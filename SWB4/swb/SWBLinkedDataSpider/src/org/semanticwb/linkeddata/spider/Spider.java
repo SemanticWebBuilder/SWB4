@@ -38,8 +38,8 @@ public class Spider  extends Thread implements SpiderEventListener
     public static final String RDFS_SCHEMA_NAMESPACE = "http://www.w3.org/2000/01/rdf-schema#";
     private static URI typeProp;
     public static final Set<URL> visited = Collections.synchronizedSet(new HashSet<URL>());
-    public static HashSet<Spider> spiders = new HashSet<Spider>();
-    public static HashSet<Spider> predicados = new HashSet<Spider>();
+    public HashSet<Spider> spiders = new HashSet<Spider>();
+    public HashSet<Spider> predicados = new HashSet<Spider>();
 
     static
     {
@@ -58,7 +58,7 @@ public class Spider  extends Thread implements SpiderEventListener
     {
         "http://www.w3.org/2000/01/rdf-schema#resource"
     };
-    private HashSet<SpiderEventListener> events = new HashSet<SpiderEventListener>();
+    private HashSet<SpiderEventListener> listeners = new HashSet<SpiderEventListener>();
     private URL url;
 
     public Spider(URL seedURL)
@@ -88,20 +88,20 @@ public class Spider  extends Thread implements SpiderEventListener
         return url;
     }
 
-    public void addTripleEvent(SpiderEventListener event)
+    public void addSpiderListener(SpiderEventListener event)
     {
-        events.add(event);
+        listeners.add(event);
     }
 
-    public void removeTripleEvent(SpiderEventListener event)
+    public void removeSpiderListener(SpiderEventListener event)
     {
-        events.remove(event);
+        listeners.remove(event);
     }
 
     @Override
     public void run()
     {
-        this.events.add(this);
+        this.listeners.add(this);
         if (!visited.contains(url))
         {
             visited.add(url);
@@ -137,11 +137,22 @@ public class Spider  extends Thread implements SpiderEventListener
             fireOnEnd(url);
             for (Spider spider : predicados)
             {
-                spider.start();
+                try
+                {
+                    spider.start();
+                }
+                catch(IllegalStateException ia)
+                {
+                    
+                }
             }
             for (final Spider spider : spiders)
             {
-                spider.start();
+                try
+                {
+                    spider.start();
+                }
+                catch(Exception e){}
             }
         }
 
@@ -318,16 +329,16 @@ public class Spider  extends Thread implements SpiderEventListener
 
     public void onTriple(URI suj, URI pred, String obj)
     {
-
+        
         try
         {
             URL newURL = pred.toURL();
             if (!visited.contains(newURL))
             {
                 Spider spider = new Spider(newURL);
-                for (SpiderEventListener listener : events)
+                for (SpiderEventListener listener : listeners)
                 {
-                    spider.addTripleEvent(listener);
+                    spider.addSpiderListener(listener);
                 }
                 predicados.add(spider);
             }
@@ -343,9 +354,9 @@ public class Spider  extends Thread implements SpiderEventListener
             try
             {
                 Spider spider = new Spider(new URL(obj));
-                for (SpiderEventListener listener : events)
+                for (SpiderEventListener listener : listeners)
                 {
-                    spider.addTripleEvent(listener);
+                    spider.addSpiderListener(listener);
                 }
                 spiders.add(spider);
             }
@@ -359,7 +370,7 @@ public class Spider  extends Thread implements SpiderEventListener
 
     private void fireError(final int code)
     {
-        for (final SpiderEventListener listener : events)
+        for (final SpiderEventListener listener : listeners)
         {
             Runnable r = new Runnable()
             {
@@ -383,7 +394,7 @@ public class Spider  extends Thread implements SpiderEventListener
 
     public void fireError(final Throwable e)
     {
-        for (final SpiderEventListener listener : events)
+        for (final SpiderEventListener listener : listeners)
         {
             Runnable r = new Runnable()
             {
@@ -408,7 +419,7 @@ public class Spider  extends Thread implements SpiderEventListener
 
     public void fireEventnewTriple(final URI suj, final URI pred, final String obj)
     {
-        for (final SpiderEventListener listener : events)
+        for (final SpiderEventListener listener : listeners)
         {
             Runnable r = new Runnable()
             {
@@ -432,7 +443,7 @@ public class Spider  extends Thread implements SpiderEventListener
 
     public void fireOnStart(final URL url)
     {
-        for (final SpiderEventListener listener : events)
+        for (final SpiderEventListener listener : listeners)
         {
             Runnable r = new Runnable()
             {
@@ -457,7 +468,7 @@ public class Spider  extends Thread implements SpiderEventListener
 
     public void fireOnEnd(final URL url)
     {
-        for (final SpiderEventListener listener : events)
+        for (final SpiderEventListener listener : listeners)
         {
             Runnable r = new Runnable()
             {
@@ -483,7 +494,7 @@ public class Spider  extends Thread implements SpiderEventListener
 
     public void fireVisit(final URI suj)
     {
-        for (final SpiderEventListener listener : events)
+        for (final SpiderEventListener listener : listeners)
         {
             Runnable r = new Runnable()
             {
@@ -655,50 +666,7 @@ public class Spider  extends Thread implements SpiderEventListener
         }
     }
 
-    public void onTripleAndFollow(URI suj, URI pred, URI obj, URL url)
-    {
-        try
-        {
-            URL newURL = obj.toURL();
-            if (!visited.contains(newURL))
-            {
-                Spider spider = new Spider(newURL);
-                for (SpiderEventListener listener : events)
-                {
-                    spider.addTripleEvent(listener);
-                }
-                predicados.add(spider);
-            }
-
-        }
-        catch (Exception e)
-        {
-            fireError(e);
-
-        }
-
-        try
-        {
-            URL newURL = pred.toURL();
-            if (!visited.contains(newURL))
-            {
-                Spider spider = new Spider(newURL);
-                for (SpiderEventListener listener : events)
-                {
-                    spider.addTripleEvent(listener);
-                }
-                spiders.add(spider);
-            }
-
-        }
-        catch (Exception e)
-        {
-            fireError(e);
-
-        }
-
-    }
-
+   
     public void visit(URI suj)
     {
         try
@@ -707,9 +675,9 @@ public class Spider  extends Thread implements SpiderEventListener
             if (!visited.contains(newURL))
             {
                 Spider spider = new Spider(newURL);
-                for (SpiderEventListener listener : events)
+                for (SpiderEventListener listener : listeners)
                 {
-                    spider.addTripleEvent(listener);
+                    spider.addSpiderListener(listener);
                 }
                 spiders.add(spider);
             }

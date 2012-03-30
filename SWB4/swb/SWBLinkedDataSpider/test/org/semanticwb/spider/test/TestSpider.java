@@ -56,7 +56,7 @@ public class TestSpider
         {
             URL url = new URL("http://harth.org/andreas/foaf.rdf");
             Spider spider = new Spider(url);
-            spider.addTripleEvent(new TestSaveTriple());
+            spider.addSpiderListener(new TestSaveTriple());
             spider.start();
         }
         catch (Exception e)
@@ -76,7 +76,7 @@ public class TestSpider
             //URL url = new URL("http://dbpedia.org/ontology/MusicalArtist");}
             URL url = new URL("http://dbpedia.org/page/Stevie_Nicks");
             Spider spider = new Spider(url);
-            spider.addTripleEvent(new TestSaveTriple());
+            spider.addSpiderListener(new TestSaveTriple());
             spider.start();
             try
             {
