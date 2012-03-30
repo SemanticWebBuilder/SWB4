@@ -7,7 +7,6 @@ package org.semanticwb.linkeddata.spider;
 import com.arthurdo.parser.HtmlStreamTokenizer;
 import com.arthurdo.parser.HtmlTag;
 import java.io.StringReader;
-import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Enumeration;
@@ -22,7 +21,7 @@ public class RDFAAnalizer
 
     private String[] attributes =
     {
-        "typeof", "about", "property", "content", "datatype", "rel", "rev"
+        "typeof", "about", "property", "datatype", "rel", "rev"
     };
     private HashMap<String, String> prefix = new HashMap<String, String>();
     public static final String DOCTYPE_RFDA = "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML+RDFa 1.0//EN\" \"http://www.w3.org/MarkUp/DTD/xhtml-rdfa-1.dtd\">";
@@ -124,7 +123,7 @@ public class RDFAAnalizer
             int tt_type = tok.nextToken();
             while (tt_type != HtmlStreamTokenizer.TT_TAG)
             {
-                if(tt_type==HtmlStreamTokenizer.TT_EOF)
+                if (tt_type == HtmlStreamTokenizer.TT_EOF)
                 {
                     return;
                 }
@@ -185,7 +184,7 @@ public class RDFAAnalizer
             {
                 if (att.equals(name))
                 {
-                    if (name.equals("about") || name.equals("content"))
+                    if (name.equals("about"))
                     {
                         return true;
                     }
@@ -218,7 +217,7 @@ public class RDFAAnalizer
             {
                 if (att.equals(name))
                 {
-                    if (name.equals("about") || name.equals("content"))
+                    if (name.equals("about"))
                     {
                         AttributeRDFA attret = new AttributeRDFA();
                         attret.value = value;
@@ -278,7 +277,7 @@ public class RDFAAnalizer
                     }
                     catch (Exception e)
                     {
-                        spider.fireError(e);                        
+                        spider.fireError(e);
                     }
                 }
                 tt_type = tok.nextToken();
@@ -303,9 +302,9 @@ public class RDFAAnalizer
                     URI obj = new URI(tag.tag.getParam("href"));
                     String spred = att.value.replace(att.prefix + ":", prefix.get(att.prefix));
                     URI pred = new URI(spred);
-                    spider.visit(obj);                    
+                    spider.visit(obj);
                     spider.fireEventnewTriple(suj, pred, obj.toString());
-                }                
+                }
                 catch (URISyntaxException e)
                 {
                     spider.fireError(e);
@@ -315,11 +314,6 @@ public class RDFAAnalizer
             {
                 String content = att.value;
             }
-            if (att.attribute.equals("content"))
-            {
-                String content = att.value;
-            }
-
             if (att.attribute.equals("about"))
             {
                 try
@@ -337,13 +331,13 @@ public class RDFAAnalizer
                         }
                         newAnalizer.start();
                         spider.fireVisit(suj);
-                        
+
                     }
                     else
                     {
                         String resource = tag.tag.getParam("resource");
                         String rel = tag.tag.getParam("rel");
-                        if (rel!=null && !rel.equals(""))
+                        if (rel != null && !rel.equals(""))
                         {
                             for (String _prefix : prefix.keySet())
                             {
@@ -354,7 +348,7 @@ public class RDFAAnalizer
                                         URI obj = new URI(resource);
                                         String spred = rel.replace(_prefix + ":", prefix.get(_prefix));
                                         URI pred = new URI(spred);
-                                        spider.visit(obj);                                        
+                                        spider.visit(obj);
                                         spider.fireEventnewTriple(suj, pred, obj.toString());
                                     }
                                     catch (URISyntaxException e)
@@ -375,16 +369,34 @@ public class RDFAAnalizer
             }
             if (att.attribute.equals("property"))
             {
-                try
+                String content = tag.tag.getParam("content");
+                if (content == null)
                 {
-                    String obj = nextText();
-                    String spred = att.value.replace(att.prefix + ":", prefix.get(att.prefix));
-                    URI pred = new URI(spred);
-                    spider.fireEventnewTriple(suj, pred, obj.toString());
+                    try
+                    {
+                        String obj = nextText();
+                        String spred = att.value.replace(att.prefix + ":", prefix.get(att.prefix));
+                        URI pred = new URI(spred);
+                        spider.fireEventnewTriple(suj, pred, obj.toString());
+                    }
+                    catch (URISyntaxException e)
+                    {
+                        spider.fireError(e);
+                    }
                 }
-                catch (URISyntaxException e)
+                else
                 {
-                    spider.fireError(e);                    
+                    try
+                    {
+                        String obj = content;
+                        String spred = att.value.replace(att.prefix + ":", prefix.get(att.prefix));
+                        URI pred = new URI(spred);
+                        spider.fireEventnewTriple(suj, pred, obj.toString());
+                    }
+                    catch (URISyntaxException e)
+                    {
+                        spider.fireError(e);
+                    }
                 }
             }
         }
