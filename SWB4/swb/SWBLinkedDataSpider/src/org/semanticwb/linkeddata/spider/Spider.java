@@ -39,7 +39,7 @@ public class Spider implements SpiderEventListener
     private static URI typeProp;
     public static final Set<URL> visited = Collections.synchronizedSet(new HashSet<URL>());
     public static HashSet<Spider> spiders = new HashSet<Spider>();
-
+    public static HashSet<Spider> predicados = new HashSet<Spider>();
     static
     {
         try
@@ -133,6 +133,10 @@ public class Spider implements SpiderEventListener
                 }
             }
             fireOnEnd(url);
+            for(Spider spider : predicados)
+            {
+                spider.start();
+            }
             for(Spider spider : spiders)
             {
                 spider.start();
@@ -312,6 +316,26 @@ public class Spider implements SpiderEventListener
 
     public void onTriple(URI suj, URI pred, String obj, URL url)
     {
+
+        try
+        {
+            URL newURL = pred.toURL();
+            if (!visited.contains(newURL))
+            {
+                Spider spider = new Spider(newURL);
+                for(SpiderEventListener listener : events)
+                {
+                    spider.addTripleEvent(listener);
+                }
+                predicados.add(spider);
+            }
+
+        }
+        catch (Exception e)
+        {
+            fireError(e);
+
+        }
         if (isVisit(pred))
         {
             try
@@ -631,6 +655,26 @@ public class Spider implements SpiderEventListener
                 {
                     spider.addTripleEvent(listener);
                 }
+                predicados.add(spider);
+            }
+
+        }
+        catch (Exception e)
+        {
+            fireError(e);
+
+        }
+
+        try
+        {
+            URL newURL = pred.toURL();
+            if (!visited.contains(newURL))
+            {
+                Spider spider = new Spider(newURL);
+                for(SpiderEventListener listener : events)
+                {
+                    spider.addTripleEvent(listener);
+                }
                 spiders.add(spider);
             }
 
@@ -675,8 +719,37 @@ public class Spider implements SpiderEventListener
     {
         
     }
+
+    @Override
+    public boolean equals(Object obj)
+    {
+        if(obj instanceof Spider)
+        {
+            Spider tmp=(Spider)obj;
+            return tmp.url.equals(this.url);
+        }
+        else
+        {
+            return false;
+        }
+        
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return url.toString().hashCode();
+    }
+
+    @Override
+    public String toString()
+    {
+        return url.toString();
+    }
     /*public void onTriple(URI suj, URI pred, String obj, URL url)
     {
     throw new UnsupportedOperationException("Not supported yet.");
     }*/
+
+
 }
