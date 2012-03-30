@@ -1,0 +1,545 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:dbpprop="http://dbpedia.org/property/"
+    xmlns:foaf="http://xmlns.com/foaf/0.1/"
+    version="XHTML+RDFa 1.0" xml:lang="en">
+
+
+<!-- header -->
+<head profile="http://www.w3.org/1999/xhtml/vocab">
+    <title>About: Stevie Nicks</title>
+    <link rel="alternate" type="application/rdf+xml" href="http://dbpedia.org/data/Stevie_Nicks.rdf" title="Structured Descriptor Document (RDF/XML format)" />
+    <link rel="alternate" type="text/rdf+n3" href="http://dbpedia.org/data/Stevie_Nicks.n3" title="Structured Descriptor Document (N3/Turtle format)" />
+    <link rel="alternate" type="application/json+rdf" href="http://dbpedia.org/data/Stevie_Nicks.jrdf" title="Structured Descriptor Document (RDF/JSON format)" />
+    <link rel="alternate" type="application/json" href="http://dbpedia.org/data/Stevie_Nicks.json" title="Structured Descriptor Document (RDF/JSON format)" />
+    <link rel="alternate" type="application/atom+xml" href="http://dbpedia.org/data/Stevie_Nicks.atom" title="OData (Atom+Feed format)" />
+    <link rel="alternate" type="text/plain" href="http://dbpedia.org/data/Stevie_Nicks.ntriples" title="Structured Descriptor Document (N-Triples format)" />
+    <link rel="alternate" href="http://dbpedia.org/sparql?default-graph-uri=http%3A%2F%2Fdbpedia.org&amp;query=DESCRIBE+&lt;http://dbpedia.org/resource/Stevie_Nicks&gt;&amp;format=text%2Fcsv" type="text/csv" title="Structured Descriptor Document (CSV format)" />
+
+    <link rel="alternate" href="http://dbpedia.org/sparql?default-graph-uri=http%3A%2F%2Fdbpedia.org&amp;query=DESCRIBE+&lt;http://dbpedia.org/resource/Stevie_Nicks&gt;&amp;output=application%2Fmicrodata%2Bjson" type="application/microdata+json" 	title="Structured Descriptor Document (Microdata/JSON format)" />
+    <link rel="alternate" href="http://dbpedia.org/sparql?default-graph-uri=http%3A%2F%2Fdbpedia.org&amp;query=DESCRIBE+&lt;http://dbpedia.org/resource/Stevie_Nicks&gt;&amp;output=text%2Fhtml" 		     type="text/html" 			title="Structured Descriptor Document (Microdata/HTML format)" />
+    <link rel="alternate" href="http://dbpedia.org/sparql?default-graph-uri=http%3A%2F%2Fdbpedia.org&amp;query=DESCRIBE+&lt;http://dbpedia.org/resource/Stevie_Nicks&gt;&amp;output=application%2Fld%2Bjson"      type="application/ld+json" 	title="Structured Descriptor Document (JSON-LD format)" />
+    <link rel="timegate" type="text/html" href="http://mementoarchive.lanl.gov/dbpedia/timegate/http://dbpedia.org/page/Stevie_Nicks" title="Time Machine" />
+    <link rel="stylesheet" type="text/css" href="/statics/style.css" />
+    <link href="/statics/highlighter.css" type="text/css" rel="stylesheet" charset="utf-8" />
+    <link rel="foaf:primarytopic" href="http://dbpedia.org/resource/Stevie_Nicks"/>
+    <link rev="describedby" href="http://dbpedia.org/resource/Stevie_Nicks"/>
+    <script type="text/javascript" src="/statics/script.js"></script>
+</head>
+<body onload="init();" about="http://dbpedia.org/resource/Stevie_Nicks">
+    <div id="header">
+      <div id="hd_l">
+	  <h1 id="title">About: <a href="http://dbpedia.org/resource/Stevie_Nicks">Stevie Nicks</a></h1>
+        <div id="homelink">
+          <!--?vsp if (white_page = 0) http (txt); ?-->
+        </div>
+	<div class="page-resource-uri">
+	    An Entity of Type : <a href="http://dbpedia.org/ontology/MusicalArtist">musical artist</a>,
+	    from Named Graph : <a href="http://dbpedia.org">http://dbpedia.org</a>,
+	    within Data Space : <a href="http://dbpedia.org">dbpedia.org</a>
+        </div>
+      </div> <!-- hd_l -->
+      <div id="hd_r">
+	  <a href="http://wiki.dbpedia.org/Imprint" title="About DBpedia">
+	      <img src="/statics/dbpedia_logo.png" height="64" alt="About DBpedia"/>
+        </a>
+      </div> <!-- hd_r -->
+    </div> <!-- header -->
+    <div id="content">
+
+      <p>Stephanie Lynn "Stevie" Nicks (born May 26, 1948) is an American singer-songwriter, best known for her work with Fleetwood Mac and an extensive solo career, which collectively have produced over forty Top 50 hits and sold over 140 million albums. She has been noted for her ethereal visual style and symbolic lyrics. Nicks joined Fleetwood Mac on December 31, 1974, along with her then-boyfriend Lindsey Buckingham.</p>
+<!-- proptable -->
+      <table class="description"><tr><th>Property</th><th>Value</th></tr>
+
+<tr class="odd"><td class="property"><a class="uri" href="http://dbpedia.org/ontology/abstract"><small>dbpedia-owl:</small>abstract</a>
+</td><td><ul>
+	<li><span class="literal"><span property="dbpedia-owl:abstract" xmlns:dbpedia-owl="http://dbpedia.org/ontology/">Stephanie Lynn "Stevie" Nicks (born May 26, 1948) is an American singer-songwriter, best known for her work with Fleetwood Mac and an extensive solo career, which collectively have produced over forty Top 50 hits and sold over 140 million albums. She has been noted for her ethereal visual style and symbolic lyrics. Nicks joined Fleetwood Mac on December 31, 1974, along with her then-boyfriend Lindsey Buckingham. Fleetwood Mac's second album after the incorporation of Nicks and Buckingham, 1977's Rumours, produced four U.S. Top 10 singles (including Nicks's song "Dreams", which was the band's first and only U.S. number one) and remained at No.1 on the American albums chart for 31 weeks, as well as reaching the top spot in various countries around the world. To date the album has sold over 40 million copies worldwide, making it the tenth highest selling album of all time. Nicks began her solo career in 1981 with the 8 million selling album Bella Donna, and she has produced six more solo studio albums to date. Her seventh solo studio album entitled In Your Dreams, and her first in ten years, has completed production with Dave Stewart of Eurythmics fame at the helm, and was released on May 3, 2011. After the release of her first solo album, Rolling Stone deemed her "The Reigning Queen of Rock and Roll". Having overcome cocaine addiction, and dependency on tranquilizers, Nicks remains a popular solo performer. As a solo artist, she has garnered eight Grammy Award nominations and, with Fleetwood Mac, has a further five nominations (one of her nominations with Fleetwood Mac won the 1977/1978 award for Album of the Year for Rumours). As a member of Fleetwood Mac, she was inducted into the Rock and Roll Hall of Fame in 1998.</span></span></li>
+	<li><span class="literal"><span property="dbpedia-owl:abstract" xmlns:dbpedia-owl="http://dbpedia.org/ontology/">Stephanie Lynn „Stevie“ Nicks ist eine US-amerikanische Sängerin und Komponistin.</span></span></li>
+	<li><span class="literal"><span property="dbpedia-owl:abstract" xmlns:dbpedia-owl="http://dbpedia.org/ontology/">Stephanie Lynn "Stevie" Nicks es una cantante y compositora estadounidense, conocida principalmente por su trabajo con Fleetwood Mac y su carrera como solista, que ha producido más de 20 éxitos en los Top 40 de las listas discográficas. Es una de las pocas artistas de rock que ha mantenido una carrera como solista, al mismo tiempo formando parte de una banda muy exitosa. Como miembro de Fleetwood Mac ingresó a The Rock and Roll Hall of Fame en 1998.</span></span></li>
+	<li><span class="literal"><span property="dbpedia-owl:abstract" xmlns:dbpedia-owl="http://dbpedia.org/ontology/">Stephanie Lynn "Stevie" Nicks on yhdysvaltalainen rocklaulaja ja lauluntekijä. Hänet tunnetaan Fleetwood Mac -yhtyeessä tekemästään työstä ja soolourastaan. Nicks syntyi Phoenixissa ja toimi vuosina 1968-1972 yhtyeessä Fritz. Vuonna 1973 hän julkaisi Lindsey Buckinghamin kanssa albumin Buckingham Nicks. Pian tämän jälkeen Nicks ja Buckingham liittyivät Fleetwood Maciin. Soolouransa Nicks aloitti vuonna 1981 julkaisemalla albumin Bella Donna. Single "Stop Draggin' My Heart Around" oli yhteistyö Tom Petty &amp; the Heartbreakersin kanssa ja pääsi Billboard Hot 100 -listalla kolmanneksi. Vuonna 1990 albumi oli jo myynyt viisinkertaista platinaa. Nicks toimii yhä Fleetwood Macissa, mutta hänellä on myös aktiivinen sooloura. Nicksin kappale "Edge of Seventeen" pääsi vuonna 2003 komediaelokuvaan School of Rock. Samainen kappale löytyy Grand Theft Auto IV:n yhdeltä radiokanavalta.</span></span></li>
+	<li><span class="literal"><span property="dbpedia-owl:abstract" xmlns:dbpedia-owl="http://dbpedia.org/ontology/">È la voce del gruppo musicale rock inglese-statunitense dei Fleetwood Mac. Oltre all'attività con la band, Stevie ha pubblicato diversi dischi da solista, e nel 2007 è apparsa nell'album "Heroes and Thieves" di Vanessa Carlton, con cui canta "The One". Stevie Nicks iniziò la sua carriera di cantante nel gruppo "Fritz" fondato con Lindsey Buckingham. I due diventano anche una coppia nella vita e fanno un album "Buckinghamnicks" che si rivela un flop commerciale, ma dal quale vengono estratte molte canzoni per il primo loro album con i Fleetwood Mac. Mick Fleetwood, fondatore dei Fleetwood Mac, dall'album Buckinghamnicks scopre che la tecnica chitarristica di Lindsey è proprio quella che ci vuole per i Fleetwood Mac e lo invita a raggiungere il gruppo. Ma Lindsey dice che lui e Stevie sono inseparabili anche musicalmente e lo invita a prendere nel suo gruppo entrambi.</span></span></li>
+	<li><span class="literal"><span property="dbpedia-owl:abstract" xmlns:dbpedia-owl="http://dbpedia.org/ontology/">スティーヴィー・ニックス（Stevie Nicks, 1948年5月26日 - ）は、フリートウッド・マックのメンバーであり、ソロとしても20曲以上のTOP50ヒットを持つシンガー、ソングライター。 彼女の妖精のようなスタイルと重々しく抽象的な歌詞は、喝采と批評の両方を彼女にもたらした。“ロックの歌姫”とも呼ばれる。 スティーヴィーは、彼女が書き、当時ボーイフレンドだったリンジー・バッキンガムと録音した「Frozen Love,」と言う曲をミック・フリートウッドが聴いたことから、1975年にリンジーと共にフリートウッド・マックに招かれて加入。1977年のフリートウッド・マックのアルバム『噂』の成功で、世界的な名声を得た。 スティーヴィーは、1981年のアルバム『Bella Donna』でソロ活動を開始し、これまでに5枚以上のソロ作品を制作した。 スティーヴィーは、これまでに7回グラミー賞にノミネートされ、1977年にフリートウッド・マックとして「噂」でアルバム・オブ・ザ・イヤーを獲得した。1998年には、フリートウッド・マックのメンバーとして、ロックの殿堂入りした。</span></span></li>
+	<li><span class="literal"><span property="dbpedia-owl:abstract" xmlns:dbpedia-owl="http://dbpedia.org/ontology/">Stephanie Lynn "Stevie" Nicks is een Amerikaans zangeres en popidool. In het midden van de jaren 70 werd Stevie Nicks een megaster als charismatische zangeres van de (voormalige) Engelse bluesformatie Fleetwood Mac, waar ze in 1974 als "package deal" werd aangenomen door Mick Fleetwood. Daar waar het eigenlijk alleen om haar toenmalige levensgezel Lindsey Buckingham ging. Stevie paste echter wonderwel in het nieuwe concept en ze zette samen met Buckingham de band weer op de kaart. Nicks leerde Buckingham kennen in 1968 op highschool, en daar speelden ze samen een tijdje in de band Fritz. Na de highschool werkte Buckingham als sessiemuzikant en deed Nicks allerlei werkzaamheden om de huur te betalen. Daar waar Lindsey geregeld "gigs" had met de Everly Brothers, bediende Stevie in verschillende restaurants. In 1973 dook het duo de studio in voor hun eerste plaat Buckingham Nicks. Een typische eastcoast sound met verdienstelijk samenspel van zowel Nicks als Buckingham. Een demonstratie van technicus Ken Caillat aan Mick Fleetwood zette de deuren open voor een samenwerking met Fleetwood Mac. Caillat verklaarde later dat hij Fleetwood wilde overtuigen van zijn eigen kwaliteiten als technicus. Ken Caillat is de vader van Colbie Caillat, die in 2008 doorbrak met haar debuutsingle 'Bubbly'. Op de single 'Falling for you' van Colbie's tweede cd Breakthrough is aan het slot een gitaarriffje te horen dat heel erg veel overeenstemming vertoont met het riffje in het nummer 'Gypsy' van de Fleetwood Mac-LP Mirage. Op beide nummers is dus duidelijk de stempel van producer Ken Caillat te horen. Op het album Buckingham Nicks was de sound en kwaliteit te horen waarnaar Fleetwood Mac op zoek was, en zo leek het dat de "engineer skills" niet belangrijk leken. Het eerste samenwerkingsverband met Fleetwood Mac kwam in 1975. Daarop bevindt zich Rhiannon (a story 'bout a Welsh witch) en het wonderschone Landslide. Haar status als superster bevestigde zij definitief door Dreams te schrijven. Dit van Rumours afkomstige nummer behaalde de eerste plaats in de Billboard Charts van Amerika. Ook op de opvolger Tusk wist ze enkele meesterwerken te produceren waaronder Sara, een nummer dat was opgedragen aan een van haar persoonlijke vriendinnen. Na de wereldtournee van 1979-1980 stortte ze in, en vond zichzelf terug in cocaïne en drank. Het bezorgde haar zo'n rush dat ze in staat was om haar eerste soloalbum te maken. Bella Donna kwam in 1981 uit en werd een wereldsucces. Een samenwerkingsverband met o.a. rocker Tom Petty en slide gitarist Waddy Wachtel (die ze nog kende uit de Buckingham-Nicks periode), bracht één hit (Stop draggin' my heart around) en het duet Leather and lace met "Eagle" Don Henley, waarmee ze volgens geruchten ooit een korte relatie had. Ze maakt nog geregeld soloalbums en is al jaren de succesvolste artiest uit de Fleetwood Mac familie. Nicks was een voorbeeld voor rocksterren als Sheryl Crow en de Dixie Chicks. Stevie bezocht met Fleetwood Mac in het najaar van 2003 Europa (UK, Ierland en Duitsland). In het najaar van 2009 was er een uitgebreide tournee waarbij ze ook Rotterdam en Antwerpen aandeden In 2005 bracht ze samen met Deep Dish een cover uit van haar eigen nummer Dreams. In februari 2011 verscheen haar nieuwe single: 'Secret Love'. Als voorbode van het nieuwe album ' In Your Dreams' wat in mei 2011 zal verschijnen. Het nummer is de uiteindelijke versie van een demo/outtake welke al rond 1976 is opgenomen. Dave Stewart (van de Eurythmics) heeft het album grotendeels geproduceerd.</span></span></li>
+	<li><span class="literal"><span property="dbpedia-owl:abstract" xmlns:dbpedia-owl="http://dbpedia.org/ontology/">Stephanie Lynn «Stevie» Nicks er en amerikansk sanger. Hun er kjent som sanger i Fleetwood Mac og en omfattende solokarriere. Hun har hatt over 40 US Top 50 hits, og solgt over 120 millioner musikkalbum. Tidlig på 1980-tallet, etter å ha gitt ut sitt første soloalbum, kalte Rolling Stone henne: «Regjerende dronning av Rock &amp; Roll». Hun er spesielt kjent for sine lange vide kjoler. Hun ble invitert med i Fleetwood Mac i 1975 etter at Mick Fleetwood hørte sangen «Frozen Love», som hun hadde innspilt med kjæresten Lindsey Buckingham. Han hadde kun tenkt å ta med kjæresten, men han sa at de kun kom sammen. Første album etter at de ble med ga fire Top 40 singler, og lå på 1. plass på den amerikanske albumlisten i over 30 uker. Etter albumet Rumours i 1977 ble Fleetwood Mac internasjonalt kjent. Albumet har solgt over 40 millioner eksemplarer. Nicks startet solokarrieren i 1981 med albumet Bella Donna. Selv narkotikamisbruk klarte ikke å ødelegge for hennes suksess. Hun har blitt nominert for syv Grammy Awards, og vant i 1977/1978 Grammy for «Årets album» med Rumours.</span></span></li>
+	<li><span class="literal"><span property="dbpedia-owl:abstract" xmlns:dbpedia-owl="http://dbpedia.org/ontology/">Stevie Nicks, właśc. Stephanie Lynn Nicks – amerykańska wokalistka rockowa.</span></span></li>
+	<li><span class="literal"><span property="dbpedia-owl:abstract" xmlns:dbpedia-owl="http://dbpedia.org/ontology/">Stevie Nicks, nome artístico de Stephanie Lynn Nicks, é uma cantora e compositora norte-americana, mais conhecida como cantora da banda Fleetwood Mac. Uma de suas canções solo, "Edge of Seventeen", figurou na trilha sonora do jogo eletrônico Grand Theft Auto IV, mais precisamente na rádio Liberty Rock Radio 97.8.</span></span></li>
+	<li><span class="literal"><span property="dbpedia-owl:abstract" xmlns:dbpedia-owl="http://dbpedia.org/ontology/">Stevie Nicks, egentligen Stephanie Lynn Nicks, född 26 maj 1948 i Phoenix, Arizona, är en amerikansk singer-songwriter. Hon är mest känd som sångerska i Fleetwood Mac, till vilken hon anslöt 1975 tillsammans med dåvarande pojkvännen Lindsey Buckingham. Med Buckingham hade hon tidigare haft gruppen Buckingham Nicks och innan dess gruppen Fritz. Hon har även haft framgångar som soloartist. Albumet Bella Donna innehöll bl.a. duetter med Tom Petty och Don Henley. Det senaste albumet, The Soundstage Sessions, utgivet i mars 2009, inspelades ursprungligen redan 2007 med 18 låtar inför studiopublik, varpå låtmaterialet redigerades med stråkar och körpåläggning 2008 och för att passa CD-kostymen.</span></span></li>
+	<li><span class="literal"><span property="dbpedia-owl:abstract" xmlns:dbpedia-owl="http://dbpedia.org/ontology/">Стиви Никс — американская певица и автор песен, наиболее известная как лицо и голос группы Fleetwood Mac. В последнее время записывается и сольно. Долгое время её партнёром был другой участник группы, Линдсей Бакингэм. Некоторое время жила и записывалась с Доном Хенли.</span></span></li>
+	<li><span class="literal"><span property="dbpedia-owl:abstract" xmlns:dbpedia-owl="http://dbpedia.org/ontology/">Stevie Nicks, de son nom complet Stephanie Lynn Nicks, est une chanteuse américaine, née le Modèle:Date à Phoenix. Elle est notamment connue pour sa musique avec le groupe de rock Fleetwood Mac, son image spirituelle et sa voix distinctive.</span></span></li>
+</ul></td></tr><tr class="even"><td class="property"><a class="uri" href="http://dbpedia.org/ontology/activeYearsStartYear"><small>dbpedia-owl:</small>activeYearsStartYear</a>
+</td><td><ul>
+	<li><span class="literal"><span property="dbpedia-owl:activeYearsStartYear" xmlns:dbpedia-owl="http://dbpedia.org/ontology/">1967-01-01 00:00:00</span><small> (xsd:date)</small></span></li>
+</ul></td></tr><tr class="odd"><td class="property"><a class="uri" href="http://dbpedia.org/ontology/associatedBand"><small>dbpedia-owl:</small>associatedBand</a>
+</td><td><ul>
+	<li><span class="literal"><a class="uri" rel="dbpedia-owl:associatedBand" xmlns:dbpedia-owl="http://dbpedia.org/ontology/" href="http://dbpedia.org/resource/Tom_Petty_and_the_Heartbreakers"><small>dbpedia</small>:Tom_Petty_and_the_Heartbreakers</a></span></li>
+	<li><span class="literal"><a class="uri" rel="dbpedia-owl:associatedBand" xmlns:dbpedia-owl="http://dbpedia.org/ontology/" href="http://dbpedia.org/resource/David_A._Stewart"><small>dbpedia</small>:David_A._Stewart</a></span></li>
+	<li><span class="literal"><a class="uri" rel="dbpedia-owl:associatedBand" xmlns:dbpedia-owl="http://dbpedia.org/ontology/" href="http://dbpedia.org/resource/Sheryl_Crow"><small>dbpedia</small>:Sheryl_Crow</a></span></li>
+	<li><span class="literal"><a class="uri" rel="dbpedia-owl:associatedBand" xmlns:dbpedia-owl="http://dbpedia.org/ontology/" href="http://dbpedia.org/resource/Fleetwood_Mac"><small>dbpedia</small>:Fleetwood_Mac</a></span></li>
+	<li><span class="literal"><a class="uri" rel="dbpedia-owl:associatedBand" xmlns:dbpedia-owl="http://dbpedia.org/ontology/" href="http://dbpedia.org/resource/Buckingham_Nicks"><small>dbpedia</small>:Buckingham_Nicks</a></span></li>
+</ul></td></tr><tr class="even"><td class="property"><a class="uri" href="http://dbpedia.org/ontology/associatedMusicalArtist"><small>dbpedia-owl:</small>associatedMusicalArtist</a>
+</td><td><ul>
+	<li><span class="literal"><a class="uri" rel="dbpedia-owl:associatedMusicalArtist" xmlns:dbpedia-owl="http://dbpedia.org/ontology/" href="http://dbpedia.org/resource/Tom_Petty_and_the_Heartbreakers"><small>dbpedia</small>:Tom_Petty_and_the_Heartbreakers</a></span></li>
+	<li><span class="literal"><a class="uri" rel="dbpedia-owl:associatedMusicalArtist" xmlns:dbpedia-owl="http://dbpedia.org/ontology/" href="http://dbpedia.org/resource/David_A._Stewart"><small>dbpedia</small>:David_A._Stewart</a></span></li>
+	<li><span class="literal"><a class="uri" rel="dbpedia-owl:associatedMusicalArtist" xmlns:dbpedia-owl="http://dbpedia.org/ontology/" href="http://dbpedia.org/resource/Sheryl_Crow"><small>dbpedia</small>:Sheryl_Crow</a></span></li>
+	<li><span class="literal"><a class="uri" rel="dbpedia-owl:associatedMusicalArtist" xmlns:dbpedia-owl="http://dbpedia.org/ontology/" href="http://dbpedia.org/resource/Fleetwood_Mac"><small>dbpedia</small>:Fleetwood_Mac</a></span></li>
+	<li><span class="literal"><a class="uri" rel="dbpedia-owl:associatedMusicalArtist" xmlns:dbpedia-owl="http://dbpedia.org/ontology/" href="http://dbpedia.org/resource/Buckingham_Nicks"><small>dbpedia</small>:Buckingham_Nicks</a></span></li>
+</ul></td></tr><tr class="odd"><td class="property"><a class="uri" href="http://dbpedia.org/ontology/background"><small>dbpedia-owl:</small>background</a>
+</td><td><ul>
+	<li><span class="literal"><span property="dbpedia-owl:background" xmlns:dbpedia-owl="http://dbpedia.org/ontology/">solo_singer</span></span></li>
+</ul></td></tr><tr class="even"><td class="property"><a class="uri" href="http://dbpedia.org/ontology/birthDate"><small>dbpedia-owl:</small>birthDate</a>
+</td><td><ul>
+	<li><span class="literal"><span property="dbpedia-owl:birthDate" xmlns:dbpedia-owl="http://dbpedia.org/ontology/">1948-05-26</span><small> (xsd:date)</small></span></li>
+</ul></td></tr><tr class="odd"><td class="property"><a class="uri" href="http://dbpedia.org/ontology/birthPlace"><small>dbpedia-owl:</small>birthPlace</a>
+</td><td><ul>
+	<li><span class="literal"><a class="uri" rel="dbpedia-owl:birthPlace" xmlns:dbpedia-owl="http://dbpedia.org/ontology/" href="http://dbpedia.org/resource/Phoenix,_Arizona"><small>dbpedia</small>:Phoenix,_Arizona</a></span></li>
+</ul></td></tr><tr class="even"><td class="property"><a class="uri" href="http://dbpedia.org/ontology/genre"><small>dbpedia-owl:</small>genre</a>
+</td><td><ul>
+	<li><span class="literal"><a class="uri" rel="dbpedia-owl:genre" xmlns:dbpedia-owl="http://dbpedia.org/ontology/" href="http://dbpedia.org/resource/Pop_music"><small>dbpedia</small>:Pop_music</a></span></li>
+	<li><span class="literal"><a class="uri" rel="dbpedia-owl:genre" xmlns:dbpedia-owl="http://dbpedia.org/ontology/" href="http://dbpedia.org/resource/Soft_rock"><small>dbpedia</small>:Soft_rock</a></span></li>
+	<li><span class="literal"><a class="uri" rel="dbpedia-owl:genre" xmlns:dbpedia-owl="http://dbpedia.org/ontology/" href="http://dbpedia.org/resource/Pop_rock"><small>dbpedia</small>:Pop_rock</a></span></li>
+</ul></td></tr><tr class="odd"><td class="property"><a class="uri" href="http://dbpedia.org/ontology/hometown"><small>dbpedia-owl:</small>hometown</a>
+</td><td><ul>
+	<li><span class="literal"><a class="uri" rel="dbpedia-owl:hometown" xmlns:dbpedia-owl="http://dbpedia.org/ontology/" href="http://dbpedia.org/resource/Phoenix,_Arizona"><small>dbpedia</small>:Phoenix,_Arizona</a></span></li>
+</ul></td></tr><tr class="even"><td class="property"><a class="uri" href="http://dbpedia.org/ontology/recordLabel"><small>dbpedia-owl:</small>recordLabel</a>
+</td><td><ul>
+	<li><span class="literal"><a class="uri" rel="dbpedia-owl:recordLabel" xmlns:dbpedia-owl="http://dbpedia.org/ontology/" href="http://dbpedia.org/resource/Modern_Records"><small>dbpedia</small>:Modern_Records</a></span></li>
+	<li><span class="literal"><a class="uri" rel="dbpedia-owl:recordLabel" xmlns:dbpedia-owl="http://dbpedia.org/ontology/" href="http://dbpedia.org/resource/Reprise_Records"><small>dbpedia</small>:Reprise_Records</a></span></li>
+	<li><span class="literal"><a class="uri" rel="dbpedia-owl:recordLabel" xmlns:dbpedia-owl="http://dbpedia.org/ontology/" href="http://dbpedia.org/resource/Atlantic_Records"><small>dbpedia</small>:Atlantic_Records</a></span></li>
+</ul></td></tr><tr class="odd"><td class="property"><a class="uri" href="http://dbpedia.org/ontology/thumbnail"><small>dbpedia-owl:</small>thumbnail</a>
+</td><td><ul>
+	<li><span class="literal"><a class="uri" rel="dbpedia-owl:thumbnail" xmlns:dbpedia-owl="http://dbpedia.org/ontology/" href="http://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/StevieNicks2.jpg/200px-StevieNicks2.jpg">http://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/StevieNicks2.jpg/200px-StevieNicks2.jpg</a></span></li>
+</ul></td></tr><tr class="even"><td class="property"><a class="uri" href="http://dbpedia.org/ontology/wikiPageExternalLink"><small>dbpedia-owl:</small>wikiPageExternalLink</a>
+</td><td><ul>
+	<li><span class="literal"><a class="uri" rel="dbpedia-owl:wikiPageExternalLink" xmlns:dbpedia-owl="http://dbpedia.org/ontology/" href="http://www.warnerbrosrecords.com">http://www.warnerbrosrecords.com</a></span></li>
+	<li><span class="literal"><a class="uri" rel="dbpedia-owl:wikiPageExternalLink" xmlns:dbpedia-owl="http://dbpedia.org/ontology/" href="http://www.classicrockcentral.com/classic_rock_gimme5-Display.cfm?week=9">http://www.classicrockcentral.com/classic_rock_gimme5-Display.cfm?week=9</a></span></li>
+	<li><span class="literal"><a class="uri" rel="dbpedia-owl:wikiPageExternalLink" xmlns:dbpedia-owl="http://dbpedia.org/ontology/" href="http://stevienicks.net">http://stevienicks.net</a></span></li>
+	<li><span class="literal"><a class="uri" rel="dbpedia-owl:wikiPageExternalLink" xmlns:dbpedia-owl="http://dbpedia.org/ontology/" href="http://www.stevienicks.net/">http://www.stevienicks.net/</a></span></li>
+</ul></td></tr><tr class="odd"><td class="property"><a class="uri" href="http://dbpedia.org/property/alternativeNames"><small>dbpprop:</small>alternativeNames</a>
+</td><td><ul>
+	<li><span class="literal"><span property="dbpprop:alternativeNames">Nicks, Stephanie Lynn</span></span></li>
+</ul></td></tr><tr class="even"><td class="property"><a class="uri" href="http://dbpedia.org/property/associatedActs"><small>dbpprop:</small>associatedActs</a>
+</td><td><ul>
+	<li><span class="literal"><a class="uri" rel="dbpprop:associatedActs" href="http://dbpedia.org/resource/Tom_Petty_and_the_Heartbreakers"><small>dbpedia</small>:Tom_Petty_and_the_Heartbreakers</a></span></li>
+	<li><span class="literal"><a class="uri" rel="dbpprop:associatedActs" href="http://dbpedia.org/resource/David_A._Stewart"><small>dbpedia</small>:David_A._Stewart</a></span></li>
+	<li><span class="literal"><a class="uri" rel="dbpprop:associatedActs" href="http://dbpedia.org/resource/Sheryl_Crow"><small>dbpedia</small>:Sheryl_Crow</a></span></li>
+	<li><span class="literal"><a class="uri" rel="dbpprop:associatedActs" href="http://dbpedia.org/resource/Fleetwood_Mac"><small>dbpedia</small>:Fleetwood_Mac</a></span></li>
+	<li><span class="literal"><a class="uri" rel="dbpprop:associatedActs" href="http://dbpedia.org/resource/Buckingham_Nicks"><small>dbpedia</small>:Buckingham_Nicks</a></span></li>
+</ul></td></tr><tr class="odd"><td class="property"><a class="uri" href="http://dbpedia.org/property/background"><small>dbpprop:</small>background</a>
+</td><td><ul>
+	<li><span class="literal"><span property="dbpprop:background">solo_singer</span></span></li>
+</ul></td></tr><tr class="even"><td class="property"><a class="uri" href="http://dbpedia.org/property/birthDate"><small>dbpprop:</small>birthDate</a>
+</td><td><ul>
+	<li><span class="literal"><span property="dbpprop:birthDate">1948-05-26</span><small> (xsd:date)</small></span></li>
+</ul></td></tr><tr class="odd"><td class="property"><a class="uri" href="http://dbpedia.org/property/birthName"><small>dbpprop:</small>birthName</a>
+</td><td><ul>
+	<li><span class="literal"><span property="dbpprop:birthName">Stephanie Lynn Nicks</span></span></li>
+</ul></td></tr><tr class="even"><td class="property"><a class="uri" href="http://dbpedia.org/property/caption"><small>dbpprop:</small>caption</a>
+</td><td><ul>
+	<li><span class="literal"><span property="dbpprop:caption">Stevie Nicks live in 2009.</span></span></li>
+</ul></td></tr><tr class="odd"><td class="property"><a class="uri" href="http://dbpedia.org/property/class"><small>dbpprop:</small>class</a>
+</td><td><ul>
+	<li><span class="literal"><span property="dbpprop:class">artist</span></span></li>
+</ul></td></tr><tr class="even"><td class="property"><a class="uri" href="http://dbpedia.org/property/dateOfBirth"><small>dbpprop:</small>dateOfBirth</a>
+</td><td><ul>
+	<li><span class="literal"><span property="dbpprop:dateOfBirth">1948-05-26</span><small> (xsd:date)</small></span></li>
+</ul></td></tr><tr class="odd"><td class="property"><a class="uri" href="http://dbpedia.org/property/genre"><small>dbpprop:</small>genre</a>
+</td><td><ul>
+	<li><span class="literal"><a class="uri" rel="dbpprop:genre" href="http://dbpedia.org/resource/Pop_music"><small>dbpedia</small>:Pop_music</a></span></li>
+	<li><span class="literal"><a class="uri" rel="dbpprop:genre" href="http://dbpedia.org/resource/Soft_rock"><small>dbpedia</small>:Soft_rock</a></span></li>
+	<li><span class="literal"><a class="uri" rel="dbpprop:genre" href="http://dbpedia.org/resource/Pop_rock"><small>dbpedia</small>:Pop_rock</a></span></li>
+</ul></td></tr><tr class="even"><td class="property"><a class="uri" href="http://dbpedia.org/property/id"><small>dbpprop:</small>id</a>
+</td><td><ul>
+	<li><span class="literal"><span property="dbpprop:id">p5026</span></span></li>
+</ul></td></tr><tr class="odd"><td class="property"><a class="uri" href="http://dbpedia.org/property/instruments"><small>dbpprop:</small>instruments</a>
+</td><td><ul>
+	<li><span class="literal"><a class="uri" rel="dbpprop:instruments" href="http://dbpedia.org/resource/Piano"><small>dbpedia</small>:Piano</a></span></li>
+	<li><span class="literal"><a class="uri" rel="dbpprop:instruments" href="http://dbpedia.org/resource/Singing"><small>dbpedia</small>:Singing</a></span></li>
+	<li><span class="literal"><a class="uri" rel="dbpprop:instruments" href="http://dbpedia.org/resource/Keyboard"><small>dbpedia</small>:Keyboard</a></span></li>
+</ul></td></tr><tr class="even"><td class="property"><a class="uri" href="http://dbpedia.org/property/label"><small>dbpprop:</small>label</a>
+</td><td><ul>
+	<li><span class="literal"><a class="uri" rel="dbpprop:label" href="http://dbpedia.org/resource/Modern_Records"><small>dbpedia</small>:Modern_Records</a></span></li>
+	<li><span class="literal"><a class="uri" rel="dbpprop:label" href="http://dbpedia.org/resource/Reprise_Records"><small>dbpedia</small>:Reprise_Records</a></span></li>
+	<li><span class="literal"><a class="uri" rel="dbpprop:label" href="http://dbpedia.org/resource/Atlantic_Records"><small>dbpedia</small>:Atlantic_Records</a></span></li>
+</ul></td></tr><tr class="odd"><td class="property"><a class="uri" href="http://dbpedia.org/property/name"><small>dbpprop:</small>name</a>
+</td><td><ul>
+	<li><span class="literal"><span property="dbpprop:name">Stevie Nicks</span></span></li>
+	<li><span class="literal"><span property="dbpprop:name">Nicks, Stevie</span></span></li>
+</ul></td></tr><tr class="even"><td class="property"><a class="uri" href="http://dbpedia.org/property/occupation"><small>dbpprop:</small>occupation</a>
+</td><td><ul>
+	<li><span class="literal"><span property="dbpprop:occupation">Singer-Songwriter, Musician, Performer</span></span></li>
+</ul></td></tr><tr class="odd"><td class="property"><a class="uri" href="http://dbpedia.org/property/origin"><small>dbpprop:</small>origin</a>
+</td><td><ul>
+	<li><span class="literal"><span property="dbpprop:origin">Phoenix, Arizona, United States</span></span></li>
+</ul></td></tr><tr class="even"><td class="property"><a class="uri" href="http://dbpedia.org/property/placeOfBirth"><small>dbpprop:</small>placeOfBirth</a>
+</td><td><ul>
+	<li><span class="literal"><span property="dbpprop:placeOfBirth">Phoenix, Arizona</span></span></li>
+</ul></td></tr><tr class="odd"><td class="property"><a class="uri" href="http://dbpedia.org/property/shortDescription"><small>dbpprop:</small>shortDescription</a>
+</td><td><ul>
+	<li><span class="literal"><span property="dbpprop:shortDescription">Singer-songwriter</span></span></li>
+</ul></td></tr><tr class="even"><td class="property"><a class="uri" href="http://dbpedia.org/property/wikiPageUsesTemplate"><small>dbpprop:</small>wikiPageUsesTemplate</a>
+</td><td><ul>
+	<li><span class="literal"><a class="uri" rel="dbpprop:wikiPageUsesTemplate" href="http://dbpedia.org/resource/Template:Persondata"><small>dbpedia</small>:Template:Persondata</a></span></li>
+	<li><span class="literal"><a class="uri" rel="dbpprop:wikiPageUsesTemplate" href="http://dbpedia.org/resource/Template:Infobox_musical_artist"><small>dbpedia</small>:Template:Infobox_musical_artist</a></span></li>
+	<li><span class="literal"><a class="uri" rel="dbpprop:wikiPageUsesTemplate" href="http://dbpedia.org/resource/Template:Allmusic"><small>dbpedia</small>:Template:Allmusic</a></span></li>
+</ul></td></tr><tr class="odd"><td class="property"><a class="uri" href="http://dbpedia.org/property/wordnet_type"><small>dbpprop:</small>wordnet_type</a>
+</td><td><ul>
+	<li><span class="literal"><a class="uri" rel="dbpprop:wordnet_type" href="http://www.w3.org/2006/03/wn/wn20/instances/synset-musician-noun-1">http://www.w3.org/2006/03/wn/wn20/instances/synset-musician-noun-1</a></span></li>
+</ul></td></tr><tr class="even"><td class="property"><a class="uri" href="http://dbpedia.org/property/yearsActive"><small>dbpprop:</small>yearsActive</a>
+</td><td><ul>
+	<li><span class="literal"><span property="dbpprop:yearsActive">1967</span><small> (xsd:integer)</small></span></li>
+</ul></td></tr><tr class="odd"><td class="property"><a class="uri" href="http://purl.org/dc/elements/1.1/description"><small>dc:</small>description</a>
+</td><td><ul>
+	<li><span class="literal"><span property="dc:description" xmlns:dc="http://purl.org/dc/elements/1.1/">Singer-songwriter</span></span></li>
+</ul></td></tr><tr class="even"><td class="property"><a class="uri" href="http://purl.org/dc/terms/subject"><small>dcterms:</small>subject</a>
+</td><td><ul>
+	<li><span class="literal"><a class="uri" rel="dcterms:subject" xmlns:dcterms="http://purl.org/dc/terms/" href="http://dbpedia.org/resource/Category:Atlantic_Records_artists"><small>category</small>:Atlantic_Records_artists</a></span></li>
+	<li><span class="literal"><a class="uri" rel="dcterms:subject" xmlns:dcterms="http://purl.org/dc/terms/" href="http://dbpedia.org/resource/Category:American_singer-songwriters"><small>category</small>:American_singer-songwriters</a></span></li>
+	<li><span class="literal"><a class="uri" rel="dcterms:subject" xmlns:dcterms="http://purl.org/dc/terms/" href="http://dbpedia.org/resource/Category:American_dance_musicians"><small>category</small>:American_dance_musicians</a></span></li>
+	<li><span class="literal"><a class="uri" rel="dcterms:subject" xmlns:dcterms="http://purl.org/dc/terms/" href="http://dbpedia.org/resource/Category:People_from_Phoenix,_Arizona"><small>category</small>:People_from_Phoenix,_Arizona</a></span></li>
+	<li><span class="literal"><a class="uri" rel="dcterms:subject" xmlns:dcterms="http://purl.org/dc/terms/" href="http://dbpedia.org/resource/Category:American_contraltos"><small>category</small>:American_contraltos</a></span></li>
+	<li><span class="literal"><a class="uri" rel="dcterms:subject" xmlns:dcterms="http://purl.org/dc/terms/" href="http://dbpedia.org/resource/Category:Fleetwood_Mac_members"><small>category</small>:Fleetwood_Mac_members</a></span></li>
+	<li><span class="literal"><a class="uri" rel="dcterms:subject" xmlns:dcterms="http://purl.org/dc/terms/" href="http://dbpedia.org/resource/Category:Female_musicians"><small>category</small>:Female_musicians</a></span></li>
+	<li><span class="literal"><a class="uri" rel="dcterms:subject" xmlns:dcterms="http://purl.org/dc/terms/" href="http://dbpedia.org/resource/Category:Living_people"><small>category</small>:Living_people</a></span></li>
+	<li><span class="literal"><a class="uri" rel="dcterms:subject" xmlns:dcterms="http://purl.org/dc/terms/" href="http://dbpedia.org/resource/Category:1948_births"><small>category</small>:1948_births</a></span></li>
+	<li><span class="literal"><a class="uri" rel="dcterms:subject" xmlns:dcterms="http://purl.org/dc/terms/" href="http://dbpedia.org/resource/Category:People_with_chronic_fatigue_syndrome"><small>category</small>:People_with_chronic_fatigue_syndrome</a></span></li>
+	<li><span class="literal"><a class="uri" rel="dcterms:subject" xmlns:dcterms="http://purl.org/dc/terms/" href="http://dbpedia.org/resource/Category:Grammy_Award_winners"><small>category</small>:Grammy_Award_winners</a></span></li>
+	<li><span class="literal"><a class="uri" rel="dcterms:subject" xmlns:dcterms="http://purl.org/dc/terms/" href="http://dbpedia.org/resource/Category:American_rock_singers"><small>category</small>:American_rock_singers</a></span></li>
+	<li><span class="literal"><a class="uri" rel="dcterms:subject" xmlns:dcterms="http://purl.org/dc/terms/" href="http://dbpedia.org/resource/Category:Female_rock_singers"><small>category</small>:Female_rock_singers</a></span></li>
+	<li><span class="literal"><a class="uri" rel="dcterms:subject" xmlns:dcterms="http://purl.org/dc/terms/" href="http://dbpedia.org/resource/Category:Musicians_from_Arizona"><small>category</small>:Musicians_from_Arizona</a></span></li>
+	<li><span class="literal"><a class="uri" rel="dcterms:subject" xmlns:dcterms="http://purl.org/dc/terms/" href="http://dbpedia.org/resource/Category:San_Jose_State_University_alumni"><small>category</small>:San_Jose_State_University_alumni</a></span></li>
+	<li><span class="literal"><a class="uri" rel="dcterms:subject" xmlns:dcterms="http://purl.org/dc/terms/" href="http://dbpedia.org/resource/Category:American_female_singers"><small>category</small>:American_female_singers</a></span></li>
+	<li><span class="literal"><a class="uri" rel="dcterms:subject" xmlns:dcterms="http://purl.org/dc/terms/" href="http://dbpedia.org/resource/Category:American_diarists"><small>category</small>:American_diarists</a></span></li>
+	<li><span class="literal"><a class="uri" rel="dcterms:subject" xmlns:dcterms="http://purl.org/dc/terms/" href="http://dbpedia.org/resource/Category:People_from_Paradise_Valley,_Arizona"><small>category</small>:People_from_Paradise_Valley,_Arizona</a></span></li>
+</ul></td></tr><tr class="odd"><td class="property"><a class="uri" href="http://www.w3.org/1999/02/22-rdf-syntax-ns#type"><small>rdf:</small>type</a>
+</td><td><ul>
+	<li><span class="literal"><a class="uri" rel="rdf:type" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" href="http://www.w3.org/2002/07/owl#Thing"><small>owl</small>:Thing</a></span></li>
+	<li><span class="literal"><a class="uri" rel="rdf:type" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" href="http://dbpedia.org/ontology/Person"><small>dbpedia-owl</small>:Person</a></span></li>
+	<li><span class="literal"><a class="uri" rel="rdf:type" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" href="http://dbpedia.org/ontology/Artist"><small>dbpedia-owl</small>:Artist</a></span></li>
+	<li><span class="literal"><a class="uri" rel="rdf:type" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" href="http://schema.org/Person"><small>schema</small>:Person</a></span></li>
+	<li><span class="literal"><a class="uri" rel="rdf:type" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" href="http://dbpedia.org/class/yago/Person100007846"><small>yago</small>:Person100007846</a></span></li>
+	<li><span class="literal"><a class="uri" rel="rdf:type" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" href="http://dbpedia.org/class/yago/AmericanDanceMusicians"><small>yago</small>:AmericanDanceMusicians</a></span></li>
+	<li><span class="literal"><a class="uri" rel="rdf:type" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" href="http://dbpedia.org/class/yago/PeopleFromPhoenix,Arizona"><small>yago</small>:PeopleFromPhoenix,Arizona</a></span></li>
+	<li><span class="literal"><a class="uri" rel="rdf:type" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" href="http://dbpedia.org/ontology/MusicalArtist"><small>dbpedia-owl</small>:MusicalArtist</a></span></li>
+	<li><span class="literal"><a class="uri" rel="rdf:type" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" href="http://dbpedia.org/class/yago/AmericanContraltos"><small>yago</small>:AmericanContraltos</a></span></li>
+	<li><span class="literal"><a class="uri" rel="rdf:type" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" href="http://xmlns.com/foaf/0.1/Person"><small>foaf</small>:Person</a></span></li>
+	<li><span class="literal"><a class="uri" rel="rdf:type" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" href="http://schema.org/MusicGroup"><small>schema</small>:MusicGroup</a></span></li>
+	<li><span class="literal"><a class="uri" rel="rdf:type" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" href="http://dbpedia.org/class/yago/LivingPeople"><small>yago</small>:LivingPeople</a></span></li>
+	<li><span class="literal"><a class="uri" rel="rdf:type" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" href="http://dbpedia.org/class/yago/AmericanFemaleSingers"><small>yago</small>:AmericanFemaleSingers</a></span></li>
+	<li><span class="literal"><a class="uri" rel="rdf:type" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" href="http://dbpedia.org/class/yago/AmericanDiarists"><small>yago</small>:AmericanDiarists</a></span></li>
+	<li><span class="literal"><a class="uri" rel="rdf:type" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" href="http://dbpedia.org/class/yago/FemaleRockSingers"><small>yago</small>:FemaleRockSingers</a></span></li>
+	<li><span class="literal"><a class="uri" rel="rdf:type" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" href="http://dbpedia.org/class/yago/AmericanRockSingers"><small>yago</small>:AmericanRockSingers</a></span></li>
+	<li><span class="literal"><a class="uri" rel="rdf:type" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" href="http://dbpedia.org/class/yago/PeopleFromParadiseValley,Arizona"><small>yago</small>:PeopleFromParadiseValley,Arizona</a></span></li>
+	<li><span class="literal"><a class="uri" rel="rdf:type" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" href="http://dbpedia.org/class/yago/MusiciansFromArizona"><small>yago</small>:MusiciansFromArizona</a></span></li>
+	<li><span class="literal"><a class="uri" rel="rdf:type" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" href="http://dbpedia.org/class/yago/PeopleWithChronicFatiguESyndrome"><small>yago</small>:PeopleWithChronicFatiguESyndrome</a></span></li>
+	<li><span class="literal"><a class="uri" rel="rdf:type" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" href="http://umbel.org/umbel/rc/MusicalPerformer">http://umbel.org/umbel/rc/MusicalPerformer</a></span></li>
+	<li><span class="literal"><a class="uri" rel="rdf:type" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" href="http://dbpedia.org/class/yago/AtlanticRecordsArtists"><small>yago</small>:AtlanticRecordsArtists</a></span></li>
+	<li><span class="literal"><a class="uri" rel="rdf:type" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" href="http://dbpedia.org/class/yago/SanJoseStateUniversityAlumni"><small>yago</small>:SanJoseStateUniversityAlumni</a></span></li>
+</ul></td></tr><tr class="even"><td class="property"><a class="uri" href="http://www.w3.org/2000/01/rdf-schema#comment"><small>rdfs:</small>comment</a>
+</td><td><ul>
+	<li><span class="literal"><span property="rdfs:comment" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">Stephanie Lynn „Stevie“ Nicks ist eine US-amerikanische Sängerin und Komponistin.</span></span></li>
+	<li><span class="literal"><span property="rdfs:comment" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">Stephanie Lynn "Stevie" Nicks es una cantante y compositora estadounidense, conocida principalmente por su trabajo con Fleetwood Mac y su carrera como solista, que ha producido más de 20 éxitos en los Top 40 de las listas discográficas. Es una de las pocas artistas de rock que ha mantenido una carrera como solista, al mismo tiempo formando parte de una banda muy exitosa. Como miembro de Fleetwood Mac ingresó a The Rock and Roll Hall of Fame en 1998.</span></span></li>
+	<li><span class="literal"><span property="rdfs:comment" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">スティーヴィー・ニックス（Stevie Nicks, 1948年5月26日 - ）は、フリートウッド・マックのメンバーであり、ソロとしても20曲以上のTOP50ヒットを持つシンガー、ソングライター。 彼女の妖精のようなスタイルと重々しく抽象的な歌詞は、喝采と批評の両方を彼女にもたらした。“ロックの歌姫”とも呼ばれる。 スティーヴィーは、彼女が書き、当時ボーイフレンドだったリンジー・バッキンガムと録音した「Frozen Love,」と言う曲をミック・フリートウッドが聴いたことから、1975年にリンジーと共にフリートウッド・マックに招かれて加入。1977年のフリートウッド・マックのアルバム『噂』の成功で、世界的な名声を得た。 スティーヴィーは、1981年のアルバム『Bella Donna』でソロ活動を開始し、これまでに5枚以上のソロ作品を制作した。 スティーヴィーは、これまでに7回グラミー賞にノミネートされ、1977年にフリートウッド・マックとして「噂」でアルバム・オブ・ザ・イヤーを獲得した。1998年には、フリートウッド・マックのメンバーとして、ロックの殿堂入りした。</span></span></li>
+	<li><span class="literal"><span property="rdfs:comment" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">Stevie Nicks, właśc. Stephanie Lynn Nicks – amerykańska wokalistka rockowa.</span></span></li>
+	<li><span class="literal"><span property="rdfs:comment" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">Stevie Nicks, nome artístico de Stephanie Lynn Nicks, é uma cantora e compositora norte-americana, mais conhecida como cantora da banda Fleetwood Mac. Uma de suas canções solo, "Edge of Seventeen", figurou na trilha sonora do jogo eletrônico Grand Theft Auto IV, mais precisamente na rádio Liberty Rock Radio 97.8.</span></span></li>
+	<li><span class="literal"><span property="rdfs:comment" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">Стиви Никс — американская певица и автор песен, наиболее известная как лицо и голос группы Fleetwood Mac. В последнее время записывается и сольно. Долгое время её партнёром был другой участник группы, Линдсей Бакингэм. Некоторое время жила и записывалась с Доном Хенли.</span></span></li>
+	<li><span class="literal"><span property="rdfs:comment" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">Stephanie Lynn "Stevie" Nicks (born May 26, 1948) is an American singer-songwriter, best known for her work with Fleetwood Mac and an extensive solo career, which collectively have produced over forty Top 50 hits and sold over 140 million albums. She has been noted for her ethereal visual style and symbolic lyrics. Nicks joined Fleetwood Mac on December 31, 1974, along with her then-boyfriend Lindsey Buckingham.</span></span></li>
+	<li><span class="literal"><span property="rdfs:comment" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">Stephanie Lynn "Stevie" Nicks on yhdysvaltalainen rocklaulaja ja lauluntekijä. Hänet tunnetaan Fleetwood Mac -yhtyeessä tekemästään työstä ja soolourastaan. Nicks syntyi Phoenixissa ja toimi vuosina 1968-1972 yhtyeessä Fritz. Vuonna 1973 hän julkaisi Lindsey Buckinghamin kanssa albumin Buckingham Nicks. Pian tämän jälkeen Nicks ja Buckingham liittyivät Fleetwood Maciin. Soolouransa Nicks aloitti vuonna 1981 julkaisemalla albumin Bella Donna.</span></span></li>
+	<li><span class="literal"><span property="rdfs:comment" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">È la voce del gruppo musicale rock inglese-statunitense dei Fleetwood Mac. Oltre all'attività con la band, Stevie ha pubblicato diversi dischi da solista, e nel 2007 è apparsa nell'album "Heroes and Thieves" di Vanessa Carlton, con cui canta "The One". Stevie Nicks iniziò la sua carriera di cantante nel gruppo "Fritz" fondato con Lindsey Buckingham.</span></span></li>
+	<li><span class="literal"><span property="rdfs:comment" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">Stephanie Lynn "Stevie" Nicks is een Amerikaans zangeres en popidool. In het midden van de jaren 70 werd Stevie Nicks een megaster als charismatische zangeres van de (voormalige) Engelse bluesformatie Fleetwood Mac, waar ze in 1974 als "package deal" werd aangenomen door Mick Fleetwood. Daar waar het eigenlijk alleen om haar toenmalige levensgezel Lindsey Buckingham ging. Stevie paste echter wonderwel in het nieuwe concept en ze zette samen met Buckingham de band weer op de kaart.</span></span></li>
+	<li><span class="literal"><span property="rdfs:comment" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">Stephanie Lynn «Stevie» Nicks er en amerikansk sanger. Hun er kjent som sanger i Fleetwood Mac og en omfattende solokarriere. Hun har hatt over 40 US Top 50 hits, og solgt over 120 millioner musikkalbum. Tidlig på 1980-tallet, etter å ha gitt ut sitt første soloalbum, kalte Rolling Stone henne: «Regjerende dronning av Rock &amp; Roll». Hun er spesielt kjent for sine lange vide kjoler.</span></span></li>
+	<li><span class="literal"><span property="rdfs:comment" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">Stevie Nicks, egentligen Stephanie Lynn Nicks, född 26 maj 1948 i Phoenix, Arizona, är en amerikansk singer-songwriter. Hon är mest känd som sångerska i Fleetwood Mac, till vilken hon anslöt 1975 tillsammans med dåvarande pojkvännen Lindsey Buckingham. Med Buckingham hade hon tidigare haft gruppen Buckingham Nicks och innan dess gruppen Fritz. Hon har även haft framgångar som soloartist. Albumet Bella Donna innehöll bl.a. duetter med Tom Petty och Don Henley.</span></span></li>
+	<li><span class="literal"><span property="rdfs:comment" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">Stevie Nicks, de son nom complet Stephanie Lynn Nicks, est une chanteuse américaine, née le Modèle:Date à Phoenix. Elle est notamment connue pour sa musique avec le groupe de rock Fleetwood Mac, son image spirituelle et sa voix distinctive.</span></span></li>
+</ul></td></tr><tr class="odd"><td class="property"><a class="uri" href="http://www.w3.org/2000/01/rdf-schema#label"><small>rdfs:</small>label</a>
+</td><td><ul>
+	<li><span class="literal"><span property="rdfs:label" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">Stevie Nicks</span></span></li>
+	<li><span class="literal"><span property="rdfs:label" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">Stevie Nicks</span></span></li>
+	<li><span class="literal"><span property="rdfs:label" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">Stevie Nicks</span></span></li>
+	<li><span class="literal"><span property="rdfs:label" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">Stevie Nicks</span></span></li>
+	<li><span class="literal"><span property="rdfs:label" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">Stevie Nicks</span></span></li>
+	<li><span class="literal"><span property="rdfs:label" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">Stevie Nicks</span></span></li>
+	<li><span class="literal"><span property="rdfs:label" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">Stevie Nicks</span></span></li>
+	<li><span class="literal"><span property="rdfs:label" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">スティーヴィー・ニックス</span></span></li>
+	<li><span class="literal"><span property="rdfs:label" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">Stevie Nicks</span></span></li>
+	<li><span class="literal"><span property="rdfs:label" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">Stevie Nicks</span></span></li>
+	<li><span class="literal"><span property="rdfs:label" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">Stevie Nicks</span></span></li>
+	<li><span class="literal"><span property="rdfs:label" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">Stevie Nicks</span></span></li>
+	<li><span class="literal"><span property="rdfs:label" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">Никс, Стиви</span></span></li>
+</ul></td></tr><tr class="even"><td class="property"><a class="uri" href="http://www.w3.org/2002/07/owl#sameAs"><small>owl:</small>sameAs</a>
+</td><td><ul>
+	<li><span class="literal"><a class="uri" rel="owl:sameAs" href="http://sw.opencyc.org/concept/Mx4rwQfMwJwpEbGdrcN5Y29ycA">http://sw.opencyc.org/concept/Mx4rwQfMwJwpEbGdrcN5Y29ycA</a></span></li>
+	<li><span class="literal"><a class="uri" rel="owl:sameAs" href="http://rdf.freebase.com/ns/m/094xh"><small>fbase</small>:Stevie Nicks</a></span></li>
+	<li><span class="literal"><a class="uri" rel="owl:sameAs" href="http://zitgist.com/music/artist/b7f2cca2-72c6-41fb-ae33-53370fc62fe7">http://zitgist.com/music/artist/b7f2cca2-72c6-41fb-ae33-53370fc62fe7</a></span></li>
+</ul></td></tr><tr class="odd"><td class="property"><a class="uri" href="http://xmlns.com/foaf/0.1/depiction"><small>foaf:</small>depiction</a>
+</td><td><ul>
+	<li><span class="literal"><a class="uri" rel="foaf:depiction" xmlns:foaf="http://xmlns.com/foaf/0.1/" href="http://upload.wikimedia.org/wikipedia/commons/6/6f/StevieNicks2.jpg">http://upload.wikimedia.org/wikipedia/commons/6/6f/StevieNicks2.jpg</a></span></li>
+</ul></td></tr><tr class="even"><td class="property"><a class="uri" href="http://xmlns.com/foaf/0.1/givenName"><small>foaf:</small>givenName</a>
+</td><td><ul>
+	<li><span class="literal"><span property="foaf:givenName" xmlns:foaf="http://xmlns.com/foaf/0.1/">Stephanie Lynn Nicks</span></span></li>
+	<li><span class="literal"><span property="foaf:givenName" xmlns:foaf="http://xmlns.com/foaf/0.1/">Stevie</span></span></li>
+</ul></td></tr><tr class="odd"><td class="property"><a class="uri" href="http://xmlns.com/foaf/0.1/homepage"><small>foaf:</small>homepage</a>
+</td><td><ul>
+	<li><span class="literal"><a class="uri" rel="foaf:homepage" xmlns:foaf="http://xmlns.com/foaf/0.1/" href="http://stevienicks.net">http://stevienicks.net</a></span></li>
+	<li><span class="literal"><a class="uri" rel="foaf:homepage" xmlns:foaf="http://xmlns.com/foaf/0.1/" href="http://www.stevienicks.net/">http://www.stevienicks.net/</a></span></li>
+</ul></td></tr><tr class="even"><td class="property"><a class="uri" href="http://xmlns.com/foaf/0.1/name"><small>foaf:</small>name</a>
+</td><td><ul>
+	<li><span class="literal"><span property="foaf:name" xmlns:foaf="http://xmlns.com/foaf/0.1/">Stevie Nicks</span></span></li>
+</ul></td></tr><tr class="odd"><td class="property"><a class="uri" href="http://xmlns.com/foaf/0.1/page"><small>foaf:</small>page</a>
+</td><td><ul>
+	<li><span class="literal"><a class="uri" rel="foaf:page" xmlns:foaf="http://xmlns.com/foaf/0.1/" href="http://en.wikipedia.org/wiki/Stevie_Nicks">http://en.wikipedia.org/wiki/Stevie_Nicks</a></span></li>
+</ul></td></tr><tr class="even"><td class="property"><a class="uri" href="http://xmlns.com/foaf/0.1/surname"><small>foaf:</small>surname</a>
+</td><td><ul>
+	<li><span class="literal"><span property="foaf:surname" xmlns:foaf="http://xmlns.com/foaf/0.1/">Nicks</span></span></li>
+</ul></td></tr><tr class="odd"><td class="property">is <a class="uri" href="http://dbpedia.org/ontology/artist"><small>dbpedia-owl:</small>artist</a>
+ of</td><td><ul>
+	<li><span class="literal"><a class="uri" rev="dbpedia-owl:artist" xmlns:dbpedia-owl="http://dbpedia.org/ontology/" href="http://dbpedia.org/resource/Timespace_%E2%80%93_The_Best_of_Stevie_Nicks"><small>dbpedia</small>:Timespace_–_The_Best_of_Stevie_Nicks</a></span></li>
+	<li><span class="literal"><a class="uri" rev="dbpedia-owl:artist" xmlns:dbpedia-owl="http://dbpedia.org/ontology/" href="http://dbpedia.org/resource/The_Soundstage_Sessions"><small>dbpedia</small>:The_Soundstage_Sessions</a></span></li>
+	<li><span class="literal"><a class="uri" rev="dbpedia-owl:artist" xmlns:dbpedia-owl="http://dbpedia.org/ontology/" href="http://dbpedia.org/resource/Trouble_in_Shangri-La"><small>dbpedia</small>:Trouble_in_Shangri-La</a></span></li>
+	<li><span class="literal"><a class="uri" rev="dbpedia-owl:artist" xmlns:dbpedia-owl="http://dbpedia.org/ontology/" href="http://dbpedia.org/resource/Beauty_and_the_Beast_%28Stevie_Nicks_song%29"><small>dbpedia</small>:Beauty_and_the_Beast_(Stevie_Nicks_song)</a></span></li>
+	<li><span class="literal"><a class="uri" rev="dbpedia-owl:artist" xmlns:dbpedia-owl="http://dbpedia.org/ontology/" href="http://dbpedia.org/resource/Live_in_Chicago_%28Stevie_Nicks_DVD%29"><small>dbpedia</small>:Live_in_Chicago_(Stevie_Nicks_DVD)</a></span></li>
+	<li><span class="literal"><a class="uri" rev="dbpedia-owl:artist" xmlns:dbpedia-owl="http://dbpedia.org/ontology/" href="http://dbpedia.org/resource/Street_Angel_%28album%29"><small>dbpedia</small>:Street_Angel_(album)</a></span></li>
+	<li><span class="literal"><a class="uri" rev="dbpedia-owl:artist" xmlns:dbpedia-owl="http://dbpedia.org/ontology/" href="http://dbpedia.org/resource/The_Wild_Heart_%28album%29"><small>dbpedia</small>:The_Wild_Heart_(album)</a></span></li>
+	<li><span class="literal"><a class="uri" rev="dbpedia-owl:artist" xmlns:dbpedia-owl="http://dbpedia.org/ontology/" href="http://dbpedia.org/resource/Rock_a_Little"><small>dbpedia</small>:Rock_a_Little</a></span></li>
+	<li><span class="literal"><a class="uri" rev="dbpedia-owl:artist" xmlns:dbpedia-owl="http://dbpedia.org/ontology/" href="http://dbpedia.org/resource/Enchanted_%28Stevie_Nicks_album%29"><small>dbpedia</small>:Enchanted_(Stevie_Nicks_album)</a></span></li>
+	<li><span class="literal"><a class="uri" rev="dbpedia-owl:artist" xmlns:dbpedia-owl="http://dbpedia.org/ontology/" href="http://dbpedia.org/resource/In_Your_Dreams_%28album%29"><small>dbpedia</small>:In_Your_Dreams_(album)</a></span></li>
+	<li><span class="literal"><a class="uri" rev="dbpedia-owl:artist" xmlns:dbpedia-owl="http://dbpedia.org/ontology/" href="http://dbpedia.org/resource/Bella_Donna_%28album%29"><small>dbpedia</small>:Bella_Donna_(album)</a></span></li>
+	<li><span class="literal"><a class="uri" rev="dbpedia-owl:artist" xmlns:dbpedia-owl="http://dbpedia.org/ontology/" href="http://dbpedia.org/resource/The_Other_Side_of_the_Mirror_%28album%29"><small>dbpedia</small>:The_Other_Side_of_the_Mirror_(album)</a></span></li>
+	<li><span class="literal"><a class="uri" rev="dbpedia-owl:artist" xmlns:dbpedia-owl="http://dbpedia.org/ontology/" href="http://dbpedia.org/resource/Crystal_Visions_%E2%80%93_The_Very_Best_of_Stevie_Nicks"><small>dbpedia</small>:Crystal_Visions_–_The_Very_Best_of_Stevie_Nicks</a></span></li>
+</ul></td></tr><tr class="even"><td class="property">is <a class="uri" href="http://dbpedia.org/ontology/associatedBand"><small>dbpedia-owl:</small>associatedBand</a>
+ of</td><td><ul>
+	<li><span class="literal"><a class="uri" rev="dbpedia-owl:associatedBand" xmlns:dbpedia-owl="http://dbpedia.org/ontology/" href="http://dbpedia.org/resource/Tom_Petty_and_the_Heartbreakers"><small>dbpedia</small>:Tom_Petty_and_the_Heartbreakers</a></span></li>
+	<li><span class="literal"><a class="uri" rev="dbpedia-owl:associatedBand" xmlns:dbpedia-owl="http://dbpedia.org/ontology/" href="http://dbpedia.org/resource/Ian_Wallace_%28drummer%29"><small>dbpedia</small>:Ian_Wallace_(drummer)</a></span></li>
+	<li><span class="literal"><a class="uri" rev="dbpedia-owl:associatedBand" xmlns:dbpedia-owl="http://dbpedia.org/ontology/" href="http://dbpedia.org/resource/Timothy_Drury"><small>dbpedia</small>:Timothy_Drury</a></span></li>
+	<li><span class="literal"><a class="uri" rev="dbpedia-owl:associatedBand" xmlns:dbpedia-owl="http://dbpedia.org/ontology/" href="http://dbpedia.org/resource/Peter_Stroud"><small>dbpedia</small>:Peter_Stroud</a></span></li>
+	<li><span class="literal"><a class="uri" rev="dbpedia-owl:associatedBand" xmlns:dbpedia-owl="http://dbpedia.org/ontology/" href="http://dbpedia.org/resource/Waddy_Wachtel"><small>dbpedia</small>:Waddy_Wachtel</a></span></li>
+	<li><span class="literal"><a class="uri" rev="dbpedia-owl:associatedBand" xmlns:dbpedia-owl="http://dbpedia.org/ontology/" href="http://dbpedia.org/resource/Sheryl_Crow"><small>dbpedia</small>:Sheryl_Crow</a></span></li>
+	<li><span class="literal"><a class="uri" rev="dbpedia-owl:associatedBand" xmlns:dbpedia-owl="http://dbpedia.org/ontology/" href="http://dbpedia.org/resource/Tom_Petty"><small>dbpedia</small>:Tom_Petty</a></span></li>
+	<li><span class="literal"><a class="uri" rev="dbpedia-owl:associatedBand" xmlns:dbpedia-owl="http://dbpedia.org/ontology/" href="http://dbpedia.org/resource/Don_Henley"><small>dbpedia</small>:Don_Henley</a></span></li>
+	<li><span class="literal"><a class="uri" rev="dbpedia-owl:associatedBand" xmlns:dbpedia-owl="http://dbpedia.org/ontology/" href="http://dbpedia.org/resource/Mike_Campbell_%28musician%29"><small>dbpedia</small>:Mike_Campbell_(musician)</a></span></li>
+</ul></td></tr><tr class="odd"><td class="property">is <a class="uri" href="http://dbpedia.org/ontology/associatedMusicalArtist"><small>dbpedia-owl:</small>associatedMusicalArtist</a>
+ of</td><td><ul>
+	<li><span class="literal"><a class="uri" rev="dbpedia-owl:associatedMusicalArtist" xmlns:dbpedia-owl="http://dbpedia.org/ontology/" href="http://dbpedia.org/resource/Tom_Petty_and_the_Heartbreakers"><small>dbpedia</small>:Tom_Petty_and_the_Heartbreakers</a></span></li>
+	<li><span class="literal"><a class="uri" rev="dbpedia-owl:associatedMusicalArtist" xmlns:dbpedia-owl="http://dbpedia.org/ontology/" href="http://dbpedia.org/resource/Ian_Wallace_%28drummer%29"><small>dbpedia</small>:Ian_Wallace_(drummer)</a></span></li>
+	<li><span class="literal"><a class="uri" rev="dbpedia-owl:associatedMusicalArtist" xmlns:dbpedia-owl="http://dbpedia.org/ontology/" href="http://dbpedia.org/resource/Timothy_Drury"><small>dbpedia</small>:Timothy_Drury</a></span></li>
+	<li><span class="literal"><a class="uri" rev="dbpedia-owl:associatedMusicalArtist" xmlns:dbpedia-owl="http://dbpedia.org/ontology/" href="http://dbpedia.org/resource/Peter_Stroud"><small>dbpedia</small>:Peter_Stroud</a></span></li>
+	<li><span class="literal"><a class="uri" rev="dbpedia-owl:associatedMusicalArtist" xmlns:dbpedia-owl="http://dbpedia.org/ontology/" href="http://dbpedia.org/resource/Waddy_Wachtel"><small>dbpedia</small>:Waddy_Wachtel</a></span></li>
+	<li><span class="literal"><a class="uri" rev="dbpedia-owl:associatedMusicalArtist" xmlns:dbpedia-owl="http://dbpedia.org/ontology/" href="http://dbpedia.org/resource/Sheryl_Crow"><small>dbpedia</small>:Sheryl_Crow</a></span></li>
+	<li><span class="literal"><a class="uri" rev="dbpedia-owl:associatedMusicalArtist" xmlns:dbpedia-owl="http://dbpedia.org/ontology/" href="http://dbpedia.org/resource/Tom_Petty"><small>dbpedia</small>:Tom_Petty</a></span></li>
+	<li><span class="literal"><a class="uri" rev="dbpedia-owl:associatedMusicalArtist" xmlns:dbpedia-owl="http://dbpedia.org/ontology/" href="http://dbpedia.org/resource/Don_Henley"><small>dbpedia</small>:Don_Henley</a></span></li>
+	<li><span class="literal"><a class="uri" rev="dbpedia-owl:associatedMusicalArtist" xmlns:dbpedia-owl="http://dbpedia.org/ontology/" href="http://dbpedia.org/resource/Mike_Campbell_%28musician%29"><small>dbpedia</small>:Mike_Campbell_(musician)</a></span></li>
+</ul></td></tr><tr class="even"><td class="property">is <a class="uri" href="http://dbpedia.org/ontology/bandMember"><small>dbpedia-owl:</small>bandMember</a>
+ of</td><td><ul>
+	<li><span class="literal"><a class="uri" rev="dbpedia-owl:bandMember" xmlns:dbpedia-owl="http://dbpedia.org/ontology/" href="http://dbpedia.org/resource/Fleetwood_Mac"><small>dbpedia</small>:Fleetwood_Mac</a></span></li>
+</ul></td></tr><tr class="odd"><td class="property">is <a class="uri" href="http://dbpedia.org/ontology/musicalArtist"><small>dbpedia-owl:</small>musicalArtist</a>
+ of</td><td><ul>
+	<li><span class="literal"><a class="uri" rev="dbpedia-owl:musicalArtist" xmlns:dbpedia-owl="http://dbpedia.org/ontology/" href="http://dbpedia.org/resource/Secret_Love_%28Stevie_Nicks_song%29"><small>dbpedia</small>:Secret_Love_(Stevie_Nicks_song)</a></span></li>
+	<li><span class="literal"><a class="uri" rev="dbpedia-owl:musicalArtist" xmlns:dbpedia-owl="http://dbpedia.org/ontology/" href="http://dbpedia.org/resource/Rooms_on_Fire"><small>dbpedia</small>:Rooms_on_Fire</a></span></li>
+	<li><span class="literal"><a class="uri" rev="dbpedia-owl:musicalArtist" xmlns:dbpedia-owl="http://dbpedia.org/ontology/" href="http://dbpedia.org/resource/Stand_Back"><small>dbpedia</small>:Stand_Back</a></span></li>
+	<li><span class="literal"><a class="uri" rev="dbpedia-owl:musicalArtist" xmlns:dbpedia-owl="http://dbpedia.org/ontology/" href="http://dbpedia.org/resource/Edge_of_Seventeen_%28Just_Like_the_White_Winged_Dove%29"><small>dbpedia</small>:Edge_of_Seventeen_(Just_Like_the_White_Winged_Dove)</a></span></li>
+	<li><span class="literal"><a class="uri" rev="dbpedia-owl:musicalArtist" xmlns:dbpedia-owl="http://dbpedia.org/ontology/" href="http://dbpedia.org/resource/Talk_to_Me_%28Stevie_Nicks_song%29"><small>dbpedia</small>:Talk_to_Me_(Stevie_Nicks_song)</a></span></li>
+	<li><span class="literal"><a class="uri" rev="dbpedia-owl:musicalArtist" xmlns:dbpedia-owl="http://dbpedia.org/ontology/" href="http://dbpedia.org/resource/Planets_of_the_Universe"><small>dbpedia</small>:Planets_of_the_Universe</a></span></li>
+	<li><span class="literal"><a class="uri" rev="dbpedia-owl:musicalArtist" xmlns:dbpedia-owl="http://dbpedia.org/ontology/" href="http://dbpedia.org/resource/Leather_and_Lace_%28song%29"><small>dbpedia</small>:Leather_and_Lace_(song)</a></span></li>
+	<li><span class="literal"><a class="uri" rev="dbpedia-owl:musicalArtist" xmlns:dbpedia-owl="http://dbpedia.org/ontology/" href="http://dbpedia.org/resource/Stop_Draggin%27_My_Heart_Around"><small>dbpedia</small>:Stop_Draggin'_My_Heart_Around</a></span></li>
+	<li><span class="literal"><a class="uri" rev="dbpedia-owl:musicalArtist" xmlns:dbpedia-owl="http://dbpedia.org/ontology/" href="http://dbpedia.org/resource/Needles_and_Pins_%28song%29__Needles_and_Pins___2"><small>dbpedia</small>:Needles_and_Pins_(song)__Needles_and_Pins___2</a></span></li>
+	<li><span class="literal"><a class="uri" rev="dbpedia-owl:musicalArtist" xmlns:dbpedia-owl="http://dbpedia.org/ontology/" href="http://dbpedia.org/resource/Crash_into_Me____1"><small>dbpedia</small>:Crash_into_Me____1</a></span></li>
+	<li><span class="literal"><a class="uri" rev="dbpedia-owl:musicalArtist" xmlns:dbpedia-owl="http://dbpedia.org/ontology/" href="http://dbpedia.org/resource/Stand_Back__%E2%80%93_Remixes___1"><small>dbpedia</small>:Stand_Back__–_Remixes___1</a></span></li>
+</ul></td></tr><tr class="even"><td class="property">is <a class="uri" href="http://dbpedia.org/ontology/musicalBand"><small>dbpedia-owl:</small>musicalBand</a>
+ of</td><td><ul>
+	<li><span class="literal"><a class="uri" rev="dbpedia-owl:musicalBand" xmlns:dbpedia-owl="http://dbpedia.org/ontology/" href="http://dbpedia.org/resource/Secret_Love_%28Stevie_Nicks_song%29"><small>dbpedia</small>:Secret_Love_(Stevie_Nicks_song)</a></span></li>
+	<li><span class="literal"><a class="uri" rev="dbpedia-owl:musicalBand" xmlns:dbpedia-owl="http://dbpedia.org/ontology/" href="http://dbpedia.org/resource/Rooms_on_Fire"><small>dbpedia</small>:Rooms_on_Fire</a></span></li>
+	<li><span class="literal"><a class="uri" rev="dbpedia-owl:musicalBand" xmlns:dbpedia-owl="http://dbpedia.org/ontology/" href="http://dbpedia.org/resource/Stand_Back"><small>dbpedia</small>:Stand_Back</a></span></li>
+	<li><span class="literal"><a class="uri" rev="dbpedia-owl:musicalBand" xmlns:dbpedia-owl="http://dbpedia.org/ontology/" href="http://dbpedia.org/resource/Edge_of_Seventeen_%28Just_Like_the_White_Winged_Dove%29"><small>dbpedia</small>:Edge_of_Seventeen_(Just_Like_the_White_Winged_Dove)</a></span></li>
+	<li><span class="literal"><a class="uri" rev="dbpedia-owl:musicalBand" xmlns:dbpedia-owl="http://dbpedia.org/ontology/" href="http://dbpedia.org/resource/Talk_to_Me_%28Stevie_Nicks_song%29"><small>dbpedia</small>:Talk_to_Me_(Stevie_Nicks_song)</a></span></li>
+	<li><span class="literal"><a class="uri" rev="dbpedia-owl:musicalBand" xmlns:dbpedia-owl="http://dbpedia.org/ontology/" href="http://dbpedia.org/resource/Planets_of_the_Universe"><small>dbpedia</small>:Planets_of_the_Universe</a></span></li>
+	<li><span class="literal"><a class="uri" rev="dbpedia-owl:musicalBand" xmlns:dbpedia-owl="http://dbpedia.org/ontology/" href="http://dbpedia.org/resource/Leather_and_Lace_%28song%29"><small>dbpedia</small>:Leather_and_Lace_(song)</a></span></li>
+	<li><span class="literal"><a class="uri" rev="dbpedia-owl:musicalBand" xmlns:dbpedia-owl="http://dbpedia.org/ontology/" href="http://dbpedia.org/resource/Stop_Draggin%27_My_Heart_Around"><small>dbpedia</small>:Stop_Draggin'_My_Heart_Around</a></span></li>
+	<li><span class="literal"><a class="uri" rev="dbpedia-owl:musicalBand" xmlns:dbpedia-owl="http://dbpedia.org/ontology/" href="http://dbpedia.org/resource/Needles_and_Pins_%28song%29__Needles_and_Pins___2"><small>dbpedia</small>:Needles_and_Pins_(song)__Needles_and_Pins___2</a></span></li>
+	<li><span class="literal"><a class="uri" rev="dbpedia-owl:musicalBand" xmlns:dbpedia-owl="http://dbpedia.org/ontology/" href="http://dbpedia.org/resource/Crash_into_Me____1"><small>dbpedia</small>:Crash_into_Me____1</a></span></li>
+	<li><span class="literal"><a class="uri" rev="dbpedia-owl:musicalBand" xmlns:dbpedia-owl="http://dbpedia.org/ontology/" href="http://dbpedia.org/resource/Stand_Back__%E2%80%93_Remixes___1"><small>dbpedia</small>:Stand_Back__–_Remixes___1</a></span></li>
+</ul></td></tr><tr class="odd"><td class="property">is <a class="uri" href="http://dbpedia.org/ontology/producer"><small>dbpedia-owl:</small>producer</a>
+ of</td><td><ul>
+	<li><span class="literal"><a class="uri" rev="dbpedia-owl:producer" xmlns:dbpedia-owl="http://dbpedia.org/ontology/" href="http://dbpedia.org/resource/Timespace_%E2%80%93_The_Best_of_Stevie_Nicks"><small>dbpedia</small>:Timespace_–_The_Best_of_Stevie_Nicks</a></span></li>
+	<li><span class="literal"><a class="uri" rev="dbpedia-owl:producer" xmlns:dbpedia-owl="http://dbpedia.org/ontology/" href="http://dbpedia.org/resource/The_Soundstage_Sessions"><small>dbpedia</small>:The_Soundstage_Sessions</a></span></li>
+	<li><span class="literal"><a class="uri" rev="dbpedia-owl:producer" xmlns:dbpedia-owl="http://dbpedia.org/ontology/" href="http://dbpedia.org/resource/Trouble_in_Shangri-La"><small>dbpedia</small>:Trouble_in_Shangri-La</a></span></li>
+	<li><span class="literal"><a class="uri" rev="dbpedia-owl:producer" xmlns:dbpedia-owl="http://dbpedia.org/ontology/" href="http://dbpedia.org/resource/Street_Angel_%28album%29"><small>dbpedia</small>:Street_Angel_(album)</a></span></li>
+	<li><span class="literal"><a class="uri" rev="dbpedia-owl:producer" xmlns:dbpedia-owl="http://dbpedia.org/ontology/" href="http://dbpedia.org/resource/Rock_a_Little"><small>dbpedia</small>:Rock_a_Little</a></span></li>
+	<li><span class="literal"><a class="uri" rev="dbpedia-owl:producer" xmlns:dbpedia-owl="http://dbpedia.org/ontology/" href="http://dbpedia.org/resource/Enchanted_%28Stevie_Nicks_album%29"><small>dbpedia</small>:Enchanted_(Stevie_Nicks_album)</a></span></li>
+	<li><span class="literal"><a class="uri" rev="dbpedia-owl:producer" xmlns:dbpedia-owl="http://dbpedia.org/ontology/" href="http://dbpedia.org/resource/Crystal_Visions_%E2%80%93_The_Very_Best_of_Stevie_Nicks"><small>dbpedia</small>:Crystal_Visions_–_The_Very_Best_of_Stevie_Nicks</a></span></li>
+	<li><span class="literal"><a class="uri" rev="dbpedia-owl:producer" xmlns:dbpedia-owl="http://dbpedia.org/ontology/" href="http://dbpedia.org/resource/Planets_of_the_Universe"><small>dbpedia</small>:Planets_of_the_Universe</a></span></li>
+	<li><span class="literal"><a class="uri" rev="dbpedia-owl:producer" xmlns:dbpedia-owl="http://dbpedia.org/ontology/" href="http://dbpedia.org/resource/Crash_into_Me____1"><small>dbpedia</small>:Crash_into_Me____1</a></span></li>
+</ul></td></tr><tr class="even"><td class="property">is <a class="uri" href="http://dbpedia.org/ontology/starring"><small>dbpedia-owl:</small>starring</a>
+ of</td><td><ul>
+	<li><span class="literal"><a class="uri" rev="dbpedia-owl:starring" xmlns:dbpedia-owl="http://dbpedia.org/ontology/" href="http://dbpedia.org/resource/Runnin%27_Down_a_Dream_%28film%29"><small>dbpedia</small>:Runnin'_Down_a_Dream_(film)</a></span></li>
+</ul></td></tr><tr class="odd"><td class="property">is <a class="uri" href="http://dbpedia.org/ontology/wikiPageDisambiguates"><small>dbpedia-owl:</small>wikiPageDisambiguates</a>
+ of</td><td><ul>
+	<li><span class="literal"><a class="uri" rev="dbpedia-owl:wikiPageDisambiguates" xmlns:dbpedia-owl="http://dbpedia.org/ontology/" href="http://dbpedia.org/resource/Nicks"><small>dbpedia</small>:Nicks</a></span></li>
+	<li><span class="literal"><a class="uri" rev="dbpedia-owl:wikiPageDisambiguates" xmlns:dbpedia-owl="http://dbpedia.org/ontology/" href="http://dbpedia.org/resource/Stevie"><small>dbpedia</small>:Stevie</a></span></li>
+</ul></td></tr><tr class="even"><td class="property">is <a class="uri" href="http://dbpedia.org/ontology/wikiPageRedirects"><small>dbpedia-owl:</small>wikiPageRedirects</a>
+ of</td><td><ul>
+	<li><span class="literal"><a class="uri" rev="dbpedia-owl:wikiPageRedirects" xmlns:dbpedia-owl="http://dbpedia.org/ontology/" href="http://dbpedia.org/resource/Stevie_Nix"><small>dbpedia</small>:Stevie_Nix</a></span></li>
+	<li><span class="literal"><a class="uri" rev="dbpedia-owl:wikiPageRedirects" xmlns:dbpedia-owl="http://dbpedia.org/ontology/" href="http://dbpedia.org/resource/Stephanie_Nicks"><small>dbpedia</small>:Stephanie_Nicks</a></span></li>
+	<li><span class="literal"><a class="uri" rev="dbpedia-owl:wikiPageRedirects" xmlns:dbpedia-owl="http://dbpedia.org/ontology/" href="http://dbpedia.org/resource/Stevie_Knicks"><small>dbpedia</small>:Stevie_Knicks</a></span></li>
+	<li><span class="literal"><a class="uri" rev="dbpedia-owl:wikiPageRedirects" xmlns:dbpedia-owl="http://dbpedia.org/ontology/" href="http://dbpedia.org/resource/Welsh_Witch_Music"><small>dbpedia</small>:Welsh_Witch_Music</a></span></li>
+	<li><span class="literal"><a class="uri" rev="dbpedia-owl:wikiPageRedirects" xmlns:dbpedia-owl="http://dbpedia.org/ontology/" href="http://dbpedia.org/resource/Welsh_Witch"><small>dbpedia</small>:Welsh_Witch</a></span></li>
+</ul></td></tr><tr class="odd"><td class="property">is <a class="uri" href="http://dbpedia.org/ontology/writer"><small>dbpedia-owl:</small>writer</a>
+ of</td><td><ul>
+	<li><span class="literal"><a class="uri" rev="dbpedia-owl:writer" xmlns:dbpedia-owl="http://dbpedia.org/ontology/" href="http://dbpedia.org/resource/Sara_%28Fleetwood_Mac_song%29"><small>dbpedia</small>:Sara_(Fleetwood_Mac_song)</a></span></li>
+	<li><span class="literal"><a class="uri" rev="dbpedia-owl:writer" xmlns:dbpedia-owl="http://dbpedia.org/ontology/" href="http://dbpedia.org/resource/Landslide_%28song%29"><small>dbpedia</small>:Landslide_(song)</a></span></li>
+	<li><span class="literal"><a class="uri" rev="dbpedia-owl:writer" xmlns:dbpedia-owl="http://dbpedia.org/ontology/" href="http://dbpedia.org/resource/Rhiannon_%28song%29"><small>dbpedia</small>:Rhiannon_(song)</a></span></li>
+	<li><span class="literal"><a class="uri" rev="dbpedia-owl:writer" xmlns:dbpedia-owl="http://dbpedia.org/ontology/" href="http://dbpedia.org/resource/Bootylicious"><small>dbpedia</small>:Bootylicious</a></span></li>
+	<li><span class="literal"><a class="uri" rev="dbpedia-owl:writer" xmlns:dbpedia-owl="http://dbpedia.org/ontology/" href="http://dbpedia.org/resource/Beauty_and_the_Beast_%28Stevie_Nicks_song%29"><small>dbpedia</small>:Beauty_and_the_Beast_(Stevie_Nicks_song)</a></span></li>
+	<li><span class="literal"><a class="uri" rev="dbpedia-owl:writer" xmlns:dbpedia-owl="http://dbpedia.org/ontology/" href="http://dbpedia.org/resource/Secret_Love_%28Stevie_Nicks_song%29"><small>dbpedia</small>:Secret_Love_(Stevie_Nicks_song)</a></span></li>
+	<li><span class="literal"><a class="uri" rev="dbpedia-owl:writer" xmlns:dbpedia-owl="http://dbpedia.org/ontology/" href="http://dbpedia.org/resource/Gypsy_%28Fleetwood_Mac_song%29"><small>dbpedia</small>:Gypsy_(Fleetwood_Mac_song)</a></span></li>
+	<li><span class="literal"><a class="uri" rev="dbpedia-owl:writer" xmlns:dbpedia-owl="http://dbpedia.org/ontology/" href="http://dbpedia.org/resource/Rooms_on_Fire"><small>dbpedia</small>:Rooms_on_Fire</a></span></li>
+	<li><span class="literal"><a class="uri" rev="dbpedia-owl:writer" xmlns:dbpedia-owl="http://dbpedia.org/ontology/" href="http://dbpedia.org/resource/Silver_Springs_%28song%29"><small>dbpedia</small>:Silver_Springs_(song)</a></span></li>
+	<li><span class="literal"><a class="uri" rev="dbpedia-owl:writer" xmlns:dbpedia-owl="http://dbpedia.org/ontology/" href="http://dbpedia.org/resource/Dreams_%28Fleetwood_Mac_song%29"><small>dbpedia</small>:Dreams_(Fleetwood_Mac_song)</a></span></li>
+	<li><span class="literal"><a class="uri" rev="dbpedia-owl:writer" xmlns:dbpedia-owl="http://dbpedia.org/ontology/" href="http://dbpedia.org/resource/The_Chain"><small>dbpedia</small>:The_Chain</a></span></li>
+	<li><span class="literal"><a class="uri" rev="dbpedia-owl:writer" xmlns:dbpedia-owl="http://dbpedia.org/ontology/" href="http://dbpedia.org/resource/Stand_Back"><small>dbpedia</small>:Stand_Back</a></span></li>
+	<li><span class="literal"><a class="uri" rev="dbpedia-owl:writer" xmlns:dbpedia-owl="http://dbpedia.org/ontology/" href="http://dbpedia.org/resource/Angel_%28Fleetwood_Mac_song%29"><small>dbpedia</small>:Angel_(Fleetwood_Mac_song)</a></span></li>
+	<li><span class="literal"><a class="uri" rev="dbpedia-owl:writer" xmlns:dbpedia-owl="http://dbpedia.org/ontology/" href="http://dbpedia.org/resource/Edge_of_Seventeen_%28Just_Like_the_White_Winged_Dove%29"><small>dbpedia</small>:Edge_of_Seventeen_(Just_Like_the_White_Winged_Dove)</a></span></li>
+	<li><span class="literal"><a class="uri" rev="dbpedia-owl:writer" xmlns:dbpedia-owl="http://dbpedia.org/ontology/" href="http://dbpedia.org/resource/Gold_Dust_Woman"><small>dbpedia</small>:Gold_Dust_Woman</a></span></li>
+	<li><span class="literal"><a class="uri" rev="dbpedia-owl:writer" xmlns:dbpedia-owl="http://dbpedia.org/ontology/" href="http://dbpedia.org/resource/Seven_Wonders_%28song%29"><small>dbpedia</small>:Seven_Wonders_(song)</a></span></li>
+	<li><span class="literal"><a class="uri" rev="dbpedia-owl:writer" xmlns:dbpedia-owl="http://dbpedia.org/ontology/" href="http://dbpedia.org/resource/Planets_of_the_Universe"><small>dbpedia</small>:Planets_of_the_Universe</a></span></li>
+	<li><span class="literal"><a class="uri" rev="dbpedia-owl:writer" xmlns:dbpedia-owl="http://dbpedia.org/ontology/" href="http://dbpedia.org/resource/Leather_and_Lace_%28song%29"><small>dbpedia</small>:Leather_and_Lace_(song)</a></span></li>
+	<li><span class="literal"><a class="uri" rev="dbpedia-owl:writer" xmlns:dbpedia-owl="http://dbpedia.org/ontology/" href="http://dbpedia.org/resource/Sisters_of_the_Moon"><small>dbpedia</small>:Sisters_of_the_Moon</a></span></li>
+	<li><span class="literal"><a class="uri" rev="dbpedia-owl:writer" xmlns:dbpedia-owl="http://dbpedia.org/ontology/" href="http://dbpedia.org/resource/Landslide_%28song%29__Landslide___1"><small>dbpedia</small>:Landslide_(song)__Landslide___1</a></span></li>
+	<li><span class="literal"><a class="uri" rev="dbpedia-owl:writer" xmlns:dbpedia-owl="http://dbpedia.org/ontology/" href="http://dbpedia.org/resource/Dreams_%28Fleetwood_Mac_song%29__Dreams___1"><small>dbpedia</small>:Dreams_(Fleetwood_Mac_song)__Dreams___1</a></span></li>
+</ul></td></tr><tr class="even"><td class="property">is <a class="uri" href="http://dbpedia.org/property/artist"><small>dbpprop:</small>artist</a>
+ of</td><td><ul>
+	<li><span class="literal"><a class="uri" rev="dbpprop:artist" href="http://dbpedia.org/resource/Timespace_%E2%80%93_The_Best_of_Stevie_Nicks"><small>dbpedia</small>:Timespace_–_The_Best_of_Stevie_Nicks</a></span></li>
+	<li><span class="literal"><a class="uri" rev="dbpprop:artist" href="http://dbpedia.org/resource/The_Soundstage_Sessions"><small>dbpedia</small>:The_Soundstage_Sessions</a></span></li>
+	<li><span class="literal"><a class="uri" rev="dbpprop:artist" href="http://dbpedia.org/resource/Trouble_in_Shangri-La"><small>dbpedia</small>:Trouble_in_Shangri-La</a></span></li>
+	<li><span class="literal"><a class="uri" rev="dbpprop:artist" href="http://dbpedia.org/resource/Crash_into_Me"><small>dbpedia</small>:Crash_into_Me</a></span></li>
+	<li><span class="literal"><a class="uri" rev="dbpprop:artist" href="http://dbpedia.org/resource/Beauty_and_the_Beast_%28Stevie_Nicks_song%29"><small>dbpedia</small>:Beauty_and_the_Beast_(Stevie_Nicks_song)</a></span></li>
+	<li><span class="literal"><a class="uri" rev="dbpprop:artist" href="http://dbpedia.org/resource/Live_in_Chicago_%28Stevie_Nicks_DVD%29"><small>dbpedia</small>:Live_in_Chicago_(Stevie_Nicks_DVD)</a></span></li>
+	<li><span class="literal"><a class="uri" rev="dbpprop:artist" href="http://dbpedia.org/resource/Secret_Love_%28Stevie_Nicks_song%29"><small>dbpedia</small>:Secret_Love_(Stevie_Nicks_song)</a></span></li>
+	<li><span class="literal"><a class="uri" rev="dbpprop:artist" href="http://dbpedia.org/resource/Street_Angel_%28album%29"><small>dbpedia</small>:Street_Angel_(album)</a></span></li>
+	<li><span class="literal"><a class="uri" rev="dbpprop:artist" href="http://dbpedia.org/resource/The_Wild_Heart_%28album%29"><small>dbpedia</small>:The_Wild_Heart_(album)</a></span></li>
+	<li><span class="literal"><a class="uri" rev="dbpprop:artist" href="http://dbpedia.org/resource/Rock_a_Little"><small>dbpedia</small>:Rock_a_Little</a></span></li>
+	<li><span class="literal"><a class="uri" rev="dbpprop:artist" href="http://dbpedia.org/resource/Rooms_on_Fire"><small>dbpedia</small>:Rooms_on_Fire</a></span></li>
+	<li><span class="literal"><a class="uri" rev="dbpprop:artist" href="http://dbpedia.org/resource/Enchanted_%28Stevie_Nicks_album%29"><small>dbpedia</small>:Enchanted_(Stevie_Nicks_album)</a></span></li>
+	<li><span class="literal"><a class="uri" rev="dbpprop:artist" href="http://dbpedia.org/resource/In_Your_Dreams_%28album%29"><small>dbpedia</small>:In_Your_Dreams_(album)</a></span></li>
+	<li><span class="literal"><a class="uri" rev="dbpprop:artist" href="http://dbpedia.org/resource/Stand_Back"><small>dbpedia</small>:Stand_Back</a></span></li>
+	<li><span class="literal"><a class="uri" rev="dbpprop:artist" href="http://dbpedia.org/resource/Bella_Donna_%28album%29"><small>dbpedia</small>:Bella_Donna_(album)</a></span></li>
+	<li><span class="literal"><a class="uri" rev="dbpprop:artist" href="http://dbpedia.org/resource/Edge_of_Seventeen_%28Just_Like_the_White_Winged_Dove%29"><small>dbpedia</small>:Edge_of_Seventeen_(Just_Like_the_White_Winged_Dove)</a></span></li>
+	<li><span class="literal"><a class="uri" rev="dbpprop:artist" href="http://dbpedia.org/resource/Talk_to_Me_%28Stevie_Nicks_song%29"><small>dbpedia</small>:Talk_to_Me_(Stevie_Nicks_song)</a></span></li>
+	<li><span class="literal"><a class="uri" rev="dbpprop:artist" href="http://dbpedia.org/resource/The_Other_Side_of_the_Mirror_%28album%29"><small>dbpedia</small>:The_Other_Side_of_the_Mirror_(album)</a></span></li>
+	<li><span class="literal"><a class="uri" rev="dbpprop:artist" href="http://dbpedia.org/resource/Crystal_Visions_%E2%80%93_The_Very_Best_of_Stevie_Nicks"><small>dbpedia</small>:Crystal_Visions_–_The_Very_Best_of_Stevie_Nicks</a></span></li>
+	<li><span class="literal"><a class="uri" rev="dbpprop:artist" href="http://dbpedia.org/resource/Planets_of_the_Universe"><small>dbpedia</small>:Planets_of_the_Universe</a></span></li>
+	<li><span class="literal"><a class="uri" rev="dbpprop:artist" href="http://dbpedia.org/resource/Stevie_Nicks_discography"><small>dbpedia</small>:Stevie_Nicks_discography</a></span></li>
+	<li><span class="literal"><a class="uri" rev="dbpprop:artist" href="http://dbpedia.org/resource/Stop_Draggin%27_My_Heart_Around"><small>dbpedia</small>:Stop_Draggin'_My_Heart_Around</a></span></li>
+</ul></td></tr><tr class="odd"><td class="property">is <a class="uri" href="http://dbpedia.org/property/associatedActs"><small>dbpprop:</small>associatedActs</a>
+ of</td><td><ul>
+	<li><span class="literal"><a class="uri" rev="dbpprop:associatedActs" href="http://dbpedia.org/resource/Tom_Petty_and_the_Heartbreakers"><small>dbpedia</small>:Tom_Petty_and_the_Heartbreakers</a></span></li>
+	<li><span class="literal"><a class="uri" rev="dbpprop:associatedActs" href="http://dbpedia.org/resource/Ian_Wallace_%28drummer%29"><small>dbpedia</small>:Ian_Wallace_(drummer)</a></span></li>
+	<li><span class="literal"><a class="uri" rev="dbpprop:associatedActs" href="http://dbpedia.org/resource/Timothy_Drury"><small>dbpedia</small>:Timothy_Drury</a></span></li>
+	<li><span class="literal"><a class="uri" rev="dbpprop:associatedActs" href="http://dbpedia.org/resource/Peter_Stroud"><small>dbpedia</small>:Peter_Stroud</a></span></li>
+	<li><span class="literal"><a class="uri" rev="dbpprop:associatedActs" href="http://dbpedia.org/resource/Waddy_Wachtel"><small>dbpedia</small>:Waddy_Wachtel</a></span></li>
+	<li><span class="literal"><a class="uri" rev="dbpprop:associatedActs" href="http://dbpedia.org/resource/Sheryl_Crow"><small>dbpedia</small>:Sheryl_Crow</a></span></li>
+	<li><span class="literal"><a class="uri" rev="dbpprop:associatedActs" href="http://dbpedia.org/resource/Tom_Petty"><small>dbpedia</small>:Tom_Petty</a></span></li>
+	<li><span class="literal"><a class="uri" rev="dbpprop:associatedActs" href="http://dbpedia.org/resource/Don_Henley"><small>dbpedia</small>:Don_Henley</a></span></li>
+</ul></td></tr><tr class="even"><td class="property">is <a class="uri" href="http://dbpedia.org/property/aux"><small>dbpprop:</small>aux</a>
+ of</td><td><ul>
+	<li><span class="literal"><a class="uri" rev="dbpprop:aux" href="http://dbpedia.org/resource/List_of_Saturday_Night_Live_episodes"><small>dbpedia</small>:List_of_Saturday_Night_Live_episodes</a></span></li>
+</ul></td></tr><tr class="odd"><td class="property">is <a class="uri" href="http://dbpedia.org/property/currentMembers"><small>dbpprop:</small>currentMembers</a>
+ of</td><td><ul>
+	<li><span class="literal"><a class="uri" rev="dbpprop:currentMembers" href="http://dbpedia.org/resource/Fleetwood_Mac"><small>dbpedia</small>:Fleetwood_Mac</a></span></li>
+</ul></td></tr><tr class="even"><td class="property">is <a class="uri" href="http://dbpedia.org/property/extra"><small>dbpprop:</small>extra</a>
+ of</td><td><ul>
+	<li><span class="literal"><a class="uri" rev="dbpprop:extra" href="http://dbpedia.org/resource/1986_Way_to_Go"><small>dbpedia</small>:1986_Way_to_Go</a></span></li>
+	<li><span class="literal"><a class="uri" rev="dbpprop:extra" href="http://dbpedia.org/resource/School_of_Rock_%28soundtrack_album%29"><small>dbpedia</small>:School_of_Rock_(soundtrack_album)</a></span></li>
+</ul></td></tr><tr class="odd"><td class="property">is <a class="uri" href="http://dbpedia.org/property/guests"><small>dbpprop:</small>guests</a>
+ of</td><td><ul>
+	<li><span class="literal"><a class="uri" rev="dbpprop:guests" href="http://dbpedia.org/resource/List_of_Late_Night_with_Jimmy_Fallon_episodes_%282009%29"><small>dbpedia</small>:List_of_Late_Night_with_Jimmy_Fallon_episodes_(2009)</a></span></li>
+</ul></td></tr><tr class="even"><td class="property">is <a class="uri" href="http://dbpedia.org/property/producer"><small>dbpprop:</small>producer</a>
+ of</td><td><ul>
+	<li><span class="literal"><a class="uri" rev="dbpprop:producer" href="http://dbpedia.org/resource/Timespace_%E2%80%93_The_Best_of_Stevie_Nicks"><small>dbpedia</small>:Timespace_–_The_Best_of_Stevie_Nicks</a></span></li>
+	<li><span class="literal"><a class="uri" rev="dbpprop:producer" href="http://dbpedia.org/resource/Rock_a_Little"><small>dbpedia</small>:Rock_a_Little</a></span></li>
+	<li><span class="literal"><a class="uri" rev="dbpprop:producer" href="http://dbpedia.org/resource/Enchanted_%28Stevie_Nicks_album%29"><small>dbpedia</small>:Enchanted_(Stevie_Nicks_album)</a></span></li>
+</ul></td></tr><tr class="odd"><td class="property">is <a class="uri" href="http://dbpedia.org/property/starring"><small>dbpprop:</small>starring</a>
+ of</td><td><ul>
+	<li><span class="literal"><a class="uri" rev="dbpprop:starring" href="http://dbpedia.org/resource/Runnin%27_Down_a_Dream_%28film%29"><small>dbpedia</small>:Runnin'_Down_a_Dream_(film)</a></span></li>
+</ul></td></tr><tr class="even"><td class="property">is <a class="uri" href="http://dbpedia.org/property/writer"><small>dbpprop:</small>writer</a>
+ of</td><td><ul>
+	<li><span class="literal"><a class="uri" rev="dbpprop:writer" href="http://dbpedia.org/resource/A_Little_More_Personal_%28Raw%29"><small>dbpedia</small>:A_Little_More_Personal_(Raw)</a></span></li>
+	<li><span class="literal"><a class="uri" rev="dbpprop:writer" href="http://dbpedia.org/resource/Sara_%28Fleetwood_Mac_song%29"><small>dbpedia</small>:Sara_(Fleetwood_Mac_song)</a></span></li>
+	<li><span class="literal"><a class="uri" rev="dbpprop:writer" href="http://dbpedia.org/resource/Landslide_%28song%29"><small>dbpedia</small>:Landslide_(song)</a></span></li>
+	<li><span class="literal"><a class="uri" rev="dbpprop:writer" href="http://dbpedia.org/resource/Rhiannon_%28song%29"><small>dbpedia</small>:Rhiannon_(song)</a></span></li>
+	<li><span class="literal"><a class="uri" rev="dbpprop:writer" href="http://dbpedia.org/resource/Beauty_and_the_Beast_%28Stevie_Nicks_song%29"><small>dbpedia</small>:Beauty_and_the_Beast_(Stevie_Nicks_song)</a></span></li>
+	<li><span class="literal"><a class="uri" rev="dbpprop:writer" href="http://dbpedia.org/resource/Secret_Love_%28Stevie_Nicks_song%29"><small>dbpedia</small>:Secret_Love_(Stevie_Nicks_song)</a></span></li>
+	<li><span class="literal"><a class="uri" rev="dbpprop:writer" href="http://dbpedia.org/resource/Gypsy_%28Fleetwood_Mac_song%29"><small>dbpedia</small>:Gypsy_(Fleetwood_Mac_song)</a></span></li>
+	<li><span class="literal"><a class="uri" rev="dbpprop:writer" href="http://dbpedia.org/resource/Rooms_on_Fire"><small>dbpedia</small>:Rooms_on_Fire</a></span></li>
+	<li><span class="literal"><a class="uri" rev="dbpprop:writer" href="http://dbpedia.org/resource/Silver_Springs_%28song%29"><small>dbpedia</small>:Silver_Springs_(song)</a></span></li>
+	<li><span class="literal"><a class="uri" rev="dbpprop:writer" href="http://dbpedia.org/resource/Dreams_%28Fleetwood_Mac_song%29"><small>dbpedia</small>:Dreams_(Fleetwood_Mac_song)</a></span></li>
+	<li><span class="literal"><a class="uri" rev="dbpprop:writer" href="http://dbpedia.org/resource/The_Chain"><small>dbpedia</small>:The_Chain</a></span></li>
+	<li><span class="literal"><a class="uri" rev="dbpprop:writer" href="http://dbpedia.org/resource/Stand_Back"><small>dbpedia</small>:Stand_Back</a></span></li>
+	<li><span class="literal"><a class="uri" rev="dbpprop:writer" href="http://dbpedia.org/resource/Angel_%28Fleetwood_Mac_song%29"><small>dbpedia</small>:Angel_(Fleetwood_Mac_song)</a></span></li>
+	<li><span class="literal"><a class="uri" rev="dbpprop:writer" href="http://dbpedia.org/resource/Edge_of_Seventeen_%28Just_Like_the_White_Winged_Dove%29"><small>dbpedia</small>:Edge_of_Seventeen_(Just_Like_the_White_Winged_Dove)</a></span></li>
+	<li><span class="literal"><a class="uri" rev="dbpprop:writer" href="http://dbpedia.org/resource/Wildflower_&amp;_Cover_Songs:_Complete_Best_%27Track_3%27"><small>dbpedia</small>:Wildflower_</a></span></li>
+	<li><span class="literal"><a class="uri" rev="dbpprop:writer" href="http://dbpedia.org/resource/Gold_Dust_Woman"><small>dbpedia</small>:Gold_Dust_Woman</a></span></li>
+	<li><span class="literal"><a class="uri" rev="dbpprop:writer" href="http://dbpedia.org/resource/Ai_o_Komete_Hanataba_o"><small>dbpedia</small>:Ai_o_Komete_Hanataba_o</a></span></li>
+	<li><span class="literal"><a class="uri" rev="dbpprop:writer" href="http://dbpedia.org/resource/Seven_Wonders_%28song%29"><small>dbpedia</small>:Seven_Wonders_(song)</a></span></li>
+	<li><span class="literal"><a class="uri" rev="dbpprop:writer" href="http://dbpedia.org/resource/Playlist:_The_Very_Best_of_Dixie_Chicks"><small>dbpedia</small>:Playlist:_The_Very_Best_of_Dixie_Chicks</a></span></li>
+	<li><span class="literal"><a class="uri" rev="dbpprop:writer" href="http://dbpedia.org/resource/Planets_of_the_Universe"><small>dbpedia</small>:Planets_of_the_Universe</a></span></li>
+	<li><span class="literal"><a class="uri" rev="dbpprop:writer" href="http://dbpedia.org/resource/Leather_and_Lace_%28song%29"><small>dbpedia</small>:Leather_and_Lace_(song)</a></span></li>
+	<li><span class="literal"><a class="uri" rev="dbpprop:writer" href="http://dbpedia.org/resource/Sisters_of_the_Moon"><small>dbpedia</small>:Sisters_of_the_Moon</a></span></li>
+	<li><span class="literal"><a class="uri" rev="dbpprop:writer" href="http://dbpedia.org/resource/Glee:_The_Music,_Volume_5"><small>dbpedia</small>:Glee:_The_Music,_Volume_5</a></span></li>
+	<li><span class="literal"><a class="uri" rev="dbpprop:writer" href="http://dbpedia.org/resource/Glee:_The_Music,_Volume_6"><small>dbpedia</small>:Glee:_The_Music,_Volume_6</a></span></li>
+	<li><span class="literal"><a class="uri" rev="dbpprop:writer" href="http://dbpedia.org/resource/It%27s_Been_a_Long_Day"><small>dbpedia</small>:It's_Been_a_Long_Day</a></span></li>
+</ul></td></tr><tr class="odd"><td class="property">is <a class="uri" href="http://www.w3.org/2002/07/owl#sameAs"><small>owl:</small>sameAs</a>
+ of</td><td><ul>
+	<li><span class="literal"><a class="uri" rev="owl:sameAs" href="http://www4.wiwiss.fu-berlin.de/flickrwrappr/photos/Stevie_Nicks">http://www4.wiwiss.fu-berlin.de/flickrwrappr/photos/Stevie_Nicks</a></span></li>
+	<li><span class="literal"><a class="uri" rev="owl:sameAs" href="http://mpii.de/yago/resource/Stevie_Nicks"><small>yago-res</small>:Stevie Nicks</a></span></li>
+</ul></td></tr><tr class="even"><td class="property">is <a class="uri" href="http://xmlns.com/foaf/0.1/primaryTopic"><small>foaf:</small>primaryTopic</a>
+ of</td><td><ul>
+	<li><span class="literal"><a class="uri" rev="foaf:primaryTopic" xmlns:foaf="http://xmlns.com/foaf/0.1/" href="http://en.wikipedia.org/wiki/Stevie_Nicks">http://en.wikipedia.org/wiki/Stevie_Nicks</a></span></li>
+</ul></td></tr>
+      </table>
+    </div> <!--  #content -->
+<!-- footer -->
+    <div id="footer">
+      <div id="ft_t">
+        Browse using:
+	<a href="http://linkeddata.uriburner.com/ode/?uri=http%3A%2F%2Fdbpedia.org%2Fresource%2FStevie_Nicks">OpenLink Data Explorer</a> |
+        <a href="http://dataviewer.zitgist.com/?uri=http%3A%2F%2Fdbpedia.org%2Fresource%2FStevie_Nicks">Zitgist Data Viewer</a> |
+        <a href="http://beckr.org/marbles?uri=http%3A%2F%2Fdbpedia.org%2Fresource%2FStevie_Nicks">Marbles</a> |
+        <a href="http://www4.wiwiss.fu-berlin.de/rdf_browser/?browse_uri=http%3A%2F%2Fdbpedia.org%2Fresource%2FStevie_Nicks">DISCO</a> |
+        <a href="http://dig.csail.mit.edu/2005/ajar/release/tabulator/0.8/tab.html?uri=http%3A%2F%2Fdbpedia.org%2Fresource%2FStevie_Nicks" >Tabulator</a>
+        
+
+        <a href="http://dbpedia.org/sparql?default-graph-uri=http%3A%2F%2Fdbpedia.org&amp;query=DESCRIBE+&lt;http://dbpedia.org/resource/Stevie_Nicks&gt;&amp;format=text%2Fcsv">CSV</a> | RDF (
+        <a href="http://dbpedia.org/data/Stevie_Nicks.ntriples">N-Triples</a>
+        <a href="http://dbpedia.org/data/Stevie_Nicks.n3">N3/Turtle</a>
+	<a href="http://dbpedia.org/data/Stevie_Nicks.json">JSON</a>
+        <a href="http://dbpedia.org/data/Stevie_Nicks.rdf">XML</a> ) | OData (
+	<a href="http://dbpedia.org/data/Stevie_Nicks.atom">Atom</a>
+	<a href="http://dbpedia.org/data/Stevie_Nicks.jsod">JSON</a> )| Microdata (
+	<a href="http://dbpedia.org/sparql?default-graph-uri=http%3A%2F%2Fdbpedia.org&amp;query=DESCRIBE+&lt;http://dbpedia.org/resource/Stevie_Nicks&gt;&amp;output=application%2Fmicrodata%2Bjson">JSON</a>
+        <a href="http://dbpedia.org/sparql?default-graph-uri=http%3A%2F%2Fdbpedia.org&amp;query=DESCRIBE+&lt;http://dbpedia.org/resource/Stevie_Nicks&gt;&amp;output=text%2Fhtml">HTML</a>) |
+        <a href="http://dbpedia.org/sparql?default-graph-uri=http%3A%2F%2Fdbpedia.org&amp;query=DESCRIBE+&lt;http://dbpedia.org/resource/Stevie_Nicks&gt;&amp;output=application%2Fld%2Bjson">JSON-LD</a>
+
+        <a href="http://wiki.dbpedia.org/Imprint">About</a>
+      </div> <!-- #ft_t -->
+      <div id="ft_b">
+        <a href="http://virtuoso.openlinksw.com" title="OpenLink Virtuoso"><img class="powered_by" src="/statics/virt_power_no_border.png" alt="Powered by OpenLink Virtuoso"/></a>
+        <a href="http://linkeddata.org/"><img alt="This material is Open Knowledge" src="/statics/LoDLogo.gif"/></a>
+        <a href="http://dbpedia.org/sparql"><img alt="W3C Semantic Web Technology" src="/statics/sw-sparql-blue.png"/></a>
+        <a href="http://www.opendefinition.org/"><img alt="This material is Open Knowledge" src="/statics/od_80x15_red_green.png"/></a>
+	<span about=""
+	resource="http://www.w3.org/TR/rdfa-syntax"
+	rel="dc:conformsTo" xmlns:dc="http://purl.org/dc/terms/">
+	<a href="http://validator.w3.org/check?uri=referer"><img
+	    src="http://www.w3.org/Icons/valid-xhtml-rdfa"
+	    alt="Valid XHTML + RDFa" height="27" /></a>
+	</span>
+      </div> <!-- #ft_b -->
+      <div id="ft_ccbysa">
+	This content was extracted from <a href="http://en.wikipedia.org/wiki/Stevie_Nicks">Wikipedia</a> and is licensed under the <a href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>
+
+      </div> <!-- #ft_ccbysa -->
+    </div> <!-- #footer -->
+    <!--script type="text/javascript">
+     Place any Javascript code e.g. Google Analytics scripts
+    </script-->
+
+ </body>
+</html>
