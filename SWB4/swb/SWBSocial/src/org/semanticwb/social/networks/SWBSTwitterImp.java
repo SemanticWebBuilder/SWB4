@@ -8,7 +8,6 @@ package org.semanticwb.social.networks;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 import org.swb.social.lib.Exception.SWBSocialNetworkException;
-import org.swb.social.lib.SWBSocialMgr;
 import org.swb.social.lib.SWBSocialNetWork;
 
 /**
