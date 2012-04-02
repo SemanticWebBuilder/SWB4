@@ -105,7 +105,7 @@
 "swpFileFilter" = "SWP files"
 "exportFileFilter" = "PNG files"
 "xpdlFileFilter" = "XPDL files"
-"msgSent" = "Data were sent correctly"
+"msgSent" = "Data was sent correctly"
 "msgModelError" = "Model is invalid and it's posible that it can't be executed because"
 "msgModelErrorUlinked" = "there is at least one flow node without connections" 
 "msgModelErrorConfirm" = "Do you want to continue anyway?"
