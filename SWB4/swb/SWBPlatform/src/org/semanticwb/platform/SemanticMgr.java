@@ -785,6 +785,9 @@ public class SemanticMgr implements SWBInstanceObject
      */
     public SemanticModel createDBModel(String name, String nameSpace, boolean cached) {
         //System.out.println("createModel:"+name+" "+nameSpace);
+        //Limpiar Cache
+        SemanticObject.clearCache();
+        
         Model model = loadRDFDBModel(name);
         model.setNsPrefix(name, nameSpace);
         model.close();
@@ -842,6 +845,7 @@ public class SemanticMgr implements SWBInstanceObject
 //        try
 //        {
 //            in.close();
+            //Limpia cache provisional
         } catch (Exception e) {
             log.error(e);
         }
