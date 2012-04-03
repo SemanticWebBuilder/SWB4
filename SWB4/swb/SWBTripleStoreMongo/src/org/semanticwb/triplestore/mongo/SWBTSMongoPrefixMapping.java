@@ -46,6 +46,11 @@ public class SWBTSMongoPrefixMapping implements PrefixMapping
             {
                 
                 DB db = SWBTSMongo.getMongo().getDB(SWBPlatform.getEnv("swb/mongodbname","swb"));
+                if(SWBPlatform.getEnv("swb/mongodbuser")!=null && SWBPlatform.getEnv("swb/mongodbpasswd")!=null)
+                {
+                    db.authenticate(SWBPlatform.getEnv("swb/mongodbuser"), SWBPlatform.getEnv("swb/mongodbpasswd").toCharArray());
+                }
+                
                 DBCollection coll = db.getCollection("swb_prefix");                
 
                 BasicDBObject doc = new BasicDBObject();
@@ -71,6 +76,11 @@ public class SWBTSMongoPrefixMapping implements PrefixMapping
         try
         {
             DB db = SWBTSMongo.getMongo().getDB(SWBPlatform.getEnv("swb/mongodbname","swb"));
+            if(SWBPlatform.getEnv("swb/mongodbuser")!=null && SWBPlatform.getEnv("swb/mongodbpasswd")!=null)
+            {
+                db.authenticate(SWBPlatform.getEnv("swb/mongodbuser"), SWBPlatform.getEnv("swb/mongodbpasswd").toCharArray());
+            }
+            
             DBCollection coll = db.getCollection("swb_prefix");              
             
             BasicDBObject doc = new BasicDBObject();
@@ -128,6 +138,11 @@ public class SWBTSMongoPrefixMapping implements PrefixMapping
             try
             {
                 DB db = SWBTSMongo.getMongo().getDB(SWBPlatform.getEnv("swb/mongodbname","swb"));
+                if(SWBPlatform.getEnv("swb/mongodbuser")!=null && SWBPlatform.getEnv("swb/mongodbpasswd")!=null)
+                {
+                    db.authenticate(SWBPlatform.getEnv("swb/mongodbuser"), SWBPlatform.getEnv("swb/mongodbpasswd").toCharArray());
+                }
+                
                 DBCollection coll = db.getCollection("swb_prefix");              
 
                 BasicDBObject doc = new BasicDBObject();
@@ -169,6 +184,11 @@ public class SWBTSMongoPrefixMapping implements PrefixMapping
         try
         {
             DB db = SWBTSMongo.getMongo().getDB(SWBPlatform.getEnv("swb/mongodbname","swb"));
+            if(SWBPlatform.getEnv("swb/mongodbuser")!=null && SWBPlatform.getEnv("swb/mongodbpasswd")!=null)
+            {
+                db.authenticate(SWBPlatform.getEnv("swb/mongodbuser"), SWBPlatform.getEnv("swb/mongodbpasswd").toCharArray());
+            }
+            
             DBCollection coll = db.getCollection("swb_prefix");              
 
             BasicDBObject doc = new BasicDBObject();
