@@ -472,7 +472,7 @@ public class SWBServiceMgr implements SemanticObserver, SemanticTSObserver, SWBO
                             }
                         }catch(Exception e){log.error(e);}
                     }
-                    if(obj.instanceOf(Template.sclass) && (prop.equals(Template.swb_active.getRDFProperty())) || prop.equals(Template.swb_actualVersion.getRDFProperty()))
+                    if(obj.instanceOf(Template.sclass) && ((prop.equals(Template.swb_active.getRDFProperty())) || prop.equals(Template.swb_actualVersion.getRDFProperty())))
                     {
                         Template aux=(Template)obj.createGenericInstance();
                         Template tpl=SWBPortal.getTemplateMgr().getTemplateImp(aux);

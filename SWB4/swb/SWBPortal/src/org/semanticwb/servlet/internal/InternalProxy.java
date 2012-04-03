@@ -79,22 +79,22 @@ public class InternalProxy
 
         SWBBridgeResponse res = bridge.bridge(proxy.getUrl()+uri, loginurl, request, response,null,true, proxy.getId());
         String code = "" + res.getResponseCode();
-
-        //System.out.println("getContentType:"+res.getContentType());
-        //System.out.println("getErrorMessage:"+res.getErrorMessage());
-        //System.out.println("getResponseMessage:"+res.getResponseMessage());
-        //System.out.println("getHeaderSize:"+res.getHeaderSize());
+//
+//        System.out.println("getContentType:"+res.getContentType());
+//        System.out.println("getErrorMessage:"+res.getErrorMessage());
+//        System.out.println("getResponseMessage:"+res.getResponseMessage());
+//        System.out.println("getHeaderSize:"+res.getHeaderSize());
         //System.out.println("getResponseCode:"+res.getResponseCode());
 
 
-        //System.out.println(""+System.currentTimeMillis()+": "+"getResponseCode:"+code);
+//        System.out.println(""+System.currentTimeMillis()+": "+"getResponseCode:"+code);
 
         if (code.startsWith("3"))
         {
             String redi = res.getHeaderField("Location");
             if (redi != null)
             {
-                redi.replace(proxy.getUrl(), "");
+                redi=redi.replace(proxy.getUrl(), "");
                 //System.out.println("redi:"+redi);
                 response.sendRedirect(redi);
                 return true;
@@ -105,12 +105,15 @@ public class InternalProxy
         } else if (code.startsWith("2"))
         {
             String contentType = res.getContentType();
-            if(contentType.indexOf("text")>-1)
+            //System.out.println("contentType:"+contentType);
+            if(contentType!=null && contentType.indexOf("text")>-1)
             {
                 String txt=SWBUtils.IO.readInputStream(res.getInputStream());
                 //System.out.println("text1:"+txt);
                 txt=txt.replace(proxy.getUrl(), "");
                 //System.out.println("text2:"+txt.length());
+                
+                response.setHeader("Content-Length", null);
                 response.getWriter().print(txt);
             }else
             {

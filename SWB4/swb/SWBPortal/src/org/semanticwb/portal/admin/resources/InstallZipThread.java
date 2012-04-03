@@ -157,7 +157,10 @@ public class InstallZipThread extends java.lang.Thread {
                 }
                 istatus = 30;
                 SemanticModel model = SWBPlatform.getSemanticMgr().createDBModelByRDF(newId, newNs, io, "N-TRIPLE");
+                //System.out.println("model:"+model+" "+newId+" "+newNs+" "+io+" "+model.getName());
                 WebSite website = SWBContext.getWebSite(model.getName());
+                //System.out.println("Site:"+website);
+                
                 wsiteUri = website.getURI();
                 website.setTitle(newTitle);
                 website.setDescription(oldDescription);
