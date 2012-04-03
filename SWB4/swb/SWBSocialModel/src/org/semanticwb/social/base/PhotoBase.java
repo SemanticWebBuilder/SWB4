@@ -1,0 +1,154 @@
+package org.semanticwb.social.base;
+
+
+public abstract class PhotoBase extends org.semanticwb.social.Post implements org.semanticwb.model.Expirable,org.semanticwb.model.Traceable
+{
+    public static final org.semanticwb.platform.SemanticClass social_Photo=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.owl-ontologies.com/socialNet#Photo");
+   /**
+   * The semantic class that represents the currentObject
+   */
+    public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.owl-ontologies.com/socialNet#Photo");
+
+    public static class ClassMgr
+    {
+       /**
+       * Returns a list of Photo for a model
+       * @param model Model to find
+       * @return Iterator of org.semanticwb.social.Photo
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.Photo> listPhotos(org.semanticwb.model.SWBModel model)
+        {
+            java.util.Iterator it=model.getSemanticObject().getModel().listInstancesOfClass(sclass);
+            return new org.semanticwb.model.GenericIterator<org.semanticwb.social.Photo>(it, true);
+        }
+       /**
+       * Returns a list of org.semanticwb.social.Photo for all models
+       * @return Iterator of org.semanticwb.social.Photo
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.Photo> listPhotos()
+        {
+            java.util.Iterator it=sclass.listInstances();
+            return new org.semanticwb.model.GenericIterator<org.semanticwb.social.Photo>(it, true);
+        }
+       /**
+       * Gets a org.semanticwb.social.Photo
+       * @param id Identifier for org.semanticwb.social.Photo
+       * @param model Model of the org.semanticwb.social.Photo
+       * @return A org.semanticwb.social.Photo
+       */
+        public static org.semanticwb.social.Photo getPhoto(String id, org.semanticwb.model.SWBModel model)
+        {
+            return (org.semanticwb.social.Photo)model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
+        }
+       /**
+       * Create a org.semanticwb.social.Photo
+       * @param id Identifier for org.semanticwb.social.Photo
+       * @param model Model of the org.semanticwb.social.Photo
+       * @return A org.semanticwb.social.Photo
+       */
+        public static org.semanticwb.social.Photo createPhoto(String id, org.semanticwb.model.SWBModel model)
+        {
+            return (org.semanticwb.social.Photo)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
+        }
+       /**
+       * Remove a org.semanticwb.social.Photo
+       * @param id Identifier for org.semanticwb.social.Photo
+       * @param model Model of the org.semanticwb.social.Photo
+       */
+        public static void removePhoto(String id, org.semanticwb.model.SWBModel model)
+        {
+            model.getSemanticObject().getModel().removeSemanticObject(model.getSemanticObject().getModel().getObjectUri(id,sclass));
+        }
+       /**
+       * Returns true if exists a org.semanticwb.social.Photo
+       * @param id Identifier for org.semanticwb.social.Photo
+       * @param model Model of the org.semanticwb.social.Photo
+       * @return true if the org.semanticwb.social.Photo exists, false otherwise
+       */
+
+        public static boolean hasPhoto(String id, org.semanticwb.model.SWBModel model)
+        {
+            return (getPhoto(id, model)!=null);
+        }
+       /**
+       * Gets all org.semanticwb.social.Photo with a determined ModifiedBy
+       * @param value ModifiedBy of the type org.semanticwb.model.User
+       * @param model Model of the org.semanticwb.social.Photo
+       * @return Iterator with all the org.semanticwb.social.Photo
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.Photo> listPhotoByModifiedBy(org.semanticwb.model.User value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.Photo> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_modifiedBy, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.social.Photo with a determined ModifiedBy
+       * @param value ModifiedBy of the type org.semanticwb.model.User
+       * @return Iterator with all the org.semanticwb.social.Photo
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.Photo> listPhotoByModifiedBy(org.semanticwb.model.User value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.Photo> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_modifiedBy,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.social.Photo with a determined Creator
+       * @param value Creator of the type org.semanticwb.model.User
+       * @param model Model of the org.semanticwb.social.Photo
+       * @return Iterator with all the org.semanticwb.social.Photo
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.Photo> listPhotoByCreator(org.semanticwb.model.User value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.Photo> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_creator, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.social.Photo with a determined Creator
+       * @param value Creator of the type org.semanticwb.model.User
+       * @return Iterator with all the org.semanticwb.social.Photo
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.Photo> listPhotoByCreator(org.semanticwb.model.User value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.Photo> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_creator,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.social.Photo with a determined PostInv
+       * @param value PostInv of the type org.semanticwb.social.SocialNetWork
+       * @param model Model of the org.semanticwb.social.Photo
+       * @return Iterator with all the org.semanticwb.social.Photo
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.Photo> listPhotoByPostInv(org.semanticwb.social.SocialNetWork value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.Photo> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(social_hasPostInv, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.social.Photo with a determined PostInv
+       * @param value PostInv of the type org.semanticwb.social.SocialNetWork
+       * @return Iterator with all the org.semanticwb.social.Photo
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.Photo> listPhotoByPostInv(org.semanticwb.social.SocialNetWork value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.Photo> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(social_hasPostInv,value.getSemanticObject(),sclass));
+            return it;
+        }
+    }
+
+   /**
+   * Constructs a PhotoBase with a SemanticObject
+   * @param base The SemanticObject with the properties for the Photo
+   */
+    public PhotoBase(org.semanticwb.platform.SemanticObject base)
+    {
+        super(base);
+    }
+}
