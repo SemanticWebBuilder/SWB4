@@ -26,9 +26,11 @@
 
 package org.semanticwb.process.model;
 
+import bsh.Interpreter;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.SWBClass;
 import org.semanticwb.model.SWBModel;
@@ -39,7 +41,9 @@ import org.semanticwb.platform.SemanticProperty;
 
 
 public class FlowNode extends org.semanticwb.process.model.base.FlowNodeBase 
-{
+{    
+    private static Logger log=SWBUtils.getLogger(SWBPClassMgr.class);
+    
     public FlowNode(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
@@ -80,12 +84,14 @@ public class FlowNode extends org.semanticwb.process.model.base.FlowNodeBase
                 SemanticProperty sprop=null;
                 SWBModel model=this.getProcessSite();
                 String id=null;
+                String code=null;
                 if(item instanceof Collectionable)
                 {
                     model=this.getProcessSite().getProcessDataInstanceModel();
                 }else
                 {
                     id=((DataStore)item).getDataObjectId();
+                    code=((DataStore)item).getInitializationCode();
                 }
 
                 if(scls!=null)
@@ -93,17 +99,47 @@ public class FlowNode extends org.semanticwb.process.model.base.FlowNodeBase
                     ItemAwareReference ref=ItemAwareReference.ClassMgr.createItemAwareReference(this.getProcessSite());
                     ref.setItemAware(item);
                     SemanticObject ins=null;
-                    if(id==null)
+                    
+                    if(code!=null)
                     {
-                        id=String.valueOf(model.getSemanticModel().getCounter(scls));
-                    }else
-                    {
-                        ins=SemanticObject.createSemanticObject(model.getSemanticModel().getObjectUri(id, scls));
+                        Object ret=null;
+                        try
+                        {
+                            //long ini=System.currentTimeMillis();
+                            Interpreter i = SWBPClassMgr.getInterpreter();
+                            ret=i.eval(code);
+                            //System.out.println("ret:"+ret);
+                            //System.out.println("time:"+ (System.currentTimeMillis()-ini ));
+                        }catch(Exception e)
+                        {
+                            log.error(e);
+                        }
+                        //String action=source.getAction();
+                        if(ret!=null && ret instanceof SemanticObject && ((SemanticObject)ret).instanceOf(scls))
+                        {
+                            ins=((SemanticObject)ret);
+                        }
+                        
+                        if(ret!=null && ret instanceof SWBClass && ((SWBClass)ret).getSemanticObject().instanceOf(scls))
+                        {
+                            ins=((SWBClass)ret).getSemanticObject();
+                        }
                     }
                     if(ins==null)
                     {
-                        ins=model.getSemanticModel().createSemanticObjectById(id, scls);
+                        if(id==null)
+                        {
+                            id=String.valueOf(model.getSemanticModel().getCounter(scls));
+                        }else
+                        {
+                            ins=SemanticObject.createSemanticObject(model.getSemanticModel().getObjectUri(id, scls));
+                        }
+                        if(ins==null)
+                        {
+                            ins=model.getSemanticModel().createSemanticObjectById(id, scls);
+                        }
                     }
+                    
                     ref.setProcessObject((SWBClass)ins.createGenericInstance());
                     inst.addItemAwareReference(ref);
                     //System.out.println("addItemAwareReference:"+ref);
