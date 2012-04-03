@@ -7,12 +7,15 @@
     {
         if(obj!=null)
         {
-            list.add(obj.getURI());
-            Iterator<SemanticObject> it=obj.listHerarquicalChilds();
-            while(it.hasNext())
+            if(!list.contains(obj.getURI()))
             {
-                SemanticObject ch=it.next();
-                getAllChilds(list,ch);
+                list.add(obj.getURI());
+                Iterator<SemanticObject> it=obj.listHerarquicalChilds();
+                while(it.hasNext())
+                {
+                    SemanticObject ch=it.next();
+                    getAllChilds(list,ch);
+                }
             }
         }
     }
@@ -20,6 +23,8 @@
 
 %>
 <%
+  try{
+
     User user=SWBContext.getAdminUser();
     if(user==null)
     {
@@ -87,7 +92,7 @@
                 obj.setBooleanProperty(Trashable.swb_deleted, true);
             }
             out.println(type+" fue eliminado...");
-            out.println("<script type=\"text/javascript\">");
+            out.println("<script type=\"text/javSascript\">");
             Iterator<String> it=list.iterator();
             while(it.hasNext())
             {
@@ -100,5 +105,6 @@
         }
     }
     //out.println(obj.getDisplayName(lang)+" "+act);
+  }catch(Throwable e){e.printStackTrace();}
 %>
 <!-- a href="#" onclick="submitUrl('/swb/swb',this); return false;">click</a -->
