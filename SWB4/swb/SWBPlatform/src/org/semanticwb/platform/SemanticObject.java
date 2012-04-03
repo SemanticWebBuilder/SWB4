@@ -2046,13 +2046,23 @@ public class SemanticObject
         //log.error(new Exception("Se borro el objecto:"+getURI()));
         remove(new ArrayList());
     }
-
+    
     /**
      * Removes the.
      *
      * @param stack the stack
      */
     public void remove(ArrayList<SemanticObject> stack)
+    {
+        remove(stack, true);
+    }    
+
+    /**
+     * Removes the.
+     *
+     * @param stack the stack
+     */
+    public void remove(ArrayList<SemanticObject> stack, boolean removeDep)
     {
         //System.out.println("Remove:"+this);
         stack.add(this);
@@ -2087,7 +2097,7 @@ public class SemanticObject
             }
 
             //Eliminar dependencias
-            removeDependencies(stack);
+            if(removeDep)removeDependencies(stack);
 
             //Borrar objeto
             Resource res=getRDFResource();
