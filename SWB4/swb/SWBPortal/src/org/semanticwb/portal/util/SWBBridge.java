@@ -417,6 +417,7 @@ public class SWBBridge
                     if(!con.getHeaderFieldKey(x).equalsIgnoreCase("Set-Cookie") && !con.getHeaderFieldKey(x).equalsIgnoreCase("Transfer-Encoding"))
                     {
                         response.setHeader(con.getHeaderFieldKey(x), con.getHeaderField(x));
+                        System.out.println(con.getHeaderFieldKey(x)+"->"+con.getHeaderField(x));
                     }
                 }
             }
