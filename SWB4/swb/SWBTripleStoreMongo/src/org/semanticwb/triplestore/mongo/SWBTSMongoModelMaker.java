@@ -30,6 +30,11 @@ public class SWBTSMongoModelMaker
 
         
         DB db = SWBTSMongo.getMongo().getDB(SWBPlatform.getEnv("swb/mongodbname","swb"));
+        if(SWBPlatform.getEnv("swb/mongodbuser")!=null && SWBPlatform.getEnv("swb/mongodbpasswd")!=null)
+        {
+            db.authenticate(SWBPlatform.getEnv("swb/mongodbuser"), SWBPlatform.getEnv("swb/mongodbpasswd").toCharArray());
+        }
+        
 
         Set<String> colls = db.getCollectionNames();
         
@@ -90,6 +95,10 @@ public class SWBTSMongoModelMaker
                 int id=0;
 
                 DB db = SWBTSMongo.getMongo().getDB(SWBPlatform.getEnv("swb/mongodbname","swb"));
+                if(SWBPlatform.getEnv("swb/mongodbuser")!=null && SWBPlatform.getEnv("swb/mongodbpasswd")!=null)
+                {
+                    db.authenticate(SWBPlatform.getEnv("swb/mongodbuser"), SWBPlatform.getEnv("swb/mongodbpasswd").toCharArray());
+                }                
                 
                 DBCollection coll = db.getCollection("swb_graph");
                 DBCursor cur=coll.find().sort(new BasicDBObject("id", -1)).limit(1);
@@ -150,6 +159,11 @@ public class SWBTSMongoModelMaker
             try
             {
                 DB db = SWBTSMongo.getMongo().getDB(SWBPlatform.getEnv("swb/mongodbname","swb"));
+                if(SWBPlatform.getEnv("swb/mongodbuser")!=null && SWBPlatform.getEnv("swb/mongodbpasswd")!=null)
+                {
+                    db.authenticate(SWBPlatform.getEnv("swb/mongodbuser"), SWBPlatform.getEnv("swb/mongodbpasswd").toCharArray());
+                }
+                
                 DBCollection coll = db.getCollection("swb_graph_ts"+id);
                 coll.drop();
                 
