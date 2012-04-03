@@ -110,6 +110,21 @@ public class SWBPClassMgr
         addProcessInstanceObjectsReference(instance, i);
         return i;
     }
+    
+    public static Interpreter getInterpreter()
+    {
+        Interpreter i = new Interpreter();  // Construct an interpreter
+        i.setClassLoader(mcls);
+        i.setStrictJava(true);
+        try
+        {
+            i.eval("import org.semanticwb.process.model.*");        
+        }catch(Exception e)
+        {
+            log.error(e);
+        }
+        return i;
+    }    
 
     public static void addProcessInstanceObjectsReference(Instance instance, Interpreter i)
     {

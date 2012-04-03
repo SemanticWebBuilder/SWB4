@@ -3,6 +3,7 @@ package org.semanticwb.process.model.base;
 
 public abstract class DataStoreBase extends org.semanticwb.process.model.ItemAware implements org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable
 {
+    public static final org.semanticwb.platform.SemanticProperty swp_dataObjectInitializationCode=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#dataObjectInitializationCode");
     public static final org.semanticwb.platform.SemanticProperty swp_dataObjectId=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#dataObjectId");
     public static final org.semanticwb.platform.SemanticClass swp_DataStore=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#DataStore");
    /**
@@ -249,6 +250,24 @@ public abstract class DataStoreBase extends org.semanticwb.process.model.ItemAwa
     public DataStoreBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
+    }
+
+/**
+* Gets the InitializationCode property
+* @return String with the InitializationCode
+*/
+    public String getInitializationCode()
+    {
+        return getSemanticObject().getProperty(swp_dataObjectInitializationCode);
+    }
+
+/**
+* Sets the InitializationCode property
+* @param value long with the InitializationCode
+*/
+    public void setInitializationCode(String value)
+    {
+        getSemanticObject().setProperty(swp_dataObjectInitializationCode, value);
     }
 
 /**

@@ -1,7 +1,7 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class MessageStartEventBase extends org.semanticwb.process.model.StartEventNode implements org.semanticwb.process.model.ActionCodeable,org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable
+public abstract class MessageStartEventBase extends org.semanticwb.process.model.StartEventNode implements org.semanticwb.process.model.CatchMessageable,org.semanticwb.model.Descriptiveable,org.semanticwb.process.model.ActionCodeable,org.semanticwb.model.Traceable
 {
     public static final org.semanticwb.platform.SemanticClass swp_MessageStartEvent=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#MessageStartEvent");
    /**
@@ -99,6 +99,29 @@ public abstract class MessageStartEventBase extends org.semanticwb.process.model
         public static java.util.Iterator<org.semanticwb.process.model.MessageStartEvent> listMessageStartEventByModifiedBy(org.semanticwb.model.User value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.process.model.MessageStartEvent> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_modifiedBy,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.MessageStartEvent with a determined ItemAwareMapping
+       * @param value ItemAwareMapping of the type org.semanticwb.process.model.ItemAwareMapping
+       * @param model Model of the org.semanticwb.process.model.MessageStartEvent
+       * @return Iterator with all the org.semanticwb.process.model.MessageStartEvent
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.MessageStartEvent> listMessageStartEventByItemAwareMapping(org.semanticwb.process.model.ItemAwareMapping value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.MessageStartEvent> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_hasItemAwareMapping, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.MessageStartEvent with a determined ItemAwareMapping
+       * @param value ItemAwareMapping of the type org.semanticwb.process.model.ItemAwareMapping
+       * @return Iterator with all the org.semanticwb.process.model.MessageStartEvent
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.MessageStartEvent> listMessageStartEventByItemAwareMapping(org.semanticwb.process.model.ItemAwareMapping value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.MessageStartEvent> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_hasItemAwareMapping,value.getSemanticObject(),sclass));
             return it;
         }
        /**
@@ -294,6 +317,71 @@ public abstract class MessageStartEventBase extends org.semanticwb.process.model
     public MessageStartEventBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
+    }
+   /**
+   * Gets all the org.semanticwb.process.model.ItemAwareMapping
+   * @return A GenericIterator with all the org.semanticwb.process.model.ItemAwareMapping
+   */
+
+    public org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ItemAwareMapping> listItemAwareMappings()
+    {
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ItemAwareMapping>(getSemanticObject().listObjectProperties(swp_hasItemAwareMapping));
+    }
+
+   /**
+   * Gets true if has a ItemAwareMapping
+   * @param value org.semanticwb.process.model.ItemAwareMapping to verify
+   * @return true if the org.semanticwb.process.model.ItemAwareMapping exists, false otherwise
+   */
+    public boolean hasItemAwareMapping(org.semanticwb.process.model.ItemAwareMapping value)
+    {
+        boolean ret=false;
+        if(value!=null)
+        {
+           ret=getSemanticObject().hasObjectProperty(swp_hasItemAwareMapping,value.getSemanticObject());
+        }
+        return ret;
+    }
+   /**
+   * Adds a ItemAwareMapping
+   * @param value org.semanticwb.process.model.ItemAwareMapping to add
+   */
+
+    public void addItemAwareMapping(org.semanticwb.process.model.ItemAwareMapping value)
+    {
+        getSemanticObject().addObjectProperty(swp_hasItemAwareMapping, value.getSemanticObject());
+    }
+   /**
+   * Removes all the ItemAwareMapping
+   */
+
+    public void removeAllItemAwareMapping()
+    {
+        getSemanticObject().removeProperty(swp_hasItemAwareMapping);
+    }
+   /**
+   * Removes a ItemAwareMapping
+   * @param value org.semanticwb.process.model.ItemAwareMapping to remove
+   */
+
+    public void removeItemAwareMapping(org.semanticwb.process.model.ItemAwareMapping value)
+    {
+        getSemanticObject().removeObjectProperty(swp_hasItemAwareMapping,value.getSemanticObject());
+    }
+
+   /**
+   * Gets the ItemAwareMapping
+   * @return a org.semanticwb.process.model.ItemAwareMapping
+   */
+    public org.semanticwb.process.model.ItemAwareMapping getItemAwareMapping()
+    {
+         org.semanticwb.process.model.ItemAwareMapping ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swp_hasItemAwareMapping);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.process.model.ItemAwareMapping)obj.createGenericInstance();
+         }
+         return ret;
     }
 
 /**

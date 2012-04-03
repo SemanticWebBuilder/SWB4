@@ -1,7 +1,7 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class MessageIntermediateThrowEventBase extends org.semanticwb.process.model.IntermediateThrowEvent implements org.semanticwb.process.model.ActionCodeable,org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable
+public abstract class MessageIntermediateThrowEventBase extends org.semanticwb.process.model.IntermediateThrowEvent implements org.semanticwb.process.model.ThrowMessageable,org.semanticwb.model.Descriptiveable,org.semanticwb.process.model.ActionCodeable,org.semanticwb.model.Traceable
 {
     public static final org.semanticwb.platform.SemanticClass swp_MessageIntermediateThrowEvent=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#MessageIntermediateThrowEvent");
    /**
@@ -99,6 +99,29 @@ public abstract class MessageIntermediateThrowEventBase extends org.semanticwb.p
         public static java.util.Iterator<org.semanticwb.process.model.MessageIntermediateThrowEvent> listMessageIntermediateThrowEventByModifiedBy(org.semanticwb.model.User value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.process.model.MessageIntermediateThrowEvent> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_modifiedBy,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.MessageIntermediateThrowEvent with a determined MessageItemAware
+       * @param value MessageItemAware of the type org.semanticwb.process.model.ItemAware
+       * @param model Model of the org.semanticwb.process.model.MessageIntermediateThrowEvent
+       * @return Iterator with all the org.semanticwb.process.model.MessageIntermediateThrowEvent
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.MessageIntermediateThrowEvent> listMessageIntermediateThrowEventByMessageItemAware(org.semanticwb.process.model.ItemAware value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.MessageIntermediateThrowEvent> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_hasMessageItemAware, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.MessageIntermediateThrowEvent with a determined MessageItemAware
+       * @param value MessageItemAware of the type org.semanticwb.process.model.ItemAware
+       * @return Iterator with all the org.semanticwb.process.model.MessageIntermediateThrowEvent
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.MessageIntermediateThrowEvent> listMessageIntermediateThrowEventByMessageItemAware(org.semanticwb.process.model.ItemAware value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.MessageIntermediateThrowEvent> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_hasMessageItemAware,value.getSemanticObject(),sclass));
             return it;
         }
        /**
@@ -271,6 +294,71 @@ public abstract class MessageIntermediateThrowEventBase extends org.semanticwb.p
     public MessageIntermediateThrowEventBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
+    }
+   /**
+   * Gets all the org.semanticwb.process.model.ItemAware
+   * @return A GenericIterator with all the org.semanticwb.process.model.ItemAware
+   */
+
+    public org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ItemAware> listMessageItemAwares()
+    {
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ItemAware>(getSemanticObject().listObjectProperties(swp_hasMessageItemAware));
+    }
+
+   /**
+   * Gets true if has a MessageItemAware
+   * @param value org.semanticwb.process.model.ItemAware to verify
+   * @return true if the org.semanticwb.process.model.ItemAware exists, false otherwise
+   */
+    public boolean hasMessageItemAware(org.semanticwb.process.model.ItemAware value)
+    {
+        boolean ret=false;
+        if(value!=null)
+        {
+           ret=getSemanticObject().hasObjectProperty(swp_hasMessageItemAware,value.getSemanticObject());
+        }
+        return ret;
+    }
+   /**
+   * Adds a MessageItemAware
+   * @param value org.semanticwb.process.model.ItemAware to add
+   */
+
+    public void addMessageItemAware(org.semanticwb.process.model.ItemAware value)
+    {
+        getSemanticObject().addObjectProperty(swp_hasMessageItemAware, value.getSemanticObject());
+    }
+   /**
+   * Removes all the MessageItemAware
+   */
+
+    public void removeAllMessageItemAware()
+    {
+        getSemanticObject().removeProperty(swp_hasMessageItemAware);
+    }
+   /**
+   * Removes a MessageItemAware
+   * @param value org.semanticwb.process.model.ItemAware to remove
+   */
+
+    public void removeMessageItemAware(org.semanticwb.process.model.ItemAware value)
+    {
+        getSemanticObject().removeObjectProperty(swp_hasMessageItemAware,value.getSemanticObject());
+    }
+
+   /**
+   * Gets the MessageItemAware
+   * @return a org.semanticwb.process.model.ItemAware
+   */
+    public org.semanticwb.process.model.ItemAware getMessageItemAware()
+    {
+         org.semanticwb.process.model.ItemAware ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swp_hasMessageItemAware);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.process.model.ItemAware)obj.createGenericInstance();
+         }
+         return ret;
     }
 
 /**
