@@ -6,10 +6,10 @@
 package swbsocial.test;
 
 import java.util.ArrayList;
-import java.util.Iterator;
-import org.swb.social.lib.Exception.SWBSocialException;
-import org.swb.social.lib.SWBSocialMgr;
-import org.swb.social.lib.SWBSocialNetWork;
+import org.semanticwb.Logger;
+import org.semanticwb.SWBUtils;
+import org.semanticwb.social.networks.SWBSFacebookImp;
+import org.semanticwb.social.networks.SWBSTwitterImp;
 
 /**
  *
@@ -17,51 +17,60 @@ import org.swb.social.lib.SWBSocialNetWork;
  */
 public class testSWBSocialMgr {
 
+    private static Logger log = SWBUtils.getLogger(testSWBSocialMgr.class);
+
     static String twitterFQN="org.semanticwb.social.networks.SWBSTwitterImp";
     static String facebookFQN="org.semanticwb.social.networks.SWBSFacebookImp";
 
     public static void main(String[] args)
     {
-
         ArrayList aClasses=new ArrayList();
         aClasses.add(twitterFQN);
         aClasses.add(facebookFQN);
 
+        String msg="Este es el mensaje de paz...";
+        // Para el uso con un wrapper
+        /*
         Iterator <String> itClasses=aClasses.iterator();
-
         while(itClasses.hasNext())
         {
-            String sClass=itClasses.next();
-            Object obj=null;
-            try{
-                Class classInstance=Class.forName(sClass);
-                obj=classInstance.newInstance();
-                send2Network(obj);
-            }catch(Exception e)
-            {
-                e.printStackTrace();
+           try{
+                SWBSocialMgr swbSocialNetWork=new SWBSocialMgr(itClasses.next());
+                swbSocialNetWork.connect();
+                swbSocialNetWork.setMsg(msg);
+                swbSocialNetWork.sendPost();
+                swbSocialNetWork.disConnect();
+            }catch (Exception e){
+                log.error(e);
             }
         }
-        
-    }
+        */
+        /////////.......................................................///////////////
 
-
-    private static void send2Network(Object obj)
-    {
-        try{
-            //Se configura una red social
-            SWBSocialNetWork swbSocialObj=(SWBSocialNetWork) obj;
-            swbSocialObj.connect();
-            swbSocialObj.setMsg("Hola Mundo este es un mensaje de pazz..");
-            //Se le pasa la red social al manager
-            SWBSocialMgr socialMgr=new SWBSocialMgr(swbSocialObj);
-            socialMgr.sendPost();
-            //Se desconecta la red social
-            swbSocialObj.disConnect();
-        }catch(SWBSocialException e)
+        //Para el uso de una determinada red social directamente
+        //WebSite wsite=WebSite.ClassMgr.getWebSite("visit");
+        SWBSTwitterImp swbTwitter=new SWBSTwitterImp(null);
+        try
         {
-            e.printStackTrace();
+            swbTwitter.setMsg(msg);
+            swbTwitter.sendPost();
+        }catch(Exception e)
+        {
+         log.error(e);
         }
+
+        SWBSFacebookImp swbFacebook=new SWBSFacebookImp(null);
+        try
+        {
+            swbFacebook.connect();
+            swbFacebook.setMsg(msg);
+            swbFacebook.sendPost();
+            swbFacebook.disConnect();
+        }catch(Exception e)
+        {
+         log.error(e);
+        }
+        
     }
 
 }
