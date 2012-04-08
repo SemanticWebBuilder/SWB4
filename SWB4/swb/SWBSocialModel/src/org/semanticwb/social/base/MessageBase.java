@@ -1,8 +1,9 @@
 package org.semanticwb.social.base;
 
 
-public abstract class MessageBase extends org.semanticwb.social.Post implements org.semanticwb.model.Expirable,org.semanticwb.model.Traceable
+public abstract class MessageBase extends org.semanticwb.social.Post implements org.semanticwb.model.Traceable,org.semanticwb.model.Expirable
 {
+    public static final org.semanticwb.platform.SemanticProperty social_msg_Text=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.owl-ontologies.com/socialNet#msg_Text");
     public static final org.semanticwb.platform.SemanticClass social_Message=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.owl-ontologies.com/socialNet#Message");
    /**
    * The semantic class that represents the currentObject
@@ -31,6 +32,12 @@ public abstract class MessageBase extends org.semanticwb.social.Post implements 
         {
             java.util.Iterator it=sclass.listInstances();
             return new org.semanticwb.model.GenericIterator<org.semanticwb.social.Message>(it, true);
+        }
+
+        public static org.semanticwb.social.Message createMessage(org.semanticwb.model.SWBModel model)
+        {
+            long id=model.getSemanticObject().getModel().getCounter(sclass);
+            return org.semanticwb.social.Message.ClassMgr.createMessage(String.valueOf(id), model);
         }
        /**
        * Gets a org.semanticwb.social.Message
@@ -119,26 +126,26 @@ public abstract class MessageBase extends org.semanticwb.social.Post implements 
             return it;
         }
        /**
-       * Gets all org.semanticwb.social.Message with a determined PostInv
-       * @param value PostInv of the type org.semanticwb.social.SocialNetWork
+       * Gets all org.semanticwb.social.Message with a determined SocialNetwork_PostInv
+       * @param value SocialNetwork_PostInv of the type org.semanticwb.social.SocialNetWork
        * @param model Model of the org.semanticwb.social.Message
        * @return Iterator with all the org.semanticwb.social.Message
        */
 
-        public static java.util.Iterator<org.semanticwb.social.Message> listMessageByPostInv(org.semanticwb.social.SocialNetWork value,org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.social.Message> listMessageBySocialNetwork_PostInv(org.semanticwb.social.SocialNetWork value,org.semanticwb.model.SWBModel model)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.social.Message> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(social_hasPostInv, value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.Message> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(social_hasSocialNetwork_PostInv, value.getSemanticObject(),sclass));
             return it;
         }
        /**
-       * Gets all org.semanticwb.social.Message with a determined PostInv
-       * @param value PostInv of the type org.semanticwb.social.SocialNetWork
+       * Gets all org.semanticwb.social.Message with a determined SocialNetwork_PostInv
+       * @param value SocialNetwork_PostInv of the type org.semanticwb.social.SocialNetWork
        * @return Iterator with all the org.semanticwb.social.Message
        */
 
-        public static java.util.Iterator<org.semanticwb.social.Message> listMessageByPostInv(org.semanticwb.social.SocialNetWork value)
+        public static java.util.Iterator<org.semanticwb.social.Message> listMessageBySocialNetwork_PostInv(org.semanticwb.social.SocialNetWork value)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.social.Message> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(social_hasPostInv,value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.Message> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(social_hasSocialNetwork_PostInv,value.getSemanticObject(),sclass));
             return it;
         }
     }
@@ -150,5 +157,23 @@ public abstract class MessageBase extends org.semanticwb.social.Post implements 
     public MessageBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
+    }
+
+/**
+* Gets the Msg_Text property
+* @return String with the Msg_Text
+*/
+    public String getMsg_Text()
+    {
+        return getSemanticObject().getProperty(social_msg_Text);
+    }
+
+/**
+* Sets the Msg_Text property
+* @param value long with the Msg_Text
+*/
+    public void setMsg_Text(String value)
+    {
+        getSemanticObject().setProperty(social_msg_Text, value);
     }
 }

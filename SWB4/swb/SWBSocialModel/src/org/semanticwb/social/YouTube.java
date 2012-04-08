@@ -8,7 +8,9 @@ public class YouTube extends org.semanticwb.social.base.YouTubeBase
         super(base);
     }
 
-    public void postVideo() {
+    public void postVideo(Video video) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
+
+   
 }

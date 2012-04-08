@@ -1,7 +1,7 @@
 package org.semanticwb.social.base;
 
 
-public abstract class YouTubeBase extends org.semanticwb.social.SocialNetWork implements org.semanticwb.social.Videoable
+public abstract class YouTubeBase extends org.semanticwb.social.SocialNetWork implements org.semanticwb.model.Traceable,org.semanticwb.social.Videoable,org.semanticwb.social.Postable,org.semanticwb.model.Descriptiveable
 {
     public static final org.semanticwb.platform.SemanticClass social_YouTube=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.owl-ontologies.com/socialNet#YouTube");
    /**
@@ -71,6 +71,52 @@ public abstract class YouTubeBase extends org.semanticwb.social.SocialNetWork im
         public static boolean hasYouTube(String id, org.semanticwb.model.SWBModel model)
         {
             return (getYouTube(id, model)!=null);
+        }
+       /**
+       * Gets all org.semanticwb.social.YouTube with a determined ModifiedBy
+       * @param value ModifiedBy of the type org.semanticwb.model.User
+       * @param model Model of the org.semanticwb.social.YouTube
+       * @return Iterator with all the org.semanticwb.social.YouTube
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.YouTube> listYouTubeByModifiedBy(org.semanticwb.model.User value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.YouTube> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_modifiedBy, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.social.YouTube with a determined ModifiedBy
+       * @param value ModifiedBy of the type org.semanticwb.model.User
+       * @return Iterator with all the org.semanticwb.social.YouTube
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.YouTube> listYouTubeByModifiedBy(org.semanticwb.model.User value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.YouTube> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_modifiedBy,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.social.YouTube with a determined Creator
+       * @param value Creator of the type org.semanticwb.model.User
+       * @param model Model of the org.semanticwb.social.YouTube
+       * @return Iterator with all the org.semanticwb.social.YouTube
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.YouTube> listYouTubeByCreator(org.semanticwb.model.User value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.YouTube> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_creator, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.social.YouTube with a determined Creator
+       * @param value Creator of the type org.semanticwb.model.User
+       * @return Iterator with all the org.semanticwb.social.YouTube
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.YouTube> listYouTubeByCreator(org.semanticwb.model.User value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.YouTube> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_creator,value.getSemanticObject(),sclass));
+            return it;
         }
        /**
        * Gets all org.semanticwb.social.YouTube with a determined Post
