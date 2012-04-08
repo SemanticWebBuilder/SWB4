@@ -8,15 +8,16 @@ package org.semanticwb.social.networks;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.SWBModel;
-import org.swb.social.lib.Exception.SWBSocialNetworkException;
-import org.swb.social.lib.SWBSocialNetWork;
+//import org.swb.social.lib.Exception.SWBSocialNetworkException;
+//import org.swb.social.lib.SWBSocialNetWork;
 
 /**
  *
  * @author jorge.jimenez
  */
-public class SWBSTwitterImp extends SWBSocialNetWork
+public class SWBSTwitterImp //extends SWBSocialNetWork
 {
+    /*
     private static Logger log = SWBUtils.getLogger(SWBSTwitterImp.class);
     
     SWBModel model=null;
@@ -48,6 +49,6 @@ public class SWBSTwitterImp extends SWBSocialNetWork
          System.out.println("Se desconecta de la red social");
          return true;
     }
-
+*/
 
 }

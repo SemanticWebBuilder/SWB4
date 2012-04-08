@@ -49,10 +49,11 @@ public class testSWBSocialMgr {
 
         //Para el uso de una determinada red social directamente
         //WebSite wsite=WebSite.ClassMgr.getWebSite("visit");
+        /*
         SWBSTwitterImp swbTwitter=new SWBSTwitterImp(null);
         try
         {
-            swbTwitter.setMsg(msg);
+            //swbTwitter.setMsg(msg);
             swbTwitter.sendPost();
         }catch(Exception e)
         {
@@ -63,14 +64,14 @@ public class testSWBSocialMgr {
         try
         {
             swbFacebook.connect();
-            swbFacebook.setMsg(msg);
+            //swbFacebook.setMsg(msg);
             swbFacebook.sendPost();
             swbFacebook.disConnect();
         }catch(Exception e)
         {
          log.error(e);
         }
-        
+        */
     }
 
 }

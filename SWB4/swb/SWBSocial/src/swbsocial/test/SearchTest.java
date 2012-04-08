@@ -24,7 +24,7 @@ import twitter4j.User;
 public class SearchTest {
 
     public static void main(String[] args) {
-
+/*
 		String token = "277181746-i5plkIhZlZfszXdNnVFtZ2X8fB2duyBn79eDHTUM";
 		String tokenSecret = "yGVTgEBNwCbMtGkbi2Qz1dR51mZLsKzPmJJOUUrYvDU";
                 Twitter twitter = new TwitterFactory().getInstance();
@@ -136,7 +136,7 @@ public class SearchTest {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
+*/
 	}
 
 }

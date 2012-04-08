@@ -95,11 +95,11 @@ public class TwitterTest {
     ex.printStackTrace();
    }
   };
-  twitterStream.addListener(listener);
-  twitterStream.filter(filterQuery);
+  //twitterStream.addListener(listener);
+  //twitterStream.filter(filterQuery);
 
   //
-  twitterStream.sample();
+  //twitterStream.sample();
 
  }
 

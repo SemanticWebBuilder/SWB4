@@ -31,8 +31,7 @@ public class TwitterListener {
                 {
                     System.out.println();
                     System.out.println("------------");
-                    System.out.println(status.getUser().getName() + " : "
-                            + status.getText() + " : " + status.getGeoLocation());
+                    //System.out.println(status.getUser().getName() + " : " + status.getText() + " : " + status.getGeoLocation());
                     System.out.println(status.getCreatedAt());
                 }
                 System.out.print(" ");
@@ -88,11 +87,10 @@ public class TwitterListener {
         Configuration cfg = cb.build();
         TwitterStream trial = new TwitterStreamFactory(cfg).getInstance();
 
-        trial.addListener(listener);
+        //trial.addListener(listener);
 
-        trial.filter(query);
-        System.out.println(" here is stuff : "
-                + trial.getFilterStream(query));
+        //trial.filter(query);
+        //System.out.println(" here is stuff : " + trial.getFilterStream(query));
         //trial.sample();
 
     }
