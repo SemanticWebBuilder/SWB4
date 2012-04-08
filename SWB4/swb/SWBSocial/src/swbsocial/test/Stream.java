@@ -62,7 +62,7 @@ public class Stream {
 
     fq.track(keywords);
 
-    twitterStream.addListener(listener);
-    twitterStream.filter(fq);
+    //twitterStream.addListener(listener);
+    //twitterStream.filter(fq);
 }
 }
