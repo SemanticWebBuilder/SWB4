@@ -1,8 +1,12 @@
 package org.semanticwb.social.base;
 
 
-public abstract class PhotoBase extends org.semanticwb.social.Post implements org.semanticwb.model.Expirable,org.semanticwb.model.Traceable
+public abstract class PhotoBase extends org.semanticwb.social.Message implements org.semanticwb.model.Traceable,org.semanticwb.model.Expirable
 {
+   /**
+   * Ruta del archivo de la imagen (Foto)
+   */
+    public static final org.semanticwb.platform.SemanticProperty social_photo=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.owl-ontologies.com/socialNet#photo");
     public static final org.semanticwb.platform.SemanticClass social_Photo=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.owl-ontologies.com/socialNet#Photo");
    /**
    * The semantic class that represents the currentObject
@@ -31,6 +35,12 @@ public abstract class PhotoBase extends org.semanticwb.social.Post implements or
         {
             java.util.Iterator it=sclass.listInstances();
             return new org.semanticwb.model.GenericIterator<org.semanticwb.social.Photo>(it, true);
+        }
+
+        public static org.semanticwb.social.Photo createPhoto(org.semanticwb.model.SWBModel model)
+        {
+            long id=model.getSemanticObject().getModel().getCounter(sclass);
+            return org.semanticwb.social.Photo.ClassMgr.createPhoto(String.valueOf(id), model);
         }
        /**
        * Gets a org.semanticwb.social.Photo
@@ -119,26 +129,26 @@ public abstract class PhotoBase extends org.semanticwb.social.Post implements or
             return it;
         }
        /**
-       * Gets all org.semanticwb.social.Photo with a determined PostInv
-       * @param value PostInv of the type org.semanticwb.social.SocialNetWork
+       * Gets all org.semanticwb.social.Photo with a determined SocialNetwork_PostInv
+       * @param value SocialNetwork_PostInv of the type org.semanticwb.social.SocialNetWork
        * @param model Model of the org.semanticwb.social.Photo
        * @return Iterator with all the org.semanticwb.social.Photo
        */
 
-        public static java.util.Iterator<org.semanticwb.social.Photo> listPhotoByPostInv(org.semanticwb.social.SocialNetWork value,org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.social.Photo> listPhotoBySocialNetwork_PostInv(org.semanticwb.social.SocialNetWork value,org.semanticwb.model.SWBModel model)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.social.Photo> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(social_hasPostInv, value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.Photo> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(social_hasSocialNetwork_PostInv, value.getSemanticObject(),sclass));
             return it;
         }
        /**
-       * Gets all org.semanticwb.social.Photo with a determined PostInv
-       * @param value PostInv of the type org.semanticwb.social.SocialNetWork
+       * Gets all org.semanticwb.social.Photo with a determined SocialNetwork_PostInv
+       * @param value SocialNetwork_PostInv of the type org.semanticwb.social.SocialNetWork
        * @return Iterator with all the org.semanticwb.social.Photo
        */
 
-        public static java.util.Iterator<org.semanticwb.social.Photo> listPhotoByPostInv(org.semanticwb.social.SocialNetWork value)
+        public static java.util.Iterator<org.semanticwb.social.Photo> listPhotoBySocialNetwork_PostInv(org.semanticwb.social.SocialNetWork value)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.social.Photo> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(social_hasPostInv,value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.Photo> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(social_hasSocialNetwork_PostInv,value.getSemanticObject(),sclass));
             return it;
         }
     }
@@ -150,5 +160,23 @@ public abstract class PhotoBase extends org.semanticwb.social.Post implements or
     public PhotoBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
+    }
+
+/**
+* Gets the Photo property
+* @return String with the Photo
+*/
+    public String getPhoto()
+    {
+        return getSemanticObject().getProperty(social_photo);
+    }
+
+/**
+* Sets the Photo property
+* @param value long with the Photo
+*/
+    public void setPhoto(String value)
+    {
+        getSemanticObject().setProperty(social_photo, value);
     }
 }
