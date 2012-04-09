@@ -15,6 +15,7 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase
 
     
    public void postMsg(Message message) {
+        addPost(message);
         this.msg=message;
         if(msg!=null)
         {
@@ -23,6 +24,7 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase
     }
 
     public void postPhoto(Photo photo) {
+        addPost(photo);
         System.out.println("Twitter login:"+getLogin());
         System.out.println("Twitter Passw:"+getPassword());
         System.out.println("Twitter SK:"+getSecreatKey());
