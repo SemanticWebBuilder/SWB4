@@ -1,7 +1,7 @@
 package org.semanticwb.social.base;
 
 
-public abstract class VideoBase extends org.semanticwb.social.Message implements org.semanticwb.model.Traceable,org.semanticwb.model.Expirable
+public abstract class VideoBase extends org.semanticwb.social.Post implements org.semanticwb.model.Expirable,org.semanticwb.model.Traceable,org.semanticwb.social.Comentable
 {
    /**
    * Archivo de Video a subir a la red social
@@ -129,26 +129,26 @@ public abstract class VideoBase extends org.semanticwb.social.Message implements
             return it;
         }
        /**
-       * Gets all org.semanticwb.social.Video with a determined SocialNetwork_PostInv
-       * @param value SocialNetwork_PostInv of the type org.semanticwb.social.SocialNetWork
+       * Gets all org.semanticwb.social.Video with a determined PostContainer_PostInv
+       * @param value PostContainer_PostInv of the type org.semanticwb.social.PostContainer
        * @param model Model of the org.semanticwb.social.Video
        * @return Iterator with all the org.semanticwb.social.Video
        */
 
-        public static java.util.Iterator<org.semanticwb.social.Video> listVideoBySocialNetwork_PostInv(org.semanticwb.social.SocialNetWork value,org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.social.Video> listVideoByPostContainer_PostInv(org.semanticwb.social.PostContainer value,org.semanticwb.model.SWBModel model)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.social.Video> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(social_hasSocialNetwork_PostInv, value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.Video> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(social_hasPostContainer_PostInv, value.getSemanticObject(),sclass));
             return it;
         }
        /**
-       * Gets all org.semanticwb.social.Video with a determined SocialNetwork_PostInv
-       * @param value SocialNetwork_PostInv of the type org.semanticwb.social.SocialNetWork
+       * Gets all org.semanticwb.social.Video with a determined PostContainer_PostInv
+       * @param value PostContainer_PostInv of the type org.semanticwb.social.PostContainer
        * @return Iterator with all the org.semanticwb.social.Video
        */
 
-        public static java.util.Iterator<org.semanticwb.social.Video> listVideoBySocialNetwork_PostInv(org.semanticwb.social.SocialNetWork value)
+        public static java.util.Iterator<org.semanticwb.social.Video> listVideoByPostContainer_PostInv(org.semanticwb.social.PostContainer value)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.social.Video> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(social_hasSocialNetwork_PostInv,value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.Video> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(social_hasPostContainer_PostInv,value.getSemanticObject(),sclass));
             return it;
         }
     }
@@ -178,5 +178,23 @@ public abstract class VideoBase extends org.semanticwb.social.Message implements
     public void setVideo(String value)
     {
         getSemanticObject().setProperty(social_video, value);
+    }
+
+/**
+* Gets the Comment property
+* @return String with the Comment
+*/
+    public String getComment()
+    {
+        return getSemanticObject().getProperty(social_comment);
+    }
+
+/**
+* Sets the Comment property
+* @param value long with the Comment
+*/
+    public void setComment(String value)
+    {
+        getSemanticObject().setProperty(social_comment, value);
     }
 }

@@ -54,7 +54,7 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase
         this.photo=photo;
         if(photo!=null)
         {
-            System.out.println("Mensaje de Photo de Twitter:"+photo.getMsg_Text());
+            System.out.println("Mensaje de Photo de Twitter:"+photo.getComment());
             System.out.println("Photo de Twitter:"+photo.getPhoto());
         }
     }

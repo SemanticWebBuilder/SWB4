@@ -1,18 +1,18 @@
 package org.semanticwb.social.base;
 
 
-public abstract class SocialNetWorkBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable
+public abstract class SocialNetWorkBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable
 {
    /**
    * Password de Conexión de la Red Social
    */
     public static final org.semanticwb.platform.SemanticProperty social_password=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.owl-ontologies.com/socialNet#password");
+    public static final org.semanticwb.platform.SemanticClass social_PostContainer=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.owl-ontologies.com/socialNet#PostContainer");
+    public static final org.semanticwb.platform.SemanticProperty social_hasPostContainer=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.owl-ontologies.com/socialNet#hasPostContainer");
    /**
    * Usuario de la Red Social
    */
     public static final org.semanticwb.platform.SemanticProperty social_login=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.owl-ontologies.com/socialNet#login");
-    public static final org.semanticwb.platform.SemanticClass social_Post=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.owl-ontologies.com/socialNet#Post");
-    public static final org.semanticwb.platform.SemanticProperty social_hasPost=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.owl-ontologies.com/socialNet#hasPost");
     public static final org.semanticwb.platform.SemanticClass social_SocialNetWork=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.owl-ontologies.com/socialNet#SocialNetWork");
    /**
    * The semantic class that represents the currentObject
@@ -129,26 +129,26 @@ public abstract class SocialNetWorkBase extends org.semanticwb.model.SWBClass im
             return it;
         }
        /**
-       * Gets all org.semanticwb.social.SocialNetWork with a determined Post
-       * @param value Post of the type org.semanticwb.social.Post
+       * Gets all org.semanticwb.social.SocialNetWork with a determined PostContainer
+       * @param value PostContainer of the type org.semanticwb.social.PostContainer
        * @param model Model of the org.semanticwb.social.SocialNetWork
        * @return Iterator with all the org.semanticwb.social.SocialNetWork
        */
 
-        public static java.util.Iterator<org.semanticwb.social.SocialNetWork> listSocialNetWorkByPost(org.semanticwb.social.Post value,org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.social.SocialNetWork> listSocialNetWorkByPostContainer(org.semanticwb.social.PostContainer value,org.semanticwb.model.SWBModel model)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.social.SocialNetWork> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(social_hasPost, value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.SocialNetWork> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(social_hasPostContainer, value.getSemanticObject(),sclass));
             return it;
         }
        /**
-       * Gets all org.semanticwb.social.SocialNetWork with a determined Post
-       * @param value Post of the type org.semanticwb.social.Post
+       * Gets all org.semanticwb.social.SocialNetWork with a determined PostContainer
+       * @param value PostContainer of the type org.semanticwb.social.PostContainer
        * @return Iterator with all the org.semanticwb.social.SocialNetWork
        */
 
-        public static java.util.Iterator<org.semanticwb.social.SocialNetWork> listSocialNetWorkByPost(org.semanticwb.social.Post value)
+        public static java.util.Iterator<org.semanticwb.social.SocialNetWork> listSocialNetWorkByPostContainer(org.semanticwb.social.PostContainer value)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.social.SocialNetWork> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(social_hasPost,value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.SocialNetWork> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(social_hasPostContainer,value.getSemanticObject(),sclass));
             return it;
         }
     }
@@ -357,6 +357,71 @@ public abstract class SocialNetWorkBase extends org.semanticwb.model.SWBClass im
     {
         getSemanticObject().setProperty(swb_description, description, lang);
     }
+   /**
+   * Gets all the org.semanticwb.social.PostContainer
+   * @return A GenericIterator with all the org.semanticwb.social.PostContainer
+   */
+
+    public org.semanticwb.model.GenericIterator<org.semanticwb.social.PostContainer> listPostContainers()
+    {
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.social.PostContainer>(getSemanticObject().listObjectProperties(social_hasPostContainer));
+    }
+
+   /**
+   * Gets true if has a PostContainer
+   * @param value org.semanticwb.social.PostContainer to verify
+   * @return true if the org.semanticwb.social.PostContainer exists, false otherwise
+   */
+    public boolean hasPostContainer(org.semanticwb.social.PostContainer value)
+    {
+        boolean ret=false;
+        if(value!=null)
+        {
+           ret=getSemanticObject().hasObjectProperty(social_hasPostContainer,value.getSemanticObject());
+        }
+        return ret;
+    }
+   /**
+   * Adds a PostContainer
+   * @param value org.semanticwb.social.PostContainer to add
+   */
+
+    public void addPostContainer(org.semanticwb.social.PostContainer value)
+    {
+        getSemanticObject().addObjectProperty(social_hasPostContainer, value.getSemanticObject());
+    }
+   /**
+   * Removes all the PostContainer
+   */
+
+    public void removeAllPostContainer()
+    {
+        getSemanticObject().removeProperty(social_hasPostContainer);
+    }
+   /**
+   * Removes a PostContainer
+   * @param value org.semanticwb.social.PostContainer to remove
+   */
+
+    public void removePostContainer(org.semanticwb.social.PostContainer value)
+    {
+        getSemanticObject().removeObjectProperty(social_hasPostContainer,value.getSemanticObject());
+    }
+
+   /**
+   * Gets the PostContainer
+   * @return a org.semanticwb.social.PostContainer
+   */
+    public org.semanticwb.social.PostContainer getPostContainer()
+    {
+         org.semanticwb.social.PostContainer ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(social_hasPostContainer);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.social.PostContainer)obj.createGenericInstance();
+         }
+         return ret;
+    }
 
 /**
 * Gets the Login property
@@ -374,70 +439,5 @@ public abstract class SocialNetWorkBase extends org.semanticwb.model.SWBClass im
     public void setLogin(String value)
     {
         getSemanticObject().setProperty(social_login, value);
-    }
-   /**
-   * Gets all the org.semanticwb.social.Post
-   * @return A GenericIterator with all the org.semanticwb.social.Post
-   */
-
-    public org.semanticwb.model.GenericIterator<org.semanticwb.social.Post> listPosts()
-    {
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.social.Post>(getSemanticObject().listObjectProperties(social_hasPost));
-    }
-
-   /**
-   * Gets true if has a Post
-   * @param value org.semanticwb.social.Post to verify
-   * @return true if the org.semanticwb.social.Post exists, false otherwise
-   */
-    public boolean hasPost(org.semanticwb.social.Post value)
-    {
-        boolean ret=false;
-        if(value!=null)
-        {
-           ret=getSemanticObject().hasObjectProperty(social_hasPost,value.getSemanticObject());
-        }
-        return ret;
-    }
-   /**
-   * Adds a Post
-   * @param value org.semanticwb.social.Post to add
-   */
-
-    public void addPost(org.semanticwb.social.Post value)
-    {
-        getSemanticObject().addObjectProperty(social_hasPost, value.getSemanticObject());
-    }
-   /**
-   * Removes all the Post
-   */
-
-    public void removeAllPost()
-    {
-        getSemanticObject().removeProperty(social_hasPost);
-    }
-   /**
-   * Removes a Post
-   * @param value org.semanticwb.social.Post to remove
-   */
-
-    public void removePost(org.semanticwb.social.Post value)
-    {
-        getSemanticObject().removeObjectProperty(social_hasPost,value.getSemanticObject());
-    }
-
-   /**
-   * Gets the Post
-   * @return a org.semanticwb.social.Post
-   */
-    public org.semanticwb.social.Post getPost()
-    {
-         org.semanticwb.social.Post ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(social_hasPost);
-         if(obj!=null)
-         {
-             ret=(org.semanticwb.social.Post)obj.createGenericInstance();
-         }
-         return ret;
     }
 }
