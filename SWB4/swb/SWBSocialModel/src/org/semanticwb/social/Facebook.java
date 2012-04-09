@@ -29,7 +29,7 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase
         this.photo=photo;
         if(photo!=null)
         {
-            System.out.println("Mensaje de Photo de Facebook:"+photo.getMsg_Text());
+            System.out.println("Mensaje de Photo de Facebook:"+photo.getComment());
             System.out.println("Photo de Facebook:"+photo.getPhoto());
         }
     }
