@@ -12,6 +12,7 @@ import com.arthurdo.parser.HtmlTag;
  */
 public class HTMLElement
 {
+    
 
     public HtmlTag tag;
     public HTMLElement parent;

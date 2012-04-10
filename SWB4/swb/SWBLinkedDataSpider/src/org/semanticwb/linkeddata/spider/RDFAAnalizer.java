@@ -20,6 +20,7 @@ public class RDFAAnalizer
 {
 
     
+    
     private String[] attributes =
     {
         "typeof", "about", "property", "datatype", "rel", "rev"

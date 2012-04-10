@@ -11,6 +11,7 @@ package org.semanticwb.linkeddata.spider;
 public class SpiderException extends Exception
 {
 
+    
     private Spider spider;
 
     public SpiderException(String message, Spider spider)

@@ -20,6 +20,7 @@ import org.semanticwb.linkeddata.spider.SpiderException;
 public class TestSaveTriple implements SpiderEventListener
 {
 
+    
     PrintStream out;
     PrintStream err;
 
