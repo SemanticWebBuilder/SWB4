@@ -19,7 +19,7 @@ public class RDDLAnalizer
 {
 
     public static final String DOCTYPE_RDDL = "<!DOCTYPE html PUBLIC \"-//XML-DEV//DTD XHTML RDDL 1.0//EN\" \"http://www.w3.org/2001/rddl/rddl-xhtml.dtd\" >";
-    public static final String RDDL_NAMESPACE="http://www.rddl.org/";
+    public static final String RDDL_NAMESPACE = "http://www.rddl.org/";
     private Spider spider;
     private URI suj;
     private HtmlStreamTokenizer tok;
@@ -145,45 +145,46 @@ public class RDDLAnalizer
 
         return element;
     }
+
     private void procesaTag(HTMLElement tag)
     {
 
-        String rddl_prefix=null;
-        for(String _prefix : prefix.keySet())
+        String rddl_prefix = null;
+        for (String _prefix : prefix.keySet())
         {
-            String ns=prefix.get(_prefix);
-            if(ns.equals(RDDL_NAMESPACE))
+            String ns = prefix.get(_prefix);
+            if (ns.equals(RDDL_NAMESPACE))
             {
-                rddl_prefix=_prefix;
+                rddl_prefix = _prefix;
             }
         }
-        if(rddl_prefix!=null)
+        if (rddl_prefix != null)
         {
-            String resourceElementName=rddl_prefix+":resource";
-            if(tag.tag.getTagString().equals(resourceElementName))
+            String resourceElementName = rddl_prefix + ":resource";
+            if (tag.tag.getTagString().equals(resourceElementName))
             {
                 //String id=tag.tag.getParam("id");
-                for(String _prefix : prefix.keySet())
+                for (String _prefix : prefix.keySet())
                 {
-                    String namespace=prefix.get(_prefix);
-                    Enumeration params=tag.tag.getParamNames();
-                    while(params.hasMoreElements())
+                    String namespace = prefix.get(_prefix);
+                    Enumeration params = tag.tag.getParamNames();
+                    while (params.hasMoreElements())
                     {
-                        String paramName=params.nextElement().toString();
-                        if(paramName!=null && paramName.startsWith(_prefix+":"))
+                        String paramName = params.nextElement().toString();
+                        if (paramName != null && paramName.startsWith(_prefix + ":"))
                         {
-                            String obj=tag.tag.getParam(paramName);
+                            String obj = tag.tag.getParam(paramName);
                             try
                             {
-                                if(!namespace.endsWith("#"))
+                                if (!namespace.endsWith("#"))
                                 {
-                                    namespace+="#";
+                                    namespace += "#";
                                 }
-                                URI pred=new URI(paramName.replace(_prefix+":", namespace));
-                                String lang=tag.tag.getParam("xml:lang");
+                                URI pred = new URI(paramName.replace(_prefix + ":", namespace));
+                                String lang = tag.tag.getParam("xml:lang");
                                 spider.fireEventnewTriple(suj, pred, obj, spider, lang);
                             }
-                            catch(Exception e)
+                            catch (Exception e)
                             {
                                 spider.fireError(e);
                             }

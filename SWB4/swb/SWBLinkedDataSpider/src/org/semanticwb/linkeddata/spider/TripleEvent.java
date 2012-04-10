@@ -10,4 +10,5 @@ package org.semanticwb.linkeddata.spider;
  */
 public class TripleEvent
 {
+    
 }

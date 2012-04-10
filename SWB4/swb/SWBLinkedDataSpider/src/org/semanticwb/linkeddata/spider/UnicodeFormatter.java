@@ -11,7 +11,6 @@ package org.semanticwb.linkeddata.spider;
 public class UnicodeFormatter
 {
 
-    
     static public String byteToHex(byte b)
     {
         // Returns hex String representation of byte b

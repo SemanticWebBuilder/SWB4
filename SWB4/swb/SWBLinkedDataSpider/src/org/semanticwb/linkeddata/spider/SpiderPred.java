@@ -21,11 +21,10 @@ public class SpiderPred extends Spider
     }
 
     @Override
-    public synchronized  void onTriple(URI suj, URI pred, String obj, Spider source, String lang)
+    public synchronized void onTriple(URI suj, URI pred, String obj, Spider source, String lang)
     {
         TripleElement element = new TripleElement(suj, pred, obj);
         predicates.add(element);
         super.onTriple(suj, pred, obj, source, lang);
     }
-
 }

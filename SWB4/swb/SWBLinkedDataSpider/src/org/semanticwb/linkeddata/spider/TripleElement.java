@@ -12,6 +12,7 @@ import java.net.URI;
  */
 public class TripleElement
 {
+    
 
     public TripleElement(URI suj, URI pred, String obj)
     {

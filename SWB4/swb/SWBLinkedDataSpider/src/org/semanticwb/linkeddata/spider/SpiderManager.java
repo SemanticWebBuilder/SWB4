@@ -22,7 +22,6 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 public class SpiderManager
 {
 
-    
     public static final Set<URL> visited = Collections.synchronizedSet(new HashSet<URL>());
     private static final Timer timer = new Timer("Spiders");
 
@@ -53,7 +52,7 @@ public class SpiderManager
                     Spider spider = spiders.poll();
                     if (spider != null)
                     {
-                        Thread t=new Thread(spider);
+                        Thread t = new Thread(spider);
                         t.start();
                         spidersRunning.add(spider);
                     }
