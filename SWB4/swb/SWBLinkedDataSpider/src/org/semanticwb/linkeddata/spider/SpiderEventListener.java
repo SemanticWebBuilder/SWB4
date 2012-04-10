@@ -14,6 +14,8 @@ import java.net.URL;
 public interface SpiderEventListener
 {
 
+
+    
     public void onStart(URL url);
 
     public void onEnd(URL url);

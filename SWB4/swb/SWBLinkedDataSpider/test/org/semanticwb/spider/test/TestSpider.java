@@ -25,6 +25,7 @@ public class TestSpider
     
     public TestSpider()
     {
+        
     }
 
     @BeforeClass

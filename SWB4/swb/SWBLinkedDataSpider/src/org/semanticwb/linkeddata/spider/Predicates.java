@@ -19,6 +19,7 @@ public class Predicates
 {
     
 
+    
     private final Map<URI, Set<TripleElement>> predicates = Collections.synchronizedMap(new HashMap<URI, Set<TripleElement>>());
 
     public void add(TripleElement element)

@@ -18,6 +18,7 @@ import java.util.HashMap;
 public class RDDLAnalizer
 {
 
+    
     public static final String DOCTYPE_RDDL = "<!DOCTYPE html PUBLIC \"-//XML-DEV//DTD XHTML RDDL 1.0//EN\" \"http://www.w3.org/2001/rddl/rddl-xhtml.dtd\" >";
     public static final String RDDL_NAMESPACE = "http://www.rddl.org/";
     private Spider spider;

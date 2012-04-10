@@ -14,6 +14,7 @@ import java.net.URL;
 public class SpiderPred extends Spider
 {
 
+
     public SpiderPred(URL seedURL)
     {
         super(seedURL);

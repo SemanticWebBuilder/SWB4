@@ -11,6 +11,7 @@ package org.semanticwb.linkeddata.spider;
 public class AttributeRDFA
 {
 
+
     public String value;
     public String attribute;
     public String prefix;

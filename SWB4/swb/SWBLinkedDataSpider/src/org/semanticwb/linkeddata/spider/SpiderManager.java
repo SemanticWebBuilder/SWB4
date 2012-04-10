@@ -22,6 +22,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 public class SpiderManager
 {
 
+    
     public static final Set<URL> visited = Collections.synchronizedSet(new HashSet<URL>());
     private static final Timer timer = new Timer("Spiders");
 
