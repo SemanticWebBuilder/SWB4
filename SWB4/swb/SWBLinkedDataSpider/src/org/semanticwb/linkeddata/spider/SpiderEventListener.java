@@ -14,8 +14,6 @@ import java.net.URL;
 public interface SpiderEventListener
 {
 
-
-    
     public void onStart(URL url);
 
     public void onEnd(URL url);
@@ -23,6 +21,8 @@ public interface SpiderEventListener
     public void onNewSubject(URI url);
 
     public void onTriple(URI suj, URI pred, String obj, Spider source, String lang);
+
+    public void onTriple(URI suj, URI pred, URI obj, Spider source, String lang);
 
     public void onNTFormat(String row);
 

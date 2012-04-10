@@ -38,7 +38,7 @@ public class Spider implements SpiderEventListener, Runnable
     public static Predicates predicates = new Predicates();
     public static final String DOCTYPE_RFDA = "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML+RDFa 1.0//EN\" \"http://www.w3.org/MarkUp/DTD/xhtml-rdfa-1.dtd\">";
     public static final String OWL_SCHEMA_NAMESPACE = "http://www.w3.org/2002/07/owl#";
-    public static final String RDF_SCHEMA_NAMESPACE = "http://www.w3.org/1999/02/22-rdf-syntax-ns#";
+    public static final String RDF_SYNTAXIS_NAMESPACE = "http://www.w3.org/1999/02/22-rdf-syntax-ns#";
     public static final String RDFS_SCHEMA_NAMESPACE = "http://www.w3.org/2000/01/rdf-schema#";
     private static URI typeProp;
 
@@ -46,7 +46,7 @@ public class Spider implements SpiderEventListener, Runnable
     {
         try
         {
-            typeProp = new URI(RDF_SCHEMA_NAMESPACE + "type");
+            typeProp = new URI(RDF_SYNTAXIS_NAMESPACE + "type");
         }
         catch (Exception e)
         {
@@ -174,9 +174,9 @@ public class Spider implements SpiderEventListener, Runnable
 
     private URI getId(Element element) throws SpiderException
     {
-        if (element.hasAttributeNS(RDF_SCHEMA_NAMESPACE, "about"))
+        if (element.hasAttributeNS(RDF_SYNTAXIS_NAMESPACE, "about"))
         {
-            String _id = element.getAttributeNS(RDF_SCHEMA_NAMESPACE, "about");
+            String _id = element.getAttributeNS(RDF_SYNTAXIS_NAMESPACE, "about");
 //            if (_id.startsWith("#"))
 //            {
 //                _id = element.getNamespaceURI() + element.getLocalName() + _id;
@@ -234,7 +234,7 @@ public class Spider implements SpiderEventListener, Runnable
             Node node = childs.item(ichild);
             if (node.getNamespaceURI() != null && node instanceof Element)
             {
-                if (!node.getNamespaceURI().equals(RDF_SCHEMA_NAMESPACE) && !node.getNamespaceURI().equals(RDFS_SCHEMA_NAMESPACE) && !node.getNamespaceURI().equals(OWL_SCHEMA_NAMESPACE))
+                if (!node.getNamespaceURI().equals(RDF_SYNTAXIS_NAMESPACE) && !node.getNamespaceURI().equals(RDFS_SCHEMA_NAMESPACE) && !node.getNamespaceURI().equals(OWL_SCHEMA_NAMESPACE))
                 {
                     try
                     {
@@ -305,6 +305,11 @@ public class Spider implements SpiderEventListener, Runnable
                     read = reader.read(cbuf);
                 }
                 DocumentInfo info = new DocumentInfo();
+                int pos = contentType.indexOf(";");
+                if (pos != -1)
+                {
+                    contentType = contentType.substring(0, pos).trim();
+                }
                 info.contentType = contentType;
                 info.content = sb.toString();
                 info.url = url;
@@ -430,6 +435,14 @@ public class Spider implements SpiderEventListener, Runnable
         return null;
     }
 
+//    private boolean isRDFSProperty(URI pred)
+//    {
+//        if(pred.toString().startsWith(RDFS_SCHEMA_NAMESPACE))
+//        {
+//            return true;
+//        }
+//        return false;
+//    }
     public synchronized void onTriple(URI suj, URI pred, String obj, Spider source, String lang)
     {
         if (suj.toString().equals("http://dbpedia.org/property/3929Label"))
@@ -643,6 +656,32 @@ public class Spider implements SpiderEventListener, Runnable
         }
     }
 
+    public void fireEventnewTriple(final URI suj, final URI pred, final URI obj, final Spider spider, final String lang)
+    {
+        for (final SpiderEventListener listener : listeners)
+        {
+            Runnable r = new Runnable()
+            {
+
+                public void run()
+                {
+                    try
+                    {
+                        //listener.onTriple(suj, pred, obj,spider);
+                        listener.onTriple(suj, pred, obj, spider, lang);
+                    }
+                    catch (Exception e)
+                    {
+                        log.debug(e);
+                    }
+                }
+            };
+            Thread t = new Thread(r);
+            t.start();
+
+        }
+    }
+
     public void fireOnStart(final URL url)
     {
         for (final SpiderEventListener listener : listeners)
@@ -738,22 +777,16 @@ public class Spider implements SpiderEventListener, Runnable
             try
             {
                 URI pred = new URI(prop.getNamespaceURI() + prop.getLocalName());
-                if (prop.hasAttributeNS(RDF_SCHEMA_NAMESPACE, "resource"))
+                if (prop.hasAttributeNS(RDF_SYNTAXIS_NAMESPACE, "resource"))
                 {
-                    String obj = prop.getAttributeNodeNS(RDF_SCHEMA_NAMESPACE, "resource").getValue();
+                    URI obj = new URI(prop.getAttributeNodeNS(RDF_SYNTAXIS_NAMESPACE, "resource").getValue());
                     String _lang = null;
                     if (prop.hasAttribute(XMLLANG))
                     {
                         prop.getAttribute(XMLLANG);
                     }
-                    URI _newsuj = new URI(obj);
-                    fireEventnewTriple(_newsuj, typeProp, pred.toString(), this, _lang);
-
                     fireEventnewTriple(suj, pred, obj, this, _lang);
-
-
-                    URI _newUri = new URI(obj);
-                    addOtherProperties(_newUri, prop);
+                    addOtherProperties(obj, prop);
                 }
                 else
                 {
@@ -761,12 +794,12 @@ public class Spider implements SpiderEventListener, Runnable
                     for (int ichild = 0; ichild < childs.getLength(); ichild++)
                     {
                         Node child = childs.item(ichild);
-                        if (child.getLocalName() != null && child.getNamespaceURI().equals(RDF_SCHEMA_NAMESPACE) && child.getLocalName().equals("Description") && child instanceof Element)
+                        if (child.getLocalName() != null && child.getNamespaceURI().equals(RDF_SYNTAXIS_NAMESPACE) && child.getLocalName().equals("Description") && child instanceof Element)
                         {
                             Element description = (Element) child;
-                            if (description.hasAttributeNS(RDF_SCHEMA_NAMESPACE, "about"))
+                            if (description.hasAttributeNS(RDF_SYNTAXIS_NAMESPACE, "about"))
                             {
-                                String obj = description.getAttributeNS(RDF_SCHEMA_NAMESPACE, "about");
+                                URI obj = new URI(description.getAttributeNS(RDF_SYNTAXIS_NAMESPACE, "about"));
                                 String _lang = null;
                                 if (description.hasAttribute(XMLLANG))
                                 {
@@ -774,9 +807,7 @@ public class Spider implements SpiderEventListener, Runnable
                                 }
 
                                 fireEventnewTriple(suj, pred, obj, this, _lang);
-                                URI _newsuj = new URI(obj);
-                                fireEventnewTriple(_newsuj, typeProp, pred.toString(), this, _lang);
-                                addOtherProperties(_newsuj, description);
+                                addOtherProperties(obj, description);
                             }
                         }
                         if (child instanceof Text)
@@ -808,28 +839,6 @@ public class Spider implements SpiderEventListener, Runnable
             if (suj != null)
             {
                 addOtherProperties(suj, element);
-
-                /*try
-                {
-
-                URI type = new URI(element.getNamespaceURI() + element.getLocalName());
-                String _lang = element.getAttribute("xml:lang");
-                fireEventnewTriple(suj, typeProp, type.toString(), this, _lang);
-                NodeList childs = element.getChildNodes();
-                for (int ichild = 0; ichild < childs.getLength(); ichild++)
-                {
-                Node node = childs.item(ichild);
-                if (node instanceof Element)
-                {
-                addProperty(suj, (Element) node, _lang);
-                }
-                }
-                }
-                catch (URISyntaxException e)
-                {
-                fireError(e);
-
-                }*/
             }
             else
             {
@@ -837,10 +846,10 @@ public class Spider implements SpiderEventListener, Runnable
                 for (int ichild = 0; ichild < childs.getLength(); ichild++)
                 {
                     Node child = childs.item(ichild);
-                    if (child.getLocalName() != null && child.getNamespaceURI().equals(RDF_SCHEMA_NAMESPACE) && child.getLocalName().equals("Description") && child instanceof Element)
+                    if (child.getLocalName() != null && child.getNamespaceURI().equals(RDF_SYNTAXIS_NAMESPACE) && child.getLocalName().equals("Description") && child instanceof Element)
                     {
                         Element description = (Element) child;
-                        if (description.hasAttributeNS(RDF_SCHEMA_NAMESPACE, "about"))
+                        if (description.hasAttributeNS(RDF_SYNTAXIS_NAMESPACE, "about"))
                         {
                             addOtherProperties(suj, description);
                         }
@@ -939,5 +948,30 @@ public class Spider implements SpiderEventListener, Runnable
 
     public void onNTFormat(String row)
     {
+    }
+
+    public void onTriple(URI suj, URI pred, URI obj, Spider source, String lang)
+    {
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("<").append(format(suj.toString())).append("> ");
+        sb.append("<").append(format(pred.toString())).append("> ");
+        sb.append("<").append(format(obj.toString())).append("> .");
+        fireEventNtFormat(sb.toString(), source);
+        try
+        {
+            Spider spider=new Spider(pred.toURL());
+            for(SpiderEventListener listener : spider.listeners)
+            {
+                spider.addSpiderListener(listener);
+            }
+            SpiderManager.addSpider(spider);            
+        }
+        catch(Exception e)
+        {
+            fireError(e);
+
+        }
+
     }
 }
