@@ -74,4 +74,9 @@ public class SpiderManager
         SetSpiders.add(spider);
     }
     private static final Set<Spider> spidersRunning = Collections.synchronizedSet(new HashSet<Spider>());
+
+    public static void addURL(URL url)
+    {
+        addSpider(new Spider(url));      
+    }
 }
