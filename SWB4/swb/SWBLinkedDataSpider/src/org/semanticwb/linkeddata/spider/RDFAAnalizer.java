@@ -292,19 +292,7 @@ public class RDFAAnalizer
 
     private void onPred(URI pred)
     {
-        try
-        {
-            SpiderPred _spider = new SpiderPred(pred.toURL());
-            for (SpiderEventListener listener : spider.getListeners())
-            {
-                _spider.addSpiderListener(listener);
-            }
-            _spider.addSpiderListener(_spider);
-            _spider.get();
-        }
-        catch (Exception e)
-        {
-        }
+        SpiderManager.onPred(pred,spider);
     }
 
     private void procesaTag(HTMLElement tag)

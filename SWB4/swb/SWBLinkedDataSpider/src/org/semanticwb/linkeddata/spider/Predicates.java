@@ -20,9 +20,9 @@ public class Predicates
     
 
     
-    private final Map<URI, Set<TripleElement>> predicates = Collections.synchronizedMap(new HashMap<URI, Set<TripleElement>>());
+    private static final Map<URI, Set<TripleElement>> predicates = Collections.synchronizedMap(new HashMap<URI, Set<TripleElement>>());
 
-    public void add(TripleElement element)
+    public synchronized void add(TripleElement element)
     {
         Set<TripleElement> elements = Collections.synchronizedSet(new HashSet<TripleElement>());
         if (predicates.containsKey(element.suj))
@@ -50,7 +50,7 @@ public class Predicates
         return _values;
     }
 
-    public boolean hasPred(URI pred)
+    public synchronized boolean hasPred(URI pred)
     {
         return predicates.containsKey(pred);
     }
