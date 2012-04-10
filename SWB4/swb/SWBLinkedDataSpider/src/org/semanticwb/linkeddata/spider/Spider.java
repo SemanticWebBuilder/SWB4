@@ -32,7 +32,6 @@ import org.xml.sax.InputSource;
  */
 public class Spider implements SpiderEventListener, Runnable
 {
-    
 
     private static Logger log = SWBUtils.getLogger(Spider.class);
     public static final String XMLLANG = "xml:lang";
@@ -437,6 +436,15 @@ public class Spider implements SpiderEventListener, Runnable
         {
             System.out.println("a");
         }
+        try
+        {
+            Thread.currentThread().sleep(1000);
+        }
+        catch (Exception e)
+        {
+            log.debug(e);
+
+        }
         Set<TripleElement> elements = predicates.get(pred);
         if (!elements.isEmpty())
         {
@@ -472,11 +480,7 @@ public class Spider implements SpiderEventListener, Runnable
                     }
                     fireEventNtFormat(sb.toString(), source);
                 }
-                else
-                {
-                    System.out.print("a");
-                    range = getRange(elements);
-                }
+
             }
             else if (isRDFProperty(elements))
             {
