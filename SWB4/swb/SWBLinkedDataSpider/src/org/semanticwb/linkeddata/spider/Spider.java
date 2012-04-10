@@ -428,7 +428,11 @@ public class Spider implements SpiderEventListener, Runnable
 
     public synchronized void onTriple(URI suj, URI pred, String obj, Spider source, String lang)
     {
-
+        if(suj.toString().equals("http://dbpedia.org/property/3929Label"))
+        {
+            System.out.println("a");
+            
+        }
         Set<TripleElement> elements = predicates.get(pred);
         if (!elements.isEmpty())
         {

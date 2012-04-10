@@ -185,7 +185,7 @@ public class RDDLAnalizer
                             }
                             catch(Exception e)
                             {
-                                
+                                spider.fireError(e);
                             }
 
                         }
