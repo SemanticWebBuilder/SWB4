@@ -7,6 +7,8 @@ package org.semanticwb.linkeddata.spider;
 
 import com.arthurdo.parser.HtmlTag;
 
+
+
 /**
  *
  * @author victor.lorenzana
