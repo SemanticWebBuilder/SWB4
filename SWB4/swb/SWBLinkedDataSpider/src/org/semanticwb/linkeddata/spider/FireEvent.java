@@ -5,6 +5,8 @@
 
 package org.semanticwb.linkeddata.spider;
 
+
+
 /**
  *
  * @author victor.lorenzana
