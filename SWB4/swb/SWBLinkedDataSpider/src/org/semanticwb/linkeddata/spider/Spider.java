@@ -697,7 +697,7 @@ public class Spider implements SpiderEventListener, Runnable
                 {
                     try
                     {
-                        listener.visit(suj);
+                        listener.onNewSubject(suj);
                     }
                     catch (Exception e)
                     {
@@ -868,7 +868,7 @@ public class Spider implements SpiderEventListener, Runnable
         }
     }
 
-    public void visit(URI suj)
+    public void onNewSubject(URI suj)
     {
         try
         {
