@@ -26,6 +26,10 @@
 
 package org.semanticwb.process.model;
 
+import java.util.Iterator;
+import org.semanticwb.model.SWBModel;
+import org.semanticwb.model.User;
+
 
 public class MessageIntermediateCatchEvent extends org.semanticwb.process.model.base.MessageIntermediateCatchEventBase 
 {
@@ -33,4 +37,81 @@ public class MessageIntermediateCatchEvent extends org.semanticwb.process.model.
     {
         super(base);
     }
+    
+    @Override
+    public void execute(FlowNodeInstance instance, User user)
+    {
+        ProcessObserver obs=instance.getProcessSite().getProcessObserver();
+        if(!obs.hasMessageObserverInstance(instance))
+        {
+            obs.addMessageObserverInstance(instance);
+        }
+    }
+
+    @Override
+    public void close(FlowNodeInstance instance, User user)
+    {
+        super.close(instance, user);
+        ProcessObserver obs=instance.getProcessSite().getProcessObserver();
+        obs.removeMessageObserverInstance(instance);
+    }
+
+    @Override
+    public void notifyEvent(FlowNodeInstance instance, FlowNodeInstance from)
+    {
+        //System.out.println("MessageIntermediateCatchEvent-notifyEvent:"+instance+" "+from);
+        
+        Iterator<ItemAwareMapping> it=listItemAwareMappings();
+        while (it.hasNext())
+        {
+            ItemAwareMapping itemAwareMapping = it.next();
+            ItemAware loc=itemAwareMapping.getLocalItemAware();
+            ItemAware rem=itemAwareMapping.getRemoteItemAware();
+            
+            //System.out.println("loc:"+loc+" rem:"+rem);
+            
+            ItemAwareReference itemAwareReference=getItemAwareReference(instance, loc);
+            //System.out.println("itemAwareReference:"+itemAwareReference);
+            
+            Iterator<ItemAwareReference> it3=from.listHeraquicalItemAwareReference().iterator();
+            while (it3.hasNext())
+            {
+                ItemAwareReference remitem = it3.next();
+                //System.out.println("remitem:"+remitem);
+                if(remitem.getItemAware().equals(rem))
+                {
+                    if(itemAwareReference==null)
+                    {
+                        //System.out.println("create");
+                        
+                        itemAwareReference=ItemAwareReference.ClassMgr.createItemAwareReference((SWBModel)remitem.getSemanticObject().getModel().getModelObject().createGenericInstance());
+                        itemAwareReference.setItemAware(loc);   
+                        itemAwareReference.setItemAwareTemporal(remitem.isItemAwareTemporal());
+                        instance.addItemAwareReference(itemAwareReference);        
+                    }
+                    itemAwareReference.setProcessObject(remitem.getProcessObject());
+                    remitem.setProcessObjectReused(true);
+                }
+            }
+        }    
+        
+        super.notifyEvent(instance, from);
+    }
+    
+    public ItemAwareReference getItemAwareReference(FlowNodeInstance instance, ItemAware item)
+    {
+        Iterator<ItemAwareReference> it=instance.listHeraquicalItemAwareReference().iterator();
+        while (it.hasNext())
+        {
+            ItemAwareReference itemAwareReference = it.next();
+            if(itemAwareReference.getItemAware().equals(item))
+            {
+                return itemAwareReference;
+            }
+        }
+        return null;
+    }
+    
+    
+    
 }

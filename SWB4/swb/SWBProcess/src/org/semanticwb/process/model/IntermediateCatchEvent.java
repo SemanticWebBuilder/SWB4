@@ -68,7 +68,7 @@ public class IntermediateCatchEvent extends org.semanticwb.process.model.base.In
         if(isInterruptor())
         {
             GraphicalElement subpro=getParent();
-            System.out.println("subpro:"+subpro);
+            //System.out.println("subpro:"+subpro);
             if(subpro!=null && subpro instanceof FlowNode)
             {
                 FlowNodeInstance source=instance.getRelatedFlowNodeInstance((FlowNode)subpro);

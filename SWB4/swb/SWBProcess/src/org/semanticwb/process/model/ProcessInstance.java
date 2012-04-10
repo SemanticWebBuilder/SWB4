@@ -78,6 +78,13 @@ public class ProcessInstance extends org.semanticwb.process.model.base.ProcessIn
         FlowNodeInstance eventins=event.createInstance(this);
         eventins.start(user);
     }
+    
+    public void start(User user, StartEventNode event, FlowNodeInstance invoker)
+    {
+        super.start(user);
+        FlowNodeInstance eventins=event.createInstance(this);
+        eventins.start(invoker,null,user);
+    }    
 
     private void listAllItemAwareReferences(Instance inst, ArrayList arr)
     {
