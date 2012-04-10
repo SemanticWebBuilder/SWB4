@@ -20,7 +20,6 @@ import org.semanticwb.linkeddata.spider.SpiderException;
 public class TestSaveTriple implements SpiderEventListener
 {
 
-    
     PrintStream out;
     PrintStream err;
 
@@ -82,5 +81,9 @@ public class TestSaveTriple implements SpiderEventListener
     {
         String date = df.format(new Date());
         System.out.println(row);
+    }
+
+    public void onTriple(URI suj, URI pred, URI obj, Spider source, String lang)
+    {
     }
 }
