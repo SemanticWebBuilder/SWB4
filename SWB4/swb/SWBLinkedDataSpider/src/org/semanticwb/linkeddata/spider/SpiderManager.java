@@ -5,11 +5,10 @@
 package org.semanticwb.linkeddata.spider;
 
 import java.net.URL;
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.List;
-import java.util.Queue;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -22,7 +21,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 public class SpiderManager
 {
 
-    private static final HashSet<SpiderEventListener> listeners = new HashSet<SpiderEventListener>();
+    private static final Set<SpiderEventListener> listeners = Collections.synchronizedSet(new HashSet<SpiderEventListener>());
     public static final Set<URL> visited = Collections.synchronizedSet(new HashSet<URL>());
     private static final Timer timer = new Timer("Spiders");
 
