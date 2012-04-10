@@ -33,6 +33,7 @@ import org.xml.sax.InputSource;
 public class Spider implements SpiderEventListener, Runnable
 {
 
+    
     private static Logger log = SWBUtils.getLogger(Spider.class);
     public static final String XMLLANG = "xml:lang";
     public static Predicates predicates = new Predicates();
