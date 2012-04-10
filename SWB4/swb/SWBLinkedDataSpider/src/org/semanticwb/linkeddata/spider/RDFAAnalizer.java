@@ -19,8 +19,6 @@ import java.util.HashMap;
 public class RDFAAnalizer
 {
 
-    
-    
     private String[] attributes =
     {
         "typeof", "about", "property", "datatype", "rel", "rev"
@@ -325,7 +323,7 @@ public class RDFAAnalizer
                     String _lang = tag.tag.getParam("xml:lang");
                     spider.onNewSubject(obj);
                     // relacion  inversa
-                    spider.fireEventnewTriple(obj, pred, suj.toString(), spider, _lang);
+                    spider.fireEventnewTriple(obj, pred, suj, spider, _lang);
                 }
                 catch (URISyntaxException e)
                 {
@@ -342,7 +340,7 @@ public class RDFAAnalizer
                     onPred(pred);
                     String _lang = tag.tag.getParam("xml:lang");
                     spider.onNewSubject(obj);
-                    spider.fireEventnewTriple(suj, pred, obj.toString(), spider, _lang);
+                    spider.fireEventnewTriple(suj, pred, obj, spider, _lang);
                 }
                 catch (URISyntaxException e)
                 {
@@ -391,7 +389,7 @@ public class RDFAAnalizer
                                         onPred(pred);
                                         spider.onNewSubject(obj);
                                         String _lang = tag.tag.getParam("xml:lang");
-                                        spider.fireEventnewTriple(suj, pred, obj.toString(), spider, _lang);
+                                        spider.fireEventnewTriple(suj, pred, obj, spider, _lang);
                                     }
                                     catch (URISyntaxException e)
                                     {
@@ -421,7 +419,7 @@ public class RDFAAnalizer
                         URI pred = new URI(spred);
                         onPred(pred);
                         String _lang = tag.tag.getParam("xml:lang");
-                        spider.fireEventnewTriple(suj, pred, obj.toString(), spider, _lang);
+                        spider.fireEventnewTriple(suj, pred, obj, spider, _lang);
                     }
                     catch (URISyntaxException e)
                     {
@@ -437,7 +435,7 @@ public class RDFAAnalizer
                         URI pred = new URI(spred);
                         onPred(pred);
                         String _lang = tag.tag.getParam("xml:lang");
-                        spider.fireEventnewTriple(suj, pred, obj.toString(), spider, _lang);
+                        spider.fireEventnewTriple(suj, pred, obj, spider, _lang);
                     }
                     catch (URISyntaxException e)
                     {

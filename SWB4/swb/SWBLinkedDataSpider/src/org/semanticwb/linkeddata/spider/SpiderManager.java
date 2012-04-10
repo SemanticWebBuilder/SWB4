@@ -21,6 +21,8 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 public class SpiderManager
 {
 
+    
+    private static SpiderDomainManager domainManager=new SpiderDomainManager();
     private static final Set<SpiderEventListener> listeners = Collections.synchronizedSet(new HashSet<SpiderEventListener>());
     public static final Set<URL> visited = Collections.synchronizedSet(new HashSet<URL>());
     private static final Timer timer = new Timer("Spiders");
@@ -66,6 +68,7 @@ public class SpiderManager
 
     public static void addSpider(Spider spider)
     {
+
         if (!SetSpiders.contains(spider) && !visited.contains(spider.getURL()))
         {
             spiders.add(spider);
@@ -76,12 +79,24 @@ public class SpiderManager
 
     public static void addURL(URL url)
     {
+        SpiderDomain domain=new SpiderDomain(url);
+        if(domainManager.containsKey(url))
+        {
+             domain=domainManager.get(url);
+        }
+        else
+        {
+            domain=domainManager.put(url, domain);
+        }
+
         Spider spider = new Spider(url);
         for (SpiderEventListener listener : listeners)
         {
             spider.addSpiderListener(listener);
         }
         addSpider(spider);
+        domain.addSpider(spider);
+        
     }
 
     public static void addSpiderEventListener(SpiderEventListener listener)
