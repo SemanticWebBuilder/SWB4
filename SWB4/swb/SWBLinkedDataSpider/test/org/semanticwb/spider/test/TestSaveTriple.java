@@ -61,7 +61,7 @@ public class TestSaveTriple implements SpiderEventListener
         e.printStackTrace(err);
     }
 
-    public void visit(URI suj)
+    public void onNewSubject(URI suj)
     {
     }
 
