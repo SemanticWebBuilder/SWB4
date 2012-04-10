@@ -229,10 +229,17 @@ public class SWBAProcessInstanceList extends GenericResource {
                 while (objit.hasNext()) {
                     ItemAwareReference item=objit.next();
                     SWBClass obj = item.getProcessObject();
-                    //TODO: Verificar nombre del ItemAware
-                    out.println("<li>Object Instance:" + obj.getURI() + " ");
-                    out.println("<a href=\"#\"  onclick=\"addNewTab('" + obj.getURI() + "','" + SWBPlatform.getContextPath() + "/swbadmin/jsp/objectTab.jsp" + "','" + SWBUtils.TEXT.cropText(SWBUtils.TEXT.scape4Script(obj.getSemanticObject().getDisplayName()),25) + "');return false;\">" + obj.getSemanticObject().getDisplayName() + "</a>");
-                    out.println("</li>");
+                    if(obj!=null)
+                    {
+                        //TODO: Verificar nombre del ItemAware
+                        out.println("<li>" + item.getItemAware().getDisplayTitle(user.getLanguage()) + "=");
+                        out.println("<a href=\"#\"  onclick=\"addNewTab('" + obj.getURI() + "','" + SWBPlatform.getContextPath() + "/swbadmin/jsp/objectTab.jsp" + "','" + SWBUtils.TEXT.cropText(SWBUtils.TEXT.scape4Script(obj.getSemanticObject().getDisplayName()),25) + "');return false;\">" + obj.getSemanticObject().getDisplayName() + "</a>");
+                        out.println("</li>");
+                    }else
+                    {
+                        out.println("<li>" + item.getItemAware().getDisplayTitle(user.getLanguage()));
+                        out.println("</li>");
+                    }
                 }
                 out.println("</ul>");
                 out.println("</fieldset>");
@@ -246,7 +253,7 @@ public class SWBAProcessInstanceList extends GenericResource {
             } else if ("pidetail".equals(action)) {
 
                 String pinsturi = request.getParameter("suripi");
-                System.out.println(pinsturi);
+                //System.out.println(pinsturi);
                 GenericObject pigobj = ont.getGenericObject(pinsturi);
 
                 ProcessInstance pi = null;

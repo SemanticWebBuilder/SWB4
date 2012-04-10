@@ -37,8 +37,10 @@ public class MessageIntermediateThrowEvent extends org.semanticwb.process.model.
     }
 
     @Override
-    public void execute(FlowNodeInstance instance, User user) {
-        super.execute(instance, user);
+    public void execute(FlowNodeInstance instance, User user) 
+    {
+        instance.getProcessSite().getProcessObserver().sendEvent(instance);
+        instance.close(user,instance.getSourceInstance().getAction());
     }
 
 

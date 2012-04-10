@@ -110,10 +110,7 @@ public class Process extends org.semanticwb.process.model.base.ProcessBase
 
             if(scls!=null)
             {
-                ItemAwareReference ref=ItemAwareReference.ClassMgr.createItemAwareReference(this.getProcessSite());
-                ref.setItemAware(item);
                 SemanticObject ins=null;
-                
                 if(code!=null)
                 {
                     Object ret=null;
@@ -150,11 +147,21 @@ public class Process extends org.semanticwb.process.model.base.ProcessBase
                     }
                     if(ins==null)
                     {
-                        ins=model.getSemanticModel().createSemanticObjectById(id, scls);
+                        Iterator auxit=ItemAwareMapping.ClassMgr.listItemAwareMappingByLocalItemAware(item, item.getProcessSite());
+                        if(!auxit.hasNext())
+                        {
+                            ins=model.getSemanticModel().createSemanticObjectById(id, scls);
+                        }
                     }
                 }
                 
-                ref.setProcessObject((SWBClass)ins.createGenericInstance());
+
+                ItemAwareReference ref=ItemAwareReference.ClassMgr.createItemAwareReference(this.getProcessSite());
+                ref.setItemAware(item); 
+                if(ins!=null)
+                {
+                    ref.setProcessObject((SWBClass)ins.createGenericInstance());
+                }
                 inst.addItemAwareReference(ref);
                 //System.out.println("addItemAwareReference:"+ref);
             }

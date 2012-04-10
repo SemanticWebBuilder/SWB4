@@ -39,7 +39,7 @@ public class SignalEndEvent extends org.semanticwb.process.model.base.SignalEndE
     @Override
     public void execute(FlowNodeInstance instance, User user)
     {
-        instance.getProcessSite().getProcessObserver().sendSignal(instance);
+        instance.getProcessSite().getProcessObserver().sendEvent(instance);
         instance.close(user,instance.getSourceInstance().getAction());
         instance.getParentInstance().close(user);
     }

@@ -26,6 +26,9 @@
 
 package org.semanticwb.process.model;
 
+import java.util.Iterator;
+import org.semanticwb.model.User;
+
 
 public class MessageStartEvent extends org.semanticwb.process.model.base.MessageStartEventBase 
 {
@@ -33,4 +36,56 @@ public class MessageStartEvent extends org.semanticwb.process.model.base.Message
     {
         super(base);
     }
+
+    @Override
+    public void execute(FlowNodeInstance instance, User user)
+    {
+        FlowNodeInstance from=instance.getSourceInstance();
+        
+        Iterator<ItemAwareMapping> it=listItemAwareMappings();
+        while (it.hasNext())
+        {
+            ItemAwareMapping itemAwareMapping = it.next();
+            ItemAware loc=itemAwareMapping.getLocalItemAware();
+            ItemAware rem=itemAwareMapping.getRemoteItemAware();
+            
+            ItemAwareReference itemAwareReference=getItemAwareReference(instance, loc);
+            
+            Iterator<ItemAwareReference> it3=from.listHeraquicalItemAwareReference().iterator();
+            while (it3.hasNext())
+            {
+                ItemAwareReference remitem = it3.next();
+                if(remitem.getItemAware().equals(rem))
+                {
+                    if(itemAwareReference==null)
+                    {
+                        itemAwareReference=ItemAwareReference.ClassMgr.createItemAwareReference(instance.getProcessSite());
+                        itemAwareReference.setItemAware(loc);                
+                        instance.addItemAwareReference(itemAwareReference);        
+                    }
+                    itemAwareReference.setProcessObject(remitem.getProcessObject());
+                    remitem.setProcessObjectReused(true);
+                }
+            }
+        }        
+        
+        super.execute(instance, user);
+    }
+    
+    public ItemAwareReference getItemAwareReference(FlowNodeInstance instance, ItemAware item)
+    {
+        Iterator<ItemAwareReference> it=instance.listHeraquicalItemAwareReference().iterator();
+        while (it.hasNext())
+        {
+            ItemAwareReference itemAwareReference = it.next();
+            if(itemAwareReference.getItemAware().equals(item))
+            {
+                return itemAwareReference;
+            }
+        }
+        return null;
+    }    
+    
+    
+    
 }

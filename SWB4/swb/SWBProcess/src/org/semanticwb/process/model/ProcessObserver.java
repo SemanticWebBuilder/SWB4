@@ -76,14 +76,25 @@ public class ProcessObserver extends org.semanticwb.process.model.base.ProcessOb
         super(base);
         init();
     }
+    
 
-    public void sendSignal(FlowNodeInstance instance)
+    public void sendEvent(FlowNodeInstance instance)
     {
-        //System.out.println("sendSignal:"+((Event)instance.getFlowNodeType()).getActionCode());
-        Iterator<FlowNodeInstance> it=listSignalObserverInstances();
-        while (it.hasNext())
+        //System.err.println("sendEvent:"+instance);
+        
+        Iterator<FlowNodeInstance> it=null;
+        if(instance.getFlowNodeType() instanceof MessageEndEvent || instance.getFlowNodeType() instanceof MessageIntermediateThrowEvent)
+        {
+            it=listMessageObserverInstances();
+        }else if(instance.getFlowNodeType() instanceof SignalEndEvent || instance.getFlowNodeType() instanceof SignalIntermediateThrowEvent)
+        {
+            it=listSignalObserverInstances();
+        }
+            
+        while (it!=null && it.hasNext())
         {
             FlowNodeInstance flowNodeInstance = it.next();
+            //System.out.println("flowNodeInstance:"+flowNodeInstance);
             if(flowNodeInstance.getFlowNodeType() instanceof ActionCodeable && instance.getFlowNodeType() instanceof ActionCodeable)
             {
                 String c1=((ActionCodeable)flowNodeInstance.getFlowNodeType()).getActionCode();
@@ -99,8 +110,16 @@ public class ProcessObserver extends org.semanticwb.process.model.base.ProcessOb
             }
         }
 
-        Iterator<StartEventNode> nit=listSignalObserverNodes();
-        while (nit.hasNext())
+        Iterator<StartEventNode> nit=null;
+        if(instance.getFlowNodeType() instanceof MessageEndEvent || instance.getFlowNodeType() instanceof MessageIntermediateThrowEvent)
+        {
+            nit=listMessageObserverNodes();
+        }else if(instance.getFlowNodeType() instanceof SignalEndEvent || instance.getFlowNodeType() instanceof SignalIntermediateThrowEvent)
+        {
+            nit=listSignalObserverNodes();
+        }
+        
+        while (nit!=null && nit.hasNext())
         {
             StartEventNode startEvent = nit.next();
             //System.out.println(startEvent);
@@ -118,17 +137,14 @@ public class ProcessObserver extends org.semanticwb.process.model.base.ProcessOb
                         {
                             //System.out.println("ok...");
                             ProcessInstance inst=((Process)cont).createInstance();
-                            inst.start(null,startEvent);
+                            
+                            inst.start(instance.getCreator(),startEvent, instance);
+                            
                         }catch(Exception e){log.error(e);}
                     }
                 }
             }
         }
-
-    }
-
-    public void sendSignal(FlowNode node)
-    {
 
     }
 
@@ -256,6 +272,9 @@ public class ProcessObserver extends org.semanticwb.process.model.base.ProcessOb
             }else if(obj.instanceOf(SignalStartEvent.sclass))
             {
                 addSignalObserverNode((StartEventNode)obj.createGenericInstance());
+            }else if(obj.instanceOf(MessageStartEvent.sclass))
+            {
+                addMessageObserverNode((StartEventNode)obj.createGenericInstance());
             }else if(obj.instanceOf(RuleStartEvent.sclass))
             {
                 addRuleObserverNode((StartEventNode)obj.createGenericInstance());

@@ -40,7 +40,7 @@ public class SignalIntermediateThrowEvent extends org.semanticwb.process.model.b
     @Override
     public void execute(FlowNodeInstance instance, User user)
     {
-        instance.getProcessSite().getProcessObserver().sendSignal(instance);
+        instance.getProcessSite().getProcessObserver().sendEvent(instance);
         instance.close(user,instance.getSourceInstance().getAction());
     }
 

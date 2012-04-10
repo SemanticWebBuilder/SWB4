@@ -153,7 +153,7 @@ public class SelectProcessItemAware extends org.semanticwb.process.model.base.Se
                     }
                 } else {
                     
-                    if(obj.instanceOf(Messageable.swp_Messageable))
+                    if(obj.instanceOf(ThrowMessageable.swp_ThrowMessageable))
                     {
                         FlowNode fn=(FlowNode)obj.createGenericInstance();
                         ArrayList<SemanticObject> arr=new ArrayList();

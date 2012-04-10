@@ -351,6 +351,7 @@ public class FlowNodeInstance extends org.semanticwb.process.model.base.FlowNode
                                     out=in;
                                 }else
                                 {
+                                    //Se crea y copia sus propiedades
                                     long id=model.getSemanticModel().getCounter(cls);
                                     out=model.getSemanticModel().createSemanticObjectById(String.valueOf(id), cls);
                                     Iterator<Statement> it3=in.getRDFResource().listProperties();

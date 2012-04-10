@@ -26,6 +26,8 @@
 
 package org.semanticwb.process.model;
 
+import org.semanticwb.model.User;
+
 
 public class MessageEndEvent extends org.semanticwb.process.model.base.MessageEndEventBase 
 {
@@ -33,4 +35,12 @@ public class MessageEndEvent extends org.semanticwb.process.model.base.MessageEn
     {
         super(base);
     }
+    
+    @Override
+    public void execute(FlowNodeInstance instance, User user)
+    {
+        instance.getProcessSite().getProcessObserver().sendEvent(instance);
+        instance.close(user,instance.getSourceInstance().getAction());
+        instance.getParentInstance().close(user);
+    }    
 }

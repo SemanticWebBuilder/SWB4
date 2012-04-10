@@ -33,7 +33,7 @@ public interface Containerable extends org.semanticwb.process.model.base.Contain
     public org.semanticwb.process.model.ProcessSite getProcessSite();
 
     public List<ItemAware> listRelatedItemAware();
-
+    
     public List<ItemAware> listHerarquicalRelatedItemAware();
 
 }
