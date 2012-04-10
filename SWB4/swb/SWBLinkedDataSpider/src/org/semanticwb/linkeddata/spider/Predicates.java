@@ -35,12 +35,14 @@ public class Predicates {
     }
     public synchronized Set<TripleElement> get(URI pred)
     {
+        Set<TripleElement> _values=new HashSet<TripleElement>();
         Set<TripleElement> values=new HashSet<TripleElement>();
         if(hasPred(pred))
         {
             values=predicates.get(pred);
         }
-        return values;
+        _values.addAll(values);
+        return _values;
     }
 
     public boolean hasPred(URI pred)
