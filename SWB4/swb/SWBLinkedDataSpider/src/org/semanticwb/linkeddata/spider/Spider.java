@@ -17,6 +17,7 @@ import java.util.HashSet;
 import java.util.Set;
 import org.jdom.input.SAXBuilder;
 import org.jdom.output.DOMOutputter;
+import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -32,6 +33,7 @@ import org.xml.sax.InputSource;
 public class Spider implements SpiderEventListener, Runnable
 {
 
+    private static Logger log = SWBUtils.getLogger(Spider.class);
     public static final String XMLLANG = "xml:lang";
     public static Predicates predicates = new Predicates();
     public static final String DOCTYPE_RFDA = "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML+RDFa 1.0//EN\" \"http://www.w3.org/MarkUp/DTD/xhtml-rdfa-1.dtd\">";
@@ -49,7 +51,8 @@ public class Spider implements SpiderEventListener, Runnable
         catch (Exception e)
         {
             typeProp = null;
-            e.printStackTrace();
+            log.debug(e);
+
         }
 
     }
@@ -145,7 +148,7 @@ public class Spider implements SpiderEventListener, Runnable
                         }
                         catch (Exception e2)
                         {
-                            e.printStackTrace();
+                            fireError(e);
                         }
                     }
                 }
@@ -156,7 +159,7 @@ public class Spider implements SpiderEventListener, Runnable
             }
             fireOnEnd(url);
 
-            
+
         }
 
 
@@ -429,10 +432,9 @@ public class Spider implements SpiderEventListener, Runnable
 
     public synchronized void onTriple(URI suj, URI pred, String obj, Spider source, String lang)
     {
-        if(suj.toString().equals("http://dbpedia.org/property/3929Label"))
+        if (suj.toString().equals("http://dbpedia.org/property/3929Label"))
         {
             System.out.println("a");
-            
         }
         Set<TripleElement> elements = predicates.get(pred);
         if (!elements.isEmpty())
@@ -549,7 +551,7 @@ public class Spider implements SpiderEventListener, Runnable
                     }
                     catch (Exception e)
                     {
-                        e.printStackTrace();
+                        log.debug(e);
                     }
                 }
             };
@@ -573,7 +575,8 @@ public class Spider implements SpiderEventListener, Runnable
                     }
                     catch (Exception e)
                     {
-                        e.printStackTrace();
+                        log.debug(e);
+
                     }
                 }
             };
@@ -599,7 +602,7 @@ public class Spider implements SpiderEventListener, Runnable
                     }
                     catch (Exception e)
                     {
-                        e.printStackTrace();
+                        log.debug(e);
                     }
                 }
             };
@@ -625,7 +628,7 @@ public class Spider implements SpiderEventListener, Runnable
                     }
                     catch (Exception e)
                     {
-                        e.printStackTrace();
+                        log.debug(e);
                     }
                 }
             };
@@ -650,7 +653,7 @@ public class Spider implements SpiderEventListener, Runnable
                     }
                     catch (Exception e)
                     {
-                        e.printStackTrace();
+                        log.debug(e);
                     }
                 }
             };
@@ -676,7 +679,8 @@ public class Spider implements SpiderEventListener, Runnable
                     }
                     catch (Exception e)
                     {
-                        e.printStackTrace();
+                        log.debug(e);
+
                     }
                 }
             };
@@ -702,7 +706,7 @@ public class Spider implements SpiderEventListener, Runnable
                     }
                     catch (Exception e)
                     {
-                        e.printStackTrace();
+                        log.debug(e);
                     }
                 }
             };
