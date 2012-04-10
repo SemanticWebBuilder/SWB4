@@ -21,6 +21,8 @@ import org.semanticwb.linkeddata.spider.Spider;
 public class TestSpider
 {
 
+
+    
     public TestSpider()
     {
     }
@@ -52,12 +54,13 @@ public class TestSpider
     @Ignore
     public void SpiderFOAFTest()
     {
+        
         try
         {
             URL url = new URL("http://harth.org/andreas/foaf.rdf");
             Spider spider = new Spider(url);
             spider.addSpiderListener(new TestSaveTriple());
-            spider.start();
+            spider.run();
         }
         catch (Exception e)
         {
@@ -75,9 +78,10 @@ public class TestSpider
             //http://musicbrainz.org/release-group/21a136b7-54dd-31dc-a4d9-90c2b833b786
             //URL url = new URL("http://dbpedia.org/ontology/MusicalArtist");}
             URL url = new URL("http://dbpedia.org/page/Stevie_Nicks");
+            //URL url = new URL("http://www.w3.org/2001/XMLSchema");
             Spider spider = new Spider(url);
             spider.addSpiderListener(new TestSaveTriple());
-            spider.start();
+            spider.run();
             try
             {
                 Thread.sleep(1400000);
