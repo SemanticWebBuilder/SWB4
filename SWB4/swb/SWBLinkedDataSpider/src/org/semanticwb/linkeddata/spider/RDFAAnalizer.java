@@ -12,7 +12,6 @@ import java.net.URISyntaxException;
 import java.util.Enumeration;
 import java.util.HashMap;
 
-
 /**
  *
  * @author victor.lorenzana
@@ -47,7 +46,7 @@ public class RDFAAnalizer
                 tok.parseTag(tok.getStringValue(), tag);
                 if (!tag.getTagString().equals("?xml"))
                 {
-                    throw new SpiderException("The xml tag was not found, url: "+spider.getURL(), spider);
+                    throw new SpiderException("The xml tag was not found, url: " + spider.getURL(), spider);
                 }
                 xmlhtml = tok.getRawString();
                 tt_type = tok.nextToken();
@@ -60,7 +59,7 @@ public class RDFAAnalizer
                     doc_type = "<!" + tok.getStringValue() + ">";
                     if (!doc_type.toString().equalsIgnoreCase(DOCTYPE_RFDA))
                     {
-                        throw new SpiderException("The document is not a rdfa document, url: "+spider.getURL(), spider);
+                        throw new SpiderException("The document is not a rdfa document, url: " + spider.getURL(), spider);
                     }
                 }
             }
@@ -296,7 +295,7 @@ public class RDFAAnalizer
         try
         {
             SpiderPred _spider = new SpiderPred(pred.toURL());
-            for(SpiderEventListener listener : spider.getListeners())
+            for (SpiderEventListener listener : spider.getListeners())
             {
                 _spider.addSpiderListener(listener);
             }
@@ -313,7 +312,7 @@ public class RDFAAnalizer
         if (hasAttribute(tag.tag))
         {
             AttributeRDFA att = getAttribute(tag.tag);
-            if (("rel".equals(att.attribute) || "rev".equals(att.attribute)) && (tag.tag.getTagString().equals("link") || tag.tag.getTagString().equals("a")))
+            if ("rev".equals(att.attribute) && (tag.tag.getTagString().equals("link") || tag.tag.getTagString().equals("a")))
             {
                 try
                 {
@@ -322,7 +321,25 @@ public class RDFAAnalizer
                     URI pred = new URI(spred);
                     onPred(pred);
                     String _lang = tag.tag.getParam("xml:lang");
-                    spider.visit(obj);
+                    spider.onNewSubject(obj);
+                    // relacion  inversa
+                    spider.fireEventnewTriple(obj, pred, suj.toString(), spider, _lang);
+                }
+                catch (URISyntaxException e)
+                {
+                    spider.fireError(e);
+                }
+            }
+            else if ("rel".equals(att.attribute) && (tag.tag.getTagString().equals("link") || tag.tag.getTagString().equals("a")))
+            {
+                try
+                {
+                    URI obj = new URI(tag.tag.getParam("href"));
+                    String spred = att.value.replace(att.prefix + ":", prefix.get(att.prefix));
+                    URI pred = new URI(spred);
+                    onPred(pred);
+                    String _lang = tag.tag.getParam("xml:lang");
+                    spider.onNewSubject(obj);
                     spider.fireEventnewTriple(suj, pred, obj.toString(), spider, _lang);
                 }
                 catch (URISyntaxException e)
@@ -370,7 +387,7 @@ public class RDFAAnalizer
                                         String spred = rel.replace(_prefix + ":", prefix.get(_prefix));
                                         URI pred = new URI(spred);
                                         onPred(pred);
-                                        spider.visit(obj);
+                                        spider.onNewSubject(obj);
                                         String _lang = tag.tag.getParam("xml:lang");
                                         spider.fireEventnewTriple(suj, pred, obj.toString(), spider, _lang);
                                     }
