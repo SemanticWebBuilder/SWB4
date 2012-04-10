@@ -22,7 +22,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 public class SpiderManager
 {
 
-    
+    private static final HashSet<SpiderEventListener> listeners = new HashSet<SpiderEventListener>();
     public static final Set<URL> visited = Collections.synchronizedSet(new HashSet<URL>());
     private static final Timer timer = new Timer("Spiders");
 
@@ -77,6 +77,16 @@ public class SpiderManager
 
     public static void addURL(URL url)
     {
-        addSpider(new Spider(url));      
+        Spider spider = new Spider(url);
+        for (SpiderEventListener listener : listeners)
+        {
+            spider.addSpiderListener(listener);
+        }
+        addSpider(spider);
+    }
+
+    public static void addSpiderEventListener(SpiderEventListener listener)
+    {
+        listeners.add(listener);
     }
 }
