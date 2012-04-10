@@ -35,12 +35,16 @@ public class Spider implements SpiderEventListener, Runnable
 
     private static Logger log = SWBUtils.getLogger(Spider.class);
     public static final String XMLLANG = "xml:lang";
-    public static Predicates predicates = new Predicates();
+    
     public static final String DOCTYPE_RFDA = "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML+RDFa 1.0//EN\" \"http://www.w3.org/MarkUp/DTD/xhtml-rdfa-1.dtd\">";
     public static final String OWL_SCHEMA_NAMESPACE = "http://www.w3.org/2002/07/owl#";
     public static final String RDF_SYNTAXIS_NAMESPACE = "http://www.w3.org/1999/02/22-rdf-syntax-ns#";
     public static final String RDFS_SCHEMA_NAMESPACE = "http://www.w3.org/2000/01/rdf-schema#";
     private static URI typeProp;
+     private HashSet<SpiderEventListener> listeners = new HashSet<SpiderEventListener>();
+    private URL url;
+    private boolean running = false;
+    private SpiderDomain domain;
 
     static
     {
@@ -60,17 +64,16 @@ public class Spider implements SpiderEventListener, Runnable
     {
         "http://www.w3.org/2000/01/rdf-schema#resource"
     };
-    private HashSet<SpiderEventListener> listeners = new HashSet<SpiderEventListener>();
-    private URL url;
-    private boolean running = false;
-
+   
     public Set<SpiderEventListener> getListeners()
     {
         return listeners;
     }
 
-    public Spider(URL seedURL)
+
+    public Spider(URL seedURL,SpiderDomain domain)
     {
+        this.domain=domain;
         String _url = seedURL.toString();
         if (_url.contains("#"))
         {
@@ -332,23 +335,9 @@ public class Spider implements SpiderEventListener, Runnable
 
     }
 
-    public boolean isVisit(URI url)
-    {
-        for (String value : visit)
-        {
-            if (url.toString().equals(value.toString()))
-            {
-                return true;
-            }
-        }
-        return false;
-    }
+    
 
-    /*public void onPred(URI suj, URI pred, String obj, Spider source)
-    {
-    TripleElement element=new TripleElement(suj, pred, obj);
-    values.put(suj,element);
-    }*/
+    
     private String format(String data)
     {
         StringBuilder sb = new StringBuilder();
@@ -451,14 +440,14 @@ public class Spider implements SpiderEventListener, Runnable
         }
         try
         {
-            Thread.currentThread().sleep(1000);
+            Thread.currentThread().sleep(10000);
         }
         catch (Exception e)
         {
             log.debug(e);
 
         }
-        Set<TripleElement> elements = predicates.get(pred);
+        Set<TripleElement> elements = SpiderManager.predicates.get(pred);
         if (!elements.isEmpty())
         {
             StringBuilder sb = new StringBuilder();
@@ -511,45 +500,6 @@ public class Spider implements SpiderEventListener, Runnable
             {
                 sb.append("<").append(format(obj)).append("> .");
                 fireEventNtFormat(sb.toString(), source);
-            }
-
-
-        }
-
-//        try
-//        {
-//            URL newURL = pred.toURL();
-//            if (!SpiderManager.visited.contains(newURL))
-//            {
-//                Spider spider = new Spider(newURL);
-//                for (SpiderEventListener listener : listeners)
-//                {
-//                    spider.addSpiderListener(listener);
-//                }
-//                SpiderManager.addSpider(spider);
-//            }
-//
-//        }
-//        catch (Exception e)
-//        {
-//            fireError(e);
-//
-//        }
-        if (isVisit(suj))
-        {
-            try
-            {
-                Spider spider = new Spider(suj.toURL());
-                for (SpiderEventListener listener : listeners)
-                {
-                    spider.addSpiderListener(listener);
-                }
-                SpiderManager.addSpider(spider);
-            }
-            catch (MalformedURLException mfe)
-            {
-                fireError(mfe);
-
             }
         }
     }
@@ -785,6 +735,7 @@ public class Spider implements SpiderEventListener, Runnable
                     {
                         prop.getAttribute(XMLLANG);
                     }
+                    onPred(pred);
                     fireEventnewTriple(suj, pred, obj, this, _lang);
                     addOtherProperties(obj, prop);
                 }
@@ -805,7 +756,8 @@ public class Spider implements SpiderEventListener, Runnable
                                 {
                                     description.getAttribute(XMLLANG);
                                 }
-
+                                onPred(pred);
+                                
                                 fireEventnewTriple(suj, pred, obj, this, _lang);
                                 addOtherProperties(obj, description);
                             }
@@ -817,6 +769,7 @@ public class Spider implements SpiderEventListener, Runnable
                             if (data != null && data.indexOf("\n") == -1)
                             {
                                 String obj = data;
+                                onPred(pred);
                                 fireEventnewTriple(suj, pred, obj, this, lang);
                             }
                         }
@@ -894,7 +847,7 @@ public class Spider implements SpiderEventListener, Runnable
             URL newURL = suj.toURL();
             if (!SpiderManager.visited.contains(newURL))
             {
-                Spider spider = new Spider(newURL);
+                Spider spider=SpiderManager.createSpider(newURL);
                 for (SpiderEventListener listener : listeners)
                 {
                     spider.addSpiderListener(listener);
@@ -958,20 +911,12 @@ public class Spider implements SpiderEventListener, Runnable
         sb.append("<").append(format(pred.toString())).append("> ");
         sb.append("<").append(format(obj.toString())).append("> .");
         fireEventNtFormat(sb.toString(), source);
-        try
-        {
-            Spider spider=new Spider(pred.toURL());
-            for(SpiderEventListener listener : spider.listeners)
-            {
-                spider.addSpiderListener(listener);
-            }
-            SpiderManager.addSpider(spider);            
-        }
-        catch(Exception e)
-        {
-            fireError(e);
+        
 
-        }
+    }
 
+    private void onPred(URI pred)
+    {
+        SpiderManager.onPred(pred,this);
     }
 }
