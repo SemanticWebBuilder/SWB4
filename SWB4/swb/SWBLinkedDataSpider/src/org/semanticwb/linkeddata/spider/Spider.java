@@ -118,6 +118,7 @@ public class Spider implements SpiderEventListener, Runnable
             SpiderManager.visited.add(url);
             fireOnStart(url);
             DocumentInfo docInfo = getContent(url);
+            running = false;
             if (docInfo != null)
             {
                 if (docInfo.contentType.equalsIgnoreCase("application/rdf+xml") || docInfo.contentType.equalsIgnoreCase("application/xml"))
@@ -155,7 +156,7 @@ public class Spider implements SpiderEventListener, Runnable
             }
             fireOnEnd(url);
 
-            running = false;
+            
         }
 
 
