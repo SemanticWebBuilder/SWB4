@@ -4,13 +4,14 @@
  */
 package org.semanticwb.spider.test;
 
-import java.io.File;
 import java.io.PrintStream;
 import java.net.URI;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import org.semanticwb.linkeddata.spider.SpiderEventListener;
+import org.semanticwb.linkeddata.spider.Spider;
+import org.semanticwb.linkeddata.spider.SpiderException;
 
 /**
  *
@@ -18,30 +19,31 @@ import org.semanticwb.linkeddata.spider.SpiderEventListener;
  */
 public class TestSaveTriple implements SpiderEventListener
 {
+
     PrintStream out;
     PrintStream err;
+
     public TestSaveTriple()
     {
-        try
-        {
-            out = new PrintStream(new File("C:\\" + df.format(new Date())) + ".log");
-            System.setOut(out);
-
-
-            err = new PrintStream(new File("C:\\" + df.format(new Date())) + "_err.log");
-            System.setErr(err);
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
+//        try
+//        {
+//            out = new PrintStream(new File("C:\\" + df.format(new Date())) + ".log");
+//            System.setOut(out);
+//
+//
+//            err = new PrintStream(new File("C:\\" + df.format(new Date())) + "_err.log");
+//            System.setErr(err);
+//        }
+//        catch (Exception e)
+//        {
+//            e.printStackTrace();
+//        }
     }
     SimpleDateFormat df = new SimpleDateFormat("dd'_'MM'_'yyyy'_'HH'_'mm'_'ss'_'SS");
 
-    public void onTriple(URI suj, URI pred, String obj)
+    public void onTriple(URI suj, URI pred, String obj, Spider spider, String lang)
     {
-        System.out.println("suj: " + suj + " pred: " + pred + " obj:" + obj);
-
+        //System.out.println("suj: " + suj + " pred: " + pred + " obj:" + obj);
     }
 
     public void onError(URL url, int error)
@@ -51,10 +53,13 @@ public class TestSaveTriple implements SpiderEventListener
 
     public void onError(URL url, Throwable e)
     {
+
+        if (e instanceof SpiderException)
+        {
+            System.err.println("ERror en url " + ((SpiderException) e).getSpider().getURL());
+        }
         e.printStackTrace(err);
     }
-
-    
 
     public void visit(URI suj)
     {
@@ -62,11 +67,19 @@ public class TestSaveTriple implements SpiderEventListener
 
     public void onStart(URL url)
     {
-        System.out.println("Inicia ------------ URL :" + url + " ----------------------");
+        //String date=df.format(new Date());
+        //System.out.println(date+": Inicia ------------ URL :" + url + " ----------------------");
     }
 
     public void onEnd(URL url)
     {
-        System.out.println("Termina ------------ URL :" + url + " ----------------------");
+        //String date=df.format(new Date());
+        //System.out.println(date+": Termina ------------ URL :" + url + " ----------------------");
+    }
+
+    public void onNTFormat(String row)
+    {
+        String date = df.format(new Date());
+        System.out.println(row);
     }
 }
