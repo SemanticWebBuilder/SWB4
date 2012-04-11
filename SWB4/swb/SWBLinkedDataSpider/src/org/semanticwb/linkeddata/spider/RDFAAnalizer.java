@@ -57,6 +57,7 @@ public class RDFAAnalizer
                 if (tt_type == HtmlStreamTokenizer.TT_BANGTAG)
                 {
                     doc_type = "<!" + tok.getStringValue() + ">";
+                    doc_type=doc_type.replace("  ", " ");
                     if (!doc_type.toString().equalsIgnoreCase(DOCTYPE_RFDA))
                     {
                         throw new SpiderException("The document is not a rdfa document, url: " + spider.getURL(), spider);
