@@ -65,24 +65,8 @@ public class Spider implements Runnable
 
     public Spider(URL seedURL, SpiderDomain domain)
     {
-        this.domain = domain;
-        String _url = seedURL.toString();
-        if (_url.contains("#"))
-        {
-            int pos = _url.indexOf("#");
-            if (pos != -1)
-            {
-                _url = _url.substring(0, pos);
-            }
-        }
-        try
-        {
-            this.url = new URL(_url);
-        }
-        catch (Exception e)
-        {
-            this.url = seedURL;
-        }
+        this.domain = domain;        
+        this.url = seedURL;
 
     }
 
@@ -217,10 +201,20 @@ public class Spider implements Runnable
         if (element.hasAttributeNS(RDF_SYNTAXIS_NAMESPACE, "about"))
         {
             String _id = element.getAttributeNS(RDF_SYNTAXIS_NAMESPACE, "about");
-//            if (_id.startsWith("#"))
-//            {
-//                _id = element.getNamespaceURI() + element.getLocalName() + _id;
-//            }
+
+            if (_id.startsWith("#"))
+            {
+                try
+                {
+                    URI uri = new URI(this.url.toString());
+                    URI iduri = new URI(_id);
+                    iduri = uri.resolve(iduri);
+                }
+                catch (URISyntaxException e)
+                {
+                    fireError(e);
+                }
+            }
             try
             {
                 return new URI(_id);
@@ -422,9 +416,9 @@ public class Spider implements Runnable
         {
             for (TripleElement element : elements)
             {
-                if (element.pred.toString().equals(RDFS_SCHEMA_NAMESPACE+"range"))
+                if (element.pred.toString().equals(RDFS_SCHEMA_NAMESPACE + "range"))
                 {
-                    if (element.obj.equals(RDFS_SCHEMA_NAMESPACE+"Literal"))
+                    if (element.obj.equals(RDFS_SCHEMA_NAMESPACE + "Literal"))
                     {
                         return true;
                     }
@@ -483,7 +477,11 @@ public class Spider implements Runnable
 //        return false;
 //    }
     public synchronized void onTriple(URI suj, URI pred, String obj, Spider source, String lang)
-    {        
+    {
+        if (pred.toString().equals("http://www.w3.org/2003/06/sw-vocab-status/ns#status"))
+        {
+            System.out.println("a");
+        }
         SpiderManager.loadPredicates(pred);
         Set<TripleElement> elements = SpiderManager.predicates.get(pred);
         StringBuilder sb = new StringBuilder();
@@ -663,7 +661,22 @@ public class Spider implements Runnable
                             Element description = (Element) child;
                             if (description.hasAttributeNS(RDF_SYNTAXIS_NAMESPACE, "about"))
                             {
-                                URI obj = new URI(description.getAttributeNS(RDF_SYNTAXIS_NAMESPACE, "about"));
+                                String id = description.getAttributeNS(RDF_SYNTAXIS_NAMESPACE, "about");
+                                if (id.startsWith("#"))
+                                {
+                                    try
+                                    {
+                                        URI uri = new URI(this.url.toString());
+                                        URI iduri = new URI(id);
+                                        iduri = uri.resolve(iduri);
+                                    }
+                                    catch (URISyntaxException e)
+                                    {
+                                        fireError(e);
+
+                                    }
+                                }
+                                URI obj = new URI(id);
                                 String _lang = null;
                                 if (description.hasAttribute(XMLLANG))
                                 {
