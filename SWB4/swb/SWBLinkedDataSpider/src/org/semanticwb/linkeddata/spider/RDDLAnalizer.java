@@ -146,9 +146,10 @@ public class RDDLAnalizer
         return element;
     }
 
-    private void onPred(URI pred)
+    private void onPred(URI pred,Spider spider)
     {
-        SpiderManager.onPred(pred,spider);
+        spider.onPred(pred);
+        
     }
     private void procesaTag(HTMLElement tag)
     {
@@ -185,7 +186,7 @@ public class RDDLAnalizer
                                     namespace += "#";
                                 }
                                 URI pred = new URI(paramName.replace(_prefix + ":", namespace));
-                                onPred(pred);                                
+                                onPred(pred,spider);
                                 String lang = tag.tag.getParam("xml:lang");
                                 spider.fireEventnewTriple(suj, pred, obj, spider, lang);
                             }

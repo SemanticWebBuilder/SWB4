@@ -21,6 +21,21 @@ public class SpiderSync extends Spider
     }
 
     @Override
+    public void get()
+    {
+        try
+        {
+            if (!SpiderManager.predicates.hasPred(url.toURI()))
+            {
+                super.get();
+            }
+        }
+        catch (Exception e)
+        {
+        }
+    }
+
+    @Override
     public synchronized void onTriple(URI suj, URI pred, String obj, Spider source, String lang)
     {
         TripleElement element = new TripleElement(suj, pred, obj);
@@ -34,5 +49,15 @@ public class SpiderSync extends Spider
         TripleElement element = new TripleElement(suj, pred, obj.toString());
         SpiderManager.addPredicate(element);
         //super.onTriple(suj, pred, obj, source, lang);
+    }
+
+    @Override
+    public void onNewSubject(URI suj)
+    {
+    }
+
+    @Override
+    protected void onPred(URI pred)
+    {
     }
 }

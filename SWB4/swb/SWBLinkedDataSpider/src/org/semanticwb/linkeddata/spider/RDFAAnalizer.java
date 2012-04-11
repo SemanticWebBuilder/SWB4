@@ -290,9 +290,9 @@ public class RDFAAnalizer
         return sb.toString();
     }
 
-    private void onPred(URI pred)
+    private void onPred(URI pred,Spider spider)
     {
-        SpiderManager.onPred(pred,spider);
+        spider.onPred(pred);
     }
 
     private void procesaTag(HTMLElement tag)
@@ -307,7 +307,7 @@ public class RDFAAnalizer
                     URI obj = new URI(tag.tag.getParam("href"));
                     String spred = att.value.replace(att.prefix + ":", prefix.get(att.prefix));
                     URI pred = new URI(spred);
-                    onPred(pred);
+                    onPred(pred,spider);
                     String _lang = tag.tag.getParam("xml:lang");
                     spider.onNewSubject(obj);
                     // relacion  inversa
@@ -325,7 +325,7 @@ public class RDFAAnalizer
                     URI obj = new URI(tag.tag.getParam("href"));
                     String spred = att.value.replace(att.prefix + ":", prefix.get(att.prefix));
                     URI pred = new URI(spred);
-                    onPred(pred);
+                    onPred(pred,spider);
                     String _lang = tag.tag.getParam("xml:lang");
                     spider.onNewSubject(obj);
                     spider.fireEventnewTriple(suj, pred, obj, spider, _lang);
@@ -374,7 +374,7 @@ public class RDFAAnalizer
                                         URI obj = new URI(resource);
                                         String spred = rel.replace(_prefix + ":", prefix.get(_prefix));
                                         URI pred = new URI(spred);
-                                        onPred(pred);
+                                        onPred(pred,spider);
                                         spider.onNewSubject(obj);
                                         String _lang = tag.tag.getParam("xml:lang");
                                         spider.fireEventnewTriple(suj, pred, obj, spider, _lang);
@@ -405,7 +405,7 @@ public class RDFAAnalizer
                         String obj = nextText();
                         String spred = att.value.replace(att.prefix + ":", prefix.get(att.prefix));
                         URI pred = new URI(spred);
-                        onPred(pred);
+                        onPred(pred,spider);
                         String _lang = tag.tag.getParam("xml:lang");
                         spider.fireEventnewTriple(suj, pred, obj, spider, _lang);
                     }
@@ -421,7 +421,7 @@ public class RDFAAnalizer
                         String obj = content;
                         String spred = att.value.replace(att.prefix + ":", prefix.get(att.prefix));
                         URI pred = new URI(spred);
-                        onPred(pred);
+                        onPred(pred,spider);
                         String _lang = tag.tag.getParam("xml:lang");
                         spider.fireEventnewTriple(suj, pred, obj, spider, _lang);
                     }
