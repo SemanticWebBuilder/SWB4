@@ -2,14 +2,12 @@ package org.semanticwb.process.model;
 
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.StringTokenizer;
 import javax.servlet.http.HttpServletRequest;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.model.DisplayProperty;
 import org.semanticwb.model.SWBComparator;
 import org.semanticwb.model.Trashable;
 import org.semanticwb.platform.SemanticClass;
-import org.semanticwb.platform.SemanticLiteral;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticProperty;
 
@@ -183,13 +181,15 @@ public class SelectProcessItemAware extends org.semanticwb.process.model.base.Se
                     {                    
 
                         if (sob.getURI() != null) {
-                            ret.append("<option value=\"" + sob.getURI() + "\" ");
+                            ItemAware iaw = (ItemAware)sob.createGenericInstance();
+                            if (iaw.getDataObjectClass() != null) {
+                                ret.append("<option value=\"" + sob.getURI() + "\" ");
 
-                            if (vals.contains(sob.getURI())) {
-                                ret.append("selected=\"selected\"");
+                                if (vals.contains(sob.getURI())) {
+                                    ret.append("selected=\"selected\"");
+                                }
+                                ret.append(">" + iaw.getName() + "</option>");
                             }
-
-                            ret.append(">" + sob.getDisplayName(lang) + "</option>");
                         }
                     }
                 }
