@@ -37,7 +37,10 @@ public class Predicates
 
 
     }
-
+    public int size()
+    {
+        return predicates.size();
+    }
     public synchronized Set<TripleElement> get(URI pred)
     {
         Set<TripleElement> _values = new HashSet<TripleElement>();

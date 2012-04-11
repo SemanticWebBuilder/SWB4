@@ -40,7 +40,7 @@ public class Spider implements Runnable
     public static final String RDF_SYNTAXIS_NAMESPACE = "http://www.w3.org/1999/02/22-rdf-syntax-ns#";
     public static final String RDFS_SCHEMA_NAMESPACE = "http://www.w3.org/2000/01/rdf-schema#";
     private static URI typeProp;
-    private URL url;
+    protected URL url;
     private boolean running = false;
     private SpiderDomain domain;
 
@@ -416,15 +416,31 @@ public class Spider implements Runnable
         return sb.toString();
     }
 
-    public boolean isDataType(Set<TripleElement> elements)
+    public boolean isDataType(Set<TripleElement> elements, URI pred)
     {
-        for (TripleElement element : elements)
+        if (pred.toString().startsWith(RDFS_SCHEMA_NAMESPACE))
         {
-            if (element.pred.toString().equals("http://www.w3.org/1999/02/22-rdf-syntax-ns#type"))
+            for (TripleElement element : elements)
             {
-                if (element.obj.equals("http://www.w3.org/2002/07/owl#DatatypeProperty"))
+                if (element.pred.toString().equals(RDFS_SCHEMA_NAMESPACE+"range"))
                 {
-                    return true;
+                    if (element.obj.equals(RDFS_SCHEMA_NAMESPACE+"Literal"))
+                    {
+                        return true;
+                    }
+                }
+            }
+        }
+        else
+        {
+            for (TripleElement element : elements)
+            {
+                if (element.pred.toString().equals("http://www.w3.org/1999/02/22-rdf-syntax-ns#type"))
+                {
+                    if (element.obj.equals("http://www.w3.org/2002/07/owl#DatatypeProperty"))
+                    {
+                        return true;
+                    }
                 }
             }
         }
@@ -467,23 +483,21 @@ public class Spider implements Runnable
 //        return false;
 //    }
     public synchronized void onTriple(URI suj, URI pred, String obj, Spider source, String lang)
-    {
-        if (suj.toString().equals("http://dbpedia.org/property/3929Label"))
-        {
-            System.out.println("a");
-        }
+    {        
+        SpiderManager.loadPredicates(pred);
         Set<TripleElement> elements = SpiderManager.predicates.get(pred);
+        StringBuilder sb = new StringBuilder();
+        sb.append("<").append(format(suj.toString())).append("> ");
+        sb.append("<").append(format(pred.toString())).append("> ");
         if (!elements.isEmpty())
         {
-            StringBuilder sb = new StringBuilder();
-            sb.append("<").append(format(suj.toString())).append("> ");
-            sb.append("<").append(format(pred.toString())).append("> ");
-            if (isDataType(elements))
+
+            if (isDataType(elements, pred))
             {
                 String range = getRange(elements);
                 if (range != null)
                 {
-                    if (range.equals("http://www.w3.org/2001/XMLSchema#string"))
+                    if (range.equals("http://www.w3.org/2001/XMLSchema#string") || range.equals("http://www.w3.org/2000/01/rdf-schema#Literal"))
                     {
                         if (lang == null)
                         {
@@ -529,8 +543,16 @@ public class Spider implements Runnable
         }
         else
         {
-            System.out.println("a");
-            
+            if (lang == null)
+            {
+                sb.append("\"").append(format(obj)).append("\" .");
+            }
+            else
+            {
+                sb.append("\"").append(format(obj)).append("\"@").append(lang).append(" .");
+            }
+            fireEventNtFormat(sb.toString(), source);
+
         }
     }
 
@@ -566,6 +588,7 @@ public class Spider implements Runnable
             domain.fireEventnewTriple(suj, pred, obj, spider, lang);
         }
         onTriple(suj, pred, obj, spider, lang);
+
     }
 
     public void fireEventnewTriple(final URI suj, final URI pred, final URI obj, final Spider spider, final String lang)
@@ -575,11 +598,14 @@ public class Spider implements Runnable
             domain.fireEventnewTriple(suj, pred, obj, spider, lang);
         }
         onTriple(suj, pred, obj, spider, lang);
+
     }
+
     public SpiderDomain getDomain()
     {
         return domain;
     }
+
     public void fireOnStart(final URL url)
     {
         if (domain != null)
@@ -784,7 +810,7 @@ public class Spider implements Runnable
 
     }
 
-    private void onPred(URI pred)
+    protected void onPred(URI pred)
     {
         SpiderManager.onPred(pred, this);
     }
