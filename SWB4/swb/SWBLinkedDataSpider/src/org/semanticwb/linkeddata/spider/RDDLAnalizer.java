@@ -55,6 +55,7 @@ public class RDDLAnalizer
                 if (tt_type == HtmlStreamTokenizer.TT_BANGTAG)
                 {
                     doc_type = "<!" + tok.getStringValue() + ">";
+                    doc_type=doc_type.replace("  ", " ");
                     if (!doc_type.toString().equalsIgnoreCase(DOCTYPE_RDDL))
                     {
                         throw new SpiderException("The document is not a rddl document, url: " + spider.getURL(), spider);
