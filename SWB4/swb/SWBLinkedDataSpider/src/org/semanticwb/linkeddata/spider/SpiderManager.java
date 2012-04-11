@@ -21,8 +21,11 @@ public class SpiderManager
     public static final Predicates predicates = new Predicates();
     private static SpiderDomainManager domainManager = new SpiderDomainManager();
     private static final Set<SpiderEventListener> listeners = Collections.synchronizedSet(new HashSet<SpiderEventListener>());
-    public static final Set<URL> visited = Collections.synchronizedSet(new HashSet<URL>());
-
+    
+    public static SpiderDomainManager getSpiderDomainManager()
+    {
+        return domainManager;
+    }
     public static void createSpider(URL url)
     {
         createSpider(url, null);
@@ -30,8 +33,7 @@ public class SpiderManager
 
     public static void createSpider(URL url, Spider source)
     {
-        if (!SpiderManager.visited.contains(url))
-        {
+        
             SpiderDomain domain = new SpiderDomain(url);
             if (domainManager.containsKey(url))
             {
@@ -45,7 +47,7 @@ public class SpiderManager
             Spider spider = new Spider(url, domain);
             domain.addSpider(spider);
 
-        }
+        
     }
 
     public synchronized static Set<SpiderEventListener> getListeners()
