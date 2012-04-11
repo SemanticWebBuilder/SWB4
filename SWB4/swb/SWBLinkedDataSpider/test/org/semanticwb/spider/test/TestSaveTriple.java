@@ -56,9 +56,9 @@ public class TestSaveTriple implements SpiderEventListener
 
         if (e instanceof SpiderException)
         {
-            System.err.println("ERror en url " + ((SpiderException) e).getSpider().getURL());
+            System.err.println("Error en url " + ((SpiderException) e).getSpider().getURL());
         }
-        e.printStackTrace(err);
+        e.printStackTrace(System.err);
     }
 
     public void onNewSubject(URI suj)

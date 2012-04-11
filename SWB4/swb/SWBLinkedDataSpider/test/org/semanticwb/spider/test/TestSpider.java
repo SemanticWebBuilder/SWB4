@@ -56,10 +56,16 @@ public class TestSpider
 
         try
         {
-            URL url = new URL("http://harth.org/andreas/foaf.rdf");
+            URL url = new URL("http://www.foaf-project.org/");
             SpiderManager.createSpider(url);
             SpiderManager.addSpiderEventListener(new TestSaveTriple());
-            
+            try
+            {
+                Thread.sleep(1400000);
+            }
+            catch (Exception e)
+            {
+            }
         }
         catch (Exception e)
         {
