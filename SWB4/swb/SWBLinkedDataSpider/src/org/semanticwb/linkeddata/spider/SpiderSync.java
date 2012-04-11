@@ -25,32 +25,14 @@ public class SpiderSync extends Spider
     {
         TripleElement element = new TripleElement(suj, pred, obj);
         SpiderManager.addPredicate(element);
-        
+        //super.onTriple(suj, pred, obj, source, lang);
     }
 
     @Override
-    public synchronized void onTriple(URI suj, URI pred, URI obj, Spider source, String lang)
+    public void onTriple(URI suj, URI pred, URI obj, Spider source, String lang)
     {
         TripleElement element = new TripleElement(suj, pred, obj.toString());
         SpiderManager.addPredicate(element);
-        
-    }
-
-    @Override
-    public void fireEventnewTriple(URI suj, URI pred, String obj, Spider spider, String lang)
-    {
-        for (SpiderEventListener listener : this.getListeners())
-        {
-            listener.onTriple(suj, pred, obj, spider, lang);
-        }
-    }
-
-    @Override
-    public void fireEventnewTriple(URI suj, URI pred, URI obj, Spider spider, String lang)
-    {
-        for (SpiderEventListener listener : this.getListeners())
-        {
-            listener.onTriple(suj, pred, obj, spider, lang);
-        }
+        //super.onTriple(suj, pred, obj, source, lang);
     }
 }
