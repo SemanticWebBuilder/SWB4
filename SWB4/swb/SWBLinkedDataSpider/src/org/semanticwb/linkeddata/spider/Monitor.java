@@ -14,11 +14,12 @@ import java.util.TimerTask;
 public class Monitor extends TimerTask
 {
 
-    SpiderDomain domain;
-
+    private final SpiderDomain domain;
+    
     public Monitor(SpiderDomain domain)
     {
         this.domain = domain;
+        
     }
 
     @Override
@@ -48,6 +49,9 @@ public class Monitor extends TimerTask
                 domain.spidersRunning.add(spider);
             }
         }
-        //System.out.println("Dominios: "+ SpiderManager.getSpiderDomainManager().size() +" names: "+ SpiderManager.getSpiderDomainManager().getNames() +" Dominio: " + domain + " running: " + domain.spidersRunning.size() + " en cola: " + domain.spiders.size() + " total: " + domain.totalSpiders.size());
+        //if(domain.toString().equals("dbpedia.org"))
+        {
+            System.out.println(" Dominio: " + domain + " running: " + domain.spidersRunning.size() + " en cola: " + domain.spiders.size() + " total: " + domain.totalSpiders.size());
+        }
     }
 }
