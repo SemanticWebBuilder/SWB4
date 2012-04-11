@@ -29,4 +29,14 @@ public class SpiderDomainManager extends HashMap<String, SpiderDomain>
         String host=url.getHost();
         return this.put(host, domain);
     }
+    public synchronized String getNames()
+    {
+        StringBuilder sb=new StringBuilder();
+        for(String host : keySet())
+        {
+            sb.append(host);
+            sb.append(",");
+        }
+        return sb.toString();
+    }
 }

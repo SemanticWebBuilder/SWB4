@@ -10,7 +10,6 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.Timer;
-import java.util.TimerTask;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
@@ -22,53 +21,18 @@ import org.semanticwb.SWBUtils;
 public class SpiderDomain
 {
 
-    private static final ConcurrentLinkedQueue<Spider> spiders = new ConcurrentLinkedQueue<Spider>();
-    private static final HashSet<Spider> SetSpiders = new HashSet<Spider>();
-    private static final Set<Spider> spidersRunning = Collections.synchronizedSet(new HashSet<Spider>());
-    private static final Timer timer = new Timer("Spiders");
+    public final ConcurrentLinkedQueue<Spider> spiders = new ConcurrentLinkedQueue<Spider>();
+    public final HashSet<Spider> totalSpiders = new HashSet<Spider>();
+    public final Set<Spider> spidersRunning = Collections.synchronizedSet(new HashSet<Spider>());
+    private final Timer timer = new Timer("Spiders");
     private String host;
     private static Logger log = SWBUtils.getLogger(SpiderDomain.class);
-
-    static
-    {
-        timer.schedule(new TimerTask()
-        {
-
-            @Override
-            public void run()
-            {
-                HashSet<Spider> _spiderstoDelete = new HashSet<Spider>();
-                for (Spider spider : spidersRunning)
-                {
-                    if (!spider.isRunning())
-                    {
-                        _spiderstoDelete.add(spider);
-                    }
-                }
-                for (Spider spider : _spiderstoDelete)
-                {
-                    spidersRunning.remove(spider);
-                }
-                int max = 15;
-                int dif = max - spidersRunning.size();
-                for (int i = 0; i < dif; i++)
-                {
-                    Spider spider = spiders.poll();
-                    if (spider != null)
-                    {
-                        Thread t = new Thread(spider);
-                        t.start();
-                        spidersRunning.add(spider);
-                    }
-                }
-            }
-        }, 1000 * 30, 1000 * 30);
-
-    }
 
     public SpiderDomain(URL url)
     {
         this.host = url.getHost();
+        Monitor monitor = new Monitor(this);
+        timer.schedule(monitor, 1000 * 30, 1000 * 30);
     }
 
     @Override
@@ -331,25 +295,24 @@ public class SpiderDomain
 
     public void addSpider(Spider spider)
     {
-        SetSpiders.add(spider);
-        spiders.add(spider);
-        synchronized (spidersRunning)
+        if (!totalSpiders.contains(spider))
         {
-            if (spidersRunning.isEmpty())
+            totalSpiders.add(spider);
+            spiders.add(spider);
+            synchronized (spidersRunning)
             {
-                Thread t = new Thread(spider);
-                t.start();
-                spidersRunning.add(spider);
+                if (spidersRunning.isEmpty())
+                {
+                    Thread t = new Thread(spider);
+                    t.start();
+                    spidersRunning.add(spider);
+                }
             }
         }
     }
 
     public void onDone(Spider spider)
     {
-        synchronized (SetSpiders)
-        {
-            SetSpiders.remove(spider);
-        }
         synchronized (spidersRunning)
         {
             spidersRunning.remove(spider);

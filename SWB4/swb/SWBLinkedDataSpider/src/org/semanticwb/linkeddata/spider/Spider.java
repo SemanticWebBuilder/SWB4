@@ -65,7 +65,7 @@ public class Spider implements Runnable
 
     public Spider(URL seedURL, SpiderDomain domain)
     {
-        this.domain = domain;        
+        this.domain = domain;
         this.url = seedURL;
 
     }
@@ -85,110 +85,52 @@ public class Spider implements Runnable
     {
         running = true;
 
-        if (domain == null)
+
+
+
+        fireOnStart(url);
+        DocumentInfo docInfo = getContent(url);
+        running = false;
+        if (domain != null)
         {
-            fireOnStart(url);
-            DocumentInfo docInfo = getContent(url);
-            running = false;
-            if (domain != null)
+            domain.onDone(this);
+        }
+        if (docInfo != null)
+        {
+            if (docInfo.contentType.equalsIgnoreCase("application/rdf+xml") || docInfo.contentType.equalsIgnoreCase("application/xml"))
             {
-                domain.onDone(this);
-            }
-            if (docInfo != null)
-            {
-                if (docInfo.contentType.equalsIgnoreCase("application/rdf+xml") || docInfo.contentType.equalsIgnoreCase("application/xml"))
+                Document doc = getDocument(docInfo);
+                if (doc != null)
                 {
-                    Document doc = getDocument(docInfo);
-                    if (doc != null)
-                    {
-                        store(doc, url);
-                    }
+                    store(doc, url);
                 }
-                else if (docInfo.contentType.equalsIgnoreCase("text/html"))
+            }
+            else if (docInfo.contentType.equalsIgnoreCase("text/html"))
+            {
+                try
+                {
+                    RDFAAnalizer analizer = new RDFAAnalizer(docInfo.content, this, this.getURL().toURI());
+                    analizer.start();
+                }
+                catch (Exception e)
                 {
                     try
                     {
-                        RDFAAnalizer analizer = new RDFAAnalizer(docInfo.content, this, this.getURL().toURI());
+                        RDDLAnalizer analizer = new RDDLAnalizer(docInfo.content, this, this.getURL().toURI());
                         analizer.start();
                     }
-                    catch (Exception e)
+                    catch (Exception e2)
                     {
-                        try
-                        {
-                            RDDLAnalizer analizer = new RDDLAnalizer(docInfo.content, this, this.getURL().toURI());
-                            analizer.start();
-                        }
-                        catch (Exception e2)
-                        {
-                            fireError(e);
-                        }
+                        fireError(e);
                     }
                 }
-                else
-                {
-                    System.out.println("docInfo.contentType: " + docInfo.contentType + " url: " + url);
-                }
             }
-            fireOnEnd(url);
-        }
-        else
-        {
-            if (!SpiderManager.visited.contains(url))
+            else
             {
-                SpiderManager.visited.add(url);
-
-                fireOnStart(url);
-                DocumentInfo docInfo = getContent(url);
-                running = false;
-                if (domain != null)
-                {
-                    domain.onDone(this);
-                }
-                if (docInfo != null)
-                {
-                    if (docInfo.contentType.equalsIgnoreCase("application/rdf+xml") || docInfo.contentType.equalsIgnoreCase("application/xml"))
-                    {
-                        Document doc = getDocument(docInfo);
-                        if (doc != null)
-                        {
-                            store(doc, url);
-                        }
-                    }
-                    else if (docInfo.contentType.equalsIgnoreCase("text/html"))
-                    {
-                        try
-                        {
-                            RDFAAnalizer analizer = new RDFAAnalizer(docInfo.content, this, this.getURL().toURI());
-                            analizer.start();
-                        }
-                        catch (Exception e)
-                        {
-                            try
-                            {
-                                RDDLAnalizer analizer = new RDDLAnalizer(docInfo.content, this, this.getURL().toURI());
-                                analizer.start();
-                            }
-                            catch (Exception e2)
-                            {
-                                fireError(e);
-                            }
-                        }
-                    }
-                    else
-                    {
-                        System.out.println("docInfo.contentType: " + docInfo.contentType + " url: " + url);
-                    }
-                }
-                fireOnEnd(url);
-
-
+                System.out.println("docInfo.contentType: " + docInfo.contentType + " url: " + url);
             }
-
         }
-
-
-
-
+        fireOnEnd(url);
     }
 
     public boolean isRunning()
@@ -477,7 +419,7 @@ public class Spider implements Runnable
 //        return false;
 //    }
     public synchronized void onTriple(URI suj, URI pred, String obj, Spider source, String lang)
-    {        
+    {
         SpiderManager.loadPredicates(pred);
         Set<TripleElement> elements = SpiderManager.predicates.get(pred);
         StringBuilder sb = new StringBuilder();
