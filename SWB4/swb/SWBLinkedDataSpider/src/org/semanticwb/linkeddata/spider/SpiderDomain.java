@@ -10,7 +10,6 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.Timer;
-import java.util.UUID;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
@@ -28,10 +27,10 @@ public class SpiderDomain
     private final Timer timer = new Timer("Spiders");
     private String host;
     private static Logger log = SWBUtils.getLogger(SpiderDomain.class);
-    private final String id;
+    
     public SpiderDomain(URL url)
     {
-        id=UUID.randomUUID().toString();
+        
         this.host = url.getHost();
         Monitor monitor = new Monitor(this);
         timer.schedule(monitor, 1000 * 30, 1000 * 30);
@@ -61,7 +60,7 @@ public class SpiderDomain
     @Override
     public String toString()
     {
-        return host+id;
+        return host;
     }
 
     public void fireError(final Throwable e, final URL url)

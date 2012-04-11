@@ -48,10 +48,6 @@ public class Monitor extends TimerTask
                 t.start();
                 domain.spidersRunning.add(spider);
             }
-        }
-        //if(domain.toString().equals("dbpedia.org"))
-        {
-            System.out.println(" Dominio: " + domain + " running: " + domain.spidersRunning.size() + " en cola: " + domain.spiders.size() + " total: " + domain.totalSpiders.size());
-        }
+        }       
     }
 }
