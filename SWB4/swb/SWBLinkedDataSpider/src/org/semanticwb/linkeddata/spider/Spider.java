@@ -8,12 +8,10 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.StringReader;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.Charset;
-import java.util.HashSet;
 import java.util.Set;
 import org.jdom.input.SAXBuilder;
 import org.jdom.output.DOMOutputter;
@@ -42,7 +40,7 @@ public class Spider implements Runnable
     private static URI typeProp;
     protected URL url;
     private boolean running = false;
-    private SpiderDomain domain;
+    private final SpiderDomain domain;
 
     static
     {

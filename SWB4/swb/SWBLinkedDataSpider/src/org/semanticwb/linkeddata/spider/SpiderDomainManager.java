@@ -22,12 +22,12 @@ public class SpiderDomainManager extends HashMap<String, SpiderDomain>
     public SpiderDomain get(URL url)
     {
         String host=url.getHost();
-        return this.get(host);
+        return super.get(host);
     }
     public SpiderDomain put(URL url,SpiderDomain domain)
     {
         String host=url.getHost();
-        return this.put(host, domain);
+        return super.put(host, domain);
     }
     public synchronized String getNames()
     {

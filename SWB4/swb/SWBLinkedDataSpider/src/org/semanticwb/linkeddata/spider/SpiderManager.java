@@ -34,14 +34,11 @@ public class SpiderManager
     public static void createSpider(URL url, Spider source)
     {
         
-            SpiderDomain domain = new SpiderDomain(url);
-            if (domainManager.containsKey(url))
-            {
-                domain = domainManager.get(url);
-            }
-            else
-            {
-                domainManager.put(url, domain);
+            SpiderDomain domain =domainManager.get(url);
+            if (domain==null)
+            {                
+                domain = new SpiderDomain(url);
+                domainManager.put(url, domain);                
             }
 
             Spider spider = new Spider(url, domain);
