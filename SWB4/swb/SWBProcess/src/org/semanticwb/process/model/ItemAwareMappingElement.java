@@ -22,7 +22,7 @@ public class ItemAwareMappingElement extends org.semanticwb.process.model.base.I
     @Override
     public void process(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String propName)
     {
-        System.out.println("process:"+obj+" "+prop+" "+propName);
+        //System.out.println("process:"+obj+" "+prop+" "+propName);
         if (obj == null) {
             obj = new SemanticObject();
         }    
@@ -57,7 +57,7 @@ public class ItemAwareMappingElement extends org.semanticwb.process.model.base.I
                 
                 if(value!=null && value.length()>0)
                 {
-                    System.out.println(var+" "+value);
+                    //System.out.println(var+" "+value);
                     
                     SemanticObject sobjr=SemanticObject.createSemanticObject(SemanticObject.shortToFullURI(value));
                     if(sobjr!=null)
@@ -233,46 +233,48 @@ public class ItemAwareMappingElement extends org.semanticwb.process.model.base.I
                         }
                     }
                     
-                    if(throwmsg!=null)
+                    if(throwmsg!=null && throwmsg.listMessageItemAwares().hasNext())
                     {
                         ret.append("<table border=\"0\">");
                         Iterator<ItemAware> it=((FlowNode)catchmsg).getContainer().listHerarquicalRelatedItemAware().iterator();
                         while (it.hasNext())
                         {
                             ItemAware itemAware = it.next();
-                            ret.append("<tr>");
-                            
-                            ret.append("<td>");
-                            
-                            String selected="";
-                            ItemAwareMapping mapping=getItemAwareMapping(arr, itemAware);
-                            if(mapping!=null)selected=mapping.getRemoteItemAware().getShortURI();
-                            
-                            ret.append("<select name=\""+propName+"-"+itemAware.getId()+"\"");                            
-                            if (DOJO) {
-                                ret.append(" dojoType=\"dijit.form.FilteringSelect\" autoComplete=\"true\" invalidMessage=\""
-                                        + imsg + "\" value=\""+selected+"\"");
-                            }                            
-                            ret.append(">");
-                            ret.append("<option value=\"\"></option>");
-                            Iterator<ItemAware> it4=throwmsg.listMessageItemAwares();
-                            while (it4.hasNext())
-                            {
-                                ItemAware ritemAware = it4.next();
-                                ret.append("<option value=\""+ritemAware.getShortURI()+"\">");
-                                ret.append(ritemAware.getName());
-                                ret.append("</option>");
-                                
+                            if (itemAware.getDataObjectClass() != null) { //Si no lo han configurado no se muestra
+                                ret.append("<tr>");
+                                ret.append("<td>");
+
+                                String selected="";
+                                ItemAwareMapping mapping=getItemAwareMapping(arr, itemAware);
+                                if(mapping!=null)selected=mapping.getRemoteItemAware().getShortURI();
+
+                                ret.append("<select name=\""+propName+"-"+itemAware.getId()+"\"");                            
+                                if (DOJO) {
+                                    ret.append(" dojoType=\"dijit.form.FilteringSelect\" autoComplete=\"true\" invalidMessage=\""
+                                            + imsg + "\" value=\""+selected+"\"");
+                                }
+                                ret.append(">");
+                                ret.append("<option value=\"\"></option>");
+                                Iterator<ItemAware> it4=throwmsg.listMessageItemAwares();
+                                while (it4.hasNext())
+                                {
+                                    ItemAware ritemAware = it4.next();
+                                    if (ritemAware.getDataObjectClass() != null && itemAware.getDataObjectClass().equals(ritemAware.getDataObjectClass())) {
+                                        ret.append("<option value=\""+ritemAware.getShortURI()+"\">");
+                                        ret.append(ritemAware.getName());
+                                        ret.append("</option>");
+                                    }
+                                }
+                                ret.append("</select>");
+                                ret.append("</td>");
+
+                                ret.append("<td>");
+                                ret.append("->");
+                                ret.append(itemAware.getName());
+                                ret.append("</td>");                            
+
+                                ret.append("</tr>");
                             }
-                            ret.append("</select>");
-                            ret.append("</td>");
-                            
-                            ret.append("<td>");
-                            ret.append("->");
-                            ret.append(itemAware.getName());
-                            ret.append("</td>");                            
-                            
-                            ret.append("</tr>");
                         }
                         ret.append("</table>");
                     }
