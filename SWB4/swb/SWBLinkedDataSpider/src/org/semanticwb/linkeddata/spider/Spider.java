@@ -477,11 +477,7 @@ public class Spider implements Runnable
 //        return false;
 //    }
     public synchronized void onTriple(URI suj, URI pred, String obj, Spider source, String lang)
-    {
-        if (pred.toString().equals("http://www.w3.org/2003/06/sw-vocab-status/ns#status"))
-        {
-            System.out.println("a");
-        }
+    {        
         SpiderManager.loadPredicates(pred);
         Set<TripleElement> elements = SpiderManager.predicates.get(pred);
         StringBuilder sb = new StringBuilder();
