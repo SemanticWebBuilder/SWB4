@@ -27,12 +27,13 @@ public class SpiderDomain
     private final Timer timer = new Timer("Spiders");
     private String host;
     private static Logger log = SWBUtils.getLogger(SpiderDomain.class);
-    
+    private int max;
+
     public SpiderDomain(URL url)
     {
-        
+        this.max = 30;
         this.host = url.getHost();
-        Monitor monitor = new Monitor(this);
+        Monitor monitor = new Monitor(this, max);
         timer.schedule(monitor, 1000 * 30, 1000 * 30);
     }
 
@@ -302,12 +303,13 @@ public class SpiderDomain
             spiders.add(spider);
             synchronized (spidersRunning)
             {
-                if (spidersRunning.isEmpty())
+                if (spidersRunning.size() < max)
                 {
                     Thread t = new Thread(spider);
                     t.start();
                     spidersRunning.add(spider);
                 }
+
             }
         }
     }
@@ -317,6 +319,17 @@ public class SpiderDomain
         synchronized (spidersRunning)
         {
             spidersRunning.remove(spider);
+            int dif = max - spidersRunning.size();
+            for (int i = 0; i < dif; i++)
+            {
+                Spider spiderToStart = spiders.poll();
+                if (spiderToStart != null)
+                {
+                    Thread t = new Thread(spiderToStart);
+                    t.start();
+                    spidersRunning.add(spiderToStart);
+                }
+            }
 
         }
     }

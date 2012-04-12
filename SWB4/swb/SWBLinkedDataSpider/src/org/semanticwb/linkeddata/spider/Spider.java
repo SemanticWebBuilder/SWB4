@@ -119,7 +119,7 @@ public class Spider implements Runnable
                     }
                     catch (Exception e2)
                     {
-                        fireError(e);
+                        fireError(e2);
                     }
                 }
             }
@@ -249,7 +249,7 @@ public class Spider implements Runnable
     {
         try
         {
-            HttpURLConnection con = (HttpURLConnection) url.openConnection();
+            HttpURLConnection con = (HttpURLConnection) url.openConnection();            
             con.setRequestMethod("GET");
             if (con.getResponseCode() == 200)
             {
@@ -270,7 +270,7 @@ public class Spider implements Runnable
                     }
                 }
                 InputStreamReader reader = new InputStreamReader(con.getInputStream(), charset);
-                char[] cbuf = new char[1024];
+                char[] cbuf = new char[1024*50];
                 StringBuilder sb = new StringBuilder();
                 int read = reader.read(cbuf);
                 while (read != -1)
@@ -287,10 +287,10 @@ public class Spider implements Runnable
                 info.contentType = contentType;
                 info.content = sb.toString();
                 info.url = url;
-                for (String key : con.getHeaderFields().keySet())
-                {
-                    info.headers.put(key, con.getHeaderFields().get(key));
-                }
+//                for (String key : con.getHeaderFields().keySet())
+//                {
+//                    info.headers.put(key, con.getHeaderFields().get(key));
+//                }
                 return info;
             }
             else

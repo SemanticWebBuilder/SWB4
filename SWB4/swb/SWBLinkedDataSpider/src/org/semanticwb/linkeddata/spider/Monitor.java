@@ -15,11 +15,16 @@ public class Monitor extends TimerTask
 {
 
     private final SpiderDomain domain;
-    
-    public Monitor(SpiderDomain domain)
+    private int MAX = 15;
+    public Monitor(SpiderDomain domain,int max)
     {
         this.domain = domain;
+        this.MAX=max;
         
+    }
+    public int getMax()
+    {
+        return MAX;
     }
 
     @Override
@@ -37,8 +42,8 @@ public class Monitor extends TimerTask
         {
             domain.spidersRunning.remove(spider);
         }
-        int max = 15;
-        int dif = max - domain.spidersRunning.size();
+        
+        int dif = MAX - domain.spidersRunning.size();
         for (int i = 0; i < dif; i++)
         {
             Spider spider = domain.spiders.poll();
