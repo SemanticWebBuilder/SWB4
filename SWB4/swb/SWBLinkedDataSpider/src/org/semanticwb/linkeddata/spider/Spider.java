@@ -105,23 +105,34 @@ public class Spider implements Runnable
             }
             else if (docInfo.contentType.equalsIgnoreCase("text/html"))
             {
-                try
+                if (docInfo.content.contains(RDFAAnalizer.DOCTYPE_RFDA))
                 {
-                    RDFAAnalizer analizer = new RDFAAnalizer(docInfo.content, this, this.getURL().toURI());
-                    analizer.start();
+
+                    try
+                    {
+                        RDFAAnalizer analizer = new RDFAAnalizer(docInfo.content, this, this.getURL().toURI());
+                        analizer.start();
+                    }
+                    catch (Exception e)
+                    {
+                        fireError(e);
+
+                    }
+
                 }
-                catch (Exception e)
+                else if (docInfo.content.contains(RDDLAnalizer.DOCTYPE_RDDL))
                 {
                     try
                     {
                         RDDLAnalizer analizer = new RDDLAnalizer(docInfo.content, this, this.getURL().toURI());
                         analizer.start();
                     }
-                    catch (Exception e2)
+                    catch (Exception e)
                     {
-                        fireError(e2);
+                        fireError(e);
                     }
                 }
+
             }
             else
             {
@@ -249,7 +260,7 @@ public class Spider implements Runnable
     {
         try
         {
-            HttpURLConnection con = (HttpURLConnection) url.openConnection();            
+            HttpURLConnection con = (HttpURLConnection) url.openConnection();
             con.setRequestMethod("GET");
             if (con.getResponseCode() == 200)
             {
@@ -270,7 +281,7 @@ public class Spider implements Runnable
                     }
                 }
                 InputStreamReader reader = new InputStreamReader(con.getInputStream(), charset);
-                char[] cbuf = new char[1024*50];
+                char[] cbuf = new char[1024 * 50];
                 StringBuilder sb = new StringBuilder();
                 int read = reader.read(cbuf);
                 while (read != -1)
