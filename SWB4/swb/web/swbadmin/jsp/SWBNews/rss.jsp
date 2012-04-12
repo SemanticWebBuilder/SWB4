@@ -1,4 +1,4 @@
-<%@page import="com.infotec.swb.resources.eventcalendar.Event"%><%@page import="org.semanticwb.portal.api.*,org.semanticwb.portal.resources.sem.news.*,org.w3c.dom.*,java.util.*,org.semanticwb.model.WebPage,org.semanticwb.platform.SemanticObject"%><%@page import="org.semanticwb.model.*,org.semanticwb.SWBUtils,org.semanticwb.SWBPortal,org.semanticwb.SWBPlatform,org.semanticwb.platform.*,org.semanticwb.portal.api.SWBResourceURL"%><%!    private static String idNoticias = "Noticias";
+<%@page import="org.semanticwb.portal.api.*,org.semanticwb.portal.resources.sem.news.*,org.w3c.dom.*,java.util.*,org.semanticwb.model.WebPage,org.semanticwb.platform.SemanticObject"%><%@page import="org.semanticwb.model.*,org.semanticwb.SWBUtils,org.semanticwb.SWBPortal,org.semanticwb.SWBPlatform,org.semanticwb.platform.*,org.semanticwb.portal.api.SWBResourceURL"%><%!    private static String idNoticias = "Noticias";
 
 public static String changeCharacters(String data)
     {
@@ -92,14 +92,14 @@ public static String changeCharacters(String data)
         }
         return sb.toString();
     }
-    public static class EventSortByStartDate implements Comparator<Event>
+    /*public static class EventSortByStartDate implements Comparator<Event>
     {
 
         public int compare(Event event1, Event event2)
         {
             return event1.getStart().compareTo(event2.getStart());
         }
-    }
+    }*/
 
     class SWBEventComparator implements Comparator<WebPage>
     {
@@ -170,7 +170,7 @@ public static String changeCharacters(String data)
                 Collections.sort(news, new SWBNewContentComparator());
                 //SWBResourceURL url=(SWBResourceURL) request.getAttribute("url");
                 String url = (String) request.getAttribute("url");
-                response.setContentType("application/rss+xml");
+                response.setContentType("application/rss+xml;charset=UTF-8");
                 Document doc = org.semanticwb.SWBUtils.XML.getNewDocument();
                 Element rss = doc.createElement("rss");
                 rss.setAttribute("version", "2.0");
@@ -256,8 +256,8 @@ public static String changeCharacters(String data)
                     int currentYear = java.util.Calendar.getInstance().getTime().getYear();
                     int currentMonth = java.util.Calendar.getInstance().getTime().getMonth();
                     int currentDay = java.util.Calendar.getInstance().getTime().getDay();
-                    Iterator<Event> itevents = Event.ClassMgr.listEvents(paramRequest.getWebPage().getWebSite());
-                    //List<Event> events = SWBUtils.Collections.copyIterator(itevents);
+                    /*Iterator<Event> itevents = Event.ClassMgr.listEvents(paramRequest.getWebPage().getWebSite());
+                    
                     List<Event> events = new ArrayList<Event>();
                     while (itevents.hasNext())
                     {
@@ -269,10 +269,9 @@ public static String changeCharacters(String data)
                             events.add(event);
                         }
 
-                    }
-                    //events.clear();
-                    //events.addAll(temp);
-                    Collections.sort(events, new EventSortByStartDate());
+                    }*/
+                    
+                    /*Collections.sort(events, new EventSortByStartDate());
 
                     for (Event event : events)
                     {
@@ -315,9 +314,10 @@ public static String changeCharacters(String data)
                         cal.set(cal.SECOND, 1);
                         addAtribute(item, "pubDate", cal.getTime().toGMTString());
 
-                    }
+                    }*/
                 }
-                out.write(org.semanticwb.SWBUtils.XML.domToXml(doc));
+
+                out.write(org.semanticwb.SWBUtils.XML.domToXml(doc, "utf-8", true));
             }
             else
             {
