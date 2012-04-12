@@ -17,7 +17,7 @@ public class DocumentInfo
 {
 
     String content;
-    Map<String, List<String>> headers = new HashMap<String, List<String>>();
+    //Map<String, List<String>> headers = new HashMap<String, List<String>>();
     URL url;
     String contentType;
 }

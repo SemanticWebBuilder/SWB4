@@ -5,6 +5,7 @@
 package org.semanticwb.linkeddata.spider;
 
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -45,6 +46,18 @@ public class Predicates
     {
         Set<TripleElement> _values = new HashSet<TripleElement>();
         Set<TripleElement> values = new HashSet<TripleElement>();
+        int pos=pred.toString().indexOf("#");
+        if(pos!=-1)
+        {
+            try
+            {
+                pred=new URI(pred.toString().substring(0,pos));
+            }
+            catch(URISyntaxException e)
+            {
+                
+            }
+        }
         if (hasPred(pred))
         {
             values = predicates.get(pred);
@@ -55,6 +68,18 @@ public class Predicates
 
     public synchronized boolean hasPred(URI pred)
     {
+        int pos=pred.toString().indexOf("#");
+        if(pos!=-1)
+        {
+            try
+            {
+                pred=new URI(pred.toString().substring(0,pos));
+            }
+            catch(URISyntaxException e)
+            {
+
+            }
+        }
         return predicates.containsKey(pred);
     }
 }
