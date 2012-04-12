@@ -1,7 +1,7 @@
 package org.semanticwb.social.base;
 
 
-public abstract class MessageBase extends org.semanticwb.social.Post implements org.semanticwb.model.Expirable,org.semanticwb.model.Traceable
+public abstract class MessageBase extends org.semanticwb.social.Post implements org.semanticwb.model.Traceable,org.semanticwb.model.Expirable
 {
     public static final org.semanticwb.platform.SemanticProperty social_msg_Text=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.owl-ontologies.com/socialNet#msg_Text");
     public static final org.semanticwb.platform.SemanticClass social_Message=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.owl-ontologies.com/socialNet#Message");
