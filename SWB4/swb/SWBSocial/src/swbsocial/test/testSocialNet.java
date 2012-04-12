@@ -7,7 +7,6 @@ package swbsocial.test;
 
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
-import org.semanticwb.social.Twitter;
 
 /**
  *
@@ -24,7 +23,7 @@ public class testSocialNet {
 
         String msg="Este es un mensaje de paz mundial...";
 
-        Twitter.ClassMgr.getTwitter("twitter1", null);
+        //Twitter.ClassMgr.getTwitter("twitter1", null);
 
 
 
