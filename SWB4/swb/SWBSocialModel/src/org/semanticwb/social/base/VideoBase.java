@@ -1,7 +1,7 @@
 package org.semanticwb.social.base;
 
 
-public abstract class VideoBase extends org.semanticwb.social.Post implements org.semanticwb.model.Expirable,org.semanticwb.model.Traceable,org.semanticwb.social.Comentable
+public abstract class VideoBase extends org.semanticwb.social.Post implements org.semanticwb.social.Comentable,org.semanticwb.model.Traceable,org.semanticwb.model.Expirable
 {
    /**
    * Archivo de Video a subir a la red social

@@ -1,5 +1,8 @@
 package org.semanticwb.social;
 
+import javax.servlet.http.HttpServletRequest;
+import org.semanticwb.portal.api.SWBActionResponse;
+
 
 public class Twitter extends org.semanticwb.social.base.TwitterBase 
 {
@@ -10,36 +13,8 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase
         super(base);
     }
 
-    /*
-    public void postPhoto() {
-        Photo photo=null;
-        Iterator <Post> itPost=listPosts();
-        while(itPost.hasNext()){
-            Post post=itPost.next();
-            if(post instanceof Photo)
-            {
-                photo=(Photo)post;
-                break;
-            }
-        }
-    }
-
-    public void postMsg() {
-        Iterator <Post> itPost=listPosts();
-        while(itPost.hasNext()){
-            Post post=itPost.next();
-            if(post instanceof Message)
-            {
-                System.out.println("Entra a poner en Twitter Msg...:"+getTitle());
-                msg=(Message)post;
-                System.out.println("Entra a poner en Twitter Msg-2...:"+msg.getMsg_Text());
-                break;
-            }
-        }
-    }
-*/
-   
-    public void postMsg(Message message) {
+    public void postMsg(Message message, HttpServletRequest request, SWBActionResponse response) {
+        addPost(message);
         this.msg=message;
         if(msg!=null)
         {
@@ -47,7 +22,8 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase
         }
     }
 
-    public void postPhoto(Photo photo) {
+    public void postPhoto(Photo photo, HttpServletRequest request, SWBActionResponse response) {
+        addPost(photo);
         System.out.println("Twitter login:"+getLogin());
         System.out.println("Twitter Passw:"+getPassword());
         System.out.println("Twitter SK:"+getSecreatKey());
@@ -58,4 +34,5 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase
             System.out.println("Photo de Twitter:"+photo.getPhoto());
         }
     }
+
 }
