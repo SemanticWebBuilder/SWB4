@@ -9,7 +9,6 @@ import java.net.URI;
 import java.net.URL;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import org.semanticwb.linkeddata.spider.SpiderEventListener;
 import org.semanticwb.linkeddata.spider.Spider;
 import org.semanticwb.linkeddata.spider.SpiderException;
@@ -44,16 +43,19 @@ public class TestSaveTriple implements SpiderEventListener
     }
     SimpleDateFormat df = new SimpleDateFormat("dd'_'MM'_'yyyy'_'HH'_'mm'_'ss'_'SS");
 
+    @Override
     public void onTriple(URI suj, URI pred, String obj, Spider spider, String lang)
     {
         //System.out.println("suj: " + suj + " pred: " + pred + " obj:" + obj);
     }
 
+    @Override
     public void onError(URL url, int error)
     {
         System.err.println("Error en url: " + url + " code: " + error);
     }
 
+    @Override
     public void onError(URL url, Throwable e)
     {
 
@@ -64,23 +66,27 @@ public class TestSaveTriple implements SpiderEventListener
         e.printStackTrace(System.err);
     }
 
+    @Override
     public boolean onNewSubject(URI suj)
     {
         return true;
     }
 
+    @Override
     public void onStart(URL url)
     {
         //String date=df.format(new Date());
         //System.out.println(date+": Inicia ------------ URL :" + url + " ----------------------");
     }
 
+    @Override
     public void onEnd(URL url)
     {
         //String date=df.format(new Date());
         //System.out.println(date+": Termina ------------ URL :" + url + " ----------------------");
     }
 
+    @Override
     public void onNTFormat(String row)
     {
         totalNTFormat++;
@@ -91,6 +97,7 @@ public class TestSaveTriple implements SpiderEventListener
         System.out.println(row);
     }
 
+    @Override
     public void onTriple(URI suj, URI pred, URI obj, Spider source, String lang)
     {
     }

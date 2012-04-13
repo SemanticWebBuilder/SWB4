@@ -20,11 +20,12 @@ public class SpiderManager
     public static final Predicates predicates = new Predicates();
     private static SpiderDomainManager domainManager = new SpiderDomainManager();
     private static final Set<SpiderEventListener> listeners = Collections.synchronizedSet(new HashSet<SpiderEventListener>());
-    
+
     public static SpiderDomainManager getSpiderDomainManager()
     {
         return domainManager;
     }
+
     public static void createSpider(URL url)
     {
         createSpider(url, null);
@@ -32,18 +33,18 @@ public class SpiderManager
 
     public static void createSpider(URL url, Spider source)
     {
-        
-            SpiderDomain domain =domainManager.get(url);
-            if (domain==null)
-            {                
-                domain = new SpiderDomain(url);
-                domainManager.put(url, domain);                
-            }
 
-            Spider spider = new Spider(url, domain);
-            domain.addSpider(spider);
+        SpiderDomain domain = domainManager.get(url);
+        if (domain == null)
+        {
+            domain = new SpiderDomain(url);
+            domainManager.put(url, domain);
+        }
 
-        
+        Spider spider = new Spider(url, domain);
+        domain.addSpider(spider);
+
+
     }
 
     public synchronized static Set<SpiderEventListener> getListeners()
@@ -90,23 +91,30 @@ public class SpiderManager
 //        {
 //            spider.fireError(e);
 //        }
+
+
         loadPredicates(pred);
-        
+
 
     }
+
     public static void loadPredicates(URI pred)
     {
         try
         {
-            SpiderSync _spider = new SpiderSync(pred.toURL(),null);
+            if (pred.toString().equals("http://dbpedia.org/ontology/background"))
+            {
+                System.out.println("a");
+            }
+            SpiderSync _spider = new SpiderSync(pred.toURL(), null);
             _spider.run();
-            
+
         }
         catch (Exception e)
         {
-            
         }
     }
+
     public static void addPredicate(TripleElement element)
     {
         predicates.add(element);
