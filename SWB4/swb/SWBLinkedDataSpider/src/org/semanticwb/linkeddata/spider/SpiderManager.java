@@ -101,11 +101,7 @@ public class SpiderManager
     public static void loadPredicates(URI pred)
     {
         try
-        {
-            if (pred.toString().equals("http://dbpedia.org/ontology/background"))
-            {
-                System.out.println("a");
-            }
+        {            
             SpiderSync _spider = new SpiderSync(pred.toURL(), null);
             _spider.run();
 

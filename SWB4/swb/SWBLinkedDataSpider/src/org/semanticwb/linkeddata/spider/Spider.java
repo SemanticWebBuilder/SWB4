@@ -438,6 +438,7 @@ public class Spider implements Runnable
 //    }
     public synchronized void onTriple(URI suj, URI pred, String obj, Spider source, String lang)
     {
+        
         SpiderManager.loadPredicates(pred);
         Set<TripleElement> elements = SpiderManager.predicates.get(pred);
         StringBuilder sb = new StringBuilder();

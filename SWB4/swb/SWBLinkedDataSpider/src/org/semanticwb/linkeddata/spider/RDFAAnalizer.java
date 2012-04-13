@@ -469,6 +469,7 @@ public class RDFAAnalizer
                 String name = tag.tag.getParamName(i);
                 if (isAttribute(name))
                 {
+                   
                     AttributeRDFA att = new AttributeRDFA();
                     att.attribute = name;
                     att.value = tag.tag.getParam(name);
