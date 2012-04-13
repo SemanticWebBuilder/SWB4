@@ -31,7 +31,6 @@ public class RDFAAnalizer
     private String xmlhtml;
     private URI suj;
     private String doc_type;
-    private URI type;
 
     public RDFAAnalizer(String html, Spider spider, URI suj) throws SpiderException
     {
@@ -186,22 +185,6 @@ public class RDFAAnalizer
                 if (att.equals(name))
                 {
                     return true;
-//                    if (name.equals("about"))
-//                    {
-//                        return true;
-//                    }
-//                    else
-//                    {
-//                        for (String _prefix : prefix.keySet())
-//                        {
-//                            String tofind = _prefix + ":";
-//                            if (value.startsWith(tofind))
-//                            {
-//                                return true;
-//                            }
-//                        }
-//                    }
-
                 }
             }
         }
@@ -360,7 +343,7 @@ public class RDFAAnalizer
                 spider.fireVisit(suj);
 
             }
-            else if(tag.tag.hasParam("resource"))
+            else if (tag.tag.hasParam("resource"))
             {
                 String resource = tag.tag.getParam("resource");
                 String rel = tag.tag.getParam("rel");
@@ -396,6 +379,43 @@ public class RDFAAnalizer
         {
             spider.fireError(e);
         }
+    }
+
+    private void procesaTypeOf(HTMLElement tag, AttributeRDFA att)
+    {
+        // es un nievo item
+        if (att.prefix != null)
+        {
+            /*try
+            {
+                URI type = new URI(att.value.replace(att.prefix + ":", prefix.get(att.prefix)));
+                URI _suj = new URI(att.value);
+
+                String htmlfragment = getFragment(tag.tag);
+                htmlfragment = this.xmlhtml + this.doc_type + this.rowhtml + htmlfragment + "</html>";
+                try
+                {
+                    RDFAAnalizer newAnalizer = new RDFAAnalizer(htmlfragment, spider, _suj);
+                    for (String _prefix : prefix.keySet())
+                    {
+                        newAnalizer.prefix.put(_prefix, prefix.get(_prefix));
+
+                    }
+                    newAnalizer.start();
+                    spider.fireVisit(suj);
+                }
+                catch (SpiderException e)
+                {
+                    spider.fireError(e);
+                }
+            }
+            catch (URISyntaxException e)
+            {
+                spider.fireError(e);
+            }*/
+        }
+
+
     }
 
     private void procesaProperty(HTMLElement tag, AttributeRDFA att)
@@ -442,56 +462,64 @@ public class RDFAAnalizer
     {
         if (hasAttribute(tag.tag))
         {
-            Enumeration paramNames = tag.tag.getParamNames();
-            if (paramNames.hasMoreElements())
+            int count=tag.tag.getParamCount();
+            for(int i=0;i<count;i++)
             {
 
-                String name = paramNames.nextElement().toString();
-                AttributeRDFA att = new AttributeRDFA();
-                att.attribute = name;
-                att.value = tag.tag.getParam(name);
-                int pos = att.value.indexOf(":");
-                if (pos != -1)
+                String name = tag.tag.getParamName(i);
+                if (isAttribute(name))
                 {
-                    for (String _prefix : prefix.keySet())
+                    AttributeRDFA att = new AttributeRDFA();
+                    att.attribute = name;
+                    att.value = tag.tag.getParam(name);
+                    int pos = att.value.indexOf(":");
+                    if (pos != -1)
                     {
-                        if (att.value.startsWith(_prefix + ":"))
+                        for (String _prefix : prefix.keySet())
                         {
-                            att.prefix = _prefix;
-                            break;
+                            if (att.value.startsWith(_prefix + ":"))
+                            {
+                                att.prefix = _prefix;
+                                break;
+                            }
                         }
                     }
-                }
-                if (name.equals("property"))
-                {
-                    procesaProperty(tag, att);
-                }
-                else if ("rev".equals(att.attribute))
-                {
-                    procesaRev(tag, att);
-                }
-                else if ("rel".equals(att.attribute))
-                {
-                    procesaRel(tag, att);
-                }
-                else if (att.attribute.equals("about"))
-                {
-                    procesaAbout(tag, att);
-                }
-                else if (att.attribute.equals("typeof"))
-                {
-                    try
+                    if (name.equals("property"))
                     {
-                        type = new URI(att.value.replace(att.prefix + ":", prefix.get(att.prefix)));
+                        procesaProperty(tag, att);
                     }
-                    catch (URISyntaxException e)
+                    else if ("rev".equals(att.attribute))
                     {
-                        spider.fireError(e);
+                        procesaRev(tag, att);
+                    }
+                    else if ("rel".equals(att.attribute))
+                    {
+                        procesaRel(tag, att);
+                    }
+                    else if (att.attribute.equals("about"))
+                    {
+                        procesaAbout(tag, att);
+                    }
+                    else if (att.attribute.equals("typeof"))
+                    {
+                        procesaTypeOf(tag, att);
                     }
                 }
             }
         }
 
 
+    }
+
+    private boolean isAttribute(String name)
+    {
+        for (String _name : attributes)
+        {
+            if (_name.equals(name))
+            {
+                return true;
+            }
+        }
+        return false;
     }
 }

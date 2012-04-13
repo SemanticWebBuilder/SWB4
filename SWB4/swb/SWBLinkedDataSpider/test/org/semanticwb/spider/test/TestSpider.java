@@ -85,7 +85,7 @@ public class TestSpider
             SpiderManager.addSpiderEventListener(new TestSaveTriple());
             //http://musicbrainz.org/release-group/21a136b7-54dd-31dc-a4d9-90c2b833b786
             //URL url = new URL("http://dbpedia.org/ontology/MusicalArtist");}
-            URL url = new URL("http://dbpedia.org/page/Stevie_Nicks");
+            URL url = new URL("http://dbpedia.org/ontology/background");
             //URL url = new URL("http://www.w3.org/2001/XMLSchema");
             SpiderManager.createSpider(url);
             

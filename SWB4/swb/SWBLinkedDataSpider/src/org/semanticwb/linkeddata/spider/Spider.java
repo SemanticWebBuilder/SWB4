@@ -144,7 +144,8 @@ public class Spider implements Runnable
             }
             else
             {
-                System.out.println("docInfo.contentType: " + docInfo.contentType + " url: " + url);
+                //System.out.println("docInfo.contentType: " + docInfo.contentType + " url: " + url);
+                fireError(new SpiderException("Format no supportes "+docInfo.contentType, this));
             }
         }
         fireOnEnd(url);
@@ -536,6 +537,7 @@ public class Spider implements Runnable
 
     public void fireEventnewTriple(final URI suj, final URI pred, final String obj, final Spider spider, final String lang)
     {
+        
         if (domain != null)
         {
             domain.fireEventnewTriple(suj, pred, obj, spider, lang);
@@ -546,6 +548,10 @@ public class Spider implements Runnable
 
     public void fireEventnewTriple(final URI suj, final URI pred, final URI obj, final Spider spider, final String lang)
     {
+        if(pred.toString().equals("http://dbpedia.org/ontology/background"))
+        {
+            System.out.println("a");
+        }
         if (domain != null)
         {
             domain.fireEventnewTriple(suj, pred, obj, spider, lang);
