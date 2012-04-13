@@ -4,6 +4,7 @@
  */
 package org.semanticwb.linkeddata.spider;
 
+import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
 import java.util.Collections;
@@ -22,7 +23,7 @@ public class SpiderDomain
 {
 
     public final ConcurrentLinkedQueue<Spider> spiders = new ConcurrentLinkedQueue<Spider>();
-    public final HashSet<Spider> totalSpiders = new HashSet<Spider>();
+    public final HashSet<URL> totalSpiders = new HashSet<URL>();
     public final Set<Spider> spidersRunning = Collections.synchronizedSet(new HashSet<Spider>());
     private final Timer timer = new Timer("Spiders");
     private String host;
@@ -293,9 +294,23 @@ public class SpiderDomain
 
     public void addSpider(Spider spider)
     {
-        if (!totalSpiders.contains(spider))
+        String _url=spider.getURL().toString();
+        URL url=spider.getURL();
+        int pos=_url.indexOf("#");
+        if(pos!=-1)
         {
-            totalSpiders.add(spider);
+            try
+            {
+                url=new URL(_url.substring(0,pos));
+            }
+            catch(MalformedURLException e)
+            {
+                log.error(e);
+            }
+        }
+        if (!totalSpiders.contains(url))
+        {
+            totalSpiders.add(url);
             spiders.add(spider);
             synchronized (spidersRunning)
             {
