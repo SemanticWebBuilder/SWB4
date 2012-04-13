@@ -409,6 +409,10 @@ public class RDFAAnalizer
                 try
                 {
                     String value = tag.tag.getParam("about");
+                    if(value.startsWith("#"))
+                    {
+                        value=suj.toString()+value;
+                    }
                     URI _suj = new URI(value);
                     URI obj = new URI(att.value.replace(att.prefix + ":", prefix.get(att.prefix)));
                     String _lang = tag.tag.getParam("xml:lang");
