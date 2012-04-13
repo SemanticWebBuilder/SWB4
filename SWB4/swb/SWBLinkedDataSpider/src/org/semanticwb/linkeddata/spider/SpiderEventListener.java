@@ -18,7 +18,7 @@ public interface SpiderEventListener
 
     public void onEnd(URL url);
 
-    public void onNewSubject(URI url);
+    public boolean onNewSubject(URI url);
 
     public void onTriple(URI suj, URI pred, String obj, Spider source, String lang);
 

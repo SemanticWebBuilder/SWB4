@@ -105,7 +105,7 @@ public class Spider implements Runnable
             }
             else if (docInfo.contentType.equalsIgnoreCase("text/html"))
             {
-                if (docInfo.content.contains(RDFAAnalizer.DOCTYPE_RFDA))
+                if (docInfo.content.contains("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML+RDFa"))
                 {
 
                     try
@@ -120,7 +120,7 @@ public class Spider implements Runnable
                     }
 
                 }
-                else if (docInfo.content.contains(RDDLAnalizer.DOCTYPE_RDDL))
+                else if (docInfo.content.contains("<!DOCTYPE html PUBLIC \"-//XML-DEV//DTD XHTML RDDL"))
                 {
                     try
                     {
@@ -132,7 +132,15 @@ public class Spider implements Runnable
                         fireError(e);
                     }
                 }
+                else
+                {
+                    fireError(new SpiderException("The document is notsupportes "+docInfo.content, this));
+                }
 
+            }
+            else if(docInfo.content.contains("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\""))
+            {
+                
             }
             else
             {
@@ -570,11 +578,15 @@ public class Spider implements Runnable
 
     public void fireVisit(final URI suj)
     {
+        boolean fireVisit=true;
         if (domain != null)
         {
-            domain.fireVisit(suj);
+            fireVisit=domain.fireVisit(suj);
         }
-        SpiderManager.createSpider(url, this);
+        if(fireVisit)
+        {
+            SpiderManager.createSpider(url, this);
+        }
 
     }
 

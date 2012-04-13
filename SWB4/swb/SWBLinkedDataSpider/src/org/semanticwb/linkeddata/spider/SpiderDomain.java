@@ -116,29 +116,17 @@ public class SpiderDomain
         }
     }
 
-    public void fireVisit(final URI suj)
+    public boolean fireVisit(final URI suj)
     {
+        boolean fireVisit=true;
         for (final SpiderEventListener listener : SpiderManager.getListeners())
         {
-            Runnable r = new Runnable()
+            if(listener.onNewSubject(suj)==false)
             {
-
-                public void run()
-                {
-                    try
-                    {
-                        listener.onNewSubject(suj);
-                    }
-                    catch (Exception e)
-                    {
-                        log.debug(e);
-                    }
-                }
-            };
-            Thread t = new Thread(r);
-            t.start();
-
+                fireVisit=false;
+            }
         }
+        return fireVisit;
     }
 
     public void onNewSubject(final URI suj)
