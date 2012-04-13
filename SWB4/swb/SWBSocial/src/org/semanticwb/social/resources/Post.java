@@ -17,6 +17,7 @@ import org.semanticwb.portal.api.SWBActionResponse;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.social.Messageable;
+import org.semanticwb.social.Photoable;
 import org.semanticwb.social.SocialNetWork;
 import org.semanticwb.social.Videoable;
 
@@ -67,6 +68,11 @@ public class Post extends GenericResource {
                     //TODO: YO CREO QUE LO QUE TENGO QUE HACER AQUI, ES UN THREAD POR CADA UNA DE LAS REDES SOCIALES A LAS QUE SE ENVÍE UN POST
                     Messageable messageable=(Messageable) socialNet;
                     messageable.postMsg(null, request, response);
+                } if(toPost.equals("photo") && socialNet instanceof Photoable)
+                {
+                    //TODO: YO CREO QUE LO QUE TENGO QUE HACER AQUI, ES UN THREAD POR CADA UNA DE LAS REDES SOCIALES A LAS QUE SE ENVÍE UN POST
+                    Photoable photoable=(Photoable) socialNet;
+                    photoable.postPhoto(null, request, response);
                 }else if(toPost.equals("video") && socialNet instanceof Videoable)
                 {
                     //TODO: YO CREO QUE LO QUE TENGO QUE HACER AQUI, ES UN THREAD POR CADA UNA DE LAS REDES SOCIALES A LAS QUE SE ENVÍE UN POST
