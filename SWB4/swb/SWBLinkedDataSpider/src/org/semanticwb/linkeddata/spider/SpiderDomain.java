@@ -71,6 +71,7 @@ public class SpiderDomain
             Runnable r = new Runnable()
             {
 
+                @Override
                 public void run()
                 {
                     try
@@ -97,6 +98,7 @@ public class SpiderDomain
             Runnable r = new Runnable()
             {
 
+                @Override
                 public void run()
                 {
                     try
@@ -121,7 +123,7 @@ public class SpiderDomain
         boolean fireVisit=true;
         for (final SpiderEventListener listener : SpiderManager.getListeners())
         {
-            if(listener.onNewSubject(suj)==false)
+            if(!listener.onNewSubject(suj))
             {
                 fireVisit=false;
             }
@@ -136,6 +138,7 @@ public class SpiderDomain
             Runnable r = new Runnable()
             {
 
+                @Override
                 public void run()
                 {
                     try
@@ -162,6 +165,7 @@ public class SpiderDomain
             Runnable r = new Runnable()
             {
 
+                @Override
                 public void run()
                 {
                     try
@@ -189,6 +193,7 @@ public class SpiderDomain
             Runnable r = new Runnable()
             {
 
+                @Override
                 public void run()
                 {
                     try
@@ -214,6 +219,7 @@ public class SpiderDomain
             Runnable r = new Runnable()
             {
 
+                @Override
                 public void run()
                 {
                     try
@@ -240,6 +246,7 @@ public class SpiderDomain
             Runnable r = new Runnable()
             {
 
+                @Override
                 public void run()
                 {
                     try
@@ -266,6 +273,7 @@ public class SpiderDomain
             Runnable r = new Runnable()
             {
 
+                @Override
                 public void run()
                 {
                     try
