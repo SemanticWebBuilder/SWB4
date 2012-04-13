@@ -11,7 +11,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
-import org.semanticwb.model.WebSite;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.portal.api.GenericResource;
 import org.semanticwb.portal.api.SWBActionResponse;
@@ -20,7 +19,6 @@ import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.social.Messageable;
 import org.semanticwb.social.SocialNetWork;
 import org.semanticwb.social.Videoable;
-import org.semanticwb.social.YouTube;
 
 /**
  *
@@ -37,7 +35,10 @@ public class Post extends GenericResource {
      */
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        RequestDispatcher dis = request.getRequestDispatcher("/swbadmin/jsp/social/post.jsp");
+        String jspResponse="/swbadmin/jsp/social/post.jsp";
+        if(request.getParameter("jspResponse")!=null) jspResponse=request.getParameter("jspResponse");
+        System.out.println("Jsp de Respuesta:"+jspResponse);
+        RequestDispatcher dis = request.getRequestDispatcher(jspResponse);
         try {
             request.setAttribute("paramRequest", paramRequest);
             dis.include(request, response);
