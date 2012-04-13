@@ -11,6 +11,8 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Enumeration;
 import java.util.HashMap;
+import org.semanticwb.Logger;
+import org.semanticwb.SWBUtils;
 
 /**
  *
@@ -19,6 +21,22 @@ import java.util.HashMap;
 public class RDFAAnalizer
 {
 
+    private static Logger log = SWBUtils.getLogger(Spider.class);
+    private static URI type;
+
+    static
+    {
+        URI _type = null;
+        try
+        {
+            _type = new URI("http://www.w3.org/1999/02/22-rdf-syntax-ns#type");
+        }
+        catch (URISyntaxException e)
+        {
+            log.error(e);
+        }
+        type = _type;
+    }
     private String[] attributes =
     {
         "typeof", "about", "property", "datatype", "rel", "rev"
@@ -386,36 +404,65 @@ public class RDFAAnalizer
         // es un nievo item
         if (att.prefix != null)
         {
-            /*try
+            if (tag.tag.hasParam("about"))
             {
-                URI type = new URI(att.value.replace(att.prefix + ":", prefix.get(att.prefix)));
-                URI _suj = new URI(att.value);
-
-                String htmlfragment = getFragment(tag.tag);
-                htmlfragment = this.xmlhtml + this.doc_type + this.rowhtml + htmlfragment + "</html>";
                 try
                 {
-                    RDFAAnalizer newAnalizer = new RDFAAnalizer(htmlfragment, spider, _suj);
-                    for (String _prefix : prefix.keySet())
-                    {
-                        newAnalizer.prefix.put(_prefix, prefix.get(_prefix));
+                    String value = tag.tag.getParam("about");
+                    URI _suj = new URI(value);
+                    URI obj = new URI(att.value.replace(att.prefix + ":", prefix.get(att.prefix)));
+                    String _lang = tag.tag.getParam("xml:lang");
+                    spider.onNewSubject(_suj);
+                    spider.fireEventnewTriple(_suj, type, obj, spider, _lang);
 
-                    }
-                    newAnalizer.start();
-                    spider.fireVisit(suj);
                 }
-                catch (SpiderException e)
+                catch (URISyntaxException e)
                 {
                     spider.fireError(e);
                 }
+
+            }
+            else
+            {
+                System.out.println("debug");
+            }
+            /*try
+            {
+            URI type = new URI(att.value.replace(att.prefix + ":", prefix.get(att.prefix)));
+            URI _suj = new URI(att.value);
+
+            String htmlfragment = getFragment(tag.tag);
+            htmlfragment = this.xmlhtml + this.doc_type + this.rowhtml + htmlfragment + "</html>";
+            try
+            {
+            RDFAAnalizer newAnalizer = new RDFAAnalizer(htmlfragment, spider, _suj);
+            for (String _prefix : prefix.keySet())
+            {
+            newAnalizer.prefix.put(_prefix, prefix.get(_prefix));
+
+            }
+            newAnalizer.start();
+            spider.fireVisit(suj);
+            }
+            catch (SpiderException e)
+            {
+            spider.fireError(e);
+            }
             }
             catch (URISyntaxException e)
             {
-                spider.fireError(e);
+            spider.fireError(e);
             }*/
         }
 
 
+    }
+
+    private void procesaDataType(HTMLElement tag, AttributeRDFA att)
+    {
+        if (att.prefix != null)
+        {
+        }
     }
 
     private void procesaProperty(HTMLElement tag, AttributeRDFA att)
@@ -462,14 +509,14 @@ public class RDFAAnalizer
     {
         if (hasAttribute(tag.tag))
         {
-            int count=tag.tag.getParamCount();
-            for(int i=0;i<count;i++)
+            int count = tag.tag.getParamCount();
+            for (int i = 0; i < count; i++)
             {
 
                 String name = tag.tag.getParamName(i);
                 if (isAttribute(name))
                 {
-                   
+
                     AttributeRDFA att = new AttributeRDFA();
                     att.attribute = name;
                     att.value = tag.tag.getParam(name);
@@ -504,6 +551,10 @@ public class RDFAAnalizer
                     else if (att.attribute.equals("typeof"))
                     {
                         procesaTypeOf(tag, att);
+                    }
+                    else if (att.attribute.equals("datatype"))
+                    {
+                        procesaDataType(tag, att);
                     }
                 }
             }
