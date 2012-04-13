@@ -1,7 +1,7 @@
 package org.semanticwb.social.base;
 
 
-public abstract class PhotoBase extends org.semanticwb.social.Post implements org.semanticwb.social.Comentable,org.semanticwb.model.Traceable,org.semanticwb.model.Expirable
+public abstract class PhotoBase extends org.semanticwb.social.Post implements org.semanticwb.model.Expirable,org.semanticwb.model.Traceable,org.semanticwb.social.Comentable
 {
    /**
    * Ruta del archivo de la imagen (Foto)

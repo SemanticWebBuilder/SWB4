@@ -1,7 +1,7 @@
 package org.semanticwb.social.base;
 
 
-public abstract class FacebookBase extends org.semanticwb.social.SocialNetWork implements org.semanticwb.social.Secreatable,org.semanticwb.model.Traceable,org.semanticwb.social.Videoable,org.semanticwb.social.Photoable,org.semanticwb.social.Postable,org.semanticwb.social.Messageable,org.semanticwb.model.Descriptiveable
+public abstract class FacebookBase extends org.semanticwb.social.SocialNetWork implements org.semanticwb.social.Postable,org.semanticwb.model.Descriptiveable,org.semanticwb.social.Secreatable,org.semanticwb.model.Traceable,org.semanticwb.social.Photoable,org.semanticwb.social.Messageable,org.semanticwb.social.Videoable
 {
     public static final org.semanticwb.platform.SemanticClass social_Facebook=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.owl-ontologies.com/socialNet#Facebook");
    /**
