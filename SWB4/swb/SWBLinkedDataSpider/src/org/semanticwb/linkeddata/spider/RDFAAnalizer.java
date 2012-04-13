@@ -31,6 +31,7 @@ public class RDFAAnalizer
     private String xmlhtml;
     private URI suj;
     private String doc_type;
+    private URI type;
 
     public RDFAAnalizer(String html, Spider spider, URI suj) throws SpiderException
     {
@@ -57,7 +58,7 @@ public class RDFAAnalizer
                 if (tt_type == HtmlStreamTokenizer.TT_BANGTAG)
                 {
                     doc_type = "<!" + tok.getStringValue() + ">";
-                    doc_type=doc_type.replace("  ", " ");
+                    doc_type = doc_type.replace("  ", " ");
                     if (!doc_type.toString().equalsIgnoreCase(DOCTYPE_RFDA))
                     {
                         throw new SpiderException("The document is not a rdfa document, url: " + spider.getURL(), spider);
@@ -180,26 +181,26 @@ public class RDFAAnalizer
         while (names.hasMoreElements())
         {
             String name = names.nextElement().toString();
-            String value = tag.getParam(name);
             for (String att : attributes)
             {
                 if (att.equals(name))
                 {
-                    if (name.equals("about"))
-                    {
-                        return true;
-                    }
-                    else
-                    {
-                        for (String _prefix : prefix.keySet())
-                        {
-                            String tofind = _prefix + ":";
-                            if (value.startsWith(tofind))
-                            {
-                                return true;
-                            }
-                        }
-                    }
+                    return true;
+//                    if (name.equals("about"))
+//                    {
+//                        return true;
+//                    }
+//                    else
+//                    {
+//                        for (String _prefix : prefix.keySet())
+//                        {
+//                            String tofind = _prefix + ":";
+//                            if (value.startsWith(tofind))
+//                            {
+//                                return true;
+//                            }
+//                        }
+//                    }
 
                 }
             }
@@ -207,46 +208,45 @@ public class RDFAAnalizer
         return false;
     }
 
-    private AttributeRDFA getAttribute(HtmlTag tag)
+    /*private AttributeRDFA getAttribute(HtmlTag tag)
     {
-        Enumeration names = tag.getParamNames();
-        while (names.hasMoreElements())
-        {
-            String name = names.nextElement().toString();
-            String value = tag.getParam(name);
-            for (String att : attributes)
-            {
-                if (att.equals(name))
-                {
-                    if (name.equals("about"))
-                    {
-                        AttributeRDFA attret = new AttributeRDFA();
-                        attret.value = value;
-                        attret.attribute = name;
-                        return attret;
-                    }
-                    else
-                    {
-                        for (String _prefix : prefix.keySet())
-                        {
-                            String tofind = _prefix + ":";
-                            if (value.startsWith(tofind))
-                            {
-                                AttributeRDFA attret = new AttributeRDFA();
-                                attret.value = value;
-                                attret.attribute = name;
-                                attret.prefix = _prefix;
-                                return attret;
-                            }
-                        }
-                    }
-
-                }
-            }
-        }
-        return null;
+    Enumeration names = tag.getParamNames();
+    while (names.hasMoreElements())
+    {
+    String name = names.nextElement().toString();
+    String value = tag.getParam(name);
+    for (String att : attributes)
+    {
+    if (att.equals(name))
+    {
+    if (name.equals("about"))
+    {
+    AttributeRDFA attret = new AttributeRDFA();
+    attret.value = value;
+    attret.attribute = name;
+    return attret;
+    }
+    else
+    {
+    for (String _prefix : prefix.keySet())
+    {
+    String tofind = _prefix + ":";
+    if (value.startsWith(tofind))
+    {
+    AttributeRDFA attret = new AttributeRDFA();
+    attret.value = value;
+    attret.attribute = name;
+    attret.prefix = _prefix;
+    return attret;
+    }
+    }
     }
 
+    }
+    }
+    }
+    return null;
+    }*/
     private String getFragment(HtmlTag tag)
     {
         StringBuilder sb = new StringBuilder();
@@ -291,44 +291,127 @@ public class RDFAAnalizer
         return sb.toString();
     }
 
-    private void onPred(URI pred,Spider spider)
+    private void onPred(URI pred, Spider spider)
     {
         spider.onPred(pred);
     }
 
-    private void procesaTag(HTMLElement tag)
+    private void procesaRel(HTMLElement tag, AttributeRDFA att)
     {
-        if (hasAttribute(tag.tag))
+        if (att.prefix != null && tag.tag.hasParam("href"))
         {
-            AttributeRDFA att = getAttribute(tag.tag);
-            if ("rev".equals(att.attribute) && (tag.tag.getTagString().equals("link") || tag.tag.getTagString().equals("a")))
+            try
             {
-                try
-                {
-                    URI obj = new URI(tag.tag.getParam("href"));
-                    String spred = att.value.replace(att.prefix + ":", prefix.get(att.prefix));
-                    URI pred = new URI(spred);
-                    onPred(pred,spider);
-                    String _lang = tag.tag.getParam("xml:lang");
-                    spider.onNewSubject(obj);
-                    // relacion  inversa
-                    spider.fireEventnewTriple(obj, pred, suj, spider, _lang);
-                }
-                catch (URISyntaxException e)
-                {
-                    spider.fireError(e);
-                }
+                URI obj = new URI(tag.tag.getParam("href"));
+                String spred = att.value.replace(att.prefix + ":", prefix.get(att.prefix));
+                URI pred = new URI(spred);
+                onPred(pred, spider);
+                String _lang = tag.tag.getParam("xml:lang");
+                spider.onNewSubject(obj);
+                spider.fireEventnewTriple(suj, pred, obj, spider, _lang);
             }
-            else if ("rel".equals(att.attribute) && (tag.tag.getTagString().equals("link") || tag.tag.getTagString().equals("a")))
+            catch (URISyntaxException e)
+            {
+                spider.fireError(e);
+            }
+        }
+    }
+
+    private void procesaRev(HTMLElement tag, AttributeRDFA att)
+    {
+        if (att.prefix != null && tag.tag.hasParam("href"))
+        {
+
+            try
+            {
+                URI obj = new URI(tag.tag.getParam("href"));
+                String spred = att.value.replace(att.prefix + ":", prefix.get(att.prefix));
+                URI pred = new URI(spred);
+                onPred(pred, spider);
+                String _lang = tag.tag.getParam("xml:lang");
+                spider.onNewSubject(obj);
+                // relacion  inversa
+                spider.fireEventnewTriple(obj, pred, suj, spider, _lang);
+            }
+            catch (URISyntaxException e)
+            {
+                spider.fireError(e);
+
+            }
+        }
+    }
+
+    private void procesaAbout(HTMLElement tag, AttributeRDFA att)
+    {
+        try
+        {
+            if (!att.value.equals(""))
+            {
+                URI _suj = new URI(att.value);
+                String htmlfragment = getFragment(tag.tag);
+                htmlfragment = this.xmlhtml + this.doc_type + this.rowhtml + htmlfragment + "</html>";
+                RDFAAnalizer newAnalizer = new RDFAAnalizer(htmlfragment, spider, _suj);
+                for (String _prefix : prefix.keySet())
+                {
+                    newAnalizer.prefix.put(_prefix, prefix.get(_prefix));
+
+                }
+                newAnalizer.start();
+                spider.fireVisit(suj);
+
+            }
+            else if(tag.tag.hasParam("resource"))
+            {
+                String resource = tag.tag.getParam("resource");
+                String rel = tag.tag.getParam("rel");
+                if (rel != null && !rel.equals(""))
+                {
+                    for (String _prefix : prefix.keySet())
+                    {
+                        if (rel.startsWith(_prefix + ":") && !resource.equals(""))
+                        {
+                            try
+                            {
+                                URI obj = new URI(resource);
+                                String spred = rel.replace(_prefix + ":", prefix.get(_prefix));
+                                URI pred = new URI(spred);
+                                onPred(pred, spider);
+                                spider.onNewSubject(obj);
+                                String _lang = tag.tag.getParam("xml:lang");
+                                spider.fireEventnewTriple(suj, pred, obj, spider, _lang);
+                                break;
+                            }
+                            catch (URISyntaxException e)
+                            {
+                                spider.fireError(e);
+                            }
+                        }
+                    }
+                }
+
+            }
+
+        }
+        catch (Exception e)
+        {
+            spider.fireError(e);
+        }
+    }
+
+    private void procesaProperty(HTMLElement tag, AttributeRDFA att)
+    {
+        if (att.prefix != null)
+        {
+            String content = tag.tag.getParam("content");
+            if (content == null)
             {
                 try
                 {
-                    URI obj = new URI(tag.tag.getParam("href"));
+                    String obj = nextText();
                     String spred = att.value.replace(att.prefix + ":", prefix.get(att.prefix));
                     URI pred = new URI(spred);
-                    onPred(pred,spider);
+                    onPred(pred, spider);
                     String _lang = tag.tag.getParam("xml:lang");
-                    spider.onNewSubject(obj);
                     spider.fireEventnewTriple(suj, pred, obj, spider, _lang);
                 }
                 catch (URISyntaxException e)
@@ -336,95 +419,70 @@ public class RDFAAnalizer
                     spider.fireError(e);
                 }
             }
-            if (att.attribute.equals("typeof"))
-            {
-                String _lang = tag.tag.getParam("xml:lang");
-                String content = att.value;
-            }
-            if (att.attribute.equals("about"))
+            else
             {
                 try
                 {
-                    if (!att.value.equals(""))
-                    {
-                        URI _suj = new URI(att.value);
-                        String htmlfragment = getFragment(tag.tag);
-                        htmlfragment = this.xmlhtml + this.doc_type + this.rowhtml + htmlfragment + "</html>";
-                        RDFAAnalizer newAnalizer = new RDFAAnalizer(htmlfragment, spider, _suj);
-                        for (String _prefix : prefix.keySet())
-                        {
-                            newAnalizer.prefix.put(_prefix, prefix.get(_prefix));
-
-                        }
-                        newAnalizer.start();
-                        spider.fireVisit(suj);
-
-                    }
-                    else
-                    {
-                        String resource = tag.tag.getParam("resource");
-                        String rel = tag.tag.getParam("rel");
-                        if (rel != null && !rel.equals(""))
-                        {
-                            for (String _prefix : prefix.keySet())
-                            {
-                                if (rel.startsWith(_prefix + ":") && !resource.equals(""))
-                                {
-                                    try
-                                    {
-                                        URI obj = new URI(resource);
-                                        String spred = rel.replace(_prefix + ":", prefix.get(_prefix));
-                                        URI pred = new URI(spred);
-                                        onPred(pred,spider);
-                                        spider.onNewSubject(obj);
-                                        String _lang = tag.tag.getParam("xml:lang");
-                                        spider.fireEventnewTriple(suj, pred, obj, spider, _lang);
-                                    }
-                                    catch (URISyntaxException e)
-                                    {
-                                        spider.fireError(e);
-                                    }
-                                }
-                            }
-                        }
-
-                    }
-
+                    String obj = content;
+                    String spred = att.value.replace(att.prefix + ":", prefix.get(att.prefix));
+                    URI pred = new URI(spred);
+                    onPred(pred, spider);
+                    String _lang = tag.tag.getParam("xml:lang");
+                    spider.fireEventnewTriple(suj, pred, obj, spider, _lang);
                 }
-                catch (Exception e)
+                catch (URISyntaxException e)
                 {
                     spider.fireError(e);
                 }
             }
-            if (att.attribute.equals("property"))
+        }
+    }
+
+    private void procesaTag(HTMLElement tag)
+    {
+        if (hasAttribute(tag.tag))
+        {
+            Enumeration paramNames = tag.tag.getParamNames();
+            if (paramNames.hasMoreElements())
             {
-                String content = tag.tag.getParam("content");
-                if (content == null)
+
+                String name = paramNames.nextElement().toString();
+                AttributeRDFA att = new AttributeRDFA();
+                att.attribute = name;
+                att.value = tag.tag.getParam(name);
+                int pos = att.value.indexOf(":");
+                if (pos != -1)
                 {
-                    try
+                    for (String _prefix : prefix.keySet())
                     {
-                        String obj = nextText();
-                        String spred = att.value.replace(att.prefix + ":", prefix.get(att.prefix));
-                        URI pred = new URI(spred);
-                        onPred(pred,spider);
-                        String _lang = tag.tag.getParam("xml:lang");
-                        spider.fireEventnewTriple(suj, pred, obj, spider, _lang);
-                    }
-                    catch (URISyntaxException e)
-                    {
-                        spider.fireError(e);
+                        if (att.value.startsWith(_prefix + ":"))
+                        {
+                            att.prefix = _prefix;
+                            break;
+                        }
                     }
                 }
-                else
+                if (name.equals("property"))
+                {
+                    procesaProperty(tag, att);
+                }
+                else if ("rev".equals(att.attribute))
+                {
+                    procesaRev(tag, att);
+                }
+                else if ("rel".equals(att.attribute))
+                {
+                    procesaRel(tag, att);
+                }
+                else if (att.attribute.equals("about"))
+                {
+                    procesaAbout(tag, att);
+                }
+                else if (att.attribute.equals("typeof"))
                 {
                     try
                     {
-                        String obj = content;
-                        String spred = att.value.replace(att.prefix + ":", prefix.get(att.prefix));
-                        URI pred = new URI(spred);
-                        onPred(pred,spider);
-                        String _lang = tag.tag.getParam("xml:lang");
-                        spider.fireEventnewTriple(suj, pred, obj, spider, _lang);
+                        type = new URI(att.value.replace(att.prefix + ":", prefix.get(att.prefix)));
                     }
                     catch (URISyntaxException e)
                     {
@@ -433,5 +491,7 @@ public class RDFAAnalizer
                 }
             }
         }
+
+
     }
 }
