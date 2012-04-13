@@ -490,7 +490,8 @@ public class SWBALogs extends GenericResource {
                         out.println("  <td>" + obj.getAction() + "</td>");
                     }
                     if (rowDescription) {
-                        out.println("  <td class=\"datos\">" + ont.getSemanticProperty(obj.getPropId()).getDisplayName(user.getLanguage()) + "</td>");
+                        //out.println("  <td class=\"datos\">" + ont.getSemanticProperty(obj.getPropId()).getDisplayName(user.getLanguage()) + "</td>");
+                        out.println("  <td>" + ont.getSemanticProperty(obj.getPropId()).getDisplayName(user.getLanguage()) + "</td>");
                     }
                     if (rowUser) {
                         String userId = obj.getUser();
