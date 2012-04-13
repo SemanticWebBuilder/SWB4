@@ -38,7 +38,6 @@ public class Post extends GenericResource {
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         String jspResponse="/swbadmin/jsp/social/post.jsp";
         if(request.getParameter("jspResponse")!=null) jspResponse=request.getParameter("jspResponse");
-        System.out.println("Jsp de Respuesta:"+jspResponse);
         RequestDispatcher dis = request.getRequestDispatcher(jspResponse);
         try {
             request.setAttribute("paramRequest", paramRequest);
@@ -56,31 +55,32 @@ public class Post extends GenericResource {
         String socialUri=request.getParameter("socialUri");
         String toPost=request.getParameter("toPost");
         try{
-            String[] socialUris=socialUri.split("\\|");  //Dividir valores
-            for(int i=0;i<socialUris.length;i++)
+            if(socialUri!=null)
             {
-                String tmp_socialUri=socialUris[i];
-                SemanticObject semObject = SemanticObject.createSemanticObject(tmp_socialUri);
-                System.out.println(semObject instanceof Videoable);
-                SocialNetWork socialNet=(SocialNetWork)semObject.createGenericInstance();
-                if(toPost.equals("msg") && socialNet instanceof Messageable)
+                String[] socialUris=socialUri.split("\\|");  //Dividir valores
+                for(int i=0;i<socialUris.length;i++)
                 {
-                    //TODO: YO CREO QUE LO QUE TENGO QUE HACER AQUI, ES UN THREAD POR CADA UNA DE LAS REDES SOCIALES A LAS QUE SE ENVÍE UN POST
-                    Messageable messageable=(Messageable) socialNet;
-                    messageable.postMsg(null, request, response);
-                } if(toPost.equals("photo") && socialNet instanceof Photoable)
-                {
-                    //TODO: YO CREO QUE LO QUE TENGO QUE HACER AQUI, ES UN THREAD POR CADA UNA DE LAS REDES SOCIALES A LAS QUE SE ENVÍE UN POST
-                    Photoable photoable=(Photoable) socialNet;
-                    photoable.postPhoto(null, request, response);
-                }else if(toPost.equals("video") && socialNet instanceof Videoable)
-                {
-                    //TODO: YO CREO QUE LO QUE TENGO QUE HACER AQUI, ES UN THREAD POR CADA UNA DE LAS REDES SOCIALES A LAS QUE SE ENVÍE UN POST
-                    Videoable videoable=(Videoable) socialNet;
-                    videoable.postVideo(null, request, response);
+                    String tmp_socialUri=socialUris[i];
+                    SemanticObject semObject = SemanticObject.createSemanticObject(tmp_socialUri);
+                    SocialNetWork socialNet=(SocialNetWork)semObject.createGenericInstance();
+                    if(toPost.equals("msg") && socialNet instanceof Messageable)
+                    {
+                        //TODO: YO CREO QUE LO QUE TENGO QUE HACER AQUI, ES UN THREAD POR CADA UNA DE LAS REDES SOCIALES A LAS QUE SE ENVÍE UN POST
+                        Messageable messageable=(Messageable) socialNet;
+                        messageable.postMsg(null, request, response);
+                    } if(toPost.equals("photo") && socialNet instanceof Photoable)
+                    {
+                        //TODO: YO CREO QUE LO QUE TENGO QUE HACER AQUI, ES UN THREAD POR CADA UNA DE LAS REDES SOCIALES A LAS QUE SE ENVÍE UN POST
+                        Photoable photoable=(Photoable) socialNet;
+                        photoable.postPhoto(null, request, response);
+                    }else if(toPost.equals("video") && socialNet instanceof Videoable)
+                    {
+                        //TODO: YO CREO QUE LO QUE TENGO QUE HACER AQUI, ES UN THREAD POR CADA UNA DE LAS REDES SOCIALES A LAS QUE SE ENVÍE UN POST
+                        Videoable videoable=(Videoable) socialNet;
+                        videoable.postVideo(null, request, response);
+                    }
                 }
             }
-
         }catch(Exception e){
             log.error(e);
         }
