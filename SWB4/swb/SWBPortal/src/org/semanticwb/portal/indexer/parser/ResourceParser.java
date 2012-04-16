@@ -80,6 +80,9 @@ public class ResourceParser extends GenericParser {
             if (res.isIndexable()) {
                 if (getWebPage(res) != null) {
                     ret = true;
+                }else
+                {
+                    ret=false;
                 }
             }
         }
