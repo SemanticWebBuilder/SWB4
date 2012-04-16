@@ -55,13 +55,13 @@ public class SWBTSGemFireIterator implements ExtendedIterator<Triple>
 
         try
         {
-            Region db = SWBTSGemFire.getCache().getRegion(SWBPlatform.getEnv("swb/gemfire_region_name","swb"));
-            Region<String,SWBTSGemFireTriple> g= db.getSubregion("swb_graph_ts"+graph.getId());
-            if(g==null)
+            //Region db = SWBTSGemFire.getCache().getRegion(SWBPlatform.getEnv("swb/gemfire_region_name","swb"));
+            Region<String,SWBTSGemFireTriple> g= SWBTSGemFire.getCache().getRegion("swb_graph_ts");//+graph.getId());
+          /*  if(g==null)
             {
                 g=db.createSubregion("swb_graph_ts"+graph.getId(), db.getAttributes());
             }
-
+*/
             cur=graph.find(g, subj, prop, obj).iterator();
             
             if(cur.hasNext())

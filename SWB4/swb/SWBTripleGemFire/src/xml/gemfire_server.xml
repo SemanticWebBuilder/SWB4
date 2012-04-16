@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<!DOCTYPE cache PUBLIC
+    "-//GemStone Systems, Inc.//GemFire Declarative Caching 6.6//EN"
+    "http://www.gemstone.com/dtd/cache6_6.dtd">
+<!--
+  | gemfire.xml
+  |
+  | Configures a region for a data replication swb.
+-->
+<cache>
+    <cache-server port="40404"></cache-server>
+    <region name="swb">
+        <region-attributes refid="PARTITION">
+            <partition-attributes redundant-copies="1"></partition-attributes>
+        </region-attributes>
+    </region>
+    <region name="swb_graph">
+        <region-attributes refid="PARTITION">
+            <partition-attributes redundant-copies="1"></partition-attributes>
+        </region-attributes>
+    </region>
+    <region name="swb_prefix">
+        <region-attributes refid="PARTITION">
+            <partition-attributes redundant-copies="1"></partition-attributes>
+        </region-attributes>
+    </region>
+    <region name="swb_graph_ts">
+        <region-attributes refid="PARTITION">
+            <partition-attributes redundant-copies="1"></partition-attributes>
+        </region-attributes>
+        <!--   Problema con PARTITION
+        <index name="swb_ind_subj">
+            <functional from-clause="/swb_graph_ts" expression="subj"/>
+        </index>            
+        <index name="swb_ind_prop">
+            <functional from-clause="/swb_graph_ts" expression="prop"/>
+        </index>            
+        <index name="swb_ind_obj">
+            <functional from-clause="/swb/swb_graph_ts" expression="obj"/>
+        </index>            
+        <index name="swb_ind_model">
+            <functional from-clause="/swb/swb_graph_ts" expression="model"/>
+        </index>  
+        -->
+    </region>                
+    
+</cache>

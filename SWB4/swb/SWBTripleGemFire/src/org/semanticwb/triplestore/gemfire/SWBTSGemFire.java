@@ -2,6 +2,8 @@ package org.semanticwb.triplestore.gemfire;
 
 import com.gemstone.gemfire.cache.Cache;
 import com.gemstone.gemfire.cache.CacheFactory;
+import com.gemstone.gemfire.cache.client.ClientCache;
+import com.gemstone.gemfire.cache.client.ClientCacheFactory;
 import com.hp.hpl.jena.query.Dataset;
 import com.hp.hpl.jena.rdf.model.Model;
 import java.util.Iterator;
@@ -22,7 +24,7 @@ public class SWBTSGemFire implements AbstractStore
     
     private static Cache cache;
     
-    public static Cache getCache()
+        public static Cache getCache()
     {
         if(cache==null)
         { 

@@ -39,9 +39,9 @@ public class SWBTSGemFirePrefixMapping implements PrefixMapping
             map.put(prefix, uri);
             try
             {
-                Region db = SWBTSGemFire.getCache().getRegion(SWBPlatform.getEnv("swb/gemfire_region_name","swb"));
+                //Region db = SWBTSGemFire.getCache().getRegion(SWBPlatform.getEnv("swb/gemfire_region_name","swb"));
                 
-                Region<String,String> rprefix = db.getSubregion("swb_prefix");                
+                Region<String,String> rprefix = SWBTSGemFire.getCache().getRegion("swb_prefix");                
 
                 //rprefix.put(prefix, new SWBTSGemFirePrefix(graph.getId(), uri, prefix));
                 rprefix.put(prefix, uri);
@@ -60,8 +60,8 @@ public class SWBTSGemFirePrefixMapping implements PrefixMapping
         map.remove(prefix);
         try
         {
-            Region db = SWBTSGemFire.getCache().getRegion(SWBPlatform.getEnv("swb/gemfire_region_name","swb"));
-            Region<String,String> rprefix = db.getSubregion("swb_prefix");                
+            //Region db = SWBTSGemFire.getCache().getRegion(SWBPlatform.getEnv("swb/gemfire_region_name","swb"));
+            Region<String,String> rprefix = SWBTSGemFire.getCache().getRegion("swb_prefix");                
             rprefix.remove(prefix);
             
         } catch (Exception e2)
@@ -111,8 +111,8 @@ public class SWBTSGemFirePrefixMapping implements PrefixMapping
         {
             try
             {
-                Region db = SWBTSGemFire.getCache().getRegion(SWBPlatform.getEnv("swb/gemfire_region_name","swb"));
-                Region<String,String> rprefix = db.getSubregion("swb_prefix");                
+                //Region db = SWBTSGemFire.getCache().getRegion(SWBPlatform.getEnv("swb/gemfire_region_name","swb"));
+                Region<String,String> rprefix = SWBTSGemFire.getCache().getRegion("swb_prefix");                
                 str=rprefix.get(prefix);
             } catch (Exception e2)
             {
@@ -140,8 +140,8 @@ public class SWBTSGemFirePrefixMapping implements PrefixMapping
         Map<String,String> map2=new ConcurrentHashMap();
         try
         {
-            Region db = SWBTSGemFire.getCache().getRegion(SWBPlatform.getEnv("swb/gemfire_region_name","swb"));
-            Region<String,String> rprefix = db.getSubregion("swb_prefix");                
+            //Region db = SWBTSGemFire.getCache().getRegion(SWBPlatform.getEnv("swb/gemfire_region_name","swb"));
+            Region<String,String> rprefix = SWBTSGemFire.getCache().getRegion("swb_prefix");                
 
             map2=new ConcurrentHashMap(rprefix);
             
