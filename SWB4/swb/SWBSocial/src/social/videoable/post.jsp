@@ -35,7 +35,11 @@ if(action.equals("step4"))
     }if(toPost.equals("video"))
     {
         %>
-            <%@include file="videoable/videoable.jsp" %>
+            <!--%@include file="videoable/videoable.jsp" %-->
+            <jsp:forward page="videoable/videoable.jsp" >
+                <jsp:param name="socialUri" value="<%=socialUri%>" />
+                <jsp:param name="toPost" value="<%=toPost%>" />
+            </jsp:forward>                     
         <%
     }
 }else if(action.equals("step3"))
