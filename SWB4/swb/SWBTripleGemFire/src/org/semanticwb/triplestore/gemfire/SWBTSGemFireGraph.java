@@ -70,6 +70,7 @@ public class SWBTSGemFireGraph extends GraphBase implements RGraph
             String obj=SWBTSGemFireUtil.node2String(t.getObject());
             String hobj=SWBTSGemFireUtil.getHashText(obj);
             
+            
             //if(subj==null || prop==null || obj==null)return;
 
             String sext="";
@@ -89,14 +90,14 @@ public class SWBTSGemFireGraph extends GraphBase implements RGraph
                 obj="lgo|"+hobj;
             }
             
-            Region db = SWBTSGemFire.getCache().getRegion(SWBPlatform.getEnv("swb/gemfire_region_name","swb"));
-            Region<String,SWBTSGemFireTriple> graph= db.getSubregion("swb_graph_ts"+getId());
-            if(graph==null)
+            //Region db = SWBTSGemFire.getCache().getRegion(SWBPlatform.getEnv("swb/gemfire_region_name","swb"));
+            Region<String,SWBTSGemFireTriple> graph= SWBTSGemFire.getCache().getRegion("swb_graph_ts"); //+getId());
+           /* if(graph==null)
             {
                 graph=db.createSubregion("swb_graph_ts"+getId(), db.getAttributes());
-            }
+            }*/
             
-            SWBTSGemFireTriple tp=new SWBTSGemFireTriple(subj, prop, obj, sext);
+            SWBTSGemFireTriple tp=new SWBTSGemFireTriple(subj, prop, obj, sext, ""+this.id);
             graph.put(tp.getId(), tp);
         } catch (Exception e2)
         {
@@ -121,13 +122,13 @@ public class SWBTSGemFireGraph extends GraphBase implements RGraph
 
             //System.out.println("performDelete:"+subj+" "+prop+" "+obj);
             
-            Region db = SWBTSGemFire.getCache().getRegion(SWBPlatform.getEnv("swb/gemfire_region_name","swb"));
-            Region<String,SWBTSGemFireTriple> graph= db.getSubregion("swb_graph_ts"+getId());
-            if(graph==null)
+           // Region db = SWBTSGemFire.getCache().getRegion(SWBPlatform.getEnv("swb/gemfire_region_name","swb"));
+            Region<String,SWBTSGemFireTriple> graph= SWBTSGemFire.getCache().getRegion("swb_graph_ts");//+getId());
+           /* if(graph==null)
             {
                 graph=db.createSubregion("swb_graph_ts"+getId(), db.getAttributes());
             }
-            
+           */ 
             Iterator<SWBTSGemFireTriple> it=find(graph, subj, prop, obj).iterator();
             while (it.hasNext())
             {
@@ -166,6 +167,7 @@ public class SWBTSGemFireGraph extends GraphBase implements RGraph
     
     public ResultsBag find(Region store, String t_subj, String t_prop, String t_obj)
     {
+        //System.out.println("Buscando: s:"+t_subj+" p:"+t_prop+" o:"+t_obj);
         ArrayList<SWBTSGemFireTriple> ret=new ArrayList<SWBTSGemFireTriple>();
         ArrayList<String> arr=new ArrayList<String>();
         try
@@ -197,22 +199,22 @@ public class SWBTSGemFireGraph extends GraphBase implements RGraph
             query+=prop;
             query+=(query.length()>0 && obj.length()>0)?" and ":"";
             query+=obj;
-
+            x++;
             if(query.length()>0)
             {
-                query="SELECT * FROM /"+store.getParentRegion().getName()+"/"+store.getName()+" WHERE "+query;
+                query="SELECT * FROM /"/*+store.getParentRegion().getName()+"/"*/+store.getName()+" WHERE "+query+" and model=$"+x;
             }else
             {
-                query="SELECT * FROM /"+store.getParentRegion().getName()+"/"+store.getName();
+                query="SELECT * FROM /"/*+store.getParentRegion().getName()+"/"*/+store.getName()+" WHERE model=$"+x;
             }
-
+            arr.add(""+this.id);
             QueryService queryService = SWBTSGemFire.getCache().getQueryService();
             Query q = queryService.newQuery(query);
             
-            
+           // System.out.println("Query:"+query+" ("+arr+")");
             ResultsBag r=(ResultsBag)q.execute(arr.toArray());
-            
-            //System.out.println("Query:"+query+" ("+arr+")"+" "+r.size());
+          //  System.out.println("Query: size "+r.size());
+          //  System.out.println("Query:"+query+" ("+arr+")"+" "+r.size());
             
 //            SWBTSGemFireTriple[] r=(SWBTSGemFireTriple[])q.execute(arr.toArray());      
 //            for(int i=0;i<r.length;i++)

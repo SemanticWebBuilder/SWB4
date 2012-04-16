@@ -1,25 +1,34 @@
 <?xml version="1.0"?>
 <!DOCTYPE cache PUBLIC
-    "-//GemStone Systems, Inc.//GemFire Declarative Caching 6.5//EN"
-    "http://www.gemstone.com/dtd/cache6_5.dtd">
-
+    "-//GemStone Systems, Inc.//GemFire Declarative Caching 6.6//EN"
+    "http://www.gemstone.com/dtd/cache6_6.dtd">
 <!--
-  | HelloWorld.xml
+  | gemfire.xml
   |
-  | Configures a region for a data replication example.
+  | Configures a region for a data replication swb.
 -->
 <cache>
-<!--    
-	<region name="exampleRegion">
-		<region-attributes refid="REPLICATE">
-			<cache-listener>
-				<class-name>helloworld.SimpleCacheListener</class-name>
-			</cache-listener>
-		</region-attributes>
-	</region>
-	<region name="swb_ts_1">
-		<region-attributes refid="REPLICATE">
-		</region-attributes>
-	</region>        
--->       
+    <!--
+    <pool name="serverPool" subscription-enabled="true">
+        <locator host="localhost" port="41111"></locator>
+    </pool>
+    
+    <region name="swb" refid="PARTITION_PROXY"></region>
+    -->    
+    <region name="swb_graph">
+        <region-attributes refid="PARTITION_PROXY">
+            <partition-attributes redundant-copies="1"></partition-attributes>
+        </region-attributes>
+    </region>
+    <region name="swb_prefix">
+        <region-attributes refid="PARTITION_PROXY">
+            <partition-attributes redundant-copies="1"></partition-attributes>
+        </region-attributes>
+    </region>
+    <region name="swb_graph_ts">
+        <region-attributes refid="PARTITION_PROXY">
+            <partition-attributes redundant-copies="1"></partition-attributes>
+        </region-attributes>
+    </region>
+    
 </cache>
