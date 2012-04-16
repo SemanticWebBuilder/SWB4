@@ -1303,6 +1303,7 @@ public class SWBAFilters extends SWBATree {
             Text etext=(Text)epath.getFirstChild();
             path=etext.getNodeValue();
             path=SWBUtils.getApplicationPath()+path;
+            path=path.replace("//", "/");
         }
         File apppath=new File(path);
         if(apppath.isDirectory() && apppath.exists())
@@ -1310,6 +1311,7 @@ public class SWBAFilters extends SWBATree {
             Element dir=addNode("dir", "", apppath.getName(), res);
             path=apppath.getAbsolutePath().substring(SWBUtils.getApplicationPath().length()-1);
             path=path.replace('\\','/');
+            path=path.replace("//", "/");
             dir.setAttribute("path",path);
             dir.setAttribute("hasChild",String.valueOf(hasSubdirectories(apppath)));
             getDirectories(dir,apppath);
@@ -1354,6 +1356,7 @@ public class SWBAFilters extends SWBATree {
             {
                 Element dir=addNode("dir", "", file.getName(), edir);
                 String path=file.getAbsolutePath().substring(SWBUtils.getApplicationPath().length()-1);
+                path=path.replace("//","/");
                 path=path.replace('\\','/');
                 dir.setAttribute("path",path);
                 dir.setAttribute("hasChild",String.valueOf(hasSubdirectories(file)));
