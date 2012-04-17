@@ -7,6 +7,7 @@
             <input type="file" name="template" label="Template (xsl, xslt)" filetype="xsl|xslt" jsrequired="false" showfile="true" isshowfiletype="true" isremovefile="true" showmsg="Show template..." editmsg="Edit template..." removemsg="Remove template" msg="Current template: " bydefault="{@webpath}/swbadmin/xsl/WBSiteMap/WBSiteMap.xsl" msgbydefault="Default template: " />
             <input type="text" name="title" label="Title:" maxlength="60" promptMessage="Title" />
             <input type="text" name="level" label="Level of deployment:" value="1" maxlength="3" jsvaltype="js_numbers" invalidMessage="Level must be a numeric value" promptMessage="Level of deployment" />
+            <input type="text" name="home" label="ID of the initial section:" maxlength="50" promptMessage="ID of the initial section of the map"/>
         </fieldset>
 
         <fieldset legend="Setting Strategy">
