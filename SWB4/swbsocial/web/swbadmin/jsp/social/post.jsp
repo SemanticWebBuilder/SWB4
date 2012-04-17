@@ -94,10 +94,10 @@ if(action.equals("step4"))
     %>
     <form name="formStep2" action="<%=url%>" method="post">
     <%
-    Iterator <SocialNetWork> itSocialNets=SocialNetWork.ClassMgr.listSocialNetWorks(wsite);
+    Iterator <SocialNetwork> itSocialNets=SocialNetwork.ClassMgr.listSocialNetworks(wsite);
     while(itSocialNets.hasNext())
     {
-        SocialNetWork socialNet=itSocialNets.next();
+        SocialNetwork socialNet=itSocialNets.next();
         if(toPost.equals("msg") && socialNet instanceof Messageable)
         {
            if(!aSocialNets.contains(socialNet.getSemanticObject().getSemanticClass().getURI())) aSocialNets.add(socialNet.getSemanticObject().getSemanticClass().getURI());
