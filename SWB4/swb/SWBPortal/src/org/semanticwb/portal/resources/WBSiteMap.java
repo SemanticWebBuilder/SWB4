@@ -20,7 +20,6 @@
 * dirección electrónica: 
 *  http://www.semanticwebbuilder.org
 **/ 
- 
 
 package org.semanticwb.portal.resources;
 
@@ -48,7 +47,6 @@ import org.semanticwb.portal.api.*;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-// TODO: Auto-generated Javadoc
 /**
  * WBSiteMap muestra el mapa del sitio de acuerdo a un determinado TopicMap.
  *
@@ -58,7 +56,6 @@ import org.w3c.dom.Element;
  */
 public class WBSiteMap extends GenericAdmResource
 {
-    
     /** The log. */
     private static Logger log = SWBUtils.getLogger(WBSiteMap.class);
     
@@ -145,8 +142,8 @@ public class WBSiteMap extends GenericAdmResource
         }catch(NumberFormatException e) {
             level = 0;
         }
-        SelectTree tree = new SelectTree(paramRequest.getWebPage().getWebSite().getId(), url.toString(), false, level, base.getAttribute("title"), paramRequest.getUser());
-        HashMap params = new HashMap();
+        SelectTree tree = new SelectTree(base, url.toString(), false, level, base.getAttribute("title"), paramRequest.getUser());
+        HashMap<String,String> params = new HashMap();
         Enumeration<String> names = request.getParameterNames();
         while(names.hasMoreElements()) {
             String name = names.nextElement();
@@ -181,7 +178,8 @@ public class WBSiteMap extends GenericAdmResource
             String name = names.nextElement();
             params.put(name, request.getParameter(name));
         }
-        SelectTree tree = new SelectTree(paramRequest.getWebPage().getWebSite().getId(), url.toString(true), false, base.getAttribute("title"), paramRequest.getUser());
+        //SelectTree tree = new SelectTree(paramRequest.getWebPage().getWebSite().getId(), url.toString(true), false, base.getAttribute("title"), paramRequest.getUser());
+        SelectTree tree = new SelectTree(getResourceBase(), url.toString(true), false, base.getAttribute("title"), paramRequest.getUser());
         
         Document dom = tree.renderXHTML(params);
         if(dom != null)  {
@@ -207,7 +205,20 @@ public class WBSiteMap extends GenericAdmResource
     public void doChilds(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         PrintWriter out = response.getWriter();
         String lang = paramRequest.getUser().getLanguage();
-        WebPage home = paramRequest.getWebPage().getWebSite().getHomePage();
+        
+Resource base = getResourceBase();
+WebPage home;
+//try {
+    home = base.getWebSite().getWebPage(base.getAttribute("home"));
+//}catch(Exception e) {
+//    home = base.getWebSite().getHomePage();
+//}
+if(home == null) {
+    home = base.getWebSite().getHomePage();
+}
+
+
+//        WebPage home = paramRequest.getWebPage().getWebSite().getHomePage();
 
         StringBuilder json = new StringBuilder();
         try {
@@ -369,7 +380,8 @@ public class WBSiteMap extends GenericAdmResource
         private final String pathImages = SWBPlatform.getContextPath() + "/swbadmin/icons";
         
         /** The website. */
-        private String website;
+        //private String website;
+        private Resource base;
         
         /** The url. */
         private String url;
@@ -398,8 +410,10 @@ public class WBSiteMap extends GenericAdmResource
          * @param title the title
          * @param user the user
          */
-        public SelectTree(String website, String url, boolean openOnClick, String title, User user) {
-            this(website, url, openOnClick, 0, title, user);
+        //public SelectTree(String website, String url, boolean openOnClick, String title, User user) {
+        public SelectTree(Resource base, String url, boolean openOnClick, String title, User user) {
+            //this(website, url, openOnClick, 0, title, user);
+            this(base, url, openOnClick, 0, title, user);
         }
 
         /**
@@ -412,8 +426,10 @@ public class WBSiteMap extends GenericAdmResource
          * @param title the title
          * @param user the user
          */
-        public SelectTree(String website, String url, boolean openOnClick, int level, String title, User user) {
-            this.website = website;
+        //public SelectTree(String website, String url, boolean openOnClick, int level, String title, User user) {
+        public SelectTree(Resource base, String url, boolean openOnClick, int level, String title, User user) {
+            //this.website = website;
+            this.base = base;
             this.url = url;
             this.openOnClick = openOnClick;
             if(level>0) {
@@ -435,7 +451,7 @@ public class WBSiteMap extends GenericAdmResource
             Document  dom = SWBUtils.XML.getNewDocument();
             Element smE = dom.createElement("sitemap");
 
-            StringBuilder params = new StringBuilder("&site="+website);
+            StringBuilder params = new StringBuilder("&site="+base.getWebSiteId());
             WebSite tm = null;
 
             try {
@@ -443,10 +459,8 @@ public class WBSiteMap extends GenericAdmResource
 
                 if(request.containsKey("reptm") && request.get("reptm")!=null) {
                     tm=SWBContext.getWebSite((String)request.get("reptm"));
-
                     if(tm!=null) {
                         tpsite=tm.getHomePage();
-
                         if(request.containsKey("reptp") && request.get("reptp")!=null && !((String)request.get("reptp")).trim().equals("")) {
                             if(tm.getWebPage((String)request.get("reptp"))!=null) {
                                 tpid=tm.getWebPage((String)request.get("reptp"));
@@ -455,19 +469,30 @@ public class WBSiteMap extends GenericAdmResource
                     }
                 }
 
-                if(level>0 && tpsite==null) {
-                    tpsite=SWBContext.getWebSite(website).getHomePage();
-                }
-
-                WebSite tmit = SWBContext.getWebSite(website);
+//                if(level>0 && tpsite==null) {
+//                    tpsite=SWBContext.getWebSite(website).getHomePage();
+//                }
+                //WebSite tmit = SWBContext.getWebSite(website);
+                WebSite tmit = base.getWebSite();
                 WebPage tmhome=tmit.getHomePage();
+
+
+//try {
+    tmhome = base.getWebSite().getWebPage(base.getAttribute("home"));
+//}catch(Exception e) {
+//    tmhome = base.getWebSite().getHomePage();
+//}
+if(tmhome == null) {
+    tmhome = base.getWebSite().getHomePage();
+}
+
 
                 boolean opened = Boolean.parseBoolean(request.get(tmhome.getId())==null?"false":((String)request.get(tmhome.getId())).equals("1")?"true":"false");
                 if(level>0) {
                     opened=true;
                 }
                 smE.setAttribute("leaf", "0");
-                smE.setAttribute("id", "tree_"+website);
+                smE.setAttribute("id", "tree_"+base.getWebSiteId());
                 if(title!=null)
                     smE.setAttribute("title", title);
                 dom.appendChild(smE);
@@ -481,12 +506,12 @@ public class WBSiteMap extends GenericAdmResource
                 if(opened) {
                     params.append("&"+tmhome.getId()+"=1");
                     node.setAttribute("leaf", "0");
-                    node.setAttribute("onclick", "getHtml('"+url+"?reptm="+tmit.getId()+"&reptp=" + tmhome.getId()+params+"','tree_'+'"+website+"')");
+                    node.setAttribute("onclick", "getHtml('"+url+"?reptm="+tmit.getId()+"&reptp=" + tmhome.getId()+params+"','tree_'+'"+base.getWebSiteId()+"')");
                     node.setAttribute("key", "-");
                 }else {
                     params.append("&"+tmhome.getId()+"=0");
                     node.setAttribute("leaf", "0");
-                    node.setAttribute("onclick", "getHtml('"+url+"?reptm="+tmit.getId()+"&reptp=" + tmhome.getId()+params+"','tree_'+'"+website+"')");
+                    node.setAttribute("onclick", "getHtml('"+url+"?reptm="+tmit.getId()+"&reptp=" + tmhome.getId()+params+"','tree_'+'"+base.getWebSiteId()+"')");
                     node.setAttribute("key", "+");
                 }
 
@@ -520,16 +545,24 @@ public class WBSiteMap extends GenericAdmResource
             Document  dom = SWBUtils.XML.getNewDocument();
             Element smE = dom.createElement("sitemap");
 
-            StringBuilder params = new StringBuilder("&site="+website);
+            StringBuilder params = new StringBuilder("&site="+base.getWebSiteId());
             WebSite tm = null;
 
             try {
                 WebPage tpsite=null, tpid=null;
                 if(request.containsKey("reptm") && request.get("reptm")!=null) {
-                    tm=SWBContext.getWebSite((String)request.get("reptm"));
-
+                    //tm=SWBContext.getWebSite((String)request.get("reptm"));
+                    tm = base.getWebSite();
                     if(tm!=null) {
                         tpsite=tm.getHomePage();
+//try {
+    tpsite = base.getWebSite().getWebPage(base.getAttribute("home"));
+//}catch(Exception e) {
+//    tpsite = base.getWebSite().getHomePage();
+//}
+if(tpsite == null) {
+    tpsite = base.getWebSite().getHomePage();
+}
 
                         if(request.containsKey("reptp") && request.get("reptp")!=null && !((String)request.get("reptp")).trim().equals("")) {
                             if(tm.getWebPage((String)request.get("reptp"))!=null) {
@@ -539,18 +572,23 @@ public class WBSiteMap extends GenericAdmResource
                     }
                 }
 
-                if(level>0 && tpsite==null) tpsite=SWBContext.getWebSite(website).getHomePage();
+//                if(level>0 && tpsite==null) {
+//System.out.println("tpsite es nulo");
+//                    tpsite = base.getWebSite().getHomePage();
+//                }
 
-                WebSite tmit = SWBContext.getWebSite(website);
-                WebPage tmhome=tmit.getHomePage();
+                WebSite tmit = SWBContext.getWebSite(base.getWebSiteId());
+                //WebPage tmhome=tmit.getHomePage();
+                WebPage tmhome = base.getWebSite().getWebPage(base.getAttribute("home"));
+                if(tmhome == null)
+                    tmhome = base.getWebSite().getHomePage();
 
                 boolean opened = Boolean.parseBoolean(request.get(tmhome.getId())==null?"false":((String)request.get(tmhome.getId())).equals("1")?"true":"false");
                 if(level>0) {
                     opened=true;
                 }
-
                 smE.setAttribute("leaf", "0");
-                smE.setAttribute("id", "tree_"+website);
+                smE.setAttribute("id", "tree_"+base.getWebSiteId());
                 if(title!=null)
                     smE.setAttribute("title", title);
                 dom.appendChild(smE);
@@ -565,14 +603,14 @@ public class WBSiteMap extends GenericAdmResource
                     if(opened) {
                         params.append("&"+tmhome.getId()+"=0");
                         node.setAttribute("leaf", "0");
-                        node.setAttribute("onclick", "getHtml('"+url+"?reptm="+tmit.getId()+"&reptp=" + tmhome.getId()+params+"','tree_'+'"+website+"')");
+                        node.setAttribute("onclick", "getHtml('"+url+"?reptm="+tmit.getId()+"&reptp=" + tmhome.getId()+params+"','tree_'+'"+base.getWebSiteId()+"')");
                         node.setAttribute("key", "+");
                         if(level==0)
                             opened = false;
                     }else {
                         params.append("&"+tmhome.getId()+"=1");
                         node.setAttribute("leaf", "0");
-                        node.setAttribute("onclick", "getHtml('"+url+"?reptm="+tmit.getId()+"&reptp=" + tmhome.getId()+params+"','tree_'+'"+website+"')");
+                        node.setAttribute("onclick", "getHtml('"+url+"?reptm="+tmit.getId()+"&reptp=" + tmhome.getId()+params+"','tree_'+'"+base.getWebSiteId()+"')");
                         node.setAttribute("key", "-");
                         opened = true;
                     }
@@ -580,12 +618,12 @@ public class WBSiteMap extends GenericAdmResource
                     if(opened) {
                         params.append("&"+tmhome.getId()+"=1");
                         node.setAttribute("leaf", "0");
-                        node.setAttribute("onclick", "getHtml('"+url+"?reptm="+tmit.getId()+"&reptp=" + tmhome.getId()+params+"','tree_'+'"+website+"')");
+                        node.setAttribute("onclick", "getHtml('"+url+"?reptm="+tmit.getId()+"&reptp=" + tmhome.getId()+params+"','tree_'+'"+base.getWebSiteId()+"')");
                         node.setAttribute("key", "-");
                     }else {
                         params.append("&"+tmhome.getId()+"=0");
                         node.setAttribute("leaf", "0");
-                        node.setAttribute("onclick", "getHtml('"+url+"?reptm="+tmit.getId()+"&reptp=" + tmhome.getId()+params+"','tree_'+'"+website+"')");
+                        node.setAttribute("onclick", "getHtml('"+url+"?reptm="+tmit.getId()+"&reptp=" + tmhome.getId()+params+"','tree_'+'"+base.getWebSiteId()+"')");
                         node.setAttribute("key", "+");
                     }
                 }
