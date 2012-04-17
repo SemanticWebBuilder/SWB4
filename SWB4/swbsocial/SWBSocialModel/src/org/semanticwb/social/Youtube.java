@@ -75,7 +75,7 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase
                 URL uploadUrl = new URL("http://gdata.youtube.com/action/GetUploadToken");
                 FormUploadToken token = service.getFormUploadToken(uploadUrl, newEntry);
 
-                response.setRenderParameter("jspResponse", "/swbadmin/jsp/social/videoable/videoable1.jsp");
+                response.setRenderParameter("jspResponse", "/swbadmin/jsp/social/videoable/videoable.jsp");
                 response.setRenderParameter("videoId", newEntry.getId());
                 response.setRenderParameter("tokenUrl", token.getUrl());
                 response.setRenderParameter("token", token.getToken());
