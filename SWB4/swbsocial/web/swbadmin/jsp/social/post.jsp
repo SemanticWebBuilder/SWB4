@@ -1,5 +1,4 @@
 <%@page import="org.semanticwb.social.*"%>
-<%@page import="org.semanticwb.social.Videoable"%>
 <jsp:useBean id="paramRequest" scope="request" type="org.semanticwb.portal.api.SWBParamRequest"/>
 <%@page import="org.semanticwb.SWBUtils"%>
 <%@page import="java.util.*"%>
