@@ -138,7 +138,7 @@ public class UserTaskInboxResource extends org.semanticwb.process.resources.task
                 }
             }
             if (inst != null) {
-                response.setRenderParameter("msg", "OK"+inst.getId());
+                request.getSession(true).setAttribute("msg", "OK"+inst.getId());
             }
             response.setMode(response.Mode_VIEW);
         } else if (action.equals("setPageItems")) {
