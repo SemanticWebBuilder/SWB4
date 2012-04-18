@@ -444,13 +444,17 @@ if (paramRequest.getMode().equals(paramRequest.Mode_VIEW)) {
     }
 }
 
-if (request.getParameter("msg") != null && request.getParameter("msg").startsWith("OK")) {
-    String id = request.getParameter("msg").substring(2);
-    %>
-    <script type="text/javascript">
-        alert("Se ha creado un nuevo caso con ID <%=id%>");
-    </script>
-    <%
+if (null != request.getSession(true).getAttribute("msg")) {
+    String message = (String) request.getSession(true).getAttribute("msg");
+    if (message.startsWith("OK")) {
+        String id = message.substring(2);
+        %>
+        <script type="text/javascript">
+            alert("Se ha creado un nuevo caso con ID <%=id%>");
+        </script>
+        <%
+    }
+    request.getSession(true).removeAttribute("msg");
 }
 %>
 
