@@ -29,6 +29,12 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase
 
     public void postVideo(Video video, HttpServletRequest request, SWBActionResponse response)
     {
+        System.out.println("Video K llega a Youtube:"+video);
+        System.out.println("Video id:"+video.getId());
+        System.out.println("Video title:"+video.getTitle());
+        System.out.println("Video descr:"+video.getDescription());
+        System.out.println("Video Tags:"+video.getTags());
+        System.out.println("Video getVideo:"+video.getVideo());
         YouTubeService service = getYouTubeService();
         if (service == null) {
             return;
