@@ -185,8 +185,11 @@ public class EditFilter extends javax.swing.JApplet {
         {
             path=WBXMLParser.encode(path, "UTF-8");
         }catch(Exception e){}
+        System.out.println("path: "+path);
         String xml="<?xml version=\"1.0\" encoding=\"UTF-8\"?><req><cmd>getDirectories</cmd><path>"+ path +"</path></req>";
+        System.out.println("xml: "+xml);
         String respxml=this.getData(xml);
+        System.out.println("respxml: "+respxml);
         WBXMLParser parser=new WBXMLParser();
         WBTreeNode enode=parser.parse(respxml);
         try
