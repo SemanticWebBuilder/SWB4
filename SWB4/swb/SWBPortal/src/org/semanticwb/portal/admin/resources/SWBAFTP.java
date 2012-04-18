@@ -845,12 +845,12 @@ public class SWBAFTP extends GenericResource{
                                         pathPermission=pathPermission.substring(pos);
                                     }
                                     String appPath=new File(SWBUtils.getApplicationPath()).getCanonicalPath();
-                                    pathPermission=appPath+pathPermission;
-                                    pathPermission.replace("\\", "/");
-                                    pathPermission.replace("//", "/");
+                                    pathPermission=appPath+pathPermission;                                   
                                     File filePermission=new File(pathPermission);
-                                    pathPermission=filePermission.getCanonicalPath().replace('\\', '/')+"/";                                    
-                                    String testPath=directory.getCanonicalPath().replace('\\', '/')+"/";                                    
+                                    pathPermission=filePermission.getCanonicalPath().replace('\\', '/')+"/";
+                                    pathPermission=pathPermission.replace("//", "/");
+                                    String testPath=directory.getCanonicalPath().replace('\\', '/')+"/";
+                                    testPath=testPath.replace("//", "/");
                                     if(filePermission.isDirectory() && (pathPermission.startsWith(testPath) || testPath.startsWith(pathPermission)))
                                     {
                                         permision=true;
