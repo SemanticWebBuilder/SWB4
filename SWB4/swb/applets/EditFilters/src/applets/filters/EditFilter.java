@@ -185,11 +185,21 @@ public class EditFilter extends javax.swing.JApplet {
         {
             path=WBXMLParser.encode(path, "UTF-8");
         }catch(Exception e){}
-        System.out.println("path: "+path);
+        if(!path.startsWith("/"))
+        {
+            int pos=path.indexOf("/");
+            if(pos!=-1)
+                path=path.substring(pos);
+            else
+            {
+                path="/";
+            }
+        }
+        
         String xml="<?xml version=\"1.0\" encoding=\"UTF-8\"?><req><cmd>getDirectories</cmd><path>"+ path +"</path></req>";
-        System.out.println("xml: "+xml);
+        
         String respxml=this.getData(xml);
-        System.out.println("respxml: "+respxml);
+        
         WBXMLParser parser=new WBXMLParser();
         WBTreeNode enode=parser.parse(respxml);
         try
@@ -258,7 +268,7 @@ public class EditFilter extends javax.swing.JApplet {
     private void loadDirectories()
     {
         String xml="<?xml version=\"1.0\" encoding=\"UTF-8\"?><req><cmd>getDirectories</cmd></req>";
-        String respxml=getData(xml);
+        String respxml=getData(xml);        
         WBXMLParser parser=new WBXMLParser();
         WBTreeNode enode=parser.parse(respxml);
         if(enode.getFirstNode()!=null && enode.getFirstNode().getFirstNode()!=null)
