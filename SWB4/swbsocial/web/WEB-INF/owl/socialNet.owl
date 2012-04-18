@@ -134,6 +134,8 @@
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Interface"/>
   </owl:Class>
   <owl:Class rdf:ID="Photo">
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Tagable"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
     <rdfs:subClassOf rdf:resource="#Commentable"/>
     <rdfs:subClassOf rdf:resource="#Post"/>
     <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
@@ -185,12 +187,12 @@
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_video">
         <swbxf:formElement>
-          <swb:DojoFileUpload rdf:ID="Social_Video_Upload">
+          <swbxf:FileUpload rdf:ID="Social_Video_Upload">
             <swbxf:fileMaxSize rdf:datatype="http://www.w3.org/2001/XMLSchema#long"
             >200000000</swbxf:fileMaxSize>
             <swbxf:fileFilter rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
             >.mov|.MOV|.png</swbxf:fileFilter>
-          </swb:DojoFileUpload>
+          </swbxf:FileUpload>
         </swbxf:formElement>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
