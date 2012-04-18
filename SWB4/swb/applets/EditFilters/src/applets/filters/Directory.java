@@ -56,7 +56,18 @@ public class Directory extends DefaultMutableTreeNode implements SelectableNode 
         panel.setBackground(Color.WHITE);
         label.setOpaque(false);
         component.setOpaque(false);
+        if(!path.startsWith("/"))
+        {
+            int pos=path.indexOf("/");
+            if(pos!=-1)
+                path=path.substring(pos);
+            else
+            {
+                path="/";
+            }
+        }
         this.path=path;
+        
         panel.add(component);
         panel.add(label);
         component.setText("");
