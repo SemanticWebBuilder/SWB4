@@ -1,7 +1,7 @@
 package org.semanticwb.social.base;
 
 
-public abstract class FlickerBase extends org.semanticwb.social.SocialNetwork implements org.semanticwb.social.Postable,org.semanticwb.social.Photoable,org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable
+public abstract class FlickerBase extends org.semanticwb.social.SocialNetwork implements org.semanticwb.social.Postable,org.semanticwb.social.Photoable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable
 {
     public static final org.semanticwb.platform.SemanticClass social_Flicker=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#Flicker");
    /**
