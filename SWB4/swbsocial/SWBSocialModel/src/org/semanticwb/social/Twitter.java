@@ -28,7 +28,7 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
             String token=super.getSecreatKey().substring(0, super.getSecreatKey().indexOf("|"));
             String secretToken=super.getSecreatKey().substring(super.getSecreatKey().indexOf("|") + 1, super.getSecreatKey().length());
             //oauth.substring(oauth.indexOf("|") + 1, oauth.length());
-            AccessToken accessToken = new AccessToken(token, "secretToken");
+            AccessToken accessToken = new AccessToken(token, secretToken);
             System.out.println("Mensaje de Twitter:" + msg.getMsg_Text());
             twitter.setOAuthAccessToken(accessToken);
             
