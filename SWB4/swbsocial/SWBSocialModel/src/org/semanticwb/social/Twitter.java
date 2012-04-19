@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javaQuery.j2ee.tinyURL;
 import javax.servlet.http.HttpServletRequest;
 import org.semanticwb.portal.api.SWBActionResponse;
 import twitter4j.StatusUpdate;
@@ -20,6 +21,7 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
         super(base);
     }
 
+    @Override
     public void postMsg(Message message, HttpServletRequest request, SWBActionResponse response) {
         addPost(message);
         this.msg = message;
@@ -27,7 +29,6 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
             twitter4j.Twitter twitter = new TwitterFactory().getInstance();
             String token=super.getSecreatKey().substring(0, super.getSecreatKey().indexOf("|"));
             String secretToken=super.getSecreatKey().substring(super.getSecreatKey().indexOf("|") + 1, super.getSecreatKey().length());
-            //oauth.substring(oauth.indexOf("|") + 1, oauth.length());
             AccessToken accessToken = new AccessToken(token, secretToken);
             System.out.println("Mensaje de Twitter:" + msg.getMsg_Text());
             twitter.setOAuthAccessToken(accessToken);
@@ -54,13 +55,6 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
         System.out.println("Twitter SK:" + getSecreatKey());
         this.photo = photo;
         if (photo != null) {
-            /*
-            
-            if (img != null && !img.equals("")) {
-            
-            }
-             */
-            
             twitter4j.Twitter twitter = new TwitterFactory().getInstance();
             AccessToken accessToken = new AccessToken("token", "secretToken");
             System.out.println("Mensaje de Twitter:" + msg.getMsg_Text());
@@ -80,5 +74,16 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
             System.out.println("Mensaje de Photo de Twitter:" + photo.getComment());
             System.out.println("Photo de Twitter:" + photo.getPhoto());
         }
+    }
+    
+    
+    
+    private String shortUrl(String urlLong){
+   String shortUrl="";
+   if(!urlLong.equals("")){
+   tinyURL tU = new tinyURL();
+        shortUrl= tU.getTinyURL(urlLong);
+   }
+   return shortUrl;
     }
 }
