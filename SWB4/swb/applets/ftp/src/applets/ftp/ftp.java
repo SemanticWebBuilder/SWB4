@@ -1,36 +1,32 @@
 /**  
-* SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración, 
-* colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de 
-* información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes 
-* fuentes, donde a la información se le asigna un significado, de forma que pueda ser interpretada y 
-* procesada por personas y/o sistemas, es una creación original del Fondo de Información y Documentación 
-* para la Industria INFOTEC, cuyo registro se encuentra actualmente en trámite. 
-* 
-* INFOTEC pone a su disposición la herramienta SemanticWebBuilder a través de su licenciamiento abierto al público (‘open source’), 
-* en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición; 
-* aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software, 
-* todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización 
-* del SemanticWebBuilder 4.0. 
-* 
-* INFOTEC no otorga garantía sobre SemanticWebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita, 
-* siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar 
-* de la misma. 
-* 
-* Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente 
-* dirección electrónica: 
-*  http://www.semanticwebbuilder.org
-**/ 
- 
-
-
+ * SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración,
+ * colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de
+ * información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes
+ * fuentes, donde a la información se le asigna un significado, de forma que pueda ser interpretada y
+ * procesada por personas y/o sistemas, es una creación original del Fondo de Información y Documentación
+ * para la Industria INFOTEC, cuyo registro se encuentra actualmente en trámite.
+ *
+ * INFOTEC pone a su disposición la herramienta SemanticWebBuilder a través de su licenciamiento abierto al público (‘open source’),
+ * en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición;
+ * aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software,
+ * todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización
+ * del SemanticWebBuilder 4.0.
+ *
+ * INFOTEC no otorga garantía sobre SemanticWebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita,
+ * siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar
+ * de la misma.
+ *
+ * Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente
+ * dirección electrónica:
+ *  http://www.semanticwebbuilder.org
+ **/
 /*
  * ftp.java
  *
  * Created on 11 de noviembre de 2004, 10:00 AM
  */
-
 package applets.ftp;
-import java.awt.event.ActionEvent;
+
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.net.*;
@@ -42,11 +38,8 @@ import java.util.*;
 import java.awt.*;
 
 import applets.commons.*;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import javax.swing.table.JTableHeader;
-import javax.swing.table.TableColumnModel;
 
 /**
  * Formulario que presneta dirtectorios y archivos existentes en el servidor, as�
@@ -54,21 +47,21 @@ import javax.swing.table.TableColumnModel;
  * dar informaci�n de los archivos existentes.
  * @author Victor Lorenzana
  */
-public class ftp extends javax.swing.JApplet implements ListSelectionListener,FileListener{
-    
-    private final String PRM_JSESS="jsess";
-    private final String PRM_CGIPATH="cgipath";
-    private final String PRM_UPLOADPATH="uploadpath";
-    private final String PRM_DOWNLOADPATH="downloadpath";
-    public static java.io.File pathDir;
-    
-    private String cgiPath="/gtw.jsp",uploadpath,downloadpath;
-    private static String jsess="";
-    private static URL url=null;
-    String[] choices =new String[4];
-    Locale locale;
-    /** Initializes the applet ftp */
+public class ftp extends javax.swing.JApplet implements ListSelectionListener, FileListener
+{
 
+    private final String PRM_JSESS = "jsess";
+    private final String PRM_CGIPATH = "cgipath";
+    private final String PRM_UPLOADPATH = "uploadpath";
+    private final String PRM_DOWNLOADPATH = "downloadpath";
+    public static java.io.File pathDir;
+    private String cgiPath = "/gtw.jsp", uploadpath, downloadpath;
+    private static String jsess = "";
+    private static URL url = null;
+    String[] choices = new String[4];
+    Locale locale;
+
+    /** Initializes the applet ftp */
     /** Initializes the applet HtmlEditor */
 //    @Override
 //    public void init()
@@ -83,100 +76,107 @@ public class ftp extends javax.swing.JApplet implements ListSelectionListener,Fi
 //        };
 //        t.start();
 //    }
-
     @Override
-    public void init() {
+    public void init()
+    {
 
-        locale=Locale.getDefault();
-        if(this.getParameter("locale")!=null && !this.getParameter("locale").equals(""))
+        locale = Locale.getDefault();
+        if (this.getParameter("locale") != null && !this.getParameter("locale").equals(""))
         {
             try
             {
-                
-                locale=new Locale(this.getParameter("locale"));                
+
+                locale = new Locale(this.getParameter("locale"));
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 e.printStackTrace(System.out);
             }
         }
         try
         {
-            jFileChooser1.setLocale(locale);        
+            jFileChooser1.setLocale(locale);
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             //e.printStackTrace(System.out);
         }
 
-        choices[0]=java.util.ResourceBundle.getBundle("applets/ftp/ftp",locale).getString("si");
-        choices[1]=java.util.ResourceBundle.getBundle("applets/ftp/ftp",locale).getString("si_todo");
-        choices[2]=java.util.ResourceBundle.getBundle("applets/ftp/ftp",locale).getString("no");
-        choices[3]=java.util.ResourceBundle.getBundle("applets/ftp/ftp",locale).getString("cancel");
+        choices[0] = java.util.ResourceBundle.getBundle("applets/ftp/ftp", locale).getString("si");
+        choices[1] = java.util.ResourceBundle.getBundle("applets/ftp/ftp", locale).getString("si_todo");
+        choices[2] = java.util.ResourceBundle.getBundle("applets/ftp/ftp", locale).getString("no");
+        choices[3] = java.util.ResourceBundle.getBundle("applets/ftp/ftp", locale).getString("cancel");
         initComponents();
         jTreeDirs.setModel(new DefaultTreeModel(new DefaultMutableTreeNode("")));
         this.jTableFiles.setDefaultRenderer(JLabel.class, new TableFileRender());
         this.jTableFiles.getSelectionModel().addListSelectionListener(this);
         jTableFiles.setCellSelectionEnabled(false);
         jTableFiles.setRowSelectionAllowed(true);
-        jsess=this.getParameter(PRM_JSESS);
-        cgiPath=this.getParameter(PRM_CGIPATH);
-        uploadpath=this.getParameter(PRM_UPLOADPATH);
-        downloadpath=this.getParameter(PRM_DOWNLOADPATH);
-        try {
-            url=new URL(getCodeBase().getProtocol(),getCodeBase().getHost(),getCodeBase().getPort(),cgiPath);
-        }catch(Exception e) {
+        jsess = this.getParameter(PRM_JSESS);
+        cgiPath = this.getParameter(PRM_CGIPATH);
+        uploadpath = this.getParameter(PRM_UPLOADPATH);
+        downloadpath = this.getParameter(PRM_DOWNLOADPATH);
+        try
+        {
+            url = new URL(getCodeBase().getProtocol(), getCodeBase().getHost(), getCodeBase().getPort(), cgiPath);
+        }
+        catch (Exception e)
+        {
             e.printStackTrace();
-        }      
+        }
         this.setJMenuBar(this.jMenuBar1);
-        TableCellRenderHeader tableCellRenderHeader=new TableCellRenderHeader(jTableFiles);
-        this.jTreeDirs.setCellRenderer(new DirectoryRenderer(this.jTableFiles));       
-        jTableFileModel filemodel=new jTableFileModel(this.jTableFiles,locale,tableCellRenderHeader);
+        TableCellRenderHeader tableCellRenderHeader = new TableCellRenderHeader(jTableFiles);
+        this.jTreeDirs.setCellRenderer(new DirectoryRenderer(this.jTableFiles));
+        jTableFileModel filemodel = new jTableFileModel(this.jTableFiles, locale, tableCellRenderHeader);
         this.jTableFiles.setModel(filemodel);
         jTableFiles.setDragEnabled(false);
-        JTableHeader header=jTableFiles.getTableHeader();
+        JTableHeader header = jTableFiles.getTableHeader();
         header.setDefaultRenderer(tableCellRenderHeader);
-        header.addMouseListener(new ColumnHeaderListener(jTableFiles));        
-        loadDirectories();        
-        
-        
-    }       
-    private void loadDirectories(Directory odir)
+        header.addMouseListener(new ColumnHeaderListener(jTableFiles));
+        loadDirectories();
+
+
+    }
+
+    public void loadDirectories(Directory odir)
     {
         odir.removeAllChildren();
-        String path=odir.getDirectory();
+        String path = odir.getDirectory();
         try
         {
-            path=WBXMLParser.encode(path, "UTF-8");
-        }catch(Exception e){}
-        String xml="<?xml version=\"1.0\" encoding=\"UTF-8\"?><req><cmd>getDirectories</cmd><path>"+ path +"</path></req>";        
-        String respxml=ftp.getData(xml);
-        WBXMLParser parser=new WBXMLParser();
-        WBTreeNode enode=parser.parse(respxml);
+            path = WBXMLParser.encode(path, "UTF-8");
+        }
+        catch (Exception e)
+        {
+        }
+        String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><req><cmd>getDirectories</cmd><path>" + path + "</path></req>";
+        String respxml = ftp.getData(xml);
+        WBXMLParser parser = new WBXMLParser();
+        WBTreeNode enode = parser.parse(respxml);
         try
         {
-            ArrayList<Directory> directories=new ArrayList<Directory>();
-            if(enode!=null && enode.getFirstNode()!=null && enode.getFirstNode().getFirstNode()!=null)
+            ArrayList<Directory> directories = new ArrayList<Directory>();
+            if (enode != null && enode.getFirstNode() != null && enode.getFirstNode().getFirstNode() != null)
             {
-                WBTreeNode dir=enode.getFirstNode().getFirstNode();
-                if(dir.getName().equals("dir"))
+                WBTreeNode dir = enode.getFirstNode().getFirstNode();
+                if (dir.getName().equals("dir"))
                 {
-                    Iterator it=dir.getNodes().iterator();
-                    while(it.hasNext())
+                    Iterator it = dir.getNodes().iterator();
+                    while (it.hasNext())
                     {
-                        dir=(WBTreeNode)it.next();
-                        if(dir!=null && dir.getName().equals("dir"))
+                        dir = (WBTreeNode) it.next();
+                        if (dir != null && dir.getName().equals("dir"))
                         {
-                            Directory child=new Directory(dir.getAttribute("name"),dir.getAttribute("path"),dir.getAttribute("hasChild"));
+                            Directory child = new Directory(dir.getAttribute("name"), dir.getAttribute("path"), dir.getAttribute("hasChild"));
                             directories.add(child);
                         }
                     }
-                    NameDirectoryCompartor c=new NameDirectoryCompartor();
-                    Collections.sort(directories,c );
-                    for(Directory child : directories)
+                    NameDirectoryCompartor c = new NameDirectoryCompartor();
+                    Collections.sort(directories, c);
+                    for (Directory child : directories)
                     {
                         odir.add(child);
-                        if(child.haschilds.equals("true"))
+                        if (child.haschilds.equals("true"))
                         {
                             child.add(new DefaultMutableTreeNode(""));
                         }
@@ -184,144 +184,162 @@ public class ftp extends javax.swing.JApplet implements ListSelectionListener,Fi
                 }
             }
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             e.printStackTrace();
         }
     }
-    private void loadDirectories(WBTreeNode dir,Directory root)
+
+    private void loadDirectories(WBTreeNode dir, Directory root)
     {
-        ArrayList<Directory> directories=new ArrayList<Directory>();
-        Iterator it=dir.getNodes().iterator();
-        while(it.hasNext())
+        ArrayList<Directory> directories = new ArrayList<Directory>();
+        Iterator it = dir.getNodes().iterator();
+        while (it.hasNext())
         {
-            WBTreeNode enode=(WBTreeNode)it.next();
-            if(enode!=null && enode.getName().equals("dir"))
-            {                
-                Directory child=new Directory(enode.getAttribute("name"),enode.getAttribute("path"),enode.getAttribute("hasChild"));
+            WBTreeNode enode = (WBTreeNode) it.next();
+            if (enode != null && enode.getName().equals("dir"))
+            {
+                Directory child = new Directory(enode.getAttribute("name"), enode.getAttribute("path"), enode.getAttribute("hasChild"));
                 directories.add(child);
             }
         }
-        Collections.sort(directories,new NameDirectoryCompartor());
-        for(Directory child : directories)
+        Collections.sort(directories, new NameDirectoryCompartor());
+        for (Directory child : directories)
         {
             root.add(child);
-            if(child.haschilds.equals("true"))
+            if (child.haschilds.equals("true"))
             {
                 child.add(new DefaultMutableTreeNode(""));
             }
         }
-        
-        
+
+
     }
+
     public boolean hasPermission(String path)
     {
-        boolean hasPermission=false;
-        
+        boolean hasPermission = false;
+
         try
         {
-            path=WBXMLParser.encode(path,"UTF-8");
-        }catch(Exception e){e.printStackTrace();}
-        String xml="<?xml version=\"1.0\" encoding=\"UTF-8\"?><req><cmd>hasPermissionFile</cmd><path>"+ path +"</path></req>";
-        String respxml=ftp.getData(xml);
-        WBXMLParser parser=new WBXMLParser();
-        WBTreeNode enode=parser.parse(respxml);        
+            path = WBXMLParser.encode(path, "UTF-8");
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><req><cmd>hasPermissionFile</cmd><path>" + path + "</path></req>";
+        String respxml = ftp.getData(xml);
+        WBXMLParser parser = new WBXMLParser();
+        WBTreeNode enode = parser.parse(respxml);
         try
-        {            
-            if(enode!=null && enode.getFirstNode()!=null)
-            {                
-                WBTreeNode node=enode.getFirstNode().getNodebyName("dir");                
-                if(node!=null && node.getAttribute("permission")!=null)
-                {                    
-                    hasPermission=Boolean.valueOf(node.getAttribute("permission"));                    
+        {
+            if (enode != null && enode.getFirstNode() != null)
+            {
+                WBTreeNode node = enode.getFirstNode().getNodebyName("dir");
+                if (node != null && node.getAttribute("permission") != null)
+                {
+                    hasPermission = Boolean.valueOf(node.getAttribute("permission"));
                     return hasPermission;
                 }
             }
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             e.printStackTrace();
         }
         return hasPermission;
     }
+
     public boolean hasPermission(File file)
     {
         return hasPermission(file.getPath());
     }
+
     public void loadFiles(Directory dir)
     {
-        String path=dir.getDirectory();
+        String path = dir.getDirectory();
         try
         {
-            path=WBXMLParser.encode(path,"UTF-8");
-        }catch(Exception e){}
-        String xml="<?xml version=\"1.0\" encoding=\"UTF-8\"?><req><cmd>getFiles</cmd><path>"+ path +"</path></req>";        
-        String respxml=ftp.getData(xml);
-        WBXMLParser parser=new WBXMLParser();
-        WBTreeNode enode=parser.parse(respxml);
-        if(enode.getFirstNode()!=null)
+            path = WBXMLParser.encode(path, "UTF-8");
+        }
+        catch (Exception e)
         {
-            TableCellRenderHeader tableCellRenderHeader=new TableCellRenderHeader(jTableFiles);
-            jTableFileModel model=new jTableFileModel(this.jTableFiles,locale,tableCellRenderHeader);
+        }
+        String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><req><cmd>getFiles</cmd><path>" + path + "</path></req>";
+        String respxml = ftp.getData(xml);
+        WBXMLParser parser = new WBXMLParser();
+        WBTreeNode enode = parser.parse(respxml);
+        if (enode.getFirstNode() != null)
+        {
+            TableCellRenderHeader tableCellRenderHeader = new TableCellRenderHeader(jTableFiles);
+            jTableFileModel model = new jTableFileModel(this.jTableFiles, locale, tableCellRenderHeader);
             jTableFiles.getTableHeader().setDefaultRenderer(tableCellRenderHeader);
             jTableFiles.getTableHeader().addMouseListener(new ColumnHeaderListener(jTableFiles));
             model.addFileListener(this);
             this.jTableFiles.setModel(model);
-            Iterator files=enode.getFirstNode().getNodes().iterator();
-            ArrayList<applets.ftp.File> lfiles=new ArrayList<applets.ftp.File>();
-            while(files.hasNext())
+            Iterator files = enode.getFirstNode().getNodes().iterator();
+            ArrayList<applets.ftp.File> lfiles = new ArrayList<applets.ftp.File>();
+            while (files.hasNext())
             {
-                WBTreeNode file=(WBTreeNode)files.next();
-                applets.ftp.File ofile=new applets.ftp.File(dir,file.getAttribute("name"), file.getAttribute("path"), file.getAttribute("size"), file.getAttribute("lastupdate"));
+                WBTreeNode file = (WBTreeNode) files.next();
+                applets.ftp.File ofile = new applets.ftp.File(dir, file.getAttribute("name"), file.getAttribute("path"), file.getAttribute("size"), file.getAttribute("lastupdate"));
                 lfiles.add(ofile);
             }
-            FileNameCompartor fc=new FileNameCompartor();
+            FileNameCompartor fc = new FileNameCompartor();
             fc.toogle();
-            Collections.sort(lfiles,fc);
-            tableCellRenderHeader.onNewOrder(0,true);
-            for(applets.ftp.File ofile : lfiles)
+            Collections.sort(lfiles, fc);
+            tableCellRenderHeader.onNewOrder(0, true);
+            for (applets.ftp.File ofile : lfiles)
             {
                 model.addFile(ofile);
             }
             this.jTableFiles.updateUI();
         }
     }
+
     private void loadDirectories()
     {
-        
-        String xml="<?xml version=\"1.0\" encoding=\"UTF-8\"?><req><cmd>getDirectories</cmd></req>";        
-        String respxml=ftp.getData(xml);
-        WBXMLParser parser=new WBXMLParser();
+
+        String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><req><cmd>getDirectories</cmd></req>";
+        String respxml = ftp.getData(xml);
+        WBXMLParser parser = new WBXMLParser();
         try
         {
-            WBTreeNode enode=parser.parse(respxml);
-            if(enode!=null && enode.getFirstNode()!=null && enode.getFirstNode().getFirstNode()!=null)
+            WBTreeNode enode = parser.parse(respxml);
+            if (enode != null && enode.getFirstNode() != null && enode.getFirstNode().getFirstNode() != null)
             {
-                WBTreeNode dir=enode.getFirstNode().getFirstNode();
-                if(dir.getName().equals("dir"))
+                WBTreeNode dir = enode.getFirstNode().getFirstNode();
+                if (dir.getName().equals("dir"))
                 {
-                    Directory root=new Directory(dir.getAttribute("name"),dir.getAttribute("path"),"false");
+                    Directory root = new Directory(dir.getAttribute("name"), dir.getAttribute("path"), "false");
                     jTreeDirs.setModel(new DefaultTreeModel(root));
-                    loadDirectories(dir,root);
+                    loadDirectories(dir, root);
                     loadFiles(root);
                     this.jTreeDirs.expandRow(0);
                 }
             }
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             e.printStackTrace();
         }
-    }   
-    public static String getData(String xml) {
+    }
 
-        StringBuilder ret=new StringBuilder();
-        try {
+    public static String getData(String xml)
+    {
 
-            URLConnection urlconn=url.openConnection();
+        StringBuilder ret = new StringBuilder();
+        try
+        {
+
+            URLConnection urlconn = url.openConnection();
             urlconn.setUseCaches(false);
-            if(jsess!=null)urlconn.setRequestProperty("Cookie","JSESSIONID="+jsess);
-            urlconn.setRequestProperty("Content-Type","application/xml");
+            if (jsess != null)
+            {
+                urlconn.setRequestProperty("Cookie", "JSESSIONID=" + jsess);
+            }
+            urlconn.setRequestProperty("Content-Type", "application/xml");
             urlconn.setDoOutput(true);
             PrintWriter pout = new PrintWriter(urlconn.getOutputStream());
             pout.println(xml);
@@ -329,24 +347,28 @@ public class ftp extends javax.swing.JApplet implements ListSelectionListener,Fi
 
             BufferedReader in = new BufferedReader(new InputStreamReader(urlconn.getInputStream()));
             String inputLine;
-            while ((inputLine = in.readLine()) != null) {
+            while ((inputLine = in.readLine()) != null)
+            {
                 ret.append(inputLine);
                 ret.append("\n");
             }
             in.close();
-        }catch(Exception e)
+        }
+        catch (Exception e)
         {
             e.printStackTrace();
         }
         return ret.toString();
     }
+
     /** This method is called from within the init() method to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is
      * always regenerated by the Form Editor.
      */
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
+    private void initComponents()
+    {
 
         jPopupMenuDir = new javax.swing.JPopupMenu();
         jMenuItemNewFolder = new javax.swing.JMenuItem();
@@ -399,10 +421,13 @@ public class ftp extends javax.swing.JApplet implements ListSelectionListener,Fi
         jPanelProgressBar = new javax.swing.JPanel();
         jProgressBar1 = new javax.swing.JProgressBar();
 
-        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("applets/ftp/ftp",locale); // NOI18N
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("applets/ftp/ftp", locale); // NOI18N
         jMenuItemNewFolder.setText(bundle.getString("new_folder")); // NOI18N
-        jMenuItemNewFolder.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        jMenuItemNewFolder.addActionListener(new java.awt.event.ActionListener()
+        {
+
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 jMenuItemNewFolderActionPerformed(evt);
             }
         });
@@ -411,16 +436,22 @@ public class ftp extends javax.swing.JApplet implements ListSelectionListener,Fi
         jMenuDirAdd.setText(bundle.getString("add")); // NOI18N
 
         jMenuItemDirAddFile.setText(bundle.getString("file")); // NOI18N
-        jMenuItemDirAddFile.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        jMenuItemDirAddFile.addActionListener(new java.awt.event.ActionListener()
+        {
+
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 jMenuItemDirAddFileActionPerformed(evt);
             }
         });
         jMenuDirAdd.add(jMenuItemDirAddFile);
 
         jMenuItemDirAddFolder.setText(bundle.getString("folder")); // NOI18N
-        jMenuItemDirAddFolder.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        jMenuItemDirAddFolder.addActionListener(new java.awt.event.ActionListener()
+        {
+
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 jMenuItemDirAddFolderActionPerformed(evt);
             }
         });
@@ -430,8 +461,11 @@ public class ftp extends javax.swing.JApplet implements ListSelectionListener,Fi
         jPopupMenuDir.add(jSeparator1);
 
         jMenuItemDirRename.setText(bundle.getString("rename")); // NOI18N
-        jMenuItemDirRename.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        jMenuItemDirRename.addActionListener(new java.awt.event.ActionListener()
+        {
+
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 jMenuItemDirRenameActionPerformed(evt);
             }
         });
@@ -439,8 +473,11 @@ public class ftp extends javax.swing.JApplet implements ListSelectionListener,Fi
         jPopupMenuDir.add(jSeparator2);
 
         jMenuItemDirDelete.setText(bundle.getString("del")); // NOI18N
-        jMenuItemDirDelete.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        jMenuItemDirDelete.addActionListener(new java.awt.event.ActionListener()
+        {
+
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 jMenuItemDirDeleteActionPerformed(evt);
             }
         });
@@ -452,8 +489,11 @@ public class ftp extends javax.swing.JApplet implements ListSelectionListener,Fi
         jMenuFile.setText(bundle.getString("file")); // NOI18N
 
         jMenuItemCrearDirectorio.setText(bundle.getString("new_folder")); // NOI18N
-        jMenuItemCrearDirectorio.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        jMenuItemCrearDirectorio.addActionListener(new java.awt.event.ActionListener()
+        {
+
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 jMenuItemCrearDirectorioActionPerformed(evt);
             }
         });
@@ -462,16 +502,22 @@ public class ftp extends javax.swing.JApplet implements ListSelectionListener,Fi
         jMenuAdd.setText(bundle.getString("add")); // NOI18N
 
         jMenuItemAddFile.setText(bundle.getString("file")); // NOI18N
-        jMenuItemAddFile.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        jMenuItemAddFile.addActionListener(new java.awt.event.ActionListener()
+        {
+
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 jMenuItemAddFileActionPerformed(evt);
             }
         });
         jMenuAdd.add(jMenuItemAddFile);
 
         jMenuItemAddFolder.setText(bundle.getString("folder")); // NOI18N
-        jMenuItemAddFolder.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        jMenuItemAddFolder.addActionListener(new java.awt.event.ActionListener()
+        {
+
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 jMenuItemAddFolderActionPerformed(evt);
             }
         });
@@ -482,8 +528,11 @@ public class ftp extends javax.swing.JApplet implements ListSelectionListener,Fi
         jMenuBorrar.setText(bundle.getString("del")); // NOI18N
 
         jMenuItemBorrarDir.setText(bundle.getString("folder")); // NOI18N
-        jMenuItemBorrarDir.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        jMenuItemBorrarDir.addActionListener(new java.awt.event.ActionListener()
+        {
+
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 jMenuItemBorrarDirActionPerformed(evt);
             }
         });
@@ -491,8 +540,11 @@ public class ftp extends javax.swing.JApplet implements ListSelectionListener,Fi
 
         jMenuItemBorrarFile.setText(bundle.getString("file")); // NOI18N
         jMenuItemBorrarFile.setEnabled(false);
-        jMenuItemBorrarFile.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        jMenuItemBorrarFile.addActionListener(new java.awt.event.ActionListener()
+        {
+
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 jMenuItemBorrarFileActionPerformed(evt);
             }
         });
@@ -507,8 +559,11 @@ public class ftp extends javax.swing.JApplet implements ListSelectionListener,Fi
 
         jMenuItemDownload.setText(bundle.getString("download")); // NOI18N
         jMenuItemDownload.setEnabled(false);
-        jMenuItemDownload.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        jMenuItemDownload.addActionListener(new java.awt.event.ActionListener()
+        {
+
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 jMenuItemDownloadActionPerformed(evt);
             }
         });
@@ -517,8 +572,11 @@ public class ftp extends javax.swing.JApplet implements ListSelectionListener,Fi
         jMenuRename.setText(bundle.getString("rename")); // NOI18N
 
         jMenuItemRenameFolder.setText(bundle.getString("folder")); // NOI18N
-        jMenuItemRenameFolder.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        jMenuItemRenameFolder.addActionListener(new java.awt.event.ActionListener()
+        {
+
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 jMenuItemRenameFolderActionPerformed(evt);
             }
         });
@@ -526,8 +584,11 @@ public class ftp extends javax.swing.JApplet implements ListSelectionListener,Fi
 
         jMenuItemRenameFile.setText(bundle.getString("file")); // NOI18N
         jMenuItemRenameFile.setEnabled(false);
-        jMenuItemRenameFile.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        jMenuItemRenameFile.addActionListener(new java.awt.event.ActionListener()
+        {
+
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 jMenuItemRenameFileActionPerformed(evt);
             }
         });
@@ -540,16 +601,22 @@ public class ftp extends javax.swing.JApplet implements ListSelectionListener,Fi
         jMenuFileAdd.setText(bundle.getString("add")); // NOI18N
 
         jMenuItemFileAddFile.setText(bundle.getString("file")); // NOI18N
-        jMenuItemFileAddFile.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        jMenuItemFileAddFile.addActionListener(new java.awt.event.ActionListener()
+        {
+
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 jMenuItemFileAddFileActionPerformed(evt);
             }
         });
         jMenuFileAdd.add(jMenuItemFileAddFile);
 
         jMenuItemFileAddDir.setText(bundle.getString("folder")); // NOI18N
-        jMenuItemFileAddDir.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        jMenuItemFileAddDir.addActionListener(new java.awt.event.ActionListener()
+        {
+
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 jMenuItemFileAddDirActionPerformed(evt);
             }
         });
@@ -559,8 +626,11 @@ public class ftp extends javax.swing.JApplet implements ListSelectionListener,Fi
         jPopupMenuFile.add(jSeparator3);
 
         jMenuItemFileDownload.setText(bundle.getString("download")); // NOI18N
-        jMenuItemFileDownload.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        jMenuItemFileDownload.addActionListener(new java.awt.event.ActionListener()
+        {
+
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 jMenuItemFileDownloadActionPerformed(evt);
             }
         });
@@ -568,8 +638,11 @@ public class ftp extends javax.swing.JApplet implements ListSelectionListener,Fi
         jPopupMenuFile.add(jSeparator5);
 
         jMenuItemFileRename.setText(bundle.getString("rename")); // NOI18N
-        jMenuItemFileRename.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        jMenuItemFileRename.addActionListener(new java.awt.event.ActionListener()
+        {
+
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 jMenuItemFileRenameActionPerformed(evt);
             }
         });
@@ -577,15 +650,21 @@ public class ftp extends javax.swing.JApplet implements ListSelectionListener,Fi
         jPopupMenuFile.add(jSeparator4);
 
         jMenuItemFileDelete.setText(bundle.getString("del")); // NOI18N
-        jMenuItemFileDelete.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        jMenuItemFileDelete.addActionListener(new java.awt.event.ActionListener()
+        {
+
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 jMenuItemFileDeleteActionPerformed(evt);
             }
         });
         jPopupMenuFile.add(jMenuItemFileDelete);
 
-        addComponentListener(new java.awt.event.ComponentAdapter() {
-            public void componentShown(java.awt.event.ComponentEvent evt) {
+        addComponentListener(new java.awt.event.ComponentAdapter()
+        {
+
+            public void componentShown(java.awt.event.ComponentEvent evt)
+            {
                 formComponentShown(evt);
             }
         });
@@ -600,8 +679,11 @@ public class ftp extends javax.swing.JApplet implements ListSelectionListener,Fi
         jButtonAddFile.setBackground(new java.awt.Color(213, 227, 255));
         jButtonAddFile.setIcon(new javax.swing.ImageIcon(getClass().getResource("/applets/ftp/images/archivonuevo2.gif"))); // NOI18N
         jButtonAddFile.setToolTipText(bundle.getString("add_files")); // NOI18N
-        jButtonAddFile.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        jButtonAddFile.addActionListener(new java.awt.event.ActionListener()
+        {
+
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 jButtonAddFileActionPerformed(evt);
             }
         });
@@ -610,8 +692,11 @@ public class ftp extends javax.swing.JApplet implements ListSelectionListener,Fi
         jButtonaddFolder.setBackground(new java.awt.Color(213, 227, 255));
         jButtonaddFolder.setIcon(new javax.swing.ImageIcon(getClass().getResource("/applets/ftp/images/ftpupfolder.gif"))); // NOI18N
         jButtonaddFolder.setToolTipText(bundle.getString("menu_add_folder")); // NOI18N
-        jButtonaddFolder.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        jButtonaddFolder.addActionListener(new java.awt.event.ActionListener()
+        {
+
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 jButtonaddFolderActionPerformed(evt);
             }
         });
@@ -620,8 +705,11 @@ public class ftp extends javax.swing.JApplet implements ListSelectionListener,Fi
         jButtonNewFolder.setBackground(new java.awt.Color(213, 227, 255));
         jButtonNewFolder.setIcon(new javax.swing.ImageIcon(getClass().getResource("/applets/ftp/images/nuevofolder2.gif"))); // NOI18N
         jButtonNewFolder.setToolTipText(bundle.getString("new_folder")); // NOI18N
-        jButtonNewFolder.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        jButtonNewFolder.addActionListener(new java.awt.event.ActionListener()
+        {
+
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 jButtonNewFolderActionPerformed(evt);
             }
         });
@@ -631,8 +719,11 @@ public class ftp extends javax.swing.JApplet implements ListSelectionListener,Fi
         jButtonDownload.setIcon(new javax.swing.ImageIcon(getClass().getResource("/applets/ftp/images/archivodown2.gif"))); // NOI18N
         jButtonDownload.setToolTipText(bundle.getString("download")); // NOI18N
         jButtonDownload.setEnabled(false);
-        jButtonDownload.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        jButtonDownload.addActionListener(new java.awt.event.ActionListener()
+        {
+
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 jButtonDownloadActionPerformed(evt);
             }
         });
@@ -649,25 +740,39 @@ public class ftp extends javax.swing.JApplet implements ListSelectionListener,Fi
 
         javax.swing.tree.DefaultMutableTreeNode treeNode1 = new javax.swing.tree.DefaultMutableTreeNode("root");
         jTreeDirs.setModel(new javax.swing.tree.DefaultTreeModel(treeNode1));
-        jTreeDirs.addTreeWillExpandListener(new javax.swing.event.TreeWillExpandListener() {
-            public void treeWillCollapse(javax.swing.event.TreeExpansionEvent evt)throws javax.swing.tree.ExpandVetoException {
+        jTreeDirs.addTreeWillExpandListener(new javax.swing.event.TreeWillExpandListener()
+        {
+
+            public void treeWillCollapse(javax.swing.event.TreeExpansionEvent evt) throws javax.swing.tree.ExpandVetoException
+            {
             }
-            public void treeWillExpand(javax.swing.event.TreeExpansionEvent evt)throws javax.swing.tree.ExpandVetoException {
+
+            public void treeWillExpand(javax.swing.event.TreeExpansionEvent evt) throws javax.swing.tree.ExpandVetoException
+            {
                 jTreeDirsTreeWillExpand(evt);
             }
         });
-        jTreeDirs.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mousePressed(java.awt.event.MouseEvent evt) {
+        jTreeDirs.addMouseListener(new java.awt.event.MouseAdapter()
+        {
+
+            public void mousePressed(java.awt.event.MouseEvent evt)
+            {
                 jTreeDirsMousePressed(evt);
             }
         });
-        jTreeDirs.addTreeSelectionListener(new javax.swing.event.TreeSelectionListener() {
-            public void valueChanged(javax.swing.event.TreeSelectionEvent evt) {
+        jTreeDirs.addTreeSelectionListener(new javax.swing.event.TreeSelectionListener()
+        {
+
+            public void valueChanged(javax.swing.event.TreeSelectionEvent evt)
+            {
                 jTreeDirsValueChanged(evt);
             }
         });
-        jTreeDirs.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
+        jTreeDirs.addKeyListener(new java.awt.event.KeyAdapter()
+        {
+
+            public void keyReleased(java.awt.event.KeyEvent evt)
+            {
                 jTreeDirsKeyReleased(evt);
             }
         });
@@ -684,30 +789,48 @@ public class ftp extends javax.swing.JApplet implements ListSelectionListener,Fi
         jPanel6.setLayout(new java.awt.BorderLayout());
 
         jScrollPane2.setBackground(new java.awt.Color(225, 235, 251));
-        jScrollPane2.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mousePressed(java.awt.event.MouseEvent evt) {
+        jScrollPane2.addMouseListener(new java.awt.event.MouseAdapter()
+        {
+
+            public void mousePressed(java.awt.event.MouseEvent evt)
+            {
                 jScrollPane2MousePressed(evt);
             }
         });
 
         jTableFiles.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
-        ));
-        jTableFiles.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mousePressed(java.awt.event.MouseEvent evt) {
+                new Object[][]
+                {
+                    {
+                        null, null, null, null
+                    },
+                    {
+                        null, null, null, null
+                    },
+                    {
+                        null, null, null, null
+                    },
+                    {
+                        null, null, null, null
+                    }
+                },
+                new String[]
+                {
+                    "Title 1", "Title 2", "Title 3", "Title 4"
+                }));
+        jTableFiles.addMouseListener(new java.awt.event.MouseAdapter()
+        {
+
+            public void mousePressed(java.awt.event.MouseEvent evt)
+            {
                 jTableFilesMousePressed(evt);
             }
         });
-        jTableFiles.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
+        jTableFiles.addKeyListener(new java.awt.event.KeyAdapter()
+        {
+
+            public void keyReleased(java.awt.event.KeyEvent evt)
+            {
                 jTableFilesKeyReleased(evt);
             }
         });
@@ -728,261 +851,293 @@ public class ftp extends javax.swing.JApplet implements ListSelectionListener,Fi
         getContentPane().add(jPanelProgressBar, java.awt.BorderLayout.SOUTH);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jScrollPane2MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jScrollPane2MousePressed
+    private void jScrollPane2MousePressed(java.awt.event.MouseEvent evt)
+    {//GEN-FIRST:event_jScrollPane2MousePressed
         this.jMenuItemFileDownload.setEnabled(false);
         this.jMenuItemFileRename.setEnabled(false);
-        this.jMenuItemFileDelete.setEnabled(false);                
-        if(evt.getButton()==MouseEvent.BUTTON3 && evt.getClickCount()==1)
+        this.jMenuItemFileDelete.setEnabled(false);
+        if (evt.getButton() == MouseEvent.BUTTON3 && evt.getClickCount() == 1)
         {
             this.setCursor(new Cursor(Cursor.WAIT_CURSOR));
             try
-            {                
-                if(this.jTableFiles.getSelectedRowCount()>0 && this.jTableFiles.getModel().getRowCount()>0)
+            {
+                if (this.jTableFiles.getSelectedRowCount() > 0 && this.jTableFiles.getModel().getRowCount() > 0)
                 {
-                    jTableFileModel model=(jTableFileModel)this.jTableFiles.getModel();
-                    File file=model.getFile(jTableFiles.getSelectedRow());
-                    if(hasPermission(file))
-                    {                        
+                    jTableFileModel model = (jTableFileModel) this.jTableFiles.getModel();
+                    File file = model.getFile(jTableFiles.getSelectedRow());
+                    if (hasPermission(file))
+                    {
                         this.jMenuItemFileDownload.setEnabled(true);
                         this.jMenuItemFileRename.setEnabled(true);
                         this.jMenuItemFileDelete.setEnabled(true);
-                        
+
                     }
                 }
-                this.jPopupMenuFile.show(this.jScrollPane2, evt.getX(),evt.getY());
+                this.jPopupMenuFile.show(this.jScrollPane2, evt.getX(), evt.getY());
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 e.printStackTrace();
-            }
-            finally
+            } finally
             {
                 this.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
             }
         }
     }//GEN-LAST:event_jScrollPane2MousePressed
 
-    private void jButtonDownloadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonDownloadActionPerformed
+    private void jButtonDownloadActionPerformed(java.awt.event.ActionEvent evt)
+    {//GEN-FIRST:event_jButtonDownloadActionPerformed
         downloadFile();
     }//GEN-LAST:event_jButtonDownloadActionPerformed
 
-    private void jButtonNewFolderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonNewFolderActionPerformed
+    private void jButtonNewFolderActionPerformed(java.awt.event.ActionEvent evt)
+    {//GEN-FIRST:event_jButtonNewFolderActionPerformed
         this.createDir();
     }//GEN-LAST:event_jButtonNewFolderActionPerformed
 
-    private void jButtonaddFolderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonaddFolderActionPerformed
+    private void jButtonaddFolderActionPerformed(java.awt.event.ActionEvent evt)
+    {//GEN-FIRST:event_jButtonaddFolderActionPerformed
         this.addDir();
     }//GEN-LAST:event_jButtonaddFolderActionPerformed
 
-    private void jButtonAddFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAddFileActionPerformed
+    private void jButtonAddFileActionPerformed(java.awt.event.ActionEvent evt)
+    {//GEN-FIRST:event_jButtonAddFileActionPerformed
         this.addFile();
     }//GEN-LAST:event_jButtonAddFileActionPerformed
 
-    private void jMenuItemAddFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemAddFileActionPerformed
+    private void jMenuItemAddFileActionPerformed(java.awt.event.ActionEvent evt)
+    {//GEN-FIRST:event_jMenuItemAddFileActionPerformed
         this.addFile();
     }//GEN-LAST:event_jMenuItemAddFileActionPerformed
 
-    private void jMenuItemDownloadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemDownloadActionPerformed
+    private void jMenuItemDownloadActionPerformed(java.awt.event.ActionEvent evt)
+    {//GEN-FIRST:event_jMenuItemDownloadActionPerformed
         jMenuItemFileDownloadActionPerformed(null);
     }//GEN-LAST:event_jMenuItemDownloadActionPerformed
 
-    private void jMenuItemNewFolderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemNewFolderActionPerformed
+    private void jMenuItemNewFolderActionPerformed(java.awt.event.ActionEvent evt)
+    {//GEN-FIRST:event_jMenuItemNewFolderActionPerformed
         this.createDir();
     }//GEN-LAST:event_jMenuItemNewFolderActionPerformed
 
-    private void jMenuItemCrearDirectorioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemCrearDirectorioActionPerformed
+    private void jMenuItemCrearDirectorioActionPerformed(java.awt.event.ActionEvent evt)
+    {//GEN-FIRST:event_jMenuItemCrearDirectorioActionPerformed
         this.createDir();
     }//GEN-LAST:event_jMenuItemCrearDirectorioActionPerformed
+
     private void downloadFile()
     {
-         if(this.jTableFiles.getSelectedRowCount()>0)
+        if (this.jTableFiles.getSelectedRowCount() > 0)
         {
-            jTableFileModel filemodel=(jTableFileModel)this.jTableFiles.getModel();
-            this.jFileChooser1=new JFileChooser();
-            if(pathDir!=null)
+            jTableFileModel filemodel = (jTableFileModel) this.jTableFiles.getModel();
+            this.jFileChooser1 = new JFileChooser();
+            if (pathDir != null)
+            {
                 this.jFileChooser1.setCurrentDirectory(pathDir);
-            this.jFileChooser1.setDialogTitle(java.util.ResourceBundle.getBundle("applets/ftp/ftp",locale).getString("download"));
-            this.jFileChooser1.setMultiSelectionEnabled(false);                         
+            }
+            this.jFileChooser1.setDialogTitle(java.util.ResourceBundle.getBundle("applets/ftp/ftp", locale).getString("download"));
+            this.jFileChooser1.setMultiSelectionEnabled(false);
             this.jFileChooser1.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-            int ret=this.jFileChooser1.showSaveDialog(this);                            
-            ftp.pathDir=this.jFileChooser1.getCurrentDirectory();
+            int ret = this.jFileChooser1.showSaveDialog(this);
+            ftp.pathDir = this.jFileChooser1.getCurrentDirectory();
             if (ret == JFileChooser.APPROVE_OPTION)
             {
                 try
                 {
-                    URL urldownload=new URL(getCodeBase().getProtocol(),getCodeBase().getHost(),getCodeBase().getPort(),this.downloadpath);                
-                    java.io.File dir=this.jFileChooser1.getSelectedFile();
-                    int[] irows=this.jTableFiles.getSelectedRows();
-                    
-                    for(int i=0;i<irows.length;i++)
+                    URL urldownload = new URL(getCodeBase().getProtocol(), getCodeBase().getHost(), getCodeBase().getPort(), this.downloadpath);
+                    java.io.File dir = this.jFileChooser1.getSelectedFile();
+                    int[] irows = this.jTableFiles.getSelectedRows();
+
+                    for (int i = 0; i < irows.length; i++)
                     {
-                        applets.ftp.File file=filemodel.getFile(irows[i]);                                        
-                        String path=dir.getAbsolutePath()+"/"+file.getName();
-                        java.io.File flocal=new java.io.File(path);
-                        if(flocal.exists())
+                        applets.ftp.File file = filemodel.getFile(irows[i]);
+                        String path = dir.getAbsolutePath() + "/" + file.getName();
+                        java.io.File flocal = new java.io.File(path);
+                        if (flocal.exists())
                         {
                             int status = JOptionPane.showConfirmDialog(
-                                                    this,   // The parent frame
-                                                    java.util.ResourceBundle.getBundle("applets/ftp/ftp",locale).getString("existe_file_download1")+
-                                                    " "+ flocal.getName() +
-                                                    " "+java.util.ResourceBundle.getBundle("applets/ftp/ftp",locale).getString("existe_file_download2")
-                                                    +"\r\n"+java.util.ResourceBundle.getBundle("applets/ftp/ftp",locale).getString("sobreEscribir"),
-                                                    java.util.ResourceBundle.getBundle("applets/ftp/ftp",locale).getString("title"),
-                                                    JOptionPane.YES_NO_OPTION,
-                                                    JOptionPane.QUESTION_MESSAGE
-                                                    );
+                                    this, // The parent frame
+                                    java.util.ResourceBundle.getBundle("applets/ftp/ftp", locale).getString("existe_file_download1")
+                                    + " " + flocal.getName()
+                                    + " " + java.util.ResourceBundle.getBundle("applets/ftp/ftp", locale).getString("existe_file_download2")
+                                    + "\r\n" + java.util.ResourceBundle.getBundle("applets/ftp/ftp", locale).getString("sobreEscribir"),
+                                    java.util.ResourceBundle.getBundle("applets/ftp/ftp", locale).getString("title"),
+                                    JOptionPane.YES_NO_OPTION,
+                                    JOptionPane.QUESTION_MESSAGE);
                             if (status == JOptionPane.NO_OPTION)
+                            {
                                 continue;
-                        }                             
+                            }
+                        }
                         //FileDownload fdown=new FileDownload(file.getPath(), this.jProgressBar1, flocal, this.jsess, urldownload);                                                
-                        FDownload fdown=new FDownload(null,false,file.getPath(),flocal, ftp.jsess, urldownload,locale);
+                        FDownload fdown = new FDownload(null, false, file.getPath(), flocal, ftp.jsess, urldownload, locale);
                         fdown.show();
-                        fdown.setLocation(400,300);
+                        fdown.setLocation(400, 300);
                         fdown.setSize(200, 50);
-                        fdown.getFile();                        
+                        fdown.getFile();
                     }
-                    
+
                 }
-                catch(Exception e)
+                catch (Exception e)
                 {
                     e.printStackTrace();
                 }
             }
         }
     }
-    private void jMenuItemFileDownloadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemFileDownloadActionPerformed
-       downloadFile();
+
+    private void jMenuItemFileDownloadActionPerformed(java.awt.event.ActionEvent evt)
+    {//GEN-FIRST:event_jMenuItemFileDownloadActionPerformed
+        downloadFile();
     }//GEN-LAST:event_jMenuItemFileDownloadActionPerformed
-        
-    private void jMenuItemDirAddFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemDirAddFileActionPerformed
+
+    private void jMenuItemDirAddFileActionPerformed(java.awt.event.ActionEvent evt)
+    {//GEN-FIRST:event_jMenuItemDirAddFileActionPerformed
         addFile();
     }//GEN-LAST:event_jMenuItemDirAddFileActionPerformed
 
-    private void jMenuItemFileAddFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemFileAddFileActionPerformed
-        
+    private void jMenuItemFileAddFileActionPerformed(java.awt.event.ActionEvent evt)
+    {//GEN-FIRST:event_jMenuItemFileAddFileActionPerformed
+
         this.addFile();
-       
+
     }//GEN-LAST:event_jMenuItemFileAddFileActionPerformed
 
-    private void jMenuItemRenameFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemRenameFileActionPerformed
+    private void jMenuItemRenameFileActionPerformed(java.awt.event.ActionEvent evt)
+    {//GEN-FIRST:event_jMenuItemRenameFileActionPerformed
         this.renameFile();
     }//GEN-LAST:event_jMenuItemRenameFileActionPerformed
 
-    private void jMenuItemRenameFolderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemRenameFolderActionPerformed
+    private void jMenuItemRenameFolderActionPerformed(java.awt.event.ActionEvent evt)
+    {//GEN-FIRST:event_jMenuItemRenameFolderActionPerformed
         this.renameDir();
     }//GEN-LAST:event_jMenuItemRenameFolderActionPerformed
 
-    private void jTreeDirsKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTreeDirsKeyReleased
-        if(evt.getKeyCode()==KeyEvent.VK_DELETE)
+    private void jTreeDirsKeyReleased(java.awt.event.KeyEvent evt)
+    {//GEN-FIRST:event_jTreeDirsKeyReleased
+        if (evt.getKeyCode() == KeyEvent.VK_DELETE)
         {
             this.deleteDir();
         }
     }//GEN-LAST:event_jTreeDirsKeyReleased
 
-    private void jTableFilesKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTableFilesKeyReleased
-        if(evt.getKeyCode()==KeyEvent.VK_DELETE)
+    private void jTableFilesKeyReleased(java.awt.event.KeyEvent evt)
+    {//GEN-FIRST:event_jTableFilesKeyReleased
+        if (evt.getKeyCode() == KeyEvent.VK_DELETE)
         {
             this.deleteFile();
         }
     }//GEN-LAST:event_jTableFilesKeyReleased
 
-    private void jMenuItemBorrarFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemBorrarFileActionPerformed
+    private void jMenuItemBorrarFileActionPerformed(java.awt.event.ActionEvent evt)
+    {//GEN-FIRST:event_jMenuItemBorrarFileActionPerformed
         this.deleteFile();
     }//GEN-LAST:event_jMenuItemBorrarFileActionPerformed
 
-    private void jMenuItemBorrarDirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemBorrarDirActionPerformed
+    private void jMenuItemBorrarDirActionPerformed(java.awt.event.ActionEvent evt)
+    {//GEN-FIRST:event_jMenuItemBorrarDirActionPerformed
         this.deleteDir();
     }//GEN-LAST:event_jMenuItemBorrarDirActionPerformed
 
-    private void jMenuItemFileRenameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemFileRenameActionPerformed
+    private void jMenuItemFileRenameActionPerformed(java.awt.event.ActionEvent evt)
+    {//GEN-FIRST:event_jMenuItemFileRenameActionPerformed
         this.renameFile();
     }//GEN-LAST:event_jMenuItemFileRenameActionPerformed
 
-    private void jMenuItemDirRenameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemDirRenameActionPerformed
+    private void jMenuItemDirRenameActionPerformed(java.awt.event.ActionEvent evt)
+    {//GEN-FIRST:event_jMenuItemDirRenameActionPerformed
         this.renameDir();
     }//GEN-LAST:event_jMenuItemDirRenameActionPerformed
 
-    private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
+    private void formComponentShown(java.awt.event.ComponentEvent evt)
+    {//GEN-FIRST:event_formComponentShown
         try
         {
             this.jTreeDirs.setSelectionRow(0);
         }
-        catch(NullPointerException npe)
+        catch (NullPointerException npe)
         {
-            
         }
     }//GEN-LAST:event_formComponentShown
 
-    private void jMenuItemDirDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemDirDeleteActionPerformed
+    private void jMenuItemDirDeleteActionPerformed(java.awt.event.ActionEvent evt)
+    {//GEN-FIRST:event_jMenuItemDirDeleteActionPerformed
         this.deleteDir();
     }//GEN-LAST:event_jMenuItemDirDeleteActionPerformed
 
-    private void jMenuItemFileDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemFileDeleteActionPerformed
+    private void jMenuItemFileDeleteActionPerformed(java.awt.event.ActionEvent evt)
+    {//GEN-FIRST:event_jMenuItemFileDeleteActionPerformed
         deleteFile();
     }//GEN-LAST:event_jMenuItemFileDeleteActionPerformed
 
-    private void jMenuItemFileAddDirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemFileAddDirActionPerformed
+    private void jMenuItemFileAddDirActionPerformed(java.awt.event.ActionEvent evt)
+    {//GEN-FIRST:event_jMenuItemFileAddDirActionPerformed
         this.addDir();
     }//GEN-LAST:event_jMenuItemFileAddDirActionPerformed
 
-    private void jMenuItemDirAddFolderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemDirAddFolderActionPerformed
+    private void jMenuItemDirAddFolderActionPerformed(java.awt.event.ActionEvent evt)
+    {//GEN-FIRST:event_jMenuItemDirAddFolderActionPerformed
         this.addDir();
     }//GEN-LAST:event_jMenuItemDirAddFolderActionPerformed
 
-    private void jTreeDirsMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTreeDirsMousePressed
-        if(evt.getButton()==MouseEvent.BUTTON3 && evt.getClickCount()==1 && this.jTreeDirs.getSelectionPath()!=null)
+    private void jTreeDirsMousePressed(java.awt.event.MouseEvent evt)
+    {//GEN-FIRST:event_jTreeDirsMousePressed
+        if (evt.getButton() == MouseEvent.BUTTON3 && evt.getClickCount() == 1 && this.jTreeDirs.getSelectionPath() != null)
         {
             jMenuItemNewFolder.setEnabled(false);
             jMenuDirAdd.setEnabled(false);
             jMenuItemDirRename.setEnabled(false);
-            jMenuItemDirDelete.setEnabled(false);            
-            Object obj=this.jTreeDirs.getSelectionPath().getLastPathComponent();            
-            if(obj!=null && obj instanceof Directory)
-            {                
-                Directory directory=(Directory)obj;             
-                if(hasPermission(directory.getDirectory()))
-                {                    
+            jMenuItemDirDelete.setEnabled(false);
+            Object obj = this.jTreeDirs.getSelectionPath().getLastPathComponent();
+            if (obj != null && obj instanceof Directory)
+            {
+                Directory directory = (Directory) obj;
+                if (hasPermission(directory.getDirectory()))
+                {
                     jMenuItemNewFolder.setEnabled(true);
                     jMenuDirAdd.setEnabled(true);
                     jMenuItemDirRename.setEnabled(true);
                     jMenuItemDirDelete.setEnabled(true);
                 }
-            }            
-            this.jPopupMenuDir.show(this.jTreeDirs, evt.getX(),evt.getY());
+            }
+            this.jPopupMenuDir.show(this.jTreeDirs, evt.getX(), evt.getY());
         }
     }//GEN-LAST:event_jTreeDirsMousePressed
 
-    private void jMenuItemAddFolderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemAddFolderActionPerformed
+    private void jMenuItemAddFolderActionPerformed(java.awt.event.ActionEvent evt)
+    {//GEN-FIRST:event_jMenuItemAddFolderActionPerformed
         addDir();
     }//GEN-LAST:event_jMenuItemAddFolderActionPerformed
 
-    private void jTableFilesMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableFilesMousePressed
+    private void jTableFilesMousePressed(java.awt.event.MouseEvent evt)
+    {//GEN-FIRST:event_jTableFilesMousePressed
         this.jMenuItemFileDownload.setEnabled(false);
         this.jMenuItemFileRename.setEnabled(false);
-        this.jMenuItemFileDelete.setEnabled(false);        
-        if(evt.getButton()==MouseEvent.BUTTON3 && evt.getClickCount()==1)
-        {            
-            if(this.jTableFiles.getSelectedRow()!=-1)
-            {         
-                jTableFileModel model=(jTableFileModel)jTableFiles.getModel();         
-                File file=model.getFile(this.jTableFiles.getSelectedRow());         
-                if(hasPermission(file))
-                {                    
+        this.jMenuItemFileDelete.setEnabled(false);
+        if (evt.getButton() == MouseEvent.BUTTON3 && evt.getClickCount() == 1)
+        {
+            if (this.jTableFiles.getSelectedRow() != -1)
+            {
+                jTableFileModel model = (jTableFileModel) jTableFiles.getModel();
+                File file = model.getFile(this.jTableFiles.getSelectedRow());
+                if (hasPermission(file))
+                {
                     this.jMenuItemFileDownload.setEnabled(true);
                     this.jMenuItemFileRename.setEnabled(true);
                     this.jMenuItemFileDelete.setEnabled(true);
                 }
-            }            
-            this.jPopupMenuFile.show(this.jTableFiles, evt.getX(),evt.getY());
-            
+            }
+            this.jPopupMenuFile.show(this.jTableFiles, evt.getX(), evt.getY());
+
         }
     }//GEN-LAST:event_jTableFilesMousePressed
 
-    private void jTreeDirsTreeWillExpand(javax.swing.event.TreeExpansionEvent evt)throws javax.swing.tree.ExpandVetoException {//GEN-FIRST:event_jTreeDirsTreeWillExpand
-        if(evt.getPath().getLastPathComponent() instanceof Directory)
+    private void jTreeDirsTreeWillExpand(javax.swing.event.TreeExpansionEvent evt) throws javax.swing.tree.ExpandVetoException
+    {//GEN-FIRST:event_jTreeDirsTreeWillExpand
+        if (evt.getPath().getLastPathComponent() instanceof Directory)
         {
-            Directory dir=(Directory)evt.getPath().getLastPathComponent();
-            if(dir.getChildCount()==1 && !(dir.getChildAt(0) instanceof Directory))
+            Directory dir = (Directory) evt.getPath().getLastPathComponent();
+            if (dir.getChildCount() == 1 && !(dir.getChildAt(0) instanceof Directory))
             {
                 this.setCursor(new Cursor(Cursor.WAIT_CURSOR));
                 dir.remove(0);
@@ -992,562 +1147,616 @@ public class ftp extends javax.swing.JApplet implements ListSelectionListener,Fi
         }
     }//GEN-LAST:event_jTreeDirsTreeWillExpand
 
-    private void jTreeDirsValueChanged(javax.swing.event.TreeSelectionEvent evt) {//GEN-FIRST:event_jTreeDirsValueChanged
-        
-            this.jButtonAddFile.setEnabled(false);
-            this.jButtonDownload.setEnabled(false);
-            this.jButtonNewFolder.setEnabled(false);
-            this.jButtonaddFolder.setEnabled(false);
-            this.jMenuBorrar.setEnabled(false);
-            this.jMenuDirAdd.setEnabled(false);
-            this.jMenuAdd.setEnabled(false);
-            this.jMenuItemCrearDirectorio.setEnabled(false);
-            this.jMenuRename.setEnabled(false);
-            this.jMenuFileAdd.setEnabled(false);
+    private void jTreeDirsValueChanged(javax.swing.event.TreeSelectionEvent evt)
+    {//GEN-FIRST:event_jTreeDirsValueChanged
 
-            if(this.jTreeDirs.getSelectionPath().getLastPathComponent() instanceof Directory)
+        this.jButtonAddFile.setEnabled(false);
+        this.jButtonDownload.setEnabled(false);
+        this.jButtonNewFolder.setEnabled(false);
+        this.jButtonaddFolder.setEnabled(false);
+        this.jMenuBorrar.setEnabled(false);
+        this.jMenuDirAdd.setEnabled(false);
+        this.jMenuAdd.setEnabled(false);
+        this.jMenuItemCrearDirectorio.setEnabled(false);
+        this.jMenuRename.setEnabled(false);
+        this.jMenuFileAdd.setEnabled(false);
+
+        if (this.jTreeDirs.getSelectionPath().getLastPathComponent() instanceof Directory)
+        {
+            this.setCursor(new Cursor(Cursor.WAIT_CURSOR));
+            Directory dir = (Directory) this.jTreeDirs.getSelectionPath().getLastPathComponent();
+            if (this.hasPermission(dir.getDirectory()))
             {
-                this.setCursor(new Cursor(Cursor.WAIT_CURSOR));
-                Directory dir=(Directory)this.jTreeDirs.getSelectionPath().getLastPathComponent();
-                if(this.hasPermission(dir.getDirectory()))
-                {
-                    this.jMenuFileAdd.setEnabled(true);
-                    this.jMenuAdd.setEnabled(true);
-                    this.jMenuRename.setEnabled(true);
-                    this.jMenuItemCrearDirectorio.setEnabled(true);
-                    this.jMenuDirAdd.setEnabled(true);
-                    this.jMenuBorrar.setEnabled(true);
-                    this.jButtonAddFile.setEnabled(true);
-                    this.jButtonDownload.setEnabled(true);
-                    this.jButtonNewFolder.setEnabled(true);
-                    this.jButtonaddFolder.setEnabled(true);
-                }
-                loadFiles(dir);
+                this.jMenuFileAdd.setEnabled(true);
+                this.jMenuAdd.setEnabled(true);
+                this.jMenuRename.setEnabled(true);
+                this.jMenuItemCrearDirectorio.setEnabled(true);
+                this.jMenuDirAdd.setEnabled(true);
+                this.jMenuBorrar.setEnabled(true);
+                this.jButtonAddFile.setEnabled(true);
+                this.jButtonDownload.setEnabled(true);
+                this.jButtonNewFolder.setEnabled(true);
+                this.jButtonaddFolder.setEnabled(true);
             }
-            this.jTreeDirs.updateUI();
-            this.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-        
+            loadFiles(dir);
+        }
+        this.jTreeDirs.updateUI();
+        this.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+
     }//GEN-LAST:event_jTreeDirsValueChanged
-    public boolean createFile(java.io.File filelocal,String path,boolean siAll) throws Exception 
+
+    public boolean createFile(java.io.File filelocal, String path, boolean siAll, Component dialog) throws Exception
     {
-        String newpath=path;
+        String newpath = path;
         try
         {
-            newpath=WBXMLParser.encode(path,"UTF-8");
-        }catch(Exception e){}
-        if(exists(path))
-        {   
-            if(!siAll)
+            newpath = WBXMLParser.encode(path, "UTF-8");
+        }
+        catch (Exception e)
+        {
+        }
+        if (exists(path))
+        {
+            if (!siAll)
             {
-                
+                Component parent = this;
+                if (dialog != null)
+                {
+                    parent = dialog;
+                }
                 int selection = JOptionPane.showOptionDialog(
-                                        this,
-                                        java.util.ResourceBundle.getBundle("applets/ftp/ftp",locale).getString("msg_file_overwrite1")+
-                                        " '"+ filelocal.getParentFile().getName()+"' "+
-                                        java.util.ResourceBundle.getBundle("applets/ftp/ftp",locale).getString("msg_file_overwrite2")+
-                                        " '"+filelocal.getName()+"'.\r\n"+
-                                        java.util.ResourceBundle.getBundle("applets/ftp/ftp",locale).getString("msg_file_overwrite3"),
-                                        java.util.ResourceBundle.getBundle("applets/ftp/ftp",locale).getString("title"),
-                                        JOptionPane.DEFAULT_OPTION,
-                                        JOptionPane.QUESTION_MESSAGE,
-                                        null,
-                                        choices,
-                                        choices[0]
-                                        );
-                switch(selection)
+                        parent,
+                        java.util.ResourceBundle.getBundle("applets/ftp/ftp", locale).getString("msg_file_overwrite1")
+                        + " '" + filelocal.getParentFile().getName() + "' "
+                        + java.util.ResourceBundle.getBundle("applets/ftp/ftp", locale).getString("msg_file_overwrite2")
+                        + " '" + filelocal.getName() + "'.\r\n"
+                        + java.util.ResourceBundle.getBundle("applets/ftp/ftp", locale).getString("msg_file_overwrite3"),
+                        java.util.ResourceBundle.getBundle("applets/ftp/ftp", locale).getString("title"),
+                        JOptionPane.DEFAULT_OPTION,
+                        JOptionPane.QUESTION_MESSAGE,
+                        null,
+                        choices,
+                        choices[0]);
+                switch (selection)
                 {
                     case 0: //Si
-                        siAll=false;
+                        siAll = false;
                         break;
                     case 1: //Si All
-                        siAll=true;
+                        siAll = true;
                         break;
                     case 2:
                         return siAll;
-                    case 3:                        
+                    case 3:
                         throw new Exception(this.choices[selection]);
 
-                }  
+                }
             }
         }
         try
         {
-            URL urlupload=new URL(getCodeBase().getProtocol(),getCodeBase().getHost(),getCodeBase().getPort(),this.uploadpath);                
-            FileUpload fup=new FileUpload(ftp.jsess,urlupload,locale);
+            URL urlupload = new URL(getCodeBase().getProtocol(), getCodeBase().getHost(), getCodeBase().getPort(), this.uploadpath);
+            FileUpload fup = new FileUpload(ftp.jsess, urlupload, locale);
             fup.sendFile(path, filelocal);
         }
-        catch(Exception e)
+        catch (Exception e)
         {
-            
         }
         return siAll;
     }
+
     public boolean exists(String path)
     {
-        String newpath=path;
+        String newpath = path;
         try
         {
-            newpath=WBXMLParser.encode(path,"UTF-8");
-        }catch(Exception e){}
-        String xml="<?xml version=\"1.0\" encoding=\"UTF-8\"?><req><cmd>exists</cmd><path>"+ newpath +"</path></req>";        
-        String respxml=ftp.getData(xml);
-        WBXMLParser parser=new WBXMLParser();
-        WBTreeNode enode=parser.parse(respxml);
-        if(enode.getFirstNode()!=null && enode.getFirstNode().getFirstNode()!=null)
+            newpath = WBXMLParser.encode(path, "UTF-8");
+        }
+        catch (Exception e)
         {
-            WBTreeNode edir=enode.getFirstNode().getFirstNode();
-            if(edir.getName().equals("exists"))
+        }
+        String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><req><cmd>exists</cmd><path>" + newpath + "</path></req>";
+        String respxml = ftp.getData(xml);
+        WBXMLParser parser = new WBXMLParser();
+        WBTreeNode enode = parser.parse(respxml);
+        if (enode.getFirstNode() != null && enode.getFirstNode().getFirstNode() != null)
+        {
+            WBTreeNode edir = enode.getFirstNode().getFirstNode();
+            if (edir.getName().equals("exists"))
             {
-                if(edir.getFirstNode().getText().equals("true"))
-                {                    
+                if (edir.getFirstNode().getText().equals("true"))
+                {
                     return true;
-                }                   
+                }
             }
-            else if(edir.getName().equals("err"))
+            else if (edir.getName().equals("err"))
             {
-                String msg=edir.getFirstNode().getText();
-                JOptionPane.showMessageDialog(this,msg,
-                       java.util.ResourceBundle.getBundle("applets/ftp/ftp",locale).getString("title"),
+                String msg = edir.getFirstNode().getText();
+                JOptionPane.showMessageDialog(this, msg,
+                        java.util.ResourceBundle.getBundle("applets/ftp/ftp", locale).getString("title"),
                         JOptionPane.ERROR_MESSAGE);
             }
         }
         return false;
     }
-    public boolean createDir(String path,boolean siAll) throws Exception
+
+    public boolean createDir(String path, boolean siAll, Component component) throws Exception
     {
-        String newpath=path;
+        String newpath = path;
         try
         {
-            newpath=WBXMLParser.encode(path,"UTF-8");
-        }catch(Exception e){}
-        boolean exists=exists(path);        
-        if(exists)
+            newpath = WBXMLParser.encode(path, "UTF-8");
+        }
+        catch (Exception e)
         {
-            if(!siAll)
+        }
+        boolean exists = exists(path);
+        if (exists)
+        {
+            if (!siAll)
             {
-                java.io.File carpeta=new java.io.File(path);
+                java.io.File carpeta = new java.io.File(path);
+                Component parent = this;
+                if (component != null)
+                {
+                    parent = component;
+                }
                 int selection = JOptionPane.showOptionDialog(
-                                    this,
-                                    java.util.ResourceBundle.getBundle("applets/ftp/ftp",locale).getString("msg_carpeta_existe")+
-                                    " '"+ carpeta.getName() +
-                                    "'.\r\n"+
-                                    java.util.ResourceBundle.getBundle("applets/ftp/ftp",locale).getString("msg_carpeta_sobreescribe"),
-                                    java.util.ResourceBundle.getBundle("applets/ftp/ftp",locale).getString("title"),
-                                    JOptionPane.DEFAULT_OPTION,
-                                    JOptionPane.QUESTION_MESSAGE,
-                                    null,
-                                    choices,
-                                    choices[0]
-                                    );
-                switch(selection)
+                        parent,
+                        java.util.ResourceBundle.getBundle("applets/ftp/ftp", locale).getString("msg_carpeta_existe")
+                        + " '" + carpeta.getName()
+                        + "'.\r\n"
+                        + java.util.ResourceBundle.getBundle("applets/ftp/ftp", locale).getString("msg_carpeta_sobreescribe"),
+                        java.util.ResourceBundle.getBundle("applets/ftp/ftp", locale).getString("title"),
+                        JOptionPane.DEFAULT_OPTION,
+                        JOptionPane.QUESTION_MESSAGE,
+                        null,
+                        choices,
+                        choices[0]);
+                switch (selection)
                 {
                     case 0: //Si
-                        siAll=false;
+                        siAll = false;
                         break;
                     case 1: //Si All
-                        siAll=true;
+                        siAll = true;
                         break;
                     case 2:
                         return siAll;
-                    case 3:                        
+                    case 3:
                         throw new Exception(this.choices[selection]);
 
-                }  
+                }
             }
-        }            
-        String xml="<?xml version=\"1.0\" encoding=\"UTF-8\"?><req><cmd>createDir</cmd><path>"+ newpath +"</path></req>";        
-        String respxml=ftp.getData(xml);
-        WBXMLParser parser=new WBXMLParser();
-        WBTreeNode enode=parser.parse(respxml);
-        if(enode.getFirstNode()!=null && enode.getFirstNode().getFirstNode()!=null)
+        }
+        String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><req><cmd>createDir</cmd><path>" + newpath + "</path></req>";
+        String respxml = ftp.getData(xml);
+        WBXMLParser parser = new WBXMLParser();
+        WBTreeNode enode = parser.parse(respxml);
+        if (enode.getFirstNode() != null && enode.getFirstNode().getFirstNode() != null)
         {
-            WBTreeNode edir=enode.getFirstNode().getFirstNode();
-            if(edir.getName().equals("create"))
+            WBTreeNode edir = enode.getFirstNode().getFirstNode();
+            if (edir.getName().equals("create"))
             {
-                if(edir.getFirstNode().getText().equals("true"))
-                {                    
-
-                }                   
+                if (edir.getFirstNode().getText().equals("true"))
+                {
+                }
             }
-            else if(edir.getName().equals("err"))
+            else if (edir.getName().equals("err"))
             {
-                String msg=edir.getFirstNode().getText();
-                JOptionPane.showMessageDialog(this,msg,
-                       java.util.ResourceBundle.getBundle("applets/ftp/ftp",locale).getString("title"),
+                String msg = edir.getFirstNode().getText();
+                JOptionPane.showMessageDialog(this, msg,
+                        java.util.ResourceBundle.getBundle("applets/ftp/ftp", locale).getString("title"),
                         JOptionPane.ERROR_MESSAGE);
             }
         }
         return siAll;
     }
-    private boolean addDir(java.io.File dir,String path,boolean siAll) throws Exception
+
+    private boolean addDir(java.io.File dir, String path, boolean siAll, Component component) throws Exception
     {
-        String pathdir=path+"/"+dir.getName();        
-        siAll=this.createDir(pathdir,siAll);
-        java.io.File[] files=dir.listFiles();
-        for(int i=0;i<files.length;i++)
+        String pathdir = path + "/" + dir.getName();
+
+        siAll = this.createDir(pathdir, siAll, component);
+
+        java.io.File[] files = dir.listFiles();
+        for (int i = 0; i < files.length; i++)
         {
-            java.io.File file=files[i];
-            String pathchild=pathdir+"/"+file.getName();
-            if(file.isDirectory())
-            {                
-                siAll=addDir(file,pathdir, siAll);
+            java.io.File file = files[i];
+            String pathchild = pathdir + "/" + file.getName();
+            if (file.isDirectory())
+            {
+                siAll = addDir(file, pathdir, siAll, component);
             }
             else
             {
-                siAll=this.createFile(file, pathchild,siAll);
+
+                siAll = this.createFile(file, pathchild, siAll, component);
+
             }
         }
         return siAll;
     }
+
     private void addDir()
     {
-        if(this.jTreeDirs.getSelectionPath().getLastPathComponent() instanceof Directory)
+        if (this.jTreeDirs.getSelectionPath().getLastPathComponent() instanceof Directory)
         {
             try
             {
-                
-                URL urlupload=new URL(getCodeBase().getProtocol(),getCodeBase().getHost(),getCodeBase().getPort(),this.uploadpath);                
-                Directory dir=(Directory)this.jTreeDirs.getSelectionPath().getLastPathComponent();                                
-                this.jFileChooser1=new JFileChooser();
-                if(pathDir!=null)
+
+                //URL urlupload=new URL(getCodeBase().getProtocol(),getCodeBase().getHost(),getCodeBase().getPort(),this.uploadpath);
+                Directory dir = (Directory) this.jTreeDirs.getSelectionPath().getLastPathComponent();
+                this.jFileChooser1 = new JFileChooser();
+                if (pathDir != null)
+                {
                     this.jFileChooser1.setCurrentDirectory(pathDir);
-                this.jFileChooser1.setDialogTitle(java.util.ResourceBundle.getBundle("applets/ftp/ftp",locale).getString("add_dir"));
-                this.jFileChooser1.setMultiSelectionEnabled(false);                  
+                }
+                this.jFileChooser1.setDialogTitle(java.util.ResourceBundle.getBundle("applets/ftp/ftp", locale).getString("add_dir"));
+                this.jFileChooser1.setMultiSelectionEnabled(false);
                 this.jFileChooser1.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-                int ret=this.jFileChooser1.showOpenDialog(this);
-                pathDir=this.jFileChooser1.getCurrentDirectory();
+                int ret = this.jFileChooser1.showOpenDialog(this);
+                pathDir = this.jFileChooser1.getCurrentDirectory();
                 if (ret == JFileChooser.APPROVE_OPTION)
-                {       
-                    java.io.File dirlocal=this.jFileChooser1.getSelectedFile();                    
-                    boolean siAll=false;                   
+                {
+                    java.io.File dirlocal = this.jFileChooser1.getSelectedFile();
+                    DialogAddFile addFile = new DialogAddFile(null, dirlocal, this, dir);
                     try
                     {
-                        addDir(dirlocal,dir.getDirectory(),siAll);
-                        loadDirectories(dir);
-                        this.jTreeDirs.updateUI();
+                        addFile.addDir();
                     }
-                    catch(Exception e){}                    
-                }        
+                    catch (Exception e)
+                    {
+                        e.printStackTrace();
+                    } finally
+                    {
+                        addFile.setVisible(false);
+                        addFile.dispose();
+                    }
+                }
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 e.printStackTrace();
             }
         }
-    }  
-    
-    private void SendFiles(Vector files,Directory dir,URL urlupload)
-    {           
-        jTableFileModel model=(jTableFileModel)this.jTableFiles.getModel();        
-        Iterator it=files.iterator();        
-        while(it.hasNext())
-        {            
-            java.io.File f=(java.io.File)it.next();            
-            String path=dir.getDirectory()+"/"+f.getName();            
-            FUpload fup=new FUpload(null,false,jsess, urlupload,locale);        
-            ftp.Worker wr=new ftp.Worker(f,path,fup,model,dir);
-            SwingUtilities.invokeLater(wr);                       
+    }
+
+    private void SendFiles(ArrayList<java.io.File> files, Directory dir, URL urlupload)
+    {
+        jTableFileModel model = (jTableFileModel) this.jTableFiles.getModel();
+        Iterator it = files.iterator();
+        while (it.hasNext())
+        {
+            java.io.File f = (java.io.File) it.next();
+            String path = dir.getDirectory() + "/" + f.getName();
+            FUpload fup = new FUpload(null, false, jsess, urlupload, locale);
+            ftp.Worker wr = new ftp.Worker(f, path, fup, model, dir);
+            SwingUtilities.invokeLater(wr);
         }
     }
+
     private void addFile()
-    {        
-        if(this.jTreeDirs.getSelectionPath().getLastPathComponent() instanceof Directory)
+    {
+        if (this.jTreeDirs.getSelectionPath().getLastPathComponent() instanceof Directory)
         {
-            
+
             try
             {
-                
-                URL urlupload=new URL(getCodeBase().getProtocol(),getCodeBase().getHost(),getCodeBase().getPort(),this.uploadpath);                
-                Directory dir=(Directory)this.jTreeDirs.getSelectionPath().getLastPathComponent();                                
-                this.jFileChooser1=new JFileChooser();
-                if(pathDir!=null)
+
+
+                URL urlupload = new URL(getCodeBase().getProtocol(), getCodeBase().getHost(), getCodeBase().getPort(), this.uploadpath);
+                Directory dir = (Directory) this.jTreeDirs.getSelectionPath().getLastPathComponent();
+                this.jFileChooser1 = new JFileChooser();
+                if (pathDir != null)
+                {
                     this.jFileChooser1.setCurrentDirectory(pathDir);
-                this.jFileChooser1.setMultiSelectionEnabled(true);  
-                this.jFileChooser1.setDialogTitle(java.util.ResourceBundle.getBundle("applets/ftp/ftp",locale).getString("add_files"));
+                }
+                this.jFileChooser1.setMultiSelectionEnabled(true);
+                this.jFileChooser1.setDialogTitle(java.util.ResourceBundle.getBundle("applets/ftp/ftp", locale).getString("add_files"));
                 this.jFileChooser1.setFileSelectionMode(JFileChooser.FILES_ONLY);
-                int ret=this.jFileChooser1.showOpenDialog(this);    
-                pathDir=this.jFileChooser1.getCurrentDirectory();
+                int ret = this.jFileChooser1.showOpenDialog(this);
+                pathDir = this.jFileChooser1.getCurrentDirectory();
                 if (ret == JFileChooser.APPROVE_OPTION)
-                {       
-                    Vector<java.io.File> vfiles=new Vector<java.io.File>();
-                    applets.ftp.File fileexists=null;
+                {
+
+
+
+                    ArrayList<java.io.File> vfiles = new ArrayList<java.io.File>();
+                    applets.ftp.File fileexists = null;
                     java.io.File[] files = this.jFileChooser1.getSelectedFiles();
-                    boolean siAll=false;                    
-                    for(int i=0;i<files.length;i++)
+
+
+                    boolean siAll = false;
+                    for (int i = 0; i < files.length; i++)
                     {
-                        java.io.File f=files[i];    
-                        jTableFileModel model=(jTableFileModel)this.jTableFiles.getModel();
-                        boolean existe=false;
-                        for(int j=0;j<model.getRowCount();j++)
+                        java.io.File f = files[i];
+                        jTableFileModel model = (jTableFileModel) this.jTableFiles.getModel();
+                        boolean existe = false;
+                        for (int j = 0; j < model.getRowCount(); j++)
                         {
-                            applets.ftp.File filecat=model.getFile(j);
-                            if(filecat.getName().equalsIgnoreCase(f.getName()))
+                            applets.ftp.File filecat = model.getFile(j);
+                            if (filecat.getName().equalsIgnoreCase(f.getName()))
                             {
-                                existe=true;
-                                fileexists=filecat;
+                                existe = true;
+                                fileexists = filecat;
                             }
                         }
-                        if(existe)
+                        if (existe)
                         {
-                            if(siAll)
+                            if (siAll)
                             {
-                                if(fileexists!=null)
+                                if (fileexists != null)
+                                {
                                     model.removeFile(fileexists);
+                                }
                             }
                             else
                             {
                                 int selection = JOptionPane.showOptionDialog(
-                                            this,
-                                            java.util.ResourceBundle.getBundle("applets/ftp/ftp",locale).getString("existe_nombrefile")+" '"+fileexists.getName() +"' "+"\r\n"+java.util.ResourceBundle.getBundle("applets/ftp/ftp",locale).getString("sobreEscribir"),
-                                            java.util.ResourceBundle.getBundle("applets/ftp/ftp",locale).getString("title"),
-                                            JOptionPane.DEFAULT_OPTION,
-                                            JOptionPane.QUESTION_MESSAGE,
-                                            null,
-                                            choices,
-                                            choices[0]
-                                            );
-                                switch(selection)
+                                        this,
+                                        java.util.ResourceBundle.getBundle("applets/ftp/ftp", locale).getString("existe_nombrefile") + " '" + fileexists.getName() + "' " + "\r\n" + java.util.ResourceBundle.getBundle("applets/ftp/ftp", locale).getString("sobreEscribir"),
+                                        java.util.ResourceBundle.getBundle("applets/ftp/ftp", locale).getString("title"),
+                                        JOptionPane.DEFAULT_OPTION,
+                                        JOptionPane.QUESTION_MESSAGE,
+                                        null,
+                                        choices,
+                                        choices[0]);
+                                switch (selection)
                                 {
                                     case 0: //Si
-                                        siAll=false;
-                                        if(fileexists!=null)
+                                        siAll = false;
+                                        if (fileexists != null)
+                                        {
                                             model.removeFile(fileexists);
+                                        }
                                         break;
                                     case 1: //Si All
-                                        siAll=true;
-                                        if(fileexists!=null)
+                                        siAll = true;
+                                        if (fileexists != null)
+                                        {
                                             model.removeFile(fileexists);
+                                        }
                                         break;
                                     case 2: // No
                                         continue;
                                     case 3:  //Cancel                      
                                         return;
-                                } 
+                                }
                             }
-                
-                            
-                            
-                        }    
-                        vfiles.add(f);                          
-                    }                    
+
+
+
+                        }
+                        vfiles.add(f);
+                    }
                     this.jFileChooser1.updateUI();
-                    final Vector<java.io.File> osendfiles=vfiles;
-                    final Directory odir=dir;
-                    final URL urlup=urlupload;
-                    
+                    final ArrayList<java.io.File> osendfiles = vfiles;
+                    final Directory odir = dir;
+                    final URL urlup = urlupload;
+
                     Runnable doWorkRunnable = new Runnable()
                     {
-                            public void run() {                                  
-                                SendFiles(osendfiles,odir,urlup);
-                            }          
+
+                        public void run()
+                        {
+                            SendFiles(osendfiles, odir, urlup);
+                        }
                     };
-                    SwingUtilities.invokeLater(doWorkRunnable); 
-                    
+                    SwingUtilities.invokeLater(doWorkRunnable);
+
                 }
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 e.printStackTrace();
             }
         }
     }
+
     private void renameFile()
     {
-        if(this.jTableFiles.getSelectedRowCount()>0)
+        if (this.jTableFiles.getSelectedRowCount() > 0)
         {
-            jTableFileModel model=(jTableFileModel)this.jTableFiles.getModel();
-            File file=model.getFile(this.jTableFiles.getSelectedRow());
-            String name=JOptionPane.showInputDialog(
-                        this,   // The parent frame
-                        java.util.ResourceBundle.getBundle("applets/ftp/ftp",locale).getString("nombre_file"),file.getName());
-            name=name.trim();
-            if(name.trim().equals(""))
+            jTableFileModel model = (jTableFileModel) this.jTableFiles.getModel();
+            File file = model.getFile(this.jTableFiles.getSelectedRow());
+            String name = JOptionPane.showInputDialog(
+                    this, // The parent frame
+                    java.util.ResourceBundle.getBundle("applets/ftp/ftp", locale).getString("nombre_file"), file.getName());
+            name = name.trim();
+            if (name.trim().equals(""))
             {
-                 JOptionPane.showMessageDialog(this,java.util.ResourceBundle.getBundle("applets/ftp/ftp",locale).getString("no_filename"),
-                           java.util.ResourceBundle.getBundle("applets/ftp/ftp",locale).getString("title"),
-                            JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, java.util.ResourceBundle.getBundle("applets/ftp/ftp", locale).getString("no_filename"),
+                        java.util.ResourceBundle.getBundle("applets/ftp/ftp", locale).getString("title"),
+                        JOptionPane.ERROR_MESSAGE);
                 return;
             }
-            for(int i=0;i<model.getRowCount();i++)
+            for (int i = 0; i < model.getRowCount(); i++)
             {
-                File f=model.getFile(i);                
-                if(f.getName().equalsIgnoreCase(name))
+                File f = model.getFile(i);
+                if (f.getName().equalsIgnoreCase(name))
                 {
-                    JOptionPane.showMessageDialog(this,java.util.ResourceBundle.getBundle("applets/ftp/ftp",locale).getString("existe_nombrefile"),
-                           java.util.ResourceBundle.getBundle("applets/ftp/ftp",locale).getString("title"),
+                    JOptionPane.showMessageDialog(this, java.util.ResourceBundle.getBundle("applets/ftp/ftp", locale).getString("existe_nombrefile"),
+                            java.util.ResourceBundle.getBundle("applets/ftp/ftp", locale).getString("title"),
                             JOptionPane.ERROR_MESSAGE);
                     return;
                 }
             }
-            String newpath=file.getDirectory().getDirectory()+"/"+name;            
-            if(renameFile(file,newpath))
+            String newpath = file.getDirectory().getDirectory() + "/" + name;
+            if (renameFile(file, newpath))
             {
-                
+
                 file.setName(name);
                 file.setPath(newpath);
                 this.jTableFiles.updateUI();
             }
         }
     }
-   
-    private boolean renameFile(File f,String newpath)
+
+    private boolean renameFile(File f, String newpath)
     {
-        String path=f.getPath();
+        String path = f.getPath();
         try
         {
-            path=WBXMLParser.encode(path,"UTF-8");
-            newpath=WBXMLParser.encode(newpath,"UTF-8");
+            path = WBXMLParser.encode(path, "UTF-8");
+            newpath = WBXMLParser.encode(newpath, "UTF-8");
         }
-        catch(Exception e){}
-        String xml="<?xml version=\"1.0\" encoding=\"UTF-8\"?><req><cmd>rename</cmd><path>"+ path +"</path><newpath>" + newpath + "</newpath></req>";        
-        String respxml=ftp.getData(xml);
-        WBXMLParser parser=new WBXMLParser();
-        WBTreeNode enode=parser.parse(respxml);
-        if(enode.getFirstNode()!=null && enode.getFirstNode().getFirstNode()!=null)
+        catch (Exception e)
         {
-            WBTreeNode edir=enode.getFirstNode().getFirstNode();
-            if(edir.getName().equals("rename"))
+        }
+        String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><req><cmd>rename</cmd><path>" + path + "</path><newpath>" + newpath + "</newpath></req>";
+        String respxml = ftp.getData(xml);
+        WBXMLParser parser = new WBXMLParser();
+        WBTreeNode enode = parser.parse(respxml);
+        if (enode.getFirstNode() != null && enode.getFirstNode().getFirstNode() != null)
+        {
+            WBTreeNode edir = enode.getFirstNode().getFirstNode();
+            if (edir.getName().equals("rename"))
             {
-                if(edir.getFirstNode().getText().equals("true"))
+                if (edir.getFirstNode().getText().equals("true"))
                 {
                     return true;
                 }
             }
-            else if(edir.getName().equals("err"))
+            else if (edir.getName().equals("err"))
             {
-                String msg=edir.getFirstNode().getText();                
-                JOptionPane.showMessageDialog(this,msg,
-                       java.util.ResourceBundle.getBundle("applets/ftp/ftp",locale).getString("title"),
+                String msg = edir.getFirstNode().getText();
+                JOptionPane.showMessageDialog(this, msg,
+                        java.util.ResourceBundle.getBundle("applets/ftp/ftp", locale).getString("title"),
                         JOptionPane.ERROR_MESSAGE);
 
             }
         }
-        return false;  
+        return false;
     }
+
     private void renameDir()
     {
-        if(this.jTreeDirs.getSelectionPath().getLastPathComponent() instanceof Directory)
-        {            
-            Directory dir=(Directory)this.jTreeDirs.getSelectionPath().getLastPathComponent();
-            if(dir.getParent()==null)
+        if (this.jTreeDirs.getSelectionPath().getLastPathComponent() instanceof Directory)
+        {
+            Directory dir = (Directory) this.jTreeDirs.getSelectionPath().getLastPathComponent();
+            if (dir.getParent() == null)
             {
-                JOptionPane.showMessageDialog(this,java.util.ResourceBundle.getBundle("applets/ftp/ftp",locale).getString("no_renombrar"),
-                           java.util.ResourceBundle.getBundle("applets/ftp/ftp",locale).getString("title"),
-                            JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, java.util.ResourceBundle.getBundle("applets/ftp/ftp", locale).getString("no_renombrar"),
+                        java.util.ResourceBundle.getBundle("applets/ftp/ftp", locale).getString("title"),
+                        JOptionPane.ERROR_MESSAGE);
                 return;
             }
-            Directory parent=(Directory)dir.getParent();
-            String name=JOptionPane.showInputDialog(
-                        this,   // The parent frame
-                        java.util.ResourceBundle.getBundle("applets/ftp/ftp",locale).getString("nombre_dir"),dir.getName());
-            name=name.trim();
-            if(name.trim().equals(""))
+            Directory parent = (Directory) dir.getParent();
+            String name = JOptionPane.showInputDialog(
+                    this, // The parent frame
+                    java.util.ResourceBundle.getBundle("applets/ftp/ftp", locale).getString("nombre_dir"), dir.getName());
+            name = name.trim();
+            if (name.trim().equals(""))
             {
-                 JOptionPane.showMessageDialog(this,java.util.ResourceBundle.getBundle("applets/ftp/ftp",locale).getString("no_nombre"),
-                           java.util.ResourceBundle.getBundle("applets/ftp/ftp",locale).getString("title"),
-                            JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, java.util.ResourceBundle.getBundle("applets/ftp/ftp", locale).getString("no_nombre"),
+                        java.util.ResourceBundle.getBundle("applets/ftp/ftp", locale).getString("title"),
+                        JOptionPane.ERROR_MESSAGE);
                 return;
             }
-            for(int i=0;i<parent.getChildCount();i++)
+            for (int i = 0; i < parent.getChildCount(); i++)
             {
-                Directory child=(Directory)parent.getChildAt(i);
-                if(child.getName().equalsIgnoreCase(name))
+                Directory child = (Directory) parent.getChildAt(i);
+                if (child.getName().equalsIgnoreCase(name))
                 {
-                     JOptionPane.showMessageDialog(this,java.util.ResourceBundle.getBundle("applets/ftp/ftp",locale).getString("existe_nombre"),
-                           java.util.ResourceBundle.getBundle("applets/ftp/ftp",locale).getString("title"),
+                    JOptionPane.showMessageDialog(this, java.util.ResourceBundle.getBundle("applets/ftp/ftp", locale).getString("existe_nombre"),
+                            java.util.ResourceBundle.getBundle("applets/ftp/ftp", locale).getString("title"),
                             JOptionPane.ERROR_MESSAGE);
                     return;
                 }
             }
-            
-            String path=parent.getDirectory()+"/"+name;
-            if(renameDir(dir,path))
-            {                
+
+            String path = parent.getDirectory() + "/" + name;
+            if (renameDir(dir, path))
+            {
                 dir.setName(name);
-                dir.setDirectory(path);                
-                this.jTreeDirs.updateUI();                
-                
+                dir.setDirectory(path);
+                this.jTreeDirs.updateUI();
+
             }
         }
     }
-    private boolean renameDir(Directory dir,String newpath)
+
+    private boolean renameDir(Directory dir, String newpath)
     {
-        String path=dir.getDirectory();
+        String path = dir.getDirectory();
         try
         {
-            path=WBXMLParser.encode(path,"UTF-8");
-            newpath=WBXMLParser.encode(newpath,"UTF-8");
+            path = WBXMLParser.encode(path, "UTF-8");
+            newpath = WBXMLParser.encode(newpath, "UTF-8");
         }
-        catch(Exception e){}
-        String xml="<?xml version=\"1.0\" encoding=\"UTF-8\"?><req><cmd>rename</cmd><path>"+ path +"</path><newpath>" + newpath + "</newpath></req>";        
-        String respxml=ftp.getData(xml);
-        WBXMLParser parser=new WBXMLParser();
-        WBTreeNode enode=parser.parse(respxml);
-        if(enode.getFirstNode()!=null && enode.getFirstNode().getFirstNode()!=null)
+        catch (Exception e)
         {
-            WBTreeNode edir=enode.getFirstNode().getFirstNode();
-            if(edir.getName().equals("rename"))
+        }
+        String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><req><cmd>rename</cmd><path>" + path + "</path><newpath>" + newpath + "</newpath></req>";
+        String respxml = ftp.getData(xml);
+        WBXMLParser parser = new WBXMLParser();
+        WBTreeNode enode = parser.parse(respxml);
+        if (enode.getFirstNode() != null && enode.getFirstNode().getFirstNode() != null)
+        {
+            WBTreeNode edir = enode.getFirstNode().getFirstNode();
+            if (edir.getName().equals("rename"))
             {
-                if(edir.getFirstNode().getText().equals("true"))
+                if (edir.getFirstNode().getText().equals("true"))
                 {
                     return true;
                 }
             }
-            else if(edir.getName().equals("err"))
+            else if (edir.getName().equals("err"))
             {
-                String msg=edir.getFirstNode().getText();                
-                JOptionPane.showMessageDialog(this,msg,
-                       java.util.ResourceBundle.getBundle("applets/ftp/ftp",locale).getString("title"),
+                String msg = edir.getFirstNode().getText();
+                JOptionPane.showMessageDialog(this, msg,
+                        java.util.ResourceBundle.getBundle("applets/ftp/ftp", locale).getString("title"),
                         JOptionPane.ERROR_MESSAGE);
 
             }
         }
-        return false;    
-        
+        return false;
+
     }
+
     private void deleteDir()
-    {        
-        if(this.jTreeDirs.getSelectionPath().getLastPathComponent() instanceof Directory)
-        {            
-            Directory dir=(Directory)this.jTreeDirs.getSelectionPath().getLastPathComponent();
+    {
+        if (this.jTreeDirs.getSelectionPath().getLastPathComponent() instanceof Directory)
+        {
+            Directory dir = (Directory) this.jTreeDirs.getSelectionPath().getLastPathComponent();
             loadDirectories(dir);
-            jTableFileModel model=(jTableFileModel)this.jTableFiles.getModel();
-            if(model.getRowCount()>0 || dir.getChildCount()>0)
+            jTableFileModel model = (jTableFileModel) this.jTableFiles.getModel();
+            if (model.getRowCount() > 0 || dir.getChildCount() > 0)
             {
-                JOptionPane.showMessageDialog(this,java.util.ResourceBundle.getBundle("applets/ftp/ftp",locale).getString("no_empty"),
-                           java.util.ResourceBundle.getBundle("applets/ftp/ftp",locale).getString("title"),
-                            JOptionPane.ERROR_MESSAGE);
-                return;                
-            }
-            
-            if(dir.getParent()==null)
-            {
-                JOptionPane.showMessageDialog(this,java.util.ResourceBundle.getBundle("applets/ftp/ftp",locale).getString("no_borrar"),
-                           java.util.ResourceBundle.getBundle("applets/ftp/ftp",locale).getString("title"),
-                            JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, java.util.ResourceBundle.getBundle("applets/ftp/ftp", locale).getString("no_empty"),
+                        java.util.ResourceBundle.getBundle("applets/ftp/ftp", locale).getString("title"),
+                        JOptionPane.ERROR_MESSAGE);
                 return;
             }
-            
-            if(JOptionPane.YES_OPTION!=JOptionPane.showConfirmDialog(
-                        this,   // The parent frame
-                        java.util.ResourceBundle.getBundle("applets/ftp/ftp",locale).getString("askdir")+" "+dir.getName()+"?",
-                        java.util.ResourceBundle.getBundle("applets/ftp/ftp",locale).getString("title"),
-                        JOptionPane.YES_NO_OPTION,   // The option type
-                        JOptionPane.QUESTION_MESSAGE
-                        ))
+
+            if (dir.getParent() == null)
+            {
+                JOptionPane.showMessageDialog(this, java.util.ResourceBundle.getBundle("applets/ftp/ftp", locale).getString("no_borrar"),
+                        java.util.ResourceBundle.getBundle("applets/ftp/ftp", locale).getString("title"),
+                        JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            if (JOptionPane.YES_OPTION != JOptionPane.showConfirmDialog(
+                    this, // The parent frame
+                    java.util.ResourceBundle.getBundle("applets/ftp/ftp", locale).getString("askdir") + " " + dir.getName() + "?",
+                    java.util.ResourceBundle.getBundle("applets/ftp/ftp", locale).getString("title"),
+                    JOptionPane.YES_NO_OPTION, // The option type
+                    JOptionPane.QUESTION_MESSAGE))
             {
                 return;
             }
-            
-            
-            
-            
-            if(dir.getParent() instanceof Directory)
-            {                
-                Directory parent=(Directory)dir.getParent();
+
+
+
+
+            if (dir.getParent() instanceof Directory)
+            {
+                Directory parent = (Directory) dir.getParent();
                 this.setCursor(new Cursor(Cursor.WAIT_CURSOR));
-                if(deleteDir(dir))
-                {                    
+                if (deleteDir(dir))
+                {
                     this.jTreeDirs.setSelectionPath(this.jTreeDirs.getSelectionPath().getParentPath());
                     parent.remove(dir);
                     this.jTreeDirs.updateUI();
@@ -1555,85 +1764,87 @@ public class ftp extends javax.swing.JApplet implements ListSelectionListener,Fi
                 this.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
             }
         }
-        
-        
+
+
     }
-    
+
     private boolean deleteDir(Directory dir)
     {
-        String path=dir.getDirectory();
+        String path = dir.getDirectory();
         try
         {
-            path=WBXMLParser.encode(dir.getDirectory(),"UTF-8");
+            path = WBXMLParser.encode(dir.getDirectory(), "UTF-8");
         }
-        catch(Exception e){}                
-        String xml="<?xml version=\"1.0\" encoding=\"UTF-8\"?><req><cmd>delete</cmd><path>"+ path +"</path></req>";                
-        String respxml=ftp.getData(xml);
-        WBXMLParser parser=new WBXMLParser();
-        WBTreeNode enode=parser.parse(respxml);
-        if(enode.getFirstNode()!=null && enode.getFirstNode().getFirstNode()!=null)
+        catch (Exception e)
         {
-            WBTreeNode edir=enode.getFirstNode().getFirstNode();
-            if(edir.getName().equals("delete"))
+        }
+        String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><req><cmd>delete</cmd><path>" + path + "</path></req>";
+        String respxml = ftp.getData(xml);
+        WBXMLParser parser = new WBXMLParser();
+        WBTreeNode enode = parser.parse(respxml);
+        if (enode.getFirstNode() != null && enode.getFirstNode().getFirstNode() != null)
+        {
+            WBTreeNode edir = enode.getFirstNode().getFirstNode();
+            if (edir.getName().equals("delete"))
             {
-                if(edir.getFirstNode().getText().equals("true"))
+                if (edir.getFirstNode().getText().equals("true"))
                 {
                     return true;
                 }
             }
-            else if(edir.getName().equals("err"))
+            else if (edir.getName().equals("err"))
             {
-                String msg=edir.getFirstNode().getText();                
-                JOptionPane.showMessageDialog(this,msg,
-                       java.util.ResourceBundle.getBundle("applets/ftp/ftp",locale).getString("title"),
+                String msg = edir.getFirstNode().getText();
+                JOptionPane.showMessageDialog(this, msg,
+                        java.util.ResourceBundle.getBundle("applets/ftp/ftp", locale).getString("title"),
                         JOptionPane.ERROR_MESSAGE);
 
             }
         }
-        return false;         
+        return false;
     }
-    private void deleteFile()
-    {      
 
-        jTableFileModel model=(jTableFileModel)this.jTableFiles.getModel();
-        int[] isel=this.jTableFiles.getSelectedRows();
-        ArrayList<File> files=new ArrayList<File>();
-        for(int i=0;i<isel.length;i++)
+    private void deleteFile()
+    {
+
+        jTableFileModel model = (jTableFileModel) this.jTableFiles.getModel();
+        int[] isel = this.jTableFiles.getSelectedRows();
+        ArrayList<File> files = new ArrayList<File>();
+        for (int i = 0; i < isel.length; i++)
         {
-            int index=isel[i];
+            int index = isel[i];
             files.add(model.getFile(index));
         }
-        boolean siAll=false;
-        for(int i=0;i<files.size();i++)
+        boolean siAll = false;
+        for (int i = 0; i < files.size(); i++)
         {
-            File f=(File)files.get(i);
-            if(!siAll)
+            File f = (File) files.get(i);
+            if (!siAll)
             {
                 int selection = JOptionPane.showOptionDialog(
-                                        this,
-                                        java.util.ResourceBundle.getBundle("applets/ftp/ftp",locale).getString("ask1")+" "+f.getName()+"?",
-                                        java.util.ResourceBundle.getBundle("applets/ftp/ftp",locale).getString("title"),
-                                        JOptionPane.DEFAULT_OPTION,
-                                        JOptionPane.QUESTION_MESSAGE,
-                                        null,
-                                        choices,
-                                        choices[0]
-                                        );
-                switch(selection)
+                        this,
+                        java.util.ResourceBundle.getBundle("applets/ftp/ftp", locale).getString("ask1") + " " + f.getName() + "?",
+                        java.util.ResourceBundle.getBundle("applets/ftp/ftp", locale).getString("title"),
+                        JOptionPane.DEFAULT_OPTION,
+                        JOptionPane.QUESTION_MESSAGE,
+                        null,
+                        choices,
+                        choices[0]);
+                switch (selection)
                 {
                     case 0: //Si
-                        siAll=false;
+                        siAll = false;
                         break;
                     case 1: //Si All
-                        siAll=true;
+                        siAll = true;
                         break;
                     case 2: // No
                         continue;
                     case 3:  //Cancel                      
                         return;
-                }  
+                }
             }
-            if(deleteFile(f))
+            if (deleteFile(f))
             {
                 model.removeFile(f);
                 this.jTableFiles.updateUI();
@@ -1641,117 +1852,127 @@ public class ftp extends javax.swing.JApplet implements ListSelectionListener,Fi
             }
         }
     }
+
     private boolean deleteFile(File f)
-    {       
-               
-        String path=f.getPath();
+    {
+
+        String path = f.getPath();
         try
         {
-            path=WBXMLParser.encode(f.getPath(),"UTF-8");
+            path = WBXMLParser.encode(f.getPath(), "UTF-8");
         }
-        catch(Exception e){}
-        String xml="<?xml version=\"1.0\" encoding=\"UTF-8\"?><req><cmd>delete</cmd><path>"+ path +"</path></req>";        
-        String respxml=ftp.getData(xml);
-        WBXMLParser parser=new WBXMLParser();
-        WBTreeNode enode=parser.parse(respxml);
-        if(enode.getFirstNode()!=null && enode.getFirstNode().getFirstNode()!=null)
+        catch (Exception e)
         {
-            WBTreeNode edir=enode.getFirstNode().getFirstNode();
-            if(edir.getName().equals("delete"))
+        }
+        String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><req><cmd>delete</cmd><path>" + path + "</path></req>";
+        String respxml = ftp.getData(xml);
+        WBXMLParser parser = new WBXMLParser();
+        WBTreeNode enode = parser.parse(respxml);
+        if (enode.getFirstNode() != null && enode.getFirstNode().getFirstNode() != null)
+        {
+            WBTreeNode edir = enode.getFirstNode().getFirstNode();
+            if (edir.getName().equals("delete"))
             {
-                if(edir.getFirstNode().getText().equals("true"))
+                if (edir.getFirstNode().getText().equals("true"))
                 {
                     return true;
                 }
             }
-            else if(edir.getName().equals("err"))
+            else if (edir.getName().equals("err"))
             {
-                String msg=edir.getFirstNode().getText();
-                JOptionPane.showMessageDialog(this,msg,
-                       java.util.ResourceBundle.getBundle("applets/ftp/ftp",locale).getString("title"),
+                String msg = edir.getFirstNode().getText();
+                JOptionPane.showMessageDialog(this, msg,
+                        java.util.ResourceBundle.getBundle("applets/ftp/ftp", locale).getString("title"),
                         JOptionPane.ERROR_MESSAGE);
 
             }
         }
         return false;
     }
+
     private void createDir()
     {
-        if(this.jTreeDirs.getSelectionPath().getLastPathComponent() instanceof Directory)
+        if (this.jTreeDirs.getSelectionPath().getLastPathComponent() instanceof Directory)
         {
-            Directory dir=(Directory)this.jTreeDirs.getSelectionPath().getLastPathComponent();
+            Directory dir = (Directory) this.jTreeDirs.getSelectionPath().getLastPathComponent();
             createDir(dir);
         }
     }
-    private void createDir(Directory dir)
+
+    public void createDir(Directory dir)
     {
         this.jTreeDirs.expandPath(this.jTreeDirs.getSelectionPath());
-        String name=JOptionPane.showInputDialog(
-                        this,   // The parent frame
-                        java.util.ResourceBundle.getBundle("applets/ftp/ftp",locale).getString("nombre_dir"));
-        name=name.trim();
-        if(name.trim().equals(""))
+        String name = JOptionPane.showInputDialog(
+                this, // The parent frame
+                java.util.ResourceBundle.getBundle("applets/ftp/ftp", locale).getString("nombre_dir"));
+        name = name.trim();
+        if (name.trim().equals(""))
         {
-             JOptionPane.showMessageDialog(this,java.util.ResourceBundle.getBundle("applets/ftp/ftp",locale).getString("no_nombre"),
-                       java.util.ResourceBundle.getBundle("applets/ftp/ftp",locale).getString("title"),
-                        JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, java.util.ResourceBundle.getBundle("applets/ftp/ftp", locale).getString("no_nombre"),
+                    java.util.ResourceBundle.getBundle("applets/ftp/ftp", locale).getString("title"),
+                    JOptionPane.ERROR_MESSAGE);
             return;
         }
-        for(int i=0;i<dir.getChildCount();i++)
+        for (int i = 0; i < dir.getChildCount(); i++)
         {
-            Directory child=(Directory)dir.getChildAt(i);
-            if(child.getName().equalsIgnoreCase(name))
+            Directory child = (Directory) dir.getChildAt(i);
+            if (child.getName().equalsIgnoreCase(name))
             {
-                 JOptionPane.showMessageDialog(this,java.util.ResourceBundle.getBundle("applets/ftp/ftp",locale).getString("existe_nombre"),
-                       java.util.ResourceBundle.getBundle("applets/ftp/ftp",locale).getString("title"),
+                JOptionPane.showMessageDialog(this, java.util.ResourceBundle.getBundle("applets/ftp/ftp", locale).getString("existe_nombre"),
+                        java.util.ResourceBundle.getBundle("applets/ftp/ftp", locale).getString("title"),
                         JOptionPane.ERROR_MESSAGE);
                 return;
             }
         }
-        String path=dir.getDirectory()+"/"+name;
-        String pathdir=path;
+        String path = dir.getDirectory() + "/" + name;
+        String pathdir = path;
         try
         {
-            pathdir=WBXMLParser.encode(pathdir,"UTF-8");
-        }catch(Exception e){}
-        String xml="<?xml version=\"1.0\" encoding=\"UTF-8\"?><req><cmd>createDir</cmd><path>"+ pathdir +"</path></req>";        
-        String respxml=ftp.getData(xml);
-        WBXMLParser parser=new WBXMLParser();
-        WBTreeNode enode=parser.parse(respxml);
-        if(enode.getFirstNode()!=null && enode.getFirstNode().getFirstNode()!=null)
+            pathdir = WBXMLParser.encode(pathdir, "UTF-8");
+        }
+        catch (Exception e)
         {
-            WBTreeNode edir=enode.getFirstNode().getFirstNode();
-            if(edir.getName().equals("create"))
+        }
+        String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><req><cmd>createDir</cmd><path>" + pathdir + "</path></req>";
+        String respxml = ftp.getData(xml);
+        WBXMLParser parser = new WBXMLParser();
+        WBTreeNode enode = parser.parse(respxml);
+        if (enode.getFirstNode() != null && enode.getFirstNode().getFirstNode() != null)
+        {
+            WBTreeNode edir = enode.getFirstNode().getFirstNode();
+            if (edir.getName().equals("create"))
             {
-                if(edir.getFirstNode().getText().equals("true"))
-                {                   
-                    Directory child=new Directory(name, path,"false");
-                    dir.add(child);                 
-                    TreePath newpath=this.jTreeDirs.getSelectionPath().pathByAddingChild(child);
+                if (edir.getFirstNode().getText().equals("true"))
+                {
+                    Directory child = new Directory(name, path, "false");
+                    dir.add(child);
+                    TreePath newpath = this.jTreeDirs.getSelectionPath().pathByAddingChild(child);
                     this.jTreeDirs.setSelectionPath(newpath);
                     this.jTreeDirs.updateUI();
-                }                   
+                }
             }
-            else if(edir.getName().equals("err"))
+            else if (edir.getName().equals("err"))
             {
-                String msg=edir.getFirstNode().getText();
-                JOptionPane.showMessageDialog(this,msg,
-                       java.util.ResourceBundle.getBundle("applets/ftp/ftp",locale).getString("title"),
+                String msg = edir.getFirstNode().getText();
+                JOptionPane.showMessageDialog(this, msg,
+                        java.util.ResourceBundle.getBundle("applets/ftp/ftp", locale).getString("title"),
                         JOptionPane.ERROR_MESSAGE);
 
             }
         }
-        
-        
+
+
     }
-    
-    public void valueChanged(ListSelectionEvent e) {
-      Modificated();
+
+    public void valueChanged(ListSelectionEvent e)
+    {
+        Modificated();
     }
-    
-    public void Modificated() {
+
+    public void Modificated()
+    {
         this.jTableFiles.updateUI();
-        if(this.jTableFiles.getSelectedRowCount()==0 || this.jTableFiles.getRowCount()==0)
+        if (this.jTableFiles.getSelectedRowCount() == 0 || this.jTableFiles.getRowCount() == 0)
         {
             this.jMenuItemBorrarFile.setEnabled(false);
             this.jMenuItemRenameFile.setEnabled(false);
@@ -1760,13 +1981,12 @@ public class ftp extends javax.swing.JApplet implements ListSelectionListener,Fi
         }
         else
         {
-           this.jMenuItemBorrarFile.setEnabled(true);
-           this.jMenuItemRenameFile.setEnabled(true);
-           this.jMenuItemDownload.setEnabled(true);
-           this.jButtonDownload.setEnabled(true);
+            this.jMenuItemBorrarFile.setEnabled(true);
+            this.jMenuItemRenameFile.setEnabled(true);
+            this.jMenuItemDownload.setEnabled(true);
+            this.jButtonDownload.setEnabled(true);
         }
     }
-    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonAddFile;
     private javax.swing.JButton jButtonDownload;
@@ -1819,27 +2039,36 @@ public class ftp extends javax.swing.JApplet implements ListSelectionListener,Fi
     private javax.swing.JToolBar jToolBar1;
     private javax.swing.JTree jTreeDirs;
     // End of variables declaration//GEN-END:variables
+
     private class Worker implements Runnable
     {
+
         FUpload fup;
         String path;
         java.io.File f;
         jTableFileModel model;
         Directory dir;
-        public Worker(java.io.File f,String path,FUpload fup,jTableFileModel model,Directory dir)
+
+        public Worker(java.io.File f, String path, FUpload fup, jTableFileModel model, Directory dir)
         {
-            this.fup=fup;
-            this.path=path;
-            this.f=f;
-            this.model=model;
-            this.dir=dir;
+            this.fup = fup;
+            this.path = path;
+            this.f = f;
+            this.model = model;
+            this.dir = dir;
         }
+
         public void run()
-        {            
-            fup.setLocation(400,300);
+        {
+            fup.setLocation(400, 300);
             fup.setSize(200, 50);
-            fup.sendFile(path,f,model,dir);
+            fup.sendFile(path, f, model, dir);
             jTableFiles.updateUI();
         }
+    }
+
+    public void updateTreeUI()
+    {
+        jTreeDirs.updateUI();
     }
 }
