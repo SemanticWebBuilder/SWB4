@@ -174,8 +174,7 @@ public class FUpload extends javax.swing.JDialog implements FileUploadListener
                             con.setRequestProperty("Cookie", "JSESSIONID=" + jsess);
                         }
                         con.addRequestProperty("PATHFILEWB", path);
-                        con.addRequestProperty("CIPHER", "true");
-                        System.out.println("CIPHER");
+                        con.addRequestProperty("CIPHER", "true");                        
                         con.setDoOutput(true);
                         OutputStream out = con.getOutputStream();
                         FileInputStream fin = new FileInputStream(f);
