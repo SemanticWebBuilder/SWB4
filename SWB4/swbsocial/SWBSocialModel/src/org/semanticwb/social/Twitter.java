@@ -27,12 +27,12 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
         this.msg = message;
         if (msg != null) {
             twitter4j.Twitter twitter = new TwitterFactory().getInstance();
-            String token=super.getSecreatKey().substring(0, super.getSecreatKey().indexOf("|"));
-            String secretToken=super.getSecreatKey().substring(super.getSecreatKey().indexOf("|") + 1, super.getSecreatKey().length());
+            String token = super.getSecreatKey().substring(0, super.getSecreatKey().indexOf("|"));
+            String secretToken = super.getSecreatKey().substring(super.getSecreatKey().indexOf("|") + 1, super.getSecreatKey().length());
             AccessToken accessToken = new AccessToken(token, secretToken);
             System.out.println("Mensaje de Twitter:" + msg.getMsg_Text());
             twitter.setOAuthAccessToken(accessToken);
-            
+
             try {
                 twitter.setOAuthAccessToken(accessToken);
                 StatusUpdate sup = new StatusUpdate(new String(message.getMsg_Text().getBytes(), "utf-8"));
@@ -75,15 +75,21 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
             System.out.println("Photo de Twitter:" + photo.getPhoto());
         }
     }
-    
-    
-    
-    private String shortUrl(String urlLong){
-   String shortUrl="";
-   if(!urlLong.equals("")){
-   tinyURL tU = new tinyURL();
-        shortUrl= tU.getTinyURL(urlLong);
-   }
-   return shortUrl;
+
+    private String shortUrl(String urlLong) {
+        String shortUrl = "";
+        if (urlLong != null && !urlLong.equals("")) {
+            String delimiter = " ";
+            String[] temp = urlLong.split(delimiter);
+            for (int i = 0; i < temp.length; i++) {
+                if ((temp[i].startsWith("http://") || temp[i].startsWith("http://")) && ((temp[i].length() > 9))) {
+                    tinyURL tU = new tinyURL();
+                    shortUrl = tU.getTinyURL(temp[i]);
+                }
+            }
+        }
+        return shortUrl;
     }
+    
+    
 }
