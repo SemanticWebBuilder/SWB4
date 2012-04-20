@@ -10,8 +10,15 @@
  */
 package applets.ftp;
 
+import applets.commons.WBTreeNode;
+import applets.commons.WBXMLParser;
+import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.net.URL;
-import java.util.Locale;
+import java.net.URLConnection;
+import java.util.ArrayList;
+import java.util.Iterator;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -45,10 +52,78 @@ public class DialogAddFile extends javax.swing.JDialog
     }
 
     public void addDir()
-    {       
-        Worker w = new Worker(this, dir, dirlocal);
+    {
+        WorkerUploadDir w = new WorkerUploadDir(this, dir, dirlocal);
         w.start();
         this.setVisible(true);
+    }
+
+    public void downloadDir()
+    {
+        ArrayList<java.io.File> files = new ArrayList<java.io.File>();
+        ArrayList<String> webfiles = new ArrayList<String>();
+        String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><req><cmd>downloadDir</cmd><path>" + dir.getDirectory() + "</path></req>";
+
+        String respxml = ftp.getData(xml);
+
+        WBXMLParser parser = new WBXMLParser();
+        WBTreeNode enode = parser.parse(respxml);
+
+        try
+        {
+            if (enode != null && enode.getFirstNode() != null && enode.getFirstNode().getFirstNode() != null)
+            {
+                WBTreeNode _dir = enode.getFirstNode().getFirstNode();
+                if (_dir.getName().equals("dir"))
+                {
+                    Iterator it = _dir.getNodes().iterator();
+                    while (it.hasNext())
+                    {
+                        _dir = (WBTreeNode) it.next();
+                        if (_dir != null && _dir.getName().equals("dir"))
+                        {
+                            String newPath = dirlocal.getAbsolutePath() + "/" + dir.getName() + "/" + _dir.getAttribute("relpath");
+                            newPath = newPath.replace("\\", "/");
+                            newPath = newPath.replace("//", "/");
+                            java.io.File newdir = new java.io.File(newPath);
+
+                            if (!newdir.exists())
+                            {
+                                newdir.mkdirs();
+                            }
+                        }
+                        else if (_dir != null && _dir.getName().equals("file"))
+                        {
+                            String newPath = dirlocal.getAbsolutePath() + "/" + dir.getName() + "/" + _dir.getAttribute("relpath");
+                            newPath = newPath.replace("\\", "/");
+                            newPath = newPath.replace("//", "/");
+                            java.io.File newfile = new java.io.File(newPath);
+
+                            java.io.File parent = newfile.getParentFile();
+
+                            if (!parent.exists())
+                            {
+                                parent.mkdirs();
+                            }
+                            files.add(newfile);
+
+                            webfiles.add(_dir.getAttribute("path"));
+                        }
+                    }
+                }
+
+
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        jProgressBar2.setMaximum(files.size());
+        WorkerDownloadDir w = new WorkerDownloadDir(this, files, webfiles);
+        w.start();
+        this.setVisible(true);
+
     }
 
     private int getCount(java.io.File[] files)
@@ -66,14 +141,14 @@ public class DialogAddFile extends javax.swing.JDialog
         return count;
     }
 
-    private class Worker extends Thread
+    private class WorkerUploadDir extends Thread
     {
 
         DialogAddFile dialog;
         Directory dir;
         java.io.File dirlocal;
 
-        public Worker(DialogAddFile dialog, Directory dir, java.io.File dirlocal)
+        public WorkerUploadDir(DialogAddFile dialog, Directory dir, java.io.File dirlocal)
         {
             this.dialog = dialog;
             this.dir = dir;
@@ -121,6 +196,122 @@ public class DialogAddFile extends javax.swing.JDialog
                 }
             }
             return siAll;
+        }
+    }
+
+    private class WorkerDownloadDir extends Thread
+    {
+
+        DialogAddFile dialog;
+        ArrayList<java.io.File> files;
+        ArrayList<String> webfiles;
+
+        public WorkerDownloadDir(DialogAddFile dialog, ArrayList<java.io.File> files, ArrayList<String> webfiles)
+        {
+            this.dialog = dialog;
+            this.files = files;
+            this.webfiles = webfiles;
+        }
+
+        @Override
+        public void run()
+        {
+            try
+            {
+                URL urldownload = new URL(ftp.getCodeBase().getProtocol(), ftp.getCodeBase().getHost(), ftp.getCodeBase().getPort(), ftp.downloadpath);
+                boolean siAll = false;
+                for (int i = 0; i < files.size(); i++)
+                {
+                    boolean doit = false;
+                    String path = webfiles.get(i);
+
+                    java.io.File filelocal = files.get(i);
+                    setText(filelocal.getName() + " ...");
+                    if (filelocal.exists())
+                    {
+                        if (!siAll)
+                        {
+                            int selection = JOptionPane.showOptionDialog(
+                                    dialog,
+                                    java.util.ResourceBundle.getBundle("applets/ftp/ftp", ftp.locale).getString("msg_file_overwrite1")
+                                    + " '" + filelocal.getParentFile().getName() + "' "
+                                    + java.util.ResourceBundle.getBundle("applets/ftp/ftp", ftp.locale).getString("msg_file_overwrite2")
+                                    + " '" + filelocal.getName() + "'.\r\n"
+                                    + java.util.ResourceBundle.getBundle("applets/ftp/ftp", ftp.locale).getString("msg_file_overwrite3"),
+                                    java.util.ResourceBundle.getBundle("applets/ftp/ftp", ftp.locale).getString("title"),
+                                    JOptionPane.DEFAULT_OPTION,
+                                    JOptionPane.QUESTION_MESSAGE,
+                                    null,
+                                    ftp.choices,
+                                    ftp.choices[0]);
+                            switch (selection)
+                            {
+                                case 0: //Si
+                                    siAll = false;
+                                    doit = true;
+                                    break;
+                                case 1: //Si All
+                                    siAll = true;
+                                    doit = true;
+                                    break;
+                                case 2: // No
+                                    siAll = false;
+                                    doit = false;
+                                    break;
+                                case 3: // Cancelar
+                                    return;
+
+                            }
+                        }
+                        else
+                        {
+                            doit = true;
+                        }
+                    }
+                    else
+                    {
+                        doit = true;
+                    }
+
+                    if (doit)
+                    {
+                        try
+                        {
+
+                            FileOutputStream out = new FileOutputStream(filelocal);
+                            URLConnection con = urldownload.openConnection();
+                            con.setUseCaches(false);
+                            if (ftp.jsess != null)
+                            {
+                                con.setRequestProperty("Cookie", "JSESSIONID=" + ftp.jsess);
+                            }
+                            con.addRequestProperty("PATHFILEWB", path);
+                            con.setDoInput(true);
+                            InputStream in = con.getInputStream();
+                            byte[] bcont = new byte[8192];
+                            int ret = in.read(bcont);
+                            while (ret != -1)
+                            {
+                                out.write(bcont, 0, ret);
+                                ret = in.read(bcont);
+                            }
+                            in.close();
+                            out.close();
+                        }
+                        catch (Exception e)
+                        {
+                            JOptionPane.showMessageDialog(null, e.getMessage(), java.util.ResourceBundle.getBundle("applets/ftp/ftp", ftp.locale).getString("title"), JOptionPane.ERROR_MESSAGE);
+                        }
+                    }
+                    incrementProgressBar();
+                }
+            }
+            catch (Exception e)
+            {
+                JOptionPane.showMessageDialog(null, e.getMessage(), java.util.ResourceBundle.getBundle("applets/ftp/ftp", ftp.locale).getString("title"), JOptionPane.ERROR_MESSAGE);
+            }
+            setVisible(false);
+            dispose();
         }
     }
 
