@@ -250,7 +250,49 @@ public class SelectMultiple extends org.semanticwb.model.base.SelectMultipleBase
 
                 ret.append("</select>");
             } else if (mode.equals("view")) {
-                ret.append("<span _id=\"" + name + "\" name=\"" + name + "\">" + value + "</span>");
+                ret.append("<select name=\"" + name + "\" multiple=\"true\"");
+                ret.append(" style=\"width:300px;\"");
+
+                if (DOJO) {
+                    //ret.append(" dojoType=\"dijit.form.MultiSelect\" invalidMessage=\"" + imsg + "\"");
+                }
+
+                ret.append(" disabled=\"disabled\">");
+
+                // onChange="dojo.byId('oc1').value=arguments[0]"
+                SemanticClass            cls = prop.getRangeClass();
+                Iterator<SemanticObject> it  = null;
+
+                if (isGlobalScope()) {
+                    if (cls != null) {
+                        it = SWBComparator.sortSermanticObjects(lang, cls.listInstances());
+                    } else {
+                        it = SWBComparator.sortSermanticObjects(lang,
+                        SWBPlatform.getSemanticMgr().getVocabulary().listSemanticClassesAsSemanticObjects());
+                    }
+                } else {
+                    it = SWBComparator.sortSermanticObjects(lang, getModel().listInstancesOfClass(cls));
+                }
+
+                while (it.hasNext()) {
+                    SemanticObject sob = it.next();
+                    boolean deleted=false;
+                    if(sob.instanceOf(Trashable.swb_Trashable))
+                    {
+                        deleted=sob.getBooleanProperty(Trashable.swb_deleted);
+                    }
+
+                    if(!deleted)
+                    {                    
+                        if (sob.getURI() != null) {
+                            if (vals.contains(sob.getURI())) {
+                                ret.append("<option value=\"" + sob.getURI() + "\" ");
+                                ret.append(">" + sob.getDisplayName(lang) + "</option>");
+                            }
+                        }
+                    }
+                }
+                ret.append("</select>");
             }
         } else {
             if (selectValues != null) {
