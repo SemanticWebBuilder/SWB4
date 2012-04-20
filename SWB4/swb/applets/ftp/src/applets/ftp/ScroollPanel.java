@@ -18,9 +18,9 @@ import javax.swing.JScrollPane;
 public class ScroollPanel extends JScrollPane implements DropTargetListener
 {
 
-    ftp ftp;
+    ftpPanel ftp;
 
-    public ScroollPanel(ftp ftp)
+    public ScroollPanel(ftpPanel ftp)
     {
         this.ftp = ftp;
     }
