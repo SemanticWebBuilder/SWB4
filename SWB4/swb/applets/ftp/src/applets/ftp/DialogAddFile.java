@@ -28,11 +28,11 @@ public class DialogAddFile extends javax.swing.JDialog
 {
 
     private final java.io.File dirlocal;
-    private final ftp ftp;
+    private final ftpPanel ftp;
     private final Directory dir;
 
     /** Creates new form DialogAddFile */
-    public DialogAddFile(java.awt.Frame parent, java.io.File dirlocal, ftp ftp, Directory dir)
+    public DialogAddFile(java.awt.Frame parent, java.io.File dirlocal, ftpPanel ftp, Directory dir)
     {
         super(parent, true);
         initComponents();
@@ -120,7 +120,7 @@ public class DialogAddFile extends javax.swing.JDialog
             e.printStackTrace();
         }
         jProgressBar2.setMaximum(files.size());
-        WorkerDownloadDir w = new WorkerDownloadDir(this, files, webfiles);
+        WorkerDownloadDir w = new WorkerDownloadDir(this, files, webfiles,ftp.urldownload);
         w.start();
         this.setVisible(true);
 
@@ -205,20 +205,20 @@ public class DialogAddFile extends javax.swing.JDialog
         DialogAddFile dialog;
         ArrayList<java.io.File> files;
         ArrayList<String> webfiles;
-
-        public WorkerDownloadDir(DialogAddFile dialog, ArrayList<java.io.File> files, ArrayList<String> webfiles)
+        URL urldownload;
+        public WorkerDownloadDir(DialogAddFile dialog, ArrayList<java.io.File> files, ArrayList<String> webfiles,URL urldownload)
         {
             this.dialog = dialog;
             this.files = files;
             this.webfiles = webfiles;
+            this.urldownload=urldownload;
         }
 
         @Override
         public void run()
         {
             try
-            {
-                URL urldownload = new URL(ftp.getCodeBase().getProtocol(), ftp.getCodeBase().getHost(), ftp.getCodeBase().getPort(), ftp.downloadpath);
+            {                
                 boolean siAll = false;
                 for (int i = 0; i < files.size(); i++)
                 {

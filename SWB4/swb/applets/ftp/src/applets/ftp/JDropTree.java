@@ -17,9 +17,9 @@ import javax.swing.JTree;
 public class JDropTree extends JTree implements DropTargetListener
 {
 
-    ftp ftp;
+    ftpPanel ftp;
 
-    public JDropTree(ftp ftp)
+    public JDropTree(ftpPanel ftp)
     {
         this.ftp = ftp;
     }
