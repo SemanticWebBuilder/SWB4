@@ -145,6 +145,8 @@ public class AudioPodCast extends org.semanticwb.portal.resources.sem.base.Audio
             }
         }else {
             String uri = request.getParameter("uri");
+            if(uri==null)
+                return;
             uri = URLDecoder.decode(uri, "UTF-8");
             AudioFile audiofile = null;
             try {
