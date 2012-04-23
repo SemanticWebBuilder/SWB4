@@ -157,7 +157,14 @@ public class SWBNews extends org.semanticwb.portal.resources.sem.news.base.SWBNe
     {
         if (paramRequest.getMode().equals("month"))
         {
-            doShowNewsByMoth(request, response, paramRequest);
+            if(paramRequest.getCallMethod()==paramRequest.Call_STRATEGY)
+            {
+                doStategy(request, response, paramRequest);
+            }
+            else
+            {
+                doShowNewsByMoth(request, response, paramRequest);
+            }
         }
         else if (paramRequest.getMode().equals("title"))
         {
