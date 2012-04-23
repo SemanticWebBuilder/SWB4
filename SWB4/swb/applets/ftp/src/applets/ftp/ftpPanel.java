@@ -956,9 +956,16 @@ public class ftpPanel extends javax.swing.JPanel implements ListSelectionListene
 
     private void jTreeDirsKeyReleased(java.awt.event.KeyEvent evt)
     {//GEN-FIRST:event_jTreeDirsKeyReleased
+        try
+        {
         if (evt!=null && evt.getKeyCode() == KeyEvent.VK_DELETE)
         {
             this.deleteDir();
+        }
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
         }
     }//GEN-LAST:event_jTreeDirsKeyReleased
 
@@ -1023,6 +1030,8 @@ public class ftpPanel extends javax.swing.JPanel implements ListSelectionListene
 
     private void jTreeDirsMousePressed(java.awt.event.MouseEvent evt)
     {//GEN-FIRST:event_jTreeDirsMousePressed
+        try
+        {
         if (evt!=null && evt.getButton() == MouseEvent.BUTTON3 && evt.getClickCount() == 1 && this.jTreeDirs!=null && this.jTreeDirs.getSelectionPath() != null)
         {
             jMenuItemNewFolder.setEnabled(false);
@@ -1044,6 +1053,11 @@ public class ftpPanel extends javax.swing.JPanel implements ListSelectionListene
                 }
             }
             this.jPopupMenuDir.show(this.jTreeDirs, evt.getX(), evt.getY());
+        }
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
         }
     }//GEN-LAST:event_jTreeDirsMousePressed
 
