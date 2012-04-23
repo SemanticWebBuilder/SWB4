@@ -27,6 +27,7 @@
  */
 package applets.ftp;
 
+import java.awt.Dialog;
 import javax.swing.*;
 import java.io.*;
 import java.net.*;
@@ -43,14 +44,14 @@ public class FUpload extends javax.swing.JDialog implements FileUploadListener
     /** Creates new form FUpload */
     URL url;
     String jsess;
-    Vector listeners = new Vector();
+    ArrayList<FileUploadListener> listeners = new ArrayList<FileUploadListener>();
     String path;
-    java.io.File f;
-    jTableFileModel model;
+    private java.io.File f;
+    private jTableFileModel model;
     Directory dir;
     Locale locale;
 
-    public FUpload(java.awt.Frame parent, boolean modal, String jsess, URL url, Locale locale)
+    public FUpload(Dialog parent, boolean modal, String jsess, URL url, Locale locale)
     {
         super(parent, modal);
         initComponents();
@@ -119,6 +120,7 @@ public class FUpload extends javax.swing.JDialog implements FileUploadListener
         dispose();
     }//GEN-LAST:event_closeDialog
 
+    @Override
     public void onSend(int size, int value)
     {
         this.jProgressBar1.setValue(value);
@@ -150,6 +152,7 @@ public class FUpload extends javax.swing.JDialog implements FileUploadListener
         {
         }
 
+        @Override
         public void run()
         {
             try
@@ -173,6 +176,7 @@ public class FUpload extends javax.swing.JDialog implements FileUploadListener
                         {
                             con.setRequestProperty("Cookie", "JSESSIONID=" + jsess);
                         }
+                        con.addRequestProperty("FTP", "true");
                         con.addRequestProperty("PATHFILEWB", path);
                         con.addRequestProperty("CIPHER", "true");                        
                         con.setDoOutput(true);

@@ -35,6 +35,7 @@ import javax.swing.*;
 import java.io.*;
 import java.net.*;
 import java.util.*;
+import java.util.ArrayList;
 /**
  * Clase que realiza la función de envíar un archivo al servidor, esta asociada
  * esta clase con la clase FUpload, que es la representación grafica de esta
@@ -47,7 +48,7 @@ public class FileUpload {
        
     URL url;
     String jsess;
-    Vector listeners=new Vector();
+    ArrayList<FileUploadListener> listeners=new ArrayList<FileUploadListener>();
     Locale locale;
     public FileUpload(String jsess,URL url,Locale locale) {                
         this.jsess=jsess;
@@ -82,6 +83,7 @@ public class FileUpload {
                     con.setDefaultUseCaches(false);   
                     con.setFixedLengthStreamingMode((int)f.length());
                     if(jsess!=null)con.setRequestProperty("Cookie","JSESSIONID="+jsess);
+                    con.addRequestProperty("FTP", "true");
                     con.addRequestProperty("PATHFILEWB",path);
                     con.setDoOutput(true);                
                     OutputStream out=con.getOutputStream();
