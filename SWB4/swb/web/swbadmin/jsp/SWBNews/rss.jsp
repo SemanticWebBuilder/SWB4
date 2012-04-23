@@ -316,8 +316,8 @@ public static String changeCharacters(String data)
 
                     }*/
                 }
-
-                out.write(org.semanticwb.SWBUtils.XML.domToXml(doc, "utf-8", true));
+                String xml=org.semanticwb.SWBUtils.TEXT.decode(org.semanticwb.SWBUtils.XML.domToXml(doc),"UTF-8");
+                out.write(xml);
             }
             else
             {
