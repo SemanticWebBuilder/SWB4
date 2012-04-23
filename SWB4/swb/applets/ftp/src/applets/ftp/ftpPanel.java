@@ -956,7 +956,7 @@ public class ftpPanel extends javax.swing.JPanel implements ListSelectionListene
 
     private void jTreeDirsKeyReleased(java.awt.event.KeyEvent evt)
     {//GEN-FIRST:event_jTreeDirsKeyReleased
-        if (evt.getKeyCode() == KeyEvent.VK_DELETE)
+        if (evt!=null && evt.getKeyCode() == KeyEvent.VK_DELETE)
         {
             this.deleteDir();
         }
@@ -964,7 +964,7 @@ public class ftpPanel extends javax.swing.JPanel implements ListSelectionListene
 
     private void jTableFilesKeyReleased(java.awt.event.KeyEvent evt)
     {//GEN-FIRST:event_jTableFilesKeyReleased
-        if (evt.getKeyCode() == KeyEvent.VK_DELETE)
+        if (evt!=null && evt.getKeyCode() == KeyEvent.VK_DELETE)
         {
             this.deleteFile();
         }
@@ -1023,7 +1023,7 @@ public class ftpPanel extends javax.swing.JPanel implements ListSelectionListene
 
     private void jTreeDirsMousePressed(java.awt.event.MouseEvent evt)
     {//GEN-FIRST:event_jTreeDirsMousePressed
-        if (evt.getButton() == MouseEvent.BUTTON3 && evt.getClickCount() == 1 && this.jTreeDirs.getSelectionPath() != null)
+        if (evt!=null && evt.getButton() == MouseEvent.BUTTON3 && evt.getClickCount() == 1 && this.jTreeDirs!=null && this.jTreeDirs.getSelectionPath() != null)
         {
             jMenuItemNewFolder.setEnabled(false);
             jMenuDirAdd.setEnabled(false);
@@ -1195,15 +1195,8 @@ public class ftpPanel extends javax.swing.JPanel implements ListSelectionListene
     }
 
     public boolean createFile(java.io.File filelocal, String path, boolean siAll, Component dialog) throws Exception
-    {
-        String newpath = path;
-        try
-        {
-            newpath = WBXMLParser.encode(path, "UTF-8");
-        }
-        catch (Exception e)
-        {
-        }
+    {        
+        
         if (exists(path))
         {
             if (!siAll)
@@ -1808,7 +1801,7 @@ public class ftpPanel extends javax.swing.JPanel implements ListSelectionListene
 
     private void deleteDir()
     {
-        if (this.jTreeDirs.getSelectionPath() != null && this.jTreeDirs.getSelectionPath().getLastPathComponent() instanceof Directory)
+        if (this.jTreeDirs!=null && this.jTreeDirs.getSelectionPath() != null && this.jTreeDirs.getSelectionPath().getLastPathComponent() instanceof Directory)
         {
             Directory dir = (Directory) this.jTreeDirs.getSelectionPath().getLastPathComponent();
             loadDirectories(dir);
