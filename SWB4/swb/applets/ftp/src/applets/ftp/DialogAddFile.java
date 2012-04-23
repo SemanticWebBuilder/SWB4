@@ -12,6 +12,7 @@ package applets.ftp;
 
 import applets.commons.WBTreeNode;
 import applets.commons.WBXMLParser;
+import java.awt.Dialog;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.net.URL;
@@ -32,7 +33,7 @@ public class DialogAddFile extends javax.swing.JDialog
     private final Directory dir;
 
     /** Creates new form DialogAddFile */
-    public DialogAddFile(java.awt.Frame parent, java.io.File dirlocal, ftpPanel ftp, Directory dir)
+    public DialogAddFile(Dialog parent, java.io.File dirlocal, ftpPanel ftp, Directory dir)
     {
         super(parent, true);
         initComponents();
@@ -285,6 +286,7 @@ public class DialogAddFile extends javax.swing.JDialog
                             {
                                 con.setRequestProperty("Cookie", "JSESSIONID=" + ftp.jsess);
                             }
+                            con.addRequestProperty("FTP", "true");
                             con.addRequestProperty("PATHFILEWB", path);
                             con.setDoInput(true);
                             InputStream in = con.getInputStream();

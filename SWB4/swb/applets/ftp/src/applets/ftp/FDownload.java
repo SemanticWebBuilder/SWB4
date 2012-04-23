@@ -31,6 +31,7 @@
 
 package applets.ftp;
 
+import java.awt.Dialog;
 import java.net.*;
 import java.io.*;
 import javax.swing.*;
@@ -48,7 +49,7 @@ public class FDownload extends javax.swing.JDialog {
     String path;
     String jsess;
     Locale locale;
-    public FDownload(java.awt.Frame parent, boolean modal,String path,java.io.File f,String jsess,URL url,Locale locale) {
+    public FDownload(Dialog parent, boolean modal,String path,java.io.File f,String jsess,URL url,Locale locale) {
         super(parent, modal);
         initComponents();
         this.setTitle(f.getName());
@@ -108,6 +109,7 @@ public class FDownload extends javax.swing.JDialog {
                 URLConnection con=url.openConnection();
                 con.setUseCaches(false);
                 if(jsess!=null)con.setRequestProperty("Cookie","JSESSIONID="+jsess);
+                con.addRequestProperty("FTP", "true");
                 con.addRequestProperty("PATHFILEWB",path);
                 con.setDoInput(true);
                 InputStream in=con.getInputStream();

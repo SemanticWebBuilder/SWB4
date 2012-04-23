@@ -64,6 +64,7 @@ public class FileDownload {
             URLConnection con=url.openConnection();
             con.setUseCaches(false);
             if(jsess!=null)con.setRequestProperty("Cookie","JSESSIONID="+jsess);
+            con.addRequestProperty("FTP", "true");
             con.addRequestProperty("PATHFILEWB",path);
             con.setDoInput(true);
             InputStream in=con.getInputStream();

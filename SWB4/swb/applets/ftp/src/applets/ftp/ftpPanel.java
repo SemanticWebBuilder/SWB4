@@ -79,15 +79,15 @@ public class ftpPanel extends javax.swing.JPanel implements ListSelectionListene
         this.urldownload = urldownload;
         this.url = url;
         this.pathInit = pathInit;
-        
+
         initComponents();
-        
+
         choices[0] = java.util.ResourceBundle.getBundle("applets/ftp/ftp", locale).getString("si");
         choices[1] = java.util.ResourceBundle.getBundle("applets/ftp/ftp", locale).getString("si_todo");
         choices[2] = java.util.ResourceBundle.getBundle("applets/ftp/ftp", locale).getString("no");
         choices[3] = java.util.ResourceBundle.getBundle("applets/ftp/ftp", locale).getString("cancel");
 
-        
+
         try
         {
             jFileChooser1.setLocale(locale);
@@ -260,7 +260,7 @@ public class ftpPanel extends javax.swing.JPanel implements ListSelectionListene
         catch (Exception e)
         {
         }
-        String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><req><cmd>getFiles</cmd><path>" + path + "</path></req>";
+        String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><req><cmd>ftp.getFiles</cmd><path>" + path + "</path></req>";
         String respxml = ftpPanel.getData(xml);
         WBXMLParser parser = new WBXMLParser();
         WBTreeNode enode = parser.parse(respxml);
@@ -334,19 +334,20 @@ public class ftpPanel extends javax.swing.JPanel implements ListSelectionListene
         try
         {
 
-            URLConnection urlconn = url.openConnection();
-            urlconn.setUseCaches(false);
+            URLConnection con = url.openConnection();
+            con.setUseCaches(false);
             if (jsess != null)
             {
-                urlconn.setRequestProperty("Cookie", "JSESSIONID=" + jsess);
+                con.setRequestProperty("Cookie", "JSESSIONID=" + jsess);
             }
-            urlconn.setRequestProperty("Content-Type", "application/xml");
-            urlconn.setDoOutput(true);
-            PrintWriter pout = new PrintWriter(urlconn.getOutputStream());
+            con.setRequestProperty("Content-Type", "application/xml");
+            con.addRequestProperty("FTP", "true");
+            con.setDoOutput(true);
+            PrintWriter pout = new PrintWriter(con.getOutputStream());
             pout.println(xml);
             pout.close();
 
-            BufferedReader in = new BufferedReader(new InputStreamReader(urlconn.getInputStream()));
+            BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
             String inputLine;
             while ((inputLine = in.readLine()) != null)
             {
@@ -456,8 +457,7 @@ public class ftpPanel extends javax.swing.JPanel implements ListSelectionListene
         jPopupMenuDir.add(jMenuDirAdd);
         jPopupMenuDir.add(jSeparator6);
 
-        java.util.ResourceBundle bundle1 = java.util.ResourceBundle.getBundle("applets/ftp/ftp"); // NOI18N
-        jMenuItemDownloadDir.setText(bundle1.getString("downloaddir")); // NOI18N
+        jMenuItemDownloadDir.setText(bundle.getString("downloaddir"));
         jMenuItemDownloadDir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItemDownloadDirActionPerformed(evt);
@@ -552,6 +552,7 @@ public class ftpPanel extends javax.swing.JPanel implements ListSelectionListene
         jMenuTools.add(jMenuItemDownload);
         jMenuTools.add(jSeparator7);
 
+        java.util.ResourceBundle bundle1 = java.util.ResourceBundle.getBundle("applets/ftp/ftp"); // NOI18N
         jMenuDownloadDir.setText(bundle1.getString("downloaddir")); // NOI18N
         jMenuDownloadDir.setEnabled(false);
         jMenuDownloadDir.addActionListener(new java.awt.event.ActionListener() {
@@ -904,8 +905,13 @@ public class ftpPanel extends javax.swing.JPanel implements ListSelectionListene
                                 continue;
                             }
                         }
-                        //FileDownload fdown=new FileDownload(file.getPath(), this.jProgressBar1, flocal, this.jsess, urldownload);                                                
-                        FDownload fdown = new FDownload(null, false, file.getPath(), flocal, ftpPanel.jsess, urldownload, locale);
+                        //FileDownload fdown=new FileDownload(file.getPath(), this.jProgressBar1, flocal, this.jsess, urldownload);
+                        Dialog parent = null;
+                        if (container instanceof Dialog)
+                        {
+                            parent = (Dialog) container;
+                        }
+                        FDownload fdown = new FDownload(parent, false, file.getPath(), flocal, ftpPanel.jsess, urldownload, locale);
                         fdown.show();
                         fdown.setLocation(400, 300);
                         fdown.setSize(200, 50);
@@ -1100,7 +1106,7 @@ public class ftpPanel extends javax.swing.JPanel implements ListSelectionListene
         this.jMenuRename.setEnabled(false);
         this.jMenuFileAdd.setEnabled(false);
 
-        if (this.jTreeDirs.getSelectionPath().getLastPathComponent() instanceof Directory)
+        if (this.jTreeDirs.getSelectionPath() != null && this.jTreeDirs.getSelectionPath().getLastPathComponent() instanceof Directory)
         {
             this.setCursor(new Cursor(Cursor.WAIT_CURSOR));
             Directory dir = (Directory) this.jTreeDirs.getSelectionPath().getLastPathComponent();
@@ -1141,7 +1147,7 @@ public class ftpPanel extends javax.swing.JPanel implements ListSelectionListene
 
     public void downloadDir()
     {
-        if (this.jTreeDirs.getSelectionPath().getLastPathComponent() instanceof Directory)
+        if (this.jTreeDirs.getSelectionPath() != null && this.jTreeDirs.getSelectionPath().getLastPathComponent() instanceof Directory)
         {
 
 
@@ -1161,7 +1167,12 @@ public class ftpPanel extends javax.swing.JPanel implements ListSelectionListene
                 if (ret == JFileChooser.APPROVE_OPTION)
                 {
                     java.io.File dirlocal = this.jFileChooser1.getSelectedFile();
-                    DialogAddFile addFile = new DialogAddFile(null, dirlocal, this, dir);
+                    Dialog parent = null;
+                    if (container instanceof Dialog)
+                    {
+                        parent = (Dialog) container;
+                    }
+                    DialogAddFile addFile = new DialogAddFile(parent, dirlocal, this, dir);
                     try
                     {
                         addFile.downloadDir();
@@ -1353,7 +1364,7 @@ public class ftpPanel extends javax.swing.JPanel implements ListSelectionListene
 
     private void addDir()
     {
-        if (this.jTreeDirs.getSelectionPath().getLastPathComponent() instanceof Directory)
+        if (this.jTreeDirs.getSelectionPath() != null && this.jTreeDirs.getSelectionPath().getLastPathComponent() instanceof Directory)
         {
             try
             {
@@ -1403,7 +1414,12 @@ public class ftpPanel extends javax.swing.JPanel implements ListSelectionListene
         {
             java.io.File f = (java.io.File) it.next();
             String path = dir.getDirectory() + "/" + f.getName();
-            FUpload fup = new FUpload(null, false, jsess, urlupload, locale);
+            Dialog parent = null;
+            if (container instanceof Dialog)
+            {
+                parent = (Dialog) container;
+            }
+            FUpload fup = new FUpload(parent, false, jsess, urlupload, locale);
             ftpPanel.Worker wr = new ftpPanel.Worker(f, path, fup, model, dir);
             SwingUtilities.invokeLater(wr);
         }
@@ -1411,7 +1427,7 @@ public class ftpPanel extends javax.swing.JPanel implements ListSelectionListene
 
     private void addFile(java.io.File file)
     {
-        if (this.jTreeDirs.getSelectionPath().getLastPathComponent() instanceof Directory)
+        if (this.jTreeDirs.getSelectionPath() != null && this.jTreeDirs.getSelectionPath().getLastPathComponent() instanceof Directory)
         {
 
             try
@@ -1513,7 +1529,7 @@ public class ftpPanel extends javax.swing.JPanel implements ListSelectionListene
 
     private void addFile()
     {
-        if (this.jTreeDirs.getSelectionPath().getLastPathComponent() instanceof Directory)
+        if (this.jTreeDirs.getSelectionPath() != null && this.jTreeDirs.getSelectionPath().getLastPathComponent() instanceof Directory)
         {
 
             try
@@ -1612,6 +1628,7 @@ public class ftpPanel extends javax.swing.JPanel implements ListSelectionListene
                     Runnable doWorkRunnable = new Runnable()
                     {
 
+                        @Override
                         public void run()
                         {
                             SendFiles(osendfiles, odir, urlup);
@@ -1706,7 +1723,7 @@ public class ftpPanel extends javax.swing.JPanel implements ListSelectionListene
 
     private void renameDir()
     {
-        if (this.jTreeDirs.getSelectionPath().getLastPathComponent() instanceof Directory)
+        if (this.jTreeDirs.getSelectionPath() != null && this.jTreeDirs.getSelectionPath().getLastPathComponent() instanceof Directory)
         {
             Directory dir = (Directory) this.jTreeDirs.getSelectionPath().getLastPathComponent();
             if (dir.getParent() == null)
@@ -1791,7 +1808,7 @@ public class ftpPanel extends javax.swing.JPanel implements ListSelectionListene
 
     private void deleteDir()
     {
-        if (this.jTreeDirs.getSelectionPath().getLastPathComponent() instanceof Directory)
+        if (this.jTreeDirs.getSelectionPath() != null && this.jTreeDirs.getSelectionPath().getLastPathComponent() instanceof Directory)
         {
             Directory dir = (Directory) this.jTreeDirs.getSelectionPath().getLastPathComponent();
             loadDirectories(dir);
@@ -1966,7 +1983,7 @@ public class ftpPanel extends javax.swing.JPanel implements ListSelectionListene
 
     private void createDir()
     {
-        if (this.jTreeDirs.getSelectionPath().getLastPathComponent() instanceof Directory)
+        if (this.jTreeDirs.getSelectionPath() != null && this.jTreeDirs.getSelectionPath().getLastPathComponent() instanceof Directory)
         {
             Directory dir = (Directory) this.jTreeDirs.getSelectionPath().getLastPathComponent();
             createDir(dir);
@@ -2144,7 +2161,7 @@ public class ftpPanel extends javax.swing.JPanel implements ListSelectionListene
     @Override
     public void drop(DropTargetDropEvent dtde)
     {
-        if (this.jTreeDirs.getSelectionPath().getLastPathComponent() instanceof Directory)
+        if (this.jTreeDirs.getSelectionPath() != null && this.jTreeDirs.getSelectionPath().getLastPathComponent() instanceof Directory)
         {
             Directory dir = (Directory) this.jTreeDirs.getSelectionPath().getLastPathComponent();
 
@@ -2201,7 +2218,7 @@ public class ftpPanel extends javax.swing.JPanel implements ListSelectionListene
         }
     }
 
-    private JPanel getContentPane()
+    public JPanel getContentPane()
     {
         return this;
     }
@@ -2212,7 +2229,7 @@ public class ftpPanel extends javax.swing.JPanel implements ListSelectionListene
         {
             ((JApplet) container).setJMenuBar(jMenuBar1);
         }
-        else if(container instanceof JDialog)
+        else if (container instanceof JDialog)
         {
             ((JDialog) container).setJMenuBar(jMenuBar1);
         }
