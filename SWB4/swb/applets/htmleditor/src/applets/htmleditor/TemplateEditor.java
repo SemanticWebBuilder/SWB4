@@ -32,6 +32,7 @@
 package applets.htmleditor;
 
 import applets.ftp.ftp;
+import applets.ftp.ftpPanel;
 import javax.swing.*;
 import javax.swing.text.*;
 import javax.swing.text.html.*;
@@ -82,6 +83,7 @@ public class TemplateEditor extends javax.swing.JApplet
     private String tpValue=null;
     private String verValue=null;
     private String typeValue=null;
+
     
     private String oldTab="text";
     private boolean htmlError=false;
@@ -2185,8 +2187,9 @@ Action:caret-previous-word
         this.setCursor(new Cursor(Cursor.WAIT_CURSOR));
         try
         {
-            ftp ftp=new ftp(locale, jsess, upurl, downurl,path,gateway);
+            ftpDialog ftp=new ftpDialog(locale, jsess, upurl, downurl, path, gateway);
             ftp.setVisible(true);
+            
         }
         catch(Exception e)
         {
