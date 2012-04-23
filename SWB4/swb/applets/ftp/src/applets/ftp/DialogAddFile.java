@@ -31,12 +31,13 @@ public class DialogAddFile extends javax.swing.JDialog
     private final java.io.File dirlocal;
     private final ftpPanel ftp;
     private final Directory dir;
-
+    private URL urldownload;
     /** Creates new form DialogAddFile */
-    public DialogAddFile(Dialog parent, java.io.File dirlocal, ftpPanel ftp, Directory dir)
+    public DialogAddFile(Dialog parent, java.io.File dirlocal, ftpPanel ftp, Directory dir,URL urldownload)
     {
         super(parent, true);
         initComponents();
+        this.urldownload=urldownload;
         this.dirlocal = dirlocal;
         this.dir = dir;
         java.io.File[] files =
@@ -121,7 +122,7 @@ public class DialogAddFile extends javax.swing.JDialog
             e.printStackTrace();
         }
         jProgressBar2.setMaximum(files.size());
-        WorkerDownloadDir w = new WorkerDownloadDir(this, files, webfiles,ftp.urldownload);
+        WorkerDownloadDir w = new WorkerDownloadDir(this, files, webfiles,urldownload);
         w.start();
         this.setVisible(true);
 

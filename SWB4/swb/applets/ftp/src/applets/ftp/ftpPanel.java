@@ -58,16 +58,16 @@ import javax.swing.table.JTableHeader;
 public class ftpPanel extends javax.swing.JPanel implements ListSelectionListener, FileListener, DropTargetListener
 {
 
-    Object container;
+    private Object container;
     public static java.io.File pathDir;
     public String cgiPath = "/gtw.jsp";
-    public static String jsess = "";
-    private static URL url = null;
+    public String jsess = "";
+    private URL url = null;
     public String[] choices = new String[4];
     public Locale locale;
-    URL urldownload;
-    URL urlupload;
-    String pathInit;
+    private URL urldownload;
+    private URL urlupload;
+    private String pathInit;
 
     public ftpPanel(String jsess, Locale locale, URL urlupload, URL urldownload, URL url, String pathInit, Object container)
     {
@@ -144,7 +144,7 @@ public class ftpPanel extends javax.swing.JPanel implements ListSelectionListene
         {
         }
         String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><req><cmd>getDirectories</cmd><path>" + path + "</path></req>";
-        String respxml = ftpPanel.getData(xml);
+        String respxml = getData(xml);
         WBXMLParser parser = new WBXMLParser();
         WBTreeNode enode = parser.parse(respxml);
         try
@@ -223,7 +223,7 @@ public class ftpPanel extends javax.swing.JPanel implements ListSelectionListene
             e.printStackTrace();
         }
         String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><req><cmd>hasPermissionFile</cmd><path>" + path + "</path></req>";
-        String respxml = ftpPanel.getData(xml);
+        String respxml = getData(xml);
         WBXMLParser parser = new WBXMLParser();
         WBTreeNode enode = parser.parse(respxml);
         try
@@ -261,7 +261,7 @@ public class ftpPanel extends javax.swing.JPanel implements ListSelectionListene
         {
         }
         String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><req><cmd>ftp.getFiles</cmd><path>" + path + "</path></req>";
-        String respxml = ftpPanel.getData(xml);
+        String respxml = getData(xml);
         WBXMLParser parser = new WBXMLParser();
         WBTreeNode enode = parser.parse(respxml);
         if (enode.getFirstNode() != null)
@@ -303,7 +303,7 @@ public class ftpPanel extends javax.swing.JPanel implements ListSelectionListene
         {
             xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><req><cmd>getDirectories</cmd><path>" + pathInit + "</path></req>";
         }
-        String respxml = ftpPanel.getData(xml);
+        String respxml = getData(xml);
         WBXMLParser parser = new WBXMLParser();
         try
         {
@@ -327,7 +327,7 @@ public class ftpPanel extends javax.swing.JPanel implements ListSelectionListene
         }
     }
 
-    public static String getData(String xml)
+    public String getData(String xml)
     {
 
         StringBuilder ret = new StringBuilder();
@@ -911,7 +911,7 @@ public class ftpPanel extends javax.swing.JPanel implements ListSelectionListene
                         {
                             parent = (Dialog) container;
                         }
-                        FDownload fdown = new FDownload(parent, false, file.getPath(), flocal, ftpPanel.jsess, urldownload, locale);
+                        FDownload fdown = new FDownload(parent, false, file.getPath(), flocal, jsess, urldownload, locale);
                         fdown.show();
                         fdown.setLocation(400, 300);
                         fdown.setSize(200, 50);
@@ -1186,7 +1186,7 @@ public class ftpPanel extends javax.swing.JPanel implements ListSelectionListene
                     {
                         parent = (Dialog) container;
                     }
-                    DialogAddFile addFile = new DialogAddFile(parent, dirlocal, this, dir);
+                    DialogAddFile addFile = new DialogAddFile(parent, dirlocal, this, dir,urldownload);
                     try
                     {
                         addFile.downloadDir();
@@ -1252,7 +1252,7 @@ public class ftpPanel extends javax.swing.JPanel implements ListSelectionListene
         try
         {
 
-            FileUpload fup = new FileUpload(ftpPanel.jsess, urlupload, locale);
+            FileUpload fup = new FileUpload(jsess, urlupload, locale);
             fup.sendFile(path, filelocal);
         }
         catch (Exception e)
@@ -1272,7 +1272,7 @@ public class ftpPanel extends javax.swing.JPanel implements ListSelectionListene
         {
         }
         String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><req><cmd>exists</cmd><path>" + newpath + "</path></req>";
-        String respxml = ftpPanel.getData(xml);
+        String respxml = getData(xml);
         WBXMLParser parser = new WBXMLParser();
         WBTreeNode enode = parser.parse(respxml);
         if (enode.getFirstNode() != null && enode.getFirstNode().getFirstNode() != null)
@@ -1346,7 +1346,7 @@ public class ftpPanel extends javax.swing.JPanel implements ListSelectionListene
             }
         }
         String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><req><cmd>createDir</cmd><path>" + newpath + "</path></req>";
-        String respxml = ftpPanel.getData(xml);
+        String respxml = getData(xml);
         WBXMLParser parser = new WBXMLParser();
         WBTreeNode enode = parser.parse(respxml);
         if (enode.getFirstNode() != null && enode.getFirstNode().getFirstNode() != null)
@@ -1391,7 +1391,7 @@ public class ftpPanel extends javax.swing.JPanel implements ListSelectionListene
                 if (ret == JFileChooser.APPROVE_OPTION)
                 {
                     java.io.File dirlocal = this.jFileChooser1.getSelectedFile();
-                    DialogAddFile addFile = new DialogAddFile(null, dirlocal, this, dir);
+                    DialogAddFile addFile = new DialogAddFile(null, dirlocal, this, dir,url);
                     try
                     {
                         addFile.addDir();
@@ -1703,7 +1703,7 @@ public class ftpPanel extends javax.swing.JPanel implements ListSelectionListene
         {
         }
         String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><req><cmd>rename</cmd><path>" + path + "</path><newpath>" + newpath + "</newpath></req>";
-        String respxml = ftpPanel.getData(xml);
+        String respxml = getData(xml);
         WBXMLParser parser = new WBXMLParser();
         WBTreeNode enode = parser.parse(respxml);
         if (enode.getFirstNode() != null && enode.getFirstNode().getFirstNode() != null)
@@ -1787,7 +1787,7 @@ public class ftpPanel extends javax.swing.JPanel implements ListSelectionListene
         {
         }
         String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><req><cmd>rename</cmd><path>" + path + "</path><newpath>" + newpath + "</newpath></req>";
-        String respxml = ftpPanel.getData(xml);
+        String respxml = getData(xml);
         WBXMLParser parser = new WBXMLParser();
         WBTreeNode enode = parser.parse(respxml);
         if (enode.getFirstNode() != null && enode.getFirstNode().getFirstNode() != null)
@@ -1877,7 +1877,7 @@ public class ftpPanel extends javax.swing.JPanel implements ListSelectionListene
         {
         }
         String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><req><cmd>delete</cmd><path>" + path + "</path></req>";
-        String respxml = ftpPanel.getData(xml);
+        String respxml = getData(xml);
         WBXMLParser parser = new WBXMLParser();
         WBTreeNode enode = parser.parse(respxml);
         if (enode.getFirstNode() != null && enode.getFirstNode().getFirstNode() != null)
@@ -1963,7 +1963,7 @@ public class ftpPanel extends javax.swing.JPanel implements ListSelectionListene
         {
         }
         String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><req><cmd>delete</cmd><path>" + path + "</path></req>";
-        String respxml = ftpPanel.getData(xml);
+        String respxml = getData(xml);
         WBXMLParser parser = new WBXMLParser();
         WBTreeNode enode = parser.parse(respxml);
         if (enode.getFirstNode() != null && enode.getFirstNode().getFirstNode() != null)
@@ -2032,7 +2032,7 @@ public class ftpPanel extends javax.swing.JPanel implements ListSelectionListene
         {
         }
         String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><req><cmd>createDir</cmd><path>" + pathdir + "</path></req>";
-        String respxml = ftpPanel.getData(xml);
+        String respxml = getData(xml);
         WBXMLParser parser = new WBXMLParser();
         WBTreeNode enode = parser.parse(respxml);
         if (enode.getFirstNode() != null && enode.getFirstNode().getFirstNode() != null)
@@ -2191,7 +2191,7 @@ public class ftpPanel extends javax.swing.JPanel implements ListSelectionListene
                             if (file.isDirectory())
                             {
                                 //this.addDir(file, dir.getDirectory(), false, this);
-                                DialogAddFile dialog = new DialogAddFile(null, file, this, dir);
+                                DialogAddFile dialog = new DialogAddFile(null, file, this, dir,urldownload);
                                 dialog.addDir();
                             }
                         }
