@@ -128,20 +128,26 @@ public class SWBAEditor extends GenericResource
     public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException
     {
         //System.out.println("Mode:"+paramsRequest.getMode());
-        if (paramsRequest.getMode().equals("gateway"))
+        if (request.getHeader("FTP") != null)
         {
-            doGateway(request, response, paramsRequest);
-        }
-        else if (paramsRequest.getMode().equals("upload"))
-        {
-            doUpload(request, response, paramsRequest);
-        }
-        else if (paramsRequest.getMode().equals("download"))
-        {
-            doDownload(request, response, paramsRequest);
+            SWBAFTP.processRequestFTP(request, response, paramsRequest);
         }
         else
-            super.processRequest(request, response, paramsRequest);
+        {
+            if (paramsRequest.getMode().equals("gateway"))
+            {
+                doGateway(request, response, paramsRequest);
+            }
+            else if (paramsRequest.getMode().equals("upload"))
+            {
+                doUpload(request, response, paramsRequest);
+            }
+            else
+            {
+                super.processRequest(request, response, paramsRequest);
+            }
+        }
+
     }
 
     /**
@@ -216,7 +222,9 @@ public class SWBAEditor extends GenericResource
         String sver = request.getHeader("VER");
         int ver = 0;
         if (sver == null)
+        {
             sver = request.getParameter("version");
+        }
 
         String webpath = null;
         String workpath = null;
@@ -224,18 +232,22 @@ public class SWBAEditor extends GenericResource
         if ("Template".equalsIgnoreCase(type))
         {
             Template template = SWBPortal.getTemplateMgr().getTemplateImp(SWBContext.getWebSite(tm).getTemplate(id));
-            String templatepath=template.getWorkPath();
-            templatepath=templatepath.substring(SWBUtils.getApplicationPath().length());
-            if(templatepath.startsWith("/work/"))
+            String templatepath = template.getWorkPath();
+            templatepath = templatepath.substring(SWBUtils.getApplicationPath().length());
+            if (templatepath.startsWith("/work/"))
             {
-                templatepath=templatepath.substring(5);
+                templatepath = templatepath.substring(5);
             }
-            webpath = SWBPortal.getWebWorkPath() + templatepath ;            
+            webpath = SWBPortal.getWebWorkPath() + templatepath;
             workpath = template.getWorkPath();
             if (sver == null)
+            {
                 ver = template.getLastVersion().getVersionNumber();
+            }
             else
+            {
                 ver = Integer.parseInt(sver);
+            }
             filename = template.getFileName(ver);
         }
         else if ("LocalContent".equalsIgnoreCase(type))
@@ -255,70 +267,83 @@ public class SWBAEditor extends GenericResource
         {
             return init(user, src, ver);
         }
-        else if (cmd.equals("getDirectories"))
+        if (request.getHeader("FTP") != null)
         {
-            Document dom = null;
-            dom = SWBUtils.XML.getNewDocument();
-            Element res = dom.createElement("res");
-            dom.appendChild(res);
-            SWBAFTP.getDirectories(res, src, user);
-            return dom;
+            return SWBAFTP.getDocument(user, src, cmd, id);
         }
-        else if (cmd.equals("getFiles"))
+        /*else if (cmd.equals("getDirectories"))
         {
-            Document dom = null;
-            dom = SWBUtils.XML.getNewDocument();
-            Element res = dom.createElement("res");
-            dom.appendChild(res);
-            SWBAFTP.getFiles(res, src, user);
-            return dom;
+        Document dom = null;
+        dom = SWBUtils.XML.getNewDocument();
+        Element res = dom.createElement("res");
+        dom.appendChild(res);
+        SWBAFTP.getDirectories(res, src, user);
+        return dom;
+        }
+        else if (cmd.equals("ftp.getFiles"))
+        {
+        Document dom = null;
+        dom = SWBUtils.XML.getNewDocument();
+        Element res = dom.createElement("res");
+        dom.appendChild(res);
+        SWBAFTP.getFiles(res, src, user);
+        return dom;
+        }
+        else if (cmd.equals("downloadDir"))
+        {
+        Document dom = null;
+        dom = SWBUtils.XML.getNewDocument();
+        Element res = dom.createElement("res");
+        dom.appendChild(res);
+        SWBAFTP.downloadDir(res, src, user);
+        return dom;
         }
         else if (cmd.equals("delete"))
         {
-            Document dom = null;
-            dom = SWBUtils.XML.getNewDocument();
-            Element res = dom.createElement("res");
-            dom.appendChild(res);
-            SWBAFTP.delete(res, src, user, request.getRemoteAddr());
-            return dom;
+        Document dom = null;
+        dom = SWBUtils.XML.getNewDocument();
+        Element res = dom.createElement("res");
+        dom.appendChild(res);
+        SWBAFTP.delete(res, src, user, request.getRemoteAddr());
+        return dom;
         }
         else if (cmd.equals("createDir"))
         {
-            Document dom = null;
-            dom = SWBUtils.XML.getNewDocument();
-            Element res = dom.createElement("res");
-            dom.appendChild(res);
-            SWBAFTP.createDir(res, src, user, request.getRemoteAddr());
-            return dom;
+        Document dom = null;
+        dom = SWBUtils.XML.getNewDocument();
+        Element res = dom.createElement("res");
+        dom.appendChild(res);
+        SWBAFTP.createDir(res, src, user, request.getRemoteAddr());
+        return dom;
         }
         else if (cmd.equals("rename"))
         {
-            Document dom = null;
-            dom = SWBUtils.XML.getNewDocument();
-            Element res = dom.createElement("res");
-            dom.appendChild(res);
-            SWBAFTP.rename(res, src, user, request.getRemoteAddr());
-            return dom;
+        Document dom = null;
+        dom = SWBUtils.XML.getNewDocument();
+        Element res = dom.createElement("res");
+        dom.appendChild(res);
+        SWBAFTP.rename(res, src, user, request.getRemoteAddr());
+        return dom;
         }
         else if (cmd.equals("exists"))
         {
-            Document dom = null;
-            dom = SWBUtils.XML.getNewDocument();
-            Element res = dom.createElement("res");
-            dom.appendChild(res);
-            SWBAFTP.exists(res, src);
-            return dom;
+        Document dom = null;
+        dom = SWBUtils.XML.getNewDocument();
+        Element res = dom.createElement("res");
+        dom.appendChild(res);
+        SWBAFTP.exists(res, src);
+        return dom;
         }
         else if (cmd.equals("hasPermissionFile"))
         {
-            Document dom = null;
-            dom = SWBUtils.XML.getNewDocument();
-            Element res = dom.createElement("res");
-            dom.appendChild(res);
-            SWBAFTP.hasPermissionFile(res, src, user);
-            return dom;
+        Document dom = null;
+        dom = SWBUtils.XML.getNewDocument();
+        Element res = dom.createElement("res");
+        dom.appendChild(res);
+        SWBAFTP.hasPermissionFile(res, src, user);
+        return dom;
 
-        }
+        }*/
         else if (cmd.equals("getResourceTypeCat"))
         {
             try
@@ -349,9 +374,6 @@ public class SWBAEditor extends GenericResource
             return getDocument(paramsRequest, user, src, cmd, workpath, webpath, filename, ver);
         }
     }
- 
-
-    
 
     /**
      * Inits the.
@@ -487,7 +509,9 @@ public class SWBAEditor extends GenericResource
 
         File dir = new File(workpath + "/" + ver + "/");
         if (!dir.exists())
+        {
             dir.mkdirs();
+        }
         File files[] = dir.listFiles();
         for (int x = 0; x < files.length; x++)
         {
@@ -524,9 +548,9 @@ public class SWBAEditor extends GenericResource
         Element menu = null;
         Element option = null;
 
-        File docDir = new File(workpath + "/" + ver + "/");        
-        String id = file.getPath().substring(docDir.getPath().length() + 1);        
-        id = id.replace('\\', '/');        
+        File docDir = new File(workpath + "/" + ver + "/");
+        String id = file.getPath().substring(docDir.getPath().length() + 1);
+        id = id.replace('\\', '/');
         String path = webpath + "/" + ver + "/" + id;
         //System.out.println("path: "+path);
         //System.out.println("id:"+id);
@@ -615,9 +639,13 @@ public class SWBAEditor extends GenericResource
         {
             File file = files[x];
             if (file.isDirectory())
+            {
                 getDir(paramsRequest, ele, file, workpath, webpath, ver);
+            }
             else if (file.isFile())
+            {
                 getFile(paramsRequest, ele, file, workpath, webpath, ver);
+            }
         }
     }
 
@@ -653,7 +681,9 @@ public class SWBAEditor extends GenericResource
                 id = act.substring(ind + 1);
             }
             else
+            {
                 cmd = act;
+            }
 
             if (cmd.equals("getFiles"))
             {
@@ -708,9 +738,13 @@ public class SWBAEditor extends GenericResource
     {
         Element ret = addElement(node, null, parent);
         if (id != null)
+        {
             ret.setAttribute("id", id);
+        }
         if (name != null)
+        {
             ret.setAttribute("name", name);
+        }
         return ret;
     }
 
@@ -727,7 +761,9 @@ public class SWBAEditor extends GenericResource
         Document doc = parent.getOwnerDocument();
         Element ele = doc.createElement(name);
         if (value != null)
+        {
             ele.appendChild(doc.createTextNode(value));
+        }
         parent.appendChild(ele);
         return ele;
     }
@@ -846,45 +882,45 @@ public class SWBAEditor extends GenericResource
      */
     public void doUploadFile(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
-        String path=request.getHeader("PATHFILEWB");
+        String path = request.getHeader("PATHFILEWB");
 
-        if(path!=null)
+        if (path != null)
         {
             try
             {
-                File f=new File(path);
-                if(!SWBAFTP.hasPermission(paramRequest.getUser(), f))
+                File f = new File(path);
+                if (!SWBAFTP.hasPermission(paramRequest.getUser(), f))
                 {
                     return;
                 }
-                if(SWBAFTP.isProtected(f))
+                if (SWBAFTP.isProtected(f))
                 {
-                   return;
+                    return;
                 }
-                if(f.isDirectory())
+                if (f.isDirectory())
                 {
-                    SWBAFTP.log("CREATED|DIR:\""+f.getCanonicalPath() +"\"|USER:\""+paramRequest.getUser().getLogin()+"_"+ paramRequest.getUser().getUserRepository().getId() +"\"",request.getRemoteAddr());
+                    SWBAFTP.log("CREATED|DIR:\"" + f.getCanonicalPath() + "\"|USER:\"" + paramRequest.getUser().getLogin() + "_" + paramRequest.getUser().getUserRepository().getId() + "\"", request.getRemoteAddr());
                 }
                 else
                 {
-                    SWBAFTP.log("CREATED|FILE:\""+f.getCanonicalPath() +"\"|USER:\""+paramRequest.getUser().getLogin()+"_"+ paramRequest.getUser().getUserRepository().getId() +"\"",request.getRemoteAddr());
+                    SWBAFTP.log("CREATED|FILE:\"" + f.getCanonicalPath() + "\"|USER:\"" + paramRequest.getUser().getLogin() + "_" + paramRequest.getUser().getUserRepository().getId() + "\"", request.getRemoteAddr());
                 }
 
-                FileOutputStream fout=new FileOutputStream(f);
-                InputStream in=request.getInputStream();
-                byte[] bcont=new byte[8192];
-                int ret=in.read(bcont);
-                while(ret!=-1)
+                FileOutputStream fout = new FileOutputStream(f);
+                InputStream in = request.getInputStream();
+                byte[] bcont = new byte[8192];
+                int ret = in.read(bcont);
+                while (ret != -1)
                 {
-                    fout.write(bcont,0, ret);
-                    ret=in.read(bcont);
+                    fout.write(bcont, 0, ret);
+                    ret = in.read(bcont);
                 }
                 in.close();
                 fout.close();
             }
-            catch(Exception e)
+            catch (Exception e)
             {
-                response.sendError(500,e.getMessage());
+                response.sendError(500, e.getMessage());
             }
         }
         else
@@ -892,56 +928,7 @@ public class SWBAEditor extends GenericResource
             response.sendError(500);
         }
     }
-     /**
-     * Do download.
-     *
-     * @param request the request
-     * @param response the response
-     * @param paramRequest the param request
-     * @throws SWBResourceException, a Resource Exception
-     * @throws IOException, an In Out Exception
-     * @throws SWBResourceException the sWB resource exception
-     * @throws IOException Signals that an I/O exception has occurred.
-     */
-    public void doDownloadFile(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
-    {
-        String path=request.getHeader("PATHFILEWB");
-        if(path!=null)
-        {
-            try
-            {
 
-                File f=new File(path);
-                if(f.exists() && SWBAFTP.hasPermission(paramRequest.getUser(), f))
-                {
-                    response.setContentLength((int)f.length());
-                    FileInputStream fin=new FileInputStream(f);
-                    OutputStream out=response.getOutputStream();
-                    byte[] bcont=new byte[8192];
-                    int ret=fin.read(bcont);
-                    while(ret!=-1)
-                    {
-                        out.write(bcont,0, ret);
-                        ret=fin.read(bcont);
-                    }
-                    fin.close();
-                    out.close();
-                }
-                else
-                {
-                    response.sendError(500);
-                }
-            }
-            catch(Exception e)
-            {
-                response.sendError(500,e.getMessage());
-            }
-        }
-        else
-        {
-            response.sendError(500);
-        }
-    }
     /**
      * Do upload.
      * 
@@ -953,9 +940,9 @@ public class SWBAEditor extends GenericResource
      */
     public void doUpload(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException
     {
-        if(request.getHeader("FTP")!=null)
+        if (request.getHeader("FTP") != null)
         {
-            doUploadFile(request,response,paramsRequest);
+            SWBAFTP.doUpload(request, response, paramsRequest);
             return;
         }
         PrintWriter out = response.getWriter();
@@ -990,10 +977,12 @@ public class SWBAEditor extends GenericResource
                 work = template.getWorkPath() + "/" + ver + "/";
 
                 if (request.getHeader("ATTACHWB") != null)
+                {
                     work += "images/";
+                }
 
                 //System.out.println("work:"+work+" name:"+name);
-                String ret="";
+                String ret = "";
                 if (!("FINDATTACHES".equals(doc)))
                 {
                     File fpath = new File(work);
@@ -1002,7 +991,8 @@ public class SWBAEditor extends GenericResource
                     //System.out.println("file:"+file);
                     ret = writeFile(in, file);
                     //System.out.println("ret:"+ret);
-                }else
+                }
+                else
                 {
                     ret = SWBUtils.IO.readInputStream(in);
                 }
@@ -1131,15 +1121,15 @@ public class SWBAEditor extends GenericResource
      */
     public String writeFile(InputStream in, File file) throws IOException
     {
-        String str ="";
+        String str = "";
         //System.out.println("file:"+file);
         try
         {
-            str=SWBUtils.IO.readInputStream(in);
+            str = SWBUtils.IO.readInputStream(in);
             //System.out.println("str:"+str);
-            if(str!=null && str.length()>0)
+            if (str != null && str.length() > 0)
             {
-                FileOutputStream fout=new FileOutputStream(file);
+                FileOutputStream fout = new FileOutputStream(file);
                 fout.write(str.getBytes());
                 fout.flush();
                 fout.close();
@@ -1150,24 +1140,6 @@ public class SWBAEditor extends GenericResource
             log.error(e);
         }
         return str;
-    }
-
-    /**
-     * Do download.
-     * 
-     * @param request the request
-     * @param response the response
-     * @param paramsRequest the params request
-     * @throws SWBResourceException the sWB resource exception
-     * @throws IOException Signals that an I/O exception has occurred.
-     */
-    public void doDownload(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException
-    {
-        if(request.getHeader("FTP")!=null)
-        {
-            doDownloadFile(request, response, paramsRequest);
-            return;
-        }
     }
 
     /**
@@ -1194,7 +1166,9 @@ public class SWBAEditor extends GenericResource
 
         String cmd = null;
         if (dom.getElementsByTagName("cmd").getLength() > 0)
+        {
             cmd = dom.getElementsByTagName("cmd").item(0).getFirstChild().getNodeValue();
+        }
 
         if (cmd == null)
         {
@@ -1214,7 +1188,9 @@ public class SWBAEditor extends GenericResource
                 ret = SWBUtils.XML.domToXml(getError(3));
             }
             else
+            {
                 ret = SWBUtils.XML.domToXml(res, true);
+            }
             out.print(new String(ret.getBytes()));
         }
         else
@@ -1225,7 +1201,9 @@ public class SWBAEditor extends GenericResource
                 ret = SWBUtils.XML.domToXml(getError(3));
             }
             else
+            {
                 ret = SWBUtils.XML.domToXml(res, true);
+            }
             out.print(new String(ret.getBytes()));
         }
 
@@ -1317,7 +1295,7 @@ public class SWBAEditor extends GenericResource
      */
     public static void getTemplateApplet(PrintWriter out, String topicmapid, String templateid, int version, User user, String session)
     {
-        out.println("<applet id=\"apptpleditor\" name=\"apptpleditor\" code=\"applets.htmleditor.TemplateEditor\" codebase=\"" + SWBPlatform.getContextPath() + "/\" archive=\"swbadmin/lib/SWBAplHtmlEditor.jar, swbadmin/lib/SWBAplCommons.jar\" width=\"100%\" height=\"500\">");
+        out.println("<applet id=\"apptpleditor\" name=\"apptpleditor\" code=\"applets.htmleditor.TemplateEditor\" codebase=\"" + SWBPlatform.getContextPath() + "/\" archive=\"swbadmin/lib/SWBAplHtmlEditor.jar, swbadmin/lib/SWBAplCommons.jar,swbadmin/lib/SWBAplFtp.jar\" width=\"100%\" height=\"500\">");
         String url = SWBPortal.getDistributorPath() + "/SWBAdmin/WBAd_utl_HTMLEditor/_rid/1/_mto/3/_mod/";
 
         out.println("<param name=\"jsess\" value=\"" + session + "\">");
