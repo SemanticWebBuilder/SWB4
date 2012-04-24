@@ -27,8 +27,8 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
         this.msg = message;
         if (msg != null) {
             twitter4j.Twitter twitter = new TwitterFactory().getInstance();
-            String token = super.getSecreatKey().substring(0, super.getSecreatKey().indexOf("|"));
-            String secretToken = super.getSecreatKey().substring(super.getSecreatKey().indexOf("|") + 1, super.getSecreatKey().length());
+            String token = super.getSecretKey().substring(0, super.getSecretKey().indexOf("|"));
+            String secretToken = super.getSecretKey().substring(super.getSecretKey().indexOf("|") + 1, super.getSecretKey().length());
             AccessToken accessToken = new AccessToken(token, secretToken);
             System.out.println("Mensaje de Twitter:" + msg.getMsg_Text());
             twitter.setOAuthAccessToken(accessToken);
@@ -52,7 +52,7 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
         addPost(photo);
         System.out.println("Twitter login:" + getLogin());
         System.out.println("Twitter Passw:" + getPassword());
-        System.out.println("Twitter SK:" + getSecreatKey());
+        System.out.println("Twitter SK:" + getSecretKey());
         this.photo = photo;
         if (photo != null) {
             twitter4j.Twitter twitter = new TwitterFactory().getInstance();
