@@ -1,7 +1,7 @@
 package org.semanticwb.social.base;
 
 
-public abstract class FlickerBase extends org.semanticwb.social.SocialNetwork implements org.semanticwb.social.Postable,org.semanticwb.social.Photoable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable
+public abstract class FlickerBase extends org.semanticwb.social.SocialNetwork implements org.semanticwb.model.Descriptiveable,org.semanticwb.social.Postable,org.semanticwb.model.Traceable,org.semanticwb.social.Photoable
 {
     public static final org.semanticwb.platform.SemanticClass social_Flicker=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#Flicker");
    /**
@@ -96,29 +96,6 @@ public abstract class FlickerBase extends org.semanticwb.social.SocialNetwork im
             return it;
         }
        /**
-       * Gets all org.semanticwb.social.Flicker with a determined Creator
-       * @param value Creator of the type org.semanticwb.model.User
-       * @param model Model of the org.semanticwb.social.Flicker
-       * @return Iterator with all the org.semanticwb.social.Flicker
-       */
-
-        public static java.util.Iterator<org.semanticwb.social.Flicker> listFlickerByCreator(org.semanticwb.model.User value,org.semanticwb.model.SWBModel model)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.social.Flicker> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_creator, value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.social.Flicker with a determined Creator
-       * @param value Creator of the type org.semanticwb.model.User
-       * @return Iterator with all the org.semanticwb.social.Flicker
-       */
-
-        public static java.util.Iterator<org.semanticwb.social.Flicker> listFlickerByCreator(org.semanticwb.model.User value)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.social.Flicker> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_creator,value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
        * Gets all org.semanticwb.social.Flicker with a determined PostContainer
        * @param value PostContainer of the type org.semanticwb.social.PostContainer
        * @param model Model of the org.semanticwb.social.Flicker
@@ -139,6 +116,29 @@ public abstract class FlickerBase extends org.semanticwb.social.SocialNetwork im
         public static java.util.Iterator<org.semanticwb.social.Flicker> listFlickerByPostContainer(org.semanticwb.social.PostContainer value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.social.Flicker> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(social_hasPostContainer,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.social.Flicker with a determined Creator
+       * @param value Creator of the type org.semanticwb.model.User
+       * @param model Model of the org.semanticwb.social.Flicker
+       * @return Iterator with all the org.semanticwb.social.Flicker
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.Flicker> listFlickerByCreator(org.semanticwb.model.User value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.Flicker> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_creator, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.social.Flicker with a determined Creator
+       * @param value Creator of the type org.semanticwb.model.User
+       * @return Iterator with all the org.semanticwb.social.Flicker
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.Flicker> listFlickerByCreator(org.semanticwb.model.User value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.Flicker> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_creator,value.getSemanticObject(),sclass));
             return it;
         }
     }

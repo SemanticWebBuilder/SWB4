@@ -1,7 +1,7 @@
 package org.semanticwb.social.base;
 
 
-public abstract class VideoBase extends org.semanticwb.social.Post implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Tagable,org.semanticwb.model.Expirable,org.semanticwb.model.Traceable,org.semanticwb.social.Commentable
+public abstract class VideoBase extends org.semanticwb.social.Post implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Tagable,org.semanticwb.model.Traceable,org.semanticwb.model.Expirable,org.semanticwb.social.Commentable
 {
     public static final org.semanticwb.platform.SemanticProperty social_video=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#video");
     public static final org.semanticwb.platform.SemanticClass social_Video=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#Video");
