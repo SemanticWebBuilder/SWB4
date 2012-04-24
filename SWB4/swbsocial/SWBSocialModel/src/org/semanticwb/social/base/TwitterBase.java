@@ -1,7 +1,7 @@
 package org.semanticwb.social.base;
 
 
-public abstract class TwitterBase extends org.semanticwb.social.SocialNetwork implements org.semanticwb.social.Postable,org.semanticwb.social.Photoable,org.semanticwb.model.Descriptiveable,org.semanticwb.social.Messageable,org.semanticwb.model.Traceable,org.semanticwb.social.Secreatable
+public abstract class TwitterBase extends org.semanticwb.social.SocialNetwork implements org.semanticwb.social.Messageable,org.semanticwb.model.Descriptiveable,org.semanticwb.social.Postable,org.semanticwb.social.Photoable,org.semanticwb.model.Traceable,org.semanticwb.social.Secreteable
 {
     public static final org.semanticwb.platform.SemanticClass social_Twitter=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#Twitter");
    /**
@@ -96,29 +96,6 @@ public abstract class TwitterBase extends org.semanticwb.social.SocialNetwork im
             return it;
         }
        /**
-       * Gets all org.semanticwb.social.Twitter with a determined Creator
-       * @param value Creator of the type org.semanticwb.model.User
-       * @param model Model of the org.semanticwb.social.Twitter
-       * @return Iterator with all the org.semanticwb.social.Twitter
-       */
-
-        public static java.util.Iterator<org.semanticwb.social.Twitter> listTwitterByCreator(org.semanticwb.model.User value,org.semanticwb.model.SWBModel model)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.social.Twitter> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_creator, value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.social.Twitter with a determined Creator
-       * @param value Creator of the type org.semanticwb.model.User
-       * @return Iterator with all the org.semanticwb.social.Twitter
-       */
-
-        public static java.util.Iterator<org.semanticwb.social.Twitter> listTwitterByCreator(org.semanticwb.model.User value)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.social.Twitter> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_creator,value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
        * Gets all org.semanticwb.social.Twitter with a determined PostContainer
        * @param value PostContainer of the type org.semanticwb.social.PostContainer
        * @param model Model of the org.semanticwb.social.Twitter
@@ -141,6 +118,29 @@ public abstract class TwitterBase extends org.semanticwb.social.SocialNetwork im
             org.semanticwb.model.GenericIterator<org.semanticwb.social.Twitter> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(social_hasPostContainer,value.getSemanticObject(),sclass));
             return it;
         }
+       /**
+       * Gets all org.semanticwb.social.Twitter with a determined Creator
+       * @param value Creator of the type org.semanticwb.model.User
+       * @param model Model of the org.semanticwb.social.Twitter
+       * @return Iterator with all the org.semanticwb.social.Twitter
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.Twitter> listTwitterByCreator(org.semanticwb.model.User value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.Twitter> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_creator, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.social.Twitter with a determined Creator
+       * @param value Creator of the type org.semanticwb.model.User
+       * @return Iterator with all the org.semanticwb.social.Twitter
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.Twitter> listTwitterByCreator(org.semanticwb.model.User value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.Twitter> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_creator,value.getSemanticObject(),sclass));
+            return it;
+        }
     }
 
    /**
@@ -153,20 +153,38 @@ public abstract class TwitterBase extends org.semanticwb.social.SocialNetwork im
     }
 
 /**
-* Gets the SecreatKey property
-* @return String with the SecreatKey
+* Gets the AppKey property
+* @return String with the AppKey
 */
-    public String getSecreatKey()
+    public String getAppKey()
     {
-        return getSemanticObject().getProperty(social_secreatKey);
+        return getSemanticObject().getProperty(social_appKey);
     }
 
 /**
-* Sets the SecreatKey property
-* @param value long with the SecreatKey
+* Sets the AppKey property
+* @param value long with the AppKey
 */
-    public void setSecreatKey(String value)
+    public void setAppKey(String value)
     {
-        getSemanticObject().setProperty(social_secreatKey, value);
+        getSemanticObject().setProperty(social_appKey, value);
+    }
+
+/**
+* Gets the SecretKey property
+* @return String with the SecretKey
+*/
+    public String getSecretKey()
+    {
+        return getSemanticObject().getProperty(social_secretKey);
+    }
+
+/**
+* Sets the SecretKey property
+* @param value long with the SecretKey
+*/
+    public void setSecretKey(String value)
+    {
+        getSemanticObject().setProperty(social_secretKey, value);
     }
 }
