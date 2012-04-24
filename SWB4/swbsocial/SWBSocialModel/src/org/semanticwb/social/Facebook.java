@@ -28,7 +28,7 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase
         addPost(photo);
         System.out.println("Twitter login:"+getLogin());
         System.out.println("Twitter Passw:"+getPassword());
-        System.out.println("Twitter SK:"+getSecreatKey());
+        System.out.println("Twitter SK:"+getSecretKey());
         this.photo=photo;
         if(photo!=null)
         {
