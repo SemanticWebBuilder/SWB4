@@ -85,7 +85,7 @@ public class PostTweet extends GenericResource {
                 WebPage currentPage = paramRequest.getWebPage();
                 WebSite wsite = currentPage.getWebSite();
                 tweet = Twitter.ClassMgr.getTwitter("", wsite);
-                tweet.setSecreatKey(accessToken.getToken() + "|" + accessToken.getTokenSecret());
+                tweet.setSecretKey(accessToken.getToken() + "|" + accessToken.getTokenSecret());
                 SWBResourceURL posted = paramRequest.getRenderUrl().setMode("view");
                 response.sendRedirect(request.getContextPath() + posted);
             } catch (TwitterException ex) {
