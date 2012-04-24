@@ -3,6 +3,10 @@ package org.semanticwb.social.base;
 
 public abstract class SocialNetworkBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable
 {
+   /**
+   * Almacena la fecha de expiración del token autorizado para hacer publicaciones, por conveniencia no utiliza displayProperty
+   */
+    public static final org.semanticwb.platform.SemanticProperty social_tokenExpirationDate=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#tokenExpirationDate");
     public static final org.semanticwb.platform.SemanticProperty social_password=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#password");
     public static final org.semanticwb.platform.SemanticClass social_PostContainer=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#PostContainer");
     public static final org.semanticwb.platform.SemanticProperty social_hasPostContainer=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#hasPostContainer");
@@ -200,6 +204,24 @@ public abstract class SocialNetworkBase extends org.semanticwb.model.SWBClass im
              ret=(org.semanticwb.model.User)obj.createGenericInstance();
          }
          return ret;
+    }
+
+/**
+* Gets the TokenExpirationDate property
+* @return String with the TokenExpirationDate
+*/
+    public String getTokenExpirationDate()
+    {
+        return getSemanticObject().getProperty(social_tokenExpirationDate);
+    }
+
+/**
+* Sets the TokenExpirationDate property
+* @param value long with the TokenExpirationDate
+*/
+    public void setTokenExpirationDate(String value)
+    {
+        getSemanticObject().setProperty(social_tokenExpirationDate, value);
     }
 
 /**
