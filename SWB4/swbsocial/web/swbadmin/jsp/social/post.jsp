@@ -138,7 +138,7 @@ else
 <form name="formStep1" action="<%=url%>">
     Que quieres postear?
     <input type="radio" name="toPost" value="msg">Mensaje
-    <input type="radio" name="toPost" value="Photo">Foto
+    <input type="radio" name="toPost" value="photo">Foto
     <input type="radio" name="toPost" value="video">Video
     <input type="submit" name="send" value="Enviar">
 </form>
