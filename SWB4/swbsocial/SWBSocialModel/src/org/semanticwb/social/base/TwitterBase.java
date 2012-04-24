@@ -1,7 +1,7 @@
 package org.semanticwb.social.base;
 
 
-public abstract class TwitterBase extends org.semanticwb.social.SocialNetwork implements org.semanticwb.social.Messageable,org.semanticwb.model.Descriptiveable,org.semanticwb.social.Postable,org.semanticwb.social.Photoable,org.semanticwb.model.Traceable,org.semanticwb.social.Secreteable
+public abstract class TwitterBase extends org.semanticwb.social.SocialNetwork implements org.semanticwb.social.Postable,org.semanticwb.model.Descriptiveable,org.semanticwb.social.Photoable,org.semanticwb.social.Secreteable,org.semanticwb.model.Traceable,org.semanticwb.social.Messageable
 {
     public static final org.semanticwb.platform.SemanticClass social_Twitter=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#Twitter");
    /**

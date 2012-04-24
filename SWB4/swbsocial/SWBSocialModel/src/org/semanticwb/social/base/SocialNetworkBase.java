@@ -208,20 +208,20 @@ public abstract class SocialNetworkBase extends org.semanticwb.model.SWBClass im
 
 /**
 * Gets the TokenExpirationDate property
-* @return String with the TokenExpirationDate
+* @return java.util.Date with the TokenExpirationDate
 */
-    public String getTokenExpirationDate()
+    public java.util.Date getTokenExpirationDate()
     {
-        return getSemanticObject().getProperty(social_tokenExpirationDate);
+        return getSemanticObject().getDateProperty(social_tokenExpirationDate);
     }
 
 /**
 * Sets the TokenExpirationDate property
 * @param value long with the TokenExpirationDate
 */
-    public void setTokenExpirationDate(String value)
+    public void setTokenExpirationDate(java.util.Date value)
     {
-        getSemanticObject().setProperty(social_tokenExpirationDate, value);
+        getSemanticObject().setDateProperty(social_tokenExpirationDate, value);
     }
 
 /**
