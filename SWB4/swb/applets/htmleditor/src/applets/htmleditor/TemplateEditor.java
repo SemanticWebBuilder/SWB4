@@ -493,6 +493,7 @@ Action:caret-previous-word
                 int x=pt.lastIndexOf('/');
                 if(x>-1)pt=pt.substring(0,x+1);
                 DragDrop dd=new DragDrop(new JFrame(),true,locale);
+                dd.setJSess(jsess);
                 String html=ret.substring(ret.indexOf('|')+1);
                 String files=ret.substring(0,ret.indexOf('|'));
                 dd.addHTMLFile(filename,html);
