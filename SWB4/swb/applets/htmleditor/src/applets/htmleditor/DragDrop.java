@@ -529,6 +529,11 @@ public class DragDrop extends javax.swing.JDialog
         return jsess;
     }    
     
+    public void setJSess(String jsess)
+    {
+        this.jsess=jsess;
+    }
+    
     /**
      * Getter for property returnValue.
      * @return Value of property returnValue.
