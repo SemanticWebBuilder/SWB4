@@ -988,8 +988,11 @@ public class SWBAEditor extends GenericResource
                     File fpath = new File(work);
                     fpath.mkdirs();
                     File file = new File(work + name);
+                    
                     //System.out.println("file:"+file);
-                    ret = writeFile(in, file);
+                    FileOutputStream fout=new FileOutputStream(file);
+                    SWBUtils.IO.copyStream(in, fout);
+                    //ret = writeFile(in, file);
                     //System.out.println("ret:"+ret);
                 }
                 else
