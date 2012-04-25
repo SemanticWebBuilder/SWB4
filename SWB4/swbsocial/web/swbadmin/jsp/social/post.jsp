@@ -29,6 +29,12 @@ if(action.equals("step4"))
     
     if(toPost.equals("msg"))
     {
+        %>
+            <jsp:forward page="messageable/messageable.jsp" >
+                <jsp:param name="socialUri" value="<%=socialUri%>" />
+                <jsp:param name="toPost" value="<%=toPost%>" />
+            </jsp:forward>                     
+        <%
     }else if(toPost.equals("photo"))
     {
     }if(toPost.equals("video"))
