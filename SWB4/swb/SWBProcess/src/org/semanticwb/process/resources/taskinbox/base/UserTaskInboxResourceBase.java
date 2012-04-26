@@ -8,6 +8,7 @@ public abstract class UserTaskInboxResourceBase extends org.semanticwb.portal.ap
     public static final org.semanticwb.platform.SemanticProperty utinbox_viewJSP=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/process/resources/UserTaskInbox#viewJSP");
     public static final org.semanticwb.platform.SemanticClass swb_Resource=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Resource");
     public static final org.semanticwb.platform.SemanticProperty swb_semanticResourceInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#semanticResourceInv");
+    public static final org.semanticwb.platform.SemanticProperty utinbox_showProcessWPLink=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/process/resources/UserTaskInbox#showProcessWPLink");
     public static final org.semanticwb.platform.SemanticProperty utinbox_itemsPerPage=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/process/resources/UserTaskInbox#itemsPerPage");
     public static final org.semanticwb.platform.SemanticProperty utinbox_displayCols=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/process/resources/UserTaskInbox#displayCols");
     public static final org.semanticwb.platform.SemanticClass swb_WebPage=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#WebPage");
@@ -137,6 +138,24 @@ public abstract class UserTaskInboxResourceBase extends org.semanticwb.portal.ap
              ret=(org.semanticwb.model.Resource)obj.createGenericInstance();
          }
          return ret;
+    }
+
+/**
+* Gets the ShowProcessWPLink property
+* @return boolean with the ShowProcessWPLink
+*/
+    public boolean isShowProcessWPLink()
+    {
+        return getSemanticObject().getBooleanProperty(utinbox_showProcessWPLink);
+    }
+
+/**
+* Sets the ShowProcessWPLink property
+* @param value long with the ShowProcessWPLink
+*/
+    public void setShowProcessWPLink(boolean value)
+    {
+        getSemanticObject().setBooleanProperty(utinbox_showProcessWPLink, value);
     }
 
 /**
