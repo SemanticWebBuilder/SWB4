@@ -4,6 +4,8 @@
     Author     : Hasdai Pacheco {haxdai@gmail.com}
 --%>
 
+<%@page import="org.semanticwb.platform.SemanticClass"%>
+<%@page import="org.semanticwb.SWBPlatform"%>
 <%@page import="org.semanticwb.SWBPortal"%>
 <%@page import="org.semanticwb.SWBUtils"%>
 <%@page import="org.semanticwb.model.SWBComparator"%>
@@ -101,6 +103,7 @@ String pFilter = request.getParameter("pFilter");
 String sFilter = request.getParameter("sFilter");
 String pNum = request.getParameter("page");
 String displayCols = (String) request.getAttribute("displayCols");
+boolean showPwpLink = (Boolean) request.getAttribute("showPWpLink");
 String baseimg = SWBPortal.getWebWorkPath() + "/models/" + paramRequest.getWebPage().getWebSiteId() + "/css/images/";
 int maxPages = (Integer) request.getAttribute("maxPages");
 int pageNum = 1;
@@ -320,7 +323,7 @@ if (paramRequest.getMode().equals(paramRequest.Mode_VIEW)) {
                             String status = "<img src=\""+baseimg;
                             String Id = instance.getProcessInstance().getId();
                             String pName = instance.getFlowNodeType().getProcess().getDisplayTitle(lang);
-                            if(pwp != null) {
+                            if(pwp != null && showPwpLink) {
                                 pName = "<a href=\"" + pwp.getUrl() + "\">" + pName + "</a>";
                             }
                             String tName = instance.getFlowNodeType().getDisplayTitle(lang);
