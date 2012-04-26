@@ -37,6 +37,12 @@ if(action.equals("step4"))
         <%
     }else if(toPost.equals("photo"))
     {
+        %>
+            <jsp:forward page="photoable/photoable.jsp" >
+                <jsp:param name="socialUri" value="<%=socialUri%>" />
+                <jsp:param name="toPost" value="<%=toPost%>" />
+            </jsp:forward>
+        <%
     }if(toPost.equals("video"))
     {
         %>
