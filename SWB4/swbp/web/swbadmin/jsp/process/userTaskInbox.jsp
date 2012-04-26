@@ -103,7 +103,10 @@ String pFilter = request.getParameter("pFilter");
 String sFilter = request.getParameter("sFilter");
 String pNum = request.getParameter("page");
 String displayCols = (String) request.getAttribute("displayCols");
-boolean showPwpLink = (Boolean) request.getAttribute("showPWpLink");
+boolean showPwpLink = false;
+if (request.getAttribute("showPWpLink") != null) {
+    showPwpLink = (Boolean) request.getAttribute("showPWpLink");
+}
 String baseimg = SWBPortal.getWebWorkPath() + "/models/" + paramRequest.getWebPage().getWebSiteId() + "/css/images/";
 int maxPages = (Integer) request.getAttribute("maxPages");
 int pageNum = 1;
