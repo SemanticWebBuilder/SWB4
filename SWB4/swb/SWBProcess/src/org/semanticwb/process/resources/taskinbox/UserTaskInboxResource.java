@@ -180,7 +180,7 @@ public class UserTaskInboxResource extends org.semanticwb.process.resources.task
             request.setAttribute("displayCols", getDisplayCols());
             request.setAttribute("statusWp", getDisplayMapWp());
             request.setAttribute("itemsPerPage", getItemsPerPage());
-            
+            request.setAttribute("showPWpLink", isShowProcessWPLink());
             rd.include(request, response);
         } catch (Exception e) {
             log.error("Error including jsp in view mode", e);
