@@ -1,18 +1,21 @@
 package org.semanticwb.social;
 
 import com.google.gdata.client.youtube.YouTubeService;
+import com.google.gdata.data.geo.impl.GeoRssWhere;
+import com.google.gdata.data.media.MediaFileSource;
 import com.google.gdata.data.media.mediarss.MediaCategory;
 import com.google.gdata.data.media.mediarss.MediaDescription;
 import com.google.gdata.data.media.mediarss.MediaKeywords;
 import com.google.gdata.data.media.mediarss.MediaTitle;
-import com.google.gdata.data.youtube.FormUploadToken;
 import com.google.gdata.data.youtube.VideoEntry;
 import com.google.gdata.data.youtube.YouTubeMediaGroup;
 import com.google.gdata.data.youtube.YouTubeNamespace;
+import java.io.File;
 import java.net.URL;
 import java.util.StringTokenizer;
 import javax.servlet.http.HttpServletRequest;
 import org.semanticwb.Logger;
+import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.portal.api.SWBActionResponse;
 
@@ -20,6 +23,8 @@ import org.semanticwb.portal.api.SWBActionResponse;
 public class Youtube extends org.semanticwb.social.base.YoutubeBase 
 {
    private static Logger log = SWBUtils.getLogger(Youtube.class);
+
+   String UPLOAD_URL = "http://uploads.gdata.youtube.com/feeds/api/users/default/uploads";
 
 
     public Youtube(org.semanticwb.platform.SemanticObject base)
@@ -42,6 +47,7 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase
         String action = response.getAction();
         try {
             if (action.equals("uploadVideo")) {
+                
                 VideoEntry newEntry = new VideoEntry();
                 newEntry.setLocation("Mexico");
                 YouTubeMediaGroup mg = newEntry.getOrCreateMediaGroup();
@@ -78,13 +84,24 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase
                     mg.getDescription().setPlainTextContent(description);
                 }
                 //mg.setPrivate(false);
-                URL uploadUrl = new URL("http://gdata.youtube.com/action/GetUploadToken");
-                FormUploadToken token = service.getFormUploadToken(uploadUrl, newEntry);
+                //URL uploadUrl = new URL("http://gdata.youtube.com/action/GetUploadToken");
+                //FormUploadToken token = service.getFormUploadToken(uploadUrl, newEntry);
+
+                mg.setPrivate(false);
+
+                newEntry.setGeoCoordinates(new GeoRssWhere(37.0,-122.0));
+                // alternatively, one could specify just a descriptive string
+                // newEntry.setLocation("Mountain View, CA");
+
+                String videoSend = SWBPortal.getWorkPath() + video.getWorkPath() + "/" + video.getVideo();
+                MediaFileSource ms = new MediaFileSource(new File(videoSend), "video/quicktime");
+                newEntry.setMediaSource(ms);
+
+                VideoEntry createdEntry = service.insert(new URL(UPLOAD_URL), newEntry);
+
 
                 response.setRenderParameter("jspResponse", "/swbadmin/jsp/social/videoable/videoable.jsp");
                 response.setRenderParameter("videoId", newEntry.getId());
-                response.setRenderParameter("tokenUrl", token.getUrl());
-                response.setRenderParameter("token", token.getToken());
             }
         } catch (Exception e) {
             log.error(e);
