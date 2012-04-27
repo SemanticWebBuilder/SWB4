@@ -4,7 +4,6 @@
 <%@page import="java.util.*"%>
 <%@page import="org.semanticwb.portal.api.SWBResourceURL"%>
 <%@page import="org.semanticwb.*,org.semanticwb.platform.*,org.semanticwb.portal.*,org.semanticwb.model.*,java.util.*,org.semanticwb.base.util.*"%>
-
 <%
 WebSite wsite=paramRequest.getWebPage().getWebSite();
 String action=paramRequest.getAction();

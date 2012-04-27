@@ -24,7 +24,7 @@ videoMgr.addButton(SWBFormButton.newBackButton());
 SemanticObject videoSemObj = new SemanticObject(paramRequest.getWebPage().getWebSite().getSemanticModel(), Video.sclass);
 %>
 <div class="formularios">
-    <form action="<%=urlAction.setAction("uploadVideo")%>" method="post">
+    <form action="<%=urlAction.setAction("uploadVideo")%>" method="post" id="frmUploadVideo" name="frmUploadVideo" dojoType="dijit.form.Form">
         <%= videoMgr.getFormHiddens() %>
         <div class="etiqueta"><label for="title"><%=Video.swb_title.getDisplayName()%>: </label></div>
         <div class="campo"><%=videoMgr.renderElement(request, Video.swb_title, videoMgr.MODE_CREATE)%></div>
@@ -46,22 +46,10 @@ SemanticObject videoSemObj = new SemanticObject(paramRequest.getWebPage().getWeb
     </form>
 </div>
 <%
-    if(action.equals("uploadVideo"))
-    {
-    //urlAction.setParameter("entryUrl", "http://gdata.youtube.com/feeds/api/videos/"+videoId);
-    String tokenUrl=request.getParameter("tokenUrl");
-    String token=request.getParameter("token");
-    if(tokenUrl!=null && token!=null)
-    {
-     %>
-        <form action="<%=tokenUrl%>?nexturl=http://localhost:8080<%=urlAction%>" method ="post" enctype="multipart/form-data">
-            <ul>
-            <input type="file" name="file"/>
-            <input type="hidden" name="token" value="<%=token%>"/>
-            <input type="submit" value="subir a youtube" />
-            </ul>
-        </form>
-     <%
-    }
+if(action.equals("uploadVideo"))
+{
+%>
+    <div>Video enviado</div>
+<%
 }
 %>
