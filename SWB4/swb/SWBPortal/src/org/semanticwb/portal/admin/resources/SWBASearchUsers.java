@@ -92,7 +92,9 @@ public class SWBASearchUsers extends GenericResource
         while (itur.hasNext())
         {
             UserRepository ur = itur.next();
-            ret.append("        <option value=\"" + ur.getId() + "\">" + ur.getDisplayTitle(user.getLanguage()) + "</option>\n"); //todo Add Language
+            if (ur.getParentWebSite() == null || (ur.getParentWebSite() != null && !ur.getParentWebSite().isDeleted())) {
+                ret.append("        <option value=\"" + ur.getId() + "\">" + ur.getDisplayTitle(user.getLanguage()) + "</option>\n"); //todo Add Language
+            }
         }
         ret.append("<script type=\"dojo/method\" event=\"onChange\" args=\"suri\">\n");
         ret.append("    var lpan = dijit.byId('SWBASearchUsers_R');\n");
