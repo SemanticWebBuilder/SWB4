@@ -25,6 +25,8 @@ import org.semanticwb.social.Photoable;
 import org.semanticwb.social.SocialNetwork;
 import org.semanticwb.social.Video;
 import org.semanticwb.social.Videoable;
+import org.semanticwb.social.util.PostableObj;
+import org.semanticwb.social.util.SendPostThread;
 
 /**
  *
@@ -90,17 +92,29 @@ public class Post extends GenericResource {
                         {
                             //TODO: YO CREO QUE LO QUE TENGO QUE HACER AQUI, ES UN THREAD POR CADA UNA DE LAS REDES SOCIALES A LAS QUE SE ENVÍE UN POST
                             Messageable messageable=(Messageable) socialNet;
-                            messageable.postMsg((Message)post, request, response);
+                            //messageable.postMsg((Message)post, request, response);
+                            PostableObj postableObj=new PostableObj(messageable, post, request, response);
+                            SendPostThread sendPostThread=new SendPostThread();
+                            sendPostThread.addPostAble(postableObj);
+                            sendPostThread.start();
                         } if(toPost.equals("photo") && socialNet instanceof Photoable)
                         {
                             //TODO: YO CREO QUE LO QUE TENGO QUE HACER AQUI, ES UN THREAD POR CADA UNA DE LAS REDES SOCIALES A LAS QUE SE ENVÍE UN POST
                             Photoable photoable=(Photoable) socialNet;
-                            photoable.postPhoto((Photo)post, request, response);
+                            //photoable.postPhoto((Photo)post, request, response);
+                            PostableObj postableObj=new PostableObj(photoable, post, request, response);
+                            SendPostThread sendPostThread=new SendPostThread();
+                            sendPostThread.addPostAble(postableObj);
+                            sendPostThread.start();
                         }else if(toPost.equals("video") && socialNet instanceof Videoable)
                         {
                             //TODO: YO CREO QUE LO QUE TENGO QUE HACER AQUI, ES UN THREAD POR CADA UNA DE LAS REDES SOCIALES A LAS QUE SE ENVÍE UN POST
                             Videoable videoable=(Videoable) socialNet;
-                            videoable.postVideo((Video)post, request, response);
+                            //videoable.postVideo((Video)post, request, response);
+                            PostableObj postableObj=new PostableObj(videoable, post, request, response);
+                            SendPostThread sendPostThread=new SendPostThread();
+                            sendPostThread.addPostAble(postableObj);
+                            sendPostThread.start();
                         }
                     }
                 }
@@ -109,5 +123,6 @@ public class Post extends GenericResource {
             log.error(e);
         }
     }
+
 
 }
