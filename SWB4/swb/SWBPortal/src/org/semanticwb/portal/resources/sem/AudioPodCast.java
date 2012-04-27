@@ -61,9 +61,9 @@ public class AudioPodCast extends org.semanticwb.portal.resources.sem.base.Audio
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
         response.setContentType("text/html; charset=UTF-8");
-        Resource base = getResourceBase();
-        String lang = paramRequest.getUser().getLanguage();
-        
+        final Resource base = getResourceBase();
+        final String lang = paramRequest.getUser().getLanguage();
+        final Locale loc = new Locale(lang);
         PrintWriter out =  response.getWriter();
         
         SWBResourceURL directURL = paramRequest.getRenderUrl().setMode(Mode_PLAY).setCallMethod(paramRequest.Call_DIRECT);
@@ -81,42 +81,43 @@ public class AudioPodCast extends org.semanticwb.portal.resources.sem.base.Audio
             final String contentURL = surl;
             
             SimpleDateFormat pd = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
-            SimpleDateFormat sdf = new SimpleDateFormat("HH:mm", new Locale(lang));
+            SimpleDateFormat sdf = new SimpleDateFormat("HH:mm", loc);
+            DecimalFormat df = new DecimalFormat("#.00");
             
             Iterator<AudioFile> resources = AudioFile.ClassMgr.listAudioFiles(base.getWebSite());
             resources = SWBComparator.sortByCreated(resources, false);
             if(resources.hasNext()) {
+                File f;
                 out.println("<div class=\"swb-podcast\">");
                 out.println("<h2>"+(base.getDisplayTitle(lang)==null?base.getTitle():base.getDisplayTitle(lang))+"</h2>");
                 out.println("<h3>"+paramRequest.getLocaleString("latest") +"</h3>");
-                out.println("<ul>");
+                out.println("<ul class=\"swb-podcast-list\">");
                 for(int i=0; i<LATEST && resources.hasNext(); i++) {
                     AudioFile audiofile = resources.next();
-//String resourceURL = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+SWBPortal.getContextPath()+SWBPortal.getWebWorkPath()+audiofile.getWorkPath()+"/"+URLDecoder.decode(audiofile.getFilename(), "UTF-8");
-//URL url = new URL(resourceURL);
-//File f=new File(url.getFile());
-//System.out.println("file="+f+", espacio total="+f.getTotalSpace()+", espacio usado="+f.getUsableSpace());                    
-                    out.println("<li>");
+                    out.println("<li class=\"swb-podcast-item\">");
                     out.println(" <div class=\"swb-pdcst-caja\">");
                     out.println("  <h4>"+(audiofile.getDisplayTitle(lang)==null?audiofile.getTitle():audiofile.getDisplayTitle(lang))+"</h4>");
                     out.println("  <div class=\"swb-pdcst-texto\"><p>"+(audiofile.getDisplayDescription(lang)==null?audiofile.getDescription():audiofile.getDisplayDescription(lang))+"</p></div>");
                     out.println("  <div class=\"swb-pdcst-texto\">");
                     out.print("    <p class=\"swb-pdcst-escuchar\">");
-                    out.print("      <a href=\""+contentURL+"?uri="+audiofile.getEncodedURI()+"\" title=\""+(audiofile.getDisplayTitle(lang)==null?audiofile.getTitle():audiofile.getDisplayTitle(lang))+"\">"+paramRequest.getLocaleString("listen")+"</a>");
+                    out.print("     <a href=\""+contentURL+"?uri="+audiofile.getEncodedURI()+"\" title=\""+(audiofile.getDisplayTitle(lang)==null?audiofile.getTitle():audiofile.getDisplayTitle(lang))+"\">"+paramRequest.getLocaleString("listen")+"</a>");
                     try {
-                        out.print("  &nbsp;<span>"+paramRequest.getLocaleString("duration")+":&nbsp;"+sdf.format(pd.parse(audiofile.getDuration()))+"</span>");
+                        out.print("  &nbsp;<span class=\"swb-pdcst-ftime\">"+paramRequest.getLocaleString("duration")+":&nbsp;"+sdf.format(pd.parse(audiofile.getDuration()))+"</span>");
                     }catch(ParseException pe) {
-                        log.error(pe);
                     }
+                    out.print("  </p>");
+                    out.print("  <p class=\"swb-pdcst-descargar\">");
+                    out.print("   <a href=\""+directURL.setParameter("uri", audiofile.getEncodedURI())+"\" title=\""+(audiofile.getDisplayTitle(lang)==null?audiofile.getTitle():audiofile.getDisplayTitle(lang))+"\">"+paramRequest.getLocaleString("download")+"</a>&nbsp;[<span class=\"swb-pdcst-ffmt\">"+paramRequest.getLocaleString("format")+"&nbsp;"+audiofile.getFilename().substring(audiofile.getFilename().lastIndexOf(".")+1)+"]</span>");
+                    f = new File(SWBPortal.getWorkPath()+audiofile.getWorkPath()+"/"+audiofile.getFilename());
+                    out.print("  &nbsp;<span class=\"swb-pdcst-fsize\">["+df.format(f.length()/1048576.0)+" Mb]</span>");
                     out.println("  </p>");
-                    out.println("  <p class=\"swb-pdcst-descargar\"><a href=\""+directURL.setParameter("uri", audiofile.getEncodedURI())+"\" title=\""+(audiofile.getDisplayTitle(lang)==null?audiofile.getTitle():audiofile.getDisplayTitle(lang))+"\">"+paramRequest.getLocaleString("download")+"</a>&nbsp;<span>"+paramRequest.getLocaleString("format")+"&nbsp;"+audiofile.getFilename().substring(audiofile.getFilename().lastIndexOf(".")+1)+"</span></p>");
                     out.println("  </div>");
                     out.println(" </div>");
                     out.println("</li>");
                 }
                 out.println("</ul>");
                 if(resources.hasNext()) {
-                    out.println("<h3>"+paramRequest.getLocaleString("previous") +"</h3>");
+                    out.println("<h3>"+paramRequest.getLocaleString("previous")+"</h3>");
                     out.println("<ul id=\"swb-pdcst-listall\">");
                     for(int i=0; i<PREVIOUS && resources.hasNext(); i++) {
                         AudioFile audiofile = resources.next();          
@@ -130,10 +131,13 @@ public class AudioPodCast extends org.semanticwb.portal.resources.sem.base.Audio
                         try {
                             out.print("  &nbsp;<span>"+paramRequest.getLocaleString("duration")+":&nbsp;"+sdf.format(pd.parse(audiofile.getDuration()))+"</span>");
                         }catch(ParseException pe) {
-                            log.error(pe);
                         }
+                        out.print("  </p>");
+                        out.print("  <p class=\"swb-pdcst-descargar\">");
+                        out.print("   <a href=\""+directURL.setParameter("uri", audiofile.getEncodedURI())+"\" title=\""+(audiofile.getDisplayTitle(lang)==null?audiofile.getTitle():audiofile.getDisplayTitle(lang))+"\">"+paramRequest.getLocaleString("download")+"</a>&nbsp;[<span class=\"swb-pdcst-ffmt\">"+paramRequest.getLocaleString("format")+"&nbsp;"+audiofile.getFilename().substring(audiofile.getFilename().lastIndexOf(".")+1)+"]</span>");
+                        f = new File(SWBPortal.getWorkPath()+audiofile.getWorkPath()+"/"+audiofile.getFilename());
+                        out.print("  &nbsp;<span class=\"swb-pdcst-fsize\">["+df.format(f.length()/1048576.0)+" Mb]</span>");
                         out.println("  </p>");
-                        out.println("  <p class=\"swb-pdcst-descargar\"><a href=\""+directURL.setParameter("uri", audiofile.getEncodedURI())+"\" title=\""+(audiofile.getDisplayTitle(lang)==null?audiofile.getTitle():audiofile.getDisplayTitle(lang))+"\">"+paramRequest.getLocaleString("download")+"</a><span>"+paramRequest.getLocaleString("format")+"&nbsp;"+audiofile.getFilename().substring(audiofile.getFilename().lastIndexOf(".")+1)+"</span></p>");
                         out.println("  </div>");
                         out.println(" </div>");
                         out.println("</li>");
@@ -148,11 +152,12 @@ public class AudioPodCast extends org.semanticwb.portal.resources.sem.base.Audio
             if(uri==null)
                 return;
             uri = URLDecoder.decode(uri, "UTF-8");
+            uri="_____";
             AudioFile audiofile = null;
             try {
                 audiofile = (AudioFile)SemanticObject.createSemanticObject(uri).createGenericInstance();
             }catch(Exception e) {
-                log.error(e);
+                //log.error(e);
             }
             if(audiofile!=null && audiofile.isValid()) {
                 synchronized(this) {
@@ -276,6 +281,7 @@ public class AudioPodCast extends org.semanticwb.portal.resources.sem.base.Audio
                 out.println(" </div>");
                 out.println("</div>");
             }
+            
         }
     }
     
@@ -400,7 +406,8 @@ public class AudioPodCast extends org.semanticwb.portal.resources.sem.base.Audio
 
             response.setHeader("Content-Disposition", "attachment; filename=" + filename);
             String resourceURL = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+SWBPortal.getContextPath()+SWBPortal.getWebWorkPath()+audiofile.getWorkPath()+"/"+URLDecoder.decode(audiofile.getFilename(), "UTF-8");
-            URL url = new URL(resourceURL);File f=new File(url.getFile());
+            URL url = new URL(resourceURL);
+            //File f=new File(url.getFile());
             BufferedInputStream  bis = new BufferedInputStream(url.openStream());
             BufferedOutputStream bos = new BufferedOutputStream(response.getOutputStream());
             byte[] buff = new byte[DEFAULT_BUFFER_SIZE];
