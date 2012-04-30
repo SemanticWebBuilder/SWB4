@@ -5,6 +5,7 @@ public abstract class PostBase extends org.semanticwb.model.SWBClass implements 
 {
     public static final org.semanticwb.platform.SemanticClass social_PostContainer=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#PostContainer");
     public static final org.semanticwb.platform.SemanticProperty social_hasPostContainer_PostInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#hasPostContainer_PostInv");
+    public static final org.semanticwb.platform.SemanticProperty social_socialNetPostId=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#socialNetPostId");
     public static final org.semanticwb.platform.SemanticClass social_Post=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#Post");
    /**
    * The semantic class that represents the currentObject
@@ -309,6 +310,24 @@ public abstract class PostBase extends org.semanticwb.model.SWBClass implements 
              ret=(org.semanticwb.social.PostContainer)obj.createGenericInstance();
          }
          return ret;
+    }
+
+/**
+* Gets the SocialNetPostId property
+* @return String with the SocialNetPostId
+*/
+    public String getSocialNetPostId()
+    {
+        return getSemanticObject().getProperty(social_socialNetPostId);
+    }
+
+/**
+* Sets the SocialNetPostId property
+* @param value long with the SocialNetPostId
+*/
+    public void setSocialNetPostId(String value)
+    {
+        getSemanticObject().setProperty(social_socialNetPostId, value);
     }
 
 /**
