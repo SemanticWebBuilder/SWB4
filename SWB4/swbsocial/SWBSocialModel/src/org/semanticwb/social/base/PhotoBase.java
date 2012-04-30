@@ -1,7 +1,7 @@
 package org.semanticwb.social.base;
 
 
-public abstract class PhotoBase extends org.semanticwb.social.Post implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Expirable,org.semanticwb.model.Traceable,org.semanticwb.social.Commentable,org.semanticwb.model.Tagable
+public abstract class PhotoBase extends org.semanticwb.social.Post implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Tagable,org.semanticwb.social.Commentable,org.semanticwb.model.Expirable,org.semanticwb.model.Traceable
 {
     public static final org.semanticwb.platform.SemanticProperty social_photo=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#photo");
     public static final org.semanticwb.platform.SemanticClass social_Photo=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#Photo");
@@ -160,39 +160,6 @@ public abstract class PhotoBase extends org.semanticwb.social.Post implements or
     }
 
 /**
-* Gets the Title property
-* @return String with the Title
-*/
-    public String getTitle()
-    {
-        return getSemanticObject().getProperty(swb_title);
-    }
-
-/**
-* Sets the Title property
-* @param value long with the Title
-*/
-    public void setTitle(String value)
-    {
-        getSemanticObject().setProperty(swb_title, value);
-    }
-
-    public String getTitle(String lang)
-    {
-        return getSemanticObject().getProperty(swb_title, null, lang);
-    }
-
-    public String getDisplayTitle(String lang)
-    {
-        return getSemanticObject().getLocaleProperty(swb_title, lang);
-    }
-
-    public void setTitle(String title, String lang)
-    {
-        getSemanticObject().setProperty(swb_title, title, lang);
-    }
-
-/**
 * Gets the Description property
 * @return String with the Description
 */
@@ -223,6 +190,57 @@ public abstract class PhotoBase extends org.semanticwb.social.Post implements or
     public void setDescription(String description, String lang)
     {
         getSemanticObject().setProperty(swb_description, description, lang);
+    }
+
+/**
+* Gets the Comment property
+* @return String with the Comment
+*/
+    public String getComment()
+    {
+        return getSemanticObject().getProperty(social_comment);
+    }
+
+/**
+* Sets the Comment property
+* @param value long with the Comment
+*/
+    public void setComment(String value)
+    {
+        getSemanticObject().setProperty(social_comment, value);
+    }
+
+/**
+* Gets the Title property
+* @return String with the Title
+*/
+    public String getTitle()
+    {
+        return getSemanticObject().getProperty(swb_title);
+    }
+
+/**
+* Sets the Title property
+* @param value long with the Title
+*/
+    public void setTitle(String value)
+    {
+        getSemanticObject().setProperty(swb_title, value);
+    }
+
+    public String getTitle(String lang)
+    {
+        return getSemanticObject().getProperty(swb_title, null, lang);
+    }
+
+    public String getDisplayTitle(String lang)
+    {
+        return getSemanticObject().getLocaleProperty(swb_title, lang);
+    }
+
+    public void setTitle(String title, String lang)
+    {
+        getSemanticObject().setProperty(swb_title, title, lang);
     }
 
 /**
@@ -274,23 +292,5 @@ public abstract class PhotoBase extends org.semanticwb.social.Post implements or
     public void setPhoto(String value)
     {
         getSemanticObject().setProperty(social_photo, value);
-    }
-
-/**
-* Gets the Comment property
-* @return String with the Comment
-*/
-    public String getComment()
-    {
-        return getSemanticObject().getProperty(social_comment);
-    }
-
-/**
-* Sets the Comment property
-* @param value long with the Comment
-*/
-    public void setComment(String value)
-    {
-        getSemanticObject().setProperty(social_comment, value);
     }
 }

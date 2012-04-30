@@ -10,6 +10,7 @@ import com.google.gdata.data.media.mediarss.MediaTitle;
 import com.google.gdata.data.youtube.VideoEntry;
 import com.google.gdata.data.youtube.YouTubeMediaGroup;
 import com.google.gdata.data.youtube.YouTubeNamespace;
+import com.google.gdata.data.youtube.YtPublicationState;
 import java.io.File;
 import java.net.URL;
 import java.util.StringTokenizer;
@@ -17,6 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.model.WebSite;
 import org.semanticwb.portal.api.SWBActionResponse;
 
 
@@ -26,7 +28,7 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase
 
    String UPLOAD_URL = "http://uploads.gdata.youtube.com/feeds/api/users/default/uploads";
 
-
+   
     public Youtube(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
@@ -47,9 +49,13 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase
         String action = response.getAction();
         try {
             if (action.equals("uploadVideo")) {
+
+                WebSite wsite=response.getWebPage().getWebSite();
                 
                 VideoEntry newEntry = new VideoEntry();
-                newEntry.setLocation("Mexico");
+
+
+                newEntry.setLocation("Mexico"); // Debe estar desde la configuración de la red social
                 YouTubeMediaGroup mg = newEntry.getOrCreateMediaGroup();
                 //http://gdata.youtube.com/schemas/2007/categories.cat-->pienso que a una cirta comunidad se le deberÃ­a asignar una categoria en especifico
                 //(de las del archivo de la mencionada url, ej. Autos) y serÃ­a con la que se subieran los nuevos videos y de esta manera
@@ -57,15 +63,15 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase
                 //de subir videos con una cierta categoria solamente, que serÃ­a que tuviera relaciÃ³n con el tipo de comunidad en la que se esta.
                 //***El tÃ­tulo, la categoria y por lo menos un keyword son requeridos.
 
-                mg.addCategory(new MediaCategory(YouTubeNamespace.CATEGORY_SCHEME, "Autos"));
-                mg.addCategory(new MediaCategory(YouTubeNamespace.DEVELOPER_TAG_SCHEME, "xyzzy"));
+                mg.addCategory(new MediaCategory(YouTubeNamespace.CATEGORY_SCHEME, "Autos"));       // Debe estar desde la configuración de la red social
+                mg.addCategory(new MediaCategory(YouTubeNamespace.DEVELOPER_TAG_SCHEME, "xyzzy"));  // Debe estar desde la configuración de la red social
 
-                String title = request.getParameter("title");
+                String title = video.getTitle();
                 if (title != null && title.trim().length() > 0) {
                     mg.setTitle(new MediaTitle());
                     mg.getTitle().setPlainTextContent(title);
                 }
-                String keywords = request.getParameter("keywords");
+                String keywords = video.getTags();
                 if (keywords != null && keywords.trim().length() > 0) {
                     mg.setKeywords(new MediaKeywords());
                     if (keywords.indexOf(",") > -1) {
@@ -78,7 +84,7 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase
                         mg.getKeywords().addKeyword(keywords);
                     }
                 }
-                String description = request.getParameter("description");
+                String description = video.getDescription();
                 if (description != null && description.trim().length() > 0) {
                     mg.setDescription(new MediaDescription());
                     mg.getDescription().setPlainTextContent(description);
@@ -89,7 +95,8 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase
 
                 mg.setPrivate(false);
 
-                newEntry.setGeoCoordinates(new GeoRssWhere(37.0,-122.0));
+               
+                newEntry.setGeoCoordinates(new GeoRssWhere(37.0,-122.0));       //ver como puedo obtener estos datos (latitud y longitud) dinamicamente
                 // alternatively, one could specify just a descriptive string
                 // newEntry.setLocation("Mountain View, CA");
 
@@ -97,7 +104,49 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase
                 MediaFileSource ms = new MediaFileSource(new File(videoSend), "video/quicktime");
                 newEntry.setMediaSource(ms);
 
-                VideoEntry createdEntry = service.insert(new URL(UPLOAD_URL), newEntry);
+                VideoEntry entry = service.insert(new URL(UPLOAD_URL), newEntry);
+                System.out.println("createdEntry:"+entry);
+                System.out.println("createdEntry:"+entry.getId());
+                System.out.println("entry sefLink:"+entry.getSelfLink());
+                System.out.println("entry getEtag:"+entry.getEtag());
+                System.out.println("entry getKind:"+entry.getKind());
+                System.out.println("entry getVersionId:"+entry.getVersionId());
+
+                int post=-1;
+                post=entry.getId().lastIndexOf(":");
+                if(post>-1)
+                {
+                    String idEntry=entry.getId().substring(post+1);
+                    System.out.println("idEntry********:"+idEntry);
+                    SocialPost newSocialPost=SocialPost.ClassMgr.createSocialPost(idEntry, wsite);
+                    newSocialPost.setSocialPost(video);
+                    newSocialPost.setSocialNetwork(this);
+                }
+
+                System.out.println("createdEntry:"+entry.getPublicationState().getState().name());
+
+                //you upload a video using the direct upload method, then the Upload API response will contain a <link> tag for which the value of the rel attribute is self. To check the status of the uploaded video, send a GET request to the URL identified in this <link> tag.
+                //<link rel='self' type='application/atom+xml' href='https://gdata.youtube.com/feeds/api/users/default/uploads/Video_ID'/>
+
+                if(entry.isDraft()) {
+                  System.out.println("Video is not live");
+                  YtPublicationState pubState = entry.getPublicationState();
+                  if(pubState.getState() == YtPublicationState.State.PROCESSING) {
+                    System.out.println("Video is still being processed.");
+                  }
+                  else if(pubState.getState() == YtPublicationState.State.REJECTED) {
+                    System.out.print("Video has been rejected because: ");
+                    System.out.println(pubState.getDescription());
+                    System.out.print("For help visit: ");
+                    System.out.println(pubState.getHelpUrl());
+                  }
+                  else if(pubState.getState() == YtPublicationState.State.FAILED) {
+                    System.out.print("Video failed uploading because: ");
+                    System.out.println(pubState.getDescription());
+                    System.out.print("For help visit: ");
+                    System.out.println(pubState.getHelpUrl());
+                  }
+                }
 
 
                 response.setRenderParameter("jspResponse", "/swbadmin/jsp/social/videoable/videoable.jsp");
@@ -109,7 +158,8 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase
     }
 
     private YouTubeService getYouTubeService() {
-        YouTubeService service = new YouTubeService("SEMANTICWEBBUILDER", "AI39si4crQ_Zn6HmLxroe0TP48ZDkOXI71uodU9xc1QRyl8Y5TaRc2OIIOKMEatsw9Amce81__JcvvwObue_8yXD2yC6bFRhXA");
+        //YouTubeService service = new YouTubeService("SEMANTICWEBBUILDER", "AI39si4crQ_Zn6HmLxroe0TP48ZDkOXI71uodU9xc1QRyl8Y5TaRc2OIIOKMEatsw9Amce81__JcvvwObue_8yXD2yC6bFRhXA");
+        YouTubeService service = new YouTubeService(getAppKey(), getSecretKey());
         try {
             service.setUserCredentials(getLogin(), getPassword());
         } catch (Exception e) {

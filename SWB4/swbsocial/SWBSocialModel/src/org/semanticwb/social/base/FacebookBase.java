@@ -1,9 +1,21 @@
 package org.semanticwb.social.base;
 
 
-public abstract class FacebookBase extends org.semanticwb.social.SocialNetwork implements org.semanticwb.social.Videoable,org.semanticwb.social.Postable,org.semanticwb.model.Descriptiveable,org.semanticwb.social.Photoable,org.semanticwb.social.Secreteable,org.semanticwb.model.Traceable,org.semanticwb.social.Messageable
+public abstract class FacebookBase extends org.semanticwb.social.SocialNetwork implements org.semanticwb.model.Descriptiveable,org.semanticwb.social.Postable,org.semanticwb.model.Traceable,org.semanticwb.social.Secreteable,org.semanticwb.social.Photoable,org.semanticwb.social.Messageable,org.semanticwb.social.Videoable
 {
+   /**
+   * Almacena la fecha de expiración del token autorizado para hacer publicaciones, por conveniencia no utiliza displayProperty
+   */
+    public static final org.semanticwb.platform.SemanticProperty social_tokenExpirationDate=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#tokenExpirationDate");
+   /**
+   * Almacena el access Token autorizado para hacer publicaciones, por conveniencia no utiliza displayProperty
+   */
+    public static final org.semanticwb.platform.SemanticProperty social_accessToken=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#accessToken");
     public static final org.semanticwb.platform.SemanticProperty social_facebookUserId=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#facebookUserId");
+   /**
+   * Almacena un token secreto para realizar publicaciones, por conveniencia no utiliza displayProperty
+   */
+    public static final org.semanticwb.platform.SemanticProperty social_accessTokenSecret=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#accessTokenSecret");
     public static final org.semanticwb.platform.SemanticClass social_Facebook=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#Facebook");
    /**
    * The semantic class that represents the currentObject
@@ -154,6 +166,24 @@ public abstract class FacebookBase extends org.semanticwb.social.SocialNetwork i
     }
 
 /**
+* Gets the TokenExpirationDate property
+* @return java.util.Date with the TokenExpirationDate
+*/
+    public java.util.Date getTokenExpirationDate()
+    {
+        return getSemanticObject().getDateProperty(social_tokenExpirationDate);
+    }
+
+/**
+* Sets the TokenExpirationDate property
+* @param value long with the TokenExpirationDate
+*/
+    public void setTokenExpirationDate(java.util.Date value)
+    {
+        getSemanticObject().setDateProperty(social_tokenExpirationDate, value);
+    }
+
+/**
 * Gets the AppKey property
 * @return String with the AppKey
 */
@@ -172,6 +202,24 @@ public abstract class FacebookBase extends org.semanticwb.social.SocialNetwork i
     }
 
 /**
+* Gets the AccessToken property
+* @return String with the AccessToken
+*/
+    public String getAccessToken()
+    {
+        return getSemanticObject().getProperty(social_accessToken);
+    }
+
+/**
+* Sets the AccessToken property
+* @param value long with the AccessToken
+*/
+    public void setAccessToken(String value)
+    {
+        getSemanticObject().setProperty(social_accessToken, value);
+    }
+
+/**
 * Gets the FacebookUserId property
 * @return String with the FacebookUserId
 */
@@ -187,6 +235,24 @@ public abstract class FacebookBase extends org.semanticwb.social.SocialNetwork i
     public void setFacebookUserId(String value)
     {
         getSemanticObject().setProperty(social_facebookUserId, value);
+    }
+
+/**
+* Gets the AccessTokenSecret property
+* @return String with the AccessTokenSecret
+*/
+    public String getAccessTokenSecret()
+    {
+        return getSemanticObject().getProperty(social_accessTokenSecret);
+    }
+
+/**
+* Sets the AccessTokenSecret property
+* @param value long with the AccessTokenSecret
+*/
+    public void setAccessTokenSecret(String value)
+    {
+        getSemanticObject().setProperty(social_accessTokenSecret, value);
     }
 
 /**

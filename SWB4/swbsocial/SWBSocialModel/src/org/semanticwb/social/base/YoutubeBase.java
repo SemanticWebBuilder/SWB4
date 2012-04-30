@@ -1,7 +1,7 @@
 package org.semanticwb.social.base;
 
 
-public abstract class YoutubeBase extends org.semanticwb.social.SocialNetwork implements org.semanticwb.social.Videoable,org.semanticwb.social.Postable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable
+public abstract class YoutubeBase extends org.semanticwb.social.SocialNetwork implements org.semanticwb.model.Descriptiveable,org.semanticwb.social.Postable,org.semanticwb.model.Traceable,org.semanticwb.social.Secreteable,org.semanticwb.social.Videoable
 {
     public static final org.semanticwb.platform.SemanticClass social_Youtube=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#Youtube");
    /**
@@ -150,5 +150,41 @@ public abstract class YoutubeBase extends org.semanticwb.social.SocialNetwork im
     public YoutubeBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
+    }
+
+/**
+* Gets the AppKey property
+* @return String with the AppKey
+*/
+    public String getAppKey()
+    {
+        return getSemanticObject().getProperty(social_appKey);
+    }
+
+/**
+* Sets the AppKey property
+* @param value long with the AppKey
+*/
+    public void setAppKey(String value)
+    {
+        getSemanticObject().setProperty(social_appKey, value);
+    }
+
+/**
+* Gets the SecretKey property
+* @return String with the SecretKey
+*/
+    public String getSecretKey()
+    {
+        return getSemanticObject().getProperty(social_secretKey);
+    }
+
+/**
+* Sets the SecretKey property
+* @param value long with the SecretKey
+*/
+    public void setSecretKey(String value)
+    {
+        getSemanticObject().setProperty(social_secretKey, value);
     }
 }
