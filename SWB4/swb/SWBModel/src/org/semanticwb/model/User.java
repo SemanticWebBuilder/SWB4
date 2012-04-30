@@ -24,16 +24,10 @@
 package org.semanticwb.model;
 
 import java.io.UnsupportedEncodingException;
-import java.security.GeneralSecurityException;
 import javax.security.auth.login.LoginException;
 import java.security.NoSuchAlgorithmException;
 import java.security.Principal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.TreeSet;
+import java.util.*;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBException;
 import org.semanticwb.SWBPlatform;
@@ -876,7 +870,9 @@ public class User extends UserBase implements Principal
 
     public void addVisitedWebPage(WebPage page)
     {
-        visited.add(page.getId());
+        synchronized(visited){
+            visited.add(page.getId());
+        }
         synchronized(history)
         {
             if(!history.isEmpty() && !history.getFirst().equals(page.getId()))
