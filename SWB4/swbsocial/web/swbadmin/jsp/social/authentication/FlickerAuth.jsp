@@ -12,7 +12,7 @@
     WebPage wp = paramRequest.getWebPage();
     User user = paramRequest.getUser();
     Iterator it = Flicker.ClassMgr.listFlickers(wp.getWebSite());
-    SWBResourceURL url = paramRequest.getRenderUrl().setMode("authOauth");
+    SWBResourceURL url = paramRequest.getRenderUrl().setMode("firstStepAuth");
     while(it.hasNext()){
         Flicker flicker = (Flicker)it.next();
         String oaTokn = flicker.getAccessToken();//flicker.getProperty("oauth_token");
