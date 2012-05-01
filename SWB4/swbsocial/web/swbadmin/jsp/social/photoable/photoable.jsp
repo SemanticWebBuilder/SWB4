@@ -24,9 +24,9 @@ if (paramRequest.getUser() != null) {
 photoMgr.setLang(lang);
 photoMgr.addButton(SWBFormButton.newSaveButton());
 photoMgr.addButton(SWBFormButton.newBackButton());
-StringBuffer ret = new StringBuffer();
+//StringBuffer ret = new StringBuffer();
 SemanticObject obj2 = new SemanticObject(paramRequest.getWebPage().getWebSite().getSemanticModel(), Photo.sclass);
-photoMgr.renderProp(request, ret, Photo.social_photo, photoMgr.getFormElement(Photo.social_photo), photoMgr.MODE_CREATE);
+//photoMgr.renderProp(request, ret, Photo.social_photo, photoMgr.getFormElement(Photo.social_photo), photoMgr.MODE_CREATE);
 %>
 <hr/>
 <div class="formularios">
