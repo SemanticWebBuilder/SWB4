@@ -34,7 +34,7 @@ public class FacebookAuthenticator extends GenericResource {
     public void doView(HttpServletRequest request, HttpServletResponse response,
             SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         
-        String jspResponse = "/swbadmin/jsp/social/FacebookAuth.jsp";
+        String jspResponse = "/swbadmin/jsp/social/authentication/FacebookAuth.jsp";
         
         RequestDispatcher dis = request.getRequestDispatcher(jspResponse);
         try {
