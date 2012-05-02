@@ -25,9 +25,9 @@ import org.semanticwb.social.SWBFlickrOauth;
  *
  * @author martha.jimenez
  */
-public class AuthFlickr extends GenericResource {
+public class FlickerAuthenticator extends GenericResource {
 
-    Logger log = SWBUtils.getLogger(AuthFlickr.class);
+    Logger log = SWBUtils.getLogger(FlickerAuthenticator.class);
     SWBFlickrOauth oauthConnection = new SWBFlickrOauth();
 
     @Override
@@ -62,7 +62,7 @@ public class AuthFlickr extends GenericResource {
         } else {
             try {
                 request.setAttribute("paramRequest", paramRequest);
-                RequestDispatcher rd = request.getRequestDispatcher("/swbadmin/jsp/social/authentication/autFlickr.jsp");
+                RequestDispatcher rd = request.getRequestDispatcher("/swbadmin/jsp/social/authentication/FlickerAuth.jsp");
                 rd.include(request, response);
             } catch(Exception e) {
                 log.error(e);
@@ -72,7 +72,7 @@ public class AuthFlickr extends GenericResource {
 
     @Override
     public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        if(paramRequest.getMode().equals("authOauth")){
+        if(paramRequest.getMode().equals("firstStepAuth")){
             doAuthorization(request, response, paramRequest);
         } else if(request.getParameter("oauth_token") != null && request.getParameter("oauth_verifier") != null){
             
