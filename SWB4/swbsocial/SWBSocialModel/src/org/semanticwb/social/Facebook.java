@@ -23,10 +23,6 @@ import org.semanticwb.io.SWBFileInputStream;
 public class Facebook extends org.semanticwb.social.base.FacebookBase {
     
     
-    private Message msg = null;
-    
-    private Photo photo = null;
-    
     private static final String CRLF = "\r\n";
     
     private static final String PREF = "--";
@@ -48,13 +44,15 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
         params.put("message", message.getMsg_Text());
         String url = Facebook.FACEBOOKGRAPH + this.getFacebookUserId() + "/feed";
         JSONObject jsonResponse = null;
+        String facebookResponse = "";
         
         try {
-            String facebookResponse = postRequest(params, url, request.getHeader(""), "POST");
+            facebookResponse = postRequest(params, url, request.getHeader(""), "POST");
             jsonResponse = new JSONObject(facebookResponse);
             if (jsonResponse != null && jsonResponse.get("id") != null) {
+                message.setSocialNetPostId(jsonResponse.getString("id"));
                 addPost(message);
-                this.msg = message;
+                //this.msg = message;
             }
         } catch (IOException ioe) {
             try {
@@ -67,7 +65,8 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
                 jsonResponse = new JSONObject("{\"errorMessage\" : \"La operacion no se pudo realizar, detail: "
                         + jsone.getMessage() + "\"}");
             } catch (JSONException jsone2) {}
-            log.error("La operacion no se pudo realizar, respuesta JSON mal formada", jsone);
+            log.error("La operacion no se pudo realizar, objeto JSON mal formado debido a la respuesta de Facebook: "
+                    + facebookResponse, jsone);
         }
     }
 
@@ -77,14 +76,9 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
         Map<String, String> params = new HashMap<String, String>(2);
         if (this.getAccessToken() != null) {
             params.put("access_token", this.getAccessToken());
-            System.out.println("Access_Token: " + this.getAccessToken());
-        } else {
-            System.out.println("access_token: nulo");
         }
         if (photo.getDescription() != null) {
             params.put("message", photo.getDescription());
-        } else {
-            System.out.println("photo.getComment(): nulo");
         }
         String url = Facebook.FACEBOOKGRAPH + this.getFacebookUserId() + "/photos";
         JSONObject jsonResponse = null;
@@ -95,20 +89,15 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
             SWBFile photoFile = new SWBFile(photoPath);
             
             if (photoFile.exists()) {
-                
-                System.out.println("Archivo a enviar: " + photoFile.getAbsolutePath());
-                
                 SWBFileInputStream fileStream = new SWBFileInputStream(photoFile);
                 String facebookResponse = postFileRequest(params, url,
-                        photo.getPhoto(), fileStream, "POST");
-                System.out.println("Respuesta de Face: " + facebookResponse);
+                        photo.getPhoto(), fileStream, "POST", "photo");
                 jsonResponse = new JSONObject(facebookResponse);
-            } else {
-                System.out.println("Archivo no encontrado: " + photoFile.getAbsolutePath());
             }
             if (jsonResponse != null && jsonResponse.get("id") != null) {
+                photo.setSocialNetPostId(jsonResponse.getString("id"));
                 this.addPost(photo);
-                this.photo = photo;
+                //this.photo = photo;
             }
         } catch (FileNotFoundException fnfe) {
             try {
@@ -127,7 +116,46 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
 
     public void postVideo(Video video, HttpServletRequest request, SWBActionResponse response) {
         
-        throw new UnsupportedOperationException("Not supported yet.");
+        Map<String, String> params = new HashMap<String, String>(3);
+        if (this.getAccessToken() != null) {
+            params.put("access_token", this.getAccessToken());
+        }
+        if (video.getTitle() != null) {
+            params.put("title", video.getTitle());
+        }
+        if (video.getDescription() != null) {
+            params.put("description", video.getDescription());
+        }
+        String url = Facebook.FACEBOOKGRAPH + this.getFacebookUserId() + "/videos";
+        JSONObject jsonResponse = null;
+        
+        try {
+            String videoPath = SWBPortal.getWorkPath() + video.getWorkPath() + "/" + video.getVideo();
+            SWBFile videoFile = new SWBFile(videoPath);
+            
+            if (videoFile.exists()) {
+                SWBFileInputStream fileStream = new SWBFileInputStream(videoFile);
+                String facebookResponse = postFileRequest(params, url,
+                        video.getVideo(), fileStream, "POST", "video");
+                jsonResponse = new JSONObject(facebookResponse);
+            }
+            if (jsonResponse != null && jsonResponse.get("id") != null) {
+                video.setSocialNetPostId(jsonResponse.getString("id"));
+                this.addPost(video);
+            }
+        } catch (FileNotFoundException fnfe) {
+            try {
+                jsonResponse = new JSONObject("{\"errorMessage\" : \"Archivo no encontrado\"}");
+            } catch (JSONException jsone) {}
+        } catch (JSONException jsone) {
+            try {
+                jsonResponse = new JSONObject("{\"errorMessage\" : \"La operacion no se pudo realizar\"}");
+            } catch (JSONException jsone2) {}
+        } catch (IOException ioe) {
+            try {
+                jsonResponse = new JSONObject("{\"errorMessage\" : \"Problemas con el envio/recepcion de la peticion/respuesta\"}");
+            } catch (JSONException jsone2) {}
+        }
     }
     
     /**
@@ -166,7 +194,6 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
         //Analizar la respuesta a la peticion y obtener el access token
         if (conex != null) {
             answer = getResponse(conex.getInputStream());
-            //System.out.println(answer);
         }
         return answer;
     }
@@ -208,12 +235,10 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
             conex.connect();
             out = conex.getOutputStream();
             out.write(paramString.toString().getBytes("UTF-8"));
-            //System.out.println("Datos enviados:\n" + paramString.toString());
             in = conex.getInputStream();
             response = getResponse(in);
         } catch (java.io.IOException ioe) {
             ioe.printStackTrace();
-            //System.out.println("Problema en metodo: postRequest");
         } finally {
             close(in);
             close(out);
@@ -236,13 +261,15 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
      * @param fileStream representa el contenido del archivo, para incluirlo en la petici&oacute; a Facebook
      * @param method indica el m&eacute;todo de la petici&oacute; HTTP requerido por Facebook para realizar
      *          una operaci&oacute;n, como: {@literal POST}
+     * @param itemToPost indica si el elemento a publicar en Facebook es una foto o un video.
+     *          Los valores aceptados por este parametro son: {@literal photo} o {@literal video}
      * @return un {@code String} que representa la respuesta generada por el grafo de Facebook, o la 
      *          representaci&oacute;n de un objeto JSON con el resultado de la ejecuci&oacute;n del metodo.
      * @throws IOException en caso de que se produzca un error al generar la petici&oacute;n
      *          o recibir la respuesta del grafo de Facebook
      */
     private String postFileRequest(Map<String, String> params, String url, String fileName,
-            InputStream fileStream, String method) {
+            InputStream fileStream, String method, String itemToPost) {
 
         HttpURLConnection conex = null;
         OutputStream urlOut = null;
@@ -259,7 +286,7 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
             String boundary = "---MyFacebookFormBoundary" + Long.toString(System.currentTimeMillis(), 16);
             conex = (HttpURLConnection) serverUrl.openConnection();
             conex.setConnectTimeout(30000);
-            conex.setReadTimeout(60000);
+            conex.setReadTimeout(itemToPost.equals("photo") ? 60000 : 3600000);
             conex.setRequestMethod(method);
             conex.setDoInput(true);
             conex.setDoOutput(true);
@@ -282,7 +309,7 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
             }
 
             out.writeBytes(PREF + boundary + CRLF);
-            out.writeBytes("Content-Type: image" + CRLF);
+            out.writeBytes("Content-Type: " + (itemToPost.equals("photo") ? "image" : "file") + CRLF);
             out.writeBytes("Content-disposition: form-data; filename=\"" + fileName + "\"" + CRLF);
 
             // Write the file
@@ -344,7 +371,6 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
             buffer.append(equals);
             buffer.append(doEncode ? encode(value) : value);
         }
-        //System.out.println("\nParametros a enviar: " + buffer);
         return buffer;
     }
 
