@@ -64,22 +64,26 @@ public class SendPostThread extends java.lang.Thread {
                      {
                        PostableObj postableObj=(PostableObj) obj;
                        Postable postable=postableObj.getPostable();
-                       if(postable instanceof Messageable)
-                        {
-                            //TODO: YO CREO QUE LO QUE TENGO QUE HACER AQUI, ES UN THREAD POR CADA UNA DE LAS REDES SOCIALES A LAS QUE SE ENVÍE UN POST
-                            Messageable messageable=(Messageable) postable;
-                            messageable.postMsg((Message)postableObj.getPost(), postableObj.getRequest(), postableObj.getResponse());
-                        }else if(postable instanceof Photoable)
-                        {
-                            //TODO: YO CREO QUE LO QUE TENGO QUE HACER AQUI, ES UN THREAD POR CADA UNA DE LAS REDES SOCIALES A LAS QUE SE ENVÍE UN POST
-                            Photoable photoable=(Photoable) postable;
-                            photoable.postPhoto((Photo)postableObj.getPost(), postableObj.getRequest(), postableObj.getResponse());
-                        }else if(postable instanceof Videoable)
-                        {
-                            //TODO: YO CREO QUE LO QUE TENGO QUE HACER AQUI, ES UN THREAD POR CADA UNA DE LAS REDES SOCIALES A LAS QUE SE ENVÍE UN POST
-                            Videoable videoable=(Videoable) postable;
-                            videoable.postVideo((Video)postableObj.getPost(), postableObj.getRequest(), postableObj.getResponse());
-                        }
+                       String action=postableObj.getAction();
+                       if(action!=null)
+                       {
+                           if(action.equals("msg") && postable instanceof Messageable)
+                            {
+                                //TODO: YO CREO QUE LO QUE TENGO QUE HACER AQUI, ES UN THREAD POR CADA UNA DE LAS REDES SOCIALES A LAS QUE SE ENVÍE UN POST
+                                Messageable messageable=(Messageable) postable;
+                                messageable.postMsg((Message)postableObj.getPost(), postableObj.getRequest(), postableObj.getResponse());
+                            }else if(action.equals("photo") && postable instanceof Photoable)
+                            {
+                                //TODO: YO CREO QUE LO QUE TENGO QUE HACER AQUI, ES UN THREAD POR CADA UNA DE LAS REDES SOCIALES A LAS QUE SE ENVÍE UN POST
+                                Photoable photoable=(Photoable) postable;
+                                photoable.postPhoto((Photo)postableObj.getPost(), postableObj.getRequest(), postableObj.getResponse());
+                            }else if(action.equals("video") && postable instanceof Videoable)
+                            {
+                                //TODO: YO CREO QUE LO QUE TENGO QUE HACER AQUI, ES UN THREAD POR CADA UNA DE LAS REDES SOCIALES A LAS QUE SE ENVÍE UN POST
+                                Videoable videoable=(Videoable) postable;
+                                videoable.postVideo((Video)postableObj.getPost(), postableObj.getRequest(), postableObj.getResponse());
+                            }
+                       }
                      }
                     } catch (Exception e)
                     {

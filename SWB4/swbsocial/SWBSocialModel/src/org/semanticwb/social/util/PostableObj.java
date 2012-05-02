@@ -20,13 +20,15 @@ public class PostableObj {
     HttpServletRequest request=null;
     SWBActionResponse response=null;
     Post post=null;
+    String action=null;
 
-    public PostableObj(Postable postAble,  Post post, HttpServletRequest request, SWBActionResponse response)
+    public PostableObj(Postable postAble,  Post post, String action, HttpServletRequest request, SWBActionResponse response)
     {
         this.postAble=postAble;
         this.request=request;
         this.response=response;
         this.post=post;
+        this.action=action;
     }
 
     public Postable getPostable()
@@ -37,6 +39,11 @@ public class PostableObj {
     public Post getPost()
     {
         return post;
+    }
+
+    public String getAction()
+    {
+        return action;
     }
 
     public HttpServletRequest getRequest()
