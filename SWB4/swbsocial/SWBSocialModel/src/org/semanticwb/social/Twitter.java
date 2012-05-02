@@ -8,8 +8,8 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.User;
-import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.portal.api.SWBActionResponse;
+import twitter4j.Status;
 import twitter4j.StatusUpdate;
 import twitter4j.TwitterException;
 import twitter4j.TwitterFactory;
@@ -25,22 +25,20 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
 
     @Override
     public void postMsg(Message message, HttpServletRequest request, SWBActionResponse response) {
-        String uri = request.getParameter("socialUri");
-        Twitter twitterObj = null;
-        if(uri != null && uri.trim().length() > 1) {
-            twitterObj = (Twitter) SemanticObject.createSemanticObject(uri).createGenericInstance();
-        }
-        if (message != null && message.getMsg_Text() != null && message.getMsg_Text().trim().length() > 1 && twitterObj != null) {
+        if (message != null && message.getMsg_Text() != null && message.getMsg_Text().trim().length() > 1) {
             twitter4j.Twitter twitter = new TwitterFactory().getInstance();
 
             try {
-                twitter.setOAuthConsumer(twitterObj.getAppKey(), twitterObj.getSecretKey());
-                AccessToken accessToken = new AccessToken(twitterObj.getAccessToken(), twitterObj.getAccessTokenSecret());
+                twitter.setOAuthConsumer(this.getAppKey(), this.getSecretKey());
+                AccessToken accessToken = new AccessToken(this.getAccessToken(), this.getAccessTokenSecret());
                 twitter.setOAuthAccessToken(accessToken);
 //                StatusUpdate sup = new StatusUpdate(new String(message.getMsg_Text().getBytes(), "utf-8"));
-                StatusUpdate sup = new StatusUpdate(new String(shortUrl(message.getMsg_Text()).getBytes(), "utf-8"));
+                StatusUpdate sup = new StatusUpdate(new String(shortUrl(message.getMsg_Text()).getBytes(), "UTF-8"));
 
-                twitter.updateStatus(sup);
+                Status stat = twitter.updateStatus(sup);
+                Long longStat = stat.getId();
+               // System.out.println("longStat: " + longStat + " texto: " + stat.getText());
+                //getPostContainer().getPost().setSocialNetPostId("");
             } catch (UnsupportedEncodingException ex) {
                 log.error("Exception"+ ex);
             } catch (TwitterException ex) {
@@ -53,25 +51,20 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
     }
 
     public void postPhoto(Photo photo, HttpServletRequest request, SWBActionResponse response) {
-        String uri = request.getParameter("socialUri");
         User user = response.getUser();
-        Twitter twitterObj = null;
-        if(uri != null && uri.trim().length() > 1) {
-            twitterObj = (Twitter) SemanticObject.createSemanticObject(uri).createGenericInstance();
-        }
-        if (photo != null && photo.getPhoto() != null && photo.getPhoto().trim().length() > 1 && twitterObj != null) {
+
+        if (photo != null && photo.getPhoto() != null && photo.getPhoto().trim().length() > 1) {
             twitter4j.Twitter twitter = new TwitterFactory().getInstance();
-            twitter.setOAuthConsumer(twitterObj.getAppKey(), twitterObj.getSecretKey());
-            AccessToken accessToken = new AccessToken(twitterObj.getAccessToken(), twitterObj.getAccessTokenSecret());
+            twitter.setOAuthConsumer(this.getAppKey(), this.getSecretKey());
+            AccessToken accessToken = new AccessToken(this.getAccessToken(), this.getAccessTokenSecret());
             String description = photo.getDescription(user.getLanguage()) == null ? (photo.getDescription() == null ? "" : photo.getDescription()) : photo.getDescription(user.getLanguage());
-            //System.out.println("Mensaje de Twitter:" + description);
             twitter.setOAuthAccessToken(accessToken);
             String photoSend = SWBPortal.getWorkPath() + photo.getWorkPath() + "/" + Photo.social_photo.getName() +
                      "_" + photo.getId() + "_" + photo.getPhoto();
             try {
                 twitter.setOAuthAccessToken(accessToken);
                 //StatusUpdate sup = new StatusUpdate(new String(photo.getComment().getBytes(), "utf-8"));
-                StatusUpdate sup = new StatusUpdate(new String(shortUrl(description).getBytes(), "utf-8"));
+                StatusUpdate sup = new StatusUpdate(new String(shortUrl(description).getBytes(), "UTF-8"));
                 sup.setMedia(new File(photoSend));
                 twitter.updateStatus(sup);
             } catch (UnsupportedEncodingException ex) {

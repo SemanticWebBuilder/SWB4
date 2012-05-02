@@ -6,7 +6,6 @@ import com.flickr4java.flickr.REST;
 import com.flickr4java.flickr.RequestContext;
 import com.flickr4java.flickr.auth.Auth;
 import com.flickr4java.flickr.auth.Permission;
-import com.flickr4java.flickr.photos.upload.UploadInterface;
 import com.flickr4java.flickr.uploader.UploadMetaData;
 import com.flickr4java.flickr.uploader.Uploader;
 import com.flickr4java.flickr.util.IOUtilities;
@@ -15,16 +14,15 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.io.SWBFile;
+import org.semanticwb.model.User;
 import org.semanticwb.model.WebPage;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.portal.api.SWBActionResponse;
-import org.xml.sax.SAXException;
 
 
 public class Flicker extends org.semanticwb.social.base.FlickerBase 
@@ -54,22 +52,18 @@ public class Flicker extends org.semanticwb.social.base.FlickerBase
     public void postPhoto(Photo photo, HttpServletRequest request, SWBActionResponse response) {
         String action = response.getAction();
         Flickr flickr = null;
-        //WebSite ws = response.getWebPage().getWebSite();
-        String uri = request.getParameter("socialUri");
-        Flicker flicker = null;
-        if(uri != null && uri.trim().length() > 1) {
-            flicker = (Flicker) SemanticObject.createSemanticObject(uri).createGenericInstance();
-        }
-        if(action.equals("uploadPhoto") && flicker != null && photo != null && photo.getPhoto() != null) {
+        User user = response.getUser();
+
+        if(action.equals("uploadPhoto") && photo != null && photo.getPhoto() != null) {
            String photoSend = SWBPortal.getWorkPath() + photo.getWorkPath() + "/" + Photo.social_photo.getName() +
                      "_" + photo.getId() + "_" + photo.getPhoto();
 
-           String oauth_token = flicker.getAccessToken();//flicker.getProperty("oauth_token");
-           String oauth_token_secret = flicker.getAccessTokenSecret();//flicker.getProperty("oauth_token_secret");
-           if(oauth_token != null && oauth_token_secret != null && (flicker.getAppKey() != null && flicker.getAppKey().trim().length() > 1) && (flicker.getSecretKey() != null && flicker.getSecretKey().trim().length() > 1)) {
+           String oauth_token = this.getAccessToken();//flicker.getProperty("oauth_token");
+           String oauth_token_secret = this.getAccessTokenSecret();//flicker.getProperty("oauth_token_secret");
+           if(oauth_token != null && oauth_token_secret != null && (this.getAppKey() != null && this.getAppKey().trim().length() > 1) && (this.getSecretKey() != null && this.getSecretKey().trim().length() > 1)) {
                REST rest = new REST();
 
-               flickr = new Flickr(flicker.getAppKey(), flicker.getSecretKey(), rest);
+               flickr = new Flickr(this.getAppKey(), this.getSecretKey(), rest);
                Auth auth = new Auth();
                auth.setPermission(Permission.DELETE);
                auth.setToken(oauth_token);
@@ -79,7 +73,7 @@ public class Flicker extends org.semanticwb.social.base.FlickerBase
                requestContext.setAuth(auth);
                flickr.setAuth(auth);
                SWBFile file = new SWBFile(photoSend);//path + photo.getPhoto();
-               String description = request.getParameter("description") != null ? request.getParameter("description") : "";
+               String description = photo.getDescription(user.getLanguage()) == null ? (photo.getDescription() == null ? "" : photo.getDescription()) : photo.getDescription(user.getLanguage());
                InputStream fileInputStream = null;
                Uploader uploader = flickr.getUploader();
                List<String> list = new ArrayList();
