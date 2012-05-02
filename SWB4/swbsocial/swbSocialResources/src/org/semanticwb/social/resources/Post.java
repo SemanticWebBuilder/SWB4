@@ -93,7 +93,7 @@ public class Post extends GenericResource {
                             //TODO: YO CREO QUE LO QUE TENGO QUE HACER AQUI, ES UN THREAD POR CADA UNA DE LAS REDES SOCIALES A LAS QUE SE ENVÍE UN POST
                             Messageable messageable=(Messageable) socialNet;
                             //messageable.postMsg((Message)post, request, response);
-                            PostableObj postableObj=new PostableObj(messageable, post, request, response);
+                            PostableObj postableObj=new PostableObj(messageable, post, toPost, request, response);
                             SendPostThread sendPostThread=new SendPostThread();
                             sendPostThread.addPostAble(postableObj);
                             sendPostThread.start();
@@ -102,7 +102,7 @@ public class Post extends GenericResource {
                             //TODO: YO CREO QUE LO QUE TENGO QUE HACER AQUI, ES UN THREAD POR CADA UNA DE LAS REDES SOCIALES A LAS QUE SE ENVÍE UN POST
                             Photoable photoable=(Photoable) socialNet;
                             //photoable.postPhoto((Photo)post, request, response);
-                            PostableObj postableObj=new PostableObj(photoable, post, request, response);
+                            PostableObj postableObj=new PostableObj(photoable, post, toPost, request, response);
                             SendPostThread sendPostThread=new SendPostThread();
                             sendPostThread.addPostAble(postableObj);
                             sendPostThread.start();
@@ -111,7 +111,7 @@ public class Post extends GenericResource {
                             //TODO: YO CREO QUE LO QUE TENGO QUE HACER AQUI, ES UN THREAD POR CADA UNA DE LAS REDES SOCIALES A LAS QUE SE ENVÍE UN POST
                             Videoable videoable=(Videoable) socialNet;
                             //videoable.postVideo((Video)post, request, response);
-                            PostableObj postableObj=new PostableObj(videoable, post, request, response);
+                            PostableObj postableObj=new PostableObj(videoable, post, toPost, request, response);
                             SendPostThread sendPostThread=new SendPostThread();
                             sendPostThread.addPostAble(postableObj);
                             sendPostThread.start();
