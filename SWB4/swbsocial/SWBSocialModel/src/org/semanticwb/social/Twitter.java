@@ -33,7 +33,7 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
                 AccessToken accessToken = new AccessToken(this.getAccessToken(), this.getAccessTokenSecret());
                 twitter.setOAuthAccessToken(accessToken);
 //                StatusUpdate sup = new StatusUpdate(new String(message.getMsg_Text().getBytes(), "utf-8"));
-                StatusUpdate sup = new StatusUpdate(new String(shortUrl(message.getMsg_Text()).getBytes(), "UTF-8"));
+                StatusUpdate sup = new StatusUpdate(new String(shortUrl(message.getMsg_Text()).getBytes(), "ISO-8859-1"));
 
                 Status stat = twitter.updateStatus(sup);
                 Long longStat = stat.getId();
@@ -64,7 +64,7 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
             try {
                 twitter.setOAuthAccessToken(accessToken);
                 //StatusUpdate sup = new StatusUpdate(new String(photo.getComment().getBytes(), "utf-8"));
-                StatusUpdate sup = new StatusUpdate(new String(shortUrl(description).getBytes(), "UTF-8"));
+                StatusUpdate sup = new StatusUpdate(new String(shortUrl(description).getBytes(), "ISO-8859-1"));
                 sup.setMedia(new File(photoSend));
                 twitter.updateStatus(sup);
             } catch (UnsupportedEncodingException ex) {
