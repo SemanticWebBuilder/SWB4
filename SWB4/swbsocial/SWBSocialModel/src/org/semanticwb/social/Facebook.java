@@ -3,16 +3,7 @@ package org.semanticwb.social;
 
 import javax.servlet.http.HttpServletRequest;
 import org.semanticwb.portal.api.SWBActionResponse;
-import java.io.BufferedReader;
-import java.io.Closeable;
-import java.io.DataOutputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.Reader;
-import java.io.UnsupportedEncodingException;
+import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
@@ -22,7 +13,9 @@ import java.util.Map;
 import java.util.HashMap;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.semanticwb.Logger;
 import org.semanticwb.SWBPortal;
+import org.semanticwb.SWBUtils;
 import org.semanticwb.io.SWBFile;
 import org.semanticwb.io.SWBFileInputStream;
 
@@ -36,9 +29,11 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
     
     private static final String CRLF = "\r\n";
     
-    private static final String PREF = "---";
+    private static final String PREF = "--";
     
     private static final String FACEBOOKGRAPH = "https://graph.facebook.com/";
+    
+    private Logger log = SWBUtils.getLogger(Facebook.class);
     
     
     public Facebook(org.semanticwb.platform.SemanticObject base) {
@@ -66,11 +61,13 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
                 jsonResponse = new JSONObject("{\"errorMessage\" : \"Problemas con el envio/recepcion de la peticion/respuesta, detail: "
                         + ioe.getMessage() + "\"}");
             } catch (JSONException jsone2) {}
+            log.error("Problemas con el envio/recepcion de la peticion/respuesta con Facebook", ioe);
         } catch (JSONException jsone) {
             try {
                 jsonResponse = new JSONObject("{\"errorMessage\" : \"La operacion no se pudo realizar, detail: "
                         + jsone.getMessage() + "\"}");
             } catch (JSONException jsone2) {}
+            log.error("La operacion no se pudo realizar, respuesta JSON mal formada", jsone);
         }
     }
 
@@ -78,18 +75,37 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
                           SWBActionResponse response) {
         
         Map<String, String> params = new HashMap<String, String>(2);
-        params.put("access_token", this.getAccessToken());
-        params.put("message", photo.getComment());
+        if (this.getAccessToken() != null) {
+            params.put("access_token", this.getAccessToken());
+            System.out.println("Access_Token: " + this.getAccessToken());
+        } else {
+            System.out.println("access_token: nulo");
+        }
+        if (photo.getDescription() != null) {
+            params.put("message", photo.getDescription());
+        } else {
+            System.out.println("photo.getComment(): nulo");
+        }
         String url = Facebook.FACEBOOKGRAPH + this.getFacebookUserId() + "/photos";
         JSONObject jsonResponse = null;
         
         try {
-            SWBFile photoFile = new SWBFile(SWBPortal.getWorkPath()
-                    + photo.getWorkPath() + photo.getPhoto());
-            SWBFileInputStream fileStream = new SWBFileInputStream(photoFile);
-            String facebookResponse = postFileRequest(params, url,
-                    photoFile.getName(), fileStream, "POST");
-            jsonResponse = new JSONObject(facebookResponse);
+            String photoPath = SWBPortal.getWorkPath() + photo.getWorkPath() + "/" + Photo.social_photo.getName() +
+                     "_" + photo.getId() + "_" + photo.getPhoto();
+            SWBFile photoFile = new SWBFile(photoPath);
+            
+            if (photoFile.exists()) {
+                
+                System.out.println("Archivo a enviar: " + photoFile.getAbsolutePath());
+                
+                SWBFileInputStream fileStream = new SWBFileInputStream(photoFile);
+                String facebookResponse = postFileRequest(params, url,
+                        photo.getPhoto(), fileStream, "POST");
+                System.out.println("Respuesta de Face: " + facebookResponse);
+                jsonResponse = new JSONObject(facebookResponse);
+            } else {
+                System.out.println("Archivo no encontrado: " + photoFile.getAbsolutePath());
+            }
             if (jsonResponse != null && jsonResponse.get("id") != null) {
                 this.addPost(photo);
                 this.photo = photo;
@@ -186,7 +202,7 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
                 conex.setRequestProperty("user-agent", userAgent);
             }
             conex.setConnectTimeout(30000);
-            conex.setReadTimeout(30000);
+            conex.setReadTimeout(60000);
             conex.setRequestMethod(method);
             conex.setDoOutput(true);
             conex.connect();
@@ -220,17 +236,19 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
      * @param fileStream representa el contenido del archivo, para incluirlo en la petici&oacute; a Facebook
      * @param method indica el m&eacute;todo de la petici&oacute; HTTP requerido por Facebook para realizar
      *          una operaci&oacute;n, como: {@literal POST}
-     * @return un {@code String} que representa la respuesta generada por el grafo de Facebook
+     * @return un {@code String} que representa la respuesta generada por el grafo de Facebook, o la 
+     *          representaci&oacute;n de un objeto JSON con el resultado de la ejecuci&oacute;n del metodo.
      * @throws IOException en caso de que se produzca un error al generar la petici&oacute;n
      *          o recibir la respuesta del grafo de Facebook
      */
     private String postFileRequest(Map<String, String> params, String url, String fileName,
-            InputStream fileStream, String method) throws IOException {
+            InputStream fileStream, String method) {
 
         HttpURLConnection conex = null;
         OutputStream urlOut = null;
         InputStream in = null;
         URL serverUrl = null;
+        String facebookResponse = "{\"response\" : \"Sin procesar\"}";
 
         if (method == null) {
             method = "POST";
@@ -241,7 +259,7 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
             String boundary = "---MyFacebookFormBoundary" + Long.toString(System.currentTimeMillis(), 16);
             conex = (HttpURLConnection) serverUrl.openConnection();
             conex.setConnectTimeout(30000);
-            conex.setReadTimeout(30000);
+            conex.setReadTimeout(60000);
             conex.setRequestMethod(method);
             conex.setDoInput(true);
             conex.setDoOutput(true);
@@ -249,15 +267,13 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
             conex.setRequestProperty("Content-Type", "multipart/form-data; boundary=" + boundary);
             conex.setRequestProperty("MIME-version", "1.0");
 
+            conex.connect();
             urlOut = conex.getOutputStream();
             DataOutputStream out = new DataOutputStream(urlOut);
-
+            
             for (Map.Entry<String, String> entry : params.entrySet()) {
                 out.writeBytes(PREF + boundary + CRLF);
-                out.writeBytes("Content-Type: text/plain;charset=utf-8" + CRLF);
-                // out.writeBytes( "Content-Transfer-Encoding: application/x-www-form-urlencoded" + CRLF );
-                // out.writeBytes( "Content-Type: text/plain;charset=utf-8" + CRLF );
-                // out.writeBytes( "Content-Transfer-Encoding: quoted-printable" + CRLF );
+                out.writeBytes("Content-Type: text/plain;charset=UTF-8" + CRLF);
                 out.writeBytes("Content-disposition: form-data; name=\"" + entry.getKey() + "\"" + CRLF);
                 out.writeBytes(CRLF);
                 byte[] valueBytes = entry.getValue().toString().getBytes("UTF-8");
@@ -268,7 +284,6 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
             out.writeBytes(PREF + boundary + CRLF);
             out.writeBytes("Content-Type: image" + CRLF);
             out.writeBytes("Content-disposition: form-data; filename=\"" + fileName + "\"" + CRLF);
-            // out.writeBytes("Content-Transfer-Encoding: binary" + CRLF); // not necessary
 
             // Write the file
             out.writeBytes(CRLF);
@@ -282,7 +297,10 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
             out.writeBytes(CRLF + PREF + boundary + PREF + CRLF);
             out.flush();
             in = conex.getInputStream();
-            return getResponse(in);
+            facebookResponse = getResponse(in);
+        } catch (IOException ioe) {
+            facebookResponse = "{\"errorMsg\":\"Ocurrio un problema en la peticion a Facebook "
+                    + ioe.getMessage() + "\"}";
         } finally {
             close(urlOut);
             close(in);
@@ -290,6 +308,7 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
                 conex.disconnect();
             }
         }
+        return facebookResponse;
     }
 
     /**
