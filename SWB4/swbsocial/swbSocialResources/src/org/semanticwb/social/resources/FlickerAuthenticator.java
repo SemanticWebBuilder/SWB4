@@ -34,7 +34,7 @@ public class FlickerAuthenticator extends GenericResource {
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         try {
             request.setAttribute("paramRequest", paramRequest);
-            RequestDispatcher rd = request.getRequestDispatcher("/swbadmin/jsp/social/authentication/autFlickr.jsp");
+            RequestDispatcher rd = request.getRequestDispatcher("/swbadmin/jsp/social/authentication/FlickerAuth.jsp");
             rd.include(request, response);
         } catch(Exception e) {
             log.error(e);
