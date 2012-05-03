@@ -164,8 +164,6 @@ public class SWBCommentToElement extends org.semanticwb.portal.resources.sem.bas
             out.println(paramRequest.getLocaleString("noElement"));
             return;
         }
-        
-System.out.println("\n\n================\nelement="+element);
 
         SWBResourceURL rUrl = paramRequest.getActionUrl();
         rUrl.setAction(paramRequest.Action_ADD);
