@@ -148,8 +148,6 @@ public class SWBCommentToElement extends org.semanticwb.portal.resources.sem.bas
         String uri = request.getParameter("uri");
         if(uri==null) {
             out.println(paramRequest.getLocaleString("noElement"));
-            out.flush();
-            out.close();
             return;
         }
         
@@ -158,19 +156,16 @@ public class SWBCommentToElement extends org.semanticwb.portal.resources.sem.bas
         try {
             element = (SWBClass)SemanticObject.createSemanticObject(uri).createGenericInstance();
         }catch(Exception e) {
-            log.error(e);
             out.println(paramRequest.getLocaleString("noElement"));
-            out.flush();
-            out.close();
             return;
         }
         
         if(element==null || !element.isValid()) {
             out.println(paramRequest.getLocaleString("noElement"));
-            out.flush();
-            out.close();
             return;
         }
+        
+System.out.println("\n\n================\nelement="+element);
 
         SWBResourceURL rUrl = paramRequest.getActionUrl();
         rUrl.setAction(paramRequest.Action_ADD);
