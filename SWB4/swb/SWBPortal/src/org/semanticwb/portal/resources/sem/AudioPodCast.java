@@ -152,12 +152,10 @@ public class AudioPodCast extends org.semanticwb.portal.resources.sem.base.Audio
             if(uri==null)
                 return;
             uri = URLDecoder.decode(uri, "UTF-8");
-            uri="_____";
             AudioFile audiofile = null;
             try {
                 audiofile = (AudioFile)SemanticObject.createSemanticObject(uri).createGenericInstance();
             }catch(Exception e) {
-                //log.error(e);
             }
             if(audiofile!=null && audiofile.isValid()) {
                 synchronized(this) {
