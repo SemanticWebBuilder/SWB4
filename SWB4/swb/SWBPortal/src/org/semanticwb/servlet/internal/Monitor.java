@@ -51,7 +51,10 @@ import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.base.util.SFBase64;
+import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticProperty;
+import org.semanticwb.portal.SWBMonitor;
+import org.semanticwb.portal.SWBResourceMgr;
 import org.semanticwb.portal.monitor.SWBGCDump;
 import org.semanticwb.portal.monitor.SWBMonitorBeans;
 import org.semanticwb.portal.monitor.SWBMonitorData;
@@ -83,7 +86,7 @@ public class Monitor implements InternalServlet
     private static List<GarbageCollectorMXBean> gcmbeans;
 //    private static MBeanServer mbs;
     /** The buffer. */
-private Vector<SWBMonitorData> buffer;
+    private Vector<SWBMonitorData> buffer;
     
     /** The timer. */
     private Timer timer;
@@ -115,13 +118,39 @@ private Vector<SWBMonitorData> buffer;
 //    private Vector<CompositeData> basureroBuff;
 //    private SWBGCDump dumper;
 
+    private static Queue<Long> tiempos = new LinkedList<Long>();
+    private static Queue<Long> pages = new LinkedList<Long>();
+    private static Queue<Float> uso = new LinkedList<Float>();
+    private static int cnt = 0;
+    private static final int MAX_SIZE=10;
+    private static final int UP_LIMIT=5;
+    private static long pps=0;
+    private static long lastTime=0;
+    private static int alerted_CPU=0;
+    private static int alerted_TIME=0;
+    private static int alerted_PPS=0;
+    private static boolean sendAlert=false;
+
+    //Configurable Values...
+    private static float THRESHOLD_CPU=85.0f;
+    private static long THRESHOLD_TIME=250;
+    private static long THRESHOLD_PPS=20;
+    private static boolean alertOn=true;
+    private static String alertEmail="alertWB@sergiomartinez.com.mx";
+    private static String siteName="DemoSite";
+    
+    
     /* (non-Javadoc)
      * @see org.semanticwb.servlet.internal.InternalServlet#init(javax.servlet.ServletContext)
      */
     public void init(ServletContext config) throws ServletException
     {
         log.event("Initializing InternalServlet Monitor...");
+       // System.out.println("Testing...");
+        try {
         monitorbeans = new SWBMonitorBeans();
+        }catch (Error err){err.printStackTrace();}
+       // System.out.println("MonitorBeans Up");
         buffer = new Vector<SWBMonitorData>(max);
         try
         {
@@ -134,9 +163,10 @@ private Vector<SWBMonitorData> buffer;
                 org.semanticwb.SWBPlatform.getSemanticMgr().createKeyPair();
                 priv = SWBPlatform.getSemanticMgr().getModel(SWBPlatform.getSemanticMgr().SWBAdmin).getModelObject().getProperty(sp);
             }
+            
             if (priv != null)
             {
-                priv = priv.substring(priv.indexOf("|") + 1);
+                priv = priv.substring(priv.indexOf("|") + 1); //System.out.println("priv:"+priv);
                 byte[] PKey = SFBase64.decode(priv);
                 byte[] pKey = SFBase64.decode(SWBPlatform.getEnv("swbMonitor/PublicKey", 
                         "MIHfMIGXBgkqhkiG9w0BAwEwgYkCQQCLxCFm00uKxKmedeD9XqiJ1SZ/DoXRtdibiTIv" +
@@ -159,11 +189,46 @@ private Vector<SWBMonitorData> buffer;
                     //SecretKey secretKey = ka.generateSecret("AES");
                 }
             }
-        //} catch (java.security.GeneralSecurityException gse)
-        } catch (Exception gse)
+          //  System.out.println("Got Security in place");
+            sp = SWBPlatform.getSemanticMgr().getModel(
+                    SWBPlatform.getSemanticMgr().SWBAdmin).getSemanticProperty(
+                    SWBPlatform.getSemanticMgr().SWBAdminURI + "/AlertSiteName");
+            String tmp = SWBPlatform.getSemanticMgr().getModel(
+                    SWBPlatform.getSemanticMgr().SWBAdmin).getModelObject().getProperty(sp);
+            if (null!=tmp)siteName=tmp;
+            sp = SWBPlatform.getSemanticMgr().getModel(
+                    SWBPlatform.getSemanticMgr().SWBAdmin).getSemanticProperty(
+                    SWBPlatform.getSemanticMgr().SWBAdminURI + "/AlertEmail");
+            tmp = SWBPlatform.getSemanticMgr().getModel(
+                    SWBPlatform.getSemanticMgr().SWBAdmin).getModelObject().getProperty(sp);
+            if (null!=tmp)alertEmail=tmp;
+            sp = SWBPlatform.getSemanticMgr().getModel(
+                    SWBPlatform.getSemanticMgr().SWBAdmin).getSemanticProperty(
+                    SWBPlatform.getSemanticMgr().SWBAdminURI + "/AlertStatus");
+            alertOn = SWBPlatform.getSemanticMgr().getModel(
+                    SWBPlatform.getSemanticMgr().SWBAdmin).getModelObject().getBooleanProperty(sp, false, false);
+            sp = SWBPlatform.getSemanticMgr().getModel(
+                    SWBPlatform.getSemanticMgr().SWBAdmin).getSemanticProperty(
+                    SWBPlatform.getSemanticMgr().SWBAdminURI + "/AlertCPU");
+            THRESHOLD_CPU = SWBPlatform.getSemanticMgr().getModel(
+                    SWBPlatform.getSemanticMgr().SWBAdmin).getModelObject().getFloatProperty(sp,90.0f);
+            sp = SWBPlatform.getSemanticMgr().getModel(
+                    SWBPlatform.getSemanticMgr().SWBAdmin).getSemanticProperty(
+                    SWBPlatform.getSemanticMgr().SWBAdminURI + "/AlertTime");
+            THRESHOLD_TIME = SWBPlatform.getSemanticMgr().getModel(
+                    SWBPlatform.getSemanticMgr().SWBAdmin).getModelObject().getLongProperty(sp, 500);
+            sp = SWBPlatform.getSemanticMgr().getModel(
+                    SWBPlatform.getSemanticMgr().SWBAdmin).getSemanticProperty(
+                    SWBPlatform.getSemanticMgr().SWBAdminURI + "/AlertPPS");
+            THRESHOLD_PPS = SWBPlatform.getSemanticMgr().getModel(
+                    SWBPlatform.getSemanticMgr().SWBAdmin).getModelObject().getLongProperty(sp, 75);
+        } catch (java.security.GeneralSecurityException gse)
+        //} catch (Exception gse)
         {
-            log.error(gse);
+            log.error("Security Fail:",gse);
             // assert (false);
+        } catch (java.lang.NullPointerException npe){
+            log.error("No access to AdminSite, probably working in Admin Maintenance",npe);
         }
 //        dumper = new SWBGCDump();
 //        //Java 6.0
@@ -179,11 +244,13 @@ private Vector<SWBMonitorData> buffer;
 
             public void run()
             {
-                long current = System.nanoTime();//System.currentTimeMillis();
+               // long current = System.nanoTime();//System.currentTimeMillis();
                 _run();
-                timetakenLast = System.nanoTime() - current;//System.currentTimeMillis()-current;
+               // timetakenLast = System.nanoTime() - current;//System.currentTimeMillis()-current;
+               // System.out.println("tt:"+timetakenLast);
             }
         };
+        //System.out.println("got new timer ready");
         timer = new Timer("Monitoring Facility", true);
         timer.schedule(t, delays, delays);
 
@@ -209,6 +276,7 @@ private Vector<SWBMonitorData> buffer;
         mmbean = getMemoryMXBean();
         pools = getMemoryPoolMXBeans();
         gcmbeans = getGarbageCollectorMXBeans();
+       // System.out.println("Got beans up and running");
 //        mbs = sun.management.ManagementFactory.createPlatformMBeanServer();
         if (null == summary)
         {
@@ -242,7 +310,110 @@ private Vector<SWBMonitorData> buffer;
         {
             buffer.remove(0);
         }
-        buffer.add(new SWBMonitorData(monitorbeans));
+        SWBMonitorData data = new SWBMonitorData(monitorbeans);
+        buffer.add(data);
+        if (alertOn) {
+            if (cnt>29){// System.out.println("Page Cache: "+Distributor.isPageCache());
+                if (alerted_CPU>0)alerted_CPU--;
+                if (alerted_PPS>0)alerted_PPS--;
+                if (alerted_TIME>0)alerted_TIME--;
+                Vector<SWBMonitor.MonitorRecord> vec = SWBPortal.getMonitor().getMonitorRecords();
+                pps = (vec.get(vec.size()-1).getHits()-vec.get(vec.size()-2).getHits())/
+                        SWBPortal.getMonitor().getDelay();    
+                if  (Distributor.isPageCache()) { 
+                    if (pps<THRESHOLD_PPS){
+                        Distributor.setPageCache(false);
+                        try {
+                                SWBUtils.EMAIL.sendBGEmail(alertEmail, "BACK TO NORMAL", "The site "+siteName+
+                                        " is back to normal operation, inAttack mode has been deactivated.");
+                            } catch (Exception e) {
+                                log.error(e);
+                            }
+                        pages.clear();
+                        uso.clear();
+                        tiempos.clear();
+                        System.out.println("***** Back to Normal");
+                    }
+                }
+                cnt = 0;
+                pages.add(pps);
+                if (pages.size()>MAX_SIZE){
+                    pages.poll();
+                }
+                Float cpu = data.instantCPU;
+                uso.add(cpu);
+                if (uso.size()>MAX_SIZE){
+                    uso.poll();
+                }
+                Vector<SWBMonitor.MonitorRecord> vmr = SWBPortal.getMonitor().getAverageMonitorRecords(10);
+                if (vmr.size()>0){
+                    tiempos.add(vmr.lastElement().getHitsTime());
+                }
+                if (tiempos.size()>MAX_SIZE){
+                    tiempos.poll();
+                }
+
+                Iterator<SWBMonitor.MonitorRecord> iter = vmr.iterator();
+                int oCPU=0;
+                for (Float ct:uso){
+                    if (ct>THRESHOLD_CPU) oCPU++;
+                }
+                int oTime=0;
+                for (Long ct:tiempos){
+                    if (ct>THRESHOLD_TIME) oTime++;
+                }
+                int oPages=0;
+                for (Long ct:pages){
+                    if (ct>THRESHOLD_PPS) oPages++;
+                }
+                if (UP_LIMIT<oCPU && alerted_CPU==0) {
+                    try {
+                        SWBUtils.EMAIL.sendBGEmail(alertEmail, 
+                                "ALERT HIGH CPU USAGE", "The site "+siteName+
+                                " is working over the "+THRESHOLD_CPU+"% usage.");
+                    } catch (Exception e) {log.error(e);
+                    }
+                    System.out.println("***** ALERTAR CPU ALTO *****");
+                    //uso.clear();
+                    alerted_CPU=MAX_SIZE*4;
+                }
+                if (UP_LIMIT<oPages && alerted_PPS==0) {
+                    try {
+                        SWBUtils.EMAIL.sendBGEmail(alertEmail, 
+                                "ALERT HIGH PAGES PER SECOND", "The site "+siteName+
+                                " is delivering more than "+THRESHOLD_PPS+" pages per second.");
+                    } catch (Exception e) {log.error(e);
+                    }
+                    System.out.println("***** ALERTAR PAGINAS ALTO *****");
+                    //pages.clear();
+                    alerted_PPS=MAX_SIZE*4;
+                }
+                if (UP_LIMIT<oTime && alerted_TIME==0) {
+                    try {
+                        SWBUtils.EMAIL.sendBGEmail(alertEmail, 
+                                "ALERT HIGH RESPONSE TIME", "The site "+siteName+
+                                " is generating pages over "+THRESHOLD_TIME+
+                                "ms per page.");
+                    } catch (Exception e) {log.error(e);
+                    }
+                    System.out.println("***** ALERTAR TIEMPO ALTO *****");
+                    //tiempos.clear();
+                    alerted_TIME=MAX_SIZE*4;
+                }
+                if (UP_LIMIT<oTime && UP_LIMIT<oPages && !Distributor.isPageCache()){
+                    try {
+                        SWBUtils.EMAIL.sendBGEmail(alertEmail, 
+                                "ALERT HIGH IN ATTACK", "The site "+siteName+
+                                " might be on attack, delivering "+pps+
+                                " per second.\nThe inAttack mode has been activated");
+                    } catch (Exception e) {log.error(e);
+                    }
+                    System.out.println("***** ALERTAR MODO ATAQUE *****");
+                    Distributor.setPageCache(true);
+                }
+            }
+            cnt++;
+        }
 //        //Java 6.0
 //        for (com.sun.management.GarbageCollectorMXBean gc :dumper.getCollectors()){
 //            BasureroCtl basurero = basureros.get(gc.getName());
@@ -255,7 +426,7 @@ private Vector<SWBMonitorData> buffer;
 //                basureroBuff.add(gcinfo.toCompositeData(gcinfo.getCompositeType()));
 //            }
 //
-//        }
+//        }   
     }
 
     /* (non-Javadoc)
@@ -275,7 +446,7 @@ private Vector<SWBMonitorData> buffer;
             if (null != request.getParameter("cmd"))
             {
                 Cipher cipher = Cipher.getInstance("AES");
-                cipher.init(Cipher.ENCRYPT_MODE, secretKey);
+                cipher.init(Cipher.ENCRYPT_MODE, secretKey); System.out.println("********************SK:"+SFBase64.encodeBytes(secretKey.getEncoded()));
                 response.setContentType("application/octet-stream");
                 CipherOutputStream out = new CipherOutputStream(response.getOutputStream(), cipher);
                 ObjectOutputStream data = new ObjectOutputStream(out);
@@ -333,6 +504,14 @@ private Vector<SWBMonitorData> buffer;
                 {
                     data.writeObject(SWBPortal.getMonitor().getAverageMonitorRecords(5));
 
+                }
+                if ("clearcache".equals(request.getParameter("cmd")))
+                {
+                    clearCaches(request.getParameter("passphrase"));
+                }
+                if ("test".equals(request.getParameter(("cmd"))))
+                {
+                    data.writeObject("AAAAAAAAAAAAAAAAA");
                 }
 //            if ("".equals(request.getParameter("cmd")))
 //            {
@@ -705,6 +884,51 @@ private static String INDENT = "    ";
 	    return rslt;
 	}
 
+    void clearCaches(String passphrase){
+        SemanticObject.clearCache();
+        SWBPortal.getResourceMgr().getResourceCacheMgr().clearCache();
+    }
+    
+    public static void setAlertParameters(String tsiteName, String talertEmail, 
+            boolean talertOn, float cpu, long time, long pps) 
+            throws NullPointerException {
+        SemanticProperty sp = SWBPlatform.getSemanticMgr().getModel(
+                SWBPlatform.getSemanticMgr().SWBAdmin).getSemanticProperty(
+                SWBPlatform.getSemanticMgr().SWBAdminURI + "/AlertSiteName");
+        SWBPlatform.getSemanticMgr().getModel(
+                SWBPlatform.getSemanticMgr().SWBAdmin).getModelObject().setProperty(sp, tsiteName);
+        siteName=tsiteName;
+        sp = SWBPlatform.getSemanticMgr().getModel(
+                SWBPlatform.getSemanticMgr().SWBAdmin).getSemanticProperty(
+                SWBPlatform.getSemanticMgr().SWBAdminURI + "/AlertEmail");
+        SWBPlatform.getSemanticMgr().getModel(
+                SWBPlatform.getSemanticMgr().SWBAdmin).getModelObject().setProperty(sp, talertEmail);
+        alertEmail = talertEmail;
+        sp = SWBPlatform.getSemanticMgr().getModel(
+                SWBPlatform.getSemanticMgr().SWBAdmin).getSemanticProperty(
+                SWBPlatform.getSemanticMgr().SWBAdminURI + "/AlertStatus");
+        SWBPlatform.getSemanticMgr().getModel(
+                SWBPlatform.getSemanticMgr().SWBAdmin).getModelObject().setBooleanProperty(sp, talertOn);
+        alertOn = talertOn;
+        sp = SWBPlatform.getSemanticMgr().getModel(
+                SWBPlatform.getSemanticMgr().SWBAdmin).getSemanticProperty(
+                SWBPlatform.getSemanticMgr().SWBAdminURI + "/AlertCPU");
+        SWBPlatform.getSemanticMgr().getModel(
+                SWBPlatform.getSemanticMgr().SWBAdmin).getModelObject().setFloatProperty(sp, cpu);
+        THRESHOLD_CPU = cpu;
+        sp = SWBPlatform.getSemanticMgr().getModel(
+                SWBPlatform.getSemanticMgr().SWBAdmin).getSemanticProperty(
+                SWBPlatform.getSemanticMgr().SWBAdminURI + "/AlertTime");
+        SWBPlatform.getSemanticMgr().getModel(
+                SWBPlatform.getSemanticMgr().SWBAdmin).getModelObject().setLongProperty(sp, time);
+        THRESHOLD_TIME = time;
+        sp = SWBPlatform.getSemanticMgr().getModel(
+                SWBPlatform.getSemanticMgr().SWBAdmin).getSemanticProperty(
+                SWBPlatform.getSemanticMgr().SWBAdminURI + "/AlertPPS");
+        SWBPlatform.getSemanticMgr().getModel(
+                SWBPlatform.getSemanticMgr().SWBAdmin).getModelObject().setLongProperty(sp, pps);
+        THRESHOLD_PPS = pps;
+    }
 }
 
 class BasureroCtl implements Serializable
