@@ -33,7 +33,7 @@ public class TwitterAuthenticator extends GenericResource {
     Logger log = SWBUtils.getLogger(TwitterAuthenticator.class);
     private twitter4j.Twitter twitter;
     private RequestToken requestToken;
-    private String urlCallback = "http://swbsocial.mx:8080/swb/Sitio_Social/Autenticacion_con_Twitter";
+    private String urlCallback = "http://swbsocial.mx:8080/firmaTwitter";
     AccessToken accessToken;
     String uriTwitter = "";
 
