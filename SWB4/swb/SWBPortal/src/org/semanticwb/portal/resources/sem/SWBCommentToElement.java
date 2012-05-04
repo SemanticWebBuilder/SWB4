@@ -293,7 +293,7 @@ public class SWBCommentToElement extends org.semanticwb.portal.resources.sem.bas
                 if(user.isSigned())
                     name = comment.getCreator().getFullName();
                 else
-                    name = comment.getName();
+                    name = comment.getName()==null?"":comment.getName();
                 html.append("<p><span>"+name+"</span> "+paramRequest.getLocaleString("ago")+" "+SWBUtils.TEXT.getTimeAgo(comment.getCreated(), user.getLanguage())+"</p>");
                 html.append("<p>"+comment.getCommentToElement()+"</p>");
                 html.append("  </li>");
