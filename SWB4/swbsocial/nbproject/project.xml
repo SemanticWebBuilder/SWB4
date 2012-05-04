@@ -54,10 +54,11 @@
                     <file>${file.reference.json.jar}</file>
                 </library>
                 <library dirs="200">
-                    <file>${reference.swbSocialResources.jar}</file>
+                    <file>${file.reference.Flickr4Java-1.0.jar}</file>
+                    <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
                 <library dirs="200">
-                    <file>${file.reference.Flickr4Java-1.0.jar}</file>
+                    <file>${reference.SWBSocialResources.jar}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
                 <library dirs="200">
@@ -116,6 +117,14 @@
             </reference>
             <reference>
                 <foreign-project>SWBSocialModel</foreign-project>
+                <artifact-type>jar</artifact-type>
+                <script>build.xml</script>
+                <target>jar</target>
+                <clean-target>clean</clean-target>
+                <id>jar</id>
+            </reference>
+            <reference>
+                <foreign-project>SWBSocialResources</foreign-project>
                 <artifact-type>jar</artifact-type>
                 <script>build.xml</script>
                 <target>jar</target>
