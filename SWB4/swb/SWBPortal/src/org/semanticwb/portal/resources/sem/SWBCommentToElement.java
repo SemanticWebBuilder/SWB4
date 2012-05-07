@@ -264,7 +264,8 @@ public class SWBCommentToElement extends org.semanticwb.portal.resources.sem.bas
      */
     private String renderListComments(SWBParamRequest paramRequest, final String uri) throws SWBResourceException {
         StringBuilder html = new StringBuilder();
-        User user = paramRequest.getUser();
+        final User user = paramRequest.getUser();
+        final String lang = user.getLanguage()==null?"es":user.getLanguage();
         String name;
 
         SWBClass element = null;
@@ -281,7 +282,7 @@ public class SWBCommentToElement extends org.semanticwb.portal.resources.sem.bas
         long totalCmmts = comments.size();
         
         html.append("<div class=\"swb-comentario-sem-lista\">");
-        if(comments.size()>0) {
+        if(!comments.isEmpty()) {
             html.append(" <h2>"+totalCmmts+"&nbsp;"+paramRequest.getLocaleString("lblComments")+"</h2>");
             icomments = comments.iterator();
             html.append("<div id=\"swb-cmnt-sem-lst\">");
@@ -289,12 +290,18 @@ public class SWBCommentToElement extends org.semanticwb.portal.resources.sem.bas
             int min = MIN_LIST;
             while(min>0 && icomments.hasNext()) {
                 CommentToElement comment = icomments.next();
+                if(!comment.isValid() || !user.haveAccess(comment))
+                    continue;
                 html.append("  <li class=\"swb-comentario-sem-item\">");
-                if(user.isSigned())
-                    name = comment.getCreator().getFullName();
+                if(comment.getName()==null && user.isSigned())
+                    html.append("<p><span>"+comment.getCreator().getFullName()==null?"":comment.getCreator().getFullName()+"</span>");
                 else
-                    name = comment.getName()==null?"":comment.getName();
-                html.append("<p><span>"+name+"</span> "+paramRequest.getLocaleString("ago")+" "+SWBUtils.TEXT.getTimeAgo(comment.getCreated(), user.getLanguage())+"</p>");
+                    html.append("<p><span>"+comment.getName()==null?"":comment.getName()+"</span>");
+                try {
+                    html.append("&nbsp;"+paramRequest.getLocaleString("ago")+"&nbsp;"+SWBUtils.TEXT.getTimeAgo(comment.getCreated(), lang));
+                }catch(Exception e) {
+                }
+                html.append("</p>");
                 html.append("<p>"+comment.getCommentToElement()+"</p>");
                 html.append("  </li>");
                 min--;
@@ -313,9 +320,11 @@ public class SWBCommentToElement extends org.semanticwb.portal.resources.sem.bas
         response.setContentType("text/xml; charset=UTF-8");
         response.setHeader("Cache-Control","no-cache");
         response.setHeader("Pragma","no-cache");
+        
         PrintWriter out = response.getWriter();
         StringBuilder html = new StringBuilder();
-        User user = paramRequest.getUser();
+        final User user = paramRequest.getUser();
+        final String lang = user.getLanguage()==null?"es":user.getLanguage();
         String name;
         
         String uri = request.getParameter("uri");
@@ -336,13 +345,14 @@ public class SWBCommentToElement extends org.semanticwb.portal.resources.sem.bas
                     name = comment.getCreator().getFullName();
                 else
                     name = comment.getName();
-                html.append("<p><span>"+name+"</span> "+paramRequest.getLocaleString("ago")+" "+SWBUtils.TEXT.getTimeAgo(comment.getCreated(), user.getLanguage())+"</p>");
+                html.append("<p><span>"+name+"</span> "+paramRequest.getLocaleString("ago")+" "+SWBUtils.TEXT.getTimeAgo(comment.getCreated(), lang)+"</p>");
                 html.append("<p>"+comment.getCommentToElement()+"</p>");
                 html.append("  </li>");
             }
             html.append(" </ol>");
             html.append(" <p><a href=\"javascript:postHtml('"+paramRequest.getRenderUrl().setCallMethod(SWBResourceURL.Call_DIRECT).setMode(SWBResourceURL.Mode_INDEX).setParameter("uri",element.getEncodedURI())+"','swb-cmnt-sem-lst')\">"+paramRequest.getLocaleString("viewAllComments") +"&nbsp;&raquo;</a></p>");
             out.println(html.toString());
-        }
+        }else
+            out.println(paramRequest.getLocaleString("noElement"));
     }
 }
