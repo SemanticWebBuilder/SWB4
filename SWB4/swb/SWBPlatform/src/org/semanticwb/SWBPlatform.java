@@ -40,10 +40,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Properties;
-import org.semanticwb.platform.SemanticMgr;
-import org.semanticwb.platform.IDGenerator;
-import org.semanticwb.platform.SemanticVocabulary;
-import org.semanticwb.platform.ThreadObserver;
+import org.semanticwb.platform.*;
 import org.semanticwb.security.SWBSecurityInstanceValues;
 
 
@@ -132,7 +129,12 @@ public class SWBPlatform
     private static String threadName=null;
     
     private static boolean portalLoaded=false;
-
+    
+    /**
+     * Is the message center in this portal.
+     * <p>Es el centro de mensajes en este portal.</p>
+     */
+    private static SWBMessageCenter msgcenter = null;    
     
     /**
      * Instantiates a new sWB platform.
@@ -976,6 +978,21 @@ public class SWBPlatform
         {
             m_observers.remove(obs);
         }
+    }
+    
+    /**
+     * Gets a reference to the message center for this instance of SWB.
+     * <p>Obtiene una referencia al centro de mensajes de esta instancia de SWB</p>
+     * @return a SWBMessageCenter object for this instance of SWB.
+     */
+    public static SWBMessageCenter getMessageCenter()
+    {
+        return msgcenter;
+    }    
+    
+    protected void setMessageCenter(SWBMessageCenter mcenter)
+    {
+        msgcenter=mcenter;
     }
 
 

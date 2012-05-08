@@ -28,7 +28,7 @@
  * Created on 3 de octubre de 2002, 14:26
  */
 
-package org.semanticwb.portal;
+package org.semanticwb.platform;
 
 import java.io.IOException;
 import java.net.*;
@@ -41,9 +41,9 @@ import java.util.LinkedList;
 import java.util.StringTokenizer;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
-import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.base.SWBObserver;
+//import org.semanticwb.platform.SWBMessageProcesor;
 
 
 // TODO: Auto-generated Javadoc
@@ -68,8 +68,8 @@ public class SWBMessageCenter
     /** The server. */
     private SWBMessageServer server = null;
     
-    /** The procesor. */
-    private SWBMessageProcesor procesor = null;
+//    /** The procesor. */
+//    private SWBMessageProcesor procesor = null;
 
     /** The sock. */
     private DatagramSocket sock = null;
@@ -121,8 +121,8 @@ public class SWBMessageCenter
 
             //System.out.println("before procesor start...");
 
-            procesor = new SWBMessageProcesor(this);
-            procesor.init();
+//            procesor = new SWBMessageProcesor(this);
+//            procesor.init();
 
             //System.out.println("after procesor start...");
             
@@ -464,15 +464,15 @@ public class SWBMessageCenter
             return localaddr;
     }
 
-    /**
-     * Gets the message procesor.
-     * 
-     * @return the message procesor
-     */
-    public SWBMessageProcesor getMessageProcesor()
-    {
-        return procesor;
-    }
+//    /**
+//     * Gets the message procesor.
+//     * 
+//     * @return the message procesor
+//     */
+//    public SWBMessageProcesor getMessageProcesor()
+//    {
+//        return procesor;
+//    }
 
     /**
      * Gets the message server.

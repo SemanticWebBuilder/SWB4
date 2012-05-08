@@ -28,7 +28,7 @@
  * Created on 3 de octubre de 2002, 14:54
  */
 
-package org.semanticwb.portal;
+package org.semanticwb.platform;
 
 import java.net.*;
 import org.semanticwb.Logger;
