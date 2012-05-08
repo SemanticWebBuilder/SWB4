@@ -1,6 +1,16 @@
+  4.2.0.5
+    - Mejora: se agregó el módulo de alertas en DDOS (Serch)
+    - BUG: se corrigió la cuenta de Hits en instancias clientes (Jei)
+    - BUG: Se corrigió error en alta concurrencia al registrar la ruta seguida por una misma session
+  4.2.0.4
+    - Mejora: Módulo de integración con GEMFIRE (Serch)
+    - BUG: Filtro de DojoFileUpload (Serch)
+    - BUG: Limpieza de XSS en mensajes de error (Serch)
+    - BUG: Limpieza de XSS en URLs mezclados (Serch)
   4.2.0.2
     - Se agrego cache de objetos no encontrados en base de datos (Jei)
-    - 
+    - BUG: Logout en ambientes distribuidos (Serch)
+    - Preparación de wrapers de JDBC para JSE7 (Serch)
   4.2.0.0
     - Rediseño de la capa interna de SWBPlatform (SemanticObject) para incrementar rendimiento (Jei)
     - Mejoras en el Soporte a Balanceo de Instancias (Jei)
