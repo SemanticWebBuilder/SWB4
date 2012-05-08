@@ -1,7 +1,7 @@
   4.2.0.5
     - Mejora: se agregó el módulo de alertas en DDOS (Serch)
     - BUG: se corrigió la cuenta de Hits en instancias clientes (Jei)
-    - BUG: Se corrigió error en alta concurrencia al registrar la ruta seguida por una misma session
+    - BUG: Se corrigió error en alta concurrencia al registrar la ruta seguida por una misma session (Serch)
   4.2.0.4
     - Mejora: Módulo de integración con GEMFIRE (Serch)
     - BUG: Filtro de DojoFileUpload (Serch)
