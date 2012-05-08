@@ -322,9 +322,44 @@ public class Resource extends org.semanticwb.model.base.ResourceBase {
      * @param user the user
      * @param page the page
      */
-    public void addHit(HttpServletRequest request, User user, WebPage page) {
-        //TODO:
-        incHits();
+    public void addHit(HttpServletRequest request, User user, WebPage page) 
+    {
+        StringBuffer logbuf = new StringBuffer(300);
+        logbuf.append("hit|");
+        logbuf.append(request.getRemoteAddr());
+        logbuf.append("|");
+        logbuf.append(SWBPlatform.getMessageCenter().getAddress());
+        logbuf.append("|");
+        String sess=request.getSession().getId();
+        if(sess!=null)
+        {
+            int p=sess.length()-10;
+            if(p>-1)sess=sess.substring(p);
+        }else sess="_";
+        logbuf.append(sess);        
+        logbuf.append("|");
+        logbuf.append(page.getWebSite().getId());
+        logbuf.append("|");
+        logbuf.append(page.getId());
+        logbuf.append("|");
+        logbuf.append(user.getUserRepository().getId());
+        logbuf.append("|");
+        if (user.getLogin() != null)
+            logbuf.append(user.getLogin());
+        else
+            logbuf.append("_");
+        logbuf.append("|");
+        logbuf.append(user.getSemanticObject().getSemanticClass().getClassId());
+        logbuf.append("|");
+        logbuf.append(user.getDevice());
+        logbuf.append("|");
+        if (user.getLanguage() != null && user.getLanguage().length() > 0)
+            logbuf.append(user.getLanguage());
+        else
+            logbuf.append("_");
+        logbuf.append("|");
+        logbuf.append(getId());
+        SWBPlatform.getMessageCenter().sendMessage(logbuf.toString());
     }
 
     /**
