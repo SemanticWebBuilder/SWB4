@@ -30,6 +30,7 @@
 
 package org.semanticwb.portal;
 
+import org.semanticwb.platform.SWBMessageCenter;
 import java.net.*;
 import java.util.*;
 import org.semanticwb.Logger;
@@ -63,7 +64,7 @@ public class SWBMessageProcesor extends TimerTask
      * @param center the center
      * @throws SocketException the socket exception
      */
-    public SWBMessageProcesor(SWBMessageCenter center) throws java.net.SocketException
+    public SWBMessageProcesor(SWBMessageCenter center)
     {
         this.center = center;
     }

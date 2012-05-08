@@ -61,12 +61,8 @@ import org.semanticwb.model.*;
 import org.semanticwb.platform.SemanticModel;
 import org.semanticwb.portal.PFlowManager;
 import org.semanticwb.portal.SWBAdminFilterMgr;
-import org.semanticwb.portal.SWBMessageCenter;
-import org.semanticwb.portal.SWBMonitor;
-import org.semanticwb.portal.SWBResourceMgr;
-import org.semanticwb.portal.SWBServiceMgr;
-import org.semanticwb.portal.SWBTemplateMgr;
-import org.semanticwb.portal.SWBUserMgr;
+import org.semanticwb.platform.SWBMessageCenter;
+import org.semanticwb.portal.*;
 import org.semanticwb.portal.access.SWBAccessIncrement;
 import org.semanticwb.portal.access.SWBAccessLog;
 import org.semanticwb.portal.api.SWBResource;
@@ -239,11 +235,16 @@ public class SWBPortal
      * <p>Es el administrador de los objetos de bit&aacute;coras de base de datos en este portal.</p>
      */
     private static SWBDBAdmLog admlog = null;
+        
     /**
      * Is the message center in this portal.
      * <p>Es el centro de mensajes en este portal.</p>
      */
     private static SWBMessageCenter msgcenter = null;
+    
+    /** The procesor. */
+    private static SWBMessageProcesor procesor = null;    
+    
     /**
      * Is the manager for the access logs in this portal.
      * <p>Es el administrador de las bit&aacute;coras de acceso en este portal.</p>
@@ -744,7 +745,11 @@ public class SWBPortal
         admlog.init();
 
         msgcenter = new SWBMessageCenter();
-        msgcenter.init();
+        msgcenter.init();        
+        platform.setMessageCenter(msgcenter);
+        
+        procesor = new SWBMessageProcesor(msgcenter);
+        procesor.init();        
 
         acclog = new SWBAccessLog();
         acclog.init();
