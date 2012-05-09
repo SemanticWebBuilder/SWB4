@@ -455,6 +455,11 @@
     >Recurso semántico que implementa un banner</rdfs:comment>
     <rdf:type rdf:resource="#SemanticResource"/>
   </owl:Class>
+  <owl:Class rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#HerarquicalNodeable">
+    <rdfs:comment>Interfaz que define propiedades para los elementos que pueden tener uno o mas objetos HerarquicalNode</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="#SWBInterface"/>
+    <rdf:type rdf:resource="#Interface"/>
+  </owl:Class>
   <owl:Class rdf:ID="ResourceCollectionCategory">
     <rdfs:label xml:lang="en">Category</rdfs:label>
     <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
@@ -483,11 +488,6 @@
     <rdfs:subClassOf>
       <owl:Class rdf:about="#Traceable"/>
     </rdfs:subClassOf>
-  </owl:Class>
-  <owl:Class rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#HerarquicalNodeable">
-    <rdfs:comment>Interfaz que define propiedades para los elementos que pueden tener uno o mas objetos HerarquicalNode</rdfs:comment>
-    <rdfs:subClassOf rdf:resource="#SWBInterface"/>
-    <rdf:type rdf:resource="#Interface"/>
   </owl:Class>
   <owl:Class rdf:ID="Role">
     <rdfs:subClassOf>
@@ -934,6 +934,16 @@
     <rdfs:label xml:lang="es">Selector Múltiple</rdfs:label>
     <swb:formElementRange rdf:resource="#SWBClass"/>
     <rdf:type rdf:resource="#FormElement"/>
+  </owl:Class>
+  <owl:Class rdf:ID="AdminAlert">
+    <rdfs:subClassOf rdf:resource="#SWBClass"/>
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <rdfs:subClassOf rdf:resource="#Traceable"/>
+    <rdfs:label>Parámetros de Alerta@es</rdfs:label>
+    <rdfs:comment>AntiDDoS Parameters, this class holds the thresholds limits to recognize an attack</rdfs:comment>
+    <rdfs:label>Alert Parameters@en</rdfs:label>
+    <rdf:type rdf:resource="#Class"/>
   </owl:Class>
   <owl:Class rdf:ID="Geolocalizable">
     <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
@@ -3432,6 +3442,18 @@
       </swbxf:DisplayProperty>
     </swb:displayProperty>
   </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="alertCPUTH">
+    <rdfs:domain rdf:resource="#AdminAlert"/>
+    <rdfs:label>Límite de CPU@es</rdfs:label>
+    <rdfs:label>CPU Threshold@en</rdfs:label>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_alertCPUTH">
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >300</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+  </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="required">
     <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >required</swb:propertyCodeName>
@@ -3619,6 +3641,20 @@
       </swbxf:DisplayProperty>
     </swb:displayProperty>
   </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="alertSistemStatus">
+    <rdfs:domain rdf:resource="#AdminAlert"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+    <rdfs:label>Activar Alertas@es</rdfs:label>
+    <rdfs:label>Activate Alerts@es</rdfs:label>
+    <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:required>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_alertSistemStatus">
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >100</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+  </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="hasCollectionSearchProperties">
     <rdfs:domain rdf:resource="#Collection"/>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
@@ -3640,6 +3676,18 @@
         <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
         >25</swb:index>
         <rdfs:label xml:lang="en">Sort Name</rdfs:label>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="alertPPSTH">
+    <rdfs:domain rdf:resource="#AdminAlert"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#long"/>
+    <rdfs:label>Límite de paginas por segundo@es</rdfs:label>
+    <rdfs:label>Pages per second Threshold@en</rdfs:label>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_alertPSPTH">
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >500</swb:index>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
   </owl:DatatypeProperty>
@@ -4225,6 +4273,22 @@
       </swbxf:DisplayProperty>
     </swb:displayProperty>
   </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="alertMailList">
+    <rdfs:domain rdf:resource="#AdminAlert"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <swb:defaultValue rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >webbuilder@infotec.com.mx</swb:defaultValue>
+    <rdfs:label>Lista de Correos (separar por ;)@es</rdfs:label>
+    <rdfs:label>Mailing List (spread by ;)@en</rdfs:label>
+    <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:required>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_alertMailList">
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >200</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+  </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#so_globalScope">
     <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >globalScope</swb:propertyCodeName>
@@ -4338,6 +4402,18 @@
     </swb:displayProperty>
     <swb:externalInvocation rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:externalInvocation>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="alertTitle">
+    <rdfs:label>Título a reportar@es</rdfs:label>
+    <rdfs:label>Title to report@en</rdfs:label>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_alertTitle">
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >150</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:domain rdf:resource="#AdminAlert"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#doDispatcher">
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
@@ -4963,11 +5039,6 @@
       </swbxf:DisplayProperty>
     </swb:displayProperty>
   </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#fileMaxSize">
-    <rdfs:domain rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#FileUpload"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#long"/>
-    <rdfs:comment>Valor en kbs</rdfs:comment>
-  </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:about="http://www.semanticwebbuilder.org/swb4/resource/ontology#promCssClass">
     <rdfs:domain rdf:resource="http://www.semanticwebbuilder.org/swb4/resource/ontology#semPromo"/>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
@@ -4983,6 +5054,11 @@
         <swbxf:propGroup rdf:resource="http://www.semanticwebbuilder.org/swb4/resource/ontology#styleConfig"/>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#fileMaxSize">
+    <rdfs:domain rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#FileUpload"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#long"/>
+    <rdfs:comment>Valor en kbs</rdfs:comment>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:about="http://www.semanticwebbuilder.org/swb4/resource/ontology#promText">
     <rdfs:domain rdf:resource="http://www.semanticwebbuilder.org/swb4/resource/ontology#semPromo"/>
@@ -5096,6 +5172,18 @@
     </swb:displayProperty>
     <rdfs:domain rdf:resource="#XMLable"/>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="alertTimeTH">
+    <rdfs:domain rdf:resource="#AdminAlert"/>
+    <rdfs:label>Límite de tiempo en procesamiento@es</rdfs:label>
+    <rdfs:label>Time per page Threshold@en</rdfs:label>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#long"/>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_alertTimeTH">
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >400</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
   </owl:DatatypeProperty>
   <swb:ViewReferenceProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#vrp_views_view">
     <swb:propertyMode rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
