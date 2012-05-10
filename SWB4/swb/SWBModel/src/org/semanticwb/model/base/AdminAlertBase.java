@@ -7,6 +7,7 @@ package org.semanticwb.model.base;
 public abstract class AdminAlertBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Traceable
 {
     public static final org.semanticwb.platform.SemanticProperty swb_alertTitle=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#alertTitle");
+    public static final org.semanticwb.platform.SemanticProperty swb_alertAttackMode=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#alertAttackMode");
     public static final org.semanticwb.platform.SemanticProperty swb_alertTimeTH=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#alertTimeTH");
     public static final org.semanticwb.platform.SemanticProperty swb_alertSistemStatus=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#alertSistemStatus");
     public static final org.semanticwb.platform.SemanticProperty swb_alertPPSTH=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#alertPPSTH");
@@ -43,12 +44,6 @@ public abstract class AdminAlertBase extends org.semanticwb.model.SWBClass imple
         {
             java.util.Iterator it=sclass.listInstances();
             return new org.semanticwb.model.GenericIterator<org.semanticwb.model.AdminAlert>(it, true);
-        }
-
-        public static org.semanticwb.model.AdminAlert createAdminAlert(org.semanticwb.model.SWBModel model)
-        {
-            long id=model.getSemanticObject().getModel().getCounter(sclass);
-            return org.semanticwb.model.AdminAlert.ClassMgr.createAdminAlert(String.valueOf(id), model);
         }
        /**
        * Gets a org.semanticwb.model.AdminAlert
@@ -237,6 +232,33 @@ public abstract class AdminAlertBase extends org.semanticwb.model.SWBClass imple
     public void setUpdated(java.util.Date value)
     {
         getSemanticObject().setDateProperty(swb_updated, value);
+    }
+
+    public java.util.Iterator<String> listAlertAttackModes()
+    {
+        java.util.ArrayList<String> values=new java.util.ArrayList<String>();
+        java.util.Iterator<org.semanticwb.platform.SemanticLiteral> it=getSemanticObject().listLiteralProperties(swb_alertAttackMode);
+        while(it.hasNext())
+        {
+                org.semanticwb.platform.SemanticLiteral literal=it.next();
+                values.add(literal.getString());
+        }
+        return values.iterator();
+    }
+
+    public void addAlertAttackMode(String value)
+    {
+        getSemanticObject().addLiteralProperty(swb_alertAttackMode, new org.semanticwb.platform.SemanticLiteral(value));
+    }
+
+    public void removeAllAlertAttackMode()
+    {
+        getSemanticObject().removeProperty(swb_alertAttackMode);
+    }
+
+    public void removeAlertAttackMode(String value)
+    {
+        getSemanticObject().removeLiteralProperty(swb_alertAttackMode,new org.semanticwb.platform.SemanticLiteral(value));
     }
 
 /**
