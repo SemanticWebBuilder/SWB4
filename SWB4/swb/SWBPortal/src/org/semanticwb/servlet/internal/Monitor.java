@@ -132,6 +132,9 @@ public class Monitor implements InternalServlet
     private static int alerted_TIME=0;
     private static int alerted_PPS=0;
     private static boolean sendAlert=false;
+    private static boolean modeOnCPU=false;
+    private static boolean modeOnTIME=false;
+    private static boolean modeOnPPS=false;
 
     //Configurable Values...
     private static float THRESHOLD_CPU=85.0f;
@@ -313,7 +316,7 @@ public class Monitor implements InternalServlet
                         pages.clear();
                         uso.clear();
                         tiempos.clear();
-                        System.out.println("***** Back to Normal");
+                       // System.out.println("***** Back to Normal");
                     }
                 }
                 cnt = 0;
@@ -326,9 +329,11 @@ public class Monitor implements InternalServlet
                 if (uso.size()>MAX_SIZE){
                     uso.poll();
                 }
+                long ltiempos = -1;
                 Vector<SWBMonitor.MonitorRecord> vmr = SWBPortal.getMonitor().getAverageMonitorRecords(10);
                 if (vmr.size()>0){
-                    tiempos.add(vmr.lastElement().getHitsTime());
+                    ltiempos=vmr.lastElement().getHitsTime();
+                    tiempos.add(ltiempos);
                 }
                 if (tiempos.size()>MAX_SIZE){
                     tiempos.poll();
@@ -354,7 +359,7 @@ public class Monitor implements InternalServlet
                                 " is working over the "+THRESHOLD_CPU+"% usage.");
                     } catch (Exception e) {log.error(e);
                     }
-                    System.out.println("***** ALERTAR CPU ALTO *****");
+                   // System.out.println("***** ALERTAR CPU ALTO *****");
                     //uso.clear();
                     alerted_CPU=MAX_SIZE*4;
                 }
@@ -365,7 +370,7 @@ public class Monitor implements InternalServlet
                                 " is delivering more than "+THRESHOLD_PPS+" pages per second.");
                     } catch (Exception e) {log.error(e);
                     }
-                    System.out.println("***** ALERTAR PAGINAS ALTO *****");
+                  //  System.out.println("***** ALERTAR PAGINAS ALTO *****");
                     //pages.clear();
                     alerted_PPS=MAX_SIZE*4;
                 }
@@ -377,19 +382,21 @@ public class Monitor implements InternalServlet
                                 "ms per page.");
                     } catch (Exception e) {log.error(e);
                     }
-                    System.out.println("***** ALERTAR TIEMPO ALTO *****");
+                   // System.out.println("***** ALERTAR TIEMPO ALTO *****");
                     //tiempos.clear();
                     alerted_TIME=MAX_SIZE*4;
                 }
-                if (UP_LIMIT<oTime && UP_LIMIT<oPages && !Distributor.isPageCache()){
+                if (!Distributor.isPageCache() && ((modeOnCPU && UP_LIMIT<oCPU) || (modeOnTIME && UP_LIMIT<oTime) 
+                        || (modeOnPPS && UP_LIMIT<oPages))){
                     try {
                         SWBUtils.EMAIL.sendBGEmail(alertEmail, 
                                 "ALERT HIGH IN ATTACK", "The site "+siteName+
-                                " might be on attack, delivering "+pps+
-                                " per second.\nThe inAttack mode has been activated");
+                                " might be on attack.\n\nLast values:\n" +
+                                "CPU: "+cpu+"\n P/S:"+pps+"\nTime:"+ltiempos
+                                + "\n\n\nThe inAttack mode has been activated");
                     } catch (Exception e) {log.error(e);
                     }
-                    System.out.println("***** ALERTAR MODO ATAQUE *****");
+                //    System.out.println("***** ALERTAR MODO ATAQUE *****");
                     Distributor.setPageCache(true);
                 }
             }
@@ -878,10 +885,21 @@ private static String INDENT = "    ";
             THRESHOLD_CPU=aa.getAlertCPUTH();
             THRESHOLD_TIME=aa.getAlertTimeTH();
             THRESHOLD_PPS=aa.getAlertPPSTH();
+            Iterator<String> iter = aa.listAlertAttackModes();
+            modeOnCPU=false;
+            modeOnTIME=false;
+            modeOnPPS=false;
+            while (iter.hasNext()){
+                String curr = iter.next();
+                if ("cpu".equals(curr)) modeOnCPU=true;
+                if ("time".equals(curr)) modeOnTIME=true;
+                if ("pps".equals(curr)) modeOnPPS=true;
+            }
         }
     }
     public static void setAlertParameters(String tsiteName, String talertEmail, 
-            boolean talertOn, float cpu, long time, long pps) 
+            boolean talertOn, float cpu, long time, long pps, boolean mbcpu, 
+            boolean mbtime, boolean mbpps) 
             throws NullPointerException {
         AdminAlert aa = AdminAlert.ClassMgr.getAdminAlert("1", SWBContext.getAdminWebSite());
             if (null==aa){
@@ -899,6 +917,15 @@ private static String INDENT = "    ";
             aa.setAlertTimeTH(time);
             THRESHOLD_PPS = pps;
             aa.setAlertPPSTH(pps);
+            modeOnCPU=mbcpu;
+            aa.removeAlertAttackMode("cpu");
+            if (mbcpu) aa.addAlertAttackMode("cpu");
+            modeOnTIME=mbtime;
+            aa.removeAlertAttackMode("time");
+            if (mbcpu) aa.addAlertAttackMode("time");
+            modeOnPPS=mbpps;
+            aa.removeAlertAttackMode("pps");
+            if (mbcpu) aa.addAlertAttackMode("pps");
     }
 }
 
