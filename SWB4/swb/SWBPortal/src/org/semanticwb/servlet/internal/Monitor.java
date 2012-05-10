@@ -51,6 +51,8 @@ import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.base.util.SFBase64;
+import org.semanticwb.model.AdminAlert;
+import org.semanticwb.model.SWBContext;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticProperty;
 import org.semanticwb.portal.SWBMonitor;
@@ -190,38 +192,17 @@ public class Monitor implements InternalServlet
                 }
             }
           //  System.out.println("Got Security in place");
-            sp = SWBPlatform.getSemanticMgr().getModel(
-                    SWBPlatform.getSemanticMgr().SWBAdmin).getSemanticProperty(
-                    SWBPlatform.getSemanticMgr().SWBAdminURI + "/AlertSiteName");
-            String tmp = SWBPlatform.getSemanticMgr().getModel(
-                    SWBPlatform.getSemanticMgr().SWBAdmin).getModelObject().getProperty(sp);
-            if (null!=tmp)siteName=tmp;
-            sp = SWBPlatform.getSemanticMgr().getModel(
-                    SWBPlatform.getSemanticMgr().SWBAdmin).getSemanticProperty(
-                    SWBPlatform.getSemanticMgr().SWBAdminURI + "/AlertEmail");
-            tmp = SWBPlatform.getSemanticMgr().getModel(
-                    SWBPlatform.getSemanticMgr().SWBAdmin).getModelObject().getProperty(sp);
-            if (null!=tmp)alertEmail=tmp;
-            sp = SWBPlatform.getSemanticMgr().getModel(
-                    SWBPlatform.getSemanticMgr().SWBAdmin).getSemanticProperty(
-                    SWBPlatform.getSemanticMgr().SWBAdminURI + "/AlertStatus");
-            alertOn = SWBPlatform.getSemanticMgr().getModel(
-                    SWBPlatform.getSemanticMgr().SWBAdmin).getModelObject().getBooleanProperty(sp, false, false);
-            sp = SWBPlatform.getSemanticMgr().getModel(
-                    SWBPlatform.getSemanticMgr().SWBAdmin).getSemanticProperty(
-                    SWBPlatform.getSemanticMgr().SWBAdminURI + "/AlertCPU");
-            THRESHOLD_CPU = SWBPlatform.getSemanticMgr().getModel(
-                    SWBPlatform.getSemanticMgr().SWBAdmin).getModelObject().getFloatProperty(sp,90.0f);
-            sp = SWBPlatform.getSemanticMgr().getModel(
-                    SWBPlatform.getSemanticMgr().SWBAdmin).getSemanticProperty(
-                    SWBPlatform.getSemanticMgr().SWBAdminURI + "/AlertTime");
-            THRESHOLD_TIME = SWBPlatform.getSemanticMgr().getModel(
-                    SWBPlatform.getSemanticMgr().SWBAdmin).getModelObject().getLongProperty(sp, 500);
-            sp = SWBPlatform.getSemanticMgr().getModel(
-                    SWBPlatform.getSemanticMgr().SWBAdmin).getSemanticProperty(
-                    SWBPlatform.getSemanticMgr().SWBAdminURI + "/AlertPPS");
-            THRESHOLD_PPS = SWBPlatform.getSemanticMgr().getModel(
-                    SWBPlatform.getSemanticMgr().SWBAdmin).getModelObject().getLongProperty(sp, 75);
+            AdminAlert aa = AdminAlert.ClassMgr.getAdminAlert("1", SWBContext.getAdminWebSite());
+            if (null==aa){
+                aa = AdminAlert.ClassMgr.createAdminAlert("1", SWBContext.getAdminWebSite());
+                aa.setAlertSistemStatus(false);
+                aa.setAlertMailList("webbuilder@infotec.com.mx");
+                aa.setAlertCPUTH(85.0f);
+                aa.setAlertTimeTH(250);
+                aa.setAlertPPSTH(50);
+            }
+            setAlertParameter(aa);
+            
         } catch (java.security.GeneralSecurityException gse)
         //} catch (Exception gse)
         {
@@ -889,45 +870,35 @@ private static String INDENT = "    ";
         SWBPortal.getResourceMgr().getResourceCacheMgr().clearCache();
     }
     
+    public static void setAlertParameter(AdminAlert aa){
+        if (null!=aa){
+            siteName=aa.getAlertTitle()==null?"Sitio":aa.getAlertTitle();
+            alertEmail=aa.getAlertMailList()==null?"webbuilder@infotec.com.mx":aa.getAlertMailList();
+            alertOn=aa.isAlertSistemStatus();
+            THRESHOLD_CPU=aa.getAlertCPUTH();
+            THRESHOLD_TIME=aa.getAlertTimeTH();
+            THRESHOLD_PPS=aa.getAlertPPSTH();
+        }
+    }
     public static void setAlertParameters(String tsiteName, String talertEmail, 
             boolean talertOn, float cpu, long time, long pps) 
             throws NullPointerException {
-        SemanticProperty sp = SWBPlatform.getSemanticMgr().getModel(
-                SWBPlatform.getSemanticMgr().SWBAdmin).getSemanticProperty(
-                SWBPlatform.getSemanticMgr().SWBAdminURI + "/AlertSiteName");
-        SWBPlatform.getSemanticMgr().getModel(
-                SWBPlatform.getSemanticMgr().SWBAdmin).getModelObject().setProperty(sp, tsiteName);
-        siteName=tsiteName;
-        sp = SWBPlatform.getSemanticMgr().getModel(
-                SWBPlatform.getSemanticMgr().SWBAdmin).getSemanticProperty(
-                SWBPlatform.getSemanticMgr().SWBAdminURI + "/AlertEmail");
-        SWBPlatform.getSemanticMgr().getModel(
-                SWBPlatform.getSemanticMgr().SWBAdmin).getModelObject().setProperty(sp, talertEmail);
-        alertEmail = talertEmail;
-        sp = SWBPlatform.getSemanticMgr().getModel(
-                SWBPlatform.getSemanticMgr().SWBAdmin).getSemanticProperty(
-                SWBPlatform.getSemanticMgr().SWBAdminURI + "/AlertStatus");
-        SWBPlatform.getSemanticMgr().getModel(
-                SWBPlatform.getSemanticMgr().SWBAdmin).getModelObject().setBooleanProperty(sp, talertOn);
-        alertOn = talertOn;
-        sp = SWBPlatform.getSemanticMgr().getModel(
-                SWBPlatform.getSemanticMgr().SWBAdmin).getSemanticProperty(
-                SWBPlatform.getSemanticMgr().SWBAdminURI + "/AlertCPU");
-        SWBPlatform.getSemanticMgr().getModel(
-                SWBPlatform.getSemanticMgr().SWBAdmin).getModelObject().setFloatProperty(sp, cpu);
-        THRESHOLD_CPU = cpu;
-        sp = SWBPlatform.getSemanticMgr().getModel(
-                SWBPlatform.getSemanticMgr().SWBAdmin).getSemanticProperty(
-                SWBPlatform.getSemanticMgr().SWBAdminURI + "/AlertTime");
-        SWBPlatform.getSemanticMgr().getModel(
-                SWBPlatform.getSemanticMgr().SWBAdmin).getModelObject().setLongProperty(sp, time);
-        THRESHOLD_TIME = time;
-        sp = SWBPlatform.getSemanticMgr().getModel(
-                SWBPlatform.getSemanticMgr().SWBAdmin).getSemanticProperty(
-                SWBPlatform.getSemanticMgr().SWBAdminURI + "/AlertPPS");
-        SWBPlatform.getSemanticMgr().getModel(
-                SWBPlatform.getSemanticMgr().SWBAdmin).getModelObject().setLongProperty(sp, pps);
-        THRESHOLD_PPS = pps;
+        AdminAlert aa = AdminAlert.ClassMgr.getAdminAlert("1", SWBContext.getAdminWebSite());
+            if (null==aa){
+                aa = AdminAlert.ClassMgr.createAdminAlert("1", SWBContext.getAdminWebSite());
+            }
+            siteName=tsiteName;
+            aa.setAlertTitle(tsiteName);
+            alertEmail = talertEmail;
+            aa.setAlertMailList(talertEmail);
+            alertOn = talertOn;
+            aa.setAlertSistemStatus(talertOn);
+            THRESHOLD_CPU = cpu;
+            aa.setAlertCPUTH(cpu);
+            THRESHOLD_TIME = time;
+            aa.setAlertTimeTH(time);
+            THRESHOLD_PPS = pps;
+            aa.setAlertPPSTH(pps);
     }
 }
 
