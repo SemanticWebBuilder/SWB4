@@ -6,7 +6,7 @@
 
         <div title="Basic Settings" open="true">
         <fieldset legend="General Data">
-            <input type="file" name="template" label="Template (xsl, xslt)" showfile="true" msg="Current template " bydefault="{@webpath}wbadmin/xsl/Recomendar/Recomendar.xslt" msgbydefault="Default Template " filetype="xsl|xslt" isshowfiletype="true" />
+            <input type="file" name="template" label="Template (xsl, xslt)" showfile="true" msg="Current template " bydefault="{@webpath}wbadmin/xsl/Recomendar/Recommend.xslt" msgbydefault="Default Template " filetype="xsl|xslt" isshowfiletype="true" />
             <input type="file" name="img" label="Image used to recommend (gif, jpg, jpeg, png)" showfile="true" filetype="gif|jpg|jpeg|png" isshowfiletype="true" isremovefile="true" removemsg="Remove the image used to recommend" moreattr="onclick=&#34;jsClear(this.form, '1');&#34;" size="40"/>
             <input type="text" name="alt" label="Alternate text for image" promptMessage=""/>
             <input type="text" name="btntexto" label="Button text if not defining image" promptMessage=""/>
