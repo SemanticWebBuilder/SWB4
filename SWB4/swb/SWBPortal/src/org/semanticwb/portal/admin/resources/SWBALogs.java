@@ -1,26 +1,25 @@
 /**  
-* SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración, 
-* colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de 
-* información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes 
-* fuentes, donde a la información se le asigna un significado, de forma que pueda ser interpretada y 
-* procesada por personas y/o sistemas, es una creación original del Fondo de Información y Documentación 
-* para la Industria INFOTEC, cuyo registro se encuentra actualmente en trámite. 
-* 
-* INFOTEC pone a su disposición la herramienta SemanticWebBuilder a través de su licenciamiento abierto al público (‘open source’), 
-* en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición; 
-* aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software, 
-* todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización 
-* del SemanticWebBuilder 4.0. 
-* 
-* INFOTEC no otorga garantía sobre SemanticWebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita, 
-* siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar 
-* de la misma. 
-* 
-* Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente 
-* dirección electrónica: 
-*  http://www.semanticwebbuilder.org
-**/ 
- 
+ * SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración, 
+ * colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de 
+ * información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes 
+ * fuentes, donde a la información se le asigna un significado, de forma que pueda ser interpretada y 
+ * procesada por personas y/o sistemas, es una creación original del Fondo de Información y Documentación 
+ * para la Industria INFOTEC, cuyo registro se encuentra actualmente en trámite. 
+ * 
+ * INFOTEC pone a su disposición la herramienta SemanticWebBuilder a través de su licenciamiento abierto al público (‘open source’), 
+ * en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición; 
+ * aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software, 
+ * todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización 
+ * del SemanticWebBuilder 4.0. 
+ * 
+ * INFOTEC no otorga garantía sobre SemanticWebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita, 
+ * siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar 
+ * de la misma. 
+ * 
+ * Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente 
+ * dirección electrónica: 
+ *  http://www.semanticwebbuilder.org
+ **/
 /*
  * SWBALogs.java
  *
@@ -42,6 +41,7 @@ import org.semanticwb.SWBUtils;
 import org.semanticwb.model.GenericObject;
 import org.semanticwb.model.Resource;
 import org.semanticwb.model.User;
+import org.semanticwb.model.UserRepository;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticOntology;
 import org.semanticwb.portal.api.GenericResource;
@@ -94,6 +94,9 @@ public class SWBALogs extends GenericResource {
         String descriptionRow = "1";
         String dateRow = "1";
         String userRow = "1";
+        String objRow = "1";
+        String classRow = "1";
+
         String rowsHistory = "20";
 
         String pagesHistory = "5";
@@ -113,6 +116,12 @@ public class SWBALogs extends GenericResource {
         }
         if (base.getAttribute("user") != null) {
             userRow = base.getAttribute("user");
+        }
+        if (base.getAttribute("obj") != null) {
+            userRow = base.getAttribute("obj");
+        }
+        if (base.getAttribute("class") != null) {
+            userRow = base.getAttribute("class");
         }
         if (base.getAttribute("rows") != null) {
             rowsHistory = base.getAttribute("rows");
@@ -287,6 +296,30 @@ public class SWBALogs extends GenericResource {
         out.println(paramRequest.getLocaleString("msgPerform"));
         out.println("</td><td align=\"left\">");
         out.println("<input type=\"checkbox\" name=\"user\" value=\"1\"  " + strChecked + "></td></tr>");
+
+        strChecked = "";
+        if (objRow != null) {
+            if (objRow.equals("1")) {
+                strChecked = "checked";
+            }
+        }
+        out.println("<tr><td width=\"250\" align=right>");
+        out.println(paramRequest.getLocaleString("msgObj"));
+        out.println("</td><td align=\"left\">");
+        out.println("<input type=\"checkbox\" name=\"obj\" value=\"1\"  " + strChecked + "></td></tr>");
+
+        strChecked = "";
+        if (classRow != null) {
+            if (userRow.equals("1")) {
+                strChecked = "checked";
+            }
+        }
+        out.println("<tr><td width=\"250\" align=right>");
+        out.println(paramRequest.getLocaleString("msgClass"));
+        out.println("</td><td align=\"left\">");
+        out.println("<input type=\"checkbox\" name=\"class\" value=\"1\"  " + strChecked + "></td></tr>");
+
+
         //out.println("<td></tr>");
         out.println("<tr><td width=250 >");
         out.println(paramRequest.getLocaleString("msgPagesOptions") + ":");
@@ -368,6 +401,8 @@ public class SWBALogs extends GenericResource {
         String descriptionRow = "1";
         String dateRow = "1";
         String userRow = "1";
+        String objRow = "1";
+        String classRow = "1";
         String rowsHistory = "20";
         String nextHistory = paramRequest.getLocaleString("defaultValueNext");
         String backHistory = paramRequest.getLocaleString("defaultValuePrevious");
@@ -386,6 +421,12 @@ public class SWBALogs extends GenericResource {
         if (base.getAttribute("user") != null) {
             userRow = base.getAttribute("user");
         }
+        if (base.getAttribute("obj") != null) {
+            objRow = base.getAttribute("obj");
+        }
+        if (base.getAttribute("class") != null) {
+            classRow = base.getAttribute("class");
+        }
         if (base.getAttribute("rows") != null) {
             rowsHistory = base.getAttribute("rows");
         }
@@ -399,6 +440,8 @@ public class SWBALogs extends GenericResource {
         boolean rowAction = false;
         boolean rowDescription = false;
         boolean rowUser = false;
+        boolean rowObj = false;
+        boolean rowClass = false;
         boolean rowDate = false;
         int maximo = 5;
         if (pagesHistory != null) {
@@ -438,6 +481,21 @@ public class SWBALogs extends GenericResource {
                 rowUser = true;
             }
         }
+        if (classRow != null) {
+            if (classRow.equals("1")) {
+                out.println("<th>" + paramRequest.getLocaleString("thClass") + "</th>");
+                rowNumber++;
+                rowClass = true;
+            }
+        }
+        if (objRow != null) {
+            if (objRow.equals("1")) {
+                out.println("<th>" + paramRequest.getLocaleString("thElementID") + "</th>");
+                rowNumber++;
+                rowObj = true;
+            }
+        }
+
         if (dateRow != null) {
             if (dateRow.equals("1")) {
                 out.println("<th>" + paramRequest.getLocaleString("thDate") + "</th>");
@@ -451,7 +509,14 @@ public class SWBALogs extends GenericResource {
         try {
             SWBRecAdmLog obj = null;
 
-            Iterator<SWBRecAdmLog> iter = SWBPortal.getDBAdmLog().getBitaObjURI(pModelId, pURI);
+            Iterator<SWBRecAdmLog> iter = null;
+            if (so != null && so.createGenericInstance() instanceof User) {
+                //System.out.println("Log de usuario..."+pURI+", rep usr: "+pModelId);
+                iter = SWBPortal.getDBAdmLog().getUserLog(pURI);
+            } else {
+                iter = SWBPortal.getDBAdmLog().getBitaObjURI(pModelId, pURI);
+            }
+
             if (isModel && showAllLog) {
                 iter = SWBPortal.getDBAdmLog().getBitaObjURI(pModelId, null);
             }
@@ -460,6 +525,9 @@ public class SWBALogs extends GenericResource {
                 obj = iter.next();
                 numReg++;
             }
+
+            //System.out.println("Registros en el iterador ... "+numReg);
+
             int cuenta = 0;
             if (request.getParameter("actualPage") != null) {
                 actualPage = Integer.parseInt(request.getParameter("actualPage"));
@@ -471,7 +539,13 @@ public class SWBALogs extends GenericResource {
             }
             String rowColor = "";
             boolean cambiaColor = true;
-            iter = SWBPortal.getDBAdmLog().getBitaObjURI(pModelId, pURI);
+            if (so != null && so.createGenericInstance() instanceof User) {
+                //System.out.println("Log de usuario..."+pURI+", rep usr: "+pModelId);
+                iter = SWBPortal.getDBAdmLog().getUserLog(pURI);
+            } else {
+                iter = SWBPortal.getDBAdmLog().getBitaObjURI(pModelId, pURI);
+            }
+
             if (isModel && showAllLog) {
                 iter = SWBPortal.getDBAdmLog().getBitaObjURI(pModelId, null);
             }
@@ -500,14 +574,33 @@ public class SWBALogs extends GenericResource {
                             User rUser = (User) ont.getGenericObject(userId);
                             String usrname = userId;
 
-                            if(null!=rUser)
-                            {
-                                usrname = (rUser.getFirstName()!= null ? rUser.getFirstName(): " ") + " " +(rUser.getLastName() != null ? rUser.getLastName() : " ");
+                            if (null != rUser) {
+                                usrname = (rUser.getFirstName() != null ? rUser.getFirstName() : " ") + " " + (rUser.getLastName() != null ? rUser.getLastName() : " ");
                             }
 
                             out.println("  <td>" + usrname + "</td>");
                         } else {
                             out.println("  <td>" + userId + "</td>");
+                        }
+                    }
+                    if (rowClass) {
+                        String classId = obj.getDbobject();
+                        if (null != classId) {
+                            log.debug("ClassID: " + classId + " - " + so.getModel().getModelObject().getURI());
+                            classId = classId.substring(classId.indexOf("#") + 1, classId.lastIndexOf(":"));
+                            out.println("  <td>" + classId + "</td>");
+                        } else {
+                            out.println("  <td>" + "---" + "</td>");
+                        }
+                    }
+                    if (rowObj) {
+                        String objId = obj.getDbobject();
+                        if (objId.length() > 1) {
+                            log.debug("ObjID: " + objId + " - " + so.getModel().getModelObject().getURI());
+                            objId = objId.substring(objId.lastIndexOf(":") + 1);
+                            out.println("  <td>" + objId + "</td>");
+                        } else {
+                            out.println("  <td>" + "---" + "</td>");
                         }
                     }
                     if (rowDate) {
@@ -624,8 +717,8 @@ public class SWBALogs extends GenericResource {
             url2.setParameter("suri", pURI);
         }
 
-        out.println("<button dojoType=\"dijit.form.Button\" type=\"button\"  onclick=\"window.open('" + url1 + "');\">"+paramRequest.getLocaleString("msg_export")+" XML</button>"); //submitUrl('#',this.domNode);  //_onclick=\"showDialog('"+url1+"'); return false;\"
-        out.println("<button dojoType=\"dijit.form.Button\" type=\"button\"  onclick=\"window.open('" + url2 + "'); return false;\">"+paramRequest.getLocaleString("msg_export")+" Excel</button>"); //submitUrl('#',this.domNode);
+        out.println("<button dojoType=\"dijit.form.Button\" type=\"button\"  onclick=\"window.open('" + url1 + "');\">" + paramRequest.getLocaleString("msg_export") + " XML</button>"); //submitUrl('#',this.domNode);  //_onclick=\"showDialog('"+url1+"'); return false;\"
+        out.println("<button dojoType=\"dijit.form.Button\" type=\"button\"  onclick=\"window.open('" + url2 + "'); return false;\">" + paramRequest.getLocaleString("msg_export") + " Excel</button>"); //submitUrl('#',this.domNode);
 
         SWBResourceURL url = paramRequest.getRenderUrl();
         if (null != pURI) {
@@ -634,17 +727,17 @@ public class SWBALogs extends GenericResource {
         if (showAllLog) {
             url.setParameter("all", "showAllLog");
         }
-        out.println("<button dojoType=\"dijit.form.Button\" type=\"button\"  onclick=\"submitUrl('" + url + "',this.domNode); return false;\">"+paramRequest.getLocaleString("msg_reload")+"</button>");
+        out.println("<button dojoType=\"dijit.form.Button\" type=\"button\"  onclick=\"submitUrl('" + url + "',this.domNode); return false;\">" + paramRequest.getLocaleString("msg_reload") + "</button>");
         if (isModel && !showAllLog) {
             SWBResourceURL urlsall = paramRequest.getRenderUrl();
             urlsall.setParameter("suri", pURI);
             urlsall.setParameter("all", "showAllLog");
-            out.println("<button dojoType=\"dijit.form.Button\" type=\"button\"  onclick=\"submitUrl('" + urlsall + "',this.domNode); return false;\">"+paramRequest.getLocaleString("msg_allLog")+"</button>");
+            out.println("<button dojoType=\"dijit.form.Button\" type=\"button\"  onclick=\"submitUrl('" + urlsall + "',this.domNode); return false;\">" + paramRequest.getLocaleString("msg_allLog") + "</button>");
         } else if (isModel && showAllLog) {
             SWBResourceURL urlsalln = paramRequest.getRenderUrl();
             urlsalln.setParameter("suri", pURI);
             urlsalln.setParameter("all", "no");
-            out.println("<button dojoType=\"dijit.form.Button\" type=\"button\"  onclick=\"submitUrl('" + urlsalln + "',this.domNode); return false;\">"+paramRequest.getLocaleString("msg_modelLog")+"</button>");
+            out.println("<button dojoType=\"dijit.form.Button\" type=\"button\"  onclick=\"submitUrl('" + urlsalln + "',this.domNode); return false;\">" + paramRequest.getLocaleString("msg_modelLog") + "</button>");
         }
         out.println("</form>");
         out.println("</fieldset>");
@@ -667,7 +760,7 @@ public class SWBALogs extends GenericResource {
         //response.setHeader("Content-Disposition", "inline; filename=\"Excel Report\";");
         response.setHeader("Content-Disposition", "attachment; filename=\"Excel Report.xls\";");
 
-        log.debug("doView()");
+        log.debug("doExcel()");
         Resource base = getResourceBase(); //paramRequest
         PrintWriter out = response.getWriter();
         int rowNumber = 0;
@@ -688,12 +781,25 @@ public class SWBALogs extends GenericResource {
         String dateRow = "1";
         String userRow = "1";
         String pTipo = "";
+        boolean rowObj = false;
+        boolean rowClass = false;
+        String objRow = "1";
+        String classRow = "1";
+
         if (base.getAttribute("action") != null) {
             actionRow = base.getAttribute("action");
         }
-        if(base.getAttribute("description")!=null) descriptionRow = base.getAttribute("description");
+        if (base.getAttribute("description") != null) {
+            descriptionRow = base.getAttribute("description");
+        }
         if (base.getAttribute("date") != null) {
             dateRow = base.getAttribute("date");
+        }
+        if (base.getAttribute("obj") != null) {
+            objRow = base.getAttribute("obj");
+        }
+        if (base.getAttribute("class") != null) {
+            classRow = base.getAttribute("class");
         }
         if (base.getAttribute("user") != null) {
             userRow = base.getAttribute("user");
@@ -705,7 +811,7 @@ public class SWBALogs extends GenericResource {
         //if(pTopic==null && pTipo.equals("Topic")) pTopic = paramRequest.getWebPage().getId();
 
         boolean rowAction = false;
-        boolean rowDescription=false;
+        boolean rowDescription = false;
         boolean rowUser = false;
         boolean rowDate = false;
         String ctype = "application/vnd.ms-excel";
@@ -719,18 +825,32 @@ public class SWBALogs extends GenericResource {
                 rowAction = true;
             }
         }
-        if(descriptionRow!=null)
-            if(descriptionRow.equals("1"))
-            {
-                out.println("<th>"+paramRequest.getLocaleString("thDescription")+"</th>");
+        if (descriptionRow != null) {
+            if (descriptionRow.equals("1")) {
+                out.println("<th>" + paramRequest.getLocaleString("thDescription") + "</th>");
                 rowNumber++;
-                rowDescription=true;
+                rowDescription = true;
             }
+        }
         if (userRow != null) {
             if (userRow.equals("1")) {
                 out.println("<th>" + paramRequest.getLocaleString("thPerformedBy") + "</th>");
                 rowNumber++;
                 rowUser = true;
+            }
+        }
+        if (classRow != null) {
+            if (classRow.equals("1")) {
+                out.println("<th>" + paramRequest.getLocaleString("thClass") + "</th>");
+                rowNumber++;
+                rowClass = true;
+            }
+        }
+        if (objRow != null) {
+            if (objRow.equals("1")) {
+                out.println("<th>" + paramRequest.getLocaleString("thElementID") + "</th>");
+                rowNumber++;
+                rowObj = true;
             }
         }
         if (dateRow != null) {
@@ -745,7 +865,14 @@ public class SWBALogs extends GenericResource {
         int numReg = 0;
         try {
             SWBRecAdmLog obj = null;
-            Iterator<SWBRecAdmLog> iter = SWBPortal.getDBAdmLog().getBitaObjURI(pModelId, pURI);
+            Iterator<SWBRecAdmLog> iter = null;
+            if (so != null && so.createGenericInstance() instanceof User) {
+                //System.out.println("Log de usuario..."+pURI+", rep usr: "+pModelId);
+                iter = SWBPortal.getDBAdmLog().getUserLog(pURI);
+            } else {
+                iter = SWBPortal.getDBAdmLog().getBitaObjURI(pModelId, pURI);
+            }
+
             if (isModel && showAllLog) {
                 iter = SWBPortal.getDBAdmLog().getBitaObjURI(pModelId, null);
             }
@@ -755,7 +882,13 @@ public class SWBALogs extends GenericResource {
                 numReg++;
             }
 
-            iter = SWBPortal.getDBAdmLog().getBitaObjURI(pModelId, pURI);
+            if (so != null && so.createGenericInstance() instanceof User) {
+                //System.out.println("Log de usuario..."+pURI+", rep usr: "+pModelId);
+                iter = SWBPortal.getDBAdmLog().getUserLog(pURI);
+            } else {
+                iter = SWBPortal.getDBAdmLog().getBitaObjURI(pModelId, pURI);
+            }
+
             if (isModel && showAllLog) {
                 iter = SWBPortal.getDBAdmLog().getBitaObjURI(pModelId, null);
             }
@@ -765,7 +898,9 @@ public class SWBALogs extends GenericResource {
                 if (rowAction) {
                     out.println("  <td>" + obj.getAction() + "</td>");
                 }
-                if(rowDescription) out.println("  <td>"+ont.getSemanticProperty(obj.getPropId()).getDisplayName(user.getLanguage())+"</td>");
+                if (rowDescription) {
+                    out.println("  <td>" + ont.getSemanticProperty(obj.getPropId()).getDisplayName(user.getLanguage()) + "</td>");
+                }
                 if (rowUser) {
                     String userId = obj.getUser();
                     if (userId.length() > 1) {
@@ -777,8 +912,25 @@ public class SWBALogs extends GenericResource {
                         out.println("  <td>" + userId + "</td>");
                     }
                 }
-                if (rowDate) {
-                    out.println("  <td>" + SWBUtils.TEXT.iso8601DateFormat(obj.getDate()) + "</td>");
+                if (rowClass) {
+                    String classId = obj.getDbobject();
+                    if (null != classId) {
+                        log.debug("ClassID: " + classId + " - " + so.getModel().getModelObject().getURI());
+                        classId = classId.substring(classId.indexOf("#") + 1, classId.lastIndexOf(":"));
+                        out.println("  <td>" + classId + "</td>");
+                    } else {
+                        out.println("  <td>" + "---" + "</td>");
+                    }
+                }
+                if (rowObj) {
+                    String objId = obj.getDbobject();
+                    if (objId.length() > 1) {
+                        log.debug("ObjID: " + objId + " - " + so.getModel().getModelObject().getURI());
+                        objId = objId.substring(objId.lastIndexOf(":") + 1);
+                        out.println("  <td>" + objId + "</td>");
+                    } else {
+                        out.println("  <td>" + "---" + "</td>");
+                    }
                 }
                 if (rowDate) {
                     out.println("  <td>" + SWBUtils.TEXT.iso8601DateFormat(obj.getDate()) + "</td>");
@@ -827,10 +979,22 @@ public class SWBALogs extends GenericResource {
         String dateRow = "1";
         String userRow = "1";
         String pTipo = "";
+        boolean rowObj = false;
+        boolean rowClass = false;
+        String objRow = "1";
+        String classRow = "1";
         if (base.getAttribute("action") != null) {
             actionRow = base.getAttribute("action");
         }
-        if(base.getAttribute("description")!=null) descriptionRow = base.getAttribute("description");
+        if (base.getAttribute("description") != null) {
+            descriptionRow = base.getAttribute("description");
+        }
+        if (base.getAttribute("obj") != null) {
+            objRow = base.getAttribute("obj");
+        }
+        if (base.getAttribute("class") != null) {
+            classRow = base.getAttribute("class");
+        }
         if (base.getAttribute("date") != null) {
             dateRow = base.getAttribute("date");
         }
@@ -842,7 +1006,7 @@ public class SWBALogs extends GenericResource {
         }
 
         boolean rowAction = false;
-        boolean rowDescription=false;
+        boolean rowDescription = false;
         boolean rowUser = false;
         boolean rowDate = false;
         String ctype = "application/xml";
@@ -853,16 +1017,28 @@ public class SWBALogs extends GenericResource {
                 rowAction = true;
             }
         }
-        if(descriptionRow!=null)
-            if(descriptionRow.equals("1"))
-            {
+        if (descriptionRow != null) {
+            if (descriptionRow.equals("1")) {
                 rowNumber++;
-                rowDescription=true;
+                rowDescription = true;
             }
+        }
         if (userRow != null) {
             if (userRow.equals("1")) {
                 rowNumber++;
                 rowUser = true;
+            }
+        }
+        if (classRow != null) {
+            if (classRow.equals("1")) {
+                rowNumber++;
+                rowClass = true;
+            }
+        }
+        if (objRow != null) {
+            if (objRow.equals("1")) {
+                rowNumber++;
+                rowObj = true;
             }
         }
         if (dateRow != null) {
@@ -875,7 +1051,14 @@ public class SWBALogs extends GenericResource {
         int numReg = 0;
         try {
             SWBRecAdmLog obj = null;
-            Iterator<SWBRecAdmLog> iter = SWBPortal.getDBAdmLog().getBitaObjURI(pModelId, pURI);
+            Iterator<SWBRecAdmLog> iter = null;
+            if (so != null && so.createGenericInstance() instanceof User) {
+                //System.out.println("Log de usuario..."+pURI+", rep usr: "+pModelId);
+                iter = SWBPortal.getDBAdmLog().getUserLog(pURI);
+            } else {
+                iter = SWBPortal.getDBAdmLog().getBitaObjURI(pModelId, pURI);
+            }
+
             if (isModel && showAllLog) {
                 iter = SWBPortal.getDBAdmLog().getBitaObjURI(pModelId, null);
             }
@@ -891,7 +1074,14 @@ public class SWBALogs extends GenericResource {
             Timestamp ts = new Timestamp((new Date()).getTime());
             reporte.setAttribute("Fecha", SWBUtils.TEXT.iso8601DateFormat(ts));
             dom.appendChild(reporte);
-            iter = SWBPortal.getDBAdmLog().getBitaObjURI(pModelId, pURI);
+
+            if (so != null && so.createGenericInstance() instanceof User) {
+                //System.out.println("Log de usuario..."+pURI+", rep usr: "+pModelId);
+                iter = SWBPortal.getDBAdmLog().getUserLog(pURI);
+            } else {
+                iter = SWBPortal.getDBAdmLog().getBitaObjURI(pModelId, pURI);
+            }
+
             if (isModel && showAllLog) {
                 iter = SWBPortal.getDBAdmLog().getBitaObjURI(pModelId, null);
             }
@@ -904,8 +1094,7 @@ public class SWBALogs extends GenericResource {
                     elecol1.appendChild(dom.createTextNode(obj.getAction()));
                     eleRec.appendChild(elecol1);
                 }
-                if(rowDescription)
-                {
+                if (rowDescription) {
                     Element elecol2 = dom.createElement("column");
                     elecol2.setAttribute("name", paramRequest.getLocaleString("thDescription"));
                     elecol2.appendChild(dom.createTextNode(ont.getSemanticProperty(obj.getPropId()).getDisplayName(user.getLanguage())));
@@ -926,11 +1115,35 @@ public class SWBALogs extends GenericResource {
                     elecol3.appendChild(dom.createTextNode(strUsr));
                     eleRec.appendChild(elecol3);
                 }
-                if (rowDate) {
+                if (rowClass) {
+                    String classId = obj.getDbobject();
                     Element elecol4 = dom.createElement("column");
-                    elecol4.setAttribute("name", paramRequest.getLocaleString("thDate"));
-                    elecol4.appendChild(dom.createTextNode(SWBUtils.TEXT.iso8601DateFormat(obj.getDate())));
+                    elecol4.setAttribute("name", paramRequest.getLocaleString("thClass")); //thElementID
+                    if (null != classId) {
+                        classId = classId.substring(classId.indexOf("#") + 1, classId.lastIndexOf(":"));
+                    } else {
+                        classId = "---";
+                    }
+                    elecol4.appendChild(dom.createTextNode(classId));
                     eleRec.appendChild(elecol4);
+                }
+                if (rowObj) {
+                    String objId = obj.getDbobject();
+                    Element elecol5 = dom.createElement("column");
+                    elecol5.setAttribute("name", paramRequest.getLocaleString("thElementID")); 
+                    if (null != objId) {
+                         objId = objId.substring(objId.lastIndexOf(":") + 1);
+                    } else {
+                        objId = "---";
+                    }
+                    elecol5.appendChild(dom.createTextNode(objId));
+                    eleRec.appendChild(elecol5);
+                }
+                if (rowDate) {
+                    Element elecol6 = dom.createElement("column");
+                    elecol6.setAttribute("name", paramRequest.getLocaleString("thDate"));
+                    elecol6.appendChild(dom.createTextNode(SWBUtils.TEXT.iso8601DateFormat(obj.getDate())));
+                    eleRec.appendChild(elecol6);
                 }
                 reporte.appendChild(eleRec);
             }
@@ -954,7 +1167,7 @@ public class SWBALogs extends GenericResource {
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
         Resource base = getResourceBase();
         String accion = response.getAction();
-        
+
 
 //        System.out.println("processAction:"+accion);
         String actionRow = request.getParameter("action");
@@ -962,6 +1175,8 @@ public class SWBALogs extends GenericResource {
         String userRow = request.getParameter("user");
         String descriptionRow = request.getParameter("description");
         String rowsHistory = request.getParameter("rows");
+        String objRow = request.getParameter("obj");
+        String classRow = request.getParameter("class");
         String pagesHistory = request.getParameter("pages");
         String showPages = request.getParameter("showPages");
         //String tipo = request.getParameter("tipo");
@@ -978,7 +1193,9 @@ public class SWBALogs extends GenericResource {
                     actionRow = "0";
                 }
                 base.setAttribute("action", actionRow);
-                if(descriptionRow==null) descriptionRow="0";
+                if (descriptionRow == null) {
+                    descriptionRow = "0";
+                }
                 base.setAttribute("description", descriptionRow);
                 if (dateRow == null) {
                     dateRow = "0";
@@ -988,6 +1205,14 @@ public class SWBALogs extends GenericResource {
                     userRow = "0";
                 }
                 base.setAttribute("user", userRow);
+                if (objRow == null) {
+                    objRow = "0";
+                }
+                base.setAttribute("obj", objRow);
+                if (classRow == null) {
+                    classRow = "0";
+                }
+                base.setAttribute("class", classRow);
                 if (rowsHistory == null | rowsHistory.length() == 0) {
                     rowsHistory = "20";
                 }
