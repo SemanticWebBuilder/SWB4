@@ -236,10 +236,10 @@ public class RecoverPassword extends GenericAdmResource {
                     ArrayList<InternetAddress> address = new ArrayList<InternetAddress>();
                     InternetAddress addressTo = new InternetAddress();
                     addressTo.setAddress(user.getEmail());
-System.out.println("\n\nuser="+user);
-System.out.println("login="+user.getLogin());
-System.out.println("email="+user.getEmail());
-System.out.println("admin="+admin);
+//System.out.println("\n\nuser="+user);
+//System.out.println("login="+user.getLogin());
+//System.out.println("email="+user.getEmail());
+//System.out.println("admin="+admin);
                     address.add(addressTo);
                     String pw = SWBPortal.UTIL.getRandString(8);
                     String subject = response.getLocaleString("msgSubject")+" "+portalname;
