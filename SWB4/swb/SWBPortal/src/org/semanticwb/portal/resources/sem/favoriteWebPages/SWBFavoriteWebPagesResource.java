@@ -159,7 +159,6 @@ public class SWBFavoriteWebPagesResource extends SWBFavoriteWebPagesResourceBase
         Resource base = getResourceBase();
         final String action = response.getAction();
         if(SWBResourceURL.Action_ADD.equals(action)) {
-            //response.setMode(Mode_REMOVE);
             response.setMode(SWBResourceURL.Mode_EDIT);
             final WebPage page = response.getWebPage();
             final WebSite model = base.getWebSite();
