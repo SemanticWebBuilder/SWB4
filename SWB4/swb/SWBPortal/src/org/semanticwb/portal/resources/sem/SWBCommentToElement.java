@@ -340,12 +340,18 @@ public class SWBCommentToElement extends org.semanticwb.portal.resources.sem.bas
             html.append(" <ol>");
             while(comments.hasNext()) {
                 CommentToElement comment = comments.next();
+                if(!comment.isValid() || !user.haveAccess(comment))
+                    continue;
                 html.append("  <li>");
-                if(user.isSigned())
+                if(comment.getName()==null && user.isSigned())
                     name = comment.getCreator().getFullName();
                 else
                     name = comment.getName();
-                html.append("<p><span>"+name+"</span> "+paramRequest.getLocaleString("ago")+" "+SWBUtils.TEXT.getTimeAgo(comment.getCreated(), lang)+"</p>");
+                try {
+                    html.append("&nbsp;"+paramRequest.getLocaleString("ago")+"&nbsp;"+SWBUtils.TEXT.getTimeAgo(comment.getCreated(), lang));
+                }catch(Exception e) {
+                }
+                html.append("</p>");
                 html.append("<p>"+comment.getCommentToElement()+"</p>");
                 html.append("  </li>");
             }
