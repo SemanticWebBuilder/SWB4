@@ -65,18 +65,18 @@ public class RecoverPassword extends GenericAdmResource {
             }
 
             if( base.getAttribute("link")!=null ) {
-                out.println("<a href=\""+surl+"\" class=\"swb-rtvpw-stgy\" title=\""+paramRequest.getLocaleString("lblRetrievePassword")+"\">"+base.getAttribute("link")+"</a>");
+                out.println("<a href=\""+surl+"\" class=\"swb-rcv-stgy\" title=\""+paramRequest.getLocaleString("lblRetrievePassword")+"\">"+base.getAttribute("link")+"</a>");
             }else if( base.getAttribute("label")!=null ) {
-                out.println("<form method=\"post\" action=\""+surl+"\" class=\"swb-rtvpw-stgy\" >");
+                out.println("<form method=\"post\" action=\""+surl+"\" class=\"swb-rcv-stgy\" >");
                 out.println("<input type=\"submit\" value=\""+base.getAttribute("label")+"\" />");
                 out.println("</form>");
             }else if( base.getAttribute("image")!=null ) {
-                out.println("<a href=\""+surl+"\" class=\"swb-rtvpw-stgy\" title=\""+paramRequest.getLocaleString("lblRetrievePassword")+"\">");
+                out.println("<a href=\""+surl+"\" class=\"swb-rcv-stgy\" title=\""+paramRequest.getLocaleString("lblRetrievePassword")+"\">");
                 out.println("<img src=\""+webWorkPath+base.getAttribute("image")+"\" alt=\""+base.getAttribute("alt",paramRequest.getLocaleString("lblRetrievePassword"))+"\" class=\"cntct-stg-img\" />");
                 out.println("</a>");
             }else {
-                out.println("<div class=\"swb-rtvpw\">");
-                out.println("<a href=\""+surl+"\" class=\"swb-rtvpw-stgy\" title=\""+paramRequest.getLocaleString("lblRetrievePassword")+"\">"+paramRequest.getLocaleString("lblRetrievePassword")+"</a>");
+                out.println("<div class=\"swb-rcv\">");
+                out.println("<a href=\""+surl+"\" class=\"swb-rcv-stgy\" title=\""+paramRequest.getLocaleString("lblRetrievePassword")+"\">"+paramRequest.getLocaleString("lblRetrievePassword")+"</a>");
                 out.println("</div>");
             }
         }else {
@@ -105,17 +105,17 @@ public class RecoverPassword extends GenericAdmResource {
             out.println("-->");
             out.println("</script>");
 
-            out.println("<div class=\"swb-rtvpw\">");
+            out.println("<div class=\"swb-rcv\">");
             if(request.getParameter("msg")!=null)
-                out.println("<p class=\"swb-rtvpw-msg\">"+paramRequest.getLocaleString(request.getParameter("msg"))+"</p>");
-            out.println("  <form class=\"swb-rtvpw-frm\" id=\"rtvps\" method=\"post\" action=\""+paramRequest.getActionUrl()+"\">");
-            out.println("    <div class=\"swb-rtvpw-d\">");
+                out.println("<p class=\"swb-rcv-msg\">"+paramRequest.getLocaleString(request.getParameter("msg"))+"</p>");
+            out.println("  <form class=\"swb-rcv-frm\" id=\"rtvps\" method=\"post\" action=\""+paramRequest.getActionUrl()+"\">");
+            out.println("    <div class=\"swb-rcv-d\">");
             out.println("      <label for=\"usrnm\">"+paramRequest.getLocaleString("lblUser")+"</label>");
-            out.println("      <input type=\"text\" class=\"swb-rtvpw-in\" name=\"usrnm\" id=\"usrnm\" value=\""+(request.getParameter("username")==null?"":request.getParameter("username"))+"\"/>");
+            out.println("      <input type=\"text\" class=\"swb-rcv-in\" name=\"usrnm\" id=\"usrnm\" value=\""+(request.getParameter("username")==null?"":request.getParameter("username"))+"\"/>");
             if(request.getParameter("wrnusrnm")!=null)
                 out.println(paramRequest.getLocaleString(request.getParameter("wrnusrnm")));
             out.println("    </div>");
-            out.println("    <div class=\"swb-rtvpw-d\">");
+            out.println("    <div class=\"swb-rcv-d\">");
             out.println("      <div class=\"swb-rtbpw-rctxt\">");
             out.println(paramRequest.getLocaleString("msgCanNotReadIt"));
             out.println("        &nbsp;<a onclick=\"changeSecureCodeImage('"+IMG_ID+"')\" id=\"recaptcha_reload_btn\" href=\"#\">"+paramRequest.getLocaleString("lblTryAnotherText")+"</a>");
@@ -125,13 +125,13 @@ public class RecoverPassword extends GenericAdmResource {
             out.println("      </div>");
             out.println("      <div class=\"swb-rtbpw-ccd\">");
             out.println("        <label for=\"recaptcha_response_field\">"+paramRequest.getLocaleString("lblWriteTextFromImage")+"</label>");
-            out.println("        <input type=\"text\" class=\"swb-rtvpw-in\" name=\""+CODE_FIELDNAME+"\" id=\"recaptcha_response_field\" value=\"\"/>");
+            out.println("        <input type=\"text\" class=\"swb-rcv-in\" name=\""+CODE_FIELDNAME+"\" id=\"recaptcha_response_field\" value=\"\"/>");
             if(request.getParameter("wrnsc")!=null)
                 out.println(paramRequest.getLocaleString(request.getParameter("wrnsc")));
             out.println("      </div>");
             out.println("    </div>");
-            out.println("    <div class=\"swb-rtvpw-d\">");
-            out.println("      <input type=\"submit\" class=\"swb-rtvpw-in\" value=\""+paramRequest.getLocaleString("lblRetrievePassword")+"\" onclick=\"return(validate(this.form))\"/>");
+            out.println("    <div class=\"swb-rcv-d\">");
+            out.println("      <input type=\"submit\" class=\"swb-rcv-in\" value=\""+paramRequest.getLocaleString("lblRetrievePassword")+"\" onclick=\"return(validate(this.form))\"/>");
             out.println("    </div>");
             out.println("  </form>");
             out.println("</div>");
@@ -173,17 +173,17 @@ public class RecoverPassword extends GenericAdmResource {
         out.println("-->");
         out.println("</script>");
 
-        out.println("<div class=\"swb-rtvpw\">");
+        out.println("<div class=\"swb-rcv\">");
         if(request.getParameter("msg")!=null)
-                out.println("<p class=\"swb-rtvpw-msg\">"+paramRequest.getLocaleString(request.getParameter("msg"))+"</p>");
-        out.println("  <form class=\"swb-rtvpw-frm\" id=\"rtvps\" method=\"post\" action=\""+paramRequest.getActionUrl()+"\">");
-        out.println("    <div class=\"swb-rtvpw-d\">");
+                out.println("<p class=\"swb-rcv-msg\">"+paramRequest.getLocaleString(request.getParameter("msg"))+"</p>");
+        out.println("  <form class=\"swb-rcv-frm\" id=\"rtvps\" method=\"post\" action=\""+paramRequest.getActionUrl()+"\">");
+        out.println("    <div class=\"swb-rcv-d\">");
         out.println("      <label for=\"email\">"+paramRequest.getLocaleString("lblEmail")+"</label>");
-        out.println("      <input type=\"text\" class=\"swb-rtvpw-in\" name=\"email\" id=\"email\" value=\""+(request.getParameter("email")==null?"":request.getParameter("email"))+"\"/>");
+        out.println("      <input type=\"text\" class=\"swb-rcv-in\" name=\"email\" id=\"email\" value=\""+(request.getParameter("email")==null?"":request.getParameter("email"))+"\"/>");
         if(request.getParameter("wrnemail")!=null)
             out.println(paramRequest.getLocaleString(request.getParameter("wrnemail")));
         out.println("    </div>");
-        out.println("    <div class=\"swb-rtvpw-d\">");
+        out.println("    <div class=\"swb-rcv-d\">");
         out.println("      <div class=\"swb-rtbpw-rctxt\">");
         out.println(paramRequest.getLocaleString("msgCanNotReadIt"));
         out.println("        &nbsp;<a onclick=\"changeSecureCodeImage('"+IMG_ID+"')\" id=\"recaptcha_reload_btn\" href=\"#\">"+paramRequest.getLocaleString("lblTryAnotherText")+"</a>");
@@ -193,13 +193,13 @@ public class RecoverPassword extends GenericAdmResource {
         out.println("      </div>");
         out.println("      <div class=\"swb-rtbpw-ccd\">");
         out.println("        <label for=\"recaptcha_response_field\">"+paramRequest.getLocaleString("lblWriteTextFromImage")+"</label>");
-        out.println("        <input type=\"text\" class=\"swb-rtvpw-in\" name=\""+CODE_FIELDNAME+"\" id=\"recaptcha_response_field\" value=\"\"/>");
+        out.println("        <input type=\"text\" class=\"swb-rcv-in\" name=\""+CODE_FIELDNAME+"\" id=\"recaptcha_response_field\" value=\"\"/>");
         if(request.getParameter("wrnsc")!=null)
             out.println(paramRequest.getLocaleString(request.getParameter("wrnsc")));
         out.println("      </div>");
         out.println("    </div>");
-        out.println("    <div class=\"swb-rtvpw-d\">");
-        out.println("      <input type=\"submit\" class=\"swb-rtvpw-in\" value=\""+paramRequest.getLocaleString("lblRetrieveUsername")+"\" onclick=\"return(validate(this.form))\"/>");
+        out.println("    <div class=\"swb-rcv-d\">");
+        out.println("      <input type=\"submit\" class=\"swb-rcv-in\" value=\""+paramRequest.getLocaleString("lblRetrieveUsername")+"\" onclick=\"return(validate(this.form))\"/>");
         out.println("    </div>");
         out.println("  </form>");
         out.println("</div>");
@@ -236,6 +236,10 @@ public class RecoverPassword extends GenericAdmResource {
                     ArrayList<InternetAddress> address = new ArrayList<InternetAddress>();
                     InternetAddress addressTo = new InternetAddress();
                     addressTo.setAddress(user.getEmail());
+System.out.println("\n\nuser="+user);
+System.out.println("login="+user.getLogin());
+System.out.println("email="+user.getEmail());
+System.out.println("admin="+admin);
                     address.add(addressTo);
                     String pw = SWBPortal.UTIL.getRandString(8);
                     String subject = response.getLocaleString("msgSubject")+" "+portalname;
