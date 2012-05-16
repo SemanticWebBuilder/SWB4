@@ -1315,6 +1315,9 @@ public class SWBAEditor extends GenericResource
         out.println("<param name=\"ver\" value=\"" + version + "\">");
         out.println("<param name=\"locale\" value=\"" + user.getLanguage() + "\">");
         out.println("<param name=\"type\" value=\"Template\">");
+
+        out.println("<param name =\"ContextPath\" value=\"" + SWBPortal.getContextPath() + "\">");
+        out.println("<param name =\"ApplicationPath\" value=\"" + SWBUtils.getApplicationPath()+ "\">");
         out.println("</applet>");
     }
     /**
