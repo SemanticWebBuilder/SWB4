@@ -19,6 +19,7 @@ import java.awt.dnd.DropTargetEvent;
 import java.awt.dnd.DropTargetListener;
 import java.net.URL;
 import java.util.Locale;
+import javax.swing.JApplet;
 
 /**
  *
@@ -28,11 +29,11 @@ public class ftpDialog extends javax.swing.JDialog implements DropTargetListener
 {
 
     /** Creates new form ftp */
-    public ftpDialog(Locale locale, String jsess, URL uploadpath, URL downloadpath, String pathInit, URL urlgateway)
+    public ftpDialog(Locale locale, String jsess, URL uploadpath, URL downloadpath, String pathInit, URL urlgateway,JApplet applet,String WebWorkPath, String ApplicationPath)
     {
         super((Frame) null, true);
         initComponents();
-        ftpPanel panel = new ftpPanel(jsess, locale, uploadpath, downloadpath, urlgateway, pathInit, this);
+        ftpPanel panel = new ftpPanel(jsess, locale, uploadpath, downloadpath, urlgateway, pathInit, this,applet,WebWorkPath, ApplicationPath);
         getContentPane().add(panel, java.awt.BorderLayout.CENTER);
         java.awt.dnd.DropTarget dt = new DropTarget(panel, this);        
         pack();
