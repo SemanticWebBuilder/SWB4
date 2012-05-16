@@ -29,11 +29,11 @@ public class ftpDialog extends javax.swing.JDialog implements DropTargetListener
 {
 
     /** Creates new form ftp */
-    public ftpDialog(Locale locale, String jsess, URL uploadpath, URL downloadpath, String pathInit, URL urlgateway,JApplet applet,String WebWorkPath, String ApplicationPath)
+    public ftpDialog(Locale locale, String jsess, URL uploadpath, URL downloadpath, String pathInit, URL urlgateway,JApplet applet,String ContextPath, String ApplicationPath)
     {
         super((Frame) null, true);
         initComponents();
-        ftpPanel panel = new ftpPanel(jsess, locale, uploadpath, downloadpath, urlgateway, pathInit, this,applet,WebWorkPath, ApplicationPath);
+        ftpPanel panel = new ftpPanel(jsess, locale, uploadpath, downloadpath, urlgateway, pathInit, this,applet,ContextPath, ApplicationPath);
         getContentPane().add(panel, java.awt.BorderLayout.CENTER);
         java.awt.dnd.DropTarget dt = new DropTarget(panel, this);        
         pack();
