@@ -10,6 +10,7 @@
  */
 package applets.ftp;
 
+import java.awt.Image;
 import java.awt.dnd.DropTarget;
 import java.awt.dnd.DropTargetDragEvent;
 import java.awt.dnd.DropTargetDropEvent;
@@ -56,6 +57,8 @@ public class ftp extends javax.swing.JApplet implements DropTargetListener
         String cgiPath = this.getParameter(PRM_CGIPATH);
         String uploadpath = this.getParameter(PRM_UPLOADPATH);
         String downloadpath = this.getParameter(PRM_DOWNLOADPATH);
+        String ContextPath = this.getParameter("ContextPath");
+        String ApplicationPath = this.getParameter("ApplicationPath");
         URL url = null;
         try
         {
@@ -70,7 +73,7 @@ public class ftp extends javax.swing.JApplet implements DropTargetListener
             URL urldownload = new URL(getCodeBase().getProtocol(), getCodeBase().getHost(), getCodeBase().getPort(), downloadpath);
             URL urlupload = new URL(getCodeBase().getProtocol(), getCodeBase().getHost(), getCodeBase().getPort(), uploadpath);
 
-            ftpPanel panel = new ftpPanel(jsess, locale, urlupload, urldownload, url, null, this);
+            ftpPanel panel = new ftpPanel(jsess, locale, urlupload, urldownload, url, null, this,this,ContextPath,ApplicationPath);
             getContentPane().add(panel, java.awt.BorderLayout.CENTER);
             java.awt.dnd.DropTarget dt = new DropTarget(panel, this);
         }
@@ -124,6 +127,8 @@ public class ftp extends javax.swing.JApplet implements DropTargetListener
     {
         throw new UnsupportedOperationException("Not supported yet.");
     }
+    
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     // End of variables declaration//GEN-END:variables
 }

@@ -68,8 +68,11 @@ public class ftpPanel extends javax.swing.JPanel implements ListSelectionListene
     private URL urldownload;
     private URL urlupload;
     private String pathInit;
+    private JApplet applet;
+    private String ContextPath;
+    private String ApplicationPath;
 
-    public ftpPanel(String jsess, Locale locale, URL urlupload, URL urldownload, URL url, String pathInit, Object container)
+    public ftpPanel(String jsess, Locale locale, URL urlupload, URL urldownload, URL url, String pathInit, Object container, JApplet applet, String ContextPath, String ApplicationPath)
     {
         super();
         this.jsess = jsess;
@@ -79,7 +82,9 @@ public class ftpPanel extends javax.swing.JPanel implements ListSelectionListene
         this.urldownload = urldownload;
         this.url = url;
         this.pathInit = pathInit;
-
+        this.applet = applet;
+        this.ContextPath = ContextPath;
+        this.ApplicationPath = ApplicationPath;
         initComponents();
 
         choices[0] = java.util.ResourceBundle.getBundle("applets/ftp/ftp", locale).getString("si");
@@ -392,6 +397,8 @@ public class ftpPanel extends javax.swing.JPanel implements ListSelectionListene
         jMenuItemBorrarDir = new javax.swing.JMenuItem();
         jMenuItemBorrarFile = new javax.swing.JMenuItem();
         jMenuTools = new javax.swing.JMenu();
+        jMenuPreview = new javax.swing.JMenuItem();
+        jSeparator8 = new javax.swing.JPopupMenu.Separator();
         jMenuItemDownload = new javax.swing.JMenuItem();
         jSeparator7 = new javax.swing.JPopupMenu.Separator();
         jMenuDownloadDir = new javax.swing.JMenuItem();
@@ -399,6 +406,8 @@ public class ftpPanel extends javax.swing.JPanel implements ListSelectionListene
         jMenuItemRenameFolder = new javax.swing.JMenuItem();
         jMenuItemRenameFile = new javax.swing.JMenuItem();
         jPopupMenuFile = new javax.swing.JPopupMenu();
+        jMenuItemPreview = new javax.swing.JMenuItem();
+        jSeparator9 = new javax.swing.JPopupMenu.Separator();
         jMenuFileAdd = new javax.swing.JMenu();
         jMenuItemFileAddFile = new javax.swing.JMenuItem();
         jMenuItemFileAddDir = new javax.swing.JMenuItem();
@@ -542,6 +551,17 @@ public class ftpPanel extends javax.swing.JPanel implements ListSelectionListene
         jMenuTools.setBackground(new java.awt.Color(213, 227, 248));
         jMenuTools.setText(bundle.getString("tools")); // NOI18N
 
+        java.util.ResourceBundle bundle1 = java.util.ResourceBundle.getBundle("applets/ftp/ftp"); // NOI18N
+        jMenuPreview.setText(bundle1.getString("preview")); // NOI18N
+        jMenuPreview.setEnabled(false);
+        jMenuPreview.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuPreviewActionPerformed(evt);
+            }
+        });
+        jMenuTools.add(jMenuPreview);
+        jMenuTools.add(jSeparator8);
+
         jMenuItemDownload.setText(bundle.getString("download")); // NOI18N
         jMenuItemDownload.setEnabled(false);
         jMenuItemDownload.addActionListener(new java.awt.event.ActionListener() {
@@ -552,7 +572,6 @@ public class ftpPanel extends javax.swing.JPanel implements ListSelectionListene
         jMenuTools.add(jMenuItemDownload);
         jMenuTools.add(jSeparator7);
 
-        java.util.ResourceBundle bundle1 = java.util.ResourceBundle.getBundle("applets/ftp/ftp"); // NOI18N
         jMenuDownloadDir.setText(bundle1.getString("downloaddir")); // NOI18N
         jMenuDownloadDir.setEnabled(false);
         jMenuDownloadDir.addActionListener(new java.awt.event.ActionListener() {
@@ -584,6 +603,16 @@ public class ftpPanel extends javax.swing.JPanel implements ListSelectionListene
         jMenuTools.add(jMenuRename);
 
         jMenuBar1.add(jMenuTools);
+
+        jMenuItemPreview.setText(bundle1.getString("preview")); // NOI18N
+        jMenuItemPreview.setEnabled(false);
+        jMenuItemPreview.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemPreviewActionPerformed(evt);
+            }
+        });
+        jPopupMenuFile.add(jMenuItemPreview);
+        jPopupMenuFile.add(jSeparator9);
 
         jMenuFileAdd.setText(bundle.getString("add")); // NOI18N
 
@@ -789,7 +818,6 @@ public class ftpPanel extends javax.swing.JPanel implements ListSelectionListene
     private void jScrollPane2MousePressed(java.awt.event.MouseEvent evt)
     {//GEN-FIRST:event_jScrollPane2MousePressed
         this.jMenuItemFileDownload.setEnabled(false);
-
         this.jMenuItemFileRename.setEnabled(false);
         this.jMenuItemFileDelete.setEnabled(false);
         if (evt.getButton() == MouseEvent.BUTTON3 && evt.getClickCount() == 1)
@@ -806,6 +834,7 @@ public class ftpPanel extends javax.swing.JPanel implements ListSelectionListene
                         this.jMenuItemFileDownload.setEnabled(true);
                         this.jMenuItemFileRename.setEnabled(true);
                         this.jMenuItemFileDelete.setEnabled(true);
+
 
                     }
                 }
@@ -958,12 +987,12 @@ public class ftpPanel extends javax.swing.JPanel implements ListSelectionListene
     {//GEN-FIRST:event_jTreeDirsKeyReleased
         try
         {
-        if (evt!=null && evt.getKeyCode() == KeyEvent.VK_DELETE)
-        {
-            this.deleteDir();
+            if (evt != null && evt.getKeyCode() == KeyEvent.VK_DELETE)
+            {
+                this.deleteDir();
+            }
         }
-        }
-        catch(Exception e)
+        catch (Exception e)
         {
             e.printStackTrace();
         }
@@ -971,7 +1000,7 @@ public class ftpPanel extends javax.swing.JPanel implements ListSelectionListene
 
     private void jTableFilesKeyReleased(java.awt.event.KeyEvent evt)
     {//GEN-FIRST:event_jTableFilesKeyReleased
-        if (evt!=null && evt.getKeyCode() == KeyEvent.VK_DELETE)
+        if (evt != null && evt.getKeyCode() == KeyEvent.VK_DELETE)
         {
             this.deleteFile();
         }
@@ -1032,30 +1061,30 @@ public class ftpPanel extends javax.swing.JPanel implements ListSelectionListene
     {//GEN-FIRST:event_jTreeDirsMousePressed
         try
         {
-        if (evt!=null && evt.getButton() == MouseEvent.BUTTON3 && evt.getClickCount() == 1 && this.jTreeDirs!=null && this.jTreeDirs.getSelectionPath() != null)
-        {
-            jMenuItemNewFolder.setEnabled(false);
-            jMenuDirAdd.setEnabled(false);
-
-
-            jMenuItemDirRename.setEnabled(false);
-            jMenuItemDirDelete.setEnabled(false);
-            Object obj = this.jTreeDirs.getSelectionPath().getLastPathComponent();
-            if (obj != null && obj instanceof Directory)
+            if (evt != null && evt.getButton() == MouseEvent.BUTTON3 && evt.getClickCount() == 1 && this.jTreeDirs != null && this.jTreeDirs.getSelectionPath() != null)
             {
-                Directory directory = (Directory) obj;
-                if (hasPermission(directory.getDirectory()))
+                jMenuItemNewFolder.setEnabled(false);
+                jMenuDirAdd.setEnabled(false);
+
+
+                jMenuItemDirRename.setEnabled(false);
+                jMenuItemDirDelete.setEnabled(false);
+                Object obj = this.jTreeDirs.getSelectionPath().getLastPathComponent();
+                if (obj != null && obj instanceof Directory)
                 {
-                    jMenuItemNewFolder.setEnabled(true);
-                    jMenuDirAdd.setEnabled(true);
-                    jMenuItemDirRename.setEnabled(true);
-                    jMenuItemDirDelete.setEnabled(true);
+                    Directory directory = (Directory) obj;
+                    if (hasPermission(directory.getDirectory()))
+                    {
+                        jMenuItemNewFolder.setEnabled(true);
+                        jMenuDirAdd.setEnabled(true);
+                        jMenuItemDirRename.setEnabled(true);
+                        jMenuItemDirDelete.setEnabled(true);
+                    }
                 }
+                this.jPopupMenuDir.show(this.jTreeDirs, evt.getX(), evt.getY());
             }
-            this.jPopupMenuDir.show(this.jTreeDirs, evt.getX(), evt.getY());
         }
-        }
-        catch(Exception e)
+        catch (Exception e)
         {
             e.printStackTrace();
         }
@@ -1072,6 +1101,10 @@ public class ftpPanel extends javax.swing.JPanel implements ListSelectionListene
         this.jMenuDownloadDir.setEnabled(false);
         this.jMenuItemFileRename.setEnabled(false);
         this.jMenuItemFileDelete.setEnabled(false);
+
+        this.jMenuItemPreview.setEnabled(false);
+        this.jMenuPreview.setEnabled(false);
+
         if (evt.getButton() == MouseEvent.BUTTON3 && evt.getClickCount() == 1)
         {
             if (this.jTableFiles.getSelectedRow() != -1)
@@ -1083,6 +1116,11 @@ public class ftpPanel extends javax.swing.JPanel implements ListSelectionListene
                     this.jMenuItemFileDownload.setEnabled(true);
                     this.jMenuItemFileRename.setEnabled(true);
                     this.jMenuItemFileDelete.setEnabled(true);
+                    if (JPreview.isImage(file.path) || JPreview.isText(file.path))
+                    {
+                        this.jMenuItemPreview.setEnabled(true);
+                        this.jMenuPreview.setEnabled(true);
+                    }
                 }
             }
             this.jPopupMenuFile.show(this.jTableFiles, evt.getX(), evt.getY());
@@ -1159,6 +1197,38 @@ public class ftpPanel extends javax.swing.JPanel implements ListSelectionListene
         jMenuItemDownloadDirActionPerformed(null);
     }//GEN-LAST:event_jMenuDownloadDirActionPerformed
 
+    private void jMenuItemPreviewActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jMenuItemPreviewActionPerformed
+    {//GEN-HEADEREND:event_jMenuItemPreviewActionPerformed
+
+        if (this.jTableFiles.getSelectedRowCount() > 0 && this.container instanceof JDialog)
+        {
+            jTableFileModel model = (jTableFileModel) this.jTableFiles.getModel();
+            File file = model.getFile(this.jTableFiles.getSelectedRow());
+            if (JPreview.isText(file.path) || JPreview.isImage(file.path))
+            {
+
+                JPreview preview = new JPreview((JDialog) this.container, locale, urldownload, jsess, file.path, applet, ContextPath, ApplicationPath);
+                preview.showPreview();
+            }
+        }
+        else if (this.jTableFiles.getSelectedRowCount() > 0 && !(this.container instanceof JDialog))
+        {
+            jTableFileModel model = (jTableFileModel) this.jTableFiles.getModel();
+            File file = model.getFile(this.jTableFiles.getSelectedRow());
+            if (JPreview.isText(file.path) || JPreview.isImage(file.path))
+            {
+                JPreview preview = new JPreview(locale, jsess, urldownload, file.path, applet, ContextPath, ApplicationPath);
+                preview.showPreview();
+            }
+        }
+
+    }//GEN-LAST:event_jMenuItemPreviewActionPerformed
+
+    private void jMenuPreviewActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jMenuPreviewActionPerformed
+    {//GEN-HEADEREND:event_jMenuPreviewActionPerformed
+        this.jMenuItemPreviewActionPerformed(evt);
+    }//GEN-LAST:event_jMenuPreviewActionPerformed
+
     public void downloadDir()
     {
         if (this.jTreeDirs.getSelectionPath() != null && this.jTreeDirs.getSelectionPath().getLastPathComponent() instanceof Directory)
@@ -1186,7 +1256,7 @@ public class ftpPanel extends javax.swing.JPanel implements ListSelectionListene
                     {
                         parent = (Dialog) container;
                     }
-                    DialogAddFile addFile = new DialogAddFile(parent, dirlocal, this, dir,urldownload);
+                    DialogAddFile addFile = new DialogAddFile(parent, dirlocal, this, dir, urldownload);
                     try
                     {
                         addFile.downloadDir();
@@ -1209,8 +1279,8 @@ public class ftpPanel extends javax.swing.JPanel implements ListSelectionListene
     }
 
     public boolean createFile(java.io.File filelocal, String path, boolean siAll, Component dialog) throws Exception
-    {        
-        
+    {
+
         if (exists(path))
         {
             if (!siAll)
@@ -1391,7 +1461,7 @@ public class ftpPanel extends javax.swing.JPanel implements ListSelectionListene
                 if (ret == JFileChooser.APPROVE_OPTION)
                 {
                     java.io.File dirlocal = this.jFileChooser1.getSelectedFile();
-                    DialogAddFile addFile = new DialogAddFile(null, dirlocal, this, dir,url);
+                    DialogAddFile addFile = new DialogAddFile(null, dirlocal, this, dir, url);
                     try
                     {
                         addFile.addDir();
@@ -1815,7 +1885,7 @@ public class ftpPanel extends javax.swing.JPanel implements ListSelectionListene
 
     private void deleteDir()
     {
-        if (this.jTreeDirs!=null && this.jTreeDirs.getSelectionPath() != null && this.jTreeDirs.getSelectionPath().getLastPathComponent() instanceof Directory)
+        if (this.jTreeDirs != null && this.jTreeDirs.getSelectionPath() != null && this.jTreeDirs.getSelectionPath().getLastPathComponent() instanceof Directory)
         {
             Directory dir = (Directory) this.jTreeDirs.getSelectionPath().getLastPathComponent();
             loadDirectories(dir);
@@ -2117,8 +2187,10 @@ public class ftpPanel extends javax.swing.JPanel implements ListSelectionListene
     private javax.swing.JMenuItem jMenuItemFileDownload;
     private javax.swing.JMenuItem jMenuItemFileRename;
     private javax.swing.JMenuItem jMenuItemNewFolder;
+    private javax.swing.JMenuItem jMenuItemPreview;
     private javax.swing.JMenuItem jMenuItemRenameFile;
     private javax.swing.JMenuItem jMenuItemRenameFolder;
+    private javax.swing.JMenuItem jMenuPreview;
     private javax.swing.JMenu jMenuRename;
     private javax.swing.JMenu jMenuTools;
     private javax.swing.JPanel jPanel1;
@@ -2140,6 +2212,8 @@ public class ftpPanel extends javax.swing.JPanel implements ListSelectionListene
     private javax.swing.JSeparator jSeparator5;
     private javax.swing.JPopupMenu.Separator jSeparator6;
     private javax.swing.JPopupMenu.Separator jSeparator7;
+    private javax.swing.JPopupMenu.Separator jSeparator8;
+    private javax.swing.JPopupMenu.Separator jSeparator9;
     private javax.swing.JTable jTableFiles;
     private javax.swing.JToolBar jToolBar1;
     private javax.swing.JTree jTreeDirs;
@@ -2191,7 +2265,7 @@ public class ftpPanel extends javax.swing.JPanel implements ListSelectionListene
                             if (file.isDirectory())
                             {
                                 //this.addDir(file, dir.getDirectory(), false, this);
-                                DialogAddFile dialog = new DialogAddFile(null, file, this, dir,urldownload);
+                                DialogAddFile dialog = new DialogAddFile(null, file, this, dir, urldownload);
                                 dialog.addDir();
                             }
                         }
