@@ -1,34 +1,30 @@
 /**
-* SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración,
-* colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de
-* información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes
-* fuentes, donde a la información se le asigna un significado, de forma que pueda ser interpretada y
-* procesada por personas y/o sistemas, es una creación original del Fondo de Información y Documentación
-* para la Industria INFOTEC, cuyo registro se encuentra actualmente en trámite.
-*
-* INFOTEC pone a su disposición la herramienta SemanticWebBuilder a través de su licenciamiento abierto al público (‘open source’),
-* en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición;
-* aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software,
-* todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización
-* del SemanticWebBuilder 4.0.
-*
-* INFOTEC no otorga garantía sobre SemanticWebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita,
-* siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar
-* de la misma.
-*
-* Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente
-* dirección electrónica:
-*  http://www.semanticwebbuilder.org
-**/ 
- 
-
-
+ * SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración,
+ * colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de
+ * información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes
+ * fuentes, donde a la información se le asigna un significado, de forma que pueda ser interpretada y
+ * procesada por personas y/o sistemas, es una creación original del Fondo de Información y Documentación
+ * para la Industria INFOTEC, cuyo registro se encuentra actualmente en trámite.
+ *
+ * INFOTEC pone a su disposición la herramienta SemanticWebBuilder a través de su licenciamiento abierto al público (‘open source’),
+ * en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición;
+ * aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software,
+ * todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización
+ * del SemanticWebBuilder 4.0.
+ *
+ * INFOTEC no otorga garantía sobre SemanticWebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita,
+ * siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar
+ * de la misma.
+ *
+ * Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente
+ * dirección electrónica:
+ *  http://www.semanticwebbuilder.org
+ **/
 /*
  * HtmlEditor.java
  *
  * Created on 20 de septiembre de 2004, 06:02 PM
  */
-
 package applets.htmleditor;
 
 import applets.ftp.ftp;
@@ -47,12 +43,11 @@ import java.awt.*;
  */
 public class TemplateEditor extends javax.swing.JApplet
 {
-    WBHtmlEditorPane htmlEditor=null;
-    WBTextEditorPane textEditor=null;
-    WBHTMLEditoKit editorKit=null;
-    
-    Hashtable actions=null;
-    
+
+    WBHtmlEditorPane htmlEditor = null;
+    WBTextEditorPane textEditor = null;
+    WBHTMLEditoKit editorKit = null;
+    Hashtable actions = null;
     private final String backgroundParam = "background";
     private final String foregroundParam = "foreground";
     private final String backgroundSelectionParam = "backgroundSelection";
@@ -64,42 +59,32 @@ public class TemplateEditor extends javax.swing.JApplet
     private final String verParam = "ver";
     private final String typeParam = "type";
     private final String canSaveParam = "canSave";
-    
-    
-    private static final String PRM_JSESS="jsess";
-    private static final String PRM_DOCUMENT="document";
-    private static final String PRM_FILENAME="filename";
-    private String document=null;
-    private String filename="template.html";
-    private String workpath=null;
-    private String jsess=null;                    //session del usuario
-    private URL upurl=null;
-    private URL downurl=null;
-    private URL gateway=null;
-    private boolean canSave=true;
-    
-    private String tmValue=null;
-    private String idValue=null;
-    private String tpValue=null;
-    private String verValue=null;
-    private String typeValue=null;
-
-    
-    private String oldTab="text";
-    private boolean htmlError=false;
-    
+    private static final String PRM_JSESS = "jsess";
+    private static final String PRM_DOCUMENT = "document";
+    private static final String PRM_FILENAME = "filename";
+    private String document = null;
+    private String filename = "template.html";
+    private String workpath = null;
+    private String jsess = null;                    //session del usuario
+    private URL upurl = null;
+    private URL downurl = null;
+    private URL gateway = null;
+    private boolean canSave = true;
+    private String tmValue = null;
+    private String idValue = null;
+    private String tpValue = null;
+    private String verValue = null;
+    private String typeValue = null;
+    private String oldTab = "text";
+    private boolean htmlError = false;
     //find
-    private String findStr=null;
-    private boolean findMCase=false;
-    private boolean findMWhole=false;
-    
-    
-    private Locale locale=new Locale("es");
-    
+    private String findStr = null;
+    private boolean findMCase = false;
+    private boolean findMWhole = false;
+    private Locale locale = new Locale("es");
     // System Clipboard Settings
     private java.awt.datatransfer.Clipboard clipboard;
-    
-    public static File curDir=null;
+    public static File curDir = null;
 
     /** Initializes the applet HtmlEditor */
 //    @Override
@@ -115,45 +100,50 @@ public class TemplateEditor extends javax.swing.JApplet
 //        };
 //        t.start();
 //    }
-
-    
     /** Initializes the applet HtmlEditor */
     @Override
     public void init()
     {
         System.out.println("Applet Template Editor initialized...");
-        jsess=this.getParameter(PRM_JSESS);
-        filename=this.getParameter(PRM_FILENAME);
-        document=this.getParameter(PRM_DOCUMENT);
+        jsess = this.getParameter(PRM_JSESS);
+        filename = this.getParameter(PRM_FILENAME);
+        document = this.getParameter(PRM_DOCUMENT);
         typeValue = getParameter(typeParam);
-        
-        if(getParameter(canSaveParam)!=null)
+
+        if (getParameter(canSaveParam) != null)
         {
-            if(getParameter(canSaveParam).equals("false"))canSave=false;
+            if (getParameter(canSaveParam).equals("false"))
+            {
+                canSave = false;
+                
+            }
         }
 
-        if(document.lastIndexOf('/')>-1)
+        if (document.lastIndexOf('/') > -1)
         {
-            workpath=document.substring(0,document.lastIndexOf('/')+1);
-        }else
+            workpath = document.substring(0, document.lastIndexOf('/') + 1);
+        }
+        else
         {
-            workpath="";
+            workpath = "";
         }
         //System.out.println("workpath:"+workpath);
         try
         {
-            upurl=new URL(getCodeBase().getProtocol(),getCodeBase().getHost(),getCodeBase().getPort(),getParameter("upload"));
-            downurl=new URL(getCodeBase().getProtocol(),getCodeBase().getHost(),getCodeBase().getPort(),getParameter("download"));
-            gateway=new URL(getCodeBase().getProtocol(),getCodeBase().getHost(),getCodeBase().getPort(),getParameter("gateway"));
-        }catch(Exception e)
-        {}
+            upurl = new URL(getCodeBase().getProtocol(), getCodeBase().getHost(), getCodeBase().getPort(), getParameter("upload"));
+            downurl = new URL(getCodeBase().getProtocol(), getCodeBase().getHost(), getCodeBase().getPort(), getParameter("download"));
+            gateway = new URL(getCodeBase().getProtocol(), getCodeBase().getHost(), getCodeBase().getPort(), getParameter("gateway"));
+        }
+        catch (Exception e)
+        {
+        }
         initComponents();
         textEditor.setApplet(this);
-        
+
         mnuOpenURL.setVisible(false);
         mnuGoto.setVisible(false);
-        
-        if(!typeValue.equalsIgnoreCase("Template"))
+
+        if (!typeValue.equalsIgnoreCase("Template"))
         {
             jSeparator7.setVisible(false);
             mnuInsertResource.setVisible(false);
@@ -161,8 +151,8 @@ public class TemplateEditor extends javax.swing.JApplet
             jButton18.setVisible(false);
             jButton19.setVisible(false);
         }
-        
-        if(!canSave)
+
+        if (!canSave)
         {
             jButton3.setVisible(false);
             jButton3.setEnabled(false);
@@ -170,10 +160,10 @@ public class TemplateEditor extends javax.swing.JApplet
             mnuSave.setEnabled(false);
             mnuSave.setVisible(false);
         }
-        
+
         checkEditButton();
     }
-    
+
     private void usePageParams()
     {
         final String defaultBackground = "979fc3";
@@ -184,21 +174,25 @@ public class TemplateEditor extends javax.swing.JApplet
         String foregroundValue;
         String backgroundSelectionValue;
         String foregroundSelectionValue;
-        
+
         backgroundValue = getParameter(backgroundParam);
         foregroundValue = getParameter(foregroundParam);
         backgroundSelectionValue = getParameter(backgroundSelectionParam);
         foregroundSelectionValue = getParameter(foregroundSelectionParam);
-        
-        if(getParameter("locale")!=null)locale=new Locale(getParameter("locale"));
-        
+
+        if (getParameter("locale") != null)
+        {
+            locale = new Locale(getParameter("locale"));
+
+            
+        }
         tmValue = getParameter(tmParam);
         idValue = getParameter(idParam);
         tpValue = getParameter(tpParam);
         verValue = getParameter(verParam);
-        
-        String startview=getParameter(startviewParam);
-        
+
+        String startview = getParameter(startviewParam);
+
         if ((backgroundValue == null) || (foregroundValue == null))
         {
             /**
@@ -210,14 +204,14 @@ public class TemplateEditor extends javax.swing.JApplet
             backgroundSelectionValue = defaultBackgroundSelection;
             foregroundSelectionValue = defaultForegroundSelection;
         }
-        
+
         // /**
         // * Set the applet's string label, background color, and
         // * foreground colors.
         // */
         this.setBackground(stringToColor(backgroundValue));
         this.setForeground(stringToColor(foregroundValue));
-        
+
         /*
         this.jButton3.setEnabled(false);
         this.jButton4.setEnabled(false);
@@ -226,46 +220,48 @@ public class TemplateEditor extends javax.swing.JApplet
         this.jButton1.setEnabled(false);
         this.jButton2.setEnabled(false);
          */
-        
+
         //cursores
         //curdrag = getToolkit().createCustomCursor(getImage(getCodeBase(), "images/drag.gif"), new Point( 16, 8 ), "drop");
         //curdrag2 = getToolkit().createCustomCursor(getImage(getCodeBase(), "images/drag3.gif"), new Point( 15, 15 ), "drop2");
-        
-        
+
+
         try
         {
-            URL url=new URL(this.getCodeBase(),document);
-            String txt=readInputStream(htmlEditor.getStreamAndSetURL(url));
+            URL url = new URL(this.getCodeBase(), document);
+            String txt = readInputStream(htmlEditor.getStreamAndSetURL(url));
             //System.out.println(txt);
-            textEditor.setText(txt.replaceAll(workpath,""));
-            
+            textEditor.setText(txt.replaceAll(workpath, ""));
+
             try
             {
                 htmlEditor.setInitText(getHTML(textEditor.getText()));
-                if("html".equals(startview))
+                if ("html".equals(startview))
                 {
-                    oldTab="html";
+                    oldTab = "html";
                     //if(htmlEditor.isEditable()==true)
                     //jTabbedPane1.setSelectedIndex(0);
-                }else
+                }
+                else
                 {
                     jTabbedPane1.setSelectedIndex(1);
                 }
-                htmlError=false;
-            }catch(Exception e)
+                htmlError = false;
+            }
+            catch (Exception e)
             {
-                htmlError=true;
+                htmlError = true;
                 htmlEditor.setEditable(false);
-                JOptionPane.showConfirmDialog(this,java.util.ResourceBundle.getBundle("applets/htmleditor/TemplateEditor",locale).getString("errShowingHTMLView")+", "+e.getMessage(),"WebBuilder",JOptionPane.CLOSED_OPTION,JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showConfirmDialog(this, java.util.ResourceBundle.getBundle("applets/htmleditor/TemplateEditor", locale).getString("errShowingHTMLView") + ", " + e.getMessage(), "WebBuilder", JOptionPane.CLOSED_OPTION, JOptionPane.ERROR_MESSAGE);
             }
             //si es editable
             {
                 htmlEditor.setEditable(true);
             }
             setActions();
-            editorKit=(WBHTMLEditoKit)htmlEditor.getEditorKit();
-            
-/*
+            editorKit = (WBHTMLEditoKit) htmlEditor.getEditorKit();
+
+            /*
             //********** parser
             HTMLEditorKit.Parser parser = htmlkit.getParser();
             HTMLEditorKit.ParserCallback callback = new WBParserCallback(new OutputStreamWriter(System.out));
@@ -273,13 +269,16 @@ public class TemplateEditor extends javax.swing.JApplet
             InputStreamReader r = new InputStreamReader(in);
             parser.parse(r, callback, true);
             //*********
- */
-        }catch(Exception e)
-        {System.out.println(e);}
-        
+             */
+        }
+        catch (Exception e)
+        {
+            System.out.println(e);
+        }
+
         // Determine if system clipboard is available
         SecurityManager secManager = System.getSecurityManager();
-        if(secManager != null)
+        if (secManager != null)
         {
             try
             {
@@ -291,83 +290,83 @@ public class TemplateEditor extends javax.swing.JApplet
                 clipboard = null;
             }
         }
-        
+
     }
-    
+
     public void setActions()
     {
         actions = new Hashtable();
         Action[] actionsArray = htmlEditor.getActions();
-        for(int i = 0; i < actionsArray.length; i++)
+        for (int i = 0; i < actionsArray.length; i++)
         {
             Action a = actionsArray[i];
             actions.put(a.getValue(Action.NAME), a);
             //System.out.println("Action:"+a.getValue(Action.NAME));
         }
-/*
-Action:set-read-only
-Action:selection-down
-Action:selection-begin-line
-Action:activate-link-action
-Action:next-link-action
-Action:selection-page-right
-Action:InsertOrderedListItem
-Action:selection-page-down
-Action:insert-content
-Action:selection-previous-word
-Action:selection-page-up
-Action:toggle-componentOrientation
-Action:selection-end-word
-Action:insert-break
-Action:caret-end-word
-Action:InsertTable
-Action:page-up
-Action:beep
-Action:InsertUnorderedList
-Action:selection-page-left
-Action:InsertUnorderedListItem
-Action:selection-begin-word
-Action:delete-previous
-Action:caret-begin-line
-Action:font-underline
-Action:InsertHR
-Action:InsertOrderedList
-Action:selection-forward
-Action:caret-forward
-Action:default-typed
-Action:cut-to-clipboard
-Action:previous-link-action
-Action:caret-end-paragraph
-Action:selection-up
-Action:caret-begin
-Action:copy-to-clipboard
-Action:InsertTableDataCell
-Action:caret-up
-Action:selection-end
-Action:caret-next-word
-Action:caret-down
-Action:selection-next-word
-Action:InsertPre
-Action:delete-next
-Action:selection-backward
-Action:selection-end-line
-Action:caret-begin-paragraph
-Action:set-writable
-Action:selection-begin
-Action:page-down
-Action:InsertTableRow
-Action:caret-end
-Action:caret-backward
-Action:caret-end-line
-Action:unselect
-Action:paste-from-clipboard
-Action:insert-tab
-Action:dump-model
-Action:selection-end-paragraph
-Action:selection-begin-paragraph
-Action:caret-begin-word
-Action:caret-previous-word
- */
+        /*
+        Action:set-read-only
+        Action:selection-down
+        Action:selection-begin-line
+        Action:activate-link-action
+        Action:next-link-action
+        Action:selection-page-right
+        Action:InsertOrderedListItem
+        Action:selection-page-down
+        Action:insert-content
+        Action:selection-previous-word
+        Action:selection-page-up
+        Action:toggle-componentOrientation
+        Action:selection-end-word
+        Action:insert-break
+        Action:caret-end-word
+        Action:InsertTable
+        Action:page-up
+        Action:beep
+        Action:InsertUnorderedList
+        Action:selection-page-left
+        Action:InsertUnorderedListItem
+        Action:selection-begin-word
+        Action:delete-previous
+        Action:caret-begin-line
+        Action:font-underline
+        Action:InsertHR
+        Action:InsertOrderedList
+        Action:selection-forward
+        Action:caret-forward
+        Action:default-typed
+        Action:cut-to-clipboard
+        Action:previous-link-action
+        Action:caret-end-paragraph
+        Action:selection-up
+        Action:caret-begin
+        Action:copy-to-clipboard
+        Action:InsertTableDataCell
+        Action:caret-up
+        Action:selection-end
+        Action:caret-next-word
+        Action:caret-down
+        Action:selection-next-word
+        Action:InsertPre
+        Action:delete-next
+        Action:selection-backward
+        Action:selection-end-line
+        Action:caret-begin-paragraph
+        Action:set-writable
+        Action:selection-begin
+        Action:page-down
+        Action:InsertTableRow
+        Action:caret-end
+        Action:caret-backward
+        Action:caret-end-line
+        Action:unselect
+        Action:paste-from-clipboard
+        Action:insert-tab
+        Action:dump-model
+        Action:selection-end-paragraph
+        Action:selection-begin-paragraph
+        Action:caret-begin-word
+        Action:caret-previous-word
+         */
         //Edit
         //if(clipboard != null)
         {
@@ -383,102 +382,106 @@ Action:caret-previous-word
             mnuCopy.setAction(new DefaultEditorKit.CopyAction());
             mnuPaste.setAction(new DefaultEditorKit.PasteAction());
         }
-        
+
         //mnuUndo.setAction(undoAction);
         //mnuRedo.setAction(redoAction);
-        
-        mnuSelectAll.setAction((Action)actions.get("select-all"));
-        mnuSelectParagraph.setAction((Action)actions.get("select-paragraph"));
-        mnuSelectLine.setAction((Action)actions.get("select-line"));
-        mnuSelectWord.setAction((Action)actions.get("select-word"));
-        
+
+        mnuSelectAll.setAction((Action) actions.get("select-all"));
+        mnuSelectParagraph.setAction((Action) actions.get("select-paragraph"));
+        mnuSelectLine.setAction((Action) actions.get("select-line"));
+        mnuSelectWord.setAction((Action) actions.get("select-word"));
+
         //Font
-        mnuFontBold.setAction((Action)actions.get("font-bold"));
+        mnuFontBold.setAction((Action) actions.get("font-bold"));
         //butFontBold.setAction((Action)actions.get("font-bold"));
-        mnuFontItalic.setAction((Action)actions.get("font-italic"));
+        mnuFontItalic.setAction((Action) actions.get("font-italic"));
         //butFontItalic.setAction((Action)actions.get("font-italic"));
-        mnuFontUnderline.setAction((Action)actions.get("font-underline"));
+        mnuFontUnderline.setAction((Action) actions.get("font-underline"));
         //butFontUnderline.setAction((Action)actions.get("font-underline"));
-        
-        mnuFont48.setAction((Action)actions.get("font-size-48"));
-        mnuFont36.setAction((Action)actions.get("font-size-36"));
-        mnuFont24.setAction((Action)actions.get("font-size-24"));
-        mnuFont18.setAction((Action)actions.get("font-size-18"));
-        mnuFont16.setAction((Action)actions.get("font-size-16"));
-        mnuFont14.setAction((Action)actions.get("font-size-14"));
-        mnuFont12.setAction((Action)actions.get("font-size-12"));
-        mnuFont10.setAction((Action)actions.get("font-size-10"));
-        mnuFont8.setAction((Action)actions.get("font-size-8"));
-        
-        mnuFontSerif.setAction((Action)actions.get("font-family-Serif"));
-        mnuFontSansSerif.setAction((Action)actions.get("font-family-SansSerif"));
-        mnuFontSerif.setAction((Action)actions.get("font-family-Serif"));
-        mnuFontMonospaced.setAction((Action)actions.get("font-family-Monospaced"));
-        
+
+        mnuFont48.setAction((Action) actions.get("font-size-48"));
+        mnuFont36.setAction((Action) actions.get("font-size-36"));
+        mnuFont24.setAction((Action) actions.get("font-size-24"));
+        mnuFont18.setAction((Action) actions.get("font-size-18"));
+        mnuFont16.setAction((Action) actions.get("font-size-16"));
+        mnuFont14.setAction((Action) actions.get("font-size-14"));
+        mnuFont12.setAction((Action) actions.get("font-size-12"));
+        mnuFont10.setAction((Action) actions.get("font-size-10"));
+        mnuFont8.setAction((Action) actions.get("font-size-8"));
+
+        mnuFontSerif.setAction((Action) actions.get("font-family-Serif"));
+        mnuFontSansSerif.setAction((Action) actions.get("font-family-SansSerif"));
+        mnuFontSerif.setAction((Action) actions.get("font-family-Serif"));
+        mnuFontMonospaced.setAction((Action) actions.get("font-family-Monospaced"));
+
         //Format
-        mnuFormatALeft.setAction((Action)actions.get("left-justify"));
+        mnuFormatALeft.setAction((Action) actions.get("left-justify"));
         //butFormatALeft.setAction((Action)actions.get("left-justify"));
-        mnuFormatACenter.setAction((Action)actions.get("center-justify"));
+        mnuFormatACenter.setAction((Action) actions.get("center-justify"));
         //butFormatACenter.setAction((Action)actions.get("center-justify"));
-        mnuFormatARight.setAction((Action)actions.get("right-justify"));
+        mnuFormatARight.setAction((Action) actions.get("right-justify"));
         //butFormatARight.setAction((Action)actions.get("right-justify"));
         //mnuFormatAJustify.setAction(new StyledEditorKit.AlignmentAction("AlignJustified", StyleConstants.ALIGN_JUSTIFIED));
-        
+
         //Insert
         //mnuInsertTable.setAction((Action)actions.get("InsertTable"));
-        
-        mnuDelete.setAction((Action)actions.get("delete-next"));
-        
+
+        mnuDelete.setAction((Action) actions.get("delete-next"));
+
         //jButton6.setAction((Action)actions.get("set-read-only"));
     }
-    
+
     public boolean validateFile(File file)
     {
-        String name=file.getName();
-        for(int x=0;x<name.length();x++)
+        String name = file.getName();
+        for (int x = 0; x < name.length(); x++)
         {
-            char ch=name.charAt(x);
-            if(!((ch>='a' && ch<='z')
-               ||(ch>='A' && ch<='Z')
-               ||(ch>='0' && ch<='9')
-               ||ch=='_'
-               ||ch=='.'
-               ||ch=='-'
-                ))
+            char ch = name.charAt(x);
+            if (!((ch >= 'a' && ch <= 'z')
+                    || (ch >= 'A' && ch <= 'Z')
+                    || (ch >= '0' && ch <= '9')
+                    || ch == '_'
+                    || ch == '.'
+                    || ch == '-'))
             {
                 return false;
             }
-             
+
         }
         //System.out.println(name);
         return true;
     }
-    
+
     public boolean openFile()
     {
-        if(JOptionPane.showConfirmDialog(this,java.util.ResourceBundle.getBundle("applets/htmleditor/TemplateEditor",locale).getString("msgConfirm"),"WebBuilder",JOptionPane.OK_CANCEL_OPTION,JOptionPane.INFORMATION_MESSAGE)==2)return false;
+        if (JOptionPane.showConfirmDialog(this, java.util.ResourceBundle.getBundle("applets/htmleditor/TemplateEditor", locale).getString("msgConfirm"), "WebBuilder", JOptionPane.OK_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE) == 2)
+        {
+            return false;
+            
+        }
         JFileChooser fc = new JFileChooser();
         fc.setLocale(locale);
-        fc.setLocation(100,100);
-        
+        fc.setLocation(100, 100);
+
         fc.setCurrentDirectory(curDir);
         int returnVal;
-        boolean validate=true;
+        boolean validate = true;
         do
         {
             returnVal = fc.showSaveDialog(this);
             if (returnVal == JFileChooser.APPROVE_OPTION)
             {
                 File file = fc.getSelectedFile();
-                validate=validateFile(file);
-                if(!validate)
+                validate = validateFile(file);
+                if (!validate)
                 {
-                    JOptionPane.showConfirmDialog(this,java.util.ResourceBundle.getBundle("applets/htmleditor/TemplateEditor",locale).getString("validateFile"),"WebBuilder",JOptionPane.CLOSED_OPTION,JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showConfirmDialog(this, java.util.ResourceBundle.getBundle("applets/htmleditor/TemplateEditor", locale).getString("validateFile"), "WebBuilder", JOptionPane.CLOSED_OPTION, JOptionPane.ERROR_MESSAGE);
                 }
             }
-        }while(returnVal == JFileChooser.APPROVE_OPTION && !validate);
+        }
+        while (returnVal == JFileChooser.APPROVE_OPTION && !validate);
         curDir = fc.getCurrentDirectory();
-        
+
         if (returnVal == JFileChooser.APPROVE_OPTION)
         {
             File file = fc.getSelectedFile();
@@ -486,47 +489,54 @@ Action:caret-previous-word
             {
                 //System.out.println("Save File"+file.getPath());
                 //FileInputStream fin=new FileInputStream(file);
-                String str=loadFile(file);
-                filename=file.getName();
-                String ret=sendHTML(str,filename,false,true);
-                String pt=file.getAbsolutePath().replace('\\','/');
-                int x=pt.lastIndexOf('/');
-                if(x>-1)pt=pt.substring(0,x+1);
-                DragDrop dd=new DragDrop(new JFrame(),true,locale);
-                dd.setJSess(jsess);
-                String html=ret.substring(ret.indexOf('|')+1);
-                String files=ret.substring(0,ret.indexOf('|'));
-                dd.addHTMLFile(filename,html);
-                StringTokenizer st=new StringTokenizer(files,";");
-                while(st.hasMoreTokens())
+                String str = loadFile(file);
+                filename = file.getName();
+                String ret = sendHTML(str, filename, false, true);
+                String pt = file.getAbsolutePath().replace('\\', '/');
+                int x = pt.lastIndexOf('/');
+                if (x > -1)
                 {
-                    String sfile=st.nextToken();
+                    pt = pt.substring(0, x + 1);
+
+                }
+                DragDrop dd = new DragDrop(new JFrame(), true, locale);
+                dd.setJSess(jsess);
+                String html = ret.substring(ret.indexOf('|') + 1);
+                String files = ret.substring(0, ret.indexOf('|'));
+                dd.addHTMLFile(filename, html);
+                StringTokenizer st = new StringTokenizer(files, ";");
+                while (st.hasMoreTokens())
+                {
+                    String sfile = st.nextToken();
                     try
                     {
-                        File attach = new File(pt+sfile);                        
-                        if(attach.getName().endsWith(".css") && attach.exists())
-                        {                            
-                            String cssbody=loadFile(attach);
-                            String retcss=sendHTML(cssbody,attach.getName(),false,true);
-                            if(retcss!=null && !retcss.trim().equals(""))
+                        File attach = new File(pt + sfile);
+                        if (attach.getName().endsWith(".css") && attach.exists())
+                        {
+                            String cssbody = loadFile(attach);
+                            String retcss = sendHTML(cssbody, attach.getName(), false, true);
+                            if (retcss != null && !retcss.trim().equals(""))
                             {
-                                retcss=retcss.replace("|", ";");
-                                if(retcss.endsWith(";"))
+                                retcss = retcss.replace("|", ";");
+                                if (retcss.endsWith(";"))
                                 {
-                                    retcss=retcss.substring(0, retcss.length()-1);
+                                    retcss = retcss.substring(0, retcss.length() - 1);
                                 }
-                                String ptcss=attach.getParentFile().getAbsolutePath().replace('\\','/');
-                                if(!ptcss.endsWith("/"))
+                                String ptcss = attach.getParentFile().getAbsolutePath().replace('\\', '/');
+                                if (!ptcss.endsWith("/"))
                                 {
-                                    ptcss+="/";
+                                    ptcss += "/";
                                 }
-                                dd.addFiles(retcss,ptcss);
+                                dd.addFiles(retcss, ptcss);
                             }
                         }
                     }
-                    catch(Exception e){System.out.println(e);}
-                 }
-                dd.addFiles(files,pt);
+                    catch (Exception e)
+                    {
+                        System.out.println(e);
+                    }
+                }
+                dd.addFiles(files, pt);
                 dd.setGateway(gateway);
                 dd.setUpload(upurl);
                 dd.setId(idValue);
@@ -537,62 +547,67 @@ Action:caret-previous-word
                 //dd.show();
                 dd.setVisible(true);
 
-                if(dd.getReturnValue())
+                if (dd.getReturnValue())
                 {
-                    sendHTML(html,filename,true,false);
-                    if(textEditor.isShowing())
+                    sendHTML(html, filename, true, false);
+                    if (textEditor.isShowing())
                     {
                         textEditor.setText(html);
-                    }else
+                    }
+                    else
                     {
                         textEditor.setText(html);
                         htmlEditor.setInitText(getHTML(textEditor.getText()));
                     }
                 }
-            }catch(Exception e)
-            {e.printStackTrace();}
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+            }
             return true;
-        } else
+        }
+        else
         {
             //debug("Save command cancelled by user");
             return false;
         }
     }
+
     private boolean isUTF8(File file)
     {
-        int c3=-61;
-        byte[] buffer=new byte[8192];
-        FileInputStream fin=null;
+        int c3 = -61;
+        byte[] buffer = new byte[8192];
+        FileInputStream fin = null;
         try
         {
-                fin=new FileInputStream(file);
-                int read=fin.read(buffer);
-                while(read!=-1)
+            fin = new FileInputStream(file);
+            int read = fin.read(buffer);
+            while (read != -1)
+            {
+                for (int i = 0; i < read; i++)
                 {
-                    for(int i=0;i<read;i++)
+                    if (buffer[i] == c3)
                     {
-                        if(buffer[i]==c3)
-                        {
-                            return true;
-                        }
+                        return true;
                     }
-                    read=fin.read(buffer);
                 }
+                read = fin.read(buffer);
+            }
 
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             e.printStackTrace();
-        }
-        finally
+        } finally
         {
-            if(fin!=null)
+            if (fin != null)
             {
                 try
                 {
                     fin.close();
                 }
-                catch(Exception e)
+                catch (Exception e)
                 {
                     e.printStackTrace();
                 }
@@ -600,99 +615,103 @@ Action:caret-previous-word
         }
         return false;
     }
+
     private String loadFile(File file)
     {
-        boolean isUTF8=isUTF8(file);
-        StringBuilder sb=new StringBuilder();
+        boolean isUTF8 = isUTF8(file);
+        StringBuilder sb = new StringBuilder();
         try
-        {            
-            FileReader reader=new FileReader(file);            
-            BufferedReader br=new BufferedReader(reader);
-            String line=br.readLine();
-            while(line!=null)
+        {
+            FileReader reader = new FileReader(file);
+            BufferedReader br = new BufferedReader(reader);
+            String line = br.readLine();
+            while (line != null)
             {
-                if(isUTF8)
+                if (isUTF8)
                 {
-                    line=new String(line.getBytes(reader.getEncoding()),"utf-8");
-                }                
+                    line = new String(line.getBytes(reader.getEncoding()), "utf-8");
+                }
                 sb.append(line);
                 sb.append("\r\n");
-                line=br.readLine();
+                line = br.readLine();
             }
             br.close();
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             e.printStackTrace();
         }
         return sb.toString();
     }
+
     public void insertLink()
     {
         String selText = htmlEditor.getSelectedText();
         int textLength = -1;
-        if(selText != null)
+        if (selText != null)
         {
             textLength = selText.length();
         }
-        
-        if(selText == null || textLength < 1)
+
+        if (selText == null || textLength < 1)
         {
             //info msg debe seleccionar un texto
-            JOptionPane.showConfirmDialog(this,java.util.ResourceBundle.getBundle("applets/htmleditor/TemplateEditor",locale).getString("selectText"),"WebBuilder",JOptionPane.CLOSED_OPTION,JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showConfirmDialog(this, java.util.ResourceBundle.getBundle("applets/htmleditor/TemplateEditor", locale).getString("selectText"), "WebBuilder", JOptionPane.CLOSED_OPTION, JOptionPane.ERROR_MESSAGE);
             return;
         }
-        
+
         int caretOffset = htmlEditor.getSelectionStart();
         int internalTextLength = selText.length();
         String currentAnchor = "";
-        
+
         SimpleAttributeSet sasText = null;
-        for(int i = caretOffset; i < caretOffset + internalTextLength; i++)
+        for (int i = caretOffset; i < caretOffset + internalTextLength; i++)
         {
             htmlEditor.select(i, i + 1);
             sasText = new SimpleAttributeSet(htmlEditor.getCharacterAttributes());
-            
+
             Enumeration attribEntries1 = sasText.getAttributeNames();
-            while(attribEntries1.hasMoreElements() && currentAnchor.equals(""))
+            while (attribEntries1.hasMoreElements() && currentAnchor.equals(""))
             {
-                Object entryKey   = attribEntries1.nextElement();
+                Object entryKey = attribEntries1.nextElement();
                 Object entryValue = sasText.getAttribute(entryKey);
                 //System.out.println("entryKey:"+entryKey);
                 //System.out.println("entryValue:"+entryValue);
-                if(entryKey.toString().equals(HTML.Tag.A.toString()))
+                if (entryKey.toString().equals(HTML.Tag.A.toString()))
                 {
-                    if(entryValue instanceof SimpleAttributeSet)
+                    if (entryValue instanceof SimpleAttributeSet)
                     {
-                        Enumeration subAttributes = ((SimpleAttributeSet)entryValue).getAttributeNames();
-                        while(subAttributes.hasMoreElements() && currentAnchor.equals(""))
+                        Enumeration subAttributes = ((SimpleAttributeSet) entryValue).getAttributeNames();
+                        while (subAttributes.hasMoreElements() && currentAnchor.equals(""))
                         {
                             Object subKey = subAttributes.nextElement();
                             //System.out.println("subKey:"+subKey);
-                            if(subKey.toString().toLowerCase().equals("href"))
+                            if (subKey.toString().toLowerCase().equals("href"))
                             {
-                                currentAnchor = ((SimpleAttributeSet)entryValue).getAttribute(subKey).toString();
+                                currentAnchor = ((SimpleAttributeSet) entryValue).getAttribute(subKey).toString();
                                 break;
                             }
                         }
                     }
                 }
             }
-            if(!currentAnchor.equals(""))
-            { break; }
+            if (!currentAnchor.equals(""))
+            {
+                break;
+            }
         }
         htmlEditor.select(caretOffset, caretOffset + internalTextLength);
-        currentAnchor=JOptionPane.showInputDialog(this,"URL",currentAnchor);//"WebBuilder",JOptionPane.CLOSED_OPTION,JOptionPane.ERROR_MESSAGE);
+        currentAnchor = JOptionPane.showInputDialog(this, "URL", currentAnchor);//"WebBuilder",JOptionPane.CLOSED_OPTION,JOptionPane.ERROR_MESSAGE);
         //System.out.println("link:"+currentAnchor);
-        
+
         if (currentAnchor != null)
         {
             SimpleAttributeSet sasTag = new SimpleAttributeSet();
             SimpleAttributeSet sasAttr = new SimpleAttributeSet();
-            
+
             sasAttr.addAttribute("href", currentAnchor);
             sasTag.addAttribute(HTML.Tag.A, sasAttr);
-            
+
             htmlEditor.setCharacterAttributes(sasTag, false);
             htmlEditor.setText(htmlEditor.getText());
 
@@ -703,15 +722,15 @@ Action:caret-previous-word
         htmlEditor.select(caretOffset, caretOffset + internalTextLength);
         htmlEditor.requestFocus();
     }
-    
+
     public void insertImage()
     {
-        WBDocumentFiles files=null;
+        WBDocumentFiles files = null;
         this.setCursor(new Cursor(Cursor.WAIT_CURSOR));
         try
         {
-            files=new WBDocumentFiles(new javax.swing.JFrame(), true,locale);
-            java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("applets/htmleditor/TemplateEditor",locale);
+            files = new WBDocumentFiles(new javax.swing.JFrame(), true, locale);
+            java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("applets/htmleditor/TemplateEditor", locale);
             files.setTitle(bundle.getString("image"));
             files.setJSession(jsess);
             files.setGateway(gateway);
@@ -724,36 +743,42 @@ Action:caret-previous-word
             files.setLocationRelativeTo(null);
             files.setVisible(true);
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             e.printStackTrace();
-        }
-        finally
+        } finally
         {
             this.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
         }
-        if(files!=null)
+        if (files != null)
         {
-            ImagePreview img=files.getSelectedImage();
-            if(img!=null)
+            ImagePreview img = files.getSelectedImage();
+            if (img != null)
             {
-                String simg="<img src=\""+img.getFilePath()+"\" width=\""+img.getImageWidth()+"\" height=\""+img.getImageHeight()+"\">";
-                if(oldTab.equals("text"))
+                String simg = "<img src=\"" + img.getFilePath() + "\" width=\"" + img.getImageWidth() + "\" height=\"" + img.getImageHeight() + "\">";
+                if (oldTab.equals("text"))
                 {
                     try
                     {
-                        textEditor.getDocument().insertString(textEditor.getCaret().getDot(), simg,null);
-                    }catch(Exception e)
-                    {e.printStackTrace();}
-                }else
+                        textEditor.getDocument().insertString(textEditor.getCaret().getDot(), simg, null);
+                    }
+                    catch (Exception e)
+                    {
+                        e.printStackTrace();
+                    }
+                }
+                else
                 {
-                    System.out.println("simg:"+simg);
+                    System.out.println("simg:" + simg);
                     try
                     {
-                        HTMLDocument doc=(HTMLDocument)htmlEditor.getDocument();
-                        doc.insertBeforeStart(doc.getCharacterElement(htmlEditor.getSelectionEnd()),simg);
-                    }catch(Exception e)
-                    {e.printStackTrace();}
+                        HTMLDocument doc = (HTMLDocument) htmlEditor.getDocument();
+                        doc.insertBeforeStart(doc.getCharacterElement(htmlEditor.getSelectionEnd()), simg);
+                    }
+                    catch (Exception e)
+                    {
+                        e.printStackTrace();
+                    }
                 }
             }
 
@@ -761,100 +786,109 @@ Action:caret-previous-word
             files.dispose();
         }
     }
-    
+
     public void insertHTML(String html)
     {
-        if(oldTab.equals("text"))
+        if (oldTab.equals("text"))
         {
             try
             {
-                textEditor.getDocument().insertString(textEditor.getCaret().getDot(), html,null);
+                textEditor.getDocument().insertString(textEditor.getCaret().getDot(), html, null);
                 //textEditor.updateSyntax();
-            }catch(Exception e)
-            {e.printStackTrace();}
-        }else
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+            }
+        }
+        else
         {
             try
             {
-                HTMLDocument doc=(HTMLDocument)htmlEditor.getDocument();
+                HTMLDocument doc = (HTMLDocument) htmlEditor.getDocument();
                 //doc.insertBeforeStart(doc.getCharacterElement(htmlEditor.getSelectionEnd()),html);
                 //doc.insertString(htmlEditor.getCaretPosition(), html, htmlEditor.getInputAttributes());
-                editorKit.insertHTML(doc, htmlEditor.getCaretPosition(), html,  0, 0, null);
-            }catch(Exception e)
-            {e.printStackTrace();}
+                editorKit.insertHTML(doc, htmlEditor.getCaretPosition(), html, 0, 0, null);
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+            }
         }
     }
-    
+
     public void insertCustomHTML(String html)
     {
-        if(oldTab.equals("text"))
+        if (oldTab.equals("text"))
         {
             insertHTML(html);
-        }else
+        }
+        else
         {
             try
             {
-                HTMLDocument doc=(HTMLDocument)htmlEditor.getDocument();
-                int pos=htmlEditor.getCaretPosition();
+                HTMLDocument doc = (HTMLDocument) htmlEditor.getDocument();
+                int pos = htmlEditor.getCaretPosition();
                 doc.insertString(htmlEditor.getCaretPosition(), "wb_rep_tag", htmlEditor.getInputAttributes());
-                String txt=replaceBodyHTML(textEditor.getText(),getBodyHTML(htmlEditor.getText()));
+                String txt = replaceBodyHTML(textEditor.getText(), getBodyHTML(htmlEditor.getText()));
                 htmlEditor.setText(txt.replaceFirst("wb_rep_tag", html));
                 htmlEditor.setCaretPosition(pos);
-            }catch(Exception e)
-            {e.printStackTrace();}
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+            }
         }
     }
-    
-    
+
     public void insertResource()
     {
         this.setCursor(new Cursor(Cursor.WAIT_CURSOR));
-        InsertResource ins=null;
+        InsertResource ins = null;
         try
         {
             Frame parent = new Frame();
-            ins=new InsertResource(parent,true);
-            java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("applets/htmleditor/TemplateEditor",locale);
+            ins = new InsertResource(parent, true);
+            java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("applets/htmleditor/TemplateEditor", locale);
             ins.setTitle(bundle.getString("resource")); // NOI18N)
             ins.setGateway(gateway);
             ins.setLocale(locale);
             ins.setTopicMap(tmValue);
             ins.setLocationRelativeTo(null);
-            ins.setJSession(jsess);            
+            ins.setJSession(jsess);
             ins.init();
             ins.setVisible(true);
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             e.printStackTrace();
-        }
-        finally
+        } finally
         {
             this.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
         }
-        if(ins!=null && ins.getResultValue()==2)
+        if (ins != null && ins.getResultValue() == 2)
         {
-            insertCustomHTML(ins.getTag());            
+            insertCustomHTML(ins.getTag());
         }
     }
-    
+
     public void insertTable()
     {
         Frame parent = new Frame();
-        InsertTable ins=new InsertTable(parent,true);
+        InsertTable ins = new InsertTable(parent, true);
         ins.setLocale(locale);
         //ins.setTag(getSelectedText());
         //ins.setEditor(this);
         //ins.show();
         ins.setVisible(true);
-        if(ins.getResultValue()==2)
+        if (ins.getResultValue() == 2)
         {
-            insertCustomHTML(ins.getTag().getHtml()+"<p style=\"margin-top: 0\">&#160;</p>");
+            insertCustomHTML(ins.getTag().getHtml() + "<p style=\"margin-top: 0\">&#160;</p>");
             //System.out.println("OK");
         }
-        
+
     }
-    
+
     /** This method is called from within the init() method to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is
@@ -1664,298 +1698,370 @@ Action:caret-previous-word
 
         setJMenuBar(jMenuBar2);
     }// </editor-fold>//GEN-END:initComponents
-    
+
     private void mnuReplaceActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_mnuReplaceActionPerformed
     {//GEN-HEADEREND:event_mnuReplaceActionPerformed
         // Add your handling code here:
-        applets.htmleditor.Replace s=new Replace(new Frame(),false);
+        applets.htmleditor.Replace s = new Replace(new Frame(), false);
         s.setText(getSelectedText());
         s.setEditor(this);
         s.setLocale(locale);
         //s.show();
         s.setVisible(true);
-        
+
     }//GEN-LAST:event_mnuReplaceActionPerformed
-    
+
     private void jComboBox2ActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jComboBox2ActionPerformed
     {//GEN-HEADEREND:event_jComboBox2ActionPerformed
         // Add your handling code here:
-        ((Action)actions.get("font-size-"+jComboBox2.getSelectedItem())).actionPerformed(evt);
+        ((Action) actions.get("font-size-" + jComboBox2.getSelectedItem())).actionPerformed(evt);
     }//GEN-LAST:event_jComboBox2ActionPerformed
-    
+
     private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jComboBox1ActionPerformed
     {//GEN-HEADEREND:event_jComboBox1ActionPerformed
         // Add your handling code here:
         //System.out.println("evt:"+jComboBox1.getSelectedItem());
-        ((Action)actions.get("font-family-"+jComboBox1.getSelectedItem())).actionPerformed(evt);
+        ((Action) actions.get("font-family-" + jComboBox1.getSelectedItem())).actionPerformed(evt);
     }//GEN-LAST:event_jComboBox1ActionPerformed
-    
+
     private void jButton8ActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButton8ActionPerformed
     {//GEN-HEADEREND:event_jButton8ActionPerformed
         // Add your handling code here:
         insertLink();
     }//GEN-LAST:event_jButton8ActionPerformed
-    
+
     private void mnuInsertLinkActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_mnuInsertLinkActionPerformed
     {//GEN-HEADEREND:event_mnuInsertLinkActionPerformed
         // Add your handling code here:
         insertLink();
     }//GEN-LAST:event_mnuInsertLinkActionPerformed
-    
+
     private void mnuInsertResourceActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_mnuInsertResourceActionPerformed
     {//GEN-HEADEREND:event_mnuInsertResourceActionPerformed
         // Add your handling code here:
         insertResource();
     }//GEN-LAST:event_mnuInsertResourceActionPerformed
-    
+
     private void jButton18ActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButton18ActionPerformed
     {//GEN-HEADEREND:event_jButton18ActionPerformed
         // Add your handling code here:
         insertResource();
     }//GEN-LAST:event_jButton18ActionPerformed
-    
+
     private void mnuFindNextActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_mnuFindNextActionPerformed
     {//GEN-HEADEREND:event_mnuFindNextActionPerformed
         // Add your handling code here:
-        if(findStr!=null)
+        if (findStr != null)
         {
             findStr(findStr, findMCase, findMWhole);
         }
     }//GEN-LAST:event_mnuFindNextActionPerformed
-    
+
     private void mnuFindActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_mnuFindActionPerformed
     {//GEN-HEADEREND:event_mnuFindActionPerformed
         // Add your handling code here:
-        applets.htmleditor.Search s=new Search(new Frame(),false);
+        applets.htmleditor.Search s = new Search(new Frame(), false);
         s.setText(getSelectedText());
         s.setEditor(this);
         s.setLocale(locale);
         //s.show();
         s.setVisible(true);
     }//GEN-LAST:event_mnuFindActionPerformed
-    
+
     private void jButton14ActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButton14ActionPerformed
     {//GEN-HEADEREND:event_jButton14ActionPerformed
         // Add your handling code here:
-        ((Action)actions.get("paste-from-clipboard")).actionPerformed(evt);
+        ((Action) actions.get("paste-from-clipboard")).actionPerformed(evt);
     }//GEN-LAST:event_jButton14ActionPerformed
-    
+
     private void jButton13ActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButton13ActionPerformed
     {//GEN-HEADEREND:event_jButton13ActionPerformed
         // Add your handling code here:
-        ((Action)actions.get("copy-to-clipboard")).actionPerformed(evt);
+        ((Action) actions.get("copy-to-clipboard")).actionPerformed(evt);
     }//GEN-LAST:event_jButton13ActionPerformed
-    
+
     private void jButton15ActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButton15ActionPerformed
     {//GEN-HEADEREND:event_jButton15ActionPerformed
         // Add your handling code here:
-        ((Action)actions.get("cut-to-clipboard")).actionPerformed(evt);
+        ((Action) actions.get("cut-to-clipboard")).actionPerformed(evt);
     }//GEN-LAST:event_jButton15ActionPerformed
-    
+
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButton6ActionPerformed
     {//GEN-HEADEREND:event_jButton6ActionPerformed
         // Add your handling code here:
         openFile();
     }//GEN-LAST:event_jButton6ActionPerformed
-    
+
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButton5ActionPerformed
     {//GEN-HEADEREND:event_jButton5ActionPerformed
         // Add your handling code here:
         newHTML();
     }//GEN-LAST:event_jButton5ActionPerformed
-    
+
     private void mnuNewActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_mnuNewActionPerformed
     {//GEN-HEADEREND:event_mnuNewActionPerformed
         // Add your handling code here:
         newHTML();
     }//GEN-LAST:event_mnuNewActionPerformed
-    
+
     public String getSelectedText()
     {
-        if(textEditor.isShowing())
+        if (textEditor.isShowing())
         {
             return textEditor.getSelectedText();
-        }else
+        }
+        else
         {
             return htmlEditor.getSelectedText();
         }
     }
-    
+
     public void goInit()
     {
-        JTextComponent source=null;
-        if(textEditor.isShowing())source=textEditor;
-        else source=htmlEditor;
-        
+        JTextComponent source = null;
+        if (textEditor.isShowing())
+        {
+            source = textEditor;
+            
+        }
+        else
+        {
+            source = htmlEditor;
+
+            
+        }
         source.setCaretPosition(0);
-        
+
     }
-    
+
     public void replaceStr(String str)
     {
-        JTextComponent source=null;
-        if(textEditor.isShowing())source=textEditor;
-        else source=htmlEditor;
-        
-        String sel=source.getSelectedText();
-        if(sel!=null && sel.length()>0)
+        JTextComponent source = null;
+        if (textEditor.isShowing())
+        {
+            source = textEditor;
+            
+        }
+        else
+        {
+            source = htmlEditor;
+
+
+        }
+        String sel = source.getSelectedText();
+        if (sel != null && sel.length() > 0)
         {
             source.replaceSelection(str);
         }
     }
-    
+
     public boolean findStr(String str, boolean mcase, boolean mwhole)
     {
-        
-        boolean ret=false;
-        findStr=str;
-        findMCase=mcase;
-        findMWhole=mwhole;
+
+        boolean ret = false;
+        findStr = str;
+        findMCase = mcase;
+        findMWhole = mwhole;
         //System.out.println("findStr:"+str+" mcase:"+mcase+" mwhole:"+mwhole);
         try
         {
-            JTextComponent source=null;
-            if(textEditor.isShowing())source=textEditor;
-            else source=htmlEditor;
-            
+            JTextComponent source = null;
+            if (textEditor.isShowing())
             {
-                int pos=source.getCaretPosition();
-                Document doc=source.getDocument();
-                int len=doc.getLength();
-                String txt="";
-                if(mcase)
-                {
-                    txt=doc.getText(pos,len-pos);
-                }else
-                {
-                    txt=doc.getText(pos,len-pos).toLowerCase();
-                    str=str.toLowerCase();
-                }
-                int y=0;
-                int x=0;
-                boolean find=false;
+                source = textEditor;
                 
-                x=txt.indexOf(str,x);
-                if(x>-1)
+            }
+            else
+            {
+                source = htmlEditor;
+
+                
+            }
+            {
+                int pos = source.getCaretPosition();
+                Document doc = source.getDocument();
+                int len = doc.getLength();
+                String txt = "";
+                if (mcase)
                 {
-                    if(mwhole)
+                    txt = doc.getText(pos, len - pos);
+                }
+                else
+                {
+                    txt = doc.getText(pos, len - pos).toLowerCase();
+                    str = str.toLowerCase();
+                }
+                int y = 0;
+                int x = 0;
+                boolean find = false;
+
+                x = txt.indexOf(str, x);
+                if (x > -1)
+                {
+                    if (mwhole)
                     {
-                        find=checkWhole(txt,x,str.length());
-                    }else
+                        find = checkWhole(txt, x, str.length());
+                    }
+                    else
                     {
-                        find=true;
+                        find = true;
                     }
                 }
-                if(find)
+                if (find)
                 {
                     //setCaretPosition(x);
-                    int z=str.length();
-                    if(z>0)
-                        source.select(pos+x, pos+x+z);
+                    int z = str.length();
+                    if (z > 0)
+                    {
+                        source.select(pos + x, pos + x + z);
+                        
+                    }
                     else
-                        source.setCaretPosition(pos+x);
+                    {
+                        source.setCaretPosition(pos + x);
+                        
+                    }
                     setStatus("");
-                    ret=true;
-                }else
+                    ret = true;
+                }
+                else
                 {
-                    setStatus(java.util.ResourceBundle.getBundle("applets/htmleditor/TemplateEditor",locale).getString("documentEnd"));
+                    setStatus(java.util.ResourceBundle.getBundle("applets/htmleditor/TemplateEditor", locale).getString("documentEnd"));
                     source.setCaretPosition(0);
                 }
             }
-        }catch(Exception ex)
-        {System.out.println(ex);}
+        }
+        catch (Exception ex)
+        {
+            System.out.println(ex);
+        }
         return ret;
     }
-    
-    private boolean checkWhole(String txt,int x,int l)
+
+    private boolean checkWhole(String txt, int x, int l)
     {
-        boolean ret=false;
-        if(x>0)
+        boolean ret = false;
+        if (x > 0)
         {
-            char ch=txt.charAt(x-1);
-            if(isValidChar(ch))return false;
-            if(txt.length()>=x+l)
+            char ch = txt.charAt(x - 1);
+            if (isValidChar(ch))
             {
-                ch=txt.charAt(x+l);
-                if(isValidChar(ch))return false;
+                return false;
+
+            }
+            if (txt.length() >= x + l)
+            {
+                ch = txt.charAt(x + l);
+                if (isValidChar(ch))
+                {
+                    return false;
+                    
+                }
             }
         }
         return true;
     }
-    
+
     private boolean isValidChar(char ch)
     {
-        if(ch>='0' && ch<='9')return true;
-        if(ch>='a' && ch<='z')return true;
-        if(ch>='A' && ch<='Z')return true;
-        if(ch=='á' || ch=='é' || ch=='í' || ch=='ó' || ch=='ú')return true;
-        if(ch=='Á' || ch=='É' || ch=='Í' || ch=='Ó' || ch=='Ú')return true;
-        if(ch=='_' || ch=='ñ' || ch=='Ñ')return true;
+        if (ch >= '0' && ch <= '9')
+        {
+            return true;
+
+        }
+        if (ch >= 'a' && ch <= 'z')
+        {
+            return true;
+
+        }
+        if (ch >= 'A' && ch <= 'Z')
+        {
+            return true;
+
+        }
+        if (ch == 'á' || ch == 'é' || ch == 'í' || ch == 'ó' || ch == 'ú')
+        {
+            return true;
+
+        }
+        if (ch == 'Á' || ch == 'É' || ch == 'Í' || ch == 'Ó' || ch == 'Ú')
+        {
+            return true;
+
+        }
+        if (ch == '_' || ch == 'ñ' || ch == 'Ñ')
+        {
+            return true;
+            
+        }
         return false;
     }
-    
-    
+
     public void setStatus(String str)
     {
         jLabel1.setText(str);
     }
-    
+
     private void newHTML()
     {
         // Add your handling code here:
-        int ret=JOptionPane.showConfirmDialog(this,java.util.ResourceBundle.getBundle("applets/htmleditor/TemplateEditor",locale).getString("msgConfirm"),"WebBuilder",JOptionPane.OK_CANCEL_OPTION,JOptionPane.INFORMATION_MESSAGE);
-        if(ret==2)return;
-        String txt="<html>\n"
-        +"  <head>\n"
-        +"    <title><TOPIC METHOD=\"getDisplayName\" language=\"{user@getLanguage}\"/></title>\n"
-        +"  </head>\n"
-        +"  <body>\n"
-        +"    <p style=\"margin-top: 0\">\n"
-        +"    </p>\n"
-        +"  </body>\n"
-        +"</html>";
-        
-        if(textEditor.isShowing())
+        int ret = JOptionPane.showConfirmDialog(this, java.util.ResourceBundle.getBundle("applets/htmleditor/TemplateEditor", locale).getString("msgConfirm"), "WebBuilder", JOptionPane.OK_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE);
+        if (ret == 2)
+        {
+            return;
+
+        }
+        String txt = "<html>\n"
+                + "  <head>\n"
+                + "    <title><TOPIC METHOD=\"getDisplayName\" language=\"{user@getLanguage}\"/></title>\n"
+                + "  </head>\n"
+                + "  <body>\n"
+                + "    <p style=\"margin-top: 0\">\n"
+                + "    </p>\n"
+                + "  </body>\n"
+                + "</html>";
+
+        if (textEditor.isShowing())
         {
             textEditor.setText(txt);
-        }else
+        }
+        else
         {
             textEditor.setText(txt);
             htmlEditor.setInitText(getHTML(textEditor.getText()));
         }
     }
-    
+
     private void saveHTML()
     {
-        if(oldTab.equals("html") && htmlEditor.isChange())
+        if (oldTab.equals("html") && htmlEditor.isChange())
         {
-            textEditor.setText(replaceBodyHTML(textEditor.getText(),getBodyHTML(htmlEditor.getText())));
+            textEditor.setText(replaceBodyHTML(textEditor.getText(), getBodyHTML(htmlEditor.getText())));
         }
-        String ret=sendHTML(textEditor.getText(),filename);
+        String ret = sendHTML(textEditor.getText(), filename);
     }
-    
+
     public String getHTML()
     {
-        if(oldTab.equals("html") && htmlEditor.isChange())
+        if (oldTab.equals("html") && htmlEditor.isChange())
         {
-            textEditor.setText(replaceBodyHTML(textEditor.getText(),getBodyHTML(htmlEditor.getText())));
+            textEditor.setText(replaceBodyHTML(textEditor.getText(), getBodyHTML(htmlEditor.getText())));
         }
         return textEditor.getText();
     }
-    
-    
+
     private void mnuSaveActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_mnuSaveActionPerformed
     {//GEN-HEADEREND:event_mnuSaveActionPerformed
         // Add your handling code here:
         saveHTML();
     }//GEN-LAST:event_mnuSaveActionPerformed
-    
+
     private void mnuOpenFileActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_mnuOpenFileActionPerformed
     {//GEN-HEADEREND:event_mnuOpenFileActionPerformed
         // Add your handling code here:
         openFile();
     }//GEN-LAST:event_mnuOpenFileActionPerformed
-    
+
     private void mnuEditMenuSelected(javax.swing.event.MenuEvent evt)//GEN-FIRST:event_mnuEditMenuSelected
     {//GEN-HEADEREND:event_mnuEditMenuSelected
         // Add your handling code here:
@@ -1963,149 +2069,155 @@ Action:caret-previous-word
         /*
         if(textEditor.isShowing())
         {
-            mnuUndo.setEnabled(textEditor.canUndo());
-            mnuRedo.setEnabled(textEditor.canRedo());
+        mnuUndo.setEnabled(textEditor.canUndo());
+        mnuRedo.setEnabled(textEditor.canRedo());
         }
          */
-        
+
     }//GEN-LAST:event_mnuEditMenuSelected
-    
+
     private void mnuInsertBRActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_mnuInsertBRActionPerformed
     {//GEN-HEADEREND:event_mnuInsertBRActionPerformed
         // Add your handling code here:
         insertHTML("<BR>");
     }//GEN-LAST:event_mnuInsertBRActionPerformed
-    
+
     private void mnuInsertHRActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_mnuInsertHRActionPerformed
     {//GEN-HEADEREND:event_mnuInsertHRActionPerformed
         // Add your handling code here:
         insertHTML("<HR>");
     }//GEN-LAST:event_mnuInsertHRActionPerformed
-    
+
     private void mnuRedoActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_mnuRedoActionPerformed
     {//GEN-HEADEREND:event_mnuRedoActionPerformed
         // Add your handling code here:
-        if(textEditor.isShowing())
+        if (textEditor.isShowing())
         {
             textEditor.redo();
-        }else
+        }
+        else
         {
             htmlEditor.redo();
         }
     }//GEN-LAST:event_mnuRedoActionPerformed
-    
+
     private void mnuUndoActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_mnuUndoActionPerformed
     {//GEN-HEADEREND:event_mnuUndoActionPerformed
         // Add your handling code here:
-        if(textEditor.isShowing())
+        if (textEditor.isShowing())
         {
             textEditor.undo();
-        }else
+        }
+        else
         {
             htmlEditor.undo();
         }
-        
+
     }//GEN-LAST:event_mnuUndoActionPerformed
-    
+
     private void mnuFindResActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_mnuFindResActionPerformed
     {//GEN-HEADEREND:event_mnuFindResActionPerformed
         // Add your handling code here:
-        if(textEditor.isShowing())
+        if (textEditor.isShowing())
         {
             textEditor.findResourceTag();
         }
     }//GEN-LAST:event_mnuFindResActionPerformed
-    
+
     private void butFormatARightActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_butFormatARightActionPerformed
     {//GEN-HEADEREND:event_butFormatARightActionPerformed
         // Add your handling code here:
-        ((Action)actions.get("right-justify")).actionPerformed(evt);
+        ((Action) actions.get("right-justify")).actionPerformed(evt);
     }//GEN-LAST:event_butFormatARightActionPerformed
-    
+
     private void butFormatACenterActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_butFormatACenterActionPerformed
     {//GEN-HEADEREND:event_butFormatACenterActionPerformed
         // Add your handling code here:
-        ((Action)actions.get("center-justify")).actionPerformed(evt);
+        ((Action) actions.get("center-justify")).actionPerformed(evt);
     }//GEN-LAST:event_butFormatACenterActionPerformed
-    
+
     private void butFontUnderlineActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_butFontUnderlineActionPerformed
     {//GEN-HEADEREND:event_butFontUnderlineActionPerformed
         // Add your handling code here:
-        ((Action)actions.get("font-underline")).actionPerformed(evt);
+        ((Action) actions.get("font-underline")).actionPerformed(evt);
     }//GEN-LAST:event_butFontUnderlineActionPerformed
-    
+
     private void butFormatALeftActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_butFormatALeftActionPerformed
     {//GEN-HEADEREND:event_butFormatALeftActionPerformed
         // Add your handling code here:
-        ((Action)actions.get("left-justify")).actionPerformed(evt);
+        ((Action) actions.get("left-justify")).actionPerformed(evt);
     }//GEN-LAST:event_butFormatALeftActionPerformed
-    
+
     private void mnuInsertContentActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_mnuInsertContentActionPerformed
     {//GEN-HEADEREND:event_mnuInsertContentActionPerformed
         // Add your handling code here:
         insertCustomHTML("<content/>");
     }//GEN-LAST:event_mnuInsertContentActionPerformed
-    
+
     private void jButton19ActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButton19ActionPerformed
     {//GEN-HEADEREND:event_jButton19ActionPerformed
         // Add your handling code here:
         insertCustomHTML("<content/>");
     }//GEN-LAST:event_jButton19ActionPerformed
-    
+
     private void jButton17ActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButton17ActionPerformed
     {//GEN-HEADEREND:event_jButton17ActionPerformed
         // Add your handling code here:
         insertTable();
     }//GEN-LAST:event_jButton17ActionPerformed
-    
+
     private void mnuInsertTableActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_mnuInsertTableActionPerformed
     {//GEN-HEADEREND:event_mnuInsertTableActionPerformed
         // Add your handling code here:
         insertTable();
     }//GEN-LAST:event_mnuInsertTableActionPerformed
-    
+
     private void mnuInsertImageActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_mnuInsertImageActionPerformed
     {//GEN-HEADEREND:event_mnuInsertImageActionPerformed
         // Add your handling code here:
         insertImage();
     }//GEN-LAST:event_mnuInsertImageActionPerformed
-    
+
     private void jButton9ActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButton9ActionPerformed
     {//GEN-HEADEREND:event_jButton9ActionPerformed
         // Add your handling code here:
         insertImage();
     }//GEN-LAST:event_jButton9ActionPerformed
-    
+
     private void butFontBoldActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_butFontBoldActionPerformed
     {//GEN-HEADEREND:event_butFontBoldActionPerformed
         // Add your handling code here:
-        ((Action)actions.get("font-bold")).actionPerformed(evt);
+        ((Action) actions.get("font-bold")).actionPerformed(evt);
     }//GEN-LAST:event_butFontBoldActionPerformed
-    
+
     private void butFontItalicActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_butFontItalicActionPerformed
     {//GEN-HEADEREND:event_butFontItalicActionPerformed
         // Add your handling code here:
-        ((Action)actions.get("font-italic")).actionPerformed(evt);
+        ((Action) actions.get("font-italic")).actionPerformed(evt);
     }//GEN-LAST:event_butFontItalicActionPerformed
-    
+
     public void checkEditButton()
     {
-        if(htmlEditor.isEditable()==true)
+        if (htmlEditor.isEditable() == true)
         {
             jButton1.setBorderPainted(true);
-            jButton1.setBackground(new Color(200,200,255));
-        }else
+            jButton1.setBackground(new Color(200, 200, 255));
+        }
+        else
         {
             jButton1.setBackground(null);
             jButton1.setBorderPainted(false);
-        }        
+        }
     }
-    
-    
+
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButton1ActionPerformed
     {//GEN-HEADEREND:event_jButton1ActionPerformed
         // Add your handling code here:
-        if(htmlError)return;
+        if (htmlError)
+        {
+            return;
+            
+        }
         htmlEditor.setEditable(!htmlEditor.isEditable());
         htmlEditor.updateUI();
         checkEditButton();
@@ -2115,22 +2227,22 @@ Action:caret-previous-word
         //System.out.println(getBodyHTML(txt));
         //System.out.println("************************");
         //System.out.println(replaceBodyHTML(txt,"Hola JEI"));
-        
+
     }//GEN-LAST:event_jButton1ActionPerformed
-    
+
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButton2ActionPerformed
     {//GEN-HEADEREND:event_jButton2ActionPerformed
         // Add your handling code here:
-        ((WBTextEditorPane)textEditor).syntaxColorizing();
-        
+        ((WBTextEditorPane) textEditor).syntaxColorizing();
+
     }//GEN-LAST:event_jButton2ActionPerformed
-    
+
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButton3ActionPerformed
     {//GEN-HEADEREND:event_jButton3ActionPerformed
         // Add your handling code here:
         saveHTML();
     }//GEN-LAST:event_jButton3ActionPerformed
-    
+
     private void jTabbedPane1StateChanged(javax.swing.event.ChangeEvent evt)//GEN-FIRST:event_jTabbedPane1StateChanged
     {//GEN-HEADEREND:event_jTabbedPane1StateChanged
         // Add your handling code here:
@@ -2138,38 +2250,40 @@ Action:caret-previous-word
         //System.out.println("jTabbedPane1StateChanged:"+jTabbedPane1.getSelectedIndex());
         try
         {
-            if(jTabbedPane1.getSelectedComponent()==jPanel2)
+            if (jTabbedPane1.getSelectedComponent() == jPanel2)
             {
-                if(oldTab.equals("html") && htmlEditor.isChange())
+                if (oldTab.equals("html") && htmlEditor.isChange())
                 {
-                    textEditor.setText(replaceBodyHTML(textEditor.getText(),getBodyHTML(htmlEditor.getText())));
+                    textEditor.setText(replaceBodyHTML(textEditor.getText(), getBodyHTML(htmlEditor.getText())));
                 }
-                oldTab="text";
-                
+                oldTab = "text";
+
                 jButton1.setVisible(false);
                 mnuFont.setVisible(false);
                 mnuFormat.setVisible(false);
                 jPanel6.setVisible(false);
                 jPanel8.setVisible(false);
                 jPanel5.setVisible(true);
-                
-            }else if(jTabbedPane1.getSelectedComponent()==jPanel1)
+
+            }
+            else if (jTabbedPane1.getSelectedComponent() == jPanel1)
             {
-                if(oldTab.equals("text"))
+                if (oldTab.equals("text"))
                 {
                     try
                     {
                         htmlEditor.setInitText(getHTML(textEditor.getText()));
-                        htmlError=false;
-                    }catch(Exception e)
+                        htmlError = false;
+                    }
+                    catch (Exception e)
                     {
-                        htmlError=true;
+                        htmlError = true;
                         htmlEditor.setEditable(false);
-                        JOptionPane.showConfirmDialog(this,java.util.ResourceBundle.getBundle("applets/htmleditor/TemplateEditor",locale).getString("errShowingHTMLView")+", "+e.getMessage(),"WebBuilder",JOptionPane.CLOSED_OPTION,JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.showConfirmDialog(this, java.util.ResourceBundle.getBundle("applets/htmleditor/TemplateEditor", locale).getString("errShowingHTMLView") + ", " + e.getMessage(), "WebBuilder", JOptionPane.CLOSED_OPTION, JOptionPane.ERROR_MESSAGE);
                     }
                 }
-                oldTab="html";
-                
+                oldTab = "html";
+
                 jButton1.setVisible(true);
                 mnuFont.setVisible(true);
                 mnuFormat.setVisible(true);
@@ -2177,42 +2291,50 @@ Action:caret-previous-word
                 jPanel8.setVisible(true);
                 jPanel5.setVisible(false);
             }
-        }catch(Exception e)
-        {e.printStackTrace(System.out);}
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace(System.out);
+        }
     }//GEN-LAST:event_jTabbedPane1StateChanged
 
     private void jButtonAddFilesActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButtonAddFilesActionPerformed
     {//GEN-HEADEREND:event_jButtonAddFilesActionPerformed
-        
-        String path="/work/models/"+tmValue+"/Template/"+idValue+"/"+verValue+"/";
+
+        String path = "/work/models/" + tmValue + "/Template/" + idValue + "/" + verValue + "/";
         this.setCursor(new Cursor(Cursor.WAIT_CURSOR));
         try
         {
-            ftpDialog ftp=new ftpDialog(locale, jsess, upurl, downurl, path, gateway);
+            String ContextPath = this.getParameter("ContextPath");
+            String ApplicationPath = this.getParameter("ApplicationPath");
+            ftpDialog ftp = new ftpDialog(locale, jsess, upurl, downurl, path, gateway, this, ContextPath, ApplicationPath);
             ftp.setVisible(true);
-            
+
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             e.printStackTrace();
-        }
-        finally
+        } finally
         {
             this.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
         }
     }//GEN-LAST:event_jButtonAddFilesActionPerformed
-    
+
     private Color stringToColor(String paramValue)
     {
-        int red = (Integer.decode("0x" + paramValue.substring(0,2))).intValue();
-        int green = (Integer.decode("0x" + paramValue.substring(2,4))).intValue();
-        int blue = (Integer.decode("0x" + paramValue.substring(4,6))).intValue();
-        return new Color(red,green,blue);
+        int red = (Integer.decode("0x" + paramValue.substring(0, 2))).intValue();
+        int green = (Integer.decode("0x" + paramValue.substring(2, 4))).intValue();
+        int blue = (Integer.decode("0x" + paramValue.substring(4, 6))).intValue();
+        return new Color(red, green, blue);
     }
-    
+
     public String readInputStream(InputStream in)
     {
-        if (in == null) return null;
+        if (in == null)
+        {
+            return null;
+            
+        }
         StringBuilder ret = new StringBuilder();
         try
         {
@@ -2220,139 +2342,166 @@ Action:caret-previous-word
             int x;
             while ((x = in.read(bfile, 0, 8192)) > -1)
             {
-                String data=new String(bfile, 0, x);
+                String data = new String(bfile, 0, x);
                 System.out.println(data);
                 ret.append(data);
-                data=new String(bfile, 0, x,"utf-8");
+                data = new String(bfile, 0, x, "utf-8");
                 System.out.println(data);
             }
-        } catch (Exception e)
+        }
+        catch (Exception e)
         {
             e.printStackTrace();
-        }finally
+        } finally
         {
             try
             {
-                in.close();            
-            }catch(Exception e2){e2.printStackTrace();}
+                in.close();
+            }
+            catch (Exception e2)
+            {
+                e2.printStackTrace();
+            }
         }
 
         return ret.toString();
     }
-    
+
     public String getHTML(String html)
     {
-        String txt=html;
-        String txtl=txt.toLowerCase();
-        int ini=0;
-        int fin=txt.length();
-        int aux=0;
-        if((aux=txtl.indexOf("<html"))>-1)
+        String txt = html;
+        String txtl = txt.toLowerCase();
+        int ini = 0;
+        int fin = txt.length();
+        int aux = 0;
+        if ((aux = txtl.indexOf("<html")) > -1)
         {
-            ini=aux;
+            ini = aux;
         }
-        if((aux=txtl.lastIndexOf("</html"))>-1)
+        if ((aux = txtl.lastIndexOf("</html")) > -1)
         {
-            aux=txtl.indexOf('>',aux);
-            if(aux>-1)fin=aux+1;
+            aux = txtl.indexOf('>', aux);
+            if (aux > -1)
+            {
+                fin = aux + 1;
+                
+            }
         }
-        return txt.substring(ini,fin).trim();
+        return txt.substring(ini, fin).trim();
     }
-    
+
     public String getBodyHTML(String html)
     {
-        String txt=html;
-        String txtl=txt.toLowerCase();
-        int ini=0;
-        int fin=txt.length();
-        int aux=0;
-        if((aux=txtl.indexOf("<body"))>-1)
+        String txt = html;
+        String txtl = txt.toLowerCase();
+        int ini = 0;
+        int fin = txt.length();
+        int aux = 0;
+        if ((aux = txtl.indexOf("<body")) > -1)
         {
-            aux=txtl.indexOf('>',aux);
-            if(aux>-1)ini=aux+1;
+            aux = txtl.indexOf('>', aux);
+            if (aux > -1)
+            {
+                ini = aux + 1;
+                
+            }
         }
-        if((aux=txtl.lastIndexOf("</body"))>-1)
+        if ((aux = txtl.lastIndexOf("</body")) > -1)
         {
-            fin=aux;
+            fin = aux;
         }
-        return txt.substring(ini,fin).trim();
+        return txt.substring(ini, fin).trim();
     }
-    
+
     public String replaceBodyHTML(String html, String body)
     {
-        String txt=html;
-        String txtl=txt.toLowerCase();
-        int ini=0;
-        int fin=txt.length();
-        int aux=0;
-        if((aux=txtl.indexOf("<body"))>-1)
+        String txt = html;
+        String txtl = txt.toLowerCase();
+        int ini = 0;
+        int fin = txt.length();
+        int aux = 0;
+        if ((aux = txtl.indexOf("<body")) > -1)
         {
-            aux=txtl.indexOf('>',aux);
-            if(aux>-1)ini=aux+1;
+            aux = txtl.indexOf('>', aux);
+            if (aux > -1)
+            {
+                ini = aux + 1;
+                
+            }
         }
-        if((aux=txtl.indexOf("</body"))>-1)
+        if ((aux = txtl.indexOf("</body")) > -1)
         {
-            fin=aux;
+            fin = aux;
         }
-        String ret=txt.substring(0,ini)+"\n"+body+"\n"+txt.substring(fin);
-        if(ini==0)
+        String ret = txt.substring(0, ini) + "\n" + body + "\n" + txt.substring(fin);
+        if (ini == 0)
         {
-            ret="<html>\n  <head>\n  </head>\n  <body>"+ret;
+            ret = "<html>\n  <head>\n  </head>\n  <body>" + ret;
         }
-        if(fin==txt.length())
+        if (fin == txt.length())
         {
-            ret=ret+"  </body>\n</html>";
+            ret = ret + "  </body>\n</html>";
         }
         return ret;
     }
-    
+
     private String sendHTML(String html, String name)
     {
-        return sendHTML(html, name, false,false);
+        return sendHTML(html, name, false, false);
     }
-    
+
     private String sendHTML(String html, String name, boolean replace, boolean findattaches)
     {
-        StringBuilder ret=new StringBuilder();
+        StringBuilder ret = new StringBuilder();
         try
         {
-            URLConnection urlconn=upurl.openConnection();
+            URLConnection urlconn = upurl.openConnection();
             urlconn.setUseCaches(false);
-            if(jsess!=null)urlconn.setRequestProperty("Cookie", "JSESSIONID="+jsess);
-            urlconn.setRequestProperty("PATHFILEWB",name);
-            if(name.endsWith(".css"))
+            if (jsess != null)
             {
-                urlconn.setRequestProperty("CSSTYPE","TRUE");
+                urlconn.setRequestProperty("Cookie", "JSESSIONID=" + jsess);
+
             }
-            if(replace)
+            urlconn.setRequestProperty("PATHFILEWB", name);
+            if (name.endsWith(".css"))
             {
-                urlconn.setRequestProperty("DOCUMENT","REPLACE");
+                urlconn.setRequestProperty("CSSTYPE", "TRUE");
             }
-            else if(findattaches)
+            if (replace)
             {
-                urlconn.setRequestProperty("DOCUMENT","FINDATTACHES");
-            }else
-            {
-                urlconn.setRequestProperty("DOCUMENT","RELOAD");
+                urlconn.setRequestProperty("DOCUMENT", "REPLACE");
             }
-            urlconn.setRequestProperty("TM",tmValue);
-            urlconn.setRequestProperty("ID",idValue);
-            if(tpValue!=null)urlconn.setRequestProperty("TP",tpValue);
-            urlconn.setRequestProperty("VER",verValue);
+            else if (findattaches)
+            {
+                urlconn.setRequestProperty("DOCUMENT", "FINDATTACHES");
+            }
+            else
+            {
+                urlconn.setRequestProperty("DOCUMENT", "RELOAD");
+            }
+            urlconn.setRequestProperty("TM", tmValue);
+            urlconn.setRequestProperty("ID", idValue);
+            if (tpValue != null)
+            {
+                urlconn.setRequestProperty("TP", tpValue);
+
+            }
+            urlconn.setRequestProperty("VER", verValue);
             urlconn.setRequestProperty("TYPE", typeValue);
             urlconn.setDoOutput(true);
             PrintWriter pout = new PrintWriter(urlconn.getOutputStream());
-            
+
             try
             {
                 pout.print(html);
-            } catch (Exception e)
+            }
+            catch (Exception e)
             {
                 System.out.println(e);
             }
             pout.flush();
             pout.close();
-            
+
             BufferedReader in = new BufferedReader(new InputStreamReader(urlconn.getInputStream()));
             String inputLine;
             while ((inputLine = in.readLine()) != null)
@@ -2361,15 +2510,20 @@ Action:caret-previous-word
                 ret.append("\n");
             }
             in.close();
-            if(!replace && !findattaches)JOptionPane.showConfirmDialog(this,java.util.ResourceBundle.getBundle("applets/htmleditor/TemplateEditor",locale).getString("submited"),"WebBuilder",JOptionPane.CLOSED_OPTION,JOptionPane.INFORMATION_MESSAGE);
-        }catch(Exception e)
+            if (!replace && !findattaches)
+            {
+                JOptionPane.showConfirmDialog(this, java.util.ResourceBundle.getBundle("applets/htmleditor/TemplateEditor", locale).getString("submited"), "WebBuilder", JOptionPane.CLOSED_OPTION, JOptionPane.INFORMATION_MESSAGE);
+                
+            }
+        }
+        catch (Exception e)
         {
-            System.out.println("Error to open service..."+e);
-            JOptionPane.showConfirmDialog(this,java.util.ResourceBundle.getBundle("applets/htmleditor/TemplateEditor",locale).getString("errSending")+", "+e.getMessage(),"WebBuilder",JOptionPane.CLOSED_OPTION,JOptionPane.ERROR_MESSAGE);
+            System.out.println("Error to open service..." + e);
+            JOptionPane.showConfirmDialog(this, java.util.ResourceBundle.getBundle("applets/htmleditor/TemplateEditor", locale).getString("errSending") + ", " + e.getMessage(), "WebBuilder", JOptionPane.CLOSED_OPTION, JOptionPane.ERROR_MESSAGE);
         }
         return ret.toString();
     }
-    
+
     /**
      * center a <code>Component</code> relative to
      * another <code>Component</code>.
@@ -2385,9 +2539,8 @@ Action:caret-previous-word
         Dimension fSize = parent.getSize();
         Point loc = parent.getLocation();
         comp.setLocation(((fSize.width - cSize.width) / 2) + loc.x,
-        ((fSize.height - cSize.height) / 2) + loc.y);
+                ((fSize.height - cSize.height) / 2) + loc.y);
     }
-    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton butFontBold;
     private javax.swing.JButton butFontItalic;
@@ -2487,5 +2640,4 @@ Action:caret-previous-word
     private javax.swing.JMenu mnuSize;
     private javax.swing.JMenuItem mnuUndo;
     // End of variables declaration//GEN-END:variables
-    
 }
