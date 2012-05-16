@@ -1128,6 +1128,8 @@ public class SWBAFTP extends GenericResource
             url.setMode("download");
             url.setCallMethod(url.Call_DIRECT);
             out.println("<param name =\"downloadpath\" value=\"" + url + "\">");
+            out.println("<param name =\"ContextPath\" value=\"" + SWBPortal.getContextPath() + "\">");
+            out.println("<param name =\"ApplicationPath\" value=\"" + SWBUtils.getApplicationPath()+ "\">");
             //out.println("<PARAM NAME =\"jsess\" VALUE=\""+request.getSession().getId()+"\">");            
             out.println("</applet>");
             out.println("</div>");
