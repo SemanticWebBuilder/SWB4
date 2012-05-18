@@ -102,8 +102,8 @@ public class TwitterResource extends GenericAdmResource {
                     if(pos>-1){
                         String userLogin=data.substring(0,pos);
                         String userPass=data.substring(pos+1);
-                        Twitter twitter = new Twitter(userLogin, userPass);
-                        twitter.updateStatus(request.getParameter("status"));
+                        //Twitter twitter = new Twitter(userLogin, userPass);
+                        //twitter.updateStatus(request.getParameter("status"));
                     }
                 }
             }
