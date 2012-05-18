@@ -10,10 +10,10 @@ import org.semanticwb.SWBUtils;
 import org.semanticwb.model.SWBModel;
 import org.semanticwb.model.User;
 import org.semanticwb.portal.api.SWBActionResponse;
+import org.semanticwb.social.listener.twitter.SWBSocialStatusListener;
 import org.semanticwb.social.util.SWBSocialUtil;
 import twitter4j.FilterQuery;
 import twitter4j.Status;
-import twitter4j.StatusDeletionNotice;
 import twitter4j.StatusListener;
 import twitter4j.StatusUpdate;
 import twitter4j.TwitterException;
@@ -113,37 +113,7 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
     @Override
     public void listenAlive(SWBModel model) {
         try {
-            StatusListener listener = new StatusListener() {
-
-                public void onStatus(Status status) {
-                    //if (status.getGeoLocation() != null)
-                    //if(status.getText().indexOf("android")>-1 || status.getText().indexOf("ipad")>-1 || status.getText().indexOf("iphone")>-1 || status.getText().indexOf("tarea")>-1)
-                    {
-                        /*
-                        System.out.println();
-                        System.out.println("------------");
-                        System.out.println(status.getUser().getName() + " : "
-                                + status.getText() + " : " + status.getGeoLocation());
-                        System.out.println(status.getCreatedAt());
-                         * 
-                         */
-                    }
-                    //System.out.print(" ");
-                }
-
-                public void onDeletionNotice(StatusDeletionNotice statusDeletionNotice) {
-                }
-
-                public void onTrackLimitationNotice(int numberOfLimitedStatuses) {
-                }
-
-                public void onException(Exception ex) {
-                    ex.printStackTrace();
-                }
-
-                public void onScrubGeo(long userId, long upToStatusId) {
-                }
-            };
+            StatusListener listener = new SWBSocialStatusListener(model);
             /*create filterQuery*/
             FilterQuery query = new FilterQuery();
             //NOTE: format of values: {minLongitude, minLatitude}, {...}
@@ -152,13 +122,10 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
             query.locations(loc);
 
             //Palabras a monitorear
-            String[] companyWords=SWBSocialUtil.words2Monitor.getCompanyWords(model);
-            for(int i=0;i<companyWords.length;i++)
-            {
-                System.out.println("companyWord["+i+"]:"+companyWords[i]);
-            }
-
-            String[] tr = {"kiunda"};
+            String words2Monitor=SWBSocialUtil.words2Monitor.getWords2Monitor(",", model);
+            System.out.println("words2Monitor:"+words2Monitor);
+            
+            String[] tr = {words2Monitor};
             query.track(tr);
 
 
@@ -198,4 +165,5 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
             log.error(e);
         }
     }
+    
 }
