@@ -1,11 +1,28 @@
 package org.semanticwb.social.base;
 
 
-public abstract class PostBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Expirable,org.semanticwb.model.Traceable
+   /**
+   * Clase que comprende todos los tipos de Post que pueden ir siendo creados en la herramienta. 
+   */
+public abstract class PostBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Traceable,org.semanticwb.model.Expirable
 {
+    public static final org.semanticwb.platform.SemanticProperty social_SocialNetPostId=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#SocialNetPostId");
+   /**
+   * Clase que va ha contener los Post que han sido tomados como base (es decir, que llegan por el listener y que se guardan en la clase PostListenerContainer) para crear un nuevo Post desde la herramienta y que se envía hacia las redes sociales.
+   */
+    public static final org.semanticwb.platform.SemanticClass social_PostListenerContainerBase=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#PostListenerContainerBase");
+   /**
+   * En esta propiedad se guarda el post que llegó por el listener y que sirvió de base para que se creara un post nuevo desde SSMCC.
+   */
+    public static final org.semanticwb.platform.SemanticProperty social_postListenerBase=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#postListenerBase");
+   /**
+   * Clase que contiene todos los post que han sido enviados por una determinada red social. La intención de crear esta clase es para que se agrupen los Post de cada red social por mes y año, y de esta manera sea mucho mas sencillo, optimo y rapido realizar las busquedas.
+   */
     public static final org.semanticwb.platform.SemanticClass social_PostContainer=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#PostContainer");
     public static final org.semanticwb.platform.SemanticProperty social_hasPostContainer_PostInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#hasPostContainer_PostInv");
-    public static final org.semanticwb.platform.SemanticProperty social_socialNetPostId=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#socialNetPostId");
+   /**
+   * Clase que comprende todos los tipos de Post que pueden ir siendo creados en la herramienta.
+   */
     public static final org.semanticwb.platform.SemanticClass social_Post=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#Post");
    /**
    * The semantic class that represents the currentObject
@@ -128,6 +145,29 @@ public abstract class PostBase extends org.semanticwb.model.SWBClass implements 
             return it;
         }
        /**
+       * Gets all org.semanticwb.social.Post with a determined PostListenerBase
+       * @param value PostListenerBase of the type org.semanticwb.social.PostListenerContainerBase
+       * @param model Model of the org.semanticwb.social.Post
+       * @return Iterator with all the org.semanticwb.social.Post
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.Post> listPostByPostListenerBase(org.semanticwb.social.PostListenerContainerBase value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.Post> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(social_postListenerBase, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.social.Post with a determined PostListenerBase
+       * @param value PostListenerBase of the type org.semanticwb.social.PostListenerContainerBase
+       * @return Iterator with all the org.semanticwb.social.Post
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.Post> listPostByPostListenerBase(org.semanticwb.social.PostListenerContainerBase value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.Post> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(social_postListenerBase,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
        * Gets all org.semanticwb.social.Post with a determined PostContainer_PostInv
        * @param value PostContainer_PostInv of the type org.semanticwb.social.PostContainer
        * @param model Model of the org.semanticwb.social.Post
@@ -198,6 +238,24 @@ public abstract class PostBase extends org.semanticwb.model.SWBClass implements 
          }
          return ret;
     }
+
+/**
+* Gets the SocialNetPostId property
+* @return String with the SocialNetPostId
+*/
+    public String getSocialNetPostId()
+    {
+        return getSemanticObject().getProperty(social_SocialNetPostId);
+    }
+
+/**
+* Sets the SocialNetPostId property
+* @param value long with the SocialNetPostId
+*/
+    public void setSocialNetPostId(String value)
+    {
+        getSemanticObject().setProperty(social_SocialNetPostId, value);
+    }
    /**
    * Sets the value for the property Creator
    * @param value Creator to set
@@ -233,6 +291,44 @@ public abstract class PostBase extends org.semanticwb.model.SWBClass implements 
          if(obj!=null)
          {
              ret=(org.semanticwb.model.User)obj.createGenericInstance();
+         }
+         return ret;
+    }
+   /**
+   * Sets the value for the property PostListenerBase
+   * @param value PostListenerBase to set
+   */
+
+    public void setPostListenerBase(org.semanticwb.social.PostListenerContainerBase value)
+    {
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(social_postListenerBase, value.getSemanticObject());
+        }else
+        {
+            removePostListenerBase();
+        }
+    }
+   /**
+   * Remove the value for PostListenerBase property
+   */
+
+    public void removePostListenerBase()
+    {
+        getSemanticObject().removeProperty(social_postListenerBase);
+    }
+
+   /**
+   * Gets the PostListenerBase
+   * @return a org.semanticwb.social.PostListenerContainerBase
+   */
+    public org.semanticwb.social.PostListenerContainerBase getPostListenerBase()
+    {
+         org.semanticwb.social.PostListenerContainerBase ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(social_postListenerBase);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.social.PostListenerContainerBase)obj.createGenericInstance();
          }
          return ret;
     }
@@ -310,24 +406,6 @@ public abstract class PostBase extends org.semanticwb.model.SWBClass implements 
              ret=(org.semanticwb.social.PostContainer)obj.createGenericInstance();
          }
          return ret;
-    }
-
-/**
-* Gets the SocialNetPostId property
-* @return String with the SocialNetPostId
-*/
-    public String getSocialNetPostId()
-    {
-        return getSemanticObject().getProperty(social_socialNetPostId);
-    }
-
-/**
-* Sets the SocialNetPostId property
-* @param value long with the SocialNetPostId
-*/
-    public void setSocialNetPostId(String value)
-    {
-        getSemanticObject().setProperty(social_socialNetPostId, value);
     }
 
 /**
