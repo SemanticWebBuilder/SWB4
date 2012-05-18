@@ -154,7 +154,44 @@ public class SWBSocialUtil {
          }
 
 
-
+        public static String getWords2Monitor(String delimiter, SWBModel model)
+        {
+                //Palabras acerca de la compañia
+                String words2monitor="";
+                String[] companyWords=getCompanyWords(model);
+                for(int i=0;i<companyWords.length;i++)
+                {
+                    System.out.println("companyWord["+i+"]:"+companyWords[i]);
+                    if(words2monitor.length()==0) words2monitor=companyWords[i];
+                    else words2monitor+=delimiter+companyWords[i];
+                }
+                //Palabras acerca de la competencia
+                String[] competitionWords=getCompetitionWords(model);
+                for(int i=0;i<competitionWords.length;i++)
+                {
+                    System.out.println("competitionWords["+i+"]:"+competitionWords[i]);
+                    if(words2monitor.length()==0) words2monitor=competitionWords[i];
+                    else words2monitor+=delimiter+competitionWords[i];
+                }
+                //Palabras acerca de productos y servicios
+                String[] pAndServWords=getProductAndServicesWords(model);
+                for(int i=0;i<pAndServWords.length;i++)
+                {
+                    System.out.println("pAndServWords["+i+"]:"+pAndServWords[i]);
+                    if(words2monitor.length()==0) words2monitor=pAndServWords[i];
+                    else words2monitor+=delimiter+pAndServWords[i];
+                }
+                //Palabras acerca de productos y servicios
+                String[] otherWords=getOtherWords(model);
+                for(int i=0;i<otherWords.length;i++)
+                {
+                    System.out.println("otherWords["+i+"]:"+otherWords[i]);
+                    if(words2monitor.length()==0) words2monitor=otherWords[i];
+                    else words2monitor+=delimiter+otherWords[i];
+                }
+                return words2monitor;
+        }
+    
      }
 
 }
