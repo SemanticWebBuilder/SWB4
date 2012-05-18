@@ -1,7 +1,7 @@
 package org.semanticwb.social.base;
 
 
-public abstract class TwitterBase extends org.semanticwb.social.SocialNetwork implements org.semanticwb.model.Descriptiveable,org.semanticwb.social.Postable,org.semanticwb.model.Traceable,org.semanticwb.social.Secreteable,org.semanticwb.social.Photoable,org.semanticwb.social.Messageable
+public abstract class TwitterBase extends org.semanticwb.social.SocialNetwork implements org.semanticwb.social.KeepAliveListenerable,org.semanticwb.social.Messageable,org.semanticwb.model.Traceable,org.semanticwb.social.Listenerable,org.semanticwb.social.Secreteable,org.semanticwb.social.Postable,org.semanticwb.social.Photoable,org.semanticwb.model.Descriptiveable
 {
    /**
    * Almacena la fecha de expiración del token autorizado para hacer publicaciones, por conveniencia no utiliza displayProperty
@@ -216,6 +216,24 @@ public abstract class TwitterBase extends org.semanticwb.social.SocialNetwork im
     public void setAccessToken(String value)
     {
         getSemanticObject().setProperty(social_accessToken, value);
+    }
+
+/**
+* Gets the IsKeepingConnection property
+* @return boolean with the IsKeepingConnection
+*/
+    public boolean isIsKeepingConnection()
+    {
+        return getSemanticObject().getBooleanProperty(social_isKeepingConnection);
+    }
+
+/**
+* Sets the IsKeepingConnection property
+* @param value long with the IsKeepingConnection
+*/
+    public void setIsKeepingConnection(boolean value)
+    {
+        getSemanticObject().setBooleanProperty(social_isKeepingConnection, value);
     }
 
 /**

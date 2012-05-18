@@ -20,6 +20,7 @@ import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.portal.api.SWBActionResponse;
+import org.semanticwb.social.util.SWBSocialUtil;
 
 
 public class Youtube extends org.semanticwb.social.base.YoutubeBase 
@@ -118,9 +119,8 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase
                 {
                     String idEntry=entry.getId().substring(post+1);
                     System.out.println("idEntry********:"+idEntry);
-                    SocialPost newSocialPost=SocialPost.ClassMgr.createSocialPost(idEntry, wsite);
-                    newSocialPost.setSocialPost(video);
-                    newSocialPost.setSocialNetwork(this);
+                    //SWBSocialUtil.MONITOR.persistPost2Monitor(video, idEntry, this, wsite);
+                    addPost(video, idEntry, this);
                 }
 
                 System.out.println("createdEntry:"+entry.getPublicationState().getState().name());
