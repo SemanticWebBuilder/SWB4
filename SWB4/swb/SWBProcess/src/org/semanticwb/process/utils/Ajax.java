@@ -39,10 +39,6 @@ import org.semanticwb.process.model.ProcessInstance;
  */
 public class Ajax {
 
-    public static String specialChars(String label) {
-        return label.replaceAll("á", "&acute;").replaceAll("é", "&eacute;").replaceAll("í", "&iacute;").replaceAll("ó", "&oacute;").replaceAll("ú", "&uacute;").replaceAll("ñ", "&ntilde;");
-    }
-
     public static Object notNull(Object parameter) {
         if (null!=parameter) return parameter; else return "";
     }
