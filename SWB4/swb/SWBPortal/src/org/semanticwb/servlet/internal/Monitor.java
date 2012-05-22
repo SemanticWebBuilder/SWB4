@@ -140,9 +140,9 @@ public class Monitor implements InternalServlet
     private static float THRESHOLD_CPU=85.0f;
     private static long THRESHOLD_TIME=250;
     private static long THRESHOLD_PPS=20;
-    private static boolean alertOn=true;
-    private static String alertEmail="alertWB@sergiomartinez.com.mx";
-    private static String siteName="DemoSite";
+    private static boolean alertOn=false;
+    private static String alertEmail="webbuilder@infotec.com.mx";
+    private static String siteName="No Name";
     
     
     /* (non-Javadoc)
