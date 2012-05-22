@@ -34,11 +34,9 @@ import java.io.PrintWriter;
 import java.net.URLDecoder;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
-import org.semanticwb.process.model.Process;
 import org.semanticwb.process.model.Instance;
 import org.semanticwb.process.model.ProcessSite;
 import org.semanticwb.process.model.ProcessInstance;
-import org.semanticwb.process.model.FlowNodeInstance;
 import org.semanticwb.process.model.SubProcessInstance;
 
 import org.semanticwb.portal.api.SWBResourceURL;
@@ -50,7 +48,6 @@ import org.semanticwb.process.kpi.CaseCountSys;
 import org.semanticwb.process.kpi.KProcessInstance;
 import org.semanticwb.process.kpi.CaseProcessInstance;
 
-import org.semanticwb.process.utils.Ajax;
 import org.semanticwb.process.utils.Restriction;
 import org.semanticwb.process.utils.TimeInterval;
 import org.semanticwb.process.utils.DateInterval;
@@ -74,14 +71,16 @@ import org.w3c.dom.Document;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.semanticwb.model.SWBClass;
+import org.semanticwb.model.*;
 
 import org.semanticwb.process.utils.JRCaseDetail;
 import org.semanticwb.portal.admin.resources.reports.jrresources.JRResource;
 import org.semanticwb.portal.admin.resources.reports.jrresources.JRPdfResource;
 import org.semanticwb.portal.admin.resources.reports.jrresources.JRRtfResource;
 import org.semanticwb.portal.admin.resources.reports.jrresources.JRDataSourceable;
-import org.semanticwb.process.model.ItemAwareReference;
+import org.semanticwb.process.model.Process;
+import org.semanticwb.process.model.*;
+import org.semanticwb.process.utils.*;
 
 /**
  *
@@ -190,18 +189,41 @@ public class CaseFilter extends GenericResource {
          out.println("}\n");
 
          out.println("  function addProps(){");
-         out.println("      var params = 'process='+dojo.byId('process').value;");
+         out.println("      var process = dijit.byId('process').value;");
+         out.println("      var startda = dojo.byId('starteda').value;");
+         out.println("      var startto = dojo.byId('startedto').value;");
+         out.println("      var closeda = dojo.byId('closeda').value;");
+         out.println("      var closeto = dojo.byId('closedto').value;");
+         out.println("      var user = dijit.byId('permission_value').value;");
+         out.println("      var oper = dijit.byId('response_oper').value;");
+         out.println("      var rtime = dojo.byId('response_time').value;");
+         out.println("      var runit = dijit.byId('response_unit').value;");
+         out.println("      var status = dijit.byId('status').value;");
+         
+         out.println("      if (process == null || process == \"null\") process = \"\";");
+         out.println("      if (startda == null || startda == \"null\") startda = \"\";");
+         out.println("      if (startto == null || startto == \"null\") startto = \"\";");
+         out.println("      if (closeda == null || closeda == \"null\") closeda = \"\";");
+         out.println("      if (closeto == null || closeto == \"null\") closeto = \"\";");
+         out.println("      if (user == null || user == \"null\") user = \"\";");
+         out.println("      if (oper == null || oper == \"null\") oper = \"\";");
+         out.println("      if (rtime == null || rtime == \"null\") rtime = \"\";");
+         out.println("      if (runit == null || runit == \"null\") runit = \"\";");
+         out.println("      if (status == null || status == \"null\") status = \"\";");
+                 
+         
+         out.println("      var params = 'process='+process;");
          //out.println("          params += '&permission=0';");
-         out.println("          params += '&starteda=' + dojo.byId('starteda').value;");
-         out.println("          params += '&startedto=' + dojo.byId('startedto').value;");
-         out.println("          params += '&closeda=' + dojo.byId('closeda').value;");
-         out.println("          params += '&closedto=' + dojo.byId('closedto').value;");
-         out.println("          params += '&permission_value=' + dojo.byId('permission_value').value;");
-         out.println("          params += '&response_oper=' + dojo.byId('response_oper').value;");
-         out.println("          params += '&response_time=' + dojo.byId('response_time').value;");
-         out.println("          params += '&response_unit=' + dojo.byId('response_unit').value;");
+         out.println("          params += '&starteda=' + startda;");
+         out.println("          params += '&startedto=' + startto;");
+         out.println("          params += '&closeda=' + closeda;");
+         out.println("          params += '&closedto=' + closeto;");
+         out.println("          params += '&permission_value=' + user;");
+         out.println("          params += '&response_oper=' + oper;");
+         out.println("          params += '&response_time=' + rtime;");
+         out.println("          params += '&response_unit=' + runit;");
          out.println("      if(dojo.byId('status')) {");
-         out.println("          params += '&status=' + dojo.byId('status').value;");
+         out.println("          params += '&status=' + status;");
          out.println("      }");
          Iterator itIds = getProcessObjectsIds().iterator();
          while (itIds.hasNext()) {
@@ -253,32 +275,21 @@ public class CaseFilter extends GenericResource {
          out.print("              <tr>\n");
          out.print("                  <td width=\"40%\">" + paramRequest.getLocaleString("process") + ":</td>\n");
          out.print("                  <td width=\"60%\" align=\"left\">\n");
-         out.print("                      <select id=\"process\" name=\"process\">\n");
+         out.print("                      <select id=\"process\" name=\"process\" style=\"width:250px;\" dojoType=\"dijit.form.FilteringSelect\">\n");
          out.print("                          <option value=\"\">&nbsp;</option>\n");
-         Iterator isites = ProcessSite.ClassMgr.listProcessSites();
-         while (isites.hasNext()) {
-            ProcessSite site = (ProcessSite)isites.next();
-            Iterator<Process> itprocess = site.listProcesses();
-            /*java.util.Vector processdefs = BPMSProcessInstance.ClassMgr.getAllProcessDefinitions(site);
-            java.util.Enumeration eprocess = processdefs.elements();
-            while (eprocess.hasMoreElements()) {*/
-            while (itprocess.hasNext()) {
-                //Process process = (Process)eprocess.nextElement();
-                Process process = itprocess.next();
-                out.print("                   <option value=" +  process.getEncodedURI() + ">" + process.getTitle() + "</option>\n");
-            }
-         }
+        Iterator<Process> itprocess = SWBComparator.sortByDisplayName(Process.ClassMgr.listProcesses(), "es");
+        while (itprocess.hasNext()) {
+            Process process = itprocess.next();
+            out.print("                   <option value=" +  process.getEncodedURI() + ">" + process.getTitle() + "</option>\n");
+        }
          out.print("                      </select>\n");
          out.print("                  </td>");
          out.print("              </tr>\n");
          out.print("              <tr>\n");
          out.print("                  <td>" + paramRequest.getLocaleString("status") + ":</td>\n");
          out.print("                  <td>\n");
-         out.print("                      <select id=\"status\" name=\"status\">\n");
+         out.print("                      <select id=\"status\" name=\"status\" style=\"width:250px;\" dojoType=\"dijit.form.FilteringSelect\">\n");
          out.print("                          <option value=\"\">&nbsp;</option>\n");
-         /*out.print("                          <option value=\"" + Activity.STATUS_PROCESSING + "\">" + paramRequest.getLocaleString("STATUS_PROCESSING") + "</option>\n");
-         out.print("                          <option value=\"" + Activity.STATUS_CLOSED + "\">" + paramRequest.getLocaleString("STATUS_CLOSED") + "</option>\n");
-         out.print("                          <option value=\"" + Activity.STATUS_ABORTED + "\">" + paramRequest.getLocaleString("STATUS_ABORTED") + "</option>\n");*/
          out.print("                          <option value=\"" + Instance.STATUS_PROCESSING + "\">" + paramRequest.getLocaleString("STATUS_PROCESSING") + "</option>\n");
          out.print("                          <option value=\"" + Instance.STATUS_CLOSED + "\">" + paramRequest.getLocaleString("STATUS_CLOSED") + "</option>\n");
          out.print("                          <option value=\"" + Instance.STATUS_ABORTED + "\">" + paramRequest.getLocaleString("STATUS_ABORTED") + "</option>\n");
@@ -295,7 +306,7 @@ public class CaseFilter extends GenericResource {
          out.print("                          <option value=\"" + ROLE + "\">" + paramRequest.getLocaleString("ROLE") + "</option>\n");
          out.print("                          <option value=\"" + GROUP + "\">" + paramRequest.getLocaleString("GROUP") + "</option>\n");
          out.print("                      </select>\n");*/
-         out.print("                      <select id=\"permission_value\" name=\"permission_value\">\n");
+         out.print("                      <select id=\"permission_value\" name=\"permission_value\" style=\"width:250px;\" dojoType=\"dijit.form.FilteringSelect\">\n");
          out.print("                        <option value=\"\">&nbsp;</option>\n");
          getSelectUsers(out);
          out.print("                      </select>\n");
@@ -304,21 +315,21 @@ public class CaseFilter extends GenericResource {
          out.print("              <tr>\n");
          out.print("                  <td>" + paramRequest.getLocaleString("started") + ":</td>\n");
          out.print("                  <td>\n");
-         out.print("                      <input type=\"text\" name=\"starteda\" onblur=\"if(!this.value){this.focus();}\" id=\"starteda\" dojoType=\"dijit.form.DateTextBox\" size=\"11\" style=\"width:110px;\" hasDownArrow=\"true\">");
-         out.print("                      &nbsp;<input type=\"text\" name=\"startedto\" onblur=\"if(!this.value){this.focus();}\" id=\"startedto\" dojoType=\"dijit.form.DateTextBox\" size=\"11\" style=\"width:110px;\" hasDownArrow=\"true\">\n");
+         out.print("                      <input type=\"text\" name=\"starteda\" id=\"starteda\" dojoType=\"dijit.form.DateTextBox\" size=\"11\" style=\"width:110px;\" hasDownArrow=\"true\">");
+         out.print("                      &nbsp;<input type=\"text\" name=\"startedto\" id=\"startedto\" dojoType=\"dijit.form.DateTextBox\" size=\"11\" style=\"width:110px;\" hasDownArrow=\"true\">\n");
          out.print("                  </td>");
          out.print("              </tr>\n");
          out.print("              <tr>\n");
          out.print("                  <td>" + paramRequest.getLocaleString("closed") + ":</td>\n");
          out.print("                  <td>\n");
-         out.print("                      <input type=\"text\" name=\"closeda\" onblur=\"if(!this.value){this.focus();}\" id=\"closeda\" dojoType=\"dijit.form.DateTextBox\" size=\"11\" style=\"width:110px;\" hasDownArrow=\"true\">");
-         out.print("                      &nbsp;<input type=\"text\" name=\"closedto\" onblur=\"if(!this.value){this.focus();}\" id=\"closedto\" dojoType=\"dijit.form.DateTextBox\" size=\"11\" style=\"width:110px;\" hasDownArrow=\"true\">\n");
+         out.print("                      <input type=\"text\" name=\"closeda\" id=\"closeda\" dojoType=\"dijit.form.DateTextBox\" size=\"11\" style=\"width:110px;\" hasDownArrow=\"true\">");
+         out.print("                      &nbsp;<input type=\"text\" name=\"closedto\" id=\"closedto\" dojoType=\"dijit.form.DateTextBox\" size=\"11\" style=\"width:110px;\" hasDownArrow=\"true\">\n");
          out.print("                  </td>\n");
          out.print("              </tr>\n");
          out.print("             <tr>\n");
          out.print("                  <td>" + paramRequest.getLocaleString("RESPONSE_TIME") + ":</td>\n");
          out.print("                  <td>\n");
-         out.print("                     <select id=\"response_oper\" name=\"response_oper\">\n");
+         out.print("                     <select id=\"response_oper\" name=\"response_oper\" dojoType=\"dijit.form.FilteringSelect\" style=\"width:60px;\">\n");
          out.print("                         <option value=\"\">&nbsp;</option>\n");
          out.print("                         <option value=\"" + Restriction.EQUALS + "\">=</option>\n");
          out.print("                         <option value=\"" + Restriction.GREATER_THAT + "\">></option>\n");
@@ -327,7 +338,7 @@ public class CaseFilter extends GenericResource {
          out.print("                         <option value=\"" + Restriction.SMALLER_EQUAL + "\"><=</option>\n");
          out.print("                     </select>\n");
          out.print("                     &nbsp;<input id=\"response_time\" name=\"response_time\" type=\"text\" style=\"width:60px;\"/>\n");
-         out.print("                     &nbsp;<select id=\"response_unit\" name=\"response_unit\">\n");
+         out.print("                     &nbsp;<select id=\"response_unit\" name=\"response_unit\" dojoType=\"dijit.form.FilteringSelect\" style=\"width:90px;\">\n");
          out.print("                         <option value=\"\">&nbsp;</option>\n");
          out.print("                         <option value=\"" + TimeInterval.MILISECOND + "\">" + paramRequest.getLocaleString("MILISECOND") + "</option>\n");
          out.print("                         <option value=\"" + TimeInterval.SECOND + "\">" + paramRequest.getLocaleString("SECOND") + "</option>\n");
@@ -356,7 +367,6 @@ public class CaseFilter extends GenericResource {
          out.print("              </tr>\n");
          out.print("          </table>\n");
          out.print("      </fieldset>\n");
-
          out.print("      <fieldset>\n");
          out.print("        <table border=\"0\" width=\"70%\">\n");
          out.print("            <tr>\n");
@@ -388,16 +398,11 @@ public class CaseFilter extends GenericResource {
     @Override
     public void doEdit(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         ArrayList pobjs = new ArrayList();
-        Iterator isites = ProcessSite.ClassMgr.listProcessSites();
-        while (isites.hasNext()) {
-            ProcessSite site = (ProcessSite)isites.next();
-            Iterator<Process> itprocess = site.listProcesses();
-            while (itprocess.hasNext()) {
-                Process process = itprocess.next();
-                if(URLDecoder.decode(request.getParameter("process")).equals(process.getURI())) {
-                    ProcessInstance pinst = CaseProcessInstance.pop(process);
-                    getObjectsFromInstance(pinst, pobjs);
-                }
+        Iterator<Process> itprocess = Process.ClassMgr.listProcesses();
+        while (itprocess.hasNext()) {
+            Process process = itprocess.next();
+            if(URLDecoder.decode(request.getParameter("process")).equals(process.getURI())) {
+                getProcessObjects(process, pobjs);
             }
         }
         printProcessObjetcs(request, pobjs, response.getWriter(), paramRequest);
@@ -499,63 +504,73 @@ public class CaseFilter extends GenericResource {
         }
     }*/
 
-    private void getObjectsFromInstance(ProcessInstance pinst, ArrayList pobjs) {
-        Iterator<ItemAwareReference> objit = pinst.listItemAwareReferences();
-        while(objit.hasNext()) {
-            ItemAwareReference item=objit.next();
-            SWBClass obj =  item.getProcessObject();
-            //TODO: Verificar nombre del ItemAware
-            if (!pobjs.contains(obj))
-                pobjs.add(obj);
+    private void getProcessObjects(Process process, ArrayList pobjs) {
+        Iterator<ItemAware> items = process.listHerarquicalRelatedItemAware().iterator();
+        while(items.hasNext()) {
+            ItemAware item = items.next();
+            if (item.getItemSemanticClass() != null && item.getName() != null) { //Ignora elementos no configurados
+                SemanticClass obj =  item.getItemSemanticClass();
+                //TODO: Verificar nombre del ItemAware
+                if (!pobjs.contains(obj))
+                    pobjs.add(obj);
+            }
         }
-        Iterator<FlowNodeInstance> foit = pinst.listFlowNodeInstances();
+        Iterator<GraphicalElement> foit = process.listAllContaineds();
         while(foit.hasNext()) {
-            FlowNodeInstance flobin = foit.next();
-            if (flobin instanceof SubProcessInstance)
-                getObjectsFromInstance((SubProcessInstance)flobin, pobjs);
+            GraphicalElement flobin = foit.next();
+            if (flobin instanceof SubProcess)
+                getSubprocessObject((SubProcess)flobin, pobjs);
         }
     }
 
-    private void getObjectsFromInstance(SubProcessInstance spinst, ArrayList pobjs) {
-        Iterator<ItemAwareReference> objit = spinst.listItemAwareReferences();
-        while(objit.hasNext()) {
-            ItemAwareReference item=objit.next();
-            SWBClass obj =  item.getProcessObject();
-            //TODO: Verificar nombre del ItemAware
-            if (!pobjs.contains(obj))
-                pobjs.add(obj);
+    private void getSubprocessObject(SubProcess subprocess, ArrayList pobjs) {
+        Iterator<ItemAware> items = subprocess.listRelatedItemAware().iterator();
+        while(items.hasNext()) {
+            ItemAware item=items.next();
+            if (item.getItemSemanticClass() != null && item.getName() != null) {
+                SemanticClass obj =  item.getItemSemanticClass();
+                //TODO: Verificar nombre del ItemAware
+                if (!pobjs.contains(obj))
+                    pobjs.add(obj);
+            }
         }
-        Iterator<FlowNodeInstance> foit = spinst.listFlowNodeInstances();
+        Iterator<GraphicalElement> foit = subprocess.listAllContaineds();
         while(foit.hasNext()) {
-            FlowNodeInstance flobin = foit.next();
-            if (flobin instanceof SubProcessInstance)
-                getObjectsFromInstance((SubProcessInstance)flobin, pobjs);
+            GraphicalElement flobin = foit.next();
+            if (flobin instanceof SubProcess)
+                getSubprocessObject((SubProcess)flobin, pobjs);
         }
     }
 
     private void printProcessObjetcs(HttpServletRequest request, ArrayList pobjs, PrintWriter out, SWBParamRequest paramRequest) throws SWBResourceException {
+        String lang = "es";
+        if (paramRequest.getUser() != null && paramRequest.getUser().getLanguage() != null){
+            lang = paramRequest.getUser().getLanguage();
+        }
+        
         out.print(" <table border=\"0\" width=\"100%\" align=\"left\"\n>");
-        Iterator<SWBClass> objit = pobjs.iterator();
+        Iterator<SemanticClass> objit = pobjs.iterator();
         if (objit.hasNext()) {
             while (objit.hasNext()) {
                 String dao = "";
-                SWBClass obj =  objit.next();
-                SemanticObject sob = SemanticObject.getSemanticObject(obj.getURI());
-                SemanticClass cls = sob.getSemanticClass();
+                SemanticClass cls =  objit.next();
+                //SemanticObject sob = SemanticObject.getSemanticObject(obj.getURI());
+                //SemanticClass cls = sob.getSemanticClass();
                 //System.out.println("SWBClass: " + obj.getURI() + " " + cls.getRootClass().getName() + " " + cls.getRootClass().getLabel(paramRequest.getUser().getLanguage()));
                 if (null!=cls.getRootClass().getLabel(paramRequest.getUser().getLanguage()))
                     dao = cls.getRootClass().getLabel(paramRequest.getUser().getLanguage());
                 else
                     dao = cls.getRootClass().getName();
                 out.print(" <tr>\n");
-                out.print("     <td colspan=\"4\"><b>" + Ajax.specialChars(dao) + "<b></td>\n");
+                out.print("     <td colspan=\"4\"><b>" + SWBUtils.TEXT.replaceSpecialCharacters(dao, true).replaceAll("_", " ") + "<b></td>\n");
                 out.print(" </tr>\n");
-                Iterator<SemanticProperty> spit = obj.getSemanticObject().listProperties();
+                Iterator<SemanticProperty> spit = cls.listProperties();
                 while(spit.hasNext()) {
                     SemanticProperty sp = spit.next();
+                    if (sp.getPropId().equals("swb:valid") || sp.isObjectProperty()) continue;
                     //out.print(" <tr>\n" + "<input name=\"key\" type=\"hidden\" value=\"" + sp.getName() + "\"/>");
                     out.print("     <td width=\"5%\"><input id=\"" + sp.getName() + "_active\" type=\"checkbox\" name=\"" + sp.getName() + "_active\" value=\"1\"" + ("1".equalsIgnoreCase(request.getParameter(sp.getName()+"_active")) ? " checked" : "") + "></td>\n");
-                    out.print("     <td width=\"25%\">" + Ajax.specialChars(sp.getDisplayName()) + "</td>\n");
+                    out.print("     <td width=\"25%\">" + SWBUtils.TEXT.replaceSpecialCharacters(sp.getDisplayName(lang), true).replaceAll("_", " ") + "</td>\n");
                     out.print("     <td width=\"25%\">\n");
                     out.print("         <select id=\"" + sp.getName() + "_operator\" name=\"" + sp.getName() + "_operator\">\n");
                     out.print("             <option value=\"" + Restriction.EQUALS + "\" " + (String.valueOf(Restriction.EQUALS).equalsIgnoreCase(request.getParameter(sp.getName()+"_operator")) ? " selected" : "") + ">=</option>\n");
@@ -665,9 +680,10 @@ public class CaseFilter extends GenericResource {
         String idpinst = getURLInstance(request.getParameter("instance"));
         SemanticObject semObject = SemanticObject.createSemanticObject(idpinst);
         ProcessInstance pinst = (ProcessInstance)semObject.createGenericInstance();
+        Process process = pinst.getProcessType();
         out.println("<h3>Propiedades</h3>");
         out.println("<ul>");
-        getObjectsFromInstance(pinst, pobjs);
+        getProcessObjects(process, pobjs);
         Iterator<SWBClass> objit = pobjs.iterator();
         while(objit.hasNext()) {
             SWBClass pobj =  objit.next();
@@ -676,7 +692,7 @@ public class CaseFilter extends GenericResource {
             while(spit.hasNext()) {
                 SemanticProperty sp = spit.next();
                 //out.println("<li>" + Ajax.specialChars(sp.getDisplayName()) + ": " + BPMSProcessInstance.getPropertyValue(pobj.getSemanticObject(), sp) + "</li>");
-                out.println("<li>" + Ajax.specialChars(sp.getDisplayName()) + ": " + KProcessInstance.getPropertyValue(pobj.getSemanticObject(), sp) + "</li>");
+                out.println("<li>" + SWBUtils.TEXT.replaceSpecialCharacters(sp.getDisplayName(), true).replaceAll("_", " ") + ": " + KProcessInstance.getPropertyValue(pobj.getSemanticObject(), sp) + "</li>");
             }
         }
         out.println("</ul>");
@@ -913,14 +929,21 @@ public class CaseFilter extends GenericResource {
     }
 
     private void getSelectUsers(PrintWriter out) throws SWBResourceException {
+        ArrayList<User> users = new ArrayList<User>();
         Iterator<UserRepository> listur = SWBContext.listUserRepositories();
         while (listur.hasNext()) {
             UserRepository ur = listur.next();
             Iterator<User> itusers = ur.listUsers();
             while (itusers.hasNext()) {
                 User user = itusers.next();
-                out.print("                      <option value=\"" + user.getLogin() + "\">" + user.getFullName() + "</option>\n");
+                users.add(user);
             }
+        }
+        
+        Iterator<User> itUsers = SWBComparator.sortByDisplayName(users.iterator(), "es");
+        while (itUsers.hasNext()) {
+            User user = itUsers.next();
+            out.print("                      <option value=\"" + user.getLogin() + "\">" + user.getFullName() + "</option>\n");
         }
     }
 
@@ -935,8 +958,8 @@ public class CaseFilter extends GenericResource {
         SemanticObject sob = SemanticObject.getSemanticObject(obj.getURI());
         SemanticClass cls = sob.getSemanticClass();
         if (null!=cls.getRootClass().getLabel(paramRequest.getUser().getLanguage()))
-            return Ajax.specialChars(cls.getRootClass().getLabel(paramRequest.getUser().getLanguage()));
+            return SWBUtils.TEXT.replaceSpecialCharacters(cls.getRootClass().getLabel(paramRequest.getUser().getLanguage()), true).replaceAll("_", " ");
         else
-            return Ajax.specialChars(cls.getRootClass().getName());
+            return SWBUtils.TEXT.replaceSpecialCharacters(cls.getRootClass().getName(), true).replaceAll("_", " ");
     }
 }
