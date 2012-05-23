@@ -1,0 +1,132 @@
+package org.semanticwb.social.base;
+
+
+   /**
+   * Clase en donde se almacenan todos los post de tipo Photo y que entran por el Listener 
+   */
+public abstract class PhotoInBase extends org.semanticwb.social.PostIn implements org.semanticwb.social.Imageable,org.semanticwb.model.Tagable,org.semanticwb.model.Descriptiveable
+{
+   /**
+   * Clase en donde se almacenan todos los post de tipo Photo y que entran por el Listener
+   */
+    public static final org.semanticwb.platform.SemanticClass social_PhotoIn=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#PhotoIn");
+   /**
+   * The semantic class that represents the currentObject
+   */
+    public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#PhotoIn");
+
+    public static class ClassMgr
+    {
+       /**
+       * Returns a list of PhotoIn for a model
+       * @param model Model to find
+       * @return Iterator of org.semanticwb.social.PhotoIn
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.PhotoIn> listPhotoIns(org.semanticwb.model.SWBModel model)
+        {
+            java.util.Iterator it=model.getSemanticObject().getModel().listInstancesOfClass(sclass);
+            return new org.semanticwb.model.GenericIterator<org.semanticwb.social.PhotoIn>(it, true);
+        }
+       /**
+       * Returns a list of org.semanticwb.social.PhotoIn for all models
+       * @return Iterator of org.semanticwb.social.PhotoIn
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.PhotoIn> listPhotoIns()
+        {
+            java.util.Iterator it=sclass.listInstances();
+            return new org.semanticwb.model.GenericIterator<org.semanticwb.social.PhotoIn>(it, true);
+        }
+       /**
+       * Gets a org.semanticwb.social.PhotoIn
+       * @param id Identifier for org.semanticwb.social.PhotoIn
+       * @param model Model of the org.semanticwb.social.PhotoIn
+       * @return A org.semanticwb.social.PhotoIn
+       */
+        public static org.semanticwb.social.PhotoIn getPhotoIn(String id, org.semanticwb.model.SWBModel model)
+        {
+            return (org.semanticwb.social.PhotoIn)model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
+        }
+       /**
+       * Create a org.semanticwb.social.PhotoIn
+       * @param id Identifier for org.semanticwb.social.PhotoIn
+       * @param model Model of the org.semanticwb.social.PhotoIn
+       * @return A org.semanticwb.social.PhotoIn
+       */
+        public static org.semanticwb.social.PhotoIn createPhotoIn(String id, org.semanticwb.model.SWBModel model)
+        {
+            return (org.semanticwb.social.PhotoIn)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
+        }
+       /**
+       * Remove a org.semanticwb.social.PhotoIn
+       * @param id Identifier for org.semanticwb.social.PhotoIn
+       * @param model Model of the org.semanticwb.social.PhotoIn
+       */
+        public static void removePhotoIn(String id, org.semanticwb.model.SWBModel model)
+        {
+            model.getSemanticObject().getModel().removeSemanticObject(model.getSemanticObject().getModel().getObjectUri(id,sclass));
+        }
+       /**
+       * Returns true if exists a org.semanticwb.social.PhotoIn
+       * @param id Identifier for org.semanticwb.social.PhotoIn
+       * @param model Model of the org.semanticwb.social.PhotoIn
+       * @return true if the org.semanticwb.social.PhotoIn exists, false otherwise
+       */
+
+        public static boolean hasPhotoIn(String id, org.semanticwb.model.SWBModel model)
+        {
+            return (getPhotoIn(id, model)!=null);
+        }
+       /**
+       * Gets all org.semanticwb.social.PhotoIn with a determined PostListenerBase
+       * @param value PostListenerBase of the type org.semanticwb.social.PostListenerContainerBase
+       * @param model Model of the org.semanticwb.social.PhotoIn
+       * @return Iterator with all the org.semanticwb.social.PhotoIn
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.PhotoIn> listPhotoInByPostListenerBase(org.semanticwb.social.PostListenerContainerBase value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.PhotoIn> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(social_postListenerBase, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.social.PhotoIn with a determined PostListenerBase
+       * @param value PostListenerBase of the type org.semanticwb.social.PostListenerContainerBase
+       * @return Iterator with all the org.semanticwb.social.PhotoIn
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.PhotoIn> listPhotoInByPostListenerBase(org.semanticwb.social.PostListenerContainerBase value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.PhotoIn> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(social_postListenerBase,value.getSemanticObject(),sclass));
+            return it;
+        }
+    }
+
+   /**
+   * Constructs a PhotoInBase with a SemanticObject
+   * @param base The SemanticObject with the properties for the PhotoIn
+   */
+    public PhotoInBase(org.semanticwb.platform.SemanticObject base)
+    {
+        super(base);
+    }
+
+/**
+* Gets the Photo property
+* @return String with the Photo
+*/
+    public String getPhoto()
+    {
+        return getSemanticObject().getProperty(social_photo);
+    }
+
+/**
+* Sets the Photo property
+* @param value long with the Photo
+*/
+    public void setPhoto(String value)
+    {
+        getSemanticObject().setProperty(social_photo, value);
+    }
+}

@@ -4,9 +4,8 @@ package org.semanticwb.social.base;
    /**
    * Clase que sera creada cuando un post sea de tipo mensaje 
    */
-public abstract class MessageBase extends org.semanticwb.social.Post implements org.semanticwb.model.Traceable,org.semanticwb.model.Expirable
+public abstract class MessageBase extends org.semanticwb.social.PostOut implements org.semanticwb.model.Traceable,org.semanticwb.social.Textable,org.semanticwb.model.Tagable,org.semanticwb.model.Descriptiveable
 {
-    public static final org.semanticwb.platform.SemanticProperty social_msg_Text=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#msg_Text");
    /**
    * Clase que sera creada cuando un post sea de tipo mensaje
    */
@@ -129,29 +128,6 @@ public abstract class MessageBase extends org.semanticwb.social.Post implements 
         public static java.util.Iterator<org.semanticwb.social.Message> listMessageByCreator(org.semanticwb.model.User value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.social.Message> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_creator,value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.social.Message with a determined PostListenerBase
-       * @param value PostListenerBase of the type org.semanticwb.social.PostListenerContainerBase
-       * @param model Model of the org.semanticwb.social.Message
-       * @return Iterator with all the org.semanticwb.social.Message
-       */
-
-        public static java.util.Iterator<org.semanticwb.social.Message> listMessageByPostListenerBase(org.semanticwb.social.PostListenerContainerBase value,org.semanticwb.model.SWBModel model)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.social.Message> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(social_postListenerBase, value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.social.Message with a determined PostListenerBase
-       * @param value PostListenerBase of the type org.semanticwb.social.PostListenerContainerBase
-       * @return Iterator with all the org.semanticwb.social.Message
-       */
-
-        public static java.util.Iterator<org.semanticwb.social.Message> listMessageByPostListenerBase(org.semanticwb.social.PostListenerContainerBase value)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.social.Message> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(social_postListenerBase,value.getSemanticObject(),sclass));
             return it;
         }
        /**

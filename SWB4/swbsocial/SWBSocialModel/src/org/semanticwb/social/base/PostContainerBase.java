@@ -13,10 +13,7 @@ public abstract class PostContainerBase extends org.semanticwb.model.SWBClass im
    */
     public static final org.semanticwb.platform.SemanticProperty social_pc_SocialNetworkInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#pc_SocialNetworkInv");
     public static final org.semanticwb.platform.SemanticProperty social_month=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#month");
-   /**
-   * Clase que comprende todos los tipos de Post que pueden ir siendo creados en la herramienta.
-   */
-    public static final org.semanticwb.platform.SemanticClass social_Post=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#Post");
+    public static final org.semanticwb.platform.SemanticClass social_PostOut=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#PostOut");
     public static final org.semanticwb.platform.SemanticProperty social_hasPost=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#hasPost");
    /**
    * Clase que contiene todos los post que han sido enviados por una determinada red social. La intención de crear esta clase es para que se agrupen los Post de cada red social por mes y año, y de esta manera sea mucho mas sencillo, optimo y rapido realizar las busquedas.
@@ -167,23 +164,23 @@ public abstract class PostContainerBase extends org.semanticwb.model.SWBClass im
         }
        /**
        * Gets all org.semanticwb.social.PostContainer with a determined Post
-       * @param value Post of the type org.semanticwb.social.Post
+       * @param value Post of the type org.semanticwb.social.PostOut
        * @param model Model of the org.semanticwb.social.PostContainer
        * @return Iterator with all the org.semanticwb.social.PostContainer
        */
 
-        public static java.util.Iterator<org.semanticwb.social.PostContainer> listPostContainerByPost(org.semanticwb.social.Post value,org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.social.PostContainer> listPostContainerByPost(org.semanticwb.social.PostOut value,org.semanticwb.model.SWBModel model)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.social.PostContainer> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(social_hasPost, value.getSemanticObject(),sclass));
             return it;
         }
        /**
        * Gets all org.semanticwb.social.PostContainer with a determined Post
-       * @param value Post of the type org.semanticwb.social.Post
+       * @param value Post of the type org.semanticwb.social.PostOut
        * @return Iterator with all the org.semanticwb.social.PostContainer
        */
 
-        public static java.util.Iterator<org.semanticwb.social.PostContainer> listPostContainerByPost(org.semanticwb.social.Post value)
+        public static java.util.Iterator<org.semanticwb.social.PostContainer> listPostContainerByPost(org.semanticwb.social.PostOut value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.social.PostContainer> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(social_hasPost,value.getSemanticObject(),sclass));
             return it;
@@ -385,21 +382,21 @@ public abstract class PostContainerBase extends org.semanticwb.model.SWBClass im
         getSemanticObject().setProperty(social_month, value);
     }
    /**
-   * Gets all the org.semanticwb.social.Post
-   * @return A GenericIterator with all the org.semanticwb.social.Post
+   * Gets all the org.semanticwb.social.PostOut
+   * @return A GenericIterator with all the org.semanticwb.social.PostOut
    */
 
-    public org.semanticwb.model.GenericIterator<org.semanticwb.social.Post> listPosts()
+    public org.semanticwb.model.GenericIterator<org.semanticwb.social.PostOut> listPosts()
     {
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.social.Post>(getSemanticObject().listObjectProperties(social_hasPost));
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.social.PostOut>(getSemanticObject().listObjectProperties(social_hasPost));
     }
 
    /**
    * Gets true if has a Post
-   * @param value org.semanticwb.social.Post to verify
-   * @return true if the org.semanticwb.social.Post exists, false otherwise
+   * @param value org.semanticwb.social.PostOut to verify
+   * @return true if the org.semanticwb.social.PostOut exists, false otherwise
    */
-    public boolean hasPost(org.semanticwb.social.Post value)
+    public boolean hasPost(org.semanticwb.social.PostOut value)
     {
         boolean ret=false;
         if(value!=null)
@@ -410,10 +407,10 @@ public abstract class PostContainerBase extends org.semanticwb.model.SWBClass im
     }
    /**
    * Adds a Post
-   * @param value org.semanticwb.social.Post to add
+   * @param value org.semanticwb.social.PostOut to add
    */
 
-    public void addPost(org.semanticwb.social.Post value)
+    public void addPost(org.semanticwb.social.PostOut value)
     {
         getSemanticObject().addObjectProperty(social_hasPost, value.getSemanticObject());
     }
@@ -427,25 +424,25 @@ public abstract class PostContainerBase extends org.semanticwb.model.SWBClass im
     }
    /**
    * Removes a Post
-   * @param value org.semanticwb.social.Post to remove
+   * @param value org.semanticwb.social.PostOut to remove
    */
 
-    public void removePost(org.semanticwb.social.Post value)
+    public void removePost(org.semanticwb.social.PostOut value)
     {
         getSemanticObject().removeObjectProperty(social_hasPost,value.getSemanticObject());
     }
 
    /**
    * Gets the Post
-   * @return a org.semanticwb.social.Post
+   * @return a org.semanticwb.social.PostOut
    */
-    public org.semanticwb.social.Post getPost()
+    public org.semanticwb.social.PostOut getPost()
     {
-         org.semanticwb.social.Post ret=null;
+         org.semanticwb.social.PostOut ret=null;
          org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(social_hasPost);
          if(obj!=null)
          {
-             ret=(org.semanticwb.social.Post)obj.createGenericInstance();
+             ret=(org.semanticwb.social.PostOut)obj.createGenericInstance();
          }
          return ret;
     }

@@ -4,9 +4,8 @@ package org.semanticwb.social.base;
    /**
    * Clase que sera creada cuando un post sea de tipo video, como lo es para youtube y facebook (cuando se envía un video a facebook). 
    */
-public abstract class VideoBase extends org.semanticwb.social.Post implements org.semanticwb.social.Commentable,org.semanticwb.model.Traceable,org.semanticwb.model.Tagable,org.semanticwb.model.Expirable,org.semanticwb.model.Descriptiveable
+public abstract class VideoBase extends org.semanticwb.social.PostOut implements org.semanticwb.model.Traceable,org.semanticwb.model.Tagable,org.semanticwb.social.Video_able,org.semanticwb.model.Descriptiveable
 {
-    public static final org.semanticwb.platform.SemanticProperty social_video=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#video");
    /**
    * Clase que sera creada cuando un post sea de tipo video, como lo es para youtube y facebook (cuando se envía un video a facebook).
    */
@@ -109,29 +108,6 @@ public abstract class VideoBase extends org.semanticwb.social.Post implements or
             return it;
         }
        /**
-       * Gets all org.semanticwb.social.Video with a determined PostListenerBase
-       * @param value PostListenerBase of the type org.semanticwb.social.PostListenerContainerBase
-       * @param model Model of the org.semanticwb.social.Video
-       * @return Iterator with all the org.semanticwb.social.Video
-       */
-
-        public static java.util.Iterator<org.semanticwb.social.Video> listVideoByPostListenerBase(org.semanticwb.social.PostListenerContainerBase value,org.semanticwb.model.SWBModel model)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.social.Video> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(social_postListenerBase, value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.social.Video with a determined PostListenerBase
-       * @param value PostListenerBase of the type org.semanticwb.social.PostListenerContainerBase
-       * @return Iterator with all the org.semanticwb.social.Video
-       */
-
-        public static java.util.Iterator<org.semanticwb.social.Video> listVideoByPostListenerBase(org.semanticwb.social.PostListenerContainerBase value)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.social.Video> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(social_postListenerBase,value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
        * Gets all org.semanticwb.social.Video with a determined Creator
        * @param value Creator of the type org.semanticwb.model.User
        * @param model Model of the org.semanticwb.social.Video
@@ -189,39 +165,6 @@ public abstract class VideoBase extends org.semanticwb.social.Post implements or
     }
 
 /**
-* Gets the Description property
-* @return String with the Description
-*/
-    public String getDescription()
-    {
-        return getSemanticObject().getProperty(swb_description);
-    }
-
-/**
-* Sets the Description property
-* @param value long with the Description
-*/
-    public void setDescription(String value)
-    {
-        getSemanticObject().setProperty(swb_description, value);
-    }
-
-    public String getDescription(String lang)
-    {
-        return getSemanticObject().getProperty(swb_description, null, lang);
-    }
-
-    public String getDisplayDescription(String lang)
-    {
-        return getSemanticObject().getLocaleProperty(swb_description, lang);
-    }
-
-    public void setDescription(String description, String lang)
-    {
-        getSemanticObject().setProperty(swb_description, description, lang);
-    }
-
-/**
 * Gets the Video property
 * @return String with the Video
 */
@@ -237,89 +180,5 @@ public abstract class VideoBase extends org.semanticwb.social.Post implements or
     public void setVideo(String value)
     {
         getSemanticObject().setProperty(social_video, value);
-    }
-
-/**
-* Gets the Comment property
-* @return String with the Comment
-*/
-    public String getComment()
-    {
-        return getSemanticObject().getProperty(social_comment);
-    }
-
-/**
-* Sets the Comment property
-* @param value long with the Comment
-*/
-    public void setComment(String value)
-    {
-        getSemanticObject().setProperty(social_comment, value);
-    }
-
-/**
-* Gets the Title property
-* @return String with the Title
-*/
-    public String getTitle()
-    {
-        return getSemanticObject().getProperty(swb_title);
-    }
-
-/**
-* Sets the Title property
-* @param value long with the Title
-*/
-    public void setTitle(String value)
-    {
-        getSemanticObject().setProperty(swb_title, value);
-    }
-
-    public String getTitle(String lang)
-    {
-        return getSemanticObject().getProperty(swb_title, null, lang);
-    }
-
-    public String getDisplayTitle(String lang)
-    {
-        return getSemanticObject().getLocaleProperty(swb_title, lang);
-    }
-
-    public void setTitle(String title, String lang)
-    {
-        getSemanticObject().setProperty(swb_title, title, lang);
-    }
-
-/**
-* Gets the Tags property
-* @return String with the Tags
-*/
-    public String getTags()
-    {
-        return getSemanticObject().getProperty(swb_tags);
-    }
-
-/**
-* Sets the Tags property
-* @param value long with the Tags
-*/
-    public void setTags(String value)
-    {
-        getSemanticObject().setProperty(swb_tags, value);
-    }
-
-    public String getTags(String lang)
-    {
-        return getSemanticObject().getProperty(swb_tags, null, lang);
-    }
-
-    public String getDisplayTags(String lang)
-    {
-        return getSemanticObject().getLocaleProperty(swb_tags, lang);
-    }
-
-    public void setTags(String tags, String lang)
-    {
-        getSemanticObject().setProperty(swb_tags, tags, lang);
     }
 }
