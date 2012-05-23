@@ -534,6 +534,10 @@ public class SWBNews extends org.semanticwb.portal.resources.sem.news.base.SWBNe
                     values.add(st.nextToken());
                 }
                 uri = values.get(3);
+                if(uri.equals("_lang"))
+                {
+                    uri=null;
+                }
                 if ("_rid".equals(uri) && values.size() >= 6)
                 {
                     uri = values.get(5);
