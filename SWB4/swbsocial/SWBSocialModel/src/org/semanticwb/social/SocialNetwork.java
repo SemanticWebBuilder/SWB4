@@ -13,7 +13,7 @@ public class SocialNetwork extends org.semanticwb.social.base.SocialNetworkBase
         super(base);
     }
 
-    public void addPost(Post post, String socialPostId, SocialNetwork socialNetwork)
+    public void addPost(PostOut post, String socialPostId, SocialNetwork socialNetwork)
     {
         SWBModel swbModel=SWBContext.getSWBModel(post.getSemanticObject().getModel().getName());
         

@@ -1,0 +1,132 @@
+package org.semanticwb.social.base;
+
+
+   /**
+   * Clase en donde se almacenan todos los post de tipo Mensaje y que entran por el Listener 
+   */
+public abstract class MessageInBase extends org.semanticwb.social.PostIn implements org.semanticwb.social.Textable,org.semanticwb.model.Tagable,org.semanticwb.model.Descriptiveable
+{
+   /**
+   * Clase en donde se almacenan todos los post de tipo Mensaje y que entran por el Listener
+   */
+    public static final org.semanticwb.platform.SemanticClass social_MessageIn=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#MessageIn");
+   /**
+   * The semantic class that represents the currentObject
+   */
+    public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#MessageIn");
+
+    public static class ClassMgr
+    {
+       /**
+       * Returns a list of MessageIn for a model
+       * @param model Model to find
+       * @return Iterator of org.semanticwb.social.MessageIn
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.MessageIn> listMessageIns(org.semanticwb.model.SWBModel model)
+        {
+            java.util.Iterator it=model.getSemanticObject().getModel().listInstancesOfClass(sclass);
+            return new org.semanticwb.model.GenericIterator<org.semanticwb.social.MessageIn>(it, true);
+        }
+       /**
+       * Returns a list of org.semanticwb.social.MessageIn for all models
+       * @return Iterator of org.semanticwb.social.MessageIn
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.MessageIn> listMessageIns()
+        {
+            java.util.Iterator it=sclass.listInstances();
+            return new org.semanticwb.model.GenericIterator<org.semanticwb.social.MessageIn>(it, true);
+        }
+       /**
+       * Gets a org.semanticwb.social.MessageIn
+       * @param id Identifier for org.semanticwb.social.MessageIn
+       * @param model Model of the org.semanticwb.social.MessageIn
+       * @return A org.semanticwb.social.MessageIn
+       */
+        public static org.semanticwb.social.MessageIn getMessageIn(String id, org.semanticwb.model.SWBModel model)
+        {
+            return (org.semanticwb.social.MessageIn)model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
+        }
+       /**
+       * Create a org.semanticwb.social.MessageIn
+       * @param id Identifier for org.semanticwb.social.MessageIn
+       * @param model Model of the org.semanticwb.social.MessageIn
+       * @return A org.semanticwb.social.MessageIn
+       */
+        public static org.semanticwb.social.MessageIn createMessageIn(String id, org.semanticwb.model.SWBModel model)
+        {
+            return (org.semanticwb.social.MessageIn)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
+        }
+       /**
+       * Remove a org.semanticwb.social.MessageIn
+       * @param id Identifier for org.semanticwb.social.MessageIn
+       * @param model Model of the org.semanticwb.social.MessageIn
+       */
+        public static void removeMessageIn(String id, org.semanticwb.model.SWBModel model)
+        {
+            model.getSemanticObject().getModel().removeSemanticObject(model.getSemanticObject().getModel().getObjectUri(id,sclass));
+        }
+       /**
+       * Returns true if exists a org.semanticwb.social.MessageIn
+       * @param id Identifier for org.semanticwb.social.MessageIn
+       * @param model Model of the org.semanticwb.social.MessageIn
+       * @return true if the org.semanticwb.social.MessageIn exists, false otherwise
+       */
+
+        public static boolean hasMessageIn(String id, org.semanticwb.model.SWBModel model)
+        {
+            return (getMessageIn(id, model)!=null);
+        }
+       /**
+       * Gets all org.semanticwb.social.MessageIn with a determined PostListenerBase
+       * @param value PostListenerBase of the type org.semanticwb.social.PostListenerContainerBase
+       * @param model Model of the org.semanticwb.social.MessageIn
+       * @return Iterator with all the org.semanticwb.social.MessageIn
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.MessageIn> listMessageInByPostListenerBase(org.semanticwb.social.PostListenerContainerBase value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.MessageIn> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(social_postListenerBase, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.social.MessageIn with a determined PostListenerBase
+       * @param value PostListenerBase of the type org.semanticwb.social.PostListenerContainerBase
+       * @return Iterator with all the org.semanticwb.social.MessageIn
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.MessageIn> listMessageInByPostListenerBase(org.semanticwb.social.PostListenerContainerBase value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.MessageIn> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(social_postListenerBase,value.getSemanticObject(),sclass));
+            return it;
+        }
+    }
+
+   /**
+   * Constructs a MessageInBase with a SemanticObject
+   * @param base The SemanticObject with the properties for the MessageIn
+   */
+    public MessageInBase(org.semanticwb.platform.SemanticObject base)
+    {
+        super(base);
+    }
+
+/**
+* Gets the Msg_Text property
+* @return String with the Msg_Text
+*/
+    public String getMsg_Text()
+    {
+        return getSemanticObject().getProperty(social_msg_Text);
+    }
+
+/**
+* Sets the Msg_Text property
+* @param value long with the Msg_Text
+*/
+    public void setMsg_Text(String value)
+    {
+        getSemanticObject().setProperty(social_msg_Text, value);
+    }
+}

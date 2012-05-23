@@ -6,7 +6,8 @@
 package org.semanticwb.social.listener.twitter;
 
 import org.semanticwb.model.SWBModel;
-import org.semanticwb.social.Message;
+import org.semanticwb.social.MessageIn;
+import org.semanticwb.social.listener.Classifier;
 import twitter4j.Status;
 import twitter4j.StatusDeletionNotice;
 
@@ -35,8 +36,9 @@ public class SWBSocialStatusListener implements twitter4j.StatusListener {
             System.out.println(status.getCreatedAt());
 
             //Persistencia del mensaje
-            Message mesagge=Message.ClassMgr.createMessage(model);
+            MessageIn mesagge=MessageIn.ClassMgr.createMessageIn(String.valueOf(status.getId()), model);
             mesagge.setMsg_Text(status.getText());
+            new Classifier(mesagge, model);
         }
     }
 

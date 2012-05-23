@@ -1,7 +1,7 @@
 package org.semanticwb.social.base;
 
 
-public abstract class TwitterBase extends org.semanticwb.social.SocialNetwork implements org.semanticwb.social.KeepAliveListenerable,org.semanticwb.social.Messageable,org.semanticwb.model.Traceable,org.semanticwb.social.Listenerable,org.semanticwb.social.Secreteable,org.semanticwb.social.Postable,org.semanticwb.social.Photoable,org.semanticwb.model.Descriptiveable
+public abstract class TwitterBase extends org.semanticwb.social.SocialNetwork implements org.semanticwb.social.Listenerable,org.semanticwb.model.Traceable,org.semanticwb.social.KeepAliveListenerable,org.semanticwb.social.Postable,org.semanticwb.social.Secreteable,org.semanticwb.social.Photoable,org.semanticwb.model.Descriptiveable,org.semanticwb.social.Messageable
 {
    /**
    * Almacena la fecha de expiración del token autorizado para hacer publicaciones, por conveniencia no utiliza displayProperty
