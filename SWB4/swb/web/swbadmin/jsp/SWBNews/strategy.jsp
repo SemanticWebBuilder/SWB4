@@ -71,7 +71,7 @@
     public String getTitleURL(String title)
     {
         title = changeCharacters(title);
-        
+
         StringBuilder sb = new StringBuilder();
 
         for (char s : title.toCharArray())
@@ -296,7 +296,7 @@
             <%
             }
     %>
-    
+
     <ul class="selector">
 
         <%
@@ -355,7 +355,7 @@
         }
                         }
     %>
-    
+
     <div style="clear: both; "></div>
 </div>
 <%
@@ -404,10 +404,10 @@
                                 {
                                     image = SWBPortal.getWebWorkPath() + content.getSemanticObject().getWorkPath() + "/image_" + content.getId() + "_" + image;
                                 }
-                                //url = noticias.getUrl() + "?uri=" + content.getResourceBase().getSemanticObject().getEncodedURI();
-                                url = noticias.getUrl() + "?uri=" + content.getResourceBase().getSemanticObject().getId();
+                                User user=paramRequest.getUser();                                
                                 String titleURL = getTitleURL(content.getResourceBase().getDisplayTitle(usrlanguage));
-                                url = noticias.getUrl() + "/" + content.getResourceBase().getSemanticObject().getId() + "/" + titleURL;
+                                url = noticias.getRealUrl(user.getLanguage()) + "/" + content.getResourceBase().getSemanticObject().getId() + "/" + titleURL;                                
+                                
                                 String date = "24 . 02 . 2011";
                                 if (content.getPublishDate() != null)
                                 {
@@ -422,17 +422,7 @@
                                 {
                                     fuente = content.getSource();
                                 }
-    %>
-    <%-- <li><a href="<%=url%>" ><img width="68" height="51" alt="<%=title%>" src="<%=image%>" />
-            <span class="fecha"><%=date%></span>
-            <b><%=title%></b>
-            <%
-                                            if (fuente != null)
-                                            {
-            %>        <span class="fuente"><%=decode(fuente)%></span>        <%
-                                            }
-            %><span><%=description%></span></a>
-    </li> --%>
+    %>   
     <li><a href="<%=url%>"><img width="68" height="51" alt="imagen_noticia" src="<%=image%>"/></a>
         <span class="fecha"><%=date%></span>
         <h4><a href="<%=url%>"><%=title%></a></h4>                <%
