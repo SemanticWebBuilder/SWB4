@@ -2,7 +2,6 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package org.semanticwb.social.listener;
 
 import java.net.SocketException;
@@ -19,23 +18,20 @@ import org.semanticwb.social.util.SendPostThread;
  *
  * @author jorge.jimenez
  */
-public class ClassifierThread  extends java.lang.Thread {
+public class ClassifierThread extends java.lang.Thread {
 
     /** The log. */
-    private static Logger log=SWBUtils.getLogger(SendPostThread.class);
-
+    private static Logger log = SWBUtils.getLogger(SendPostThread.class);
     /** The emails. */
-    LinkedList<Post> postableList = null;
-
+    Post post = null;
 
     /**
      * Creates a new instance of WBMessageServer.
      *
      * @throws SocketException the socket exception
      */
-    public ClassifierThread() throws java.net.SocketException
-    {
-        postableList = new LinkedList();
+    public ClassifierThread(Post post) throws java.net.SocketException {
+        this.post = post;
     }
 
     /* (non-Javadoc)
@@ -44,55 +40,23 @@ public class ClassifierThread  extends java.lang.Thread {
     @Override
     public void run()
     {
-        while (true)
+        try
         {
-            try
-            {
-                while (!postableList.isEmpty())
-                {
-                    Object obj=postableList.removeLast();
-                    try
-                    {
-                         if(obj instanceof Post)
-                         {
-                           String words2classify=null;
-                           Post postableObj=(Post) obj;
-                           if(postableObj instanceof MessageIn)
-                            {
-                                 MessageIn messageIn=(MessageIn) postableObj;
-                                 words2classify=messageIn.getMsg_Text();
+            String words2classify = null;
+            if (post instanceof MessageIn) {
+                MessageIn messageIn = (MessageIn) post;
+                words2classify = messageIn.getMsg_Text();
 
-                            }else if(postableObj instanceof PhotoIn)
-                            {
-                                PhotoIn photoIn=(PhotoIn) postableObj;
-                                words2classify=photoIn.getTitle() + photoIn.getDescription();
-                            }else if(postableObj instanceof VideoIn)
-                            {
-                                VideoIn videoIn=(VideoIn) postableObj;
-                                words2classify=videoIn.getTitle() + videoIn.getDescription();
-                            }
-                            new SentimentalDataClassifier(postableObj, words2classify);
-                         }
-                    } catch (Exception e)
-                    {
-                        log.error(e);
-                    }
-                }
-            } catch (Exception e)
-            {
-                log.error(e);
+            } else if (post instanceof PhotoIn) {
+                PhotoIn photoIn = (PhotoIn) post;
+                words2classify = photoIn.getTitle() + photoIn.getDescription();
+            } else if (post instanceof VideoIn) {
+                VideoIn videoIn = (VideoIn) post;
+                words2classify = videoIn.getTitle() + videoIn.getDescription();
             }
+            new SentimentalDataClassifier(post, words2classify);
+        } catch (Exception e) {
+            log.error(e);
         }
     }
-
-    /**
-     * Adds the e mail.
-     *
-     * @param email the email
-     */
-    public void addPostAble(Post postableObj)
-    {
-        postableList.addFirst(postableObj);
-    }
-
 }

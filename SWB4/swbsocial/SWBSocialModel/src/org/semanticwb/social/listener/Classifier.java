@@ -23,8 +23,7 @@ public class Classifier {
     {
         this.post=post;
         try{
-            ClassifierThread classThread=new ClassifierThread();
-            classThread.addPostAble(post);
+            ClassifierThread classThread=new ClassifierThread(post);
             classThread.start();
         }catch(Exception e){
             log.error(e);
