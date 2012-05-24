@@ -27,6 +27,7 @@ import twitter4j.conf.ConfigurationBuilder;
 public class Twitter extends org.semanticwb.social.base.TwitterBase {
 
     Logger log = SWBUtils.getLogger(Twitter.class);
+    TwitterStream trial=null;
 
     public Twitter(org.semanticwb.platform.SemanticObject base) {
         super(base);
@@ -153,16 +154,27 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
 
 
             Configuration cfg = cb.build();
-            TwitterStream trial = new TwitterStreamFactory(cfg).getInstance();
+            trial = new TwitterStreamFactory(cfg).getInstance();
 
             trial.addListener(listener);
 
+
             trial.filter(query);
             //System.out.println(" here is stuff : " + trial.getFilterStream(query));
+           
 
             //trial.sample();
         } catch (Exception e) {
             log.error(e);
+        }
+    }
+
+    @Override
+    public void stopListenAlive() {
+        if(trial!=null)
+        {
+            trial.cleanUp();
+            trial.shutdown();
         }
     }
     
