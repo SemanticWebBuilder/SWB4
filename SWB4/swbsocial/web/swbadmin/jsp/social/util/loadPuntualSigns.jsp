@@ -26,7 +26,7 @@ Inicia...
     //Inserta detos en la clase SentimentWords
     BufferedReader bf = null;
     try {
-        bf = new BufferedReader(new FileReader("C:\\proyectos\\SSMCC\\Octavio\\puntuationSigns.csv"));
+        bf = new BufferedReader(new FileReader("C:\\proyectos\\SSMCC\\Clasificacion\\puntuationSigns.csv"));
     } catch (FileNotFoundException e) {
     e.printStackTrace();
     }
