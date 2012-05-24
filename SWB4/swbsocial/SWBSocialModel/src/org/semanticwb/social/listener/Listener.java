@@ -42,7 +42,8 @@ public class Listener implements SWBAppObject {
                 {
                     SocialNetwork socialNet=itSocialNetWorks.next();
                     int periodTime=socialNet.getPoolTime();
-                    if(periodTime==0) periodTime=5000;
+                    //Peridicidad de ejecución en milisegundos (3600 segundos x 1000 ms en un segundo=1 hr por defecto)
+                    if(periodTime==0) periodTime=3600*1000;
                     if(socialNet instanceof KeepAliveListenerable)
                     {
                         KeepAliveListenerable keepAliveListenerable=(KeepAliveListenerable)socialNet;
