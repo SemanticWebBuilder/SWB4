@@ -4,7 +4,7 @@ package org.semanticwb.social.base;
    /**
    * Clase en donde se almacenan todos los post de tipo Video y que entran por el Listener 
    */
-public abstract class VideoInBase extends org.semanticwb.social.PostIn implements org.semanticwb.model.Tagable,org.semanticwb.social.Video_able,org.semanticwb.model.Descriptiveable
+public abstract class VideoInBase extends org.semanticwb.social.PostIn implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable,org.semanticwb.model.Tagable,org.semanticwb.social.Video_able
 {
    /**
    * Clase en donde se almacenan todos los post de tipo Video y que entran por el Listener
@@ -79,6 +79,29 @@ public abstract class VideoInBase extends org.semanticwb.social.PostIn implement
             return (getVideoIn(id, model)!=null);
         }
        /**
+       * Gets all org.semanticwb.social.VideoIn with a determined ModifiedBy
+       * @param value ModifiedBy of the type org.semanticwb.model.User
+       * @param model Model of the org.semanticwb.social.VideoIn
+       * @return Iterator with all the org.semanticwb.social.VideoIn
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.VideoIn> listVideoInByModifiedBy(org.semanticwb.model.User value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.VideoIn> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_modifiedBy, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.social.VideoIn with a determined ModifiedBy
+       * @param value ModifiedBy of the type org.semanticwb.model.User
+       * @return Iterator with all the org.semanticwb.social.VideoIn
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.VideoIn> listVideoInByModifiedBy(org.semanticwb.model.User value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.VideoIn> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_modifiedBy,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
        * Gets all org.semanticwb.social.VideoIn with a determined PostListenerBase
        * @param value PostListenerBase of the type org.semanticwb.social.PostListenerContainerBase
        * @param model Model of the org.semanticwb.social.VideoIn
@@ -99,6 +122,29 @@ public abstract class VideoInBase extends org.semanticwb.social.PostIn implement
         public static java.util.Iterator<org.semanticwb.social.VideoIn> listVideoInByPostListenerBase(org.semanticwb.social.PostListenerContainerBase value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.social.VideoIn> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(social_postListenerBase,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.social.VideoIn with a determined Creator
+       * @param value Creator of the type org.semanticwb.model.User
+       * @param model Model of the org.semanticwb.social.VideoIn
+       * @return Iterator with all the org.semanticwb.social.VideoIn
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.VideoIn> listVideoInByCreator(org.semanticwb.model.User value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.VideoIn> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_creator, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.social.VideoIn with a determined Creator
+       * @param value Creator of the type org.semanticwb.model.User
+       * @return Iterator with all the org.semanticwb.social.VideoIn
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.VideoIn> listVideoInByCreator(org.semanticwb.model.User value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.VideoIn> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_creator,value.getSemanticObject(),sclass));
             return it;
         }
     }

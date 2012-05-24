@@ -4,21 +4,21 @@ package org.semanticwb.social.base;
    /**
    * Clase que comprende todos los tipos de Post que pueden ir siendo creados en la herramienta. 
    */
-public abstract class PostBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Tagable,org.semanticwb.model.Descriptiveable
+public abstract class PostBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable,org.semanticwb.model.Tagable
 {
-    public static final org.semanticwb.platform.SemanticProperty social_SocialNetPostId=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#SocialNetPostId");
    /**
    * Propiedad con valor entero que representa el tipo de Sentimientos que expresa el Post, estos se estan definiendo de esta manera: 0) Neutro 1) Positivo 2)Negativo, estos valores pueden ser mas y permanecer en un objeto tipo colección en lo futuro.
    */
     public static final org.semanticwb.platform.SemanticProperty social_PostSentimentType=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#PostSentimentType");
-   /**
-   * Valor que resulta del algoritmo de analisis sentimental, aqui se puede ver el porque se pone cierto valir a la propiedad PostSentimentalType
-   */
-    public static final org.semanticwb.platform.SemanticProperty social_PostSentimentalValue=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#PostSentimentalValue");
+    public static final org.semanticwb.platform.SemanticProperty social_SocialNetPostId=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#SocialNetPostId");
    /**
    * Valor que es resultado del algoritmo de intensidad, mediante este valor se puede determinar si la intencidad es alta, media o baja
    */
     public static final org.semanticwb.platform.SemanticProperty social_PostIntensityValue=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#PostIntensityValue");
+   /**
+   * Valor que resulta del algoritmo de analisis sentimental, aqui se puede ver el porque se pone cierto valir a la propiedad PostSentimentalType
+   */
+    public static final org.semanticwb.platform.SemanticProperty social_PostSentimentalValue=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#PostSentimentalValue");
    /**
    * Clase que comprende todos los tipos de Post que pueden ir siendo creados en la herramienta.
    */
@@ -97,6 +97,52 @@ public abstract class PostBase extends org.semanticwb.model.SWBClass implements 
         {
             return (getPost(id, model)!=null);
         }
+       /**
+       * Gets all org.semanticwb.social.Post with a determined ModifiedBy
+       * @param value ModifiedBy of the type org.semanticwb.model.User
+       * @param model Model of the org.semanticwb.social.Post
+       * @return Iterator with all the org.semanticwb.social.Post
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.Post> listPostByModifiedBy(org.semanticwb.model.User value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.Post> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_modifiedBy, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.social.Post with a determined ModifiedBy
+       * @param value ModifiedBy of the type org.semanticwb.model.User
+       * @return Iterator with all the org.semanticwb.social.Post
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.Post> listPostByModifiedBy(org.semanticwb.model.User value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.Post> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_modifiedBy,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.social.Post with a determined Creator
+       * @param value Creator of the type org.semanticwb.model.User
+       * @param model Model of the org.semanticwb.social.Post
+       * @return Iterator with all the org.semanticwb.social.Post
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.Post> listPostByCreator(org.semanticwb.model.User value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.Post> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_creator, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.social.Post with a determined Creator
+       * @param value Creator of the type org.semanticwb.model.User
+       * @return Iterator with all the org.semanticwb.social.Post
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.Post> listPostByCreator(org.semanticwb.model.User value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.Post> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_creator,value.getSemanticObject(),sclass));
+            return it;
+        }
     }
 
    /**
@@ -107,56 +153,79 @@ public abstract class PostBase extends org.semanticwb.model.SWBClass implements 
     {
         super(base);
     }
+   /**
+   * Sets the value for the property ModifiedBy
+   * @param value ModifiedBy to set
+   */
 
-/**
-* Gets the SocialNetPostId property
-* @return String with the SocialNetPostId
-*/
-    public String getSocialNetPostId()
+    public void setModifiedBy(org.semanticwb.model.User value)
     {
-        return getSemanticObject().getProperty(social_SocialNetPostId);
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(swb_modifiedBy, value.getSemanticObject());
+        }else
+        {
+            removeModifiedBy();
+        }
+    }
+   /**
+   * Remove the value for ModifiedBy property
+   */
+
+    public void removeModifiedBy()
+    {
+        getSemanticObject().removeProperty(swb_modifiedBy);
+    }
+
+   /**
+   * Gets the ModifiedBy
+   * @return a org.semanticwb.model.User
+   */
+    public org.semanticwb.model.User getModifiedBy()
+    {
+         org.semanticwb.model.User ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_modifiedBy);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.model.User)obj.createGenericInstance();
+         }
+         return ret;
     }
 
 /**
-* Sets the SocialNetPostId property
-* @param value long with the SocialNetPostId
+* Gets the Created property
+* @return java.util.Date with the Created
 */
-    public void setSocialNetPostId(String value)
+    public java.util.Date getCreated()
     {
-        getSemanticObject().setProperty(social_SocialNetPostId, value);
+        return getSemanticObject().getDateProperty(swb_created);
     }
 
 /**
-* Gets the Title property
-* @return String with the Title
+* Sets the Created property
+* @param value long with the Created
 */
-    public String getTitle()
+    public void setCreated(java.util.Date value)
     {
-        return getSemanticObject().getProperty(swb_title);
+        getSemanticObject().setDateProperty(swb_created, value);
     }
 
 /**
-* Sets the Title property
-* @param value long with the Title
+* Gets the Updated property
+* @return java.util.Date with the Updated
 */
-    public void setTitle(String value)
+    public java.util.Date getUpdated()
     {
-        getSemanticObject().setProperty(swb_title, value);
+        return getSemanticObject().getDateProperty(swb_updated);
     }
 
-    public String getTitle(String lang)
+/**
+* Sets the Updated property
+* @param value long with the Updated
+*/
+    public void setUpdated(java.util.Date value)
     {
-        return getSemanticObject().getProperty(swb_title, null, lang);
-    }
-
-    public String getDisplayTitle(String lang)
-    {
-        return getSemanticObject().getLocaleProperty(swb_title, lang);
-    }
-
-    public void setTitle(String title, String lang)
-    {
-        getSemanticObject().setProperty(swb_title, title, lang);
+        getSemanticObject().setDateProperty(swb_updated, value);
     }
 
 /**
@@ -193,6 +262,113 @@ public abstract class PostBase extends org.semanticwb.model.SWBClass implements 
     }
 
 /**
+* Gets the PostSentimentType property
+* @return int with the PostSentimentType
+*/
+    public int getPostSentimentType()
+    {
+        return getSemanticObject().getIntProperty(social_PostSentimentType);
+    }
+
+/**
+* Sets the PostSentimentType property
+* @param value long with the PostSentimentType
+*/
+    public void setPostSentimentType(int value)
+    {
+        getSemanticObject().setIntProperty(social_PostSentimentType, value);
+    }
+
+/**
+* Gets the SocialNetPostId property
+* @return String with the SocialNetPostId
+*/
+    public String getSocialNetPostId()
+    {
+        return getSemanticObject().getProperty(social_SocialNetPostId);
+    }
+
+/**
+* Sets the SocialNetPostId property
+* @param value long with the SocialNetPostId
+*/
+    public void setSocialNetPostId(String value)
+    {
+        getSemanticObject().setProperty(social_SocialNetPostId, value);
+    }
+   /**
+   * Sets the value for the property Creator
+   * @param value Creator to set
+   */
+
+    public void setCreator(org.semanticwb.model.User value)
+    {
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(swb_creator, value.getSemanticObject());
+        }else
+        {
+            removeCreator();
+        }
+    }
+   /**
+   * Remove the value for Creator property
+   */
+
+    public void removeCreator()
+    {
+        getSemanticObject().removeProperty(swb_creator);
+    }
+
+   /**
+   * Gets the Creator
+   * @return a org.semanticwb.model.User
+   */
+    public org.semanticwb.model.User getCreator()
+    {
+         org.semanticwb.model.User ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_creator);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.model.User)obj.createGenericInstance();
+         }
+         return ret;
+    }
+
+/**
+* Gets the Title property
+* @return String with the Title
+*/
+    public String getTitle()
+    {
+        return getSemanticObject().getProperty(swb_title);
+    }
+
+/**
+* Sets the Title property
+* @param value long with the Title
+*/
+    public void setTitle(String value)
+    {
+        getSemanticObject().setProperty(swb_title, value);
+    }
+
+    public String getTitle(String lang)
+    {
+        return getSemanticObject().getProperty(swb_title, null, lang);
+    }
+
+    public String getDisplayTitle(String lang)
+    {
+        return getSemanticObject().getLocaleProperty(swb_title, lang);
+    }
+
+    public void setTitle(String title, String lang)
+    {
+        getSemanticObject().setProperty(swb_title, title, lang);
+    }
+
+/**
 * Gets the Tags property
 * @return String with the Tags
 */
@@ -226,21 +402,21 @@ public abstract class PostBase extends org.semanticwb.model.SWBClass implements 
     }
 
 /**
-* Gets the PostSentimentType property
-* @return int with the PostSentimentType
+* Gets the PostIntensityValue property
+* @return float with the PostIntensityValue
 */
-    public int getPostSentimentType()
+    public float getPostIntensityValue()
     {
-        return getSemanticObject().getIntProperty(social_PostSentimentType);
+        return getSemanticObject().getFloatProperty(social_PostIntensityValue);
     }
 
 /**
-* Sets the PostSentimentType property
-* @param value long with the PostSentimentType
+* Sets the PostIntensityValue property
+* @param value long with the PostIntensityValue
 */
-    public void setPostSentimentType(int value)
+    public void setPostIntensityValue(float value)
     {
-        getSemanticObject().setIntProperty(social_PostSentimentType, value);
+        getSemanticObject().setFloatProperty(social_PostIntensityValue, value);
     }
 
 /**
@@ -259,23 +435,5 @@ public abstract class PostBase extends org.semanticwb.model.SWBClass implements 
     public void setPostSentimentalValue(float value)
     {
         getSemanticObject().setFloatProperty(social_PostSentimentalValue, value);
-    }
-
-/**
-* Gets the PostIntensityValue property
-* @return float with the PostIntensityValue
-*/
-    public float getPostIntensityValue()
-    {
-        return getSemanticObject().getFloatProperty(social_PostIntensityValue);
-    }
-
-/**
-* Sets the PostIntensityValue property
-* @param value long with the PostIntensityValue
-*/
-    public void setPostIntensityValue(float value)
-    {
-        getSemanticObject().setFloatProperty(social_PostIntensityValue, value);
     }
 }
