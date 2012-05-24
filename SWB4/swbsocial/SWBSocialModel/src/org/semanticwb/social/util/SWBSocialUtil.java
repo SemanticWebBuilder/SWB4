@@ -4,7 +4,9 @@
  */
 package org.semanticwb.social.util;
 
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.StringTokenizer;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.SWBModel;
@@ -64,9 +66,9 @@ public class SWBSocialUtil {
          * @param text Texto a procesar
          * @return Listado de palabras procesadas
          */
-        public static java.util.ArrayList<String> stripWordsByLine(String text) {
-            java.util.StringTokenizer st = new java.util.StringTokenizer(text);
-            java.util.ArrayList<String> words = new java.util.ArrayList<String>();
+        public static ArrayList<String> stripWordsByLine(String text) {
+            StringTokenizer st = new StringTokenizer(text);
+            ArrayList<String> words = new ArrayList<String>();
             while (st.hasMoreTokens())
             {
                 String temp = st.nextToken();
@@ -183,42 +185,54 @@ public class SWBSocialUtil {
             //Palabras acerca de la compañia
             String words2monitor = "";
             String[] companyWords = getCompanyWords(model);
-            for (int i = 0; i < companyWords.length; i++) {
-                System.out.println("companyWord[" + i + "]:" + companyWords[i]);
-                if (words2monitor.length() == 0) {
-                    words2monitor = companyWords[i];
-                } else {
-                    words2monitor += delimiter + companyWords[i];
+            if(companyWords!=null)
+            {
+                for (int i = 0; i < companyWords.length; i++) {
+                    System.out.println("companyWord[" + i + "]:" + companyWords[i]);
+                    if (words2monitor.length() == 0) {
+                        words2monitor = companyWords[i];
+                    } else {
+                        words2monitor += delimiter + companyWords[i];
+                    }
                 }
             }
             //Palabras acerca de la competencia
             String[] competitionWords = getCompetitionWords(model);
-            for (int i = 0; i < competitionWords.length; i++) {
-                System.out.println("competitionWords[" + i + "]:" + competitionWords[i]);
-                if (words2monitor.length() == 0) {
-                    words2monitor = competitionWords[i];
-                } else {
-                    words2monitor += delimiter + competitionWords[i];
+            if(competitionWords!=null)
+            {
+                for (int i = 0; i < competitionWords.length; i++) {
+                    System.out.println("competitionWords[" + i + "]:" + competitionWords[i]);
+                    if (words2monitor.length() == 0) {
+                        words2monitor = competitionWords[i];
+                    } else {
+                        words2monitor += delimiter + competitionWords[i];
+                    }
                 }
             }
             //Palabras acerca de productos y servicios
             String[] pAndServWords = getProductAndServicesWords(model);
-            for (int i = 0; i < pAndServWords.length; i++) {
-                System.out.println("pAndServWords[" + i + "]:" + pAndServWords[i]);
-                if (words2monitor.length() == 0) {
-                    words2monitor = pAndServWords[i];
-                } else {
-                    words2monitor += delimiter + pAndServWords[i];
+            if(pAndServWords!=null)
+            {
+                for (int i = 0; i < pAndServWords.length; i++) {
+                    System.out.println("pAndServWords[" + i + "]:" + pAndServWords[i]);
+                    if (words2monitor.length() == 0) {
+                        words2monitor = pAndServWords[i];
+                    } else {
+                        words2monitor += delimiter + pAndServWords[i];
+                    }
                 }
             }
             //Palabras acerca de productos y servicios
             String[] otherWords = getOtherWords(model);
-            for (int i = 0; i < otherWords.length; i++) {
-                System.out.println("otherWords[" + i + "]:" + otherWords[i]);
-                if (words2monitor.length() == 0) {
-                    words2monitor = otherWords[i];
-                } else {
-                    words2monitor += delimiter + otherWords[i];
+            if(otherWords!=null)
+            {
+                for (int i = 0; i < otherWords.length; i++) {
+                    System.out.println("otherWords[" + i + "]:" + otherWords[i]);
+                    if (words2monitor.length() == 0) {
+                        words2monitor = otherWords[i];
+                    } else {
+                        words2monitor += delimiter + otherWords[i];
+                    }
                 }
             }
             return words2monitor;
