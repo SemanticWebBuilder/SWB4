@@ -123,13 +123,13 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
 
             //Palabras a monitorear
             String words2Monitor=SWBSocialUtil.words2Monitor.getWords2Monitor(",", model);
-            System.out.println("words2Monitor:"+words2Monitor);
+            //System.out.println("words2Monitor:"+words2Monitor);
             
             String[] tr = {words2Monitor};
             query.track(tr);
 
 
-            System.out.println(query.toString());
+            //System.out.println(query.toString());
 
             //Autenticación con Oath, comentado, para despues utilizarlo
         /*
@@ -158,7 +158,7 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
             trial.addListener(listener);
 
             trial.filter(query);
-            System.out.println(" here is stuff : " + trial.getFilterStream(query));
+            //System.out.println(" here is stuff : " + trial.getFilterStream(query));
 
             //trial.sample();
         } catch (Exception e) {
