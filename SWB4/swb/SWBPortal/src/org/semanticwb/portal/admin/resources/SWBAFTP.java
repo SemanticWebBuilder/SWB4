@@ -1142,6 +1142,7 @@ public class SWBAFTP extends GenericResource
 class FileComprator implements Comparator
 {
 
+    @Override
     public int compare(Object o1, Object o2)
     {
         if (o1 instanceof File && o2 instanceof File)
