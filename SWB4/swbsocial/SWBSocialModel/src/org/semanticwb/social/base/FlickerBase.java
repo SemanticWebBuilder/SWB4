@@ -1,7 +1,7 @@
 package org.semanticwb.social.base;
 
 
-public abstract class FlickerBase extends org.semanticwb.social.SocialNetwork implements org.semanticwb.model.Descriptiveable,org.semanticwb.social.Listenerable,org.semanticwb.social.Postable,org.semanticwb.model.Traceable,org.semanticwb.social.Photoable,org.semanticwb.social.Secreteable
+public abstract class FlickerBase extends org.semanticwb.social.SocialNetwork implements org.semanticwb.social.Photoable,org.semanticwb.social.Secreteable,org.semanticwb.model.Descriptiveable,org.semanticwb.social.Listenerable,org.semanticwb.model.Traceable,org.semanticwb.social.Postable
 {
    /**
    * Almacena la fecha de expiración del token autorizado para hacer publicaciones, por conveniencia no utiliza displayProperty

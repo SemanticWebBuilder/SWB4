@@ -1,7 +1,7 @@
 package org.semanticwb.social.base;
 
 
-public abstract class YoutubeBase extends org.semanticwb.social.SocialNetwork implements org.semanticwb.model.Descriptiveable,org.semanticwb.social.Listenerable,org.semanticwb.social.Videoable,org.semanticwb.model.Traceable,org.semanticwb.social.Postable,org.semanticwb.social.Secreteable
+public abstract class YoutubeBase extends org.semanticwb.social.SocialNetwork implements org.semanticwb.social.Videoable,org.semanticwb.social.Secreteable,org.semanticwb.model.Descriptiveable,org.semanticwb.social.Listenerable,org.semanticwb.model.Traceable,org.semanticwb.social.Postable
 {
     public static final org.semanticwb.platform.SemanticClass social_Youtube=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#Youtube");
    /**

@@ -4,7 +4,7 @@ package org.semanticwb.social.base;
    /**
    * Clase en donde se almacenan todos los post de tipo Mensaje y que entran por el Listener 
    */
-public abstract class MessageInBase extends org.semanticwb.social.PostIn implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable,org.semanticwb.social.Textable,org.semanticwb.model.Tagable
+public abstract class MessageInBase extends org.semanticwb.social.PostIn implements org.semanticwb.model.Tagable,org.semanticwb.model.Descriptiveable,org.semanticwb.social.Textable,org.semanticwb.model.Traceable
 {
    /**
    * Clase en donde se almacenan todos los post de tipo Mensaje y que entran por el Listener
