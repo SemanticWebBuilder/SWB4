@@ -570,12 +570,12 @@ public class GenericDB {
                                         {
                                             codigo = getSQLType(tmpVal);
                                             tipocol = dialect.getTypeName(codigo);
-                                            tmpCol = tmpCol.replaceAll("#TYPE#", dialect.getTypeName(getSQLType(tmpVal), 4000, 0, 0));
+                                            tmpCol = tmpCol.replaceAll("#TYPE#", dialect.getTypeName(getSQLType(tmpVal), 65535, 0, 0));
                                         } else if(tmpVal.equals(SQL_BLOB))
                                         {
                                             codigo = getSQLType(tmpVal);
                                             tipocol = dialect.getTypeName(codigo);
-                                            tmpCol = tmpCol.replaceAll("#TYPE#", dialect.getTypeName(getSQLType(tmpVal), 4000, 0, 0));
+                                            tmpCol = tmpCol.replaceAll("#TYPE#", dialect.getTypeName(getSQLType(tmpVal), 65535, 0, 0));
                                         }
                                         else
                                         {
