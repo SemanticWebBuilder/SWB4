@@ -13,6 +13,8 @@ import org.semanticwb.social.MessageIn;
 import org.semanticwb.social.Post;
 import org.semanticwb.social.Prepositions;
 import org.semanticwb.social.PunctuationSign;
+import org.semanticwb.social.SentimentWords;
+import org.semanticwb.social.util.NormalizerCharDuplicate;
 import org.semanticwb.social.util.SWBSocialUtil;
 
 /**
@@ -37,21 +39,71 @@ public class SentimentalDataClassifier {
     {
         //removePuntualSigns1();
         removePuntualSigns();
+
+        //Elimino Caracteres especiales (acentuados)
+        postData=SWBSocialUtil.Strings.replaceSpecialCharacters(postData);
+
+        System.out.println("Q pexx postData:"+postData);
+
         //Arreglo con las palabras totales que existe en la variable PostData
         ArrayList aPostDataWords=SWBSocialUtil.Strings.stripWordsByLine(postData);
         
         //Elimino preposiciones
         aPostDataWords=removeprepositions(aPostDataWords);
-        Iterator itaPostDataWords=aPostDataWords.iterator();
+        //Elimino
+
+        float sentimentalTweetValue=0;
+        float IntensiveTweetValue=0;
+        int wordsCont=0;
+        Iterator<String> itaPostDataWords=aPostDataWords.iterator();
         while(itaPostDataWords.hasNext())
         {
-            System.out.println("Palabra2:"+itaPostDataWords.next());
+            String word2Find=itaPostDataWords.next();
+            System.out.println("word2Find:"+word2Find);
+            NormalizerCharDuplicate normalizerCharDuplicate=SWBSocialUtil.Classifier.normalizer(word2Find);
+            word2Find=normalizerCharDuplicate.getNormalizedWord();
+            System.out.println("word Normalizada:"+word2Find);
+            word2Find=SWBSocialUtil.Classifier.phonematize(word2Find);
+            System.out.println("word Fonematizada:"+word2Find);
+            SentimentWords sentimentalWordObj=SentimentWords.getSentimentalWordByWord(model, word2Find);
+            if(sentimentalWordObj!=null) //La palabra en cuestion ha sido encontrada en la BD
+            {
+                wordsCont++;
+                IntensiveTweetValue+=sentimentalWordObj.getIntensityValue();
+                //Veo si la palabra cuenta con mas de dos caracteres(Normalmente el inicial de la palabra y talvez otro que
+                //hayan escrito por equivocación) en mayusculas
+                //De ser así, se incrementaría el valor para la intensidad
+                if(SWBSocialUtil.Strings.isIntensiveWordByUpperCase(word2Find, 3))
+                {
+                    IntensiveTweetValue+=1;
+                }
+                //Veo si en la palabra se repiten mas de 2 caracteres para los que se pueden repetir hasta 2 veces (Arrar Doubles) 
+                // y mas de 1 cuando no estan dichos caracteres en docho array, si es así entonces se incrementa la intensidad
+                if(normalizerCharDuplicate.isCharDuplicate()){
+                    IntensiveTweetValue+=1;
+                }
+                sentimentalTweetValue+=sentimentalWordObj.getSentimentalValue();
+            }
         }
-        //aPostDataWords esta preparado para ver si existen estas palabras en las que tengo en la BD,
-        //las cuales cuentan con una valor sentimental y de intensidad
-        //TODO:Revisar Palabras de aPostDataWords en mi objeto de BD, para ver si existen y así saber cuales
-               //es el valor sentimental de c/palabra y así poder determinar el sentimiento del msg en general.
-        
+        if(sentimentalTweetValue>0)
+        {
+            float prom=sentimentalTweetValue/wordsCont;
+            post.setPostSentimentalValue(prom);
+            if(prom>4.5) //Si el promedio es mayor de 4.5 (Segun Octavio) es un tweet positivo
+            {
+                post.setPostSentimentType(1); //Tweet Postivivo, valor de 1 (Esto yo lo determiné)
+            }else if(prom<4.5)
+            {
+                post.setPostSentimentType(2); //Tweet Negativo, valor de 1 (Esto yo lo determiné)
+            }else{
+                post.setPostSentimentType(0); //Tweet Neutro, valor de 0 (Esto yo lo determiné)
+            }
+        }
+        if(IntensiveTweetValue>0)
+        {
+            float prom=IntensiveTweetValue/wordsCont;
+            post.setPostIntensityValue(prom);
+        }
     }
 
     private void removePuntualSigns()

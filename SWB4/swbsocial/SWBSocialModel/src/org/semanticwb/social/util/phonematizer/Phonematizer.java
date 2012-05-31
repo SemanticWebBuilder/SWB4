@@ -20,12 +20,14 @@ public class Phonematizer {
     public static void main(String [] args)
     {
         init();
-        String in_word="innnnnnovvvvvaaaaaaciiiiioooonnnnn";
+        String in_word="inovasion";
         in_word=normalizer(in_word);
         System.out.println("normalizer:"+in_word);
         String out_word=phonematize(in_word);
         System.out.println("out_word:"+out_word);
     }
+
+
 
     private static String normalizer(String in_word)
     {
@@ -57,6 +59,13 @@ public class Phonematizer {
                 tmp+=in_wordChar;
             }
         }
+
+        //If que Revisa si los primeros 2 caracteres son iguales, si es así, elimina el Primero.
+        if(tmp.length()>2 && tmp.substring(0,1).equals(tmp.substring(1,2)))
+        {
+            tmp=tmp.substring(1);
+        }
+        //If que Revisa si los ultimos 2 caracteres son iguales, si es así, elimina el último.
         if(tmp.length()>2 && tmp.substring(tmp.length()-2, tmp.length()-1).equals(tmp.substring(tmp.length()-1)))
         {
             tmp=tmp.substring(0, tmp.length()-1);
