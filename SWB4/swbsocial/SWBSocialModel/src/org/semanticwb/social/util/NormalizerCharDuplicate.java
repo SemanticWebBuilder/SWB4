@@ -13,7 +13,7 @@ public class NormalizerCharDuplicate {
 
     String normalizedWord=null;
     boolean isCharDuplicate=false;
-
+    
     public NormalizerCharDuplicate(String normalizedWord, boolean isCharDuplicate)
     {
         this.normalizedWord=normalizedWord;

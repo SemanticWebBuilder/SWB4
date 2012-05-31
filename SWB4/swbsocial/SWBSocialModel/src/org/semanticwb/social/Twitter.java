@@ -124,7 +124,7 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
 
             //Palabras a monitorear
             String words2Monitor=SWBSocialUtil.words2Monitor.getWords2Monitor(",", model);
-            //System.out.println("words2Monitor:"+words2Monitor);
+            System.out.println("words2MonitorGeorge:"+words2Monitor);
             
             String[] tr = {words2Monitor};
             query.track(tr);
@@ -175,6 +175,7 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
         {
             trial.cleanUp();
             trial.shutdown();
+            System.out.println("DETUVO TODO EL PEX EN:"+this.getId());
         }
     }
     

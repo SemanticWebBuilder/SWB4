@@ -145,7 +145,7 @@ public class SWBSocialUtil {
          * @return True si tiene la palabra mas mayusculas que el número que llega en el parametro Limitnumber
           * o false de lo contrario
          */
-        public static boolean isIntensiveWordByUpperCase(String word, int Limitnumber)
+        public static boolean isIntensiveWordByUpperCase(String word, int limitNumber)
         {
             int cont=0;
             int l = word.length();
@@ -155,7 +155,7 @@ public class SWBSocialUtil {
                 if (chr >= 'A' && chr <= 'Z')
                 {
                     cont++;
-                    if(cont>=Limitnumber)
+                    if(cont>=limitNumber)
                     {
                         return true;
                     }
@@ -286,7 +286,7 @@ public class SWBSocialUtil {
         public static String[] getCompanyWords(SWBModel model) {
             String words = null;
             String[] awords = null;
-            Iterator<WordsToMonitor> itWords2Monitor = WordsToMonitor.ClassMgr.listWordsToMonitors();
+            Iterator<WordsToMonitor> itWords2Monitor = WordsToMonitor.ClassMgr.listWordsToMonitors(model);
             while (itWords2Monitor.hasNext()) {
                 WordsToMonitor words2monitor = itWords2Monitor.next();
                 String wordsTmp = words2monitor.getCompany();
@@ -311,7 +311,7 @@ public class SWBSocialUtil {
         public static String[] getCompetitionWords(SWBModel model) {
             String words = null;
             String[] awords = null;
-            Iterator<WordsToMonitor> itWords2Monitor = WordsToMonitor.ClassMgr.listWordsToMonitors();
+            Iterator<WordsToMonitor> itWords2Monitor = WordsToMonitor.ClassMgr.listWordsToMonitors(model);
             while (itWords2Monitor.hasNext()) {
                 WordsToMonitor words2monitor = itWords2Monitor.next();
                 String wordsTmp = words2monitor.getCompetition();
@@ -336,7 +336,7 @@ public class SWBSocialUtil {
         public static String[] getProductAndServicesWords(SWBModel model) {
             String words = null;
             String[] awords = null;
-            Iterator<WordsToMonitor> itWords2Monitor = WordsToMonitor.ClassMgr.listWordsToMonitors();
+            Iterator<WordsToMonitor> itWords2Monitor = WordsToMonitor.ClassMgr.listWordsToMonitors(model);
             while (itWords2Monitor.hasNext()) {
                 WordsToMonitor words2monitor = itWords2Monitor.next();
                 String wordsTmp = words2monitor.getProductsAndServices();
@@ -361,7 +361,7 @@ public class SWBSocialUtil {
         public static String[] getOtherWords(SWBModel model) {
             String words = null;
             String[] awords = null;
-            Iterator<WordsToMonitor> itWords2Monitor = WordsToMonitor.ClassMgr.listWordsToMonitors();
+            Iterator<WordsToMonitor> itWords2Monitor = WordsToMonitor.ClassMgr.listWordsToMonitors(model);
             while (itWords2Monitor.hasNext()) {
                 WordsToMonitor words2monitor = itWords2Monitor.next();
                 String wordsTmp = words2monitor.getOtherWords();
@@ -451,7 +451,7 @@ public class SWBSocialUtil {
                 {
                     if(aDoubles.contains(in_wordChar))
                     {
-                        if(tmp.substring(tmp.length()-2, tmp.length()-1).equals(tmp.substring(tmp.length()-1)) && (tmp.substring(tmp.length()-1).equals(in_wordChar)))
+                        if(tmp.substring(tmp.length()-2, tmp.length()-1).equalsIgnoreCase(tmp.substring(tmp.length()-1)) && (tmp.substring(tmp.length()-1).equalsIgnoreCase(in_wordChar)))
                         {
                             isCharDuplicate=true;
                             continue;
@@ -460,7 +460,7 @@ public class SWBSocialUtil {
                             tmp+=in_wordChar;
                         }
                     }else{
-                        if(tmp.substring(tmp.length()-1).equals(in_wordChar))
+                        if(tmp.substring(tmp.length()-1).equalsIgnoreCase(in_wordChar))
                         {
                             isCharDuplicate=true;
                             continue;
@@ -474,13 +474,13 @@ public class SWBSocialUtil {
             }
 
             //If que Revisa si los primeros 2 caracteres son iguales, si es así, elimina el Primero.
-            if(tmp.length()>2 && tmp.substring(0,1).equals(tmp.substring(1,2)))
+            if(tmp.length()>2 && tmp.substring(0,1).equalsIgnoreCase(tmp.substring(1,2)))
             {
                 isCharDuplicate=true;
                 tmp=tmp.substring(1);
             }
             //If que Revisa si los ultimos 2 caracteres son iguales, si es así, elimina el último.
-            if(tmp.length()>2 && tmp.substring(tmp.length()-2, tmp.length()-1).equals(tmp.substring(tmp.length()-1)))
+            if(tmp.length()>2 && tmp.substring(tmp.length()-2, tmp.length()-1).equalsIgnoreCase(tmp.substring(tmp.length()-1)))
             {
                 isCharDuplicate=true;
                 tmp=tmp.substring(0, tmp.length()-1);
@@ -541,7 +541,7 @@ public class SWBSocialUtil {
                             tmp="";
                             continue;
                         }
-                    }else if(in_wordChar.equals("h")){  //Elimina la h
+                    }else if(in_wordChar.equalsIgnoreCase("h")){  //Elimina la h
                         continue;
                     }
                     out_word+=in_wordChar;

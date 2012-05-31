@@ -5,6 +5,7 @@
 
 package org.semanticwb.social.listener;
 
+import java.lang.Float;
 import java.util.ArrayList;
 import java.util.Iterator;
 import org.semanticwb.model.SWBModel;
@@ -43,7 +44,7 @@ public class SentimentalDataClassifier {
         //Elimino Caracteres especiales (acentuados)
         postData=SWBSocialUtil.Strings.replaceSpecialCharacters(postData);
 
-        System.out.println("Q pexx postData:"+postData);
+        System.out.println("Q pexxJ postData:"+postData);
 
         //Arreglo con las palabras totales que existe en la variable PostData
         ArrayList aPostDataWords=SWBSocialUtil.Strings.stripWordsByLine(postData);
@@ -59,7 +60,8 @@ public class SentimentalDataClassifier {
         while(itaPostDataWords.hasNext())
         {
             String word2Find=itaPostDataWords.next();
-            //System.out.println("word2Find:"+word2Find);
+            String word2FindTmp=word2Find;
+            System.out.println("word2Find:"+word2Find);
             NormalizerCharDuplicate normalizerCharDuplicate=SWBSocialUtil.Classifier.normalizer(word2Find);
             word2Find=normalizerCharDuplicate.getNormalizedWord();
             //System.out.println("word Normalizada:"+word2Find);
@@ -68,12 +70,13 @@ public class SentimentalDataClassifier {
             SentimentWords sentimentalWordObj=SentimentWords.getSentimentalWordByWord(model, word2Find);
             if(sentimentalWordObj!=null) //La palabra en cuestion ha sido encontrada en la BD
             {
+                System.out.println("word2Find-1:"+word2Find);
                 wordsCont++;
                 IntensiveTweetValue+=sentimentalWordObj.getIntensityValue();
                 //Veo si la palabra cuenta con mas de dos caracteres(Normalmente el inicial de la palabra y talvez otro que
                 //hayan escrito por equivocación) en mayusculas
                 //De ser así, se incrementaría el valor para la intensidad
-                if(SWBSocialUtil.Strings.isIntensiveWordByUpperCase(word2Find, 3))
+                if(SWBSocialUtil.Strings.isIntensiveWordByUpperCase(word2FindTmp, 3))
                 {
                     System.out.println("VENIA PALABRA CON MAYUSCULAS:"+word2Find);
                     IntensiveTweetValue+=1;
@@ -87,28 +90,33 @@ public class SentimentalDataClassifier {
                 sentimentalTweetValue+=sentimentalWordObj.getSentimentalValue();
             }
         }
-        System.out.println("sentimentalTweetValue Final:"+sentimentalTweetValue+", wordsCont:"+wordsCont);
+        //System.out.println("sentimentalTweetValue Final:"+sentimentalTweetValue+", wordsCont:"+wordsCont);
         if(sentimentalTweetValue>0)
         {
             float prom=sentimentalTweetValue/wordsCont;
             post.setPostSentimentalValue(prom);
             if(prom>4.5) //Si el promedio es mayor de 4.5 (Segun Octavio) es un tweet positivo
             {
-                System.out.println("Se guarda Post Positivo:"+post.getId()+", valor promedio:"+prom);
+                //System.out.println("Se guarda Post Positivo:"+post.getId()+", valor promedio:"+prom);
                 post.setPostSentimentType(1); //Tweet Postivivo, valor de 1 (Esto yo lo determiné)
             }else if(prom<4.5)
             {
-                System.out.println("Se guarda Post Negativo:"+post.getId()+", valor promedio:"+prom);
+                //System.out.println("Se guarda Post Negativo:"+post.getId()+", valor promedio:"+prom);
                 post.setPostSentimentType(2); //Tweet Negativo, valor de 1 (Esto yo lo determiné)
             }else{
-                System.out.println("Se guarda Post Neutro:"+post.getId()+", valor promedio:"+prom);
+                //System.out.println("Se guarda Post Neutro:"+post.getId()+", valor promedio:"+prom);
                 post.setPostSentimentType(0); //Tweet Neutro, valor de 0 (Esto yo lo determiné)
             }
+        }else {
+            //Si no encontro ninguna palabra de las que vienen en el post en la BD, entonces es como si no tuviera
+            //valor sentimental, por lo cual lo pone con valor de 4.5 (Neutro-según Octavio)
+            post.setPostSentimentalValue(Float.parseFloat("4.5"));
+            post.setPostSentimentType(0); //Tweet Neutro, valor de 0 (Esto yo lo determiné)
         }
         if(IntensiveTweetValue>0)
         {
             float prom=IntensiveTweetValue/wordsCont;
-            System.out.println("IntensiveTweetValue Final:"+IntensiveTweetValue+", valor promedio:"+prom);
+            //System.out.println("IntensiveTweetValue Final:"+IntensiveTweetValue+", valor promedio:"+prom);
             post.setPostIntensityValue(prom);
         }
     }
