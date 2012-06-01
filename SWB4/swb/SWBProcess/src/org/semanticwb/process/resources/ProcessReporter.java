@@ -561,14 +561,14 @@ public class ProcessReporter extends GenericResource {
                 else
                     dao = cls.getRootClass().getName();
                 out.print(" <tr>\n");
-                out.print("     <td colspan=\"4\"><b>" + Ajax.specialChars(dao) + "<b></td>\n");
+                out.print("     <td colspan=\"4\"><b>" + SWBUtils.TEXT.replaceSpecialCharacters(dao, false) + "<b></td>\n");
                 out.print(" </tr>\n");
                 Iterator<SemanticProperty> spit = obj.getSemanticObject().listProperties();
                 while(spit.hasNext()) {
                     SemanticProperty sp = spit.next();
                     //out.print(" <tr>\n" + "<input name=\"key\" type=\"hidden\" value=\"" + sp.getName() + "\"/>");
                     out.print("     <td width=\"5%\"><input id=\"" + sp.getName() + "_active\" type=\"checkbox\" name=\"" + sp.getName() + "_active\" value=\"1\"" + (!"".equalsIgnoreCase(getResourceBase().getAttribute(sp.getName(),"")) ? " checked" : "") + "></td>\n");
-                    out.print("     <td width=\"25%\">" + Ajax.specialChars(sp.getDisplayName()) + "</td>\n");
+                    out.print("     <td width=\"25%\">" + SWBUtils.TEXT.replaceSpecialCharacters(sp.getDisplayName(), false) + "</td>\n");
                     out.print("     <td width=\"25%\">\n");
                     out.print("         <select id=\"" + sp.getName() + "_operator\" name=\"" + sp.getName() + "_operator\">\n");
                     out.print("             <option value=\"\">&nbsp;</option>\n");
@@ -687,7 +687,7 @@ public class ProcessReporter extends GenericResource {
                 else
                     dao = cls.getRootClass().getName();
                 out.print(" <tr>\n");
-                out.print("     <td colspan=\"2\"><b>" + Ajax.specialChars(dao) + "<b></td>\n");
+                out.print("     <td colspan=\"2\"><b>" + SWBUtils.TEXT.replaceSpecialCharacters(dao, false) + "<b></td>\n");
                 out.print(" </tr>\n");
                 Iterator<SemanticProperty> spit = obj.getSemanticObject().listProperties();
                 boolean filters = false;
@@ -696,7 +696,7 @@ public class ProcessReporter extends GenericResource {
                     if (!"".equals(getResourceBase().getAttribute(sp.getName(),""))) {
                         filters = true;
                         out.print(" </tr>\n");
-                        out.print("     <td width=\"40%\">" + Ajax.specialChars(sp.getDisplayName()) + "</td>\n");
+                        out.print("     <td width=\"40%\">" + SWBUtils.TEXT.replaceSpecialCharacters(sp.getDisplayName(), false) + "</td>\n");
                         out.print("     <td width=\"60%\" align=\"left\">\n");
                         Restriction restriction = new Restriction(getResourceBase().getAttribute(sp.getName(),""));
                         if (null != restriction.getOperator() && !"".equals(restriction.getOperator()))
