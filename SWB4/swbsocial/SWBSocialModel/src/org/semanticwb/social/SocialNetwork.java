@@ -78,6 +78,7 @@ public class SocialNetwork extends org.semanticwb.social.base.SocialNetworkBase
        System.out.println("Datos completamente guardados..");
 
        //Código siguiente es solo para verificar de guardado, quitar despues...
+       /*
        Iterator <SocialPost> itSocialPost=SocialPost.ClassMgr.listSocialPosts();
        while(itSocialPost.hasNext())
        {
@@ -101,6 +102,8 @@ public class SocialNetwork extends org.semanticwb.social.base.SocialNetworkBase
 
             }
         }
+        * */
+
     }
 
 
