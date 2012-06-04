@@ -20,14 +20,14 @@ Inicia...
     //Inserta detos en la clase SentimentWords
     BufferedReader bf = null;
     try {
-        bf = new BufferedReader(new FileReader("C:\\proyectos\\SSMCC\\Octavio\\preposiciones.csv"));
+        bf = new BufferedReader(new FileReader("C:\\proyectos\\SSMCC\\Clasificacion\\preposiciones.csv"));
     } catch (FileNotFoundException e) {
     e.printStackTrace();
     }
     String line = null;
     try {
         while ((line = bf.readLine())!=null) {
-               Prepositions preposition=Prepositions.ClassMgr.createPrepositions(wsite);
+               Prepositions preposition=Prepositions.ClassMgr.createPrepositions(line,wsite);
                preposition.setPreposition(line);
         }
     } catch (IOException e) {
