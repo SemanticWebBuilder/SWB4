@@ -11,9 +11,8 @@ import java.util.Iterator;
 import org.semanticwb.model.SWBModel;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.social.MessageIn;
-import org.semanticwb.social.Post;
+import org.semanticwb.social.PostIn;
 import org.semanticwb.social.Prepositions;
-import org.semanticwb.social.PunctuationSign;
 import org.semanticwb.social.SentimentWords;
 import org.semanticwb.social.util.NormalizerCharDuplicate;
 import org.semanticwb.social.util.SWBSocialUtil;
@@ -24,11 +23,11 @@ import org.semanticwb.social.util.SWBSocialUtil;
  */
 public class SentimentalDataClassifier {
 
-    Post post=null;
+    PostIn post=null;
     String postData=null;
     SWBModel model=null;
     
-    public SentimentalDataClassifier(Post post, String postData)
+    public SentimentalDataClassifier(PostIn post, String postData)
     {
         this.post=post;
         this.postData=postData;
@@ -99,21 +98,21 @@ public class SentimentalDataClassifier {
             if(prom>4.5) //Si el promedio es mayor de 4.5 (Segun Octavio) es un tweet positivo
             {
                 System.out.println("Se guarda Post Positivo:"+post.getId()+", valor promedio:"+prom);
-                post.setPostSentimentType(1); //Tweet Postivivo, valor de 1 (Esto yo lo determiné)
+                post.setPostSentimentalType(1); //Tweet Postivivo, valor de 1 (Esto yo lo determiné)
             }else if(prom<4.5)
             {
                 System.out.println("Se guarda Post Negativo:"+post.getId()+", valor promedio:"+prom);
-                post.setPostSentimentType(2); //Tweet Negativo, valor de 1 (Esto yo lo determiné)
+                post.setPostSentimentalType(2); //Tweet Negativo, valor de 1 (Esto yo lo determiné)
             }else{
                 System.out.println("Se guarda Post Neutro:"+post.getId()+", valor promedio:"+prom);
-                post.setPostSentimentType(0); //Tweet Neutro, valor de 0 (Esto yo lo determiné)
+                post.setPostSentimentalType(0); //Tweet Neutro, valor de 0 (Esto yo lo determiné)
             }
         }else {
             System.out.println("Se guarda Post Neutro POR DEFAULT:"+post.getId()+", valor promedio--4.5");
             //Si no encontro ninguna palabra de las que vienen en el post en la BD, entonces es como si no tuviera
             //valor sentimental, por lo cual lo pone con valor de 4.5 (Neutro-según Octavio)
             post.setPostSentimentalValue(Float.parseFloat("4.5"));
-            post.setPostSentimentType(0); //Tweet Neutro, valor de 0 (Esto yo lo determiné)
+            post.setPostSentimentalType(0); //Tweet Neutro, valor de 0 (Esto yo lo determiné)
         }
         if(IntensiveTweetValue>0)
         {
