@@ -46,15 +46,25 @@ public class ClassifierThread extends java.lang.Thread {
             if (post instanceof MessageIn) {
                 MessageIn messageIn = (MessageIn) post;
                 words2classify = messageIn.getMsg_Text();
-
+                if(words2classify!=null && words2classify.trim().length()>0)
+                {
+                    new SentimentalDataClassifier(messageIn, words2classify);
+                }
             } else if (post instanceof PhotoIn) {
                 PhotoIn photoIn = (PhotoIn) post;
                 words2classify = photoIn.getTitle() + photoIn.getDescription();
+                if(words2classify!=null && words2classify.trim().length()>0)
+                {
+                    new SentimentalDataClassifier(photoIn, words2classify);
+                }
             } else if (post instanceof VideoIn) {
                 VideoIn videoIn = (VideoIn) post;
                 words2classify = videoIn.getTitle() + videoIn.getDescription();
+                if(words2classify!=null && words2classify.trim().length()>0)
+                {
+                    new SentimentalDataClassifier(videoIn, words2classify);
+                }
             }
-            new SentimentalDataClassifier(post, words2classify);
         } catch (Exception e) {
             log.error(e);
         }

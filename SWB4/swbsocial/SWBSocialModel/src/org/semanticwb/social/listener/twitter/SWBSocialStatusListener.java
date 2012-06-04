@@ -32,10 +32,13 @@ public class SWBSocialStatusListener implements twitter4j.StatusListener {
         //if (status.getGeoLocation() != null)
         //if(status.getText().indexOf("android")>-1 || status.getText().indexOf("ipad")>-1 || status.getText().indexOf("iphone")>-1 || status.getText().indexOf("tarea")>-1)
         {
-            //System.out.println();
-            //System.out.println("------------");
-            //System.out.println(status.getUser().getName() + " : " + status.getText() + " : " + status.getGeoLocation());
-            //System.out.println(status.getCreatedAt());
+            /*
+            System.out.println();
+            System.out.println("------------");
+            System.out.println(status.getUser().getName() + " : " + status.getText() + " : " + status.getGeoLocation());
+            System.out.println(status.getCreatedAt());
+             * 
+             */
 
             //Persistencia del mensaje
             MessageIn mesagge=MessageIn.ClassMgr.createMessageIn(String.valueOf(status.getId()), model);
