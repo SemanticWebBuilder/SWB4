@@ -40,6 +40,7 @@ public class SWBSocialStatusListener implements twitter4j.StatusListener {
             //Persistencia del mensaje
             MessageIn mesagge=MessageIn.ClassMgr.createMessageIn(String.valueOf(status.getId()), model);
             mesagge.setMsg_Text(status.getText());
+            mesagge.setPostInSocialNetwork(socialNetwork);
             socialNetwork.addReceivedPost(mesagge, String.valueOf(status.getId()), socialNetwork);
             new Classifier(mesagge, model);
         }

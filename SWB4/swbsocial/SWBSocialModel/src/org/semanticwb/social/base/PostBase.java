@@ -2,24 +2,12 @@ package org.semanticwb.social.base;
 
 
    /**
-   * Clase que comprende todos los tipos de Post que pueden ir siendo creados en la herramienta. 
+   * Clase que comprende todos los tipos de Post que pueden ir siendo creados en la herramienta.. 
    */
-public abstract class PostBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Tagable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable
+public abstract class PostBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Tagable,org.semanticwb.model.Traceable
 {
    /**
-   * Propiedad con valor entero que representa el tipo de Sentimientos que expresa el Post, estos se estan definiendo de esta manera: 0) Neutro 1) Positivo 2)Negativo, estos valores pueden ser mas y permanecer en un objeto tipo colección en lo futuro.
-   */
-    public static final org.semanticwb.platform.SemanticProperty social_PostSentimentType=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#PostSentimentType");
-   /**
-   * Valor que es resultado del algoritmo de intensidad, mediante este valor se puede determinar si la intencidad es alta, media o baja
-   */
-    public static final org.semanticwb.platform.SemanticProperty social_PostIntensityValue=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#PostIntensityValue");
-   /**
-   * Valor que resulta del algoritmo de analisis sentimental, aqui se puede ver el porque se pone cierto valir a la propiedad PostSentimentalType
-   */
-    public static final org.semanticwb.platform.SemanticProperty social_PostSentimentalValue=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#PostSentimentalValue");
-   /**
-   * Clase que comprende todos los tipos de Post que pueden ir siendo creados en la herramienta.
+   * Clase que comprende todos los tipos de Post que pueden ir siendo creados en la herramienta..
    */
     public static final org.semanticwb.platform.SemanticClass social_Post=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#Post");
    /**
@@ -259,24 +247,6 @@ public abstract class PostBase extends org.semanticwb.model.SWBClass implements 
     {
         getSemanticObject().setProperty(swb_description, description, lang);
     }
-
-/**
-* Gets the PostSentimentType property
-* @return int with the PostSentimentType
-*/
-    public int getPostSentimentType()
-    {
-        return getSemanticObject().getIntProperty(social_PostSentimentType);
-    }
-
-/**
-* Sets the PostSentimentType property
-* @param value long with the PostSentimentType
-*/
-    public void setPostSentimentType(int value)
-    {
-        getSemanticObject().setIntProperty(social_PostSentimentType, value);
-    }
    /**
    * Sets the value for the property Creator
    * @param value Creator to set
@@ -380,41 +350,5 @@ public abstract class PostBase extends org.semanticwb.model.SWBClass implements 
     public void setTags(String tags, String lang)
     {
         getSemanticObject().setProperty(swb_tags, tags, lang);
-    }
-
-/**
-* Gets the PostIntensityValue property
-* @return float with the PostIntensityValue
-*/
-    public float getPostIntensityValue()
-    {
-        return getSemanticObject().getFloatProperty(social_PostIntensityValue);
-    }
-
-/**
-* Sets the PostIntensityValue property
-* @param value long with the PostIntensityValue
-*/
-    public void setPostIntensityValue(float value)
-    {
-        getSemanticObject().setFloatProperty(social_PostIntensityValue, value);
-    }
-
-/**
-* Gets the PostSentimentalValue property
-* @return float with the PostSentimentalValue
-*/
-    public float getPostSentimentalValue()
-    {
-        return getSemanticObject().getFloatProperty(social_PostSentimentalValue);
-    }
-
-/**
-* Sets the PostSentimentalValue property
-* @param value long with the PostSentimentalValue
-*/
-    public void setPostSentimentalValue(float value)
-    {
-        getSemanticObject().setFloatProperty(social_PostSentimentalValue, value);
     }
 }
