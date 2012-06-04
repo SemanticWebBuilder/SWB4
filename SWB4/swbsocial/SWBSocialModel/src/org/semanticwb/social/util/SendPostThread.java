@@ -13,7 +13,7 @@ import org.semanticwb.social.Message;
 import org.semanticwb.social.Messageable;
 import org.semanticwb.social.Photo;
 import org.semanticwb.social.Photoable;
-import org.semanticwb.social.Postable;
+import org.semanticwb.social.SocialNetPostable;
 import org.semanticwb.social.Video;
 import org.semanticwb.social.Videoable;
 
@@ -63,7 +63,7 @@ public class SendPostThread extends java.lang.Thread {
                      if(obj instanceof PostableObj)
                      {
                        PostableObj postableObj=(PostableObj) obj;
-                       Postable postable=postableObj.getPostable();
+                       SocialNetPostable postable=postableObj.getPostable();
                        String action=postableObj.getAction();
                        if(action!=null)
                        {

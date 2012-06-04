@@ -42,12 +42,6 @@ public abstract class PrepositionsBase extends org.semanticwb.social.TakeOut
             java.util.Iterator it=sclass.listInstances();
             return new org.semanticwb.model.GenericIterator<org.semanticwb.social.Prepositions>(it, true);
         }
-
-        public static org.semanticwb.social.Prepositions createPrepositions(org.semanticwb.model.SWBModel model)
-        {
-            long id=model.getSemanticObject().getModel().getCounter(sclass);
-            return org.semanticwb.social.Prepositions.ClassMgr.createPrepositions(String.valueOf(id), model);
-        }
        /**
        * Gets a org.semanticwb.social.Prepositions
        * @param id Identifier for org.semanticwb.social.Prepositions

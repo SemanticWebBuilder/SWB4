@@ -37,7 +37,6 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
     public void postMsg(Message message, HttpServletRequest request, SWBActionResponse response) {
         if (message != null && message.getMsg_Text() != null && message.getMsg_Text().trim().length() > 1) {
             twitter4j.Twitter twitter = new TwitterFactory().getInstance();
-
             try {
                 twitter.setOAuthConsumer(this.getAppKey(), this.getSecretKey());
                 AccessToken accessToken = new AccessToken(this.getAccessToken(), this.getAccessTokenSecret());
@@ -114,7 +113,7 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
     @Override
     public void listenAlive(SWBModel model) {
         try {
-            StatusListener listener = new SWBSocialStatusListener(model);
+            StatusListener listener = new SWBSocialStatusListener(model, this);
             /*create filterQuery*/
             FilterQuery query = new FilterQuery();
             //NOTE: format of values: {minLongitude, minLatitude}, {...}

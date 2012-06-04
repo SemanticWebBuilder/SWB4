@@ -1,20 +1,14 @@
 package org.semanticwb.social.base;
 
 
-public abstract class TwitterBase extends org.semanticwb.social.SocialNetwork implements org.semanticwb.social.KeepAliveListenerable,org.semanticwb.social.Messageable,org.semanticwb.social.Secreteable,org.semanticwb.social.Photoable,org.semanticwb.model.Descriptiveable,org.semanticwb.social.Listenerable,org.semanticwb.model.Traceable,org.semanticwb.social.Postable
+   /**
+   * Clase que almacenara las diferentes cuentas de una organización para la red social Twitter. 
+   */
+public abstract class TwitterBase extends org.semanticwb.social.SocialNetwork implements org.semanticwb.social.KeepAliveListenerable,org.semanticwb.social.Oauthable,org.semanticwb.social.Messageable,org.semanticwb.social.Secreteable,org.semanticwb.model.Descriptiveable,org.semanticwb.social.Listenerable,org.semanticwb.social.Photoable,org.semanticwb.model.Traceable,org.semanticwb.social.SocialNetPostable
 {
    /**
-   * Almacena la fecha de expiración del token autorizado para hacer publicaciones, por conveniencia no utiliza displayProperty
+   * Clase que almacenara las diferentes cuentas de una organización para la red social Twitter.
    */
-    public static final org.semanticwb.platform.SemanticProperty social_tokenExpirationDate=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#tokenExpirationDate");
-   /**
-   * Almacena el access Token autorizado para hacer publicaciones, por conveniencia no utiliza displayProperty
-   */
-    public static final org.semanticwb.platform.SemanticProperty social_accessToken=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#accessToken");
-   /**
-   * Almacena un token secreto para realizar publicaciones, por conveniencia no utiliza displayProperty
-   */
-    public static final org.semanticwb.platform.SemanticProperty social_accessTokenSecret=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#accessTokenSecret");
     public static final org.semanticwb.platform.SemanticClass social_Twitter=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#Twitter");
    /**
    * The semantic class that represents the currentObject
@@ -108,6 +102,52 @@ public abstract class TwitterBase extends org.semanticwb.social.SocialNetwork im
             return it;
         }
        /**
+       * Gets all org.semanticwb.social.Twitter with a determined PostListenerContainer
+       * @param value PostListenerContainer of the type org.semanticwb.social.PostListenerContainer
+       * @param model Model of the org.semanticwb.social.Twitter
+       * @return Iterator with all the org.semanticwb.social.Twitter
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.Twitter> listTwitterByPostListenerContainer(org.semanticwb.social.PostListenerContainer value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.Twitter> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(social_hasPostListenerContainer, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.social.Twitter with a determined PostListenerContainer
+       * @param value PostListenerContainer of the type org.semanticwb.social.PostListenerContainer
+       * @return Iterator with all the org.semanticwb.social.Twitter
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.Twitter> listTwitterByPostListenerContainer(org.semanticwb.social.PostListenerContainer value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.Twitter> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(social_hasPostListenerContainer,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.social.Twitter with a determined SocialNetworkUsersInv
+       * @param value SocialNetworkUsersInv of the type org.semanticwb.social.SocialNetworkUser
+       * @param model Model of the org.semanticwb.social.Twitter
+       * @return Iterator with all the org.semanticwb.social.Twitter
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.Twitter> listTwitterBySocialNetworkUsersInv(org.semanticwb.social.SocialNetworkUser value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.Twitter> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(social_hasSocialNetworkUsersInv, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.social.Twitter with a determined SocialNetworkUsersInv
+       * @param value SocialNetworkUsersInv of the type org.semanticwb.social.SocialNetworkUser
+       * @return Iterator with all the org.semanticwb.social.Twitter
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.Twitter> listTwitterBySocialNetworkUsersInv(org.semanticwb.social.SocialNetworkUser value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.Twitter> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(social_hasSocialNetworkUsersInv,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
        * Gets all org.semanticwb.social.Twitter with a determined PostContainer
        * @param value PostContainer of the type org.semanticwb.social.PostContainer
        * @param model Model of the org.semanticwb.social.Twitter
@@ -128,6 +168,29 @@ public abstract class TwitterBase extends org.semanticwb.social.SocialNetwork im
         public static java.util.Iterator<org.semanticwb.social.Twitter> listTwitterByPostContainer(org.semanticwb.social.PostContainer value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.social.Twitter> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(social_hasPostContainer,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.social.Twitter with a determined PostInSocialNetworkInv
+       * @param value PostInSocialNetworkInv of the type org.semanticwb.social.PostIn
+       * @param model Model of the org.semanticwb.social.Twitter
+       * @return Iterator with all the org.semanticwb.social.Twitter
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.Twitter> listTwitterByPostInSocialNetworkInv(org.semanticwb.social.PostIn value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.Twitter> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(social_hasPostInSocialNetworkInv, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.social.Twitter with a determined PostInSocialNetworkInv
+       * @param value PostInSocialNetworkInv of the type org.semanticwb.social.PostIn
+       * @return Iterator with all the org.semanticwb.social.Twitter
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.Twitter> listTwitterByPostInSocialNetworkInv(org.semanticwb.social.PostIn value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.Twitter> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(social_hasPostInSocialNetworkInv,value.getSemanticObject(),sclass));
             return it;
         }
        /**

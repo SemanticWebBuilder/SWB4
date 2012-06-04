@@ -1,8 +1,14 @@
 package org.semanticwb.social.base;
 
 
+   /**
+   * Clase que englobara elementos a ser quitados en los mensajes de las diferentes redes sociales, de tal manera que se puedan comparar cada uno de las palabras de los mensajes con las palabras de valor sentimental que se tengan almacenadas en la clase SentimentalWords. 
+   */
 public abstract class TakeOutBase extends org.semanticwb.model.SWBClass 
 {
+   /**
+   * Clase que englobara elementos a ser quitados en los mensajes de las diferentes redes sociales, de tal manera que se puedan comparar cada uno de las palabras de los mensajes con las palabras de valor sentimental que se tengan almacenadas en la clase SentimentalWords.
+   */
     public static final org.semanticwb.platform.SemanticClass social_TakeOut=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#TakeOut");
    /**
    * The semantic class that represents the currentObject

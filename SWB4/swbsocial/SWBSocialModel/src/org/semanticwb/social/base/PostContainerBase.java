@@ -2,21 +2,36 @@ package org.semanticwb.social.base;
 
 
    /**
-   * Clase que contiene todos los post que han sido enviados por una determinada red social. La intención de crear esta clase es para que se agrupen los Post de cada red social por mes y año, y de esta manera sea mucho mas sencillo, optimo y rapido realizar las busquedas. 
+   * Clase que contiene todos los post que han sido enviados a una determinada red social. La intención de crear esta clase es para que se agrupen los Post de cada red social por mes y año, y de esta manera sea mucho mas sencillo, optimo y rapido realizar las busquedas. 
    */
 public abstract class PostContainerBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Traceable
 {
+   /**
+   * Año en el cual es creada una instancia de PostContainer, esta propiedad servira mucho  para buscar los postOut de manera optima, ya que pudieran ser muchos en un corto tiempo.
+   */
     public static final org.semanticwb.platform.SemanticProperty social_year=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#year");
+   /**
+   * Mes en el cual es creada una instancia de PostContainer,esta propiedad servira mucho  para buscar los postOut de manera optima, ya que pudieran ser muchos en un corto tiempo.
+   */
+    public static final org.semanticwb.platform.SemanticProperty social_month=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#month");
+   /**
+   * Clase que engloba a las diferentes clases que representan cada una de las redes sociales.
+   */
     public static final org.semanticwb.platform.SemanticClass social_SocialNetwork=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#SocialNetwork");
    /**
    * Con esta propiedad inversa, se puede saber a que red social pertenece este grupo de post agrupados por mes y año
    */
     public static final org.semanticwb.platform.SemanticProperty social_pc_SocialNetworkInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#pc_SocialNetworkInv");
-    public static final org.semanticwb.platform.SemanticProperty social_month=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#month");
+   /**
+   * Clase que comprende todos los tipos de Post de Salida que pueden ir siendo creados en la herramienta y que seran publicados a partir de esto en las diferentes redes sociales.
+   */
     public static final org.semanticwb.platform.SemanticClass social_PostOut=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#PostOut");
+   /**
+   * Post de Salida (PostOut)
+   */
     public static final org.semanticwb.platform.SemanticProperty social_hasPost=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#hasPost");
    /**
-   * Clase que contiene todos los post que han sido enviados por una determinada red social. La intención de crear esta clase es para que se agrupen los Post de cada red social por mes y año, y de esta manera sea mucho mas sencillo, optimo y rapido realizar las busquedas.
+   * Clase que contiene todos los post que han sido enviados a una determinada red social. La intención de crear esta clase es para que se agrupen los Post de cada red social por mes y año, y de esta manera sea mucho mas sencillo, optimo y rapido realizar las busquedas.
    */
     public static final org.semanticwb.platform.SemanticClass social_PostContainer=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#PostContainer");
    /**
@@ -233,6 +248,78 @@ public abstract class PostContainerBase extends org.semanticwb.model.SWBClass im
          }
          return ret;
     }
+
+/**
+* Gets the Created property
+* @return java.util.Date with the Created
+*/
+    public java.util.Date getCreated()
+    {
+        return getSemanticObject().getDateProperty(swb_created);
+    }
+
+/**
+* Sets the Created property
+* @param value long with the Created
+*/
+    public void setCreated(java.util.Date value)
+    {
+        getSemanticObject().setDateProperty(swb_created, value);
+    }
+
+/**
+* Gets the Updated property
+* @return java.util.Date with the Updated
+*/
+    public java.util.Date getUpdated()
+    {
+        return getSemanticObject().getDateProperty(swb_updated);
+    }
+
+/**
+* Sets the Updated property
+* @param value long with the Updated
+*/
+    public void setUpdated(java.util.Date value)
+    {
+        getSemanticObject().setDateProperty(swb_updated, value);
+    }
+
+/**
+* Gets the Year property
+* @return String with the Year
+*/
+    public String getYear()
+    {
+        return getSemanticObject().getProperty(social_year);
+    }
+
+/**
+* Sets the Year property
+* @param value long with the Year
+*/
+    public void setYear(String value)
+    {
+        getSemanticObject().setProperty(social_year, value);
+    }
+
+/**
+* Gets the Month property
+* @return String with the Month
+*/
+    public String getMonth()
+    {
+        return getSemanticObject().getProperty(social_month);
+    }
+
+/**
+* Sets the Month property
+* @param value long with the Month
+*/
+    public void setMonth(String value)
+    {
+        getSemanticObject().setProperty(social_month, value);
+    }
    /**
    * Sets the value for the property Creator
    * @param value Creator to set
@@ -271,60 +358,6 @@ public abstract class PostContainerBase extends org.semanticwb.model.SWBClass im
          }
          return ret;
     }
-
-/**
-* Gets the Updated property
-* @return java.util.Date with the Updated
-*/
-    public java.util.Date getUpdated()
-    {
-        return getSemanticObject().getDateProperty(swb_updated);
-    }
-
-/**
-* Sets the Updated property
-* @param value long with the Updated
-*/
-    public void setUpdated(java.util.Date value)
-    {
-        getSemanticObject().setDateProperty(swb_updated, value);
-    }
-
-/**
-* Gets the Created property
-* @return java.util.Date with the Created
-*/
-    public java.util.Date getCreated()
-    {
-        return getSemanticObject().getDateProperty(swb_created);
-    }
-
-/**
-* Sets the Created property
-* @param value long with the Created
-*/
-    public void setCreated(java.util.Date value)
-    {
-        getSemanticObject().setDateProperty(swb_created, value);
-    }
-
-/**
-* Gets the Year property
-* @return String with the Year
-*/
-    public String getYear()
-    {
-        return getSemanticObject().getProperty(social_year);
-    }
-
-/**
-* Sets the Year property
-* @param value long with the Year
-*/
-    public void setYear(String value)
-    {
-        getSemanticObject().setProperty(social_year, value);
-    }
    /**
    * Sets the value for the property Pc_SocialNetworkInv
    * @param value Pc_SocialNetworkInv to set
@@ -362,24 +395,6 @@ public abstract class PostContainerBase extends org.semanticwb.model.SWBClass im
              ret=(org.semanticwb.social.SocialNetwork)obj.createGenericInstance();
          }
          return ret;
-    }
-
-/**
-* Gets the Month property
-* @return String with the Month
-*/
-    public String getMonth()
-    {
-        return getSemanticObject().getProperty(social_month);
-    }
-
-/**
-* Sets the Month property
-* @param value long with the Month
-*/
-    public void setMonth(String value)
-    {
-        getSemanticObject().setProperty(social_month, value);
     }
    /**
    * Gets all the org.semanticwb.social.PostOut

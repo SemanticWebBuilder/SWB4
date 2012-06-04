@@ -51,9 +51,9 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
             jsonResponse = new JSONObject(facebookResponse);
             if (jsonResponse != null && jsonResponse.get("id") != null) 
             {
-                message.setSocialNetPostId(jsonResponse.getString("id"));
+                //message.setSocialNetPostId(jsonResponse.getString("id"));
                 //addPost(message);
-                addPost(message, jsonResponse.getString("id"), this);
+                addSentPost(message, jsonResponse.getString("id"), this);
                 //addPost(message, "IDpuestoxFacebook", this);
                 //this.msg = message;
             }
@@ -98,9 +98,9 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
                 jsonResponse = new JSONObject(facebookResponse);
             }
             if (jsonResponse != null && jsonResponse.get("id") != null) {
-                photo.setSocialNetPostId(jsonResponse.getString("id"));
+                //photo.setSocialNetPostId(jsonResponse.getString("id"));
                 //this.addPost(photo);
-                addPost(photo, jsonResponse.getString("id"), this);
+                addSentPost(photo, jsonResponse.getString("id"), this);
                 //this.photo = photo;
             }
         } catch (FileNotFoundException fnfe) {
@@ -144,9 +144,9 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
                 jsonResponse = new JSONObject(facebookResponse);
             }
             if (jsonResponse != null && jsonResponse.get("id") != null) {
-                video.setSocialNetPostId(jsonResponse.getString("id"));
+                //video.setSocialNetPostId(jsonResponse.getString("id"));
                 //this.addPost(video);
-                addPost(video, jsonResponse.getString("id"), this);
+                addSentPost(video, jsonResponse.getString("id"), this);
             }
         } catch (FileNotFoundException fnfe) {
             try {

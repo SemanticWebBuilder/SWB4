@@ -39,20 +39,16 @@ public class SentimentalDataClassifier {
     private void initAnalysis()
     {
         //removePuntualSigns1();
-        removePuntualSigns();
+        postData=SWBSocialUtil.Strings.removePuntualSigns(postData, model);
 
         //Elimino Caracteres especiales (acentuados)
         postData=SWBSocialUtil.Strings.replaceSpecialCharacters(postData);
 
-        System.out.println("Q pexxJ postData:"+postData);
+        System.out.println("Msg to Classify:"+postData);
 
         //Arreglo con las palabras totales que existe en la variable PostData
         ArrayList aPostDataWords=SWBSocialUtil.Strings.stripWordsByLine(postData);
         
-        //Elimino preposiciones
-        aPostDataWords=removeprepositions(aPostDataWords);
-        //Elimino
-
         float sentimentalTweetValue=0;
         float IntensiveTweetValue=0;
         int wordsCont=0;
@@ -60,6 +56,11 @@ public class SentimentalDataClassifier {
         while(itaPostDataWords.hasNext())
         {
             String word2Find=itaPostDataWords.next();
+            if(Prepositions.ClassMgr.getPrepositions(word2Find.toLowerCase(), model)!=null) //Elimino preposiciones
+            {
+                continue;
+            }
+
             String word2FindTmp=word2Find;
             System.out.println("word2Find:"+word2Find);
             NormalizerCharDuplicate normalizerCharDuplicate=SWBSocialUtil.Classifier.normalizer(word2Find);
@@ -97,17 +98,18 @@ public class SentimentalDataClassifier {
             post.setPostSentimentalValue(prom);
             if(prom>4.5) //Si el promedio es mayor de 4.5 (Segun Octavio) es un tweet positivo
             {
-                //System.out.println("Se guarda Post Positivo:"+post.getId()+", valor promedio:"+prom);
+                System.out.println("Se guarda Post Positivo:"+post.getId()+", valor promedio:"+prom);
                 post.setPostSentimentType(1); //Tweet Postivivo, valor de 1 (Esto yo lo determiné)
             }else if(prom<4.5)
             {
-                //System.out.println("Se guarda Post Negativo:"+post.getId()+", valor promedio:"+prom);
+                System.out.println("Se guarda Post Negativo:"+post.getId()+", valor promedio:"+prom);
                 post.setPostSentimentType(2); //Tweet Negativo, valor de 1 (Esto yo lo determiné)
             }else{
-                //System.out.println("Se guarda Post Neutro:"+post.getId()+", valor promedio:"+prom);
+                System.out.println("Se guarda Post Neutro:"+post.getId()+", valor promedio:"+prom);
                 post.setPostSentimentType(0); //Tweet Neutro, valor de 0 (Esto yo lo determiné)
             }
         }else {
+            System.out.println("Se guarda Post Neutro POR DEFAULT:"+post.getId()+", valor promedio--4.5");
             //Si no encontro ninguna palabra de las que vienen en el post en la BD, entonces es como si no tuviera
             //valor sentimental, por lo cual lo pone con valor de 4.5 (Neutro-según Octavio)
             post.setPostSentimentalValue(Float.parseFloat("4.5"));
@@ -116,42 +118,8 @@ public class SentimentalDataClassifier {
         if(IntensiveTweetValue>0)
         {
             float prom=IntensiveTweetValue/wordsCont;
-            //System.out.println("IntensiveTweetValue Final:"+IntensiveTweetValue+", valor promedio:"+prom);
+            System.out.println("IntensiveTweetValue Final:"+IntensiveTweetValue+", valor promedio:"+prom);
             post.setPostIntensityValue(prom);
-        }
-    }
-
-    private void removePuntualSigns()
-    {
-        Iterator <PunctuationSign> itPunctuationSigns=PunctuationSign.ClassMgr.listPunctuationSigns(model);
-        while(itPunctuationSigns.hasNext())
-        {
-            PunctuationSign puncSign=itPunctuationSigns.next();
-            postData=postData.replaceAll(puncSign.getPuntuationSign(), "");
-        }
-    }
-
-    private ArrayList removeprepositions(ArrayList aPostDataWords)
-    {
-        Iterator <Prepositions> itPrepositions=Prepositions.ClassMgr.listPrepositionses(model);
-        while(itPrepositions.hasNext())
-        {
-            Prepositions preposition=itPrepositions.next();
-            removeWordFromArray(aPostDataWords, preposition.getPreposition());
-        }
-        return aPostDataWords;
-    }
-
-     /*
-     * Remueve una cierta palabra de un arreglo, si la palabra existe varias veces en dicho arreglo,
-     * las elimina todas, esto de manera iterativa
-     */
-    private void removeWordFromArray(ArrayList aPostDataWords, String sprep)
-    {
-        if(aPostDataWords.contains(sprep))
-        {
-            aPostDataWords.remove(sprep);
-            removeWordFromArray(aPostDataWords, sprep);
         }
     }
 
@@ -224,11 +192,31 @@ public class SentimentalDataClassifier {
         alist.add("las");
         alist.add("despues");
         alist.add("acerca");
+        alist.add("y");
+        alist.add("yo");
+        alist.add("tu");
+        alist.add("dicen");
+        alist.add("todos");
+        alist.add("tampoco");
+        alist.add("pero");
+        alist.add("siempre");
+        alist.add("tener");
+        alist.add("si");
+        alist.add("no");
+        alist.add("es");
+        alist.add("solo");
+        alist.add("aun");
+        alist.add("todo");
+        alist.add("toda");
+        alist.add("su");
+        alist.add("mio");
+        alist.add("mia");
+
         Iterator<String> itPreps=alist.iterator();
         while(itPreps.hasNext())
         {
             String sprep=itPreps.next();
-            removeWordFromArray(aPostDataWords, sprep);
+            //removeWordFromArray(aPostDataWords, sprep);
         }
         return aPostDataWords;
     }
