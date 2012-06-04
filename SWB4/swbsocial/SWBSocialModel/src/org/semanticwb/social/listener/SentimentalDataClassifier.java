@@ -38,12 +38,15 @@ public class SentimentalDataClassifier {
     private void initAnalysis()
     {
         //removePuntualSigns1();
+        System.out.println("Msg to Classify-0:"+postData);
         postData=SWBSocialUtil.Strings.removePuntualSigns(postData, model);
+
+        System.out.println("Msg to Classify-1:"+postData);
 
         //Elimino Caracteres especiales (acentuados)
         postData=SWBSocialUtil.Strings.replaceSpecialCharacters(postData);
 
-        System.out.println("Msg to Classify:"+postData);
+        System.out.println("Msg to Classify-2:"+postData);
 
         //Arreglo con las palabras totales que existe en la variable PostData
         ArrayList aPostDataWords=SWBSocialUtil.Strings.stripWordsByLine(postData);
