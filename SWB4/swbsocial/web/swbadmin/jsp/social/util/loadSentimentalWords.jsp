@@ -14,7 +14,7 @@ Inicia...
 
 <%
     WebSite wsite=paramRequest.getWebPage().getWebSite();
-    /*
+    
     initialize();
     
     //Elimina todos los objetos(instancias) de la clase SentimentWords
