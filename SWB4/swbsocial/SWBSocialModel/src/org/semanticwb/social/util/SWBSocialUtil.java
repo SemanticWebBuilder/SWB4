@@ -11,6 +11,7 @@ import java.util.StringTokenizer;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.SWBModel;
+import org.semanticwb.social.PunctuationSign;
 import org.semanticwb.social.WordsToMonitor;
 
 /**
@@ -136,6 +137,20 @@ public class SWBSocialUtil {
             return words;
         }
 
+        /*
+         * Elimina signos de puntualcion
+         */
+        public static String removePuntualSigns(String text, SWBModel model)
+        {
+            Iterator <PunctuationSign> itPunctuationSigns=PunctuationSign.ClassMgr.listPunctuationSigns(model);
+            while(itPunctuationSigns.hasNext())
+            {
+                PunctuationSign puncSign=itPunctuationSigns.next();
+                text=text.replaceAll(puncSign.getPuntuationSign(), "");
+            }
+            return text;
+        }
+
 
          /**
          * Lee una string caracter por caracter y si encuentra que existen en el mismo
@@ -255,7 +270,7 @@ public class SWBSocialUtil {
             aux = aux.replace('ü', 'u');
             aux = aux.replace('û', 'u');
 
-            aux = aux.replace('ñ', 'n');
+            //aux = aux.replace('ñ', 'n');
 
             aux = aux.replace('ç', 'c');
             aux = aux.replace('ÿ', 'y');

@@ -10,7 +10,6 @@ public abstract class PostBase extends org.semanticwb.model.SWBClass implements 
    * Propiedad con valor entero que representa el tipo de Sentimientos que expresa el Post, estos se estan definiendo de esta manera: 0) Neutro 1) Positivo 2)Negativo, estos valores pueden ser mas y permanecer en un objeto tipo colección en lo futuro.
    */
     public static final org.semanticwb.platform.SemanticProperty social_PostSentimentType=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#PostSentimentType");
-    public static final org.semanticwb.platform.SemanticProperty social_SocialNetPostId=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#SocialNetPostId");
    /**
    * Valor que es resultado del algoritmo de intensidad, mediante este valor se puede determinar si la intencidad es alta, media o baja
    */
@@ -277,24 +276,6 @@ public abstract class PostBase extends org.semanticwb.model.SWBClass implements 
     public void setPostSentimentType(int value)
     {
         getSemanticObject().setIntProperty(social_PostSentimentType, value);
-    }
-
-/**
-* Gets the SocialNetPostId property
-* @return String with the SocialNetPostId
-*/
-    public String getSocialNetPostId()
-    {
-        return getSemanticObject().getProperty(social_SocialNetPostId);
-    }
-
-/**
-* Sets the SocialNetPostId property
-* @param value long with the SocialNetPostId
-*/
-    public void setSocialNetPostId(String value)
-    {
-        getSemanticObject().setProperty(social_SocialNetPostId, value);
     }
    /**
    * Sets the value for the property Creator

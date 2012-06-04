@@ -1,12 +1,18 @@
 package org.semanticwb.social.base;
 
 
+   /**
+   * Signos de puntuación que seran eliminados de los mensajes de los post dentro del listener. Es decir, estas no deben ser evaluadas para analisis sentimental. 
+   */
 public abstract class PunctuationSignBase extends org.semanticwb.social.TakeOut 
 {
    /**
    * Signo de Puntuación
    */
     public static final org.semanticwb.platform.SemanticProperty social_puntuationSign=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#puntuationSign");
+   /**
+   * Signos de puntuación que seran eliminados de los mensajes de los post dentro del listener. Es decir, estas no deben ser evaluadas para analisis sentimental.
+   */
     public static final org.semanticwb.platform.SemanticClass social_PunctuationSign=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#PunctuationSign");
    /**
    * The semantic class that represents the currentObject

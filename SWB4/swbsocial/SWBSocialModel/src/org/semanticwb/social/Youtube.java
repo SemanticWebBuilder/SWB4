@@ -120,7 +120,7 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase
                     String idEntry=entry.getId().substring(post+1);
                     System.out.println("idEntry********:"+idEntry);
                     //SWBSocialUtil.MONITOR.persistPost2Monitor(video, idEntry, this, wsite);
-                    addPost(video, idEntry, this);
+                    addSentPost(video, idEntry, this);
                 }
 
                 System.out.println("createdEntry:"+entry.getPublicationState().getState().name());

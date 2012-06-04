@@ -8,7 +8,8 @@ package org.semanticwb.social.util;
 import javax.servlet.http.HttpServletRequest;
 import org.semanticwb.portal.api.SWBActionResponse;
 import org.semanticwb.social.Post;
-import org.semanticwb.social.Postable;
+import org.semanticwb.social.SocialNetPostable;
+import org.semanticwb.social.SocialNetPostable;
 
 /**
  *
@@ -16,13 +17,13 @@ import org.semanticwb.social.Postable;
  */
 public class PostableObj {
 
-    Postable postAble=null;
+    SocialNetPostable postAble=null;
     HttpServletRequest request=null;
     SWBActionResponse response=null;
     Post post=null;
     String action=null;
 
-    public PostableObj(Postable postAble,  Post post, String action, HttpServletRequest request, SWBActionResponse response)
+    public PostableObj(SocialNetPostable postAble,  Post post, String action, HttpServletRequest request, SWBActionResponse response)
     {
         this.postAble=postAble;
         this.request=request;
@@ -31,7 +32,7 @@ public class PostableObj {
         this.action=action;
     }
 
-    public Postable getPostable()
+    public SocialNetPostable getPostable()
     {
         return postAble;
     }

@@ -7,6 +7,7 @@ package org.semanticwb.social.listener.twitter;
 
 import org.semanticwb.model.SWBModel;
 import org.semanticwb.social.MessageIn;
+import org.semanticwb.social.SocialNetwork;
 import org.semanticwb.social.listener.Classifier;
 import twitter4j.Status;
 import twitter4j.StatusDeletionNotice;
@@ -18,10 +19,12 @@ import twitter4j.StatusDeletionNotice;
 public class SWBSocialStatusListener implements twitter4j.StatusListener {
 
     SWBModel model=null;
+    SocialNetwork socialNetwork=null;
 
-    public SWBSocialStatusListener(SWBModel model)
+    public SWBSocialStatusListener(SWBModel model, SocialNetwork socialNetwork)
     {
         this.model=model;
+        this.socialNetwork=socialNetwork;
     }
 
     @Override
@@ -37,6 +40,7 @@ public class SWBSocialStatusListener implements twitter4j.StatusListener {
             //Persistencia del mensaje
             MessageIn mesagge=MessageIn.ClassMgr.createMessageIn(String.valueOf(status.getId()), model);
             mesagge.setMsg_Text(status.getText());
+            socialNetwork.addReceivedPost(mesagge, String.valueOf(status.getId()), socialNetwork);
             new Classifier(mesagge, model);
         }
     }
