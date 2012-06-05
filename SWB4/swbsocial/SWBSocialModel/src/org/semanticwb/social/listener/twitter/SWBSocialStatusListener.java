@@ -48,7 +48,7 @@ public class SWBSocialStatusListener implements twitter4j.StatusListener {
             if(status.getUser()!=null)
             {
                 long userId=status.getUser().getId();
-                String name=status.getUser().getName();
+                String name=status.getUser().getScreenName();
                 Date userNetworkCreatedDate=status.getUser().getCreatedAt();
                 int followers=status.getUser().getFollowersCount();
                 int friends=status.getUser().getFriendsCount();
@@ -58,17 +58,23 @@ public class SWBSocialStatusListener implements twitter4j.StatusListener {
                     //Si no existe el id del usuario para esa red social, lo crea.
                     socialNetUser=SocialNetworkUser.ClassMgr.createSocialNetworkUser(model);
                     socialNetUser.setSnu_id(""+userId);
+                    socialNetUser.setSnu_name(name);
                     socialNetUser.setSnu_SocialNetwork(socialNetwork);
-                    System.out.println("SocialNetworkUser Creado:"+socialNetUser.getSnu_id()+", name:"+socialNetUser.getSnu_name());
+                    socialNetUser.setCreated(userNetworkCreatedDate);
+                    //System.out.println("SocialNetworkUser Creado:"+socialNetUser.getSnu_id());
                 }else{
-                    System.out.println("SocialNetworkUser Actualizado:"+socialNetUser.getSnu_id()+", name:"+socialNetUser.getSnu_name());
+                    //System.out.println("SocialNetworkUser Actualizado:"+socialNetUser.getSnu_id());
+                    socialNetUser.setUpdated(new Date());
                 }
                 socialNetUser.setFollowers(followers);
                 socialNetUser.setFriends(friends);
                 //int listedCount=status.getUser().getListedCount();
-                System.out.println("userId:"+userId+", date:"+userNetworkCreatedDate+", followers:"+socialNetUser.getFollowers()+", friends:"+socialNetUser.getFriends());
+                //System.out.println("userId:"+userId+", created:"+socialNetUser.getCreated()+", followers:"+socialNetUser.getFollowers()+", friends:"+socialNetUser.getFriends()+", name:"+socialNetUser.getSnu_name());
+                if(socialNetUser!=null)
+                {
+                    mesagge.setPostInSocialNetworkUser(socialNetUser);
+                }
             }
-
             socialNetwork.addReceivedPost(mesagge, String.valueOf(status.getId()), socialNetwork);
             new Classifier(mesagge, model);
         }
@@ -89,7 +95,5 @@ public class SWBSocialStatusListener implements twitter4j.StatusListener {
     @Override
     public void onException(Exception excptn) {
     }
-
-
 
 }
