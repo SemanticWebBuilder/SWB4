@@ -7,9 +7,17 @@ package org.semanticwb.social.base;
 public abstract class SocialNetworkUserBase extends org.semanticwb.model.SWBClass 
 {
    /**
+   * Nombre del usuario en la Red Social
+   */
+    public static final org.semanticwb.platform.SemanticProperty social_snu_name=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#snu_name");
+   /**
    * Cantidad de seguidores que tiene el usuario que es almacenado en c/instancia de esta clase (en su propiedad id)
    */
     public static final org.semanticwb.platform.SemanticProperty social_followers=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#followers");
+   /**
+   * Número de usuarios a los que yo sigo (así se maneja en twitter), en facebook aqui pondría a mis amigos y la de followers (que son los que me siguen) según yo no la utilizaría (en facebook)
+   */
+    public static final org.semanticwb.platform.SemanticProperty social_friends=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#friends");
    /**
    * Clase que comprende todos los tipos de Post de entrada (Povientes del Listener)que pueden ir siendo creados en la herramienta.
    */
@@ -26,6 +34,10 @@ public abstract class SocialNetworkUserBase extends org.semanticwb.model.SWBClas
    * Red social a la cual pertenece este usuario (usuario de red social)
    */
     public static final org.semanticwb.platform.SemanticProperty social_snu_SocialNetwork=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#snu_SocialNetwork");
+   /**
+   * Id del usuario en una determinada red social
+   */
+    public static final org.semanticwb.platform.SemanticProperty social_snu_id=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#snu_id");
    /**
    * Clase en la cual se almacenan los usuarios que escriben los PostIn que llegan. El identificador de c/intancia de esta clase es el identificador de un usuarios en una red social.
    */
@@ -57,6 +69,12 @@ public abstract class SocialNetworkUserBase extends org.semanticwb.model.SWBClas
         {
             java.util.Iterator it=sclass.listInstances();
             return new org.semanticwb.model.GenericIterator<org.semanticwb.social.SocialNetworkUser>(it, true);
+        }
+
+        public static org.semanticwb.social.SocialNetworkUser createSocialNetworkUser(org.semanticwb.model.SWBModel model)
+        {
+            long id=model.getSemanticObject().getModel().getCounter(sclass);
+            return org.semanticwb.social.SocialNetworkUser.ClassMgr.createSocialNetworkUser(String.valueOf(id), model);
         }
        /**
        * Gets a org.semanticwb.social.SocialNetworkUser
@@ -156,6 +174,24 @@ public abstract class SocialNetworkUserBase extends org.semanticwb.model.SWBClas
     }
 
 /**
+* Gets the Snu_name property
+* @return String with the Snu_name
+*/
+    public String getSnu_name()
+    {
+        return getSemanticObject().getProperty(social_snu_name);
+    }
+
+/**
+* Sets the Snu_name property
+* @param value long with the Snu_name
+*/
+    public void setSnu_name(String value)
+    {
+        getSemanticObject().setProperty(social_snu_name, value);
+    }
+
+/**
 * Gets the Followers property
 * @return int with the Followers
 */
@@ -171,6 +207,24 @@ public abstract class SocialNetworkUserBase extends org.semanticwb.model.SWBClas
     public void setFollowers(int value)
     {
         getSemanticObject().setIntProperty(social_followers, value);
+    }
+
+/**
+* Gets the Friends property
+* @return int with the Friends
+*/
+    public int getFriends()
+    {
+        return getSemanticObject().getIntProperty(social_friends);
+    }
+
+/**
+* Sets the Friends property
+* @param value long with the Friends
+*/
+    public void setFriends(int value)
+    {
+        getSemanticObject().setIntProperty(social_friends, value);
     }
    /**
    * Gets all the org.semanticwb.social.PostIn
@@ -248,5 +302,23 @@ public abstract class SocialNetworkUserBase extends org.semanticwb.model.SWBClas
              ret=(org.semanticwb.social.SocialNetwork)obj.createGenericInstance();
          }
          return ret;
+    }
+
+/**
+* Gets the Snu_id property
+* @return String with the Snu_id
+*/
+    public String getSnu_id()
+    {
+        return getSemanticObject().getProperty(social_snu_id);
+    }
+
+/**
+* Sets the Snu_id property
+* @param value long with the Snu_id
+*/
+    public void setSnu_id(String value)
+    {
+        getSemanticObject().setProperty(social_snu_id, value);
     }
 }
