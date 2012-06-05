@@ -16,7 +16,7 @@ Inicia...
     WebSite wsite=paramRequest.getWebPage().getWebSite();
     
     initialize();
-    
+
     //Elimina todos los objetos(instancias) de la clase SentimentWords
     Iterator <SentimentWords> itSentimentWords=SentimentWords.ClassMgr.listSentimentWordses(wsite);
     while(itSentimentWords.hasNext())
@@ -64,11 +64,11 @@ Inicia...
     } catch (IOException e) {
         e.printStackTrace();
     }
-**/
+
     int cont=0;
     //Lee todos los valores de la clase sentimentWord
-    Iterator <SentimentWords> itSentimentWords=SentimentWords.ClassMgr.listSentimentWordses(wsite);
-  //itSentimentWords=SentimentWords.ClassMgr.listSentimentWordses(wsite);
+  //Iterator <SentimentWords> itSentimentWords=SentimentWords.ClassMgr.listSentimentWordses(wsite);
+    itSentimentWords=SentimentWords.ClassMgr.listSentimentWordses(wsite);
     while(itSentimentWords.hasNext())
     {
         cont++;
