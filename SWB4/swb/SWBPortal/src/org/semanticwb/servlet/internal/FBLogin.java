@@ -114,7 +114,8 @@ public class FBLogin implements InternalServlet
                 String url = request.getParameter("wb_goto");
                 if ((url == null || url.equals("/")))
                 {
-                    url = path + "/" + SWBPlatform.getEnv("swb/distributor") + "/" + dparams.getWebPage().getWebSiteId() + "/" + dparams.getWebPage().getId() + "/_lang/" + dparams.getUser().getLanguage();
+                    //url = path + "/" + SWBPlatform.getEnv("swb/distributor") + "/" + dparams.getWebPage().getWebSiteId() + "/" + dparams.getWebPage().getId() + "/_lang/" + dparams.getUser().getLanguage();
+                    url = path + dparams.getWebPage().getUrl(dparams.getUser().getLanguage());
                     log.debug("LOGOUT (Path, uri, url): " + path + "   |   " + uri + "    |  " + url);
                     sendRedirect(response, url);
                     return;
@@ -177,8 +178,8 @@ public class FBLogin implements InternalServlet
         if ((url == null || url.equals("/")))
         {
             log.debug("PATHs: Path:" + path + " - " + dparams.getWebPage().getWebSiteId() + " - " + dparams.getWebPage().getId());
-            url =
-                    SWBPlatform.getContextPath() + "/" + SWBPlatform.getEnv("swb/distributor") + "/" + dparams.getWebPage().getWebSiteId() + "/" + dparams.getWebPage().getId() + "/_lang/" + dparams.getUser().getLanguage();
+            url =SWBPlatform.getContextPath() + dparams.getWebPage().getUrl(dparams.getUser().getLanguage());
+                    //SWBPlatform.getContextPath() + "/" + SWBPlatform.getEnv("swb/distributor") + "/" + dparams.getWebPage().getWebSiteId() + "/" + dparams.getWebPage().getId() + "/_lang/" + dparams.getUser().getLanguage();
         }
 
         sendRedirect(response, url);
