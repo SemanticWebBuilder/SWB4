@@ -358,8 +358,8 @@ public class Login implements InternalServlet
         if ((url == null || url.equals("/")))
         {
             log.debug("PATHs: Path:" + path + " - " + dparams.getWebPage().getWebSiteId() + " - " + dparams.getWebPage().getId());
-            url =
-                    SWBPlatform.getContextPath() + "/" + SWBPlatform.getEnv("swb/distributor") + "/" + dparams.getWebPage().getWebSiteId() + "/" + dparams.getWebPage().getId() + "/_lang/" + dparams.getUser().getLanguage();
+            url =   SWBPlatform.getContextPath() + dparams.getWebPage().getUrl(dparams.getUser().getLanguage());
+                    //SWBPlatform.getContextPath() + "/" + SWBPlatform.getEnv("swb/distributor") + "/" + dparams.getWebPage().getWebSiteId() + "/" + dparams.getWebPage().getId() + "/_lang/" + dparams.getUser().getLanguage();
         } 
         if (null!=request.getQueryString() && request.getQueryString().indexOf("wb_logout")==-1) url = url+"?"+request.getQueryString();
         sendRedirect(response, url);
