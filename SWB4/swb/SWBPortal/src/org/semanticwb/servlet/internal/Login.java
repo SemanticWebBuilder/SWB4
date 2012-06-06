@@ -232,7 +232,8 @@ public class Login implements InternalServlet
                 String url = request.getParameter("wb_goto");
                 if ((url == null))
                 {
-                    url = path + "/" + SWBPlatform.getEnv("swb/distributor") + "/" + dparams.getWebPage().getWebSiteId() + "/" + dparams.getWebPage().getId() + "/_lang/" + dparams.getUser().getLanguage();
+                   // url = path + "/" + SWBPlatform.getEnv("swb/distributor") + "/" + dparams.getWebPage().getWebSiteId() + "/" + dparams.getWebPage().getId() + "/_lang/" + dparams.getUser().getLanguage();
+                     url = path + "/" + SWBPlatform.getEnv("swb/distributor") + dparams.getWebPage().getUrl(dparams.getUser().getLanguage());
                 }
                 log.debug("LOGOUT (Path, uri, url): " + path + "   |   " + uri + "    |  " + url);
                 sendRedirect(response, url);
