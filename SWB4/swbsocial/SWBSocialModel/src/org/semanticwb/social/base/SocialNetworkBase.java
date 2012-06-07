@@ -4,7 +4,7 @@ package org.semanticwb.social.base;
    /**
    * Clase que engloba a las diferentes clases que representan cada una de las redes sociales. 
    */
-public abstract class SocialNetworkBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Traceable,org.semanticwb.social.Listenerable,org.semanticwb.model.Descriptiveable
+public abstract class SocialNetworkBase extends org.semanticwb.model.SWBClass implements org.semanticwb.social.Listenerable,org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable
 {
    /**
    * En esta clase se guardan todos los post que lleguan por el listener, se estima que toda la info. que se guarde en este objeto debe de eliminarse aproximadamente c/mes, siendo este parametro configurable de acuerdo al tiempo que la organización quiera guardar  la información sobre los mensajes que lleguen por el listener. Cuando un post que llegue por el listener sea tomado como base para crear un nuevo post por la organización, se cree que debe copiarse la información de dicho post de esta clase hacia la clase PostListenerContainerBase.
@@ -50,6 +50,10 @@ public abstract class SocialNetworkBase extends org.semanticwb.model.SWBClass im
    * Tiempo en que se ira a buscar información a una determinada red social
    */
     public static final org.semanticwb.platform.SemanticProperty social_PoolTime=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#PoolTime");
+   /**
+   * Código de pais que servira como filtro, es decir, solo se guardaran los mensajes que se hayan generado en el pais que pertenesca al mismo código de pais que se capture en esta propiedad, esto podría ser para cada instancia (cuenta) de cada red social.
+   */
+    public static final org.semanticwb.platform.SemanticProperty social_countryCodetoSearch=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#countryCodetoSearch");
    /**
    * Clase que engloba a las diferentes clases que representan cada una de las redes sociales.
    */
@@ -638,6 +642,24 @@ public abstract class SocialNetworkBase extends org.semanticwb.model.SWBClass im
     public void setPoolTime(int value)
     {
         getSemanticObject().setIntProperty(social_PoolTime, value);
+    }
+
+/**
+* Gets the CountryCodetoSearch property
+* @return String with the CountryCodetoSearch
+*/
+    public String getCountryCodetoSearch()
+    {
+        return getSemanticObject().getProperty(social_countryCodetoSearch);
+    }
+
+/**
+* Sets the CountryCodetoSearch property
+* @param value long with the CountryCodetoSearch
+*/
+    public void setCountryCodetoSearch(String value)
+    {
+        getSemanticObject().setProperty(social_countryCodetoSearch, value);
     }
    /**
    * Sets the value for the property Creator
