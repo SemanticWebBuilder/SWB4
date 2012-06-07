@@ -11,9 +11,11 @@ import java.util.Iterator;
 import org.semanticwb.model.SWBModel;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.social.MessageIn;
+import org.semanticwb.social.PhotoIn;
 import org.semanticwb.social.PostIn;
 import org.semanticwb.social.Prepositions;
 import org.semanticwb.social.SentimentWords;
+import org.semanticwb.social.VideoIn;
 import org.semanticwb.social.util.NormalizerCharDuplicate;
 import org.semanticwb.social.util.SWBSocialUtil;
 
@@ -26,7 +28,9 @@ public class SentimentalDataClassifier {
     PostIn post=null;
     String postData=null;
     SWBModel model=null;
-    
+
+
+
     public SentimentalDataClassifier(PostIn post, String postData)
     {
         this.post=post;
@@ -34,6 +38,29 @@ public class SentimentalDataClassifier {
         this.model=WebSite.ClassMgr.getWebSite(post.getSemanticObject().getModel().getName());
         initAnalysis();
     }
+
+    public SentimentalDataClassifier(PostIn post)
+    {
+        this.post=post;
+        getPostData();
+        this.model=WebSite.ClassMgr.getWebSite(post.getSemanticObject().getModel().getName());
+        initAnalysis();
+    }
+
+    private void getPostData()
+    {
+        if (post instanceof MessageIn) {
+            MessageIn messageIn = (MessageIn) post;
+            postData = messageIn.getMsg_Text();
+        } else if (post instanceof PhotoIn) {
+            //PhotoIn photoIn = (PhotoIn) post;
+            postData = post.getTitle() + post.getDescription();
+        } else if (post instanceof VideoIn) {
+            //VideoIn videoIn = (VideoIn) post;
+            postData = post.getTitle() + post.getDescription();
+        }
+    }
+
 
     private void initAnalysis()
     {
@@ -98,7 +125,7 @@ public class SentimentalDataClassifier {
         {
             float prom=sentimentalTweetValue/wordsCont;
             post.setPostSentimentalValue(prom);
-            if(prom>4.5) //Si el promedio es mayor de 4.5 (Segun Octavio) es un tweet positivo
+            if(prom>=4.5) //Si el promedio es mayor de 4.5 (Segun Octavio) es un tweet positivo
             {
                 //System.out.println("Se guarda Post Positivo:"+post.getId()+", valor promedio:"+prom);
                 post.setPostSentimentalType(1); //Tweet Postivivo, valor de 1 (Esto yo lo determiné)
@@ -114,7 +141,7 @@ public class SentimentalDataClassifier {
             //System.out.println("Se guarda Post Neutro POR DEFAULT:"+post.getId()+", valor promedio--4.5");
             //Si no encontro ninguna palabra de las que vienen en el post en la BD, entonces es como si no tuviera
             //valor sentimental, por lo cual lo pone con valor de 4.5 (Neutro-según Octavio)
-            post.setPostSentimentalValue(Float.parseFloat("4.5"));
+            post.setPostSentimentalValue(Float.parseFloat("0"));
             post.setPostSentimentalType(0); //Tweet Neutro, valor de 0 (Esto yo lo determiné)
         }
         if(IntensiveTweetValue>0)
