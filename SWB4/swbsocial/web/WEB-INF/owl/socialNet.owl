@@ -452,6 +452,19 @@
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <rdfs:comment>Preposición</rdfs:comment>
   </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="countryCodetoSearch">
+    <rdfs:label xml:lang="en">Country Code to reduce the search</rdfs:label>
+    <rdfs:label xml:lang="es">Código de País a reducir la busqueda</rdfs:label>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_countryCodetoSearch">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextBox"/>
+        <swbxf:propGroup rdf:resource="#SocialConfigGroup"/>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:comment>Código de pais que servira como filtro, es decir, solo se guardaran los mensajes que se hayan generado en el pais que pertenesca al mismo código de pais que se capture en esta propiedad, esto podría ser para cada instancia (cuenta) de cada red social.</rdfs:comment>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#SocialNetwork"/>
+  </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="OtherWords">
     <rdfs:domain rdf:resource="#WordsToMonitor"/>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
@@ -485,12 +498,24 @@
   <owl:DatatypeProperty rdf:ID="login">
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_login">
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >1</swb:index>
         <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextBox"/>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <rdfs:domain rdf:resource="#SocialNetwork"/>
     <rdfs:comment>Login o usuario con la cual una organización se puede conectar a una determinada instancia de Red Social.</rdfs:comment>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="msg_Text">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_msg_Text">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextArea_Description"/>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#PostTextable"/>
+    <rdfs:comment>Propiedad que almacena un texto o mensaje en un objeto Post que lo requiera.</rdfs:comment>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="video">
     <swb:displayProperty>
@@ -508,16 +533,6 @@
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <rdfs:domain rdf:resource="#PostVideoable"/>
     <rdfs:comment>Propiedad que almacena el nombre(referencia) de un video en un objeto Post que lo requiera.</rdfs:comment>
-  </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="msg_Text">
-    <swb:displayProperty>
-      <swbxf:DisplayProperty rdf:ID="dp_msg_Text">
-        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextArea_Description"/>
-      </swbxf:DisplayProperty>
-    </swb:displayProperty>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-    <rdfs:domain rdf:resource="#PostTextable"/>
-    <rdfs:comment>Propiedad que almacena un texto o mensaje en un objeto Post que lo requiera.</rdfs:comment>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="IntensityValue">
     <rdfs:domain rdf:resource="#SentimentWords"/>
@@ -573,6 +588,8 @@
   <owl:DatatypeProperty rdf:ID="password">
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_password">
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >2</swb:index>
         <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextBox"/>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
