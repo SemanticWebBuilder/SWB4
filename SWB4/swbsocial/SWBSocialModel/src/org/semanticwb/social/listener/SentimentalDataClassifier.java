@@ -8,6 +8,8 @@ package org.semanticwb.social.listener;
 import java.lang.Float;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.StringTokenizer;
+import org.semanticwb.SWBUtils;
 import org.semanticwb.model.SWBModel;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.social.MessageIn;
@@ -28,6 +30,8 @@ public class SentimentalDataClassifier {
     PostIn post=null;
     String postData=null;
     SWBModel model=null;
+    int contPositiveEmoticon=0;
+    int contNegativeEmoticon=0;
 
 
 
@@ -64,27 +68,25 @@ public class SentimentalDataClassifier {
 
     private void initAnalysis()
     {
-        //removePuntualSigns1();
-        //System.out.println("Msg to Classify-0:"+postData);
-        postData=SWBSocialUtil.Strings.removePuntualSigns(postData, model);
+        //Revisa si encuentra emoticones en el mensaje
+        findEmoticones();
 
-        //System.out.println("Msg to Classify-1:"+postData);
+        //removePuntualSigns1();
+        postData=SWBSocialUtil.Strings.removePuntualSigns(postData, model);
 
         //Elimino Caracteres especiales (acentuados)
         postData=SWBSocialUtil.Strings.replaceSpecialCharacters(postData);
 
-        //System.out.println("Msg to Classify-2:"+postData);
-
         //Arreglo con las palabras totales que existe en la variable PostData
-        ArrayList aPostDataWords=SWBSocialUtil.Strings.stripWordsByLine(postData);
         
         float sentimentalTweetValue=0;
         float IntensiveTweetValue=0;
         int wordsCont=0;
-        Iterator<String> itaPostDataWords=aPostDataWords.iterator();
-        while(itaPostDataWords.hasNext())
+
+        StringTokenizer st = new StringTokenizer(postData);
+        while (st.hasMoreTokens())
         {
-            String word2Find=itaPostDataWords.next();
+            String word2Find=st.nextToken();
             if(Prepositions.ClassMgr.getPrepositions(word2Find.toLowerCase(), model)!=null) //Elimino preposiciones
             {
                 continue;
@@ -151,6 +153,33 @@ public class SentimentalDataClassifier {
             post.setPostIntensityValue(prom);
         }
     }
+
+
+    private void findEmoticones()
+    {
+         StringTokenizer st = new StringTokenizer(postData);
+         while (st.hasMoreTokens())
+         {
+             String word2Find=st.nextToken();
+            if(word2Find.indexOf(":)")>-1 || word2Find.indexOf(":))")>-1 || word2Find.indexOf("(:")>-1 || word2Find.indexOf(":-)")>-1 || word2Find.indexOf("(-:")>-1 || word2Find.indexOf("<3")>-1) //Sentimiento Positivo
+             {
+                contPositiveEmoticon++;
+             }else if(word2Find.indexOf(":(")>-1 || word2Find.indexOf(":((")>-1 || word2Find.indexOf("):")>-1 || word2Find.indexOf(":-(")>-1 || word2Find.indexOf(")-:")>-1) //Sentimineto negativo
+             {
+                contNegativeEmoticon++;
+             }
+        }
+        if(contPositiveEmoticon>contNegativeEmoticon)
+        {
+            post.setPostSentimentalEmoticonType(1);
+        }else if(contPositiveEmoticon<contNegativeEmoticon)
+        {
+            post.setPostSentimentalEmoticonType(2);
+        }
+    }
+
+
+
 
     //**************** METODOS PARA PROBAR EL CLASIFICADOR **********************
 
