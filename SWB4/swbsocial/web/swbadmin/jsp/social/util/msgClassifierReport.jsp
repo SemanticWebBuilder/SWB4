@@ -29,15 +29,18 @@
 Sentiment Type=1:Positivo|2:Negativo|0:Neutro
 <table border="1">
   <tr>
+    <th>Cta. de Red Social</th>
     <th>Message</th>
     <th>Sentiment Type</th>
+    <th>SentimentEmoticon Type</th>
     <th>Sentiment Value</th>
     <th>Intencity Value</th>
+    <th>F. creación</th>
   </tr>
 <%
     int cont=0;
     WebPage wpage=paramRequest.getWebPage();
-    Iterator <MessageIn> itMsgIn=MessageIn.ClassMgr.listMessageIns(wpage.getWebSite());
+    Iterator <MessageIn> itMsgIn=SWBComparator.sortByCreated(MessageIn.ClassMgr.listMessageIns(wpage.getWebSite()), false);
     while(itMsgIn.hasNext())
     {
         MessageIn msgIn=itMsgIn.next();
@@ -47,6 +50,7 @@ Sentiment Type=1:Positivo|2:Negativo|0:Neutro
             <td><%=msgIn.getPostInSocialNetwork()%></td>
             <td><%=msgIn.getMsg_Text()%></td>
             <td><%=msgIn.getPostSentimentalType()%></td>
+            <td><%=msgIn.getPostSentimentalEmoticonType()%></td>
             <td><%=msgIn.getPostSentimentalValue()%></td>
             <td><%=msgIn.getPostIntensityValue()%></td>
             <td><%=msgIn.getCreated()%></td>
