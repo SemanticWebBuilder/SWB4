@@ -430,6 +430,11 @@
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <rdfs:comment>Mes en el cual es creada una instancia de PostListenerContainer,esta propiedad servira mucho  para buscar los postIn de manera optima, ya que pudieran ser muchos en un corto tiempo.</rdfs:comment>
   </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="postIntensityValue">
+    <rdfs:domain rdf:resource="#PostIn"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
+    <rdfs:comment>Valor que es resultado del algoritmo de intensidad, mediante este valor se puede determinar si la intencidad es alta, media o baja</rdfs:comment>
+  </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="accessToken">
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
@@ -507,6 +512,11 @@
     <rdfs:domain rdf:resource="#SocialNetwork"/>
     <rdfs:comment>Login o usuario con la cual una organización se puede conectar a una determinada instancia de Red Social.</rdfs:comment>
   </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="postSentimentalValue">
+    <rdfs:domain rdf:resource="#PostIn"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
+    <rdfs:comment>Valor que resulta del algoritmo de analisis sentimental, aqui se puede ver el porque se pone cierto valir a la propiedad PostSentimentalType</rdfs:comment>
+  </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="msg_Text">
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_msg_Text">
@@ -516,6 +526,11 @@
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <rdfs:domain rdf:resource="#PostTextable"/>
     <rdfs:comment>Propiedad que almacena un texto o mensaje en un objeto Post que lo requiera.</rdfs:comment>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="postSentimentalType">
+    <rdfs:comment>Propiedad con valor entero que representa el tipo de Sentimientos que expresa el Post, estos se estan definiendo de esta manera: 0) Neutro 1) Positivo 2)Negativo, estos valores pueden ser mas y permanecer en un objeto tipo colección en lo futuro.</rdfs:comment>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+    <rdfs:domain rdf:resource="#PostIn"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="video">
     <swb:displayProperty>
@@ -533,6 +548,11 @@
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <rdfs:domain rdf:resource="#PostVideoable"/>
     <rdfs:comment>Propiedad que almacena el nombre(referencia) de un video en un objeto Post que lo requiera.</rdfs:comment>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="postSentimentalEmoticonType">
+    <rdfs:comment>Sentimiento de el mensaje (Post) basado en emoticones encontrados. (1=Positivo;2=Negativo;0=Neutro)</rdfs:comment>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+    <rdfs:domain rdf:resource="#PostIn"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="IntensityValue">
     <rdfs:domain rdf:resource="#SentimentWords"/>
@@ -627,11 +647,6 @@
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <rdfs:comment>Año en el cual es creada una instancia de PostContainer, esta propiedad servira mucho  para buscar los postOut de manera optima, ya que pudieran ser muchos en un corto tiempo.</rdfs:comment>
   </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="PostIntensityValue">
-    <rdfs:comment>Valor que es resultado del algoritmo de intensidad, mediante este valor se puede determinar si la intencidad es alta, media o baja</rdfs:comment>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
-    <rdfs:domain rdf:resource="#PostIn"/>
-  </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="photo">
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <swb:displayProperty>
@@ -653,11 +668,6 @@
     <rdfs:domain rdf:resource="#PunctuationSign"/>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <rdfs:comment>Signo de Puntuación</rdfs:comment>
-  </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="PostSentimentalType">
-    <rdfs:domain rdf:resource="#PostIn"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
-    <rdfs:comment>Propiedad con valor entero que representa el tipo de Sentimientos que expresa el Post, estos se estan definiendo de esta manera: 0) Neutro 1) Positivo 2)Negativo, estos valores pueden ser mas y permanecer en un objeto tipo colección en lo futuro.</rdfs:comment>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="followers">
     <rdfs:domain rdf:resource="#SocialNetworkUser"/>
@@ -704,11 +714,6 @@
     <rdfs:label xml:lang="es">Aplicación</rdfs:label>
     <rdfs:label xml:lang="en">Aplication Key</rdfs:label>
     <rdfs:comment>Propiedad que almacena el Aplication Key de una determinada Red Social que requiera de este para su conección.</rdfs:comment>
-  </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="PostSentimentalValue">
-    <rdfs:comment>Valor que resulta del algoritmo de analisis sentimental, aqui se puede ver el porque se pone cierto valir a la propiedad PostSentimentalType</rdfs:comment>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
-    <rdfs:domain rdf:resource="#PostIn"/>
   </owl:DatatypeProperty>
   <swb:CodePackage rdf:ID="pkg">
     <swb:prefix rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
