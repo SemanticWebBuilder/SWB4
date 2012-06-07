@@ -42,6 +42,8 @@ public class ClassifierThread extends java.lang.Thread {
     {
         try
         {
+           new SentimentalDataClassifier(post);
+           /*
             String words2classify = null;
             if (post instanceof MessageIn) {
                 MessageIn messageIn = (MessageIn) post;
@@ -65,6 +67,7 @@ public class ClassifierThread extends java.lang.Thread {
                     new SentimentalDataClassifier(videoIn, words2classify);
                 }
             }
+            * */
         } catch (Exception e) {
             log.error(e);
         }

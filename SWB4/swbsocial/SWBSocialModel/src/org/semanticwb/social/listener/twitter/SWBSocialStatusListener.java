@@ -5,12 +5,18 @@
 
 package org.semanticwb.social.listener.twitter;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import org.semanticwb.model.SWBModel;
 import org.semanticwb.social.MessageIn;
 import org.semanticwb.social.SocialNetwork;
 import org.semanticwb.social.SocialNetworkUser;
 import org.semanticwb.social.listener.Classifier;
+import twitter4j.GeoLocation;
+import twitter4j.Location;
+import twitter4j.MediaEntity;
+import twitter4j.Place;
 import twitter4j.Status;
 import twitter4j.StatusDeletionNotice;
 
@@ -32,13 +38,41 @@ public class SWBSocialStatusListener implements twitter4j.StatusListener {
     @Override
     public void onStatus(Status status) {
         //if (status.getGeoLocation() != null)
-        //if(status.getText().indexOf("android")>-1 || status.getText().indexOf("ipad")>-1 || status.getText().indexOf("iphone")>-1 || status.getText().indexOf("tarea")>-1)
+
+        Place place=status.getPlace();
+        //Investigar cuales son los 4 puntos cardinales del bounding Box de México y los tweets que lleguen no deben ser mayores
+        //a esos 4 float que lleguen, esto con los números que nos llegan en la parte de código que se encuentra comentada aquí abajo.
+        /*
+        if (null != place.getBoundingBoxCoordinates() && place.getBoundingBoxCoordinates().length > 0) {
+                GeoLocation[] boundingBox = place.getBoundingBoxCoordinates()[0];
+                StringBuffer buffer = new StringBuffer();
+                buffer.append("[" + boundingBox[0].getLatitude() + ", " + boundingBox[0].getLongitude() + "], ");
+                buffer.append("[" + boundingBox[1].getLatitude() + ", " + boundingBox[1].getLongitude() + "], ");
+                buffer.append("[" + boundingBox[2].getLatitude() + ", " + boundingBox[2].getLongitude() + "], ");
+                buffer.append("[" + boundingBox[3].getLatitude() + ", " + boundingBox[3].getLongitude() + "]");
+                System.out.println("bufferJ:"+buffer.toString());
+                System.out.println("boundingBoxType:"+place.getBoundingBoxType());
+        }
+        */
+        System.out.println("Cuenta en la que estoy:"+socialNetwork.getTitle());
+        if(place!=null) System.out.println("Country:"+place.getCountry()+",CountryCode:"+place.getCountryCode()+", PlaceName:"+place.getName()+", PlaceFullName:"+place.getFullName()+", PlaceStreetAdress:"+place.getStreetAddress());
+        else System.out.println("place es NULO...");
+        //if(place!=null && place.getCountryCode().equals("MX")) //&& place.getName().equals("Cuernavaca"))
         {
             
             System.out.println();
             System.out.println("------------");
             System.out.println(status.getUser().getName() + " : " + status.getText() + " : " + status.getGeoLocation());
             System.out.println(status.getCreatedAt());
+            MediaEntity[] medianEntities=status.getMediaEntities();
+            for(int i=0;i<medianEntities.length;i++)
+            {
+                MediaEntity mediaEntity=medianEntities[i];
+                System.out.println("Media DisplayUrl:"+mediaEntity.getDisplayURL());
+                System.out.println("Media ExpandedUrl:"+mediaEntity.getExpandedURL());
+                System.out.println("Media MediaURLFile:"+mediaEntity.getMediaURL().getFile());
+                System.out.println("Media URLString:"+mediaEntity.getURL().toString());
+            }
             
             //Persistencia del mensaje
             MessageIn mesagge=MessageIn.ClassMgr.createMessageIn(String.valueOf(status.getId()), model);
@@ -76,7 +110,7 @@ public class SWBSocialStatusListener implements twitter4j.StatusListener {
                 }
             }
             socialNetwork.addReceivedPost(mesagge, String.valueOf(status.getId()), socialNetwork);
-            new Classifier(mesagge, model);
+            new Classifier(mesagge);
         }
     }
 

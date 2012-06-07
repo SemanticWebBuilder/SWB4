@@ -117,7 +117,9 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
             /*create filterQuery*/
             FilterQuery query = new FilterQuery();
             //NOTE: format of values: {minLongitude, minLatitude}, {...}
-            //double[][] loc = {{-118, 14}, {-86, 33}}; //Bounding Box de San Francisco
+            //double[][] loc = {{-118, 37}, {-86, 33}}; //Bounding Box de San Francisco
+            //double[][] loc = {{37.78452999999, -122.39532395324}, {37.78452999998, -122.39532395323}}; //Bounding Box de San Francisco
+            //double[][] loc = {{32.718620, -86.703392}, {14.532850, -118.867172}}; //Bounding Box de México (País) Encontrado en http://isithackday.com/geoplanet-explorer/index.php?woeid=23424900
             //double[][] loc = {{32.718620, -86.703392}, {14.532850, -118.867172}}; //Bounding Box de México (País) Encontrado en http://isithackday.com/geoplanet-explorer/index.php?woeid=23424900
             //query.locations(loc);
 
@@ -164,6 +166,7 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
 
             //trial.sample();
         } catch (Exception e) {
+            System.out.println(e.getMessage());
             log.error(e);
         }
     }

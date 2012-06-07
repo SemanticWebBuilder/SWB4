@@ -19,7 +19,7 @@ public class Classifier {
     private Logger log = SWBUtils.getLogger(Classifier.class);
 
     PostIn post=null;
-    public Classifier (PostIn post, SWBModel model)
+    public Classifier (PostIn post)
     {
         this.post=post;
         try{
