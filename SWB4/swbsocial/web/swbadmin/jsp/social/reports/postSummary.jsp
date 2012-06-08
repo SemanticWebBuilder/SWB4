@@ -5,14 +5,11 @@
 --%>
 <%@page contentType="text/html" pageEncoding="ISO-8859-1"%>
 <%@page import="org.semanticwb.social.*"%>
-<%@page import="org.semanticwb.SWBPlatform"%>
-<%@page import="org.semanticwb.SWBPortal"%>
 <%@page import="org.semanticwb.SWBUtils"%>
 <%@page import="org.semanticwb.model.*"%>
 <%@page import="org.semanticwb.platform.SemanticProperty"%>
 <%@page import="org.semanticwb.portal.api.*"%>
 <%@page import="java.util.*"%>
-<%@page import="java.text.*"%>
 <%@page import="static org.semanticwb.social.resources.reports.PostSummary.*"%>
 <jsp:useBean id="paramRequest" scope="request" type="org.semanticwb.portal.api.SWBParamRequest"/>
 <%
@@ -86,7 +83,7 @@ out.println("}");
         
         out.println(" function apply() {");
         out.println("   var grid = dijit.byId('gridMaster');");
-        out.println("   fillGrid(grid, '"+url.setMode(Mode_FILLGRD)+"');");
+        out.println("   fillGrid(grid, '"+url.setMode(Mode_JSON)+"');");
         out.println("  ");
         out.println(" }");
         
@@ -119,7 +116,7 @@ out.println("}");
         out.println("   }, 'gridMaster');");
         out.println("   gridMaster.startup();");
         
-        out.println("   fillGrid(gridMaster, '"+url.setMode(Mode_FILLGRD)+"');");
+        out.println("   fillGrid(gridMaster, '"+url.setMode(Mode_JSON)+"');");
         out.println(" });");
         out.println("</script>");
         out.println("<div id=\"ctnergrid\" style=\"height:600px; width:99%; margin: 1px; padding: 0px; border: 1px solid #DAE1FE;\">");
@@ -128,7 +125,7 @@ out.println("}");
         
 // paginación
 if(paginas > 1) {
-    SWBResourceURL pagURL = paramRequest.getRenderUrl().setMode(Mode_JSON);
+    SWBResourceURL pagURL = paramRequest.getRenderUrl().setMode(SWBResourceURL.Mode_VIEW);
     StringBuilder html = new StringBuilder();
     html.append("<div class=\"\"  style=\"text-align:center\">");
     String nextURL = "#";
