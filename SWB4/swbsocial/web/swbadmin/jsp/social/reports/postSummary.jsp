@@ -24,17 +24,6 @@ try {
 }
 Iterator<PostIn> itposts = PostIn.ClassMgr.listPostIns(wsite);
 long el = SWBUtils.Collections.sizeOf(itposts);
-
-
-itposts = PostIn.ClassMgr.listPostIns(wsite);
-while(itposts.hasNext()) {
-    PostIn post = itposts.next();
-    if(post.getPostSentimentalType()>0)
-        System.out.println("sentimiento"+post.getPostSentimentalType());
-}
-
-
-
 long paginas = el / PAGE_SIZE;
 if(el % PAGE_SIZE != 0) {
     paginas++;
