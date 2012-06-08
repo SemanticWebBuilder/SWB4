@@ -72,20 +72,20 @@ inicio++;
         
 out.println("function feelingIcon(value) {");
 out.println(" if(value==2)");
-out.println("  return '/work/positivo.jpg';");
+out.println("  return '<img src=\"/swbadmin/images/positivo.jpg\" />';");
 out.println(" else if(value==1)");
-out.println("  return '/work/negativo.jpg';");
+out.println("  return '<img src=\"/swbadmin/images/negativo.jpg\" />';");
 out.println(" else");
-out.println("  return '/work/neutro.jpg';");
+out.println("  return '-';");
 out.println("}");
 
 out.println("function emotIcon(value) {");
 out.println(" if(value==2)");
-out.println("  return '/work/emopos.jpg';");
+out.println("  return '<img src=\"/swbadmin/images/emopos.png\" />';");
 out.println(" else if(value==1)");
-out.println("  return '/work/emoneg.jpg';");
+out.println("  return '<img src=\"/swbadmin/images/emoneg.png\" />';");
 out.println(" else");
-out.println("  return '/work/neutro.jpg';");
+out.println("  return '-';");
 out.println("}");
         
         out.println(" var layout= null;");
@@ -100,8 +100,8 @@ out.println("}");
         out.println("      { field:'sn',  width:'80px',name:'Red social' },");
         out.println("      { field:'date',width:'90px',name:'Fecha' },");
         out.println("      { field:'msg', width:'300px',name:'Mensaje' },");
-        out.println("      { field:'feel',width:'40px', name:'Sentimiento', formatter:function(value){var src=feelingIcon(value);return '<img src=\"'+src+'\" />';} },");
-        out.println("      { field:'eicon', width:'40px', name:'Emoticon', formatter:function(value){var src=emotIcon(value);return '<img src=\"'+src+'\" />';} },");
+        out.println("      { field:'feel',width:'40px', name:'Sentimiento', formatter:function(value){var artf=feelingIcon(value);return artf;} },");
+        out.println("      { field:'eicon', width:'40px', name:'Emoticon', formatter:function(value){var artf=emotIcon(value);return artf;} },");
         out.println("      { field:'int', width:'50px', name:'Intensidad' },");
         out.println("      { field:'user',width:'100px',name:'Usuario' },");
         out.println("      { field:'fllwrs', width:'80px', name:'Seguidores' },");
