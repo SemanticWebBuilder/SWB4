@@ -76,7 +76,7 @@ out.println("  return '<img src=\"/swbadmin/images/positivo.jpg\" />';");
 out.println(" else if(value==1)");
 out.println("  return '<img src=\"/swbadmin/images/negativo.jpg\" />';");
 out.println(" else");
-out.println("  return '-';");
+out.println("  return '--';");
 out.println("}");
 
 out.println("function emotIcon(value) {");
@@ -85,7 +85,7 @@ out.println("  return '<img src=\"/swbadmin/images/emopos.png\" />';");
 out.println(" else if(value==1)");
 out.println("  return '<img src=\"/swbadmin/images/emoneg.png\" />';");
 out.println(" else");
-out.println("  return '-';");
+out.println("  return '--';");
 out.println("}");
         
         out.println(" var layout= null;");
