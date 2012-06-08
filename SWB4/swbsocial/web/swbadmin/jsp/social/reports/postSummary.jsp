@@ -72,18 +72,18 @@ inicio++;
         
 out.println("function feelingIcon(value) {");
 out.println(" if(value==2)");
-out.println("  return '<img src=\"/swbadmin/images/positivo.jpg\" />';");
+out.println("  return '<img src=\"/swbadmin/images/feelneg.png\" />';");
 out.println(" else if(value==1)");
-out.println("  return '<img src=\"/swbadmin/images/negativo.jpg\" />';");
+out.println("  return '<img src=\"/swbadmin/images/feelpos.png\" />';");
 out.println(" else");
 out.println("  return '--';");
 out.println("}");
 
 out.println("function emotIcon(value) {");
 out.println(" if(value==2)");
-out.println("  return '<img src=\"/swbadmin/images/emopos.png\" />';");
-out.println(" else if(value==1)");
 out.println("  return '<img src=\"/swbadmin/images/emoneg.png\" />';");
+out.println(" else if(value==1)");
+out.println("  return '<img src=\"/swbadmin/images/emopos.png\" />';");
 out.println(" else");
 out.println("  return '--';");
 out.println("}");
@@ -95,7 +95,7 @@ out.println("}");
 
         out.println(" dojo.addOnLoad(function() {");
         out.println("   layout= [");
-        out.println("      { field:'fl',  width:'50px', name:'Num' },");
+        /*out.println("      { field:'fl',  width:'50px', name:'Num' },");
         out.println("      { field:'cta', width:'80px', name:'Cuenta' },");
         out.println("      { field:'sn',  width:'80px',name:'Red social' },");
         out.println("      { field:'date',width:'90px',name:'Fecha' },");
@@ -105,7 +105,18 @@ out.println("}");
         out.println("      { field:'int', width:'50px', name:'Intensidad' },");
         out.println("      { field:'user',width:'100px',name:'Usuario' },");
         out.println("      { field:'fllwrs', width:'80px', name:'Seguidores' },");
-        out.println("      { field:'frds',width: '50px',name:'Amigos' }");
+        out.println("      { field:'frds',width: '50px',name:'Amigos' }");*/
+        out.println("      { field:'fl',  width:'5%', name:'Num' },");
+        out.println("      { field:'cta', width:'9%', name:'Cuenta' },");
+        out.println("      { field:'sn',  width:'5%',name:'Red social' },");
+        out.println("      { field:'date',width:'9%',name:'Fecha' },");
+        out.println("      { field:'msg', width:'37%',name:'Mensaje' },");
+        out.println("      { field:'feel',width:'5%', name:'Sentimiento', formatter:function(value){var artf=feelingIcon(value);return artf;} },");
+        out.println("      { field:'eicon', width:'5%', name:'Emoticon', formatter:function(value){var artf=emotIcon(value);return artf;} },");
+        out.println("      { field:'int', width:'5%', name:'Intensidad' },");
+        out.println("      { field:'user',width:'9%',name:'Usuario' },");
+        out.println("      { field:'fllwrs', width:'5%', name:'Seguidores' },");
+        out.println("      { field:'frds',width: '5%',name:'Amigos' }");
         out.println("   ];");
 
         out.println("   gridMaster = new dojox.grid.DataGrid({");
