@@ -42,7 +42,7 @@ public class PostSummary extends GenericAdmResource {
     /** The log. */
     private static Logger log = SWBUtils.getLogger(PostSummary.class);
     
-    public static final int PAGE_SIZE = 50; //Líneas por página
+    public static final int PAGE_SIZE = 1000; //Líneas por página
     public static final String Mode_JSON = "json";
     public static final String Mode_FILLGRD = "fg";
     public static int xxx=1000;
@@ -60,11 +60,11 @@ public class PostSummary extends GenericAdmResource {
     public void setResourceBase(Resource base) throws SWBResourceException {
         super.setResourceBase(base);
         
-System.out.println("\n\n\nSWBPortal.getWebWorkPath()="+SWBPortal.getWebWorkPath());
-System.out.println("SWBPortal.getWorkPath()="+SWBPortal.getWorkPath());
-System.out.println("base.getWorkPath()="+base.getWorkPath());
-System.out.println("path="+path);
-System.out.println("\n\n");
+//System.out.println("\n\n\nSWBPortal.getWebWorkPath()="+SWBPortal.getWebWorkPath());
+//System.out.println("SWBPortal.getWorkPath()="+SWBPortal.getWorkPath());
+//System.out.println("base.getWorkPath()="+base.getWorkPath());
+//System.out.println("path="+path);
+//System.out.println("\n\n");
 
 //        webWorkPath = SWBPortal.getWebWorkPath()+base.getWorkPath();
 //        if(!base.getAttribute("template","").isEmpty()) {
@@ -89,8 +89,8 @@ System.out.println("\n\n");
         final String mode = paramRequest.getMode();
         if(Mode_JSON.equals(mode))
             doJson(request, response, paramRequest);
-        else if(Mode_FILLGRD.equals(mode))
-            doFillReport(request, response, paramRequest);
+        /*else if(Mode_FILLGRD.equals(mode))
+            doFillReport(request, response, paramRequest);*/
         else
             super.processRequest(request, response, paramRequest);
     }
@@ -102,6 +102,10 @@ System.out.println("\n\n");
 
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        response.setContentType("text/html;charset=iso-8859-1");
+        response.setHeader("Cache-Control", "no-cache");
+        response.setHeader("Pragma", "no-cache");
+        
         final String myPath = path+"postSummary.jsp";
         if (request != null) {
             RequestDispatcher dis = request.getRequestDispatcher(myPath);
@@ -117,7 +121,7 @@ System.out.println("\n\n");
         }
     }
     
-    public void doJson(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+    public void _doJson(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         response.setContentType("text/html;charset=iso-8859-1");
         response.setHeader("Cache-Control", "no-cache");
         response.setHeader("Pragma", "no-cache");
@@ -186,7 +190,6 @@ inicio++;
         
         
         out.println(" function fillGrid(grid, uri) {");
-        //out.println("   grid.store = new dojo.data.ItemFileReadStore({url: uri+'/_mod/'+mode+'?'+params});");
         out.println("   grid.store = new dojo.data.ItemFileReadStore({url: uri+'?ipage="+ipage+"'});");
         out.println("   grid._refresh();");
         out.println(" }");
@@ -236,8 +239,6 @@ out.println("}");
         out.println("   gridMaster.startup();");
         
         out.println("   fillGrid(gridMaster, '"+url.setMode(Mode_FILLGRD)+"');");
-//        out.println("   gridMaster.store = new dojo.data.ItemFileReadStore({url: '"+url.setMode(Mode_FILLGRD)+"'});");
-//        out.println("   gridMaster._refresh();");
         out.println(" });");
         out.println("</script>");
         out.println("<div id=\"ctnergrid\" style=\"height:600px; width:99%; margin: 1px; padding: 0px; border: 1px solid #DAE1FE;\">");
@@ -281,7 +282,7 @@ if(paginas > 1) {
 }        
     }
     
-    private void doFillReport(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
+    private void doJson(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
         response.setContentType("text/json;charset=iso-8859-1");
         
         String lang = paramsRequest.getUser().getLanguage();
@@ -375,6 +376,8 @@ System.out.println("fin="+fin);
                     obj.put("date",sdf.format(msg.getCreated()));
                     obj.put("msg",msg.getMsg_Text());
                     obj.put("feel",msg.getPostSentimentalType());
+//if(msg.getPostSentimentalType()!=0)
+//System.out.println("sentimiento"+msg.getPostSentimentalType());
                     obj.put("int",df.format(msg.getPostIntensityValue()));
                     obj.put("user",msg.getPostInSocialNetworkUser().getSnu_name());
                     obj.put("fllwrs",nf.format(msg.getPostInSocialNetworkUser().getFollowers()));
@@ -391,51 +394,4 @@ System.out.println("fin="+fin);
         response.getWriter().print(jobj.toString());
     }
     
-    @Override
-    public void doXML(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-    }
-    
-    private void doList(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        Resource base = getResourceBase();
-        WebSite wsite = base.getWebSite();
-        
-        PrintWriter out = response.getWriter();
-        
-        Iterator<Twitter> itacts = Twitter.ClassMgr.listTwitters(wsite);
-        out.println("<select>");
-        Twitter twitter;
-        while(itacts.hasNext()) {
-            twitter = itacts.next();
-            out.println("<option value=\""+twitter.getId()+"\">"+twitter.getTitle()+"</option>");
-        }
-        out.println("</select>");
-        
-        Twitter act = Twitter.ClassMgr.getTwitter("carlos", wsite);
-        
-        Iterator<PostIn> itposts = PostIn.ClassMgr.listPostIns(wsite);
-        itposts = SWBComparator.sortByCreated(itposts, false);
-        //List posts = SWBUtils.Collections.copyIterator(itposts);
-        out.println("<table>");
-        out.println("<tr>");
-        out.println("<th>cuenta</th><th>red social</th><th>fecha</th><th>mensaje</th><th>sentimiento</th><th>intensidad</th><th>usuario</th><th>seguidores</th>");
-        out.println("</tr>");
-        PostIn post;
-        while(itposts.hasNext()) {
-            post = itposts.next();
-            if(post instanceof MessageIn) {
-                MessageIn msg = (MessageIn)post;
-                out.println("<tr>");
-                out.println("<td>"+msg.getPostInSocialNetwork().getTitle()+"</td>");
-                out.println("<td>"+msg.getPostInSocialNetwork().getClass().getSimpleName()+"</td>");
-                out.println("<td>"+msg.getCreated()+"</td>");
-                out.println("<td>"+msg.getMsg_Text()+"</td>");
-                out.println("<td>"+msg.getPostSentimentalType()+"</td>");
-                out.println("<td>"+msg.getPostIntensityValue()+"</td>");
-                out.println("<td>"+msg.getPostInSocialNetworkUser().getSnu_name()+"</td>");
-                out.println("<td>"+msg.getPostInSocialNetworkUser().getFollowers()+"</td>");
-                out.println("</tr>");
-            }
-        }
-        out.println("</table>");
-    }
 }
