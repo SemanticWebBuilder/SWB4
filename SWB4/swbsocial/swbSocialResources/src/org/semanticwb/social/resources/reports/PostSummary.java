@@ -29,7 +29,6 @@ import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.api.SWBResourceURL;
 import org.semanticwb.social.MessageIn;
 import org.semanticwb.social.PostIn;
-import org.semanticwb.social.Twitter;
 import twitter4j.internal.org.json.JSONArray;
 import twitter4j.internal.org.json.JSONException;
 import twitter4j.internal.org.json.JSONObject;
@@ -42,7 +41,7 @@ public class PostSummary extends GenericAdmResource {
     /** The log. */
     private static Logger log = SWBUtils.getLogger(PostSummary.class);
     
-    public static final int PAGE_SIZE = 1000; //Líneas por página
+    public static final int PAGE_SIZE = 50; //Líneas por página
     public static final String Mode_JSON = "json";
     public static final String Mode_FILLGRD = "fg";
     public static int xxx=1000;
@@ -352,21 +351,12 @@ if(fin - inicio > PAGE_SIZE) {
     fin = PAGE_SIZE;
 }
 inicio++;
-//////////////////////        
-System.out.println("\n\nipage="+ipage);
-System.out.println("inicio="+inicio);
-System.out.println("fin="+fin);
-         
+//////////////////////
         
-        int count = 0;
         PostIn post;
-//        for(int i=0; i<xxx && i<size; i++ ) {
-        for(int i=inicio; i<fin && i<size; i++ ) {
+        for(int i=inicio; i<=fin && i<size; i++ ) {
             post = posts.get(i);
             if(post instanceof MessageIn) {
-//                if( count>fin )
-//                    break;
-//                if( count>=inicio && count<=fin) {
                 MessageIn msg = (MessageIn)post;
                 JSONObject obj = new JSONObject();
                 try {
@@ -378,6 +368,7 @@ System.out.println("fin="+fin);
                     obj.put("feel",msg.getPostSentimentalType());
 //if(msg.getPostSentimentalType()!=0)
 //System.out.println("sentimiento"+msg.getPostSentimentalType());
+                    obj.put("eicon",msg.getPostSentimentalEmoticonType());
                     obj.put("int",df.format(msg.getPostIntensityValue()));
                     obj.put("user",msg.getPostInSocialNetworkUser().getSnu_name());
                     obj.put("fllwrs",nf.format(msg.getPostInSocialNetworkUser().getFollowers()));
