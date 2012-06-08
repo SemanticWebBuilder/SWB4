@@ -6,6 +6,7 @@ package org.semanticwb.social.resources.reports;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Iterator;
@@ -41,7 +42,7 @@ public class PostSummary extends GenericAdmResource {
     /** The log. */
     private static Logger log = SWBUtils.getLogger(PostSummary.class);
     
-    public static final int PAGE_SIZE = 1000; //Líneas por página
+    public static final int PAGE_SIZE = 50; //Líneas por página
     public static final String Mode_JSON = "json";
     public static final String Mode_FILLGRD = "fg";
     public static int xxx=1000;
@@ -177,14 +178,27 @@ inicio++;
         SWBResourceURL url = paramRequest.getRenderUrl().setCallMethod(SWBResourceURL.Call_DIRECT);
         
         out.println("<script type=\"text/javascript\">");
-        out.println(" dojo.require(\"dojox.grid.DataGrid\");");
-        out.println(" dojo.require(\"dojo.data.ItemFileReadStore\");");
+        out.println(" dojo.require('dijit.layout.ContentPane');");
+        out.println(" dojo.require('dijit.dijit');");
+        out.println(" dojo.require('dojox.grid.DataGrid');");
+        out.println(" dojo.require('dojo.data.ItemFileReadStore');");
+        out.println(" dojo.require('dojo.parser');");
+        
         
         out.println(" function fillGrid(grid, uri) {");
         //out.println("   grid.store = new dojo.data.ItemFileReadStore({url: uri+'/_mod/'+mode+'?'+params});");
         out.println("   grid.store = new dojo.data.ItemFileReadStore({url: uri+'?ipage="+ipage+"'});");
         out.println("   grid._refresh();");
         out.println(" }");
+        
+out.println("function x_(value) {");
+out.println(" if(value==2)");
+out.println("  return '/work/positivo.jpg';");
+out.println(" else if(value==1)");
+out.println("  return '/work/negativo.jpg';");
+out.println(" else");
+out.println("  return '/work/neutro.jpg';");
+out.println("}");
         
         out.println(" function apply() {");
         out.println("   var grid = dijit.byId('gridMaster');");
@@ -199,51 +213,42 @@ inicio++;
 
         out.println(" dojo.addOnLoad(function() {");
         out.println("   layout= [");
-        out.println("      { field:\"fl\",  width:\"50px\", name:\"Num\" },");
-        out.println("      { field:\"cta\", width:\"50px\", name:\"Cuenta\" },");
-        out.println("      { field:\"sn\",  width:\"100px\",name:\"Red social\" },");
-        out.println("      { field:\"date\",width:\"150px\",name:\"Fecha\" },");
-        out.println("      { field:\"msg\", width:\"400px\",name:\"Mensaje\" },");
-        out.println("      { field:\"feel\",width:\"80px\", name:\"Sentimiento\" },");
-        out.println("      { field:\"int\", width:\"60px\", name:\"Intensidad\" },");
-        out.println("      { field:\"user\",width:\"100px\",name:\"Usuario\" },");
-        out.println("      { field:\"fllwrs\", width:\"80px\", name:\"Seguidores\" },");
-        out.println("      { field:\"frds\",width: \"50px\",name:\"Amigos\" }");
+        out.println("      { field:'fl',  width:'50px', name:'Num' },");
+        out.println("      { field:'cta', width:'50px', name:'Cuenta' },");
+        out.println("      { field:'sn',  width:'100px',name:'Red social' },");
+        out.println("      { field:'date',width:'150px',name:'Fecha' },");
+        out.println("      { field:'msg', width:'300px',name:'Mensaje' },");
+        out.println("      { field:'feel',width:'80px', name:'Sentimiento', formatter:function(value){var src=x_(value);return '<img src=\"'+src+'\" />';} },");
+        out.println("      { field:'int', width:'50px', name:'Intensidad' },");
+        out.println("      { field:'user',width:'100px',name:'Usuario' },");
+        out.println("      { field:'fllwrs', width:'80px', name:'Seguidores' },");
+        out.println("      { field:'frds',width: '50px',name:'Amigos' }");
         out.println("   ];");
 
         out.println("   gridMaster = new dojox.grid.DataGrid({");
-        out.println("      id: \"gridMaster\",");
+        out.println("      escapeHTMLInData: 'true',");     
+        out.println("      preload: 'true',");     
+        out.println("      id: 'gridMaster',");
         out.println("      structure: layout,");
-        out.println("      rowSelector: \"10px\",");
-        out.println("      rowsPerPage: \"25\"");
-        out.println("   }, \"gridMaster\");");
+        out.println("      rowSelector: '10px',");
+        out.println("      rowsPerPage: '25'");
+        out.println("   }, 'gridMaster');");
         out.println("   gridMaster.startup();");
         
         out.println("   fillGrid(gridMaster, '"+url.setMode(Mode_FILLGRD)+"');");
 //        out.println("   gridMaster.store = new dojo.data.ItemFileReadStore({url: '"+url.setMode(Mode_FILLGRD)+"'});");
 //        out.println("   gridMaster._refresh();");
         out.println(" });");
-        
-        
-        
         out.println("</script>");
-        
-        //out.println("<div>");
-        //out.println(" <fieldset>");
-        //out.println("  <legend>Datos</legend>");
-        out.println("  <div id=\"ctnergrid\" style=\"height:600px; width:98%; margin: 1px; padding: 0px; border: 1px solid #DAE1FE;\">");
+        out.println("<div id=\"ctnergrid\" style=\"height:600px; width:99%; margin: 1px; padding: 0px; border: 1px solid #DAE1FE;\">");
         out.println("   <div id=\"gridMaster\"></div>");
-        out.println("  </div>");
-        //out.println("</fieldset>");
-        //out.println("</div>");
-        
-        
+        out.println("</div>");
         
 // paginación
 if(paginas > 1) {
     SWBResourceURL pagURL = paramRequest.getRenderUrl().setMode(Mode_JSON);
     StringBuilder html = new StringBuilder();
-    html.append("<div class=\"amfr-paginacion\">");
+    html.append("<div class=\"\"  style=\"text-align:center\">");
     String nextURL = "#";
     String previusURL = "#";
     if (ipage < paginas) {
@@ -283,10 +288,12 @@ if(paginas > 1) {
         Locale locale = new Locale("es");
         NumberFormat nf = NumberFormat.getIntegerInstance(locale);
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MMM/yy HH:mm", locale);
+        DecimalFormat df = new DecimalFormat("#.#");
         
         JSONObject jobj = new JSONObject();
         JSONArray jarr = new JSONArray();
         try {
+            jobj.put("identifier", "fl");
             jobj.put("label", "fl");
             jobj.put("items", jarr);
         }catch (JSONException jse) {
@@ -365,13 +372,13 @@ System.out.println("fin="+fin);
                     obj.put("fl",i);
                     obj.put("cta",msg.getPostInSocialNetwork().getTitle());
                     obj.put("sn",msg.getPostInSocialNetwork().getClass().getSimpleName());
-                    obj.put("date",msg.getCreated());
+                    obj.put("date",sdf.format(msg.getCreated()));
                     obj.put("msg",msg.getMsg_Text());
                     obj.put("feel",msg.getPostSentimentalType());
-                    obj.put("int",msg.getPostIntensityValue());
+                    obj.put("int",df.format(msg.getPostIntensityValue()));
                     obj.put("user",msg.getPostInSocialNetworkUser().getSnu_name());
-                    obj.put("fllwrs",msg.getPostInSocialNetworkUser().getFollowers());
-                    obj.put("frds",msg.getPostInSocialNetworkUser().getFriends());
+                    obj.put("fllwrs",nf.format(msg.getPostInSocialNetworkUser().getFollowers()));
+                    obj.put("frds",nf.format(msg.getPostInSocialNetworkUser().getFriends()));
                     jarr.put(obj);
                 }catch (JSONException jse) {
                     jse.printStackTrace(System.out);
@@ -384,7 +391,6 @@ System.out.println("fin="+fin);
         response.getWriter().print(jobj.toString());
     }
     
-        
     @Override
     public void doXML(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
     }
