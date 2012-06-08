@@ -24,6 +24,17 @@ try {
 }
 Iterator<PostIn> itposts = PostIn.ClassMgr.listPostIns(wsite);
 long el = SWBUtils.Collections.sizeOf(itposts);
+
+
+itposts = PostIn.ClassMgr.listPostIns(wsite);
+while(itposts.hasNext()) {
+    PostIn post = itposts.next();
+    if(post.getPostSentimentalType()>0)
+        System.out.println("sentimiento"+post.getPostSentimentalType());
+}
+
+
+
 long paginas = el / PAGE_SIZE;
 if(el % PAGE_SIZE != 0) {
     paginas++;
@@ -59,9 +70,7 @@ inicio++;
 
 
         SWBResourceURL url = paramRequest.getRenderUrl().setCallMethod(SWBResourceURL.Call_DIRECT);
-        
         out.println("<script type=\"text/javascript\">");
-        out.println(" dojo.require('dijit.layout.ContentPane');");
         out.println(" dojo.require('dijit.dijit');");
         out.println(" dojo.require('dojox.grid.DataGrid');");
         out.println(" dojo.require('dojo.data.ItemFileReadStore');");
@@ -72,7 +81,7 @@ inicio++;
         out.println("   grid._refresh();");
         out.println(" }");
         
-out.println("function x_(value) {");
+out.println("function feelingIcon(value) {");
 out.println(" if(value==2)");
 out.println("  return '/work/positivo.jpg';");
 out.println(" else if(value==1)");
@@ -80,12 +89,15 @@ out.println("  return '/work/negativo.jpg';");
 out.println(" else");
 out.println("  return '/work/neutro.jpg';");
 out.println("}");
-        
-        out.println(" function apply() {");
-        out.println("   var grid = dijit.byId('gridMaster');");
-        out.println("   fillGrid(grid, '"+url.setMode(Mode_JSON)+"');");
-        out.println("  ");
-        out.println(" }");
+
+out.println("function emotIcon(value) {");
+out.println(" if(value==2)");
+out.println("  return '/work/emopos.jpg';");
+out.println(" else if(value==1)");
+out.println("  return '/work/emoneg.jpg';");
+out.println(" else");
+out.println("  return '/work/neutro.jpg';");
+out.println("}");
         
         out.println(" var layout= null;");
         out.println(" var jStrMaster = null;");
@@ -95,11 +107,12 @@ out.println("}");
         out.println(" dojo.addOnLoad(function() {");
         out.println("   layout= [");
         out.println("      { field:'fl',  width:'50px', name:'Num' },");
-        out.println("      { field:'cta', width:'50px', name:'Cuenta' },");
-        out.println("      { field:'sn',  width:'100px',name:'Red social' },");
-        out.println("      { field:'date',width:'150px',name:'Fecha' },");
+        out.println("      { field:'cta', width:'80px', name:'Cuenta' },");
+        out.println("      { field:'sn',  width:'80px',name:'Red social' },");
+        out.println("      { field:'date',width:'90px',name:'Fecha' },");
         out.println("      { field:'msg', width:'300px',name:'Mensaje' },");
-        out.println("      { field:'feel',width:'80px', name:'Sentimiento', formatter:function(value){var src=x_(value);return '<img src=\"'+src+'\" />';} },");
+        out.println("      { field:'feel',width:'40px', name:'Sentimiento', formatter:function(value){var src=feelingIcon(value);return '<img src=\"'+src+'\" />';} },");
+        out.println("      { field:'eicon', width:'40px', name:'Emoticon', formatter:function(value){var src=emotIcon(value);return '<img src=\"'+src+'\" />';} },");
         out.println("      { field:'int', width:'50px', name:'Intensidad' },");
         out.println("      { field:'user',width:'100px',name:'Usuario' },");
         out.println("      { field:'fllwrs', width:'80px', name:'Seguidores' },");
@@ -107,8 +120,8 @@ out.println("}");
         out.println("   ];");
 
         out.println("   gridMaster = new dojox.grid.DataGrid({");
-        out.println("      escapeHTMLInData: 'true',");     
-        out.println("      preload: 'true',");     
+        //out.println("      escapeHTMLInData: 'true',");     
+        //out.println("      preload: 'true',");     
         out.println("      id: 'gridMaster',");
         out.println("      structure: layout,");
         out.println("      rowSelector: '10px',");
@@ -119,7 +132,7 @@ out.println("}");
         out.println("   fillGrid(gridMaster, '"+url.setMode(Mode_JSON)+"');");
         out.println(" });");
         out.println("</script>");
-        out.println("<div id=\"ctnergrid\" style=\"height:600px; width:99%; margin: 1px; padding: 0px; border: 1px solid #DAE1FE;\">");
+        out.println("<div id=\"ctnergrid\" style=\"height:598px; width:99%; margin: 1px; padding: 0px; border: 1px solid #DAE1FE;\">");
         out.println("   <div id=\"gridMaster\"></div>");
         out.println("</div>");
         
