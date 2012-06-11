@@ -339,6 +339,11 @@
     <rdfs:label xml:lang="es">Código de País a reducir la busqueda</rdfs:label>
     <rdfs:label xml:lang="en">Country Code to reduce the search</rdfs:label>
   </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="postIntesityType">
+    <rdfs:comment>Tipo de Intensidad. 2=Alta;1=Media;0=Baja;</rdfs:comment>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+    <rdfs:domain rdf:resource="#PostIn"/>
+  </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="OtherWords">
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_OtherWords">
@@ -607,15 +612,15 @@
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
     <rdfs:domain rdf:resource="#SocialNetworkUser"/>
   </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="sentimentalWord">
-    <rdfs:domain rdf:resource="#SentimentWords"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-    <rdfs:comment>Palabra a buscar dentro de los Post para determinar el sentimiento .</rdfs:comment>
-  </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="IntensityType">
     <rdfs:domain rdf:resource="#SentimentalLearningPhrase"/>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
     <rdfs:comment>Valor que le dan los usuarios al clasificar una palabra o secuencia de palabra. 1=Alto;2=Bajo;0=Medio</rdfs:comment>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="sentimentalWord">
+    <rdfs:domain rdf:resource="#SentimentWords"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:comment>Palabra a buscar dentro de los Post para determinar el sentimiento .</rdfs:comment>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="secretKey">
     <rdfs:comment>Propiedad que almacena el SecretKey de una determinada Red Social que requiera de este para su conección.</rdfs:comment>
