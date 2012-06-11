@@ -372,7 +372,7 @@ inicio++;
                     obj.put("int",df.format(msg.getPostIntensityValue()));
                     obj.put("user",msg.getPostInSocialNetworkUser().getSnu_name());
                     obj.put("fllwrs",msg.getPostInSocialNetworkUser().getFollowers());
-                    obj.put("frds",nf.format(msg.getPostInSocialNetworkUser().getFriends()));
+                    obj.put("frds",msg.getPostInSocialNetworkUser().getFriends());
                     jarr.put(obj);
                 }catch (JSONException jse) {
                     jse.printStackTrace(System.out);
