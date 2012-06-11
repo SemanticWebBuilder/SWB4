@@ -5,11 +5,9 @@
 
 package org.semanticwb.social.listener;
 
-import java.lang.Float;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.StringTokenizer;
-import org.semanticwb.SWBUtils;
 import org.semanticwb.model.SWBModel;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.social.MessageIn;
@@ -17,6 +15,7 @@ import org.semanticwb.social.PhotoIn;
 import org.semanticwb.social.PostIn;
 import org.semanticwb.social.Prepositions;
 import org.semanticwb.social.SentimentWords;
+import org.semanticwb.social.SentimentalLearningPhrase;
 import org.semanticwb.social.VideoIn;
 import org.semanticwb.social.util.NormalizerCharDuplicate;
 import org.semanticwb.social.util.SWBSocialUtil;
@@ -30,11 +29,11 @@ public class SentimentalDataClassifier {
     PostIn post=null;
     String postData=null;
     SWBModel model=null;
-    int contPositiveEmoticon=0;
-    int contNegativeEmoticon=0;
+    float sentimentalTweetValue=0;
+    float IntensiveTweetValue=0;
+    int wordsCont=0;
 
-
-
+    
     public SentimentalDataClassifier(PostIn post, String postData)
     {
         this.post=post;
@@ -77,17 +76,19 @@ public class SentimentalDataClassifier {
         //Elimino Caracteres especiales (acentuados)
         postData=SWBSocialUtil.Strings.replaceSpecialCharacters(postData);
 
-        //Arreglo con las palabras totales que existe en la variable PostData
-        
-        float sentimentalTweetValue=0;
-        float IntensiveTweetValue=0;
-        int wordsCont=0;
+        //Convierto todo el mensaje en minusculas
+        postData=postData.toLowerCase();
+
+        //Busco frases en objeto de aprendizaje (SentimentalLearningPhrase)
+        //System.out.println("postData a revisar:"+postData);
+        findInLearnigPhrases();
+        //System.out.println("postData a revisado:"+postData+", sentimentalTweetValue:"+sentimentalTweetValue+", IntensiveTweetValue:+"+IntensiveTweetValue+", wordsCont:"+wordsCont);
 
         StringTokenizer st = new StringTokenizer(postData);
         while (st.hasMoreTokens())
         {
             String word2Find=st.nextToken();
-            if(Prepositions.ClassMgr.getPrepositions(word2Find.toLowerCase(), model)!=null) //Elimino preposiciones
+            if(Prepositions.ClassMgr.getPrepositions(word2Find, model)!=null) //Elimino preposiciones
             {
                 continue;
             }
@@ -127,6 +128,7 @@ public class SentimentalDataClassifier {
         {
             float prom=sentimentalTweetValue/wordsCont;
             post.setPostSentimentalValue(prom);
+            //System.out.println("prom final:"+prom);
             if(prom>=4.5) //Si el promedio es mayor de 4.5 (Segun Octavio) es un tweet positivo
             {
                 //System.out.println("Se guarda Post Positivo:"+post.getId()+", valor promedio:"+prom);
@@ -154,9 +156,111 @@ public class SentimentalDataClassifier {
         }
     }
 
+    //Función que barre todas las frases y las busca en el mensaje (PostData)
+    //Esto talvez pueda NO ser lo mas optimo.
+    //TODO:Ver si encuentra otra forma más optima de hacer esto.
+    private void findInLearnigPhrases()
+    {
+        int contPositive=0;
+        int contNegative=0;
+        int result=0;   //Mi inicio sera 0(Neutro) y de ahi se va ha tender a la derecha (positivos) o a la izquierda (Negativos)
+        int positiveintensityveResult=0;
+        int negativeintensityveResult=0;
+        //HashMap sntPhrasesMap=new HashMap();
+        Iterator<SentimentalLearningPhrase> itSntPhases=SentimentalLearningPhrase.ClassMgr.listSentimentalLearningPhrases(model);
+        while(itSntPhases.hasNext())
+        {
+            SentimentalLearningPhrase sntLPhrase=itSntPhases.next();
+            int contOcurr=findOccurrencesNumber(sntLPhrase.getPhrase(), 0);
+            if(contOcurr>0)
+            {
+                //System.out.println("sntLPhrase:"+sntLPhrase.getPhrase()+",contOcurrJorge:"+contOcurr);
+                if(sntLPhrase.getSentimentType()==1) //la frase es positiva
+                {
+                    contPositive+=contOcurr;
+                    result+=contOcurr;
+                    if(sntLPhrase.getIntensityType()==2) //Es intensidad Alta
+                    {
+                        positiveintensityveResult+=8;   //Yo internamente le doy un 3 como valor (Este yo se lo pongo)
+                    }else if(sntLPhrase.getIntensityType()==1) //Es intensidad Media
+                    {
+                        positiveintensityveResult+=5;   //Yo internamente le doy un 2 como valor (Este yo se lo pongo)
+                    }else if(sntLPhrase.getIntensityType()==0) //Es intensidad Baja
+                    {
+                        positiveintensityveResult+=2;   //Yo internamente le doy un 1 como valor (Este yo se lo pongo)
+                    }
+                }else if(sntLPhrase.getSentimentType()==2){ //la frase es Negativa
+                    contNegative+=contOcurr;
+                    result-=contOcurr;
+                    if(sntLPhrase.getIntensityType()==2) //Es intensidad Alta
+                    {
+                        negativeintensityveResult+=8;   //Yo internamente le doy un 3 como valor (Este yo se lo pongo)
+                    }else if(sntLPhrase.getIntensityType()==1) //Es intensidad Media
+                    {
+                        negativeintensityveResult+=5;   //Yo internamente le doy un 2 como valor (Este yo se lo pongo)
+                    }else if(sntLPhrase.getIntensityType()==0) //Es intensidad Baja
+                    {
+                        negativeintensityveResult+=2;   //Yo internamente le doy un 1 como valor (Este yo se lo pongo)
+                    }
+                }
+            }
+        }
+        //System.out.println("result k:"+result);
+        //Reglas
+        if(result>0)    //Es positivo
+        {
+            sentimentalTweetValue=7*contPositive;   //El 7 yo lo propongo dado que la númeración va de 0-9 considero que un 7 es la media para los positivos
+            IntensiveTweetValue=positiveintensityveResult/contPositive;
+            wordsCont=contPositive;
+        }else if(result<0){ //Es Negativo
+            sentimentalTweetValue=3*contNegative; //El 3 yo lo propongo dado que la númeración va de 0-9 considero que un 3 es la media para los Negativos
+            IntensiveTweetValue=negativeintensityveResult/contNegative;
+            wordsCont=contNegative;
+        }else{ //Es Neutro
+            sentimentalTweetValue=0;
+            IntensiveTweetValue=0;
+            wordsCont=0;
+        }
+    }
 
+    private int findOccurrencesNumber(String phrase, int contOcurrences)
+    {
+        int iocurrence=postData.indexOf(phrase);
+        if(iocurrence>-1)
+        {
+            contOcurrences++;
+            postData=postData.substring(0, iocurrence)+postData.substring(iocurrence+phrase.length());
+            //System.out.println("phrase:"+phrase+",Ocurrencia:"+contOcurrences+",postData:"+postData);
+            //tmpPostData=tmpPostData.substring(iocurrence)+tmpPostData.substring(iocurrence+phrase.length());
+            contOcurrences=findOccurrencesNumber(phrase, contOcurrences);
+        }
+        return contOcurrences;
+    }
+
+    /*
+    private int findOccurrencesNumber(String phrase, int index)
+    {
+        String tmpPostData=postData;
+        int contOcurrences=0;
+        int iocurrence=postData.indexOf(phrase, index);
+        if(iocurrence>-1)
+        {
+            contOcurrences++;
+            tmpPostData=tmpPostData.substring(index, iocurrence)+tmpPostData.substring(iocurrence+phrase.length());
+            findOccurrencesNumber(phrase, iocurrence+phrase.length());
+        }
+        return contOcurrences;
+    }
+     * */
+
+
+
+    //Encuentra emoticons en el mensaje
+    //TODO:Hacer que los emoticons esten almacenados en un objeto.
     private void findEmoticones()
     {
+         int contPositiveEmoticon=0;
+         int contNegativeEmoticon=0;
          StringTokenizer st = new StringTokenizer(postData);
          while (st.hasMoreTokens())
          {
