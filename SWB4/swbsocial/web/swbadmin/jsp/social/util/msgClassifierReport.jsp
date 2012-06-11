@@ -58,7 +58,7 @@ Sentiment Type=1:Positivo|2:Negativo|0:Neutro
         <%
     }
 %>
-<tr><td colspan="4">Mensajes Totales:<%=cont%></td></tr>
+<tr><td colspan="7">Mensajes Totales:<%=cont%></td></tr>
 </table>
 </body>
 </html>
