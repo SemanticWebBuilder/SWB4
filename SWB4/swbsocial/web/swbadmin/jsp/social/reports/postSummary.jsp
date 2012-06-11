@@ -72,12 +72,13 @@ out.println("dojox.grid.cells.dijit");
         out.println(" }");
         
 out.println("function feelingIcon(value) {");
-out.println(" if(value==2)");
+out.println(" if(value==2) {");
 out.println("  return '<img src=\"/swbadmin/images/feelneg.png\" />';");
-out.println(" else if(value==1)");
+out.println(" }else if(value==1) {");
 out.println("  return '<img src=\"/swbadmin/images/feelpos.png\" />';");
-out.println(" else");
+out.println(" }else {");
 out.println("  return '--';");
+out.println(" }");
 out.println("}");
 
 out.println("function emotIcon(value) {");
@@ -126,13 +127,13 @@ out.println("}");
         out.println("   fillGrid(gridMaster, '"+url.setMode(Mode_JSON)+"');");
         out.println(" });");
         out.println("</script>");
+        out.println("<p>Total: "+el+"</p>");
         out.println("<div id=\"ctnergrid\" style=\"height:598px; width:99%; margin: 1px; padding: 0px; border: 1px solid #DAE1FE;\">");
-        out.println("  <p>Total: "+el+"</p>");
         out.println("  <div id=\"gridMaster\"></div>");
-        out.println("  <p>Total: "+el+"</p>");
         out.println("</div>");
         
 // paginación
+System.out.println("paginas="+paginas+", el="+el);
 if(paginas > 1) {
     SWBResourceURL pagURL = paramRequest.getRenderUrl().setMode(SWBResourceURL.Mode_VIEW);
     StringBuilder html = new StringBuilder();
