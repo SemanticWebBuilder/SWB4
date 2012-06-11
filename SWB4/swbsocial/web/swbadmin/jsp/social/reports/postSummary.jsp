@@ -60,10 +60,11 @@ inicio++;
 
         SWBResourceURL url = paramRequest.getRenderUrl().setCallMethod(SWBResourceURL.Call_DIRECT);
         out.println("<script type=\"text/javascript\">");
-        out.println(" dojo.require('dijit.dijit');");
+        //out.println(" dojo.require('dijit.dijit');");
         out.println(" dojo.require('dojox.grid.DataGrid');");
         out.println(" dojo.require('dojo.data.ItemFileReadStore');");
-        out.println(" dojo.require('dojo.parser');");
+        //out.println(" dojo.require('dojo.parser');");
+out.println("dojox.grid.cells.dijit");
         
         out.println(" function fillGrid(grid, uri) {");
         out.println("   grid.store = new dojo.data.ItemFileReadStore({url: uri+'?ipage="+ipage+"'});");
@@ -80,12 +81,16 @@ out.println("  return '--';");
 out.println("}");
 
 out.println("function emotIcon(value) {");
-out.println(" if(value==2)");
+out.println(" if(value==2) {");
 out.println("  return '<img src=\"/swbadmin/images/emoneg.png\" />';");
-out.println(" else if(value==1)");
+out.println(" }else if(value==1) {");
 out.println("  return '<img src=\"/swbadmin/images/emopos.png\" />';");
-out.println(" else");
+out.println(" }else {");
 out.println("  return '--';");
+out.println(" }");
+out.println("}");
+out.println("formatNumber = function(value) {");
+out.println(" return isNaN(value)?'...':dojo.number.format(value, {pattern:\"#,###\"});");
 out.println("}");
         
         out.println(" var layout= null;");
@@ -95,19 +100,8 @@ out.println("}");
 
         out.println(" dojo.addOnLoad(function() {");
         out.println("   layout= [");
-        /*out.println("      { field:'fl',  width:'50px', name:'Num' },");
-        out.println("      { field:'cta', width:'80px', name:'Cuenta' },");
-        out.println("      { field:'sn',  width:'80px',name:'Red social' },");
-        out.println("      { field:'date',width:'90px',name:'Fecha' },");
-        out.println("      { field:'msg', width:'300px',name:'Mensaje' },");
-        out.println("      { field:'feel',width:'40px', name:'Sentimiento', formatter:function(value){var artf=feelingIcon(value);return artf;} },");
-        out.println("      { field:'eicon', width:'40px', name:'Emoticon', formatter:function(value){var artf=emotIcon(value);return artf;} },");
-        out.println("      { field:'int', width:'50px', name:'Intensidad' },");
-        out.println("      { field:'user',width:'100px',name:'Usuario' },");
-        out.println("      { field:'fllwrs', width:'80px', name:'Seguidores' },");
-        out.println("      { field:'frds',width: '50px',name:'Amigos' }");*/
         out.println("      { field:'fl',  width:'5%', name:'Num' },");
-        out.println("      { field:'cta', width:'9%', name:'Cuenta' },");
+        out.println("      { field:'cta', width:'9%', name:'Cuenta', editable:'true' },");
         out.println("      { field:'sn',  width:'5%',name:'Red social' },");
         out.println("      { field:'date',width:'9%',name:'Fecha' },");
         out.println("      { field:'msg', width:'37%',name:'Mensaje' },");
@@ -115,13 +109,13 @@ out.println("}");
         out.println("      { field:'eicon', width:'5%', name:'Emoticon', formatter:function(value){var artf=emotIcon(value);return artf;} },");
         out.println("      { field:'int', width:'5%', name:'Intensidad' },");
         out.println("      { field:'user',width:'9%',name:'Usuario' },");
-        out.println("      { field:'fllwrs', width:'5%', name:'Seguidores' },");
+        out.println("      { field:'fllwrs', width:'5%', name:'Seguidores'},");
         out.println("      { field:'frds',width: '5%',name:'Amigos' }");
         out.println("   ];");
 
         out.println("   gridMaster = new dojox.grid.DataGrid({");
         //out.println("      escapeHTMLInData: 'true',");     
-        //out.println("      preload: 'true',");     
+        //out.println("      preload: 'true',");
         out.println("      id: 'gridMaster',");
         out.println("      structure: layout,");
         out.println("      rowSelector: '10px',");
@@ -133,7 +127,9 @@ out.println("}");
         out.println(" });");
         out.println("</script>");
         out.println("<div id=\"ctnergrid\" style=\"height:598px; width:99%; margin: 1px; padding: 0px; border: 1px solid #DAE1FE;\">");
-        out.println("   <div id=\"gridMaster\"></div>");
+        out.println("  <p>Total: "+el+"</p>");
+        out.println("  <div id=\"gridMaster\"></div>");
+        out.println("  <p>Total: "+el+"</p>");
         out.println("</div>");
         
 // paginación
