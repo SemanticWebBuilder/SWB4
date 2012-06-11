@@ -285,7 +285,7 @@ if(paginas > 1) {
         response.setContentType("text/json;charset=iso-8859-1");
         
         String lang = paramsRequest.getUser().getLanguage();
-        Locale locale = new Locale("es");
+        Locale locale = new Locale("es","mx");
         NumberFormat nf = NumberFormat.getIntegerInstance(locale);
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MMM/yy HH:mm", locale);
         DecimalFormat df = new DecimalFormat("#.#");
@@ -371,7 +371,7 @@ inicio++;
                     obj.put("eicon",msg.getPostSentimentalEmoticonType());
                     obj.put("int",df.format(msg.getPostIntensityValue()));
                     obj.put("user",msg.getPostInSocialNetworkUser().getSnu_name());
-                    obj.put("fllwrs",nf.format(msg.getPostInSocialNetworkUser().getFollowers()));
+                    obj.put("fllwrs",msg.getPostInSocialNetworkUser().getFollowers());
                     obj.put("frds",nf.format(msg.getPostInSocialNetworkUser().getFriends()));
                     jarr.put(obj);
                 }catch (JSONException jse) {
