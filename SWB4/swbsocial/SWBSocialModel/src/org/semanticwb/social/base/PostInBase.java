@@ -4,7 +4,7 @@ package org.semanticwb.social.base;
    /**
    * Clase que comprende todos los tipos de Post de entrada (Povientes del Listener)que pueden ir siendo creados en la herramienta. 
    */
-public abstract class PostInBase extends org.semanticwb.social.Post implements org.semanticwb.model.Traceable,org.semanticwb.model.Tagable,org.semanticwb.model.Descriptiveable
+public abstract class PostInBase extends org.semanticwb.social.Post implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Tagable,org.semanticwb.model.Traceable
 {
    /**
    * Clase en la cual se almacenan los usuarios que escriben los PostIn que llegan. El identificador de c/intancia de esta clase es el identificador de un usuarios en una red social.
@@ -46,6 +46,10 @@ public abstract class PostInBase extends org.semanticwb.social.Post implements o
    * Valor que resulta del algoritmo de analisis sentimental, aqui se puede ver el porque se pone cierto valir a la propiedad PostSentimentalType
    */
     public static final org.semanticwb.platform.SemanticProperty social_postSentimentalValue=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#postSentimentalValue");
+   /**
+   * Tipo de Intensidad. 1=Alta;2=Baja;0=Media
+   */
+    public static final org.semanticwb.platform.SemanticProperty social_postIntesityType=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#postIntesityType");
    /**
    * Clase que comprende todos los tipos de Post de entrada (Povientes del Listener)que pueden ir siendo creados en la herramienta.
    */
@@ -428,5 +432,23 @@ public abstract class PostInBase extends org.semanticwb.social.Post implements o
     public void setPostSentimentalValue(float value)
     {
         getSemanticObject().setFloatProperty(social_postSentimentalValue, value);
+    }
+
+/**
+* Gets the PostIntesityType property
+* @return int with the PostIntesityType
+*/
+    public int getPostIntesityType()
+    {
+        return getSemanticObject().getIntProperty(social_postIntesityType);
+    }
+
+/**
+* Sets the PostIntesityType property
+* @param value long with the PostIntesityType
+*/
+    public void setPostIntesityType(int value)
+    {
+        getSemanticObject().setIntProperty(social_postIntesityType, value);
     }
 }
