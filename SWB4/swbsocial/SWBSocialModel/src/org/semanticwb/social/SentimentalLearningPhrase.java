@@ -17,7 +17,7 @@ public class SentimentalLearningPhrase extends org.semanticwb.social.base.Sentim
 
     public static SentimentalLearningPhrase getSentimentalLearningPhrasebyPhrase(String phrase, SWBModel model)
     {
-        Iterator<SemanticObject> it=model.getSemanticModel().listSubjects(social_Phrase, phrase); //No encuentra
+        Iterator<SemanticObject> it=model.getSemanticModel().listSubjects(social_Phrase, phrase.trim().toLowerCase()); //No encuentra
         if(it.hasNext())
         {
             SemanticObject obj=it.next();
