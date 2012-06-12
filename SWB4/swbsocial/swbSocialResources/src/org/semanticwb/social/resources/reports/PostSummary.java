@@ -105,6 +105,7 @@ public class PostSummary extends GenericAdmResource {
                 int dpth = Integer.parseInt(request.getParameter("dpth"));
                 SentimentalLearningPhrase slp;
                 for(String phrase:phrases) {
+                    phrase = phrase.toLowerCase().trim();
                     slp = SentimentalLearningPhrase.getSentimentalLearningPhrasebyPhrase(phrase, wsite);
                     if(slp==null) {
                         slp = SentimentalLearningPhrase.ClassMgr.createSentimentalLearningPhrase(wsite);
