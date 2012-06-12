@@ -36,8 +36,36 @@
     dojo.require("dijit.form.ValidationTextBox");
     dojo.require("dijit.form.Button");
     dojo.require("dijit.form.FilteringSelect");
-    /*dojo.require("dijit.form.RadioButton");
-    dojo.require("dijit.form.CheckBox");*/
+
+    dojo.provide("ValidationTextarea");
+    dojo.require("dijit.form.SimpleTextarea");
+    dojo.require("dijit.form.ValidationTextBox");
+    dojo.require("dijit.form.FilteringSelect");
+    dojo.require('dojo.data.ItemFileReadStore');
+    dojo.declare(
+        "ValidationTextarea",
+        [dijit.form.ValidationTextBox, dijit.form.SimpleTextarea],
+        {
+            invalidMessage: "Este dato es requerido",
+            promptMessage: "Ingresa",
+            postCreate: function() {
+                this.inherited(arguments);
+            },
+            validate: function() {
+                if(arguments.length==0)
+                    return this.validate(false);
+                return this.inherited(arguments);
+            },
+            onFocus: function() {
+                if(!this.isValid()) {
+                    this.displayMessage(this.getErrorMessage());
+                }
+            },
+            onBlur: function() {
+                this.validate(false);
+            }
+         }
+    );
 
     function enviar() {
         var objd=dijit.byId('rv');
@@ -57,7 +85,8 @@
      <form id="rv" dojoType="dijit.form.Form" class="" action="<%=(paramRequest.getActionUrl().setAction(SWBResourceURL.Action_EDIT))%>" method="post">
    <p class="">
     <label for="fw"><em>*</em>Frases</label>
-    <input type="text" name="fw" id="fw" dojoType="dijit.form.ValidationTextBox" value="" required="true" promptMessage="Lista de frases separadas por punto y coma" invalidMessage="Palabra incorrecta" trim="true" />
+    <!--input type="text" name="fw" id="fw" dojoType="dijit.form.ValidationTextBox" value="" required="true" promptMessage="Lista de frases separadas por punto y coma" invalidMessage="Palabra incorrecta" trim="true" /-->
+    <textarea name="fw" id="fw" rows="2" cols="40" dojoType="ValidationTextarea" required="true" promptMessage="Lista de frases separadas por punto y coma" invalidMessage="Lista de frases separadas por punto y coma" trim="true"></textarea>
    </p>
    <p>
        <label for="nv"><em>*</em>Tipo de sentimiento</label>
