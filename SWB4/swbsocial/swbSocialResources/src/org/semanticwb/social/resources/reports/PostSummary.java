@@ -222,8 +222,6 @@ if(fin - inicio > PAGE_SIZE) {
         for(int i=inicio; i<fin && i<size; i++ ) {
             post = posts.get(i);
             if(post instanceof MessageIn) {
-if(i==2)
-    post.setPostInSocialNetworkUser(null);
                 MessageIn msg = (MessageIn)post;
                 JSONObject obj = new JSONObject();
                 try {
