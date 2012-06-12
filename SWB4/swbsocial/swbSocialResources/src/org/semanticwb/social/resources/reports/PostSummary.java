@@ -245,8 +245,8 @@ if(i==2)
                         obj.put("frds",msg.getPostInSocialNetworkUser().getFriends());
                     }catch(Exception e) {
                         obj.put("user","--");
-                        obj.put("fllwrs","--");
-                        obj.put("frds","--");
+                        obj.put("fllwrs","0");
+                        obj.put("frds","0");
                     }
                     jarr.put(obj);
                 }catch (Exception jse) {
