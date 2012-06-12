@@ -215,16 +215,15 @@ if(fin - inicio > PAGE_SIZE) {
     inicio = 0;
     fin = PAGE_SIZE;
 }
-inicio++;
+//inicio++;
 //////////////////////
         
-/*System.out.println("inicio="+inicio);
+System.out.println("\n\n---------------\ninicio="+inicio);
 System.out.println("fin="+fin);
-System.out.println("size="+size);*/
+System.out.println("size="+size);
 
         PostIn post;
-        for(int i=inicio; i<=fin && i<size; i++ ) {
-        //for(int i=inicio; i<=fin; i++ ) {
+        for(int i=inicio; i<fin && i<size; i++ ) {
             post = posts.get(i);
             if(post instanceof MessageIn) {
                 MessageIn msg = (MessageIn)post;
@@ -236,8 +235,6 @@ System.out.println("size="+size);*/
                     obj.put("date",sdf.format(msg.getCreated()));
                     obj.put("msg",msg.getMsg_Text());
                     obj.put("feel",msg.getPostSentimentalType());
-//if(msg.getPostSentimentalType()!=0)
-//System.out.println("sentimiento"+msg.getPostSentimentalType());
                     obj.put("eicon",msg.getPostSentimentalEmoticonType());
                     obj.put("int",df.format(msg.getPostIntensityValue()));
                     obj.put("user",msg.getPostInSocialNetworkUser().getSnu_name());
