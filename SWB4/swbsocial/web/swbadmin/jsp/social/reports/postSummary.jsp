@@ -71,16 +71,20 @@ out.println("dojox.grid.cells.dijit");
         out.println("   grid._refresh();");
         out.println(" }");
         
+out.println("function showPopUp(pageURL, title, w, h) {");
+out.println(" var left = (screen.width/2)-(w/2);");
+out.println(" var top = (screen.height/2)-(h/2);");
+out.println(" var targetWin = window.open (pageURL, title, 'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=no, copyhistory=no, width='+w+', height='+h+', top='+top+', left='+left);");
+out.println("}");
 out.println("function feelingIcon(value) {");
 out.println(" if(value==2) {");
-out.println("  return '<img src=\"/swbadmin/images/feelneg.png\" />';");
+out.println("  return '<img src=\"/swbadmin/images/feelneg.png\" /><a href=\"javascript:void(0)\" onclick=\"showPopUp(\\'"+paramRequest.getRenderUrl().setMode(Mode_REVAL).setCallMethod(SWBResourceURL.Call_DIRECT)+"\\',\\'reevaluando\\',500,200)\" target=\"_blank\">revaluar</a>';");
 out.println(" }else if(value==1) {");
 out.println("  return '<img src=\"/swbadmin/images/feelpos.png\" />';");
 out.println(" }else {");
 out.println("  return '--';");
 out.println(" }");
 out.println("}");
-
 out.println("function emotIcon(value) {");
 out.println(" if(value==2) {");
 out.println("  return '<img src=\"/swbadmin/images/emoneg.png\" />';");
@@ -133,7 +137,6 @@ out.println("}");
         out.println("</div>");
         
 // paginación
-System.out.println("paginas="+paginas+", el="+el);
 if(paginas > 1) {
     SWBResourceURL pagURL = paramRequest.getRenderUrl().setMode(SWBResourceURL.Mode_VIEW);
     StringBuilder html = new StringBuilder();

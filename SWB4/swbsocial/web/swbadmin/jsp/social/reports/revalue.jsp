@@ -36,16 +36,15 @@
     dojo.require("dijit.form.ValidationTextBox");
     dojo.require("dijit.form.Button");
     dojo.require("dijit.form.FilteringSelect");
-    dojo.require("dijit.form.RadioButton");
-    dojo.require("dijit.form.CheckBox");
+    /*dojo.require("dijit.form.RadioButton");
+    dojo.require("dijit.form.CheckBox");*/
 
     function enviar() {
-        var objd=dijit.byId('form1ud');
-        if(objd.validate())
-        {
+        var objd=dijit.byId('rv');
+        if(objd.validate()) {
             return true;
         }else {
-            alert("Datos incompletos o erroneos");
+            alert("Datos incompletos o incorrectos");
         }
         return false;
     }
@@ -55,18 +54,47 @@
   <body class="soria">
 <div>
  <div>
-  <form id="rv" dojoType="dijit.form.Form" class="" action="<%=(paramRequest.getActionUrl())%>" method="post">
-   <p class="icv-3col">
-    <label for="fw"><b>*</b>Palabras</label>
-    <input type="text" name="fw" id="fw" dojoType="dijit.form.ValidationTextBox" value="" required="true" promptMessage="Lista de palabras separadas por punto y coma" invalidMessage="Palabra incorrecta" trim="true" />
+     <form id="rv" dojoType="dijit.form.Form" class="" action="<%=(paramRequest.getActionUrl().setAction(SWBResourceURL.Action_EDIT))%>" method="post">
+   <p class="">
+    <label for="fw"><em>*</em>Frases</label>
+    <input type="text" name="fw" id="fw" dojoType="dijit.form.ValidationTextBox" value="" required="true" promptMessage="Lista de frases separadas por punto y coma" invalidMessage="Palabra incorrecta" trim="true" />
    </p>
-   
+   <p>
+       <label for="nv"><em>*</em>Tipo de sentimiento</label>
+       <select name="nv" id="nv" dojoType="dijit.form.FilteringSelect" value="0" required="true" promptMessage="cambiar sentimiento">
+           <option value="0" selected="selected">Neutro</option>
+           <option value="1">Positivo</option>
+           <option value="2">Negativo</option>
+       </select>
+   </p>
+   <p>
+       <label for="dpth"><em>*</em>Intensidad</label>
+       <select name="dpth" id="dpth" dojoType="dijit.form.FilteringSelect" value="0" required="true" promptMessage="cambiar intensidad">
+           <option value="0" selected="selected">Media</option>
+           <option value="1">Alta</option>
+           <option value="2">Baja</option>
+       </select>
+   </p>
    <p>
     <input type="reset" value="limpiar"/>
+    <input type="button" value="salir" onclick="window.close()"/>
     <input type="submit" value="enviar" onclick="return enviar()"/>
    </p>
   </form>
  </div>
 </div>
+<%
+    if(request.getParameter("alertmsg")!=null) {
+%>
+<script type="text/javascript">
+<!--
+ dojo.addOnLoad(function(){
+   alert('<%=request.getParameter("alertmsg")%>');
+ });
+ -->
+</script>
+<%
+    }
+%>
   </body>
 </html>
