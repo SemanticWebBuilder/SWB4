@@ -237,7 +237,7 @@ if(fin - inicio > PAGE_SIZE) {
                     obj.put("fllwrs",msg.getPostInSocialNetworkUser().getFollowers());
                     obj.put("frds",msg.getPostInSocialNetworkUser().getFriends());
                     jarr.put(obj);
-                }catch (JSONException jse) {
+                }catch (Exception e) {
                     //jse.printStackTrace(System.out);
                     continue;
                 }
