@@ -222,22 +222,34 @@ if(fin - inicio > PAGE_SIZE) {
         for(int i=inicio; i<fin && i<size; i++ ) {
             post = posts.get(i);
             if(post instanceof MessageIn) {
+if(i==2)
+    post.setPostInSocialNetworkUser(null);
                 MessageIn msg = (MessageIn)post;
                 JSONObject obj = new JSONObject();
                 try {
                     obj.put("fl",i);
                     obj.put("cta",msg.getPostInSocialNetwork().getTitle());
-                    obj.put("sn",msg.getPostInSocialNetwork().getClass().getSimpleName());
+                    try {
+                        obj.put("sn",msg.getPostInSocialNetwork().getClass().getSimpleName());
+                    }catch(Exception e) {
+                        obj.put("sn","--");
+                    }
                     obj.put("date",sdf.format(msg.getCreated()));
                     obj.put("msg",msg.getMsg_Text());
                     obj.put("feel",msg.getPostSentimentalType());
                     obj.put("eicon",msg.getPostSentimentalEmoticonType());
                     obj.put("int",df.format(msg.getPostIntensityValue()));
-                    obj.put("user",msg.getPostInSocialNetworkUser().getSnu_name());
-                    obj.put("fllwrs",msg.getPostInSocialNetworkUser().getFollowers());
-                    obj.put("frds",msg.getPostInSocialNetworkUser().getFriends());
+                    try {
+                        obj.put("user",msg.getPostInSocialNetworkUser().getSnu_name());
+                        obj.put("fllwrs",msg.getPostInSocialNetworkUser().getFollowers());
+                        obj.put("frds",msg.getPostInSocialNetworkUser().getFriends());
+                    }catch(Exception e) {
+                        obj.put("user","--");
+                        obj.put("fllwrs","--");
+                        obj.put("frds","--");
+                    }
                     jarr.put(obj);
-                }catch (Exception e) {
+                }catch (Exception jse) {
                     //jse.printStackTrace(System.out);
                     continue;
                 }
