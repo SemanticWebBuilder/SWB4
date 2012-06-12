@@ -238,7 +238,7 @@ if(fin - inicio > PAGE_SIZE) {
                     obj.put("frds",msg.getPostInSocialNetworkUser().getFriends());
                     jarr.put(obj);
                 }catch (JSONException jse) {
-                    jse.printStackTrace(System.out);
+                    //jse.printStackTrace(System.out);
                     continue;
                 }
 //                }
