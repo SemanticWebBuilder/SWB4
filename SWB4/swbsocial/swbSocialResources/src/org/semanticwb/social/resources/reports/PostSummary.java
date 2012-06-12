@@ -217,10 +217,6 @@ if(fin - inicio > PAGE_SIZE) {
 }
 //inicio++;
 //////////////////////
-        
-System.out.println("\n\n---------------\ninicio="+inicio);
-System.out.println("fin="+fin);
-System.out.println("size="+size);
 
         PostIn post;
         for(int i=inicio; i<fin && i<size; i++ ) {
