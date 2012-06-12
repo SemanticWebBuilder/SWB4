@@ -223,8 +223,8 @@ System.out.println("fin="+fin);
 System.out.println("size="+size);*/
 
         PostIn post;
-        //for(int i=inicio; i<=fin && i<size; i++ ) {
-        for(int i=inicio; i<=fin; i++ ) {
+        for(int i=inicio; i<=fin && i<size; i++ ) {
+        //for(int i=inicio; i<=fin; i++ ) {
             post = posts.get(i);
             if(post instanceof MessageIn) {
                 MessageIn msg = (MessageIn)post;
