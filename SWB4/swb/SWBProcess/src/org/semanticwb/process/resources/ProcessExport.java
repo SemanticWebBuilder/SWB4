@@ -732,6 +732,24 @@ public class ProcessExport extends GenericResource {
                                 WebService temp = (WebService)go;
                                 temp.setUrl(tool.optString(WebService.swp_wsUrl.getPropId(), ""));
                             }
+                            
+                            int pos = suri.indexOf("#");
+                            //System.out.println("suri: "+suri);
+                            String newSObjPath = go.getSemanticObject().getWorkPath();
+                            if(pos > -1) {
+                                int pos1 = suri.indexOf(":", pos);
+                                if(pos1 > -1) {
+                                    String dirOldSObj = suri.substring(pos + 1, pos1);
+                                    String idOldSobj = suri.substring(pos1 + 1);
+                                    File fileOldSObjPath = new File(targetDir.getAbsolutePath() + "/" + dirOldSObj + "/" + idOldSobj + "/");
+                                    //System.out.println("path:"+fileOldSObjPath.getAbsolutePath());
+                                    if(fileOldSObjPath.isDirectory() && fileOldSObjPath.exists()) {
+                                        boolean r = SWBUtils.IO.copyStructure(targetDir.getAbsolutePath() + "/" + dirOldSObj + "/" + idOldSobj + "/", SWBPortal.getWorkPath() + newSObjPath+"/");
+                                        //System.out.println(r+" Copiando estructura de "+targetDir.getAbsolutePath() + "/" + dirOldSObj + "/" + idOldSobj + "/  a  "+SWBPortal.getWorkPath() + newSObjPath+"/");
+                                        //System.out.println(idOldSobj+"-->"+_elements.get(nodeUri).getId());
+                                    }
+                                }
+                            }
                         }
                     }
                 }
