@@ -54,7 +54,7 @@ if(fin - inicio > PAGE_SIZE) {
     inicio = 0;
     fin = PAGE_SIZE;
 }
-//inicio++;
+inicio++;
 //////////////////////
 
 
@@ -123,7 +123,7 @@ out.println("}");
 
         out.println("   gridMaster = new dojox.grid.DataGrid({");
         //out.println("      escapeHTMLInData: 'true',");     
-        out.println("      preload: 'true',");
+        //out.println("      preload: 'true',");
         out.println("      id: 'gridMaster',");
         out.println("      structure: layout,");
         //out.println("      rowSelector: '10px',");
@@ -135,7 +135,7 @@ out.println("}");
         out.println(" });");
         out.println("</script>");
         out.println("<p style=\"font-size:12px; font-weight:bold; text-align:center\">Total: "+el+"</p>");
-        out.println("<div id=\"ctnergrid\" style=\"height:85%; width:100%; margin: 1px; padding: 1px; border: 1px solid #DAE1FE;\">");
+        out.println("<div id=\"ctnergrid\" style=\"height:670px; width:100%; margin: 1px; padding: 1px; border: 1px solid #DAE1FE;\">");
         out.println("  <div id=\"gridMaster\"></div>");
         out.println("</div>");
         
