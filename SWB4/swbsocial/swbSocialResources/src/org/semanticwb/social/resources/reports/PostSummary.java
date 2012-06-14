@@ -232,7 +232,11 @@ if(fin - inicio > PAGE_SIZE) {
                     }catch(Exception e) {
                         obj.put("sn","--");
                     }
-                    obj.put("date",sdf.format(msg.getCreated()));
+                    try {
+                        obj.put("date",sdf.format(msg.getCreated()));
+                    }catch(Exception e) {
+                        obj.put("date","--");
+                    }
                     obj.put("msg",msg.getMsg_Text());
                     obj.put("feel",msg.getPostSentimentalType());
                     obj.put("eicon",msg.getPostSentimentalEmoticonType());
