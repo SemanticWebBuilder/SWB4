@@ -106,26 +106,27 @@ out.println("}");
 
         out.println(" dojo.addOnLoad(function() {");
         out.println("   layout= [");
-        out.println("      { field:'fl',  width:'2%', name:'Num', styles:'font-size:10px;' },");
-        out.println("      { field:'cta', width:'6%', name:'Cuenta', editable:'true', styles:'font-size:10px;' },");
-        out.println("      { field:'sn',  width:'5%',name:'Red social', styles:'font-size:10px;' },");
-        out.println("      { field:'date',width:'6%',name:'Fecha', styles:'font-size:10px;' },");
-        out.println("      { field:'msg', width:'43%',name:'Mensaje', styles:'font-size:10px;' },");
-        out.println("      { field:'feel',width:'5%', name:'Sentimiento', formatter:function(value){var artf=feelingIcon(value);return artf;}, styles:'text-align:center;font-size:10px;' },");
-        out.println("      { field:'eicon', width:'4%', name:'Emoticon', formatter:function(value){var artf=emotIcon(value);return artf;}, styles:'text-align:center;font-size:10px;' },");
-        out.println("      { field:'int', width:'5%', name:'Intensidad', styles:'font-size:10px;' },");
-        out.println("      { field:'user',width:'9%',name:'Usuario', styles:'font-size:10px;' },");
-        out.println("      { field:'fllwrs', width:'5%', name:'Seguidores', styles:'font-size:10px;'},");
-        out.println("      { field:'frds',width: '5%',name:'Amigos', styles:'font-size:10px;' },");
-        out.println("      { field:'plc',width: '5%',name:'Lugar', styles:'font-size:10px;' }");
+        out.println("      { field:'fl',  width:'2%', name:'Num', styles:'font-size:10px;', headerStyles:'font-size:11px;text-align:center;' },");
+        out.println("      { field:'cta', width:'6%', name:'Origen', editable:'true', styles:'font-size:11px;', headerStyles:'font-size:11px;text-align:center;' },");
+        //out.println("      { field:'sn',  width:'5%',name:'Red social', styles:'font-size:10px;', headerStyles:'text-align:center;' },");
+        out.println("      { field:'date',width:'6%',name:'Fecha', styles:'font-size:11px;', headerStyles:'font-size:11px;text-align:center;' },");
+        out.println("      { field:'msg', width:'43%',name:'Mensaje', styles:'font-size:10px;', headerStyles:'font-size:11px;text-align:center;' },");
+        out.println("      { field:'feel',width:'5%', name:'Sentimiento', formatter:function(value){var artf=feelingIcon(value);return artf;}, styles:'text-align:center;font-size:10px;', headerStyles:'font-size:11px;text-align:center;' },");
+        out.println("      { field:'eicon', width:'4%', name:'Emoticon', formatter:function(value){var artf=emotIcon(value);return artf;}, styles:'text-align:center;font-size:10px;', headerStyles:'font-size:11px;text-align:center;' },");
+        out.println("      { field:'int', width:'5%', name:'Intensidad', styles:'font-size:11px;text-align:right;', headerStyles:'text-align:center;', headerStyles:'font-size:11px;text-align:center;' },");
+        out.println("      { field:'rp',  width:'5%',name:'Replica', styles:'font-size:11px;text-align:right;', headerStyles:'font-size:11px;text-align:center;' },");        
+        out.println("      { field:'user',width:'9%',name:'Usuario', styles:'font-size:11px;', headerStyles:'font-size:11px;text-align:center;' },");
+        out.println("      { field:'fllwrs', width:'5%', name:'Seguidores', styles:'font-size:11px;text-align:right;', headerStyles:'font-size:11px;text-align:center;' },");
+        out.println("      { field:'frds',width: '5%',name:'Amigos', styles:'font-size:11px;text-align:right;', headerStyles:'font-size:11px;text-align:center;' },");
+        out.println("      { field:'plc',width: '5%',name:'Lugar', styles:'font-size:11px;', headerStyles:'font-size:11px;text-align:center;' }");
         out.println("   ];");
 
         out.println("   gridMaster = new dojox.grid.DataGrid({");
         //out.println("      escapeHTMLInData: 'true',");     
-        //out.println("      preload: 'true',");
+        out.println("      preload: 'true',");
         out.println("      id: 'gridMaster',");
         out.println("      structure: layout,");
-        out.println("      rowSelector: '10px',");
+        //out.println("      rowSelector: '10px',");
         out.println("      rowsPerPage: '25'"); 
         out.println("   }, 'gridMaster');");
         out.println("   gridMaster.startup();");
@@ -134,9 +135,12 @@ out.println("}");
         out.println(" });");
         out.println("</script>");
         out.println("<p style=\"font-size:12px; font-weight:bold; text-align:center\">Total: "+el+"</p>");
-        out.println("<div id=\"ctnergrid\" style=\"height:85%; width:100%; margin: 1px; padding: 1px; border: 1px solid #DAE1FE;\">");
+        /*out.println("<div id=\"ctnergrid\" style=\"height:85%; width:100%; margin: 1px; padding: 1px; border: 1px solid #DAE1FE;\">");
         out.println("  <div id=\"gridMaster\"></div>");
-        out.println("</div>");
+        out.println("</div>");*/
+out.println("<div style=\"height:85%; width:100%;\">");
+out.println("  <div id=\"gridMaster\"></div>");
+out.println("</div>");
         
 // paginación
 if(paginas > 1) {
