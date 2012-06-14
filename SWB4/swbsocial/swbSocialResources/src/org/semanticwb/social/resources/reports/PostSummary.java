@@ -226,12 +226,16 @@ if(fin - inicio > PAGE_SIZE) {
                 JSONObject obj = new JSONObject();
                 try {
                     obj.put("fl",i);
-                    obj.put("cta",msg.getPostInSocialNetwork().getTitle());
                     try {
-                        obj.put("sn",msg.getPostInSocialNetwork().getClass().getSimpleName());
+                        obj.put("cta",msg.getPostSource());
                     }catch(Exception e) {
-                        obj.put("sn","--");
+                        obj.put("cta","--");
                     }
+//                    try {
+//                        obj.put("sn",msg.getPostInSocialNetwork().getClass().getSimpleName());
+//                    }catch(Exception e) {
+//                        obj.put("sn","--");
+//                    }
                     try {
                         obj.put("date",sdf.format(msg.getCreated()));
                     }catch(Exception e) {
@@ -241,6 +245,11 @@ if(fin - inicio > PAGE_SIZE) {
                     obj.put("feel",msg.getPostSentimentalType());
                     obj.put("eicon",msg.getPostSentimentalEmoticonType());
                     obj.put("int",df.format(msg.getPostIntensityValue()));
+                    try {
+                        obj.put("rp",msg.getPostRetweets());
+                    }catch(Exception e) {
+                        obj.put("rp","0");
+                    }
                     try {
                         obj.put("user",msg.getPostInSocialNetworkUser().getSnu_name());
                         obj.put("fllwrs",msg.getPostInSocialNetworkUser().getFollowers());
