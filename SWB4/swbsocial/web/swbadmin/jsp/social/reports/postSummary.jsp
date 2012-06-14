@@ -114,11 +114,11 @@ out.println("}");
         out.println("      { field:'feel',width:'5%', name:'Sentimiento', formatter:function(value){var artf=feelingIcon(value);return artf;}, styles:'text-align:center;font-size:10px;', headerStyles:'font-size:11px;text-align:center;' },");
         out.println("      { field:'eicon', width:'4%', name:'Emoticon', formatter:function(value){var artf=emotIcon(value);return artf;}, styles:'text-align:center;font-size:10px;', headerStyles:'font-size:11px;text-align:center;' },");
         out.println("      { field:'int', width:'5%', name:'Intensidad', styles:'font-size:11px;text-align:right;', headerStyles:'text-align:center;', headerStyles:'font-size:11px;text-align:center;' },");
-        out.println("      { field:'rp',  width:'5%',name:'Replica', styles:'font-size:11px;text-align:right;', headerStyles:'font-size:11px;text-align:center;' },");        
+        out.println("      { field:'rp',  width:'3%',name:'Réplica', styles:'font-size:11px;text-align:right;', headerStyles:'font-size:11px;text-align:center;' },");        
         out.println("      { field:'user',width:'9%',name:'Usuario', styles:'font-size:11px;', headerStyles:'font-size:11px;text-align:center;' },");
         out.println("      { field:'fllwrs', width:'5%', name:'Seguidores', styles:'font-size:11px;text-align:right;', headerStyles:'font-size:11px;text-align:center;' },");
         out.println("      { field:'frds',width: '5%',name:'Amigos', styles:'font-size:11px;text-align:right;', headerStyles:'font-size:11px;text-align:center;' },");
-        out.println("      { field:'plc',width: '5%',name:'Lugar', styles:'font-size:11px;', headerStyles:'font-size:11px;text-align:center;' }");
+        out.println("      { field:'plc',width: '8%',name:'Lugar', styles:'font-size:11px;', headerStyles:'font-size:11px;text-align:center;' }");
         out.println("   ];");
 
         out.println("   gridMaster = new dojox.grid.DataGrid({");
@@ -135,7 +135,7 @@ out.println("}");
         out.println(" });");
         out.println("</script>");
         out.println("<p style=\"font-size:12px; font-weight:bold; text-align:center\">Total: "+el+"</p>");
-        out.println("<div id=\"ctnergrid\" style=\"height:670px; width:100%; margin: 1px; padding: 1px; border: 1px solid #DAE1FE;\">");
+        out.println("<div id=\"ctnergrid\" style=\"height:670px; width:98%; border: 1px solid #DAE1FE; text-align:center;\">");
         out.println("  <div id=\"gridMaster\"></div>");
         out.println("</div>");
         
