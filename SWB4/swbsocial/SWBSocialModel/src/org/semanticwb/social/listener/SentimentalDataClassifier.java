@@ -70,12 +70,6 @@ public class SentimentalDataClassifier {
         //Revisa si encuentra emoticones en el mensaje
         findEmoticones();
 
-        //removePuntualSigns1();
-        postData=SWBSocialUtil.Strings.removePuntualSigns(postData, model);
-
-        //Elimino Caracteres especiales (acentuados)
-        postData=SWBSocialUtil.Strings.replaceSpecialCharacters(postData);
-
         //Convierto todo el mensaje en minusculas
         postData=postData.toLowerCase();
 
@@ -83,6 +77,12 @@ public class SentimentalDataClassifier {
         //System.out.println("postData a revisar:"+postData);
         findInLearnigPhrases();
         //System.out.println("postData a revisado:"+postData+", sentimentalTweetValue:"+sentimentalTweetValue+", IntensiveTweetValue:+"+IntensiveTweetValue+", wordsCont:"+wordsCont);
+
+        //Elimino Caracteres especiales (acentuados)
+        postData=SWBSocialUtil.Strings.replaceSpecialCharacters(postData);
+
+        //removePuntualSigns1();
+        postData=SWBSocialUtil.Strings.removePuntualSigns(postData, model);
 
         StringTokenizer st = new StringTokenizer(postData);
         while (st.hasMoreTokens())
@@ -98,9 +98,13 @@ public class SentimentalDataClassifier {
             NormalizerCharDuplicate normalizerCharDuplicate=SWBSocialUtil.Classifier.normalizer(word2Find);
             word2Find=normalizerCharDuplicate.getNormalizedWord();
             //System.out.println("word Normalizada:"+word2Find);
+            //Aplicar snowball a la palabra
+            word2Find=SWBSocialUtil.Classifier.getRootWord(word2Find);
+            //Se fonematiza la palabra
             word2Find=SWBSocialUtil.Classifier.phonematize(word2Find);
             //System.out.println("word Fonematizada:"+word2Find);
-            SentimentWords sentimentalWordObj=SentimentWords.getSentimentalWordByWord(model, word2Find);
+            //SentimentWords sentimentalWordObj=SentimentWords.getSentimentalWordByWord(model, word2Find);
+            SentimentWords sentimentalWordObj=SentimentWords.ClassMgr.getSentimentWords(word2Find, model);
             if(sentimentalWordObj!=null) //La palabra en cuestion ha sido encontrada en la BD
             {
                 //System.out.println("word2Find-1:"+word2Find);

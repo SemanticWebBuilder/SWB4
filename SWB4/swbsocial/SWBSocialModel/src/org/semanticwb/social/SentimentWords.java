@@ -15,6 +15,7 @@ public class SentimentWords extends org.semanticwb.social.base.SentimentWordsBas
         super(base);
     }
 
+    /*
     public static SentimentWords getSentimentalWordByWord(SWBModel model, String word)
     {
         Iterator<SemanticObject> it=model.getSemanticModel().listSubjects(social_sentimentalWord, word);
@@ -25,4 +26,6 @@ public class SentimentWords extends org.semanticwb.social.base.SentimentWordsBas
         }
         return null;
     }
+     * 
+     */
 }

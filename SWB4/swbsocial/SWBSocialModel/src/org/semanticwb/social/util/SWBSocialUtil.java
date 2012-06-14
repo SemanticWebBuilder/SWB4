@@ -4,15 +4,20 @@
  */
 package org.semanticwb.social.util;
 
+import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.StringTokenizer;
+import org.apache.lucene.analysis.TokenStream;
+import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
+import org.apache.lucene.analysis.tokenattributes.OffsetAttribute;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.SWBModel;
 import org.semanticwb.social.PunctuationSign;
 import org.semanticwb.social.WordsToMonitor;
+import org.semanticwb.social.util.lucene.SpanishAnalizer;
 
 /**
  *
@@ -571,6 +576,23 @@ public class SWBSocialUtil {
             }
 
             return out_word;
+        }
+
+        public static String getRootWord(String word)
+        {
+            try
+            {
+                TokenStream tokenStream = new SpanishAnalizer().tokenStream("word", new StringReader(word));
+                //OffsetAttribute offsetAttribute = tokenStream.addAttribute(OffsetAttribute.class);
+                CharTermAttribute charTermAttribute = tokenStream.addAttribute(CharTermAttribute.class);
+                while (tokenStream.incrementToken()) {
+                    String term = charTermAttribute.toString();
+                    if(term!=null) return term;
+                }
+            }catch(Exception e){
+                log.error(e);
+            }
+            return word;
         }
     }
 }

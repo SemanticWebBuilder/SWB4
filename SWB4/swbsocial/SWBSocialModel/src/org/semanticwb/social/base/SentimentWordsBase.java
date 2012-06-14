@@ -15,10 +15,6 @@ public abstract class SentimentWordsBase extends org.semanticwb.model.SWBClass
    */
     public static final org.semanticwb.platform.SemanticProperty social_IntensityValue=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#IntensityValue");
    /**
-   * Palabra a buscar dentro de los Post para determinar el sentimiento .
-   */
-    public static final org.semanticwb.platform.SemanticProperty social_sentimentalWord=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#sentimentalWord");
-   /**
    * Conjunto de Palabras a buscar dentro de los Post que llegan por el Listener y con las cuales se podra determinar el sentimiento y la intensidad de los mismos(Post).
    */
     public static final org.semanticwb.platform.SemanticClass social_SentimentWords=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#SentimentWords");
@@ -49,12 +45,6 @@ public abstract class SentimentWordsBase extends org.semanticwb.model.SWBClass
         {
             java.util.Iterator it=sclass.listInstances();
             return new org.semanticwb.model.GenericIterator<org.semanticwb.social.SentimentWords>(it, true);
-        }
-
-        public static org.semanticwb.social.SentimentWords createSentimentWords(org.semanticwb.model.SWBModel model)
-        {
-            long id=model.getSemanticObject().getModel().getCounter(sclass);
-            return org.semanticwb.social.SentimentWords.ClassMgr.createSentimentWords(String.valueOf(id), model);
         }
        /**
        * Gets a org.semanticwb.social.SentimentWords
@@ -141,23 +131,5 @@ public abstract class SentimentWordsBase extends org.semanticwb.model.SWBClass
     public void setIntensityValue(float value)
     {
         getSemanticObject().setFloatProperty(social_IntensityValue, value);
-    }
-
-/**
-* Gets the SentimentalWord property
-* @return String with the SentimentalWord
-*/
-    public String getSentimentalWord()
-    {
-        return getSemanticObject().getProperty(social_sentimentalWord);
-    }
-
-/**
-* Sets the SentimentalWord property
-* @param value long with the SentimentalWord
-*/
-    public void setSentimentalWord(String value)
-    {
-        getSemanticObject().setProperty(social_sentimentalWord, value);
     }
 }
