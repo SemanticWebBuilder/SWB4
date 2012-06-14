@@ -107,7 +107,7 @@ out.println("}");
         out.println(" dojo.addOnLoad(function() {");
         out.println("   layout= [");
         out.println("      { field:'fl',  width:'2%', name:'Num', styles:'font-size:10px;', headerStyles:'font-size:11px;text-align:center;' },");
-        out.println("      { field:'cta', width:'6%', name:'Origen', editable:'true', styles:'font-size:11px;', headerStyles:'font-size:11px;text-align:center;' },");
+        out.println("      { field:'cta', width:'6%', name:'Origen', styles:'font-size:11px;', headerStyles:'font-size:11px;text-align:center;' },");
         //out.println("      { field:'sn',  width:'5%',name:'Red social', styles:'font-size:10px;', headerStyles:'text-align:center;' },");
         out.println("      { field:'date',width:'6%',name:'Fecha', styles:'font-size:11px;', headerStyles:'font-size:11px;text-align:center;' },");
         out.println("      { field:'msg', width:'43%',name:'Mensaje', styles:'font-size:10px;', headerStyles:'font-size:11px;text-align:center;' },");
@@ -135,12 +135,9 @@ out.println("}");
         out.println(" });");
         out.println("</script>");
         out.println("<p style=\"font-size:12px; font-weight:bold; text-align:center\">Total: "+el+"</p>");
-        /*out.println("<div id=\"ctnergrid\" style=\"height:85%; width:100%; margin: 1px; padding: 1px; border: 1px solid #DAE1FE;\">");
+        out.println("<div id=\"ctnergrid\" style=\"height:85%; width:100%; margin: 1px; padding: 1px; border: 1px solid #DAE1FE;\">");
         out.println("  <div id=\"gridMaster\"></div>");
-        out.println("</div>");*/
-out.println("<div style=\"height:85%; width:100%;\">");
-out.println("  <div id=\"gridMaster\"></div>");
-out.println("</div>");
+        out.println("</div>");
         
 // paginación
 if(paginas > 1) {
