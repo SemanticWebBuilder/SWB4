@@ -409,6 +409,11 @@
     <rdfs:comment>Usuario creador del Post que llega por el Listener (PostIn)</rdfs:comment>
     <owl:inverseOf rdf:resource="#hasPostInInv"/>
   </owl:ObjectProperty>
+  <owl:DatatypeProperty rdf:ID="plc_month">
+    <rdfs:domain rdf:resource="#PostListenerContainer"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:comment>Mes en el cual es creada una instancia de PostListenerContainer,esta propiedad servira mucho  para buscar los postIn de manera optima, ya que pudieran ser muchos en un corto tiempo.</rdfs:comment>
+  </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="ProductsAndServices">
     <rdfs:domain rdf:resource="#WordsToMonitor"/>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
@@ -431,11 +436,6 @@
         </swbxf:propGroup>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
-  </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="plc_month">
-    <rdfs:domain rdf:resource="#PostListenerContainer"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-    <rdfs:comment>Mes en el cual es creada una instancia de PostListenerContainer,esta propiedad servira mucho  para buscar los postIn de manera optima, ya que pudieran ser muchos en un corto tiempo.</rdfs:comment>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="postIntensityValue">
     <rdfs:domain rdf:resource="#PostIn"/>
@@ -496,6 +496,11 @@
         <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextBox"/>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="postSource">
+    <rdfs:comment>Dispositivo desde el que se ha enviado el post</rdfs:comment>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#PostIn"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="company">
     <rdfs:domain rdf:resource="#WordsToMonitor"/>
@@ -628,6 +633,11 @@
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <rdfs:domain rdf:resource="#SocialNetwork"/>
     <rdfs:comment>Password o contraseña con la cual una organización se puede conectar a una determinada instancia de Red Social.</rdfs:comment>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="postRetweets">
+    <rdfs:comment>Veces que ha sido re-enviado el post</rdfs:comment>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+    <rdfs:domain rdf:resource="#PostIn"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="SentimentalValue">
     <rdfs:domain rdf:resource="#SentimentWords"/>
