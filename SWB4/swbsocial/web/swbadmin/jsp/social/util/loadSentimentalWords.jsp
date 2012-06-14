@@ -6,6 +6,10 @@
 <%@page import="org.semanticwb.portal.api.SWBResourceURL"%>
 <%@page import="org.semanticwb.*,org.semanticwb.platform.*,org.semanticwb.portal.*,org.semanticwb.model.*,java.util.*,org.semanticwb.base.util.*"%>
 
+//Imports de Lucene
+<%@page import="org.apache.lucene.analysis.Analyzer,org.apache.lucene.analysis.TokenStream,org.apache.lucene.analysis.tokenattributes.CharTermAttribute,org.apache.lucene.analysis.tokenattributes.OffsetAttribute,org.semanticwb.social.util.lucene.SpanishAnalizer"%>
+
+
 Inicia...
 <%!
     static ArrayList<String> aDoubles=new ArrayList();
@@ -14,7 +18,7 @@ Inicia...
 
 <%
     WebSite wsite=paramRequest.getWebPage().getWebSite();
-    
+
     initialize();
 
     //Elimina todos los objetos(instancias) de la clase SentimentWords
@@ -38,7 +42,7 @@ Inicia...
         while ((line = bf.readLine())!=null) {
             if(isFirstLine){isFirstLine=false; continue;}
             int colum=0;
-            SentimentWords sentimentWord=SentimentWords.ClassMgr.createSentimentWords(wsite);
+            SentimentWords sentimentWord=null;
             StringTokenizer tokens = new StringTokenizer(line, ";");
             while(tokens.hasMoreTokens()){
                 colum++;
@@ -47,15 +51,25 @@ Inicia...
                 if(tokenValue==null) continue;
                 if(colum==1) {
                     System.out.println("tokenValue-1:"+tokenValue);
+                    String tmpToken=getRootWord(tokenValue);
+                    if(tmpToken!=null) tokenValue=tmpToken;
+                    System.out.println("tokenValue-1.1:"+tokenValue);
                     tokenValue=phonematize(tokenValue);
                     System.out.println("tokenValue-2:"+tokenValue);
-                    sentimentWord.setSentimentalWord(tokenValue);
+                    sentimentWord=SentimentWords.ClassMgr.getSentimentWords(tokenValue,wsite);
+                    if(sentimentWord==null)
+                    {
+                        sentimentWord=SentimentWords.ClassMgr.createSentimentWords(tokenValue,wsite);
+                    }else{
+                        out.println("YA SE ENCUENTRAAAAAAAAAAAAAA:"+tokenValue);
+                    }
+                    //sentimentWord.setSentimentalWord(tokenValue);
                 }
-                else if(colum==2) {
+                else if(colum==2 && sentimentWord!=null) {
                     //System.out.println("tokenValue:"+tokenValue);
                     sentimentWord.setSentimentalValue(Float.parseFloat(tokenValue));
                 }
-                else if(colum==3) {
+                else if(colum==3 && sentimentWord!=null) {
                     //System.out.println("tokenValue:"+tokenValue);
                     sentimentWord.setIntensityValue(Float.parseFloat(tokenValue));
                 }
@@ -67,19 +81,38 @@ Inicia...
 
     int cont=0;
     //Lee todos los valores de la clase sentimentWord
-  //Iterator <SentimentWords> itSentimentWords=SentimentWords.ClassMgr.listSentimentWordses(wsite);
+    //Iterator <SentimentWords> itSentimentWords=SentimentWords.ClassMgr.listSentimentWordses(wsite);
     itSentimentWords=SentimentWords.ClassMgr.listSentimentWordses(wsite);
     while(itSentimentWords.hasNext())
     {
         cont++;
         SentimentWords sentimentWord=itSentimentWords.next();
-        System.out.println("sentimentWord:"+sentimentWord.getSentimentalWord()+", sentimentValue:"+sentimentWord.getSentimentalValue()+", IntensityValue:"+sentimentWord.getIntensityValue());
+        out.println("sentimentWord:"+sentimentWord.getId()+", sentimentValue:"+sentimentWord.getSentimentalValue()+", IntensityValue:"+sentimentWord.getIntensityValue()+"<br/>");
         //if(cont==10) break;
     }
     System.out.println("cont:"+cont);
 %>
 
 <%!
+private static String getRootWord(String word)
+{
+    try
+    {
+        TokenStream tokenStream = new SpanishAnalizer().tokenStream("contents", new StringReader(word));
+        OffsetAttribute offsetAttribute = tokenStream.addAttribute(OffsetAttribute.class);
+        CharTermAttribute charTermAttribute = tokenStream.addAttribute(CharTermAttribute.class);
+
+        while (tokenStream.incrementToken()) {
+            //int startOffset = offsetAttribute.startOffset();
+            //int endOffset = offsetAttribute.endOffset();
+            String term = charTermAttribute.toString();
+            System.out.println("term Jorge:"+term);
+            return term;
+        }
+    }catch(Exception e){ e.printStackTrace();}
+    return null;
+}
+
 
 private static String phonematize(String in_word)
     {
