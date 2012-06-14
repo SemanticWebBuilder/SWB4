@@ -129,18 +129,18 @@ public class SWBMessageCenter
             
             if (!sa)
             {
-                String localAddr=SWBPlatform.getEnv("swb/localMessageAddress");
+                String localAddr=SWBPlatform.getEnv("swb/localMessageAddress"); 
                 String serverAddr=SWBPlatform.getEnv("swb/serverMessageAddress");
                 
                 if(localaddr!=null && serverAddr!=null) //Nueva version
                 {
-                    int i=localAddr.indexOf(":");
+                    int i=localAddr.lastIndexOf(":"); //MAPS74 Ajuste para IPV6
                     String ipaddr=localAddr.substring(0, i);
-                    int port=Integer.parseInt(localAddr.substring(i+1));
+                    int port=Integer.parseInt(localAddr.substring(i+1)); //System.out.println("ipadd1:"+ipaddr+" "+port);
                     
-                    i=serverAddr.indexOf(":");
+                    i=serverAddr.lastIndexOf(":"); //MAPS74 Ajuste para IPV6
                     String sipaddr=serverAddr.substring(0, i);
-                    int sport=Integer.parseInt(serverAddr.substring(i+1));
+                    int sport=Integer.parseInt(serverAddr.substring(i+1));//System.out.println("ipadd2:"+sipaddr+" "+sport);
                     
                     InetAddress saddr=null;
                     try
