@@ -17,11 +17,12 @@ Inicia...
     int cont=0;
     WebSite wsite=paramRequest.getWebPage().getWebSite();
     //Crea
+    /*
     SentimentalLearningPhrase newSLP=SentimentalLearningPhrase.ClassMgr.createSentimentalLearningPhrase(wsite);
     newSLP.setPhrase("super bien");
     newSLP.setSentimentType(1);
     newSLP.setIntensityType(2);
-
+*/
     //Lista
     Iterator<SentimentalLearningPhrase> itSntLPs=SentimentalLearningPhrase.ClassMgr.listSentimentalLearningPhrases(wsite);
     while(itSntLPs.hasNext())
