@@ -75,7 +75,7 @@ public class SocialNetwork extends org.semanticwb.social.base.SocialNetworkBase
        PostListenerContainer plcContainer=PostListenerContainer.getPostListenerContainerByDate(date, swbModel);
        plcContainer.addPlc_Post(post);
        plcContainer.setPlc_SocialNetworkInv(socialNetwork);
-       System.out.println("Datos completamente guardados..");
+       //System.out.println("Datos completamente guardados..");
 
        //Código siguiente es solo para verificar de guardado, quitar despues...
        /*

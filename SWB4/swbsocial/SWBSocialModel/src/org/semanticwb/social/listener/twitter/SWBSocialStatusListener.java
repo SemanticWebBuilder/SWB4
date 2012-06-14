@@ -62,12 +62,10 @@ public class SWBSocialStatusListener implements twitter4j.StatusListener {
             //if(place!=null && place.getCountryCode().equals("MX")) //&& place.getName().equals("Cuernavaca"))
             {
 
-                /*
                 System.out.println();
                 System.out.println(status.getUser().getName() + " : " + status.getText() + " : " + status.getGeoLocation());
                 System.out.println(status.getCreatedAt());
-                 *
-                 */
+               
                 MediaEntity[] medianEntities=status.getMediaEntities();
                 if(medianEntities!=null)
                 {
@@ -86,6 +84,27 @@ public class SWBSocialStatusListener implements twitter4j.StatusListener {
                 MessageIn message=MessageIn.ClassMgr.createMessageIn(String.valueOf(status.getId()), model);
                 message.setMsg_Text(status.getText());
                 message.setPostInSocialNetwork(socialNetwork);
+                //System.out.println("Fuente:"+status.getSource());
+                message.setPostRetweets(Integer.parseInt(""+status.getRetweetCount()));
+                //System.out.println("Ya en Msg ReTweets:"+message.getPostRetweets());
+                if(status.getSource()!=null)    //Dispositivo utilizado
+                {
+                    String source=null;
+                    int pos=status.getSource().indexOf(">");
+                    if(pos>-1)
+                    {
+                        int pos1=status.getSource().indexOf("<",pos);
+                        if(pos1>-1)
+                        {
+                            source=status.getSource().substring(pos+1, pos1);
+                        }
+                    }else{
+                        source=status.getSource();
+                    }
+                   message.setPostSource(source);
+                }
+                //System.out.println("Ya en Msg source:"+source);
+
                 if(status.getUser()!=null)
                 {
                     long userId=status.getUser().getId();
