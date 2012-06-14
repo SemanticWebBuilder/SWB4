@@ -120,15 +120,16 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
             //double[][] loc = {{-118, 37}, {-86, 33}}; //Bounding Box de San Francisco
             //double[][] loc = {{37.78452999999, -122.39532395324}, {37.78452999998, -122.39532395323}}; //Bounding Box de San Francisco
             //double[][] loc = {{32.718620, -86.703392}, {14.532850, -118.867172}}; //Bounding Box de México (País) Encontrado en http://isithackday.com/geoplanet-explorer/index.php?woeid=23424900
-            //double[][] loc = {{32.718620, -86.703392}, {14.532850, -118.867172}}; //Bounding Box de México (País) Encontrado en http://isithackday.com/geoplanet-explorer/index.php?woeid=23424900
             //query.locations(loc);
 
             //Palabras a monitorear
             String words2Monitor=SWBSocialUtil.words2Monitor.getWords2Monitor(",", model);
             System.out.println("words2MonitorGeorge:"+words2Monitor);
-            
-            String[] tr = {words2Monitor};
-            query.track(tr);
+            if(words2Monitor!=null && words2Monitor.trim().length()>0)
+            {
+                String[] tr = {words2Monitor};
+                query.track(tr);
+            }
 
 
             //System.out.println(query.toString());
@@ -159,8 +160,9 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
 
             trial.addListener(listener);
 
-
+            
             trial.filter(query);
+            
             //System.out.println(" here is stuff : " + trial.getFilterStream(query));
            
 
@@ -177,7 +179,7 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
         {
             trial.cleanUp();
             trial.shutdown();
-            System.out.println("DETUVO TODO EL PEX EN:"+this.getId());
+            System.out.println("DETUVO LA CONEXION EN:"+this.getId());
         }
     }
     

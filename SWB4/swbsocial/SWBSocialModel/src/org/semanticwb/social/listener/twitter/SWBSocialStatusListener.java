@@ -56,31 +56,40 @@ public class SWBSocialStatusListener implements twitter4j.StatusListener {
                     System.out.println("boundingBoxType:"+place.getBoundingBoxType());
             }
             */
-            System.out.println("Cuenta en la que estoy:"+socialNetwork.getTitle());
-            //if(place!=null) System.out.println("Country:"+place.getCountry()+",CountryCode:"+place.getCountryCode()+", PlaceName:"+place.getName()+", PlaceFullName:"+place.getFullName()+", PlaceStreetAdress:"+place.getStreetAddress());
+            //System.out.println("Cuenta en la que estoy:"+socialNetwork.getTitle());
+            if(place!=null) System.out.println("Country:"+place.getCountry()+",CountryCode:"+place.getCountryCode()+", PlaceName:"+place.getName()+", PlaceFullName:"+place.getFullName()+", PlaceStreetAdress:"+place.getStreetAddress());
             //else System.out.println("place es NULO...");
             //if(place!=null && place.getCountryCode().equals("MX")) //&& place.getName().equals("Cuernavaca"))
             {
 
+                /*
                 System.out.println();
                 System.out.println(status.getUser().getName() + " : " + status.getText() + " : " + status.getGeoLocation());
                 System.out.println(status.getCreatedAt());
+                 *
+                 */
                 MediaEntity[] medianEntities=status.getMediaEntities();
                 if(medianEntities!=null)
                 {
                     for(int i=0;i<medianEntities.length;i++)
                     {
                         MediaEntity mediaEntity=medianEntities[i];
+                        /*
                         System.out.println("Media DisplayUrl:"+mediaEntity.getDisplayURL());
                         System.out.println("Media ExpandedUrl:"+mediaEntity.getExpandedURL());
                         System.out.println("Media MediaURLFile:"+mediaEntity.getMediaURL().getFile());
                         System.out.println("Media URLString:"+mediaEntity.getURL().toString());
+                         * */
                     }
                 }
                 //Persistencia del mensaje
-                MessageIn mesagge=MessageIn.ClassMgr.createMessageIn(String.valueOf(status.getId()), model);
-                mesagge.setMsg_Text(status.getText());
-                mesagge.setPostInSocialNetwork(socialNetwork);
+                MessageIn message=MessageIn.ClassMgr.createMessageIn(String.valueOf(status.getId()), model);
+                message.setMsg_Text(status.getText());
+                if(place!=null)
+                {
+                    message.setPostPlace(place.getFullName());
+                }
+                message.setPostInSocialNetwork(socialNetwork);
                 if(status.getUser()!=null)
                 {
                     long userId=status.getUser().getId();
@@ -108,11 +117,11 @@ public class SWBSocialStatusListener implements twitter4j.StatusListener {
                     //System.out.println("userId:"+userId+", created:"+socialNetUser.getCreated()+", followers:"+socialNetUser.getFollowers()+", friends:"+socialNetUser.getFriends()+", name:"+socialNetUser.getSnu_name());
                     if(socialNetUser!=null)
                     {
-                        mesagge.setPostInSocialNetworkUser(socialNetUser);
+                        message.setPostInSocialNetworkUser(socialNetUser);
                     }
                 }
-                socialNetwork.addReceivedPost(mesagge, String.valueOf(status.getId()), socialNetwork);
-                new Classifier(mesagge);
+                socialNetwork.addReceivedPost(message, String.valueOf(status.getId()), socialNetwork);
+                new Classifier(message);
             }
       }catch(Exception e){
         e.printStackTrace();
