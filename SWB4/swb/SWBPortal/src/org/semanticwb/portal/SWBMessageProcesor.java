@@ -127,7 +127,6 @@ public class SWBMessageProcesor extends TimerTask
                         }
                     } else if(ini.equals("ini"))
                     {
-                        //System.out.println(str);
                         StringTokenizer st=new StringTokenizer(str, "|");
                         String init=st.nextToken();
                         String time=st.nextToken();
@@ -139,7 +138,7 @@ public class SWBMessageProcesor extends TimerTask
                             
                             //System.out.println("Registering Message Client:"+addr);
                             
-                            int j=addr.indexOf(":");
+                            int j=addr.lastIndexOf(":"); //MAPS74 IPV6
                             center.addAddress(InetAddress.getByName(addr.substring(0,j)),Integer.parseInt(addr.substring(j+1)));
                             
                             if(!SWBPortal.isClient())
@@ -154,7 +153,7 @@ public class SWBMessageProcesor extends TimerTask
                                 while(st.hasMoreTokens())
                                 {
                                     String addr=st.nextToken();
-                                    int j=addr.indexOf(":");
+                                    int j=addr.lastIndexOf(":"); //MAPS74 IPV6
                                     center.addAddress(InetAddress.getByName(addr.substring(0,j)),Integer.parseInt(addr.substring(j+1)));
                                 }
                                 
