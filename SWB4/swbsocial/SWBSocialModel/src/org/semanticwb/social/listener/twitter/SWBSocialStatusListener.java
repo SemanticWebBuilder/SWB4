@@ -85,10 +85,6 @@ public class SWBSocialStatusListener implements twitter4j.StatusListener {
                 //Persistencia del mensaje
                 MessageIn message=MessageIn.ClassMgr.createMessageIn(String.valueOf(status.getId()), model);
                 message.setMsg_Text(status.getText());
-                if(place!=null)
-                {
-                    message.setPostPlace(place.getFullName());
-                }
                 message.setPostInSocialNetwork(socialNetwork);
                 if(status.getUser()!=null)
                 {
@@ -97,6 +93,14 @@ public class SWBSocialStatusListener implements twitter4j.StatusListener {
                     Date userNetworkCreatedDate=status.getUser().getCreatedAt();
                     int followers=status.getUser().getFollowersCount();
                     int friends=status.getUser().getFriendsCount();
+                    if(place!=null)
+                    {
+                        message.setPostPlace(place.getFullName());
+                    }else if(status.getUser().getLocation()!=null)
+                    {
+                        message.setPostPlace(status.getUser().getLocation());
+                    }
+                    
                     SocialNetworkUser socialNetUser=SocialNetworkUser.getSocialNetworkUserbyIDAndSocialNet(""+userId, socialNetwork, model);
                     if(socialNetUser==null)//
                     {
