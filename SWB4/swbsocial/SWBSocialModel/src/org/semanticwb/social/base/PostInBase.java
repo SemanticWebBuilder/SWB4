@@ -4,7 +4,7 @@ package org.semanticwb.social.base;
    /**
    * Clase que comprende todos los tipos de Post de entrada (Povientes del Listener)que pueden ir siendo creados en la herramienta. 
    */
-public abstract class PostInBase extends org.semanticwb.social.Post implements org.semanticwb.model.Tagable,org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable
+public abstract class PostInBase extends org.semanticwb.social.Post implements org.semanticwb.model.Traceable,org.semanticwb.model.Tagable,org.semanticwb.model.Descriptiveable
 {
    /**
    * Clase en la cual se almacenan los usuarios que escriben los PostIn que llegan. El identificador de c/intancia de esta clase es el identificador de un usuarios en una red social.
@@ -26,6 +26,10 @@ public abstract class PostInBase extends org.semanticwb.social.Post implements o
    * Red Social de la cual es procedente el mensaje que llega por el Listener.
    */
     public static final org.semanticwb.platform.SemanticProperty social_postInSocialNetwork=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#postInSocialNetwork");
+   /**
+   * Veces que ha sido re-enviado el post
+   */
+    public static final org.semanticwb.platform.SemanticProperty social_postRetweets=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#postRetweets");
    /**
    * Clase que va ha contener los Post que han sido tomados como base (es decir, que llegan por el listener y que se guardan en la clase PostListenerContainer) para crear un nuevo Post desde la herramienta y que se envía hacia las redes sociales.
    */
@@ -50,6 +54,10 @@ public abstract class PostInBase extends org.semanticwb.social.Post implements o
    * Valor que resulta del algoritmo de analisis sentimental, aqui se puede ver el porque se pone cierto valir a la propiedad PostSentimentalType
    */
     public static final org.semanticwb.platform.SemanticProperty social_postSentimentalValue=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#postSentimentalValue");
+   /**
+   * Dispositivo desde el que se ha enviado el post
+   */
+    public static final org.semanticwb.platform.SemanticProperty social_postSource=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#postSource");
    /**
    * Tipo de Intensidad. 2=Alta;1=Media;0=Baja;
    */
@@ -345,6 +353,24 @@ public abstract class PostInBase extends org.semanticwb.social.Post implements o
          }
          return ret;
     }
+
+/**
+* Gets the PostRetweets property
+* @return int with the PostRetweets
+*/
+    public int getPostRetweets()
+    {
+        return getSemanticObject().getIntProperty(social_postRetweets);
+    }
+
+/**
+* Sets the PostRetweets property
+* @param value long with the PostRetweets
+*/
+    public void setPostRetweets(int value)
+    {
+        getSemanticObject().setIntProperty(social_postRetweets, value);
+    }
    /**
    * Sets the value for the property PostListenerBase
    * @param value PostListenerBase to set
@@ -454,6 +480,24 @@ public abstract class PostInBase extends org.semanticwb.social.Post implements o
     public void setPostSentimentalValue(float value)
     {
         getSemanticObject().setFloatProperty(social_postSentimentalValue, value);
+    }
+
+/**
+* Gets the PostSource property
+* @return String with the PostSource
+*/
+    public String getPostSource()
+    {
+        return getSemanticObject().getProperty(social_postSource);
+    }
+
+/**
+* Sets the PostSource property
+* @param value long with the PostSource
+*/
+    public void setPostSource(String value)
+    {
+        getSemanticObject().setProperty(social_postSource, value);
     }
 
 /**
