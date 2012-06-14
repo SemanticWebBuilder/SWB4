@@ -40,7 +40,7 @@ public class PostSummary extends GenericAdmResource {
     /** The log. */
     private static Logger log = SWBUtils.getLogger(PostSummary.class);
     
-    public static final int PAGE_SIZE = 50; //Líneas por página
+    public static final int PAGE_SIZE = 25; //Líneas por página
     public static final String Mode_JSON = "json";
     public static final String Mode_REVAL = "rv";
     public static int xxx=1000;
