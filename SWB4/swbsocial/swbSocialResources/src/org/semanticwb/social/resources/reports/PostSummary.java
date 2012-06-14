@@ -246,6 +246,7 @@ if(fin - inicio > PAGE_SIZE) {
                         obj.put("fllwrs","0");
                         obj.put("frds","0");
                     }
+                    obj.put("plc", msg.getPostPlace()==null?"--":msg.getPostPlace());
                     jarr.put(obj);
                 }catch (Exception jse) {
                     //jse.printStackTrace(System.out);
