@@ -2427,7 +2427,11 @@ public class BaseNode extends BaseNodeBase
                     uri = this.getURI().replaceAll("#", "/") + "#" + name;
                 }
                 else
-                {                    
+                {
+                    for(String prefix : listUris().keySet())
+                    {
+                        System.out.println("prefix: "+prefix+" namespace: "+listUris().get(prefix));
+                    }
                     String namespace = listUris().get(values[0]);
                     if (namespace == null)
                     {
