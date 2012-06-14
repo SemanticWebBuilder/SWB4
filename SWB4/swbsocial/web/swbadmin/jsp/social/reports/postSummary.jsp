@@ -54,7 +54,7 @@ if(fin - inicio > PAGE_SIZE) {
     inicio = 0;
     fin = PAGE_SIZE;
 }
-inicio++;
+//inicio++;
 //////////////////////
 
 
