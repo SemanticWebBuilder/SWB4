@@ -2428,10 +2428,10 @@ public class BaseNode extends BaseNodeBase
                 }
                 else
                 {
-                    for(String prefix : listUris().keySet())
-                    {
-                        System.out.println("prefix: "+prefix+" namespace: "+listUris().get(prefix));
-                    }
+//                    for(String prefix : listUris().keySet())
+//                    {
+//                        System.out.println("prefix: "+prefix+" namespace: "+listUris().get(prefix));
+//                    }
                     String namespace = listUris().get(values[0]);
                     if (namespace == null)
                     {
@@ -2541,12 +2541,12 @@ public class BaseNode extends BaseNodeBase
      */
     public static Hashtable<String, String> listUris()
     {
-        System.out.println("Semantic class para nt_BaseNode: "+nt_BaseNode.getSemanticObject().getSemanticClass());
+        //System.out.println("Semantic class para nt_BaseNode: "+nt_BaseNode.getSemanticObject().getSemanticClass());
         Iterator<SemanticClass> tpcit = nt_BaseNode.listSubClasses();
         while (tpcit.hasNext())
         {
             SemanticClass tpc = tpcit.next();
-            System.out.println("Subclase para nt_BaseNode: "+tpc.getName());
+            //System.out.println("Subclase para nt_BaseNode: "+tpc.getName());
             // solo agregar espacios de nombre de clases abajo de base
             if (tpc.getPrefix() != null)
             {
