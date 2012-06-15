@@ -512,6 +512,7 @@ public class SWBSocialUtil {
 
         public static String phonematize(String phase)
         {
+            if(phase==null || phase.isEmpty()) return phase;
             String tmp="";
             String out_word = "";
             phase = phase.toLowerCase();
