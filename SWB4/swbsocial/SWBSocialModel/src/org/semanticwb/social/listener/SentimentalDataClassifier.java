@@ -65,7 +65,8 @@ public class SentimentalDataClassifier {
     }
 
 
-    private void initAnalysis()
+ // Funciona bien al 15/06/2012
+    private void initAnalysiss()
     {
         //Revisa si encuentra emoticones en el mensaje
         findEmoticones();
@@ -96,7 +97,7 @@ public class SentimentalDataClassifier {
             String word2FindTmp=word2Find;
             //System.out.println("word2Find:"+word2Find);
             NormalizerCharDuplicate normalizerCharDuplicate=SWBSocialUtil.Classifier.normalizer(word2Find);
-            word2Find=normalizerCharDuplicate.getNormalizedWord();
+            word2Find=normalizerCharDuplicate.getNormalizedPhrase();
             //System.out.println("word Normalizada:"+word2Find);
             //Aplicar snowball a la palabra
             word2Find=SWBSocialUtil.Classifier.getRootWord(word2Find);
@@ -160,6 +161,118 @@ public class SentimentalDataClassifier {
         }
     }
 
+    /**Metodo Prueba**/
+    private void initAnalysis()
+    {
+        //Revisa si encuentra emoticones en el mensaje
+        findEmoticones();
+
+        //Normalizo
+        postData=SWBSocialUtil.Classifier.normalizer(postData).getNormalizedPhrase();
+
+        System.out.println("postData-1:"+postData);
+
+        //Se cambia toda la frase a su modo raiz
+        postData=SWBSocialUtil.Classifier.getRootWord(postData);
+
+        System.out.println("postData-2:"+postData);
+
+        //Fonetizo
+        postData=SWBSocialUtil.Classifier.phonematize(postData);
+
+        //Busco frases en objeto de aprendizaje (SentimentalLearningPhrase)
+        //System.out.println("postData a revisar:"+postData);
+        findInLearnigPhrases();
+        //System.out.println("postData a revisado:"+postData+", sentimentalTweetValue:"+sentimentalTweetValue+", IntensiveTweetValue:+"+IntensiveTweetValue+", wordsCont:"+wordsCont);
+
+        //Elimino Caracteres especiales (acentuados)
+        //postData=SWBSocialUtil.Strings.replaceSpecialCharacters(postData);
+
+        //removePuntualSigns1();
+        //postData=SWBSocialUtil.Strings.removePuntualSigns(postData, model);
+
+        StringTokenizer st = new StringTokenizer(postData);
+        while (st.hasMoreTokens())
+        {
+            String word2Find=st.nextToken();
+            //System.out.println("Palabra:"+word2Find);
+            /*
+            if(Prepositions.ClassMgr.getPrepositions(word2Find, model)!=null) //Elimino preposiciones
+            {
+                continue;
+            }*/
+
+            //String word2FindTmp=word2Find;
+            //System.out.println("word2Find:"+word2Find);
+            //NormalizerCharDuplicate normalizerCharDuplicate=SWBSocialUtil.Classifier.normalizer(word2Find);
+            //word2Find=normalizerCharDuplicate.getNormalizedWord();
+            //System.out.println("word Normalizada:"+word2Find);
+            //Aplicar snowball a la palabra
+            //word2Find=SWBSocialUtil.Classifier.getRootWord(word2Find);
+            //Se fonematiza la palabra
+            //word2Find=SWBSocialUtil.Classifier.phonematize(word2Find);
+            //System.out.println("word Fonematizada:"+word2Find);
+            //SentimentWords sentimentalWordObj=SentimentWords.getSentimentalWordByWord(model, word2Find);
+            SentimentWords sentimentalWordObj=SentimentWords.ClassMgr.getSentimentWords(word2Find, model);
+            if(sentimentalWordObj!=null) //La palabra en cuestion ha sido encontrada en la BD
+            {
+                //System.out.println("Palabra Encontrada:"+word2Find);
+                wordsCont++;
+                IntensiveTweetValue+=sentimentalWordObj.getIntensityValue();
+                //Veo si la palabra cuenta con mas de dos caracteres(Normalmente el inicial de la palabra y talvez otro que
+                //hayan escrito por equivocación) en mayusculas
+                //De ser así, se incrementaría el valor para la intensidad
+                /*
+                if(SWBSocialUtil.Strings.isIntensiveWordByUpperCase(word2FindTmp, 3))
+                {
+                    //System.out.println("VENIA PALABRA CON MAYUSCULAS:"+word2Find);
+                    IntensiveTweetValue+=1;
+                }*/
+                //Veo si en la palabra se repiten mas de 2 caracteres para los que se pueden repetir hasta 2 veces (Arrar Doubles)
+                // y mas de 1 cuando no estan dichos caracteres en docho array, si es así entonces se incrementa la intensidad
+                /*
+                if(normalizerCharDuplicate.isCharDuplicate()){
+                    //System.out.println("VENIA PALABRA CON CARACTERES REPETIDOS:"+word2Find);
+                    IntensiveTweetValue+=1;
+                }*/
+                sentimentalTweetValue+=sentimentalWordObj.getSentimentalValue();
+            }
+        }
+        //System.out.println("sentimentalTweetValue Final:"+sentimentalTweetValue+", wordsCont:"+wordsCont);
+        if(sentimentalTweetValue>0)
+        {
+            float prom=sentimentalTweetValue/wordsCont;
+            post.setPostSentimentalValue(prom);
+            //System.out.println("prom final:"+prom);
+            if(prom>=4.5) //Si el promedio es mayor de 4.5 (Segun Octavio) es un tweet positivo
+            {
+                //System.out.println("Se guarda Post Positivo:"+post.getId()+", valor promedio:"+prom);
+                post.setPostSentimentalType(1); //Tweet Postivivo, valor de 1 (Esto yo lo determiné)
+            }else if(prom<4.5)
+            {
+                //System.out.println("Se guarda Post Negativo:"+post.getId()+", valor promedio:"+prom);
+                post.setPostSentimentalType(2); //Tweet Negativo, valor de 1 (Esto yo lo determiné)
+            }else{
+                //System.out.println("Se guarda Post Neutro:"+post.getId()+", valor promedio:"+prom);
+                post.setPostSentimentalType(0); //Tweet Neutro, valor de 0 (Esto yo lo determiné)
+            }
+        }else {
+            //System.out.println("Se guarda Post Neutro POR DEFAULT:"+post.getId()+", valor promedio--4.5");
+            //Si no encontro ninguna palabra de las que vienen en el post en la BD, entonces es como si no tuviera
+            //valor sentimental, por lo cual lo pone con valor de 4.5 (Neutro-según Octavio)
+            post.setPostSentimentalValue(Float.parseFloat("0"));
+            post.setPostSentimentalType(0); //Tweet Neutro, valor de 0 (Esto yo lo determiné)
+        }
+        if(IntensiveTweetValue>0)
+        {
+            float prom=IntensiveTweetValue/wordsCont;
+            //System.out.println("IntensiveTweetValue Final:"+IntensiveTweetValue+", valor promedio:"+prom);
+            post.setPostIntensityValue(prom);
+        }
+    }
+
+
+
     //Función que barre todas las frases y las busca en el mensaje (PostData)
     //Esto talvez pueda NO ser lo mas optimo.
     //TODO:Ver si encuentra otra forma más optima de hacer esto.
@@ -175,6 +288,7 @@ public class SentimentalDataClassifier {
         while(itSntPhases.hasNext())
         {
             SentimentalLearningPhrase sntLPhrase=itSntPhases.next();
+            //System.out.println("Frase Learn:"+sntLPhrase.getPhrase());
             int contOcurr=findOccurrencesNumber(sntLPhrase.getPhrase(), 0);
             if(contOcurr>0)
             {
@@ -235,30 +349,12 @@ public class SentimentalDataClassifier {
             contOcurrences++;
             postData=postData.substring(0, iocurrence)+postData.substring(iocurrence+phrase.length());
             //System.out.println("phrase:"+phrase+",Ocurrencia:"+contOcurrences+",postData:"+postData);
-            //tmpPostData=tmpPostData.substring(iocurrence)+tmpPostData.substring(iocurrence+phrase.length());
             contOcurrences=findOccurrencesNumber(phrase, contOcurrences);
         }
         return contOcurrences;
     }
 
-    /*
-    private int findOccurrencesNumber(String phrase, int index)
-    {
-        String tmpPostData=postData;
-        int contOcurrences=0;
-        int iocurrence=postData.indexOf(phrase, index);
-        if(iocurrence>-1)
-        {
-            contOcurrences++;
-            tmpPostData=tmpPostData.substring(index, iocurrence)+tmpPostData.substring(iocurrence+phrase.length());
-            findOccurrencesNumber(phrase, iocurrence+phrase.length());
-        }
-        return contOcurrences;
-    }
-     * */
-
-
-
+  
     //Encuentra emoticons en el mensaje
     //TODO:Hacer que los emoticons esten almacenados en un objeto.
     private void findEmoticones()
