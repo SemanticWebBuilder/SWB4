@@ -56,6 +56,7 @@ public class LiteFileRepository extends GenericResource {
     private static final String LVL_VIEW = "prop_view";
     private static final String LVL_MODIFY = "prop_modify";
     private static final String LVL_ADMIN = "prop_admin";
+    private static final String CHK_FOLDERSUPPORT = "prop_foldersupport";
     private static final NumberFormat numf = NumberFormat.getNumberInstance();
 
     @Override
@@ -73,6 +74,8 @@ public class LiteFileRepository extends GenericResource {
         response.setContentType("text/html; charset=ISO-8859-1");
         response.setHeader("Cache-Control", "no-cache");
         response.setHeader("Pragma", "no-cache");
+
+        Resource base = getResourceBase();
 
         numf.setMaximumFractionDigits(1);
 
@@ -269,9 +272,12 @@ public class LiteFileRepository extends GenericResource {
                 SWBResourceURL urlnew = paramRequest.getRenderUrl();
                 urlnew.setParameter("act", "new");
                 out.println("<button onclick=\"window.location='" + urlnew + "';\">" + "Agregar archivo" + "</button>");
-                SWBResourceURL urlnewDirectory = paramRequest.getRenderUrl();
-                urlnewDirectory.setParameter("act", "newDirectory");
-                out.println("<button onclick=\"window.location='" + urlnewDirectory + "';\">" + "Agregar carpeta" + "</button>");
+
+                if (base.getAttribute(CHK_FOLDERSUPPORT, "1").equals("1")) {
+                    SWBResourceURL urlnewDirectory = paramRequest.getRenderUrl();
+                    urlnewDirectory.setParameter("act", "newDirectory");
+                    out.println("<button onclick=\"window.location='" + urlnewDirectory + "';\">" + "Agregar carpeta" + "</button>");
+                }
             }
 
             out.println("</td>");
@@ -355,14 +361,15 @@ public class LiteFileRepository extends GenericResource {
                 fver = fver + 0.10D;
 
                 String sfver = numf.format(fver);
-                if(sfver.indexOf(".")==-1)
-                    sfver = ""+(float)fver;
+                if (sfver.indexOf(".") == -1) {
+                    sfver = "" + (float) fver;
+                }
 
                 int iver = (int) fver;
                 iver = iver + 1;
 
                 out.println("<option value=\"fraction\">" + sfver + "</option>");
-                out.println("<option value=\"nextInt\">" + (float)iver + "</option>");
+                out.println("<option value=\"nextInt\">" + (float) iver + "</option>");
 
 
                 out.println("</select>");
@@ -577,8 +584,9 @@ public class LiteFileRepository extends GenericResource {
                 fver = fver + 0.10D;
 
                 String sfver = numf.format(fver);
-                if(sfver.indexOf(".")==-1)
-                    sfver = ""+(float)fver;
+                if (sfver.indexOf(".") == -1) {
+                    sfver = "" + (float) fver;
+                }
 
 
                 int iver = (int) fver;
@@ -587,7 +595,7 @@ public class LiteFileRepository extends GenericResource {
                 sNxtVersion = sfver;
 
                 if (incremento) {
-                    sNxtVersion = ""+(float)iver;
+                    sNxtVersion = "" + (float) iver;
                 }
             }
 
@@ -810,10 +818,10 @@ public class LiteFileRepository extends GenericResource {
         }
         User user = paramRequest.getUser();
 
-        
-        
+
+
         WebPage wpage = paramRequest.getWebPage();
-        
+
         WebSite wsite = getResourceBase().getWebSite(); //wpage.getWebSite();
 
         out.println("<div class=\"swbform\">");
@@ -841,6 +849,17 @@ public class LiteFileRepository extends GenericResource {
             out.println("<td><select name=\"modificar\">" + getSelectOptions("modificar", wsite, paramRequest) + "</select></td></tr>");
             out.println("<tr><td align=\"right\"  width=150>" + paramRequest.getLocaleString("msgAdministrate") + ":</td>");
             out.println("<td><select name=\"administrar\">" + getSelectOptions("administrar", wsite, paramRequest) + "</select></td></tr>");
+
+            Resource base = getResourceBase();
+
+            String checked = "checked";
+            if (base.getAttribute(CHK_FOLDERSUPPORT, "1").equals("0")) {
+                checked = "";
+            }
+
+            out.println("<tr><td colspan=\"2\"><hr/></td></tr>");
+            out.println("<tr><td align=\"right\"  width=150>" + paramRequest.getLocaleString("msgFolderSupport") + ":</td>");
+            out.println("<td><input type=\"checkbox\" name=\"foldersupport\" value=\"1\" " + checked + " /></td></tr>");
 
             out.println("</table>");
             out.println("</fieldset>");
@@ -1017,8 +1036,6 @@ public class LiteFileRepository extends GenericResource {
             String fdescription = fup.getValue("fdescription");
             String fcomment = fup.getValue("fcomment");
 
-
-
             String fid = fup.getValue("fid");
             String newVersion = fup.getValue("newVersion");
 
@@ -1061,13 +1078,16 @@ public class LiteFileRepository extends GenericResource {
             String viewrole = request.getParameter("ver");
             String modifyrole = request.getParameter("modificar");
             String adminrole = request.getParameter("administrar");
-            
-            System.out.println("admin---=>"+adminrole);
+            String folderSupport = request.getParameter("foldersupport");
+            if(folderSupport==null||folderSupport.equals("null")) folderSupport="0";
+
+            System.out.println("admin---=>" + adminrole+">|||>>>"+folderSupport);
 
             try {
                 getResourceBase().setAttribute(LVL_VIEW, viewrole);
                 getResourceBase().setAttribute(LVL_MODIFY, modifyrole);
                 getResourceBase().setAttribute(LVL_ADMIN, adminrole);
+                getResourceBase().setAttribute(CHK_FOLDERSUPPORT, folderSupport);
                 getResourceBase().updateAttributesToDB();
 
             } catch (Exception e) {
@@ -1144,13 +1164,14 @@ public class LiteFileRepository extends GenericResource {
 
             if (bigVersionInc) {
                 f = (int) f + 1;
-                sver = ""+(float)f;
+                sver = "" + (float) f;
             } else {
                 f = f + 0.10D;
 
                 String sfver = numf.format(f);
-                if(sfver.indexOf(".")==-1)
-                    sfver = ""+(float)f;
+                if (sfver.indexOf(".") == -1) {
+                    sfver = "" + (float) f;
+                }
                 sver = sfver;
             }
             ver++;
