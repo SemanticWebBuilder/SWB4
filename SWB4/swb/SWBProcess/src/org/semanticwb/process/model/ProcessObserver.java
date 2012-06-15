@@ -31,7 +31,6 @@ import java.util.Timer;
 import java.util.TimerTask;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
-import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticObserver;
@@ -180,24 +179,26 @@ public class ProcessObserver extends org.semanticwb.process.model.base.ProcessOb
             while (sit.hasNext())
             {
                 StartEventNode startEvent = sit.next();
-                Containerable cont=startEvent.getContainer();
-                if(cont!=null && cont instanceof Process && ((Process)cont).isActive())
-                {
-                    ProcessPeriodRefable pr=((ProcessPeriodRefable)startEvent);
-                    Iterator<ProcessPeriodRef> it2=pr.listProcessPeriodRefs();
-                    while (it2.hasNext()) {
-                        ProcessPeriodRef ppr = it2.next();
-                        if(ppr.isActive())
-                        {
-                            //System.out.println("checking:"+ppr.getProcessPeriod());
-                            if(ppr.getProcessPeriod().isOnSchedule())
+                if (startEvent != null) {
+                    Containerable cont=startEvent.getContainer();
+                    if(cont!=null && cont instanceof Process && ((Process)cont).isActive())
+                    {
+                        ProcessPeriodRefable pr=((ProcessPeriodRefable)startEvent);
+                        Iterator<ProcessPeriodRef> it2=pr.listProcessPeriodRefs();
+                        while (it2.hasNext()) {
+                            ProcessPeriodRef ppr = it2.next();
+                            if(ppr.isActive())
                             {
-                                try
+                                //System.out.println("checking:"+ppr.getProcessPeriod());
+                                if(ppr.getProcessPeriod().isOnSchedule())
                                 {
-                                    //System.out.println("ok...");
-                                    ProcessInstance inst=((Process)cont).createInstance();
-                                    inst.start(null,startEvent);
-                                }catch(Exception e){log.error(e);}
+                                    try
+                                    {
+                                        //System.out.println("ok...");
+                                        ProcessInstance inst=((Process)cont).createInstance();
+                                        inst.start(null,startEvent);
+                                    }catch(Exception e){log.error(e);}
+                                }
                             }
                         }
                     }
