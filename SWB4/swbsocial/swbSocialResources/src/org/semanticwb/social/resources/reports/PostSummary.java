@@ -28,6 +28,7 @@ import org.semanticwb.portal.api.SWBResourceURL;
 import org.semanticwb.social.MessageIn;
 import org.semanticwb.social.PostIn;
 import org.semanticwb.social.SentimentalLearningPhrase;
+import org.semanticwb.social.util.SWBSocialUtil;
 import twitter4j.internal.org.json.JSONArray;
 import twitter4j.internal.org.json.JSONException;
 import twitter4j.internal.org.json.JSONObject;
@@ -100,7 +101,7 @@ public class PostSummary extends GenericAdmResource {
         if(SWBResourceURL.Action_EDIT.equals(action)) {
             WebSite wsite = base.getWebSite();
             try {
-                String[] phrases = request.getParameter("fw").split(";", -1);
+                String[] phrases = request.getParameter("fw").split(";");
                 int nv = Integer.parseInt(request.getParameter("nv"));
                 int dpth = Integer.parseInt(request.getParameter("dpth"));
                 SentimentalLearningPhrase slp;
@@ -108,6 +109,9 @@ public class PostSummary extends GenericAdmResource {
                     phrase = phrase.toLowerCase().trim();
                     slp = SentimentalLearningPhrase.getSentimentalLearningPhrasebyPhrase(phrase, wsite);
                     if(slp==null) {
+                        phrase=SWBSocialUtil.Classifier.normalizer(phrase).getNormalizedPhrase();
+                        phrase=SWBSocialUtil.Classifier.getRootWord(phrase);
+                        phrase=SWBSocialUtil.Classifier.phonematize(phrase);
                         slp = SentimentalLearningPhrase.ClassMgr.createSentimentalLearningPhrase(wsite);
                         slp.setPhrase(phrase);
                         slp.setSentimentType(nv);
