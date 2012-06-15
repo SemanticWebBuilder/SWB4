@@ -26,19 +26,9 @@
 
 package org.semanticwb.process.model;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.TreeSet;
+import java.util.*;
 import javax.servlet.http.HttpServletRequest;
-import org.semanticwb.model.DisplayProperty;
-import org.semanticwb.model.FormElement;
-import org.semanticwb.model.FormValidateException;
-import org.semanticwb.model.PropertyGroup;
-import org.semanticwb.model.SWBClass;
-import org.semanticwb.model.SWBComparator;
+import org.semanticwb.model.*;
 import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticProperty;
@@ -87,16 +77,18 @@ public class SWBProcessFormMgr implements SWBForms
         {
             ItemAwareReference item=objs.next();
             SWBClass processObject = item.getProcessObject();
-            SWBFormMgr mgr=new SWBFormMgr(processObject.getSemanticObject(),null,MODE_EDIT);
-            mgr.setType(m_type);
-            if(item.getItemAware()!=null)
-            {
-                mgr.setVarName(item.getItemAware().getName());
-                if(item.getItemAware().getDataObjectClass().transformToSemanticClass().isSubClass(DataTypes.sclass))
+            if (processObject != null) {
+                SWBFormMgr mgr=new SWBFormMgr(processObject.getSemanticObject(),null,MODE_EDIT);
+                mgr.setType(m_type);
+                if(item.getItemAware()!=null)
                 {
-                    mgr.setVarReference(item.getItemAware().getSemanticObject());
+                    mgr.setVarName(item.getItemAware().getName());
+                    if(item.getItemAware().getDataObjectClass().transformToSemanticClass().isSubClass(DataTypes.sclass))
+                    {
+                        mgr.setVarReference(item.getItemAware().getSemanticObject());
+                    }
+                    mgrs.put(item.getItemAware().getName(),mgr);
                 }
-                mgrs.put(item.getItemAware().getName(),mgr);
             }
             //TODO: agregar variable en lugar del uri de la clase
         }
@@ -327,7 +319,7 @@ public class SWBProcessFormMgr implements SWBForms
      */
     public String getFormHiddens()
     {
-        StringBuffer ret=new StringBuffer();
+        StringBuilder ret=new StringBuilder();
         if(m_pinst!=null)ret.append("    <input type=\"hidden\" name=\""+PRM_URI+"\" value=\""+m_pinst.getURI()+"\"/>\n");
         //if(m_cls!=null)ret.append("    <input type=\"hidden\" name=\""+PRM_CLS+"\" value=\""+m_cls.getURI()+"\"/>\n");
         if(m_mode!=null)ret.append("    <input type=\"hidden\" name=\""+PRM_MODE+"\" value=\""+m_mode+"\"/>\n");
