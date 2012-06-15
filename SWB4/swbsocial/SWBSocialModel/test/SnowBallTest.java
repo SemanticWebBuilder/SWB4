@@ -20,7 +20,8 @@ public class SnowBallTest{
     
     private static final String[] strings = {
         "la constitución de México es la mejor",
-        "queso vueno ta chido"
+        "queso vueno ta chido",
+        "innnnnobacccción",
     };
 
     private static final Analyzer[] analyzers = new Analyzer[]{

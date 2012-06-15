@@ -510,13 +510,13 @@ public class SWBSocialUtil {
 
         }
 
-        public static String phonematize(String in_word)
+        public static String phonematize(String phase)
         {
             String tmp="";
             String out_word = "";
-            in_word = in_word.toLowerCase();
+            phase = phase.toLowerCase();
 
-            char [] in_wordArray=in_word.toCharArray();
+            char [] in_wordArray=phase.toCharArray();
             for(int i=0;i<in_wordArray.length;i++)
             {
                 String in_wordChar=String.valueOf(in_wordArray[i]);
@@ -578,6 +578,7 @@ public class SWBSocialUtil {
             return out_word;
         }
 
+        /*
         public static String getRootWord(String word)
         {
             try
@@ -588,12 +589,41 @@ public class SWBSocialUtil {
                 while (tokenStream.incrementToken()) {
                     String term = charTermAttribute.toString();
                     if(term!=null) return term;
+                    else return word;
                 }
             }catch(Exception e){
                 log.error(e);
             }
             return word;
+        }*/
+
+         public static String getRootWord(String phrase)
+        {
+            String sphrase="";
+            try
+            {
+                TokenStream tokenStream = new SpanishAnalizer().tokenStream("word", new StringReader(phrase));
+                //OffsetAttribute offsetAttribute = tokenStream.addAttribute(OffsetAttribute.class);
+                CharTermAttribute charTermAttribute = tokenStream.addAttribute(CharTermAttribute.class);
+                while (tokenStream.incrementToken()) {
+                    String term = charTermAttribute.toString();
+                    if(term!=null && sphrase.trim().length()>0) {
+                        sphrase+=" "+term;
+                    }else if(term!=null) {
+                        sphrase=term;
+                    }
+                }
+            }catch(Exception e){
+                log.error(e);
+            }
+            if(sphrase.trim().length()>0)
+            {
+                return sphrase;
+            }else{
+                return phrase;
+            }
         }
+
     }
 }
 

@@ -11,18 +11,18 @@ package org.semanticwb.social.util;
  */
 public class NormalizerCharDuplicate {
 
-    String normalizedWord=null;
+    String normalizedPhrase=null;
     boolean isCharDuplicate=false;
     
-    public NormalizerCharDuplicate(String normalizedWord, boolean isCharDuplicate)
+    public NormalizerCharDuplicate(String normalizedPhrase, boolean isCharDuplicate)
     {
-        this.normalizedWord=normalizedWord;
+        this.normalizedPhrase=normalizedPhrase;
         this.isCharDuplicate=isCharDuplicate;
     }
 
-    public String getNormalizedWord()
+    public String getNormalizedPhrase()
     {
-        return normalizedWord;
+        return normalizedPhrase;
     }
 
     public boolean isCharDuplicate()

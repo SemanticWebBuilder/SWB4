@@ -681,6 +681,12 @@ public class SpanishAnalizer extends Analyzer {
         "vez",
         "y",
         "ya",
+        "tu",
+        "tus",
+        "su",
+        "sus",
+        "mi",
+        "mis"
     };
 
     @SuppressWarnings({"unchecked", "rawtypes"})
