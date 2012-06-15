@@ -102,7 +102,7 @@
 </td>
 <td colspan="2">
     <!--input type="text" name="fw" id="fw" dojoType="dijit.form.ValidationTextBox" value="" required="true" promptMessage="Lista de frases separadas por punto y coma" invalidMessage="Palabra incorrecta" trim="true" /-->
-    <textarea name="fw" id="fw" rows="2" cols="28" dojoType="ValidationTextarea" required="true" promptMessage="Lista de frases separadas por punto y coma" invalidMessage="Lista de frases separadas por punto y coma" trim="true"></textarea>
+    <textarea name="fw" id="fw" rows="2" cols="28" dojoType="ValidationTextarea" required="true" promptMessage="Lista de frases separadas por punto y coma" invalidMessage="Frase;Frase" trim="true"></textarea>
 </td>
 </tr>
 <tr>
