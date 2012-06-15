@@ -27,51 +27,21 @@ package org.semanticwb.process.resources;
 
 import com.hp.hpl.jena.rdf.model.NodeIterator;
 import com.hp.hpl.jena.rdf.model.RDFNode;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.StringTokenizer;
+import java.io.*;
+import java.util.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
-import org.semanticwb.model.DisplayProperty;
-import org.semanticwb.model.FormElement;
-import org.semanticwb.model.Resource;
-import org.semanticwb.model.ResourceType;
-import org.semanticwb.model.Resourceable;
-import org.semanticwb.model.SWBClass;
-import org.semanticwb.model.User;
-import org.semanticwb.model.WebPage;
-import org.semanticwb.platform.SemanticClass;
-import org.semanticwb.platform.SemanticObject;
-import org.semanticwb.platform.SemanticOntology;
-import org.semanticwb.platform.SemanticProperty;
-import org.semanticwb.platform.SemanticVocabulary;
+import org.semanticwb.model.*;
+import org.semanticwb.platform.*;
 import org.semanticwb.portal.SWBFormMgr;
 import org.semanticwb.portal.SWBForms;
-import org.semanticwb.portal.api.GenericResource;
-import org.semanticwb.portal.api.SWBActionResponse;
-import org.semanticwb.portal.api.SWBParamRequest;
-import org.semanticwb.portal.api.SWBParameters;
-import org.semanticwb.portal.api.SWBResourceException;
-import org.semanticwb.portal.api.SWBResourceURL;
+import org.semanticwb.portal.api.*;
 import org.semanticwb.process.forms.SWBFormMgrLayer;
-import org.semanticwb.process.model.FlowNodeInstance;
-import org.semanticwb.process.model.Instance;
-import org.semanticwb.process.model.ItemAware;
-import org.semanticwb.process.model.ItemAwareReference;
-import org.semanticwb.process.model.SWBProcessFormMgr;
-import org.semanticwb.process.model.UserTask;
+import org.semanticwb.process.model.*;
 
 /**
  *
@@ -136,14 +106,16 @@ public class ProcessForm extends GenericResource {
             ItemAwareReference item = it.next();
             SWBClass obj = item.getProcessObject();
 
-            SemanticClass cls = obj.getSemanticObject().getSemanticClass();
+            if (obj != null) {
+                SemanticClass cls = obj.getSemanticObject().getSemanticClass();
 
-            hmclass.put(item.getItemAware().getName(), cls);
+                hmclass.put(item.getItemAware().getName(), cls);
 
-            Iterator<SemanticProperty> itp = cls.listProperties();
-            while (itp.hasNext()) {
-                SemanticProperty prop = itp.next();
-                hmprops.put(item.getItemAware().getName() + "|" + prop.getPropId(), prop);
+                Iterator<SemanticProperty> itp = cls.listProperties();
+                while (itp.hasNext()) {
+                    SemanticProperty prop = itp.next();
+                    hmprops.put(item.getItemAware().getName() + "|" + prop.getPropId(), prop);
+                }
             }
         }
 
@@ -370,8 +342,6 @@ public class ProcessForm extends GenericResource {
         UserTask ut = null;
         String suri = request.getParameter("suri");
 
-        FlowNodeInstance foi = null;
-
         if ("updAdminMode".equals(response.getAction())) {
 
             base.setAttribute("adminMode", request.getParameter("adminMode"));
@@ -426,10 +396,10 @@ public class ProcessForm extends GenericResource {
 
             response.setMode(SWBActionResponse.Mode_ADMIN);
         } else if ("process".equals(response.getAction())) {
+            FlowNodeInstance foi = (FlowNodeInstance) SWBPlatform.getSemanticMgr().getOntology().getGenericObject(suri);
             if (suri == null) {
                 return;
             }
-            foi = (FlowNodeInstance) SWBPlatform.getSemanticMgr().getOntology().getGenericObject(suri);
             SWBProcessFormMgr mgr = new SWBProcessFormMgr(foi);
             mgr.clearProperties();
 
@@ -579,8 +549,7 @@ public class ProcessForm extends GenericResource {
             HashMap<String, String> hmparam = new HashMap();
 
             if (props != null && props.length > 0) {
-                int j = 0;
-                for (j = 0; j < props.length; j++) {
+                for (int j = 0; j < props.length; j++) {
                     hmparam.put(props[j], props[j]);
                 }
             }
@@ -780,13 +749,13 @@ public class ProcessForm extends GenericResource {
             }
         } else if ("update".equals(response.getAction())) {
             try {
-                foi = (FlowNodeInstance) SWBPlatform.getSemanticMgr().getOntology().getGenericObject(suri);
+                FlowNodeInstance foi = (FlowNodeInstance) SWBPlatform.getSemanticMgr().getOntology().getGenericObject(suri);
                 String basepath = SWBPortal.getWorkPath() + base.getWorkPath() + "/code.xml";
                 String xml = SWBUtils.IO.getFileFromPath(basepath); //base.getXmlConf();//bundle.getBundle(getClass().getName(), new java.util.Locale(user.getLanguage()));
                 if (xml != null && xml.trim().length() > 0) {
                     SWBFormMgrLayer.update2DB(request, response, foi, xml);
                 }
-                response.setAction(response.Action_EDIT);
+                response.setAction(SWBActionResponse.Action_EDIT);
             } catch (Exception e) {
                 log.error(e);
             }
@@ -838,7 +807,7 @@ public class ProcessForm extends GenericResource {
         if (hmFormEle == null) {
             hmFormEle = new HashMap<String, SemanticObject>();
 
-            Iterator<SemanticObject> itfe = ont.listInstancesOfClass(sv.getSemanticClass(sv.SWB_FORMELEMENT));
+            Iterator<SemanticObject> itfe = ont.listInstancesOfClass(sv.getSemanticClass(SemanticVocabulary.SWB_FORMELEMENT));
             while (itfe.hasNext()) {
                 SemanticObject sofe = itfe.next();
                 hmFormEle.put(sofe.getURI(), sofe);
@@ -859,7 +828,7 @@ public class ProcessForm extends GenericResource {
                 }
             }
         }
-
+        
         int max = 1;
         while (!base.getAttribute("prop" + max, "").equals("")) {
 
@@ -1293,7 +1262,7 @@ public class ProcessForm extends GenericResource {
         //System.out.println("prop:" + pro.getName());
         
         
-        Iterator<SemanticClass> itsub = sv.getSemanticClass(sv.SWB_SWBFORMELEMENT).listSubClasses();
+        Iterator<SemanticClass> itsub = sv.getSemanticClass(SemanticVocabulary.SWB_SWBFORMELEMENT).listSubClasses();
         while (itsub.hasNext()) {
             SemanticClass scobj = itsub.next();
 
@@ -1379,7 +1348,7 @@ public class ProcessForm extends GenericResource {
         boolean ret = false;
         String data = paramRequest.getResourceBase().getData(paramRequest.getWebPage());
         if (data != null && data.indexOf(varName + "|" + prop.getPropId()) > -1) {
-            return ret = true;
+            ret = true;
         }
         return ret;
     }
@@ -1388,7 +1357,7 @@ public class ProcessForm extends GenericResource {
         boolean ret = false;
         String data = hm.get(varName + "|" + prop.getPropId());
         if (data != null && data.indexOf(varName + "|" + prop.getPropId() + "|view") > -1) {
-            return ret = true;
+            ret = true;
         }
         return ret;
     }
@@ -1397,7 +1366,7 @@ public class ProcessForm extends GenericResource {
         boolean ret = false;
         String data = hm.get(varName + "|" + prop.getPropId());
         if (data != null && data.indexOf(varName + "|" + prop.getPropId() + "|edit") > -1) {
-            return ret = true;
+            ret = true;
         }
         return ret;
     }
