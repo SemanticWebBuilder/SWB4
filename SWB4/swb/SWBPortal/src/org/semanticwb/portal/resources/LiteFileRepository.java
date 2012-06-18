@@ -216,13 +216,18 @@ public class LiteFileRepository extends GenericResource {
                 }
 
                 if (luser > 0) {
-                    SWBResourceURL urlview = paramRequest.getRenderUrl();
-                    urlview.setCallMethod(SWBResourceURL.Call_DIRECT);
-                    urlview.setParameter("fid", fid);
-                    urlview.setMode(MODE_GETFILE);
-                    urlview.setParameter("verNum", "" + vi.getVersionNumber());
-
-                    out.println("<a href=\"" + urlview + "\">");
+//                    SWBResourceURL urlview = paramRequest.getRenderUrl();
+//                    urlview.setCallMethod(SWBResourceURL.Call_DIRECT);
+//                    urlview.setParameter("fid", fid);
+//                    urlview.setMode(MODE_GETFILE);
+//                    urlview.setParameter("verNum", "" + vi.getVersionNumber());
+//
+//                    out.println("<a href=\"" + urlview + "\">");
+//                    out.println("<img border=0 src='" + path + "" + type + "' alt=\"" + getFileType(file) + "\" />");
+//                    out.println("</a>");
+                    
+                    String ulrdirecta = SWBPortal.getWebWorkPath()+repositoryFile.getWorkPath()+"/"+vi.getVersionNumber()+"/"+vi.getVersionFile();
+                    out.println("<a href=\"" + ulrdirecta + "\">");
                     out.println("<img border=0 src='" + path + "" + type + "' alt=\"" + getFileType(file) + "\" />");
                     out.println("</a>");
                 } else {
