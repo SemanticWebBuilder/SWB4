@@ -51,7 +51,6 @@
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
     <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:autogenId>
-    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Tagable"/>
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
     <rdfs:comment>Clase que comprende todos los tipos de Post que pueden ir siendo creados en la herramienta..</rdfs:comment>
@@ -82,10 +81,6 @@
   </owl:Class>
   <owl:Class rdf:ID="PhotoIn">
     <rdfs:subClassOf>
-      <owl:Class rdf:ID="PostIn"/>
-    </rdfs:subClassOf>
-    <rdfs:comment>Clase en donde se almacenan todos los post de tipo Photo y que entran por el Listener</rdfs:comment>
-    <rdfs:subClassOf>
       <swb:Interface rdf:ID="PostImageable">
         <rdfs:subClassOf>
           <owl:Class rdf:about="#PostDataable"/>
@@ -94,6 +89,10 @@
         <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
       </swb:Interface>
     </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="MessageIn"/>
+    </rdfs:subClassOf>
+    <rdfs:comment>Clase en donde se almacenan todos los post de tipo Photo y que entran por el Listener</rdfs:comment>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
   <owl:Class rdf:ID="Video">
@@ -141,7 +140,7 @@
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
-  <owl:Class rdf:about="#PostIn">
+  <owl:Class rdf:ID="PostIn">
     <rdfs:comment>Clase que comprende todos los tipos de Post de entrada (Povientes del Listener)que pueden ir siendo creados en la herramienta.</rdfs:comment>
     <rdfs:subClassOf rdf:resource="#Post"/>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
@@ -157,6 +156,7 @@
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
   <owl:Class rdf:about="#PostOut">
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
     <rdfs:comment>Clase que comprende todos los tipos de Post de Salida que pueden ir siendo creados en la herramienta y que seran publicados a partir de esto en las diferentes redes sociales.</rdfs:comment>
     <rdfs:subClassOf rdf:resource="#Post"/>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
@@ -192,6 +192,10 @@
     <rdfs:subClassOf rdf:resource="#Oauthable"/>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
+  <owl:Class rdf:ID="YouTubeWords">
+    <rdfs:subClassOf rdf:resource="#WordsToMonitor"/>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+  </owl:Class>
   <owl:Class rdf:about="#SocialNetwork">
     <rdfs:comment>Clase que engloba a las diferentes clases que representan cada una de las redes sociales.</rdfs:comment>
     <rdfs:subClassOf>
@@ -206,16 +210,16 @@
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
-  <owl:Class rdf:ID="MessageIn">
+  <owl:Class rdf:about="#MessageIn">
     <rdfs:subClassOf rdf:resource="#PostIn"/>
     <rdfs:comment>Clase en donde se almacenan todos los post de tipo Mensaje y que entran por el Listener</rdfs:comment>
     <rdfs:subClassOf rdf:resource="#PostTextable"/>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
   <owl:Class rdf:ID="VideoIn">
-    <rdfs:subClassOf rdf:resource="#PostIn"/>
-    <rdfs:comment>Clase en donde se almacenan todos los post de tipo Video y que entran por el Listener</rdfs:comment>
     <rdfs:subClassOf rdf:resource="#PostVideoable"/>
+    <rdfs:subClassOf rdf:resource="#MessageIn"/>
+    <rdfs:comment>Clase en donde se almacenan todos los post de tipo Video y que entran por el Listener</rdfs:comment>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
   <owl:Class rdf:ID="Youtube">
@@ -232,6 +236,10 @@
     <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:autogenId>
     <rdfs:comment>Signos de puntuación que seran eliminados de los mensajes de los post dentro del listener. Es decir, estas no deben ser evaluadas para analisis sentimental.</rdfs:comment>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+  </owl:Class>
+  <owl:Class rdf:ID="TwitterWords">
+    <rdfs:subClassOf rdf:resource="#WordsToMonitor"/>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
   <owl:Class rdf:ID="SocialSite">
@@ -258,11 +266,6 @@
     <swb:hasHerarquicalNode rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_Rules"/>
     <swb:hasHerarquicalNode rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_Devices"/>
   </owl:Class>
-  <owl:Class rdf:about="#Secreteable">
-    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBInterface"/>
-    <rdfs:comment>Interface que contiene ciertas propiedades utiles para la autenticación de ciertas redes sociales (ver mas adelante si se unifica con Oauthable)</rdfs:comment>
-    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Interface"/>
-  </owl:Class>
   <owl:Class rdf:ID="SocialNetworkUser">
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
     <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
@@ -270,6 +273,11 @@
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
     <rdfs:comment>Clase en la cual se almacenan los usuarios que escriben los PostIn que llegan. El identificador de c/intancia de esta clase es el identificador de un usuarios en una red social.</rdfs:comment>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+  </owl:Class>
+  <owl:Class rdf:about="#Secreteable">
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBInterface"/>
+    <rdfs:comment>Interface que contiene ciertas propiedades utiles para la autenticación de ciertas redes sociales (ver mas adelante si se unifica con Oauthable)</rdfs:comment>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Interface"/>
   </owl:Class>
   <owl:Class rdf:ID="Twitter">
     <rdfs:comment>Clase que almacenara las diferentes cuentas de una organización para la red social Twitter.</rdfs:comment>
