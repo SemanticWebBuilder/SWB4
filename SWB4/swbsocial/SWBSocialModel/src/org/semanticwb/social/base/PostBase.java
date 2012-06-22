@@ -4,7 +4,7 @@ package org.semanticwb.social.base;
    /**
    * Clase que comprende todos los tipos de Post que pueden ir siendo creados en la herramienta.. 
    */
-public abstract class PostBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Traceable,org.semanticwb.model.Tagable,org.semanticwb.model.Descriptiveable
+public abstract class PostBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Traceable,org.semanticwb.model.Tagable
 {
    /**
    * Clase que comprende todos los tipos de Post que pueden ir siendo creados en la herramienta..
@@ -178,75 +178,6 @@ public abstract class PostBase extends org.semanticwb.model.SWBClass implements 
          }
          return ret;
     }
-
-/**
-* Gets the Created property
-* @return java.util.Date with the Created
-*/
-    public java.util.Date getCreated()
-    {
-        return getSemanticObject().getDateProperty(swb_created);
-    }
-
-/**
-* Sets the Created property
-* @param value long with the Created
-*/
-    public void setCreated(java.util.Date value)
-    {
-        getSemanticObject().setDateProperty(swb_created, value);
-    }
-
-/**
-* Gets the Updated property
-* @return java.util.Date with the Updated
-*/
-    public java.util.Date getUpdated()
-    {
-        return getSemanticObject().getDateProperty(swb_updated);
-    }
-
-/**
-* Sets the Updated property
-* @param value long with the Updated
-*/
-    public void setUpdated(java.util.Date value)
-    {
-        getSemanticObject().setDateProperty(swb_updated, value);
-    }
-
-/**
-* Gets the Description property
-* @return String with the Description
-*/
-    public String getDescription()
-    {
-        return getSemanticObject().getProperty(swb_description);
-    }
-
-/**
-* Sets the Description property
-* @param value long with the Description
-*/
-    public void setDescription(String value)
-    {
-        getSemanticObject().setProperty(swb_description, value);
-    }
-
-    public String getDescription(String lang)
-    {
-        return getSemanticObject().getProperty(swb_description, null, lang);
-    }
-
-    public String getDisplayDescription(String lang)
-    {
-        return getSemanticObject().getLocaleProperty(swb_description, lang);
-    }
-
-    public void setDescription(String description, String lang)
-    {
-        getSemanticObject().setProperty(swb_description, description, lang);
-    }
    /**
    * Sets the value for the property Creator
    * @param value Creator to set
@@ -287,36 +218,39 @@ public abstract class PostBase extends org.semanticwb.model.SWBClass implements 
     }
 
 /**
-* Gets the Title property
-* @return String with the Title
+* Gets the Updated property
+* @return java.util.Date with the Updated
 */
-    public String getTitle()
+    public java.util.Date getUpdated()
     {
-        return getSemanticObject().getProperty(swb_title);
+        return getSemanticObject().getDateProperty(swb_updated);
     }
 
 /**
-* Sets the Title property
-* @param value long with the Title
+* Sets the Updated property
+* @param value long with the Updated
 */
-    public void setTitle(String value)
+    public void setUpdated(java.util.Date value)
     {
-        getSemanticObject().setProperty(swb_title, value);
+        getSemanticObject().setDateProperty(swb_updated, value);
     }
 
-    public String getTitle(String lang)
+/**
+* Gets the Created property
+* @return java.util.Date with the Created
+*/
+    public java.util.Date getCreated()
     {
-        return getSemanticObject().getProperty(swb_title, null, lang);
+        return getSemanticObject().getDateProperty(swb_created);
     }
 
-    public String getDisplayTitle(String lang)
+/**
+* Sets the Created property
+* @param value long with the Created
+*/
+    public void setCreated(java.util.Date value)
     {
-        return getSemanticObject().getLocaleProperty(swb_title, lang);
-    }
-
-    public void setTitle(String title, String lang)
-    {
-        getSemanticObject().setProperty(swb_title, title, lang);
+        getSemanticObject().setDateProperty(swb_created, value);
     }
 
 /**

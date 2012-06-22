@@ -24,7 +24,9 @@ public class Classifier {
         this.post=post;
         try{
             ClassifierThread classThread=new ClassifierThread(post);
+            System.out.println("THREAD CREADO:"+classThread);
             classThread.start();
+            System.out.println("classThread.isAlive():"+classThread);
         }catch(Exception e){
             log.error(e);
         }

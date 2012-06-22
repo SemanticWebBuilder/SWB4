@@ -52,15 +52,53 @@ public class SentimentalDataClassifier {
 
     private void getPostData()
     {
+        //En este momento de los 3 tipos (MessageIn,PhotoIn y VideoIn) se obtiene la misma información, sin embargo, seguramente no va ha
+        //quedar así, por eso se esta separando desde ahorita.
         if (post instanceof MessageIn) {
             MessageIn messageIn = (MessageIn) post;
-            postData = messageIn.getMsg_Text();
+            if(messageIn.getMsg_Text()!=null && !messageIn.getMsg_Text().isEmpty())
+            {
+                postData = messageIn.getMsg_Text();
+            }
+            //Ver mas adelante si realmente se requiere para la clasificación revisar los tags, muy posiblemente no sea así
+            if(messageIn.getTags()!=null && !messageIn.getTags().isEmpty())
+            {
+                if(postData==null)
+                {
+                    postData="";
+                }
+                postData = messageIn.getTags();
+            }
         } else if (post instanceof PhotoIn) {
-            //PhotoIn photoIn = (PhotoIn) post;
-            postData = post.getTitle() + post.getDescription();
+            PhotoIn photoIn = (PhotoIn) post;
+            if(photoIn.getMsg_Text()!=null && !photoIn.getMsg_Text().isEmpty())
+            {
+                postData = photoIn.getMsg_Text();
+            }
+            //Ver mas adelante si realmente se requiere para la clasificación revisar los tags, muy posiblemente no sea así
+            if(photoIn.getTags()!=null && !photoIn.getTags().isEmpty())
+            {
+                if(postData==null)
+                {
+                    postData="";
+                }
+                postData = photoIn.getTags();
+            }
         } else if (post instanceof VideoIn) {
-            //VideoIn videoIn = (VideoIn) post;
-            postData = post.getTitle() + post.getDescription();
+            VideoIn videoIn = (VideoIn) post;
+            if(videoIn.getMsg_Text()!=null && !videoIn.getMsg_Text().isEmpty())
+            {
+                postData = videoIn.getMsg_Text();
+            }
+            //Ver mas adelante si realmente se requiere para la clasificación revisar los tags, muy posiblemente no sea así
+            if(videoIn.getTags()!=null && !videoIn.getTags().isEmpty())
+            {
+                if(postData==null)
+                {
+                    postData="";
+                }
+                postData = videoIn.getTags();
+            }
         }
     }
 

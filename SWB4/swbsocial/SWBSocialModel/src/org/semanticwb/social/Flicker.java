@@ -19,6 +19,7 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.io.SWBFile;
+import org.semanticwb.model.SWBModel;
 import org.semanticwb.model.User;
 import org.semanticwb.model.WebPage;
 import org.semanticwb.platform.SemanticObject;
@@ -48,6 +49,7 @@ public class Flicker extends org.semanticwb.social.base.FlickerBase
         super(base);
     }
 
+    
     //@Override
     public void postPhoto(Photo photo, HttpServletRequest request, SWBActionResponse response) {
         String action = response.getAction();

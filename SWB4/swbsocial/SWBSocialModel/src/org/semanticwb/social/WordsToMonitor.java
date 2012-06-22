@@ -31,13 +31,16 @@ public class WordsToMonitor extends org.semanticwb.social.base.WordsToMonitorBas
                     {
                         //System.out.println("actionJG:"+action);
                         WordsToMonitor words2Monitor = (WordsToMonitor) obj.createGenericInstance();
+                        System.out.println("Model a Monitorear:"+words2Monitor.getSemanticObject().getModel().getName());
                         WebSite wsite=WebSite.ClassMgr.getWebSite(words2Monitor.getSemanticObject().getModel().getName());
                         Iterator<SocialNetwork> itSocialNetWorks=SocialNetwork.ClassMgr.listSocialNetworks(wsite);
                         while(itSocialNetWorks.hasNext())
                         {
                             SocialNetwork socialNet=itSocialNetWorks.next();
+                            System.out.println("socialNet a Monitorear:"+socialNet);
                             if(socialNet instanceof KeepAliveListenerable)
                             {
+                                System.out.println("socialNet a Monitorear KeepAlive:"+socialNet);
                                 KeepAliveListenerable keepAliveListenerable=(KeepAliveListenerable)socialNet;
                                 if(keepAliveListenerable.isIsKeepingConnection()) //Tiene la propiedad de mantener la conexión en true, por lo tanto no enviar a timer
                                 {

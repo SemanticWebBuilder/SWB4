@@ -124,7 +124,7 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
 
             //Palabras a monitorear
             String words2Monitor=SWBSocialUtil.words2Monitor.getWords2Monitor(",", model);
-            System.out.println("words2MonitorGeorge:"+words2Monitor);
+            System.out.println("words2MonitorGeorge:"+words2Monitor+", en cta:"+this);
             if(words2Monitor!=null && words2Monitor.trim().length()>0)
             {
                 String[] tr = {words2Monitor};
