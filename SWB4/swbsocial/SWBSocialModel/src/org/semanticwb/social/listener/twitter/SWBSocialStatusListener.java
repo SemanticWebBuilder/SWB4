@@ -62,7 +62,7 @@ public class SWBSocialStatusListener implements twitter4j.StatusListener {
             //if(place!=null && place.getCountryCode().equals("MX")) //&& place.getName().equals("Cuernavaca"))
             {
 
-                System.out.println();
+                System.out.println("CUENTA EN SWBSocialStatusListener:"+socialNetwork);
                 System.out.println(status.getUser().getName() + " : " + status.getText() + " : " + status.getGeoLocation());
                 System.out.println(status.getCreatedAt());
                

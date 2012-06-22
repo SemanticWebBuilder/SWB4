@@ -35,8 +35,9 @@ public class Listener implements SWBAppObject {
         while(itWebSites.hasNext())
         {
             WebSite wsite=itWebSites.next();
-            if(wsite instanceof SocialSite)
+            if(wsite.isActive() && wsite instanceof SocialSite)
             {
+                System.out.println("wsite a monitorear en Listener:"+wsite);
                 Iterator<SocialNetwork> itSocialNetWorks=SocialNetwork.ClassMgr.listSocialNetworks(wsite);
                 while(itSocialNetWorks.hasNext())
                 {
@@ -50,6 +51,7 @@ public class Listener implements SWBAppObject {
                         if(keepAliveListenerable.isIsKeepingConnection()) //Tiene la propiedad de mantener la conexión en true, por lo tanto no enviar a timer
                         {
                             //System.out.println("ES KEPING ALIVE:"+socialNet.getId()+", title:"+socialNet.getTitle());
+                            System.out.println("wsite a monitorear en Listener alive:"+wsite+", cuenta:"+socialNet);
                             keepAliveListenerable.listenAlive(wsite);
                         }else { //La red soporta una conexión abierta, tipo twitter con Streaming Api, pero no desean que se maneje así, quieren que sea por petición
                             //System.out.println("ES KEPING ALIVE *pero no se quiere así*:"+socialNet.getId()+", title:"+socialNet.getTitle());
