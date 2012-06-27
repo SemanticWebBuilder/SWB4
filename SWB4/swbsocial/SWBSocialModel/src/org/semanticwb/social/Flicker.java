@@ -6,6 +6,9 @@ import com.flickr4java.flickr.REST;
 import com.flickr4java.flickr.RequestContext;
 import com.flickr4java.flickr.auth.Auth;
 import com.flickr4java.flickr.auth.Permission;
+import com.flickr4java.flickr.photos.PhotoList;
+import com.flickr4java.flickr.photos.PhotosInterface;
+import com.flickr4java.flickr.photos.SearchParameters;
 import com.flickr4java.flickr.uploader.UploadMetaData;
 import com.flickr4java.flickr.uploader.Uploader;
 import com.flickr4java.flickr.util.IOUtilities;
@@ -13,6 +16,8 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import org.semanticwb.Logger;
@@ -24,12 +29,14 @@ import org.semanticwb.model.User;
 import org.semanticwb.model.WebPage;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.portal.api.SWBActionResponse;
+import org.semanticwb.social.listener.Classifier;
 
 
 public class Flicker extends org.semanticwb.social.base.FlickerBase 
 {
     Logger log = SWBUtils.getLogger(Flicker.class);
     SWBFlickrOauth oauthConnection = new SWBFlickrOauth();
+    public static final String UPLOAD_Photo = "upld";
 
     // Utilizado para loguearse con OAuth
     public String getCredentials(String uri, WebPage wp, String scheme) throws IOException{
@@ -50,14 +57,14 @@ public class Flicker extends org.semanticwb.social.base.FlickerBase
     }
 
     
-    //@Override
-    public void postPhoto(Photo photo, HttpServletRequest request, SWBActionResponse response) {
+    @Override
+    public void postPhoto(org.semanticwb.social.Photo photo, HttpServletRequest request, SWBActionResponse response) {
         String action = response.getAction();
         Flickr flickr = null;
         User user = response.getUser();
 
-        if(action.equals("uploadPhoto") && photo != null && photo.getPhoto() != null) {
-           String photoSend = SWBPortal.getWorkPath() + photo.getWorkPath() + "/" + Photo.social_photo.getName() +
+        if(UPLOAD_Photo.equals(action) && photo != null && photo.getPhoto() != null) {
+           String photoSend = SWBPortal.getWorkPath() + photo.getWorkPath() + "/" + org.semanticwb.social.Photo.social_photo.getName() +
                      "_" + photo.getId() + "_" + photo.getPhoto();
 
            String oauth_token = this.getAccessToken();//flicker.getProperty("oauth_token");
@@ -106,5 +113,62 @@ public class Flicker extends org.semanticwb.social.base.FlickerBase
                }
            }
        }
+    }
+
+    @Override
+    public void listen(SWBModel model) {
+        final String key="48a5f73b83d8c736dc2c752fe7c1958d";//flicker.getAppKey()
+        final String shared = "3120b55a3337460c";//flicker.getSecretKey()
+        final String svr="www.flickr.com";
+        REST rest=new REST();
+        rest.setHost(svr);
+
+        Flickr flickr=new Flickr(key,shared,rest);
+        Flickr.debugStream=false;
+
+        SearchParameters searchParams=new SearchParameters();
+        searchParams.setSort(SearchParameters.INTERESTINGNESS_DESC);
+        
+        Iterator<WordsToMonitor> words = WordsToMonitor.ClassMgr.listWordsToMonitors(model);
+        if(words.hasNext()) {
+            StringBuilder tagLst = new StringBuilder();
+            while(words.hasNext()) {
+                WordsToMonitor word = words.next();
+                tagLst.append(word.getCompany());tagLst.append(";");
+                tagLst.append(word.getCompetition());tagLst.append(";");
+                tagLst.append(word.getProductsAndServices());tagLst.append(";");
+                tagLst.append(word.getOtherWords());tagLst.append(";");
+            }
+            searchParams.setTagMode("any");
+            searchParams.setTags(tagLst.toString().split(";"));
+            searchParams.setText(tagLst.toString());
+        }
+
+
+        PhotosInterface photosInterface=flickr.getPhotosInterface();
+        PhotoList photoList=null;
+        try {
+            photoList=photosInterface.search(searchParams,20,1);
+        }catch(Exception e) {
+            e.printStackTrace(System.out);
+        }
+        if(photoList!=null) {
+            com.flickr4java.flickr.photos.Photo photo;
+            org.semanticwb.social.PhotoIn photoIn;
+            StringBuilder strBuf=new StringBuilder();
+            for(int i=0;i<photoList.size();i++) {
+                photo=(com.flickr4java.flickr.photos.Photo)photoList.get(i);
+                photoIn = PhotoIn.ClassMgr.createPhotoIn(photo.getId(), model);
+                photoIn.setMsg_Text(photo.getTitle());
+                photoIn.setTags(Arrays.toString(searchParams.getTags()));
+                photoIn.setPostInSocialNetwork(this);
+                //photoIn.setPostInSocialNetworkUser(photo.getOwner());
+                //              strBuf.append("<a href=\"\">");
+                //              strBuf.append("<img border=\"0\" src=\""+photo.getSmallSquareUrl()+"\" />");
+                //              strBuf.append("</a>\n");
+                new Classifier(photoIn);
+            }
+//           System.out.println(strBuf.toString());
+        }
     }
 }
