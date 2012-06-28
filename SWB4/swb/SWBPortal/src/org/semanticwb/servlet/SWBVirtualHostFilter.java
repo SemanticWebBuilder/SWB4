@@ -26,6 +26,7 @@ package org.semanticwb.servlet;
 //import com.infotec.wb.core.WBVirtualHostMgr;
 import java.io.*;
 import java.util.HashMap;
+import java.util.StringTokenizer;
 import javax.servlet.http.*;
 
 import javax.servlet.Filter;
@@ -77,7 +78,6 @@ import org.semanticwb.servlet.internal.Work;
  */
 public class SWBVirtualHostFilter implements Filter
 {
-
     /** The log. */
     static Logger log = SWBUtils.getLogger(SWBVirtualHostFilter.class);
     
@@ -102,6 +102,8 @@ public class SWBVirtualHostFilter implements Filter
     
     /** The fist call. */
     private boolean fistCall = true;
+    
+    private HashMap<String,String> depurls = null;
 
     /**
      * Do filter.
@@ -244,8 +246,17 @@ public class SWBVirtualHostFilter implements Filter
 
             //Friendly URLs
             if((serv==null || iserv.equals("wb")) && !isjsp)
-            {
-                FriendlyURL url=FriendlyURL.getFriendlyURL(path, host);
+            {   
+                if(depurls!=null)
+                {
+                    String redpath=depurls.get(path);
+                    if(redpath!=null)
+                    {
+                        _response.sendRedirect(redpath);
+                        return;
+                    }                              
+                }
+                FriendlyURL url=FriendlyURL.getFriendlyURL(path, host);                
                 if(url!=null)
                 {
                     if(!url.isOldURL())
@@ -518,6 +529,42 @@ public class SWBVirtualHostFilter implements Filter
             InternalServlet p3p = new P3PFile();
             intServlets.put("w3c", p3p);
             p3p.init(filterConfig.getServletContext());
+
+            File file = new File(SWBUtils.getApplicationPath() + "/WEB-INF/depurls.txt");
+            if (file.exists())
+            {
+                depurls = new HashMap();
+                log.event("Loading Deprecated Urls...");
+                try
+                {
+                    FileInputStream in = new FileInputStream(file);
+                    DataInputStream din = new DataInputStream(in);
+                    String line = null;
+                    while ((line = din.readLine()) != null)
+                    {
+                        line=line.trim();
+                        if(line.length()>0)
+                        {
+                            StringTokenizer st = new StringTokenizer(line, "|,\t");
+                            while (st.hasMoreTokens())
+                            {
+                                String tk1 = st.nextToken().trim();
+                                String tk2 = st.nextToken().trim();
+                                if(!tk1.equals(tk2))
+                                {
+                                    depurls.put(tk1, tk2);
+                                }
+                            }
+                        }
+                    }
+                    din.close();
+                    in.close();
+                } catch (Exception e)
+                {
+                    depurls = null;
+                    log.error("Error loading Deprecated Urls...", e);
+                }
+            }
 
             log.event("SemanticWebBuilder started...");
             log.event("************************************");
