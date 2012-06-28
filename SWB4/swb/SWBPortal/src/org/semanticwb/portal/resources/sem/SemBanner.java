@@ -45,7 +45,12 @@ public class SemBanner extends org.semanticwb.portal.resources.sem.base.SemBanne
                 String longdesc = banner.getBanrLongDescr();
                 String url = banner.getBanrExternalUrl();
                 if(url == null) {
-                    url = banner.getBanrInternalUrl();
+                    if(banner.getBanrInternalUrl() != null) {
+                        WebPage wpInternalUrl = paramRequest.getWebPage().getWebSite().getWebPage(banner.getBanrInternalUrl());
+                        if(wpInternalUrl != null && !wpInternalUrl.isDeleted() && !wpInternalUrl.isHidden()) {
+                            url = wpInternalUrl.getUrl(lang) == null ? (wpInternalUrl.getUrl() == null ? "" : wpInternalUrl.getUrl()) : wpInternalUrl.getUrl(lang);
+                        }
+                    }
                 }
 
                 String width = "";

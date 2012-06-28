@@ -158,8 +158,9 @@ public class SemPromo extends org.semanticwb.portal.resources.sem.base.SemPromoB
         String internalLink = null;
         if (promo.getPromInternalUrl() != null) {
             WebPage wp = paramRequest.getWebPage().getWebSite().getWebPage(promo.getPromInternalUrl());
-            if (wp != null) {
-                internalLink = wp.getUrl(paramRequest.getUser().getLanguage());
+            if (wp != null && !wp.isDeleted() && !wp.isHidden()) {
+                String lang = paramRequest.getUser().getLanguage();
+                internalLink = wp.getUrl(lang) == null ? (wp.getUrl() == null ? "" : wp.getUrl()) : wp.getUrl(lang);
             }
         }
         String link = promo.getPromLink() == null ? (internalLink == null ? "" : internalLink) : promo.getPromLink();
@@ -236,10 +237,12 @@ public class SemPromo extends org.semanticwb.portal.resources.sem.base.SemPromoB
         String internalLink = null;
         if (promo.getPromInternalUrl() != null) {
             WebPage wp = paramRequest.getWebPage().getWebSite().getWebPage(promo.getPromInternalUrl());
-            if (wp != null) {
-                internalLink = wp.getUrl(paramRequest.getUser().getLanguage());
+            if (wp != null && !wp.isDeleted() && !wp.isHidden()) {
+                String lang = paramRequest.getUser().getLanguage();
+                internalLink = wp.getUrl(lang) == null ? (wp.getUrl() == null ? "" : wp.getUrl()) : wp.getUrl(lang);
             }
         }
+
         String url = promo.getPromLink() == null ? (internalLink == null ? "" : internalLink) : promo.getPromLink();
         String uline = promo.isPromUnderlineLink() ? "1" : "0";
         boolean target = promo.isPromOpenNewWindow();
@@ -514,8 +517,9 @@ public class SemPromo extends org.semanticwb.portal.resources.sem.base.SemPromoB
         String internalLink = null;
         if (promo.getPromInternalUrl() != null) {
             WebPage wp = paramRequest.getWebPage().getWebSite().getWebPage(promo.getPromInternalUrl());
-            if (wp != null) {
-                internalLink = wp.getUrl(paramRequest.getUser().getLanguage());
+            if (wp != null && !wp.isDeleted() && !wp.isHidden()) {
+                String lang = paramRequest.getUser().getLanguage();
+                internalLink = wp.getUrl(lang) == null ? (wp.getUrl() == null ? "" : wp.getUrl()) : wp.getUrl(lang);
             }
         }
         String url = promo.getPromLink() == null ? (internalLink == null ? "" : internalLink) : promo.getPromLink();
