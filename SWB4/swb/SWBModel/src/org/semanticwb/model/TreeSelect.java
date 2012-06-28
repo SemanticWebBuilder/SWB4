@@ -56,8 +56,16 @@ public class TreeSelect extends org.semanticwb.model.base.TreeSelectBase
         if(li != null && li.length() > 0) {
             ret.append("<input type=\"checkbox\" name=\"deletePages" + "_" + obj.getShortURI() + "_" + propName + "\" value=\"deletePages\">Deseleccionar p&aacute;gina web");
             lip = site.getWebPage(li);
-            ret.append("<br><span style=\"font-style:italic; font-weight:bold; padding-top:7px; padding-left: 20px; padding-bottom: 7px; padding-right: 20px; color:#336699;\">" + lip.getDisplayName() + "</span>");
-            ret.append("<a href=\"javascript:getHtml('" + url + "?site=" + home.getWebSiteId() + "&reptp=" + home.getId() + params + "&dataProp=" + dataProp + "&li=" + li + "&lang=" + lang + "&edit=true','tree_'+'" + site.getId() + "_" + obj.getShortURI() + "_" + propName + "')\">Mostrar en el &aacute;rbol</a>");
+            if(lip != null) {
+                ret.append("<br><span style=\"font-style:italic; font-weight:bold; padding-top:7px; padding-left: 20px; padding-bottom: 7px; padding-right: 20px; color:#336699;\">" + lip.getDisplayName() + "</span>");
+                ret.append("<a href=\"javascript:getHtml('" + url + "?site=" + home.getWebSiteId() + "&reptp=" + home.getId() + params + "&dataProp=" + dataProp + "&li=" + li + "&lang=" + lang + "&edit=true','tree_'+'" + site.getId() + "_" + obj.getShortURI() + "_" + propName + "')\">Mostrar en el &aacute;rbol</a>");
+                if(lip.isDeleted()) {
+                    ret.append("<span style=\"font-style:italic; font-weight:bold; padding-top:7px; padding-left: 20px; padding-bottom: 5px; padding-right: 20px; color:#FF0000;\">(En papelera de reciclaje, recup&eacute;rala o selecciona otra)</span>");
+                }
+            } else {
+                //Si la página web almacenada se eliminó del sitio, la propiedad almacenada se eliminará.
+                obj.removeProperty(prop);
+            }
         }
 
         ret.append("<div id=\"slave\">");
