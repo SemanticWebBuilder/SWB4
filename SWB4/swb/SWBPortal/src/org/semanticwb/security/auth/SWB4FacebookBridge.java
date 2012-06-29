@@ -137,8 +137,11 @@ public class SWB4FacebookBridge extends ExtUserRepInt
 //        System.out.println("****************************************");
 
         FBUserPojo pojo=null;
+        String lcred = null;
+        if (credential instanceof char[]) lcred= new String((char[])credential);
+        else lcred = (String)credential;
         try {
-            pojo=authenticateFB((String)credential);
+            pojo=authenticateFB(lcred);
         } catch (Exception noe) {}
         return null!=pojo;
     }
