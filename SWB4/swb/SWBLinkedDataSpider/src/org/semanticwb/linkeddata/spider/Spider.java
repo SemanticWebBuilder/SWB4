@@ -105,7 +105,8 @@ public class Spider implements Runnable
             }
             else if (docInfo.contentType.equalsIgnoreCase("text/html"))
             {
-                if (docInfo.content.contains("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML+RDFa"))
+
+                if (docInfo.content.contains("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML+RDFa") || docInfo.content.contains("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN"))
                 {
 
                     try
@@ -134,18 +135,17 @@ public class Spider implements Runnable
                 }
                 else
                 {
-                    fireError(new SpiderException("The document is notsupportes "+docInfo.content, this));
+                    fireError(new SpiderException("The document is not supported " + docInfo.content, this));
                 }
 
             }
-            else if(docInfo.content.contains("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\""))
+            else if (docInfo.content.contains("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\""))
             {
-                
             }
             else
             {
                 //System.out.println("docInfo.contentType: " + docInfo.contentType + " url: " + url);
-                fireError(new SpiderException("Format no supportes "+docInfo.contentType, this));
+                fireError(new SpiderException("Format no supportes " + docInfo.contentType, this));
             }
         }
         fireOnEnd(url);
@@ -438,7 +438,7 @@ public class Spider implements Runnable
 //    }
     public synchronized void onTriple(URI suj, URI pred, String obj, Spider source, String lang)
     {
-        
+
         SpiderManager.loadPredicates(pred);
         Set<TripleElement> elements = SpiderManager.predicates.get(pred);
         StringBuilder sb = new StringBuilder();
@@ -538,7 +538,7 @@ public class Spider implements Runnable
 
     public void fireEventnewTriple(final URI suj, final URI pred, final String obj, final Spider spider, final String lang)
     {
-        
+
         if (domain != null)
         {
             domain.fireEventnewTriple(suj, pred, obj, spider, lang);
@@ -549,7 +549,7 @@ public class Spider implements Runnable
 
     public void fireEventnewTriple(final URI suj, final URI pred, final URI obj, final Spider spider, final String lang)
     {
-        if(pred.toString().equals("http://dbpedia.org/ontology/background"))
+        if (pred.toString().equals("http://dbpedia.org/ontology/background"))
         {
             System.out.println("a");
         }
@@ -585,12 +585,12 @@ public class Spider implements Runnable
 
     public void fireVisit(final URI suj)
     {
-        boolean fireVisit=true;
+        boolean fireVisit = true;
         if (domain != null)
         {
-            fireVisit=domain.fireVisit(suj);
+            fireVisit = domain.fireVisit(suj);
         }
-        if(fireVisit)
+        if (fireVisit)
         {
             SpiderManager.createSpider(url, this);
         }
