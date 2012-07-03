@@ -111,6 +111,8 @@ public class SpiderManager
         }
     }
 
+
+
     public static void addPredicate(TripleElement element)
     {
         predicates.add(element);

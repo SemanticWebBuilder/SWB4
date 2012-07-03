@@ -95,7 +95,10 @@ public class RDFAAnalizer
         try
         {
             int tt_type = tok.nextToken();
-            return tok.getStringValue().toString();
+            if(tt_type==tok.TT_TEXT)
+                return tok.getStringValue().toString();
+            else
+                return "";
         }
         catch (Exception e)
         {
