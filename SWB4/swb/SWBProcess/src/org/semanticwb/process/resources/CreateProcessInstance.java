@@ -28,51 +28,83 @@ package org.semanticwb.process.resources;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.lang.String;
+import java.util.Iterator;
+import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.semanticwb.model.User;
-import org.semanticwb.model.WebPage;
-import org.semanticwb.portal.api.GenericResource;
-import org.semanticwb.portal.api.SWBActionResponse;
-import org.semanticwb.portal.api.SWBParamRequest;
-import org.semanticwb.portal.api.SWBResourceException;
-import org.semanticwb.portal.api.SWBResourceURL;
+import org.semanticwb.model.*;
+import org.semanticwb.portal.api.*;
+import org.semanticwb.process.model.Process;
+import org.semanticwb.process.model.ProcessInstance;
 import org.semanticwb.process.model.SWBProcessMgr;
+import org.semanticwb.process.model.WrapperProcessWebPage;
 
 /**
  *
  * @author juan.fernandez
  */
-public class CreateProcessInstance extends GenericResource{
+public class CreateProcessInstance extends GenericResource {
 
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
         PrintWriter out = response.getWriter();
         SWBResourceURL url =  paramRequest.getActionUrl();
-        url.setParameter("act", "cpi");
-        out.println("<a href=\""+url.toString()+"\">"+paramRequest.getLocaleString("lblCreateInstance")+"</a>");
+        Process process = null;
+        String label = paramRequest.getLocaleString("lblCreateInstance");
+        String pid = "";
+        
+        if (paramRequest.getArguments().containsKey("label")) {
+            label = (String)paramRequest.getArguments().get("label");
+        }
+        if (paramRequest.getArguments().containsKey("process")) {
+            pid = (String)paramRequest.getArguments().get("process");
+        }
+        
+        if (paramRequest.getWebPage() instanceof WrapperProcessWebPage) {
+            process = ((WrapperProcessWebPage)paramRequest.getWebPage()).getProcess();
+        } else if (!pid.trim().equals("")) {
+            process = Process.ClassMgr.getProcess(pid, paramRequest.getWebPage().getWebSite());
+        }
+        
+        if (process != null) {
+            url.setParameter("prid", process.getId());
+            url.setAction("CREATE");
+            out.println("<a href=\""+url.toString()+"\">"+label+"</a>");
+        }
     }
 
     @Override
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
-
         WebPage wp = response.getWebPage();
         User user=response.getUser();
-        org.semanticwb.process.model.Process process=SWBProcessMgr.getProcess(wp);
-        if(process!=null)
-        {
-            String act=request.getParameter("act");
-            if(act!=null)
-            {
-                if(act.equals("cpi"))
+        String act = response.getAction();
+        ProcessInstance inst = null;
+        
+        if (act.equals("CREATE")) {
+            String pid = request.getParameter("prid");
+            Process process = Process.ClassMgr.getProcess(pid, wp.getWebSite());
+            
+            if(process!=null) inst = SWBProcessMgr.createProcessInstance(process, user);
+            
+            String url=process.getProcessWebPage().getUrl();
+            ResourceType rtype=ResourceType.ClassMgr.getResourceType("ProcessTaskInbox", wp.getWebSite());
+
+            if (rtype != null) {
+                Resource res=rtype.getResource();
+                if(res!=null)
                 {
-                    SWBProcessMgr.createProcessInstance(process, user);
+                    Resourceable resable=res.getResourceable();
+                    if(resable instanceof WebPage)
+                    {
+                        url=((WebPage)resable).getUrl();
+                    }
                 }
             }
+            if (inst != null) {
+                request.getSession(true).setAttribute("msg", "OK"+inst.getId());
+            }
+            response.sendRedirect(url);
         }
     }
-
-
 }
