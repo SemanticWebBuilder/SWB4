@@ -35,9 +35,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.model.*;
 import org.semanticwb.portal.api.*;
 import org.semanticwb.process.model.Process;
-import org.semanticwb.process.model.ProcessInstance;
-import org.semanticwb.process.model.SWBProcessMgr;
-import org.semanticwb.process.model.WrapperProcessWebPage;
+import org.semanticwb.process.model.*;
 
 /**
  *
@@ -53,6 +51,7 @@ public class CreateProcessInstance extends GenericResource {
         Process process = null;
         String label = paramRequest.getLocaleString("lblCreateInstance");
         String pid = "";
+        User user = paramRequest.getUser();
         
         if (paramRequest.getArguments().containsKey("label")) {
             label = (String)paramRequest.getArguments().get("label");
@@ -68,9 +67,20 @@ public class CreateProcessInstance extends GenericResource {
         }
         
         if (process != null) {
-            url.setParameter("prid", process.getId());
-            url.setAction("CREATE");
-            out.println("<a href=\""+url.toString()+"\">"+label+"</a>");
+            boolean canStart = false;
+            Iterator<StartEvent> startEvents = StartEvent.ClassMgr.listStartEventByContainer(process);
+            while(startEvents.hasNext()) {
+                StartEvent sevt = startEvents.next();
+                if (user.haveAccess(sevt) && process.isValid()) {
+                    canStart = true;
+                }
+            }
+            
+            if (canStart) {
+                url.setParameter("prid", process.getId());
+                url.setAction("CREATE");
+                out.println("<a href=\""+url.toString()+"\">"+label+"</a>");
+            }
         }
     }
 
