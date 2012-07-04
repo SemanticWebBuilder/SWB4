@@ -39,7 +39,7 @@ public class ProcessInstance extends org.semanticwb.process.model.base.ProcessIn
     }
 
     /**
-     * Se ejecuta cada que se crea la intancia del objeto de flujo
+     * Se ejecuta cada que se crea la intancia del objeto de flujo desde un evento de inicio normal
      * @param user
      */
     @Override
@@ -64,7 +64,7 @@ public class ProcessInstance extends org.semanticwb.process.model.base.ProcessIn
     }
 
     /**
-     * Se ejecuta cada que se crea la intancia del objeto de flujo
+     * Se ejecuta cada que se crea la intancia del objeto de flujo desde el processObserver
      * @param user
      */
     public void start(User user, StartEventNode event)
