@@ -32,7 +32,6 @@ import java.util.Iterator;
 import java.util.List;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
-import org.semanticwb.model.Dns;
 import org.semanticwb.model.SWBClass;
 import org.semanticwb.model.SWBModel;
 import org.semanticwb.platform.SemanticClass;
@@ -40,10 +39,15 @@ import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticObserver;
 import org.semanticwb.platform.SemanticProperty;
 
+/**
+ * Clase que encapsula las propiedades y funciones de un proceso.
+ * @author Javier Solis
+ */
 public class Process extends org.semanticwb.process.model.base.ProcessBase 
 {
     private static Logger log=SWBUtils.getLogger(SWBPClassMgr.class);
     
+    //Bloque estático para registrar un observador cuando se modifica la propiedad parentWebPage
     static 
     {
         swp_parentWebPage.registerObserver(new SemanticObserver() 
@@ -68,7 +72,10 @@ public class Process extends org.semanticwb.process.model.base.ProcessBase
         });
     }
     
-    
+    /**
+     * Constructor.
+     * @param base 
+     */
     public Process(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
@@ -77,10 +84,8 @@ public class Process extends org.semanticwb.process.model.base.ProcessBase
     }
 
     /**
-     * Crea una instancia del Proceso
-     * @param fobj
-     * @param pinst
-     * @return
+     * Crea una instancia del proceso.
+     * @return 
      */
     public ProcessInstance createInstance()
     {
@@ -90,6 +95,7 @@ public class Process extends org.semanticwb.process.model.base.ProcessBase
         inst.setProcessType(this);
         inst.setStatus(Instance.STATUS_INIT);
 
+        //Se crean las instancias de los objetos de datos y se referencían con el proceso.
         Iterator<ItemAware> it=listRelatedItemAware().iterator();
         while (it.hasNext())
         {
@@ -99,19 +105,19 @@ public class Process extends org.semanticwb.process.model.base.ProcessBase
             SWBModel model=this.getProcessSite();
             String id=null;
             String code=null;
-            if(item instanceof Collectionable)
+            if(item instanceof Collectionable) //Es un dato temporal
             {
                 model=this.getProcessSite().getProcessDataInstanceModel();
-            }else
+            }else //Es un dato persistente
             {
                 id=((DataStore)item).getDataObjectId();
                 code=((DataStore)item).getInitializationCode();
             }
 
-            if(scls!=null)
+            if(scls!=null)//El elemento fué configurado
             {
                 SemanticObject ins=null;
-                if(code!=null)
+                if(code!=null) //Ejecutar código de inicialización de la instancia
                 {
                     Object ret=null;
                     try
@@ -126,41 +132,46 @@ public class Process extends org.semanticwb.process.model.base.ProcessBase
                         log.error(e);
                     }
                     //String action=source.getAction();
-                    if(ret!=null && ret instanceof SemanticObject && ((SemanticObject)ret).instanceOf(scls))
+                    if(ret!=null && ret instanceof SemanticObject && ((SemanticObject)ret).instanceOf(scls)) //El código se ejecutó bien y devolvió un objeto
                     {
                         ins=((SemanticObject)ret);
                     }
 
-                    if(ret!=null && ret instanceof SWBClass && ((SWBClass)ret).getSemanticObject().instanceOf(scls))
+                    if(ret!=null && ret instanceof SWBClass && ((SWBClass)ret).getSemanticObject().instanceOf(scls)) //El código se ejecutó bien y devolvió una clase semántica
                     {
                         ins=((SWBClass)ret).getSemanticObject();
                     }
                 }
-                if(ins==null)
-                {                
-                    if(id==null)
+                if(ins==null) //No se creó objeto a partir del código de inicialización
+                {
+                    if(id==null) //No se especificó Id de objeto a recuperar, se crea uno nuevo id
                     {
                         id=String.valueOf(model.getSemanticModel().getCounter(scls));
-                    }else
+                    }else //Se especificó Id de objeto a recuperar, se recupera
                     {
                         ins=SemanticObject.createSemanticObject(model.getSemanticModel().getObjectUri(id, scls));
                     }
-                    if(ins==null)
+                    if(ins==null) //No se recuperó ningún objeto
                     {
-                        Iterator auxit=ItemAwareMapping.ClassMgr.listItemAwareMappingByLocalItemAware(item, item.getProcessSite());
-                        if(!auxit.hasNext())
-                        {
+                        //Verificar mapeos de eventos iniciales de mensaje
+                        //Iterator auxit=ItemAwareMapping.ClassMgr.listItemAwareMappingByLocalItemAware(item, item.getProcessSite());
+                        //if(!auxit.hasNext()) //No hay mapeos, crear nueva instancia
+                        //{
+                            //System.out.println("No hay mapeos");
                             ins=model.getSemanticModel().createSemanticObjectById(id, scls);
-                        }
+                        //} else {
+                            //Recorrer los mapeos
+                        //}
                     }
                 }
                 
-
+                //Crear referencia entre el proceso y la isntancia del objeto de datos
                 ItemAwareReference ref=ItemAwareReference.ClassMgr.createItemAwareReference(this.getProcessSite());
                 ref.setItemAware(item); 
                 if(ins!=null)
                 {
-                    ref.setProcessObject((SWBClass)ins.createGenericInstance());
+                    SWBClass c = (SWBClass)ins.createGenericInstance();
+                    ref.setProcessObject(c);
                 }
                 inst.addItemAwareReference(ref);
                 //System.out.println("addItemAwareReference:"+ref);
