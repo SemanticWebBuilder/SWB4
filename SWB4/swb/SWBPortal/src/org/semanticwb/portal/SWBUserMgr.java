@@ -301,6 +301,10 @@ public class SWBUserMgr
                         {
                             cont++;
                             auxuseragent = auxuseragent.substring(pos);
+                        }else
+                        {
+                            cont=0;
+                            break;
                         }
                     }
                     //System.out.println(dev+" cont:"+cont);
