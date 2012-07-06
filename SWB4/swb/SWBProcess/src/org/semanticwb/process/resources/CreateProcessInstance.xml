@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<admresource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <xslfile>admresource.xslt</xslfile>
+    <form name="frmAdmCreatePI" action="true" method="POST">
+        <admdbconnmgr defconn="true"/>
+        <fieldset legend="Configuración de enlace">
+            <input type="TEXT" name="processId" label="ID del proceso:"/>
+            <input type="TEXT" name="linkLabel" label="Etiqueta del enlace:"/>
+        </fieldset>
+        <fieldset legend="Configuración de lista">
+            <input type="CHECKBOX" name="asMenu" label="Mostrar como lista:" value="false"/>
+            <input type="CHECKBOX" name="showGroups" label="Mostrar grupos de procesos:" value="false"/>
+        </fieldset>
+        <fieldset>
+            <input type="SUBMIT" name="btnSave" value="Guardar"/>
+            <input type="RESET"  name="btnReset" id="btnReset" value="Restablecer" />
+        </fieldset>
+    </form>
+</admresource>
