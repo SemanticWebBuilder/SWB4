@@ -36,6 +36,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Properties;
 import java.util.StringTokenizer;
+import javax.servlet.http.HttpServletRequest;
+import org.omg.PortableServer.REQUEST_PROCESSING_POLICY_ID;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
@@ -155,19 +157,20 @@ public class ContentUtils {
      * @param position the position
      * @return the content by page
      */
-    private String getContentByPage(String content, int totPages, int npage, WebPage webpage, Resource base, String contentType, int snpages, String stxtant, String stxtsig, String stfont, int position) {
-        StringBuffer strb = new StringBuffer();
+    private String getContentByPage(HttpServletRequest request, String content, int totPages, int npage, WebPage webpage, Resource base, String contentType, int snpages, String stxtant, String stxtsig, String stfont, int position) {
+        StringBuilder strb = new StringBuilder();
         try {
 
-            StringBuffer strb1 = new StringBuffer();
+            StringBuilder strb1 = new StringBuilder();
 
             strb1.append("<table width=\"100%\" id=\"pagStyle\">");
             strb1.append("<tr>");
             strb1.append("<td align=\"center\">");
-            String path = webpage.getUrl() + "?";
+            //String path = webpage.getUrl() + "?";
+            String path = request.getRequestURI() + "?";
 
             if (npage > 1) {
-                strb1.append("<a href=\"" + path + "page=" + (npage - 1) + "\"><" + stfont + ">" + stxtant + "</font></a> ");
+                strb1.append("<a href=\"").append(path).append("page=").append(npage - 1).append("\"><").append(stfont).append(">").append(stxtant).append("</font></a> ");
             }
             int ini = 1;
             int fin = snpages;
@@ -225,7 +228,7 @@ public class ContentUtils {
         }
         return strb.toString();
     }
-    private String getContentByPage(String content, int totPages, int npage, WebPage webpage, Resource base, String contentType, int snpages, String stxtant, String stxtsig, String stfont, int position,String uri) {
+    private String getContentByPage(HttpServletRequest request,String content, int totPages, int npage, WebPage webpage, Resource base, String contentType, int snpages, String stxtant, String stxtsig, String stfont, int position,String uri) {
         {
             StringBuilder strb = new StringBuilder();
         try {
@@ -235,7 +238,8 @@ public class ContentUtils {
             strb1.append("<table width=\"100%\" id=\"pagStyle\">");
             strb1.append("<tr>");
             strb1.append("<td align=\"center\">");
-            String path = webpage.getUrl() + "?";
+            //String path = webpage.getUrl() + "?";
+            String path = request.getRequestURI() + "?";
 
             if (npage > 1) {
                 if(uri==null)
@@ -320,7 +324,7 @@ public class ContentUtils {
      * @param position the position
      * @return the string
      */
-    public String paginationMsWord(String htmlOut, WebPage page, String npage, Resource base, int snpages, String stxtant, String stxtsig, String stfont, int position) {
+    public String paginationMsWord(HttpServletRequest request,String htmlOut, WebPage page, String npage, Resource base, int snpages, String stxtant, String stxtsig, String stfont, int position) {
         int totPages = getMsContentPagesNumber(htmlOut);
         if (totPages > 1) {
             int ipage = 1;
@@ -329,7 +333,7 @@ public class ContentUtils {
             } else {
                 ipage = 1;
             }
-            htmlOut = getContentByPage(htmlOut, totPages, ipage, page, base, "MsWord", snpages, stxtant, stxtsig, stfont, position);
+            htmlOut = getContentByPage(request,htmlOut, totPages, ipage, page, base, "MsWord", snpages, stxtant, stxtsig, stfont, position);
         }
         return htmlOut;
     }
@@ -696,7 +700,7 @@ public class ContentUtils {
                  * @param position the position
                  * @return the string
                  */
-     public String paginationOpenOffice(String htmlOut, WebPage page, String npage, Resource base, int snpages, String stxtant, String stxtsig, String stfont, int position) {
+     public String paginationOpenOffice(HttpServletRequest request,String htmlOut, WebPage page, String npage, Resource base, int snpages, String stxtant, String stxtsig, String stfont, int position) {
         String toFind="<P STYLE=\"page-break-before: always\">";
         int totPages = getOpenOfficeContentPagesNumber(htmlOut, toFind);
         if (totPages > 1) {
@@ -711,7 +715,7 @@ public class ContentUtils {
 
                 htmlOut=htmlOut.substring(htmlOut.indexOf("<BODY"));
             }
-            htmlOut = headers+getContentByPage(htmlOut, totPages, ipage, page, base, "OpenOffice", snpages, stxtant, stxtsig, stfont, position);
+            htmlOut = headers+getContentByPage(request,htmlOut, totPages, ipage, page, base, "OpenOffice", snpages, stxtant, stxtsig, stfont, position);
         }
         return htmlOut;
     }
@@ -824,7 +828,7 @@ public class ContentUtils {
      * @param position the position
      * @return the string
      */
-    public String paginationHtmlContent(String htmlOut, WebPage page, String npage, Resource base, int snpages, String stxtant, String stxtsig, String stfont, int position) {
+    public String paginationHtmlContent(HttpServletRequest request,String htmlOut, WebPage page, String npage, Resource base, int snpages, String stxtant, String stxtsig, String stfont, int position) {
         int totPages = getHtmlContentPagesNumber(htmlOut);
         if (totPages > 1) {
             int ipage = 1;
@@ -833,12 +837,12 @@ public class ContentUtils {
             } else {
                 ipage = 1;
             }
-            htmlOut = getContentByPage(htmlOut, totPages, ipage, page, base, "HtmlContent", snpages, stxtant, stxtsig, stfont, position);
+            htmlOut = getContentByPage(request,htmlOut, totPages, ipage, page, base, "HtmlContent", snpages, stxtant, stxtsig, stfont, position);
         }
         return htmlOut;
     }
 
-    public String paginationHtmlContent(String htmlOut, WebPage page, String npage, Resource base, int snpages, String stxtant, String stxtsig, String stfont, int position,String uri) {
+    public String paginationHtmlContent(HttpServletRequest request,String htmlOut, WebPage page, String npage, Resource base, int snpages, String stxtant, String stxtsig, String stfont, int position,String uri) {
         int totPages = getHtmlContentPagesNumber(htmlOut);
         if (totPages > 1) {
             int ipage = 1;
@@ -847,7 +851,7 @@ public class ContentUtils {
             } else {
                 ipage = 1;
             }
-            htmlOut = getContentByPage(htmlOut, totPages, ipage, page, base, "HtmlContent", snpages, stxtant, stxtsig, stfont, position,uri);
+            htmlOut = getContentByPage(request,htmlOut, totPages, ipage, page, base, "HtmlContent", snpages, stxtant, stxtsig, stfont, position,uri);
         }
         return htmlOut;
     }
