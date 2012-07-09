@@ -373,7 +373,7 @@ public class HTMLContent extends org.semanticwb.portal.resources.sem.base.HTMLCo
                 fileContent = contentUtils.predefinedStyles(fileContent, resource, true); //Estilos predefinidos
                 //fileContent = contentUtils.predefinedStyles(fileContent, base, isTpred()); //Estilos predefinidos
                 if (paginated) {
-                    fileContent = contentUtils.paginationMsWord(fileContent, page, request.getParameter("page"), resource, snpages, stxtant, stxtsig, stfont, position);
+                    fileContent = contentUtils.paginationMsWord(request,fileContent, page, request.getParameter("page"), resource, snpages, stxtant, stxtsig, stfont, position);
                 }//Paginación
                 fileContent = cleanHTML(fileContent, deleteStyles);
             } else {
@@ -391,7 +391,7 @@ public class HTMLContent extends org.semanticwb.portal.resources.sem.base.HTMLCo
                     stxtsig = paramRequest.getLocaleString("txtsig");
                 }
                 if (paginated) {
-                    fileContent = new ContentUtils().paginationHtmlContent(fileContent, page, request.getParameter("page"), resource, snpages, stxtant, stxtsig, stfont, position,request.getParameter("uri"));
+                    fileContent = new ContentUtils().paginationHtmlContent(request,fileContent, page, request.getParameter("page"), resource, snpages, stxtant, stxtsig, stfont, position,request.getParameter("uri"));
                 }
                 //Termina Páginación
             }
