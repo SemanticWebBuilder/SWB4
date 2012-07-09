@@ -27,15 +27,24 @@
 package org.semanticwb.process.resources.tracer;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Iterator;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.*;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.model.User;
+import org.semanticwb.model.WebSite;
 import org.semanticwb.portal.api.*;
+import org.semanticwb.process.model.ProcessInstance;
+import org.semanticwb.process.model.Process;
+import org.semanticwb.process.model.WrapperProcessWebPage;
 
 public class ProcessTracer extends org.semanticwb.process.resources.tracer.base.ProcessTracerBase 
 {
     public static Logger log = SWBUtils.getLogger(ProcessTracer.class);
+    public static final int MODE_OVERVIEW = 1;
+    public static final int MODE_TRACKING = 2;
     
     public ProcessTracer() {}
 
@@ -52,6 +61,7 @@ public class ProcessTracer extends org.semanticwb.process.resources.tracer.base.
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
         String jsp = "/swbadmin/jsp/process/listProcessInstances.jsp";
+        
         if (getViewJSP() != null && !getViewJSP().trim().equals("")) {
             jsp = getViewJSP();
         }
@@ -60,9 +70,95 @@ public class ProcessTracer extends org.semanticwb.process.resources.tracer.base.
         try {
             request.setAttribute("paramRequest", paramRequest);
             request.setAttribute("statusWP", getDisplayMapPage());
+            request.setAttribute("instances", getProcessInstances(request, paramRequest));
+            request.setAttribute("itemsPerPage", getItemsPerPage());
+            request.setAttribute("viewMode", getViewMode());
             rd.include(request, response);
         } catch (Exception e) {
             log.error("ProcessTracer: Error including view JSP", e);
         }
+    }
+    
+    /**
+     * Obtiene las instancias de los procesos a desplegar.
+     * @param request
+     * @param paramRequest
+     * @return Lista con las instancias de procesos.
+     */
+    private ArrayList<ProcessInstance> getProcessInstances(HttpServletRequest request, SWBParamRequest paramRequest) {
+        ArrayList<ProcessInstance> _ret = new ArrayList<ProcessInstance>();
+        String piid = request.getParameter("prid");
+        WebSite site = paramRequest.getWebPage().getWebSite();
+        Process process = null;
+        User creator = null;
+        Iterator<ProcessInstance> it = null;
+        int itemsPerPage = getItemsPerPage();
+        int page = 1;
+        
+        if (request.getParameter("page") != null && !request.getParameter("page").trim().equals("")) {
+            page = Integer.valueOf(request.getParameter("page"));
+            if (page < 0) page = 1;
+        }
+        
+        if (itemsPerPage < 5) itemsPerPage = 5;
+        
+        if (getUserID() != null && getUserID().length() > 0) {
+            creator = User.ClassMgr.getUser(getUserID(), site);
+        }
+        
+        if (creator == null) {
+            creator = paramRequest.getUser();
+        }
+        
+        if (piid != null && piid.length() > 0) { // El proceso viene por parámetro
+            process = Process.ClassMgr.getProcess(piid, site);
+        }
+        
+        if (process == null && getProcessID() != null && getProcessID().length() > 0) { // El proceso fue configurado en la administración
+            process = Process.ClassMgr.getProcess(getProcessID(), site);
+        }
+        
+        if (process == null && paramRequest.getWebPage() instanceof WrapperProcessWebPage) { //El componente se encuentra en una página de proceso
+            process = ((WrapperProcessWebPage)paramRequest.getWebPage()).getProcess();
+        }
+
+        if (getViewMode() == MODE_OVERVIEW) { //Modo de listado general
+            if (isFilterByCreator()) {
+                it = ProcessInstance.ClassMgr.listProcessInstanceByCreator(creator, site);
+            } else {
+                it = ProcessInstance.ClassMgr.listProcessInstances(site);
+            }
+        } else if (process != null) { //Modo de seguimiento de procesos
+            it = ProcessInstance.ClassMgr.listProcessInstanceByProcessType(process);
+        }
+        
+        if (it != null) {
+            while (it.hasNext()) {
+                ProcessInstance processInstance = it.next();
+                _ret.add(processInstance);
+            }
+        }
+        
+        int maxPages = 1;
+        if (_ret.size() >= itemsPerPage) {
+            maxPages = (int)Math.ceil((double)_ret.size() / itemsPerPage);
+        }
+        if (page > maxPages) page = maxPages;
+
+        int sIndex = (page - 1) * itemsPerPage;
+        if (_ret.size() > itemsPerPage && sIndex > _ret.size() - 1) {
+            sIndex = _ret.size() - itemsPerPage;
+        }
+
+        int eIndex = sIndex + itemsPerPage;
+        if (eIndex >= _ret.size()) eIndex = _ret.size();
+
+        request.setAttribute("maxPages", maxPages);
+        ArrayList<ProcessInstance> ret = new ArrayList<ProcessInstance>();
+        for (int i = sIndex; i < eIndex; i++) {
+            ProcessInstance instance = _ret.get(i);
+            ret.add(instance);
+        }
+        return ret;
     }
 }
