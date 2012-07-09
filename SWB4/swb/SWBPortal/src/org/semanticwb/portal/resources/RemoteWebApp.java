@@ -295,7 +295,10 @@ public class RemoteWebApp extends GenericAdmResource
                 String contentType = res.getContentType();
                 //System.out.println(""+System.currentTimeMillis()+": "+"Content-Type:"+contentType);
                 //if (isDirect(direct, remoteURL) || contentType.toLowerCase().equals("text/xml") || contentType.toLowerCase().indexOf("text") == -1)
-                if (isDirect(direct, remoteURL) || contentType==null || contentType.toLowerCase().indexOf("text/html")<0)
+                boolean isHtml=false;
+                if(contentType!=null)
+                    isHtml=contentType.toLowerCase().indexOf("text/html")!=-1 || contentType.toLowerCase().indexOf("text/plain")!=-1;
+                if (isDirect(direct, remoteURL) || contentType==null || !isHtml )
                 {
                     if(contentType!=null && (contentType.toLowerCase().indexOf("text/css")>=0
                                              ||contentType.toLowerCase().indexOf("text/javascript")>=0))
