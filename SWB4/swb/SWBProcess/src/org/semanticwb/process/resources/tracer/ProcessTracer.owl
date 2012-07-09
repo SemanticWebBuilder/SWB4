@@ -35,6 +35,8 @@
       <swbxf:DisplayProperty rdf:ID="dp_filterByCreator">
         <swbxf:propGroup>
           <swbxf:PropertyGroup rdf:ID="pg_ListOptions">
+            <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+            >30</swb:index>
             <rdfs:label xml:lang="en">List options</rdfs:label>
             <rdfs:label xml:lang="es">Opciones de listado</rdfs:label>
           </swbxf:PropertyGroup>
