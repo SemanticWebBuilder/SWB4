@@ -385,6 +385,7 @@ public class SWBVirtualHostFilter implements Filter
                 {
                     switch (resp.getError())
                     {
+                        case 304:
                         case 500:
                         case 404:
                             processError(resp.getError(), resp.getErrorMsg(), _response, dparams);
