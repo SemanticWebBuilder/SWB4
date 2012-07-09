@@ -9,43 +9,104 @@
     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
   xml:base="http://org.semanticwb.process.resources/ProcessTracer">
   <owl:Ontology rdf:about="">
-    <owl:imports rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology"/>
     <owl:versionInfo rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >Created with TopBraid Composer</owl:versionInfo>
+    <owl:imports rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology"/>
   </owl:Ontology>
+  <owl:Class rdf:ID="ProcessTracer">
+    <rdfs:label xml:lang="en">Process tracer</rdfs:label>
+    <rdfs:label xml:lang="es">Rastreador de procesos</rdfs:label>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBSemanticResource"/>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SemanticResource"/>
+  </owl:Class>
   <owl:ObjectProperty rdf:ID="displayMapPage">
+    <rdfs:domain rdf:resource="#ProcessTracer"/>
+    <rdfs:range rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#WebPage"/>
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_displayMapPage">
-        <rdfs:label xml:lang="en">Status map page</rdfs:label>
-        <rdfs:label xml:lang="es">Página de mapa de estado</rdfs:label>
         <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#selectOneModel"/>
+        <rdfs:label xml:lang="es">Página de mapa de estado</rdfs:label>
+        <rdfs:label xml:lang="en">Status map page</rdfs:label>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
-    <rdfs:range rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#WebPage"/>
-    <rdfs:domain>
-      <swb:SemanticResource rdf:ID="ProcessTracer">
-        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBSemanticResource"/>
-        <rdfs:label xml:lang="es">Rastreador de procesos</rdfs:label>
-        <rdfs:label xml:lang="en">Process tracer</rdfs:label>
-        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-      </swb:SemanticResource>
-    </rdfs:domain>
   </owl:ObjectProperty>
-  <owl:DatatypeProperty rdf:ID="viewJSP">
+  <owl:DatatypeProperty rdf:ID="filterByCreator">
     <swb:displayProperty>
-      <swbxf:DisplayProperty rdf:ID="dp_viewJSP">
-        <rdfs:label xml:lang="en">Path to view JSP</rdfs:label>
-        <rdfs:label xml:lang="es">Ruta al JSP de vista</rdfs:label>
+      <swbxf:DisplayProperty rdf:ID="dp_filterByCreator">
+        <swbxf:propGroup>
+          <swbxf:PropertyGroup rdf:ID="pg_ListOptions">
+            <rdfs:label xml:lang="en">List options</rdfs:label>
+            <rdfs:label xml:lang="es">Opciones de listado</rdfs:label>
+          </swbxf:PropertyGroup>
+        </swbxf:propGroup>
+        <rdfs:label xml:lang="en">Filter by creator</rdfs:label>
+        <rdfs:label xml:lang="es">Filtrar por usuario creador</rdfs:label>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+    <rdfs:domain rdf:resource="#ProcessTracer"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="userID">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_userID">
+        <swbxf:propGroup rdf:resource="#pg_ListOptions"/>
+        <rdfs:label xml:lang="en">Creator user ID</rdfs:label>
+        <rdfs:label xml:lang="es">ID de usuario creador</rdfs:label>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <rdfs:domain rdf:resource="#ProcessTracer"/>
   </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="processID">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_processID">
+        <swbxf:propGroup rdf:resource="#pg_ListOptions"/>
+        <rdfs:label xml:lang="es">ID de proceso a monitorear</rdfs:label>
+        <rdfs:label xml:lang="en">Process ID</rdfs:label>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#ProcessTracer"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="itemsPerPage">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_itemsPerPage">
+        <rdfs:label xml:lang="en">Items per page</rdfs:label>
+        <rdfs:label xml:lang="es">Elementos por página</rdfs:label>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+    <rdfs:domain rdf:resource="#ProcessTracer"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="viewJSP">
+    <rdfs:domain rdf:resource="#ProcessTracer"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_viewJSP">
+        <rdfs:label xml:lang="es">Ruta al JSP de vista</rdfs:label>
+        <rdfs:label xml:lang="en">Path to view JSP</rdfs:label>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="viewMode">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_viewMode">
+        <swbxf:propGroup rdf:resource="#pg_ListOptions"/>
+        <swbxf:propSelectValues xml:lang="en">1:Overview|2:Process tracking</swbxf:propSelectValues>
+        <swbxf:propSelectValues xml:lang="es">1:Listado general|2:Seguimiento a proceso</swbxf:propSelectValues>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#selectOneModel"/>
+        <rdfs:label xml:lang="en">View mode</rdfs:label>
+        <rdfs:label xml:lang="es">Modo de despliegue</rdfs:label>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+    <rdfs:domain rdf:resource="#ProcessTracer"/>
+  </owl:DatatypeProperty>
   <swb:CodePackage rdf:ID="pkg">
-    <swb:package rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >org.semanticwb.process.resources.tracer</swb:package>
     <swb:prefix rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >ptrace</swb:prefix>
+    <swb:package rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >org.semanticwb.process.resources.tracer</swb:package>
   </swb:CodePackage>
 </rdf:RDF>
 
