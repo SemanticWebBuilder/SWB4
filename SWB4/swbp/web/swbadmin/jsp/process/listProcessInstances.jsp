@@ -24,6 +24,7 @@
      http://www.semanticwebbuilder.org.mx
 --%>
 
+<%@page import="org.semanticwb.process.resources.tracer.ProcessTracer"%>
 <%@page import="org.semanticwb.process.model.Process"%>
 <%@page import="org.semanticwb.process.model.ProcessSite"%>
 <%@page import="org.semanticwb.process.model.Instance"%>
@@ -190,44 +191,16 @@
 
 <%
 SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
-ProcessSite site = (ProcessSite) paramRequest.getWebPage().getWebSite();
-WebPage statusWp = (WebPage) request.getAttribute("statusWP");
+//WebPage statusWp = (WebPage) request.getAttribute("statusWP");
+int mode = (Integer) request.getAttribute("viewMode");
+ArrayList<ProcessInstance> instances = (ArrayList<ProcessInstance>) request.getAttribute("instances");
 WebPage topic = paramRequest.getWebPage();
-ArrayList<ProcessInstance> instances = new ArrayList<ProcessInstance>();
-WrapperProcessWebPage wpwp = null;
+
 Iterator<ProcessInstance> it = null;
-Process process = null;
+if (instances != null) it = instances.iterator();
 
-User user = paramRequest.getUser();
-String lang = "es";
-String piid = null;
-
-if (request.getParameter("piid") != null) {
-    if (!request.getParameter("piid").trim().equals("")) {
-        piid = request.getParameter("piid");
-        ProcessInstance ins = ProcessInstance.ClassMgr.getProcessInstance(piid, site);
-        if (ins != null) {
-            instances.add(ins);
-            it = instances.iterator();
-            process = ins.getProcessType();
-        }
-    }
-} else {
-    if (paramRequest.getWebPage() instanceof WrapperProcessWebPage) {
-        wpwp = (WrapperProcessWebPage) topic;
-        process = wpwp.getProcess();
-        it = SWBProcessMgr.getActiveProcessInstance(site, process).iterator();
-    }
-}
-
-if (user != null && user.getLanguage() != null) {
-    lang = user.getLanguage();
-}
-
-String baseimg = SWBPortal.getWebWorkPath() + "/models/" + topic.getWebSiteId() + "/css/images/";
-%>
-<h2>Seguimiento del proceso (<%=process.getDisplayTitle(lang)%>)</h2>
-    <%
+//String baseimg = SWBPortal.getWebWorkPath() + "/models/" + topic.getWebSiteId() + "/css/images/";
+if (mode == ProcessTracer.MODE_TRACKING) {
     if (it != null && it.hasNext()) {
         while (it.hasNext()) {
             ProcessInstance pi = it.next();
@@ -246,6 +219,7 @@ String baseimg = SWBPortal.getWebWorkPath() + "/models/" + topic.getWebSiteId() 
                         Iterator<FlowNodeInstance> actit = SWBComparator.sortByCreated(pi.listFlowNodeInstances());
                         while (actit.hasNext()) {
                             FlowNodeInstance obj = actit.next();
+                            if (obj.getStatus() == Instance.STATUS_PROCESSING)
                             printActivityInstance(topic, obj, out);
                         }
                     %>
@@ -255,5 +229,8 @@ String baseimg = SWBPortal.getWebWorkPath() + "/models/" + topic.getWebSiteId() 
             <%
         }
     }
+} else {
+    System.out.println("Modo overview");
+}
     %>
 <!--meta http-equiv="refresh" content="20"/-->
