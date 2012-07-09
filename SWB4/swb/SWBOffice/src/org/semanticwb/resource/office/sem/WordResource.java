@@ -392,12 +392,12 @@ public class WordResource extends org.semanticwb.resource.office.sem.base.WordRe
                             htmlOut = contentUtils.predefinedStyles(htmlOut, base, isTpred()); //Estilos predefinidos
                             if (isPages())
                             {
-                                htmlOut = contentUtils.paginationMsWord(htmlOut, page, request.getParameter("page"), base, snpages, stxtant, stxtsig, stfont, position);
+                                htmlOut = contentUtils.paginationMsWord(request,htmlOut, page, request.getParameter("page"), base, snpages, stxtant, stxtsig, stfont, position);
                             } //Paginación
                         }
                         else if (isPages())
                         { //Contenido OpenOffice
-                            htmlOut = contentUtils.paginationOpenOffice(htmlOut, page, request.getParameter("page"), base, snpages, stxtant, stxtsig, stfont, position); //Paginación
+                            htmlOut = contentUtils.paginationOpenOffice(request,htmlOut, page, request.getParameter("page"), base, snpages, stxtant, stxtsig, stfont, position); //Paginación
                         }
                         //Termina Agregado por Jorge Jiménez (5/07/2009)
                         // eliminar <head><body>, etc
