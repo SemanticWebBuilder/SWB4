@@ -1,7 +1,7 @@
 package org.semanticwb.portal.resources.sem.base;
 
 
-public abstract class HTMLContentBase extends org.semanticwb.portal.resources.sem.Content implements org.semanticwb.model.Versionable,org.semanticwb.model.ResourceVersionable
+public abstract class HTMLContentBase extends org.semanticwb.portal.resources.sem.Content implements org.semanticwb.model.ResourceVersionable,org.semanticwb.model.Versionable
 {
     public static final org.semanticwb.platform.SemanticProperty swbres_contentPaginated=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/resource/ontology#contentPaginated");
     public static final org.semanticwb.platform.SemanticProperty swbres_nextLinkText=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/resource/ontology#nextLinkText");
