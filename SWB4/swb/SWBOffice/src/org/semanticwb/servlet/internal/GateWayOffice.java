@@ -1,32 +1,33 @@
 /**  
-* SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración, 
-* colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de 
-* información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes 
-* fuentes, donde a la información se le asigna un significado, de forma que pueda ser interpretada y 
-* procesada por personas y/o sistemas, es una creación original del Fondo de Información y Documentación 
-* para la Industria INFOTEC, cuyo registro se encuentra actualmente en trámite. 
-* 
-* INFOTEC pone a su disposición la herramienta SemanticWebBuilder a través de su licenciamiento abierto al público (‘open source’), 
-* en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición; 
-* aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software, 
-* todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización 
-* del SemanticWebBuilder 4.0. 
-* 
-* INFOTEC no otorga garantía sobre SemanticWebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita, 
-* siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar 
-* de la misma. 
-* 
-* Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente 
-* dirección electrónica: 
-*  http://www.semanticwebbuilder.org
-**/ 
- 
+ * SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración,
+ * colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de
+ * información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes
+ * fuentes, donde a la información se le asigna un significado, de forma que pueda ser interpretada y
+ * procesada por personas y/o sistemas, es una creación original del Fondo de Información y Documentación
+ * para la Industria INFOTEC, cuyo registro se encuentra actualmente en trámite.
+ *
+ * INFOTEC pone a su disposición la herramienta SemanticWebBuilder a través de su licenciamiento abierto al público (‘open source’),
+ * en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición;
+ * aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software,
+ * todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización
+ * del SemanticWebBuilder 4.0.
+ *
+ * INFOTEC no otorga garantía sobre SemanticWebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita,
+ * siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar
+ * de la misma.
+ *
+ * Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente
+ * dirección electrónica:
+ *  http://www.semanticwebbuilder.org
+ **/
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
 package org.semanticwb.servlet.internal;
 
+import java.io.FileFilter;
+import java.io.FileOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -59,16 +60,12 @@ public class GateWayOffice implements InternalServlet
 
     /** The REALM. */
     private static String REALM = "Secure Area";
-    
     /** The PREFI x_ basic. */
     private static String PREFIX_BASIC = "Basic ";
-    
     /** The Constant title. */
     private static final String title = "Gateway de Comunicación con Office INFOTEC Semantic WebBuilder 4";
-    
     /** The log. */
     static Logger log = SWBUtils.getLogger(GateWayOffice.class);
-    
     /** The office servlet. */
     private OfficeServlet officeServlet = new OfficeServlet()
     {
@@ -144,6 +141,64 @@ public class GateWayOffice implements InternalServlet
 
     }
 
+    protected void v3(File dir)
+    {
+        String prefix = "slide";
+
+        //String path = SWBPortal.getWorkPath() + getResourceBase().getWorkPath();
+        //File dir = new File(path);
+        File[] files = dir.listFiles(new FileFilter()
+        {
+
+            @Override
+            public boolean accept(File pathname)
+            {
+                String prefix = "slide";
+                //String prefix_v3 = "v3_";
+                if (pathname.getName().startsWith(prefix) && pathname.getName().endsWith(".html"))
+                {
+                    return true;
+                }
+                return false;
+            }
+        });
+        String prefix_v3 = "v3_";
+        if (files != null && files.length > 0)
+        {
+            for (File f : files)
+            {
+                if (f.exists())
+                {
+                    String oldpath = f.getAbsolutePath();
+                    String newName = f.getAbsolutePath() + ".bk";
+                    String fileToCopy = f.getParentFile().getAbsolutePath() + "/" + prefix_v3 + f.getName();
+                    File f_v3 = new File(fileToCopy);
+                    if (f_v3.exists())
+                    {
+                        f.renameTo(new File(newName));
+                        try
+                        {
+                            String content = SWBUtils.IO.readInputStream(new FileInputStream(f_v3));
+                            FileOutputStream out = new FileOutputStream(new File(oldpath));
+                            out.write(content.getBytes());
+                            out.flush();
+                            out.close();
+                        }
+                        catch (Exception fnfe)
+                        {
+                            log.error(fnfe);
+
+                        }
+                    }
+                }
+
+
+            }
+        }
+
+
+    }
+
     /**
      * Show ppt content.
      * 
@@ -156,6 +211,7 @@ public class GateWayOffice implements InternalServlet
      */
     private void showPPTContent(PrintWriter out, String file, String dir, String contentId, String repositoryName) throws IOException
     {
+
         String path = SWBPortal.getWebWorkPath();
         if (path.endsWith("/"))
         {
@@ -167,7 +223,43 @@ public class GateWayOffice implements InternalServlet
         {
             path += dir + "/" + "frame.html";
         }
+        String worpath = SWBPortal.getWorkPath();
+        if (worpath.endsWith("/"))
+        {
+            worpath = worpath.substring(0, worpath.length() - 1);
+            worpath += dir + "/" + "frame.html";
+        }
+        else
+        {
+            worpath += dir + "/" + "frame.html";
+        }
 
+        File pathFilePPT = new File(worpath);
+        if (!pathFilePPT.exists())
+        {
+
+            path = SWBPortal.getWebWorkPath();
+            worpath = SWBPortal.getWorkPath();
+            worpath += dir;
+
+            v3(new File(worpath));
+
+            file = file.replace(".pptx", ".html");
+            file = file.replace(".ppt", ".html");
+
+            if (path.endsWith("/"))
+            {
+                path = path.substring(0, path.length() - 1);
+                path +=
+                        dir + "/" + file;
+            }
+            else
+            {
+                path += dir + "/" + file;
+            }
+
+
+        }
         String with = "100%";
         String height = "500";
         out.println("<html>");
@@ -202,7 +294,7 @@ public class GateWayOffice implements InternalServlet
             while (read != -1)
             {
                 html.append(new String(buffer, 0, read));
-                read =inFile.read(buffer);
+                read = inFile.read(buffer);
             }
 
             inFile.close();
@@ -313,7 +405,7 @@ public class GateWayOffice implements InternalServlet
                         OfficeDocument doc = new OfficeDocument();
                         doc.setUser(pUserName);
                         doc.setPassword(pPassword);
-                        dir ="/" + dir;
+                        dir = "/" + dir;
                         PrintWriter out = response.getWriter();
 
                         try
@@ -372,6 +464,4 @@ public class GateWayOffice implements InternalServlet
             }
         }
     }
-
-    
 }
