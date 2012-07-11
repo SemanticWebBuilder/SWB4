@@ -310,7 +310,8 @@ public class GenericResource implements SWBResource, SWBResourceCache, SWBResour
 
     public String getResourceCacheID(HttpServletRequest request, SWBParamRequest paramRequest) throws SWBResourceException
     {
-        if (request.getParameterNames().hasMoreElements())
+        Resource base=paramRequest.getResourceBase();
+        if (!base.getResourceType().isResourceCacheIgnoreQueryParams() && request.getParameterNames().hasMoreElements())
         {
             return null;
         }else
@@ -321,7 +322,6 @@ public class GenericResource implements SWBResource, SWBResourceCache, SWBResour
             //language
             //user_webpage
                                     
-            Resource base=paramRequest.getResourceBase();
             String key = SWBResourceCachedMgr.getKey(base);
             if("webpage".equals(base.getResourceType().getResourceCacheType()))
             {
