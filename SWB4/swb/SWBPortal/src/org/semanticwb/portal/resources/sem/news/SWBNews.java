@@ -157,7 +157,7 @@ public class SWBNews extends org.semanticwb.portal.resources.sem.news.base.SWBNe
     {
         if (paramRequest.getMode().equals("month"))
         {
-            if(paramRequest.getCallMethod()==paramRequest.Call_STRATEGY)
+            if (paramRequest.getCallMethod() == paramRequest.Call_STRATEGY)
             {
                 doStategy(request, response, paramRequest);
             }
@@ -478,6 +478,75 @@ public class SWBNews extends org.semanticwb.portal.resources.sem.news.base.SWBNe
         }
     }
 
+    @Override
+    public String getResourceCacheID(HttpServletRequest request, SWBParamRequest paramRequest) throws SWBResourceException
+    {
+        Resource base = paramRequest.getResourceBase();
+        String key = null;
+        String uri = request.getParameter("uri");
+
+        if (uri != null && !uri.startsWith("http:"))
+        {
+            String uriSite = paramRequest.getWebPage().getWebSite().getSemanticObject().getURI();
+            int pos = uriSite.indexOf("#");
+            if (pos != -1)
+            {
+                uriSite = uriSite.substring(0, pos);
+            }
+            uri = uriSite + "/Resource#" + uri;
+        }
+
+
+        if (uri != null)
+        {
+            uri = uri.trim();
+            if (uri.equals(""))
+            {
+                uri = null;
+            }
+        }
+
+        if (uri == null)
+        {
+            StringTokenizer st = new StringTokenizer(request.getRequestURI(), "/");
+            if (st.countTokens() >= 4)
+            {
+                ArrayList<String> values = new ArrayList<String>();
+                while (st.hasMoreTokens())
+                {
+                    values.add(st.nextToken());
+                }
+                uri = values.get(3);
+                if (uri.startsWith("_"))
+                {
+                    uri = null;
+                }
+                if ("_rid".equals(uri) && values.size() >= 6)
+                {
+                    uri = values.get(5);
+                }
+            }
+        }
+        if (paramRequest.getCallMethod() == SWBParamRequest.Call_STRATEGY)
+        {
+            key = SWBResourceCachedMgr.getKey(base);
+            key = "strategy_" + key;
+
+        }
+        else if (uri != null && paramRequest.getCallMethod() == SWBParamRequest.Call_CONTENT)
+        {
+            key = SWBResourceCachedMgr.getKey(base);
+            key = "content_" + uri + "_" + key;
+        }
+        else
+        {
+            return super.getResourceCacheID(request, paramRequest);
+        }
+        return key;
+
+    }
+
+
     /* (non-Javadoc)
      * @see org.semanticwb.portal.api.GenericResource#doView(HttpServletRequest, HttpServletResponse, SWBParamRequest)
      */
@@ -534,9 +603,9 @@ public class SWBNews extends org.semanticwb.portal.resources.sem.news.base.SWBNe
                     values.add(st.nextToken());
                 }
                 uri = values.get(3);
-                if(uri.startsWith("_"))
+                if (uri.startsWith("_"))
                 {
-                    uri=null;
+                    uri = null;
                 }
                 if ("_rid".equals(uri) && values.size() >= 6)
                 {
