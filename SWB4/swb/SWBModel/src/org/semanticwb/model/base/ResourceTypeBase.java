@@ -4,7 +4,7 @@ package org.semanticwb.model.base;
    /**
    * Objeto por medio del cual se define un tipo de componente o recurso 
    */
-public abstract class ResourceTypeBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Traceable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Descriptiveable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Filterable
+public abstract class ResourceTypeBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.FilterableClass,org.semanticwb.model.FilterableNode,org.semanticwb.model.Filterable,org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable
 {
     public static final org.semanticwb.platform.SemanticProperty swb_resourceCache=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#resourceCache");
    /**
@@ -27,6 +27,7 @@ public abstract class ResourceTypeBase extends org.semanticwb.model.SWBClass imp
     public static final org.semanticwb.platform.SemanticProperty swb_resourceMode=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#resourceMode");
     public static final org.semanticwb.platform.SemanticProperty swb_resourceBundle=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#resourceBundle");
     public static final org.semanticwb.platform.SemanticProperty swb_resourceOWL=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#resourceOWL");
+    public static final org.semanticwb.platform.SemanticProperty swb_resourceCacheIgnoreQueryParams=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#resourceCacheIgnoreQueryParams");
    /**
    * Objeto por medio del cual se define un tipo de componente o recurso
    */
@@ -625,6 +626,24 @@ public abstract class ResourceTypeBase extends org.semanticwb.model.SWBClass imp
     public void setResourceOWL(String value)
     {
         getSemanticObject().setProperty(swb_resourceOWL, value);
+    }
+
+/**
+* Gets the ResourceCacheIgnoreQueryParams property
+* @return boolean with the ResourceCacheIgnoreQueryParams
+*/
+    public boolean isResourceCacheIgnoreQueryParams()
+    {
+        return getSemanticObject().getBooleanProperty(swb_resourceCacheIgnoreQueryParams);
+    }
+
+/**
+* Sets the ResourceCacheIgnoreQueryParams property
+* @param value long with the ResourceCacheIgnoreQueryParams
+*/
+    public void setResourceCacheIgnoreQueryParams(boolean value)
+    {
+        getSemanticObject().setBooleanProperty(swb_resourceCacheIgnoreQueryParams, value);
     }
 
    /**
