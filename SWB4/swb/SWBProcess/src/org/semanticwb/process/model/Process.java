@@ -45,7 +45,7 @@ import org.semanticwb.platform.SemanticProperty;
  */
 public class Process extends org.semanticwb.process.model.base.ProcessBase 
 {
-    private static Logger log=SWBUtils.getLogger(SWBPClassMgr.class);
+    private static Logger log=SWBUtils.getLogger(Process.class);
     
     //Bloque estático para registrar un observador cuando se modifica la propiedad parentWebPage
     static 
@@ -89,117 +89,11 @@ public class Process extends org.semanticwb.process.model.base.ProcessBase
      */
     public ProcessInstance createInstance()
     {
-        return createInstance((StartEventNode)null);
-    }    
-
-    /**
-     * Crea una instancia del proceso.
-     * @return 
-     */
-    public ProcessInstance createInstance(StartEventNode startEvent)
-    {
         //System.out.println("createInstance process:"+this);
         ProcessInstance inst=null;
         inst=this.getProcessSite().createProcessInstance();
         inst.setProcessType(this);
         inst.setStatus(Instance.STATUS_INIT);
-
-        //Se crean las instancias de los objetos de datos y se referencían con el proceso.
-        Iterator<ItemAware> it=listRelatedItemAware().iterator();
-        while (it.hasNext())
-        {
-            ItemAware item = it.next();
-            SemanticClass scls=item.getItemSemanticClass();
-            SemanticProperty sprop=null;
-            SWBModel model=this.getProcessSite();
-            String id=null;
-            String code=null;
-            if(item instanceof Collectionable) //Es un dato temporal
-            {
-                model=this.getProcessSite().getProcessDataInstanceModel();
-            }else //Es un dato persistente
-            {
-                id=((DataStore)item).getDataObjectId();
-                code=((DataStore)item).getInitializationCode();
-            }
-
-            if(scls!=null)//El elemento fué configurado
-            {
-                SemanticObject ins=null;
-                if(code!=null) //Ejecutar código de inicialización de la instancia
-                {
-                    Object ret=null;
-                    try
-                    {
-                        //long ini=System.currentTimeMillis();
-                        Interpreter i = SWBPClassMgr.getInterpreter();
-                        ret=i.eval(code);
-                        //System.out.println("ret:"+ret);
-                        //System.out.println("time:"+ (System.currentTimeMillis()-ini ));
-                    }catch(Exception e)
-                    {
-                        log.error(e);
-                    }
-                    //String action=source.getAction();
-                    if(ret!=null && ret instanceof SemanticObject && ((SemanticObject)ret).instanceOf(scls)) //El código se ejecutó bien y devolvió un objeto
-                    {
-                        ins=((SemanticObject)ret);
-                    }
-
-                    if(ret!=null && ret instanceof SWBClass && ((SWBClass)ret).getSemanticObject().instanceOf(scls)) //El código se ejecutó bien y devolvió una clase semántica
-                    {
-                        ins=((SWBClass)ret).getSemanticObject();
-                    }
-                }
-                if(ins==null) //No se creó objeto a partir del código de inicialización
-                {
-                    if(id==null) //No se especificó Id de objeto a recuperar, se crea uno nuevo id
-                    {
-                        id=String.valueOf(model.getSemanticModel().getCounter(scls));
-                    }else //Se especificó Id de objeto a recuperar, se recupera
-                    {
-                        ins=SemanticObject.createSemanticObject(model.getSemanticModel().getObjectUri(id, scls));
-                    }
-                    if(ins==null) //No se recuperó ningún objeto
-                    {
-                        //Verificar mapeos de eventos iniciales de mensaje
-                        Iterator<ItemAwareMapping> auxit=ItemAwareMapping.ClassMgr.listItemAwareMappingByLocalItemAware(item, item.getProcessSite());
-                        if(!auxit.hasNext() || startEvent==null || !(startEvent instanceof MessageStartEvent)) //No hay mapeos, crear nueva instancia
-                        {
-                            ins=model.getSemanticModel().createSemanticObjectById(id, scls);
-                        } else {
-                            //Recorrer los mapeos
-                            boolean hasMapping=false;
-                            while (auxit.hasNext())
-                            {
-                                ItemAwareMapping itemAwareMapping = auxit.next();
-                                MessageStartEvent stevent=(MessageStartEvent)startEvent;
-                                if(stevent.hasItemAwareMapping(itemAwareMapping))
-                                {
-                                    hasMapping=true;
-                                    break;
-                                }                                
-                            }
-                            if(!hasMapping)
-                            {
-                                ins=model.getSemanticModel().createSemanticObjectById(id, scls);
-                            }
-                        }
-                    }
-                }
-                
-                //Crear referencia entre el proceso y la isntancia del objeto de datos
-                ItemAwareReference ref=ItemAwareReference.ClassMgr.createItemAwareReference(this.getProcessSite());
-                ref.setItemAware(item); 
-                if(ins!=null)
-                {
-                    SWBClass c = (SWBClass)ins.createGenericInstance();
-                    ref.setProcessObject(c);
-                }
-                inst.addItemAwareReference(ref);
-                //System.out.println("addItemAwareReference:"+ref);
-            }
-        }
 
         return inst;
     }

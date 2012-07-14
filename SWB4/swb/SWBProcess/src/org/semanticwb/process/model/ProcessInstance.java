@@ -26,13 +26,24 @@
 
 package org.semanticwb.process.model;
 
+import bsh.Interpreter;
 import java.util.ArrayList;
 import java.util.Iterator;
+import org.semanticwb.Logger;
+import org.semanticwb.SWBUtils;
+import org.semanticwb.model.SWBClass;
+import org.semanticwb.model.SWBModel;
 import org.semanticwb.model.User;
+import org.semanticwb.platform.SemanticClass;
+import org.semanticwb.platform.SemanticObject;
+import org.semanticwb.platform.SemanticProperty;
 
 
 public class ProcessInstance extends org.semanticwb.process.model.base.ProcessInstanceBase 
 {
+    private static Logger log=SWBUtils.getLogger(ProcessInstance.class);
+    
+    
     public ProcessInstance(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
@@ -57,7 +68,9 @@ public class ProcessInstance extends org.semanticwb.process.model.base.ProcessIn
                 if(flownode instanceof StartEvent)
                 {
                     StartEvent init=(StartEvent)flownode;
-                    startEvent(user, init);
+                    FlowNodeInstance eventins=startEvent(user, init);
+                    eventins.start(user);
+                    return;
                 }
             }
         }
@@ -70,21 +83,122 @@ public class ProcessInstance extends org.semanticwb.process.model.base.ProcessIn
     public void start(User user, StartEventNode event)
     {
         super.start(user);
-        startEvent(user, event);
-    }
-
-    private void startEvent(User user, StartEventNode event)
-    {
-        FlowNodeInstance eventins=event.createInstance(this);
+        FlowNodeInstance eventins=startEvent(user, event);
         eventins.start(user);
     }
     
     public void start(User user, StartEventNode event, FlowNodeInstance invoker)
     {
         super.start(user);
-        FlowNodeInstance eventins=event.createInstance(this);
+        FlowNodeInstance eventins=startEvent(user, event);
         eventins.start(invoker,null,user);
     }    
+    
+    private FlowNodeInstance startEvent(User user, StartEventNode event)
+    {
+        initItemAwares(user, event);
+        return event.createInstance(this);
+    }     
+    
+    private void initItemAwares(User user, StartEventNode startEvent)
+    {
+        //Se crean las instancias de los objetos de datos y se referencían con el proceso.
+        Iterator<ItemAware> it=getProcessType().listRelatedItemAware().iterator();
+        while (it.hasNext())
+        {
+            ItemAware item = it.next();
+            SemanticClass scls=item.getItemSemanticClass();
+            SemanticProperty sprop=null;
+            SWBModel model=this.getProcessSite();
+            String id=null;
+            String code=null;
+            if(item instanceof Collectionable) //Es un dato temporal
+            {
+                model=this.getProcessSite().getProcessDataInstanceModel();
+            }else //Es un dato persistente
+            {
+                id=((DataStore)item).getDataObjectId();
+                code=((DataStore)item).getInitializationCode();
+            }
+
+            if(scls!=null)//El elemento fué configurado
+            {
+                SemanticObject ins=null;
+                if(code!=null) //Ejecutar código de inicialización de la instancia
+                {
+                    Object ret=null;
+                    try
+                    {
+                        //long ini=System.currentTimeMillis();
+                        Interpreter i = SWBPClassMgr.getInterpreter();
+                        ret=i.eval(code);
+                        //System.out.println("ret:"+ret);
+                        //System.out.println("time:"+ (System.currentTimeMillis()-ini ));
+                    }catch(Exception e)
+                    {
+                        log.error(e);
+                    }
+                    //String action=source.getAction();
+                    if(ret!=null && ret instanceof SemanticObject && ((SemanticObject)ret).instanceOf(scls)) //El código se ejecutó bien y devolvió un objeto
+                    {
+                        ins=((SemanticObject)ret);
+                    }
+
+                    if(ret!=null && ret instanceof SWBClass && ((SWBClass)ret).getSemanticObject().instanceOf(scls)) //El código se ejecutó bien y devolvió una clase semántica
+                    {
+                        ins=((SWBClass)ret).getSemanticObject();
+                    }
+                }
+                if(ins==null) //No se creó objeto a partir del código de inicialización
+                {
+                    if(id==null) //No se especificó Id de objeto a recuperar, se crea uno nuevo id
+                    {
+                        id=String.valueOf(model.getSemanticModel().getCounter(scls));
+                    }else //Se especificó Id de objeto a recuperar, se recupera
+                    {
+                        ins=SemanticObject.createSemanticObject(model.getSemanticModel().getObjectUri(id, scls));
+                    }
+                    if(ins==null) //No se recuperó ningún objeto
+                    {
+                        //Verificar mapeos de eventos iniciales de mensaje
+                        Iterator<ItemAwareMapping> auxit=ItemAwareMapping.ClassMgr.listItemAwareMappingByLocalItemAware(item, item.getProcessSite());
+                        if(!auxit.hasNext() || startEvent==null || !(startEvent instanceof MessageStartEvent)) //No hay mapeos, crear nueva instancia
+                        {
+                            ins=model.getSemanticModel().createSemanticObjectById(id, scls);
+                        } else {
+                            //Recorrer los mapeos
+                            boolean hasMapping=false;
+                            while (auxit.hasNext())
+                            {
+                                ItemAwareMapping itemAwareMapping = auxit.next();
+                                MessageStartEvent stevent=(MessageStartEvent)startEvent;
+                                if(stevent.hasItemAwareMapping(itemAwareMapping))
+                                {
+                                    hasMapping=true;
+                                    break;
+                                }                                
+                            }
+                            if(!hasMapping)
+                            {
+                                ins=model.getSemanticModel().createSemanticObjectById(id, scls);
+                            }
+                        }
+                    }
+                }
+                
+                //Crear referencia entre el proceso y la isntancia del objeto de datos
+                ItemAwareReference ref=ItemAwareReference.ClassMgr.createItemAwareReference(this.getProcessSite());
+                ref.setItemAware(item); 
+                if(ins!=null)
+                {
+                    SWBClass c = (SWBClass)ins.createGenericInstance();
+                    ref.setProcessObject(c);
+                }
+                addItemAwareReference(ref);
+                //System.out.println("addItemAwareReference:"+ref);
+            }
+        }        
+    }
 
     private void listAllItemAwareReferences(Instance inst, ArrayList arr)
     {
