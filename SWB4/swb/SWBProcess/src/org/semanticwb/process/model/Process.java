@@ -82,12 +82,21 @@ public class Process extends org.semanticwb.process.model.base.ProcessBase
         getProcessWebPage();  //Crea pagina web de proceso
         
     }
-
+    
     /**
      * Crea una instancia del proceso.
      * @return 
      */
     public ProcessInstance createInstance()
+    {
+        return createInstance((StartEventNode)null);
+    }    
+
+    /**
+     * Crea una instancia del proceso.
+     * @return 
+     */
+    public ProcessInstance createInstance(StartEventNode startEvent)
     {
         //System.out.println("createInstance process:"+this);
         ProcessInstance inst=null;
@@ -154,14 +163,28 @@ public class Process extends org.semanticwb.process.model.base.ProcessBase
                     if(ins==null) //No se recuperó ningún objeto
                     {
                         //Verificar mapeos de eventos iniciales de mensaje
-                        //Iterator auxit=ItemAwareMapping.ClassMgr.listItemAwareMappingByLocalItemAware(item, item.getProcessSite());
-                        //if(!auxit.hasNext()) //No hay mapeos, crear nueva instancia
-                        //{
-                            //System.out.println("No hay mapeos");
+                        Iterator<ItemAwareMapping> auxit=ItemAwareMapping.ClassMgr.listItemAwareMappingByLocalItemAware(item, item.getProcessSite());
+                        if(!auxit.hasNext() || startEvent==null || !(startEvent instanceof MessageStartEvent)) //No hay mapeos, crear nueva instancia
+                        {
                             ins=model.getSemanticModel().createSemanticObjectById(id, scls);
-                        //} else {
+                        } else {
                             //Recorrer los mapeos
-                        //}
+                            boolean hasMapping=false;
+                            while (auxit.hasNext())
+                            {
+                                ItemAwareMapping itemAwareMapping = auxit.next();
+                                MessageStartEvent stevent=(MessageStartEvent)startEvent;
+                                if(stevent.hasItemAwareMapping(itemAwareMapping))
+                                {
+                                    hasMapping=true;
+                                    break;
+                                }                                
+                            }
+                            if(!hasMapping)
+                            {
+                                ins=model.getSemanticModel().createSemanticObjectById(id, scls);
+                            }
+                        }
                     }
                 }
                 
