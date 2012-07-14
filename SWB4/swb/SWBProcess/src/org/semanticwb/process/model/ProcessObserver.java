@@ -135,7 +135,7 @@ public class ProcessObserver extends org.semanticwb.process.model.base.ProcessOb
                         try
                         {
                             //System.out.println("ok...");
-                            ProcessInstance inst=((Process)cont).createInstance(startEvent);
+                            ProcessInstance inst=((Process)cont).createInstance();
                             
                             inst.start(instance.getCreator(),startEvent, instance);
                             
