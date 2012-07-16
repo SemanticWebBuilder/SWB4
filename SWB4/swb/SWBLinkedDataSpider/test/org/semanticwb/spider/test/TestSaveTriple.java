@@ -4,14 +4,16 @@
  */
 package org.semanticwb.spider.test;
 
+import java.io.File;
 import java.io.PrintStream;
 import java.net.URI;
 import java.net.URL;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Properties;
 import org.semanticwb.linkeddata.spider.SpiderEventListener;
 import org.semanticwb.linkeddata.spider.Spider;
-import org.semanticwb.linkeddata.spider.SpiderException;
 
 /**
  *
@@ -19,14 +21,42 @@ import org.semanticwb.linkeddata.spider.SpiderException;
  */
 public class TestSaveTriple implements SpiderEventListener
 {
-    DecimalFormat d_f=new DecimalFormat("###.##");
+
+    DecimalFormat d_f = new DecimalFormat("###.##");
     PrintStream out;
     PrintStream err;
     long tini;
     int totalNTFormat;
+
     public TestSaveTriple()
     {
-        tini=System.currentTimeMillis();
+
+
+        Properties properties = new Properties();
+        File journal = new File("/data.jnl");
+//        properties.setProperty(BigdataSail.Options.FILE, journal.getAbsolutePath());
+        //The persistence engine.  Use 'Disk' for the WORM or 'DiskRW' for the RWStore.
+        properties.setProperty("com.bigdata.journal.AbstractJournal.bufferMode", "DiskRW");
+        properties.setProperty("com.bigdata.btree.writeRetentionQueue.capacity", "4000");
+        properties.setProperty("com.bigdata.btree.BTree.branchingFactor", "128");
+
+        //# 200M initial extent.
+        properties.setProperty("com.bigdata.journal.AbstractJournal.initialExtent", "100715200");
+        properties.setProperty("com.bigdata.journal.AbstractJournal.maximumExtent", "100715200");
+
+        //##
+        //## Setup for QUADS mode without the full text index.
+        //##
+        properties.setProperty("com.bigdata.rdf.sail.isolatableIndices", "true");
+        properties.setProperty("com.bigdata.rdf.sail.truthMaintenance", "false");
+        properties.setProperty("com.bigdata.rdf.store.AbstractTripleStore.quads", "true");
+        properties.setProperty("com.bigdata.rdf.store.AbstractTripleStore.statementIdentifiers", "false");
+        properties.setProperty("com.bigdata.rdf.store.AbstractTripleStore.textIndex", "false");
+        properties.setProperty("com.bigdata.rdf.store.AbstractTripleStore.axiomsClass", "com.bigdata.rdf.axioms.NoAxioms");
+        properties.setProperty("com.bigdata.rdf.store.AbstractTripleStore.vocabularyClass", "com.bigdata.rdf.vocab.NoVocabulary");
+        properties.setProperty("com.bigdata.rdf.store.AbstractTripleStore.justify", "false");
+
+        tini = System.currentTimeMillis();
 //        try
 //        {
 //            out = new PrintStream(new File("C:\\" + df.format(new Date())) + ".log");
@@ -46,7 +76,15 @@ public class TestSaveTriple implements SpiderEventListener
     @Override
     public void onTriple(URI suj, URI pred, String obj, Spider spider, String lang)
     {
-        //System.out.println("suj: " + suj + " pred: " + pred + " obj:" + obj);
+        System.out.println("onTriple 1 suj: " + suj + " pred: " + pred + " obj:" + obj);
+        //new Throwable().printStackTrace();
+    }
+
+    @Override
+    public void onTriple(URI suj, URI pred, URI obj, Spider source, String lang)
+    {
+        System.out.println("onTriple 2 suj: " + suj + " pred: " + pred + " obj:" + obj);
+        //new Throwable().printStackTrace();
     }
 
     @Override
@@ -58,7 +96,6 @@ public class TestSaveTriple implements SpiderEventListener
     @Override
     public void onError(URL url, Throwable e)
     {
-
 //        if (e instanceof SpiderException)
 //        {
 //            System.err.println("Error en url " + ((SpiderException) e).getSpider().getURL());
@@ -69,20 +106,21 @@ public class TestSaveTriple implements SpiderEventListener
     @Override
     public boolean onNewSubject(URI suj)
     {
-        return true;
+        return false;
     }
 
     @Override
     public void onStart(URL url)
     {
-        //String date=df.format(new Date());
-        //System.out.println(date+": Inicia ------------ URL :" + url + " ----------------------");
+        String date=df.format(new Date());
+        System.out.println(date+": Inicia ------------ URL :" + url + " ----------------------");
+        //new Throwable().printStackTrace();
     }
 
     @Override
     public void onEnd(URL url)
     {
-        //String date=df.format(new Date());
+        String date=df.format(new Date());
         //System.out.println(date+": Termina ------------ URL :" + url + " ----------------------");
     }
 
@@ -90,15 +128,10 @@ public class TestSaveTriple implements SpiderEventListener
     public void onNTFormat(String row)
     {
         totalNTFormat++;
-        
-        long dif=System.currentTimeMillis()-tini;
-        double vel=(double)totalNTFormat*1000*60*60/(double)dif;
-        //System.out.println("velocidad : "+d_f.format(vel)+" reg/hr");
-        System.out.println(row);
-    }
 
-    @Override
-    public void onTriple(URI suj, URI pred, URI obj, Spider source, String lang)
-    {
+        long dif = System.currentTimeMillis() - tini;
+        double vel = (double) totalNTFormat * 1000 * 60 * 60 / (double) dif;
+        //System.out.println("velocidad : "+d_f.format(vel)+" reg/hr");
+        //System.out.println(row);
     }
 }
