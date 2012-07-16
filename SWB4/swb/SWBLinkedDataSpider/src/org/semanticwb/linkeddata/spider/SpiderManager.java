@@ -79,20 +79,6 @@ public class SpiderManager
 
     public static synchronized void onPred(URI pred, Spider spider)
     {
-        // carga las propiedades de un predicado
-//        try
-//        {
-//            SpiderSync _spider = new SpiderSync(pred.toURL(), spider.getDomain());
-//            _spider.setFriend(spider);
-//            _spider.run();
-//            spider.fireVisit(pred);
-//        }
-//        catch (Exception e)
-//        {
-//            spider.fireError(e);
-//        }
-
-
         loadPredicates(pred);
 
 
@@ -100,18 +86,20 @@ public class SpiderManager
 
     public static void loadPredicates(URI pred)
     {
-        try
-        {            
-            SpiderSync _spider = new SpiderSync(pred.toURL(), null);
-            _spider.run();
-
-        }
-        catch (Exception e)
+        String nopred = System.getProperty("nopred");
+        if (nopred != null && !nopred.equals("true"))
         {
+            try
+            {
+                SpiderSync _spider = new SpiderSync(pred.toURL(), null);
+                _spider.run();
+
+            }
+            catch (Exception e)
+            {
+            }
         }
     }
-
-
 
     public static void addPredicate(TripleElement element)
     {
