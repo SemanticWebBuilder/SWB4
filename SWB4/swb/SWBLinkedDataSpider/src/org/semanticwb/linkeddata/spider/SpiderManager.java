@@ -86,7 +86,7 @@ public class SpiderManager
 
     public static void loadPredicates(URI pred)
     {
-        String nopred = System.getProperty("nopred");
+        String nopred = System.getProperty("org.semanticwb.linkeddata.spider.SpiderManager.NoPred");
         if (nopred != null && !nopred.equals("true"))
         {
             try

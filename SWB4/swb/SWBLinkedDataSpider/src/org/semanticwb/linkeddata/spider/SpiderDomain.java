@@ -206,6 +206,10 @@ public class SpiderDomain
     {
         for (final SpiderEventListener listener : SpiderManager.getListeners())
         {
+            listener.onStart(url);
+        }
+        /*for (final SpiderEventListener listener : SpiderManager.getListeners())
+        {
             Runnable r = new Runnable()
             {
 
@@ -225,7 +229,7 @@ public class SpiderDomain
             Thread t = new Thread(r);
             t.start();
 
-        }
+        }*/
     }
 
     public void fireEventnewTriple(final URI suj, final URI pred, final String obj, final Spider spider, final String lang)
