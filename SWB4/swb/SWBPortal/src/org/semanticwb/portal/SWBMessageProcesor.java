@@ -125,7 +125,7 @@ public class SWBMessageProcesor extends TimerTask
                         {
                             SWBPortal.getAccessLog().updateLogin(str.substring(4));
                         }
-                    } else if(ini.equals("ini"))
+                    } else if(ini.equals("ini") || ini.equals("syn"))
                     {
                         StringTokenizer st=new StringTokenizer(str, "|");
                         String init=st.nextToken();
@@ -141,7 +141,7 @@ public class SWBMessageProcesor extends TimerTask
                             int j=addr.lastIndexOf(":"); //MAPS74 IPV6
                             center.addAddress(InetAddress.getByName(addr.substring(0,j)),Integer.parseInt(addr.substring(j+1)));
                             
-                            if(!SWBPortal.isClient())
+                            if(!SWBPortal.isClient() && ini.equals("ini"))
                             {
                                 //System.out.println("Server...");
                                 center.sendMessage("ini|upd|"+center.getListAddress());
