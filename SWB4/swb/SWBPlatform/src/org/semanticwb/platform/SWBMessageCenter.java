@@ -33,12 +33,7 @@ package org.semanticwb.platform;
 import java.io.IOException;
 import java.net.*;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.StringTokenizer;
+import java.util.*;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
@@ -88,6 +83,15 @@ public class SWBMessageCenter
 
     /** The localaddr. */
     private String localaddr = "127.0.0.1";
+    
+    /** The Timer Sync **/
+    private Timer timer = new Timer("MessageSynchronizer", true);
+    
+    /** The Period **/
+    private long period = 1000 * 60 * 5;
+    
+    /** The Message **/
+    private String synchMess = null;
 
 
     /**
@@ -168,10 +172,21 @@ public class SWBMessageCenter
                     
                     String message = "ini|hel|"+addr.getHostAddress()+":"+port;
                     
+                    synchMess = "syn|hel|"+addr.getHostAddress()+":"+port;
+                    
+                    
                     server = new SWBMessageServer(this,addr,port);
                     server.start();               
                                         
                     sendMessage(message);
+                    timer.schedule(new TimerTask(){
+
+                        @Override
+                        public void run() {
+                            sendMessage(synchMess);
+                        }
+                    
+                    }, period, period);
                     
                 }else  //Version Enterior de Registro de Mensajes
                 {
