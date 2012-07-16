@@ -1,7 +1,7 @@
 <%@page import="org.semanticwb.portal.api.SWBResourceURL"%><%@page import="org.semanticwb.model.GenericIterator"%><%@page import="org.semanticwb.model.Country"%><%@page import="org.semanticwb.model.User"%><%@page import="org.semanticwb.SWBUtils"%><%@page import="org.semanticwb.platform.SemanticObject"%><%@page import="org.semanticwb.servlet.SWBHttpServletResponseWrapper"%><%@page import="org.semanticwb.portal.api.SWBResource"%><%@page import="org.semanticwb.SWBPortal"%><%@page import="java.text.DateFormat"%><%@page import="java.util.Locale"%><%@page import="org.semanticwb.portal.resources.sem.news.*"%><%@page import="org.semanticwb.model.Resource"%><%@page import="java.util.*"%><%@page import="org.semanticwb.model.ResourceCollectionCategory"%>
 <jsp:useBean id="paramRequest" scope="request" type="org.semanticwb.portal.api.SWBParamRequest"/>
 <%!
-public static String changeCharacters(String data)
+    public static String changeCharacters(String data)
     {
         if (data == null || data.trim().equals(""))
         {
@@ -93,6 +93,7 @@ public static String changeCharacters(String data)
         }
         return sb.toString();
     }
+
     class SWBNewContentComparator implements Comparator<SWBNewContent>
     {
 
@@ -200,21 +201,11 @@ public static String changeCharacters(String data)
 
             User user = paramRequest.getUser();
 
-            if (paramRequest.getUser().getDevice().getId() != null && (paramRequest.getUser().getDevice().getId().equals("iPad") || paramRequest.getUser().getDevice().getId().equals("Android")))
-            {
-%><jsp:include page="shownewIpad.jsp" flush="true" /><%
-                return;
-            }
-            if (paramRequest.getUser().getDevice().getId() != null && (paramRequest.getUser().getDevice().getId().equals("iPhone") || paramRequest.getUser().getDevice().getId().equals("Android_mobile")))
-                {
-                %><jsp:include page="shownewIphone.jsp" flush="true" /><%
-                return;
-                }
             // muestra el recurso
             SWBNewContent content = (SWBNewContent) request.getAttribute("content");
             SWBNews news = (SWBNews) request.getAttribute("this");
 
-            
+
             if (content == null && request.getParameter("uri") != null)
             {
                 String uri = request.getParameter("uri");
@@ -241,7 +232,7 @@ public static String changeCharacters(String data)
                     values.add(st.nextToken());
                 }
                 String uri = values.get(3);
-                if ("_rid".equals(uri) && values.size()>=6)
+                if ("_rid".equals(uri) && values.size() >= 6)
                 {
                     uri = values.get(5);
                 }
@@ -301,114 +292,83 @@ public static String changeCharacters(String data)
             {
                 //String url = paramRequest.getWebPage().getUrl() + "?uri=" + before.getResourceBase().getSemanticObject().getEncodedURI();
                 String url = paramRequest.getWebPage().getUrl();// + "?uri=" + before.getResourceBase().getSemanticObject().getId();
-                String beforettitle=before.getResourceBase().getDisplayTitle(user.getLanguage());
-                beforettitle=getTitleURL(beforettitle);
-                String urlcontent = url.toString().replace("&", "&amp;")+"/"+before.getResourceBase().getSemanticObject().getId()+"/"+beforettitle;
+                String beforettitle = before.getResourceBase().getDisplayTitle(user.getLanguage());
+                beforettitle = getTitleURL(beforettitle);
+                String urlcontent = url.toString().replace("&", "&amp;") + "/" + before.getResourceBase().getSemanticObject().getId() + "/" + beforettitle;
 %>
-<a href="<%=urlcontent%>">Noticia anterior</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-<%                        }
+<div id="oneColumnInternaDetalle">
+    <div class="oneColumnsContentBox">
+        <a class="anteriorNota" href="<%=urlcontent%>">Noticia anterior</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <%                        }
 
-            if (next != null)
-            {
-                //String url = paramRequest.getWebPage().getUrl() + "?uri=" + next.getResourceBase().getSemanticObject().getEncodedURI();
-                String url = paramRequest.getWebPage().getUrl();//+ "?uri=" + next.getResourceBase().getSemanticObject().getId();
-                String nexttitle=next.getResourceBase().getDisplayTitle(user.getLanguage());
-                nexttitle=getTitleURL(nexttitle);
-                String urlcontent = url.toString().replace("&", "&amp;")+"/"+next.getResourceBase().getSemanticObject().getId()+"/"+nexttitle;
-%>
-<a href="<%=urlcontent%>">Noticia siguiente</a>
-<%
-            }
+                    String country = "";
+                    if (content.getCountry() != null)
+                    {
+                        country = "(" + content.getCountry().getDisplayTitle(user.getLanguage()) + ")";
+                    }
 
-%>
-
-<br/><br/><h2 class="sectionTitle"><%=title%>
-    <%
-                if (content.getCountry() != null)
-                {
-                    String country = content.getCountry().getDisplayTitle(user.getLanguage());
-    %>
-    (<%=country%>)
-    <%
-                }
-
-                String description = "";
-                if (content.getResourceBase().getDisplayDescription(user.getLanguage()) != null)
-                {
-                    description = SWBUtils.TEXT.encodeExtendedCharacters(content.getResourceBase().getDisplayDescription(user.getLanguage()));
-                    if (description != null && description.trim().equals(""))
+                    String description = "";
+                    if (content.getResourceBase().getDisplayDescription(user.getLanguage()) != null)
                     {
                         description = SWBUtils.TEXT.encodeExtendedCharacters(content.getResourceBase().getDisplayDescription(user.getLanguage()));
+                        if (description != null && description.trim().equals(""))
+                        {
+                            description = SWBUtils.TEXT.encodeExtendedCharacters(content.getResourceBase().getDisplayDescription(user.getLanguage()));
+                        }
                     }
-                }
+                    if (next != null)
+                    {
+                        //String url = paramRequest.getWebPage().getUrl() + "?uri=" + next.getResourceBase().getSemanticObject().getEncodedURI();
+                        String url = paramRequest.getWebPage().getUrl();//+ "?uri=" + next.getResourceBase().getSemanticObject().getId();
+                        String nexttitle = next.getResourceBase().getDisplayTitle(user.getLanguage());
+                        nexttitle = getTitleURL(nexttitle);
+                        String urlcontent = url.toString().replace("&", "&amp;") + "/" + next.getResourceBase().getSemanticObject().getId() + "/" + nexttitle;
 
-    %>
-</h2>
+        %>
+        <a class="siguienteNota" href="<%=urlcontent%>">Noticia siguiente</a>
+        <%
+                    }
 
+        %>
+        <br/><br/>
+        <h2 class="sectionTitle"><%=title%> <%=country%> </h2>
+        <p class="kickerNota"><i><%=description%></i></p>
+        <%
+                    if (content.getSource() != null)
+                    {
+                        String source = SWBUtils.TEXT.encodeExtendedCharacters(content.getSource());
+                        if (content.getSourceURL() != null)
+                        {
+        %>
+        <a target="_blank" href="<%=content.getSourceURL()%>" class="fuente"><%=source%></a>
+        <%
+                                }
+                                else
+                                {
+        %>
+        <%=source%>
+        <%
+                        }
+                    }
+                    if (content.getAuthor() != null)
+                    {
+                        out.println(SWBUtils.TEXT.encodeExtendedCharacters(content.getAuthor()) + "<br/>");
+                    }
+                    if (content.getPublishDate() != null)
+                    {
+                        out.println(SWBUtils.TEXT.getStrDate(content.getPublishDate(), "es", "dd/mm/yyyy") + "<br/>");
+                    }
 
-<p><i><%=description%></i></p>
-<%
-            if (pathPhoto != null)
-            {
-                if (news.isMobile())
-                {
-%>
-<img alt="Imagen noticia" src="<%=pathPhoto%>" />
-<%
-                }
-                else
-                {
-%>
-<img alt="Imagen noticia" width="368" height="230" src="<%=pathPhoto%>" />
-<%
-                }
-%>             
-<!--br/-->
-<%
-            }
-%>
+                    SWBHttpServletResponseWrapper res = new SWBHttpServletResponseWrapper(response);
+                    ((org.semanticwb.portal.api.SWBParamRequestImp) paramRequest).setResourceBase(content.getResourceBase());
+                    ((org.semanticwb.portal.api.SWBParamRequestImp) paramRequest).setVirtualResource(content.getResourceBase());
+                    ((org.semanticwb.portal.api.SWBParamRequestImp) paramRequest).setMode(paramRequest.Mode_VIEW);
+                    ((org.semanticwb.portal.api.SWBParamRequestImp) paramRequest).setCallMethod(paramRequest.Call_CONTENT);
+                    content.doView(request, res, paramRequest);
+        %>
 
-<%
-            if (content.getOriginalTitle() != null)
-            {
-                String originalTitle = SWBUtils.TEXT.encodeExtendedCharacters(content.getOriginalTitle());
-%>
-<%--=originalTitle--%><br/>
-<%
-            }
-            if (content.getSource() != null)
-            {
-                String source = SWBUtils.TEXT.encodeExtendedCharacters(content.getSource());
-                if (content.getSourceURL() != null)
-                {
-%>
-<a target="_blank" href="<%=content.getSourceURL()%>"><%=source%></a>
-<%
-                }
-                else
-                {
-%>
-<%=source%>
-<%
-                }
-            }
-            if (content.getAuthor() != null)
-            {
-                out.println(SWBUtils.TEXT.encodeExtendedCharacters(content.getAuthor()) + "<br/>");
-            }
-            if (content.getPublishDate() != null)
-            {
-                out.println(SWBUtils.TEXT.getStrDate(content.getPublishDate(), "es", "dd/mm/yyyy") + "<br/>");
-            }
-
-            SWBHttpServletResponseWrapper res = new SWBHttpServletResponseWrapper(response);
-            ((org.semanticwb.portal.api.SWBParamRequestImp) paramRequest).setResourceBase(content.getResourceBase());
-            ((org.semanticwb.portal.api.SWBParamRequestImp) paramRequest).setVirtualResource(content.getResourceBase());
-            ((org.semanticwb.portal.api.SWBParamRequestImp) paramRequest).setMode(paramRequest.Mode_VIEW);
-            ((org.semanticwb.portal.api.SWBParamRequestImp) paramRequest).setCallMethod(paramRequest.Call_CONTENT);
-            content.doView(request, res, paramRequest);
-%>
-
-<%=res.toString()%>
-<%
-%>
+        <%=res.toString()%>
+        <%
+        %>
+    </div>
+</div>

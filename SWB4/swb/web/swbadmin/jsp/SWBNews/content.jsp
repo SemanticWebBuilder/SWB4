@@ -228,7 +228,17 @@
 %><jsp:include page="strategy.jsp" flush="true" /><%
                 return;
             }
+            if (paramRequest.getUser().getDevice().getId() != null && (paramRequest.getUser().getDevice().getId().equals("iPad") || paramRequest.getUser().getDevice().getId().equals("Android")))
+            {
+%><jsp:include page="contentiPad.jsp" flush="true" /><%
+                return;
+            }
 
+            if (paramRequest.getUser().getDevice().getId() != null && (paramRequest.getUser().getDevice().getId().equals("iPhone") || paramRequest.getUser().getDevice().getId().equals("Android_mobile")))
+            {
+%><jsp:include page="contentiPhone.jsp" flush="true" /><%
+                return;
+            }
             String languser = "es";
             if (paramRequest.getUser().getLanguage() != null)
             {
@@ -420,50 +430,50 @@
 <div class="entradaVideos">
     <div class="thumbVideo">
         <%
-            if (pathPhoto != null && !"Prensa".equals(id))
-            {
+                            if (pathPhoto != null && !"Prensa".equals(id))
+                            {
 
 
         %>
         <img width="120" height="120" alt="<%=title%>" src="<%=pathPhoto%>" />
         <%
-            }
+                            }
         %>
 
     </div>
     <div class="infoVideo">
         <h3><%=title%><%
-            if (country != null && !country.equals(""))
-            {
+                            if (country != null && !country.equals(""))
+                            {
             %>&nbsp;<%=country%><%
-                }
+                                }
             %>
         </h3>
         <%
-            if (originalTitle != null && !originalTitle.trim().equals(""))
-            {
+                            if (originalTitle != null && !originalTitle.trim().equals(""))
+                            {
         %>
         <p><%=originalTitle%></p>
         <%
-            }
+                            }
         %>
         <p><%=description%></p>
         <p class="fechaVideo">
             <%
-                if (date != null && !date.trim().equals(""))
-                {
+                                if (date != null && !date.trim().equals(""))
+                                {
             %>
             <%=date%> - <%=ago%>
             <%
-                }
+                                }
             %>
 
         </p>
         <%
-            if (source != null)
-            {
-                if (content.getSourceURL() == null)
-                {
+                            if (source != null)
+                            {
+                                if (content.getSourceURL() == null)
+                                {
 
         %>
         <p>Fuente: <%=source%></p>
@@ -476,63 +486,63 @@
         %>
         <p>Fuente: <a href="<%=urlsource%>"><%=source%></a></p>
         <%
-                }
-            }
+                                }
+                            }
         %>
         <p class="vermas"><a href="<%=urlcontent%>">Ver Más</a></p>
     </div>
     <div class="clear">&nbsp;</div>
 </div>
 <%
-        if (inew >= limit)
-        {
-            break;
-        }
-    }
-    int icolumna = 1;
+                    if (inew >= limit)
+                    {
+                        break;
+                    }
+                }
+                int icolumna = 1;
 
 %>
 <ul id="col<%=icolumna%>">
     <%
 
-        int count = 0;
+                    int count = 0;
 
-        String[] years = SWBNews.getYears(contents);
-        for (String year : years)
-        {
-            int iyear = Integer.parseInt(year);
-
-            for (int month = 11; month >= 0; month--)
-            {
-                if (SWBNews.hasNews(contents, month, iyear))
-                {
-                    count++;
-                }
-            }
-        }
-        int elementInColumn = count / 3;
-        if (elementInColumn == 0)
-        {
-            elementInColumn++;
-        }
-
-        int ielement = 0;
-        years = SWBNews.getYears(contents);
-        ArrayList<String> ayears = new ArrayList<String>();
-        ayears.addAll(Arrays.asList(years));
-        Collections.sort(ayears, new YearComparator());
-        for (String year : ayears)
-        {
-            int iyear = Integer.parseInt(year);
-            for (int month = 11; month >= 0; month--)
-            {
-                if (SWBNews.hasNews(contents, month, iyear))
-                {
-                    ielement++;
-                    if (ielement > elementInColumn && icolumna != 3)
+                    String[] years = SWBNews.getYears(contents);
+                    for (String year : years)
                     {
-                        icolumna++;
-                        ielement = 1;
+                        int iyear = Integer.parseInt(year);
+
+                        for (int month = 11; month >= 0; month--)
+                        {
+                            if (SWBNews.hasNews(contents, month, iyear))
+                            {
+                                count++;
+                            }
+                        }
+                    }
+                    int elementInColumn = count / 3;
+                    if (elementInColumn == 0)
+                    {
+                        elementInColumn++;
+                    }
+
+                    int ielement = 0;
+                    years = SWBNews.getYears(contents);
+                    ArrayList<String> ayears = new ArrayList<String>();
+                    ayears.addAll(Arrays.asList(years));
+                    Collections.sort(ayears, new YearComparator());
+                    for (String year : ayears)
+                    {
+                        int iyear = Integer.parseInt(year);
+                        for (int month = 11; month >= 0; month--)
+                        {
+                            if (SWBNews.hasNews(contents, month, iyear))
+                            {
+                                ielement++;
+                                if (ielement > elementInColumn && icolumna != 3)
+                                {
+                                    icolumna++;
+                                    ielement = 1;
     %>
 </ul>
 <ul id="col<%=icolumna%>">
@@ -560,17 +570,17 @@
     %>
     <li class="listaLinksMes"><a href="<%=urlcontent%>"><%=ultmsg%></a></li>
     <%
-                                        }
-                                        else
-                                        {
+                            }
+                            else
+                            {
     %>
     <li class="listaLinksMes"><a href="<%=urlcontent%>"><%=mensaje%><%=titleMonth%></a></li>
     <%
-                    }
+                                }
 
-                }
-            }
-        }
+                            }
+                        }
+                    }
     %>
 </ul>   
 <%
