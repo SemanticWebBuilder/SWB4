@@ -557,7 +557,10 @@ public class Spider implements Runnable
         {
             domain.fireEventnewTriple(suj, pred, obj, spider, lang);
         }
-        onTriple(suj, pred, obj, spider, lang);
+        else
+        {
+            onTriple(suj, pred, obj, spider, lang);
+        }
 
     }
 
@@ -734,19 +737,23 @@ public class Spider implements Runnable
 
     public void onNewSubject(URI suj)
     {
+        boolean _visit = true;
         if (domain != null)
         {
-            domain.onNewSubject(suj);
+            _visit = domain.onNewSubject(suj);
         }
-        try
+        if (_visit)
         {
-            URL newURL = suj.toURL();
-            SpiderManager.createSpider(newURL, this);
-        }
-        catch (Exception e)
-        {
-            fireError(e);
+            try
+            {
+                URL newURL = suj.toURL();
+                SpiderManager.createSpider(newURL, this);
+            }
+            catch (Exception e)
+            {
+                fireError(e);
 
+            }
         }
     }
 

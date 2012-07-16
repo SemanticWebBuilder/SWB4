@@ -94,7 +94,12 @@ public class SpiderDomain
 
     public void fireEventnewTriple(final URI suj, final URI pred, final URI obj, final Spider spider, final String lang)
     {
+
         for (final SpiderEventListener listener : SpiderManager.getListeners())
+        {
+            listener.onTriple(suj, pred, obj, spider, lang);
+        }
+        /*for (final SpiderEventListener listener : SpiderManager.getListeners())
         {
             Runnable r = new Runnable()
             {
@@ -105,6 +110,7 @@ public class SpiderDomain
                     try
                     {
                         //listener.onTriple(suj, pred, obj,spider);
+
                         listener.onTriple(suj, pred, obj, spider, lang);
                     }
                     catch (Exception e)
@@ -116,7 +122,7 @@ public class SpiderDomain
             Thread t = new Thread(r);
             t.start();
 
-        }
+        }*/
     }
 
     public boolean fireVisit(final URI suj)
@@ -132,9 +138,18 @@ public class SpiderDomain
         return fireVisit;
     }
 
-    public void onNewSubject(final URI suj)
+    public boolean onNewSubject(final URI suj)
     {
         for (final SpiderEventListener listener : SpiderManager.getListeners())
+        {
+            boolean _return=listener.onNewSubject(suj);
+            if(!_return)
+            {
+                return false;
+            }
+        }
+        return true;
+        /*for (final SpiderEventListener listener : SpiderManager.getListeners())
         {
             Runnable r = new Runnable()
             {
@@ -156,7 +171,7 @@ public class SpiderDomain
             Thread t = new Thread(r);
             t.start();
 
-        }
+        }*/
     }
 
     public void fireOnEnd(final URL url)
@@ -217,6 +232,10 @@ public class SpiderDomain
     {
         for (final SpiderEventListener listener : SpiderManager.getListeners())
         {
+            listener.onTriple(suj, pred, obj, spider, lang);
+        }
+        /*for (final SpiderEventListener listener : SpiderManager.getListeners())
+        {
             Runnable r = new Runnable()
             {
 
@@ -237,7 +256,7 @@ public class SpiderDomain
             Thread t = new Thread(r);
             t.start();
 
-        }
+        }*/
     }
 
     public void fireEventNtFormat(final String row, final Spider spider, final URL url)
