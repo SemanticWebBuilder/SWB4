@@ -141,7 +141,7 @@ public class SWBMessageProcesor extends TimerTask
                             int j=addr.lastIndexOf(":"); //MAPS74 IPV6
                             center.addAddress(InetAddress.getByName(addr.substring(0,j)),Integer.parseInt(addr.substring(j+1)));
                             
-                            if(!SWBPortal.isClient() && ini.equals("ini"))
+                            if(!SWBPortal.isClient())
                             {
                                 //System.out.println("Server...");
                                 center.sendMessage("ini|upd|"+center.getListAddress());
