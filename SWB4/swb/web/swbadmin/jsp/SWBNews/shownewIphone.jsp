@@ -296,7 +296,7 @@
                 beforettitle = getTitleURL(beforettitle);
                 String urlcontent = url.toString().replace("&", "&amp;") + "/" + before.getResourceBase().getSemanticObject().getId() + "/" + beforettitle;
 %>
-<div id="inicioBar">
+
         <a class="anteriorNota" href="<%=urlcontent%>">Noticia anterior</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         <%                        }
 
@@ -325,7 +325,7 @@
 
         %>
         <a class="siguienteNota" href="<%=urlcontent%>">Noticia siguiente</a>
-        </div>
+
         <%
                     }
 
@@ -340,23 +340,31 @@
                         if (content.getSourceURL() != null)
                         {
         %>
-        <a target="_blank" href="<%=content.getSourceURL()%>" class="fuente"><%=source%></a>
+        <p><a target="_blank" href="<%=content.getSourceURL()%>" class="fuente"><%=source%></a>
         <%
                                 }
                                 else
                                 {
         %>
-        <%=source%>
+        <p><%=source%>
         <%
                         }
                     }
                     if (content.getAuthor() != null)
                     {
-                        out.println(SWBUtils.TEXT.encodeExtendedCharacters(content.getAuthor()) + "<br/>");
+                        String author=SWBUtils.TEXT.encodeExtendedCharacters(content.getAuthor());
+                        %>
+                        <%=author%><br>
+                        <%
+                        
                     }
                     if (content.getPublishDate() != null)
                     {
-                        out.println(SWBUtils.TEXT.getStrDate(content.getPublishDate(), "es", "dd/mm/yyyy") + "<br/>");
+                        String date=SWBUtils.TEXT.getStrDate(content.getPublishDate(), "es", "dd/mm/yyyy");
+                        %>
+                        &nbsp;&nbsp;<%=date%><br/>
+                        <%
+                        
                     }
 
                     SWBHttpServletResponseWrapper res = new SWBHttpServletResponseWrapper(response);
@@ -366,7 +374,7 @@
                     ((org.semanticwb.portal.api.SWBParamRequestImp) paramRequest).setCallMethod(paramRequest.Call_CONTENT);
                     content.doView(request, res, paramRequest);
         %>
-
+        </p>
         <%=res.toString()%>
         <%
         %>
