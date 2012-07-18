@@ -284,6 +284,10 @@
                     e.printStackTrace();
                 }
             }
+            if (npage <= 0)
+            {
+                npage = 1;
+            }
             if (npage > npages)
             {
                 npage = npages;
