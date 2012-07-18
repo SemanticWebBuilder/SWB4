@@ -288,17 +288,17 @@
                 {
                     source = "";
                 }
-                String sourceURL=content.getSourceURL();
-                if(sourceURL==null)
-                    {
-                    sourceURL="#";
-                    }
-                
+                String sourceURL = content.getSourceURL();
+                if (sourceURL == null)
+                {
+                    sourceURL = "#";
+                }
+
 %>
 
-<div class="notaChunks"><img alt="<%=title%>"  src="<%=pathPhoto%>" width="80" height="80" />
-    <h3><%=title%> </h3>
-    <p><%=description%></p>
+<div class="notaChunks"><a href="<%=urlcontent%>"><img alt="<%=title%>"  src="<%=pathPhoto%>" width="80" height="80" /></a>
+    <h3><a href="<%=urlcontent%>"><%=title%></a></h3>
+    <p><a href="<%=urlcontent%>"><%=description%></a></p>
     <p class="fechaVideo"><%=date%></p>
     <p>
         Fuente: <a href="<%=sourceURL%>" class="fuente"><%=source%></a></p></div>
