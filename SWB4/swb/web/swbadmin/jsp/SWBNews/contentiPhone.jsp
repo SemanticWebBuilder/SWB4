@@ -246,7 +246,13 @@
             List<SWBNewContent> contents = (List<SWBNewContent>) request.getAttribute("news");
             Collections.sort(contents, new SWBNewContentComparator());
             DateFormat sdf = DateFormat.getDateInstance(DateFormat.MEDIUM, new Locale(usrlanguage));
-            for (SWBNewContent content : contents)
+            List<SWBNewContent> contentsToshow = new ArrayList<SWBNewContent>();
+            for (int i = 0; i < 5; i++)
+            {
+                contentsToshow.add(contents.get(i));
+
+            }
+            for (SWBNewContent content : contentsToshow)
             {
                 String title = SWBUtils.TEXT.encodeExtendedCharacters(content.getResourceBase().getDisplayTitle(usrlanguage));
                 if (title != null && title.trim().equals(""))
