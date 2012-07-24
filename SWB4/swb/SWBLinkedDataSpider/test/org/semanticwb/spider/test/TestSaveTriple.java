@@ -114,9 +114,7 @@ public class TestSaveTriple implements SpiderEventListener
     public void onStart(URL url)
     {
         String date=df.format(new Date());
-        System.out.println(date+": Inicia ------------ URL :" + url + " ----------------------");
-        //new Throwable().printStackTrace();
-    }
+        System.out.println("Thread.currentThread().getName(): "+Thread.currentThread().getName()+" "+date+": Inicia ------------ URL :" + url + " ----------------------");            }
 
     @Override
     public void onEnd(URL url)
