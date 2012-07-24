@@ -255,7 +255,7 @@ public class ProcessForm extends GenericResource {
             //TODO: Agregar propiedades del item
         }
 
-        ret.append("<div class=\"processForm\">");
+        ret.append("<div id=\"processForm\">");
         ret.append("\n<form");
 
         if (request.getParameter("useDojo") != null && request.getParameter("useDojo").equals("dojo")) {
