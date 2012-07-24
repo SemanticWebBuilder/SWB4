@@ -189,6 +189,7 @@ public class RDDLAnalizer
                                 URI pred = new URI(paramName.replace(_prefix + ":", namespace));
                                 onPred(pred,spider);
                                 String lang = tag.tag.getParam("xml:lang");
+                                spider.onNewSubject(pred,TYPE.SUBJECT,spider);                                
                                 spider.fireEventnewTriple(suj, pred, obj, spider, lang);
                             }
                             catch (Exception e)

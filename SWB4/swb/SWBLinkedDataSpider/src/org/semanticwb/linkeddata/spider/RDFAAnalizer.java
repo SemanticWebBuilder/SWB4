@@ -311,7 +311,8 @@ public class RDFAAnalizer
                 URI pred = new URI(spred);
                 onPred(pred, spider);
                 String _lang = tag.tag.getParam("xml:lang");
-                spider.onNewSubject(obj);
+                spider.onNewSubject(obj,TYPE.OBJECT,spider);
+                spider.onNewSubject(pred,TYPE.PREDICATE,spider);
                 spider.fireEventnewTriple(suj, pred, obj, spider, _lang);
             }
             catch (URISyntaxException e)
@@ -333,7 +334,8 @@ public class RDFAAnalizer
                 URI pred = new URI(spred);
                 onPred(pred, spider);
                 String _lang = tag.tag.getParam("xml:lang");
-                spider.onNewSubject(obj);
+                spider.onNewSubject(pred,TYPE.PREDICATE,spider);
+                spider.onNewSubject(obj,TYPE.OBJECT,spider);
                 // relacion  inversa
                 spider.fireEventnewTriple(obj, pred, suj, spider, _lang);
             }
@@ -361,7 +363,7 @@ public class RDFAAnalizer
 
                 }
                 newAnalizer.start();
-                spider.fireVisit(suj);
+                spider.fireVisit(suj,TYPE.SUBJECT,spider);
 
             }
             else if (tag.tag.hasParam("resource"))
@@ -380,7 +382,8 @@ public class RDFAAnalizer
                                 String spred = rel.replace(_prefix + ":", prefix.get(_prefix));
                                 URI pred = new URI(spred);
                                 onPred(pred, spider);
-                                spider.onNewSubject(obj);
+                                spider.onNewSubject(obj,TYPE.OBJECT,spider);
+                                spider.onNewSubject(pred,TYPE.PREDICATE,spider);
                                 String _lang = tag.tag.getParam("xml:lang");
                                 spider.fireEventnewTriple(suj, pred, obj, spider, _lang);
                                 break;
@@ -419,7 +422,10 @@ public class RDFAAnalizer
                     URI _suj = new URI(value);
                     URI obj = new URI(att.value.replace(att.prefix + ":", prefix.get(att.prefix)));
                     String _lang = tag.tag.getParam("xml:lang");
-                    spider.onNewSubject(_suj);
+                    spider.onNewSubject(_suj,TYPE.SUBJECT,spider);
+                    spider.onNewSubject(type,TYPE.PREDICATE,spider);
+                    spider.onNewSubject(obj,TYPE.OBJECT,spider);
+
                     spider.fireEventnewTriple(_suj, type, obj, spider, _lang);
 
                 }
@@ -486,6 +492,7 @@ public class RDFAAnalizer
                     URI pred = new URI(spred);
                     onPred(pred, spider);
                     String _lang = tag.tag.getParam("xml:lang");
+                    spider.onNewSubject(pred, TYPE.PREDICATE, spider);
                     spider.fireEventnewTriple(suj, pred, obj, spider, _lang);
                 }
                 catch (URISyntaxException e)
@@ -502,6 +509,7 @@ public class RDFAAnalizer
                     URI pred = new URI(spred);
                     onPred(pred, spider);
                     String _lang = tag.tag.getParam("xml:lang");
+                    spider.onNewSubject(pred, TYPE.PREDICATE, spider);
                     spider.fireEventnewTriple(suj, pred, obj, spider, _lang);
                 }
                 catch (URISyntaxException e)

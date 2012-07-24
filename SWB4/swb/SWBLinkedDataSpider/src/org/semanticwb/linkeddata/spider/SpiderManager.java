@@ -80,8 +80,6 @@ public class SpiderManager
     public static synchronized void onPred(URI pred, Spider spider)
     {
         loadPredicates(pred);
-
-
     }
 
     public static void loadPredicates(URI pred)
