@@ -39,10 +39,15 @@ public class SpiderManager
         {
             domain = new SpiderDomain(url);
             domainManager.put(url, domain);
+            Spider spider = new Spider(url, domain);
+            domain.addSpider(spider);
         }
+        else
+        {
 
-        Spider spider = new Spider(url, domain);
-        domain.addSpider(spider);
+            Spider spider = new Spider(url, domain);
+            domain.addSpider(spider);
+        }
 
 
     }

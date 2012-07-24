@@ -205,7 +205,7 @@ public class SpiderDomain
     public void fireOnStart(final URL url)
     {
         for (final SpiderEventListener listener : SpiderManager.getListeners())
-        {
+        {            
             listener.onStart(url);
         }
         /*for (final SpiderEventListener listener : SpiderManager.getListeners())
@@ -339,7 +339,7 @@ public class SpiderDomain
             {
                 if (spidersRunning.size() < max)
                 {
-                    Thread t = new Thread(spider);
+                    ThreadSpider t = new ThreadSpider(spider);
                     t.start();
                     spidersRunning.add(spider);
                 }
@@ -357,9 +357,13 @@ public class SpiderDomain
             for (int i = 0; i < dif; i++)
             {
                 Spider spiderToStart = spiders.poll();
+                if(spiderToStart!=null && spiderToStart.getURL().equals(spider.getURL()))
+                {
+                    continue;
+                }
                 if (spiderToStart != null)
                 {
-                    Thread t = new Thread(spiderToStart);
+                    ThreadSpider t = new ThreadSpider(spiderToStart);
                     t.start();
                     spidersRunning.add(spiderToStart);
                 }
