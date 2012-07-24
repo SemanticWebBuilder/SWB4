@@ -14,6 +14,7 @@ import java.util.Date;
 import java.util.Properties;
 import org.semanticwb.linkeddata.spider.SpiderEventListener;
 import org.semanticwb.linkeddata.spider.Spider;
+import org.semanticwb.linkeddata.spider.TYPE;
 
 /**
  *
@@ -104,7 +105,7 @@ public class TestSaveTriple implements SpiderEventListener
     }
 
     @Override
-    public boolean onNewSubject(URI suj)
+    public boolean onNewSubject(URI suj,TYPE type,Spider spider)
     {
         return false;
     }
