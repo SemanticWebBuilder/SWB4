@@ -49,7 +49,7 @@ public class Monitor extends TimerTask
             Spider spider = domain.spiders.poll();
             if (spider != null)
             {
-                Thread t = new Thread(spider);
+                ThreadSpider t = new ThreadSpider(spider);
                 t.start();
                 domain.spidersRunning.add(spider);
             }
