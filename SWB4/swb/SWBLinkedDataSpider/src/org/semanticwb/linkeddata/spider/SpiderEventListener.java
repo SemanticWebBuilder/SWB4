@@ -11,14 +11,16 @@ import java.net.URL;
  *
  * @author victor.lorenzana
  */
+
+
 public interface SpiderEventListener
 {
-
+    
     public void onStart(URL url);
 
     public void onEnd(URL url);
 
-    public boolean onNewSubject(URI url);
+    public boolean onNewSubject(URI url,TYPE type,Spider spider);
 
     public void onTriple(URI suj, URI pred, String obj, Spider source, String lang);
 

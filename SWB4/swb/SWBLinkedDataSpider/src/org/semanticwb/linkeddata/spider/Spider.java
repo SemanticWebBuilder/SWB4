@@ -586,12 +586,12 @@ public class Spider implements Runnable
         }
     }
 
-    public void fireVisit(final URI suj)
+    public void fireVisit(final URI suj,TYPE type,Spider spider)
     {
         boolean fireVisit = true;
         if (domain != null)
         {
-            fireVisit = domain.fireVisit(suj);
+            fireVisit = domain.fireVisit(suj,type,spider);
         }
         if (fireVisit)
         {
@@ -735,12 +735,12 @@ public class Spider implements Runnable
         }
     }
 
-    public void onNewSubject(URI suj)
+    public void onNewSubject(URI suj,TYPE type,Spider spider)
     {
         boolean _visit = true;
         if (domain != null)
         {
-            _visit = domain.onNewSubject(suj);
+            _visit = domain.onNewSubject(suj,type,spider);
         }
         if (_visit)
         {

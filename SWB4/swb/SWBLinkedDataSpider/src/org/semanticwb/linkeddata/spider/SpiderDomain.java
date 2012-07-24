@@ -125,12 +125,12 @@ public class SpiderDomain
         }*/
     }
 
-    public boolean fireVisit(final URI suj)
+    public boolean fireVisit(final URI suj,TYPE type,Spider spider)
     {
         boolean fireVisit=true;
         for (final SpiderEventListener listener : SpiderManager.getListeners())
         {
-            if(!listener.onNewSubject(suj))
+            if(!listener.onNewSubject(suj,type,spider))
             {
                 fireVisit=false;
             }
@@ -138,11 +138,11 @@ public class SpiderDomain
         return fireVisit;
     }
 
-    public boolean onNewSubject(final URI suj)
+    public boolean onNewSubject(final URI suj,TYPE type,Spider spider)
     {
         for (final SpiderEventListener listener : SpiderManager.getListeners())
         {
-            boolean _return=listener.onNewSubject(suj);
+            boolean _return=listener.onNewSubject(suj,type,spider);
             if(!_return)
             {
                 return false;

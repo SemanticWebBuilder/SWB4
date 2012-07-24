@@ -52,7 +52,7 @@ public class SpiderSync extends Spider
     }
 
     @Override
-    public void onNewSubject(URI suj)
+    public void onNewSubject(URI suj,TYPE type,Spider spider)
     {
     }
 
