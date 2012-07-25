@@ -46,7 +46,7 @@ import com.arthurdo.parser.HtmlTag;
 import java.io.ByteArrayInputStream;
 import java.util.Enumeration;
 import java.util.HashMap;
-import org.semanticwb.model.SWBClass;
+import org.semanticwb.model.*;
 import org.semanticwb.portal.SWBForms;
 import org.semanticwb.process.model.ItemAwareReference;
 
@@ -240,15 +240,31 @@ public class SWBFormMgrLayer {
             }catch(Exception e){
                 log.error(e);
             }
+            
+            String url = foi.getProcessWebPage().getUrl();
+            ResourceType rtype=ResourceType.ClassMgr.getResourceType("ProcessTaskInbox", foi.getProcessSite());
+
+            if (rtype != null) {
+                Resource res=rtype.getResource();
+                if(res!=null)
+                {
+                    Resourceable resable=res.getResourceable();
+                    if(resable instanceof WebPage)
+                    {
+                        url=((WebPage)resable).getUrl();
+                    }
+                }
+            }
+            
             if (request.getParameter("accept") != null) {
                 foi.close(response.getUser(), Instance.ACTION_ACCEPT);
-                response.sendRedirect(foi.getProcessWebPage().getUrl());
+                response.sendRedirect(url);
             } else if (request.getParameter("reject") != null) {
                 foi.close(response.getUser(), Instance.ACTION_REJECT);
-                response.sendRedirect(foi.getProcessWebPage().getUrl());
+                response.sendRedirect(url);
             } else if(request.getParameter("swp_action") != null) {            
                 foi.close(response.getUser(), request.getParameter("swp_action"));
-                response.sendRedirect(foi.getProcessWebPage().getUrl());
+                response.sendRedirect(url);
             }
             response.setRenderParameter("suri", suri);
         } catch (Exception e) {
