@@ -205,7 +205,7 @@ public class ProcessForm extends GenericResource {
                 out.println("<button dojoType=\"dijit.form.Button\" name=\"reject\" type=\"submit\">Rechazar Tarea</button>");
             }
             if (base.getAttribute("btnCancel", "").equals("use")) {
-                out.println("<button dojoType=\"dijit.form.Button\" onclick=\"window.location='" + foi.getProcessWebPage().getUrl() + "?suri=" + suri + "'\">Regresar</button>");
+                out.println("<button dojoType=\"dijit.form.Button\" onclick=\"window.location='" + foi.getUserTaskInboxUrl() + "?suri=" + suri + "'\">Regresar</button>");
             }
 
             out.println("</span></fieldset>");
@@ -443,22 +443,6 @@ public class ProcessForm extends GenericResource {
                 }
             }
             try {
-                
-                String url=foi.getProcessWebPage().getUrl();
-                ResourceType rtype=ResourceType.ClassMgr.getResourceType("ProcessTaskInbox", base.getWebSite());
-                
-                if (rtype != null) {
-                    Resource res=rtype.getResource();
-                    if(res!=null)
-                    {
-                        Resourceable resable=res.getResourceable();
-                        if(resable instanceof WebPage)
-                        {
-                            url=((WebPage)resable).getUrl();
-                        }
-                    }
-                }
-                
                 mgr.processForm(request);
                 if (request.getParameter("accept") != null) {
                     foi.close(response.getUser(), Instance.ACTION_ACCEPT);
@@ -471,10 +455,10 @@ public class ProcessForm extends GenericResource {
 //                        if(fn instanceof UserTask)url=((UserTask)fn).getTaskWebPage().getUrl()+"?suri="+l.get(0).getURI();
 //                    }
                     
-                    response.sendRedirect(url);
+                    response.sendRedirect(foi.getUserTaskInboxUrl());
                 } else if (request.getParameter("reject") != null) {
                     foi.close(response.getUser(), Instance.ACTION_REJECT);
-                    response.sendRedirect(url);
+                    response.sendRedirect(foi.getUserTaskInboxUrl());
                 }
             } catch (Exception e) {
                 log.error(e);
