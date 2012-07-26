@@ -71,9 +71,11 @@ public class TransformRepositoryFile extends org.semanticwb.process.model.base.T
             file=RepositoryFile.ClassMgr.createRepositoryFile(this.getProcessSite());
         }
         String name=this.getNodeName();
+        String comments = this.getNodeComment();
         
         file.setRepositoryDirectory(this.getNodeDirectory());
         if(name!=null)name=name.replace("{filename}", this.getFileTemplate().getFileName());
+        if(comments!=null)comments=SWBScriptParser.parser(instance, user, comments);
         file.setTitle(SWBScriptParser.parser(instance, user, name));
         file.setOwnerUserGroup(user.getUserGroup());
 
@@ -82,7 +84,7 @@ public class TransformRepositoryFile extends org.semanticwb.process.model.base.T
             ItemAwareStatus _status = getNodeStatus();
             String status = null;
             if (_status != null) status = _status.getId();
-            OutputStream ous = file.storeFile(SWBScriptParser.parser(instance, user, name)+".docx", null, false, status);
+            OutputStream ous = file.storeFile(SWBScriptParser.parser(instance, user, name)+".docx", comments, false, status);
             rep.generateReport(ous);
             
             if (getNodeVarName() != null && !getNodeVarName().trim().equals("")){
