@@ -74,13 +74,15 @@ public class StoreRepositoryFile extends org.semanticwb.process.model.base.Store
                 f.setRepositoryFile(file);
                 file.setRepositoryDirectory(this.getNodeDirectory());
                 String name=this.getNodeName();
+                String comments = this.getNodeComment();
                 if(name!=null)name=name.replace("{filename}", filename);
+                if(comments!=null)comments=SWBScriptParser.parser(instance, user, comments);
                 file.setTitle(SWBScriptParser.parser(instance, user, name==null?filename:name));
                 file.setOwnerUserGroup(user.getUserGroup());
                 
                 try
                 {
-                    file.storeFile(filename, new FileInputStream(filePath), "Created by process:"+instance.getProcessInstance().getProcessType().getId()+", processInstance:"+instance.getProcessInstance().getId(), false,getNodeStatus()!=null?getNodeStatus().getId():null);
+                    file.storeFile(filename, new FileInputStream(filePath), comments, false,getNodeStatus()!=null?getNodeStatus().getId():null);
                 }catch(Exception e)
                 {
                     log.error(e);
@@ -125,15 +127,16 @@ public class StoreRepositoryFile extends org.semanticwb.process.model.base.Store
                     }
                     f.addRepositoryFile(file);
                     file.setRepositoryDirectory(this.getNodeDirectory());
-                    String name=this.getNodeName();
-                    if(name!=null)name=name.replace("{filename}", filename);
+                    String name=this.getNodeName();                    
+                    if(name!=null)name=name.replace("{filename}", filename);                    
                     file.setTitle(SWBScriptParser.parser(instance, user, name==null?filename:name));
                     file.setOwnerUserGroup(user.getUserGroup());
                 }
-                
+                String comments = this.getNodeComment();
+                if(comments!=null)comments=SWBScriptParser.parser(instance, user, comments);
                 try
                 {
-                    file.storeFile(filename, new FileInputStream(filePath), "Created by process:"+instance.getProcessInstance().getProcessType().getId()+", processInstance:"+instance.getProcessInstance().getId(), false,getNodeStatus()!=null?getNodeStatus().getId():"Indefinido");
+                    file.storeFile(filename, new FileInputStream(filePath), comments, false,getNodeStatus()!=null?getNodeStatus().getId():"Indefinido");
                 }catch(Exception e)
                 {
                     log.error(e);
