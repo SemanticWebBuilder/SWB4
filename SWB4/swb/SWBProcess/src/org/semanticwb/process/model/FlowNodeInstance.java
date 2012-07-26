@@ -32,12 +32,7 @@ import com.hp.hpl.jena.vocabulary.RDF;
 import java.util.Iterator;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
-import org.semanticwb.model.GenericObject;
-import org.semanticwb.model.SWBClass;
-import org.semanticwb.model.SWBModel;
-import org.semanticwb.model.User;
-import org.semanticwb.model.WebPage;
-import org.semanticwb.model.base.GenericObjectBase;
+import org.semanticwb.model.*;
 import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticObject;
 
@@ -410,9 +405,6 @@ public class FlowNodeInstance extends org.semanticwb.process.model.base.FlowNode
         }
     }
 
-
-
-
     /**
      * Aborta las instancias anteriores ene el flujo a esta instancia
      * @param user
@@ -497,6 +489,24 @@ public class FlowNodeInstance extends org.semanticwb.process.model.base.FlowNode
     {
         return getProcessInstance().getProcessType().getProcessWebPage();
     }
+    
+    /**
+     * Obtiene la URL de la página Web asociada a la Bandeja de tareas del sitio.
+     * @return URL de la bandeja de tareas o URL del proceso en su defecto.
+     */
+    public String getUserTaskInboxUrl() {
+        String url = getProcessWebPage().getUrl();
+        ResourceType rtype = ResourceType.ClassMgr.getResourceType("ProcessTaskInbox", getProcessSite());
 
-
+        if (rtype != null) {
+            Resource res = rtype.getResource();
+            if(res != null) {
+                Resourceable resable = res.getResourceable();
+                if(resable instanceof WebPage) {
+                    url = ((WebPage)resable).getUrl();
+                }
+            }
+        }
+        return url;
+    }
 }
