@@ -89,6 +89,11 @@ public class ProcessForm extends GenericResource {
             return;
         }
         
+        if (foi.getStatus() == Instance.STATUS_CLOSED || foi.getStatus() == Instance.STATUS_ABORTED || foi.getStatus() == Instance.STATUS_STOPED) {
+            out.println("La tarea ya ha sido ejecutada...");
+            return;
+        }
+        
         if(asigned==null)
         {
             foi.setAssigned(new Date());
