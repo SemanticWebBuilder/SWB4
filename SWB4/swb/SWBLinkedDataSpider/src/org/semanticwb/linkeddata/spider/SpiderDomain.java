@@ -101,49 +101,49 @@ public class SpiderDomain
         }
         /*for (final SpiderEventListener listener : SpiderManager.getListeners())
         {
-            Runnable r = new Runnable()
-            {
+        Runnable r = new Runnable()
+        {
 
-                @Override
-                public void run()
-                {
-                    try
-                    {
-                        //listener.onTriple(suj, pred, obj,spider);
+        @Override
+        public void run()
+        {
+        try
+        {
+        //listener.onTriple(suj, pred, obj,spider);
 
-                        listener.onTriple(suj, pred, obj, spider, lang);
-                    }
-                    catch (Exception e)
-                    {
-                        log.debug(e);
-                    }
-                }
-            };
-            Thread t = new Thread(r);
-            t.start();
+        listener.onTriple(suj, pred, obj, spider, lang);
+        }
+        catch (Exception e)
+        {
+        log.debug(e);
+        }
+        }
+        };
+        Thread t = new Thread(r);
+        t.start();
 
         }*/
     }
 
-    public boolean fireVisit(final URI suj,TYPE type,Spider spider)
+    public boolean fireVisit(final URI suj, TYPE type, Spider spider)
     {
-        boolean fireVisit=true;
+        boolean fireVisit = true;
         for (final SpiderEventListener listener : SpiderManager.getListeners())
         {
-            if(!listener.onNewSubject(suj,type,spider))
+            if (!listener.onNewSubject(suj, type, spider))
             {
-                fireVisit=false;
+                fireVisit = false;
             }
         }
         return fireVisit;
     }
 
-    public boolean onNewSubject(final URI suj,TYPE type,Spider spider)
+    public boolean onNewSubject(final URI suj, TYPE type, Spider spider)
     {
         for (final SpiderEventListener listener : SpiderManager.getListeners())
         {
-            boolean _return=listener.onNewSubject(suj,type,spider);
-            if(!_return)
+            boolean _return = listener.onNewSubject(suj, type, spider);
+            if (!_return)
             {
                 return false;
             }
@@ -151,25 +151,25 @@ public class SpiderDomain
         return true;
         /*for (final SpiderEventListener listener : SpiderManager.getListeners())
         {
-            Runnable r = new Runnable()
-            {
+        Runnable r = new Runnable()
+        {
 
-                @Override
-                public void run()
-                {
-                    try
-                    {
-                        listener.onNewSubject(suj);
-                    }
-                    catch (Exception e)
-                    {
-                        log.debug(e);
+        @Override
+        public void run()
+        {
+        try
+        {
+        listener.onNewSubject(suj);
+        }
+        catch (Exception e)
+        {
+        log.debug(e);
 
-                    }
-                }
-            };
-            Thread t = new Thread(r);
-            t.start();
+        }
+        }
+        };
+        Thread t = new Thread(r);
+        t.start();
 
         }*/
     }
@@ -205,29 +205,29 @@ public class SpiderDomain
     public void fireOnStart(final URL url)
     {
         for (final SpiderEventListener listener : SpiderManager.getListeners())
-        {            
+        {
             listener.onStart(url);
         }
         /*for (final SpiderEventListener listener : SpiderManager.getListeners())
         {
-            Runnable r = new Runnable()
-            {
+        Runnable r = new Runnable()
+        {
 
-                @Override
-                public void run()
-                {
-                    try
-                    {
-                        listener.onStart(url);
-                    }
-                    catch (Exception e)
-                    {
-                        log.debug(e);
-                    }
-                }
-            };
-            Thread t = new Thread(r);
-            t.start();
+        @Override
+        public void run()
+        {
+        try
+        {
+        listener.onStart(url);
+        }
+        catch (Exception e)
+        {
+        log.debug(e);
+        }
+        }
+        };
+        Thread t = new Thread(r);
+        t.start();
 
         }*/
     }
@@ -240,25 +240,25 @@ public class SpiderDomain
         }
         /*for (final SpiderEventListener listener : SpiderManager.getListeners())
         {
-            Runnable r = new Runnable()
-            {
+        Runnable r = new Runnable()
+        {
 
-                @Override
-                public void run()
-                {
-                    try
-                    {
-                        //listener.onTriple(suj, pred, obj,spider);
-                        listener.onTriple(suj, pred, obj, spider, lang);
-                    }
-                    catch (Exception e)
-                    {
-                        log.debug(e);
-                    }
-                }
-            };
-            Thread t = new Thread(r);
-            t.start();
+        @Override
+        public void run()
+        {
+        try
+        {
+        //listener.onTriple(suj, pred, obj,spider);
+        listener.onTriple(suj, pred, obj, spider, lang);
+        }
+        catch (Exception e)
+        {
+        log.debug(e);
+        }
+        }
+        };
+        Thread t = new Thread(r);
+        t.start();
 
         }*/
     }
@@ -317,16 +317,16 @@ public class SpiderDomain
 
     public void addSpider(Spider spider)
     {
-        String _url=spider.getURL().toString();
-        URL url=spider.getURL();
-        int pos=_url.indexOf("#");
-        if(pos!=-1)
+        String _url = spider.getURL().toString();
+        URL url = spider.getURL();
+        int pos = _url.indexOf("#");
+        if (pos != -1)
         {
             try
             {
-                url=new URL(_url.substring(0,pos));
+                url = new URL(_url.substring(0, pos));
             }
-            catch(MalformedURLException e)
+            catch (MalformedURLException e)
             {
                 log.error(e);
             }
@@ -357,7 +357,11 @@ public class SpiderDomain
             for (int i = 0; i < dif; i++)
             {
                 Spider spiderToStart = spiders.poll();
-                if(spiderToStart!=null && spiderToStart.getURL().equals(spider.getURL()))
+                if (spiderToStart != null && spiderToStart.getURL().equals(spider.getURL()))
+                {
+                    continue;
+                }
+                if (spider.getDomain() != null && spider.getDomain().totalSpiders.contains(spider.getURL()))
                 {
                     continue;
                 }
