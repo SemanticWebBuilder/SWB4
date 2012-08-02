@@ -733,6 +733,13 @@ public class ProcessForm extends GenericResource {
 
                     } catch (Exception e) {
                         log.error("Error al cambiar el orden de las propiedades.", e);
+                        base.setAttribute("prop" + pid, prop2change );
+                        try {
+                           base.updateAttributesToDB();  
+                        } catch (Exception eupd) {
+                            log.error("Error al restaurar el valor de la propiedad.", eupd);
+                        }
+                        
                     }
                 }
             }
