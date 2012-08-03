@@ -30,6 +30,7 @@ public class SpiderDomain
     private static Logger log = SWBUtils.getLogger(SpiderDomain.class);
     private int max;
 
+    
     public SpiderDomain(URL url)
     {
         this.max = 30;
