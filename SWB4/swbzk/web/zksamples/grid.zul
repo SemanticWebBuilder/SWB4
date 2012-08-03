@@ -1,0 +1,56 @@
+<!--
+<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" arg0="./mywin"?>
+-->
+<window id="mywin" border="none" xmlns:c="client">
+	<zscript>
+	//init example data beans
+	import org.semanticwb.model.*;
+	import org.semanticwb.*;
+	import org.semanticwb.portal.api.*;
+	
+	SWBParamRequest paramRequest=requestScope.get("paramRequest");
+	WebPage wpage=paramRequest.getWebPage();
+	User user=paramRequest.getUser();
+	
+	List webpages=new SWBModelWrapper().listWebPages(wpage.getWebSite());
+	
+	</zscript>
+    <label value="Hola:${user.fullName}"/>
+    <!--<div apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('org.semanticwb.model.SWBModelWrapper')">-->
+	<grid mold="paging" apply="org.zkoss.bind.BindComposer" model="@load(webpages)">
+		<columns menupopup="auto">
+			<column label="Title" sort="auto(title)"/>
+			<column label="Description" sort="auto(description)"/>
+			<column label="Active" sort="auto(active)"/>
+			<column label="Views" sort="auto(views)"/>
+			<column label="Creator" sort="auto(creator.login)"/>
+			<column label="Created" sort="auto(created)"/>
+		</columns>
+		
+            <template name="model">
+                <row>
+                    <textbox inplace="true" value="@bind(each.title)" width="99%" />
+                    <textbox inplace="true" value="@bind(each.description)" width="99%" />
+  				    <checkbox checked="@bind(each.active)" />
+                    <div>
+                        <!-- Inplace is pure client action so that use client way to modify the width-->
+                        <spinner inplace="true"
+                            value="@bind(each.views)" width="30px"
+                            c:onFocus='this.setWidth("55px")'
+                            c:onBlur='this.setWidth("30px")' />
+                        <label value="views" />
+                    </div>
+                    <label value="@bind(each.creator.login)"/>
+                    <datebox inplace="true" value="@bind(each.created)" width="99%" format="MM/dd/yyyy" />
+<!--  				    
+                    <combobox hflex="1" inplace="true"
+                        model="@load(vm.allStatuses)" selectedItem="@bind(each.status)">
+                        <template name="model">
+                            <comboitem label="@load(each)" />
+                        </template>
+                    </combobox>
+-->                    
+                </row>
+            </template>		
+	</grid>
+</window>
