@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<window id="radio" title="Radio" border="normal" width="100%">
+<vbox width="100%" align="stretch">
+	ZK Online Survey
+	<radiogroup onCheck="choice.value = self.selectedItem.label">
+		<grid>
+			<rows>
+				<row spans="5">
+				Which one area would you like ZK to improve upon?</row>
+				<row>
+					<radio label="IDE Support" />
+					<radio label="Bug Fixing" />
+					<radio label="Performance" />
+					<radio label="Backward Compatibility" />
+					<radio label="Offline Functionality" />
+				</row>
+				<row>
+					<radio label="Forum" />
+					<radio label="Smalltalk" />
+					<radio label="How-to Wiki" />
+					<radio label="Offical Web Site" />
+					<radio label="On-line Training" />
+				</row>
+				<row>
+					<radio label="ZK Demo" />
+					<radio label="Style Guide" />
+					<radio label="Developer Guide" />
+					<radio label="Developer Reference" />
+					<radio label="Component Developer's Guide" />
+				</row>
+			</rows>
+		</grid>
+	</radiogroup>
+	<hbox>
+		You have selected :
+		<label id="choice" />
+	</hbox>
+	<separator bar="true" />
+	Which layout component you like in ZK ?
+	<hbox>
+		<checkbox id="l1" label="Border" onCheck="doChecked()" />
+		<checkbox id="l2" label="Box" onCheck="doChecked()" />
+		<checkbox id="l3" label="Table" onCheck="doChecked()" />
+		<checkbox id="l4" label="Portal" onCheck="doChecked()" />
+		<checkbox id="l5" label="Column" onCheck="doChecked()" />
+	</hbox>
+	<hbox>
+		You have selected :
+		<label id="layout" />
+	</hbox>
+	<zscript>
+			void doChecked() {
+				layout.value = (l1.isChecked() ? l1.label+' ' : &quot;&quot;) 
+					+ (l2.isChecked() ? l2.label+' ' : &quot;&quot;)
+					+ (l3.isChecked() ? l3.label+' ' : &quot;&quot;) 
+					+ (l4.isChecked() ? l4.label+' ' : &quot;&quot;)  
+					+ (l5.isChecked() ? l5.label+' ' : &quot;&quot;);
+			}
+		</zscript>
+</vbox>
+</window>

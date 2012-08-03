@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+index.zul
+
+{{IS_NOTE
+	Purpose:
+
+	Description:
+
+	History:
+		Mon Jun 12 21:23:35     2006, Created by tomyeh
+		Fri May 01 04:36:35     2009, Modified by stera
+}}IS_NOTE
+
+Copyright (C) 2006 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<?page id="userGuide" title="ZK Sandbox"?>
+<?link rel="stylesheet" type="text/css" href="/macros/zksandbox.css.dsp?v=${desktop.webApp.build}"?>
+<?script type="text/javascript" src="/macros/zksandbox.js.dsp?v=${desktop.webApp.build}"?>
+<?script type="text/javascript" content="jq.IE6_ALPHAFIX=/24x24.png|32x32.png|48x48.png|128x128.png|ButtonBlue.png|ButtonGray.png|small.png|small-sel.png|normal.png|normal-sel.png|large.png|large-sel.png/;"?>
+<?component name="category" extends="button" widgetClass="zksandbox.Category" mold="default"?>
+<?component name="categorybar" extends="div" widgetClass="zksandbox.Categorybar"?>
+<zk xmlns="http://www.zkoss.org/2005/zul">
+<borderlayout id="main" height="100%">
+    <north border="normal" title="" size="100px">
+        <borderlayout>
+            <west border="none" size="215px" flex="true">
+				<image src="/img/SWB-Social.png" height="50"/>
+            </west>
+            <center id="menu" border="normal" flex="true">
+                <menubar id="menubar" width="100%">
+                        <menuitem width="10%" image="/img/iconos/mensajes.png"  height="70px;" label="Publicar" onClick="alert(self.label)">
+                        </menuitem>
+                        <custom-attributes><image id="" src="/img/iconos/mensajes.png" width="45px"  height="45px"/>
+                        </custom-attributes>
+                        <menu width="10%" label="Análisis" image="/img/Centigrade-Widget-Icons/QuestionmarkButton-16x16.png">
+                            <menupopup>
+                                <menuitem width="10%" label="Análisis 1" onClick="alert(self.label)" />
+                                <menuitem width="10%" label="Análisis 2" onClick="alert(self.label)" />
+                                <menuitem width="10%" label="Análisis 3" onClick="alert(self.label)" />
+                                <menuitem width="10%" label="Análisis n" onClick="alert(self.label)" />
+                            </menupopup>
+                        </menu>
+                        <menuitem width="10%" label="Autorizar" image="/img/Centigrade-Widget-Icons/Briefcase-16x16.png" onClick="alert(self.label)">
+                        </menuitem>
+                        <menu width="10%" label="Configurar" image="/img/Centigrade-Widget-Icons/QuestionmarkButton-16x16.png">
+                            <menupopup>
+                                <menuitem width="10%" label="Análisis 1" onClick="alert(self.label)" />
+                                <menuitem width="10%" label="Análisis 2" onClick="alert(self.label)" />
+                                <menuitem width="10%" label="Análisis 3" onClick="alert(self.label)" />
+                                <menuitem width="10%" label="Análisis n" onClick="alert(self.label)" />
+                            </menupopup>
+                        </menu>
+                        <menu width="10%" label="Herramientas" image="/img/Centigrade-Widget-Icons/QuestionmarkButton-16x16.png">
+                            <menupopup>
+                                <menuitem width="10%" label="Análisis 1" onClick="alert(self.label)" />
+                                <menuitem width="10%" label="Análisis 2" onClick="alert(self.label)" />
+                                <menuitem width="10%" label="Análisis 3" onClick="alert(self.label)" />
+                                <menuitem width="10%" label="Análisis n" onClick="alert(self.label)" />
+                            </menupopup>
+                        </menu>
+                        <menuitem width="10%" label="Ayuda" image="/img/Centigrade-Widget-Icons/Briefcase-16x16.png" onClick="alert(self.label)">
+                        </menuitem>
+                    </menubar>
+
+            </center>
+        </borderlayout>
+    </north>
+
+    <center border="none">
+        <borderlayout>
+            <west id="" title=" " maxsize="600" size="215px" flex="true" collapsible="true" splittable="true">
+			    <vlayout width="100%" height="100%">   
+				<tree id="branchs" width="400px" rows="8" height="100%" onClick='self.setZclass("z-vfiletree")'>
+					<!--zscript deferred="true">    
+						branchs.setZclass('z-vfiletree');
+					</zscript-->
+					<treechildren>
+						<treeitem>
+							<treerow>
+								<treecell label="Item 1" />
+							</treerow>
+							<treechildren>
+								<treeitem>
+									<treerow>
+										<treecell label="Item 1.1.1" />
+									</treerow>
+								</treeitem>
+								<treeitem>
+									<treerow>
+										<treecell label="Item 1.1.2" />
+									</treerow>
+								</treeitem>
+							</treechildren>
+						</treeitem>
+						
+						<treeitem>
+							<treerow>
+								<treecell label="Item 2" />
+							</treerow>
+							<treechildren>
+								<treeitem>
+										<treerow>
+												<treecell label="Item 2.1" />
+										</treerow>
+										<treechildren>
+												<treeitem>
+													<treerow>
+														
+														<treecell label="Item 2.1.1" />
+													</treerow>
+												</treeitem>
+												<treeitem>
+													<treerow>
+														<treecell label="Item 2.1.2" />
+													</treerow>
+												</treeitem>
+										</treechildren>
+								</treeitem>
+								<treeitem>
+									<treerow>
+										<treecell label="Item 2.2" />
+									</treerow>
+									<treechildren>
+										<treeitem>
+											<treerow>
+												<treecell label="Item 2.2.1" />
+											</treerow>
+										</treeitem>
+									</treechildren>
+								</treeitem>
+							</treechildren>
+						</treeitem>
+					</treechildren>
+				</tree>
+				</vlayout>
+            </west>
+            <center id="wrkSpc" border="normal">
+            </center>
+            <east title=" " size="15%" flex="true" splittable="true" collapsible="true">
+                <borderlayout>
+                    <north border="normal" size="50%" splittable="true" collapsible="true">
+                        <borderlayout>
+                            <north border="normal" title="Widget1" size="50%" splittable="true" collapsible="true">
+                             </north>
+                            <center border="normal"  title="Widget2" >
+                            </center>
+
+                        </borderlayout>
+                    </north>
+                    <center border="normal">
+                        <borderlayout>
+                        <north border="normal" size="50%" title="Widget3" collapsible="true">
+
+                        </north>
+                        <center border="normal"  title="Widget4">
+                        </center>
+                        </borderlayout>
+                    </center>
+                </borderlayout>
+            </east>
+        </borderlayout>
+    </center>
+</borderlayout>
+
+</zk>

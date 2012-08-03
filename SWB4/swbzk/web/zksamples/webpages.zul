@@ -1,0 +1,58 @@
+<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" arg0="./mywin"?>
+<window id="mywin" border="none">
+ZK name check list :
+	<zscript>
+	//init example data beans
+	import org.semanticwb.model.*;
+    
+	List webpages=new SWBModelWrapper().listWebPages();
+	WebPage selected = webpages.get(0);
+	
+	</zscript>
+        
+        <menubar id="mbar" children="@bind(webpages) @template(empty each.children?'menuitem':'menu')">
+<!--         
+        <menubar id="mbar" children="@bind(webpages) @template(empty each.children?'menuitem':'menu')">
+		<template name="menu" var="node">
+			<menu label="@bind(node.title)">
+				<menupopup children="@bind(node.children) @template(empty each.children?'menuitem':'menu')"/>
+			</menu>
+		</template>
+-->                
+		<template name="menuitem" var="node">
+<!--                    
+			<menuitem label="@bind(node.title)" onClick="@command('menuClicked',node=node)" />
+-->                        
+			<menuitem label="@bind(node.title)" />
+		</template>
+                
+	</menubar>              
+	
+	<listbox model="@{webpages}" mold="paging" selectedItem="@{selected}" rows="10">
+		<listhead >
+				<listheader label="Title"/>		
+				<listheader label="Description"/>		
+		</listhead>
+		<listitem self="@{each=webpage}">
+			<listcell label="@{webpage.title}" />
+			<listcell label="@{webpage.description}" />
+		</listitem>
+	</listbox>
+	<grid>
+		<columns>
+			<column label="Title" />
+			<column label="Description" />
+			<column label="Active" />
+			<column label="Parent" />
+		</columns>
+		<rows>
+			<row>
+				<textbox value="@{selected.title}" />
+				<textbox value="@{selected.description}" />
+				<checkbox checked="@{selected.active}" />
+				<label value="@{selected.paretWebPage.title}" />
+			</row>
+		</rows>
+	</grid>        
+     
+</window>

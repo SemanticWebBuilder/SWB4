@@ -1,0 +1,35 @@
+<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" arg0="./mywin"?>
+<window id="mywin" border="none">
+ZK name check list :
+	<zscript>
+	//init example data beans
+	import org.semanticwb.model.*;
+    
+	List persons=new SWBModelWrapper().listUsers();
+	User selected = persons.get(0);
+	
+	System.out.println(session);
+	
+	</zscript>
+	
+	<listbox model="@{persons}" selectedItem="@{selected}" rows="5">
+		<listhead >
+				<listheader label="Name"/>		
+		</listhead>
+		<listitem self="@{each=person}" label="@{person.fullName}" />
+	</listbox>
+	<grid>
+		<columns>
+			<column label="First Name" />
+			<column label="Last Name" />
+			<column label="Full Name" />
+		</columns>
+		<rows>
+			<row>
+				<textbox value="@{selected.firstName}" />
+				<textbox value="@{selected.lastName}" />
+				<label value="@{selected.fullName}" />
+			</row>
+		</rows>
+	</grid>
+</window>
