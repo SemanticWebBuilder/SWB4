@@ -70,7 +70,7 @@
     -->
     
         <target name="-post-dist">
-            <copyfiles files="../swbp/build/web" todir="${build.web.dir}//"/>      
+            <copyfiles files="../swbzk/build/web" todir="${build.web.dir}//"/>      
         </target>  
         
 </project>
