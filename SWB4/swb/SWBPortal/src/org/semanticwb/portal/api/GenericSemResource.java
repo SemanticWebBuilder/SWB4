@@ -28,6 +28,7 @@
 
 package org.semanticwb.portal.api;
 
+import com.hp.hpl.jena.rdf.model.Statement;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Iterator;
@@ -70,11 +71,12 @@ public class GenericSemResource extends GenericResource implements org.semanticw
     {
         this.m_obj=obj;
         try
-        {
-            Iterator<SemanticObject> it=obj.getModel().listSubjects(Resource.swb_resourceData, obj);
+        {   
+            Iterator<Statement> it=obj.listInvProperties(Resource.swb_resourceData.getRDFProperty());
+            //Iterator<SemanticObject> it=obj.getModel().listSubjects(Resource.swb_resourceData, obj);
             while(it.hasNext())
             {
-                setResourceBase((Resource)it.next().createGenericInstance());
+                setResourceBase((Resource)SemanticObject.createSemanticObject(it.next().getSubject()).createGenericInstance());
                 break;
             }
         }catch(Exception e){log.error(e);}

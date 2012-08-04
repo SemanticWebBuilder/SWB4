@@ -322,6 +322,7 @@ public class SemanticObject
             if(semanticObject.m_props.size()>0)
             {
                cacheSemanticObject(semanticObject);
+               if(semanticObject.m_propsInv==null)semanticObject.m_propsInv=Collections.synchronizedList(new ArrayList());
             }
         }
     }
@@ -904,7 +905,7 @@ public class SemanticObject
     
  //************************************************************** RDF BASE ***********************************************************   
     
-    private Iterator<Statement> listProperties(Property prop)
+    public Iterator<Statement> listProperties(Property prop)
     {
         ArrayList ret=new ArrayList();        
         List stmts=getProps();
@@ -1127,7 +1128,7 @@ public class SemanticObject
 
 //************************************************************** RDF Inv ***********************************************************   
  
-    private Iterator<Statement> listInvProperties(Property prop)
+    public Iterator<Statement> listInvProperties(Property prop)
     {
         ArrayList ret=new ArrayList();
         List stmts=getPropsInv();
