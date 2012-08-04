@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<admresource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <xslfile>admresource.xslt</xslfile>
+    <form name="frmAdmin" action="true" method="post" enctype="multipart/form-data" jsframework="dojo">
+    <admdbconnmgr defconn="true"/>
+    <fieldset>
+        <input type="checkbox" name="forward" label="Include(padrão) / Forward" value="1" promptMessage="Marque a caixa de invocar Forward" />
+        <input type="text" name="jsppath" label="Arquivo ZUL caminho relativo" size="50" jspatron="[\w\/\-]+(\.jsp)$" jsrequired="true" invalidMessage="O arquivo deve ter extensão jsp" promptMessage="Arquivo ZUL caminho relativo. Por exemplo /swbadmin/jsp/poll/poll.jsp" />
+    </fieldset>
+    <div title="Avançado" open="false">
+        <fieldset legend="ProcessAction configurar">
+            <input type="text" name="jspactpath" label="ZUL caminho relativo à ação" size="50" jspatron="[\w\/\-]+(\.jsp)$" invalidMessage="O arquivo deve ter extensão jsp" />
+        </fieldset>
+    </div>
+    <fieldset>
+        <input type="submit" name="btnSave" id="btnSave" value="Salvar" />
+        <input type="reset"  name="btnReset" id="btnReset" value="Restablecer" />
+    </fieldset>
+</form>
+</admresource>
