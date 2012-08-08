@@ -272,6 +272,24 @@ public abstract class StoreRepositoryFileBase extends org.semanticwb.process.mod
     }
 
 /**
+* Gets the NodeComment property
+* @return String with the NodeComment
+*/
+    public String getNodeComment()
+    {
+        return getSemanticObject().getProperty(swp_storeRepNodeComment);
+    }
+
+/**
+* Sets the NodeComment property
+* @param value long with the NodeComment
+*/
+    public void setNodeComment(String value)
+    {
+        getSemanticObject().setProperty(swp_storeRepNodeComment, value);
+    }
+
+/**
 * Gets the NodeVarName property
 * @return String with the NodeVarName
 */
