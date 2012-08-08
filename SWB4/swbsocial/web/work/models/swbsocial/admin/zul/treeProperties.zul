@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<zk xmlns="http://www.zkoss.org/2005/zul">
+    <grid>
+        <columns sizable="true">
+            <column label="Propiedad" sort="auto"/>
+            <column label="Valor"/>
+        </columns>
+        <rows>
+            <row>
+                <label value="Id"/>
+                <label value="entidad1"/>
+            </row>
+            <row>
+                <label value="Class"/>
+                <label value="Entidad"/>
+            </row>
+            <row>
+                <label value="Título"/>
+                <label value="Entidad 1"/>
+            </row>
+        </rows>
+    </grid>
+
+</zk>

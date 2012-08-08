@@ -30,8 +30,8 @@ Inicia...
         cont++;
         SentimentalLearningPhrase sntlp=itSntLPs.next();
         System.out.println("sntlp, Id():"+sntlp.getId()+", phrase:"+sntlp.getPhrase()+", SentimentType:"+sntlp.getSentimentType()+", IntensityType:"+sntlp.getIntensityType());
-        //if(sntlp.getId().equals("16")) {
-           // sntlp.remove();
+        //if(sntlp.getId().equals("26")) {
+        //    sntlp.remove();
         //}
     }
     System.out.println("SentimentalLearningPhrase totales:"+cont);
