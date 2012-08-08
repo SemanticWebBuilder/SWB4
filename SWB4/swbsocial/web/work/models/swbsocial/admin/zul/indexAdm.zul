@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<borderlayout id="main" height="100%">
+    <north border="normal" title="" size="100px">
+        <borderlayout>
+            <west border="none" size="215px" flex="true">
+		<image src="/img/SWB-Social.png" />
+            </west>
+            <center id="menu" border="normal">
+                <window height="100%">
+                    <menubar id="mainMenu" apply="org.semanticwb.social.admin.menu.SWBSTopMenuComposer" style="font-size:200px;" height="100%"/>
+                </window>
+            </center>
+        </borderlayout>
+    </north>
+
+    <center border="none">
+        <borderlayout>
+            <west id="" title=" " maxsize="600" size="215px" flex="true" collapsible="true" splittable="true">
+            <vbox spacing="0" width="100%" heights="50%,100">
+                <window id="swbTreeWindow" apply="org.semanticwb.social.admin.SWBSTreeComposer">
+                    <style>
+                    .h-inline-block {
+                        display: inline-block;
+                        _display: inline;
+                    }
+                    </style>
+                    <tree id="tree" width="300px" >
+                        <treecols>
+                            <treecol label="SWBSocial" />
+                        </treecols>
+                    </tree>
+                </window>
+                <splitter id="swbtreeprops" collapse="after"/>
+                <include id="treeProps"/>
+            </vbox>
+         </west>
+            <!--Inicia Contenido   -->
+            <center id="wrkSpc" border="normal">
+               <include id="content"/>
+            </center>
+            <!--Termina Contenido -->
+            <east title=" " size="15%" flex="true" splittable="true" collapsible="true">
+                <borderlayout>
+                    <north border="normal" size="50%" splittable="true" collapsible="true">
+                        <borderlayout>
+                            <north border="normal" title="Widget1" size="50%" splittable="true" collapsible="true">
+                             </north>
+                            <center border="normal"  title="Widget2" >
+                            </center>
+
+                        </borderlayout>
+                    </north>
+                    <center border="normal">
+                        <borderlayout>
+                        <north border="normal" size="50%" title="Widget3" collapsible="true">
+
+                        </north>
+                        <center border="normal"  title="Widget4">
+                        </center>
+                        </borderlayout>
+                    </center>
+                </borderlayout>
+            </east>
+        </borderlayout>
+    </center>
+</borderlayout>
