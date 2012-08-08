@@ -295,6 +295,24 @@ public abstract class TransformRepositoryFileBase extends org.semanticwb.process
          }
          return ret;
     }
+
+/**
+* Gets the NodeComment property
+* @return String with the NodeComment
+*/
+    public String getNodeComment()
+    {
+        return getSemanticObject().getProperty(swp_storeRepNodeComment);
+    }
+
+/**
+* Sets the NodeComment property
+* @param value long with the NodeComment
+*/
+    public void setNodeComment(String value)
+    {
+        getSemanticObject().setProperty(swp_storeRepNodeComment, value);
+    }
    /**
    * Sets the value for the property FileTemplate
    * @param value FileTemplate to set
