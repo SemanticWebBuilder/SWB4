@@ -8,6 +8,7 @@ public interface StoreRepositoryNodeableBase extends org.semanticwb.model.Generi
     public static final org.semanticwb.platform.SemanticProperty swp_storeRepNodeName=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#storeRepNodeName");
     public static final org.semanticwb.platform.SemanticClass swp_ItemAwareStatus=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#ItemAwareStatus");
     public static final org.semanticwb.platform.SemanticProperty swp_storeRepNodeStatus=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#storeRepNodeStatus");
+    public static final org.semanticwb.platform.SemanticProperty swp_storeRepNodeComment=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#storeRepNodeComment");
     public static final org.semanticwb.platform.SemanticClass swp_StoreRepositoryNodeable=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#StoreRepositoryNodeable");
 
     public String getNodeId();
@@ -43,4 +44,8 @@ public interface StoreRepositoryNodeableBase extends org.semanticwb.model.Generi
     public void removeNodeStatus();
 
     public org.semanticwb.process.model.ItemAwareStatus getNodeStatus();
+
+    public String getNodeComment();
+
+    public void setNodeComment(String value);
 }
