@@ -261,39 +261,43 @@ public class SelectOne extends SelectOneBase {
                 if (value == null) {
                     value = obj.getProperty(prop);
                 }
+                
+                if (mode.equals("edit") || mode.equals("create")) {
+                    ret.append("<select name=\"" + name + "\"");
 
-                ret.append("<select name=\"" + name + "\"");
-
-                if (DOJO) {
-                    ret.append(" dojoType=\"dijit.form.FilteringSelect\" autoComplete=\"true\" invalidMessage=\""
-                               + imsg + "\"");
-                }
-
-                ret.append(" " + ext + ">");
-
-                StringTokenizer st = new StringTokenizer(selectValues, "|");
-
-                while (st.hasMoreTokens()) {
-                    String tok = st.nextToken();
-                    int    ind = tok.indexOf(':');
-                    String id  = tok;
-                    String val = tok;
-
-                    if (ind > 0) {
-                        id  = tok.substring(0, ind);
-                        val = tok.substring(ind + 1);
+                    if (DOJO) {
+                        ret.append(" dojoType=\"dijit.form.FilteringSelect\" autoComplete=\"true\" invalidMessage=\""
+                                + imsg + "\"");
                     }
 
-                    ret.append("<option value=\"" + id + "\" ");
+                    ret.append(" " + ext + ">");
 
-                    if (id.equals(value)) {
-                        ret.append("selected");
+                    StringTokenizer st = new StringTokenizer(selectValues, "|");
+
+                    while (st.hasMoreTokens()) {
+                        String tok = st.nextToken();
+                        int    ind = tok.indexOf(':');
+                        String id  = tok;
+                        String val = tok;
+
+                        if (ind > 0) {
+                            id  = tok.substring(0, ind);
+                            val = tok.substring(ind + 1);
+                        }
+
+                        ret.append("<option value=\"" + id + "\" ");
+
+                        if (id.equals(value)) {
+                            ret.append("selected");
+                        }
+
+                        ret.append(">" + val + "</option>");
                     }
 
-                    ret.append(">" + val + "</option>");
+                    ret.append("</select>");
+                } else if (mode.equals("view")) {
+                    ret.append("<span _id=\"" + name + "\" name=\"" + name + "\">" + value + "</span>");
                 }
-
-                ret.append("</select>");
             }
         }
 
