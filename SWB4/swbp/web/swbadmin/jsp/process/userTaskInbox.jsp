@@ -4,6 +4,8 @@
     Author     : Hasdai Pacheco {haxdai@gmail.com}
 --%>
 
+<%@page import="org.semanticwb.process.model.MessageStartEvent"%>
+<%@page import="org.semanticwb.process.model.StartEventNode"%>
 <%@page import="org.semanticwb.platform.SemanticClass"%>
 <%@page import="org.semanticwb.SWBPlatform"%>
 <%@page import="org.semanticwb.SWBPortal"%>
@@ -146,7 +148,7 @@ if (paramRequest.getMode().equals(paramRequest.Mode_VIEW)) {
         while(startEvents.hasNext()) {
             StartEvent sevt = startEvents.next();
             //Si el usuario tiene permisos en el evento
-            if (user.haveAccess(sevt)) {
+            if (sevt.getContainer() != null && sevt.getContainer() instanceof Process && user.haveAccess(sevt)) {
                 Process itp = sevt.getProcess();
                 //Si el proceso al que pertenece el evento y es válido
                 if (itp != null && itp.isValid()) {
