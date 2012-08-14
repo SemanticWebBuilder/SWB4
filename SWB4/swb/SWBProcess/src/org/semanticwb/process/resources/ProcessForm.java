@@ -130,9 +130,9 @@ public class ProcessForm extends GenericResource {
 
             SWBResourceURL urlact = paramRequest.getActionUrl();
             urlact.setAction("process");
-
+            out.println("<script type=\"text/javascript\">function validateForm"+foi.getId()+"(form) {if (form.validate()) {return true;} else {alert('Algunos de los datos no son válidos. Verifique la información proporcionada.'); return false;}}</script>");
             out.println("<div id=\"processForm\">");
-            out.println("<form id=\"" + foi.getId() + "/form\" dojoType=\"dijit.form.Form\" class=\"swbform\" action=\"" + urlact + "\" method=\"post\">");
+            out.println("<form id=\"" + foi.getId() + "/form\" dojoType=\"dijit.form.Form\" class=\"swbform\" action=\"" + urlact + "\" method=\"post\" onSubmit=\"return validateForm"+foi.getId()+"(this);\">");
             out.println("<input type=\"hidden\" name=\"suri\" value=\"" + suri + "\"/>");
             out.println("<input type=\"hidden\" name=\"smode\" value=\"edit\"/>");
 
