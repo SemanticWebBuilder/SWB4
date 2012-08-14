@@ -169,6 +169,7 @@ public class SWBFormMgrLayer {
         if (sDojo!=null && sDojo.equalsIgnoreCase("dojo")) {
             sDojo = "dojoType=\"dijit.form.Form\"";
             strb.append(SWBForms.DOJO_REQUIRED);
+            strb.append("<script type=\"text/javascript\">function validateForm"+foi.getId()+"(form) {if (form.validate()) {return true;} else {alert('Algunos de los datos no son válidos. Verifique la información proporcionada.'); return false;}}</script>");
         }
         int pos = -1;
         pos = xml.indexOf("<form");
@@ -180,7 +181,7 @@ public class SWBFormMgrLayer {
         String lang = paramRequest.getUser().getLanguage();
 
 
-        strb.append("<form name=\"" + mgr.getFormName() + "\" method=\"post\" action=\"" + actionUrl + "\" id=\"" + mgr.getFormName() + "\" " + sDojo + " class=\"swbform\">");
+        strb.append("<form name=\"" + mgr.getFormName() + "\" method=\"post\" action=\"" + actionUrl + "\" id=\"" + mgr.getFormName() + "\" " + sDojo + " class=\"swbform\" onSubmit=\"return validateForm"+foi.getId()+"(this);\">");
 
         Iterator<SWBFormLayer> itaProperties = aProperties.iterator();
         while (itaProperties.hasNext()) {
