@@ -3,7 +3,7 @@
 <%
     String lang = "es";
     SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
-    Iterator<WebPage> childs = paramRequest.getWebPage().listChilds(lang, true, false, false, false, true);
+    Iterator<WebPage> childs = paramRequest.getWebPage().listChilds(lang, true, false, false, true, true);
 
     if (paramRequest.getUser() != null) {
         lang = paramRequest.getUser().getLanguage();
@@ -75,7 +75,7 @@
                     <div class="AccordionPanelContent">
                         <ul class="itemsCategoria">
                         <%
-                            Iterator<WebPage> c = p.listChilds(lang, true, false, false, false, true);
+                            Iterator<WebPage> c = p.listChilds(lang, true, false, false, true, true);
                             while(c.hasNext()) {
                                 WebPage wp = c.next();
                                 %>
