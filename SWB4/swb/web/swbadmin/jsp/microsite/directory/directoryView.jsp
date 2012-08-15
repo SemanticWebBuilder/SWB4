@@ -51,7 +51,7 @@ private final int I_PAGE_SIZE = 20;
                         if(wpage.getLevel()==1)
                         {
                             //obteniendo WebPages de temas que sería el Level = 2
-                            Iterator<WebPage> iteWP = wpage.listChilds(paramRequest.getUser().getLanguage(),true,false,false,false);
+                            Iterator<WebPage> iteWP = wpage.listChilds(paramRequest.getUser().getLanguage(),true,false,false,true);
                             while(iteWP.hasNext())
                             {
                                 WebPage wpc = iteWP.next();
@@ -663,7 +663,7 @@ if (!exist)
     {
         StringBuffer stOpts = new StringBuffer("");
         // obteniendo el listado de subtemas
-        Iterator<WebPage> itwpst = wp.listChilds(lang,true,false,false,false);
+        Iterator<WebPage> itwpst = wp.listChilds(lang,true,false,false,true);
         while(itwpst.hasNext())
         {
             WebPage wpst = itwpst.next();

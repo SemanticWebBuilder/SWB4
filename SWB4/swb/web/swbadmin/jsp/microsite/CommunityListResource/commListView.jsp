@@ -6,7 +6,7 @@
     private int getExistingCommunities(WebPage wp, User user)
     {
         int numc = 0;
-        Iterator<WebPage> itwp = wp.listChilds(user.getLanguage(), Boolean.TRUE, Boolean.FALSE, Boolean.FALSE, Boolean.FALSE);
+        Iterator<WebPage> itwp = wp.listChilds(user.getLanguage(), Boolean.TRUE, Boolean.FALSE, Boolean.FALSE, Boolean.TRUE);
         while (itwp.hasNext())
         {
             WebPage wpit = itwp.next();
@@ -30,7 +30,7 @@
             int nwp = 0;
             int nms = 0;
 
-            Iterator<WebPage> itso = webPage.listChilds(user.getLanguage(), true, false, false, false);
+            Iterator<WebPage> itso = webPage.listChilds(user.getLanguage(), true, false, false, true);
             if (itso.hasNext())
             {
                 while (itso.hasNext())
@@ -53,7 +53,7 @@
             String nummsg = "";
             int wplevel = webPage.getLevel();
 
-            Iterator<WebPage> itwp = webPage.listChilds(user.getLanguage(), Boolean.TRUE, Boolean.FALSE, Boolean.FALSE, Boolean.FALSE);
+            Iterator<WebPage> itwp = webPage.listChilds(user.getLanguage(), Boolean.TRUE, Boolean.FALSE, Boolean.FALSE, Boolean.TRUE);
 
             if (wplevel == 3 || nwp == 0)
             {
@@ -103,7 +103,7 @@
     <h3 class="titulo"><a href="<%=wpch.getUrl()%>"><%=wpch.getDisplayTitle(user.getLanguage())%></a></h3>
     <%
 
-                Iterator<WebPage> itwpch = wpch.listChilds(user.getLanguage(), Boolean.TRUE, Boolean.FALSE, Boolean.FALSE, Boolean.FALSE);
+                Iterator<WebPage> itwpch = wpch.listChilds(user.getLanguage(), Boolean.TRUE, Boolean.FALSE, Boolean.FALSE, Boolean.TRUE);
                 if (itwpch.hasNext())
                 {
     %>
@@ -150,7 +150,7 @@
 <div class="groupInteres">
     <h3 class="titulo"><a href="<%=wpch.getUrl()%>"><%=wpch.getDisplayTitle(user.getLanguage())%></a></h3>
     <%
-                        Iterator<WebPage> itwpch = wpch.listChilds(user.getLanguage(), Boolean.TRUE, Boolean.FALSE, Boolean.FALSE, Boolean.FALSE);
+                        Iterator<WebPage> itwpch = wpch.listChilds(user.getLanguage(), Boolean.TRUE, Boolean.FALSE, Boolean.FALSE, Boolean.TRUE);
                         if (itwpch.hasNext())
                         {
     %>
