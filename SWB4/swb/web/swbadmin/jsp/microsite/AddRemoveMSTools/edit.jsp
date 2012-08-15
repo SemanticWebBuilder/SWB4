@@ -42,7 +42,7 @@
             else
             {
                 HashMap hmwp = new HashMap();
-                Iterator<WebPage> itwp = wp.listChilds(user.getLanguage(), true, false, false, false);
+                Iterator<WebPage> itwp = wp.listChilds(user.getLanguage(), true, false, false, true);
                 while(itwp.hasNext())
                 {
                     WebPage wpc = itwp.next();
