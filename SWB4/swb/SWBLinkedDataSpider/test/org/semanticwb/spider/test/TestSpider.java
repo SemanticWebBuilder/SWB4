@@ -16,35 +16,30 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.semanticwb.linkeddata.spider.SpiderManager;
 
+
 /**
  *
  * @author victor.lorenzana
  */
-public class TestSpider
-{
+public class TestSpider {
 
-    public TestSpider()
-    {
+    public TestSpider() {
     }
 
     @BeforeClass
-    public static void setUpClass() throws Exception
-    {
+    public static void setUpClass() throws Exception {
     }
 
     @AfterClass
-    public static void tearDownClass() throws Exception
-    {
+    public static void tearDownClass() throws Exception {
     }
 
     @Before
-    public void setUp()
-    {
+    public void setUp() {
     }
 
     @After
-    public void tearDown()
-    {
+    public void tearDown() {
     }
 
     // TODO add test methods here.
@@ -52,57 +47,51 @@ public class TestSpider
     //
     @Test
     @Ignore
-    public void SpiderFOAFTest()
-    {
+    public void SpiderFOAFTest() {
 
-        try
-        {
+        try {
+            String database = "/repository/data.jnl";
+            String RDFStore = "Bigdata";
+            //String database = "linkeddatastore";
+            //String RDFStore = "MySQL";      
             URL url = new URL("http://www.foaf-project.org/");
+
+            SpiderManager.addSpiderEventListener(new TestSaveTriple(database, RDFStore, url));
             SpiderManager.createSpider(url);
-            SpiderManager.addSpiderEventListener(new TestSaveTriple());
-            try
-            {
-                Thread.sleep(1400000);
+
+            try {
+                Thread.sleep(650000);
+            } catch (Exception e) {
             }
-            catch (Exception e)
-            {
-            }
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
     }
 
-
     @Test
     //@Ignore
-    public void SpiderLiveDBPediaTest()
-    {
+    public void SpiderLiveDBPediaTest() {
 
-        System.setProperty("org.semanticwb.linkeddata.spider.SpiderManager.NoPred","true");
-        try
-        {
-            SpiderManager.addSpiderEventListener(new TestSaveTriple());
-            //http://musicbrainz.org/release-group/21a136b7-54dd-31dc-a4d9-90c2b833b786
-            //URL url = new URL("http://dbpedia.org/ontology/MusicalArtist");}
-            //URL url = new URL("http://dbpedia.org/page/Stevie_Nicks");
-            URL url = new URL("http://live.dbpedia.org/page/Category:Visitor_attractions_in_Mexico");
-            //URL url = new URL("http://www.w3.org/2001/XMLSchema");
+        System.setProperty("org.semanticwb.linkeddata.spider.SpiderManager.NoPred", "true");
+        try {
+            //String database = "/repository/data.jnl";
+            //String RDFStore = "Bigdata";
+            String database = "ldstore";
+            String RDFStore = "MySQL";            
+
+            URL url = new URL("http://dbpedia.org/page/Mexico");
+            //URL url = new URL("http://live.dbpedia.org/page/Category:Visitor_attractions_in_Mexico");           
+            
+            SpiderManager.addSpiderEventListener(new TestSaveTriple(database, RDFStore, url));
             SpiderManager.createSpider(url);
 
 
-            try
-            {
-                Thread.sleep(1400000);
+            try {
+                Thread.sleep(3500000);
+            } catch (Exception e) {
             }
-            catch (Exception e)
-            {
-            }
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -110,34 +99,28 @@ public class TestSpider
 
     @Test
     @Ignore
-    public void SpiderMusicbrainzTest()
-    {
+    public void SpiderMusicbrainzTest() {
 
 
-        try
-        {
-            SpiderManager.addSpiderEventListener(new TestSaveTriple());
-            //http://musicbrainz.org/release-group/21a136b7-54dd-31dc-a4d9-90c2b833b786
-            //URL url = new URL("http://dbpedia.org/ontology/MusicalArtist");}
-            //URL url = new URL("http://dbpedia.org/page/Stevie_Nicks");
-            URL url = new URL("http://thedatahub.org/dataset/webnmasunotraveler/resource/fefc9325-316e-4cfd-b6c8-f1cd0cd17d09");
-            //URL url = new URL("http://www.w3.org/2001/XMLSchema");
+        try {
+            String database = "/repository/data.jnl";
+            String RDFStore = "Bigdata";
+            //String database = "linkeddatastore";
+            //String RDFStore = "MySQL";            
+
+            URL url = new URL("http://dbpedia.org/page/Stevie_Nicks");            
+            SpiderManager.addSpiderEventListener(new TestSaveTriple(database, RDFStore, url));
             SpiderManager.createSpider(url);
-            
-            
-            try
-            {
-                Thread.sleep(1400000);
+
+
+            try {
+                Thread.sleep(40000);
+                //Thread.sleep(100000);
+            } catch (Exception e) {
             }
-            catch (Exception e)
-            {
-            }
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
     }
-    
 }
