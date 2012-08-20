@@ -31,7 +31,9 @@
 package org.semanticwb.platform;
 
 import java.io.IOException;
-import java.net.*;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import org.semanticwb.Logger;
@@ -355,8 +357,8 @@ public class SWBMessageCenter
      */
     public void incomingMessage(String message, String addr)
     {
-        Date dt = new Date();
-        StringBuffer logbuf = new StringBuffer(message.length() + 20);
+        //Date dt = new Date(); death storage
+        StringBuilder logbuf = new StringBuilder(message.length() + 20);
         logbuf.append(message.substring(0, 4));
         logbuf.append(df.format(new Date()));
         logbuf.append(message.substring(3));
