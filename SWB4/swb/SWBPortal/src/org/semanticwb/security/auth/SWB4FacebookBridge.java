@@ -191,7 +191,7 @@ public class SWB4FacebookBridge extends ExtUserRepInt
             ret.setEmail(pojo.usrMail);
             ret.setActive(true);
             ret.setPassword("{CRYPT}" + pojo.access_token);
-            user=ret;
+            //user=ret; 
 //        } catch (Exception noe) {}
         }
 //        System.out.println("login:"+login+" pojo:"+pojo);

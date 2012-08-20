@@ -136,9 +136,9 @@ public class SWB4GenericLDAPBridge extends ExtUserRepInt
     @Override
     public boolean validateCredential(String login, Object credential)
     {
-        String lcred = null;
-        if (credential instanceof char[]) lcred= new String((char[])credential);
-        else lcred = (String)credential;
+//        String lcred = null;
+//        if (credential instanceof char[]) lcred= new String((char[])credential);
+//        else lcred = (String)credential;
         return AuthenticateLP(login, credential);
     }
 
