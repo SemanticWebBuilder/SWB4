@@ -24,14 +24,8 @@
 package org.semanticwb.servlet.internal;
 
 import com.sun.management.GcInfo;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
+import java.io.*;
 import static java.lang.management.ManagementFactory.*;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.PrintWriter;
-import java.io.Serializable;
 import java.lang.management.*;
 import java.security.KeyFactory;
 import java.security.PrivateKey;
@@ -56,12 +50,7 @@ import org.semanticwb.model.SWBContext;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticProperty;
 import org.semanticwb.portal.SWBMonitor;
-import org.semanticwb.portal.SWBResourceMgr;
-import org.semanticwb.portal.monitor.SWBGCDump;
-import org.semanticwb.portal.monitor.SWBMonitorBeans;
-import org.semanticwb.portal.monitor.SWBMonitorData;
-import org.semanticwb.portal.monitor.SWBSummary;
-import org.semanticwb.portal.monitor.SWBThreadDumper;
+import org.semanticwb.portal.monitor.*;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -143,6 +132,13 @@ public class Monitor implements InternalServlet
     private static boolean alertOn=false;
     private static String alertEmail="webbuilder@infotec.com.mx";
     private static String siteName="No Name";
+    
+    static {
+        rmbean = getRuntimeMXBean();
+        mmbean = getMemoryMXBean();
+        pools = getMemoryPoolMXBeans();
+        gcmbeans = getGarbageCollectorMXBeans();
+    }
     
     
     /* (non-Javadoc)
@@ -256,10 +252,10 @@ public class Monitor implements InternalServlet
 //            log.error(ex);
 //        }
 
-        rmbean = getRuntimeMXBean();
-        mmbean = getMemoryMXBean();
-        pools = getMemoryPoolMXBeans();
-        gcmbeans = getGarbageCollectorMXBeans();
+//        rmbean = getRuntimeMXBean();
+//        mmbean = getMemoryMXBean();
+//        pools = getMemoryPoolMXBeans();
+//        gcmbeans = getGarbageCollectorMXBeans();
        // System.out.println("Got beans up and running");
 //        mbs = sun.management.ManagementFactory.createPlatformMBeanServer();
         if (null == summary)
