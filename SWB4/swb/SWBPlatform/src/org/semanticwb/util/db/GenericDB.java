@@ -79,6 +79,8 @@ public class GenericDB {
     /** The Constant DB_DB2. */
     static final String DB_DB2 = "DB2";
     
+    static final String DB_DERBY = "APACHE DERBY"; //Apache Derby
+    
     //static final String SQL_ARRAY = "ARRAY";
     //static final String SQL_TEXT = "TEXT";
     /** The Constant SQL_CHAR. */
@@ -231,6 +233,9 @@ public class GenericDB {
         }
         else if (dbname.lastIndexOf("db2") > -1) {
             dbname = DB_DB2;
+        }
+        else if (dbname.lastIndexOf("apache derby") > -1) {
+            dbname = DB_DERBY;
         }
         if (null != dom) {
             try 
@@ -482,7 +487,29 @@ public class GenericDB {
                                         {
                                             codigo = getSQLType(SQL_VARCHAR);
                                             tipocol = dialect.getTypeName(codigo);
-                                            tmpCol = tmpCol.replaceAll("#TYPE#", dialect.getTypeName(getSQLType(SQL_VARCHAR), 4000, 0, 0));
+                                            tmpCol = tmpCol.replaceAll("#TYPE#", dialect.getTypeName(getSQLType(SQL_VARCHAR), 65535, 0, 0));
+                                        } else if(tmpVal.equals(SQL_BLOB))
+                                        {
+                                            tipocol = "blob";
+                                            tmpCol = tmpCol.replaceAll("#TYPE#", tipocol);
+                                        }
+                                        else
+                                        {
+                                            codigo = getSQLType(tmpVal);
+                                            tipocol = dialect.getTypeName(codigo);
+                                            tmpCol = tmpCol.replaceAll("#TYPE#", dialect.getTypeName(getSQLType(tmpVal), Integer.parseInt(col.getAttribute("size")), 0, 0));
+                                        }
+                                    }else if(DBName.equals(DB_DERBY))
+                                    {
+                                         if(tmpVal.equals(SQL_CLOB)&&!haveCLOB)
+                                        {
+                                            tipocol = "clob";
+                                            tmpCol = tmpCol.replaceAll("#TYPE#", tipocol);
+                                        } else if(tmpVal.equals(SQL_CLOB)&&haveCLOB)
+                                        {
+                                            codigo = getSQLType(SQL_VARCHAR);
+                                            tipocol = dialect.getTypeName(codigo);
+                                            tmpCol = tmpCol.replaceAll("#TYPE#", dialect.getTypeName(getSQLType(SQL_VARCHAR), 32672, 0, 0));
                                         } else if(tmpVal.equals(SQL_BLOB))
                                         {
                                             tipocol = "blob";
@@ -594,7 +621,30 @@ public class GenericDB {
                                         {
                                             codigo = getSQLType(SQL_VARCHAR);
                                             tipocol = dialect.getTypeName(codigo);
-                                            tmpCol = tmpCol.replaceAll("#TYPE#", dialect.getTypeName(getSQLType("VARCHAR"), 4000, 0, 0));
+                                            tmpCol = tmpCol.replaceAll("#TYPE#", dialect.getTypeName(getSQLType("VARCHAR"), 65535, 0, 0));
+                                        } else if(tmpVal.equals(SQL_BLOB))
+                                        {
+                                            tipocol = "blob";
+                                            tmpCol = tmpCol.replaceAll("#TYPE#", tipocol);
+                                        }
+                                        else
+                                        {
+                                            codigo = getSQLType(tmpVal);
+                                            tipocol = dialect.getTypeName(codigo);
+                                            tmpCol = tmpCol.replaceAll("#TYPE#", tipocol);
+                                        }
+                                    }
+                                    else if(DBName.equals(DB_DERBY))
+                                    {
+                                         if(tmpVal.equals(SQL_CLOB)&&!haveCLOB)
+                                        {
+                                            tipocol = "clob";
+                                            tmpCol = tmpCol.replaceAll("#TYPE#", tipocol);
+                                        } else if(tmpVal.equals(SQL_CLOB)&&haveCLOB)
+                                        {
+                                            codigo = getSQLType(SQL_VARCHAR);
+                                            tipocol = dialect.getTypeName(codigo);
+                                            tmpCol = tmpCol.replaceAll("#TYPE#", dialect.getTypeName(getSQLType("VARCHAR"), 32672, 0, 0));
                                         } else if(tmpVal.equals(SQL_BLOB))
                                         {
                                             tipocol = "blob";
@@ -625,6 +675,7 @@ public class GenericDB {
                                     else
                                     {
                                         codigo = getSQLType(tmpVal);
+                                        System.out.println("DBName:"+DBName);
                                         tipocol = dialect.getTypeName(codigo);
                                         tmpCol = tmpCol.replaceAll("#TYPE#", tipocol);
                                     }
@@ -914,6 +965,8 @@ public class GenericDB {
         hmDialect.put(DB_POSTGRESSQL, "org.hibernate.dialect.PostgreSQLDialect");
         hmDialect.put(DB_SYBASE, "org.hibernate.dialect.SybaseDialect");
         hmDialect.put(DB_DB2, "org.hibernate.dialect.DB2Dialect");
+        hmDialect.put(DB_DERBY, "org.hibernate.dialect.DerbyDialect");
+        
     }
     
     /**
@@ -1015,6 +1068,12 @@ public class GenericDB {
         hmSYBASE.put(PK, "ALTER TABLE #TABLE_NAME# ADD CONSTRAINT #CNAME# PRIMARY KEY ( ");
         hmSYBASE.put(INDTYPE, "UNIQUE");
         hmSYBASE.put(INDORDER, "ASC|DESC");
+        
+        HashMap hmDERBY = new HashMap();
+        hmDERBY.put(COLUMN, "#COLUMN_NAME# #TYPE# #DEFAULT# #NULL#");
+        hmDERBY.put(PK, "ALTER TABLE #TABLE_NAME# ADD CONSTRAINT #CNAME# PRIMARY KEY ( ");
+        hmDERBY.put(INDTYPE, "UNIQUE");
+        hmDERBY.put(INDORDER, "ASC|DESC");
 
         hmSyntax.put("MYSQL", hmMySQL);
         hmSyntax.put("ORACLE", hmOracle);
@@ -1025,6 +1084,7 @@ public class GenericDB {
         hmSyntax.put("POSTGRESSQL", hmPOSTGRESSQL);
         hmSyntax.put("SYBASE", hmSYBASE);
         hmSyntax.put("DB2", hmDB2);
+        hmSyntax.put("APACHE DERBY", hmDERBY); //Apache Derby
 
     }
 }
