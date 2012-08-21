@@ -50,7 +50,9 @@ public class ScriptTask extends org.semanticwb.process.model.base.ScriptTaskBase
         try
         {
             Interpreter i = SWBPClassMgr.getInterpreter(instance, user);
-            Object ret=i.eval(code);
+            if (code != null && code.length() > 0) {
+                Object ret=i.eval(code);
+            }
         }catch(Exception e)
         {
             log.error(e);
