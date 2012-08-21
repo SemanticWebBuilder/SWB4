@@ -86,12 +86,28 @@
 %>
 
 <script type="text/javascript">
+    var intCounterToast = 0;
     function loadPageUrl(url, paramName, paramValue) {
         var dest = url;
         if (paramName != null && paramValue != null && paramValue != "") {
             dest+="&"+paramName+"="+paramValue;
         }
         window.location = dest;
+    }
+    
+    function showToast(msg) {
+        var toast = document.getElementById("toast");
+        toast.style.opacity = 0.7;
+        toast.style.visibility = "visible";
+        toast.innerHTML = "<b>"+msg+"</b>";
+        intCounterToast = setInterval("hideToast()", 2000);
+    }
+    
+    function hideToast() {
+        var toast = document.getElementById("toast");
+        toast.style.display = "none";
+        toast.style.opacity = 0;
+        clearInterval(intCounterToast);
     }
 </script>
 
@@ -215,6 +231,7 @@ if (paramRequest.getMode().equals(paramRequest.Mode_VIEW)) {
         optsUrl.setParameter("sFilter", sFilter);
         %>
         <h2>Mis Tareas</h2>
+        <div id="toast" style="border: 1px solid #CCCCCC;background-color: #FFF49C;padding: 10px 0 ;text-align:center;opacity: 0.9;border-radius:5px 5px 5px 5px;-webkit-transition: opacity 0.5s ease-out;  /* Saf3.2+, Chrome */-moz-transition: opacity 0.5s ease-out;  /* FF4+ */-ms-transition: opacity 0.5s ease-out;  /* IE10? */-o-transition: opacity 0.5s ease-out;  /* Opera 10.5+ */transition: opacity 0.5s ease-out;"></div>
         <div class="bandeja-combo">
             <ul>
                 <li>
@@ -458,11 +475,19 @@ if (null != request.getSession(true).getAttribute("msg")) {
         String id = message.substring(2);
         %>
         <script type="text/javascript">
-            alert("Se ha creado un nuevo caso con ID <%=id%>");
+            var toast = document.getElementById("toast");
+            showToast("Se ha creado un nuevo caso con ID <%=id%>");
+            //alert("Se ha creado un nuevo caso con ID <%=id%>");
         </script>
         <%
     }
     request.getSession(true).removeAttribute("msg");
+} else {
+    %>
+    <script type="text/javascript">
+    hideToast();
+    </script>
+    <%
 }
 %>
 
