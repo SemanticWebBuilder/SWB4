@@ -38,6 +38,12 @@ public abstract class X509SingInstanceBase extends org.semanticwb.process.model.
             java.util.Iterator it=sclass.listInstances();
             return new org.semanticwb.model.GenericIterator<org.semanticwb.process.model.X509SingInstance>(it, true);
         }
+
+        public static org.semanticwb.process.model.X509SingInstance createX509SingInstance(org.semanticwb.model.SWBModel model)
+        {
+            long id=model.getSemanticObject().getModel().getCounter(sclass);
+            return org.semanticwb.process.model.X509SingInstance.ClassMgr.createX509SingInstance(String.valueOf(id), model);
+        }
        /**
        * Gets a org.semanticwb.process.model.X509SingInstance
        * @param id Identifier for org.semanticwb.process.model.X509SingInstance
