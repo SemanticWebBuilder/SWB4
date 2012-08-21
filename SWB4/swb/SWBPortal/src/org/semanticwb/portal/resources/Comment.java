@@ -151,7 +151,7 @@ public class Comment extends GenericResource {
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException {
         Resource base = getResourceBase();
         String action = response.getAction();
-        if(response.Action_ADD.equals(action)){
+        if(SWBActionResponse.Action_ADD.equals(action)){
             boolean hasCaptcha = Boolean.parseBoolean(base.getAttribute("captcha"));
 
             String securCodeSent = request.getParameter("cmnt_seccode");
@@ -164,7 +164,7 @@ public class Comment extends GenericResource {
                     }catch (IOException ioe) {
                         log.error("Error in resource Comment, while trying to log the action. ", ioe);
                     }
-                    response.setMode(response.Mode_HELP);
+                    response.setMode(SWBActionResponse.Mode_HELP);
                 }catch(TransformerException te) {
                     log.error("Error in resource Comment, while trying to send the email. ", te);
                     response.setRenderParameter(_FAIL, te.getMessage());
@@ -985,6 +985,8 @@ public class Comment extends GenericResource {
                     dom.appendChild(root);
                 }
 
+                
+
                 value = (null != fup.getValue("comentarios")
                          && !"".equals(fup.getValue("comentarios").trim())
                          ? fup.getValue("comentarios").trim()
@@ -1020,12 +1022,8 @@ public class Comment extends GenericResource {
                                 att = "email";
                             }
 
-                            if ("edit".equals(actype)
-                                    && type.equals(String.valueOf(i))) {
-                                value = (null != fup.getValue(att)
-                                         && !"".equals(fup.getValue(att).trim())
-                                         ? fup.getValue(att).trim()
-                                         : "");
+                            if ("edit".equals(actype) && type.equals(String.valueOf(i))) {
+                                value = (null != fup.getValue(att) && !"".equals(fup.getValue(att).trim()) ? fup.getValue(att).trim() : "");
                             }
                             if (j < 1) {
                                 comment.appendChild(dom.createTextNode(value));
@@ -1490,10 +1488,10 @@ public class Comment extends GenericResource {
             ret.append("<td colspan=\"4\">");
             ret.append("<input type=\"button\" name=\"btnType\" value=\""
                     + paramsRequest.getLocaleString("msgAdd")
-                    + "\" onClick=\"if(jsValidaType(this.form, '" + area
-                    + "', '" + responsable + "', '" + email
-                    + "')) document.frmResource.submit(); else return false;\" class=\"boton\"/> \n");
-            ret.append("<input type=\"hidden\" name=\"type\" value=\"0\"/> \n");
+                    + "\" onClick=\"if(jsValidaType(this.form, '" + area + "', '" + responsable + "', '" + email + "')) document.frmResource.submit(); else return false;\" class=\"boton\"/> \n");
+            //ret.append("\n <button dojoType=\"dijit.form.Button\" type=\"submit\" onclick=\"if(jsValidaType(this.form, '"+area+"', '"+responsable+"', '"+email+"')) return true; else return false; \">"+paramsRequest.getLocaleString("msgAdd")+"</button>&nbsp;");
+            
+            ret.append("\n<input type=\"hidden\" name=\"type\" value=\"0\"/> \n");
             ret.append("<input type=\"hidden\" name=\"actype\" value=\"add\"/> \n");
             ret.append("<input type=\"hidden\" name=\"comentarios\" value=\""
                     + comentarios + "\"/> \n");
@@ -1507,9 +1505,11 @@ public class Comment extends GenericResource {
             ret.append("<fieldset>\n");
             ret.append("<table> \n");
             ret.append("<tr> \n");
-            ret.append("\n<td>");
-            ret.append("\n<input type=\"submit\" name=\"btnSave\" value=\"" + paramsRequest.getLocaleString("btnSubmit") + "\" onClick=\"if(jsValida(this.form, " + i + ", '" + area + "', '" + responsable + "', '" + email + "')) return true; else return false;\"/>&nbsp;");
-            ret.append("<input type=\"reset\" name=\"btnReset\" value=\"" + paramsRequest.getLocaleString("btnReset") + "\"/>");
+            ret.append("\n<td>");   
+            ret.append("\n <button dojoType=\"dijit.form.Button\" type=\"submit\" onclick=\"if(jsValida(this.form, " + i + ", '" + area + "', '" + responsable + "', '" + email + "'))return true; else return false; \">"+paramsRequest.getLocaleString("btnSubmit")+"</button>&nbsp;");
+            ret.append("\n <button dojoType=\"dijit.form.Button\" type=\"reset\">"+paramsRequest.getLocaleString("btnReset")+"</button>");            
+//            ret.append("\n<input type=\"submit\" name=\"btnSave\" value=\"" + paramsRequest.getLocaleString("btnSubmit") + "\" onClick=\"if(jsValida(this.form, " + i + ", '" + area + "', '" + responsable + "', '" + email + "')) return true; else return false;\"/>&nbsp;");
+//            ret.append("<input type=\"reset\" name=\"btnReset\" value=\"" + paramsRequest.getLocaleString("btnReset") + "\"/>");
             ret.append("\n</td>");
             ret.append("\n</tr>");
             ret.append("\n</table>");
@@ -1760,11 +1760,11 @@ public class Comment extends GenericResource {
         StringBuilder html = new StringBuilder();
         html.append("<div class=\"swb-coment-imagen\"> \n");
         html.append("  <p><img src=\""+SWBPlatform.getContextPath()+"/swbadmin/jsp/securecode.jsp\" alt=\"\" id=\"imgseccode\" width=\"155\" height=\"65\" /></p> \n");
-        html.append("  <p><a href=\"#\" onclick=\"changeSecureCodeImage('imgseccode');\">"+paramRequest.getLocaleString("lblDoViewAnotherCode")+"</a></p> \n");
+        html.append("  <p><a href=\"javascript:changeSecureCodeImage('imgseccode');\">"+paramRequest.getLocaleString("lblDoViewAnotherCode")+"</a></p> \n");
         html.append("</div> \n");
         html.append("<div class=\"swb-coment-captcha\"> \n");
         html.append("  <p><label for=\"cmnt_seccode\">"+paramRequest.getLocaleString("lblDoViewImageIs")+":</label></p> \n");
-        html.append("  <p><input type=\"text\" id=\"cmnt_seccode\" name=\"cmnt_seccode\" /></p> \n");
+        html.append("  <p><input type=\"text\" name=\"cmnt_seccode\" value=\"\"/></p> \n");
         html.append("</div> \n");
         return html.toString();
     }
