@@ -67,6 +67,7 @@ public class SWBPClassMgr
             try
             {
                 CodeGenerator cg=new CodeGenerator();
+                cg.setGenerateVirtualClasses(true);
                 String code=cg.createClassBase(scls,false);
                 classes.put(className, code);
             }catch(Exception e)
