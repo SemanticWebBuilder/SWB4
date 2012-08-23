@@ -2406,6 +2406,7 @@ public class CodeGenerator
     private void insertObjectProperty(SemanticClass tpc, SemanticProperty tpp, StringBuilder javaClassContent, String semanticObject)
     {
         SemanticClass cls = tpp.getRangeClass();
+        System.out.println(cls.isSWB()+" "+cls.isSWBVirtualClass()+" "+isGenerateVirtualClasses());
         if (cls != null && cls.getURI() != null && (cls.isSWB() || (cls.isSWBVirtualClass() && isGenerateVirtualClasses())))
         {
             String objectName = tpp.getPropertyCodeName();
