@@ -18,16 +18,19 @@ public class SignatureApplet extends JApplet {
     private String urlPostSignature = "http://localhost:8888/post.jsp";
     private String sessionid;
     private String message = "||TEST|RECORD|23232443434343|TOTAL|Acepted||";
+    private java.applet.Applet applet;
 
     /**
      * Initialization method that will be called after the applet is loaded into
      * the browser.
      */
     public void init() {
-        sessionid = getParameter("sessionid");
+        applet = this;
+        //sessionid = getParameter("sessionid");
         //urlGetSignatureString=getParameter("urlMessage");
         //urlPostSignature = getParameter("urlPost");
-        try {
+        message = getParameter("message");
+        /*try {
             URL urlget = new URL(urlGetSignatureString);
             URLConnection ucon = urlget.openConnection();
             ucon.addRequestProperty("JSESSIONID", sessionid);
@@ -44,14 +47,14 @@ public class SignatureApplet extends JApplet {
         } catch (IOException ex) {
             message = "No se pudo obtener cadena a firmar";
             ex.printStackTrace();
-        }
+        }*/
         this.setSize(600, 330);
         try {
             SwingUtilities.invokeAndWait(new Runnable() {
 
                 public void run() {
                     SignaturePanel lbl = new SignaturePanel();
-                    lbl.setToSignString(message, urlPostSignature, sessionid);
+                    lbl.setToSignString(message, urlPostSignature, sessionid, applet);
                     add(lbl);
                 }
             });
