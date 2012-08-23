@@ -127,6 +127,8 @@ public class CodeGenerator
     private static final String TYPE_VOID = "void";
     /** The log. */
     private static Logger log = SWBUtils.getLogger(SemanticObject.class);
+    
+    private boolean generateVirtualClasses=false;
 
 
     /*public CodeGenerator(File pDirectory, String pPackage)
@@ -139,6 +141,16 @@ public class CodeGenerator
      */
     public CodeGenerator()
     {
+    }
+
+    public void setGenerateVirtualClasses(boolean generateVirtualClasses)
+    {
+        this.generateVirtualClasses = generateVirtualClasses;
+    }
+
+    public boolean isGenerateVirtualClasses()
+    {
+        return generateVirtualClasses;
     }
 
     /**
@@ -2394,9 +2406,8 @@ public class CodeGenerator
     private void insertObjectProperty(SemanticClass tpc, SemanticProperty tpp, StringBuilder javaClassContent, String semanticObject)
     {
         SemanticClass cls = tpp.getRangeClass();
-        if (cls != null && cls.getURI() != null && cls.isSWB())
+        if (cls != null && cls.getURI() != null && (cls.isSWB() || (cls.isSWBVirtualClass() && isGenerateVirtualClasses())))
         {
-
             String objectName = tpp.getPropertyCodeName();
             if (objectName == null)
             {
