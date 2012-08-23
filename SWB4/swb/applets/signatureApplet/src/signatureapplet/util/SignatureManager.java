@@ -3,7 +3,7 @@ package signatureapplet.util;
 import java.io.*;
 import java.security.*;
 import org.bouncycastle.util.encoders.Base64;
-import signatureapplet.data.SignatureRecord;
+import org.semanticwb.security.SignatureRecord;
 
 /**
  *

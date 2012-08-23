@@ -4,6 +4,7 @@
  */
 package signatureapplet;
 
+import java.applet.Applet;
 import java.awt.GridLayout;
 import java.io.BufferedInputStream;
 import java.io.DataOutputStream;
@@ -11,17 +12,15 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLEncoder;
 import java.security.GeneralSecurityException;
-import java.security.Signature;
 import java.security.PrivateKey;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
 import javax.swing.*;
 import javax.swing.filechooser.FileFilter;
-import org.bouncycastle.util.encoders.Base64;
-import signatureapplet.data.SignatureRecord;
+import netscape.javascript.JSObject;
+import org.semanticwb.security.SignatureRecord;
 import signatureapplet.util.ExtensionFileFilter;
 import signatureapplet.util.GetFIELPK;
 import signatureapplet.util.SignatureManager;
@@ -37,6 +36,7 @@ public class SignaturePanel extends javax.swing.JPanel {
     private String message = null;
     private String postURL = null;
     private String sessionid = null;
+    private Applet applet = null;
 
     /**
      * Creates new form SignatureApplet
@@ -243,13 +243,15 @@ public class SignaturePanel extends javax.swing.JPanel {
                 System.out.println("Subject: " + sr.getSubject());
                 
                 if (valid){
-                    int result=postData(new URL(postURL), "signature="+URLEncoder.encode(data, "UTF-8"));
-                    if (result==200){
+                    JSObject browser = JSObject.getWindow(applet);
+                    browser.call("setSignature", new Object[]{data});
+                    //int result=postData(new URL(postURL), "signature="+URLEncoder.encode(data, "UTF-8"));
+                    //if (result==200){
                         JOptionPane.showMessageDialog(this, "Firma enviada", "Firma", JOptionPane.INFORMATION_MESSAGE);
                         signerBtn.setEnabled(false);
-                    } else {
-                        JOptionPane.showMessageDialog(this, "Error: "+result, "Error", JOptionPane.ERROR_MESSAGE);
-                    }
+                    //} else {
+                    //    JOptionPane.showMessageDialog(this, "Error: "+result, "Error", JOptionPane.ERROR_MESSAGE);
+                    //}
                 }
                 
             } catch (GeneralSecurityException ngse) {
@@ -275,10 +277,11 @@ public class SignaturePanel extends javax.swing.JPanel {
     private javax.swing.JLabel title3;
     // End of variables declaration//GEN-END:variables
 
-    public void setToSignString(String message, String url, String sessionid) {
+    public void setToSignString(String message, String url, String sessionid, Applet applet) {
         this.message = message;
         jTextToSign.setText(this.message);
         this.postURL = url;
+        this.applet = applet;
     }
 
     int postData(URL url, String data) {
