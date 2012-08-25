@@ -111,7 +111,9 @@ public class SWBADBNatural extends GenericResource {
         if (user != null) {
             if (!lang.equals(user.getLanguage())) {
                 lang = user.getLanguage();
-                lex.addLexicon(new SWBLocaleLexicon(lang, SWBDictionary.getLanguageName(lang)));
+                SWBLocaleLexicon l = new SWBLocaleLexicon(lang, SWBDictionary.getLanguageName(lang));
+                l.buildLexicon();
+                lex.addLexicon(l);
                 lex.setLocale(lang);
             }
         } else {
