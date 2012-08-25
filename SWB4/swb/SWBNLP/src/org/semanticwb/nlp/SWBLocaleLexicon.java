@@ -101,6 +101,14 @@ public class SWBLocaleLexicon {
         System.out.println(prefixString);*/
     }
 
+    /**
+     * Builds the lexicon.
+     * Traverses the semantic classes and properties in the Semantic vocabulary of loaded
+     * ontologies and adds their names to the lexicon through a {@link Word}.
+     * <p>
+     * Recorre las clases y propiedades en el vocabulario semántico de las ontologías
+     * cargadas y agrega sus nombres al lexicon mediante un objeto de tipo {@link Word}.
+     */
     public void buildLexicon () {
         Iterator<SemanticClass> scit = SWBPlatform.getSemanticMgr().getVocabulary().listSemanticClasses();
         while(scit.hasNext()) {
