@@ -34,6 +34,7 @@ import org.antlr.runtime.tree.CommonTree;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.nlp.SWBDictionary;
+import org.semanticwb.nlp.SWBLocaleLexicon;
 import org.semanticwb.nlp.Tag;
 import org.semanticwb.nlp.analysis.EnglishLexer;
 import org.semanticwb.nlp.analysis.SpanishLexer;
@@ -186,7 +187,7 @@ public class SWBSparqlTranslator {
                     res.append(" ?description \nWHERE \n{\n");
                     String etype = "";
                     if (lex.getLexicon(lang).getWord(subject, true) != null) {
-                        etype = lex.getLexicon(lang).getWord(subject, true).getTags().get(0).getId();
+                        etype = lex.getLexicon(lang).getWord(subject, true).getTags().get(0).getTagInfoParam(SWBLocaleLexicon.PARAM_ID);
                     }
                     patterns += etype + " rdfs:comment ?description.\n";
                 } else {
@@ -209,7 +210,7 @@ public class SWBSparqlTranslator {
                     res.append("\nWHERE \n{\n");
                     String etype = "";
                     if (lex.getLexicon(lang).getWord(t.getText(), true) != null) {
-                        etype = lex.getLexicon(lang).getWord(t.getText(), true).getTags().get(0).getId();
+                        etype = lex.getLexicon(lang).getWord(t.getText(), true).getTags().get(0).getTagInfoParam(SWBLocaleLexicon.PARAM_ID);
                     }
                     //String etype = lex.getObjWordTag(t.getText()).getType();
                     if (!etype.equals("")) {
@@ -405,9 +406,9 @@ public class SWBSparqlTranslator {
         SemanticVocabulary vocabulary = SWBPlatform.getSemanticMgr().getVocabulary();
         String ret = "";
         if (assertRelation(className, propertyName)) {
-            SemanticClass sc = vocabulary.getSemanticClass(lex.getLexicon(lang).getWord(className, true).getTags().get(0).getURI());
+            SemanticClass sc = vocabulary.getSemanticClass(lex.getLexicon(lang).getWord(className, true).getTags().get(0).getTagInfoParam(SWBLocaleLexicon.PARAM_URI));
             if (sc != null) {
-                SemanticProperty sp = vocabulary.getSemanticProperty(lex.getLexicon(lang).getWord(propertyName, false).getSelectedTag().getURI());
+                SemanticProperty sp = vocabulary.getSemanticProperty(lex.getLexicon(lang).getWord(propertyName, false).getSelectedTag().getTagInfoParam(SWBLocaleLexicon.PARAM_URI));
                 if (sp != null) {
                     ret = sp.getPrefix() + ":" + sp.getName();
                 } else {
@@ -433,7 +434,7 @@ public class SWBSparqlTranslator {
         SemanticVocabulary vocabulary = SWBPlatform.getSemanticMgr().getVocabulary();
         //System.out.println("--Asserting " + propertyName + " from " + className);
         boolean ret = false;
-        SemanticClass sc = vocabulary.getSemanticClass(lex.getLexicon(lang).getWord(className, true).getTags().get(0).getURI());
+        SemanticClass sc = vocabulary.getSemanticClass(lex.getLexicon(lang).getWord(className, true).getTags().get(0).getTagInfoParam(SWBLocaleLexicon.PARAM_URI));
 
         if (sc != null) {
             if (lex.getLexicon(lang).getWord(propertyName, false) != null) {
@@ -444,7 +445,7 @@ public class SWBSparqlTranslator {
                 while(tit.hasNext() && !ret) {
                     Tag t = tit.next();
 
-                    SemanticProperty sp = vocabulary.getSemanticProperty(t.getURI());
+                    SemanticProperty sp = vocabulary.getSemanticProperty(t.getTagInfoParam(SWBLocaleLexicon.PARAM_URI));
                     if (sp != null && sc.getProperty(sp.getName()) != null) {
                         ret = true;
                         lex.getLexicon(lang).getWord(propertyName, false).setSelectedTag(t);
@@ -463,9 +464,9 @@ public class SWBSparqlTranslator {
     public SemanticClass getPropertyRangeClass(String propertyName, String className) {
         SemanticVocabulary vocabulary = SWBPlatform.getSemanticMgr().getVocabulary();
         if (assertRelation(className, propertyName)) {
-            SemanticClass sc = vocabulary.getSemanticClass(lex.getLexicon(lang).getWord(className, true).getTags().get(0).getURI());
+            SemanticClass sc = vocabulary.getSemanticClass(lex.getLexicon(lang).getWord(className, true).getTags().get(0).getTagInfoParam(SWBLocaleLexicon.PARAM_URI));
             if (sc != null) {
-                SemanticProperty sp = vocabulary.getSemanticProperty(lex.getLexicon(lang).getWord(propertyName, false).getSelectedTag().getURI());
+                SemanticProperty sp = vocabulary.getSemanticProperty(lex.getLexicon(lang).getWord(propertyName, false).getSelectedTag().getTagInfoParam(SWBLocaleLexicon.PARAM_URI));
                 if (sp != null) {
                     SemanticClass rg = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(sp.getRangeClass().getURI());
                     if (rg != null) {
@@ -485,9 +486,9 @@ public class SWBSparqlTranslator {
         SemanticVocabulary vocabulary = SWBPlatform.getSemanticMgr().getVocabulary();
         String ret = "";
         if (assertRelation(className, propertyName)) {
-            SemanticClass sc = vocabulary.getSemanticClass(lex.getLexicon(lang).getWord(className, true).getTags().get(0).getURI());
+            SemanticClass sc = vocabulary.getSemanticClass(lex.getLexicon(lang).getWord(className, true).getTags().get(0).getTagInfoParam(SWBLocaleLexicon.PARAM_URI));
             if (sc != null) {
-                SemanticProperty sp = vocabulary.getSemanticProperty(lex.getLexicon(lang).getWord(propertyName, false).getSelectedTag().getURI());
+                SemanticProperty sp = vocabulary.getSemanticProperty(lex.getLexicon(lang).getWord(propertyName, false).getSelectedTag().getTagInfoParam(SWBLocaleLexicon.PARAM_URI));
                 if (sp != null) {
                     SemanticClass rg = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(sp.getRangeClass().getURI());
                     if (rg != null) {
