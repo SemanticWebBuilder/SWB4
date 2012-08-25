@@ -126,7 +126,8 @@ public class SemanticSearch extends GenericAdmResource {
         if (user != null) {
             if (!lang.equals(paramRequest.getUser().getLanguage())) {
                 lang = paramRequest.getUser().getLanguage();
-                lex.addLexicon(new SWBLocaleLexicon(lang, SWBDictionary.getLanguageName(lang)));
+                SWBLocaleLexicon l = new SWBLocaleLexicon(lang, SWBDictionary.getLanguageName(lang));
+                lex.addLexicon(l);
                 lex.setLocale(lang);
             }
         } else {
@@ -665,7 +666,8 @@ public class SemanticSearch extends GenericAdmResource {
         if (user != null) {
             if (!lang.equals(paramRequest.getUser().getLanguage())) {
                 lang = paramRequest.getUser().getLanguage();
-                lex.addLexicon(new SWBLocaleLexicon(lang, SWBDictionary.getLanguageName(lang)));
+                SWBLocaleLexicon l = new SWBLocaleLexicon(lang, SWBDictionary.getLanguageName(lang));
+                lex.addLexicon(l);
                 lex.setLocale(lang);
             }
         } else {
