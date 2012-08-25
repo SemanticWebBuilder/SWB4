@@ -453,11 +453,6 @@ public class SWBSparqlTranslator {
                 }
             }
         }
-//        if (ret) {
-//            System.out.println("--Property " + propertyName + " belongs to " + className);
-//        } else {
-//            System.out.println("--Property " + propertyName + " does not belong to " + className);
-//        }
         return ret;
     }
 
