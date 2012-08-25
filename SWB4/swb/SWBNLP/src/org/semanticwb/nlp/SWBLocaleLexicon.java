@@ -40,17 +40,17 @@ import org.semanticwb.platform.SemanticProperty;
 
 /**
  * Lexicon para un idioma determinado.
- * @author Hasdai Pacheco {haxdai@gmail.com}
+ * @author Hasdai Pacheco {ebenezer.sanchez@infotec.com.mx}
  */
 public class SWBLocaleLexicon {
     public static final String OBJ_TAG = "OBJ"; //SemanticClass
     public static final String DTT_TAG = "LPR"; //Datatype Property
     public static final String OBT_TAG = "OPR"; //Objecttype Property
 
-    private HashMap<String, Word> objHash;
-    private HashMap<String, Word> propHash;
-    private HashMap<String, String> prefixHash;
-    private ArrayList<String> prefixFilters;
+    private HashMap<String, Word> objHash;       //Word hash for classes
+    private HashMap<String, Word> propHash;      //Word hash for properties
+    private HashMap<String, String> prefixHash;  //String hash for prefix definitions
+    private ArrayList<String> prefixFilters;     //List of filtering prefixes
     private String langCode = "es";
     private String langName = "Spanish";
     private int maxWordLength;
@@ -67,21 +67,36 @@ public class SWBLocaleLexicon {
     };
 
 
+    /**
+     * Constructor.
+     * Creates a new instance of a {@link SWBLocaleLexicon} with the default language (Spanish).
+     * <p>
+     * Crea una nueva instancia de un {@link SWBLocaleLexicon} para el idioma por defecto (Español).
+     */
     public SWBLocaleLexicon() {
         this("es", "Spanish");
     }
 
+    /**
+     * Constructor.
+     * Creates a new instance of a {@link SWBLocaleLexicon} for the specified languaje.
+     * <p>
+     * Crea una nueva instancia de un {@link SWBLocaleLexicon} para el idioma especificado.
+     */
     public SWBLocaleLexicon(String languageCode, String languageName) {
         this(languageCode, languageName, "");
     }
 
     /**
-     * Constructor. Crea una nueva instancia de LocaleLexicon para un idioma
+     * Constructor.
+     * Creates a new instance of a {@link SWBLocaleLexicon} for the specified languaje.
+     * <p>
+     * Crea una nueva instancia de un {@link SWBLocaleLexicon} para un idioma especificado.
      * definido.
-     * @param languageCode código del idioma como se usa en Semantic WebBuilder
-     * @param languageName código del idioma como se usa por el algoritmo de
+     * @param languageCode Language code. <p> Código del idioma como se usa en Semantic WebBuilder
+     * @param languageName Language name. <p> Nombre del idioma como se usa por el algoritmo de
      * snowball de lucene.
-     * @param prexFilter prefijos para filtrado separados por comas.
+     * @param prexFilter Filtering prefixes, comma-separated.<p>Prefijos para filtrado separados por comas.
      */
     public SWBLocaleLexicon(String languageCode, String languageName, String prexFilter) {
         langCode = languageCode;
@@ -95,13 +110,6 @@ public class SWBLocaleLexicon {
 
         prefixHash.put("rdfs", "http://www.w3.org/2000/01/rdf-schema#");
         prefixHash.put("rdf", "http://www.w3.org/1999/02/22-rdf-syntax-ns#");
-        //prefixString = "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n";
-        
-        //buildLexicon();
-        /*System.out.println("---" + objHash.values().size() + " objetos agregados");
-        System.out.println("---" + propHash.values().size() + " propiedades agregadas");
-        System.out.println("---Cadena de prefijos:");
-        System.out.println(prefixString);*/
     }
 
     /**
@@ -231,7 +239,6 @@ public class SWBLocaleLexicon {
             tList[stopWords.length] = w.toLowerCase();
             stopWords = tList;
         }
-
     }
 
     /**
