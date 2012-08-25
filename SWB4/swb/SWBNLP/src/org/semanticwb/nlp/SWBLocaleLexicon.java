@@ -49,10 +49,10 @@ public class SWBLocaleLexicon {
 
     private HashMap<String, Word> objHash;
     private HashMap<String, Word> propHash;
+    private HashMap<String, String> prefixHash;
     private ArrayList<String> prefixFilters;
     private String langCode = "es";
     private String langName = "Spanish";
-    private String prefixString;
     private int maxWordLength;
     private String[] stopWords = {"a", "ante", "bajo", "cabe", "con",
         "contra", "de", "desde", "durante",
@@ -87,13 +87,16 @@ public class SWBLocaleLexicon {
         langCode = languageCode;
         langName = languageName;
         maxWordLength = 0;
-
+        prefixHash = new HashMap<String, String>();
+        objHash = new HashMap<String, Word>();
+        propHash = new HashMap<String, Word>();
         if (!prexFilter.trim().equals(""))
             prefixFilters = new ArrayList<String>(Arrays.asList(prexFilter.split(",")));
 
-        prefixString = "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n";
-        objHash = new HashMap<String, Word>();
-        propHash = new HashMap<String, Word>();
+        prefixHash.put("rdfs", "http://www.w3.org/2000/01/rdf-schema#");
+        prefixHash.put("rdf", "http://www.w3.org/1999/02/22-rdf-syntax-ns#");
+        //prefixString = "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n";
+        
         //buildLexicon();
         /*System.out.println("---" + objHash.values().size() + " objetos agregados");
         System.out.println("---" + propHash.values().size() + " propiedades agregadas");
@@ -134,14 +137,15 @@ public class SWBLocaleLexicon {
                     w.setTag(t);
                     objHash.put(wLemma, w);
                 }
-                String pf = buildPrefixEntry(sc.getPrefix().trim(), sc.getOntClass().getNameSpace().trim());
-                if (prefixString.indexOf(pf) == -1) prefixString += pf + "\n";
+                
+                //Get the prefix definition for the class and add it to the prefix definition hash
+                addPrefixDefinition(sc.getPrefix().trim(), sc.getOntClass().getNameSpace().trim());
 
                 Iterator<SemanticProperty> spit = sc.listProperties();
                 while(spit.hasNext()) {
                     SemanticProperty sp = spit.next();
-                    pf = buildPrefixEntry(sp.getPrefix(), sp.getRDFProperty().getNameSpace());
-                    if (prefixString.indexOf(pf) == -1) prefixString += pf + "\n";
+                    //Get the prefix definition for the property and add it to the prefix definition hash
+                    addPrefixDefinition(sp.getPrefix().trim(), sp.getRDFProperty().getNameSpace().trim());
 
                     wLemma = getSnowballForm(sp.getDisplayName(langCode));
                     Word pw = propHash.get(wLemma);
@@ -171,22 +175,10 @@ public class SWBLocaleLexicon {
 
                         t.setURI(sp.getURI());
                         t.setId(sp.getPrefix() + ":" + sp.getName());
-                        /*SemanticClass rg = sp.getRangeClass();
-
-                        if (sp != null) {
-                            rg = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(sp.getRangeClass().getURI());
-                        }
-
-                        if (rg != null) {
-                            t.setRangeURI(rg.getPrefix() + ":" + rg.getName());
-                        }*/
 
                         w.addTag(t);
                         propHash.put(wLemma, w);
                     }
-                    //if (propHash.get(wLemma) == null) {
-                        
-                    //}
                 }
             }
         }
@@ -208,6 +200,14 @@ public class SWBLocaleLexicon {
         return ret;
     }
 
+    /**
+     * Adds a new {@link Word} to the lexicon.
+     * <p>
+     * Agrega una nueva palabra ({@link Word}) al lexicon.
+     * @param w The {@link Word}. <p> La palabra ({@link Word}).
+     * @param asObject Wheter to add the {@link Word} to the Object or Property hash. <p>
+     * Indica si la palabra se agregará al hash de objetos o de propiedades.
+     */
     public void addWord(Word w, boolean asObject) {
         if (asObject) {
             objHash.put(w.getLemma(), w);
@@ -217,6 +217,11 @@ public class SWBLocaleLexicon {
         //TODO: Agregar sinónimos a partir de las variantes
     }
 
+    /**
+     * Adds a new stop-word for the lexicon analyzer. <p>
+     * Agrega un nuevo stop-word al analizador del léxicon.
+     * @param w stop-word.
+     */
     public void addStopWord(String w) {
         if (!Arrays.asList(stopWords).contains(w.toLowerCase())) {
             String [] tList = new String[stopWords.length+1];
@@ -229,6 +234,12 @@ public class SWBLocaleLexicon {
 
     }
 
+    /**
+     * Gets the snowball form of a word. <p>
+     * Obtiene la raíz de la palabra usando el algoritmo snowball.
+     * @param input Input word characters.
+     * @return Snowball form for the word characters.
+     */
     public String getSnowballForm(String input) {
         String res = "";
 
@@ -253,7 +264,16 @@ public class SWBLocaleLexicon {
     }
 
     public String getPrefixString () {
-        return prefixString;
+        StringBuilder ret = new StringBuilder();
+        Iterator<String> keys = prefixHash.keySet().iterator();
+        while (keys.hasNext()) {
+            String key = keys.next();
+            ret.append(buildPrefixEntry(key, prefixHash.get(key)));
+            if (keys.hasNext()) {
+                ret.append("\n");
+            }
+        }
+        return ret.toString();
     }
 
     public Iterator<Word> listWords () {
@@ -322,5 +342,11 @@ public class SWBLocaleLexicon {
 
     public int getMaxWordLength() {
         return maxWordLength;
+    }
+    
+    public void addPrefixDefinition(String prefix, String namespace) {
+        if (prefixHash.get(prefix) == null) {
+            prefixHash.put(prefix, namespace);
+        }
     }
 }
