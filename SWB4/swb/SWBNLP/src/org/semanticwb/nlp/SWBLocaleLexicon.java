@@ -114,11 +114,13 @@ public class SWBLocaleLexicon {
         while(scit.hasNext()) {
             SemanticClass sc = scit.next();
 
+            //Store the max word length for n-grammar tokenization purposes
             if (sc.getDisplayName(langCode).split("[\\s]+").length > maxWordLength) {
                 maxWordLength = sc.getDisplayName(langCode).split("[\\s]+").length;
             }
 
             if (prefixFilters == null || (prefixFilters != null && prefixFilters.contains(sc.getPrefix()))) {
+                //Add the class information: lexical form, lemma, tag, URI and ID to a Word object
                 String wLemma = getSnowballForm(sc.getDisplayName(langCode));
                 if (objHash.get(wLemma) == null) {
                     Word w = new Word(sc.getDisplayName(langCode));
@@ -128,11 +130,11 @@ public class SWBLocaleLexicon {
                     t.setURI(sc.getURI());
                     t.setId(sc.getPrefix() + ":" + sc.getName());
 
-                    //Word objects have just one tag
+                    //Word objects have just one tag for now
                     w.setTag(t);
                     objHash.put(wLemma, w);
                 }
-                String pf = buildPrefixEntry(sc.getPrefix(), sc.getOntClass().getNameSpace());
+                String pf = buildPrefixEntry(sc.getPrefix().trim(), sc.getOntClass().getNameSpace().trim());
                 if (prefixString.indexOf(pf) == -1) prefixString += pf + "\n";
 
                 Iterator<SemanticProperty> spit = sc.listProperties();
@@ -190,10 +192,20 @@ public class SWBLocaleLexicon {
         }
     }
 
+    /**
+     * Builds a prefix definition string for a SPARQL query.
+     * <p>
+     * Construye una cadena de definición de prefijo para una consulta SPARQL.
+     * @param prefix Prefix. <p> Prefijo.
+     * @param namespace Namespace. <p> Namespace.
+     * @return Prefix definition string. <p> Cadena de definición de prefijo.
+     */
     private String buildPrefixEntry(String prefix, String namespace) {
-        if (prefix == null || prefix.trim().equals("") || namespace.trim().equals(""))
-            return "";
-        return "PREFIX " + prefix + ": " + "<" + namespace + ">";
+        String ret = "";
+        if (prefix != null && namespace != null && prefix.length() > 0 && namespace.length() > 0) {
+            ret = "PREFIX " + prefix + ": " + "<" + namespace + ">";
+        }
+        return ret;
     }
 
     public void addWord(Word w, boolean asObject) {
