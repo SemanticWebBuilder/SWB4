@@ -46,6 +46,8 @@ public class SWBLocaleLexicon {
     public static final String OBJ_TAG = "OBJ"; //SemanticClass
     public static final String DTT_TAG = "LPR"; //Datatype Property
     public static final String OBT_TAG = "OPR"; //Objecttype Property
+    public static final String PARAM_URI = "URI"; //URI
+    public static final String PARAM_ID = "ID"; //ID
 
     private HashMap<String, Word> objHash;       //Word hash for classes
     private HashMap<String, Word> propHash;      //Word hash for properties
@@ -138,8 +140,8 @@ public class SWBLocaleLexicon {
                     w.setLemma(wLemma);
 
                     Tag t = new Tag(OBJ_TAG);
-                    t.setURI(sc.getURI());
-                    t.setId(sc.getPrefix() + ":" + sc.getName());
+                    t.setTagInfoParam(PARAM_URI, sc.getURI());
+                    t.setTagInfoParam(PARAM_ID, sc.getPrefix() + ":" + sc.getName());
 
                     //Word objects have just one tag for now
                     w.setTag(t);
@@ -158,35 +160,23 @@ public class SWBLocaleLexicon {
                     wLemma = getSnowballForm(sp.getDisplayName(langCode));
                     Word pw = propHash.get(wLemma);
 
-                    //If property already exists, add tag to the word
-                    if (pw != null) {
-                        Tag t = new Tag();
-                        if (sp.isObjectProperty()) {
-                            t.setTag(OBT_TAG);
-                        } else {
-                            t.setTag(DTT_TAG);
-                        }
-
-                        t.setURI(sp.getURI());
-                        t.setId(sp.getPrefix() + ":" + sp.getName());
-                        pw.addTag(t);
-                    } else {
-                        Word w = new Word(sp.getDisplayName(langCode));
-                        w.setLemma(wLemma);
-
-                        Tag t = new Tag();
-                        if (sp.isObjectProperty()) {
-                            t.setTag(OBT_TAG);
-                        } else {
-                            t.setTag(DTT_TAG);
-                        }
-
-                        t.setURI(sp.getURI());
-                        t.setId(sp.getPrefix() + ":" + sp.getName());
-
-                        w.addTag(t);
-                        propHash.put(wLemma, w);
+                    //If property does not exists, create it
+                    if (pw == null) {
+                        pw = new Word(sp.getDisplayName(langCode));
+                        pw.setLemma(wLemma);
+                        propHash.put(wLemma, pw);
                     }
+                    
+                    Tag t = null;
+                    if (sp.isObjectProperty()) {
+                        t = new Tag(OBT_TAG);
+                    } else {
+                        t = new Tag(DTT_TAG);
+                    }
+
+                    t.setTagInfoParam(PARAM_URI, sp.getURI());
+                    t.setTagInfoParam(PARAM_ID, sp.getPrefix() + ":" + sp.getName());
+                    pw.addTag(t);
                 }
             }
         }
