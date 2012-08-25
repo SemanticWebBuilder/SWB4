@@ -94,7 +94,7 @@ public class SWBLocaleLexicon {
         prefixString = "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n";
         objHash = new HashMap<String, Word>();
         propHash = new HashMap<String, Word>();
-        buildLexicon();
+        //buildLexicon();
         /*System.out.println("---" + objHash.values().size() + " objetos agregados");
         System.out.println("---" + propHash.values().size() + " propiedades agregadas");
         System.out.println("---Cadena de prefijos:");
