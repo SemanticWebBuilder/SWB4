@@ -43,10 +43,17 @@ import javax.tools.JavaFileManager;
 import javax.tools.JavaFileObject.Kind;
 import javax.tools.SimpleJavaFileObject;
 import javax.tools.ToolProvider;
+import org.semanticwb.Logger;
+import org.semanticwb.SWBPlatform;
+import org.semanticwb.SWBUtils;
+import org.semanticwb.codegen.CodeGenerator;
+import org.semanticwb.platform.SemanticClass;
 
 
-public final class MemoryClassLoader extends ClassLoader {
-
+public final class MemoryClassLoader extends ClassLoader 
+{
+    private static Logger log=SWBUtils.getLogger(MemoryClassLoader.class);
+    
     Map<String, Class> classes = Collections.synchronizedMap(new HashMap<String, Class>());
     private final JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
     private final MemoryFileManager manager = new MemoryFileManager(this.compiler);
@@ -63,6 +70,39 @@ public final class MemoryClassLoader extends ClassLoader {
         }
         this.compiler.getTask(null, this.manager, null, null, null, list).call();
     }*/
+
+    @Override
+    public Class<?> loadClass(String name) throws ClassNotFoundException
+    {
+        Class cls=super.loadClass(name);
+        if(cls==null)
+        {
+            System.out.println("Compiling Class:"+name);
+            HashMap<String,String> classes=new HashMap<String, String>();
+            try
+            {
+                SemanticClass scls=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClassByJavaName(name);
+                if(scls!=null && scls.isSWBVirtualClass())
+                {    
+                    CodeGenerator cg=new CodeGenerator();
+                    cg.setGenerateVirtualClasses(true);
+                    String code=cg.createClassBase(scls,false);
+                    classes.put(name, code);
+                    addAll(classes);
+                }    
+                System.out.println("Compiled Class:"+name);
+            }catch(Exception e)
+            {
+                log.error("Error compiling:" +name,e);
+            }
+
+            try
+            {
+                cls=findLoadedClass(name);
+            }catch(Exception noe){}
+        }
+        return cls;
+    }   
 
     @Override
     protected synchronized Class loadClass(String name, boolean resolve)

@@ -61,26 +61,26 @@ public class SWBPClassMgr
         {
             clazz=mcls.loadClass(className);
         }catch(Exception noe){}
-        if(clazz==null)
-        {
-            HashMap<String,String> classes=new HashMap<String, String>();
-            try
-            {
-                CodeGenerator cg=new CodeGenerator();
-                cg.setGenerateVirtualClasses(true);
-                String code=cg.createClassBase(scls,false);
-                classes.put(className, code);
-            }catch(Exception e)
-            {
-                log.error("Error compiling:" +className,e);
-            }
-            mcls.addAll(classes);
-
-            try
-            {
-                clazz=mcls.loadClass(className);
-            }catch(Exception noe){}
-        }
+//        if(clazz==null)
+//        {
+//            HashMap<String,String> classes=new HashMap<String, String>();
+//            try
+//            {
+//                CodeGenerator cg=new CodeGenerator();
+//                cg.setGenerateVirtualClasses(true);
+//                String code=cg.createClassBase(scls,false);
+//                classes.put(className, code);
+//            }catch(Exception e)
+//            {
+//                log.error("Error compiling:" +className,e);
+//            }
+//            mcls.addAll(classes);
+//
+//            try
+//            {
+//                clazz=mcls.loadClass(className);
+//            }catch(Exception noe){}
+//        }
         return clazz;
     }
 
