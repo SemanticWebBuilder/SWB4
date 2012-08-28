@@ -263,6 +263,9 @@ public class SemanticVocabulary
     
     /** The clsbyname. */
     public HashMap<String, SemanticClass> clsbyname;
+    
+    /** The clsbyname. */
+    public HashMap<String, SemanticClass> clsbyVirtualName;    
 
     /**
      * Instantiates a new semantic vocabulary.
@@ -272,6 +275,7 @@ public class SemanticVocabulary
         classes = new HashMap();
         clsbyid = new HashMap();
         clsbyname = new HashMap();
+        clsbyVirtualName = new HashMap();
         properties = new HashMap();
     }
 
@@ -342,6 +346,12 @@ public class SemanticVocabulary
         {
             clsbyname.put(clsname, tpc);
         }
+        clsname = tpc.getVirtualClassName();
+        if (clsname != null)
+        {
+            clsbyVirtualName.put(tpc.getVirtualClassName(), tpc);
+        }    
+        //System.out.println("addSemanticClass:"+clsname+" "+tpc.getURI());
     }
 
     /**
@@ -426,6 +436,17 @@ public class SemanticVocabulary
     {
         return clsbyname.get(className);
     }
+    
+    /**
+     * Gets the semantic class by java name.
+     * 
+     * @param className the class name
+     * @return the semantic class by java name
+     */
+    public SemanticClass getSemanticClassByVirtualJavaName(String className)
+    {
+        return clsbyVirtualName.get(className);
+    }    
 
     /**
      * Adds the semantic property.
