@@ -12,7 +12,7 @@ import java.security.cert.Certificate;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
 import org.bouncycastle.util.encoders.Base64;
-import signatureapplet.util.GetFIELPK;
+//import signatureapplet.util.GetFIELPK;
 
 /**
  *
@@ -24,7 +24,7 @@ public class SignTest {
     
     public static void main(String[] args) throws Exception{
         Signature sig = Signature.getInstance("SHA1withRSA");
-        sig.initSign(GetFIELPK.getKey(new File(args[1]), args[2].toCharArray()));
+        sig.initSign(null); //GetFIELPK.getKey(new File(args[1]), args[2].toCharArray()));
         sig.update(data.getBytes());
         byte[] firma = sig.sign();
         

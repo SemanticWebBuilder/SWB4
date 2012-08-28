@@ -42,7 +42,11 @@ public class SignaturePanel extends javax.swing.JPanel {
      * Creates new form SignatureApplet
      */
     public SignaturePanel() {
+        try {
         initComponents();
+        } catch (Throwable t){
+            t.printStackTrace();
+        }
     }
 
     /**
@@ -215,8 +219,8 @@ public class SignaturePanel extends javax.swing.JPanel {
         }
         if (null != enteredPassword) {
             try {
-
-                PrivateKey privateKey = GetFIELPK.getKey(privFileName, enteredPassword);
+                
+                PrivateKey privateKey =GetFIELPK.getKey(privFileName, enteredPassword);
 
                 FileInputStream fis = new FileInputStream(pubFileName);
                 BufferedInputStream bis = new BufferedInputStream(fis);
@@ -236,11 +240,8 @@ public class SignaturePanel extends javax.swing.JPanel {
                 String data = SignatureManager.encodeSignatureRecord(SignatureManager.wrapData(message, privateKey, cert));
                 //String urlParameters = "fName=" + URLEncoder.encode("???", "UTF-8") +  "&lName=" + URLEncoder.encode("???", "UTF-8")
                 
-                System.out.println("data: " + data);
                 SignatureRecord sr = SignatureManager.decodeSignatureRecord(data);
                 boolean valid = SignatureManager.ValidateSignatureRecord(sr);
-                System.out.println("valid: " + valid);
-                System.out.println("Subject: " + sr.getSubject());
                 
                 if (valid){
                     JSObject browser = JSObject.getWindow(applet);
@@ -255,10 +256,11 @@ public class SignaturePanel extends javax.swing.JPanel {
                 }
                 
             } catch (GeneralSecurityException ngse) {
+                ngse.printStackTrace();
                 JOptionPane.showMessageDialog(this, "Contraseña o llave privada incorrecta", "Error", JOptionPane.ERROR_MESSAGE);
             } catch (Exception e) {
-                JOptionPane.showMessageDialog(this, "Error: " + e.getLocalizedMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                 e.printStackTrace();
+                JOptionPane.showMessageDialog(this, "Error: " + e.getLocalizedMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
 
