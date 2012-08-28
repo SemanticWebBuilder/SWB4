@@ -135,6 +135,9 @@ public class SemanticClass
     
     /** The m_class name. */
     private String m_className=null;
+    
+    /** The m_class name. */
+    private String m_virtualClassName=null;    
 
     /** The m_observers. */
     private List<SemanticObserver> m_observers = null;
@@ -246,7 +249,11 @@ public class SemanticClass
             {
                 if(cls.isSWB())
                 {
-                    m_className=cls.getCodePackage()+"."+cls.getClassCodeName();
+                    m_className=cls.getClassCodeName();
+                    if(cls.getCodePackage()!=null)                    
+                    {
+                        m_className=cls.getCodePackage()+"."+m_className;
+                    }    
                     break;
                 }else
                 {
@@ -265,6 +272,45 @@ public class SemanticClass
         }
         return m_className;
     }
+    
+    /**
+     * Regresa nombre de la clase con paquete, siempre y cuendo sea del tipo virtualClass.
+     * 
+     * @return the class name
+     * @return
+     */
+    public String getVirtualClassName()
+    {
+        if(m_virtualClassName==null)
+        {
+            SemanticClass cls=this;
+            while(cls!=null)
+            {
+                if(cls.isSWB() || cls.isSWBVirtualClass())
+                {
+                    m_virtualClassName=cls.getClassCodeName();
+                    if(cls.getCodePackage()!=null)                    
+                    {
+                        m_virtualClassName=cls.getCodePackage()+"."+m_virtualClassName;
+                    }    
+                    break;
+                }else
+                {
+                    Iterator<SemanticClass> it=cls.listSuperClasses(true);
+                    cls=null;
+                    SemanticClass acls=null;
+                    while(it.hasNext())
+                    {
+                        SemanticClass aux=it.next();
+                        if(aux.isSWBClass())cls=aux;
+                        if(!aux.isSWB())acls=aux;
+                    }
+                    if(cls==null)cls=acls;
+                }
+            }
+        }
+        return m_virtualClassName;
+    }    
 
     /**
      * Regresa paquete de la clase generica java definido den la ontologia.
