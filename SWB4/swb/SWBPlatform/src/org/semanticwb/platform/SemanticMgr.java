@@ -74,6 +74,8 @@ public class SemanticMgr implements SWBInstanceObject
     private boolean tripleCache=false;
     
     private boolean semobjCache=false;
+    
+    private ClassLoader classLoader=getClass().getClassLoader();
 
     /**
      * The Enum ModelSchema.
@@ -1122,5 +1124,15 @@ public class SemanticMgr implements SWBInstanceObject
     {
         return tripleCache;
     }
+
+    public ClassLoader getClassLoader()
+    {
+        return classLoader;
+    }
+
+    public void setClassLoader(ClassLoader classLoader)
+    {
+        this.classLoader = classLoader;
+    }        
 
 }

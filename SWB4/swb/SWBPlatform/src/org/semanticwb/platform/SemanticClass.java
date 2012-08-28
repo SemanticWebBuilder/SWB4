@@ -798,7 +798,7 @@ public class SemanticClass
             {
                 try
                 {
-                    m_cls=Class.forName(getVirtualClassName());
+                    m_cls=Class.forName(getVirtualClassName(), false, SWBPlatform.getSemanticMgr().getClassLoader());
                 }catch(Exception noe){}
             }
             
