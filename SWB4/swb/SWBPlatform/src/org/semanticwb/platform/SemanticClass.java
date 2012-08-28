@@ -794,11 +794,22 @@ public class SemanticClass
     {
         if(m_cls==null)
         {
-            try
+            if(isSWBVirtualClass())
             {
-                m_cls=Class.forName(getClassName());
-                //System.out.println("createClass:"+getClassName()+" "+m_cls);
-            }catch(Exception e){log.error(e);}
+                try
+                {
+                    m_cls=Class.forName(getVirtualClassName());
+                }catch(Exception noe){}
+            }
+            
+            if(m_cls==null)
+            {
+                try
+                {
+                    m_cls=Class.forName(getClassName());
+                    //System.out.println("createClass:"+getClassName()+" "+m_cls);
+                }catch(Exception e){log.error(e);}
+            }            
         }
         return m_cls;
     }
