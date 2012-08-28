@@ -29,8 +29,11 @@ package org.semanticwb.process.model;
 import bsh.Interpreter;
 import java.lang.reflect.Constructor;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import org.openjena.atlas.iterator.Iterator2;
 import org.semanticwb.Logger;
+import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.codegen.CodeGenerator;
 import org.semanticwb.model.User;
@@ -45,56 +48,69 @@ import org.semanticwb.script.util.MemoryClassLoader;
 public class SWBPClassMgr
 {
     private static Logger log=SWBUtils.getLogger(SWBPClassMgr.class);
-    private static MemoryClassLoader mcls=new MemoryClassLoader(SWBPClassMgr.class.getClassLoader());
+    private static MemoryClassLoader mcls=null;
+
+    static 
+    {
+        getClassLoader();
+    }
 
     public static Class getClassDefinition(SemanticClass scls)
     {
-        String pk=scls.getCodePackage();
-        String className=scls.getClassCodeName();
-        if(pk!=null)
-        {
-            className = pk + "." + className;
-        }
         //System.out.println("className:"+className);
         Class clazz=null;
         try
         {
-            clazz=mcls.loadClass(className);
+            clazz=getClassLoader().loadClass(scls.getVirtualClassName());
         }catch(Exception e){
             log.debug(e);
         }
-//        if(clazz==null)
-//        {
-//            HashMap<String,String> classes=new HashMap<String, String>();
-//            try
-//            {
-//                CodeGenerator cg=new CodeGenerator();
-//                cg.setGenerateVirtualClasses(true);
-//                String code=cg.createClassBase(scls,false);
-//                classes.put(className, code);
-//            }catch(Exception e)
-//            {
-//                log.error("Error compiling:" +className,e);
-//            }
-//            mcls.addAll(classes);
-//
-//            try
-//            {
-//                clazz=mcls.loadClass(className);
-//            }catch(Exception noe){}
-//        }
         return clazz;
+    }
+    
+    public static ClassLoader getClassLoader()
+    {
+        if(mcls==null)
+        {
+            mcls=new MemoryClassLoader(SWBPClassMgr.class.getClassLoader());
+            
+            HashMap<String,String> classes=new HashMap<String, String>();
+            CodeGenerator cg=new CodeGenerator();
+            cg.setGenerateVirtualClasses(true);
+            
+            Iterator<SemanticClass> it=SWBPlatform.getSemanticMgr().getVocabulary().listSemanticClasses();
+            while (it.hasNext())
+            {
+                SemanticClass scls = it.next();
+                if(scls.isSWBVirtualClass())
+                {
+                    String className=scls.getVirtualClassName();
+                    try
+                    {
+                        String code=cg.createClassBase(scls,false);
+                        classes.put(className, code);
+                    }catch(Exception e)
+                    {
+                        log.error("Error compiling:" +className,e);
+                    }
+                }
+            }                        
+            mcls.addAll(classes);
+        }
+        return mcls;
     }
 
     public static void reset()
     {
-        mcls=new MemoryClassLoader(SWBPClassMgr.class.getClassLoader());
+        mcls=null;
+        getClassLoader();
     }
+        
     
     public static Interpreter getInterpreter(Instance instance, User user)
     {
         Interpreter i = new Interpreter();  // Construct an interpreter
-        i.setClassLoader(mcls);
+        i.setClassLoader(getClassLoader());
         try
         {
             i.eval("import org.semanticwb.process.model.*");        
@@ -117,7 +133,7 @@ public class SWBPClassMgr
     public static Interpreter getInterpreter()
     {
         Interpreter i = new Interpreter();  // Construct an interpreter
-        i.setClassLoader(mcls);
+        i.setClassLoader(getClassLoader());
         i.setStrictJava(true);
         try
         {
@@ -155,9 +171,5 @@ public class SWBPClassMgr
         }
     }
 
-    public static ClassLoader getClassLoader()
-    {
-        return mcls;
-    }
 
 }
