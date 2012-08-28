@@ -54,10 +54,12 @@ public final class MemoryClassLoader extends ClassLoader
     Map<String, Class> classes = Collections.synchronizedMap(new HashMap<String, Class>());
     private final JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
     private final MemoryFileManager manager = new MemoryFileManager(this.compiler);
-
+    
+    
     /*public MemoryClassLoader(String classname, String filecontent) {
         this(Collections.singletonMap(classname, filecontent));
     }
+    
 
     public MemoryClassLoader(Map<String, String> map) {
 
