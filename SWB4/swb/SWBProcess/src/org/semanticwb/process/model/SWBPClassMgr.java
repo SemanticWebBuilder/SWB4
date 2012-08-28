@@ -55,12 +55,14 @@ public class SWBPClassMgr
         {
             className = pk + "." + className;
         }
-        //System.out.println("className:"+className);
+        System.out.println("className:"+className);
         Class clazz=null;
         try
         {
             clazz=mcls.loadClass(className);
-        }catch(Exception noe){}
+        }catch(Exception e){
+            log.debug(e);
+        }
 //        if(clazz==null)
 //        {
 //            HashMap<String,String> classes=new HashMap<String, String>();

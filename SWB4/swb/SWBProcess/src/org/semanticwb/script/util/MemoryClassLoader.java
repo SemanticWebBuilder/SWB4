@@ -74,33 +74,40 @@ public final class MemoryClassLoader extends ClassLoader
     @Override
     public Class<?> loadClass(String name) throws ClassNotFoundException
     {
-        Class cls=super.loadClass(name);
+        Class cls=null;
+        ClassNotFoundException notf=null;
+        try
+        {    
+            cls=super.loadClass(name);
+        }catch(ClassNotFoundException noe)
+        {
+            notf=noe;
+        }   
+        
         if(cls==null)
         {
-            System.out.println("Compiling Class:"+name);
-            HashMap<String,String> classes=new HashMap<String, String>();
             try
             {
-                SemanticClass scls=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClassByJavaName(name);
+                SemanticClass scls=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClassByVirtualJavaName(name);
                 if(scls!=null && scls.isSWBVirtualClass())
                 {    
+                    System.out.println("Compiling Class:"+name);
+                    HashMap<String,String> classes=new HashMap<String, String>();
                     CodeGenerator cg=new CodeGenerator();
                     cg.setGenerateVirtualClasses(true);
                     String code=cg.createClassBase(scls,false);
                     classes.put(name, code);
                     addAll(classes);
+                    System.out.println("Compiled Class:"+name);
                 }    
-                System.out.println("Compiled Class:"+name);
             }catch(Exception e)
             {
                 log.error("Error compiling:" +name,e);
             }
 
-            try
-            {
-                cls=findLoadedClass(name);
-            }catch(Exception noe){}
+            cls=super.loadClass(name);
         }
+        //if(cls==null)throw notf;
         return cls;
     }   
 
