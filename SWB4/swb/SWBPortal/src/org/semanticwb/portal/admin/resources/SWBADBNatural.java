@@ -679,7 +679,7 @@ public class SWBADBNatural extends GenericResource {
                 sbf.append("</ul>");
             }
         } else { //User has queried property of an object
-            String tag = lex.getLexicon(lang).getWord(word, true).getTags().get(0).getId();
+            String tag = lex.getLexicon(lang).getWord(word, true).getTags().get(0).getTagInfoParam(SWBLocaleLexicon.PARAM_ID);
             //String tag = lex.getObjWordTag(word).getObjId();
 
             sbf.append("<ul id=\"resultlist\" class=\"resultlist\" style=\"background:white;list-style-type:none;" +
@@ -703,7 +703,7 @@ public class SWBADBNatural extends GenericResource {
                     idCounter++;
                 }
             } else {
-                tag = lex.getLexicon(lang).getWord(word, false).getSelectedTag().getId();
+                tag = lex.getLexicon(lang).getWord(word, false).getSelectedTag().getTagInfoParam(SWBLocaleLexicon.PARAM_ID);
                 SemanticClass sc = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(tag);
                 tag = sc.getPrefix() + ":" + sc.getName();
                 //tag = lex.getPropWordTag(word).getRangeClassId();
