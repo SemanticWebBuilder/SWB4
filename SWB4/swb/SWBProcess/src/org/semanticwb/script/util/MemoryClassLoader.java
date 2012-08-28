@@ -44,10 +44,7 @@ import javax.tools.JavaFileObject.Kind;
 import javax.tools.SimpleJavaFileObject;
 import javax.tools.ToolProvider;
 import org.semanticwb.Logger;
-import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
-import org.semanticwb.codegen.CodeGenerator;
-import org.semanticwb.platform.SemanticClass;
 
 
 public final class MemoryClassLoader extends ClassLoader 
@@ -71,6 +68,7 @@ public final class MemoryClassLoader extends ClassLoader
         this.compiler.getTask(null, this.manager, null, null, null, list).call();
     }*/
 
+    /*
     @Override
     public Class<?> loadClass(String name) throws ClassNotFoundException
     {
@@ -110,6 +108,7 @@ public final class MemoryClassLoader extends ClassLoader
         //if(cls==null)throw notf;
         return cls;
     }   
+    */    
 
     @Override
     protected synchronized Class loadClass(String name, boolean resolve)
