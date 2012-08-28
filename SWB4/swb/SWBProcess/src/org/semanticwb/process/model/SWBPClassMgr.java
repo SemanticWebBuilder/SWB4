@@ -55,7 +55,7 @@ public class SWBPClassMgr
         {
             className = pk + "." + className;
         }
-        System.out.println("className:"+className);
+        //System.out.println("className:"+className);
         Class clazz=null;
         try
         {
