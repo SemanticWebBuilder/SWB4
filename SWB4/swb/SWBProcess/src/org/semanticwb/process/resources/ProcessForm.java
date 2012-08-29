@@ -219,9 +219,9 @@ public class ProcessForm extends GenericResource {
             if (base.getAttribute("btnCancel", "").equals("use")) {
                 out.println("<button dojoType=\"dijit.form.Button\" onclick=\"window.location='" + foi.getUserTaskInboxUrl() + "?suri=" + suri + "'\">Regresar</button>");
             }
-            if (base.getAttribute("btnCancel", "").equals("use")) {
-                out.println("<button dojoType=\"dijit.form.Button\" onclick=\"window.location='" + foi.getUserTaskInboxUrl() + "?suri=" + suri + "'\">Regresar</button>");
-            }
+//            if (base.getAttribute("btnCancel", "").equals("use")) {
+//                out.println("<button dojoType=\"dijit.form.Button\" onclick=\"window.location='" + foi.getUserTaskInboxUrl() + "?suri=" + suri + "'\">Regresar</button>");
+//            }
 
             out.println("</span></fieldset>");
             out.println("</form>");
