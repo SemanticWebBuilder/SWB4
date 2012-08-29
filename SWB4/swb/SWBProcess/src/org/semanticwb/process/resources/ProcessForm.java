@@ -288,7 +288,7 @@ public class ProcessForm extends GenericResource {
         out.println("<td>");
         out.println("<applet code=\"signatureapplet.SignatureApplet.class\" archive=\""
                     + SWBPlatform.getContextPath()
-                    + "/swbadmin/digitalSignature/SWBAplDigitalSignature.jar\" width=\"600\" height=\"330\">");
+                    + "/swbadmin/lib/SWBAplDigitalSignature.jar\" width=\"600\" height=\"330\">");
         out.println("<param name=\"message\" value=\"" + SigCad + "\">");
         out.println("</applet>");
 //        out.println("<script type=\"text/javascript\">");
