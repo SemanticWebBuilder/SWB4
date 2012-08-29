@@ -123,23 +123,27 @@ public class DojoFileUpload extends org.semanticwb.model.base.DojoFileUploadBase
             buffer.append("	<br><br>\n");
             buffer.append("	<div id=\"" + pname + "_dynamic\"></div>\n");
         } else {
-            
-            buffer.append("<input dojoType=\"dojox.form.FileInputAuto\" blurDelay=\"0\" "
-                    + "id=\"" + pname + "_defaultAuto\" name=\"" + pname + "_inputFileAuto\" url=\"" + url
-                    + "\" onComplete=\"fileUpload_Callback"+((obj.getProperty(prop) != null)?"":"2")+"\"  startup=\"dijit.byId(document.getElementById('"+pname+ "_defaultAuto').form.id).extValid="+(obj.getProperty(prop) != null)+";\" "
-                    + "fileMask=\"" + filts.toString().replaceAll("\\\\", "") + "\"/>\n");
-            //buffer.append("        <button onclick=\"return false;\">Enviar</button>\n");
-            buffer.append("<br/>\n");
+            if (!"view".equals(mode)) {
+                buffer.append("<input dojoType=\"dojox.form.FileInputAuto\" blurDelay=\"0\" "
+                        + "id=\"" + pname + "_defaultAuto\" name=\"" + pname + "_inputFileAuto\" url=\"" + url
+                        + "\" onComplete=\"fileUpload_Callback"+((obj.getProperty(prop) != null)?"":"2")+"\"  startup=\"dijit.byId(document.getElementById('"+pname+ "_defaultAuto').form.id).extValid="+(obj.getProperty(prop) != null)+";\" "
+                        + "fileMask=\"" + filts.toString().replaceAll("\\\\", "") + "\"/>\n");
+                //buffer.append("        <button onclick=\"return false;\">Enviar</button>\n");
+                buffer.append("<br/>\n");
+            }
             
             if (!"create".equals(mode) && obj.getProperty(prop) != null) {
                 String name = obj.getProperty(prop);
                 if (name.startsWith(pname)) {
                     name = name.substring(pname.length() + 1);
                 }
-                buffer.append("Eliminar: <input dojoType=\"dijit.form.CheckBox\" id=\""
-                        + pname + "_delFile\" name=\""
-                        + pname + "_delFile\" value=\"" + name + "\" /><label for=\""
-                        + pname + "_delFile\">" + name + "</label>\n");
+                if ("edit".equals(mode)) {
+                    buffer.append("Eliminar: <input dojoType=\"dijit.form.CheckBox\" id=\""
+                            + pname + "_delFile\" name=\""
+                            + pname + "_delFile\" value=\"" + name + "\" /><a href=\"" + obj.getWorkPath() + "/" + name + "\">"+name+"</a>\n");
+                } else {
+                    buffer.append("&nbsp;<a href=\"" + obj.getWorkPath() + "/" + name + "\">"+name+"</a>");
+                }
             }else
             {
                 buffer.append("<script type=\"text/javascript\">");
