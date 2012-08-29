@@ -113,6 +113,21 @@ public abstract class BooleanElementBase extends org.semanticwb.model.base.FormE
         getSemanticObject().setProperty(swbxf_booleanTrueTitle, value);
     }
 
+    public String getTrueTitle(String lang)
+    {
+        return getSemanticObject().getProperty(swbxf_booleanTrueTitle, null, lang);
+    }
+
+    public String getDisplayTrueTitle(String lang)
+    {
+        return getSemanticObject().getLocaleProperty(swbxf_booleanTrueTitle, lang);
+    }
+
+    public void setTrueTitle(String booleanTrueTitle, String lang)
+    {
+        getSemanticObject().setProperty(swbxf_booleanTrueTitle, booleanTrueTitle, lang);
+    }
+
 /**
 * Gets the DisplayType property
 * @return String with the DisplayType
@@ -147,6 +162,21 @@ public abstract class BooleanElementBase extends org.semanticwb.model.base.FormE
     public void setFalseTitle(String value)
     {
         getSemanticObject().setProperty(swbxf_booleanDisplayFalseTitle, value);
+    }
+
+    public String getFalseTitle(String lang)
+    {
+        return getSemanticObject().getProperty(swbxf_booleanDisplayFalseTitle, null, lang);
+    }
+
+    public String getDisplayFalseTitle(String lang)
+    {
+        return getSemanticObject().getLocaleProperty(swbxf_booleanDisplayFalseTitle, lang);
+    }
+
+    public void setFalseTitle(String booleanDisplayFalseTitle, String lang)
+    {
+        getSemanticObject().setProperty(swbxf_booleanDisplayFalseTitle, booleanDisplayFalseTitle, lang);
     }
 
     public void remove()
