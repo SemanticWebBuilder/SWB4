@@ -140,9 +140,9 @@ public class DojoFileUpload extends org.semanticwb.model.base.DojoFileUploadBase
                 if ("edit".equals(mode)) {
                     buffer.append("Eliminar: <input dojoType=\"dijit.form.CheckBox\" id=\""
                             + pname + "_delFile\" name=\""
-                            + pname + "_delFile\" value=\"" + name + "\" /><a href=\"/work" + obj.getWorkPath() + "/" + obj.getProperty(prop) + "\">"+name+"</a>\n");
+                            + pname + "_delFile\" value=\"" + name + "\" /><a href=\"" + SWBPlatform.getContextPath()+"/work" + obj.getWorkPath() + "/" + obj.getProperty(prop) + "\">"+name+"</a>\n");
                 } else {
-                    buffer.append("&nbsp;<a href=\"/work" + obj.getWorkPath() + "/" + obj.getProperty(prop) + "\">"+name+"</a>");
+                    buffer.append("&nbsp;<a href=\"" + SWBPlatform.getContextPath()+"/work" + obj.getWorkPath() + "/" + obj.getProperty(prop) + "\">"+name+"</a>");
                 }
             }else
             {
