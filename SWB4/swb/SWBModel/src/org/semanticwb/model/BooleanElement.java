@@ -34,8 +34,8 @@ public class BooleanElement extends org.semanticwb.model.base.BooleanElementBase
         String         pmsg         = null;
         String         imsg         = null;
         boolean        isDisabled   = false;
-        String trueTitle            = getTrueTitle();
-        String falseTitle           = getFalseTitle();
+        String trueTitle            = getDisplayTrueTitle(lang);
+        String falseTitle           = getDisplayFalseTitle(lang);
         String displayType          = getDisplayType();
 
         if (sobj != null) {
