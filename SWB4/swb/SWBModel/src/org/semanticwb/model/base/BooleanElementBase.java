@@ -6,6 +6,12 @@ package org.semanticwb.model.base;
    */
 public abstract class BooleanElementBase extends org.semanticwb.model.base.FormElementBase 
 {
+    public static final org.semanticwb.platform.SemanticProperty swbxf_booleanTrueTitle=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#booleanTrueTitle");
+   /**
+   * Tipo de despliegue del elemento ("checkbox","radio","select")
+   */
+    public static final org.semanticwb.platform.SemanticProperty swbxf_booleanDisplayType=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#booleanDisplayType");
+    public static final org.semanticwb.platform.SemanticProperty swbxf_booleanDisplayFalseTitle=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#booleanDisplayFalseTitle");
    /**
    * Elemento para valores booleanos configurable como CheckBox, Radio y Select
    */
@@ -87,6 +93,60 @@ public abstract class BooleanElementBase extends org.semanticwb.model.base.FormE
     public BooleanElementBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
+    }
+
+/**
+* Gets the TrueTitle property
+* @return String with the TrueTitle
+*/
+    public String getTrueTitle()
+    {
+        return getSemanticObject().getProperty(swbxf_booleanTrueTitle);
+    }
+
+/**
+* Sets the TrueTitle property
+* @param value long with the TrueTitle
+*/
+    public void setTrueTitle(String value)
+    {
+        getSemanticObject().setProperty(swbxf_booleanTrueTitle, value);
+    }
+
+/**
+* Gets the DisplayType property
+* @return String with the DisplayType
+*/
+    public String getDisplayType()
+    {
+        return getSemanticObject().getProperty(swbxf_booleanDisplayType);
+    }
+
+/**
+* Sets the DisplayType property
+* @param value long with the DisplayType
+*/
+    public void setDisplayType(String value)
+    {
+        getSemanticObject().setProperty(swbxf_booleanDisplayType, value);
+    }
+
+/**
+* Gets the FalseTitle property
+* @return String with the FalseTitle
+*/
+    public String getFalseTitle()
+    {
+        return getSemanticObject().getProperty(swbxf_booleanDisplayFalseTitle);
+    }
+
+/**
+* Sets the FalseTitle property
+* @param value long with the FalseTitle
+*/
+    public void setFalseTitle(String value)
+    {
+        getSemanticObject().setProperty(swbxf_booleanDisplayFalseTitle, value);
     }
 
     public void remove()
