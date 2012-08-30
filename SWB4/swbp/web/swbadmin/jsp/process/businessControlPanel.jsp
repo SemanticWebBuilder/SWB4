@@ -298,9 +298,7 @@ if (paramRequest.getMode().equals(paramRequest.Mode_VIEW)) {
                                                 if (task.getStatus() == task.STATUS_PROCESSING) {
                                                     hasTasks = true;
                                                     %>
-                                                    <li>
-                                                        <b><%=task.getFlowNodeType().getDisplayTitle(lang)%></b>
-                                                    </li>
+                                                        <b><%=task.getFlowNodeType().getDisplayTitle(lang)%></b><br/>
                                                     <%
                                                 }
                                             }
