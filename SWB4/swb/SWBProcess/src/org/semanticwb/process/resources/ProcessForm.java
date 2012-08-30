@@ -246,7 +246,7 @@ public class ProcessForm extends GenericResource {
         PrintWriter out = response.getWriter();
         Resource base = getResourceBase();
         User user = paramRequest.getUser();
-        String SigCad = "||TEST|RECORD|23232443434343|TOTAL|Acepted||"; //Datos a firmar temporales
+        String SigCad = "||TEST|RECORD|23232443434343|TOTAL|Acepted||"; //TODO: Datos a firmar temporales
         
         String suri = request.getParameter("suri");
         if (suri == null) {
@@ -272,11 +272,10 @@ public class ProcessForm extends GenericResource {
         SWBResourceURL urlact = paramRequest.getActionUrl();
         urlact.setAction("processSign");
        
-      //  out.println("<script src=\"http://www.java.com/js/deployJava.js\"></script>");
         out.println(SWBForms.DOJO_REQUIRED);
         
         out.println("<script type=\"text/javascript\">function validateForm" + foi.getId() + "(form) {if (form.validate()) {return true;} else {alert('Algunos de los datos no son válidos. Verifique la información proporcionada.'); return false;}}");
-        out.println("function setSignedData(data){dataElement = document.getElementById('hiddenSign'); data.value=data; form = document.getElementById('" + foi.getId() + "/form'); form.submit();}</script>");
+        out.println("function setSignature(data){dataElement = document.getElementById('hiddenSign'); data.value=data; form = document.getElementById('" + foi.getId() + "/form'); form.submit();}</script>");
         out.println("<div id=\"processForm\">");
         out.println("<form id=\"" + foi.getId() + "/form\" dojoType=\"dijit.form.Form\" class=\"swbform\" action=\"" + urlact + "\" method=\"post\" onSubmit=\"return validateForm" + foi.getId() + "(this);\">");
         out.println("<input type=\"hidden\" name=\"suri\" value=\"" + suri + "\"/>");
@@ -284,23 +283,15 @@ public class ProcessForm extends GenericResource {
         out.println("<input type=\"hidden\" name=\"hiddenSign\" value=\"\"/>");
         out.println("<fieldset>");
         out.println("<table>");
-        out.println("<tr><td width=\"200px\" align=\"right\"><label for=\"title\">Applet para Firmado:</label></td>");
+        
+        out.println("<tr>");
+        out.println("<td width=\"200px\" align=\"right\"><label for=\"title\">Applet para Firmado:</label></td>");
         out.println("<td>");
         out.println("<applet code=\"signatureapplet.SignatureApplet.class\" codebase=\"/swbadmin/lib\" archive=\""
                     + SWBPlatform.getContextPath()
                     + "/swbadmin/lib/SWBAplDigitalSignature.jar\" width=\"600\" height=\"330\">");
         out.println("<param name=\"message\" value=\"" + SigCad + "\">");
         out.println("</applet>");
-//        out.println("<script type=\"text/javascript\">");
-//        out.println("var attributes = { code:'signatureapplet.SignatureApplet',"
-//                + "            archive:'/swbadmin/digitalSignature/SWBAplDigitalSignature.jar',"
-//                + "            width:600, height:330} ;"
-//                + "        var parameters = {jnlp_href: '/swbadmin/digitalSignature/SignApplet.jnlp',"
-//                + "            message: '"+SigCad+"'} ;"
-//                + "alert(parameters); "
-//                + "        deployJava.runApplet(attributes, parameters, '1.6');");
-//        out.println("</script>");
-        out.println("<input type=\"checkbox\" name=\"appletSigner\" id=\"" + foi.getId() + "appletSigner\" value=\"use\" ><label for=\"" + foi.getId() + "_appletSgner\">Firmar</label>");
         out.println("</td></tr>");
         out.println("    </table>");
         out.println("</fieldset>");
