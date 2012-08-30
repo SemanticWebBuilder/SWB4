@@ -20,6 +20,7 @@ import java.security.cert.X509Certificate;
 import javax.swing.*;
 import javax.swing.filechooser.FileFilter;
 import netscape.javascript.JSObject;
+import org.bouncycastle.util.encoders.Base64;
 import org.semanticwb.security.SignatureRecord;
 import signatureapplet.util.ExtensionFileFilter;
 import signatureapplet.util.GetFIELPK;
@@ -237,15 +238,17 @@ public class SignaturePanel extends javax.swing.JPanel {
                 }
                 bis.close();
                 fis.close();
-                String data = SignatureManager.encodeSignatureRecord(SignatureManager.wrapData(message, privateKey, cert));
+                SignatureRecord sr = SignatureManager.wrapData(message, privateKey, cert);
+                String ret = new String(Base64.encode(sr.getSignature()));
+                String data = SignatureManager.encodeSignatureRecord(sr);
                 //String urlParameters = "fName=" + URLEncoder.encode("???", "UTF-8") +  "&lName=" + URLEncoder.encode("???", "UTF-8")
                 
-                SignatureRecord sr = SignatureManager.decodeSignatureRecord(data);
+                sr = SignatureManager.decodeSignatureRecord(data);
                 boolean valid = SignatureManager.ValidateSignatureRecord(sr);
                 
                 if (valid){
                     JSObject browser = JSObject.getWindow(applet);
-                    browser.call("setSignature", new Object[]{data});
+                    browser.call("setSignature", new Object[]{ret});
                     //int result=postData(new URL(postURL), "signature="+URLEncoder.encode(data, "UTF-8"));
                     //if (result==200){
                         JOptionPane.showMessageDialog(this, "Firma enviada", "Firma", JOptionPane.INFORMATION_MESSAGE);
