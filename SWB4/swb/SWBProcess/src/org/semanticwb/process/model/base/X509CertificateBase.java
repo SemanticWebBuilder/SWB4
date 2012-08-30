@@ -4,6 +4,8 @@ package org.semanticwb.process.model.base;
 public abstract class X509CertificateBase extends org.semanticwb.process.model.BaseElement implements org.semanticwb.model.Expirable,org.semanticwb.model.Traceable
 {
     public static final org.semanticwb.platform.SemanticProperty swp_X509Subject=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#X509Subject");
+    public static final org.semanticwb.platform.SemanticProperty swp_X509Name=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#X509Name");
+    public static final org.semanticwb.platform.SemanticProperty swp_X509Serial=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#X509Serial");
     public static final org.semanticwb.platform.SemanticProperty swp_X509File=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#X509File");
     public static final org.semanticwb.platform.SemanticClass swp_X509Certificate=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#X509Certificate");
    /**
@@ -230,6 +232,24 @@ public abstract class X509CertificateBase extends org.semanticwb.process.model.B
     }
 
 /**
+* Gets the Name property
+* @return String with the Name
+*/
+    public String getName()
+    {
+        return getSemanticObject().getProperty(swp_X509Name);
+    }
+
+/**
+* Sets the Name property
+* @param value long with the Name
+*/
+    public void setName(String value)
+    {
+        getSemanticObject().setProperty(swp_X509Name, value);
+    }
+
+/**
 * Gets the Expiration property
 * @return java.util.Date with the Expiration
 */
@@ -283,6 +303,24 @@ public abstract class X509CertificateBase extends org.semanticwb.process.model.B
              ret=(org.semanticwb.model.User)obj.createGenericInstance();
          }
          return ret;
+    }
+
+/**
+* Gets the Serial property
+* @return String with the Serial
+*/
+    public String getSerial()
+    {
+        return getSemanticObject().getProperty(swp_X509Serial);
+    }
+
+/**
+* Sets the Serial property
+* @param value long with the Serial
+*/
+    public void setSerial(String value)
+    {
+        getSemanticObject().setProperty(swp_X509Serial, value);
     }
 
 /**
