@@ -381,7 +381,7 @@ if (paramRequest.getMode().equals(paramRequest.Mode_VIEW)) {
                                 }
                                 if (detailWp != null) {
                                 %>
-                                    <a class="acc-detalle" href="<%=detailWp.getUrl()%>?piid=<%=instance.getId()%>">Seguimiento</a>
+                                    <a class="acc-detalle" href="<%=detailWp.getUrl()%>?pid=<%=instance.getProcessType().getId()%>">Seguimiento</a>
                                 <%
                                 }
                                 Role processAdmRole = instance.getProcessType().getAdministrationRole();
