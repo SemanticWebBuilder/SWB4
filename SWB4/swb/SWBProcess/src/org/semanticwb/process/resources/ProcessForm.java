@@ -288,7 +288,7 @@ public class ProcessForm extends GenericResource {
         out.println(SWBForms.DOJO_REQUIRED);
         
         out.println("<script type=\"text/javascript\">function validateForm" + foi.getId() + "(form) {if (form.validate()) {return true;} else {alert('Algunos de los datos no son válidos. Verifique la información proporcionada.'); return false;}}");
-        out.println("function setSignature(data){alert(data); dataElement = document.getElementById('hiddenSign'); dataElement.value=data; form = document.getElementById('" + foi.getId() + "/form'); form.submit();}</script>");
+        out.println("function setSignature(data){ dataElement = document.getElementById('hiddenSign'); dataElement.value=data; form = document.getElementById('" + foi.getId() + "/form'); alert('Documento Firmado');form.submit();}</script>");
         out.println("<div id=\"processForm\">");
         out.println("<form id=\"" + foi.getId() + "/form\" dojoType=\"dijit.form.Form\" class=\"swbform\" action=\"" + urlact + "\" method=\"post\" onSubmit=\"return validateForm" + foi.getId() + "(this);\">");
         out.println("<input type=\"hidden\" name=\"suri\" value=\"" + suri + "\"/>");
