@@ -559,13 +559,16 @@ public class ProcessForm extends GenericResource {
                         x509SingInstance.setFlowNodeInstance(foi);
                         x509SingInstance.setOriginalString(cadenaOrig);
                         x509SingInstance.setSignedString(appletHidden);
-                        foi.close(response.getUser(), Instance.ACTION_ACCEPT);
+                        
                         File file = new File(SWBPortal.getWorkPath()+x509SingInstance.getWorkPath());
                         file.mkdirs();
                         FileOutputStream fileOut = new FileOutputStream(SWBPortal.getWorkPath()+x509SingInstance.getWorkPath()+"/baseData.nt");
                         fileOut.write(cadenaBase.getBytes("utf8"));
                         fileOut.flush();
                         fileOut.close();
+                        
+                        foi.close(response.getUser(), Instance.ACTION_ACCEPT);
+                        
                         response.sendRedirect(foi.getUserTaskInboxUrl());
                         
                     } else {
