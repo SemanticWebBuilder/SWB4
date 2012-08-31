@@ -34,9 +34,15 @@
  */
 package org.semanticwb.process.resources;
 
+import com.hp.hpl.jena.rdf.model.Model;
+import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.NodeIterator;
 import com.hp.hpl.jena.rdf.model.RDFNode;
 import java.io.*;
+import java.security.GeneralSecurityException;
+import java.security.Signature;
+import java.security.cert.Certificate;
+import java.security.cert.CertificateFactory;
 import java.util.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -49,6 +55,7 @@ import org.semanticwb.platform.*;
 import org.semanticwb.portal.SWBFormMgr;
 import org.semanticwb.portal.SWBForms;
 import org.semanticwb.portal.api.*;
+import org.semanticwb.portal.util.Base64;
 import org.semanticwb.process.forms.SWBFormMgrLayer;
 import org.semanticwb.process.model.*;
 
@@ -246,7 +253,6 @@ public class ProcessForm extends GenericResource {
         PrintWriter out = response.getWriter();
         Resource base = getResourceBase();
         User user = paramRequest.getUser();
-        String SigCad = "||TEST|RECORD|23232443434343|TOTAL|Acepted||"; //TODO: Datos a firmar temporales
         
         String suri = request.getParameter("suri");
         if (suri == null) {
@@ -257,7 +263,9 @@ public class ProcessForm extends GenericResource {
         SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
         FlowNodeInstance foi = (FlowNodeInstance) ont.getGenericObject(suri);
 
-
+        String SigCad = getStringToSign(foi); //TODO: Datos a firmar temporales
+        
+        
         User asigned = foi.getAssignedto();
         if (asigned != null && !asigned.equals(user)) {
             out.println("Tarea asignada previamente a otro usuario...");
@@ -296,7 +304,7 @@ public class ProcessForm extends GenericResource {
         out.println("    </table>");
         out.println("</fieldset>");
         out.println("<fieldset><span align=\"center\">");
-        out.println("<button dojoType=\"dijit.form.Button\" name=\"btn_signed\" type=\"submit\">Concluir Tarea</button>");
+       // out.println("<button dojoType=\"dijit.form.Button\" name=\"btn_signed\" type=\"submit\">Concluir Tarea</button>");
         if (base.getAttribute("btnCancel", "").equals("use")) {
             out.println("<button dojoType=\"dijit.form.Button\" onclick=\"window.location='" + foi.getUserTaskInboxUrl() + "?suri=" + suri + "'\">Regresar</button>");
         }
@@ -413,6 +421,32 @@ public class ProcessForm extends GenericResource {
 
         return ret.toString();
     }
+    
+    private String getStringToSign(FlowNodeInstance flowNodeInstance) {
+
+        Iterator<ItemAwareReference> it = flowNodeInstance.listHeraquicalItemAwareReference().iterator();
+
+        ByteArrayOutputStream bout = new ByteArrayOutputStream();
+
+        Model model = ModelFactory.createDefaultModel();
+
+        while (it.hasNext()) {
+            ItemAwareReference itemAwareReference = it.next();
+            model.add(itemAwareReference.getProcessObject()
+                    .getSemanticObject().getRDFResource().listProperties());
+                    
+        }
+        // "RDF/XML", "RDF/XML-ABBREV", "N-TRIPLE" and "N3"
+        model.write(bout, "N-TRIPLE");
+
+        String ret = null;
+        try {
+        ret = bout.toString("UTF8");
+        } catch (IOException ioe){
+            log.error(ioe);
+        }
+        return ret;
+    }
 
     @Override
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
@@ -479,13 +513,51 @@ public class ProcessForm extends GenericResource {
             if (suri == null) {
                 return;
             }
-            
-            String appletHidden = request.getParameter("appletHidden");
+            String cadenaOrig=getStringToSign(foi);
+            String appletHidden = request.getParameter("hiddenSign");
+            User user = response.getUser();
+            try {
+                CertificateFactory cf = CertificateFactory.getInstance("X.509");
+                Iterator<SemanticObject>it = foi.getProcessSite().getSemanticModel().listSubjects(X509Certificate.swp_X509Serial, user.getExternalID()); //TODO: Modificar Búsqueda
+                if (it.hasNext()){
+                    X509Certificate certObj = (X509Certificate)it.next().createGenericInstance();
+                    FileInputStream fis = new FileInputStream(SWBPortal.getWorkPath()+certObj.getWorkPath()+"/"+certObj.getFile());
+                    BufferedInputStream bis = new BufferedInputStream(fis);
+
+                    Certificate cert=null;
+                    if (bis.available() > 0) {
+                        cert = cf.generateCertificate(bis);
+                    }
+                    bis.close();
+                    fis.close();
+                    Signature sig = Signature.getInstance("SHA1withRSA");
+                    sig.initVerify(cert);
+                    byte[] data = Base64.decode(appletHidden);
+                    sig.update(cadenaOrig.getBytes());
+                    if (sig.verify(data)){
+                        X509SingInstance x509SingInstance=X509SingInstance.ClassMgr.createX509SingInstance(foi.getProcessSite());
+                        x509SingInstance.setCertificate(certObj);
+                        x509SingInstance.setFlowNodeInstance(foi);
+                        x509SingInstance.setOriginalString(cadenaOrig);
+                        x509SingInstance.setSignedString(appletHidden);
+                        foi.close(response.getUser(), Instance.ACTION_ACCEPT);
+                        
+                        response.sendRedirect(foi.getUserTaskInboxUrl());
+                        
+                    } else {
+                        //TODO: Fallo de validación de firma.....
+                        response.setMode(MODE_SIGN);
+                    }
+                    
+                }
+            } catch (Exception gse){
+                //TODO: Como poner el error...
+            }
             // TODO: falta procesar el parámetro del applet de la firma
             
             // al final se cierra ....
-            foi.close(response.getUser(), Instance.ACTION_ACCEPT);
-            response.sendRedirect(foi.getUserTaskInboxUrl());
+            
+            
 
         } else if ("process".equals(response.getAction())) {
             FlowNodeInstance foi = (FlowNodeInstance) SWBPlatform.getSemanticMgr().getOntology().getGenericObject(suri);
