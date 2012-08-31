@@ -34,6 +34,7 @@ public class ProcessSite extends org.semanticwb.process.model.base.ProcessSiteBa
         super(base);
         //Initialize ProcessObserver
         ProcessObserver po=getProcessObserver();
+        Class cls=X509Certificate.class;
     }
 
     public synchronized ProcessObserver getProcessObserver()
