@@ -525,26 +525,27 @@ public class ProcessForm extends GenericResource {
             } catch (GeneralSecurityException gse){
                 log.error(gse);
             }
-            System.out.println("processSign:"+foi+" "+cadenaOrig);
+            //System.out.println("processSign:"+foi+" "+cadenaOrig);
 
-            String appletHidden = request.getParameter("hiddenSign"); System.out.println("appletValue:"+appletHidden);
+            String appletHidden = request.getParameter("hiddenSign");
+            //System.out.println("appletValue:"+appletHidden);
             User user = response.getUser();
             try {
                 CertificateFactory cf = CertificateFactory.getInstance("X.509");
-                System.out.println("user.getExternalID():"+user.getExternalID());
+                //System.out.println("user.getExternalID():"+user.getExternalID());
                 Iterator<SemanticObject>it = foi.getProcessSite().getSemanticModel().listSubjects(X509Certificate.swp_X509Serial, user.getExternalID()); //TODO: Modificar Búsqueda
                 if (it.hasNext()){
                     X509Certificate certObj = (X509Certificate)it.next().createGenericInstance();
-                    System.out.println("certObj:"+certObj);
+                    //System.out.println("certObj:"+certObj);
                     FileInputStream fis = new FileInputStream(SWBPortal.getWorkPath()+certObj.getWorkPath()+"/"+certObj.getFile());
                     BufferedInputStream bis = new BufferedInputStream(fis);
 
                     Certificate cert=null;
-                    System.out.println("datos:"+bis.available());
+                    //System.out.println("datos:"+bis.available());
                     if (bis.available() > 0) {
                         cert = cf.generateCertificate(bis);
                     }
-                    System.out.println("cert:"+cert);
+                    //System.out.println("cert:"+cert);
                     bis.close();
                     fis.close();
                     Signature sig = Signature.getInstance("SHA1withRSA");
@@ -552,7 +553,7 @@ public class ProcessForm extends GenericResource {
                     byte[] data = Base64.decode(appletHidden);
                     sig.update(cadenaOrig.getBytes());
                     boolean flag = sig.verify(data);
-                    System.out.println("validado:"+flag);
+                    //System.out.println("validado:"+flag);
                     if (flag){
                         X509SingInstance x509SingInstance=X509SingInstance.ClassMgr.createX509SingInstance(foi.getProcessSite());
                         x509SingInstance.setCertificate(certObj);
