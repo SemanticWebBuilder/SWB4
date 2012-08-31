@@ -551,7 +551,9 @@ public class ProcessForm extends GenericResource {
                     sig.initVerify(cert);
                     byte[] data = Base64.decode(appletHidden);
                     sig.update(cadenaOrig.getBytes());
-                    if (sig.verify(data)){
+                    boolean flag = sig.verify(data);
+                    System.out.println("validado:"+flag);
+                    if (flag){
                         X509SingInstance x509SingInstance=X509SingInstance.ClassMgr.createX509SingInstance(foi.getProcessSite());
                         x509SingInstance.setCertificate(certObj);
                         x509SingInstance.setFlowNodeInstance(foi);
