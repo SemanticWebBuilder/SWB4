@@ -44,6 +44,8 @@ public class X509Certificate extends org.semanticwb.process.model.base.X509Certi
 
         CertificateFactory cf = CertificateFactory.getInstance("X.509");
         Certificate cert=null;
+        System.out.println("ruta:"+SWBPortal.getWorkPath()+getWorkPath()+"/"+getFile());
+        System.out.println("Antes de Available: "+bis.available());
         if (bis.available() > 0) {
             cert = cf.generateCertificate(bis);
             java.security.cert.X509Certificate x509 = (java.security.cert.X509Certificate)cert;
