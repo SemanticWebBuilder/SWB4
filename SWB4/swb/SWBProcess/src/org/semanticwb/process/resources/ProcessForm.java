@@ -263,7 +263,7 @@ public class ProcessForm extends GenericResource {
         SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
         FlowNodeInstance foi = (FlowNodeInstance) ont.getGenericObject(suri);
 
-        String SigCad = getStringToSign(foi); //TODO: Datos a firmar temporales
+        String SigCad = getStringToSign(foi); 
         String signTemp=null;
         try {
             signTemp=SWBUtils.CryptoWrapper.comparablePassword(SigCad);
@@ -302,7 +302,7 @@ public class ProcessForm extends GenericResource {
         out.println("<td>");
         out.println("<applet code=\"signatureapplet.SignatureApplet.class\" codebase=\"/swbadmin/lib\" archive=\""
                     + SWBPlatform.getContextPath()
-                    + "/swbadmin/lib/SWBAplDigitalSignature.jar\" width=\"600\" height=\"330\">");
+                    + "/swbadmin/lib/SWBAplDigitalSignature.jar\" width=\"600\" height=\"250\">");
         out.println("<param name=\"message\" value=\"" + signTemp + "\">");
         out.println("</applet>");
         out.println("</td></tr>");
