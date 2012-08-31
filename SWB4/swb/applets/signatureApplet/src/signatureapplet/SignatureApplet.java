@@ -20,6 +20,7 @@ public class SignatureApplet extends JApplet {
      * the browser.
      */
     public void init() {
+        System.out.println("Java Version:"+System.getProperty("java.version")+" "+System.getProperty("java.vendor"));
         applet = this;
         //sessionid = getParameter("sessionid");
         //urlGetSignatureString=getParameter("urlMessage");
