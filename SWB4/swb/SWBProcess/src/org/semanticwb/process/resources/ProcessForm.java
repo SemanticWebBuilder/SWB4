@@ -527,7 +527,7 @@ public class ProcessForm extends GenericResource {
             }
             System.out.println("processSign:"+foi+" "+cadenaOrig);
 
-            String appletHidden = request.getParameter("hiddenSign");
+            String appletHidden = request.getParameter("hiddenSign"); System.out.println("appletValue:"+appletHidden);
             User user = response.getUser();
             try {
                 CertificateFactory cf = CertificateFactory.getInstance("X.509");
