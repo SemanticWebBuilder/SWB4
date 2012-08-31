@@ -540,9 +540,11 @@ public class ProcessForm extends GenericResource {
                     BufferedInputStream bis = new BufferedInputStream(fis);
 
                     Certificate cert=null;
+                    System.out.println("datos:"+bis.available());
                     if (bis.available() > 0) {
                         cert = cf.generateCertificate(bis);
                     }
+                    System.out.println("cert:"+cert);
                     bis.close();
                     fis.close();
                     Signature sig = Signature.getInstance("SHA1withRSA");
