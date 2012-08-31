@@ -39,7 +39,7 @@ public class X509Certificate extends org.semanticwb.process.model.base.X509Certi
     }
     
     private void setPropertiesFromCertFile() throws IOException, GeneralSecurityException{
-        FileInputStream fis = new FileInputStream(getFile());
+        FileInputStream fis = new FileInputStream(SWBPortal.getWorkPath()+getWorkPath()+"/"+getFile());
         BufferedInputStream bis = new BufferedInputStream(fis);
 
         CertificateFactory cf = CertificateFactory.getInstance("X.509");
