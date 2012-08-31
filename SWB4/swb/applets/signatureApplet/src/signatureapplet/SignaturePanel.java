@@ -72,6 +72,7 @@ public class SignaturePanel extends javax.swing.JPanel {
         jTextToSign = new javax.swing.JTextArea();
         seleccionArchivo.getAccessibleContext().setAccessibleParent(privSelBtn);
 
+        setBackground(new java.awt.Color(255, 255, 255));
         setFont(new java.awt.Font("Lucida Sans", 0, 12)); // NOI18N
         setPreferredSize(new java.awt.Dimension(600, 330));
 
@@ -211,6 +212,7 @@ public class SignaturePanel extends javax.swing.JPanel {
         JPasswordField passwordFld = new JPasswordField();
         userPanel.add(passwordLbl);
         userPanel.add(passwordFld);
+        userPanel.setFocusable(true);
         int input = JOptionPane.showConfirmDialog(this, userPanel,
                 "Contraseña de la llave privada:", JOptionPane.OK_CANCEL_OPTION,
                 JOptionPane.PLAIN_MESSAGE);
