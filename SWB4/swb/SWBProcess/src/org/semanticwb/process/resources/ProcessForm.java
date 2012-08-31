@@ -525,14 +525,17 @@ public class ProcessForm extends GenericResource {
             } catch (GeneralSecurityException gse){
                 log.error(gse);
             }
+            System.out.println("processSign:"+foi+" "+cadenaOrig);
 
             String appletHidden = request.getParameter("hiddenSign");
             User user = response.getUser();
             try {
                 CertificateFactory cf = CertificateFactory.getInstance("X.509");
+                System.out.println("user.getExternalID():"+user.getExternalID());
                 Iterator<SemanticObject>it = foi.getProcessSite().getSemanticModel().listSubjects(X509Certificate.swp_X509Serial, user.getExternalID()); //TODO: Modificar Búsqueda
                 if (it.hasNext()){
                     X509Certificate certObj = (X509Certificate)it.next().createGenericInstance();
+                    System.out.println("certObj:"+certObj);
                     FileInputStream fis = new FileInputStream(SWBPortal.getWorkPath()+certObj.getWorkPath()+"/"+certObj.getFile());
                     BufferedInputStream bis = new BufferedInputStream(fis);
 
