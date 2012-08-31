@@ -293,7 +293,7 @@ public class ProcessForm extends GenericResource {
         out.println("<form id=\"" + foi.getId() + "/form\" dojoType=\"dijit.form.Form\" class=\"swbform\" action=\"" + urlact + "\" method=\"post\" onSubmit=\"return validateForm" + foi.getId() + "(this);\">");
         out.println("<input type=\"hidden\" name=\"suri\" value=\"" + suri + "\"/>");
         //out.println("<input type=\"hidden\" name=\"smode\" value=\"edit\"/>");
-        out.println("<input type=\"hidden\" name=\"hiddenSign\" value=\"\"/>");
+        out.println("<input type=\"hidden\" id=\"hiddenSign\" name=\"hiddenSign\" value=\"\"/>");
         out.println("<fieldset>");
         out.println("<table>");
         
