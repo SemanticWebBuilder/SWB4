@@ -264,7 +264,12 @@ public class ProcessForm extends GenericResource {
         FlowNodeInstance foi = (FlowNodeInstance) ont.getGenericObject(suri);
 
         String SigCad = getStringToSign(foi); //TODO: Datos a firmar temporales
-        
+        String signTemp=null;
+        try {
+            signTemp=SWBUtils.CryptoWrapper.comparablePassword(SigCad);
+        } catch (GeneralSecurityException gse){
+            log.error(gse);
+        }
         
         User asigned = foi.getAssignedto();
         if (asigned != null && !asigned.equals(user)) {
@@ -298,7 +303,7 @@ public class ProcessForm extends GenericResource {
         out.println("<applet code=\"signatureapplet.SignatureApplet.class\" codebase=\"/swbadmin/lib\" archive=\""
                     + SWBPlatform.getContextPath()
                     + "/swbadmin/lib/SWBAplDigitalSignature.jar\" width=\"600\" height=\"330\">");
-        out.println("<param name=\"message\" value=\"" + SigCad + "\">");
+        out.println("<param name=\"message\" value=\"" + signTemp + "\">");
         out.println("</applet>");
         out.println("</td></tr>");
         out.println("    </table>");
@@ -513,7 +518,14 @@ public class ProcessForm extends GenericResource {
             if (suri == null) {
                 return;
             }
-            String cadenaOrig=getStringToSign(foi);
+            String cadenaOrig=null;
+            String cadenaBase=getStringToSign(foi);
+            try {
+                cadenaOrig=SWBUtils.CryptoWrapper.comparablePassword(cadenaBase);
+            } catch (GeneralSecurityException gse){
+                log.error(gse);
+            }
+
             String appletHidden = request.getParameter("hiddenSign");
             User user = response.getUser();
             try {
@@ -541,7 +553,10 @@ public class ProcessForm extends GenericResource {
                         x509SingInstance.setOriginalString(cadenaOrig);
                         x509SingInstance.setSignedString(appletHidden);
                         foi.close(response.getUser(), Instance.ACTION_ACCEPT);
-                        
+                        FileOutputStream fileOut = new FileOutputStream(SWBPortal.getWorkPath()+x509SingInstance.getWorkPath()+"/baseData.nt");
+                        fileOut.write(cadenaBase.getBytes("utf8"));
+                        fileOut.flush();
+                        fileOut.close();
                         response.sendRedirect(foi.getUserTaskInboxUrl());
                         
                     } else {
