@@ -20,7 +20,7 @@ public class SignatureApplet extends JApplet {
      * the browser.
      */
     public void init() {
-        System.out.println("Java Version:"+System.getProperty("java.version")+" "+System.getProperty("java.vendor"));
+        //System.out.println("Java Version:"+System.getProperty("java.version")+" "+System.getProperty("java.vendor"));
         applet = this;
         //sessionid = getParameter("sessionid");
         //urlGetSignatureString=getParameter("urlMessage");
@@ -45,7 +45,8 @@ public class SignatureApplet extends JApplet {
             message = "No se pudo obtener cadena a firmar";
             ex.printStackTrace();
         }*/
-        this.setSize(600, 330);
+        this.setSize(600, 250);
+        this.setBackground(new java.awt.Color(255, 255, 255));
         try {
             SwingUtilities.invokeAndWait(new Runnable() {
 

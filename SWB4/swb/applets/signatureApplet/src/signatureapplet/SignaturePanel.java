@@ -118,10 +118,13 @@ public class SignaturePanel extends javax.swing.JPanel {
         title1.setFont(new java.awt.Font("Lucida Sans", 0, 12)); // NOI18N
         title1.setText("Cadena a firmar:");
 
-        jTextToSign.setColumns(20);
+        jScrollPane1.setPreferredSize(new java.awt.Dimension(244, 44));
+
         jTextToSign.setEditable(false);
+        jTextToSign.setColumns(20);
         jTextToSign.setLineWrap(true);
         jTextToSign.setRows(5);
+        jTextToSign.setPreferredSize(new java.awt.Dimension(240, 40));
         jScrollPane1.setViewportView(jTextToSign);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -148,7 +151,7 @@ public class SignaturePanel extends javax.swing.JPanel {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(title1)
                         .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(jScrollPane1))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -157,7 +160,7 @@ public class SignaturePanel extends javax.swing.JPanel {
                 .addContainerGap()
                 .addComponent(title1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 186, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(title2)
@@ -253,8 +256,8 @@ public class SignaturePanel extends javax.swing.JPanel {
                     browser.call("setSignature", new Object[]{ret});
                     //int result=postData(new URL(postURL), "signature="+URLEncoder.encode(data, "UTF-8"));
                     //if (result==200){
-                        JOptionPane.showMessageDialog(this, "Firma enviada", "Firma", JOptionPane.INFORMATION_MESSAGE);
-                        signerBtn.setEnabled(false);
+//                        JOptionPane.showMessageDialog(this, "Firma enviada", "Firma", JOptionPane.INFORMATION_MESSAGE);
+//                        signerBtn.setEnabled(false);
                     //} else {
                     //    JOptionPane.showMessageDialog(this, "Error: "+result, "Error", JOptionPane.ERROR_MESSAGE);
                     //}
