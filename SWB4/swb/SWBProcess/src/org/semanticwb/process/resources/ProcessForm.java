@@ -76,6 +76,7 @@ public class ProcessForm extends GenericResource {
     static final String FE_MODE_EDIT = "edit";
     static final String FE_DEFAULT = "generico";
     static final String MODE_SIGN = "sign";
+    static final String MODE_ACUSE = "acuse";
 
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
@@ -249,6 +250,90 @@ public class ProcessForm extends GenericResource {
         }
     }
 
+    
+    public void doAcuse(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        PrintWriter out = response.getWriter();
+        Resource base = getResourceBase();
+        User user = paramRequest.getUser();
+        
+        String suri = request.getParameter("suri");
+        if (suri == null) {
+            out.println("Parámetro no definido...");
+            return;
+        }
+        
+        String x509 = request.getParameter("sg");
+        if (x509 == null) {
+            out.println("Parámetro no definido...");
+            return;
+        }
+
+        SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
+        FlowNodeInstance foi = (FlowNodeInstance) ont.getGenericObject(suri);
+        X509SingInstance x509SingInstance = (X509SingInstance) ont.getGenericObject(x509);
+        
+        if (null==x509SingInstance){
+            out.println("El objeto no se encontró...");
+            return;
+        }
+        
+        out.println(SWBForms.DOJO_REQUIRED);
+        
+        out.println("<div id=\"processForm\">");
+        out.println("<fieldset>");
+        out.println("<table>");
+        
+        out.println("<tr>");
+        
+        
+        
+        out.println("<td width=\"200px\" align=\"right\"><label for=\"title\">Valor Firmado:</label></td>");
+        out.println("<td>");
+        out.println(htmlwrap(x509SingInstance.getOriginalString(), 50));
+        out.println("</td></tr>");
+        
+        out.println("<td width=\"200px\" align=\"right\"><label for=\"title\">Firma:</label></td>");
+        out.println("<td>");
+        out.println(htmlwrap(x509SingInstance.getSignedString(), 50));
+        out.println("</td></tr>");
+        
+        out.println("<td width=\"200px\" align=\"right\"><label for=\"title\">Instancia de proceso:</label></td>");
+        out.println("<td>");
+        out.println(x509SingInstance.getFlowNodeInstance().getProcessInstance().getProcessType().getDisplayTitle(paramRequest.getUser().getLanguage()));
+        out.println("</td></tr>");
+        
+        out.println("<td width=\"200px\" align=\"right\"><label for=\"title\">Instancia de Tarea:</label></td>");
+        out.println("<td>");
+        out.println(x509SingInstance.getFlowNodeInstance().getFlowNodeType().getDisplayTitle(paramRequest.getUser().getLanguage()));
+        out.println("</td></tr>");
+
+        out.println("<td width=\"200px\" align=\"right\"><label for=\"title\">Firmada por:</label></td>");
+        out.println("<td>");
+        out.println(x509SingInstance.getCertificate().getName());
+        out.println("</td></tr>");
+        
+        out.println("<td width=\"200px\" align=\"right\"><label for=\"title\">RFC:</label></td>");
+        out.println("<td>");
+        out.println(x509SingInstance.getCertificate().getSerial());
+        out.println("</td></tr>");
+        
+        out.println("<td width=\"200px\" align=\"right\"><label for=\"title\">El:</label></td>");
+        out.println("<td>");
+        out.println(x509SingInstance.getCreated());
+        out.println("</td></tr>");
+        
+        out.println("    </table>");
+        out.println("</fieldset>");
+        out.println("<fieldset><span align=\"center\">");
+       // out.println("<button dojoType=\"dijit.form.Button\" name=\"btn_signed\" type=\"submit\">Concluir Tarea</button>");
+        
+        out.println("<button dojoType=\"dijit.form.Button\" onclick=\"window.location='" + foi.getUserTaskInboxUrl() + "?suri=" + suri + "'\">Salir</button>");
+        
+        out.println("</span></fieldset>");
+        out.println("</div>");
+        
+    }
+    
     public void doSign(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         PrintWriter out = response.getWriter();
         Resource base = getResourceBase();
@@ -298,7 +383,7 @@ public class ProcessForm extends GenericResource {
         out.println("<table>");
         
         out.println("<tr>");
-        out.println("<td width=\"200px\" align=\"right\"><label for=\"title\">Applet para Firmado:</label></td>");
+        out.println("<td width=\"200px\" align=\"right\"><label for=\"title\">Firmar documento:</label></td>");
         out.println("<td>");
         out.println("<applet code=\"signatureapplet.SignatureApplet.class\" codebase=\"/swbadmin/lib\" archive=\""
                     + SWBPlatform.getContextPath()
@@ -1538,7 +1623,9 @@ public class ProcessForm extends GenericResource {
     public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         if (paramRequest.getMode().equals(MODE_SIGN)) {
             doSign(request, response, paramRequest);
-        } else {
+        } else if (paramRequest.getMode().equals(MODE_ACUSE)) {
+            doAcuse(request, response, paramRequest);
+        } else{
             super.processRequest(request, response, paramRequest);
         }
     }
@@ -1568,5 +1655,23 @@ public class ProcessForm extends GenericResource {
             ret = true;
         }
         return ret;
+    }
+    
+    public String htmlwrap(String orig, final int length){
+        StringBuilder ret = new StringBuilder(512);
+        ret.append("<pre>");
+        int linea = 0;
+        while(linea*length < orig.length()){
+            int inicial=linea*length;
+            int ifinal = ++linea * length;
+            if (ifinal>orig.length()){
+                ret.append(orig.substring(inicial));
+            } else {
+                ret.append(orig.substring(inicial,ifinal));
+                ret.append(System.lineSeparator());
+            }
+        }
+        ret.append("</pre>");
+        return ret.toString();
     }
 }
