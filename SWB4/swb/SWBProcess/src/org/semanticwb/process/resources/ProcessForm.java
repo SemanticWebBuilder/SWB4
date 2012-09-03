@@ -279,7 +279,8 @@ public class ProcessForm extends GenericResource {
         
         out.println(SWBForms.DOJO_REQUIRED);
         
-        out.println("<div id=\"processForm\">");
+        out.println("<div id=\"processForm\" class=\"swbform\">");
+        out.println("<h2>Acuse de Firma</h2>");
         out.println("<fieldset>");
         out.println("<table>");
         
@@ -288,14 +289,14 @@ public class ProcessForm extends GenericResource {
         
         
         out.println("<td width=\"200px\" align=\"right\"><label for=\"title\">Valor Firmado:</label></td>");
-        out.println("<td>");
+        out.println("<td><div id=\"code\">");
         out.println(htmlwrap(x509SingInstance.getOriginalString(), 50));
-        out.println("</td></tr>");
+        out.println("</div></td></tr>");
         
         out.println("<td width=\"200px\" align=\"right\"><label for=\"title\">Firma:</label></td>");
-        out.println("<td>");
+        out.println("<td><div id=\"code\">");
         out.println(htmlwrap(x509SingInstance.getSignedString(), 50));
-        out.println("</td></tr>");
+        out.println("<div></td></tr>");
         
         out.println("<td width=\"200px\" align=\"right\"><label for=\"title\">Instancia de proceso:</label></td>");
         out.println("<td>");
@@ -317,7 +318,7 @@ public class ProcessForm extends GenericResource {
         out.println(x509SingInstance.getCertificate().getSerial());
         out.println("</td></tr>");
         
-        out.println("<td width=\"200px\" align=\"right\"><label for=\"title\">El:</label></td>");
+        out.println("<td width=\"200px\" align=\"right\"><label for=\"title\">Fecha:</label></td>");
         out.println("<td>");
         out.println(x509SingInstance.getCreated());
         out.println("</td></tr>");
