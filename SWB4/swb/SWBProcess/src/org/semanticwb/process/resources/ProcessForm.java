@@ -1668,7 +1668,7 @@ public class ProcessForm extends GenericResource {
                 ret.append(orig.substring(inicial));
             } else {
                 ret.append(orig.substring(inicial,ifinal));
-                ret.append(System.lineSeparator());
+                ret.append("\n");
             }
         }
         ret.append("</pre>");
