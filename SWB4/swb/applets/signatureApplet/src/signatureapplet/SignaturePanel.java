@@ -120,8 +120,8 @@ public class SignaturePanel extends javax.swing.JPanel {
 
         jScrollPane1.setPreferredSize(new java.awt.Dimension(244, 44));
 
-        jTextToSign.setEditable(false);
         jTextToSign.setColumns(20);
+        jTextToSign.setEditable(false);
         jTextToSign.setLineWrap(true);
         jTextToSign.setRows(5);
         jTextToSign.setPreferredSize(new java.awt.Dimension(240, 40));
@@ -152,7 +152,7 @@ public class SignaturePanel extends javax.swing.JPanel {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(signerBtn, javax.swing.GroupLayout.DEFAULT_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(title1))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGap(0, 12, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
