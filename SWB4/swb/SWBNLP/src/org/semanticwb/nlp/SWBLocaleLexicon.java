@@ -24,16 +24,14 @@ package org.semanticwb.nlp;
 
 import java.io.IOException;
 import java.io.StringReader;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 import java.util.logging.Level;
 import org.apache.lucene.analysis.Analyzer;
-import org.apache.lucene.analysis.Token;
+import org.apache.lucene.analysis.StopFilter;
 import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.snowball.SnowballAnalyzer;
+import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
+import org.apache.lucene.util.Version;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticProperty;
@@ -231,7 +229,7 @@ public class SWBLocaleLexicon {
         }
     }
 
-    /**
+     /**
      * Gets the snowball form of a word. <p>
      * Obtiene la raíz de la palabra usando el algoritmo snowball.
      * @param input Input word characters.
@@ -241,16 +239,20 @@ public class SWBLocaleLexicon {
         String res = "";
 
         //Create snowball analyzer
-        Analyzer SnballAnalyzer = new SnowballAnalyzer(langName, stopWords);
+        Set stopTable = StopFilter.makeStopSet(Version.LUCENE_36, stopWords);
+        Analyzer SnballAnalyzer = new SnowballAnalyzer(Version.LUCENE_36, langName, stopTable);
 
         //Create token stream for prhase composition
         TokenStream ts = SnballAnalyzer.tokenStream("sna", new StringReader(input));
 
         //Build the result string with the analyzed tokens
-        Token tk;
         try {
-            while ((tk = ts.next()) != null) {
-                res = res + new String(tk.termBuffer(), 0, tk.termLength()) + " ";
+            boolean hasNext = ts.incrementToken();
+            while (hasNext) {
+                CharTermAttribute ta = ts.getAttribute(CharTermAttribute.class);
+                res = res + ta.toString() + " ";
+                hasNext = ts.incrementToken();
+                //res = res + new String(tk.termBuffer(), 0, tk.termLength()) + " ";
             }
             ts.close();
         } catch (IOException ex) {
@@ -271,6 +273,12 @@ public class SWBLocaleLexicon {
             }
         }
         return ret.toString();
+    }
+
+    public void addPrefixDefinition(String prefix, String namespace) {
+        if (prefixHash.get(prefix) == null) {
+            prefixHash.put(prefix, namespace);
+        }
     }
 
     public Iterator<Word> listWords () {
@@ -339,11 +347,5 @@ public class SWBLocaleLexicon {
 
     public int getMaxWordLength() {
         return maxWordLength;
-    }
-    
-    public void addPrefixDefinition(String prefix, String namespace) {
-        if (prefixHash.get(prefix) == null) {
-            prefixHash.put(prefix, namespace);
-        }
     }
 }
