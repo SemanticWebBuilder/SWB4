@@ -25,36 +25,25 @@ package org.semanticwb.portal.community;
 import com.hp.hpl.jena.query.QueryExecution;
 import com.hp.hpl.jena.query.QuerySolution;
 import com.hp.hpl.jena.query.ResultSet;
-import com.hp.hpl.jena.query.larq.IndexLARQ;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.RDFNode;
-import com.hp.hpl.jena.sparql.util.StringUtils;
 import java.io.IOException;
 import java.io.StringReader;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.*;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.lucene.analysis.Analyzer;
-import org.apache.lucene.analysis.Token;
+import org.apache.lucene.analysis.StopFilter;
 import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.snowball.SnowballAnalyzer;
+import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
 import org.apache.lucene.index.CorruptIndexException;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
-import org.semanticwb.model.Resource;
-import org.semanticwb.model.Resourceable;
-import org.semanticwb.model.SWBComparator;
-import org.semanticwb.model.Traceable;
-import org.semanticwb.model.User;
-import org.semanticwb.model.WebPage;
+import org.semanticwb.model.*;
 import org.semanticwb.platform.SemanticModel;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.portal.api.GenericAdmResource;
@@ -65,6 +54,7 @@ import org.semanticwb.portal.indexer.searcher.SearchDocument;
 import org.semanticwb.portal.indexer.searcher.SearchQuery;
 import org.semanticwb.portal.indexer.searcher.SearchResults;
 import org.semanticwb.portal.indexer.searcher.SearchTerm;
+import org.semanticwb.portal.integration.lucene.SWBLuceneIndexer;
 
 /**
  * Search resource for communities. Searchs for {@link DirectoryObject}s and
@@ -73,12 +63,12 @@ import org.semanticwb.portal.indexer.searcher.SearchTerm;
  * Recurso para búsqueda en comunidades. Busca {@link DirectoryObject}s y
  * {@link WebPage}s en la base de datos de jena ejecutando una consulta con LARQ.
  * 
- * @author Hasdai Pacheco {haxdai@gmail.com}
+ * @author Hasdai Pacheco {ebenezer.sanchez@infotec.com.mx}
  */
 public class Search extends GenericAdmResource {
 
     private static Logger log = SWBUtils.getLogger(Search.class);
-    private IndexLARQ index;
+    //private IndexLARQ index;
     private Model smodel;
     private HashMap<String, String> langCodes;
     private ArrayList<SemanticObject> solutions = null;
@@ -145,7 +135,7 @@ public class Search extends GenericAdmResource {
             url = ((WebPage) rsa).getUrl();
         }
 
-        if (paramRequest.getCallMethod() == paramRequest.Call_CONTENT) {
+        if (paramRequest.getCallMethod() == SWBParamRequest.Call_CONTENT) {
             //Assert query string
             String q = request.getParameter("q");
             if (q == null) return;
@@ -208,6 +198,7 @@ public class Search extends GenericAdmResource {
                 //Sort manually by date because SWBComparator fails launching a
                 //ClassCast exception
                 results = new TreeSet(new Comparator() {
+                    @Override
                     public int compare(Object o1, Object o2)
                     {
                         Traceable ob1 = (Traceable) ((SemanticObject)o1).createGenericInstance();
@@ -363,18 +354,21 @@ public class Search extends GenericAdmResource {
 
         //Create snowball analyzer
         if (stopWords != null && stopWords.length > 0)
-            SnballAnalyzer = new SnowballAnalyzer(langCodes.get(language), stopWords);
+            SnballAnalyzer = new SnowballAnalyzer(SWBLuceneIndexer.LUCENE_VERSION, langCodes.get(language), StopFilter.makeStopSet(SWBLuceneIndexer.LUCENE_VERSION, stopWords));
         else
-            SnballAnalyzer = new SnowballAnalyzer(langCodes.get(language));
+            SnballAnalyzer = new SnowballAnalyzer(SWBLuceneIndexer.LUCENE_VERSION, langCodes.get(language));
 
         //Create token stream for prhase composition
         TokenStream ts = SnballAnalyzer.tokenStream("sna", new StringReader(input));
 
         //Build the result string with the analyzed tokens
         try {
-            Token tk;
-            while ((tk = ts.next()) != null) {
-                res = res + new String(tk.termBuffer(), 0, tk.termLength()) + " ";//tk.termText() + " ";
+            boolean hasNext = ts.incrementToken();
+            while (hasNext) {
+                CharTermAttribute ta = ts.getAttribute(CharTermAttribute.class);
+                res = res + ta.toString() + " ";
+                hasNext = ts.incrementToken();
+                //res = res + new String(tk.termBuffer(), 0, tk.termLength()) + " ";
             }
             ts.close();
         } catch (Exception ex) {
