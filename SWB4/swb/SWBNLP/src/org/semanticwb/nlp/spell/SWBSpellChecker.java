@@ -24,12 +24,16 @@
 package org.semanticwb.nlp.spell;
 
 import java.io.File;
+import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.index.IndexReader;
+import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.search.spell.LuceneDictionary;
 import org.apache.lucene.search.spell.PlainTextDictionary;
 import org.apache.lucene.search.spell.SpellChecker;
 import org.apache.lucene.store.Directory;
+import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.store.RAMDirectory;
+import org.apache.lucene.util.Version;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 
@@ -42,7 +46,7 @@ import org.semanticwb.SWBUtils;
  *
  * @see org.apache.lucene.search.spell.SpellChecker
  * 
- * @author Hasdai Pacheco {haxdai@gmail.com}
+ * @author Hasdai Pacheco {ebenezer.sanchez@infotec.com.mx}
  */
 public class SWBSpellChecker {
     /**Lucene SpellChecker object*/
@@ -115,8 +119,8 @@ public class SWBSpellChecker {
         try {
             spellDir = new RAMDirectory();
             checker = new SpellChecker(spellDir);
-            spellDict = new LuceneDictionary(IndexReader.open(dirPath), fieldName);
-            checker.indexDictionary(spellDict);
+            spellDict = new LuceneDictionary(IndexReader.open(FSDirectory.open(new File(dirPath))), fieldName);
+            checker.indexDictionary(spellDict, new IndexWriterConfig(Version.LUCENE_36, new StandardAnalyzer(Version.LUCENE_36)), false);
         } catch (Exception ex) {
            log.error(ex);
         }
@@ -138,7 +142,7 @@ public class SWBSpellChecker {
          try {
             spellDir = new RAMDirectory();
             checker = new SpellChecker(spellDir);
-            checker.indexDictionary(new PlainTextDictionary(txtDictFile));
+            checker.indexDictionary(new PlainTextDictionary(txtDictFile), new IndexWriterConfig(Version.LUCENE_36, new StandardAnalyzer(Version.LUCENE_36)), false);
         } catch (Exception ex) {
             log.error(ex);
         }
