@@ -33,25 +33,20 @@ import com.hp.hpl.jena.query.larq.IndexBuilderString;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Iterator;
+import java.util.Locale;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexWriter;
+import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.queryParser.QueryParser;
-import org.apache.lucene.search.BooleanClause;
 import org.apache.lucene.search.BooleanClause.Occur;
-import org.apache.lucene.search.BooleanQuery;
-import org.apache.lucene.search.Hits;
-import org.apache.lucene.search.IndexSearcher;
-import org.apache.lucene.search.Query;
-import org.apache.lucene.search.Searcher;
-import org.apache.lucene.search.Sort;
-import org.apache.lucene.search.SortField;
+import org.apache.lucene.search.*;
 import org.apache.lucene.store.FSDirectory;
+import org.apache.lucene.util.Version;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
@@ -72,11 +67,14 @@ import org.semanticwb.portal.integration.lucene.analyzer.LocaleAnalyzer;
  * The Class SWBLuceneIndexer.
  * 
  * @author Javier Solis Gonzalez
- * @modified by Hasdai Pacheco {haxdai@gmail.com}
+ * @modified by Hasdai Pacheco {ebenezer.sanchez@infotec.com.mx}
  */
 public class SWBLuceneIndexer extends SWBIndexer
 {
-
+    /** Max TopDocuments resulting for a search query*/
+    public static final int MAX_RESULTS = 1000000;
+    /** Current lucene version*/
+    public static final Version LUCENE_VERSION = Version.LUCENE_36;
     /** The log. */
     private static Logger log=SWBUtils.getLogger(SWBLuceneIndexer.class);
     
@@ -89,14 +87,14 @@ public class SWBLuceneIndexer extends SWBIndexer
     /** The writer. */
     private IndexWriter writer;
     
-    /** The reader. */
-    private IndexReader reader;
+    // The reader. */
+    //private IndexReader reader;
 
     /** The larq builder. */
     private IndexBuilderString larqBuilder;
 
     /** The searcher. */
-    private Searcher searcher;
+    private IndexSearcher searcher;
     
     /** The analyzer. */
     private Analyzer analyzer;
@@ -116,21 +114,11 @@ public class SWBLuceneIndexer extends SWBIndexer
     public SWBLuceneIndexer() {
         
     }
-
-    /**
-     * Gets the date.
-     * 
-     * @param date the date
-     * @return the date
-     */
-    private String getDate(Date date)
-    {
-        return df.format(date);
-    }
     
     /**
      * Inits the.
      */
+    @Override
     public void init()
     {
         //analyzer=new SimpleAnalyzer();
@@ -139,9 +127,13 @@ public class SWBLuceneIndexer extends SWBIndexer
         log.info("Initializing WBLuceneIndexer");
         indexPath=SWBPortal.getWorkPath()+"/index/"+getName();
         File file=new File(indexPath);
-        if(!IndexReader.indexExists(file))
-        {
-            createIndex();
+        try {
+            if(!IndexReader.indexExists(FSDirectory.open(file)))
+            {
+                createIndex();
+            }
+        } catch (Exception e) {
+            
         }
     }
     
@@ -151,10 +143,17 @@ public class SWBLuceneIndexer extends SWBIndexer
     private void init_writer()
     {
         //System.out.println("init_writer");
-        if(writer==null) 
+        if(writer==null)
         {
             try {
-                writer = new IndexWriter(indexPath, analyzer, createIndex);
+                //writer = new IndexWriter(indexPath, analyzer, createIndex);
+                IndexWriterConfig cfg = new IndexWriterConfig(LUCENE_VERSION, analyzer);
+                if (createIndex) {
+                    cfg.setOpenMode(IndexWriterConfig.OpenMode.CREATE);
+                } else  {
+                    cfg.setOpenMode(IndexWriterConfig.OpenMode.APPEND);
+                }
+                writer = new IndexWriter(FSDirectory.open(new File(indexPath)), cfg);
                 larqBuilder = new IndexBuilderString(writer);
             } catch (Exception e) {
                 log.error("Error creating index...",e);
@@ -183,34 +182,34 @@ public class SWBLuceneIndexer extends SWBIndexer
     /**
      * Init_reader.
      */
-    private void init_reader()
-    {
-        //System.out.println("init_reader");
-        if(reader==null)
-        {
-            try {
-                reader = IndexReader.open(indexPath);
-            }catch(Exception e){log.error(e);}
-        }
-    }
+//    private void init_reader()
+//    {
+//        //System.out.println("init_reader");
+//        if(reader==null)
+//        {
+//            try {
+//                reader = IndexReader.open(FSDirectory.open(new File(indexPath)));
+//            }catch(Exception e){log.error(e);}
+//        }
+//    }
 
     /**
      * Close_reader.
      */
-    private void close_reader()
-    {
-        //System.out.println("close_reader");
-        if(reader!=null)
-        {
-            try {
-                reader.close();
-            }catch(Exception e){log.error(e);}
-            finally
-            {
-                reader=null;
-            }
-        }
-    }
+//    private void close_reader()
+//    {
+//        //System.out.println("close_reader");
+//        if(reader!=null)
+//        {
+//            try {
+//                reader.close();
+//            }catch(Exception e){log.error(e);}
+//            finally
+//            {
+//                reader=null;
+//            }
+//        }
+//    }
 
 
     /**
@@ -226,17 +225,18 @@ public class SWBLuceneIndexer extends SWBIndexer
             {
                 //Eliminar elementos
                 try {
-                    init_reader();
+                    //122init_reader();
+                    init_writer();
                     removeRun();                //Eliminar elementos
                     if(removeModel!=null)       //Eliminar modelos
                     {
-                        reader.deleteDocuments(new Term(ATT_MODEL, removeModel));
+                        writer.deleteDocuments(new Term(ATT_MODEL, removeModel));
                         removeModel=null;
                     }
                 } catch (Exception e) {
                     log.error("Error removing objects...",e);
                 } finally {
-                    close_reader();
+                    close_writer();
                 }
                 //Indexar elementos
                 try {
@@ -252,19 +252,19 @@ public class SWBLuceneIndexer extends SWBIndexer
             }
 
             //Optimizar
-            if(optimize)
-            {
-                try {
-                    init_writer();
-                    writer.optimize();
-                } catch (Exception e) {
-                    log.error("Error optimizing objects...",e);
-                } finally {
-                    close_writer();
-                    reset_searcher();
-                }
-                optimize=false;
-            }
+//            if(optimize)
+//            {
+//                try {
+//                    init_writer();
+//                    //writer.optimize();
+//                } catch (Exception e) {
+//                    log.error("Error optimizing objects...",e);
+//                } finally {
+//                    close_writer();
+//                    reset_searcher();
+//                }
+//                optimize=false;
+//            }
         }finally
         {
             SWBPlatform.createInstance().endThreadRequest();
@@ -300,7 +300,7 @@ public class SWBLuceneIndexer extends SWBIndexer
         //System.out.println("removeSearchableObj:"+uri);
         try
         {
-            reader.deleteDocuments(new Term(ATT_URI, uri));
+            writer.deleteDocuments(new Term(ATT_URI, uri));
         }catch(Exception ex) {log.error(ex);}
     }
 
@@ -347,6 +347,7 @@ public class SWBLuceneIndexer extends SWBIndexer
     /**
      * Removes the.
      */
+    @Override
     public void remove()
     {
         //TODO:
@@ -355,6 +356,7 @@ public class SWBLuceneIndexer extends SWBIndexer
     /**
      * Reset.
      */
+    @Override
     public void reset() 
     {
         createIndex();
@@ -365,8 +367,10 @@ public class SWBLuceneIndexer extends SWBIndexer
      * 
      * @throws IOException Signals that an I/O exception has occurred.
      */
+    @Override
     public void unLock() throws IOException {
-        IndexReader.unlock(org.apache.lucene.store.FSDirectory.getDirectory(indexPath, true));
+        //IndexReader.unlock(org.apache.lucene.store.FSDirectory.getDirectory(indexPath, true));
+        IndexWriter.unlock(FSDirectory.open(new File(indexPath)));
     }
     
     /**
@@ -375,14 +379,17 @@ public class SWBLuceneIndexer extends SWBIndexer
      * @return true, if is locked
      * @throws IOException Signals that an I/O exception has occurred.
      */
+    @Override
     public boolean isLocked() throws IOException {
-        return IndexReader.isLocked(indexPath);
+        return IndexWriter.isLocked(FSDirectory.open(new File(indexPath)));
+        //return IndexReader.isLocked(indexPath);
     }
     
     
     /**
      * Optimize.
      */
+    @Override
     public void optimize() 
     {
         optimize=true;
@@ -443,7 +450,8 @@ public class SWBLuceneIndexer extends SWBIndexer
             String txt=t.getText();
             try
             {
-                bq.add(new QueryParser(t.getField(), analyzer).parse(txt), operation);
+                //bq.add(new QueryParser(t.getField(), analyzer).parse(txt), operation);
+                bq.add(new QueryParser(LUCENE_VERSION, t.getField(), analyzer).parse(txt), operation);
             }catch(Exception e){log.error(e);}
         }
         Iterator<SearchQuery> it2 = query.listQueries();
@@ -489,9 +497,11 @@ public class SWBLuceneIndexer extends SWBIndexer
                 } else {
                     //Reverse sort?
                     if (field.startsWith(ATT_INV)) {
-                        sortfs[i] = new SortField(field.substring(ATT_INV.length()), true);
+                        //sortfs[i] = new SortField(field.substring(ATT_INV.length()), true);
+                        sortfs[i] = new SortField(field.substring(ATT_INV.length()), new Locale(user.getLanguage()!=null?user.getLanguage():"es"), true);
                     } else {
-                        sortfs[i] = new SortField(field);
+                        //sortfs[i] = new SortField(field);
+                        sortfs[i] = new SortField(field, new Locale(user.getLanguage()!=null?user.getLanguage():"es"));
                     }
                 }
             }
@@ -500,22 +510,33 @@ public class SWBLuceneIndexer extends SWBIndexer
 
         try {
             try {
-                Hits hits = null;
+                //Hits hits = null;
+                TopDocs hits = null;
                 //Para que no haya problemas al cerrar el reader de abajo
                 if(searcher==null) {
-                    searcher = new IndexSearcher(FSDirectory.getDirectory((indexPath)));
+                    //searcher = new IndexSearcher(FSDirectory.getDirectory((indexPath)));
+                    searcher = new IndexSearcher(IndexReader.open(FSDirectory.open(new File(indexPath))));
                 }
                 
                 if (sort == null) {
-                    hits = searcher.search(getQuery(query)); //y el filtro?
+                    //hits = searcher.search(getQuery(query)); //y el filtro?
+                    hits = searcher.search(getQuery(query), 100000); //y el filtro?
                 } else {
-                    hits = searcher.search(getQuery(query), sort); //y el filtro?
+                    //hits = searcher.search(getQuery(query), sort); //y el filtro?
+                    hits = searcher.search(getQuery(query), 100000, sort); //y el filtro?
                 }
-
-                for (int i = 0; i < hits.length(); i++) {
-                    Document doc = hits.doc(i);
-                    //System.out.println("doc:"+doc);
-                    ret.add(new SearchDocument(doc.get(ATT_URI), doc.get(ATT_SUMMARY), hits.score(i))); //Es correcto este score?
+//                for (int i = 0; i < hits.length(); i++) {
+//                    Document doc = hits.doc(i);
+//                    //System.out.println("doc:"+doc);
+//                    ret.add(new SearchDocument(doc.get(ATT_URI), doc.get(ATT_SUMMARY), hits.score(i))); //Es correcto este score?
+//                }
+                ScoreDoc [] topDocs = hits.scoreDocs;
+                float maxScore = topDocs[0].score;
+                float minScore = topDocs[topDocs.length - 1].score;
+                for (int i = 0; i < topDocs.length; i++) {
+                    Document doc = searcher.doc(topDocs[i].doc);
+                    float normScore = (topDocs[i].score - minScore)/(maxScore - minScore);
+                    ret.add(new SearchDocument(doc.get(ATT_URI), doc.get(ATT_SUMMARY), normScore)); //Es correcto este score?
                 }
             } catch(Exception e) {
                 log.error(e);
