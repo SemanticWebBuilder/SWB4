@@ -23,15 +23,17 @@
  
 package org.semanticwb.portal.integration.lucene.analyzer;
 
-import org.apache.lucene.analysis.*;
-import org.apache.lucene.analysis.standard.*;
-import org.apache.lucene.analysis.snowball.*;
-
 import java.io.Reader;
-import java.io.StringReader;
 import java.util.Set;
-import org.semanticwb.SWBUtils;
+import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.analysis.LowerCaseFilter;
+import org.apache.lucene.analysis.StopFilter;
+import org.apache.lucene.analysis.TokenStream;
+import org.apache.lucene.analysis.snowball.SnowballFilter;
+import org.apache.lucene.analysis.standard.StandardFilter;
+import org.apache.lucene.analysis.standard.StandardTokenizer;
 import org.semanticwb.portal.indexer.SWBIndexer;
+import org.semanticwb.portal.integration.lucene.SWBLuceneIndexer;
 
 // TODO: Auto-generated Javadoc
 /** Filters {@link StandardTokenizer} with {@link StandardFilter}, {@link
@@ -85,7 +87,8 @@ public class LocaleAnalyzer extends Analyzer
     public LocaleAnalyzer(String name, String[] stopWords)
     {
         this.name = name;
-        stopTable = StopFilter.makeStopSet(stopWords);
+        //stopTable = StopFilter.makeStopSet(stopWords);
+        stopTable = StopFilter.makeStopSet(SWBLuceneIndexer.LUCENE_VERSION, stopWords);
     }
 
 
@@ -96,7 +99,8 @@ public class LocaleAnalyzer extends Analyzer
      */
     public LocaleAnalyzer(String[] stopWords)
     {
-        stopTable = StopFilter.makeStopSet(stopWords);
+        //stopTable = StopFilter.makeStopSet(stopWords);
+        stopTable = StopFilter.makeStopSet(SWBLuceneIndexer.LUCENE_VERSION, stopWords);
     }
 
     /**
@@ -107,18 +111,20 @@ public class LocaleAnalyzer extends Analyzer
      * @param reader the reader
      * @return the token stream
      */
+    @Override
     public final TokenStream tokenStream(String fieldName, Reader reader)
     {
         TokenStream result = null;
         if(!SWBIndexer.containsNoAnalyzedIndexTerm(fieldName))
         {
             result = new LocaleTokenizer(reader);
-            result = new StopFilter(result, stopTable);
+            //result = new StopFilter(result, stopTable);
+            result = new StopFilter(SWBLuceneIndexer.LUCENE_VERSION, result, stopTable);
             result = new SnowballFilter(result, name);
         }else
         {
-            result = new StandardFilter(result);
             //result = new StandardFilter(result);
+            result = new StandardFilter(SWBLuceneIndexer.LUCENE_VERSION, result);
             //result = new LowerCaseFilter(result);
         }
         return result;
