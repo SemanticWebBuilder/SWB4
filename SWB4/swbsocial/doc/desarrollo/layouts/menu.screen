@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model:Screen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:model="http://wireframesketcher.com/1.0/model.ecore">
+  <widgets xsi:type="model:Rectangle" id="4" x="32" y="24" width="1028" height="81" measuredWidth="1028" measuredHeight="81">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="1" x="256" y="32" width="97" text="Análisis" measuredWidth="97" measuredHeight="66" textAlignment="Center" icon="bar-chart (medium)" iconPosition="top">
+    <font size="24px"/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="6" x="392" y="28" text="Autorizar (4)" measuredWidth="128" measuredHeight="74" textAlignment="Center" icon="checked (large)" iconPosition="top">
+    <font size="24px"/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="7" x="552" y="28" text="Configurar" measuredWidth="111" measuredHeight="74" textAlignment="Center" icon="options (large)" iconPosition="top">
+    <font size="24px"/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="8" x="680" y="28" text="Herramientas" measuredWidth="140" measuredHeight="74" textAlignment="Center" icon="wrench (large)" iconPosition="top">
+    <font size="24px"/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="9" x="136" y="28" text="Publicar" measuredWidth="86" measuredHeight="74" textAlignment="Center" icon="email (large)" iconPosition="top">
+    <font size="24px"/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="10" x="848" y="28" text="Ayuda" measuredWidth="68" measuredHeight="74" textAlignment="Center" icon="help (large)" iconPosition="top">
+    <font size="24px"/>
+  </widgets>
+  <widgets xsi:type="model:SearchField" id="11" x="944" y="40" text="Buscar" measuredWidth="97" measuredHeight="39">
+    <font size="24px"/>
+  </widgets>
+  <hRuler/>
+  <vRuler/>
+  <font size="12px"/>
+</model:Screen>
