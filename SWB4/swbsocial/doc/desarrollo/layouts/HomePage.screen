@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model:Screen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:model="http://wireframesketcher.com/1.0/model.ecore">
+  <widgets xsi:type="model:Panel" id="1" x="-2" y="6" width="974" height="713" measuredWidth="974" measuredHeight="713" verticalScrollbar="true"/>
+  <widgets xsi:type="model:Panel" id="2" x="-2" y="116" width="147" height="603" measuredWidth="147" measuredHeight="603"/>
+  <widgets xsi:type="model:Tree" id="5" x="-2" y="118" width="147" height="427" text="-{assets/comments}Entidad 1&#xA;--{assets/globe}Redes Sociales&#xA;---{twitter}Twitter&#xA;--{facebook}Facebook&#xA;--{linkedin} Linkedin&#xA;-{phone}Escuchar&#xA;-{bar-chart} Análisis&#xA;-{user} Contactos&#xA;-{filter} Reglas&#xA;-{calendar2} Calendarios&#xA;-{alarm} Flujos de pub.&#xA;-{usergroup} Repositorio de usu&#xA;-{email} Publicar" measuredWidth="147" measuredHeight="427">
+    <items x="0" y="5" width="147" height="21" text="-{assets/comments}Entidad 1"/>
+    <items x="0" y="26" width="147" height="21" text="--{assets/globe}Redes Sociales"/>
+    <items x="0" y="47" width="147" height="21" text="---{twitter}Twitter"/>
+    <items x="0" y="68" width="147" height="21" text="--{facebook}Facebook"/>
+    <items x="0" y="89" width="147" height="21" text="--{linkedin} Linkedin"/>
+    <items x="0" y="110" width="147" height="21" text="-{phone}Escuchar"/>
+    <items x="0" y="131" width="147" height="21" text="-{bar-chart} Análisis"/>
+    <items x="0" y="152" width="147" height="21" text="-{user} Contactos"/>
+    <items x="0" y="173" width="147" height="21" text="-{filter} Reglas"/>
+    <items x="0" y="194" width="147" height="21" text="-{calendar2} Calendarios"/>
+    <items x="0" y="215" width="147" height="21" text="-{alarm} Flujos de pub."/>
+    <items x="0" y="236" width="147" height="21" text="-{usergroup} Repositorio de usu"/>
+    <items x="0" y="257" width="147" height="21" text="-{email} Publicar"/>
+  </widgets>
+  <widgets xsi:type="model:HLine" id="28" x="183" y="113" width="789" measuredWidth="789" measuredHeight="6"/>
+  <widgets xsi:type="model:VLine" id="30" x="183" y="17" height="97" measuredWidth="6" measuredHeight="97"/>
+  <widgets xsi:type="model:Master" id="33" x="144" y="6" width="828" measuredWidth="828" measuredHeight="111" dimmed="true">
+    <screen xsi:type="model:Screen" href="menu.screen#/"/>
+    <overrides>
+      <widgets ref="4" x="-138" y="-18" width="828" height="111"/>
+      <widgets ref="1" x="-36" y="3" width="95"/>
+      <widgets ref="6" x="69" y="-1" width="126"/>
+      <widgets ref="7" x="213" y="-1" width="109"/>
+      <widgets ref="8" x="341" y="-1" width="138"/>
+      <widgets ref="9" x="-132" y="-1" width="83"/>
+      <widgets ref="10" x="502" y="-1" width="67"/>
+      <widgets ref="11" x="582" y="16" width="95"/>
+    </overrides>
+  </widgets>
+  <widgets xsi:type="model:Label" id="34" x="-2" y="15" width="137" text="SSMCC" measuredWidth="137" measuredHeight="90" textAlignment="Center" icon="assets/forum (xlarge)" iconPosition="top">
+    <font size="24px"/>
+  </widgets>
+  <widgets xsi:type="model:TabbedPane" id="36" x="-2" y="544" width="147" text="Propiedad,Valor" measuredWidth="147" measuredHeight="130" selection="2" verticalScrollbar="true" alpha="192">
+    <items x="10" y="0" width="81" height="30" text="Propiedad"/>
+    <items x="91" y="0" width="51" height="30" text="Valor"/>
+    <font size="13px"/>
+  </widgets>
+  <widgets xsi:type="model:TextField" id="37" x="-2" y="522" width="147" text="Propiedades" measuredWidth="147" measuredHeight="28">
+    <font size="15px"/>
+  </widgets>
+  <widgets xsi:type="model:TextField" id="38" x="-2" y="677" width="147" text="Favoritos" measuredWidth="147" measuredHeight="28">
+    <font size="15px"/>
+  </widgets>
+  <widgets xsi:type="model:TextField" id="43" x="-2" y="589" width="75" text="Id" measuredWidth="75" measuredHeight="23">
+    <font size="12px"/>
+  </widgets>
+  <widgets xsi:type="model:TextField" id="44" x="72" y="589" width="73" text="Entidad1" measuredWidth="73" measuredHeight="23">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:TextField" id="45" x="-2" y="611" width="75" text="Class" measuredWidth="75" measuredHeight="23">
+    <font size="12px"/>
+  </widgets>
+  <widgets xsi:type="model:TextField" id="46" x="72" y="611" width="73" text="Entidad" measuredWidth="73" measuredHeight="23">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:TextField" id="47" x="-2" y="633" width="75" text="Título" measuredWidth="75" measuredHeight="23">
+    <font size="12px"/>
+  </widgets>
+  <widgets xsi:type="model:TextField" id="48" x="72" y="633" width="73" text="Entidad 1" measuredWidth="73" measuredHeight="23">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:TextField" id="49" x="-2" y="655" width="75" text="Msg x Aprobar" measuredWidth="75" measuredHeight="23">
+    <font size="12px"/>
+  </widgets>
+  <widgets xsi:type="model:TextField" id="50" x="72" y="655" width="73" text="25" measuredWidth="73" measuredHeight="23">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Window" id="51" x="784" y="118" width="173" height="155" text="Mensajes al Momento" measuredWidth="173" measuredHeight="155" verticalScrollbar="true" minimizeButton="true" maximizeButton="true"/>
+  <widgets xsi:type="model:Window" id="52" x="784" y="273" width="173" height="152" text="Mapa" measuredWidth="173" measuredHeight="152" verticalScrollbar="true" minimizeButton="true" maximizeButton="true"/>
+  <widgets xsi:type="model:Window" id="53" x="784" y="424" width="173" height="158" text="Mensajes x Autorizar" measuredWidth="173" measuredHeight="158" verticalScrollbar="true" minimizeButton="true" maximizeButton="true"/>
+  <widgets xsi:type="model:TabbedPane" id="56" x="784" y="581" width="173" height="138" text="Mensajes Personales, Chat" measuredWidth="173" measuredHeight="138" selection="0" verticalScrollbar="true">
+    <items x="10" y="0" width="128" height="27" text="Mensajes Personales"/>
+    <items x="138" y="0" width="45" height="27" text="Chat"/>
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Placeholder" id="57" x="134" y="117" width="641" height="601" text="Área de Trabajo...Bienvenida, Noticias de Actualizaciones, Nuevos Vocabularios a la venta, Nuevos Servicios, Cursos, etc" measuredWidth="641" measuredHeight="601"/>
+  <widgets xsi:type="model:Icon" id="58" x="784" y="292" width="158" height="133" measuredWidth="158" measuredHeight="133" icon="assets/world-map (large)"/>
+  <widgets xsi:type="model:Table" id="61" x="784" y="137" width="158" height="137" text="Msg,Sent.,Disp., Klout&#xA;Prueba,{thumbs-up},{apple}, 40&#xA;prueba,{thumbs-down},{smartphone}, 30&#xA;prueba,{thumbs-down},{smartphone}, 10&#xA;prueba,{thumbs-up},{smartphone}, 5&#xA;prueba,{thumbs-down},{smartphone}, 60" measuredWidth="158" measuredHeight="137" alternative="#eeeeee">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Table" id="62" x="784" y="443" width="158" height="139" text="Msg,De,Fecha,Prioridad&#xD;&#xA;Prueba, JAJS,19/7/12, Alta&#xD;&#xA;Prueba, JAJS,19/7/12, Media&#xD;&#xA;Prueba, JAJS,19/7/12, Alta&#xD;&#xA;Prueba, JAJS,19/7/12, Baja&#xD;&#xA;Prueba, JAJS,19/7/12, Alta&#xD;&#xA;Prueba, JAJS,19/7/12, Alta&#xD;&#xA;Prueba, JAJS,19/7/12, Media" measuredWidth="158" measuredHeight="139" alternative="#eeeeee">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:TextArea" id="63" x="784" y="614" width="158" height="104" text="K pex Jei, espero que este diseño de layout nos sirva para su posterior creación en Dojo, tu dime cuando lo vemos mi estimao...." measuredWidth="158" measuredHeight="104">
+    <font/>
+  </widgets>
+  <hRuler/>
+  <vRuler/>
+  <font size="12px"/>
+</model:Screen>
