@@ -175,6 +175,18 @@ public class OfficeResource extends org.semanticwb.resource.office.sem.base.Offi
     {
         try
         {
+            if(document==null)
+            {
+                log.error("Document nulo");
+            }
+            if(user==null)
+            {
+                log.error("user nulo");
+            }
+            if(user.getLogin()==null)
+            {
+                log.error("user.getLogin() nulo");
+            }
             document.setUser(user.getLogin());
             document.setPassword(user.getLogin());
             String fileHTML=document.getContentFile(this.getRepositoryName(), this.getContent(), this.getVersionToShow(),user);
