@@ -296,7 +296,24 @@ public class SelectOne extends SelectOneBase {
 
                     ret.append("</select>");
                 } else if (mode.equals("view")) {
-                    ret.append("<span _id=\"" + name + "\" name=\"" + name + "\">" + value + "</span>");
+                    StringTokenizer st = new StringTokenizer(selectValues, "|");
+
+                    while (st.hasMoreTokens()) {
+                        String tok = st.nextToken();
+                        int    ind = tok.indexOf(':');
+                        String id  = tok;
+                        String val = tok;
+
+                        if (ind > 0) {
+                            id  = tok.substring(0, ind);
+                            val = tok.substring(ind + 1);
+                        }
+
+                        if (id.equals(value)) {
+                            ret.append("<span _id=\"" + name + "\" name=\"" + name + "\">" + val + "</span>");
+                            break;
+                        }
+                    }
                 }
             }
         }
