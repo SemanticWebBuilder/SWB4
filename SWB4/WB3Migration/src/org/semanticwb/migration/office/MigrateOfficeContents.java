@@ -69,10 +69,11 @@ public class MigrateOfficeContents
         {
             return null;
         }
-        document.setUser("");
+        document.setUser("admin");
         document.setPassword("");
         String title = resource.getResourceBase().getTitle();
         String description = resource.getResourceBase().getDescription();
+        if(null==description)  description=" "; 
         String xml = resource.getResourceBase().getRecResource().getXml();
 
 

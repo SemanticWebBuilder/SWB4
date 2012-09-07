@@ -77,14 +77,16 @@
                     }
                     System.out.println("SWBUtils Instance loaded....");
                     try {
-                        SWBPortal.createInstance(getServletContext());
-                        SWBPortal.setUseDB(true);
+                        
 
                         String base=SWBUtils.getApplicationPath();
                         System.out.println("appPath: "+base);
+                        
+                        SWBPortal.createInstance(getServletContext());
+                        //SWBPortal.setUseDB(true);                         
                         SWBPlatform.createInstance();
                         SWBPlatform.createInstance().setContextPath(getServletContext().getContextPath());
-
+/*
                         SWBPlatform.getSemanticMgr().initializeDB();
                         SWBPlatform.getSemanticMgr().addBaseOntology(base+"WEB-INF/owl/swb.owl");
                         SWBPlatform.getSemanticMgr().addBaseOntology(base+"WEB-INF/owl/swb_rep.owl");
@@ -92,7 +94,10 @@
                         SWBPlatform.getSemanticMgr().loadBaseVocabulary();
                         SWBPlatform.getSemanticMgr().loadDBModels();
                         SWBPlatform.getSemanticMgr().getOntology().rebind();
+ **/
                         System.out.println("SWBPlatform instance loaded....");
+                        
+
 
                     } catch (Exception e) {
                         System.out.println("Warning.... Loading SWBPlatform...."+e.getMessage());
