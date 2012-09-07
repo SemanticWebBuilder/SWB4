@@ -414,6 +414,11 @@ public class SWBASOPropRefEditor extends GenericAdmResource {
                 //log.debug("Clase: " + clsobj.getName()+" -- "+sobj.getObjectProperty(UserGroupRef.swb_userGroup).getProperty(UserGroup.swb_title));
                 //String stitle = getDisplaySemObj(sobj, user.getLanguage());
                 if (clsobj.getName().trim().equals("UserGroupRef")) {
+                    SemanticObject soref = sobj.getObjectProperty(UserGroupRef.swb_userGroup);
+                    if(soref==null) {
+                        sobj.remove(); //eliminando el UserGroupRef que no tiene UserGroup 
+                        continue;
+                    }
                     title = sobj.getObjectProperty(UserGroupRef.swb_userGroup).getProperty(UserGroup.swb_title);
                 }
 
