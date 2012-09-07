@@ -177,15 +177,15 @@ public class OfficeResource extends org.semanticwb.resource.office.sem.base.Offi
         {
             if(document==null)
             {
-                log.error("Document nulo");
+                log.error("updateFileCache:document nulo");
             }
             if(user==null)
             {
-                log.error("user nulo");
+                log.error("updateFileCache:user nulo");
             }
             if(user.getLogin()==null)
             {
-                log.error("user.getLogin() nulo");
+                log.error("updateFileCache:user.getLogin() nulo");
             }
             document.setUser(user.getLogin());
             document.setPassword(user.getLogin());
