@@ -19,7 +19,7 @@
 	<table name="swb_reshits">
 		<column id="hits_date" type="TIMESTAMP" size="14" acceptNulls="false"/>
 		<column id="hits_modelid" type="VARCHAR" size="50" acceptNulls="false"/>
-		<column id="hits_objid" type="VARCHAR" size="50" acceptNulls="true"/>
+		<column id="hits_objid" type="VARCHAR" size="255" acceptNulls="true"/>
 		<column id="hits_type" type="SMALLINT" size="2" acceptNulls="false"/>
 		<column id="hits" type="BIGINT" size="20" default="0" acceptNulls="false"/>
 	</table>
