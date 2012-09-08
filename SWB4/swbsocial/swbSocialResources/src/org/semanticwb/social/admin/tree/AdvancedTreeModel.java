@@ -3,10 +3,9 @@
  * and open the template in the editor.
  */
 
-package org.semanticwb.social.admin;
+package org.semanticwb.social.admin.tree;
 
 
-import org.semanticwb.social.admin.data.pojo.Contact;
 import org.zkoss.zul.DefaultTreeModel;
 import org.zkoss.zul.DefaultTreeNode;
 
@@ -14,17 +13,17 @@ import org.zkoss.zul.DefaultTreeNode;
  *
  * @author jorge.jimenez
  */
-public class AdvancedTreeModel extends DefaultTreeModel<Contact> {
+public class AdvancedTreeModel extends DefaultTreeModel<Element> {
     /**
      *
      */
     //private static final long serialVersionUID = -5513180500300189445L;
 
-    DefaultTreeNode<Contact> _root;
+    DefaultTreeNode<Element> _root;
 
-    public AdvancedTreeModel(ContactTreeNode contactTreeNode) {
-        super(contactTreeNode);
-        _root = contactTreeNode;
+    public AdvancedTreeModel(ElementTreeNode ElementTreeNode) {
+        super(ElementTreeNode);
+        _root = ElementTreeNode;
     }
 
     /**
@@ -40,8 +39,8 @@ public class AdvancedTreeModel extends DefaultTreeModel<Contact> {
      * @throws IndexOutOfBoundsException
      *             - indexFrom < 0 or indexTo > number of parent's children
      */
-    public void remove(DefaultTreeNode<Contact> parent, int indexFrom, int indexTo) throws IndexOutOfBoundsException {
-        DefaultTreeNode<Contact> stn = parent;
+    public void remove(DefaultTreeNode<Element> parent, int indexFrom, int indexTo) throws IndexOutOfBoundsException {
+        DefaultTreeNode<Element> stn = parent;
         for (int i = indexTo; i >= indexFrom; i--)
             try {
                 stn.getChildren().remove(i);
@@ -50,9 +49,9 @@ public class AdvancedTreeModel extends DefaultTreeModel<Contact> {
             }
     }
 
-    public void remove(DefaultTreeNode<Contact> target) throws IndexOutOfBoundsException {
+    public void remove(DefaultTreeNode<Element> target) throws IndexOutOfBoundsException {
         int index = 0;
-        DefaultTreeNode<Contact> parent = null;
+        DefaultTreeNode<Element> parent = null;
         // find the parent and index of target
         parent = dfSearchParent(_root, target);
         for (index = 0; index < parent.getChildCount(); index++) {
@@ -78,9 +77,9 @@ public class AdvancedTreeModel extends DefaultTreeModel<Contact> {
      * @throws IndexOutOfBoundsException
      *             - indexFrom < 0 or indexTo > number of parent's children
      */
-    public void insert(DefaultTreeNode<Contact> parent, int indexFrom, int indexTo, DefaultTreeNode<Contact>[] newNodes)
+    public void insert(DefaultTreeNode<Element> parent, int indexFrom, int indexTo, DefaultTreeNode<Element>[] newNodes)
             throws IndexOutOfBoundsException {
-        DefaultTreeNode<Contact> stn = parent;
+        DefaultTreeNode<Element> stn = parent;
         for (int i = indexFrom; i <= indexTo; i++) {
             try {
                 stn.getChildren().add(i, newNodes[i - indexFrom]);
@@ -99,21 +98,21 @@ public class AdvancedTreeModel extends DefaultTreeModel<Contact> {
      * @param newNodes
      *            New nodes which are appended
      */
-    public void add(DefaultTreeNode<Contact> parent, DefaultTreeNode<Contact>[] newNodes) {
-        DefaultTreeNode<Contact> stn = (DefaultTreeNode<Contact>) parent;
+    public void add(DefaultTreeNode<Element> parent, DefaultTreeNode<Element>[] newNodes) {
+        DefaultTreeNode<Element> stn = (DefaultTreeNode<Element>) parent;
 
         for (int i = 0; i < newNodes.length; i++)
             stn.getChildren().add(newNodes[i]);
 
     }
 
-    private DefaultTreeNode<Contact> dfSearchParent(DefaultTreeNode<Contact> node, DefaultTreeNode<Contact> target) {
+    private DefaultTreeNode<Element> dfSearchParent(DefaultTreeNode<Element> node, DefaultTreeNode<Element> target) {
         if (node.getChildren() != null && node.getChildren().contains(target)) {
             return node;
         } else {
             int size = getChildCount(node);
             for (int i = 0; i < size; i++) {
-                DefaultTreeNode<Contact> parent = dfSearchParent((DefaultTreeNode<Contact>) getChild(node, i), target);
+                DefaultTreeNode<Element> parent = dfSearchParent((DefaultTreeNode<Element>) getChild(node, i), target);
                 if (parent != null) {
                     return parent;
                 }

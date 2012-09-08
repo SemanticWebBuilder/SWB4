@@ -3,35 +3,35 @@
  * and open the template in the editor.
  */
 
-package org.semanticwb.social.admin;
+package org.semanticwb.social.admin.tree;
 
-import org.semanticwb.social.admin.data.pojo.Contact;
 import org.zkoss.zul.DefaultTreeNode;
 
 /**
  *
  * @author jorge.jimenez
  */
-public class ContactTreeNode extends DefaultTreeNode<Contact> {
+public class ElementTreeNode extends DefaultTreeNode<Element> {
     /**
      *
      */
-    private static final long serialVersionUID = -7012663776755277499L;
+    private static final long serialVersionUID = -9145887024839938516L;
 
     private boolean open = false;
 
-    public ContactTreeNode(Contact data, DefaultTreeNode<Contact>[] children) {
+   
+
+    public ElementTreeNode(Element data, DefaultTreeNode<Element>[] children) {
         super(data, children);
     }
 
-    public ContactTreeNode(Contact data, DefaultTreeNode<Contact>[] children, boolean open) {
+    public ElementTreeNode(Element data, DefaultTreeNode<Element>[] children, boolean open) {
         super(data, children);
         setOpen(open);
     }
 
-    public ContactTreeNode(Contact data) {
+    public ElementTreeNode(Element data) {
         super(data);
-
     }
 
     public boolean isOpen() {
