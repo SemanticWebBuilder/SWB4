@@ -31,6 +31,7 @@ public class Listener implements SWBAppObject {
   public Listener() {
     try{
         timer = new Timer();
+        
         Iterator <WebSite> itWebSites=SWBContext.listWebSites(false);
         while(itWebSites.hasNext())
         {

@@ -11,7 +11,6 @@ import java.util.Iterator;
 import java.util.StringTokenizer;
 import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
-import org.apache.lucene.analysis.tokenattributes.OffsetAttribute;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.SWBModel;
@@ -626,5 +625,6 @@ public class SWBSocialUtil {
         }
 
     }
+    
 }
 
