@@ -7,13 +7,13 @@ package org.semanticwb.social.base;
 public abstract class SentimentalLearningPhraseBase extends org.semanticwb.model.SWBClass 
 {
    /**
-   * Calor sentimental que le dan los usuarios al clasificar los mensajes, este valor se lo dan a las palabras o secuencia de palabras que se guardan en este objeto. 1=Positivo, 2=Negativo
-   */
-    public static final org.semanticwb.platform.SemanticProperty social_SentimentType=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#SentimentType");
-   /**
    * Frase a ser re-clasificada por los usuarios.
    */
     public static final org.semanticwb.platform.SemanticProperty social_Phrase=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#Phrase");
+   /**
+   * Calor sentimental que le dan los usuarios al clasificar los mensajes, este valor se lo dan a las palabras o secuencia de palabras que se guardan en este objeto. 1=Positivo, 2=Negativo
+   */
+    public static final org.semanticwb.platform.SemanticProperty social_SentimentType=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#SentimentType");
    /**
    * Valor que le dan los usuarios al clasificar una palabra o secuencia de palabra. 1=Alto;2=Bajo;0=Medio
    */
@@ -108,24 +108,6 @@ public abstract class SentimentalLearningPhraseBase extends org.semanticwb.model
     }
 
 /**
-* Gets the SentimentType property
-* @return int with the SentimentType
-*/
-    public int getSentimentType()
-    {
-        return getSemanticObject().getIntProperty(social_SentimentType);
-    }
-
-/**
-* Sets the SentimentType property
-* @param value long with the SentimentType
-*/
-    public void setSentimentType(int value)
-    {
-        getSemanticObject().setIntProperty(social_SentimentType, value);
-    }
-
-/**
 * Gets the Phrase property
 * @return String with the Phrase
 */
@@ -141,6 +123,24 @@ public abstract class SentimentalLearningPhraseBase extends org.semanticwb.model
     public void setPhrase(String value)
     {
         getSemanticObject().setProperty(social_Phrase, value);
+    }
+
+/**
+* Gets the SentimentType property
+* @return int with the SentimentType
+*/
+    public int getSentimentType()
+    {
+        return getSemanticObject().getIntProperty(social_SentimentType);
+    }
+
+/**
+* Sets the SentimentType property
+* @param value long with the SentimentType
+*/
+    public void setSentimentType(int value)
+    {
+        getSemanticObject().setIntProperty(social_SentimentType, value);
     }
 
 /**

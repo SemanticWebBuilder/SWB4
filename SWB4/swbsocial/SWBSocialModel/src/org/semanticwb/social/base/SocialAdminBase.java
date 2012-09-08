@@ -4,17 +4,22 @@ package org.semanticwb.social.base;
    /**
    * Objeto que define un Sitio Web de Administración de SWBSocial 
    */
-public abstract class SocialAdminBase extends org.semanticwb.model.AdminWebSite implements org.semanticwb.model.FilterableClass,org.semanticwb.model.Activeable,org.semanticwb.model.Countryable,org.semanticwb.model.Indexable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Undeleteable,org.semanticwb.model.Localeable,org.semanticwb.model.Filterable,org.semanticwb.model.OntologyDepable,org.semanticwb.model.Traceable,org.semanticwb.model.Trashable
+public abstract class SocialAdminBase extends org.semanticwb.model.AdminWebSite implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Filterable,org.semanticwb.model.Traceable,org.semanticwb.model.Indexable,org.semanticwb.model.Activeable,org.semanticwb.model.Localeable,org.semanticwb.model.Trashable,org.semanticwb.model.Countryable,org.semanticwb.model.FilterableNode,org.semanticwb.model.OntologyDepable,org.semanticwb.model.Undeleteable,org.semanticwb.model.FilterableClass
 {
    /**
    * Es una pagina web utilizada para mostrar opciones del menu dentro de la administración de SWB
    */
     public static final org.semanticwb.platform.SemanticClass swbxf_MenuItem=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/xforms/ontology#MenuItem");
     public static final org.semanticwb.platform.SemanticClass social_ZulWebPage=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#ZulWebPage");
+    public static final org.semanticwb.platform.SemanticClass social_TreeNodePage=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#TreeNodePage");
    /**
    * Es una pagina web utilizada para mostrar comportamientos (tabs) dentro de la administración de SWB
    */
     public static final org.semanticwb.platform.SemanticClass swbxf_ObjectBehavior=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/xforms/ontology#ObjectBehavior");
+   /**
+   * Define una Collección de objetos de una clase especificada con la propiedad "collectionClass"
+   */
+    public static final org.semanticwb.platform.SemanticClass swb_Collection=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Collection");
    /**
    * Objeto que define un Sitio Web de Administración de SWBSocial
    */
@@ -416,6 +421,30 @@ public abstract class SocialAdminBase extends org.semanticwb.model.AdminWebSite 
         return org.semanticwb.social.ZulWebPage.ClassMgr.hasZulWebPage(id, this);
     }
 
+    public org.semanticwb.social.TreeNodePage getTreeNodePage(String id)
+    {
+        return org.semanticwb.social.TreeNodePage.ClassMgr.getTreeNodePage(id, this);
+    }
+
+    public java.util.Iterator<org.semanticwb.social.TreeNodePage> listTreeNodePages()
+    {
+        return org.semanticwb.social.TreeNodePage.ClassMgr.listTreeNodePages(this);
+    }
+
+    public org.semanticwb.social.TreeNodePage createTreeNodePage(String id)
+    {
+        return org.semanticwb.social.TreeNodePage.ClassMgr.createTreeNodePage(id,this);
+    }
+
+    public void removeTreeNodePage(String id)
+    {
+        org.semanticwb.social.TreeNodePage.ClassMgr.removeTreeNodePage(id, this);
+    }
+    public boolean hasTreeNodePage(String id)
+    {
+        return org.semanticwb.social.TreeNodePage.ClassMgr.hasTreeNodePage(id, this);
+    }
+
     public org.semanticwb.model.ObjectBehavior getObjectBehavior(String id)
     {
         return org.semanticwb.model.ObjectBehavior.ClassMgr.getObjectBehavior(id, this);
@@ -438,5 +467,35 @@ public abstract class SocialAdminBase extends org.semanticwb.model.AdminWebSite 
     public boolean hasObjectBehavior(String id)
     {
         return org.semanticwb.model.ObjectBehavior.ClassMgr.hasObjectBehavior(id, this);
+    }
+
+    public org.semanticwb.model.Collection getCollection(String id)
+    {
+        return org.semanticwb.model.Collection.ClassMgr.getCollection(id, this);
+    }
+
+    public java.util.Iterator<org.semanticwb.model.Collection> listCollections()
+    {
+        return org.semanticwb.model.Collection.ClassMgr.listCollections(this);
+    }
+
+    public org.semanticwb.model.Collection createCollection(String id)
+    {
+        return org.semanticwb.model.Collection.ClassMgr.createCollection(id,this);
+    }
+
+    public org.semanticwb.model.Collection createCollection()
+    {
+        long id=getSemanticObject().getModel().getCounter(swb_Collection);
+        return org.semanticwb.model.Collection.ClassMgr.createCollection(String.valueOf(id),this);
+    } 
+
+    public void removeCollection(String id)
+    {
+        org.semanticwb.model.Collection.ClassMgr.removeCollection(id, this);
+    }
+    public boolean hasCollection(String id)
+    {
+        return org.semanticwb.model.Collection.ClassMgr.hasCollection(id, this);
     }
 }

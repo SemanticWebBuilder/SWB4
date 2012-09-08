@@ -7,6 +7,11 @@ package org.semanticwb.social.base;
 public abstract class PostBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Tagable,org.semanticwb.model.Traceable
 {
    /**
+   * Catalogo de temas de un modelo (Marca)
+   */
+    public static final org.semanticwb.platform.SemanticClass social_SocialTopic=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#SocialTopic");
+    public static final org.semanticwb.platform.SemanticProperty social_socialTopic=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#socialTopic");
+   /**
    * Clase que comprende todos los tipos de Post que pueden ir siendo creados en la herramienta..
    */
     public static final org.semanticwb.platform.SemanticClass social_Post=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#Post");
@@ -130,6 +135,29 @@ public abstract class PostBase extends org.semanticwb.model.SWBClass implements 
             org.semanticwb.model.GenericIterator<org.semanticwb.social.Post> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_creator,value.getSemanticObject(),sclass));
             return it;
         }
+       /**
+       * Gets all org.semanticwb.social.Post with a determined SocialTopic
+       * @param value SocialTopic of the type org.semanticwb.social.SocialTopic
+       * @param model Model of the org.semanticwb.social.Post
+       * @return Iterator with all the org.semanticwb.social.Post
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.Post> listPostBySocialTopic(org.semanticwb.social.SocialTopic value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.Post> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(social_socialTopic, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.social.Post with a determined SocialTopic
+       * @param value SocialTopic of the type org.semanticwb.social.SocialTopic
+       * @return Iterator with all the org.semanticwb.social.Post
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.Post> listPostBySocialTopic(org.semanticwb.social.SocialTopic value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.Post> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(social_socialTopic,value.getSemanticObject(),sclass));
+            return it;
+        }
     }
 
    /**
@@ -178,6 +206,42 @@ public abstract class PostBase extends org.semanticwb.model.SWBClass implements 
          }
          return ret;
     }
+
+/**
+* Gets the Updated property
+* @return java.util.Date with the Updated
+*/
+    public java.util.Date getUpdated()
+    {
+        return getSemanticObject().getDateProperty(swb_updated);
+    }
+
+/**
+* Sets the Updated property
+* @param value long with the Updated
+*/
+    public void setUpdated(java.util.Date value)
+    {
+        getSemanticObject().setDateProperty(swb_updated, value);
+    }
+
+/**
+* Gets the Created property
+* @return java.util.Date with the Created
+*/
+    public java.util.Date getCreated()
+    {
+        return getSemanticObject().getDateProperty(swb_created);
+    }
+
+/**
+* Sets the Created property
+* @param value long with the Created
+*/
+    public void setCreated(java.util.Date value)
+    {
+        getSemanticObject().setDateProperty(swb_created, value);
+    }
    /**
    * Sets the value for the property Creator
    * @param value Creator to set
@@ -218,42 +282,6 @@ public abstract class PostBase extends org.semanticwb.model.SWBClass implements 
     }
 
 /**
-* Gets the Created property
-* @return java.util.Date with the Created
-*/
-    public java.util.Date getCreated()
-    {
-        return getSemanticObject().getDateProperty(swb_created);
-    }
-
-/**
-* Sets the Created property
-* @param value long with the Created
-*/
-    public void setCreated(java.util.Date value)
-    {
-        getSemanticObject().setDateProperty(swb_created, value);
-    }
-
-/**
-* Gets the Updated property
-* @return java.util.Date with the Updated
-*/
-    public java.util.Date getUpdated()
-    {
-        return getSemanticObject().getDateProperty(swb_updated);
-    }
-
-/**
-* Sets the Updated property
-* @param value long with the Updated
-*/
-    public void setUpdated(java.util.Date value)
-    {
-        getSemanticObject().setDateProperty(swb_updated, value);
-    }
-
-/**
 * Gets the Tags property
 * @return String with the Tags
 */
@@ -284,5 +312,43 @@ public abstract class PostBase extends org.semanticwb.model.SWBClass implements 
     public void setTags(String tags, String lang)
     {
         getSemanticObject().setProperty(swb_tags, tags, lang);
+    }
+   /**
+   * Sets the value for the property SocialTopic
+   * @param value SocialTopic to set
+   */
+
+    public void setSocialTopic(org.semanticwb.social.SocialTopic value)
+    {
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(social_socialTopic, value.getSemanticObject());
+        }else
+        {
+            removeSocialTopic();
+        }
+    }
+   /**
+   * Remove the value for SocialTopic property
+   */
+
+    public void removeSocialTopic()
+    {
+        getSemanticObject().removeProperty(social_socialTopic);
+    }
+
+   /**
+   * Gets the SocialTopic
+   * @return a org.semanticwb.social.SocialTopic
+   */
+    public org.semanticwb.social.SocialTopic getSocialTopic()
+    {
+         org.semanticwb.social.SocialTopic ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(social_socialTopic);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.social.SocialTopic)obj.createGenericInstance();
+         }
+         return ret;
     }
 }
