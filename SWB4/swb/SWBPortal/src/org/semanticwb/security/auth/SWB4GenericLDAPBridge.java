@@ -53,31 +53,31 @@ public class SWB4GenericLDAPBridge extends ExtUserRepInt
     static Logger log = SWBUtils.getLogger(SWB4GenericLDAPBridge.class);
     
     /** The user rep. */
-    private UserRepository userRep;
+    protected UserRepository userRep;
     
     /** The props. */
-    private Properties props;
+    protected Properties props;
     
     /** The seek field. */
-    private String seekField;
+    protected String seekField;
     
     /** The user object class. */
-    private String userObjectClass;
+    protected String userObjectClass;
     
     /** The field first name. */
-    private String fieldFirstName;
+    protected String fieldFirstName;
     
     /** The field last name. */
-    private String fieldLastName;
+    protected String fieldLastName;
     
     /** The field middle name. */
-    private String fieldMiddleName;
+    protected String fieldMiddleName;
     
     /** The field email. */
-    private String fieldEmail;
+    protected String fieldEmail;
     
     /** The value language. */
-    private String valueLanguage;
+    protected String valueLanguage;
 
     /**
      * Instantiates a new sW b4 generic ldap bridge.
