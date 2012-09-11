@@ -302,11 +302,6 @@ public class User extends UserBase implements Principal
         }
         if (null != prop && null != prop.getRange())
         {
-            if(prop.getRange().isResource() && value instanceof GenericObject)
-            {
-                GenericObject go=(GenericObject)value;
-                getSemanticObject().setObjectProperty(prop, go.getSemanticObject());
-            }
             if (SemanticVocabulary.XMLS_BOOLEAN.equals(prop.getRange().toString()))
             {
                 if (value instanceof Boolean)
