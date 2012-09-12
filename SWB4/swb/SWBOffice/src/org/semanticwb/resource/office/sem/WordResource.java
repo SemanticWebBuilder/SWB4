@@ -506,7 +506,7 @@ public class WordResource extends org.semanticwb.resource.office.sem.base.WordRe
                         if (tag.getTagString().toLowerCase().equals("title") && !tag.isEndTag())
                         {
                             tok.nextToken();
-                            if (!tok.getStringValue().toString().isEmpty())
+                            if (!tok.getStringValue().toString().trim().isEmpty())
                             {
                                 tok.parseTag(tok.getStringValue(), tag);
                                 ttype = tok.getTokenType();
