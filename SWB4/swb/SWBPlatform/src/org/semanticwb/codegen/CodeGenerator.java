@@ -376,12 +376,12 @@ public class CodeGenerator
                 {
                     if (tpp.isString() || tpp.isXML() || tpp.isInt() || tpp.isFloat() || tpp.isDouble() || tpp.isLong() || tpp.isByte() || tpp.isShort() || tpp.isBoolean() || tpp.isDateTime() || tpp.isDate())
                     {
-                        throw new CodeGeneratorException("The property "+tpp.getURI()+" for semantic class " + clazz.getURI() + " is defined as Object Property, but the type is "+ tpp.getRange().getURI() +" \r\n");
+                        throw new CodeGeneratorException("The property "+tpp+" for semantic class " + clazz + " is defined as Object Property, but the type is "+ tpp.getRange() +" \r\n");
                     }
                 }
                 catch(Exception e)
                 {
-                    throw new CodeGeneratorException("The property "+tpp.getURI()+" has an error\r\n",e);
+                    throw new CodeGeneratorException("The property "+tpp+" has an error\r\n",e);
                 }
 
 
@@ -390,7 +390,7 @@ public class CodeGenerator
             {
                 if (!(tpp.isBinary() ||  tpp.isString() || tpp.isXML() || tpp.isInt() || tpp.isFloat() || tpp.isDouble() || tpp.isLong() || tpp.isByte() || tpp.isShort() || tpp.isBoolean() || tpp.isDateTime() || tpp.isDate()))
                 {
-                    throw new CodeGeneratorException("The property "+tpp.getURI()+" for semantic class " + clazz.getURI() + " is defined as DataType Property, but the type is "+ tpp.getRange().getURI() +" \r\n");
+                    throw new CodeGeneratorException("The property "+tpp+" for semantic class " + clazz + " is defined as DataType Property, but the type is "+ tpp.getRange() +" \r\n");
                 }
             }
         }
@@ -2406,7 +2406,7 @@ public class CodeGenerator
     private void insertObjectProperty(SemanticClass tpc, SemanticProperty tpp, StringBuilder javaClassContent, String semanticObject)
     {
         SemanticClass cls = tpp.getRangeClass();
-        System.out.println(cls.isSWB()+" "+cls.isSWBVirtualClass()+" "+isGenerateVirtualClasses());
+        //System.out.println(cls.isSWB()+" "+cls.isSWBVirtualClass()+" "+isGenerateVirtualClasses());
         if (cls != null && cls.getURI() != null && (cls.isSWB() || (cls.isSWBVirtualClass() && isGenerateVirtualClasses())))
         {
             String objectName = tpp.getPropertyCodeName();
