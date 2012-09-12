@@ -55,29 +55,21 @@ import org.semanticwb.portal.util.ContentUtils;
 public class WordResource extends org.semanticwb.resource.office.sem.base.WordResourceBase
 {
 
-
-    
     /** The log. */
     private static Logger log = SWBUtils.getLogger(WordResource.class);
-    
     /** The Constant contentUtils. */
     private static final ContentUtils contentUtils = new ContentUtils();
-    
     /** The snpages. */
     int snpages = 15;
-    
     /** The stxtant. */
     String stxtant = "Anterior";
-    
     /** The stxtsig. */
     String stxtsig = "Siguiente";
-    
     /** The stfont. */
     String stfont = "font face=\"Verdana, Arial, Helvetica, sans-serif\" size=\"2\" color=\"#000000\"";
-    
     /** The position. */
     int position = 1;
-    
+
     /**
      * Instantiates a new word resource.
      */
@@ -95,7 +87,6 @@ public class WordResource extends org.semanticwb.resource.office.sem.base.WordRe
     {
         super(obj);
     }
-    
 
     /**
      * Before print document.
@@ -114,7 +105,7 @@ public class WordResource extends org.semanticwb.resource.office.sem.base.WordRe
     protected void afterPrintDocument(PrintWriter out)
     {
     }
-    
+
     /**
      * Gets the hTML.
      * 
@@ -123,16 +114,16 @@ public class WordResource extends org.semanticwb.resource.office.sem.base.WordRe
      */
     public static String getHTML(File file)
     {
-        String name=file.getName();
+        String name = file.getName();
         name = name.replace(".doc", ".html");
-        StringBuilder html=new StringBuilder();
+        StringBuilder html = new StringBuilder();
         try
         {
             name = java.net.URLDecoder.decode(name, "utf-8");
-            file=new File(file.getParent()+"/"+name);
+            file = new File(file.getParent() + "/" + name);
 
-           
-            
+
+
 
             FileInputStream in = new FileInputStream(file);
             byte[] buffer = new byte[2048];
@@ -142,32 +133,32 @@ public class WordResource extends org.semanticwb.resource.office.sem.base.WordRe
                 html.append(new String(buffer, 0, read));
                 read = in.read(buffer);
             }
-            String workpath=file.getAbsolutePath().replace('\\', '/');
-            String applicationpath=SWBUtils.getApplicationPath();
-            if(workpath.toLowerCase().startsWith(applicationpath.toLowerCase()))
+            String workpath = file.getAbsolutePath().replace('\\', '/');
+            String applicationpath = SWBUtils.getApplicationPath();
+            if (workpath.toLowerCase().startsWith(applicationpath.toLowerCase()))
             {
-                workpath=workpath.substring(0,applicationpath.length());
-                workpath=SWBPortal.getContextPath()+workpath;
+                workpath = workpath.substring(0, applicationpath.length());
+                workpath = SWBPortal.getContextPath() + workpath;
             }
             return SWBPortal.UTIL.parseHTML(html.toString(), workpath);
 
         }
-        catch(UnsupportedEncodingException uee)
+        catch (UnsupportedEncodingException uee)
         {
             log.error(uee);
         }
-        catch(FileNotFoundException uee)
+        catch (FileNotFoundException uee)
         {
             log.error(uee);
         }
-        catch(IOException uee)
+        catch (IOException uee)
         {
             log.error(uee);
         }
         return html.toString();
 
     }
-    
+
     /**
      * Prints the document.
      * 
@@ -201,20 +192,20 @@ public class WordResource extends org.semanticwb.resource.office.sem.base.WordRe
     {
 
         Resource base = paramRequest.getResourceBase();
-        WebPage page = paramRequest.getWebPage();        
+        WebPage page = paramRequest.getWebPage();
         try
-        {            
-            
-            User user=paramRequest.getUser();
-            String file=null;
-            if(this.getResourceBase().getAttribute(OfficeDocument.FILE_HTML)==null)
+        {
+
+            User user = paramRequest.getUser();
+            String file = null;
+            if (this.getResourceBase().getAttribute(OfficeDocument.FILE_HTML) == null)
             {
                 updateFileCache(user);
-                file=this.getResourceBase().getAttribute(OfficeDocument.FILE_HTML);
+                file = this.getResourceBase().getAttribute(OfficeDocument.FILE_HTML);
             }
             else
             {
-                file=this.getResourceBase().getAttribute(OfficeDocument.FILE_HTML);
+                file = this.getResourceBase().getAttribute(OfficeDocument.FILE_HTML);
             }
             if (file != null)
             {
@@ -232,10 +223,10 @@ public class WordResource extends org.semanticwb.resource.office.sem.base.WordRe
                 }
 
                 File filecontent = new File(path);
-                if(!filecontent.exists())
+                if (!filecontent.exists())
                 {
                     updateFileCache(user);
-                    file=this.getResourceBase().getAttribute(OfficeDocument.FILE_HTML);
+                    file = this.getResourceBase().getAttribute(OfficeDocument.FILE_HTML);
                     file = file.replace(".doc", ".html");
                     file = java.net.URLDecoder.decode(file, "utf-8");
                     path = SWBPortal.getWorkPath();
@@ -252,13 +243,13 @@ public class WordResource extends org.semanticwb.resource.office.sem.base.WordRe
                 }
                 if (filecontent.exists())
                 {
-                                        
-                    boolean isutf8=false;
+
+                    boolean isutf8 = false;
                     try
                     {
-                        isutf8=SWBUtils.IO.isUTF8(filecontent);
+                        isutf8 = SWBUtils.IO.isUTF8(filecontent);
                     }
-                    catch(IOException ioe)
+                    catch (IOException ioe)
                     {
                         log.error(ioe);
                     }
@@ -266,48 +257,47 @@ public class WordResource extends org.semanticwb.resource.office.sem.base.WordRe
                     StringBuilder html = new StringBuilder();
                     try
                     {
-                        if(isutf8)
+                        if (isutf8)
                         {
-                            FileReader reader=null;
+                            FileReader reader = null;
                             try
                             {
-                                reader=new FileReader(filecontent);
-                                BufferedReader br=new BufferedReader(reader);
-                                String line=br.readLine();
-                                while(line!=null)
+                                reader = new FileReader(filecontent);
+                                BufferedReader br = new BufferedReader(reader);
+                                String line = br.readLine();
+                                while (line != null)
                                 {
-                                    if(isutf8)
+                                    if (isutf8)
                                     {
-                                        line=new String(line.getBytes(reader.getEncoding()),"utf-8");
+                                        line = new String(line.getBytes(reader.getEncoding()), "utf-8");
                                     }
                                     html.append(line);
                                     html.append("\r\n");
-                                    line=br.readLine();
+                                    line = br.readLine();
                                 }
                             }
-                            catch(Exception ioe)
+                            catch (Exception ioe)
                             {
                                 log.error(ioe);
-                            }
-                            finally
+                            } finally
                             {
-                                if(reader!=null)
+                                if (reader != null)
                                 {
                                     try
                                     {
                                         reader.close();
                                     }
-                                    catch(IOException ioe)
+                                    catch (IOException ioe)
                                     {
                                         log.error(ioe);
                                     }
                                 }
                             }
-                            
+
                         }
                         else
                         {
-                            FileInputStream in=null;
+                            FileInputStream in = null;
                             try
                             {
                                 in = new FileInputStream(filecontent);
@@ -319,26 +309,25 @@ public class WordResource extends org.semanticwb.resource.office.sem.base.WordRe
                                     read = in.read(buffer);
                                 }
                             }
-                            catch(Exception ioe)
+                            catch (Exception ioe)
                             {
                                 log.error(ioe);
-                            }
-                            finally
+                            } finally
                             {
-                                if(in!=null)
+                                if (in != null)
                                 {
                                     try
                                     {
                                         in.close();
                                     }
-                                    catch(IOException ioe)
+                                    catch (IOException ioe)
                                     {
                                         log.error(ioe);
                                     }
                                 }
                             }
                         }
-                        String htmlOut = null;                        
+                        String htmlOut = null;
                         if (isPages() && getNpages() > 0)
                         {
                             htmlOut = SWBPortal.UTIL.parseHTML(html.toString(), workpath, getNpages());
@@ -392,12 +381,12 @@ public class WordResource extends org.semanticwb.resource.office.sem.base.WordRe
                             htmlOut = contentUtils.predefinedStyles(htmlOut, base, isTpred()); //Estilos predefinidos
                             if (isPages())
                             {
-                                htmlOut = contentUtils.paginationMsWord(request,htmlOut, page, request.getParameter("page"), base, snpages, stxtant, stxtsig, stfont, position);
+                                htmlOut = contentUtils.paginationMsWord(request, htmlOut, page, request.getParameter("page"), base, snpages, stxtant, stxtsig, stfont, position);
                             } //Paginación
                         }
                         else if (isPages())
                         { //Contenido OpenOffice
-                            htmlOut = contentUtils.paginationOpenOffice(request,htmlOut, page, request.getParameter("page"), base, snpages, stxtant, stxtsig, stfont, position); //Paginación
+                            htmlOut = contentUtils.paginationOpenOffice(request, htmlOut, page, request.getParameter("page"), base, snpages, stxtant, stxtsig, stfont, position); //Paginación
                         }
                         //Termina Agregado por Jorge Jiménez (5/07/2009)
                         // eliminar <head><body>, etc
@@ -411,7 +400,7 @@ public class WordResource extends org.semanticwb.resource.office.sem.base.WordRe
                         {
                             log.error(e);
                         }
-                        htmlOut = cleanHTML(htmlOut, deletestyles);                        
+                        htmlOut = cleanHTML(htmlOut, deletestyles);
                         printDocument(out, path, workpath, htmlOut);
                         afterPrintDocument(out);
                         out.close();
@@ -517,22 +506,25 @@ public class WordResource extends org.semanticwb.resource.office.sem.base.WordRe
                         if (tag.getTagString().toLowerCase().equals("title") && !tag.isEndTag())
                         {
                             tok.nextToken();
-                            tok.parseTag(tok.getStringValue(), tag);
-                            ttype = tok.getTokenType();
-                            if (ttype == HtmlStreamTokenizer.TT_TEXT)
+                            if (!tok.getStringValue().toString().isEmpty())
                             {
-                                tok.nextToken();
                                 tok.parseTag(tok.getStringValue(), tag);
                                 ttype = tok.getTokenType();
-                                if (ttype == HtmlStreamTokenizer.TT_TAG && tag.isEndTag() && tag.getTagString().toLowerCase().equals("title"))
+                                if (ttype == HtmlStreamTokenizer.TT_TEXT)
+                                {
+                                    tok.nextToken();
+                                    tok.parseTag(tok.getStringValue(), tag);
+                                    ttype = tok.getTokenType();
+                                    if (ttype == HtmlStreamTokenizer.TT_TAG && tag.isEndTag() && tag.getTagString().toLowerCase().equals("title"))
+                                    {
+                                        continue;
+                                    }
+                                }
+                                else if (ttype == HtmlStreamTokenizer.TT_TAG && tag.isEndTag() && tag.getTagString().toLowerCase().equals("title"))
                                 {
                                     continue;
-                                }
-                            }
-                            else if (ttype == HtmlStreamTokenizer.TT_TAG && tag.isEndTag() && tag.getTagString().toLowerCase().equals("title"))
-                            {
-                                continue;
 
+                                }
                             }
 
                         }
@@ -593,19 +585,25 @@ public class WordResource extends org.semanticwb.resource.office.sem.base.WordRe
                         else
                         {
                             if (!omit)
+                            {
                                 ret.append(tok.getRawString());
+                            }
                         }
                     }
                     else
                     {
                         if (!omit)
+                        {
                             ret.append(tok.getRawString());
+                        }
                     }
                 }
                 else if (ttype == HtmlStreamTokenizer.TT_TEXT)
                 {
                     if (!omit)
+                    {
                         ret.append(tok.getRawString());
+                    }
                 }
 
             }
@@ -626,7 +624,7 @@ public class WordResource extends org.semanticwb.resource.office.sem.base.WordRe
     public void setResourceBase(Resource base)
     {
         try
-        {            
+        {
             super.setResourceBase(base);
             contentUtils.setResourceBase(base, "Content");
         }
