@@ -24,9 +24,9 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.io.SWBFile;
-import org.semanticwb.model.SWBModel;
 import org.semanticwb.model.User;
 import org.semanticwb.model.WebPage;
+import org.semanticwb.model.WebSite;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.portal.api.SWBActionResponse;
 import org.semanticwb.social.listener.Classifier;
@@ -115,6 +115,66 @@ public class Flicker extends org.semanticwb.social.base.FlickerBase
        }
     }
 
+    public void listen(Stream stream)
+    {
+         WebSite wsite=WebSite.ClassMgr.getWebSite(stream.getSemanticObject().getModel().getName());
+
+        final String key="48a5f73b83d8c736dc2c752fe7c1958d";//flicker.getAppKey()
+        final String shared = "3120b55a3337460c";//flicker.getSecretKey()
+        final String svr="www.flickr.com";
+        REST rest=new REST();
+        rest.setHost(svr);
+
+        Flickr flickr=new Flickr(key,shared,rest);
+        Flickr.debugStream=false;
+
+        SearchParameters searchParams=new SearchParameters();
+        searchParams.setSort(SearchParameters.INTERESTINGNESS_DESC);
+
+        Iterator<WordsToMonitor> words = WordsToMonitor.ClassMgr.listWordsToMonitors(wsite);
+        if(words.hasNext()) {
+            StringBuilder tagLst = new StringBuilder();
+            while(words.hasNext()) {
+                WordsToMonitor word = words.next();
+                tagLst.append(word.getCompany());tagLst.append(";");
+                tagLst.append(word.getCompetition());tagLst.append(";");
+                tagLst.append(word.getProductsAndServices());tagLst.append(";");
+                tagLst.append(word.getOtherWords());tagLst.append(";");
+            }
+            searchParams.setTagMode("any");
+            searchParams.setTags(tagLst.toString().split(";"));
+            searchParams.setText(tagLst.toString());
+        }
+
+
+        PhotosInterface photosInterface=flickr.getPhotosInterface();
+        PhotoList photoList=null;
+        try {
+            photoList=photosInterface.search(searchParams,20,1);
+        }catch(Exception e) {
+            e.printStackTrace(System.out);
+        }
+        if(photoList!=null) {
+            com.flickr4java.flickr.photos.Photo photo;
+            org.semanticwb.social.PhotoIn photoIn;
+            StringBuilder strBuf=new StringBuilder();
+            for(int i=0;i<photoList.size();i++) {
+                photo=(com.flickr4java.flickr.photos.Photo)photoList.get(i);
+                photoIn = PhotoIn.ClassMgr.createPhotoIn(photo.getId(), wsite);
+                photoIn.setMsg_Text(photo.getTitle());
+                photoIn.setTags(Arrays.toString(searchParams.getTags()));
+                photoIn.setPostInSocialNetwork(this);
+                //photoIn.setPostInSocialNetworkUser(photo.getOwner());
+                //              strBuf.append("<a href=\"\">");
+                //              strBuf.append("<img border=\"0\" src=\""+photo.getSmallSquareUrl()+"\" />");
+                //              strBuf.append("</a>\n");
+                new Classifier(photoIn);
+            }
+//           System.out.println(strBuf.toString());
+    }
+  }
+
+    /* Funcionando para el protoripo
     @Override
     public void listen(SWBModel model) {
         final String key="48a5f73b83d8c736dc2c752fe7c1958d";//flicker.getAppKey()
@@ -171,4 +231,6 @@ public class Flicker extends org.semanticwb.social.base.FlickerBase
 //           System.out.println(strBuf.toString());
         }
     }
+     *
+     */
 }

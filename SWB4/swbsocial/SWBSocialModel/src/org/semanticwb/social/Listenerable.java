@@ -7,5 +7,5 @@ import org.semanticwb.model.SWBModel;
    */
 public interface Listenerable extends org.semanticwb.social.base.ListenerableBase
 {
-     public void listen(SWBModel model);
+     public void listen(Stream stream);
 }

@@ -108,7 +108,7 @@ public class SocialNetwork extends org.semanticwb.social.base.SocialNetworkBase
 
 
     @Override
-    public void listen(SWBModel model) {
+    public void listen(Stream stream) {
         //throw new UnsupportedOperationException("Not supported yet.");
     }
 }

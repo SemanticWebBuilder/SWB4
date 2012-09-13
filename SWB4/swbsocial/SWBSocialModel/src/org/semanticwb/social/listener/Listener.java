@@ -2,9 +2,9 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package org.semanticwb.social.listener;
 
+import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -12,11 +12,10 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.base.SWBAppObject;
 import org.semanticwb.model.SWBContext;
-import org.semanticwb.model.SWBModel;
 import org.semanticwb.model.WebSite;
-import org.semanticwb.social.KeepAliveListenerable;
 import org.semanticwb.social.SocialNetwork;
 import org.semanticwb.social.SocialSite;
+import org.semanticwb.social.Stream;
 
 /**
  *
@@ -24,52 +23,201 @@ import org.semanticwb.social.SocialSite;
  */
 public class Listener implements SWBAppObject {
 
-  private static Logger log = SWBUtils.getLogger(Listener.class);
+    private static Logger log = SWBUtils.getLogger(Listener.class);
+    //Timer timer;
+    static Hashtable<String, Timer> htTimers = new Hashtable();
+    static private Listener instance;
+    static final int MILISEG_IN_SEGUNDO=1000;
+    static ReBindThread rbThread=null;
 
-  Timer timer;
+    /**
+     * Retrieves a reference to the only one existing object of this class.
+     * <p>Obtiene una referencia al &uacute;nico objeto existente de esta clase.</p>
+     * @param applicationPath a string representing the path for this application
+     * @return a reference to the only one existing object of this class
+     */
+    static public synchronized Listener createInstance() {
+        if (Listener.instance == null) {
+            Listener.instance = new Listener();
+        }
+        return Listener.instance;
+    }
 
-  public Listener() {
-    try{
-        timer = new Timer();
-        
-        Iterator <WebSite> itWebSites=SWBContext.listWebSites(false);
-        while(itWebSites.hasNext())
-        {
-            WebSite wsite=itWebSites.next();
-            if(wsite.isActive() && wsite instanceof SocialSite)
-            {
-                System.out.println("wsite a monitorear en Listener:"+wsite);
-                Iterator<SocialNetwork> itSocialNetWorks=SocialNetwork.ClassMgr.listSocialNetworks(wsite);
-                while(itSocialNetWorks.hasNext())
-                {
-                    SocialNetwork socialNet=itSocialNetWorks.next();
-                    int periodTime=socialNet.getPoolTime();
-                    //Peridicidad de ejecución en milisegundos (3600 segundos x 1000 ms en un segundo=1 hr por defecto)
-                    if(periodTime==0) periodTime=3600*1000;
-                    if(socialNet instanceof KeepAliveListenerable)
-                    {
-                        KeepAliveListenerable keepAliveListenerable=(KeepAliveListenerable)socialNet;
-                        if(keepAliveListenerable.isIsKeepingConnection()) //Tiene la propiedad de mantener la conexión en true, por lo tanto no enviar a timer
+    public Listener() {
+        try {
+            Iterator<WebSite> itWebSites = SWBContext.listWebSites(false);
+            while (itWebSites.hasNext()) {
+                WebSite wsite = itWebSites.next();
+                if (wsite instanceof SocialSite) {
+                    Iterator<Stream> itStreams = Stream.ClassMgr.listStreams(wsite);
+                    while (itStreams.hasNext()) {
+                        Stream stream = itStreams.next();
+                        if (createTimer(stream))
                         {
-                            //System.out.println("ES KEPING ALIVE:"+socialNet.getId()+", title:"+socialNet.getTitle());
-                            System.out.println("wsite a monitorear en Listener alive:"+wsite+", cuenta:"+socialNet);
-                            keepAliveListenerable.listenAlive(wsite);
-                        }else { //La red soporta una conexión abierta, tipo twitter con Streaming Api, pero no desean que se maneje así, quieren que sea por petición
-                            //System.out.println("ES KEPING ALIVE *pero no se quiere así*:"+socialNet.getId()+", title:"+socialNet.getTitle());
-                            timer.schedule(new ListenerTask(socialNet, wsite), 0, periodTime);
+                            int periodTime = stream.getPoolTime()*MILISEG_IN_SEGUNDO;
+                            Timer timer = new Timer();
+                            timer.schedule(new ListenerTask(stream), 0,periodTime);
+                            htTimers.put(stream.getURI(), timer);
                         }
-                    }else { //La red no es de tipo KeepAliveListenerable, es decir, no soporta una conexión abierta
-                        //System.out.println("NO ES KEEPING ALIVE-Entra J1/Red ID:"+socialNet.getId()+", Title:"+socialNet.getTitle());
-                        timer.schedule(new ListenerTask(socialNet, wsite), 0,periodTime);
                     }
                 }
             }
+        } catch (Exception e) {
+            log.error(e);
         }
-      }catch(Exception e){
-          log.error(e);
-      }
-    
-  }
+    }
+
+    public static boolean createUpdateTimers(Stream stream)
+    {
+        //System.out.println("rbThread:"+rbThread);
+        try
+        {
+            //synchronized(stream)
+            {
+                if(rbThread==null)  //TODO:Ver que hago cuando puedan llegar algunos otros stream que se modifiquen cuando aun no haya terminado el thread.
+                {
+                    //System.out.println("Entra a Enviar a ReBind...");
+                    rbThread=new ReBindThread(stream);
+                    rbThread.sleep(2*MILISEG_IN_SEGUNDO);
+                    rbThread.start();
+                    rbThread=null;
+                    return true;
+                }
+            }
+        }catch(Exception e)
+        {
+            log.error(e);
+        }
+        return false;
+    }
+
+    static class ReBindThread extends Thread {
+        Stream stream=null;
+        public ReBindThread(Stream stream) {
+            this.stream=stream;
+        }
+        public void run() {
+            //sleep(2 * 1000);
+            //System.out.println("Entra a run...");
+            createUpdateTimersReBind(stream);
+            //System.out.println("DONE! " + getName());
+        }
+    }
+
+
+    private static boolean createUpdateTimersReBind(Stream stream)
+    {
+        //System.out.println("Entra a Listener/createUpdateTimersReBind-1");
+        /*
+        Iterator<SocialNetwork> itNets=stream.listSocialNetworks();
+        while(itNets.hasNext())
+        {
+            SocialNetwork socialNet=itNets.next();
+            System.out.println("SocialNetwork que tiene el stream:"+socialNet.getURI());
+        }*/
+        if(htTimers.get(stream.getURI())!=null)
+        {
+            try
+            {
+                //System.out.println("Entra a Listener/createUpdateTimers-2:"+stream.getURI());
+                if(!createTimer(stream))
+                {
+                    //System.out.println("Entra a Listener/createUpdateTimers-3:"+stream.getURI());
+                    removeTimer(stream);
+                    //System.out.println("Elimino timer k");
+                }else
+                {
+                    //System.out.println("Entra a Listener/createUpdateTimers-4:"+stream.getURI());
+                    Timer timer=removeTimer(stream);
+                    timer=new Timer();
+                    timer.schedule(new ListenerTask(stream), 0,stream.getPoolTime()*MILISEG_IN_SEGUNDO);
+                    htTimers.put(stream.getURI(), timer);
+                }
+                //System.out.println("Entra a Listener/createUpdateTimers-5:"+stream.getURI());
+                return true;
+            }catch(Exception e)
+            {
+                //System.out.println("Error:"+e.getMessage());
+                log.error(e);
+            }
+        }else
+        {
+            if(createTimer(stream))
+            {
+                Timer timer = new Timer();
+                timer.schedule(new ListenerTask(stream), 0,stream.getPoolTime()*MILISEG_IN_SEGUNDO);
+                htTimers.put(stream.getURI(), timer);
+                return true;
+            }
+        }
+        return false;
+    }
+     
+
+     public static Timer removeTimer(Stream stream)
+     {
+        try
+        {
+            if(htTimers.get(stream.getURI())!=null)
+            {
+                //System.out.println("Entra a removeTimer de stream:"+stream.getURI());
+                Timer timer=htTimers.get(stream.getURI());
+                htTimers.remove(stream.getURI());
+                timer.cancel();
+                timer.purge();
+                timer=null;
+                return timer;
+            }
+         }catch(Exception e)
+         {
+           //System.out.println("Error:"+e.getMessage());
+           log.error(e);
+         }
+        return null;
+     }
+
+
+    private static class ListenerTask extends TimerTask
+    {
+        Stream stream=null;
+
+        public ListenerTask(Stream stream)
+        {
+            this.stream=stream;
+        }
+
+        public void run() {
+            Iterator<SocialNetwork> itSocialNets=stream.listSocialNetworks();
+            while(itSocialNets.hasNext())
+            {
+                SocialNetwork socialNet=itSocialNets.next();
+                socialNet.listen(stream);
+            }
+        }
+     }
+
+    private static boolean createTimer(Stream stream)
+    {
+        //System.out.println("stream.getPoolTime():"+stream.getPoolTime());
+        //System.out.println("stream.getPhrase()-1:"+stream.getPhrase());
+        if(stream.getPhrase()!=null)
+        {
+            //System.out.println("stream.getPhrase()-2:"+stream.getPhrase().trim().length());
+        }
+        //System.out.println("stream.listSocialNetworks().hasNext():"+stream.listSocialNetworks().hasNext());
+        Iterator<SocialNetwork> itNets=stream.listSocialNetworks();
+        while(itNets.hasNext())
+        {
+            SocialNetwork socialNet=itNets.next();
+            //System.out.println("SocialNetwork que tiene el stream:"+socialNet.getURI());
+        }
+        if(stream.getPoolTime() > 0 && stream.getPhrase()!=null && stream.getPhrase().trim().length()>0 && stream.listSocialNetworks().hasNext())
+        {
+            return true;
+        }
+        return false;
+    }
+
 
     @Override
     public void init() {
@@ -78,7 +226,7 @@ public class Listener implements SWBAppObject {
 
     @Override
     public void destroy() {
-        //throw new UnsupportedOperationException("Not supported yet.");
+        htTimers.clear();
     }
 
     @Override
@@ -86,30 +234,9 @@ public class Listener implements SWBAppObject {
         //throw new UnsupportedOperationException("Not supported yet.");
     }
 
-  class ListenerTask extends TimerTask {
-
-    SocialNetwork socialNet=null;
-    SWBModel model=null;
-
-    public ListenerTask(SocialNetwork socialNet, SWBModel model)
-    {
-        this.socialNet=socialNet;
-        this.model=model;
+    public static void main(String args[]) {
+        System.out.println("About to schedule task.");
+        new Listener(); //C/cuantos segundos se ejecutara la tarea
+        System.out.println("Task scheduled.");
     }
-
-    public void run() {
-      //System.out.println("NO ES KEEPING ALIVE-Entra J2/Red ID:"+socialNet.getId()+", Title:"+socialNet.getTitle());
-      //Llamado a todos los metodos listener de las redes sociales, ver si c/una la meto en un thread x separado
-       socialNet.listen(model);
-       //System.exit(0);
-    }
-  }
-
-  public static void main(String args[]) {
-    System.out.println("About to schedule task.");
-    new Listener(); //C/cuantos segundos se ejecutara la tarea
-    System.out.println("Task scheduled.");
-  }
-
-
 }

@@ -1,7 +1,7 @@
 package org.semanticwb.social.base;
 
 
-public abstract class PublishFlowBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable
+public abstract class PublishFlowBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable
 {
    /**
    * Catalogo de temas de un modelo (Marca)
