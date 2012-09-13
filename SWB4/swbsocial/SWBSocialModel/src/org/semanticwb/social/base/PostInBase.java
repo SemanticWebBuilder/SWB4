@@ -4,7 +4,7 @@ package org.semanticwb.social.base;
    /**
    * Clase que comprende todos los tipos de Post de entrada (Povientes del Listener)que pueden ir siendo creados en la herramienta. 
    */
-public abstract class PostInBase extends org.semanticwb.social.Post implements org.semanticwb.model.Tagable,org.semanticwb.model.Traceable
+public abstract class PostInBase extends org.semanticwb.social.Post implements org.semanticwb.model.Traceable,org.semanticwb.model.Tagable
 {
    /**
    * Clase en la cual se almacenan los usuarios que escriben los PostIn que llegan. El identificador de c/intancia de esta clase es el identificador de un usuarios en una red social.

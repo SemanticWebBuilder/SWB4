@@ -18,6 +18,7 @@ import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.io.SWBFile;
 import org.semanticwb.io.SWBFileInputStream;
+import org.semanticwb.model.WebSite;
 
 
 public class Facebook extends org.semanticwb.social.base.FacebookBase {
@@ -35,6 +36,14 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
     public Facebook(org.semanticwb.platform.SemanticObject base) {
         super(base);
     }
+
+    @Override
+    public void listen(Stream stream) {
+        WebSite wsite=WebSite.ClassMgr.getWebSite(stream.getSemanticObject().getModel().getName());
+        System.out.println("Red SocialID:"+this.getId()+", Red Title:"+this.getTitle()+", sitio:"+wsite.getId());
+    }
+
+
     
     public void postMsg(Message message, HttpServletRequest request,
                         SWBActionResponse response) {

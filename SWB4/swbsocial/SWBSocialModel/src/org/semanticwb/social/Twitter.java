@@ -2,6 +2,7 @@ package org.semanticwb.social;
 
 import java.io.File;
 import java.io.UnsupportedEncodingException;
+import java.util.Date;
 import javaQuery.j2ee.tinyURL;
 import javax.servlet.http.HttpServletRequest;
 import org.semanticwb.Logger;
@@ -9,6 +10,7 @@ import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.SWBModel;
 import org.semanticwb.model.User;
+import org.semanticwb.model.WebSite;
 import org.semanticwb.portal.api.SWBActionResponse;
 import org.semanticwb.social.listener.twitter.SWBSocialStatusListener;
 import org.semanticwb.social.util.SWBSocialUtil;
@@ -106,8 +108,38 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
     }
 
     @Override
-    public void listen(SWBModel model) {
-        
+    public void listen(Stream stream) {
+        WebSite wsite=WebSite.ClassMgr.getWebSite(stream.getSemanticObject().getModel().getName());
+        System.out.println("Red SocialID:"+this.getId()+", Red Title:"+this.getTitle()+", sitio:"+wsite.getId());
+
+        for(int i=0;i<=10;i++)
+        {
+            SocialNetworkUser socialNetUser=SocialNetworkUser.getSocialNetworkUserbyIDAndSocialNet(""+"012345", this, wsite);
+            if(socialNetUser==null)//
+            {
+                //Si no existe el id del usuario para esa red social, lo crea.
+                socialNetUser=SocialNetworkUser.ClassMgr.createSocialNetworkUser(wsite);
+                socialNetUser.setSnu_id(""+012345);
+                socialNetUser.setSnu_name("Jorge");
+                socialNetUser.setSnu_SocialNetwork(this);
+                socialNetUser.setCreated(new Date());
+                //System.out.println("SocialNetworkUser Creado:"+socialNetUser.getSnu_id());
+            }else{
+                //System.out.println("SocialNetworkUser Actualizado:"+socialNetUser.getSnu_id());
+                socialNetUser.setUpdated(new Date());
+            }
+            socialNetUser.setFollowers(i);
+            socialNetUser.setFriends(i);
+
+            String msg="Prueba de Msg de Facebook"+i;
+            MessageIn message=MessageIn.ClassMgr.createMessageIn(String.valueOf(i), wsite);
+            message.setMsg_Text(msg);
+            message.setPostInSocialNetwork(this);
+            if(socialNetUser!=null)
+            {
+                message.setPostInSocialNetworkUser(socialNetUser);
+            }
+        }
     }
 
     @Override
