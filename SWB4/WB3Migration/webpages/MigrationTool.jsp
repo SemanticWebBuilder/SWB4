@@ -2188,18 +2188,26 @@
                                                 String tfont = wb3resbase.getAttribute("tfont","");
                                                 String npages = wb3resbase.getAttribute("npages","");
                                                 String tpred = wb3resbase.getAttribute("tpred","");
+                                                
+                                                System.out.println("\n\r\n\r\n\r\n\r\n\r\n\rTPRED: "+tpred);
+                                                System.out.println("\n\r\n\r\n\r\n\r\n\r\n\r");
+                                                
                                                 if(pages!=null && pages.trim().length()>0 && pages.equals("1")) so.setBooleanProperty(WordResource.swboffice_pages, Boolean.TRUE);
                                                 if(position!=null && position.trim().length()>0) so.setIntProperty(WordResource.swboffice_position, Integer.parseInt(position));
                                                 if(txtant!=null && txtant.trim().length()>0) so.setProperty(WordResource.swboffice_txtant, txtant);
                                                 if(txtsig!=null && txtsig.trim().length()>0) so.setProperty(WordResource.swboffice_txtsig, txtsig);
                                                 if(tfont!=null && tfont.trim().length()>0) so.setProperty(WordResource.swboffice_tfont, tfont);
                                                 if(npages!=null && npages.trim().length()>0) so.setIntProperty(WordResource.swboffice_npages, Integer.parseInt(npages));
-                                                if(tpred!=null && tpred.trim().length()>0) so.setProperty(WordResource.swboffice_tpred, tpred);
+                                                if(tpred!=null && tpred.trim().length()>0)
+                                                { 
+                                                    if("1".equals(tpred)) so.setBooleanProperty(WordResource.swboffice_tpred, true);
+                                                    else so.setBooleanProperty(WordResource.swboffice_tpred, false);  
+                                                }                                                
                                             }
                                         }
                                         System.out.println("Paginacion de Contenido corregida: "+wbresource.getResourceBase().getId() );
                                     }
-                                    catch(Exception e){System.out.println("Error al revisar la paginacion del contenido.");}
+                                    catch(Exception e){System.out.println("Error al revisar la paginacion del contenido.");} 
                                 }
                                 //////////////////////////////////////////////////////////////////////////////                            
                                 try {
@@ -2312,7 +2320,7 @@
     WebPage copyValues( com.infotec.topicmaps.Topic topic, WebSite ws)
     {
         WebPage wp = null;
-        if(topic!=null&&!topic.isDeleted())
+        if(topic!=null) //&&!topic.isDeleted()
         {
             String id=topic.getId();
             wp = ws.getWebPage(id);
