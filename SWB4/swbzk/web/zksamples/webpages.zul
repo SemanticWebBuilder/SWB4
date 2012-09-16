@@ -4,8 +4,10 @@ ZK name check list :
 	<zscript>
 	//init example data beans
 	import org.semanticwb.model.*;
+	import org.semanticwb.*;
     
-	List webpages=new SWBModelWrapper().listWebPages();
+        List webpages=SWBUtils.Collections.copyIterator(WebPage.getWebPageClassMgr().listWebPages());
+        
 	WebPage selected = webpages.get(0);
 	
 	</zscript>
