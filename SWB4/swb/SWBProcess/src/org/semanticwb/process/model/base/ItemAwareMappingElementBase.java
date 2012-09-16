@@ -74,6 +74,11 @@ public abstract class ItemAwareMappingElementBase extends org.semanticwb.model.b
         }
     }
 
+    public static ItemAwareMappingElementBase.ClassMgr getItemAwareMappingElementClassMgr()
+    {
+        return new ItemAwareMappingElementBase.ClassMgr();
+    }
+
    /**
    * Constructs a ItemAwareMappingElementBase with a SemanticObject
    * @param base The SemanticObject with the properties for the ItemAwareMappingElement

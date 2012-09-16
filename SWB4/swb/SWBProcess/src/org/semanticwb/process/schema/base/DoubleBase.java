@@ -75,6 +75,11 @@ public abstract class DoubleBase extends org.semanticwb.process.model.DataTypes
         }
     }
 
+    public static DoubleBase.ClassMgr getDoubleClassMgr()
+    {
+        return new DoubleBase.ClassMgr();
+    }
+
    /**
    * Constructs a DoubleBase with a SemanticObject
    * @param base The SemanticObject with the properties for the Double

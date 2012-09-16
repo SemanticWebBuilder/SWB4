@@ -268,6 +268,11 @@ public abstract class GatewayBase extends org.semanticwb.process.model.FlowNode 
         }
     }
 
+    public static GatewayBase.ClassMgr getGatewayClassMgr()
+    {
+        return new GatewayBase.ClassMgr();
+    }
+
    /**
    * Constructs a GatewayBase with a SemanticObject
    * @param base The SemanticObject with the properties for the Gateway

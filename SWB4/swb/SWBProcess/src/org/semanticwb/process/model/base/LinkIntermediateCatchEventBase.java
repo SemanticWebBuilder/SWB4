@@ -264,6 +264,11 @@ public abstract class LinkIntermediateCatchEventBase extends org.semanticwb.proc
         }
     }
 
+    public static LinkIntermediateCatchEventBase.ClassMgr getLinkIntermediateCatchEventClassMgr()
+    {
+        return new LinkIntermediateCatchEventBase.ClassMgr();
+    }
+
    /**
    * Constructs a LinkIntermediateCatchEventBase with a SemanticObject
    * @param base The SemanticObject with the properties for the LinkIntermediateCatchEvent

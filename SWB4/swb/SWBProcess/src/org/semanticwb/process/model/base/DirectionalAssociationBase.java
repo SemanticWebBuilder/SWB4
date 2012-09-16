@@ -173,6 +173,11 @@ public abstract class DirectionalAssociationBase extends org.semanticwb.process.
         }
     }
 
+    public static DirectionalAssociationBase.ClassMgr getDirectionalAssociationClassMgr()
+    {
+        return new DirectionalAssociationBase.ClassMgr();
+    }
+
    /**
    * Constructs a DirectionalAssociationBase with a SemanticObject
    * @param base The SemanticObject with the properties for the DirectionalAssociation

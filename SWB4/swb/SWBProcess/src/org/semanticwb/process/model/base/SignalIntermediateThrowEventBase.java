@@ -264,6 +264,11 @@ public abstract class SignalIntermediateThrowEventBase extends org.semanticwb.pr
         }
     }
 
+    public static SignalIntermediateThrowEventBase.ClassMgr getSignalIntermediateThrowEventClassMgr()
+    {
+        return new SignalIntermediateThrowEventBase.ClassMgr();
+    }
+
    /**
    * Constructs a SignalIntermediateThrowEventBase with a SemanticObject
    * @param base The SemanticObject with the properties for the SignalIntermediateThrowEvent

@@ -243,6 +243,11 @@ public abstract class DataStoreBase extends org.semanticwb.process.model.ItemAwa
         }
     }
 
+    public static DataStoreBase.ClassMgr getDataStoreClassMgr()
+    {
+        return new DataStoreBase.ClassMgr();
+    }
+
    /**
    * Constructs a DataStoreBase with a SemanticObject
    * @param base The SemanticObject with the properties for the DataStore

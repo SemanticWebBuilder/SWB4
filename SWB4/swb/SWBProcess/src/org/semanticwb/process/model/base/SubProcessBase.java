@@ -1,7 +1,7 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class SubProcessBase extends org.semanticwb.process.model.Activity implements org.semanticwb.model.TemplateRefable,org.semanticwb.model.RoleRefable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Referensable,org.semanticwb.process.model.ActivityConfable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.Descriptiveable,org.semanticwb.process.model.ResourceAssignmentable,org.semanticwb.process.model.Containerable,org.semanticwb.model.Traceable
+public abstract class SubProcessBase extends org.semanticwb.process.model.Activity implements org.semanticwb.process.model.Containerable,org.semanticwb.model.RoleRefable,org.semanticwb.model.RuleRefable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.Descriptiveable,org.semanticwb.process.model.ResourceAssignmentable,org.semanticwb.process.model.ActivityConfable,org.semanticwb.model.Traceable,org.semanticwb.model.Referensable,org.semanticwb.model.TemplateRefable
 {
     public static final org.semanticwb.platform.SemanticClass swp_SubProcess=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#SubProcess");
    /**
@@ -400,6 +400,11 @@ public abstract class SubProcessBase extends org.semanticwb.process.model.Activi
             org.semanticwb.model.GenericIterator<org.semanticwb.process.model.SubProcess> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasRoleRef,value.getSemanticObject(),sclass));
             return it;
         }
+    }
+
+    public static SubProcessBase.ClassMgr getSubProcessClassMgr()
+    {
+        return new SubProcessBase.ClassMgr();
     }
 
    /**

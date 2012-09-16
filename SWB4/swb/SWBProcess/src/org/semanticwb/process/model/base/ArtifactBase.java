@@ -241,6 +241,11 @@ public abstract class ArtifactBase extends org.semanticwb.process.model.Graphica
         }
     }
 
+    public static ArtifactBase.ClassMgr getArtifactClassMgr()
+    {
+        return new ArtifactBase.ClassMgr();
+    }
+
    /**
    * Constructs a ArtifactBase with a SemanticObject
    * @param base The SemanticObject with the properties for the Artifact

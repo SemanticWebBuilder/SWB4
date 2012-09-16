@@ -264,6 +264,11 @@ public abstract class ScalationEndEventBase extends org.semanticwb.process.model
         }
     }
 
+    public static ScalationEndEventBase.ClassMgr getScalationEndEventClassMgr()
+    {
+        return new ScalationEndEventBase.ClassMgr();
+    }
+
    /**
    * Constructs a ScalationEndEventBase with a SemanticObject
    * @param base The SemanticObject with the properties for the ScalationEndEvent

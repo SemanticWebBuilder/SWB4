@@ -120,6 +120,11 @@ public abstract class ProcessElementBase extends org.semanticwb.model.SWBClass i
         }
     }
 
+    public static ProcessElementBase.ClassMgr getProcessElementClassMgr()
+    {
+        return new ProcessElementBase.ClassMgr();
+    }
+
    /**
    * Constructs a ProcessElementBase with a SemanticObject
    * @param base The SemanticObject with the properties for the ProcessElement

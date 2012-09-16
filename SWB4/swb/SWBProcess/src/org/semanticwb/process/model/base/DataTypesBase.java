@@ -74,6 +74,11 @@ public abstract class DataTypesBase extends org.semanticwb.model.SWBClass
         }
     }
 
+    public static DataTypesBase.ClassMgr getDataTypesClassMgr()
+    {
+        return new DataTypesBase.ClassMgr();
+    }
+
    /**
    * Constructs a DataTypesBase with a SemanticObject
    * @param base The SemanticObject with the properties for the DataTypes

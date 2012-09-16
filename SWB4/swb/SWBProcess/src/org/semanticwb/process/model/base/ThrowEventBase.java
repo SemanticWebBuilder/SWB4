@@ -258,6 +258,11 @@ public abstract class ThrowEventBase extends org.semanticwb.process.model.Event 
         }
     }
 
+    public static ThrowEventBase.ClassMgr getThrowEventClassMgr()
+    {
+        return new ThrowEventBase.ClassMgr();
+    }
+
    /**
    * Constructs a ThrowEventBase with a SemanticObject
    * @param base The SemanticObject with the properties for the ThrowEvent

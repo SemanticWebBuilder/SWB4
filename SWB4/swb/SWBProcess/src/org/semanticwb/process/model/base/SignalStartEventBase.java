@@ -287,6 +287,11 @@ public abstract class SignalStartEventBase extends org.semanticwb.process.model.
         }
     }
 
+    public static SignalStartEventBase.ClassMgr getSignalStartEventClassMgr()
+    {
+        return new SignalStartEventBase.ClassMgr();
+    }
+
    /**
    * Constructs a SignalStartEventBase with a SemanticObject
    * @param base The SemanticObject with the properties for the SignalStartEvent

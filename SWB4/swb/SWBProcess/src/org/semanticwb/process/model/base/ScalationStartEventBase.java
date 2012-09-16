@@ -287,6 +287,11 @@ public abstract class ScalationStartEventBase extends org.semanticwb.process.mod
         }
     }
 
+    public static ScalationStartEventBase.ClassMgr getScalationStartEventClassMgr()
+    {
+        return new ScalationStartEventBase.ClassMgr();
+    }
+
    /**
    * Constructs a ScalationStartEventBase with a SemanticObject
    * @param base The SemanticObject with the properties for the ScalationStartEvent

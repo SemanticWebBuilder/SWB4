@@ -264,6 +264,11 @@ public abstract class CancelationEndEventBase extends org.semanticwb.process.mod
         }
     }
 
+    public static CancelationEndEventBase.ClassMgr getCancelationEndEventClassMgr()
+    {
+        return new CancelationEndEventBase.ClassMgr();
+    }
+
    /**
    * Constructs a CancelationEndEventBase with a SemanticObject
    * @param base The SemanticObject with the properties for the CancelationEndEvent

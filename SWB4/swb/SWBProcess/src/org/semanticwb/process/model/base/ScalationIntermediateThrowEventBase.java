@@ -264,6 +264,11 @@ public abstract class ScalationIntermediateThrowEventBase extends org.semanticwb
         }
     }
 
+    public static ScalationIntermediateThrowEventBase.ClassMgr getScalationIntermediateThrowEventClassMgr()
+    {
+        return new ScalationIntermediateThrowEventBase.ClassMgr();
+    }
+
    /**
    * Constructs a ScalationIntermediateThrowEventBase with a SemanticObject
    * @param base The SemanticObject with the properties for the ScalationIntermediateThrowEvent

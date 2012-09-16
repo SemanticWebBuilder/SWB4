@@ -241,6 +241,11 @@ public abstract class AnnotationArtifactBase extends org.semanticwb.process.mode
         }
     }
 
+    public static AnnotationArtifactBase.ClassMgr getAnnotationArtifactClassMgr()
+    {
+        return new AnnotationArtifactBase.ClassMgr();
+    }
+
    /**
    * Constructs a AnnotationArtifactBase with a SemanticObject
    * @param base The SemanticObject with the properties for the AnnotationArtifact

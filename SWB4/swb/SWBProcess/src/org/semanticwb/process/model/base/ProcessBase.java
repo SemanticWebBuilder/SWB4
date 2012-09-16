@@ -1,7 +1,7 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class ProcessBase extends org.semanticwb.process.model.ProcessElement implements org.semanticwb.model.Resourceable,org.semanticwb.model.Trashable,org.semanticwb.model.CalendarRefable,org.semanticwb.model.TemplateRefable,org.semanticwb.model.FilterableClass,org.semanticwb.model.FilterableNode,org.semanticwb.model.RoleRefable,org.semanticwb.model.Expirable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Referensable,org.semanticwb.model.UserGroupRefable,org.semanticwb.process.model.Callable,org.semanticwb.model.Filterable,org.semanticwb.model.Activeable,org.semanticwb.model.Descriptiveable,org.semanticwb.process.model.Containerable,org.semanticwb.model.Traceable
+public abstract class ProcessBase extends org.semanticwb.process.model.ProcessElement implements org.semanticwb.model.Filterable,org.semanticwb.process.model.Containerable,org.semanticwb.model.Trashable,org.semanticwb.model.Expirable,org.semanticwb.model.RoleRefable,org.semanticwb.model.RuleRefable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Resourceable,org.semanticwb.model.Traceable,org.semanticwb.model.Referensable,org.semanticwb.model.FilterableClass,org.semanticwb.model.TemplateRefable,org.semanticwb.model.Activeable,org.semanticwb.process.model.Callable,org.semanticwb.model.CalendarRefable
 {
    /**
    * Objeto que define un Role dentro de un repositorio de usuarios aplicable a un Usuario para filtrar componente, seccion, plantillas, etc.
@@ -487,6 +487,11 @@ public abstract class ProcessBase extends org.semanticwb.process.model.ProcessEl
             org.semanticwb.model.GenericIterator<org.semanticwb.process.model.Process> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasCalendarRef,value.getSemanticObject(),sclass));
             return it;
         }
+    }
+
+    public static ProcessBase.ClassMgr getProcessClassMgr()
+    {
+        return new ProcessBase.ClassMgr();
     }
 
    /**

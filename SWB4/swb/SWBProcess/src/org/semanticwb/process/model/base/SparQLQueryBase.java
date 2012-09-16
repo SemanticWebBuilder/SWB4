@@ -105,6 +105,11 @@ public abstract class SparQLQueryBase extends org.semanticwb.process.model.Proce
         }
     }
 
+    public static SparQLQueryBase.ClassMgr getSparQLQueryClassMgr()
+    {
+        return new SparQLQueryBase.ClassMgr();
+    }
+
    /**
    * Constructs a SparQLQueryBase with a SemanticObject
    * @param base The SemanticObject with the properties for the SparQLQuery

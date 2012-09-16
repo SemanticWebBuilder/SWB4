@@ -264,6 +264,11 @@ public abstract class LinkIntermediateThrowEventBase extends org.semanticwb.proc
         }
     }
 
+    public static LinkIntermediateThrowEventBase.ClassMgr getLinkIntermediateThrowEventClassMgr()
+    {
+        return new LinkIntermediateThrowEventBase.ClassMgr();
+    }
+
    /**
    * Constructs a LinkIntermediateThrowEventBase with a SemanticObject
    * @param base The SemanticObject with the properties for the LinkIntermediateThrowEvent

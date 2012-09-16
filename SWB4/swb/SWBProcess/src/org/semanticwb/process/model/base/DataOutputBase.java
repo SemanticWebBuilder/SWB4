@@ -1,7 +1,7 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class DataOutputBase extends org.semanticwb.process.model.ItemAware implements org.semanticwb.process.model.Collectionable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable
+public abstract class DataOutputBase extends org.semanticwb.process.model.ItemAware implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable,org.semanticwb.process.model.Collectionable
 {
     public static final org.semanticwb.platform.SemanticClass swp_DataOutput=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#DataOutput");
    /**
@@ -239,6 +239,11 @@ public abstract class DataOutputBase extends org.semanticwb.process.model.ItemAw
             org.semanticwb.model.GenericIterator<org.semanticwb.process.model.DataOutput> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_hasOutputConnectionObjectInv,value.getSemanticObject(),sclass));
             return it;
         }
+    }
+
+    public static DataOutputBase.ClassMgr getDataOutputClassMgr()
+    {
+        return new DataOutputBase.ClassMgr();
     }
 
    /**

@@ -1,7 +1,7 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class CalledSubProcessInstanceBase extends org.semanticwb.process.model.SubProcessInstance implements org.semanticwb.process.model.ContainerInstanceable,org.semanticwb.process.model.ProcessTraceable,org.semanticwb.model.Traceable
+public abstract class CalledSubProcessInstanceBase extends org.semanticwb.process.model.SubProcessInstance implements org.semanticwb.process.model.ContainerInstanceable,org.semanticwb.model.Traceable,org.semanticwb.process.model.ProcessTraceable
 {
     public static final org.semanticwb.platform.SemanticClass swp_CalledSubProcessInstance=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#CalledSubProcessInstance");
    /**
@@ -331,6 +331,11 @@ public abstract class CalledSubProcessInstanceBase extends org.semanticwb.proces
             org.semanticwb.model.GenericIterator<org.semanticwb.process.model.CalledSubProcessInstance> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_hasItemAwareReference,value.getSemanticObject(),sclass));
             return it;
         }
+    }
+
+    public static CalledSubProcessInstanceBase.ClassMgr getCalledSubProcessInstanceClassMgr()
+    {
+        return new CalledSubProcessInstanceBase.ClassMgr();
     }
 
    /**

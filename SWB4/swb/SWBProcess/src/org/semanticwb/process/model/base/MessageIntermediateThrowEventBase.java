@@ -1,7 +1,7 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class MessageIntermediateThrowEventBase extends org.semanticwb.process.model.IntermediateThrowEvent implements org.semanticwb.process.model.ThrowMessageable,org.semanticwb.model.Descriptiveable,org.semanticwb.process.model.ActionCodeable,org.semanticwb.model.Traceable
+public abstract class MessageIntermediateThrowEventBase extends org.semanticwb.process.model.IntermediateThrowEvent implements org.semanticwb.model.Descriptiveable,org.semanticwb.process.model.ActionCodeable,org.semanticwb.model.Traceable,org.semanticwb.process.model.ThrowMessageable
 {
     public static final org.semanticwb.platform.SemanticClass swp_MessageIntermediateThrowEvent=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#MessageIntermediateThrowEvent");
    /**
@@ -285,6 +285,11 @@ public abstract class MessageIntermediateThrowEventBase extends org.semanticwb.p
             org.semanticwb.model.GenericIterator<org.semanticwb.process.model.MessageIntermediateThrowEvent> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_hasFlowNodeInstanceInv,value.getSemanticObject(),sclass));
             return it;
         }
+    }
+
+    public static MessageIntermediateThrowEventBase.ClassMgr getMessageIntermediateThrowEventClassMgr()
+    {
+        return new MessageIntermediateThrowEventBase.ClassMgr();
     }
 
    /**

@@ -1,7 +1,7 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class TaskBase extends org.semanticwb.process.model.Activity implements org.semanticwb.model.RoleRefable,org.semanticwb.model.RuleRefable,org.semanticwb.process.model.ActivityConfable,org.semanticwb.model.Referensable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.Descriptiveable,org.semanticwb.process.model.ResourceAssignmentable,org.semanticwb.model.Traceable
+public abstract class TaskBase extends org.semanticwb.process.model.Activity implements org.semanticwb.model.RoleRefable,org.semanticwb.model.RuleRefable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.Descriptiveable,org.semanticwb.process.model.ResourceAssignmentable,org.semanticwb.process.model.ActivityConfable,org.semanticwb.model.Traceable,org.semanticwb.model.Referensable
 {
     public static final org.semanticwb.platform.SemanticClass swp_Task=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#Task");
    /**
@@ -354,6 +354,11 @@ public abstract class TaskBase extends org.semanticwb.process.model.Activity imp
             org.semanticwb.model.GenericIterator<org.semanticwb.process.model.Task> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasRoleRef,value.getSemanticObject(),sclass));
             return it;
         }
+    }
+
+    public static TaskBase.ClassMgr getTaskClassMgr()
+    {
+        return new TaskBase.ClassMgr();
     }
 
    /**

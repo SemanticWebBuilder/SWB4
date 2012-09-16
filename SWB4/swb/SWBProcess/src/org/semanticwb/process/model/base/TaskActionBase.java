@@ -128,6 +128,11 @@ public abstract class TaskActionBase extends org.semanticwb.process.model.BaseEl
         }
     }
 
+    public static TaskActionBase.ClassMgr getTaskActionClassMgr()
+    {
+        return new TaskActionBase.ClassMgr();
+    }
+
    /**
    * Constructs a TaskActionBase with a SemanticObject
    * @param base The SemanticObject with the properties for the TaskAction

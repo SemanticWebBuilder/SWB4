@@ -170,6 +170,11 @@ public abstract class ConnectionObjectBase extends org.semanticwb.process.model.
         }
     }
 
+    public static ConnectionObjectBase.ClassMgr getConnectionObjectClassMgr()
+    {
+        return new ConnectionObjectBase.ClassMgr();
+    }
+
    /**
    * Constructs a ConnectionObjectBase with a SemanticObject
    * @param base The SemanticObject with the properties for the ConnectionObject

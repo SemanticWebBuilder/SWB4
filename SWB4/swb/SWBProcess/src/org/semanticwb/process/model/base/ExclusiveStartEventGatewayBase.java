@@ -264,6 +264,11 @@ public abstract class ExclusiveStartEventGatewayBase extends org.semanticwb.proc
         }
     }
 
+    public static ExclusiveStartEventGatewayBase.ClassMgr getExclusiveStartEventGatewayClassMgr()
+    {
+        return new ExclusiveStartEventGatewayBase.ClassMgr();
+    }
+
    /**
    * Constructs a ExclusiveStartEventGatewayBase with a SemanticObject
    * @param base The SemanticObject with the properties for the ExclusiveStartEventGateway

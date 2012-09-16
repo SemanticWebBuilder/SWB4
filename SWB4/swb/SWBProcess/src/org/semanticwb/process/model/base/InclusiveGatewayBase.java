@@ -264,6 +264,11 @@ public abstract class InclusiveGatewayBase extends org.semanticwb.process.model.
         }
     }
 
+    public static InclusiveGatewayBase.ClassMgr getInclusiveGatewayClassMgr()
+    {
+        return new InclusiveGatewayBase.ClassMgr();
+    }
+
    /**
    * Constructs a InclusiveGatewayBase with a SemanticObject
    * @param base The SemanticObject with the properties for the InclusiveGateway

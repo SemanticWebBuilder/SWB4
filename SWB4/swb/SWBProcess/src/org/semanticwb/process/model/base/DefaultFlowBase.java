@@ -172,6 +172,11 @@ public abstract class DefaultFlowBase extends org.semanticwb.process.model.Seque
         }
     }
 
+    public static DefaultFlowBase.ClassMgr getDefaultFlowClassMgr()
+    {
+        return new DefaultFlowBase.ClassMgr();
+    }
+
    /**
    * Constructs a DefaultFlowBase with a SemanticObject
    * @param base The SemanticObject with the properties for the DefaultFlow

@@ -1,7 +1,7 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class ServiceTaskBase extends org.semanticwb.process.model.Task implements org.semanticwb.model.RoleRefable,org.semanticwb.model.RuleRefable,org.semanticwb.process.model.ActivityConfable,org.semanticwb.model.Referensable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.Descriptiveable,org.semanticwb.process.model.ResourceAssignmentable,org.semanticwb.model.Traceable
+public abstract class ServiceTaskBase extends org.semanticwb.process.model.Task implements org.semanticwb.model.RoleRefable,org.semanticwb.model.RuleRefable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.Descriptiveable,org.semanticwb.process.model.ResourceAssignmentable,org.semanticwb.process.model.ActivityConfable,org.semanticwb.model.Traceable,org.semanticwb.model.Referensable
 {
     public static final org.semanticwb.platform.SemanticClass swp_ProcessService=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#ProcessService");
     public static final org.semanticwb.platform.SemanticProperty swp_processService=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#processService");
@@ -379,6 +379,11 @@ public abstract class ServiceTaskBase extends org.semanticwb.process.model.Task 
             org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ServiceTask> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasRoleRef,value.getSemanticObject(),sclass));
             return it;
         }
+    }
+
+    public static ServiceTaskBase.ClassMgr getServiceTaskClassMgr()
+    {
+        return new ServiceTaskBase.ClassMgr();
     }
 
    /**

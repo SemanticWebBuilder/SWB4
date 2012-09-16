@@ -1,7 +1,7 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class MessageStartEventBase extends org.semanticwb.process.model.StartEventNode implements org.semanticwb.process.model.CatchMessageable,org.semanticwb.model.Descriptiveable,org.semanticwb.process.model.ActionCodeable,org.semanticwb.model.Traceable
+public abstract class MessageStartEventBase extends org.semanticwb.process.model.StartEventNode implements org.semanticwb.model.Descriptiveable,org.semanticwb.process.model.ActionCodeable,org.semanticwb.model.Traceable,org.semanticwb.process.model.CatchMessageable
 {
     public static final org.semanticwb.platform.SemanticClass swp_MessageStartEvent=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#MessageStartEvent");
    /**
@@ -308,6 +308,11 @@ public abstract class MessageStartEventBase extends org.semanticwb.process.model
             org.semanticwb.model.GenericIterator<org.semanticwb.process.model.MessageStartEvent> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_hasFlowNodeInstanceInv,value.getSemanticObject(),sclass));
             return it;
         }
+    }
+
+    public static MessageStartEventBase.ClassMgr getMessageStartEventClassMgr()
+    {
+        return new MessageStartEventBase.ClassMgr();
     }
 
    /**

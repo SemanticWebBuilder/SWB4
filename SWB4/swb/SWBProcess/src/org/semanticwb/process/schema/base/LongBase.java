@@ -75,6 +75,11 @@ public abstract class LongBase extends org.semanticwb.process.model.DataTypes
         }
     }
 
+    public static LongBase.ClassMgr getLongClassMgr()
+    {
+        return new LongBase.ClassMgr();
+    }
+
    /**
    * Constructs a LongBase with a SemanticObject
    * @param base The SemanticObject with the properties for the Long

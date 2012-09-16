@@ -264,6 +264,11 @@ public abstract class MultipleIntermediateCatchEventBase extends org.semanticwb.
         }
     }
 
+    public static MultipleIntermediateCatchEventBase.ClassMgr getMultipleIntermediateCatchEventClassMgr()
+    {
+        return new MultipleIntermediateCatchEventBase.ClassMgr();
+    }
+
    /**
    * Constructs a MultipleIntermediateCatchEventBase with a SemanticObject
    * @param base The SemanticObject with the properties for the MultipleIntermediateCatchEvent

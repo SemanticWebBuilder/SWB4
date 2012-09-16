@@ -74,6 +74,11 @@ public abstract class ProcessReprositoryFileRefBase extends org.semanticwb.model
         }
     }
 
+    public static ProcessReprositoryFileRefBase.ClassMgr getProcessReprositoryFileRefClassMgr()
+    {
+        return new ProcessReprositoryFileRefBase.ClassMgr();
+    }
+
    /**
    * Constructs a ProcessReprositoryFileRefBase with a SemanticObject
    * @param base The SemanticObject with the properties for the ProcessReprositoryFileRef

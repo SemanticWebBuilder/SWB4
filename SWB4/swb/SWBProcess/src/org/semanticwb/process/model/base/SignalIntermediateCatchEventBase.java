@@ -264,6 +264,11 @@ public abstract class SignalIntermediateCatchEventBase extends org.semanticwb.pr
         }
     }
 
+    public static SignalIntermediateCatchEventBase.ClassMgr getSignalIntermediateCatchEventClassMgr()
+    {
+        return new SignalIntermediateCatchEventBase.ClassMgr();
+    }
+
    /**
    * Constructs a SignalIntermediateCatchEventBase with a SemanticObject
    * @param base The SemanticObject with the properties for the SignalIntermediateCatchEvent

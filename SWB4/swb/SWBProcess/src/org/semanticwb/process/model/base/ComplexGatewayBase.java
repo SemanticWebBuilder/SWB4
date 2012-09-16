@@ -268,6 +268,11 @@ public abstract class ComplexGatewayBase extends org.semanticwb.process.model.Ga
         }
     }
 
+    public static ComplexGatewayBase.ClassMgr getComplexGatewayClassMgr()
+    {
+        return new ComplexGatewayBase.ClassMgr();
+    }
+
    /**
    * Constructs a ComplexGatewayBase with a SemanticObject
    * @param base The SemanticObject with the properties for the ComplexGateway

@@ -80,6 +80,11 @@ public abstract class ItemAwareStatusBase extends org.semanticwb.process.model.B
         }
     }
 
+    public static ItemAwareStatusBase.ClassMgr getItemAwareStatusClassMgr()
+    {
+        return new ItemAwareStatusBase.ClassMgr();
+    }
+
    /**
    * Constructs a ItemAwareStatusBase with a SemanticObject
    * @param base The SemanticObject with the properties for the ItemAwareStatus

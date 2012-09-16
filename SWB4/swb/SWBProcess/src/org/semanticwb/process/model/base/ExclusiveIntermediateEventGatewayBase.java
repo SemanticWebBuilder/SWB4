@@ -264,6 +264,11 @@ public abstract class ExclusiveIntermediateEventGatewayBase extends org.semantic
         }
     }
 
+    public static ExclusiveIntermediateEventGatewayBase.ClassMgr getExclusiveIntermediateEventGatewayClassMgr()
+    {
+        return new ExclusiveIntermediateEventGatewayBase.ClassMgr();
+    }
+
    /**
    * Constructs a ExclusiveIntermediateEventGatewayBase with a SemanticObject
    * @param base The SemanticObject with the properties for the ExclusiveIntermediateEventGateway

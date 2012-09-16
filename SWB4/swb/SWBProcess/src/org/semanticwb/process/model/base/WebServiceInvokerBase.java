@@ -178,6 +178,11 @@ public abstract class WebServiceInvokerBase extends org.semanticwb.process.model
         }
     }
 
+    public static WebServiceInvokerBase.ClassMgr getWebServiceInvokerClassMgr()
+    {
+        return new WebServiceInvokerBase.ClassMgr();
+    }
+
    /**
    * Constructs a WebServiceInvokerBase with a SemanticObject
    * @param base The SemanticObject with the properties for the WebServiceInvoker

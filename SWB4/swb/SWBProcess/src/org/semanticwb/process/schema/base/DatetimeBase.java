@@ -75,6 +75,11 @@ public abstract class DatetimeBase extends org.semanticwb.process.model.DataType
         }
     }
 
+    public static DatetimeBase.ClassMgr getDatetimeClassMgr()
+    {
+        return new DatetimeBase.ClassMgr();
+    }
+
    /**
    * Constructs a DatetimeBase with a SemanticObject
    * @param base The SemanticObject with the properties for the Datetime

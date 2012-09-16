@@ -264,6 +264,11 @@ public abstract class ParallelStartEventGatewayBase extends org.semanticwb.proce
         }
     }
 
+    public static ParallelStartEventGatewayBase.ClassMgr getParallelStartEventGatewayClassMgr()
+    {
+        return new ParallelStartEventGatewayBase.ClassMgr();
+    }
+
    /**
    * Constructs a ParallelStartEventGatewayBase with a SemanticObject
    * @param base The SemanticObject with the properties for the ParallelStartEventGateway

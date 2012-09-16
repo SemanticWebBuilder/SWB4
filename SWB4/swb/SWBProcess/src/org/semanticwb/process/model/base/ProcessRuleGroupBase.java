@@ -157,6 +157,11 @@ public abstract class ProcessRuleGroupBase extends org.semanticwb.process.model.
         }
     }
 
+    public static ProcessRuleGroupBase.ClassMgr getProcessRuleGroupClassMgr()
+    {
+        return new ProcessRuleGroupBase.ClassMgr();
+    }
+
    /**
    * Constructs a ProcessRuleGroupBase with a SemanticObject
    * @param base The SemanticObject with the properties for the ProcessRuleGroup

@@ -172,6 +172,11 @@ public abstract class MessageFlowBase extends org.semanticwb.process.model.Conne
         }
     }
 
+    public static MessageFlowBase.ClassMgr getMessageFlowClassMgr()
+    {
+        return new MessageFlowBase.ClassMgr();
+    }
+
    /**
    * Constructs a MessageFlowBase with a SemanticObject
    * @param base The SemanticObject with the properties for the MessageFlow

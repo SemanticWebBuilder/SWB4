@@ -238,6 +238,11 @@ public abstract class ItemAwareBase extends org.semanticwb.process.model.Graphic
         }
     }
 
+    public static ItemAwareBase.ClassMgr getItemAwareClassMgr()
+    {
+        return new ItemAwareBase.ClassMgr();
+    }
+
    /**
    * Constructs a ItemAwareBase with a SemanticObject
    * @param base The SemanticObject with the properties for the ItemAware

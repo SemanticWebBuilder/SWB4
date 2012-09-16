@@ -80,6 +80,11 @@ public abstract class ActionCodeElementBase extends org.semanticwb.model.Text
         }
     }
 
+    public static ActionCodeElementBase.ClassMgr getActionCodeElementClassMgr()
+    {
+        return new ActionCodeElementBase.ClassMgr();
+    }
+
    /**
    * Constructs a ActionCodeElementBase with a SemanticObject
    * @param base The SemanticObject with the properties for the ActionCodeElement

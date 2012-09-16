@@ -289,6 +289,11 @@ public abstract class StartEventNodeBase extends org.semanticwb.process.model.Ca
         }
     }
 
+    public static StartEventNodeBase.ClassMgr getStartEventNodeClassMgr()
+    {
+        return new StartEventNodeBase.ClassMgr();
+    }
+
    /**
    * Constructs a StartEventNodeBase with a SemanticObject
    * @param base The SemanticObject with the properties for the StartEventNode

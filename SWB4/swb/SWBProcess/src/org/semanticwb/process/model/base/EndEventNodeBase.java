@@ -264,6 +264,11 @@ public abstract class EndEventNodeBase extends org.semanticwb.process.model.Thro
         }
     }
 
+    public static EndEventNodeBase.ClassMgr getEndEventNodeClassMgr()
+    {
+        return new EndEventNodeBase.ClassMgr();
+    }
+
    /**
    * Constructs a EndEventNodeBase with a SemanticObject
    * @param base The SemanticObject with the properties for the EndEventNode

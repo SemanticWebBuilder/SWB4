@@ -1,7 +1,7 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class RepositoryURLBase extends org.semanticwb.process.model.RepositoryElement implements org.semanticwb.model.Hitable,org.semanticwb.model.Searchable,org.semanticwb.model.RoleRefable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Expirable,org.semanticwb.model.Referensable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.Activeable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Versionable,org.semanticwb.model.Traceable
+public abstract class RepositoryURLBase extends org.semanticwb.process.model.RepositoryElement implements org.semanticwb.model.Hitable,org.semanticwb.model.Expirable,org.semanticwb.model.RoleRefable,org.semanticwb.model.RuleRefable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Searchable,org.semanticwb.model.Traceable,org.semanticwb.model.Referensable,org.semanticwb.model.Versionable,org.semanticwb.model.Activeable
 {
     public static final org.semanticwb.platform.SemanticClass swp_RepositoryURL=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#RepositoryURL");
    /**
@@ -308,6 +308,11 @@ public abstract class RepositoryURLBase extends org.semanticwb.process.model.Rep
             org.semanticwb.model.GenericIterator<org.semanticwb.process.model.RepositoryURL> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasRoleRef,value.getSemanticObject(),sclass));
             return it;
         }
+    }
+
+    public static RepositoryURLBase.ClassMgr getRepositoryURLClassMgr()
+    {
+        return new RepositoryURLBase.ClassMgr();
     }
 
    /**

@@ -1,7 +1,7 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class TimerIntermediateCatchEventBase extends org.semanticwb.process.model.IntermediateCatchEvent implements org.semanticwb.model.Referensable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable,org.semanticwb.process.model.ProcessPeriodRefable
+public abstract class TimerIntermediateCatchEventBase extends org.semanticwb.process.model.IntermediateCatchEvent implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Referensable,org.semanticwb.model.Traceable,org.semanticwb.process.model.ProcessPeriodRefable
 {
     public static final org.semanticwb.platform.SemanticClass swp_TimerIntermediateCatchEvent=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#TimerIntermediateCatchEvent");
    /**
@@ -285,6 +285,11 @@ public abstract class TimerIntermediateCatchEventBase extends org.semanticwb.pro
             org.semanticwb.model.GenericIterator<org.semanticwb.process.model.TimerIntermediateCatchEvent> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_hasProcessPeriodRef,value.getSemanticObject(),sclass));
             return it;
         }
+    }
+
+    public static TimerIntermediateCatchEventBase.ClassMgr getTimerIntermediateCatchEventClassMgr()
+    {
+        return new TimerIntermediateCatchEventBase.ClassMgr();
     }
 
    /**

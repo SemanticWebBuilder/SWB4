@@ -150,6 +150,11 @@ public abstract class StoreRepositoryFileBase extends org.semanticwb.process.mod
         }
     }
 
+    public static StoreRepositoryFileBase.ClassMgr getStoreRepositoryFileClassMgr()
+    {
+        return new StoreRepositoryFileBase.ClassMgr();
+    }
+
    /**
    * Constructs a StoreRepositoryFileBase with a SemanticObject
    * @param base The SemanticObject with the properties for the StoreRepositoryFile

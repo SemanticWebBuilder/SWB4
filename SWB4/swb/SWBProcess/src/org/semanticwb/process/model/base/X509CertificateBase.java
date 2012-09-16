@@ -1,7 +1,7 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class X509CertificateBase extends org.semanticwb.process.model.BaseElement implements org.semanticwb.model.Expirable,org.semanticwb.model.Traceable
+public abstract class X509CertificateBase extends org.semanticwb.process.model.BaseElement implements org.semanticwb.model.Traceable,org.semanticwb.model.Expirable
 {
     public static final org.semanticwb.platform.SemanticProperty swp_X509Subject=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#X509Subject");
     public static final org.semanticwb.platform.SemanticProperty swp_X509Name=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#X509Name");
@@ -128,6 +128,11 @@ public abstract class X509CertificateBase extends org.semanticwb.process.model.B
             org.semanticwb.model.GenericIterator<org.semanticwb.process.model.X509Certificate> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_creator,value.getSemanticObject(),sclass));
             return it;
         }
+    }
+
+    public static X509CertificateBase.ClassMgr getX509CertificateClassMgr()
+    {
+        return new X509CertificateBase.ClassMgr();
     }
 
    /**

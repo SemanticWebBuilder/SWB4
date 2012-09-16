@@ -123,6 +123,11 @@ public abstract class DBConnectionBase extends org.semanticwb.process.model.Base
         }
     }
 
+    public static DBConnectionBase.ClassMgr getDBConnectionClassMgr()
+    {
+        return new DBConnectionBase.ClassMgr();
+    }
+
    /**
    * Constructs a DBConnectionBase with a SemanticObject
    * @param base The SemanticObject with the properties for the DBConnection

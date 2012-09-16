@@ -287,6 +287,11 @@ public abstract class ErrorStartEventBase extends org.semanticwb.process.model.S
         }
     }
 
+    public static ErrorStartEventBase.ClassMgr getErrorStartEventClassMgr()
+    {
+        return new ErrorStartEventBase.ClassMgr();
+    }
+
    /**
    * Constructs a ErrorStartEventBase with a SemanticObject
    * @param base The SemanticObject with the properties for the ErrorStartEvent

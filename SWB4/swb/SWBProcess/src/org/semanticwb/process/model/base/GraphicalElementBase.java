@@ -247,6 +247,11 @@ public abstract class GraphicalElementBase extends org.semanticwb.process.model.
         }
     }
 
+    public static GraphicalElementBase.ClassMgr getGraphicalElementClassMgr()
+    {
+        return new GraphicalElementBase.ClassMgr();
+    }
+
    /**
    * Constructs a GraphicalElementBase with a SemanticObject
    * @param base The SemanticObject with the properties for the GraphicalElement

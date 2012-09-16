@@ -74,6 +74,11 @@ public abstract class BaseElementBase extends org.semanticwb.model.SWBClass
         }
     }
 
+    public static BaseElementBase.ClassMgr getBaseElementClassMgr()
+    {
+        return new BaseElementBase.ClassMgr();
+    }
+
    /**
    * Constructs a BaseElementBase with a SemanticObject
    * @param base The SemanticObject with the properties for the BaseElement

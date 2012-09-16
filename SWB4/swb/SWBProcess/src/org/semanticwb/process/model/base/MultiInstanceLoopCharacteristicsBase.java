@@ -126,6 +126,11 @@ public abstract class MultiInstanceLoopCharacteristicsBase extends org.semanticw
         }
     }
 
+    public static MultiInstanceLoopCharacteristicsBase.ClassMgr getMultiInstanceLoopCharacteristicsClassMgr()
+    {
+        return new MultiInstanceLoopCharacteristicsBase.ClassMgr();
+    }
+
    /**
    * Constructs a MultiInstanceLoopCharacteristicsBase with a SemanticObject
    * @param base The SemanticObject with the properties for the MultiInstanceLoopCharacteristics

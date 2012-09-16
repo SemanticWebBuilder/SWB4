@@ -74,6 +74,11 @@ public abstract class CallProcessElementBase extends org.semanticwb.model.Select
         }
     }
 
+    public static CallProcessElementBase.ClassMgr getCallProcessElementClassMgr()
+    {
+        return new CallProcessElementBase.ClassMgr();
+    }
+
    /**
    * Constructs a CallProcessElementBase with a SemanticObject
    * @param base The SemanticObject with the properties for the CallProcessElement

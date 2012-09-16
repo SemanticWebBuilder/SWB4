@@ -172,6 +172,11 @@ public abstract class AssociationFlowBase extends org.semanticwb.process.model.C
         }
     }
 
+    public static AssociationFlowBase.ClassMgr getAssociationFlowClassMgr()
+    {
+        return new AssociationFlowBase.ClassMgr();
+    }
+
    /**
    * Constructs a AssociationFlowBase with a SemanticObject
    * @param base The SemanticObject with the properties for the AssociationFlow

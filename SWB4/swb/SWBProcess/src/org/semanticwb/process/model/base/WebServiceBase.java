@@ -127,6 +127,11 @@ public abstract class WebServiceBase extends org.semanticwb.process.model.BaseEl
         }
     }
 
+    public static WebServiceBase.ClassMgr getWebServiceClassMgr()
+    {
+        return new WebServiceBase.ClassMgr();
+    }
+
    /**
    * Constructs a WebServiceBase with a SemanticObject
    * @param base The SemanticObject with the properties for the WebService
