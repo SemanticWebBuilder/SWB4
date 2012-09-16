@@ -130,6 +130,11 @@ public abstract class SQLQueryBase extends org.semanticwb.process.model.ProcessS
         }
     }
 
+    public static SQLQueryBase.ClassMgr getSQLQueryClassMgr()
+    {
+        return new SQLQueryBase.ClassMgr();
+    }
+
    /**
    * Constructs a SQLQueryBase with a SemanticObject
    * @param base The SemanticObject with the properties for the SQLQuery

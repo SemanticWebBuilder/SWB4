@@ -75,6 +75,11 @@ public abstract class BooleanBase extends org.semanticwb.process.model.DataTypes
         }
     }
 
+    public static BooleanBase.ClassMgr getBooleanClassMgr()
+    {
+        return new BooleanBase.ClassMgr();
+    }
+
    /**
    * Constructs a BooleanBase with a SemanticObject
    * @param base The SemanticObject with the properties for the Boolean

@@ -264,6 +264,11 @@ public abstract class ErrorIntermediateCatchEventBase extends org.semanticwb.pro
         }
     }
 
+    public static ErrorIntermediateCatchEventBase.ClassMgr getErrorIntermediateCatchEventClassMgr()
+    {
+        return new ErrorIntermediateCatchEventBase.ClassMgr();
+    }
+
    /**
    * Constructs a ErrorIntermediateCatchEventBase with a SemanticObject
    * @param base The SemanticObject with the properties for the ErrorIntermediateCatchEvent

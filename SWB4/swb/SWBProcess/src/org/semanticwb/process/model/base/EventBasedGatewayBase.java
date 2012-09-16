@@ -258,6 +258,11 @@ public abstract class EventBasedGatewayBase extends org.semanticwb.process.model
         }
     }
 
+    public static EventBasedGatewayBase.ClassMgr getEventBasedGatewayClassMgr()
+    {
+        return new EventBasedGatewayBase.ClassMgr();
+    }
+
    /**
    * Constructs a EventBasedGatewayBase with a SemanticObject
    * @param base The SemanticObject with the properties for the EventBasedGateway

@@ -259,6 +259,11 @@ public abstract class CatchEventBase extends org.semanticwb.process.model.Event 
         }
     }
 
+    public static CatchEventBase.ClassMgr getCatchEventClassMgr()
+    {
+        return new CatchEventBase.ClassMgr();
+    }
+
    /**
    * Constructs a CatchEventBase with a SemanticObject
    * @param base The SemanticObject with the properties for the CatchEvent

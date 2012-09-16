@@ -264,6 +264,11 @@ public abstract class ExclusiveGatewayBase extends org.semanticwb.process.model.
         }
     }
 
+    public static ExclusiveGatewayBase.ClassMgr getExclusiveGatewayClassMgr()
+    {
+        return new ExclusiveGatewayBase.ClassMgr();
+    }
+
    /**
    * Constructs a ExclusiveGatewayBase with a SemanticObject
    * @param base The SemanticObject with the properties for the ExclusiveGateway

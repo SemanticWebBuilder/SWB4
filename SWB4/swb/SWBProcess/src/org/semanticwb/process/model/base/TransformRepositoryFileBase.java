@@ -175,6 +175,11 @@ public abstract class TransformRepositoryFileBase extends org.semanticwb.process
         }
     }
 
+    public static TransformRepositoryFileBase.ClassMgr getTransformRepositoryFileClassMgr()
+    {
+        return new TransformRepositoryFileBase.ClassMgr();
+    }
+
    /**
    * Constructs a TransformRepositoryFileBase with a SemanticObject
    * @param base The SemanticObject with the properties for the TransformRepositoryFile

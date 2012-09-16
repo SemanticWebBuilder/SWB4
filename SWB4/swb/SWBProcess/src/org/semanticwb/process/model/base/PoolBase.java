@@ -241,6 +241,11 @@ public abstract class PoolBase extends org.semanticwb.process.model.GraphicalEle
         }
     }
 
+    public static PoolBase.ClassMgr getPoolClassMgr()
+    {
+        return new PoolBase.ClassMgr();
+    }
+
    /**
    * Constructs a PoolBase with a SemanticObject
    * @param base The SemanticObject with the properties for the Pool

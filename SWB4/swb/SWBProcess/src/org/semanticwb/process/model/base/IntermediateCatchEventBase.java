@@ -264,6 +264,11 @@ public abstract class IntermediateCatchEventBase extends org.semanticwb.process.
         }
     }
 
+    public static IntermediateCatchEventBase.ClassMgr getIntermediateCatchEventClassMgr()
+    {
+        return new IntermediateCatchEventBase.ClassMgr();
+    }
+
    /**
    * Constructs a IntermediateCatchEventBase with a SemanticObject
    * @param base The SemanticObject with the properties for the IntermediateCatchEvent

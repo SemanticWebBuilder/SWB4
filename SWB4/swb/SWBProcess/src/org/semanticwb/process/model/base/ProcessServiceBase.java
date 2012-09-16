@@ -105,6 +105,11 @@ public abstract class ProcessServiceBase extends org.semanticwb.model.SWBClass
         }
     }
 
+    public static ProcessServiceBase.ClassMgr getProcessServiceClassMgr()
+    {
+        return new ProcessServiceBase.ClassMgr();
+    }
+
    /**
    * Constructs a ProcessServiceBase with a SemanticObject
    * @param base The SemanticObject with the properties for the ProcessService

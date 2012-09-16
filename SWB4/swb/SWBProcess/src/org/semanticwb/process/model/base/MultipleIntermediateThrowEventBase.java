@@ -289,6 +289,11 @@ public abstract class MultipleIntermediateThrowEventBase extends org.semanticwb.
         }
     }
 
+    public static MultipleIntermediateThrowEventBase.ClassMgr getMultipleIntermediateThrowEventClassMgr()
+    {
+        return new MultipleIntermediateThrowEventBase.ClassMgr();
+    }
+
    /**
    * Constructs a MultipleIntermediateThrowEventBase with a SemanticObject
    * @param base The SemanticObject with the properties for the MultipleIntermediateThrowEvent

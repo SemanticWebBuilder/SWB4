@@ -317,6 +317,11 @@ public abstract class ProcessObserverBase extends org.semanticwb.process.model.P
         }
     }
 
+    public static ProcessObserverBase.ClassMgr getProcessObserverClassMgr()
+    {
+        return new ProcessObserverBase.ClassMgr();
+    }
+
    /**
    * Constructs a ProcessObserverBase with a SemanticObject
    * @param base The SemanticObject with the properties for the ProcessObserver

@@ -129,6 +129,11 @@ public abstract class ItemAwareMappingBase extends org.semanticwb.process.model.
         }
     }
 
+    public static ItemAwareMappingBase.ClassMgr getItemAwareMappingClassMgr()
+    {
+        return new ItemAwareMappingBase.ClassMgr();
+    }
+
    /**
    * Constructs a ItemAwareMappingBase with a SemanticObject
    * @param base The SemanticObject with the properties for the ItemAwareMapping

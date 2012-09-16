@@ -264,6 +264,11 @@ public abstract class TerminationEndEventBase extends org.semanticwb.process.mod
         }
     }
 
+    public static TerminationEndEventBase.ClassMgr getTerminationEndEventClassMgr()
+    {
+        return new TerminationEndEventBase.ClassMgr();
+    }
+
    /**
    * Constructs a TerminationEndEventBase with a SemanticObject
    * @param base The SemanticObject with the properties for the TerminationEndEvent

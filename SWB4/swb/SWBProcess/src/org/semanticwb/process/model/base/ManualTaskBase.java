@@ -1,7 +1,7 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class ManualTaskBase extends org.semanticwb.process.model.Task implements org.semanticwb.model.RoleRefable,org.semanticwb.model.RuleRefable,org.semanticwb.process.model.ActivityConfable,org.semanticwb.model.Referensable,org.semanticwb.model.UserGroupRefable,org.semanticwb.process.model.Callable,org.semanticwb.model.Descriptiveable,org.semanticwb.process.model.ResourceAssignmentable,org.semanticwb.model.Traceable
+public abstract class ManualTaskBase extends org.semanticwb.process.model.Task implements org.semanticwb.model.RoleRefable,org.semanticwb.model.RuleRefable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.Descriptiveable,org.semanticwb.process.model.ResourceAssignmentable,org.semanticwb.process.model.ActivityConfable,org.semanticwb.model.Traceable,org.semanticwb.model.Referensable,org.semanticwb.process.model.Callable
 {
     public static final org.semanticwb.platform.SemanticClass swp_ManualTask=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#ManualTask");
    /**
@@ -354,6 +354,11 @@ public abstract class ManualTaskBase extends org.semanticwb.process.model.Task i
             org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ManualTask> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasRoleRef,value.getSemanticObject(),sclass));
             return it;
         }
+    }
+
+    public static ManualTaskBase.ClassMgr getManualTaskClassMgr()
+    {
+        return new ManualTaskBase.ClassMgr();
     }
 
    /**

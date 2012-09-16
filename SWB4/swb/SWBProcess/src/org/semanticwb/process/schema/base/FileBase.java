@@ -100,6 +100,11 @@ public abstract class FileBase extends org.semanticwb.process.model.DataTypes
         }
     }
 
+    public static FileBase.ClassMgr getFileClassMgr()
+    {
+        return new FileBase.ClassMgr();
+    }
+
    /**
    * Constructs a FileBase with a SemanticObject
    * @param base The SemanticObject with the properties for the File

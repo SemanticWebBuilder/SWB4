@@ -287,6 +287,11 @@ public abstract class CompensationStartEventBase extends org.semanticwb.process.
         }
     }
 
+    public static CompensationStartEventBase.ClassMgr getCompensationStartEventClassMgr()
+    {
+        return new CompensationStartEventBase.ClassMgr();
+    }
+
    /**
    * Constructs a CompensationStartEventBase with a SemanticObject
    * @param base The SemanticObject with the properties for the CompensationStartEvent

@@ -75,6 +75,11 @@ public abstract class IntegerBase extends org.semanticwb.process.model.DataTypes
         }
     }
 
+    public static IntegerBase.ClassMgr getIntegerClassMgr()
+    {
+        return new IntegerBase.ClassMgr();
+    }
+
    /**
    * Constructs a IntegerBase with a SemanticObject
    * @param base The SemanticObject with the properties for the Integer

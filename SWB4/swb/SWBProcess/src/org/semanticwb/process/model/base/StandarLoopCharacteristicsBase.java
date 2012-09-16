@@ -126,6 +126,11 @@ public abstract class StandarLoopCharacteristicsBase extends org.semanticwb.proc
         }
     }
 
+    public static StandarLoopCharacteristicsBase.ClassMgr getStandarLoopCharacteristicsClassMgr()
+    {
+        return new StandarLoopCharacteristicsBase.ClassMgr();
+    }
+
    /**
    * Constructs a StandarLoopCharacteristicsBase with a SemanticObject
    * @param base The SemanticObject with the properties for the StandarLoopCharacteristics

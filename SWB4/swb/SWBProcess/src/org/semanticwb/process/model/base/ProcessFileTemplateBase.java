@@ -127,6 +127,11 @@ public abstract class ProcessFileTemplateBase extends org.semanticwb.process.mod
         }
     }
 
+    public static ProcessFileTemplateBase.ClassMgr getProcessFileTemplateClassMgr()
+    {
+        return new ProcessFileTemplateBase.ClassMgr();
+    }
+
    /**
    * Constructs a ProcessFileTemplateBase with a SemanticObject
    * @param base The SemanticObject with the properties for the ProcessFileTemplate

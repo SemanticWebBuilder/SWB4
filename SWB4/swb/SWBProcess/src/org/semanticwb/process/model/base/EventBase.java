@@ -258,6 +258,11 @@ public abstract class EventBase extends org.semanticwb.process.model.FlowNode im
         }
     }
 
+    public static EventBase.ClassMgr getEventClassMgr()
+    {
+        return new EventBase.ClassMgr();
+    }
+
    /**
    * Constructs a EventBase with a SemanticObject
    * @param base The SemanticObject with the properties for the Event

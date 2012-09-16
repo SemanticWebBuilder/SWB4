@@ -178,6 +178,11 @@ public abstract class X509SingInstanceBase extends org.semanticwb.process.model.
         }
     }
 
+    public static X509SingInstanceBase.ClassMgr getX509SingInstanceClassMgr()
+    {
+        return new X509SingInstanceBase.ClassMgr();
+    }
+
    /**
    * Constructs a X509SingInstanceBase with a SemanticObject
    * @param base The SemanticObject with the properties for the X509SingInstance

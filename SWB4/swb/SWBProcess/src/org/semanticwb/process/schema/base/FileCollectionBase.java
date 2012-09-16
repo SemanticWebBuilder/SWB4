@@ -100,6 +100,11 @@ public abstract class FileCollectionBase extends org.semanticwb.process.model.Da
         }
     }
 
+    public static FileCollectionBase.ClassMgr getFileCollectionClassMgr()
+    {
+        return new FileCollectionBase.ClassMgr();
+    }
+
    /**
    * Constructs a FileCollectionBase with a SemanticObject
    * @param base The SemanticObject with the properties for the FileCollection

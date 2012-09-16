@@ -287,6 +287,11 @@ public abstract class MultipleStartEventBase extends org.semanticwb.process.mode
         }
     }
 
+    public static MultipleStartEventBase.ClassMgr getMultipleStartEventClassMgr()
+    {
+        return new MultipleStartEventBase.ClassMgr();
+    }
+
    /**
    * Constructs a MultipleStartEventBase with a SemanticObject
    * @param base The SemanticObject with the properties for the MultipleStartEvent

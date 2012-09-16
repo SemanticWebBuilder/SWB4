@@ -135,6 +135,11 @@ public abstract class ItemAwareReferenceBase extends org.semanticwb.process.mode
         }
     }
 
+    public static ItemAwareReferenceBase.ClassMgr getItemAwareReferenceClassMgr()
+    {
+        return new ItemAwareReferenceBase.ClassMgr();
+    }
+
    /**
    * Constructs a ItemAwareReferenceBase with a SemanticObject
    * @param base The SemanticObject with the properties for the ItemAwareReference

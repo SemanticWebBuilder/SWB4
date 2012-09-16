@@ -1,7 +1,7 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class ProcessInstanceBase extends org.semanticwb.process.model.Instance implements org.semanticwb.process.model.ContainerInstanceable,org.semanticwb.process.model.ProcessTraceable,org.semanticwb.model.Traceable
+public abstract class ProcessInstanceBase extends org.semanticwb.process.model.Instance implements org.semanticwb.process.model.ContainerInstanceable,org.semanticwb.model.Traceable,org.semanticwb.process.model.ProcessTraceable
 {
     public static final org.semanticwb.platform.SemanticProperty swp_processStatus=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#processStatus");
     public static final org.semanticwb.platform.SemanticClass swp_Process=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#Process");
@@ -271,6 +271,11 @@ public abstract class ProcessInstanceBase extends org.semanticwb.process.model.I
             org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ProcessInstance> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_processOwnerUserGroup,value.getSemanticObject(),sclass));
             return it;
         }
+    }
+
+    public static ProcessInstanceBase.ClassMgr getProcessInstanceClassMgr()
+    {
+        return new ProcessInstanceBase.ClassMgr();
     }
 
    /**

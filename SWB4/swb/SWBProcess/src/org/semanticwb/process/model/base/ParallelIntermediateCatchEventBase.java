@@ -264,6 +264,11 @@ public abstract class ParallelIntermediateCatchEventBase extends org.semanticwb.
         }
     }
 
+    public static ParallelIntermediateCatchEventBase.ClassMgr getParallelIntermediateCatchEventClassMgr()
+    {
+        return new ParallelIntermediateCatchEventBase.ClassMgr();
+    }
+
    /**
    * Constructs a ParallelIntermediateCatchEventBase with a SemanticObject
    * @param base The SemanticObject with the properties for the ParallelIntermediateCatchEvent

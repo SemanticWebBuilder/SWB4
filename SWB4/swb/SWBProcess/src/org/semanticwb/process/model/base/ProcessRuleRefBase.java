@@ -105,6 +105,11 @@ public abstract class ProcessRuleRefBase extends org.semanticwb.model.Reference 
         }
     }
 
+    public static ProcessRuleRefBase.ClassMgr getProcessRuleRefClassMgr()
+    {
+        return new ProcessRuleRefBase.ClassMgr();
+    }
+
    /**
    * Constructs a ProcessRuleRefBase with a SemanticObject
    * @param base The SemanticObject with the properties for the ProcessRuleRef

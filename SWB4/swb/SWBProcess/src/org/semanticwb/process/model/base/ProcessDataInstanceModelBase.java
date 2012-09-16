@@ -183,6 +183,11 @@ public abstract class ProcessDataInstanceModelBase extends org.semanticwb.model.
         }
     }
 
+    public static ProcessDataInstanceModelBase.ClassMgr getProcessDataInstanceModelClassMgr()
+    {
+        return new ProcessDataInstanceModelBase.ClassMgr();
+    }
+
    /**
    * Constructs a ProcessDataInstanceModelBase with a SemanticObject
    * @param base The SemanticObject with the properties for the ProcessDataInstanceModel

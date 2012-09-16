@@ -107,6 +107,11 @@ public abstract class SendMailBase extends org.semanticwb.process.model.ProcessS
         }
     }
 
+    public static SendMailBase.ClassMgr getSendMailClassMgr()
+    {
+        return new SendMailBase.ClassMgr();
+    }
+
    /**
    * Constructs a SendMailBase with a SemanticObject
    * @param base The SemanticObject with the properties for the SendMail

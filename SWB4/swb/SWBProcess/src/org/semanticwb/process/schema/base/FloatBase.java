@@ -75,6 +75,11 @@ public abstract class FloatBase extends org.semanticwb.process.model.DataTypes
         }
     }
 
+    public static FloatBase.ClassMgr getFloatClassMgr()
+    {
+        return new FloatBase.ClassMgr();
+    }
+
    /**
    * Constructs a FloatBase with a SemanticObject
    * @param base The SemanticObject with the properties for the Float

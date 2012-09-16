@@ -287,6 +287,11 @@ public abstract class ParallelStartEventBase extends org.semanticwb.process.mode
         }
     }
 
+    public static ParallelStartEventBase.ClassMgr getParallelStartEventClassMgr()
+    {
+        return new ParallelStartEventBase.ClassMgr();
+    }
+
    /**
    * Constructs a ParallelStartEventBase with a SemanticObject
    * @param base The SemanticObject with the properties for the ParallelStartEvent

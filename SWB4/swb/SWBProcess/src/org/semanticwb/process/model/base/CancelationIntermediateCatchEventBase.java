@@ -264,6 +264,11 @@ public abstract class CancelationIntermediateCatchEventBase extends org.semantic
         }
     }
 
+    public static CancelationIntermediateCatchEventBase.ClassMgr getCancelationIntermediateCatchEventClassMgr()
+    {
+        return new CancelationIntermediateCatchEventBase.ClassMgr();
+    }
+
    /**
    * Constructs a CancelationIntermediateCatchEventBase with a SemanticObject
    * @param base The SemanticObject with the properties for the CancelationIntermediateCatchEvent

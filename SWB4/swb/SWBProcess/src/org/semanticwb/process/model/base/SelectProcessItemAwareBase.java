@@ -74,6 +74,11 @@ public abstract class SelectProcessItemAwareBase extends org.semanticwb.model.Se
         }
     }
 
+    public static SelectProcessItemAwareBase.ClassMgr getSelectProcessItemAwareClassMgr()
+    {
+        return new SelectProcessItemAwareBase.ClassMgr();
+    }
+
    /**
    * Constructs a SelectProcessItemAwareBase with a SemanticObject
    * @param base The SemanticObject with the properties for the SelectProcessItemAware

@@ -264,6 +264,11 @@ public abstract class ErrorEndEventBase extends org.semanticwb.process.model.End
         }
     }
 
+    public static ErrorEndEventBase.ClassMgr getErrorEndEventClassMgr()
+    {
+        return new ErrorEndEventBase.ClassMgr();
+    }
+
    /**
    * Constructs a ErrorEndEventBase with a SemanticObject
    * @param base The SemanticObject with the properties for the ErrorEndEvent

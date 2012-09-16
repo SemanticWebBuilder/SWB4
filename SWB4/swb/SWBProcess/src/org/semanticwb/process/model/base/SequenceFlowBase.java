@@ -172,6 +172,11 @@ public abstract class SequenceFlowBase extends org.semanticwb.process.model.Conn
         }
     }
 
+    public static SequenceFlowBase.ClassMgr getSequenceFlowClassMgr()
+    {
+        return new SequenceFlowBase.ClassMgr();
+    }
+
    /**
    * Constructs a SequenceFlowBase with a SemanticObject
    * @param base The SemanticObject with the properties for the SequenceFlow

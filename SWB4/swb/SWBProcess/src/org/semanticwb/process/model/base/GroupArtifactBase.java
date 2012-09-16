@@ -241,6 +241,11 @@ public abstract class GroupArtifactBase extends org.semanticwb.process.model.Art
         }
     }
 
+    public static GroupArtifactBase.ClassMgr getGroupArtifactClassMgr()
+    {
+        return new GroupArtifactBase.ClassMgr();
+    }
+
    /**
    * Constructs a GroupArtifactBase with a SemanticObject
    * @param base The SemanticObject with the properties for the GroupArtifact

@@ -264,6 +264,11 @@ public abstract class ScalationIntermediateCatchEventBase extends org.semanticwb
         }
     }
 
+    public static ScalationIntermediateCatchEventBase.ClassMgr getScalationIntermediateCatchEventClassMgr()
+    {
+        return new ScalationIntermediateCatchEventBase.ClassMgr();
+    }
+
    /**
    * Constructs a ScalationIntermediateCatchEventBase with a SemanticObject
    * @param base The SemanticObject with the properties for the ScalationIntermediateCatchEvent

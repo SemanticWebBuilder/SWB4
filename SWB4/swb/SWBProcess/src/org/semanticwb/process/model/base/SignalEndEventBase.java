@@ -264,6 +264,11 @@ public abstract class SignalEndEventBase extends org.semanticwb.process.model.En
         }
     }
 
+    public static SignalEndEventBase.ClassMgr getSignalEndEventClassMgr()
+    {
+        return new SignalEndEventBase.ClassMgr();
+    }
+
    /**
    * Constructs a SignalEndEventBase with a SemanticObject
    * @param base The SemanticObject with the properties for the SignalEndEvent

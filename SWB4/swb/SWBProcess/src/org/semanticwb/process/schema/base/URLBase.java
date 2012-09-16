@@ -100,6 +100,11 @@ public abstract class URLBase extends org.semanticwb.process.model.DataTypes
         }
     }
 
+    public static URLBase.ClassMgr getURLClassMgr()
+    {
+        return new URLBase.ClassMgr();
+    }
+
    /**
    * Constructs a URLBase with a SemanticObject
    * @param base The SemanticObject with the properties for the URL

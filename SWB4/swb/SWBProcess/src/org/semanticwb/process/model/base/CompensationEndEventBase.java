@@ -264,6 +264,11 @@ public abstract class CompensationEndEventBase extends org.semanticwb.process.mo
         }
     }
 
+    public static CompensationEndEventBase.ClassMgr getCompensationEndEventClassMgr()
+    {
+        return new CompensationEndEventBase.ClassMgr();
+    }
+
    /**
    * Constructs a CompensationEndEventBase with a SemanticObject
    * @param base The SemanticObject with the properties for the CompensationEndEvent

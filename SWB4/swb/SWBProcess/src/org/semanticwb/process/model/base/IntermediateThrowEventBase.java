@@ -264,6 +264,11 @@ public abstract class IntermediateThrowEventBase extends org.semanticwb.process.
         }
     }
 
+    public static IntermediateThrowEventBase.ClassMgr getIntermediateThrowEventClassMgr()
+    {
+        return new IntermediateThrowEventBase.ClassMgr();
+    }
+
    /**
    * Constructs a IntermediateThrowEventBase with a SemanticObject
    * @param base The SemanticObject with the properties for the IntermediateThrowEvent

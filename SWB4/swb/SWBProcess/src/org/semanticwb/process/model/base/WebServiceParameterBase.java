@@ -82,6 +82,11 @@ public abstract class WebServiceParameterBase extends org.semanticwb.process.mod
         }
     }
 
+    public static WebServiceParameterBase.ClassMgr getWebServiceParameterClassMgr()
+    {
+        return new WebServiceParameterBase.ClassMgr();
+    }
+
    /**
    * Constructs a WebServiceParameterBase with a SemanticObject
    * @param base The SemanticObject with the properties for the WebServiceParameter

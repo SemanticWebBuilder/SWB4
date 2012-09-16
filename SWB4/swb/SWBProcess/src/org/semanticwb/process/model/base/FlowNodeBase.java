@@ -260,6 +260,11 @@ public abstract class FlowNodeBase extends org.semanticwb.process.model.Graphica
         }
     }
 
+    public static FlowNodeBase.ClassMgr getFlowNodeClassMgr()
+    {
+        return new FlowNodeBase.ClassMgr();
+    }
+
    /**
    * Constructs a FlowNodeBase with a SemanticObject
    * @param base The SemanticObject with the properties for the FlowNode

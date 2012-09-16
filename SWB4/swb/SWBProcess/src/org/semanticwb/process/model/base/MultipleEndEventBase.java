@@ -264,6 +264,11 @@ public abstract class MultipleEndEventBase extends org.semanticwb.process.model.
         }
     }
 
+    public static MultipleEndEventBase.ClassMgr getMultipleEndEventClassMgr()
+    {
+        return new MultipleEndEventBase.ClassMgr();
+    }
+
    /**
    * Constructs a MultipleEndEventBase with a SemanticObject
    * @param base The SemanticObject with the properties for the MultipleEndEvent

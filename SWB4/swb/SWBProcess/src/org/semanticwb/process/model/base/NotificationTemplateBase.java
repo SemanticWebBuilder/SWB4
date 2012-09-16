@@ -128,6 +128,11 @@ public abstract class NotificationTemplateBase extends org.semanticwb.process.mo
         }
     }
 
+    public static NotificationTemplateBase.ClassMgr getNotificationTemplateClassMgr()
+    {
+        return new NotificationTemplateBase.ClassMgr();
+    }
+
    /**
    * Constructs a NotificationTemplateBase with a SemanticObject
    * @param base The SemanticObject with the properties for the NotificationTemplate

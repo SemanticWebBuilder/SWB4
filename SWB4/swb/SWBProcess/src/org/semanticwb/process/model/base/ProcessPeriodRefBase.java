@@ -105,6 +105,11 @@ public abstract class ProcessPeriodRefBase extends org.semanticwb.model.Referenc
         }
     }
 
+    public static ProcessPeriodRefBase.ClassMgr getProcessPeriodRefClassMgr()
+    {
+        return new ProcessPeriodRefBase.ClassMgr();
+    }
+
    /**
    * Constructs a ProcessPeriodRefBase with a SemanticObject
    * @param base The SemanticObject with the properties for the ProcessPeriodRef

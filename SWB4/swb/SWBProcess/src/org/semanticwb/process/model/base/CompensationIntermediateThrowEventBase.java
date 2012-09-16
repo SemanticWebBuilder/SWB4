@@ -264,6 +264,11 @@ public abstract class CompensationIntermediateThrowEventBase extends org.semanti
         }
     }
 
+    public static CompensationIntermediateThrowEventBase.ClassMgr getCompensationIntermediateThrowEventClassMgr()
+    {
+        return new CompensationIntermediateThrowEventBase.ClassMgr();
+    }
+
    /**
    * Constructs a CompensationIntermediateThrowEventBase with a SemanticObject
    * @param base The SemanticObject with the properties for the CompensationIntermediateThrowEvent

@@ -1,7 +1,7 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class DataInputBase extends org.semanticwb.process.model.ItemAware implements org.semanticwb.process.model.Collectionable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable
+public abstract class DataInputBase extends org.semanticwb.process.model.ItemAware implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable,org.semanticwb.process.model.Collectionable
 {
     public static final org.semanticwb.platform.SemanticClass swp_DataInput=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#DataInput");
    /**
@@ -239,6 +239,11 @@ public abstract class DataInputBase extends org.semanticwb.process.model.ItemAwa
             org.semanticwb.model.GenericIterator<org.semanticwb.process.model.DataInput> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_hasOutputConnectionObjectInv,value.getSemanticObject(),sclass));
             return it;
         }
+    }
+
+    public static DataInputBase.ClassMgr getDataInputClassMgr()
+    {
+        return new DataInputBase.ClassMgr();
     }
 
    /**

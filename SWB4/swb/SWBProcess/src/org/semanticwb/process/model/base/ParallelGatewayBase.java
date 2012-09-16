@@ -264,6 +264,11 @@ public abstract class ParallelGatewayBase extends org.semanticwb.process.model.G
         }
     }
 
+    public static ParallelGatewayBase.ClassMgr getParallelGatewayClassMgr()
+    {
+        return new ParallelGatewayBase.ClassMgr();
+    }
+
    /**
    * Constructs a ParallelGatewayBase with a SemanticObject
    * @param base The SemanticObject with the properties for the ParallelGateway

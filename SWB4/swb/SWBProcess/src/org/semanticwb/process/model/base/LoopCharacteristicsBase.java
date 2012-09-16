@@ -120,6 +120,11 @@ public abstract class LoopCharacteristicsBase extends org.semanticwb.process.mod
         }
     }
 
+    public static LoopCharacteristicsBase.ClassMgr getLoopCharacteristicsClassMgr()
+    {
+        return new LoopCharacteristicsBase.ClassMgr();
+    }
+
    /**
    * Constructs a LoopCharacteristicsBase with a SemanticObject
    * @param base The SemanticObject with the properties for the LoopCharacteristics

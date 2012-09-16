@@ -264,6 +264,11 @@ public abstract class CompensationIntermediateCatchEventBase extends org.semanti
         }
     }
 
+    public static CompensationIntermediateCatchEventBase.ClassMgr getCompensationIntermediateCatchEventClassMgr()
+    {
+        return new CompensationIntermediateCatchEventBase.ClassMgr();
+    }
+
    /**
    * Constructs a CompensationIntermediateCatchEventBase with a SemanticObject
    * @param base The SemanticObject with the properties for the CompensationIntermediateCatchEvent

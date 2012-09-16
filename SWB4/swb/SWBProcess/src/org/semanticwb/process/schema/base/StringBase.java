@@ -75,6 +75,11 @@ public abstract class StringBase extends org.semanticwb.process.model.DataTypes
         }
     }
 
+    public static StringBase.ClassMgr getStringClassMgr()
+    {
+        return new StringBase.ClassMgr();
+    }
+
    /**
    * Constructs a StringBase with a SemanticObject
    * @param base The SemanticObject with the properties for the String

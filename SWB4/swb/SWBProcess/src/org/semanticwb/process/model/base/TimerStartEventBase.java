@@ -1,7 +1,7 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class TimerStartEventBase extends org.semanticwb.process.model.StartEventNode implements org.semanticwb.model.Referensable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable,org.semanticwb.process.model.ProcessPeriodRefable
+public abstract class TimerStartEventBase extends org.semanticwb.process.model.StartEventNode implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Referensable,org.semanticwb.model.Traceable,org.semanticwb.process.model.ProcessPeriodRefable
 {
     public static final org.semanticwb.platform.SemanticClass swp_TimerStartEvent=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#TimerStartEvent");
    /**
@@ -308,6 +308,11 @@ public abstract class TimerStartEventBase extends org.semanticwb.process.model.S
             org.semanticwb.model.GenericIterator<org.semanticwb.process.model.TimerStartEvent> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_hasProcessPeriodRef,value.getSemanticObject(),sclass));
             return it;
         }
+    }
+
+    public static TimerStartEventBase.ClassMgr getTimerStartEventClassMgr()
+    {
+        return new TimerStartEventBase.ClassMgr();
     }
 
    /**
