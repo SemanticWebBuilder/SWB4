@@ -74,6 +74,11 @@ public abstract class LoginElementBase extends org.semanticwb.model.Text
         }
     }
 
+    public static LoginElementBase.ClassMgr getLoginElementClassMgr()
+    {
+        return new LoginElementBase.ClassMgr();
+    }
+
    /**
    * Constructs a LoginElementBase with a SemanticObject
    * @param base The SemanticObject with the properties for the LoginElement

@@ -82,6 +82,11 @@ public abstract class UniqueTextElementBase extends org.semanticwb.model.Text
         }
     }
 
+    public static UniqueTextElementBase.ClassMgr getUniqueTextElementClassMgr()
+    {
+        return new UniqueTextElementBase.ClassMgr();
+    }
+
    /**
    * Constructs a UniqueTextElementBase with a SemanticObject
    * @param base The SemanticObject with the properties for the UniqueTextElement

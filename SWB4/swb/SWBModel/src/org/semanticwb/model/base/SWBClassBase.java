@@ -84,6 +84,11 @@ public abstract class SWBClassBase extends org.semanticwb.model.base.GenericObje
         }
     }
 
+    public static SWBClassBase.ClassMgr getSWBClassClassMgr()
+    {
+        return new SWBClassBase.ClassMgr();
+    }
+
    /**
    * Constructs a SWBClassBase with a SemanticObject
    * @param base The SemanticObject with the properties for the SWBClass

@@ -80,6 +80,11 @@ public abstract class TreeSelectBase extends org.semanticwb.model.base.FormEleme
         }
     }
 
+    public static TreeSelectBase.ClassMgr getTreeSelectClassMgr()
+    {
+        return new TreeSelectBase.ClassMgr();
+    }
+
    /**
    * Constructs a TreeSelectBase with a SemanticObject
    * @param base The SemanticObject with the properties for the TreeSelect

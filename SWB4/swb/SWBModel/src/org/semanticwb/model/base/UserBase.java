@@ -4,7 +4,7 @@ package org.semanticwb.model.base;
    /**
    * Un usuario es una persona que tiene relación con el portal a través de un método de acceso. 
    */
-public abstract class UserBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.FilterableClass,org.semanticwb.model.Referensable,org.semanticwb.model.UserGroupable,org.semanticwb.model.Roleable,org.semanticwb.model.Expirable,org.semanticwb.model.Activeable,org.semanticwb.model.Traceable,org.semanticwb.model.Filterable,org.semanticwb.model.CalendarRefable
+public abstract class UserBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Traceable,org.semanticwb.model.Referensable,org.semanticwb.model.Activeable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Roleable,org.semanticwb.model.Filterable,org.semanticwb.model.CalendarRefable,org.semanticwb.model.Expirable,org.semanticwb.model.UserGroupable
 {
     public static final org.semanticwb.platform.SemanticProperty swb_usrFirstName=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#usrFirstName");
    /**
@@ -275,6 +275,11 @@ public abstract class UserBase extends org.semanticwb.model.SWBClass implements 
             org.semanticwb.model.GenericIterator<org.semanticwb.model.User> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasCalendarRef,value.getSemanticObject(),sclass));
             return it;
         }
+    }
+
+    public static UserBase.ClassMgr getUserClassMgr()
+    {
+        return new UserBase.ClassMgr();
     }
 
    /**

@@ -114,6 +114,11 @@ public abstract class CalendarRefBase extends org.semanticwb.model.Reference imp
         }
     }
 
+    public static CalendarRefBase.ClassMgr getCalendarRefClassMgr()
+    {
+        return new CalendarRefBase.ClassMgr();
+    }
+
    /**
    * Constructs a CalendarRefBase with a SemanticObject
    * @param base The SemanticObject with the properties for the CalendarRef

@@ -80,6 +80,11 @@ public abstract class LabelBase extends org.semanticwb.model.base.FormElementBas
         }
     }
 
+    public static LabelBase.ClassMgr getLabelClassMgr()
+    {
+        return new LabelBase.ClassMgr();
+    }
+
    /**
    * Constructs a LabelBase with a SemanticObject
    * @param base The SemanticObject with the properties for the Label

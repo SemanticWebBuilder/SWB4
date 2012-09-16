@@ -80,6 +80,11 @@ public abstract class SecurityQuestionBase extends org.semanticwb.model.base.For
         }
     }
 
+    public static SecurityQuestionBase.ClassMgr getSecurityQuestionClassMgr()
+    {
+        return new SecurityQuestionBase.ClassMgr();
+    }
+
    /**
    * Constructs a SecurityQuestionBase with a SemanticObject
    * @param base The SemanticObject with the properties for the SecurityQuestion

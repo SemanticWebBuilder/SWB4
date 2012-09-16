@@ -74,6 +74,11 @@ public abstract class FlashImageUploadBase extends org.semanticwb.model.FlashFil
         }
     }
 
+    public static FlashImageUploadBase.ClassMgr getFlashImageUploadClassMgr()
+    {
+        return new FlashImageUploadBase.ClassMgr();
+    }
+
    /**
    * Constructs a FlashImageUploadBase with a SemanticObject
    * @param base The SemanticObject with the properties for the FlashImageUpload

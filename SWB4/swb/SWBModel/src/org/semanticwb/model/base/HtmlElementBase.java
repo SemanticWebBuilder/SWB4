@@ -80,6 +80,11 @@ public abstract class HtmlElementBase extends org.semanticwb.model.TextArea
         }
     }
 
+    public static HtmlElementBase.ClassMgr getHtmlElementClassMgr()
+    {
+        return new HtmlElementBase.ClassMgr();
+    }
+
    /**
    * Constructs a HtmlElementBase with a SemanticObject
    * @param base The SemanticObject with the properties for the HtmlElement

@@ -80,6 +80,11 @@ public abstract class PropertyGroupBase extends org.semanticwb.model.SWBClass im
         }
     }
 
+    public static PropertyGroupBase.ClassMgr getPropertyGroupClassMgr()
+    {
+        return new PropertyGroupBase.ClassMgr();
+    }
+
    /**
    * Constructs a PropertyGroupBase with a SemanticObject
    * @param base The SemanticObject with the properties for the PropertyGroup

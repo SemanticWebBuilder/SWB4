@@ -4,7 +4,7 @@ package org.semanticwb.model.base;
    /**
    * Objeto de calendarización que permite configurar una página o un recurso para desplegarse en cierta fecha, entre un rango de fechas o incluso en periodos de tiempo definidos. 
    */
-public abstract class CalendarBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.FilterableClass,org.semanticwb.model.XMLable,org.semanticwb.model.Activeable,org.semanticwb.model.Filterable,org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable
+public abstract class CalendarBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Activeable,org.semanticwb.model.XMLable,org.semanticwb.model.Filterable
 {
    /**
    * Referencia a un objeto de tipo Calendar
@@ -158,6 +158,11 @@ public abstract class CalendarBase extends org.semanticwb.model.SWBClass impleme
             org.semanticwb.model.GenericIterator<org.semanticwb.model.Calendar> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_creator,value.getSemanticObject(),sclass));
             return it;
         }
+    }
+
+    public static CalendarBase.ClassMgr getCalendarClassMgr()
+    {
+        return new CalendarBase.ClassMgr();
     }
 
    /**

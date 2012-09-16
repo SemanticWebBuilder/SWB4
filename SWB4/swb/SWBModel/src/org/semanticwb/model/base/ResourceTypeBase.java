@@ -4,7 +4,7 @@ package org.semanticwb.model.base;
    /**
    * Objeto por medio del cual se define un tipo de componente o recurso 
    */
-public abstract class ResourceTypeBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.FilterableClass,org.semanticwb.model.FilterableNode,org.semanticwb.model.Traceable,org.semanticwb.model.Filterable,org.semanticwb.model.Descriptiveable
+public abstract class ResourceTypeBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.FilterableNode,org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Filterable
 {
     public static final org.semanticwb.platform.SemanticProperty swb_resourceCache=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#resourceCache");
    /**
@@ -215,6 +215,11 @@ public abstract class ResourceTypeBase extends org.semanticwb.model.SWBClass imp
             org.semanticwb.model.GenericIterator<org.semanticwb.model.ResourceType> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasPTSubType,value.getSemanticObject(),sclass));
             return it;
         }
+    }
+
+    public static ResourceTypeBase.ClassMgr getResourceTypeClassMgr()
+    {
+        return new ResourceTypeBase.ClassMgr();
     }
 
    /**

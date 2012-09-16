@@ -4,7 +4,7 @@ package org.semanticwb.model.base;
    /**
    * Objeto que define una agripacion de componentes o recursos de un mismo tipo 
    */
-public abstract class ResourceSubTypeBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.FilterableClass,org.semanticwb.model.FilterableNode,org.semanticwb.model.Traceable,org.semanticwb.model.Filterable,org.semanticwb.model.Descriptiveable
+public abstract class ResourceSubTypeBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.FilterableNode,org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Filterable
 {
    /**
    * Objeto por medio del cual se define un tipo de componente o recurso
@@ -180,6 +180,11 @@ public abstract class ResourceSubTypeBase extends org.semanticwb.model.SWBClass 
             org.semanticwb.model.GenericIterator<org.semanticwb.model.ResourceSubType> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasPSTResource,value.getSemanticObject(),sclass));
             return it;
         }
+    }
+
+    public static ResourceSubTypeBase.ClassMgr getResourceSubTypeClassMgr()
+    {
+        return new ResourceSubTypeBase.ClassMgr();
     }
 
    /**

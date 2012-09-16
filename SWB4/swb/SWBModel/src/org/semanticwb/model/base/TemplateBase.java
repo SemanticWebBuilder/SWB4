@@ -4,7 +4,7 @@ package org.semanticwb.model.base;
    /**
    * Las Plantillas son documentos HTML que sirven de base a SemanticWebBuilder para poder mostrar el "look & feel" del sitio, así como la distribución de todos los elementos en la pagina. 
    */
-public abstract class TemplateBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.UserGroupRefable,org.semanticwb.model.Localeable,org.semanticwb.model.RoleRefable,org.semanticwb.model.Expirable,org.semanticwb.model.Deviceable,org.semanticwb.model.Activeable,org.semanticwb.model.Traceable,org.semanticwb.model.Filterable,org.semanticwb.model.CalendarRefable,org.semanticwb.model.Versionable,org.semanticwb.model.Trashable,org.semanticwb.model.RuleRefable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Referensable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Countryable
+public abstract class TemplateBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Traceable,org.semanticwb.model.Versionable,org.semanticwb.model.Referensable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Trashable,org.semanticwb.model.Deviceable,org.semanticwb.model.RoleRefable,org.semanticwb.model.Filterable,org.semanticwb.model.Expirable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Countryable,org.semanticwb.model.Activeable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.Localeable,org.semanticwb.model.CalendarRefable
 {
    /**
    * Referencia a un objeto de tipo Template
@@ -393,6 +393,11 @@ public abstract class TemplateBase extends org.semanticwb.model.SWBClass impleme
             org.semanticwb.model.GenericIterator<org.semanticwb.model.Template> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_device,value.getSemanticObject(),sclass));
             return it;
         }
+    }
+
+    public static TemplateBase.ClassMgr getTemplateClassMgr()
+    {
+        return new TemplateBase.ClassMgr();
     }
 
    /**

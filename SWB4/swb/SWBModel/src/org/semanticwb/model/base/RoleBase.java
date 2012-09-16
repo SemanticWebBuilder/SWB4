@@ -4,7 +4,7 @@ package org.semanticwb.model.base;
    /**
    * Objeto que define un Role dentro de un repositorio de usuarios aplicable a un Usuario para filtrar componente, seccion, plantillas, etc. 
    */
-public abstract class RoleBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.FilterableClass,org.semanticwb.model.Undeleteable,org.semanticwb.model.Traceable,org.semanticwb.model.Filterable,org.semanticwb.model.Descriptiveable
+public abstract class RoleBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Undeleteable,org.semanticwb.model.Filterable
 {
    /**
    * Referencia a un objeto de tipo Role
@@ -200,6 +200,11 @@ public abstract class RoleBase extends org.semanticwb.model.SWBClass implements 
             org.semanticwb.model.GenericIterator<org.semanticwb.model.Role> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasRoleChild,value.getSemanticObject(),sclass));
             return it;
         }
+    }
+
+    public static RoleBase.ClassMgr getRoleClassMgr()
+    {
+        return new RoleBase.ClassMgr();
     }
 
    /**

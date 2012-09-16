@@ -95,6 +95,11 @@ public abstract class DisplayObjectBase extends org.semanticwb.model.SWBClass im
         }
     }
 
+    public static DisplayObjectBase.ClassMgr getDisplayObjectClassMgr()
+    {
+        return new DisplayObjectBase.ClassMgr();
+    }
+
    /**
    * Constructs a DisplayObjectBase with a SemanticObject
    * @param base The SemanticObject with the properties for the DisplayObject

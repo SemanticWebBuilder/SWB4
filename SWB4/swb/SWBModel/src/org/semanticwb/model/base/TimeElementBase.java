@@ -81,6 +81,11 @@ public abstract class TimeElementBase extends org.semanticwb.model.base.FormElem
         }
     }
 
+    public static TimeElementBase.ClassMgr getTimeElementClassMgr()
+    {
+        return new TimeElementBase.ClassMgr();
+    }
+
    /**
    * Constructs a TimeElementBase with a SemanticObject
    * @param base The SemanticObject with the properties for the TimeElement

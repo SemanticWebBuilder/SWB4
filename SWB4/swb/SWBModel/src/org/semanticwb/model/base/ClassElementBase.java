@@ -74,6 +74,11 @@ public abstract class ClassElementBase extends org.semanticwb.model.Text
         }
     }
 
+    public static ClassElementBase.ClassMgr getClassElementClassMgr()
+    {
+        return new ClassElementBase.ClassMgr();
+    }
+
    /**
    * Constructs a ClassElementBase with a SemanticObject
    * @param base The SemanticObject with the properties for the ClassElement

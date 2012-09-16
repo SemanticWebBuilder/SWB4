@@ -4,7 +4,7 @@ package org.semanticwb.model.base;
    /**
    * Un dispositivo es un elemento que tiene la capacidad de leer una Página Web, por ejemplo: un PDA, una PC o un celular. En SemanticWebBuilder se pueden encontrar algunos dispositivos ya definidos. 
    */
-public abstract class DeviceBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.FilterableClass,org.semanticwb.model.Traceable,org.semanticwb.model.Filterable,org.semanticwb.model.Descriptiveable
+public abstract class DeviceBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Filterable
 {
     public static final org.semanticwb.platform.SemanticProperty swb_dvcUserAgent=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#dvcUserAgent");
    /**
@@ -173,6 +173,11 @@ public abstract class DeviceBase extends org.semanticwb.model.SWBClass implement
             org.semanticwb.model.GenericIterator<org.semanticwb.model.Device> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasDvcChild,value.getSemanticObject(),sclass));
             return it;
         }
+    }
+
+    public static DeviceBase.ClassMgr getDeviceClassMgr()
+    {
+        return new DeviceBase.ClassMgr();
     }
 
    /**

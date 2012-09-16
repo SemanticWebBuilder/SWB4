@@ -133,6 +133,11 @@ public abstract class AdminAlertBase extends org.semanticwb.model.SWBClass imple
         }
     }
 
+    public static AdminAlertBase.ClassMgr getAdminAlertClassMgr()
+    {
+        return new AdminAlertBase.ClassMgr();
+    }
+
    /**
    * Constructs a AdminAlertBase with a SemanticObject
    * @param base The SemanticObject with the properties for the AdminAlert

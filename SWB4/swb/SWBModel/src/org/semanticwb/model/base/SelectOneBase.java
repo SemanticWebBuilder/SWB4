@@ -83,6 +83,11 @@ public abstract class SelectOneBase extends org.semanticwb.model.base.FormElemen
         }
     }
 
+    public static SelectOneBase.ClassMgr getSelectOneClassMgr()
+    {
+        return new SelectOneBase.ClassMgr();
+    }
+
    /**
    * Constructs a SelectOneBase with a SemanticObject
    * @param base The SemanticObject with the properties for the SelectOne

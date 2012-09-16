@@ -81,6 +81,11 @@ public abstract class PasswordUpdateBase extends org.semanticwb.model.base.FormE
         }
     }
 
+    public static PasswordUpdateBase.ClassMgr getPasswordUpdateClassMgr()
+    {
+        return new PasswordUpdateBase.ClassMgr();
+    }
+
    /**
    * Constructs a PasswordUpdateBase with a SemanticObject
    * @param base The SemanticObject with the properties for the PasswordUpdate

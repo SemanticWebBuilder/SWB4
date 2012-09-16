@@ -1,7 +1,7 @@
 package org.semanticwb.model.base;
 
 
-public abstract class MetaTagValueBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Localeable,org.semanticwb.model.Countryable
+public abstract class MetaTagValueBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Countryable,org.semanticwb.model.Localeable
 {
     public static final org.semanticwb.platform.SemanticClass swb_MetaTagDef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#MetaTagDef");
     public static final org.semanticwb.platform.SemanticProperty swb_metadataDef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#metadataDef");
@@ -150,6 +150,11 @@ public abstract class MetaTagValueBase extends org.semanticwb.model.SWBClass imp
             org.semanticwb.model.GenericIterator<org.semanticwb.model.MetaTagValue> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_language,value.getSemanticObject(),sclass));
             return it;
         }
+    }
+
+    public static MetaTagValueBase.ClassMgr getMetaTagValueClassMgr()
+    {
+        return new MetaTagValueBase.ClassMgr();
     }
 
    /**

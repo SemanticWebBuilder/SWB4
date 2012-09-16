@@ -74,6 +74,11 @@ public abstract class IDTextElementBase extends org.semanticwb.model.Text
         }
     }
 
+    public static IDTextElementBase.ClassMgr getIDTextElementClassMgr()
+    {
+        return new IDTextElementBase.ClassMgr();
+    }
+
    /**
    * Constructs a IDTextElementBase with a SemanticObject
    * @param base The SemanticObject with the properties for the IDTextElement

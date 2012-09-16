@@ -74,6 +74,11 @@ public abstract class RichTextBase extends org.semanticwb.model.TextArea
         }
     }
 
+    public static RichTextBase.ClassMgr getRichTextClassMgr()
+    {
+        return new RichTextBase.ClassMgr();
+    }
+
    /**
    * Constructs a RichTextBase with a SemanticObject
    * @param base The SemanticObject with the properties for the RichText

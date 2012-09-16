@@ -213,6 +213,11 @@ public abstract class VersionInfoBase extends org.semanticwb.model.SWBClass impl
         }
     }
 
+    public static VersionInfoBase.ClassMgr getVersionInfoClassMgr()
+    {
+        return new VersionInfoBase.ClassMgr();
+    }
+
    /**
    * Constructs a VersionInfoBase with a SemanticObject
    * @param base The SemanticObject with the properties for the VersionInfo

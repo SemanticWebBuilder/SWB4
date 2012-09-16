@@ -142,6 +142,11 @@ public abstract class AssociationBase extends org.semanticwb.model.SWBClass
         }
     }
 
+    public static AssociationBase.ClassMgr getAssociationClassMgr()
+    {
+        return new AssociationBase.ClassMgr();
+    }
+
    /**
    * Constructs a AssociationBase with a SemanticObject
    * @param base The SemanticObject with the properties for the Association

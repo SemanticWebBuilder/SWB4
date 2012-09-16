@@ -4,7 +4,7 @@ package org.semanticwb.model.base;
    /**
    * Es una pagina web utilizada para mostrar opciones del menu dentro de la administración de SWB 
    */
-public abstract class MenuItemBase extends org.semanticwb.model.WebPage implements org.semanticwb.model.Resourceable,org.semanticwb.model.RoleRefable,org.semanticwb.model.Activeable,org.semanticwb.model.Filterable,org.semanticwb.model.Traceable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Referensable,org.semanticwb.model.FilterableNode,org.semanticwb.model.NSPrefixFilterable,org.semanticwb.model.Searchable,org.semanticwb.model.MetaTagable,org.semanticwb.model.Indexable,org.semanticwb.model.Tagable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.Rankable,org.semanticwb.model.Localeable,org.semanticwb.model.Expirable,org.semanticwb.model.Hiddenable,org.semanticwb.model.TemplateRefable,org.semanticwb.model.CalendarRefable,org.semanticwb.model.Viewable,org.semanticwb.model.Trashable,org.semanticwb.model.RuleRefable,org.semanticwb.model.PFlowRefable,org.semanticwb.model.Undeleteable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Countryable
+public abstract class MenuItemBase extends org.semanticwb.model.WebPage implements org.semanticwb.model.Traceable,org.semanticwb.model.Hiddenable,org.semanticwb.model.Expirable,org.semanticwb.model.NSPrefixFilterable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Rankable,org.semanticwb.model.Countryable,org.semanticwb.model.Activeable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.Tagable,org.semanticwb.model.TemplateRefable,org.semanticwb.model.Referensable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Trashable,org.semanticwb.model.Undeleteable,org.semanticwb.model.Indexable,org.semanticwb.model.RoleRefable,org.semanticwb.model.Filterable,org.semanticwb.model.MetaTagable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Viewable,org.semanticwb.model.PFlowRefable,org.semanticwb.model.Localeable,org.semanticwb.model.CalendarRefable,org.semanticwb.model.Resourceable,org.semanticwb.model.Searchable
 {
     public static final org.semanticwb.platform.SemanticProperty swb_mnuItemShowIFrame=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#mnuItemShowIFrame");
    /**
@@ -539,6 +539,11 @@ public abstract class MenuItemBase extends org.semanticwb.model.WebPage implemen
             org.semanticwb.model.GenericIterator<org.semanticwb.model.MenuItem> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasFriendlyURL,value.getSemanticObject(),sclass));
             return it;
         }
+    }
+
+    public static MenuItemBase.ClassMgr getMenuItemClassMgr()
+    {
+        return new MenuItemBase.ClassMgr();
     }
 
    /**

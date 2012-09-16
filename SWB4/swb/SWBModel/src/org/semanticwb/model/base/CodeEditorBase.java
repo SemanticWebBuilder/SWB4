@@ -75,6 +75,11 @@ public abstract class CodeEditorBase extends org.semanticwb.model.TextArea
         }
     }
 
+    public static CodeEditorBase.ClassMgr getCodeEditorClassMgr()
+    {
+        return new CodeEditorBase.ClassMgr();
+    }
+
    /**
    * Constructs a CodeEditorBase with a SemanticObject
    * @param base The SemanticObject with the properties for the CodeEditor

@@ -4,7 +4,7 @@ package org.semanticwb.model.base;
    /**
    * Un Filtro permite configurar un recurso para que se despliegue sólo en ciertas páginas dentro de un Sitio Web, es decir, restringe el acceso a ciertas funcionalidades a nivel de navegación. 
    */
-public abstract class AdminFilterBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.XMLable,org.semanticwb.model.Undeleteable,org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable
+public abstract class AdminFilterBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Undeleteable,org.semanticwb.model.XMLable
 {
    /**
    * Un Filtro permite configurar un recurso para que se despliegue sólo en ciertas páginas dentro de un Sitio Web, es decir, restringe el acceso a ciertas funcionalidades a nivel de navegación.
@@ -130,6 +130,11 @@ public abstract class AdminFilterBase extends org.semanticwb.model.SWBClass impl
             org.semanticwb.model.GenericIterator<org.semanticwb.model.AdminFilter> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_creator,value.getSemanticObject(),sclass));
             return it;
         }
+    }
+
+    public static AdminFilterBase.ClassMgr getAdminFilterClassMgr()
+    {
+        return new AdminFilterBase.ClassMgr();
     }
 
    /**

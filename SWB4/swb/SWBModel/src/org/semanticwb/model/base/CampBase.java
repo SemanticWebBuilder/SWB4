@@ -4,7 +4,7 @@ package org.semanticwb.model.base;
    /**
    * Define una campaña de recursos o componentes de SemanticWebBuilder (No usada de momento) 
    */
-public abstract class CampBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Referensable,org.semanticwb.model.Roleable,org.semanticwb.model.Activeable,org.semanticwb.model.Ruleable,org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.CalendarRefable
+public abstract class CampBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Ruleable,org.semanticwb.model.Traceable,org.semanticwb.model.Referensable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Activeable,org.semanticwb.model.Roleable,org.semanticwb.model.CalendarRefable
 {
    /**
    * Define una campaña de recursos o componentes de SemanticWebBuilder (No usada de momento)
@@ -199,6 +199,11 @@ public abstract class CampBase extends org.semanticwb.model.SWBClass implements 
             org.semanticwb.model.GenericIterator<org.semanticwb.model.Camp> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasCalendarRef,value.getSemanticObject(),sclass));
             return it;
         }
+    }
+
+    public static CampBase.ClassMgr getCampClassMgr()
+    {
+        return new CampBase.ClassMgr();
     }
 
    /**

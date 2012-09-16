@@ -132,6 +132,11 @@ public abstract class InfRuleBase extends org.semanticwb.model.SWBClass implemen
         }
     }
 
+    public static InfRuleBase.ClassMgr getInfRuleClassMgr()
+    {
+        return new InfRuleBase.ClassMgr();
+    }
+
    /**
    * Constructs a InfRuleBase with a SemanticObject
    * @param base The SemanticObject with the properties for the InfRule

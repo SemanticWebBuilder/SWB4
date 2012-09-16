@@ -114,6 +114,11 @@ public abstract class ResourceRefBase extends org.semanticwb.model.Reference imp
         }
     }
 
+    public static ResourceRefBase.ClassMgr getResourceRefClassMgr()
+    {
+        return new ResourceRefBase.ClassMgr();
+    }
+
    /**
    * Constructs a ResourceRefBase with a SemanticObject
    * @param base The SemanticObject with the properties for the ResourceRef

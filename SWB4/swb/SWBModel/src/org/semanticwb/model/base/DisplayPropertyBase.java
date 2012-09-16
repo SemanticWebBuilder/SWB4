@@ -121,6 +121,11 @@ public abstract class DisplayPropertyBase extends org.semanticwb.model.SWBClass 
         }
     }
 
+    public static DisplayPropertyBase.ClassMgr getDisplayPropertyClassMgr()
+    {
+        return new DisplayPropertyBase.ClassMgr();
+    }
+
    /**
    * Constructs a DisplayPropertyBase with a SemanticObject
    * @param base The SemanticObject with the properties for the DisplayProperty

@@ -74,6 +74,11 @@ public abstract class SelectClassBase extends org.semanticwb.model.base.FormElem
         }
     }
 
+    public static SelectClassBase.ClassMgr getSelectClassClassMgr()
+    {
+        return new SelectClassBase.ClassMgr();
+    }
+
    /**
    * Constructs a SelectClassBase with a SemanticObject
    * @param base The SemanticObject with the properties for the SelectClass

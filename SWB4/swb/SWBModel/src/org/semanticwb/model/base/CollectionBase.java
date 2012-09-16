@@ -4,7 +4,7 @@ package org.semanticwb.model.base;
    /**
    * Define una Collección de objetos de una clase especificada con la propiedad "collectionClass" 
    */
-public abstract class CollectionBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.FilterableClass,org.semanticwb.model.FilterableNode,org.semanticwb.model.Traceable,org.semanticwb.model.Filterable,org.semanticwb.model.Descriptiveable
+public abstract class CollectionBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.FilterableNode,org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Filterable
 {
     public static final org.semanticwb.platform.SemanticProperty swb_hasCollectionSearchProperties=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#hasCollectionSearchProperties");
    /**
@@ -162,6 +162,11 @@ public abstract class CollectionBase extends org.semanticwb.model.SWBClass imple
             org.semanticwb.model.GenericIterator<org.semanticwb.model.Collection> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_creator,value.getSemanticObject(),sclass));
             return it;
         }
+    }
+
+    public static CollectionBase.ClassMgr getCollectionClassMgr()
+    {
+        return new CollectionBase.ClassMgr();
     }
 
    /**

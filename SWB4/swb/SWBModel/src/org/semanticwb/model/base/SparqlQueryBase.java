@@ -132,6 +132,11 @@ public abstract class SparqlQueryBase extends org.semanticwb.model.SWBClass impl
         }
     }
 
+    public static SparqlQueryBase.ClassMgr getSparqlQueryClassMgr()
+    {
+        return new SparqlQueryBase.ClassMgr();
+    }
+
    /**
    * Constructs a SparqlQueryBase with a SemanticObject
    * @param base The SemanticObject with the properties for the SparqlQuery

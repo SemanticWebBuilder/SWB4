@@ -74,6 +74,11 @@ public abstract class UrlFormElementBase extends org.semanticwb.model.Text
         }
     }
 
+    public static UrlFormElementBase.ClassMgr getUrlFormElementClassMgr()
+    {
+        return new UrlFormElementBase.ClassMgr();
+    }
+
    /**
    * Constructs a UrlFormElementBase with a SemanticObject
    * @param base The SemanticObject with the properties for the UrlFormElement

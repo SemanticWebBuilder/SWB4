@@ -4,7 +4,7 @@ package org.semanticwb.model.base;
    /**
    * Objeto que define un Grupo de plantillas 
    */
-public abstract class TemplateGroupBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.FilterableClass,org.semanticwb.model.FilterableNode,org.semanticwb.model.Traceable,org.semanticwb.model.Filterable,org.semanticwb.model.Descriptiveable
+public abstract class TemplateGroupBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.FilterableNode,org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Filterable
 {
    /**
    * Las Plantillas son documentos HTML que sirven de base a SemanticWebBuilder para poder mostrar el "look & feel" del sitio, así como la distribución de todos los elementos en la pagina.
@@ -158,6 +158,11 @@ public abstract class TemplateGroupBase extends org.semanticwb.model.SWBClass im
             org.semanticwb.model.GenericIterator<org.semanticwb.model.TemplateGroup> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasGroupedTemplate,value.getSemanticObject(),sclass));
             return it;
         }
+    }
+
+    public static TemplateGroupBase.ClassMgr getTemplateGroupClassMgr()
+    {
+        return new TemplateGroupBase.ClassMgr();
     }
 
    /**

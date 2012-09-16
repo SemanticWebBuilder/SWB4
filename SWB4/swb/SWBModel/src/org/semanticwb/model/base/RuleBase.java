@@ -4,7 +4,7 @@ package org.semanticwb.model.base;
    /**
    * Objeto que define una regla de negocio, utilizando los atributos del usuario para filtrar componente, seccion, plantillas, etc. 
    */
-public abstract class RuleBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.FilterableClass,org.semanticwb.model.XMLable,org.semanticwb.model.Traceable,org.semanticwb.model.Filterable,org.semanticwb.model.Descriptiveable
+public abstract class RuleBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.FilterableClass,org.semanticwb.model.XMLable,org.semanticwb.model.Filterable
 {
    /**
    * Referencia a un objeto de tipo Rule
@@ -158,6 +158,11 @@ public abstract class RuleBase extends org.semanticwb.model.SWBClass implements 
             org.semanticwb.model.GenericIterator<org.semanticwb.model.Rule> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasRuleRefInv,value.getSemanticObject(),sclass));
             return it;
         }
+    }
+
+    public static RuleBase.ClassMgr getRuleClassMgr()
+    {
+        return new RuleBase.ClassMgr();
     }
 
    /**

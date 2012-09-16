@@ -1,7 +1,7 @@
 package org.semanticwb.model.base;
 
 
-public abstract class FriendlyURLBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Localeable,org.semanticwb.model.Traceable,org.semanticwb.model.Countryable
+public abstract class FriendlyURLBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Traceable,org.semanticwb.model.Countryable,org.semanticwb.model.Localeable
 {
    /**
    * Una Página Web es el elemento de SemanticWebBuilder a través del cual se estructura la información del portal.
@@ -201,6 +201,11 @@ public abstract class FriendlyURLBase extends org.semanticwb.model.SWBClass impl
             org.semanticwb.model.GenericIterator<org.semanticwb.model.FriendlyURL> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_creator,value.getSemanticObject(),sclass));
             return it;
         }
+    }
+
+    public static FriendlyURLBase.ClassMgr getFriendlyURLClassMgr()
+    {
+        return new FriendlyURLBase.ClassMgr();
     }
 
    /**

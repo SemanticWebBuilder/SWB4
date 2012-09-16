@@ -4,7 +4,7 @@ package org.semanticwb.model.base;
    /**
    * Objeto por medio del cual se define un tipo de componente o recurso, con especializacion de estilo XSLT 
    */
-public abstract class XSLTResourceTypeBase extends org.semanticwb.model.ResourceType implements org.semanticwb.model.FilterableClass,org.semanticwb.model.FilterableNode,org.semanticwb.model.Traceable,org.semanticwb.model.Filterable,org.semanticwb.model.Descriptiveable
+public abstract class XSLTResourceTypeBase extends org.semanticwb.model.ResourceType implements org.semanticwb.model.FilterableNode,org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Filterable
 {
    /**
    * Objeto por medio del cual se define un tipo de componente o recurso, con especializacion de estilo XSLT
@@ -193,6 +193,11 @@ public abstract class XSLTResourceTypeBase extends org.semanticwb.model.Resource
             org.semanticwb.model.GenericIterator<org.semanticwb.model.XSLTResourceType> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasPTSubType,value.getSemanticObject(),sclass));
             return it;
         }
+    }
+
+    public static XSLTResourceTypeBase.ClassMgr getXSLTResourceTypeClassMgr()
+    {
+        return new XSLTResourceTypeBase.ClassMgr();
     }
 
    /**

@@ -85,6 +85,11 @@ public abstract class FileUploadBase extends org.semanticwb.model.base.FormEleme
         }
     }
 
+    public static FileUploadBase.ClassMgr getFileUploadClassMgr()
+    {
+        return new FileUploadBase.ClassMgr();
+    }
+
    /**
    * Constructs a FileUploadBase with a SemanticObject
    * @param base The SemanticObject with the properties for the FileUpload

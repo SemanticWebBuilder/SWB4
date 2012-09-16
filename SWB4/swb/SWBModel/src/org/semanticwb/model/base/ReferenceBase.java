@@ -86,6 +86,11 @@ public abstract class ReferenceBase extends org.semanticwb.model.SWBClass implem
         }
     }
 
+    public static ReferenceBase.ClassMgr getReferenceClassMgr()
+    {
+        return new ReferenceBase.ClassMgr();
+    }
+
    /**
    * Constructs a ReferenceBase with a SemanticObject
    * @param base The SemanticObject with the properties for the Reference

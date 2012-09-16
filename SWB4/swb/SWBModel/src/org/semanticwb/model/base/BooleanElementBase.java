@@ -86,6 +86,11 @@ public abstract class BooleanElementBase extends org.semanticwb.model.base.FormE
         }
     }
 
+    public static BooleanElementBase.ClassMgr getBooleanElementClassMgr()
+    {
+        return new BooleanElementBase.ClassMgr();
+    }
+
    /**
    * Constructs a BooleanElementBase with a SemanticObject
    * @param base The SemanticObject with the properties for the BooleanElement
