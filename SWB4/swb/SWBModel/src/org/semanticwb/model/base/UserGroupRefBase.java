@@ -114,6 +114,11 @@ public abstract class UserGroupRefBase extends org.semanticwb.model.Reference im
         }
     }
 
+    public static UserGroupRefBase.ClassMgr getUserGroupRefClassMgr()
+    {
+        return new UserGroupRefBase.ClassMgr();
+    }
+
    /**
    * Constructs a UserGroupRefBase with a SemanticObject
    * @param base The SemanticObject with the properties for the UserGroupRef

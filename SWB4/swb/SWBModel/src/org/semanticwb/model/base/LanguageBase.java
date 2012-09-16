@@ -4,7 +4,7 @@ package org.semanticwb.model.base;
    /**
    * Un Lenguaje en SemanticWebBuilder es la definición de un Idioma para despliegue de las páginas y recursos. Al definir un lenguaje nuevo es posible definir el título y la descripción de páginas y recursos en él. 
    */
-public abstract class LanguageBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.FilterableClass,org.semanticwb.model.Filterable,org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable
+public abstract class LanguageBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Filterable
 {
    /**
    * Un Lenguaje en SemanticWebBuilder es la definición de un Idioma para despliegue de las páginas y recursos. Al definir un lenguaje nuevo es posible definir el título y la descripción de páginas y recursos en él.
@@ -124,6 +124,11 @@ public abstract class LanguageBase extends org.semanticwb.model.SWBClass impleme
             org.semanticwb.model.GenericIterator<org.semanticwb.model.Language> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_creator,value.getSemanticObject(),sclass));
             return it;
         }
+    }
+
+    public static LanguageBase.ClassMgr getLanguageClassMgr()
+    {
+        return new LanguageBase.ClassMgr();
     }
 
    /**

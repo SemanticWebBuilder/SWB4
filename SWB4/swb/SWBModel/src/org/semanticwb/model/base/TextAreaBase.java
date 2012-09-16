@@ -82,6 +82,11 @@ public abstract class TextAreaBase extends org.semanticwb.model.base.FormElement
         }
     }
 
+    public static TextAreaBase.ClassMgr getTextAreaClassMgr()
+    {
+        return new TextAreaBase.ClassMgr();
+    }
+
    /**
    * Constructs a TextAreaBase with a SemanticObject
    * @param base The SemanticObject with the properties for the TextArea

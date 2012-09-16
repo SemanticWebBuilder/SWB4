@@ -74,6 +74,11 @@ public abstract class DojoImageUploadBase extends org.semanticwb.model.DojoFileU
         }
     }
 
+    public static DojoImageUploadBase.ClassMgr getDojoImageUploadClassMgr()
+    {
+        return new DojoImageUploadBase.ClassMgr();
+    }
+
    /**
    * Constructs a DojoImageUploadBase with a SemanticObject
    * @param base The SemanticObject with the properties for the DojoImageUpload

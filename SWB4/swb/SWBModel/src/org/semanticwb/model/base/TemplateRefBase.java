@@ -114,6 +114,11 @@ public abstract class TemplateRefBase extends org.semanticwb.model.Reference imp
         }
     }
 
+    public static TemplateRefBase.ClassMgr getTemplateRefClassMgr()
+    {
+        return new TemplateRefBase.ClassMgr();
+    }
+
    /**
    * Constructs a TemplateRefBase with a SemanticObject
    * @param base The SemanticObject with the properties for the TemplateRef

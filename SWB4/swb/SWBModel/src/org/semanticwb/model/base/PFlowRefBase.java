@@ -4,7 +4,7 @@ package org.semanticwb.model.base;
    /**
    * Referencia a un objeto de tipo PFlow 
    */
-public abstract class PFlowRefBase extends org.semanticwb.model.Reference implements org.semanticwb.model.PFlowable,org.semanticwb.model.Activeable
+public abstract class PFlowRefBase extends org.semanticwb.model.Reference implements org.semanticwb.model.Activeable,org.semanticwb.model.PFlowable
 {
    /**
    * Un Flujo de Publicación es una serie de autorizaciones por las que pasa un contenido antes de publicarse en un Sitio Web
@@ -112,6 +112,11 @@ public abstract class PFlowRefBase extends org.semanticwb.model.Reference implem
             org.semanticwb.model.GenericIterator<org.semanticwb.model.PFlowRef> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_pflow,value.getSemanticObject(),sclass));
             return it;
         }
+    }
+
+    public static PFlowRefBase.ClassMgr getPFlowRefClassMgr()
+    {
+        return new PFlowRefBase.ClassMgr();
     }
 
    /**

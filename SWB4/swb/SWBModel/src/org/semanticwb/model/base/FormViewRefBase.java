@@ -109,6 +109,11 @@ public abstract class FormViewRefBase extends org.semanticwb.model.Reference imp
         }
     }
 
+    public static FormViewRefBase.ClassMgr getFormViewRefClassMgr()
+    {
+        return new FormViewRefBase.ClassMgr();
+    }
+
    /**
    * Constructs a FormViewRefBase with a SemanticObject
    * @param base The SemanticObject with the properties for the FormViewRef

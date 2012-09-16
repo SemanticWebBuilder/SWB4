@@ -1,7 +1,7 @@
 package org.semanticwb.model.base;
 
 
-public abstract class RepositoryFileBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.RuleRefable,org.semanticwb.model.Referensable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.RoleRefable,org.semanticwb.model.Expirable,org.semanticwb.model.Activeable,org.semanticwb.model.Traceable,org.semanticwb.model.Hitable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Versionable
+public abstract class RepositoryFileBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Traceable,org.semanticwb.model.Versionable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Referensable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Activeable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.Hitable,org.semanticwb.model.RoleRefable,org.semanticwb.model.Expirable
 {
    /**
    * Una Página Web es el elemento de SemanticWebBuilder a través del cual se estructura la información del portal.
@@ -267,6 +267,11 @@ public abstract class RepositoryFileBase extends org.semanticwb.model.SWBClass i
             org.semanticwb.model.GenericIterator<org.semanticwb.model.RepositoryFile> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasRoleRef,value.getSemanticObject(),sclass));
             return it;
         }
+    }
+
+    public static RepositoryFileBase.ClassMgr getRepositoryFileClassMgr()
+    {
+        return new RepositoryFileBase.ClassMgr();
     }
 
    /**

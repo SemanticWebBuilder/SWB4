@@ -80,6 +80,11 @@ public abstract class ActivateBase extends org.semanticwb.model.base.FormElement
         }
     }
 
+    public static ActivateBase.ClassMgr getActivateClassMgr()
+    {
+        return new ActivateBase.ClassMgr();
+    }
+
    /**
    * Constructs a ActivateBase with a SemanticObject
    * @param base The SemanticObject with the properties for the Activate

@@ -80,6 +80,11 @@ public abstract class FlashFileUploadBase extends org.semanticwb.model.FileUploa
         }
     }
 
+    public static FlashFileUploadBase.ClassMgr getFlashFileUploadClassMgr()
+    {
+        return new FlashFileUploadBase.ClassMgr();
+    }
+
    /**
    * Constructs a FlashFileUploadBase with a SemanticObject
    * @param base The SemanticObject with the properties for the FlashFileUpload

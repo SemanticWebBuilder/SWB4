@@ -80,6 +80,11 @@ public abstract class ObjectElementBase extends org.semanticwb.model.base.FormEl
         }
     }
 
+    public static ObjectElementBase.ClassMgr getObjectElementClassMgr()
+    {
+        return new ObjectElementBase.ClassMgr();
+    }
+
    /**
    * Constructs a ObjectElementBase with a SemanticObject
    * @param base The SemanticObject with the properties for the ObjectElement

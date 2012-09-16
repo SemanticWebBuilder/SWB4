@@ -82,6 +82,11 @@ public abstract class TextBase extends org.semanticwb.model.base.FormElementBase
         }
     }
 
+    public static TextBase.ClassMgr getTextClassMgr()
+    {
+        return new TextBase.ClassMgr();
+    }
+
    /**
    * Constructs a TextBase with a SemanticObject
    * @param base The SemanticObject with the properties for the Text

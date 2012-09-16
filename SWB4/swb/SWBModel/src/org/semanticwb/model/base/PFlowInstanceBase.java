@@ -146,6 +146,11 @@ public abstract class PFlowInstanceBase extends org.semanticwb.model.SWBClass im
         }
     }
 
+    public static PFlowInstanceBase.ClassMgr getPFlowInstanceClassMgr()
+    {
+        return new PFlowInstanceBase.ClassMgr();
+    }
+
    /**
    * Constructs a PFlowInstanceBase with a SemanticObject
    * @param base The SemanticObject with the properties for the PFlowInstance

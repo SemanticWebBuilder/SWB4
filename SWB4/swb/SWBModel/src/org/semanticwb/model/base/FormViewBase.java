@@ -112,6 +112,11 @@ public abstract class FormViewBase extends org.semanticwb.model.SWBClass impleme
         }
     }
 
+    public static FormViewBase.ClassMgr getFormViewClassMgr()
+    {
+        return new FormViewBase.ClassMgr();
+    }
+
    /**
    * Constructs a FormViewBase with a SemanticObject
    * @param base The SemanticObject with the properties for the FormView

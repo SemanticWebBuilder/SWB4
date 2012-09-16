@@ -114,6 +114,11 @@ public abstract class RoleRefBase extends org.semanticwb.model.Reference impleme
         }
     }
 
+    public static RoleRefBase.ClassMgr getRoleRefClassMgr()
+    {
+        return new RoleRefBase.ClassMgr();
+    }
+
    /**
    * Constructs a RoleRefBase with a SemanticObject
    * @param base The SemanticObject with the properties for the RoleRef

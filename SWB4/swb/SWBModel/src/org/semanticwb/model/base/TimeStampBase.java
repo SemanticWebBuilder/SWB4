@@ -80,6 +80,11 @@ public abstract class TimeStampBase extends org.semanticwb.model.base.FormElemen
         }
     }
 
+    public static TimeStampBase.ClassMgr getTimeStampClassMgr()
+    {
+        return new TimeStampBase.ClassMgr();
+    }
+
    /**
    * Constructs a TimeStampBase with a SemanticObject
    * @param base The SemanticObject with the properties for the TimeStamp

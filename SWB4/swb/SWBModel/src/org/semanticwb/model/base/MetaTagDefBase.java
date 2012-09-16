@@ -172,6 +172,11 @@ public abstract class MetaTagDefBase extends org.semanticwb.model.SWBClass imple
         }
     }
 
+    public static MetaTagDefBase.ClassMgr getMetaTagDefClassMgr()
+    {
+        return new MetaTagDefBase.ClassMgr();
+    }
+
    /**
    * Constructs a MetaTagDefBase with a SemanticObject
    * @param base The SemanticObject with the properties for the MetaTagDef

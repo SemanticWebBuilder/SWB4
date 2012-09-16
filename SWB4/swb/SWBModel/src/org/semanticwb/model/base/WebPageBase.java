@@ -4,7 +4,7 @@ package org.semanticwb.model.base;
    /**
    * Una Página Web es el elemento de SemanticWebBuilder a través del cual se estructura la información del portal. 
    */
-public abstract class WebPageBase extends org.semanticwb.model.Topic implements org.semanticwb.model.Resourceable,org.semanticwb.model.RoleRefable,org.semanticwb.model.Activeable,org.semanticwb.model.Filterable,org.semanticwb.model.Traceable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Referensable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Searchable,org.semanticwb.model.MetaTagable,org.semanticwb.model.Indexable,org.semanticwb.model.Tagable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.Localeable,org.semanticwb.model.Rankable,org.semanticwb.model.Expirable,org.semanticwb.model.TemplateRefable,org.semanticwb.model.Hiddenable,org.semanticwb.model.CalendarRefable,org.semanticwb.model.Viewable,org.semanticwb.model.Trashable,org.semanticwb.model.RuleRefable,org.semanticwb.model.PFlowRefable,org.semanticwb.model.Undeleteable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Countryable
+public abstract class WebPageBase extends org.semanticwb.model.Topic implements org.semanticwb.model.Traceable,org.semanticwb.model.Hiddenable,org.semanticwb.model.Expirable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Rankable,org.semanticwb.model.Countryable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.Activeable,org.semanticwb.model.Tagable,org.semanticwb.model.TemplateRefable,org.semanticwb.model.Referensable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Trashable,org.semanticwb.model.Undeleteable,org.semanticwb.model.Indexable,org.semanticwb.model.RoleRefable,org.semanticwb.model.Filterable,org.semanticwb.model.FilterableNode,org.semanticwb.model.MetaTagable,org.semanticwb.model.Viewable,org.semanticwb.model.PFlowRefable,org.semanticwb.model.Localeable,org.semanticwb.model.CalendarRefable,org.semanticwb.model.Resourceable,org.semanticwb.model.Searchable
 {
    /**
    * Una Página Web es el elemento de SemanticWebBuilder a través del cual se estructura la información del portal.
@@ -549,6 +549,11 @@ public abstract class WebPageBase extends org.semanticwb.model.Topic implements 
             org.semanticwb.model.GenericIterator<org.semanticwb.model.WebPage> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasFriendlyURL,value.getSemanticObject(),sclass));
             return it;
         }
+    }
+
+    public static WebPageBase.ClassMgr getWebPageClassMgr()
+    {
+        return new WebPageBase.ClassMgr();
     }
 
    /**

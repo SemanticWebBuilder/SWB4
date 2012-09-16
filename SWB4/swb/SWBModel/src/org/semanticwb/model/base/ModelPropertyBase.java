@@ -121,6 +121,11 @@ public abstract class ModelPropertyBase extends org.semanticwb.model.SWBClass im
         }
     }
 
+    public static ModelPropertyBase.ClassMgr getModelPropertyClassMgr()
+    {
+        return new ModelPropertyBase.ClassMgr();
+    }
+
    /**
    * Constructs a ModelPropertyBase with a SemanticObject
    * @param base The SemanticObject with the properties for the ModelProperty

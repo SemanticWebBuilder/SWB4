@@ -4,7 +4,7 @@ package org.semanticwb.model.base;
    /**
    * Un recurso es un componente en una Página Web con el cual el usuario tiene interacción 
    */
-public abstract class ResourceBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.RoleRefable,org.semanticwb.model.Campable,org.semanticwb.model.Activeable,org.semanticwb.model.Filterable,org.semanticwb.model.Traceable,org.semanticwb.model.Priorityable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Referensable,org.semanticwb.model.XMLable,org.semanticwb.model.Hitable,org.semanticwb.model.Searchable,org.semanticwb.model.Tagable,org.semanticwb.model.Indexable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.Localeable,org.semanticwb.model.Expirable,org.semanticwb.model.XMLConfable,org.semanticwb.model.Deviceable,org.semanticwb.model.Sortable,org.semanticwb.model.CalendarRefable,org.semanticwb.model.Viewable,org.semanticwb.model.Trashable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Countryable
+public abstract class ResourceBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Traceable,org.semanticwb.model.Deviceable,org.semanticwb.model.Expirable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Countryable,org.semanticwb.model.Activeable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.Tagable,org.semanticwb.model.Campable,org.semanticwb.model.XMLable,org.semanticwb.model.Priorityable,org.semanticwb.model.XMLConfable,org.semanticwb.model.Referensable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Trashable,org.semanticwb.model.Hitable,org.semanticwb.model.Indexable,org.semanticwb.model.Sortable,org.semanticwb.model.RoleRefable,org.semanticwb.model.Filterable,org.semanticwb.model.Viewable,org.semanticwb.model.Localeable,org.semanticwb.model.CalendarRefable,org.semanticwb.model.Searchable
 {
    /**
    * Objeto que define una agripacion de componentes o recursos de un mismo tipo
@@ -488,6 +488,11 @@ public abstract class ResourceBase extends org.semanticwb.model.SWBClass impleme
             org.semanticwb.model.GenericIterator<org.semanticwb.model.Resource> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_pflowInstance,value.getSemanticObject(),sclass));
             return it;
         }
+    }
+
+    public static ResourceBase.ClassMgr getResourceClassMgr()
+    {
+        return new ResourceBase.ClassMgr();
     }
 
    /**

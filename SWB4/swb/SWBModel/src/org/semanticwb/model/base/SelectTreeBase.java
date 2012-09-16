@@ -81,6 +81,11 @@ public abstract class SelectTreeBase extends org.semanticwb.model.SelectOne
         }
     }
 
+    public static SelectTreeBase.ClassMgr getSelectTreeClassMgr()
+    {
+        return new SelectTreeBase.ClassMgr();
+    }
+
    /**
    * Constructs a SelectTreeBase with a SemanticObject
    * @param base The SemanticObject with the properties for the SelectTree

@@ -80,6 +80,11 @@ public abstract class UserTypeDefBase extends org.semanticwb.model.SWBClass
         }
     }
 
+    public static UserTypeDefBase.ClassMgr getUserTypeDefClassMgr()
+    {
+        return new UserTypeDefBase.ClassMgr();
+    }
+
    /**
    * Constructs a UserTypeDefBase with a SemanticObject
    * @param base The SemanticObject with the properties for the UserTypeDef

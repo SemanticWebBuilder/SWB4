@@ -83,6 +83,11 @@ public abstract class GMapBase extends org.semanticwb.model.base.FormElementBase
         }
     }
 
+    public static GMapBase.ClassMgr getGMapClassMgr()
+    {
+        return new GMapBase.ClassMgr();
+    }
+
    /**
    * Constructs a GMapBase with a SemanticObject
    * @param base The SemanticObject with the properties for the GMap

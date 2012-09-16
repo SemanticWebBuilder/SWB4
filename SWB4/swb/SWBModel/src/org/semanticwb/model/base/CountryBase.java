@@ -4,7 +4,7 @@ package org.semanticwb.model.base;
    /**
    * Catalogo de paises 
    */
-public abstract class CountryBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.FilterableClass,org.semanticwb.model.Traceable,org.semanticwb.model.Filterable,org.semanticwb.model.Descriptiveable
+public abstract class CountryBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Filterable
 {
    /**
    * Catalogo de paises
@@ -124,6 +124,11 @@ public abstract class CountryBase extends org.semanticwb.model.SWBClass implemen
             org.semanticwb.model.GenericIterator<org.semanticwb.model.Country> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_creator,value.getSemanticObject(),sclass));
             return it;
         }
+    }
+
+    public static CountryBase.ClassMgr getCountryClassMgr()
+    {
+        return new CountryBase.ClassMgr();
     }
 
    /**

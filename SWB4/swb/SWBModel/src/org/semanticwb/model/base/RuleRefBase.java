@@ -114,6 +114,11 @@ public abstract class RuleRefBase extends org.semanticwb.model.Reference impleme
         }
     }
 
+    public static RuleRefBase.ClassMgr getRuleRefClassMgr()
+    {
+        return new RuleRefBase.ClassMgr();
+    }
+
    /**
    * Constructs a RuleRefBase with a SemanticObject
    * @param base The SemanticObject with the properties for the RuleRef

@@ -4,7 +4,7 @@ package org.semanticwb.model.base;
    /**
    * Objeto por el cual se define un filtro para que un recurso o componente se pueda presentar o no dentro de la estructura del sitio 
    */
-public abstract class ResourceFilterBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.XMLable,org.semanticwb.model.Traceable
+public abstract class ResourceFilterBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Traceable,org.semanticwb.model.XMLable
 {
    /**
    * Objeto por el cual se define un filtro para que un recurso o componente se pueda presentar o no dentro de la estructura del sitio
@@ -130,6 +130,11 @@ public abstract class ResourceFilterBase extends org.semanticwb.model.SWBClass i
             org.semanticwb.model.GenericIterator<org.semanticwb.model.ResourceFilter> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_creator,value.getSemanticObject(),sclass));
             return it;
         }
+    }
+
+    public static ResourceFilterBase.ClassMgr getResourceFilterClassMgr()
+    {
+        return new ResourceFilterBase.ClassMgr();
     }
 
    /**

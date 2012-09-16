@@ -83,6 +83,11 @@ public abstract class SelectMultipleBase extends org.semanticwb.model.base.FormE
         }
     }
 
+    public static SelectMultipleBase.ClassMgr getSelectMultipleClassMgr()
+    {
+        return new SelectMultipleBase.ClassMgr();
+    }
+
    /**
    * Constructs a SelectMultipleBase with a SemanticObject
    * @param base The SemanticObject with the properties for the SelectMultiple

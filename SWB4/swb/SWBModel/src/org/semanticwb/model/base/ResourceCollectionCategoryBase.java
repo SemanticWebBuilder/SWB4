@@ -4,7 +4,7 @@ package org.semanticwb.model.base;
    /**
    * Define una categoria dentro de una colección de recursos 
    */
-public abstract class ResourceCollectionCategoryBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Resourceable,org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable
+public abstract class ResourceCollectionCategoryBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Resourceable
 {
    /**
    * Define una agrupacion de objetos de tipo resource
@@ -181,6 +181,11 @@ public abstract class ResourceCollectionCategoryBase extends org.semanticwb.mode
             org.semanticwb.model.GenericIterator<org.semanticwb.model.ResourceCollectionCategory> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasResource,value.getSemanticObject(),sclass));
             return it;
         }
+    }
+
+    public static ResourceCollectionCategoryBase.ClassMgr getResourceCollectionCategoryClassMgr()
+    {
+        return new ResourceCollectionCategoryBase.ClassMgr();
     }
 
    /**

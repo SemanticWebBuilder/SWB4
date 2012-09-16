@@ -166,6 +166,11 @@ public abstract class AssMemberBase extends org.semanticwb.model.SWBClass
         }
     }
 
+    public static AssMemberBase.ClassMgr getAssMemberClassMgr()
+    {
+        return new AssMemberBase.ClassMgr();
+    }
+
    /**
    * Constructs a AssMemberBase with a SemanticObject
    * @param base The SemanticObject with the properties for the AssMember

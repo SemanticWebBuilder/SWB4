@@ -88,6 +88,11 @@ public abstract class UserFavoriteBase extends org.semanticwb.model.SWBClass
         }
     }
 
+    public static UserFavoriteBase.ClassMgr getUserFavoriteClassMgr()
+    {
+        return new UserFavoriteBase.ClassMgr();
+    }
+
    /**
    * Constructs a UserFavoriteBase with a SemanticObject
    * @param base The SemanticObject with the properties for the UserFavorite
