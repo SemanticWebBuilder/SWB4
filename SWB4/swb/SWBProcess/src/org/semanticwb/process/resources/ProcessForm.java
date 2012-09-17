@@ -552,6 +552,7 @@ public class ProcessForm extends GenericResource {
             try {
                 base.updateAttributesToDB();
             } catch (Exception e) {
+                log.error("Error al actualizar el modo de administración del recurso.",e);
             }
 
             if (request.getParameter("suri") != null) {
@@ -668,6 +669,7 @@ public class ProcessForm extends GenericResource {
                 }
             } catch (Exception gse){
                 //TODO: Como poner el error...
+                log.error("Error al firmar la tarea...", gse);
             }
             // TODO: falta procesar el parámetro del applet de la firma
             
@@ -746,7 +748,7 @@ public class ProcessForm extends GenericResource {
                     response.sendRedirect(foi.getUserTaskInboxUrl());
                 }
             } catch (Exception e) {
-                log.error(e);
+                log.error("Error al procesar ....",e);
                 response.setRenderParameter("err", "invalidForm");
             }
 
@@ -778,7 +780,7 @@ public class ProcessForm extends GenericResource {
             try {
                 base.updateAttributesToDB();
             } catch (Exception e) {
-                log.error("Error al guardar las propiedades del recurso en la DB.", e);
+                log.error("Error al eliminar y guardar las propiedades del recurso en la DB.", e);
             }
         } else if ("addprops".equals(response.getAction())) {
 
@@ -938,6 +940,7 @@ public class ProcessForm extends GenericResource {
             try {
                 base.updateAttributesToDB();
             } catch (Exception e) {
+                log.error("Error al guardar las propiedades de acuerdo al display property.",e);
             }
 
 
@@ -981,6 +984,7 @@ public class ProcessForm extends GenericResource {
             try {
                 base.updateAttributesToDB();
             } catch (Exception e) {
+                log.error("Error al subir la propiedad....", e);
             }
 
         } else if ("updtItem".equals(response.getAction())) {
