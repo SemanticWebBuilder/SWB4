@@ -182,11 +182,13 @@ public class HTMLContent extends org.semanticwb.portal.resources.sem.base.HTMLCo
                             ret.append(">");
                         }
                     }
-                    else if (tag.getTagString().toLowerCase().equals("body") || tag.getTagString().toLowerCase().equals("head") || tag.getTagString().toLowerCase().equals("title") || tag.getTagString().toLowerCase().equals("meta") || tag.getTagString().toLowerCase().equals("html") || tag.getTagString().toLowerCase().equals("link"))
+                    else if ((tag.getTagString().toLowerCase().equals("body") || tag.getTagString().toLowerCase().equals("head") || tag.getTagString().toLowerCase().equals("title") || tag.getTagString().toLowerCase().equals("meta") || tag.getTagString().toLowerCase().equals("html") || tag.getTagString().toLowerCase().equals("link"))&&tag.getTagString().trim().length()>0&&!tag.isEmpty())
                     {
                         if (tag.getTagString().toLowerCase().equals("title") && !tag.isEndTag())
                         {
                             tok.nextToken();
+                            //System.out.println("tok-------------:"+tok!=null?tok.getStringValue():"null");
+                            if(tok.getStringValue().toString().trim().length()==0) continue;
                             tok.parseTag(tok.getStringValue(), tag);
                             ttype = tok.getTokenType();
                             if (ttype == HtmlStreamTokenizer.TT_TEXT)
@@ -211,7 +213,7 @@ public class HTMLContent extends org.semanticwb.portal.resources.sem.base.HTMLCo
                             continue;
                         }
                     }
-                    else if (tag.getTagString().toLowerCase().equals("a"))
+                    else if (tag.getTagString().toLowerCase().equals("a")&&!tag.isEmpty())
                     {
                         String value = tag.getParam("href");
                         if (value != null && value.startsWith("docrep://")) // liga al repositorio
