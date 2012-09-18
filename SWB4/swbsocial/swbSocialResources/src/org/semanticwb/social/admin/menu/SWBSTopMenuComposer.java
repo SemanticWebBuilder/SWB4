@@ -43,6 +43,7 @@ public class SWBSTopMenuComposer extends GenericForwardComposer <Component>{
             super.doAfterCompose(comp);
             try
             {
+                mainMenu.setSclass("menuStyle");
                 paramRequest=(SWBParamRequest)requestScope.get("paramRequest");
                 if(paramRequest!=null)
                 {
@@ -77,6 +78,7 @@ public class SWBSTopMenuComposer extends GenericForwardComposer <Component>{
                     if(zulPage.listVisibleChilds(lang).hasNext()) //Menu
                     {
                         Menu menu = new Menu();
+                        menu.setHflex("true");
                         menu.setParent(parent);
                         menu.setLabel(zulPage.getDisplayName());
                         menu.setId(zulPage.getId());
