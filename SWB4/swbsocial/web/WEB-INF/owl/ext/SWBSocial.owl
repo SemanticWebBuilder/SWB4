@@ -1,0 +1,162 @@
+<?xml version="1.0"?>
+<rdf:RDF
+    xmlns:swbxf="http://www.semanticwebbuilder.org/swb4/xforms/ontology#"
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+    xmlns:swbs="http://www.semanticwebbuilder.org/swb4/SWBSocial#"
+    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+    xmlns:owl="http://www.w3.org/2002/07/owl#"
+    xmlns:swb="http://www.semanticwebbuilder.org/swb4/ontology#"
+  xml:base="http://www.semanticwebbuilder.org/swb4/SWBSocial">
+  <owl:Ontology rdf:about="">
+    <owl:imports rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology"/>
+    <owl:versionInfo rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Created with TopBraid Composer</owl:versionInfo>
+  </owl:Ontology>
+  <owl:Class rdf:ID="Text">
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="SocialPost"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="PublishFlow">
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Photo">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#SocialPost"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="Video">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#SocialPost"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="#SocialPost">
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
+  </owl:Class>
+  <owl:ObjectProperty rdf:ID="topicPublishFlow">
+    <rdfs:range rdf:resource="#PublishFlow"/>
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >publishFlow</swb:propertyCodeName>
+    <rdfs:domain>
+      <swb:Class rdf:ID="SocialTopic">
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Class>
+    </rdfs:domain>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="spref_socialPost">
+    <owl:inverseOf>
+      <owl:ObjectProperty rdf:ID="hasSocialPostRefInv"/>
+    </owl:inverseOf>
+    <rdfs:range rdf:resource="#SocialPost"/>
+    <rdfs:domain>
+      <swb:Class rdf:ID="SocialPostRef">
+        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >false</swb:autogenId>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Class>
+    </rdfs:domain>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="#hasSocialPostRefInv">
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >hasSocialPostRef</swb:propertyCodeName>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="spref_socialNetwork">
+    <rdfs:range>
+      <swb:Class rdf:ID="SocialNetwork">
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Class>
+    </rdfs:range>
+    <rdfs:domain rdf:resource="#SocialPostRef"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasChildSocialTopicInv">
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >hasChildSocialTopic</swb:propertyCodeName>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="socialTopic">
+    <rdfs:range rdf:resource="#SocialTopic"/>
+    <rdfs:domain rdf:resource="#SocialPost"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="parentSocialTopic">
+    <owl:inverseOf rdf:resource="#hasChildSocialTopicInv"/>
+    <rdfs:range rdf:resource="#SocialTopic"/>
+    <rdfs:domain rdf:resource="#SocialTopic"/>
+  </owl:ObjectProperty>
+  <swb:Class rdf:ID="FaceBook">
+    <swb:displayObject>
+      <swbxf:DisplayObject rdf:ID="dp_FaceBook">
+        <swbxf:doDispatcher rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >cnf_Facebook.zul</swbxf:doDispatcher>
+      </swbxf:DisplayObject>
+    </swb:displayObject>
+    <rdfs:subClassOf rdf:resource="#SocialNetwork"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </swb:Class>
+  <swb:Class rdf:ID="LinkedIn">
+    <swb:displayObject>
+      <swbxf:DisplayObject rdf:ID="dp_LinkedIn">
+        <swbxf:doDispatcher rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >cnf_LinkedIn.zul</swbxf:doDispatcher>
+      </swbxf:DisplayObject>
+    </swb:displayObject>
+    <rdfs:subClassOf rdf:resource="#SocialNetwork"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </swb:Class>
+  <swb:Model rdf:ID="SWBSocialBrand">
+    <swb:displayObject>
+      <swbxf:DisplayObject rdf:ID="dp_SWBSocialBrand">
+        <swbxf:doDispatcher rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >cnf_SWBSocialBrand.zul</swbxf:doDispatcher>
+        <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >socialBrand.png</swb:iconClass>
+      </swbxf:DisplayObject>
+    </swb:displayObject>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#WebSite"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </swb:Model>
+  <swbxf:DisplayObject rdf:ID="dp_Youtube">
+    <swbxf:doDispatcher rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >cnf_Youtube.zul</swbxf:doDispatcher>
+  </swbxf:DisplayObject>
+  <swb:Class rdf:ID="Youtube">
+    <swb:displayObject rdf:resource="#dp_Youtube"/>
+    <rdfs:subClassOf rdf:resource="#SocialNetwork"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </swb:Class>
+  <swbxf:DisplayObject rdf:ID="dp_Flicker">
+    <swbxf:doDispatcher rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >cnf_Flicker.zul</swbxf:doDispatcher>
+  </swbxf:DisplayObject>
+  <swb:Class rdf:ID="Twitter">
+    <swb:displayObject>
+      <swbxf:DisplayObject rdf:ID="dp_Twitter">
+        <swbxf:doDispatcher rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >cnf_Twitter.zul</swbxf:doDispatcher>
+      </swbxf:DisplayObject>
+    </swb:displayObject>
+    <rdfs:subClassOf rdf:resource="#SocialNetwork"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </swb:Class>
+  <swb:Class rdf:ID="Stream">
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </swb:Class>
+  <swb:Class rdf:ID="Flicker">
+    <swb:displayObject rdf:resource="#dp_Flicker"/>
+    <rdfs:subClassOf rdf:resource="#SocialNetwork"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </swb:Class>
+</rdf:RDF>
+
+<!-- Created with TopBraid Composer -->

@@ -1,67 +1,77 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <borderlayout id="main" height="100%">
+    <!--Inicia parte superior de pantalla de admin-->
     <north border="normal" title="" size="100px">
         <borderlayout>
-            <west border="none" size="215px" flex="true">
-		<image src="/img/SWB-Social.png" />
+            <!--Área de logo-->
+            <west border="none" size="215px" flex="true" width="300px">
+		       <image src="/img/SWB-Social.png" />
             </west>
+             <!--Termina área de logo-->
+             <!--Inicia área de Menú Superior-->
             <center id="menu" border="normal">
-                <window height="100%">
-                    <menubar id="mainMenu" apply="org.semanticwb.social.admin.menu.SWBSTopMenuComposer" style="font-size:200px;" height="100%"/>
+                <window height="100%" style="background:green">
+                    <style src="/work/models/swbsocial/admin/css/menuStyle.css.dsp" />
+                    <menubar id="mainMenu" apply="org.semanticwb.social.admin.menu.SWBSTopMenuComposer" height="100%" hflex="true" />
                 </window>
             </center>
+            <!--Termina área de Menú Superior-->
         </borderlayout>
     </north>
-
+    <!--Termina parte superior de pantalla de admin-->
     <center border="none">
         <borderlayout>
-            <west id="" title=" " maxsize="600" size="215px" flex="true" collapsible="true" splittable="true">
-            <vbox spacing="0" width="100%" heights="50%,100">
-                <window id="swbTreeWindow" apply="org.semanticwb.social.admin.SWBSTreeComposer">
-                    <style>
-                    .h-inline-block {
-                        display: inline-block;
-                        _display: inline;
-                    }
-                    </style>
-                    <tree id="tree" width="300px" >
-                        <treecols>
-                            <treecol label="SWBSocial" />
-                        </treecols>
-                    </tree>
-                </window>
-                <splitter id="swbtreeprops" collapse="after"/>
-                <include id="treeProps"/>
-            </vbox>
-         </west>
-            <!--Inicia Contenido   -->
+            <!--Inicia árbol de navegación-->
+            <west id="" title=" " maxsize="600" size="300px" flex="true" collapsible="true" splittable="true">
+                <vbox spacing="0" width="100%" height="50%,100">
+                    <window id="swbTreeWindow" apply="org.semanticwb.social.admin.tree.SWBSTreeComposer">
+                        <tree id="tree" width="300px" rows="25">
+                            <treecols>
+                                <treecol label="SWBSocial" />
+                            </treecols>
+                        </tree>
+                        <style>
+                            .h-inline-block {
+                                display: inline-block;
+                                _display: inline;
+                            }
+                        </style>
+                        <menupopup id="treePopup"/>
+                    </window>
+                </vbox>
+            </west>
+            <!--termina árbol de navegación-->
+            <!--Inicia área de trabajo (Contenido) -->
             <center id="wrkSpc" border="normal">
-               <include id="content"/>
+               <include id="content" mode="defer"/>
             </center>
-            <!--Termina Contenido -->
+            <!--Termina área de trabajo (Contenido) -->
+            <!--Comienza área de widgets-->
             <east title=" " size="15%" flex="true" splittable="true" collapsible="true">
                 <borderlayout>
                     <north border="normal" size="50%" splittable="true" collapsible="true">
                         <borderlayout>
                             <north border="normal" title="Widget1" size="50%" splittable="true" collapsible="true">
+				<include id="widget1" mode="defer"/>
                              </north>
                             <center border="normal"  title="Widget2" >
+				<include id="widget2" mode="defer"/>
                             </center>
-
                         </borderlayout>
                     </north>
                     <center border="normal">
                         <borderlayout>
                         <north border="normal" size="50%" title="Widget3" collapsible="true">
-
+				<include id="widget3" mode="defer"/>
                         </north>
                         <center border="normal"  title="Widget4">
+				<include id="widget4" mode="defer"/>
                         </center>
                         </borderlayout>
                     </center>
                 </borderlayout>
             </east>
+            <!--Termina área de widgets-->
         </borderlayout>
     </center>
 </borderlayout>

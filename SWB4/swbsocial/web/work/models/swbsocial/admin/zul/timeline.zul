@@ -1,0 +1,15 @@
+<div apply="org.semanticwb.social.admin.components.streams.TimeLimeRendererController">
+    <style src="/widgets/grid/dynamic_renderer/style.css" />
+    <grid model="${$composer.contributors}" rowRenderer="org.semanticwb.social.admin.components.streams.SimpleRenderer">
+        <auxhead>
+            <auxheader label="Mensajes llegados para el Stream" colspan="5" />
+        </auxhead>
+        <columns>
+            <column width="60px">Id</column>
+            <column hflex="4">Language</column>
+            <column hflex="5">Contributor</column>
+            <column hflex="2">Charset</column>
+            <column width="130px">Like</column>
+        </columns>
+    </grid>
+</div>
