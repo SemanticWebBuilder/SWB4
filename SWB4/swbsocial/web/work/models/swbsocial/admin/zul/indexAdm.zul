@@ -10,9 +10,9 @@
              <!--Termina área de logo-->
              <!--Inicia área de Menú Superior-->
             <center id="menu" border="normal">
-                <window height="100%" style="background:green">
+                <window height="100%">
                     <style src="/work/models/swbsocial/admin/css/menuStyle.css.dsp" />
-                    <menubar id="mainMenu" apply="org.semanticwb.social.admin.menu.SWBSTopMenuComposer" height="100%" hflex="true" />
+                    <menubar id="mainMenu" apply="org.semanticwb.social.admin.menu.SWBSTopMenuComposer" height="100%" />
                 </window>
             </center>
             <!--Termina área de Menú Superior-->

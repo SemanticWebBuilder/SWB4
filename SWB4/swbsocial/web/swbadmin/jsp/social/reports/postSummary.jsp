@@ -57,8 +57,10 @@ if(fin - inicio > PAGE_SIZE) {
 inicio++;
 //////////////////////
 
-
+        String wsiteId=request.getParameter("wsite");
         SWBResourceURL url = paramRequest.getRenderUrl().setCallMethod(SWBResourceURL.Call_DIRECT);
+        System.out.println("wsiteId en Jsp de PostSummary:"+wsiteId);
+        url.setParameter("wsite", wsiteId);
         out.println("<script type=\"text/javascript\">");
         //out.println(" dojo.require('dijit.dijit');");
         out.println(" dojo.require('dojox.grid.DataGrid');");
