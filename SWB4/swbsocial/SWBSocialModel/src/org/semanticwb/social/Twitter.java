@@ -3,6 +3,7 @@ package org.semanticwb.social;
 import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.util.Date;
+import java.util.List;
 import javaQuery.j2ee.tinyURL;
 import javax.servlet.http.HttpServletRequest;
 import org.semanticwb.Logger;
@@ -15,9 +16,12 @@ import org.semanticwb.portal.api.SWBActionResponse;
 import org.semanticwb.social.listener.twitter.SWBSocialStatusListener;
 import org.semanticwb.social.util.SWBSocialUtil;
 import twitter4j.FilterQuery;
+import twitter4j.Query;
+import twitter4j.QueryResult;
 import twitter4j.Status;
 import twitter4j.StatusListener;
 import twitter4j.StatusUpdate;
+import twitter4j.Tweet;
 import twitter4j.TwitterException;
 import twitter4j.TwitterFactory;
 import twitter4j.TwitterStream;
@@ -25,6 +29,7 @@ import twitter4j.TwitterStreamFactory;
 import twitter4j.auth.AccessToken;
 import twitter4j.conf.Configuration;
 import twitter4j.conf.ConfigurationBuilder;
+
 
 public class Twitter extends org.semanticwb.social.base.TwitterBase {
 
@@ -112,34 +117,50 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
         WebSite wsite=WebSite.ClassMgr.getWebSite(stream.getSemanticObject().getModel().getName());
         System.out.println("Red SocialID:"+this.getId()+", Red Title:"+this.getTitle()+", sitio:"+wsite.getId());
 
-        for(int i=0;i<=10;i++)
-        {
-            SocialNetworkUser socialNetUser=SocialNetworkUser.getSocialNetworkUserbyIDAndSocialNet(""+"012345", this, wsite);
-            if(socialNetUser==null)//
-            {
-                //Si no existe el id del usuario para esa red social, lo crea.
-                socialNetUser=SocialNetworkUser.ClassMgr.createSocialNetworkUser(wsite);
-                socialNetUser.setSnu_id(""+012345);
-                socialNetUser.setSnu_name("Jorge");
-                socialNetUser.setSnu_SocialNetwork(this);
-                socialNetUser.setCreated(new Date());
-                //System.out.println("SocialNetworkUser Creado:"+socialNetUser.getSnu_id());
-            }else{
-                //System.out.println("SocialNetworkUser Actualizado:"+socialNetUser.getSnu_id());
-                socialNetUser.setUpdated(new Date());
-            }
-            socialNetUser.setFollowers(i);
-            socialNetUser.setFriends(i);
+        try {
+            twitter4j.Twitter twitter = new TwitterFactory().getInstance();
+            Query query = new Query(stream.getPhrase());
+            QueryResult result=twitter.search(query);
+            List<Tweet> tweets = result.getTweets();
+            for (Tweet tweet : tweets) {
+                System.out.println("@"+tweet.getFromUser()+", msg:"+tweet.getText());
+                SocialNetworkUser socialNetUser=SocialNetworkUser.getSocialNetworkUserbyIDAndSocialNet(String.valueOf(tweet.getFromUserId()), this, wsite);
+                if(socialNetUser==null)//
+                {
+                    System.out.println("listen-1:"+socialNetUser);
+                    //Si no existe el id del usuario para esa red social, lo crea.
+                    socialNetUser=SocialNetworkUser.ClassMgr.createSocialNetworkUser(wsite);
+                    socialNetUser.setSnu_id(String.valueOf(tweet.getFromUserId()));
+                    socialNetUser.setSnu_name("@"+tweet.getFromUser());
+                    socialNetUser.setSnu_SocialNetwork(this);
+                    socialNetUser.setCreated(new Date());
+                    System.out.println("listen-2:"+socialNetUser);
+                    //System.out.println("SocialNetworkUser Creado:"+socialNetUser.getSnu_id());
+                }else{
+                    //System.out.println("SocialNetworkUser Actualizado:"+socialNetUser.getSnu_id());
+                    System.out.println("listen-3:"+socialNetUser);
+                    socialNetUser.setUpdated(new Date());
+                }
+                socialNetUser.setFollowers(100);
+                socialNetUser.setFriends(100);
 
-            String msg="Prueba de Msg de Facebook"+i;
-            MessageIn message=MessageIn.ClassMgr.createMessageIn(String.valueOf(i), wsite);
-            message.setMsg_Text(msg);
-            message.setPostInSocialNetwork(this);
-            if(socialNetUser!=null)
-            {
-                message.setPostInSocialNetworkUser(socialNetUser);
+                MessageIn message=MessageIn.ClassMgr.createMessageIn(String.valueOf(tweet.getId()), wsite);
+                message.setMsg_Text(tweet.getText());
+                message.setPostInSocialNetwork(this);
+                System.out.println("listen-4:"+message);
+                if(socialNetUser!=null)
+                {
+                    message.setPostInSocialNetworkUser(socialNetUser);
+                    System.out.println("listen-5:"+message);
+                }
+                System.out.println("listen-6...");
             }
+        } catch (Exception te) {
+            te.printStackTrace();
+            System.out.println("Failed to search tweets: " + te.getMessage());
+            System.exit(-1);
         }
+
     }
 
     @Override
