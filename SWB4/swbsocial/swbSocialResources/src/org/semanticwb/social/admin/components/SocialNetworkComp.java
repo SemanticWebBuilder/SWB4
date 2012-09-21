@@ -50,7 +50,9 @@ public class SocialNetworkComp extends GenericForwardComposer {
         if(action.equals(SWBSocialResourceUtils.ACTION_EDIT) && requestScope.get("item")!=null)
         {
             item=(ElementTreeNode)requestScope.get("item");
+            System.out.println("item en SocialNetworkComp:"+item);
             semObject = SemanticObject.createSemanticObject(item.getData().getUri());
+            System.out.println("semObject en SocialNetworkComp:"+semObject);
             socialNet = (SocialNetwork) semObject.createGenericInstance();
             id.setValue(socialNet.getId());
             title.setValue(socialNet.getTitle());

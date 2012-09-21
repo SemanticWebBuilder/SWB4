@@ -19,6 +19,7 @@ import org.semanticwb.model.WebSite;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.social.TreeNodePage;
+import java.net.URLEncoder;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.event.Event;
@@ -36,6 +37,7 @@ import org.zkoss.zul.TreeitemRenderer;
 import org.zkoss.zul.Treerow;
 import org.zkoss.zul.Menuitem;
 import org.zkoss.zul.Menupopup;
+import org.zkoss.zul.Messagebox;
 
 
 public class SWBSTreeComposer extends GenericForwardComposer <Component> {
@@ -50,7 +52,8 @@ public class SWBSTreeComposer extends GenericForwardComposer <Component> {
     //private Include treeProps;
     private AdvancedTreeModel elemenetTreeModel;
     private Menupopup treePopup;
-    WebSite wsite=null;
+    private Messagebox messageBox;
+    WebSite wsiteAdm=null;
     User user=null;
     SWBParamRequest paramRequest=null;
 
@@ -63,8 +66,8 @@ public class SWBSTreeComposer extends GenericForwardComposer <Component> {
             if(paramRequest!=null)
             {
                 //this.getPage().getDesktop().setAttribute("paramRequest", paramRequest);
-                wsite=paramRequest.getWebPage().getWebSite();
-                if(wsite!=null)
+                wsiteAdm=paramRequest.getWebPage().getWebSite();
+                if(wsiteAdm!=null)
                 {
                     user=paramRequest.getUser();
                     elemenetTreeModel = new AdvancedTreeModel(new ElementList(paramRequest).getRoot());
@@ -103,7 +106,7 @@ public class SWBSTreeComposer extends GenericForwardComposer <Component> {
 
                 {
                     Hlayout hl = new Hlayout();
-                    //hl.appendChild(new Image("/work/models/"+wsite.getId()+"/admin/img/" + element.getIconElement()));
+                    //hl.appendChild(new Image("/work/models/"+wsiteAdm.getId()+"/admin/img/" + element.getIconElement()));
                     hl.appendChild(new Image(element.getIconElement()));
                     hl.appendChild(new Label(element.getName()));
                     hl.setSclass("h-inline-block");
@@ -111,26 +114,7 @@ public class SWBSTreeComposer extends GenericForwardComposer <Component> {
                     treeCell.appendChild(hl);
                     dataRow.setDraggable("true");
                     dataRow.appendChild(treeCell);
-
-                    dataRow.addEventListener(Events.ON_DOUBLE_CLICK, new EventListener<Event>() {
-                        @Override
-                        public void onEvent(Event event) throws Exception {
-                            ElementTreeNode clickedNodeValue = (ElementTreeNode) ((Treeitem) event.getTarget().getParent())
-                                    .getValue();
-                            content.setSrc("/hello.zul");
-                        }
-                    });
-                    /*
-                    //Sección de propiedades de un nodo del árbol
-                    dataRow.addEventListener(Events.ON_CLICK, new EventListener<Event>() {
-                        @Override
-                        public void onEvent(Event event) throws Exception {
-                            ElementTreeNode clickedNodeValue = (ElementTreeNode) ((Treeitem) event.getTarget().getParent())
-                                    .getValue();
-                            treeProps.setSrc("/treeProperties.zul");
-                            //content.getPage();
-                        }
-                    });*/
+                    //Manejo de click derecho en los elementos del árbol
                     dataRow.addEventListener(Events.ON_RIGHT_CLICK, new EventListener<Event>() {
                         @Override
                         public void onEvent(Event event) throws Exception {
@@ -144,18 +128,24 @@ public class SWBSTreeComposer extends GenericForwardComposer <Component> {
                                 @Override
                                 public void onEvent(Event event) throws Exception {
                                     content.setSrc("/work/models/swbsocial/admin/zul/clearCompose.zul");
-                                    content.setSrc("/work/models/swbsocial/admin/zul/"+itemValue.getData().getZulPage());
+                                    content.setSrc(itemValue.getData().getZulPage());
+                                    content.setDynamicProperty("parentItem", itemValue);
+                                    content.setDynamicProperty("action", "add");
+
+                                    //Se obtiene website del nodo en cuestion, es decir, no es el sitio de admin.
                                     //Tomando en cuenta que el siguiente padre de una categoría es el nodo del sitio
                                     Treeitem wsiteItem=selectedTreeItem.getParentItem();
                                     ElementTreeNode wsiteItemValue = (ElementTreeNode) wsiteItem.getValue();
                                     if(wsiteItemValue.getData().getUri()!=null)
                                     {
                                         SemanticObject semObject = SemanticObject.createSemanticObject(wsiteItemValue.getData().getUri());
-                                        WebSite wsite = (WebSite) semObject.createGenericInstance();
-                                        content.setDynamicProperty("wsite", wsite);
+                                        if(semObject!=null)
+                                        {
+                                            WebSite wsite = (WebSite) semObject.createGenericInstance();
+                                            content.setDynamicProperty("wsite", wsite);
+                                        }
                                     }
-                                    content.setDynamicProperty("parentItem", itemValue);
-                                    content.setDynamicProperty("action", "add");
+                                    content.setDynamicProperty("optionWepPage", wsiteAdm.getWebPage(itemValue.getData().getUri()).getUrl(user.getLanguage()));
                                 }
                                 });
                                 treePopup.appendChild(mItemNew);
@@ -169,25 +159,6 @@ public class SWBSTreeComposer extends GenericForwardComposer <Component> {
 
                                 //------------Opciones por defecto----------//
 
-                                //Opción Editar
-                                Menuitem mItemEdit=new Menuitem();
-                                mItemEdit.setLabel("Editar");
-                                mItemEdit.addEventListener(Events.ON_CLICK, new EventListener<Event>() {
-                                @Override
-                                public void onEvent(Event event) throws Exception {
-                                    //El siguiente "clearCompose.zul", no tiene nada, solo es para que zkoss utilize uno que limpie su
-                                    //memoría (de zkoss), ya que si se hace algo con un zul (ejemplo:cnf_socialNetwork), si se utiliza
-                                    //nuevamente el mismo zul, ya no entraría el metodo doAfterCompose, ya que ya lo tiene cargado, es por eso,
-                                    //que primero envio uno vacio, por si ya estaba cargado uno y despues envio el que quiero mandar, esto
-                                    //haría que se siempre se cargue el metodo doAfterCompose del elemento que realmente quiero.
-                                    //Esto es un truco, hay que ver si existe algo diferente que se pueda hacer.
-                                    content.setSrc("/work/models/swbsocial/admin/zul/clearCompose.zul");
-                                    content.setSrc("/work/models/swbsocial/admin/zul/"+parentItemValue.getData().getZulPage());
-                                    content.setDynamicProperty("item", itemValue);
-                                    content.setDynamicProperty("action", "edit");
-                                }
-                                });
-                                treePopup.appendChild(mItemEdit);
 
                                 //Opción Eliminar TODO:Que aparezca mensaje antes de eliminar un nodo:¿Esta seguro de querer eliminar el elemento?
                                 Menuitem mItemRemove=new Menuitem();
@@ -195,9 +166,22 @@ public class SWBSTreeComposer extends GenericForwardComposer <Component> {
                                 mItemRemove.addEventListener(Events.ON_CLICK, new EventListener<Event>() {
                                 @Override
                                 public void onEvent(Event event) throws Exception {
-                                    SemanticObject semObject = SemanticObject.createSemanticObject(itemValue.getData().getUri());
-                                    semObject.remove();
-                                    elemenetTreeModel.remove(itemValue);
+                                    messageBox.show("Esta seguro de eliminar este elemento?", "deleteConfirm", Messagebox.YES|Messagebox.NO, Messagebox.QUESTION,
+                                     new EventListener() {
+                                       public void onEvent(Event evt) {
+                                         switch (((Integer)evt.getData()).intValue()) {
+                                           case Messagebox.YES:
+                                               SemanticObject semObject = SemanticObject.getSemanticObject(itemValue.getData().getUri());
+                                               if(semObject!=null)
+                                               {
+                                                   semObject.remove();
+                                                   elemenetTreeModel.remove(itemValue);
+                                                   break;
+                                               }
+                                           //case Messagebox.NO: doNo(); break;
+                                      }
+                                    }
+                                   });
                                 }
                                 });
                                 treePopup.appendChild(mItemRemove);
@@ -210,7 +194,7 @@ public class SWBSTreeComposer extends GenericForwardComposer <Component> {
                                 @Override
                                 public void onEvent(Event event) throws Exception {
                                     content.setSrc("/work/models/swbsocial/admin/zul/"+parentItemValue.getData().getZulPage());
-                                    content.setDynamicProperty("uri", itemValue.getData().getUri());
+                                    content.setDynamicProperty("objUri", itemValue.getData().getUri());
                                     content.setDynamicProperty("paramRequest", paramRequest);;
                                 }
                                 });
@@ -219,7 +203,7 @@ public class SWBSTreeComposer extends GenericForwardComposer <Component> {
 
                                 //------------Opciones dependiendo del nodo del árbol----------//
 
-                                WebPage treeCategoryNode=wsite.getWebPage(parentItemValue.getData().getUri());
+                                WebPage treeCategoryNode=wsiteAdm.getWebPage(parentItemValue.getData().getUri());
                                 Iterator <WebPage> itTreeCategoryNodeChilds=treeCategoryNode.listVisibleChilds(user.getLanguage());
                                 while(itTreeCategoryNodeChilds.hasNext())
                                 {
@@ -245,40 +229,60 @@ public class SWBSTreeComposer extends GenericForwardComposer <Component> {
                                         }
                                         content.setSrc("/work/models/swbsocial/admin/zul/clearCompose.zul");
                                         content.setSrc(zulPage);
-                                        content.setDynamicProperty("uri", itemValue.getData().getUri());
+                                        content.setDynamicProperty("objUri", URLEncoder.encode(itemValue.getData().getUri()));
                                         content.setDynamicProperty("paramRequest", paramRequest);;
                                         content.setDynamicProperty("action", action);
+                                        content.setDynamicProperty("optionWepPage", wpageOption.getUrl(user.getLanguage()));
+                                        content.setDynamicProperty("item", itemValue);
+                                        WebSite wsite=(WebSite)SemanticObject.getSemanticObject(itemValue.getData().getUri()).getModel().getModelObject().createGenericInstance();
+                                        content.setDynamicProperty("wsite", wsite);
                                     }
                                     });
                                     treePopup.appendChild(mItemCustomOpt);
                                 }
-
-
-                                /*
-                                //Manejo de elementos especificos por categoría en menú contextual
-                                if(parentItemValue.getData().getUri()!=null && parentItemValue.getData().getUri().equals("cat:streams")) //Cuando el nodo seleccionado es de tipo stream
-                                {
-                                    Menuitem mItemListen=new Menuitem();
-                                    mItemListen.setLabel("Escuchar");
-                                    mItemListen.addEventListener(Events.ON_CLICK, new EventListener<Event>() {
-                                    @Override
-                                    public void onEvent(Event event) throws Exception {
-                                        content.setSrc("/work/models/swbsocial/admin/zul/timeline.zul");
-                                        content.setDynamicProperty("uri", itemValue.getData().getUri());
-                                        content.setDynamicProperty("paramRequest", paramRequest);;
-                                    }
-                                    });
-                                    treePopup.appendChild(mItemListen);
-                                }
-                                */
 
                                 //Abre el menú contextual inmediatamente abajo del nodo seleccionado
                                 treePopup.open(selectedTreeItem);
                             }
                         }
                     });
-
                 }
+                //Manejo de doble click en los nodos del árbol
+                {
+                    //TODO
+                    dataRow.addEventListener(Events.ON_DOUBLE_CLICK, new EventListener<Event>() {
+                        @Override
+                        public void onEvent(Event event) throws Exception {
+                            final Treeitem selectedTreeItem = tree.getSelectedItem();
+                            final ElementTreeNode itemValue = (ElementTreeNode) selectedTreeItem.getValue();
+                            if(!isCategory(itemValue.getData())){ //Si es una categoría
+                                final Treeitem selectedTreeItemParent = tree.getSelectedItem().getParentItem();
+                                final ElementTreeNode itemValueParent = (ElementTreeNode) selectedTreeItemParent.getValue();
+                                content.setSrc("/work/models/swbsocial/admin/zul/clearCompose.zul");
+                                content.setSrc(itemValueParent.getData().getZulPage());
+                                content.setDynamicProperty("objUri", itemValue.getData().getUri());
+                                content.setDynamicProperty("item", itemValue);
+                                content.setDynamicProperty("action", "edit");
+
+                                //Se obtiene website del nodo en cuestion, es decir, no es el sitio de admin.
+                                //Tomando en cuenta que el siguiente padre de una categoría es el nodo del sitio
+                                Treeitem wsiteItem=selectedTreeItem.getParentItem();
+                                ElementTreeNode wsiteItemValue = (ElementTreeNode) wsiteItem.getValue();
+                                if(wsiteItemValue.getData().getUri()!=null)
+                                {
+                                    SemanticObject semObject = SemanticObject.createSemanticObject(wsiteItemValue.getData().getUri());
+                                    if(semObject!=null)
+                                    {
+                                        WebSite wsite = (WebSite) semObject.createGenericInstance();
+                                        content.setDynamicProperty("wsite", wsite);
+                                    }
+                                }
+                                content.setDynamicProperty("optionWepPage", wsiteAdm.getWebPage(itemValueParent.getData().getUri()).getUrl(user.getLanguage()));
+                            }
+                        }
+                    });
+                }
+
                 //Bloque de código para soportar drag&drop. TODO: Revisar para implementar bien (Si vemos que debe aplicar)
                 /*
                 dataRow.setDroppable("true");

@@ -10,6 +10,7 @@ import java.util.List;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.model.User;
 import org.semanticwb.model.WebPage;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.portal.api.SWBParamRequest;
@@ -43,7 +44,7 @@ public class SWBSTopMenuComposer extends GenericForwardComposer <Component>{
             super.doAfterCompose(comp);
             try
             {
-                mainMenu.setSclass("menuStyle");
+                //mainMenu.setSclass("menuStyle");
                 paramRequest=(SWBParamRequest)requestScope.get("paramRequest");
                 if(paramRequest!=null)
                 {
@@ -63,6 +64,64 @@ public class SWBSTopMenuComposer extends GenericForwardComposer <Component>{
             log.error(e);
         }
     }
+    
+    private void makeMenu(WebPage webpage, XulElement parent)
+    {
+        try
+        {
+            Iterator <WebPage> itChilds=webpage.listVisibleChilds(lang);
+            while(itChilds.hasNext())
+            {
+                WebPage child=itChilds.next();
+                if(child instanceof ZulWebPage)
+                {
+                    ZulWebPage zulPage=(ZulWebPage)child;
+                    if(zulPage.listVisibleChilds(lang).hasNext()) //Menu
+                    {
+                        Menu menu = new Menu();
+                        menu.setSclass("menuStyle");
+                        menu.setHflex("true");
+                        menu.setParent(parent);
+                        menu.setLabel(zulPage.getDisplayName());
+                        menu.setId(zulPage.getId());
+                        if(zulPage.getWpImg()!=null)
+                        {
+                            menu.setImage(SWBPortal.getWebWorkPath()+child.getWorkPath()+"/"+ZulWebPage.social_wpImg.getName()+"_"+zulPage.getId()+"_"+zulPage.getWpImg());
+                        }
+                        if(zulPage.getWphOverImg()!=null)
+                        {
+                            menu.setHoverImage(SWBPortal.getWebWorkPath()+child.getWorkPath()+"/"+ZulWebPage.social_wphOverImg.getName()+"_"+zulPage.getId()+"_"+zulPage.getWphOverImg());
+                        }
+                        Menupopup menuPopUp = new Menupopup();
+                        menuPopUp.setParent(menu);
+                        makeMenu(child, menuPopUp);
+                    }else{  //Menuitem
+                        Menuitem menuItem = new Menuitem();
+                        menuItem.setSclass("menuitemStyle");
+                        menuItem.setParent(parent);
+                        menuItem.setId(zulPage.getId());
+                        menuItem.setLabel(zulPage.getDisplayName());
+                        if(zulPage.getWpImg()!=null)
+                        {
+                            menuItem.setImage(SWBPortal.getWebWorkPath()+child.getWorkPath()+"/"+ZulWebPage.social_wpImg.getName()+"_"+zulPage.getId()+"_"+zulPage.getWpImg());
+                        }
+                        if(zulPage.getWphOverImg()!=null)
+                        {
+                            menuItem.setHoverImage(SWBPortal.getWebWorkPath()+child.getWorkPath()+"/"+ZulWebPage.social_wphOverImg.getName()+"_"+zulPage.getId()+"_"+zulPage.getWphOverImg());
+                        }
+                        menuItem.addEventListener("onClick", new menuEventListener());
+                        menuItem.setAttribute("zulPageID", zulPage.getId());
+                        //menuItem.setAttribute("optionWepPage", zulPage.getUrl());
+                    }
+                }
+            }
+        }catch(Exception e)
+        {
+            log.error(e);
+        }
+    }
+
+    /*
 
     private void makeMenu(WebPage webpage, XulElement parent)
     {
@@ -116,15 +175,24 @@ public class SWBSTopMenuComposer extends GenericForwardComposer <Component>{
             log.error(e);
         }
     }
-
+*/
     class menuEventListener implements org.zkoss.zk.ui.event.EventListener {
         public void onEvent(org.zkoss.zk.ui.event.Event event) {
             try {
                     String zulPageID=(String)event.getTarget().getAttribute("zulPageID");
+                    //String optionWepPage=(String)event.getTarget().getAttribute("optionWepPage");
                     ZulWebPage zulWPage=(ZulWebPage)wsite.getWebPage(zulPageID);
                     if(zulWPage.getZulResourcePath()!=null)
                     {
+                        System.out.println("Entra a menuEventListener...de MenuComposer...");
+                        content.setSrc("/work/models/swbsocial/admin/zul/clearCompose.zul");
                         content.setSrc(zulWPage.getZulResourcePath());
+                        content.setDynamicProperty("optionWepPage", zulWPage.getUrl(lang));
+                        /*
+                        WebSite wsite=(WebSite)SemanticObject.getSemanticObject(itemValue.getData().getUri()).getModel().getModelObject().createGenericInstance();
+                        content.setDynamicProperty("wsite", wsite);
+                         *
+                         */
                     }
             } catch (Exception ex) {
                 log.error(ex);
