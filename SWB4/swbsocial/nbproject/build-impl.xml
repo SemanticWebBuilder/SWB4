@@ -497,12 +497,42 @@ exists or setup the property manually. For example like this:
                 COMPILATION SECTION
             -->
     <target depends="init" if="no.dist.ear.dir" name="deps-module-jar" unless="no.deps">
-        <ant antfile="${project.VTSeguro}/build.xml" inheritall="false" target="jar">
+        <ant antfile="${project.SWBBase}/build.xml" inheritall="false" target="jar">
+            <property name="deploy.on.save" value="false"/>
+        </ant>
+        <ant antfile="${project.SWBModel}/build.xml" inheritall="false" target="jar">
+            <property name="deploy.on.save" value="false"/>
+        </ant>
+        <ant antfile="${project.SWBPlatform}/build.xml" inheritall="false" target="jar">
+            <property name="deploy.on.save" value="false"/>
+        </ant>
+        <ant antfile="${project.SWBPortal}/build.xml" inheritall="false" target="jar">
+            <property name="deploy.on.save" value="false"/>
+        </ant>
+        <ant antfile="${project.SWBSocialModel}/build.xml" inheritall="false" target="jar">
+            <property name="deploy.on.save" value="false"/>
+        </ant>
+        <ant antfile="${project.SWBSocialResources}/build.xml" inheritall="false" target="jar">
             <property name="deploy.on.save" value="false"/>
         </ant>
     </target>
     <target depends="init" if="dist.ear.dir" name="deps-ear-jar" unless="no.deps">
-        <ant antfile="${project.VTSeguro}/build.xml" inheritall="false" target="jar">
+        <ant antfile="${project.SWBBase}/build.xml" inheritall="false" target="jar">
+            <property name="deploy.on.save" value="false"/>
+        </ant>
+        <ant antfile="${project.SWBModel}/build.xml" inheritall="false" target="jar">
+            <property name="deploy.on.save" value="false"/>
+        </ant>
+        <ant antfile="${project.SWBPlatform}/build.xml" inheritall="false" target="jar">
+            <property name="deploy.on.save" value="false"/>
+        </ant>
+        <ant antfile="${project.SWBPortal}/build.xml" inheritall="false" target="jar">
+            <property name="deploy.on.save" value="false"/>
+        </ant>
+        <ant antfile="${project.SWBSocialModel}/build.xml" inheritall="false" target="jar">
+            <property name="deploy.on.save" value="false"/>
+        </ant>
+        <ant antfile="${project.SWBSocialResources}/build.xml" inheritall="false" target="jar">
             <property name="deploy.on.save" value="false"/>
         </ant>
     </target>
@@ -665,7 +695,6 @@ exists or setup the property manually. For example like this:
         <copyfiles files="${file.reference.zkplus.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
         <copyfiles files="${file.reference.zul.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
         <copyfiles files="${file.reference.zweb.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
-        <copyfiles files="${reference.VTSeguro.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
         <copyfiles files="${file.reference.lucene-analyzers-2.4.1-javadoc.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
         <copyfiles files="${file.reference.lucene-analyzers-3.6.0-javadoc.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
         <copyfiles files="${file.reference.lucene-analyzers-3.6.0.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
@@ -673,6 +702,12 @@ exists or setup the property manually. For example like this:
         <copyfiles files="${file.reference.lucene-snowball-2.4.1-javadoc.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
         <copyfiles files="${file.reference.lucene-snowball-2.4.1.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
         <copyfiles files="${file.reference.lucene-spellchecker-3.6.0.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
+        <copyfiles files="${reference.SWBBase.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
+        <copyfiles files="${reference.SWBModel.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
+        <copyfiles files="${reference.SWBPlatform.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
+        <copyfiles files="${reference.SWBPortal.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
+        <copyfiles files="${reference.SWBSocialModel.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
+        <copyfiles files="${reference.SWBSocialResources.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
         <mkdir dir="${build.web.dir}/META-INF"/>
         <manifest file="${build.web.dir}/META-INF/MANIFEST.MF" mode="update"/>
     </target>
@@ -701,7 +736,6 @@ exists or setup the property manually. For example like this:
         <copyfiles files="${file.reference.zkplus.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
         <copyfiles files="${file.reference.zul.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
         <copyfiles files="${file.reference.zweb.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
-        <copyfiles files="${reference.VTSeguro.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
         <copyfiles files="${file.reference.lucene-analyzers-2.4.1-javadoc.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
         <copyfiles files="${file.reference.lucene-analyzers-3.6.0-javadoc.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
         <copyfiles files="${file.reference.lucene-analyzers-3.6.0.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
@@ -709,6 +743,12 @@ exists or setup the property manually. For example like this:
         <copyfiles files="${file.reference.lucene-snowball-2.4.1-javadoc.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
         <copyfiles files="${file.reference.lucene-snowball-2.4.1.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
         <copyfiles files="${file.reference.lucene-spellchecker-3.6.0.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${reference.SWBBase.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${reference.SWBModel.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${reference.SWBPlatform.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${reference.SWBPortal.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${reference.SWBSocialModel.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${reference.SWBSocialResources.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
     </target>
     <target depends="init" if="dist.ear.dir" name="-clean-webinf-lib">
         <delete dir="${build.web.dir}/WEB-INF/lib"/>
@@ -1014,7 +1054,12 @@ exists or setup the property manually. For example like this:
                 CLEANUP SECTION
             -->
     <target depends="init" if="no.dist.ear.dir" name="deps-clean" unless="no.deps">
-        <ant antfile="${project.VTSeguro}/build.xml" inheritall="false" target="clean"/>
+        <ant antfile="${project.SWBBase}/build.xml" inheritall="false" target="clean"/>
+        <ant antfile="${project.SWBModel}/build.xml" inheritall="false" target="clean"/>
+        <ant antfile="${project.SWBPlatform}/build.xml" inheritall="false" target="clean"/>
+        <ant antfile="${project.SWBPortal}/build.xml" inheritall="false" target="clean"/>
+        <ant antfile="${project.SWBSocialModel}/build.xml" inheritall="false" target="clean"/>
+        <ant antfile="${project.SWBSocialResources}/build.xml" inheritall="false" target="clean"/>
     </target>
     <target depends="init" name="do-clean">
         <condition property="build.dir.to.clean" value="${build.web.dir}">
