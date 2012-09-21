@@ -169,14 +169,21 @@ public class PostSummary extends GenericAdmResource {
             jse.printStackTrace(System.out);
         }
         
-        Resource base = getResourceBase();
-        WebSite wsite = base.getWebSite();
-        Iterator<PostIn> itposts = PostIn.ClassMgr.listPostIns(wsite);
-        itposts = SWBComparator.sortByCreated(itposts, false);
-        List<PostIn> posts = SWBUtils.Collections.copyIterator(itposts);
-        int size = posts.size();
-        
-        
+        String wsiteId=request.getParameter("wsite");
+        int pos=wsiteId.indexOf("?");
+        if(pos>-1) wsiteId=wsiteId.substring(0, pos);
+        WebSite wsite=null;
+        List<PostIn> posts=null;
+        int size=0;
+        if(wsiteId!=null)
+        {
+             wsite=WebSite.ClassMgr.getWebSite(wsiteId);
+             Iterator<PostIn> itposts = PostIn.ClassMgr.listPostIns(wsite);
+             itposts = SWBComparator.sortByCreated(itposts, false);
+             posts = SWBUtils.Collections.copyIterator(itposts);
+             size = posts.size();
+        }
+
 //////////////////////
 int ipage;
 try {
