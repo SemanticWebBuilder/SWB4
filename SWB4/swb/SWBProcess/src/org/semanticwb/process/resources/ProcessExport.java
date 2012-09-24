@@ -23,8 +23,8 @@ import org.semanticwb.SWBUtils;
 import org.semanticwb.model.*;
 import org.semanticwb.platform.*;
 import org.semanticwb.portal.api.*;
-import org.semanticwb.process.model.Process;
 import org.semanticwb.process.model.*;
+import org.semanticwb.process.model.Process;
 
 /**
  *
@@ -67,7 +67,19 @@ public class ProcessExport extends GenericResource {
             }
             response.setMode("getFile");
         } else if (action.equals(ACTION_IMPORT)) {
-            String path = SWBPortal.getWorkPath() + "/";
+            org.semanticwb.portal.util.FileUpload fup = new org.semanticwb.portal.util.FileUpload();
+            fup.getFiles(request, null);
+            byte[] bcont = fup.getFileData("ffile");
+            
+            System.out.println(fup.getFileName("ffile"));
+            
+            File file = new File(SWBPortal.getWorkPath()+getResourceBase().getWorkPath());
+            file.mkdirs();
+            OutputStream outs = new FileOutputStream(SWBPortal.getWorkPath()+getResourceBase().getWorkPath()+"/ProcessPackage.zip");
+            
+            SWBUtils.IO.copyStream(new ByteArrayInputStream(bcont), outs);
+            
+            String path = SWBPortal.getWorkPath()+getResourceBase().getWorkPath() + "/";
             String zip = path + "ProcessPackage.zip";
             File zipFile = new File(zip);
             if (zipFile.exists()) {
@@ -117,7 +129,8 @@ public class ProcessExport extends GenericResource {
         
         if (paramRequest.getUser() != null && paramRequest.getUser().getLanguage() != null) lang = paramRequest.getUser().getLanguage();
         
-        sb.append("  <form action=\"" + actUrl + "\" method=\"post\">");
+        sb.append("  <form dojoType=\"dijit.form.Form\" action=\"" + actUrl + "\" method=\"post\">");
+        sb.append("    <fieldset><legend>Exportar procesos del sitio</legend>");
         sb.append("    <table>");
         Iterator<ProcessGroup> groups = ProcessGroup.ClassMgr.listProcessGroups(model);
         while (groups.hasNext()) {
@@ -145,9 +158,22 @@ public class ProcessExport extends GenericResource {
             }
         }
         sb.append("    <tr>");
-        sb.append("      <td align=\"center\" colspan=\"2\"><input type=\"submit\" value=\"Exportar seleccionados\"/><input type=\"button\" onclick=\"window.location='" + importUrl + "'\" value=\"Importar paquete\"/></td>");
+        sb.append("      <td align=\"center\" colspan=\"2\"><input type=\"submit\" value=\"Exportar seleccionados\"/></td>");
         sb.append("    </tr>");
         sb.append("  </table>");
+        sb.append("  </fieldset>");
+        sb.append("</form>");
+        sb.append("<form dojoType=\"dijit.form.Form\" action=\"" + importUrl + "\" method=\"post\" enctype=\"multipart/form-data\">");
+        sb.append("  <fieldset><legend>Importar procesos desde archivo</legend>");
+        sb.append("    <table>");
+        sb.append("      <tr>");
+        sb.append("         <td align=\"center\"><input id=\"ffile\" type=\"file\" name=\"ffile\" value=\"\" style=\"width:300px;\"></td>");
+        sb.append("      </tr>");
+        sb.append("      <tr>");
+        sb.append("         <td align=\"center\"><input type=\"submit\" value=\"Importar\"/></td>");
+        sb.append("      </tr>");
+        sb.append("    </table>");
+        sb.append("  </fieldset>");
         sb.append("</form>");
         
         out.print(sb.toString());
@@ -156,7 +182,7 @@ public class ProcessExport extends GenericResource {
     private void createZipPackage(JSONObject data, ProcessSite site) {
         Resource base = getResourceBase();
         String basepath = SWBPortal.getWorkPath() + base.getWorkPath() + "/";
-        String sitePath = SWBPortal.getWorkPath() + "/models/"+site.getId()+"/";
+        //String sitePath = SWBPortal.getWorkPath() + "/models/"+site.getId()+"/";
         try {
             File resPath = new File(basepath);
             if (!resPath.exists()) {
@@ -185,7 +211,7 @@ public class ProcessExport extends GenericResource {
                             File directory2Zip = new File(objPath);
                             if(directory2Zip != null && directory2Zip.exists()){
                                 //System.out.println("dirPath: "+objPath+", basePath: "+sitePath);
-                                org.semanticwb.SWBUtils.IO.zip(directory2Zip, new File(sitePath), zos);
+                                org.semanticwb.SWBUtils.IO.zip(directory2Zip, new File(basepath), zos);
                             }
                         }
                     }
@@ -212,7 +238,7 @@ public class ProcessExport extends GenericResource {
                                             File directory2Zip = new File(objPath);
                                             if(directory2Zip != null && directory2Zip.exists()){
                                                 //System.out.println("dirPath: "+objPath+", basePath: "+sitePath);
-                                                org.semanticwb.SWBUtils.IO.zip(directory2Zip, new File(sitePath), zos);
+                                                org.semanticwb.SWBUtils.IO.zip(directory2Zip, new File(basepath), zos);
                                             }
                                         }
                                     }
@@ -235,10 +261,12 @@ public class ProcessExport extends GenericResource {
         JSONArray data = new JSONArray();
         JSONArray conns = new JSONArray();
         HashMap<String, ConnectionObject> cobjs = new HashMap<String, ConnectionObject>();
+        //Model model = ModelFactory.createDefaultModel();
         
         Iterator<GraphicalElement> itChilds = process.listAllContaineds();
         while (itChilds.hasNext()) {
             GraphicalElement ge = itChilds.next();
+            //model.add(ge.getSemanticObject().getRDFResource().listProperties());
             JSONObject child = getProcessElementJSON(ge);
             if (ge instanceof ItemAware) {
                 ItemAware temp = (ItemAware)ge;
