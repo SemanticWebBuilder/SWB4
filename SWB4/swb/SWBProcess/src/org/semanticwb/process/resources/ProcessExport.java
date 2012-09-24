@@ -127,42 +127,58 @@ public class ProcessExport extends GenericResource {
         SWBResourceURL importUrl = paramRequest.getActionUrl().setAction(ACTION_IMPORT);
         String lang = "es";
         
-        if (paramRequest.getUser() != null && paramRequest.getUser().getLanguage() != null) lang = paramRequest.getUser().getLanguage();
+        if (paramRequest.getUser() != null && paramRequest.getUser().getLanguage() != null) {
+            lang = paramRequest.getUser().getLanguage();
+        }
         
-        sb.append("  <form dojoType=\"dijit.form.Form\" action=\"" + actUrl + "\" method=\"post\">");
-        sb.append("    <fieldset><legend>Exportar procesos del sitio</legend>");
-        sb.append("    <table>");
         Iterator<ProcessGroup> groups = ProcessGroup.ClassMgr.listProcessGroups(model);
-        while (groups.hasNext()) {
-            ProcessGroup group = groups.next();
-            Iterator<Process> processes = group.listProcesses();
-            ArrayList<Process> _processes = new ArrayList<Process>();
-            while (processes.hasNext()) {
-                Process process = processes.next();
-                if (!process.isDeleted()) {
-                    _processes.add(process);
+        if (groups.hasNext()) {
+            boolean hasProcess = false;
+            sb.append("  <form dojoType=\"dijit.form.Form\" action=\"" + actUrl + "\" method=\"post\">");
+            sb.append("    <fieldset><legend>Exportar procesos del sitio</legend>");
+            sb.append("    <table>");
+
+            while (groups.hasNext()) {
+                ProcessGroup group = groups.next();
+                Iterator<Process> processes = group.listProcesses();
+                ArrayList<Process> _processes = new ArrayList<Process>();
+                while (processes.hasNext()) {
+                    Process process = processes.next();
+                    if (!process.isDeleted()) {
+                        _processes.add(process);
+                        if (!hasProcess) {
+                            hasProcess = true;
+                        }
+                    }
+                }
+
+                processes = SWBComparator.sortByDisplayName(_processes.iterator(), lang);
+                if (processes.hasNext()) {
+                    sb.append("    <tr>");
+                    sb.append("      <td align=\"left\" colspan=\"2\"><b>" + group.getDisplayTitle(lang) + "</b></td>");
+                    sb.append("    </tr>");
+                    while (processes.hasNext()) {
+                        Process process = processes.next();
+                        sb.append("    <tr>");
+                        sb.append("      <td><input type=\"checkbox\" name=\"" + process.getId() + "\"/></td><td align=\"left\">" + process.getDisplayTitle(lang) + "</td>");
+                        sb.append("    </tr>");
+                    }
                 }
             }
             
-            processes = SWBComparator.sortByDisplayName(_processes.iterator(), lang);
-            if (processes.hasNext()) {
+            if (hasProcess) {
                 sb.append("    <tr>");
-                sb.append("      <td align=\"left\" colspan=\"2\"><b>" + group.getDisplayTitle(lang) + "</b></td>");
+                sb.append("      <td align=\"center\" colspan=\"2\"><input type=\"submit\" value=\"Exportar seleccionados\"/></td>");
                 sb.append("    </tr>");
-                while (processes.hasNext()) {
-                    Process process = processes.next();
-                    sb.append("    <tr>");
-                    sb.append("      <td><input type=\"checkbox\" name=\"" + process.getId() + "\"/></td><td align=\"left\">" + process.getDisplayTitle(lang) + "</td>");
-                    sb.append("    </tr>");
-                }
+            } else {
+                sb.append("    <tr>");
+                sb.append("      <td align=\"center\" colspan=\"2\"><span>No existen procesos para exportar</span></td>");
+                sb.append("    </tr>");
             }
+            sb.append("  </table>");
+            sb.append("  </fieldset>");
+            sb.append("</form>");
         }
-        sb.append("    <tr>");
-        sb.append("      <td align=\"center\" colspan=\"2\"><input type=\"submit\" value=\"Exportar seleccionados\"/></td>");
-        sb.append("    </tr>");
-        sb.append("  </table>");
-        sb.append("  </fieldset>");
-        sb.append("</form>");
         sb.append("<form dojoType=\"dijit.form.Form\" action=\"" + importUrl + "\" method=\"post\" enctype=\"multipart/form-data\">");
         sb.append("  <fieldset><legend>Importar procesos desde archivo</legend>");
         sb.append("    <table>");
