@@ -33,6 +33,7 @@ public class ProcessSite extends org.semanticwb.process.model.base.ProcessSiteBa
     {
         super(base);
         //Initialize ProcessObserver
+        SWBPClassMgr.getClassLoader();
         ProcessObserver po=getProcessObserver();
         Class cls=X509Certificate.class;
     }
