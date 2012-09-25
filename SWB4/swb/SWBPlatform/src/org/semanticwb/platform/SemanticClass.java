@@ -800,6 +800,7 @@ public class SemanticClass
                 {
                     m_cls=Class.forName(getVirtualClassName(), false, SWBPlatform.getSemanticMgr().getClassLoader());
                 }catch(Exception noe){}
+                //System.out.println("VirtualClass:"+m_cls);
             }
             
             if(m_cls==null)
@@ -809,6 +810,7 @@ public class SemanticClass
                     m_cls=Class.forName(getClassName());
                     //System.out.println("createClass:"+getClassName()+" "+m_cls);
                 }catch(Exception e){log.error(e);}
+                //System.out.println("NoVirtualClass:"+m_cls);
             }            
         }
         return m_cls;

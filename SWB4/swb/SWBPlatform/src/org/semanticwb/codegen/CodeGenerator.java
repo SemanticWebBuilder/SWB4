@@ -1300,11 +1300,21 @@ public class CodeGenerator
         javaClassContent.append("    }" + ENTER); // ennd ClassMgr
 
 
-        javaClassContent.append(ENTER);
-        javaClassContent.append("    public static "+tpc.getUpperClassName() + "Base.ClassMgr get"+tpc.getUpperClassName()+"ClassMgr()"+ ENTER);
-        javaClassContent.append("    {"+ ENTER);
-        javaClassContent.append("        return new "+tpc.getUpperClassName() + "Base.ClassMgr();"+ ENTER);
-        javaClassContent.append("    }"+ ENTER);
+        if(usesufix)
+        {
+            javaClassContent.append(ENTER);
+            javaClassContent.append("    public static "+tpc.getUpperClassName() + "Base.ClassMgr get"+tpc.getUpperClassName()+"ClassMgr()"+ ENTER);
+            javaClassContent.append("    {"+ ENTER);
+            javaClassContent.append("        return new "+tpc.getUpperClassName() + "Base.ClassMgr();"+ ENTER);
+            javaClassContent.append("    }"+ ENTER);
+        }else
+        {
+            javaClassContent.append(ENTER);
+            javaClassContent.append("    public static "+tpc.getUpperClassName() + ".ClassMgr get"+tpc.getUpperClassName()+"ClassMgr()"+ ENTER);
+            javaClassContent.append("    {"+ ENTER);
+            javaClassContent.append("        return new "+tpc.getUpperClassName() + ".ClassMgr();"+ ENTER);
+            javaClassContent.append("    }"+ ENTER);
+        }
         
 
         javaClassContent.append(ENTER);
