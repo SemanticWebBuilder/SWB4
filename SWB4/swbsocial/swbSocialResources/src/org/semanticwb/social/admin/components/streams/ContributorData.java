@@ -72,11 +72,11 @@ public class ContributorData {
         languageContributions.add(new LanguageContribution("Swedish (sv)", "Easit AB", "iso-8859-1"));
         languageContributions.add(new LanguageContribution("Slovenian (sl) ", "Ziga", "iso-8859-2"));
         */
-        Timer timer = new Timer();
-        timer.schedule(new updateData(), 0,5*1000);
+        //Timer timer = new Timer();
+        //timer.schedule(new updateData(), 0,5*1000);
     }
 
-
+    
     private static class updateData extends TimerTask
     {
         public void run() {
