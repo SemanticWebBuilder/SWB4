@@ -39,6 +39,7 @@ import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.snowball.SnowballAnalyzer;
 import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
 import org.apache.lucene.index.CorruptIndexException;
+import org.apache.lucene.util.Version;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
@@ -54,7 +55,6 @@ import org.semanticwb.portal.indexer.searcher.SearchDocument;
 import org.semanticwb.portal.indexer.searcher.SearchQuery;
 import org.semanticwb.portal.indexer.searcher.SearchResults;
 import org.semanticwb.portal.indexer.searcher.SearchTerm;
-import org.semanticwb.portal.integration.lucene.SWBLuceneIndexer;
 
 /**
  * Search resource for communities. Searchs for {@link DirectoryObject}s and
@@ -354,9 +354,9 @@ public class Search extends GenericAdmResource {
 
         //Create snowball analyzer
         if (stopWords != null && stopWords.length > 0)
-            SnballAnalyzer = new SnowballAnalyzer(SWBLuceneIndexer.LUCENE_VERSION, langCodes.get(language), StopFilter.makeStopSet(SWBLuceneIndexer.LUCENE_VERSION, stopWords));
+            SnballAnalyzer = new SnowballAnalyzer(Version.LUCENE_36, langCodes.get(language), StopFilter.makeStopSet(Version.LUCENE_36, stopWords));
         else
-            SnballAnalyzer = new SnowballAnalyzer(SWBLuceneIndexer.LUCENE_VERSION, langCodes.get(language));
+            SnballAnalyzer = new SnowballAnalyzer(Version.LUCENE_36, langCodes.get(language));
 
         //Create token stream for prhase composition
         TokenStream ts = SnballAnalyzer.tokenStream("sna", new StringReader(input));
