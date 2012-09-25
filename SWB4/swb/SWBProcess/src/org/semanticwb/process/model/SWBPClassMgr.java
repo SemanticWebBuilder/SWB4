@@ -88,6 +88,8 @@ public class SWBPClassMgr
                     try
                     {
                         String code=cg.createClassBase(scls,false);
+                        
+                        //System.out.println(code);
                         classes.put(className, code);
                     }catch(Exception e)
                     {
@@ -155,7 +157,7 @@ public class SWBPClassMgr
             SemanticObject object=item.getProcessObject().getSemanticObject();
             try
             {
-                //System.out.println("Cargando clase "+className+" ...");
+                //System.out.println("Cargando clase "+item.getItemAware().getName()+" ...");
                 Class clazz=getClassDefinition(object.getSemanticClass());
                 //System.out.println("Obteniendo constructor...");
                 Constructor c=clazz.getConstructor(SemanticObject.class);
