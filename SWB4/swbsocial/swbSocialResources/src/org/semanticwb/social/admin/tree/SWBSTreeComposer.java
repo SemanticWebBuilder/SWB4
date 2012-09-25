@@ -128,9 +128,16 @@ public class SWBSTreeComposer extends GenericForwardComposer <Component> {
                                 @Override
                                 public void onEvent(Event event) throws Exception {
                                     content.setSrc("/work/models/swbsocial/admin/zul/clearCompose.zul");
-                                    content.setSrc(itemValue.getData().getZulPage());
+                                    WebPage adminWebPage=wsiteAdm.getWebPage(itemValue.getData().getUri());
+                                    if(adminWebPage instanceof TreeNodePage)
+                                    {
+                                        TreeNodePage treeNodePage=(TreeNodePage) adminWebPage;
+                                        content.setSrc(treeNodePage.getTree_creationZul());
+                                    }
+                                    
                                     content.setDynamicProperty("parentItem", itemValue);
                                     content.setDynamicProperty("action", "add");
+                                    content.setDynamicProperty("user", user);
 
                                     //Se obtiene website del nodo en cuestion, es decir, no es el sitio de admin.
                                     //Tomando en cuenta que el siguiente padre de una categoría es el nodo del sitio
@@ -145,7 +152,7 @@ public class SWBSTreeComposer extends GenericForwardComposer <Component> {
                                             content.setDynamicProperty("wsite", wsite);
                                         }
                                     }
-                                    content.setDynamicProperty("optionWepPage", wsiteAdm.getWebPage(itemValue.getData().getUri()).getUrl(user.getLanguage()));
+                                    content.setDynamicProperty("optionWepPage", adminWebPage);
                                 }
                                 });
                                 treePopup.appendChild(mItemNew);
@@ -213,7 +220,7 @@ public class SWBSTreeComposer extends GenericForwardComposer <Component> {
                                     mItemCustomOpt.addEventListener(Events.ON_CLICK, new EventListener<Event>() {
                                     @Override
                                     public void onEvent(Event event) throws Exception {
-                                        String zulPage="/work/models/swbsocial/admin/zul/"+parentItemValue.getData().getZulPage();
+                                        String zulPage=parentItemValue.getData().getZulPage();
                                         String action="";
                                         if(wpageOption instanceof TreeNodePage)
                                         {
@@ -232,10 +239,11 @@ public class SWBSTreeComposer extends GenericForwardComposer <Component> {
                                         content.setDynamicProperty("objUri", URLEncoder.encode(itemValue.getData().getUri()));
                                         content.setDynamicProperty("paramRequest", paramRequest);;
                                         content.setDynamicProperty("action", action);
-                                        content.setDynamicProperty("optionWepPage", wpageOption.getUrl(user.getLanguage()));
+                                        content.setDynamicProperty("optionWepPage", wpageOption);
                                         content.setDynamicProperty("item", itemValue);
                                         WebSite wsite=(WebSite)SemanticObject.getSemanticObject(itemValue.getData().getUri()).getModel().getModelObject().createGenericInstance();
                                         content.setDynamicProperty("wsite", wsite);
+                                        content.setDynamicProperty("user", user);
                                     }
                                     });
                                     treePopup.appendChild(mItemCustomOpt);
@@ -261,23 +269,19 @@ public class SWBSTreeComposer extends GenericForwardComposer <Component> {
                                 content.setSrc("/work/models/swbsocial/admin/zul/clearCompose.zul");
                                 content.setSrc(itemValueParent.getData().getZulPage());
                                 content.setDynamicProperty("objUri", itemValue.getData().getUri());
+                                content.setDynamicProperty("parentItem", itemValueParent);
                                 content.setDynamicProperty("item", itemValue);
                                 content.setDynamicProperty("action", "edit");
+                                content.setDynamicProperty("wsiteAdm", wsiteAdm);
+                                content.setDynamicProperty("user", user);
 
-                                //Se obtiene website del nodo en cuestion, es decir, no es el sitio de admin.
-                                //Tomando en cuenta que el siguiente padre de una categoría es el nodo del sitio
-                                Treeitem wsiteItem=selectedTreeItem.getParentItem();
-                                ElementTreeNode wsiteItemValue = (ElementTreeNode) wsiteItem.getValue();
-                                if(wsiteItemValue.getData().getUri()!=null)
+                                WebSite wsite=WebSite.ClassMgr.getWebSite(SemanticObject.getSemanticObject(itemValue.getData().getUri()).getModel().getName());
+                                
+                                if(wsite!=null)
                                 {
-                                    SemanticObject semObject = SemanticObject.createSemanticObject(wsiteItemValue.getData().getUri());
-                                    if(semObject!=null)
-                                    {
-                                        WebSite wsite = (WebSite) semObject.createGenericInstance();
-                                        content.setDynamicProperty("wsite", wsite);
-                                    }
-                                }
-                                content.setDynamicProperty("optionWepPage", wsiteAdm.getWebPage(itemValueParent.getData().getUri()).getUrl(user.getLanguage()));
+                                    content.setDynamicProperty("wsite",wsite);
+                                }                                
+                                //content.setDynamicProperty("optionWepPage", wsiteAdm.getWebPage(itemValueParent.getData().getUri()).getUrl(user.getLanguage()));
                             }
                         }
                     });
