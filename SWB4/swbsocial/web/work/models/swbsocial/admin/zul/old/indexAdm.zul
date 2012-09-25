@@ -51,21 +51,21 @@
                 <borderlayout>
                     <north border="normal" size="50%" splittable="true" collapsible="true">
                         <borderlayout>
-                            <north border="normal" title="Widget1" size="50%" splittable="true" collapsible="true">
-				<include id="widget1" mode="defer"/>
+                            <north border="normal" title="Pendientes" size="50%" splittable="true" collapsible="true" apply="org.semanticwb.social.admin.components.widgets.Widget1Composer">
+                               <iframe id="widgetIframe1" style="width:100%; height:100%;"  />
                              </north>
-                            <center border="normal"  title="Widget2" >
-				<include id="widget2" mode="defer"/>
+                            <center border="normal"  title="Mensajes Listener" apply="org.semanticwb.social.admin.components.widgets.Widget2Composer">
+				<iframe id="widgetIframe2" style="width:100%; height:100%;"  />
                             </center>
                         </borderlayout>
                     </north>
                     <center border="normal">
                         <borderlayout>
-                        <north border="normal" size="50%" title="Widget3" collapsible="true">
-				<include id="widget3" mode="defer"/>
+                        <north border="normal" size="50%" title="Mensajes Personales" collapsible="true" apply="org.semanticwb.social.admin.components.widgets.Widget3Composer">
+				<iframe id="widgetIframe3" style="width:100%; height:100%;"  />
                         </north>
-                        <center border="normal"  title="Widget4">
-				<include id="widget4" mode="defer"/>
+                        <center border="normal"  title="Noticias Comunidad" apply="org.semanticwb.social.admin.components.widgets.Widget4Composer">
+				<iframe id="widgetIframe4" style="width:100%; height:100%;"  />
                         </center>
                         </borderlayout>
                     </center>
