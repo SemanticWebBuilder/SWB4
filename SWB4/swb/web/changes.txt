@@ -1,5 +1,6 @@
   4.2.1.0
-    - Se agrego método get[NombreDeClase]ClassMgr() en el Generador de código para todas clases de SWB
+    - Se agrego método get[NombreDeClase]ClassMgr() en el Generador de código para todas clases de SWB (Jei)
+    - Mejoras en la carga de Cache de Objetos Semanticos (FullSemanticObjectCache) (Jei)
   4.2.0.5
     - Mejora: se agregó el módulo de alertas en DDOS (Serch)
     - BUG: se corrigió la cuenta de Hits en instancias clientes (Jei)
