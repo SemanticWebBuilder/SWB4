@@ -80,6 +80,11 @@ public abstract class TakeOutBase extends org.semanticwb.model.SWBClass
         }
     }
 
+    public static TakeOutBase.ClassMgr getTakeOutClassMgr()
+    {
+        return new TakeOutBase.ClassMgr();
+    }
+
    /**
    * Constructs a TakeOutBase with a SemanticObject
    * @param base The SemanticObject with the properties for the TakeOut

@@ -274,6 +274,11 @@ public abstract class PostInBase extends org.semanticwb.social.Post implements o
         }
     }
 
+    public static PostInBase.ClassMgr getPostInClassMgr()
+    {
+        return new PostInBase.ClassMgr();
+    }
+
    /**
    * Constructs a PostInBase with a SemanticObject
    * @param base The SemanticObject with the properties for the PostIn

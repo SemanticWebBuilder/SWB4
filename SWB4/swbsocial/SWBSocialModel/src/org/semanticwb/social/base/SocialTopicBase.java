@@ -227,6 +227,11 @@ public abstract class SocialTopicBase extends org.semanticwb.model.SWBClass impl
         }
     }
 
+    public static SocialTopicBase.ClassMgr getSocialTopicClassMgr()
+    {
+        return new SocialTopicBase.ClassMgr();
+    }
+
    /**
    * Constructs a SocialTopicBase with a SemanticObject
    * @param base The SemanticObject with the properties for the SocialTopic

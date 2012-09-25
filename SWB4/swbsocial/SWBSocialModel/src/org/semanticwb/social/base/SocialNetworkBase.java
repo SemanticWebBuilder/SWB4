@@ -266,6 +266,11 @@ public abstract class SocialNetworkBase extends org.semanticwb.model.SWBClass im
         }
     }
 
+    public static SocialNetworkBase.ClassMgr getSocialNetworkClassMgr()
+    {
+        return new SocialNetworkBase.ClassMgr();
+    }
+
    /**
    * Constructs a SocialNetworkBase with a SemanticObject
    * @param base The SemanticObject with the properties for the SocialNetwork

@@ -4,7 +4,7 @@ package org.semanticwb.social.base;
    /**
    * Clase en donde se almacenan todos los post de tipo Mensaje y que entran por el Listener 
    */
-public abstract class MessageInBase extends org.semanticwb.social.PostIn implements org.semanticwb.model.Traceable,org.semanticwb.model.Tagable,org.semanticwb.social.PostTextable,org.semanticwb.social.PostDataable
+public abstract class MessageInBase extends org.semanticwb.social.PostIn implements org.semanticwb.model.Traceable,org.semanticwb.social.PostTextable,org.semanticwb.social.PostDataable,org.semanticwb.model.Tagable
 {
    /**
    * Clase en donde se almacenan todos los post de tipo Mensaje y que entran por el Listener
@@ -216,6 +216,11 @@ public abstract class MessageInBase extends org.semanticwb.social.PostIn impleme
             org.semanticwb.model.GenericIterator<org.semanticwb.social.MessageIn> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(social_socialTopic,value.getSemanticObject(),sclass));
             return it;
         }
+    }
+
+    public static MessageInBase.ClassMgr getMessageInClassMgr()
+    {
+        return new MessageInBase.ClassMgr();
     }
 
    /**

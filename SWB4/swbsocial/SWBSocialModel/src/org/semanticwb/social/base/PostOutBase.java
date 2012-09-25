@@ -180,6 +180,11 @@ public abstract class PostOutBase extends org.semanticwb.social.Post implements 
         }
     }
 
+    public static PostOutBase.ClassMgr getPostOutClassMgr()
+    {
+        return new PostOutBase.ClassMgr();
+    }
+
    /**
    * Constructs a PostOutBase with a SemanticObject
    * @param base The SemanticObject with the properties for the PostOut

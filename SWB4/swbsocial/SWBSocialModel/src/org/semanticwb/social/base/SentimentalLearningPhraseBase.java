@@ -98,6 +98,11 @@ public abstract class SentimentalLearningPhraseBase extends org.semanticwb.model
         }
     }
 
+    public static SentimentalLearningPhraseBase.ClassMgr getSentimentalLearningPhraseClassMgr()
+    {
+        return new SentimentalLearningPhraseBase.ClassMgr();
+    }
+
    /**
    * Constructs a SentimentalLearningPhraseBase with a SemanticObject
    * @param base The SemanticObject with the properties for the SentimentalLearningPhrase

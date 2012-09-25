@@ -90,6 +90,11 @@ public abstract class PunctuationSignBase extends org.semanticwb.social.TakeOut
         }
     }
 
+    public static PunctuationSignBase.ClassMgr getPunctuationSignClassMgr()
+    {
+        return new PunctuationSignBase.ClassMgr();
+    }
+
    /**
    * Constructs a PunctuationSignBase with a SemanticObject
    * @param base The SemanticObject with the properties for the PunctuationSign

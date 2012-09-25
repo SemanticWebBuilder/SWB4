@@ -160,6 +160,11 @@ public abstract class PostBase extends org.semanticwb.model.SWBClass implements 
         }
     }
 
+    public static PostBase.ClassMgr getPostClassMgr()
+    {
+        return new PostBase.ClassMgr();
+    }
+
    /**
    * Constructs a PostBase with a SemanticObject
    * @param base The SemanticObject with the properties for the Post

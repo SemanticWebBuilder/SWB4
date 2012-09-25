@@ -171,6 +171,11 @@ public abstract class StreamBase extends org.semanticwb.model.SWBClass implement
         }
     }
 
+    public static StreamBase.ClassMgr getStreamClassMgr()
+    {
+        return new StreamBase.ClassMgr();
+    }
+
    /**
    * Constructs a StreamBase with a SemanticObject
    * @param base The SemanticObject with the properties for the Stream

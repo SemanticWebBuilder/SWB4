@@ -222,6 +222,11 @@ public abstract class FacebookBase extends org.semanticwb.social.SocialNetwork i
         }
     }
 
+    public static FacebookBase.ClassMgr getFacebookClassMgr()
+    {
+        return new FacebookBase.ClassMgr();
+    }
+
    /**
    * Constructs a FacebookBase with a SemanticObject
    * @param base The SemanticObject with the properties for the Facebook

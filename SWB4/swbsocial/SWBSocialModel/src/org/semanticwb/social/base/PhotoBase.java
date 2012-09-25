@@ -4,7 +4,7 @@ package org.semanticwb.social.base;
    /**
    * Clase que sera creada cuando un post sea de tipo Foto (una imagen), como lo es flicker y facebook (cuando se envía una foto a facebook). 
    */
-public abstract class PhotoBase extends org.semanticwb.social.PostOut implements org.semanticwb.model.Traceable,org.semanticwb.model.Tagable,org.semanticwb.social.PostDataable,org.semanticwb.social.PostImageable,org.semanticwb.model.Descriptiveable
+public abstract class PhotoBase extends org.semanticwb.social.PostOut implements org.semanticwb.model.Traceable,org.semanticwb.social.PostDataable,org.semanticwb.social.PostImageable,org.semanticwb.model.Tagable,org.semanticwb.model.Descriptiveable
 {
    /**
    * Clase que sera creada cuando un post sea de tipo Foto (una imagen), como lo es flicker y facebook (cuando se envía una foto a facebook).
@@ -176,6 +176,11 @@ public abstract class PhotoBase extends org.semanticwb.social.PostOut implements
             org.semanticwb.model.GenericIterator<org.semanticwb.social.Photo> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(social_socialTopic,value.getSemanticObject(),sclass));
             return it;
         }
+    }
+
+    public static PhotoBase.ClassMgr getPhotoClassMgr()
+    {
+        return new PhotoBase.ClassMgr();
     }
 
    /**

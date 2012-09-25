@@ -142,6 +142,11 @@ public abstract class SocialPostBase extends org.semanticwb.model.SWBClass
         }
     }
 
+    public static SocialPostBase.ClassMgr getSocialPostClassMgr()
+    {
+        return new SocialPostBase.ClassMgr();
+    }
+
    /**
    * Constructs a SocialPostBase with a SemanticObject
    * @param base The SemanticObject with the properties for the SocialPost

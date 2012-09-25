@@ -4,7 +4,7 @@ package org.semanticwb.social.base;
    /**
    * Clase en donde se almacenan todos los post de tipo Photo y que entran por el Listener 
    */
-public abstract class PhotoInBase extends org.semanticwb.social.MessageIn implements org.semanticwb.model.Traceable,org.semanticwb.model.Tagable,org.semanticwb.social.PostTextable,org.semanticwb.social.PostDataable,org.semanticwb.social.PostImageable
+public abstract class PhotoInBase extends org.semanticwb.social.MessageIn implements org.semanticwb.model.Traceable,org.semanticwb.social.PostTextable,org.semanticwb.social.PostDataable,org.semanticwb.social.PostImageable,org.semanticwb.model.Tagable
 {
    /**
    * Clase en donde se almacenan todos los post de tipo Photo y que entran por el Listener
@@ -216,6 +216,11 @@ public abstract class PhotoInBase extends org.semanticwb.social.MessageIn implem
             org.semanticwb.model.GenericIterator<org.semanticwb.social.PhotoIn> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(social_socialTopic,value.getSemanticObject(),sclass));
             return it;
         }
+    }
+
+    public static PhotoInBase.ClassMgr getPhotoInClassMgr()
+    {
+        return new PhotoInBase.ClassMgr();
     }
 
    /**

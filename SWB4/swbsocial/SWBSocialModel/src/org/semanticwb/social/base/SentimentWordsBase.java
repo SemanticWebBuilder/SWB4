@@ -88,6 +88,11 @@ public abstract class SentimentWordsBase extends org.semanticwb.model.SWBClass
         }
     }
 
+    public static SentimentWordsBase.ClassMgr getSentimentWordsClassMgr()
+    {
+        return new SentimentWordsBase.ClassMgr();
+    }
+
    /**
    * Constructs a SentimentWordsBase with a SemanticObject
    * @param base The SemanticObject with the properties for the SentimentWords
