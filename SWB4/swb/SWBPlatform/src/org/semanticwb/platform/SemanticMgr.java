@@ -1132,6 +1132,7 @@ public class SemanticMgr implements SWBInstanceObject
 
     public void setClassLoader(ClassLoader classLoader)
     {
+        //System.out.println("setClassLoader:"+classLoader);
         this.classLoader = classLoader;
     }        
 
