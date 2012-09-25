@@ -84,6 +84,11 @@ public abstract class PrepositionsBase extends org.semanticwb.social.TakeOut
         }
     }
 
+    public static PrepositionsBase.ClassMgr getPrepositionsClassMgr()
+    {
+        return new PrepositionsBase.ClassMgr();
+    }
+
    /**
    * Constructs a PrepositionsBase with a SemanticObject
    * @param base The SemanticObject with the properties for the Prepositions

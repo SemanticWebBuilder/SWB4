@@ -218,6 +218,11 @@ public abstract class FlickerBase extends org.semanticwb.social.SocialNetwork im
         }
     }
 
+    public static FlickerBase.ClassMgr getFlickerClassMgr()
+    {
+        return new FlickerBase.ClassMgr();
+    }
+
    /**
    * Constructs a FlickerBase with a SemanticObject
    * @param base The SemanticObject with the properties for the Flicker

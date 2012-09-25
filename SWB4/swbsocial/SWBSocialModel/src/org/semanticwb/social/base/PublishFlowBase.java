@@ -151,6 +151,11 @@ public abstract class PublishFlowBase extends org.semanticwb.model.SWBClass impl
         }
     }
 
+    public static PublishFlowBase.ClassMgr getPublishFlowClassMgr()
+    {
+        return new PublishFlowBase.ClassMgr();
+    }
+
    /**
    * Constructs a PublishFlowBase with a SemanticObject
    * @param base The SemanticObject with the properties for the PublishFlow

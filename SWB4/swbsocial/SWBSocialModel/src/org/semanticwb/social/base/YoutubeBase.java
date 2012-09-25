@@ -218,6 +218,11 @@ public abstract class YoutubeBase extends org.semanticwb.social.SocialNetwork im
         }
     }
 
+    public static YoutubeBase.ClassMgr getYoutubeClassMgr()
+    {
+        return new YoutubeBase.ClassMgr();
+    }
+
    /**
    * Constructs a YoutubeBase with a SemanticObject
    * @param base The SemanticObject with the properties for the Youtube

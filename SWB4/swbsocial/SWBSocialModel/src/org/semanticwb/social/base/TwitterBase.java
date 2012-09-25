@@ -218,6 +218,11 @@ public abstract class TwitterBase extends org.semanticwb.social.SocialNetwork im
         }
     }
 
+    public static TwitterBase.ClassMgr getTwitterClassMgr()
+    {
+        return new TwitterBase.ClassMgr();
+    }
+
    /**
    * Constructs a TwitterBase with a SemanticObject
    * @param base The SemanticObject with the properties for the Twitter

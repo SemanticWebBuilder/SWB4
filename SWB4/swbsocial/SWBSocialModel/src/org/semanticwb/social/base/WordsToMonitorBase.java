@@ -148,6 +148,11 @@ public abstract class WordsToMonitorBase extends org.semanticwb.model.SWBClass i
         }
     }
 
+    public static WordsToMonitorBase.ClassMgr getWordsToMonitorClassMgr()
+    {
+        return new WordsToMonitorBase.ClassMgr();
+    }
+
    /**
    * Constructs a WordsToMonitorBase with a SemanticObject
    * @param base The SemanticObject with the properties for the WordsToMonitor

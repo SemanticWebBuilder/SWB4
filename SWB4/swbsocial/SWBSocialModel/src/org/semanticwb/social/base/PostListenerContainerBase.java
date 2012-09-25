@@ -202,6 +202,11 @@ public abstract class PostListenerContainerBase extends org.semanticwb.model.SWB
         }
     }
 
+    public static PostListenerContainerBase.ClassMgr getPostListenerContainerClassMgr()
+    {
+        return new PostListenerContainerBase.ClassMgr();
+    }
+
    /**
    * Constructs a PostListenerContainerBase with a SemanticObject
    * @param base The SemanticObject with the properties for the PostListenerContainer

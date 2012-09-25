@@ -1,12 +1,16 @@
 package org.semanticwb.social.base;
 
 
-public abstract class TreeNodePageBase extends org.semanticwb.social.ZulWebPage implements org.semanticwb.model.Tagable,org.semanticwb.model.Trashable,org.semanticwb.model.Localeable,org.semanticwb.model.Viewable,org.semanticwb.model.MetaTagable,org.semanticwb.model.Activeable,org.semanticwb.model.FilterableClass,org.semanticwb.model.RuleRefable,org.semanticwb.model.Referensable,org.semanticwb.model.Hiddenable,org.semanticwb.model.Undeleteable,org.semanticwb.model.TemplateRefable,org.semanticwb.model.Resourceable,org.semanticwb.model.Filterable,org.semanticwb.model.RoleRefable,org.semanticwb.model.Expirable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Traceable,org.semanticwb.model.CalendarRefable,org.semanticwb.model.Indexable,org.semanticwb.model.PFlowRefable,org.semanticwb.model.Rankable,org.semanticwb.model.Searchable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.Countryable
+public abstract class TreeNodePageBase extends org.semanticwb.social.ZulWebPage implements org.semanticwb.model.UserGroupRefable,org.semanticwb.model.Trashable,org.semanticwb.model.MetaTagable,org.semanticwb.model.Activeable,org.semanticwb.model.FilterableClass,org.semanticwb.model.TemplateRefable,org.semanticwb.model.Hiddenable,org.semanticwb.model.Resourceable,org.semanticwb.model.RoleRefable,org.semanticwb.model.Expirable,org.semanticwb.model.Localeable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Indexable,org.semanticwb.model.FilterableNode,org.semanticwb.model.RuleRefable,org.semanticwb.model.Traceable,org.semanticwb.model.Viewable,org.semanticwb.model.Undeleteable,org.semanticwb.model.Referensable,org.semanticwb.model.Tagable,org.semanticwb.model.CalendarRefable,org.semanticwb.model.Filterable,org.semanticwb.model.PFlowRefable,org.semanticwb.model.Rankable,org.semanticwb.model.Searchable,org.semanticwb.model.Countryable
 {
    /**
    * Acción a implementar en un zul para esta opción en el árbol. Ej. "add", "edit", "listen", "opcionx", etc.
    */
     public static final org.semanticwb.platform.SemanticProperty social_tree_action=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#tree_action");
+   /**
+   * Nombre del archivo zul que va ha mostrar la configuración de nuevas instancias
+   */
+    public static final org.semanticwb.platform.SemanticProperty social_tree_creationZul=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#tree_creationZul");
    /**
    * Uri de la clase a ser desplegada en el árbol de navegación como un nodo de tipo Categoría.
    */
@@ -542,6 +546,11 @@ public abstract class TreeNodePageBase extends org.semanticwb.social.ZulWebPage 
         }
     }
 
+    public static TreeNodePageBase.ClassMgr getTreeNodePageClassMgr()
+    {
+        return new TreeNodePageBase.ClassMgr();
+    }
+
    /**
    * Constructs a TreeNodePageBase with a SemanticObject
    * @param base The SemanticObject with the properties for the TreeNodePage
@@ -567,6 +576,24 @@ public abstract class TreeNodePageBase extends org.semanticwb.social.ZulWebPage 
     public void setAction(String value)
     {
         getSemanticObject().setProperty(social_tree_action, value);
+    }
+
+/**
+* Gets the Tree_creationZul property
+* @return String with the Tree_creationZul
+*/
+    public String getTree_creationZul()
+    {
+        return getSemanticObject().getProperty(social_tree_creationZul);
+    }
+
+/**
+* Sets the Tree_creationZul property
+* @param value long with the Tree_creationZul
+*/
+    public void setTree_creationZul(String value)
+    {
+        getSemanticObject().setProperty(social_tree_creationZul, value);
     }
 
 /**

@@ -202,6 +202,11 @@ public abstract class PostContainerBase extends org.semanticwb.model.SWBClass im
         }
     }
 
+    public static PostContainerBase.ClassMgr getPostContainerClassMgr()
+    {
+        return new PostContainerBase.ClassMgr();
+    }
+
    /**
    * Constructs a PostContainerBase with a SemanticObject
    * @param base The SemanticObject with the properties for the PostContainer
