@@ -675,7 +675,7 @@ public class GenericDB {
                                     else
                                     {
                                         codigo = getSQLType(tmpVal);
-                                        System.out.println("DBName:"+DBName);
+                                        //System.out.println("DBName:"+DBName);
                                         tipocol = dialect.getTypeName(codigo);
                                         tmpCol = tmpCol.replaceAll("#TYPE#", tipocol);
                                     }
