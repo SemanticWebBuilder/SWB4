@@ -111,4 +111,9 @@ public class SocialNetwork extends org.semanticwb.social.base.SocialNetworkBase
     public void listen(Stream stream) {
         //throw new UnsupportedOperationException("Not supported yet.");
     }
+
+    public void authenticate()
+    {
+        //throw new UnsupportedOperationException("Not supported yet.");
+    }
 }
