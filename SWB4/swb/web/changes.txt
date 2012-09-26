@@ -4,6 +4,7 @@
     - Soporte a IPV6 en StandAlone y Balanceo (Serch)
     - Soporte a Derby (Serch)
     - ReInscripción en ambientes de nube (Serch)
+    - Limpieza de algunos DeathStorage y mejoras al manejo interno del monitoreo (Serch)
     - Ajuste del soporte a DB2 (Serch)
   4.2.0.5
     - Mejora: se agregó el módulo de alertas en DDOS (Serch)
