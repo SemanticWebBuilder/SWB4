@@ -4,7 +4,7 @@ package org.semanticwb.social.base;
    /**
    * Catalogo de temas de un modelo (Marca) 
    */
-public abstract class SocialTopicBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable
+public abstract class SocialTopicBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable,org.semanticwb.social.Childrenable
 {
    /**
    * Catalogo de temas de un modelo (Marca)
@@ -46,6 +46,12 @@ public abstract class SocialTopicBase extends org.semanticwb.model.SWBClass impl
         {
             java.util.Iterator it=sclass.listInstances();
             return new org.semanticwb.model.GenericIterator<org.semanticwb.social.SocialTopic>(it, true);
+        }
+
+        public static org.semanticwb.social.SocialTopic createSocialTopic(org.semanticwb.model.SWBModel model)
+        {
+            long id=model.getSemanticObject().getModel().getCounter(sclass);
+            return org.semanticwb.social.SocialTopic.ClassMgr.createSocialTopic(String.valueOf(id), model);
         }
        /**
        * Gets a org.semanticwb.social.SocialTopic
@@ -180,6 +186,29 @@ public abstract class SocialTopicBase extends org.semanticwb.model.SWBClass impl
             return it;
         }
        /**
+       * Gets all org.semanticwb.social.SocialTopic with a determined ParentObj
+       * @param value ParentObj of the type org.semanticwb.social.Childrenable
+       * @param model Model of the org.semanticwb.social.SocialTopic
+       * @return Iterator with all the org.semanticwb.social.SocialTopic
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.SocialTopic> listSocialTopicByParentObj(org.semanticwb.social.Childrenable value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.SocialTopic> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(social_parentObj, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.social.SocialTopic with a determined ParentObj
+       * @param value ParentObj of the type org.semanticwb.social.Childrenable
+       * @return Iterator with all the org.semanticwb.social.SocialTopic
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.SocialTopic> listSocialTopicByParentObj(org.semanticwb.social.Childrenable value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.SocialTopic> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(social_parentObj,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
        * Gets all org.semanticwb.social.SocialTopic with a determined Creator
        * @param value Creator of the type org.semanticwb.model.User
        * @param model Model of the org.semanticwb.social.SocialTopic
@@ -200,6 +229,29 @@ public abstract class SocialTopicBase extends org.semanticwb.model.SWBClass impl
         public static java.util.Iterator<org.semanticwb.social.SocialTopic> listSocialTopicByCreator(org.semanticwb.model.User value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.social.SocialTopic> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_creator,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.social.SocialTopic with a determined ChildrenObjInv
+       * @param value ChildrenObjInv of the type org.semanticwb.social.Childrenable
+       * @param model Model of the org.semanticwb.social.SocialTopic
+       * @return Iterator with all the org.semanticwb.social.SocialTopic
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.SocialTopic> listSocialTopicByChildrenObjInv(org.semanticwb.social.Childrenable value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.SocialTopic> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(social_hasChildrenObjInv, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.social.SocialTopic with a determined ChildrenObjInv
+       * @param value ChildrenObjInv of the type org.semanticwb.social.Childrenable
+       * @return Iterator with all the org.semanticwb.social.SocialTopic
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.SocialTopic> listSocialTopicByChildrenObjInv(org.semanticwb.social.Childrenable value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.SocialTopic> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(social_hasChildrenObjInv,value.getSemanticObject(),sclass));
             return it;
         }
        /**
@@ -463,6 +515,44 @@ public abstract class SocialTopicBase extends org.semanticwb.model.SWBClass impl
         getSemanticObject().setProperty(swb_description, description, lang);
     }
    /**
+   * Sets the value for the property ParentObj
+   * @param value ParentObj to set
+   */
+
+    public void setParentObj(org.semanticwb.social.Childrenable value)
+    {
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(social_parentObj, value.getSemanticObject());
+        }else
+        {
+            removeParentObj();
+        }
+    }
+   /**
+   * Remove the value for ParentObj property
+   */
+
+    public void removeParentObj()
+    {
+        getSemanticObject().removeProperty(social_parentObj);
+    }
+
+   /**
+   * Gets the ParentObj
+   * @return a org.semanticwb.social.Childrenable
+   */
+    public org.semanticwb.social.Childrenable getParentObj()
+    {
+         org.semanticwb.social.Childrenable ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(social_parentObj);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.social.Childrenable)obj.createGenericInstance();
+         }
+         return ret;
+    }
+   /**
    * Sets the value for the property Creator
    * @param value Creator to set
    */
@@ -532,6 +622,45 @@ public abstract class SocialTopicBase extends org.semanticwb.model.SWBClass impl
     public void setTitle(String title, String lang)
     {
         getSemanticObject().setProperty(swb_title, title, lang);
+    }
+   /**
+   * Gets all the org.semanticwb.social.Childrenable
+   * @return A GenericIterator with all the org.semanticwb.social.Childrenable
+   */
+
+    public org.semanticwb.model.GenericIterator<org.semanticwb.social.Childrenable> listChildrenObjInvs()
+    {
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.social.Childrenable>(getSemanticObject().listObjectProperties(social_hasChildrenObjInv));
+    }
+
+   /**
+   * Gets true if has a ChildrenObjInv
+   * @param value org.semanticwb.social.Childrenable to verify
+   * @return true if the org.semanticwb.social.Childrenable exists, false otherwise
+   */
+    public boolean hasChildrenObjInv(org.semanticwb.social.Childrenable value)
+    {
+        boolean ret=false;
+        if(value!=null)
+        {
+           ret=getSemanticObject().hasObjectProperty(social_hasChildrenObjInv,value.getSemanticObject());
+        }
+        return ret;
+    }
+
+   /**
+   * Gets the ChildrenObjInv
+   * @return a org.semanticwb.social.Childrenable
+   */
+    public org.semanticwb.social.Childrenable getChildrenObjInv()
+    {
+         org.semanticwb.social.Childrenable ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(social_hasChildrenObjInv);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.social.Childrenable)obj.createGenericInstance();
+         }
+         return ret;
     }
    /**
    * Gets all the org.semanticwb.social.Post
