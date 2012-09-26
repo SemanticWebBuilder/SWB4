@@ -6,6 +6,7 @@
 package org.semanticwb.social.admin.tree;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
@@ -18,6 +19,7 @@ import org.semanticwb.model.WebPage;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.portal.api.SWBParamRequest;
+import org.semanticwb.social.Childrenable;
 import org.semanticwb.social.SocialSite;
 import org.semanticwb.social.TreeNodePage;
 
@@ -98,29 +100,80 @@ import org.semanticwb.social.TreeNodePage;
     private ElementTreeNode[] getTreeNodeElements(String classUri, SWBModel model)
     {
         if(classUri==null) return new ElementTreeNode[0];
-        ArrayList<GenericObject> alist=new ArrayList();
+        HashMap<GenericObject, String> hmapElements=new HashMap();
         int cont=0;
         SemanticClass swbClass = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(classUri);
+
         if(swbClass==null) return new ElementTreeNode[0];
         Iterator <GenericObject> itGenObjs=model.listInstancesOfClass(swbClass);
         while(itGenObjs.hasNext())
         {
             GenericObject genObj=itGenObjs.next();
-            alist.add(genObj);
-            cont++;
+            if(genObj instanceof Childrenable)
+            {
+                Childrenable child=(Childrenable)genObj;
+                //Si no tiene padre, se agrega al principal
+                if(child.getParentObj()==null)
+                {
+                    hmapElements.put(genObj,"true");
+                    cont++;
+                }
+            }else
+            {
+                hmapElements.put(genObj,"false");
+                cont++;
+            }
         }
         ElementTreeNode[] elementTreeNode=new ElementTreeNode[cont];
-        itGenObjs=alist.iterator();
+        itGenObjs=hmapElements.keySet().iterator();
         int cont2=0;
         while(itGenObjs.hasNext())
         {
             GenericObject genObj=itGenObjs.next();
             DisplayObject displayObj=(DisplayObject)genObj.getSemanticObject().getSemanticClass().getDisplayObject().createGenericInstance();
-            elementTreeNode[cont2]=new ElementTreeNode(new Element(genObj.getSemanticObject().getProperty(Descriptiveable.swb_title), genObj.getURI(), ImgAdminPathBase+displayObj.getIconClass()));
+            if(hmapElements.get(genObj)!=null && hmapElements.get(genObj).trim().equalsIgnoreCase("true"))
+            {
+                elementTreeNode[cont2]=new ElementTreeNode(new Element(genObj.getSemanticObject().getProperty(Descriptiveable.swb_title), genObj.getURI(), ImgAdminPathBase+displayObj.getIconClass()), getTreeNodeChildrenElements(genObj, model), true);
+            }else
+            {
+                elementTreeNode[cont2]=new ElementTreeNode(new Element(genObj.getSemanticObject().getProperty(Descriptiveable.swb_title), genObj.getURI(), ImgAdminPathBase+displayObj.getIconClass()));
+            }
             cont2++;
         }
         return elementTreeNode;
     }
+
+
+    private ElementTreeNode[] getTreeNodeChildrenElements(GenericObject genObj, SWBModel model)
+    {
+        if(genObj instanceof Childrenable)
+        {
+            ArrayList<Childrenable> alist=new ArrayList();
+            int cont=0;
+            Childrenable childrenable = (Childrenable) genObj;
+            Iterator<Childrenable> itChildren=childrenable.listChildrenObjInvs();
+            while(itChildren.hasNext())
+            {
+                Childrenable child=itChildren.next();
+                alist.add(child);
+                cont++;
+            }
+            ElementTreeNode[] elementTreeNode=new ElementTreeNode[cont];
+            itChildren=alist.iterator();
+            int cont2=0;
+            while(itChildren.hasNext())
+            {
+                Childrenable child=itChildren.next();
+                GenericObject childGenObj=child.getSemanticObject().getGenericInstance();
+                DisplayObject displayObj=(DisplayObject)childGenObj.getSemanticObject().getSemanticClass().getDisplayObject().createGenericInstance();
+                elementTreeNode[cont2]=new ElementTreeNode(new Element(childGenObj.getSemanticObject().getProperty(Descriptiveable.swb_title), childGenObj.getURI(), ImgAdminPathBase+displayObj.getIconClass()),getTreeNodeChildrenElements(childGenObj, model), true);
+                cont2++;
+            }
+            return elementTreeNode;
+        }
+        return null;
+    }
+
 
     public ElementTreeNode getRoot() {
         return root;
