@@ -5,7 +5,7 @@
         <borderlayout>
             <!--Área de logo-->
             <west border="none" size="215px" flex="true" width="300px">
-		       <image src="/img/SWB-Social.png" />
+		       <image src="../img/SWB-Social.png" />
             </west>
              <!--Termina área de logo-->
              <!--Inicia área de Menú Superior-->
