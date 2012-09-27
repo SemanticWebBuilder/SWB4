@@ -20,6 +20,8 @@ import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.social.TreeNodePage;
 import java.net.URLEncoder;
+import org.semanticwb.social.Childrenable;
+import org.semanticwb.social.utils.SWBSocialResourceUtils;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.event.Event;
@@ -164,6 +166,38 @@ public class SWBSTreeComposer extends GenericForwardComposer <Component> {
 
                                 //MENU CONTEXTUAL
 
+                                final SemanticObject semObj=SemanticObject.createSemanticObject(itemValue.getData().getUri());
+
+                                //Opción Crear, para los nodos que sean de tipo Childrenable
+                                if(semObj.getSemanticClass().isSubClass(Childrenable.social_Childrenable))
+                                {
+                                    Menuitem mItemNew=new Menuitem();
+                                    mItemNew.setLabel("Crear nuevo");
+                                    mItemNew.addEventListener(Events.ON_CLICK, new EventListener<Event>() {
+                                    @Override
+                                    public void onEvent(Event event) throws Exception {
+                                        content.setSrc("/work/models/swbsocial/admin/zul/clearCompose.zul");
+                                        WebPage adminWebPage=wsiteAdm.getWebPage(itemValue.getData().getCategoryID());
+                                        if(adminWebPage instanceof TreeNodePage)
+                                        {
+                                            TreeNodePage treeNodePage=(TreeNodePage) adminWebPage;
+                                            content.setSrc(treeNodePage.getTree_creationZul());
+                                        }
+
+                                        content.setDynamicProperty("parentItem", itemValue);
+                                        //content.setDynamicProperty("item", itemValue);
+                                        content.setDynamicProperty("action", "add");
+                                        content.setDynamicProperty("user", user);
+                                        WebSite wsite=(WebSite)semObj.getModel().getModelObject().createGenericInstance();
+                                        content.setDynamicProperty("wsite", wsite);
+                                        content.setDynamicProperty("optionWepPage", adminWebPage);
+                                    }
+                                    });
+                                    treePopup.appendChild(mItemNew);
+                                }
+
+
+
                                 //------------Opciones por defecto----------//
 
 
@@ -178,10 +212,18 @@ public class SWBSTreeComposer extends GenericForwardComposer <Component> {
                                        public void onEvent(Event evt) {
                                          switch (((Integer)evt.getData()).intValue()) {
                                            case Messagebox.YES:
-                                               SemanticObject semObject = SemanticObject.getSemanticObject(itemValue.getData().getUri());
-                                               if(semObject!=null)
+                                               if(semObj!=null)
                                                {
-                                                   semObject.remove();
+                                                   if(semObj.getSemanticClass().isSubClass(Childrenable.social_Childrenable))
+                                                   {
+                                                       if(SWBSocialResourceUtils.Semantic.removeObjChildrenable(semObj))
+                                                       {
+                                                            semObj.remove();
+                                                       }
+                                                   }else
+                                                   {
+                                                        semObj.remove();
+                                                   }
                                                    elemenetTreeModel.remove(itemValue);
                                                    break;
                                                }
@@ -210,7 +252,7 @@ public class SWBSTreeComposer extends GenericForwardComposer <Component> {
 
                                 //------------Opciones dependiendo del nodo del árbol----------//
 
-                                WebPage treeCategoryNode=wsiteAdm.getWebPage(parentItemValue.getData().getUri());
+                                WebPage treeCategoryNode=wsiteAdm.getWebPage(itemValue.getData().getCategoryID());
                                 Iterator <WebPage> itTreeCategoryNodeChilds=treeCategoryNode.listVisibleChilds(user.getLanguage());
                                 while(itTreeCategoryNodeChilds.hasNext())
                                 {
@@ -241,7 +283,7 @@ public class SWBSTreeComposer extends GenericForwardComposer <Component> {
                                         content.setDynamicProperty("action", action);
                                         content.setDynamicProperty("optionWepPage", wpageOption);
                                         content.setDynamicProperty("item", itemValue);
-                                        WebSite wsite=(WebSite)SemanticObject.getSemanticObject(itemValue.getData().getUri()).getModel().getModelObject().createGenericInstance();
+                                        WebSite wsite=(WebSite)semObj.getModel().getModelObject().createGenericInstance();
                                         content.setDynamicProperty("wsite", wsite);
                                         content.setDynamicProperty("user", user);
                                     }
@@ -287,7 +329,7 @@ public class SWBSTreeComposer extends GenericForwardComposer <Component> {
                     });
                 }
 
-                //Bloque de código para soportar drag&drop. TODO: Revisar para implementar bien (Si vemos que debe aplicar)
+                //Bloque de código para soportar drag&drop. TODO: Revisar para implementar solo en los casos de que los nodos sean de tipo Childrenable
                 /*
                 dataRow.setDroppable("true");
                 dataRow.addEventListener(Events.ON_DROP, new EventListener<Event>() {

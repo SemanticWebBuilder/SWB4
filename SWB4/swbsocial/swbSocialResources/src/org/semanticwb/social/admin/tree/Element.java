@@ -16,21 +16,31 @@ public class Element {
     private String name;
     private String uri;
     private String zulPage;
-    //private final String category;
     private String iconElement;
+    private String categoryID;
 
     public Element(String name, String uri, String iconElement) {
-        this.name = name;
+        this.name=name;
         this.uri=uri;
         this.iconElement = iconElement;
         this.zulPage=null;
+        this.categoryID=null;
     }
 
     public Element(String name, String uri, String zulPage, String iconElement) {
-        this.name = name;
+        this.name=name;
         this.uri=uri;
         this.iconElement = iconElement;
         this.zulPage=zulPage;
+        this.categoryID=null;
+    }
+
+    public Element(String name, String uri, String zulPage, String iconElement, String categoryID) {
+        this.name=name;
+        this.uri=uri;
+        this.zulPage=zulPage;
+        this.iconElement = iconElement;
+        this.categoryID=categoryID;
     }
 
     public void setName(String name)
@@ -53,6 +63,11 @@ public class Element {
         this.iconElement=iconElement;
     }
 
+    public void setCategoryID(String categoryID)
+    {
+        this.categoryID=categoryID;
+    }
+
 
 
     public String getName() {
@@ -70,5 +85,9 @@ public class Element {
 
     public String getIconElement() {
         return iconElement;
+    }
+
+    public String getCategoryID() {
+        return categoryID;
     }
 }
