@@ -8,7 +8,7 @@ package org.semanticwb.social.admin.components;
 import org.semanticwb.model.WebPage;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.platform.SemanticObject;
-import org.semanticwb.social.Stream;
+import org.semanticwb.social.SocialTopic;
 import org.semanticwb.social.admin.tree.ElementTreeNode;
 import org.semanticwb.social.utils.SWBSocialResourceUtils;
 import org.zkoss.zul.Textbox;
@@ -21,11 +21,11 @@ import org.zkoss.zul.Button;
  *
  * @author jorge.jimenez
  */
-public class StreamsComp extends GenericForwardComposer
+public class TopicsComp extends GenericForwardComposer
 {
 
     private static final long serialVersionUID = -9145887024839938515L;
-    
+
     Textbox title;
     Textbox description;
     Textbox id;
@@ -35,7 +35,7 @@ public class StreamsComp extends GenericForwardComposer
     Button sendButton;
     String action;
     SemanticObject semObject;
-    Stream stream;
+    SocialTopic socialTopic;
     WebPage optionWepPage;
 
     public void doAfterCompose(Component comp) throws Exception {
@@ -55,10 +55,10 @@ public class StreamsComp extends GenericForwardComposer
             {
                 item=(ElementTreeNode)requestScope.get("item");
                 semObject = SemanticObject.createSemanticObject(item.getData().getUri());
-                stream = (Stream) semObject.createGenericInstance();
-                id.setValue(stream.getId());
-                title.setValue(stream.getTitle());
-                description.setValue(stream.getDescription());
+                socialTopic = (SocialTopic) semObject.createGenericInstance();
+                id.setValue(socialTopic.getId());
+                title.setValue(socialTopic.getTitle());
+                description.setValue(socialTopic.getDescription());
                 sendButton.setLabel("Actualizar");
             }else
             {
@@ -74,28 +74,28 @@ public class StreamsComp extends GenericForwardComposer
     {
         if(action.equals(SWBSocialResourceUtils.ACTION_ADD))
         {
-            Stream stream=Stream.ClassMgr.createStream(id.getValue(), wsite);
+            SocialTopic socialTopic=SocialTopic.ClassMgr.createSocialTopic(id.getValue(), wsite);
             if(title.getValue()!=null)
             {
-                stream.setTitle(title.getValue());
+                socialTopic.setTitle(title.getValue());
             }
             if(description.getValue()!=null)
             {
-                stream.setDescription(description.getValue());
+                socialTopic.setDescription(description.getValue());
             }
             //Actualizar el árbol (Insertar Nodo)
-            SWBSocialResourceUtils.Components.insertTreeNode(parentItem, stream, optionWepPage);
-        }else if(action.equals(SWBSocialResourceUtils.ACTION_EDIT) && stream!=null)
+            SWBSocialResourceUtils.Components.insertTreeNode(parentItem, socialTopic, optionWepPage);
+        }else if(action.equals(SWBSocialResourceUtils.ACTION_EDIT) && socialTopic!=null)
         {
             if(title.getValue()!=null)
             {
-                stream.setTitle(title.getValue());
+                socialTopic.setTitle(title.getValue());
                 //Actualizar el árbol (actualizar título de Nodo)
                 SWBSocialResourceUtils.Components.updateTreeNode(item, title.getValue());
             }
             if(description.getValue()!=null)
             {
-                stream.setDescription(description.getValue());
+                socialTopic.setDescription(description.getValue());
             }
         }
     }

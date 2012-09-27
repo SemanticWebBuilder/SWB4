@@ -5,6 +5,7 @@
 
 package org.semanticwb.social.admin.components;
 
+import org.semanticwb.model.WebPage;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.social.SocialNetwork;
@@ -34,6 +35,7 @@ public class SocialNetworkComp extends GenericForwardComposer {
     String action;
     SemanticObject semObject;
     SocialNetwork socialNet;
+    WebPage optionWepPage;
     
     @Override
     public void doAfterCompose(Component comp) throws Exception {
@@ -41,6 +43,7 @@ public class SocialNetworkComp extends GenericForwardComposer {
         wsite=(WebSite)requestScope.get("wsite");
         parentItem=(ElementTreeNode)requestScope.get("parentItem");
         action=(String)requestScope.get("action");
+        optionWepPage=(WebPage)requestScope.get("optionWepPage");
 
         if(action.equals(SWBSocialResourceUtils.ACTION_ADD))
         {
@@ -76,7 +79,7 @@ public class SocialNetworkComp extends GenericForwardComposer {
                 ctaNet.setDescription(description.getValue());
             }
             //Actualizar el árbol (Insertar Nodo)
-            SWBSocialResourceUtils.Components.insertTreeNode(parentItem, ctaNet);
+            SWBSocialResourceUtils.Components.insertTreeNode(parentItem, ctaNet, optionWepPage);
         }else if(action.equals(SWBSocialResourceUtils.ACTION_EDIT) && socialNet!=null)
         {
             if(title.getValue()!=null)
