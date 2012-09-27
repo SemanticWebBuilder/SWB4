@@ -8,10 +8,6 @@ public abstract class TreeNodePageBase extends org.semanticwb.social.ZulWebPage 
    */
     public static final org.semanticwb.platform.SemanticProperty social_tree_action=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#tree_action");
    /**
-   * Nombre del archivo zul que va ha mostrar la configuración de nuevas instancias
-   */
-    public static final org.semanticwb.platform.SemanticProperty social_tree_creationZul=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#tree_creationZul");
-   /**
    * Uri de la clase a ser desplegada en el árbol de navegación como un nodo de tipo Categoría.
    */
     public static final org.semanticwb.platform.SemanticProperty social_tree_classUri=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#tree_classUri");
@@ -576,24 +572,6 @@ public abstract class TreeNodePageBase extends org.semanticwb.social.ZulWebPage 
     public void setAction(String value)
     {
         getSemanticObject().setProperty(social_tree_action, value);
-    }
-
-/**
-* Gets the Tree_creationZul property
-* @return String with the Tree_creationZul
-*/
-    public String getTree_creationZul()
-    {
-        return getSemanticObject().getProperty(social_tree_creationZul);
-    }
-
-/**
-* Sets the Tree_creationZul property
-* @param value long with the Tree_creationZul
-*/
-    public void setTree_creationZul(String value)
-    {
-        getSemanticObject().setProperty(social_tree_creationZul, value);
     }
 
 /**
