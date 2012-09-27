@@ -16,6 +16,7 @@ import org.semanticwb.model.WebSite;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.social.TreeNodePage;
 import org.semanticwb.social.admin.tree.ElementTreeNode;
+import org.semanticwb.social.utils.SWBSocialResourceUtils;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.util.GenericForwardComposer;
 import org.zkoss.zul.Iframe;
@@ -30,9 +31,9 @@ import org.zkoss.zul.Window;
  *
  * @author jorge.jimenez
  */
-public class DobleClick extends GenericForwardComposer <Component>
+public class GenericCRUDElement extends GenericForwardComposer <Component>
 {
-    private static Logger log = SWBUtils.getLogger(DobleClick.class);
+    private static Logger log = SWBUtils.getLogger(GenericCRUDElement.class);
     private static final long serialVersionUID = 1L;
     private WebSite wsiteAdm;
     private WebSite wsite=null;
@@ -44,6 +45,7 @@ public class DobleClick extends GenericForwardComposer <Component>
     Tabs tabs_dobleClick;
     Iframe iframe_dobleClick;
     String action;
+    WebPage optionWepPage;
     SemanticObject semObject;
 
 
@@ -60,17 +62,34 @@ public class DobleClick extends GenericForwardComposer <Component>
            parentItem=(ElementTreeNode)requestScope.get("parentItem");
            item=(ElementTreeNode)requestScope.get("item");
            action=(String)requestScope.get("action");
-
-           SemanticObject semObj=SemanticObject.getSemanticObject(objUri);
-
-           if(semObj.getProperty(Descriptiveable.swb_title)!=null)
+           optionWepPage=(WebPage)requestScope.get("optionWepPage");
+           if(action.equals(SWBSocialResourceUtils.ACTION_ADD))
            {
-                win_dobleClick.setTitle(semObj.getSemanticClass().getClassCodeName()+":"+semObj.getProperty(Descriptiveable.swb_title));
-           }
-           if(wsiteAdm!=null && parentItem!=null)
+                win_dobleClick.setTitle("Creación de:"+optionWepPage.getTitle());
+                Tab tab=new Tab(optionWepPage.getDisplayTitle(user.getLanguage()));
+                tab.setParent(tabs_dobleClick);
+                if(optionWepPage instanceof TreeNodePage)
+                {
+                    final TreeNodePage treeNodePage=(TreeNodePage) optionWepPage;
+                    if(treeNodePage.getWpImg()!=null)
+                    {
+                        String iconImgPath=SWBPortal.getWebWorkPath()+treeNodePage.getWorkPath()+"/"+treeNodePage.social_wpImg.getName()+"_"+treeNodePage.getId()+"_"+treeNodePage.getWpImg();
+                        tab.setImage(iconImgPath);
+                    }
+                    iframe_dobleClick.setSrc(treeNodePage.getUrl(user.getLanguage())+"?wsite="+wsite.getId()+"&action="+action);
+                }
+           }else if(action.equals(SWBSocialResourceUtils.ACTION_EDIT))
            {
-               buildTabs();
-           }
+               SemanticObject semObj=SemanticObject.getSemanticObject(objUri);
+               if(semObj.getProperty(Descriptiveable.swb_title)!=null)
+               {
+                    win_dobleClick.setTitle(semObj.getSemanticClass().getClassCodeName()+":"+semObj.getProperty(Descriptiveable.swb_title));
+               }
+               if(wsiteAdm!=null && parentItem!=null)
+               {
+                   buildTabs();
+               }
+            }
         }catch(Exception e)
         {
             log.error(e);
@@ -100,13 +119,13 @@ public class DobleClick extends GenericForwardComposer <Component>
                     }
                     if(isFirstNode) //Se ejecuta solo con el primer webpage del topico padre, en este caso por lo regular sería el topico de "Configurar".
                     {
-                        iframe_dobleClick.setSrc(treeNodePage.getUrl(user.getLanguage())+"?wsite="+wsite.getId()+"&action="+treeNodePage.getAction()+"&objUri="+objUri);
+                        iframe_dobleClick.setSrc(treeNodePage.getUrl(user.getLanguage())+"?wsite="+wsite.getId()+"&action="+action+"&objUri="+objUri);
                         isFirstNode=false;
                     }
                     tab.addEventListener(Events.ON_SELECT, new EventListener<Event>() {
                         @Override
                         public void onEvent(Event event) throws Exception {
-                            iframe_dobleClick.setSrc(treeNodePage.getUrl(user.getLanguage())+"?wsite="+wsite.getId()+"&action="+treeNodePage.getAction()+"&objUri="+objUri);
+                            iframe_dobleClick.setSrc(treeNodePage.getUrl(user.getLanguage())+"?wsite="+wsite.getId()+"&action="+action+"&objUri="+objUri);
                         }
                      });
                  }

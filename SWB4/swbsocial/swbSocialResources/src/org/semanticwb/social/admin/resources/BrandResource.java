@@ -6,8 +6,10 @@
 package org.semanticwb.social.admin.resources;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.semanticwb.model.User;
 import org.semanticwb.portal.api.GenericResource;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
@@ -23,7 +25,13 @@ public class BrandResource extends GenericResource{
        String action=request.getParameter("action");
        String objUri=request.getParameter("objUri");
        String wsite=request.getParameter("wsite");
+       User user=paramRequest.getUser();
        System.out.println("BrandResource View...action:"+action+",objUri:"+objUri+",wsite:"+wsite);
+       System.out.println("User:"+user);
+       System.out.println("adminTopic:"+paramRequest.getAdminTopic().getId());
+       System.out.println("webPage id:"+paramRequest.getWebPage().getUrl());
+       PrintWriter out = response.getWriter();
+       out.println("Contenido de Prueba Genérico....");
     }
     
     @Override
