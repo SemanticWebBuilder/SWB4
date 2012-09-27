@@ -134,11 +134,11 @@ public class SWBSTreeComposer extends GenericForwardComposer <Component> {
                                     if(adminWebPage instanceof TreeNodePage)
                                     {
                                         TreeNodePage treeNodePage=(TreeNodePage) adminWebPage;
-                                        content.setSrc(treeNodePage.getTree_creationZul());
+                                        content.setSrc(treeNodePage.getZulResourcePath());
                                     }
                                     
                                     content.setDynamicProperty("parentItem", itemValue);
-                                    content.setDynamicProperty("action", "add");
+                                    content.setDynamicProperty("action", SWBSocialResourceUtils.ACTION_ADD);
                                     content.setDynamicProperty("user", user);
 
                                     //Se obtiene website del nodo en cuestion, es decir, no es el sitio de admin.
@@ -181,12 +181,12 @@ public class SWBSTreeComposer extends GenericForwardComposer <Component> {
                                         if(adminWebPage instanceof TreeNodePage)
                                         {
                                             TreeNodePage treeNodePage=(TreeNodePage) adminWebPage;
-                                            content.setSrc(treeNodePage.getTree_creationZul());
+                                            content.setSrc(treeNodePage.getZulResourcePath());
                                         }
 
                                         content.setDynamicProperty("parentItem", itemValue);
                                         //content.setDynamicProperty("item", itemValue);
-                                        content.setDynamicProperty("action", "add");
+                                        content.setDynamicProperty("action", SWBSocialResourceUtils.ACTION_ADD);
                                         content.setDynamicProperty("user", user);
                                         WebSite wsite=(WebSite)semObj.getModel().getModelObject().createGenericInstance();
                                         content.setDynamicProperty("wsite", wsite);
@@ -313,7 +313,7 @@ public class SWBSTreeComposer extends GenericForwardComposer <Component> {
                                 content.setDynamicProperty("objUri", itemValue.getData().getUri());
                                 content.setDynamicProperty("parentItem", itemValueParent);
                                 content.setDynamicProperty("item", itemValue);
-                                content.setDynamicProperty("action", "edit");
+                                content.setDynamicProperty("action", SWBSocialResourceUtils.ACTION_EDIT);
                                 content.setDynamicProperty("wsiteAdm", wsiteAdm);
                                 content.setDynamicProperty("user", user);
 
