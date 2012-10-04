@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<admresource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <xslfile>admresource.xslt</xslfile>
+    <form name="frmAdmin" action="true" method="post" enctype="multipart/form-data" jsframework="dojo">
+    <admdbconnmgr defconn="true"/>
+    <fieldset>
+        <input type="checkbox" name="forward" label="Include(por defecto) / Forward" value="1" promptMessage="Marque la casilla para invocación Forward" />
+        <input type="text" name="zulpath" label="Ruta relativa del ZUL" size="50" zulatron="[\w\/\-]+(\.zul)$" jsrequired="true" invalidMessage="El archivo debe tener extensión zul" promptMessage="Ruta relativa del archivo ZUL. Por ejemplo /swbadmin/zul/poll/poll.zul" />
+    </fieldset>
+    <div title="Opciones avanzadas" open="false">
+        <fieldset legend="Configurar el ProcessAction">
+            <input type="text" name="zulactpath" label="Ruta del ZUL de acción" size="50" zulatron="[\w\/\-]+(\.zul)$" invalidMessage="El archivo debe tener extensión zul" />
+        </fieldset>
+    </div>
+    <fieldset>
+        <input type="submit" name="btnSave" id="btnSave" value="Guardar" />
+        <input type="reset"  name="btnReset" id="btnReset" value="Restablecer" />
+    </fieldset>
+</form>
+</admresource>
