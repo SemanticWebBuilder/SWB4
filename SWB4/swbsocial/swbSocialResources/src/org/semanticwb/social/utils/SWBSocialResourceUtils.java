@@ -16,12 +16,16 @@ import org.semanticwb.model.SWBClass;
 import org.semanticwb.model.WebPage;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.social.Childrenable;
-import org.semanticwb.social.admin.tree.ElementTreeNode;
-import org.semanticwb.social.admin.tree.Element;
+import org.semanticwb.social.components.tree.ElementTreeNode;
+import org.semanticwb.social.components.tree.Element;
 
 /**
  *
  * @author jorge.jimenez
+ */
+
+/*
+ * Clase de utilerías para los recursos de swbsocial
  */
 public class SWBSocialResourceUtils {
 
@@ -75,6 +79,12 @@ public class SWBSocialResourceUtils {
 
     public static class Components {
 
+        /*
+         * Metodo cuya funcionalidad es la de insertar un nodo al árbol de navegación y que se refleje en el mismo
+         * @param parentItem item padre del que se desea insertar
+         * @param swbClass SWBClass del nuevo elemento a insertar
+         * @param wpage WebPage de la categoría donde se desea insertar un nuevo nodo
+         */
         public static void insertTreeNode(ElementTreeNode parentItem, SWBClass swbClass, WebPage wpage) {
             if (swbClass instanceof Descriptiveable) {
                 try
@@ -111,6 +121,14 @@ public class SWBSocialResourceUtils {
             }
         }
 
+        /*
+         * Metodo cuya funcionalidad es la de actualizar un nodo del árbol,
+         * basicamente se actualiza solamente en su título, para que este se
+         * vea reflejado en el mismo árbol
+         * @param item ElementTreeNode a actualizar
+         * @param title String a colocar en el item a actualizar
+         */
+
         public static void updateTreeNode(ElementTreeNode item, String title) {
             Element element = (Element) item.getData();
             element.setName(title);
@@ -121,8 +139,8 @@ public class SWBSocialResourceUtils {
     public static class Semantic
     {
         /**
-         * Metodo para eliminar los todos los hijos de un elementos que sea de tipo Childrenale
-         * @param semObj
+         * Metodo para eliminar los todos los hijos de un elementos que sea de tipo Childrenale, de manera recursiva.
+         * @param semObj SemanticObject en el cual buscara nodos hijos, si los tiene los elimina
          * @return true: Si eliminó satisfactoriamente, false: si no lo hizo.
          */
         public static boolean removeObjChildrenable(SemanticObject semObj) {
