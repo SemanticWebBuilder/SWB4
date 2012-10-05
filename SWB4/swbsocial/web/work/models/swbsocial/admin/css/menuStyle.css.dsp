@@ -4,7 +4,7 @@
     text-align:center;
     background:transparent no-repeat center 0;
     font-size: 18pt;
-    color: blue;
+    color: black;
 }
 .menuStyle .z-menu-body-over .z-menu-inner-l,
 .menuStyle .z-menu-body-over .z-menu-inner-r,
@@ -52,7 +52,7 @@
     text-align:center;
     background:transparent no-repeat center 0;
     font-size: 18pt;
-    color: blue;
+    color: black;
     padding-top:58px;
     padding-bottom:8px;
     padding-right:4px;
