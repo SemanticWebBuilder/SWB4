@@ -13,6 +13,10 @@ public class SocialNetwork extends org.semanticwb.social.base.SocialNetworkBase
         super(base);
     }
 
+    /*
+     * Metodo que funciona para realizar ciertas acciones despues de enviado un post a una red social
+     *
+     */
     public void addSentPost(PostOut post, String socialPostId, SocialNetwork socialNetwork)
     {
         SWBModel swbModel=SWBContext.getSWBModel(post.getSemanticObject().getModel().getName());
@@ -23,15 +27,17 @@ public class SocialNetwork extends org.semanticwb.social.base.SocialNetworkBase
         newSocialPost.setSocialPost(post);
         newSocialPost.setSocialNetwork(socialNetwork);
 
-        //Se crea un objeto de persistencia siempre y cuando no este creado para un ciero año y mes, de lo
-        //contrario, se reutiliza uno para ese año y mes.
-        //Una vez esto, se agrega el post al objeto creado o reutilizado.
+       //Lo siguiente que se realiza, es para poder buscar rapidamente los post enviados
+       //Se crea un objeto de persistencia siempre y cuando no este creado para un cierto año y mes, de lo
+       //contrario, se reutiliza uno para ese año y mes.
+       //Una vez esto, se agrega el post al objeto creado o reutilizado.
        Date date=post.getCreated();
        PostContainer postContainer=PostContainer.getPostContainerByDate(date, swbModel);
        postContainer.addPost(post);
        postContainer.setPc_SocialNetworkInv(socialNetwork);
        //System.out.println("Datos completamente guardados..");
 
+       //PRUEBAS......
        //Código siguiente es solo para verificar de guardado, quitar despues...
        Iterator <SocialPost> itSocialPost=SocialPost.ClassMgr.listSocialPosts();
        while(itSocialPost.hasNext())
@@ -107,11 +113,19 @@ public class SocialNetwork extends org.semanticwb.social.base.SocialNetworkBase
     }
 
 
+    /*
+     * Metodo que las clases que extiendan de esta deberan implementar para
+     * escuchar una determinada red social por petición(Request)
+     */
     @Override
     public void listen(Stream stream) {
         //throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    /*
+     * Metodo que las clases que extiendan de esta deberan implementar para
+     * autenticar una cuenta de red social
+     */
     public void authenticate()
     {
         //throw new UnsupportedOperationException("Not supported yet.");

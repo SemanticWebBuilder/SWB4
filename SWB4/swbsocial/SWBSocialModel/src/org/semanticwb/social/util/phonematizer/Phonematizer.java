@@ -12,6 +12,9 @@ import java.util.HashMap;
  *
  * @author jorge.jimenez
  */
+/*
+ * Clase de Prueba, no se esta utilizando...
+ */
 public class Phonematizer {
 
     static ArrayList<String> aDoubles=new ArrayList();
@@ -21,7 +24,7 @@ public class Phonematizer {
     {
         init();
         String in_word="inovasion";
-        
+
         in_word=normalizer(in_word);
         System.out.println("normalizer:"+in_word);
         String out_word=phonematize(in_word);
@@ -84,7 +87,7 @@ public class Phonematizer {
         for(int i=0;i<in_wordArray.length;i++)
         {
             String in_wordChar=String.valueOf(in_wordArray[i]);
-            if(aDoubles.contains(in_wordChar)) 
+            if(aDoubles.contains(in_wordChar))
             {
                 tmp+=in_wordChar;
                 continue;

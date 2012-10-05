@@ -9,12 +9,16 @@ import javax.servlet.http.HttpServletRequest;
 import org.semanticwb.portal.api.SWBActionResponse;
 import org.semanticwb.social.Post;
 import org.semanticwb.social.SocialNetPostable;
-import org.semanticwb.social.SocialNetPostable;
 
 /**
  *
  * @author jorge.jimenez
  */
+
+/*
+ * Clase de tipo pojo que sirve en la clasificación de mensajes provenientes del listener
+ */
+
 public class PostableObj {
 
     SocialNetPostable postAble=null;

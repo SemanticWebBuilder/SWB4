@@ -4,7 +4,7 @@ package org.semanticwb.social.base;
    /**
    * Clase que comprende todos los tipos de Post de entrada (Povientes del Listener)que pueden ir siendo creados en la herramienta. 
    */
-public abstract class PostInBase extends org.semanticwb.social.Post implements org.semanticwb.model.Tagable,org.semanticwb.model.Traceable
+public abstract class PostInBase extends org.semanticwb.social.Post implements org.semanticwb.model.Traceable,org.semanticwb.model.Tagable
 {
    /**
    * Clase en la cual se almacenan los usuarios que escriben los PostIn que llegan. El identificador de c/intancia de esta clase es el identificador de un usuarios en una red social.
@@ -62,6 +62,14 @@ public abstract class PostInBase extends org.semanticwb.social.Post implements o
    * Tipo de Intensidad. 2=Alta;1=Media;0=Baja;
    */
     public static final org.semanticwb.platform.SemanticProperty social_postIntesityType=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#postIntesityType");
+   /**
+   * Clase que contendra los streams que configurados para cada usuario
+   */
+    public static final org.semanticwb.platform.SemanticClass social_Stream=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#Stream");
+   /**
+   * Stream por el que llega el mensaje de entrada
+   */
+    public static final org.semanticwb.platform.SemanticProperty social_postInStream=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#postInStream");
    /**
    * Clase que comprende todos los tipos de Post de entrada (Povientes del Listener)que pueden ir siendo creados en la herramienta.
    */
@@ -247,6 +255,29 @@ public abstract class PostInBase extends org.semanticwb.social.Post implements o
         public static java.util.Iterator<org.semanticwb.social.PostIn> listPostInByCreator(org.semanticwb.model.User value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.social.PostIn> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_creator,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.social.PostIn with a determined PostInStream
+       * @param value PostInStream of the type org.semanticwb.social.Stream
+       * @param model Model of the org.semanticwb.social.PostIn
+       * @return Iterator with all the org.semanticwb.social.PostIn
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.PostIn> listPostInByPostInStream(org.semanticwb.social.Stream value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.PostIn> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(social_postInStream, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.social.PostIn with a determined PostInStream
+       * @param value PostInStream of the type org.semanticwb.social.Stream
+       * @return Iterator with all the org.semanticwb.social.PostIn
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.PostIn> listPostInByPostInStream(org.semanticwb.social.Stream value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.PostIn> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(social_postInStream,value.getSemanticObject(),sclass));
             return it;
         }
        /**
@@ -544,5 +575,43 @@ public abstract class PostInBase extends org.semanticwb.social.Post implements o
     public void setPostIntesityType(int value)
     {
         getSemanticObject().setIntProperty(social_postIntesityType, value);
+    }
+   /**
+   * Sets the value for the property PostInStream
+   * @param value PostInStream to set
+   */
+
+    public void setPostInStream(org.semanticwb.social.Stream value)
+    {
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(social_postInStream, value.getSemanticObject());
+        }else
+        {
+            removePostInStream();
+        }
+    }
+   /**
+   * Remove the value for PostInStream property
+   */
+
+    public void removePostInStream()
+    {
+        getSemanticObject().removeProperty(social_postInStream);
+    }
+
+   /**
+   * Gets the PostInStream
+   * @return a org.semanticwb.social.Stream
+   */
+    public org.semanticwb.social.Stream getPostInStream()
+    {
+         org.semanticwb.social.Stream ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(social_postInStream);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.social.Stream)obj.createGenericInstance();
+         }
+         return ret;
     }
 }

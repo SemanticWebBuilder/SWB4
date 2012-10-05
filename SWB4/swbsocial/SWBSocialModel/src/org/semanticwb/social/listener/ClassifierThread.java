@@ -18,6 +18,11 @@ import org.semanticwb.social.util.SendPostThread;
  *
  * @author jorge.jimenez
  */
+
+/*
+ * Clase cuya funcionalidad es la de realizar ciertas tareas de clasificación por cada mensaje que llega por medio del listener.
+ * Estas tareas se realizan en un thread, esta clase puede enviar hacia otras clases a realizar otras tareas mas específicas
+ */
 public class ClassifierThread extends java.lang.Thread {
 
     /** The log. */

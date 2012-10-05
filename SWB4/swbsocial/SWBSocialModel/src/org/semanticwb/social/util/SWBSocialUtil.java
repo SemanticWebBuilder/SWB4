@@ -22,6 +22,11 @@ import org.semanticwb.social.util.lucene.SpanishAnalizer;
  *
  * @author jorge.jimenez
  */
+
+/*
+ * Clase de tipo utilerías 
+ */
+
 public class SWBSocialUtil {
 
     /**
@@ -117,6 +122,9 @@ public class SWBSocialUtil {
         return aDoubles;
     }
 
+    /*
+     * Metodo que regresa phonemas
+     */
     public HashMap getChangesMap()
     {
         return hmapChanges;
@@ -398,6 +406,11 @@ public class SWBSocialUtil {
             return awords;
         }
 
+        /*
+         * Metod que regresa cuales con la palabras o frases para monitorear en un determinado modelo
+         * Este metodo es muy posible que NO nos sea util al final ya que pensamos utilizar diversos streams
+         * los cuales pueden tener multiples frases, y todo esto en un mismo sitio o marca
+         */
         public static String getWords2Monitor(String delimiter, SWBModel model) {
             //Palabras acerca de la compañia
             String words2monitor = "";
@@ -456,6 +469,9 @@ public class SWBSocialUtil {
         }
     }
 
+    /*
+     * Metodo que normaliza una palabra, esto de acuerdo a definición realizada internamente en el área
+     */
     public static class Classifier
     {
         public static NormalizerCharDuplicate normalizer(String in_word)
@@ -509,6 +525,10 @@ public class SWBSocialUtil {
 
         }
 
+        /*
+         * Metodo que regresa el fonema de una palabra, esto de acuerdo a definición
+         * realizada internamente en el área.
+         */
         public static String phonematize(String phase)
         {
             if(phase==null || phase.isEmpty()) return phase;
@@ -597,7 +617,10 @@ public class SWBSocialUtil {
             return word;
         }*/
 
-         public static String getRootWord(String phrase)
+        /*
+         * Metodo que regrasa la raíz de una palabra
+         */
+        public static String getRootWord(String phrase)
         {
             String sphrase="";
             try

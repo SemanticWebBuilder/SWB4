@@ -14,6 +14,10 @@ import org.semanticwb.social.PostIn;
  *
  * @author jorge.jimenez
  */
+
+/*
+ * Clase cuya funcionalidad es la de levantar un thread por cada mensaje que llega por medio del listener.
+ */
 public class Classifier {
 
     private Logger log = SWBUtils.getLogger(Classifier.class);

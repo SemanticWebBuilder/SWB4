@@ -13,6 +13,7 @@ import org.semanticwb.model.SWBModel;
 import org.semanticwb.model.User;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.portal.api.SWBActionResponse;
+import org.semanticwb.social.listener.Classifier;
 import org.semanticwb.social.listener.twitter.SWBSocialStatusListener;
 import org.semanticwb.social.util.SWBSocialUtil;
 import twitter4j.FilterQuery;
@@ -147,13 +148,15 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
                 MessageIn message=MessageIn.ClassMgr.createMessageIn(String.valueOf(tweet.getId()), wsite);
                 message.setMsg_Text(tweet.getText());
                 message.setPostInSocialNetwork(this);
+                message.setPostInStream(stream);
                 System.out.println("listen-4:"+message);
                 if(socialNetUser!=null)
                 {
                     message.setPostInSocialNetworkUser(socialNetUser);
                     System.out.println("listen-5:"+message);
                 }
-                System.out.println("listen-6...");
+                this.addReceivedPost(message, String.valueOf(tweet.getId()), this);
+                new Classifier(message);
             }
         } catch (Exception te) {
             te.printStackTrace();
@@ -166,7 +169,7 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
     @Override
     public void listenAlive(SWBModel model) {
         try {
-            StatusListener listener = new SWBSocialStatusListener(model, this);
+            StatusListener listener = new SWBSocialStatusListener(model, this, null);
             /*create filterQuery*/
             FilterQuery query = new FilterQuery();
             //NOTE: format of values: {minLongitude, minLatitude}, {...}

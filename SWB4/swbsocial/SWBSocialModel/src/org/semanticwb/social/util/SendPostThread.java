@@ -21,6 +21,10 @@ import org.semanticwb.social.Videoable;
  *
  * @author jorge.jimenez
  */
+
+/*
+ * Clase que se encarga de enviar un mensaje a una determinada red social, esto mediante un thread.
+ */
 public class SendPostThread extends java.lang.Thread {
 
     /** The log. */
