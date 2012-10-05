@@ -1,6 +1,0 @@
-<window id="win" title="Datos de nueva Red Social" width="640px" border="normal" apply="org.semanticwb.social.admin.components.SocialNetworkComp">
-    Título: <textbox id="title" cols="25" />
-    id: <textbox id="id" cols="25" />
-    Descripción: <textbox id="description" cols="50" rows="10"/>
-    <button id="sendButton"  />
-</window>
