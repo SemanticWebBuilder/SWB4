@@ -53,12 +53,17 @@ public class SocialNetworkComp extends GenericForwardComposer {
         treeItem=(ElementTreeNode)requestScope.get("treeItem");
         action=(String)requestScope.get("action");
         objUri=(String)requestScope.get("objUri");
+        /*
+        System.out.println("SocialNetworkComp/wsite:"+wsite);
+        System.out.println("SocialNetworkComp/treeItem:"+treeItem);
+        System.out.println("SocialNetworkComp/action:"+action);
+        System.out.println("SocialNetworkComp/objUri:"+objUri);*/
         if(action.equals(SWBSocialResourceUtils.ACTION_ADD))
         {
             sendButton.setLabel("Crear");
         }
 
-        if(action.equals(SWBSocialResourceUtils.ACTION_EDIT) && requestScope.get("treeItem")!=null)
+        if(action.equals(SWBSocialResourceUtils.ACTION_EDIT) ||  action.equals(SWBSocialResourceUtils.ACTION_DOUBLECLICK) && requestScope.get("treeItem")!=null)
         {
             treeItem=(ElementTreeNode)requestScope.get("treeItem");
             semObject = SemanticObject.createSemanticObject(treeItem.getData().getUri());
@@ -87,7 +92,7 @@ public class SocialNetworkComp extends GenericForwardComposer {
             }
             //Actualizar el árbol (Insertar Nodo)
             SWBSocialResourceUtils.Components.updateTreeNode(treeItem, ctaNet);
-        }else if(action.equals(SWBSocialResourceUtils.ACTION_EDIT) && socialNet!=null)
+        }else if(action.equals(SWBSocialResourceUtils.ACTION_EDIT) ||  action.equals(SWBSocialResourceUtils.ACTION_DOUBLECLICK) && socialNet!=null)
         {
             if(title.getValue()!=null)
             {
