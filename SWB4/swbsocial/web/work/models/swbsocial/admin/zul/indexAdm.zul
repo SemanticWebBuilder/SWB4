@@ -48,7 +48,7 @@
                                         TreeNodeRefresh treeNodeRefresh=(TreeNodeRefresh)evt.getData();
                                         ElementTreeNode treeNode=treeNodeRefresh.getTreeNode();
                                         String title=treeNodeRefresh.getTitle();
-                                        SWBSocialResourceUtils.Components.insertTreeNode(treeNode, title);
+                                        SWBSocialResourceUtils.Components.updateTreeTitleNode(treeNode, title);
                                     }
                                 });
                             ]]>
