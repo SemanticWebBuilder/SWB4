@@ -53,7 +53,6 @@ public class SocialNetworkComp extends GenericForwardComposer {
         treeItem=(ElementTreeNode)requestScope.get("treeItem");
         action=(String)requestScope.get("action");
         objUri=(String)requestScope.get("objUri");
-        
         if(action.equals(SWBSocialResourceUtils.ACTION_ADD))
         {
             sendButton.setLabel("Crear");
