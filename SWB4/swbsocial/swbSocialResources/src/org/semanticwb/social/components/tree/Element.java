@@ -49,9 +49,9 @@ public class Element {
     public Element(String name, String uri, String zulPage, String iconElement, String categoryID, String modelID) {
         this.name=name;
         this.uri=uri;
-        this.iconElement = iconElement;
         this.zulPage=zulPage;
-        this.categoryID=null;
+        this.iconElement = iconElement;
+        this.categoryID=categoryID;
         this.modelID=modelID;
     }
 

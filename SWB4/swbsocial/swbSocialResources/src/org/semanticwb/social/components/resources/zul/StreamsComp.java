@@ -8,6 +8,8 @@ package org.semanticwb.social.components.resources.zul;
 import org.semanticwb.model.WebPage;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.platform.SemanticObject;
+import org.semanticwb.portal.api.SWBParamRequest;
+import org.semanticwb.social.SocialNetwork;
 import org.semanticwb.social.Stream;
 import org.semanticwb.social.components.tree.ElementTreeNode;
 import org.semanticwb.social.utils.SWBSocialResourceUtils;
@@ -31,48 +33,43 @@ import org.zkoss.zul.Button;
 public class StreamsComp extends GenericForwardComposer
 {
 
-    private static final long serialVersionUID = -9145887024839938515L;
-    
+    private static final long serialVersionUID = -9145887024839938516L;
+    private WebSite wsite=null;
     Textbox title;
     Textbox description;
     Textbox id;
-    private WebSite wsite=null;
-    ElementTreeNode parentItem;
-    ElementTreeNode item;
+    ElementTreeNode treeItem;
     Button sendButton;
     String action;
     SemanticObject semObject;
     Stream stream;
     WebPage optionWepPage;
+    String objUri;
+    SWBParamRequest paramRequest=null;
 
+    @Override
     public void doAfterCompose(Component comp) throws Exception {
         super.doAfterCompose(comp);
         wsite=(WebSite)requestScope.get("wsite");
-        parentItem=(ElementTreeNode)requestScope.get("parentItem");
-        optionWepPage=(WebPage)requestScope.get("optionWepPage");
-
+        treeItem=(ElementTreeNode)requestScope.get("treeItem");
         action=(String)requestScope.get("action");
-
-        if(action!=null)
+        objUri=(String)requestScope.get("objUri");
+        
+        if(action.equals(SWBSocialResourceUtils.ACTION_ADD))
         {
-            if(action.equals(SWBSocialResourceUtils.ACTION_ADD))
-            {
-                sendButton.setLabel("Crear");
-            }else  if(action.equals(SWBSocialResourceUtils.ACTION_EDIT) && requestScope.get("item")!=null)
-            {
-                item=(ElementTreeNode)requestScope.get("item");
-                semObject = SemanticObject.createSemanticObject(item.getData().getUri());
-                stream = (Stream) semObject.createGenericInstance();
-                id.setValue(stream.getId());
-                title.setValue(stream.getTitle());
-                description.setValue(stream.getDescription());
-                sendButton.setLabel("Actualizar");
-            }else
-            {
-                System.out.println("action:"+action);
-            }
+            sendButton.setLabel("Crear");
         }
 
+        if(action.equals(SWBSocialResourceUtils.ACTION_EDIT) && requestScope.get("treeItem")!=null)
+        {
+            treeItem=(ElementTreeNode)requestScope.get("treeItem");
+            semObject = SemanticObject.createSemanticObject(treeItem.getData().getUri());
+            stream = (Stream) semObject.createGenericInstance();
+            id.setValue(stream.getId());
+            title.setValue(stream.getTitle());
+            description.setValue(stream.getDescription());
+            sendButton.setLabel("Actualizar");
+        }
 
     }
 
@@ -91,14 +88,14 @@ public class StreamsComp extends GenericForwardComposer
                 stream.setDescription(description.getValue());
             }
             //Actualizar el árbol (Insertar Nodo)
-            SWBSocialResourceUtils.Components.insertTreeNode(parentItem, stream, optionWepPage);
+            SWBSocialResourceUtils.Components.updateTreeNode(treeItem, stream);
         }else if(action.equals(SWBSocialResourceUtils.ACTION_EDIT) && stream!=null)
         {
             if(title.getValue()!=null)
             {
                 stream.setTitle(title.getValue());
                 //Actualizar el árbol (actualizar título de Nodo)
-                SWBSocialResourceUtils.Components.updateTreeNode(item, title.getValue());
+                SWBSocialResourceUtils.Components.updateTreeNode(treeItem, title.getValue());
             }
             if(description.getValue()!=null)
             {

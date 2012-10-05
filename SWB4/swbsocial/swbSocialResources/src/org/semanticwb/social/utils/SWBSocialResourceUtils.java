@@ -8,16 +8,18 @@ import java.lang.String;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import javax.servlet.http.HttpServletRequest;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Descriptiveable;
 import org.semanticwb.model.DisplayObject;
 import org.semanticwb.model.SWBClass;
-import org.semanticwb.model.WebPage;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.social.Childrenable;
+import org.semanticwb.social.components.tree.AdvancedTreeModel;
 import org.semanticwb.social.components.tree.ElementTreeNode;
 import org.semanticwb.social.components.tree.Element;
+import org.zkoss.zk.ui.event.*;
 
 /**
  *
@@ -31,6 +33,7 @@ public class SWBSocialResourceUtils {
 
     public static final String ACTION_ADD = "add";
     public static final String ACTION_EDIT = "edit";
+    public static final String ACTION_DOUBLECLICK = "doubleClick";
     public static final String ACTION_REMOVE = "remove";
     /**
      * Holds a reference to a log utility.
@@ -79,13 +82,40 @@ public class SWBSocialResourceUtils {
 
     public static class Components {
 
-        /*
+        public static void updateTreeNode(ElementTreeNode treeNode, SWBClass newSWBClass)
+        {
+            EventQueue<Event> eq = EventQueues.lookup("insertNodo2Tree", EventQueues.SESSION, true);
+            TreeNodeRefresh treeNodeRefresh=new TreeNodeRefresh(treeNode, newSWBClass);
+            eq.publish(new Event("onCreateNode", null, treeNodeRefresh));
+        }
+
+        public static void updateTreeNode(ElementTreeNode treeNode, String title)
+        {
+            EventQueue<Event> eq = EventQueues.lookup("updateNodo2Tree", EventQueues.SESSION, true);
+            TreeNodeRefresh treeNodeRefresh=new TreeNodeRefresh(treeNode,title);
+            eq.publish(new Event("onUpdateNode", null, treeNodeRefresh));
+        }
+
+        public static ElementTreeNode getComponentbyUri(HttpServletRequest request)
+        {
+            try
+            {
+                AdvancedTreeModel advTreeModel=(AdvancedTreeModel)request.getSession().getAttribute("elemenetTreeModel");
+                return advTreeModel.findNode(request.getParameter("itemUri"),request.getParameter("wsite"), advTreeModel.getRoot());
+            }catch(Exception e)
+            {
+                log.error(e);
+            }
+            return null;
+        }
+
+         /*
          * Metodo cuya funcionalidad es la de insertar un nodo al árbol de navegación y que se refleje en el mismo
          * @param parentItem item padre del que se desea insertar
          * @param swbClass SWBClass del nuevo elemento a insertar
          * @param wpage WebPage de la categoría donde se desea insertar un nuevo nodo
          */
-        public static void insertTreeNode(ElementTreeNode parentItem, SWBClass swbClass, WebPage wpage) {
+        public static void insertTreeNode(ElementTreeNode parentItem, SWBClass swbClass) {
             if (swbClass instanceof Descriptiveable) {
                 try
                 {
@@ -129,7 +159,7 @@ public class SWBSocialResourceUtils {
          * @param title String a colocar en el item a actualizar
          */
 
-        public static void updateTreeNode(ElementTreeNode item, String title) {
+        public static void updateTreeTitleNode(ElementTreeNode item, String title) {
             Element element = (Element) item.getData();
             element.setName(title);
             item.setData(element);

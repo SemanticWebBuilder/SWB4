@@ -26,6 +26,7 @@ import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zul.Tabs;
 import org.zkoss.zul.Window;
+import java.net.URLDecoder;
 
 /**
  *
@@ -46,11 +47,11 @@ public class GenericCRUDElement extends GenericForwardComposer <Component>
     private WebSite wsite=null;
     private User user=null;
     private String objUri=null;
-    ElementTreeNode parentItem;
+    ElementTreeNode treeItem;
     ElementTreeNode item;
-    Window win_dobleClick;
-    Tabs tabs_dobleClick;
-    Iframe iframe_dobleClick;
+    Window win_genCRUD;
+    Tabs tabs_genCRUD;
+    Iframe iframe_genCRUD;
     String action;
     WebPage optionWepPage;
     SemanticObject semObject;
@@ -69,52 +70,49 @@ public class GenericCRUDElement extends GenericForwardComposer <Component>
            wsite=(WebSite)requestScope.get("wsite");
            user=(User)requestScope.get("user");
            objUri=(String)requestScope.get("objUri");
-           parentItem=(ElementTreeNode)requestScope.get("parentItem");
-           item=(ElementTreeNode)requestScope.get("item");
+           treeItem=(ElementTreeNode)requestScope.get("treeItem");
+           //item=(ElementTreeNode)requestScope.get("item");
            action=(String)requestScope.get("action");
            optionWepPage=(WebPage)requestScope.get("optionWepPage");
-           if(action.equals(SWBSocialResourceUtils.ACTION_ADD))
+           TreeNodePage treeNodePage=null;
+           if(optionWepPage!=null)
            {
-                win_dobleClick.setTitle("Creación de:"+optionWepPage.getTitle());
+                win_genCRUD.setTitle("Creación de:"+optionWepPage.getTitle());
                 Tab tab=new Tab(optionWepPage.getDisplayTitle(user.getLanguage()));
-                tab.setParent(tabs_dobleClick);
+                tab.setParent(tabs_genCRUD);
                 if(optionWepPage instanceof TreeNodePage)
                 {
-                    final TreeNodePage treeNodePage=(TreeNodePage) optionWepPage;
+                    treeNodePage=(TreeNodePage) optionWepPage;
                     if(treeNodePage.getWpImg()!=null)
                     {
                         String iconImgPath=SWBPortal.getWebWorkPath()+treeNodePage.getWorkPath()+"/"+treeNodePage.social_wpImg.getName()+"_"+treeNodePage.getId()+"_"+treeNodePage.getWpImg();
                         tab.setImage(iconImgPath);
                     }
-                    System.out.println("Entra a Add de GenericCRUD,wsite:"+wsite+",action:"+action+",objUri:"+objUri+",parentItem:"+parentItem);
-             
-                    //
-                    requestScope.put("wsite", wsite);
-                    requestScope.put("action", action);
-                    requestScope.put("objUri", objUri);
-                    this.getPage().setAttribute("wsite",wsite);
-                    this.getPage().setAttribute("action",action);
-                    this.getPage().setAttribute("objUri",objUri);
-                    this.getPage().setAttribute("parentItem",parentItem);
-                    //Desktop
-                    this.getPage().getDesktop().setAttribute("wsite",wsite);
-                    this.getPage().getDesktop().setAttribute("action",action);
-                    this.getPage().getDesktop().setAttribute("parentItem",parentItem);
-                    
-                    System.out.println("Index de parentItem:"+parentItem.getIndex(parentItem));
-
-                    iframe_dobleClick.getPage().getDesktop().getSession().setAttribute("parentItem", parentItem);
-                    iframe_dobleClick.setSrc(treeNodePage.getUrl(user.getLanguage())+"?wsite="+wsite.getId()+"&action="+action+"&itemUri="+parentItem.getData().getUri());
-                    
                 }
-           }else if(action.equals(SWBSocialResourceUtils.ACTION_EDIT))
+                //Para cuando le den click de nuevo, se refresque el contenido del tab
+                tab.addEventListener(Events.ON_SELECT, new EventListener<Event>() {
+                    @Override
+                    public void onEvent(Event event) throws Exception {
+                        iframe_genCRUD.setSrc(optionWepPage.getUrl(user.getLanguage())+"?wsite="+wsite!=null?wsite.getId():null+"&action="+action+"&objUri="+objUri);
+                    }
+                 });
+           }
+
+           if(action.equals(SWBSocialResourceUtils.ACTION_ADD) && treeNodePage!=null)
            {
-               SemanticObject semObj=SemanticObject.getSemanticObject(objUri);
+               iframe_genCRUD.setSrc(treeNodePage.getUrl(user.getLanguage())+"?wsite="+wsite.getId()+"&action="+action+"&itemUri="+treeItem.getData().getUri());
+            }else if(action.equals(SWBSocialResourceUtils.ACTION_EDIT))
+           {
+               buildEditTab();
+           }
+           else if(action.equals(SWBSocialResourceUtils.ACTION_DOUBLECLICK))
+           {
+               SemanticObject semObj=SemanticObject.getSemanticObject(URLDecoder.decode(objUri));
                if(semObj.getProperty(Descriptiveable.swb_title)!=null)
                {
-                    win_dobleClick.setTitle(semObj.getSemanticClass().getClassCodeName()+":"+semObj.getProperty(Descriptiveable.swb_title));
+                    win_genCRUD.setTitle(semObj.getSemanticClass().getClassCodeName()+":"+semObj.getProperty(Descriptiveable.swb_title));
                }
-               if(wsiteAdm!=null && parentItem!=null)
+               if(wsiteAdm!=null && treeItem!=null)
                {
                    buildTabs();
                }
@@ -125,13 +123,26 @@ public class GenericCRUDElement extends GenericForwardComposer <Component>
         }
     }
 
+    private void buildEditTab()
+    {
+        String wsiteId=null;
+        if(wsite!=null)
+        {
+            wsiteId=wsite.getId();
+        }
+        
+        //Manejo dinamico de la propiedad "src" del iframe.
+        iframe_genCRUD.setScrolling("false");iframe_genCRUD.setScrolling("no");
+        iframe_genCRUD.setSrc(optionWepPage.getUrl(user.getLanguage())+"?wsite="+wsiteId+"&action="+action+"&objUri="+objUri);
+    }
+
     /*
      * Metodo que construye los tabs de un cierto elemento del árbol, esto sucede cuando un usuario
      * da doble click en el elemento.
      */
      private void buildTabs()
      {
-         WebPage admItemPage=wsiteAdm.getWebPage(parentItem.getData().getUri());
+         WebPage admItemPage=wsiteAdm.getWebPage(treeItem.getData().getCategoryID());
          if(admItemPage!=null)
          {
              boolean isFirstNode=true;
@@ -143,7 +154,7 @@ public class GenericCRUDElement extends GenericForwardComposer <Component>
                  {
                     final TreeNodePage treeNodePage=(TreeNodePage) wPageChild;
                     Tab tab=new Tab(wPageChild.getDisplayTitle(user.getLanguage()));
-                    tab.setParent(tabs_dobleClick);
+                    tab.setParent(tabs_genCRUD);
                     if(treeNodePage.getWpImg()!=null)
                     {
                         String iconImgPath=SWBPortal.getWebWorkPath()+treeNodePage.getWorkPath()+"/"+treeNodePage.social_wpImg.getName()+"_"+treeNodePage.getId()+"_"+treeNodePage.getWpImg();
@@ -151,13 +162,15 @@ public class GenericCRUDElement extends GenericForwardComposer <Component>
                     }
                     if(isFirstNode) //Se ejecuta solo con el primer webpage del topico padre, en este caso por lo regular sería el topico de "Configurar".
                     {
-                        iframe_dobleClick.setSrc(treeNodePage.getUrl(user.getLanguage())+"?wsite="+wsite.getId()+"&action="+action+"&objUri="+objUri);
+                        iframe_genCRUD.setSrc("/work/models/swbsocial/admin/zul/clearCompose.zul");
+                        iframe_genCRUD.setSrc(treeNodePage.getUrl(user.getLanguage())+"?wsite="+wsite.getId()+"&action="+action+"&objUri="+objUri);
                         isFirstNode=false;
                     }
                     tab.addEventListener(Events.ON_SELECT, new EventListener<Event>() {
                         @Override
                         public void onEvent(Event event) throws Exception {
-                            iframe_dobleClick.setSrc(treeNodePage.getUrl(user.getLanguage())+"?wsite="+wsite.getId()+"&action="+action+"&objUri="+objUri);
+                            iframe_genCRUD.setSrc("/work/models/swbsocial/admin/zul/clearCompose.zul");
+                            iframe_genCRUD.setSrc(treeNodePage.getUrl(user.getLanguage())+"?wsite="+wsite.getId()+"&action="+action+"&objUri="+objUri);
                         }
                      });
                  }
