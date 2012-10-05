@@ -142,7 +142,6 @@ public class AdvancedTreeModel extends DefaultTreeModel<Element> {
      */
     public ElementTreeNode findNode(String uri, String modelID, TreeNode<Element> treeNodeInit)
     {
-        System.out.println("findNode Uri:"+uri+", treeNodeInit name:"+treeNodeInit.getData().getName()+",uri:"+treeNodeInit.getData().getUri());
         Iterator<TreeNode<Element>> itChilds=treeNodeInit.getChildren().iterator();
         while(itChilds.hasNext())
         {
@@ -152,10 +151,8 @@ public class AdvancedTreeModel extends DefaultTreeModel<Element> {
                 return treeNode;
             }else if(treeNode.getChildCount()>0){
                 ElementTreeNode tmpNode=findNode(uri, modelID, treeNode);
-                System.out.println("tmpNode:"+tmpNode.getData().getUri());
                 if(tmpNode!=null)
                 {
-                    System.out.println("Regresa tmpNode:"+tmpNode.getData().getUri());
                     return tmpNode;
                 }
             }

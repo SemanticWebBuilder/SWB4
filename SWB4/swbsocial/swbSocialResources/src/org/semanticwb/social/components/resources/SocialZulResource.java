@@ -19,6 +19,7 @@ import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.lib.SWBResponse;
 import org.semanticwb.social.components.tree.AdvancedTreeModel;
 import org.semanticwb.social.components.tree.ElementTreeNode;
+import org.semanticwb.social.utils.SWBSocialResourceUtils;
 
 /**
  *
@@ -56,33 +57,13 @@ public class SocialZulResource extends GenericAdmResource
             request.setAttribute("paramRequest", paramRequest);
             RequestDispatcher dispatcher = request.getRequestDispatcher(path);
             if(dispatcher != null) {
-                System.out.println("SocialZulResource/wsite:"+request.getParameter("wsite"));
-                System.out.println("SocialZulResource/action:"+request.getParameter("action"));
-                System.out.println("SocialZulResource/itemUri:"+request.getParameter("itemUri"));
-
                 WebSite wsite=WebSite.ClassMgr.getWebSite(request.getParameter("wsite"));
+                ElementTreeNode treeItem=SWBSocialResourceUtils.Components.getComponentbyUri(request);
 
                 request.setAttribute("wsite", wsite);
                 request.setAttribute("action", request.getParameter("action"));
-
-
-                AdvancedTreeModel advTreeModel=(AdvancedTreeModel)request.getSession().getAttribute("elemenetTreeModel");
-                ElementTreeNode nodo=advTreeModel.findNode(request.getParameter("itemUri"), wsite.getId(), advTreeModel.getRoot());
-
-                ElementTreeNode parentItem=(ElementTreeNode)request.getSession().getAttribute("parentItem");
-                System.out.println("parentItem Canijo:"+parentItem);
-
-                request.setAttribute("treeItem", parentItem);
-                System.out.println("Nodo:"+nodo);
-                System.out.println("nodo final:"+nodo.getData().getName()+",uri:"+nodo.getData().getUri());
-
-                System.out.println("SocialZulResource/objUri:"+request.getParameter("objUri"));
-                //ElementTreeNode parentItem=(ElementTreeNode)request.getAttribute("parentItem");
-                System.out.println("SocialZulResource/parentItem:"+parentItem);
-
-                System.out.println("SocialZulResource/parentItem -Atribute:"+request.getAttribute("parentItem"));
-                System.out.println("SocialZulResource/wsite -Atribute:"+request.getAttribute("wsite"));
-                System.out.println("SocialZulResource/action -Atribute:"+request.getAttribute("action"));
+                request.setAttribute("objUri", request.getParameter("objUri"));
+                request.setAttribute("treeItem", treeItem);
 
                 if(getResourceBase().getAttribute("forward")!=null) {
                     dispatcher.forward(request, response);

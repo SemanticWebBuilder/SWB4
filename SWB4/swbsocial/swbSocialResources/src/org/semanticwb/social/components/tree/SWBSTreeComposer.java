@@ -25,7 +25,6 @@ import org.semanticwb.social.utils.SWBSocialResourceUtils;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.event.Event;
-import org.zkoss.zk.ui.event.EventQueues;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.util.GenericForwardComposer;
@@ -144,18 +143,16 @@ public class SWBSTreeComposer extends GenericForwardComposer <Component> {
                                 mItemNew.addEventListener(Events.ON_CLICK, new EventListener<Event>() {
                                 @Override
                                 public void onEvent(Event event) throws Exception {
-                                    content.setSrc(null);
+                                    //content.setSrc(null);
                                     content.setSrc("/work/models/swbsocial/admin/zul/clearCompose.zul");
                                     WebPage adminWebPage=wsiteAdm.getWebPage(itemValue.getData().getUri());
-                                    System.out.println("Arbol-1:"+adminWebPage);
                                     if(adminWebPage instanceof TreeNodePage)
                                     {
                                         TreeNodePage treeNodePage=(TreeNodePage) adminWebPage;
-                                        System.out.println("Arbol-2:"+treeNodePage.getZulResourcePath());
                                         content.setSrc(treeNodePage.getZulResourcePath());
                                     }
                                     
-                                    content.setDynamicProperty("parentItem", itemValue);
+                                    content.setDynamicProperty("treeItem", itemValue);
                                     content.setDynamicProperty("action", SWBSocialResourceUtils.ACTION_ADD);
                                     content.setDynamicProperty("user", user);
 
@@ -194,7 +191,7 @@ public class SWBSTreeComposer extends GenericForwardComposer <Component> {
                                     mItemNew.addEventListener(Events.ON_CLICK, new EventListener<Event>() {
                                     @Override
                                     public void onEvent(Event event) throws Exception {
-                                        content.setSrc(null);   //En teoría, esta línea hace lo que hace la línea de abajo (Todo:Probar y Quitar la de abajo)
+                                        //content.setSrc(null);   //En teoría, esta línea hace lo que hace la línea de abajo (Todo:Probar y Quitar la de abajo)
                                         content.setSrc("/work/models/swbsocial/admin/zul/clearCompose.zul");
                                         WebPage adminWebPage=wsiteAdm.getWebPage(itemValue.getData().getCategoryID());
                                         if(adminWebPage instanceof TreeNodePage)
@@ -203,8 +200,7 @@ public class SWBSTreeComposer extends GenericForwardComposer <Component> {
                                             content.setSrc(treeNodePage.getZulResourcePath());
                                         }
 
-                                        content.setDynamicProperty("parentItem", itemValue);
-                                        //content.setDynamicProperty("item", itemValue);
+                                        content.setDynamicProperty("treeItem", itemValue);
                                         content.setDynamicProperty("action", SWBSocialResourceUtils.ACTION_ADD);
                                         content.setDynamicProperty("user", user);
                                         WebSite wsite=(WebSite)semObj.getModel().getModelObject().createGenericInstance();
@@ -282,7 +278,7 @@ public class SWBSTreeComposer extends GenericForwardComposer <Component> {
                                     @Override
                                     public void onEvent(Event event) throws Exception {
                                         String zulPage=parentItemValue.getData().getZulPage();
-                                        String action="";
+                                        String action=SWBSocialResourceUtils.ACTION_EDIT;
                                         if(wpageOption instanceof TreeNodePage)
                                         {
                                             TreeNodePage TreeNodePage=(TreeNodePage)wpageOption;
@@ -295,14 +291,14 @@ public class SWBSTreeComposer extends GenericForwardComposer <Component> {
                                                 action=TreeNodePage.getAction();
                                             }
                                         }
-                                        content.setSrc(null);//En teoría, esta línea hace lo que hace la línea de abajo (Todo:Probar y Quitar la de abajo)
+                                        //content.setSrc(null);//En teoría, esta línea hace lo que hace la línea de abajo (Todo:Probar y Quitar la de abajo)
                                         content.setSrc("/work/models/swbsocial/admin/zul/clearCompose.zul");
                                         content.setSrc(zulPage);
                                         content.setDynamicProperty("objUri", URLEncoder.encode(itemValue.getData().getUri()));
                                         content.setDynamicProperty("paramRequest", paramRequest);;
                                         content.setDynamicProperty("action", action);
                                         content.setDynamicProperty("optionWepPage", wpageOption);
-                                        content.setDynamicProperty("item", itemValue);
+                                        content.setDynamicProperty("treeItem", itemValue);
                                         WebSite wsite=(WebSite)semObj.getModel().getModelObject().createGenericInstance();
                                         content.setDynamicProperty("wsite", wsite);
                                         content.setDynamicProperty("user", user);
@@ -328,13 +324,13 @@ public class SWBSTreeComposer extends GenericForwardComposer <Component> {
                             if(!isCategory(itemValue.getData())){ //Si es una categoría
                                 final Treeitem selectedTreeItemParent = tree.getSelectedItem().getParentItem();
                                 final ElementTreeNode itemValueParent = (ElementTreeNode) selectedTreeItemParent.getValue();
-                                content.setSrc(null);//En teoría, esta línea hace lo que hace la línea de abajo (Todo:Probar y Quitar la de abajo)
+                                //content.setSrc(null);//En teoría, esta línea hace lo que hace la línea de abajo (Todo:Probar y Quitar la de abajo)
                                 content.setSrc("/work/models/swbsocial/admin/zul/clearCompose.zul");
                                 content.setSrc(itemValueParent.getData().getZulPage());
                                 content.setDynamicProperty("objUri", itemValue.getData().getUri());
-                                content.setDynamicProperty("parentItem", itemValueParent);
-                                content.setDynamicProperty("item", itemValue);
-                                content.setDynamicProperty("action", SWBSocialResourceUtils.ACTION_EDIT);
+                                //content.setDynamicProperty("parentItem", itemValueParent);
+                                content.setDynamicProperty("treeItem", itemValue);
+                                content.setDynamicProperty("action", SWBSocialResourceUtils.ACTION_DOUBLECLICK);
                                 content.setDynamicProperty("wsiteAdm", wsiteAdm);
                                 content.setDynamicProperty("user", user);
 
