@@ -2,14 +2,14 @@
 
 <zk xmlns="http://www.zkoss.org/2005/zul">
 
-    <window id="win_genIframeRed" width="100%" height="100%" border="normal" apply="org.semanticwb.social.admin.components.GenericIframeRedirect">
+    <window id="win_genIframeRed" width="100%" height="100%" border="normal" apply="org.semanticwb.social.components.GenericIframeRedirect">
          <style>
         .nav_tabs .z-tabpanel { padding: 0; border-bottom: 0 none;}
         .nav_tabs .z-tabpanels .z-toolbarbutton-cnt { padding: 4px;}
         .nav_category { cursor:pointer; }
         .nav_text { color: #696569; font-size : 24px; font-weight: bold;}
     </style>
-    <tabbox width="100%" height="25px" sclass="nav_tabs" >
+    <tabbox width="100%" sclass="nav_tabs" >
         <tabs id="tabs_genIframeRed"/>
     </tabbox>
     <iframe id="genIframeRed" style="width:100%; height:100%;"  />

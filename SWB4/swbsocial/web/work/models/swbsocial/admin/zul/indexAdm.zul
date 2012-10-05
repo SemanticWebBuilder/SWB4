@@ -12,7 +12,7 @@
             <center id="menu" border="normal">
                 <window height="100%">
                     <style src="/work/models/swbsocial/admin/css/menuStyle.css.dsp" />
-                    <menubar id="mainMenu" apply="org.semanticwb.social.admin.menu.SWBSTopMenuComposer" height="100%" />
+                    <menubar id="mainMenu" apply="org.semanticwb.social.components.SWBSTopMenuComposer" height="100%" />
                 </window>
             </center>
             <!--Termina área de Menú Superior-->
@@ -24,7 +24,36 @@
             <!--Inicia árbol de navegación-->
             <west id="" title=" " maxsize="600" size="300px" flex="true" collapsible="true" splittable="true">
                 <vbox spacing="0" width="100%" height="50%,100">
-                    <window id="swbTreeWindow" apply="org.semanticwb.social.admin.tree.SWBSTreeComposer">
+                    <window id="swbTreeWindow" apply="org.semanticwb.social.components.tree.SWBSTreeComposer">
+                        <zscript>
+                            <![CDATA[
+                                import org.zkoss.zk.ui.event.*;
+                                import org.semanticwb.social.utils.TreeNodeRefresh;
+                                import org.semanticwb.social.components.tree.ElementTreeNode;
+                                import org.semanticwb.model.SWBClass;
+                                import org.semanticwb.model.SWBModel;
+                                import org.semanticwb.social.utils.SWBSocialResourceUtils;
+                                EventQueue queOnCreateNode = EventQueues.lookup("insertNodo2Tree", EventQueues.SESSION, true);
+                                queOnCreateNode.subscribe(new EventListener() {
+                                    public void onEvent(Event evt) {
+                                        TreeNodeRefresh treeNodeRefresh=(TreeNodeRefresh)evt.getData();
+                                        ElementTreeNode treeNode=treeNodeRefresh.getTreeNode();
+                                        SWBClass swbClass=treeNodeRefresh.getSWBClass();
+                                        SWBSocialResourceUtils.Components.insertTreeNode(treeNode,swbClass);
+                                    }
+                                });
+                                EventQueue queOnUpdateNode = EventQueues.lookup("updateNodo2Tree", EventQueues.SESSION, true);
+                                queOnUpdateNode.subscribe(new EventListener() {
+                                    public void onEvent(Event evt) {
+                                        TreeNodeRefresh treeNodeRefresh=(TreeNodeRefresh)evt.getData();
+                                        ElementTreeNode treeNode=treeNodeRefresh.getTreeNode();
+                                        String title=treeNodeRefresh.getTitle();
+                                        SWBSocialResourceUtils.Components.insertTreeNode(treeNode, title);
+                                    }
+                                });
+                            ]]>
+                        </zscript>
+
                         <tree id="tree" width="300px" rows="25">
                             <treecols>
                                 <treecol label="SWBSocial" />
@@ -43,7 +72,7 @@
             <!--termina árbol de navegación-->
             <!--Inicia área de trabajo (Contenido) -->
             <center id="wrkSpc" border="normal">
-               <include id="content" mode="defer"/>
+               <include id="content" mode="defer" progressing="true"/>
             </center>
             <!--Termina área de trabajo (Contenido) -->
             <!--Comienza área de widgets-->
@@ -51,20 +80,20 @@
                 <borderlayout>
                     <north border="normal" size="50%" splittable="true" collapsible="true">
                         <borderlayout>
-                            <north border="normal" title="Pendientes" size="50%" splittable="true" collapsible="true" apply="org.semanticwb.social.admin.components.widgets.Widget1Composer">
+                            <north border="normal" title="Pendientes" size="50%" splittable="true" collapsible="true" apply="org.semanticwb.social.components.WidgetGenericComposer">
                                <iframe id="widgetIframe1" style="width:100%; height:100%;"  />
                              </north>
-                            <center border="normal"  title="Mensajes Listener" apply="org.semanticwb.social.admin.components.widgets.Widget2Composer">
+                            <center border="normal"  title="Mensajes Listener" apply="org.semanticwb.social.components.WidgetGenericComposer">
 				<iframe id="widgetIframe2" style="width:100%; height:100%;"  />
                             </center>
                         </borderlayout>
                     </north>
                     <center border="normal">
                         <borderlayout>
-                        <north border="normal" size="50%" title="Mensajes Personales" collapsible="true" apply="org.semanticwb.social.admin.components.widgets.Widget3Composer">
+                        <north border="normal" size="50%" title="Mensajes Personales" collapsible="true" apply="org.semanticwb.social.components.WidgetGenericComposer">
 				<iframe id="widgetIframe3" style="width:100%; height:100%;"  />
                         </north>
-                        <center border="normal"  title="Noticias Comunidad" apply="org.semanticwb.social.admin.components.widgets.Widget4Composer">
+                        <center border="normal"  title="Noticias Comunidad" apply="org.semanticwb.social.components.WidgetGenericComposer">
 				<iframe id="widgetIframe4" style="width:100%; height:100%;"  />
                         </center>
                         </borderlayout>

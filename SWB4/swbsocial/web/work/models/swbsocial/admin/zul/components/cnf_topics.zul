@@ -1,0 +1,6 @@
+<window id="win" title="Datos de nuevo Tema" width="640px" border="normal" apply="org.semanticwb.social.components.resources.zul.TopicsComp">
+    Título: <textbox id="title" cols="25" />
+    id: <textbox id="id" cols="25" />
+    Descripción: <textbox id="description" cols="50" rows="10"/>
+     <button id="sendButton"  />
+</window>
