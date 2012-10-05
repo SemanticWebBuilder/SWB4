@@ -27,6 +27,7 @@ import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zul.Tabs;
 import org.zkoss.zul.Window;
 import java.net.URLDecoder;
+import java.net.URLEncoder;
 
 /**
  *
@@ -39,9 +40,9 @@ import java.net.URLDecoder;
  * edición y posiblemente la eliminación de elementos del árbol de navegación de la administración
  * de la herramienta swbsocial
  */
-public class GenericCRUDElement extends GenericForwardComposer <Component>
+public class GenericRedirect extends GenericForwardComposer <Component>
 {
-    private static Logger log = SWBUtils.getLogger(GenericCRUDElement.class);
+    private static Logger log = SWBUtils.getLogger(GenericRedirect.class);
     private static final long serialVersionUID = 1L;
     private WebSite wsiteAdm;
     private WebSite wsite=null;
@@ -73,6 +74,10 @@ public class GenericCRUDElement extends GenericForwardComposer <Component>
            treeItem=(ElementTreeNode)requestScope.get("treeItem");
            //item=(ElementTreeNode)requestScope.get("item");
            action=(String)requestScope.get("action");
+           if(action==null)
+           {
+               action = "edit";
+           }
            optionWepPage=(WebPage)requestScope.get("optionWepPage");
            TreeNodePage treeNodePage=null;
            if(optionWepPage!=null)
@@ -97,11 +102,11 @@ public class GenericCRUDElement extends GenericForwardComposer <Component>
                     }
                  });
            }
-
+           
            if(action.equals(SWBSocialResourceUtils.ACTION_ADD) && treeNodePage!=null)
            {
-               iframe_genCRUD.setSrc(treeNodePage.getUrl(user.getLanguage())+"?wsite="+wsite.getId()+"&action="+action+"&itemUri="+treeItem.getData().getUri());
-            }else if(action.equals(SWBSocialResourceUtils.ACTION_EDIT))
+               iframe_genCRUD.setSrc(treeNodePage.getUrl(user.getLanguage())+"?wsite="+wsite.getId()+"&action="+action+"&itemUri="+URLEncoder.encode(treeItem.getData().getUri()));
+           }else if(action.equals(SWBSocialResourceUtils.ACTION_EDIT))
            {
                buildEditTab();
            }
@@ -130,10 +135,15 @@ public class GenericCRUDElement extends GenericForwardComposer <Component>
         {
             wsiteId=wsite.getId();
         }
-        
+       
         //Manejo dinamico de la propiedad "src" del iframe.
         iframe_genCRUD.setScrolling("false");iframe_genCRUD.setScrolling("no");
-        iframe_genCRUD.setSrc(optionWepPage.getUrl(user.getLanguage())+"?wsite="+wsiteId+"&action="+action+"&objUri="+objUri);
+        String itemUri=null;
+        if(treeItem!=null)
+        {
+            itemUri=URLEncoder.encode(treeItem.getData().getUri());
+        }
+        iframe_genCRUD.setSrc(optionWepPage.getUrl(user.getLanguage())+"?wsite="+wsiteId+"&action="+action+"&objUri="+objUri+"&itemUri="+itemUri);
     }
 
     /*

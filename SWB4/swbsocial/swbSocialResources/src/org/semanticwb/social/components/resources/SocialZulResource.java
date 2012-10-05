@@ -17,9 +17,9 @@ import org.semanticwb.portal.api.SWBActionResponse;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.lib.SWBResponse;
-import org.semanticwb.social.components.tree.AdvancedTreeModel;
 import org.semanticwb.social.components.tree.ElementTreeNode;
 import org.semanticwb.social.utils.SWBSocialResourceUtils;
+import java.net.URLDecoder;
 
 /**
  *
@@ -59,10 +59,13 @@ public class SocialZulResource extends GenericAdmResource
             if(dispatcher != null) {
                 WebSite wsite=WebSite.ClassMgr.getWebSite(request.getParameter("wsite"));
                 ElementTreeNode treeItem=SWBSocialResourceUtils.Components.getComponentbyUri(request);
-
+                
                 request.setAttribute("wsite", wsite);
                 request.setAttribute("action", request.getParameter("action"));
-                request.setAttribute("objUri", request.getParameter("objUri"));
+                if(request.getParameter("objUri")!=null)
+                {
+                    request.setAttribute("objUri", URLDecoder.decode(request.getParameter("objUri")));
+                }
                 request.setAttribute("treeItem", treeItem);
 
                 if(getResourceBase().getAttribute("forward")!=null) {
