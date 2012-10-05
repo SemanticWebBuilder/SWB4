@@ -143,8 +143,8 @@ public class SWBSTreeComposer extends GenericForwardComposer <Component> {
                                 mItemNew.addEventListener(Events.ON_CLICK, new EventListener<Event>() {
                                 @Override
                                 public void onEvent(Event event) throws Exception {
-                                    //content.setSrc(null);
-                                    content.setSrc("/work/models/swbsocial/admin/zul/clearCompose.zul");
+                                    content.setSrc(null);
+                                    //content.setSrc("/work/models/swbsocial/admin/zul/clearCompose.zul");
                                     WebPage adminWebPage=wsiteAdm.getWebPage(itemValue.getData().getUri());
                                     if(adminWebPage instanceof TreeNodePage)
                                     {
@@ -191,8 +191,8 @@ public class SWBSTreeComposer extends GenericForwardComposer <Component> {
                                     mItemNew.addEventListener(Events.ON_CLICK, new EventListener<Event>() {
                                     @Override
                                     public void onEvent(Event event) throws Exception {
-                                        //content.setSrc(null);   //En teoría, esta línea hace lo que hace la línea de abajo (Todo:Probar y Quitar la de abajo)
-                                        content.setSrc("/work/models/swbsocial/admin/zul/clearCompose.zul");
+                                        content.setSrc(null);   //En teoría, esta línea hace lo que hace la línea de abajo (Todo:Probar y Quitar la de abajo)
+                                        //content.setSrc("/work/models/swbsocial/admin/zul/clearCompose.zul");
                                         WebPage adminWebPage=wsiteAdm.getWebPage(itemValue.getData().getCategoryID());
                                         if(adminWebPage instanceof TreeNodePage)
                                         {
@@ -291,8 +291,8 @@ public class SWBSTreeComposer extends GenericForwardComposer <Component> {
                                                 action=TreeNodePage.getAction();
                                             }
                                         }
-                                        //content.setSrc(null);//En teoría, esta línea hace lo que hace la línea de abajo (Todo:Probar y Quitar la de abajo)
-                                        content.setSrc("/work/models/swbsocial/admin/zul/clearCompose.zul");
+                                        content.setSrc(null);//En teoría, esta línea hace lo que hace la línea de abajo (Todo:Probar y Quitar la de abajo)
+                                        //content.setSrc("/work/models/swbsocial/admin/zul/clearCompose.zul");
                                         content.setSrc(zulPage);
                                         content.setDynamicProperty("objUri", URLEncoder.encode(itemValue.getData().getUri()));
                                         content.setDynamicProperty("paramRequest", paramRequest);;
@@ -324,10 +324,10 @@ public class SWBSTreeComposer extends GenericForwardComposer <Component> {
                             if(!isCategory(itemValue.getData())){ //Si es una categoría
                                 final Treeitem selectedTreeItemParent = tree.getSelectedItem().getParentItem();
                                 final ElementTreeNode itemValueParent = (ElementTreeNode) selectedTreeItemParent.getValue();
-                                //content.setSrc(null);//En teoría, esta línea hace lo que hace la línea de abajo (Todo:Probar y Quitar la de abajo)
+                                content.setSrc(null);//En teoría, esta línea hace lo que hace la línea de abajo (Todo:Probar y Quitar la de abajo)
                                 content.setSrc("/work/models/swbsocial/admin/zul/clearCompose.zul");
                                 content.setSrc(itemValueParent.getData().getZulPage());
-                                content.setDynamicProperty("objUri", itemValue.getData().getUri());
+                                content.setDynamicProperty("objUri", URLEncoder.encode(itemValue.getData().getUri()));
                                 //content.setDynamicProperty("parentItem", itemValueParent);
                                 content.setDynamicProperty("treeItem", itemValue);
                                 content.setDynamicProperty("action", SWBSocialResourceUtils.ACTION_DOUBLECLICK);
@@ -340,7 +340,7 @@ public class SWBSTreeComposer extends GenericForwardComposer <Component> {
                                 {
                                     content.setDynamicProperty("wsite",wsite);
                                 }                                
-                                //content.setDynamicProperty("optionWepPage", wsiteAdm.getWebPage(itemValueParent.getData().getUri()).getUrl(user.getLanguage()));
+                                content.setDynamicProperty("optionWepPage", null);
                             }
                         }
                     });

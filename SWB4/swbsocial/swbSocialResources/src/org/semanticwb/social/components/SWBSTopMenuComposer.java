@@ -15,6 +15,7 @@ import org.semanticwb.model.WebPage;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.social.ZulWebPage;
+import org.semanticwb.social.utils.SWBSocialResourceUtils;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.util.GenericForwardComposer;
 import org.zkoss.zul.Include;
@@ -145,10 +146,12 @@ public class SWBSTopMenuComposer extends GenericForwardComposer <Component>{
                     ZulWebPage zulWPage=(ZulWebPage)wsite.getWebPage(zulPageID);
                     if(zulWPage.getZulResourcePath()!=null)
                     {
-                        content.setSrc("/work/models/swbsocial/admin/zul/clearCompose.zul");
+                        //content.setSrc("/work/models/swbsocial/admin/zul/clearCompose.zul");
+                        content.setSrc(null);
                         content.setSrc(zulWPage.getZulResourcePath());
                         content.setDynamicProperty("optionWepPage", zulWPage);
                         content.setDynamicProperty("user", user);
+                        content.setDynamicProperty("action", SWBSocialResourceUtils.ACTION_EDIT);
                         /*
                         WebSite wsite=(WebSite)SemanticObject.getSemanticObject(itemValue.getData().getUri()).getModel().getModelObject().createGenericInstance();
                         content.setDynamicProperty("wsite", wsite);

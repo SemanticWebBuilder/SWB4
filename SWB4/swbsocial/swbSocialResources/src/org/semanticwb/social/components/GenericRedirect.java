@@ -50,9 +50,9 @@ public class GenericRedirect extends GenericForwardComposer <Component>
     private String objUri=null;
     ElementTreeNode treeItem;
     ElementTreeNode item;
-    Window win_genCRUD;
-    Tabs tabs_genCRUD;
-    Iframe iframe_genCRUD;
+    Window win_genRedirect;
+    Tabs tabs_genRedirect;
+    Iframe iframe_genRedirect;
     String action;
     WebPage optionWepPage;
     SemanticObject semObject;
@@ -74,17 +74,18 @@ public class GenericRedirect extends GenericForwardComposer <Component>
            treeItem=(ElementTreeNode)requestScope.get("treeItem");
            //item=(ElementTreeNode)requestScope.get("item");
            action=(String)requestScope.get("action");
+           iframe_genRedirect.setSrc(null);
            if(action==null)
            {
-               action = "edit";
+               action = SWBSocialResourceUtils.ACTION_EDIT;
            }
-           optionWepPage=(WebPage)requestScope.get("optionWepPage");
            TreeNodePage treeNodePage=null;
-           if(optionWepPage!=null)
+           if(requestScope.get("optionWepPage")!=null)
            {
-                win_genCRUD.setTitle("Creación de:"+optionWepPage.getTitle());
+                optionWepPage=(WebPage)requestScope.get("optionWepPage");
+                //win_genRedirect.setTitle("Creación de:"+optionWepPage.getTitle());
                 Tab tab=new Tab(optionWepPage.getDisplayTitle(user.getLanguage()));
-                tab.setParent(tabs_genCRUD);
+                tab.setParent(tabs_genRedirect);
                 if(optionWepPage instanceof TreeNodePage)
                 {
                     treeNodePage=(TreeNodePage) optionWepPage;
@@ -98,25 +99,26 @@ public class GenericRedirect extends GenericForwardComposer <Component>
                 tab.addEventListener(Events.ON_SELECT, new EventListener<Event>() {
                     @Override
                     public void onEvent(Event event) throws Exception {
-                        iframe_genCRUD.setSrc(optionWepPage.getUrl(user.getLanguage())+"?wsite="+wsite!=null?wsite.getId():null+"&action="+action+"&objUri="+objUri);
+                        iframe_genRedirect.setSrc(optionWepPage.getUrl(user.getLanguage())+"?wsite="+wsite!=null?wsite.getId():null+"&action="+action+"&objUri="+objUri);
                     }
                  });
            }
            
            if(action.equals(SWBSocialResourceUtils.ACTION_ADD) && treeNodePage!=null)
            {
-               iframe_genCRUD.setSrc(treeNodePage.getUrl(user.getLanguage())+"?wsite="+wsite.getId()+"&action="+action+"&itemUri="+URLEncoder.encode(treeItem.getData().getUri()));
+               iframe_genRedirect.setSrc(treeNodePage.getUrl(user.getLanguage())+"?wsite="+wsite.getId()+"&action="+action+"&itemUri="+URLEncoder.encode(treeItem.getData().getUri()));
            }else if(action.equals(SWBSocialResourceUtils.ACTION_EDIT))
            {
                buildEditTab();
            }
            else if(action.equals(SWBSocialResourceUtils.ACTION_DOUBLECLICK))
            {
+               /*
                SemanticObject semObj=SemanticObject.getSemanticObject(URLDecoder.decode(objUri));
                if(semObj.getProperty(Descriptiveable.swb_title)!=null)
                {
-                    win_genCRUD.setTitle(semObj.getSemanticClass().getClassCodeName()+":"+semObj.getProperty(Descriptiveable.swb_title));
-               }
+                    win_genRedirect.setTitle(semObj.getSemanticClass().getClassCodeName()+":"+semObj.getProperty(Descriptiveable.swb_title));
+               }*/
                if(wsiteAdm!=null && treeItem!=null)
                {
                    buildTabs();
@@ -137,13 +139,13 @@ public class GenericRedirect extends GenericForwardComposer <Component>
         }
        
         //Manejo dinamico de la propiedad "src" del iframe.
-        iframe_genCRUD.setScrolling("false");iframe_genCRUD.setScrolling("no");
+        iframe_genRedirect.setScrolling("false");iframe_genRedirect.setScrolling("no");
         String itemUri=null;
         if(treeItem!=null)
         {
             itemUri=URLEncoder.encode(treeItem.getData().getUri());
         }
-        iframe_genCRUD.setSrc(optionWepPage.getUrl(user.getLanguage())+"?wsite="+wsiteId+"&action="+action+"&objUri="+objUri+"&itemUri="+itemUri);
+        iframe_genRedirect.setSrc(optionWepPage.getUrl(user.getLanguage())+"?wsite="+wsiteId+"&action="+action+"&objUri="+objUri+"&itemUri="+itemUri);
     }
 
     /*
@@ -152,6 +154,7 @@ public class GenericRedirect extends GenericForwardComposer <Component>
      */
      private void buildTabs()
      {
+         iframe_genRedirect.setScrolling("false");iframe_genRedirect.setScrolling("no");
          WebPage admItemPage=wsiteAdm.getWebPage(treeItem.getData().getCategoryID());
          if(admItemPage!=null)
          {
@@ -164,7 +167,7 @@ public class GenericRedirect extends GenericForwardComposer <Component>
                  {
                     final TreeNodePage treeNodePage=(TreeNodePage) wPageChild;
                     Tab tab=new Tab(wPageChild.getDisplayTitle(user.getLanguage()));
-                    tab.setParent(tabs_genCRUD);
+                    tab.setParent(tabs_genRedirect);
                     if(treeNodePage.getWpImg()!=null)
                     {
                         String iconImgPath=SWBPortal.getWebWorkPath()+treeNodePage.getWorkPath()+"/"+treeNodePage.social_wpImg.getName()+"_"+treeNodePage.getId()+"_"+treeNodePage.getWpImg();
@@ -172,15 +175,13 @@ public class GenericRedirect extends GenericForwardComposer <Component>
                     }
                     if(isFirstNode) //Se ejecuta solo con el primer webpage del topico padre, en este caso por lo regular sería el topico de "Configurar".
                     {
-                        iframe_genCRUD.setSrc("/work/models/swbsocial/admin/zul/clearCompose.zul");
-                        iframe_genCRUD.setSrc(treeNodePage.getUrl(user.getLanguage())+"?wsite="+wsite.getId()+"&action="+action+"&objUri="+objUri);
+                        iframe_genRedirect.setSrc(treeNodePage.getUrl(user.getLanguage())+"?wsite="+wsite.getId()+"&action="+action+"&objUri="+objUri+"&itemUri="+URLEncoder.encode(treeItem.getData().getUri()));
                         isFirstNode=false;
                     }
                     tab.addEventListener(Events.ON_SELECT, new EventListener<Event>() {
                         @Override
                         public void onEvent(Event event) throws Exception {
-                            iframe_genCRUD.setSrc("/work/models/swbsocial/admin/zul/clearCompose.zul");
-                            iframe_genCRUD.setSrc(treeNodePage.getUrl(user.getLanguage())+"?wsite="+wsite.getId()+"&action="+action+"&objUri="+objUri);
+                            iframe_genRedirect.setSrc(treeNodePage.getUrl(user.getLanguage())+"?wsite="+wsite.getId()+"&action="+action+"&objUri="+objUri+"&itemUri="+URLEncoder.encode(treeItem.getData().getUri()));
                         }
                      });
                  }
