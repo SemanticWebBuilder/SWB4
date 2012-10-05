@@ -24,6 +24,13 @@ import org.semanticwb.social.util.SWBSocialUtil;
  *
  * @author jorge.jimenez
  */
+
+/*
+ * Clase cuya funcionalidad, es la de clasificar los mensajes que llegan por el listener.
+ * Esta clase es llamada por cada thread levantado cuando llegan los mensajes del listener.
+ *
+ */
+
 public class SentimentalDataClassifier {
 
     PostIn post=null;
@@ -50,6 +57,10 @@ public class SentimentalDataClassifier {
         initAnalysis();
     }
 
+    /*
+     * Metodo que obtiene la información de los mensajes de entrada (del listener) que va ha ser
+     * analizada para su clasificación.
+     */
     private void getPostData()
     {
         //En este momento de los 3 tipos (MessageIn,PhotoIn y VideoIn) se obtiene la misma información, sin embargo, seguramente no va ha
@@ -103,7 +114,11 @@ public class SentimentalDataClassifier {
     }
 
 
- // Funciona bien al 15/06/2012
+    /*
+     * Metodo cuya función es la de analizar la información de cada mensaje y determinar el sentimiento del mismo,
+     * así como la intensidad, eso en este momento, talvez se requiera realizar mas clasificaciones posteriormente.
+     * Funciona bien al 15/06/2012
+     */
     private void initAnalysiss()
     {
         //Revisa si encuentra emoticones en el mensaje
@@ -199,7 +214,11 @@ public class SentimentalDataClassifier {
         }
     }
 
-    /**Metodo Prueba**/
+    /*Metodo cuya función es la de analizar la información de cada mensaje y determinar el sentimiento del mismo,
+     * así como la intensidad, eso en este momento, talvez se requiera realizar mas clasificaciones posteriormente.
+     * Metodo Prueba
+     */
+    
     private void initAnalysis()
     {
         //Revisa si encuentra emoticones en el mensaje
@@ -311,9 +330,12 @@ public class SentimentalDataClassifier {
 
 
 
-    //Función que barre todas las frases y las busca en el mensaje (PostData)
-    //Esto talvez pueda NO ser lo mas optimo.
-    //TODO:Ver si encuentra otra forma más optima de hacer esto.
+    /*
+     *Función que barre todas las frases y las busca en el mensaje (PostData)
+     *Esto talvez pueda NO pueda ser lo mas optimo.
+     *TODO:Ver si encuentra otra forma más optima de hacer esto.
+     *
+     */
     private void findInLearnigPhrases()
     {
         int contPositive=0;
@@ -379,6 +401,9 @@ public class SentimentalDataClassifier {
         }
     }
 
+    /*
+     * Función que encuentra el número de ocurrencias en una frase
+     */
     private int findOccurrencesNumber(String phrase, int contOcurrences)
     {
         int iocurrence=postData.indexOf(phrase);
@@ -393,8 +418,11 @@ public class SentimentalDataClassifier {
     }
 
   
-    //Encuentra emoticons en el mensaje
-    //TODO:Hacer que los emoticons esten almacenados en un objeto.
+    /*
+     * Encuentra emoticons en el mensaje
+     * TODO:Hacer que los emoticons esten almacenados en un objeto.
+     */
+    
     private void findEmoticones()
     {
          int contPositiveEmoticon=0;

@@ -21,6 +21,11 @@ import org.apache.lucene.util.Version;
  *
  * @author jorge.jimenez
  */
+
+/*
+ * Clase que elimina de un mensaje los stop words provenientes en el mismo
+ * En este momento solo se tienen stop words en español.
+ */
 public class SpanishAnalizer extends Analyzer {
 
     // Sacadas de http://members.unine.ch/jacques.savoy/clef/spanishSmart.txt

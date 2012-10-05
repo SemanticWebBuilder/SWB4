@@ -9,6 +9,10 @@ package org.semanticwb.social.util;
  *
  * @author jorge.jimenez
  */
+
+/*
+ * Clase de tipo pojo que sirve en la clasificación de mensajes provenientes del listener
+ */
 public class NormalizerCharDuplicate {
 
     String normalizedPhrase=null;

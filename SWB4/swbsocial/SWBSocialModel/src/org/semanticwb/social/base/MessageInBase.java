@@ -4,7 +4,7 @@ package org.semanticwb.social.base;
    /**
    * Clase en donde se almacenan todos los post de tipo Mensaje y que entran por el Listener 
    */
-public abstract class MessageInBase extends org.semanticwb.social.PostIn implements org.semanticwb.social.PostTextable,org.semanticwb.model.Tagable,org.semanticwb.social.PostDataable,org.semanticwb.model.Traceable
+public abstract class MessageInBase extends org.semanticwb.social.PostIn implements org.semanticwb.model.Traceable,org.semanticwb.social.PostTextable,org.semanticwb.social.PostDataable,org.semanticwb.model.Tagable
 {
    /**
    * Clase en donde se almacenan todos los post de tipo Mensaje y que entran por el Listener
@@ -191,6 +191,29 @@ public abstract class MessageInBase extends org.semanticwb.social.PostIn impleme
         public static java.util.Iterator<org.semanticwb.social.MessageIn> listMessageInByCreator(org.semanticwb.model.User value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.social.MessageIn> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_creator,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.social.MessageIn with a determined PostInStream
+       * @param value PostInStream of the type org.semanticwb.social.Stream
+       * @param model Model of the org.semanticwb.social.MessageIn
+       * @return Iterator with all the org.semanticwb.social.MessageIn
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.MessageIn> listMessageInByPostInStream(org.semanticwb.social.Stream value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.MessageIn> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(social_postInStream, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.social.MessageIn with a determined PostInStream
+       * @param value PostInStream of the type org.semanticwb.social.Stream
+       * @return Iterator with all the org.semanticwb.social.MessageIn
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.MessageIn> listMessageInByPostInStream(org.semanticwb.social.Stream value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.MessageIn> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(social_postInStream,value.getSemanticObject(),sclass));
             return it;
         }
        /**

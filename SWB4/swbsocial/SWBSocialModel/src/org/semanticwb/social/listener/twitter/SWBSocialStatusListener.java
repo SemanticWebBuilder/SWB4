@@ -12,8 +12,8 @@ import org.semanticwb.model.SWBModel;
 import org.semanticwb.social.MessageIn;
 import org.semanticwb.social.SocialNetwork;
 import org.semanticwb.social.SocialNetworkUser;
+import org.semanticwb.social.Stream;
 import org.semanticwb.social.listener.Classifier;
-import org.semanticwb.social.util.SendPostThread;
 import twitter4j.MediaEntity;
 import twitter4j.Place;
 import twitter4j.Status;
@@ -23,18 +23,38 @@ import twitter4j.StatusDeletionNotice;
  *
  * @author jorge.jimenez
  */
+
+/*
+ * Metodo cuya funcionalidad es la de obtener los mensajes que llegan por el listener de twitter
+ * mediante la forma streaming de esta red social
+ */
+
 public class SWBSocialStatusListener implements twitter4j.StatusListener {
 
     private static Logger log = SWBUtils.getLogger(SWBSocialStatusListener.class);
     SWBModel model=null;
     SocialNetwork socialNetwork=null;
+    Stream stream=null;
 
-    public SWBSocialStatusListener(SWBModel model, SocialNetwork socialNetwork)
+    /*
+     * Metodo constructor el cual recibe como parametros
+     * @param model is the SWBModel object related with the listener
+     * @param socialNetwork is the SocialNetwork object related with the instance of the listener
+     * @param stream is the stream configured to hear the listener.
+     */
+    public SWBSocialStatusListener(SWBModel model, SocialNetwork socialNetwork, Stream stream)
     {
         this.model=model;
         this.socialNetwork=socialNetwork;
+        this.stream=stream;
     }
 
+    /*
+     * Metodo que obtiene todos los mensajes provenientes de twitter de un determinado listener de red social y los
+     * guarda y envía a clasificar
+     * @param status objeto de tipo twitter4j.Status el cual tiene toda la información de un mensaje proveniente del listener
+     * de la red social de twitter
+     */
     @Override
     public void onStatus(Status status) {
         try
@@ -84,6 +104,7 @@ public class SWBSocialStatusListener implements twitter4j.StatusListener {
                 MessageIn message=MessageIn.ClassMgr.createMessageIn(String.valueOf(status.getId()), model);
                 message.setMsg_Text(status.getText());
                 message.setPostInSocialNetwork(socialNetwork);
+                message.setPostInStream(stream);
                 //System.out.println("Fuente:"+status.getSource());
                 message.setPostRetweets(Integer.parseInt(""+status.getRetweetCount()));
                 //System.out.println("Ya en Msg ReTweets:"+message.getPostRetweets());

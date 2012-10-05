@@ -21,6 +21,13 @@ import org.semanticwb.social.Stream;
  *
  * @author jorge.jimenez
  */
+
+/*
+ *  Clase cuya funcionalidad es la de generar un timer por cada uno de los streams existentes y activos en todas las Marcas
+ *  de una instancia de la herramienta swbsocial.
+ *  Esta clase es llamada cuando se levanta el appserver mediante el archivo startup.properties o mediante la creación y/o edición
+ *  de streams.
+ */
 public class Listener implements SWBAppObject {
 
     private static Logger log = SWBUtils.getLogger(Listener.class);
@@ -33,7 +40,6 @@ public class Listener implements SWBAppObject {
     /**
      * Retrieves a reference to the only one existing object of this class.
      * <p>Obtiene una referencia al &uacute;nico objeto existente de esta clase.</p>
-     * @param applicationPath a string representing the path for this application
      * @return a reference to the only one existing object of this class
      */
     static public synchronized Listener createInstance() {
@@ -43,6 +49,9 @@ public class Listener implements SWBAppObject {
         return Listener.instance;
     }
 
+    /*
+     * Metodo constructor que levanta listener de cada uno de los streams de cada sitio de tipo SWBSocial
+     */
     public Listener() {
         try {
             Iterator<WebSite> itWebSites = SWBContext.listWebSites(false);
@@ -67,6 +76,9 @@ public class Listener implements SWBAppObject {
         }
     }
 
+    /*
+     * Metodo que crea y actualiza timers
+     */
     public static boolean createUpdateTimers(Stream stream)
     {
         //System.out.println("rbThread:"+rbThread);
@@ -91,6 +103,9 @@ public class Listener implements SWBAppObject {
         return false;
     }
 
+    /*
+     * Metodo que regenera un determinado thread de un determinado stream
+     */
     static class ReBindThread extends Thread {
         Stream stream=null;
         public ReBindThread(Stream stream) {
@@ -104,7 +119,9 @@ public class Listener implements SWBAppObject {
         }
     }
 
-
+    /*
+     * Metodo que crea o actualiza un thread de un determinado stream
+     */
     private static boolean createUpdateTimersReBind(Stream stream)
     {
         //System.out.println("Entra a Listener/createUpdateTimersReBind-1");
@@ -154,6 +171,9 @@ public class Listener implements SWBAppObject {
     }
      
 
+    /*
+     * Metodo que elimina un thread de un stream
+     */
      public static Timer removeTimer(Stream stream)
      {
         try
@@ -196,6 +216,9 @@ public class Listener implements SWBAppObject {
         }
      }
 
+    /*
+     * Metodo cuya funcionalidad es la de crear un thread de un determinado stream
+     */
     private static boolean createTimer(Stream stream)
     {
         //System.out.println("stream.getPoolTime():"+stream.getPoolTime());
@@ -234,6 +257,9 @@ public class Listener implements SWBAppObject {
         //throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    /*
+     * Metodo de prueba
+     */
     public static void main(String args[]) {
         System.out.println("About to schedule task.");
         new Listener(); //C/cuantos segundos se ejecutara la tarea
