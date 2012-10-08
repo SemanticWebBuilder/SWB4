@@ -38,6 +38,12 @@ public abstract class YoutubeBase extends org.semanticwb.social.SocialNetwork im
             java.util.Iterator it=sclass.listInstances();
             return new org.semanticwb.model.GenericIterator<org.semanticwb.social.Youtube>(it, true);
         }
+
+        public static org.semanticwb.social.Youtube createYoutube(org.semanticwb.model.SWBModel model)
+        {
+            long id=model.getSemanticObject().getModel().getCounter(sclass);
+            return org.semanticwb.social.Youtube.ClassMgr.createYoutube(String.valueOf(id), model);
+        }
        /**
        * Gets a org.semanticwb.social.Youtube
        * @param id Identifier for org.semanticwb.social.Youtube
