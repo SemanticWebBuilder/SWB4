@@ -86,6 +86,12 @@ public abstract class SocialNetworkBase extends org.semanticwb.model.SWBClass im
             java.util.Iterator it=sclass.listInstances();
             return new org.semanticwb.model.GenericIterator<org.semanticwb.social.SocialNetwork>(it, true);
         }
+
+        public static org.semanticwb.social.SocialNetwork createSocialNetwork(org.semanticwb.model.SWBModel model)
+        {
+            long id=model.getSemanticObject().getModel().getCounter(sclass);
+            return org.semanticwb.social.SocialNetwork.ClassMgr.createSocialNetwork(String.valueOf(id), model);
+        }
        /**
        * Gets a org.semanticwb.social.SocialNetwork
        * @param id Identifier for org.semanticwb.social.SocialNetwork
