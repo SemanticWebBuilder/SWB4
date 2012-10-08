@@ -42,6 +42,12 @@ public abstract class FacebookBase extends org.semanticwb.social.SocialNetwork i
             java.util.Iterator it=sclass.listInstances();
             return new org.semanticwb.model.GenericIterator<org.semanticwb.social.Facebook>(it, true);
         }
+
+        public static org.semanticwb.social.Facebook createFacebook(org.semanticwb.model.SWBModel model)
+        {
+            long id=model.getSemanticObject().getModel().getCounter(sclass);
+            return org.semanticwb.social.Facebook.ClassMgr.createFacebook(String.valueOf(id), model);
+        }
        /**
        * Gets a org.semanticwb.social.Facebook
        * @param id Identifier for org.semanticwb.social.Facebook

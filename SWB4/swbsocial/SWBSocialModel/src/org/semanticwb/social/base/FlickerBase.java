@@ -38,6 +38,12 @@ public abstract class FlickerBase extends org.semanticwb.social.SocialNetwork im
             java.util.Iterator it=sclass.listInstances();
             return new org.semanticwb.model.GenericIterator<org.semanticwb.social.Flicker>(it, true);
         }
+
+        public static org.semanticwb.social.Flicker createFlicker(org.semanticwb.model.SWBModel model)
+        {
+            long id=model.getSemanticObject().getModel().getCounter(sclass);
+            return org.semanticwb.social.Flicker.ClassMgr.createFlicker(String.valueOf(id), model);
+        }
        /**
        * Gets a org.semanticwb.social.Flicker
        * @param id Identifier for org.semanticwb.social.Flicker
