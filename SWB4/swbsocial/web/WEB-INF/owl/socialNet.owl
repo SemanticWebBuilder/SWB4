@@ -723,6 +723,8 @@
             <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
           </swb:Interface>
         </rdfs:subClassOf>
+        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >true</swb:autogenId>
       </swb:Class>
     </rdfs:domain>
   </owl:DatatypeProperty>
@@ -995,6 +997,8 @@
     <rdfs:subClassOf rdf:resource="#KeepAliveListenerable"/>
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
     <rdfs:subClassOf rdf:resource="#Photoable"/>
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
     <rdfs:subClassOf rdf:resource="#Oauthable"/>
     <swb:displayObject>
       <swbxf:DisplayObject rdf:ID="do_Twitter">
@@ -1024,6 +1028,8 @@
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
   </swb:Class>
   <swb:Class rdf:ID="Flicker">
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
     <rdfs:subClassOf rdf:resource="#Oauthable"/>
     <rdfs:subClassOf rdf:resource="#Photoable"/>
     <rdfs:subClassOf rdf:resource="#SocialNetwork"/>
@@ -1047,6 +1053,8 @@
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
   </swb:Class>
   <swb:Class rdf:ID="Youtube">
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
     <rdfs:subClassOf rdf:resource="#Secreteable"/>
     <rdfs:subClassOf rdf:resource="#Videoable"/>
     <rdfs:subClassOf rdf:resource="#SocialNetwork"/>
