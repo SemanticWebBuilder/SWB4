@@ -4,7 +4,6 @@
  */
 package org.semanticwb.social.utils;
 
-import java.lang.String;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -24,6 +23,7 @@ import org.zkoss.zk.ui.event.*;
 /**
  *
  * @author jorge.jimenez
+ * @date 10/03/2012
  */
 
 /*

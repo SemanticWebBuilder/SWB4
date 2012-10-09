@@ -9,7 +9,6 @@ import org.semanticwb.model.WebPage;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.portal.api.SWBParamRequest;
-import org.semanticwb.social.SocialNetwork;
 import org.semanticwb.social.Stream;
 import org.semanticwb.social.components.tree.ElementTreeNode;
 import org.semanticwb.social.utils.SWBSocialResourceUtils;
@@ -22,6 +21,7 @@ import org.zkoss.zul.Button;
 /**
  *
  * @author jorge.jimenez
+ * @date 10/03/2012
  */
 
 /*

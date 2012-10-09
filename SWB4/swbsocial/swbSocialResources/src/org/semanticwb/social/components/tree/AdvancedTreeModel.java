@@ -7,6 +7,10 @@ package org.semanticwb.social.components.tree;
 
 
 import java.util.Iterator;
+import org.semanticwb.Logger;
+import org.semanticwb.SWBUtils;
+import org.semanticwb.platform.SemanticObject;
+import org.semanticwb.social.Childrenable;
 import org.zkoss.zul.DefaultTreeModel;
 import org.zkoss.zul.DefaultTreeNode;
 import org.zkoss.zul.TreeNode;
@@ -14,6 +18,7 @@ import org.zkoss.zul.TreeNode;
 /**
  *
  * @author jorge.jimenez
+ * @date 10/03/2012
  */
 
 /*
@@ -23,6 +28,7 @@ public class AdvancedTreeModel extends DefaultTreeModel<Element> {
     /**
      *
      */
+    private static Logger log = SWBUtils.getLogger(SWBSTreeComposer.class);
     private static final long serialVersionUID = -9145887024839938518L;
 
     DefaultTreeNode<Element> _root;
@@ -87,8 +93,9 @@ public class AdvancedTreeModel extends DefaultTreeModel<Element> {
      * @throws IndexOutOfBoundsException
      *             - indexFrom < 0 or indexTo > number of parent's children
      */
-    public void insert(DefaultTreeNode<Element> parent, int indexFrom, int indexTo, DefaultTreeNode<Element>[] newNodes)
-            throws IndexOutOfBoundsException {
+
+    public void insert(DefaultTreeNode<Element> parent, int indexFrom, int indexTo, DefaultTreeNode<Element>[] newNodes) throws IndexOutOfBoundsException
+    {
         DefaultTreeNode<Element> stn = parent;
         for (int i = indexFrom; i <= indexTo; i++) {
             try {
@@ -98,6 +105,8 @@ public class AdvancedTreeModel extends DefaultTreeModel<Element> {
             }
         }
     }
+
+
 
     /**
      * append new nodes which parent is <code>parent</code> by new nodes
@@ -109,11 +118,36 @@ public class AdvancedTreeModel extends DefaultTreeModel<Element> {
      *            New nodes which are appended
      */
     public void add(DefaultTreeNode<Element> parent, DefaultTreeNode<Element>[] newNodes) {
-        DefaultTreeNode<Element> stn = (DefaultTreeNode<Element>) parent;
-
         for (int i = 0; i < newNodes.length; i++)
-            stn.getChildren().add(newNodes[i]);
-
+        {
+            try{
+                if(!parent.getChildren().contains(newNodes[i]) && !newNodes[i].getChildren().contains(parent) && parent.getChildren().add(newNodes[i]))
+                {
+                    //Colocar el nuevo padre al elemento Childrenable que se acaba de mover (newNodes)
+                    ElementTreeNode elementTreeNodeChild=(ElementTreeNode)newNodes[i];
+                    SemanticObject semObjChild=SemanticObject.createSemanticObject(elementTreeNodeChild.getData().getUri());
+                    if(semObjChild!=null && semObjChild.getSemanticClass().isSubClass(Childrenable.social_Childrenable))
+                    {
+                        Childrenable childChildrenable=(Childrenable)semObjChild.createGenericInstance();
+                        //System.out.println("childChildrenable parent:"+childChildrenable.getParentObj());
+                        ElementTreeNode elementTreeNodeParent=(ElementTreeNode)parent;
+                        SemanticObject semObjParent=SemanticObject.createSemanticObject(elementTreeNodeParent.getData().getUri());
+                        if(semObjParent!=null && semObjParent.getSemanticClass().isSubClass(Childrenable.social_Childrenable))
+                        {
+                            Childrenable parentChildrenable=(Childrenable)semObjParent.createGenericInstance();
+                            //System.out.println("parentChildrenable:"+parentChildrenable.getParentObj());
+                            childChildrenable.setParentObj(parentChildrenable);
+                            //System.out.println("Puso el padre al hijo...");
+                        }else{//El padre puede ser una categoría que no tiene uri, aqui hay que poner el childChildrenable.setParentObj(null);
+                            childChildrenable.setParentObj(null); //No tiene padre, es decir, es hijo de la categoría directamente (En el árbol)
+                        }
+                    }
+                }
+            }catch(Exception e)
+            {
+                log.error(e);
+            }
+        }
     }
 
 

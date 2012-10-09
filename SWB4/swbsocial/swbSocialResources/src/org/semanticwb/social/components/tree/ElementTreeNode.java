@@ -10,7 +10,9 @@ import org.zkoss.zul.DefaultTreeNode;
 /**
  *
  * @author jorge.jimenez
- */
+ * @date 10/03/2012
+*/
+
 /*
  * Clase Implementación de la clase DefaultTreeNode del framework de zkoss
  * Aqui es donde declaramos que nuestra clase element, se comporte como un DefaultTreeNode

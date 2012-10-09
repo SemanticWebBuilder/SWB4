@@ -26,6 +26,7 @@ import org.semanticwb.social.TreeNodePage;
 /**
  *
  * @author jorge.jimenez
+ * @date 10/03/2012
  */
 
  /*

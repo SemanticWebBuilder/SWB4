@@ -9,7 +9,6 @@ import java.util.Iterator;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
-import org.semanticwb.model.Descriptiveable;
 import org.semanticwb.model.User;
 import org.semanticwb.model.WebPage;
 import org.semanticwb.model.WebSite;
@@ -26,17 +25,17 @@ import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zul.Tabs;
 import org.zkoss.zul.Window;
-import java.net.URLDecoder;
 import java.net.URLEncoder;
 
 /**
  *
  * @author jorge.jimenez
+ * @date 10/03/2012
  */
 
 /*
  * Clase cuya funcionalidad sera la de poder transferir el control mediante el manejo dinamico
- * la propiedad src de un iframe de un zul a un determinado lugar que funcione para la creación,
+ * de la propiedad src de un iframe de un zul a un determinado lugar que funcione para la creación,
  * edición y posiblemente la eliminación de elementos del árbol de navegación de la administración
  * de la herramienta swbsocial
  */
@@ -130,6 +129,9 @@ public class GenericRedirect extends GenericForwardComposer <Component>
         }
     }
 
+    /*
+     * Metodo que crear el tab de edición para un cierto elemento del árbol
+     */
     private void buildEditTab()
     {
         String wsiteId=null;

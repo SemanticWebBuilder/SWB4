@@ -24,6 +24,12 @@ import java.net.URLDecoder;
 /**
  *
  * @author jorge.jimenez
+ * @date 10/03/2012
+ */
+/*
+ * Clase de swbsocial que es utilizada como un recurso en la administración de la herramienta, sirve para poder
+ * redirigir el control hacia un zul, pasandole los para metros que la herramienta envía desde el árbol, los cuales son:
+ * wsite, action, objUri, treeItem.
  */
 public class SocialZulResource extends GenericAdmResource
 {

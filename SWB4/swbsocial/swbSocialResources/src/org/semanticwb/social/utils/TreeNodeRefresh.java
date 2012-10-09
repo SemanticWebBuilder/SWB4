@@ -6,12 +6,17 @@
 package org.semanticwb.social.utils;
 
 import org.semanticwb.model.SWBClass;
-import org.semanticwb.model.SWBModel;
 import org.semanticwb.social.components.tree.ElementTreeNode;
 
 /**
  *
  * @author jorge.jimenez
+ * @date 10/03/2012
+ /*
+ 
+/*
+ * Clase de tipo bean que sirve de utilería para refrescar el árbol de navegación
+ * de la administración de la herramienta.
  */
 public class TreeNodeRefresh {
 

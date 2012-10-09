@@ -8,6 +8,7 @@ package org.semanticwb.social.components.tree;
 /**
  *
  * @author jorge.jimenez
+ * @date 10/03/2012
  */
 
 import java.util.Iterator;
@@ -28,6 +29,7 @@ import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.util.GenericForwardComposer;
+import org.zkoss.zul.DefaultTreeNode;
 import org.zkoss.zul.Hlayout;
 import org.zkoss.zul.Image;
 import org.zkoss.zul.Include;
@@ -40,6 +42,7 @@ import org.zkoss.zul.Treerow;
 import org.zkoss.zul.Menuitem;
 import org.zkoss.zul.Menupopup;
 import org.zkoss.zul.Messagebox;
+import org.zkoss.zk.ui.event.DropEvent;
 
 
 /*
@@ -315,8 +318,8 @@ public class SWBSTreeComposer extends GenericForwardComposer <Component> {
                 }
                 //Manejo de doble click en los nodos del árbol
                 {
-                    //TODO
-                    dataRow.addEventListener(Events.ON_DOUBLE_CLICK, new EventListener<Event>() {
+                       //TODO
+                        dataRow.addEventListener(Events.ON_DOUBLE_CLICK, new EventListener<Event>() {
                         @Override
                         public void onEvent(Event event) throws Exception {
                             final Treeitem selectedTreeItem = tree.getSelectedItem();
@@ -347,34 +350,47 @@ public class SWBSTreeComposer extends GenericForwardComposer <Component> {
                 }
 
                 //Bloque de código para soportar drag&drop. TODO: Revisar para implementar solo en los casos de que los nodos sean de tipo Childrenable
-                /*
-                dataRow.setDroppable("true");
-                dataRow.addEventListener(Events.ON_DROP, new EventListener<Event>() {
-                    @SuppressWarnings("unchecked")
-                    @Override
-                    public void onEvent(Event event) throws Exception {
+                final ElementTreeNode itemValue = (ElementTreeNode) treeItem.getValue();
+                //System.out.println("itemValue-00:"+itemValue);
+                if(itemValue.getData().getUri()!=null)
+                {
+                    SemanticObject semObj=SemanticObject.createSemanticObject(itemValue.getData().getUri());
+                    //System.out.println("semObj:"+semObj);
+                    if(semObj!=null && semObj.getSemanticClass().isSubClass(Childrenable.social_Childrenable))
+                    {
+                        dataRow.setDraggable("true");
+                        dataRow.setDroppable("true");
+                        dataRow.addEventListener(Events.ON_DROP, new EventListener<Event>()
+                        {
+                            @SuppressWarnings("unchecked")
+                            @Override
+                            public void onEvent(Event event) throws Exception
+                            {
+                                // The dragged target is a TreeRow belongs to an
+                                // Treechildren of TreeItem.
+                                Treeitem draggedItem = (Treeitem) ((DropEvent) event).getDragged().getParent();
+                                ElementTreeNode draggedValue = (ElementTreeNode) draggedItem.getValue();
 
-                        // The dragged target is a TreeRow belongs to an
-                        // Treechildren of TreeItem.
-                        Treeitem draggedItem = (Treeitem) ((DropEvent) event).getDragged().getParent();
-                        ElementTreeNode draggedValue = (ElementTreeNode) draggedItem.getValue();
-                        Treeitem parentItem = treeItem.getParentItem();
-                        elemenetTreeModel.remove(draggedValue);
-                        if (isCategory((Element) ((ElementTreeNode) treeItem.getValue()).getData())) {
-                            elemenetTreeModel.add((ElementTreeNode) treeItem.getValue(),
-                                    new DefaultTreeNode[] { draggedValue });
-                        } else {
-                            int index = parentItem.getTreechildren().getChildren().indexOf(treeItem);
-                            if(parentItem.getValue() instanceof ElementTreeNode) {
-                                elemenetTreeModel.insert((ElementTreeNode)parentItem.getValue(), index, index,
-                                        new DefaultTreeNode[] { draggedValue });
+                                //Treeitem parentItem = treeItem.getParentItem();
+                                ElementTreeNode parentData = (ElementTreeNode) treeItem.getValue();
+                                //System.out.println("draggedValue:"+draggedValue.getData().getUri()+",parentData:"+parentData.getData().getUri());
+                                if(draggedValue.getData().getModelID().equals(parentData.getData().getModelID()))
+                                {
+                                    //System.out.println("parentItemJJJJ:"+parentData.getData().getUri()+",model:"+parentData.getData().getModelID());
+                                    if (isCategory((Element) ((ElementTreeNode) treeItem.getValue()).getData())) {
+                                        elemenetTreeModel.add((ElementTreeNode) treeItem.getValue(), new DefaultTreeNode[] { draggedValue });
+                                    } else {
+                                        elemenetTreeModel.add(parentData, new ElementTreeNode[] { draggedValue });
+                                        //elemenetTreeModel.remove(draggedValue);
+                                    }
+                                }
                             }
-
-                        }
-
+                        });
+                    }else{
+                        dataRow.setDraggable("false");
+                        dataRow.setDroppable("false");
                     }
-                });
-                 * */
+                }
             }catch(Exception e)
             {
                 log.error(e);

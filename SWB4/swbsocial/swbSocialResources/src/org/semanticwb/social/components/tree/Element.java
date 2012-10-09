@@ -8,6 +8,7 @@ package org.semanticwb.social.components.tree;
 /**
  *
  * @author jorge.jimenez
+ * @date 10/03/2012
  */
 
 /*
