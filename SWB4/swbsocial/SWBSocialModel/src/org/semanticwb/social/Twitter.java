@@ -206,8 +206,10 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
             ConfigurationBuilder cb = new ConfigurationBuilder();
             cb.setDebugEnabled(true);
             //simple http form based authentication, you can use oAuth if you have one, check Twitter4j documentation
-            cb.setUser(this.getLogin());
-            cb.setPassword(this.getPassword());
+            //cb.setUser(this.getLogin());
+            //cb.setPassword(this.getPassword());
+            cb.setUser("George24Mx");
+            cb.setPassword("george24");
             // creating the twitter listener
 
 
