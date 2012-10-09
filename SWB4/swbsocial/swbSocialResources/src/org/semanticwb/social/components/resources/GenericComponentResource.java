@@ -17,6 +17,7 @@ import org.semanticwb.portal.api.SWBResourceException;
 /**
  *
  * @author jorge.jimenez
+ * @date 10/03/2012
  */
 /*
  * Recurso de prueba, solo para ver que si lleguen los parametros que se envían desde el árbol

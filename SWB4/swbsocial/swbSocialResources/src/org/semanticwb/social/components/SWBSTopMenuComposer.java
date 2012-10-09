@@ -28,6 +28,7 @@ import org.zkoss.zul.impl.XulElement;
 /**
  *
  * @author jorge.jimenez
+ * @date 10/03/2012
  */
 
 /*
