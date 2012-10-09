@@ -4,7 +4,7 @@ package org.semanticwb.social.base;
    /**
    * Clase que almacenara las diferentes cuentas de una organización para la red social Twitter. 
    */
-public abstract class TwitterBase extends org.semanticwb.social.SocialNetwork implements org.semanticwb.social.Oauthable,org.semanticwb.model.Traceable,org.semanticwb.social.KeepAliveListenerable,org.semanticwb.social.Secreteable,org.semanticwb.social.Listenerable,org.semanticwb.social.Photoable,org.semanticwb.model.Descriptiveable,org.semanticwb.social.SocialNetPostable,org.semanticwb.social.Messageable
+public abstract class TwitterBase extends org.semanticwb.social.SocialNetwork implements org.semanticwb.model.Descriptiveable,org.semanticwb.social.Secreteable,org.semanticwb.social.Photoable,org.semanticwb.social.Listenerable,org.semanticwb.social.KeepAliveListenerable,org.semanticwb.model.Traceable,org.semanticwb.social.SocialNetPostable,org.semanticwb.social.Oauthable,org.semanticwb.social.Messageable
 {
    /**
    * Clase que almacenara las diferentes cuentas de una organización para la red social Twitter.
@@ -257,24 +257,6 @@ public abstract class TwitterBase extends org.semanticwb.social.SocialNetwork im
     }
 
 /**
-* Gets the AppKey property
-* @return String with the AppKey
-*/
-    public String getAppKey()
-    {
-        return getSemanticObject().getProperty(social_appKey);
-    }
-
-/**
-* Sets the AppKey property
-* @param value long with the AppKey
-*/
-    public void setAppKey(String value)
-    {
-        getSemanticObject().setProperty(social_appKey, value);
-    }
-
-/**
 * Gets the AccessToken property
 * @return String with the AccessToken
 */
@@ -326,23 +308,5 @@ public abstract class TwitterBase extends org.semanticwb.social.SocialNetwork im
     public void setAccessTokenSecret(String value)
     {
         getSemanticObject().setProperty(social_accessTokenSecret, value);
-    }
-
-/**
-* Gets the SecretKey property
-* @return String with the SecretKey
-*/
-    public String getSecretKey()
-    {
-        return getSemanticObject().getProperty(social_secretKey);
-    }
-
-/**
-* Sets the SecretKey property
-* @param value long with the SecretKey
-*/
-    public void setSecretKey(String value)
-    {
-        getSemanticObject().setProperty(social_secretKey, value);
     }
 }

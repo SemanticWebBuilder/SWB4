@@ -4,7 +4,7 @@ package org.semanticwb.social.base;
    /**
    * Clase que engloba a las diferentes clases que representan cada una de las redes sociales. 
    */
-public abstract class SocialNetworkBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Traceable,org.semanticwb.social.Listenerable,org.semanticwb.model.Descriptiveable
+public abstract class SocialNetworkBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Descriptiveable,org.semanticwb.social.Secreteable,org.semanticwb.social.Listenerable,org.semanticwb.model.Traceable
 {
    /**
    * En esta clase se guardan todos los post que lleguan por el listener, se estima que toda la info. que se guarde en este objeto debe de eliminarse aproximadamente c/mes, siendo este parametro configurable de acuerdo al tiempo que la organización quiera guardar  la información sobre los mensajes que lleguen por el listener. Cuando un post que llegue por el listener sea tomado como base para crear un nuevo post por la organización, se cree que debe copiarse la información de dicho post de esta clase hacia la clase PostListenerContainerBase.
@@ -23,10 +23,6 @@ public abstract class SocialNetworkBase extends org.semanticwb.model.SWBClass im
    */
     public static final org.semanticwb.platform.SemanticProperty social_hasSocialNetworkUsersInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#hasSocialNetworkUsersInv");
    /**
-   * Password o contraseña con la cual una organización se puede conectar a una determinada instancia de Red Social.
-   */
-    public static final org.semanticwb.platform.SemanticProperty social_password=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#password");
-   /**
    * Clase que contiene todos los post que han sido enviados a una determinada red social. La intención de crear esta clase es para que se agrupen los Post de cada red social por mes y año, y de esta manera sea mucho mas sencillo, optimo y rapido realizar las busquedas.
    */
     public static final org.semanticwb.platform.SemanticClass social_PostContainer=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#PostContainer");
@@ -34,10 +30,6 @@ public abstract class SocialNetworkBase extends org.semanticwb.model.SWBClass im
    * Con esta propiedad se puede obtener cuales son los objetos de tipo "PostContainer" que tiene una determinada red social, de esta manera se pudiera saber cuales son los post que han sido enviados a una determinada cuenta de una red social, siendo agrupados por año y mes.
    */
     public static final org.semanticwb.platform.SemanticProperty social_hasPostContainer=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#hasPostContainer");
-   /**
-   * Login o usuario con la cual una organización se puede conectar a una determinada instancia de Red Social.
-   */
-    public static final org.semanticwb.platform.SemanticProperty social_login=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#login");
    /**
    * Clase que comprende todos los tipos de Post de entrada (Povientes del Listener)que pueden ir siendo creados en la herramienta.
    */
@@ -429,24 +421,6 @@ public abstract class SocialNetworkBase extends org.semanticwb.model.SWBClass im
     }
 
 /**
-* Gets the Password property
-* @return String with the Password
-*/
-    public String getPassword()
-    {
-        return getSemanticObject().getProperty(social_password);
-    }
-
-/**
-* Sets the Password property
-* @param value long with the Password
-*/
-    public void setPassword(String value)
-    {
-        getSemanticObject().setProperty(social_password, value);
-    }
-
-/**
 * Gets the Updated property
 * @return java.util.Date with the Updated
 */
@@ -579,24 +553,6 @@ public abstract class SocialNetworkBase extends org.semanticwb.model.SWBClass im
          }
          return ret;
     }
-
-/**
-* Gets the Login property
-* @return String with the Login
-*/
-    public String getLogin()
-    {
-        return getSemanticObject().getProperty(social_login);
-    }
-
-/**
-* Sets the Login property
-* @param value long with the Login
-*/
-    public void setLogin(String value)
-    {
-        getSemanticObject().setProperty(social_login, value);
-    }
    /**
    * Gets all the org.semanticwb.social.PostIn
    * @return A GenericIterator with all the org.semanticwb.social.PostIn
@@ -672,6 +628,24 @@ public abstract class SocialNetworkBase extends org.semanticwb.model.SWBClass im
     {
         getSemanticObject().setProperty(social_countryCodetoSearch, value);
     }
+
+/**
+* Gets the AppKey property
+* @return String with the AppKey
+*/
+    public String getAppKey()
+    {
+        return getSemanticObject().getProperty(social_appKey);
+    }
+
+/**
+* Sets the AppKey property
+* @param value long with the AppKey
+*/
+    public void setAppKey(String value)
+    {
+        getSemanticObject().setProperty(social_appKey, value);
+    }
    /**
    * Sets the value for the property Creator
    * @param value Creator to set
@@ -742,5 +716,23 @@ public abstract class SocialNetworkBase extends org.semanticwb.model.SWBClass im
     public void setTitle(String title, String lang)
     {
         getSemanticObject().setProperty(swb_title, title, lang);
+    }
+
+/**
+* Gets the SecretKey property
+* @return String with the SecretKey
+*/
+    public String getSecretKey()
+    {
+        return getSemanticObject().getProperty(social_secretKey);
+    }
+
+/**
+* Sets the SecretKey property
+* @param value long with the SecretKey
+*/
+    public void setSecretKey(String value)
+    {
+        getSemanticObject().setProperty(social_secretKey, value);
     }
 }

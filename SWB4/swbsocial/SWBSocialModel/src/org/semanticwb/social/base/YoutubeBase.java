@@ -4,7 +4,7 @@ package org.semanticwb.social.base;
    /**
    * Clase que almacenara las diferentes cuentas de una organización para la red social YouTube. 
    */
-public abstract class YoutubeBase extends org.semanticwb.social.SocialNetwork implements org.semanticwb.social.Videoable,org.semanticwb.model.Traceable,org.semanticwb.social.Secreteable,org.semanticwb.social.Listenerable,org.semanticwb.model.Descriptiveable,org.semanticwb.social.SocialNetPostable
+public abstract class YoutubeBase extends org.semanticwb.social.SocialNetwork implements org.semanticwb.model.Descriptiveable,org.semanticwb.social.Secreteable,org.semanticwb.social.Authenticable,org.semanticwb.social.Listenerable,org.semanticwb.model.Traceable,org.semanticwb.social.SocialNetPostable,org.semanticwb.social.Videoable
 {
    /**
    * Clase que almacenara las diferentes cuentas de una organización para la red social YouTube.
@@ -239,38 +239,38 @@ public abstract class YoutubeBase extends org.semanticwb.social.SocialNetwork im
     }
 
 /**
-* Gets the AppKey property
-* @return String with the AppKey
+* Gets the Password property
+* @return String with the Password
 */
-    public String getAppKey()
+    public String getPassword()
     {
-        return getSemanticObject().getProperty(social_appKey);
+        return getSemanticObject().getProperty(social_password);
     }
 
 /**
-* Sets the AppKey property
-* @param value long with the AppKey
+* Sets the Password property
+* @param value long with the Password
 */
-    public void setAppKey(String value)
+    public void setPassword(String value)
     {
-        getSemanticObject().setProperty(social_appKey, value);
+        getSemanticObject().setProperty(social_password, value);
     }
 
 /**
-* Gets the SecretKey property
-* @return String with the SecretKey
+* Gets the Login property
+* @return String with the Login
 */
-    public String getSecretKey()
+    public String getLogin()
     {
-        return getSemanticObject().getProperty(social_secretKey);
+        return getSemanticObject().getProperty(social_login);
     }
 
 /**
-* Sets the SecretKey property
-* @param value long with the SecretKey
+* Sets the Login property
+* @param value long with the Login
 */
-    public void setSecretKey(String value)
+    public void setLogin(String value)
     {
-        getSemanticObject().setProperty(social_secretKey, value);
+        getSemanticObject().setProperty(social_login, value);
     }
 }
