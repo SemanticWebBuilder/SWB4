@@ -102,7 +102,6 @@ public class GenericRedirect extends GenericForwardComposer <Component>
                     }
                  });
            }
-           
            if(action.equals(SWBSocialResourceUtils.ACTION_ADD) && treeNodePage!=null)
            {
                iframe_genRedirect.setSrc(treeNodePage.getUrl(user.getLanguage())+"?wsite="+wsite.getId()+"&action="+action+"&itemUri="+URLEncoder.encode(treeItem.getData().getUri()));

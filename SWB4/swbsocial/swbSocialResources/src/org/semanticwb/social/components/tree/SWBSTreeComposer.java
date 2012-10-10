@@ -325,13 +325,26 @@ public class SWBSTreeComposer extends GenericForwardComposer <Component> {
                         @Override
                         public void onEvent(Event event) throws Exception {
                             final Treeitem selectedTreeItem = tree.getSelectedItem();
-                            final ElementTreeNode itemValue = (ElementTreeNode) selectedTreeItem.getValue();
+                            final ElementTreeNode itemValue = (ElementTreeNode) selectedTreeItem.getValue();                            
                             if(!isCategory(itemValue.getData())){ //Si es una categoría
-                                final Treeitem selectedTreeItemParent = tree.getSelectedItem().getParentItem();
-                                final ElementTreeNode itemValueParent = (ElementTreeNode) selectedTreeItemParent.getValue();
+                                //final Treeitem selectedTreeItemParent = tree.getSelectedItem().getParentItem();
+                                //final ElementTreeNode itemValueParent = (ElementTreeNode) selectedTreeItemParent.getValue();
+                                WebPage wpage=wsiteAdm.getWebPage(itemValue.getData().getCategoryID());
+                                String zulPage="";
+                                if(wpage!=null && wpage instanceof TreeNodePage)
+                                {
+                                    TreeNodePage TreeNodePage=(TreeNodePage)wpage;
+                                    if(TreeNodePage.getZulResourcePath()!=null)
+                                    {
+                                        zulPage=TreeNodePage.getZulResourcePath();
+                                    }
+                                }
                                 content.setSrc(null);//En teoría, esta línea hace lo que hace la línea de abajo (Todo:Probar y Quitar la de abajo)
                                 content.setSrc("/work/models/swbsocial/admin/zul/clearCompose.zul");
-                                content.setSrc(itemValueParent.getData().getZulPage());
+                                if(zulPage!=null)
+                                {
+                                    content.setSrc(zulPage);
+                                }
                                 content.setDynamicProperty("objUri", URLEncoder.encode(itemValue.getData().getUri()));
                                 //content.setDynamicProperty("parentItem", itemValueParent);
                                 content.setDynamicProperty("treeItem", itemValue);
@@ -351,7 +364,7 @@ public class SWBSTreeComposer extends GenericForwardComposer <Component> {
                     });
                 }
 
-                //Bloque de código para soportar drag&drop. TODO: Revisar para implementar solo en los casos de que los nodos sean de tipo Childrenable
+                //Bloque de código para soportar drag&drop. Solo en los casos de que los nodos sean de tipo Childrenable
                 final ElementTreeNode itemValue = (ElementTreeNode) treeItem.getValue();
                 //System.out.println("itemValue-00:"+itemValue.getData().getUri());
                 if(itemValue.getData().getUri()!=null)
