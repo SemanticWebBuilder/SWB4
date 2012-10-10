@@ -9,121 +9,52 @@
     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
   xml:base="http://www.semanticwebbuilder.org/swb4/domotic">
   <owl:Ontology rdf:about="">
-    <owl:imports rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology"/>
     <owl:versionInfo rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >Created with TopBraid Composer</owl:versionInfo>
+    <owl:imports rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology"/>
   </owl:Ontology>
+  <owl:Class rdf:ID="TimerAction">
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="DomAction"/>
+    </rdfs:subClassOf>
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+  </owl:Class>
   <owl:Class rdf:ID="DomiticSite">
     <swb:hasClass>
-      <swb:Class rdf:ID="DomDevice">
-        <rdfs:label xml:lang="en">Device</rdfs:label>
-        <rdfs:label xml:lang="es">Dispositivo</rdfs:label>
-        <swb:displayObject>
-          <swbxf:DisplayObject rdf:ID="do_DomDevice">
-            <swb:displayMode rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-            >edit_only</swb:displayMode>
-            <swbxf:doNotInstanceable rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-            >true</swbxf:doNotInstanceable>
-            <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-            >swbIconResource</swb:iconClass>
-          </swbxf:DisplayObject>
-        </swb:displayObject>
-        <rdfs:subClassOf>
-          <swb:Class rdf:ID="DomItem">
-            <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
-            <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-          </swb:Class>
-        </rdfs:subClassOf>
-        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-        >true</swb:autogenId>
-        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
-        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
-        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-      </swb:Class>
+      <owl:Class rdf:ID="DomDevice"/>
     </swb:hasClass>
     <swb:hasHerarquicalNode>
       <swbxf:HerarquicalNode rdf:ID="hn_Contexts">
-        <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >swbIconLanguages</swb:iconClass>
-        <swbxf:heClass>
-          <swb:Class rdf:ID="DomContext">
-            <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Activeable"/>
-            <swb:displayObject>
-              <swbxf:DisplayObject rdf:ID="do_DomContext">
-                <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-                >swbIconWebPage</swb:iconClass>
-              </swbxf:DisplayObject>
-            </swb:displayObject>
-            <rdfs:label xml:lang="en">Context</rdfs:label>
-            <rdfs:label xml:lang="es">Contexto</rdfs:label>
-            <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
-            <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
-            <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
-            <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-          </swb:Class>
-        </swbxf:heClass>
+        <swb:title xml:lang="es">Contextos</swb:title>
+        <swb:title xml:lang="en">Contexts</swb:title>
         <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
         >94</swb:index>
-        <swb:title xml:lang="en">Contexts</swb:title>
-        <swb:title xml:lang="es">Contextos</swb:title>
+        <swbxf:heClass>
+          <owl:Class rdf:ID="DomContext"/>
+        </swbxf:heClass>
+        <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >swbIconLanguages</swb:iconClass>
       </swbxf:HerarquicalNode>
     </swb:hasHerarquicalNode>
     <swb:hasClass>
-      <swb:Class rdf:ID="DomDeviceType">
-        <swb:displayObject>
-          <swbxf:DisplayObject rdf:ID="do_DomDeviceType">
-            <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-            >swbIconWebPage</swb:iconClass>
-          </swbxf:DisplayObject>
-        </swb:displayObject>
-        <rdfs:label xml:lang="en">Device Type</rdfs:label>
-        <rdfs:label xml:lang="es">Tipo de Dispositivo</rdfs:label>
-        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-        >true</swb:autogenId>
-        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
-        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
-        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
-        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-      </swb:Class>
+      <owl:Class rdf:ID="DomDeviceType"/>
     </swb:hasClass>
     <swb:hasClass>
-      <swb:Class rdf:ID="DomDeviceStat">
-        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-        >true</swb:autogenId>
-        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
-        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-      </swb:Class>
+      <owl:Class rdf:ID="DomDeviceStat"/>
     </swb:hasClass>
     <swb:hasHerarquicalNode>
       <swbxf:HerarquicalNode rdf:ID="hn_DomGroups">
-        <swbxf:heClass>
-          <swb:Class rdf:ID="DomGroup">
-            <rdfs:label xml:lang="en">Device Group</rdfs:label>
-            <rdfs:label xml:lang="es">Grupo de Dispositivos</rdfs:label>
-            <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
-            <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
-            <swb:displayObject>
-              <swbxf:DisplayObject rdf:ID="do_DomGroup">
-                <swbxf:dropMatchLevel rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-                >2</swbxf:dropMatchLevel>
-                <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-                >swbIconTemplateGroup</swb:iconClass>
-                <swbxf:dragSupport rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-                >true</swbxf:dragSupport>
-              </swbxf:DisplayObject>
-            </swb:displayObject>
-            <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-            >true</swb:autogenId>
-            <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
-            <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-          </swb:Class>
-        </swbxf:heClass>
-        <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >swbIconTemplateGroup</swb:iconClass>
-        <swb:title xml:lang="en">Groups</swb:title>
-        <swb:title xml:lang="es">Grupos</swb:title>
         <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
         >105</swb:index>
+        <swb:title xml:lang="es">Grupos</swb:title>
+        <swb:title xml:lang="en">Groups</swb:title>
+        <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >swbIconTemplateGroup</swb:iconClass>
+        <swbxf:heClass>
+          <owl:Class rdf:ID="DomGroup"/>
+        </swbxf:heClass>
       </swbxf:HerarquicalNode>
     </swb:hasHerarquicalNode>
     <swb:displayObject>
@@ -134,23 +65,41 @@
     </swb:displayObject>
     <swb:hasHerarquicalNode>
       <swbxf:HerarquicalNode rdf:ID="hn_DomGateways">
-        <swb:title xml:lang="es">Gateways</swb:title>
-        <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >swbIconResources</swb:iconClass>
-        <swbxf:heClass>
-          <owl:Class rdf:ID="DomGateway"/>
-        </swbxf:heClass>
-        <swb:title xml:lang="en">Gateways</swb:title>
         <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
         >100</swb:index>
+        <swb:title xml:lang="en">Gateways</swb:title>
+        <swbxf:heClass>
+          <swb:Class rdf:ID="DomGateway">
+            <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
+            <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
+            <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+            >true</swb:autogenId>
+            <rdfs:subClassOf>
+              <owl:Class rdf:ID="DomItem"/>
+            </rdfs:subClassOf>
+            <swb:displayObject>
+              <swbxf:DisplayObject rdf:ID="do_DomGateway">
+                <swbxf:doNotInstanceable rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+                >false</swbxf:doNotInstanceable>
+                <swb:displayMode rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+                >edit_only</swb:displayMode>
+                <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+                >swbIconProcess</swb:iconClass>
+              </swbxf:DisplayObject>
+            </swb:displayObject>
+            <rdfs:label>Gateway</rdfs:label>
+            <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+          </swb:Class>
+        </swbxf:heClass>
+        <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >swbIconResources</swb:iconClass>
+        <swb:title xml:lang="es">Gateways</swb:title>
       </swbxf:HerarquicalNode>
     </swb:hasHerarquicalNode>
     <swb:hasHerarquicalNode>
       <swbxf:HerarquicalNode rdf:ID="hn_DomPeriods">
-        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >91</swb:index>
-        <swb:title xml:lang="en">Periods</swb:title>
-        <swb:title xml:lang="es">Periodos</swb:title>
+        <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >swbIconCalendars</swb:iconClass>
         <swbxf:heClass>
           <swb:Class rdf:ID="DomPeriod">
             <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
@@ -170,409 +119,467 @@
             <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
           </swb:Class>
         </swbxf:heClass>
-        <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >swbIconCalendars</swb:iconClass>
+        <swb:title xml:lang="es">Periodos</swb:title>
+        <swb:title xml:lang="en">Periods</swb:title>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >91</swb:index>
       </swbxf:HerarquicalNode>
     </swb:hasHerarquicalNode>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Model"/>
     <swb:hasHerarquicalNode>
       <swbxf:HerarquicalNode rdf:ID="hn_DomDeviceTypes">
-        <swbxf:heClass rdf:resource="#DomDeviceType"/>
-        <swb:title xml:lang="en">Device Types</swb:title>
-        <swb:title xml:lang="es">Tipos de Dispositivos</swb:title>
-        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >96</swb:index>
         <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
         >swbIconTemplateGroup</swb:iconClass>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >96</swb:index>
+        <swb:title xml:lang="es">Tipos de Dispositivos</swb:title>
+        <swb:title xml:lang="en">Device Types</swb:title>
+        <swbxf:heClass>
+          <owl:Class rdf:about="#DomDeviceType"/>
+        </swbxf:heClass>
       </swbxf:HerarquicalNode>
     </swb:hasHerarquicalNode>
-    <swb:hasClass>
-      <owl:Class rdf:about="#DomGateway"/>
-    </swb:hasClass>
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#WebSite"/>
+    <swb:hasClass rdf:resource="#DomGateway"/>
     <swb:hasHerarquicalNode rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_Calendars"/>
   </owl:Class>
-  <owl:Class rdf:about="#DomGateway">
-    <rdfs:label>Gateway</rdfs:label>
+  <owl:Class rdf:about="#DomAction">
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
+    <rdfs:label xml:lang="es">Acción</rdfs:label>
+    <rdfs:label xml:lang="en">Action</rdfs:label>
     <swb:displayObject>
-      <swbxf:DisplayObject rdf:ID="do_DomGateway">
-        <swbxf:doNotInstanceable rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-        >true</swbxf:doNotInstanceable>
-        <swb:displayMode rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >edit_only</swb:displayMode>
+      <swbxf:DisplayObject rdf:ID="dp_DomAction">
         <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >swbIconProcess</swb:iconClass>
+        >swbIconResource</swb:iconClass>
       </swbxf:DisplayObject>
     </swb:displayObject>
-    <rdfs:subClassOf rdf:resource="#DomItem"/>
     <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:autogenId>
+    <swb:classGroupId rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >DomAction</swb:classGroupId>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+  </owl:Class>
+  <owl:Class rdf:ID="OffEvent">
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="DomEvent"/>
+    </rdfs:subClassOf>
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+  </owl:Class>
+  <owl:Class rdf:about="#DomDeviceStat">
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+  </owl:Class>
+  <owl:Class rdf:ID="DomMacro">
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+  </owl:Class>
+  <owl:Class rdf:ID="DomAccessLevel">
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
+    <rdfs:label xml:lang="es">Nivel de Acceso</rdfs:label>
+    <rdfs:label xml:lang="en">Access Level</rdfs:label>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+  </owl:Class>
+  <owl:Class rdf:ID="DomPermission">
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+  </owl:Class>
+  <owl:Class rdf:about="#DomGroup">
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <swb:displayObject>
+      <swbxf:DisplayObject rdf:ID="do_DomGroup">
+        <swbxf:dragSupport rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >true</swbxf:dragSupport>
+        <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >swbIconTemplateGroup</swb:iconClass>
+        <swbxf:dropMatchLevel rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >2</swbxf:dropMatchLevel>
+      </swbxf:DisplayObject>
+    </swb:displayObject>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
+    <rdfs:label xml:lang="es">Grupo de Dispositivos</rdfs:label>
+    <rdfs:label xml:lang="en">Device Group</rdfs:label>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+  </owl:Class>
+  <owl:Class rdf:ID="OnEvent">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#DomEvent"/>
+    </rdfs:subClassOf>
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+  </owl:Class>
+  <owl:Class rdf:ID="SendMailAction">
+    <rdfs:subClassOf rdf:resource="#DomAction"/>
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+  </owl:Class>
+  <owl:Class rdf:about="#DomDeviceType">
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <rdfs:label xml:lang="es">Tipo de Dispositivo</rdfs:label>
+    <rdfs:label xml:lang="en">Device Type</rdfs:label>
+    <swb:displayObject>
+      <swbxf:DisplayObject rdf:ID="do_DomDeviceType">
+        <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >swbIconWebPage</swb:iconClass>
+      </swbxf:DisplayObject>
+    </swb:displayObject>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+  </owl:Class>
+  <owl:Class rdf:ID="DomPeriodRef">
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+  </owl:Class>
+  <owl:Class rdf:ID="ChangeEvent">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#DomEvent"/>
+    </rdfs:subClassOf>
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <swb:displayObject>
+      <swbxf:DisplayObject rdf:ID="do_DomEvent">
+        <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >swbIconRule</swb:iconClass>
+      </swbxf:DisplayObject>
+    </swb:displayObject>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+  </owl:Class>
+  <owl:Class rdf:ID="ChangeStatAction">
+    <rdfs:subClassOf rdf:resource="#DomAction"/>
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+  </owl:Class>
+  <owl:Class rdf:ID="TwitterAction">
+    <rdfs:subClassOf rdf:resource="#DomAction"/>
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+  </owl:Class>
+  <owl:Class rdf:ID="SendSMSAction">
+    <rdfs:subClassOf rdf:resource="#DomAction"/>
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >false</swb:autogenId>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+  </owl:Class>
+  <owl:Class rdf:about="#DomContext">
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
+    <rdfs:label xml:lang="es">Contexto</rdfs:label>
+    <rdfs:label xml:lang="en">Context</rdfs:label>
+    <swb:displayObject>
+      <swbxf:DisplayObject rdf:ID="do_DomContext">
+        <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >swbIconWebPage</swb:iconClass>
+      </swbxf:DisplayObject>
+    </swb:displayObject>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Activeable"/>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+  </owl:Class>
+  <owl:Class rdf:about="#DomEvent">
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
+    <swb:displayObject rdf:resource="#do_DomEvent"/>
+    <rdfs:label xml:lang="en">Event</rdfs:label>
+    <rdfs:label xml:lang="es">Evento</rdfs:label>
+    <swb:classGroupId rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >DomEvent</swb:classGroupId>
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+  </owl:Class>
+  <owl:Class rdf:about="#DomItem">
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+  </owl:Class>
+  <owl:Class rdf:about="#DomDevice">
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <rdfs:subClassOf rdf:resource="#DomItem"/>
+    <swb:displayObject>
+      <swbxf:DisplayObject rdf:ID="do_DomDevice">
+        <swbxf:doNotInstanceable rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >false</swbxf:doNotInstanceable>
+        <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >swbIconResource</swb:iconClass>
+        <swb:displayMode rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >edit_only</swb:displayMode>
+      </swbxf:DisplayObject>
+    </swb:displayObject>
+    <rdfs:label xml:lang="es">Dispositivo</rdfs:label>
+    <rdfs:label xml:lang="en">Device</rdfs:label>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
   <owl:ObjectProperty rdf:ID="hasChildGroupInv">
-    <swb:herarquicalRelation rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:herarquicalRelation>
     <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >hasChildGroup</swb:propertyCodeName>
+    <swb:herarquicalRelation rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:herarquicalRelation>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="domGateway">
+    <rdfs:domain rdf:resource="#DomDevice"/>
+    <rdfs:range rdf:resource="#DomGateway"/>
     <owl:inverseOf>
       <owl:ObjectProperty rdf:ID="hasDomDevice"/>
     </owl:inverseOf>
-    <rdfs:range rdf:resource="#DomGateway"/>
-    <rdfs:domain rdf:resource="#DomDevice"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="hasGroup">
-    <rdfs:label xml:lang="en">Groups</rdfs:label>
-    <rdfs:label xml:lang="es">Grupos</rdfs:label>
-    <swb:displayProperty>
-      <swbxf:DisplayProperty rdf:ID="dp_hasGroup">
-        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#SelectMultipleModel"/>
-        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >55</swb:index>
-      </swbxf:DisplayProperty>
-    </swb:displayProperty>
-    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >hasDomDevice</swb:propertyCodeName>
+    <rdfs:domain rdf:resource="#DomDevice"/>
+    <rdfs:range rdf:resource="#DomGroup"/>
     <owl:inverseOf>
       <owl:ObjectProperty rdf:ID="hasDomDeviceInv"/>
     </owl:inverseOf>
-    <rdfs:range rdf:resource="#DomGroup"/>
-    <rdfs:domain rdf:resource="#DomDevice"/>
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >hasDomDevice</swb:propertyCodeName>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_hasGroup">
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >55</swb:index>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#SelectMultipleModel"/>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:label xml:lang="es">Grupos</rdfs:label>
+    <rdfs:label xml:lang="en">Groups</rdfs:label>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="domPeriodRefContext">
-    <rdfs:range rdf:resource="#DomContext"/>
-    <rdfs:domain>
-      <swb:Class rdf:ID="DomPeriodRef">
-        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-        >true</swb:autogenId>
-        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
-        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-      </swb:Class>
-    </rdfs:domain>
+    <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:removeDependency>
     <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >hasDomPeriodRef</swb:propertyCodeName>
-    <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:removeDependency>
+    <rdfs:domain rdf:resource="#DomPeriodRef"/>
+    <rdfs:range rdf:resource="#DomContext"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="domDeviceStat">
-    <rdfs:range rdf:resource="#DomDeviceStat"/>
-    <swb:herarquicalRelation rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >false</swb:herarquicalRelation>
-    <rdfs:label xml:lang="es">Estatus</rdfs:label>
-    <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:removeDependency>
+    <rdfs:label xml:lang="en">Status</rdfs:label>
+    <rdfs:domain rdf:resource="#DomDevice"/>
+    <swb:cloneDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:cloneDependency>
     <owl:inverseOf>
       <owl:ObjectProperty rdf:ID="domDevice"/>
     </owl:inverseOf>
-    <swb:cloneDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:cloneDependency>
-    <rdfs:domain rdf:resource="#DomDevice"/>
-    <rdfs:label xml:lang="en">Status</rdfs:label>
+    <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:removeDependency>
+    <rdfs:label xml:lang="es">Estatus</rdfs:label>
+    <swb:herarquicalRelation rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >false</swb:herarquicalRelation>
+    <rdfs:range rdf:resource="#DomDeviceStat"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:about="#hasDomDevice">
-    <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:removeDependency>
-    <swb:cloneDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:cloneDependency>
     <swb:herarquicalRelation rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:herarquicalRelation>
+    <swb:cloneDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:cloneDependency>
+    <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:removeDependency>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="hasDomActionInv">
-    <swb:herarquicalRelation rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:herarquicalRelation>
     <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >hasDomAction</swb:propertyCodeName>
-  </owl:ObjectProperty>
-  <owl:ObjectProperty rdf:ID="hasDomEventsInv">
-    <swb:cloneDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:cloneDependency>
-    <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:removeDependency>
     <swb:herarquicalRelation rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:herarquicalRelation>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasDomEventsInv">
     <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >hasDomEvents</swb:propertyCodeName>
+    <swb:herarquicalRelation rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:herarquicalRelation>
+    <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:removeDependency>
+    <swb:cloneDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:cloneDependency>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="hasPermission">
-    <rdfs:domain rdf:resource="#DomItem"/>
-    <rdfs:range>
-      <swb:Class rdf:ID="DomPermission">
-        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-        >true</swb:autogenId>
-        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
-        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-      </swb:Class>
-    </rdfs:range>
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_hsPermission">
-        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#ObjectElement_1"/>
         <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
         >200</swb:index>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#ObjectElement_1"/>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
+    <rdfs:range rdf:resource="#DomPermission"/>
+    <rdfs:domain rdf:resource="#DomItem"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="domDeviceType">
-    <rdfs:label xml:lang="en">Device Type</rdfs:label>
-    <rdfs:label xml:lang="es">Tipo de Dispositivo</rdfs:label>
+    <rdfs:domain rdf:resource="#DomDevice"/>
+    <rdfs:range rdf:resource="#DomDeviceType"/>
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_domDeviceType">
-        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#selectOneModel"/>
         <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
         >90</swb:index>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#selectOneModel"/>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
-    <rdfs:range rdf:resource="#DomDeviceType"/>
-    <rdfs:domain rdf:resource="#DomDevice"/>
+    <rdfs:label xml:lang="es">Tipo de Dispositivo</rdfs:label>
+    <rdfs:label xml:lang="en">Device Type</rdfs:label>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="hasMacroAction">
-    <rdfs:range>
-      <swb:Class rdf:ID="DomAction">
-        <swb:classGroupId rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >DomAction</swb:classGroupId>
-        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-        >true</swb:autogenId>
-        <swb:displayObject>
-          <swbxf:DisplayObject rdf:ID="dp_DomAction">
-            <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-            >swbIconResource</swb:iconClass>
-          </swbxf:DisplayObject>
-        </swb:displayObject>
-        <rdfs:label xml:lang="en">Action</rdfs:label>
-        <rdfs:label xml:lang="es">Acción</rdfs:label>
-        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
-        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-      </swb:Class>
-    </rdfs:range>
-    <rdfs:domain>
-      <swb:Class rdf:ID="DomMacro">
-        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-        >true</swb:autogenId>
-        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
-        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
-        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-      </swb:Class>
-    </rdfs:domain>
+    <rdfs:domain rdf:resource="#DomMacro"/>
+    <rdfs:range rdf:resource="#DomAction"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="accessLevel">
-    <rdfs:range>
-      <swb:Class rdf:ID="DomAccessLevel">
-        <rdfs:label xml:lang="en">Access Level</rdfs:label>
-        <rdfs:label xml:lang="es">Nivel de Acceso</rdfs:label>
-        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
-        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
-        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
-        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-      </swb:Class>
-    </rdfs:range>
     <rdfs:domain rdf:resource="#DomPermission"/>
+    <rdfs:range rdf:resource="#DomAccessLevel"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="parentGroup">
-    <owl:inverseOf rdf:resource="#hasChildGroupInv"/>
-    <rdfs:range rdf:resource="#DomGroup"/>
     <rdfs:domain rdf:resource="#DomGroup"/>
+    <rdfs:range rdf:resource="#DomGroup"/>
+    <owl:inverseOf rdf:resource="#hasChildGroupInv"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:about="#hasDomDeviceInv">
     <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >hasDomDevice</swb:propertyCodeName>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="user">
-    <rdfs:range rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#User"/>
     <rdfs:domain rdf:resource="#DomPermission"/>
+    <rdfs:range rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#User"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="domEvent">
-    <swb:cloneDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:cloneDependency>
-    <rdfs:range>
-      <swb:Class rdf:ID="DomEvent">
-        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-        >true</swb:autogenId>
-        <swb:classGroupId rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >DomEvent</swb:classGroupId>
-        <rdfs:label xml:lang="es">Evento</rdfs:label>
-        <rdfs:label xml:lang="en">Event</rdfs:label>
-        <swb:displayObject>
-          <swbxf:DisplayObject rdf:ID="do_DomEvent">
-            <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-            >swbIconRule</swb:iconClass>
-          </swbxf:DisplayObject>
-        </swb:displayObject>
-        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
-        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-      </swb:Class>
-    </rdfs:range>
+    <owl:inverseOf rdf:resource="#hasDomActionInv"/>
+    <rdfs:domain rdf:resource="#DomAction"/>
     <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:removeDependency>
-    <rdfs:domain rdf:resource="#DomAction"/>
-    <owl:inverseOf rdf:resource="#hasDomActionInv"/>
+    <rdfs:range rdf:resource="#DomEvent"/>
+    <swb:cloneDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:cloneDependency>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="domEventContext">
-    <owl:inverseOf rdf:resource="#hasDomEventsInv"/>
+    <rdfs:range rdf:resource="#DomContext"/>
+    <rdfs:domain rdf:resource="#DomEvent"/>
     <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >domContext</swb:propertyCodeName>
-    <rdfs:domain rdf:resource="#DomEvent"/>
-    <rdfs:range rdf:resource="#DomContext"/>
+    <owl:inverseOf rdf:resource="#hasDomEventsInv"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="hasDomPeriodRef">
-    <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:removeDependency>
+    <rdfs:range rdf:resource="#DomPeriodRef"/>
+    <rdfs:domain rdf:resource="#DomDevice"/>
     <swb:cloneDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:cloneDependency>
-    <rdfs:domain rdf:resource="#DomDevice"/>
-    <rdfs:range rdf:resource="#DomPeriodRef"/>
+    <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:removeDependency>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="domPeriod">
-    <rdfs:domain rdf:resource="#DomPeriodRef"/>
     <rdfs:range rdf:resource="#DomPeriod"/>
+    <rdfs:domain rdf:resource="#DomPeriodRef"/>
   </owl:ObjectProperty>
   <owl:DatatypeProperty rdf:ID="devId">
-    <rdfs:label xml:lang="es">Id del Dispositivo</rdfs:label>
-    <rdfs:label xml:lang="en">Device Id</rdfs:label>
+    <rdfs:domain rdf:resource="#DomDevice"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_devId">
         <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
         >27</swb:index>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-    <rdfs:domain rdf:resource="#DomDevice"/>
+    <rdfs:label xml:lang="en">Device Id</rdfs:label>
+    <rdfs:label xml:lang="es">Id del Dispositivo</rdfs:label>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="devSerial">
-    <rdfs:label>Serial</rdfs:label>
+    <rdfs:domain rdf:resource="#DomDevice"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >serial</swb:propertyCodeName>
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="sp_serial">
         <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
         >25</swb:index>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
-    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >serial</swb:propertyCodeName>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-    <rdfs:domain rdf:resource="#DomDevice"/>
+    <rdfs:label>Serial</rdfs:label>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="active">
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
     <rdfs:domain rdf:resource="#DomDeviceStat"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="gtwSerial">
-    <rdfs:label>Serial</rdfs:label>
-    <swb:displayProperty rdf:resource="#sp_serial"/>
-    <rdfs:domain rdf:resource="#DomGateway"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >serial</swb:propertyCodeName>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#DomGateway"/>
+    <swb:displayProperty rdf:resource="#sp_serial"/>
+    <rdfs:label>Serial</rdfs:label>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="status">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+    <rdfs:domain rdf:resource="#DomDeviceStat"/>
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_status">
         <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
         >20</swb:index>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
-    <rdfs:domain rdf:resource="#DomDeviceStat"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="dimerizable">
-    <rdfs:label>Dimerizable</rdfs:label>
+    <rdfs:domain rdf:resource="#DomDevice"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_dimerizable">
         <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
         >70</swb:index>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
-    <rdfs:domain rdf:resource="#DomDevice"/>
+    <rdfs:label>Dimerizable</rdfs:label>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="devZone">
-    <rdfs:label xml:lang="es">Zona del Dispositivo</rdfs:label>
-    <rdfs:label xml:lang="en">Device Zone</rdfs:label>
+    <rdfs:domain rdf:resource="#DomDevice"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_devZone">
         <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
         >25</swb:index>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-    <rdfs:domain rdf:resource="#DomDevice"/>
+    <rdfs:label xml:lang="en">Device Zone</rdfs:label>
+    <rdfs:label xml:lang="es">Zona del Dispositivo</rdfs:label>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="devStatus">
-    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >status</swb:propertyCodeName>
+    <rdfs:domain rdf:resource="#DomDevice"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+    <rdfs:label xml:lang="es">Estatus</rdfs:label>
+    <rdfs:label xml:lang="en">Status</rdfs:label>
+    <swb:externalInvocation rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:externalInvocation>
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_devStatus">
         <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
         >90</swb:index>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
-    <swb:externalInvocation rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:externalInvocation>
-    <rdfs:label xml:lang="en">Status</rdfs:label>
-    <rdfs:label xml:lang="es">Estatus</rdfs:label>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
-    <rdfs:domain rdf:resource="#DomDevice"/>
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >status</swb:propertyCodeName>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="lastUpdate">
-    <swb:displayProperty rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#dp_updated"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#dateTime"/>
     <rdfs:domain rdf:resource="#DomDeviceStat"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#dateTime"/>
+    <swb:displayProperty rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#dp_updated"/>
   </owl:DatatypeProperty>
   <swb:CodePackage rdf:ID="pkg">
-    <swb:prefix rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >swb4d</swb:prefix>
     <swb:package rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >org.semanticwb.domotic.model</swb:package>
+    <swb:prefix rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >swb4d</swb:prefix>
   </swb:CodePackage>
-  <swb:Class rdf:ID="OnEvent">
-    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:autogenId>
-    <rdfs:subClassOf rdf:resource="#DomEvent"/>
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-  </swb:Class>
-  <swb:Class rdf:ID="ChangeStatAction">
-    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:autogenId>
-    <rdfs:subClassOf rdf:resource="#DomAction"/>
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-  </swb:Class>
-  <swb:Class rdf:ID="ChangeEvent">
-    <swb:displayObject rdf:resource="#do_DomEvent"/>
-    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:autogenId>
-    <rdfs:subClassOf rdf:resource="#DomEvent"/>
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-  </swb:Class>
-  <swb:Class rdf:ID="TwitterAction">
-    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:autogenId>
-    <rdfs:subClassOf rdf:resource="#DomAction"/>
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-  </swb:Class>
-  <swb:Class rdf:ID="TimerAction">
-    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:autogenId>
-    <rdfs:subClassOf rdf:resource="#DomAction"/>
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-  </swb:Class>
-  <swb:Class rdf:ID="OffEvent">
-    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:autogenId>
-    <rdfs:subClassOf rdf:resource="#DomEvent"/>
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-  </swb:Class>
-  <swb:Class rdf:ID="SendMailAction">
-    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:autogenId>
-    <rdfs:subClassOf rdf:resource="#DomAction"/>
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-  </swb:Class>
-  <swb:Class rdf:ID="SendSMSAction">
-    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >false</swb:autogenId>
-    <rdfs:subClassOf rdf:resource="#DomAction"/>
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-  </swb:Class>
 </rdf:RDF>
 
 <!-- Created with TopBraid Composer -->
