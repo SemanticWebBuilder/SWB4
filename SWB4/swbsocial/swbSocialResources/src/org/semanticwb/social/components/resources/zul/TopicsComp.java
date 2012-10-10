@@ -89,7 +89,7 @@ public class TopicsComp extends GenericForwardComposer
                 socialTopic.setDescription(description.getValue());
             }
             //Actualizar el árbol (Insertar Nodo)
-            SWBSocialResourceUtils.Components.insertTreeNode(treeItem, socialTopic);
+            SWBSocialResourceUtils.Components.updateTreeNode(treeItem, socialTopic);
         }else if(action.equals(SWBSocialResourceUtils.ACTION_EDIT) ||  action.equals(SWBSocialResourceUtils.ACTION_DOUBLECLICK) && socialTopic!=null)
         {
             if(title.getValue()!=null)
