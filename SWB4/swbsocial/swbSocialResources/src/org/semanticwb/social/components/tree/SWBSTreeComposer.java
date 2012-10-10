@@ -21,6 +21,8 @@ import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.social.TreeNodePage;
 import java.net.URLEncoder;
+import org.semanticwb.SWBPlatform;
+import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.social.Childrenable;
 import org.semanticwb.social.utils.SWBSocialResourceUtils;
 
@@ -351,13 +353,13 @@ public class SWBSTreeComposer extends GenericForwardComposer <Component> {
 
                 //Bloque de código para soportar drag&drop. TODO: Revisar para implementar solo en los casos de que los nodos sean de tipo Childrenable
                 final ElementTreeNode itemValue = (ElementTreeNode) treeItem.getValue();
-                //System.out.println("itemValue-00:"+itemValue);
+                //System.out.println("itemValue-00:"+itemValue.getData().getUri());
                 if(itemValue.getData().getUri()!=null)
                 {
                     SemanticObject semObj=SemanticObject.createSemanticObject(itemValue.getData().getUri());
-                    //System.out.println("semObj:"+semObj);
                     if(semObj!=null && semObj.getSemanticClass().isSubClass(Childrenable.social_Childrenable))
                     {
+                        //System.out.println("semObj NO ES NULO:"+semObj.getURI());
                         dataRow.setDraggable("true");
                         dataRow.setDroppable("true");
                         dataRow.addEventListener(Events.ON_DROP, new EventListener<Event>()
@@ -373,22 +375,56 @@ public class SWBSTreeComposer extends GenericForwardComposer <Component> {
 
                                 //Treeitem parentItem = treeItem.getParentItem();
                                 ElementTreeNode parentData = (ElementTreeNode) treeItem.getValue();
+                                //System.out.println("draggedValue-0:"+draggedValue+",parentData-0:"+parentData);
                                 //System.out.println("draggedValue:"+draggedValue.getData().getUri()+",parentData:"+parentData.getData().getUri());
                                 if(draggedValue.getData().getModelID().equals(parentData.getData().getModelID()))
                                 {
-                                    //System.out.println("parentItemJJJJ:"+parentData.getData().getUri()+",model:"+parentData.getData().getModelID());
-                                    if (isCategory((Element) ((ElementTreeNode) treeItem.getValue()).getData())) {
-                                        elemenetTreeModel.add((ElementTreeNode) treeItem.getValue(), new DefaultTreeNode[] { draggedValue });
-                                    } else {
                                         elemenetTreeModel.add(parentData, new ElementTreeNode[] { draggedValue });
                                         //elemenetTreeModel.remove(draggedValue);
-                                    }
-                                }
+                               }
                             }
                         });
                     }else{
+                        //System.out.println("itemValue-00:"+itemValue.getData().getUri()+",Es NULO");
                         dataRow.setDraggable("false");
                         dataRow.setDroppable("false");
+                        //Se revisa si es una sección de la administración y si su semanticClass es de tipo Childrenable
+                        if(itemValue.getData().getUri()!=null)
+                        {
+                            WebPage wpage=wsiteAdm.getWebPage(itemValue.getData().getUri());
+                            if(wpage instanceof TreeNodePage)
+                            {
+                                TreeNodePage TreeNodePage=(TreeNodePage)wpage;
+                                if(TreeNodePage.getClassUri()!=null)
+                                {
+                                    SemanticClass swbClass = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(TreeNodePage.getClassUri());
+                                    if(swbClass.isSubClass(Childrenable.social_Childrenable))
+                                    {
+                                         dataRow.setDroppable("true");
+                                         dataRow.addEventListener(Events.ON_DROP, new EventListener<Event>()
+                                         {
+                                            @SuppressWarnings("unchecked")
+                                            @Override
+                                            public void onEvent(Event event) throws Exception
+                                            {
+                                                Treeitem draggedItem = (Treeitem) ((DropEvent) event).getDragged().getParent();
+                                                ElementTreeNode draggedValue = (ElementTreeNode) draggedItem.getValue();
+
+                                                //Treeitem parentItem = treeItem.getParentItem();
+                                                ElementTreeNode parentData = (ElementTreeNode) treeItem.getValue();
+                                                //System.out.println("draggedValue-0:"+draggedValue+",parentData-0:"+parentData);
+                                                //System.out.println("draggedValue:"+draggedValue.getData().getUri()+",parentData:"+parentData.getData().getUri());
+                                                if(draggedValue.getData().getModelID().equals(parentData.getData().getModelID()))
+                                                {
+                                                    elemenetTreeModel.add(parentData, new ElementTreeNode[] { draggedValue });
+                                                    //elemenetTreeModel.remove(draggedValue);
+                                                }
+                                            }
+                                         });
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             }catch(Exception e)
