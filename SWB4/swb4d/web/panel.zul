@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<zk xmlns="http://www.zkoss.org/2005/zul">
+	<zscript>
+            import org.zkoss.zksandbox.*;
+            import org.semanticwb.domotic.model.*;
+            import org.semanticwb.model.*;
+            import org.semanticwb.*;
+            import java.util.*;
+            
+            List gtws=new ArrayList();
+            List devs=new ArrayList();            
+            
+            WebSite site=SWBContext.getWebSite("dom");            
+            Iterator it=DomGateway.getDomGatewayClassMgr().listDomGateways(site);
+            while(it.hasNext())
+            {
+                DomGateway gtw=(DomGateway)it.next();
+                gtws.add(gtw);
+                List ldev=new ArrayList();
+                devs.add(ldev);
+                Iterator it2=gtw.listDomDevices();
+                while(it2.hasNext())
+                {
+                    DomDevice dev=(DomDevice)it2.next();
+                    ldev.add(dev);
+                }
+            }
+            
+            SimpleGroupsModel model = new SimpleGroupsModel(devs,gtws);
+	</zscript>
+<div>
+    <grid height="400px" model="${model}">
+        <columns>
+            <column label="title" width="100px" />
+            <column label="Subject" />
+            <column label="Received" width="150px" />
+            <column label="Size" width="100px" />
+        </columns>
+        
+        <template name="model:group">
+            <group label="${each.serial}" />
+        </template>
+        
+        <template name="model">
+            <row>
+                <div>
+                    <image style="padding: 0px 10px"
+                        src="/img/Centigrade-Widget-Icons/EnvelopeOpen-16x16.png" />
+                    <label value="${each.title}" />
+                </div>
+                <label value="${each.serial}" />
+                <label value="${each.devId}" />
+                <label value="${each.devZone}" />
+            </row>
+        </template>
+    </grid>
+</div>
+</zk>
