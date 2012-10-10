@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<zk xmlns="http://www.zkoss.org/2005/zul">
+<!--<window id="cnt" title="My First Window" border="normal" width="500px" apply="org.zkoss.bind.BindComposer" validationMessages="@id('vmsgs')">-->
+<div id="cnt" width="500px" apply="org.zkoss.bind.BindComposer" validationMessages="@id('vmsgs')">
+	<zscript>
+        <![CDATA[
+            import org.semanticwb.model.*;
+            //import org.semanticwb.*;
+            //import java.util.*;
+            
+            //Acceso a Objectos de SWB
+            WebSite site=SWBContext.getWebSite("dom");
+            WebPage p=site.getHomePage();
+                 
+            //Creacion de validador     
+            org.zkoss.bind.Validator range = new org.zkoss.bind.validator.AbstractValidator()
+            {
+                public void validate(org.zkoss.bind.ValidationContext ctx)
+                {
+                    Integer val = (Integer) ctx.getProperty().getValue();
+                    if (val < 10 || val > 100)
+                    {
+                        addInvalidMessage(ctx, "value must not < 10 or > 100, but is " + val);
+                    }
+                }
+            };
+            
+            org.zkoss.bind.Validator txtval = new org.zkoss.bind.validator.AbstractValidator()
+            {
+                public void validate(org.zkoss.bind.ValidationContext ctx)
+                {
+                    String val = (String) ctx.getProperty().getValue();
+                    if (val.length() < 10 || val.length() > 100)
+                    {
+                        addInvalidMessage(ctx, "value must not < 10 or > 100 characterns, but is " + val.length());
+                    }
+                }
+            };  
+            
+            //Creacion de Contraint
+            org.zkoss.zul.Constraint ct=new org.zkoss.zul.Constraint() 
+            {
+                public void validate(org.zkoss.zk.ui.Component comp, Object value) 
+                {
+                    //System.out.println(value.getClass());
+                    if (value == null || ((Integer)value).intValue() < 100) //assume used with intbox
+                        throw new org.zkoss.zk.ui.WrongValueException(comp, "At least 100 must be specified, not "+value);
+                }        
+            };
+            
+            //metodo invocado desde el boton
+            void submit() 
+            {
+                //Creacion dinamica de elementos por código
+                Row r=new org.zkoss.zul.Row();
+                r.setParent(rs);
+                new org.zkoss.zul.Label("Hello, World!").setParent(r);
+                Textbox txt=new org.zkoss.zul.Textbox();
+                txt.setParent(r);
+                
+                //Creación dinamica de elemento por parser 
+                Executions.createComponentsDirectly("<row>Description: <textbox constraint=\"no empty\" value=\"@bind(p.description)\"/></row>", "zul", rs, null);
+                
+            }
+        ]]>
+	</zscript>
+
+        Hello, World!
+        
+	<grid>
+	<rows id="rs">
+		<row>Name : <textbox id="name" value="@bind(p.title) @validator(txtval)"/></row>
+		<row>Email: <textbox id="email" constraint="no empty"/></row>
+                <row>Phone: <intbox constraint="${ct}" width="150px" /></row>
+		<row><button label="submit" onClick="submit()"/></row>
+                
+	</rows>
+	</grid>
+        <label value="@bind(vmsgs[name])"/>
+</div>
+<!--</window>-->
+</zk>
