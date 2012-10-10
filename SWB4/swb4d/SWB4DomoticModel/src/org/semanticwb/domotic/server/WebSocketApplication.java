@@ -8,7 +8,7 @@ package org.semanticwb.domotic.server;
  *
  * @author javier.solis.g
  */
-public class WebSocketApplication extends WebSocketApplication
+public class WebSocketApplication 
 {
     
 }
