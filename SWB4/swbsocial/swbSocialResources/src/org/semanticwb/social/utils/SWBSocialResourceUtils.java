@@ -143,7 +143,9 @@ public class SWBSocialResourceUtils {
                     }else{
                         categoryID=parentItem.getData().getUri();
                     }
-                    parentItem.insert(new ElementTreeNode(new Element(descripTable.getTitle(), descripTable.getURI(), null, ImgAdminPathBase + displayObj.getIconClass(), categoryID), new ElementTreeNode[0], true), parentItem.getChildCount());
+                    String modelID=swbClass.getSemanticObject().getModel().getModelObject().getId();
+                    parentItem.insert(new ElementTreeNode(new Element(descripTable.getTitle(), descripTable.getURI(), null, ImgAdminPathBase + displayObj.getIconClass(), 
+                            categoryID, modelID), new ElementTreeNode[0], true), parentItem.getChildCount());
                 }catch(Exception e)
                 {
                     log.error(e);
