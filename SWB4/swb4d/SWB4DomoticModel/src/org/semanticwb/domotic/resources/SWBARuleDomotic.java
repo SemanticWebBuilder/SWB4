@@ -18,6 +18,7 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.domotic.model.DomDevice;
+import org.semanticwb.domotic.model.DomRule;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.User;
 import org.semanticwb.model.UserRepository;
@@ -34,6 +35,7 @@ import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.api.SWBResourceURL;
 import org.semanticwb.domotic.model.DomiticSite;
+import org.semanticwb.model.Calendar;
 import org.semanticwb.model.Country;
 import org.semanticwb.model.Device;
 import org.semanticwb.model.DisplayProperty;
@@ -53,6 +55,9 @@ import org.w3c.dom.Element;
  */
 public class SWBARuleDomotic extends GenericResource {
 
+    public static final String TAG_CALENDAR = "calendar";
+    public static final String TAG_WEATHER = "weather";
+    public static final String TAG_HOUR = "hour";
     /**
      * The log.
      */
@@ -350,8 +355,8 @@ public class SWBARuleDomotic extends GenericResource {
     private void loadComboAttr(String tmid, String ruleid, SWBParamRequest paramRequest, HttpServletRequest request) throws SWBResourceException, java.io.IOException {
         SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
         String rrid = request.getParameter("suri");
-        Rule rRule = (Rule) ont.getGenericObject(rrid);
-        String tmsid = rRule.getWebSite().getId();
+        DomRule rRule = (DomRule) ont.getGenericObject(rrid);
+        String tmsid = null; // rRule.getWebSite().getId();
         if (tmsid == null) {
             tmsid = paramRequest.getWebPage().getWebSiteId();
         }
@@ -365,167 +370,100 @@ public class SWBARuleDomotic extends GenericResource {
         log.debug("Propiedades clases....");
         log.debug("DomiticSite:" + ws.getDisplayTitle(user.getLanguage()));
 
-       
-
         comboAtt = new HashMap();
         vecOrderAtt = new Vector(1, 1);
 
         // Agreando valores iniciales al HashMap como son isloged, isregistered, language, device
-        HashMap hmAttr = new HashMap();
-        HashMap hmOper = new HashMap();
-        HashMap hmValues = new HashMap();  
-        
-        hmAttr.put("Etiqueta", paramRequest.getLocaleString("msgUserRegistered"));  ///////////////////////////
-        hmAttr.put("Tipo", "select");
-        hmOper.put("=", paramRequest.getLocaleString("msgSameAs"));
-        hmOper.put("!=", paramRequest.getLocaleString("msgNotEqual"));
-        hmAttr.put("Operador", hmOper);
-        hmValues.put("true", paramRequest.getLocaleString("msgYes"));
-        hmValues.put("false", paramRequest.getLocaleString("msgNo"));
-        hmAttr.put("Valor", hmValues);
-        comboAtt.put(SWBRuleMgr.TAG_INT_ISREGISTERED, hmAttr); //RuleMgr.TAG_INT_ISREGISTERED
-
-        hmAttr = new HashMap();
-        hmOper = new HashMap();
-        hmValues = new HashMap();
-        hmAttr.put("Etiqueta", paramRequest.getLocaleString("msgUserSigned"));   ///////////////////////////
-        hmAttr.put("Tipo", "select");
-        hmOper.put("=", paramRequest.getLocaleString("msgSameAs"));
-        hmOper.put("!=", paramRequest.getLocaleString("msgNotEqual"));
-        hmAttr.put("Operador", hmOper);
-        hmValues.put("true", paramRequest.getLocaleString("msgYes"));
-        hmValues.put("false", paramRequest.getLocaleString("msgNo"));
-        hmAttr.put("Valor", hmValues);
-        comboAtt.put(SWBRuleMgr.TAG_INT_ISSIGNED, hmAttr); //RuleMgr.TAG_INT_ISLOGED
-
-        // DISPOSITIVOS POR SITIO
-        hmAttr = new HashMap();
-        hmOper = new HashMap();
-        hmValues = new HashMap();
-        hmAttr.put("Etiqueta", paramRequest.getLocaleString("msgDevice"));   ///////////////////////////
-        hmAttr.put("Tipo", "select");
-        Iterator<Device> eleDev = SWBContext.getWebSite(tmid).listDevices();
-        while (eleDev.hasNext()) {
-            Device rDev = eleDev.next();
-            hmValues.put(rDev.getURI(), rDev.getDisplayTitle(user.getLanguage()));
-        }
-        hmAttr.put("Valor", hmValues);
-        hmOper.put("=", paramRequest.getLocaleString("msgSameAs"));
-        hmOper.put("!=", paramRequest.getLocaleString("msgNotEqual"));
-        hmAttr.put("Operador", hmOper);
-        comboAtt.put(SWBRuleMgr.TAG_INT_DEVICE, hmAttr); //RuleMgr.TAG_INT_DEVICE
+        HashMap hmAttr = null;
+        HashMap hmOper = null;
+        HashMap hmValues = null;
 
         int numero = 0;
-        vecOrderAtt.add(numero++, SWBRuleMgr.TAG_INT_ISREGISTERED); //RuleMgr.TAG_INT_ISREGISTERED
-        vecOrderAtt.add(numero++, SWBRuleMgr.TAG_INT_ISSIGNED); //RuleMgr.TAG_INT_ISLOGED
-        vecOrderAtt.add(numero++, SWBRuleMgr.TAG_INT_DEVICE); //RuleMgr.TAG_INT_DEVICE
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         /////  Domotic Devices
-        
+
         Iterator<DomDevice> itdd = ws.listDomDevices();
         while (itdd.hasNext()) {
             DomDevice domDevice = itdd.next();
-
-
+            hmAttr = new HashMap();
+            hmOper = new HashMap();
+            hmValues = new HashMap();
+            hmAttr.put("Etiqueta", domDevice.getDisplayTitle(user.getLanguage()));   ///////////////////////////
+            if(domDevice.isDimerizable()){
+                 hmAttr.put("Tipo", "TEXT");
+                hmOper.put("&gt;", paramRequest.getLocaleString("msgGreaterThan"));
+                hmOper.put("&lt;", paramRequest.getLocaleString("msgLessThan"));
+                hmOper.put("=", paramRequest.getLocaleString("msgIs"));
+                hmOper.put("!=", paramRequest.getLocaleString("msgNotIs"));
+                hmAttr.put("Operador", hmOper);
+            } else {
+                hmAttr.put("Tipo", "select");
+                hmOper.put("=", paramRequest.getLocaleString("msgSameAs"));
+                hmOper.put("!=", paramRequest.getLocaleString("msgNotEqual"));
+                hmAttr.put("Operador", hmOper);
+                hmValues.put("true", paramRequest.getLocaleString("msgON"));
+                hmValues.put("false", paramRequest.getLocaleString("msgOFF"));
+                hmAttr.put("Valor", hmValues);
+            }
+            comboAtt.put(DomDevice.sclass.getName()+"."+domDevice.getId(), hmAttr);
+            vecOrderAtt.add(numero++, DomDevice.sclass.getName()+"."+domDevice.getId());
         }
-        
+
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         /////  Calendar
-        
+
         hmAttr = new HashMap();
         hmOper = new HashMap();
         hmValues = new HashMap();
         hmAttr.put("Etiqueta", paramRequest.getLocaleString("msgUserSigned"));   ///////////////////////////
         hmAttr.put("Tipo", "select");
-        hmOper.put("=", paramRequest.getLocaleString("msgSameAs"));
-        hmOper.put("!=", paramRequest.getLocaleString("msgNotEqual"));
+        hmOper.put("=", paramRequest.getLocaleString("msgCumpla"));
+        hmOper.put("!=", paramRequest.getLocaleString("msgNoCumpla"));
         hmAttr.put("Operador", hmOper);
-        hmValues.put("true", paramRequest.getLocaleString("msgYes"));
-        hmValues.put("false", paramRequest.getLocaleString("msgNo"));
+        Iterator<Calendar> itcal = ws.listCalendars();
+        while (itcal.hasNext()) {
+            Calendar calendar = itcal.next();
+            hmValues.put(calendar.getURI(), calendar.getDisplayTitle(user.getLanguage()));
+        }
         hmAttr.put("Valor", hmValues);
-        comboAtt.put(SWBRuleMgr.TAG_INT_ISSIGNED, hmAttr); //RuleMgr.TAG_INT_ISLOGED
-        vecOrderAtt.add(numero++, SWBRuleMgr.TAG_INT_ISREGISTERED); //RuleMgr.TAG_INT_ISREGISTERED
-        
+        comboAtt.put(TAG_CALENDAR, hmAttr);
+        vecOrderAtt.add(numero++, TAG_CALENDAR);
+
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         /////  Hora
-        
+
         hmAttr = new HashMap();
         hmOper = new HashMap();
-        hmValues = new HashMap();
         hmAttr.put("Etiqueta", paramRequest.getLocaleString("msgHour"));   ///////////////////////////
         hmAttr.put("Tipo", "TEXT");
-                                    hmOper.put("&gt;", paramRequest.getLocaleString("msgGreaterThan"));
-                                    hmOper.put("&lt;", paramRequest.getLocaleString("msgLessThan"));
-                                    hmOper.put("=", paramRequest.getLocaleString("msgIs"));
-                                    hmOper.put("!=", paramRequest.getLocaleString("msgNotIs"));
-                                    hmAttr.put("Operador", hmOper);
-        //hmValues.put("true", paramRequest.getLocaleString("msgYes"));
-        //hmValues.put("false", paramRequest.getLocaleString("msgNo"));
-        //hmAttr.put("Valor", hmValues);
-        comboAtt.put(SWBRuleMgr.TAG_INT_ISSIGNED, hmAttr); //RuleMgr.TAG_INT_ISLOGED
-        vecOrderAtt.add(numero++, SWBRuleMgr.TAG_INT_ISREGISTERED); //RuleMgr.TAG_INT_ISREGISTERED
-        
+        hmOper.put("&gt;", paramRequest.getLocaleString("msgGreaterThan"));
+        hmOper.put("&lt;", paramRequest.getLocaleString("msgLessThan"));
+        hmOper.put("=", paramRequest.getLocaleString("msgIs"));
+        hmOper.put("!=", paramRequest.getLocaleString("msgNotIs"));
+        hmAttr.put("Operador", hmOper);
+        comboAtt.put(TAG_HOUR, hmAttr); 
+        vecOrderAtt.add(numero++, TAG_HOUR); 
+
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         /////  Clima/temperatura
-        
+
         hmAttr = new HashMap();
         hmOper = new HashMap();
-        hmValues = new HashMap();
         hmAttr.put("Etiqueta", paramRequest.getLocaleString("msgClimaTemp"));   ///////////////////////////
-                                    hmAttr.put("Tipo","TEXT");
-                                    hmOper.put("&gt;", paramRequest.getLocaleString("msgGreaterThan"));
-                                    hmOper.put("&lt;", paramRequest.getLocaleString("msgLessThan"));
-                                    hmOper.put("=", paramRequest.getLocaleString("msgIs"));
-                                    hmOper.put("!=", paramRequest.getLocaleString("msgNotIs"));
-                                    hmAttr.put("Operador", hmOper);
-        //hmValues.put("true", paramRequest.getLocaleString("msgYes"));
-        //hmValues.put("false", paramRequest.getLocaleString("msgNo"));
-        //hmAttr.put("Valor", hmValues);
-        comboAtt.put(SWBRuleMgr.TAG_INT_ISSIGNED, hmAttr); //RuleMgr.TAG_INT_ISLOGED
-        vecOrderAtt.add(numero++, SWBRuleMgr.TAG_INT_ISREGISTERED); //RuleMgr.TAG_INT_ISREGISTERED
-        
-        
+        hmAttr.put("Tipo", "TEXT");
+        hmOper.put("&gt;", paramRequest.getLocaleString("msgGreaterThan"));
+        hmOper.put("&lt;", paramRequest.getLocaleString("msgLessThan"));
+        hmOper.put("=", paramRequest.getLocaleString("msgIs"));
+        hmOper.put("!=", paramRequest.getLocaleString("msgNotIs"));
+        hmAttr.put("Operador", hmOper);
+        comboAtt.put(TAG_WEATHER, hmAttr); 
+        vecOrderAtt.add(numero++, TAG_WEATHER); 
+
+
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        // Grupo de usuarios
+        // DomRules
         try {
-            hmAttr = new HashMap();
-            hmOper = new HashMap();
-            hmValues = new HashMap();
-            hmAttr.put("Etiqueta", paramRequest.getLocaleString("msgUserGroups"));   ///////////////////////////
-            hmAttr.put("Tipo", "select");
-            Iterator<UserGroup> enumUsrG = usrRepo.listUserGroups();
-            while (enumUsrG.hasNext()) {
-                UserGroup usrGroup = enumUsrG.next();
-                hmValues.put(usrGroup.getURI(), usrGroup.getDisplayTitle(user.getLanguage()));
-            }
-            hmAttr.put("Valor", hmValues);
-            hmOper.put("=", paramRequest.getLocaleString("msgHave"));
-            hmOper.put("!=", paramRequest.getLocaleString("msgNotHave"));
-            hmAttr.put("Operador", hmOper);
-
-            comboAtt.put(SWBRuleMgr.TAG_INT_USERGROUP, hmAttr);
-            vecOrderAtt.add(numero++, SWBRuleMgr.TAG_INT_USERGROUP);
-
-            // Se agrega la parte de roles
-            hmAttr = new HashMap();
-            hmOper = new HashMap();
-            hmValues = new HashMap();
-            hmAttr.put("Etiqueta", paramRequest.getLocaleString("msgRoles"));   ///////////////////////////
-            hmAttr.put("Tipo", "select");
-            hmOper.put("=", paramRequest.getLocaleString("msgHave"));
-            hmOper.put("!=", paramRequest.getLocaleString("msgNotHave"));
-            hmAttr.put("Operador", hmOper);
-            //Enumeration enumRoles = DBRole.getInstance().getRoles(TopicMgr.getInstance().getTopicMap(tmid).getDbdata().getRepository());
-            Iterator<Role> enumRoles = SWBContext.getWebSite(tmid).getUserRepository().listRoles();
-            while (enumRoles.hasNext()) {
-                Role role = enumRoles.next();
-                hmValues.put(role.getURI(), role.getDisplayTitle(user.getLanguage()));
-            }
-            hmAttr.put("Valor", hmValues);
-            //TODO: RuleMgr ???ROLE
-            comboAtt.put(SWBRuleMgr.TAG_INT_ROLE, hmAttr); //SWBRuleMgr.TAG_INT_ROLE
-            vecOrderAtt.add(numero++, SWBRuleMgr.TAG_INT_ROLE); //RuleMgr.TAG_INT_ROLE
 
             // Se agrega la parte de reglas
             if (ruleid == null) {
@@ -533,9 +471,9 @@ public class SWBARuleDomotic extends GenericResource {
             }
 
             int numreglas = 0;
-            Iterator<Rule> numrules = SWBContext.getWebSite(tmid).listRules();
+            Iterator<DomRule> numrules = DomRule.ClassMgr.listDomRules(ws);
             while (numrules.hasNext()) {
-                Rule rule = numrules.next();
+                DomRule rule = numrules.next();
                 if (!ruleid.equals(rule.getURI())) {
                     numreglas++;
                 }
@@ -550,298 +488,23 @@ public class SWBARuleDomotic extends GenericResource {
                 hmOper.put("=", paramRequest.getLocaleString("msgCumpla"));
                 hmOper.put("!=", paramRequest.getLocaleString("msgNoCumpla"));
                 hmAttr.put("Operador", hmOper);
-                Iterator<Rule> enumRules = SWBContext.getWebSite(tmid).listRules();
+                Iterator<DomRule> enumRules = DomRule.ClassMgr.listDomRules(ws);
                 while (enumRules.hasNext()) {
-                    Rule rule = enumRules.next();
+                    DomRule rule = enumRules.next();
                     if (!ruleid.equals(rule.getURI())) {
                         hmValues.put(rule.getURI(), rule.getDisplayTitle(user.getLanguage()));
                     }
                 }
                 hmAttr.put("Valor", hmValues);
-                comboAtt.put(SWBRuleMgr.TAG_INT_RULE, hmAttr); //RuleMgr.TAG_INT_RULE
-                vecOrderAtt.add(numero++, SWBRuleMgr.TAG_INT_RULE); //RuleMgr.TAG_INT_RULE
+                comboAtt.put(SWBRuleMgr.TAG_INT_RULE, hmAttr); 
+                vecOrderAtt.add(numero++, SWBRuleMgr.TAG_INT_RULE); 
             }
 
-            // Se agrega la parte de paises
 
-            List<Country> countries = SWBUtils.Collections.copyIterator(SWBContext.getWebSite(tmid).listCountries());
-            log.debug("numPais:" + countries.size());
-            if (!countries.isEmpty()) {
-                hmAttr = new HashMap();
-                hmOper = new HashMap();
-                hmValues = new HashMap();
-                hmAttr.put("Etiqueta", paramRequest.getLocaleString("msgCountries"));   ///////////////////////////
-                hmAttr.put("Tipo", "select");
-                hmOper.put("=", paramRequest.getLocaleString("msgIs"));
-                hmOper.put("!=", paramRequest.getLocaleString("msgNotIs"));
-                hmAttr.put("Operador", hmOper);
-                Iterator<Country> enumCountry = countries.iterator();
-                while (enumCountry.hasNext()) {
-                    Country country = enumCountry.next();
-                    hmValues.put(country.getId(), country.getDisplayTitle(user.getLanguage()));
-                }
-                hmAttr.put("Valor", hmValues);
-                comboAtt.put(User.swb_usrCountry.getName(), hmAttr); //falta tag del pais
-                vecOrderAtt.add(numero++, User.swb_usrCountry.getName()); //falta tag del pais
-            }
-
-            //Se agrega la parte de IP del usuario
-            hmAttr = new HashMap();
-            hmOper = new HashMap();
-            hmValues = new HashMap();
-            hmAttr.put("Etiqueta", paramRequest.getLocaleString("msgIPUser"));
-            hmAttr.put("Tipo", "TEXT");
-            hmOper.put("=", paramRequest.getLocaleString("msgIs"));
-            hmOper.put("!=", paramRequest.getLocaleString("msgNotIs"));
-            hmAttr.put("Operador", hmOper);
-            comboAtt.put(SWBRuleMgr.TAG_INT_USERIP, hmAttr); //falta tag de IP
-            vecOrderAtt.add(numero++, SWBRuleMgr.TAG_INT_USERIP); //falta tag de IP
-
-            //Se agrega la parte de WebPage visitada por el usuario
-            hmAttr = new HashMap();
-            hmOper = new HashMap();
-            hmValues = new HashMap();
-            hmAttr.put("Etiqueta", paramRequest.getLocaleString("msgWebPageUser"));
-            hmAttr.put("Tipo", "TEXT");
-            hmOper.put("=", paramRequest.getLocaleString("msgContains"));
-            hmOper.put("!=", paramRequest.getLocaleString("msgNotContains"));
-            hmAttr.put("Operador", hmOper);
-            comboAtt.put(SWBRuleMgr.TAG_WEBPAGEVISITED_ATT, hmAttr);
-            vecOrderAtt.add(numero++, SWBRuleMgr.TAG_WEBPAGEVISITED_ATT);
-
-            //Se agrega la parte de Historial de WebPages visitada por el usuario
-            hmAttr = new HashMap();
-            hmOper = new HashMap();
-            hmValues = new HashMap();
-            hmAttr.put("Etiqueta", paramRequest.getLocaleString("msgHistoryWebPageUser"));
-            hmAttr.put("Tipo", "TEXT");
-            hmOper.put("=", paramRequest.getLocaleString("msgContains"));
-            hmOper.put("!=", paramRequest.getLocaleString("msgNotContains"));
-            for (int i = 1; i < 26; i++) {
-                //System.out.println("i "+i);
-                hmOper.put("-" + i, "-" + i);
-            }
-            hmAttr.put("Operador", hmOper);
-            comboAtt.put(SWBRuleMgr.TAG_WEBPAGEHISTORY_ATT, hmAttr); //
-            vecOrderAtt.add(numero++, SWBRuleMgr.TAG_WEBPAGEHISTORY_ATT); //
-
-            //Tipo de usuario
-            Iterator<String> usrTypes = usrRepo.getUserTypes();
-            log.debug("usrTypes:" + usrTypes.hasNext());
-            while (usrTypes.hasNext()) {
-
-                String uType = usrTypes.next();
-                log.debug("UType: " + uType);
-                hmAttr = new HashMap();
-                hmOper = new HashMap();
-                hmValues = new HashMap();
-                hmAttr.put("Etiqueta", uType);   ///////////////////////////
-                hmAttr.put("Tipo", "select");
-                hmOper.put("=", paramRequest.getLocaleString("msgSameAs"));
-                hmOper.put("!=", paramRequest.getLocaleString("msgNotEqual"));
-                hmAttr.put("Operador", hmOper);
-                Iterator<SemanticProperty> iteruserType = usrRepo.listAttributesofUserType(uType);
-                while (iteruserType.hasNext()) {
-                    SemanticProperty usrTypeAtt = iteruserType.next();
-                    hmValues.put(usrTypeAtt.getName(), usrTypeAtt.getDisplayName(user.getLanguage()));
-                }
-                hmAttr.put("Valor", hmValues);
-                if (!tmid.equals(SWBContext.getGlobalWebSite().getId())) {
-                    comboAtt.put(uType, hmAttr);
-                }
-                vecOrderAtt.add(numero++, uType);
-                log.debug("tipo de usuario: " + uType);
-            }
-
-            Iterator<SemanticProperty> iteratt = usrRepo.listAttributes(); //listBasicAttributes
-            int attnum = 0;
-            while (iteratt.hasNext()) {
-
-                String tipoControl = "TEXT";
-                SemanticProperty usrAtt = iteratt.next();
-                attnum++;
-                log.debug("ListAttributes:" + usrAtt.getName() + ", " + attnum + ", objProp: " + usrAtt.isObjectProperty());
-                hmAttr = new HashMap();
-                hmOper = new HashMap();
-                hmValues = new HashMap();
-
-                hmAttr.put("Etiqueta", usrAtt.getDisplayName(user.getLanguage()));
-                if (usrAtt.getDisplayProperty() != null) {
-                    log.debug("DisplayProperty");
-                    DisplayProperty dobj = new DisplayProperty(usrAtt.getDisplayProperty());
-
-                    if (!dobj.isHidden()) {
-                        String selectValues = dobj.getSelectValues(user.getLanguage());
-                        ///////////////////////////
-                        if (selectValues != null) {
-                            tipoControl = "select";
-                            hmAttr.put("Tipo", tipoControl);
-                            hmOper.put("=", paramRequest.getLocaleString("msgSameAs"));
-                            hmOper.put("!=", paramRequest.getLocaleString("msgNotEqual"));
-                            hmAttr.put("Operador", hmOper);
-
-                            if (usrAtt.getName().equals("usrLanguage")) {
-                                Iterator<Language> itlang = ws.listLanguages();
-                                while (itlang.hasNext()) {
-                                    Language lang = itlang.next();
-                                    if (null != lang) {
-                                        String strLang = lang.getDisplayTitle(user.getLanguage());
-                                        String strVal = lang.getId();
-                                        hmValues.put(strVal, strLang);
-                                    }
-                                }
-                            } else {
-                                StringTokenizer st = new StringTokenizer(selectValues, "|");
-                                while (st.hasMoreTokens()) {
-                                    String tok = st.nextToken();
-                                    int ind = tok.indexOf(':');
-                                    String idt = tok;
-                                    String val = tok;
-                                    if (ind > 0) {
-                                        idt = tok.substring(0, ind);
-                                        val = tok.substring(ind + 1);
-                                    }
-                                    hmValues.put(idt, val);
-                                }
-                            }
-                            hmAttr.put("Valor", hmValues);
-                            comboAtt.put(usrAtt.getName(), hmAttr);
-                            vecOrderAtt.add(numero++, usrAtt.getName());
-                        } else if (!usrAtt.equals(User.swb_usrPassword)) {
-                            if (usrAtt.isDataTypeProperty()) {
-                                log.debug("DP: DataTypeProperty");
-                                if (usrAtt.isInt() || usrAtt.isFloat() || usrAtt.isLong()) {
-                                    tipoControl = "TEXT";
-                                    hmAttr.put("Tipo", tipoControl);
-                                    hmOper.put("&gt;", paramRequest.getLocaleString("msgGreaterThan"));
-                                    hmOper.put("&lt;", paramRequest.getLocaleString("msgLessThan"));
-                                    hmOper.put("=", paramRequest.getLocaleString("msgIs"));
-                                    hmOper.put("!=", paramRequest.getLocaleString("msgNotIs"));
-                                    hmAttr.put("Operador", hmOper);
-                                    comboAtt.put(usrAtt.getName(), hmAttr);
-                                    vecOrderAtt.add(numero++, usrAtt.getName());
-                                } else if (usrAtt.isBoolean()) {
-                                    tipoControl = "select";
-                                    hmAttr.put("Tipo", tipoControl);
-                                    hmOper.put("=", paramRequest.getLocaleString("msgIs"));
-                                    hmOper.put("!=", paramRequest.getLocaleString("msgNotIs"));
-                                    hmAttr.put("Operador", hmOper);
-                                    hmValues.put("true", paramRequest.getLocaleString("msgTrue"));
-                                    hmValues.put("false", paramRequest.getLocaleString("msgFalse"));
-                                    hmAttr.put("Valor", hmValues);
-                                    comboAtt.put(usrAtt.getName(), hmAttr);
-                                    vecOrderAtt.add(numero++, usrAtt.getName());
-                                } else if (usrAtt.isString()) {
-                                    tipoControl = "TEXT";
-                                    hmAttr.put("Tipo", tipoControl);
-                                    hmOper.put("=", paramRequest.getLocaleString("msgIs"));
-                                    hmOper.put("!=", paramRequest.getLocaleString("msgNotIs"));
-                                    hmAttr.put("Operador", hmOper);
-                                    comboAtt.put(usrAtt.getName(), hmAttr);
-                                    vecOrderAtt.add(numero++, usrAtt.getName());
-                                }
-                            }
-                        }
-                        log.debug("DP:Tipo --- " + tipoControl);
-                    }
-                }
-            }
         } catch (Exception e) {
             log.error(paramRequest.getLocaleString("msgErrorLoadingUserAttributeList") + ". SWBARules.loadComboAttr", e);
         }
-//////////////////////////////////////////////////////////// process
 
-        HashMap<String,String> hmAttrLabel = new HashMap();  
-
-        SemanticClass pcls = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(SemanticVocabulary.PROCESS_CLASS);
-        log.debug("SemClass:" + pcls);
-        Iterator<SemanticObject> it = pcls.listInstances();
-
-        String tipoControl = "";
-
-        while (it.hasNext()) {
-            SemanticObject semanticObject = it.next();
-            SemanticClass cls = semanticObject.transformToSemanticClass();
-            //System.out.println("trans2semClass:"+cls);
-            Iterator<SemanticProperty> itsp = cls.listProperties();
-            while (itsp.hasNext()) {
-                SemanticProperty semProp = itsp.next();
-                if (null != semProp) {
-                    log.debug("SemProp:" + semProp.getName());
-                    //System.out.println("SemProp:"+semProp.getName());
-                }
-                // Agreando valores al HashMap 
-                hmAttr = new HashMap();
-                hmOper = new HashMap();
-                hmValues = new HashMap();
-                hmAttr.put("Etiqueta", cls.getName() + "." + semProp.getName());  ///////////////////////////
-
-                if (semProp.isDataTypeProperty()) {
-                    log.debug("DP: DataTypeProperty");
-                    if (semProp.isInt() || semProp.isFloat() || semProp.isLong()) {
-                        tipoControl = "TEXT";
-                        hmAttr.put("Tipo", tipoControl);
-                        hmOper.put("&gt;", paramRequest.getLocaleString("msgGreaterThan"));
-                        hmOper.put("&lt;", paramRequest.getLocaleString("msgLessThan"));
-                        hmOper.put("=", paramRequest.getLocaleString("msgIs"));
-                        hmOper.put("!=", paramRequest.getLocaleString("msgNotIs"));
-                        hmAttr.put("Operador", hmOper);
-
-                    } else if (semProp.isBoolean()) {
-                        tipoControl = "select";
-                        hmAttr.put("Tipo", tipoControl);
-                        hmOper.put("=", paramRequest.getLocaleString("msgIs"));
-                        hmOper.put("!=", paramRequest.getLocaleString("msgNotIs"));
-                        hmAttr.put("Operador", hmOper);
-                        hmValues.put("true", paramRequest.getLocaleString("msgTrue"));
-                        hmValues.put("false", paramRequest.getLocaleString("msgFalse"));
-                        hmAttr.put("Valor", hmValues);
-
-                    } else if (semProp.isString()) {
-                        tipoControl = "TEXT";
-                        hmAttr.put("Tipo", tipoControl);
-                        hmOper.put("=", paramRequest.getLocaleString("msgIs"));
-                        hmOper.put("!=", paramRequest.getLocaleString("msgNotIs"));
-                        hmAttr.put("Operador", hmOper);
-
-                    } else {
-                        tipoControl = "TEXT";
-                        hmAttr.put("Tipo", tipoControl);
-                        hmOper.put("=", paramRequest.getLocaleString("msgIs"));
-                        hmOper.put("!=", paramRequest.getLocaleString("msgNotIs"));
-                        hmAttr.put("Operador", hmOper);
-
-                    }
-
-                } // Object property
-                else if (semProp.isObjectProperty()) {
-                    hmAttr.put("Tipo", "select");
-                    hmOper.put("=", paramRequest.getLocaleString("msgSameAs"));
-                    hmOper.put("!=", paramRequest.getLocaleString("msgNotEqual"));
-                    hmOper.put("[", paramRequest.getLocaleString("msgContains"));
-                    hmOper.put("![", paramRequest.getLocaleString("msgNotContains"));
-                    hmAttr.put("Operador", hmOper);
-                    Iterator<SemanticObject> itsemobj = semProp.getRangeClass().listInstances();
-                    while (itsemobj.hasNext()) {
-                        SemanticObject semanticObject1 = itsemobj.next();
-                        hmValues.put(semanticObject1.getId(), semanticObject1.getDisplayName(user.getLanguage()));
-                    }
-                    if (hmValues.isEmpty()) {
-                        hmValues.put("", "No hay disponibles");
-                    }
-                    hmAttr.put("Valor", hmValues);
-                }
-
-                //System.out.println(">>>>"+cls.getName()+"."+semProp.getName()+"<<<<"+hmAttrLabel.get(cls.getName()+"."+semProp.getName()));
-                if (hmAttrLabel.get(cls.getName() + "." + semProp.getName()) == null) {
-                    hmAttrLabel.put(cls.getURI() + "." + semProp.getName(), cls.getName() + "." + semProp.getName());
-                    comboAtt.put(cls.getName() + "_" + semProp.getPrefix() + "_" + semProp.getName(), hmAttr);
-                    vecOrderAtt.add(numero++, cls.getName() + "_" + semProp.getPrefix() + "_" + semProp.getName());
-                }
-            }
-        }
-
-        
         // HABILITAR PARA DEBUG
 
 //        Iterator<String> itkeys = comboAtt.keySet().iterator();
