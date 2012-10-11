@@ -79,6 +79,29 @@ public abstract class TimerActionBase extends org.semanticwb.domotic.model.DomAc
             return (getTimerAction(id, model)!=null);
         }
        /**
+       * Gets all org.semanticwb.domotic.model.TimerAction with a determined DomRule
+       * @param value DomRule of the type org.semanticwb.domotic.model.DomRule
+       * @param model Model of the org.semanticwb.domotic.model.TimerAction
+       * @return Iterator with all the org.semanticwb.domotic.model.TimerAction
+       */
+
+        public static java.util.Iterator<org.semanticwb.domotic.model.TimerAction> listTimerActionByDomRule(org.semanticwb.domotic.model.DomRule value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.domotic.model.TimerAction> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb4d_hasDomRule, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.domotic.model.TimerAction with a determined DomRule
+       * @param value DomRule of the type org.semanticwb.domotic.model.DomRule
+       * @return Iterator with all the org.semanticwb.domotic.model.TimerAction
+       */
+
+        public static java.util.Iterator<org.semanticwb.domotic.model.TimerAction> listTimerActionByDomRule(org.semanticwb.domotic.model.DomRule value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.domotic.model.TimerAction> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb4d_hasDomRule,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
        * Gets all org.semanticwb.domotic.model.TimerAction with a determined DomEvent
        * @param value DomEvent of the type org.semanticwb.domotic.model.DomEvent
        * @param model Model of the org.semanticwb.domotic.model.TimerAction

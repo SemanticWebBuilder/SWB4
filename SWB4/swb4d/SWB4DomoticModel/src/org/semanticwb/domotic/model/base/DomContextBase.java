@@ -1,12 +1,10 @@
 package org.semanticwb.domotic.model.base;
 
 
-public abstract class DomContextBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Activeable,org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable
+public abstract class DomContextBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Traceable,org.semanticwb.model.Activeable,org.semanticwb.model.Descriptiveable
 {
     public static final org.semanticwb.platform.SemanticClass swb4d_DomEvent=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/domotic#DomEvent");
     public static final org.semanticwb.platform.SemanticProperty swb4d_hasDomEventsInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/domotic#hasDomEventsInv");
-    public static final org.semanticwb.platform.SemanticClass swb4d_DomPeriodRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/domotic#DomPeriodRef");
-    public static final org.semanticwb.platform.SemanticProperty swb4d_hasDomPeriodRefContextInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/domotic#hasDomPeriodRefContextInv");
     public static final org.semanticwb.platform.SemanticClass swb4d_DomContext=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/domotic#DomContext");
    /**
    * The semantic class that represents the currentObject
@@ -143,29 +141,6 @@ public abstract class DomContextBase extends org.semanticwb.model.SWBClass imple
         public static java.util.Iterator<org.semanticwb.domotic.model.DomContext> listDomContextByCreator(org.semanticwb.model.User value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.domotic.model.DomContext> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_creator,value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.domotic.model.DomContext with a determined DomPeriodRefContextInv
-       * @param value DomPeriodRefContextInv of the type org.semanticwb.domotic.model.DomPeriodRef
-       * @param model Model of the org.semanticwb.domotic.model.DomContext
-       * @return Iterator with all the org.semanticwb.domotic.model.DomContext
-       */
-
-        public static java.util.Iterator<org.semanticwb.domotic.model.DomContext> listDomContextByDomPeriodRefContextInv(org.semanticwb.domotic.model.DomPeriodRef value,org.semanticwb.model.SWBModel model)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.domotic.model.DomContext> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb4d_hasDomPeriodRefContextInv, value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.domotic.model.DomContext with a determined DomPeriodRefContextInv
-       * @param value DomPeriodRefContextInv of the type org.semanticwb.domotic.model.DomPeriodRef
-       * @return Iterator with all the org.semanticwb.domotic.model.DomContext
-       */
-
-        public static java.util.Iterator<org.semanticwb.domotic.model.DomContext> listDomContextByDomPeriodRefContextInv(org.semanticwb.domotic.model.DomPeriodRef value)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.domotic.model.DomContext> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb4d_hasDomPeriodRefContextInv,value.getSemanticObject(),sclass));
             return it;
         }
     }
@@ -417,44 +392,5 @@ public abstract class DomContextBase extends org.semanticwb.model.SWBClass imple
     public void setTitle(String title, String lang)
     {
         getSemanticObject().setProperty(swb_title, title, lang);
-    }
-   /**
-   * Gets all the org.semanticwb.domotic.model.DomPeriodRef
-   * @return A GenericIterator with all the org.semanticwb.domotic.model.DomPeriodRef
-   */
-
-    public org.semanticwb.model.GenericIterator<org.semanticwb.domotic.model.DomPeriodRef> listDomPeriodRefContextInvs()
-    {
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.domotic.model.DomPeriodRef>(getSemanticObject().listObjectProperties(swb4d_hasDomPeriodRefContextInv));
-    }
-
-   /**
-   * Gets true if has a DomPeriodRefContextInv
-   * @param value org.semanticwb.domotic.model.DomPeriodRef to verify
-   * @return true if the org.semanticwb.domotic.model.DomPeriodRef exists, false otherwise
-   */
-    public boolean hasDomPeriodRefContextInv(org.semanticwb.domotic.model.DomPeriodRef value)
-    {
-        boolean ret=false;
-        if(value!=null)
-        {
-           ret=getSemanticObject().hasObjectProperty(swb4d_hasDomPeriodRefContextInv,value.getSemanticObject());
-        }
-        return ret;
-    }
-
-   /**
-   * Gets the DomPeriodRefContextInv
-   * @return a org.semanticwb.domotic.model.DomPeriodRef
-   */
-    public org.semanticwb.domotic.model.DomPeriodRef getDomPeriodRefContextInv()
-    {
-         org.semanticwb.domotic.model.DomPeriodRef ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb4d_hasDomPeriodRefContextInv);
-         if(obj!=null)
-         {
-             ret=(org.semanticwb.domotic.model.DomPeriodRef)obj.createGenericInstance();
-         }
-         return ret;
     }
 }

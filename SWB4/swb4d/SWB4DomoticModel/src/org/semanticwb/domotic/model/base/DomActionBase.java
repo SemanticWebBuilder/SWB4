@@ -3,6 +3,8 @@ package org.semanticwb.domotic.model.base;
 
 public abstract class DomActionBase extends org.semanticwb.model.SWBClass 
 {
+    public static final org.semanticwb.platform.SemanticClass swb4d_DomRule=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/domotic#DomRule");
+    public static final org.semanticwb.platform.SemanticProperty swb4d_hasDomRule=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/domotic#hasDomRule");
     public static final org.semanticwb.platform.SemanticClass swb4d_DomEvent=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/domotic#DomEvent");
     public static final org.semanticwb.platform.SemanticProperty swb4d_domEvent=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/domotic#domEvent");
     public static final org.semanticwb.platform.SemanticClass swb4d_DomAction=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/domotic#DomAction");
@@ -81,6 +83,29 @@ public abstract class DomActionBase extends org.semanticwb.model.SWBClass
             return (getDomAction(id, model)!=null);
         }
        /**
+       * Gets all org.semanticwb.domotic.model.DomAction with a determined DomRule
+       * @param value DomRule of the type org.semanticwb.domotic.model.DomRule
+       * @param model Model of the org.semanticwb.domotic.model.DomAction
+       * @return Iterator with all the org.semanticwb.domotic.model.DomAction
+       */
+
+        public static java.util.Iterator<org.semanticwb.domotic.model.DomAction> listDomActionByDomRule(org.semanticwb.domotic.model.DomRule value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.domotic.model.DomAction> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb4d_hasDomRule, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.domotic.model.DomAction with a determined DomRule
+       * @param value DomRule of the type org.semanticwb.domotic.model.DomRule
+       * @return Iterator with all the org.semanticwb.domotic.model.DomAction
+       */
+
+        public static java.util.Iterator<org.semanticwb.domotic.model.DomAction> listDomActionByDomRule(org.semanticwb.domotic.model.DomRule value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.domotic.model.DomAction> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb4d_hasDomRule,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
        * Gets all org.semanticwb.domotic.model.DomAction with a determined DomEvent
        * @param value DomEvent of the type org.semanticwb.domotic.model.DomEvent
        * @param model Model of the org.semanticwb.domotic.model.DomAction
@@ -117,6 +142,71 @@ public abstract class DomActionBase extends org.semanticwb.model.SWBClass
     public DomActionBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
+    }
+   /**
+   * Gets all the org.semanticwb.domotic.model.DomRule
+   * @return A GenericIterator with all the org.semanticwb.domotic.model.DomRule
+   */
+
+    public org.semanticwb.model.GenericIterator<org.semanticwb.domotic.model.DomRule> listDomRules()
+    {
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.domotic.model.DomRule>(getSemanticObject().listObjectProperties(swb4d_hasDomRule));
+    }
+
+   /**
+   * Gets true if has a DomRule
+   * @param value org.semanticwb.domotic.model.DomRule to verify
+   * @return true if the org.semanticwb.domotic.model.DomRule exists, false otherwise
+   */
+    public boolean hasDomRule(org.semanticwb.domotic.model.DomRule value)
+    {
+        boolean ret=false;
+        if(value!=null)
+        {
+           ret=getSemanticObject().hasObjectProperty(swb4d_hasDomRule,value.getSemanticObject());
+        }
+        return ret;
+    }
+   /**
+   * Adds a DomRule
+   * @param value org.semanticwb.domotic.model.DomRule to add
+   */
+
+    public void addDomRule(org.semanticwb.domotic.model.DomRule value)
+    {
+        getSemanticObject().addObjectProperty(swb4d_hasDomRule, value.getSemanticObject());
+    }
+   /**
+   * Removes all the DomRule
+   */
+
+    public void removeAllDomRule()
+    {
+        getSemanticObject().removeProperty(swb4d_hasDomRule);
+    }
+   /**
+   * Removes a DomRule
+   * @param value org.semanticwb.domotic.model.DomRule to remove
+   */
+
+    public void removeDomRule(org.semanticwb.domotic.model.DomRule value)
+    {
+        getSemanticObject().removeObjectProperty(swb4d_hasDomRule,value.getSemanticObject());
+    }
+
+   /**
+   * Gets the DomRule
+   * @return a org.semanticwb.domotic.model.DomRule
+   */
+    public org.semanticwb.domotic.model.DomRule getDomRule()
+    {
+         org.semanticwb.domotic.model.DomRule ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb4d_hasDomRule);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.domotic.model.DomRule)obj.createGenericInstance();
+         }
+         return ret;
     }
    /**
    * Sets the value for the property DomEvent
