@@ -123,7 +123,7 @@ public class SWBSocialResourceUtils {
                 {
                     //Tomando en cuenta que solo exista un solo sitio de admin de swbsocial y que exista con identificador "swbsocial"
                     //Todo:Ver si puede mejorar la sig. línea.
-                    String ImgAdminPathBase = "/work/models/swbsocial/admin/img/";
+                    String ImgAdminPathBase = "/work/models/";
 
                     Iterator<WebSite> itSites=WebSite.ClassMgr.listWebSites();
                     while(itSites.hasNext())
@@ -131,7 +131,8 @@ public class SWBSocialResourceUtils {
                         WebSite wsite=itSites.next();
                         if(wsite instanceof SocialAdmin)
                         {
-                            ImgAdminPathBase="/work/models/"+wsite.getId()+"/admin/img/";
+                            ImgAdminPathBase+=wsite.getId()+"/admin/img/";
+                            break;
                         }
                     }
 
