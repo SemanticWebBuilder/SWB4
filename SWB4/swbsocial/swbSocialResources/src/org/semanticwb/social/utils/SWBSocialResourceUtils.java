@@ -13,8 +13,10 @@ import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Descriptiveable;
 import org.semanticwb.model.DisplayObject;
 import org.semanticwb.model.SWBClass;
+import org.semanticwb.model.WebSite;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.social.Childrenable;
+import org.semanticwb.social.SocialAdmin;
 import org.semanticwb.social.components.tree.AdvancedTreeModel;
 import org.semanticwb.social.components.tree.ElementTreeNode;
 import org.semanticwb.social.components.tree.Element;
@@ -122,12 +124,17 @@ public class SWBSocialResourceUtils {
                     //Tomando en cuenta que solo exista un solo sitio de admin de swbsocial y que exista con identificador "swbsocial"
                     //Todo:Ver si puede mejorar la sig. línea.
                     String ImgAdminPathBase = "/work/models/swbsocial/admin/img/";
-                    /*
-                    WebSite adminWSite=wpage.getWebSite();
-                    if(adminWSite!=null)
+
+                    Iterator<WebSite> itSites=WebSite.ClassMgr.listWebSites();
+                    while(itSites.hasNext())
                     {
-                    ImgAdminPathBase="/work/models/"+adminWSite+"/admin/img/";
-                    }*/
+                        WebSite wsite=itSites.next();
+                        if(wsite instanceof SocialAdmin)
+                        {
+                            ImgAdminPathBase="/work/models/"+wsite.getId()+"/admin/img/";
+                        }
+                    }
+
                     String categoryID=null;
                     Descriptiveable descripTable = (Descriptiveable) swbClass;
                     DisplayObject displayObj = (DisplayObject) swbClass.getSemanticObject().getSemanticClass().getDisplayObject().createGenericInstance();
