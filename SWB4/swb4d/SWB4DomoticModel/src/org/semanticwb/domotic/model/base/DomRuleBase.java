@@ -1,141 +1,141 @@
 package org.semanticwb.domotic.model.base;
 
 
-public abstract class DomPeriodBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Traceable,org.semanticwb.model.XMLable,org.semanticwb.model.Descriptiveable
+public abstract class DomRuleBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Traceable,org.semanticwb.model.XMLable,org.semanticwb.model.Descriptiveable
 {
-    public static final org.semanticwb.platform.SemanticClass swb4d_DomPeriod=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/domotic#DomPeriod");
+    public static final org.semanticwb.platform.SemanticClass swb4d_DomRule=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/domotic#DomRule");
    /**
    * The semantic class that represents the currentObject
    */
-    public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/domotic#DomPeriod");
+    public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/domotic#DomRule");
 
     public static class ClassMgr
     {
        /**
-       * Returns a list of DomPeriod for a model
+       * Returns a list of DomRule for a model
        * @param model Model to find
-       * @return Iterator of org.semanticwb.domotic.model.DomPeriod
+       * @return Iterator of org.semanticwb.domotic.model.DomRule
        */
 
-        public static java.util.Iterator<org.semanticwb.domotic.model.DomPeriod> listDomPeriods(org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.domotic.model.DomRule> listDomRules(org.semanticwb.model.SWBModel model)
         {
             java.util.Iterator it=model.getSemanticObject().getModel().listInstancesOfClass(sclass);
-            return new org.semanticwb.model.GenericIterator<org.semanticwb.domotic.model.DomPeriod>(it, true);
+            return new org.semanticwb.model.GenericIterator<org.semanticwb.domotic.model.DomRule>(it, true);
         }
        /**
-       * Returns a list of org.semanticwb.domotic.model.DomPeriod for all models
-       * @return Iterator of org.semanticwb.domotic.model.DomPeriod
+       * Returns a list of org.semanticwb.domotic.model.DomRule for all models
+       * @return Iterator of org.semanticwb.domotic.model.DomRule
        */
 
-        public static java.util.Iterator<org.semanticwb.domotic.model.DomPeriod> listDomPeriods()
+        public static java.util.Iterator<org.semanticwb.domotic.model.DomRule> listDomRules()
         {
             java.util.Iterator it=sclass.listInstances();
-            return new org.semanticwb.model.GenericIterator<org.semanticwb.domotic.model.DomPeriod>(it, true);
+            return new org.semanticwb.model.GenericIterator<org.semanticwb.domotic.model.DomRule>(it, true);
         }
 
-        public static org.semanticwb.domotic.model.DomPeriod createDomPeriod(org.semanticwb.model.SWBModel model)
+        public static org.semanticwb.domotic.model.DomRule createDomRule(org.semanticwb.model.SWBModel model)
         {
             long id=model.getSemanticObject().getModel().getCounter(sclass);
-            return org.semanticwb.domotic.model.DomPeriod.ClassMgr.createDomPeriod(String.valueOf(id), model);
+            return org.semanticwb.domotic.model.DomRule.ClassMgr.createDomRule(String.valueOf(id), model);
         }
        /**
-       * Gets a org.semanticwb.domotic.model.DomPeriod
-       * @param id Identifier for org.semanticwb.domotic.model.DomPeriod
-       * @param model Model of the org.semanticwb.domotic.model.DomPeriod
-       * @return A org.semanticwb.domotic.model.DomPeriod
+       * Gets a org.semanticwb.domotic.model.DomRule
+       * @param id Identifier for org.semanticwb.domotic.model.DomRule
+       * @param model Model of the org.semanticwb.domotic.model.DomRule
+       * @return A org.semanticwb.domotic.model.DomRule
        */
-        public static org.semanticwb.domotic.model.DomPeriod getDomPeriod(String id, org.semanticwb.model.SWBModel model)
+        public static org.semanticwb.domotic.model.DomRule getDomRule(String id, org.semanticwb.model.SWBModel model)
         {
-            return (org.semanticwb.domotic.model.DomPeriod)model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
+            return (org.semanticwb.domotic.model.DomRule)model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
         }
        /**
-       * Create a org.semanticwb.domotic.model.DomPeriod
-       * @param id Identifier for org.semanticwb.domotic.model.DomPeriod
-       * @param model Model of the org.semanticwb.domotic.model.DomPeriod
-       * @return A org.semanticwb.domotic.model.DomPeriod
+       * Create a org.semanticwb.domotic.model.DomRule
+       * @param id Identifier for org.semanticwb.domotic.model.DomRule
+       * @param model Model of the org.semanticwb.domotic.model.DomRule
+       * @return A org.semanticwb.domotic.model.DomRule
        */
-        public static org.semanticwb.domotic.model.DomPeriod createDomPeriod(String id, org.semanticwb.model.SWBModel model)
+        public static org.semanticwb.domotic.model.DomRule createDomRule(String id, org.semanticwb.model.SWBModel model)
         {
-            return (org.semanticwb.domotic.model.DomPeriod)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
+            return (org.semanticwb.domotic.model.DomRule)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
         }
        /**
-       * Remove a org.semanticwb.domotic.model.DomPeriod
-       * @param id Identifier for org.semanticwb.domotic.model.DomPeriod
-       * @param model Model of the org.semanticwb.domotic.model.DomPeriod
+       * Remove a org.semanticwb.domotic.model.DomRule
+       * @param id Identifier for org.semanticwb.domotic.model.DomRule
+       * @param model Model of the org.semanticwb.domotic.model.DomRule
        */
-        public static void removeDomPeriod(String id, org.semanticwb.model.SWBModel model)
+        public static void removeDomRule(String id, org.semanticwb.model.SWBModel model)
         {
             model.getSemanticObject().getModel().removeSemanticObject(model.getSemanticObject().getModel().getObjectUri(id,sclass));
         }
        /**
-       * Returns true if exists a org.semanticwb.domotic.model.DomPeriod
-       * @param id Identifier for org.semanticwb.domotic.model.DomPeriod
-       * @param model Model of the org.semanticwb.domotic.model.DomPeriod
-       * @return true if the org.semanticwb.domotic.model.DomPeriod exists, false otherwise
+       * Returns true if exists a org.semanticwb.domotic.model.DomRule
+       * @param id Identifier for org.semanticwb.domotic.model.DomRule
+       * @param model Model of the org.semanticwb.domotic.model.DomRule
+       * @return true if the org.semanticwb.domotic.model.DomRule exists, false otherwise
        */
 
-        public static boolean hasDomPeriod(String id, org.semanticwb.model.SWBModel model)
+        public static boolean hasDomRule(String id, org.semanticwb.model.SWBModel model)
         {
-            return (getDomPeriod(id, model)!=null);
+            return (getDomRule(id, model)!=null);
         }
        /**
-       * Gets all org.semanticwb.domotic.model.DomPeriod with a determined ModifiedBy
+       * Gets all org.semanticwb.domotic.model.DomRule with a determined ModifiedBy
        * @param value ModifiedBy of the type org.semanticwb.model.User
-       * @param model Model of the org.semanticwb.domotic.model.DomPeriod
-       * @return Iterator with all the org.semanticwb.domotic.model.DomPeriod
+       * @param model Model of the org.semanticwb.domotic.model.DomRule
+       * @return Iterator with all the org.semanticwb.domotic.model.DomRule
        */
 
-        public static java.util.Iterator<org.semanticwb.domotic.model.DomPeriod> listDomPeriodByModifiedBy(org.semanticwb.model.User value,org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.domotic.model.DomRule> listDomRuleByModifiedBy(org.semanticwb.model.User value,org.semanticwb.model.SWBModel model)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.domotic.model.DomPeriod> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_modifiedBy, value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.domotic.model.DomRule> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_modifiedBy, value.getSemanticObject(),sclass));
             return it;
         }
        /**
-       * Gets all org.semanticwb.domotic.model.DomPeriod with a determined ModifiedBy
+       * Gets all org.semanticwb.domotic.model.DomRule with a determined ModifiedBy
        * @param value ModifiedBy of the type org.semanticwb.model.User
-       * @return Iterator with all the org.semanticwb.domotic.model.DomPeriod
+       * @return Iterator with all the org.semanticwb.domotic.model.DomRule
        */
 
-        public static java.util.Iterator<org.semanticwb.domotic.model.DomPeriod> listDomPeriodByModifiedBy(org.semanticwb.model.User value)
+        public static java.util.Iterator<org.semanticwb.domotic.model.DomRule> listDomRuleByModifiedBy(org.semanticwb.model.User value)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.domotic.model.DomPeriod> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_modifiedBy,value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.domotic.model.DomRule> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_modifiedBy,value.getSemanticObject(),sclass));
             return it;
         }
        /**
-       * Gets all org.semanticwb.domotic.model.DomPeriod with a determined Creator
+       * Gets all org.semanticwb.domotic.model.DomRule with a determined Creator
        * @param value Creator of the type org.semanticwb.model.User
-       * @param model Model of the org.semanticwb.domotic.model.DomPeriod
-       * @return Iterator with all the org.semanticwb.domotic.model.DomPeriod
+       * @param model Model of the org.semanticwb.domotic.model.DomRule
+       * @return Iterator with all the org.semanticwb.domotic.model.DomRule
        */
 
-        public static java.util.Iterator<org.semanticwb.domotic.model.DomPeriod> listDomPeriodByCreator(org.semanticwb.model.User value,org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.domotic.model.DomRule> listDomRuleByCreator(org.semanticwb.model.User value,org.semanticwb.model.SWBModel model)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.domotic.model.DomPeriod> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_creator, value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.domotic.model.DomRule> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_creator, value.getSemanticObject(),sclass));
             return it;
         }
        /**
-       * Gets all org.semanticwb.domotic.model.DomPeriod with a determined Creator
+       * Gets all org.semanticwb.domotic.model.DomRule with a determined Creator
        * @param value Creator of the type org.semanticwb.model.User
-       * @return Iterator with all the org.semanticwb.domotic.model.DomPeriod
+       * @return Iterator with all the org.semanticwb.domotic.model.DomRule
        */
 
-        public static java.util.Iterator<org.semanticwb.domotic.model.DomPeriod> listDomPeriodByCreator(org.semanticwb.model.User value)
+        public static java.util.Iterator<org.semanticwb.domotic.model.DomRule> listDomRuleByCreator(org.semanticwb.model.User value)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.domotic.model.DomPeriod> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_creator,value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.domotic.model.DomRule> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_creator,value.getSemanticObject(),sclass));
             return it;
         }
     }
 
-    public static DomPeriodBase.ClassMgr getDomPeriodClassMgr()
+    public static DomRuleBase.ClassMgr getDomRuleClassMgr()
     {
-        return new DomPeriodBase.ClassMgr();
+        return new DomRuleBase.ClassMgr();
     }
 
    /**
-   * Constructs a DomPeriodBase with a SemanticObject
-   * @param base The SemanticObject with the properties for the DomPeriod
+   * Constructs a DomRuleBase with a SemanticObject
+   * @param base The SemanticObject with the properties for the DomRule
    */
-    public DomPeriodBase(org.semanticwb.platform.SemanticObject base)
+    public DomRuleBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
     }
