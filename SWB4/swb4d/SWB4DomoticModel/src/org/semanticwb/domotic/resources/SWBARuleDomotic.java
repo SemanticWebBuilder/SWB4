@@ -365,21 +365,15 @@ public class SWBARuleDomotic extends GenericResource {
         log.debug("Propiedades clases....");
         log.debug("DomiticSite:" + ws.getDisplayTitle(user.getLanguage()));
 
-        Iterator<DomDevice> itdd = ws.listDomDevices();
-        while (itdd.hasNext()) {
-            DomDevice domDevice = itdd.next();
+       
 
-
-        }
-        
-        
         comboAtt = new HashMap();
         vecOrderAtt = new Vector(1, 1);
+
         // Agreando valores iniciales al HashMap como son isloged, isregistered, language, device
         HashMap hmAttr = new HashMap();
         HashMap hmOper = new HashMap();
-        HashMap hmValues = new HashMap();
-        
+        HashMap hmValues = new HashMap();  
         
         hmAttr.put("Etiqueta", paramRequest.getLocaleString("msgUserRegistered"));  ///////////////////////////
         hmAttr.put("Tipo", "select");
@@ -426,6 +420,72 @@ public class SWBARuleDomotic extends GenericResource {
         vecOrderAtt.add(numero++, SWBRuleMgr.TAG_INT_ISSIGNED); //RuleMgr.TAG_INT_ISLOGED
         vecOrderAtt.add(numero++, SWBRuleMgr.TAG_INT_DEVICE); //RuleMgr.TAG_INT_DEVICE
 
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        /////  Domotic Devices
+        
+        Iterator<DomDevice> itdd = ws.listDomDevices();
+        while (itdd.hasNext()) {
+            DomDevice domDevice = itdd.next();
+
+
+        }
+        
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        /////  Calendar
+        
+        hmAttr = new HashMap();
+        hmOper = new HashMap();
+        hmValues = new HashMap();
+        hmAttr.put("Etiqueta", paramRequest.getLocaleString("msgUserSigned"));   ///////////////////////////
+        hmAttr.put("Tipo", "select");
+        hmOper.put("=", paramRequest.getLocaleString("msgSameAs"));
+        hmOper.put("!=", paramRequest.getLocaleString("msgNotEqual"));
+        hmAttr.put("Operador", hmOper);
+        hmValues.put("true", paramRequest.getLocaleString("msgYes"));
+        hmValues.put("false", paramRequest.getLocaleString("msgNo"));
+        hmAttr.put("Valor", hmValues);
+        comboAtt.put(SWBRuleMgr.TAG_INT_ISSIGNED, hmAttr); //RuleMgr.TAG_INT_ISLOGED
+        vecOrderAtt.add(numero++, SWBRuleMgr.TAG_INT_ISREGISTERED); //RuleMgr.TAG_INT_ISREGISTERED
+        
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        /////  Hora
+        
+        hmAttr = new HashMap();
+        hmOper = new HashMap();
+        hmValues = new HashMap();
+        hmAttr.put("Etiqueta", paramRequest.getLocaleString("msgHour"));   ///////////////////////////
+        hmAttr.put("Tipo", "TEXT");
+                                    hmOper.put("&gt;", paramRequest.getLocaleString("msgGreaterThan"));
+                                    hmOper.put("&lt;", paramRequest.getLocaleString("msgLessThan"));
+                                    hmOper.put("=", paramRequest.getLocaleString("msgIs"));
+                                    hmOper.put("!=", paramRequest.getLocaleString("msgNotIs"));
+                                    hmAttr.put("Operador", hmOper);
+        //hmValues.put("true", paramRequest.getLocaleString("msgYes"));
+        //hmValues.put("false", paramRequest.getLocaleString("msgNo"));
+        //hmAttr.put("Valor", hmValues);
+        comboAtt.put(SWBRuleMgr.TAG_INT_ISSIGNED, hmAttr); //RuleMgr.TAG_INT_ISLOGED
+        vecOrderAtt.add(numero++, SWBRuleMgr.TAG_INT_ISREGISTERED); //RuleMgr.TAG_INT_ISREGISTERED
+        
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        /////  Clima/temperatura
+        
+        hmAttr = new HashMap();
+        hmOper = new HashMap();
+        hmValues = new HashMap();
+        hmAttr.put("Etiqueta", paramRequest.getLocaleString("msgClimaTemp"));   ///////////////////////////
+                                    hmAttr.put("Tipo","TEXT");
+                                    hmOper.put("&gt;", paramRequest.getLocaleString("msgGreaterThan"));
+                                    hmOper.put("&lt;", paramRequest.getLocaleString("msgLessThan"));
+                                    hmOper.put("=", paramRequest.getLocaleString("msgIs"));
+                                    hmOper.put("!=", paramRequest.getLocaleString("msgNotIs"));
+                                    hmAttr.put("Operador", hmOper);
+        //hmValues.put("true", paramRequest.getLocaleString("msgYes"));
+        //hmValues.put("false", paramRequest.getLocaleString("msgNo"));
+        //hmAttr.put("Valor", hmValues);
+        comboAtt.put(SWBRuleMgr.TAG_INT_ISSIGNED, hmAttr); //RuleMgr.TAG_INT_ISLOGED
+        vecOrderAtt.add(numero++, SWBRuleMgr.TAG_INT_ISREGISTERED); //RuleMgr.TAG_INT_ISREGISTERED
+        
+        
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Grupo de usuarios
         try {
@@ -549,7 +609,6 @@ public class SWBARuleDomotic extends GenericResource {
             comboAtt.put(SWBRuleMgr.TAG_WEBPAGEVISITED_ATT, hmAttr);
             vecOrderAtt.add(numero++, SWBRuleMgr.TAG_WEBPAGEVISITED_ATT);
 
-
             //Se agrega la parte de Historial de WebPages visitada por el usuario
             hmAttr = new HashMap();
             hmOper = new HashMap();
@@ -565,8 +624,6 @@ public class SWBARuleDomotic extends GenericResource {
             hmAttr.put("Operador", hmOper);
             comboAtt.put(SWBRuleMgr.TAG_WEBPAGEHISTORY_ATT, hmAttr); //
             vecOrderAtt.add(numero++, SWBRuleMgr.TAG_WEBPAGEHISTORY_ATT); //
-
-
 
             //Tipo de usuario
             Iterator<String> usrTypes = usrRepo.getUserTypes();
