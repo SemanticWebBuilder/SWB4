@@ -45,7 +45,7 @@ public class CodeGeneratorDomotic
         SWBPlatform.createInstance();
         //SWBPlatform.getSemanticMgr().initializeDB();
         SWBPlatform.getSemanticMgr().addBaseOntology(base+"/../../../web/WEB-INF/owl/swb.owl");
-        SWBPlatform.getSemanticMgr().addBaseOntology(base+"/../../../../../SWB4Domotic/web/WEB-INF/owl/ext/swb4d.owl");
+        SWBPlatform.getSemanticMgr().addBaseOntology(base+"/../../../../swb4d/web/WEB-INF/owl/ext/swb4d.owl");
         SWBPlatform.getSemanticMgr().loadBaseVocabulary();
         //SWBPlatform.getSemanticMgr().loadDBModels();
         SWBPlatform.getSemanticMgr().getOntology().rebind();
@@ -53,7 +53,7 @@ public class CodeGeneratorDomotic
         try
         {
             String path = getClass().getResource("/").getPath().replaceAll("%20", " ");
-            File dir = new File(path+"../../../../../SWB4Domotic/SWB4DomoticModel/src");
+            File dir = new File(path+"../../../../swb4d/SWB4DomoticModel/src");
             CodeGenerator codeGeneration = new CodeGenerator();
             System.out.println(dir.getAbsolutePath());
             codeGeneration.generateCode("swb4d", false, dir);
