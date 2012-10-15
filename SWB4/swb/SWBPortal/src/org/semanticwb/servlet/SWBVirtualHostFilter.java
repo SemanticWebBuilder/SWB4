@@ -25,36 +25,30 @@ package org.semanticwb.servlet;
 
 //import com.infotec.wb.core.WBVirtualHostMgr;
 import java.io.*;
-import java.util.HashMap;
 import java.util.StringTokenizer;
-import javax.servlet.http.*;
-
+import java.util.concurrent.ConcurrentHashMap;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
-import org.semanticwb.SWBPlatform;
+import javax.servlet.http.*;
+import net.fckeditor.connector.SWBConnectorServlet;
 import org.semanticwb.Logger;
+import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.FriendlyURL;
 import org.semanticwb.model.Proxy;
 import org.semanticwb.model.SWBContext;
-import org.semanticwb.model.SWBModel;
 import org.semanticwb.model.User;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.portal.SWBIPValidationExeption;
-import org.semanticwb.portal.lib.SWBBridgeResponse;
-import org.semanticwb.portal.util.SWBBridge;
 import org.semanticwb.servlet.internal.Admin;
 import org.semanticwb.servlet.internal.Distributor;
 import org.semanticwb.servlet.internal.DistributorParams;
 import org.semanticwb.servlet.internal.EditFile;
-
-import org.semanticwb.servlet.internal.ShowFile;
-
 import org.semanticwb.servlet.internal.FrmProcess;
 import org.semanticwb.servlet.internal.GoogleSiteMap;
 import org.semanticwb.servlet.internal.InternalProxy;
@@ -64,11 +58,16 @@ import org.semanticwb.servlet.internal.Monitor;
 import org.semanticwb.servlet.internal.MultipleFileUploader;
 import org.semanticwb.servlet.internal.P3PFile;
 import org.semanticwb.servlet.internal.RobotFile;
+import org.semanticwb.servlet.internal.ShowFile;
 import org.semanticwb.servlet.internal.TreeSelectFormElement;
-import org.semanticwb.servlet.internal.Upload;
-import org.semanticwb.servlet.internal.UploadFormElement;
-import net.fckeditor.connector.SWBConnectorServlet;
 import org.semanticwb.servlet.internal.Work;
+
+/* MAPS74 Dynamic Tracing - Requires Java SDK 7.0 y Solaris* /
+import com.sun.tracing.ProviderFactory;
+import java.util.concurrent.ConcurrentHashMap;
+import org.semanticwb.tracing.SWBProvider;
+/* */
+
 
 // TODO: Auto-generated Javadoc
 /**
@@ -78,6 +77,18 @@ import org.semanticwb.servlet.internal.Work;
  */
 public class SWBVirtualHostFilter implements Filter
 {
+    /* MAPS74 Dynamic Tracing - Requires Java SDK 7.0 y Solaris* /
+    public static SWBProvider provider;
+    
+    static {
+        ProviderFactory factory = ProviderFactory.getDefaultFactory();
+        System.out.println("************ Provider: "+provider+ " *******************************");
+        System.out.println("SWBProvider: "+ SWBProvider.class);
+        provider = factory.createProvider(SWBProvider.class);
+        System.out.println("************ Provider: "+provider+ " *******************************");
+    }
+    /* */
+    
     /** The log. */
     static Logger log = SWBUtils.getLogger(SWBVirtualHostFilter.class);
     
@@ -87,7 +98,7 @@ public class SWBVirtualHostFilter implements Filter
     private SWBPlatform swbPlatform = null;
     
     /** The int servlets. */
-    private HashMap<String, InternalServlet> intServlets = new HashMap();
+    private ConcurrentHashMap<String, InternalServlet> intServlets = new ConcurrentHashMap<String, InternalServlet>();
     
     /** The dist. */
     private InternalServlet dist=null;
@@ -103,7 +114,7 @@ public class SWBVirtualHostFilter implements Filter
     /** The fist call. */
     private boolean fistCall = true;
     
-    private HashMap<String,String> depurls = null;
+    private ConcurrentHashMap<String,String> depurls = null;
 
     /**
      * Do filter.
@@ -306,6 +317,10 @@ public class SWBVirtualHostFilter implements Filter
             {
                 if (serv != null)
                 {
+                        /* MAPS74 Dynamic Tracing - Requires Java SDK 7.0  y Solaris* /
+                        provider.processInternalServlet(serv.toString());
+                        /* */
+
                     processThread=true;
                     processInternalServlet(serv, _request, _response, path, lang, country, iserv);
                 }
@@ -533,7 +548,7 @@ public class SWBVirtualHostFilter implements Filter
             File file = new File(SWBUtils.getApplicationPath() + "/WEB-INF/depurls.txt");
             if (file.exists())
             {
-                depurls = new HashMap();
+                depurls = new ConcurrentHashMap<String, String>();
                 log.event("Loading Deprecated Urls...");
                 try
                 {
