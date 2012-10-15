@@ -437,4 +437,13 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
             }
         }
     }
+    
+    @Override
+    public void doRequestAccess() {
+    
+    }
+    
+    @Override
+    public void doRequestPermissions() {
+    }
 }

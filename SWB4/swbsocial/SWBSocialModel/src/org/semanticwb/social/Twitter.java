@@ -241,4 +241,14 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
         }
     }
     
+    @Override
+    public void doRequestAccess()
+    {
+
+    }
+
+    @Override
+    public void doRequestPermissions()
+    {
+    }
 }
