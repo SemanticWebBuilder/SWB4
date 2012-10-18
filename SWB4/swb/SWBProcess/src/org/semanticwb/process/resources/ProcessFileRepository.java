@@ -977,7 +977,7 @@ public class ProcessFileRepository extends GenericResource {
                 out.println("</tr>");
             }
             out.println("</tbody>");
-            out.println("<tfoot>");
+            //out.println("<tfoot>");
             //out.println("<tr>");
             //out.println("<td colspan=\"2\" align=\"right\">");
 //            out.println("<button  type=\"button\" onclick=\"if(Checkfiles('" + validFiles + "')){this.form.submit();}else {return false;};\">Agregar</button>");
@@ -986,13 +986,14 @@ public class ProcessFileRepository extends GenericResource {
 //            out.println("<button type=\"button\" onclick=\"window.location='" + urlbck + "';\">Regresar</button>");
             //out.println("</td>");
             //out.println("</tr>");
-            out.println("</tbody>");
+           // out.println("</tbody>");
             out.println("</table>");
-            out.println("</form>");
+            
             out.println("<br/><button  type=\"button\" onclick=\"if(Checkfiles('" + validFiles + "')){this.form.submit();}else {return false;};\">Agregar</button>");
             SWBResourceURL urlbck = paramRequest.getRenderUrl();
             urlbck.setParameter("act", "");
             out.println("<button type=\"button\" onclick=\"window.location='" + urlbck + "';\">Regresar</button>");
+            out.println("</form>");
             out.println("</div>");
             out.println("</div>");
         }
