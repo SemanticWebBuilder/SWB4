@@ -63,7 +63,7 @@ public class StreamsComp extends GenericForwardComposer
         if(action.equals(SWBSocialResourceUtils.ACTION_EDIT) ||  action.equals(SWBSocialResourceUtils.ACTION_DOUBLECLICK) && requestScope.get("treeItem")!=null)
         {
             treeItem=(ElementTreeNode)requestScope.get("treeItem");
-            semObject = SemanticObject.createSemanticObject(treeItem.getData().getUri());
+            semObject = SemanticObject.createSemanticObject(objUri);
             stream = (Stream) semObject.createGenericInstance();
             id.setValue(stream.getId());
             title.setValue(stream.getTitle());
@@ -88,14 +88,14 @@ public class StreamsComp extends GenericForwardComposer
                 stream.setDescription(description.getValue());
             }
             //Actualizar el árbol (Insertar Nodo)
-            SWBSocialResourceUtils.Components.updateTreeNode(treeItem, stream);
+            SWBSocialResourceUtils.Components.updateTreeNode(requestScope, stream);
         }else if(action.equals(SWBSocialResourceUtils.ACTION_EDIT) ||  action.equals(SWBSocialResourceUtils.ACTION_DOUBLECLICK) && stream!=null)
         {
             if(title.getValue()!=null)
             {
                 stream.setTitle(title.getValue());
                 //Actualizar el árbol (actualizar título de Nodo)
-                SWBSocialResourceUtils.Components.updateTreeNode(treeItem, title.getValue());
+                SWBSocialResourceUtils.Components.updateTreeNode(requestScope, title.getValue());
             }
             if(description.getValue()!=null)
             {

@@ -58,21 +58,23 @@ public class SocialNetworkComp extends GenericForwardComposer {
         System.out.println("SocialNetworkComp/wsite:"+wsite);
         System.out.println("SocialNetworkComp/treeItem:"+treeItem);
         System.out.println("SocialNetworkComp/action:"+action);
-        System.out.println("SocialNetworkComp/objUri:"+objUri);*/
+        System.out.println("SocialNetworkComp/objUri:"+objUri);
+         *
+         */
         if(action.equals(SWBSocialResourceUtils.ACTION_ADD))
         {
             sendButton.setLabel("Crear");
-        }
-
-        if(action.equals(SWBSocialResourceUtils.ACTION_EDIT) ||  action.equals(SWBSocialResourceUtils.ACTION_DOUBLECLICK) && requestScope.get("treeItem")!=null)
+        }else if(action.equals(SWBSocialResourceUtils.ACTION_EDIT) ||  action.equals(SWBSocialResourceUtils.ACTION_DOUBLECLICK) && requestScope.get("treeItem")!=null)
         {
-            treeItem=(ElementTreeNode)requestScope.get("treeItem");
-            semObject = SemanticObject.createSemanticObject(treeItem.getData().getUri());
+            semObject = SemanticObject.createSemanticObject(objUri);
             socialNet = (SocialNetwork) semObject.createGenericInstance();
             id.setValue(socialNet.getId());
             title.setValue(socialNet.getTitle());
             description.setValue(socialNet.getDescription());
             sendButton.setLabel("Actualizar");
+        }else if(action.equals(SWBSocialResourceUtils.ACTION_REMOVE))
+        {
+            SWBSocialResourceUtils.Components.updateTree(requestScope);
         }
 
     }
@@ -92,14 +94,14 @@ public class SocialNetworkComp extends GenericForwardComposer {
                 ctaNet.setDescription(description.getValue());
             }
             //Actualizar el árbol (Insertar Nodo)
-            SWBSocialResourceUtils.Components.updateTreeNode(treeItem, ctaNet);
+            SWBSocialResourceUtils.Components.updateTreeNode(requestScope, ctaNet);
         }else if(action.equals(SWBSocialResourceUtils.ACTION_EDIT) ||  action.equals(SWBSocialResourceUtils.ACTION_DOUBLECLICK) && socialNet!=null)
         {
             if(title.getValue()!=null)
             {
                 socialNet.setTitle(title.getValue());
                 //Actualizar el árbol (actualizar título de Nodo)
-                SWBSocialResourceUtils.Components.updateTreeNode(treeItem, title.getValue());
+                SWBSocialResourceUtils.Components.updateTreeNode(requestScope, title.getValue());
             }
             if(description.getValue()!=null)
             {

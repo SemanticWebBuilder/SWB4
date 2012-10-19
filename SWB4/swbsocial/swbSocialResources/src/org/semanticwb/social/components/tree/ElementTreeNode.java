@@ -18,7 +18,7 @@ import org.zkoss.zul.DefaultTreeNode;
  * Aqui es donde declaramos que nuestra clase element, se comporte como un DefaultTreeNode
  * Al crear una clase de este tipo, estamos creando una clase DefaultTreeNode<Element> para el árbol
  */
-public class ElementTreeNode extends DefaultTreeNode<Element> {
+public final class ElementTreeNode extends DefaultTreeNode<Element> {
     /**
      *
      */

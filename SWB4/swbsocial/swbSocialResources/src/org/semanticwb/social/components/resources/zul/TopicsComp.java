@@ -64,7 +64,7 @@ public class TopicsComp extends GenericForwardComposer
         if(action.equals(SWBSocialResourceUtils.ACTION_EDIT) ||  action.equals(SWBSocialResourceUtils.ACTION_DOUBLECLICK) && requestScope.get("treeItem")!=null)
         {
             treeItem=(ElementTreeNode)requestScope.get("treeItem");
-            semObject = SemanticObject.createSemanticObject(treeItem.getData().getUri());
+            semObject = SemanticObject.createSemanticObject(objUri);
             socialTopic = (SocialTopic) semObject.createGenericInstance();
             id.setValue(socialTopic.getId());
             title.setValue(socialTopic.getTitle());
@@ -89,14 +89,14 @@ public class TopicsComp extends GenericForwardComposer
                 socialTopic.setDescription(description.getValue());
             }
             //Actualizar el árbol (Insertar Nodo)
-            SWBSocialResourceUtils.Components.updateTreeNode(treeItem, socialTopic);
+            SWBSocialResourceUtils.Components.updateTreeNode(requestScope, socialTopic);
         }else if(action.equals(SWBSocialResourceUtils.ACTION_EDIT) ||  action.equals(SWBSocialResourceUtils.ACTION_DOUBLECLICK) && socialTopic!=null)
         {
             if(title.getValue()!=null)
             {
                 socialTopic.setTitle(title.getValue());
                 //Actualizar el árbol (actualizar título de Nodo)
-                SWBSocialResourceUtils.Components.updateTreeNode(treeItem, title.getValue());
+                SWBSocialResourceUtils.Components.updateTreeNode(requestScope, title.getValue());
             }
             if(description.getValue()!=null)
             {

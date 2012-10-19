@@ -24,7 +24,7 @@ import org.zkoss.zul.TreeNode;
 /*
  * Clase que controladora del modelo de datos del árbol de navegación.
  */
-public class AdvancedTreeModel extends DefaultTreeModel<Element> {
+public final class AdvancedTreeModel extends DefaultTreeModel<Element> {
     /**
      *
      */

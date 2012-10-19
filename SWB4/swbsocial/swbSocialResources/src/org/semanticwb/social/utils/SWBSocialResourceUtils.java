@@ -7,14 +7,17 @@ package org.semanticwb.social.utils;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Descriptiveable;
 import org.semanticwb.model.DisplayObject;
 import org.semanticwb.model.SWBClass;
-import org.semanticwb.model.WebSite;
 import org.semanticwb.platform.SemanticObject;
+import org.semanticwb.portal.api.SWBParamRequest;
+import org.semanticwb.portal.lib.SWBResponse;
 import org.semanticwb.social.Childrenable;
 import org.semanticwb.social.SocialAdmin;
 import org.semanticwb.social.components.tree.AdvancedTreeModel;
@@ -37,6 +40,7 @@ public class SWBSocialResourceUtils {
     public static final String ACTION_EDIT = "edit";
     public static final String ACTION_DOUBLECLICK = "doubleClick";
     public static final String ACTION_REMOVE = "remove";
+    public static final String ACTION2= "updateTree";
     /**
      * Holds a reference to a log utility.
      * <p>Mantiene una referencia a la utiler&iacute;a de generaci&oacute;n de bit&aacute;coras.</p>
@@ -84,26 +88,37 @@ public class SWBSocialResourceUtils {
 
     public static class Components {
 
-        public static void updateTreeNode(ElementTreeNode treeNode, SWBClass newSWBClass)
+        public static void updateTreeNode(Map<String, Object> requestScope, SWBClass newSWBClass)
         {
-            EventQueue<Event> eq = EventQueues.lookup("insertNodo2Tree", EventQueues.SESSION, true);
-            TreeNodeRefresh treeNodeRefresh=new TreeNodeRefresh(treeNode, newSWBClass);
-            eq.publish(new Event("onCreateNode", null, treeNodeRefresh));
+            ElementTreeNode treeNode=(ElementTreeNode)requestScope.get("treeItem");
+            if(treeNode!=null)
+            {
+                EventQueue<Event> eq = EventQueues.lookup("insertNodo2Tree", EventQueues.SESSION, true);
+                TreeNodeRefresh treeNodeRefresh=new TreeNodeRefresh(treeNode, newSWBClass);
+                eq.publish(new Event("onCreateNode", null, treeNodeRefresh));
+            }
         }
 
-        public static void updateTreeNode(ElementTreeNode treeNode, String title)
+        public static void updateTreeNode(Map<String, Object> requestScope, String title)
         {
-            EventQueue<Event> eq = EventQueues.lookup("updateNodo2Tree", EventQueues.SESSION, true);
-            TreeNodeRefresh treeNodeRefresh=new TreeNodeRefresh(treeNode,title);
-            eq.publish(new Event("onUpdateNode", null, treeNodeRefresh));
+            ElementTreeNode treeNode=(ElementTreeNode)requestScope.get("treeItem");
+            if(treeNode!=null)
+            {
+                EventQueue<Event> eq = EventQueues.lookup("updateNodo2Tree", EventQueues.SESSION, true);
+                TreeNodeRefresh treeNodeRefresh=new TreeNodeRefresh(treeNode,title);
+                eq.publish(new Event("onUpdateNode", null, treeNodeRefresh));
+            }
         }
 
         public static ElementTreeNode getComponentbyUri(HttpServletRequest request)
         {
             try
             {
-                AdvancedTreeModel advTreeModel=(AdvancedTreeModel)request.getSession().getAttribute("elemenetTreeModel");
-                return advTreeModel.findNode(request.getParameter("itemUri"),request.getParameter("wsite"), advTreeModel.getRoot());
+                if(request.getParameter("itemUri")!=null)
+                {
+                    AdvancedTreeModel advTreeModel=(AdvancedTreeModel)request.getSession().getAttribute("elemenetTreeModel");
+                    return advTreeModel.findNode(request.getParameter("itemUri"),request.getParameter("wsite"), advTreeModel.getRoot());
+                }
             }catch(Exception e)
             {
                 log.error(e);
@@ -121,20 +136,12 @@ public class SWBSocialResourceUtils {
             if (swbClass instanceof Descriptiveable) {
                 try
                 {
-                    //Tomando en cuenta que solo exista un solo sitio de admin de swbsocial y que exista con identificador "swbsocial"
-                    //Todo:Ver si puede mejorar la sig. línea.
                     String ImgAdminPathBase = "/work/models/";
-
-                    Iterator<WebSite> itSites=WebSite.ClassMgr.listWebSites();
-                    while(itSites.hasNext())
-                    {
-                        WebSite wsite=itSites.next();
-                        if(wsite instanceof SocialAdmin)
-                        {
-                            ImgAdminPathBase+=wsite.getId()+"/admin/img/";
-                            break;
-                        }
-                    }
+                    //Tomo un sitio de tipo SocialAdmin (Se considera que solo debe haber uno) y este debe de tener
+                    //imagenes en la ruta /work/models/[iddesitio]/admin/img/
+                    SocialAdmin socialAdm=SocialAdmin.ClassMgr.listSocialAdmins().next();
+                    ImgAdminPathBase+=socialAdm.getId()+"/admin/img/";
+                    
 
                     String categoryID=null;
                     Descriptiveable descripTable = (Descriptiveable) swbClass;
@@ -174,10 +181,80 @@ public class SWBSocialResourceUtils {
             element.setName(title);
             item.setData(element);
         }
+
+
+        public static void updateTreeNode(HttpServletRequest request, SWBParamRequest paramRequest)
+        {
+            try
+            {
+                String action=(String)request.getAttribute("action");
+                if(action!=null && action.equals(SWBSocialResourceUtils.ACTION_REMOVE))
+                {
+                    String objUri=(String)request.getAttribute("objUri");
+                    if(objUri!=null)
+                    {
+                        SemanticObject semObj=SemanticObject.createSemanticObject(objUri);
+                        Semantic.removeSemObjTreeNode(semObj);
+                    }
+                }
+                RequestDispatcher dispatcher = request.getRequestDispatcher("/work/models/"+paramRequest.getWebPage().getWebSiteId()+"/admin/zul/cnf_GenericZulTreeUpdate.zul");
+                dispatcher.include(request, new SWBResponse());
+            }catch(Exception e)
+            {
+                log.debug(e);
+            }
+        }
+
+        /*
+         * Actualiza el árbol, este metodo se debe llamar desde un zul o un controlador de zul.
+         */
+        public static void updateTree(Map<String, Object> requestScope)
+        {
+            try
+            {
+                String action=(String)requestScope.get("action");
+                if(action!=null && action.equals(SWBSocialResourceUtils.ACTION_REMOVE))
+                {
+                    String objUri=(String)requestScope.get("objUri");
+                    if(objUri!=null)
+                    {
+                        SemanticObject semObj=SemanticObject.createSemanticObject(objUri);
+                        Semantic.removeSemObjTreeNode(semObj);
+                    }
+                    ElementTreeNode treeItem=(ElementTreeNode)requestScope.get("treeItem");
+                    if(treeItem!=null)
+                    {
+                        EventQueue<Event> eq = EventQueues.lookup("removeNodo2Tree", EventQueues.SESSION, true);
+                        eq.publish(new Event("onRemoveNode", null, treeItem));
+                    }
+                }
+            }catch(Exception e)
+            {
+                log.debug(e);
+            }
+        }
     }
 
     public static class Semantic
     {
+        
+        public static void removeSemObjTreeNode(SemanticObject semObj)
+        {
+           if(semObj!=null)
+           {
+               if(semObj.getSemanticClass().isSubClass(Childrenable.social_Childrenable))
+               {
+                   if(SWBSocialResourceUtils.Semantic.removeObjChildrenable(semObj))
+                   {
+                        semObj.remove();
+                   }
+               }else
+               {
+                    semObj.remove();
+               }
+           }
+        }
+
         /**
          * Metodo para eliminar los todos los hijos de un elementos que sea de tipo Childrenale, de manera recursiva.
          * @param semObj SemanticObject en el cual buscara nodos hijos, si los tiene los elimina
@@ -185,7 +262,7 @@ public class SWBSocialResourceUtils {
          */
         public static boolean removeObjChildrenable(SemanticObject semObj) {
             try {
-                Childrenable childrenable = (Childrenable) semObj.getGenericInstance();                
+                Childrenable childrenable = (Childrenable) semObj.getGenericInstance();
                 Iterator<Childrenable> itChildren = childrenable.listChildrenObjInvs();
                 while (itChildren.hasNext()) {
                     Childrenable children = itChildren.next();
@@ -206,5 +283,6 @@ public class SWBSocialResourceUtils {
             }
             return false;
         }
+
     }
 }

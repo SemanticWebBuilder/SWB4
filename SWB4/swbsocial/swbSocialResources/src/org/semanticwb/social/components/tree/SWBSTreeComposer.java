@@ -22,16 +22,15 @@ import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.social.TreeNodePage;
 import java.net.URLEncoder;
 import org.semanticwb.SWBPlatform;
+import org.semanticwb.model.Activeable;
+import org.semanticwb.model.DisplayObject;
 import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.social.Childrenable;
+import org.semanticwb.social.DeleteControlable;
 import org.semanticwb.social.utils.SWBSocialResourceUtils;
 
 import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.event.Event;
-import org.zkoss.zk.ui.event.EventListener;
-import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.util.GenericForwardComposer;
-import org.zkoss.zul.DefaultTreeNode;
 import org.zkoss.zul.Hlayout;
 import org.zkoss.zul.Image;
 import org.zkoss.zul.Include;
@@ -44,13 +43,13 @@ import org.zkoss.zul.Treerow;
 import org.zkoss.zul.Menuitem;
 import org.zkoss.zul.Menupopup;
 import org.zkoss.zul.Messagebox;
-import org.zkoss.zk.ui.event.DropEvent;
-
+import org.zkoss.zk.ui.event.*;
+import org.zkoss.zul.Window;
 
 /*
  * Clase controladora del árbol de navegación
  */
-public class SWBSTreeComposer extends GenericForwardComposer <Component> {
+public final class SWBSTreeComposer extends GenericForwardComposer <Component> {
     /**
      *
      */
@@ -66,7 +65,8 @@ public class SWBSTreeComposer extends GenericForwardComposer <Component> {
     WebSite wsiteAdm=null;
     User user=null;
     SWBParamRequest paramRequest=null;
-
+    String ImgAdminPathBase=null;
+    
     /*
     * Metodo implementación de la clase padre, este metodo se ejecuta una vez cargado
     * el componente.
@@ -83,6 +83,7 @@ public class SWBSTreeComposer extends GenericForwardComposer <Component> {
                 wsiteAdm=paramRequest.getWebPage().getWebSite();
                 if(wsiteAdm!=null)
                 {
+                    ImgAdminPathBase="/work/models/"+wsiteAdm.getId()+"/admin/img/";
                     user=paramRequest.getUser();
                     elemenetTreeModel = new AdvancedTreeModel(new ElementList(paramRequest).getRoot());
                     tree.setModel(elemenetTreeModel);
@@ -184,10 +185,20 @@ public class SWBSTreeComposer extends GenericForwardComposer <Component> {
                                 Treeitem parentItem = selectedTreeItem.getParentItem();
                                 final ElementTreeNode parentItemValue = (ElementTreeNode) parentItem.getValue();
 
+
                                 //MENU CONTEXTUAL
 
                                 final SemanticObject semObj=SemanticObject.createSemanticObject(itemValue.getData().getUri());
 
+                                final WebPage adminWebPage=wsiteAdm.getWebPage(itemValue.getData().getCategoryID());
+                                TreeNodePage treeNodePageTmp=null;
+                                if(adminWebPage instanceof TreeNodePage)
+                                {
+                                    treeNodePageTmp=(TreeNodePage) adminWebPage;
+                                }
+                                final TreeNodePage treeNodePage=treeNodePageTmp;
+                                final SemanticClass swbClass = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(treeNodePage.getClassUri());
+                                
                                 //Opción Crear, para los nodos que sean de tipo Childrenable
                                 if(semObj.getSemanticClass().isSubClass(Childrenable.social_Childrenable))
                                 {
@@ -197,14 +208,10 @@ public class SWBSTreeComposer extends GenericForwardComposer <Component> {
                                     @Override
                                     public void onEvent(Event event) throws Exception {
                                         content.setSrc(null);   //En teoría, esta línea hace lo que hace la línea de abajo (Todo:Probar y Quitar la de abajo)
-                                        //content.setSrc("/work/models/swbsocial/admin/zul/clearCompose.zul");
-                                        WebPage adminWebPage=wsiteAdm.getWebPage(itemValue.getData().getCategoryID());
-                                        if(adminWebPage instanceof TreeNodePage)
+                                        if(treeNodePage!=null)
                                         {
-                                            TreeNodePage treeNodePage=(TreeNodePage) adminWebPage;
                                             content.setSrc(treeNodePage.getZulResourcePath());
                                         }
-
                                         content.setDynamicProperty("treeItem", itemValue);
                                         content.setDynamicProperty("action", SWBSocialResourceUtils.ACTION_ADD);
                                         content.setDynamicProperty("user", user);
@@ -216,17 +223,13 @@ public class SWBSTreeComposer extends GenericForwardComposer <Component> {
                                     treePopup.appendChild(mItemNew);
                                 }
 
-
-
-                                //------------Opciones por defecto----------//
-
-
-                                //Opción Eliminar TODO:Que aparezca mensaje antes de eliminar un nodo:¿Esta seguro de querer eliminar el elemento?
+                                //Opción de eliminar
                                 Menuitem mItemRemove=new Menuitem();
                                 mItemRemove.setLabel("Eliminar");
                                 mItemRemove.addEventListener(Events.ON_CLICK, new EventListener<Event>() {
                                 @Override
-                                public void onEvent(Event event) throws Exception {
+                                public void onEvent(Event event) throws Exception
+                                {
                                     messageBox.show("Esta seguro de eliminar este elemento?", "deleteConfirm", Messagebox.YES|Messagebox.NO, Messagebox.QUESTION,
                                      new EventListener() {
                                        public void onEvent(Event evt) {
@@ -234,18 +237,37 @@ public class SWBSTreeComposer extends GenericForwardComposer <Component> {
                                            case Messagebox.YES:
                                                if(semObj!=null)
                                                {
-                                                   if(semObj.getSemanticClass().isSubClass(Childrenable.social_Childrenable))
+                                                   if(swbClass!=null && swbClass.isSubClass(DeleteControlable.social_DeleteControlable))
                                                    {
-                                                       if(SWBSocialResourceUtils.Semantic.removeObjChildrenable(semObj))
+                                                       //Nuevo Código
+                                                        content.setSrc(null);//En teoría, esta línea hace lo que hace la línea de abajo (Todo:Probar y Quitar la de abajo)
+                                                        if(treeNodePage!=null)
+                                                        {
+                                                            content.setSrc(treeNodePage.getZulResourcePath());
+                                                        }
+                                                        content.setDynamicProperty("objUri", URLEncoder.encode(semObj.getURI()));
+                                                        content.setDynamicProperty("paramRequest", paramRequest);
+                                                        content.setDynamicProperty("action", SWBSocialResourceUtils.ACTION_REMOVE);
+                                                        content.setDynamicProperty("treeItem", itemValue);
+                                                        WebSite wsite=(WebSite)semObj.getModel().getModelObject().createGenericInstance();
+                                                        content.setDynamicProperty("wsite", wsite);
+                                                        content.setDynamicProperty("optionWepPage", adminWebPage);
+                                                        content.setDynamicProperty("user", user);
+                                                       //Termina nuevo código
+                                                   }else {
+                                                       if(semObj.getSemanticClass().isSubClass(Childrenable.social_Childrenable))
+                                                       {
+                                                           if(SWBSocialResourceUtils.Semantic.removeObjChildrenable(semObj))
+                                                           {
+                                                                semObj.remove();
+                                                           }
+                                                       }else
                                                        {
                                                             semObj.remove();
                                                        }
-                                                   }else
-                                                   {
-                                                        semObj.remove();
+                                                       elemenetTreeModel.remove(itemValue);
+                                                       break;
                                                    }
-                                                   elemenetTreeModel.remove(itemValue);
-                                                   break;
                                                }
                                            //case Messagebox.NO: doNo(); break;
                                       }
@@ -254,20 +276,47 @@ public class SWBSTreeComposer extends GenericForwardComposer <Component> {
                                 }
                                 });
                                 treePopup.appendChild(mItemRemove);
+                                
 
                                 //Opción Activar/Desactivar
-
-                                Menuitem mItemActive=new Menuitem();
-                                mItemActive.setLabel("Activar");
-                                mItemActive.addEventListener(Events.ON_CLICK, new EventListener<Event>() {
-                                @Override
-                                public void onEvent(Event event) throws Exception {
-                                    content.setSrc("/work/models/swbsocial/admin/zul/"+parentItemValue.getData().getZulPage());
-                                    content.setDynamicProperty("objUri", itemValue.getData().getUri());
-                                    content.setDynamicProperty("paramRequest", paramRequest);;
+                                if(swbClass!=null && swbClass.isSubClass(Activeable.swb_Activeable))
+                                {
+                                    if(!semObj.getBooleanProperty(Activeable.swb_active)) //Si esta desactivado el objeto semantico
+                                    {
+                                        Menuitem mItemActive=new Menuitem();
+                                        mItemActive.setLabel("Activar");
+                                        mItemActive.addEventListener(Events.ON_CLICK, new EventListener<Event>() {
+                                        @Override
+                                        public void onEvent(Event event) throws Exception {
+                                            semObj.setBooleanProperty(Activeable.swb_active, true);
+                                            DisplayObject displayObj=(DisplayObject)semObj.getSemanticClass().getDisplayObject().createGenericInstance();
+                                            Element element = (Element) itemValue.getData();
+                                            element.seticonElement(ImgAdminPathBase+displayObj.getIconClass());
+                                            itemValue.setData(element);
+                                            EventQueue<Event> eq = EventQueues.lookup("updateMsgWin", EventQueues.SESSION, true);
+                                            eq.publish(new Event("onUpdateMsgWin", null, "Elemento activado..."));
+                                        }
+                                        });
+                                        treePopup.appendChild(mItemActive);
+                                    }else //Si esta activo el objeto semantico
+                                    {
+                                        Menuitem mItemActive=new Menuitem();
+                                        mItemActive.setLabel("Desactivar");
+                                        mItemActive.addEventListener(Events.ON_CLICK, new EventListener<Event>() {
+                                        @Override
+                                        public void onEvent(Event event) throws Exception {
+                                            semObj.setBooleanProperty(Activeable.swb_active, false);
+                                            DisplayObject displayObj=(DisplayObject)semObj.getSemanticClass().getDisplayObject().createGenericInstance();
+                                            Element element = (Element) itemValue.getData();
+                                            element.seticonElement(ImgAdminPathBase+"off_"+displayObj.getIconClass());
+                                            itemValue.setData(element);
+                                            EventQueue<Event> eq = EventQueues.lookup("updateMsgWin", EventQueues.SESSION, true);
+                                            eq.publish(new Event("onUpdateMsgWin", null, "Elemento desactivado..."));
+                                        }
+                                        });
+                                        treePopup.appendChild(mItemActive);
+                                    }
                                 }
-                                });
-                                treePopup.appendChild(mItemActive);
 
 
                                 //------------Opciones dependiendo del nodo del árbol----------//
@@ -300,7 +349,7 @@ public class SWBSTreeComposer extends GenericForwardComposer <Component> {
                                         //content.setSrc("/work/models/swbsocial/admin/zul/clearCompose.zul");
                                         content.setSrc(zulPage);
                                         content.setDynamicProperty("objUri", URLEncoder.encode(itemValue.getData().getUri()));
-                                        content.setDynamicProperty("paramRequest", paramRequest);;
+                                        content.setDynamicProperty("paramRequest", paramRequest);
                                         content.setDynamicProperty("action", action);
                                         content.setDynamicProperty("optionWepPage", wpageOption);
                                         content.setDynamicProperty("treeItem", itemValue);
@@ -407,11 +456,11 @@ public class SWBSTreeComposer extends GenericForwardComposer <Component> {
                             WebPage wpage=wsiteAdm.getWebPage(itemValue.getData().getUri());
                             if(wpage instanceof TreeNodePage)
                             {
-                                TreeNodePage TreeNodePage=(TreeNodePage)wpage;
-                                if(TreeNodePage.getClassUri()!=null)
+                                TreeNodePage treeNodePage=(TreeNodePage)wpage;
+                                if(treeNodePage.getClassUri()!=null)
                                 {
-                                    SemanticClass swbClass = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(TreeNodePage.getClassUri());
-                                    if(swbClass.isSubClass(Childrenable.social_Childrenable))
+                                    SemanticClass swbClass = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(treeNodePage.getClassUri());
+                                    if(swbClass!=null && swbClass.isSubClass(Childrenable.social_Childrenable))
                                     {
                                          dataRow.setDroppable("true");
                                          dataRow.addEventListener(Events.ON_DROP, new EventListener<Event>()

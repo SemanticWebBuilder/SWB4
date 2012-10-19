@@ -27,7 +27,7 @@ import org.zkoss.zul.Iframe;
  * Clase que maneja la fuente del iframe del widget 1 en la administración de swbsocial
  * 
  */
-public class WidgetGenericComposer extends GenericForwardComposer {
+public final class WidgetGenericComposer extends GenericForwardComposer {
 
     private static Logger log = SWBUtils.getLogger(SWBSTreeComposer.class);
     private static final long serialVersionUID = -9145887024839938516L;
