@@ -116,7 +116,7 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
     @Override
     public void listen(Stream stream) {
         WebSite wsite=WebSite.ClassMgr.getWebSite(stream.getSemanticObject().getModel().getName());
-        System.out.println("Red SocialID:"+this.getId()+", Red Title:"+this.getTitle()+", sitio:"+wsite.getId());
+        //System.out.println("Red SocialID:"+this.getId()+", Red Title:"+this.getTitle()+", sitio:"+wsite.getId());
 
         try {
             twitter4j.Twitter twitter = new TwitterFactory().getInstance();
@@ -124,22 +124,19 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
             QueryResult result=twitter.search(query);
             List<Tweet> tweets = result.getTweets();
             for (Tweet tweet : tweets) {
-                System.out.println("@"+tweet.getFromUser()+", msg:"+tweet.getText());
+                //System.out.println("@"+tweet.getFromUser()+", msg:"+tweet.getText());
                 SocialNetworkUser socialNetUser=SocialNetworkUser.getSocialNetworkUserbyIDAndSocialNet(String.valueOf(tweet.getFromUserId()), this, wsite);
                 if(socialNetUser==null)//
                 {
-                    System.out.println("listen-1:"+socialNetUser);
                     //Si no existe el id del usuario para esa red social, lo crea.
                     socialNetUser=SocialNetworkUser.ClassMgr.createSocialNetworkUser(wsite);
                     socialNetUser.setSnu_id(String.valueOf(tweet.getFromUserId()));
                     socialNetUser.setSnu_name("@"+tweet.getFromUser());
                     socialNetUser.setSnu_SocialNetwork(this);
                     socialNetUser.setCreated(new Date());
-                    System.out.println("listen-2:"+socialNetUser);
                     //System.out.println("SocialNetworkUser Creado:"+socialNetUser.getSnu_id());
                 }else{
                     //System.out.println("SocialNetworkUser Actualizado:"+socialNetUser.getSnu_id());
-                    System.out.println("listen-3:"+socialNetUser);
                     socialNetUser.setUpdated(new Date());
                 }
                 socialNetUser.setFollowers(100);
@@ -149,11 +146,9 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
                 message.setMsg_Text(tweet.getText());
                 message.setPostInSocialNetwork(this);
                 message.setPostInStream(stream);
-                System.out.println("listen-4:"+message);
                 if(socialNetUser!=null)
                 {
                     message.setPostInSocialNetworkUser(socialNetUser);
-                    System.out.println("listen-5:"+message);
                 }
                 this.addReceivedPost(message, String.valueOf(tweet.getId()), this);
                 new Classifier(message);
@@ -165,6 +160,7 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
         }
 
     }
+
 
     @Override
     public void listenAlive(SWBModel model) {
@@ -180,7 +176,7 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
 
             //Palabras a monitorear
             String words2Monitor=SWBSocialUtil.words2Monitor.getWords2Monitor(",", model);
-            System.out.println("words2MonitorGeorge:"+words2Monitor+", en cta:"+this);
+            //System.out.println("words2MonitorGeorge:"+words2Monitor+", en cta:"+this);
             if(words2Monitor!=null && words2Monitor.trim().length()>0)
             {
                 String[] tr = {words2Monitor};
@@ -202,7 +198,7 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
             twitterStream.filter(filterQuery);
              *
              */
-           
+
             ConfigurationBuilder cb = new ConfigurationBuilder();
             cb.setDebugEnabled(true);
             //simple http form based authentication, you can use oAuth if you have one, check Twitter4j documentation
@@ -218,11 +214,11 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
 
             trial.addListener(listener);
 
-            
+
             trial.filter(query);
-            
+
             //System.out.println(" here is stuff : " + trial.getFilterStream(query));
-           
+
 
             //trial.sample();
         } catch (Exception e) {
@@ -240,7 +236,17 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
             System.out.println("DETUVO LA CONEXION EN:"+this.getId());
         }
     }
-    
+
+    @Override
+    public void doRequestPermissions() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public void doRequestAccess() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
     @Override
     public void doRequestAccess()
     {
