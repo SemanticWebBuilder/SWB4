@@ -7,11 +7,7 @@ package org.semanticwb.social.listener;
 import java.net.SocketException;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
-import org.semanticwb.social.MessageIn;
-import org.semanticwb.social.PhotoIn;
-import org.semanticwb.social.Post;
 import org.semanticwb.social.PostIn;
-import org.semanticwb.social.VideoIn;
 import org.semanticwb.social.util.SendPostThread;
 
 /**
