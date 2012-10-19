@@ -33,6 +33,9 @@
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
     <rdfs:subClassOf>
+      <owl:Class rdf:ID="DeleteControlable"/>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
       <swb:Interface rdf:ID="Secreteable">
         <rdfs:comment>Interface que contiene ciertas propiedades utiles para la autenticación de ciertas redes sociales (ver mas adelante si se unifica con Oauthable)</rdfs:comment>
         <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBInterface"/>
@@ -53,6 +56,7 @@
         >socialnet.png</swb:iconClass>
       </swbxf:DisplayObject>
     </swb:displayObject>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Activeable"/>
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
   </owl:Class>
   <owl:Class rdf:ID="TakeOut">
@@ -60,19 +64,26 @@
     <rdfs:comment>Clase que englobara elementos a ser quitados en los mensajes de las diferentes redes sociales, de tal manera que se puedan comparar cada uno de las palabras de los mensajes con las palabras de valor sentimental que se tengan almacenadas en la clase SentimentalWords.</rdfs:comment>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
+  <owl:Class rdf:about="#DeleteControlable">
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBInterface"/>
+    <rdfs:comment>Interface que define que las instancias de una clase pueden ser eliminadas</rdfs:comment>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Interface"/>
+  </owl:Class>
   <owl:Class rdf:ID="Stream">
+    <rdfs:subClassOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+    <rdfs:comment>Clase que contendra los streams que configurados para cada usuario</rdfs:comment>
     <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:autogenId>
-    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
-    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
-    <rdfs:comment>Clase que contendra los streams que configurados para cada usuario</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Activeable"/>
     <swb:displayObject>
       <swbxf:DisplayObject rdf:ID="do_Stream">
         <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
         >stream.png</swb:iconClass>
       </swbxf:DisplayObject>
     </swb:displayObject>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
   <owl:Class rdf:ID="SocialTopic">
@@ -465,6 +476,23 @@
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
     <rdfs:domain rdf:resource="#PostIn"/>
   </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="stream_phrase">
+    <rdfs:comment>Frase a monitorear en un determinado stream, cada stream tiene sus propias frasea a monitorear.</rdfs:comment>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#Stream"/>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_stream_phase">
+        <swbxf:propGroup rdf:resource="#pg_socialConfig"/>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextArea_Description"/>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >10</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >phrase</swb:propertyCodeName>
+    <rdfs:label xml:lang="es">Frase</rdfs:label>
+    <rdfs:label xml:lang="en">Phrase</rdfs:label>
+  </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="snu_name">
     <rdfs:domain rdf:resource="#SocialNetworkUser"/>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
@@ -628,23 +656,6 @@
     <rdfs:domain rdf:resource="#PostIn"/>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
     <rdfs:comment>Sentimiento de el mensaje (Post) basado en emoticones encontrados. (1=Positivo;2=Negativo;0=Neutro)</rdfs:comment>
-  </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="stream_phase">
-    <rdfs:label xml:lang="en">Phrase</rdfs:label>
-    <rdfs:label xml:lang="es">Frase</rdfs:label>
-    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >phrase</swb:propertyCodeName>
-    <swb:displayProperty>
-      <swbxf:DisplayProperty rdf:ID="dp_stream_phase">
-        <swbxf:propGroup rdf:resource="#pg_socialConfig"/>
-        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextArea_Description"/>
-        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >10</swb:index>
-      </swbxf:DisplayProperty>
-    </swb:displayProperty>
-    <rdfs:domain rdf:resource="#Stream"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-    <rdfs:comment>Frase a monitorear en un determinado stream, cada stream tiene sus propias frasea a monitorear.</rdfs:comment>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="IntensityValue">
     <rdfs:comment>Valor de intensidad de la palabra</rdfs:comment>
@@ -880,8 +891,8 @@
     <rdfs:label xml:lang="es">Tiempo para Busqueda de Información</rdfs:label>
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_stream_PoolTime">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextBox"/>
         <swbxf:propGroup rdf:resource="#pg_socialConfig"/>
-        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextArea_Description"/>
         <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
         >60</swb:index>
       </swbxf:DisplayProperty>
@@ -1030,6 +1041,11 @@
     <rdfs:subClassOf rdf:resource="#PostOut"/>
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
   </swb:Class>
+  <swbxf:DisplayProperty rdf:ID="dp_removeFromController">
+    <swbxf:propGroup rdf:resource="#pg_socialConfig"/>
+    <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+    >1</swb:index>
+  </swbxf:DisplayProperty>
   <swb:Class rdf:ID="Flicker">
     <rdfs:subClassOf rdf:resource="#Oauthable"/>
     <rdfs:subClassOf rdf:resource="#Photoable"/>

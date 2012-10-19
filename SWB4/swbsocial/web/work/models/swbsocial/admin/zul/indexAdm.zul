@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<?script content="jq.IE6_ALPHAFIX='.png';"?>
 <borderlayout id="main" height="100%">
     <!--Inicia parte superior de pantalla de admin-->
     <north border="normal" title="" size="100px">
@@ -30,6 +31,7 @@
                                 import org.zkoss.zk.ui.event.*;
                                 import org.semanticwb.social.utils.TreeNodeRefresh;
                                 import org.semanticwb.social.components.tree.ElementTreeNode;
+                                import org.semanticwb.social.components.tree.AdvancedTreeModel;
                                 import org.semanticwb.model.SWBClass;
                                 import org.semanticwb.model.SWBModel;
                                 import org.semanticwb.social.utils.SWBSocialResourceUtils;
@@ -51,8 +53,37 @@
                                         SWBSocialResourceUtils.Components.updateTreeTitleNode(treeNode, title);
                                     }
                                 });
+                                EventQueue queOnRemoveNode = EventQueues.lookup("removeNodo2Tree", EventQueues.SESSION, true);
+                                queOnRemoveNode.subscribe(new EventListener() {
+                                    public void onEvent(Event evt) {
+                                        ElementTreeNode treeItem=(ElementTreeNode)evt.getData();
+                                        AdvancedTreeModel advTreeModel=(AdvancedTreeModel)page.getDesktop().getSession().getAttribute("elemenetTreeModel");
+                                        advTreeModel.remove(treeItem);
+                                    }
+                                });
+                                EventQueue queOnUpdateMsgWin = EventQueues.lookup("updateMsgWin", EventQueues.SESSION, true);
+                                queOnUpdateMsgWin.subscribe(new EventListener() {
+                                    public void onEvent(Event evt) {
+                                        String sMsg=(String)evt.getData();
+                                        System.out.println("sMsg:"+sMsg);
+                                        msgLabel.value=sMsg;
+                                        //alert("Holas Mundos!!!");
+                                        openWindow();
+                                        //jq($msgWindow).hide().slideDown(1000);
+                                        //jq(this.$f('msgWindow')).hide().slideDown(1000);
+                                    }
+                                 });
                             ]]>
                         </zscript>
+                        <script type="text/javascript">
+                           <![CDATA[
+                                function openWindow()
+                                {
+                                    jq(this.$f('msgWindow')).hide().slideDown(1000);
+                                }
+                           ]]>
+                        </script>
+
 
                         <tree id="tree" width="300px" rows="25">
                             <treecols>
@@ -70,9 +101,21 @@
                 </vbox>
             </west>
             <!--termina árbol de navegación-->
+            <!--Ventana de mensajes-->
             <!--Inicia área de trabajo (Contenido) -->
-            <center id="wrkSpc" border="normal">
-               <include id="content" mode="defer" progressing="true"/>
+            <center id="wrkSpcRoot" border="normal">
+               <borderlayout>
+                   <north>
+                       <window id="msgWindow" width="100%">
+                           <vbox id="msgVbox">
+                                <label id="msgLabel"/>
+                           </vbox>
+                       </window>
+                   </north>
+                   <center id="wrkSpc">
+                        <include id="content" mode="defer" progressing="true"/>
+                   </center>
+              </borderlayout>
             </center>
             <!--Termina área de trabajo (Contenido) -->
             <!--Comienza área de widgets-->
@@ -83,8 +126,11 @@
                             <north border="normal" title="Pendientes" size="50%" splittable="true" collapsible="true" apply="org.semanticwb.social.components.WidgetGenericComposer">
                                <iframe id="widgetIframe1" style="width:100%; height:100%;"  />
                              </north>
-                            <center border="normal"  title="Mensajes Listener" apply="org.semanticwb.social.components.WidgetGenericComposer">
-				<iframe id="widgetIframe2" style="width:100%; height:100%;"  />
+                            <center border="normal"  title="Mensajes Listener">
+				<!--div apply="org.semanticwb.social.components.resources.widgets.WidgetListener">
+                                <grid model="${$composer.messages}" rowRenderer="org.semanticwb.social.components.resources.widgets.WidgetListenerRenderer"-->
+                                <iframe id="widgetIframe2" style="width:100%; height:100%;"  />
+                                <!--/div-->
                             </center>
                         </borderlayout>
                     </north>
