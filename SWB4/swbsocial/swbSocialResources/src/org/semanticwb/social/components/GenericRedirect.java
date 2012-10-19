@@ -39,7 +39,7 @@ import java.net.URLEncoder;
  * edición y posiblemente la eliminación de elementos del árbol de navegación de la administración
  * de la herramienta swbsocial
  */
-public class GenericRedirect extends GenericForwardComposer <Component>
+public final class GenericRedirect extends GenericForwardComposer <Component>
 {
     private static Logger log = SWBUtils.getLogger(GenericRedirect.class);
     private static final long serialVersionUID = 1L;
@@ -71,7 +71,6 @@ public class GenericRedirect extends GenericForwardComposer <Component>
            user=(User)requestScope.get("user");
            objUri=(String)requestScope.get("objUri");
            treeItem=(ElementTreeNode)requestScope.get("treeItem");
-           //item=(ElementTreeNode)requestScope.get("item");
            action=(String)requestScope.get("action");
            iframe_genRedirect.setSrc(null);
            if(action==null)
@@ -108,6 +107,9 @@ public class GenericRedirect extends GenericForwardComposer <Component>
            }else if(action.equals(SWBSocialResourceUtils.ACTION_EDIT))
            {
                buildEditTab();
+           }else if(action.equals(SWBSocialResourceUtils.ACTION_REMOVE) && treeItem!=null && treeNodePage!=null)
+           {
+               iframe_genRedirect.setSrc(treeNodePage.getUrl(user.getLanguage())+"?wsite="+wsite.getId()+"&action="+action+"&itemUri="+URLEncoder.encode(treeItem.getData().getUri())+"&objUri="+objUri);
            }
            else if(action.equals(SWBSocialResourceUtils.ACTION_DOUBLECLICK))
            {

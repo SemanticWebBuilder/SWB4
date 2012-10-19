@@ -14,7 +14,7 @@ package org.semanticwb.social.components.tree;
 /*
  * Clase de tipo Pojo que maneja cada uno de los elementos o nodos en el árbol de navegación
  */
-public class Element {
+public final class Element {
 
     private static final long serialVersionUID = -9145887024839938518L;
 

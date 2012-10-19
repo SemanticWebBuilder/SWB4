@@ -34,7 +34,7 @@ import org.zkoss.zul.impl.XulElement;
 /*
  * Clase Controladora del menú superior de la herramienta swbsocial
  */
-public class SWBSTopMenuComposer extends GenericForwardComposer <Component>{
+public final class SWBSTopMenuComposer extends GenericForwardComposer <Component>{
 
     private static Logger log = SWBUtils.getLogger(SWBSTopMenuComposer.class);
     public Menubar mainMenu;

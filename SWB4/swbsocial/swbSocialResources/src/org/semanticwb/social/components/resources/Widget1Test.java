@@ -9,24 +9,21 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.semanticwb.model.GenericObject;
 import org.semanticwb.model.User;
 import org.semanticwb.portal.api.GenericResource;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
+import org.zkoss.zk.ui.event.*;
 
 /**
  *
  * @author jorge.jimenez
- * @date 10/03/2012
  */
-/*
- * Recurso de prueba, solo para ver que si lleguen los parametros que se envían desde el árbol
- */
-public class GenericComponentResource extends GenericResource{
+public class Widget1Test extends GenericResource{
 
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+       PrintWriter out = response.getWriter();
        String action=request.getParameter("action");
        String objUri=request.getParameter("objUri");
        String wsite=request.getParameter("wsite");
@@ -35,13 +32,10 @@ public class GenericComponentResource extends GenericResource{
        System.out.println("User:"+user);
        System.out.println("adminTopic:"+paramRequest.getAdminTopic().getId());
        System.out.println("webPage id:"+paramRequest.getWebPage().getUrl());
-       PrintWriter out = response.getWriter();
-       out.println("Contenido de Prueba Genérico....");
-    }
-    
-    @Override
-    public void doAdmin(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-       System.out.println("BrandResource Admin...");
-    }
+       System.out.println("Va a poner evento-1");
+       EventQueue eq = EventQueues.lookup("timelineReady",EventQueues.SESSION, true); //create a queue
+       eq.publish(new Event("onTimelineReady", null, null));
+       System.out.println("Va a poner evento-2");
 
+    }
 }

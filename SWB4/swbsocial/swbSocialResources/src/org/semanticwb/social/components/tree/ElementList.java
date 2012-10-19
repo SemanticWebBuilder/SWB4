@@ -5,12 +5,14 @@
 
 package org.semanticwb.social.components.tree;
 
+import java.awt.ActiveEvent;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.model.Activeable;
 import org.semanticwb.model.Descriptiveable;
 import org.semanticwb.model.DisplayObject;
 import org.semanticwb.model.GenericObject;
@@ -33,7 +35,7 @@ import org.semanticwb.social.TreeNodePage;
  /*
   * Clase controladora del modelo de datos del árbol de navegación
   */
- public class ElementList {
+ public final class ElementList {
 
     private ElementTreeNode root;
     private WebSite modelAdmin=null;
@@ -138,18 +140,24 @@ import org.semanticwb.social.TreeNodePage;
         {
             GenericObject genObj=itGenObjs.next();
             DisplayObject displayObj=(DisplayObject)genObj.getSemanticObject().getSemanticClass().getDisplayObject().createGenericInstance();
+            String sIconImg=displayObj.getIconClass();
+            //Si el objeto semantico instancia de una clase Activeable, pero no esta activada dicha instancia
+            if(genObj.getSemanticObject().getSemanticClass().isSubClass(Activeable.swb_Activeable) && !genObj.getSemanticObject().getBooleanProperty(Activeable.swb_active))
+            {
+                sIconImg="off_"+sIconImg;
+            }
             if(genObj instanceof Childrenable)
             {
                 Childrenable child=(Childrenable)genObj;
                 //Si no tiene padre, se agrega al principal
                 if(child.getParentObj()==null)
                 {
-                    alist.add(new ElementTreeNode(new Element(genObj.getSemanticObject().getProperty(Descriptiveable.swb_title), genObj.getURI(), null, ImgAdminPathBase+displayObj.getIconClass(), categoryID, model.getId()), getTreeNodeChildrenElements(genObj, model, categoryID), true));
+                    alist.add(new ElementTreeNode(new Element(genObj.getSemanticObject().getProperty(Descriptiveable.swb_title), genObj.getURI(), null, ImgAdminPathBase+sIconImg, categoryID, model.getId()), getTreeNodeChildrenElements(genObj, model, categoryID), true));
                     cont++;
                 }
             }else
             {
-                alist.add(new ElementTreeNode(new Element(genObj.getSemanticObject().getProperty(Descriptiveable.swb_title), genObj.getURI(), null,ImgAdminPathBase+displayObj.getIconClass(), categoryID, model.getId())));
+                alist.add(new ElementTreeNode(new Element(genObj.getSemanticObject().getProperty(Descriptiveable.swb_title), genObj.getURI(), null,ImgAdminPathBase+sIconImg, categoryID, model.getId())));
                 cont++;
             }
         }
@@ -187,7 +195,13 @@ import org.semanticwb.social.TreeNodePage;
                 Childrenable child=itChildren.next();
                 GenericObject childGenObj=child.getSemanticObject().getGenericInstance();
                 DisplayObject displayObj=(DisplayObject)childGenObj.getSemanticObject().getSemanticClass().getDisplayObject().createGenericInstance();
-                elementTreeNode[cont]=new ElementTreeNode(new Element(childGenObj.getSemanticObject().getProperty(Descriptiveable.swb_title), childGenObj.getURI(), null, ImgAdminPathBase+displayObj.getIconClass(), categoryID, model.getId()),getTreeNodeChildrenElements(childGenObj, model, categoryID), true);
+                String sIconImg=displayObj.getIconClass();
+                //Si el objeto semantico instancia de una clase Activeable, pero no esta activada dicha instancia
+                if(childGenObj.getSemanticObject().getSemanticClass().isSubClass(Activeable.swb_Activeable) && !childGenObj.getSemanticObject().getBooleanProperty(Activeable.swb_active))
+                {
+                    sIconImg="off_"+sIconImg;
+                }
+                elementTreeNode[cont]=new ElementTreeNode(new Element(childGenObj.getSemanticObject().getProperty(Descriptiveable.swb_title), childGenObj.getURI(), null, ImgAdminPathBase+sIconImg, categoryID, model.getId()),getTreeNodeChildrenElements(childGenObj, model, categoryID), true);
                 cont++;
             }
             return elementTreeNode;

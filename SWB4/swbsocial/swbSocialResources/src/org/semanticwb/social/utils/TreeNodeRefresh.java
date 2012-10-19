@@ -18,7 +18,7 @@ import org.semanticwb.social.components.tree.ElementTreeNode;
  * Clase de tipo bean que sirve de utilería para refrescar el árbol de navegación
  * de la administración de la herramienta.
  */
-public class TreeNodeRefresh {
+public final class TreeNodeRefresh {
 
     private ElementTreeNode treeNode;
     //private SWBModel model;
