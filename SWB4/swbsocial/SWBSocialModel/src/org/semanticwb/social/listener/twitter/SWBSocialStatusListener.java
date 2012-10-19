@@ -17,6 +17,7 @@ import org.semanticwb.social.listener.Classifier;
 import twitter4j.MediaEntity;
 import twitter4j.Place;
 import twitter4j.Status;
+import org.zkoss.zk.ui.event.*;
 import twitter4j.StatusDeletionNotice;
 
 /**
@@ -172,7 +173,8 @@ public class SWBSocialStatusListener implements twitter4j.StatusListener {
         log.error(e);
       }
     }
-
+    
+    
     @Override
     public void onDeletionNotice(StatusDeletionNotice sdn) {
     }

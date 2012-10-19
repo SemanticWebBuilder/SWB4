@@ -19,6 +19,8 @@ import org.semanticwb.social.SentimentalLearningPhrase;
 import org.semanticwb.social.VideoIn;
 import org.semanticwb.social.util.NormalizerCharDuplicate;
 import org.semanticwb.social.util.SWBSocialUtil;
+import org.zkoss.zk.ui.event.*;
+import org.zkoss.zul.ListModelList;
 
 /**
  *
@@ -227,12 +229,12 @@ public class SentimentalDataClassifier {
         //Normalizo
         postData=SWBSocialUtil.Classifier.normalizer(postData).getNormalizedPhrase();
 
-        System.out.println("postData-1:"+postData);
+        //System.out.println("postData-1:"+postData);
 
         //Se cambia toda la frase a su modo raiz
         postData=SWBSocialUtil.Classifier.getRootWord(postData);
 
-        System.out.println("postData-2:"+postData);
+        //System.out.println("postData-2:"+postData);
 
         //Fonetizo
         postData=SWBSocialUtil.Classifier.phonematize(postData);
@@ -326,9 +328,41 @@ public class SentimentalDataClassifier {
             //System.out.println("IntensiveTweetValue Final:"+IntensiveTweetValue+", valor promedio:"+prom);
             post.setPostIntensityValue(prom);
         }
+        //Pruebas para manejo de eventos para TimeLines...
+        System.out.println("Aqui");
+        try{
+            EventQueue queOnTimelineReady = EventQueues.lookup("timelineReady", EventQueues.APPLICATION, true);
+            queOnTimelineReady.subscribe(new EventListener() {
+                public void onEvent(Event evt)
+                {
+                    System.out.println("Esta en Clasificador-llego evento-1:"+post);
+                    EventQueue eq = EventQueues.lookup("timelineReadyResp",EventQueues.SESSION, true); //create a queue
+                    eq.publish(new Event("onTimelineReadyRes", null, post));
+                    System.out.println("Esta en Clasificador-llego evento-2");
+                }
+            });
+            EventQueue queOnTimelineReady1 = EventQueues.lookup("onTimelineReady", EventQueues.APPLICATION, true);
+            queOnTimelineReady1.subscribe(new EventListener() {
+                public void onEvent(Event evt)
+                {
+                    System.out.println("Esta en Clasificador-llego evento-J1:"+post);
+                    EventQueue eq = EventQueues.lookup("timelineReadyResp",EventQueues.SESSION, true); //create a queue
+                    eq.publish(new Event("onTimelineReadyRes", null, post));
+                    System.out.println("Esta en Clasificador-llego evento-2");
+                }
+            });
+            //Termina Pruebas para manejo de eventos para TimeLines...
+        }catch(Exception e)
+        {
+            
+        }
     }
 
+    /*
+     * Envía a publicar el mensaje para que lo tomen los timelines que esten escuchando
+     */
 
+ 
 
     /*
      *Función que barre todas las frases y las busca en el mensaje (PostData)
