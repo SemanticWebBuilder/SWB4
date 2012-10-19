@@ -4,7 +4,7 @@ package org.semanticwb.social.base;
    /**
    * Clase que contendra los streams que configurados para cada usuario 
    */
-public abstract class StreamBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable
+public abstract class StreamBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Activeable,org.semanticwb.model.Traceable
 {
    /**
    * Clase que engloba a las diferentes clases que representan cada una de las redes sociales.
@@ -21,7 +21,7 @@ public abstract class StreamBase extends org.semanticwb.model.SWBClass implement
    /**
    * Frase a monitorear en un determinado stream, cada stream tiene sus propias frasea a monitorear.
    */
-    public static final org.semanticwb.platform.SemanticProperty social_stream_phase=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#stream_phase");
+    public static final org.semanticwb.platform.SemanticProperty social_stream_phrase=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#stream_phrase");
    /**
    * Clase que comprende todos los tipos de Post de entrada (Povientes del Listener)que pueden ir siendo creados en la herramienta.
    */
@@ -409,7 +409,7 @@ public abstract class StreamBase extends org.semanticwb.model.SWBClass implement
 */
     public String getPhrase()
     {
-        return getSemanticObject().getProperty(social_stream_phase);
+        return getSemanticObject().getProperty(social_stream_phrase);
     }
 
 /**
@@ -418,7 +418,25 @@ public abstract class StreamBase extends org.semanticwb.model.SWBClass implement
 */
     public void setPhrase(String value)
     {
-        getSemanticObject().setProperty(social_stream_phase, value);
+        getSemanticObject().setProperty(social_stream_phrase, value);
+    }
+
+/**
+* Gets the Active property
+* @return boolean with the Active
+*/
+    public boolean isActive()
+    {
+        return getSemanticObject().getBooleanProperty(swb_active);
+    }
+
+/**
+* Sets the Active property
+* @param value long with the Active
+*/
+    public void setActive(boolean value)
+    {
+        getSemanticObject().setBooleanProperty(swb_active, value);
     }
    /**
    * Gets all the org.semanticwb.social.PostIn
