@@ -247,14 +247,4 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    @Override
-    public void doRequestAccess()
-    {
-
-    }
-
-    @Override
-    public void doRequestPermissions()
-    {
-    }
 }
