@@ -232,24 +232,24 @@ public abstract class DomDeviceBase extends org.semanticwb.domotic.model.DomItem
             return it;
         }
        /**
-       * Gets all org.semanticwb.domotic.model.DomDevice with a determined DomDevice
-       * @param value DomDevice of the type org.semanticwb.domotic.model.DomGroup
+       * Gets all org.semanticwb.domotic.model.DomDevice with a determined DomGroup
+       * @param value DomGroup of the type org.semanticwb.domotic.model.DomGroup
        * @param model Model of the org.semanticwb.domotic.model.DomDevice
        * @return Iterator with all the org.semanticwb.domotic.model.DomDevice
        */
 
-        public static java.util.Iterator<org.semanticwb.domotic.model.DomDevice> listDomDeviceByDomDevice(org.semanticwb.domotic.model.DomGroup value,org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.domotic.model.DomDevice> listDomDeviceByDomGroup(org.semanticwb.domotic.model.DomGroup value,org.semanticwb.model.SWBModel model)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.domotic.model.DomDevice> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb4d_hasGroup, value.getSemanticObject(),sclass));
             return it;
         }
        /**
-       * Gets all org.semanticwb.domotic.model.DomDevice with a determined DomDevice
-       * @param value DomDevice of the type org.semanticwb.domotic.model.DomGroup
+       * Gets all org.semanticwb.domotic.model.DomDevice with a determined DomGroup
+       * @param value DomGroup of the type org.semanticwb.domotic.model.DomGroup
        * @return Iterator with all the org.semanticwb.domotic.model.DomDevice
        */
 
-        public static java.util.Iterator<org.semanticwb.domotic.model.DomDevice> listDomDeviceByDomDevice(org.semanticwb.domotic.model.DomGroup value)
+        public static java.util.Iterator<org.semanticwb.domotic.model.DomDevice> listDomDeviceByDomGroup(org.semanticwb.domotic.model.DomGroup value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.domotic.model.DomDevice> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb4d_hasGroup,value.getSemanticObject(),sclass));
             return it;
@@ -708,17 +708,17 @@ public abstract class DomDeviceBase extends org.semanticwb.domotic.model.DomItem
    * @return A GenericIterator with all the org.semanticwb.domotic.model.DomGroup
    */
 
-    public org.semanticwb.model.GenericIterator<org.semanticwb.domotic.model.DomGroup> listDomDevices()
+    public org.semanticwb.model.GenericIterator<org.semanticwb.domotic.model.DomGroup> listDomGroups()
     {
         return new org.semanticwb.model.GenericIterator<org.semanticwb.domotic.model.DomGroup>(getSemanticObject().listObjectProperties(swb4d_hasGroup));
     }
 
    /**
-   * Gets true if has a DomDevice
+   * Gets true if has a DomGroup
    * @param value org.semanticwb.domotic.model.DomGroup to verify
    * @return true if the org.semanticwb.domotic.model.DomGroup exists, false otherwise
    */
-    public boolean hasDomDevice(org.semanticwb.domotic.model.DomGroup value)
+    public boolean hasDomGroup(org.semanticwb.domotic.model.DomGroup value)
     {
         boolean ret=false;
         if(value!=null)
@@ -728,37 +728,37 @@ public abstract class DomDeviceBase extends org.semanticwb.domotic.model.DomItem
         return ret;
     }
    /**
-   * Adds a DomDevice
+   * Adds a DomGroup
    * @param value org.semanticwb.domotic.model.DomGroup to add
    */
 
-    public void addDomDevice(org.semanticwb.domotic.model.DomGroup value)
+    public void addDomGroup(org.semanticwb.domotic.model.DomGroup value)
     {
         getSemanticObject().addObjectProperty(swb4d_hasGroup, value.getSemanticObject());
     }
    /**
-   * Removes all the DomDevice
+   * Removes all the DomGroup
    */
 
-    public void removeAllDomDevice()
+    public void removeAllDomGroup()
     {
         getSemanticObject().removeProperty(swb4d_hasGroup);
     }
    /**
-   * Removes a DomDevice
+   * Removes a DomGroup
    * @param value org.semanticwb.domotic.model.DomGroup to remove
    */
 
-    public void removeDomDevice(org.semanticwb.domotic.model.DomGroup value)
+    public void removeDomGroup(org.semanticwb.domotic.model.DomGroup value)
     {
         getSemanticObject().removeObjectProperty(swb4d_hasGroup,value.getSemanticObject());
     }
 
    /**
-   * Gets the DomDevice
+   * Gets the DomGroup
    * @return a org.semanticwb.domotic.model.DomGroup
    */
-    public org.semanticwb.domotic.model.DomGroup getDomDevice()
+    public org.semanticwb.domotic.model.DomGroup getDomGroup()
     {
          org.semanticwb.domotic.model.DomGroup ret=null;
          org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb4d_hasGroup);
