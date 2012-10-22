@@ -133,7 +133,6 @@ public class Connection extends Thread
 
                     DomDevice dev=findDomDevice(id, zn, server.getModel());
                     dev.setStatus(Integer.parseInt(cm),false);
-
                 }else if(cb.equals("ini"))
                 {
                     String serial = st.nextToken();

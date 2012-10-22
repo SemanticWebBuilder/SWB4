@@ -2,6 +2,7 @@ package org.semanticwb.domotic.model;
 
 import java.util.Date;
 import org.semanticwb.domotic.server.Connection;
+import org.semanticwb.domotic.server.WebSocketServlet;
 import org.semanticwb.model.SWBModel;
 
 
@@ -39,6 +40,7 @@ public class DomDevice extends org.semanticwb.domotic.model.base.DomDeviceBase
                 con.sendMessage("upd "+getDevId()+" "+getDevZone()+" "+dstat.getStatus()+"\n");
             }
         }
+        WebSocketServlet.broadcast(getShortURI()+" "+stat);
         
     }
 

@@ -5,94 +5,111 @@
 package org.semanticwb.domotic.server;
 
 import java.io.IOException;
-import java.io.PrintWriter;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
+import java.nio.ByteBuffer;
+import java.nio.CharBuffer;
+import java.util.Set;
+import java.util.StringTokenizer;
+import java.util.concurrent.CopyOnWriteArraySet;
+import java.util.concurrent.atomic.AtomicInteger;
+
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+
+import org.apache.catalina.websocket.MessageInbound;
+import org.apache.catalina.websocket.StreamInbound;
+import org.apache.catalina.websocket.WsOutbound;
+import org.semanticwb.SWBPlatform;
+import org.semanticwb.domotic.model.DomDevice;
+import org.semanticwb.domotic.model.base.DomDeviceBase;
+import org.semanticwb.platform.SemanticObject;
 
 /**
- *
- * @author javier.solis.g
+ * Example web socket servlet for chat.
  */
-public class WebSocketServlet extends HttpServlet
+public class WebSocketServlet extends org.apache.catalina.websocket.WebSocketServlet
 {
 
-    /**
-     * Processes requests for both HTTP
-     * <code>GET</code> and
-     * <code>POST</code> methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException
+    private static final long serialVersionUID = 1L;
+    private static final String GUEST_PREFIX = "Guest";
+    private static final AtomicInteger connectionIds = new AtomicInteger(0);
+    private static final Set<ChatMessageInbound> connections = new CopyOnWriteArraySet();
+
+    public static void broadcast(String message)
     {
-        response.setContentType("text/html;charset=UTF-8");
-        PrintWriter out = response.getWriter();
-        try
+        System.out.println("broadcast:" + message);
+        for (ChatMessageInbound connection : connections)
         {
-            /*
-             * TODO output your page here. You may use following sample code.
-             */
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet WebSocketServlet</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet WebSocketServlet at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
-        } finally
-        {            
-            out.close();
+            try
+            {
+                CharBuffer buffer = CharBuffer.wrap(message);
+                connection.getWsOutbound().writeTextMessage(buffer);
+            } catch (IOException ignore)
+            {
+                // Ignore
+            }
         }
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP
-     * <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException
+    protected StreamInbound createWebSocketInbound(String subProtocol,
+            HttpServletRequest request)
     {
-        processRequest(request, response);
+        return new ChatMessageInbound(connectionIds.incrementAndGet());
     }
 
-    /**
-     * Handles the HTTP
-     * <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException
+    private final class ChatMessageInbound extends MessageInbound
     {
-        processRequest(request, response);
-    }
 
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
-    @Override
-    public String getServletInfo()
-    {
-        return "Short description";
-    }// </editor-fold>
+        private final String nickname;
+
+        private ChatMessageInbound(int id)
+        {
+            this.nickname = GUEST_PREFIX + id;
+        }
+
+        @Override
+        protected void onOpen(WsOutbound outbound)
+        {
+            connections.add(this);
+            String message = String.format("* %s %s",nickname, "has joined.");
+            //broadcast(message);
+            System.out.println("onOpen:" + message);
+        }
+
+        @Override
+        protected void onClose(int status)
+        {
+            connections.remove(this);
+            String message = String.format("* %s %s",nickname, "has disconnected.");
+            //broadcast(message);
+            System.out.println("onClose:" + message);
+        }
+
+        @Override
+        protected void onBinaryMessage(ByteBuffer message) throws IOException
+        {
+            System.out.println("onBinaryMessage:" + message.toString());
+            throw new UnsupportedOperationException(
+                    "Binary message not supported.");
+        }
+
+        @Override
+        protected void onTextMessage(CharBuffer message) throws IOException
+        {
+            // Never trust the client
+            String filteredMessage = String.format("%s: %s",nickname, message.toString());
+            //broadcast(filteredMessage);
+            System.out.println("onTextMessage:" + filteredMessage);
+            
+            String txt=message.toString();
+            StringTokenizer st=new StringTokenizer(txt," ");
+            while (st.hasMoreTokens())
+            {
+                 String devid=st.nextToken();
+                 String val=st.nextToken();
+                 DomDevice dev=(DomDevice)SemanticObject.getSemanticObject(SemanticObject.shortToFullURI(devid)).createGenericInstance();
+                 dev.setStatus(Integer.parseInt(val));
+            }
+            
+        }
+    }
 }
