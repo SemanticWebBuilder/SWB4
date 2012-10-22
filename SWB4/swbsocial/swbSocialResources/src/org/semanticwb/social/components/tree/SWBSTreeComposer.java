@@ -21,6 +21,7 @@ import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.social.TreeNodePage;
 import java.net.URLEncoder;
+import java.util.Locale;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.model.Activeable;
 import org.semanticwb.model.DisplayObject;
@@ -44,7 +45,6 @@ import org.zkoss.zul.Menuitem;
 import org.zkoss.zul.Menupopup;
 import org.zkoss.zul.Messagebox;
 import org.zkoss.zk.ui.event.*;
-import org.zkoss.zul.Window;
 
 /*
  * Clase controladora del árbol de navegación
@@ -66,7 +66,14 @@ public final class SWBSTreeComposer extends GenericForwardComposer <Component> {
     User user=null;
     SWBParamRequest paramRequest=null;
     String ImgAdminPathBase=null;
-    
+    //Mensajes
+    private String msg_sureOfdelete;
+    private String msg_createNew;
+    private String msg_delete;
+    private String msg_activate;
+    private String msg_deactivate;
+
+
     /*
     * Metodo implementación de la clase padre, este metodo se ejecuta una vez cargado
     * el componente.
@@ -93,6 +100,12 @@ public final class SWBSTreeComposer extends GenericForwardComposer <Component> {
                     comp.getPage().getDesktop().getSession().setAttribute("elemenetTreeModel", elemenetTreeModel);
                 }
             }
+            //Mensajes
+            msg_sureOfdelete=SWBUtils.TEXT.getLocaleString("org.semanticwb.social.components.locales.genericCompMsgs", "msg_sureOfdelete",new Locale(user.getLanguage()));
+            msg_createNew=SWBUtils.TEXT.getLocaleString("org.semanticwb.social.components.locales.genericCompMsgs", "msg_createNew",new Locale(user.getLanguage()));
+            msg_delete=SWBUtils.TEXT.getLocaleString("org.semanticwb.social.components.locales.genericCompMsgs", "msg_delete",new Locale(user.getLanguage()));
+            msg_activate=SWBUtils.TEXT.getLocaleString("org.semanticwb.social.components.locales.genericCompMsgs", "msg_activate",new Locale(user.getLanguage()));
+            msg_deactivate=SWBUtils.TEXT.getLocaleString("org.semanticwb.social.components.locales.genericCompMsgs", "msg_deactivate",new Locale(user.getLanguage()));
         }catch(Exception e)
         {
             log.error(e);
@@ -145,7 +158,7 @@ public final class SWBSTreeComposer extends GenericForwardComposer <Component> {
                             treePopup.getChildren().clear();
                             if(isCategory(itemValue.getData())){ //Es una categoría
                                 Menuitem mItemNew=new Menuitem();
-                                mItemNew.setLabel("Crear nuevo");
+                                mItemNew.setLabel(msg_createNew);
                                 mItemNew.addEventListener(Events.ON_CLICK, new EventListener<Event>() {
                                 @Override
                                 public void onEvent(Event event) throws Exception {
@@ -203,7 +216,7 @@ public final class SWBSTreeComposer extends GenericForwardComposer <Component> {
                                 if(semObj.getSemanticClass().isSubClass(Childrenable.social_Childrenable))
                                 {
                                     Menuitem mItemNew=new Menuitem();
-                                    mItemNew.setLabel("Crear nuevo");
+                                    mItemNew.setLabel(msg_createNew);
                                     mItemNew.addEventListener(Events.ON_CLICK, new EventListener<Event>() {
                                     @Override
                                     public void onEvent(Event event) throws Exception {
@@ -225,12 +238,13 @@ public final class SWBSTreeComposer extends GenericForwardComposer <Component> {
 
                                 //Opción de eliminar
                                 Menuitem mItemRemove=new Menuitem();
-                                mItemRemove.setLabel("Eliminar");
+                                mItemRemove.setLabel(msg_delete);
                                 mItemRemove.addEventListener(Events.ON_CLICK, new EventListener<Event>() {
                                 @Override
                                 public void onEvent(Event event) throws Exception
                                 {
-                                    messageBox.show("Esta seguro de eliminar este elemento?", "deleteConfirm", Messagebox.YES|Messagebox.NO, Messagebox.QUESTION,
+                                    messageBox.show(msg_sureOfdelete, "deleteConfirm", Messagebox.YES|Messagebox.NO, Messagebox.QUESTION,
+                                    //messageBox.show("Esta seguro de eliminar este elemento?", "deleteConfirm", Messagebox.YES|Messagebox.NO, Messagebox.QUESTION,
                                      new EventListener() {
                                        public void onEvent(Event evt) {
                                          switch (((Integer)evt.getData()).intValue()) {
@@ -284,7 +298,7 @@ public final class SWBSTreeComposer extends GenericForwardComposer <Component> {
                                     if(!semObj.getBooleanProperty(Activeable.swb_active)) //Si esta desactivado el objeto semantico
                                     {
                                         Menuitem mItemActive=new Menuitem();
-                                        mItemActive.setLabel("Activar");
+                                        mItemActive.setLabel(msg_activate);
                                         mItemActive.addEventListener(Events.ON_CLICK, new EventListener<Event>() {
                                         @Override
                                         public void onEvent(Event event) throws Exception {
@@ -301,7 +315,7 @@ public final class SWBSTreeComposer extends GenericForwardComposer <Component> {
                                     }else //Si esta activo el objeto semantico
                                     {
                                         Menuitem mItemActive=new Menuitem();
-                                        mItemActive.setLabel("Desactivar");
+                                        mItemActive.setLabel(msg_deactivate);
                                         mItemActive.addEventListener(Events.ON_CLICK, new EventListener<Event>() {
                                         @Override
                                         public void onEvent(Event event) throws Exception {
