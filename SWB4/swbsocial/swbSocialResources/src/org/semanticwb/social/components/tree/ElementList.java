@@ -5,7 +5,6 @@
 
 package org.semanticwb.social.components.tree;
 
-import java.awt.ActiveEvent;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -51,7 +50,7 @@ import org.semanticwb.social.TreeNodePage;
         modelAdmin=paramRequest.getWebPage().getWebSite();
         ImgAdminPathBase="/work/models/"+modelAdmin.getId()+"/admin/img/";
         user=paramRequest.getUser();
-        root=new ElementTreeNode(new Element("Company Brands","",""),getSocialSites(), true);
+        root=new ElementTreeNode(new Element("Company Brands","",""),getSocialSites(), false);
     }
 
     /*
@@ -66,11 +65,9 @@ import org.semanticwb.social.TreeNodePage;
         while(itSocialSites.hasNext())
         {
             SocialSite socialSite=itSocialSites.next();
-            if(socialSite.isActive())
-            {
-                alist.add(socialSite);
-                cont++;
-            }
+            alist.add(socialSite);
+            cont++;
+            
         }
         ElementTreeNode[] elementTreeNode=new ElementTreeNode[cont];
         itSocialSites=alist.iterator();
@@ -78,7 +75,12 @@ import org.semanticwb.social.TreeNodePage;
         while(itSocialSites.hasNext())
         {
             SocialSite socialSite=itSocialSites.next();
-            elementTreeNode[cont2]=new ElementTreeNode(new Element(socialSite.getTitle(), socialSite.getURI(), ImgAdminPathBase+displayObj.getIconClass()),getTreeCategoryNodes(socialSite),true);
+            String sIconImg=displayObj.getIconClass();
+            if(!socialSite.isActive())
+            {
+                sIconImg="off_"+sIconImg;
+            }
+            elementTreeNode[cont2]=new ElementTreeNode(new Element(socialSite.getTitle(), socialSite.getURI(), ImgAdminPathBase+sIconImg),getTreeCategoryNodes(socialSite),false);
             cont2++;
         }
         return elementTreeNode;
@@ -113,7 +115,7 @@ import org.semanticwb.social.TreeNodePage;
         {
             TreeNodePage treeNode=itTreeNodes.next();
             String iconImgPath=SWBPortal.getWebWorkPath()+treeNode.getWorkPath()+"/"+treeNode.social_wpImg.getName()+"_"+treeNode.getId()+"_"+treeNode.getWpImg();
-            elementTreeNode[cont2]=new ElementTreeNode(new Element(treeNode.getTitle(), treeNode.getId(), treeNode.getZulResourcePath(), iconImgPath, null, model.getId()),getTreeNodeElements(treeNode.getClassUri(), model, treeNode.getId()), true);
+            elementTreeNode[cont2]=new ElementTreeNode(new Element(treeNode.getTitle(), treeNode.getId(), treeNode.getZulResourcePath(), iconImgPath, null, model.getId()),getTreeNodeElements(treeNode.getClassUri(), model, treeNode.getId()), false);
             cont2++;
         }
         return elementTreeNode;
@@ -152,7 +154,7 @@ import org.semanticwb.social.TreeNodePage;
                 //Si no tiene padre, se agrega al principal
                 if(child.getParentObj()==null)
                 {
-                    alist.add(new ElementTreeNode(new Element(genObj.getSemanticObject().getProperty(Descriptiveable.swb_title), genObj.getURI(), null, ImgAdminPathBase+sIconImg, categoryID, model.getId()), getTreeNodeChildrenElements(genObj, model, categoryID), true));
+                    alist.add(new ElementTreeNode(new Element(genObj.getSemanticObject().getProperty(Descriptiveable.swb_title), genObj.getURI(), null, ImgAdminPathBase+sIconImg, categoryID, model.getId()), getTreeNodeChildrenElements(genObj, model, categoryID), false));
                     cont++;
                 }
             }else
@@ -201,7 +203,7 @@ import org.semanticwb.social.TreeNodePage;
                 {
                     sIconImg="off_"+sIconImg;
                 }
-                elementTreeNode[cont]=new ElementTreeNode(new Element(childGenObj.getSemanticObject().getProperty(Descriptiveable.swb_title), childGenObj.getURI(), null, ImgAdminPathBase+sIconImg, categoryID, model.getId()),getTreeNodeChildrenElements(childGenObj, model, categoryID), true);
+                elementTreeNode[cont]=new ElementTreeNode(new Element(childGenObj.getSemanticObject().getProperty(Descriptiveable.swb_title), childGenObj.getURI(), null, ImgAdminPathBase+sIconImg, categoryID, model.getId()),getTreeNodeChildrenElements(childGenObj, model, categoryID), false);
                 cont++;
             }
             return elementTreeNode;

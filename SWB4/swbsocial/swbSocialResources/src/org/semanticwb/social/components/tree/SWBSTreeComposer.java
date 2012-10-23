@@ -32,10 +32,7 @@ import org.semanticwb.social.utils.SWBSocialResourceUtils;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.util.GenericForwardComposer;
-import org.zkoss.zul.Hlayout;
-import org.zkoss.zul.Image;
 import org.zkoss.zul.Include;
-import org.zkoss.zul.Label;
 import org.zkoss.zul.Tree;
 import org.zkoss.zul.Treecell;
 import org.zkoss.zul.Treeitem;
@@ -45,6 +42,9 @@ import org.zkoss.zul.Menuitem;
 import org.zkoss.zul.Menupopup;
 import org.zkoss.zul.Messagebox;
 import org.zkoss.zk.ui.event.*;
+import org.zkoss.zul.DefaultTreeNode;
+import org.zkoss.zul.Window;
+import org.zkoss.zul.event.TreeDataEvent;
 
 /*
  * Clase controladora del árbol de navegación
@@ -72,6 +72,7 @@ public final class SWBSTreeComposer extends GenericForwardComposer <Component> {
     private String msg_delete;
     private String msg_activate;
     private String msg_deactivate;
+    Window swbTreeWindow;
 
 
     /*
@@ -87,6 +88,8 @@ public final class SWBSTreeComposer extends GenericForwardComposer <Component> {
             if(paramRequest!=null)
             {
                 //this.getPage().getDesktop().setAttribute("paramRequest", paramRequest);
+                //Label label=(Label)page.getDesktop().getComponentByUuid("msgLabel");
+
                 wsiteAdm=paramRequest.getWebPage().getWebSite();
                 if(wsiteAdm!=null)
                 {
@@ -97,7 +100,11 @@ public final class SWBSTreeComposer extends GenericForwardComposer <Component> {
                     tree.setItemRenderer(new ElementTreeRenderer());
                     tree.setZclass("z-dottree");    //Estilo del icono de los nodos abiertos y cerrados"[+]...[-]"
                     tree.setVflex(true);
+
+                    //Guardo el modelo y el root node en la session, TODO: Ver si solo guardo el modelo y saco el root node del mismo modelo.
                     comp.getPage().getDesktop().getSession().setAttribute("elemenetTreeModel", elemenetTreeModel);
+                    ElementTreeNode rootTreeNode=(ElementTreeNode)elemenetTreeModel._root;
+                    comp.getPage().getDesktop().getSession().setAttribute("rootTreeNode", rootTreeNode);
                 }
             }
             //Mensajes
@@ -140,13 +147,15 @@ public final class SWBSTreeComposer extends GenericForwardComposer <Component> {
                 treeItem.setOpen(ctn.isOpen());
 
                 {
-                    Hlayout hl = new Hlayout();
+                    //Hlayout hl = new Hlayout();
                     //hl.appendChild(new Image("/work/models/"+wsiteAdm.getId()+"/admin/img/" + element.getIconElement()));
-                    hl.appendChild(new Image(element.getIconElement()));
-                    hl.appendChild(new Label(element.getName()));
-                    hl.setSclass("h-inline-block");
+                    //hl.appendChild(new Image(element.getIconElement()));
+                    //hl.appendChild(new Label(element.getName()));
+                    //hl.setSclass("h-inline-block");
                     Treecell treeCell = new Treecell();
-                    treeCell.appendChild(hl);
+                    treeCell.setImage(element.getIconElement());
+                    treeCell.setLabel(element.getName());
+                    //treeCell.appendChild(hl);
                     dataRow.setDraggable("true");
                     dataRow.appendChild(treeCell);
                     //Manejo de click derecho en los elementos del árbol
