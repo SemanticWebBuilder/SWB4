@@ -37,6 +37,9 @@ public class GenericZulTreeUpdate extends GenericForwardComposer
         {
             EventQueue<Event> eq = EventQueues.lookup("removeNodo2Tree", EventQueues.SESSION, true);
             eq.publish(new Event("onRemoveNode", null, treeItem));
+        }else if(action.equalsIgnoreCase("updateTree")){
+             EventQueue<Event> eq = EventQueues.lookup("updateTree", EventQueues.SESSION, true);
+             eq.publish(new Event("onUpdateTree", null, treeItem));
         }
     }
 }

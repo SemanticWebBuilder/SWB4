@@ -11,15 +11,22 @@ import java.util.Map;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 import org.semanticwb.Logger;
+import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Descriptiveable;
 import org.semanticwb.model.DisplayObject;
 import org.semanticwb.model.SWBClass;
+import org.semanticwb.model.SWBModel;
+import org.semanticwb.model.User;
+import org.semanticwb.model.WebPage;
+import org.semanticwb.model.WebSite;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.lib.SWBResponse;
 import org.semanticwb.social.Childrenable;
 import org.semanticwb.social.SocialAdmin;
+import org.semanticwb.social.SocialSite;
+import org.semanticwb.social.TreeNodePage;
 import org.semanticwb.social.components.tree.AdvancedTreeModel;
 import org.semanticwb.social.components.tree.ElementTreeNode;
 import org.semanticwb.social.components.tree.Element;
@@ -206,9 +213,75 @@ public class SWBSocialResourceUtils {
         }
 
         /*
+         * Metodo que crea el nodo de la nueva marca y la pasa al archivo zul cnf_GenericZulTreeUpdate, para que este levante un evento y
+         * sea dicho evento manejado en el indexAdm.zul y este actualice el árbol, ya que no se puede actualizar sin que sea en un listener (Evento)
+         */
+        public static void createNewBrandNode(HttpServletRequest request, SWBParamRequest paramRequest, WebSite newSite)
+        {
+            try
+            {
+                WebSite adminWebSite=paramRequest.getWebPage().getWebSite();
+                User user=paramRequest.getUser();
+
+                DisplayObject displayObj=(DisplayObject)SocialSite.sclass.getDisplayObject().createGenericInstance();
+                String sIconImg="off_"+displayObj.getIconClass();
+                //rootTreeNode.insert(new ElementTreeNode(new Element(newSite.getTitle(), newSite.getURI(), "/work/models/"+adminWebSite.getId()+"/admin/img/"+sIconImg),getTreeCategoryNodes(newSite, adminWebSite, user),true), rootTreeNode.getChildCount());
+                ElementTreeNode newBrandNode=new ElementTreeNode(new Element(newSite.getTitle(), newSite.getURI(), "/work/models/"+adminWebSite.getId()+"/admin/img/"+sIconImg),getTreeCategoryNodes(newSite, adminWebSite, user),true);
+                request.setAttribute("action", "updateTree");
+                request.setAttribute("treeItem", newBrandNode);
+                RequestDispatcher dispatcher = request.getRequestDispatcher("/work/models/"+adminWebSite.getId()+"/admin/zul/cnf_GenericZulTreeUpdate.zul");
+                dispatcher.include(request, new SWBResponse());
+            }catch(Exception e)
+            {
+                log.debug(e);
+            }
+        }
+
+        /*
+         * Metodo que sirve para crear los nodos de tipo categorías a un nuevo nodo de tipo Marca.
+         */
+        private static ElementTreeNode[] getTreeCategoryNodes(SWBModel model, WebSite adminWebSite, User user)
+        {
+            try
+            {
+                ArrayList<TreeNodePage> alist=new ArrayList();
+                WebSite adminWSite=WebSite.ClassMgr.getWebSite(adminWebSite.getId());
+                WebPage treePageHome=adminWSite.getWebPage("TreeCategoryNodes");
+                int cont=0;
+                Iterator <WebPage> itChilds=treePageHome.listVisibleChilds(user.getLanguage());
+                while(itChilds.hasNext())
+                {
+                    WebPage page=itChilds.next();
+                    if(page instanceof TreeNodePage)
+                    {
+                        TreeNodePage treeNodePage=(TreeNodePage)page;
+                        alist.add(treeNodePage);
+                        cont++;
+                    }
+                }
+                ElementTreeNode[] elementTreeNode=new ElementTreeNode[cont];
+                Iterator<TreeNodePage> itTreeNodes=alist.iterator();
+                int cont2=0;
+                while(itTreeNodes.hasNext())
+                {
+                    TreeNodePage treeNode=itTreeNodes.next();
+                    String iconImgPath=SWBPortal.getWebWorkPath()+treeNode.getWorkPath()+"/"+treeNode.social_wpImg.getName()+"_"+treeNode.getId()+"_"+treeNode.getWpImg();
+                    elementTreeNode[cont2]=new ElementTreeNode(new Element(treeNode.getTitle(), treeNode.getId(), treeNode.getZulResourcePath(), iconImgPath, null, model.getId()));
+                    cont2++;
+                }
+                return elementTreeNode;
+            }catch(Exception e)
+            {
+                log.error(e);
+            }
+            return new ElementTreeNode[0];
+        }
+
+      
+        /*
          * Actualiza el árbol, este metodo se debe llamar desde un zul o un controlador de zul.
          */
-        public static void updateTree(Map<String, Object> requestScope)
+        public static void removeNodeFromTree(Map<String, Object> requestScope)
         {
             try
             {

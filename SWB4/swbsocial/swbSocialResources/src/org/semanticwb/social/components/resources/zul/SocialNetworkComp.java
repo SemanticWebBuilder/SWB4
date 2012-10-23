@@ -74,7 +74,7 @@ public class SocialNetworkComp extends GenericForwardComposer {
             sendButton.setLabel("Actualizar");
         }else if(action.equals(SWBSocialResourceUtils.ACTION_REMOVE))
         {
-            SWBSocialResourceUtils.Components.updateTree(requestScope);
+            SWBSocialResourceUtils.Components.removeNodeFromTree(requestScope);
         }
 
     }
