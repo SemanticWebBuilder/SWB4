@@ -306,6 +306,16 @@ public class SWBSocialResourceUtils {
                 log.debug(e);
             }
         }
+
+        /*
+         * Envía mensajes a la barra de estatus
+         */
+        public static void setStatusMessage(String message)
+        {
+            EventQueue<Event> eq = EventQueues.lookup("updateMsgWin", EventQueues.SESSION, true);
+            eq.publish(new Event("onUpdateMsgWin", null, message));
+        }
+
     }
 
     public static class Semantic

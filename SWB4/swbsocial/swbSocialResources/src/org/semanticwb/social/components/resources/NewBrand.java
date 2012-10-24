@@ -32,7 +32,6 @@ import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.api.SWBResourceURL;
 import org.semanticwb.repository.Workspace;
 import org.semanticwb.social.utils.SWBSocialResourceUtils;
-import org.zkoss.zk.ui.event.*;
 
 /**
  *
@@ -776,8 +775,8 @@ public class NewBrand extends GenericResource {
                     //Tree tree=(Tree)request.getSession().getAttribute("tree");
                     //System.out.println(tree);
                     //tree.setModel(tree.getModel());
+                    //Refrescar nodo del árbol...
                     SWBSocialResourceUtils.Components.createNewBrandNode(request, paramRequest, site);
-                    
                 }catch(Exception e)
                 {
                     site.abort();
