@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<?page style="width:100%;height:100%"?>
 <?script content="jq.IE6_ALPHAFIX='.png';"?>
 <borderlayout id="main" height="100%">
     <!--Inicia parte superior de pantalla de admin-->
@@ -12,7 +13,7 @@
              <!--Inicia área de Menú Superior-->
             <center id="menu" border="normal">
                 <window height="100%">
-                    <style src="/work/models/swbsocial/admin/css/menuStyle.css.dsp" />
+                    <style src="/work/models/swbsocial/admin/css/menuStyle.css" />
                     <menubar id="mainMenu" apply="org.semanticwb.social.components.SWBSTopMenuComposer" height="100%" />
                 </window>
             </center>
@@ -24,17 +25,25 @@
         <borderlayout>
             <!--Inicia árbol de navegación-->
             <west id="" title=" " maxsize="600" size="300px" flex="true" collapsible="true" splittable="true">
-                <vbox spacing="0" width="100%" height="50%,100">
+                <!--vbox spacing="0" width="100%" height="50%,100"-->
                     <window id="swbTreeWindow" apply="org.semanticwb.social.components.tree.SWBSTreeComposer">
                         <zscript>
                             <![CDATA[
                                 import org.zkoss.zk.ui.event.*;
+                                import org.zkoss.zul.event.TreeDataEvent;
                                 import org.semanticwb.social.utils.TreeNodeRefresh;
                                 import org.semanticwb.social.components.tree.ElementTreeNode;
                                 import org.semanticwb.social.components.tree.AdvancedTreeModel;
                                 import org.semanticwb.model.SWBClass;
                                 import org.semanticwb.model.SWBModel;
+                                import java.util.Locale;
+                                import org.semanticwb.SWBUtils;
                                 import org.semanticwb.social.utils.SWBSocialResourceUtils;
+                                import org.semanticwb.portal.api.SWBParamRequest;
+                                import org.semanticwb.model.User;
+
+                                SWBParamRequest paramRequest=(SWBParamRequest)requestScope.get("paramRequest");
+                                User user=paramRequest.getUser();
                                 EventQueue queOnCreateNode = EventQueues.lookup("insertNodo2Tree", EventQueues.SESSION, true);
                                 queOnCreateNode.subscribe(new EventListener() {
                                     public void onEvent(Event evt) {
@@ -65,27 +74,29 @@
                                 queOnUpdateMsgWin.subscribe(new EventListener() {
                                     public void onEvent(Event evt) {
                                         String sMsg=(String)evt.getData();
-                                        System.out.println("sMsg:"+sMsg);
-                                        msgLabel.value=sMsg;
-                                        //alert("Holas Mundos!!!");
-                                        openWindow();
-                                        //jq($msgWindow).hide().slideDown(1000);
-                                        //jq(this.$f('msgWindow')).hide().slideDown(1000);
+                                        //Messagebox.show(sMsg, "Information",  Messagebox.OK, Messagebox.INFORMATION);
+                                        Label label=(Label)Path.getComponent("/msgWindow/msgLabel");
+                                        label.setStyle("color:green;font-size:14pt");
+                                        label.setValue(sMsg);
+                                        Clients.evalJavaScript("jq('$msgWindow').hide().slideDown(1000)");
+                                        Clients.evalJavaScript("jq('$msgWindow').show().slideUp(1500)");
+                                    }
+                                 });
+                                //Con el siguiente eventListener se crea una nueva marca al árbol
+                                EventQueue queOnUpdateTree = EventQueues.lookup("updateTree", EventQueues.SESSION, true);
+                                queOnUpdateTree.subscribe(new EventListener() {
+                                    public void onEvent(Event evt) {
+                                        ElementTreeNode rootTreeNode=(ElementTreeNode)page.getDesktop().getSession().getAttribute("rootTreeNode");
+                                        ElementTreeNode treeItem=(ElementTreeNode)evt.getData();
+                                        rootTreeNode.insert(treeItem, rootTreeNode.getChildCount());
+                                        String msg_brandCreated=SWBUtils.TEXT.getLocaleString("org.semanticwb.social.components.locales.genericCompMsgs", "msg_brandCreated",new Locale(user.getLanguage()));
+                                        SWBSocialResourceUtils.Components.setStatusMessage(msg_brandCreated+":"+treeItem.getData().getName());
                                     }
                                  });
                             ]]>
                         </zscript>
-                        <script type="text/javascript">
-                           <![CDATA[
-                                function openWindow()
-                                {
-                                    jq(this.$f('msgWindow')).hide().slideDown(1000);
-                                }
-                           ]]>
-                        </script>
-
-
-                        <tree id="tree" width="300px" rows="25">
+                        
+                        <tree id="tree" sizedByContent="true" vflex="true">
                             <treecols>
                                 <treecol label="SWBSocial" />
                             </treecols>
@@ -98,24 +109,18 @@
                         </style>
                         <menupopup id="treePopup"/>
                     </window>
-                </vbox>
+                <!--/vbox-->
             </west>
             <!--termina árbol de navegación-->
             <!--Ventana de mensajes-->
             <!--Inicia área de trabajo (Contenido) -->
             <center id="wrkSpcRoot" border="normal">
-               <borderlayout>
-                   <north>
-                       <window id="msgWindow" width="100%">
-                           <vbox id="msgVbox">
-                                <label id="msgLabel"/>
-                           </vbox>
-                       </window>
-                   </north>
-                   <center id="wrkSpc">
-                        <include id="content" mode="defer" progressing="true"/>
-                   </center>
-              </borderlayout>
+               <div>
+                   <window id="msgWindow" visible="false" border="none">
+                       <label id="msgLabel" />
+                   </window>
+                   <include id="content" mode="defer" progressing="true" vflex="true" hflex="true"/>
+              </div>
             </center>
             <!--Termina área de trabajo (Contenido) -->
             <!--Comienza área de widgets-->
