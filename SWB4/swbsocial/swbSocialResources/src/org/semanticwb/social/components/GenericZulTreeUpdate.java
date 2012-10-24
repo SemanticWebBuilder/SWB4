@@ -5,11 +5,9 @@
 
 package org.semanticwb.social.components;
 
-
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.social.components.resources.SocialZulResource;
-import org.semanticwb.social.components.tree.AdvancedTreeModel;
 import org.semanticwb.social.components.tree.ElementTreeNode;
 import org.semanticwb.social.utils.SWBSocialResourceUtils;
 import org.zkoss.zk.ui.util.GenericForwardComposer;
@@ -31,6 +29,7 @@ public class GenericZulTreeUpdate extends GenericForwardComposer
     @Override
     public void doAfterCompose(Component comp) throws Exception {
         super.doAfterCompose(comp);
+
         treeItem=(ElementTreeNode)requestScope.get("treeItem");
         action=(String)requestScope.get("action");
         if(action.equalsIgnoreCase(SWBSocialResourceUtils.ACTION_REMOVE))
