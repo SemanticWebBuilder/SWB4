@@ -43,8 +43,8 @@ import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.queryParser.QueryParser;
-import org.apache.lucene.search.BooleanClause.Occur;
 import org.apache.lucene.search.*;
+import org.apache.lucene.search.BooleanClause.Occur;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.Version;
 import org.semanticwb.Logger;
@@ -531,8 +531,15 @@ public class SWBLuceneIndexer extends SWBIndexer
 //                    ret.add(new SearchDocument(doc.get(ATT_URI), doc.get(ATT_SUMMARY), hits.score(i))); //Es correcto este score?
 //                }
                 ScoreDoc [] topDocs = hits.scoreDocs;
-                float maxScore = topDocs[0].score;
-                float minScore = topDocs[topDocs.length - 1].score;
+                float maxScore = 0;
+                float minScore = 0;
+                if (topDocs != null && topDocs.length > 0) {
+                    maxScore = topDocs[0].score;
+                    if (topDocs.length > 1) {
+                        minScore = topDocs[topDocs.length - 1].score;
+                    }
+                }
+                
                 for (int i = 0; i < topDocs.length; i++) {
                     Document doc = searcher.doc(topDocs[i].doc);
                     float normScore = (topDocs[i].score - minScore)/(maxScore - minScore);
