@@ -8,8 +8,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
-import java.util.StringTokenizer;
 import java.util.Vector;
 import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
@@ -24,11 +22,7 @@ import org.semanticwb.model.User;
 import org.semanticwb.model.UserRepository;
 import org.semanticwb.model.WebPage;
 import org.semanticwb.model.WebSite;
-import org.semanticwb.platform.SemanticClass;
-import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticOntology;
-import org.semanticwb.platform.SemanticProperty;
-import org.semanticwb.platform.SemanticVocabulary;
 import org.semanticwb.portal.api.GenericResource;
 import org.semanticwb.portal.api.SWBActionResponse;
 import org.semanticwb.portal.api.SWBParamRequest;
@@ -36,14 +30,8 @@ import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.api.SWBResourceURL;
 import org.semanticwb.domotic.model.DomiticSite;
 import org.semanticwb.model.Calendar;
-import org.semanticwb.model.Country;
-import org.semanticwb.model.Device;
-import org.semanticwb.model.DisplayProperty;
-import org.semanticwb.model.Language;
-import org.semanticwb.model.Role;
-import org.semanticwb.model.Rule;
+//import org.semanticwb.model.Rule;
 import org.semanticwb.model.SWBRuleMgr;
-import org.semanticwb.model.UserGroup;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -108,7 +96,7 @@ public class SWBARuleDomotic extends GenericResource {
         String suri = request.getParameter("suri");
         log.debug("getApplet: " + suri);
         SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
-        Rule rRule = (Rule) ont.getGenericObject(suri);
+        DomRule rRule = (DomRule) ont.getGenericObject(suri);
         WebPage tp = paramRequest.getWebPage();
 
         ret.append("\n<div class=\"applet\">");
@@ -120,7 +108,7 @@ public class SWBARuleDomotic extends GenericResource {
         urlapp.setParameter("suri", suri);
         ret.append("\n<param name=\"jsess\" value=\"" + request.getSession().getId() + "\">");
         ret.append("\n<param name =\"cgipath\" value=\"" + urlapp + "\">");
-        ret.append("\n<param name =\"tm\" value=\"" + rRule.getWebSite().getId() + "\">");
+        ret.append("\n<param name =\"tm\" value=\"" + rRule.getDomiticSite().getId() + "\">");
         if (null != request.getParameter("suri")) {
             ret.append("\n<param name =\"id\" value=\"" + rRule.getId() + "\">");
             ret.append("\n<param name =\"suri\" value=\"" + rRule.getId() + "\">");
@@ -173,7 +161,7 @@ public class SWBARuleDomotic extends GenericResource {
                         tmsid = request.getParameter("tmsid");
                     }
                     DomiticSite ptm = DomiticSite.ClassMgr.getDomiticSite(tmsid);
-                    Rule rRule = ptm.getRule(id);
+                    DomRule rRule = ptm.getDomRule(id);
                     rRule.setTitle(request.getParameter("title"));
                     rRule.setDescription(request.getParameter("description"));
                     rRule.setModifiedBy(user);
@@ -204,7 +192,7 @@ public class SWBARuleDomotic extends GenericResource {
                             WebSite ptm = SWBContext.getWebSite(tmsid);
                         }
                         DomiticSite ptm = DomiticSite.ClassMgr.getDomiticSite(tmsid);
-                        Rule newRule = ptm.createRule();
+                        DomRule newRule = ptm.createDomRule();
                         newRule.setTitle(request.getParameter("title"));
                         newRule.setDescription(request.getParameter("description"));
                         newRule.setXml(SWBUtils.XML.domToXml(newRuleDoc));
@@ -227,7 +215,7 @@ public class SWBARuleDomotic extends GenericResource {
                         }
                         response.setMode(response.Mode_EDIT);
                     } catch (Exception ei) {
-                        log.error(response.getLocaleString("msgErrorAddNewRule") + ". WBARules.processAction", ei);
+                        log.error(response.getLocaleString("msgErrorAddNewRule") + ". SWBARuleDomotic.processAction", ei);
                     }
                 }
             }
@@ -272,8 +260,8 @@ public class SWBARuleDomotic extends GenericResource {
         response.setHeader("Pragma", "no-cache");
         SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
         String rrid = request.getParameter("suri");
-        Rule rRule = (Rule) ont.getGenericObject(rrid);
-        String tmsid = rRule.getWebSite().getId();
+        DomRule rRule = (DomRule) ont.getGenericObject(rrid);
+        String tmsid = rRule.getDomiticSite().getId();
         if (tmsid == null) {
             tmsid = paramRequest.getWebPage().getWebSiteId();
         }
@@ -337,7 +325,7 @@ public class SWBARuleDomotic extends GenericResource {
                 ret.append("\n</div>");
             }
         } catch (Exception e) {
-            log.error(paramRequest.getLocaleString("msgErrorEditRule") + ", SWBARuleProcess.doEdit", e);
+            log.error(paramRequest.getLocaleString("msgErrorEditRule") + ", SWBADomRule.doEdit", e);
         }
         response.getWriter().print(ret.toString());
     }
@@ -356,7 +344,7 @@ public class SWBARuleDomotic extends GenericResource {
         SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
         String rrid = request.getParameter("suri");
         DomRule rRule = (DomRule) ont.getGenericObject(rrid);
-        String tmsid = null; // rRule.getWebSite().getId();
+        String tmsid = rRule.getDomiticSite().getId();
         if (tmsid == null) {
             tmsid = paramRequest.getWebPage().getWebSiteId();
         }
@@ -502,7 +490,7 @@ public class SWBARuleDomotic extends GenericResource {
 
 
         } catch (Exception e) {
-            log.error(paramRequest.getLocaleString("msgErrorLoadingUserAttributeList") + ". SWBARules.loadComboAttr", e);
+            log.error(paramRequest.getLocaleString("msgErrorLoadingUserAttributeList") + ". SWBARuleDomotic.loadComboAttr", e);
         }
 
         // HABILITAR PARA DEBUG
@@ -737,12 +725,12 @@ public class SWBARuleDomotic extends GenericResource {
                 log.error("Error while trying to get XML user attributes. ", e);
             }
         } else if (tmpcmd.equals("getXMLRule")) {
-            Rule rRule = null;
-            rRule = (Rule) ont.getGenericObject(request.getParameter("suri"));
+            DomRule rRule = null;
+            rRule = (DomRule) ont.getGenericObject(request.getParameter("suri"));
             return SWBUtils.XML.xmlToDom(rRule.getXml());
         } else if (tmpcmd.equals("updateRule")) {
             Document dom = null;
-            Rule rRule = (Rule) ont.getGenericObject(request.getParameter("suri"));
+            DomRule rRule = (DomRule) ont.getGenericObject(request.getParameter("suri"));
             String strXMLRule = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
             String strTmp = SWBUtils.XML.domToXml(src);
             if (strTmp.indexOf("<rule>") != -1) {
