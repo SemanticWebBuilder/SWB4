@@ -6,7 +6,7 @@ public abstract class DomActionBase extends org.semanticwb.model.SWBClass implem
     public static final org.semanticwb.platform.SemanticClass swb4d_DomRule=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/domotic#DomRule");
     public static final org.semanticwb.platform.SemanticProperty swb4d_hasDomRule=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/domotic#hasDomRule");
     public static final org.semanticwb.platform.SemanticClass swb4d_DomEvent=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/domotic#DomEvent");
-    public static final org.semanticwb.platform.SemanticProperty swb4d_domEvent=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/domotic#domEvent");
+    public static final org.semanticwb.platform.SemanticProperty swb4d_domEventInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/domotic#domEventInv");
     public static final org.semanticwb.platform.SemanticClass swb4d_DomAction=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/domotic#DomAction");
    /**
    * The semantic class that represents the currentObject
@@ -114,7 +114,7 @@ public abstract class DomActionBase extends org.semanticwb.model.SWBClass implem
 
         public static java.util.Iterator<org.semanticwb.domotic.model.DomAction> listDomActionByDomEvent(org.semanticwb.domotic.model.DomEvent value,org.semanticwb.model.SWBModel model)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.domotic.model.DomAction> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb4d_domEvent, value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.domotic.model.DomAction> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb4d_domEventInv, value.getSemanticObject(),sclass));
             return it;
         }
        /**
@@ -125,7 +125,7 @@ public abstract class DomActionBase extends org.semanticwb.model.SWBClass implem
 
         public static java.util.Iterator<org.semanticwb.domotic.model.DomAction> listDomActionByDomEvent(org.semanticwb.domotic.model.DomEvent value)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.domotic.model.DomAction> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb4d_domEvent,value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.domotic.model.DomAction> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb4d_domEventInv,value.getSemanticObject(),sclass));
             return it;
         }
     }
@@ -283,7 +283,7 @@ public abstract class DomActionBase extends org.semanticwb.model.SWBClass implem
     {
         if(value!=null)
         {
-            getSemanticObject().setObjectProperty(swb4d_domEvent, value.getSemanticObject());
+            getSemanticObject().setObjectProperty(swb4d_domEventInv, value.getSemanticObject());
         }else
         {
             removeDomEvent();
@@ -295,7 +295,7 @@ public abstract class DomActionBase extends org.semanticwb.model.SWBClass implem
 
     public void removeDomEvent()
     {
-        getSemanticObject().removeProperty(swb4d_domEvent);
+        getSemanticObject().removeProperty(swb4d_domEventInv);
     }
 
    /**
@@ -305,7 +305,7 @@ public abstract class DomActionBase extends org.semanticwb.model.SWBClass implem
     public org.semanticwb.domotic.model.DomEvent getDomEvent()
     {
          org.semanticwb.domotic.model.DomEvent ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb4d_domEvent);
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb4d_domEventInv);
          if(obj!=null)
          {
              ret=(org.semanticwb.domotic.model.DomEvent)obj.createGenericInstance();

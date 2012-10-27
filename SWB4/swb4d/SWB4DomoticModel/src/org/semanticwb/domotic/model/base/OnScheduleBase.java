@@ -116,7 +116,7 @@ public abstract class OnScheduleBase extends org.semanticwb.domotic.model.DomEve
 
         public static java.util.Iterator<org.semanticwb.domotic.model.OnSchedule> listOnScheduleByDomAction(org.semanticwb.domotic.model.DomAction value,org.semanticwb.model.SWBModel model)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.domotic.model.OnSchedule> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb4d_hasDomActionInv, value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.domotic.model.OnSchedule> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb4d_hasDomAction, value.getSemanticObject(),sclass));
             return it;
         }
        /**
@@ -127,7 +127,7 @@ public abstract class OnScheduleBase extends org.semanticwb.domotic.model.DomEve
 
         public static java.util.Iterator<org.semanticwb.domotic.model.OnSchedule> listOnScheduleByDomAction(org.semanticwb.domotic.model.DomAction value)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.domotic.model.OnSchedule> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb4d_hasDomActionInv,value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.domotic.model.OnSchedule> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb4d_hasDomAction,value.getSemanticObject(),sclass));
             return it;
         }
        /**

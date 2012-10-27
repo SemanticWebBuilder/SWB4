@@ -3,9 +3,9 @@ package org.semanticwb.domotic.model.base;
 
 public abstract class DomEventBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Descriptiveable
 {
-    public static final org.semanticwb.platform.SemanticClass swb4d_DomAction=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/domotic#DomAction");
-    public static final org.semanticwb.platform.SemanticProperty swb4d_hasDomActionInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/domotic#hasDomActionInv");
     public static final org.semanticwb.platform.SemanticProperty swb4d_onceEvent=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/domotic#onceEvent");
+    public static final org.semanticwb.platform.SemanticClass swb4d_DomAction=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/domotic#DomAction");
+    public static final org.semanticwb.platform.SemanticProperty swb4d_hasDomAction=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/domotic#hasDomAction");
     public static final org.semanticwb.platform.SemanticClass swb4d_DomContext=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/domotic#DomContext");
     public static final org.semanticwb.platform.SemanticProperty swb4d_domEventContext=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/domotic#domEventContext");
     public static final org.semanticwb.platform.SemanticClass swb4d_DomEvent=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/domotic#DomEvent");
@@ -92,7 +92,7 @@ public abstract class DomEventBase extends org.semanticwb.model.SWBClass impleme
 
         public static java.util.Iterator<org.semanticwb.domotic.model.DomEvent> listDomEventByDomAction(org.semanticwb.domotic.model.DomAction value,org.semanticwb.model.SWBModel model)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.domotic.model.DomEvent> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb4d_hasDomActionInv, value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.domotic.model.DomEvent> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb4d_hasDomAction, value.getSemanticObject(),sclass));
             return it;
         }
        /**
@@ -103,7 +103,7 @@ public abstract class DomEventBase extends org.semanticwb.model.SWBClass impleme
 
         public static java.util.Iterator<org.semanticwb.domotic.model.DomEvent> listDomEventByDomAction(org.semanticwb.domotic.model.DomAction value)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.domotic.model.DomEvent> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb4d_hasDomActionInv,value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.domotic.model.DomEvent> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb4d_hasDomAction,value.getSemanticObject(),sclass));
             return it;
         }
        /**
@@ -143,45 +143,6 @@ public abstract class DomEventBase extends org.semanticwb.model.SWBClass impleme
     public DomEventBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
-    }
-   /**
-   * Gets all the org.semanticwb.domotic.model.DomAction
-   * @return A GenericIterator with all the org.semanticwb.domotic.model.DomAction
-   */
-
-    public org.semanticwb.model.GenericIterator<org.semanticwb.domotic.model.DomAction> listDomActions()
-    {
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.domotic.model.DomAction>(getSemanticObject().listObjectProperties(swb4d_hasDomActionInv));
-    }
-
-   /**
-   * Gets true if has a DomAction
-   * @param value org.semanticwb.domotic.model.DomAction to verify
-   * @return true if the org.semanticwb.domotic.model.DomAction exists, false otherwise
-   */
-    public boolean hasDomAction(org.semanticwb.domotic.model.DomAction value)
-    {
-        boolean ret=false;
-        if(value!=null)
-        {
-           ret=getSemanticObject().hasObjectProperty(swb4d_hasDomActionInv,value.getSemanticObject());
-        }
-        return ret;
-    }
-
-   /**
-   * Gets the DomAction
-   * @return a org.semanticwb.domotic.model.DomAction
-   */
-    public org.semanticwb.domotic.model.DomAction getDomAction()
-    {
-         org.semanticwb.domotic.model.DomAction ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb4d_hasDomActionInv);
-         if(obj!=null)
-         {
-             ret=(org.semanticwb.domotic.model.DomAction)obj.createGenericInstance();
-         }
-         return ret;
     }
 
 /**
@@ -266,6 +227,71 @@ public abstract class DomEventBase extends org.semanticwb.model.SWBClass impleme
     public void setOnceEvent(boolean value)
     {
         getSemanticObject().setBooleanProperty(swb4d_onceEvent, value);
+    }
+   /**
+   * Gets all the org.semanticwb.domotic.model.DomAction
+   * @return A GenericIterator with all the org.semanticwb.domotic.model.DomAction
+   */
+
+    public org.semanticwb.model.GenericIterator<org.semanticwb.domotic.model.DomAction> listDomActions()
+    {
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.domotic.model.DomAction>(getSemanticObject().listObjectProperties(swb4d_hasDomAction));
+    }
+
+   /**
+   * Gets true if has a DomAction
+   * @param value org.semanticwb.domotic.model.DomAction to verify
+   * @return true if the org.semanticwb.domotic.model.DomAction exists, false otherwise
+   */
+    public boolean hasDomAction(org.semanticwb.domotic.model.DomAction value)
+    {
+        boolean ret=false;
+        if(value!=null)
+        {
+           ret=getSemanticObject().hasObjectProperty(swb4d_hasDomAction,value.getSemanticObject());
+        }
+        return ret;
+    }
+   /**
+   * Adds a DomAction
+   * @param value org.semanticwb.domotic.model.DomAction to add
+   */
+
+    public void addDomAction(org.semanticwb.domotic.model.DomAction value)
+    {
+        getSemanticObject().addObjectProperty(swb4d_hasDomAction, value.getSemanticObject());
+    }
+   /**
+   * Removes all the DomAction
+   */
+
+    public void removeAllDomAction()
+    {
+        getSemanticObject().removeProperty(swb4d_hasDomAction);
+    }
+   /**
+   * Removes a DomAction
+   * @param value org.semanticwb.domotic.model.DomAction to remove
+   */
+
+    public void removeDomAction(org.semanticwb.domotic.model.DomAction value)
+    {
+        getSemanticObject().removeObjectProperty(swb4d_hasDomAction,value.getSemanticObject());
+    }
+
+   /**
+   * Gets the DomAction
+   * @return a org.semanticwb.domotic.model.DomAction
+   */
+    public org.semanticwb.domotic.model.DomAction getDomAction()
+    {
+         org.semanticwb.domotic.model.DomAction ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb4d_hasDomAction);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.domotic.model.DomAction)obj.createGenericInstance();
+         }
+         return ret;
     }
    /**
    * Sets the value for the property DomContext
