@@ -419,12 +419,6 @@
     <swb:cloneDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:cloneDependency>
   </owl:ObjectProperty>
-  <owl:ObjectProperty rdf:ID="hasDomActionInv">
-    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >hasDomAction</swb:propertyCodeName>
-    <swb:herarquicalRelation rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:herarquicalRelation>
-  </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="domDevice4Event">
     <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >domDevice</swb:propertyCodeName>
@@ -479,22 +473,32 @@
     <rdfs:range rdf:resource="#DomGroup"/>
     <owl:inverseOf rdf:resource="#hasChildGroupInv"/>
   </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasDomAction">
+    <owl:inverseOf>
+      <owl:ObjectProperty rdf:ID="domEventInv"/>
+    </owl:inverseOf>
+    <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:removeDependency>
+    <swb:cloneDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:cloneDependency>
+    <rdfs:range rdf:resource="#DomAction"/>
+    <rdfs:domain rdf:resource="#DomEvent"/>
+    <swb:herarquicalRelation rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:herarquicalRelation>
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >hasDomAction</swb:propertyCodeName>
+  </owl:ObjectProperty>
   <owl:ObjectProperty rdf:about="#hasDomDeviceInv">
     <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >hasDomDevice</swb:propertyCodeName>
   </owl:ObjectProperty>
-  <owl:ObjectProperty rdf:ID="domEvent">
-    <owl:inverseOf rdf:resource="#hasDomActionInv"/>
-    <rdfs:domain rdf:resource="#DomAction"/>
-    <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:removeDependency>
-    <rdfs:range rdf:resource="#DomEvent"/>
-    <swb:cloneDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:cloneDependency>
-  </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="user">
     <rdfs:domain rdf:resource="#DomPermission"/>
     <rdfs:range rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#User"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="#domEventInv">
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >domEvent</swb:propertyCodeName>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="schedule4Event">
     <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
