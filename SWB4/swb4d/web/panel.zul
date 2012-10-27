@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<zk xmlns="http://www.zkoss.org/2005/zul">
+<window id="mywin" border="none" xmlns:c="client">
 	<zscript>
             import org.zkoss.zksandbox.*;
             import org.semanticwb.domotic.model.*;
@@ -25,34 +25,44 @@
                     ldev.add(dev);
                 }
             }
-            
-            SimpleGroupsModel model = new SimpleGroupsModel(devs,gtws);
 	</zscript>
-<div>
-    <grid height="400px" model="${model}">
-        <columns>
-            <column label="title" width="100px" />
-            <column label="Subject" />
-            <column label="Received" width="150px" />
-            <column label="Size" width="100px" />
-        </columns>
-        
-        <template name="model:group">
-            <group label="${each.serial}" />
-        </template>
-        
-        <template name="model">
-            <row>
-                <div>
-                    <image style="padding: 0px 10px"
-                        src="/img/Centigrade-Widget-Icons/EnvelopeOpen-16x16.png" />
-                    <label value="${each.title}" />
-                </div>
-                <label value="${each.serial}" />
-                <label value="${each.devId}" />
-                <label value="${each.devZone}" />
-            </row>
-        </template>
-    </grid>
-</div>
-</zk>
+    
+    <label value="Hola:${user.fullName}"/>
+    <!--<div apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('org.semanticwb.model.SWBModelWrapper')">-->
+	<grid mold="paging" apply="org.zkoss.bind.BindComposer" model="@load(webpages)">
+		<columns menupopup="auto">
+			<column label="Title" sort="auto(title)"/>
+			<column label="Description" sort="auto(description)"/>
+			<column label="Active" sort="auto(active)"/>
+			<column label="Views" sort="auto(views)"/>
+			<column label="Creator" sort="auto(creator.login)"/>
+			<column label="Created" sort="auto(created)"/>
+		</columns>
+		
+            <template name="model">
+                <row>
+                    <textbox inplace="true" value="@bind(each.title)" width="99%" />
+                    <textbox inplace="true" value="@bind(each.description)" width="99%" />
+  				    <checkbox checked="@bind(each.active)" />
+                    <div>
+                        <!-- Inplace is pure client action so that use client way to modify the width-->
+                        <spinner inplace="true"
+                            value="@bind(each.views)" width="30px"
+                            c:onFocus='this.setWidth("55px")'
+                            c:onBlur='this.setWidth("30px")' />
+                        <label value="views" />
+                    </div>
+                    <label value="@bind(each.creator.login)"/>
+                    <datebox inplace="true" value="@bind(each.created)" width="99%" format="MM/dd/yyyy" />
+<!--  				    
+                    <combobox hflex="1" inplace="true"
+                        model="@load(vm.allStatuses)" selectedItem="@bind(each.status)">
+                        <template name="model">
+                            <comboitem label="@load(each)" />
+                        </template>
+                    </combobox>
+-->                    
+                </row>
+            </template>		
+	</grid>
+</window>
