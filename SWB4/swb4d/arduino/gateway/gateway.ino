@@ -2,11 +2,14 @@
 #include <SPI.h>
 
 byte mac[] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED };
-byte ip[] = { 192, 168, 5, 116};
-byte gate[] = { 192, 168, 5, 254 };
+//byte ip[] = { 192, 168, 5, 116};
+byte ip[] = { 192, 168, 2, 2};
+//byte gate[] = { 192, 168, 5, 254 };
+byte gate[] = { 192, 168, 2, 1  };
 byte mask[] = { 255, 255, 255, 0 };
-//byte server[] = { 192, 168, 1, 10 }; // Google
-byte server[] = { 207, 248, 177, 5 }; // Google
+//byte server[] = { 192, 168, 2, 1 }; // Google
+//byte server[] = { 108,161,130,57 }; // Google
+byte server[] = { 192,168,2,1 }; // Google
 
 char serverName[] = "domotic.infotec.com";  // twitter URL
 
@@ -43,7 +46,8 @@ void setup()
   
   // attempt a DHCP connection:
   Serial.println("Attempting to get an IP address using DHCP:");
-  if (!Ethernet.begin(mac)) {
+  //if (!Ethernet.begin(mac)) 
+  {
     // if DHCP fails, start with a hard-coded address:
     Serial.println("failed to get an IP address using DHCP, trying manually");
     Ethernet.begin(mac, ip, gate, mask);
