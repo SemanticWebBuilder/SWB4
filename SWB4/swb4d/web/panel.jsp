@@ -64,10 +64,11 @@
                 }
             }
             
+            
             if(!found)
             {
                 Iterator<DomGroup> it2 = DomGroup.ClassMgr.listDomGroups(model);
-                while (it.hasNext())
+                while (it2.hasNext())
                 {
                     DomGroup grp = it2.next();
                     String title=grp.getDisplayTitle("es");
@@ -77,12 +78,23 @@
                         if(ret.indexOf("desactiva")>-1 || ret.indexOf("apaga")>-1 || ret.indexOf("desconecta")>-1)
                         {
                             grp.setStatus(0);
-                            ret="Dispositivo "+grp.getDisplayTitle("es")+" desactivado";
+                            ret="Grupo "+grp.getDisplayTitle("es")+" desactivado";
                         }else if(ret.indexOf("activa")>-1 || ret.indexOf("enciende")>-1 || ret.indexOf("encender")>-1 || ret.indexOf("conecta")>-1)
                         {
                             grp.setStatus(16);
-                            ret="Dispositivo \""+grp.getDisplayTitle("es")+"\" activado";
-                        }                                        
+                            ret="Grupo \""+grp.getDisplayTitle("es")+"\" activado";
+                        }else
+                        {
+                            if (grp.getStatus() != 0)
+                            {
+                                grp.setStatus(0);
+                                ret="Grupo "+grp.getDisplayTitle("es")+" desactivado";
+                            } else
+                            {                        
+                                grp.setStatus(16);
+                                ret="Grupo \""+grp.getDisplayTitle("es")+"\" activado";
+                            }                        
+                        }                                          
                         break;
                     }
                 }            
