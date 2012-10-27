@@ -1,7 +1,7 @@
 package org.semanticwb.domotic.model.base;
 
 
-public abstract class DomContextBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Activeable,org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable
+public abstract class DomContextBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Activeable
 {
     public static final org.semanticwb.platform.SemanticClass swb4d_DomEvent=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/domotic#DomEvent");
     public static final org.semanticwb.platform.SemanticProperty swb4d_hasDomEventsInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/domotic#hasDomEventsInv");
@@ -33,6 +33,12 @@ public abstract class DomContextBase extends org.semanticwb.model.SWBClass imple
         {
             java.util.Iterator it=sclass.listInstances();
             return new org.semanticwb.model.GenericIterator<org.semanticwb.domotic.model.DomContext>(it, true);
+        }
+
+        public static org.semanticwb.domotic.model.DomContext createDomContext(org.semanticwb.model.SWBModel model)
+        {
+            long id=model.getSemanticObject().getModel().getCounter(sclass);
+            return org.semanticwb.domotic.model.DomContext.ClassMgr.createDomContext(String.valueOf(id), model);
         }
        /**
        * Gets a org.semanticwb.domotic.model.DomContext
@@ -392,5 +398,14 @@ public abstract class DomContextBase extends org.semanticwb.model.SWBClass imple
     public void setTitle(String title, String lang)
     {
         getSemanticObject().setProperty(swb_title, title, lang);
+    }
+
+   /**
+   * Gets the DomiticSite
+   * @return a instance of org.semanticwb.domotic.model.DomiticSite
+   */
+    public org.semanticwb.domotic.model.DomiticSite getDomiticSite()
+    {
+        return (org.semanticwb.domotic.model.DomiticSite)getSemanticObject().getModel().getModelObject().createGenericInstance();
     }
 }

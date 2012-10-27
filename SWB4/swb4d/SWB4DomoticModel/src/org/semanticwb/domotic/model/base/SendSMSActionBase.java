@@ -1,7 +1,7 @@
 package org.semanticwb.domotic.model.base;
 
 
-public abstract class SendSMSActionBase extends org.semanticwb.domotic.model.DomAction 
+public abstract class SendSMSActionBase extends org.semanticwb.domotic.model.DomAction implements org.semanticwb.model.Descriptiveable
 {
     public static final org.semanticwb.platform.SemanticClass swb4d_SendSMSAction=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/domotic#SendSMSAction");
    /**
@@ -31,6 +31,12 @@ public abstract class SendSMSActionBase extends org.semanticwb.domotic.model.Dom
         {
             java.util.Iterator it=sclass.listInstances();
             return new org.semanticwb.model.GenericIterator<org.semanticwb.domotic.model.SendSMSAction>(it, true);
+        }
+
+        public static org.semanticwb.domotic.model.SendSMSAction createSendSMSAction(org.semanticwb.model.SWBModel model)
+        {
+            long id=model.getSemanticObject().getModel().getCounter(sclass);
+            return org.semanticwb.domotic.model.SendSMSAction.ClassMgr.createSendSMSAction(String.valueOf(id), model);
         }
        /**
        * Gets a org.semanticwb.domotic.model.SendSMSAction

@@ -177,4 +177,13 @@ public abstract class DomItemBase extends org.semanticwb.model.SWBClass
          }
          return ret;
     }
+
+   /**
+   * Gets the DomiticSite
+   * @return a instance of org.semanticwb.domotic.model.DomiticSite
+   */
+    public org.semanticwb.domotic.model.DomiticSite getDomiticSite()
+    {
+        return (org.semanticwb.domotic.model.DomiticSite)getSemanticObject().getModel().getModelObject().createGenericInstance();
+    }
 }

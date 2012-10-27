@@ -341,4 +341,13 @@ public abstract class DomMacroBase extends org.semanticwb.model.SWBClass impleme
     {
         getSemanticObject().setDateProperty(swb_created, value);
     }
+
+   /**
+   * Gets the DomiticSite
+   * @return a instance of org.semanticwb.domotic.model.DomiticSite
+   */
+    public org.semanticwb.domotic.model.DomiticSite getDomiticSite()
+    {
+        return (org.semanticwb.domotic.model.DomiticSite)getSemanticObject().getModel().getModelObject().createGenericInstance();
+    }
 }

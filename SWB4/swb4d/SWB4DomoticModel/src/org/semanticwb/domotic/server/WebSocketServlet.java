@@ -18,8 +18,11 @@ import org.apache.catalina.websocket.MessageInbound;
 import org.apache.catalina.websocket.StreamInbound;
 import org.apache.catalina.websocket.WsOutbound;
 import org.semanticwb.SWBPlatform;
+import org.semanticwb.domotic.model.DomContext;
 import org.semanticwb.domotic.model.DomDevice;
+import org.semanticwb.domotic.model.DomGroup;
 import org.semanticwb.domotic.model.base.DomDeviceBase;
+import org.semanticwb.model.GenericObject;
 import org.semanticwb.platform.SemanticObject;
 
 /**
@@ -102,12 +105,26 @@ public class WebSocketServlet extends org.apache.catalina.websocket.WebSocketSer
             
             String txt=message.toString();
             StringTokenizer st=new StringTokenizer(txt," ");
-            while (st.hasMoreTokens())
+            if (st.hasMoreTokens())
             {
-                 String devid=st.nextToken();
-                 String val=st.nextToken();
-                 DomDevice dev=(DomDevice)SemanticObject.getSemanticObject(SemanticObject.shortToFullURI(devid)).createGenericInstance();
-                 dev.setStatus(Integer.parseInt(val));
+                 String suri=st.nextToken();
+                 String sstat=st.nextToken();
+                 
+                String uri=SemanticObject.shortToFullURI(suri);
+                GenericObject obj=SemanticObject.createSemanticObject(uri).createGenericInstance();
+                if(obj instanceof DomDevice)
+                {        
+                    DomDevice dev = (DomDevice)obj;
+                    dev.setStatus(Integer.parseInt(sstat));
+                }else if(obj instanceof DomGroup)
+                {
+                    DomGroup grp=(DomGroup)obj;
+                    grp.setStatus(Integer.parseInt(sstat));
+                }else if(obj instanceof DomContext)
+                {
+                    DomContext cnt=(DomContext)obj;
+                    cnt.setActive(Boolean.parseBoolean(sstat));
+                }
             }
             
         }
