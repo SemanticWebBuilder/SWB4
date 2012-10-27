@@ -45,6 +45,7 @@ public class SWBARuleDomotic extends GenericResource {
 
     public static final String TAG_CALENDAR = "calendar";
     public static final String TAG_WEATHER = "weather";
+    public static final String TAG_TEMPERATURE ="temperature";
     public static final String TAG_HOUR = "hour";
     /**
      * The log.
@@ -404,7 +405,7 @@ public class SWBARuleDomotic extends GenericResource {
         hmAttr = new HashMap();
         hmOper = new HashMap();
         hmValues = new HashMap();
-        hmAttr.put("Etiqueta", paramRequest.getLocaleString("msgUserSigned"));   ///////////////////////////
+        hmAttr.put("Etiqueta", paramRequest.getLocaleString("msgCalendar"));   ///////////////////////////
         hmAttr.put("Tipo", "select");
         hmOper.put("=", paramRequest.getLocaleString("msgCumpla"));
         hmOper.put("!=", paramRequest.getLocaleString("msgNoCumpla"));
@@ -434,7 +435,7 @@ public class SWBARuleDomotic extends GenericResource {
         vecOrderAtt.add(numero++, TAG_HOUR); 
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        /////  Clima/temperatura
+        /////  Clima
 
         hmAttr = new HashMap();
         hmOper = new HashMap();
@@ -447,6 +448,21 @@ public class SWBARuleDomotic extends GenericResource {
         hmAttr.put("Operador", hmOper);
         comboAtt.put(TAG_WEATHER, hmAttr); 
         vecOrderAtt.add(numero++, TAG_WEATHER); 
+
+         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        /////  Temperatura
+
+        hmAttr = new HashMap();
+        hmOper = new HashMap();
+        hmAttr.put("Etiqueta", paramRequest.getLocaleString("msgTemperature"));   ///////////////////////////
+        hmAttr.put("Tipo", "TEXT");
+        hmOper.put("&gt;", paramRequest.getLocaleString("msgGreaterThan"));
+        hmOper.put("&lt;", paramRequest.getLocaleString("msgLessThan"));
+        hmOper.put("=", paramRequest.getLocaleString("msgIs"));
+        hmOper.put("!=", paramRequest.getLocaleString("msgNotIs"));
+        hmAttr.put("Operador", hmOper);
+        comboAtt.put(TAG_TEMPERATURE, hmAttr); 
+        vecOrderAtt.add(numero++, TAG_TEMPERATURE); 
 
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
