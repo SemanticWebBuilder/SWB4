@@ -1,7 +1,7 @@
 package org.semanticwb.domotic.model.base;
 
 
-public abstract class SendMailActionBase extends org.semanticwb.domotic.model.DomAction 
+public abstract class SendMailActionBase extends org.semanticwb.domotic.model.DomAction implements org.semanticwb.model.Descriptiveable
 {
     public static final org.semanticwb.platform.SemanticClass swb4d_SendMailAction=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/domotic#SendMailAction");
    /**

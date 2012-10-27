@@ -506,4 +506,13 @@ public abstract class DomGroupBase extends org.semanticwb.model.SWBClass impleme
          }
          return ret;
     }
+
+   /**
+   * Gets the DomiticSite
+   * @return a instance of org.semanticwb.domotic.model.DomiticSite
+   */
+    public org.semanticwb.domotic.model.DomiticSite getDomiticSite()
+    {
+        return (org.semanticwb.domotic.model.DomiticSite)getSemanticObject().getModel().getModelObject().createGenericInstance();
+    }
 }

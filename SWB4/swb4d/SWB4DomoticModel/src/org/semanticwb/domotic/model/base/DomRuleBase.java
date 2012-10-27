@@ -1,7 +1,7 @@
 package org.semanticwb.domotic.model.base;
 
 
-public abstract class DomRuleBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.XMLable,org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable
+public abstract class DomRuleBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable,org.semanticwb.model.XMLable
 {
     public static final org.semanticwb.platform.SemanticClass swb4d_DomRule=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/domotic#DomRule");
    /**
@@ -334,5 +334,14 @@ public abstract class DomRuleBase extends org.semanticwb.model.SWBClass implemen
     public void setTitle(String title, String lang)
     {
         getSemanticObject().setProperty(swb_title, title, lang);
+    }
+
+   /**
+   * Gets the DomiticSite
+   * @return a instance of org.semanticwb.domotic.model.DomiticSite
+   */
+    public org.semanticwb.domotic.model.DomiticSite getDomiticSite()
+    {
+        return (org.semanticwb.domotic.model.DomiticSite)getSemanticObject().getModel().getModelObject().createGenericInstance();
     }
 }

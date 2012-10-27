@@ -1,6 +1,7 @@
 package org.semanticwb.domotic.model;
 
 import java.util.Date;
+import java.util.Iterator;
 import org.semanticwb.domotic.server.Connection;
 import org.semanticwb.domotic.server.WebSocketServlet;
 import org.semanticwb.model.SWBModel;
@@ -14,11 +15,12 @@ public class DomDevice extends org.semanticwb.domotic.model.base.DomDeviceBase
     }
     
     /**
-     * Actualiza el estatus y envia el estatus al gateway si el parametro send esta activo
+     * Actualiza el estatus y envia el estatus al gateway si el parametro send esta activo, notifica a los grupos por websockets si notifyParents es true 
      * @param stat
      * @param send 
+     * @param notifyParents 
      */
-    public void setStatus(int stat, boolean send)
+    public void setStatus(int stat, boolean send, boolean notifyParents)
     {
         if(!isDimerizable() && stat>0)stat=16;
         
@@ -40,10 +42,41 @@ public class DomDevice extends org.semanticwb.domotic.model.base.DomDeviceBase
                 con.sendMessage("upd "+getDevId()+" "+getDevZone()+" "+dstat.getStatus()+"\n");
             }
         }
-        WebSocketServlet.broadcast(getShortURI()+" "+stat);
-        
+        sendWebSocketStatus(notifyParents);
+    }
+    
+    /**
+     * Notifica a los grupos por websockets si notifyParents es true 
+     * @param notifyParents 
+     */
+    public void sendWebSocketStatus(boolean notifyParents)
+    {
+        WebSocketServlet.broadcast(getShortURI()+" "+getStatus());
+        if(notifyParents)
+        {
+            Iterator<DomGroup> it=listDomGroups();
+            while (it.hasNext())
+            {
+                DomGroup domGroup = it.next();
+                domGroup.sendWebSocketStatus(notifyParents);
+            }
+        }
+    }
+    
+    /**
+     * Actualiza el estatus y envia el estatus al gateway si el parametro send esta activo y notifica a los grupos por websockets 
+     * @param value
+     * @param send 
+     */
+    public void setStatus(int value, boolean send)
+    {
+        setStatus(value, true, true);
     }
 
+    /**
+     * Actualiza el estatus y envia el estatus al gateway y  notifica a los grupos por websockets 
+     * @param value 
+     */
     @Override
     public void setStatus(int value)
     {
