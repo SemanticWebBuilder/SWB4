@@ -82,29 +82,6 @@ public abstract class OnGroupChangeBase extends org.semanticwb.domotic.model.Dom
             return (getOnGroupChange(id, model)!=null);
         }
        /**
-       * Gets all org.semanticwb.domotic.model.OnGroupChange with a determined DomAction
-       * @param value DomAction of the type org.semanticwb.domotic.model.DomAction
-       * @param model Model of the org.semanticwb.domotic.model.OnGroupChange
-       * @return Iterator with all the org.semanticwb.domotic.model.OnGroupChange
-       */
-
-        public static java.util.Iterator<org.semanticwb.domotic.model.OnGroupChange> listOnGroupChangeByDomAction(org.semanticwb.domotic.model.DomAction value,org.semanticwb.model.SWBModel model)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.domotic.model.OnGroupChange> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb4d_hasDomActionInv, value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.domotic.model.OnGroupChange with a determined DomAction
-       * @param value DomAction of the type org.semanticwb.domotic.model.DomAction
-       * @return Iterator with all the org.semanticwb.domotic.model.OnGroupChange
-       */
-
-        public static java.util.Iterator<org.semanticwb.domotic.model.OnGroupChange> listOnGroupChangeByDomAction(org.semanticwb.domotic.model.DomAction value)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.domotic.model.OnGroupChange> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb4d_hasDomActionInv,value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
        * Gets all org.semanticwb.domotic.model.OnGroupChange with a determined DomGroup
        * @param value DomGroup of the type org.semanticwb.domotic.model.DomGroup
        * @param model Model of the org.semanticwb.domotic.model.OnGroupChange
@@ -125,6 +102,29 @@ public abstract class OnGroupChangeBase extends org.semanticwb.domotic.model.Dom
         public static java.util.Iterator<org.semanticwb.domotic.model.OnGroupChange> listOnGroupChangeByDomGroup(org.semanticwb.domotic.model.DomGroup value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.domotic.model.OnGroupChange> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb4d_domGroup4Event,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.domotic.model.OnGroupChange with a determined DomAction
+       * @param value DomAction of the type org.semanticwb.domotic.model.DomAction
+       * @param model Model of the org.semanticwb.domotic.model.OnGroupChange
+       * @return Iterator with all the org.semanticwb.domotic.model.OnGroupChange
+       */
+
+        public static java.util.Iterator<org.semanticwb.domotic.model.OnGroupChange> listOnGroupChangeByDomAction(org.semanticwb.domotic.model.DomAction value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.domotic.model.OnGroupChange> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb4d_hasDomAction, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.domotic.model.OnGroupChange with a determined DomAction
+       * @param value DomAction of the type org.semanticwb.domotic.model.DomAction
+       * @return Iterator with all the org.semanticwb.domotic.model.OnGroupChange
+       */
+
+        public static java.util.Iterator<org.semanticwb.domotic.model.OnGroupChange> listOnGroupChangeByDomAction(org.semanticwb.domotic.model.DomAction value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.domotic.model.OnGroupChange> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb4d_hasDomAction,value.getSemanticObject(),sclass));
             return it;
         }
        /**

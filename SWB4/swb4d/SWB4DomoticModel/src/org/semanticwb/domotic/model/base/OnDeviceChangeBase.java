@@ -113,7 +113,7 @@ public abstract class OnDeviceChangeBase extends org.semanticwb.domotic.model.Do
 
         public static java.util.Iterator<org.semanticwb.domotic.model.OnDeviceChange> listOnDeviceChangeByDomAction(org.semanticwb.domotic.model.DomAction value,org.semanticwb.model.SWBModel model)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.domotic.model.OnDeviceChange> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb4d_hasDomActionInv, value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.domotic.model.OnDeviceChange> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb4d_hasDomAction, value.getSemanticObject(),sclass));
             return it;
         }
        /**
@@ -124,7 +124,7 @@ public abstract class OnDeviceChangeBase extends org.semanticwb.domotic.model.Do
 
         public static java.util.Iterator<org.semanticwb.domotic.model.OnDeviceChange> listOnDeviceChangeByDomAction(org.semanticwb.domotic.model.DomAction value)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.domotic.model.OnDeviceChange> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb4d_hasDomActionInv,value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.domotic.model.OnDeviceChange> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb4d_hasDomAction,value.getSemanticObject(),sclass));
             return it;
         }
        /**
