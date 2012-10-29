@@ -198,7 +198,7 @@ public class ProcessExport extends GenericResource {
     private void createZipPackage(JSONObject data, ProcessSite site) {
         Resource base = getResourceBase();
         String basepath = SWBPortal.getWorkPath() + base.getWorkPath() + "/";
-        //String sitePath = SWBPortal.getWorkPath() + "/models/"+site.getId()+"/";
+        String sitePath = SWBPortal.getWorkPath() + "/models/"+site.getId()+"/";
         try {
             File resPath = new File(basepath);
             if (!resPath.exists()) {
@@ -227,7 +227,7 @@ public class ProcessExport extends GenericResource {
                             File directory2Zip = new File(objPath);
                             if(directory2Zip != null && directory2Zip.exists()){
                                 //System.out.println("dirPath: "+objPath+", basePath: "+sitePath);
-                                org.semanticwb.SWBUtils.IO.zip(directory2Zip, new File(basepath), zos);
+                                org.semanticwb.SWBUtils.IO.zip(directory2Zip, new File(sitePath), zos);
                             }
                         }
                     }
@@ -254,7 +254,7 @@ public class ProcessExport extends GenericResource {
                                             File directory2Zip = new File(objPath);
                                             if(directory2Zip != null && directory2Zip.exists()){
                                                 //System.out.println("dirPath: "+objPath+", basePath: "+sitePath);
-                                                org.semanticwb.SWBUtils.IO.zip(directory2Zip, new File(basepath), zos);
+                                                org.semanticwb.SWBUtils.IO.zip(directory2Zip, new File(sitePath), zos);
                                             }
                                         }
                                     }
