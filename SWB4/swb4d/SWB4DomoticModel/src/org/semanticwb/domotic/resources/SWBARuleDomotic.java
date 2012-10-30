@@ -16,6 +16,7 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.domotic.model.DomDevice;
+import org.semanticwb.domotic.model.DomGroup;
 import org.semanticwb.domotic.model.DomRule;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.User;
@@ -29,6 +30,7 @@ import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.api.SWBResourceURL;
 import org.semanticwb.domotic.model.DomiticSite;
+import org.semanticwb.domotic.model.StartTimerAction;
 import org.semanticwb.model.Calendar;
 //import org.semanticwb.model.Rule;
 import org.semanticwb.model.SWBRuleMgr;
@@ -45,7 +47,7 @@ public class SWBARuleDomotic extends GenericResource {
 
     public static final String TAG_CALENDAR = "calendar";
     public static final String TAG_WEATHER = "weather";
-    public static final String TAG_TEMPERATURE ="temperature";
+    public static final String TAG_TEMPERATURE = "temperature";
     public static final String TAG_HOUR = "hour";
     /**
      * The log.
@@ -379,8 +381,8 @@ public class SWBARuleDomotic extends GenericResource {
             hmOper = new HashMap();
             hmValues = new HashMap();
             hmAttr.put("Etiqueta", domDevice.getDisplayTitle(user.getLanguage()));   ///////////////////////////
-            if(domDevice.isDimerizable()){
-                 hmAttr.put("Tipo", "TEXT");
+            if (domDevice.isDimerizable()) {
+                hmAttr.put("Tipo", "TEXT");
                 hmOper.put("&gt;", paramRequest.getLocaleString("msgGreaterThan"));
                 hmOper.put("&lt;", paramRequest.getLocaleString("msgLessThan"));
                 hmOper.put("=", paramRequest.getLocaleString("msgIs"));
@@ -395,8 +397,30 @@ public class SWBARuleDomotic extends GenericResource {
                 hmValues.put("false", paramRequest.getLocaleString("msgOFF"));
                 hmAttr.put("Valor", hmValues);
             }
-            comboAtt.put(DomDevice.sclass.getName()+"."+domDevice.getId(), hmAttr);
-            vecOrderAtt.add(numero++, DomDevice.sclass.getName()+"."+domDevice.getId());
+            comboAtt.put(DomDevice.sclass.getName() + "." + domDevice.getId(), hmAttr);
+            vecOrderAtt.add(numero++, DomDevice.sclass.getName() + "." + domDevice.getId());
+        }
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        /////  DomGroup 
+
+        Iterator<DomGroup> itdg = ws.listDomGroups();
+        while (itdg.hasNext()) {
+            DomGroup domGroup = itdg.next();
+            hmAttr = new HashMap();
+            hmOper = new HashMap();
+            hmValues = new HashMap();
+            hmAttr.put("Etiqueta", domGroup.getDisplayTitle(user.getLanguage()));   ///////////////////////////
+            hmAttr.put("Tipo", "select");
+            hmOper.put("=", paramRequest.getLocaleString("msgSameAs"));
+            hmOper.put("!=", paramRequest.getLocaleString("msgNotEqual"));
+            hmAttr.put("Operador", hmOper);
+            hmValues.put("true", paramRequest.getLocaleString("msgON"));
+            hmValues.put("false", paramRequest.getLocaleString("msgOFF"));
+            hmAttr.put("Valor", hmValues);
+
+            comboAtt.put(DomGroup.sclass.getName() + "." + domGroup.getId(), hmAttr);
+            vecOrderAtt.add(numero++, DomGroup.sclass.getName() + "." + domGroup.getId());
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -420,6 +444,27 @@ public class SWBARuleDomotic extends GenericResource {
         vecOrderAtt.add(numero++, TAG_CALENDAR);
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        /////  StartTimerAction 
+
+        Iterator<StartTimerAction> itst = ws.listStartTimerActions();
+        while (itst.hasNext()) {
+            StartTimerAction startTimer = itst.next();
+            hmAttr = new HashMap();
+            hmOper = new HashMap();
+            hmValues = new HashMap();
+            hmAttr.put("Etiqueta", startTimer.getDisplayTitle(user.getLanguage()));   ///////////////////////////
+            hmAttr.put("Tipo", "select");
+            hmOper.put("=", paramRequest.getLocaleString("msgSameAs"));
+            hmOper.put("!=", paramRequest.getLocaleString("msgNotEqual"));
+            hmAttr.put("Operador", hmOper);
+            hmValues.put("true", paramRequest.getLocaleString("msgActive"));
+            hmValues.put("false", paramRequest.getLocaleString("msgInactive"));
+
+            comboAtt.put(StartTimerAction.sclass.getName() + "." + startTimer.getId(), hmAttr);
+            vecOrderAtt.add(numero++, StartTimerAction.sclass.getName() + "." + startTimer.getId());
+        }
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         /////  Hora
 
         hmAttr = new HashMap();
@@ -431,8 +476,8 @@ public class SWBARuleDomotic extends GenericResource {
         hmOper.put("=", paramRequest.getLocaleString("msgIs"));
         hmOper.put("!=", paramRequest.getLocaleString("msgNotIs"));
         hmAttr.put("Operador", hmOper);
-        comboAtt.put(TAG_HOUR, hmAttr); 
-        vecOrderAtt.add(numero++, TAG_HOUR); 
+        comboAtt.put(TAG_HOUR, hmAttr);
+        vecOrderAtt.add(numero++, TAG_HOUR);
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         /////  Clima
@@ -446,10 +491,10 @@ public class SWBARuleDomotic extends GenericResource {
         hmOper.put("=", paramRequest.getLocaleString("msgIs"));
         hmOper.put("!=", paramRequest.getLocaleString("msgNotIs"));
         hmAttr.put("Operador", hmOper);
-        comboAtt.put(TAG_WEATHER, hmAttr); 
-        vecOrderAtt.add(numero++, TAG_WEATHER); 
+        comboAtt.put(TAG_WEATHER, hmAttr);
+        vecOrderAtt.add(numero++, TAG_WEATHER);
 
-         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         /////  Temperatura
 
         hmAttr = new HashMap();
@@ -461,8 +506,8 @@ public class SWBARuleDomotic extends GenericResource {
         hmOper.put("=", paramRequest.getLocaleString("msgIs"));
         hmOper.put("!=", paramRequest.getLocaleString("msgNotIs"));
         hmAttr.put("Operador", hmOper);
-        comboAtt.put(TAG_TEMPERATURE, hmAttr); 
-        vecOrderAtt.add(numero++, TAG_TEMPERATURE); 
+        comboAtt.put(TAG_TEMPERATURE, hmAttr);
+        vecOrderAtt.add(numero++, TAG_TEMPERATURE);
 
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -500,8 +545,8 @@ public class SWBARuleDomotic extends GenericResource {
                     }
                 }
                 hmAttr.put("Valor", hmValues);
-                comboAtt.put(SWBRuleMgr.TAG_INT_RULE, hmAttr); 
-                vecOrderAtt.add(numero++, SWBRuleMgr.TAG_INT_RULE); 
+                comboAtt.put(SWBRuleMgr.TAG_INT_RULE, hmAttr);
+                vecOrderAtt.add(numero++, SWBRuleMgr.TAG_INT_RULE);
             }
 
 
