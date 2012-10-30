@@ -429,6 +429,23 @@ public class ProcessExport extends GenericResource {
                 ret.put(ProcessPeriodRefable.swp_hasProcessPeriodRef.getPropId(), processPeriodRefs);
             }
             
+            if (ge instanceof RoleRefable) {
+                RoleRefable temp = (RoleRefable)ge;
+                JSONArray roleRefs = new JSONArray();
+                
+                Iterator<RoleRef> refs = temp.listRoleRefs();
+                while (refs.hasNext()) {
+                    RoleRef roleRef = refs.next();
+                    JSONObject ref = getElementJSON(roleRef);
+                    
+                    if (roleRef.getRole() != null) ref.put(RoleRef.swb_role.getPropId(), roleRef.getRole().getURI());
+                    else ref.put(RoleRef.swb_role.getPropId(), "");
+                    
+                    roleRefs.put(ref);
+                }
+                ret.put(RoleRefable.swb_hasRoleRef.getPropId(), roleRefs);
+            }
+            
             if (ge instanceof Collectionable) {
                 ret.put(Collectionable.swp_collection.getPropId(), ((Collectionable)ge).isCollection());
             }
@@ -654,6 +671,7 @@ public class ProcessExport extends GenericResource {
     private JSONObject getProcessPackage(ProcessSite site, ArrayList<String> processIds, boolean addProcessTools) {
         JSONObject pkg = new JSONObject();
         JSONArray processTools = new JSONArray();
+        JSONArray siteRoles = new JSONArray();
         JSONArray processes = new JSONArray();
 
         if (addProcessTools) {
@@ -705,6 +723,13 @@ public class ProcessExport extends GenericResource {
                 WebService webService = services.next();
                 processTools.put(getElementJSON(webService));
             }
+            
+            //Roles
+            Iterator<Role> roles = site.getUserRepository().listRoles();
+            while (roles.hasNext()) {
+                Role role = roles.next();
+                siteRoles.put(getElementJSON(role));
+            }
         }
 
         //Procesos de negocio
@@ -721,6 +746,7 @@ public class ProcessExport extends GenericResource {
         try {
             pkg.put("tools", processTools);
             pkg.put("processes", processes);
+            pkg.put("siteRoles", siteRoles);
         } catch (Exception ex) {
             log.error(ex);
         }
@@ -795,6 +821,24 @@ public class ProcessExport extends GenericResource {
                                 }
                             }
                         }
+                    }
+                }
+            }
+            
+            //Crear roles
+            elements = data.getJSONArray("siteRoles");
+            if (elements != null) {
+                for (int i = 0; i < elements.length(); i++) {
+                    JSONObject processJson = elements.getJSONObject(i);
+                    String suri = processJson.getString("uri");
+                    SemanticObject sobj = SemanticObject.getSemanticObject(suri);
+                    if (sobj == null) {
+                        String id = suri.substring(suri.lastIndexOf(":")+1, suri.length());
+                        Role role = site.getUserRepository().createRole(id);
+                        role.setTitle(processJson.optString(Descriptiveable.swb_title.getPropId(), ""));
+                        _elements.put(suri, role);
+                    } else {
+                        _elements.put(suri, sobj.createGenericInstance());
                     }
                 }
             }
@@ -1020,6 +1064,25 @@ public class ProcessExport extends GenericResource {
                         ref.setProcessRule((ProcessRule)rule);
                         ref.setActive(ruleRef.getBoolean(ProcessRuleRef.swb_active.getPropId()));
                         temp.addProcessRuleRef(ref);
+                    }
+                }
+            }
+        }
+        
+        if (go instanceof RoleRefable) {
+            RoleRefable temp = (RoleRefable)go;
+            JSONArray roleRefs = obj.optJSONArray(RoleRefable.swb_hasRoleRef.getPropId());
+            if (roleRefs != null) {
+                for (int i = 0; i < roleRefs.length(); i++) {
+                    JSONObject roleRef = roleRefs.getJSONObject(i);
+                    if (!roleRef.optString(RoleRef.swb_role.getPropId(), "").equals("")) {
+                        GenericObject role = elements.get(roleRef.getString(RoleRef.swb_role.getPropId()));
+                        if (role != null) {
+                            RoleRef ref = RoleRef.ClassMgr.createRoleRef(site);
+                            ref.setRole((Role)role);
+                            ref.setActive(roleRef.getBoolean(RoleRef.swb_active.getPropId()));
+                            temp.addRoleRef(ref);
+                        }
                     }
                 }
             }
