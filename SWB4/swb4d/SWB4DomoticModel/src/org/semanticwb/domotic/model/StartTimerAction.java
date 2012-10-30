@@ -8,6 +8,7 @@ import java.util.TimerTask;
 public class StartTimerAction extends org.semanticwb.domotic.model.base.StartTimerActionBase 
 {
     private Timer timer=null;
+    private boolean running=false;
     
     public StartTimerAction(org.semanticwb.platform.SemanticObject base)
     {
@@ -17,6 +18,7 @@ public class StartTimerAction extends org.semanticwb.domotic.model.base.StartTim
     @Override
     public void doActionImp()
     {
+        running=true;
         if(timer!=null)timer.cancel();
         System.out.println("StartTimerAction:doAction");
         timer=new Timer();
@@ -26,8 +28,13 @@ public class StartTimerAction extends org.semanticwb.domotic.model.base.StartTim
             public void run()
             {
                 System.out.println("StartTimerAction:run");
-                doActions();
-                timer.cancel();
+                try
+                {
+                    doActions();                    
+                }finally
+                {
+                    cancel();
+                }
             }
             
         }, getDelay()*1000);
@@ -55,6 +62,19 @@ public class StartTimerAction extends org.semanticwb.domotic.model.base.StartTim
         return getGetStartTimerAction().getDomContext();
     }
         
+    public boolean isActive()
+    {
+        return running;
+    }
     
+    public void cancel()
+    {
+        if(timer!=null)
+        {
+            timer.cancel();
+            timer=null;
+            running=false;
+        };
+    }
     
 }
