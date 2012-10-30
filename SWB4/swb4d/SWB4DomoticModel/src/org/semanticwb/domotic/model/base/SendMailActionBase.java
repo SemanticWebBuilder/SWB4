@@ -3,6 +3,9 @@ package org.semanticwb.domotic.model.base;
 
 public abstract class SendMailActionBase extends org.semanticwb.domotic.model.DomAction implements org.semanticwb.model.Descriptiveable
 {
+    public static final org.semanticwb.platform.SemanticProperty swb4d_emailSubject=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/domotic#emailSubject");
+    public static final org.semanticwb.platform.SemanticProperty swb4d_emailBody=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/domotic#emailBody");
+    public static final org.semanticwb.platform.SemanticProperty swb4d_emailTo=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/domotic#emailTo");
     public static final org.semanticwb.platform.SemanticClass swb4d_SendMailAction=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/domotic#SendMailAction");
    /**
    * The semantic class that represents the currentObject
@@ -79,6 +82,29 @@ public abstract class SendMailActionBase extends org.semanticwb.domotic.model.Do
             return (getSendMailAction(id, model)!=null);
         }
        /**
+       * Gets all org.semanticwb.domotic.model.SendMailAction with a determined DomEvent
+       * @param value DomEvent of the type org.semanticwb.domotic.model.DomEvent
+       * @param model Model of the org.semanticwb.domotic.model.SendMailAction
+       * @return Iterator with all the org.semanticwb.domotic.model.SendMailAction
+       */
+
+        public static java.util.Iterator<org.semanticwb.domotic.model.SendMailAction> listSendMailActionByDomEvent(org.semanticwb.domotic.model.DomEvent value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.domotic.model.SendMailAction> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb4d_domEventInv, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.domotic.model.SendMailAction with a determined DomEvent
+       * @param value DomEvent of the type org.semanticwb.domotic.model.DomEvent
+       * @return Iterator with all the org.semanticwb.domotic.model.SendMailAction
+       */
+
+        public static java.util.Iterator<org.semanticwb.domotic.model.SendMailAction> listSendMailActionByDomEvent(org.semanticwb.domotic.model.DomEvent value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.domotic.model.SendMailAction> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb4d_domEventInv,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
        * Gets all org.semanticwb.domotic.model.SendMailAction with a determined DomRule
        * @param value DomRule of the type org.semanticwb.domotic.model.DomRule
        * @param model Model of the org.semanticwb.domotic.model.SendMailAction
@@ -102,26 +128,26 @@ public abstract class SendMailActionBase extends org.semanticwb.domotic.model.Do
             return it;
         }
        /**
-       * Gets all org.semanticwb.domotic.model.SendMailAction with a determined DomEvent
-       * @param value DomEvent of the type org.semanticwb.domotic.model.DomEvent
+       * Gets all org.semanticwb.domotic.model.SendMailAction with a determined GetStartTimerAction
+       * @param value GetStartTimerAction of the type org.semanticwb.domotic.model.StartTimerAction
        * @param model Model of the org.semanticwb.domotic.model.SendMailAction
        * @return Iterator with all the org.semanticwb.domotic.model.SendMailAction
        */
 
-        public static java.util.Iterator<org.semanticwb.domotic.model.SendMailAction> listSendMailActionByDomEvent(org.semanticwb.domotic.model.DomEvent value,org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.domotic.model.SendMailAction> listSendMailActionByGetStartTimerAction(org.semanticwb.domotic.model.StartTimerAction value,org.semanticwb.model.SWBModel model)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.domotic.model.SendMailAction> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb4d_domEventInv, value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.domotic.model.SendMailAction> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb4d_getStartTimerActionInv, value.getSemanticObject(),sclass));
             return it;
         }
        /**
-       * Gets all org.semanticwb.domotic.model.SendMailAction with a determined DomEvent
-       * @param value DomEvent of the type org.semanticwb.domotic.model.DomEvent
+       * Gets all org.semanticwb.domotic.model.SendMailAction with a determined GetStartTimerAction
+       * @param value GetStartTimerAction of the type org.semanticwb.domotic.model.StartTimerAction
        * @return Iterator with all the org.semanticwb.domotic.model.SendMailAction
        */
 
-        public static java.util.Iterator<org.semanticwb.domotic.model.SendMailAction> listSendMailActionByDomEvent(org.semanticwb.domotic.model.DomEvent value)
+        public static java.util.Iterator<org.semanticwb.domotic.model.SendMailAction> listSendMailActionByGetStartTimerAction(org.semanticwb.domotic.model.StartTimerAction value)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.domotic.model.SendMailAction> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb4d_domEventInv,value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.domotic.model.SendMailAction> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb4d_getStartTimerActionInv,value.getSemanticObject(),sclass));
             return it;
         }
     }
@@ -138,5 +164,68 @@ public abstract class SendMailActionBase extends org.semanticwb.domotic.model.Do
     public SendMailActionBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
+    }
+
+/**
+* Gets the EmailSubject property
+* @return String with the EmailSubject
+*/
+    public String getEmailSubject()
+    {
+        return getSemanticObject().getProperty(swb4d_emailSubject);
+    }
+
+/**
+* Sets the EmailSubject property
+* @param value long with the EmailSubject
+*/
+    public void setEmailSubject(String value)
+    {
+        getSemanticObject().setProperty(swb4d_emailSubject, value);
+    }
+
+/**
+* Gets the EmailBody property
+* @return String with the EmailBody
+*/
+    public String getEmailBody()
+    {
+        return getSemanticObject().getProperty(swb4d_emailBody);
+    }
+
+/**
+* Sets the EmailBody property
+* @param value long with the EmailBody
+*/
+    public void setEmailBody(String value)
+    {
+        getSemanticObject().setProperty(swb4d_emailBody, value);
+    }
+
+/**
+* Gets the EmailTo property
+* @return String with the EmailTo
+*/
+    public String getEmailTo()
+    {
+        return getSemanticObject().getProperty(swb4d_emailTo);
+    }
+
+/**
+* Sets the EmailTo property
+* @param value long with the EmailTo
+*/
+    public void setEmailTo(String value)
+    {
+        getSemanticObject().setProperty(swb4d_emailTo, value);
+    }
+
+   /**
+   * Gets the DomiticSite
+   * @return a instance of org.semanticwb.domotic.model.DomiticSite
+   */
+    public org.semanticwb.domotic.model.DomiticSite getDomiticSite()
+    {
+        return (org.semanticwb.domotic.model.DomiticSite)getSemanticObject().getModel().getModelObject().createGenericInstance();
     }
 }

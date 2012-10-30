@@ -3,6 +3,7 @@ package org.semanticwb.domotic.model.base;
 
 public abstract class SendSMSActionBase extends org.semanticwb.domotic.model.DomAction implements org.semanticwb.model.Descriptiveable
 {
+    public static final org.semanticwb.platform.SemanticProperty swb4d_smsNumber=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/domotic#smsNumber");
     public static final org.semanticwb.platform.SemanticClass swb4d_SendSMSAction=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/domotic#SendSMSAction");
    /**
    * The semantic class that represents the currentObject
@@ -79,6 +80,29 @@ public abstract class SendSMSActionBase extends org.semanticwb.domotic.model.Dom
             return (getSendSMSAction(id, model)!=null);
         }
        /**
+       * Gets all org.semanticwb.domotic.model.SendSMSAction with a determined DomEvent
+       * @param value DomEvent of the type org.semanticwb.domotic.model.DomEvent
+       * @param model Model of the org.semanticwb.domotic.model.SendSMSAction
+       * @return Iterator with all the org.semanticwb.domotic.model.SendSMSAction
+       */
+
+        public static java.util.Iterator<org.semanticwb.domotic.model.SendSMSAction> listSendSMSActionByDomEvent(org.semanticwb.domotic.model.DomEvent value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.domotic.model.SendSMSAction> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb4d_domEventInv, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.domotic.model.SendSMSAction with a determined DomEvent
+       * @param value DomEvent of the type org.semanticwb.domotic.model.DomEvent
+       * @return Iterator with all the org.semanticwb.domotic.model.SendSMSAction
+       */
+
+        public static java.util.Iterator<org.semanticwb.domotic.model.SendSMSAction> listSendSMSActionByDomEvent(org.semanticwb.domotic.model.DomEvent value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.domotic.model.SendSMSAction> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb4d_domEventInv,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
        * Gets all org.semanticwb.domotic.model.SendSMSAction with a determined DomRule
        * @param value DomRule of the type org.semanticwb.domotic.model.DomRule
        * @param model Model of the org.semanticwb.domotic.model.SendSMSAction
@@ -102,26 +126,26 @@ public abstract class SendSMSActionBase extends org.semanticwb.domotic.model.Dom
             return it;
         }
        /**
-       * Gets all org.semanticwb.domotic.model.SendSMSAction with a determined DomEvent
-       * @param value DomEvent of the type org.semanticwb.domotic.model.DomEvent
+       * Gets all org.semanticwb.domotic.model.SendSMSAction with a determined GetStartTimerAction
+       * @param value GetStartTimerAction of the type org.semanticwb.domotic.model.StartTimerAction
        * @param model Model of the org.semanticwb.domotic.model.SendSMSAction
        * @return Iterator with all the org.semanticwb.domotic.model.SendSMSAction
        */
 
-        public static java.util.Iterator<org.semanticwb.domotic.model.SendSMSAction> listSendSMSActionByDomEvent(org.semanticwb.domotic.model.DomEvent value,org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.domotic.model.SendSMSAction> listSendSMSActionByGetStartTimerAction(org.semanticwb.domotic.model.StartTimerAction value,org.semanticwb.model.SWBModel model)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.domotic.model.SendSMSAction> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb4d_domEventInv, value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.domotic.model.SendSMSAction> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb4d_getStartTimerActionInv, value.getSemanticObject(),sclass));
             return it;
         }
        /**
-       * Gets all org.semanticwb.domotic.model.SendSMSAction with a determined DomEvent
-       * @param value DomEvent of the type org.semanticwb.domotic.model.DomEvent
+       * Gets all org.semanticwb.domotic.model.SendSMSAction with a determined GetStartTimerAction
+       * @param value GetStartTimerAction of the type org.semanticwb.domotic.model.StartTimerAction
        * @return Iterator with all the org.semanticwb.domotic.model.SendSMSAction
        */
 
-        public static java.util.Iterator<org.semanticwb.domotic.model.SendSMSAction> listSendSMSActionByDomEvent(org.semanticwb.domotic.model.DomEvent value)
+        public static java.util.Iterator<org.semanticwb.domotic.model.SendSMSAction> listSendSMSActionByGetStartTimerAction(org.semanticwb.domotic.model.StartTimerAction value)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.domotic.model.SendSMSAction> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb4d_domEventInv,value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.domotic.model.SendSMSAction> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb4d_getStartTimerActionInv,value.getSemanticObject(),sclass));
             return it;
         }
     }
@@ -138,5 +162,32 @@ public abstract class SendSMSActionBase extends org.semanticwb.domotic.model.Dom
     public SendSMSActionBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
+    }
+
+/**
+* Gets the SmsNumber property
+* @return String with the SmsNumber
+*/
+    public String getSmsNumber()
+    {
+        return getSemanticObject().getProperty(swb4d_smsNumber);
+    }
+
+/**
+* Sets the SmsNumber property
+* @param value long with the SmsNumber
+*/
+    public void setSmsNumber(String value)
+    {
+        getSemanticObject().setProperty(swb4d_smsNumber, value);
+    }
+
+   /**
+   * Gets the DomiticSite
+   * @return a instance of org.semanticwb.domotic.model.DomiticSite
+   */
+    public org.semanticwb.domotic.model.DomiticSite getDomiticSite()
+    {
+        return (org.semanticwb.domotic.model.DomiticSite)getSemanticObject().getModel().getModelObject().createGenericInstance();
     }
 }

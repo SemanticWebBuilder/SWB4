@@ -515,12 +515,12 @@ public class SWBARuleDomotic extends GenericResource {
 //        while(itkeys.hasNext())
 //        {
 //            //log.debug("---- "+itkeys.next());
-//            System.out.println("---- "+itkeys.next());
+//            //System.out.println("---- "+itkeys.next());
 //        }
 //
-//        System.out.println("Vector: "+vecOrderAtt.size());
+//        //System.out.println("Vector: "+vecOrderAtt.size());
 //        for(int i =0; i<vecOrderAtt.size(); i++) {
-//            System.out.println("vector("+i+") :"+vecOrderAtt.get(i));
+//            //System.out.println("vector("+i+") :"+vecOrderAtt.get(i));
 //        }
 
     }

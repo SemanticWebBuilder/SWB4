@@ -7,4 +7,14 @@ public class ChangeDeviceAction extends org.semanticwb.domotic.model.base.Change
     {
         super(base);
     }
+
+    @Override
+    public void doActionImp()
+    {
+        System.out.println("ChangeDeviceAction:doAction");        
+        DomDevice dev=getChangeDevice();
+        dev.setStatus(getChangeDeviceStat());
+    }
+    
+    
 }

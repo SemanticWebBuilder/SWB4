@@ -7,4 +7,14 @@ public class ChangeContextAction extends org.semanticwb.domotic.model.base.Chang
     {
         super(base);
     }
+
+    @Override
+    public void doActionImp()
+    {
+        System.out.println("ChangeContextAction:doAction");
+        DomContext con=getChangeContext();
+        con.setActive(true);
+    }
+    
+    
 }

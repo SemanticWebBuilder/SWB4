@@ -224,4 +224,13 @@ public abstract class OnScheduleBase extends org.semanticwb.domotic.model.DomEve
     {
         getSemanticObject().setProperty(swb4d_scheduleStat, value);
     }
+
+   /**
+   * Gets the DomiticSite
+   * @return a instance of org.semanticwb.domotic.model.DomiticSite
+   */
+    public org.semanticwb.domotic.model.DomiticSite getDomiticSite()
+    {
+        return (org.semanticwb.domotic.model.DomiticSite)getSemanticObject().getModel().getModelObject().createGenericInstance();
+    }
 }

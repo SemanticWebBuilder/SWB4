@@ -6,6 +6,8 @@ import org.semanticwb.domotic.server.WebSocketServlet;
 
 public class DomGroup extends org.semanticwb.domotic.model.base.DomGroupBase 
 {
+    private int oldStat=0;
+    
     public DomGroup(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
@@ -18,6 +20,8 @@ public class DomGroup extends org.semanticwb.domotic.model.base.DomGroupBase
     
     public void setStatus(int stat, boolean notifyParents)
     {
+        System.out.println("DomGroup:setStatus:"+stat+" "+notifyParents);
+        
         Iterator<DomDevice> it=listDomDevices();
         while (it.hasNext())
         {
@@ -30,27 +34,52 @@ public class DomGroup extends org.semanticwb.domotic.model.base.DomGroupBase
         {
             DomGroup domGroup = it2.next();
             domGroup.setStatus(stat,false);
-        }
+        }        
         
         sendWebSocketStatus(notifyParents);
+        
     }
     
     public int getStatus()
     {
+        int ret=0;
         Iterator<DomDevice> it=listDomDevices();
         while (it.hasNext())
         {
             DomDevice domDevice = it.next();
-            if(domDevice.getStatus()>0)return 16;
+            if(domDevice.getStatus()>0)
+            {
+                ret=16;
+                break;
+            }
         }
         
-        Iterator<DomGroup> it2=listChildGroups();
-        while (it2.hasNext())
+        if(ret==0)
+        {        
+            Iterator<DomGroup> it2=listChildGroups();
+            while (it2.hasNext())
+            {
+                DomGroup domGroup = it2.next();
+                if(domGroup.getStatus()>0)
+                {
+                    ret=16;
+                    break;
+                }
+            }        
+        }
+        
+        if(oldStat!=ret)
         {
-            DomGroup domGroup = it2.next();
-            if(domGroup.getStatus()>0)return 16;
-        }        
-        return 0;
+            Iterator<OnGroupChange> it3=listOnGroupChanges();
+            while (it3.hasNext())
+            {
+                OnGroupChange onGroupChange = it3.next();
+                onGroupChange.onEvent(""+ret);
+            }            
+        }
+        
+        oldStat=ret;
+        return ret;
     }
     
     

@@ -15,18 +15,49 @@ public class DomContext extends org.semanticwb.domotic.model.base.DomContextBase
     @Override
     public void setActive(boolean value)
     {
-        super.setActive(value);
-        if(value==true)
+        if(super.isActive()!=value)
         {
-            SWBModel model=(SWBModel)getSemanticObject().getModel().getModelObject().createGenericInstance();
-            Iterator<DomContext> it=ClassMgr.listDomContexts(model);
-            while (it.hasNext())
+            if(value==true)
             {
-                DomContext domContext = it.next();
-                if(!domContext.equals(this))domContext.setActive(false);
+                SWBModel model=(SWBModel)getSemanticObject().getModel().getModelObject().createGenericInstance();
+                Iterator<DomContext> it=ClassMgr.listDomContexts(model);
+                while (it.hasNext())
+                {
+                    DomContext domContext = it.next();
+                    if(!domContext.equals(this))
+                    {
+                        if(domContext.isActive())
+                        {
+                            Iterator<DomEvent> it2=domContext.listDomEventses();
+                            while (it2.hasNext())
+                            {
+                                DomEvent domEvent = it2.next();
+                                if(domEvent instanceof OnContextChange)
+                                {
+                                    domEvent.onEvent("false");   //Apagar el Contexto
+                                }
+                            }
+                        }
+                        domContext.setActive(false);
+                    }
+                }
+                super.setActive(value);
+
+                Iterator<DomEvent> it2=this.listDomEventses();
+                while (it2.hasNext())
+                {
+                    DomEvent domEvent = it2.next();
+                    if(domEvent instanceof OnContextChange)
+                    {
+                        domEvent.onEvent("true");   //Apagar el Contexto
+                    }
+                }
+            }else
+            {
+                super.setActive(value);            
             }
+            sendWebSocketStatus();
         }
-        sendWebSocketStatus();
     }        
     
     /**

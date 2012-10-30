@@ -1,21 +1,35 @@
 package org.semanticwb.domotic.model.base;
 
 
-public abstract class DomiticSiteBase extends org.semanticwb.model.WebSite implements org.semanticwb.model.Localeable,org.semanticwb.model.Trashable,org.semanticwb.model.FilterableClass,org.semanticwb.model.FilterableNode,org.semanticwb.model.Undeleteable,org.semanticwb.model.Filterable,org.semanticwb.model.Indexable,org.semanticwb.model.Traceable,org.semanticwb.model.Countryable,org.semanticwb.model.OntologyDepable,org.semanticwb.model.Activeable,org.semanticwb.model.Descriptiveable
+public abstract class DomiticSiteBase extends org.semanticwb.model.WebSite implements org.semanticwb.model.Traceable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Trashable,org.semanticwb.model.Activeable,org.semanticwb.model.OntologyDepable,org.semanticwb.model.Undeleteable,org.semanticwb.model.Countryable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Localeable,org.semanticwb.model.Indexable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Filterable
 {
+    public static final org.semanticwb.platform.SemanticClass swb4d_DomPeriodRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/domotic#DomPeriodRef");
+    public static final org.semanticwb.platform.SemanticClass swb4d_OnGroupChange=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/domotic#OnGroupChange");
+    public static final org.semanticwb.platform.SemanticClass swb4d_SendMailAction=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/domotic#SendMailAction");
     public static final org.semanticwb.platform.SemanticClass swb4d_DomItem=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/domotic#DomItem");
     public static final org.semanticwb.platform.SemanticClass swb4d_DomEvent=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/domotic#DomEvent");
+    public static final org.semanticwb.platform.SemanticClass swb4d_DomAccessLevel=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/domotic#DomAccessLevel");
+    public static final org.semanticwb.platform.SemanticClass swb4d_ChangeContextAction=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/domotic#ChangeContextAction");
     public static final org.semanticwb.platform.SemanticClass swb4d_DomContext=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/domotic#DomContext");
+    public static final org.semanticwb.platform.SemanticClass swb4d_ChangeGroupAction=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/domotic#ChangeGroupAction");
+    public static final org.semanticwb.platform.SemanticClass swb4d_OnSchedule=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/domotic#OnSchedule");
     public static final org.semanticwb.platform.SemanticClass swb4d_DomRule=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/domotic#DomRule");
     public static final org.semanticwb.platform.SemanticClass swb4d_DomPermission=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/domotic#DomPermission");
     public static final org.semanticwb.platform.SemanticClass swb4d_DomPeriod=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/domotic#DomPeriod");
     public static final org.semanticwb.platform.SemanticClass swb4d_DomGroup=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/domotic#DomGroup");
+    public static final org.semanticwb.platform.SemanticClass swb4d_SendSMSAction=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/domotic#SendSMSAction");
+    public static final org.semanticwb.platform.SemanticClass swb4d_OnDeviceChange=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/domotic#OnDeviceChange");
     public static final org.semanticwb.platform.SemanticClass swb4d_DomMacro=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/domotic#DomMacro");
-    public static final org.semanticwb.platform.SemanticClass swb4d_DomGateway=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/domotic#DomGateway");
+    public static final org.semanticwb.platform.SemanticClass swb4d_SendTwitterAction=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/domotic#SendTwitterAction");
+    public static final org.semanticwb.platform.SemanticClass swb4d_StartTimerAction=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/domotic#StartTimerAction");
+    public static final org.semanticwb.platform.SemanticClass swb4d_OnSignal=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/domotic#OnSignal");
     public static final org.semanticwb.platform.SemanticClass swb4d_DomAction=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/domotic#DomAction");
     public static final org.semanticwb.platform.SemanticClass swb4d_DomDevice=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/domotic#DomDevice");
+    public static final org.semanticwb.platform.SemanticClass swb4d_DomGateway=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/domotic#DomGateway");
     public static final org.semanticwb.platform.SemanticClass swb4d_DomDeviceType=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/domotic#DomDeviceType");
     public static final org.semanticwb.platform.SemanticClass swb4d_DomDeviceStat=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/domotic#DomDeviceStat");
+    public static final org.semanticwb.platform.SemanticClass swb4d_OnContextChange=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/domotic#OnContextChange");
+    public static final org.semanticwb.platform.SemanticClass swb4d_ChangeDeviceAction=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/domotic#ChangeDeviceAction");
     public static final org.semanticwb.platform.SemanticClass swb4d_DomiticSite=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/domotic#DomiticSite");
    /**
    * The semantic class that represents the currentObject
@@ -371,6 +385,96 @@ public abstract class DomiticSiteBase extends org.semanticwb.model.WebSite imple
         super(base);
     }
 
+    public org.semanticwb.domotic.model.DomPeriodRef getDomPeriodRef(String id)
+    {
+        return org.semanticwb.domotic.model.DomPeriodRef.ClassMgr.getDomPeriodRef(id, this);
+    }
+
+    public java.util.Iterator<org.semanticwb.domotic.model.DomPeriodRef> listDomPeriodRefs()
+    {
+        return org.semanticwb.domotic.model.DomPeriodRef.ClassMgr.listDomPeriodRefs(this);
+    }
+
+    public org.semanticwb.domotic.model.DomPeriodRef createDomPeriodRef(String id)
+    {
+        return org.semanticwb.domotic.model.DomPeriodRef.ClassMgr.createDomPeriodRef(id,this);
+    }
+
+    public org.semanticwb.domotic.model.DomPeriodRef createDomPeriodRef()
+    {
+        long id=getSemanticObject().getModel().getCounter(swb4d_DomPeriodRef);
+        return org.semanticwb.domotic.model.DomPeriodRef.ClassMgr.createDomPeriodRef(String.valueOf(id),this);
+    } 
+
+    public void removeDomPeriodRef(String id)
+    {
+        org.semanticwb.domotic.model.DomPeriodRef.ClassMgr.removeDomPeriodRef(id, this);
+    }
+    public boolean hasDomPeriodRef(String id)
+    {
+        return org.semanticwb.domotic.model.DomPeriodRef.ClassMgr.hasDomPeriodRef(id, this);
+    }
+
+    public org.semanticwb.domotic.model.OnGroupChange getOnGroupChange(String id)
+    {
+        return org.semanticwb.domotic.model.OnGroupChange.ClassMgr.getOnGroupChange(id, this);
+    }
+
+    public java.util.Iterator<org.semanticwb.domotic.model.OnGroupChange> listOnGroupChanges()
+    {
+        return org.semanticwb.domotic.model.OnGroupChange.ClassMgr.listOnGroupChanges(this);
+    }
+
+    public org.semanticwb.domotic.model.OnGroupChange createOnGroupChange(String id)
+    {
+        return org.semanticwb.domotic.model.OnGroupChange.ClassMgr.createOnGroupChange(id,this);
+    }
+
+    public org.semanticwb.domotic.model.OnGroupChange createOnGroupChange()
+    {
+        long id=getSemanticObject().getModel().getCounter(swb4d_OnGroupChange);
+        return org.semanticwb.domotic.model.OnGroupChange.ClassMgr.createOnGroupChange(String.valueOf(id),this);
+    } 
+
+    public void removeOnGroupChange(String id)
+    {
+        org.semanticwb.domotic.model.OnGroupChange.ClassMgr.removeOnGroupChange(id, this);
+    }
+    public boolean hasOnGroupChange(String id)
+    {
+        return org.semanticwb.domotic.model.OnGroupChange.ClassMgr.hasOnGroupChange(id, this);
+    }
+
+    public org.semanticwb.domotic.model.SendMailAction getSendMailAction(String id)
+    {
+        return org.semanticwb.domotic.model.SendMailAction.ClassMgr.getSendMailAction(id, this);
+    }
+
+    public java.util.Iterator<org.semanticwb.domotic.model.SendMailAction> listSendMailActions()
+    {
+        return org.semanticwb.domotic.model.SendMailAction.ClassMgr.listSendMailActions(this);
+    }
+
+    public org.semanticwb.domotic.model.SendMailAction createSendMailAction(String id)
+    {
+        return org.semanticwb.domotic.model.SendMailAction.ClassMgr.createSendMailAction(id,this);
+    }
+
+    public org.semanticwb.domotic.model.SendMailAction createSendMailAction()
+    {
+        long id=getSemanticObject().getModel().getCounter(swb4d_SendMailAction);
+        return org.semanticwb.domotic.model.SendMailAction.ClassMgr.createSendMailAction(String.valueOf(id),this);
+    } 
+
+    public void removeSendMailAction(String id)
+    {
+        org.semanticwb.domotic.model.SendMailAction.ClassMgr.removeSendMailAction(id, this);
+    }
+    public boolean hasSendMailAction(String id)
+    {
+        return org.semanticwb.domotic.model.SendMailAction.ClassMgr.hasSendMailAction(id, this);
+    }
+
     public org.semanticwb.domotic.model.DomItem getDomItem(String id)
     {
         return org.semanticwb.domotic.model.DomItem.ClassMgr.getDomItem(id, this);
@@ -425,6 +529,60 @@ public abstract class DomiticSiteBase extends org.semanticwb.model.WebSite imple
         return org.semanticwb.domotic.model.DomEvent.ClassMgr.hasDomEvent(id, this);
     }
 
+    public org.semanticwb.domotic.model.DomAccessLevel getDomAccessLevel(String id)
+    {
+        return org.semanticwb.domotic.model.DomAccessLevel.ClassMgr.getDomAccessLevel(id, this);
+    }
+
+    public java.util.Iterator<org.semanticwb.domotic.model.DomAccessLevel> listDomAccessLevels()
+    {
+        return org.semanticwb.domotic.model.DomAccessLevel.ClassMgr.listDomAccessLevels(this);
+    }
+
+    public org.semanticwb.domotic.model.DomAccessLevel createDomAccessLevel(String id)
+    {
+        return org.semanticwb.domotic.model.DomAccessLevel.ClassMgr.createDomAccessLevel(id,this);
+    }
+
+    public void removeDomAccessLevel(String id)
+    {
+        org.semanticwb.domotic.model.DomAccessLevel.ClassMgr.removeDomAccessLevel(id, this);
+    }
+    public boolean hasDomAccessLevel(String id)
+    {
+        return org.semanticwb.domotic.model.DomAccessLevel.ClassMgr.hasDomAccessLevel(id, this);
+    }
+
+    public org.semanticwb.domotic.model.ChangeContextAction getChangeContextAction(String id)
+    {
+        return org.semanticwb.domotic.model.ChangeContextAction.ClassMgr.getChangeContextAction(id, this);
+    }
+
+    public java.util.Iterator<org.semanticwb.domotic.model.ChangeContextAction> listChangeContextActions()
+    {
+        return org.semanticwb.domotic.model.ChangeContextAction.ClassMgr.listChangeContextActions(this);
+    }
+
+    public org.semanticwb.domotic.model.ChangeContextAction createChangeContextAction(String id)
+    {
+        return org.semanticwb.domotic.model.ChangeContextAction.ClassMgr.createChangeContextAction(id,this);
+    }
+
+    public org.semanticwb.domotic.model.ChangeContextAction createChangeContextAction()
+    {
+        long id=getSemanticObject().getModel().getCounter(swb4d_ChangeContextAction);
+        return org.semanticwb.domotic.model.ChangeContextAction.ClassMgr.createChangeContextAction(String.valueOf(id),this);
+    } 
+
+    public void removeChangeContextAction(String id)
+    {
+        org.semanticwb.domotic.model.ChangeContextAction.ClassMgr.removeChangeContextAction(id, this);
+    }
+    public boolean hasChangeContextAction(String id)
+    {
+        return org.semanticwb.domotic.model.ChangeContextAction.ClassMgr.hasChangeContextAction(id, this);
+    }
+
     public org.semanticwb.domotic.model.DomContext getDomContext(String id)
     {
         return org.semanticwb.domotic.model.DomContext.ClassMgr.getDomContext(id, this);
@@ -453,6 +611,66 @@ public abstract class DomiticSiteBase extends org.semanticwb.model.WebSite imple
     public boolean hasDomContext(String id)
     {
         return org.semanticwb.domotic.model.DomContext.ClassMgr.hasDomContext(id, this);
+    }
+
+    public org.semanticwb.domotic.model.ChangeGroupAction getChangeGroupAction(String id)
+    {
+        return org.semanticwb.domotic.model.ChangeGroupAction.ClassMgr.getChangeGroupAction(id, this);
+    }
+
+    public java.util.Iterator<org.semanticwb.domotic.model.ChangeGroupAction> listChangeGroupActions()
+    {
+        return org.semanticwb.domotic.model.ChangeGroupAction.ClassMgr.listChangeGroupActions(this);
+    }
+
+    public org.semanticwb.domotic.model.ChangeGroupAction createChangeGroupAction(String id)
+    {
+        return org.semanticwb.domotic.model.ChangeGroupAction.ClassMgr.createChangeGroupAction(id,this);
+    }
+
+    public org.semanticwb.domotic.model.ChangeGroupAction createChangeGroupAction()
+    {
+        long id=getSemanticObject().getModel().getCounter(swb4d_ChangeGroupAction);
+        return org.semanticwb.domotic.model.ChangeGroupAction.ClassMgr.createChangeGroupAction(String.valueOf(id),this);
+    } 
+
+    public void removeChangeGroupAction(String id)
+    {
+        org.semanticwb.domotic.model.ChangeGroupAction.ClassMgr.removeChangeGroupAction(id, this);
+    }
+    public boolean hasChangeGroupAction(String id)
+    {
+        return org.semanticwb.domotic.model.ChangeGroupAction.ClassMgr.hasChangeGroupAction(id, this);
+    }
+
+    public org.semanticwb.domotic.model.OnSchedule getOnSchedule(String id)
+    {
+        return org.semanticwb.domotic.model.OnSchedule.ClassMgr.getOnSchedule(id, this);
+    }
+
+    public java.util.Iterator<org.semanticwb.domotic.model.OnSchedule> listOnSchedules()
+    {
+        return org.semanticwb.domotic.model.OnSchedule.ClassMgr.listOnSchedules(this);
+    }
+
+    public org.semanticwb.domotic.model.OnSchedule createOnSchedule(String id)
+    {
+        return org.semanticwb.domotic.model.OnSchedule.ClassMgr.createOnSchedule(id,this);
+    }
+
+    public org.semanticwb.domotic.model.OnSchedule createOnSchedule()
+    {
+        long id=getSemanticObject().getModel().getCounter(swb4d_OnSchedule);
+        return org.semanticwb.domotic.model.OnSchedule.ClassMgr.createOnSchedule(String.valueOf(id),this);
+    } 
+
+    public void removeOnSchedule(String id)
+    {
+        org.semanticwb.domotic.model.OnSchedule.ClassMgr.removeOnSchedule(id, this);
+    }
+    public boolean hasOnSchedule(String id)
+    {
+        return org.semanticwb.domotic.model.OnSchedule.ClassMgr.hasOnSchedule(id, this);
     }
 
     public org.semanticwb.domotic.model.DomRule getDomRule(String id)
@@ -575,6 +793,66 @@ public abstract class DomiticSiteBase extends org.semanticwb.model.WebSite imple
         return org.semanticwb.domotic.model.DomGroup.ClassMgr.hasDomGroup(id, this);
     }
 
+    public org.semanticwb.domotic.model.SendSMSAction getSendSMSAction(String id)
+    {
+        return org.semanticwb.domotic.model.SendSMSAction.ClassMgr.getSendSMSAction(id, this);
+    }
+
+    public java.util.Iterator<org.semanticwb.domotic.model.SendSMSAction> listSendSMSActions()
+    {
+        return org.semanticwb.domotic.model.SendSMSAction.ClassMgr.listSendSMSActions(this);
+    }
+
+    public org.semanticwb.domotic.model.SendSMSAction createSendSMSAction(String id)
+    {
+        return org.semanticwb.domotic.model.SendSMSAction.ClassMgr.createSendSMSAction(id,this);
+    }
+
+    public org.semanticwb.domotic.model.SendSMSAction createSendSMSAction()
+    {
+        long id=getSemanticObject().getModel().getCounter(swb4d_SendSMSAction);
+        return org.semanticwb.domotic.model.SendSMSAction.ClassMgr.createSendSMSAction(String.valueOf(id),this);
+    } 
+
+    public void removeSendSMSAction(String id)
+    {
+        org.semanticwb.domotic.model.SendSMSAction.ClassMgr.removeSendSMSAction(id, this);
+    }
+    public boolean hasSendSMSAction(String id)
+    {
+        return org.semanticwb.domotic.model.SendSMSAction.ClassMgr.hasSendSMSAction(id, this);
+    }
+
+    public org.semanticwb.domotic.model.OnDeviceChange getOnDeviceChange(String id)
+    {
+        return org.semanticwb.domotic.model.OnDeviceChange.ClassMgr.getOnDeviceChange(id, this);
+    }
+
+    public java.util.Iterator<org.semanticwb.domotic.model.OnDeviceChange> listOnDeviceChanges()
+    {
+        return org.semanticwb.domotic.model.OnDeviceChange.ClassMgr.listOnDeviceChanges(this);
+    }
+
+    public org.semanticwb.domotic.model.OnDeviceChange createOnDeviceChange(String id)
+    {
+        return org.semanticwb.domotic.model.OnDeviceChange.ClassMgr.createOnDeviceChange(id,this);
+    }
+
+    public org.semanticwb.domotic.model.OnDeviceChange createOnDeviceChange()
+    {
+        long id=getSemanticObject().getModel().getCounter(swb4d_OnDeviceChange);
+        return org.semanticwb.domotic.model.OnDeviceChange.ClassMgr.createOnDeviceChange(String.valueOf(id),this);
+    } 
+
+    public void removeOnDeviceChange(String id)
+    {
+        org.semanticwb.domotic.model.OnDeviceChange.ClassMgr.removeOnDeviceChange(id, this);
+    }
+    public boolean hasOnDeviceChange(String id)
+    {
+        return org.semanticwb.domotic.model.OnDeviceChange.ClassMgr.hasOnDeviceChange(id, this);
+    }
+
     public org.semanticwb.domotic.model.DomMacro getDomMacro(String id)
     {
         return org.semanticwb.domotic.model.DomMacro.ClassMgr.getDomMacro(id, this);
@@ -605,34 +883,94 @@ public abstract class DomiticSiteBase extends org.semanticwb.model.WebSite imple
         return org.semanticwb.domotic.model.DomMacro.ClassMgr.hasDomMacro(id, this);
     }
 
-    public org.semanticwb.domotic.model.DomGateway getDomGateway(String id)
+    public org.semanticwb.domotic.model.SendTwitterAction getSendTwitterAction(String id)
     {
-        return org.semanticwb.domotic.model.DomGateway.ClassMgr.getDomGateway(id, this);
+        return org.semanticwb.domotic.model.SendTwitterAction.ClassMgr.getSendTwitterAction(id, this);
     }
 
-    public java.util.Iterator<org.semanticwb.domotic.model.DomGateway> listDomGateways()
+    public java.util.Iterator<org.semanticwb.domotic.model.SendTwitterAction> listSendTwitterActions()
     {
-        return org.semanticwb.domotic.model.DomGateway.ClassMgr.listDomGateways(this);
+        return org.semanticwb.domotic.model.SendTwitterAction.ClassMgr.listSendTwitterActions(this);
     }
 
-    public org.semanticwb.domotic.model.DomGateway createDomGateway(String id)
+    public org.semanticwb.domotic.model.SendTwitterAction createSendTwitterAction(String id)
     {
-        return org.semanticwb.domotic.model.DomGateway.ClassMgr.createDomGateway(id,this);
+        return org.semanticwb.domotic.model.SendTwitterAction.ClassMgr.createSendTwitterAction(id,this);
     }
 
-    public org.semanticwb.domotic.model.DomGateway createDomGateway()
+    public org.semanticwb.domotic.model.SendTwitterAction createSendTwitterAction()
     {
-        long id=getSemanticObject().getModel().getCounter(swb4d_DomGateway);
-        return org.semanticwb.domotic.model.DomGateway.ClassMgr.createDomGateway(String.valueOf(id),this);
+        long id=getSemanticObject().getModel().getCounter(swb4d_SendTwitterAction);
+        return org.semanticwb.domotic.model.SendTwitterAction.ClassMgr.createSendTwitterAction(String.valueOf(id),this);
     } 
 
-    public void removeDomGateway(String id)
+    public void removeSendTwitterAction(String id)
     {
-        org.semanticwb.domotic.model.DomGateway.ClassMgr.removeDomGateway(id, this);
+        org.semanticwb.domotic.model.SendTwitterAction.ClassMgr.removeSendTwitterAction(id, this);
     }
-    public boolean hasDomGateway(String id)
+    public boolean hasSendTwitterAction(String id)
     {
-        return org.semanticwb.domotic.model.DomGateway.ClassMgr.hasDomGateway(id, this);
+        return org.semanticwb.domotic.model.SendTwitterAction.ClassMgr.hasSendTwitterAction(id, this);
+    }
+
+    public org.semanticwb.domotic.model.StartTimerAction getStartTimerAction(String id)
+    {
+        return org.semanticwb.domotic.model.StartTimerAction.ClassMgr.getStartTimerAction(id, this);
+    }
+
+    public java.util.Iterator<org.semanticwb.domotic.model.StartTimerAction> listStartTimerActions()
+    {
+        return org.semanticwb.domotic.model.StartTimerAction.ClassMgr.listStartTimerActions(this);
+    }
+
+    public org.semanticwb.domotic.model.StartTimerAction createStartTimerAction(String id)
+    {
+        return org.semanticwb.domotic.model.StartTimerAction.ClassMgr.createStartTimerAction(id,this);
+    }
+
+    public org.semanticwb.domotic.model.StartTimerAction createStartTimerAction()
+    {
+        long id=getSemanticObject().getModel().getCounter(swb4d_StartTimerAction);
+        return org.semanticwb.domotic.model.StartTimerAction.ClassMgr.createStartTimerAction(String.valueOf(id),this);
+    } 
+
+    public void removeStartTimerAction(String id)
+    {
+        org.semanticwb.domotic.model.StartTimerAction.ClassMgr.removeStartTimerAction(id, this);
+    }
+    public boolean hasStartTimerAction(String id)
+    {
+        return org.semanticwb.domotic.model.StartTimerAction.ClassMgr.hasStartTimerAction(id, this);
+    }
+
+    public org.semanticwb.domotic.model.OnSignal getOnSignal(String id)
+    {
+        return org.semanticwb.domotic.model.OnSignal.ClassMgr.getOnSignal(id, this);
+    }
+
+    public java.util.Iterator<org.semanticwb.domotic.model.OnSignal> listOnSignals()
+    {
+        return org.semanticwb.domotic.model.OnSignal.ClassMgr.listOnSignals(this);
+    }
+
+    public org.semanticwb.domotic.model.OnSignal createOnSignal(String id)
+    {
+        return org.semanticwb.domotic.model.OnSignal.ClassMgr.createOnSignal(id,this);
+    }
+
+    public org.semanticwb.domotic.model.OnSignal createOnSignal()
+    {
+        long id=getSemanticObject().getModel().getCounter(swb4d_OnSignal);
+        return org.semanticwb.domotic.model.OnSignal.ClassMgr.createOnSignal(String.valueOf(id),this);
+    } 
+
+    public void removeOnSignal(String id)
+    {
+        org.semanticwb.domotic.model.OnSignal.ClassMgr.removeOnSignal(id, this);
+    }
+    public boolean hasOnSignal(String id)
+    {
+        return org.semanticwb.domotic.model.OnSignal.ClassMgr.hasOnSignal(id, this);
     }
 
     public org.semanticwb.domotic.model.DomAction getDomAction(String id)
@@ -695,6 +1033,36 @@ public abstract class DomiticSiteBase extends org.semanticwb.model.WebSite imple
         return org.semanticwb.domotic.model.DomDevice.ClassMgr.hasDomDevice(id, this);
     }
 
+    public org.semanticwb.domotic.model.DomGateway getDomGateway(String id)
+    {
+        return org.semanticwb.domotic.model.DomGateway.ClassMgr.getDomGateway(id, this);
+    }
+
+    public java.util.Iterator<org.semanticwb.domotic.model.DomGateway> listDomGateways()
+    {
+        return org.semanticwb.domotic.model.DomGateway.ClassMgr.listDomGateways(this);
+    }
+
+    public org.semanticwb.domotic.model.DomGateway createDomGateway(String id)
+    {
+        return org.semanticwb.domotic.model.DomGateway.ClassMgr.createDomGateway(id,this);
+    }
+
+    public org.semanticwb.domotic.model.DomGateway createDomGateway()
+    {
+        long id=getSemanticObject().getModel().getCounter(swb4d_DomGateway);
+        return org.semanticwb.domotic.model.DomGateway.ClassMgr.createDomGateway(String.valueOf(id),this);
+    } 
+
+    public void removeDomGateway(String id)
+    {
+        org.semanticwb.domotic.model.DomGateway.ClassMgr.removeDomGateway(id, this);
+    }
+    public boolean hasDomGateway(String id)
+    {
+        return org.semanticwb.domotic.model.DomGateway.ClassMgr.hasDomGateway(id, this);
+    }
+
     public org.semanticwb.domotic.model.DomDeviceType getDomDeviceType(String id)
     {
         return org.semanticwb.domotic.model.DomDeviceType.ClassMgr.getDomDeviceType(id, this);
@@ -753,5 +1121,65 @@ public abstract class DomiticSiteBase extends org.semanticwb.model.WebSite imple
     public boolean hasDomDeviceStat(String id)
     {
         return org.semanticwb.domotic.model.DomDeviceStat.ClassMgr.hasDomDeviceStat(id, this);
+    }
+
+    public org.semanticwb.domotic.model.OnContextChange getOnContextChange(String id)
+    {
+        return org.semanticwb.domotic.model.OnContextChange.ClassMgr.getOnContextChange(id, this);
+    }
+
+    public java.util.Iterator<org.semanticwb.domotic.model.OnContextChange> listOnContextChanges()
+    {
+        return org.semanticwb.domotic.model.OnContextChange.ClassMgr.listOnContextChanges(this);
+    }
+
+    public org.semanticwb.domotic.model.OnContextChange createOnContextChange(String id)
+    {
+        return org.semanticwb.domotic.model.OnContextChange.ClassMgr.createOnContextChange(id,this);
+    }
+
+    public org.semanticwb.domotic.model.OnContextChange createOnContextChange()
+    {
+        long id=getSemanticObject().getModel().getCounter(swb4d_OnContextChange);
+        return org.semanticwb.domotic.model.OnContextChange.ClassMgr.createOnContextChange(String.valueOf(id),this);
+    } 
+
+    public void removeOnContextChange(String id)
+    {
+        org.semanticwb.domotic.model.OnContextChange.ClassMgr.removeOnContextChange(id, this);
+    }
+    public boolean hasOnContextChange(String id)
+    {
+        return org.semanticwb.domotic.model.OnContextChange.ClassMgr.hasOnContextChange(id, this);
+    }
+
+    public org.semanticwb.domotic.model.ChangeDeviceAction getChangeDeviceAction(String id)
+    {
+        return org.semanticwb.domotic.model.ChangeDeviceAction.ClassMgr.getChangeDeviceAction(id, this);
+    }
+
+    public java.util.Iterator<org.semanticwb.domotic.model.ChangeDeviceAction> listChangeDeviceActions()
+    {
+        return org.semanticwb.domotic.model.ChangeDeviceAction.ClassMgr.listChangeDeviceActions(this);
+    }
+
+    public org.semanticwb.domotic.model.ChangeDeviceAction createChangeDeviceAction(String id)
+    {
+        return org.semanticwb.domotic.model.ChangeDeviceAction.ClassMgr.createChangeDeviceAction(id,this);
+    }
+
+    public org.semanticwb.domotic.model.ChangeDeviceAction createChangeDeviceAction()
+    {
+        long id=getSemanticObject().getModel().getCounter(swb4d_ChangeDeviceAction);
+        return org.semanticwb.domotic.model.ChangeDeviceAction.ClassMgr.createChangeDeviceAction(String.valueOf(id),this);
+    } 
+
+    public void removeChangeDeviceAction(String id)
+    {
+        org.semanticwb.domotic.model.ChangeDeviceAction.ClassMgr.removeChangeDeviceAction(id, this);
+    }
+    public boolean hasChangeDeviceAction(String id)
+    {
+        return org.semanticwb.domotic.model.ChangeDeviceAction.ClassMgr.hasChangeDeviceAction(id, this);
     }
 }
