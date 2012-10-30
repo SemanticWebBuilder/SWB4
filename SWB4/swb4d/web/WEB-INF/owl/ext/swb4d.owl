@@ -56,30 +56,125 @@
       <owl:Class rdf:ID="DomGroup"/>
     </swb:hasClass>
     <swb:hasClass>
-      <owl:Class rdf:ID="DomDevice"/>
+      <swb:Class rdf:ID="StartTimerAction">
+        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >true</swb:autogenId>
+        <rdfs:subClassOf>
+          <owl:Class rdf:ID="DomAction"/>
+        </rdfs:subClassOf>
+        <swb:displayObject>
+          <swbxf:DisplayObject rdf:ID="do_DomActionChild">
+            <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >swbIconResource</swb:iconClass>
+            <swbxf:dragSupport rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+            >true</swbxf:dragSupport>
+            <swbxf:dropMatchLevel rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+            >2</swbxf:dropMatchLevel>
+          </swbxf:DisplayObject>
+        </swb:displayObject>
+        <rdfs:label xml:lang="es">Iniciar Temporizador</rdfs:label>
+        <rdfs:label xml:lang="en">Start Timer</rdfs:label>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Class>
     </swb:hasClass>
     <swb:hasClass>
-      <owl:Class rdf:ID="DomEvent"/>
+      <owl:Class rdf:ID="DomDevice"/>
     </swb:hasClass>
     <swb:hasHerarquicalNode>
       <swbxf:HerarquicalNode rdf:ID="hn_Contexts">
         <swb:title xml:lang="es">Contextos</swb:title>
         <swb:title xml:lang="en">Contexts</swb:title>
-        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >94</swb:index>
-        <swbxf:heClass rdf:resource="#DomContext"/>
         <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
         >swbIconLanguages</swb:iconClass>
+        <swbxf:heClass rdf:resource="#DomContext"/>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >10</swb:index>
       </swbxf:HerarquicalNode>
     </swb:hasHerarquicalNode>
+    <swb:hasClass>
+      <swb:Class rdf:ID="OnSchedule">
+        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >true</swb:autogenId>
+        <rdfs:subClassOf>
+          <owl:Class rdf:ID="DomEvent"/>
+        </rdfs:subClassOf>
+        <rdfs:label xml:lang="es">En Calendario</rdfs:label>
+        <rdfs:label xml:lang="en">On Schedule</rdfs:label>
+        <swb:displayObject>
+          <swbxf:DisplayObject rdf:ID="do_DomEventChild">
+            <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >swbIconResource</swb:iconClass>
+            <swbxf:dragSupport rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+            >true</swbxf:dragSupport>
+            <swbxf:dropMatchLevel rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+            >2</swbxf:dropMatchLevel>
+          </swbxf:DisplayObject>
+        </swb:displayObject>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Class>
+    </swb:hasClass>
+    <swb:hasClass>
+      <owl:Class rdf:about="#DomEvent"/>
+    </swb:hasClass>
+    <swb:hasClass>
+      <owl:Class rdf:ID="SendMailAction"/>
+    </swb:hasClass>
+    <swb:hasClass>
+      <swb:Class rdf:ID="OnGroupChange">
+        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >true</swb:autogenId>
+        <rdfs:subClassOf>
+          <owl:Class rdf:about="#DomEvent"/>
+        </rdfs:subClassOf>
+        <rdfs:label xml:lang="es">Al Activar/Desactivar Grupo</rdfs:label>
+        <rdfs:label xml:lang="en">At Active/Unactive Group</rdfs:label>
+        <swb:displayObject rdf:resource="#do_DomEventChild"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Class>
+    </swb:hasClass>
+    <swb:hasClass>
+      <owl:Class rdf:ID="SendSMSAction"/>
+    </swb:hasClass>
     <swb:hasClass>
       <owl:Class rdf:ID="DomPermission"/>
     </swb:hasClass>
     <swb:hasClass>
-      <owl:Class rdf:ID="DomAction"/>
+      <owl:Class rdf:ID="DomPeriodRef"/>
+    </swb:hasClass>
+    <swb:hasClass>
+      <swb:Class rdf:ID="OnDeviceChange">
+        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >true</swb:autogenId>
+        <rdfs:subClassOf>
+          <owl:Class rdf:about="#DomEvent"/>
+        </rdfs:subClassOf>
+        <rdfs:label xml:lang="es">Al Activar/Desactivar Dispositivo</rdfs:label>
+        <rdfs:label xml:lang="en">At Device Active/Unactive</rdfs:label>
+        <swb:displayObject rdf:resource="#do_DomEventChild"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Class>
+    </swb:hasClass>
+    <swb:hasClass>
+      <owl:Class rdf:ID="DomAccessLevel"/>
+    </swb:hasClass>
+    <swb:hasClass>
+      <owl:Class rdf:about="#DomAction"/>
     </swb:hasClass>
     <swb:hasClass>
       <owl:Class rdf:ID="DomDeviceType"/>
+    </swb:hasClass>
+    <swb:hasClass>
+      <swb:Class rdf:ID="SendTwitterAction">
+        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >true</swb:autogenId>
+        <rdfs:subClassOf>
+          <owl:Class rdf:about="#DomAction"/>
+        </rdfs:subClassOf>
+        <swb:displayObject rdf:resource="#do_DomActionChild"/>
+        <rdfs:label xml:lang="es">Enviar Twitter</rdfs:label>
+        <rdfs:label xml:lang="en">Sent Twitter</rdfs:label>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Class>
     </swb:hasClass>
     <swb:hasClass>
       <owl:Class rdf:ID="DomRule"/>
@@ -89,17 +184,20 @@
     </swb:hasClass>
     <swb:hasHerarquicalNode>
       <swbxf:HerarquicalNode rdf:ID="hn_DomGroups">
-        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >105</swb:index>
+        <swbxf:heClass>
+          <owl:Class rdf:about="#DomGroup"/>
+        </swbxf:heClass>
         <swb:title xml:lang="es">Grupos</swb:title>
         <swb:title xml:lang="en">Groups</swb:title>
         <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
         >swbIconTemplateGroup</swb:iconClass>
-        <swbxf:heClass>
-          <owl:Class rdf:about="#DomGroup"/>
-        </swbxf:heClass>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >12</swb:index>
       </swbxf:HerarquicalNode>
     </swb:hasHerarquicalNode>
+    <swb:hasClass>
+      <owl:Class rdf:ID="OnSignal"/>
+    </swb:hasClass>
     <swb:displayObject>
       <swbxf:DisplayObject rdf:ID="do_DomoticSite">
         <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
@@ -108,8 +206,7 @@
     </swb:displayObject>
     <swb:hasHerarquicalNode>
       <swbxf:HerarquicalNode rdf:ID="hn_DomGateways">
-        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >100</swb:index>
+        <swb:title xml:lang="es">Gateways</swb:title>
         <swb:title xml:lang="en">Gateways</swb:title>
         <swbxf:heClass>
           <swb:Class rdf:ID="DomGateway">
@@ -136,44 +233,71 @@
         </swbxf:heClass>
         <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
         >swbIconResources</swb:iconClass>
-        <swb:title xml:lang="es">Gateways</swb:title>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >15</swb:index>
       </swbxf:HerarquicalNode>
     </swb:hasHerarquicalNode>
+    <swb:hasClass>
+      <swb:Class rdf:ID="ChangeGroupAction">
+        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >true</swb:autogenId>
+        <rdfs:subClassOf>
+          <owl:Class rdf:about="#DomAction"/>
+        </rdfs:subClassOf>
+        <swb:displayObject rdf:resource="#do_DomActionChild"/>
+        <rdfs:label xml:lang="es">Activar/Desactivar Grupo</rdfs:label>
+        <rdfs:label xml:lang="en">Group Active/Unactive</rdfs:label>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Class>
+    </swb:hasClass>
     <swb:hasClass>
       <owl:Class rdf:about="#DomItem"/>
     </swb:hasClass>
+    <swb:hasClass>
+      <swb:Class rdf:ID="ChangeContextAction">
+        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >true</swb:autogenId>
+        <rdfs:subClassOf>
+          <owl:Class rdf:about="#DomAction"/>
+        </rdfs:subClassOf>
+        <swb:displayObject rdf:resource="#do_DomActionChild"/>
+        <rdfs:label xml:lang="es">Cambiar el Contexto</rdfs:label>
+        <rdfs:label xml:lang="en">Context Change</rdfs:label>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Class>
+    </swb:hasClass>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Model"/>
+    <swb:hasClass>
+      <swb:Class rdf:ID="ChangeDeviceAction">
+        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >true</swb:autogenId>
+        <rdfs:subClassOf>
+          <owl:Class rdf:about="#DomAction"/>
+        </rdfs:subClassOf>
+        <swb:displayObject rdf:resource="#do_DomActionChild"/>
+        <rdfs:label xml:lang="es">Activar/Desactivar Dispositivo</rdfs:label>
+        <rdfs:label xml:lang="en">Device Active/Unactive</rdfs:label>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Class>
+    </swb:hasClass>
     <swb:hasClass>
       <owl:Class rdf:ID="DomMacro"/>
     </swb:hasClass>
-    <swb:hasHerarquicalNode>
-      <swbxf:HerarquicalNode rdf:ID="hn_DomDeviceTypes">
-        <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >swbIconTemplateGroup</swb:iconClass>
-        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >96</swb:index>
-        <swb:title xml:lang="es">Tipos de Dispositivos</swb:title>
-        <swb:title xml:lang="en">Device Types</swb:title>
-        <swbxf:heClass>
-          <owl:Class rdf:about="#DomDeviceType"/>
-        </swbxf:heClass>
-      </swbxf:HerarquicalNode>
-    </swb:hasHerarquicalNode>
-    <swb:hasHerarquicalNode>
-      <swbxf:HerarquicalNode rdf:ID="hn_Conditions">
-        <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >swbIconRules</swb:iconClass>
-        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >200</swb:index>
-        <swb:title xml:lang="es">Condiciones</swb:title>
-        <swb:title xml:lang="en">Conditions</swb:title>
-        <swbxf:heClass>
-          <owl:Class rdf:about="#DomRule"/>
-        </swbxf:heClass>
-      </swbxf:HerarquicalNode>
-    </swb:hasHerarquicalNode>
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#WebSite"/>
     <swb:hasClass rdf:resource="#DomGateway"/>
+    <swb:hasClass>
+      <swb:Class rdf:ID="OnContextChange">
+        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >true</swb:autogenId>
+        <rdfs:subClassOf>
+          <owl:Class rdf:about="#DomEvent"/>
+        </rdfs:subClassOf>
+        <rdfs:label xml:lang="es">Al Cambiar de Contexto</rdfs:label>
+        <rdfs:label xml:lang="en">At Context Change</rdfs:label>
+        <swb:displayObject rdf:resource="#do_DomEventChild"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Class>
+    </swb:hasClass>
     <swb:hasHerarquicalNode rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_Calendars"/>
   </owl:Class>
   <owl:Class rdf:about="#DomAction">
@@ -185,6 +309,12 @@
       <swbxf:DisplayObject rdf:ID="dp_DomAction">
         <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
         >swbIconResource</swb:iconClass>
+        <swbxf:doNotInstanceable rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >true</swbxf:doNotInstanceable>
+        <swbxf:dragSupport rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >true</swbxf:dragSupport>
+        <swbxf:dropMatchLevel rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >2</swbxf:dropMatchLevel>
       </swbxf:DisplayObject>
     </swb:displayObject>
     <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
@@ -208,8 +338,8 @@
     </swb:displayObject>
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
     <rdfs:label xml:lang="en">Condition</rdfs:label>
-    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#XMLable"/>
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#XMLable"/>
     <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:autogenId>
     <rdfs:label xml:lang="es">Condición</rdfs:label>
@@ -223,18 +353,12 @@
     >true</swb:autogenId>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
-  <owl:Class rdf:ID="DomAccessLevel">
+  <owl:Class rdf:about="#DomAccessLevel">
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
     <rdfs:label xml:lang="es">Nivel de Acceso</rdfs:label>
     <rdfs:label xml:lang="en">Access Level</rdfs:label>
-    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
-  </owl:Class>
-  <owl:Class rdf:about="#DomPermission">
-    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
-    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:autogenId>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
   <owl:Class rdf:about="#DomGroup">
@@ -257,6 +381,21 @@
     <rdfs:label xml:lang="en">Device Group</rdfs:label>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
+  <owl:Class rdf:about="#DomPermission">
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+  </owl:Class>
+  <owl:Class rdf:about="#SendMailAction">
+    <rdfs:subClassOf rdf:resource="#DomAction"/>
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <swb:displayObject rdf:resource="#do_DomActionChild"/>
+    <rdfs:label xml:lang="es">Enviar Correo Electrónico</rdfs:label>
+    <rdfs:label xml:lang="en">Send Email</rdfs:label>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+  </owl:Class>
   <owl:Class rdf:about="#DomDeviceType">
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
@@ -273,22 +412,30 @@
     </swb:displayObject>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
-  <owl:Class rdf:ID="SendMailAction">
-    <rdfs:subClassOf rdf:resource="#DomAction"/>
-    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:autogenId>
-    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
-  </owl:Class>
-  <owl:Class rdf:ID="DomPeriodRef">
+  <owl:Class rdf:about="#DomPeriodRef">
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
     <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:autogenId>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
-  <owl:Class rdf:ID="SendSMSAction">
+  <owl:Class rdf:about="#SendSMSAction">
     <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:autogenId>
     <rdfs:subClassOf rdf:resource="#DomAction"/>
+    <swb:displayObject rdf:resource="#do_DomActionChild"/>
+    <rdfs:label xml:lang="es">Enviar SMS</rdfs:label>
+    <rdfs:label xml:lang="en">Send SMS</rdfs:label>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+  </owl:Class>
+  <owl:Class rdf:about="#OnSignal">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#DomEvent"/>
+    </rdfs:subClassOf>
+    <rdfs:label xml:lang="es">Al Recibir Señal</rdfs:label>
+    <rdfs:label xml:lang="en">On Signal</rdfs:label>
+    <swb:displayObject rdf:resource="#do_DomEventChild"/>
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
   <owl:Class rdf:about="#DomEvent">
@@ -298,6 +445,12 @@
       <swbxf:DisplayObject rdf:ID="do_DomEvent">
         <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
         >swbIconRule</swb:iconClass>
+        <swbxf:doNotInstanceable rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >true</swbxf:doNotInstanceable>
+        <swbxf:dragSupport rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >true</swbxf:dragSupport>
+        <swbxf:dropMatchLevel rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >2</swbxf:dropMatchLevel>
       </swbxf:DisplayObject>
     </swb:displayObject>
     <rdfs:label xml:lang="en">Event</rdfs:label>
@@ -334,31 +487,31 @@
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
+  <owl:ObjectProperty rdf:ID="domGroup4Event">
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >domGroup</swb:propertyCodeName>
+    <rdfs:range rdf:resource="#DomGroup"/>
+    <rdfs:domain rdf:resource="#OnGroupChange"/>
+    <rdfs:label xml:lang="es">Grupo</rdfs:label>
+    <rdfs:label xml:lang="en">Group</rdfs:label>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_domObjectSelect">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#selectOneModel"/>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >50</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:required>
+    <owl:inverseOf>
+      <owl:ObjectProperty rdf:ID="hasOnGroupChangeInv"/>
+    </owl:inverseOf>
+  </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="hasChildGroupInv">
     <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >hasChildGroup</swb:propertyCodeName>
     <swb:herarquicalRelation rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:herarquicalRelation>
-  </owl:ObjectProperty>
-  <owl:ObjectProperty rdf:ID="domGroup4Event">
-    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >domGroup</swb:propertyCodeName>
-    <rdfs:range rdf:resource="#DomGroup"/>
-    <rdfs:domain>
-      <swb:Class rdf:ID="OnGroupChange">
-        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-        >true</swb:autogenId>
-        <rdfs:subClassOf rdf:resource="#DomEvent"/>
-        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-      </swb:Class>
-    </rdfs:domain>
-  </owl:ObjectProperty>
-  <owl:ObjectProperty rdf:ID="domGateway">
-    <rdfs:domain rdf:resource="#DomDevice"/>
-    <rdfs:range rdf:resource="#DomGateway"/>
-    <owl:inverseOf>
-      <owl:ObjectProperty rdf:ID="hasDomDevice"/>
-    </owl:inverseOf>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="hasGroup">
     <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
@@ -377,6 +530,129 @@
     </swb:displayProperty>
     <rdfs:label xml:lang="es">Grupos</rdfs:label>
     <rdfs:label xml:lang="en">Groups</rdfs:label>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="#hasOnGroupChangeInv">
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >hasOnGroupChange</swb:propertyCodeName>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasDomDevice">
+    <swb:herarquicalRelation rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:herarquicalRelation>
+    <swb:cloneDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:cloneDependency>
+    <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:removeDependency>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="getStartTimerActionInv">
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >getStartTimerAction</swb:propertyCodeName>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasDomEventsInv">
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >hasDomEvents</swb:propertyCodeName>
+    <swb:herarquicalRelation rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:herarquicalRelation>
+    <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:removeDependency>
+    <swb:cloneDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:cloneDependency>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasOnDeviceChangeInv">
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >hasOnDeviceChange</swb:propertyCodeName>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="domDevice4Event">
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >domDevice</swb:propertyCodeName>
+    <rdfs:range rdf:resource="#DomDevice"/>
+    <rdfs:domain rdf:resource="#OnDeviceChange"/>
+    <rdfs:label xml:lang="en">Device</rdfs:label>
+    <rdfs:label xml:lang="es">Dispositivo</rdfs:label>
+    <swb:displayProperty rdf:resource="#dp_domObjectSelect"/>
+    <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:required>
+    <owl:inverseOf rdf:resource="#hasOnDeviceChangeInv"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasDomRule">
+    <swb:herarquicalRelation rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:herarquicalRelation>
+    <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:removeDependency>
+    <swb:cloneDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:cloneDependency>
+    <rdfs:domain rdf:resource="#DomAction"/>
+    <rdfs:range rdf:resource="#DomRule"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="accessLevel">
+    <rdfs:domain rdf:resource="#DomPermission"/>
+    <rdfs:range rdf:resource="#DomAccessLevel"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="changeDevice">
+    <rdfs:domain rdf:resource="#ChangeDeviceAction"/>
+    <rdfs:range rdf:resource="#DomDevice"/>
+    <rdfs:label xml:lang="es">Dispositivo</rdfs:label>
+    <rdfs:label xml:lang="en">Device</rdfs:label>
+    <swb:displayProperty rdf:resource="#dp_domObjectSelect"/>
+    <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:required>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="changeGroup">
+    <rdfs:domain rdf:resource="#ChangeGroupAction"/>
+    <rdfs:range rdf:resource="#DomGroup"/>
+    <rdfs:label xml:lang="es">Grupo</rdfs:label>
+    <rdfs:label xml:lang="en">Group</rdfs:label>
+    <swb:displayProperty rdf:resource="#dp_domObjectSelect"/>
+    <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:required>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="parentGroup">
+    <rdfs:domain rdf:resource="#DomGroup"/>
+    <rdfs:range rdf:resource="#DomGroup"/>
+    <owl:inverseOf rdf:resource="#hasChildGroupInv"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="schedule4Event">
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >calendar</swb:propertyCodeName>
+    <rdfs:range rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Calendar"/>
+    <rdfs:domain rdf:resource="#OnSchedule"/>
+    <rdfs:label xml:lang="es">Calendario</rdfs:label>
+    <rdfs:label xml:lang="en">Schedule</rdfs:label>
+    <swb:displayProperty rdf:resource="#dp_domObjectSelect"/>
+    <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:required>
+    <owl:inverseOf>
+      <owl:ObjectProperty rdf:ID="hasOnScheduleInv"/>
+    </owl:inverseOf>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasDomPeriodRef">
+    <rdfs:range rdf:resource="#DomPeriodRef"/>
+    <rdfs:domain rdf:resource="#DomDevice"/>
+    <swb:cloneDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:cloneDependency>
+    <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:removeDependency>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="domPeriod">
+    <rdfs:range rdf:resource="#DomPeriod"/>
+    <rdfs:domain rdf:resource="#DomPeriodRef"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasTimerDomAction">
+    <rdfs:domain rdf:resource="#StartTimerAction"/>
+    <rdfs:range rdf:resource="#DomAction"/>
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >hasDomAction</swb:propertyCodeName>
+    <swb:herarquicalRelation rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:herarquicalRelation>
+    <swb:cloneDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:cloneDependency>
+    <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:removeDependency>
+    <owl:inverseOf rdf:resource="#getStartTimerActionInv"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="domGateway">
+    <rdfs:domain rdf:resource="#DomDevice"/>
+    <rdfs:range rdf:resource="#DomGateway"/>
+    <owl:inverseOf rdf:resource="#hasDomDevice"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="domPeriodRefContext">
     <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
@@ -401,36 +677,14 @@
     >false</swb:herarquicalRelation>
     <rdfs:range rdf:resource="#DomDeviceStat"/>
   </owl:ObjectProperty>
-  <owl:ObjectProperty rdf:about="#hasDomDevice">
-    <swb:herarquicalRelation rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:herarquicalRelation>
-    <swb:cloneDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:cloneDependency>
-    <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:removeDependency>
-  </owl:ObjectProperty>
-  <owl:ObjectProperty rdf:ID="hasDomEventsInv">
-    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >hasDomEvents</swb:propertyCodeName>
-    <swb:herarquicalRelation rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:herarquicalRelation>
-    <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:removeDependency>
-    <swb:cloneDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:cloneDependency>
-  </owl:ObjectProperty>
-  <owl:ObjectProperty rdf:ID="domDevice4Event">
-    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >domDevice</swb:propertyCodeName>
-    <rdfs:range rdf:resource="#DomDevice"/>
-    <rdfs:domain>
-      <swb:Class rdf:ID="OnDeviceChange">
-        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-        >true</swb:autogenId>
-        <rdfs:subClassOf rdf:resource="#DomEvent"/>
-        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-      </swb:Class>
-    </rdfs:domain>
+  <owl:ObjectProperty rdf:ID="changeContext">
+    <rdfs:domain rdf:resource="#ChangeContextAction"/>
+    <rdfs:range rdf:resource="#DomContext"/>
+    <rdfs:label xml:lang="es">Contexto</rdfs:label>
+    <rdfs:label xml:lang="en">Context</rdfs:label>
+    <swb:displayProperty rdf:resource="#dp_domObjectSelect"/>
+    <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:required>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="hasPermission">
     <swb:displayProperty>
@@ -442,10 +696,6 @@
     </swb:displayProperty>
     <rdfs:range rdf:resource="#DomPermission"/>
     <rdfs:domain rdf:resource="#DomItem"/>
-  </owl:ObjectProperty>
-  <owl:ObjectProperty rdf:ID="hasDomRule">
-    <rdfs:domain rdf:resource="#DomAction"/>
-    <rdfs:range rdf:resource="#DomRule"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="domDeviceType">
     <rdfs:domain rdf:resource="#DomDevice"/>
@@ -464,54 +714,47 @@
     <rdfs:domain rdf:resource="#DomMacro"/>
     <rdfs:range rdf:resource="#DomAction"/>
   </owl:ObjectProperty>
-  <owl:ObjectProperty rdf:ID="accessLevel">
-    <rdfs:domain rdf:resource="#DomPermission"/>
-    <rdfs:range rdf:resource="#DomAccessLevel"/>
-  </owl:ObjectProperty>
-  <owl:ObjectProperty rdf:ID="parentGroup">
-    <rdfs:domain rdf:resource="#DomGroup"/>
-    <rdfs:range rdf:resource="#DomGroup"/>
-    <owl:inverseOf rdf:resource="#hasChildGroupInv"/>
-  </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="hasDomAction">
     <owl:inverseOf>
       <owl:ObjectProperty rdf:ID="domEventInv"/>
     </owl:inverseOf>
+    <swb:herarquicalRelation rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:herarquicalRelation>
     <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:removeDependency>
     <swb:cloneDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:cloneDependency>
     <rdfs:range rdf:resource="#DomAction"/>
     <rdfs:domain rdf:resource="#DomEvent"/>
-    <swb:herarquicalRelation rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:herarquicalRelation>
-    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >hasDomAction</swb:propertyCodeName>
-  </owl:ObjectProperty>
-  <owl:ObjectProperty rdf:about="#hasDomDeviceInv">
-    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >hasDomDevice</swb:propertyCodeName>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="user">
     <rdfs:domain rdf:resource="#DomPermission"/>
     <rdfs:range rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#User"/>
   </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="cancelEvent">
+    <rdfs:domain rdf:resource="#StartTimerAction"/>
+    <rdfs:range rdf:resource="#DomEvent"/>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_cancelEvent">
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >60</swb:index>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#ObjectElement_1"/>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:label xml:lang="en">Cancel Event</rdfs:label>
+    <rdfs:label xml:lang="es">Evento de Cancelación</rdfs:label>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="#hasDomDeviceInv">
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >hasDomDevice</swb:propertyCodeName>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="#hasOnScheduleInv">
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >hasOnSchedule</swb:propertyCodeName>
+  </owl:ObjectProperty>
   <owl:ObjectProperty rdf:about="#domEventInv">
     <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >domEvent</swb:propertyCodeName>
-  </owl:ObjectProperty>
-  <owl:ObjectProperty rdf:ID="schedule4Event">
-    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >calendar</swb:propertyCodeName>
-    <rdfs:range rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Calendar"/>
-    <rdfs:domain>
-      <swb:Class rdf:ID="OnSchedule">
-        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-        >true</swb:autogenId>
-        <rdfs:subClassOf rdf:resource="#DomEvent"/>
-        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-      </swb:Class>
-    </rdfs:domain>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="domEventContext">
     <rdfs:range rdf:resource="#DomContext"/>
@@ -520,21 +763,50 @@
     >domContext</swb:propertyCodeName>
     <owl:inverseOf rdf:resource="#hasDomEventsInv"/>
   </owl:ObjectProperty>
-  <owl:ObjectProperty rdf:ID="hasDomPeriodRef">
-    <rdfs:range rdf:resource="#DomPeriodRef"/>
-    <rdfs:domain rdf:resource="#DomDevice"/>
-    <swb:cloneDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:cloneDependency>
-    <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:removeDependency>
-  </owl:ObjectProperty>
-  <owl:ObjectProperty rdf:ID="domPeriod">
-    <rdfs:range rdf:resource="#DomPeriod"/>
-    <rdfs:domain rdf:resource="#DomPeriodRef"/>
-  </owl:ObjectProperty>
   <owl:DatatypeProperty rdf:ID="deviceStat">
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <rdfs:domain rdf:resource="#OnDeviceChange"/>
+    <rdfs:label xml:lang="es">Estatus</rdfs:label>
+    <rdfs:label xml:lang="en">Status</rdfs:label>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_deviceStat">
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >60</swb:index>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#selectOneModel"/>
+        <swbxf:propSelectValues xml:lang="es">on:Activar|off:Desactivar|any:Cualquiera</swbxf:propSelectValues>
+        <swbxf:propSelectValues xml:lang="en">on:ON|off:OFF|any:ANY</swbxf:propSelectValues>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:required>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="once">
+    <rdfs:label xml:lang="en">Once</rdfs:label>
+    <rdfs:domain rdf:resource="#DomEvent"/>
+    <rdfs:label xml:lang="es">Una vez</rdfs:label>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_once">
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >100</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:required>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="delay">
+    <rdfs:domain rdf:resource="#StartTimerAction"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#long"/>
+    <rdfs:label>Tiempo (seg)</rdfs:label>
+    <rdfs:label>Time (Seg)</rdfs:label>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_delay">
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >50</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:required>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="devSerial">
     <rdfs:domain rdf:resource="#DomDevice"/>
@@ -549,24 +821,35 @@
     </swb:displayProperty>
     <rdfs:label>Serial</rdfs:label>
   </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="active">
-    <rdfs:domain rdf:resource="#DomDeviceStat"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
-  </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="scheduleStat">
     <swb:displayProperty>
-      <swbxf:DisplayProperty rdf:ID="dp_contextStat">
-        <rdfs:label xml:lang="en">Status</rdfs:label>
-        <rdfs:label xml:lang="es">Estatus</rdfs:label>
-        <swbxf:propSelectValues xml:lang="en">init:Start|end:End</swbxf:propSelectValues>
-        <swbxf:propSelectValues xml:lang="es">init:Al Iniciar|end:Al Finalizar</swbxf:propSelectValues>
-        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#selectOneModel"/>
+      <swbxf:DisplayProperty rdf:ID="dp_contextEventType">
         <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
         >50</swb:index>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#selectOneModel"/>
+        <swbxf:propSelectValues xml:lang="en">true:Start|false:End</swbxf:propSelectValues>
+        <swbxf:propSelectValues xml:lang="es">true:Inicia|false:Finalizar</swbxf:propSelectValues>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <rdfs:domain rdf:resource="#OnSchedule"/>
+    <rdfs:label xml:lang="es">Cuando</rdfs:label>
+    <rdfs:label xml:lang="en">When</rdfs:label>
+    <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:required>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="active">
+    <rdfs:domain rdf:resource="#DomDeviceStat"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="contextEventType">
+    <rdfs:domain rdf:resource="#OnContextChange"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:label xml:lang="es">Cuando el Contexto</rdfs:label>
+    <rdfs:label xml:lang="en">On Context</rdfs:label>
+    <swb:displayProperty rdf:resource="#dp_contextEventType"/>
+    <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:required>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="gtwSerial">
     <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
@@ -592,17 +875,74 @@
     <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >status</swb:propertyCodeName>
   </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="contextStat">
-    <swb:displayProperty rdf:resource="#dp_contextStat"/>
+  <owl:DatatypeProperty rdf:ID="changeDeviceStat">
+    <rdfs:domain rdf:resource="#ChangeDeviceAction"/>
+    <rdfs:label xml:lang="en">Status</rdfs:label>
+    <rdfs:label xml:lang="es">Estatus</rdfs:label>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_changeStatus">
+        <rdfs:label xml:lang="es">Estatus</rdfs:label>
+        <rdfs:label xml:lang="en">Status</rdfs:label>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >60</swb:index>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#selectOneModel"/>
+        <swbxf:propSelectValues xml:lang="es">0:Desactivar|1:1|2:2|3:3|4:4|5:5|6:6|7:7|8:8|9:9|10:10|11:11|12:12|13:13|14:14|15:15|16:Activar</swbxf:propSelectValues>
+        <swbxf:propSelectValues xml:lang="en">0:Unactive|1:1|2:2|3:3|4:4|5:5|6:6|7:7|8:8|9:9|10:10|11:11|12:12|13:13|14:14|15:15|16:Active</swbxf:propSelectValues>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:required>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="emailBody">
+    <rdfs:domain rdf:resource="#SendMailAction"/>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-    <rdfs:domain>
-      <swb:Class rdf:ID="OnContextChange">
-        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-        >true</swb:autogenId>
-        <rdfs:subClassOf rdf:resource="#DomEvent"/>
-        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-      </swb:Class>
-    </rdfs:domain>
+    <rdfs:label xml:lang="es">Mensaje</rdfs:label>
+    <rdfs:label xml:lang="en">Message</rdfs:label>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_emailBody">
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >70</swb:index>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextArea_Description"/>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:required>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="changeGroupStat">
+    <rdfs:domain rdf:resource="#ChangeGroupAction"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+    <swb:displayProperty rdf:resource="#dp_changeStatus"/>
+    <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:required>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="smsNumber">
+    <rdfs:domain rdf:resource="#SendSMSAction"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:label xml:lang="es">Número</rdfs:label>
+    <rdfs:label xml:lang="en">Number</rdfs:label>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_smsNumber">
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >50</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:required>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="emailSubject">
+    <rdfs:domain rdf:resource="#SendMailAction"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:label xml:lang="es">Asunto</rdfs:label>
+    <rdfs:label xml:lang="en">Subject</rdfs:label>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_emailSubject">
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >60</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:required>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="devId">
     <rdfs:domain rdf:resource="#DomDevice"/>
@@ -616,6 +956,20 @@
     <rdfs:label xml:lang="en">Device Id</rdfs:label>
     <rdfs:label xml:lang="es">Id del Dispositivo</rdfs:label>
   </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="emailTo">
+    <rdfs:domain rdf:resource="#SendMailAction"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:label xml:lang="es">Para</rdfs:label>
+    <rdfs:label xml:lang="en">To</rdfs:label>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_emailTo">
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >50</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:required>
+  </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="status">
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
     <rdfs:domain rdf:resource="#DomDeviceStat"/>
@@ -625,6 +979,29 @@
         >20</swb:index>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="groupStat">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#OnGroupChange"/>
+    <rdfs:label xml:lang="es">Estatus</rdfs:label>
+    <rdfs:label xml:lang="en">Status</rdfs:label>
+    <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:required>
+    <swb:displayProperty rdf:resource="#dp_deviceStat"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="signal">
+    <rdfs:domain rdf:resource="#OnSignal"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:label xml:lang="es">Señal</rdfs:label>
+    <rdfs:label xml:lang="en">Signal</rdfs:label>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_signal">
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >50</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:required>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="dimerizable">
     <rdfs:domain rdf:resource="#DomDevice"/>
@@ -636,10 +1013,6 @@
       </swbxf:DisplayProperty>
     </swb:displayProperty>
     <rdfs:label>Dimerizable</rdfs:label>
-  </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="groupStat">
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-    <rdfs:domain rdf:resource="#OnGroupChange"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="devZone">
     <rdfs:domain rdf:resource="#DomDevice"/>
@@ -658,46 +1031,45 @@
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#dateTime"/>
     <swb:displayProperty rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#dp_updated"/>
   </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="onceEvent">
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
-    <rdfs:domain rdf:resource="#DomEvent"/>
-  </owl:DatatypeProperty>
-  <swb:Class rdf:ID="ChangeGroupAction">
-    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:autogenId>
-    <rdfs:subClassOf rdf:resource="#DomAction"/>
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-  </swb:Class>
   <swb:CodePackage rdf:ID="pkg">
     <swb:package rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >org.semanticwb.domotic.model</swb:package>
     <swb:prefix rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >swb4d</swb:prefix>
   </swb:CodePackage>
-  <swb:Class rdf:ID="ChangeDeviceAction">
+  <swbxf:DisplayProperty rdf:ID="dp_contextStat">
+    <rdfs:label xml:lang="en">Status</rdfs:label>
+    <rdfs:label xml:lang="es">Estatus</rdfs:label>
+    <swbxf:propSelectValues xml:lang="en">init:Start|end:End</swbxf:propSelectValues>
+    <swbxf:propSelectValues xml:lang="es">init:Al Iniciar|end:Al Finalizar</swbxf:propSelectValues>
+    <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#selectOneModel"/>
+    <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+    >50</swb:index>
+  </swbxf:DisplayProperty>
+  <swbxf:HerarquicalNode rdf:ID="hn_DomDeviceTypes">
+    <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >swbIconTemplateGroup</swb:iconClass>
+    <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+    >96</swb:index>
+    <swb:title xml:lang="es">Tipos de Dispositivos</swb:title>
+    <swb:title xml:lang="en">Device Types</swb:title>
+    <swbxf:heClass rdf:resource="#DomDeviceType"/>
+  </swbxf:HerarquicalNode>
+  <swb:Class rdf:ID="OnExternalEvent">
     <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:autogenId>
-    <rdfs:subClassOf rdf:resource="#DomAction"/>
+    <rdfs:subClassOf rdf:resource="#DomEvent"/>
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
   </swb:Class>
-  <swb:Class rdf:ID="ChangeContextAction">
-    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:autogenId>
-    <rdfs:subClassOf rdf:resource="#DomAction"/>
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-  </swb:Class>
-  <swb:Class rdf:ID="SendTwitterAction">
-    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:autogenId>
-    <rdfs:subClassOf rdf:resource="#DomAction"/>
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-  </swb:Class>
-  <swb:Class rdf:ID="StartTimerAction">
-    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:autogenId>
-    <rdfs:subClassOf rdf:resource="#DomAction"/>
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-  </swb:Class>
+  <swbxf:HerarquicalNode rdf:ID="hn_Conditions">
+    <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >swbIconRules</swb:iconClass>
+    <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+    >200</swb:index>
+    <swb:title xml:lang="es">Condiciones</swb:title>
+    <swb:title xml:lang="en">Conditions</swb:title>
+    <swbxf:heClass rdf:resource="#DomRule"/>
+  </swbxf:HerarquicalNode>
 </rdf:RDF>
 
 <!-- Created with TopBraid Composer -->
