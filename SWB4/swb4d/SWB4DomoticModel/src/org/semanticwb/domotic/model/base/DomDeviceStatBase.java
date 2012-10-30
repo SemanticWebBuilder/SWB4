@@ -3,11 +3,11 @@ package org.semanticwb.domotic.model.base;
 
 public abstract class DomDeviceStatBase extends org.semanticwb.model.SWBClass 
 {
-    public static final org.semanticwb.platform.SemanticProperty swb4d_lastUpdate=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/domotic#lastUpdate");
     public static final org.semanticwb.platform.SemanticClass swb4d_DomDevice=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/domotic#DomDevice");
     public static final org.semanticwb.platform.SemanticProperty swb4d_domDevice=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/domotic#domDevice");
     public static final org.semanticwb.platform.SemanticProperty swb4d_status=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/domotic#status");
     public static final org.semanticwb.platform.SemanticProperty swb4d_active=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/domotic#active");
+    public static final org.semanticwb.platform.SemanticProperty swb4d_lastUpdate=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/domotic#lastUpdate");
     public static final org.semanticwb.platform.SemanticClass swb4d_DomDeviceStat=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/domotic#DomDeviceStat");
    /**
    * The semantic class that represents the currentObject
@@ -121,24 +121,6 @@ public abstract class DomDeviceStatBase extends org.semanticwb.model.SWBClass
     {
         super(base);
     }
-
-/**
-* Gets the LastUpdate property
-* @return java.util.Date with the LastUpdate
-*/
-    public java.util.Date getLastUpdate()
-    {
-        return getSemanticObject().getDateProperty(swb4d_lastUpdate);
-    }
-
-/**
-* Sets the LastUpdate property
-* @param value long with the LastUpdate
-*/
-    public void setLastUpdate(java.util.Date value)
-    {
-        getSemanticObject().setDateProperty(swb4d_lastUpdate, value);
-    }
    /**
    * Sets the value for the property DomDevice
    * @param value DomDevice to set
@@ -212,6 +194,24 @@ public abstract class DomDeviceStatBase extends org.semanticwb.model.SWBClass
     public void setActive(boolean value)
     {
         getSemanticObject().setBooleanProperty(swb4d_active, value);
+    }
+
+/**
+* Gets the LastUpdate property
+* @return java.util.Date with the LastUpdate
+*/
+    public java.util.Date getLastUpdate()
+    {
+        return getSemanticObject().getDateProperty(swb4d_lastUpdate);
+    }
+
+/**
+* Sets the LastUpdate property
+* @param value long with the LastUpdate
+*/
+    public void setLastUpdate(java.util.Date value)
+    {
+        getSemanticObject().setDateProperty(swb4d_lastUpdate, value);
     }
 
    /**

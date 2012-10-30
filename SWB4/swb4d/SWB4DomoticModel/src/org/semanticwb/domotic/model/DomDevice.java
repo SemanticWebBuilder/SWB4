@@ -29,9 +29,12 @@ public class DomDevice extends org.semanticwb.domotic.model.base.DomDeviceBase
         {
             dstat=DomDeviceStat.ClassMgr.createDomDeviceStat((SWBModel)getSemanticObject().getModel().getModelObject().createGenericInstance());            
             setDomDeviceStat(dstat);       
+            dstat.setActive(true);
         }
-        dstat.setActive(true);
         dstat.setLastUpdate(new Date());
+                
+        int oldStat=dstat.getStatus();
+        
         dstat.setStatus(stat);
         
         if(send)
@@ -43,6 +46,16 @@ public class DomDevice extends org.semanticwb.domotic.model.base.DomDeviceBase
             }
         }
         sendWebSocketStatus(notifyParents);
+        
+        if(oldStat!=stat)
+        {
+            Iterator<OnDeviceChange> it=listOnDeviceChanges();
+            while (it.hasNext())
+            {
+                OnDeviceChange onDeviceChange = it.next();
+                onDeviceChange.onEvent(""+stat);
+            }            
+        }
     }
     
     /**
@@ -70,7 +83,7 @@ public class DomDevice extends org.semanticwb.domotic.model.base.DomDeviceBase
      */
     public void setStatus(int value, boolean send)
     {
-        setStatus(value, true, true);
+        setStatus(value, send, true);
     }
 
     /**

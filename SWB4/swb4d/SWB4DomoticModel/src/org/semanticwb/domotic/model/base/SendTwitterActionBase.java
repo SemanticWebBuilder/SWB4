@@ -79,6 +79,29 @@ public abstract class SendTwitterActionBase extends org.semanticwb.domotic.model
             return (getSendTwitterAction(id, model)!=null);
         }
        /**
+       * Gets all org.semanticwb.domotic.model.SendTwitterAction with a determined DomEvent
+       * @param value DomEvent of the type org.semanticwb.domotic.model.DomEvent
+       * @param model Model of the org.semanticwb.domotic.model.SendTwitterAction
+       * @return Iterator with all the org.semanticwb.domotic.model.SendTwitterAction
+       */
+
+        public static java.util.Iterator<org.semanticwb.domotic.model.SendTwitterAction> listSendTwitterActionByDomEvent(org.semanticwb.domotic.model.DomEvent value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.domotic.model.SendTwitterAction> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb4d_domEventInv, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.domotic.model.SendTwitterAction with a determined DomEvent
+       * @param value DomEvent of the type org.semanticwb.domotic.model.DomEvent
+       * @return Iterator with all the org.semanticwb.domotic.model.SendTwitterAction
+       */
+
+        public static java.util.Iterator<org.semanticwb.domotic.model.SendTwitterAction> listSendTwitterActionByDomEvent(org.semanticwb.domotic.model.DomEvent value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.domotic.model.SendTwitterAction> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb4d_domEventInv,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
        * Gets all org.semanticwb.domotic.model.SendTwitterAction with a determined DomRule
        * @param value DomRule of the type org.semanticwb.domotic.model.DomRule
        * @param model Model of the org.semanticwb.domotic.model.SendTwitterAction
@@ -102,26 +125,26 @@ public abstract class SendTwitterActionBase extends org.semanticwb.domotic.model
             return it;
         }
        /**
-       * Gets all org.semanticwb.domotic.model.SendTwitterAction with a determined DomEvent
-       * @param value DomEvent of the type org.semanticwb.domotic.model.DomEvent
+       * Gets all org.semanticwb.domotic.model.SendTwitterAction with a determined GetStartTimerAction
+       * @param value GetStartTimerAction of the type org.semanticwb.domotic.model.StartTimerAction
        * @param model Model of the org.semanticwb.domotic.model.SendTwitterAction
        * @return Iterator with all the org.semanticwb.domotic.model.SendTwitterAction
        */
 
-        public static java.util.Iterator<org.semanticwb.domotic.model.SendTwitterAction> listSendTwitterActionByDomEvent(org.semanticwb.domotic.model.DomEvent value,org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.domotic.model.SendTwitterAction> listSendTwitterActionByGetStartTimerAction(org.semanticwb.domotic.model.StartTimerAction value,org.semanticwb.model.SWBModel model)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.domotic.model.SendTwitterAction> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb4d_domEventInv, value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.domotic.model.SendTwitterAction> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb4d_getStartTimerActionInv, value.getSemanticObject(),sclass));
             return it;
         }
        /**
-       * Gets all org.semanticwb.domotic.model.SendTwitterAction with a determined DomEvent
-       * @param value DomEvent of the type org.semanticwb.domotic.model.DomEvent
+       * Gets all org.semanticwb.domotic.model.SendTwitterAction with a determined GetStartTimerAction
+       * @param value GetStartTimerAction of the type org.semanticwb.domotic.model.StartTimerAction
        * @return Iterator with all the org.semanticwb.domotic.model.SendTwitterAction
        */
 
-        public static java.util.Iterator<org.semanticwb.domotic.model.SendTwitterAction> listSendTwitterActionByDomEvent(org.semanticwb.domotic.model.DomEvent value)
+        public static java.util.Iterator<org.semanticwb.domotic.model.SendTwitterAction> listSendTwitterActionByGetStartTimerAction(org.semanticwb.domotic.model.StartTimerAction value)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.domotic.model.SendTwitterAction> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb4d_domEventInv,value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.domotic.model.SendTwitterAction> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb4d_getStartTimerActionInv,value.getSemanticObject(),sclass));
             return it;
         }
     }
@@ -138,5 +161,14 @@ public abstract class SendTwitterActionBase extends org.semanticwb.domotic.model
     public SendTwitterActionBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
+    }
+
+   /**
+   * Gets the DomiticSite
+   * @return a instance of org.semanticwb.domotic.model.DomiticSite
+   */
+    public org.semanticwb.domotic.model.DomiticSite getDomiticSite()
+    {
+        return (org.semanticwb.domotic.model.DomiticSite)getSemanticObject().getModel().getModelObject().createGenericInstance();
     }
 }

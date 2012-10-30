@@ -7,4 +7,13 @@ public class ChangeGroupAction extends org.semanticwb.domotic.model.base.ChangeG
     {
         super(base);
     }
+    
+    @Override
+    public void doActionImp()
+    {
+        System.out.println("ChangeGroupAction:doAction");                
+        DomGroup obj=getChangeGroup();
+        obj.setStatus(getChangeGroupStat());
+    }
+    
 }

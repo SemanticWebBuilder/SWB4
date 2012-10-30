@@ -7,4 +7,14 @@ public class DomAction extends org.semanticwb.domotic.model.base.DomActionBase
     {
         super(base);
     }
+    
+    public final void doAction()
+    {
+        doActionImp();
+    }
+    
+    public void doActionImp()
+    {
+        
+    }
 }

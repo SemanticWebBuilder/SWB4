@@ -72,22 +72,22 @@ public class Connection extends Thread
         {
             firstline=false;
             websocket=true;
-            System.out.println("Wensocket:true");
+            //System.out.println("Wensocket:true");
             handshake=true;
         }
         firstline=false;
         
         if(websocket)
         {
-            System.out.println("ws:"+acc);
+            //System.out.println("ws:"+acc);
             if(acc.startsWith("Sec-WebSocket-Key:"))
             {
                 key=acc.substring(18).trim();
-                System.out.println("ws key:"+key);
+                //System.out.println("ws key:"+key);
             }else if(acc.startsWith("Origin:"))
             {
                 origin=acc.substring(7).trim();
-                System.out.println("ws origin:"+origin);
+                //System.out.println("ws origin:"+origin);
             }else if(acc.isEmpty())
             {
                 handshake=false;
@@ -112,7 +112,7 @@ public class Connection extends Thread
                     response+="(Challenge Response):00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00\r\n";
                     //response+="Sec-WebSocket-Protocol: chat\n";
                     response+="\r\n";
-                    System.out.println("ws response:"+response);
+                    //System.out.println("ws response:"+response);
                     sendMessage(response);                    
                 }
             }
@@ -120,7 +120,7 @@ public class Connection extends Thread
         {
             try
             {
-                System.out.println("sk:"+acc);
+                //System.out.println("sk:"+acc);
 
                 StringTokenizer st = new StringTokenizer(acc, " ");
                 String cb = st.nextToken();            
@@ -158,7 +158,7 @@ public class Connection extends Thread
             {
                 if(websocket && !handshake)
                 {
-                    System.out.print(in.read()+" ");
+                    //System.out.print(in.read()+" ");
                 }else
                 {
                     String aux=in.readLine();

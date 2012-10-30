@@ -3,7 +3,7 @@ package org.semanticwb.domotic.model.base;
 
 public abstract class OnContextChangeBase extends org.semanticwb.domotic.model.DomEvent implements org.semanticwb.model.Descriptiveable
 {
-    public static final org.semanticwb.platform.SemanticProperty swb4d_contextStat=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/domotic#contextStat");
+    public static final org.semanticwb.platform.SemanticProperty swb4d_contextEventType=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/domotic#contextEventType");
     public static final org.semanticwb.platform.SemanticClass swb4d_OnContextChange=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/domotic#OnContextChange");
    /**
    * The semantic class that represents the currentObject
@@ -142,20 +142,29 @@ public abstract class OnContextChangeBase extends org.semanticwb.domotic.model.D
     }
 
 /**
-* Gets the ContextStat property
-* @return String with the ContextStat
+* Gets the ContextEventType property
+* @return String with the ContextEventType
 */
-    public String getContextStat()
+    public String getContextEventType()
     {
-        return getSemanticObject().getProperty(swb4d_contextStat);
+        return getSemanticObject().getProperty(swb4d_contextEventType);
     }
 
 /**
-* Sets the ContextStat property
-* @param value long with the ContextStat
+* Sets the ContextEventType property
+* @param value long with the ContextEventType
 */
-    public void setContextStat(String value)
+    public void setContextEventType(String value)
     {
-        getSemanticObject().setProperty(swb4d_contextStat, value);
+        getSemanticObject().setProperty(swb4d_contextEventType, value);
+    }
+
+   /**
+   * Gets the DomiticSite
+   * @return a instance of org.semanticwb.domotic.model.DomiticSite
+   */
+    public org.semanticwb.domotic.model.DomiticSite getDomiticSite()
+    {
+        return (org.semanticwb.domotic.model.DomiticSite)getSemanticObject().getModel().getModelObject().createGenericInstance();
     }
 }

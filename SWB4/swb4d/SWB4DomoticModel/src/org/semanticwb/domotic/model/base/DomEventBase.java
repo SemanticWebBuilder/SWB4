@@ -3,7 +3,7 @@ package org.semanticwb.domotic.model.base;
 
 public abstract class DomEventBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Descriptiveable
 {
-    public static final org.semanticwb.platform.SemanticProperty swb4d_onceEvent=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/domotic#onceEvent");
+    public static final org.semanticwb.platform.SemanticProperty swb4d_once=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/domotic#once");
     public static final org.semanticwb.platform.SemanticClass swb4d_DomAction=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/domotic#DomAction");
     public static final org.semanticwb.platform.SemanticProperty swb4d_hasDomAction=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/domotic#hasDomAction");
     public static final org.semanticwb.platform.SemanticClass swb4d_DomContext=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/domotic#DomContext");
@@ -146,39 +146,6 @@ public abstract class DomEventBase extends org.semanticwb.model.SWBClass impleme
     }
 
 /**
-* Gets the Title property
-* @return String with the Title
-*/
-    public String getTitle()
-    {
-        return getSemanticObject().getProperty(swb_title);
-    }
-
-/**
-* Sets the Title property
-* @param value long with the Title
-*/
-    public void setTitle(String value)
-    {
-        getSemanticObject().setProperty(swb_title, value);
-    }
-
-    public String getTitle(String lang)
-    {
-        return getSemanticObject().getProperty(swb_title, null, lang);
-    }
-
-    public String getDisplayTitle(String lang)
-    {
-        return getSemanticObject().getLocaleProperty(swb_title, lang);
-    }
-
-    public void setTitle(String title, String lang)
-    {
-        getSemanticObject().setProperty(swb_title, title, lang);
-    }
-
-/**
 * Gets the Description property
 * @return String with the Description
 */
@@ -212,21 +179,54 @@ public abstract class DomEventBase extends org.semanticwb.model.SWBClass impleme
     }
 
 /**
-* Gets the OnceEvent property
-* @return boolean with the OnceEvent
+* Gets the Once property
+* @return boolean with the Once
 */
-    public boolean isOnceEvent()
+    public boolean isOnce()
     {
-        return getSemanticObject().getBooleanProperty(swb4d_onceEvent);
+        return getSemanticObject().getBooleanProperty(swb4d_once);
     }
 
 /**
-* Sets the OnceEvent property
-* @param value long with the OnceEvent
+* Sets the Once property
+* @param value long with the Once
 */
-    public void setOnceEvent(boolean value)
+    public void setOnce(boolean value)
     {
-        getSemanticObject().setBooleanProperty(swb4d_onceEvent, value);
+        getSemanticObject().setBooleanProperty(swb4d_once, value);
+    }
+
+/**
+* Gets the Title property
+* @return String with the Title
+*/
+    public String getTitle()
+    {
+        return getSemanticObject().getProperty(swb_title);
+    }
+
+/**
+* Sets the Title property
+* @param value long with the Title
+*/
+    public void setTitle(String value)
+    {
+        getSemanticObject().setProperty(swb_title, value);
+    }
+
+    public String getTitle(String lang)
+    {
+        return getSemanticObject().getProperty(swb_title, null, lang);
+    }
+
+    public String getDisplayTitle(String lang)
+    {
+        return getSemanticObject().getLocaleProperty(swb_title, lang);
+    }
+
+    public void setTitle(String title, String lang)
+    {
+        getSemanticObject().setProperty(swb_title, title, lang);
     }
    /**
    * Gets all the org.semanticwb.domotic.model.DomAction
