@@ -403,7 +403,7 @@ public class SWBARuleDomotic extends GenericResource {
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         /////  DomGroup 
-
+        
         Iterator<DomGroup> itdg = ws.listDomGroups();
         while (itdg.hasNext()) {
             DomGroup domGroup = itdg.next();
@@ -459,7 +459,8 @@ public class SWBARuleDomotic extends GenericResource {
             hmAttr.put("Operador", hmOper);
             hmValues.put("true", paramRequest.getLocaleString("msgActive"));
             hmValues.put("false", paramRequest.getLocaleString("msgInactive"));
-
+            hmAttr.put("Valor", hmValues);
+            
             comboAtt.put(StartTimerAction.sclass.getName() + "." + startTimer.getId(), hmAttr);
             vecOrderAtt.add(numero++, StartTimerAction.sclass.getName() + "." + startTimer.getId());
         }
