@@ -17,11 +17,19 @@
         <!--dispatcher>REQUEST</dispatcher-->
     </filter-mapping>
 
-<!-- ZKoss listener -->    
+<!-- ZKoss listener --> 
     <listener>
         <!--<listener-class>org.zkoss.zk.ui.http.HttpSessionListener</listener-class>-->
         <listener-class>org.zkoss.zk.ui.http.HttpSessionListener23</listener-class>
     </listener>     
+
+    <listener>
+<!--        
+        <description>ZK JSP Tags environment initiation </description>
+        <display-name>ZK JSP Initiator</display-name>
+-->        
+        <listener-class>org.zkoss.jsp.spec.JspFactoryContextListener</listener-class>
+    </listener>    
 <!-- End ZKoss listener -->     
 
     <servlet>
