@@ -551,6 +551,10 @@ public class SemanticObject
             if(model!=null)
             {
                 return model.getNameSpace()+shorturi.substring(pos+1);
+            }else
+            {
+                System.out.println("shortToFullURI(\""+shorturi+"\")");
+                System.out.println("idmodel:"+idmodel);
             }
             throw new IllegalArgumentException("The model was not found "+idmodel);
         }
