@@ -513,47 +513,47 @@ public class SWBARuleDomotic extends GenericResource {
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // DomRules
-        try {
-
-            // Se agrega la parte de reglas
-            if (ruleid == null) {
-                ruleid = "";
-            }
-
-            int numreglas = 0;
-            Iterator<DomRule> numrules = DomRule.ClassMgr.listDomRules(ws);
-            while (numrules.hasNext()) {
-                DomRule rule = numrules.next();
-                if (!ruleid.equals(rule.getURI())) {
-                    numreglas++;
-                }
-            }
-            log.debug("numReglas:" + numreglas);
-            if (numreglas > 0) {
-                hmAttr = new HashMap();
-                hmOper = new HashMap();
-                hmValues = new HashMap();
-                hmAttr.put("Etiqueta",  "(C) "+paramRequest.getLocaleString("msgRules"));   ///////////////////////////
-                hmAttr.put("Tipo", "select");
-                hmOper.put("=", paramRequest.getLocaleString("msgCumpla"));
-                hmOper.put("!=", paramRequest.getLocaleString("msgNoCumpla"));
-                hmAttr.put("Operador", hmOper);
-                Iterator<DomRule> enumRules = DomRule.ClassMgr.listDomRules(ws);
-                while (enumRules.hasNext()) {
-                    DomRule rule = enumRules.next();
-                    if (!ruleid.equals(rule.getURI())) {
-                        hmValues.put(rule.getURI(), rule.getDisplayTitle(user.getLanguage()));
-                    }
-                }
-                hmAttr.put("Valor", hmValues);
-                comboAtt.put(SWBRuleMgr.TAG_INT_RULE, hmAttr);
-                vecOrderAtt.add(numero++, SWBRuleMgr.TAG_INT_RULE);
-            }
-
-
-        } catch (Exception e) {
-            log.error(paramRequest.getLocaleString("msgErrorLoadingUserAttributeList") + ". SWBARuleDomotic.loadComboAttr", e);
-        }
+//        try {
+//
+//            // Se agrega la parte de reglas
+//            if (ruleid == null) {
+//                ruleid = "";
+//            }
+//
+//            int numreglas = 0;
+//            Iterator<DomRule> numrules = DomRule.ClassMgr.listDomRules(ws);
+//            while (numrules.hasNext()) {
+//                DomRule rule = numrules.next();
+//                if (!ruleid.equals(rule.getURI())) {
+//                    numreglas++;
+//                }
+//            }
+//            log.debug("numReglas:" + numreglas);
+//            if (numreglas > 0) {
+//                hmAttr = new HashMap();
+//                hmOper = new HashMap();
+//                hmValues = new HashMap();
+//                hmAttr.put("Etiqueta",  "(C) "+paramRequest.getLocaleString("msgRules"));   ///////////////////////////
+//                hmAttr.put("Tipo", "select");
+//                hmOper.put("=", paramRequest.getLocaleString("msgCumpla"));
+//                hmOper.put("!=", paramRequest.getLocaleString("msgNoCumpla"));
+//                hmAttr.put("Operador", hmOper);
+//                Iterator<DomRule> enumRules = DomRule.ClassMgr.listDomRules(ws);
+//                while (enumRules.hasNext()) {
+//                    DomRule rule = enumRules.next();
+//                    if (!ruleid.equals(rule.getURI())) {
+//                        hmValues.put(rule.getURI(), rule.getDisplayTitle(user.getLanguage()));
+//                    }
+//                }
+//                hmAttr.put("Valor", hmValues);
+//                comboAtt.put(SWBRuleMgr.TAG_INT_RULE, hmAttr);
+//                vecOrderAtt.add(numero++, SWBRuleMgr.TAG_INT_RULE);
+//            }
+//
+//
+//        } catch (Exception e) {
+//            log.error(paramRequest.getLocaleString("msgErrorLoadingUserAttributeList") + ". SWBARuleDomotic.loadComboAttr", e);
+//        }
 
         // HABILITAR PARA DEBUG
 
