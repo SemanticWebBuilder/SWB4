@@ -380,7 +380,7 @@ public class SWBARuleDomotic extends GenericResource {
             hmAttr = new HashMap();
             hmOper = new HashMap();
             hmValues = new HashMap();
-            hmAttr.put("Etiqueta", "(D)"+domDevice.getDisplayTitle(user.getLanguage()));   ///////////////////////////
+            hmAttr.put("Etiqueta", "(D) "+domDevice.getDisplayTitle(user.getLanguage()));   ///////////////////////////
             if (domDevice.isDimerizable()) {
                 hmAttr.put("Tipo", "TEXT");
                 hmOper.put("&gt;", paramRequest.getLocaleString("msgGreaterThan"));
@@ -410,7 +410,7 @@ public class SWBARuleDomotic extends GenericResource {
             hmAttr = new HashMap();
             hmOper = new HashMap();
             hmValues = new HashMap();
-            hmAttr.put("Etiqueta",  "(G)"+domGroup.getDisplayTitle(user.getLanguage()));   ///////////////////////////
+            hmAttr.put("Etiqueta",  "(G) "+domGroup.getDisplayTitle(user.getLanguage()));   ///////////////////////////
             hmAttr.put("Tipo", "select");
             hmOper.put("=", paramRequest.getLocaleString("msgSameAs"));
             hmOper.put("!=", paramRequest.getLocaleString("msgNotEqual"));
@@ -429,7 +429,7 @@ public class SWBARuleDomotic extends GenericResource {
         hmAttr = new HashMap();
         hmOper = new HashMap();
         hmValues = new HashMap();
-        hmAttr.put("Etiqueta",  "(R)"+paramRequest.getLocaleString("msgCalendar"));   ///////////////////////////
+        hmAttr.put("Etiqueta",  "(R) "+paramRequest.getLocaleString("msgCalendar"));   ///////////////////////////
         hmAttr.put("Tipo", "select");
         hmOper.put("=", paramRequest.getLocaleString("msgCumpla"));
         hmOper.put("!=", paramRequest.getLocaleString("msgNoCumpla"));
@@ -452,7 +452,7 @@ public class SWBARuleDomotic extends GenericResource {
             hmAttr = new HashMap();
             hmOper = new HashMap();
             hmValues = new HashMap();
-            hmAttr.put("Etiqueta",  "(T)"+startTimer.getDisplayTitle(user.getLanguage()));   ///////////////////////////
+            hmAttr.put("Etiqueta",  "(T) "+startTimer.getDisplayTitle(user.getLanguage()));   ///////////////////////////
             hmAttr.put("Tipo", "select");
             hmOper.put("=", paramRequest.getLocaleString("msgSameAs"));
             hmOper.put("!=", paramRequest.getLocaleString("msgNotEqual"));
@@ -470,7 +470,7 @@ public class SWBARuleDomotic extends GenericResource {
 
         hmAttr = new HashMap();
         hmOper = new HashMap();
-        hmAttr.put("Etiqueta",  "(R)"+paramRequest.getLocaleString("msgHour"));   ///////////////////////////
+        hmAttr.put("Etiqueta",  "(R) "+paramRequest.getLocaleString("msgHour"));   ///////////////////////////
         hmAttr.put("Tipo", "TEXT");
         hmOper.put("&gt;", paramRequest.getLocaleString("msgGreaterThan"));
         hmOper.put("&lt;", paramRequest.getLocaleString("msgLessThan"));
@@ -485,7 +485,7 @@ public class SWBARuleDomotic extends GenericResource {
 
         hmAttr = new HashMap();
         hmOper = new HashMap();
-        hmAttr.put("Etiqueta",  "(R)"+paramRequest.getLocaleString("msgClimaTemp"));   ///////////////////////////
+        hmAttr.put("Etiqueta",  "(R) "+paramRequest.getLocaleString("msgClimaTemp"));   ///////////////////////////
         hmAttr.put("Tipo", "TEXT");
         hmOper.put("&gt;", paramRequest.getLocaleString("msgGreaterThan"));
         hmOper.put("&lt;", paramRequest.getLocaleString("msgLessThan"));
@@ -500,7 +500,7 @@ public class SWBARuleDomotic extends GenericResource {
 
         hmAttr = new HashMap();
         hmOper = new HashMap();
-        hmAttr.put("Etiqueta",  "(R)"+paramRequest.getLocaleString("msgTemperature"));   ///////////////////////////
+        hmAttr.put("Etiqueta",  "(R) "+paramRequest.getLocaleString("msgTemperature"));   ///////////////////////////
         hmAttr.put("Tipo", "TEXT");
         hmOper.put("&gt;", paramRequest.getLocaleString("msgGreaterThan"));
         hmOper.put("&lt;", paramRequest.getLocaleString("msgLessThan"));
@@ -533,7 +533,7 @@ public class SWBARuleDomotic extends GenericResource {
                 hmAttr = new HashMap();
                 hmOper = new HashMap();
                 hmValues = new HashMap();
-                hmAttr.put("Etiqueta",  "(C)"+paramRequest.getLocaleString("msgRules"));   ///////////////////////////
+                hmAttr.put("Etiqueta",  "(C) "+paramRequest.getLocaleString("msgRules"));   ///////////////////////////
                 hmAttr.put("Tipo", "select");
                 hmOper.put("=", paramRequest.getLocaleString("msgCumpla"));
                 hmOper.put("!=", paramRequest.getLocaleString("msgNoCumpla"));
