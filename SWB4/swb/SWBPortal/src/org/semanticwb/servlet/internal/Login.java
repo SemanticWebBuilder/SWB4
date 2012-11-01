@@ -29,6 +29,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.net.SocketException;
 import java.util.Iterator;
 import java.security.Principal;
+import java.util.regex.Matcher;
 import javax.security.auth.Subject;
 import javax.security.auth.callback.CallbackHandler;
 import javax.security.auth.login.LoginContext;
@@ -868,13 +869,19 @@ public class Login implements InternalServlet
             }
 
             login = login.replaceFirst("<SWBVERSION>", SWBPlatform.getVersion());
-            login = login.replaceFirst("<ussid>", "<input type=\"hidden\" name=\"user\" value=\""+
+            login = login.replaceFirst("<ussid>", Matcher.quoteReplacement("<input type=\"hidden\" name=\"user\" value=\""+
                     SWBUtils.TEXT.encodeBase64(new String(SWBUtils.CryptoWrapper.PBEAES128Cipher(SWBPlatform.getVersion(),
-                    (""+user.getUserRepository().getId()+"|"+user.getLogin()).getBytes())))+"\">");
-            login = login.replaceFirst("<val01>", (SWBPlatform.getSecValues().isDifferFromLogin())?"if (form.wb_new_password.value == '"+user.getLogin()+"') { ret=false; alert('Error: password must be diferent from login.');}":"");
-            login = login.replaceFirst("<val02>", (SWBPlatform.getSecValues().getMinlength()>0)?"if (form.wb_new_password.value.length < "+SWBPlatform.getSecValues().getMinlength()+") { ret=false; alert('Error: password must have at least "+SWBPlatform.getSecValues().getMinlength()+" characters.');}":"");
-            login = login.replaceFirst("<val03>", (SWBPlatform.getSecValues().getComplexity()==1)?"if (!form.wb_new_password.value.match(/^.*(?=.*[a-zA-Z])(?=.*[0-9])().*$/) ) { ret=false; alert('Error: password must have leters and numbers.');}":"");
-            login = login.replaceFirst("<val04>", (SWBPlatform.getSecValues().getComplexity()==2)?"if (!form.wb_new_password.value.match(/^.*(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[\\W])().*$/) ) { ret=false; alert('Error: password must have leters, numbres and special symbols.');}":"");
+                    (""+user.getUserRepository().getId()+"|"+user.getLogin()).getBytes())))+"\">"));
+            login = login.replaceFirst("<val01>", (SWBPlatform.getSecValues().isDifferFromLogin())?
+                    Matcher.quoteReplacement("if (form.wb_new_password.value == '"+user.getLogin()+
+                    "') { ret=false; alert('Error: password must be diferent from login.');}"):"");
+            login = login.replaceFirst("<val02>", (SWBPlatform.getSecValues().getMinlength()>0)?
+                    Matcher.quoteReplacement("if (form.wb_new_password.value.length < "+SWBPlatform.getSecValues().getMinlength()+
+                    ") { ret=false; alert('Error: password must have at least "+SWBPlatform.getSecValues().getMinlength()+" characters.');}"):"");
+            login = login.replaceFirst("<val03>", (SWBPlatform.getSecValues().getComplexity()==1)?
+                    Matcher.quoteReplacement("if (!form.wb_new_password.value.match(/^.*(?=.*[a-zA-Z])(?=.*[0-9])().*$/) ) { ret=false; alert('Error: password must have leters and numbers.');}"):"");
+            login = login.replaceFirst("<val04>", (SWBPlatform.getSecValues().getComplexity()==2)?
+                    Matcher.quoteReplacement("if (!form.wb_new_password.value.match(/^.*(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[\\W])().*$/) ) { ret=false; alert('Error: password must have leters, numbres and special symbols.');}"):"");
 
         } catch (Exception e)
         {
