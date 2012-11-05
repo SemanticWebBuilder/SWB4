@@ -17,6 +17,8 @@ import org.zkoss.zk.ui.util.GenericForwardComposer;
 import org.zkoss.zul.Textbox;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zul.Button;
+import java.util.Locale;
+import org.semanticwb.SWBUtils;
 
 /**
  *
@@ -59,8 +61,7 @@ public class SocialNetworkComp extends GenericForwardComposer {
         System.out.println("SocialNetworkComp/treeItem:"+treeItem);
         System.out.println("SocialNetworkComp/action:"+action);
         System.out.println("SocialNetworkComp/objUri:"+objUri);
-         *
-         */
+        */
         if(action.equals(SWBSocialResourceUtils.ACTION_ADD))
         {
             sendButton.setLabel("Crear");
@@ -94,14 +95,15 @@ public class SocialNetworkComp extends GenericForwardComposer {
                 ctaNet.setDescription(description.getValue());
             }
             //Actualizar el árbol (Insertar Nodo)
-            SWBSocialResourceUtils.Components.updateTreeNode(requestScope, ctaNet);
+            SWBSocialResourceUtils.Components.setStatusMessage(SWBUtils.TEXT.getLocaleString("org.semanticwb.social.components.locales.genericCompMsgs", "msg_elementCreated",new Locale("es"))+":"+ctaNet.getTitle());
+            SWBSocialResourceUtils.Components.updateTreeNode(treeItem, ctaNet);
         }else if(action.equals(SWBSocialResourceUtils.ACTION_EDIT) ||  action.equals(SWBSocialResourceUtils.ACTION_DOUBLECLICK) && socialNet!=null)
         {
             if(title.getValue()!=null)
             {
                 socialNet.setTitle(title.getValue());
                 //Actualizar el árbol (actualizar título de Nodo)
-                SWBSocialResourceUtils.Components.updateTreeNode(requestScope, title.getValue());
+                SWBSocialResourceUtils.Components.updateTreeNode(treeItem, title.getValue());
             }
             if(description.getValue()!=null)
             {

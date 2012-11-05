@@ -16,6 +16,9 @@ import org.zkoss.zul.Textbox;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.util.GenericForwardComposer;
 import org.zkoss.zul.Button;
+import java.util.Locale;
+import org.semanticwb.SWBUtils;
+
 
 
 /**
@@ -89,14 +92,15 @@ public class TopicsComp extends GenericForwardComposer
                 socialTopic.setDescription(description.getValue());
             }
             //Actualizar el árbol (Insertar Nodo)
-            SWBSocialResourceUtils.Components.updateTreeNode(requestScope, socialTopic);
+            SWBSocialResourceUtils.Components.setStatusMessage(SWBUtils.TEXT.getLocaleString("org.semanticwb.social.components.locales.genericCompMsgs", "msg_elementCreated",new Locale("es"))+":"+socialTopic.getTitle());
+            SWBSocialResourceUtils.Components.updateTreeNode(treeItem, socialTopic);
         }else if(action.equals(SWBSocialResourceUtils.ACTION_EDIT) ||  action.equals(SWBSocialResourceUtils.ACTION_DOUBLECLICK) && socialTopic!=null)
         {
             if(title.getValue()!=null)
             {
                 socialTopic.setTitle(title.getValue());
                 //Actualizar el árbol (actualizar título de Nodo)
-                SWBSocialResourceUtils.Components.updateTreeNode(requestScope, title.getValue());
+                SWBSocialResourceUtils.Components.updateTreeNode(treeItem, title.getValue());
             }
             if(description.getValue()!=null)
             {

@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.model.Activeable;
 import org.semanticwb.model.Descriptiveable;
 import org.semanticwb.model.DisplayObject;
 import org.semanticwb.model.SWBClass;
@@ -95,9 +96,8 @@ public class SWBSocialResourceUtils {
 
     public static class Components {
 
-        public static void updateTreeNode(Map<String, Object> requestScope, SWBClass newSWBClass)
+        public static void updateTreeNode(ElementTreeNode treeNode, SWBClass newSWBClass)
         {
-            ElementTreeNode treeNode=(ElementTreeNode)requestScope.get("treeItem");
             if(treeNode!=null)
             {
                 EventQueue<Event> eq = EventQueues.lookup("insertNodo2Tree", EventQueues.SESSION, true);
@@ -106,9 +106,8 @@ public class SWBSocialResourceUtils {
             }
         }
 
-        public static void updateTreeNode(Map<String, Object> requestScope, String title)
+        public static void updateTreeNode(ElementTreeNode treeNode, String title)
         {
-            ElementTreeNode treeNode=(ElementTreeNode)requestScope.get("treeItem");
             if(treeNode!=null)
             {
                 EventQueue<Event> eq = EventQueues.lookup("updateNodo2Tree", EventQueues.SESSION, true);
@@ -153,6 +152,12 @@ public class SWBSocialResourceUtils {
                     String categoryID=null;
                     Descriptiveable descripTable = (Descriptiveable) swbClass;
                     DisplayObject displayObj = (DisplayObject) swbClass.getSemanticObject().getSemanticClass().getDisplayObject().createGenericInstance();
+                    String iconImg=displayObj.getIconClass();
+                    if(swbClass!=null && swbClass.getSemanticObject().getSemanticClass().isSubClass(Activeable.swb_Activeable))
+                    {
+                        iconImg="off_"+iconImg;
+                    }
+
                     if (parentItem.getData().getUri().indexOf("#") > -1) //El parentItem no es una categoría, entonces se asume que es childrenable el nuevo nodo
                     {
                         SemanticObject semObj = SemanticObject.getSemanticObject(parentItem.getData().getUri());
@@ -166,7 +171,7 @@ public class SWBSocialResourceUtils {
                         categoryID=parentItem.getData().getUri();
                     }
                     String modelID=swbClass.getSemanticObject().getModel().getModelObject().getId();
-                    parentItem.insert(new ElementTreeNode(new Element(descripTable.getTitle(), descripTable.getURI(), null, ImgAdminPathBase + displayObj.getIconClass(), 
+                    parentItem.insert(new ElementTreeNode(new Element(descripTable.getTitle(), descripTable.getURI(), null, ImgAdminPathBase + iconImg,
                             categoryID, modelID), new ElementTreeNode[0], true), parentItem.getChildCount());
                 }catch(Exception e)
                 {

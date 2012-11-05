@@ -211,39 +211,16 @@ public final class SWBSTreeComposer extends GenericForwardComposer <Component> {
                                 treePopup.open(selectedTreeItem);
                             }else   //Es un elemento
                             {
+                                final SemanticObject semObj=SemanticObject.createSemanticObject(itemValue.getData().getUri());
                                 Treeitem parentItem = selectedTreeItem.getParentItem();
-                                if(parentItem==null)  //No tiene padre, seguramente es una marca
+                                
+
+                                //Es algún otro nodo diferente al de una marca
+                                if(parentItem!=null)
                                 {
-                                    //Opción de eliminar para una marca
-                                    Menuitem mItemRemove=new Menuitem();
-                                    mItemRemove.setLabel(msg_delete);
-                                    mItemRemove.addEventListener(Events.ON_CLICK, new EventListener<Event>() {
-                                    @Override
-                                    public void onEvent(Event event) throws Exception
-                                    {
-                                        messageBox.show(msg_sureOfdelete+":"+itemValue.getData().getName(), "deleteConfirm", Messagebox.YES|Messagebox.NO, Messagebox.QUESTION,
-                                        new EventListener() {
-                                           public void onEvent(Event evt) {
-                                                SemanticObject semObj=SemanticObject.createSemanticObject(itemValue.getData().getUri());
-                                                if(semObj!=null)
-                                                {
-                                                    semObj.remove();
-                                                    elemenetTreeModel.remove(itemValue);
-                                                    SWBSocialResourceUtils.Components.setStatusMessage(msg_brandDeleted+":"+itemValue.getData().getName());
-                                                }
-                                           }
-                                        });
-                                    }
-                                    });
-                                    treePopup.appendChild(mItemRemove);
-                                }else
-                                {
-                                    //Es algún otro nodo diferente al de una marca
                                     final ElementTreeNode parentItemValue = (ElementTreeNode) parentItem.getValue();
 
                                     //MENU CONTEXTUAL
-
-                                    final SemanticObject semObj=SemanticObject.createSemanticObject(itemValue.getData().getUri());
 
                                     final WebPage adminWebPage=wsiteAdm.getWebPage(itemValue.getData().getCategoryID());
                                     TreeNodePage treeNodePageTmp=null;
@@ -253,7 +230,7 @@ public final class SWBSTreeComposer extends GenericForwardComposer <Component> {
                                     }
                                     final TreeNodePage treeNodePage=treeNodePageTmp;
                                     final SemanticClass swbClass = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(treeNodePage.getClassUri());
-
+                                    
                                     //Opción Crear, para los nodos que sean de tipo Childrenable
                                     if(semObj.getSemanticClass().isSubClass(Childrenable.social_Childrenable))
                                     {
@@ -262,7 +239,7 @@ public final class SWBSTreeComposer extends GenericForwardComposer <Component> {
                                         mItemNew.addEventListener(Events.ON_CLICK, new EventListener<Event>() {
                                         @Override
                                         public void onEvent(Event event) throws Exception {
-                                            content.setSrc(null);   
+                                            content.setSrc(null);
                                             if(treeNodePage!=null)
                                             {
                                                 content.setSrc(treeNodePage.getZulResourcePath());
@@ -276,6 +253,87 @@ public final class SWBSTreeComposer extends GenericForwardComposer <Component> {
                                         }
                                         });
                                         treePopup.appendChild(mItemNew);
+                                    }
+
+                                    
+                                    //------------Opciones dependiendo del nodo del árbol----------//
+
+                                    WebPage treeCategoryNode=wsiteAdm.getWebPage(itemValue.getData().getCategoryID());
+                                    Iterator <WebPage> itTreeCategoryNodeChilds=treeCategoryNode.listVisibleChilds(user.getLanguage());
+                                    while(itTreeCategoryNodeChilds.hasNext())
+                                    {
+                                        final WebPage wpageOption=itTreeCategoryNodeChilds.next();
+                                        Menuitem mItemCustomOpt=new Menuitem();
+                                        mItemCustomOpt.setLabel(wpageOption.getDisplayName(user.getLanguage()));
+                                        mItemCustomOpt.addEventListener(Events.ON_CLICK, new EventListener<Event>() {
+                                        @Override
+                                        public void onEvent(Event event) throws Exception {
+                                            String zulPage=parentItemValue.getData().getZulPage();
+                                            String action=SWBSocialResourceUtils.ACTION_EDIT;
+                                            if(wpageOption instanceof TreeNodePage)
+                                            {
+                                                TreeNodePage TreeNodePage=(TreeNodePage)wpageOption;
+                                                if(TreeNodePage.getZulResourcePath()!=null)
+                                                {
+                                                    zulPage=TreeNodePage.getZulResourcePath();
+                                                }
+                                                if(TreeNodePage.getAction()!=null)
+                                                {
+                                                    action=TreeNodePage.getAction();
+                                                }
+                                            }
+                                            content.setSrc(null);//En teoría, esta línea hace lo que hace la línea de abajo (Todo:Probar y Quitar la de abajo)
+                                            //content.setSrc("/work/models/swbsocial/admin/zul/clearCompose.zul");
+                                            content.setSrc(zulPage);
+                                            content.setDynamicProperty("objUri", URLEncoder.encode(itemValue.getData().getUri()));
+                                            content.setDynamicProperty("paramRequest", paramRequest);
+                                            content.setDynamicProperty("action", action);
+                                            content.setDynamicProperty("optionWepPage", wpageOption);
+                                            content.setDynamicProperty("treeItem", itemValue);
+                                            WebSite wsite=(WebSite)semObj.getModel().getModelObject().createGenericInstance();
+                                            content.setDynamicProperty("wsite", wsite);
+                                            content.setDynamicProperty("user", user);
+                                        }
+                                        });
+                                        treePopup.appendChild(mItemCustomOpt);
+                                    }
+
+                                    //Opción Activar/Desactivar
+                                    if(swbClass!=null && swbClass.isSubClass(Activeable.swb_Activeable))
+                                    {
+                                        if(!semObj.getBooleanProperty(Activeable.swb_active)) //Si esta desactivado el objeto semantico
+                                        {
+                                            Menuitem mItemActive=new Menuitem();
+                                            mItemActive.setLabel(msg_activate);
+                                            mItemActive.addEventListener(Events.ON_CLICK, new EventListener<Event>() {
+                                            @Override
+                                            public void onEvent(Event event) throws Exception {
+                                                semObj.setBooleanProperty(Activeable.swb_active, true);
+                                                DisplayObject displayObj=(DisplayObject)semObj.getSemanticClass().getDisplayObject().createGenericInstance();
+                                                Element element = (Element) itemValue.getData();
+                                                element.seticonElement(ImgAdminPathBase+displayObj.getIconClass());
+                                                itemValue.setData(element);
+                                                SWBSocialResourceUtils.Components.setStatusMessage(msg_activeElement+":"+itemValue.getData().getName());
+                                            }
+                                            });
+                                            treePopup.appendChild(mItemActive);
+                                        }else //Si esta activo el objeto semantico
+                                        {
+                                            Menuitem mItemActive=new Menuitem();
+                                            mItemActive.setLabel(msg_deactivate);
+                                            mItemActive.addEventListener(Events.ON_CLICK, new EventListener<Event>() {
+                                            @Override
+                                            public void onEvent(Event event) throws Exception {
+                                                semObj.setBooleanProperty(Activeable.swb_active, false);
+                                                DisplayObject displayObj=(DisplayObject)semObj.getSemanticClass().getDisplayObject().createGenericInstance();
+                                                Element element = (Element) itemValue.getData();
+                                                element.seticonElement(ImgAdminPathBase+"off_"+displayObj.getIconClass());
+                                                itemValue.setData(element);
+                                                SWBSocialResourceUtils.Components.setStatusMessage(msg_unActiveElement+":"+itemValue.getData().getName());
+                                            }
+                                            });
+                                            treePopup.appendChild(mItemActive);
+                                        }
                                     }
 
                                     //Opción de eliminar
@@ -334,59 +392,21 @@ public final class SWBSTreeComposer extends GenericForwardComposer <Component> {
                                     });
                                     treePopup.appendChild(mItemRemove);
 
-
-                                    //Opción Activar/Desactivar
-                                    if(swbClass!=null && swbClass.isSubClass(Activeable.swb_Activeable))
+                                //Opciones para cuando es una marca a la que se le da click derecho
+                                }else  //No tiene padre, seguramente es una marca
+                                {
+                                    //Opciones dinamicas de un sitio tipo SocialAdmin, todas bajo la sección con id "siteOptions".
+                                    WebPage siteOptsWebPage=wsiteAdm.getWebPage("siteOptions");
+                                    Iterator <WebPage> itChildPages=siteOptsWebPage.listVisibleChilds(user.getLanguage());
+                                    while(itChildPages.hasNext())
                                     {
-                                        if(!semObj.getBooleanProperty(Activeable.swb_active)) //Si esta desactivado el objeto semantico
-                                        {
-                                            Menuitem mItemActive=new Menuitem();
-                                            mItemActive.setLabel(msg_activate);
-                                            mItemActive.addEventListener(Events.ON_CLICK, new EventListener<Event>() {
-                                            @Override
-                                            public void onEvent(Event event) throws Exception {
-                                                semObj.setBooleanProperty(Activeable.swb_active, true);
-                                                DisplayObject displayObj=(DisplayObject)semObj.getSemanticClass().getDisplayObject().createGenericInstance();
-                                                Element element = (Element) itemValue.getData();
-                                                element.seticonElement(ImgAdminPathBase+displayObj.getIconClass());
-                                                itemValue.setData(element);
-                                                SWBSocialResourceUtils.Components.setStatusMessage(msg_activeElement+":"+itemValue.getData().getName());
-                                            }
-                                            });
-                                            treePopup.appendChild(mItemActive);
-                                        }else //Si esta activo el objeto semantico
-                                        {
-                                            Menuitem mItemActive=new Menuitem();
-                                            mItemActive.setLabel(msg_deactivate);
-                                            mItemActive.addEventListener(Events.ON_CLICK, new EventListener<Event>() {
-                                            @Override
-                                            public void onEvent(Event event) throws Exception {
-                                                semObj.setBooleanProperty(Activeable.swb_active, false);
-                                                DisplayObject displayObj=(DisplayObject)semObj.getSemanticClass().getDisplayObject().createGenericInstance();
-                                                Element element = (Element) itemValue.getData();
-                                                element.seticonElement(ImgAdminPathBase+"off_"+displayObj.getIconClass());
-                                                itemValue.setData(element);
-                                                SWBSocialResourceUtils.Components.setStatusMessage(msg_unActiveElement+":"+itemValue.getData().getName());
-                                            }
-                                            });
-                                            treePopup.appendChild(mItemActive);
-                                        }
-                                    }
-
-
-                                    //------------Opciones dependiendo del nodo del árbol----------//
-
-                                    WebPage treeCategoryNode=wsiteAdm.getWebPage(itemValue.getData().getCategoryID());
-                                    Iterator <WebPage> itTreeCategoryNodeChilds=treeCategoryNode.listVisibleChilds(user.getLanguage());
-                                    while(itTreeCategoryNodeChilds.hasNext())
-                                    {
-                                        final WebPage wpageOption=itTreeCategoryNodeChilds.next();
+                                        final WebPage wpageOption=itChildPages.next();
                                         Menuitem mItemCustomOpt=new Menuitem();
                                         mItemCustomOpt.setLabel(wpageOption.getDisplayName(user.getLanguage()));
                                         mItemCustomOpt.addEventListener(Events.ON_CLICK, new EventListener<Event>() {
                                         @Override
                                         public void onEvent(Event event) throws Exception {
-                                            String zulPage=parentItemValue.getData().getZulPage();
+                                            String zulPage=null;
                                             String action=SWBSocialResourceUtils.ACTION_EDIT;
                                             if(wpageOption instanceof TreeNodePage)
                                             {
@@ -400,8 +420,7 @@ public final class SWBSTreeComposer extends GenericForwardComposer <Component> {
                                                     action=TreeNodePage.getAction();
                                                 }
                                             }
-                                            content.setSrc(null);//En teoría, esta línea hace lo que hace la línea de abajo (Todo:Probar y Quitar la de abajo)
-                                            //content.setSrc("/work/models/swbsocial/admin/zul/clearCompose.zul");
+                                            content.setSrc(null);
                                             content.setSrc(zulPage);
                                             content.setDynamicProperty("objUri", URLEncoder.encode(itemValue.getData().getUri()));
                                             content.setDynamicProperty("paramRequest", paramRequest);
@@ -415,7 +434,66 @@ public final class SWBSTreeComposer extends GenericForwardComposer <Component> {
                                         });
                                         treePopup.appendChild(mItemCustomOpt);
                                     }
+
+                                    //Opción Activar/Desactivar
+                                    if(!semObj.getBooleanProperty(Activeable.swb_active)) //Si esta desactivado el objeto semantico
+                                    {
+                                        Menuitem mItemActive=new Menuitem();
+                                        mItemActive.setLabel(msg_activate);
+                                        mItemActive.addEventListener(Events.ON_CLICK, new EventListener<Event>() {
+                                        @Override
+                                        public void onEvent(Event event) throws Exception {
+                                            semObj.setBooleanProperty(Activeable.swb_active, true);
+                                            DisplayObject displayObj=(DisplayObject)semObj.getSemanticClass().getDisplayObject().createGenericInstance();
+                                            Element element = (Element) itemValue.getData();
+                                            element.seticonElement(ImgAdminPathBase+displayObj.getIconClass());
+                                            itemValue.setData(element);
+                                            SWBSocialResourceUtils.Components.setStatusMessage(msg_activeElement+":"+itemValue.getData().getName());
+                                        }
+                                        });
+                                        treePopup.appendChild(mItemActive);
+                                    }else //Si esta activo el objeto semantico
+                                    {
+                                        Menuitem mItemActive=new Menuitem();
+                                        mItemActive.setLabel(msg_deactivate);
+                                        mItemActive.addEventListener(Events.ON_CLICK, new EventListener<Event>() {
+                                        @Override
+                                        public void onEvent(Event event) throws Exception {
+                                            semObj.setBooleanProperty(Activeable.swb_active, false);
+                                            DisplayObject displayObj=(DisplayObject)semObj.getSemanticClass().getDisplayObject().createGenericInstance();
+                                            Element element = (Element) itemValue.getData();
+                                            element.seticonElement(ImgAdminPathBase+"off_"+displayObj.getIconClass());
+                                            itemValue.setData(element);
+                                            SWBSocialResourceUtils.Components.setStatusMessage(msg_unActiveElement+":"+itemValue.getData().getName());
+                                        }
+                                        });
+                                        treePopup.appendChild(mItemActive);
+                                    }
+
+                                    //Opción de eliminar para una marca
+                                    Menuitem mItemRemove=new Menuitem();
+                                    mItemRemove.setLabel(msg_delete);
+                                    mItemRemove.addEventListener(Events.ON_CLICK, new EventListener<Event>() {
+                                    @Override
+                                    public void onEvent(Event event) throws Exception
+                                    {
+                                        messageBox.show(msg_sureOfdelete+":"+itemValue.getData().getName(), "deleteConfirm", Messagebox.YES|Messagebox.NO, Messagebox.QUESTION,
+                                        new EventListener() {
+                                           public void onEvent(Event evt) {
+                                                SemanticObject semObj=SemanticObject.createSemanticObject(itemValue.getData().getUri());
+                                                if(semObj!=null)
+                                                {
+                                                    semObj.remove();
+                                                    elemenetTreeModel.remove(itemValue);
+                                                    SWBSocialResourceUtils.Components.setStatusMessage(msg_brandDeleted+":"+itemValue.getData().getName());
+                                                }
+                                           }
+                                        });
+                                    }
+                                    });
+                                    treePopup.appendChild(mItemRemove);
                                 }
+
                                 //Abre el menú contextual inmediatamente abajo del nodo seleccionado
                                 treePopup.open(selectedTreeItem);
                             }
