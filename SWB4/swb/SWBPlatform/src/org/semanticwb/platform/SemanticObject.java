@@ -25,7 +25,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.logging.Level;
 import org.semanticwb.base.util.HashMapCache;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBException;
