@@ -12,6 +12,7 @@ import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.rdf.model.StmtIterator;
 import com.hp.hpl.jena.vocabulary.RDF;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Method;
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -24,6 +25,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.logging.Level;
 import org.semanticwb.base.util.HashMapCache;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBException;
@@ -1266,7 +1268,12 @@ public class SemanticObject
             String xml=getProperty(prop);
             if(xml!=null)
             {
-                dom=SWBUtils.XML.xmlToDom(xml);
+                try {
+                    //dom=SWBUtils.XML.xmlToDom(xml);
+                    dom = SWBUtils.XML.xmlToDom(new java.io.ByteArrayInputStream(xml.getBytes("UTF-8")));
+                } catch (UnsupportedEncodingException ex) {
+                    log.error(ex);
+                }
             }
             if(dom==null)
             {
