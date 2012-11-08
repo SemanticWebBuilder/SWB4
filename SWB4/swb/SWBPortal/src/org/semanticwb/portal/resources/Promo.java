@@ -327,7 +327,7 @@ public class Promo extends GenericResource {
                             img.append(" target=\"_blank\"");
                         img.append(">");
                     }
-                    img.append("<img src=\""+webWorkPath+"/"+imgfile+"\" " +imgWidth+ " "+ imgHeight +"/>");
+                    img.append("<img src=\""+webWorkPath+imgfile+"\" " +imgWidth+ " "+ imgHeight +"/>");
                     if(hasLink)
                         img.append("</a>");
                     img.append("</span>\n");
@@ -953,7 +953,7 @@ public class Promo extends GenericResource {
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
         Resource base=getResourceBase();
         String action = response.getAction();
-        if(response.Action_EDIT.equals(action)) {
+        if(SWBActionResponse.Action_EDIT.equals(action)) {
             try {
                 edit(request, response);
                 if( Boolean.parseBoolean(base.getAttribute("wbNoFile_imgfile")) ) {
@@ -1010,7 +1010,7 @@ public class Promo extends GenericResource {
         StringBuilder htm = new StringBuilder();
         final String path = SWBPortal.getWebWorkPath()+base.getWorkPath()+"/";
 
-        SWBResourceURL url = paramRequest.getActionUrl().setAction(paramRequest.Action_EDIT);
+        SWBResourceURL url = paramRequest.getActionUrl().setAction(SWBParamRequest.Action_EDIT);
         htm.append("<script type=\"text/javascript\">\n");
         htm.append("<!--\n");
         htm.append("  dojo.require('dijit.layout.ContentPane');");
@@ -1552,13 +1552,19 @@ public class Promo extends GenericResource {
                     base.setAttribute(name, value);
                 }else {
                     String filename = item.getName().replaceAll(" ", "_").trim();
+                    filename = filename.substring(filename.lastIndexOf('\\')+1);
                     if(item.getFieldName().equals("imgfile") && filename.equals("") && base.getAttribute("imgfile")==null)
+                    {
                         throw new FileNotFoundException(item.getFieldName()+" es requerido");
+                    }
                     else if(!filename.equals("")) {
                         file = new File(SWBPortal.getWorkPath()+base.getWorkPath()+"/"+filename);
                         item.write(file);
                         base.setAttribute(item.getFieldName(), filename);
                         base.setAttribute("wbNoFile_"+item.getFieldName(), "false");
+                    }
+                    else
+                    {
                     }
                 }
             }
