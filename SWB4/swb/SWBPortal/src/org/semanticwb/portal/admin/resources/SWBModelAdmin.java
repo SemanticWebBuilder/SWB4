@@ -556,30 +556,35 @@ public class SWBModelAdmin extends GenericResource {
                     strbr.append("<title>" + site.getDisplayTitle(response.getUser().getLanguage()) + "</title>\n");
                     strbr.append("<description>" + site.getDisplayDescription(response.getUser().getLanguage()) + "</description>\n");
                     //--------------Generación de submodelos------------------------------------------------
+                    ArrayList aFilesTmp=new ArrayList();
                     Iterator<SemanticObject> sitSubModels = site.getSemanticObject().listObjectProperties(WebSite.swb_hasSubModel);
                     while (sitSubModels.hasNext()) {
                         SemanticObject sObj = sitSubModels.next();
                         if(sObj!=null)
                         {
-                            File fileSubModel = new File(zipdirectory + "/" + sObj.getId() + ".nt");
-                            FileOutputStream rdfout = new FileOutputStream(fileSubModel);
-                            sObj.getModel().write(rdfout, "N-TRIPLE");
-                            rdfout.flush();
-                            rdfout.close();
-                            //Agregar c/archivo .rdf de submodelos a arreglo de archivos
-                            aFiles.add(fileSubModel);
-                            //graba el directorio work de c/submodelo en archivo zip
-                            directory = new File(modelspath + sObj.getId() + "/");
-                            org.semanticwb.SWBUtils.IO.zip(directory, base, zos);
-                            //Genera datos de c/summodelo en archivo siteInfo.xml
-                            strbr.append("<model>\n");
-                            strbr.append("<type>" + sObj.getSemanticClass() + "</type>\n");
-                            //if(obj.instanceOf(WebSite.sclass)) //Que datos saco si es un rep de usuarios o de documentos y como los parseo despues
-                            strbr.append("<id>" + sObj.getId() + "</id>\n");
-                            strbr.append("<namespace>" + sObj.getModel().getNameSpace() + "</namespace>\n");
-                            strbr.append("<title>" + sObj.getProperty(Descriptiveable.swb_title) + "</title>\n");
-                            strbr.append("<description>" + sObj.getProperty(Descriptiveable.swb_description) + "</description>\n");
-                            strbr.append("</model>\n");
+                            if(!aFilesTmp.contains(sObj.getId()))
+                            {
+                                aFilesTmp.add(sObj.getId());
+                                File fileSubModel = new File(zipdirectory + "/" + sObj.getId() + ".nt");
+                                FileOutputStream rdfout = new FileOutputStream(fileSubModel);
+                                sObj.getModel().write(rdfout, "N-TRIPLE");
+                                rdfout.flush();
+                                rdfout.close();
+                                //Agregar c/archivo .rdf de submodelos a arreglo de archivos}
+                                aFiles.add(fileSubModel);
+                                //graba el directorio work de c/submodelo en archivo zip
+                                directory = new File(modelspath + sObj.getId() + "/");
+                                org.semanticwb.SWBUtils.IO.zip(directory, base, zos);
+                                //Genera datos de c/summodelo en archivo siteInfo.xml
+                                strbr.append("<model>\n");
+                                strbr.append("<type>" + sObj.getSemanticClass() + "</type>\n");
+                                //if(obj.instanceOf(WebSite.sclass)) //Que datos saco si es un rep de usuarios o de documentos y como los parseo despues
+                                strbr.append("<id>" + sObj.getId() + "</id>\n");
+                                strbr.append("<namespace>" + sObj.getModel().getNameSpace() + "</namespace>\n");
+                                strbr.append("<title>" + sObj.getProperty(Descriptiveable.swb_title) + "</title>\n");
+                                strbr.append("<description>" + sObj.getProperty(Descriptiveable.swb_description) + "</description>\n");
+                                strbr.append("</model>\n");
+                            }
                         }
                     }
                     strbr.append("</model>");
