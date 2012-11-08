@@ -3876,6 +3876,7 @@ public class SWBUtils {
          */
         public static String domToXml(Document dom, String encode, boolean indent)
         {
+            String res=null;
             ByteArrayOutputStream sw = new java.io.ByteArrayOutputStream();
             OutputStreamWriter osw = null;
             try
@@ -3902,11 +3903,12 @@ public class SWBUtils {
                 }
                 transformer.setOutputProperty(OutputKeys.METHOD, "xml");
                 transformer.transform(new DOMSource(dom), streamResult);
+                res=sw.toString(encode);
             } catch (Exception e)
             {
                 SWBUtils.log.error(e);
             }
-            return sw.toString();
+            return res;
         }
 
         /**
