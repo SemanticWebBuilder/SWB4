@@ -1,34 +1,30 @@
 /**  
-* SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración, 
-* colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de 
-* información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes 
-* fuentes, donde a la información se le asigna un significado, de forma que pueda ser interpretada y 
-* procesada por personas y/o sistemas, es una creación original del Fondo de Información y Documentación 
-* para la Industria INFOTEC, cuyo registro se encuentra actualmente en trámite. 
-* 
-* INFOTEC pone a su disposición la herramienta SemanticWebBuilder a través de su licenciamiento abierto al público (‘open source’), 
-* en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición; 
-* aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software, 
-* todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización 
-* del SemanticWebBuilder 4.0. 
-* 
-* INFOTEC no otorga garantía sobre SemanticWebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita, 
-* siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar 
-* de la misma. 
-* 
-* Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente 
-* dirección electrónica: 
-*  http://www.semanticwebbuilder.org
-**/ 
- 
-
-
+ * SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración,
+ * colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de
+ * información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes
+ * fuentes, donde a la información se le asigna un significado, de forma que pueda ser interpretada y
+ * procesada por personas y/o sistemas, es una creación original del Fondo de Información y Documentación
+ * para la Industria INFOTEC, cuyo registro se encuentra actualmente en trámite.
+ *
+ * INFOTEC pone a su disposición la herramienta SemanticWebBuilder a través de su licenciamiento abierto al público (‘open source’),
+ * en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición;
+ * aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software,
+ * todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización
+ * del SemanticWebBuilder 4.0.
+ *
+ * INFOTEC no otorga garantía sobre SemanticWebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita,
+ * siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar
+ * de la misma.
+ *
+ * Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente
+ * dirección electrónica:
+ *  http://www.semanticwebbuilder.org
+ **/
 /*
  * FilterSection.java
  *
  * Created on 10 de enero de 2005, 09:57 AM
  */
-
 package applets.filterSection;
 
 import javax.swing.*;
@@ -38,131 +34,140 @@ import java.net.*;
 import java.util.*;
 
 import applets.commons.*;
+import javax.swing.event.TreeExpansionEvent;
 
 /**
  * Formulario que muestra el �rbol de secciones de WebBuilder para hacer filtros de
  * secciones.
  * @author Victor Lorenzana
  */
-public class FilterSection extends javax.swing.JApplet {
-    
-    private final String PRM_JSESS="jsess";
-    private final String PRM_CGIPATH="cgipath";
-    
-    private String cgiPath="/gtw.jsp";
-    private String jsess="",repository;                    //session del usuario
-    private URL url=null;
+public class FilterSection extends javax.swing.JApplet
+{
+
+    private final String PRM_JSESS = "jsess";
+    private final String PRM_CGIPATH = "cgipath";
+    private String cgiPath = "/gtw.jsp";
+    private String jsess = "", repository;                    //session del usuario
+    private URL url = null;
     private String topicmap;
     private String id;
-    HashMap icons=new HashMap();
-    boolean isGlobal=false;
+    HashMap icons = new HashMap();
+    boolean isGlobal = false;
     Locale locale;
     ArrayList topicmaps;
-    
-    HashSet reloads=new HashSet();
+    HashSet reloads = new HashSet();
+
     /** Initializes the applet FilterSection */
-    public void init() {
-        locale=Locale.getDefault();
-        if(this.getParameter("locale")!=null && !this.getParameter("locale").equals(""))
+    public void init()
+    {
+        locale = Locale.getDefault();
+        if (this.getParameter("locale") != null && !this.getParameter("locale").equals(""))
         {
             try
             {
-                
-                locale=new Locale(this.getParameter("locale"));                
+
+                locale = new Locale(this.getParameter("locale"));
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 e.printStackTrace(System.out);
             }
-        }        
+        }
         initComponents();
-        jsess=this.getParameter(PRM_JSESS);
-        cgiPath=this.getParameter(PRM_CGIPATH);
-        topicmap=this.getParameter("tm");
-        if(this.getParameter("maps")!=null)
+        jsess = this.getParameter(PRM_JSESS);
+        cgiPath = this.getParameter(PRM_CGIPATH);
+        topicmap = this.getParameter("tm");
+        if (this.getParameter("maps") != null)
         {
-            topicmaps=new ArrayList();
-            StringTokenizer st=new StringTokenizer(this.getParameter("maps"),"|");
-            while(st.hasMoreTokens())
+            topicmaps = new ArrayList();
+            StringTokenizer st = new StringTokenizer(this.getParameter("maps"), "|");
+            while (st.hasMoreTokens())
             {
                 this.topicmaps.add(st.nextToken());
             }
         }
-        this.id=this.getParameter("idresource");
-        this.isGlobal=Boolean.valueOf(this.getParameter("isGlobalTM")).booleanValue();
-         try {
-            url=new URL(getCodeBase().getProtocol(),getCodeBase().getHost(),getCodeBase().getPort(),cgiPath);
-        }catch(Exception e) {
+        this.id = this.getParameter("idresource");
+        this.isGlobal = Boolean.valueOf(this.getParameter("isGlobalTM")).booleanValue();
+        try
+        {
+            url = new URL(getCodeBase().getProtocol(), getCodeBase().getHost(), getCodeBase().getPort(), cgiPath);
+        }
+        catch (Exception e)
+        {
             System.out.println(e.getMessage());
         }
-        jTree1.setCellRenderer(new CheckRenderer());        
-        jTree1.addMouseListener(new CheckListener()); 
-        String xml="<?xml version=\"1.0\" encoding=\"UTF-8\"?><req><cmd>initTree</cmd></req>";        
-        String resp=this.getData(xml);                        
-        WBXMLParser parser=new WBXMLParser();
-        WBTreeNode nodexml=parser.parse(resp);
-        if(nodexml.getFirstNode()!=null)
+        jTree1.setCellRenderer(new CheckRenderer());
+        jTree1.addMouseListener(new CheckListener());
+        String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><req><cmd>initTree</cmd></req>";
+        String resp = this.getData(xml);
+        WBXMLParser parser = new WBXMLParser();
+        WBTreeNode nodexml = parser.parse(resp);
+        if (nodexml.getFirstNode() != null)
         {
-            WBTreeNode res=nodexml.getFirstNode();
-            WBTreeNode config=res.getNodebyName("config");            
-            if(config!=null)
+            WBTreeNode res = nodexml.getFirstNode();
+            WBTreeNode config = res.getNodebyName("config");
+            if (config != null)
             {
-                WBTreeNode icons=config.getFirstNode();                
-                if(icons!=null)
+                WBTreeNode icons = config.getFirstNode();
+                if (icons != null)
                 {
-                    Iterator itIcons=icons.getNodesbyName("icon");
-                    while(itIcons.hasNext())
+                    Iterator itIcons = icons.getNodesbyName("icon");
+                    while (itIcons.hasNext())
                     {
-                        WBTreeNode icon=(WBTreeNode)itIcons.next();                        
-                        String path="/applets/filterSection/"+icon.getAttribute("path");                        
-                        if(getClass().getResource(path)!=null)
+                        WBTreeNode icon = (WBTreeNode) itIcons.next();
+                        String path = "/applets/filterSection/" + icon.getAttribute("path");
+                        if (getClass().getResource(path) != null)
                         {
-                            ImageIcon oicon=new javax.swing.ImageIcon(getClass().getResource(path));
-                            this.icons.put(icon.getAttribute("id"),oicon);
-                        }else
+                            ImageIcon oicon = new javax.swing.ImageIcon(getClass().getResource(path));
+                            this.icons.put(icon.getAttribute("id"), oicon);
+                        }
+                        else
                         {
-                            System.out.println("Image not found:"+path);
+                            System.out.println("Image not found:" + path);
                         }
                     }
                 }
             }
-            Iterator nodes=res.getNodesbyName("node");
-            while(nodes.hasNext())
+            Iterator nodes = res.getNodesbyName("node");
+            while (nodes.hasNext())
             {
-                WBTreeNode node=(WBTreeNode)nodes.next();                
-                ImageIcon icon=(ImageIcon)this.icons.get(node.getAttribute("icon"));                
-                String name=node.getAttribute("name");
-                TopicMap root=new TopicMap(node.getAttribute("icon"),node.getAttribute("id"),name,node.getAttribute("reload"),icon);
-                this.jTree1.setModel(new DefaultTreeModel(root));                
-                fillTreeTopicMap(node,root);
+                WBTreeNode node = (WBTreeNode) nodes.next();
+                ImageIcon icon = (ImageIcon) this.icons.get(node.getAttribute("icon"));
+                String name = node.getAttribute("name");
+                TopicMap root = new TopicMap(node.getAttribute("icon"), node.getAttribute("id"), name, node.getAttribute("reload"), icon);
+                this.jTree1.setModel(new DefaultTreeModel(root));
+                fillTreeTopicMap(node, root);
                 this.jTree1.updateUI();
             }
         }
         loadFilter();
     }
-    public void addNode(String topicmap,WBTreeNode ochild,DefaultMutableTreeNode tp,boolean checked,boolean expand,boolean childs)
-    {        
-        if(tp==null || ochild==null)
-            return;
-                
-        Topic topic=new Topic(ochild.getAttribute("icon"),topicmap,ochild.getAttribute("id"),ochild.getAttribute("name"),ochild.getAttribute("reload"),(ImageIcon)this.icons.get(ochild.getAttribute("icon")));                    
-        if(expand)
+
+    public void addNode(String topicmap, WBTreeNode ochild, DefaultMutableTreeNode tp, boolean checked, boolean expand, boolean childs)
+    {
+        if (tp == null || ochild == null)
         {
-            TreeNode parent=topic.getParent();
-            while(parent!=null)
-            {                
-                if(parent instanceof DefaultMutableTreeNode)                    
+            return;
+        }
+
+        Topic topic = new Topic(ochild.getAttribute("icon"), topicmap, ochild.getAttribute("id"), ochild.getAttribute("name"), ochild.getAttribute("reload"), (ImageIcon) this.icons.get(ochild.getAttribute("icon")));
+        if (expand)
+        {
+            TreeNode parent = topic.getParent();
+            while (parent != null)
+            {
+                if (parent instanceof DefaultMutableTreeNode)
                 {
-                    DefaultMutableTreeNode nodep=(DefaultMutableTreeNode)parent;
-                    jTree1.expandPath(new TreePath(nodep.getPath()));                    
+                    DefaultMutableTreeNode nodep = (DefaultMutableTreeNode) parent;
+                    jTree1.expandPath(new TreePath(nodep.getPath()));
                 }
-                parent=topic.getParent();
+                parent = topic.getParent();
             }
             jTree1.expandPath(new TreePath(topic.getPath()));
         }
-        if(checked)
+        if (checked)
         {
-            if(childs)
+            if (childs)
             {
                 topic.setChecked(TristateCheckBox.DONT_CARE);
             }
@@ -176,29 +181,29 @@ public class FilterSection extends javax.swing.JApplet {
             topic.setChecked(TristateCheckBox.NOT_SELECTED);
         }
         tp.add(topic);
-        
-        this.findTopic(this.jTree1,topic);        
-        
-        if(topic.getParent()!=null)
+
+        this.findTopic(this.jTree1, topic);
+
+        if (topic.getParent() != null)
         {
-            if(topic.getParent() instanceof Topic)
+            if (topic.getParent() instanceof Topic)
             {
-                Topic parent=(Topic)topic.getParent();
-                if(parent.getChecked()==TristateCheckBox.DONT_CARE)
+                Topic parent = (Topic) topic.getParent();
+                if (parent.getChecked() == TristateCheckBox.DONT_CARE)
                 {
                     topic.setChecked(TristateCheckBox.NOT_SELECTED);
                     topic.setEnabled(false);
                 }
-                if(!parent.isEnabled())
-                {                    
+                if (!parent.isEnabled())
+                {
                     topic.setEnabled(false);
-                }   
-                
+                }
+
             }
-            else if(topic.getParent() instanceof TopicMap)
+            else if (topic.getParent() instanceof TopicMap)
             {
-                TopicMap parent=(TopicMap)topic.getParent();
-                if(parent.getChecked()==TristateCheckBox.DONT_CARE)
+                TopicMap parent = (TopicMap) topic.getParent();
+                if (parent.getChecked() == TristateCheckBox.DONT_CARE)
                 {
                     topic.setChecked(TristateCheckBox.NOT_SELECTED);
                     topic.setEnabled(false);
@@ -206,111 +211,114 @@ public class FilterSection extends javax.swing.JApplet {
             }
         }
 
-        Iterator it=reloads.iterator();
-        while(it.hasNext())
+        Iterator it = reloads.iterator();
+        while (it.hasNext())
         {
-           WBTreeNode enode=(WBTreeNode)it.next();
-           String reload=enode.getAttribute("reload");
-           if(reload!=null && ochild.getAttribute("reload")!=null && ochild.getAttribute("reload").equals(reload))
-           {
-               this.jTree1.expandPath(new TreePath(topic.getPath()));
-               if(enode.getAttribute("childs").equals("false"))
-               {
+            WBTreeNode enode = (WBTreeNode) it.next();
+            String reload = enode.getAttribute("reload");
+            if (reload != null && ochild.getAttribute("reload") != null && ochild.getAttribute("reload").equals(reload))
+            {
+                this.jTree1.expandPath(new TreePath(topic.getPath()));
+                if (enode.getAttribute("childs").equals("false"))
+                {
                     topic.setChecked(TristateCheckBox.SELECTED);
-               }
-               else
-               {
+                }
+                else
+                {
                     topic.setChecked(TristateCheckBox.DONT_CARE);
-               }
-           }               
+                }
+            }
         }
 
-        WBTreeNode evt=ochild.getNodebyName("events");
-        if(evt!=null)
+        WBTreeNode evt = ochild.getNodebyName("events");
+        if (evt != null)
         {
-            WBTreeNode willexpand=evt.getNodebyName("willExpand");
-            if(willexpand!=null)
+            WBTreeNode willexpand = evt.getNodebyName("willExpand");
+            if (willexpand != null)
             {
                 topic.setWillExpand(true);
-            }                
+            }
         }
-        fillTreeTopic(ochild,topicmap,topic);          
+        fillTreeTopic(ochild, topicmap, topic);
     }
-    public void reLoadTopic(String topicmap,Topic topic)
+
+    public void reLoadTopic(String topicmap, Topic topic)
     {
-        if(topic.getParent()!=null)
-        {            
-            if(topic.getParent() instanceof DefaultMutableTreeNode)
-            {               
-                String xml="<?xml version=\"1.0\" encoding=\"UTF-8\"?><req><cmd>"+ topic.getRealoadPath() +"</cmd></req>";
-                String resp=this.getData(xml);                  
-                WBXMLParser parser=new WBXMLParser();
-                WBTreeNode exml=parser.parse(resp);
-                if(exml.getFirstNode()!=null)
+        if (topic.getParent() != null)
+        {
+            if (topic.getParent() instanceof DefaultMutableTreeNode)
+            {
+                String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><req><cmd>" + topic.getRealoadPath() + "</cmd></req>";
+                String resp = this.getData(xml);
+                WBXMLParser parser = new WBXMLParser();
+                WBTreeNode exml = parser.parse(resp);
+                if (exml.getFirstNode() != null)
                 {
-                    WBTreeNode res=exml.getFirstNode();
-                    if(res!=null)
+                    WBTreeNode res = exml.getFirstNode();
+                    if (res != null)
                     {
-                        WBTreeNode etopic=res.getNodebyName("node");
-                        if(etopic!=null)
+                        WBTreeNode etopic = res.getNodebyName("node");
+                        if (etopic != null)
                         {
-                            DefaultMutableTreeNode tp=(DefaultMutableTreeNode)topic.getParent();                
+                            DefaultMutableTreeNode tp = (DefaultMutableTreeNode) topic.getParent();
                             tp.remove(topic);
-                            addNode(topicmap,etopic, tp,true,true,false);
+                            addNode(topicmap, etopic, tp, true, true, false);
                         }
                         else
                         {
-                            System.out.println("error : node:"+ topic.getID() +" reload: "+topic.getRealoadPath()+" was not found");
+                            System.out.println("error : node:" + topic.getID() + " reload: " + topic.getRealoadPath() + " was not found");
                         }
                     }
                 }
             }
         }
     }
-    boolean CheckNode(String reload,boolean bchilds)
+
+    boolean CheckNode(String reload, boolean bchilds)
     {
-        Object root=this.jTree1.getModel().getRoot();
-        if(root instanceof TopicMap)
+        Object root = this.jTree1.getModel().getRoot();
+        if (root instanceof TopicMap)
         {
-            TopicMap map=(TopicMap)root;
-            if(map.getRealoadPath()!=null && map.getRealoadPath().equals(reload))
+            TopicMap map = (TopicMap) root;
+            if (map.getRealoadPath() != null && map.getRealoadPath().equals(reload))
             {
-                map.setChecked(TristateCheckBox.SELECTED);                    
+                map.setChecked(TristateCheckBox.SELECTED);
                 this.jTree1.expandPath(new TreePath(map.getPath()));
                 return true;
             }
         }
-        int childs=this.jTree1.getModel().getChildCount(root);
-        for(int i=0;i<childs;i++)
+        int childs = this.jTree1.getModel().getChildCount(root);
+        for (int i = 0; i < childs; i++)
         {
-            if(this.jTree1.getModel().getChild(root,i) instanceof TopicMap)
+            if (this.jTree1.getModel().getChild(root, i) instanceof TopicMap)
             {
-                TopicMap map=(TopicMap)this.jTree1.getModel().getChild(root,i);
-                if(map.getRealoadPath()!=null && map.getRealoadPath().equals(reload))
+                TopicMap map = (TopicMap) this.jTree1.getModel().getChild(root, i);
+                if (map.getRealoadPath() != null && map.getRealoadPath().equals(reload))
                 {
-                    map.setChecked(TristateCheckBox.SELECTED);                    
+                    map.setChecked(TristateCheckBox.SELECTED);
                     this.jTree1.expandPath(new TreePath(map.getPath()));
                     return true;
                 }
                 else
                 {
-                    CheckNode(map, reload,bchilds);
+                    CheckNode(map, reload, bchilds);
                 }
             }
         }
         return false;
     }
-    boolean CheckNode(Topic root,String reload,boolean bchilds)
+
+    boolean CheckNode(Topic root, String reload, boolean bchilds)
     {
-        int childs=this.jTree1.getModel().getChildCount(root);
-        for(int i=0;i<childs;i++)
+        int childs = this.jTree1.getModel().getChildCount(root);
+        for (int i = 0; i < childs; i++)
         {
-            if(this.jTree1.getModel().getChild(root,i) instanceof Topic)
+            if (this.jTree1.getModel().getChild(root, i) instanceof Topic)
             {
-                Topic topic=(Topic)this.jTree1.getModel().getChild(root,i);                
-                if(topic.getRealoadPath()!=null && topic.getRealoadPath().equals(reload))
+                Topic topic = (Topic) this.jTree1.getModel().getChild(root, i);
+                if (topic.getRealoadPath() != null && topic.getRealoadPath().equals(reload))
                 {
-                    if(bchilds)
+                    if (bchilds)
                     {
                         topic.setChecked(TristateCheckBox.DONT_CARE);
                     }
@@ -323,23 +331,24 @@ public class FilterSection extends javax.swing.JApplet {
                 }
                 else
                 {
-                    CheckNode(topic, reload,bchilds);
+                    CheckNode(topic, reload, bchilds);
                 }
             }
         }
         return false;
     }
-    boolean CheckNode(TopicMap root,String reload,boolean bchilds)
+
+    boolean CheckNode(TopicMap root, String reload, boolean bchilds)
     {
-        int childs=this.jTree1.getModel().getChildCount(root);
-        for(int i=0;i<childs;i++)
+        int childs = this.jTree1.getModel().getChildCount(root);
+        for (int i = 0; i < childs; i++)
         {
-            if(this.jTree1.getModel().getChild(root,i) instanceof Topic)
+            if (this.jTree1.getModel().getChild(root, i) instanceof Topic)
             {
-                Topic topic=(Topic)this.jTree1.getModel().getChild(root,i);
-                if(topic.getRealoadPath()!=null && topic.getRealoadPath().equals(reload))
+                Topic topic = (Topic) this.jTree1.getModel().getChild(root, i);
+                if (topic.getRealoadPath() != null && topic.getRealoadPath().equals(reload))
                 {
-                    if(bchilds)
+                    if (bchilds)
                     {
                         topic.setChecked(TristateCheckBox.DONT_CARE);
                     }
@@ -352,332 +361,348 @@ public class FilterSection extends javax.swing.JApplet {
                 }
                 else
                 {
-                    CheckNode(topic, reload,bchilds);
+                    CheckNode(topic, reload, bchilds);
                 }
             }
         }
         return false;
     }
+
     private void loadFilter()
     {
-        if(id!=null)
+        if (id != null)
         {
-            String xml="<?xml version=\"1.0\" encoding=\"UTF-8\"?><req><cmd>getFilter</cmd><id>"+ this.id +"</id><tm>"+ topicmap +"</tm></req>";
-            String resp=this.getData(xml);                            
-            WBXMLParser parser=new WBXMLParser();
-            WBTreeNode nodexml=parser.parse(resp);
-            WBTreeNode eresp=nodexml.getFirstNode();             
-            if(eresp!=null )
-            {                
-                WBTreeNode efilter=eresp.getNodebyName("filter");
-                if(efilter!=null)
-                {                    
-                    Iterator it=efilter.getNodesbyName("topicmap");
-                    while(it.hasNext())
+            String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><req><cmd>getFilter</cmd><id>" + this.id + "</id><tm>" + topicmap + "</tm></req>";
+            String resp = this.getData(xml);
+            WBXMLParser parser = new WBXMLParser();
+            WBTreeNode nodexml = parser.parse(resp);
+            WBTreeNode eresp = nodexml.getFirstNode();
+            if (eresp != null)
+            {
+                WBTreeNode efilter = eresp.getNodebyName("filter");
+                if (efilter != null)
+                {
+                    Iterator it = efilter.getNodesbyName("topicmap");
+                    while (it.hasNext())
                     {
-                       WBTreeNode etopicmap=(WBTreeNode)it.next();
+                        WBTreeNode etopicmap = (WBTreeNode) it.next();
 
-                       String _negative=etopicmap.getAttribute("negative");
-                        boolean negative=false;
-                        if(_negative!=null && !"".equals(_negative))
+                        String _negative = etopicmap.getAttribute("negative");
+                        boolean negative = false;
+                        if (_negative != null && !"".equals(_negative))
                         {
                             try
                             {
-                                negative=Boolean.parseBoolean(_negative);
+                                negative = Boolean.parseBoolean(_negative);
                             }
-                            catch(Exception e)
+                            catch (Exception e)
                             {
                                 e.printStackTrace();
                             }
                         }
                         jCheckBoxNegative.setSelected(negative);
 
-                       String topicmapid=etopicmap.getAttribute("id");                                                                      
-                       Object objroot=this.jTree1.getModel().getRoot();                           
-                       int childs=this.jTree1.getModel().getChildCount(objroot);
-                       for(int ichild=0;ichild<childs;ichild++)
-                       {                              
-                           
-                           if(this.jTree1.getModel().getChild(objroot, ichild) instanceof TopicMap)
-                           {                                   
-                               
-                                TopicMap map=(TopicMap)this.jTree1.getModel().getChild(objroot, ichild);
-                                if(map.getID().equals(topicmap))
-                                {                                    
-                                    Iterator ittopics=etopicmap.getNodesbyName("topic");
-                                    while(ittopics.hasNext())
+                        String topicmapid = etopicmap.getAttribute("id");
+                        Object objroot = this.jTree1.getModel().getRoot();
+                        int childs = this.jTree1.getModel().getChildCount(objroot);
+                        for (int ichild = 0; ichild < childs; ichild++)
+                        {
+
+                            if (this.jTree1.getModel().getChild(objroot, ichild) instanceof TopicMap)
+                            {
+
+                                TopicMap map = (TopicMap) this.jTree1.getModel().getChild(objroot, ichild);
+                                this.jTree1.expandPath(new TreePath(map.getPath()));
+                                if (map.getID().equals(topicmap))
+                                {
+                                    Iterator ittopics = etopicmap.getNodesbyName("topic");
+                                    while (ittopics.hasNext())
                                     {
-                                        WBTreeNode enode=(WBTreeNode)ittopics.next();                                        
-                                        String reload="getTopic."+topicmapid+"."+enode.getAttribute("id");
-                                        enode.addAttribute("reload",reload);
-                                        if(reload!=null && !reload.equals(""))
+                                        WBTreeNode enode = (WBTreeNode) ittopics.next();
+                                        String reload = "getTopic." + topicmapid + "." + enode.getAttribute("id");
+                                        enode.addAttribute("reload", reload);
+                                        if (reload != null && !reload.equals(""))
                                         {
-                                            StringTokenizer st=new StringTokenizer(reload,".");
-                                            if(st.nextToken().equals("getTopic"))
+                                            StringTokenizer st = new StringTokenizer(reload, ".");
+                                            if (st.nextToken().equals("getTopic"))
                                             {
-                                                Root shortcuts=null;
-                                                int l=this.jTree1.getModel().getChildCount(map);
-                                                for(int i=0;i<l;i++)
+                                                Root shortcuts = null;
+                                                int l = this.jTree1.getModel().getChildCount(map);
+                                                for (int i = 0; i < l; i++)
                                                 {
-                                                    if(this.jTree1.getModel().getChild(map, i) instanceof Root)
+                                                    if (this.jTree1.getModel().getChild(map, i) instanceof Root)
                                                     {
-                                                        shortcuts=(Root)this.jTree1.getModel().getChild(map, i);
+                                                        shortcuts = (Root) this.jTree1.getModel().getChild(map, i);
                                                         break;
                                                     }
                                                 }
-                                                String path="/applets/filterSection/images/f_general.gif";
-                                                ImageIcon oicon=new javax.swing.ImageIcon(getClass().getResource(path));
-                                                if(shortcuts==null)
+                                                String path = "/applets/filterSection/images/f_general.gif";
+                                                ImageIcon oicon = new javax.swing.ImageIcon(getClass().getResource(path));
+                                                if (shortcuts == null)
                                                 {
-                                                    shortcuts=new Root(java.util.ResourceBundle.getBundle("applets/filterSection/FilterSection",locale).getString("sections_permiss"),oicon);
+                                                    shortcuts = new Root(java.util.ResourceBundle.getBundle("applets/filterSection/FilterSection", locale).getString("sections_permiss"), oicon);
                                                     map.add(shortcuts);
-                                                } 
-                                                Topic nodetopic=new Topic(enode.getAttribute("icon"), enode.getAttribute("topicmap"),  enode.getAttribute("id"), "",enode.getAttribute("reload"),oicon);
+                                                }
+                                                Topic nodetopic = new Topic(enode.getAttribute("icon"), enode.getAttribute("topicmap"), enode.getAttribute("id"), "", enode.getAttribute("reload"), oicon);
                                                 shortcuts.add(nodetopic);
-                                                this.reLoadTopic(topicmap,nodetopic);                                                
-                                                boolean bchilds=Boolean.valueOf(enode.getAttribute("childs")).booleanValue();
-                                                if(!CheckNode(reload,bchilds))
+                                                this.reLoadTopic(topicmap, nodetopic);
+                                                boolean bchilds = Boolean.valueOf(enode.getAttribute("childs")).booleanValue();
+                                                if (!CheckNode(reload, bchilds))
                                                 {
                                                     reloads.add(enode);
-                                                }                            
+                                                }
+
+                                                this.jTree1.expandPath(new TreePath(shortcuts.getPath()));
+                                                this.jTree1.updateUI();
+
                                             }
                                         }
                                     }
                                 }
-                           }
-                       }
+                            }
+                        }
 
-                       
+
                     }
                     /*it=sites.getNodesbyName("node");
                     while(it.hasNext())
                     {
-                       WBTreeNode enode=(WBTreeNode)it.next();
-                       String reload=enode.getAttribute("reload");                       
-                       if(!CheckNode(reload))
-                       {
-                           reloads.add(reload);
-                       }                            
+                    WBTreeNode enode=(WBTreeNode)it.next();
+                    String reload=enode.getAttribute("reload");
+                    if(!CheckNode(reload))
+                    {
+                    reloads.add(reload);
+                    }
                     }*/
-                    
+
                 }
             }
         }
-    }    
-    void fillTreeTopicMap(WBTreeNode node,TopicMap root)
+    }
+
+    void fillTreeTopicMap(WBTreeNode node, TopicMap root)
     {
-        
-        Iterator nodes=node.getNodesbyName("node");        
-        while(nodes.hasNext())
+
+        Iterator nodes = node.getNodesbyName("node");
+        while (nodes.hasNext())
         {
-            WBTreeNode ochild=(WBTreeNode)nodes.next();                    
-            if(this.isGlobal || this.topicmap.equalsIgnoreCase(ochild.getAttribute("id")))
+            WBTreeNode ochild = (WBTreeNode) nodes.next();
+            if (this.isGlobal || this.topicmap.equalsIgnoreCase(ochild.getAttribute("id")))
             {
-                if(this.isGlobal && this.topicmaps!=null && this.topicmaps.size()>0)
+                if (this.isGlobal && this.topicmaps != null && this.topicmaps.size() > 0)
                 {
-                    for(int i=0;i<this.topicmaps.size();i++)
+                    for (int i = 0; i < this.topicmaps.size(); i++)
                     {
-                        String topicmaptemp=(String)this.topicmaps.get(i);
-                        if(topicmaptemp.equalsIgnoreCase(ochild.getAttribute("id")))
+                        String topicmaptemp = (String) this.topicmaps.get(i);
+                        if (topicmaptemp.equalsIgnoreCase(ochild.getAttribute("id")))
                         {
-                            TopicMap tm=new TopicMap(ochild.getAttribute("icon"),ochild.getAttribute("id"),ochild.getAttribute("name"),ochild.getAttribute("reload"),(ImageIcon)this.icons.get(ochild.getAttribute("icon")));            
+                            TopicMap tm = new TopicMap(ochild.getAttribute("icon"), ochild.getAttribute("id"), ochild.getAttribute("name"), ochild.getAttribute("reload"), (ImageIcon) this.icons.get(ochild.getAttribute("icon")));
                             root.add(tm);
-                            fillTreeTopic(ochild,ochild.getAttribute("id"),tm);
+                            fillTreeTopic(ochild, ochild.getAttribute("id"), tm);
                             break;
                         }
                     }
                 }
                 else
                 {
-                    TopicMap tm=new TopicMap(ochild.getAttribute("icon"),ochild.getAttribute("id"),ochild.getAttribute("name"),ochild.getAttribute("reload"),(ImageIcon)this.icons.get(ochild.getAttribute("icon")));            
+                    TopicMap tm = new TopicMap(ochild.getAttribute("icon"), ochild.getAttribute("id"), ochild.getAttribute("name"), ochild.getAttribute("reload"), (ImageIcon) this.icons.get(ochild.getAttribute("icon")));
                     root.add(tm);
-                    fillTreeTopic(ochild,ochild.getAttribute("id"),tm);
+                    fillTreeTopic(ochild, ochild.getAttribute("id"), tm);
                 }
             }
         }
     }
-    private void findTopic(JTree jTree,Topic topic)
+
+    private void findTopic(JTree jTree, Topic topic)
     {
-        Object root=jTree.getModel().getRoot();
-        int childs=jTree.getModel().getChildCount(root);
-        if(root instanceof Topic)
+        Object root = jTree.getModel().getRoot();
+        int childs = jTree.getModel().getChildCount(root);
+        if (root instanceof Topic)
         {
-            Topic node=(Topic)root;
+            Topic node = (Topic) root;
             node.addTopicListener(topic);
             topic.addTopicListener(node);
         }
-        for(int i=0;i<childs;i++)
+        for (int i = 0; i < childs; i++)
         {
-            Object ochild=jTree.getModel().getChild(root, i);            
-            findTopic(jTree,ochild,topic);
+            Object ochild = jTree.getModel().getChild(root, i);
+            findTopic(jTree, ochild, topic);
         }
     }
-    private void findTopic(JTree jTree,Object root,Topic topic)
-    {        
-        int childs=jTree.getModel().getChildCount(root);
-        if(root instanceof Topic)
+
+    private void findTopic(JTree jTree, Object root, Topic topic)
+    {
+        int childs = jTree.getModel().getChildCount(root);
+        if (root instanceof Topic)
         {
-            Topic node=(Topic)root;
+            Topic node = (Topic) root;
             node.addTopicListener(topic);
             topic.addTopicListener(node);
         }
-        for(int i=0;i<childs;i++)
+        for (int i = 0; i < childs; i++)
         {
-            Object ochild=jTree.getModel().getChild(root, i);
-            if(ochild instanceof Topic)
+            Object ochild = jTree.getModel().getChild(root, i);
+            if (ochild instanceof Topic)
             {
-                Topic tp=(Topic)ochild;
+                Topic tp = (Topic) ochild;
                 tp.addTopicListener(topic);
-                topic.addTopicListener(tp);                
+                topic.addTopicListener(tp);
             }
-            findTopic(jTree,ochild,topic);
+            findTopic(jTree, ochild, topic);
         }
     }
-    void fillTreeTopic(WBTreeNode node,String topicmap,Topic tp)
-    {        
-        Iterator nodes=node.getNodesbyName("node");
-        while(nodes.hasNext())
+
+    void fillTreeTopic(WBTreeNode node, String topicmap, Topic tp)
+    {
+        Iterator nodes = node.getNodesbyName("node");
+        while (nodes.hasNext())
         {
-            WBTreeNode ochild=(WBTreeNode)nodes.next();           
-            Topic topic=new Topic(ochild.getAttribute("icon"),topicmap,ochild.getAttribute("id"),ochild.getAttribute("name"),ochild.getAttribute("reload"),(ImageIcon)this.icons.get(ochild.getAttribute("icon")));                        
-            topic.setChecked(TristateCheckBox.NOT_SELECTED);                        
+            WBTreeNode ochild = (WBTreeNode) nodes.next();
+            Topic topic = new Topic(ochild.getAttribute("icon"), topicmap, ochild.getAttribute("id"), ochild.getAttribute("name"), ochild.getAttribute("reload"), (ImageIcon) this.icons.get(ochild.getAttribute("icon")));
+            topic.setChecked(TristateCheckBox.NOT_SELECTED);
             tp.add(topic);
-            this.findTopic(this.jTree1,topic);            
-            if(topic.getParent()!=null)
+            this.findTopic(this.jTree1, topic);
+            if (topic.getParent() != null)
             {
-                if(topic.getParent() instanceof Topic)
+                if (topic.getParent() instanceof Topic)
                 {
-                    Topic parent=(Topic)topic.getParent();
-                    if(parent.getChecked()==TristateCheckBox.DONT_CARE)
-                    {                        
+                    Topic parent = (Topic) topic.getParent();
+                    if (parent.getChecked() == TristateCheckBox.DONT_CARE)
+                    {
                         topic.setChecked(TristateCheckBox.NOT_SELECTED);
                         topic.setEnabled(false);
-                    }    
-                    if(!parent.isEnabled())
-                    {                        
-                        topic.setEnabled(false);
-                    }                    
-                }
-                else if(topic.getParent() instanceof TopicMap)
-                {
-                    TopicMap parent=(TopicMap)topic.getParent();
-                    if(parent.getChecked()==TristateCheckBox.DONT_CARE)
+                    }
+                    if (!parent.isEnabled())
                     {
-                        topic.setChecked(TristateCheckBox.NOT_SELECTED);                        
                         topic.setEnabled(false);
-                    }                          
+                    }
+                }
+                else if (topic.getParent() instanceof TopicMap)
+                {
+                    TopicMap parent = (TopicMap) topic.getParent();
+                    if (parent.getChecked() == TristateCheckBox.DONT_CARE)
+                    {
+                        topic.setChecked(TristateCheckBox.NOT_SELECTED);
+                        topic.setEnabled(false);
+                    }
                 }
             }
-            
-            Iterator it=reloads.iterator();
-            while(it.hasNext())
+
+            Iterator it = reloads.iterator();
+            while (it.hasNext())
             {
-               WBTreeNode enode=(WBTreeNode)it.next();
-               String reload=enode.getAttribute("reload");
-               if(reload!=null && ochild.getAttribute("reload")!=null && ochild.getAttribute("reload").equals(reload))
-               {
-                   this.jTree1.expandPath(new TreePath(topic.getPath()));
-                   if(enode.getAttribute("childs").equals("false"))
-                   {
-                        topic.setChecked(TristateCheckBox.SELECTED);                   
-                   }
-                   else
-                   {
-                       topic.setChecked(TristateCheckBox.DONT_CARE);                   
-                   }
-               }               
+                WBTreeNode enode = (WBTreeNode) it.next();
+                String reload = enode.getAttribute("reload");
+                if (reload != null && ochild.getAttribute("reload") != null && ochild.getAttribute("reload").equals(reload))
+                {
+                    this.jTree1.expandPath(new TreePath(topic.getPath()));
+                    if (enode.getAttribute("childs").equals("false"))
+                    {
+                        topic.setChecked(TristateCheckBox.SELECTED);
+                    }
+                    else
+                    {
+                        topic.setChecked(TristateCheckBox.DONT_CARE);
+                    }
+                }
             }
-            
-            WBTreeNode evt=ochild.getNodebyName("events");
-            if(evt!=null)
+
+            WBTreeNode evt = ochild.getNodebyName("events");
+            if (evt != null)
             {
-                WBTreeNode willexpand=evt.getNodebyName("willExpand");
-                if(willexpand!=null)
+                WBTreeNode willexpand = evt.getNodebyName("willExpand");
+                if (willexpand != null)
                 {
                     topic.setWillExpand(true);
-                }                
+                }
             }
-            fillTreeTopic(ochild,topicmap,topic);            
+            fillTreeTopic(ochild, topicmap, topic);
         }
     }
-    void fillTreeTopic(WBTreeNode node,String topicmap,TopicMap tm)
+
+    void fillTreeTopic(WBTreeNode node, String topicmap, TopicMap tm)
     {
-        Iterator nodes=node.getNodesbyName("node");
-        while(nodes.hasNext())
+        Iterator nodes = node.getNodesbyName("node");
+        while (nodes.hasNext())
         {
-            WBTreeNode ochild=(WBTreeNode)nodes.next();
-            
-            Topic topic=new Topic(ochild.getAttribute("icon"),topicmap,ochild.getAttribute("id"),ochild.getAttribute("name"),ochild.getAttribute("reload"),(ImageIcon)this.icons.get(ochild.getAttribute("icon")));            
-            topic.setChecked(TristateCheckBox.NOT_SELECTED);                        
+            WBTreeNode ochild = (WBTreeNode) nodes.next();
+
+            Topic topic = new Topic(ochild.getAttribute("icon"), topicmap, ochild.getAttribute("id"), ochild.getAttribute("name"), ochild.getAttribute("reload"), (ImageIcon) this.icons.get(ochild.getAttribute("icon")));
+            topic.setChecked(TristateCheckBox.NOT_SELECTED);
             tm.add(topic);
-            this.findTopic(this.jTree1,topic);            
-            if(topic.getParent()!=null)
+            this.findTopic(this.jTree1, topic);
+            if (topic.getParent() != null)
             {
-                if(topic.getParent() instanceof Topic)
+                if (topic.getParent() instanceof Topic)
                 {
-                    Topic parent=(Topic)topic.getParent();
-                    if(parent.getChecked()==TristateCheckBox.SELECTED || parent.getChecked()==TristateCheckBox.DONT_CARE)
+                    Topic parent = (Topic) topic.getParent();
+                    if (parent.getChecked() == TristateCheckBox.SELECTED || parent.getChecked() == TristateCheckBox.DONT_CARE)
                     {
-                        topic.setChecked(TristateCheckBox.NOT_SELECTED);                        
+                        topic.setChecked(TristateCheckBox.NOT_SELECTED);
                         topic.setEnabled(false);
                     }
-                    if(!parent.isEnabled())
-                    {                       
-                        
-                        topic.setEnabled(false);
-                    }   
-                   
-                }
-                else if(topic.getParent() instanceof TopicMap)
-                {
-                    TopicMap parent=(TopicMap)topic.getParent();
-                    if(parent.getChecked()==TristateCheckBox.SELECTED || parent.getChecked()==TristateCheckBox.DONT_CARE)
+                    if (!parent.isEnabled())
                     {
-                        topic.setChecked(TristateCheckBox.NOT_SELECTED);                        
+
+                        topic.setEnabled(false);
+                    }
+
+                }
+                else if (topic.getParent() instanceof TopicMap)
+                {
+                    TopicMap parent = (TopicMap) topic.getParent();
+                    if (parent.getChecked() == TristateCheckBox.SELECTED || parent.getChecked() == TristateCheckBox.DONT_CARE)
+                    {
+                        topic.setChecked(TristateCheckBox.NOT_SELECTED);
                         topic.setEnabled(false);
                     }
                 }
             }
-            
-            Iterator it=reloads.iterator();
-            while(it.hasNext())
+
+            Iterator it = reloads.iterator();
+            while (it.hasNext())
             {
-               WBTreeNode enode=(WBTreeNode)it.next();
-               String reload=enode.getAttribute("reload");
-               if(reload!=null && ochild.getAttribute("reload")!=null && ochild.getAttribute("reload").equals(reload))
-               {
-                   this.jTree1.expandPath(new TreePath(topic.getPath()));
-                   if(enode.getAttribute("childs").equals("false"))
-                   {
-                        topic.setChecked(TristateCheckBox.SELECTED);                   
-                   }
-                   else
-                   {
-                       topic.setChecked(TristateCheckBox.DONT_CARE);                   
-                   }
-               }               
+                WBTreeNode enode = (WBTreeNode) it.next();
+                String reload = enode.getAttribute("reload");
+                if (reload != null && ochild.getAttribute("reload") != null && ochild.getAttribute("reload").equals(reload))
+                {
+                    this.jTree1.expandPath(new TreePath(topic.getPath()));
+                    if (enode.getAttribute("childs").equals("false"))
+                    {
+                        topic.setChecked(TristateCheckBox.SELECTED);
+                    }
+                    else
+                    {
+                        topic.setChecked(TristateCheckBox.DONT_CARE);
+                    }
+                }
             }
-            WBTreeNode evt=ochild.getNodebyName("events");
-            if(evt!=null)
+            WBTreeNode evt = ochild.getNodebyName("events");
+            if (evt != null)
             {
-                WBTreeNode willexpand=evt.getNodebyName("willExpand");
-                if(willexpand!=null)
+                WBTreeNode willexpand = evt.getNodebyName("willExpand");
+                if (willexpand != null)
                 {
                     topic.setWillExpand(true);
-                }                
+                }
             }
-            fillTreeTopic(ochild,topicmap,topic);            
+            fillTreeTopic(ochild, topicmap, topic);
         }
     }
+
     public String getData(String xml)
     {
-        StringBuffer ret=new StringBuffer();
-        try {           
-            
-            URLConnection urlconn=url.openConnection();
+        StringBuffer ret = new StringBuffer();
+        try
+        {
+
+            URLConnection urlconn = url.openConnection();
             urlconn.setUseCaches(false);
-            if(jsess!=null)urlconn.setRequestProperty("Cookie", "JSESSIONID="+jsess);
-            urlconn.setRequestProperty("Content-Type","application/xml");
+            if (jsess != null)
+            {
+                urlconn.setRequestProperty("Cookie", "JSESSIONID=" + jsess);
+            }
+            urlconn.setRequestProperty("Content-Type", "application/xml");
             urlconn.setDoOutput(true);
             PrintWriter pout = new PrintWriter(urlconn.getOutputStream());
             pout.println(xml);
@@ -685,14 +710,20 @@ public class FilterSection extends javax.swing.JApplet {
 
             BufferedReader in = new BufferedReader(new InputStreamReader(urlconn.getInputStream()));
             String inputLine;
-            while ((inputLine = in.readLine()) != null) {
+            while ((inputLine = in.readLine()) != null)
+            {
                 ret.append(inputLine);
                 ret.append("\n");
             }
             in.close();
-        }catch(Exception e){System.out.println("Error to open service..."+e);}
+        }
+        catch (Exception e)
+        {
+            System.out.println("Error to open service..." + e);
+        }
         return ret.toString();
     }
+
     /** This method is called from within the init() method to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is
@@ -758,34 +789,35 @@ public class FilterSection extends javax.swing.JApplet {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        WBXMLParser parser=new WBXMLParser();
-        WBTreeNode exml=parser.parse("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
-        WBTreeNode ereq=exml.addNode();
+        WBXMLParser parser = new WBXMLParser();
+        WBTreeNode exml = parser.parse("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+        WBTreeNode ereq = exml.addNode();
         ereq.setName("req");
-        WBTreeNode id=ereq.addNode();
+        WBTreeNode id = ereq.addNode();
         id.setName("id");
         id.setText(this.id);
-        WBTreeNode tm=ereq.addNode();
+        WBTreeNode tm = ereq.addNode();
         tm.setName("tm");
         tm.setText(this.topicmap);
-        WBTreeNode cmd=ereq.addNode();
+        WBTreeNode cmd = ereq.addNode();
         cmd.setName("cmd");
         cmd.setText("update");
-        WBTreeNode efilter=ereq.addNode();
-        efilter.setName("filter");        
-        
+        WBTreeNode efilter = ereq.addNode();
+        efilter.setName("filter");
 
-        Object root=this.jTree1.getModel().getRoot();
-        int ichilds=this.jTree1.getModel().getChildCount(root);
-        for(int i=0;i<ichilds;i++)
+
+        Object root = this.jTree1.getModel().getRoot();
+        int ichilds = this.jTree1.getModel().getChildCount(root);
+        for (int i = 0; i < ichilds; i++)
         {
-            Object child=this.jTree1.getModel().getChild(root, i);
-            if(child instanceof TopicMap)
+            Object child = this.jTree1.getModel().getChild(root, i);
+            WBTreeNode etopicmap = null;
+            if (child instanceof TopicMap)
             {
-                
-                WBTreeNode etopicmap=new WBTreeNode();
+
+                etopicmap = new WBTreeNode();
                 etopicmap.setName("topicmap");
-                if(this.jCheckBoxNegative.isSelected())
+                if (this.jCheckBoxNegative.isSelected())
                 {
                     etopicmap.addAttribute("negative", "true");
                 }
@@ -793,57 +825,109 @@ public class FilterSection extends javax.swing.JApplet {
                 {
                     etopicmap.addAttribute("negative", "false");
                 }
-                TopicMap map=(TopicMap)child;
+                TopicMap map = (TopicMap) child;
                 etopicmap.addAttribute("id", map.getID());
-                saveFilters(etopicmap, child);                
-                if(etopicmap.getNodes().size()>0)
+                saveFilters(etopicmap, child);
+                if (etopicmap.getNodes().size() > 0)
                 {
                     efilter.addNode(etopicmap);
                 }
             }
+
         }
-        String xml="<?xml version=\"1.0\" encoding=\"UTF-8\"?>"+ereq.getXML();                
-        String resp=this.getData(xml);         
-        parser= new WBXMLParser();
-        WBTreeNode exmlresp=parser.parse(resp);
-        WBTreeNode efilternode=exmlresp.getNodebyName("filter");        
-        if(efilternode!=null)
+        String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + ereq.getXML();
+        String resp = this.getData(xml);
+        parser = new WBXMLParser();
+        WBTreeNode exmlresp = parser.parse(resp);
+        WBTreeNode efilternode = exmlresp.getNodebyName("filter");
+        if (efilternode != null)
         {
-            this.id=efilternode.getFirstNode().getText();                           
-            JOptionPane.showMessageDialog(this,java.util.ResourceBundle.getBundle("applets/filterSection/FilterSection",locale).getString("save"),java.util.ResourceBundle.getBundle("applets/filterSection/FilterSection",locale).getString("title"),JOptionPane.INFORMATION_MESSAGE);
+            this.id = efilternode.getFirstNode().getText();
+            JOptionPane.showMessageDialog(this, java.util.ResourceBundle.getBundle("applets/filterSection/FilterSection", locale).getString("save"), java.util.ResourceBundle.getBundle("applets/filterSection/FilterSection", locale).getString("title"), JOptionPane.INFORMATION_MESSAGE);
             return;
         }
         else
         {
-            WBTreeNode err=efilternode.getNodebyName("err");
-            if(err!=null)
+            WBTreeNode err = efilternode.getNodebyName("err");
+            if (err != null)
             {
-                JOptionPane.showMessageDialog(this,err.getFirstNode().getText(),java.util.ResourceBundle.getBundle("applets/filterSection/FilterSection",locale).getString("title"),JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(this, err.getFirstNode().getText(), java.util.ResourceBundle.getBundle("applets/filterSection/FilterSection", locale).getString("title"), JOptionPane.INFORMATION_MESSAGE);
                 return;
             }
             else
             {
-                JOptionPane.showMessageDialog(this,java.util.ResourceBundle.getBundle("applets/filterSection/FilterSection",locale).getString("err1"),java.util.ResourceBundle.getBundle("applets/filterSection/FilterSection",locale).getString("title"),JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, java.util.ResourceBundle.getBundle("applets/filterSection/FilterSection", locale).getString("err1"), java.util.ResourceBundle.getBundle("applets/filterSection/FilterSection", locale).getString("title"), JOptionPane.ERROR_MESSAGE);
                 return;
             }
         }
-       
+
     }//GEN-LAST:event_jButton1ActionPerformed
-    public void saveFilters(WBTreeNode etopicmap,Object root)
+    public void saveFilters(WBTreeNode etopicmap, Object root)
     {
-        int ichilds=this.jTree1.getModel().getChildCount(root);
-        for(int i=0;i<ichilds;i++)
+        int ichilds = this.jTree1.getModel().getChildCount(root);
+        Root root_ = null;
+        for (int i = 0; i < ichilds; i++)
         {
-            Object child=this.jTree1.getModel().getChild(root, i);
-            if(child instanceof Topic)
+            Object child = this.jTree1.getModel().getChild(root, i);
+
+
+            if (child instanceof Root)
             {
-                Topic topic=(Topic)child;
-                if(topic.getChecked()==TristateCheckBox.SELECTED || topic.getChecked()==TristateCheckBox.DONT_CARE)
+
+                root_ = (Root) child;
+                this.jTree1.expandPath(new TreePath(root_.getPath()));
+                this.jTree1.updateUI();
+                String text = root_.getJLabel().getText();
+                String labelTo = java.util.ResourceBundle.getBundle("applets/filterSection/FilterSection", locale).getString("sections_permiss");
+                if (labelTo.equalsIgnoreCase(text))
                 {
-                    WBTreeNode etopic=new WBTreeNode();
-                    etopic.setName("topic");                
+                    int childs = this.jTree1.getModel().getChildCount(root_);
+                    
+                    for (int j = 0; j < childs; j++)
+                    {
+                        Object node = this.jTree1.getModel().getChild(root_, j);
+                        
+                        if (node instanceof Topic)
+                        {
+                            Topic topic = (Topic) node;
+                            this.jTree1.expandPath(new TreePath(topic.getPath()));
+                            this.jTree1.updateUI();
+                            if (topic.getChecked() == TristateCheckBox.SELECTED || topic.getChecked() == TristateCheckBox.DONT_CARE)
+                            {
+                                WBTreeNode etopic = new WBTreeNode();
+                                etopic.setName("topic");
+                                etopic.addAttribute("id", topic.getID());
+                                if (topic.getChecked() == TristateCheckBox.DONT_CARE)
+                                {
+                                    etopic.addAttribute("childs", "true");
+                                }
+                                else
+                                {
+                                    etopic.addAttribute("childs", "false");
+                                }
+                                etopicmap.addNode(etopic);
+                            }
+
+                            saveFilters(etopicmap, topic);
+                        }
+                    }
+                }
+            }
+            if (child instanceof Topic)
+            {
+                Topic topic = (Topic) child;
+
+                if (topic.getChecked() == TristateCheckBox.SELECTED || topic.getChecked() == TristateCheckBox.DONT_CARE)
+                {
+                    List<TreeNode> nodes = Arrays.asList(topic.getPath());
+                    if (nodes.contains(root_))
+                    {
+                        this.jTree1.expandPath(new TreePath(topic.getPath()));
+                    }
+                    WBTreeNode etopic = new WBTreeNode();
+                    etopic.setName("topic");
                     etopic.addAttribute("id", topic.getID());
-                    if(topic.getChecked()==TristateCheckBox.DONT_CARE)
+                    if (topic.getChecked() == TristateCheckBox.DONT_CARE)
                     {
                         etopic.addAttribute("childs", "true");
                     }
@@ -852,38 +936,39 @@ public class FilterSection extends javax.swing.JApplet {
                         etopic.addAttribute("childs", "false");
                     }
                     etopicmap.addNode(etopic);
-                    if(topic.getChecked()==TristateCheckBox.DONT_CARE)
+                    if (topic.getChecked() == TristateCheckBox.DONT_CARE)
                     {
                         continue;
                     }
                 }
-                saveFilters(etopicmap, child);                
+                saveFilters(etopicmap, child);
             }
         }
     }
+
     public void loadTopic(Topic topic)
     {
-        String xml="<?xml version=\"1.0\" encoding=\"UTF-8\"?><req><cmd>"+ topic.getRealoadPath() +"</cmd></req>";
-        String resp=this.getData(xml);                  
-        WBXMLParser parser=new WBXMLParser();
-        WBTreeNode exml=parser.parse(resp);
-        if(exml.getFirstNode()!=null)
+        String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><req><cmd>" + topic.getRealoadPath() + "</cmd></req>";
+        String resp = this.getData(xml);
+        WBXMLParser parser = new WBXMLParser();
+        WBTreeNode exml = parser.parse(resp);
+        if (exml.getFirstNode() != null)
         {
-            WBTreeNode res=exml.getFirstNode();
-            if(res!=null)
+            WBTreeNode res = exml.getFirstNode();
+            if (res != null)
             {
-                WBTreeNode etopic=res.getNodebyName("node");
-                this.fillTreeTopic(etopic,topic.getTopicMapID(),topic);                
+                WBTreeNode etopic = res.getNodebyName("node");
+                this.fillTreeTopic(etopic, topic.getTopicMapID(), topic);
             }
         }
     }
     private void jTree1TreeWillExpand(javax.swing.event.TreeExpansionEvent evt)throws javax.swing.tree.ExpandVetoException {//GEN-FIRST:event_jTree1TreeWillExpand
-        if(evt.getPath().getLastPathComponent() instanceof Topic)
+        if (evt.getPath().getLastPathComponent() instanceof Topic)
         {
-            Topic topic=(Topic)evt.getPath().getLastPathComponent();
-            if(topic.getWillExpand())
+            Topic topic = (Topic) evt.getPath().getLastPathComponent();
+            if (topic.getWillExpand())
             {
-                topic.removeAllChildren();  
+                topic.removeAllChildren();
                 loadTopic(topic);
             }
             topic.setWillExpand(false);
@@ -893,8 +978,6 @@ public class FilterSection extends javax.swing.JApplet {
     private void jTree1MouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTree1MouseMoved
         this.jTree1.setSelectionPath(this.jTree1.getPathForLocation(evt.getX(), evt.getY()));
     }//GEN-LAST:event_jTree1MouseMoved
-    
-    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JCheckBox jCheckBoxNegative;
@@ -905,5 +988,4 @@ public class FilterSection extends javax.swing.JApplet {
     private javax.swing.JToolBar jToolBar1;
     private javax.swing.JTree jTree1;
     // End of variables declaration//GEN-END:variables
-    
 }

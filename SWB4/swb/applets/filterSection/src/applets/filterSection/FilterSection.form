@@ -75,8 +75,8 @@
           <SubComponents>
             <Component class="javax.swing.JTree" name="jTree1">
               <Events>
-                <EventHandler event="mouseMoved" listener="java.awt.event.MouseMotionListener" parameters="java.awt.event.MouseEvent" handler="jTree1MouseMoved"/>
                 <EventHandler event="treeWillExpand" listener="javax.swing.event.TreeWillExpandListener" parameters="javax.swing.event.TreeExpansionEvent" handler="jTree1TreeWillExpand"/>
+                <EventHandler event="mouseMoved" listener="java.awt.event.MouseMotionListener" parameters="java.awt.event.MouseEvent" handler="jTree1MouseMoved"/>
               </Events>
             </Component>
           </SubComponents>
