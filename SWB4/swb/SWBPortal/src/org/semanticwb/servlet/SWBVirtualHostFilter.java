@@ -401,6 +401,7 @@ public class SWBVirtualHostFilter implements Filter
                     switch (resp.getError())
                     {                       
                         case 500:
+                            log.error("Attempt to process an HTTP-500: "+path + " - " + resp.getError() + ":" + resp.getErrorMsg());
                         case 404:
                             processError(resp.getError(), resp.getErrorMsg(), _response, dparams);
                             log.warn(path + " - " + resp.getError() + ":" + resp.getErrorMsg());
