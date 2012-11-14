@@ -779,8 +779,16 @@ public class SemanticClass
         }
         catch(Exception ie)
         {
-            ie.printStackTrace();
-            throw new AssertionError(ie.getMessage());
+            log.event("Error creating object "+obj, ie);
+            Throwable th=ie.getCause();
+            int cause=0;
+            while (null!=th) { 
+                cause++;
+                log.event("Cause "+cause+":", th);
+                th = th.getCause();
+            }
+            log.event("Aborting....... "+th.getMessage());
+            throw new AssertionError(ie);
         }
     }
 
