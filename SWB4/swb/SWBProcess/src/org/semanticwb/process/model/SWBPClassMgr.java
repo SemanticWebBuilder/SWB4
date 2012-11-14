@@ -97,7 +97,7 @@ public class SWBPClassMgr
                     }
                 }
             }                        
-            mcls.addAll(classes);
+            if (classes.size()>0) mcls.addAll(classes);
             SWBPlatform.getSemanticMgr().setClassLoader(mcls);
         }
         return mcls;
