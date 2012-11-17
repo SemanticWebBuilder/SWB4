@@ -49,7 +49,7 @@ public class GoogleSiteMap implements InternalServlet {
         String host = "http://"+req.getServerName();
         if (req.getServerPort()!=80) host += ":"+req.getServerPort();
         //resp.setHeader("Content-Encoding", "gzip");
-        resp.setContentType("text/xml");
+        resp.setContentType("text/xml;charset=UTF-8");
         //java.util.zip.GZIPOutputStream garr = new java.util.zip.GZIPOutputStream(resp.getOutputStream());
         StringBuffer ret=new StringBuffer();
         ret.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
