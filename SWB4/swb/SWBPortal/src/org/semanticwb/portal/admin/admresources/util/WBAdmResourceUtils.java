@@ -30,6 +30,8 @@ import java.util.*;
 import javax.servlet.http.HttpServletRequest;
 import org.semanticwb.model.Resource;
 import javax.xml.transform.*;
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
@@ -1098,6 +1100,48 @@ public class WBAdmResourceUtils {
             log.error(SWBUtils.TEXT.getLocaleString("locale_swb_util", "error_WBResource_uploadFile_exc01") + " " + base.getId() + SWBUtils.TEXT.getLocaleString("locale_swb_util", "error_WBResource_uploadFile_exc02") + " " + base.getResourceType() + SWBUtils.TEXT.getLocaleString("locale_swb_util", "error_WBResource_uploadFile_exc03") + " " + strFile + ".");
         }
         return bOk;
+    }
+    
+    /*
+     * Recibe los parámetros de administración del recurso y el archivo en su caso
+     */
+    public void update(Resource base, HttpServletRequest request) throws FileNotFoundException, UnsupportedOperationException, Exception {
+        boolean isMultipart = ServletFileUpload.isMultipartContent(request);
+        if (isMultipart) {
+            File file = new File(SWBPortal.getWorkPath()+base.getWorkPath()+"/");
+            if(!file.exists()) {
+                file.mkdirs();
+            }
+            base.setAttribute("deftmp", "false");
+            Iterator<FileItem> iter = SWBUtils.IO.fileUpload(request, null);
+            while(iter.hasNext()) {
+                FileItem item = iter.next();
+                if(item.isFormField()) {
+                    String name = item.getFieldName();
+                    String value = item.getString().trim();
+                    base.setAttribute(name, value);
+                }else {
+                    String filename = item.getName().replaceAll(" ", "_").trim();
+                    if (filename.contains("\\")) {
+                        filename = filename.substring(filename.lastIndexOf("\\")+1);
+                    }
+                    if(item.getFieldName().equals("imgfile") && filename.equals("") && base.getAttribute("imgfile")==null) {
+                        throw new FileNotFoundException(item.getFieldName()+" es requerido");
+                    }
+                    else if(!filename.equals(""))
+                    {
+                        file = new File(SWBPortal.getWorkPath()+base.getWorkPath()+"/"+filename);
+                        item.write(file);
+                        base.setAttribute(item.getFieldName(), filename);
+                        base.setAttribute("wbNoFile_"+item.getFieldName(), "false");
+                    }
+                }
+            }
+        }
+        else
+        {
+            throw new UnsupportedOperationException("Form-data must be encoded in multipart form using enctype attribute");
+        }
     }
     
     /**
