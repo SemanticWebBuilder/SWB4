@@ -862,6 +862,22 @@ public class FilterSection extends javax.swing.JApplet
         }
 
     }//GEN-LAST:event_jButton1ActionPerformed
+    private boolean existTopic(WBTreeNode map, String id)
+    {
+        boolean existTopic = false;
+        String search = "id=\"" + id + "\"";
+        System.out.println("search: "+search);
+        String xml = map.getXML();
+        System.out.println("xml: "+xml);
+        int pos = xml.indexOf(search);
+        System.out.println("pos: "+pos);
+        if (pos != -1)
+        {
+            return true;
+        }
+        return existTopic;
+    }
+
     public void saveFilters(WBTreeNode etopicmap, Object root)
     {
         int ichilds = this.jTree1.getModel().getChildCount(root);
@@ -882,11 +898,11 @@ public class FilterSection extends javax.swing.JApplet
                 if (labelTo.equalsIgnoreCase(text))
                 {
                     int childs = this.jTree1.getModel().getChildCount(root_);
-                    
+
                     for (int j = 0; j < childs; j++)
                     {
                         Object node = this.jTree1.getModel().getChild(root_, j);
-                        
+
                         if (node instanceof Topic)
                         {
                             Topic topic = (Topic) node;
@@ -895,17 +911,20 @@ public class FilterSection extends javax.swing.JApplet
                             if (topic.getChecked() == TristateCheckBox.SELECTED || topic.getChecked() == TristateCheckBox.DONT_CARE)
                             {
                                 WBTreeNode etopic = new WBTreeNode();
-                                etopic.setName("topic");
-                                etopic.addAttribute("id", topic.getID());
-                                if (topic.getChecked() == TristateCheckBox.DONT_CARE)
+                                if (!existTopic(etopicmap, topic.getID()))
                                 {
-                                    etopic.addAttribute("childs", "true");
+                                    etopic.setName("topic");
+                                    etopic.addAttribute("id", topic.getID());
+                                    if (topic.getChecked() == TristateCheckBox.DONT_CARE)
+                                    {
+                                        etopic.addAttribute("childs", "true");
+                                    }
+                                    else
+                                    {
+                                        etopic.addAttribute("childs", "false");
+                                    }
+                                    etopicmap.addNode(etopic);
                                 }
-                                else
-                                {
-                                    etopic.addAttribute("childs", "false");
-                                }
-                                etopicmap.addNode(etopic);
                             }
 
                             saveFilters(etopicmap, topic);
@@ -925,17 +944,20 @@ public class FilterSection extends javax.swing.JApplet
                         this.jTree1.expandPath(new TreePath(topic.getPath()));
                     }
                     WBTreeNode etopic = new WBTreeNode();
-                    etopic.setName("topic");
-                    etopic.addAttribute("id", topic.getID());
-                    if (topic.getChecked() == TristateCheckBox.DONT_CARE)
+                    if (!existTopic(etopicmap, topic.getID()))
                     {
-                        etopic.addAttribute("childs", "true");
+                        etopic.setName("topic");
+                        etopic.addAttribute("id", topic.getID());
+                        if (topic.getChecked() == TristateCheckBox.DONT_CARE)
+                        {
+                            etopic.addAttribute("childs", "true");
+                        }
+                        else
+                        {
+                            etopic.addAttribute("childs", "false");
+                        }
+                        etopicmap.addNode(etopic);
                     }
-                    else
-                    {
-                        etopic.addAttribute("childs", "false");
-                    }
-                    etopicmap.addNode(etopic);
                     if (topic.getChecked() == TristateCheckBox.DONT_CARE)
                     {
                         continue;
