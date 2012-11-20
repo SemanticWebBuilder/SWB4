@@ -865,12 +865,9 @@ public class FilterSection extends javax.swing.JApplet
     private boolean existTopic(WBTreeNode map, String id)
     {
         boolean existTopic = false;
-        String search = "id=\"" + id + "\"";
-        System.out.println("search: "+search);
-        String xml = map.getXML();
-        System.out.println("xml: "+xml);
-        int pos = xml.indexOf(search);
-        System.out.println("pos: "+pos);
+        String search = "id=\"" + id + "\"";        
+        String xml = map.getXML();        
+        int pos = xml.indexOf(search);        
         if (pos != -1)
         {
             return true;
