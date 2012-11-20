@@ -370,10 +370,69 @@ public class FilterSection extends javax.swing.JApplet
 
     private void loadFilter()
     {
+        DefaultTreeModel model = (DefaultTreeModel) this.jTree1.getModel();
+
+        if (model.getRoot() != null)
+        {
+
+            Object objroot = model.getRoot();
+
+            if (objroot instanceof DefaultMutableTreeNode)
+            {
+
+                ((DefaultMutableTreeNode) objroot).removeAllChildren();
+                String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><req><cmd>initTree</cmd></req>";
+                String resp = this.getData(xml);
+                WBXMLParser parser = new WBXMLParser();
+                WBTreeNode nodexml = parser.parse(resp);
+                if (nodexml.getFirstNode() != null)
+                {
+                    WBTreeNode res = nodexml.getFirstNode();
+                    WBTreeNode config = res.getNodebyName("config");
+                    if (config != null)
+                    {
+                        WBTreeNode icons = config.getFirstNode();
+                        if (icons != null)
+                        {
+                            Iterator itIcons = icons.getNodesbyName("icon");
+                            while (itIcons.hasNext())
+                            {
+                                WBTreeNode icon = (WBTreeNode) itIcons.next();
+                                String path = "/applets/filterSection/" + icon.getAttribute("path");
+                                if (getClass().getResource(path) != null)
+                                {
+                                    ImageIcon oicon = new javax.swing.ImageIcon(getClass().getResource(path));
+                                    this.icons.put(icon.getAttribute("id"), oicon);
+                                }
+                                else
+                                {
+                                    System.out.println("Image not found:" + path);
+                                }
+                            }
+                        }
+                    }
+                    Iterator nodes = res.getNodesbyName("node");
+                    while (nodes.hasNext())
+                    {
+                        WBTreeNode node = (WBTreeNode) nodes.next();
+                        ImageIcon icon = (ImageIcon) this.icons.get(node.getAttribute("icon"));
+                        String name = node.getAttribute("name");
+                        TopicMap root = new TopicMap(node.getAttribute("icon"), node.getAttribute("id"), name, node.getAttribute("reload"), icon);
+                        this.jTree1.setModel(new DefaultTreeModel(root));
+                        fillTreeTopicMap(node, root);
+                        this.jTree1.updateUI();
+                    }
+                }
+                this.jTree1.updateUI();
+            }
+
+        }
         if (id != null)
         {
+
             String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><req><cmd>getFilter</cmd><id>" + this.id + "</id><tm>" + topicmap + "</tm></req>";
             String resp = this.getData(xml);
+            
             WBXMLParser parser = new WBXMLParser();
             WBTreeNode nodexml = parser.parse(resp);
             WBTreeNode eresp = nodexml.getFirstNode();
@@ -832,6 +891,8 @@ public class FilterSection extends javax.swing.JApplet
                 {
                     efilter.addNode(etopicmap);
                 }
+                
+
             }
 
         }
@@ -843,6 +904,7 @@ public class FilterSection extends javax.swing.JApplet
         if (efilternode != null)
         {
             this.id = efilternode.getFirstNode().getText();
+            loadFilter();
             JOptionPane.showMessageDialog(this, java.util.ResourceBundle.getBundle("applets/filterSection/FilterSection", locale).getString("save"), java.util.ResourceBundle.getBundle("applets/filterSection/FilterSection", locale).getString("title"), JOptionPane.INFORMATION_MESSAGE);
             return;
         }
@@ -856,7 +918,9 @@ public class FilterSection extends javax.swing.JApplet
             }
             else
             {
+                loadFilter();
                 JOptionPane.showMessageDialog(this, java.util.ResourceBundle.getBundle("applets/filterSection/FilterSection", locale).getString("err1"), java.util.ResourceBundle.getBundle("applets/filterSection/FilterSection", locale).getString("title"), JOptionPane.ERROR_MESSAGE);
+
                 return;
             }
         }
@@ -865,9 +929,9 @@ public class FilterSection extends javax.swing.JApplet
     private boolean existTopic(WBTreeNode map, String id)
     {
         boolean existTopic = false;
-        String search = "id=\"" + id + "\"";        
-        String xml = map.getXML();        
-        int pos = xml.indexOf(search);        
+        String search = "id=\"" + id + "\"";
+        String xml = map.getXML();
+        int pos = xml.indexOf(search);
         if (pos != -1)
         {
             return true;
