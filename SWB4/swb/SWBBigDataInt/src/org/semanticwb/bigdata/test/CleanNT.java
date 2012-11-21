@@ -25,13 +25,17 @@ public class CleanNT
         //<http://www.vgn.swb#vgn_RecursoDigital:11583-1495> <http://www.sfp.gob.mx/vgn#hrefVistaPrevia> "hrefVistaPrevia_11583-1495_11583.jpg" .
         //<http://www.vgn.swb#vgn_RecursoDigital:11583-1495> <http://www.sfp.gob.mx/vgn#pathFileSystem> "pathFileSystem_11583-1495_11583.jpg" .
 
+        //<http://www.vgn.swb#vgn_Coleccion:467-254> <http://www.semanticwebbuilder.org/swb4/ontology#created> "2011-12-12T15:25:50.003" .
+        //<http://www.vgn.swb#vgn_Coleccion:467-254> <http://www.semanticwebbuilder.org/swb4/ontology#updated> "2011-12-12T15:25:50.003" .
+        //<http://www.vgn.swb#vgn_RecursoDigital:2556-1> <http://www.sfp.gob.mx/vgn#formatoRecurso> <http://www.vgn.swb#vgn_FormatoRecurso:17> .
+
         
         //Clean VGN
         /*
         try
         {
-            FileInputStream in=new FileInputStream("/programming/proys/hackaton/vgn_db/vgn.nt");
-            FileOutputStream ot=new FileOutputStream("/programming/proys/hackaton/vgn_db/vgn2.nt");
+            FileInputStream in=new FileInputStream("/programming/proys/hackaton_data/vgn_db/vgn.nt");
+            FileOutputStream ot=new FileOutputStream("/programming/proys/hackaton_data/vgn_db/vgn2.nt");
             PrintWriter out=new PrintWriter(ot);
             DataInputStream din=new DataInputStream(in);
 
@@ -61,11 +65,11 @@ public class CleanNT
             ot.close();
         }catch(Exception e){e.printStackTrace();}
         */
-        
+/*        
         try
         {
-            FileInputStream in=new FileInputStream("/programming/proys/hackaton/vgng_db/vgng.nt");
-            FileOutputStream ot=new FileOutputStream("/programming/proys/hackaton/vgng_db/vgng2.nt");
+            FileInputStream in=new FileInputStream("/programming/proys/hackaton_data/vgng_db/vgng.nt");
+            FileOutputStream ot=new FileOutputStream("/programming/proys/hackaton_data/vgng_db/vgng2.nt");
             PrintWriter out=new PrintWriter(ot);
             DataInputStream din=new DataInputStream(in);
 
@@ -92,7 +96,66 @@ public class CleanNT
             out.close();
             ot.close();
         }catch(Exception e){e.printStackTrace();}
+*/        
+/*    
+        try
+        {
+            FileInputStream in=new FileInputStream("/programming/proys/hackaton_data/vgn_db/vgn2.nt");
+            FileOutputStream ot=new FileOutputStream("/programming/proys/hackaton_data/vgn_db/vgn3.nt");
+            PrintWriter out=new PrintWriter(ot);
+            DataInputStream din=new DataInputStream(in);
+
+            int x=0;
+            int y=0;
+            String line=null;
+            while((line=din.readLine())!=null)
+            {
+                x++;if(x%10000==0)System.out.println(x+" "+y+" "+line);
+                if(line.indexOf("<http://www.semanticwebbuilder.org/swb4/ontology#")>-1)continue;
+                
+                line=line.replace("<http://www.sfp.gob.mx/vgn#", "<http://datosabiertos.gob.mx/ontology/mapas.owl#");
+                line=line.replace("<http://www.vgn.swb#vgn_","<http://datosabiertos.gob.mx/data/map_");
+                line=line.replace("<http://www.vgng.swb#vgn_","<http://datosabiertos.gob.mx/data/map_");
+                
+                if(line.indexOf("<http://www.vgn.swb#")>-1)continue;                
+                
+                out.println(line);
+                y++;
+            }
+            out.flush();
+            out.close();
+            ot.close();
+        }catch(Exception e){e.printStackTrace();}       
+*/        
         
-        
+        try
+        {
+            FileInputStream in=new FileInputStream("/programming/proys/hackaton_data/vgng_db/vgng2.nt");
+            FileOutputStream ot=new FileOutputStream("/programming/proys/hackaton_data/vgng_db/vgng3.nt");
+            PrintWriter out=new PrintWriter(ot);
+            DataInputStream din=new DataInputStream(in);
+
+            int x=0;
+            int y=0;
+            String line=null;
+            while((line=din.readLine())!=null)
+            {
+                x++;if(x%10000==0)System.out.println(x+" "+y+" "+line);
+                if(line.indexOf("<http://www.semanticwebbuilder.org/swb4/ontology#")>-1)continue;
+                
+                line=line.replace("<http://www.sfp.gob.mx/vgn#", "<http://datosabiertos.gob.mx/ontology/mapas.owl#");
+                line=line.replace("<http://www.vgn.swb#vgn_","<http://datosabiertos.gob.mx/data/map_");
+                line=line.replace("<http://www.vgng.swb#vgn_","<http://datosabiertos.gob.mx/data/map_");
+                
+                if(line.indexOf("<http://www.vgng.swb#")>-1)continue;                
+                
+                out.println(line);
+                y++;
+            }
+            out.flush();
+            out.close();
+            ot.close();
+        }catch(Exception e){e.printStackTrace();}         
+      
     }
 }
