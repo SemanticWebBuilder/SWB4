@@ -44,7 +44,7 @@ public class TestBigData {
         properties.setProperty(BigdataSail.Options.FILE, journal.getAbsolutePath());
         //The persistence engine.  Use 'Disk' for the WORM or 'DiskRW' for the RWStore.
 
-        properties.setProperty("com.bigdata.journal.AbstractJournal.bufferMode","DiskRW");
+        properties.setProperty("com.bigdata.journal.AbstractJournal.bufferMode","Disk");
         properties.setProperty("com.bigdata.btree.writeRetentionQueue.capacity", "4000");
         properties.setProperty("com.bigdata.btree.BTree.branchingFactor", "128");
 
@@ -58,9 +58,9 @@ public class TestBigData {
         properties.setProperty("com.bigdata.rdf.sail.isolatableIndices", "true");
         properties.setProperty("com.bigdata.rdf.sail.truthMaintenance", "false");
         //com.bigdata.rdf.store.AbstractTripleStore.quads=false
-        properties.setProperty("com.bigdata.rdf.store.AbstractTripleStore.quads", "true");
+        properties.setProperty("com.bigdata.rdf.store.AbstractTripleStore.quads", "false");
         properties.setProperty("com.bigdata.rdf.store.AbstractTripleStore.statementIdentifiers", "false");
-        properties.setProperty("com.bigdata.rdf.store.AbstractTripleStore.textIndex", "false");
+        properties.setProperty("com.bigdata.rdf.store.AbstractTripleStore.textIndex", "true");
         properties.setProperty("com.bigdata.rdf.store.AbstractTripleStore.axiomsClass", "com.bigdata.rdf.axioms.NoAxioms");
         properties.setProperty("com.bigdata.rdf.store.AbstractTripleStore.vocabularyClass", "com.bigdata.rdf.vocab.NoVocabulary");
         properties.setProperty("com.bigdata.rdf.store.AbstractTripleStore.justify", "false");
@@ -70,7 +70,7 @@ public class TestBigData {
         BigdataSail sail = new BigdataSail(properties);
         System.out.println("NameSapce:"+sail.getDatabase().getNamespace());
         
-        
+        /*
         Repository repo = new BigdataSailRepository(sail);
         try {
             repo.initialize();
@@ -78,15 +78,12 @@ public class TestBigData {
             try {
                 con.setAutoCommit(false);
                 
-//                FileInputStream in=new FileInputStream("/programming/proys/hackaton/vgn_db/vgn2.nt");
-//                con.add(in, "http://www.vgn.swb#", RDFFormat.N3);
+                //FileInputStream in=new FileInputStream("/programming/proys/hackaton_data/vgn_db/vgn3.nt");
+                //con.add(in, "http://datosabiertos.gob.mx/data/", RDFFormat.N3);
                 
-//                FileInputStream in=new FileInputStream("/programming/proys/hackaton/vgng_db/vgng2.nt");
-//                con.add(in, "http://www.vgng.swb#", RDFFormat.N3);
-                
-                //URL url = new URL("http://example.org/example/remote");
-                //con.add(url, url.toString(), RDFFormat.RDFXML);
-                
+                //FileInputStream in=new FileInputStream("/programming/proys/hackaton_data/vgng_db/vgng3.nt");
+                //con.add(in, "http://datosabiertos.gob.mx/data/", RDFFormat.N3);
+                                
                 con.commit();
             }
             finally {
@@ -96,10 +93,10 @@ public class TestBigData {
         catch (Exception e) {
         // handle exception
             e.printStackTrace();
-        }       
+        }    
+        */
         
         System.out.println("Size:"+sail.getDatabase().getStatementCount()+" "+sail.getDatabase().getURICount());
-        
                 
 //        BigdataGraph graph = new BigdataGraph(sail,false);
 //        Model model = new ModelCom(graph);
