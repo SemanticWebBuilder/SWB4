@@ -113,11 +113,7 @@ import org.apache.poi.extractor.ExtractorFactory;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.openxml4j.exceptions.OpenXML4JException;
 import org.apache.xmlbeans.XmlException;
-import org.semanticwb.base.util.ErrorElement;
-import org.semanticwb.base.util.SFBase64;
-import org.semanticwb.base.util.SWBMailSender;
-import org.semanticwb.base.util.SWBMail;
-import org.semanticwb.base.util.SWBProperties;
+import org.semanticwb.base.util.*;
 import org.semanticwb.base.util.parser.html.HTMLParser;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -719,7 +715,17 @@ public class SWBUtils {
          */
         public static Date iso8601DateParse(String date) throws ParseException
         {
-            SimpleDateFormat iso8601dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'.'SSS");
+            SimpleDateFormat iso8601dateFormat=null;        
+            if(date.length()>19)
+            {
+                iso8601dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'.'SSS");
+            }if(date.length()>10)
+            {
+                iso8601dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+            }else
+            {
+                iso8601dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            }
             return iso8601dateFormat.parse(date);
         }
 
@@ -3903,7 +3909,7 @@ public class SWBUtils {
                 }
                 transformer.setOutputProperty(OutputKeys.METHOD, "xml");
                 transformer.transform(new DOMSource(dom), streamResult);
-                res=sw.toString(encode);
+                res=sw.toString();
             } catch (Exception e)
             {
                 SWBUtils.log.error(e);
@@ -5570,6 +5576,26 @@ public class SWBUtils {
                 size++;
             }
             return size;
+        }
+        
+        /**
+         * Filtra iterador por medio de la interface FilterRule, la cual hay que implementar cuando se utilice
+         * @param it
+         * @param rule
+         * @return 
+         */
+        public static List filterIterator(Iterator it, FilterRule rule)
+        {
+            List ret=new ArrayList();
+            while (it.hasNext())
+            {
+                Object object = it.next();
+                if(!rule.filter(object))
+                {
+                    ret.add(object);
+                }
+            }
+            return ret;
         }
     }
 }
