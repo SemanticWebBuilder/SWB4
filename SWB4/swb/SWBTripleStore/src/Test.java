@@ -1,5 +1,11 @@
 
+import com.hp.hpl.jena.datatypes.RDFDatatype;
+import com.hp.hpl.jena.graph.Node;
+import com.hp.hpl.jena.graph.impl.LiteralLabelFactory;
 import java.util.StringTokenizer;
+import org.apache.lucene.util.NumericUtils;
+import org.semanticwb.base.util.LexiSortable;
+import org.semanticwb.triplestore.SWBTSUtil;
 
 /*
  * To change this template, choose Tools | Templates
@@ -43,6 +49,35 @@ public class Test
         String node="subj";
 
         System.out.println(getSegment(ext, node));
+        
+        
+        //String subj="uri|http://www.google.com/data#swb_Class:56";
+        String subj="uri|http://www.google.com/data/swb_Class:56";
+        //String subj="uri|http://www.google.com/data/swb_Class";
+        System.out.println(SWBTSUtil.getSTypeFromSUBJ(subj));
+        
+        
+        Node n=Node.createLiteral(LiteralLabelFactory.create(new Long(-100L)));        
+        System.out.println(SWBTSUtil.node2SortString(n));
+        n=Node.createLiteral(LiteralLabelFactory.create(new Long(100L)));        
+        System.out.println(SWBTSUtil.node2SortString(n));
+        n=Node.createLiteral(LiteralLabelFactory.create(new Integer(100)));        
+        System.out.println(SWBTSUtil.node2SortString(n));
+        n=Node.createLiteral(LiteralLabelFactory.create(new Integer(-100)));        
+        System.out.println(SWBTSUtil.node2SortString(n));
+        n=Node.createLiteral(LiteralLabelFactory.create("Hola"));        
+        System.out.println(SWBTSUtil.node2SortString(n));
+        
+        double d=-23.5877868768767876;
+        String s=NumericUtils.doubleToPrefixCoded(d);
+        System.out.println(d);
+        System.out.println("("+s+")");
+        System.out.println(s.length());
+        System.out.println(NumericUtils.prefixCodedToDouble(s));
+        
+        System.out.println(LexiSortable.toLexiSortable(d));
+        System.out.println(LexiSortable.doubleFromLexiSortable(LexiSortable.toLexiSortable(d)));
+        
 
     }
 
