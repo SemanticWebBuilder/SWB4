@@ -1267,12 +1267,7 @@ public class SemanticObject
             String xml=getProperty(prop);
             if(xml!=null)
             {
-                try {
-                    //dom=SWBUtils.XML.xmlToDom(xml);
-                    dom = SWBUtils.XML.xmlToDom(new java.io.ByteArrayInputStream(xml.getBytes("UTF-8")));
-                } catch (UnsupportedEncodingException ex) {
-                    log.error(ex);
-                }
+                    dom=SWBUtils.XML.xmlToDom(xml);
             }
             if(dom==null)
             {

@@ -270,6 +270,9 @@ public class SemanticMgr implements SWBInstanceObject
         } else if (SWBPlatform.isSWBTripleStore())
         {
             clsname="org.semanticwb.triplestore.SWBTripleStore";
+        } else if (SWBPlatform.isSWBTripleStoreExt())
+        {
+            clsname="org.semanticwb.triplestore.ext.SWBTripleStoreExt";
         } else if (SWBPlatform.isSWBTSMongo())
         {
             clsname="org.semanticwb.triplestore.mongo.SWBTSMongo";
