@@ -107,6 +107,9 @@ public class SWBPlatform
     /** The Constant PRESIST_TYPE_TDB. */
     public final static String PRESIST_TYPE_SWBTRIPLESTORE="swbts";
     
+    /** The Constant PRESIST_TYPE_TDB. */
+    public final static String PRESIST_TYPE_SWBTRIPLESTOREEXT="swbtse";
+    
     public final static String PRESIST_TYPE_SWBTSMONGO="swbtsmongo";
     
     public final static String PRESIST_TYPE_SWBTSGEMFIRE="swbtsgemfire";
@@ -381,6 +384,9 @@ public class SWBPlatform
         }else if(PRESIST_TYPE_SWBTRIPLESTORE.equalsIgnoreCase(persistenceType))
         {
             SWBPlatform.persistenceType = PRESIST_TYPE_SWBTRIPLESTORE;
+        }else if(PRESIST_TYPE_SWBTRIPLESTOREEXT.equalsIgnoreCase(persistenceType))
+        {
+            SWBPlatform.persistenceType = PRESIST_TYPE_SWBTRIPLESTOREEXT;
         }else if(PRESIST_TYPE_SWBTSMONGO.equalsIgnoreCase(persistenceType))
         {
             SWBPlatform.persistenceType = PRESIST_TYPE_SWBTSMONGO;
@@ -896,6 +902,16 @@ public class SWBPlatform
     {
         return persistenceType==PRESIST_TYPE_SWBTRIPLESTORE;
     }
+    
+    /**
+     * Checks if is TDBE.
+     *
+     * @return true, if is tDB
+     */
+    public static boolean isSWBTripleStoreExt()
+    {
+        return persistenceType==PRESIST_TYPE_SWBTRIPLESTOREEXT;
+    }    
     
     public static boolean isSWBTSMongo()
     {

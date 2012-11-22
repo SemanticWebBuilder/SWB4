@@ -134,7 +134,22 @@ public class SemanticLiteral
                 ret=new SemanticLiteral(Long.valueOf(value));
             }else if(prop.isDate())
             {
-                ret=new SemanticLiteral(value);
+                try
+                {
+                    ret=new SemanticLiteral(SWBUtils.TEXT.iso8601DateParse(value));
+                }catch(Exception e)
+                {
+                    log.error(e);
+                }
+            }else if(prop.isDateTime())
+            {
+                try
+                {
+                    ret=new SemanticLiteral(new Timestamp(SWBUtils.TEXT.iso8601DateParse(value).getTime()));
+                }catch(Exception e)
+                {
+                    log.error(e);
+                }
             }
         }
         return ret;

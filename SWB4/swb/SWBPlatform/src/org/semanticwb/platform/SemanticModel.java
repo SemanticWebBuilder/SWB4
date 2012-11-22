@@ -28,6 +28,10 @@
 
 package org.semanticwb.platform;
 
+import com.hp.hpl.jena.graph.Graph;
+import com.hp.hpl.jena.graph.Node;
+import com.hp.hpl.jena.graph.Triple;
+import com.hp.hpl.jena.graph.TripleMatch;
 import com.hp.hpl.jena.ontology.OntClass;
 import com.hp.hpl.jena.ontology.OntModel;
 import com.hp.hpl.jena.ontology.OntProperty;
@@ -44,6 +48,8 @@ import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.rdf.model.StmtIterator;
+import com.hp.hpl.jena.rdf.model.impl.IteratorFactory;
+import com.hp.hpl.jena.rdf.model.impl.ModelCom;
 import com.hp.hpl.jena.vocabulary.OWL;
 import com.hp.hpl.jena.vocabulary.RDF;
 import java.io.OutputStream;
@@ -55,6 +61,7 @@ import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.GenericObject;
 import org.semanticwb.rdf.RemoteGraph;
+import org.semanticwb.triplestore.ext.GraphExt;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -536,6 +543,93 @@ public class SemanticModel
         }
         return ret;
     }
+    
+    /**
+     * Lista instancia de la clase ordenandas por tiempo de creacion ascendente
+     * @param cls SemanticClass.
+     * @param asc Si es verdadero, regresa los resultados de forma ascendente.
+     * @return Iterador de SemanticObjects.
+     */
+    public Iterator<SemanticObject> listInstancesOfClassOrderByCreation(SemanticClass cls, boolean asc)
+    {
+        StmtIterator stit=null;
+        if(asc)
+        {
+            stit=listStatements(null, RDF.type, cls.getOntClass(),null,null,null,"timems");
+        }else
+        {
+            stit=listStatements(null, RDF.type, cls.getOntClass(),null,null,null,"timems desc");
+        }
+        Iterator<SemanticObject> ret=null;
+        if(cls.isSWBClass())ret=new SemanticIterator(stit, true, this, cls); //Crea instancias de este tiplo de clase en el modelo sin verificar clase
+        else ret=new SemanticIterator(stit, true, this, null); //Crea instancias de este tiplo de clase en el modelo verificando clase
+        return ret;
+    }
+    
+    /**
+     * Lista instancia de la clase ordenandas por la propiedad definida y filtradas por el ClassGroupId ascendente
+     * @param cls SemanticClass usada para filtrar por ClassgroupId
+     * @param p SemanticProperty a filtrar
+     * @param asc Si es verdadero, regresa los resultados de forma ascendente.
+     * @return Iterador de SemanticObjects.
+     */
+    public Iterator<SemanticObject> listInstancesOfClassOrderByProperty(SemanticClass cls, SemanticProperty p, boolean asc)
+    {
+        StmtIterator stit=null;
+        if(asc)
+        {
+            stit=listStatements(null, p.getRDFProperty(), null,cls.getClassGroupId(),null,null,"sort");
+        }else
+        {
+            stit=listStatements(null, p.getRDFProperty(), null,cls.getClassGroupId(),null,null,"sort desc");
+        }
+        Iterator<SemanticObject> ret=null;
+        if(cls.isSWBClass())ret=new SemanticIterator(stit, true, this, cls); //Crea instancias de este tiplo de clase en el modelo sin verificar clase
+        else ret=new SemanticIterator(stit, true, this, null); //Crea instancias de este tiplo de clase en el modelo verificando clase
+        return ret;
+    }    
+    
+    
+    /**
+     * Lista los Statements del modelo, siempre y cuando sea del tipo GraphExt (swbtse).
+     * @param r Resource
+     * @param p Propery
+     * @param o RDFNode
+     * @param stype ClassID
+     * @param limit limite de registros
+     * @param offset Desplazamiento de los registros
+     * @param sortby campo de ordenamiento valores: "subj", "prop", "obj", "sort", "timems"
+     * @return Iterador de Statements
+     */
+    public StmtIterator listStatements(Resource r, Property p, RDFNode o, String stype, Long limit, Long offset, String sortby)
+    {
+        Graph g=getRDFModel().getGraph();
+        if(g instanceof GraphExt)
+        {
+            TripleMatch tm=Triple.createMatch( r!=null?r.asNode():null, p!=null?p.asNode():null, o!=null?o.asNode():null );
+            return IteratorFactory.asStmtIterator( ((GraphExt)g).find( tm, stype, limit, offset, sortby), (ModelCom)getRDFModel() );
+        }
+        return null;
+    }
+    
+    /**
+     * Cuenta los Statements del modelo, siempre y cuando sea del tipo GraphExt (swbtse).
+     * @param r Resource
+     * @param p Propery
+     * @param o RDFNode
+     * @param stype ClassID
+     * @return long con el numero de elements encontrados
+     */
+    public long countStatements(Resource r, Property p, RDFNode o, String stype)
+    {
+        Graph g=getRDFModel().getGraph();
+        if(g instanceof GraphExt)
+        {
+            TripleMatch tm=Triple.createMatch( r!=null?r.asNode():null, p!=null?p.asNode():null, o!=null?o.asNode():null );
+            return ((GraphExt)g).count(tm, stype);
+        }
+        return 0;
+    }    
     
     /**
      * Creates the semantic property.
