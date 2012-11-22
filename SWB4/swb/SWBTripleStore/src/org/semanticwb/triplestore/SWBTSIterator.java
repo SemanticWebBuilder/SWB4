@@ -11,6 +11,7 @@ import com.hp.hpl.jena.graph.TripleMatch;
 import com.hp.hpl.jena.util.iterator.ExtendedIterator;
 import com.hp.hpl.jena.util.iterator.Filter;
 import com.hp.hpl.jena.util.iterator.Map1;
+import com.hp.hpl.jena.util.iterator.Map1Iterator;
 import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -46,8 +47,10 @@ public class SWBTSIterator implements ExtendedIterator<Triple>
 
     private static int counter=0;
 
-     public SWBTSIterator(SWBTSGraph graph, TripleMatch tm)
+    public SWBTSIterator(SWBTSGraph graph, TripleMatch tm)
     {
+        //new Exception().printStackTrace();
+        
         counter++;
         //System.out.println("SWBTSIterator:"+counter+" tm:"+tm+" "+graph.getName());
         
@@ -131,9 +134,12 @@ public class SWBTSIterator implements ExtendedIterator<Triple>
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    public <U> ExtendedIterator<U> mapWith(Map1<Triple, U> map1)
-    {
-        throw new UnsupportedOperationException("Not supported yet.");
+    /**
+        make a new iterator which is the elementwise _map1_ of the base iterator.
+    */     
+    public <U> ExtendedIterator<U> mapWith( Map1<Triple, U> map1 )
+    { 
+        return new Map1Iterator<Triple, U>( map1, this ); 
     }
 
     public List<Triple> toList()

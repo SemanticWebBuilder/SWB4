@@ -6,6 +6,7 @@
 package org.semanticwb.triplestore;
 
 import com.hp.hpl.jena.datatypes.BaseDatatype;
+import com.hp.hpl.jena.datatypes.RDFDatatype;
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.graph.impl.LiteralLabel;
 import com.hp.hpl.jena.graph.impl.LiteralLabelFactory;
@@ -13,6 +14,7 @@ import com.hp.hpl.jena.rdf.model.AnonId;
 import java.util.StringTokenizer;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.base.util.LexiSortable;
 import org.semanticwb.base.util.SFBase64;
 
 /**
@@ -259,5 +261,89 @@ public class SWBTSUtil
         }
         return null;
     }
+    
+    /**
+     * Regresa la representacion en String del nodo de RDF
+     * @param node
+     * @return
+     */
+    public static String node2SortString(Node node)//, StringBuilder comp)
+    {
+        if(node==null)return null;
+        if(node.isBlank())return node.getBlankNodeId().toString();
+        if(node.isURI())
+        {
+            return node.getURI();
+        }
+        if(node.isLiteral())
+        {
+            String value=null;
+            String type=node.getLiteralDatatypeURI();
+            if(type==null || type.endsWith("#string"))
+            {
+                value=encodeText(node.getLiteralValue().toString());
+            }
+            else if(type.endsWith("#long") || type.endsWith("#integer") || type.endsWith("#int"))
+            {
+                Object obj=node.getLiteral().getValue();
+                if(obj instanceof Integer)value=LexiSortable.toLexiSortable((Integer)obj);
+                if(obj instanceof Long)value=LexiSortable.toLexiSortable((Long)obj);
+                /*                
+                String ini="00000000000000000000";
+                String v=node.getLiteral().getValue().toString();
+                if(v.charAt(0)=='-')
+                {
+                    value="-"+ini.substring(v.length())+v.substring(1);
+                }else
+                {
+                    value=ini.substring(v.length())+v;
+                }
+                * 
+                */
+            }else if(type.endsWith("#float") || type.endsWith("#double"))
+            {
+                Object obj=node.getLiteral().getValue();
+                if(obj instanceof Float)value=LexiSortable.toLexiSortable((Float)obj);
+                if(obj instanceof Double)value=LexiSortable.toLexiSortable((Double)obj);
+            }else{
+                value=node.getLiteralLexicalForm();
+            }
+            if(value!=null && value.length()>MAX_NODE_TEXT)value=value.substring(0,MAX_NODE_TEXT);
+            return value;
+        }
+        return null;
+    }    
+    
+    public static String getSTypeFromSUBJ(String subj)
+    {
+        //String subj="uri|http://www.google.com/asdsdj#swb_Class:56";
+        String type=null;
+        if(subj!=null && subj.startsWith("uri"))
+        {                
+            int i=subj.lastIndexOf("#");
+            if(i>-1)
+            {
+                type=subj.substring(i+1);
+            }else
+            {
+                i=subj.lastIndexOf("/");
+                if(i>-1)
+                {
+                    type=subj.substring(i+1);
+                }
+            }
+                               
+            if(type!=null)
+            {
+                i=type.lastIndexOf(":");
+                if(i>-1)
+                {
+                    type=type.substring(0, i);
+                }
+            }
+        }    
+        return type;
+    }
 
 }
+
