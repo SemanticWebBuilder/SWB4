@@ -546,6 +546,7 @@ public class Modeler extends GenericResource {
     }
 
     public void doApplet(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
+        response.setContentType("test/html");
         String suri = request.getParameter("suri");
         String current = request.getParameter("currentActivities");
         String tp = request.getParameter("tp");
