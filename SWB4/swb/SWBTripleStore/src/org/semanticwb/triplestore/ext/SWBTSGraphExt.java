@@ -3,54 +3,36 @@
  * and open the template in the editor.
  */
 
-package org.semanticwb.triplestore;
+package org.semanticwb.triplestore.ext;
 
+import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.graph.Triple;
 import com.hp.hpl.jena.graph.TripleMatch;
-import com.hp.hpl.jena.graph.impl.GraphBase;
-import com.hp.hpl.jena.shared.PrefixMapping;
 import com.hp.hpl.jena.util.iterator.ExtendedIterator;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBRuntimeException;
 import org.semanticwb.SWBUtils;
-import org.semanticwb.remotetriplestore.RGraph;
+import org.semanticwb.triplestore.SWBTSGraph;
+import org.semanticwb.triplestore.SWBTSUtil;
 
 /**
  *
  * @author jei
  */
-public class SWBTSGraph extends GraphBase implements RGraph
+public class SWBTSGraphExt extends SWBTSGraph implements GraphExt
 {
-    private static Logger log = SWBUtils.getLogger(SWBTSGraph.class);
-
-    private String name;
-    private int id;
-
-    private PrefixMapping pmap;
-    //private BigdataTransactionHandler trans;
+    private static Logger log = SWBUtils.getLogger(SWBTSGraphExt.class);
 
 
-    public SWBTSGraph(int id, String name)
+    public SWBTSGraphExt(int id, String name)
     {
-        this.id=id;
-        this.name=name;
-        pmap=new SWBTSPrefixMapping(this);
+        super(id, name);
     }
-
-    @Override
-    protected ExtendedIterator<Triple> graphBaseFind(TripleMatch tm)
-    {
-        return new SWBTSIterator(this, tm);
-        //throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public void performAdd(Triple t)
-    {
-        performAdd(t,null);
-    }    
+   
 
     public void performAdd(Triple t, Long id)
     {
@@ -87,22 +69,27 @@ public class SWBTSGraph extends GraphBase implements RGraph
             
             //System.out.println("performAdd:"+subj+" "+prop+" "+obj);
             //new Exception().printStackTrace();
+            
+            String sort=SWBTSUtil.node2SortString(t.getObject());
+            String stype=SWBTSUtil.getSTypeFromSUBJ(subj);
 
             if(sext.length()==0)
             {
-                ps=con.prepareStatement("INSERT INTO swb_graph_ts"+getId()+" (subj, prop, obj, timems) VALUES (?, ?, ?, ?)");
+                ps=con.prepareStatement("INSERT INTO swb_graph_ts"+getId()+" (subj, prop, obj, sort, stype, timems) VALUES (?, ?, ?, ?, ? ,?)");
             }else
             {
-                ps=con.prepareStatement("INSERT INTO swb_graph_ts"+getId()+" (subj, prop, obj, timems, ext) VALUES (?, ?, ?, ?, ?)");
+                ps=con.prepareStatement("INSERT INTO swb_graph_ts"+getId()+" (subj, prop, obj, sort, stype, timems, ext) VALUES (?, ?, ?, ?, ?, ?, ?)");
             }
 
             ps.setString(1, subj);
             ps.setString(2, prop);
             ps.setString(3, obj);
-            ps.setLong(4, System.currentTimeMillis());
+            ps.setString(4, sort);
+            ps.setString(5, stype);
+            ps.setLong(6, System.currentTimeMillis());
             if(sext.length()>0)
             {
-                ps.setAsciiStream(5, SWBUtils.IO.getStreamFromString(sext), sext.length());
+                ps.setAsciiStream(7, SWBUtils.IO.getStreamFromString(sext), sext.length());
             }
 
             ps.executeUpdate();
@@ -114,13 +101,7 @@ public class SWBTSGraph extends GraphBase implements RGraph
             throw new SWBRuntimeException(e2.getMessage(), e2);
         }
     }
-
-    @Override
-    public void performDelete(Triple t)
-    {
-        performDelete(t,null);
-    }    
-
+    
     public void performDelete(Triple t, Long id)
     {
         try
@@ -162,29 +143,72 @@ public class SWBTSGraph extends GraphBase implements RGraph
             log.error(e2);
             throw new SWBRuntimeException(e2.getMessage(), e2);            
         }
+    }    
+
+    public long count(TripleMatch tm, String stype)
+    {
+        long count=0;
+        String subj=SWBTSUtil.node2HashString(tm.getMatchSubject(),"lgs");
+        String prop=SWBTSUtil.node2HashString(tm.getMatchPredicate(),"lgp");
+        String obj=SWBTSUtil.node2HashString(tm.getMatchObject(),"lgo");
+        
+        //System.out.println("subj:"+subj+" prop:"+prop+" obj:"+obj+" stype:"+stype);
+
+        try
+        {
+            Connection con=SWBUtils.DB.getDefaultConnection();
+
+            String query="select count(*) from swb_graph_ts"+this.getId();
+            String query2="";
+            if(subj!=null)query2+=" subj=?";
+            if(prop!=null)
+            {
+                if(query2.length()>0)query2 +=" and";
+                query2 += " prop=?";
+            }
+            if(obj!=null)
+            {
+                if(query2.length()>0)query2 +=" and";
+                query2 += " obj=?";
+            }
+            if(stype!=null)
+            {
+                if(query2.length()>0)query2 +=" and";
+                query2 += " stype=?";
+            }
+
+            if(query2.length()>0)query+=" where"+query2;
+
+            PreparedStatement ps=con.prepareStatement(query);
+            int i=1;
+            if(subj!=null)ps.setString(i++, subj);
+            if(prop!=null)ps.setString(i++, prop);
+            if(obj!=null)ps.setString(i++, obj);
+            if(stype!=null)ps.setString(i++, stype);
+            ResultSet rs=ps.executeQuery();
+
+            if(rs.next())
+            {
+                count=rs.getLong(1);
+            }
+            
+            //System.out.println("cout:"+count+" rs:"+rs);
+            
+            
+            rs.close();
+            ps.close();
+            con.close();
+        }catch(SQLException e)
+        {
+            log.error(e);
+            throw new SWBRuntimeException(e.getMessage(), e);
+        }
+        return count;
     }
 
-    public String getName()
+    public ExtendedIterator<Triple> find(TripleMatch tm, String stype, Long limit, Long offset, String sortby)
     {
-        return name;
-    }
-
-    public int getId()
-    {
-        return id;
-    }
-
-    @Override
-    public void close()
-    {
-        //Thread.currentThread().dumpStack();
-        super.close();
-    }
-
-    @Override
-    public PrefixMapping getPrefixMapping()
-    {
-        return pmap;
+        return new SWBTSIteratorExt(this, tm, stype, limit, offset, sortby);
     }
 
 }
