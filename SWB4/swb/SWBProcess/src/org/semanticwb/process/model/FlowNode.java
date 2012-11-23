@@ -91,7 +91,9 @@ public class FlowNode extends org.semanticwb.process.model.base.FlowNodeBase
                 }else
                 {
                     id=((DataStore)item).getDataObjectId();
+                    if(id!=null && id.length()==0)id=null;
                     code=((DataStore)item).getInitializationCode();
+                    if(code!=null && code.length()==0)code=null;
                 }
 
                 if(scls!=null)

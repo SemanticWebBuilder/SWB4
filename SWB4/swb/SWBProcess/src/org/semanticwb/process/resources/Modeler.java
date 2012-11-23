@@ -40,11 +40,7 @@ import org.json.JSONObject;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
-import org.semanticwb.model.GenericObject;
-import org.semanticwb.model.Resource;
-import org.semanticwb.model.ResourceType;
-import org.semanticwb.model.Sortable;
-import org.semanticwb.model.User;
+import org.semanticwb.model.*;
 import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticModel;
 import org.semanticwb.platform.SemanticObject;
@@ -175,6 +171,9 @@ public class Modeler extends GenericResource {
 
     private Document getService(String cmd, Document src, User user, HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) 
     {
+        //Valida que no se pueda editar si esta fuera del sitio de administracion.
+        if(!paramRequest.getWebPage().getWebSiteId().equals(SWBContext.WEBSITE_ADMIN))return getError(2);;
+        
         GenericObject go = ont.getGenericObject(request.getParameter("suri"));
         SemanticClass sc = go.getSemanticObject().getSemanticClass();
         HashMap<String, JSONObject> hmjson = new HashMap();
@@ -546,7 +545,7 @@ public class Modeler extends GenericResource {
     }
 
     public void doApplet(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
-        response.setContentType("test/html");
+        response.setContentType("text/html");
         String suri = request.getParameter("suri");
         String current = request.getParameter("currentActivities");
         String tp = request.getParameter("tp");
@@ -561,6 +560,10 @@ public class Modeler extends GenericResource {
         if (mode == null) {
             mode = "edit";
         }
+        
+        //Valida que no se pueda editar si esta fuera del sitio de administracion.        
+        if(mode.equals("edit") && !paramsRequest.getWebPage().getWebSiteId().equals(SWBContext.WEBSITE_ADMIN))return;
+        
         PrintWriter out = response.getWriter();
         SWBResourceURL urlapp = paramsRequest.getRenderUrl();
         urlapp.setMode("gateway");
@@ -587,6 +590,8 @@ public class Modeler extends GenericResource {
         out.println("              name: \"SWBAppBPMNModeler\"");
         out.println("        },");
         out.println("        {");
+        out.println("              cache_archive: \"" + SWBPlatform.getContextPath() + "/swbadmin/lib/SWBAppBPMNModeler.jar," + SWBPlatform.getContextPath() + "/swbadmin/lib/json.jar," + SWBPlatform.getContextPath() + "/swbadmin/lib/SWBAplCommons.jar\",");
+        out.println("              cache_version: \"1.0,1.0,1.0\",");
         out.println("              lang: \"" + paramsRequest.getUser().getLanguage() + "\",");
         out.println("              jsess: \"" + request.getSession().getId() + "\",");
         out.println("              currentActivities: \"" + URLDecoder.decode(current) + "\",");

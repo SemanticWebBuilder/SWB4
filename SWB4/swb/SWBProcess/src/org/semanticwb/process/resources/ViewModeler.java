@@ -43,6 +43,7 @@ public class ViewModeler extends Modeler
 {
     @Override
     public void doApplet(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
+        response.setContentType("text/html");
         String suri = request.getParameter("suri");
         String pending = request.getParameter("pending");
         String done = request.getParameter("done");
@@ -74,6 +75,8 @@ public class ViewModeler extends Modeler
         out.println("              name: \"SWBAppBPMNModeler\"");
         out.println("        },");
         out.println("        {");
+        out.println("              cache_archive: \"" + SWBPlatform.getContextPath() + "/swbadmin/lib/SWBAppBPMNModeler.jar," + SWBPlatform.getContextPath() + "/swbadmin/lib/json.jar," + SWBPlatform.getContextPath() + "/swbadmin/lib/SWBAplCommons.jar\",");
+        out.println("              cache_version: \"1.0,1.0,1.0\",");        
         out.println("              lang: \"" + paramsRequest.getUser().getLanguage() + "\",");
         out.println("              mode: \"view\",");
         out.println("              pending: \""+pending+"\",");

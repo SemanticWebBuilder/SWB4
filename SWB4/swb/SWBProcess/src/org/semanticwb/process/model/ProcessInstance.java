@@ -118,7 +118,9 @@ public class ProcessInstance extends org.semanticwb.process.model.base.ProcessIn
             }else //Es un dato persistente
             {
                 id=((DataStore)item).getDataObjectId();
+                if(id!=null && id.length()==0)id=null;
                 code=((DataStore)item).getInitializationCode();
+                if(code!=null && code.length()==0)code=null;
             }
 
             if(scls!=null)//El elemento fué configurado
