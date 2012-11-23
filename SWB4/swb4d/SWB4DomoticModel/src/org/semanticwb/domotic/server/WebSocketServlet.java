@@ -7,8 +7,7 @@ package org.semanticwb.domotic.server;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
-import java.util.Set;
-import java.util.StringTokenizer;
+import java.util.*;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -17,11 +16,9 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.catalina.websocket.MessageInbound;
 import org.apache.catalina.websocket.StreamInbound;
 import org.apache.catalina.websocket.WsOutbound;
-import org.semanticwb.SWBPlatform;
 import org.semanticwb.domotic.model.DomContext;
 import org.semanticwb.domotic.model.DomDevice;
 import org.semanticwb.domotic.model.DomGroup;
-import org.semanticwb.domotic.model.base.DomDeviceBase;
 import org.semanticwb.model.GenericObject;
 import org.semanticwb.platform.SemanticObject;
 
@@ -35,6 +32,7 @@ public class WebSocketServlet extends org.apache.catalina.websocket.WebSocketSer
     private static final String GUEST_PREFIX = "Guest";
     private static final AtomicInteger connectionIds = new AtomicInteger(0);
     private static final Set<ChatMessageInbound> connections = new CopyOnWriteArraySet();
+    private static final LinkedList<Message> messages=new LinkedList();
 
     public static void broadcast(String message)
     {
@@ -50,8 +48,30 @@ public class WebSocketServlet extends org.apache.catalina.websocket.WebSocketSer
                 // Ignore
             }
         }
+        
+        messages.add(new Message(System.currentTimeMillis(), message));
     }
-
+    
+    public static List<String> getLastMessages()
+    {
+        long time=System.currentTimeMillis()-4000;
+        ArrayList arr=new ArrayList();
+        Iterator<Message> it=messages.listIterator();
+        while (it.hasNext())
+        {
+            Message message = it.next();
+            if(message.getTime()>time)
+            {
+                arr.add(message.getMessage());
+            }else
+            {
+                it.remove();
+            }
+        }
+        return arr;
+    }
+            
+            
     @Override
     protected StreamInbound createWebSocketInbound(String subProtocol,
             HttpServletRequest request)
@@ -129,4 +149,37 @@ public class WebSocketServlet extends org.apache.catalina.websocket.WebSocketSer
             
         }
     }
+}
+
+class Message
+{
+    private long time;
+    private String message=null;
+
+    public Message(long time, String message)
+    {
+        this.time = time;
+        this.message=message;
+    }
+
+    public long getTime()
+    {
+        return time;
+    }
+
+    public void setTime(long time)
+    {
+        this.time = time;
+    }
+    
+    public String getMessage()
+    {
+        return message;
+    }
+
+    public void setMessage(String message)
+    {
+        this.message = message;
+    }
+
 }

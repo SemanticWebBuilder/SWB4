@@ -2,26 +2,14 @@
     Document   : processCommand
     Created on : 22-oct-2012, 13:40:01
     Author     : javier.solis.g
---%>
-<%@page import="org.semanticwb.domotic.model.DomContext"%>
-<%@page import="org.semanticwb.model.GenericObject"%>
-<%@page import="org.semanticwb.platform.SemanticObject"%>
-<%@page import="org.semanticwb.model.SWBContext"%>
-<%@page import="org.semanticwb.domotic.model.SWB4DContext"%>
-<%@page import="org.semanticwb.model.WebSite"%>
-<%@page import="org.semanticwb.domotic.model.DomGroup"%>
-<%@page import="org.semanticwb.domotic.model.DomDevice"%>
-<%@page import="java.util.Iterator"%>
-<%@page import="org.semanticwb.SWBUtils"%>
-<%@page import="org.semanticwb.model.SWBModel"%>
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%!
-String processComands(String commands, SWBModel model)
+--%><%@page import="java.util.List"%><%@page import="org.semanticwb.domotic.server.WebSocketServlet"%><%@page import="org.semanticwb.domotic.model.DomContext"%><%@page import="org.semanticwb.model.GenericObject"%><%@page import="org.semanticwb.platform.SemanticObject"%><%@page import="org.semanticwb.model.SWBContext"%><%@page import="org.semanticwb.domotic.model.SWB4DContext"%><%@page import="org.semanticwb.model.WebSite"%><%@page import="org.semanticwb.domotic.model.DomGroup"%><%@page import="org.semanticwb.domotic.model.DomDevice"%><%@page import="java.util.Iterator"%><%@page import="org.semanticwb.SWBUtils"%><%@page import="org.semanticwb.model.SWBModel"%><%@page contentType="text/html" pageEncoding="UTF-8"%><%!
+    
+    String processComands(String commands, SWBModel model)
     {
         String ret = commands;
         if (ret != null)
         {
-            try{ret=SWBUtils.TEXT.decode(ret, "utf8");}catch(Exception e){e.printStackTrace();}
+            //try{ret=SWBUtils.TEXT.decode(ret, "utf8");}catch(Exception e){e.printStackTrace();}
             if (ret.startsWith("["))
             {
                 ret = ret.substring(1, ret.length() - 1);
@@ -102,14 +90,16 @@ String processComands(String commands, SWBModel model)
         
         return ret;
     }
-%>
-<%
+%><%
     WebSite site = SWBContext.getWebSite("dom");
     SWB4DContext domotic = SWB4DContext.getInstance(site);
     SWB4DContext.getServer().setModel(site);
     
     String suri = request.getParameter("suri");
     String sstat = request.getParameter("stat");
+    String sdata = request.getParameter("data");
+    String gmsg = request.getParameter("gmsg");
+    
     if (suri != null)
     {
         String uri=SemanticObject.shortToFullURI(suri);
@@ -129,9 +119,18 @@ String processComands(String commands, SWBModel model)
         }
     }    
 
-    String data = processComands(request.getParameter("data"), site);
-    if(data!=null)
+    if(sdata!=null)
     {
-        out.println(data);
+        out.println(processComands(sdata, site));
     }
+    
+    if(gmsg!=null)
+    {
+        Iterator<String> it=WebSocketServlet.getLastMessages().iterator();
+        while(it.hasNext())
+        {
+            out.println(it.next());
+        }
+    }
+    
 %>
