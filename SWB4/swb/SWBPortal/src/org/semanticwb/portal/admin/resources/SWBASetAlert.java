@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.semanticwb.portal.admin.resources;
 
 import java.io.IOException;
@@ -10,9 +6,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
-import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.AdminAlert;
 import org.semanticwb.model.FormValidateException;
+import org.semanticwb.model.SWBContext;
 import org.semanticwb.portal.SWBFormButton;
 import org.semanticwb.portal.SWBFormMgr;
 import org.semanticwb.portal.api.*;
@@ -57,15 +53,4 @@ public class SWBASetAlert extends GenericResource {
         }
     }
 
-    @Override
-    public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
-//        AdminAlert aa = AdminAlert.ClassMgr.getAdminAlert("1", SWBContext.getAdminWebSite());
-//        SWBFormMgr fm = new SWBFormMgr(aa.getSemanticObject(), SWBFormMgr.TYPE_DOJO, SWBFormMgr.MODE_EDIT);
-//        try {
-//            fm.processForm(request);
-//        } catch (FormValidateException fve) {
-//            log.error(fve);
-//        }
-    }
-    
 }
