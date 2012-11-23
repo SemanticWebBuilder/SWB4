@@ -1,25 +1,28 @@
-/*
- * INFOTEC WebBuilder es una herramienta para el desarrollo de portales de conocimiento, colaboración e integración para Internet,
- * la cual, es una creación original del Fondo de Información y Documentación para la Industria INFOTEC, misma que se encuentra
- * debidamente registrada ante el Registro Público del Derecho de Autor de los Estados Unidos Mexicanos con el
- * No. 03-2002-052312015400-14, para la versión 1; No. 03-2003-012112473900 para la versión 2, y No. 03-2006-012012004000-01
- * para la versión 3, respectivamente.
- *
- * INFOTEC pone a su disposición la herramienta INFOTEC WebBuilder a través de su licenciamiento abierto al público (‘open source’),
- * en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición;
- * aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software,
- * todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización
- * de INFOTEC WebBuilder 3.2.
- *
- * INFOTEC no otorga garantía sobre INFOTEC WebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita,
- * siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar
- * de la misma.
- *
- * Si usted tiene cualquier duda o comentario sobre INFOTEC WebBuilder, INFOTEC pone a su disposición la siguiente
- * dirección electrónica:
- *
- *                                          http://www.webbuilder.org.mx
- */
+/**
+* SemanticWebBuilder Process (SWB Process) es una plataforma para la gestiÃ³n de procesos de negocio mediante el uso de 
+* tecnologÃ­a semÃ¡ntica, que permite el modelado, configuraciÃ³n, ejecuciÃ³n y monitoreo de los procesos de negocio
+* de una organizaciÃ³n, asÃ­ como el desarrollo de componentes y aplicaciones orientadas a la gestiÃ³n de procesos.
+* 
+* Mediante el uso de tecnologÃ­a semÃ¡ntica, SemanticWebBuilder Process puede generar contextos de informaciÃ³n
+* alrededor de algÃºn tema de interÃ©s o bien integrar informaciÃ³n y aplicaciones de diferentes fuentes asociadas a
+* un proceso de negocio, donde a la informaciÃ³n se le asigna un significado, de forma que pueda ser interpretada
+* y procesada por personas y/o sistemas. SemanticWebBuilder Process es una creaciÃ³n original del Fondo de 
+* InformaciÃ³n y DocumentaciÃ³n para la Industria INFOTEC.
+* 
+* INFOTEC pone a su disposiciÃ³n la herramienta SemanticWebBuilder Process a travÃ©s de su licenciamiento abierto 
+* al pÃºblico (â€˜open sourceâ€™), en virtud del cual, usted podrÃ¡ usarlo en las mismas condiciones con que INFOTEC 
+* lo ha diseÃ±ado y puesto a su disposiciÃ³n; aprender de Ã©l; distribuirlo a terceros; acceder a su cÃ³digo fuente,
+* modificarlo y combinarlo (o enlazarlo) con otro software. Todo lo anterior de conformidad con los tÃ©rminos y 
+* condiciones de la LICENCIA ABIERTA AL PÃšBLICO que otorga INFOTEC para la utilizaciÃ³n de SemanticWebBuilder Process. 
+* 
+* INFOTEC no otorga garantÃ­a sobre SemanticWebBuilder Process, de ninguna especie y naturaleza, ni implÃ­cita ni 
+* explÃ­cita, siendo usted completamente responsable de la utilizaciÃ³n que le dÃ© y asumiendo la totalidad de los 
+* riesgos que puedan derivar de la misma. 
+* 
+* Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder Process, INFOTEC pone a su disposiciÃ³n la
+* siguiente direcciÃ³n electrÃ³nica: 
+*  http://www.semanticwebbuilder.org.mx
+**/
 
 
 /*
@@ -45,12 +48,12 @@ public class AppObject
     public int rx,ry;
     public int w,h,fos;
     public int type=0;
-    public int maxX,maxY;           //tamño del applet
-    public int maxW;                //tamaño maximo del objeto
+    public int maxX,maxY;           //tamï¿½o del applet
+    public int maxW;                //tamaï¿½o maximo del objeto
     public boolean over=false;      //mouse sobre el objecto
     public int ifr,ifg,ifb;                //incrementos en colores
     public int ibr,ibg,ibb;                //incrementos en colores
-    public int isf=0,wsf;                      //incremento y tamaño del scroll del fade
+    public int isf=0,wsf;                      //incremento y tamaï¿½o del scroll del fade
     public Color cfonta;                    //color de fuente topico activo
     public Color cfontd;                    //color de fuente topico desactivo
     public Color cfontr;                    //color de fuente topico borrado

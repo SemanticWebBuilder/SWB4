@@ -1,25 +1,28 @@
-/*
- * INFOTEC WebBuilder es una herramienta para el desarrollo de portales de conocimiento, colaboración e integración para Internet,
- * la cual, es una creación original del Fondo de Información y Documentación para la Industria INFOTEC, misma que se encuentra
- * debidamente registrada ante el Registro Público del Derecho de Autor de los Estados Unidos Mexicanos con el
- * No. 03-2002-052312015400-14, para la versión 1; No. 03-2003-012112473900 para la versión 2, y No. 03-2006-012012004000-01
- * para la versión 3, respectivamente.
- *
- * INFOTEC pone a su disposición la herramienta INFOTEC WebBuilder a través de su licenciamiento abierto al público (‘open source’),
- * en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición;
- * aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software,
- * todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización
- * de INFOTEC WebBuilder 3.2.
- *
- * INFOTEC no otorga garantía sobre INFOTEC WebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita,
- * siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar
- * de la misma.
- *
- * Si usted tiene cualquier duda o comentario sobre INFOTEC WebBuilder, INFOTEC pone a su disposición la siguiente
- * dirección electrónica:
- *
- *                                          http://www.webbuilder.org.mx
- */
+/**
+* SemanticWebBuilder Process (SWB Process) es una plataforma para la gestiÃ³n de procesos de negocio mediante el uso de 
+* tecnologÃ­a semÃ¡ntica, que permite el modelado, configuraciÃ³n, ejecuciÃ³n y monitoreo de los procesos de negocio
+* de una organizaciÃ³n, asÃ­ como el desarrollo de componentes y aplicaciones orientadas a la gestiÃ³n de procesos.
+* 
+* Mediante el uso de tecnologÃ­a semÃ¡ntica, SemanticWebBuilder Process puede generar contextos de informaciÃ³n
+* alrededor de algÃºn tema de interÃ©s o bien integrar informaciÃ³n y aplicaciones de diferentes fuentes asociadas a
+* un proceso de negocio, donde a la informaciÃ³n se le asigna un significado, de forma que pueda ser interpretada
+* y procesada por personas y/o sistemas. SemanticWebBuilder Process es una creaciÃ³n original del Fondo de 
+* InformaciÃ³n y DocumentaciÃ³n para la Industria INFOTEC.
+* 
+* INFOTEC pone a su disposiciÃ³n la herramienta SemanticWebBuilder Process a travÃ©s de su licenciamiento abierto 
+* al pÃºblico (â€˜open sourceâ€™), en virtud del cual, usted podrÃ¡ usarlo en las mismas condiciones con que INFOTEC 
+* lo ha diseÃ±ado y puesto a su disposiciÃ³n; aprender de Ã©l; distribuirlo a terceros; acceder a su cÃ³digo fuente,
+* modificarlo y combinarlo (o enlazarlo) con otro software. Todo lo anterior de conformidad con los tÃ©rminos y 
+* condiciones de la LICENCIA ABIERTA AL PÃšBLICO que otorga INFOTEC para la utilizaciÃ³n de SemanticWebBuilder Process. 
+* 
+* INFOTEC no otorga garantÃ­a sobre SemanticWebBuilder Process, de ninguna especie y naturaleza, ni implÃ­cita ni 
+* explÃ­cita, siendo usted completamente responsable de la utilizaciÃ³n que le dÃ© y asumiendo la totalidad de los 
+* riesgos que puedan derivar de la misma. 
+* 
+* Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder Process, INFOTEC pone a su disposiciÃ³n la
+* siguiente direcciÃ³n electrÃ³nica: 
+*  http://www.semanticwebbuilder.org.mx
+**/
 
 
 
@@ -43,7 +46,7 @@ public class WBCreateTopic extends javax.swing.JDialog {
 
     private boolean accept=false;
     private String prefix=null;
-    private String lang="Español";
+    private String lang="Espaï¿½ol";
     private Locale locale=new Locale("es");
     
     /** Creates new form WBCreateTopic */
@@ -168,45 +171,45 @@ public class WBCreateTopic extends javax.swing.JDialog {
             if(!((ch>='0' && ch<='9')||(ch>='a' && ch<='z')||(ch>='A' && ch<='Z')||(ch=='_')))
             {
                 if     (ch==' ')ch='_';
-                else if(ch=='á')ch='a';
-                else if(ch=='é')ch='e';
-                else if(ch=='í')ch='i';
-                else if(ch=='ó')ch='o';
-                else if(ch=='ú')ch='u';
-                else if(ch=='à')ch='a';
-                else if(ch=='è')ch='e';
-                else if(ch=='ì')ch='i';
-                else if(ch=='ò')ch='o';
-                else if(ch=='ù')ch='u';
-                else if(ch=='ü')ch='u';
-                else if(ch=='ñ')ch='n';
-                else if(ch=='Á')ch='A';
-                else if(ch=='É')ch='E';
-                else if(ch=='Í')ch='I';
-                else if(ch=='Ó')ch='O';
-                else if(ch=='Ú')ch='U';
-                else if(ch=='À')ch='A';
-                else if(ch=='È')ch='E';
-                else if(ch=='Ì')ch='I';
-                else if(ch=='Ò')ch='O';
-                else if(ch=='Ù')ch='U';
-                else if(ch=='Ü')ch='U';
-                else if(ch=='Ñ')ch='N';
+                else if(ch=='ï¿½')ch='a';
+                else if(ch=='ï¿½')ch='e';
+                else if(ch=='ï¿½')ch='i';
+                else if(ch=='ï¿½')ch='o';
+                else if(ch=='ï¿½')ch='u';
+                else if(ch=='ï¿½')ch='a';
+                else if(ch=='ï¿½')ch='e';
+                else if(ch=='ï¿½')ch='i';
+                else if(ch=='ï¿½')ch='o';
+                else if(ch=='ï¿½')ch='u';
+                else if(ch=='ï¿½')ch='u';
+                else if(ch=='ï¿½')ch='n';
+                else if(ch=='ï¿½')ch='A';
+                else if(ch=='ï¿½')ch='E';
+                else if(ch=='ï¿½')ch='I';
+                else if(ch=='ï¿½')ch='O';
+                else if(ch=='ï¿½')ch='U';
+                else if(ch=='ï¿½')ch='A';
+                else if(ch=='ï¿½')ch='E';
+                else if(ch=='ï¿½')ch='I';
+                else if(ch=='ï¿½')ch='O';
+                else if(ch=='ï¿½')ch='U';
+                else if(ch=='ï¿½')ch='U';
+                else if(ch=='ï¿½')ch='N';
                 else ch='\0';
             }
             if(ch!='\0')aux2.append(ch);
         }
 /*        
         aux=aux.toLowerCase();
-        aux=aux.replace('ó','o');
-        aux=aux.replace('ú','u');
-        aux=aux.replace('à','a');
-        aux=aux.replace('è','e');
-        aux=aux.replace('ì','i');
-        aux=aux.replace('ò','o');
-        aux=aux.replace('ù','u');
-        aux=aux.replace('ü','u');
-        aux=aux.replace('ñ','n');
+        aux=aux.replace('ï¿½','o');
+        aux=aux.replace('ï¿½','u');
+        aux=aux.replace('ï¿½','a');
+        aux=aux.replace('ï¿½','e');
+        aux=aux.replace('ï¿½','i');
+        aux=aux.replace('ï¿½','o');
+        aux=aux.replace('ï¿½','u');
+        aux=aux.replace('ï¿½','u');
+        aux=aux.replace('ï¿½','n');
         aux=aux.replace(' ','_');
  */
         String ret;
@@ -265,7 +268,7 @@ public class WBCreateTopic extends javax.swing.JDialog {
     * @param args the command line arguments
     */
     public static void main(String args[]) {
-        new WBCreateTopic(new javax.swing.JFrame(), true,new Locale("es"),"Español").show();
+        new WBCreateTopic(new javax.swing.JFrame(), true,new Locale("es"),"Espaï¿½ol").show();
     }
     
     public String getTopicId()

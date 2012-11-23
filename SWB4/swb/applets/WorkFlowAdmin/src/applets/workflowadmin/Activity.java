@@ -32,7 +32,7 @@
 package applets.workflowadmin;
 import java.util.*;
 /**
- * Clase que representa una actividad dentro de un flujo de publicación.
+ * Clase que representa una actividad dentro de un flujo de publicaciÃ³n.
  * @author Victor Lorenzana
  */
 public class Activity
