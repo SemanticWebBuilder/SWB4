@@ -37,8 +37,8 @@ import javax.swing.*;
 import java.awt.geom.Line2D;
 
 /**
- * Clase que representa una actidad gráficamente, esta clase se utiliza dentro del
- * formulario que mustra el flujo en la pestaña de diseño.
+ * Clase que representa una actidad grÃ¡ficamente, esta clase se utiliza dentro del
+ * formulario que mustra el flujo en la pestaï¿½a de diseï¿½o.
  * @author Victor Lorenzana
  */
 public class ActivityG {

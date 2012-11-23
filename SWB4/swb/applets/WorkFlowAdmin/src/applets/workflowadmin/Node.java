@@ -36,7 +36,7 @@ import javax.swing.tree.*;
 import javax.swing.event.*;
 import java.awt.*;
 /**
- * Clase que repsenta un nodo dentro de un ·rbol de secciones.
+ * Clase que repsenta un nodo dentro de un √Årbol de secciones.
  * @author Victor Lorenzana
  */
 public class Node  extends DefaultMutableTreeNode {   

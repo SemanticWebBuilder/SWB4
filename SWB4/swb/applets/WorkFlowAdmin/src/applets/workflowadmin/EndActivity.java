@@ -33,7 +33,7 @@ package applets.workflowadmin;
 
 import java.util.*;
 /**
- * Clase que representa una actividad de terminación de flujo.
+ * Clase que representa una actividad de terminaciÃ³n de flujo.
  * @author Victor Lorenzana
  */
 public class EndActivity extends Activity{

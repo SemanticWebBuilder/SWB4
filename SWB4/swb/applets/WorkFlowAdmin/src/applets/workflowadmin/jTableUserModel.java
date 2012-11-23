@@ -36,7 +36,7 @@ import java.util.*;
 /**
  * Clase que representa el modelo de datos para mostrar una tabla de usuarios al
  * ediatr una actividad, que permita seleccionar los usuarios revisores de un flujo
- * de publicación.
+ * de publicaciÃ³n.
  * @author Victor Lorenzana
  */
 public class jTableUserModel extends AbstractTableModel{

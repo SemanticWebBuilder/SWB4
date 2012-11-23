@@ -752,7 +752,7 @@ public class AutoConnection implements Connection
         return con.isWrapperFor(iface);
     }
 
-    /* MAPS74 - JSE 7 Wrapper * /
+    /* MAPS74 - JSE 7 Wrapper */
     @Override
     public void setSchema(String schema) throws SQLException
     {
@@ -783,6 +783,4 @@ public class AutoConnection implements Connection
         return con.getNetworkTimeout();
     }
 
-    /*
-     */
 }

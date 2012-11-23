@@ -36,7 +36,7 @@ import javax.swing.tree.*;
 import javax.swing.event.*;
 import java.awt.*;
 /**
- * Clase que muestra con un componente gr·fico a un checkbox.
+ * Clase que muestra con un componente gr√°fico a un checkbox.
  * @author Victor Lorenzana
  */
 public class CheckRenderer extends JPanel 

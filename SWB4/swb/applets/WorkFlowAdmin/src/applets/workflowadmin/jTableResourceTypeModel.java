@@ -35,7 +35,7 @@ import javax.swing.table.*;
 import java.util.*;
 /**
  * Clase que representa el modelo de datos, necesario para mostrarlo en una tabla
- * dentro de la edición de un flujo de publicación.
+ * dentro de la ediciÃ³n de un flujo de publicaciï¿½n.
  * @author Victor Lorenzana
  */
 public class jTableResourceTypeModel extends AbstractTableModel implements Comparator{

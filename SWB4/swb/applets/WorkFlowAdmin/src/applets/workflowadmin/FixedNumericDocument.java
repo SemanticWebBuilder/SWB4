@@ -35,8 +35,8 @@ import javax.swing.text.*;
 import java.awt.*;
 
 /**
- * Clase utilería para que en campos de texto, se pueda determinar la longitud de
- * ese campo y si es de tipo número o alfanumerico.
+ * Clase utilerÃ¬a para que en campos de texto, se pueda determinar la longitud de
+ * ese campo y si es de tipo nï¿½mero o alfanumerico.
  */
 public class FixedNumericDocument extends PlainDocument {
 

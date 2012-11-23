@@ -35,8 +35,8 @@ import java.util.*;
 import javax.swing.*;
 import applets.commons.*;
 /**
- * Formulario que permite agregar una secuencia en caso de aprovación o de rechazo,
- * los posibles valores son, envíar a aotra actividad, al autor del contenido o
+ * Formulario que permite agregar una secuencia en caso de aprovaciÃ³n o de rechazo,
+ * los posibles valores son, envï¿½ar a aotra actividad, al autor del contenido o
  * terminar el flujo.
  * @author Victor Lorenzana
  */

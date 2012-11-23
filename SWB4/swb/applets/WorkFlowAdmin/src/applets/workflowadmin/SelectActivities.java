@@ -34,7 +34,7 @@ package applets.workflowadmin;
 import java.awt.event.*;
 import javax.swing.*;
 /**
- * Clase utilería para seleciconar actividades dentro de la tabla de actividades.
+ * Clase utilerÃ­a para seleciconar actividades dentro de la tabla de actividades.
  * @author Victor Lorenzana
  */
 public class SelectActivities implements MouseListener

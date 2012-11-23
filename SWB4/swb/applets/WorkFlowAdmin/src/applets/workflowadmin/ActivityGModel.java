@@ -34,7 +34,7 @@ import javax.swing.table.*;
 import java.util.*;
 import javax.swing.*;
 /**
- * Modelo que representa actividades, usado en la pestaña Diseño dentro de
+ * Modelo que representa actividades, usado en la pestaÃ±a Diseï¿½o dentro de
  * formulario del flujo.
  * @author Victor Lorenzana
  */

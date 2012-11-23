@@ -823,7 +823,7 @@ public class WBDocumentFiles extends javax.swing.JDialog
                     up.setTopicMap(topicMap);
                     up.setId(id);
                     up.setVersion(version);
-                    up.setType(type);
+                    up.setSType(type);
                     //up.show();
                     up.setVisible(true);
                     up.sendFile(path+files[f].getName(), files[f]);
@@ -1533,7 +1533,7 @@ public class WBDocumentFiles extends javax.swing.JDialog
      * Getter for property type.
      * @return Value of property type.
      */
-    public java.lang.String getType()
+    public java.lang.String getSType()
     {
         return type;
     }
@@ -1542,7 +1542,7 @@ public class WBDocumentFiles extends javax.swing.JDialog
      * Setter for property type.
      * @param type New value of property type.
      */
-    public void setType(java.lang.String type)
+    public void setSType(java.lang.String type)
     {
         this.type = type;
     }

@@ -1,25 +1,29 @@
 /**
- * SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración,
- * colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de
- * información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes
- * fuentes, donde a la información se le asigna un significado, de forma que pueda ser interpretada y
- * procesada por personas y/o sistemas, es una creación original del Fondo de Información y Documentación
- * para la Industria INFOTEC, cuyo registro se encuentra actualmente en trámite.
- *
- * INFOTEC pone a su disposición la herramienta SemanticWebBuilder a través de su licenciamiento abierto al público (‘open source’),
- * en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición;
- * aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software,
- * todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización
- * del SemanticWebBuilder 4.0.
- *
- * INFOTEC no otorga garantía sobre SemanticWebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita,
- * siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar
- * de la misma.
- *
- * Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente
- * dirección electrónica:
- *  http://www.semanticwebbuilder.org
- **/
+* SemanticWebBuilder Process (SWB Process) es una plataforma para la gestiÃ³n de procesos de negocio mediante el uso de 
+* tecnologÃ­a semÃ¡ntica, que permite el modelado, configuraciÃ³n, ejecuciÃ³n y monitoreo de los procesos de negocio
+* de una organizaciÃ³n, asÃ­ como el desarrollo de componentes y aplicaciones orientadas a la gestiÃ³n de procesos.
+* 
+* Mediante el uso de tecnologÃ­a semÃ¡ntica, SemanticWebBuilder Process puede generar contextos de informaciÃ³n
+* alrededor de algÃºn tema de interÃ©s o bien integrar informaciÃ³n y aplicaciones de diferentes fuentes asociadas a
+* un proceso de negocio, donde a la informaciÃ³n se le asigna un significado, de forma que pueda ser interpretada
+* y procesada por personas y/o sistemas. SemanticWebBuilder Process es una creaciÃ³n original del Fondo de 
+* InformaciÃ³n y DocumentaciÃ³n para la Industria INFOTEC.
+* 
+* INFOTEC pone a su disposiciÃ³n la herramienta SemanticWebBuilder Process a travÃ©s de su licenciamiento abierto 
+* al pÃºblico (â€˜open sourceâ€™), en virtud del cual, usted podrÃ¡ usarlo en las mismas condiciones con que INFOTEC 
+* lo ha diseÃ±ado y puesto a su disposiciÃ³n; aprender de Ã©l; distribuirlo a terceros; acceder a su cÃ³digo fuente,
+* modificarlo y combinarlo (o enlazarlo) con otro software. Todo lo anterior de conformidad con los tÃ©rminos y 
+* condiciones de la LICENCIA ABIERTA AL PÃšBLICO que otorga INFOTEC para la utilizaciÃ³n de SemanticWebBuilder Process. 
+* 
+* INFOTEC no otorga garantÃ­a sobre SemanticWebBuilder Process, de ninguna especie y naturaleza, ni implÃ­cita ni 
+* explÃ­cita, siendo usted completamente responsable de la utilizaciÃ³n que le dÃ© y asumiendo la totalidad de los 
+* riesgos que puedan derivar de la misma. 
+* 
+* Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder Process, INFOTEC pone a su disposiciÃ³n la
+* siguiente direcciÃ³n electrÃ³nica: 
+*  http://www.semanticwebbuilder.org.mx
+**/
+
 /*
  * HtmlEditor.java
  *
@@ -542,7 +546,7 @@ public class TemplateEditor extends javax.swing.JApplet
                 dd.setId(idValue);
                 dd.setTopicMap(tmValue);
                 dd.setVersion(verValue);
-                dd.setType(typeValue);
+                dd.setSType(typeValue);
                 //dd.setDSize(300,100);
                 //dd.show();
                 dd.setVisible(true);
@@ -738,7 +742,7 @@ public class TemplateEditor extends javax.swing.JApplet
             files.setTopicMap(tmValue);
             files.setId(idValue);
             files.setVersion(verValue);
-            files.setType(typeValue);
+            files.setSType(typeValue);
             files.init();
             files.setLocationRelativeTo(null);
             files.setVisible(true);
@@ -1979,17 +1983,17 @@ public class TemplateEditor extends javax.swing.JApplet
             return true;
 
         }
-        if (ch == 'á' || ch == 'é' || ch == 'í' || ch == 'ó' || ch == 'ú')
+        if (ch == 'ï¿½' || ch == 'ï¿½' || ch == 'ï¿½' || ch == 'ï¿½' || ch == 'ï¿½')
         {
             return true;
 
         }
-        if (ch == 'Á' || ch == 'É' || ch == 'Í' || ch == 'Ó' || ch == 'Ú')
+        if (ch == 'ï¿½' || ch == 'ï¿½' || ch == 'ï¿½' || ch == 'ï¿½' || ch == 'ï¿½')
         {
             return true;
 
         }
-        if (ch == '_' || ch == 'ñ' || ch == 'Ñ')
+        if (ch == '_' || ch == 'ï¿½' || ch == 'ï¿½')
         {
             return true;
             

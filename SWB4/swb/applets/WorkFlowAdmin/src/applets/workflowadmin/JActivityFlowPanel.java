@@ -40,7 +40,7 @@ import java.awt.geom.*;
 import java.awt.Graphics2D;
 /**
  * Clase uqe maneja graficamente las actividades, esta clase esta asociada con el
- * modelo de actividades gr·ficas y con ActiviG.
+ * modelo de actividades gr√°ficas y con ActiviG.
  * @author Victor Lorenzana
  */
 public class JActivityFlowPanel extends JPanel implements MouseListener,MouseMotionListener{

@@ -33,8 +33,8 @@ package applets.workflowadmin;
 import java.util.*;
 
 /**
- * Clase que representa un tipo de recurso, esta información est mostrada en una
- * tabla al editar un flujo de publicación.
+ * Clase que representa un tipo de recurso, esta informaciÃ³n est mostrada en una
+ * tabla al editar un flujo de publicaciï¿½n.
  * @author Victor Lorenzana
  */
 public class ResourceType {

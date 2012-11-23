@@ -39,8 +39,8 @@ import java.awt.*;
 import applets.commons.*;
 
 /**
- * Formulario para editar un flujo der publicación, contiene tres pestañas, la de
- * propiedades, la de actividades y la de diseño.
+ * Formulario para editar un flujo der publicaciÃ³n, contiene tres pestaï¿½as, la de
+ * propiedades, la de actividades y la de diseï¿½o.
  * @author Victor Lorenzana
  */
 public class EditWorkflow extends javax.swing.JApplet
@@ -255,7 +255,7 @@ public class EditWorkflow extends javax.swing.JApplet
         jPanelActividades = new javax.swing.JPanel();
         jScrollPaneActividades = new javax.swing.JScrollPane();
         jTableActividades = new javax.swing.JTable();
-        jPanelDiseño = new javax.swing.JPanel();
+        jPanelDisenio = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTableActivitiesG = new javax.swing.JTable();
@@ -367,7 +367,7 @@ public class EditWorkflow extends javax.swing.JApplet
 
         jToolBar1.setFloatable(false);
 
-        jButtonSave.setFont(new java.awt.Font("Arial", 1, 12));
+        jButtonSave.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         jButtonSave.setIcon(new javax.swing.ImageIcon(getClass().getResource("/applets/workflowadmin/images/save.png"))); // NOI18N
         jButtonSave.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -382,38 +382,38 @@ public class EditWorkflow extends javax.swing.JApplet
 
         jPanel2.setLayout(new java.awt.BorderLayout());
 
-        jPanelPropiedades.setFont(new java.awt.Font("Arial", 0, 12));
+        jPanelPropiedades.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jPanelPropiedades.setLayout(null);
 
         jLabelName.setLabelFor(jTextFieldName);
         jLabelName.setText(bundle.getString("nombre")); // NOI18N
         jPanelPropiedades.add(jLabelName);
-        jLabelName.setBounds(240, 210, 41, 14);
+        jLabelName.setBounds(240, 210, 54, 16);
 
         jTextFieldName.setEditable(false);
         jPanelPropiedades.add(jTextFieldName);
-        jTextFieldName.setBounds(150, 210, 11, 19);
+        jTextFieldName.setBounds(150, 210, 14, 28);
 
         jLabelDescription.setLabelFor(jTextAreaDescription);
         jLabelDescription.setText(bundle.getString("Description")); // NOI18N
         jPanelPropiedades.add(jLabelDescription);
-        jLabelDescription.setBounds(300, 220, 58, 14);
+        jLabelDescription.setBounds(300, 220, 79, 16);
 
-        jLabelVersion.setFont(new java.awt.Font("Arial", 1, 12));
+        jLabelVersion.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         jLabelVersion.setLabelFor(jTextFieldVersion);
         jLabelVersion.setText(bundle.getString("version")); // NOI18N
         jPanelPropiedades.add(jLabelVersion);
-        jLabelVersion.setBounds(10, 20, 47, 15);
+        jLabelVersion.setBounds(10, 20, 48, 14);
 
         jTextFieldVersion.setEditable(false);
         jTextFieldVersion.setText("1.0");
         jPanelPropiedades.add(jTextFieldVersion);
-        jTextFieldVersion.setBounds(70, 20, 27, 19);
+        jTextFieldVersion.setBounds(70, 20, 34, 28);
 
         java.util.ResourceBundle bundle1 = java.util.ResourceBundle.getBundle("applets/workflowadmin/EditWorkflow"); // NOI18N
         jCheckBoxEdit.setText(bundle1.getString("modificarContenido")); // NOI18N
         jPanelPropiedades.add(jCheckBoxEdit);
-        jCheckBoxEdit.setBounds(10, 50, 235, 23);
+        jCheckBoxEdit.setBounds(10, 50, 311, 23);
 
         jTextAreaDescription.setEditable(false);
         jTextAreaDescription.setLineWrap(true);
@@ -421,7 +421,7 @@ public class EditWorkflow extends javax.swing.JApplet
         jScrollPaneAreaDescription.setViewportView(jTextAreaDescription);
 
         jPanelPropiedades.add(jScrollPaneAreaDescription);
-        jScrollPaneAreaDescription.setBounds(70, 120, 102, 20);
+        jScrollPaneAreaDescription.setBounds(70, 120, 104, 20);
 
         jTabbedPane1.addTab(bundle.getString("propiedades"), jPanelPropiedades); // NOI18N
 
@@ -465,7 +465,7 @@ public class EditWorkflow extends javax.swing.JApplet
 
         jTabbedPane1.addTab(bundle.getString("actividades"), jPanelActividades); // NOI18N
 
-        jPanelDiseño.setLayout(new java.awt.BorderLayout());
+        jPanelDisenio.setLayout(new java.awt.BorderLayout());
 
         jPanel1.setPreferredSize(new java.awt.Dimension(10, 100));
         jPanel1.setLayout(new java.awt.BorderLayout());
@@ -490,10 +490,10 @@ public class EditWorkflow extends javax.swing.JApplet
 
         jPanel1.add(jScrollPane1, java.awt.BorderLayout.CENTER);
 
-        jPanelDiseño.add(jPanel1, java.awt.BorderLayout.SOUTH);
-        jPanelDiseño.add(jScrollPaneDesign, java.awt.BorderLayout.CENTER);
+        jPanelDisenio.add(jPanel1, java.awt.BorderLayout.SOUTH);
+        jPanelDisenio.add(jScrollPaneDesign, java.awt.BorderLayout.CENTER);
 
-        jTabbedPane1.addTab(bundle.getString("ver"), jPanelDiseño); // NOI18N
+        jTabbedPane1.addTab(bundle.getString("ver"), jPanelDisenio); // NOI18N
 
         jPanel2.add(jTabbedPane1, java.awt.BorderLayout.CENTER);
 
@@ -1130,7 +1130,7 @@ public class EditWorkflow extends javax.swing.JApplet
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanelActividades;
-    private javax.swing.JPanel jPanelDiseño;
+    private javax.swing.JPanel jPanelDisenio;
     private javax.swing.JPanel jPanelPropiedades;
     private javax.swing.JPanel jPanelTiposRecursos;
     private javax.swing.JPanel jPaneltoolbar;

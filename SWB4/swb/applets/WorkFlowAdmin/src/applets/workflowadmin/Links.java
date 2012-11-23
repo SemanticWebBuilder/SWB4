@@ -32,7 +32,7 @@
 package applets.workflowadmin;
 import java.util.*;
 /**
- * Clase colección de objetos tipo link.
+ * Clase colecciÃ³n de objetos tipo link.
  * @author Victor Lorenzana
  */
 public class Links extends HashSet{
