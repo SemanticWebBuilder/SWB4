@@ -1260,6 +1260,8 @@ public class SWBACollectionConfig extends GenericAdmResource {
                         while (itso.hasNext()) {
 
                             semO = itso.next();
+                            
+                            if(semO==null)continue;
 
                             //PAGINACION ////////////////////
                             if (x < p * ps) {
