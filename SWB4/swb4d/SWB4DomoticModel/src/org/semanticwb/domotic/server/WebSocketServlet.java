@@ -36,7 +36,7 @@ public class WebSocketServlet extends org.apache.catalina.websocket.WebSocketSer
 
     public static void broadcast(String message)
     {
-        //System.out.println("broadcast:" + message);
+        System.out.println("broadcast:" + message);
         for (ChatMessageInbound connection : connections)
         {
             try
@@ -95,7 +95,7 @@ public class WebSocketServlet extends org.apache.catalina.websocket.WebSocketSer
             connections.add(this);
             String message = String.format("* %s %s",nickname, "has joined.");
             //broadcast(message);
-            //System.out.println("onOpen:" + message);
+            System.out.println("onOpen:" + message);
         }
 
         @Override
@@ -104,7 +104,7 @@ public class WebSocketServlet extends org.apache.catalina.websocket.WebSocketSer
             connections.remove(this);
             String message = String.format("* %s %s",nickname, "has disconnected.");
             //broadcast(message);
-            //System.out.println("onClose:" + message);
+            System.out.println("onClose:" + message);
         }
 
         @Override
@@ -121,7 +121,7 @@ public class WebSocketServlet extends org.apache.catalina.websocket.WebSocketSer
             // Never trust the client
             String filteredMessage = String.format("%s: %s",nickname, message.toString());
             //broadcast(filteredMessage);
-            //System.out.println("onTextMessage:" + filteredMessage);
+            System.out.println("onTextMessage:" + filteredMessage);
             
             String txt=message.toString();
             StringTokenizer st=new StringTokenizer(txt," ");
