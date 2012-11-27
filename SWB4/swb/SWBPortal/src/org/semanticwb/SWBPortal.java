@@ -54,6 +54,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.SWBUtils.IO;
+import org.semanticwb.aws.AWSServices;
 import org.semanticwb.css.parser.Attribute;
 import org.semanticwb.css.parser.CSSParser;
 import org.semanticwb.css.parser.Selector;
@@ -265,6 +266,11 @@ public class SWBPortal
      * GeoIp Service Interface
      */
     private static com.maxmind.geoip.LookupService geoip = null;
+    
+    /**
+     * Link to AWS Services
+     */
+    private static AWSServices cloudAWS = null;
 
     /**
      * Creates an object of this class, calling method {@code createInstance(ServletContext, Filter) with.
@@ -714,7 +720,7 @@ public class SWBPortal
             catch (SQLException ne)
             {
                 //ne.printStackTrace();
-                log.event("Creating Logs Tables...");
+                log.event("Creating Logs Tables... "+SWBUtils.DB.getDatabaseName());
                 GenericDB db = new GenericDB();
                 String xml = SWBUtils.IO.getFileFromPath(SWBUtils.getApplicationPath() + "/WEB-INF/xml/swb_logs.xml");
                 db.executeSQLScript(xml, SWBUtils.DB.getDatabaseName(), null);
@@ -771,6 +777,17 @@ public class SWBPortal
 
         //Inicializa el RuleMgr
         Rule.getRuleMgr();
+        
+        if (!"ignore".equals(getEnv("swb/CloudImplementation", "ignore"))){
+            String cloudClass = getEnv("swb/CloudImplementation");
+            try {
+                Class clazz = Class.forName(cloudClass);
+                cloudAWS = (AWSServices)clazz.newInstance();
+            } catch (ReflectiveOperationException roe){
+                log.event("Can't instantiate cloud services", roe);
+                assert false;
+            }
+        }
 
         try
         {
@@ -1606,6 +1623,14 @@ public class SWBPortal
             }
         }
         return languages;
+    }
+    
+    /**
+     * Gets the cloud services interface
+     * @return 
+     */
+    public static AWSServices getAWSCloud() {
+        return cloudAWS;
     }
 
     /**
