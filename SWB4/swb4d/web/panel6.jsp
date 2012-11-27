@@ -88,6 +88,8 @@
     <head> 
         <title>My Page</title> 
 <%
+    String ws=request.getParameter("ws");
+    if(ws==null)ws="true";
     String userAgent = request.getHeader("User-Agent");
     String httpAccept = request.getHeader("Accept");
     if(userAgent!=null)userAgent=userAgent.toLowerCase();
@@ -147,9 +149,9 @@
             Dom.socket = null;
 
             Dom.connect = (function(host) {
-                if ('WebSocket' in window) {
+                if ('WebSocket' in window && <%=ws%>) {
                     Dom.socket = new WebSocket(host);
-                } else if ('MozWebSocket' in window) {
+                } else if ('MozWebSocket' in window && <%=ws%>) {
                     Dom.socket = new MozWebSocket(host);
                 } else 
                 {
@@ -204,6 +206,7 @@
 
             Dom.sendMessage = (function(message) {
                 Dom.socket.send(message);
+                //alert(message);
             });
             
             Dom.receveMessage = (function(message) {
