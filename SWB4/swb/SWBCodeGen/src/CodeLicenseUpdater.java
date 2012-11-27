@@ -63,17 +63,20 @@ public class CodeLicenseUpdater
         {
             FileInputStream in=new FileInputStream(file);
             String content=SWBUtils.IO.readInputStream(in,"utf-8");
-            int x=content.indexOf("package org.semanticwb");
-            int y=content.indexOf("public class");
-            if(x>-1 && x<y)
+            if(!content.startsWith(license))
             {
-                content=license+content.substring(x);
-                //System.out.println(content);
-                FileOutputStream out=new FileOutputStream(file);
-                out.write(content.getBytes("utf-8"));
-                System.out.println("Procesando Archivo:"+file);
-                out.flush();
-                out.close();
+                int x=content.indexOf("package org.semanticwb");
+                int y=content.indexOf("public class");
+                if(x>-1 && x<y)
+                {
+                    content=license+content.substring(x);
+                    //System.out.println(content);
+                    FileOutputStream out=new FileOutputStream(file);
+                    out.write(content.getBytes("utf-8"));
+                    System.out.println("Procesando Archivo:"+file);
+                    out.flush();
+                    out.close();
+                }
             }
         }catch(Exception e)
         {
