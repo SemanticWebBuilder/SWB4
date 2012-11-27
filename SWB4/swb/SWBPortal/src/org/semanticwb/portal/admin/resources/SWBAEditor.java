@@ -1,4 +1,4 @@
-/**  
+/*
  * SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración,
  * colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de
  * información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes
@@ -19,11 +19,6 @@
  * Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente
  * dirección electrónica:
  *  http://www.semanticwebbuilder.org
- **/
-/*
- * WBTree.java
- *
- * Created on 30 de junio de 2004, 06:55 PM
  */
 package org.semanticwb.portal.admin.resources;
 
