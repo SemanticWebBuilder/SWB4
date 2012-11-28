@@ -783,6 +783,7 @@ public class SWBPortal
             try {
                 Class clazz = Class.forName(cloudClass);
                 cloudAWS = (AWSServices)clazz.newInstance();
+                log.event("CloudServices enabled...");
             } catch (ReflectiveOperationException roe){
                 log.event("Can't instantiate cloud services", roe);
                 assert false;
@@ -1629,7 +1630,7 @@ public class SWBPortal
      * Gets the cloud services interface
      * @return 
      */
-    public static AWSServices getAWSCloud() {
+    public final static AWSServices getAWSCloud() {
         return cloudAWS;
     }
 

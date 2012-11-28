@@ -417,7 +417,11 @@ public class Monitor implements InternalServlet
      */
     public void doProcess(HttpServletRequest request, HttpServletResponse response, DistributorParams dparams) throws IOException, ServletException
     {
-
+        if ("/ping".equals(request.getRequestURI())){
+            response.setContentType("text/plain");
+            response.getWriter().println("System alive...");
+            return;
+        }
         if (null == secretKey)
         {
             response.setContentType("text/plain");
