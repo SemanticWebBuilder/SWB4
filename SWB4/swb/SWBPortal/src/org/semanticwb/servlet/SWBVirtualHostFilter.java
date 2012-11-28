@@ -458,6 +458,7 @@ public class SWBVirtualHostFilter implements Filter
             {
                 InternalServlet monitor = new Monitor();
                 intServlets.put("swbmonitor.ssl", monitor);
+                intServlets.put("ping", monitor);
                 monitor.init(filterConfig.getServletContext());
             }catch(Exception e){log.error(e);}
             
