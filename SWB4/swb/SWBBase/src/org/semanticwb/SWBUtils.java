@@ -2314,6 +2314,7 @@ public class SWBUtils {
          */
         public static boolean removeDirectory(String path)
         {
+            log.trace("removeDirectory:"+path);
             try
             {
                 File dir = new File(path);
