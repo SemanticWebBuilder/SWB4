@@ -211,14 +211,8 @@ public class SelectOne extends SelectOneBase {
                 } else {
                     SemanticModel model = getModel();
                     SWBModel      m     = (SWBModel) model.getModelObject().createGenericInstance();
-                    if(m.getParentWebSite()!=null)m=m.getParentWebSite();
-                    
-                    if (m instanceof UserRepository) 
-                    {                    
-                        SWBModel p=m.getParentWebSite();
-                        if(p!=null)m=p;
-                        model = m.getSemanticObject().getModel();
-                    }
+                    if(m.getParentWebSite()!=null)m=m.getParentWebSite();                    
+                    model = m.getSemanticModel();
                     
                     it = SWBComparator.sortSermanticObjects(lang, model.listInstancesOfClass(cls));
                 }
