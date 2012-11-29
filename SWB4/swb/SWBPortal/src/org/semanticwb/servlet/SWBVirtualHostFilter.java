@@ -454,15 +454,6 @@ public class SWBVirtualHostFilter implements Filter
                 swbPlatform = SWBPlatform.createInstance();
             }
 
-            try
-            {
-                InternalServlet monitor = new Monitor();
-                intServlets.put("swbmonitor.ssl", monitor);
-                intServlets.put("ping", monitor);
-                monitor.init(filterConfig.getServletContext());
-            }catch(Exception e){log.error(e);}
-            
-
             InternalServlet serv = new Distributor();
             intServlets.put("swb", serv);
             intServlets.put("wb", serv);
@@ -491,7 +482,15 @@ public class SWBVirtualHostFilter implements Filter
             intServlets.put("treeSelect", treeSelectFormElement);
             treeSelectFormElement.init(filterConfig.getServletContext());
 
-
+            try
+            {
+                InternalServlet monitor = new Monitor();
+                intServlets.put("swbmonitor.ssl", monitor);
+                intServlets.put("ping", monitor);
+                monitor.init(filterConfig.getServletContext());
+            }catch(Exception e){log.error(e);}            
+            
+            
             //InternalServlet upload = new Upload();
             //intServlets.put("wbupload", upload);
             //upload.init(filterConfig.getServletContext());
