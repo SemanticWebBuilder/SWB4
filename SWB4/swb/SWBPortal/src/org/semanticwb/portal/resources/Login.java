@@ -23,26 +23,18 @@
 package org.semanticwb.portal.resources;
 
 import java.io.IOException;
-import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.util.Iterator;
 import javax.security.auth.Subject;
 import javax.security.auth.callback.CallbackHandler;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
-import org.semanticwb.SWBUtils.TEXT;
 import org.semanticwb.base.util.SFBase64;
-import org.semanticwb.model.Resource;
-import org.semanticwb.model.User;
 import org.semanticwb.model.UserRepository;
-import org.semanticwb.model.WebPage;
-import org.semanticwb.model.WebSite;
-import org.semanticwb.portal.SWBUserMgr;
 import org.semanticwb.portal.api.GenericAdmResource;
 import org.semanticwb.portal.api.SWBActionResponse;
 import org.semanticwb.portal.api.SWBParamRequest;
@@ -56,8 +48,22 @@ public class Login extends GenericAdmResource
   private static final String FRM_LOGOUT = "frmlogout";
   private static final String INPLACE = "inPlace";
   private static final String TXT_login = "<fieldset><form action=\"{?loginurl}\" method=\"post\">\n<label>Usuario:</label><input type=\"text\" id=\"wb_username\" name=\"wb_username\" /><br />\n<label>Contrase&ntilde;a:</label><input type=\"password\" id=\"wb_password\" name=\"wb_password\" /><br />\n<input type=\"submit\" value=\"Enviar\" /></form></fieldset>\n";
-  private static final String TXT_logout = "<a href=\"{?logouturl}?wb_logout=true\" >Logout</a>";
+  private static final String TXT_logout = "<a href=\"{?logouturl}\" >Logout</a>";
 
+  private static String codigoRSA1 = "\n"
+            + "<script language=\"JavaScript\" type=\"text/javascript\" src=\"/swbadmin/js/crypto/jsbn.js\"></script>\n"
+            + "<script language=\"JavaScript\" type=\"text/javascript\" src=\"/swbadmin/js/crypto/prng4.js\"></script>\n"
+            + "<script language=\"JavaScript\" type=\"text/javascript\" src=\"/swbadmin/js/crypto/rng.js\"></script>\n"
+            + "<script language=\"JavaScript\" type=\"text/javascript\" src=\"/swbadmin/js/crypto/rsa.js\"></script>\n"
+            + "<script> \n"
+            + "var rsa = new RSAKey();\n";
+    private static String codigoRSA2 = "function encrypt(){\n"
+            + "var res = rsa.encrypt(document.login.wb_password.value);\n"
+            + "if (res){ document.login.wb_password.value=res; return true;}\n"
+            + "else {return false;}\n}\n"
+            + "document.login.onsubmit=encrypt;\n"
+            + "</script>";
+  
   public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest)
     throws SWBResourceException, IOException
   {
@@ -77,10 +83,19 @@ public class Login extends GenericAdmResource
     }
     if (null == frmlogout)
     {
-      frmlogout = "<a href=\"{?logouturl}?wb_logout=true\" >Logout</a>";
+      frmlogout = "<a href=\"{?logouturl}\" >Logout</a>";
     }
 
     String url = null;
+    if (SWBPlatform.getSecValues().isEncrypt()){
+                java.security.KeyPair key = SWBPortal.getUserMgr().getSessionKey(request);
+                String codigoRSA = codigoRSA1 + "rsa.setPublic(\""+ ((java.security.interfaces.RSAPublicKey)key.getPublic()).getModulus().toString(16)+"\", \""
+            +((java.security.interfaces.RSAPublicKey)key.getPublic()).getPublicExponent().toString(16)+"\");\n"
+                        +codigoRSA2;
+                inPlace=false;
+                frmlogin += codigoRSA;
+                
+    }
     //System.out.println(new StringBuilder().append("checa ").append(!paramsRequest.getUser().isSigned()).toString());
     if (!paramsRequest.getUser().isSigned())
     {
@@ -144,13 +159,13 @@ public class Login extends GenericAdmResource
     out.println("</script>");
 
     out.println("<div class=\"swbform\">");
-    out.println(new StringBuilder().append("<form dojoType=\"dijit.form.Form\" id=\"").append(getResourceBase().getId()).append("/sparql\" action=\"").append(paramsRequest.getRenderUrl()).append("\" method=\"post\" >").toString());
+    out.println(new StringBuilder().append("<form dojoType=\"dijit.form.Form\" id=\"").append(getResourceBase().getId()).append("/loginRes\" action=\"").append(paramsRequest.getRenderUrl()).append("\" method=\"post\" >").toString());
     out.println("<input type=\"hidden\" name=\"act\" value=\"upd\">");
 
     out.println("<fieldset>");
     out.println("<legend>Configuraci&oacute;n Despliegue</legend>");
     out.println("<br/>");
-    out.println("Forma de autenticaci&oacute;n:");
+    out.println("Forma de autenticaci&oacute;n: *Si login/encryptData es true la forma debe tener: name=\"login\"");
     out.println("<br/>");
     out.print("<textarea name=\"frmlogin\" rows=10 cols=80>");
     out.print(frmlogin);
