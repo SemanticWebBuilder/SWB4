@@ -26,6 +26,7 @@ import com.bigdata.rdf.sail.BigdataSail;
 import com.bigdata.rdf.sail.BigdataSailRepository;
 import java.io.File;
 import java.io.FileInputStream;
+import java.util.Date;
 import java.util.Properties;
 import org.openrdf.repository.Repository;
 import org.openrdf.repository.RepositoryConnection;
@@ -72,7 +73,7 @@ public class TestBigData {
         // instantiate a sail
         BigdataSail sail = new BigdataSail(properties);
         System.out.println("NameSapce:"+sail.getDatabase().getNamespace());
-
+        
         try
         {
             Repository repo = new BigdataSailRepository(sail);
@@ -100,7 +101,7 @@ public class TestBigData {
                             con.rollback();
                             con.close();
                         }
-                        System.out.println("Size:"+sail.getDatabase().getStatementCount()+" "+sail.getDatabase().getURICount());
+                        System.out.println(new Date()+" Size:"+sail.getDatabase().getStatementCount()+" "+sail.getDatabase().getURICount());
                     }
                     catch (Exception e) {
                     // handle exception
