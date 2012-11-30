@@ -24,33 +24,19 @@ package org.semanticwb.bigdata.test;
 
 import com.bigdata.rdf.sail.BigdataSail;
 import com.bigdata.rdf.sail.BigdataSailRepository;
-import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.RDFNode;
-import com.hp.hpl.jena.rdf.model.Resource;
-import com.hp.hpl.jena.rdf.model.Statement;
-import com.hp.hpl.jena.rdf.model.StmtIterator;
-import com.hp.hpl.jena.rdf.model.impl.ModelCom;
-import com.hp.hpl.jena.vocabulary.RDF;
 import java.io.File;
 import java.io.FileInputStream;
-import java.util.Iterator;
 import java.util.Properties;
-import org.openrdf.OpenRDFException;
-import org.openrdf.query.BindingSet;
-import org.openrdf.query.QueryEvaluationException;
-import org.openrdf.query.QueryLanguage;
-import org.openrdf.query.TupleQueryResult;
 import org.openrdf.repository.Repository;
 import org.openrdf.repository.RepositoryConnection;
 import org.openrdf.rio.RDFFormat;
-import org.semanticwb.bigdata.BigdataGraph;
 
 /**
  *
  * @author jei
  */
 public class TestBigData {
-
+    
     /**
      * @param args the command line arguments
      */
@@ -86,32 +72,47 @@ public class TestBigData {
         // instantiate a sail
         BigdataSail sail = new BigdataSail(properties);
         System.out.println("NameSapce:"+sail.getDatabase().getNamespace());
-        
-        /*
-        Repository repo = new BigdataSailRepository(sail);
-        try {
+
+        try
+        {
+            Repository repo = new BigdataSailRepository(sail);
             repo.initialize();
-            RepositoryConnection con = repo.getConnection();
-            try {
-                con.setAutoCommit(false);
-                
-                //FileInputStream in=new FileInputStream("/programming/proys/hackaton_data/vgn_db/vgn3.nt");
-                //con.add(in, "http://datosabiertos.gob.mx/data/", RDFFormat.N3);
-                
-                //FileInputStream in=new FileInputStream("/programming/proys/hackaton_data/vgng_db/vgng3.nt");
-                //con.add(in, "http://datosabiertos.gob.mx/data/", RDFFormat.N3);
-                                
-                con.commit();
+
+            File dir=new File("/programming/proys/hackaton2_data/Datos2");
+            File files[]=dir.listFiles();
+            for(int x=0;x<files.length;x++)
+            {
+                File file=files[x];
+                if(file.isFile() && file.getName().endsWith(".n3"))
+                {
+                    System.out.println("Procesando archivo:"+file);
+                    try {
+                        RepositoryConnection con = repo.getConnection();
+                        try {
+                            con.setAutoCommit(false);
+
+                            FileInputStream in=new FileInputStream(file);
+                            con.add(in, "http://datosabiertos.gob.mx/data/", RDFFormat.N3);
+
+                            con.commit();
+                        }
+                        finally {
+                            con.rollback();
+                            con.close();
+                        }
+                        System.out.println("Size:"+sail.getDatabase().getStatementCount()+" "+sail.getDatabase().getURICount());
+                    }
+                    catch (Exception e) {
+                    // handle exception
+                        e.printStackTrace();
+                    }    
+
+                }
             }
-            finally {
-                con.close();
-            }
-        }
-        catch (Exception e) {
+        }catch (Exception e) {
         // handle exception
             e.printStackTrace();
         }    
-        */
         
         System.out.println("Size:"+sail.getDatabase().getStatementCount()+" "+sail.getDatabase().getURICount());
                 
