@@ -1,29 +1,7 @@
-/*
- * SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración,
- * colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de
- * información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes
- * fuentes, donde a la información se le asigna un significado, de forma que pueda ser interpretada y
- * procesada por personas y/o sistemas, es una creación original del Fondo de Información y Documentación
- * para la Industria INFOTEC, cuyo registro se encuentra actualmente en trámite.
- *
- * INFOTEC pone a su disposición la herramienta SemanticWebBuilder a través de su licenciamiento abierto al público (‘open source’),
- * en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición;
- * aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software,
- * todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización
- * del SemanticWebBuilder 4.0.
- *
- * INFOTEC no otorga garantía sobre SemanticWebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita,
- * siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar
- * de la misma.
- *
- * Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente
- * dirección electrónica:
- *  http://www.semanticwebbuilder.org
- */
 package org.semanticwb.process.model.base;
 
 
-public abstract class ProcessSiteBase extends org.semanticwb.model.WebSite implements org.semanticwb.model.Trashable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Filterable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Indexable,org.semanticwb.model.Undeleteable,org.semanticwb.model.Localeable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Countryable,org.semanticwb.model.Traceable,org.semanticwb.model.Activeable,org.semanticwb.model.OntologyDepable
+public abstract class ProcessSiteBase extends org.semanticwb.model.WebSite implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Localeable,org.semanticwb.model.OntologyDepable,org.semanticwb.model.Countryable,org.semanticwb.model.Indexable,org.semanticwb.model.Activeable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Undeleteable,org.semanticwb.model.Traceable,org.semanticwb.model.Filterable,org.semanticwb.model.Trashable,org.semanticwb.model.FilterableClass
 {
     public static final org.semanticwb.platform.SemanticClass swp_ProcessDataInstanceModel=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#ProcessDataInstanceModel");
     public static final org.semanticwb.platform.SemanticProperty swp_processDataInstanceModel=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#processDataInstanceModel");
@@ -39,8 +17,8 @@ public abstract class ProcessSiteBase extends org.semanticwb.model.WebSite imple
     public static final org.semanticwb.platform.SemanticClass swp_ScalationEndEvent=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#ScalationEndEvent");
     public static final org.semanticwb.platform.SemanticClass swp_ScalationIntermediateThrowEvent=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#ScalationIntermediateThrowEvent");
     public static final org.semanticwb.platform.SemanticClass swp_SignalEndEvent=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#SignalEndEvent");
-    public static final org.semanticwb.platform.SemanticClass swp_StartEvent=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#StartEvent");
     public static final org.semanticwb.platform.SemanticClass swp_SparQLQuery=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#SparQLQuery");
+    public static final org.semanticwb.platform.SemanticClass swp_StartEvent=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#StartEvent");
    /**
    * Objeto utilizado para agrupar propiedades que en su conjunto definen una vista dentro de la administración de SWB
    */
@@ -906,36 +884,6 @@ public abstract class ProcessSiteBase extends org.semanticwb.model.WebSite imple
         return org.semanticwb.process.model.SignalEndEvent.ClassMgr.hasSignalEndEvent(id, this);
     }
 
-    public org.semanticwb.process.model.StartEvent getStartEvent(String id)
-    {
-        return org.semanticwb.process.model.StartEvent.ClassMgr.getStartEvent(id, this);
-    }
-
-    public java.util.Iterator<org.semanticwb.process.model.StartEvent> listStartEvents()
-    {
-        return org.semanticwb.process.model.StartEvent.ClassMgr.listStartEvents(this);
-    }
-
-    public org.semanticwb.process.model.StartEvent createStartEvent(String id)
-    {
-        return org.semanticwb.process.model.StartEvent.ClassMgr.createStartEvent(id,this);
-    }
-
-    public org.semanticwb.process.model.StartEvent createStartEvent()
-    {
-        long id=getSemanticObject().getModel().getCounter(swp_StartEvent);
-        return org.semanticwb.process.model.StartEvent.ClassMgr.createStartEvent(String.valueOf(id),this);
-    } 
-
-    public void removeStartEvent(String id)
-    {
-        org.semanticwb.process.model.StartEvent.ClassMgr.removeStartEvent(id, this);
-    }
-    public boolean hasStartEvent(String id)
-    {
-        return org.semanticwb.process.model.StartEvent.ClassMgr.hasStartEvent(id, this);
-    }
-
     public org.semanticwb.process.model.SparQLQuery getSparQLQuery(String id)
     {
         return org.semanticwb.process.model.SparQLQuery.ClassMgr.getSparQLQuery(id, this);
@@ -964,6 +912,36 @@ public abstract class ProcessSiteBase extends org.semanticwb.model.WebSite imple
     public boolean hasSparQLQuery(String id)
     {
         return org.semanticwb.process.model.SparQLQuery.ClassMgr.hasSparQLQuery(id, this);
+    }
+
+    public org.semanticwb.process.model.StartEvent getStartEvent(String id)
+    {
+        return org.semanticwb.process.model.StartEvent.ClassMgr.getStartEvent(id, this);
+    }
+
+    public java.util.Iterator<org.semanticwb.process.model.StartEvent> listStartEvents()
+    {
+        return org.semanticwb.process.model.StartEvent.ClassMgr.listStartEvents(this);
+    }
+
+    public org.semanticwb.process.model.StartEvent createStartEvent(String id)
+    {
+        return org.semanticwb.process.model.StartEvent.ClassMgr.createStartEvent(id,this);
+    }
+
+    public org.semanticwb.process.model.StartEvent createStartEvent()
+    {
+        long id=getSemanticObject().getModel().getCounter(swp_StartEvent);
+        return org.semanticwb.process.model.StartEvent.ClassMgr.createStartEvent(String.valueOf(id),this);
+    } 
+
+    public void removeStartEvent(String id)
+    {
+        org.semanticwb.process.model.StartEvent.ClassMgr.removeStartEvent(id, this);
+    }
+    public boolean hasStartEvent(String id)
+    {
+        return org.semanticwb.process.model.StartEvent.ClassMgr.hasStartEvent(id, this);
     }
 
     public org.semanticwb.model.FormView getFormView(String id)

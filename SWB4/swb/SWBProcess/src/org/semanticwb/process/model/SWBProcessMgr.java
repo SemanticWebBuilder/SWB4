@@ -25,6 +25,8 @@ package org.semanticwb.process.model;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
+import org.semanticwb.model.GenericIterator;
 import org.semanticwb.model.User;
 import org.semanticwb.model.UserGroup;
 import org.semanticwb.model.WebPage;
@@ -35,16 +37,24 @@ import org.semanticwb.model.WebPage;
  */
 public class SWBProcessMgr
 {
+    private static ConcurrentHashMap<Thread, Thread> linkedThreads=new ConcurrentHashMap();
+    
 
+    public static GenericIterator<ProcessInstance> getProcessInstanceWithStatus(ProcessSite site, int status)
+    {
+        GenericIterator it=new org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ProcessInstance>(site.getSemanticModel().listSubjects(ProcessInstance.swp_processStatus, status));
+        return it;
+    }
+    
     public static List<ProcessInstance> getActiveProcessInstance(ProcessSite site, Process process)
     {
         ArrayList ret=new ArrayList();
         
-        Iterator<ProcessInstance> it=process.listProcessInstances();
+        Iterator<ProcessInstance> it=getProcessInstanceWithStatus(site,ProcessInstance.STATUS_PROCESSING);
         while (it.hasNext())
         {
             ProcessInstance processInstance = (ProcessInstance)it.next();
-            if(processInstance.getStatus()==Instance.STATUS_PROCESSING)
+            if(processInstance.getProcessType().equals(process))
             {
                 ret.add(processInstance);
             }
@@ -171,6 +181,21 @@ public class SWBProcessMgr
         }
         return arr;
     }    
+    
+    static Thread addLinkedThread(Thread thread)
+    {
+        linkedThreads.put(thread, thread);
+        return thread;
+    }
 
+    static Thread removeLinkedThread(Thread thread)
+    {
+        return linkedThreads.remove(thread);
+    }
+    
+    static boolean hasLinkedThread(Thread thread)
+    {
+        return linkedThreads.contains(thread);
+    }
 
 }

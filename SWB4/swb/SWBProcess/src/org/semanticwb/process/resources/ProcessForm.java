@@ -731,14 +731,18 @@ public class ProcessForm extends GenericResource {
 //                    }
 
                     response.sendRedirect(foi.getUserTaskInboxUrl());
+                    
                 } else if (request.getParameter("reject") != null) {
                     foi.close(response.getUser(), Instance.ACTION_REJECT);
+                    
                     response.sendRedirect(foi.getUserTaskInboxUrl());
                 }
             } catch (Exception e) {
                 log.error("Error al procesar ....",e);
                 response.setRenderParameter("err", "invalidForm");
             }
+            
+            
 
         } else if ("removeprop".equals(response.getAction())) {
             String prop = request.getParameter("prop");
