@@ -42,9 +42,15 @@ public class SWBProcessMgr
 
     public static GenericIterator<ProcessInstance> getProcessInstanceWithStatus(ProcessSite site, int status)
     {
-        GenericIterator it=new org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ProcessInstance>(site.getSemanticModel().listSubjects(ProcessInstance.swp_processStatus, status));
+        GenericIterator<ProcessInstance> it=new org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ProcessInstance>(site.getSemanticModel().listSubjects(ProcessInstance.swp_processStatus, status));
         return it;
     }
+    
+    public static GenericIterator<FlowNodeInstance> getFlowNodeInstanceWithStatus(ProcessSite site, int status)
+    {
+        GenericIterator<FlowNodeInstance> it=new org.semanticwb.model.GenericIterator<org.semanticwb.process.model.FlowNodeInstance>(site.getSemanticModel().listSubjects(FlowNodeInstance.swp_status, status));
+        return it;
+    }    
     
     public static List<ProcessInstance> getActiveProcessInstance(ProcessSite site, Process process)
     {
