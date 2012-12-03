@@ -258,6 +258,10 @@ public class ProcessInstance extends org.semanticwb.process.model.base.ProcessIn
         return ret.iterator();
     }
 
+    /**
+     * Regresa todos los FlowNodeInstance del proceso y subprocesos
+     * @return 
+     */
     public Iterator<FlowNodeInstance> listAllFlowNodeInstance()
     {
         ArrayList<FlowNodeInstance> arr=new ArrayList();

@@ -28,6 +28,7 @@ import java.util.Iterator;
 import java.util.List;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.model.GenericIterator;
 import org.semanticwb.model.SWBClass;
 import org.semanticwb.model.SWBModel;
 import org.semanticwb.platform.SemanticClass;
@@ -170,6 +171,4 @@ public class Process extends org.semanticwb.process.model.base.ProcessBase
         return wp;
     }    
     
-    
-
 }

@@ -61,13 +61,13 @@ public class UserTask extends org.semanticwb.process.model.base.UserTaskBase
                 User assigned=users.get(new Random().nextInt(s));                
                 instance.setAssigned(new Date());
                 instance.setAssignedto(assigned);
-                System.out.println("assigned:"+assigned);
+                //System.out.println("assigned:"+assigned);
                 NotificationTemplate tpl=getProcess().getAssigmentNotificationTemplate();
                 if(tpl!=null)
                 {
                     try
                     {
-                        System.out.println("send mail:"+assigned);
+                        //System.out.println("send mail:"+assigned);
                         SWBUtils.EMAIL.sendBGEmail(assigned.getEmail(), SWBScriptParser.parser(instance, assigned, tpl.getSubject()), SWBScriptParser.parser(instance, assigned, tpl.getBody()));
                     }catch(Exception e)
                     {

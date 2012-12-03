@@ -93,6 +93,30 @@ public class FlowNodeInstance extends org.semanticwb.process.model.base.FlowNode
         //System.out.println("close("+user+","+status+","+action+")");
         close(user, status, action, true);
     }
+    
+    private void _close(User user, int status, boolean nextObjects)
+    {
+        abortDependencies(user);
+
+        connectItemsAware(user);
+
+        if(nextObjects)
+        {
+            FlowNode type=getFlowNodeType();
+            type.nextObject(this, user);
+        }
+        getFlowNodeType().close(this, user);
+
+        if(status==Instance.STATUS_CLOSED)
+        {
+            runActionCode(user, UserTask.CLOSE_ACTIONCODE);
+        }else if(status==Instance.STATUS_ABORTED)
+        {
+            runActionCode(user, UserTask.ABORT_ACTIONCODE);
+        }
+
+        removeTemporallyDataobjects();        
+    }
 
     /**
      * Cierra la instancia de objeto y continua el flujo al siguiente objeto si nexObjects = true
@@ -112,49 +136,58 @@ public class FlowNodeInstance extends org.semanticwb.process.model.base.FlowNode
         final FlowNodeInstance _this=this;
         final Thread _thread=Thread.currentThread();        
         
-        synchronized(this)
+        boolean linkThread=false;
+        
+        if(SWBProcessMgr.hasLinkedThread(Thread.currentThread()))
         {
-            Thread thread=new Thread()
+            linkThread=true;
+        }else
+        {
+            if(getFlowNodeType() instanceof UserTask)
             {
-                @Override
-                public void run()
+                if(((UserTask)getFlowNodeType()).isLinkNextUserTask())
                 {
-                    //long time=System.currentTimeMillis();
-                    //System.out.println("Init Thread");                    
-                    
-                    abortDependencies(_user);
-
-                    connectItemsAware(_user);
-
-                    if(_nextObjects)
-                    {
-                        FlowNode type=getFlowNodeType();
-                        type.nextObject(_this, _user);
-                    }
-                    getFlowNodeType().close(_this, _user);
-
-                    if(_status==Instance.STATUS_CLOSED)
-                    {
-                        runActionCode(_user, UserTask.CLOSE_ACTIONCODE);
-                    }else if(_status==Instance.STATUS_ABORTED)
-                    {
-                        runActionCode(_user, UserTask.ABORT_ACTIONCODE);
-                    }
-
-                    removeTemporallyDataobjects();
-                    
-                    //System.out.println("End Thread:"+(System.currentTimeMillis()-time));
-                    _thread.interrupt();                    
+                    linkThread=true;
                 }
-            };
-            thread.start();
-
-            try
-            {
-                wait(500);
-            }catch(InterruptedException e){}                
+            }
         }
+        
+        if(!linkThread)
+        {
+            synchronized(this)
+            {
+                Thread thread=new Thread()
+                {
+                    @Override
+                    public void run()
+                    {
+                        //long time=System.currentTimeMillis();
+                        //System.out.println("Init Thread");                    
+                        _close(_user, _status, _nextObjects);
 
+                        //System.out.println("End Thread:"+(System.currentTimeMillis()-time));
+                        _thread.interrupt();                    
+                    }
+                };
+                thread.start();
+
+                try
+                {
+                    wait(500);
+                }catch(InterruptedException e){}                
+            }
+        }else
+        {
+            if(SWBProcessMgr.hasLinkedThread(Thread.currentThread()))
+            {
+                _close(_user, _status, _nextObjects);
+            }else
+            {
+                SWBProcessMgr.addLinkedThread(Thread.currentThread());
+                _close(_user, _status, _nextObjects);
+                SWBProcessMgr.removeLinkedThread(Thread.currentThread());
+            }
+        }
         //System.out.println("end close:"+(System.currentTimeMillis()-time));    
     }
     
