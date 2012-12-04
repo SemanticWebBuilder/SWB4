@@ -120,11 +120,11 @@ public class MigrateOfficeContents
 
         String source = SWBPortal.getWorkPath() + "/" + "models/" + siteid + "/";
         File fileSource=new File(source);
-        log.info("Ruta temporal de migración SWB-WB3.2 (source) "+ fileSource.getCanonicalPath());
-        log.info("Ruta final de migración SWB (newpath) "+ newpath.getCanonicalPath());
+        log.debug("Ruta temporal de migración SWB-WB3.2 (source) "+ fileSource.getCanonicalPath());
+        log.debug("Ruta final de migración SWB (newpath) "+ newpath.getCanonicalPath());
         if(fileSource.equals(newpath))
         {
-            log.info("Las rutas newpath y source son iguales, no se realizará limpiado de directorio");
+            log.debug("Las rutas newpath y source son iguales, no se realizará limpiado de directorio");
         }
         else
         {
@@ -134,7 +134,7 @@ public class MigrateOfficeContents
             source = SWBPortal.getWorkPath() + "/" + "models/" + siteid + "_rep/";
             SWBUtils.IO.copyStructure(source, newpath.getAbsolutePath() + "/" + siteid + "_rep/");
             SWBUtils.IO.removeDirectory(source);
-            log.info("Fin de limpiado de directorios de trabajo");
+            log.debug("Fin de limpiado de directorios de trabajo");
         }
         log.debug("=== terminado de migrar Office Content....");
         return res;
