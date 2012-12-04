@@ -133,6 +133,58 @@ public class SemanticModel
     {
         m_trace=trace;
     }
+    
+    /**
+     * List subjects by double.
+     * 
+     * @param prop the prop
+     * @param value the value
+     * @return the iterator
+     */
+    public Iterator<SemanticObject> listSubjects(SemanticProperty prop, double value)
+    {
+        SemanticIterator<SemanticObject> it = new SemanticIterator(getRDFModel().listStatements(null, prop.getRDFProperty(), getRDFModel().createTypedLiteral(value)), true);
+        return it;
+    }     
+    
+    /**
+     * List subjects by float.
+     * 
+     * @param prop the prop
+     * @param value the value
+     * @return the iterator
+     */
+    public Iterator<SemanticObject> listSubjects(SemanticProperty prop, float value)
+    {
+        SemanticIterator<SemanticObject> it = new SemanticIterator(getRDFModel().listStatements(null, prop.getRDFProperty(), getRDFModel().createTypedLiteral(value)), true);
+        return it;
+    }     
+    
+    /**
+     * List subjects by lomg.
+     * 
+     * @param prop the prop
+     * @param value the value
+     * @return the iterator
+     */
+    public Iterator<SemanticObject> listSubjects(SemanticProperty prop, long value)
+    {
+        SemanticIterator<SemanticObject> it = new SemanticIterator(getRDFModel().listStatements(null, prop.getRDFProperty(), getRDFModel().createTypedLiteral(value)), true);
+        return it;
+    }     
+    
+    /**
+     * List subjects by int.
+     * 
+     * @param prop the prop
+     * @param value the value
+     * @return the iterator
+     */
+    public Iterator<SemanticObject> listSubjects(SemanticProperty prop, int value)
+    {
+        SemanticIterator<SemanticObject> it = new SemanticIterator(getRDFModel().listStatements(null, prop.getRDFProperty(), getRDFModel().createTypedLiteral(value)), true);
+        return it;
+    }    
 
     /**
      * List subjects by boolean.
