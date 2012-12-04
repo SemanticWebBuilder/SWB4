@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
+import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.GenericIterator;
 import org.semanticwb.model.User;
@@ -39,6 +40,8 @@ import org.semanticwb.model.WebPage;
  */
 public class SWBProcessMgr
 {
+    private static Logger log=SWBUtils.getLogger(SWBProcessMgr.class);
+    
     private static ConcurrentHashMap<Thread, Thread> linkedThreads=new ConcurrentHashMap();
     
     public static GenericIterator<ProcessInstance> getProcessInstanceWithStatus(ProcessSite site, int status)
@@ -105,7 +108,34 @@ public class SWBProcessMgr
         }
         return ret;
     }
+   
+    /**
+     * Crea procesos y espera a que termine de crearlo y este en la primera tarea de usuario o termine el proceso.
+     * @param process
+     * @param user
+     * @return 
+     */
+    public static ProcessInstance createSynchProcessInstance(Process process, User user)
+    {
+        ProcessInstance ret=null;
+        addLinkedThread(Thread.currentThread());
+        try
+        {
+            ret=createProcessInstance(process, user);
+        }finally
+        {
+            removeLinkedThread(Thread.currentThread());
+        }
+        return ret;
+    }    
+           
 
+    /**
+     * Crea proceso en un thread independiente
+     * @param process
+     * @param user
+     * @return 
+     */
     public static ProcessInstance createProcessInstance(Process process, User user)
     {
         ProcessInstance pinst=process.createInstance();
