@@ -918,6 +918,7 @@ public boolean execute(String str, String[] str1) throws java.sql.SQLException
     }
 
     /* MAPS74 - JDK 7 SE Wrapper */
+/*    
     @Override
     public void closeOnCompletion() throws SQLException
     {
@@ -929,5 +930,5 @@ public boolean execute(String str, String[] str1) throws java.sql.SQLException
     {
         return isCloseOnCompletion();
     }
-
+*/
 }
