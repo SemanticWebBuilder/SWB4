@@ -54,6 +54,14 @@ public class SWBProcessMgr
     }
     
     /**
+     * Obtiene una lista de las instancias de tareas de usuario activas.
+     * @return Lista de las instancias de tareas de usuario activas.
+     */
+    public static ArrayList<FlowNodeInstance> getActiveUserTaskInstances(ProcessSite site) {
+        return getUserTaskInstancesWithStatus(site, Instance.STATUS_PROCESSING, null);
+    }    
+    
+    /**
      * Obtiene una lista de las instancias de tareas de usuario activas para un proceso determinado.
      * @param process Proceso.
      * @return Lista de las instancias de tareas de usuario activas.
@@ -73,12 +81,10 @@ public class SWBProcessMgr
         ArrayList<FlowNodeInstance> instances = new ArrayList<FlowNodeInstance>();
                 
         Iterator<FlowNodeInstance> it = getFlowNodeInstanceWithStatus(site, status);
-        if (process == null) {
-            while (it.hasNext()) {
-                FlowNodeInstance flowNodeInstance = it.next();
-                if (flowNodeInstance.getFlowNodeType() instanceof UserTask && (process == null || (process != null && flowNodeInstance.getProcessInstance().getProcessType().equals(process)))) {
-                    instances.add(flowNodeInstance);
-                }
+        while (it.hasNext()) {
+            FlowNodeInstance flowNodeInstance = it.next();
+            if (flowNodeInstance.getFlowNodeType() instanceof UserTask && (process == null || (process != null && flowNodeInstance.getProcessInstance().getProcessType().equals(process)))) {
+                instances.add(flowNodeInstance);
             }
         }
         return instances;
@@ -109,79 +115,43 @@ public class SWBProcessMgr
         return pinst;
     }
 
-    public static List<FlowNodeInstance> getUserTaskInstances(ContainerInstanceable pinst, User user)
+    public static List<FlowNodeInstance> getActiveUserTaskInstances(ProcessSite site, User user)
     {
         ArrayList ret=new ArrayList();
         //Obtener todos los nodos de flujo activos
-        Iterator<FlowNodeInstance> it = getFlowNodeInstanceWithStatus(pinst.getProcessSite(), Instance.STATUS_PROCESSING);
+        Iterator<FlowNodeInstance> it = getFlowNodeInstanceWithStatus(site, Instance.STATUS_PROCESSING);
                 
         while(it.hasNext())
         {
             FlowNodeInstance actins=it.next();
             FlowNode type=actins.getFlowNodeType();
-            if(actins instanceof SubProcessInstance)
+            if(type instanceof UserTask)
             {
-                List aux=getUserTaskInstances((SubProcessInstance)actins, user);
-                ret.addAll(aux);
-            }else if(type instanceof Task)
-            {
-                if(user.haveAccess(type))
+                if(actins.haveAccess(user))
                 {
-                    //System.out.println("User:"+user+" TYPE:"+type);
-                    boolean add=true;                    
-                    GraphicalElement parent=type.getParent();
-                    //System.out.println("parent:"+type);
-                    if(parent !=null && parent instanceof Lane)
-                    {
-                        Lane lane=(Lane)parent;
-                        if(!user.haveAccess(lane))
-                        {
-                            add=false;
-                        }
-                    }
-                    //System.out.println("access:"+add);
-                    if(add)ret.add(actins);
+                    ret.add(actins);
                 }                    
             }
         }
-//        while(it.hasNext())
-//        {
-//            FlowNodeInstance actins=it.next();
-//            FlowNode type=actins.getFlowNodeType();
-//            if(actins instanceof SubProcessInstance)
-//            {
-//                SubProcessInstance processInstance=(SubProcessInstance)actins;
-//                if(processInstance.getStatus()==Instance.STATUS_PROCESSING || processInstance.getStatus()==Instance.STATUS_OPEN)
-//                {
-//                    List aux=getUserTaskInstances((SubProcessInstance)actins, user);
-//                    ret.addAll(aux);
-//                }
-//            }else if(type instanceof Task)
-//            {
-//                if(actins.getStatus()==Instance.STATUS_PROCESSING || actins.getStatus()==Instance.STATUS_OPEN)
-//                {
-//                    if(user.haveAccess(type))
-//                    {
-//                        //System.out.println("User:"+user+" TYPE:"+type);
-//                        boolean add=true;                    
-//                        GraphicalElement parent=type.getParent();
-//                        //System.out.println("parent:"+type);
-//                        if(parent !=null && parent instanceof Lane)
-//                        {
-//                            Lane lane=(Lane)parent;
-//                            if(!user.haveAccess(lane))
-//                            {
-//                                add=false;
-//                            }
-//                        }
-//                        //System.out.println("access:"+add);
-//                        if(add)ret.add(actins);
-//                    }                    
-//                }
-//            }
-//        }
         return ret;
     }
+    
+    public static List<FlowNodeInstance> getActiveUserTaskInstances(ProcessInstance pint, User user)
+    {
+        ArrayList ret=new ArrayList();
+        //Obtener todos los nodos de flujo activos
+        Iterator<FlowNodeInstance> it = getActiveUserTaskInstances(pint.getProcessSite(), pint.getProcessType()).iterator();
+                
+        while(it.hasNext())
+        {
+            FlowNodeInstance actins=it.next();
+            if(actins.haveAccess(user))
+            {
+                ret.add(actins);
+            }                    
+        }
+        return ret;
+    }    
 
     public static Process getProcess(WebPage page)
     {

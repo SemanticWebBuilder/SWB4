@@ -538,4 +538,42 @@ public class FlowNodeInstance extends org.semanticwb.process.model.base.FlowNode
         }
         return url;
     }
+    
+    /**
+     * Regresa url de la instancia de la tarea siempre y cuando sea del tipo UserTask, de locontrario regresa null
+     * @return 
+     */
+    public String getUserTaskUrl()
+    {
+        String ret=null;
+        FlowNode node=getFlowNodeType();
+        if(node instanceof UserTask)
+        {
+            UserTask ut=(UserTask)node;
+            ret=ut.getTaskWebPage().getUrl()+"?suri="+getEncodedURI();
+        }
+        return ret;
+    }
+    
+    public boolean haveAccess(User user) 
+    {
+        boolean canAccess = false;
+        
+        User owner = this.getAssignedto();
+        UserTask utask = (UserTask)this.getFlowNodeType();
+        
+        //Verificar permisos del usuario sobre la instancia
+        if (owner != null) { //Tiene propieario
+            if (owner.equals(user)) {
+                canAccess = true;
+            }
+        } else if (user.haveAccess(utask)) { //No tiene propietario
+            GraphicalElement parent = utask.getParent();
+            if (parent == null || parent instanceof Pool || (parent != null && parent instanceof Lane && user.haveAccess(parent))) {
+                canAccess = true;
+            }
+        }
+        
+        return canAccess;
+    }    
 }
