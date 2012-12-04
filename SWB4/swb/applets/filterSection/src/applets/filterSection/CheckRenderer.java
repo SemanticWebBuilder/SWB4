@@ -37,7 +37,7 @@ import javax.swing.tree.*;
 import javax.swing.event.*;
 import java.awt.*;
 /**
- * Clase que permite mostrar elementos de tipo ChceckBox, dentro del ·rbol de
+ * Clase que permite mostrar elementos de tipo ChceckBox, dentro del √Årbol de
  * secciones.
  * @author Victor Lorenzana
  */

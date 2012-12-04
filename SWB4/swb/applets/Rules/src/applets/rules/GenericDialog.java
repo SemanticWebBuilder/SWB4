@@ -33,7 +33,7 @@ package applets.rules;
 
 /**
  *
- * @author  Samuel Aceves modified by Juan Antonio Fern·ndez
+ * @author  Samuel Aceves modified by Juan Antonio Fern√°ndez
  */
 
 

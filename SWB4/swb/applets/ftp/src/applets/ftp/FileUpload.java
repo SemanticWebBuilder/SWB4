@@ -37,9 +37,9 @@ import java.net.*;
 import java.util.*;
 import java.util.ArrayList;
 /**
- * Clase que realiza la función de envíar un archivo al servidor, esta asociada
- * esta clase con la clase FUpload, que es la representación grafica de esta
- * opción.
+ * Clase que realiza la funciÃ³n de envÃ­ar un archivo al servidor, esta asociada
+ * esta clase con la clase FUpload, que es la representaciÃ³n grafica de esta
+ * opciÃ³n.
  * @author Victor Lorenzana
  */
 public class FileUpload {

@@ -45,7 +45,7 @@ import applets.commons.*;
 import java.util.zip.GZIPInputStream;
 
 /**
- * Applet que despliega el ·rbol lateral de la aplicaciÛn.
+ * Applet que despliega el √Årbol lateral de la aplicaci√≥n.
  *
  * Applet that shows the side tree of the application.
  *

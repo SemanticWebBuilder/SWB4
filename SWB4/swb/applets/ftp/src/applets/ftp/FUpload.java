@@ -34,8 +34,8 @@ import java.net.*;
 import java.util.*;
 
 /**
- * Formulario que muestra el avanze de envíar un archivo al servidor, muestra el
- * avance en la transmisión.
+ * Formulario que muestra el avanze de envÃ¡ar un archivo al servidor, muestra el
+ * avance en la transmisiÃ³n.
  * @author Victor Lorenzana
  */
 public class FUpload extends javax.swing.JDialog implements FileUploadListener

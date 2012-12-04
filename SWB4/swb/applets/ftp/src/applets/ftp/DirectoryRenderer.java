@@ -37,7 +37,7 @@ import javax.swing.tree.*;
 import javax.swing.event.*;
 import java.awt.*;
 /**
- * Clase que da la logica de presentaciÛn gr·fica de un directorio en el applet.
+ * Clase que da la logica de presentaci√≥n gr√°fica de un directorio en el applet.
  * @author Victor Lorenzana
  */
 public class DirectoryRenderer extends JPanel implements TreeCellRenderer{

@@ -36,7 +36,7 @@ import javax.swing.tree.*;
 import java.awt.*;
 import java.util.*;
 /**
- * Clase que representa un topic dentro del ·rbol de secciones, este nodo es
+ * Clase que representa un topic dentro del √Årbol de secciones, este nodo es
  * representado como un checkbox.
  * @author Victor Lorenzana
  */

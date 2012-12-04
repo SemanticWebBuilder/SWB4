@@ -39,7 +39,7 @@ import java.util.*;
 
 import applets.commons.*;
 /**
- * Clase que imprime los elementos del ·rbol.
+ * Clase que imprime los elementos del √Årbol.
  *
  * Class that prints the tree elements.
  *

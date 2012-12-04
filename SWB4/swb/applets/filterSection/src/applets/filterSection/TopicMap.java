@@ -36,7 +36,7 @@ import javax.swing.*;
 import javax.swing.tree.*;
 import java.awt.*;
 /**
- * Clase que representa un topicMap (sitio) dentro del ·rbol de secciones, este nodo es
+ * Clase que representa un topicMap (sitio) dentro del √Årbol de secciones, este nodo es
  * representado como un checkbox.
  * @author Victor Lorenzana
  */
