@@ -22,6 +22,7 @@
  */
 package org.semanticwb.aws;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -36,5 +37,12 @@ public interface AWSServices {
     List<String> getInstanceTypes();
     List<String> getSecurityGroups();
     List<String> getLoadBalancers();
-    
+    List<InstanceData> getRunningInstances();
+    List<String> getAvailabilityZones();
+    String createInstance(String placement, String amiID, 
+            String instanceType, Collection<String> securityGroups, 
+            String keyPair, String memory, String appServ, 
+            String elasticAdminDNS, String loadBalancer);
+    void removeInstance(String instanceId);
+    List<String> getElasticIPs();
 }
