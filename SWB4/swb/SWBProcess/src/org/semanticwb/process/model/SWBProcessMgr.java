@@ -39,7 +39,6 @@ public class SWBProcessMgr
 {
     private static ConcurrentHashMap<Thread, Thread> linkedThreads=new ConcurrentHashMap();
     
-
     public static GenericIterator<ProcessInstance> getProcessInstanceWithStatus(ProcessSite site, int status)
     {
         GenericIterator<ProcessInstance> it=new org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ProcessInstance>(site.getSemanticModel().listSubjects(ProcessInstance.swp_processStatus, status));
@@ -50,7 +49,49 @@ public class SWBProcessMgr
     {
         GenericIterator<FlowNodeInstance> it=new org.semanticwb.model.GenericIterator<org.semanticwb.process.model.FlowNodeInstance>(site.getSemanticModel().listSubjects(FlowNodeInstance.swp_status, status));
         return it;
-    }    
+    }
+    
+    /**
+     * Obtiene una lista de las instancias de tareas de usuario activas para un proceso determinado.
+     * @param process Proceso.
+     * @return Lista de las instancias de tareas de usuario activas.
+     */
+    public static ArrayList<FlowNodeInstance> getActiveUserTaskInstances(Process process) {
+        ProcessSite site = process.getProcessSite();
+        ArrayList<FlowNodeInstance> all = getUserTaskInstancesWithStatus(site, Instance.STATUS_PROCESSING);
+        
+        if (process == null) {
+            return all;
+        }
+        
+        ArrayList<FlowNodeInstance> ret = new ArrayList<FlowNodeInstance>();
+        Iterator<FlowNodeInstance> it = all.iterator();
+        while (it.hasNext()) {
+            FlowNodeInstance instance = it.next();
+            if (instance.getProcessInstance().getProcessType().equals(process)) {
+                ret.add(instance);
+            }
+        }
+        return ret;
+    }
+    
+    /**
+     * Obtiene una lista de las instancias de tareas de usuario con el estado proporcionado.
+     * @param site Sitio Web de procesos (modelo) del cual se obtendrán las instancias.
+     * @param status Estado de las instancias.
+     * @return Lista de las instancias de tareas de usuario con el estado proporcionado.
+     */
+    public static ArrayList<FlowNodeInstance> getUserTaskInstancesWithStatus(ProcessSite site, int status) {
+        ArrayList<FlowNodeInstance> ret = new ArrayList<FlowNodeInstance>();
+        Iterator<FlowNodeInstance> instances = getFlowNodeInstanceWithStatus(site, status);
+        while (instances.hasNext()) {
+            FlowNodeInstance instance = instances.next();
+            if (instance.getFlowNodeType() instanceof UserTask) {
+                ret.add(instance);
+            }
+        }
+        return ret;
+    }
     
     public static List<ProcessInstance> getActiveProcessInstance(ProcessSite site, Process process)
     {
@@ -80,43 +121,74 @@ public class SWBProcessMgr
     public static List<FlowNodeInstance> getUserTaskInstances(ContainerInstanceable pinst, User user)
     {
         ArrayList ret=new ArrayList();
-        Iterator<FlowNodeInstance> it=pinst.listFlowNodeInstances();
+        //Obtener todos los nodos de flujo activos
+        Iterator<FlowNodeInstance> it = getFlowNodeInstanceWithStatus(pinst.getProcessSite(), Instance.STATUS_PROCESSING);
+                
         while(it.hasNext())
         {
             FlowNodeInstance actins=it.next();
             FlowNode type=actins.getFlowNodeType();
             if(actins instanceof SubProcessInstance)
             {
-                SubProcessInstance processInstance=(SubProcessInstance)actins;
-                if(processInstance.getStatus()==Instance.STATUS_PROCESSING || processInstance.getStatus()==Instance.STATUS_OPEN)
-                {
-                    List aux=getUserTaskInstances((SubProcessInstance)actins, user);
-                    ret.addAll(aux);
-                }
+                List aux=getUserTaskInstances((SubProcessInstance)actins, user);
+                ret.addAll(aux);
             }else if(type instanceof Task)
             {
-                if(actins.getStatus()==Instance.STATUS_PROCESSING || actins.getStatus()==Instance.STATUS_OPEN)
+                if(user.haveAccess(type))
                 {
-                    if(user.haveAccess(type))
+                    //System.out.println("User:"+user+" TYPE:"+type);
+                    boolean add=true;                    
+                    GraphicalElement parent=type.getParent();
+                    //System.out.println("parent:"+type);
+                    if(parent !=null && parent instanceof Lane)
                     {
-                        //System.out.println("User:"+user+" TYPE:"+type);
-                        boolean add=true;                    
-                        GraphicalElement parent=type.getParent();
-                        //System.out.println("parent:"+type);
-                        if(parent !=null && parent instanceof Lane)
+                        Lane lane=(Lane)parent;
+                        if(!user.haveAccess(lane))
                         {
-                            Lane lane=(Lane)parent;
-                            if(!user.haveAccess(lane))
-                            {
-                                add=false;
-                            }
+                            add=false;
                         }
-                        //System.out.println("access:"+add);
-                        if(add)ret.add(actins);
-                    }                    
-                }
+                    }
+                    //System.out.println("access:"+add);
+                    if(add)ret.add(actins);
+                }                    
             }
         }
+//        while(it.hasNext())
+//        {
+//            FlowNodeInstance actins=it.next();
+//            FlowNode type=actins.getFlowNodeType();
+//            if(actins instanceof SubProcessInstance)
+//            {
+//                SubProcessInstance processInstance=(SubProcessInstance)actins;
+//                if(processInstance.getStatus()==Instance.STATUS_PROCESSING || processInstance.getStatus()==Instance.STATUS_OPEN)
+//                {
+//                    List aux=getUserTaskInstances((SubProcessInstance)actins, user);
+//                    ret.addAll(aux);
+//                }
+//            }else if(type instanceof Task)
+//            {
+//                if(actins.getStatus()==Instance.STATUS_PROCESSING || actins.getStatus()==Instance.STATUS_OPEN)
+//                {
+//                    if(user.haveAccess(type))
+//                    {
+//                        //System.out.println("User:"+user+" TYPE:"+type);
+//                        boolean add=true;                    
+//                        GraphicalElement parent=type.getParent();
+//                        //System.out.println("parent:"+type);
+//                        if(parent !=null && parent instanceof Lane)
+//                        {
+//                            Lane lane=(Lane)parent;
+//                            if(!user.haveAccess(lane))
+//                            {
+//                                add=false;
+//                            }
+//                        }
+//                        //System.out.println("access:"+add);
+//                        if(add)ret.add(actins);
+//                    }                    
+//                }
+//            }
+//        }
         return ret;
     }
 
