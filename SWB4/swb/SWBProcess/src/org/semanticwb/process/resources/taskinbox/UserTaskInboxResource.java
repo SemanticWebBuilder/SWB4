@@ -359,25 +359,15 @@ public class UserTaskInboxResource extends org.semanticwb.process.resources.task
         boolean hasStatus = false;
         boolean canAccess = false;
         
-        User owner = fni.getAssignedto();
-        UserTask utask = (UserTask)fni.getFlowNodeType();
         Process pType = fni.getProcessInstance().getProcessType();
         
-        if (pType.isDeleted() || !pType.isValid()) {
+        if (!pType.isValid()) {
             return true;
         }
         
-        //Verificar permisos del usuario sobre la instancia
-        if (owner != null) { //Tiene propieario
-            if (owner.equals(user)) {
-                canAccess = true;
-            }
-        } else if (user.haveAccess(utask)) { //No tiene propietario
-            GraphicalElement parent = utask.getParent();
-            if (parent == null || parent instanceof Pool || (parent != null && parent instanceof Lane && user.haveAccess(parent))) {
-                canAccess = true;
-            }
-        }
+        canAccess = fni.haveAccess(user);
+        
+        System.out.println(fni+" "+pType+" "+canAccess);
 
         if (canAccess) {
             //Verificar filtrado por grupo

@@ -713,6 +713,9 @@ public class ProcessForm extends GenericResource {
             }
             try {
                 mgr.processForm(request);
+                
+                String action=null;
+                String redirect=null;
 
                 // validar por si requiere firmado
                 if (base.getAttribute("useSign", "").equals("true")) {
@@ -720,23 +723,34 @@ public class ProcessForm extends GenericResource {
                     response.setMode(MODE_SIGN);
                     //response.setAction("");
                 } else if (request.getParameter("accept") != null) {
-                    foi.close(response.getUser(), Instance.ACTION_ACCEPT);
-
-//                    ProcessInstance pi=foi.getProcessInstance();
-//                    List<FlowNodeInstance> l=SWBProcessMgr.getUserTaskInstances(pi, response.getUser());
-//                    if(l.size()==1)
-//                    {
-//                        FlowNode fn=l.get(0).getFlowNodeType();
-//                        if(fn instanceof UserTask)url=((UserTask)fn).getTaskWebPage().getUrl()+"?suri="+l.get(0).getURI();
-//                    }
-
-                    response.sendRedirect(foi.getUserTaskInboxUrl());
-                    
+                    action=Instance.ACTION_ACCEPT;
                 } else if (request.getParameter("reject") != null) {
-                    foi.close(response.getUser(), Instance.ACTION_REJECT);
-                    
-                    response.sendRedirect(foi.getUserTaskInboxUrl());
+                    action=Instance.ACTION_REJECT;
                 }
+                
+                if(action!=null)
+                {
+                    foi.close(response.getUser(), action);
+                    if(foi.getFlowNodeType() instanceof UserTask && ((UserTask)foi.getFlowNodeType()).isLinkNextUserTask())
+                    {
+                        List<FlowNodeInstance> arr=SWBProcessMgr.getActiveUserTaskInstances(foi.getProcessInstance(),response.getUser());                        
+                        if(arr.size()>0)
+                        {
+                            redirect=arr.get(0).getUserTaskUrl();
+                        }else
+                        {
+                            redirect=foi.getUserTaskInboxUrl();
+                        }
+                    }else
+                    {
+                        redirect=foi.getUserTaskInboxUrl();
+                    }
+                }
+                if(redirect!=null)
+                {
+                    response.sendRedirect(redirect);
+                }
+                
             } catch (Exception e) {
                 log.error("Error al procesar ....",e);
                 response.setRenderParameter("err", "invalidForm");

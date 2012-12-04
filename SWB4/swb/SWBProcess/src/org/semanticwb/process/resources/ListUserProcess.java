@@ -67,7 +67,7 @@ public class ListUserProcess extends GenericResource {
             Iterator<ProcessInstance> itprocins = SWBProcessMgr.getActiveProcessInstance(psite, process).iterator();
             while (itprocins.hasNext()) {
                 ProcessInstance procins = itprocins.next();
-                List<FlowNodeInstance> lfnins = SWBProcessMgr.getUserTaskInstances(procins, user);
+                List<FlowNodeInstance> lfnins = SWBProcessMgr.getActiveUserTaskInstances(procins, user);
                 if(lfnins.size()>0)
                 {
                     numpen++;
