@@ -39,10 +39,12 @@ import org.semanticwb.model.WebSite;
 import org.semanticwb.portal.api.*;
 import org.semanticwb.process.model.FlowNodeInstance;
 import org.semanticwb.process.model.GraphicalElement;
+import org.semanticwb.process.model.Instance;
 import org.semanticwb.process.model.Lane;
 import org.semanticwb.process.model.Pool;
 import org.semanticwb.process.model.Process;
 import org.semanticwb.process.model.ProcessInstance;
+import org.semanticwb.process.model.ProcessSite;
 import org.semanticwb.process.model.SWBProcessMgr;
 import org.semanticwb.process.model.UserTask;
 
@@ -207,7 +209,7 @@ public class UserTaskInboxResource extends org.semanticwb.process.resources.task
      * @return Lista de instancias de tareas de usuario filtradas y ordenadas.
      */
     private ArrayList<FlowNodeInstance> getUserTaskInstances(HttpServletRequest request, SWBParamRequest paramRequest) {
-        ArrayList<FlowNodeInstance> t_instances = new ArrayList<FlowNodeInstance>();
+        ArrayList<FlowNodeInstance> unpaged = new ArrayList<FlowNodeInstance>();
         WebSite site = paramRequest.getWebPage().getWebSite();
         User user = paramRequest.getUser();
         String sortType = request.getParameter("sort");
@@ -215,19 +217,6 @@ public class UserTaskInboxResource extends org.semanticwb.process.resources.task
         int statusFilter = ProcessInstance.STATUS_PROCESSING;
         Process p = null;
         int page = 1;
-
-        if (sortType == null || sortType.trim().equals("")) {
-            sortType = "date";
-        } else {
-            sortType = sortType.trim();
-        }
-
-        if (request.getParameter("page") != null && !request.getParameter("page").trim().equals("")) {
-            page = Integer.valueOf(request.getParameter("page"));
-            if (page < 0) page = 1;
-        }
-
-        if (itemsPerPage < 5) itemsPerPage = 5;
 
         if (request.getParameter("sFilter") != null && !request.getParameter("sFilter").trim().equals("")) {
             statusFilter = Integer.valueOf(request.getParameter("sFilter"));
@@ -237,115 +226,179 @@ public class UserTaskInboxResource extends org.semanticwb.process.resources.task
             p = Process.ClassMgr.getProcess(request.getParameter("pFilter"), site);
         }
         
-        Iterator<Process> processes = Process.ClassMgr.listProcesses(site);
-        while (processes.hasNext()) {
-            Process process = processes.next();
-            if (process.isActive()) {
-                Iterator<ProcessInstance> processInstances = process.listProcessInstances();
-                while (processInstances.hasNext()) {
-                    ProcessInstance processInstance = processInstances.next();
-                    Iterator<FlowNodeInstance> nodeInstances = null;
-
-                    if (isFilterByGroup()) { //Si hay que filtrar por grupo de usuarios
-                        UserGroup iug = processInstance.getOwnerUserGroup();
-                        UserGroup uug = user.getUserGroup();
-
-                        if (iug != null && uug != null) { //Si la instancia y el usuario tienen grupo
-                            if (user.getUserGroup().getURI().equals(processInstance.getOwnerUserGroup().getURI())) { //Si tienen el mismo grupo
-                                nodeInstances = processInstance.listAllFlowNodeInstance();
-                            }
-                        } else if (iug == null && uug == null) { //Si el proceso y el usuario no tienen grupo
-                            nodeInstances = processInstance.listAllFlowNodeInstance();
-                        }
-                    } else { //Si no hay que filtrar por grupo de usuarios
-                        nodeInstances = processInstance.listAllFlowNodeInstance();
-                    }
-
-                    if (nodeInstances != null) {
-                        while (nodeInstances.hasNext()) {
-                            FlowNodeInstance flowNodeInstance = nodeInstances.next();
-                            if (flowNodeInstance.getFlowNodeType() instanceof UserTask) {
-                                UserTask utask = (UserTask) flowNodeInstance.getFlowNodeType();
-                                boolean canAccess = false;
-                                User owner = flowNodeInstance.getAssignedto();
-                                
-                                if (owner != null) { //Tiene propieario
-                                    if (owner.getURI().equals(user.getURI())) {
-                                        canAccess = true;
-                                    }
-                                } else if (user.haveAccess(utask)) { //No tiene propietario
-                                    GraphicalElement parent = utask.getParent();
-                                    if (parent == null || parent instanceof Pool || (parent != null && parent instanceof Lane && user.haveAccess(parent))) {
-                                        canAccess = true;
-                                    }
-                                }
-                                
-                                if (canAccess) {
-                                    if (statusFilter > 0) {
-                                        if (p != null) {
-                                            if (flowNodeInstance.getStatus() == statusFilter && utask.getProcess().getURI().equals(p.getURI())) {
-                                                t_instances.add(flowNodeInstance);
-                                            }
-                                        } else {
-                                            if (flowNodeInstance.getStatus() == statusFilter) {
-                                                t_instances.add(flowNodeInstance);
-                                            }
-                                        }
-                                    } else if (p != null) {
-                                        if (utask.getProcess().getURI().equals(p.getURI())) {
-                                            t_instances.add(flowNodeInstance);
-                                        }
-                                    } else {
-                                        t_instances.add(flowNodeInstance);
-                                    }
-                                }
-                            }
-                        }
-                    }
+        //Obtener todas las tareas de usuario por el estatus solicitado
+        ArrayList<FlowNodeInstance> userTaskInstances = SWBProcessMgr.getActiveUserTaskInstances(p);//SWBProcessMgr.getUserTaskInstancesWithStatus((ProcessSite)site, statusFilter);
+        
+        //Iniciar el filtrado
+        if (userTaskInstances != null) {
+            Iterator<FlowNodeInstance> fnInstances = userTaskInstances.iterator();
+            while (fnInstances.hasNext()) {
+                FlowNodeInstance flowNodeInstance = fnInstances.next();
+                if (!filterUserTaskInstance(flowNodeInstance, user, statusFilter)) {
+                    unpaged.add(flowNodeInstance);
                 }
             }
         }
-
-        Iterator<FlowNodeInstance> it_ins = null;
-        if (sortType.equals("date")) {
-            it_ins = SWBComparator.sortByCreated(t_instances.iterator(), false);
-        } else if (sortType.equals("name")) {
-            Collections.sort(t_instances, taskNameComparator);
-            it_ins = t_instances.iterator();
-        } 
-//        else if (sortType.equals("priority")) {
-//            Collections.sort(t_instances, processPriorityComparator);
-//            it_ins = t_instances.iterator();
+        
+//        Iterator<Process> processes = Process.ClassMgr.listProcesses(site);
+//        while (processes.hasNext()) {
+//            Process process = processes.next();
+//            if (process.isActive()) {
+//                Iterator<ProcessInstance> processInstances = process.listProcessInstances();
+//                while (processInstances.hasNext()) {
+//                    ProcessInstance processInstance = processInstances.next();
+//                    Iterator<FlowNodeInstance> nodeInstances = null;
+//
+//                    if (isFilterByGroup()) { //Si hay que filtrar por grupo de usuarios
+//                        UserGroup iug = processInstance.getOwnerUserGroup();
+//                        UserGroup uug = user.getUserGroup();
+//
+//                        if (iug != null && uug != null) { //Si la instancia y el usuario tienen grupo
+//                            if (user.getUserGroup().getURI().equals(processInstance.getOwnerUserGroup().getURI())) { //Si tienen el mismo grupo
+//                                nodeInstances = processInstance.listAllFlowNodeInstance();
+//                            }
+//                        } else if (iug == null && uug == null) { //Si el proceso y el usuario no tienen grupo
+//                            nodeInstances = processInstance.listAllFlowNodeInstance();
+//                        }
+//                    } else { //Si no hay que filtrar por grupo de usuarios
+//                        nodeInstances = processInstance.listAllFlowNodeInstance();
+//                    }
+//
+//                    if (nodeInstances != null) {
+//                        while (nodeInstances.hasNext()) {
+//                            FlowNodeInstance flowNodeInstance = nodeInstances.next();
+//                            if (flowNodeInstance.getFlowNodeType() instanceof UserTask) {
+//                                UserTask utask = (UserTask) flowNodeInstance.getFlowNodeType();
+//                                boolean canAccess = false;
+//                                User owner = flowNodeInstance.getAssignedto();
+//                                
+//                                if (owner != null) { //Tiene propieario
+//                                    if (owner.getURI().equals(user.getURI())) {
+//                                        canAccess = true;
+//                                    }
+//                                } else if (user.haveAccess(utask)) { //No tiene propietario
+//                                    GraphicalElement parent = utask.getParent();
+//                                    if (parent == null || parent instanceof Pool || (parent != null && parent instanceof Lane && user.haveAccess(parent))) {
+//                                        canAccess = true;
+//                                    }
+//                                }
+//                                
+//                                if (canAccess) {
+//                                    if (statusFilter > 0) {
+//                                        if (p != null) {
+//                                            if (flowNodeInstance.getStatus() == statusFilter && utask.getProcess().getURI().equals(p.getURI())) {
+//                                                t_instances.add(flowNodeInstance);
+//                                            }
+//                                        } else {
+//                                            if (flowNodeInstance.getStatus() == statusFilter) {
+//                                                t_instances.add(flowNodeInstance);
+//                                            }
+//                                        }
+//                                    } else if (p != null) {
+//                                        if (utask.getProcess().getURI().equals(p.getURI())) {
+//                                            t_instances.add(flowNodeInstance);
+//                                        }
+//                                    } else {
+//                                        t_instances.add(flowNodeInstance);
+//                                    }
+//                                }
+//                            }
+//                        }
+//                    }
+//                }
+//            }
 //        }
 
-        if (it_ins != null) {
-            t_instances = new ArrayList<FlowNodeInstance>();
-            while (it_ins.hasNext()) {
-                FlowNodeInstance nodeInstance = it_ins.next();
-                t_instances.add(nodeInstance);
-            }
+        //Realizar Ordenamiento de instancias
+        if (sortType == null || sortType.trim().equals("")) {
+            sortType = "date";
+        } else {
+            sortType = sortType.trim();
+        }
+        
+        if (sortType.equals("date")) {
+            unpaged = (ArrayList<FlowNodeInstance>)SWBUtils.Collections.copyIterator(SWBComparator.sortByCreated(unpaged.iterator(), false));
+        } else if (sortType.equals("name")) {
+            Collections.sort(unpaged, taskNameComparator);
+        } 
+        
+        //Realizar paginado de instancias
+        int maxPages = 1;
+        if (request.getParameter("page") != null && !request.getParameter("page").trim().equals("")) {
+            page = Integer.valueOf(request.getParameter("page"));
+            if (page < 0) page = 1;
         }
 
-        int maxPages = 1;
-        if (t_instances.size() >= itemsPerPage) {
-            maxPages = (int)Math.ceil((double)t_instances.size() / itemsPerPage);
+        if (itemsPerPage < 5) itemsPerPage = 5;
+        
+        if (unpaged.size() >= itemsPerPage) {
+            maxPages = (int)Math.ceil((double)unpaged.size() / itemsPerPage);
         }
         if (page > maxPages) page = maxPages;
 
         int sIndex = (page - 1) * itemsPerPage;
-        if (t_instances.size() > itemsPerPage && sIndex > t_instances.size() - 1) {
-            sIndex = t_instances.size() - itemsPerPage;
+        if (unpaged.size() > itemsPerPage && sIndex > unpaged.size() - 1) {
+            sIndex = unpaged.size() - itemsPerPage;
         }
 
         int eIndex = sIndex + itemsPerPage;
-        if (eIndex >= t_instances.size()) eIndex = t_instances.size();
+        if (eIndex >= unpaged.size()) eIndex = unpaged.size();
 
         request.setAttribute("maxPages", maxPages);
         ArrayList<FlowNodeInstance> instances = new ArrayList<FlowNodeInstance>();
         for (int i = sIndex; i < eIndex; i++) {
-            FlowNodeInstance instance = t_instances.get(i);
+            FlowNodeInstance instance = unpaged.get(i);
             instances.add(instance);
         }
         return instances;
+    }
+    
+    private boolean filterUserTaskInstance(FlowNodeInstance fni, User user, int statusFilter) {
+        boolean hasGroup = false;
+        boolean hasStatus = false;
+        boolean canAccess = false;
+        
+        User owner = fni.getAssignedto();
+        UserTask utask = (UserTask)fni.getFlowNodeType();
+        Process pType = fni.getProcessInstance().getProcessType();
+        
+        if (pType.isDeleted() || !pType.isValid()) {
+            return true;
+        }
+        
+        //Verificar permisos del usuario sobre la instancia
+        if (owner != null) { //Tiene propieario
+            if (owner.equals(user)) {
+                canAccess = true;
+            }
+        } else if (user.haveAccess(utask)) { //No tiene propietario
+            GraphicalElement parent = utask.getParent();
+            if (parent == null || parent instanceof Pool || (parent != null && parent instanceof Lane && user.haveAccess(parent))) {
+                canAccess = true;
+            }
+        }
+
+        if (canAccess) {
+            System.out.println("La instancia puede ser accedida por el usuario");
+            //Verificar filtrado por grupo
+            if (isFilterByGroup()) {
+                UserGroup iug = fni.getProcessInstance().getOwnerUserGroup();
+                UserGroup uug = user.getUserGroup();
+
+                if (iug != null && uug != null) { //Si la instancia y el usuario tienen grupo
+                    if (uug.equals(iug)) { //Si tienen el mismo grupo
+                        hasGroup = true;
+                    }
+                } else if (iug == null && uug == null) { //Si el proceso y el usuario no tienen grupo
+                    hasGroup = true;
+                }
+            }
+
+            //Verificar filtrado por estatus
+            if (statusFilter > 0 && fni.getStatus() == statusFilter) {
+                hasStatus = true;
+            }
+        }
+        return canAccess && (hasGroup && hasStatus);
     }
 }
