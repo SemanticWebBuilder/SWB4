@@ -185,11 +185,11 @@ public class JSPEditor extends GenericAdmResource {
 
         //Muestra mensaje de almacenamiento de informacion
         if (action != null && action.equalsIgnoreCase(JSPEditor.ACTION_SAVE)) {
-            String show = request.getParameter("_msg").replace('\'', '`');
+            String show = request.getParameter("_msg");
             if (show != null && !"null".equalsIgnoreCase(show)) {
-                show = paramReq.getLocaleString("MsgStoreError");
                 String alert = "\n<script type=\"text/javascript\">"
-                        + "\n   this.onload = function() {alert('" + show
+                        + "\n   this.onload = function() {alert('"
+                        + paramReq.getLocaleString("MsgStoreError")
                         + "');}" + "\n</script>";
                 ret.append(alert);
             }
