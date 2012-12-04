@@ -711,6 +711,7 @@ public java.sql.Savepoint setSavepoint() throws java.sql.SQLException
     }
     
 /* MAPS74 - Wrapping for Java SE 7 */
+/*    
     @Override
     public void setSchema(String schema) throws SQLException
     {
@@ -740,5 +741,5 @@ public java.sql.Savepoint setSavepoint() throws java.sql.SQLException
     {
         return con.getNetworkTimeout();
     }
-
+*/
 }
