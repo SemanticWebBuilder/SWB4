@@ -1,25 +1,27 @@
-/*
- * SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración,
- * colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de
- * información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes
- * fuentes, donde a la información se le asigna un significado, de forma que pueda ser interpretada y
- * procesada por personas y/o sistemas, es una creación original del Fondo de Información y Documentación
- * para la Industria INFOTEC, cuyo registro se encuentra actualmente en trámite.
- *
- * INFOTEC pone a su disposición la herramienta SemanticWebBuilder a través de su licenciamiento abierto al público (‘open source’),
- * en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición;
- * aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software,
- * todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización
- * del SemanticWebBuilder 4.0.
- *
- * INFOTEC no otorga garantía sobre SemanticWebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita,
- * siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar
- * de la misma.
- *
- * Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente
- * dirección electrónica:
- *  http://www.semanticwebbuilder.org
- */
+/**
+* SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración,
+* colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de
+* información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes
+* fuentes, donde a la información se le asigna un significado, de forma que pueda ser interpretada y
+* procesada por personas y/o sistemas, es una creación original del Fondo de Información y Documentación
+* para la Industria INFOTEC, cuyo registro se encuentra actualmente en trámite.
+*
+* INFOTEC pone a su disposición la herramienta SemanticWebBuilder a través de su licenciamiento abierto al público (‘open source’),
+* en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición;
+* aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software,
+* todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización
+* del SemanticWebBuilder 4.0.
+*
+* INFOTEC no otorga garantía sobre SemanticWebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita,
+* siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar
+* de la misma.
+*
+* Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente
+* dirección electrónica:
+*  http://www.semanticwebbuilder.org
+**/
+
+
 package org.semanticwb.portal.admin.resources.reports;
 
 import java.io.IOException;
@@ -28,6 +30,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.Collection;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletRequest;
 
@@ -46,28 +49,31 @@ import org.semanticwb.portal.admin.resources.reports.jrresources.*;
 import org.semanticwb.portal.admin.resources.reports.jrresources.data.JRGlobalAccessDataDetail;
 import org.semanticwb.portal.db.SWBRecHit;
 
-import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 import org.semanticwb.portal.api.SWBResourceURL;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 // TODO: Auto-generated Javadoc
 /**
  * The Class WBAGlobalReport.
  */
 public class WBAGlobalReport extends GenericResource {
-    
+
     /** The log. */
     private static Logger log = SWBUtils.getLogger(WBAGlobalReport.class);
 
     /** The Constant S_REPORT_IDAUX. */
     public static final String S_REPORT_IDAUX = "_";
-    
+
     /** The Constant I_REPORT_TYPE. */
     public static final int I_REPORT_TYPE = 0;
-    
+
     /** The str rsc type. */
     private String strRscType;
 
@@ -87,7 +93,7 @@ public class WBAGlobalReport extends GenericResource {
 
     /**
      * Render.
-     * 
+     *
      * @param request the request
      * @param response the response
      * @param paramsRequest the params request
@@ -103,12 +109,13 @@ public class WBAGlobalReport extends GenericResource {
 
     /**
      * Process request.
-     * 
+     *
      * @param request the request
      * @param response the response
      * @param paramsRequest the params request
      * @throws SWBResourceException the sWB resource exception
      * @throws IOException Signals that an I/O exception has occurred.
+     * Process the different presentations of the report.
      */
     @Override
     public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException{
@@ -124,14 +131,16 @@ public class WBAGlobalReport extends GenericResource {
             doRepPdf(request,response,paramsRequest);
         }else if(paramsRequest.getMode().equalsIgnoreCase("rtf")) {
             doRepRtf(request,response,paramsRequest);
-        }else {
+        }else if(paramsRequest.getMode().equalsIgnoreCase("fillgridmtr")) {
+            doFillReport(request,response,paramsRequest);
+        }else{
             super.processRequest(request, response, paramsRequest);
         }
     }
 
     /**
      * Do view.
-     * 
+     *
      * @param request the request
      * @param response the response
      * @param paramsRequest the params request
@@ -158,17 +167,18 @@ public class WBAGlobalReport extends GenericResource {
                     hm_sites.put(site.getId(), site.getDisplayTitle(paramsRequest.getUser().getLanguage()));
                 }
             }
-            if(hm_sites.size() > 0){
+            if(hm_sites.size() > 0){ //If sites found
                 String address = paramsRequest.getWebPage().getUrl();
+                
                 String websiteId = request.getParameter("wb_site")==null ? (String)hm_sites.keySet().iterator().next():request.getParameter("wb_site");
 
-                int groupDates;
+                int groupDates;                
                 try {
                     groupDates = request.getParameter("wb_rep_type")==null ? 0:Integer.parseInt(request.getParameter("wb_rep_type"));
                 }catch(NumberFormatException e) {
                     groupDates = 0;
                 }
-
+                
                 GregorianCalendar cal = new GregorianCalendar();
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
                 String fecha1 = request.getParameter("wb_fecha1")==null ? sdf.format(cal.getTime()):request.getParameter("wb_fecha1");
@@ -176,7 +186,7 @@ public class WBAGlobalReport extends GenericResource {
                     sdf.parse(fecha1);
                 }catch(ParseException pe){
                     fecha1 = sdf.format(cal.getTime());
-                }                
+                }
                 String fecha11 = request.getParameter("wb_fecha11")==null ? sdf.format(cal.getTime()):request.getParameter("wb_fecha11");
                 try {
                     sdf.parse(fecha11);
@@ -189,7 +199,7 @@ public class WBAGlobalReport extends GenericResource {
                 }catch(ParseException pe){
                     fecha12 = sdf.format(cal.getTime());
                 }
-                
+
                 String topicId = paramsRequest.getWebPage().getId();
                 if(topicId.lastIndexOf("Daily") != -1) {
                     rtype = "0";
@@ -203,12 +213,47 @@ public class WBAGlobalReport extends GenericResource {
                 }
 
                 SWBResourceURL url = paramsRequest.getRenderUrl();
-                url.setCallMethod(url.Call_DIRECT);
+                url.setCallMethod(SWBResourceURL.Call_DIRECT);
 
                 // javascript
                 out.println("<script type=\"text/javascript\">");
                 out.println("dojo.require(\"dijit.form.DateTextBox\");");
+
+                out.println("dojo.require(\"dojox.grid.DataGrid\");");//--
+                out.println("dojo.require(\"dojo.data.ItemFileReadStore\");");//--
+
                 out.println("dojo.addOnLoad(doBlockade);");
+
+                out.println("function fillGrid(grid, uri) {");
+                out.println("   grid.store = new dojo.data.ItemFileReadStore({url: uri});");
+                out.println("   grid._refresh();");
+                out.println("}");
+
+                out.println("var layout= null;");
+                out.println("var jStrMaster = null;");
+                out.println("var gridMaster = null;");
+                out.println("var gridResources = null;");
+
+                out.println("dojo.addOnLoad(function() {");
+                out.println("   layout= [");
+                out.println("      { field:\"sitio\", width:\"100px\", name:\"Sitio\" },");
+                out.println("      { field:\"anio\", width:\"100px\", name:\"Año\" },");
+                out.println("      { field:\"mes\", width:\"100px\", name:\"Mes\" },");
+                if(rtype.equals("0")) { //Reporte diario
+                    out.println("  { field:\"dia\", width:\"100px\", name:\"Día\" },");
+                }
+                out.println("      { field:\"accesos\", width:\"100px\", name:\"Accesos\" },");
+                out.println("   ];");
+
+                out.println("   gridMaster = new dojox.grid.DataGrid({");
+                out.println("      id: \"gridMaster\",");
+                out.println("      structure: layout,");
+                out.println("      rowSelector: \"10px\",");
+                out.println("      rowsPerPage: \"15\"");
+                out.println("   }, \"gridMaster\");");
+                out.println("   gridMaster.startup();");
+                out.println("});");
+                //--
 
                 out.println("function getParams(accion) {");
                 out.println("   var dp = null;");
@@ -231,7 +276,7 @@ public class WBAGlobalReport extends GenericResource {
                 out.println("       if(fecha3.length>0) {");
                 out.println("           dp = fecha3.split('/');");
                 out.println("           params = params + '&wb_fecha12=' + dp[2]+'-'+dp[1]+'-'+dp[0];");
-                out.println("       }");                
+                out.println("       }");
                 out.println("   }else {");
                 out.println("       var year = new String(dojo.byId('wb_year13').value);");
                 out.println("       params = params + '&wb_year13=' + year;");
@@ -299,6 +344,7 @@ public class WBAGlobalReport extends GenericResource {
                 /*out.println("   }");*/
                 out.println("}");
 
+                //Devuelve el id del radio seleccionado [0,1]
                 out.println(" function getTypeSelected(){");
                 out.println("     var strType = \"0\";");
                 out.println("     for(i=0;i<window.document.frmrep.wb_rep_type.length;i++){");
@@ -308,13 +354,13 @@ public class WBAGlobalReport extends GenericResource {
                 out.println("     }");
                 out.println("     return strType;");
                 out.println(" }");
-
-                out.println(" function doApply() { ");
-                /*out.println("    if(validate(dojo.byId('wb_rtype').value, dojo.byId('wb_rep_type').value) {");*/
-                out.println("       window.document.frmrep.submit(); ");
-                /*out.println("    }");*/
-                out.println(" }");
-
+                
+                out.println("function doApply() {");
+                out.println("   var grid = dijit.byId('gridMaster');");
+                out.println("   var params = getParams("+ rtype+ ");");
+                out.println("   fillGrid(grid, '"+url.setMode("fillgridmtr")+"'+params);");
+                out.println("}");
+                
                 out.println(" function doBlockade() {");
                 out.println("   if(window.document.frmrep.wb_rep_type) {");
                 out.println("     if(window.document.frmrep.wb_rep_type[0].checked){");
@@ -331,6 +377,7 @@ public class WBAGlobalReport extends GenericResource {
                 out.println(" }");
                 out.println("</script>");
 
+                
                 out.println("<div class=\"swbform\">");
                 out.println("<fieldset>");
                 if(rtype.equals("0")) {
@@ -381,7 +428,7 @@ public class WBAGlobalReport extends GenericResource {
                     out.println("<td colspan=\"2\">");
                     out.println("<input type=\"text\" name=\"wb_fecha1\" onblur=\"if(!this.value){this.focus();}\" id=\"wb_fecha1\" dojoType=\"dijit.form.DateTextBox\" required=\"true\" constraints=\"{datePattern:'dd/MM/yyyy'}\" size=\"11\" style=\"width:110px;\" hasDownArrow=\"true\" value=\""+fecha1+"\"/>");
                     out.println("</td>");
-                    out.println("<td><input type=\"hidden\" id=\"wb_rtype\" name=\"wb_rtype\" value=\"0\" /></td>");
+                    out.println("<td><input type=\"hidden\" id=\"wb_rtype\" name=\"wb_rtype\" value=\"0\" /></td>"); //Campo oculto para el tipo de reporte rtype=diario
                     out.println("</tr>");
 
                     out.println("<tr>");
@@ -420,34 +467,19 @@ public class WBAGlobalReport extends GenericResource {
                     out.println("</table>");
                     out.println("</fieldset>");
                     out.println("</form>");
-                    if(request.getParameter("wb_rtype")!=null && websiteId!=null) {
-                        out.println("<fieldset>");
-                        out.println("<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"98%\">");
-                        out.println("<tr>");
-                        out.println("<td>");
-                        try {
-                        WBAFilterReportBean filter = buildFilter(request, paramsRequest);
-                        JRDataSourceable dataDetail = new JRGlobalAccessDataDetail(filter);
-                        JasperTemplate jasperTemplate = JasperTemplate.GLOBAL_DAILY_HTML;
-                        HashMap params = new HashMap();
-                        params.put("swb", SWBUtils.getApplicationPath()+"/swbadmin/images/swb-logo-hor.jpg");
-                        params.put("site", filter.getSite());
-                        try {
-                            JRResource jrResource = new JRHtmlResource(jasperTemplate.getTemplatePath(), params, dataDetail.orderJRReport());
-                            jrResource.prepareReport();
-                            jrResource.exportReport(response);
-                        }catch(JRException e) {
-                            throw new javax.servlet.ServletException(e);
-                        }
-                        }catch(IncompleteFilterException ife) {
-                            out.println("<script type=\"text/javascript\">alert('Falta por especificar el período de consulta');</script>");
-                        }
-                        out.println("</td>");
-                        out.println("</tr>");
-                        out.println("<tr><td>&nbsp;</td></tr>");
-                        out.println("</table>");
-                        out.println("</fieldset>");
-                    }
+                    
+                    out.println("<fieldset>");
+                    out.println("<table border=\"0\" width=\"95%\" align=\"center\">");
+                    out.println("<tr>");
+                    out.println("<td colspan=\"4\">");
+                    out.println("<div id=\"ctnergrid\" style=\"height:400px; width:98%; margin: 1px; padding: 0px; border: 1px solid #DAE1FE;\">");
+                    out.println("  <div id=\"gridMaster\"></div>");
+                    out.println("</div>");
+                    out.println("</td>");
+                    out.println("</tr>");
+                    out.println("</table>");
+                    out.println("</fieldset>");
+                    out.println("</div>");
                 }else { // REPORTE MENSUAL
                     GregorianCalendar gc_now = new GregorianCalendar();
                     int year13 = request.getParameter("wb_year13")==null ? gc_now.get(Calendar.YEAR):Integer.parseInt(request.getParameter("wb_year13"));
@@ -483,33 +515,19 @@ public class WBAGlobalReport extends GenericResource {
                     out.println("</table>");
                     out.println("</fieldset>");
                     out.println("</form>");
-                    if(request.getParameter("wb_rtype")!=null && websiteId!=null ) {
-                        out.println("<fieldset>");
-                        out.println("<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"98%\">");
-                        out.println("<tr><td>");
-
-                        WBAFilterReportBean filter = new WBAFilterReportBean();
-                        filter.setSite(websiteId);
-                        filter.setIdaux(S_REPORT_IDAUX);
-                        filter. setType(I_REPORT_TYPE);
-                        filter.setYearI(year13);
-                        JRDataSourceable dataDetail = new JRGlobalAccessDataDetail(filter);
-                        JasperTemplate jasperTemplate = JasperTemplate.GLOBAL_MONTHLY_HTML;
-                        HashMap params = new HashMap();
-                        params.put("swb", SWBUtils.getApplicationPath()+"/swbadmin/images/swb-logo-hor.jpg");
-                        params.put("site", filter.getSite());
-                        try {
-                            JRResource jrResource = new JRHtmlResource(jasperTemplate.getTemplatePath(), params, dataDetail.orderJRReport());
-                            jrResource.prepareReport();
-                            jrResource.exportReport(response);
-                        }catch (Exception e) {
-                            throw new javax.servlet.ServletException(e);
-                        }
-                        out.println("</td></tr>");
-                        out.println("<tr><td>&nbsp;</td></tr>");
-                        out.println("</table>");
-                        out.println("</fieldset>");
-                    }
+                    
+                    out.println("<fieldset>");
+                    out.println("<table border=\"0\" width=\"95%\" align=\"center\">");
+                    out.println("<tr>");
+                    out.println("<td colspan=\"4\">");
+                    out.println("<div id=\"ctnergrid\" style=\"height:400px; width:98%; margin: 1px; padding: 0px; border: 1px solid #DAE1FE;\">");
+                    out.println("  <div id=\"gridMaster\"></div>");
+                    out.println("</div>");
+                    out.println("</td>");
+                    out.println("</tr>");
+                    out.println("</table>");
+                    out.println("</fieldset>");
+                    out.println("</div>");
                 }
                 out.println("</div>");
             }
@@ -543,7 +561,7 @@ public class WBAGlobalReport extends GenericResource {
 
     /**
      * Do graph.
-     * 
+     *
      * @param request the request
      * @param response the response
      * @param paramsRequest the params request
@@ -597,7 +615,7 @@ public class WBAGlobalReport extends GenericResource {
 
     /**
      * Do rep excel.
-     * 
+     *
      * @param request the request
      * @param response the response
      * @param paramsRequest the params request
@@ -617,7 +635,8 @@ public class WBAGlobalReport extends GenericResource {
                 WBAFilterReportBean filter = buildFilter(request, paramsRequest);
                 params.put("site", filter.getSite());
                 JRDataSourceable dataDetail = new JRGlobalAccessDataDetail(filter);
-                JasperTemplate jasperTemplate = JasperTemplate.GLOBAL_DAILY;
+                //JasperTemplate jasperTemplate = JasperTemplate.GLOBAL_DAILY;
+                JasperTemplate jasperTemplate = JasperTemplate.GLOBAL_DAILY_EXCEL;
                 try {
                     JRResource jrResource = new JRXlsResource(jasperTemplate.getTemplatePath(), params, dataDetail.orderJRReport());
                     jrResource.prepareReport();
@@ -635,7 +654,8 @@ public class WBAGlobalReport extends GenericResource {
                 filter. setType(I_REPORT_TYPE);
                 filter.setYearI(year13);
                 JRDataSourceable dataDetail = new JRGlobalAccessDataDetail(filter);
-                JasperTemplate jasperTemplate = JasperTemplate.GLOBAL_MONTHLY;
+                //JasperTemplate jasperTemplate = JasperTemplate.GLOBAL_MONTHLY;
+                JasperTemplate jasperTemplate = JasperTemplate.GLOBAL_MONTHLY_EXCEL;
                 try {
                     JRResource jrResource = new JRXlsResource(jasperTemplate.getTemplatePath(), params, dataDetail.orderJRReport());
                     jrResource.prepareReport();
@@ -652,7 +672,7 @@ public class WBAGlobalReport extends GenericResource {
 
     /**
      * Do rep xml.
-     * 
+     *
      * @param request the request
      * @param response the response
      * @param paramsRequest the params request
@@ -752,7 +772,7 @@ public class WBAGlobalReport extends GenericResource {
 
     /**
      * Do rep pdf.
-     * 
+     *
      * @param request the request
      * @param response the response
      * @param paramsRequest the params request
@@ -806,7 +826,7 @@ public class WBAGlobalReport extends GenericResource {
 
     /**
      * Do rep rtf.
-     * 
+     *
      * @param request the request
      * @param response the response
      * @param paramsRequest the params request
@@ -861,7 +881,7 @@ public class WBAGlobalReport extends GenericResource {
 
     /**
      * Do histrogram.
-     * 
+     *
      * @param request the request
      * @param response the response
      * @param paramsRequest the params request
@@ -922,7 +942,7 @@ public class WBAGlobalReport extends GenericResource {
 
     /**
      * Gets the histogram.
-     * 
+     *
      * @param request the request
      * @param response the response
      * @param paramsRequest the params request
@@ -1062,7 +1082,7 @@ public class WBAGlobalReport extends GenericResource {
 
     /**
      * Builds the filter.
-     * 
+     *
      * @param request the request
      * @param paramsRequest the params request
      * @return the wBA filter report bean
@@ -1071,29 +1091,29 @@ public class WBAGlobalReport extends GenericResource {
      */
     private WBAFilterReportBean buildFilter(HttpServletRequest request, SWBParamRequest paramsRequest) throws SWBResourceException, IncompleteFilterException {
         WBAFilterReportBean filterReportBean = null;
-        String websiteId = request.getParameter("wb_site");
+        String websiteId = request.getParameter("wb_site"); //El id del sitio
         int groupDates;
-        try {
+        try {//Tipo de report diario/mensual
             groupDates = request.getParameter("wb_rep_type")==null ? 0:Integer.parseInt(request.getParameter("wb_rep_type"));
         }catch(NumberFormatException e) {
             groupDates = 0;
         }
-        
+
         GregorianCalendar cal = new GregorianCalendar();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        String fecha1 = request.getParameter("wb_fecha1")==null ? sdf.format(cal.getTime()):request.getParameter("wb_fecha1");
+        String fecha1 = request.getParameter("wb_fecha1")==null ? sdf.format(cal.getTime()):request.getParameter("wb_fecha1"); //Fecha 1
         try {
             sdf.parse(fecha1);
         }catch(ParseException pe){
             fecha1 = sdf.format(cal.getTime());
         }
-        String fecha11 = request.getParameter("wb_fecha11")==null ? sdf.format(cal.getTime()):request.getParameter("wb_fecha11");
+        String fecha11 = request.getParameter("wb_fecha11")==null ? sdf.format(cal.getTime()):request.getParameter("wb_fecha11"); //Rango de fecha, inicial
         try {
             sdf.parse(fecha11);
         }catch(ParseException pe){
             fecha11 = sdf.format(cal.getTime());
         }
-        String fecha12 = request.getParameter("wb_fecha12")==null ? sdf.format(cal.getTime()):request.getParameter("wb_fecha12");
+        String fecha12 = request.getParameter("wb_fecha12")==null ? sdf.format(cal.getTime()):request.getParameter("wb_fecha12"); //Rango de fecha, final
         try {
             sdf.parse(fecha12);
         }catch(ParseException pe){
@@ -1101,23 +1121,23 @@ public class WBAGlobalReport extends GenericResource {
         }
 
         try {
-            filterReportBean = new WBAFilterReportBean(paramsRequest.getUser().getLanguage());
+            filterReportBean = new WBAFilterReportBean(paramsRequest.getUser().getLanguage()); //Crear una instanciasa del filtro
             filterReportBean.setSite(websiteId);
-            filterReportBean.setIdaux(S_REPORT_IDAUX);
-            filterReportBean.setType(I_REPORT_TYPE);
+            filterReportBean.setIdaux(S_REPORT_IDAUX); //??
+            filterReportBean.setType(I_REPORT_TYPE); //??
             if(groupDates==0) { // radio button was 0. Select only one date
-                filterReportBean.setGroupedDates(false);                
+                filterReportBean.setGroupedDates(false);
                 filterReportBean.setYearI(Integer.parseInt(fecha1.substring(0,4)));
                 filterReportBean.setMonthI(Integer.parseInt(fecha1.substring(5,7)));
                 filterReportBean.setDayI(Integer.parseInt(fecha1.substring(8)));
 
             }else { // radio button was 1. Select between two dates
                 filterReportBean.setGroupedDates(true);
-                
+
                 filterReportBean.setYearI(Integer.parseInt(fecha11.substring(0,4)));
                 filterReportBean.setMonthI(Integer.parseInt(fecha11.substring(5,7)));
                 filterReportBean.setDayI(Integer.parseInt(fecha11.substring(8)));
-                
+
                 filterReportBean.setYearF(Integer.parseInt(fecha12.substring(0,4)));
                 filterReportBean.setMonthF(Integer.parseInt(fecha12.substring(5,7)));
                 filterReportBean.setDayF(Integer.parseInt(fecha12.substring(8)));
@@ -1127,5 +1147,66 @@ public class WBAGlobalReport extends GenericResource {
             log.error("Error on method buildFilter() resource " + strRscType + " with id " + getResourceBase().getId(), e);
         }
         return filterReportBean;
+    }
+
+    private void doFillReport(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
+        response.setContentType("text/json;charset=iso-8859-1");
+        JSONObject jobj = new JSONObject();
+        JSONArray jarr = new JSONArray();
+        try {
+            jobj.put("label", "sect");
+            jobj.put("items", jarr);
+        }catch (JSONException jse) {
+        }
+
+        GregorianCalendar gc_now = new GregorianCalendar();
+        String websiteId =  request.getParameter("wb_site");
+        String wb_rtype = request.getParameter("wb_rtype")==null ? "0":request.getParameter("wb_rtype");
+
+        JRDataSourceable dataDetail = null;
+        
+        if(wb_rtype.equals("0")) { //Daily Report
+            try{
+            WBAFilterReportBean filter = buildFilter(request, paramsRequest);
+            dataDetail = new JRGlobalAccessDataDetail(filter);
+            }catch(IncompleteFilterException ife) {
+                log.error("Error on method doFillReport() ", ife);
+            }
+        }else{ //Monthly Report
+            WBAFilterReportBean filter = new WBAFilterReportBean();
+            int year13 = request.getParameter("wb_year13")==null ? gc_now.get(Calendar.YEAR):Integer.parseInt(request.getParameter("wb_year13"));
+
+            filter.setSite(websiteId);
+            filter.setIdaux(S_REPORT_IDAUX);
+            filter. setType(I_REPORT_TYPE);
+            filter.setYearI(year13);
+            dataDetail = new JRGlobalAccessDataDetail(filter);
+        }
+              
+        try {
+            JRBeanCollectionDataSource dataSource = dataDetail.orderJRReport();
+            Collection<SWBRecHit> collection = dataSource.getData();
+            Iterator<SWBRecHit> iterator = collection.iterator();
+
+            while(iterator.hasNext()){
+                JSONObject obj = new JSONObject();
+                SWBRecHit recHit= iterator.next();
+                try {
+                    obj.put("sitio", websiteId);
+                    obj.put("anio", recHit.getYear());
+                    obj.put("mes", recHit.getMonth());
+                    if(wb_rtype.equals("0")){
+                        obj.put("dia", recHit.getDay());
+                    }
+                    obj.put("accesos", recHit.getHits());
+                    jarr.put(obj);
+                }catch (JSONException jsone) {
+                    log.error("Error on method doFillReport() ", jsone);
+                }
+            }
+        }catch (Exception e) {
+            log.error("Error on method doFillReport() ", e);
+        }
+        response.getOutputStream().println(jobj.toString());
     }
 }
