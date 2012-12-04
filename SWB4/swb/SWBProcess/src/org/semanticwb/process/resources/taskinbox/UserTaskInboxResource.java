@@ -228,7 +228,7 @@ public class UserTaskInboxResource extends org.semanticwb.process.resources.task
         
         //Obtener todas las tareas de usuario por el estatus solicitado
         //TODO: Agregar código para cuando solicitan todos los estados
-        ArrayList<FlowNodeInstance> userTaskInstances = SWBProcessMgr.getActiveUserTaskInstances(p);//SWBProcessMgr.getUserTaskInstancesWithStatus((ProcessSite)site, statusFilter);
+        ArrayList<FlowNodeInstance> userTaskInstances = SWBProcessMgr.getUserTaskInstancesWithStatus((ProcessSite)site, statusFilter, p);//SWBProcessMgr.getUserTaskInstancesWithStatus((ProcessSite)site, statusFilter);
         
         //Iniciar el filtrado
         if (userTaskInstances != null) {
@@ -380,7 +380,6 @@ public class UserTaskInboxResource extends org.semanticwb.process.resources.task
         }
 
         if (canAccess) {
-            System.out.println("La instancia puede ser accedida por el usuario");
             //Verificar filtrado por grupo
             if (isFilterByGroup()) {
                 UserGroup iug = fni.getProcessInstance().getOwnerUserGroup();
