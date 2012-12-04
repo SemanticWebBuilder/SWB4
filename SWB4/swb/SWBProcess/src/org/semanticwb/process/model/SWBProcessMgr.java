@@ -57,8 +57,7 @@ public class SWBProcessMgr
      * @param process Proceso.
      * @return Lista de las instancias de tareas de usuario activas.
      */
-    public static ArrayList<FlowNodeInstance> getActiveUserTaskInstances(Process process) {
-        ProcessSite site = process.getProcessSite();
+    public static ArrayList<FlowNodeInstance> getActiveUserTaskInstances(ProcessSite site, Process process) {
         return getUserTaskInstancesWithStatus(site, Instance.STATUS_PROCESSING, process);
     }
     
