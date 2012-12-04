@@ -227,6 +227,7 @@ public class UserTaskInboxResource extends org.semanticwb.process.resources.task
         }
         
         //Obtener todas las tareas de usuario por el estatus solicitado
+        //TODO: Agregar código para cuando solicitan todos los estados
         ArrayList<FlowNodeInstance> userTaskInstances = SWBProcessMgr.getActiveUserTaskInstances(p);//SWBProcessMgr.getUserTaskInstancesWithStatus((ProcessSite)site, statusFilter);
         
         //Iniciar el filtrado
