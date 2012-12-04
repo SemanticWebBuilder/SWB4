@@ -28,6 +28,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Enumeration;
 import java.util.Iterator;
+import java.util.List;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.*;
 import org.semanticwb.Logger;
@@ -131,8 +132,16 @@ public class UserTaskInboxResource extends org.semanticwb.process.resources.task
             
             if (pid != null && !pid.trim().equals("")) {
                 Process process = Process.ClassMgr.getProcess(pid, response.getWebPage().getWebSite());
-                if (process != null) {
-                    inst = SWBProcessMgr.createProcessInstance(process, user);
+                if (process != null) 
+                {
+                    String redirect=null;
+                    inst = SWBProcessMgr.createSynchProcessInstance(process, user);
+                    List<FlowNodeInstance> arr=SWBProcessMgr.getActiveUserTaskInstances(inst,response.getUser());                        
+                    if(arr.size()>0)
+                    {
+                        response.sendRedirect(arr.get(0).getUserTaskUrl());
+                        return;
+                    }                    
                 }
             }
             if (inst != null) {
