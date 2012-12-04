@@ -292,7 +292,6 @@ if (paramRequest.getMode().equals(paramRequest.Mode_VIEW)) {
                     }
                     %>
                     <select onchange="loadPageUrl('<%=optsUrl.toString()%>', 'sFilter', this.options[this.selectedIndex].value)">
-                        <option value="-1" <%=sFilter.equals("-1")?"selected":""%>>Todas las tareas</option>
                         <option value="<%=ProcessInstance.STATUS_PROCESSING%>" <%=sFilter.equals(String.valueOf(ProcessInstance.STATUS_PROCESSING))?"selected":""%>>Tareas Pendientes</option>
                         <option value="<%=ProcessInstance.STATUS_CLOSED%>" <%=sFilter.equals(String.valueOf(ProcessInstance.STATUS_CLOSED))?"selected":""%>>Tareas Terminadas</option>
                         <option value="<%=ProcessInstance.STATUS_ABORTED%>" <%=sFilter.equals(String.valueOf(ProcessInstance.STATUS_ABORTED))?"selected":""%>>Tareas Abortadas</option>
