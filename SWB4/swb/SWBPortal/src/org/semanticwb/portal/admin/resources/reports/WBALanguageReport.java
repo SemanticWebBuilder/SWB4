@@ -488,7 +488,7 @@ public class WBALanguageReport extends GenericResource {
                     out.println("<table border=\"0\" width=\"95%\" align=\"center\">");
                     out.println("<tr>");
                     out.println("<td colspan=\"4\">");
-                    out.println("<div id=\"ctnergrid\" style=\"height:600px; width:98%; margin: 1px; padding: 0px; border: 1px solid #DAE1FE;\">");
+                    out.println("<div id=\"ctnergrid\" style=\"height:400px; width:98%; margin: 1px; padding: 0px; border: 1px solid #DAE1FE;\">");
                     out.println("  <div id=\"gridMaster\"></div>");
                     out.println("</div>");
                     out.println("</td>");
