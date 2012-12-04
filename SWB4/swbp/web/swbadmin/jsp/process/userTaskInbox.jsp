@@ -463,7 +463,7 @@ if (paramRequest.getMode().equals(paramRequest.Mode_VIEW)) {
                 </div>
                 <%
         } else {
-            %>No tiene tareas pendientes<%
+            %>No hay tareas<%
         }
     }
 }
