@@ -22,6 +22,7 @@
  */
 package org.semanticwb.process.model;
 
+import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -69,21 +70,18 @@ public class SWBProcessMgr
      * @return Lista de las instancias de tareas de usuario con el estado proporcionado.
      */
     public static ArrayList<FlowNodeInstance> getUserTaskInstancesWithStatus(ProcessSite site, int status, Process process) {
-        List<FlowNodeInstance> instances = SWBUtils.Collections.copyIterator(getFlowNodeInstanceWithStatus(site, status));
-        
+        ArrayList<FlowNodeInstance> instances = new ArrayList<FlowNodeInstance>();
+                
+        Iterator<FlowNodeInstance> it = getFlowNodeInstanceWithStatus(site, status);
         if (process == null) {
-            return (ArrayList<FlowNodeInstance>)instances;
-        }
-        
-        ArrayList<FlowNodeInstance> ret = new ArrayList<FlowNodeInstance>();
-        Iterator<FlowNodeInstance> it = instances.iterator();
-        while (it.hasNext()) {
-            FlowNodeInstance instance = it.next();
-            if (instance.getProcessInstance().getProcessType().equals(process) && instance.getFlowNodeType() instanceof UserTask) {
-                ret.add(instance);
+            while (it.hasNext()) {
+                FlowNodeInstance flowNodeInstance = it.next();
+                if (flowNodeInstance.getFlowNodeType() instanceof UserTask && (process == null || (process != null && flowNodeInstance.getProcessInstance().getProcessType().equals(process)))) {
+                    instances.add(flowNodeInstance);
+                }
             }
         }
-        return ret;
+        return instances;
     }
     
     public static List<ProcessInstance> getActiveProcessInstance(ProcessSite site, Process process)
