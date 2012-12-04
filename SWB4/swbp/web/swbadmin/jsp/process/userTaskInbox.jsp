@@ -235,10 +235,22 @@ if (paramRequest.getMode().equals(paramRequest.Mode_VIEW)) {
         <div class="bandeja-combo">
             <ul>
                 <li>
+                    <%
+                    SWBResourceURL createUrl = paramRequest.getRenderUrl().setAction("createCase");
+                    %>
+                    <a onclick="window.location='<%=createUrl%>'"><img src="<%=baseimg%>newProcess.png" alt="Iniciar nuevo Caso" title="Iniciar nuevo Caso"></a><!--input type="button" value="Iniciar proceso" onclick="window.location='<%=createUrl%>'"/-->
+                </li>
+                <li>
+                    <b>Ordenamiento&nbsp;</b>
+                </li>
+                <li>
                     <select onchange="loadPageUrl('<%=optsUrl.toString()%>', 'sort', this.options[this.selectedIndex].value)">
                         <option value="date" <%=sortType.equals("date")?"selected":""%>>Por fecha</option>
                         <option value="name" <%=sortType.equals("name")?"selected":""%>>Por proceso</option>
                     </select>
+                </li>
+                <li>
+                    <b>Filtrado&nbsp;</b>
                 </li>
                 <li>
                     <%
@@ -297,15 +309,8 @@ if (paramRequest.getMode().equals(paramRequest.Mode_VIEW)) {
                         <option value="<%=ProcessInstance.STATUS_ABORTED%>" <%=sFilter.equals(String.valueOf(ProcessInstance.STATUS_ABORTED))?"selected":""%>>Tareas Abortadas</option>
                     </select>
                 </li>
-                <li>
-                    <%
-                    SWBResourceURL createUrl = paramRequest.getRenderUrl().setAction("createCase");
-                    %>
-                    <input type="button" value="Iniciar proceso" onclick="window.location='<%=createUrl%>'"/>
-                </li>
             </ul>
         </div>
-
         <%
         if (tinstances != null && tinstances.size() > 0) {
             %>
