@@ -38,7 +38,7 @@ import javax.swing.*;
 import applets.commons.*;
 
 /**
- * Modo de datos de los elementos del árbol.
+ * Modo de datos de los elementos del Ã¡rbol.
  *
  * Data mode of the tree elements.
  *

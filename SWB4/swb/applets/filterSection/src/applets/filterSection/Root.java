@@ -34,8 +34,8 @@ import javax.swing.*;
 import javax.swing.tree.*;
 import java.awt.*;
 /**
- * Clase que muestra un nodo dentro del ·rbol, que no puede ser seleccionado,
- * normalmente es utilizado como nodo raÌz dentro del ·rbol de secciones.
+ * Clase que muestra un nodo dentro del √Årbol, que no puede ser seleccionado,
+ * normalmente es utilizado como nodo ra√≠z dentro del √Årbol de secciones.
  * @author Victor Lorenzana
  */
 public class Root extends DefaultMutableTreeNode implements Node{

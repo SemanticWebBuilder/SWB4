@@ -33,7 +33,7 @@ package applets.filterSection;
 import javax.swing.*;
 import java.awt.*;
 /**
- * Interfaz que representa un nodo dentro del ·rbol.
+ * Interfaz que representa un nodo dentro del √Årbol.
  * @author Victor Lorenzana
  */
 public interface Node {

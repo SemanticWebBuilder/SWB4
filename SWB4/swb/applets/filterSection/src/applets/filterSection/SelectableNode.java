@@ -36,7 +36,7 @@ import java.awt.*;
 import javax.swing.tree.*;
 /**
  * Interfaz que determina el comportameiento de nodos que se pueden seleccionar,
- * como checkbox dentro del ·rbol de secciones.
+ * como checkbox dentro del √Årbol de secciones.
  * @author Victor Lorenzana
  */
 public interface SelectableNode {

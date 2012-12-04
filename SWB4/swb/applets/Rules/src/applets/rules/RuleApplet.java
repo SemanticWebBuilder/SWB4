@@ -84,7 +84,7 @@ public class RuleApplet extends javax.swing.JApplet implements CommandListener
     public void init()
     {
         locale=Locale.getDefault();
-        //System.out.println("País:"+locale.getCountry()+" - "+locale.getDisplayLanguage()+" - "+locale.getLanguage());
+        //System.out.println("PaÃ­s:"+locale.getCountry()+" - "+locale.getDisplayLanguage()+" - "+locale.getLanguage());
         if(this.getParameter("locale")!=null && !this.getParameter("locale").equals(""))
         {
             try

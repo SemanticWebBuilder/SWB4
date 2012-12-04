@@ -68,7 +68,7 @@ public class GraphElement
     private int _h=50;
     
     private int OPT_CLOSE_SEP=5;                      //separacion de la opcion de minimizar de la esquina superior izquierda
-    private int OPT_CLOSE_SIZE=8;                    //Tamaño de la opcion de minimizar
+    private int OPT_CLOSE_SIZE=8;                    //TamaÃ±o de la opcion de minimizar
     private boolean overClose=false;                 //Se encuentra sobre la opcion de minimizar
     private boolean closed=false;
     

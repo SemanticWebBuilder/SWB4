@@ -50,9 +50,9 @@ import java.util.ArrayList;
 import javax.swing.table.JTableHeader;
 
 /**
- * Formulario que presneta dirtectorios y archivos existentes en el servidor, así
+ * Formulario que presneta dirtectorios y archivos existentes en el servidor, asÃ­
  * da las opciones para enviar archivos, descargar archivos, renombrar, eliminar y
- * dar información de los archivos existentes.
+ * dar informaciÃ³n de los archivos existentes.
  * @author Victor Lorenzana
  */
 public class ftpPanel extends javax.swing.JPanel implements ListSelectionListener, FileListener, DropTargetListener

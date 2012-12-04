@@ -36,7 +36,7 @@ import java.net.*;
 import java.util.*;
 /**
  * Clase que hace la descarga de archivos de un servidor, esta asociada a la clase
- * FDownload, que la presentación.
+ * FDownload, que la presentaciÃ³n.
  * @author Victor Lorenzana
  */
 public class FileDownload {

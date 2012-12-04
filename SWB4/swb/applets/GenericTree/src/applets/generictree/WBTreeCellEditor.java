@@ -41,7 +41,7 @@ import java.awt.event.*;
 import applets.commons.*;
 
 /**
- * Permite la ediciÛn de los elementos del ·rbol.
+ * Permite la edici√≥n de los elementos del √Årbol.
  *
  * It allows the edition of the tree elements.
  *
