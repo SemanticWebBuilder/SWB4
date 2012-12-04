@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
+import org.semanticwb.SWBUtils;
 import org.semanticwb.model.GenericIterator;
 import org.semanticwb.model.User;
 import org.semanticwb.model.UserGroup;
@@ -58,35 +59,28 @@ public class SWBProcessMgr
      */
     public static ArrayList<FlowNodeInstance> getActiveUserTaskInstances(Process process) {
         ProcessSite site = process.getProcessSite();
-        ArrayList<FlowNodeInstance> all = getUserTaskInstancesWithStatus(site, Instance.STATUS_PROCESSING);
-        
-        if (process == null) {
-            return all;
-        }
-        
-        ArrayList<FlowNodeInstance> ret = new ArrayList<FlowNodeInstance>();
-        Iterator<FlowNodeInstance> it = all.iterator();
-        while (it.hasNext()) {
-            FlowNodeInstance instance = it.next();
-            if (instance.getProcessInstance().getProcessType().equals(process)) {
-                ret.add(instance);
-            }
-        }
-        return ret;
+        return getUserTaskInstancesWithStatus(site, Instance.STATUS_PROCESSING, process);
     }
     
     /**
      * Obtiene una lista de las instancias de tareas de usuario con el estado proporcionado.
      * @param site Sitio Web de procesos (modelo) del cual se obtendrán las instancias.
      * @param status Estado de las instancias.
+     * @param process Proceso para filtrado de instancias.
      * @return Lista de las instancias de tareas de usuario con el estado proporcionado.
      */
-    public static ArrayList<FlowNodeInstance> getUserTaskInstancesWithStatus(ProcessSite site, int status) {
+    public static ArrayList<FlowNodeInstance> getUserTaskInstancesWithStatus(ProcessSite site, int status, Process process) {
+        List<FlowNodeInstance> instances = SWBUtils.Collections.copyIterator(getFlowNodeInstanceWithStatus(site, status));
+        
+        if (process == null) {
+            return (ArrayList<FlowNodeInstance>)instances;
+        }
+        
         ArrayList<FlowNodeInstance> ret = new ArrayList<FlowNodeInstance>();
-        Iterator<FlowNodeInstance> instances = getFlowNodeInstanceWithStatus(site, status);
-        while (instances.hasNext()) {
-            FlowNodeInstance instance = instances.next();
-            if (instance.getFlowNodeType() instanceof UserTask) {
+        Iterator<FlowNodeInstance> it = instances.iterator();
+        while (it.hasNext()) {
+            FlowNodeInstance instance = it.next();
+            if (instance.getProcessInstance().getProcessType().equals(process) && instance.getFlowNodeType() instanceof UserTask) {
                 ret.add(instance);
             }
         }
