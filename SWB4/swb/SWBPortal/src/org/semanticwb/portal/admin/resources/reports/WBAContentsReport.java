@@ -1,29 +1,33 @@
 /*
- * SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración,
- * colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de
- * información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes
- * fuentes, donde a la información se le asigna un significado, de forma que pueda ser interpretada y
- * procesada por personas y/o sistemas, es una creación original del Fondo de Información y Documentación
- * para la Industria INFOTEC, cuyo registro se encuentra actualmente en trámite.
- *
- * INFOTEC pone a su disposición la herramienta SemanticWebBuilder a través de su licenciamiento abierto al público (‘open source’),
- * en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición;
- * aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software,
- * todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización
- * del SemanticWebBuilder 4.0.
- *
- * INFOTEC no otorga garantía sobre SemanticWebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita,
- * siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar
- * de la misma.
- *
- * Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente
- * dirección electrónica:
- *  http://www.semanticwebbuilder.org
- */
+* SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración,
+* colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de
+* información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes
+* fuentes, donde a la información se le asigna un significado, de forma que pueda ser interpretada y
+* procesada por personas y/o sistemas, es una creación original del Fondo de Información y Documentación
+* para la Industria INFOTEC, cuyo registro se encuentra actualmente en trámite.
+*
+* INFOTEC pone a su disposición la herramienta SemanticWebBuilder a través de su licenciamiento abierto al público (‘open source’),
+* en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición;
+* aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software,
+* todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización
+* del SemanticWebBuilder 4.0.
+*
+* INFOTEC no otorga garantía sobre SemanticWebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita,
+* siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar
+* de la misma.
+*
+* Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente
+* dirección electrónica:
+*  http://www.semanticwebbuilder.org
+**/
+
+
 package org.semanticwb.portal.admin.resources.reports;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletRequest;
@@ -52,12 +56,18 @@ import org.w3c.dom.Element;
  * The Class WBAContentsReport.
  */
 public class WBAContentsReport extends GenericResource {
-    
+
     /** The log. */
     private static Logger log = SWBUtils.getLogger(WBASectionReport.class);
 
     /** The str rsc type. */
     private String strRscType;
+
+    /** Format for Last Update field **/
+    private DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+
+    /** Host & port **/
+    private String hostAndPort;
 
     /**
      * Instantiates a new wBA contents report.
@@ -80,7 +90,7 @@ public class WBAContentsReport extends GenericResource {
 
     /**
      * Process request.
-     * 
+     *
      * @param request the request
      * @param response the response
      * @param paramsRequest the params request
@@ -100,11 +110,13 @@ public class WBAContentsReport extends GenericResource {
         }else {
             super.processRequest(request, response, paramsRequest);
         }
+        String port= (request.getServerPort() != 80)? ":" + request.getServerPort():"";
+        hostAndPort = request.getScheme() + "://" + request.getServerName() + port;
     }
 
     /**
      * Do render section tree.
-     * 
+     *
      * @param request the request
      * @param response the response
      * @param paramsRequest the params request
@@ -142,7 +154,7 @@ public class WBAContentsReport extends GenericResource {
 
     /**
      * Do fill report.
-     * 
+     *
      * @param request the request
      * @param response the response
      * @param paramsRequest the params request
@@ -160,7 +172,7 @@ public class WBAContentsReport extends GenericResource {
             jobj.put("items", jarr);
         }catch (JSONException jse) {
         }
-        
+
         String websiteId = request.getParameter("site");
         WebSite webSite = SWBContext.getWebSite(websiteId);
         String webPageId = request.getParameter("section");
@@ -179,8 +191,10 @@ public class WBAContentsReport extends GenericResource {
                     obj.put("prior", portlet.getPriority());
                     obj.put("active", portlet.isActive()?"Si":"No");
                     obj.put("loc", portlet.getWorkPath());
-                    obj.put("uri", portlet.getURI());
-                    obj.put("breaken", "No");
+                    obj.put("url", hostAndPort + webPage.getUrl());
+                    obj.put("lastUpdate", df.format(webPage.getUpdated()));
+                    //obj.put("uri", portlet.getURI());
+                    //obj.put("breaken", "No");
                     jarr.put(obj);
                 }catch (JSONException jsone) {
                 }
@@ -195,7 +209,7 @@ public class WBAContentsReport extends GenericResource {
 
     /**
      * Do data store.
-     * 
+     *
      * @param node the node
      * @param jarr the jarr
      * @param lang the lang
@@ -217,8 +231,10 @@ public class WBAContentsReport extends GenericResource {
                         obj.put("prior", portlet.getPriority());
                         obj.put("active", portlet.isActive()?"Si":"No");
                         obj.put("loc", portlet.getWorkPath());
-                        obj.put("uri", portlet.getURI());
-                        obj.put("breaken", "No");
+                        obj.put("url", hostAndPort + webPage.getUrl());
+                        obj.put("lastUpdate", df.format(webPage.getUpdated()));
+                        //obj.put("uri", portlet.getURI());
+                        //obj.put("breaken", "No");
                         jarr. put(obj);
                     }catch (JSONException jsone) {
                     }
@@ -232,7 +248,7 @@ public class WBAContentsReport extends GenericResource {
 
     /**
      * Do view.
-     * 
+     *
      * @param request the request
      * @param response the response
      * @param paramsRequest the params request
@@ -312,8 +328,8 @@ public class WBAContentsReport extends GenericResource {
                 out.println("      { field:\"prior\", width:\"50px\", name:\"Prioridad\" },");
                 out.println("      { field:\"active\", width:\"50px\", name:\"Activo\" },");
                 out.println("      { field:\"loc\", width:\"100px\", name:\"Localidad\" },");
-                out.println("      { field:\"uri\", width:\"150px\", name:\"Uri\" },");
-                out.println("      { field:\"breaken\", width: \"50px\", name:\"Liga rota\" },");
+                out.println("      { field:\"url\", width:\"200px\", name:\"URL\" },");
+                out.println("      { field:\"lastUpdate\", width: \"125px\", name:\"Última modificación\" }");
                 out.println("   ];");
 
                 out.println("   gridMaster = new dojox.grid.DataGrid({");
@@ -382,7 +398,7 @@ public class WBAContentsReport extends GenericResource {
                 out.println("<legend>" + paramsRequest.getLocaleString("filter") + "</legend>");
                 out.println("<table border=\"0\" width=\"95%\" align=\"center\">");
                 out.println("<tr><td width=\"100\"></td><td width=\"200\"></td><td width=\"224\"></td><td width=\"264\"></td></tr>");
-                
+
                 out.println("<tr>");
                 out.println("<td>" + paramsRequest.getLocaleString("site") + ":</td>");
                 out.println("<td colspan=\"2\"><select id=\"wb_site\" name=\"wb_site\" onchange=\"renderTreeSectionsSite('"+url.toString()+"', 'rendertree', this.value, 'slave');\">");
@@ -431,7 +447,7 @@ public class WBAContentsReport extends GenericResource {
                 out.println("<table border=\"0\" width=\"95%\" align=\"center\">");
                 out.println("<tr>");
                 out.println("<td colspan=\"4\">");
-                out.println("<div id=\"ctnergrid\" style=\"height:400px; width:98%; margin: 1px; padding: 0px; border: 1px solid #DAE1FE;\">");
+                out.println("<div id=\"ctnergrid\" style=\"height:250px; width:98%; margin: 1px; padding: 0px; border: 1px solid #DAE1FE;\">");
                 out.println("  <div id=\"gridMaster\"></div>");
                 out.println("</div>");
                 out.println("</td>");
@@ -450,7 +466,7 @@ public class WBAContentsReport extends GenericResource {
 
     /**
      * Do rep excel.
-     * 
+     *
      * @param request the request
      * @param response the response
      * @param paramsRequest the params request
@@ -481,8 +497,8 @@ public class WBAContentsReport extends GenericResource {
         html.append("  <th>Prioridad</th>");
         html.append("  <th>Activo</th>");
         html.append("  <th>Localidad</th>");
-        html.append("  <th>Uri</th>");
-        html.append("  <th>Liga rota</th>");
+        html.append("  <th>URL</th>");
+        html.append("  <th>Última modificación</th>");
         html.append("</tr>");
 
         String websiteId = request.getParameter("site");
@@ -501,8 +517,10 @@ public class WBAContentsReport extends GenericResource {
                 html.append("  <td>"+portlet.getPriority()+"</td>");
                 html.append("  <td>"+(portlet.isActive()?"Si":"No")+"</td>");
                 html.append("  <td>"+portlet.getWorkPath()+"</td>");
-                html.append("  <td>"+portlet.getURI()+"</td>");
-                html.append("  <td>No</td>");
+                html.append("  <td>"+hostAndPort + webPage.getUrl()+"</td>");
+                html.append("  <td>" +df.format(webPage.getUpdated()) +"</td>");
+                //html.append("  <td>"+portlet.getURI()+"</td>");
+                //html.append("  <td>No</td>");
                 html.append("</tr>");
 
             }
@@ -522,7 +540,7 @@ public class WBAContentsReport extends GenericResource {
 
     /**
      * Gets the content in html.
-     * 
+     *
      * @param childs the childs
      * @param language the language
      * @return the content in html
@@ -543,8 +561,10 @@ public class WBAContentsReport extends GenericResource {
                     html.append("  <td>"+portlet.getPriority()+"</td>");
                     html.append("  <td>"+(portlet.isActive()?"Si":"No")+"</td>");
                     html.append("  <td>"+portlet.getWorkPath()+"</td>");
-                    html.append("  <td>"+portlet.getURI()+"</td>");
-                    html.append("  <td>No</td>");
+                    html.append("  <td>"+hostAndPort + webPage.getUrl()+"</td>");
+                    html.append("  <td>" +df.format(webPage.getUpdated()) +"</td>");
+                    //html.append("  <td>"+portlet.getURI()+"</td>");
+                    //html.append("  <td>No</td>");
                     html.append("</tr>");
                 }
             }
@@ -557,7 +577,7 @@ public class WBAContentsReport extends GenericResource {
 
     /**
      * Do rep xml.
-     * 
+     *
      * @param request the request
      * @param response the response
      * @param paramsRequest the params request
@@ -606,12 +626,16 @@ public class WBAContentsReport extends GenericResource {
                 Element loc = dom.createElement("location");
                 loc.appendChild(dom.createTextNode(portlet.getWorkPath()));
                 resource.appendChild(loc);
-                Element uri = dom.createElement("uri");
-                uri.appendChild(dom.createTextNode(portlet.getURI()));
-                resource.appendChild(uri);
-                Element broke = dom.createElement("broke");
-                broke.appendChild(dom.createTextNode("No"));
-                resource.appendChild(broke);
+                Element url = dom.createElement("url");
+                url.appendChild(dom.createTextNode(hostAndPort + webPage.getUrl()));
+                resource.appendChild(url);
+                //uri.appendChild(dom.createTextNode(portlet.getURI()));
+                //resource.appendChild(uri);
+                Element lastUpdate = dom.createElement("lastUpdate");
+                lastUpdate.appendChild(dom.createTextNode(df.format(webPage.getUpdated())));
+                resource.appendChild(lastUpdate);
+                //broke.appendChild(dom.createTextNode("No"));
+                //resource.appendChild(broke);
             }
         }
 
@@ -626,7 +650,7 @@ public class WBAContentsReport extends GenericResource {
 
     /**
      * Gets the content in xml.
-     * 
+     *
      * @param dom the dom
      * @param childs the childs
      * @param language the language
@@ -665,12 +689,16 @@ public class WBAContentsReport extends GenericResource {
                     Element loc = dom.createElement("location");
                     loc.appendChild(dom.createTextNode(portlet.getWorkPath()));
                     resource.appendChild(loc);
-                    Element uri = dom.createElement("uri");
-                    uri.appendChild(dom.createTextNode(portlet.getURI()));
-                    resource.appendChild(uri);
-                    Element broke = dom.createElement("broke");
-                    broke.appendChild(dom.createTextNode("No"));
-                    resource.appendChild(broke);
+                    Element url = dom.createElement("url");
+                    url.appendChild(dom.createTextNode(hostAndPort + webPage.getUrl()));
+                    resource.appendChild(url);
+                    //uri.appendChild(dom.createTextNode(portlet.getURI()));
+                    //resource.appendChild(uri);
+                    Element lastUpdate = dom.createElement("lastUpdate");
+                    lastUpdate.appendChild(dom.createTextNode(df.format(webPage.getUpdated())));
+                    resource.appendChild(lastUpdate);
+                    //broke.appendChild(dom.createTextNode("No"));
+                    //resource.appendChild(broke);
                 }
             }
             if(webPage.listChilds().hasNext()) {
@@ -682,7 +710,7 @@ public class WBAContentsReport extends GenericResource {
 
     /**
      * Checks for broken links.
-     * 
+     *
      * @param p_datapage the p_datapage
      * @param p_page the p_page
      * @param p_content the p_content
@@ -721,7 +749,7 @@ public class WBAContentsReport extends GenericResource {
      * The Class Bool.
      */
     private class Bool {
-        
+
         /** The first. */
         private boolean first;
 
@@ -734,7 +762,7 @@ public class WBAContentsReport extends GenericResource {
 
         /**
          * Checks if is first.
-         * 
+         *
          * @return true, if is first
          */
         public boolean isFirst() {
