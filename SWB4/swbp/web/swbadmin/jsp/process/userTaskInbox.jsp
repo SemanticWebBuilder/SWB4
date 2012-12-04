@@ -242,8 +242,6 @@ if (paramRequest.getMode().equals(paramRequest.Mode_VIEW)) {
                 </li>
                 <li>
                     <b>Ordenamiento&nbsp;</b>
-                </li>
-                <li>
                     <select onchange="loadPageUrl('<%=optsUrl.toString()%>', 'sort', this.options[this.selectedIndex].value)">
                         <option value="date" <%=sortType.equals("date")?"selected":""%>>Por fecha</option>
                         <option value="name" <%=sortType.equals("name")?"selected":""%>>Por proceso</option>
@@ -251,8 +249,6 @@ if (paramRequest.getMode().equals(paramRequest.Mode_VIEW)) {
                 </li>
                 <li>
                     <b>Filtrado&nbsp;</b>
-                </li>
-                <li>
                     <%
                     optsUrl = paramRequest.getRenderUrl();
                     optsUrl.setParameter("sort", sortType);
@@ -293,9 +289,7 @@ if (paramRequest.getMode().equals(paramRequest.Mode_VIEW)) {
                             }
                         }
                         %>
-                    </select>
-                </li>
-                <li>
+                    </select>&nbsp;
                     <%
                     optsUrl = paramRequest.getRenderUrl();
                     optsUrl.setParameter("sort", sortType);
