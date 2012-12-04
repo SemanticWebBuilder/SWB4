@@ -1,25 +1,28 @@
-/*
- * SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración,
- * colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de
- * información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes
- * fuentes, donde a la información se le asigna un significado, de forma que pueda ser interpretada y
- * procesada por personas y/o sistemas, es una creación original del Fondo de Información y Documentación
- * para la Industria INFOTEC, cuyo registro se encuentra actualmente en trámite.
- *
- * INFOTEC pone a su disposición la herramienta SemanticWebBuilder a través de su licenciamiento abierto al público (‘open source’),
- * en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición;
- * aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software,
- * todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización
- * del SemanticWebBuilder 4.0.
- *
- * INFOTEC no otorga garantía sobre SemanticWebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita,
- * siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar
- * de la misma.
- *
- * Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente
- * dirección electrónica:
- *  http://www.semanticwebbuilder.org
- */
+/**  
+* SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración, 
+* colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de 
+* información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes 
+* fuentes, donde a la información se le asigna un significado, de forma que pueda ser interpretada y 
+* procesada por personas y/o sistemas, es una creación original del Fondo de Información y Documentación 
+* para la Industria INFOTEC, cuyo registro se encuentra actualmente en trámite. 
+* 
+* INFOTEC pone a su disposición la herramienta SemanticWebBuilder a través de su licenciamiento abierto al público (‘open source’), 
+* en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición; 
+* aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software, 
+* todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización 
+* del SemanticWebBuilder 4.0. 
+* 
+* INFOTEC no otorga garantía sobre SemanticWebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita, 
+* siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar 
+* de la misma. 
+* 
+* Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente 
+* dirección electrónica: 
+*  http://www.semanticwebbuilder.org
+**/ 
+ 
+
+
 package org.semanticwb.portal.admin.resources.reports;
 
 import java.io.IOException;
@@ -52,6 +55,10 @@ import org.semanticwb.portal.admin.resources.reports.jrresources.data.JRGlobalAc
 import org.semanticwb.portal.api.SWBResourceURL;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 // TODO: Auto-generated Javadoc
 /** Esta clase genera el reporte de sesiones, toma la informaci�n de los
@@ -129,6 +136,8 @@ public class WBASessionReport extends GenericResource {
             doRepPdf(request,response,paramsRequest);
         }else if(paramsRequest.getMode().equals("rtf")) {
             doRepRtf(request,response,paramsRequest);
+        }else if(paramsRequest.getMode().equalsIgnoreCase("fillgridmtr")) {
+            doFillReport(request,response,paramsRequest);
         }else {
             super.processRequest(request, response, paramsRequest);
         }
@@ -216,10 +225,43 @@ public class WBASessionReport extends GenericResource {
                 url.setCallMethod(url.Call_DIRECT);
 
                 // javascript
-                out.println("<script type=\"text/javascript\">");
-                
+                out.println("<script type=\"text/javascript\">");                
                 out.println("dojo.require(\"dijit.form.DateTextBox\");");
+
+                out.println("dojo.require(\"dojox.grid.DataGrid\");");//--
+                out.println("dojo.require(\"dojo.data.ItemFileReadStore\");");//--
                 out.println("dojo.addOnLoad(doBlockade);");
+
+                out.println("function fillGrid(grid, uri) {");
+                out.println("   grid.store = new dojo.data.ItemFileReadStore({url: uri});");
+                out.println("   grid._refresh();");
+                out.println("}");
+
+                out.println("var layout= null;");
+                out.println("var jStrMaster = null;");
+                out.println("var gridMaster = null;");
+                out.println("var gridResources = null;");
+
+                out.println("dojo.addOnLoad(function() {");
+                out.println("   layout= [");
+                out.println("      { field:\"repositorio\", width:\"100px\", name:\"Repositorio\" },");
+                out.println("      { field:\"anio\", width:\"100px\", name:\"Año\" },");
+                out.println("      { field:\"mes\", width:\"100px\", name:\"Mes\" },");
+                if(rtype.equals("0")) { //Reporte diario
+                    out.println("  { field:\"dia\", width:\"100px\", name:\"Día\" },");
+                }
+                out.println("      { field:\"accesos\", width:\"100px\", name:\"Accesos\" },");
+                out.println("   ];");
+
+                out.println("   gridMaster = new dojox.grid.DataGrid({");
+                out.println("      id: \"gridMaster\",");
+                out.println("      structure: layout,");
+                out.println("      rowSelector: \"10px\",");
+                out.println("      rowsPerPage: \"15\"");
+                out.println("   }, \"gridMaster\");");
+                out.println("   gridMaster.startup();");
+                out.println("});");
+                //--
                 
                 out.println("function getParams(accion) {");
                 out.println("   var params = '?';");
@@ -247,22 +289,6 @@ public class WBASessionReport extends GenericResource {
                 out.println("   }");
                 out.println("   return params;");
                 out.println("}");
-                
-                /*out.println("function validate(accion) {");
-                out.println("    var fecha1 = null;");
-                out.println("    var fecha2 = null;");
-                out.println("    var fecha3 = null;");
-                out.println("    if(accion=='0') {");
-                out.println("       fecha1 = new String(dojo.byId('wb_fecha1').value);");
-                out.println("       fecha2 = new String(dojo.byId('wb_fecha11').value);");
-                out.println("       fecha3 = new String(dojo.byId('wb_fecha12').value);");
-                out.println("       if( (fecha1.length==0) && (fecha2.length==0 || fecha3.length==0) ) {");
-                out.println("          alert('Especifique la fecha o el rango de fechas que desea consultar');");
-                out.println("          return false;");
-                out.println("       }");
-                out.println("    }");
-                out.println("    return true;");
-                out.println("}");*/
                 
                 out.println("function doXml(accion, size) { ");
                 /*out.println("   if(validate(accion)) {");*/
@@ -314,11 +340,11 @@ public class WBASessionReport extends GenericResource {
                 out.println("     return strType;");
                 out.println(" }");
                 
-                out.println(" function doApply() { ");
-                /*out.println("   if(validate(dojo.byId('wb_rtype').value)) {");*/
-                out.println("      dojo.byId('frmrep').submit(); ");
-                /*out.println("   }");*/
-                out.println(" }");                
+                out.println("function doApply() {");
+                out.println("   var grid = dijit.byId('gridMaster');");
+                out.println("   var params = getParams("+ rtype + ");");
+                out.println("   fillGrid(grid, '"+url.setMode("fillgridmtr")+"'+params);");
+                out.println("}");
 
                 out.println("function doBlockade() {");
                 out.println("  if(window.document.frmrep.wb_rep_type) {");
@@ -427,6 +453,22 @@ public class WBASessionReport extends GenericResource {
                     out.println("</table>");
                     out.println("</fieldset>");
                     out.println("</form>");
+
+                    //--
+                    out.println("<fieldset>");
+                    out.println("<table border=\"0\" width=\"95%\" align=\"center\">");
+                    out.println("<tr>");
+                    out.println("<td colspan=\"4\">");
+                    out.println("<div id=\"ctnergrid\" style=\"height:500px; width:98%; margin: 1px; padding: 0px; border: 1px solid #DAE1FE;\">");
+                    out.println("  <div id=\"gridMaster\"></div>");
+                    out.println("</div>");
+                    out.println("</td>");
+                    out.println("</tr>");
+                    out.println("</table>");
+                    out.println("</fieldset>");
+                    out.println("</div>");
+                    //--
+                    /*
                     if(request.getParameter("wb_rtype")!=null && repositoryName!=null ) {
                         out.println("<fieldset>");
                         out.println("<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"98%\">");                            
@@ -450,7 +492,7 @@ public class WBASessionReport extends GenericResource {
                         out.println("<tr><td>&nbsp;</td></tr>");
                         out.println("</table>");
                         out.println("</fieldset>");
-                    }
+                    }*/
                 }else { // REPORTE MENSUAL
                     GregorianCalendar gc_now = new GregorianCalendar();
                     int year13 = request.getParameter("wb_year13")==null ? gc_now.get(Calendar.YEAR):Integer.parseInt(request.getParameter("wb_year13"));
@@ -486,6 +528,23 @@ public class WBASessionReport extends GenericResource {
                     out.println("</table>");
                     out.println("</fieldset>");
                     out.println("</form>");
+
+                    //--
+                    out.println("<fieldset>");
+                    out.println("<table border=\"0\" width=\"95%\" align=\"center\">");
+                    out.println("<tr>");
+                    out.println("<td colspan=\"4\">");
+                    out.println("<div id=\"ctnergrid\" style=\"height:400px; width:98%; margin: 1px; padding: 0px; border: 1px solid #DAE1FE;\">");
+                    out.println("  <div id=\"gridMaster\"></div>");
+                    out.println("</div>");
+                    out.println("</td>");
+                    out.println("</tr>");
+                    out.println("</table>");
+                    out.println("</fieldset>");
+                    out.println("</div>");
+                    //--
+
+                    /*
                     if(request.getParameter("wb_rtype")!=null && repositoryName!=null ) {
                         out.println("<fieldset>");
                         out.println("<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"98%\">");
@@ -511,7 +570,7 @@ public class WBASessionReport extends GenericResource {
                         out.println("<tr><td>&nbsp;</td></tr>");
                         out.println("</table>");
                         out.println("</fieldset>");
-                    }
+                    }*/
                 }
                 out.println("</div>");
             }
@@ -623,7 +682,8 @@ public class WBASessionReport extends GenericResource {
             if(rtype.equals("0")) {  // REPORTE DIARIO
                 WBAFilterReportBean filter = buildFilter(request, paramsRequest);
                 JRDataSourceable dataDetail = new JRSessionDataDetail(filter);
-                JasperTemplate jasperTemplate = JasperTemplate.SESSION_DAILY;                
+                //JasperTemplate jasperTemplate = JasperTemplate.SESSION_DAILY;
+                JasperTemplate jasperTemplate = JasperTemplate.SESSION_DAILY_EXCEL;
                 try {
                     JRResource jrResource = new JRXlsResource(jasperTemplate.getTemplatePath(), params, dataDetail.orderJRReport());
                     jrResource.prepareReport();
@@ -640,7 +700,8 @@ public class WBASessionReport extends GenericResource {
                     filter. setType(I_REPORT_TYPE);
                     filter.setYearI(Integer.parseInt(s_year_13));
                     JRDataSourceable dataDetail = new JRSessionDataDetail(filter);
-                    JasperTemplate jasperTemplate = JasperTemplate.SESSION_MONTHLY;                        
+                    //JasperTemplate jasperTemplate = JasperTemplate.SESSION_MONTHLY;
+                    JasperTemplate jasperTemplate = JasperTemplate.SESSION_MONTHLY_EXCEL;
                     try {
                         JRResource jrResource = new JRXlsResource(jasperTemplate.getTemplatePath(), params, dataDetail.orderJRReport());
                         jrResource.prepareReport();
@@ -1212,5 +1273,64 @@ public class WBASessionReport extends GenericResource {
         }
         return filterReportBean;
     }
-}
 
+    private void doFillReport(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
+        response.setContentType("text/json;charset=iso-8859-1");
+        JSONObject jobj = new JSONObject();
+        JSONArray jarr = new JSONArray();
+        try {
+            jobj.put("label", "sect");
+            jobj.put("items", jarr);
+        }catch (JSONException jse) {
+        }
+
+        GregorianCalendar gc_now = new GregorianCalendar();
+        String wb_rtype = request.getParameter("wb_rtype");
+
+        JRDataSourceable dataDetail = null;
+
+        if(wb_rtype.equals("0")) { //Daily Report
+            try{
+                WBAFilterReportBean filter = buildFilter(request, paramsRequest);
+                dataDetail = new JRSessionDataDetail(filter);
+            }catch(IncompleteFilterException ife) {
+                log.error("Error on method doFillReport() ", ife);
+            }
+        }else{ //Monthly Report
+            WBAFilterReportBean filter = new WBAFilterReportBean();
+            String repositoryName = request.getParameter("wb_repository");
+            int year13 = request.getParameter("wb_year13")==null ? gc_now.get(Calendar.YEAR):Integer.parseInt(request.getParameter("wb_year13"));
+            filter.setSite(repositoryName);
+            filter.setIdaux(S_REPORT_IDAUX);
+            filter. setType(I_REPORT_TYPE);
+            filter.setYearI(year13);
+            dataDetail = new JRSessionDataDetail(filter);
+        }
+
+        try {
+            JRBeanCollectionDataSource dataSource = dataDetail.orderJRReport();
+            Collection<SWBRecHit> collection = dataSource.getData();
+            Iterator<SWBRecHit> iterator = collection.iterator();
+
+            while(iterator.hasNext()){
+                JSONObject obj = new JSONObject();
+                SWBRecHit recHit = iterator.next();
+                try {                    
+                    obj.put("repositorio", recHit.getTopicmap());
+                    obj.put("anio", recHit.getYear());
+                    obj.put("mes", recHit.getMonth());
+                    if(wb_rtype.equals("0")){
+                        obj.put("dia", recHit.getDay());
+                    }
+                    obj.put("accesos", recHit.getHits());
+                    jarr.put(obj);
+                }catch (JSONException jsone) {
+                    log.error("Error on method doFillReport() ",jsone);
+                }
+            }
+        }catch (Exception e) {
+            log.error("Error on method doFillReport() ", e);
+        }
+        response.getOutputStream().println(jobj.toString());
+    }
+}
