@@ -128,7 +128,7 @@ public class MigrateOfficeContents
         }
         else
         {
-            log.info("Iniciando limpiado de directorios de trabajo");
+            log.debug("Iniciando limpiado de directorios de trabajo");
             SWBUtils.IO.copyStructure(source, newpath.getAbsolutePath() + "/" + siteid + "/");
             SWBUtils.IO.removeDirectory(source);
             source = SWBPortal.getWorkPath() + "/" + "models/" + siteid + "_rep/";
