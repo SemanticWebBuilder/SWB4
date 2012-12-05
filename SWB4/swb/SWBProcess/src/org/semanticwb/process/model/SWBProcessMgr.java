@@ -166,16 +166,22 @@ public class SWBProcessMgr
         return ret;
     }
     
+    /**
+     * Obtiene una lista de las instancias de tareas de usuario relacionadas con la instancia de proceso proporcionada.
+     * @param pint Instancia de proceso.
+     * @param user Usuario.
+     * @return Lista de las instancias de tareas de usuario relacionadas con la instancia de proceso proporcionada
+     */
     public static List<FlowNodeInstance> getActiveUserTaskInstances(ProcessInstance pint, User user)
     {
         ArrayList ret=new ArrayList();
-        //Obtener todos los nodos de flujo activos
+        //Obtener todos los nodos de flujo activos del proceso
         Iterator<FlowNodeInstance> it = getActiveUserTaskInstances(pint.getProcessSite(), pint.getProcessType()).iterator();
                 
         while(it.hasNext())
         {
             FlowNodeInstance actins=it.next();
-            if(actins.haveAccess(user))
+            if(actins.haveAccess(user) && actins.getProcessInstance().equals(pint))
             {
                 ret.add(actins);
             }                    
