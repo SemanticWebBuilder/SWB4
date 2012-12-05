@@ -236,88 +236,18 @@ public class UserTaskInboxResource extends org.semanticwb.process.resources.task
         }
         
         //Obtener todas las tareas de usuario por el estatus solicitado
-        //TODO: Agregar código para cuando solicitan todos los estados
-        ArrayList<FlowNodeInstance> userTaskInstances = SWBProcessMgr.getUserTaskInstancesWithStatus((ProcessSite)site, statusFilter, p);//SWBProcessMgr.getUserTaskInstancesWithStatus((ProcessSite)site, statusFilter);
+        ArrayList<FlowNodeInstance> userTaskInstances = SWBProcessMgr.getUserTaskInstancesWithStatus((ProcessSite)site, statusFilter, p);
         
         //Iniciar el filtrado
         if (userTaskInstances != null) {
             Iterator<FlowNodeInstance> fnInstances = userTaskInstances.iterator();
             while (fnInstances.hasNext()) {
                 FlowNodeInstance flowNodeInstance = fnInstances.next();
-                if (!filterUserTaskInstance(flowNodeInstance, user, statusFilter)) {
+                if (validUserTaskInstance(flowNodeInstance, user, statusFilter)) {
                     unpaged.add(flowNodeInstance);
                 }
             }
         }
-        
-//        Iterator<Process> processes = Process.ClassMgr.listProcesses(site);
-//        while (processes.hasNext()) {
-//            Process process = processes.next();
-//            if (process.isActive()) {
-//                Iterator<ProcessInstance> processInstances = process.listProcessInstances();
-//                while (processInstances.hasNext()) {
-//                    ProcessInstance processInstance = processInstances.next();
-//                    Iterator<FlowNodeInstance> nodeInstances = null;
-//
-//                    if (isFilterByGroup()) { //Si hay que filtrar por grupo de usuarios
-//                        UserGroup iug = processInstance.getOwnerUserGroup();
-//                        UserGroup uug = user.getUserGroup();
-//
-//                        if (iug != null && uug != null) { //Si la instancia y el usuario tienen grupo
-//                            if (user.getUserGroup().getURI().equals(processInstance.getOwnerUserGroup().getURI())) { //Si tienen el mismo grupo
-//                                nodeInstances = processInstance.listAllFlowNodeInstance();
-//                            }
-//                        } else if (iug == null && uug == null) { //Si el proceso y el usuario no tienen grupo
-//                            nodeInstances = processInstance.listAllFlowNodeInstance();
-//                        }
-//                    } else { //Si no hay que filtrar por grupo de usuarios
-//                        nodeInstances = processInstance.listAllFlowNodeInstance();
-//                    }
-//
-//                    if (nodeInstances != null) {
-//                        while (nodeInstances.hasNext()) {
-//                            FlowNodeInstance flowNodeInstance = nodeInstances.next();
-//                            if (flowNodeInstance.getFlowNodeType() instanceof UserTask) {
-//                                UserTask utask = (UserTask) flowNodeInstance.getFlowNodeType();
-//                                boolean canAccess = false;
-//                                User owner = flowNodeInstance.getAssignedto();
-//                                
-//                                if (owner != null) { //Tiene propieario
-//                                    if (owner.getURI().equals(user.getURI())) {
-//                                        canAccess = true;
-//                                    }
-//                                } else if (user.haveAccess(utask)) { //No tiene propietario
-//                                    GraphicalElement parent = utask.getParent();
-//                                    if (parent == null || parent instanceof Pool || (parent != null && parent instanceof Lane && user.haveAccess(parent))) {
-//                                        canAccess = true;
-//                                    }
-//                                }
-//                                
-//                                if (canAccess) {
-//                                    if (statusFilter > 0) {
-//                                        if (p != null) {
-//                                            if (flowNodeInstance.getStatus() == statusFilter && utask.getProcess().getURI().equals(p.getURI())) {
-//                                                t_instances.add(flowNodeInstance);
-//                                            }
-//                                        } else {
-//                                            if (flowNodeInstance.getStatus() == statusFilter) {
-//                                                t_instances.add(flowNodeInstance);
-//                                            }
-//                                        }
-//                                    } else if (p != null) {
-//                                        if (utask.getProcess().getURI().equals(p.getURI())) {
-//                                            t_instances.add(flowNodeInstance);
-//                                        }
-//                                    } else {
-//                                        t_instances.add(flowNodeInstance);
-//                                    }
-//                                }
-//                            }
-//                        }
-//                    }
-//                }
-//            }
-//        }
 
         //Realizar Ordenamiento de instancias
         if (sortType == null || sortType.trim().equals("")) {
@@ -363,7 +293,7 @@ public class UserTaskInboxResource extends org.semanticwb.process.resources.task
         return instances;
     }
     
-    private boolean filterUserTaskInstance(FlowNodeInstance fni, User user, int statusFilter) {
+    private boolean validUserTaskInstance(FlowNodeInstance fni, User user, int statusFilter) {
         boolean hasGroup = false;
         boolean hasStatus = false;
         boolean canAccess = false;
@@ -376,7 +306,7 @@ public class UserTaskInboxResource extends org.semanticwb.process.resources.task
         
         canAccess = fni.haveAccess(user);
         
-        System.out.println(fni+" "+pType+" "+canAccess);
+        //System.out.println(fni+" "+pType+" "+canAccess);
 
         if (canAccess) {
             //Verificar filtrado por grupo
@@ -391,6 +321,8 @@ public class UserTaskInboxResource extends org.semanticwb.process.resources.task
                 } else if (iug == null && uug == null) { //Si el proceso y el usuario no tienen grupo
                     hasGroup = true;
                 }
+            } else {
+                hasGroup = true;
             }
 
             //Verificar filtrado por estatus
