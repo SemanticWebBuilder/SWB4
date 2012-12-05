@@ -330,6 +330,7 @@ public class WBADeviceReport extends GenericResource {
                 out.println("   gridMaster = new dojox.grid.DataGrid({");
                 out.println("      id: \"gridMaster\",");
                 out.println("      structure: layout,");
+                out.println("      autoWidth: true,");
                 out.println("      rowSelector: \"10px\",");
                 out.println("      rowsPerPage: \"15\"");
                 out.println("   }, \"gridMaster\");");
@@ -562,17 +563,20 @@ public class WBADeviceReport extends GenericResource {
                     out.println("</fieldset>");
                     out.println("</form>");
                     
-                    out.println("<fieldset>");
-                    out.println("<table border=\"0\" width=\"95%\" align=\"center\">");
-                    out.println("<tr>");
-                    out.println("<td colspan=\"4\">");
-                    out.println("<div id=\"ctnergrid\" style=\"height:600px; width:98%; margin: 1px; padding: 0px; border: 1px solid #DAE1FE;\">");
-                    out.println("  <div id=\"gridMaster\"></div>");
+//                    out.println("<fieldset>");
+//                    out.println("<table border=\"0\" width=\"95%\" align=\"center\">");
+//                    out.println("<tr>");
+//                    out.println("<td colspan=\"4\">");
+//                    out.println("<div id=\"ctnergrid\" style=\"height:600px; width:98%; margin: 1px; padding: 0px; border: 1px solid #DAE1FE;\">");
+//                    out.println("  <div id=\"gridMaster\"></div>");
+//                    out.println("</div>");
+                    out.println("<div id=\"ctnergrid\" style=\"height:350px; width:98%; margin: 1px; padding: 0px; border: 1px solid #DAE1FE;\">");
+                    out.println("  <div id=\"gridMaster\" jsid=\"gridMaster\"></div>");
                     out.println("</div>");
-                    out.println("</td>");
-                    out.println("</tr>");
-                    out.println("</table>");
-                    out.println("</fieldset>");
+//                    out.println("</td>");
+//                    out.println("</tr>");
+//                    out.println("</table>");
+//                    out.println("</fieldset>");
                     out.println("</div>");
                 }else { // REPORTE MENSUAL                    
                     int year13 = request.getParameter("wb_year13")==null ? gc_now.get(Calendar.YEAR):Integer.parseInt(request.getParameter("wb_year13"));
@@ -609,17 +613,20 @@ public class WBADeviceReport extends GenericResource {
                     out.println("</fieldset>");
                     out.println("</form>");
                     
-                    out.println("<fieldset>");
-                    out.println("<table border=\"0\" width=\"95%\" align=\"center\">");
-                    out.println("<tr>");
-                    out.println("<td colspan=\"4\">");
-                    out.println("<div id=\"ctnergrid\" style=\"height:400px; width:98%; margin: 1px; padding: 0px; border: 1px solid #DAE1FE;\">");
-                    out.println("  <div id=\"gridMaster\"></div>");
+//                    out.println("<fieldset>");
+//                    out.println("<table border=\"0\" width=\"95%\" align=\"center\">");
+//                    out.println("<tr>");
+//                    out.println("<td colspan=\"4\">");
+//                    out.println("<div id=\"ctnergrid\" style=\"height:400px; width:98%; margin: 1px; padding: 0px; border: 1px solid #DAE1FE;\">");
+//                    out.println("  <div id=\"gridMaster\"></div>");
+//                    out.println("</div>");
+                    out.println("<div id=\"ctnergrid\" style=\"height:350px; width:98%; margin: 1px; padding: 0px; border: 1px solid #DAE1FE;\">");
+                    out.println("  <div id=\"gridMaster\" jsid=\"gridMaster\"></div>");
                     out.println("</div>");
-                    out.println("</td>");
-                    out.println("</tr>");
-                    out.println("</table>");
-                    out.println("</fieldset>");
+//                    out.println("</td>");
+//                    out.println("</tr>");
+//                    out.println("</table>");
+//                    out.println("</fieldset>");
                     out.println("</div>");
                 }
                 out.println("</div>");
