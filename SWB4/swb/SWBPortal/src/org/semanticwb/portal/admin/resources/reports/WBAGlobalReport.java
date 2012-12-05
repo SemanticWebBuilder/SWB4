@@ -248,6 +248,7 @@ public class WBAGlobalReport extends GenericResource {
                 out.println("   gridMaster = new dojox.grid.DataGrid({");
                 out.println("      id: \"gridMaster\",");
                 out.println("      structure: layout,");
+                out.println("      autoWidth: true,");
                 out.println("      rowSelector: \"10px\",");
                 out.println("      rowsPerPage: \"15\"");
                 out.println("   }, \"gridMaster\");");
@@ -283,26 +284,6 @@ public class WBAGlobalReport extends GenericResource {
                 out.println("   }");
                 out.println("   return params;");
                 out.println("}");
-
-                /*out.println("function validate(tiporep, dategrp) {");
-                out.println("    if(tiporep=='0') {");
-                out.println("       if(dategrp=='0') {");
-                out.println("           var fecha1 = new String(dojo.byId('wb_fecha1').value);");
-                out.println("           if( (fecha1.length==0) && (fecha2.length==0 || fecha3.length==0) ) {");
-                out.println("               alert('Especifique la fecha que desea consultar');");
-                out.println("               return false;");
-                out.println("           }");
-                out.println("       }else if(dategrp=='1') {");
-                out.println("           var fecha2 = new String(dojo.byId('wb_fecha11').value);");
-                out.println("           var fecha3 = new String(dojo.byId('wb_fecha12').value);");
-                out.println("           if( fecha2.length==0 || fecha3.length==0 ) {");
-                out.println("               alert('Especifique el rango de fechas que desea consultar');");
-                out.println("               return false;");
-                out.println("           }");
-                out.println("       }");
-                out.println("    }");
-                out.println("    return true;");
-                out.println("}");*/
 
                 out.println("function doXml(accion, size) { ");
                 /*out.println("   if(validate(accion)) {");*/
@@ -468,17 +449,17 @@ public class WBAGlobalReport extends GenericResource {
                     out.println("</fieldset>");
                     out.println("</form>");
                     
-                    out.println("<fieldset>");
-                    out.println("<table border=\"0\" width=\"95%\" align=\"center\">");
-                    out.println("<tr>");
-                    out.println("<td colspan=\"4\">");
-                    out.println("<div id=\"ctnergrid\" style=\"height:400px; width:98%; margin: 1px; padding: 0px; border: 1px solid #DAE1FE;\">");
-                    out.println("  <div id=\"gridMaster\"></div>");
+//                    out.println("<fieldset>");
+//                    out.println("<table border=\"0\" width=\"95%\" align=\"center\">");
+//                    out.println("<tr>");
+//                    out.println("<td colspan=\"4\">");
+                    out.println("<div id=\"ctnergrid\" style=\"height:350px; width:98%; margin: 1px; padding: 0px; border: 1px solid #DAE1FE;\">");
+                    out.println("  <div id=\"gridMaster\" jsid=\"gridMaster\"></div>");
                     out.println("</div>");
-                    out.println("</td>");
-                    out.println("</tr>");
-                    out.println("</table>");
-                    out.println("</fieldset>");
+//                    out.println("</td>");
+//                    out.println("</tr>");
+//                    out.println("</table>");
+//                    out.println("</fieldset>");
                     out.println("</div>");
                 }else { // REPORTE MENSUAL
                     GregorianCalendar gc_now = new GregorianCalendar();
@@ -516,17 +497,20 @@ public class WBAGlobalReport extends GenericResource {
                     out.println("</fieldset>");
                     out.println("</form>");
                     
-                    out.println("<fieldset>");
-                    out.println("<table border=\"0\" width=\"95%\" align=\"center\">");
-                    out.println("<tr>");
-                    out.println("<td colspan=\"4\">");
-                    out.println("<div id=\"ctnergrid\" style=\"height:400px; width:98%; margin: 1px; padding: 0px; border: 1px solid #DAE1FE;\">");
-                    out.println("  <div id=\"gridMaster\"></div>");
+//                    out.println("<fieldset>");
+//                    out.println("<table border=\"0\" width=\"95%\" align=\"center\">");
+//                    out.println("<tr>");
+//                    out.println("<td colspan=\"4\">");
+//                    out.println("<div id=\"ctnergrid\" style=\"height:30%; width:98%; margin: 1px; padding: 0px; border: 1px solid #DAE1FE;\">");
+//                    out.println("  <div id=\"gridMaster\"></div>");
+//                    out.println("</div>");
+                    out.println("<div id=\"ctnergrid\" style=\"height:350px; width:98%; margin: 1px; padding: 0px; border: 1px solid #DAE1FE;\">");
+                    out.println("  <div id=\"gridMaster\" jsid=\"gridMaster\"></div>");
                     out.println("</div>");
-                    out.println("</td>");
-                    out.println("</tr>");
-                    out.println("</table>");
-                    out.println("</fieldset>");
+//                    out.println("</td>");
+//                    out.println("</tr>");
+//                    out.println("</table>");
+//                    out.println("</fieldset>");
                     out.println("</div>");
                 }
                 out.println("</div>");
