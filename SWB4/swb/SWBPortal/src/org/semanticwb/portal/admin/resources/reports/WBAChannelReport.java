@@ -117,9 +117,10 @@ public class WBAChannelReport extends GenericResource {
      */
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
+System.out.println("\n\n----------------\nchannel report... doview");
         final int I_ACCESS = 0;
         Resource base = getResourceBase();
-        StringBuffer sb_ret = new StringBuffer();
+        StringBuilder sb_ret = new StringBuilder();
 
         ChannelReportMgr rm = ChannelReportMgr.getInstance();
         if((null!=rm) && (!rm.isRunning())) {
@@ -810,6 +811,9 @@ class Node {
     }
 }
 
+
+
+
 class PortalTree {
     Node root;
 
@@ -823,6 +827,12 @@ class PortalTree {
 
     Node getRoot() {
         return root;
+    }
+    
+    void insert(Node root) {
+        if(this.root==null) {
+            this.root = root;
+        }
     }
 
     void insert(Node parent, Node child) {
@@ -882,7 +892,7 @@ class PortalTree {
             preorden(child, l);
         }
     }
-
+    
     public void print(Node node) {
         System.out.println("section= "+node.id+", hits="+node.hits+", acumulate="+node.acumulate);
     }
@@ -1006,6 +1016,7 @@ class ChannelReportGenerator extends Thread {
             parent.setHits((Long)hits.get(page.getId()));
             hits.remove(page.getId());
         }
+        ptree.insert(parent);
 
         Iterator<WebPage> childs = page.listChilds();
         while(childs.hasNext()) {
@@ -1052,7 +1063,7 @@ class ChannelReportGenerator extends Thread {
         status = "Initializing";
         initTime = System.currentTimeMillis();
         
-        if(webSite != null) {                        
+        if(webSite != null) {
             status = "Reading Logs";
             getHardHits();
             PortalTree ptree = new PortalTree();
