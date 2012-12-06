@@ -122,9 +122,9 @@ public class MigrateOfficeContents
         File fileSource=new File(source);
         log.debug("Ruta temporal de migración SWB-WB3.2 (source) "+ fileSource.getCanonicalPath());
         log.debug("Ruta final de migración SWB (newpath) "+ newpath.getCanonicalPath());
-        if(fileSource.equals(newpath))
+        if(fileSource.equals(newpath) || newpath.getAbsolutePath().startsWith(fileSource.getAbsolutePath()))
         {
-            log.debug("Las rutas newpath y source son iguales, no se realizará limpiado de directorio");
+            log.debug("Las rutas newpath y source son iguales o la ruta nueva (newpath) esta contenida dentro de la ruta de migración (source), no se realizará limpiado de directorio");
         }
         else
         {
