@@ -85,7 +85,7 @@ public class WBAAccessLogReport extends GenericResource {
      */
     @Override
     public void render(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException{
-        if(!paramsRequest.WinState_MINIMIZED.equals(paramsRequest.getWindowState())) {
+        if(!SWBParamRequest.WinState_MINIMIZED.equals(paramsRequest.getWindowState())) {
             processRequest(request, response, paramsRequest);
         }
     }
@@ -372,8 +372,7 @@ public class WBAAccessLogReport extends GenericResource {
         Resource base = paramsRequest.getResourceBase();
         StringBuilder ret = new StringBuilder();
 
-        HashMap hm_sites = new HashMap();
-
+        HashMap<String, String> hm_sites = new HashMap<String, String>();
         try {
             // Evaluates if there are sites
             Iterator<WebSite> webSites = SWBContext.listWebSites();
@@ -385,7 +384,7 @@ public class WBAAccessLogReport extends GenericResource {
                 }
             }
             // If there are sites continue
-            if(hm_sites.size() > 0) {
+            if( !hm_sites.isEmpty() ) {
                 //String address = paramsRequest.getWebPage().getUrl();
                 String websiteId = request.getParameter("wb_site")==null ? (String)hm_sites.keySet().iterator().next():request.getParameter("wb_site");
                 String repositoryName = SWBContext.getWebSite(websiteId).getUserRepository().getDisplayTitle(paramsRequest.getUser().getLanguage());
@@ -394,7 +393,7 @@ public class WBAAccessLogReport extends GenericResource {
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
                 SWBResourceURL url = paramsRequest.getRenderUrl();
-                url.setCallMethod(url.Call_DIRECT);
+                url.setCallMethod(SWBResourceURL.Call_DIRECT);
 
                 // javascript
                 ret.append("<script type=\"text/javascript\">\n");
