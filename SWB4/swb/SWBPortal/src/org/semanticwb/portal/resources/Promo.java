@@ -1018,7 +1018,7 @@ public class Promo extends GenericResource {
         PrintWriter out = response.getWriter();
 
         String action = null != request.getParameter("act") && !"".equals(request.getParameter("act").trim()) ? request.getParameter("act").trim() : paramRequest.getAction();
-        if(paramRequest.Action_ADD.equals(action) || paramRequest.Action_EDIT.equals(action)) {
+        if(SWBParamRequest.Action_ADD.equals(action) || SWBParamRequest.Action_EDIT.equals(action)) {
             out.println(getForm(request, paramRequest));
         }else if(Action_UPDATE.equals(action)) {
             out.println("<script type=\"text/javascript\" language=\"JavaScript\">");
@@ -1034,7 +1034,7 @@ public class Promo extends GenericResource {
         PrintWriter out = response.getWriter();
         
         String action = null != request.getParameter("act") && !"".equals(request.getParameter("act").trim()) ? request.getParameter("act").trim() : paramRequest.getAction();
-        if(paramRequest.Action_ADD.equals(action) || paramRequest.Action_EDIT.equals(action)) {
+        if(SWBParamRequest.Action_ADD.equals(action) || SWBParamRequest.Action_EDIT.equals(action)) {
             out.println(getForm(request, paramRequest));
         }else if(Action_UPDATE.equals(action)) {
             out.println("<script type=\"text/javascript\" language=\"JavaScript\">");
