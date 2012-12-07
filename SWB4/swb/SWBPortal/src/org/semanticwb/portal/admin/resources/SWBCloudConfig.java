@@ -48,6 +48,17 @@ public class SWBCloudConfig extends GenericResource {
     public void doView(HttpServletRequest request, HttpServletResponse response,
             SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         PrintWriter out = response.getWriter();
+        String val = getValueOf("/launched"); System.out.println("Value: "+val);
+        boolean launched = (null!=val&&"true".equals(val))?true:false;
+        if ("launch".equals(paramRequest.getAction())){
+            if (null==val || "false".equals(val)){
+                setValueOf("/launched", "true");
+                launched=true;
+            } else {
+                setValueOf("/launched", "false");
+                launched=false;
+            }
+        }
         if ("accUpdate".equals(paramRequest.getAction())) {
             String error = processCredentials(request);
             if (null != error) {
@@ -62,12 +73,14 @@ public class SWBCloudConfig extends GenericResource {
         }
 
         out.print(jsElements());
-        out.print(getFormCredentials(paramRequest, checkIfParameterOk("/CloudLaunched")));
+        out.print(getFormCredentials(paramRequest, launched));
         //out.print("<br/><br/>");
-        List<String> secGrp = SWBPortal.getAWSCloud().getSecurityGroups();
-        out.print(getFormConfig(paramRequest, secGrp, checkIfParameterOk("/CloudLaunched")));
-        if (checkIfCanLaunch()) out.print(getFormLaunch(paramRequest));
-        //SWBPortal.getAWSCloud().getRunningInstances();
+        if (checkIfParameterOk("/accessKey") && checkIfParameterOk("/secretKey")) {
+            List<String> secGrp = SWBPortal.getAWSCloud().getSecurityGroups();
+            out.print(getFormConfig(paramRequest, secGrp, launched));
+            if (checkIfCanLaunch()) out.print(getFormLaunch(paramRequest));
+            //SWBPortal.getAWSCloud().getRunningInstances();
+        }
 
     }
 
@@ -105,7 +118,9 @@ public class SWBCloudConfig extends GenericResource {
             secret = "";
         }
 
-        String forma = "<form id=\"credentialsAWS\" dojoType=\"dijit.form.Form\" class=\"swbform\" action=\""
+        String forma = null;
+        if (!launched) {
+        forma = "<form id=\"credentialsAWS\" dojoType=\"dijit.form.Form\" class=\"swbform\" action=\""
                 + paramRequest.getRenderUrl().setAction("accUpdate")
                 + "\" onsubmit=\"submitForm('credentialsAWS');return false;\" method=\"post\">\n"
                 + "<fieldset>\n"
@@ -119,7 +134,9 @@ public class SWBCloudConfig extends GenericResource {
                 + "    <button dojoType=\"dijit.form.Button\" type=\"submit\">Enviar accesso</button>\n"
                 + "</span></fieldset>\n"
                 + "</form>";
-
+        } else {
+            forma = "";
+        }
         return forma;
     }
 
@@ -217,7 +234,9 @@ public class SWBCloudConfig extends GenericResource {
         if (null==maxNum) maxNum="";
         if (null==memory) memory="";
         if (null==appserv) appserv="";
-        String forma = "<form id=\"configAWS\" dojoType=\"dijit.form.Form\" class=\"swbform\" action=\""
+        String forma =null; 
+        if (!launched) {
+        forma = "<form id=\"configAWS\" dojoType=\"dijit.form.Form\" class=\"swbform\" action=\""
                 + paramRequest.getRenderUrl().setAction("confUpdate")
                 + "\" onsubmit=\"submitForm('configAWS');return false;\" method=\"post\">\n"
                 + "<fieldset>\n"
@@ -246,6 +265,25 @@ public class SWBCloudConfig extends GenericResource {
                 + "    <button dojoType=\"dijit.form.Button\" type=\"submit\">Enviar configuración</button>\n"
                 + "</span></fieldset>\n"
                 + "</form>";
+        }
+        else {
+            forma =  "<fieldset>\n"
+                + "<legend>Configuración</legend>"
+                + "	    <table>\n"
+                + "                <tr><td width=\"200px\" align=\"right\"><label for=\"AvZone\">Placement Zone &nbsp;</label></td><td>"+getValueOf("/AvZone") +"</td></tr>\n"
+                + "                <tr><td width=\"200px\" align=\"right\"><label for=\"KeyPair\">KeyPair &nbsp;</label></td><td>"+getValueOf("/KeyPair") +"</td></tr>\n"
+                + "                <tr><td width=\"200px\" align=\"right\"><label for=\"ImageId\">Image &nbsp;</label></td><td>"+getValueOf("/ImageId") +"</td></tr>\n"
+                + "                <tr><td width=\"200px\" align=\"right\"><label for=\"InstanceType\">InstanceType &nbsp;</label></td><td>"+getValueOf("/InstanceType") +"</td></tr>\n"
+                + "                <tr><td width=\"200px\" align=\"right\"><label for=\"MaxNumberInstances\">Max Instance to launch &nbsp;</label></td><td>"+maxNum +"</td></tr>\n"
+                + "                <tr><td width=\"200px\" align=\"right\"><label for=\"Memory\">Memory String &nbsp;</label></td><td>"+memory+"</td></tr>\n"
+                + "                <tr><td width=\"200px\" align=\"right\"><label for=\"AppServer\">AppServer String &nbsp;</label></td><td>"+appserv+"</td></tr>\n"
+                + "                <tr><td width=\"200px\" align=\"right\"><label for=\"SecGrpInt\">Internal Security Group &nbsp;</label></td><td>"+getValueOf("/SecGrpInt") +"</td></tr>\n"
+                + "                <tr><td width=\"200px\" align=\"right\"><label for=\"SecGrpExt\">External Security Group &nbsp;</label></td><td>"+getValueOf("/SecGrpExt") +"</td></tr>\n"
+                + "                <tr><td width=\"200px\" align=\"right\"><label for=\"Elastic\">ELastic Admin IP &nbsp;</label></td><td>"+getValueOf("/Elastic") +"</td></tr>\n"
+                + "                <tr><td width=\"200px\" align=\"right\"><label for=\"LoadBal\">LoadBalancer &nbsp;</label></td><td>"+getValueOf("/LoadBal") +"</td></tr>\n"
+                + "	    </table>\n"
+                + "	</fieldset>";
+        }
 
         return forma;
     }
