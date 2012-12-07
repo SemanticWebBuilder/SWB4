@@ -201,22 +201,9 @@ System.out.println("\n\n----------------\nchannel report... doview");
                     sb_ret.append("   return params;");
                     sb_ret.append(" }\n");
 
-                    /*sb_ret.append("function validate() {");
-                    sb_ret.append("   var fecha1 = new String(dojo.byId('wb_fecha1').value);");
-                    sb_ret.append("   var fecha2 = new String(dojo.byId('wb_fecha11').value);");
-                    sb_ret.append("   var fecha3 = new String(dojo.byId('wb_fecha12').value);");
-                    sb_ret.append("   if( (fecha1.length==0) && (fecha2.length==0 || fecha3.length==0) ) {");
-                    sb_ret.append("      alert('Especifique la fecha o el rango de fechas que desea consultar');");
-                    sb_ret.append("      return false;");
-                    sb_ret.append("   }");
-                    sb_ret.append("   return true;");
-                    sb_ret.append("}");*/
-
                     sb_ret.append(" function doXml(size) { ");
-                    /*sb_ret.append("   if(validate()) {");*/
                     sb_ret.append("      var params = getParams();");
-                    sb_ret.append("      window.open(\""+paramsRequest.getRenderUrl().setCallMethod(paramsRequest.Call_DIRECT).setMode("report_xml")+"\"+params,\"graphWindow\",size);");
-                    /*sb_ret.append("   }");*/
+                    sb_ret.append("      window.open(\"").append(paramsRequest.getRenderUrl().setCallMethod(SWBParamRequest.Call_DIRECT).setMode("report_xml")).append("\"+params,\"graphWindow\",size);");
                     sb_ret.append(" }\n");
 
                     sb_ret.append(" function getTypeSelected() {");
@@ -233,7 +220,7 @@ System.out.println("\n\n----------------\nchannel report... doview");
                     sb_ret.append("   tmp = dojo.byId('filename').value;");
                     sb_ret.append("   tmp2=tmp.replace(/ /g,'');");
                     sb_ret.append("   if(tmp2.length==0) {");
-                    sb_ret.append("      alert('" + paramsRequest.getLocaleString("file_name") + "');");
+                    sb_ret.append("      alert('").append(paramsRequest.getLocaleString("file_name")).append("');");
                     sb_ret.append("      dojo.byId('filename').select();");
                     sb_ret.append("      dojo.byId('filename').focus();");
                     sb_ret.append("      return false;");
@@ -258,7 +245,7 @@ System.out.println("\n\n----------------\nchannel report... doview");
                     sb_ret.append(" }\n");
                     
                     sb_ret.append(" function doDownload(name,key){");
-                    sb_ret.append("   window.location='"+paramsRequest.getRenderUrl().setCallMethod(paramsRequest.Call_DIRECT).setMode("download")+"?filename='+name+'&key='+key;");
+                    sb_ret.append("   window.location='").append(paramsRequest.getRenderUrl().setCallMethod(SWBParamRequest.Call_DIRECT).setMode("download")).append("?filename='+name+'&key='+key;");
                     sb_ret.append(" }");
 
                     sb_ret.append("</script>\n");
@@ -277,16 +264,16 @@ System.out.println("\n\n----------------\nchannel report... doview");
                     sb_ret.append("<tr><td width=\"213\"></td><td width=\"146\"></td><td width=\"157\"></td><td width=\"413\"></td></tr>");
                     
                     sb_ret.append("<tr>");
-                    sb_ret.append("<td>" + paramsRequest.getLocaleString("site") + ":</td>");
+                    sb_ret.append("<td>").append(paramsRequest.getLocaleString("site")).append(":</td>");
                     sb_ret.append("<td colspan=\"2\"><select id=\"wb_site\" name=\"wb_site\" size=\"1\">");
                     Iterator<String> itKeys = hm_sites.keySet().iterator();
                     while(itKeys.hasNext()) {
                         String key = itKeys.next();
-                        sb_ret.append("<option value=\"" + key + "\"");
+                        sb_ret.append("<option value=\"").append(key).append("\"");
                         if(key.equalsIgnoreCase(websiteId)) {
                             sb_ret.append(" selected=\"selected\"");
                         }
-                        sb_ret.append(">" + (String)hm_sites.get(key) + "</option>");
+                        sb_ret.append(">").append((String)hm_sites.get(key)).append("</option>");
                     }
                     sb_ret.append("</select>");
                     sb_ret.append("</td>");
@@ -301,11 +288,11 @@ System.out.println("\n\n----------------\nchannel report... doview");
                         sb_ret.append(" checked=\"checked\"");
                     }
                     sb_ret.append(" />");
-                    sb_ret.append("&nbsp;" + paramsRequest.getLocaleString("by_day"));
+                    sb_ret.append("&nbsp;").append(paramsRequest.getLocaleString("by_day"));
                     sb_ret.append("</label></td>");
                     sb_ret.append("<td colspan=\"2\">");
 
-                    sb_ret.append("<input type=\"text\" name=\"wb_fecha1\" onblur=\"if(!this.value){this.focus();}\" id=\"wb_fecha1\" dojoType=\"dijit.form.DateTextBox\" constraints=\"{datePattern:'dd/MM/yyyy'}\" size=\"11\" style=\"width:110px;\" hasDownArrow=\"true\" value=\""+fecha1+"\"/>");
+                    sb_ret.append("<input type=\"text\" name=\"wb_fecha1\" onblur=\"if(!this.value){this.focus();}\" id=\"wb_fecha1\" dojoType=\"dijit.form.DateTextBox\" constraints=\"{datePattern:'dd/MM/yyyy'}\" size=\"11\" style=\"width:110px;\" hasDownArrow=\"true\" value=\"").append(fecha1).append("\"/>");
 
                     sb_ret.append("</td>");
                     sb_ret.append("<td><input type=\"hidden\" id=\"wb_rtype\" name=\"wb_rtype\" value=\"0\" /></td>");
@@ -319,24 +306,24 @@ System.out.println("\n\n----------------\nchannel report... doview");
                         sb_ret.append(" checked=\"checked\"");
                     }
                     sb_ret.append(" />");
-                    sb_ret.append("&nbsp;" + paramsRequest.getLocaleString("by_range"));
+                    sb_ret.append("&nbsp;").append(paramsRequest.getLocaleString("by_range"));
                     sb_ret.append("</label></td>");
                     sb_ret.append("<td>");
-                    sb_ret.append("<input type=\"text\" name=\"wb_fecha11\" onblur=\"if(!this.value){this.focus();}\" id=\"wb_fecha11\" dojoType=\"dijit.form.DateTextBox\" constraints=\"{datePattern:'dd/MM/yyyy'}\" size=\"11\" style=\"width:110px;\" hasDownArrow=\"true\" value=\""+fecha11+"\"/>");
+                    sb_ret.append("<input type=\"text\" name=\"wb_fecha11\" onblur=\"if(!this.value){this.focus();}\" id=\"wb_fecha11\" dojoType=\"dijit.form.DateTextBox\" constraints=\"{datePattern:'dd/MM/yyyy'}\" size=\"11\" style=\"width:110px;\" hasDownArrow=\"true\" value=\"").append(fecha11).append("\"/>");
                     sb_ret.append("</td>");
                     sb_ret.append("<td>");
-                    sb_ret.append("<input type=\"text\" name=\"wb_fecha12\" onblur=\"if(!this.value){this.focus();}\" id=\"wb_fecha12\" dojoType=\"dijit.form.DateTextBox\" constraints=\"{datePattern:'dd/MM/yyyy'}\" size=\"11\" style=\"width:110px;\" hasDownArrow=\"true\" value=\""+fecha12+"\"/>");
+                    sb_ret.append("<input type=\"text\" name=\"wb_fecha12\" onblur=\"if(!this.value){this.focus();}\" id=\"wb_fecha12\" dojoType=\"dijit.form.DateTextBox\" constraints=\"{datePattern:'dd/MM/yyyy'}\" size=\"11\" style=\"width:110px;\" hasDownArrow=\"true\" value=\"").append(fecha12).append("\"/>");
                     sb_ret.append("</td>");
                     sb_ret.append("<td>&nbsp;</td>");
                     sb_ret.append("</tr>");
 
                     sb_ret.append("<tr>");
                     sb_ret.append("<td>");
-                    sb_ret.append(paramsRequest.getLocaleString("report_name") + ":");
+                    sb_ret.append(paramsRequest.getLocaleString("report_name")).append(":");
                     sb_ret.append("</td>");
                     sb_ret.append("<td colspan=\"3\">");
                     sb_ret.append("<input type=\"text\" name=\"filename\" id=\"filename\" value=\"\"/>");
-                    sb_ret.append("&nbsp;<font size=\"1\">* " + paramsRequest.getLocaleString("report_file_generated") + "</font>");
+                    sb_ret.append("&nbsp;<font size=\"1\">* ").append(paramsRequest.getLocaleString("report_file_generated")).append("</font>");
                     sb_ret.append("</td>");
                     sb_ret.append("</tr>");
                     sb_ret.append("</table>");
@@ -347,8 +334,8 @@ System.out.println("\n\n----------------\nchannel report... doview");
                     sb_ret.append("<tr>");
                     sb_ret.append(" <td colspan=\"4\">&nbsp;&nbsp;&nbsp;");
                     sb_ret.append("   <button dojoType=\"dijit.form.Button\" onclick=\"doXml('width=600, height=550, scrollbars, resizable, alwaysRaised, menubar')\">XML</button>&nbsp;");
-                    sb_ret.append("   <button dojoType=\"dijit.form.Button\" onclick=\"doApply()\">"+paramsRequest.getLocaleString("apply")+"</button>");
-                    sb_ret.append("   <input type=\"hidden\" name=\"wb_rfilter\" value=\""+s_rfilter+"\"/>");
+                    sb_ret.append("   <button dojoType=\"dijit.form.Button\" onclick=\"doApply()\">").append(paramsRequest.getLocaleString("apply")).append("</button>");
+                    sb_ret.append("   <input type=\"hidden\" name=\"wb_rfilter\" value=\"").append(s_rfilter).append("\"/>");
                     sb_ret.append(" </td>");
                     sb_ret.append("</tr>");
                     sb_ret.append("</table>");
@@ -362,12 +349,12 @@ System.out.println("\n\n----------------\nchannel report... doview");
                     sb_ret.append("<td colspan=\"4\">");
                     
                     HashMap hm = getFileList(paramsRequest.getWebPage());
-                    if (hm.size() == 0) {
+                    if (hm.isEmpty()) {
                         sb_ret.append(paramsRequest.getLocaleString("reports_not_found"));
                     } else {
                         sb_ret.append("<table border=\"0\" cellpadding=\"5\" cellspacing=\"0\" width=\"100%\">");
-                        sb_ret.append("<caption align=\"top\">" + paramsRequest.getLocaleString("list_reports") + "</caption>");
-                        sb_ret.append("<tr><th width=\"15%\">" + paramsRequest.getLocaleString("action") + "</th><th width=\"35%\">" + paramsRequest.getLocaleString("file_name") + "</th><th width=\"25%\">" + paramsRequest.getLocaleString("site") + "</th><th width=\"25%\">" + paramsRequest.getLocaleString("created") + "</th></tr>");
+                        sb_ret.append("<caption align=\"top\">").append(paramsRequest.getLocaleString("list_reports")).append("</caption>");
+                        sb_ret.append("<tr><th width=\"15%\">").append(paramsRequest.getLocaleString("action")).append("</th><th width=\"35%\">").append(paramsRequest.getLocaleString("file_name")).append("</th><th width=\"25%\">").append(paramsRequest.getLocaleString("site")).append("</th><th width=\"25%\">").append(paramsRequest.getLocaleString("created")).append("</th></tr>");
 
                         boolean toggleColor = true;
                         SWBResourceURL urlDel = paramsRequest.getActionUrl().setAction("remove");
@@ -379,12 +366,12 @@ System.out.println("\n\n----------------\nchannel report... doview");
                             String site = sfn.substring(0, sfn.lastIndexOf("|"));
                             String filename = sfn.substring(sfn.lastIndexOf("|") + 1);
 
-                            sb_ret.append("<tr bgcolor=\""+(toggleColor?"#EFEDEC":"#FFFFFF")+"\">");
+                            sb_ret.append("<tr bgcolor=\"").append(toggleColor?"#EFEDEC":"#FFFFFF").append("\">");
                             urlDel.setParameter("key", key);
-                            sb_ret.append("<td><a href=\""+urlDel+"\" onclick=\" if(confirm('" + paramsRequest.getLocaleString("alert_remove_file") + "?')){return true;}else{return false};\"><img border=\"0\" src=\"" + SWBPlatform.getContextPath() + "/swbadmin/images/delete.gif\" alt=\"" + paramsRequest.getLocaleString("delete_report") + "\"></a></td>");
-                            sb_ret.append("<td><a href=\"javascript:doDownload('"+filename+"','"+key + "');\" alt=\"Reporte: "+filename+"\">"+filename+"</a></td>");
-                            sb_ret.append("<td>" + site + "</td>");
-                            sb_ret.append("<td>" + SWBUtils.TEXT.iso8601DateFormat(new java.sql.Timestamp(Long.parseLong(key)))+"</td>");
+                            sb_ret.append("<td><a href=\"").append(urlDel).append("\" onclick=\" if(confirm('").append(paramsRequest.getLocaleString("alert_remove_file")).append("?')){return true;}else{return false};\"><img border=\"0\" src=\"").append(SWBPlatform.getContextPath()).append("/swbadmin/images/delete.gif\" alt=\"").append(paramsRequest.getLocaleString("delete_report")).append("\"></a></td>");
+                            sb_ret.append("<td><a href=\"javascript:doDownload('").append(filename).append("','").append(key).append("');\" alt=\"Reporte: ").append(filename).append("\">").append(filename).append("</a></td>");
+                            sb_ret.append("<td>").append(site).append("</td>");
+                            sb_ret.append("<td>").append(SWBUtils.TEXT.iso8601DateFormat(new java.sql.Timestamp(Long.parseLong(key)))).append("</td>");
                             sb_ret.append("</tr>");
                             toggleColor = !(toggleColor);
                         }
@@ -397,15 +384,15 @@ System.out.println("\n\n----------------\nchannel report... doview");
                 }else { // There are not sites and displays a message
                     sb_ret.append("<div class=\"swbform\">");
                     sb_ret.append("<fieldset>");
-                    sb_ret.append("<legend>" + paramsRequest.getLocaleString("channel_report") + "</legend>");
-                    sb_ret.append("<form method=\"Post\" class=\"box\" action=\"" + paramsRequest.getWebPage().getUrl() + "\" id=\"frmrep\" name=\"frmrep\">");
+                    sb_ret.append("<legend>").append(paramsRequest.getLocaleString("channel_report")).append("</legend>");
+                    sb_ret.append("<form method=\"Post\" class=\"box\" action=\"").append(paramsRequest.getWebPage().getUrl()).append("\" id=\"frmrep\" name=\"frmrep\">");
                     sb_ret.append("<table border=0 width=\"100%\">");
                     sb_ret.append("<tr><td colspan=\"4\">&nbsp;</td></tr>");
                     sb_ret.append("<tr><td colspan=\"4\">&nbsp;</td></tr>");
                     sb_ret.append("<tr><td colspan=\"4\">&nbsp;</td></tr>");
                     sb_ret.append("<tr>");
                     sb_ret.append("<td>&nbsp;</td>");
-                    sb_ret.append("<td colspan=\"2\" align=\"center\" class=\"datos\">" + paramsRequest.getLocaleString("no_sites_found") + "</td>");
+                    sb_ret.append("<td colspan=\"2\" align=\"center\" class=\"datos\">").append(paramsRequest.getLocaleString("no_sites_found")).append("</td>");
                     sb_ret.append("<td>&nbsp;</td>");
                     sb_ret.append("</tr>");
                     sb_ret.append("<tr><td colspan=\"4\">&nbsp;</td></tr>");
@@ -427,7 +414,7 @@ System.out.println("\n\n----------------\nchannel report... doview");
             sb_ret.append(paramsRequest.getLocaleString("channel_report"));
             sb_ret.append("</td></tr>");
             sb_ret.append("<tr><td width=\"200\" align=\"right\">");
-            sb_ret.append(paramsRequest.getLocaleString("status") + ":</td><td>" + rmgr.getStatus());
+            sb_ret.append(paramsRequest.getLocaleString("status")).append(":</td><td>").append(rmgr.getStatus());
             sb_ret.append("</td></tr>");
             sb_ret.append("<tr><td width=\"200\" align=\"right\">");
 
@@ -435,17 +422,17 @@ System.out.println("\n\n----------------\nchannel report... doview");
             gc.setTimeInMillis(rmgr.getInitTime());
             df = DateFormat.getTimeInstance(DateFormat.FULL);
             String s_time = df.format(gc.getTime());
-            sb_ret.append(paramsRequest.getLocaleString("initial_time") + ":</td><td>" + s_time);
+            sb_ret.append(paramsRequest.getLocaleString("initial_time")).append(":</td><td>").append(s_time);
             sb_ret.append("</td></tr>");
             sb_ret.append("<tr><td width=\"200\" align=\"right\">");
-            sb_ret.append(paramsRequest.getLocaleString("process_time") + ":</td><td>" + getAvailableTime(new Timestamp(gc.getTimeInMillis())));
+            sb_ret.append(paramsRequest.getLocaleString("process_time")).append(":</td><td>").append(getAvailableTime(new Timestamp(gc.getTimeInMillis())));
             sb_ret.append("</td></tr>");
             /*sb_ret.append("<tr><td width=\"200\" align=\"right\">");
             sb_ret.append(paramsRequest.getLocaleString("log_counter") + ":</td><td>" + rmgr.getCounter());
             sb_ret.append("</td></tr>");*/
             sb_ret.append("</table>\n");
 
-            sb_ret.append("\n<META HTTP-EQUIV=\"Refresh\" CONTENT=\"3;URL="+paramsRequest.getRenderUrl()+"\">\n");
+            sb_ret.append("\n<META HTTP-EQUIV=\"Refresh\" CONTENT=\"3;URL=").append(paramsRequest.getRenderUrl()).append("\">\n");
         }
         response.getWriter().print(sb_ret.toString());
     }
@@ -457,7 +444,7 @@ System.out.println("\n\n----------------\nchannel report... doview");
      * @return the available time
      */
     public String getAvailableTime(Timestamp inicio) {
-        StringBuffer ret = new StringBuffer();
+        StringBuilder ret = new StringBuilder();
         Timestamp min_actual = inicio;
         Timestamp limite = new java.sql.Timestamp(System.currentTimeMillis());
 
@@ -488,9 +475,9 @@ System.out.println("\n\n----------------\nchannel report... doview");
 
         ret.append(" showTimer();\n");
         ret.append(" var dthen = new Date();\n");
-        ret.append(" dthen.setTime(" + limite.getTime() + ");\n");
+        ret.append(" dthen.setTime(").append(limite.getTime()).append(");\n");
         ret.append(" var dnow = new Date();\n");
-        ret.append(" dnow.setTime(" + min_actual.getTime() + ");\n");
+        ret.append(" dnow.setTime(").append(min_actual.getTime()).append(");\n");
         ret.append(" ddiff = new Date(dthen-dnow);\n");
         ret.append(" gsecs = Math.floor(ddiff.valueOf()/1000);\n");
         ret.append(" CountBack(gsecs);\n");
