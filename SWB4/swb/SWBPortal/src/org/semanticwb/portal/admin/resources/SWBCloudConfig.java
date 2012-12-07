@@ -48,6 +48,10 @@ public class SWBCloudConfig extends GenericResource {
     public void doView(HttpServletRequest request, HttpServletResponse response,
             SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         PrintWriter out = response.getWriter();
+        if (SWBPortal.getAWSCloud()==null){
+            out.println("This function only works in an EC2 AWS");
+            return;
+        }
         String val = getValueOf("/launched"); System.out.println("Value: "+val);
         boolean launched = (null!=val&&"true".equals(val))?true:false;
         if ("launch".equals(paramRequest.getAction())){
