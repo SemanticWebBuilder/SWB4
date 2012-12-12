@@ -22,13 +22,12 @@
  */
 package org.semanticwb.aws;
 
-import java.util.List;
-
 /**
  *
  * @author serch
  */
-public final class InstanceData {
+public final class InstanceData implements Comparable<InstanceData> {
+
     private String id;
     private String type;
     private String ip;
@@ -74,5 +73,42 @@ public final class InstanceData {
     public void setStartupTime(long startupTime) {
         this.startupTime = startupTime;
     }
-    
+
+    @Override
+    public int hashCode() {
+        return id.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final InstanceData other = (InstanceData) obj;
+        if ((this.id == null) ? (other.id != null) : !this.id.equals(other.id)) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public int compareTo(InstanceData o) {
+        final int BEFORE = -1;
+        final int EQUAL = 0;
+        final int AFTER = 1;
+        if (this.equals(o)) {
+            return EQUAL;
+        }
+        if (this.getStartupTime() < o.getStartupTime()) {
+            return BEFORE;
+        }
+        if (this.getStartupTime() > o.getStartupTime()) {
+            return AFTER;
+        } else {
+            return this.getId().compareTo(o.getId());
+        }
+    }
 }
