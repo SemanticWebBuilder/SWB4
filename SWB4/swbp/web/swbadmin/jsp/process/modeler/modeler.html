@@ -1,0 +1,840 @@
+<html>
+    <head>
+        <title>Hola</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+            <script type="text/javascript">
+            
+                function desc(obj, content)
+                {
+                    var ret="";
+                    for (property in obj) {
+                        if(content && content==true)
+                        {
+                            ret+=property+"="+obj[property]+", ";
+                        }else
+                        {
+                            ret+=property+", ";
+                        }
+                    }
+                    console.log(ret);
+                    //alert(ret);
+                }            
+
+                var Modeler =
+                    {
+                    svgNS:"http://www.w3.org/2000/svg",
+                    xlink:"http://www.w3.org/1999/xlink",
+                    contents:[],
+                    selected:[],
+                    selectBox:null,
+                    cmdkey:false,
+                    ctrlkey:false,
+                    
+
+                    getWidth:function()
+                    {
+                        return this.svg.width.baseVal.value;
+                    },
+                
+                    getHeight:function()
+                    {
+                        return this.svg.height.baseVal.value;
+                    },
+                
+                    setWidth:function(width)
+                    {
+                        this.svg.width.baseVal.value=width;
+                    },
+                
+                    setHeight:function(height)
+                    {
+                        this.svg.height.baseVal.value=height;
+                    },                
+                
+                    init:function()
+                    {
+                        var _this=this;
+                        _this.svg=document.getElementById("modeler");
+                        //desc(_this.svg,true);
+                    
+                        _this.svg.onmousemove=function(evt)
+                        {
+                            _this.svg.mouseX=evt.clientX;
+                            _this.svg.mouseY=evt.clientY;
+                            
+                            if(_this.svg.dragObject!=null)  //dragObjects
+                            {
+                                _this.selected.unselect=false; //si hace drag no deselecciona
+                                x=evt.clientX-_this.svg.dragOffsetX;
+                                y=evt.clientY-_this.svg.dragOffsetY;
+                                
+                                if(_this.cmdkey==true) //Drag one
+                                {
+                                    _this.svg.dragObject.move(x,y);
+                                }else //drag selecteds
+                                {
+                                    tx=x-_this.svg.dragObject.getX();
+                                    ty=y-_this.svg.dragObject.getY();
+
+                                    for (var i = _this.selected.length; i--;) 
+                                    {                                
+                                        _this.selected[i].traslate(tx, ty);
+                                    }
+                                }
+                            }else if(_this.selectBox!=null) //SelectBox
+                            {
+                                var w=evt.clientX-_this.svg.dragOffsetX;
+                                var h=evt.clientY-_this.svg.dragOffsetY;
+                                var x=_this.svg.dragOffsetX;
+                                var y=_this.svg.dragOffsetY;
+                                
+                                if(w<0)
+                                {
+                                    x=_this.svg.dragOffsetX+w;
+                                    w=-w;                                    
+                                }
+                                if(h<0)
+                                {
+                                    y=_this.svg.dragOffsetY+h;
+                                    h=-h;                                        
+                                }
+                                
+                                _this.selectBox.setAttributeNS(null,"x",x);
+                                _this.selectBox.setAttributeNS(null,"width",w);
+                                _this.selectBox.setAttributeNS(null,"y",y);
+                                _this.selectBox.setAttributeNS(null,"height",h);
+                                
+                                var nodes=_this.svg.childNodes;
+                                for(i=0;i<nodes.length;i++)
+                                {
+                                    var obj=nodes.item(i);
+                                    if(obj.contents)    //Es un objeto grafico
+                                    {
+                                        var ox=obj.getX();
+                                        var oy=obj.getY();
+                                        if(ox>=x && ox<=x+w && oy>=y && oy<=y+h)
+                                        {
+                                            if(obj.selected!=true)
+                                            {                                                
+                                                obj.setStyle("stroke:#2cff20");
+                                                obj.selected=true;                                    
+                                                _this.selected.push(obj);
+                                                //alert(obj);                                                
+                                            }
+                                        }else
+                                        {
+                                            if(!_this.cmdkey)
+                                            {
+                                                if(obj.selected==true)
+                                                {
+                                                    obj.resetStyle();
+                                                    obj.selected=false;
+                                                    _this.selected.splice(_this.selected.indexOf(obj), 1);                                  
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            
+                        };
+                        
+                        _this.svg.onmousedown=function(evt)
+                        {
+                            //SelectBox
+                            if(_this.svg.dragObject==null)
+                            {
+                                if(!_this.cmdkey)_this.unSelectAll();
+                                if(_this.selectBox==null)
+                                {
+                                    _this.selectBox=document.createElementNS(_this.svgNS,"rect");
+                                    //_this.selectBox.setAttributeNS(_this.xlink,"href","#selectBox");
+                                    _this.selectBox.setAttributeNS(null,"style","fill:#f0f0f0;fill-opacity:.5;stroke-width:2;stroke-opacity:1;stroke:#2c5aa0");
+                                    _this.selectBox.setAttributeNS(null,"x",evt.clientX);
+                                    _this.selectBox.setAttributeNS(null,"y",evt.clientY);
+                                    _this.selectBox.setAttributeNS(null,"width",0);
+                                    _this.selectBox.setAttributeNS(null,"height",0);
+                                    _this.svg.appendChild(_this.selectBox);
+                                    _this.svg.dragOffsetX=evt.clientX;
+                                    _this.svg.dragOffsetY=evt.clientY;                                    
+                                }
+                            }
+                        };                         
+                        
+                        _this.svg.onmouseup=function(evt)
+                        {
+                            _this.svg.dragObject=null;
+                            //SelectBox
+                            if(_this.selectBox!=null)
+                            {
+                                _this.svg.removeChild(_this.selectBox);
+                                _this.selectBox=null;
+                            }
+                        };                        
+                        
+                        //Add Key Events
+                        if (window.addEventListener)
+                        {
+                            window.addEventListener('keydown', _this.keydown, true);
+                            window.addEventListener('keyup', _this.keyup, true);
+                        }
+                        else if (window.attachEvent)
+                        {
+                           window.attachEvent("onkeydown", _this.keydown);
+                           window.attachEvent("onkeyup", _this.keyup);
+                        }
+                        else
+                        {
+                           window.onkeydown= _this.keydown;  
+                           window.onkeyup= _this.keyup;  
+                        }
+                        
+                        _this.setWidth(1920);
+                        _this.setHeight(1080);
+                    },
+                    
+                    unSelectAll:function()
+                    {
+                        var _this=Modeler;
+                        while((o=_this.selected.pop())!=null)
+                        {
+                            o.resetStyle();
+                            o.selected=false;
+                        }                       
+                    },
+                    
+                    keydown:function(evt)
+                    {
+                        var _this=Modeler;
+                        //desc(evt,true);
+                        if(evt.keyCode==8 && evt.which==8)
+                        //if(evt.keyCode==32 && evt.which==32)
+                        {
+                            for (var i = _this.selected.length; i--;) 
+                            {
+                                _this.selected[i].remove();
+                            }                             
+                            _this.stopPropagation(evt);
+                        }else if((evt.keyCode==91 && evt.which==91) || (evt.keyCode==224 && evt.which==224))
+                        {
+                            _this.cmdkey=true;
+                            _this.stopPropagation(evt);
+                        }else if(evt.keyCode==17 && evt.which==17)
+                        {
+                            _this.ctrlkey=true;
+                            _this.stopPropagation(evt);
+                        }
+                    },
+                    
+                    keyup:function(evt)
+                    {
+                        //alert("hola");
+                        var _this=Modeler;
+                        if((evt.keyCode==91 && evt.which==91) || (evt.keyCode==224 && evt.which==224))
+                        {
+                            _this.cmdkey=false;
+                            _this.stopPropagation(evt);
+                        }else if(evt.keyCode==17 && evt.which==17)
+                        {
+                            _this.ctrlkey=false;
+                            _this.stopPropagation(evt);
+                        }
+                    },                                        
+                    
+                    stopPropagation:function(evt)
+                    {
+                        if (evt.preventDefault) evt.preventDefault();
+                        if (evt.stopPropagation) evt.stopPropagation();
+                    },
+
+                    createObject:function(type, id, parent)
+                    {
+                        var _this=this;
+                        var obj = document.createElementNS(_this.svgNS,"use"); //to create a circle, for rectangle use rectangle
+                        obj.setAttributeNS(this.xlink,"href",type);
+                        if(id && id!=null)obj.setAttributeNS(null,"id",id);
+                    
+                        obj.setStyle=function(style)
+                        {
+                            var _this=Modeler;
+                            obj.setAttributeNS(null,"style",style);
+                        };
+                        
+                        obj.resetStyle=function()
+                        {
+                            var _this=Modeler;
+                            var s=document.getElementById(obj.getAttributeNS(_this.xlink,"href").substring(1)).getAttributeNS(null, "styled");
+                            if(s!=null)obj.setAttributeNS(null,"style",s);
+                        };
+                        
+                        obj.resetStyle();                        
+                    
+                        obj.onmousedown=function(evt)
+                        {
+                            _this.svg.dragOffsetX=_this.svg.mouseX-obj.getAttributeNS(null,"x");
+                            _this.svg.dragOffsetY=_this.svg.mouseY-obj.getAttributeNS(null,"y");
+                            _this.svg.dragObject=obj;
+                            obj.mousedown(evt);
+                            obj.select(true);
+                        };
+                        
+                        //obj.onmousemove=function(evt)
+                        //{
+                        //    console.log("id:"+obj.getAttributeNS(null,"id"));                            
+                        //};
+                        
+                        obj.select=function(down)
+                        {
+                            //desc(obj,true);
+                            var _this=Modeler;
+                            var i=_this.selected.indexOf(obj);
+                            if(down==true)
+                            {
+                                if(i==-1 && down==true)
+                                {
+                                    if(_this.cmdkey==false) //deselect all
+                                    {
+                                        _this.unSelectAll();
+                                    }
+                                    //select one
+                                    obj.setStyle("stroke:#2cff20");
+                                    _this.selected.push(obj);
+                                    obj.selected=true;
+                                }else 
+                                {
+                                    //can unselect
+                                    _this.selected.unselect=true;
+                                }
+                            }else
+                            {
+                                if(_this.cmdkey==true && _this.selected.unselect==true) //unselect one
+                                {
+                                    _this.selected[i].resetStyle();
+                                    _this.selected[i].selected=false;
+                                    _this.selected.splice(i, 1);
+                                }                                 
+                                _this.selected.unselect=false;
+                            }
+                        };
+                    
+                        obj.getX=function()
+                        {
+                            return Number(obj.getAttributeNS(null,"x"));
+                        };
+                    
+                        obj.getY=function()
+                        {
+                            return Number(obj.getAttributeNS(null,"y"));
+                        };
+                        
+                        obj.setX=function(x)
+                        {
+                            obj.setAttributeNS(null,"x",x);
+                        };
+                    
+                        obj.setY=function(y)
+                        {
+                            obj.setAttributeNS(null,"y",y);
+                        };                        
+                    
+                        obj.mousedown=function(evt)
+                        {
+                            //Sobreescribir
+                        };
+
+                        obj.onmouseup=function(evt)
+                        {
+                            obj.mouseup(evt);
+                            obj.select(false);
+                        };
+                    
+                        obj.mouseup=function(evt)
+                        {
+                            //Sobreescribir
+                        };                
+                    
+                        obj.traslate=function(dx, dy)
+                        {
+                            var ox=obj.getX();
+                            var oy=obj.getY();
+                            obj.move(ox+dx, oy+dy);
+                        }
+
+                        obj.move=function(x,y)
+                        {
+                            var offx=x-obj.getX();
+                            var offy=y-obj.getY();
+                            obj.setX(x);
+                            obj.setY(y);
+                        
+                            for (var i = obj.contents.length; i--;) 
+                            {
+                                if(obj.contents[i].selected!=true)
+                                {
+                                    obj.contents[i].traslate(offx,offy);
+                                }
+                            }  
+                        
+                            if(x+50>_this.getWidth())
+                            {
+                                _this.setWidth(x+50);
+                            }
+                            if(y+50>_this.getHeight())
+                            {
+                                _this.setHeight(y+50);
+                            }                           
+                        };    
+                        
+                        obj.remove = function(all) {
+                            if(!all)
+                            {
+                                while ((ax = obj.parent.contents.indexOf(obj)) !== -1) {
+                                    obj.parent.contents.splice(ax, 1);
+                                }
+                            }
+                            for (var i = obj.contents.length; i--;)
+                            {
+                                obj.contents[i].remove(true);
+                            }
+                            try
+                            {
+                                _this.svg.removeChild(obj);
+                            }catch(noe){}
+                            return this;
+                        };
+                        
+                        obj.onclick =function(evt)
+                        {
+                            //previene de abrir nuevas ventanas al hacer click sobre elementos
+                            return false;
+                        }
+                    
+                        obj.contents=[];
+
+                        if(parent && parent!=null)
+                        {
+                            parent.contents.push(obj);
+                            obj.parent=parent;
+                        }else
+                        {
+                            _this.contents.push(obj);
+                            obj.parent=_this;
+                        }   
+                        _this.svg.appendChild(obj);
+                        return obj;
+                    },
+                
+                    createStartEvent:function(id, parent)
+                    {
+                        //Revisar ID
+                        var obj=this.createObject("#startEvent",id,parent);
+                        obj.mouseup=function(x,y)
+                        {
+                            //alert("hola1");
+                        }
+                        return obj;
+                    },
+                
+                    createMessageStartEvent:function(id, parent)
+                    {
+                        //Revisar ID
+                        var obj=this.createStartEvent(id,parent);
+                        //obj.mouseup=function(x,y)
+                        //{
+                        //    alert("hola2");
+                        //}
+                        return obj;
+                    }                
+                
+                };
+
+                function draw()
+                {
+                    var obj;
+                
+                    obj = Modeler.createObject("#task","tk1");
+                
+                    obj2 = Modeler.createObject("#endEvent","ee1",obj);
+                    obj2.move(100,200);                
+                
+                    for(i=0;i<100;i++)
+                    {
+                        obj3 = Modeler.createStartEvent("se"+i, obj2);
+                        obj3.move(i,100);
+                    }
+                
+                    obj = Modeler.createObject("#barra");                
+                
+                    obj = Modeler.createObject("#test");                
+                
+                    obj2 = Modeler.createObject("#intermediateEvent",null,obj);
+                    obj2.move(300,200);
+                
+                    Modeler.createStartEvent();
+                
+                    Modeler.createMessageStartEvent();
+
+                }
+
+            </script>
+
+    </head>
+    <body onload="Modeler.init();draw();">
+        <svg id="modeler" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="100" height="100">
+            <defs id="globalDef">
+
+                <g id="barra" transform="translate(0,-455.65)">
+                    <use x="100" y="100" xlink:href="#reusableButton"/>
+                    <!--          
+                        <image
+                           y="115.96933"
+                           x="196.21428"
+                           id="image7347"
+                           xlink:href="file:////programming/proys/SWB4/swb/applets/SWBAppBPMNModeler/src/org/semanticwb/process/modeler/images/file2.png"
+                           height="43"
+                           width="49"
+                           style="display:none" />
+                        <image
+                           y="170.96983"
+                           x="411.21429"
+                           id="image7728"
+                           xlink:href="file:////programming/proys/SWB4/swb/applets/SWBAppBPMNModeler/src/org/semanticwb/process/modeler/images/task_2.png"
+                           height="43"
+                           width="49"
+                           style="display:none" />
+                        <image
+                           y="213.91927"
+                           x="411.21429"
+                           id="image7967"
+                           xlink:href="file:////programming/proys/SWB4/swb/applets/SWBAppBPMNModeler/src/org/semanticwb/process/modeler/images/subtask_2.png"
+                           height="43"
+                           width="49"
+                           style="display:none" />
+                        <image
+                           y="256.85519"
+                           x="411.21429"
+                           id="image8705"
+                           xlink:href="file:////programming/proys/SWB4/swb/applets/SWBAppBPMNModeler/src/org/semanticwb/process/modeler/images/task_call_2.png"
+                           height="43"
+                           width="49"
+                           style="display:none" />
+                        <image
+                           y="316.17926"
+                           x="335.61938"
+                           id="image8880"
+                           xlink:href="file:////programming/proys/SWB4/swb/applets/SWBAppBPMNModeler/src/org/semanticwb/process/modeler/images/start_2.png"
+                           height="43"
+                           width="49"
+                           style="display:none" />
+                        <image
+                           y="405.07269"
+                           x="223.99753"
+                           id="image9106"
+                           xlink:href="file:////programming/proys/SWB4/swb/applets/SWBAppBPMNModeler/src/org/semanticwb/process/modeler/images/inter_2.png"
+                           height="43"
+                           width="49"
+                           style="display:none" />
+                        <image
+                           y="399.43362"
+                           x="389.78571"
+                           id="image9233"
+                           xlink:href="file:////programming/proys/SWB4/swb/applets/SWBAppBPMNModeler/src/org/semanticwb/process/modeler/images/end_2.png"
+                           height="43"
+                           width="49"
+                           style="display:none" />
+                        <image
+                           y="229.43361"
+                           x="361.92856"
+                           id="image9648"
+                           xlink:href="file:////programming/proys/SWB4/swb/applets/SWBAppBPMNModeler/src/org/semanticwb/process/modeler/images/if_2.png"
+                           height="43"
+                           width="49"
+                           style="display:none" />
+                        <image
+                           y="441.93362"
+                           x="384.78571"
+                           id="image9844"
+                           xlink:href="file:////programming/proys/SWB4/swb/applets/SWBAppBPMNModeler/src/org/semanticwb/process/modeler/images/flow_2.png"
+                           height="43"
+                           width="49"
+                           style="display:none" />
+                        <image
+                           y="604.79077"
+                           x="378.71429"
+                           id="image10006"
+                           xlink:href="file:////programming/proys/SWB4/swb/applets/SWBAppBPMNModeler/src/org/semanticwb/process/modeler/images/anota_2.png"
+                           height="43"
+                           width="49"
+                           style="display:none" />
+                        <image
+                           y="619.79077"
+                           x="479.07144"
+                           id="image10137"
+                           xlink:href="file:////programming/proys/SWB4/swb/applets/SWBAppBPMNModeler/src/org/semanticwb/process/modeler/images/doc_2.png"
+                           height="43"
+                           width="49"
+                           style="display:none" />
+                        <image
+                           y="487.64789"
+                           x="434.78571"
+                           id="image10266"
+                           xlink:href="file:////programming/proys/SWB4/swb/applets/SWBAppBPMNModeler/src/org/semanticwb/process/modeler/images/pool_2.png"
+                           height="43"
+                           width="49"
+                           style="display:none" />
+                    -->    
+                    <g
+                        id="g10334"
+                        transform="translate(-471.21428,347.71423)">
+                        <g
+                            transform="translate(595.37654,-39.29079)"
+                            id="g3273">
+                            <image
+                                width="37"
+                                height="18"
+                                xlink:href="file:////programming/proys/SWB4/swb/applets/SWBAppBPMNModeler/src/org/semanticwb/process/modeler/images/barra_mov.png"
+                                id="image7061"
+                                x="-124.13931"
+                                y="147.21928" />
+                            <g
+                                transform="translate(0.08995799,0)"
+                                id="g7188">
+                                <image
+                                    y="147.21928"
+                                    x="-87.274498"
+                                    id="image7123"
+                                    xlink:href="file:////programming/proys/SWB4/swb/applets/SWBAppBPMNModeler/src/org/semanticwb/process/modeler/images/baja_1.png"
+                                    height="18"
+                                    width="12" />
+                                <image
+                                    style="display:none"
+                                    y="147.21928"
+                                    x="-87.274498"
+                                    id="image7185"
+                                    xlink:href="file:////programming/proys/SWB4/swb/applets/SWBAppBPMNModeler/src/org/semanticwb/process/modeler/images/baja_2.png"
+                                    height="18"
+                                    width="12" />
+                            </g>
+                        </g>
+                        <g
+                            transform="translate(275,9.852067)"
+                            id="g7350">
+                            <image
+                                y="115.84306"
+                                x="196.21428"
+                                id="image7251"
+                                xlink:href="file:////programming/proys/SWB4/swb/applets/SWBAppBPMNModeler/src/org/semanticwb/process/modeler/images/file1.png"
+                                height="43"
+                                width="49" 
+                                onmouseover="this.correspondingElement.setAttributeNS('http://www.w3.org/1999/xlink','href','file:////programming/proys/SWB4/swb/applets/SWBAppBPMNModeler/src/org/semanticwb/process/modeler/images/file2.png')"           
+                                onmouseout="this.setAttributeNS('http://www.w3.org/1999/xlink','href','file:////programming/proys/SWB4/swb/applets/SWBAppBPMNModeler/src/org/semanticwb/process/modeler/images/file1.png')"           
+                                />
+                        </g>
+                        <image
+                            width="49"
+                            height="12"
+                            xlink:href="file:////programming/proys/SWB4/swb/applets/SWBAppBPMNModeler/src/org/semanticwb/process/modeler/images/barra_division.png"
+                            id="image7556"
+                            x="471.21429"
+                            y="168.26781" />
+                        <g
+                            transform="translate(60,9.1377811)"
+                            id="g7731">
+                            <image
+                                y="170.96983"
+                                x="411.21429"
+                                id="image7650"
+                                xlink:href="file:////programming/proys/SWB4/swb/applets/SWBAppBPMNModeler/src/org/semanticwb/process/modeler/images/task_1.png"
+                                height="43"
+                                width="49" />
+                        </g>
+                        <g
+                            transform="translate(60,9.1377811)"
+                            id="g7970">
+                            <image
+                                y="213.91927"
+                                x="411.21429"
+                                id="image7857"
+                                xlink:href="file:////programming/proys/SWB4/swb/applets/SWBAppBPMNModeler/src/org/semanticwb/process/modeler/images/subtask_1.png"
+                                height="43"
+                                width="49" />
+                        </g>
+                        <g
+                            transform="translate(60,8.7806382)"
+                            id="g8708">
+                            <image
+                                y="256.85519"
+                                x="411.21429"
+                                id="image8627"
+                                xlink:href="file:////programming/proys/SWB4/swb/applets/SWBAppBPMNModeler/src/org/semanticwb/process/modeler/images/task_call_1.png"
+                                height="43"
+                                width="49" />
+                        </g>
+                        <g
+                            transform="translate(135.59491,-7.6793888)"
+                            id="g8883">
+                            <image
+                                y="316.17926"
+                                x="335.61938"
+                                id="image8786"
+                                xlink:href="file:////programming/proys/SWB4/swb/applets/SWBAppBPMNModeler/src/org/semanticwb/process/modeler/images/start_1.png"
+                                height="43"
+                                width="49" />
+                        </g>
+                        <g
+                            transform="translate(247.21677,-53.686379)"
+                            id="g9109">
+                            <image
+                                y="405.07269"
+                                x="223.99753"
+                                id="image9012"
+                                xlink:href="file:////programming/proys/SWB4/swb/applets/SWBAppBPMNModeler/src/org/semanticwb/process/modeler/images/inter_1.png"
+                                height="43"
+                                width="49" />
+                        </g>
+                        <g
+                            transform="translate(81.428593,-5.1785712)"
+                            id="g9236">
+                            <image
+                                y="399.43362"
+                                x="389.78571"
+                                id="image9171"
+                                xlink:href="file:////programming/proys/SWB4/swb/applets/SWBAppBPMNModeler/src/org/semanticwb/process/modeler/images/end_1.png"
+                                height="43"
+                                width="49" />
+                        </g>
+                        <g
+                            transform="translate(109.28574,207.57144)"
+                            id="g9651">
+                            <image
+                                y="229.43361"
+                                x="361.92856"
+                                id="image9570"
+                                xlink:href="file:////programming/proys/SWB4/swb/applets/SWBAppBPMNModeler/src/org/semanticwb/process/modeler/images/if_1.png"
+                                height="43"
+                                width="49" />
+                        </g>
+                        <image
+                            y="479.51642"
+                            x="471.21429"
+                            id="image9654"
+                            xlink:href="file:////programming/proys/SWB4/swb/applets/SWBAppBPMNModeler/src/org/semanticwb/process/modeler/images/barra_division.png"
+                            height="12"
+                            width="49" />
+                        <g
+                            transform="translate(86.428589,49.390319)"
+                            id="g9847">
+                            <image
+                                y="441.93362"
+                                x="384.78571"
+                                id="image9766"
+                                xlink:href="file:////programming/proys/SWB4/swb/applets/SWBAppBPMNModeler/src/org/semanticwb/process/modeler/images/flow_1.png"
+                                height="43"
+                                width="49" />
+                        </g>
+                        <g
+                            transform="translate(92.5,-59.482148)"
+                            id="g10009">
+                            <image
+                                y="604.79077"
+                                x="378.71429"
+                                id="image9944"
+                                xlink:href="file:////programming/proys/SWB4/swb/applets/SWBAppBPMNModeler/src/org/semanticwb/process/modeler/images/anota_1.png"
+                                height="43"
+                                width="49" />
+                        </g>
+                        <image
+                            width="49"
+                            height="12"
+                            xlink:href="file:////programming/proys/SWB4/swb/applets/SWBAppBPMNModeler/src/org/semanticwb/process/modeler/images/barra_division.png"
+                            id="image10012"
+                            x="471.21429"
+                            y="533.73083" />
+                        <image
+                            y="587.94525"
+                            x="471.21429"
+                            id="image10014"
+                            xlink:href="file:////programming/proys/SWB4/swb/applets/SWBAppBPMNModeler/src/org/semanticwb/process/modeler/images/barra_division.png"
+                            height="12"
+                            width="49" />
+                        <g
+                            transform="translate(-7.8571472,-20.232148)"
+                            id="g10140">
+                            <image
+                                y="619.79077"
+                                x="479.07144"
+                                id="image10075"
+                                xlink:href="file:////programming/proys/SWB4/swb/applets/SWBAppBPMNModeler/src/org/semanticwb/process/modeler/images/doc_1.png"
+                                height="43"
+                                width="49" />
+                        </g>
+                        <image
+                            width="49"
+                            height="12"
+                            xlink:href="file:////programming/proys/SWB4/swb/applets/SWBAppBPMNModeler/src/org/semanticwb/process/modeler/images/barra_division.png"
+                            id="image10143"
+                            x="471.21429"
+                            y="642.30237" />
+                        <g
+                            transform="translate(36.428589,166.07145)"
+                            id="g10269">
+                            <image
+                                y="487.64789"
+                                x="434.78571"
+                                id="image10204"
+                                xlink:href="file:////programming/proys/SWB4/swb/applets/SWBAppBPMNModeler/src/org/semanticwb/process/modeler/images/pool_1.png"
+                                height="43"
+                                width="49" />
+                        </g>
+                        <image
+                            width="49"
+                            height="8"
+                            xlink:href="file:////programming/proys/SWB4/swb/applets/SWBAppBPMNModeler/src/org/semanticwb/process/modeler/images/barra_bottom.png"
+                            id="image10331"
+                            x="471.21429"
+                            y="696.29083" />
+                    </g>
+                </g>                    
+
+                <linearGradient id="linearGradientStartEvent" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="10%" style="stop-color:#ffffff;stop-opacity:1" />
+                    <stop offset="90%" style="stop-color:#ccffaa;stop-opacity:1" />
+                </linearGradient>
+                <linearGradient id="linearGradientEndEvent" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="10%" style="stop-color:#ffffff;stop-opacity:1" />
+                    <stop offset="90%" style="stop-color:#f4d7d7;stop-opacity:1" />
+                </linearGradient>
+                <linearGradient id="linearGradientIntermediateEvent" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="10%" style="stop-color:#ffffff;stop-opacity:1" />
+                    <stop offset="100%" style="stop-color:#87aade;stop-opacity:1" />
+                </linearGradient>
+                
+                <rect id="selectBox" x="0" y="0" style="fill:url(#linearGradientIntermediateEvent);fill-opacity:1;stroke-width:2;stroke-opacity:1;stroke-dasharray:none"/>                
+
+                <g id="startEvent" styled="stroke:#008000">
+                    <circle r="25" style="fill:url(#linearGradientStartEvent);fill-opacity:1;stroke-width:2;stroke-opacity:1;stroke-dasharray:none;cursor:pointer"/>
+                </g>
+
+                <g id="endEvent" styled="stroke:#550000">
+                    <circle r="25" style="fill:url(#linearGradientEndEvent);fill-opacity:1;stroke-width:4;stroke-opacity:1;stroke-dasharray:none"/>
+                </g>
+
+                <g id="intermediateEvent" styled="stroke:#2c5aa0">
+                    <circle r="25" style="fill:url(#linearGradientIntermediateEvent);fill-opacity:1;stroke-width:2;stroke-opacity:1;stroke-dasharray:none"/>
+                    <circle r="22" style="fill-opacity:0;stroke-width:1;stroke-opacity:1;stroke-dasharray:none"/>
+                </g>
+                
+                <g id="task" styled="stroke:#2c5aa0">
+                    <rect x="-75" y="-50" rx="10" ry="10" width="150" height="100" style="fill:url(#linearGradientIntermediateEvent);fill-opacity:1;stroke-width:2;stroke-opacity:1;stroke-dasharray:none"/>
+                </g>
+
+                <g id="test" styled="stroke:#2c5aa0">
+                    <use xlink:href="#startEvent" x="0" y="0"/>
+                    <use xlink:href="#endEvent" x="100" y="100"/>
+                </g>                    
+            </defs>
+        </svg>
+
+    </body>
+</html>
