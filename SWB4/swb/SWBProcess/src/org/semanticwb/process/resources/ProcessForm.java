@@ -333,9 +333,28 @@ public class ProcessForm extends GenericResource {
             out.println("Parámetro no definido...");
             return;
         }
-
+        
         SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
         FlowNodeInstance foi = (FlowNodeInstance) ont.getGenericObject(suri);
+        
+        boolean canSign=false;
+        if(user.getExternalID()!=null)
+        {
+            Iterator<SemanticObject>it = foi.getProcessSite().getSemanticModel().listSubjects(X509Certificate.swp_X509Serial, user.getExternalID()); //TODO: Modificar Búsqueda
+            if (it.hasNext()){        
+                canSign=true;
+            }        
+        }
+        if(!canSign)
+        {
+            out.println("Su usuario no tiene un certificado registrado para poder firmar este documento, favor de contactar al administrador del sitio...");
+            return;
+        }
+        if(request.getParameter("err")!=null)
+        {
+            out.println("<script type=\"text/javascript\">alert('Error al procesar la firma del documento (Firma invalida)...')</script>");
+        }
+        
 
         String SigCad = getStringToSign(foi); 
         String signTemp=null;
@@ -607,54 +626,66 @@ public class ProcessForm extends GenericResource {
             User user = response.getUser();
             try {
                 CertificateFactory cf = CertificateFactory.getInstance("X.509");
-                //System.out.println("user.getExternalID():"+user.getExternalID());
-                Iterator<SemanticObject>it = foi.getProcessSite().getSemanticModel().listSubjects(X509Certificate.swp_X509Serial, user.getExternalID()); //TODO: Modificar Búsqueda
-                if (it.hasNext()){
-                    X509Certificate certObj = (X509Certificate)it.next().createGenericInstance();
-                    //System.out.println("certObj:"+certObj);
-                    FileInputStream fis = new FileInputStream(SWBPortal.getWorkPath()+certObj.getWorkPath()+"/"+certObj.getFile());
-                    BufferedInputStream bis = new BufferedInputStream(fis);
+                if(user.getExternalID()!=null)
+                {
+                    //System.out.println("user.getExternalID():"+user.getExternalID());
+                    Iterator<SemanticObject>it = foi.getProcessSite().getSemanticModel().listSubjects(X509Certificate.swp_X509Serial, user.getExternalID()); //TODO: Modificar Búsqueda
+                    if (it.hasNext()){
+                        X509Certificate certObj = (X509Certificate)it.next().createGenericInstance();
+                        //System.out.println("certObj:"+certObj);
+                        FileInputStream fis = new FileInputStream(SWBPortal.getWorkPath()+certObj.getWorkPath()+"/"+certObj.getFile());
+                        BufferedInputStream bis = new BufferedInputStream(fis);
 
-                    Certificate cert=null;
-                    //System.out.println("datos:"+bis.available());
-                    if (bis.available() > 0) {
-                        cert = cf.generateCertificate(bis);
-                    }
-                    //System.out.println("cert:"+cert);
-                    bis.close();
-                    fis.close();
-                    Signature sig = Signature.getInstance("SHA1withRSA");
-                    sig.initVerify(cert);
-                    byte[] data = Base64.decode(appletHidden);
-                    sig.update(cadenaOrig.getBytes());
-                    boolean flag = sig.verify(data);
-                    //System.out.println("validado:"+flag);
-                    if (flag){
-                        X509SingInstance x509SingInstance=X509SingInstance.ClassMgr.createX509SingInstance(foi.getProcessSite());
-                        x509SingInstance.setCertificate(certObj);
-                        x509SingInstance.setFlowNodeInstance(foi);
-                        x509SingInstance.setOriginalString(cadenaOrig);
-                        x509SingInstance.setSignedString(appletHidden);
-                        
-                        File file = new File(SWBPortal.getWorkPath()+x509SingInstance.getWorkPath());
-                        file.mkdirs();
-                        FileOutputStream fileOut = new FileOutputStream(SWBPortal.getWorkPath()+x509SingInstance.getWorkPath()+"/baseData.nt");
-                        fileOut.write(cadenaBase.getBytes("utf8"));
-                        fileOut.flush();
-                        fileOut.close();
-                        
-                        foi.close(response.getUser(), Instance.ACTION_ACCEPT);
-                        response.setMode(MODE_ACUSE);
-                        response.setRenderParameter("sg", x509SingInstance.getURI());
-                        
-                        //response.sendRedirect(foi.getUserTaskInboxUrl());//URL BOTON
-                        
-                    } else {
-                        log.error(new Exception("Error al validar firma..."));
-                        //TODO: Fallo de validación de firma.....
+                        Certificate cert=null;
+                        //System.out.println("datos:"+bis.available());
+                        if (bis.available() > 0) {
+                            cert = cf.generateCertificate(bis);
+                        }
+                        //System.out.println("cert:"+cert);
+                        bis.close();
+                        fis.close();
+                        Signature sig = Signature.getInstance("SHA1withRSA");
+                        sig.initVerify(cert);
+                        byte[] data = Base64.decode(appletHidden);
+                        sig.update(cadenaOrig.getBytes());
+                        boolean flag = sig.verify(data);
+                        //System.out.println("validado:"+flag);
+                        if (flag){
+                            X509SingInstance x509SingInstance=X509SingInstance.ClassMgr.createX509SingInstance(foi.getProcessSite());
+                            x509SingInstance.setCertificate(certObj);
+                            x509SingInstance.setFlowNodeInstance(foi);
+                            x509SingInstance.setOriginalString(cadenaOrig);
+                            x509SingInstance.setSignedString(appletHidden);
+
+                            File file = new File(SWBPortal.getWorkPath()+x509SingInstance.getWorkPath());
+                            file.mkdirs();
+                            FileOutputStream fileOut = new FileOutputStream(SWBPortal.getWorkPath()+x509SingInstance.getWorkPath()+"/baseData.nt");
+                            fileOut.write(cadenaBase.getBytes("utf8"));
+                            fileOut.flush();
+                            fileOut.close();
+
+                            foi.close(response.getUser(), Instance.ACTION_ACCEPT);
+                            response.setMode(MODE_ACUSE);
+                            response.setRenderParameter("sg", x509SingInstance.getURI());
+
+                            //response.sendRedirect(foi.getUserTaskInboxUrl());//URL BOTON
+
+                        } else {
+                            log.error(new Exception("Error al validar firma..."));
+                            //TODO: Fallo de validación de firma.....
+                            response.setMode(MODE_SIGN);
+                            response.setRenderParameter("err", "invCert");
+                        }
+
+                    }else
+                    {
                         response.setMode(MODE_SIGN);
+                        response.setRenderParameter("err", "noCert");
                     }
-                    
+                }else
+                {
+                        response.setMode(MODE_SIGN);
+                        response.setRenderParameter("err", "noCert");
                 }
             } catch (Exception gse){
                 //TODO: Como poner el error...
