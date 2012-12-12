@@ -45,4 +45,5 @@ public interface AWSServices {
             String elasticAdminDNS, String loadBalancer);
     void removeInstance(String instanceId);
     List<String> getElasticIPs();
+    void launch();
 }
