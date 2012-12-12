@@ -650,6 +650,7 @@ public class ProcessForm extends GenericResource {
                         //response.sendRedirect(foi.getUserTaskInboxUrl());//URL BOTON
                         
                     } else {
+                        log.error(new Exception("Error al validar firma..."));
                         //TODO: Fallo de validación de firma.....
                         response.setMode(MODE_SIGN);
                     }
