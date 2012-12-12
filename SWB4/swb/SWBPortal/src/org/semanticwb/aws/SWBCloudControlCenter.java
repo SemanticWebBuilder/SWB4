@@ -37,7 +37,7 @@ public final class SWBCloudControlCenter {
         reloadData();
     }
 
-    public void reloadData() {
+    public final void reloadData() {
         if (SWBAWSDataUtils.checkIfCanLaunch()){
             runningInstances = new ArrayList<InstanceData>();
             for (InstanceData cur:SWBPortal.getAWSCloud().getRunningInstances()){
@@ -49,6 +49,7 @@ public final class SWBCloudControlCenter {
             runningInstances=null;
         }
     }
+    
     
     
     
