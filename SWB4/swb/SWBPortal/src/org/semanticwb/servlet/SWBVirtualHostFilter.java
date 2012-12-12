@@ -91,6 +91,8 @@ public class SWBVirtualHostFilter implements Filter
     /** The log. */
     static Logger log = SWBUtils.getLogger(SWBVirtualHostFilter.class);
     
+    static SWBVirtualHostFilter instance=null;
+    
     /** The swb portal. */
     private SWBPortal swbPortal = null;
 
@@ -440,6 +442,7 @@ public class SWBVirtualHostFilter implements Filter
      */
     public void init(FilterConfig filterConfig) throws ServletException
     {
+        instance=this;
         try
         {
             log.event("************************************");
@@ -689,6 +692,11 @@ public class SWBVirtualHostFilter implements Filter
         out.write(msg.getBytes());
         //out.flush();
         //out.close();
+    }
+    
+    public static SWBVirtualHostFilter getInstance()
+    {
+        return instance;
     }
 
     /**
