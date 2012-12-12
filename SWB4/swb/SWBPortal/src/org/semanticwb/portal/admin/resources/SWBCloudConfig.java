@@ -28,19 +28,18 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.Logger;
-import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
-import org.semanticwb.platform.SemanticProperty;
 import org.semanticwb.portal.api.GenericResource;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 
+import static org.semanticwb.aws.SWBAWSDataUtils.*;
 /**
  *
  * @author serch
  */
-public class SWBCloudConfig extends GenericResource {
+public final class SWBCloudConfig extends GenericResource {
 
     private static Logger log = SWBUtils.getLogger(SWBCloudConfig.class);
 
@@ -409,43 +408,6 @@ public class SWBCloudConfig extends GenericResource {
                 + "</form>";
 
         return forma;
-    }
-    
-    private boolean checkIfCanLaunch(){
-        return checkIfParameterOk("/KeyPair") && checkIfParameterOk("/ImageId") && checkIfParameterOk("/InstanceType") 
-                && checkIfParameterOk("/MaxNumberInstances") && checkIfParameterOk("/AvZone") && checkIfParameterOk("/Memory") 
-                && checkIfParameterOk("/AppServer") && checkIfParameterOk("/SecGrpInt") && checkIfParameterOk("/SecGrpExt") 
-                && checkIfParameterOk("/Elastic") && checkIfParameterOk("/LoadBal");
-    }
-    
-    private boolean checkIfParameterOk(final String parameter){
-        String value = getValueOf(parameter);
-        return (null!=value && (!"".equals(value)));
-    }
-    
-    private String getValueOf(final String parameter){
-        SemanticProperty sp = SWBPlatform.getSemanticMgr().getModel(
-                SWBPlatform.getSemanticMgr().SWBAdmin).getSemanticProperty(
-                SWBPlatform.getSemanticMgr().SWBAdminURI + parameter);
-        //System.out.println("sp:"+sp);
-        return SWBPlatform.getSemanticMgr().getModel(
-                SWBPlatform.getSemanticMgr().SWBAdmin).getModelObject().getProperty(sp);
-    }
-    
-    private void setValueOf(final String parameter, final String value){
-        SemanticProperty sp = SWBPlatform.getSemanticMgr().getModel(
-                    SWBPlatform.getSemanticMgr().SWBAdmin).getSemanticProperty(
-                    SWBPlatform.getSemanticMgr().SWBAdminURI + parameter);
-        SWBPlatform.getSemanticMgr().getModel(
-                    SWBPlatform.getSemanticMgr().SWBAdmin).getModelObject().setProperty(sp, value);
-    }
-    
-    private void removeValue(final String parameter){
-        SemanticProperty sp = SWBPlatform.getSemanticMgr().getModel(
-                    SWBPlatform.getSemanticMgr().SWBAdmin).getSemanticProperty(
-                    SWBPlatform.getSemanticMgr().SWBAdminURI + parameter);
-        SWBPlatform.getSemanticMgr().getModel(
-                    SWBPlatform.getSemanticMgr().SWBAdmin).getModelObject().removeProperty(sp);
     }
 }
 
