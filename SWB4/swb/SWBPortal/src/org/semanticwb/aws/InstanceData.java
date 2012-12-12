@@ -33,6 +33,7 @@ public final class InstanceData {
     private String type;
     private String ip;
     private String Status;
+    private long startupTime;
 
     public String getId() {
         return id;
@@ -64,6 +65,14 @@ public final class InstanceData {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public long getStartupTime() {
+        return startupTime;
+    }
+
+    public void setStartupTime(long startupTime) {
+        this.startupTime = startupTime;
     }
     
 }

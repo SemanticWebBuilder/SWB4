@@ -58,6 +58,7 @@ public class SWBCloudConfig extends GenericResource {
             if (null==val || "false".equals(val)){
                 setValueOf("/launched", "true");
                 launched=true;
+                SWBPortal.getAWSCloud().launch();
             } else {
                 setValueOf("/launched", "false");
                 launched=false;
@@ -228,6 +229,12 @@ public class SWBCloudConfig extends GenericResource {
         } else {
             removeValue("/LoadBal");
         }
+        String maxCPU = request.getParameter("MaxCPU").trim();
+        if (null!=maxCPU && (!"".equals(maxCPU))){
+            setValueOf("/MaxCPU", maxCPU);
+        } else {
+            removeValue("/MaxCPU");
+        }
         return error;
     }
 
@@ -235,9 +242,11 @@ public class SWBCloudConfig extends GenericResource {
         String maxNum = getValueOf("/MaxNumberInstances");
         String memory = getValueOf("/Memory");
         String appserv = getValueOf("/AppServer");
+        String maxCPU = getValueOf("/MaxCPU");
         if (null==maxNum) maxNum="";
         if (null==memory) memory="";
         if (null==appserv) appserv="";
+        if (null==maxCPU) maxCPU="";
         String forma =null; 
         if (!launched) {
         forma = "<form id=\"configAWS\" dojoType=\"dijit.form.Form\" class=\"swbform\" action=\""
@@ -251,7 +260,7 @@ public class SWBCloudConfig extends GenericResource {
                 + "                <tr><td width=\"200px\" align=\"right\"><label for=\"ImageId\">Image &nbsp;</label></td><td><select name=\"ImageId\" >" + getImagesID() + "</td></tr>\n"
                 + "                <tr><td width=\"200px\" align=\"right\"><label for=\"InstanceType\">InstanceType &nbsp;</label></td><td><select name=\"InstanceType\" >" + getInstanceTypes() + "</td></tr>\n"
                 + "                <tr><td width=\"200px\" align=\"right\"><label for=\"MaxNumberInstances\">Max Instance to launch &nbsp;</label></td><td><input _id=\"MaxNumberInstances\" name=\"MaxNumberInstances\" "
-                + "value=\""+maxNum+"\" dojoType=\"dijit.form.ValidationTextBox\" required=\"true\" promptMessage=\"Set the max number of EC2 Instances to Launch\" invalidMessage=\"Not a number\" style=\"width:30px;\"  "
+                + "value=\""+maxNum+"\" dojoType=\"dijit.form.ValidationTextBox\" required=\"true\" promptMessage=\"Set the max number of EC2 Instances to Launch\" invalidMessage=\"Not a number\" style=\"width:40px;\"  "
                 + "trim=\"true\"/></td></tr>\n"
                 + "                <tr><td width=\"200px\" align=\"right\"><label for=\"Memory\">Memory String &nbsp;</label></td><td><input _id=\"Memory\" name=\"Memory\" "
                 + "value=\""+memory+"\" dojoType=\"dijit.form.ValidationTextBox\" required=\"true\" promptMessage=\"Set the memory to configura\" invalidMessage=\"Not a number\" style=\"width:300px;\"  "
@@ -263,6 +272,9 @@ public class SWBCloudConfig extends GenericResource {
                 + "                <tr><td width=\"200px\" align=\"right\"><label for=\"SecGrpExt\">External Security Group &nbsp;</label></td><td><select name=\"SecGrpExt\" >" + getSecGroupFor(secGrp, "/SecGrpExt") + "</td></tr>\n"
                 + "                <tr><td width=\"200px\" align=\"right\"><label for=\"Elastic\">ELastic Admin IP &nbsp;</label></td><td><select name=\"Elastic\" >" + getElastic() + "</td></tr>\n"
                 + "                <tr><td width=\"200px\" align=\"right\"><label for=\"LoadBal\">LoadBalancer &nbsp;</label></td><td><select name=\"LoadBal\" >" + getLoadBalancers() + "</td></tr>\n"
+                + "                <tr><td width=\"200px\" align=\"right\"><label for=\"MaxCPU\">CPU Aerage Level to lauch &nbsp;</label></td><td><input _id=\"MaxCPU\" name=\"MaxCPU\" "
+                + "value=\""+maxCPU+"\" dojoType=\"dijit.form.ValidationTextBox\" required=\"true\" promptMessage=\"Set the CPU average usage level to Launch other instances\" invalidMessage=\"Not a number\" style=\"width:40px;\"  "
+                + "trim=\"true\"/></td></tr>\n"
                 + "	    </table>\n"
                 + "	</fieldset>"
                 + "<fieldset><span align=\"center\">\n"
@@ -285,6 +297,7 @@ public class SWBCloudConfig extends GenericResource {
                 + "                <tr><td width=\"200px\" align=\"right\"><label for=\"SecGrpExt\">External Security Group &nbsp;</label></td><td>"+getValueOf("/SecGrpExt") +"</td></tr>\n"
                 + "                <tr><td width=\"200px\" align=\"right\"><label for=\"Elastic\">ELastic Admin IP &nbsp;</label></td><td>"+getValueOf("/Elastic") +"</td></tr>\n"
                 + "                <tr><td width=\"200px\" align=\"right\"><label for=\"LoadBal\">LoadBalancer &nbsp;</label></td><td>"+getValueOf("/LoadBal") +"</td></tr>\n"
+                + "                <tr><td width=\"200px\" align=\"right\"><label for=\"MaxCPU\">CPU Aerage Level to lauch &nbsp;</label></td><td>"+maxCPU +"</td></tr>\n"
                 + "	    </table>\n"
                 + "	</fieldset>";
         }
