@@ -23,6 +23,7 @@
 package org.semanticwb.aws;
 
 import org.semanticwb.SWBPlatform;
+import org.semanticwb.platform.SemanticMgr;
 import org.semanticwb.platform.SemanticProperty;
 
 /**
@@ -32,8 +33,8 @@ import org.semanticwb.platform.SemanticProperty;
 public class SWBAWSDataUtils {
 
     public static void removeValue(final String parameter) {
-        SemanticProperty sp = SWBPlatform.getSemanticMgr().getModel(SWBPlatform.getSemanticMgr().SWBAdmin).getSemanticProperty(SWBPlatform.getSemanticMgr().SWBAdminURI + parameter);
-        SWBPlatform.getSemanticMgr().getModel(SWBPlatform.getSemanticMgr().SWBAdmin).getModelObject().removeProperty(sp);
+        SemanticProperty sp = SWBPlatform.getSemanticMgr().getModel(SemanticMgr.SWBAdmin).getSemanticProperty(SemanticMgr.SWBAdminURI + parameter);
+        SWBPlatform.getSemanticMgr().getModel(SemanticMgr.SWBAdmin).getModelObject().removeProperty(sp);
     }
 
     public static boolean checkIfCanLaunch() {
@@ -41,13 +42,13 @@ public class SWBAWSDataUtils {
     }
 
     public static void setValueOf(final String parameter, final String value) {
-        SemanticProperty sp = SWBPlatform.getSemanticMgr().getModel(SWBPlatform.getSemanticMgr().SWBAdmin).getSemanticProperty(SWBPlatform.getSemanticMgr().SWBAdminURI + parameter);
-        SWBPlatform.getSemanticMgr().getModel(SWBPlatform.getSemanticMgr().SWBAdmin).getModelObject().setProperty(sp, value);
+        SemanticProperty sp = SWBPlatform.getSemanticMgr().getModel(SemanticMgr.SWBAdmin).getSemanticProperty(SemanticMgr.SWBAdminURI + parameter);
+        SWBPlatform.getSemanticMgr().getModel(SemanticMgr.SWBAdmin).getModelObject().setProperty(sp, value);
     }
 
     public static String getValueOf(final String parameter) {
-        SemanticProperty sp = SWBPlatform.getSemanticMgr().getModel(SWBPlatform.getSemanticMgr().SWBAdmin).getSemanticProperty(SWBPlatform.getSemanticMgr().SWBAdminURI + parameter);
-        return SWBPlatform.getSemanticMgr().getModel(SWBPlatform.getSemanticMgr().SWBAdmin).getModelObject().getProperty(sp);
+        SemanticProperty sp = SWBPlatform.getSemanticMgr().getModel(SemanticMgr.SWBAdmin).getSemanticProperty(SemanticMgr.SWBAdminURI + parameter);
+        return SWBPlatform.getSemanticMgr().getModel(SemanticMgr.SWBAdmin).getModelObject().getProperty(sp);
     }
 
     public static boolean checkIfParameterOk(final String parameter) {
