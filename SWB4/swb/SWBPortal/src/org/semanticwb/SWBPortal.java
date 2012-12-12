@@ -55,6 +55,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.SWBUtils.IO;
 import org.semanticwb.aws.AWSServices;
+import org.semanticwb.aws.SWBAWSDataUtils;
 import org.semanticwb.css.parser.Attribute;
 import org.semanticwb.css.parser.CSSParser;
 import org.semanticwb.css.parser.Selector;
@@ -784,7 +785,10 @@ public class SWBPortal
                 Class clazz = Class.forName(cloudClass);
                 cloudAWS = (AWSServices)clazz.newInstance();
                 log.event("CloudServices enabled...");
-            } catch (Exception roe){
+                if (SWBAWSDataUtils.checkIfCanLaunch()) {
+                    cloudAWS.launch();
+                }
+            } catch (Exception roe){ //Must change to ReflectiveOperationException in JDK7
                 log.event("Can't instantiate cloud services", roe);
                 assert false;
             }
