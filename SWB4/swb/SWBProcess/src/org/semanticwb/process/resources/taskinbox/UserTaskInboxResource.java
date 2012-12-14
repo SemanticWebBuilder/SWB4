@@ -301,7 +301,7 @@ public class UserTaskInboxResource extends org.semanticwb.process.resources.task
         Process pType = fni.getProcessInstance().getProcessType();
         
         if (!pType.isValid()) {
-            return true;
+            return false;
         }
         
         canAccess = fni.haveAccess(user);
