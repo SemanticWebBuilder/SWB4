@@ -5,6 +5,6 @@ package org.semanticwb.social;
    */
 public interface Oauthable extends org.semanticwb.social.base.OauthableBase
 {
-    public void doRequestPermissions();
-    public void doRequestAccess();
+    public String doRequestPermissions();
+    public String doRequestAccess();
 }
