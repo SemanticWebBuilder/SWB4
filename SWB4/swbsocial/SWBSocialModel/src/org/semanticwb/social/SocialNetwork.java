@@ -1,9 +1,14 @@
 package org.semanticwb.social;
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.Iterator;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.SWBModel;
+import org.semanticwb.portal.api.SWBParamRequest;
+import org.semanticwb.portal.api.SWBResourceException;
 
 
 public class SocialNetwork extends org.semanticwb.social.base.SocialNetworkBase 
@@ -129,5 +134,10 @@ public class SocialNetwork extends org.semanticwb.social.base.SocialNetworkBase
     public void authenticate()
     {
         //throw new UnsupportedOperationException("Not supported yet.");
+    }
+    
+    public void authenticate(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
+    {
+        System.out.println("SocialNetwork.authenticate(request,response,paramRequest)");
     }
 }

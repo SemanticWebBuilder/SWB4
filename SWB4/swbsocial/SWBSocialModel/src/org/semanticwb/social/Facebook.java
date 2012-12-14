@@ -11,6 +11,8 @@ import java.net.URLEncoder;
 import java.util.Collection;
 import java.util.Map;
 import java.util.HashMap;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.semanticwb.Logger;
@@ -19,7 +21,8 @@ import org.semanticwb.SWBUtils;
 import org.semanticwb.io.SWBFile;
 import org.semanticwb.io.SWBFileInputStream;
 import org.semanticwb.model.WebSite;
-
+import org.semanticwb.portal.api.SWBParamRequest;
+import org.semanticwb.portal.api.SWBResourceException;
 
 public class Facebook extends org.semanticwb.social.base.FacebookBase {
     
@@ -439,11 +442,233 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
     }
     
     @Override
-    public void doRequestAccess() {
+    public void authenticate(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
+    {
+System.out.println("********************   Facebook.authenticate");
+System.out.println("objUri="+request.getAttribute("objUri"));
+        String code = request.getParameter("code");
+System.out.println("code="+code);
+        String state = request.getParameter("state");
+System.out.println("state="+state);
+        String error = request.getParameter("error");
+System.out.println("error="+error);
+
+        HttpSession session = request.getSession(true);
+        
+        if(code==null)
+        {
+System.out.println("paso 1");
+            String url = doRequestPermissions(request);
+System.out.println("url="+url);
+            PrintWriter out = response.getWriter();
+            out.println("<script type=\"text/javascript\">");
+            out.println(" function ioauth() {");
+            out.println("  mywin = window.open("+url+",'_blank','width=840,height=680',true);");
+            out.println("  mywin.focus();");
+            out.println(" }");
+            out.println(" if(confirm('autenticar en facebook?')) {");
+            out.println("  ioauth();");
+            out.println(" }");
+            out.println("</script>");
+        }
+        else if( state!=null && state.equals(session.getAttribute("state")) && error==null  )
+        {
+System.out.println("paso 2");
+            String accessToken = null;
+            long secsToExpiration = 0L;
+            //Si el usuario otorgo los permisos necesarios, se obtiene el token de acceso
+            String token_url = "https://graph.facebook.com/oauth/access_token?" + "client_id=116470745174271&redirect_uri=" + URLEncoder.encode("http://localhost:8088/es/swbsocial5/SocialNetworks/_rid/24/_mod/oauth/_lang/es", "utf-8") + "&client_secret=f392625af4ae987e409a257d77f43c94&code=" + code;
+            if (session.getAttribute("accessToken") != null) {
+                accessToken = (String) session.getAttribute("accessToken");
+                secsToExpiration = ((Long) session.getAttribute("secsToExpiration")).longValue();
+            }
+System.out.println("accessToken="+accessToken);
+            if (accessToken == null) {
+                URL pagina = new URL(token_url);
+                URLConnection conex = null;
+                try {
+                    String host = pagina.getHost();
+                    String header = request.getHeader("user-agent");
+                    //Se realiza la peticion a la página externa
+                    conex = pagina.openConnection();
+                    if (header != null) {
+                        conex.setRequestProperty("user-agent", header);
+                    }
+                    if (host != null) {
+                        conex.setRequestProperty("host", host);
+                    }
+                    conex.setConnectTimeout(5000);
+                } catch (Exception nexc) {
+                    conex = null;
+System.out.println("error........"+nexc);
+                }
+
+                //Analizar la respuesta a la peticion y obtener el access token
+System.out.println("conex="+conex);
+                if (conex != null) {
+                    String answer = SWBUtils.IO.readInputStream(conex.getInputStream());
+System.out.println("answer="+answer);
+                    String aux = null;
+                    //System.out.println("Respuesta de Facebook para el accessToken: \n" + answer);
+
+                    if (answer.indexOf("&") > 0) {
+                        aux = answer.split("&")[0];
+                        if (aux.indexOf("=") > 0) {
+                            accessToken = aux.split("=")[1];
+                        }
+                        session.setAttribute("accessToken", accessToken);                        
+                        aux = answer.split("&")[1];
+                        if (aux.indexOf("=") > 0) {
+                            secsToExpiration = Long.parseLong(aux.split("=")[1]);
+                        }
+                        session.setAttribute("secsToExpiration", Long.valueOf(secsToExpiration));
+                    }
+                }
+            }
+            if (accessToken != null) {
+                //Hacer consulta a los datos del usuario a través del grafo
+                String graph_url = "https://graph.facebook.com/me?access_token="
+                    + accessToken;
+                String me = Facebook.graphRequest(graph_url, request.getHeader("user-agent"));
+                setActive(true);
+                try {
+                    JSONObject userData = new JSONObject(me);
+                    String userId = userData != null && userData.get("id") != null ? (String) userData.get("id") : "";
+                    PrintWriter out = response.getWriter();
+                    out.println("<script type=\"text/javascript\">");
+                    out.println("  window.close();");
+                    out.println("</script>");
+                }catch(JSONException e) {
+                    response.getWriter().println("<p>ya valio queso.......</p><br/>"+e);
+                }
+            }
+        }
+        else
+        {
+            System.out.println("Se ha encontrado un problema con la respuesta obtenida, se considera no aut&eacute;ntica.");
+        }
+        
+        
+        /*else if(state!=null && error!=null)
+        {
+System.out.println("\n------NO HUBO CHANCE--------------\n");
+        }
+        else
+        {
+System.out.println("segundo paso de autenticacion");
+            StringBuilder url = new StringBuilder();
+            url.append(FACEBOOKGRAPH);
+            url.append("oauth/access_token");
+            url.append("?client_id=");
+            url.append(getAppKey());
+            url.append("&redirect_uri=");
+            url.append("http://localhost:8088/es/swbsocial5/SocialNetworks/_rid/24/_mod/oauth/_lang/es");
+            url.append("&client_secret");
+            url.append(getSecretKey());
+            url.append("&code=");
+            url.append(code);
+            //url.append("\\");
+            
+            String accessToken = null;
+            long secsToExpiration = 0L;
+
+            HttpSession session = request.getSession(true);
+            if (session.getAttribute("accessToken") != null) {
+                accessToken = (String) session.getAttribute("accessToken");
+                secsToExpiration = ((Long) session.getAttribute("secsToExpiration")).longValue();
+            }
+
+            if (accessToken == null) {
+System.out.println("3");
+                URL pagina = new URL(url.toString());
+                URLConnection conex = null;
+                try {
+                    String host = pagina.getHost();
+                    String header = request.getHeader("user-agent");
+                    //Se realiza la peticion a la página externa
+                    conex = pagina.openConnection();
+                    if (header != null) {
+                        conex.setRequestProperty("user-agent", header);
+                    }
+                    if (host != null) {
+                        conex.setRequestProperty("host", host);
+                    }
+                    conex.setConnectTimeout(5000);
+                } catch (Exception nexc) {
+                    conex = null;
+                }
+
+                //Analizar la respuesta a la peticion y obtener el access token
+                if (conex != null) {
+                    String answer = SWBUtils.IO.readInputStream(conex.getInputStream());
+                    String aux = null;
+                    //System.out.println("Respuesta de Facebook para el accessToken: \n" + answer);
+
+                    if (answer.indexOf("&") > 0) {
+                        aux = answer.split("&")[0];
+                        if (aux.indexOf("=") > 0) {
+                            accessToken = aux.split("=")[1];
+                        }
+                        session.setAttribute("accessToken", accessToken);
+                        aux = answer.split("&")[1];
+                        if (aux.indexOf("=") > 0) {
+                            secsToExpiration = Long.parseLong(aux.split("=")[1]);
+                        }
+                        session.setAttribute("secsToExpiration", Long.valueOf(secsToExpiration));
+                    }
+                }
+            }
+            if (accessToken != null) {
+System.out.println("4");
+                //Hacer consulta a los datos del usuario a través del grafo
+                String graph_url = "https://graph.facebook.com/me?access_token="
+                    + accessToken;
+                String me = Facebook.graphRequest(graph_url, request.getHeader("user-agent"));
+                try {
+                    JSONObject userData = new JSONObject(me);
+                    String userId = userData != null && userData.get("id") != null ? (String) userData.get("id") : "";
+                    System.out.println("\n\nPara publicar info en Facebook haz clic <a href=\""
+                            + paramRequest.getActionUrl().setAction("saveToken").setParameter("token", accessToken).setParameter("userId", userId)
+                            + "\">aqu&iacute;</a>");
+                }catch(org.json.JSONException e) {
+                    e.printStackTrace(System.out);
+                }
+            }
+        }*/
+    }
     
+    public String doRequestPermissions(HttpServletRequest request)
+    {
+        StringBuilder url = new StringBuilder();
+        final String state = getState((String)request.getAttribute("objUri"));
+        
+        url.append("'https://www.facebook.com/dialog/oauth?'+");
+        url.append("'client_id='+");
+        url.append("'"+getAppKey()+"'+");
+        url.append("'&redirect_uri='+");
+        url.append("encodeURI('http://localhost:8088/es/swbsocial5/SocialNetworks/_rid/24/_mod/oauth/_lang/es')+");
+        //url.append("encodeURI('http://localhost:8088/mifacebook')+");
+        url.append("'&scope='+");
+        url.append("encodeURIComponent('publish_stream,read_stream')+");
+        url.append("'&state='+");        
+        url.append("'"+state+"'");
+        request.getSession(true).setAttribute("state", state);
+        return url.toString();
+
+        //heroku pass admin12345678
     }
     
     @Override
-    public void doRequestPermissions() {
+    public String doRequestPermissions() {
+        return null;
+    }
+    
+    @Override
+    public String doRequestAccess() {
+        return null;
+    }
+    
+    public String getState(String value) {
+        return "abc123";
     }
 }

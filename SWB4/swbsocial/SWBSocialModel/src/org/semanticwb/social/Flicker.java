@@ -175,14 +175,15 @@ public class Flicker extends org.semanticwb.social.base.FlickerBase
   }
     
     @Override
-    public void doRequestAccess()
+    public String doRequestAccess()
     {
-
+        return null;
     }
 
     @Override
-    public void doRequestPermissions()
+    public String doRequestPermissions()
     {
+        return null;
     }
 
     /* Funcionando para el protoripo
