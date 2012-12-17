@@ -779,8 +779,8 @@ public class SWBPortal
         //Inicializa el RuleMgr
         Rule.getRuleMgr();
         
-        if (!"ignore".equals(getEnv("swb/CloudImplementation", "ignore"))){
-            String cloudClass = getEnv("swb/CloudImplementation");
+        if (!"ignore".equals(getEnv("swb/cloudImplementation", "ignore"))){
+            String cloudClass = getEnv("swb/cloudImplementation");
             try {
                 Class clazz = Class.forName(cloudClass);
                 cloudAWS = (AWSServices)clazz.newInstance();
