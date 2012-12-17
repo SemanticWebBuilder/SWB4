@@ -784,11 +784,13 @@ public class SWBPortal
             try {
                 Class clazz = Class.forName(cloudClass);
                 cloudAWS = (AWSServices)clazz.newInstance();
+                new Thread(){
+                        public void run() {
+                            cloudAWS.launch();
+                        }
+                    }.start();
                 log.event("CloudServices enabled...");
-                if (SWBAWSDataUtils.checkIfCanLaunch()) {
-                    cloudAWS.launch();
-                }
-            } catch (Exception roe){ //Must change to ReflectiveOperationException in JDK7
+            } catch (Exception roe){ //catching Reflection and Thread Exceptions
                 log.event("Can't instantiate cloud services", roe);
                 assert false;
             }

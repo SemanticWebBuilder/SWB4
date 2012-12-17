@@ -22,7 +22,9 @@
  */
 package org.semanticwb.aws;
 
+import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
+import org.semanticwb.SWBUtils;
 import org.semanticwb.platform.SemanticMgr;
 import org.semanticwb.platform.SemanticProperty;
 
@@ -31,29 +33,32 @@ import org.semanticwb.platform.SemanticProperty;
  * @author serch
  */
 public class SWBAWSDataUtils {
-
+    private static Logger log = SWBUtils.getLogger(SWBAWSDataUtils.class);
+    
     public static void removeValue(final String parameter) {
         SemanticProperty sp = SWBPlatform.getSemanticMgr().getModel(SemanticMgr.SWBAdmin).getSemanticProperty(SemanticMgr.SWBAdminURI + parameter);
         SWBPlatform.getSemanticMgr().getModel(SemanticMgr.SWBAdmin).getModelObject().removeProperty(sp);
     }
-
+    
     public static boolean checkIfCanLaunch() {
-        return checkIfParameterOk("/KeyPair") && checkIfParameterOk("/ImageId") && checkIfParameterOk("/InstanceType") && checkIfParameterOk("/MaxNumberInstances") && checkIfParameterOk("/AvZone") && checkIfParameterOk("/Memory") && checkIfParameterOk("/AppServer") && checkIfParameterOk("/SecGrpInt") && checkIfParameterOk("/SecGrpExt") && checkIfParameterOk("/Elastic") && checkIfParameterOk("/LoadBal");
+        return checkIfParameterOk("/KeyPair") && checkIfParameterOk("/ImageId") && checkIfParameterOk("/InstanceType")
+                && checkIfParameterOk("/MaxNumberInstances") && checkIfParameterOk("/AvZone") && checkIfParameterOk("/Memory")
+                && checkIfParameterOk("/AppServer") && checkIfParameterOk("/SecGrpInt") && checkIfParameterOk("/SecGrpExt")
+                && checkIfParameterOk("/Elastic") && checkIfParameterOk("/LoadBal") && checkIfParameterOk("/MaxCPU");
     }
-
+    
     public static void setValueOf(final String parameter, final String value) {
         SemanticProperty sp = SWBPlatform.getSemanticMgr().getModel(SemanticMgr.SWBAdmin).getSemanticProperty(SemanticMgr.SWBAdminURI + parameter);
         SWBPlatform.getSemanticMgr().getModel(SemanticMgr.SWBAdmin).getModelObject().setProperty(sp, value);
     }
-
+    
     public static String getValueOf(final String parameter) {
         SemanticProperty sp = SWBPlatform.getSemanticMgr().getModel(SemanticMgr.SWBAdmin).getSemanticProperty(SemanticMgr.SWBAdminURI + parameter);
         return SWBPlatform.getSemanticMgr().getModel(SemanticMgr.SWBAdmin).getModelObject().getProperty(sp);
     }
-
+    
     public static boolean checkIfParameterOk(final String parameter) {
         String value = getValueOf(parameter);
         return null != value && (!"".equals(value));
     }
-    
 }
