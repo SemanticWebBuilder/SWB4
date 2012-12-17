@@ -22,35 +22,162 @@
  */
 package org.semanticwb.aws;
 
+import com.sun.corba.se.spi.monitoring.MonitoringConstants;
+import java.net.InetAddress;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
+import java.util.SortedSet;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.TreeSet;
+import org.semanticwb.Logger;
 import org.semanticwb.SWBPortal;
+import org.semanticwb.SWBUtils;
 
 /**
  *
  * @author serch
  */
 public final class SWBCloudControlCenter {
-    private List<InstanceData> runningInstances;
 
-    public SWBCloudControlCenter() {
-        reloadData();
-    }
+    private static Logger log = SWBUtils.getLogger(SWBCloudControlCenter.class);
+    private SortedSet<InstanceData> runningInstances;
+    private Timer cloudTimer = null;
+    private final static long _PERIOD = 5 * 60 * 1000l;
+    private String placement = null;
+    private String amiID = null;
+    private String instanceType = null;
+    private Collection<String> seg = null;
+    private String keyPair = null;
+    private String memory = null;
+    private String appServ = null;
+    private String elasticDNS = null;
+    private String lbName = null;
+    private double avgCPU = 0.0;
+    private int maxInstances = 0;
 
     public final void reloadData() {
-        if (SWBAWSDataUtils.checkIfCanLaunch()){
-            runningInstances = new ArrayList<InstanceData>();
-            for (InstanceData cur:SWBPortal.getAWSCloud().getRunningInstances()){
-                if ("swbClient".equals(cur.getType()) && "running".equals(cur.getStatus())){
+        System.out.println("Reloading data "+SWBAWSDataUtils.checkIfCanLaunch());
+        if (SWBAWSDataUtils.checkIfCanLaunch()) {
+            placement = SWBAWSDataUtils.getValueOf("/AvZone");
+            amiID = SWBAWSDataUtils.getValueOf("/ImageId");
+            instanceType = SWBAWSDataUtils.getValueOf("/InstanceType");
+            seg = new ArrayList<String>();
+            seg.add(SWBAWSDataUtils.getValueOf("/SecGrpInt"));
+            seg.add(SWBAWSDataUtils.getValueOf("/SecGrpExt"));
+            keyPair = SWBAWSDataUtils.getValueOf("/KeyPair");
+            memory = SWBAWSDataUtils.getValueOf("/Memory");
+            appServ = SWBAWSDataUtils.getValueOf("/AppServer");
+            elasticDNS = SWBAWSDataUtils.getValueOf("/Elastic");
+            lbName = SWBAWSDataUtils.getValueOf("/LoadBal");
+            try {
+                maxInstances = Integer.parseInt(SWBAWSDataUtils.getValueOf("/MaxNumberInstances"));
+            } catch (NumberFormatException nfe) {
+                log.debug("MaxNumberInstances not an Integer", nfe);
+            }
+            try {
+                avgCPU = Double.parseDouble(SWBAWSDataUtils.getValueOf("/MaxCPU"));
+            } catch (NumberFormatException nfe) {
+                log.debug("Average to Launch not a number", nfe);
+            }
+
+            runningInstances = Collections.synchronizedSortedSet(new TreeSet<InstanceData>());
+            for (InstanceData cur : SWBPortal.getAWSCloud().getRunningInstances()) {
+                if ("swbClient".equals(cur.getType()) && "running".equals(cur.getStatus())) {
                     runningInstances.add(cur);
                 }
             }
         } else {
-            runningInstances=null;
+            runningInstances = null;
         }
     }
+
+    public final void addInstanceData(InstanceData data) {
+        runningInstances.add(data);
+    }
+
+    public final void removeInstanceData(InstanceData data) {
+        runningInstances.remove(data);
+    }
     
-    
-    
-    
+    public final Iterator<InstanceData> listInstanceData(){
+        return runningInstances.iterator();
+    }
+
+    public final double getAverageLoad() {
+        double load = 0.0d;
+        int instCount = 0;
+        for (InstanceData id : runningInstances) {
+            load += SWBPortal.getAWSCloud().getCPUUSage(id.getId());
+            instCount++;
+        }
+        return load / instCount;
+    }
+
+    public final void activateMonitoring(final TimerTask task) {
+        if (null == cloudTimer) {
+            cloudTimer = new Timer("AWSMonitor", true);
+            cloudTimer.schedule(task, _PERIOD, _PERIOD);
+        }
+    }
+
+    public String getPlacement() {
+        return placement;
+    }
+
+    public String getAmiID() {
+        return amiID;
+    }
+
+    public String getInstanceType() {
+        return instanceType;
+    }
+
+    public Collection<String> getSeg() {
+        return seg;
+    }
+
+    public String getKeyPair() {
+        return keyPair;
+    }
+
+    public String getMemory() {
+        return memory;
+    }
+
+    public String getAppServ() {
+        return appServ;
+    }
+
+    public String getElasticDNS() {
+        return elasticDNS;
+    }
+
+    public String getLbName() {
+        return lbName;
+    }
+
+    public double getAvgCPU() {
+        return avgCPU;
+    }
+
+    public int getMaxInstances() {
+        return maxInstances;
+    }
+
+    boolean isLaunched() {
+        return "true".equals(SWBAWSDataUtils.getValueOf("/launched"));
+    }
+
+    int currentInstances() {
+        return runningInstances.size();
+    }
+
+    InstanceData getFisrtInstance() {
+        return runningInstances.first();
+    }
 }

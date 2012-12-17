@@ -24,12 +24,14 @@ package org.semanticwb.portal.admin.resources;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Iterator;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.aws.InstanceData;
 import org.semanticwb.portal.api.GenericResource;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
@@ -51,7 +53,7 @@ public final class SWBCloudConfig extends GenericResource {
             out.println("This function only works in an EC2 AWS");
             return;
         }
-        String val = getValueOf("/launched"); System.out.println("Value: "+val);
+        String val = getValueOf("/launched"); 
         boolean launched = (null!=val&&"true".equals(val))?true:false;
         if ("launch".equals(paramRequest.getAction())){
             if (null==val || "false".equals(val)){
@@ -61,6 +63,16 @@ public final class SWBCloudConfig extends GenericResource {
             } else {
                 setValueOf("/launched", "false");
                 launched=false;
+            }
+        }
+        if ("shutdown".equals(paramRequest.getAction())){
+            setValueOf("/launched", "false");
+            launched=false;
+            Iterator<InstanceData> lista = SWBPortal.getAWSCloud().getControlCenter().listInstanceData();    
+            while(lista.hasNext()){
+                InstanceData inDat = lista.next();
+                SWBPortal.getAWSCloud().removeInstance(SWBPortal.getAWSCloud().getControlCenter().getLbName(),inDat.getId());
+                SWBPortal.getAWSCloud().getControlCenter().removeInstanceData(inDat);
             }
         }
         if ("accUpdate".equals(paramRequest.getAction())) {
@@ -77,6 +89,11 @@ public final class SWBCloudConfig extends GenericResource {
         }
 
         out.print(jsElements());
+        
+        SWBPortal.getAWSCloud().getControlCenter().reloadData();
+        if (SWBPortal.getAWSCloud().getControlCenter().listInstanceData().hasNext()){
+            out.print(getFormShutdown(paramRequest));
+        }
         out.print(getFormCredentials(paramRequest, launched));
         //out.print("<br/><br/>");
         if (checkIfParameterOk("/accessKey") && checkIfParameterOk("/secretKey")) {
@@ -271,7 +288,7 @@ public final class SWBCloudConfig extends GenericResource {
                 + "                <tr><td width=\"200px\" align=\"right\"><label for=\"SecGrpExt\">External Security Group &nbsp;</label></td><td><select name=\"SecGrpExt\" >" + getSecGroupFor(secGrp, "/SecGrpExt") + "</td></tr>\n"
                 + "                <tr><td width=\"200px\" align=\"right\"><label for=\"Elastic\">ELastic Admin IP &nbsp;</label></td><td><select name=\"Elastic\" >" + getElastic() + "</td></tr>\n"
                 + "                <tr><td width=\"200px\" align=\"right\"><label for=\"LoadBal\">LoadBalancer &nbsp;</label></td><td><select name=\"LoadBal\" >" + getLoadBalancers() + "</td></tr>\n"
-                + "                <tr><td width=\"200px\" align=\"right\"><label for=\"MaxCPU\">CPU Aerage Level to lauch &nbsp;</label></td><td><input _id=\"MaxCPU\" name=\"MaxCPU\" "
+                + "                <tr><td width=\"200px\" align=\"right\"><label for=\"MaxCPU\">CPU Average Level to launch &nbsp;</label></td><td><input _id=\"MaxCPU\" name=\"MaxCPU\" "
                 + "value=\""+maxCPU+"\" dojoType=\"dijit.form.ValidationTextBox\" required=\"true\" promptMessage=\"Set the CPU average usage level to Launch other instances\" invalidMessage=\"Not a number\" style=\"width:40px;\"  "
                 + "trim=\"true\"/></td></tr>\n"
                 + "	    </table>\n"
@@ -296,7 +313,7 @@ public final class SWBCloudConfig extends GenericResource {
                 + "                <tr><td width=\"200px\" align=\"right\"><label for=\"SecGrpExt\">External Security Group &nbsp;</label></td><td>"+getValueOf("/SecGrpExt") +"</td></tr>\n"
                 + "                <tr><td width=\"200px\" align=\"right\"><label for=\"Elastic\">ELastic Admin IP &nbsp;</label></td><td>"+getValueOf("/Elastic") +"</td></tr>\n"
                 + "                <tr><td width=\"200px\" align=\"right\"><label for=\"LoadBal\">LoadBalancer &nbsp;</label></td><td>"+getValueOf("/LoadBal") +"</td></tr>\n"
-                + "                <tr><td width=\"200px\" align=\"right\"><label for=\"MaxCPU\">CPU Aerage Level to lauch &nbsp;</label></td><td>"+maxCPU +"</td></tr>\n"
+                + "                <tr><td width=\"200px\" align=\"right\"><label for=\"MaxCPU\">CPU Average Level to launch &nbsp;</label></td><td>"+maxCPU +"</td></tr>\n"
                 + "	    </table>\n"
                 + "	</fieldset>";
         }
@@ -393,17 +410,33 @@ public final class SWBCloudConfig extends GenericResource {
         String forma = "<form id=\"launcAWS\" dojoType=\"dijit.form.Form\" class=\"swbform\" action=\""
                 + paramRequest.getRenderUrl().setAction("launch")
                 + "\" onsubmit=\"submitForm('launcAWS');return false;\" method=\"post\">\n"
-//                + "<fieldset>\n"
-//                + "<legend>Lanzamiento</legend>"
-//                + "	    <table>\n"
-//                + "                <tr><td width=\"200px\" align=\"right\"><label for=\"accessKey\">AccessKey &nbsp;</label></td><td><input _id=\"accessKey\" name=\"accessKey\" value=\"" + access + "\" dojoType=\"dijit.form.ValidationTextBox\" required=\"false\" promptMessage=\"Captura el AccessKey\" style=\"width:300px;\" /></td></tr>\n"
-//                + "                <tr><td width=\"200px\" align=\"right\"><label for=\"secretKey\">SecretKey &nbsp;</label></td><td><input _id=\"secretKey\" name=\"secretKey\" value=\"" + secret + "\" dojoType=\"dijit.form.ValidationTextBox\" required=\"false\" promptMessage=\"Captura el SecretKey\" style=\"width:300px;\" /></td></tr>\n"
-//                + "	    </table>\n"
-//                + "	</fieldset>"
                 + "<fieldset>"
                 + "<legend>Lanzamiento</legend>"
                 + "<span align=\"center\">\n"
                 + "    <button dojoType=\"dijit.form.Button\" type=\"submit\">Lanzar</button>\n"
+                + "</span></fieldset>\n"
+                + "</form>";
+
+        return forma;
+    }
+    
+    private String getFormShutdown(final SWBParamRequest paramRequest){
+        String list = "";
+        Iterator<InstanceData> datos = SWBPortal.getAWSCloud().getControlCenter().listInstanceData();
+        while(datos.hasNext()) {
+            list = ", "+datos.next().getId();
+        }
+        list = list.substring(2);
+        String forma = "<form id=\"shutAWS\" dojoType=\"dijit.form.Form\" class=\"swbform\" action=\""
+                + paramRequest.getRenderUrl().setAction("shutdown")
+                + "\" onsubmit=\"submitForm('shutAWS');return false;\" method=\"post\">\n"
+                + "<fieldset>"
+                + "<legend>Shutdown</legend>"
+                + "	    <table>\n"
+                + "                <tr><td width=\"200px\" align=\"right\"><label for=\"AvZone\">Instances List &nbsp;</label></td><td>"+list +"</td></tr>\n"
+                + "	    </table>\n"                
+                + "<span align=\"center\">\n"
+                + "    <button dojoType=\"dijit.form.Button\" type=\"submit\">Apagar todas las instancias</button>\n"
                 + "</span></fieldset>\n"
                 + "</form>";
 

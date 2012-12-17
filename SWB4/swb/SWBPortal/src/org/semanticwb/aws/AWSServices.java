@@ -43,8 +43,9 @@ public interface AWSServices {
             String instanceType, Collection<String> securityGroups, 
             String keyPair, String memory, String appServ, 
             String elasticAdminDNS, String loadBalancer);
-    void removeInstance(String instanceId);
+    void removeInstance(String loadBalancer, String instanceId);
     List<String> getElasticIPs();
     void launch();
     SWBCloudControlCenter getControlCenter();
+    double getCPUUSage(String instanceID);
 }
