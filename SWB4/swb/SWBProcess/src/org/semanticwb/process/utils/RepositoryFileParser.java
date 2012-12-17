@@ -151,15 +151,20 @@ public class RepositoryFileParser extends GenericParser {
         boolean ret = false;
         //Si el creador del archivo tiene el mismo grupo de usuarios que el usuario en sesión
         //El usuario puede ver la sección
+        //TODO: Revisar condiciones de acuerdo a las reglas de negocio aplicables para SWB Process
         RepositoryFile rf = (RepositoryFile) gen;
         if (user.haveAccess(rf.getRepositoryDirectory())) {
             User creator = rf.getCreator();
-            Iterator<Role> roles = creator.listRoles();
-            while (roles.hasNext()) {
-                Role role = roles.next();
-                if (user.hasRole(role)) {
-                    ret = true;
-                    break;
+            if (creator != null) {
+                Iterator<Role> roles = creator.listRoles();
+                if (roles != null && roles.hasNext()) {
+                    while (roles.hasNext()) {
+                        Role role = roles.next();
+                        if (user.hasRole(role)) {
+                            ret = true;
+                            break;
+                        }
+                    }
                 }
             }
         }
