@@ -23,7 +23,7 @@
 package org.semanticwb.aws;
 
 /**
- *
+ * POJO representing an Instance
  * @author serch
  */
 public final class InstanceData implements Comparable<InstanceData> {
@@ -34,42 +34,82 @@ public final class InstanceData implements Comparable<InstanceData> {
     private String Status;
     private long startupTime;
 
+    /**
+     * get Instance ID
+     * @return Instance ID
+     */
     public String getId() {
         return id;
     }
 
+    /**
+     * Set Instance ID
+     * @param id instance ID
+     */
     public void setId(String id) {
         this.id = id;
     }
 
+    /**
+     * get Private IP
+     * @return Private IP
+     */
     public String getIp() {
         return ip;
     }
 
+    /**
+     * Set private IP
+     * @param ip private ip
+     */
     public void setIp(String ip) {
         this.ip = ip;
     }
 
+    /**
+     * get status of the instance
+     * @return status of the instance
+     */
     public String getStatus() {
         return Status;
     }
 
+    /**
+     * set status of the instance
+     * @param Status status of the instance
+     */
     public void setStatus(String Status) {
         this.Status = Status;
     }
 
+    /**
+     * get Instance swb type
+     * @return instance swb type
+     */
     public String getType() {
         return type;
     }
 
+    /**
+     * set instance swb type
+     * @param type instance swb type
+     */
     public void setType(String type) {
         this.type = type;
     }
 
+    /**
+     * get Startup Timestamp
+     * @return startup timestamp
+     */
     public long getStartupTime() {
         return startupTime;
     }
 
+    /**
+     * Set Startup timestamp
+     * @param startupTime startup timestamp
+     */
     public void setStartupTime(long startupTime) {
         this.startupTime = startupTime;
     }
