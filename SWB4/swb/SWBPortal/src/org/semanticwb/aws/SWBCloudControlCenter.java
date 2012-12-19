@@ -22,14 +22,10 @@
  */
 package org.semanticwb.aws;
 
-import com.sun.corba.se.spi.monitoring.MonitoringConstants;
-import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
 import java.util.SortedSet;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -61,7 +57,7 @@ public final class SWBCloudControlCenter {
     private int maxInstances = 0;
 
     public final void reloadData() {
-        System.out.println("Reloading data "+SWBAWSDataUtils.checkIfCanLaunch());
+        log.trace("Reloading data "+SWBAWSDataUtils.checkIfCanLaunch());
         if (SWBAWSDataUtils.checkIfCanLaunch()) {
             placement = SWBAWSDataUtils.getValueOf("/AvZone");
             amiID = SWBAWSDataUtils.getValueOf("/ImageId");
@@ -105,7 +101,7 @@ public final class SWBCloudControlCenter {
     }
     
     public final Iterator<InstanceData> listInstanceData(){
-        return runningInstances.iterator();
+        return null!=runningInstances?runningInstances.iterator():null;
     }
 
     public final double getAverageLoad() {
