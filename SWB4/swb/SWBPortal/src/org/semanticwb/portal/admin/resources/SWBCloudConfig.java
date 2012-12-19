@@ -32,11 +32,10 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.aws.InstanceData;
+import static org.semanticwb.aws.SWBAWSDataUtils.*;
 import org.semanticwb.portal.api.GenericResource;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
-
-import static org.semanticwb.aws.SWBAWSDataUtils.*;
 /**
  *
  * @author serch
@@ -91,7 +90,8 @@ public final class SWBCloudConfig extends GenericResource {
         out.print(jsElements());
         
         SWBPortal.getAWSCloud().getControlCenter().reloadData();
-        if (SWBPortal.getAWSCloud().getControlCenter().listInstanceData().hasNext()){
+        Iterator<InstanceData> iid = SWBPortal.getAWSCloud().getControlCenter().listInstanceData();
+        if (null!=iid && iid.hasNext()){
             out.print(getFormShutdown(paramRequest));
         }
         out.print(getFormCredentials(paramRequest, launched));
@@ -286,7 +286,7 @@ public final class SWBCloudConfig extends GenericResource {
                 + "trim=\"true\"/></td></tr>\n"
                 + "                <tr><td width=\"200px\" align=\"right\"><label for=\"SecGrpInt\">Internal Security Group &nbsp;</label></td><td><select name=\"SecGrpInt\" >" + getSecGroupFor(secGrp, "/SecGrpInt") + "</td></tr>\n"
                 + "                <tr><td width=\"200px\" align=\"right\"><label for=\"SecGrpExt\">External Security Group &nbsp;</label></td><td><select name=\"SecGrpExt\" >" + getSecGroupFor(secGrp, "/SecGrpExt") + "</td></tr>\n"
-                + "                <tr><td width=\"200px\" align=\"right\"><label for=\"Elastic\">ELastic Admin IP &nbsp;</label></td><td><select name=\"Elastic\" >" + getElastic() + "</td></tr>\n"
+                + "                <tr><td width=\"200px\" align=\"right\"><label for=\"Elastic\">Elastic Admin IP &nbsp;</label></td><td><select name=\"Elastic\" >" + getElastic() + "</td></tr>\n"
                 + "                <tr><td width=\"200px\" align=\"right\"><label for=\"LoadBal\">LoadBalancer &nbsp;</label></td><td><select name=\"LoadBal\" >" + getLoadBalancers() + "</td></tr>\n"
                 + "                <tr><td width=\"200px\" align=\"right\"><label for=\"MaxCPU\">CPU Average Level to launch &nbsp;</label></td><td><input _id=\"MaxCPU\" name=\"MaxCPU\" "
                 + "value=\""+maxCPU+"\" dojoType=\"dijit.form.ValidationTextBox\" required=\"true\" promptMessage=\"Set the CPU average usage level to Launch other instances\" invalidMessage=\"Not a number\" style=\"width:40px;\"  "
@@ -311,7 +311,7 @@ public final class SWBCloudConfig extends GenericResource {
                 + "                <tr><td width=\"200px\" align=\"right\"><label for=\"AppServer\">AppServer String &nbsp;</label></td><td>"+appserv+"</td></tr>\n"
                 + "                <tr><td width=\"200px\" align=\"right\"><label for=\"SecGrpInt\">Internal Security Group &nbsp;</label></td><td>"+getValueOf("/SecGrpInt") +"</td></tr>\n"
                 + "                <tr><td width=\"200px\" align=\"right\"><label for=\"SecGrpExt\">External Security Group &nbsp;</label></td><td>"+getValueOf("/SecGrpExt") +"</td></tr>\n"
-                + "                <tr><td width=\"200px\" align=\"right\"><label for=\"Elastic\">ELastic Admin IP &nbsp;</label></td><td>"+getValueOf("/Elastic") +"</td></tr>\n"
+                + "                <tr><td width=\"200px\" align=\"right\"><label for=\"Elastic\">Elastic Admin IP &nbsp;</label></td><td>"+getValueOf("/Elastic") +"</td></tr>\n"
                 + "                <tr><td width=\"200px\" align=\"right\"><label for=\"LoadBal\">LoadBalancer &nbsp;</label></td><td>"+getValueOf("/LoadBal") +"</td></tr>\n"
                 + "                <tr><td width=\"200px\" align=\"right\"><label for=\"MaxCPU\">CPU Average Level to launch &nbsp;</label></td><td>"+maxCPU +"</td></tr>\n"
                 + "	    </table>\n"
@@ -424,7 +424,7 @@ public final class SWBCloudConfig extends GenericResource {
         String list = "";
         Iterator<InstanceData> datos = SWBPortal.getAWSCloud().getControlCenter().listInstanceData();
         while(datos.hasNext()) {
-            list = ", "+datos.next().getId();
+            list += ", "+datos.next().getId();
         }
         list = list.substring(2);
         String forma = "<form id=\"shutAWS\" dojoType=\"dijit.form.Form\" class=\"swbform\" action=\""
