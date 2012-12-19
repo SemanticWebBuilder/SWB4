@@ -29,17 +29,25 @@ import org.semanticwb.platform.SemanticMgr;
 import org.semanticwb.platform.SemanticProperty;
 
 /**
- *
+ * Utils to handle AWS configuration data
  * @author serch
  */
 public class SWBAWSDataUtils {
     private static Logger log = SWBUtils.getLogger(SWBAWSDataUtils.class);
     
+    /**
+     * Remove a configuration Value
+     * @param parameter name of the configuration value to remove
+     */
     public static void removeValue(final String parameter) {
         SemanticProperty sp = SWBPlatform.getSemanticMgr().getModel(SemanticMgr.SWBAdmin).getSemanticProperty(SemanticMgr.SWBAdminURI + parameter);
         SWBPlatform.getSemanticMgr().getModel(SemanticMgr.SWBAdmin).getModelObject().removeProperty(sp);
     }
     
+    /**
+     * check if we have enough configuration values to launch
+     * @return true if we have enough configuration values to launch
+     */
     public static boolean checkIfCanLaunch() {
         return checkIfParameterOk("/KeyPair") && checkIfParameterOk("/ImageId") && checkIfParameterOk("/InstanceType")
                 && checkIfParameterOk("/MaxNumberInstances") && checkIfParameterOk("/AvZone") && checkIfParameterOk("/Memory")
@@ -47,16 +55,31 @@ public class SWBAWSDataUtils {
                 && checkIfParameterOk("/Elastic") && checkIfParameterOk("/LoadBal") && checkIfParameterOk("/MaxCPU");
     }
     
+    /**
+     * set a configuration value
+     * @param parameter name of the configuration value
+     * @param value value
+     */
     public static void setValueOf(final String parameter, final String value) {
         SemanticProperty sp = SWBPlatform.getSemanticMgr().getModel(SemanticMgr.SWBAdmin).getSemanticProperty(SemanticMgr.SWBAdminURI + parameter);
         SWBPlatform.getSemanticMgr().getModel(SemanticMgr.SWBAdmin).getModelObject().setProperty(sp, value);
     }
     
+    /**
+     * get configuration value
+     * @param parameter name of the configuration value
+     * @return value
+     */
     public static String getValueOf(final String parameter) {
         SemanticProperty sp = SWBPlatform.getSemanticMgr().getModel(SemanticMgr.SWBAdmin).getSemanticProperty(SemanticMgr.SWBAdminURI + parameter);
         return SWBPlatform.getSemanticMgr().getModel(SemanticMgr.SWBAdmin).getModelObject().getProperty(sp);
     }
     
+    /**
+     * check if configuration value has value
+     * @param parameter name of the configuration value
+     * @return true if configuration value has value
+     */
     public static boolean checkIfParameterOk(final String parameter) {
         String value = getValueOf(parameter);
         return null != value && (!"".equals(value));

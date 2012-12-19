@@ -35,7 +35,8 @@ import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 
 /**
- *
+ * Cloud Controller
+ * methods to facilitate instance management
  * @author serch
  */
 public final class SWBCloudControlCenter {
@@ -56,6 +57,9 @@ public final class SWBCloudControlCenter {
     private double avgCPU = 0.0;
     private int maxInstances = 0;
 
+    /**
+     * update configuration and instance data
+     */
     public final void reloadData() {
         log.trace("Reloading data "+SWBAWSDataUtils.checkIfCanLaunch());
         if (SWBAWSDataUtils.checkIfCanLaunch()) {
@@ -92,18 +96,34 @@ public final class SWBCloudControlCenter {
         }
     }
 
+    /**
+     * Add an InstanceData to the list
+     * @param data InstanceData to be added
+     */
     public final void addInstanceData(InstanceData data) {
         runningInstances.add(data);
     }
 
+    /**
+     * remove an InstanceData from the list
+     * @param data InstanceData to be removed
+     */
     public final void removeInstanceData(InstanceData data) {
         runningInstances.remove(data);
     }
     
+    /**
+     * get an Iterator of instanceData
+     * @return Iterator of instanceData
+     */
     public final Iterator<InstanceData> listInstanceData(){
         return null!=runningInstances?runningInstances.iterator():null;
     }
 
+    /**
+     * get Average CPU load
+     * @return average CPU load
+     */
     public final double getAverageLoad() {
         double load = 0.0d;
         int instCount = 0;
@@ -114,6 +134,10 @@ public final class SWBCloudControlCenter {
         return load / instCount;
     }
 
+    /**
+     * Activate Monitoring system
+     * @param task AWS Timer Monitoring Task
+     */
     public final void activateMonitoring(final TimerTask task) {
         if (null == cloudTimer) {
             cloudTimer = new Timer("AWSMonitor", true);
@@ -121,58 +145,114 @@ public final class SWBCloudControlCenter {
         }
     }
 
+    /**
+     * get Configuration value Placement zone
+     * @return value Placement zone
+     */
     public String getPlacement() {
         return placement;
     }
 
+    /**
+     * get Configuration value AMIID
+     * @return value AMIID
+     */
     public String getAmiID() {
         return amiID;
     }
 
+    /**
+     * get Configuration value Instance type
+     * @return value instance type
+     */
     public String getInstanceType() {
         return instanceType;
     }
 
+    /**
+     * get Configuration value Security Groups
+     * @return value Security Groups
+     */
     public Collection<String> getSeg() {
         return seg;
     }
 
+    /**
+     * get Configuration value KeyPair
+     * @return value KeyPair
+     */
     public String getKeyPair() {
         return keyPair;
     }
 
+    /**
+     * get Configuration value Memory
+     * @return memory
+     */
     public String getMemory() {
         return memory;
     }
 
+    /**
+     * get Configuration value App Server
+     * @return value App Server
+     */
     public String getAppServ() {
         return appServ;
     }
 
+    /**
+     * get Configuration value Elastic IP
+     * @return ElasticIP
+     */
     public String getElasticDNS() {
         return elasticDNS;
     }
 
+    /**
+     * get Configuration value Load Balancer
+     * @return value Load Balancer
+     */
     public String getLbName() {
         return lbName;
     }
 
+    /**
+     * get Configuration value AvgCPU
+     * @return value AVGCPU
+     */
     public double getAvgCPU() {
         return avgCPU;
     }
 
+    /**
+     * get Configuration value Max instances
+     * @return value Max instances
+     */
     public int getMaxInstances() {
         return maxInstances;
     }
 
+    /**
+     * is the system launched
+     * @return true if system is launched
+     */
     boolean isLaunched() {
         return "true".equals(SWBAWSDataUtils.getValueOf("/launched"));
     }
 
+    /**
+     * count running instances
+     * @return count of running instances
+     */
     int currentInstances() {
         return runningInstances.size();
     }
 
+    /**
+     * obtain the first instance data
+     * @return first instance data
+     */
     InstanceData getFisrtInstance() {
         return runningInstances.first();
     }

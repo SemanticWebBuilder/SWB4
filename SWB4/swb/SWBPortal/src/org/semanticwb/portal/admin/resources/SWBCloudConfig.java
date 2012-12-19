@@ -36,14 +36,23 @@ import static org.semanticwb.aws.SWBAWSDataUtils.*;
 import org.semanticwb.portal.api.GenericResource;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
+
 /**
- *
+ *Cloud Configuration Resource
  * @author serch
  */
 public final class SWBCloudConfig extends GenericResource {
 
     private static Logger log = SWBUtils.getLogger(SWBCloudConfig.class);
 
+    /**
+     * View Method for Cloud Configuration Resource
+     * @param request the Request
+     * @param response the Response
+     * @param paramRequest the paramRequest
+     * @throws SWBResourceException
+     * @throws IOException 
+     */
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response,
             SWBParamRequest paramRequest) throws SWBResourceException, IOException {
@@ -105,7 +114,7 @@ public final class SWBCloudConfig extends GenericResource {
 
     }
 
-    public static String jsElements() {
+    private static String jsElements() {
         return "    <script type=\"text/javascript\">\n"
                 + "      // scan page for widgets and instantiate them\n"
                 + "      dojo.require(\"dojo.parser\");\n"
@@ -129,7 +138,7 @@ public final class SWBCloudConfig extends GenericResource {
                 + "    </script>\n\n";
     }
 
-    public String getFormCredentials(final SWBParamRequest paramRequest, final boolean launched) {
+    private String getFormCredentials(final SWBParamRequest paramRequest, final boolean launched) {
         String access = getValueOf("/accessKey");
         String secret = getValueOf("/secretKey");
         if (access == null) {
