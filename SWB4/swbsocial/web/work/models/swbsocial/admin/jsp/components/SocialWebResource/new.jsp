@@ -11,8 +11,8 @@
 <%@page import="java.util.Iterator"%>
 <%@page import="org.semanticwb.social.Oauthable"%>
 <%@page import="static org.semanticwb.social.Oauthable.*" %>
-<%@page import="org.semanticwb.social.admin.socialweb.SocialWebResource"%>
-<%@page import="static org.semanticwb.social.admin.socialweb.SocialWebResource.*"%>
+<%@page import="org.semanticwb.social.components.resources.SocialWebResource"%>
+<%@page import="static org.semanticwb.social.components.resources.SocialWebResource.*"%>
 <%@page import="org.semanticwb.SWBPlatform"%>
 <%@page import="org.semanticwb.SWBUtils"%>
 <%@page import="org.semanticwb.social.SocialSite"%>
