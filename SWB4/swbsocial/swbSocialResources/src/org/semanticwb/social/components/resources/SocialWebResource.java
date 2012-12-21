@@ -66,6 +66,7 @@ System.out.println("********************   doView");
             }
             
             final String basePath = "/work/models/" + paramRequest.getWebPage().getWebSite().getId() + "/admin/jsp/components/" + this.getClass().getSimpleName() + "/";
+System.out.println("basePath="+basePath);
             final String action=request.getParameter(ATTR_AXN);
             final String objUri = request.getParameter(ATTR_OBJURI);
             final String wsite = request.getParameter(ATTR_WSITEID);
@@ -102,7 +103,7 @@ final String action = request.getParameter(ATTR_AXN)==null?paramRequest.getActio
         final SocialSite wsite = SocialSite.ClassMgr.getSocialSite(wsiteId);
         final String treeItem = request.getParameter(ATTR_TREEITEM);
         
-System.out.println("objUri="+objUri+", osea "+(objUri==null));        
+System.out.println("objUri es nulo?"+" "+(objUri==null));        
         
         HttpSession session = request.getSession(true);
         if(session.getAttribute("sw")==null)
@@ -123,7 +124,7 @@ System.out.println("------------------------ 1");
             socialNetwork.setDescription(desc);
             socialNetwork.setAppKey(appId);            
             socialNetwork.setSecretKey(sk);
-            request.setAttribute("objUri", objUri);
+            //request.setAttribute("objUri", objUri);
             socialNetwork.authenticate(request, response, paramRequest);
             session.setAttribute("sw", socialNetwork);
         }
@@ -134,6 +135,7 @@ System.out.println("------------------------ 2");
             objUri = socialNetwork.getURI();
             socialNetwork.authenticate(request, response, paramRequest);
             session.removeAttribute("sw");
+System.out.println("request.getAttribute('msg')="+request.getAttribute("msg"));            
         }
 
 System.out.println("including jsp...............");
