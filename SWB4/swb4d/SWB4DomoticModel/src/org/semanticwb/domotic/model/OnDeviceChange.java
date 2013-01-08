@@ -37,7 +37,7 @@ public class OnDeviceChange extends org.semanticwb.domotic.model.base.OnDeviceCh
     {
         System.out.println("OnDeviceChange:onEvent:"+stat);        
         int st=Integer.parseInt(stat);
-        DomDevice obj=getDomDevice();
+        //DomDevice obj=getDomDevice();
         if(getDeviceStat().equals("any") || (getDeviceStat().equals("on") && st>0) || (getDeviceStat().equals("off") && st==0))
         {
             doActions();

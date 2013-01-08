@@ -1,32 +1,10 @@
-/*
- * SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración,
- * colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de
- * información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes
- * fuentes, donde a la información se le asigna un significado, de forma que pueda ser interpretada y
- * procesada por personas y/o sistemas, es una creación original del Fondo de Información y Documentación
- * para la Industria INFOTEC, cuyo registro se encuentra actualmente en trámite.
- *
- * INFOTEC pone a su disposición la herramienta SemanticWebBuilder a través de su licenciamiento abierto al público (‘open source’),
- * en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición;
- * aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software,
- * todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización
- * del SemanticWebBuilder 4.0.
- *
- * INFOTEC no otorga garantía sobre SemanticWebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita,
- * siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar
- * de la misma.
- *
- * Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente
- * dirección electrónica:
- *  http://www.semanticwebbuilder.org
- */
 package org.semanticwb.domotic.model.base;
 
 
 public abstract class ChangeDeviceActionBase extends org.semanticwb.domotic.model.DomAction implements org.semanticwb.model.Descriptiveable
 {
     public static final org.semanticwb.platform.SemanticClass swb4d_DomDevice=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/domotic#DomDevice");
-    public static final org.semanticwb.platform.SemanticProperty swb4d_changeDevice=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/domotic#changeDevice");
+    public static final org.semanticwb.platform.SemanticProperty swb4d_hasChangeDevice=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/domotic#hasChangeDevice");
     public static final org.semanticwb.platform.SemanticProperty swb4d_changeDeviceStat=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/domotic#changeDeviceStat");
     public static final org.semanticwb.platform.SemanticClass swb4d_ChangeDeviceAction=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/domotic#ChangeDeviceAction");
    /**
@@ -112,7 +90,7 @@ public abstract class ChangeDeviceActionBase extends org.semanticwb.domotic.mode
 
         public static java.util.Iterator<org.semanticwb.domotic.model.ChangeDeviceAction> listChangeDeviceActionByChangeDevice(org.semanticwb.domotic.model.DomDevice value,org.semanticwb.model.SWBModel model)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.domotic.model.ChangeDeviceAction> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb4d_changeDevice, value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.domotic.model.ChangeDeviceAction> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb4d_hasChangeDevice, value.getSemanticObject(),sclass));
             return it;
         }
        /**
@@ -123,7 +101,7 @@ public abstract class ChangeDeviceActionBase extends org.semanticwb.domotic.mode
 
         public static java.util.Iterator<org.semanticwb.domotic.model.ChangeDeviceAction> listChangeDeviceActionByChangeDevice(org.semanticwb.domotic.model.DomDevice value)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.domotic.model.ChangeDeviceAction> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb4d_changeDevice,value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.domotic.model.ChangeDeviceAction> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb4d_hasChangeDevice,value.getSemanticObject(),sclass));
             return it;
         }
        /**
@@ -211,27 +189,54 @@ public abstract class ChangeDeviceActionBase extends org.semanticwb.domotic.mode
         super(base);
     }
    /**
-   * Sets the value for the property ChangeDevice
-   * @param value ChangeDevice to set
+   * Gets all the org.semanticwb.domotic.model.DomDevice
+   * @return A GenericIterator with all the org.semanticwb.domotic.model.DomDevice
    */
 
-    public void setChangeDevice(org.semanticwb.domotic.model.DomDevice value)
+    public org.semanticwb.model.GenericIterator<org.semanticwb.domotic.model.DomDevice> listChangeDevices()
     {
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.domotic.model.DomDevice>(getSemanticObject().listObjectProperties(swb4d_hasChangeDevice));
+    }
+
+   /**
+   * Gets true if has a ChangeDevice
+   * @param value org.semanticwb.domotic.model.DomDevice to verify
+   * @return true if the org.semanticwb.domotic.model.DomDevice exists, false otherwise
+   */
+    public boolean hasChangeDevice(org.semanticwb.domotic.model.DomDevice value)
+    {
+        boolean ret=false;
         if(value!=null)
         {
-            getSemanticObject().setObjectProperty(swb4d_changeDevice, value.getSemanticObject());
-        }else
-        {
-            removeChangeDevice();
+           ret=getSemanticObject().hasObjectProperty(swb4d_hasChangeDevice,value.getSemanticObject());
         }
+        return ret;
     }
    /**
-   * Remove the value for ChangeDevice property
+   * Adds a ChangeDevice
+   * @param value org.semanticwb.domotic.model.DomDevice to add
    */
 
-    public void removeChangeDevice()
+    public void addChangeDevice(org.semanticwb.domotic.model.DomDevice value)
     {
-        getSemanticObject().removeProperty(swb4d_changeDevice);
+        getSemanticObject().addObjectProperty(swb4d_hasChangeDevice, value.getSemanticObject());
+    }
+   /**
+   * Removes all the ChangeDevice
+   */
+
+    public void removeAllChangeDevice()
+    {
+        getSemanticObject().removeProperty(swb4d_hasChangeDevice);
+    }
+   /**
+   * Removes a ChangeDevice
+   * @param value org.semanticwb.domotic.model.DomDevice to remove
+   */
+
+    public void removeChangeDevice(org.semanticwb.domotic.model.DomDevice value)
+    {
+        getSemanticObject().removeObjectProperty(swb4d_hasChangeDevice,value.getSemanticObject());
     }
 
    /**
@@ -241,7 +246,7 @@ public abstract class ChangeDeviceActionBase extends org.semanticwb.domotic.mode
     public org.semanticwb.domotic.model.DomDevice getChangeDevice()
     {
          org.semanticwb.domotic.model.DomDevice ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb4d_changeDevice);
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb4d_hasChangeDevice);
          if(obj!=null)
          {
              ret=(org.semanticwb.domotic.model.DomDevice)obj.createGenericInstance();

@@ -1,33 +1,11 @@
-/*
- * SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración,
- * colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de
- * información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes
- * fuentes, donde a la información se le asigna un significado, de forma que pueda ser interpretada y
- * procesada por personas y/o sistemas, es una creación original del Fondo de Información y Documentación
- * para la Industria INFOTEC, cuyo registro se encuentra actualmente en trámite.
- *
- * INFOTEC pone a su disposición la herramienta SemanticWebBuilder a través de su licenciamiento abierto al público (‘open source’),
- * en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición;
- * aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software,
- * todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización
- * del SemanticWebBuilder 4.0.
- *
- * INFOTEC no otorga garantía sobre SemanticWebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita,
- * siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar
- * de la misma.
- *
- * Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente
- * dirección electrónica:
- *  http://www.semanticwebbuilder.org
- */
 package org.semanticwb.domotic.model.base;
 
 
 public abstract class OnGroupChangeBase extends org.semanticwb.domotic.model.DomEvent implements org.semanticwb.model.Descriptiveable
 {
-    public static final org.semanticwb.platform.SemanticProperty swb4d_groupStat=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/domotic#groupStat");
     public static final org.semanticwb.platform.SemanticClass swb4d_DomGroup=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/domotic#DomGroup");
-    public static final org.semanticwb.platform.SemanticProperty swb4d_domGroup4Event=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/domotic#domGroup4Event");
+    public static final org.semanticwb.platform.SemanticProperty swb4d_hasDomGroup4Event=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/domotic#hasDomGroup4Event");
+    public static final org.semanticwb.platform.SemanticProperty swb4d_groupStat=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/domotic#groupStat");
     public static final org.semanticwb.platform.SemanticClass swb4d_OnGroupChange=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/domotic#OnGroupChange");
    /**
    * The semantic class that represents the currentObject
@@ -112,7 +90,7 @@ public abstract class OnGroupChangeBase extends org.semanticwb.domotic.model.Dom
 
         public static java.util.Iterator<org.semanticwb.domotic.model.OnGroupChange> listOnGroupChangeByDomGroup(org.semanticwb.domotic.model.DomGroup value,org.semanticwb.model.SWBModel model)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.domotic.model.OnGroupChange> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb4d_domGroup4Event, value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.domotic.model.OnGroupChange> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb4d_hasDomGroup4Event, value.getSemanticObject(),sclass));
             return it;
         }
        /**
@@ -123,7 +101,7 @@ public abstract class OnGroupChangeBase extends org.semanticwb.domotic.model.Dom
 
         public static java.util.Iterator<org.semanticwb.domotic.model.OnGroupChange> listOnGroupChangeByDomGroup(org.semanticwb.domotic.model.DomGroup value)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.domotic.model.OnGroupChange> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb4d_domGroup4Event,value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.domotic.model.OnGroupChange> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb4d_hasDomGroup4Event,value.getSemanticObject(),sclass));
             return it;
         }
        /**
@@ -187,6 +165,71 @@ public abstract class OnGroupChangeBase extends org.semanticwb.domotic.model.Dom
     {
         super(base);
     }
+   /**
+   * Gets all the org.semanticwb.domotic.model.DomGroup
+   * @return A GenericIterator with all the org.semanticwb.domotic.model.DomGroup
+   */
+
+    public org.semanticwb.model.GenericIterator<org.semanticwb.domotic.model.DomGroup> listDomGroups()
+    {
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.domotic.model.DomGroup>(getSemanticObject().listObjectProperties(swb4d_hasDomGroup4Event));
+    }
+
+   /**
+   * Gets true if has a DomGroup
+   * @param value org.semanticwb.domotic.model.DomGroup to verify
+   * @return true if the org.semanticwb.domotic.model.DomGroup exists, false otherwise
+   */
+    public boolean hasDomGroup(org.semanticwb.domotic.model.DomGroup value)
+    {
+        boolean ret=false;
+        if(value!=null)
+        {
+           ret=getSemanticObject().hasObjectProperty(swb4d_hasDomGroup4Event,value.getSemanticObject());
+        }
+        return ret;
+    }
+   /**
+   * Adds a DomGroup
+   * @param value org.semanticwb.domotic.model.DomGroup to add
+   */
+
+    public void addDomGroup(org.semanticwb.domotic.model.DomGroup value)
+    {
+        getSemanticObject().addObjectProperty(swb4d_hasDomGroup4Event, value.getSemanticObject());
+    }
+   /**
+   * Removes all the DomGroup
+   */
+
+    public void removeAllDomGroup()
+    {
+        getSemanticObject().removeProperty(swb4d_hasDomGroup4Event);
+    }
+   /**
+   * Removes a DomGroup
+   * @param value org.semanticwb.domotic.model.DomGroup to remove
+   */
+
+    public void removeDomGroup(org.semanticwb.domotic.model.DomGroup value)
+    {
+        getSemanticObject().removeObjectProperty(swb4d_hasDomGroup4Event,value.getSemanticObject());
+    }
+
+   /**
+   * Gets the DomGroup
+   * @return a org.semanticwb.domotic.model.DomGroup
+   */
+    public org.semanticwb.domotic.model.DomGroup getDomGroup()
+    {
+         org.semanticwb.domotic.model.DomGroup ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb4d_hasDomGroup4Event);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.domotic.model.DomGroup)obj.createGenericInstance();
+         }
+         return ret;
+    }
 
 /**
 * Gets the GroupStat property
@@ -204,44 +247,6 @@ public abstract class OnGroupChangeBase extends org.semanticwb.domotic.model.Dom
     public void setGroupStat(String value)
     {
         getSemanticObject().setProperty(swb4d_groupStat, value);
-    }
-   /**
-   * Sets the value for the property DomGroup
-   * @param value DomGroup to set
-   */
-
-    public void setDomGroup(org.semanticwb.domotic.model.DomGroup value)
-    {
-        if(value!=null)
-        {
-            getSemanticObject().setObjectProperty(swb4d_domGroup4Event, value.getSemanticObject());
-        }else
-        {
-            removeDomGroup();
-        }
-    }
-   /**
-   * Remove the value for DomGroup property
-   */
-
-    public void removeDomGroup()
-    {
-        getSemanticObject().removeProperty(swb4d_domGroup4Event);
-    }
-
-   /**
-   * Gets the DomGroup
-   * @return a org.semanticwb.domotic.model.DomGroup
-   */
-    public org.semanticwb.domotic.model.DomGroup getDomGroup()
-    {
-         org.semanticwb.domotic.model.DomGroup ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb4d_domGroup4Event);
-         if(obj!=null)
-         {
-             ret=(org.semanticwb.domotic.model.DomGroup)obj.createGenericInstance();
-         }
-         return ret;
     }
 
    /**
