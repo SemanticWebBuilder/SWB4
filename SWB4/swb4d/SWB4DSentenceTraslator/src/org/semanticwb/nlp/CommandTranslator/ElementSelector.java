@@ -116,7 +116,7 @@ public class ElementSelector {
     private MatchedElementOfASentence getElementbySetence(String Sentence) {
         String moreSimilar = null;
         String elementSelected = null;
-        double JWDistance = 0.0;
+        double JWDistance = 0.85;
         double jwd;
         for (String subset : getSubsetString(Sentence)) {
             for (String element : elements) {
