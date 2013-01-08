@@ -1,0 +1,4 @@
+Manifest-Version: 1.0
+Main-Class: org.semanticwb.nlp.CommandTranslator.CommandParser
+Class-Path: freeling.jar
+
