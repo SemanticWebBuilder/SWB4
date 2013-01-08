@@ -100,23 +100,28 @@ public class ElementSelector {
         MatchedElementOfASentence ElementsSentence = null;
         for (String sentence : speechSentence) {
             MatchedElementOfASentence SSE = getElementbySetence(sentence);
-            if (SSE.getSimilarity() == greaterSimilarity) {
-                selectedSentences.add(sentence.replace(SSE.getSubsetSimilar(), string.normalizeElementName(SSE.getElementSimilar())));
-            } else if (SSE.getSimilarity() > greaterSimilarity) {
-                greaterSimilarity = SSE.getSimilarity();
-                ElementsSentence = SSE;
-                selectedSentences = new ArrayList<String>();
-                selectedSentences.add(sentence.replace(SSE.getSubsetSimilar(), string.normalizeElementName(SSE.getElementSimilar())));
+            if(SSE.getElementSimilar()!=null)
+            {
+                if (SSE.getSimilarity() == greaterSimilarity) {
+
+                    selectedSentences.add(sentence.replace(SSE.getSubsetSimilar(), string.normalizeElementName(SSE.getElementSimilar())));
+                } else if (SSE.getSimilarity() > greaterSimilarity) {
+                    greaterSimilarity = SSE.getSimilarity();
+                    ElementsSentence = SSE;
+                    selectedSentences = new ArrayList<String>();
+                    selectedSentences.add(sentence.replace(SSE.getSubsetSimilar(), string.normalizeElementName(SSE.getElementSimilar())));
+                }
             }
         }
         selectedElement = ElementsSentence;
+        if(selectedSentences==null)selectedSentences = new ArrayList<String>();
         return selectedSentences;
     }
     
     private MatchedElementOfASentence getElementbySetence(String Sentence) {
         String moreSimilar = null;
         String elementSelected = null;
-        double JWDistance = 0.85;
+        double JWDistance = 0.1;
         double jwd;
         for (String subset : getSubsetString(Sentence)) {
             for (String element : elements) {

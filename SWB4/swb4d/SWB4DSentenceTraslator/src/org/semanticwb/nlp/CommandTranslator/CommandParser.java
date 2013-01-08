@@ -89,7 +89,10 @@ public class CommandParser {
 
     private Command getCommand(List<SentenceParser> parsedSentences) {
         Command c = new Command();
-        c.setElement(elementSelector.getSelectedElement().getElementSimilar());
+        if(elementSelector.getSelectedElement()!=null)
+        {
+            c.setElement(elementSelector.getSelectedElement().getElementSimilar());
+        }
         if (parsedSentences.size() > 1) {
             c.setAction(selectAction(parsedSentences));
             c.setIntensity(string.getIntensity(selectIntensity(parsedSentences)));

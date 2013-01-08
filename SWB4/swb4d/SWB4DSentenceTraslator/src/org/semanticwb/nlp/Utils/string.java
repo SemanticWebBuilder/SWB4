@@ -264,6 +264,7 @@ public class string {
     }
 
     public static String normalizeElementName(String ElementName) {
+        if(ElementName==null)return null;
         //If the element name contains one or more numbers replace for its description
         if (ElementName.matches(".*[0-9]+.*")) {
             Pattern regex = Pattern.compile("([0-9]+)");
