@@ -31,7 +31,6 @@ import java.nio.charset.Charset;
 import java.security.MessageDigest;
 
 
-
 import java.util.*;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.base.util.SFBase64;

@@ -22,6 +22,8 @@
  */
 package org.semanticwb.domotic.model;
 
+import java.util.Iterator;
+
 
 public class ChangeDeviceAction extends org.semanticwb.domotic.model.base.ChangeDeviceActionBase 
 {
@@ -34,8 +36,13 @@ public class ChangeDeviceAction extends org.semanticwb.domotic.model.base.Change
     public void doActionImp()
     {
         System.out.println("ChangeDeviceAction:doAction");        
-        DomDevice dev=getChangeDevice();
-        dev.setStatus(getChangeDeviceStat());
+        Iterator<DomDevice> it=listChangeDevices();
+        while (it.hasNext())
+        {
+            DomDevice dev = it.next();
+            dev.setStatus(getChangeDeviceStat());
+        }
+        
     }
     
     

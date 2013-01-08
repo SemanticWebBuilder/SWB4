@@ -1,32 +1,10 @@
-/*
- * SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración,
- * colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de
- * información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes
- * fuentes, donde a la información se le asigna un significado, de forma que pueda ser interpretada y
- * procesada por personas y/o sistemas, es una creación original del Fondo de Información y Documentación
- * para la Industria INFOTEC, cuyo registro se encuentra actualmente en trámite.
- *
- * INFOTEC pone a su disposición la herramienta SemanticWebBuilder a través de su licenciamiento abierto al público (‘open source’),
- * en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición;
- * aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software,
- * todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización
- * del SemanticWebBuilder 4.0.
- *
- * INFOTEC no otorga garantía sobre SemanticWebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita,
- * siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar
- * de la misma.
- *
- * Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente
- * dirección electrónica:
- *  http://www.semanticwebbuilder.org
- */
 package org.semanticwb.domotic.model.base;
 
 
 public abstract class ChangeGroupActionBase extends org.semanticwb.domotic.model.DomAction implements org.semanticwb.model.Descriptiveable
 {
     public static final org.semanticwb.platform.SemanticClass swb4d_DomGroup=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/domotic#DomGroup");
-    public static final org.semanticwb.platform.SemanticProperty swb4d_changeGroup=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/domotic#changeGroup");
+    public static final org.semanticwb.platform.SemanticProperty swb4d_hasChangeGroup=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/domotic#hasChangeGroup");
     public static final org.semanticwb.platform.SemanticProperty swb4d_changeGroupStat=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/domotic#changeGroupStat");
     public static final org.semanticwb.platform.SemanticClass swb4d_ChangeGroupAction=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/domotic#ChangeGroupAction");
    /**
@@ -104,29 +82,6 @@ public abstract class ChangeGroupActionBase extends org.semanticwb.domotic.model
             return (getChangeGroupAction(id, model)!=null);
         }
        /**
-       * Gets all org.semanticwb.domotic.model.ChangeGroupAction with a determined ChangeGroup
-       * @param value ChangeGroup of the type org.semanticwb.domotic.model.DomGroup
-       * @param model Model of the org.semanticwb.domotic.model.ChangeGroupAction
-       * @return Iterator with all the org.semanticwb.domotic.model.ChangeGroupAction
-       */
-
-        public static java.util.Iterator<org.semanticwb.domotic.model.ChangeGroupAction> listChangeGroupActionByChangeGroup(org.semanticwb.domotic.model.DomGroup value,org.semanticwb.model.SWBModel model)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.domotic.model.ChangeGroupAction> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb4d_changeGroup, value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.domotic.model.ChangeGroupAction with a determined ChangeGroup
-       * @param value ChangeGroup of the type org.semanticwb.domotic.model.DomGroup
-       * @return Iterator with all the org.semanticwb.domotic.model.ChangeGroupAction
-       */
-
-        public static java.util.Iterator<org.semanticwb.domotic.model.ChangeGroupAction> listChangeGroupActionByChangeGroup(org.semanticwb.domotic.model.DomGroup value)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.domotic.model.ChangeGroupAction> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb4d_changeGroup,value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
        * Gets all org.semanticwb.domotic.model.ChangeGroupAction with a determined DomEvent
        * @param value DomEvent of the type org.semanticwb.domotic.model.DomEvent
        * @param model Model of the org.semanticwb.domotic.model.ChangeGroupAction
@@ -173,6 +128,29 @@ public abstract class ChangeGroupActionBase extends org.semanticwb.domotic.model
             return it;
         }
        /**
+       * Gets all org.semanticwb.domotic.model.ChangeGroupAction with a determined ChangeGroup
+       * @param value ChangeGroup of the type org.semanticwb.domotic.model.DomGroup
+       * @param model Model of the org.semanticwb.domotic.model.ChangeGroupAction
+       * @return Iterator with all the org.semanticwb.domotic.model.ChangeGroupAction
+       */
+
+        public static java.util.Iterator<org.semanticwb.domotic.model.ChangeGroupAction> listChangeGroupActionByChangeGroup(org.semanticwb.domotic.model.DomGroup value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.domotic.model.ChangeGroupAction> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb4d_hasChangeGroup, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.domotic.model.ChangeGroupAction with a determined ChangeGroup
+       * @param value ChangeGroup of the type org.semanticwb.domotic.model.DomGroup
+       * @return Iterator with all the org.semanticwb.domotic.model.ChangeGroupAction
+       */
+
+        public static java.util.Iterator<org.semanticwb.domotic.model.ChangeGroupAction> listChangeGroupActionByChangeGroup(org.semanticwb.domotic.model.DomGroup value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.domotic.model.ChangeGroupAction> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb4d_hasChangeGroup,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
        * Gets all org.semanticwb.domotic.model.ChangeGroupAction with a determined GetStartTimerAction
        * @param value GetStartTimerAction of the type org.semanticwb.domotic.model.StartTimerAction
        * @param model Model of the org.semanticwb.domotic.model.ChangeGroupAction
@@ -211,27 +189,54 @@ public abstract class ChangeGroupActionBase extends org.semanticwb.domotic.model
         super(base);
     }
    /**
-   * Sets the value for the property ChangeGroup
-   * @param value ChangeGroup to set
+   * Gets all the org.semanticwb.domotic.model.DomGroup
+   * @return A GenericIterator with all the org.semanticwb.domotic.model.DomGroup
    */
 
-    public void setChangeGroup(org.semanticwb.domotic.model.DomGroup value)
+    public org.semanticwb.model.GenericIterator<org.semanticwb.domotic.model.DomGroup> listChangeGroups()
     {
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.domotic.model.DomGroup>(getSemanticObject().listObjectProperties(swb4d_hasChangeGroup));
+    }
+
+   /**
+   * Gets true if has a ChangeGroup
+   * @param value org.semanticwb.domotic.model.DomGroup to verify
+   * @return true if the org.semanticwb.domotic.model.DomGroup exists, false otherwise
+   */
+    public boolean hasChangeGroup(org.semanticwb.domotic.model.DomGroup value)
+    {
+        boolean ret=false;
         if(value!=null)
         {
-            getSemanticObject().setObjectProperty(swb4d_changeGroup, value.getSemanticObject());
-        }else
-        {
-            removeChangeGroup();
+           ret=getSemanticObject().hasObjectProperty(swb4d_hasChangeGroup,value.getSemanticObject());
         }
+        return ret;
     }
    /**
-   * Remove the value for ChangeGroup property
+   * Adds a ChangeGroup
+   * @param value org.semanticwb.domotic.model.DomGroup to add
    */
 
-    public void removeChangeGroup()
+    public void addChangeGroup(org.semanticwb.domotic.model.DomGroup value)
     {
-        getSemanticObject().removeProperty(swb4d_changeGroup);
+        getSemanticObject().addObjectProperty(swb4d_hasChangeGroup, value.getSemanticObject());
+    }
+   /**
+   * Removes all the ChangeGroup
+   */
+
+    public void removeAllChangeGroup()
+    {
+        getSemanticObject().removeProperty(swb4d_hasChangeGroup);
+    }
+   /**
+   * Removes a ChangeGroup
+   * @param value org.semanticwb.domotic.model.DomGroup to remove
+   */
+
+    public void removeChangeGroup(org.semanticwb.domotic.model.DomGroup value)
+    {
+        getSemanticObject().removeObjectProperty(swb4d_hasChangeGroup,value.getSemanticObject());
     }
 
    /**
@@ -241,7 +246,7 @@ public abstract class ChangeGroupActionBase extends org.semanticwb.domotic.model
     public org.semanticwb.domotic.model.DomGroup getChangeGroup()
     {
          org.semanticwb.domotic.model.DomGroup ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb4d_changeGroup);
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb4d_hasChangeGroup);
          if(obj!=null)
          {
              ret=(org.semanticwb.domotic.model.DomGroup)obj.createGenericInstance();

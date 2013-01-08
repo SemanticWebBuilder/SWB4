@@ -22,6 +22,8 @@
  */
 package org.semanticwb.domotic.model;
 
+import java.util.Iterator;
+
 
 public class ChangeGroupAction extends org.semanticwb.domotic.model.base.ChangeGroupActionBase 
 {
@@ -34,8 +36,12 @@ public class ChangeGroupAction extends org.semanticwb.domotic.model.base.ChangeG
     public void doActionImp()
     {
         System.out.println("ChangeGroupAction:doAction");                
-        DomGroup obj=getChangeGroup();
-        obj.setStatus(getChangeGroupStat());
+        Iterator<DomGroup> it=listChangeGroups();
+        while (it.hasNext())
+        {
+            DomGroup obj = it.next();
+            obj.setStatus(getChangeGroupStat());
+        }
     }
     
 }

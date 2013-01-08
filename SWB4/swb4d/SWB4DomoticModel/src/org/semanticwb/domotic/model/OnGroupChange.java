@@ -37,7 +37,7 @@ public class OnGroupChange extends org.semanticwb.domotic.model.base.OnGroupChan
     {
         System.out.println("OnGroupChange:onEvent:"+stat);                
         int st=Integer.parseInt(stat);
-        DomGroup obj=getDomGroup();
+        //DomGroup obj=getDomGroup();
         if(getGroupStat().equals("any") || (getGroupStat().equals("on") && st>0) || (getGroupStat().equals("off") && st==0))
         {
             doActions();
