@@ -108,7 +108,7 @@ public final class SWBCloudConfig extends GenericResource {
         if (checkIfParameterOk("/accessKey") && checkIfParameterOk("/secretKey")) {
             List<String> secGrp = SWBPortal.getAWSCloud().getSecurityGroups();
             out.print(getFormConfig(paramRequest, secGrp, launched));
-            if (checkIfCanLaunch()) out.print(getFormLaunch(paramRequest));
+            if (checkIfCanLaunch()) out.print(getFormLaunch(paramRequest, launched));
             //SWBPortal.getAWSCloud().getRunningInstances();
         }
 
@@ -415,14 +415,15 @@ public final class SWBCloudConfig extends GenericResource {
         return ret;
     }
     
-    private String getFormLaunch(final SWBParamRequest paramRequest){
+    private String getFormLaunch(final SWBParamRequest paramRequest, final boolean launched){
+        String lnch = (launched?"Detener":"Lanzar");
         String forma = "<form id=\"launcAWS\" dojoType=\"dijit.form.Form\" class=\"swbform\" action=\""
                 + paramRequest.getRenderUrl().setAction("launch")
                 + "\" onsubmit=\"submitForm('launcAWS');return false;\" method=\"post\">\n"
                 + "<fieldset>"
                 + "<legend>Lanzamiento</legend>"
                 + "<span align=\"center\">\n"
-                + "    <button dojoType=\"dijit.form.Button\" type=\"submit\">Lanzar</button>\n"
+                + "    <button dojoType=\"dijit.form.Button\" type=\"submit\">"+lnch+"</button>\n"
                 + "</span></fieldset>\n"
                 + "</form>";
 
