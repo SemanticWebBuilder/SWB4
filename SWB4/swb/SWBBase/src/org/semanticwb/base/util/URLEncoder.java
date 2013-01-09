@@ -178,12 +178,14 @@ public class URLEncoder
 
         String str = null;
 
-        try
-        {
-            str = encode(s, dfltEncName);
-        } catch (UnsupportedEncodingException e)
-        {
-            // The system should always have the platform default
+        if (s != null) {
+            try
+            {
+                str = encode(s, dfltEncName);
+            } catch (UnsupportedEncodingException e)
+            {
+                // The system should always have the platform default
+            }
         }
 
         return str;
