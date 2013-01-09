@@ -4,8 +4,12 @@ package org.semanticwb.social.base;
    /**
    * Clase que almacenara las diferentes cuentas de una organización para la red social Facebook. 
    */
-public abstract class FacebookBase extends org.semanticwb.social.SocialNetwork implements org.semanticwb.social.Photoable,org.semanticwb.social.Messageable,org.semanticwb.social.Oauthable,org.semanticwb.model.Traceable,org.semanticwb.social.Listenerable,org.semanticwb.model.Descriptiveable,org.semanticwb.social.Videoable,org.semanticwb.social.Secreteable,org.semanticwb.model.Activeable,org.semanticwb.social.SocialNetPostable
+public abstract class FacebookBase extends org.semanticwb.social.SocialNetwork implements org.semanticwb.social.SocialNetPostable,org.semanticwb.model.Activeable,org.semanticwb.social.Secreteable,org.semanticwb.social.Videoable,org.semanticwb.model.Descriptiveable,org.semanticwb.social.Oauthable,org.semanticwb.social.Listenerable,org.semanticwb.social.Photoable,org.semanticwb.social.Messageable,org.semanticwb.model.Traceable
 {
+   /**
+   * Fecha siguiente para busqueda en una red social.
+   */
+    public static final org.semanticwb.platform.SemanticProperty social_nextDatetoSearch=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#nextDatetoSearch");
    /**
    * Eliminar despues esta propiedad, ver si Jose puede eliminar la propiedad login que se encuentra en la clase padre(SocialNetwork).
    */
@@ -258,6 +262,24 @@ public abstract class FacebookBase extends org.semanticwb.social.SocialNetwork i
     public void setTokenExpirationDate(java.util.Date value)
     {
         getSemanticObject().setDateProperty(social_tokenExpirationDate, value);
+    }
+
+/**
+* Gets the NextDatetoSearch property
+* @return String with the NextDatetoSearch
+*/
+    public String getNextDatetoSearch()
+    {
+        return getSemanticObject().getProperty(social_nextDatetoSearch);
+    }
+
+/**
+* Sets the NextDatetoSearch property
+* @param value long with the NextDatetoSearch
+*/
+    public void setNextDatetoSearch(String value)
+    {
+        getSemanticObject().setProperty(social_nextDatetoSearch, value);
     }
 
 /**
