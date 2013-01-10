@@ -94,8 +94,8 @@ System.out.println("********************   doView");
     {
 System.out.println("********************   doAuthenticate.");
         
-final String basePath = "/work/models/" + paramRequest.getWebPage().getWebSite().getId() + "/admin/jsp/components/" + this.getClass().getSimpleName() + "/";
-final String action = request.getParameter(ATTR_AXN)==null?paramRequest.getAction():"";
+        final String basePath = "/work/models/" + paramRequest.getWebPage().getWebSite().getId() + "/admin/jsp/components/" + this.getClass().getSimpleName() + "/";
+        final String action = request.getParameter(ATTR_AXN)==null?paramRequest.getAction():"";
 
         String objUri = request.getParameter(ATTR_OBJURI);
         final String wsiteId = request.getParameter(ATTR_WSITEID);
