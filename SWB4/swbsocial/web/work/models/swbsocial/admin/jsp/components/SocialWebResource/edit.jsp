@@ -1,6 +1,6 @@
 <%-- 
-    Document   : new
-    Created on : 11-oct-2012, 18:19:52
+    Document   : edit
+    Created on : 10-ene-2013, 12:16:11
     Author     : carlos.ramos
 --%>
 <%@page import="org.semanticwb.SWBPortal"%>
@@ -45,6 +45,7 @@
     -->
 </script>
 <%
+try{
     final String objUri = (String)request.getAttribute(ATTR_OBJURI);
     SocialNetwork socialNetwork;
     try {
@@ -55,6 +56,8 @@
     }
     String wsiteId = (String)request.getAttribute(ATTR_WSITEID);
     final String treeItem = (String)request.getAttribute(ATTR_TREEITEM);
+    //final SocialSite wsite = SocialSite.ClassMgr.getSocialSite(wsiteId);
+    //final String url = paramRequest.getActionUrl().setCallMethod(SWBResourceURL.Call_DIRECT).setAction(SWBResourceURL.Action_ADD).toString();
     final String url = paramRequest.getRenderUrl().setMode("oauth").setAction(SWBResourceURL.Action_ADD).toString();
 %>
 <div>
@@ -130,3 +133,10 @@
 %>
     </div>
 </div>
+<%
+}catch(Exception e) {
+    System.out.println("#############################");
+    e.printStackTrace(System.out);
+    System.out.println("#############################");
+}
+%>
