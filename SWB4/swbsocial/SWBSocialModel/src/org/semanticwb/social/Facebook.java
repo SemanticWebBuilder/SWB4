@@ -472,11 +472,7 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
             String accessToken = null;
             long secsToExpiration = 0L;
             String token_url = "https://graph.facebook.com/oauth/access_token?" + "client_id="+getAppKey()+"&redirect_uri=" + URLEncoder.encode(getRedirectUrl(request, paramRequest), "utf-8") + "&client_secret="+getSecretKey()+"&code=" + code;
-//            if(session.getAttribute("accessToken") != null) {
-//System.out.println("############### entro en if raro");
-//                accessToken = (String) session.getAttribute("accessToken");
-//                secsToExpiration = ((Long) session.getAttribute("secsToExpiration")).longValue();
-//            }
+
             if(accessToken == null) {
                 URL pagina = new URL(token_url);
                 URLConnection conex = null;
@@ -502,24 +498,21 @@ System.out.println("error........"+nexc);
                         if (aux.indexOf("=") > 0) {
                             accessToken = aux.split("=")[1];
                         }
-//                        session.setAttribute("accessToken", accessToken);                        
                         aux = answer.split("&")[1];
                         if (aux.indexOf("=") > 0) {
-                            secsToExpiration = Long.parseLong(aux.split("=")[1]);
+//                            secsToExpiration = Long.parseLong(aux.split("=")[1]);
                         }
-//                        session.setAttribute("secsToExpiration", Long.valueOf(secsToExpiration));
                     }
                 }
             }
             if(accessToken != null) {
-                //Hacer consulta a los datos del usuario a través del grafo
                 String graph_url = "https://graph.facebook.com/me?access_token=" + accessToken;
                 String me = Facebook.graphRequest(graph_url, request.getHeader("user-agent"));
-System.out.println("me="+me);
                 try {
                     JSONObject userData = new JSONObject(me);
                     String name = (String)userData.getString("name");
                     setActive(true);
+                    setAccessToken(accessToken);
                     request.setAttribute("msg", name);
                     PrintWriter out = response.getWriter();
                     out.println("<script type=\"text/javascript\">");
@@ -550,7 +543,7 @@ System.out.println("me="+me);
     private String getRedirectUrl(HttpServletRequest request, SWBParamRequest paramRequest)
     {
         StringBuilder address = new StringBuilder();
-        address.append("http://"+request.getServerName()+":"+request.getServerPort()+"/"+paramRequest.getUser().getLanguage()+"/"+paramRequest.getResourceBase().getWebSiteId()+"/SocialNetworks/_rid/"+paramRequest.getResourceBase().getId()+"/_mod/"+paramRequest.getMode()+"/_lang/"+paramRequest.getUser().getLanguage());
+        address.append("http://").append(request.getServerName()).append(":").append(request.getServerPort()).append("/").append(paramRequest.getUser().getLanguage()).append("/").append(paramRequest.getResourceBase().getWebSiteId()).append("/SocialNetworks/_rid/").append(paramRequest.getResourceBase().getId()).append("/_mod/").append(paramRequest.getMode()).append("/_lang/").append(paramRequest.getUser().getLanguage());
         return address.toString();
     }
     
@@ -568,9 +561,9 @@ System.out.println("encodedURI="+encodedURI);
                 
         url.append("'https://www.facebook.com/dialog/oauth?'+");
         url.append("'client_id='+");
-        url.append("'"+getAppKey()+"'+");
+        url.append("'").append(getAppKey()).append("'+");
         url.append("'&redirect_uri='+");
-        url.append("encodeURI('"+getRedirectUrl(request, paramRequest)+"')+");
+        url.append("encodeURI('").append(getRedirectUrl(request, paramRequest)).append("')+");
         url.append("'&scope='+");
         url.append("encodeURIComponent('publish_stream,read_stream')+");
         url.append("'&state='+");        
