@@ -176,7 +176,7 @@ public class Text extends TextBase {
             ret.append("/>");
 
             if (DOJO) {
-                if (!mode.equals("create") && prop.isLocaleable()) {
+                if (!mode.equals("create") && prop.isLocaleable() && !obj.isVirtual()) {
                     ret.append(" <a href=\"#\" onClick=\"javascript:showDialog('" + SWBPlatform.getContextPath()
                                + "/swbadmin/jsp/propLocaleEdit.jsp?suri=" + obj.getEncodedURI() + "&prop="
                                + prop.getEncodedURI() + "','Idiomas de la Propiedad " + prop.getDisplayName(lang)
