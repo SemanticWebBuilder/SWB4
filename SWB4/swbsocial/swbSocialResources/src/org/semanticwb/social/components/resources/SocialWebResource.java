@@ -66,7 +66,6 @@ System.out.println("********************   doView");
             }
             
             final String basePath = "/work/models/" + paramRequest.getWebPage().getWebSite().getId() + "/admin/jsp/components/" + this.getClass().getSimpleName() + "/";
-System.out.println("basePath="+basePath);
             final String action=request.getParameter(ATTR_AXN);
             final String objUri = request.getParameter(ATTR_OBJURI);
             final String wsite = request.getParameter(ATTR_WSITEID);
@@ -108,7 +107,6 @@ System.out.println("objUri es nulo?"+" "+(objUri==null));
         HttpSession session = request.getSession(true);
         if(session.getAttribute("sw")==null)
         {
-System.out.println("------------------------ 1");
             String sclassURI = request.getParameter("socialweb");
             String title = request.getParameter("title");
             String desc = request.getParameter("desc");
@@ -130,30 +128,27 @@ System.out.println("------------------------ 1");
         }
         else
         {
-System.out.println("------------------------ 2");
             SocialNetwork socialNetwork = (SocialNetwork)session.getAttribute("sw");
+            session.removeAttribute("sw");
             objUri = socialNetwork.getURI();
             socialNetwork.authenticate(request, response, paramRequest);
-            session.removeAttribute("sw");
-System.out.println("request.getAttribute('msg')="+request.getAttribute("msg"));            
         }
 
-System.out.println("including jsp...............");
-RequestDispatcher dis = null;
-dis = request.getRequestDispatcher(basePath+"/new.jsp");
-try
-{
-    request.setAttribute(ATTR_THIS, this);
-    request.setAttribute(ATTR_PARAMREQUEST, paramRequest);
-    request.setAttribute(ATTR_AXN, action);
-    request.setAttribute(ATTR_OBJURI, objUri);
-    request.setAttribute(ATTR_WSITEID, wsiteId);
-    request.setAttribute(ATTR_TREEITEM, treeItem);
-    dis.include(request, response);
-}catch (Exception e) {
-    log.error(e);
-    e.printStackTrace(System.out);
-}
+        RequestDispatcher dis = null;
+        dis = request.getRequestDispatcher(basePath+"/new.jsp");
+        try
+        {
+            request.setAttribute(ATTR_THIS, this);
+            request.setAttribute(ATTR_PARAMREQUEST, paramRequest);
+            request.setAttribute(ATTR_AXN, action);
+            request.setAttribute(ATTR_OBJURI, objUri);
+            request.setAttribute(ATTR_WSITEID, wsiteId);
+            request.setAttribute(ATTR_TREEITEM, treeItem);
+            dis.include(request, response);
+        }catch (Exception e) {
+            log.error(e);
+            e.printStackTrace(System.out);
+        }
     }
     
     @Override
@@ -162,10 +157,8 @@ System.out.println("processAction....");
         final String wsiteId = request.getParameter(ATTR_WSITEID);
         final SocialSite model = SocialSite.ClassMgr.getSocialSite(wsiteId);
         final String action = response.getAction();
-System.out.println("action="+action);
         if(SWBResourceURL.Action_ADD.equals(action))
         {
-System.out.println("PHASE 1");
             String sclassURI = request.getParameter("socialweb");
             String title = request.getParameter("title");
             String desc = request.getParameter("desc");
@@ -183,24 +176,6 @@ System.out.println("PHASE 1");
             response.setRenderParameter(ATTR_OBJURI, socialNetwork.getURI());
             response.setRenderParameter(ATTR_WSITEID, wsiteId);
             response.setRenderParameter(ATTR_TREEITEM, request.getParameter(ATTR_TREEITEM));
-//            response.setRenderParameter(URL_REQ_PERMISSIONS, url);
-            //response.setCallMethod(SWBResourceURL.Call_DIRECT);
         }
-        
-        
-        
-        
-        
-        /*if(SWBResourceURL.Action_ADD.equals(action))
-        {
-System.out.println("wsite="+request.getAttribute("wsite"));
-//            final String socialweb = request.getParameter("socialweb");
-//            SemanticClass sclass = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(socialweb);
-//            long id = model.getSemanticObject().getModel().getCounter(sclass);
-//            //GenericObject gobj = model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(Long.toString(id), sclass), sclass);     
-//            SocialNetwork socialNetwork = (SocialNetwork)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(Long.toString(id), sclass), sclass);     
-//            //gobj.setProperty(SocialNetwork.swb_title.getURI(), title.getValue());
-//            socialNetwork.setTitle(title.getValue());
-        }*/
     }
 }
