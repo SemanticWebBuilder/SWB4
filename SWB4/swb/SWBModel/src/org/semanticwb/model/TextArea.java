@@ -148,7 +148,7 @@ public class TextArea extends TextAreaBase {
             ret += ">" + value + "</textarea>";
 
             if (DOJO) {
-                if (!mode.equals("create") && prop.isLocaleable()) {
+                if (!mode.equals("create") && prop.isLocaleable() && !obj.isVirtual()) {
                     ret += " <a href=\"#\" onClick=\"javascript:showDialog('" + SWBPlatform.getContextPath()
                                + "/swbadmin/jsp/propLocaleTextAreaEdit.jsp?suri=" + obj.getEncodedURI() + "&prop="
                                + prop.getEncodedURI() + "','Idiomas de la Propiedad " + prop.getDisplayName(lang)
