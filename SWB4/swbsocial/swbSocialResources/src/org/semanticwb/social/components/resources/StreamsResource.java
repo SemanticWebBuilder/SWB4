@@ -36,7 +36,6 @@ public class StreamsResource extends GenericSocialResource{
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
        String action=(String)request.getAttribute("action");
-  //     String objUri=(String)request.getAttribute("objUri");
        WebSite wsite=(WebSite)request.getAttribute("wsite");
        User user=paramRequest.getUser();
        PrintWriter out = response.getWriter();
@@ -50,7 +49,6 @@ public class StreamsResource extends GenericSocialResource{
        if(action!=null && action.equals(SWBSocialResourceUtils.ACTION_ADD)) {
            SWBFormMgr mgr = new SWBFormMgr(Stream.sclass, wsite.getSemanticObject(), null);
            SWBResourceURL url = paramRequest.getActionUrl();
-           //SWBResourceURL url = paramRequest.getRenderUrl().setParameter("cr", "create");
 
            mgr.setFilterRequired(false);
            String lang = "es";
@@ -75,11 +73,11 @@ public class StreamsResource extends GenericSocialResource{
         WebSite wsite=(WebSite)request.getAttribute("wsite");
         User user = paramRequest.getUser();
         String uri = request.getParameter("objUri");
+        SWBSocialResourceUtils.Components.updateTreeNode(request, paramRequest);
         if(uri != null) {
             SemanticObject semObj = SemanticObject.createSemanticObject(uri);
 
            SWBFormMgr mgr = new SWBFormMgr(semObj, null, SWBFormMgr.MODE_EDIT);
-           //SWBResourceURL url = paramRequest.getActionUrl();
            SWBResourceURL url = paramRequest.getRenderUrl().setParameter("cr", "create");
            mgr.setFilterRequired(false);
            mgr.clearProperties();
@@ -105,9 +103,7 @@ public class StreamsResource extends GenericSocialResource{
 
     @Override
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
-//        String action=(String)request.getParameter("action");
         String objUri=(String)request.getParameter("sref");
-//        String objUri2=(String)request.getParameter("scls");
         String wsite=(String)request.getParameter("wsite");
         if(wsite != null) {
             WebSite ws = WebSite.ClassMgr.getWebSite(wsite);
@@ -120,9 +116,8 @@ public class StreamsResource extends GenericSocialResource{
             mgr.addProperty(Stream.social_stream_PoolTime);
             mgr.addProperty(Stream.social_hasStream_socialNetwork);
             try {
-                SemanticObject semObj  = mgr.processForm(request);
-                SWBSocialResourceUtils.Components.updateTreeNodeAction(request, response);
-                objUri = semObj.getURI();
+                mgr.processForm(request);
+                //SWBSocialResourceUtils.Components.updateTreeNodeAction(request, response);
 
             } catch(FormValidateException ex) {
                 log.error("Error in: " + ex);
@@ -132,7 +127,6 @@ public class StreamsResource extends GenericSocialResource{
         response.setRenderParameter("action", "edit");
         response.setRenderParameter("objUri", objUri);
         response.setRenderParameter("wsite", wsite);
-        //response.setRenderParameter("treeItem", treeItem);
         response.setMode(SWBResourceURL.Mode_EDIT);
     }
 
