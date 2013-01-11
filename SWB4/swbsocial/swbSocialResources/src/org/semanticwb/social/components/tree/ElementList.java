@@ -65,8 +65,11 @@ import org.semanticwb.social.TreeNodePage;
         while(itSocialSites.hasNext())
         {
             SocialSite socialSite=itSocialSites.next();
-            alist.add(socialSite);
-            cont++;
+            if(!socialSite.isDeleted())
+            {
+                alist.add(socialSite);
+                cont++;
+            }
             
         }
         ElementTreeNode[] elementTreeNode=new ElementTreeNode[cont];
@@ -75,7 +78,7 @@ import org.semanticwb.social.TreeNodePage;
         while(itSocialSites.hasNext())
         {
             SocialSite socialSite=itSocialSites.next();
-            String sIconImg=displayObj.getIconClass();
+            String sIconImg=displayObj.getDoDispatcher();   //Aqui esta el icono para social, en getIconClass esta el icono(swbIconWebSite) para mostrar el sitio en el admin de SWB.
             if(!socialSite.isActive())
             {
                 sIconImg="off_"+sIconImg;
