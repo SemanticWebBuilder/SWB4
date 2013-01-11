@@ -1,0 +1,53 @@
+#workspace {
+	border: 1px solid #A5ACB5;
+	box-shadow: 0 0 10px #000000;
+	margin:5px;
+	padding:10px;
+}
+
+.saveIcon,
+.rejectIcon,
+.acceptIcon,
+.signIcon,
+.advancedIcon,
+.headerIcon,
+.hrIcon,
+.propIcon,
+.cancelIcon {
+	background-image: url(images/icons.png); 
+	background-repeat: no-repeat;
+	height: 18px;
+	width:19px;
+}
+
+.cancelIcon {
+	background-position: -60px;
+}
+
+.acceptIcon {
+	background-position: -39px;
+}
+
+.rejectIcon {
+	background-position: -19px;
+}
+
+.signIcon {
+	background-position: -79px;
+}
+
+.advancedIcon {
+	background-position: -99px;
+}
+
+.headerIcon {
+	background-position: -139px;
+}
+
+.hrIcon {
+	background-position: -159px;
+}
+
+.propIcon {
+	background-position: -119px;
+}
