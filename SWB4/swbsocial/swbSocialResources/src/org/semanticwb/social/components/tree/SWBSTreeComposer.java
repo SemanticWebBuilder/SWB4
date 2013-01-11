@@ -28,6 +28,7 @@ import org.semanticwb.model.DisplayObject;
 import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.social.Childrenable;
 import org.semanticwb.social.DeleteControlable;
+import org.semanticwb.social.SocialSite;
 import org.semanticwb.social.utils.SWBSocialResourceUtils;
 
 import org.zkoss.zk.ui.Component;
@@ -98,7 +99,7 @@ public final class SWBSTreeComposer extends GenericForwardComposer <Component> {
                     elemenetTreeModel = new AdvancedTreeModel(new ElementList(paramRequest).getRoot());
                     tree.setModel(elemenetTreeModel);
                     tree.setItemRenderer(new ElementTreeRenderer());
-                    tree.setZclass("z-dottree");    //Estilo del icono de los nodos abiertos y cerrados"[+]...[-]"
+                    //tree.setZclass("z-dottree");    //Estilo del icono de los nodos abiertos y cerrados"[+]...[-]"
                     tree.setVflex(true);
 
                     //Guardo el modelo y el root node en la session, TODO: Ver si solo guardo el modelo y saco el root node del mismo modelo.
@@ -354,7 +355,7 @@ public final class SWBSTreeComposer extends GenericForwardComposer <Component> {
                                                        if(swbClass!=null && swbClass.isSubClass(DeleteControlable.social_DeleteControlable))
                                                        {
                                                            //Nuevo Código
-                                                            content.setSrc(null);//En teoría, esta línea hace lo que hace la línea de abajo (Todo:Probar y Quitar la de abajo)
+                                                            content.setSrc(null);
                                                             if(treeNodePage!=null)
                                                             {
                                                                 content.setSrc(treeNodePage.getZulResourcePath());
@@ -446,7 +447,7 @@ public final class SWBSTreeComposer extends GenericForwardComposer <Component> {
                                             semObj.setBooleanProperty(Activeable.swb_active, true);
                                             DisplayObject displayObj=(DisplayObject)semObj.getSemanticClass().getDisplayObject().createGenericInstance();
                                             Element element = (Element) itemValue.getData();
-                                            element.seticonElement(ImgAdminPathBase+displayObj.getIconClass());
+                                            element.seticonElement(ImgAdminPathBase+displayObj.getDoDispatcher());
                                             itemValue.setData(element);
                                             SWBSocialResourceUtils.Components.setStatusMessage(msg_activeElement+":"+itemValue.getData().getName());
                                         }
@@ -462,7 +463,7 @@ public final class SWBSTreeComposer extends GenericForwardComposer <Component> {
                                             semObj.setBooleanProperty(Activeable.swb_active, false);
                                             DisplayObject displayObj=(DisplayObject)semObj.getSemanticClass().getDisplayObject().createGenericInstance();
                                             Element element = (Element) itemValue.getData();
-                                            element.seticonElement(ImgAdminPathBase+"off_"+displayObj.getIconClass());
+                                            element.seticonElement(ImgAdminPathBase+"off_"+displayObj.getDoDispatcher());
                                             itemValue.setData(element);
                                             SWBSocialResourceUtils.Components.setStatusMessage(msg_unActiveElement+":"+itemValue.getData().getName());
                                         }
@@ -483,7 +484,12 @@ public final class SWBSTreeComposer extends GenericForwardComposer <Component> {
                                                 SemanticObject semObj=SemanticObject.createSemanticObject(itemValue.getData().getUri());
                                                 if(semObj!=null)
                                                 {
-                                                    semObj.remove();
+                                                    //if(semObj.getSemanticClass().isSubClass(SocialSite.sclass)) 
+                                                    {
+                                                        SocialSite socialSite=(SocialSite)semObj.createGenericInstance();
+                                                        socialSite.setDeleted(true);    //Como es un sitio, No lo elimino, solo lo envío a la papelera de reciclaje
+                                                        //semObj.remove();
+                                                    }
                                                     elemenetTreeModel.remove(itemValue);
                                                     SWBSocialResourceUtils.Components.setStatusMessage(msg_brandDeleted+":"+itemValue.getData().getName());
                                                 }
