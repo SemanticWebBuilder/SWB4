@@ -56,6 +56,7 @@ public class SocialZulResource extends GenericAdmResource
                 request.setAttribute("objUri", URLDecoder.decode(request.getParameter("objUri")));
             }
             request.setAttribute("treeItem", treeItem);
+            //La linea siguiente siempre debe de ir.
             processRequest(request, response, paramRequest);
         }
     }
