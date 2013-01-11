@@ -7,8 +7,8 @@ package org.semanticwb.nlp.CommandTranslator;
 import java.util.Calendar;
 
 /**
- *
  * @author vieyra
+ * samuel.vieyra@infotec.com.mx
  */
 public class Command {
     private String element;

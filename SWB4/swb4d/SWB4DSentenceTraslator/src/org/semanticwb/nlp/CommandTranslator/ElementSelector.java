@@ -4,9 +4,9 @@
  */
 package org.semanticwb.nlp.CommandTranslator;
 
-import org.semanticwb.nlp.Utils.string;
 import java.util.ArrayList;
 import java.util.List;
+import org.semanticwb.nlp.Utils.StringUtilities;
 
 /**
  * @author vieyra
@@ -18,7 +18,7 @@ public class ElementSelector {
     private MatchedElementOfASentence selectedElement;
     private List<String> selectedSentences;
     private String[] speechSentences;
-    private int ElementsMaxlength;
+    private int elementsMaxlength;
     
     public ElementSelector() {
     }
@@ -45,10 +45,10 @@ public class ElementSelector {
     
     public void setElements(String[] elements) {
         this.elements = elements;
-        ElementsMaxlength = 0;
+        elementsMaxlength = 0;
         for (String element : elements) {
-            if (element.length() > ElementsMaxlength) {
-                ElementsMaxlength = element.split(" ").length;
+            if (element.length() > elementsMaxlength) {
+                elementsMaxlength = element.split(" ").length;
             }
         }
     }
@@ -71,7 +71,7 @@ public class ElementSelector {
     }
     
     public String getDirectlyElement() {
-        for (int i = ElementsMaxlength + 1; i > 0; i--) {
+        for (int i = elementsMaxlength + 1; i > 0; i--) {
             for (String element : elements) {
                 if (element.split(" ").length == i) {
                     for (String sentence : speechSentences) {
@@ -89,7 +89,7 @@ public class ElementSelector {
         selectedSentences = new ArrayList<String>();
         for (String sentence : speechSentences) {
             if (sentence.contains(element)) {
-                selectedSentences.add(sentence.replace(element, string.normalizeElementName(element)));
+                selectedSentences.add(sentence.replace(element, StringUtilities.normalizeElementName(element)));
             }
         }
         return selectedSentences;
@@ -97,23 +97,23 @@ public class ElementSelector {
     
     private List<String> selectSpeechSentences(String[] speechSentence) {
         double greaterSimilarity = 0.0;
-        MatchedElementOfASentence ElementsSentence = null;
+        MatchedElementOfASentence elementsSentence = null;
         for (String sentence : speechSentence) {
-            MatchedElementOfASentence SSE = getElementbySetence(sentence);
-            if(SSE.getElementSimilar()!=null)
+            MatchedElementOfASentence sse = getElementbySetence(sentence);
+            if(sse.getElementSimilar()!=null)
             {
-                if (SSE.getSimilarity() == greaterSimilarity) {
+                if (sse.getSimilarity() == greaterSimilarity) {
 
-                    selectedSentences.add(sentence.replace(SSE.getSubsetSimilar(), string.normalizeElementName(SSE.getElementSimilar())));
-                } else if (SSE.getSimilarity() > greaterSimilarity) {
-                    greaterSimilarity = SSE.getSimilarity();
-                    ElementsSentence = SSE;
+                    selectedSentences.add(sentence.replace(sse.getSubsetSimilar(), StringUtilities.normalizeElementName(sse.getElementSimilar())));
+                } else if (sse.getSimilarity() > greaterSimilarity) {
+                    greaterSimilarity = sse.getSimilarity();
+                    elementsSentence = sse;
                     selectedSentences = new ArrayList<String>();
-                    selectedSentences.add(sentence.replace(SSE.getSubsetSimilar(), string.normalizeElementName(SSE.getElementSimilar())));
+                    selectedSentences.add(sentence.replace(sse.getSubsetSimilar(), StringUtilities.normalizeElementName(sse.getElementSimilar())));
                 }
             }
         }
-        selectedElement = ElementsSentence;
+        selectedElement = elementsSentence;
         if(selectedSentences==null)selectedSentences = new ArrayList<String>();
         return selectedSentences;
     }
@@ -121,18 +121,18 @@ public class ElementSelector {
     private MatchedElementOfASentence getElementbySetence(String Sentence) {
         String moreSimilar = null;
         String elementSelected = null;
-        double JWDistance = 0.1;
+        double jwDistance = 0.1;
         double jwd;
         for (String subset : getSubsetString(Sentence)) {
             for (String element : elements) {
-                if ((jwd = org.semanticwb.nlp.Utils.string.JaroWinklerDistance(subset, element, element.length())) > JWDistance) {
-                    JWDistance = jwd;
+                if ((jwd = org.semanticwb.nlp.Utils.StringUtilities.jaroWinklerDistance(subset, element, element.length())) > jwDistance) {
+                    jwDistance = jwd;
                     elementSelected = element;
                     moreSimilar = subset;
                 }
             }
         }
-        return new MatchedElementOfASentence(moreSimilar, elementSelected, JWDistance);
+        return new MatchedElementOfASentence(moreSimilar, elementSelected, jwDistance);
     }
     
     private String[] getSubsetString(String sentence) {
