@@ -40,6 +40,25 @@ public class SocialZulResource extends GenericAdmResource
      * <p>object that creates messages in SWB's log file.</p>
      */
     private static Logger log = SWBUtils.getLogger(SocialZulResource.class);
+    
+    
+    @Override
+    public void render(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        if(!SWBParamRequest.WinState_MINIMIZED.equals(paramRequest.getWindowState()))
+        {
+            WebSite wsite=WebSite.ClassMgr.getWebSite(request.getParameter("wsite"));
+            ElementTreeNode treeItem=SWBSocialResourceUtils.Components.getComponentbyUri(request);
+
+            request.setAttribute("wsite", wsite);
+            request.setAttribute("action", request.getParameter("action"));
+            if(request.getParameter("objUri")!=null)
+            {
+                request.setAttribute("objUri", URLDecoder.decode(request.getParameter("objUri")));
+            }
+            request.setAttribute("treeItem", treeItem);
+            processRequest(request, response, paramRequest);
+        }
+    }
 
     /**
      * Realiza la llamada a ejecuci&oacute;n del archivo ZUL especificado en la
@@ -63,17 +82,6 @@ public class SocialZulResource extends GenericAdmResource
             request.setAttribute("paramRequest", paramRequest);
             RequestDispatcher dispatcher = request.getRequestDispatcher(path);
             if(dispatcher != null) {
-                WebSite wsite=WebSite.ClassMgr.getWebSite(request.getParameter("wsite"));
-                ElementTreeNode treeItem=SWBSocialResourceUtils.Components.getComponentbyUri(request);
-                
-                request.setAttribute("wsite", wsite);
-                request.setAttribute("action", request.getParameter("action"));
-                if(request.getParameter("objUri")!=null)
-                {
-                    request.setAttribute("objUri", URLDecoder.decode(request.getParameter("objUri")));
-                }
-                request.setAttribute("treeItem", treeItem);
-
                 if(getResourceBase().getAttribute("forward")!=null) {
                     dispatcher.forward(request, response);
                 }else {
