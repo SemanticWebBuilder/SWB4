@@ -10,22 +10,22 @@ package org.semanticwb.nlp.CommandTranslator;
  * samuel.vieyra@infotec.com.mx
  */
 public class MatchedElementOfASentence {
-    private String SubsetSimilar;
-    private String ElementSimilar;
+    private String subsetSimilar;
+    private String elementSimilar;
     private double similarity;
     
-    public MatchedElementOfASentence(String SubsetSimilar, String ElementSimilar, double similarity) {
-        this.SubsetSimilar = SubsetSimilar;
-        this.ElementSimilar = ElementSimilar;
+    public MatchedElementOfASentence(String subsetSimilar, String elementSimilar, double similarity) {
+        this.subsetSimilar = subsetSimilar;
+        this.elementSimilar = elementSimilar;
         this.similarity = similarity;
     }
 
     public String getSubsetSimilar() {
-        return SubsetSimilar;
+        return subsetSimilar;
     }
 
     public String getElementSimilar() {
-        return ElementSimilar;
+        return elementSimilar;
     }
 
     public double getSimilarity() {

@@ -103,8 +103,8 @@ public class FreelingParser {
     
     public static void main(String argv[]) {
         FreelingParser parser = new FreelingParser();
-        parser.analyzeSentence("esto es un ejemplo.");
-        ListSentence ls = parser.analyzeSentence("enciende el foco de la cocina el jueves a las ocho de la noche.");
+//        parser.analyzeSentence("esto es un ejemplo.");
+        ListSentence ls = parser.analyzeSentence("enciende el foco de la cocina en 5 minutos.");
         for(int i = 0; i < ls.size(); i++){
             TreeDepnode deptree = ls.get(i).getDepTree();
             printDepTree(deptree);
@@ -121,7 +121,7 @@ public class FreelingParser {
         for(int i = 0; i < level; i++) System.out.print(" ");
         Word w = deptree.getInfo().getWord();
         System.out.print(
-                "(" + w.getForm() + " " + w.getLemma() + " " + w.getTag());
+                "(" + w.getForm() + " " + w.getLemma() + " '" + w.getTag()+"'");
         System.out.print(")");
         for(int i = 0 ; i < deptree.numChildren() ; i++){
             TreeDepnode child = deptree.nthChildRef(i);

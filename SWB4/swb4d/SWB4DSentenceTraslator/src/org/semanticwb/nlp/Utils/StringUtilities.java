@@ -7,32 +7,32 @@ package org.semanticwb.nlp.Utils;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * @author vieyra samuel.vieyra@infotec.com.mx
+ * @author vieyra 
+ * samuel.vieyra@infotec.com.mx
  */
-public class string {
+public class StringUtilities {
 
     //**** Metrics for distance of strings ****//
-    public static double JaroWinklerDistance(String string1, String string2) {
-        return JaroWinklerDistance(string1, string2, 0.1);
+    public static double jaroWinklerDistance(String string1, String string2) {
+        return jaroWinklerDistance(string1, string2, 0.1);
     }
 
-    public static double JaroWinklerDistance(String string1, String string2, int ElementsC) {
-        double jwd = JaroWinklerDistance(string1, string2);
+    public static double jaroWinklerDistance(String string1, String string2, int ElementsC) {
+        double jwd = jaroWinklerDistance(string1, string2);
         double lengthElement = (double) ElementsC;
         return jwd * (lengthElement / (lengthElement + 1.0));
     }
 
-    public static double JaroWinklerDistance(String string1, String string2, double p) {
-        double JD = JaroDistance(string1, string2);
+    public static double jaroWinklerDistance(String string1, String string2, double p) {
+        double JD = jaroDistance(string1, string2);
         return JD + (getIndexofCommonPrefix(string1, string2) * p * (1 - JD));
     }
 
-    public static double JaroDistance(String string1, String string2) {
+    public static double jaroDistance(String string1, String string2) {
         int len1 = string1.length();
         int len2 = string2.length();
         if (len1 == 0) {
@@ -89,7 +89,7 @@ public class string {
                 + (numCommon - numTransposed) / numCommonD) / 3.0;
     }
 
-    public static float LevenshteinDistance(String string1, String string2) {
+    public static float levenshteinDistance(String string1, String string2) {
         int[][] matriz = new int[string1.length() + 1][string2.length() + 1];
         for (int i = 0; i < string1.length() + 1; i++) {
             matriz[i][0] = i;
@@ -127,16 +127,16 @@ public class string {
     }
     
    
-    public static int getIntensity(String Intensity){
-        return getIntensity(Intensity, 16);
+    public static int getIntensity(String intensity){
+        return getIntensity(intensity, 16);
     }
     
-    public static int getIntensity(String Intensity, int MaxRange){
-        if (Intensity != null) {
+    public static int getIntensity(String intensity, int maxRange){
+        if (intensity != null) {
             Pattern regex = Pattern.compile("([0-9]+)/([0-9]+)$");
-            Matcher regexMatcher = regex.matcher(Intensity);
+            Matcher regexMatcher = regex.matcher(intensity);
             while (regexMatcher.find()) {
-                return (int) (Double.parseDouble(regexMatcher.group(1)) * MaxRange / Double.parseDouble(regexMatcher.group(2)));
+                return (int) (Double.parseDouble(regexMatcher.group(1)) * maxRange / Double.parseDouble(regexMatcher.group(2)));
             }
         }
        return -1;
@@ -189,8 +189,8 @@ public class string {
         return cal;
     }
 
-    private static int getMonth(int Month) {
-        switch(Month){
+    private static int getMonth(int month) {
+        switch(month){
             case  1: return Calendar.JANUARY;
             case  2: return Calendar.FEBRUARY;
             case  3: return Calendar.MARCH;
@@ -263,83 +263,83 @@ public class string {
         return parseddate;
     }
 
-    public static String normalizeElementName(String ElementName) {
-        if(ElementName==null)return null;
+    public static String normalizeElementName(String elementName) {
+        if(elementName==null)return null;
         //If the element name contains one or more numbers replace for its description
-        if (ElementName.matches(".*[0-9]+.*")) {
+        if (elementName.matches(".*[0-9]+.*")) {
             Pattern regex = Pattern.compile("([0-9]+)");
-            Matcher regexMatcher = regex.matcher(ElementName);
+            Matcher regexMatcher = regex.matcher(elementName);
 
             while (regexMatcher.find()) {
-                ElementName = ElementName.replace(regexMatcher.group(), convertNumbetToString(Integer.parseInt(regexMatcher.group())));
+                elementName = elementName.replace(regexMatcher.group(), convertNumbetToString(Integer.parseInt(regexMatcher.group())));
             }
         }
 
-        ElementName = ElementName.replace(" ", "_");
-        return ElementName.replaceFirst("[a-z]", (ElementName.charAt(0) + "").toUpperCase());
+        elementName = elementName.replace(" ", "_");
+        return elementName.replaceFirst("[a-z]", (elementName.charAt(0) + "").toUpperCase());
     }
 
-    public static String normalizeEntityName(String EntityName) {
+    public static String normalizeEntityName(String entityName) {
         String normalizedEntityName = "";
 
-        EntityName = EntityName.replace("-", " ");
-        EntityName = EntityName.replace("_", " ");
+        entityName = entityName.replace("-", " ");
+        entityName = entityName.replace("_", " ");
 
-        while (EntityName.contains("  ")) {
-            EntityName = EntityName.replace("  ", " ");
+        while (entityName.contains("  ")) {
+            entityName = entityName.replace("  ", " ");
         }
 
-        if (EntityName.startsWith(" ")) {
-            EntityName = EntityName.substring(1);
+        if (entityName.startsWith(" ")) {
+            entityName = entityName.substring(1);
         }
-        if (EntityName.endsWith(" ")) {
-            EntityName = EntityName.substring(0, EntityName.length() - 1);
+        if (entityName.endsWith(" ")) {
+            entityName = entityName.substring(0, entityName.length() - 1);
         }
 
-        if (EntityName.matches("[A-Z][a-z0-9 ]+([A-Z][a-z0-9 ]+)+")) {
-            String[] splitedEntityName = EntityName.split("[A-Z ]");
+        if (entityName.matches("[A-Z][a-z0-9 ]+([A-Z][a-z0-9 ]+)+")) {
+            String[] splitedEntityName = entityName.split("[A-Z ]");
             for (int i = 0; i < splitedEntityName.length; i++) {
                 String splited = splitedEntityName[i];
                 if (!splited.equals("")) {
                     String toAppend = "";
                     try {
-                        toAppend = EntityName.substring(EntityName.indexOf(splited) - 1, (EntityName.indexOf(splited) + splited.length()));
+                        toAppend = entityName.substring(entityName.indexOf(splited) - 1, (entityName.indexOf(splited) + splited.length()));
                     } catch (Exception ex) {
                     }
                     normalizedEntityName += toAppend + ((i < splitedEntityName.length - 1) ? " " : "");
                 }
             }
-            EntityName = normalizedEntityName;
+            entityName = normalizedEntityName;
         }
 
-        return EntityName.toLowerCase();
+        return entityName.toLowerCase();
     }
 
-    public static String[] getEntityNameSegments(String EntityName) {
-        ArrayList<String> Segments = new ArrayList<String>();
+    public static String[] getEntityNameSegments(String entityName) {
+        ArrayList<String> segments = new ArrayList<String>();
 
-        if (EntityName.matches("[A-Z][a-z0-9]+([A-Z][a-z0-9]+)+")) {
-            String[] splitedEntityName = EntityName.split("[A-Z]");
+        if (entityName.matches("[A-Z][a-z0-9]+([A-Z][a-z0-9]+)+")) {
+            String[] splitedEntityName = entityName.split("[A-Z]");
             for (String splited : splitedEntityName) {
                 if (!splited.equals("")) {
                     String toAppend;
                     try {
-                        toAppend = EntityName.substring(EntityName.indexOf(splited) - 1, (EntityName.indexOf(splited) + splited.length())).toLowerCase();
+                        toAppend = entityName.substring(entityName.indexOf(splited) - 1, (entityName.indexOf(splited) + splited.length())).toLowerCase();
                     } catch (Exception ex) {
                         break;
                     }
-                    Segments.add(toAppend);
-                    EntityName = EntityName.replace(toAppend, "");
+                    segments.add(toAppend);
+                    entityName = entityName.replace(toAppend, "");
                 }
             }
         }
-        if (EntityName.matches("[A-Za-z0-9]+([ _ -][A-Za-z0-9]+)+")) {
-            return EntityName.split("[ _-]");
+        if (entityName.matches("[A-Za-z0-9]+([ _ -][A-Za-z0-9]+)+")) {
+            return entityName.split("[ _-]");
         }
-        if (Segments.isEmpty()) {
-            Segments.add(EntityName);
+        if (segments.isEmpty()) {
+            segments.add(entityName);
         }
-        return Segments.toArray(new String[]{});
+        return segments.toArray(new String[]{});
     }
 
     //Código basado en http://explotandocodigo.blogspot.mx/2008/12/convertir-un-numero-su-descripcion-en.html
