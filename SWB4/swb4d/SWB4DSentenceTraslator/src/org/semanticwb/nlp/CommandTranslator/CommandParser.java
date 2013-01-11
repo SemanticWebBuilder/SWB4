@@ -219,9 +219,7 @@ public class CommandParser {
         String timeUnit = lemma.split(":")[0];
         int quant = Integer.parseInt("+" + lemma.split(":")[1]);
         if (timeUnit.equals("TM_sec")) {
-            System.out.println(calendar);
             calendar.add(Calendar.SECOND, quant);
-            System.out.println(calendar);
         }
         if (timeUnit.startsWith("TM_m")) {
             calendar.add(Calendar.MINUTE, quant);
