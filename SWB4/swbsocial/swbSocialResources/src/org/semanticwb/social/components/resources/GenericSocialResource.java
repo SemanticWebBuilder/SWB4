@@ -54,12 +54,7 @@ public class GenericSocialResource extends GenericAdmResource
         }
     }
 
-    @Override
-    public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        super.processRequest(request, response, paramRequest);
-    }
-
-
+   
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
        String action=(String)request.getAttribute("action");
@@ -84,9 +79,5 @@ public class GenericSocialResource extends GenericAdmResource
        out.println("Contenido de Prueba Genérico.Jogg...-1");
     }
     
-    @Override
-    public void doAdmin(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-       System.out.println("BrandResource Admin...");
-    }
-
+   
 }
