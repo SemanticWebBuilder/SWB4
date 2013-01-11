@@ -33,23 +33,29 @@ import org.semanticwb.social.utils.SWBSocialResourceUtils;
 public class GenericSocialResource extends GenericAdmResource
 {
     private static Logger log = SWBUtils.getLogger(GenericSocialResource.class);
-
+    
+    @Override
+    public void render(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        if(!SWBParamRequest.WinState_MINIMIZED.equals(paramRequest.getWindowState()))
+        {
+            WebSite wsite=WebSite.ClassMgr.getWebSite(request.getParameter("wsite"));
+            if(wsite!=null)
+            {
+                ElementTreeNode treeItem=SWBSocialResourceUtils.Components.getComponentbyUri(request);
+                request.setAttribute("wsite", wsite);
+                request.setAttribute("action", request.getParameter("action"));
+                if(request.getParameter("objUri")!=null)
+                {
+                    request.setAttribute("objUri", URLDecoder.decode(request.getParameter("objUri"),"UTF-8"));
+                }
+                request.setAttribute("treeItem", treeItem);
+            }
+            processRequest(request, response, paramRequest);
+        }
+    }
 
     @Override
     public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        WebSite wsite=WebSite.ClassMgr.getWebSite(request.getParameter("wsite"));
-        if(wsite!=null)
-        {
-            ElementTreeNode treeItem=SWBSocialResourceUtils.Components.getComponentbyUri(request);
-            request.setAttribute("wsite", wsite);
-            request.setAttribute("action", request.getParameter("action"));
-            if(request.getParameter("objUri")!=null)
-            {
-                request.setAttribute("objUri", URLDecoder.decode(request.getParameter("objUri"),"UTF-8"));
-            }
-            request.setAttribute("treeItem", treeItem);
-        }
-        //Manda llamar al metodo del padre.
         super.processRequest(request, response, paramRequest);
     }
 
