@@ -45,7 +45,7 @@ public class GenericSocialResource extends GenericAdmResource
             request.setAttribute("action", request.getParameter("action"));
             if(request.getParameter("objUri")!=null)
             {
-                request.setAttribute("objUri", URLDecoder.decode(request.getParameter("objUri")));
+                request.setAttribute("objUri", URLDecoder.decode(request.getParameter("objUri"),"UTF-8"));
             }
             request.setAttribute("treeItem", treeItem);
         }
