@@ -96,7 +96,7 @@
                             ]]>
                         </zscript>
                         
-                        <tree id="tree" sizedByContent="true" vflex="true">
+                        <tree id="tree" sizedByContent="true" vflex="true"> <!--Para que se vea con + y - para abrir y cerrar nodos, colocar atributo zclass="z-dottree"-->
                             <treecols>
                                 <treecol label="SWBSocial" />
                             </treecols>
@@ -115,7 +115,7 @@
             <!--Ventana de mensajes-->
             <!--Inicia área de trabajo (Contenido) -->
             <center id="wrkSpcRoot" border="normal">
-               <div>
+               <div height="100%">
                    <window id="msgWindow" visible="false" border="none">
                        <label id="msgLabel" />
                    </window>
