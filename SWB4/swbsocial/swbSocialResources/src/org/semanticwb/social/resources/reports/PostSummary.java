@@ -170,6 +170,7 @@ public class PostSummary extends GenericAdmResource {
         }
         
         String wsiteId=request.getParameter("wsite");
+        System.out.println("wsiteId en PostSummary:"+wsiteId);
         int pos=wsiteId.indexOf("?");
         if(pos>-1) wsiteId=wsiteId.substring(0, pos);
         WebSite wsite=null;

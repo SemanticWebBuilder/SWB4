@@ -50,7 +50,7 @@ import org.semanticwb.social.TreeNodePage;
         modelAdmin=paramRequest.getWebPage().getWebSite();
         ImgAdminPathBase="/work/models/"+modelAdmin.getId()+"/admin/img/";
         user=paramRequest.getUser();
-        root=new ElementTreeNode(new Element("Company Brands","",""),getSocialSites(), false);
+        root=new ElementTreeNode(new Element("Company Brands","socialBrands",""),getSocialSites(), false);
     }
 
     /*

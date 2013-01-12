@@ -509,44 +509,79 @@ public final class SWBSTreeComposer extends GenericForwardComposer <Component> {
                 //Manejo de doble click en los nodos del árbol
                 {
                        //TODO
+                        dataRow.setAttribute("xxx", ctn.getData()); //Charly
+                        treeItem.setId("xxx"+ctn.getData());    //Charly
                         dataRow.addEventListener(Events.ON_DOUBLE_CLICK, new EventListener<Event>() {
                         @Override
                         public void onEvent(Event event) throws Exception {
-                            final Treeitem selectedTreeItem = tree.getSelectedItem();
-                            final ElementTreeNode itemValue = (ElementTreeNode) selectedTreeItem.getValue();                            
+                            //final Treeitem selectedTreeItem = tree.getSelectedItem();
+                            final Treeitem selectedTreeItem = (Treeitem) event.getTarget().getFellow("xxx"+event.getTarget().getAttribute("xxx"));   //Charly
+                            final ElementTreeNode itemValue = (ElementTreeNode) selectedTreeItem.getValue();
+                            final SemanticObject semObj=SemanticObject.createSemanticObject(itemValue.getData().getUri());
                             if(!isCategory(itemValue.getData())){ //Si es una categoría
                                 //final Treeitem selectedTreeItemParent = tree.getSelectedItem().getParentItem();
                                 //final ElementTreeNode itemValueParent = (ElementTreeNode) selectedTreeItemParent.getValue();
-                                WebPage wpage=wsiteAdm.getWebPage(itemValue.getData().getCategoryID());
-                                String zulPage="";
-                                if(wpage!=null && wpage instanceof TreeNodePage)
-                                {
-                                    TreeNodePage TreeNodePage=(TreeNodePage)wpage;
-                                    if(TreeNodePage.getZulResourcePath()!=null)
+                                if(itemValue.getParent().getData().getUri().equals("socialBrands"))
+                                {    
+                                    WebPage siteEditWebPage=wsiteAdm.getWebPage("siteOpt_Edit");
+                                    String zulPage=null;
+                                    String action=SWBSocialResourceUtils.ACTION_EDIT;
+                                    if(siteEditWebPage instanceof TreeNodePage)
                                     {
-                                        zulPage=TreeNodePage.getZulResourcePath();
+                                        TreeNodePage TreeNodePage=(TreeNodePage)siteEditWebPage;
+                                        if(TreeNodePage.getZulResourcePath()!=null)
+                                        {
+                                            zulPage=TreeNodePage.getZulResourcePath();
+                                        }
+                                        if(TreeNodePage.getAction()!=null)
+                                        {
+                                            action=TreeNodePage.getAction();
+                                        }
                                     }
-                                }
-                                content.setSrc(null);//En teoría, esta línea hace lo que hace la línea de abajo (Todo:Probar y Quitar la de abajo)
-                                content.setSrc("/work/models/swbsocial/admin/zul/clearCompose.zul");
-                                if(zulPage!=null)
-                                {
+                                    content.setSrc(null);
                                     content.setSrc(zulPage);
-                                }
-                                content.setDynamicProperty("objUri", URLEncoder.encode(itemValue.getData().getUri()));
-                                //content.setDynamicProperty("parentItem", itemValueParent);
-                                content.setDynamicProperty("treeItem", itemValue);
-                                content.setDynamicProperty("action", SWBSocialResourceUtils.ACTION_DOUBLECLICK);
-                                content.setDynamicProperty("wsiteAdm", wsiteAdm);
-                                content.setDynamicProperty("user", user);
-
-                                WebSite wsite=WebSite.ClassMgr.getWebSite(SemanticObject.getSemanticObject(itemValue.getData().getUri()).getModel().getName());
-                                
-                                if(wsite!=null)
+                                    content.setDynamicProperty("objUri", URLEncoder.encode(itemValue.getData().getUri()));
+                                    content.setDynamicProperty("paramRequest", paramRequest);
+                                    content.setDynamicProperty("action", action);
+                                    content.setDynamicProperty("optionWepPage", siteEditWebPage);
+                                    content.setDynamicProperty("treeItem", itemValue);
+                                    WebSite wsite=(WebSite)semObj.getModel().getModelObject().createGenericInstance();
+                                    content.setDynamicProperty("wsite", wsite);
+                                    content.setDynamicProperty("user", user);
+                                    
+                                }else
                                 {
-                                    content.setDynamicProperty("wsite",wsite);
-                                }                                
-                                content.setDynamicProperty("optionWepPage", null);
+                                    WebPage wpage=wsiteAdm.getWebPage(itemValue.getData().getCategoryID());
+                                    String zulPage="";
+                                    if(wpage!=null && wpage instanceof TreeNodePage)
+                                    {
+                                        TreeNodePage TreeNodePage=(TreeNodePage)wpage;
+                                        if(TreeNodePage.getZulResourcePath()!=null)
+                                        {
+                                            zulPage=TreeNodePage.getZulResourcePath();
+                                        }
+                                    }
+                                    content.setSrc(null);//En teoría, esta línea hace lo que hace la línea de abajo (Todo:Probar y Quitar la de abajo)
+                                    content.setSrc("/work/models/swbsocial/admin/zul/clearCompose.zul");
+                                    if(zulPage!=null)
+                                    {
+                                        content.setSrc(zulPage);
+                                    }
+                                    content.setDynamicProperty("objUri", URLEncoder.encode(itemValue.getData().getUri()));
+                                    //content.setDynamicProperty("parentItem", itemValueParent);
+                                    content.setDynamicProperty("treeItem", itemValue);
+                                    content.setDynamicProperty("action", SWBSocialResourceUtils.ACTION_DOUBLECLICK);
+                                    content.setDynamicProperty("wsiteAdm", wsiteAdm);
+                                    content.setDynamicProperty("user", user);
+
+                                    WebSite wsite=WebSite.ClassMgr.getWebSite(SemanticObject.getSemanticObject(itemValue.getData().getUri()).getModel().getName());
+
+                                    if(wsite!=null)
+                                    {
+                                        content.setDynamicProperty("wsite",wsite);
+                                    }                                
+                                    content.setDynamicProperty("optionWepPage", null);
+                                }
                             }
                         }
                     });
