@@ -180,7 +180,13 @@ public final class AdvancedTreeModel extends DefaultTreeModel<Element> {
         while(itChilds.hasNext())
         {
             ElementTreeNode treeNode=(ElementTreeNode)itChilds.next();
-            if(treeNode.getData().getUri().equalsIgnoreCase(uri) && treeNode.getData().getModelID().equalsIgnoreCase(modelID))
+            System.out.println("En findNode");
+            System.out.println("uri:"+uri);
+            System.out.println("treeNode.getData():"+treeNode.getData());
+            System.out.println("modelID:"+modelID);
+            System.out.println("treeNode.getData().getModelID():"+treeNode.getData().getModelID());
+            
+            if(treeNode.getData().getUri().equalsIgnoreCase(uri) && treeNode.getData().getModelID()!=null && treeNode.getData().getModelID().equalsIgnoreCase(modelID))
             {
                 return treeNode;
             }else if(treeNode.getChildCount()>0){
