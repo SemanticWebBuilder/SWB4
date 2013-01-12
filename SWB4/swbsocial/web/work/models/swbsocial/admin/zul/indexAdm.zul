@@ -1,30 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?page style="width:100%;height:100%"?>
 <?script content="jq.IE6_ALPHAFIX='.png';"?>
-<borderlayout id="main" height="100%">
+<borderlayout id="main" height="100%" sclass="minSize">
     <!--Inicia parte superior de pantalla de admin-->
-    <north border="normal" title="" size="100px">
-        <borderlayout>
-            <!--Área de logo-->
-            <west border="none" size="215px" flex="true" width="300px">
-		       <image src="../img/SWB-Social.png" />
-            </west>
-             <!--Termina área de logo-->
-             <!--Inicia área de Menú Superior-->
-            <center id="menu" border="normal">
-                <window height="100%">
-                    <style src="/work/models/swbsocial/admin/css/menuStyle.css" />
-                    <menubar id="mainMenu" apply="org.semanticwb.social.components.SWBSTopMenuComposer" height="100%" />
-                </window>
-            </center>
-            <!--Termina área de Menú Superior-->
-        </borderlayout>
+    <north>
+		<hbox hflex="true" width="100%" height="70px" align="center" style="background: #424242;">
+				<style src="/work/models/swbsocial/admin/css/menuStyle.css" />
+				<!--Área de logo-->
+                <image src="../img/SWB-Social.png" height="70px"/>
+				<separator width="80px"/>
+				<!--Inicia área de Menú Superior-->
+                <menubar style="" id="mainMenu" apply="org.semanticwb.social.components.SWBSTopMenuComposer" vflex="true"/>
+				<!--Termina área de Menú Superior-->
+            </hbox>
     </north>
     <!--Termina parte superior de pantalla de admin-->
     <center border="none">
         <borderlayout>
             <!--Inicia árbol de navegación-->
-            <west id="" title=" " maxsize="600" size="300px" flex="true" collapsible="true" splittable="true">
+            <west id="" title="SWBSocial" maxsize="600" size="300px" flex="true" collapsible="true" splittable="true">
                 <!--vbox spacing="0" width="100%" height="50%,100"-->
                     <window id="swbTreeWindow" apply="org.semanticwb.social.components.tree.SWBSTreeComposer">
                         <zscript>
@@ -75,11 +69,12 @@
                                     public void onEvent(Event evt) {
                                         String sMsg=(String)evt.getData();
                                         //Messagebox.show(sMsg, "Information",  Messagebox.OK, Messagebox.INFORMATION);
-                                        Label label=(Label)Path.getComponent("/msgWindow/msgLabel");
-                                        label.setStyle("color:green;font-size:14pt");
-                                        label.setValue(sMsg);
-                                        Clients.evalJavaScript("jq('$msgWindow').hide().slideDown(1000)");
-                                        Clients.evalJavaScript("jq('$msgWindow').show().slideUp(1500)");
+                                        //Label label=(Label)Path.getComponent("/msgWindow/msgLabel");
+                                        //label.setStyle("color:green;font-size:14pt");
+                                        //label.setValue(sMsg);
+                                        //Clients.evalJavaScript("jq('$msgWindow').hide().slideDown(1000)");
+                                        //Clients.evalJavaScript("jq('$msgWindow').show().slideUp(1500)");
+										Clients.showNotification(sMsg, "", content, "bottom_center", 3000);
                                     }
                                  });
                                 //Con el siguiente eventListener se crea una nueva marca al árbol
@@ -96,17 +91,7 @@
                             ]]>
                         </zscript>
                         
-                        <tree id="tree" sizedByContent="true" vflex="true"> <!--Para que se vea con + y - para abrir y cerrar nodos, colocar atributo zclass="z-dottree"-->
-                            <treecols>
-                                <treecol label="SWBSocial" />
-                            </treecols>
-                        </tree>
-                        <style>
-                            .h-inline-block {
-                                display: inline-block;
-                                _display: inline;
-                            }
-                        </style>
+                        <tree id="tree" sizedByContent="true" vflex="true"/>    <!--Para que se vea con + y - para abrir y cerrar nodos, colocar atributo zclass="z-dottree"-->
                         <menupopup id="treePopup"/>
                     </window>
                 <!--/vbox-->
