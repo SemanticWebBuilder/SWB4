@@ -32,6 +32,8 @@ import org.semanticwb.social.components.tree.AdvancedTreeModel;
 import org.semanticwb.social.components.tree.ElementTreeNode;
 import org.semanticwb.social.components.tree.Element;
 import org.zkoss.zk.ui.event.*;
+import org.zkoss.zul.TreeNode;
+import org.zkoss.zul.event.TreeDataEvent;
 
 /**
  *
@@ -95,6 +97,29 @@ public class SWBSocialResourceUtils {
     }
 
     public static class Components {
+        
+     
+        /**
+     * Refreshes the given node
+     * 
+     * @param node
+     *            The node to refresh
+     */
+    
+        public static void refreshNode(TreeNode node) {
+            if (node != null) {
+                TreeNode parent = node.getParent();
+                if (parent != null) 
+                {
+                    int index = parent.getIndex(node);
+                    if (index >= 0) {
+                            node.getModel().fireEvent(parent, index, index, TreeDataEvent.CONTENTS_CHANGED);
+                            node.getModel().fireEvent(parent, index, index, TreeDataEvent.INTERVAL_REMOVED);
+                            node.getModel().fireEvent(parent, index, index, TreeDataEvent.INTERVAL_ADDED);
+                    }
+                }
+            }
+        }
 
         public static void updateTreeNode(ElementTreeNode treeNode, SWBClass newSWBClass)
         {
@@ -189,10 +214,10 @@ public class SWBSocialResourceUtils {
          */
 
         public static void updateTreeTitleNode(ElementTreeNode item, String title) {
-            Element element = (Element) item.getData();
-            element.setName(title);
-            item.setData(element);
-        }
+             Element element=item.getData();
+             element.setName(title);
+             item.setData(element);
+        } 
 
 
         public static void updateTreeNode(HttpServletRequest request, SWBParamRequest paramRequest)
