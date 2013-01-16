@@ -104,6 +104,7 @@ public class SocialNetworkComp extends GenericForwardComposer {
                 socialNet.setTitle(title.getValue());
                 //Actualizar el árbol (actualizar título de Nodo)
                 SWBSocialResourceUtils.Components.updateTreeNode(treeItem, title.getValue());
+                SWBSocialResourceUtils.Components.setStatusMessage("Titulo de nodo actualizado..");
             }
             if(description.getValue()!=null)
             {
