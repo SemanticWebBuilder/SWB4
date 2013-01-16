@@ -14,6 +14,7 @@ import org.semanticwb.social.Childrenable;
 import org.zkoss.zul.DefaultTreeModel;
 import org.zkoss.zul.DefaultTreeNode;
 import org.zkoss.zul.TreeNode;
+import org.zkoss.zul.event.TreeDataEvent;
 
 /**
  *
@@ -180,11 +181,6 @@ public final class AdvancedTreeModel extends DefaultTreeModel<Element> {
         while(itChilds.hasNext())
         {
             ElementTreeNode treeNode=(ElementTreeNode)itChilds.next();
-            System.out.println("En findNode");
-            System.out.println("uri:"+uri);
-            System.out.println("treeNode.getData():"+treeNode.getData());
-            System.out.println("modelID:"+modelID);
-            System.out.println("treeNode.getData().getModelID():"+treeNode.getData().getModelID());
             
             if(treeNode.getData().getUri().equalsIgnoreCase(uri) && treeNode.getData().getModelID()!=null && treeNode.getData().getModelID().equalsIgnoreCase(modelID))
             {
@@ -199,5 +195,30 @@ public final class AdvancedTreeModel extends DefaultTreeModel<Element> {
         }
         return null;
     }
-
+    
+    
+    /**
+     * Refreshes the given node
+     * 
+     * @param node
+     *            The node to refresh
+     */
+    
+    public void refreshNode(TreeNode node) {
+        Element element = (Element) node.getData();
+        if (node != null) {
+            TreeNode parent = node.getParent();
+            Element parentElement = (Element) parent.getData();
+            if (parent != null) {
+                    int index = parent.getIndex(node);
+                    if (index >= 0) {
+                            // This causes the NullPointerException!
+                            fireEvent(parent, index, index, TreeDataEvent.CONTENTS_CHANGED);
+                            fireEvent(parent, index, index, TreeDataEvent.INTERVAL_REMOVED);
+                            fireEvent(parent, index, index, TreeDataEvent.INTERVAL_ADDED);
+                    }
+            }
+        }
+    }
+    
 }
