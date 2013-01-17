@@ -38,22 +38,22 @@
 
                                 SWBParamRequest paramRequest=(SWBParamRequest)requestScope.get("paramRequest");
                                 User user=paramRequest.getUser();
-                                EventQueue queOnCreateNode = EventQueues.lookup("insertNodo2Tree", EventQueues.SESSION, true);
+                                EventQueue queOnCreateNode = EventQueues.lookup("insertNode2Tree", EventQueues.SESSION, true);
                                 queOnCreateNode.subscribe(new EventListener() {
                                     public void onEvent(Event evt) {
                                         TreeNodeRefresh treeNodeRefresh=(TreeNodeRefresh)evt.getData();
                                         ElementTreeNode treeNode=treeNodeRefresh.getTreeNode();
                                         SWBClass swbClass=treeNodeRefresh.getSWBClass();
-                                        SWBSocialResourceUtils.Components.insertTreeNode(treeNode,swbClass);
+                                        SWBSocialResourceUtils.Actions.insertTreeNode(treeNode,swbClass);
                                     }
                                 });
-                                EventQueue queOnUpdateNode = EventQueues.lookup("updateNodo2Tree", EventQueues.SESSION, true);
+                                EventQueue queOnUpdateNode = EventQueues.lookup("updateNode2Tree", EventQueues.SESSION, true);
                                 queOnUpdateNode.subscribe(new EventListener() {
                                     public void onEvent(Event evt) {
                                         TreeNodeRefresh treeNodeRefresh=(TreeNodeRefresh)evt.getData();
                                         ElementTreeNode treeNode=treeNodeRefresh.getTreeNode();
                                         String title=treeNodeRefresh.getTitle();
-                                        SWBSocialResourceUtils.Components.updateTreeTitleNode(treeNode, title);
+                                        SWBSocialResourceUtils.Actions.updateTreeTitleNode(treeNode, title);
                                     }
                                 });
                                 EventQueue queOnRemoveNode = EventQueues.lookup("removeNodo2Tree", EventQueues.SESSION, true);
@@ -78,14 +78,14 @@
                                     }
                                  });
                                 //Con el siguiente eventListener se crea una nueva marca al árbol
-                                EventQueue queOnUpdateTree = EventQueues.lookup("updateTree", EventQueues.SESSION, true);
-                                queOnUpdateTree.subscribe(new EventListener() {
+                                EventQueue queOnCreateNewBrand = EventQueues.lookup("createNewBrand", EventQueues.SESSION, true);
+                                queOnCreateNewBrand.subscribe(new EventListener() {
                                     public void onEvent(Event evt) {
                                         ElementTreeNode rootTreeNode=(ElementTreeNode)page.getDesktop().getSession().getAttribute("rootTreeNode");
                                         ElementTreeNode treeItem=(ElementTreeNode)evt.getData();
                                         rootTreeNode.insert(treeItem, rootTreeNode.getChildCount());
                                         String msg_brandCreated=SWBUtils.TEXT.getLocaleString("org.semanticwb.social.components.locales.genericCompMsgs", "msg_brandCreated",new Locale(user.getLanguage()));
-                                        SWBSocialResourceUtils.Components.setStatusMessage(msg_brandCreated+":"+treeItem.getData().getName());
+                                        SWBSocialResourceUtils.Events.setStatusMessage_Event(msg_brandCreated+":"+treeItem.getData().getName());
                                     }
                                  });
                             ]]>
