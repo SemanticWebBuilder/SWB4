@@ -75,7 +75,7 @@ public class SocialNetworkComp extends GenericForwardComposer {
             sendButton.setLabel("Actualizar");
         }else if(action.equals(SWBSocialResourceUtils.ACTION_REMOVE))
         {
-            SWBSocialResourceUtils.Components.removeNodeFromTree(requestScope);
+            SWBSocialResourceUtils.Actions.updateTreeNode(requestScope);
         }
 
     }
@@ -95,16 +95,16 @@ public class SocialNetworkComp extends GenericForwardComposer {
                 ctaNet.setDescription(description.getValue());
             }
             //Actualizar el árbol (Insertar Nodo)
-            SWBSocialResourceUtils.Components.setStatusMessage(SWBUtils.TEXT.getLocaleString("org.semanticwb.social.components.locales.genericCompMsgs", "msg_elementCreated",new Locale("es"))+":"+ctaNet.getTitle());
-            SWBSocialResourceUtils.Components.updateTreeNode(treeItem, ctaNet);
+            SWBSocialResourceUtils.Events.setStatusMessage_Event(SWBUtils.TEXT.getLocaleString("org.semanticwb.social.components.locales.genericCompMsgs", "msg_elementCreated",new Locale("es"))+":"+ctaNet.getTitle()); 
+            SWBSocialResourceUtils.Events.insertNode2Tree_Event(treeItem, ctaNet);
         }else if(action.equals(SWBSocialResourceUtils.ACTION_EDIT) ||  action.equals(SWBSocialResourceUtils.ACTION_DOUBLECLICK) && socialNet!=null)
         {
             if(title.getValue()!=null)
             {
                 socialNet.setTitle(title.getValue());
                 //Actualizar el árbol (actualizar título de Nodo)
-                SWBSocialResourceUtils.Components.updateTreeNode(treeItem, title.getValue());
-                SWBSocialResourceUtils.Components.setStatusMessage("Titulo de nodo actualizado..");
+                SWBSocialResourceUtils.Events.updateTreeTitleNode_Event(treeItem, title.getValue());
+                SWBSocialResourceUtils.Events.setStatusMessage_Event("Titulo de nodo actualizado..");
             }
             if(description.getValue()!=null)
             {
