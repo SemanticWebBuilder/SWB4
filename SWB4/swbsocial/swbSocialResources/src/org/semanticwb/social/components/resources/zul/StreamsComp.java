@@ -91,15 +91,15 @@ public class StreamsComp extends GenericForwardComposer
                 stream.setDescription(description.getValue());
             }
             //Actualizar el árbol (Insertar Nodo)
-            SWBSocialResourceUtils.Components.setStatusMessage(SWBUtils.TEXT.getLocaleString("org.semanticwb.social.components.locales.genericCompMsgs", "msg_elementCreated",new Locale("es"))+":"+stream.getTitle());
-            SWBSocialResourceUtils.Components.updateTreeNode(treeItem, stream);
+            SWBSocialResourceUtils.Events.setStatusMessage_Event(SWBUtils.TEXT.getLocaleString("org.semanticwb.social.components.locales.genericCompMsgs", "msg_elementCreated",new Locale("es"))+":"+stream.getTitle());
+            SWBSocialResourceUtils.Events.insertNode2Tree_Event(treeItem, stream);
         }else if(action.equals(SWBSocialResourceUtils.ACTION_EDIT) ||  action.equals(SWBSocialResourceUtils.ACTION_DOUBLECLICK) && stream!=null)
         {
             if(title.getValue()!=null)
             {
                 stream.setTitle(title.getValue());
                 //Actualizar el árbol (actualizar título de Nodo)
-                SWBSocialResourceUtils.Components.updateTreeNode(treeItem, title.getValue());
+                SWBSocialResourceUtils.Events.updateTreeTitleNode_Event(treeItem, title.getValue());
             }
             if(description.getValue()!=null)
             {

@@ -106,7 +106,7 @@ public class ImportExportBrand extends GenericResource {
                 out.println("<script type=\"text/javascript\">");
                 if (request.getParameter("msgKey").equals("siteCreated")) {
                     out.println("parent.addItemByURI(parent.mtreeStore, null, '" + request.getParameter("wsUri") + "');");
-                    SWBSocialResourceUtils.Components.createNewBrandNode(request, paramRequest, createdWebSite);
+                    SWBSocialResourceUtils.Events.createNewBrandNode_Event(request, paramRequest, createdWebSite);
 
                 }
                 out.println("parent.showStatus('" + paramRequest.getLocaleString(request.getParameter("msgKey")) + "');");

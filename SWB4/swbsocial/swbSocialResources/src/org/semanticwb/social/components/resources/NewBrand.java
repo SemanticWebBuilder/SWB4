@@ -776,7 +776,7 @@ public class NewBrand extends GenericResource {
                     //System.out.println(tree);
                     //tree.setModel(tree.getModel());
                     //Refrescar nodo del árbol...
-                    SWBSocialResourceUtils.Components.createNewBrandNode(request, paramRequest, site);
+                    SWBSocialResourceUtils.Events.createNewBrandNode_Event(request, paramRequest, site);
                 }catch(Exception e)
                 {
                     site.abort();

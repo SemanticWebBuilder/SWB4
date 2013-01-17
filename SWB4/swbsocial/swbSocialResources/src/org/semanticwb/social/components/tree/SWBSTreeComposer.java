@@ -315,7 +315,7 @@ public final class SWBSTreeComposer extends GenericForwardComposer <Component> {
                                                 Element element = (Element) itemValue.getData();
                                                 element.seticonElement(ImgAdminPathBase+displayObj.getIconClass());
                                                 itemValue.setData(element);
-                                                SWBSocialResourceUtils.Components.setStatusMessage(msg_activeElement+":"+itemValue.getData().getName());
+                                                SWBSocialResourceUtils.Events.setStatusMessage_Event(msg_activeElement+":"+itemValue.getData().getName());
                                             }
                                             });
                                             treePopup.appendChild(mItemActive);
@@ -331,7 +331,7 @@ public final class SWBSTreeComposer extends GenericForwardComposer <Component> {
                                                 Element element = (Element) itemValue.getData();
                                                 element.seticonElement(ImgAdminPathBase+"off_"+displayObj.getIconClass());
                                                 itemValue.setData(element);
-                                                SWBSocialResourceUtils.Components.setStatusMessage(msg_unActiveElement+":"+itemValue.getData().getName());
+                                                SWBSocialResourceUtils.Events.setStatusMessage_Event(msg_unActiveElement+":"+itemValue.getData().getName());
                                             }
                                             });
                                             treePopup.appendChild(mItemActive);
@@ -382,7 +382,7 @@ public final class SWBSTreeComposer extends GenericForwardComposer <Component> {
                                                                 semObj.remove();
                                                            }
                                                            elemenetTreeModel.remove(itemValue);
-                                                           SWBSocialResourceUtils.Components.setStatusMessage(msg_elementDeleted+":"+itemValue.getData().getName());
+                                                           SWBSocialResourceUtils.Events.setStatusMessage_Event(msg_elementDeleted+":"+itemValue.getData().getName());
                                                            break;   //TODO:Ver si requiero este break;
                                                        }
                                                    }
@@ -452,7 +452,7 @@ public final class SWBSTreeComposer extends GenericForwardComposer <Component> {
                                             
                                             elemenetTreeModel.refreshNode(itemValue);
                                             
-                                            SWBSocialResourceUtils.Components.setStatusMessage(msg_activeElement+":"+itemValue.getData().getName());
+                                            SWBSocialResourceUtils.Events.setStatusMessage_Event(msg_activeElement+":"+itemValue.getData().getName());
                                         }
                                         });
                                         treePopup.appendChild(mItemActive);
@@ -470,7 +470,7 @@ public final class SWBSTreeComposer extends GenericForwardComposer <Component> {
                                             
                                             elemenetTreeModel.refreshNode(itemValue);
                                             
-                                            SWBSocialResourceUtils.Components.setStatusMessage(msg_unActiveElement+":"+itemValue.getData().getName());
+                                            SWBSocialResourceUtils.Events.setStatusMessage_Event(msg_unActiveElement+":"+itemValue.getData().getName());
                                         }
                                         });
                                         treePopup.appendChild(mItemActive);
@@ -496,7 +496,7 @@ public final class SWBSTreeComposer extends GenericForwardComposer <Component> {
                                                         //semObj.remove();
                                                     }
                                                     elemenetTreeModel.remove(itemValue);
-                                                    SWBSocialResourceUtils.Components.setStatusMessage(msg_brandDeleted+":"+itemValue.getData().getName());
+                                                    SWBSocialResourceUtils.Events.setStatusMessage_Event(msg_brandDeleted+":"+itemValue.getData().getName());
                                                 }
                                            }
                                         });
@@ -514,13 +514,13 @@ public final class SWBSTreeComposer extends GenericForwardComposer <Component> {
                 //Manejo de doble click en los nodos del árbol
                 {
                        //TODO
-                        //dataRow.setAttribute("xxx", ctn.getData()); //Charly
-                        //treeItem.setId("xxx"+ctn.getData());    //Charly
+                        dataRow.setAttribute("xxx", ctn.getData()); //Charly
+                        treeItem.setId("xxx"+ctn.getData());    //Charly
                         dataRow.addEventListener(Events.ON_DOUBLE_CLICK, new EventListener<Event>() {
                         @Override
                         public void onEvent(Event event) throws Exception {
-                            final Treeitem selectedTreeItem = tree.getSelectedItem();
-                            //final Treeitem selectedTreeItem = (Treeitem) event.getTarget().getFellow("xxx"+event.getTarget().getAttribute("xxx"));   //Charly
+                            //final Treeitem selectedTreeItem = tree.getSelectedItem();
+                            final Treeitem selectedTreeItem = (Treeitem) event.getTarget().getFellow("xxx"+event.getTarget().getAttribute("xxx"));   //Charly
                             final ElementTreeNode itemValue = (ElementTreeNode) selectedTreeItem.getValue();
                             final SemanticObject semObj=SemanticObject.createSemanticObject(itemValue.getData().getUri());
                             if(!isCategory(itemValue.getData())){ //Si es una categoría
@@ -621,7 +621,7 @@ public final class SWBSTreeComposer extends GenericForwardComposer <Component> {
                                 if(draggedValue.getData().getModelID().equals(parentData.getData().getModelID()))
                                 {
                                         elemenetTreeModel.add(parentData, new ElementTreeNode[] { draggedValue });
-                                        SWBSocialResourceUtils.Components.setStatusMessage(msg_elementMoved+":"+itemValue.getData().getName());
+                                        SWBSocialResourceUtils.Events.setStatusMessage_Event(msg_elementMoved+":"+itemValue.getData().getName());
                                }
                             }
                         });
@@ -658,7 +658,7 @@ public final class SWBSTreeComposer extends GenericForwardComposer <Component> {
                                                 if(draggedValue.getData().getModelID().equals(parentData.getData().getModelID()))
                                                 {
                                                     elemenetTreeModel.add(parentData, new ElementTreeNode[] { draggedValue });
-                                                    SWBSocialResourceUtils.Components.setStatusMessage(msg_elementMoved+":"+itemValue.getData().getName());
+                                                    SWBSocialResourceUtils.Events.setStatusMessage_Event(msg_elementMoved+":"+itemValue.getData().getName());
                                                     //elemenetTreeModel.remove(draggedValue);
                                                 }
                                             }
