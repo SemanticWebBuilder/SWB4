@@ -1,5 +1,7 @@
 package org.semanticwb.social;
 
+import java.util.Date;
+
 /**
  * Represents any message, image or video posted in any of the social networks
  * at which this application searches for information
@@ -46,7 +48,7 @@ public class ExternalPost {
     /**
      * The text that describes the link related to this message
      */
-    private String linkDescription;
+    private String description;
     
     /**
      * A link to an icon representing the type of this post (in Facebook)
@@ -66,12 +68,37 @@ public class ExternalPost {
     /**
      * Creator's friends number
      */
-    private String friendsNumber;
+    private int friendsNumber;
     
     /**
      * Creator's followers number
      */
-    private String followers;
+    private int followers;
+    
+    /**
+     * Number that post has been retweeted
+     */
+    private int retweets;
+    
+    /**
+     * Device used by the post creator
+     */
+    private String device;
+    
+    /**
+     * Date when the user was created
+     */
+    private Date usercreation;
+    
+    /**
+     * Place where the post was originated
+     */
+    private String place;
+    
+    /**
+     * location where the post was originated
+     */
+    private String location;
     
 
     /**
@@ -179,17 +206,17 @@ public class ExternalPost {
     }
 
     /**
-     * @return the linkDescription
+     * @return the description
      */
-    public String getLinkDescription() {
-        return linkDescription;
+    public String getDescription() {
+        return description;
     }
 
     /**
-     * @param linkDescription the linkDescription to set
+     * @param description the linkDescription to set
      */
-    public void setLinkDescription(String linkDescription) {
-        this.linkDescription = linkDescription;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     /**
@@ -237,29 +264,123 @@ public class ExternalPost {
     /**
      * @return the friendsNumber
      */
-    public String getFriendsNumber() {
+    public int getFriendsNumber() {
         return friendsNumber;
     }
 
     /**
      * @param friendsNumber the friendsNumber to set
      */
-    public void setFriendsNumber(String friendsNumber) {
+    public void setFriendsNumber(int friendsNumber) {
         this.friendsNumber = friendsNumber;
     }
 
     /**
      * @return the followers
      */
-    public String getFollowers() {
+    public int getFollowers() {
         return followers;
     }
 
     /**
      * @param followers the followers to set
      */
-    public void setFollowers(String followers) {
+    public void setFollowers(int followers) {
         this.followers = followers;
+    }
+    
+    /**
+     * 
+     * @return the retweets
+     */
+    public int getRetweets()
+    {
+       return retweets; 
+    }
+    
+    
+    /**
+     * 
+     * @param the retweets to set
+     */
+    public void setRetweets(int retweets)
+    {
+       this.retweets=retweets;
+    }
+    
+     /**
+     * 
+     * @return the device
+     */
+    public String getDevice()
+    {
+       return device; 
+    }
+    
+    
+    /**
+     * 
+     * @param the device to set
+     */
+    public void setDevice(String device)
+    {
+       this.device=device; 
+    }
+    
+    /**
+     * 
+     * @return usercreation
+     */
+    public Date getUsercreation()
+    {
+        return usercreation;
+    }
+    
+    /**
+     * 
+     * @param usercreation the creation date to set
+     */
+    public void setUsercreation(Date usercreation)
+    {
+        this.usercreation=usercreation;
+    }
+    
+    /**
+     * 
+     * @return the place
+     */
+    public String getPlace()
+    {
+        return place;
+    }
+    
+    
+    /**
+     * 
+     * @param place the place to set
+     */
+    public void setPlace(String place)
+    {
+        this.place=place;
+    }
+    
+    /**
+     * 
+     * @return location the location where the post was originated
+     */
+    public String getLocation()
+    {
+       return location; 
+    }
+    
+    /**
+     * 
+     * @param location the location where the post was originated
+     * 
+     */
+    public void setLocation(String location)
+    {
+        this.location=location;
     }
     
 }

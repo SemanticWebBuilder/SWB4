@@ -166,7 +166,7 @@ public class SWBSocialStatusListener implements twitter4j.StatusListener {
                     }
                 }
                 socialNetwork.addReceivedPost(message, String.valueOf(status.getId()), socialNetwork);
-                new Classifier(message);
+                //new Classifier(message);
             }
       }catch(Exception e){
         e.printStackTrace();

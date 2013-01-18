@@ -6,16 +6,21 @@
 package org.semanticwb.social.listener;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.StringTokenizer;
 import org.semanticwb.model.SWBModel;
 import org.semanticwb.model.WebSite;
+import org.semanticwb.social.ExternalPost;
 import org.semanticwb.social.MessageIn;
 import org.semanticwb.social.PhotoIn;
 import org.semanticwb.social.PostIn;
 import org.semanticwb.social.Prepositions;
 import org.semanticwb.social.SentimentWords;
 import org.semanticwb.social.SentimentalLearningPhrase;
+import org.semanticwb.social.SocialNetwork;
+import org.semanticwb.social.SocialNetworkUser;
+import org.semanticwb.social.Stream;
 import org.semanticwb.social.VideoIn;
 import org.semanticwb.social.util.NormalizerCharDuplicate;
 import org.semanticwb.social.util.SWBSocialUtil;
@@ -35,86 +40,47 @@ import org.zkoss.zul.ListModelList;
 
 public class SentimentalDataClassifier {
 
-    PostIn post=null;
-    String postData=null;
+    //PostIn post=null;
+    String externalString2Clasify=null;
     SWBModel model=null;
     float sentimentalTweetValue=0;
     float IntensiveTweetValue=0;
     int wordsCont=0;
-
     
+    ExternalPost externalPost=null;
+    Stream stream=null;
+    SocialNetwork socialNetwork=null;
+
+    /*
     public SentimentalDataClassifier(PostIn post, String postData)
     {
-        this.post=post;
         this.postData=postData;
         this.model=WebSite.ClassMgr.getWebSite(post.getSemanticObject().getModel().getName());
         initAnalysis();
     }
-
-    public SentimentalDataClassifier(PostIn post)
+    * */
+    public SentimentalDataClassifier(ExternalPost externalPost, Stream stream, SocialNetwork socialNetwork)
     {
-        this.post=post;
-        getPostData();
-        this.model=WebSite.ClassMgr.getWebSite(post.getSemanticObject().getModel().getName());
+        this.externalPost=externalPost;
+        this.stream=stream;
+        this.socialNetwork=socialNetwork;
+    
+        getExternalPostData();
+        this.model=WebSite.ClassMgr.getWebSite(stream.getSemanticObject().getModel().getName());
         initAnalysis();
     }
-
-    /*
-     * Metodo que obtiene la información de los mensajes de entrada (del listener) que va ha ser
-     * analizada para su clasificación.
-     */
-    private void getPostData()
+    
+    private void getExternalPostData()
     {
-        //En este momento de los 3 tipos (MessageIn,PhotoIn y VideoIn) se obtiene la misma información, sin embargo, seguramente no va ha
-        //quedar así, por eso se esta separando desde ahorita.
-        if (post instanceof MessageIn) {
-            MessageIn messageIn = (MessageIn) post;
-            if(messageIn.getMsg_Text()!=null && !messageIn.getMsg_Text().isEmpty())
-            {
-                postData = messageIn.getMsg_Text();
-            }
-            //Ver mas adelante si realmente se requiere para la clasificación revisar los tags, muy posiblemente no sea así
-            if(messageIn.getTags()!=null && !messageIn.getTags().isEmpty())
-            {
-                if(postData==null)
-                {
-                    postData="";
-                }
-                postData = messageIn.getTags();
-            }
-        } else if (post instanceof PhotoIn) {
-            PhotoIn photoIn = (PhotoIn) post;
-            if(photoIn.getMsg_Text()!=null && !photoIn.getMsg_Text().isEmpty())
-            {
-                postData = photoIn.getMsg_Text();
-            }
-            //Ver mas adelante si realmente se requiere para la clasificación revisar los tags, muy posiblemente no sea así
-            if(photoIn.getTags()!=null && !photoIn.getTags().isEmpty())
-            {
-                if(postData==null)
-                {
-                    postData="";
-                }
-                postData = photoIn.getTags();
-            }
-        } else if (post instanceof VideoIn) {
-            VideoIn videoIn = (VideoIn) post;
-            if(videoIn.getMsg_Text()!=null && !videoIn.getMsg_Text().isEmpty())
-            {
-                postData = videoIn.getMsg_Text();
-            }
-            //Ver mas adelante si realmente se requiere para la clasificación revisar los tags, muy posiblemente no sea así
-            if(videoIn.getTags()!=null && !videoIn.getTags().isEmpty())
-            {
-                if(postData==null)
-                {
-                    postData="";
-                }
-                postData = videoIn.getTags();
-            }
+        externalString2Clasify=externalPost.getMessage();
+        
+        //Si la descripción es diferente que nula, se agrega al texto a ser clasificado
+        if(externalPost.getDescription()!=null)
+        {
+            externalString2Clasify+=" "+externalPost.getDescription();
         }
     }
-
+    
 
     /*
      * Metodo cuya función es la de analizar la información de cada mensaje y determinar el sentimiento del mismo,
@@ -123,24 +89,22 @@ public class SentimentalDataClassifier {
      */
     private void initAnalysiss()
     {
-        //Revisa si encuentra emoticones en el mensaje
-        findEmoticones();
-
+        
         //Convierto todo el mensaje en minusculas
-        postData=postData.toLowerCase();
+        externalString2Clasify=externalString2Clasify.toLowerCase();
 
         //Busco frases en objeto de aprendizaje (SentimentalLearningPhrase)
-        //System.out.println("postData a revisar:"+postData);
+        //System.out.println("externalString2Clasify a revisar:"+externalString2Clasify);
         findInLearnigPhrases();
-        //System.out.println("postData a revisado:"+postData+", sentimentalTweetValue:"+sentimentalTweetValue+", IntensiveTweetValue:+"+IntensiveTweetValue+", wordsCont:"+wordsCont);
+        //System.out.println("externalString2Clasify a revisado:"+externalString2Clasify+", sentimentalTweetValue:"+sentimentalTweetValue+", IntensiveTweetValue:+"+IntensiveTweetValue+", wordsCont:"+wordsCont);
 
         //Elimino Caracteres especiales (acentuados)
-        postData=SWBSocialUtil.Strings.replaceSpecialCharacters(postData);
+        externalString2Clasify=SWBSocialUtil.Strings.replaceSpecialCharacters(externalString2Clasify);
 
         //removePuntualSigns1();
-        postData=SWBSocialUtil.Strings.removePuntualSigns(postData, model);
+        externalString2Clasify=SWBSocialUtil.Strings.removePuntualSigns(externalString2Clasify, model);
 
-        StringTokenizer st = new StringTokenizer(postData);
+        StringTokenizer st = new StringTokenizer(externalString2Clasify);
         while (st.hasMoreTokens())
         {
             String word2Find=st.nextToken();
@@ -184,6 +148,18 @@ public class SentimentalDataClassifier {
             }
         }
         //System.out.println("sentimentalTweetValue Final:"+sentimentalTweetValue+", wordsCont:"+wordsCont);
+        
+        
+        //Una vez que se tiene clasificado el mensaje por sentimientos y por intensidad, falta ver si cumple el filtro(s) del stream
+        {
+            //TODO:FILTRAR
+            //SI NO PASA EL O LOS FILTROS, HASTA AQUÍ LLEGA EL THREAD DE ESTE MENSAJE QUE ENTRÓ POR EL LISTENER.
+        }
+        
+        //Si cumple el o los filtros, crea un objeto messageIn.
+        
+        PostIn post=createPostInObj();
+        
         if(sentimentalTweetValue>0)
         {
             float prom=sentimentalTweetValue/wordsCont;
@@ -214,6 +190,9 @@ public class SentimentalDataClassifier {
             //System.out.println("IntensiveTweetValue Final:"+IntensiveTweetValue+", valor promedio:"+prom);
             post.setPostIntensityValue(prom);
         }
+        
+        //Revisa si encuentra emoticones en el mensaje
+        findEmoticones(post);
     }
 
     /*Metodo cuya función es la de analizar la información de cada mensaje y determinar el sentimiento del mismo,
@@ -223,34 +202,32 @@ public class SentimentalDataClassifier {
     
     private void initAnalysis()
     {
-        //Revisa si encuentra emoticones en el mensaje
-        findEmoticones();
-
+        
         //Normalizo
-        postData=SWBSocialUtil.Classifier.normalizer(postData).getNormalizedPhrase();
+        externalString2Clasify=SWBSocialUtil.Classifier.normalizer(externalString2Clasify).getNormalizedPhrase();
 
-        //System.out.println("postData-1:"+postData);
+        //System.out.println("externalString2Clasify-1:"+externalString2Clasify);
 
         //Se cambia toda la frase a su modo raiz
-        postData=SWBSocialUtil.Classifier.getRootWord(postData);
+        externalString2Clasify=SWBSocialUtil.Classifier.getRootWord(externalString2Clasify);
 
-        //System.out.println("postData-2:"+postData);
+        //System.out.println("externalString2Clasify-2:"+externalString2Clasify);
 
         //Fonetizo
-        postData=SWBSocialUtil.Classifier.phonematize(postData);
+        externalString2Clasify=SWBSocialUtil.Classifier.phonematize(externalString2Clasify);
 
         //Busco frases en objeto de aprendizaje (SentimentalLearningPhrase)
-        //System.out.println("postData a revisar:"+postData);
+        //System.out.println("externalString2Clasify a revisar:"+externalString2Clasify);
         findInLearnigPhrases();
-        //System.out.println("postData a revisado:"+postData+", sentimentalTweetValue:"+sentimentalTweetValue+", IntensiveTweetValue:+"+IntensiveTweetValue+", wordsCont:"+wordsCont);
+        //System.out.println("externalString2Clasify a revisado:"+externalString2Clasify+", sentimentalTweetValue:"+sentimentalTweetValue+", IntensiveTweetValue:+"+IntensiveTweetValue+", wordsCont:"+wordsCont);
 
         //Elimino Caracteres especiales (acentuados)
-        //postData=SWBSocialUtil.Strings.replaceSpecialCharacters(postData);
+        //externalString2Clasify=SWBSocialUtil.Strings.replaceSpecialCharacters(externalString2Clasify);
 
         //removePuntualSigns1();
-        //postData=SWBSocialUtil.Strings.removePuntualSigns(postData, model);
+        //externalString2Clasify=SWBSocialUtil.Strings.removePuntualSigns(externalString2Clasify, model);
 
-        StringTokenizer st = new StringTokenizer(postData);
+        StringTokenizer st = new StringTokenizer(externalString2Clasify);
         while (st.hasMoreTokens())
         {
             String word2Find=st.nextToken();
@@ -298,6 +275,18 @@ public class SentimentalDataClassifier {
             }
         }
         //System.out.println("sentimentalTweetValue Final:"+sentimentalTweetValue+", wordsCont:"+wordsCont);
+        
+        //Una vez que se tiene clasificado el mensaje por sentimientos y por intensidad, falta ver si cumple el filtro(s) del stream
+        {
+            //TODO:FILTRAR
+            //SI NO PASA EL O LOS FILTROS, HASTA AQUÍ LLEGA EL THREAD DE ESTE MENSAJE QUE ENTRÓ POR EL LISTENER.
+        }
+        
+        //Si cumple el o los filtros, crea un objeto messageIn.
+        
+        PostIn post=createPostInObj();
+        
+        
         if(sentimentalTweetValue>0)
         {
             float prom=sentimentalTweetValue/wordsCont;
@@ -328,35 +317,85 @@ public class SentimentalDataClassifier {
             //System.out.println("IntensiveTweetValue Final:"+IntensiveTweetValue+", valor promedio:"+prom);
             post.setPostIntensityValue(prom);
         }
-        //Pruebas para manejo de eventos para TimeLines...
-        System.out.println("Aqui");
-        try{
-            EventQueue queOnTimelineReady = EventQueues.lookup("timelineReady", EventQueues.APPLICATION, true);
-            queOnTimelineReady.subscribe(new EventListener() {
-                public void onEvent(Event evt)
-                {
-                    System.out.println("Esta en Clasificador-llego evento-1:"+post);
-                    EventQueue eq = EventQueues.lookup("timelineReadyResp",EventQueues.SESSION, true); //create a queue
-                    eq.publish(new Event("onTimelineReadyRes", null, post));
-                    System.out.println("Esta en Clasificador-llego evento-2");
-                }
-            });
-            EventQueue queOnTimelineReady1 = EventQueues.lookup("onTimelineReady", EventQueues.APPLICATION, true);
-            queOnTimelineReady1.subscribe(new EventListener() {
-                public void onEvent(Event evt)
-                {
-                    System.out.println("Esta en Clasificador-llego evento-J1:"+post);
-                    EventQueue eq = EventQueues.lookup("timelineReadyResp",EventQueues.SESSION, true); //create a queue
-                    eq.publish(new Event("onTimelineReadyRes", null, post));
-                    System.out.println("Esta en Clasificador-llego evento-2");
-                }
-            });
-            //Termina Pruebas para manejo de eventos para TimeLines...
-        }catch(Exception e)
-        {
-            
-        }
+        
+        //Revisa si encuentra emoticones en el mensaje
+        findEmoticones(post);
     }
+    
+    
+    /**
+     * Crea objeto PostIn, de acuerdo a los datos que contenga el objeto
+     * @return 
+     */
+    private PostIn createPostInObj()
+    {
+           //Persistencia del mensaje
+                MessageIn message=MessageIn.ClassMgr.createMessageIn(String.valueOf(externalPost.getPostId()), model);
+                message.setMsg_Text(externalPost.getMessage());
+                message.setPostInSocialNetwork(socialNetwork);
+                message.setPostInStream(stream);
+                //System.out.println("Fuente:"+status.getSource());
+                message.setPostRetweets(Integer.parseInt(""+externalPost.getRetweets()));
+                //System.out.println("Ya en Msg ReTweets:"+message.getPostRetweets());
+                if(externalPost.getDevice()!=null)    //Dispositivo utilizado
+                {
+                    String source=null;
+                    int pos=externalPost.getDevice().indexOf(">");
+                    if(pos>-1)
+                    {
+                        int pos1=externalPost.getDevice().indexOf("<",pos);
+                        if(pos1>-1)
+                        {
+                            source=externalPost.getDevice().substring(pos+1, pos1);
+                        }
+                    }else{
+                        source=externalPost.getDevice();
+                    }
+                   message.setPostSource(source);
+                }
+                //System.out.println("Ya en Msg source:"+source);
+
+                if(externalPost.getCreatorId()!=null)
+                {
+                    if(externalPost.getPlace()!=null)
+                    {
+                        message.setPostPlace(externalPost.getPlace());
+                    }else if(externalPost.getLocation()!=null)
+                    {
+                        message.setPostPlace(externalPost.getLocation());
+                    }
+                    
+                    SocialNetworkUser socialNetUser=SocialNetworkUser.getSocialNetworkUserbyIDAndSocialNet(externalPost.getCreatorId(), socialNetwork, model);
+                    if(socialNetUser==null)//
+                    {
+                        //Si no existe el id del usuario para esa red social, lo crea.
+                        socialNetUser=SocialNetworkUser.ClassMgr.createSocialNetworkUser(model);
+                        socialNetUser.setSnu_id(externalPost.getCreatorId());
+                        socialNetUser.setSnu_name(externalPost.getCreatorName());
+                        socialNetUser.setSnu_SocialNetwork(socialNetwork);
+                        socialNetUser.setCreated(externalPost.getUsercreation());
+                        //System.out.println("SocialNetworkUser Creado:"+socialNetUser.getSnu_id());
+                    }else{
+                        //System.out.println("SocialNetworkUser Actualizado:"+socialNetUser.getSnu_id());
+                        socialNetUser.setUpdated(new Date());
+                    }
+                    socialNetUser.setFollowers(externalPost.getFollowers());
+                    socialNetUser.setFriends(externalPost.getFriendsNumber());
+                    //int listedCount=status.getUser().getListedCount();
+                    //System.out.println("userId:"+userId+", created:"+socialNetUser.getCreated()+", followers:"+socialNetUser.getFollowers()+", friends:"+socialNetUser.getFriends()+", name:"+socialNetUser.getSnu_name());
+                    if(socialNetUser!=null)
+                    {
+                        message.setPostInSocialNetworkUser(socialNetUser);
+                    }
+                }
+                socialNetwork.addReceivedPost(message, String.valueOf(externalPost.getPostId()), socialNetwork);
+                
+                return message;
+    }
+    
+    
+    
+    
 
     /*
      * Envía a publicar el mensaje para que lo tomen los timelines que esten escuchando
@@ -440,12 +479,12 @@ public class SentimentalDataClassifier {
      */
     private int findOccurrencesNumber(String phrase, int contOcurrences)
     {
-        int iocurrence=postData.indexOf(phrase);
+        int iocurrence=externalString2Clasify.indexOf(phrase);
         if(iocurrence>-1)
         {
             contOcurrences++;
-            postData=postData.substring(0, iocurrence)+postData.substring(iocurrence+phrase.length());
-            //System.out.println("phrase:"+phrase+",Ocurrencia:"+contOcurrences+",postData:"+postData);
+            externalString2Clasify=externalString2Clasify.substring(0, iocurrence)+externalString2Clasify.substring(iocurrence+phrase.length());
+            //System.out.println("phrase:"+phrase+",Ocurrencia:"+contOcurrences+",externalString2Clasify:"+externalString2Clasify);
             contOcurrences=findOccurrencesNumber(phrase, contOcurrences);
         }
         return contOcurrences;
@@ -457,11 +496,11 @@ public class SentimentalDataClassifier {
      * TODO:Hacer que los emoticons esten almacenados en un objeto.
      */
     
-    private void findEmoticones()
+    private void findEmoticones(PostIn post)
     {
          int contPositiveEmoticon=0;
          int contNegativeEmoticon=0;
-         StringTokenizer st = new StringTokenizer(postData);
+         StringTokenizer st = new StringTokenizer(externalString2Clasify);
          while (st.hasMoreTokens())
          {
              String word2Find=st.nextToken();
@@ -492,7 +531,7 @@ public class SentimentalDataClassifier {
         //MessageIn msgIn=MessageIn.ClassMgr.createMessageIn("1234567890", WebSite.ClassMgr.getWebSite("Infotc"));
         //msgIn.setMsg_Text("#Peleaporelsegundo lugar en la persona más PENDEJA entre Peña Nieto y Ninel Conde, dicen que Peña Nieto tiene la victoria asegurada.");
         //new SentimentalDataClassifier(msgIn, msgIn.getMsg_Text());
-        new SentimentalDataClassifier(msgIn, "#Peleaporelsegundo! lugar... en la persona! más PENDEJA? entre Peña Nieto y Ninel Conde!, dicen que Peña Nieto tiene la victoria asegurada!!.");
+        //new SentimentalDataClassifier(msgIn, "#Peleaporelsegundo! lugar... en la persona! más PENDEJA? entre Peña Nieto y Ninel Conde!, dicen que Peña Nieto tiene la victoria asegurada!!.");
     }
 
     private void removePuntualSigns1()
@@ -506,7 +545,7 @@ public class SentimentalDataClassifier {
         while(itSigns.hasNext())
         {
             String sign=itSigns.next();
-            postData=postData.replaceAll(sign, "");
+            externalString2Clasify=externalString2Clasify.replaceAll(sign, "");
         }
     }
 

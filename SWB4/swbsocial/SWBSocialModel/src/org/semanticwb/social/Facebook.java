@@ -319,7 +319,7 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
                                     external.setMessage(postsData.getJSONObject(k).getString("message"));
                                 }
                                 if (postsData.getJSONObject(k).has("description")) {
-                                    external.setLinkDescription(postsData.getJSONObject(k).getString("description"));
+                                    external.setDescription(postsData.getJSONObject(k).getString("description"));
                                 }
                                 if (postsData.getJSONObject(k).has("icon")) {
                                     external.setIcon(postsData.getJSONObject(k).getString("icon"));

@@ -168,7 +168,7 @@ public class Flicker extends org.semanticwb.social.base.FlickerBase
                 //              strBuf.append("<a href=\"\">");
                 //              strBuf.append("<img border=\"0\" src=\""+photo.getSmallSquareUrl()+"\" />");
                 //              strBuf.append("</a>\n");
-                new Classifier(photoIn);
+                //new Classifier(photoIn);
             }
 //           System.out.println(strBuf.toString());
     }
