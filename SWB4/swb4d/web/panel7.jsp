@@ -125,16 +125,16 @@
             
             function changeStat(suri,stat)
             {
-                if(Dom.socket==null)
-                {
+                //if(Dom.socket==null)
+                //{
                     $.post("<%=contx%>/processCommand.jsp", { suri: suri, stat: stat },
                     function(data) {
                         //alert(data);
                     });                   
-                }else
-                {
-                    Dom.sendMessage(suri+" "+stat);
-                }
+                //}else
+                //{
+                //    Dom.sendMessage(suri+" "+stat);
+                //}
             }         
         
             function processData(txt)
