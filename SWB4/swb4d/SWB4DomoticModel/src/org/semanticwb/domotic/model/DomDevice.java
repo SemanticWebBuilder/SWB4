@@ -64,7 +64,7 @@ public class DomDevice extends org.semanticwb.domotic.model.base.DomDeviceBase
             Connection con=getDomGateway().getConnection();
             if(con!=null)
             {
-                con.sendMessage("upd "+getDevId()+" "+getDevZone()+" "+dstat.getStatus()+"\n");
+                con.sendMessage("upd "+getDevZone()+" "+getDevId()+" "+dstat.getStatus()+"\n");
             }
         }
         sendWebSocketStatus(notifyParents);
