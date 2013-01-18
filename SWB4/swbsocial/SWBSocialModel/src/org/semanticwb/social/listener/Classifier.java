@@ -7,8 +7,9 @@ package org.semanticwb.social.listener;
 
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
-import org.semanticwb.model.SWBModel;
-import org.semanticwb.social.PostIn;
+import org.semanticwb.social.ExternalPost;
+import org.semanticwb.social.SocialNetwork;
+import org.semanticwb.social.Stream;
 
 /**
  *
@@ -22,12 +23,27 @@ public class Classifier {
 
     private Logger log = SWBUtils.getLogger(Classifier.class);
 
+    /*
     PostIn post=null;
     public Classifier (PostIn post)
     {
         this.post=post;
         try{
             ClassifierThread classThread=new ClassifierThread(post);
+            //System.out.println("THREAD CREADO:"+classThread);
+            classThread.start();
+            //System.out.println("classThread.isAlive():"+classThread);
+        }catch(Exception e){
+            log.error(e);
+        }
+
+    }
+    * */
+    
+    public Classifier (ExternalPost externalPost, Stream stream, SocialNetwork socialNetwork)
+    {
+        try{
+            ClassifierThread classThread=new ClassifierThread(externalPost, stream, socialNetwork);
             //System.out.println("THREAD CREADO:"+classThread);
             classThread.start();
             //System.out.println("classThread.isAlive():"+classThread);

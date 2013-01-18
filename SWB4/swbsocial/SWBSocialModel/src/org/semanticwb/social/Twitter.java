@@ -151,7 +151,7 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
                     message.setPostInSocialNetworkUser(socialNetUser);
                 }
                 this.addReceivedPost(message, String.valueOf(tweet.getId()), this);
-                new Classifier(message);
+                //new Classifier(message);
             }
         } catch (Exception te) {
             te.printStackTrace();

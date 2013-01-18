@@ -7,7 +7,10 @@ package org.semanticwb.social.listener;
 import java.net.SocketException;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.social.ExternalPost;
 import org.semanticwb.social.PostIn;
+import org.semanticwb.social.SocialNetwork;
+import org.semanticwb.social.Stream;
 import org.semanticwb.social.util.SendPostThread;
 
 /**
@@ -24,15 +27,25 @@ public class ClassifierThread extends java.lang.Thread {
     /** The log. */
     private static Logger log = SWBUtils.getLogger(SendPostThread.class);
     /** The emails. */
-    PostIn post = null;
+    //PostIn post = null;
+    ExternalPost externalPost=null;
+    Stream stream=null;
+    SocialNetwork socialNetwork=null;
 
     /**
      * Creates a new instance of WBMessageServer.
      *
      * @throws SocketException the socket exception
      */
+    /*
     public ClassifierThread(PostIn post) throws java.net.SocketException {
         this.post = post;
+    }**/
+    
+    public ClassifierThread(ExternalPost externalPost, Stream stream, SocialNetwork socialNetwork) throws java.net.SocketException {
+        this.externalPost = externalPost;
+        this.stream = stream;
+        this.socialNetwork = socialNetwork;
     }
 
     /* (non-Javadoc)
@@ -43,7 +56,7 @@ public class ClassifierThread extends java.lang.Thread {
     {
         try
         {
-           new SentimentalDataClassifier(post);
+           new SentimentalDataClassifier(externalPost, stream, socialNetwork);
            /*
             String words2classify = null;
             if (post instanceof MessageIn) {
