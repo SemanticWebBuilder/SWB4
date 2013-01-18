@@ -143,8 +143,8 @@ public class Connection extends Thread
 
                 if(cb.equals("rep"))
                 {
-                    String id = st.nextToken();            
                     String zn = st.nextToken();            
+                    String id = st.nextToken();            
                     String cm = st.nextToken();   
 
                     DomDevice dev=findDomDevice(id, zn, server.getModel());
