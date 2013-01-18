@@ -538,7 +538,7 @@
                                     lang = ws.createLanguage(rlang.getLang());
                                     lang.setTitle(rlang.getTitle());
                                 }
-                            }
+                            }                           
                         }
                         if ("device".equals(arrCat[i])) {
 
@@ -1008,6 +1008,7 @@
                                                 System.out.println("Nueva Ruta:"+targetParserPath);
 
                                                 AFUtils.getInstance().copyStructure(WBUtils.getInstance().getWorkPath() + sourceDirectory, targetDirectory, true, sourceParserPath, targetParserPath);
+                                                //SWBUtils.IO.removeDirectory(targetDirectory);
                                             }
                                         }
                                     }
@@ -2142,7 +2143,7 @@
                         {
                             org.semanticwb.model.Resource resource = ws.getResource(idElement);
 
-                            resource.setPriority(occ.getPriority());
+                            //resource.setPriority(occ.getPriority());
 
                             if(resource!=null)
                             {
@@ -2167,7 +2168,7 @@
 
                             org.semanticwb.model.Resource resource = ws.getResource(idElement);
 
-                            resource.setPriority(occ.getPriority());
+                            //resource.setPriority(occ.getPriority());
                             if(resource!=null)
                             {
                                 //Agregado para verificar paginacion /////////////////////////////////////////
