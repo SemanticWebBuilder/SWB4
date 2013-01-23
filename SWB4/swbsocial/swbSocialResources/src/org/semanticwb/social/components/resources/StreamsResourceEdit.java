@@ -41,7 +41,7 @@ public class StreamsResourceEdit extends GenericSocialResource{
         String smode = request.getParameter("smode");
         if(uri != null) {
             SemanticObject semObj = SemanticObject.createSemanticObject(uri);
-            SWBSocialResourceUtils.Components.updateTreeNode(request, paramRequest);
+            SWBSocialResourceUtils.Actions.updateTreeNode(request, paramRequest);
            SWBFormMgr mgr = new SWBFormMgr(semObj, null, SWBFormMgr.MODE_EDIT);
            SWBResourceURL url = paramRequest.getRenderUrl().setParameter("itemUri",request.getAttribute("treeItem")+"");
            mgr.setFilterRequired(false);
@@ -81,7 +81,7 @@ public class StreamsResourceEdit extends GenericSocialResource{
                 mgr.addProperty(Stream.social_hasStream_socialNetwork);
                 try {
                     mgr.processForm(request);
-                    SWBSocialResourceUtils.Components.updateTreeNode(request, paramRequest);
+                    SWBSocialResourceUtils.Actions.updateTreeNode(request, paramRequest);
 
                 } catch(FormValidateException ex) {
                     log.error("Error in: " + ex);
