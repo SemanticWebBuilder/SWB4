@@ -49,11 +49,15 @@ import javax.xml.transform.*;
 import java.util.*;
 import java.io.*;
 import java.sql.*;
+import org.semanticwb.SWBPortal;
 import org.semanticwb.model.Role;
 import org.semanticwb.model.User;
 import org.semanticwb.model.UserRepository;
 import org.semanticwb.model.WebPage;
 import org.semanticwb.model.WebSite;
+import org.semanticwb.portal.api.SWBParamRequest;
+import org.semanticwb.portal.api.SWBResourceException;
+import org.semanticwb.portal.api.SWBResourceURL;
 
 
 import org.w3c.dom.*;
@@ -75,9 +79,9 @@ import org.w3c.dom.*;
  * repository elements. Also have the configuration of the message notification.
  * @author Javier Solis Gonzalez
  */
-public class Repository extends GenericResource
+public class Repository extends org.semanticwb.portal.api.GenericResource
 {
-    Resource base=null;
+    org.semanticwb.model.Resource base=null;
     TreeRepHtml tree=new TreeRepHtml();
     RepositoryFile files=new RepositoryFile();
     AdmTopics admtp=new AdmTopics();
@@ -98,18 +102,18 @@ public class Repository extends GenericResource
      * @param tmid TopicMap identifier
      * @return The level of the user
      */
-    public int getLevelUser(WBUser user, String tmid)
+    public int getLevelUser(User user, String tmid)
     {
         int level=0;
         String adm=base.getAttribute("admin");
-        User usr = user.getNative();
+        User usr = user;
         UserRepository usrRep = usr.getUserRepository();
         Role rol = null;
         if(adm!=null)
         {
             rol = usrRep.getRole(adm);
             //int r=Integer.parseInt(adm);
-            if(user.getNative().hasRole(rol)) level=3;
+            if(user.hasRole(rol)) level=3;
         }
         else level=3;
         
@@ -120,7 +124,7 @@ public class Repository extends GenericResource
             {
                 rol = usrRep.getRole(mdy);
                 //int r=Integer.parseInt(mdy);
-                if(user.getNative().hasRole(rol)) level=2;
+                if(user.hasRole(rol)) level=2;
             }
             else level=2;
         }
@@ -132,7 +136,7 @@ public class Repository extends GenericResource
             {
                 rol = usrRep.getRole(viw);
                 //int r=Integer.parseInt(viw);
-                 if(user.getNative().hasRole(rol)) level=1;
+                 if(user.hasRole(rol)) level=1;
             }
             else level=1;
         }
@@ -155,33 +159,27 @@ public class Repository extends GenericResource
         return level;
     }
 
-    /**
-     * User view of the Repository resource
-     * @param request The input parameters
-     * @param response The answerd to the request
-     * @param paramsRequest The list of objects (topic, user, action, ...)
-     * @throws AFException An Application framework exception
-     * @throws IOException An Input / Output exception
-     */
-    public void doView(HttpServletRequest request, HttpServletResponse response, WBParamRequest paramsRequest) throws AFException, IOException
-    {
+    @Override
+    public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
+       
         //PrintWriter out = response.getWriter();
         StringBuffer ret = new StringBuffer();
-        WBUser user = paramsRequest.getUser();
-        Topic topic = paramsRequest.getTopic();
-        Topic dir = null;
+        User user = paramsRequest.getUser();
+        WebPage topic = paramsRequest.getWebPage();
+        WebPage dir = null;
         String s_message = null;
         String repobj=request.getParameter("repobj");
         String repacc=request.getParameter("repacc");
         String reptp=request.getParameter("reptp");
+        WebSite ws = null;
         
         String repfop=request.getParameter("repfop");
         String home="CNFWB_Rep"+base.getId();
         String sub=base.getAttribute("showdirectory","true");
         HashMap arguments=null;
-        int level = getLevelUser(user,paramsRequest.getTopic().getMap().getId());
+        int level = getLevelUser(user,paramsRequest.getWebPage().getWebSiteId());
         int i_log = 0;
-        if(user.isLoged()) i_log=1;
+        if(user.isSigned()) i_log=1;
         else i_log=supportGuestUser();
         //System.out.println("Support Guest user: "+supportGuestUser());
         // quitar para quitar la validaci�n de usuario firmado
@@ -202,29 +200,35 @@ public class Repository extends GenericResource
             if(paramsRequest.getCallMethod()==paramsRequest.Call_STRATEGY)
             {
                 if(reptp==null)
-                    reptp = paramsRequest.getTopic().getId();
+                    reptp = paramsRequest.getWebPage().getId();
             }else
             {
                 if(reptp==null)
                 {
-                    if(paramsRequest.getTopic().getId().equals(paramsRequest.getAdminTopic().getId()))
+                    if(paramsRequest.getWebPage().getId().equals(paramsRequest.getAdminTopic().getId()))
                     {
                         reptp=home;
                     }
                     else
                     {
-                        reptp = paramsRequest.getTopic().getId();
+                        reptp = paramsRequest.getWebPage().getId();
                     }
                 }
             }
               //System.out.println(reptp);
             try
             {
-                dir=topic.getMap().getTopic(reptp);
+                dir=topic.getWebSite().getWebPage(reptp);
             }
             catch(Exception e)
             {
                 AFUtils.log(e,"",true);
+            }
+            
+            if(null==dir){
+                ws = topic.getWebSite();
+                dir = ws.createWebPage(reptp);
+                dir.setTitle(paramsRequest.getWebPage().getTitle());
             }
             
             if(sub.equals("false"))
@@ -349,7 +353,7 @@ public class Repository extends GenericResource
                     ret.append("\n<td width=\"4\" rowspan=\"3\"> <img src=\""+path1+"folderinsin_05.gif\" width=\"4\" height=\"100%\" alt=\"\"></td>");
                     ret.append("\n<td colspan=\"2\" rowspan=\"3\" bgcolor=\"#FFFFFF\">");
                     tree.setResourceBase(getResourceBase());
-                    if(i_log==1) ret.append(tree.getDirs(request, response, user, topic,  arguments, topic.getMap().getTopic(home), paramsRequest));
+                    if(i_log==1) ret.append(tree.getDirs(request, response, user, topic,  arguments, topic.getWebSite().getWebPage(home), paramsRequest));
                     
                     ret.append("</td>");
                     ret.append("<td> <img src=\""+path1+"spacer.gif\" width=\"1\" height=\"8\"></td>");
@@ -399,7 +403,7 @@ public class Repository extends GenericResource
                     }
                     if(!salir)
                     {
-                        if(user.isLoged())
+                        if(user.isSigned())
                         {
                             i_log = 1;
                         }
@@ -452,7 +456,7 @@ public class Repository extends GenericResource
                         ret.append("\n  }");
                         ret.append("\n</script>");
                         
-                        WBResourceURL urlTopic = paramsRequest.getRenderUrl();
+                        SWBResourceURL urlTopic = paramsRequest.getRenderUrl();
                         urlTopic.setMode(paramsRequest.Mode_VIEW);
                         
                         // forma que se utiliza para cuando se quiere cambiar un archivo a un directorio diferente.
@@ -510,7 +514,7 @@ public class Repository extends GenericResource
                             ret.append("\n<tr>");
                             ret.append("\n<td width=\"4\" rowspan=\"3\"> <img src=\""+path1+"folderinsin_05.gif\" width=\"4\" height=\"100%\" alt=\"\"></td>");
                             ret.append("\n<td colspan=\"2\" rowspan=\"3\" bgcolor=\"#FFFFFF\">");
-                            ret.append(tree.getHtml(request, response, user, topic, arguments, topic.getMap().getTopic(home), paramsRequest));
+                            ret.append(tree.getHtml(request, response, user, topic, arguments, topic.getWebSite().getWebPage(home), paramsRequest));
                             ret.append("<p align=center valign=top>");
                             ret.append("<IMG src=\""+path1+"line.gif\" width=\"100%\" height=\"5\">");
                             //************************** menu directorios ********************************************
@@ -518,12 +522,12 @@ public class Repository extends GenericResource
                             if(!"AdmTopics".equals(repobj))
                             {
                                 int islog = 0;
-                                if(user.isLoged())
+                                if(user.isSigned())
                                 {
                                     islog = 1;
                                 }
                                 
-                                if(level>1&&user.isLoged())
+                                if(level>1&&user.isSigned())
                                 {
                                     ret.append("\n<a href=\"javascript: doCreateTopic(" + islog + ");\"><img src=\""+path1+paramsRequest.getLocaleString("img_b_create")+".gif\" alt=\""+paramsRequest.getLocaleString("msgAltCreateDirectory")+"\" border=0></a>\n");
                                 }
@@ -532,7 +536,7 @@ public class Repository extends GenericResource
                                     
                                     ret.append("\n<a onclick=\"javascript: doDeleteTopic(" + islog + ");\"><img src=\""+path1+paramsRequest.getLocaleString("img_b_delete")+".gif\" alt=\""+paramsRequest.getLocaleString("msgAltDelDirectory")+"\" border=0></a>\n");
                                 }
-                                if(level>2&&user.isLoged())
+                                if(level>2&&user.isSigned())
                                 {
                                     
                                     ret.append("\n<a href=\"javascript: doChangeTopic(" + islog + ");\"><img src=\""+path1+paramsRequest.getLocaleString("img_b_edit")+".gif\" alt=\""+paramsRequest.getLocaleString("msgAltRenDirectory")+"\" border=0></a>\n");
@@ -710,7 +714,7 @@ public class Repository extends GenericResource
      * Load the resource information
      * @param base The Resource object
      */
-    public void setResourceBase(Resource base)
+    public void setResourceBase(org.semanticwb.model.Resource base)
     {
         try
         {
@@ -1029,9 +1033,10 @@ public class Repository extends GenericResource
      * @throws AFException An Application framework exception
      * @throws IOException An Input / Output exception
      */
-    public void doAdmin(HttpServletRequest request, HttpServletResponse response, WBParamRequest paramsRequest) throws AFException, IOException
+ @Override
+    public void doAdmin(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException 
     {
-        UserRepository usrRep = getResourceBase().getNative().getWebSite().getUserRepository();
+        UserRepository usrRep = getResourceBase().getWebSite().getUserRepository();
         Connection con = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
@@ -1052,7 +1057,7 @@ public class Repository extends GenericResource
         
         PrintWriter out = response.getWriter();
         String accion = paramsRequest.getAction();
-        WBUser user = paramsRequest.getUser();
+        User user = paramsRequest.getUser();
         String webpath = WBUtils.getInstance().getWebPath();
         String admresprec = AFUtils.getEnv("wb/admresource");
         Iterator it = null;
@@ -1073,7 +1078,7 @@ public class Repository extends GenericResource
 //        strTopic = request.getParameter("topic");
 //        if(strTopicMap==null) strTopicMap = paramsRequest.getTopic().getMap().getId();
 //        if(strTopic==null) strTopic = paramsRequest.getTopic().getId();
-        WebSite topicMap = getResourceBase().getNative().getWebSite();
+        WebSite topicMap = getResourceBase().getWebSite();
         
         if(accion.equals("add"))
         {
@@ -1083,7 +1088,7 @@ public class Repository extends GenericResource
             if(topic!=null)
             {
                 WebPage aux=WebPage.ClassMgr.createWebPage("CNFWB_Rep"+base.getId(),topicMap);
-                org.semanticwb.model.Language lang = org.semanticwb.model.Language.ClassMgr.getLanguage(user.getNative().getLanguage(), topicMap);
+                org.semanticwb.model.Language lang = org.semanticwb.model.Language.ClassMgr.getLanguage(user.getLanguage(), topicMap);
                 aux.setLanguage(lang);
                 aux.setTitle(base.getTitle());
 //                BaseName bn=new BaseName(base.getTitle());
@@ -1099,7 +1104,7 @@ public class Repository extends GenericResource
         if(accion.equals("remove"))
         {
             strAdmin = "0";
-            String strTMId = paramsRequest.getTopic().getMap().getId();
+            String strTMId = paramsRequest.getWebPage().getWebSiteId();
             flag=true;
             strTopic = "CNFWB_Rep"+base.getId();
             
@@ -1113,8 +1118,8 @@ public class Repository extends GenericResource
                 conn = AFUtils.getDBConnection(tmp_conn,"Repository.doAdmin() -- remove --");
                 String sql = "select * from resrepository where resid = ? and idtm=?";
                 pst = conn.prepareStatement(sql);
-                pst.setLong(1,base.getId());
-                pst.setString(2,base.getTopicMapId());
+                pst.setString(1,base.getId());
+                pst.setString(2,base.getWebSiteId());
                 rsdocs = pst.executeQuery();
                 
                 while(rsdocs.next())
@@ -1292,7 +1297,7 @@ public class Repository extends GenericResource
                 topic.remove();
                 //tpmap.removeTopicandChild(user,topic.getId());
                 //tpmap.update2DB();
-                AFUtils.removeDirectory(WBUtils.getInstance().getWorkPath()+base.getResourceWorkPath());
+                AFUtils.removeDirectory(SWBPortal.getWorkPath()+base.getWorkPath());
             }
             
         }  // ----------------- Termina remove
@@ -1321,7 +1326,7 @@ public class Repository extends GenericResource
                     if(request.getParameter("docid") != null)
                     {
                         String strTMParam = request.getParameter("tm");
-                        if(strTMParam==null) strTMParam = paramsRequest.getTopic().getMap().getId();
+                        if(strTMParam==null) strTMParam = paramsRequest.getWebPage().getWebSiteId();
                         // se recuperara el folder si este est� eliminado
                         if(request.getParameter("resdir") != null && request.getParameter("resdir").equals("1"))
                         {
@@ -1387,7 +1392,7 @@ public class Repository extends GenericResource
                                     ps.setString(2, strTopicMap);
                                     ps.executeUpdate();
                                     ps.close();
-                                    File fdir=new File(WBUtils.getInstance().getWorkPath()+"/"+base.getResourceWorkPath()+"/");
+                                    File fdir=new File(SWBPortal.getWorkPath()+"/"+base.getWorkPath()+"/");
                                     String filestarts=id+"_";
 //                                    File[] files=fdir.listFiles();
 //                                    // eliminando archivos
@@ -1419,10 +1424,11 @@ public class Repository extends GenericResource
                         }
                     }
                     
-                    s_sql = "select * from resrepository where resId=? and rep_deleted = 1 and idtm=? order by rep_title";
+                    s_sql = "select * from resrepository where resId=? and rep_deleted = ? and idtm=? order by rep_title";
                     ps=con.prepareStatement(s_sql);
-                    ps.setLong(1, base.getId());
-                    ps.setString(2,strTopicMap);
+                    ps.setString(1, base.getId());
+                    ps.setInt(2,1);
+                    ps.setString(3,strTopicMap);
                     rs=ps.executeQuery();
                     out.println("<tr> ");
                     out.println("<td class=valores>");
@@ -1430,7 +1436,7 @@ public class Repository extends GenericResource
                     out.println("</tr>");
                     out.println("<tr> ");
                     out.println("<td>");
-                    WBResourceURL urlShowOld = paramsRequest.getRenderUrl();
+                    SWBResourceURL urlShowOld = paramsRequest.getRenderUrl();
                     urlShowOld.setMode(paramsRequest.Mode_ADMIN);
                     urlShowOld.setAction("ShowOld");
                     
@@ -1506,7 +1512,7 @@ public class Repository extends GenericResource
                     out.println("</tr>");
                     out.println("</table>");
                     out.println("</form>");
-                    WBResourceURL urlEdit = paramsRequest.getRenderUrl();
+                    SWBResourceURL urlEdit = paramsRequest.getRenderUrl();
                     urlEdit.setMode(paramsRequest.Mode_ADMIN);
                     urlEdit.setAction("edit");
                     
@@ -1630,7 +1636,7 @@ public class Repository extends GenericResource
                 out.println("<tr> ");
                 out.println("<td class=valores>");
                 
-                WBResourceURL urlAddRule = paramsRequest.getRenderUrl();
+                SWBResourceURL urlAddRule = paramsRequest.getRenderUrl();
                 urlAddRule.setMode(paramsRequest.Mode_ADMIN);
                 urlAddRule.setAction("addrule");
                 
@@ -1753,7 +1759,7 @@ public class Repository extends GenericResource
                 out.println("<script language=javascript>");
                 out.println("  function DoOld(){");
                 
-                WBResourceURL urlShowOld = paramsRequest.getRenderUrl();
+                SWBResourceURL urlShowOld = paramsRequest.getRenderUrl();
                 urlShowOld.setMode(paramsRequest.Mode_ADMIN);
                 urlShowOld.setAction("ShowOld");
                 

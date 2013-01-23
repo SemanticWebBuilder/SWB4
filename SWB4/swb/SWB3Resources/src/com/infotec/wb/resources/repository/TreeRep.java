@@ -44,6 +44,9 @@ import javax.xml.transform.*;
 import javax.xml.transform.stream.*;
 import com.infotec.topicmaps.*;
 import org.semanticwb.model.ResourceType;
+import org.semanticwb.model.User;
+import org.semanticwb.model.WebPage;
+import org.semanticwb.model.WebSite;
 
 
 /**
@@ -125,21 +128,21 @@ public class TreeRep {
 
 
 
-     public String getHtml(HttpServletRequest request, HttpServletResponse response, WBUser user, Topic topicrec, HashMap arguments,Topic topic) throws AFException {
+     public String getHtml(HttpServletRequest request, HttpServletResponse response, User user, WebPage topicrec, HashMap arguments,WebPage topic) throws AFException {
         Document dcmDom=base.getDom();
         if(dcmDom==null)throw new AFException("Dom nulo","getHtml()");
         StringBuffer sbfRet=new StringBuffer();
 
         String strResmaptopic=null;
             strResmaptopic=topicrec.getId();
-        String strUrl = topic.getMap().getHome().getUrl();
+        String strUrl = topic.getWebSite().getHomePage().getUrl();
 
         try
         {
-                TopicMap tm   =topic.getMap();
+                WebSite tm   =topic.getWebSite();
 
                 Document dom=null;
-                Topic tpid=null;
+                WebPage tpid=null;
                 Vector vctPath=new Vector();
                 int intLevel=1, intWidth=10;
                 String idhome=null;
@@ -151,7 +154,7 @@ public class TreeRep {
                     {
                         if(request.getParameter("reptp")!=null && !request.getParameter("reptp").trim().equals(""))
                         {
-                            tpid=tm.getTopic(request.getParameter("reptp"));
+                            tpid=tm.getWebPage(request.getParameter("reptp"));
                             vctPath=getMapPath(tpid);
                         }
 
@@ -161,13 +164,13 @@ public class TreeRep {
                                 idhome = dir;
                         }
 
-                        Topic tpsite=null;
+                        WebPage tpsite=null;
                         if(idhome!=null)
                         {
-                            tpsite=tm.getTopic(idhome);
-                            if(tpsite==null) tpsite=tm.getHome();
+                            tpsite=tm.getWebPage(idhome);
+                            if(tpsite==null) tpsite=tm.getHomePage();
                         }
-                        else tpsite=tm.getHome();
+                        else tpsite=tm.getHomePage();
 
                         ///hASTA AQUI
 
@@ -182,24 +185,24 @@ public class TreeRep {
                             el.setAttribute("urlmapa", strUrl + strResmaptopic + "/?reptp=" + topic.getId());
                             el.setAttribute("url", strUrl + strResmaptopic + "/?reptp=" + topic.getId());
                             el.setAttribute("nombre", topic.getDisplayName());
-                            if(topic.getSortChild(false).hasNext()) el.setAttribute("mas", "1");
+                            if(topic.listChilds().hasNext()) el.setAttribute("mas", "1");
                             else el.setAttribute("mas", "0");
-                            Iterator it=tpsite.getSortChild(false);
+                            Iterator<WebPage> it=tpsite.listChilds();
                             while(it.hasNext())
                             {
                                 intLevel=1;
-                                Topic tp=(Topic)it.next();
+                                WebPage tp=it.next();
                                 if(user.haveAccess(tp) && tp.getId()!=null)
                                 {
                                         Element padre=dom.createElement("padre");
                                         padre.setAttribute("urlmapa", strUrl + strResmaptopic + "/?reptp=" + tp.getId());
                                         padre.setAttribute("url", strUrl + strResmaptopic + "/?reptp=" + tp.getId());
                                         padre.setAttribute("nombre", tp.getDisplayName());
-                                        if(tp.getSortChild(false).hasNext()) padre.setAttribute("mas", "1");
+                                        if(tp.listChilds().hasNext()) padre.setAttribute("mas", "1");
                                         else padre.setAttribute("mas", "0");
                                         el.appendChild(padre);
                                         if((intLevel < intMaxLevel || (tpid!=null && tp.getId().equals(tpid.getId())) ||
-                                        vctPath.contains(tp.getId())) && tp.getSortChild(false).hasNext())
+                                        vctPath.contains(tp.getId())) && tp.listChilds().hasNext())
                                             sbfRet.append(getChilds(tpid, tp, user, dom, padre, vctPath, intLevel+1, intWidth,strResmaptopic));
                                 }
                             }
@@ -236,19 +239,19 @@ public class TreeRep {
      * @return    Regresa un nuevo String que contiene.
      * @see       infotec.topicmaps
      */
-    public String getChilds(Topic tpid, Topic tpc, WBUser user, Document dom, Element el, Vector vctPath, int intLevel, int intWidth,String topicrec)
+    public String getChilds(WebPage tpid, WebPage tpc, User user, Document dom, Element el, Vector vctPath, int intLevel, int intWidth,String topicrec)
     {
         Document dcmDom=base.getDom();
         String strResmaptopic=null;
               strResmaptopic=topicrec;
-        String strUrl =tpc.getMap().getHome().getUrl();
+        String strUrl =tpc.getWebSite().getHomePage().getUrl();
 
         StringBuffer sbfRet=new StringBuffer();
-        Iterator it=tpc.getSortChild(false);
+        Iterator<WebPage> it=tpc.listChilds();
 
         while(it.hasNext())
         {
-            Topic tpsub=(Topic)it.next();
+            WebPage tpsub=it.next();
             if(tpsub.getId()!=null &&  user.haveAccess(tpsub))
             {
                 if(vTopic.contains(tpsub)) break;
@@ -269,7 +272,7 @@ public class TreeRep {
                 el.appendChild(hijo);
 
                 if((intLevel < intMaxLevel ||  (tpid!=null && tpsub.getId().equals(tpid.getId())) ||
-                vctPath.contains(tpsub.getId())) && tpsub.getSortChild().hasNext())
+                vctPath.contains(tpsub.getId())) && tpsub.listChilds().hasNext())
                     sbfRet.append(getChilds(tpid, tpsub, user, dom, el, vctPath, intLevel+1, intWidth,strResmaptopic));
                 vTopic.removeElement(tpsub);
             }
@@ -284,18 +287,18 @@ public class TreeRep {
      * @return    Regresa un objeto Vector que contiene los t�picos padre del t�pico requerido.
      * @see       infotec.topicmaps.Topic
      */
-    public Vector getMapPath(Topic tpid)
+    public Vector getMapPath(WebPage tpid)
     {
         Vector vctPath=new Vector();
-        if(tpid.getMap().getHome()!=tpid)
+        if(tpid.getWebSite().getHomePage()!=tpid)
         {
-            Iterator aux=tpid.getTypes();
+            Iterator<WebPage> aux=tpid.listVirtualParents();
             while(aux.hasNext())
             {
-                Topic tp=(Topic)aux.next();
+                WebPage tp=aux.next();
                 vctPath.addElement(tp.getId());
-                aux=tp.getTypes();
-                if(tpid.getMap().getHome()==tp)break;
+                aux=tp.listVirtualParents();
+                if(tpid.getWebSite().getHomePage()==tp)break;
             }
         }
         return vctPath;
@@ -311,15 +314,15 @@ public class TreeRep {
      * @return    Regresa si el t�pico solicitado contiene o no t�picos hijo con referencias c�clicas.
      * @see       infotec.topicmaps.Topic
      */
-   public boolean isMapParent(Topic tpid, Topic tpsub, Vector vctPath)
+   public boolean isMapParent(WebPage tpid, WebPage tpsub, Vector vctPath)
    {
         boolean bParent=false;
-        Iterator hit=tpsub.getSortChild();
+        Iterator<WebPage> hit=tpsub.listChilds();
         if(hit.hasNext())
         {
             do
             {
-                Topic htp=(Topic)hit.next();
+                WebPage htp=hit.next();
                 if(tpid!=null)
                 {
                     if(htp.getId()!=null && !tpid.getId().equals(htp.getId()) && !vctPath.contains(htp.getId()))

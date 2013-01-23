@@ -35,6 +35,7 @@ import com.infotec.wb.core.*;
 import com.infotec.wb.core.db.*;
 import com.infotec.wb.lib.*;
 import com.infotec.wb.util.WBUtils;
+import java.io.IOException;
 import java.sql.*;
 import java.util.*;
 import java.util.regex.Matcher;
@@ -44,7 +45,10 @@ import org.semanticwb.model.Role;
 import org.semanticwb.model.SWBModel;
 import org.semanticwb.model.User;
 import org.semanticwb.model.UserRepository;
+import org.semanticwb.model.WebPage;
 import org.semanticwb.portal.api.SWBParamRequest;
+import org.semanticwb.portal.api.SWBResourceException;
+import org.semanticwb.portal.api.SWBResourceURL;
 
 /** Envia notificaciones a los usuarios que esten suscritos a los cambios
  * que se hagan a documentos en alguna carpeta o a un documento espec�fico.
@@ -62,7 +66,7 @@ public class Notification {
      * Default constructor.
      *
      */
-    Resource base = null;
+    org.semanticwb.model.Resource base = null;
 
     /**
      * Creates a new instance of Notification
@@ -81,7 +85,7 @@ public class Notification {
      * @throws AFException An Application framework exception
      * @return The HTML view for the user
      */
-    public String getHtml(HttpServletRequest request, HttpServletResponse response, WBUser user, Topic topic, HashMap arguments, Topic tp, WBParamRequest paramsRequest) throws AFException {
+    public String getHtml(HttpServletRequest request, HttpServletResponse response, User user, WebPage topic, HashMap arguments, WebPage tp, SWBParamRequest paramsRequest) throws  SWBResourceException, IOException {
         StringBuffer sbfRet = new StringBuffer();
         String strRepacc = request.getParameter("repacc");
         String repobj = request.getParameter("repobj");
@@ -124,7 +128,7 @@ public class Notification {
      * @param arguments Argumentos del recurso en el template.
      * @throws AFException An Application Framework exception
      */
-    public String subscribeToDirectory(HttpServletRequest request, HttpServletResponse response, WBUser user, Topic topic, HashMap arguments, Topic tp, WBParamRequest paramsRequest) throws AFException {
+    public String subscribeToDirectory(HttpServletRequest request, HttpServletResponse response, User user, WebPage topic, HashMap arguments, WebPage tp, SWBParamRequest paramsRequest) throws  SWBResourceException, IOException {
         StringBuffer sbfRet = new StringBuffer();
         sbfRet.append("<p align=center class=Estilo6><font size=2 face=\"Verdana, Arial, Helvetica, sans-serif\">" + paramsRequest.getLocaleString("msgSubscribe2Dir") + "</font></p>");
         if (user == null || (user != null && user.getEmail() == null)) {
@@ -137,7 +141,7 @@ public class Notification {
             return sbfRet.toString();
         }
 
-        WBResourceURL urlBack = paramsRequest.getRenderUrl();
+        SWBResourceURL urlBack = paramsRequest.getRenderUrl();
         urlBack.setParameter("reptp", strReptp);
         sbfRet.append("\n<form method=\"get\">");
         sbfRet.append("\n<table border=0 width=\"100%\"><tr><td align=center><font size=1 face=\"Verdana, Arial, Helvetica, sans-serif\">" + paramsRequest.getLocaleString("msgEmailNotify") + "</font></td></tr></table>");
@@ -171,7 +175,7 @@ public class Notification {
      * @param arguments Argumentos del recurso en el template.
      * @throws AFException An Application Framework exception
      */
-    public String subscribeToDocument(HttpServletRequest request, HttpServletResponse response, WBUser user, Topic topic, HashMap arguments, Topic tp, WBParamRequest paramsRequest) throws AFException {
+    public String subscribeToDocument(HttpServletRequest request, HttpServletResponse response, User user, WebPage topic, HashMap arguments, WebPage tp, SWBParamRequest paramsRequest) throws  SWBResourceException, IOException {
         StringBuffer sbfRet = new StringBuffer();
         sbfRet.append("<p align=center class=Estilo6><font size=2 face=\"Verdana, Arial, Helvetica, sans-serif\">" + paramsRequest.getLocaleString("msgSubscribe2Doc") + "</font></p>");
         if (user == null || (user != null && user.getEmail() == null)) {
@@ -189,7 +193,7 @@ public class Notification {
             return sbfRet.toString();
         }
 
-        WBResourceURL urlBack = paramsRequest.getRenderUrl();
+        SWBResourceURL urlBack = paramsRequest.getRenderUrl();
         urlBack.setParameter("reptp", strReptp);
         sbfRet.append("\n<form method=\"post\">");
         sbfRet.append("\n<table border=0 width=\"100%\"><tr><td align=center><font size=1 face=\"Verdana, Arial, Helvetica, sans-serif\">" + paramsRequest.getLocaleString("msgEmailNotify") + "</font></td></tr></table>");
@@ -223,7 +227,7 @@ public class Notification {
      * @throws AFException An AF exception
      * @return The create action
      */
-    public String create(HttpServletRequest request, HttpServletResponse response, WBUser user, Topic topic, HashMap arguments, Topic tp, WBParamRequest paramsRequest) throws AFException {
+    public String create(HttpServletRequest request, HttpServletResponse response, User user, WebPage topic, HashMap arguments, WebPage tp, SWBParamRequest paramsRequest) throws  SWBResourceException, IOException {
         StringBuffer sbfRet = new StringBuffer();
         Connection conn = null;
         PreparedStatement st = null;
@@ -248,7 +252,7 @@ public class Notification {
                     AFUtils.log(noe, "Error while trying to create a repository suscription.", true);
                 }
                 st.setLong(1, id);
-                st.setString(2, tp.getMap().getId());
+                st.setString(2, tp.getWebSiteId());
                 st.setString(3, tp.getId());
                 st.setString(4, user.getId());
                 count = st.executeUpdate();
@@ -266,7 +270,7 @@ public class Notification {
                     AFUtils.log(noe, "Error while trying to delete a repository suscription.", true);
                 }
                 st.setLong(1, id);
-                st.setString(2, tp.getMap().getId());
+                st.setString(2, tp.getWebSiteId());
                 st.setString(3, tp.getId());
                 st.setString(4, user.getId());
                 count = st.executeUpdate();
@@ -320,7 +324,7 @@ public class Notification {
      * @param arguments Argumentos del recurso en el template.
      * @throws AFException An Application Framework Exception
      */
-    public String unsubscribeToDirectory(HttpServletRequest request, HttpServletResponse response, WBUser user, Topic topic, HashMap arguments, Topic tp, WBParamRequest paramsRequest) throws AFException {
+    public String unsubscribeToDirectory(HttpServletRequest request, HttpServletResponse response, User user, WebPage topic, HashMap arguments, WebPage tp, SWBParamRequest paramsRequest) throws  SWBResourceException, IOException {
         StringBuffer sbfRet = new StringBuffer();
         sbfRet.append("<p align=center class=Estilo6><font size=2 face=\"Verdana, Arial, Helvetica, sans-serif\">" + paramsRequest.getLocaleString("msgCancelSubscriptionDirectory") + "</font></p>");
         if (user == null || (user != null && user.getEmail() == null)) {
@@ -333,7 +337,7 @@ public class Notification {
             return sbfRet.toString();
         }
 
-        WBResourceURL urlBack = paramsRequest.getRenderUrl();
+        SWBResourceURL urlBack = paramsRequest.getRenderUrl();
         urlBack.setParameter("reptp", strReptp);
         sbfRet.append("\n<form method=\"post\">");
         sbfRet.append("\n<table border=0 width=\"100%\"><tr><td align=center><font size=1 face=\"Verdana, Arial, Helvetica, sans-serif\">" + paramsRequest.getLocaleString("msgCancelEmailNotify") + "</font></td></tr></table>");
@@ -366,7 +370,7 @@ public class Notification {
      * @param arguments Argumentos del recurso en el template.
      * @throws AFException An Application Framework Exception
      */
-    public String unsubscribeToDocument(HttpServletRequest request, HttpServletResponse response, WBUser user, Topic topic, HashMap arguments, Topic tp, WBParamRequest paramsRequest) throws AFException {
+    public String unsubscribeToDocument(HttpServletRequest request, HttpServletResponse response, User user, WebPage topic, HashMap arguments, WebPage tp, SWBParamRequest paramsRequest) throws  SWBResourceException, IOException {
         StringBuffer sbfRet = new StringBuffer();
         sbfRet.append("<p align=center class=Estilo6><font size=2 face=\"Verdana, Arial, Helvetica, sans-serif\">" + paramsRequest.getLocaleString("msgCancelSubscriptionDoc") + "</font></p>");
         if (user == null || (user != null && user.getEmail() == null)) {
@@ -384,7 +388,7 @@ public class Notification {
             return sbfRet.toString();
         }
 
-        WBResourceURL urlBack = paramsRequest.getRenderUrl();
+        SWBResourceURL urlBack = paramsRequest.getRenderUrl();
         urlBack.setParameter("reptp", strReptp);
         sbfRet.append("\n<form method=\"post\">");
         sbfRet.append("\n<table border=0 width=\"100%\"><tr><td align=center><font size=1 face=\"Verdana, Arial, Helvetica, sans-serif\">" + paramsRequest.getLocaleString("msgCancelEmailNotify") + "</font></td></tr></table>");
@@ -417,7 +421,7 @@ public class Notification {
      * @throws AFException An Application Framework Exception
      * @return The remove of the suscription roles action
      */
-    public String remove(HttpServletRequest request, HttpServletResponse response, WBUser user, Topic topic, HashMap arguments, Topic tp, WBParamRequest paramsRequest) throws AFException {
+    public String remove(HttpServletRequest request, HttpServletResponse response, User user, WebPage topic, HashMap arguments, WebPage tp, SWBParamRequest paramsRequest) throws  SWBResourceException, IOException {
         StringBuffer sbfRet = new StringBuffer();
         if (user == null || (user != null && user.getEmail() == null)) {
             sbfRet.append("<p align=center><font size=2 face=\"Verdana, Arial, Helvetica, sans-serif\">" + paramsRequest.getLocaleString("msgMustSign2CancelSubscription") + ".</font></p>");
@@ -443,7 +447,7 @@ public class Notification {
 
                 pst.setString(1, user.getId());
                 pst.setLong(2, id);
-                pst.setString(3, tp.getMap().getId());
+                pst.setString(3, tp.getWebSiteId());
                 pst.setString(4, tp.getId());
                 count = pst.executeUpdate();
                 pst.close();
@@ -491,7 +495,7 @@ public class Notification {
      * @throws AFException An exception of type AF (Application Framework)
      * @return a list of the suscribed roles
      */
-    public String showNotification(HttpServletRequest request, HttpServletResponse response, WBUser user, Topic tp, WBParamRequest paramsRequest, boolean bloquear) throws AFException {
+    public String showNotification(HttpServletRequest request, HttpServletResponse response, User user, WebPage tp, SWBParamRequest paramsRequest, boolean bloquear) throws  SWBResourceException, IOException {
         StringBuffer sbfRet = new StringBuffer();
         Connection conn = null;
         PreparedStatement pst = null;
@@ -509,7 +513,7 @@ public class Notification {
                 conn = WBUtils.getDBConnection();
                 String strQuery = "select * from resrepositorynotify where idtm=? and topic=? and rep_email=? and rep_docId=?";
                 pst = conn.prepareStatement(strQuery);
-                pst.setString(1, tp.getMap().getId());
+                pst.setString(1, tp.getWebSiteId());
                 pst.setString(2, tp.getId());
                 pst.setString(3, user.getId());
                 pst.setLong(4, 0);
@@ -538,7 +542,7 @@ public class Notification {
                 conn = WBUtils.getDBConnection();
                 pst = conn.prepareStatement("select * from resrepositorynotify where rep_docId=? and idtm=? and topic=? and rep_email=? ");
                 pst.setInt(1, Integer.parseInt(request.getParameter("repdocid")));
-                pst.setString(2, tp.getMap().getId());
+                pst.setString(2, tp.getWebSiteId());
                 pst.setString(3, tp.getId());
                 pst.setString(4, user.getId());
                 rs = pst.executeQuery();
@@ -553,7 +557,7 @@ public class Notification {
 
                 pst = conn.prepareStatement("select * from resrepository where rep_docid=? and idtm=? ");
                 pst.setInt(1, Integer.parseInt(request.getParameter("repdocid")));
-                pst.setString(2, tp.getMap().getId());
+                pst.setString(2, tp.getWebSiteId());
                 rs = pst.executeQuery();
                 String titledoc = "";
 
@@ -596,7 +600,7 @@ public class Notification {
      * @param dir A topic that represents a directory
      * @return An array list with the files ids
      */
-    public ArrayList getSubscriptions(WBUser user, Topic dir) {
+    public ArrayList getSubscriptions(User user, WebPage dir) {
         ArrayList arr = new ArrayList();
         if (user == null || (user != null && (user.getEmail() == null)) || dir == null) {
             return arr;
@@ -605,7 +609,7 @@ public class Notification {
             Connection conn = WBUtils.getDBConnection();
             PreparedStatement pst = conn.prepareStatement("SELECT rep_docId FROM resrepositorynotify WHERE rep_email=? AND idtm=? AND topic=?");
             pst.setString(1, user.getId());
-            pst.setString(2, dir.getMap().getId());
+            pst.setString(2, dir.getWebSiteId());
             pst.setString(3, dir.getId());
             ResultSet rs = pst.executeQuery();
             while (rs.next()) {
@@ -631,13 +635,13 @@ public class Notification {
      * @param readonly a flag that indicates if it's read only or not
      * @return A role suscription form
      */
-    public String getRepositoryRoles(Topic dir, HttpServletRequest request, WBParamRequest paramsRequest, boolean readonly) {
+    public String getRepositoryRoles(WebPage dir, HttpServletRequest request, SWBParamRequest paramsRequest, boolean readonly) {
 
         HashMap hmroles = getDirRoles(dir, request);
         StringBuffer ret = new StringBuffer();
-        User usr = paramsRequest.getUser().getNative();
-        String rep = paramsRequest.getUser().getRepository();
-        UserRepository usrRep = paramsRequest.getUser().getNative().getUserRepository();
+        User usr = paramsRequest.getUser();
+        String rep = paramsRequest.getUser().getUserRepository().getId();
+        UserRepository usrRep = paramsRequest.getUser().getUserRepository();
         Iterator<Role> enuRoles = Role.ClassMgr.listRoles((SWBModel)usrRep);
         try {
             if (!readonly) {
@@ -674,7 +678,7 @@ public class Notification {
      * @param request input parameters
      * @return A Hashmap with the roles ids
      */
-    public HashMap getDirRoles(Topic dir, HttpServletRequest request) {
+    public HashMap getDirRoles(WebPage dir, HttpServletRequest request) {
 
         HashMap hmroles = new HashMap();
         Connection conn = null;
@@ -688,7 +692,7 @@ public class Notification {
         try {
             conn = WBUtils.getDBConnection();
             st = conn.prepareStatement("SELECT rep_role FROM resrepositorynotify WHERE idtm=? and topic=? and rep_role<>? and rep_docid=?");
-            st.setString(1, dir.getMap().getId());
+            st.setString(1, dir.getWebSiteId());
             st.setString(2, dir.getId());
             st.setInt(3, 0);
             st.setLong(4, ldocid);
@@ -721,7 +725,7 @@ public class Notification {
      * @param dir A topic object that represents a folder
      * @return True or false if the action has completed
      */
-    private boolean updateRoleList(HttpServletRequest request, Topic dir) {
+    private boolean updateRoleList(HttpServletRequest request, WebPage dir) {
         Connection conn = null;
         PreparedStatement st = null;
         PreparedStatement st2 = null;
@@ -734,8 +738,8 @@ public class Notification {
             conn = WBUtils.getDBConnection();
             st = conn.prepareStatement("DELETE from resrepositorynotify where rep_docid=? and idtm=? and topic=? and rep_role<>?");
             st.setLong(1, ldocid);
-            st.setString(2, dir.getMap().getId());
-            st.setString(3, dir.getId());
+            st.setString(2, dir.getWebSiteId());
+            st.setString(3, dir.getWebSiteId());
             st.setInt(4, 0);
             st.executeUpdate();
             st.close();
@@ -747,8 +751,8 @@ public class Notification {
                     String token = request.getParameter(parametro);
                     st2 = conn.prepareStatement("INSERT INTO resrepositorynotify (rep_docid, idtm, topic, rep_email, rep_role) VALUES (?, ?, ?, ?, ?)");
                     st2.setLong(1, ldocid);
-                    st2.setString(2, dir.getMap().getId());
-                    st2.setString(3, dir.getId());
+                    st2.setString(2, dir.getWebSiteId());
+                    st2.setString(3, dir.getWebSiteId());
                     st2.setString(4, "0");
                     st2.setInt(5, Integer.parseInt(token));
                     st2.executeUpdate();
@@ -835,10 +839,10 @@ public class Notification {
      * @param paramsRequest a list of object (topic, user, action, ...)
      * @throws AFException An exception of type AF (Application framework)
      */
-    public void sendNotification(WBUser user, Resource base, long docid, String title, String description, String filename, String comment, String fileDate, int version, String action, Topic dir, WBParamRequest paramsRequest, HttpServletRequest request) throws AFException {
+    public void sendNotification(User user, org.semanticwb.model.Resource base, long docid, String title, String description, String filename, String comment, String fileDate, int version, String action, WebPage dir, SWBParamRequest paramsRequest, HttpServletRequest request) throws  SWBResourceException, IOException {
 
         HashMap hmemails = new HashMap();
-        String repositorio = paramsRequest.getUser().getNative().getUserRepository().getId();
+        String repositorio = paramsRequest.getUser().getUserRepository().getId();
         String strNotify = base.getAttribute("notify" + action, paramsRequest.getLocaleString("msgTheDocument") + " {getDocTitle} " + paramsRequest.getLocaleString("msgWasChanged") + " (" + action + ")");
         strNotify = strNotify.replaceAll("\\{getUserName\\}", "<b>" + user.getName() + "</b>");
         if (user.getEmail() != null) {
@@ -851,7 +855,7 @@ public class Notification {
         strNotify = strNotify.replaceAll("\\{getDocTitle\\}", "<b>" + title + "</b>");
         strNotify = strNotify.replaceAll("\\{getDocDesc\\}", "<b>" + description + "</b>");
         strNotify = strNotify.replaceAll("\\{getDocVersion\\}", "<b>" + version + "</b>");
-        WBResourceURL urlline = paramsRequest.getRenderUrl();
+        SWBResourceURL urlline = paramsRequest.getRenderUrl();
         urlline.setCallMethod(urlline.Call_DIRECT);
         String host_name = request.getServerName();
 
@@ -871,7 +875,7 @@ public class Notification {
 
             Connection conn = WBUtils.getDBConnection();
             PreparedStatement pst = conn.prepareStatement("select rep_email from resrepositorynotify where idtm=? and topic=? and (rep_docid=0 or rep_docid=?) and rep_role=? group by rep_email");
-            pst.setString(1, dir.getMap().getId());
+            pst.setString(1, dir.getWebSiteId());
             pst.setString(2, dir.getId());
             pst.setLong(3, docid);
             pst.setInt(4, 0);
@@ -896,7 +900,7 @@ public class Notification {
             pst = conn.prepareStatement("select idtm, topic, rep_email from resrepositorynotify where (rep_docid=0 or rep_docid=?) and rep_role=? and idtm=?");
             pst.setLong(1, docid);
             pst.setInt(2, 0);
-            pst.setString(3, dir.getMap().getId());
+            pst.setString(3, dir.getWebSiteId());
             rs = pst.executeQuery();
             // agregando emails de usuarios suscritos
 
@@ -904,7 +908,7 @@ public class Notification {
                 String strTopic = rs.getString("topic");
 
                 //Topic tp2 = dir.getMap().getTopic(strTopic.substring(strTopic.lastIndexOf("|")+1));
-                Topic tp2 = dir.getMap().getTopic(strTopic);
+                WebPage tp2 = dir.getWebSite().getWebPage(strTopic);
                 if (dir.isChildof(tp2)) {
                     RecUser ruser = DBUser.getInstance().getUserById(rs.getString("rep_email"));
                     if (ruser.getActive() == 1) {
@@ -921,7 +925,7 @@ public class Notification {
             encontrados = 0;
             conn = WBUtils.getDBConnection();
             pst = conn.prepareStatement("select rep_role from resrepositorynotify where idtm=? and topic=? and (rep_docid=0 or rep_docid=?) and rep_email=? group by rep_role");
-            pst.setString(1, dir.getMap().getId());
+            pst.setString(1, dir.getWebSiteId());
             pst.setString(2, dir.getId());
             pst.setLong(3, docid);
             pst.setString(4, "0");
@@ -929,7 +933,7 @@ public class Notification {
 
             // encontrando usuarios que tengan el rol suscrito al documento o al directorio
 
-            User usr = user.getNative();
+            User usr = user;
 
             while (rs.next()) {
                 String strrole = rs.getString("rep_role");
@@ -956,7 +960,7 @@ public class Notification {
 
             pst.setLong(1, docid);
             pst.setString(2, "0");
-            pst.setString(3, dir.getMap().getId());
+            pst.setString(3, dir.getWebSiteId());
             rs = pst.executeQuery();
 
             // encontrando usuarios que tengan el rol suscrito al documento o al directorio
@@ -964,7 +968,7 @@ public class Notification {
             while (rs.next()) {
                 String strTopic = rs.getString("topic");
                 //Topic tp2 = dir.getMap().getTopic(strTopic.substring(strTopic.lastIndexOf("|")+1));
-                Topic tp2 = dir.getMap().getTopic(strTopic);
+                WebPage tp2 = dir.getWebSite().getWebPage(strTopic);
                 if (dir.isChildof(tp2)) {
                     String strrole = rs.getString("rep_role");
                     Role rol = usr.getUserRepository().getRole(strrole);
@@ -1004,7 +1008,7 @@ public class Notification {
                 {
                     try {
                         MailMessage mm = new MailMessage();
-                        mm.setSubject(paramsRequest.getLocaleString("msgDocChanges") + " " + base.getTitle() + " " + paramsRequest.getLocaleString("msgFromSite") + " " + base.getTopicMap().getDbdata().getTitle());
+                        mm.setSubject(paramsRequest.getLocaleString("msgDocChanges") + " " + base.getTitle() + " " + paramsRequest.getLocaleString("msgFromSite") + " " + base.getWebSite().getTitle());
                         mm.setFrom(from);
                         mm.addTo(email2send);
                         strNotify = "<table border=0 cellpadding=5 cellspacing=0><tr><td align=left>" + strNotify + "</td></tr></table>";
@@ -1048,17 +1052,17 @@ public class Notification {
      * @param user A user object
      * @return The number of the user level
      */
-    public int getLevelUser(WBUser user) {
+    public int getLevelUser(User user) {
         int level=0;
         String adm=base.getAttribute("admin");
-        User usr = user.getNative();
+        User usr = user;
         UserRepository usrRep = usr.getUserRepository();
         Role rol = null;
         if(adm!=null)
         {
             rol = usrRep.getRole(adm);
             //int r=Integer.parseInt(adm);
-            if(user.getNative().hasRole(rol)) level=3;
+            if(user.hasRole(rol)) level=3;
         }
         else level=3;
 
@@ -1069,7 +1073,7 @@ public class Notification {
             {
                 rol = usrRep.getRole(mdy);
                 //int r=Integer.parseInt(mdy);
-                if(user.getNative().hasRole(rol)) level=2;
+                if(user.hasRole(rol)) level=2;
             }
             else level=2;
         }
@@ -1081,7 +1085,7 @@ public class Notification {
             {
                 rol = usrRep.getRole(viw);
                 //int r=Integer.parseInt(viw);
-                 if(user.getNative().hasRole(rol)) level=1;
+                 if(user.hasRole(rol)) level=1;
             }
             else level=1;
         }
@@ -1092,7 +1096,7 @@ public class Notification {
      * Load the resource object information
      * @param base The resource object
      */
-    public void setResourceBase(Resource base) {
+    public void setResourceBase(org.semanticwb.model.Resource base) {
         try {
             this.base = base;
         } catch (Exception e) {
