@@ -27,16 +27,47 @@ import twitter4j.auth.RequestToken;
 /**
  *
  * @author martha.jimenez
+ * Esta clase se encarga de obtener el permiso de acceso a una cuenta en Twitter para
+ * posteriormente almacenar dichas autorizaciones en objetos de tipo Twitter
  */
 public class TwitterAuthenticator extends GenericResource {
 
     Logger log = SWBUtils.getLogger(TwitterAuthenticator.class);
+    /**
+     * Objeto twitter que permitir&aacute; tener acceso a los metodos para
+     * poder autenticarse
+     */
     private twitter4j.Twitter twitter;
+    /**
+     * Objeto que se encargará de hacer una petici&oacute;n al sitio de Twitter para generar
+     * tokens temporales que permitiran autenticar un usuario
+     */
     private RequestToken requestToken;
+    /**
+     * Url a la que redireccionará el sitio Twitter una vez que el usuario haya aceptado
+     * dar el acceso de su cuenta a SWBSocial
+     */
     private String urlCallback = "http://swbsocial.mx:8080/firmaTwitter";
+    /**
+     * Objeto que se encargará de hacer una petici&oacute;n al sitio de Twitter para generar
+     * tokens permanentes que permitiran autenticar un usuario
+     */
     AccessToken accessToken;
+    /**
+     * Uri del objeto Twitter que se ha creado para almacenar las credenciales autorizadas
+     * por el usuario.
+     */
     String uriTwitter = "";
 
+    /**
+     * Env&iacute;a a la vista que mostrar&aacute; la opci&oacute;n para obtener las
+     * credenciales de  una cuenta en Twitter
+     * @param request
+     * @param response
+     * @param paramRequest
+     * @throws SWBResourceException
+     * @throws IOException
+     */
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         try {
@@ -49,7 +80,17 @@ public class TwitterAuthenticator extends GenericResource {
             log.error("Exception Twitter Authenticator: " + e);
         }
     }
-
+    /**
+     * Procesa las distintas vistas para la obtención de credenciales de un usuario. Valida
+     * si en el llamado al recurso vienen adicionalmente los parámetros de que el usuario
+     * ha aceptado que la aplicaci&oacute;n utilize su cuenta y almacena los tokens permanentes
+     * en el objeto Twitter
+     * @param request
+     * @param response
+     * @param paramRequest
+     * @throws SWBResourceException
+     * @throws IOException
+     */
     @Override
     public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         if(paramRequest.getMode().equals("firstStepAuth")){
@@ -73,6 +114,17 @@ public class TwitterAuthenticator extends GenericResource {
         }
     }
 
+    /**
+     * Env&iacute;a un redireccionamiento al sitio de Twitter que har&aacute; la petici&oacute;
+     * de un token temporal para poder obtener las credenciales del usuario. Si todo esta
+     * correcto se mostrar&aacute; la ventana de Twitter para que el usuario autorize
+     * a la aplicaci&oacute;n de usar su cuenta
+     * @param request
+     * @param response
+     * @param paramRequest
+     * @throws SWBResourceException
+     * @throws IOException
+     */
     public void doAuthorization(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         if(request.getParameter("uri") != null) {
             String uri = request.getParameter("uri");
