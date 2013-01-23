@@ -44,9 +44,17 @@ import com.infotec.wb.core.db.*;
 import java.util.Locale;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.semanticwb.SWBPortal;
+import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Role;
+import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.User;
 import org.semanticwb.model.UserRepository;
+import org.semanticwb.model.WebPage;
+import org.semanticwb.model.WebSite;
+import org.semanticwb.portal.api.SWBParamRequest;
+import org.semanticwb.portal.api.SWBResourceException;
+import org.semanticwb.portal.api.SWBResourceURL;
 
 /** Muestra la lista de los documentos existentes dentro del repositorio. Se pueden
  * agregar documentos, mostrar su informaci�n detallada, el historial de cada
@@ -62,7 +70,7 @@ import org.semanticwb.model.UserRepository;
  */
 public class RepositoryFile {
 
-    protected Resource resource;
+    protected org.semanticwb.model.Resource resource;
     String path = "";
     String[] values;
     protected Notification notification = new Notification();
@@ -82,9 +90,9 @@ public class RepositoryFile {
      * @throws AFException An Application Framework exception
      * @return The html code of existing files in the repository
      */
-    public String getHtml(HttpServletRequest request, HttpServletResponse response, WBUser user, Topic topic, HashMap hashMap, WBParamRequest paramsRequest) throws AFException {
-        path = WBUtils.getInstance().getWebWorkPath() + resource.getResourceWorkPath();
-        int level = getLevelUser(user, topic.getMap().getId());
+    public String getHtml(HttpServletRequest request, HttpServletResponse response, User user, WebPage topic, HashMap hashMap, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
+        path = SWBPortal.getWebWorkPath() + resource.getWorkPath();
+        int level = getLevelUser(user, topic.getWebSiteId());
         return getHtml(request, response, user, topic, hashMap, topic, level, paramsRequest);
     }
 
@@ -93,19 +101,19 @@ public class RepositoryFile {
      * @param tmid Topic map identifier
      * @return An integer value of the user level
      */
-    public int getLevelUser(WBUser user, String tmid) {
+    public int getLevelUser(User user, String tmid) {
 
 
         int level=0;
         String adm=resource.getAttribute("admin");
-        User usr = user.getNative();
+        User usr = user;
         UserRepository usrRep = usr.getUserRepository();
         Role rol = null;
         if(adm!=null)
         {
             rol = usrRep.getRole(adm);
             //int r=Integer.parseInt(adm);
-            if(user.getNative().hasRole(rol)) level=3;
+            if(user.hasRole(rol)) level=3;
         }
         else level=3;
 
@@ -116,7 +124,7 @@ public class RepositoryFile {
             {
                 rol = usrRep.getRole(mdy);
                 //int r=Integer.parseInt(mdy);
-                if(user.getNative().hasRole(rol)) level=2;
+                if(user.hasRole(rol)) level=2;
             }
             else level=2;
         }
@@ -128,7 +136,7 @@ public class RepositoryFile {
             {
                 rol = usrRep.getRole(viw);
                 //int r=Integer.parseInt(viw);
-                 if(user.getNative().hasRole(rol)) level=1;
+                 if(user.hasRole(rol)) level=1;
             }
             else level=1;
         }
@@ -149,13 +157,13 @@ public class RepositoryFile {
      * @param paramsRequest a list of objects (topic, user, action, ...)
      * @throws AFException An Application Framework exception
      */
-    public String getHtml(HttpServletRequest request, HttpServletResponse response, WBUser user, Topic topic, HashMap hashMap, Topic dir, int nivel, WBParamRequest paramsRequest) throws AFException {
+    public String getHtml(HttpServletRequest request, HttpServletResponse response, User user, WebPage topic, HashMap hashMap, WebPage dir, int nivel, SWBParamRequest paramsRequest) throws  SWBResourceException, IOException {
 
         String accept = request.getHeader("accept");
         if (null != accept) {
             values = accept.split(",");
         }
-        WBResourceURL url1 = paramsRequest.getRenderUrl();
+        SWBResourceURL url1 = paramsRequest.getRenderUrl();
         url1.setMode(url1.Mode_VIEW);
         StringBuffer ret = new StringBuffer();
         FileUpload fup = new FileUpload();
@@ -232,8 +240,8 @@ public class RepositoryFile {
                     long id = Long.parseLong(request.getParameter("repiddoc"));
                     String origen = request.getParameter("reptp_original");
                     String destino = request.getParameter("reptp");
-                    Topic fromDir = dir.getMap().getTopic(origen, true);
-                    Topic toDir = dir.getMap().getTopic(destino, true);
+                    WebPage fromDir = dir.getWebSite().getWebPage(origen);
+                    WebPage toDir = dir.getWebSite().getWebPage(destino);
                     //System.out.println("movedoctodir");
                     if (!moveDoc2Dir(id, fromDir, toDir, user)) {
                         AFUtils.log("Error while trying to move the document to another directory. RepositoryFile.getHtml.movedoctodir", true);
@@ -258,7 +266,7 @@ public class RepositoryFile {
     /** Load the Resource object information
      * @param resource The Resource object
      */
-    public void setResourceBase(Resource resource) {
+    public void setResourceBase(org.semanticwb.model.Resource resource) {
         try {
             this.resource = resource;
             path = WBUtils.getInstance().getWebPath() + "wbadmin/resources/Repository/images/";
@@ -279,7 +287,7 @@ public class RepositoryFile {
      * @param nivel The user level into the repository
      * @throws AFException An Application Framework exception
      */
-    public void undocheckout(HttpServletRequest request, HttpServletResponse response, WBUser user, Topic topic, HashMap hashMap, Topic dir, Resource resource, int nivel) throws AFException {
+    public void undocheckout(HttpServletRequest request, HttpServletResponse response, User user, WebPage topic, HashMap hashMap, WebPage dir, org.semanticwb.model.Resource resource, int nivel) throws SWBResourceException, IOException {
         if (nivel < 2) {
             return;
         }
@@ -294,7 +302,7 @@ public class RepositoryFile {
                 } else {
                     PreparedStatement psuser = con.prepareStatement("select rep_emailCheckOut from resrepository where rep_docId=? and idtm=?");
                     psuser.setLong(1, id);
-                    psuser.setString(2, dir.getMap().getId());
+                    psuser.setString(2, dir.getWebSiteId());
                     ResultSet rsuser = psuser.executeQuery();
 
                     if (rsuser.next()) {
@@ -316,7 +324,7 @@ public class RepositoryFile {
                 }
                 PreparedStatement psstatus = con.prepareStatement("select rep_status, rep_title from resrepository where rep_docId=? and idtm=?");
                 psstatus.setLong(1, id);
-                psstatus.setString(2, dir.getMap().getId());
+                psstatus.setString(2, dir.getWebSiteId());
                 ResultSet rsstatus = psstatus.executeQuery();
                 boolean mod = false;
                 if (rsstatus.next()) {
@@ -331,7 +339,7 @@ public class RepositoryFile {
                     ps.setInt(1, 0);
                     ps.setString(2, null);
                     ps.setLong(3, id);
-                    ps.setString(4, dir.getMap().getId());
+                    ps.setString(4, dir.getWebSiteId());
                     ps.execute();
                     ps.close();
                     saveLog("undocheckout", user, id, dir, "This user made checkout", 1);
@@ -365,12 +373,12 @@ public class RepositoryFile {
      * @param resource A Resource object
      * @throws AFException An Application Framework exception
      */
-    public void view(HttpServletRequest request, HttpServletResponse response, WBUser user, Topic topic, HashMap hashMap, Topic dir, Resource resource) throws AFException {
+    public void view(HttpServletRequest request, HttpServletResponse response, User user, WebPage topic, HashMap hashMap, WebPage dir, org.semanticwb.model.Resource resource) throws SWBResourceException, IOException {
 
         //System.out.println("TOPICO: " + topic.getId()+", DIR:"+dir.getId());
         String p_repinline = request.getParameter("repinline");
-        int levelUser = getLevelUser(user, topic.getMap().getId());
-        Topic tmpTp = topic;
+        int levelUser = getLevelUser(user, topic.getWebSiteId());
+        WebPage tmpTp = topic;
         String subdir = resource.getAttribute("showdirectory");
         if (subdir != null && "true".equals(subdir)) {
             tmpTp = dir;
@@ -398,7 +406,8 @@ public class RepositoryFile {
                     String p_reptp = request.getParameter("reptp");
                     String p_repfiddoc = request.getParameter("repfiddoc");
 
-                    long idRes = resource.getId();
+                    //long idRes = resource.getId();
+                    String idRes = resource.getId();
 
                     if (p_reptp == null && p_repfiddoc == null && p_repinline == null) {
                         fileName = request.getRequestURL().toString();///MapaSitio.xslt?repfop=view&reptp=CNFWB_Rep11&repfiddoc=1&repinline=true
@@ -409,7 +418,7 @@ public class RepositoryFile {
                                     + " where rrep.topic=? and rrep.resId = ? and rrep.rep_docId = rver.rep_docId and rver.rep_fileName = ?";
                             pstID = con.prepareStatement(sqlID);
                             pstID.setString(1, tmpTp.getId());
-                            pstID.setLong(2, idRes);
+                            pstID.setString(2, idRes);
                             pstID.setString(3, fileName);
                             rsID = pstID.executeQuery();
                             if (rsID.next()) {
@@ -466,7 +475,7 @@ public class RepositoryFile {
                 if (sversion == null) {
                     PreparedStatement psversion = con.prepareStatement("select rep_lastVersion from resrepository where rep_docId=? and idtm=?");
                     psversion.setLong(1, id);
-                    psversion.setString(2, tmpTp.getMap().getId());
+                    psversion.setString(2, tmpTp.getWebSiteId());
                     ResultSet rs = psversion.executeQuery();
                     if (rs.next()) {
                         version = rs.getInt("rep_lastVersion");
@@ -478,7 +487,7 @@ public class RepositoryFile {
                 PreparedStatement ps = con.prepareStatement("select * from  resrepositoryversions where rep_docId=? and rep_fileVersion=? and idtm=?");
                 ps.setLong(1, id);
                 ps.setInt(2, version);
-                ps.setString(3, tmpTp.getMap().getId());
+                ps.setString(3, tmpTp.getWebSiteId());
                 ResultSet rsversion = ps.executeQuery();
                 String filename = null, rep_fileType = null;
                 if (rsversion.next()) {
@@ -510,7 +519,7 @@ public class RepositoryFile {
                     }
 
                     OutputStream out = response.getOutputStream();
-                    InputStream in = WBUtils.getInstance().getFileFromWorkPath(resource.getResourceWorkPath() + "/" + sfile);
+                    InputStream in = SWBPortal.getFileFromWorkPath(resource.getWorkPath() + "/" + sfile);
                     AFUtils.copyStream(in, out);
                 }
             } catch (SQLException e) {
@@ -541,7 +550,7 @@ public class RepositoryFile {
      * @param nivel The user level into the repository
      * @throws AFException An Application Framework exception
      */
-    public synchronized void updatetitle(HttpServletRequest request, HttpServletResponse response, WBUser user, Topic topic, HashMap hashMap, Topic dir, Resource resource, int nivel, WBParamRequest paramsRequest) throws AFException {
+    public synchronized void updatetitle(HttpServletRequest request, HttpServletResponse response, User user, WebPage topic, HashMap hashMap, WebPage dir, org.semanticwb.model.Resource resource, int nivel, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
         if (nivel < 2) {
             return;
         }
@@ -557,7 +566,7 @@ public class RepositoryFile {
                 con = WBUtils.getDBConnection();
                 PreparedStatement ps = con.prepareStatement("select rep_email from resrepository where rep_docId=? and idtm=?");
                 ps.setLong(1, id);
-                ps.setString(2, dir.getMap().getId());
+                ps.setString(2, dir.getWebSiteId());
                 boolean canupdate = false;
                 if (nivel == 3) {
                     canupdate = true;
@@ -581,14 +590,14 @@ public class RepositoryFile {
                     psupdate.setString(1, title);
                     psupdate.setString(2, description);
                     psupdate.setLong(3, id);
-                    psupdate.setString(4, dir.getMap().getId());
+                    psupdate.setString(4, dir.getWebSiteId());
                     psupdate.execute();
                     psupdate.close();
                     saveLog("update", user, id, dir, "Description", 1);
                     // indexar cambios
                     ps = con.prepareStatement("select rep_fileVersion, rep_fileName from resrepositoryversions where rep_docId=? and idtm=? order by rep_fileVersion desc");
                     ps.setLong(1, id);
-                    ps.setString(2, dir.getMap().getId());
+                    ps.setString(2, dir.getWebSiteId());
                     ResultSet rs = ps.executeQuery();
                     if (rs.next()) {
                         //obtener valores faltantes para poder realizar la re-indexacion
@@ -671,7 +680,7 @@ public class RepositoryFile {
      * @param paramsRequest a list of objects (topic, user, action, ...)
      * @throws AFException An Application Framework exception
      */
-    public synchronized void newversion(HttpServletRequest request, HttpServletResponse response, WBUser user, Topic topic, HashMap hashMap, Topic dir, Resource resource, int nivel, WBParamRequest paramsRequest, FileUpload fup) throws AFException {
+    public synchronized void newversion(HttpServletRequest request, HttpServletResponse response, User user, WebPage topic, HashMap hashMap, WebPage dir, org.semanticwb.model.Resource resource, int nivel, SWBParamRequest paramsRequest, FileUpload fup) throws SWBResourceException, IOException {
         System.out.println("RepositoryFile.newversion");
         if (nivel < 2) {
             return;
@@ -696,7 +705,7 @@ public class RepositoryFile {
                 boolean cancheckin = false;
                 PreparedStatement psuser = con.prepareStatement("select rep_title,rep_emailCheckOut from resrepository where rep_docId=? and idtm=?");
                 psuser.setLong(1, id);
-                psuser.setString(2, dir.getMap().getId());
+                psuser.setString(2, dir.getWebSiteId());
                 ResultSet rsuser = psuser.executeQuery();
                 if (rsuser.next()) {
                     title = rsuser.getString("rep_title");
@@ -715,7 +724,7 @@ public class RepositoryFile {
                 int last_ver = 1;
                 PreparedStatement psmaxversion = con.prepareStatement("select max(rep_fileVersion) as max from resrepositoryversions where rep_docId=? and idtm=?");
                 psmaxversion.setLong(1, id);
-                psmaxversion.setString(2, dir.getMap().getId());
+                psmaxversion.setString(2, dir.getWebSiteId());
                 ResultSet rsmax = psmaxversion.executeQuery();
                 if (rsmax.next()) {
                     version = rsmax.getInt("max");
@@ -736,7 +745,7 @@ public class RepositoryFile {
                     file_last = id + "_" + last_ver;
                 }
 
-                WBUtils.getInstance().writeFileToWorkPath(resource.getResourceWorkPath() + "/" + file_db, new ByteArrayInputStream(bcont), user.getId());
+                SWBPortal.writeFileToWorkPath(resource.getWorkPath() + "/" + file_db, new ByteArrayInputStream(bcont), user);
 
                 //indexFile(file_last, file_db, id, title, dir, paramsRequest);
 
@@ -780,7 +789,7 @@ public class RepositoryFile {
                 ps.setInt(2, 0);
                 ps.setString(3, user.getId());
                 ps.setLong(4, id);
-                ps.setString(5, dir.getMap().getId());
+                ps.setString(5, dir.getWebSiteId());
                 int num_reg = ps.executeUpdate();
                 ps.close();
                 PreparedStatement ps2 = con.prepareStatement("insert into "
@@ -788,7 +797,7 @@ public class RepositoryFile {
                         + "values(?,?,?,?,?,?,?,?,?,?)");
                 ps2.setLong(1, id);
                 ps2.setInt(2, version);
-                ps2.setString(3, dir.getMap().getId());
+                ps2.setString(3, dir.getWebSiteId());
                 ps2.setString(4, user.getId());
                 ps2.setString(5, filename);
                 ps2.setInt(6, bcont.length);
@@ -800,7 +809,7 @@ public class RepositoryFile {
                 ps2.close();
                 PreparedStatement psdata = con.prepareStatement("select * from resrepository where rep_docId=? and idtm=?");
                 psdata.setLong(1, id);
-                psdata.setString(2, dir.getMap().getId());
+                psdata.setString(2, dir.getWebSiteId());
                 ResultSet rsdata = psdata.executeQuery();
                 if (rsdata.next()) {
                     title = rsdata.getString("rep_title");
@@ -846,7 +855,7 @@ public class RepositoryFile {
      * @throws AFException An Application Framework exception
      * @return the form to add comments and add new version of file
      */
-    public String checkin(HttpServletRequest request, HttpServletResponse response, WBUser user, Topic topic, HashMap hashMap, Topic dir, Resource resource, int nivel, WBParamRequest paramsRequest) throws AFException {
+    public String checkin(HttpServletRequest request, HttpServletResponse response, User user, WebPage topic, HashMap hashMap, WebPage dir, org.semanticwb.model.Resource resource, int nivel, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
         StringBuffer ret = new StringBuffer();
         if (nivel < 2) {
             return "";
@@ -860,7 +869,7 @@ public class RepositoryFile {
                 boolean cancheckin = false;
                 PreparedStatement psuser = con.prepareStatement("select rep_emailCheckOut from resrepository where rep_docId=? and idtm=?");
                 psuser.setLong(1, id);
-                psuser.setString(2, dir.getMap().getId());
+                psuser.setString(2, dir.getWebSiteId());
                 ResultSet rsuser = psuser.executeQuery();
                 if (rsuser.next()) {
                     if (user.getId() != null) {
@@ -876,7 +885,7 @@ public class RepositoryFile {
                 }
                 PreparedStatement psstatus = con.prepareStatement("select rep_status from resrepository where rep_docId=? and idtm=?");
                 psstatus.setLong(1, id);
-                psstatus.setString(2, dir.getMap().getId());
+                psstatus.setString(2, dir.getWebSiteId());
                 ResultSet rsstatus = psstatus.executeQuery();
                 boolean mod = false;
                 if (rsstatus.next()) {
@@ -890,7 +899,7 @@ public class RepositoryFile {
                     String title = "";
                     PreparedStatement ps = con.prepareStatement("select rep_title from resrepository where rep_docId=? and idtm=?");
                     ps.setLong(1, id);
-                    ps.setString(2, dir.getMap().getId());
+                    ps.setString(2, dir.getWebSiteId());
                     ResultSet rs = ps.executeQuery();
                     if (rs.next()) {
                         title = rs.getString("rep_title");
@@ -902,7 +911,7 @@ public class RepositoryFile {
                     PreparedStatement psFileName = con.prepareStatement("select rep_fileName from resrepositoryversions where rep_docId=? and rep_fileVersion=? and idtm=?");
                     psFileName.setLong(1, id);
                     psFileName.setInt(2, 1);
-                    psFileName.setString(3, dir.getMap().getId());
+                    psFileName.setString(3, dir.getWebSiteId());
                     ResultSet rsFileName = psFileName.executeQuery();
                     if (rsFileName.next()) {
                         fileName = rsFileName.getString("rep_fileName");
@@ -989,7 +998,7 @@ public class RepositoryFile {
                     ret.append("submitform();\r\n");
                     ret.append("}\r\n");
                     ret.append("function init(){\r\n");
-                    WBResourceURL url = paramsRequest.getRenderUrl();
+                    SWBResourceURL url = paramsRequest.getRenderUrl();
 
                     ret.append("document.location='" + url.toString() + "?reptp=" + dir.getId() + "';\r\n");
                     ret.append("}\r\n");
@@ -1025,7 +1034,7 @@ public class RepositoryFile {
      * @param nivel The user level into the repository
      * @throws AFException An Application Framework exception
      */
-    public synchronized void checkout(HttpServletRequest request, HttpServletResponse response, WBUser user, Topic topic, HashMap hashMap, Topic dir, Resource resource, int nivel) throws AFException {
+    public synchronized void checkout(HttpServletRequest request, HttpServletResponse response, User user, WebPage topic, HashMap hashMap, WebPage dir, org.semanticwb.model.Resource resource, int nivel) throws SWBResourceException, IOException {
         if (nivel < 2) {
             return;
         }
@@ -1037,7 +1046,7 @@ public class RepositoryFile {
                 con = WBUtils.getDBConnection();
                 PreparedStatement psstatus = con.prepareStatement("select rep_status from resrepository where rep_docId=? and idtm=?");
                 psstatus.setLong(1, id);
-                psstatus.setString(2, dir.getMap().getId());
+                psstatus.setString(2, dir.getWebSiteId());
                 ResultSet rsstatus = psstatus.executeQuery();
                 boolean mod = false;
                 if (rsstatus.next()) {
@@ -1052,7 +1061,7 @@ public class RepositoryFile {
                     ps.setInt(1, 1);
                     ps.setString(2, user.getId());
                     ps.setLong(3, id);
-                    ps.setString(4, dir.getMap().getId());
+                    ps.setString(4, dir.getWebSiteId());
                     int num_reg = ps.executeUpdate();
                     ps.close();
 
@@ -1089,7 +1098,7 @@ public class RepositoryFile {
      * @param paramsRequest a list of objects (topic, user, action, ...)
      * @throws AFException An exception of type AF (Applicatioon Framework)
      */
-    public synchronized void delete(HttpServletRequest request, HttpServletResponse response, WBUser user, Topic topic, HashMap hashMap, Topic dir, Resource resource, int nivel, WBParamRequest paramsRequest, FileUpload fup) throws AFException {
+    public synchronized void delete(HttpServletRequest request, HttpServletResponse response, User user, WebPage topic, HashMap hashMap, WebPage dir, org.semanticwb.model.Resource resource, int nivel, SWBParamRequest paramsRequest, FileUpload fup) throws  SWBResourceException, IOException {
 
         if (nivel == 0) {
             return;
@@ -1107,7 +1116,7 @@ public class RepositoryFile {
                     } else {
                         PreparedStatement psuser = con.prepareStatement("select rep_email from resrepository where rep_docId=? and idtm=?");
                         psuser.setLong(1, id);
-                        psuser.setString(2, dir.getMap().getId());
+                        psuser.setString(2, dir.getWebSiteId());
                         ResultSet rsuser = psuser.executeQuery();
                         if (rsuser.next()) {
                             if (user.getId() != null) {
@@ -1123,7 +1132,7 @@ public class RepositoryFile {
                 }
                 PreparedStatement psdata = con.prepareStatement("select * from resrepository where rep_docId=? and idtm=?");
                 psdata.setLong(1, id);
-                psdata.setString(2, dir.getMap().getId());
+                psdata.setString(2, dir.getWebSiteId());
                 ResultSet rsdata = psdata.executeQuery();
                 if (rsdata.next()) {
                     String title = rsdata.getString("rep_title");
@@ -1144,7 +1153,7 @@ public class RepositoryFile {
                 }
                 PreparedStatement ps = con.prepareStatement("update resrepository set rep_deleted = 1 where rep_docId=? and idtm=?");
                 ps.setLong(1, id);
-                ps.setString(2, dir.getMap().getId());
+                ps.setString(2, dir.getWebSiteId());
                 int count = ps.executeUpdate();
                 ps.close();
 
@@ -1179,10 +1188,10 @@ public class RepositoryFile {
      * @throws AFException An exception of type AF (Applicatioon Framework)
      * @return The file information
      */
-    public String info(HttpServletRequest request, HttpServletResponse response, WBUser user, Topic topic, HashMap hashMap, Topic dir, Resource resource, int nivel, WBParamRequest paramsRequest) throws AFException {
+    public String info(HttpServletRequest request, HttpServletResponse response, User user, WebPage topic, HashMap hashMap, WebPage dir, org.semanticwb.model.Resource resource, int nivel, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
         StringBuffer ret = new StringBuffer();
         ArrayList subcriptions = new ArrayList();
-        RecUser usr = null;
+        User usr = null;
         Connection con = null;
         PreparedStatement ps = null;
         boolean canupdate = false;
@@ -1193,7 +1202,7 @@ public class RepositoryFile {
         long id = 0;
         int i_log = 0;
 
-        WBResourceURL url = paramsRequest.getRenderUrl();
+        SWBResourceURL url = paramsRequest.getRenderUrl();
         url.setCallMethod(url.Call_CONTENT);
 
         if (user.getId() != null) {
@@ -1204,7 +1213,7 @@ public class RepositoryFile {
             return "";
         }
 
-        if (user.isLoged()) {
+        if (user.isSigned()) {
             i_log = 1;
         }
         //i_log = 1;
@@ -1232,7 +1241,7 @@ public class RepositoryFile {
             ret.append("\n          alert('" + s_message + "');");
             ret.append("\n      }");
             ret.append("\n      else{");
-            WBResourceURL urlOUT = paramsRequest.getRenderUrl();
+            SWBResourceURL urlOUT = paramsRequest.getRenderUrl();
 
             ret.append("\n          window.document.frmparameter.action= '" + urlOUT.toString() + "';");
             ret.append("\n          window.document.frmparameter.repfop.value = 'checkout';");
@@ -1273,7 +1282,7 @@ public class RepositoryFile {
             ret.append("\n      }");
             ret.append("\n      else{");
             ret.append("\n          if(confirm('" + paramsRequest.getLocaleString("msgSureDelete") + "?')){");
-            WBResourceURL urlDel = paramsRequest.getRenderUrl();
+            SWBResourceURL urlDel = paramsRequest.getRenderUrl();
             ret.append("\n              window.document.frmparameter.action = '" + urlDel.toString() + "';");
             ret.append("\n              window.document.frmparameter.repfop.value = 'delete';");
             ret.append("\n              window.document.frmparameter.repfiddoc.value = idoc;");
@@ -1287,7 +1296,7 @@ public class RepositoryFile {
             ret.append("\n          alert('" + s_message + "');");
             ret.append("\n      }");
             ret.append("\n      else{");
-            WBResourceURL urlView = paramsRequest.getRenderUrl();
+            SWBResourceURL urlView = paramsRequest.getRenderUrl();
             urlView.setCallMethod(urlView.Call_DIRECT);
             ret.append("\n          window.document.frmparameter.action = '" + urlView.toString() + "';");
             ret.append("\n          window.document.frmparameter.repfop.value = 'view';");
@@ -1303,7 +1312,7 @@ public class RepositoryFile {
             ret.append("\n      }");
             ret.append("\n      else{");
 
-            WBResourceURL urlPreView = paramsRequest.getRenderUrl();
+            SWBResourceURL urlPreView = paramsRequest.getRenderUrl();
             urlPreView.setCallMethod(paramsRequest.Call_DIRECT);
 
             ret.append("\n          window.open(\"" + urlPreView.toString() + "?repfop=view&reptp=" + dir.getId() + "&repfiddoc=\" + idoc + \"&repinline=true \",\"\",'width=650, height=520');    ");
@@ -1315,7 +1324,7 @@ public class RepositoryFile {
             ret.append("\n          alert('" + s_message + "');");
             ret.append("\n      }");
             ret.append("\n      else{");
-            WBResourceURL urlSusDoc = paramsRequest.getRenderUrl();
+            SWBResourceURL urlSusDoc = paramsRequest.getRenderUrl();
             ret.append("\n          window.document.frmparameter.action = '" + urlSusDoc.toString() + "';");
             ret.append("\n          window.document.frmparameter.repacc.value = 'addtodoc';");
             ret.append("\n          window.document.frmparameter.repobj.value = 'Notification';");
@@ -1342,7 +1351,7 @@ public class RepositoryFile {
             ret.append("\n          alert('" + s_message + "');");
             ret.append("\n      }");
             ret.append("\n      else{");
-            WBResourceURL urlMove = paramsRequest.getRenderUrl();
+            SWBResourceURL urlMove = paramsRequest.getRenderUrl();
             urlMove.setCallMethod(urlMove.Call_DIRECT);
             urlMove.setParameter("repfiddoc", "movedoctodir");
             urlMove.setParameter("reptp", dir.getId());
@@ -1363,7 +1372,7 @@ public class RepositoryFile {
             ret.append("\n<input type=\"hidden\" name=\"repfiddoc\" value=\"\">");
             ret.append("\n</form>");
 
-            if (user.isLoged()) {
+            if (user.isSigned()) {
                 ret.append("<form name='frmnewdoc' method='GET' action='" + url.toString() + "'>");
             }
             ret.append("<input type='hidden' name='repfop' value='updatetitle'>");
@@ -1381,7 +1390,7 @@ public class RepositoryFile {
             con = WBUtils.getDBConnection();
             ps = con.prepareStatement("select rep_docId, resId, rep_email, rep_title, rep_description, rep_lastVersion, rep_status, rep_emailCheckOut, rep_xml from resrepository where rep_docId=? and idtm=?");
             ps.setLong(1, id);
-            ps.setString(2, dir.getMap().getId());
+            ps.setString(2, dir.getWebSiteId());
             ResultSet rs = ps.executeQuery();
 
             if (rs.next()) {
@@ -1393,7 +1402,9 @@ public class RepositoryFile {
                 int replastversion = rs.getInt("rep_lastVersion");
                 int repstatus = rs.getInt("rep_status");
                 String repemailCOut = rs.getString("rep_emailCheckOut");
-                String repxml = com.infotec.appfw.util.AFUtils.getInstance().readInputStream(rs.getAsciiStream("rep_xml")); //rs.getString("rep_xml");
+                
+                String repxml =rs.getAsciiStream("rep_xml")!=null?SWBUtils.IO.readInputStream(rs.getAsciiStream("rep_xml")):null;
+                //String repxml = com.infotec.appfw.util.AFUtils.getInstance().readInputStream(rs.getAsciiStream("rep_xml")); //rs.getString("rep_xml");
 
                 ret.append("<TR>");
                 ret.append("<TD bgcolor='#FFFFFF' width='150'><FONT color='#000000' size='2' face='Verdana, Arial, Helvetica, sans-serif'>" + paramsRequest.getLocaleString("msgTitle") + ":</FONT></TD>");
@@ -1434,7 +1445,7 @@ public class RepositoryFile {
                 PreparedStatement ps2 = con.prepareStatement("select * from resrepositoryversions where rep_docId=? and rep_fileVersion=? and idtm=?");
                 ps2.setLong(1, repdocid);
                 ps2.setInt(2, replastversion);
-                ps2.setString(3, dir.getMap().getId());
+                ps2.setString(3, dir.getWebSiteId());
                 ResultSet rsversions = ps2.executeQuery();
                 if (rsversions.next()) {
                     Timestamp repcreate = rsversions.getTimestamp("rep_create");
@@ -1458,7 +1469,8 @@ public class RepositoryFile {
                         s_author = "&nbsp;";
                     } else {
                         try {
-                            usr = DBUser.getInstance().getUserById(s_author);
+                            //usr = DBUser.getInstance().getUserById(s_author);
+                            usr = dir.getWebSite().getUserRepository().getUser(s_author);
 
                             if (usr.getFirstName() != null) {
                                 s_author = usr.getFirstName();
@@ -1534,7 +1546,7 @@ public class RepositoryFile {
                         ps3.setLong(1, id);
                         ps3.setString(2, repemailCOut);
                         ps3.setString(3, "checkout");
-                        ps3.setString(4, dir.getMap().getId());
+                        ps3.setString(4, dir.getWebSiteId());
                         ResultSet rs3 = ps3.executeQuery();
 
                         String checkOutDate = "";
@@ -1555,7 +1567,7 @@ public class RepositoryFile {
                     ret.append("<TR>");
                     ret.append("<TD colspan='2' align='center'>");
 
-                    if (nivel >= 2 && user.isLoged()) {
+                    if (nivel >= 2 && user.isSigned()) {
 
                         if (repstatus == 0) {
                             ret.append("<A href=\"javascript: doCheckout(" + i_log + "," + repdocid + ");\"><IMG src='" + path + "out.gif' height='14' width='25' alt='" + paramsRequest.getLocaleString("msgCOut") + "' border='0'>");
@@ -1563,7 +1575,7 @@ public class RepositoryFile {
                             boolean cancheckin = false;
                             PreparedStatement psuser = con.prepareStatement("select rep_emailCheckOut from resrepository where rep_docId=? and idtm=?");
                             psuser.setLong(1, repdocid);
-                            psuser.setString(2, dir.getMap().getId());
+                            psuser.setString(2, dir.getWebSiteId());
                             ResultSet rsuser = psuser.executeQuery();
                             if (rsuser.next()) {
                                 if (user != null) {
@@ -1592,7 +1604,7 @@ public class RepositoryFile {
                             }
                         }
                     }
-                    if (user.getId() != null && user.isLoged()) {
+                    if (user.getId() != null && user.isSigned()) {
                         if (!subcriptions.contains(new Long(0))) { //dir
 
                             if (!subcriptions.contains(new Long(repdocid))) {
@@ -1609,7 +1621,7 @@ public class RepositoryFile {
                     } else {
                         PreparedStatement psuser = con.prepareStatement("select rep_email from resrepository where rep_docId=? and idtm=?");
                         psuser.setLong(1, repdocid);
-                        psuser.setString(2, dir.getMap().getId());
+                        psuser.setString(2, dir.getWebSiteId());
                         ResultSet rsuser = psuser.executeQuery();
                         if (rsuser.next()) {
                             if (user.getId() != null) {
@@ -1620,7 +1632,7 @@ public class RepositoryFile {
                             }
                         }
                     }
-                    if (candelete && user.isLoged()) {
+                    if (candelete && user.isSigned()) {
                         if (repstatus == 0) {
                             if (resource.getAttribute("showdirectory", "true").equals("true")) {
                                 ret.append("<a href=\"javascript: doMoveDocDir(" + i_log + "," + repdocid + ");\"><IMG src='" + path + "folder.gif' alt='" + paramsRequest.getLocaleString("msgALTMove") + "' border='0'></a>");
@@ -1665,11 +1677,11 @@ public class RepositoryFile {
                     ret.append("</TR>");
                     ret.append("<TR>");
                     ret.append("<TD colspan='2' align='center'>");
-                    if (canupdate && user.isLoged()) {
+                    if (canupdate && user.isSigned()) {
                         ret.append("<input  type='button' name='s' value='" + paramsRequest.getLocaleString("msgBTNSubmit") + "' onClick='javascript:valida(" + i_log + ")'>&nbsp;&nbsp;&nbsp;");
                     }
                     ret.append("<input  type='button' name='n' value='" + paramsRequest.getLocaleString("msgBTNViewAllFiles") + "' onClick='javascript:init()'>&nbsp;&nbsp;&nbsp;");
-                    if (canupdate && user.isLoged()) {
+                    if (canupdate && user.isSigned()) {
                         ret.append("<input  type='button' name='c' value='" + paramsRequest.getLocaleString("msgBTNCancel") + "' onClick='javascript:init()'>");
                     }
                     ret.append("</TD>");
@@ -1679,7 +1691,7 @@ public class RepositoryFile {
             ps.close();
 
             ret.append("</table>");
-            if (user.isLoged()) {
+            if (user.isSigned()) {
                 ret.append("</form>");
             }
             ret.append("<script language='JavaScript'>\r\n");
@@ -1748,7 +1760,7 @@ public class RepositoryFile {
      * @throws AFException An Application Framework exception
      * @return A list of existing files
      */
-    public String showfiles(HttpServletRequest request, HttpServletResponse response, WBUser user, Topic topic, HashMap hashMap, Topic dir, Resource resource, int nivel, WBParamRequest paramsRequest) throws AFException {
+    public String showfiles(HttpServletRequest request, HttpServletResponse response, User user, WebPage topic, HashMap hashMap, WebPage dir, org.semanticwb.model.Resource resource, int nivel, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
 
         ArrayList subcriptions = new ArrayList();
         StringBuffer ret = new StringBuffer();
@@ -1767,12 +1779,12 @@ public class RepositoryFile {
             return "";
         }
 
-        if (user.isLoged()) {
+        if (user.isSigned()) {
             i_log = 1;
         }
         //i_log = 1;
         try {
-            String topicid = dir.getId();
+            String topicid = dir!=null?dir.getId():"";
             con = WBUtils.getDBConnection();
             s_sql = "select * from resrepository where idtm=? and topic=? and resId=? and rep_deleted = 0";
             // Display results sorted by title or date
@@ -1784,15 +1796,15 @@ public class RepositoryFile {
                 }
             }
             ps = con.prepareStatement(s_sql);
-            ps.setString(1, dir.getMap().getId());
+            ps.setString(1, dir.getWebSiteId());
             ps.setString(2, topicid);
-            ps.setLong(3, resource.getId());
+            ps.setString(3, resource.getId());
             ResultSet rs = ps.executeQuery();
 
             String tp = dir.getId();
             s_message = paramsRequest.getLocaleString("msgMustBeLogged");
             String foldername = dir.getDisplayName();
-            WBResourceURL url = paramsRequest.getRenderUrl();
+            SWBResourceURL url = paramsRequest.getRenderUrl();
             ret.append("\n<script language='JavaScript'>");
             ret.append("\n  function doSuscribe(ivar){");
             ret.append("\n      if( ivar == 0){");
@@ -1823,7 +1835,7 @@ public class RepositoryFile {
             ret.append("\n          alert('" + s_message + "');");
             ret.append("\n      }");
             ret.append("\n      else{");
-            WBResourceURL urlAdd = paramsRequest.getRenderUrl();
+            SWBResourceURL urlAdd = paramsRequest.getRenderUrl();
             ret.append("\n          window.document.frmparameter.action= '" + urlAdd.toString() + "';");
             ret.append("\n          window.document.frmparameter.repfop.value = 'add';");
             ret.append("\n          window.document.frmparameter.reptp.value = '" + dir.getId() + "';");
@@ -1835,7 +1847,7 @@ public class RepositoryFile {
             ret.append("\n          alert('" + s_message + "');");
             ret.append("\n      }");
             ret.append("\n      else{");
-            WBResourceURL urlOUT = paramsRequest.getRenderUrl();
+            SWBResourceURL urlOUT = paramsRequest.getRenderUrl();
             ret.append("\n          window.document.frmparameter.action= '" + urlOUT.toString() + "';");
             ret.append("\n          window.document.frmparameter.repfop.value = 'checkout';");
             ret.append("\n          window.document.frmparameter.repfiddoc.value = idoc;");
@@ -1873,7 +1885,7 @@ public class RepositoryFile {
             ret.append("\n      }");
             ret.append("\n      else{");
             ret.append("\n          if(confirm('" + paramsRequest.getLocaleString("msgSureDelete") + "?')){");
-            WBResourceURL urlDel = paramsRequest.getRenderUrl();
+            SWBResourceURL urlDel = paramsRequest.getRenderUrl();
             ret.append("\n              window.document.frmparameter.action = '" + urlDel.toString() + "';");
             ret.append("\n              window.document.frmparameter.repfop.value = 'delete';");
             ret.append("\n              window.document.frmparameter.repfiddoc.value = idoc;");
@@ -1887,7 +1899,7 @@ public class RepositoryFile {
             ret.append("\n          alert('" + s_message + "');");
             ret.append("\n      }");
             ret.append("\n      else{");
-            WBResourceURL urlView = paramsRequest.getRenderUrl();
+            SWBResourceURL urlView = paramsRequest.getRenderUrl();
             urlView.setCallMethod(urlView.Call_DIRECT);
             ret.append("\n          window.document.frmparameter.action = '" + urlView.toString() + "/'+iname;");
             ret.append("\n          window.document.frmparameter.repfop.value = 'view';");
@@ -1902,7 +1914,7 @@ public class RepositoryFile {
             ret.append("\n          alert('" + s_message + "');");
             ret.append("\n      }");
             ret.append("\n      else{");
-            WBResourceURL urlSusDoc = paramsRequest.getRenderUrl();
+            SWBResourceURL urlSusDoc = paramsRequest.getRenderUrl();
             ret.append("\n          window.document.frmparameter.action = '" + urlSusDoc.toString() + "';");
             ret.append("\n          window.document.frmparameter.repacc.value = 'addtodoc';");
             ret.append("\n          window.document.frmparameter.repobj.value = 'Notification';");
@@ -1948,7 +1960,7 @@ public class RepositoryFile {
             ret.append("\n          alert('" + s_message + "');");
             ret.append("\n      }");
             ret.append("\n      else{");
-            WBResourceURL urlMove = paramsRequest.getRenderUrl();
+            SWBResourceURL urlMove = paramsRequest.getRenderUrl();
             urlMove.setCallMethod(urlMove.Call_DIRECT);
             urlMove.setParameter("repfiddoc", "movedoctodir");
             urlMove.setParameter("reptp", dir.getId());
@@ -1977,7 +1989,7 @@ public class RepositoryFile {
             ret.append("\n<TABLE width='100%'  border='0' cellspacing='0' cellpadding='0'>");
             ret.append("\n<TR>");
             ret.append("\n<TD colspan='10' width='50%'><IMG src='" + path + "openfolder.gif' width='20' height='20'> <B class=\"Estilo6\"><FONT face=\"Verdana, Arial, Helvetica, sans-serif\">" + foldername);
-            if (user.getId() != null && user.isLoged()) {
+            if (user.getId() != null && user.isSigned()) {
                 if (!subcriptions.contains(new Long(0))) {
                     ret.append("&nbsp;&nbsp;&nbsp;<a href=\"javascript: doSuscribe(" + i_log + ");\"><FONT color='#666666' size='1' face='Verdana, Arial, Helvetica, sans-serif'>" + paramsRequest.getLocaleString("msgSuscribeDirectory") + "</font></a>");
                 } else {
@@ -1985,7 +1997,7 @@ public class RepositoryFile {
                 }
             }
             ret.append("</FONT></B></TD>");
-            if (nivel >= 2 && user.isLoged()) {
+            if (nivel >= 2 && user.isSigned()) {
                 ret.append("\n<TD width='50%' align='right'><A href=\"javascript: doAddFile(" + i_log + ");\"><IMG src='" + path + "add.gif' alt='" + paramsRequest.getLocaleString("msgAltAdd") + "' width='20' height='18' border='0'></A><FONT size='1' face='Verdana, Arial, Helvetica, sans-serif'>" + paramsRequest.getLocaleString("msgALTAddFile") + "</FONT> </TD>");
             }
             ret.append("\n</TR>");
@@ -2021,7 +2033,7 @@ public class RepositoryFile {
                 PreparedStatement ps2 = con.prepareStatement("select * from resrepositoryversions where rep_docId=? and rep_fileVersion=? and idtm=?");
                 ps2.setLong(1, repdocid);
                 ps2.setInt(2, lastversion);
-                ps2.setString(3, dir.getMap().getId());
+                ps2.setString(3, dir.getWebSiteId());
                 ResultSet rsversions = ps2.executeQuery();
                 if (rsversions.next()) {
                     String repfiletype = rsversions.getString("rep_fileType");
@@ -2038,7 +2050,7 @@ public class RepositoryFile {
 
                     //ret.append("\n<TD width='20'><a href=\"javascript: doView(" + i_log + ","+ repdocid+",'"+type+"');\" ><IMG border=0 src='"+ path +""+ file +"' alt=\""+getFileType(type)+"\"></a></TD>");
 
-                    WBResourceURL urllineA = paramsRequest.getRenderUrl();
+                    SWBResourceURL urllineA = paramsRequest.getRenderUrl();
                     urllineA.setCallMethod(urllineA.Call_DIRECT);
                     ret.append("\n<TD width='20'>");//"<a href=\"javascript: doView(" + i_log + ","+ repdocid+",'"+type+"');\" ></a></TD>");
                     if (i_log == 1 || supportGuestUser() == 1) {
@@ -2058,7 +2070,7 @@ public class RepositoryFile {
                     date = df.format(new Date(repcreate.getTime()));
                     ret.append("\n<TD width='150'><FONT size='1' face='Verdana, Arial, Helvetica, sans-serif'>" + date + "</FONT></TD>");
 
-                    if (nivel >= 2 && user.isLoged()) {
+                    if (nivel >= 2 && user.isSigned()) {
                         if (repstatus == 0) {
                             ret.append("\n<TD width='140' align=\"center\">");
                             ret.append("<A href=\"javascript: doCheckout(" + i_log + "," + repdocid + ");\"><IMG src='" + path + "out.gif' height='14' width='25' alt='" + paramsRequest.getLocaleString("msgCOut") + "' border='0'></A>");
@@ -2067,7 +2079,7 @@ public class RepositoryFile {
                             boolean cancheckin = false;
                             PreparedStatement psuser = con.prepareStatement("select rep_emailCheckOut from resrepository where rep_docId=? and idtm=?");
                             psuser.setLong(1, repdocid);
-                            psuser.setString(2, dir.getMap().getId());
+                            psuser.setString(2, dir.getWebSiteId());
                             ResultSet rsuser = psuser.executeQuery();
                             if (rsuser.next()) {
                                 String repemailcout = rsuser.getString("rep_emailCheckOut");
@@ -2105,7 +2117,7 @@ public class RepositoryFile {
                         }
                     }
                     ret.append("<TD width='80' align='center'>");
-                    if (user.getId() != null && user.isLoged()) {
+                    if (user.getId() != null && user.isSigned()) {
                         if (!subcriptions.contains(new Long(0))) //dir
                         {
                             if (!subcriptions.contains(new Long(repdocid))) {
@@ -2122,7 +2134,7 @@ public class RepositoryFile {
                     } else {
                         PreparedStatement psuser = con.prepareStatement("select rep_email from resrepository where rep_docId=? and idtm=?");
                         psuser.setLong(1, repdocid);
-                        psuser.setString(2, dir.getMap().getId());
+                        psuser.setString(2, dir.getWebSiteId());
                         ResultSet rsuser = psuser.executeQuery();
                         if (rsuser.next()) {
                             if (user.getId() != null) {
@@ -2132,7 +2144,7 @@ public class RepositoryFile {
                             }
                         }
                     }
-                    if (candelete && user.isLoged()) {
+                    if (candelete && user.isSigned()) {
                         if (repstatus == 0) {
                             if (resource.getAttribute("showdirectory", "true").equals("true")) {
                                 ret.append("<a href=\"javascript: doMoveDocDir(" + i_log + "," + repdocid + ");\"><IMG src='" + path + "folder.gif' alt='" + paramsRequest.getLocaleString("msgALTMove") + "' border='0'></a>");
@@ -2156,7 +2168,7 @@ public class RepositoryFile {
                             }
                         }
                         if (inline) {
-                            WBResourceURL urlline = paramsRequest.getRenderUrl();
+                            SWBResourceURL urlline = paramsRequest.getRenderUrl();
                             urlline.setCallMethod(urlline.Call_DIRECT);
 //                            urlline.setParameter("repfop","view");
 //                            urlline.setParameter("reptp", dir.getId());
@@ -2186,7 +2198,7 @@ public class RepositoryFile {
             ret.append("<TR>");
             ret.append("<TD  align='left' colspan='3'><FONT size='1' face='Verdana, Arial, Helvetica, sans-serif'><b>" + i_tot + "</b> " + "file(s)" + "</FONT></TD>");
             ret.append("<TD  align='right' colspan='7'>");
-            if (nivel >= 2 && user.isLoged()) {
+            if (nivel >= 2 && user.isSigned()) {
                 ret.append("<A href=\"javascript: doAddFile(" + i_log + ");\"><IMG src='" + path + "add.gif' alt='" + paramsRequest.getLocaleString("msgAdd") + "' width='20' height='18' border='0'></A><FONT size='1' face='Verdana, Arial, Helvetica, sans-serif'>" + paramsRequest.getLocaleString("msgAddFile") + "</FONT>");
             }
             ret.append("&nbsp;</TD>");
@@ -2313,7 +2325,7 @@ public class RepositoryFile {
      * @throws AFException An exception of type AF (Applicatioon Framework)
      * @return The history of the file changes
      */
-    public String history(HttpServletRequest request, HttpServletResponse response, WBUser user, Topic topic, HashMap hashMap, Topic dir, Resource resource, int nivel, WBParamRequest paramsRequest) throws AFException {
+    public String history(HttpServletRequest request, HttpServletResponse response, User user, WebPage topic, HashMap hashMap, WebPage dir, org.semanticwb.model.Resource resource, int nivel, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
         StringBuffer ret = new StringBuffer();
         Connection con = null;
         PreparedStatement ps = null;
@@ -2326,7 +2338,7 @@ public class RepositoryFile {
             return "";
         }
 
-        WBResourceURL url = paramsRequest.getRenderUrl();
+        SWBResourceURL url = paramsRequest.getRenderUrl();
 
         try {
             id = Long.parseLong(request.getParameter("repfiddoc"));
@@ -2335,7 +2347,7 @@ public class RepositoryFile {
             con = WBUtils.getDBConnection();
             ps = con.prepareStatement("select * from resrepositoryversions where rep_docId=? and idtm=?");
             ps.setLong(1, id);
-            ps.setString(2, dir.getMap().getId());
+            ps.setString(2, dir.getWebSiteId());
             ResultSet rs = ps.executeQuery();
 
             String tp = dir.getId();
@@ -2366,12 +2378,12 @@ public class RepositoryFile {
                     type = rs.getString("rep_fileName");
                     file = this.getFileName(type);
                 }
-                if (rs.getString("rep_email") == null) {
+                if (repemail == null) {
                     s_author = "&nbsp;";
                 } else {
                     try {
-                        RecUser usr = null;
-                        usr = DBUser.getInstance().getUserById(repemail);
+                        User usr = null;
+                        usr = dir.getWebSite().getUserRepository().getUser(repemail);
                         if (usr.getFirstName() != null) {
                             s_author = usr.getFirstName();
                         }
@@ -2380,10 +2392,10 @@ public class RepositoryFile {
                         }
                     } catch (Exception e) {
                         s_author = "&nbsp;";
-                        AFUtils.log(e, "Error on method history class RepositoryFile trying to create new user with email" + ": " + DBUser.getInstance().getUserById(repemail).getEmail(), true);
+                        AFUtils.log(e, "Error on method history class RepositoryFile trying to create new user with email" + ": " + dir.getWebSite().getUserRepository().getUser(repemail).getEmail(), true);
                     }
                 }
-                WBResourceURL urlrecdoc = paramsRequest.getRenderUrl();
+                SWBResourceURL urlrecdoc = paramsRequest.getRenderUrl();
                 urlrecdoc.setCallMethod(urlrecdoc.Call_DIRECT);
                 ret.append("\n<tr>");
                 ret.append("\n<TD width='20'><a href='" + urlrecdoc.toString() + "?repfop=view&reptp=" + dir.getId() + "&repfiddoc=" + rs.getString("rep_docId") + "&repfversion=" + rs.getString("rep_fileVersion") + "'><IMG src='" + path + "" + file + "' border=0></a></TD>");
@@ -2422,11 +2434,11 @@ public class RepositoryFile {
                         }
                     }
                     if (inline) {
-                        WBResourceURL urlrec = paramsRequest.getRenderUrl();
+                        SWBResourceURL urlrec = paramsRequest.getRenderUrl();
                         urlrec.setCallMethod(urlrec.Call_DIRECT);
                         ret.append("\n<a target='_new' href='" + urlrec.toString() + "?repfop=view&reptp=" + dir.getId() + "&repfiddoc=" + rs.getString("rep_docId") + "&repfversion=" + rs.getString("rep_fileVersion") + "&repinline=true'><IMG src='" + path + "preview.gif' alt='" + paramsRequest.getLocaleString("msgALTPreview") + "' border='0'></a>");
                     } else {
-                        WBResourceURL urlrec = paramsRequest.getRenderUrl();
+                        SWBResourceURL urlrec = paramsRequest.getRenderUrl();
                         urlrec.setCallMethod(urlrec.Call_DIRECT);
                         ret.append("\n<a href='" + urlrec.toString() + "?repfop=view&reptp=" + dir.getId() + "&repfiddoc=" + rs.getString("rep_docId") + "&repfversion=" + rs.getString("rep_fileVersion") + "'><IMG src='" + path + "preview.gif' alt='" + paramsRequest.getLocaleString("msgALTPreview") + "' border='0'></a>");
                     }
@@ -2478,7 +2490,7 @@ public class RepositoryFile {
      * @param paramsRequest a list of objects (topic, user, action, ...)
      * @throws AFException An exception of type AF (Applicatioon Framework)
      */
-    public synchronized String insert(HttpServletRequest request, HttpServletResponse response, WBUser user, Topic topic, HashMap hashMap, Topic dir, Resource resource, int nivel, WBParamRequest paramsRequest, FileUpload fup) throws AFException {
+    public synchronized String insert(HttpServletRequest request, HttpServletResponse response, User user, WebPage topic, HashMap hashMap, WebPage dir, org.semanticwb.model.Resource resource, int nivel, SWBParamRequest paramsRequest, FileUpload fup) throws SWBResourceException, IOException {
         //System.out.println("RepositoryFile.insert");
         StringBuffer ret = new StringBuffer();
         String title = null;
@@ -2513,7 +2525,7 @@ public class RepositoryFile {
                 return ret.toString();
             }
             PreparedStatement psmaxid = con.prepareStatement("select max(rep_docId) as id from resrepository where idtm=?");
-            psmaxid.setString(1, dir.getMap().getId());
+            psmaxid.setString(1, dir.getWebSiteId());
             ResultSet rsmax = psmaxid.executeQuery();
             long docid = 0;
             if (rsmax.next()) {
@@ -2529,20 +2541,20 @@ public class RepositoryFile {
             } else {
                 file_db = docid + "_" + "1";
             }
-            File repositorydir = new File(WBUtils.getInstance().getWorkPath() + "/" + resource.getResourceWorkPath() + "/");
+            File repositorydir = new File(SWBPortal.getWorkPath() + "/" + resource.getWorkPath() + "/");
             if (!repositorydir.exists()) {
                 repositorydir.mkdirs();
             }
 
-            WBUtils.getInstance().writeFileToWorkPath(resource.getResourceWorkPath() + "/" + file_db, new ByteArrayInputStream(bcont), user.getId());
+            SWBPortal.writeFileToWorkPath(resource.getWorkPath() + "/" + file_db, new ByteArrayInputStream(bcont), user);
 
             PreparedStatement ps = con.prepareStatement("insert into resrepository "
                     + "(rep_docId,resId,idtm,topic,rep_email,rep_title,rep_description,rep_lastVersion,rep_status, rep_deleted, rep_create) "
                     + "values(?,?,?,?,?,?,?,?,?,?,?)");
             ps.setLong(1, docid);
-            ps.setLong(2, resource.getId());
+            ps.setString(2, resource.getId());
             String topicid = dir.getId();
-            ps.setString(3, dir.getMap().getId());
+            ps.setString(3, dir.getWebSiteId());
             ps.setString(4, topicid);
             ps.setString(5, user.getId());
             ps.setString(6, title);
@@ -2573,7 +2585,7 @@ public class RepositoryFile {
                     + "resrepositoryversions(rep_docId,idtm,rep_fileVersion,rep_email,rep_fileName,rep_fileSize,rep_fileDate,rep_comment,rep_create,rep_fileType) "
                     + "values(?,?,?,?,?,?,?,?,?,?)");
             ps2.setLong(1, docid);
-            ps2.setString(2, dir.getMap().getId());
+            ps2.setString(2, dir.getWebSiteId());
             ps2.setInt(3, 1);
             ps2.setString(4, user.getId());
             ps2.setString(5, filename);
@@ -2650,11 +2662,11 @@ public class RepositoryFile {
      * @throws AFException An exception of type AF (Applicatioon Framework)
      * @return The create form
      */
-    public String create(HttpServletRequest request, HttpServletResponse response, WBUser user, Topic topic, HashMap hashMap, Topic dir, Resource resource, int nivel, WBParamRequest paramsRequest) throws AFException {
+    public String create(HttpServletRequest request, HttpServletResponse response, User user, WebPage topic, HashMap hashMap, WebPage dir, org.semanticwb.model.Resource resource, int nivel, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
         StringBuffer ret = new StringBuffer();
         String reptp = null;
 
-        WBResourceURL url = paramsRequest.getRenderUrl();
+        SWBResourceURL url = paramsRequest.getRenderUrl();
         reptp = request.getParameter("reptp");
         url.setParameter("reptp", reptp);
         if (nivel < 2) {
@@ -2751,7 +2763,7 @@ public class RepositoryFile {
      * @param p_description Description of the action
      * @param p_isfile A flag to indicate if is a file or not
      */
-    public void saveLog(String p_action, WBUser user, long p_fileid, Topic p_topic, String p_description, int p_isfile) {
+    public void saveLog(String p_action, User user, long p_fileid, WebPage p_topic, String p_description, int p_isfile) {
         Connection con = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
@@ -2764,7 +2776,7 @@ public class RepositoryFile {
             if (p_isfile == 1) {
                 ps = con.prepareStatement("select rep_title from resrepository where rep_docId=? and idtm=?");
                 ps.setLong(1, p_fileid);
-                ps.setString(2, p_topic.getMap().getId());
+                ps.setString(2, p_topic.getWebSiteId());
                 rs = ps.executeQuery();
                 if (rs.next()) {
                     str_title = rs.getString("rep_title");
@@ -2779,7 +2791,7 @@ public class RepositoryFile {
                 str_name = str_name + user.getLastName();
             }
             str_topicid = p_topic.getId();
-            str_topicmapid = p_topic.getMap().getId();
+            str_topicmapid = p_topic.getWebSiteId();
 
             ps = con.prepareStatement("insert into resrepositorylog "
                     + "(rep_email,rep_user,rep_docId,rep_action,rep_name,rep_topicid,rep_topicmapid,rep_objectid,rep_description,rep_dateaction,rep_isfile,rep_ipuser) "
@@ -2791,7 +2803,7 @@ public class RepositoryFile {
             ps.setString(5, str_name);
             ps.setString(6, str_topicid);
             ps.setString(7, str_topicmapid);
-            ps.setLong(8, resource.getId());
+            ps.setString(8, resource.getId());
             ps.setString(9, p_description);
             ps.setTimestamp(10, new Timestamp(System.currentTimeMillis()));
             ps.setInt(11, p_isfile);
@@ -2815,7 +2827,7 @@ public class RepositoryFile {
      * @param user WBUser object that represents the user who moves the file
      * @return True or false if the action was success
      */
-    public boolean moveDoc2Dir(long id, Topic fromDir, Topic toDir, WBUser user) {
+    public boolean moveDoc2Dir(long id, WebPage fromDir, WebPage toDir, User user) {
         boolean ret = false;
         Connection conn = null;
         PreparedStatement ps = null;
@@ -2826,7 +2838,7 @@ public class RepositoryFile {
                 ps.setString(1, toDir.getId());
                 ps.setLong(2, id);
                 ps.setString(3, fromDir.getId());
-                ps.setString(4, fromDir.getMap().getId());
+                ps.setString(4, fromDir.getWebSiteId());
                 ps.executeUpdate();
                 ret = true;
                 ps.close();

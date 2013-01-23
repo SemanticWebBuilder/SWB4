@@ -32,16 +32,21 @@ package com.infotec.wb.resources.repository;
 
 
 import javax.servlet.http.*;
-import com.infotec.wb.core.*;
 import com.infotec.wb.util.*;
 import com.infotec.appfw.exception.*;
-import com.infotec.wb.lib.*;
 import com.infotec.appfw.util.*;
 import org.w3c.dom.*;
 import javax.xml.parsers.*;
 import java.util.*;
 import javax.xml.transform.*;
-import com.infotec.topicmaps.*;
+import java.io.IOException;
+import org.semanticwb.model.User;
+import org.semanticwb.model.WebPage;
+import org.semanticwb.model.WebSite;
+import org.semanticwb.portal.api.SWBParamRequest;
+import org.semanticwb.portal.api.SWBResourceException;
+import org.semanticwb.portal.api.SWBResourceURL;
+import org.semanticwb.portal.api.SWBResourceURLImp;
 
 
 /** Muestra el �rbol de los diferentes sub carpetas de las que est� compuesto el
@@ -55,7 +60,7 @@ import com.infotec.topicmaps.*;
  */
 public class TreeRepHtml {
 
-    Resource base=null;
+    org.semanticwb.model.Resource base=null;
 
     String webpath=(String)WBUtils.getInstance().getWebPath();
 
@@ -79,7 +84,7 @@ public class TreeRepHtml {
      *
      * @param     base  La informaci�n del recurso en memoria.
      */
-    public void setResourceBase(Resource base) {
+    public void setResourceBase(org.semanticwb.model.Resource base) {
         this.base=base;
     }
 
@@ -97,18 +102,18 @@ public class TreeRepHtml {
      * @throws AFException An Application Framework exception
      * @return The user html view of the directory structure
      */
-    public String getHtml(HttpServletRequest request, HttpServletResponse response, WBUser user, Topic topicrec, HashMap arguments,Topic topic, WBParamRequest paramsRequest) throws AFException {
+    public String getHtml(HttpServletRequest request, HttpServletResponse response, User user, WebPage topicrec, HashMap arguments,WebPage topic, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
         Document dcmDom=base.getDom();
-        if(dcmDom==null)throw new AFException("Dom nulo","getHtml()");
+        if(dcmDom==null)throw new SWBResourceException("Dom nulo - getHtml()");
         StringBuffer sbfRet=new StringBuffer();
 
-        WBResourceURLImp url1 = (WBResourceURLImp)paramsRequest.getRenderUrl();
+        SWBResourceURLImp url1 = new SWBResourceURLImp(request, base, topic, SWBResourceURLImp.UrlType_RENDER);
         url1.setMode(url1.Mode_VIEW);
         url1.setAdminTopic(paramsRequest.getAdminTopic());
         try {
-            TopicMap tm   =topic.getMap();
+            WebSite tm   =topic.getWebSite();
             Document dom=null;
-            Topic tpid=null;
+            WebPage tpid=null;
             Vector vctPath=new Vector();
             int intLevel=4, intWidth=10;
             String idhome=null;
@@ -116,15 +121,15 @@ public class TreeRepHtml {
             int widthsize=15;
             String backg=" bgcolor=\"FFFFFF\"";
             String color="666666";
-            String path=WBUtils.getInstance().getWorkPath()+base.getResourceWorkPath();
+            //String path=WBUtils.getInstance().getWorkPath()+base.getResourceWorkPath();
             String path1=""+webpath+"wbadmin/resources/Repository/images/";
 
             if(request.getParameter("reptp")!=null && !request.getParameter("reptp").trim().equals("")) {
-                tpid=tm.getTopic(request.getParameter("reptp"));
+                tpid=tm.getWebPage(request.getParameter("reptp"));
                 vctPath=getMapPath(tpid);
             }else
             {
-                tpid=paramsRequest.getTopic();
+                tpid=paramsRequest.getWebPage();
                 vctPath=getMapPath(tpid);
             }
 
@@ -132,12 +137,16 @@ public class TreeRepHtml {
                 idhome = dir;
             }
 
-            Topic tpsite=null;
+            WebPage tpsite=null;
             if(idhome!=null) {
-                tpsite=tm.getTopic(idhome);
-                if(tpsite==null) tpsite=tm.getHome();
+                tpsite=tm.getWebPage(idhome);
+                if(tpsite==null) {
+                    tpsite=tm.getHomePage();
+                }
             }
-            else tpsite=tm.getHome();
+            else {
+                tpsite=tm.getHomePage();
+            }
 
 
             sbfRet.append("<TABLE border=\"0\" cellPadding=\"0\" cellSpacing=\"0\" width=\"100%\">");
@@ -165,10 +174,10 @@ public class TreeRepHtml {
             sbfRet.append("</TD>");
             sbfRet.append("</TR>");
 
-            Iterator it=tpsite.getSortChild(false);
+            Iterator<WebPage> it=tpsite.listChilds();
             while(it.hasNext()){
                 intLevel=1;
-                Topic tp=(Topic)it.next();
+                WebPage tp= it.next();
                 if(user.haveAccess(tp) && tp.getId()!=null) {
                     backg=" bgcolor=\"FFFFFF\"";
                     color="666666";
@@ -184,17 +193,17 @@ public class TreeRepHtml {
                     sbfRet.append("	<IMG height=\"5\" width=\"5\" border=\"0\" src=\""+path1+"pixel.gif\"></IMG>");
                     sbfRet.append("</TD>");
                     sbfRet.append("<TD width=\"50\">");
-                    if(tp.getSortChild(false).hasNext() || vctPath.contains(tp.getId())){
+                    if(tp.listChilds().hasNext() || vctPath.contains(tp.getId())){
                         if(tpid!=null && (tpid.getId().equals(tp.getId()) || vctPath.contains(tp.getId()))){
                             url1.setTopic(tp);
-                            sbfRet.append("<A href=\""+url1+"\">");
+                            sbfRet.append("<A href=\""+url1+"?reptp="+tp.getId()+"\">");
                             sbfRet.append("<IMG height=\"10\" width=\"10\" border=\"0\" src=\""+path1+"pixel.gif\"></IMG>");
                             sbfRet.append("<IMG border=\"0\" height=\"20\" width=\"15\" src=\""+path1+"minus.gif\"/>");
                             sbfRet.append("<IMG border=\"0\" height=\"20\" width=\"20\" src=\""+path1+"openfolder.gif\"></IMG>");
                             sbfRet.append("</A>");
                         }else{
                             url1.setTopic(tp);
-                            sbfRet.append("<A href=\""+url1+"\">");
+                            sbfRet.append("<A href=\""+url1+"?reptp="+tp.getId()+"\">");
                             sbfRet.append("<IMG height=\"10\" width=\"10\" border=\"0\" src=\""+path1+"pixel.gif\"></IMG>");
                             sbfRet.append("<IMG border=\"0\" height=\"20\" width=\"15\" src=\""+path1+"plus.gif\"></IMG>");
                             sbfRet.append("<IMG border=\"0\" height=\"20\" width=\"20\" src=\""+path1+"folder.gif\"></IMG>");
@@ -204,7 +213,7 @@ public class TreeRepHtml {
                     }
                     else{
                         url1.setTopic(tp);
-                        sbfRet.append("<A href=\""+url1+"\">");
+                        sbfRet.append("<A href=\""+url1+"?reptp="+tp.getId()+"\">");
                         sbfRet.append("<IMG height=\"10\" width=\"10\" border=\"0\" src=\""+path1+"pixel.gif\"></IMG>");
                         sbfRet.append("<IMG height=\"10\" width=\"15\" border=\"0\" src=\""+path1+"pixel.gif\"></IMG>");
                         sbfRet.append("<IMG border=\"0\" height=\"20\" width=\"20\" src=\""+path1+"folder.gif\"></IMG>");
@@ -214,7 +223,7 @@ public class TreeRepHtml {
 
                     sbfRet.append("<TD"+backg+">");
                     url1.setTopic(tp);
-                    sbfRet.append("<A href=\""+url1+"\">");
+                    sbfRet.append("<A href=\""+url1+"?reptp="+tp.getId()+"\">");
                     sbfRet.append("<FONT face=\"Verdana, Arial, Helvetica, sans-serif\" size=\"1\" style=\"text-decoration: none\" color=\""+color+"\">&nbsp;"+tp.getDisplayName()+"</FONT></A>");
                     sbfRet.append("</TD>");
                     sbfRet.append("</TR>");
@@ -222,7 +231,7 @@ public class TreeRepHtml {
                     sbfRet.append("</TD>");
                     sbfRet.append("</TR>");
                     if((intLevel < intMaxLevel || (tpid!=null && tp.getId().equals(tpid.getId())) ||
-                    vctPath.contains(tp.getId())) && tp.getSortChild(false).hasNext()){
+                    vctPath.contains(tp.getId())) && tp.listChilds().hasNext()){
                         sbfRet.append(getChilds(tpid, tp, user, vctPath, intLevel+1, intWidth,"",widthsize, paramsRequest));
                     }
                 }
@@ -250,7 +259,7 @@ public class TreeRepHtml {
      * @param paramsRequest A list of objects (topic, user, action, ...)
      * @return The directory structure
      */
-    public String getChilds(Topic tpid, Topic tpc, WBUser user, Vector vctPath, int intLevel, int intWidth,String topicrec,int widthsize, WBParamRequest paramsRequest) {
+    public String getChilds(WebPage tpid, WebPage tpc, User user, Vector vctPath, int intLevel, int intWidth,String topicrec,int widthsize, SWBParamRequest paramsRequest) {
 
         Document dcmDom=base.getDom();
         String strResmaptopic=null;
@@ -258,14 +267,14 @@ public class TreeRepHtml {
         StringBuffer sbfRet=new StringBuffer();
         try{
             String path1=""+webpath+"wbadmin/resources/Repository/images/";
-            String path=WBUtils.getInstance().getWorkPath()+base.getResourceWorkPath();
+            //String path=WBUtils.getInstance().getWorkPath()+base.getResourceWorkPath();
 
-            WBResourceURLImp url1 = (WBResourceURLImp)paramsRequest.getRenderUrl();
+            SWBResourceURLImp url1 = new SWBResourceURLImp(null,base,tpid,SWBResourceURLImp.UrlType_RENDER);
             url1.setMode(url1.Mode_VIEW);
             url1.setAdminTopic(paramsRequest.getAdminTopic());
-            Iterator it=tpc.getSortChild(false);
+            Iterator<WebPage> it=tpc.listChilds();
             while(it.hasNext()) {
-                Topic tpsub=(Topic)it.next();
+                WebPage tpsub=it.next();
                 if(tpsub.getId()!=null && user.haveAccess(tpsub)) {
                     if(vTopic.contains(tpsub)) break;
                     vTopic.addElement(tpsub);
@@ -292,14 +301,14 @@ public class TreeRepHtml {
                     if(isMapParent(tpid, tpsub, vctPath) || vctPath.contains(tpsub.getId())){
                         if((tpid!=null && tpsub.getId().equals(tpid.getId()) || vctPath.contains(tpsub.getId()))){
                             url1.setTopic(tpsub);
-                            sbfRet.append("<A href=\""+url1+"\">");
+                            sbfRet.append("<A href=\""+url1+"?reptp="+tpsub.getId()+"\">");
                             sbfRet.append("<IMG height=\"10\" width=\""+widthsize+"\" border=\"0\" src=\""+path1+"pixel.gif\"></IMG>");
                             sbfRet.append("<IMG border=\"0\" height=\"20\" width=\"15\" src=\""+path1+"minus.gif\"/>");
                             sbfRet.append("<IMG border=\"0\" height=\"20\" width=\"20\" src=\""+path1+"openfolder.gif\"></IMG>");
                             sbfRet.append("</A>");
                         }else{
                             url1.setTopic(tpsub);
-                            sbfRet.append("<A href=\""+url1+"\">");
+                            sbfRet.append("<A href=\""+url1+"?reptp="+tpsub.getId()+"\">");
                             sbfRet.append("<IMG height=\"10\" width=\""+widthsize+"\" border=\"0\" src=\""+path1+"pixel.gif\"></IMG>");
                             sbfRet.append("<IMG border=\"0\" height=\"20\" width=\"15\" src=\""+path1+"plus.gif\"/>");
                             sbfRet.append("<IMG border=\"0\" height=\"20\" width=\"20\" src=\""+path1+"folder.gif\"></IMG>");
@@ -308,7 +317,7 @@ public class TreeRepHtml {
                     }
                     else{
                         url1.setTopic(tpsub);
-                        sbfRet.append("<A href=\""+url1+"\">");
+                        sbfRet.append("<A href=\""+url1+"?reptp="+tpsub.getId()+"\">");
                         sbfRet.append("<IMG height=\"10\" width=\""+15+"\" border=\"0\" src=\""+path1+"pixel.gif\"></IMG>");
                         sbfRet.append("<IMG height=\"10\" width=\""+widthsize+"\" border=\"0\" src=\""+path1+"pixel.gif\"></IMG>");
                         sbfRet.append("<IMG border=\"0\" height=\"20\" width=\"20\" src=\""+path1+"folder.gif\"></IMG>");
@@ -318,7 +327,7 @@ public class TreeRepHtml {
                     sbfRet.append("</TD>");
                     sbfRet.append("<TD"+backg+">");
                     url1.setTopic(tpsub);
-                    sbfRet.append("<A href=\""+url1+"\">");
+                    sbfRet.append("<A href=\""+url1+"?reptp="+tpsub.getId()+"\">");
                     sbfRet.append("<FONT face=\"Verdana, Arial, Helvetica, sans-serif\" size=\"1\" style=\"text-decoration: none\" color=\""+color+"\">&nbsp;"+tpsub.getDisplayName()+"</FONT></A>");
                     sbfRet.append("</TD>");
                     sbfRet.append("</TR>");
@@ -326,7 +335,7 @@ public class TreeRepHtml {
                     sbfRet.append("</TD>");
                     sbfRet.append("</TR>");
                     if((intLevel < intMaxLevel ||  (tpid!=null && tpsub.getId().equals(tpid.getId())) ||
-                    vctPath.contains(tpsub.getId())) && tpsub.getSortChild(false).hasNext()){
+                    vctPath.contains(tpsub.getId())) && tpsub.listChilds().hasNext()){
                         sbfRet.append(getChilds(tpid, tpsub, user, vctPath, intLevel+1, intWidth,"",widthsize+10,paramsRequest));
                     }
                     vTopic.removeElement(tpsub);
@@ -345,15 +354,15 @@ public class TreeRepHtml {
      * @return    Regresa un objeto Vector que contiene los t�picos padre del t�pico requerido.
      * @see       infotec.topicmaps.Topic
      */
-    public Vector getMapPath(Topic tpid) {
+    public Vector getMapPath(WebPage tpid) {
         Vector vctPath=new Vector();
-        if(tpid.getMap().getHome()!=tpid) {
-            Iterator aux=tpid.getTypes();
+        if(!tpid.getWebSite().getHomePage().equals(tpid)) {
+            Iterator<WebPage> aux=tpid.listVirtualParents();
             while(aux.hasNext()) {
-                Topic tp=(Topic)aux.next();
+                WebPage tp=aux.next();
                 vctPath.addElement(tp.getId());
-                aux=tp.getTypes();
-                if(tpid.getMap().getHome()==tp)break;
+                aux=tp.listVirtualParents();
+                if(tpid.getWebSite().getHomePage().equals(tp))break;
             }
         }
         return vctPath;
@@ -369,12 +378,12 @@ public class TreeRepHtml {
      * @return    Regresa si el t�pico solicitado contiene o no t�picos hijo con referencias c�clicas.
      * @see       infotec.topicmaps.Topic
      */
-    public boolean isMapParent(Topic tpid, Topic tpsub, Vector vctPath) {
+    public boolean isMapParent(WebPage tpid, WebPage tpsub, Vector vctPath) {
         boolean bParent=false;
-        Iterator hit=tpsub.getSortChild(false);
+        Iterator<WebPage> hit=tpsub.listChilds();
         if(hit.hasNext()) {
             do {
-                Topic htp=(Topic)hit.next();
+                WebPage htp=hit.next();
                 if(tpid!=null) {
                     if(htp.getId()!=null && !tpid.getId().equals(htp.getId()) && !vctPath.contains(htp.getId())) {
                         bParent=true;
@@ -406,22 +415,24 @@ public class TreeRepHtml {
      * @throws AFException An application Framework exception
      * @return The directory structure
      */
-    public String getDirs(HttpServletRequest request, HttpServletResponse response, WBUser user, Topic topicrec, HashMap arguments,Topic topic, WBParamRequest paramsRequest) throws AFException {
+    public String getDirs(HttpServletRequest request, HttpServletResponse response, User user, WebPage topicrec, HashMap arguments,WebPage topic, SWBParamRequest paramsRequest) throws  SWBResourceException, IOException {
         //System.out.println("get Dirs");
         Document dcmDom=base.getDom();
-        if(dcmDom==null)throw new AFException("Dom nulo","getDirs()");
+        if(dcmDom==null) {
+            throw new SWBResourceException("Dom nulo - getDirs()");
+        }
         StringBuffer sbfRet=new StringBuffer();
         response.setContentType("text/html");
-        WBResourceURL url1 = paramsRequest.getRenderUrl();
+        SWBResourceURL url1 = paramsRequest.getRenderUrl();
         url1.setMode(url1.Mode_VIEW);
         url1.setParameter("repobj","MoveDoc");
         if(request.getParameter("reptp_original")!=null) url1.setParameter("reptp_original",request.getParameter("reptp_original"));
         if(request.getParameter("repiddoc")!=null) url1.setParameter("repiddoc",request.getParameter("repiddoc"));
         String strUrl = url1.toString();
         try {
-            TopicMap tm   =topic.getMap();
-            Document dom=null;
-            Topic tpid=null;
+            WebSite tm   =topic.getWebSite();
+            //Document dom=null;
+            WebPage tpid=null;
             Vector vctPath=new Vector();
             int intLevel=4, intWidth=10;
             String idhome=null;
@@ -429,11 +440,11 @@ public class TreeRepHtml {
             int widthsize=15;
             String backg=" bgcolor=\"FFFFFF\"";
             String color="666666";
-            String path=WBUtils.getInstance().getWorkPath()+base.getResourceWorkPath();
+            //String path=WBUtils.getInstance().getWorkPath()+base.getResourceWorkPath();
             String path1=""+webpath+"wbadmin/resources/Repository/images/";
 
             if(request.getParameter("reptp")!=null && !request.getParameter("reptp").trim().equals("")) {
-                tpid=tm.getTopic(request.getParameter("reptp"));
+                tpid=tm.getWebPage(request.getParameter("reptp"));
                 vctPath=getMapPath(tpid);
             }
 
@@ -441,12 +452,12 @@ public class TreeRepHtml {
                 idhome = dir;
             }
 
-            Topic tpsite=null;
+            WebPage tpsite=null;
             if(idhome!=null) {
-                tpsite=tm.getTopic(idhome);
-                if(tpsite==null) tpsite=tm.getHome();
+                tpsite=tm.getWebPage(idhome);
+                if(tpsite==null) tpsite=tm.getHomePage();
             }
-            else tpsite=tm.getHome();
+            else tpsite=tm.getHomePage();
 
 
             sbfRet.append("<TABLE border=\"0\" cellPadding=\"0\" cellSpacing=\"0\" width=\"100%\">");
@@ -471,10 +482,10 @@ public class TreeRepHtml {
             sbfRet.append("</A>");
             sbfRet.append("</TD>");
             sbfRet.append("</TR>");
-            Iterator it=tpsite.getSortChild(false);
+            Iterator<WebPage> it=tpsite.listChilds();
             while(it.hasNext()){
                 intLevel=1;
-                Topic tp=(Topic)it.next();
+                WebPage tp=it.next();
 
                 if(tp.getId()!=null) {
                     backg=" bgcolor=\"FFFFFF\"";
@@ -491,9 +502,9 @@ public class TreeRepHtml {
                     sbfRet.append("	<IMG height=\"5\" width=\"5\" border=\"0\" src=\""+path1+"pixel.gif\"></IMG>");
                     sbfRet.append("</TD>");
                     sbfRet.append("<TD width=\"50\">");
-                    if(tp.getSortChild(false).hasNext() || vctPath.contains(tp.getId())){
+                    if(tp.listChilds().hasNext() || vctPath.contains(tp.getId())){
                         if(tpid!=null && (tpid.getId().equals(tp.getId()) || vctPath.contains(tp.getId()))){
-                            sbfRet.append("<A href=\""+strUrl + "&reptp=" + tp.getType().getId()+"\">");
+                            sbfRet.append("<A href=\""+strUrl + "&reptp=" + tp.getParent().getId()+"\">");
                             sbfRet.append("<IMG height=\"10\" width=\"10\" border=\"0\" src=\""+path1+"pixel.gif\"></IMG>");
                             sbfRet.append("<IMG border=\"0\" height=\"20\" width=\"15\" src=\""+path1+"minus.gif\"/>");
                             sbfRet.append("<IMG border=\"0\" height=\"20\" width=\"20\" src=\""+path1+"openfolder.gif\"></IMG>");
@@ -523,7 +534,7 @@ public class TreeRepHtml {
                     sbfRet.append("</TD>");
                     sbfRet.append("</TR>");
                     if((intLevel < intMaxLevel || (tpid!=null && tp.getId().equals(tpid.getId())) ||
-                    vctPath.contains(tp.getId())) && tp.getSortChild(false).hasNext()){
+                    vctPath.contains(tp.getId())) && tp.listChilds().hasNext()){
                         sbfRet.append(getChilds2(tpid, tp, user, vctPath, intLevel+1, intWidth,"",widthsize, paramsRequest,0,request));
                     }
                 }
@@ -536,9 +547,9 @@ public class TreeRepHtml {
             sbfRet.append("\n    window.close();");
             sbfRet.append("\n   }");
             sbfRet.append("\n</script>");
-            WBResourceURL urlAction = paramsRequest.getRenderUrl();
+            SWBResourceURL urlAction = paramsRequest.getRenderUrl();
             urlAction.setCallMethod(urlAction.Call_CONTENT);
-            if(user.isLoged()) sbfRet.append("<form name=\"frmSnd\" action=\""+urlAction.toString()+"\" method=post>");
+            if(user.isSigned()) sbfRet.append("<form name=\"frmSnd\" action=\""+urlAction.toString()+"\" method=post>");
             sbfRet.append("<input type=hidden name=\"repfiddoc\" value=\"movedoctodir\">");
             sbfRet.append("<input type=hidden name=\"reptp_original\" value=\""+request.getParameter("reptp_original")+"\">");
             sbfRet.append("<input type=hidden name=\"reptp\" value=\""+request.getParameter("reptp")+"\">");
@@ -546,10 +557,10 @@ public class TreeRepHtml {
             sbfRet.append("<input type=hidden name=\"repiddoc\" value=\""+request.getParameter("repiddoc")+"\">");
             sbfRet.append("<TABLE width=100% cellpadding=0 cellspacing=0>");
             sbfRet.append("<TR><TD align=center><HR noshade size=1>");
-            if(user.isLoged()) sbfRet.append("<input type=button name=\"mover\" value=\""+paramsRequest.getLocaleString("msgBTNMove")+"\" onclick=\"if(confirm('"+paramsRequest.getLocaleString("msgConfirmShureMove")+"?')) {enviar(frmSnd);} else { return(false);}\">&nbsp;<input type=\"button\" name=\"btn_cancel\" value=\""+paramsRequest.getLocaleString("msgBTNCancel")+"\" onclick=\"javascript:window.close();\">");
+            if(user.isSigned()) sbfRet.append("<input type=button name=\"mover\" value=\""+paramsRequest.getLocaleString("msgBTNMove")+"\" onclick=\"if(confirm('"+paramsRequest.getLocaleString("msgConfirmShureMove")+"?')) {enviar(frmSnd);} else { return(false);}\">&nbsp;<input type=\"button\" name=\"btn_cancel\" value=\""+paramsRequest.getLocaleString("msgBTNCancel")+"\" onclick=\"javascript:window.close();\">");
             sbfRet.append("</TD></TR>");
             sbfRet.append("</TABLE>");
-            if(user.isLoged()) sbfRet.append("</form>");
+            if(user.isSigned()) sbfRet.append("</form>");
         }
         catch(Exception e) {
             AFUtils.log(e,"Error in resource "+"TreeRepHtml:getHtml",true);
@@ -572,24 +583,24 @@ public class TreeRepHtml {
      * @param request Rhe input parameters
      * @return The directory structure
      */
-    public String getChilds2(Topic tpid, Topic tpc, WBUser user, Vector vctPath, int intLevel, int intWidth,String topicrec,int widthsize, WBParamRequest paramsRequest, int direct, HttpServletRequest request) {
+    public String getChilds2(WebPage tpid, WebPage tpc, User user, Vector vctPath, int intLevel, int intWidth,String topicrec,int widthsize, SWBParamRequest paramsRequest, int direct, HttpServletRequest request) {
 
         Document dcmDom=base.getDom();
         StringBuffer sbfRet=new StringBuffer();
         try{
             String path1=""+webpath+"wbadmin/resources/Repository/images/";
-            String path=WBUtils.getInstance().getWorkPath()+base.getResourceWorkPath();
-            String strUrl =tpc.getMap().getHome().getUrl();
-            WBResourceURL url1 = paramsRequest.getRenderUrl();
+            //String path=WBUtils.getInstance().getWorkPath()+base.getResourceWorkPath();
+            String strUrl =tpc.getWebSite().getHomePage().getUrl();
+            SWBResourceURL url1 = paramsRequest.getRenderUrl();
             url1.setMode(url1.Mode_VIEW);
             url1.setParameter("repobj","MoveDoc");
             if(request.getParameter("reptp_original")!=null) url1.setParameter("reptp_original",request.getParameter("reptp_original"));
             if(request.getParameter("repiddoc")!=null) url1.setParameter("repiddoc",request.getParameter("repiddoc"));
             strUrl = url1.toString();
-            Iterator it=tpc.getSortChild(false);
+            Iterator<WebPage> it=tpc.listChilds();
 
             while(it.hasNext()) {
-                Topic tpsub=(Topic)it.next();
+                WebPage tpsub=it.next();
 
                 if(tpsub.getId()!=null && user.haveAccess(tpsub)) {
                     if(vTopic.contains(tpsub)) break;
@@ -614,7 +625,7 @@ public class TreeRepHtml {
                     sbfRet.append("<TD width=\"30\">");
                     if(isMapParent(tpid, tpsub, vctPath) || vctPath.contains(tpsub.getId())){
                         if((tpid!=null && tpsub.getId().equals(tpid.getId()) || vctPath.contains(tpsub.getId()))){
-                            sbfRet.append("<A href=\""+strUrl + "&reptp=" + tpsub.getType().getId()+"\">");
+                            sbfRet.append("<A href=\""+strUrl + "&reptp=" + tpsub.getParent().getId()+"\">");
                             sbfRet.append("<IMG height=\"10\" width=\""+widthsize+"\" border=\"0\" src=\""+path1+"pixel.gif\"></IMG>");
                             sbfRet.append("<IMG border=\"0\" height=\"20\" width=\"15\" src=\""+path1+"minus.gif\"/>");
                             sbfRet.append("<IMG border=\"0\" height=\"20\" width=\"20\" src=\""+path1+"openfolder.gif\"></IMG>");
@@ -645,7 +656,7 @@ public class TreeRepHtml {
                     sbfRet.append("</TD>");
                     sbfRet.append("</TR>");
                     if((intLevel < intMaxLevel ||  (tpid!=null && tpsub.getId().equals(tpid.getId())) ||
-                    vctPath.contains(tpsub.getId())) && tpsub.getSortChild(false).hasNext()){
+                    vctPath.contains(tpsub.getId())) && tpsub.listChilds().hasNext()){
                         sbfRet.append(getChilds2(tpid, tpsub, user, vctPath, intLevel+1, intWidth,"",widthsize+10,paramsRequest,1,request));
                     }
                     vTopic.removeElement(tpsub);
