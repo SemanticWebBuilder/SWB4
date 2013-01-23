@@ -37,6 +37,8 @@ import org.semanticwb.SWBUtils;
 /**
  *
  * @author martha.jimenez
+ * Esta clase contiene los metodos para conectarse al sitio de Flickr y obtener
+ * el permiso de alguna cuenta de Flickr.
  */
 public class SWBFlickrOauth {
 
