@@ -15,16 +15,18 @@ String action = paramRequest.getAction();
 String facebookAppId = null;
 String facebookSecret = null;
 
-
-WebSite wsite = paramRequest.getWebPage().getWebSite();
-Iterator<Facebook> listFacebook = Facebook.ClassMgr.listFacebooks(wsite);
+//WebSite wsite = paramRequest.getWebPage().getWebSite();
+Iterator<Facebook> listFacebook = Facebook.ClassMgr.listFacebooks(); //wsite
 while (listFacebook.hasNext()) {
     Facebook face = listFacebook.next();
     facebookAppId = face.getAppKey();
     facebookSecret = face.getSecretKey();
-    break;
+    if (facebookAppId != null && !"null".equalsIgnoreCase(facebookAppId) &&
+            facebookSecret != null && !"null".equalsIgnoreCase(facebookSecret)) {
+        session.setAttribute("facebookId", face.getId());
+        break;
+    }
 }
-
 
 if(action == null || !action.equals("saveToken")) {
     if (facebookCode == null) {
@@ -34,12 +36,12 @@ if(action == null || !action.equals("saveToken")) {
         session.setAttribute("state", state);  //CSRF protection
         String dialog_url = "\"https://www.facebook.com/dialog/oauth?client_id="
                 + facebookAppId + "&redirect_uri=\" + encodeURI(\""
-                + thisPage + "\") + \"&scope=publish_stream,read_stream&state="
-                + state + "\"";
+                + thisPage + "\") + \"&state="
+                + state + "&scope=publish_stream,read_stream\"";
 
         out.println("<script> var urlFace = " + dialog_url + "; top.location.href=urlFace;</script>");
 
-    } else if (requestState != null && requestState.equals(session.getAttribute("state")) &&
+    } else if (/*requestState != null && requestState.equals(session.getAttribute("state")) && */
             (error_reason == null || (error_reason != null && error_reason.equals("user_denied")))) {
 
         String accessToken = null;
@@ -101,12 +103,12 @@ if(action == null || !action.equals("saveToken")) {
             JSONObject userData = new JSONObject(me);
             String userId = userData != null && userData.get("id") != null ? (String) userData.get("id") : "";
 
-            out.println("Para publicar info en Facebook haz clic <a href=\""
+            out.println("Para habilitar la publicaci&oacute;n en Facebook haz clic <a href=\""
                     + paramRequest.getActionUrl().setAction("saveToken").setParameter("token", accessToken).setParameter("userId", userId)
                     + "\">aqu&iacute;</a>");
         }
     } else {
-        out.println("Se ha encontrado un problema con la respuesta obtenida, se considera no aut&eacute;ntica.");
+        out.println("Se ha encontrado un problema con la respuesta obtenida, se considera no aut&eacute;ntica. " + session.getAttribute("state"));
     }
 } else {
     out.println("Ya puedes hacer publicaciones en Facebook!");
