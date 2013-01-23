@@ -380,7 +380,9 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
         String facebookResponse = "";
         
         try {
-            facebookResponse = postRequest(params, url, request.getHeader(""), "POST");
+            facebookResponse = postRequest(params, url, 
+                    "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95",
+                    "POST");
             jsonResponse = new JSONObject(facebookResponse);
             if (jsonResponse != null && jsonResponse.get("id") != null) {
                 //message.setSocialNetPostId(jsonResponse.getString("id"));
