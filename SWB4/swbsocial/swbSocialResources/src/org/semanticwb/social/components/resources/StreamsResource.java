@@ -7,7 +7,6 @@ package org.semanticwb.social.components.resources;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Enumeration;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.Logger;
@@ -26,12 +25,26 @@ import org.semanticwb.social.Stream;
 import org.semanticwb.social.utils.SWBSocialResourceUtils;
 
 /**
- *
+ * Esta clase se encarga de crear nuevos Streams. Utiliza los modos y acciones de un
+ * recurso de SWB.
  * @author martha.jimenez
  */
 public class StreamsResource extends GenericSocialResource{
 
     Logger log = SWBUtils.getLogger(StreamsResource.class);
+
+    /**
+     *
+     * Este m&eacute;todo muestra en primera instancia la vista con los datos necesarios para
+     * poder crear un Stream. Utiliza un FormManager para renderear la vista. En el caso
+     * de que ya se haya guardado el Stream muestra la vista de edición del Stream creado
+     * @param request
+     * @param response
+     * @param paramRequest
+     * @throws SWBResourceException
+     * @throws IOException
+     *
+     */
 
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
@@ -67,45 +80,91 @@ public class StreamsResource extends GenericSocialResource{
        }
     }
 
+    /**
+     *
+     * Este m&eacute;todo se encarga de mostrar la vista del Stream que se cre&oacute; y permite
+     * modificar sus propiedades.
+     * @param request
+     * @param response
+     * @param paramRequest
+     * @throws SWBResourceException
+     * @throws IOException
+     *
+     */
+
     @Override
     public void doEdit(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         PrintWriter out = response.getWriter();
         WebSite wsite=(WebSite)request.getAttribute("wsite");
         User user = paramRequest.getUser();
-        String uri = request.getParameter("objUri");
+        String uri = request.getParameter("sobjUri");
         SWBSocialResourceUtils.Actions.updateTreeNode(request, paramRequest);
         if(uri != null) {
             SemanticObject semObj = SemanticObject.createSemanticObject(uri);
-
-           SWBFormMgr mgr = new SWBFormMgr(semObj, null, SWBFormMgr.MODE_EDIT);
-           SWBResourceURL url = paramRequest.getRenderUrl().setParameter("cr", "create");
-           mgr.setFilterRequired(false);
-           mgr.clearProperties();
-           mgr.addProperty(Stream.swb_title);
-           mgr.addProperty(Stream.swb_description);
-           mgr.addProperty(Stream.swb_active);
-           mgr.addProperty(Stream.social_stream_phrase);
-           mgr.addProperty(Stream.social_hasStream_socialNetwork);
-           mgr.addProperty(Stream.social_stream_PoolTime);
-           String lang = "es";
-           if(user != null) {
-               lang = user.getLanguage();
-           }
-           mgr.setLang(lang);
-           mgr.setSubmitByAjax(false);
-           url.setParameter("wsite",wsite.getId());
-           mgr.setAction(url.toString());
-           SWBFormButton buttonAdd = SWBFormButton.newSaveButton();
-           mgr.addButton(buttonAdd);
-           out.println(mgr.renderForm(request));
+            if(semObj != null) {
+               SWBFormMgr mgr = new SWBFormMgr(semObj, null, SWBFormMgr.MODE_EDIT);
+               SWBResourceURL url = paramRequest.getActionUrl().setParameter("action_", "edicion");
+               mgr.setFilterRequired(false);
+               mgr.clearProperties();
+               mgr.addProperty(Stream.swb_title);
+               mgr.addProperty(Stream.swb_description);
+               mgr.addProperty(Stream.swb_active);
+               mgr.addProperty(Stream.social_stream_phrase);
+               mgr.addProperty(Stream.social_hasStream_socialNetwork);
+               mgr.addProperty(Stream.social_stream_PoolTime);
+               String lang = "es";
+               if(user != null) {
+                   lang = user.getLanguage();
+               }
+               mgr.setLang(lang);
+               mgr.setSubmitByAjax(false);
+               url.setParameter("wsite",wsite.getId());
+               mgr.setAction(url.toString());
+               SWBFormButton buttonAdd = SWBFormButton.newSaveButton();
+               mgr.addButton(buttonAdd);
+               out.println(mgr.renderForm(request));
+            }
         }
     }
+
+    /**
+     *
+     * Este m&eacute;todo se encarga de procesar las acciones de agregar un nuevo Stream
+     * o editar un Stream.
+     * @param request
+     * @param response
+     * @throws SWBResourceException
+     * @throws IOException
+     *
+     */
 
     @Override
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
         String objUri=(String)request.getParameter("sref");
         String wsite=(String)request.getParameter("wsite");
-        if(wsite != null) {
+        String action = (String) request.getParameter("action_");
+        SemanticObject semObj = null;
+        if("edicion".equals(action)) {
+            String objUri1=(String)request.getParameter("suri");
+            if(wsite != null) {
+                SemanticObject semObj2 = SemanticObject.createSemanticObject(objUri1);
+                if(semObj2 != null) {
+                    SWBFormMgr mgr = new SWBFormMgr(semObj2, null, SWBFormMgr.MODE_EDIT);
+                    mgr.clearProperties();
+                    mgr.addProperty(Stream.swb_active);
+                    mgr.addProperty(Stream.swb_title);
+                    mgr.addProperty(Stream.swb_description);
+                    mgr.addProperty(Stream.social_stream_phrase);
+                    mgr.addProperty(Stream.social_stream_PoolTime);
+                    mgr.addProperty(Stream.social_hasStream_socialNetwork);
+                    try {
+                       semObj = mgr.processForm(request);
+                    } catch(FormValidateException ex) {
+                        log.error("Error in: " + ex);
+                    }
+                }
+            }
+        } else if(wsite != null) {
             WebSite ws = WebSite.ClassMgr.getWebSite(wsite);
             SWBFormMgr mgr = new SWBFormMgr(Stream.sclass, ws.getSemanticObject(), null);
             mgr.clearProperties();
@@ -116,9 +175,7 @@ public class StreamsResource extends GenericSocialResource{
             mgr.addProperty(Stream.social_stream_PoolTime);
             mgr.addProperty(Stream.social_hasStream_socialNetwork);
             try {
-                mgr.processForm(request);
-                //SWBSocialResourceUtils.Components.updateTreeNodeAction(request, response);
-
+                semObj = mgr.processForm(request);
             } catch(FormValidateException ex) {
                 log.error("Error in: " + ex);
             }
@@ -127,8 +184,8 @@ public class StreamsResource extends GenericSocialResource{
         response.setRenderParameter("action", "edit");
         response.setRenderParameter("objUri", objUri);
         response.setRenderParameter("wsite", wsite);
+        String semObjStr = semObj != null ? semObj.getURI() : null;
+        response.setRenderParameter("sobjUri", semObjStr);
         response.setMode(SWBResourceURL.Mode_EDIT);
     }
-
-
 }
