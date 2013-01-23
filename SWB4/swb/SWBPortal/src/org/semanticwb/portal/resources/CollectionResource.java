@@ -95,7 +95,7 @@ public class CollectionResource extends GenericResource {
         SWBResourceURL urlact = paramRequest.getActionUrl();
         urlact.setAction("updcfg");
         out.println("<div class=\"swbform\">");
-        out.println("<form id=\"" + id + "/collectionAdmin\" action=\""+urlact+"\" method=\"post\" onsubmit=\"submitForm('" + id + "/collectionAdmin'); return false;\">");
+        out.println("<form id=\"" + id + "/collectionAdminres\" action=\""+urlact+"\" method=\"post\" onsubmit=\"submitForm('" + id + "/collectionAdminres'); return false;\">");
         out.println("<input type=\"hidden\" name=\"suri\" value=\""+id+"\">");
         out.println("<fieldset>");
         out.println("<legend>");
