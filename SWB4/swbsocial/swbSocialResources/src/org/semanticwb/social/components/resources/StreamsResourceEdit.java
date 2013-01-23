@@ -26,51 +26,66 @@ import org.semanticwb.social.Stream;
 import org.semanticwb.social.utils.SWBSocialResourceUtils;
 
 /**
- *
+ * Esta clase tiene la finalidad de poder editar un Stream, extiende de la clase
+ * GenericSocialResource y no maneja modos u acciones de un recurso gen&eacute;rico
  * @author martha.jimenez
+ *
  */
 public class StreamsResourceEdit extends GenericSocialResource{
     Logger log = SWBUtils.getLogger(StreamsResource.class);
 
+    /**
+     *
+     * Este m&eacute;todo se encarga de mostrar la vista de edición del Stream y una vez que
+     * se ha modificado el Stream permite guardar los cambios y volver a mostrar la vista
+     * del Stream
+     * @param request
+     * @param response
+     * @param paramRequest
+     * @throws SWBResourceException
+     * @throws IOException
+     * 
+     */
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         PrintWriter out = response.getWriter();
         WebSite wsite=(WebSite)request.getAttribute("wsite");
         User user = paramRequest.getUser();
         String uri = request.getParameter("objUri");
+        if(uri == null) {
+            uri = request.getParameter("suri");
+        }
         String smode = request.getParameter("smode");
         if(uri != null) {
             SemanticObject semObj = SemanticObject.createSemanticObject(uri);
             SWBSocialResourceUtils.Actions.updateTreeNode(request, paramRequest);
-           SWBFormMgr mgr = new SWBFormMgr(semObj, null, SWBFormMgr.MODE_EDIT);
-           SWBResourceURL url = paramRequest.getRenderUrl().setParameter("itemUri",request.getAttribute("treeItem")+"");
-           mgr.setFilterRequired(false);
-           mgr.clearProperties();
-           mgr.addProperty(Stream.swb_title);
-           mgr.addProperty(Stream.swb_description);
-           mgr.addProperty(Stream.swb_active);
-           mgr.addProperty(Stream.social_stream_phrase);
-           mgr.addProperty(Stream.social_hasStream_socialNetwork);
-           mgr.addProperty(Stream.social_stream_PoolTime);
-           String lang = "es";
-           if(user != null) {
+            SWBFormMgr mgr = new SWBFormMgr(semObj, null, SWBFormMgr.MODE_EDIT);
+            SWBResourceURL url = paramRequest.getRenderUrl().setParameter("itemUri",request.getAttribute("treeItem")+"");
+            mgr.setFilterRequired(false);
+            mgr.clearProperties();
+            mgr.addProperty(Stream.swb_title);
+            mgr.addProperty(Stream.swb_description);
+            mgr.addProperty(Stream.swb_active);
+            mgr.addProperty(Stream.social_stream_phrase);
+            mgr.addProperty(Stream.social_hasStream_socialNetwork);
+            mgr.addProperty(Stream.social_stream_PoolTime);
+            String lang = "es";
+            if(user != null) {
                lang = user.getLanguage();
-           }
-           mgr.setLang(lang);
-           mgr.setSubmitByAjax(false);
-           url.setParameter("wsite",wsite.getId());
-           mgr.setAction(url.toString());
-           SWBFormButton buttonAdd = SWBFormButton.newSaveButton();
-           mgr.addButton(buttonAdd);
-           out.println(mgr.renderForm(request));
+            }
+            mgr.setLang(lang);
+            mgr.setSubmitByAjax(false);
+            url.setParameter("wsite",wsite.getId());
+            mgr.setAction(url.toString());
+            SWBFormButton buttonAdd = SWBFormButton.newSaveButton();
+            mgr.addButton(buttonAdd);
+            out.println(mgr.renderForm(request));
         }
 
         if("edit".equals(smode)) {
             String objUri=(String)request.getParameter("suri");
-
             if(wsite != null) {
                 SemanticObject semObj = SemanticObject.createSemanticObject(objUri);
-
                 SWBFormMgr mgr = new SWBFormMgr(semObj, null, SWBFormMgr.MODE_EDIT);
                 mgr.clearProperties();
                 mgr.addProperty(Stream.swb_active);
@@ -82,13 +97,10 @@ public class StreamsResourceEdit extends GenericSocialResource{
                 try {
                     mgr.processForm(request);
                     SWBSocialResourceUtils.Actions.updateTreeNode(request, paramRequest);
-
                 } catch(FormValidateException ex) {
                     log.error("Error in: " + ex);
                 }
             }
         }
     }
-
-
 }
