@@ -30,14 +30,18 @@ import org.semanticwb.social.listener.Classifier;
 public class Facebook extends org.semanticwb.social.base.FacebookBase {
     
     
+    /** Cadena utilizada en la construccion de peticiones HTTP POST al servidor de Facebook */
     private static final String PassPhrase = "f:,+#u4w=EkJ0R[";
     
     private static final String CRLF = "\r\n";    
     
+    /** Cadena utilizada en la construccion de peticiones HTTP POST al servidor de Facebook */
     private static final String PREF = "--";    
     
+    /** Inicio de la URL utilizada para las peticiones de informacion a Facebook */
     private static final String FACEBOOKGRAPH = "https://graph.facebook.com/";
     
+    /** Indica el numero de mensajes maximo a extraer en cada busqueda */
     private static final short QUERYLIMIT = 100;
     
     private Logger log = SWBUtils.getLogger(Facebook.class);
@@ -47,10 +51,15 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
         super(base);
     }
 
+    /**
+     * Ejecuta las operaciones para extraer informaci&oacute;n de Facebook, 
+     * en base a los criterios especificados en el stream indicado.
+     * @param stream Indica el objeto {@code Stream} del que se obtienen los criterios de
+     *          b&uacute;squeda de informaci&oacute;n
+     */
     @Override
     public void listen(Stream stream) {
         HashMap<String, String> params = new HashMap<String, String>(2);
-//        String access_token = this.getAccessToken();
         params.put("access_token", this.getAccessToken());
 //        JSONArray nextQueries = null;
         JSONArray batchQueries = null;
@@ -62,7 +71,7 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
             //Como Facebook proporciona los datos de un conjunto definido de 
             //mensajes a la vez, se necesita pedir esta información por bloques
             do {
-                //Genera todas las consultas a ejecutar en Facebook, una por frase almacenada
+                //Genera todas las consultas a ejecutar en Facebook, una por frase almacenada en el Stream
                 generateBatchQuery(queries, stream);
                 
                 if (queries.has("batch")) {
@@ -73,9 +82,7 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
                             "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95", "POST");
 
                     //Se analiza la respuesta de Facebook y se extraen los datos de los mensajes
-                    //---System.out.println("Analizando respuesta de FB");
                     canGetMoreResults = parseResponse(fbResponse, queries, stream);
-                    //---System.out.println("canGetMoreResults: " + canGetMoreResults);
                     
                 /*} else {
                     //System.out.println("queries no tiene batch");*/
@@ -100,10 +107,13 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
     }
 
     /**
-     * Almacena los nuevos l&iacute;mites para las b&uacute;squedas posteriores en Facebook
+     * Almacena los nuevos l&iacute;mites a utilizar en las b&uacute;squedas posteriores en Facebook.
+     * Para cada frase en el {@code Stream} indicado, se almacena el valor del l&iacute;mite que indica a partir
+     * de qu&eacute; registro se har&aacute;n las b&uacute;squedas de nueva informaci&oacute;n en Facebook.
      * @param queries contiene tanto los queryStrings a ejecutar en FB, como los
      *        url's devueltos por FB para las siguientes consultas
-     * @param stream objeto en el que se almacenará la fecha del último post extraído de Facebook
+     * @param stream objeto en el que se almacenar&aacute; la informaci&oacute;n del &uacute;ltimo
+     *        post extra&iacute;do de Facebook, para que sea utilizado en la siguiente b&uacute;squeda.
      */
     private void storeSearchLimits(JSONObject queries, Stream stream) {
         
@@ -144,7 +154,6 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
             }
             if (limits.length() > 0) {
                 this.setNextDatetoSearch(limits.toString());
-                //System.out.println("Limites almacenados: " + limits.toString());
             }
         } catch (JSONException jsone) {
             log.error("Al formar URL de siguiente consulta a ejecutar en Facebook", jsone);
@@ -155,7 +164,7 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
      * Genera las url's de las consultas a ejecutar en Facebook.
      * @param queries contiene tanto los queryStrings a ejecutar en FB, como los
      *        url's devueltos por FB para las siguientes consultas
-     * @param streamobjeto del que se extrae la fecha del último post obtenido de Facebook
+     * @param stream objeto del que se extrae la fecha del &uacute;ltimo post obtenido de Facebook
      */
     private void generateBatchQuery(JSONObject queries, Stream stream) throws Exception {
         
@@ -168,7 +177,6 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
         if (!queries.has("batch")) {
             try {
             //Se obtienen los límites desde los cuales se harán consultas en Facebook
-                //System.out.println("Nuevos límites: " + this.getNextDatetoSearch());
             if (this.getNextDatetoSearch() != null && !"".equals(this.getNextDatetoSearch())) {
                 String[] phraseElements = this.getNextDatetoSearch().split(":");
                 for (int i = 0; i < phrase.length; i++) {
@@ -217,7 +225,7 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
                     
                     batch.put(request); //consulta a la información pública de Facebook
                     searchPhrase.put(jsonPhrase);
-                    /*batch.put(wallRequest); //consulta a la información privada de Facebook
+                    /*batch.put(wallRequest); //consulta a la información privada (en el muro) de Facebook
                     searchPhrase.put(jsonPhrase);*/
                 } catch (JSONException jsone) {}
             }
@@ -228,9 +236,8 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
             } catch (JSONException jsone) {
                 log.error("Al integrar consulta batch con siguiente consulta", jsone);
             }
-            //System.out.println("queries 1a vez: " + queries.toString());
         } else {
-            //En las segundas y posteriores iteraciones de este proceso, se usan las consultas "next" 
+            //En la segunda y posteriores iteraciones de este proceso, se usan las consultas "next" 
             //que se extraen de las respuestas obtenidas de Facebook:
             try {
                 for (int i = 0; i < queries.getJSONArray("batch").length(); i++) {
@@ -239,16 +246,11 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
                     int msgsObtained = queries.getJSONArray("searchPhrase").getJSONObject(i).getInt("msgCounted");
                     if (msgsObtained > 0) {
                         //Si se obtuvieron mensajes, hay un nuevo valor para el último mensaje leído, indicado en "nextQuery"
-                        
-                        //System.out.println("Se va a sustituir:\n" + batchQuery.getString("relative_url") + "\npor:\n ");
-                        
                         if (newQuery.indexOf("search?") > 0) {
                             batchQuery.put("relative_url", newQuery.substring(newQuery.indexOf("search?") - 1));
                         /*} else if (newQuery.indexOf("me/feed?") > 0) {
                             batchQuery.put("relative_url", newQuery.substring(newQuery.indexOf("me/feed?") - 1));*/
                         }
-                        
-                        //System.out.println(batchQuery.getString("relative_url"));
                         
                     /*} else {
                         //Si no hubo resultados, se usará a continuación la misma consulta ejecutada anteriormente
@@ -260,19 +262,19 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
                 log.error("Al formar URL de siguiente consulta a ejecutar en Facebook", jsone);
             }
         }
-        //System.out.println("queries armadas: \n" + queries.toString(3));
     }
     
     /**
-     * Analiza la respuesta de Facebook y obtiene la información de los mensajes publicados en la red social.
+     * Analiza la respuesta de Facebook y obtiene la informaci&oacute;n de los mensajes publicados en la red social.
      * En base a la estructura del objeto JSON devuelto por Facebook, se revisa que se haya podido responder
-     * la petición, se obtiene la información de los mensajes publicados y se obtiene las url's de las 
+     * la petici&oacute;n, se obtiene la informaci&oacute;n de los mensajes publicados y se obtiene las url's de las 
      * siguientes consultas a ejecutar.
-     * @param response
-     * @param queries
-     * @param stream
-     * @return un booleano que indica si es posible que haya más mensajes publicados en la red al momento
-     *         en que se contestó la petición, lo que indica que se tiene que realizar otra iteración
+     * @param response representa la respuesta obtenida de Facebook en formato JSON
+     * @param queries contiene tanto los queryStrings a ejecutar en FB, como los
+     *        url's devueltos por FB para las siguientes consultas
+     * @param stream objeto al que el clasificador relacionar&aacute; los mensajes obtenidos de las b&uacute;squedas ejecutadas
+     * @return un booleano que indica si es posible que haya m&aacute;s mensajes publicados en la red al momento
+     *         en que se contest&oacute; la petici&oacute;n, lo que indica que se tiene que realizar otra iteraci&oacute;n
      */
     private boolean parseResponse(String response, JSONObject queries, Stream stream) {
         
@@ -333,8 +335,6 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
                                 if (postsData.getJSONObject(k).has("name")) {
                                     external.setPostName(postsData.getJSONObject(k).getString("name"));
                                 }
-                                //TODO: Enviar external al clasificador en cada iteracion.
-                                //System.out.println("Mensaje " + cont + ": " + external.getMessage());
                                 new Classifier(external, stream, this);
                                 
                             }
@@ -343,7 +343,6 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
                             } else if (cont == 0) {
                                 isResponseEmpty = true;
                             }
-                            //System.out.println("Hubo " + cont + " comentarios para la frase " + queries.getJSONArray("searchPhrase").getJSONObject(j).getString("phrase"));
                             
                             //Se obtiene la url de la siguiente consulta a realizar para la frase correspondiente
                             String nextPage = null;
@@ -359,9 +358,6 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
                             JSONObject phrase = queries.getJSONArray("searchPhrase").getJSONObject(j);
                             phrase.put("nextQuery", nextPage);
                             phrase.put("msgCounted", cont);
-                            //System.out.println("Mensajes para " + phrase.getString("phrase") + " = " + cont);
-                            //TODO: Mostrar valores de nextPage y cont
-                            //System.out.println("Queries después del parse: \n" + queries.toString(3));
                         }
                     }
                 }
