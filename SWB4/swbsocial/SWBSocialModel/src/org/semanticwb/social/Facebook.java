@@ -781,9 +781,10 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
 //        }
         String error = request.getParameter("error");
         HttpSession session = request.getSession(true);
-        
+System.out.println("Facebook.autenticate.............");
         if(code==null)
         {
+System.out.println("paso 1");
             String url = doRequestPermissions(request, paramRequest);
             PrintWriter out = response.getWriter();
             out.println("<script type=\"text/javascript\">");
@@ -798,12 +799,14 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
         }
         else if( state!=null && state.equals(session.getAttribute("state")) && error==null  )
         {
+System.out.println("2");
             session.removeAttribute("state");
             String accessToken = null;
             long secsToExpiration = 0L;
             String token_url = "https://graph.facebook.com/oauth/access_token?" + "client_id="+getAppKey()+"&redirect_uri=" + URLEncoder.encode(getRedirectUrl(request, paramRequest), "utf-8") + "&client_secret="+getSecretKey()+"&code=" + code;
 
             if(accessToken == null) {
+System.out.println("2.1");
                 URL pagina = new URL(token_url);
                 URLConnection conex = null;
                 try {
@@ -836,6 +839,7 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
                 }
             }
             if(accessToken != null) {
+System.out.println("2.2");
                 String graph_url = "https://graph.facebook.com/me?access_token=" + accessToken;
                 String me = Facebook.graphRequest(graph_url, request.getHeader("user-agent"));
                 try {
@@ -860,6 +864,7 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
         }
         else
         {
+System.out.println("problemas");
             session.removeAttribute("state");
             //System.out.println("ERROR:Se ha encontrado un problema con la respuesta obtenida, se considera no aut&eacute;ntica.");
             PrintWriter out = response.getWriter();
@@ -873,7 +878,8 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
     private String getRedirectUrl(HttpServletRequest request, SWBParamRequest paramRequest)
     {
         StringBuilder address = new StringBuilder(128);
-        address.append("http://").append(request.getServerName()).append(":").append(request.getServerPort()).append("/").append(paramRequest.getUser().getLanguage()).append("/").append(paramRequest.getResourceBase().getWebSiteId()).append("/SocialNetworks/_rid/").append(paramRequest.getResourceBase().getId()).append("/_mod/").append(paramRequest.getMode()).append("/_lang/").append(paramRequest.getUser().getLanguage());
+        address.append("http://").append(request.getServerName()).append(":").append(request.getServerPort()).append("/").append(paramRequest.getUser().getLanguage()).append("/").append(paramRequest.getResourceBase().getWebSiteId()).append("/"+paramRequest.getWebPage().getId()+"/_rid/").append(paramRequest.getResourceBase().getId()).append("/_mod/").append(paramRequest.getMode()).append("/_lang/").append(paramRequest.getUser().getLanguage());
+System.out.println("url de regreso: "+address);
         return address.toString();
     }
     
