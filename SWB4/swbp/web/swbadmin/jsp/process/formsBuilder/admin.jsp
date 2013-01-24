@@ -1,3 +1,4 @@
+<%@page import="org.semanticwb.process.resources.ProcessForm"%>
 <%@page import="org.semanticwb.model.User"%>
 <%@page import="org.semanticwb.SWBUtils"%>
 <%@page import="org.semanticwb.SWBPortal"%>
@@ -22,11 +23,10 @@
 <%@page import="org.semanticwb.process.model.UserTask"%>
 <%@page import="org.semanticwb.model.WebSite"%>
 <%@page import="org.semanticwb.portal.SWBFormMgr"%>
-<%@page import="org.semanticwb.process.resources.FormsBuilderResource"%>
 <%@page import="org.semanticwb.portal.api.SWBParamRequest"%>
 <%
-SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute(FormsBuilderResource.ATT_PARAMREQUEST);
-UserTask task = (UserTask) request.getAttribute(FormsBuilderResource.ATT_TASK);
+SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute(ProcessForm.ATT_PARAMREQUEST);
+UserTask task = (UserTask) request.getAttribute(ProcessForm.ATT_TASK);
 User user = paramRequest.getUser();
 String lang = "es";
 
@@ -38,7 +38,7 @@ if (task == null) {
     return;
 }
 
-Resource base = (Resource) request.getAttribute(FormsBuilderResource.ATT_RBASE);
+Resource base = (Resource) request.getAttribute(ProcessForm.ATT_RBASE);
 WebSite site = paramRequest.getWebPage().getWebSite();
 boolean btnAccept = false;
 boolean btnReject = false;
@@ -91,23 +91,23 @@ if (task != null) {
 int max = 1;
 while (!base.getAttribute("prop" + max, "").equals("")) {
     String val = base.getAttribute("prop" + max++);
-    HashMap<String, String> map = FormsBuilderResource.getPropertiesMap(val);
+    HashMap<String, String> map = ProcessForm.getPropertiesMap(val);
     String key = map.get("varName") + "|" + map.get("propId");
     if (allprops.containsKey(key)) {
         baseProps.add(val);
     }
 }
 
-String admMode = base.getAttribute(FormsBuilderResource.PARAM_ADMMODE, FormsBuilderResource.ADM_MODESIMPLE);
-SWBResourceURL toggle = paramRequest.getActionUrl().setAction(FormsBuilderResource.ACT_TOGGLEBUTTON);
-SWBResourceURL updMode = paramRequest.getActionUrl().setAction(FormsBuilderResource.ACT_UPDADMINMODE);
+String admMode = base.getAttribute(ProcessForm.PARAM_ADMMODE, ProcessForm.ADM_MODESIMPLE);
+SWBResourceURL toggle = paramRequest.getActionUrl().setAction(ProcessForm.ACT_TOGGLEBUTTON);
+SWBResourceURL updMode = paramRequest.getActionUrl().setAction(ProcessForm.ACT_UPDADMINMODE);
 SWBResourceURL admUrl = paramRequest.getRenderUrl().setMode(SWBParamRequest.Mode_ADMIN);
 String disabled = "";
-if (FormsBuilderResource.ADM_MODESIMPLE.equals(admMode)) {
-    updMode.setParameter(FormsBuilderResource.PARAM_ADMMODE, FormsBuilderResource.ADM_MODEADVANCED);
-} else if (FormsBuilderResource.ADM_MODEADVANCED.equals(admMode)) {
+if (ProcessForm.ADM_MODESIMPLE.equals(admMode)) {
+    updMode.setParameter(ProcessForm.PARAM_ADMMODE, ProcessForm.ADM_MODEADVANCED);
+} else if (ProcessForm.ADM_MODEADVANCED.equals(admMode)) {
     disabled = "disabled=\"true\"";
-    updMode.setParameter(FormsBuilderResource.PARAM_ADMMODE, FormsBuilderResource.ADM_MODESIMPLE);
+    updMode.setParameter(ProcessForm.PARAM_ADMMODE, ProcessForm.ADM_MODESIMPLE);
 }
 %>
 <div dojoType="dijit.layout.BorderContainer" id="mainContainer" style="width:100%; height:1300px;">
@@ -115,18 +115,18 @@ if (FormsBuilderResource.ADM_MODESIMPLE.equals(admMode)) {
         <form action="<%=toggle%>" method="post">
             <button iconClass="propIcon" <%=disabled%> dojoType="dijit.form.Button" onclick="showFormDialog('elePropsDialog','','Agregar Propiedad')">Propiedad</button>
             <span dojoType="dijit.ToolbarSeparator"></span>
-            <button name="btns" <%=disabled%> iconClass="acceptIcon" onclick="window.location='<%=toggle%>?btns=accept'; return false;" <%=btnAccept?"checked":""%> dojoType="dijit.form.ToggleButton">Bot&oacute;n aceptar</button>
+            <button name="btns" <%=disabled%> iconClass="acceptIcon" onclick="window.location='<%=toggle%>?btns=accept'; return false;" <%=btnAccept?"checked":""%> dojoType="dijit.form.ToggleButton">Bot&oacute;n concluir</button>
             <button name="btns" <%=disabled%> iconClass="rejectIcon" onclick="window.location='<%=toggle%>?btns=reject'; return false;" <%=btnReject?"checked":""%> dojoType="dijit.form.ToggleButton">Bot&oacute;n rechazar</button>
-            <button name="btns" <%=disabled%> iconClass="cancelIcon" onclick="window.location='<%=toggle%>?btns=cancel'; return false;" <%=btnCancel?"checked":""%> dojoType="dijit.form.ToggleButton">Bot&oacute;n cacelar</button>
+            <button name="btns" <%=disabled%> iconClass="cancelIcon" onclick="window.location='<%=toggle%>?btns=cancel'; return false;" <%=btnCancel?"checked":""%> dojoType="dijit.form.ToggleButton">Bot&oacute;n regresar</button>
             <button name="btns" <%=disabled%> iconClass="saveIcon" onclick="window.location='<%=toggle%>?btns=save'; return false;" <%=btnSave?"checked":""%> dojoType="dijit.form.ToggleButton">Bot&oacute;n guardar</button>
             <span dojoType="dijit.ToolbarSeparator"></span>
             <button name="btns" iconClass="signIcon" onclick="window.location='<%=toggle%>?btns=sign'; return false;" <%=base.getAttribute("useSign") != null ? "checked" : ""%> dojoType="dijit.form.ToggleButton">Usar firmado</button>
-            <button iconClass="advancedIcon" onclick="window.location='<%=updMode%>'" <%=admMode.equals(FormsBuilderResource.ADM_MODEADVANCED) ? "checked" : ""%> dojoType="dijit.form.ToggleButton">Modo avanzado</button>
+            <button iconClass="advancedIcon" onclick="window.location='<%=updMode%>'" <%=admMode.equals(ProcessForm.ADM_MODEADVANCED) ? "checked" : ""%> dojoType="dijit.form.ToggleButton">Modo avanzado</button>
         </form>
     </div>
     <div dojoType="dijit.layout.ContentPane" region="center" id="workspace">
         <%
-        if (FormsBuilderResource.ADM_MODESIMPLE.equals(admMode)) {
+        if (ProcessForm.ADM_MODESIMPLE.equals(admMode)) {
             %>
             <div class="formBody container" autoSync="true" dojoType="dojo.dnd.Source" skipForm="true">
                 <div id="header1">
@@ -148,7 +148,7 @@ if (FormsBuilderResource.ADM_MODESIMPLE.equals(admMode)) {
                                 max = 1;
                                 while (props.hasNext()) {
                                     String val = props.next();
-                                    HashMap<String, String> map = FormsBuilderResource.getPropertiesMap(val);
+                                    HashMap<String, String> map = ProcessForm.getPropertiesMap(val);
                                     String varName = map.get("varName");
                                     String fe = map.get("fe");
                                     String modo = map.get("mode");
@@ -175,9 +175,9 @@ if (FormsBuilderResource.ADM_MODESIMPLE.equals(admMode)) {
                                                 FormElement ele = mgr.getFormElement(sprop);
                                                 ele.setLabel(map.get("label"));
                                                 SWBResourceURL urlmove = paramRequest.getActionUrl();
-                                                urlmove.setAction(FormsBuilderResource.ACT_SWAP);
-                                                urlmove.setParameter(FormsBuilderResource.PARAM_PROPIDX, "" + max);
-                                                urlmove.setParameter(FormsBuilderResource.PARAM_DIR, "up");
+                                                urlmove.setAction(ProcessForm.ACT_SWAP);
+                                                urlmove.setParameter(ProcessForm.PARAM_PROPIDX, "" + max);
+                                                urlmove.setParameter(ProcessForm.PARAM_DIR, "up");
                                                 %>
                                                 <td>
                                                     <%
@@ -187,7 +187,7 @@ if (FormsBuilderResource.ADM_MODESIMPLE.equals(admMode)) {
                                                         <%
                                                     }
                                                     if (max < baseProps.size()) {
-                                                        urlmove.setParameter(FormsBuilderResource.PARAM_DIR, "down");
+                                                        urlmove.setParameter(ProcessForm.PARAM_DIR, "down");
                                                         %>
                                                         <a href="#" onclick="window.location='<%=urlmove%>'; return false;" title="Bajar"><img src="/swbadmin/images/down.jpg"/></a>
                                                         <%
@@ -235,10 +235,11 @@ if (FormsBuilderResource.ADM_MODESIMPLE.equals(admMode)) {
                                                         <td><%=mgr.renderElement(request, sprop, modo)%></td>
                                                         <%
                                                     }
-                                                    SWBResourceURL delUrl = paramRequest.getActionUrl().setAction(FormsBuilderResource.ACT_REMOVEPROP);
-                                                    SWBResourceURL editUrl = paramRequest.getRenderUrl().setMode(FormsBuilderResource.MODE_EDITPROP).setCallMethod(SWBParamRequest.Call_DIRECT);
-                                                    delUrl.setParameter(FormsBuilderResource.PARAM_PROPIDX, String.valueOf(max));
-                                                    editUrl.setParameter(FormsBuilderResource.PARAM_PROPIDX, String.valueOf(max));
+                                                    SWBResourceURL delUrl = paramRequest.getActionUrl().setAction(ProcessForm.ACT_REMOVEPROP);
+                                                    SWBResourceURL editUrl = paramRequest.getRenderUrl().setMode(ProcessForm.MODE_EDITPROP).setCallMethod(SWBParamRequest.Call_DIRECT);
+                                                    delUrl.setParameter(ProcessForm.PARAM_PROPIDX, String.valueOf(max));
+                                                    editUrl.setParameter(ProcessForm.PARAM_PROPIDX, String.valueOf(max));
+                                                    editUrl.setAction(ProcessForm.ACT_UPDPROP);
                                                     %>
                                                 <td>
                                                     <a href="#" title="Eliminar propiedad" onclick="window.location='<%=delUrl%>';return false;"><img src="/swbadmin/images/delete.gif"/></a>
@@ -261,31 +262,38 @@ if (FormsBuilderResource.ADM_MODESIMPLE.equals(admMode)) {
             </div>
             <div class="swbform">
                 <%
+                SWBResourceURL editUrl = paramRequest.getRenderUrl().setMode(ProcessForm.MODE_EDITPROP).setCallMethod(SWBParamRequest.Call_DIRECT);
+                editUrl.setAction(ProcessForm.ACT_UPDBTNLABEL);
                 if (btnAccept || btnCancel || btnReject || btnSave) {
                     %>
                     <fieldset>
                     <%
                 }
-                if (btnAccept) {
+                if (btnSave) {
+                    editUrl.setParameter(ProcessForm.PARAM_BTNID , "btnSave");
                     %>
-                    <button dojoType="dijit.form.Button">Aceptar</button>
+                    <button dojoType="dijit.form.Button"><%=base.getAttribute("btnSaveLabel","Guardar")%></button><a href="#" onclick="showDialog('<%=editUrl%>','Editar botón guardar'); return false;" title="Editar Configuración"><img src="/swbadmin/icons/editar_1.gif"/></a>
+                    <%
+                }
+                if (btnAccept) {
+                    editUrl.setParameter(ProcessForm.PARAM_BTNID , "btnAccept");
+                    %>
+                    <button dojoType="dijit.form.Button"><%=base.getAttribute("btnAcceptLabel","Concluir Tarea")%></button><a href="#" onclick="showDialog('<%=editUrl%>','Editar botón concluir'); return false;" title="Editar Configuración"><img src="/swbadmin/icons/editar_1.gif"/></a>
                     <%
                 }
                 if (btnReject) {
+                    editUrl.setParameter(ProcessForm.PARAM_BTNID , "btnReject");
                     %>
-                    <button dojoType="dijit.form.Button">Rechazar</button>
+                    <button dojoType="dijit.form.Button"><%=base.getAttribute("btnRejectLabel","Rechazar Tarea")%></button><a href="#" onclick="showDialog('<%=editUrl%>','Editar botón rechazar'); return false;" title="Editar Configuración"><img src="/swbadmin/icons/editar_1.gif"/></a>
                     <%
                 }
                 if (btnCancel) {
+                    editUrl.setParameter(ProcessForm.PARAM_BTNID , "btnCancel");
                     %>
-                    <button dojoType="dijit.form.Button">Cancelar</button>
+                    <button dojoType="dijit.form.Button"><%=base.getAttribute("btnCancelLabel","Regresar")%></button><a href="#" onclick="showDialog('<%=editUrl%>','Editar botón regresar'); return false;" title="Editar Configuración"><img src="/swbadmin/icons/editar_1.gif"/></a>
                     <%
                 }
-                if (btnSave) {
-                    %>
-                    <button dojoType="dijit.form.Button">Guardar</button>
-                    <%
-                }
+                
                 if (btnAccept || btnCancel || btnReject || btnSave) {
                     %>
                     </fieldset>
@@ -300,7 +308,7 @@ if (FormsBuilderResource.ADM_MODESIMPLE.equals(admMode)) {
             </div>
             <div id="elePropsDialog" style="display:none;" dojoType="dijit.Dialog" title="Agregar propiedad">
                 <%
-                SWBResourceURL urladd = paramRequest.getActionUrl().setAction(FormsBuilderResource.ACT_ADDPROPS);
+                SWBResourceURL urladd = paramRequest.getActionUrl().setAction(ProcessForm.ACT_ADDPROPS);
                 ArrayList<String> list = new ArrayList(allprops.keySet());
                 if (!list.isEmpty()) {
                     %>
@@ -341,10 +349,10 @@ if (FormsBuilderResource.ADM_MODESIMPLE.equals(admMode)) {
                 %>
             </div>
             <%
-        } else if (FormsBuilderResource.ADM_MODEADVANCED.equals(admMode)) {
+        } else if (ProcessForm.ADM_MODEADVANCED.equals(admMode)) {
             String basepath = SWBPortal.getWorkPath() + base.getWorkPath() + "/";
             String value = SWBUtils.IO.getFileFromPath(basepath + "code.xml");
-            SWBResourceURL urladd = paramRequest.getActionUrl().setAction(FormsBuilderResource.ACT_UPDATEXML);
+            SWBResourceURL urladd = paramRequest.getActionUrl().setAction(ProcessForm.ACT_UPDATEXML);
             %>
             <form dojoType="dijit.form.Form" action="<%=urladd%>" method="post">
                 <button dojoType="dijit.form.Button" onclick="if (confirm('Se volverá a generar el XML.\nLos cambios que haya hecho se perderán. ¿Desea continuar?')) {window.location='<%=urladd%>';} else {return false;}">Generar XML</button>
@@ -352,7 +360,7 @@ if (FormsBuilderResource.ADM_MODESIMPLE.equals(admMode)) {
             </form>
             <%
             if (null != value && value.trim().length() > 0) {
-                SWBResourceURL url = paramRequest.getActionUrl().setAction(FormsBuilderResource.ACT_SAVEXML);
+                SWBResourceURL url = paramRequest.getActionUrl().setAction(ProcessForm.ACT_SAVEXML);
                 %>
                 <div>
                     <script type="text/javascript" src="<%=SWBPlatform.getContextPath() + "/swbadmin/js/editarea/edit_area/edit_area_full.js" %>" ></script>
