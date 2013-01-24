@@ -1,3 +1,4 @@
+<%@page import="org.semanticwb.process.model.DataTypes"%>
 <%@page import="org.semanticwb.process.resources.ProcessForm"%>
 <%@page import="org.semanticwb.model.User"%>
 <%@page import="org.semanticwb.SWBUtils"%>
@@ -64,6 +65,7 @@ if (base.getAttribute("useSign") != null) {
 
 HashMap<String, SemanticProperty> allprops = new HashMap();
 HashMap<String, SemanticClass> hmclass = new HashMap();
+HashMap<String, ItemAware> userDefinedVars = new HashMap();
 ArrayList<String> baseProps = new ArrayList<String>();
 SemanticOntology ont = SWBPlatform.getSemanticMgr().getSchema();
 
@@ -77,6 +79,9 @@ if (task != null) {
             while (itp.hasNext()) {
                 SemanticProperty prop = itp.next();
                 String name = item.getName() + "|" + prop.getPropId();
+                if (cls.isSubClass(DataTypes.sclass) && !userDefinedVars.containsKey(name)) {
+                    userDefinedVars.put(name, item);
+                }
                 if (!prop.getPropId().equals("swb:valid") && !allprops.containsKey(name)) {
                     allprops.put(name, prop);
                     if (!hmclass.containsKey(item.getName())) {
@@ -170,7 +175,11 @@ if (ProcessForm.ADM_MODESIMPLE.equals(admMode)) {
                                                 mgr.setType(SWBFormMgr.TYPE_DOJO);
                                                 mgr.setLang("es");
                                                 if (map.get("label") == null) {
-                                                    map.put("label", sprop.getDisplayName(lang));
+                                                    if (userDefinedVars.containsKey(propKey)) {
+                                                        map.put("label", userDefinedVars.get(propKey).getDisplayTitle(lang));
+                                                    } else {
+                                                        map.put("label", sprop.getDisplayName(lang));
+                                                    }
                                                 }
                                                 FormElement ele = mgr.getFormElement(sprop);
                                                 ele.setLabel(map.get("label"));
@@ -183,13 +192,13 @@ if (ProcessForm.ADM_MODESIMPLE.equals(admMode)) {
                                                     <%
                                                     if (max != 1) {
                                                         %>
-                                                        <a href="#" onclick="window.location='<%=urlmove%>'; return false;" title="Subir"><img src="/swbadmin/images/up.jpg"/></a>
+                                                        <a href="#" onclick="window.location='<%=urlmove%>'; return false;" title="Subir"><img src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/up.jpg"/></a>
                                                         <%
                                                     }
                                                     if (max < baseProps.size()) {
                                                         urlmove.setParameter(ProcessForm.PARAM_DIR, "down");
                                                         %>
-                                                        <a href="#" onclick="window.location='<%=urlmove%>'; return false;" title="Bajar"><img src="/swbadmin/images/down.jpg"/></a>
+                                                        <a href="#" onclick="window.location='<%=urlmove%>'; return false;" title="Bajar"><img src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/down.jpg"/></a>
                                                         <%
                                                     }
                                                     %>
@@ -242,8 +251,8 @@ if (ProcessForm.ADM_MODESIMPLE.equals(admMode)) {
                                                     editUrl.setAction(ProcessForm.ACT_UPDPROP);
                                                     %>
                                                 <td>
-                                                    <a href="#" title="Eliminar propiedad" onclick="window.location='<%=delUrl%>';return false;"><img src="/swbadmin/images/delete.gif"/></a>
-                                                    <a href="#" title="Editar Configuración" onclick="showDialog('<%=editUrl%>','Editar'); return false;"><img src="/swbadmin/icons/editar_1.gif"/></a>
+                                                    <a href="#" title="Eliminar propiedad" onclick="window.location='<%=delUrl%>';return false;"><img src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/delete.gif"/></a>
+                                                    <a href="#" title="Editar Configuración" onclick="showDialog('<%=editUrl%>','Editar'); return false;"><img src="<%=SWBPlatform.getContextPath()%>/swbadmin/icons/editar_1.gif"/></a>
                                                 </td>
                                             </tr>
                                         <%
@@ -272,25 +281,25 @@ if (ProcessForm.ADM_MODESIMPLE.equals(admMode)) {
                 if (btnSave) {
                     editUrl.setParameter(ProcessForm.PARAM_BTNID , "btnSave");
                     %>
-                    <button dojoType="dijit.form.Button"><%=base.getAttribute("btnSaveLabel","Guardar")%></button><a href="#" onclick="showDialog('<%=editUrl%>','Editar botón guardar'); return false;" title="Editar Configuración"><img src="/swbadmin/icons/editar_1.gif"/></a>
+                    <button dojoType="dijit.form.Button"><%=base.getAttribute("btnSaveLabel","Guardar")%></button><a href="#" onclick="showDialog('<%=editUrl%>','Editar botón guardar'); return false;" title="Editar Configuración"><img src="<%=SWBPlatform.getContextPath()%>/swbadmin/icons/editar_1.gif"/></a>
                     <%
                 }
                 if (btnAccept) {
                     editUrl.setParameter(ProcessForm.PARAM_BTNID , "btnAccept");
                     %>
-                    <button dojoType="dijit.form.Button"><%=base.getAttribute("btnAcceptLabel","Concluir Tarea")%></button><a href="#" onclick="showDialog('<%=editUrl%>','Editar botón concluir'); return false;" title="Editar Configuración"><img src="/swbadmin/icons/editar_1.gif"/></a>
+                    <button dojoType="dijit.form.Button"><%=base.getAttribute("btnAcceptLabel","Concluir Tarea")%></button><a href="#" onclick="showDialog('<%=editUrl%>','Editar botón concluir'); return false;" title="Editar Configuración"><img src="<%=SWBPlatform.getContextPath()%>/swbadmin/icons/editar_1.gif"/></a>
                     <%
                 }
                 if (btnReject) {
                     editUrl.setParameter(ProcessForm.PARAM_BTNID , "btnReject");
                     %>
-                    <button dojoType="dijit.form.Button"><%=base.getAttribute("btnRejectLabel","Rechazar Tarea")%></button><a href="#" onclick="showDialog('<%=editUrl%>','Editar botón rechazar'); return false;" title="Editar Configuración"><img src="/swbadmin/icons/editar_1.gif"/></a>
+                    <button dojoType="dijit.form.Button"><%=base.getAttribute("btnRejectLabel","Rechazar Tarea")%></button><a href="#" onclick="showDialog('<%=editUrl%>','Editar botón rechazar'); return false;" title="Editar Configuración"><img src="<%=SWBPlatform.getContextPath()%>/swbadmin/icons/editar_1.gif"/></a>
                     <%
                 }
                 if (btnCancel) {
                     editUrl.setParameter(ProcessForm.PARAM_BTNID , "btnCancel");
                     %>
-                    <button dojoType="dijit.form.Button"><%=base.getAttribute("btnCancelLabel","Regresar")%></button><a href="#" onclick="showDialog('<%=editUrl%>','Editar botón regresar'); return false;" title="Editar Configuración"><img src="/swbadmin/icons/editar_1.gif"/></a>
+                    <button dojoType="dijit.form.Button"><%=base.getAttribute("btnCancelLabel","Regresar")%></button><a href="#" onclick="showDialog('<%=editUrl%>','Editar botón regresar'); return false;" title="Editar Configuración"><img src="<%=SWBPlatform.getContextPath()%>/swbadmin/icons/editar_1.gif"/></a>
                     <%
                 }
                 
@@ -499,7 +508,7 @@ if (ProcessForm.ADM_MODESIMPLE.equals(admMode)) {
         var cssNode = document.createElement('link');
         cssNode.setAttribute("type","text/css");
         cssNode.setAttribute("rel","stylesheet");
-        cssNode.setAttribute("href","/swbadmin/jsp/process/formsBuilder.css");
+        cssNode.setAttribute("href","<%=SWBPlatform.getContextPath()%>/swbadmin/jsp/process/formsBuilder.css");
         document.getElementsByTagName("head")[0].appendChild(cssNode);
     }
     setCSS();
