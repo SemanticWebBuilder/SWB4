@@ -1,8 +1,9 @@
-  4.2.2.0
+  4.2.3.0
     - BUG: High concurrency on hash table for internal and depurl tables (serch)
+    - Se agregó interface para soporte en AWS (serch)
+  4.2.2.0
     - BUG 67: Mejoras en el sistema de autenticación (serch)
     - BUG: Mejoras en la carga del Memory ClassLoader y en la invocación al Compilador para clases owl virtuales (serch)
-    - Se agregó interface para soporte en AWS (serch)
   4.2.1.0
     - Se agrego método get[NombreDeClase]ClassMgr() en el Generador de código para todas clases de SWB (Jei)
     - Mejoras en la carga de Cache de Objetos Semanticos (FullSemanticObjectCache) (Jei)
