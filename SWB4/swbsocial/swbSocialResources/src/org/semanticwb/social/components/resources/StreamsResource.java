@@ -7,6 +7,7 @@ package org.semanticwb.social.components.resources;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Enumeration;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.Logger;
@@ -23,6 +24,7 @@ import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.api.SWBResourceURL;
 import org.semanticwb.social.Stream;
 import org.semanticwb.social.utils.SWBSocialResourceUtils;
+import org.semanticwb.social.components.tree.ElementTreeNode;
 
 /**
  * Esta clase se encarga de crear nuevos Streams. Utiliza los modos y acciones de un
@@ -50,6 +52,11 @@ public class StreamsResource extends GenericSocialResource{
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
        String action=(String)request.getAttribute("action");
        WebSite wsite=(WebSite)request.getAttribute("wsite");
+       /*Enumeration enum1 = request.getAttributeNames();
+       while(enum1.hasMoreElements()){
+           Object eleObj = enum1.nextElement();
+           System.out.println("ele: " + eleObj + " value: " + request.getParameter(eleObj+""));
+       }*/
        User user=paramRequest.getUser();
        PrintWriter out = response.getWriter();
        if(action == null){
@@ -71,6 +78,7 @@ public class StreamsResource extends GenericSocialResource{
            mgr.setLang(lang);
            mgr.setSubmitByAjax(false);
            url.setParameter("wsite",wsite.getId());
+           url.setParameter("treeItem", request.getParameter("treeItem"));
            mgr.setAction(url.toString());
            SWBFormButton buttonAdd = SWBFormButton.newSaveButton();
            mgr.addButton(buttonAdd);
@@ -119,6 +127,7 @@ public class StreamsResource extends GenericSocialResource{
                mgr.setLang(lang);
                mgr.setSubmitByAjax(false);
                url.setParameter("wsite",wsite.getId());
+               url.setParameter("treeItem", request.getParameter("treeItem"));
                mgr.setAction(url.toString());
                SWBFormButton buttonAdd = SWBFormButton.newSaveButton();
                mgr.addButton(buttonAdd);
@@ -143,6 +152,21 @@ public class StreamsResource extends GenericSocialResource{
         String objUri=(String)request.getParameter("sref");
         String wsite=(String)request.getParameter("wsite");
         String action = (String) request.getParameter("action_");
+        Object  treeItemObj = (Object) request.getParameter("treeItem");
+        /*Enumeration enu2 = request.getAttributeNames();
+        while(enu2.hasMoreElements()){
+            System.out.println("atr: " + enu2.nextElement());
+        }
+        Enumeration enu3 = request.getParameterNames();
+        while(enu3.hasMoreElements()){
+            System.out.println("param: " + enu3.nextElement());
+        }*/
+
+        ElementTreeNode treeItem = null;
+        if(treeItemObj instanceof ElementTreeNode) {
+            treeItem = (ElementTreeNode)treeItemObj;
+        }
+
         SemanticObject semObj = null;
         if("edicion".equals(action)) {
             String objUri1=(String)request.getParameter("suri");
@@ -176,12 +200,19 @@ public class StreamsResource extends GenericSocialResource{
             mgr.addProperty(Stream.social_hasStream_socialNetwork);
             try {
                 semObj = mgr.processForm(request);
+                if(treeItem != null) {
+                    Stream str = (Stream)semObj.createGenericInstance();
+                    SWBSocialResourceUtils.Events.updateTreeTitleNode_Event(treeItem, str.getTitle());
+                }
             } catch(FormValidateException ex) {
                 log.error("Error in: " + ex);
             }
         }
-
+        //------ to Do UpdateTreeNode
+        
+        //-----------
         response.setRenderParameter("action", "edit");
+        response.setRenderParameter("treeItem", treeItem+"");
         response.setRenderParameter("objUri", objUri);
         response.setRenderParameter("wsite", wsite);
         String semObjStr = semObj != null ? semObj.getURI() : null;
