@@ -23,6 +23,7 @@
 package org.semanticwb.process.resources.taskinbox;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -33,16 +34,16 @@ import javax.servlet.RequestDispatcher;
 import javax.servlet.http.*;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.model.Role;
+import org.semanticwb.model.RoleRef;
 import org.semanticwb.model.SWBComparator;
 import org.semanticwb.model.User;
 import org.semanticwb.model.UserGroup;
+import org.semanticwb.model.UserRepository;
 import org.semanticwb.model.WebSite;
+import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.portal.api.*;
 import org.semanticwb.process.model.FlowNodeInstance;
-import org.semanticwb.process.model.GraphicalElement;
-import org.semanticwb.process.model.Instance;
-import org.semanticwb.process.model.Lane;
-import org.semanticwb.process.model.Pool;
 import org.semanticwb.process.model.Process;
 import org.semanticwb.process.model.ProcessInstance;
 import org.semanticwb.process.model.ProcessSite;
@@ -101,8 +102,10 @@ public class UserTaskInboxResource extends org.semanticwb.process.resources.task
     @Override
     public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         String mode = paramRequest.getMode();
-        if (mode.equals("config")) {
+        if ("config".equals(mode)) {
             doConfig(request, response, paramRequest);
+        } else if ("forward".equals(mode)) {
+            doForward(request, response, paramRequest);
         } else {
             super.processRequest(request, response, paramRequest);
         }
@@ -111,7 +114,7 @@ public class UserTaskInboxResource extends org.semanticwb.process.resources.task
     @Override
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
         String action = response.getAction();
-        if (action.equals("setDisplay")) {
+        if ("setDisplay".equals(action)) {
             Enumeration params = request.getParameterNames();
             String dCols = "";
             while(params.hasMoreElements()) {
@@ -125,7 +128,7 @@ public class UserTaskInboxResource extends org.semanticwb.process.resources.task
             }
             setDisplayCols(dCols+"|actionsCol");
             response.setMode(response.Mode_VIEW);
-        } else if (action.equals("CREATE")) {
+        } else if ("CREATE".equals(action)) {
             User user=response.getUser();
             String pid = request.getParameter("pid");
             ProcessInstance inst = null;
@@ -134,7 +137,6 @@ public class UserTaskInboxResource extends org.semanticwb.process.resources.task
                 Process process = Process.ClassMgr.getProcess(pid, response.getWebPage().getWebSite());
                 if (process != null) 
                 {
-                    String redirect=null;
                     inst = SWBProcessMgr.createSynchProcessInstance(process, user);
                     List<FlowNodeInstance> arr=SWBProcessMgr.getActiveUserTaskInstances(inst,response.getUser());                        
                     if(arr.size()>0)
@@ -148,7 +150,7 @@ public class UserTaskInboxResource extends org.semanticwb.process.resources.task
                 request.getSession(true).setAttribute("msg", "OK"+inst.getId());
             }
             response.setMode(response.Mode_VIEW);
-        } else if (action.equals("setPageItems")) {
+        } else if ("setPageItems".equals(action)) {
             String ipp = request.getParameter("ipp");
             int itemsPerPage = 0;
             
@@ -163,6 +165,19 @@ public class UserTaskInboxResource extends org.semanticwb.process.resources.task
             }
             setItemsPerPage(itemsPerPage);
             response.setMode(response.Mode_VIEW);
+        } else if ("forward".equals(action)) {
+            String suri = request.getParameter("suri");
+            String sowner = request.getParameter("owner");
+            SemanticObject sobj = SemanticObject.createSemanticObject(suri);
+            if (sobj != null) {
+                FlowNodeInstance fni = (FlowNodeInstance)sobj.createGenericInstance();
+                if (fni != null) {
+                    User owner = response.getWebPage().getWebSite().getUserRepository().getUser(sowner);
+                    fni.setAssignedto(owner);
+                }
+            }
+            
+            response.setMode(SWBParamRequest.Mode_VIEW);
         } else {
             super.processAction(request, response);
         }
@@ -192,6 +207,97 @@ public class UserTaskInboxResource extends org.semanticwb.process.resources.task
         } catch (Exception e) {
             log.error("Error including jsp in view mode", e);
         }
+    }
+    
+    public void doForward(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        User user = paramRequest.getUser();
+        WebSite site = paramRequest.getWebPage().getWebSite();
+        PrintWriter out = response.getWriter();
+        StringBuilder sb = new StringBuilder();
+        String suri = request.getParameter("suri");
+        Iterator<User> tPartners = null;
+        
+        SemanticObject sobj = SemanticObject.createSemanticObject(suri);
+        if (sobj != null) {
+            FlowNodeInstance fni = (FlowNodeInstance) sobj.createGenericInstance();
+            if (fni != null) {
+                User owner = fni.getAssignedto();
+                if (owner.equals(user)) {
+                    
+                    UserRepository ur = site.getUserRepository();
+                    UserTask task = (UserTask) fni.getFlowNodeType();
+                    ArrayList<Role> taskRoles = new ArrayList<Role>();
+
+                    Iterator<RoleRef> refs = task.listRoleRefs();
+                    while (refs.hasNext()) {
+                        RoleRef roleRef = refs.next();
+                        if (roleRef.getRole() != null && roleRef.isActive()) {
+                            taskRoles.add(roleRef.getRole());
+                        }
+                    }
+                    
+                    if (taskRoles.isEmpty()) {
+                        tPartners = ur.listUsers();
+                    } else {
+                        ArrayList<User> _users = new ArrayList<User>();
+                        Iterator<Role> tRoles = taskRoles.iterator();
+                        while (tRoles.hasNext()) {
+                            Role role = tRoles.next();
+                            Iterator<User> users = User.ClassMgr.listUserByRole(role);
+                            while (users.hasNext()) {
+                                User user1 = users.next();
+                                if (!_users.contains(user1) && !user1.equals(owner)) {
+                                    _users.add(user1);
+                                }
+                            }
+                        }
+                        tPartners = _users.iterator();
+                    }
+                }
+            }
+            
+            if (tPartners != null && tPartners.hasNext() && fni != null) {
+                SWBResourceURL forward = paramRequest.getActionUrl().setAction("forward");
+                SWBResourceURL url = paramRequest.getRenderUrl().setMode(SWBParamRequest.Mode_VIEW);
+                sb.append("<script type=\"text/javascript\">");
+                sb.append(" dojo.require(\"dijit.form.Form\");");
+                sb.append(" dojo.require(\"dijit.form.FilteringSelect\");");
+                sb.append(" dojo.require(\"dijit.form.Button\");");
+                sb.append("</script>");
+                sb.append("<form class=\"swbform\" dojoType=\"dijit.form.Form\" action=\"").append(forward).append("\">");
+                sb.append("  <input type=\"hidden\" name=\"suri\" value=\""+suri+"\"/>");
+                sb.append("  <fieldset>");
+                sb.append("    <table>");
+                sb.append("      <tr>");
+                sb.append("        <td width=\"200px\" align=\"right\">");
+                sb.append("          <label for=\"owner\">Reasignar tarea a: </label>");
+                sb.append("        </td>");
+                sb.append("        <td>");
+                sb.append("          <select name=\"owner\" dojoType=\"dijit.form.FilteringSelect\">");
+                sb.append("            <option value=\"--\">Liberar tarea</option>");
+                while(tPartners.hasNext()) {
+                    User _user = tPartners.next();
+                    if (!_user.equals(fni.getAssignedto())) {
+                        sb.append("            <option value=\"").append(_user.getId()).append("\">").append((_user.getFullName()==null||_user.getFullName().trim().equals(""))?_user.getId():_user.getFullName()).append("</option>");
+                    }
+                }
+                sb.append("          </select>");
+                sb.append("        </td>");
+                sb.append("      </tr>");
+                sb.append("    </table>");
+                sb.append("  </fieldset>");
+                sb.append("  <fieldset>");
+                sb.append("    <button type=\"submit\" dojoType=\"dijit.form.Button\">Reasignar</button>");
+                sb.append("    <button dojoType=\"dijit.form.Button\" onclick=\"window.location='").append(url).append("'; return false;\">Regresar</button>");
+                sb.append("  </fieldset>");
+                sb.append("</form>");
+            } else {
+                String url = fni.getUserTaskInboxUrl();             
+                sb.append("Esta tarea no puede ser reasignada a otro usuario");
+                sb.append("<a href=\"").append(url).append("\">Regresar</a>");
+            }
+        }
+        out.println(sb.toString());
     }
 
     public void doConfig(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
