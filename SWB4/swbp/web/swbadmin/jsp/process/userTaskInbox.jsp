@@ -230,7 +230,6 @@ if (paramRequest.getMode().equals(paramRequest.Mode_VIEW)) {
         }
         optsUrl.setParameter("sFilter", sFilter);
         %>
-        <h2>Mis Tareas</h2>
         <div id="toast" style="border: 1px solid #CCCCCC;background-color: #FFF49C;padding: 10px 0 ;text-align:center;opacity: 0.9;border-radius:5px 5px 5px 5px;-webkit-transition: opacity 0.5s ease-out;  /* Saf3.2+, Chrome */-moz-transition: opacity 0.5s ease-out;  /* FF4+ */-ms-transition: opacity 0.5s ease-out;  /* IE10? */-o-transition: opacity 0.5s ease-out;  /* Opera 10.5+ */transition: opacity 0.5s ease-out;"></div>
         <div class="bandeja-combo">
             <ul>
@@ -376,12 +375,17 @@ if (paramRequest.getMode().equals(paramRequest.Mode_VIEW)) {
                                 }
                                 if (displayCols.contains("actionsCol")) {
                                     UserTask utask = (UserTask) instance.getFlowNodeType();
-
                                     %>
                                     <td class="tban-accion">
                                         <%
                                         if (instance.getStatus() == ProcessInstance.STATUS_PROCESSING) {
-                                            %><a class="acc-atender" href="<%=utask.getTaskWebPage().getUrl()%>?suri=<%=instance.getEncodedURI()%>">Atender</a><%
+                                            %>
+                                            <a class="acc-atender" href="<%=utask.getTaskWebPage().getUrl()%>?suri=<%=instance.getEncodedURI()%>">Atender</a>
+                                            <%
+                                            if (instance.getAssignedto() != null) {
+                                                SWBResourceURL forward = paramRequest.getRenderUrl().setMode("forward");
+                                                %><a class="acc-delegar" href="<%=forward%>?suri=<%=instance.getEncodedURI()%>">Reasignar</a><%
+                                            }
                                         }
                                         if (statusWp != null) {
                                             String acts = getStatusInstances(instance.getProcessInstance(), ProcessInstance.STATUS_PROCESSING);
