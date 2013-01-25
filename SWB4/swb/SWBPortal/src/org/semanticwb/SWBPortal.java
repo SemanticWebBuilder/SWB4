@@ -2583,6 +2583,26 @@ public class SWBPortal
             }
             return sb.toString();
         }
+        
+        /**
+         * Generates a string of {@code size} characters selected in a random basis.
+         * <p>Genera una string con {@code size} caracteres seleccionados en orden aleatorio.</p>
+         * @param size the number of characters the resulting string will contain
+         * @param alphabeth set of characters the resulting string will contain
+         * @return a string with {@code size} characters selected in a random basis.
+         *         If {@code size} equals zero the returning string will be empty,
+         *         and if {@code size} is less than zero an exception will be thrown.
+         * @throws NegativeArraySizeException if the {@code size} argument is less than zero.
+         */
+        public static String getRandString(int size, final String alphabeth)
+        {
+            StringBuilder sb = new StringBuilder(size);
+            for (int i = 0; i < size; i++)
+            {
+                sb.append(alphabeth.charAt((int) (Math.random() * alphabeth.length())));
+            }
+            return sb.toString();
+        }
 
         /**
          * Generates an image representing a string and embeds it in a {@code HttpServletResponse}.
