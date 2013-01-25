@@ -18,6 +18,7 @@ import org.semanticwb.portal.api.SWBResourceException;
 
 import org.semanticwb.social.SocialNetwork;
 import org.semanticwb.social.SocialSite;
+import org.semanticwb.social.components.tree.ElementTreeNode;
 
 /**
  *
@@ -53,8 +54,8 @@ System.out.println("********************");
 System.out.println("********************   doView");
         PrintWriter out = response.getWriter();
         User user = paramRequest.getUser();
-//        if(user.isSigned())
-//        {
+        if(user.isSigned())
+        {
             String msg = request.getParameter("msg");
             if(msg!=null) {
                 out.println("<div class=\"\"><p class=\"\">"+msg+"</p></div>");
@@ -63,11 +64,7 @@ System.out.println("********************   doView");
             RequestDispatcher dis = null;
             
             final String basePath = "/work/models/" + paramRequest.getWebPage().getWebSite().getId() + "/admin/jsp/components/" + this.getClass().getSimpleName() + "/";
-//            final String action=request.getParameter(ATTR_AXN);
             final String objUri = request.getParameter("objUri");
-//            final String wsite = request.getParameter(ATTR_BRAND);
-//            final String treeItem = request.getParameter(ATTR_TREEITEM);
-            
             if(objUri==null)
             {
                 dis = request.getRequestDispatcher(basePath+"/new.jsp");
@@ -76,22 +73,17 @@ System.out.println("********************   doView");
                 dis = request.getRequestDispatcher(basePath+"/edit.jsp");
             }
             
-            
             try
             {
                 request.setAttribute(ATTR_THIS, this);
                 request.setAttribute(ATTR_PARAMREQUEST, paramRequest);
-//                request.setAttribute(ATTR_AXN, action);
-//                request.setAttribute(ATTR_OBJURI, objUri);
-//                request.setAttribute(ATTR_BRAND, wsite);
-//                request.setAttribute(ATTR_TREEITEM, treeItem);
                 dis.include(request, response);
             }catch (Exception e) {
                 log.error(e);
             }
-//        }else {
-//            out.println("<p>Usuario no autorizado. Consulte a su administrador</p>");
-//        }
+        }else {
+            out.println("<p>Usuario no autorizado. Consulte a su administrador</p>");
+        }
     }
     
     public void doAuthenticate(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
@@ -99,15 +91,8 @@ System.out.println("********************   doView");
 System.out.println("********************   doAuthenticate.");
         
         final String basePath = "/work/models/" + paramRequest.getWebPage().getWebSite().getId() + "/admin/jsp/components/" + this.getClass().getSimpleName() + "/";
-        //final String action = request.getParameter(ATTR_AXN)==null?paramRequest.getAction():"";
-
         String objUri = (String)request.getAttribute("objUri");
-//        final String wsiteId = request.getParameter(ATTR_BRAND);
-//        final SocialSite wsite = SocialSite.ClassMgr.getSocialSite(wsiteId);
         final SocialSite wsite = (SocialSite)request.getAttribute("wsite");
-//        final String treeItem = request.getParameter(ATTR_TREEITEM);
-        
-System.out.println("objUri es nulo?"+" "+(objUri==null));        
         
         HttpSession session = request.getSession(true);
         if(session.getAttribute("sw")==null)
@@ -122,12 +107,16 @@ System.out.println("objUri es nulo?"+" "+(objUri==null));
             long id = wsite.getSemanticObject().getModel().getCounter(sclass);
             SocialNetwork socialNetwork = (SocialNetwork)wsite.getSemanticObject().getModel().createGenericObject(wsite.getSemanticObject().getModel().getObjectUri(Long.toString(id), sclass), sclass);
             objUri = socialNetwork.getURI();
-System.out.println("cuenta creada... objUri="+objUri);
             socialNetwork.setActive(false);
             socialNetwork.setTitle(title);
             socialNetwork.setDescription(desc);
             socialNetwork.setAppKey(appId);            
             socialNetwork.setSecretKey(sk);
+            
+//            ElementTreeNode treeItem = (ElementTreeNode)request.getAttribute("treeItem");
+//            SWBSocialResourceUtils.Events.insertNode2Tree_Event(treeItem, socialNetwork);
+//            SWBSocialResourceUtils.Events.setStatusMessage_Event("Cuenta creada");
+            
             session.setAttribute("sw", socialNetwork);
             socialNetwork.authenticate(request, response, paramRequest);
         }
@@ -145,10 +134,7 @@ System.out.println("cuenta creada... objUri="+objUri);
         {
             request.setAttribute(ATTR_THIS, this);
             request.setAttribute(ATTR_PARAMREQUEST, paramRequest);
-//            request.setAttribute(ATTR_AXN, action);
             request.setAttribute("objUri", objUri);
-//            request.setAttribute(ATTR_BRAND, wsiteId);
-//            request.setAttribute(ATTR_TREEITEM, treeItem);
             dis.include(request, response);
         }catch (Exception e) {
             log.error(e);
@@ -164,46 +150,39 @@ System.out.println("********************   doEdit.");
         final String basePath = "/work/models/" + paramRequest.getWebPage().getWebSite().getId() + "/admin/jsp/components/" + this.getClass().getSimpleName() + "/";
         final String action = request.getParameter(ATTR_AXN)==null?paramRequest.getAction():"";
 
-        String objUri = request.getParameter(ATTR_OBJURI);
-//        final String wsiteId = request.getParameter(ATTR_WSITEID);
-//        final SocialSite wsite = SocialSite.ClassMgr.getSocialSite(wsiteId);
-        final SocialSite wsite = (SocialSite)request.getAttribute("wsite");
-//        final String treeItem = request.getParameter(ATTR_TREEITEM);
-
-        SocialNetwork socialNetwork = null;
+        String objUri = (String)request.getAttribute("objUri");
+        SocialNetwork socialNetwork;
         try {
             socialNetwork = (SocialNetwork)SemanticObject.getSemanticObject(objUri).getGenericInstance();
         }catch(Exception e) {
-//            System.out.println("La cuenta no existe. Consulte a su administrador.."+e);
-//            return;
+            HttpSession session = request.getSession(true);
+            objUri = (String)session.getAttribute("objUri");
+            try {
+                socialNetwork = (SocialNetwork)SemanticObject.getSemanticObject(objUri).getGenericInstance();
+            }catch(Exception ex) {
+                socialNetwork = null;
+            }
         }
         
-        HttpSession session = request.getSession(true);
-        if(session.getAttribute("sw")==null)
+        if( socialNetwork!=null )
         {
+System.out.println("doEdit----1");
+            objUri = socialNetwork.getURI();
             String sclassURI = request.getParameter("socialweb");
             String title = request.getParameter("title");
             String desc = request.getParameter("desc");
             String appId = request.getParameter("appId");
             String sk = request.getParameter("sk");
-            
             socialNetwork.setTitle(title);
             socialNetwork.setDescription(desc);
-            socialNetwork.setAppKey(appId);            
-            socialNetwork.setSecretKey(sk);
-            session.setAttribute("sw", socialNetwork);
-            if(!socialNetwork.isActive())
+            if(!socialNetwork.isSn_authenticated())
             {
+                socialNetwork.setAppKey(appId);
+                socialNetwork.setSecretKey(sk);
+                HttpSession session = request.getSession(true);
+                session.setAttribute("objUri", objUri);
                 socialNetwork.authenticate(request, response, paramRequest);
             }
-        }
-        else
-        {
-            socialNetwork = (SocialNetwork)session.getAttribute("sw");
-            session.removeAttribute("sw");
-            objUri = socialNetwork.getURI();
-            socialNetwork.authenticate(request, response, paramRequest);
-            //SWBSocialResourceUtils.Components.updateTreeNode((ElementTreeNode)request.getAttribute(ATTR_TREEITEM), socialNetwork);
         }
 
         RequestDispatcher dis = null;
@@ -212,9 +191,7 @@ System.out.println("********************   doEdit.");
         {
             request.setAttribute(ATTR_THIS, this);
             request.setAttribute(ATTR_PARAMREQUEST, paramRequest);
-//            request.setAttribute(ATTR_AXN, request.getParameter("action"));
-//            request.setAttribute(ATTR_OBJURI, URLDecoder.decode(request.getParameter("objUri"),"utf-8"));
-//            request.setAttribute(ATTR_TREEITEM, request.getAttribute(ATTR_TREEITEM));
+            request.setAttribute("objUri", objUri);
             dis.include(request, response);
         }catch (Exception e) {
             log.error(e);
