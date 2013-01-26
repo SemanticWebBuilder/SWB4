@@ -125,7 +125,9 @@ System.out.println("********************   doAuthenticate.");
             SocialNetwork socialNetwork = (SocialNetwork)session.getAttribute("sw");
             session.removeAttribute("sw");
             objUri = socialNetwork.getURI();
-            socialNetwork.authenticate(request, response, paramRequest);
+            if(!socialNetwork.isSn_authenticated()) {
+                socialNetwork.authenticate(request, response, paramRequest);
+            }
         }
 
         RequestDispatcher dis = null;
@@ -148,34 +150,23 @@ System.out.println("********************   doAuthenticate.");
 System.out.println("********************   doEdit.");
         
         final String basePath = "/work/models/" + paramRequest.getWebPage().getWebSite().getId() + "/admin/jsp/components/" + this.getClass().getSimpleName() + "/";
-        final String action = request.getParameter(ATTR_AXN)==null?paramRequest.getAction():"";
-
+System.out.println(" recuperando socialNetwork....");
         String objUri = (String)request.getAttribute("objUri");
         SocialNetwork socialNetwork;
         try {
             socialNetwork = (SocialNetwork)SemanticObject.getSemanticObject(objUri).getGenericInstance();
-        }catch(Exception e) {
-            HttpSession session = request.getSession(true);
-            objUri = (String)session.getAttribute("objUri");
-            try {
-                socialNetwork = (SocialNetwork)SemanticObject.getSemanticObject(objUri).getGenericInstance();
-            }catch(Exception ex) {
-                socialNetwork = null;
-            }
-        }
-        
-        if( socialNetwork!=null )
-        {
-System.out.println("doEdit----1");
-            objUri = socialNetwork.getURI();
-            String sclassURI = request.getParameter("socialweb");
+System.out.println(" 1.socialNetwork="+socialNetwork.getId());
             String title = request.getParameter("title");
             String desc = request.getParameter("desc");
             String appId = request.getParameter("appId");
             String sk = request.getParameter("sk");
-            socialNetwork.setTitle(title);
-            socialNetwork.setDescription(desc);
-            if(!socialNetwork.isSn_authenticated())
+            if(title!=null && !title.isEmpty()) {
+                socialNetwork.setTitle(title);
+            }
+            if(desc!=null && !desc.isEmpty()) {
+                socialNetwork.setDescription(desc);
+            }
+            if(!socialNetwork.isSn_authenticated() && appId!=null && sk!=null && !appId.isEmpty() && !sk.isEmpty())
             {
                 socialNetwork.setAppKey(appId);
                 socialNetwork.setSecretKey(sk);
@@ -183,8 +174,20 @@ System.out.println("doEdit----1");
                 session.setAttribute("objUri", objUri);
                 socialNetwork.authenticate(request, response, paramRequest);
             }
+        }catch(Exception e) {
+            HttpSession session = request.getSession(true);
+            objUri = (String)session.getAttribute("objUri");
+            try {
+                socialNetwork = (SocialNetwork)SemanticObject.getSemanticObject(objUri).getGenericInstance();
+System.out.println(" 2.socialNetwork="+socialNetwork.getId());
+                if(!socialNetwork.isSn_authenticated()) {
+                    socialNetwork.authenticate(request, response, paramRequest);
+                }
+            }catch(Exception ex) {
+                socialNetwork = null;
+            }
         }
-
+        
         RequestDispatcher dis = null;
         dis = request.getRequestDispatcher(basePath+"/edit.jsp");
         try
