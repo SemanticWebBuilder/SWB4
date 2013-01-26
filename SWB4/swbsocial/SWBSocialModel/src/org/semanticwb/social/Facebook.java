@@ -30,8 +30,7 @@ import org.semanticwb.social.listener.Classifier;
 public class Facebook extends org.semanticwb.social.base.FacebookBase {
     
     
-    /** Cadena utilizada en la construccion de peticiones HTTP POST al servidor de Facebook */
-    private static final String PassPhrase = "f:,+#u4w=EkJ0R[";
+    private final static String ALPHABETH = "abcdefghijklmnopqrstuvwxyz1234567890";
     
     private static final String CRLF = "\r\n";    
     
@@ -770,19 +769,12 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
     {
         String code = request.getParameter("code");
         String state = request.getParameter("state");
-//        try {
-//            state = new String(SWBUtils.CryptoWrapper.PBEAES128Decipher(PassPhrase, SFBase64.decode(state)));
-//        }catch(GeneralSecurityException gse) {
-//System.out.println("----GeneralSecurityException");
-//        }catch(Exception e) {
-//System.out.println("----Exception");        
-//        }
         String error = request.getParameter("error");
         HttpSession session = request.getSession(true);
 System.out.println("Facebook.autenticate.............");
         if(code==null)
         {
-System.out.println("paso 1");
+System.out.println("Facebook----paso 1");
             String url = doRequestPermissions(request, paramRequest);
             PrintWriter out = response.getWriter();
             out.println("<script type=\"text/javascript\">");
@@ -797,54 +789,62 @@ System.out.println("paso 1");
         }
         else if( state!=null && state.equals(session.getAttribute("state")) && error==null  )
         {
-System.out.println("2");
+System.out.println("Facebook----2");
             session.removeAttribute("state");
             String accessToken = null;
-            long secsToExpiration = 0L;
+//            long secsToExpiration = 0L;
             String token_url = "https://graph.facebook.com/oauth/access_token?" + "client_id="+getAppKey()+"&redirect_uri=" + URLEncoder.encode(getRedirectUrl(request, paramRequest), "utf-8") + "&client_secret="+getSecretKey()+"&code=" + code;
-
-            if(accessToken == null) {
-System.out.println("2.1");
-                URL pagina = new URL(token_url);
-                URLConnection conex = null;
-                try {
-                    //Se realiza la peticion a la página externa
-                    conex = pagina.openConnection();
-                    if(request.getHeader("user-agent")!=null) {
-                        conex.setRequestProperty("user-agent", request.getHeader("user-agent"));
-                    }
-                    if(pagina.getHost()!=null) {
-                        conex.setRequestProperty("host", pagina.getHost());
-                    }
-                    conex.setConnectTimeout(5000);
-                }catch(Exception nexc) {
-                    conex = null;
-//System.out.println("error........"+nexc);
+//            if(accessToken == null) {
+System.out.println("Facebook----2.1");
+            URL pagina = new URL(token_url);
+            URLConnection conex = null;
+            try {
+                //Se realiza la peticion a la página externa
+                conex = pagina.openConnection();
+                if(request.getHeader("user-agent")!=null) {
+                    conex.setRequestProperty("user-agent", request.getHeader("user-agent"));
                 }
-                if (conex != null) {
-                    String answer = SWBUtils.IO.readInputStream(conex.getInputStream());
-                    String aux = null;
-                    if (answer.indexOf("&") > 0) {
-                        aux = answer.split("&")[0];
-                        if (aux.indexOf("=") > 0) {
-                            accessToken = aux.split("=")[1];
-                        }
-                        aux = answer.split("&")[1];
-                        if (aux.indexOf("=") > 0) {
+                if(pagina.getHost()!=null) {
+                    conex.setRequestProperty("host", pagina.getHost());
+                }
+                conex.setConnectTimeout(5000);
+            }catch(Exception nexc) {
+                conex = null;
+System.out.println("error error error error error error error error 1");
+//System.out.println("error........"+nexc);
+            }
+            if (conex != null) {
+                String answer;
+                try{
+                answer = SWBUtils.IO.readInputStream(conex.getInputStream());
+                }catch(Exception e) {
+System.out.println("error error error error error error error error 3\n"+e);
+                answer = "";
+                }
+                String aux = null;
+                if (answer.indexOf("&") > 0) {
+                    aux = answer.split("&")[0];
+                    if (aux.indexOf("=") > 0) {
+                        accessToken = aux.split("=")[1];
+                    }
+                    aux = answer.split("&")[1];
+                    if (aux.indexOf("=") > 0) {
 //                            secsToExpiration = Long.parseLong(aux.split("=")[1]);
-                        }
                     }
                 }
             }
+//            }
             if(accessToken != null) {
-System.out.println("2.2");
+System.out.println("Facebook----2.2");
                 String graph_url = "https://graph.facebook.com/me?access_token=" + accessToken;
                 String me = Facebook.graphRequest(graph_url, request.getHeader("user-agent"));
                 try {
                     JSONObject userData = new JSONObject(me);
                     String name = (String)userData.getString("name");
                     setActive(true);
+                    setSn_authenticated(true);
                     setAccessToken(accessToken);
+                                        
                     request.setAttribute("msg", name);
                     PrintWriter out = response.getWriter();
                     out.println("<script type=\"text/javascript\">");
@@ -857,6 +857,7 @@ System.out.println("2.2");
                     out.println("<script type=\"text/javascript\">");
                     out.println("  window.close();");
                     out.println("</script>");
+System.out.println("error error error error error error error error 2");
                 }
             }
         }
@@ -877,21 +878,14 @@ System.out.println("problemas");
     {
         StringBuilder address = new StringBuilder(128);
         address.append("http://").append(request.getServerName()).append(":").append(request.getServerPort()).append("/").append(paramRequest.getUser().getLanguage()).append("/").append(paramRequest.getResourceBase().getWebSiteId()).append("/"+paramRequest.getWebPage().getId()+"/_rid/").append(paramRequest.getResourceBase().getId()).append("/_mod/").append(paramRequest.getMode()).append("/_lang/").append(paramRequest.getUser().getLanguage());
-System.out.println("url de regreso: "+address);
         return address.toString();
     }
     
     public String doRequestPermissions(HttpServletRequest request, SWBParamRequest paramRequest )
     {
         StringBuilder url = new StringBuilder(128);
-        String encodedURI;
-        try {
-            encodedURI = SFBase64.encodeBytes(SWBUtils.CryptoWrapper.PBEAES128Cipher(PassPhrase, getURI().getBytes()));
-        }catch(GeneralSecurityException e) {
-            encodedURI = getURI();
-        }
-        request.getSession(true).setAttribute("state", "123");
-//System.out.println("encodedURI="+encodedURI);
+        String state = SWBPortal.UTIL.getRandString(7, ALPHABETH);
+        request.getSession(true).setAttribute("state", state);
                 
         url.append("'https://www.facebook.com/dialog/oauth?'+");
         url.append("'client_id='+");
@@ -901,7 +895,7 @@ System.out.println("url de regreso: "+address);
         url.append("'&scope='+");
         url.append("encodeURIComponent('publish_stream,read_stream')+");
         url.append("'&state='+");        
-        url.append("'123'");
+        url.append("'").append(state).append("'");
         return url.toString();
         //heroku pass admin12345678
     }
