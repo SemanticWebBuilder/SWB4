@@ -89,7 +89,7 @@ public class SWBProcessFormMgr implements SWBForms
             //TODO: agregar variable en lugar del uri de la clase
         }
     }
-
+    
     public void setType(String type)
     {
         this.m_type = type;
@@ -293,9 +293,11 @@ public class SWBProcessFormMgr implements SWBForms
 
     public String getFormName()
     {
-        String uri;
+        String uri="";
         String frmname=null;
-        uri=m_pinst.getId();
+        if (m_pinst != null) {
+            uri=m_pinst.getId();
+        }
         return frmname=uri+"/form";
     }
 
@@ -375,7 +377,14 @@ public class SWBProcessFormMgr implements SWBForms
 //        }
 //        return mgr.renderLabel(request, prop, prop.getName(), mode);
 //    }
-
+    public FormElement getFormElement(SemanticProperty prop, String varName) {
+        FormElement ele = null;
+        SWBFormMgr mgr = mgrs.get(varName);
+        if (mgr != null) {
+            ele = mgr.getFormElement(prop);
+        }
+        return ele;
+    }
 
     /**
      * Render label.
