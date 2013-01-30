@@ -44,16 +44,7 @@
                                         TreeNodeRefresh treeNodeRefresh=(TreeNodeRefresh)evt.getData();
                                         ElementTreeNode treeNode=treeNodeRefresh.getTreeNode();
                                         SWBClass swbClass=treeNodeRefresh.getSWBClass();
-                                        SWBSocialResourceUtils.Actions.insertTreeNode(treeNode,swbClass);
-                                    }
-                                });
-                                EventQueue queOnUpdateNode = EventQueues.lookup("updateNode2Tree", EventQueues.SESSION, true);
-                                queOnUpdateNode.subscribe(new EventListener() {
-                                    public void onEvent(Event evt) {
-                                        TreeNodeRefresh treeNodeRefresh=(TreeNodeRefresh)evt.getData();
-                                        ElementTreeNode treeNode=treeNodeRefresh.getTreeNode();
-                                        String title=treeNodeRefresh.getTitle();
-                                        SWBSocialResourceUtils.Actions.updateTreeTitleNode(treeNode, title);
+                                        SWBSocialResourceUtils.Zkoss.insertTreeNode(treeNode,swbClass);
                                     }
                                 });
                                 EventQueue queOnRemoveNode = EventQueues.lookup("removeNodo2Tree", EventQueues.SESSION, true);
@@ -62,6 +53,13 @@
                                         ElementTreeNode treeItem=(ElementTreeNode)evt.getData();
                                         AdvancedTreeModel advTreeModel=(AdvancedTreeModel)page.getDesktop().getSession().getAttribute("elemenetTreeModel");
                                         advTreeModel.remove(treeItem);
+                                    }
+                                });
+                                EventQueue queOnRefreshNode = EventQueues.lookup("refreshNodo2Tree", EventQueues.SESSION, true);
+                                queOnRefreshNode.subscribe(new EventListener() {
+                                    public void onEvent(Event evt) {
+                                         TreeNode treeItem=(ElementTreeNode)evt.getData();
+                                         SWBSocialResourceUtils.Zkoss.refreshNode(treeItem);
                                     }
                                 });
                                 EventQueue queOnUpdateMsgWin = EventQueues.lookup("updateMsgWin", EventQueues.SESSION, true);
@@ -85,7 +83,7 @@
                                         ElementTreeNode treeItem=(ElementTreeNode)evt.getData();
                                         rootTreeNode.insert(treeItem, rootTreeNode.getChildCount());
                                         String msg_brandCreated=SWBUtils.TEXT.getLocaleString("org.semanticwb.social.components.locales.genericCompMsgs", "msg_brandCreated",new Locale(user.getLanguage()));
-                                        SWBSocialResourceUtils.Events.setStatusMessage_Event(msg_brandCreated+":"+treeItem.getData().getName());
+                                        SWBSocialResourceUtils.Zkoss.setStatusMessage_Event(msg_brandCreated+":"+treeItem.getData().getName());
                                     }
                                  });
                             ]]>
