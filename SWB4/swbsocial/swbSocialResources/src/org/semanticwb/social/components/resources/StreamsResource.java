@@ -106,7 +106,7 @@ public class StreamsResource extends GenericSocialResource{
         WebSite wsite=(WebSite)request.getAttribute("wsite");
         User user = paramRequest.getUser();
         String uri = request.getParameter("sobjUri");
-        SWBSocialResourceUtils.Actions.updateTreeNode(request, paramRequest);
+        SWBSocialResourceUtils.Resources.updateTreeNode(request, paramRequest);
         if(uri != null) {
             SemanticObject semObj = SemanticObject.createSemanticObject(uri);
             if(semObj != null) {
@@ -202,7 +202,7 @@ public class StreamsResource extends GenericSocialResource{
                 semObj = mgr.processForm(request);
                 if(treeItem != null) {
                     Stream str = (Stream)semObj.createGenericInstance();
-                    SWBSocialResourceUtils.Events.updateTreeTitleNode_Event(treeItem, str.getTitle());
+                    SWBSocialResourceUtils.Zkoss.refreshNodeTitle(treeItem, str.getTitle());
                 }
             } catch(FormValidateException ex) {
                 log.error("Error in: " + ex);
