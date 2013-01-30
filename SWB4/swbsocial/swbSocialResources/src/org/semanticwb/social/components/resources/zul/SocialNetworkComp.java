@@ -19,6 +19,7 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zul.Button;
 import java.util.Locale;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.social.components.tree.AdvancedTreeModel;
 
 /**
  *
@@ -48,6 +49,7 @@ public class SocialNetworkComp extends GenericForwardComposer {
     WebPage optionWepPage;
     String objUri;
     SWBParamRequest paramRequest=null;
+    
 
     @Override
     public void doAfterCompose(Component comp) throws Exception {
@@ -56,6 +58,7 @@ public class SocialNetworkComp extends GenericForwardComposer {
         treeItem=(ElementTreeNode)requestScope.get("treeItem");
         action=(String)requestScope.get("action");
         objUri=(String)requestScope.get("objUri");
+        
         /*
         System.out.println("SocialNetworkComp/wsite:"+wsite);
         System.out.println("SocialNetworkComp/treeItem:"+treeItem);
@@ -75,7 +78,7 @@ public class SocialNetworkComp extends GenericForwardComposer {
             sendButton.setLabel("Actualizar");
         }else if(action.equals(SWBSocialResourceUtils.ACTION_REMOVE))
         {
-            SWBSocialResourceUtils.Actions.updateTreeNode(requestScope);
+            SWBSocialResourceUtils.Zkoss.updateTreeNode(requestScope);
         }
 
     }
@@ -95,16 +98,17 @@ public class SocialNetworkComp extends GenericForwardComposer {
                 ctaNet.setDescription(description.getValue());
             }
             //Actualizar el árbol (Insertar Nodo)
-            SWBSocialResourceUtils.Events.setStatusMessage_Event(SWBUtils.TEXT.getLocaleString("org.semanticwb.social.components.locales.genericCompMsgs", "msg_elementCreated",new Locale("es"))+":"+ctaNet.getTitle()); 
-            SWBSocialResourceUtils.Events.insertNode2Tree_Event(treeItem, ctaNet);
+            SWBSocialResourceUtils.Zkoss.setStatusMessage(SWBUtils.TEXT.getLocaleString("org.semanticwb.social.components.locales.genericCompMsgs", "msg_elementCreated",new Locale("es"))+":"+ctaNet.getTitle()); 
+            SWBSocialResourceUtils.Zkoss.insertNode2Tree(treeItem, ctaNet);
         }else if(action.equals(SWBSocialResourceUtils.ACTION_EDIT) ||  action.equals(SWBSocialResourceUtils.ACTION_DOUBLECLICK) && socialNet!=null)
         {
             if(title.getValue()!=null)
             {
                 socialNet.setTitle(title.getValue());
                 //Actualizar el árbol (actualizar título de Nodo)
-                SWBSocialResourceUtils.Events.updateTreeTitleNode_Event(treeItem, title.getValue());
-                SWBSocialResourceUtils.Events.setStatusMessage_Event("Titulo de nodo actualizado..");
+                SWBSocialResourceUtils.Zkoss.refreshNodeTitle(treeItem, title.getValue());
+                
+                SWBSocialResourceUtils.Zkoss.setStatusMessage("Titulo de nodo actualizado..");
             }
             if(description.getValue()!=null)
             {
