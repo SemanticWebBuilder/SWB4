@@ -47,7 +47,7 @@ public class SocialZulResource extends GenericAdmResource
         if(!SWBParamRequest.WinState_MINIMIZED.equals(paramRequest.getWindowState()))
         {
             WebSite wsite=WebSite.ClassMgr.getWebSite(request.getParameter("wsite"));
-            ElementTreeNode treeItem=SWBSocialResourceUtils.Actions.getComponentbyUri(request); 
+            ElementTreeNode treeItem=SWBSocialResourceUtils.Resources.getComponentbyUri(request); 
 
             request.setAttribute("wsite", wsite);
             request.setAttribute("action", request.getParameter("action"));

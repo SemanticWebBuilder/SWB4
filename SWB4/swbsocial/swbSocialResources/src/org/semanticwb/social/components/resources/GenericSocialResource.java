@@ -41,7 +41,7 @@ public class GenericSocialResource extends GenericAdmResource
             WebSite wsite=WebSite.ClassMgr.getWebSite(request.getParameter("wsite"));
             if(wsite!=null)
             {
-                ElementTreeNode treeItem=SWBSocialResourceUtils.Actions.getComponentbyUri(request);
+                ElementTreeNode treeItem=SWBSocialResourceUtils.Resources.getComponentbyUri(request);
                 request.setAttribute("wsite", wsite);
                 request.setAttribute("action", request.getParameter("action"));
                 if(request.getParameter("objUri")!=null)
@@ -74,7 +74,7 @@ public class GenericSocialResource extends GenericAdmResource
        {
            //Se elimina algo específico del objeto semantico (puede ser algo de filesystem, algo de BD, algun mensaje a un webservice,etc)
            //Y siempre se debe envíar a llamar al siguiente metodo para actualizar el arbol.
-           SWBSocialResourceUtils.Actions.updateTreeNode(request, paramRequest);
+           SWBSocialResourceUtils.Resources.updateTreeNode(request, paramRequest);
        }
        out.println("Contenido de Prueba Genérico.Jogg...-1");
     }

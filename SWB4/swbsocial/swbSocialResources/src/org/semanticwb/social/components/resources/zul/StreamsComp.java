@@ -58,6 +58,8 @@ public class StreamsComp extends GenericForwardComposer
         action=(String)requestScope.get("action");
         objUri=(String)requestScope.get("objUri");
         
+        comp.getPage().getDesktop().getSession().getAttribute("elemenetTreeModel");
+        
         if(action.equals(SWBSocialResourceUtils.ACTION_ADD))
         {
             sendButton.setLabel("Crear");
@@ -91,15 +93,15 @@ public class StreamsComp extends GenericForwardComposer
                 stream.setDescription(description.getValue());
             }
             //Actualizar el árbol (Insertar Nodo)
-            SWBSocialResourceUtils.Events.setStatusMessage_Event(SWBUtils.TEXT.getLocaleString("org.semanticwb.social.components.locales.genericCompMsgs", "msg_elementCreated",new Locale("es"))+":"+stream.getTitle());
-            SWBSocialResourceUtils.Events.insertNode2Tree_Event(treeItem, stream);
+            SWBSocialResourceUtils.Zkoss.setStatusMessage(SWBUtils.TEXT.getLocaleString("org.semanticwb.social.components.locales.genericCompMsgs", "msg_elementCreated",new Locale("es"))+":"+stream.getTitle());
+            SWBSocialResourceUtils.Zkoss.insertNode2Tree(treeItem, stream);
         }else if(action.equals(SWBSocialResourceUtils.ACTION_EDIT) ||  action.equals(SWBSocialResourceUtils.ACTION_DOUBLECLICK) && stream!=null)
         {
             if(title.getValue()!=null)
             {
                 stream.setTitle(title.getValue());
                 //Actualizar el árbol (actualizar título de Nodo)
-                SWBSocialResourceUtils.Events.updateTreeTitleNode_Event(treeItem, title.getValue());
+                SWBSocialResourceUtils.Zkoss.refreshNodeTitle(treeItem, title.getValue()); 
             }
             if(description.getValue()!=null)
             {
