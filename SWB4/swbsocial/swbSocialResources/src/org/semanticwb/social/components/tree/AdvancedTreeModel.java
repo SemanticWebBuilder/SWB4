@@ -150,6 +150,22 @@ public final class AdvancedTreeModel extends DefaultTreeModel<Element> {
             }
         }
     }
+    
+    /**
+     * Este metodo sirve para agregar un nodo a otro nodo (como hijo), pero no se esta utilizando en este momento
+     * TODO:Probar despues, la tomé de http://forum.zkoss.org/question/67089/manually-refreshing-the-tree-component/
+     * @param parent
+     * @param node 
+     */
+    public void add(TreeNode parent, TreeNode node) {
+        if (node != null && parent != null) {
+                parent.add(node);
+                int index = parent.getIndex(node);
+                if (index >= 0) {
+                        fireEvent(parent, index, index, TreeDataEvent.INTERVAL_ADDED);
+                }
+        }
+    }
 
 
     /*
@@ -205,18 +221,17 @@ public final class AdvancedTreeModel extends DefaultTreeModel<Element> {
      */
     
     public void refreshNode(TreeNode node) {
-        Element element = (Element) node.getData();
         if (node != null) {
             TreeNode parent = node.getParent();
-            Element parentElement = (Element) parent.getData();
             if (parent != null) {
-                    int index = parent.getIndex(node);
-                    if (index >= 0) {
-                            // This causes the NullPointerException!
-                            fireEvent(parent, index, index, TreeDataEvent.CONTENTS_CHANGED);
-                            fireEvent(parent, index, index, TreeDataEvent.INTERVAL_REMOVED);
-                            fireEvent(parent, index, index, TreeDataEvent.INTERVAL_ADDED);
-                    }
+                int index = parent.getIndex(node);
+                if (index >= 0) {
+                        System.out.println("Entra a Adv-refreshNode-3");
+                        // This causes the NullPointerException!
+                        fireEvent(parent, index, index, TreeDataEvent.CONTENTS_CHANGED);
+                        fireEvent(parent, index, index, TreeDataEvent.INTERVAL_REMOVED);
+                        fireEvent(parent, index, index, TreeDataEvent.INTERVAL_ADDED);
+                }
             }
         }
     }

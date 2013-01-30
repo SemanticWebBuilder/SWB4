@@ -92,15 +92,15 @@ public class TopicsComp extends GenericForwardComposer
                 socialTopic.setDescription(description.getValue());
             }
             //Actualizar el árbol (Insertar Nodo)
-            SWBSocialResourceUtils.Events.setStatusMessage_Event(SWBUtils.TEXT.getLocaleString("org.semanticwb.social.components.locales.genericCompMsgs", "msg_elementCreated",new Locale("es"))+":"+socialTopic.getTitle());
-            SWBSocialResourceUtils.Events.insertNode2Tree_Event(treeItem, socialTopic);
+            SWBSocialResourceUtils.Zkoss.setStatusMessage(SWBUtils.TEXT.getLocaleString("org.semanticwb.social.components.locales.genericCompMsgs", "msg_elementCreated",new Locale("es"))+":"+socialTopic.getTitle());
+            SWBSocialResourceUtils.Zkoss.insertNode2Tree(treeItem, socialTopic);
         }else if(action.equals(SWBSocialResourceUtils.ACTION_EDIT) ||  action.equals(SWBSocialResourceUtils.ACTION_DOUBLECLICK) && socialTopic!=null)
         {
             if(title.getValue()!=null)
             {
                 socialTopic.setTitle(title.getValue());
                 //Actualizar el árbol (actualizar título de Nodo)
-                SWBSocialResourceUtils.Events.updateTreeTitleNode_Event(treeItem, title.getValue());
+                SWBSocialResourceUtils.Zkoss.refreshNodeTitle(treeItem, title.getValue());
             }
             if(description.getValue()!=null)
             {
