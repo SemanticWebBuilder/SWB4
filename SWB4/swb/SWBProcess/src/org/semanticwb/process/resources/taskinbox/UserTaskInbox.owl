@@ -9,97 +9,108 @@
     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
   xml:base="http://www.semanticwebbuilder.org/process/resources/UserTaskInbox">
   <owl:Ontology rdf:about="">
-    <owl:imports rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology"/>
     <owl:versionInfo rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >Created with TopBraid Composer</owl:versionInfo>
+    <owl:imports rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology"/>
   </owl:Ontology>
+  <owl:Class rdf:ID="UserTaskInboxResource">
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBSemanticResource"/>
+    <rdfs:label xml:lang="es">Bandeja de Tareas de Usuario</rdfs:label>
+    <rdfs:label xml:lang="en">User Task Inbox</rdfs:label>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Recurso que despliega la bandeja de tareas de un usuario de procesos.</rdfs:comment>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SemanticResource"/>
+  </owl:Class>
   <owl:ObjectProperty rdf:ID="displayMapWp">
-    <rdfs:domain>
-      <swb:SemanticResource rdf:ID="UserTaskInboxResource">
-        <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >Recurso que despliega la bandeja de tareas de un usuario de procesos.</rdfs:comment>
-        <rdfs:label xml:lang="en">User Task Inbox</rdfs:label>
-        <rdfs:label xml:lang="es">Bandeja de Tareas de Usuario</rdfs:label>
-        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBSemanticResource"/>
-        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-      </swb:SemanticResource>
-    </rdfs:domain>
+    <rdfs:range rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#WebPage"/>
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_dysplayMapWp">
-        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#SelectTree_Model_Blank"/>
-        <rdfs:label xml:lang="en">Status map page</rdfs:label>
         <rdfs:label xml:lang="es">Página de Mapa de estado</rdfs:label>
+        <rdfs:label xml:lang="en">Status map page</rdfs:label>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#SelectTree_Model_Blank"/>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
-    <rdfs:range rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#WebPage"/>
+    <rdfs:domain rdf:resource="#UserTaskInboxResource"/>
   </owl:ObjectProperty>
   <owl:DatatypeProperty rdf:ID="displayCols">
+    <rdfs:domain rdf:resource="#UserTaskInboxResource"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:label xml:lang="es">Propiedades de despliegue</rdfs:label>
+    <rdfs:label xml:lang="en">Display properties</rdfs:label>
     <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >Almacena, separados por pipes, los nombres de las propiedades a desplegar en la tabla de tareas.</rdfs:comment>
-    <rdfs:label xml:lang="en">Display properties</rdfs:label>
-    <rdfs:label xml:lang="es">Propiedades de despliegue</rdfs:label>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-    <rdfs:domain rdf:resource="#UserTaskInboxResource"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="viewJSP">
-    <rdfs:domain rdf:resource="#UserTaskInboxResource"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_viewJSP">
-        <rdfs:label xml:lang="es">Ruta al JSP de vista</rdfs:label>
         <rdfs:label xml:lang="en">Path to view JSP</rdfs:label>
+        <rdfs:label xml:lang="es">Ruta al JSP de vista</rdfs:label>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#UserTaskInboxResource"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="filterByGroup">
-    <rdfs:domain rdf:resource="#UserTaskInboxResource"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_filterByGroup">
-        <rdfs:label xml:lang="es">Filtrar por grupo de usuarios</rdfs:label>
         <rdfs:label xml:lang="en">Filter by user group</rdfs:label>
-      </swbxf:DisplayProperty>
-    </swb:displayProperty>
-  </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="configJSP">
-    <rdfs:domain rdf:resource="#UserTaskInboxResource"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-    <swb:displayProperty>
-      <swbxf:DisplayProperty rdf:ID="dp_configJSP">
-        <rdfs:label xml:lang="es">Ruta al JSP de configuración</rdfs:label>
-        <rdfs:label xml:lang="en">Path to config JSP</rdfs:label>
-      </swbxf:DisplayProperty>
-    </swb:displayProperty>
-  </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="itemsPerPage">
-    <rdfs:domain rdf:resource="#UserTaskInboxResource"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
-    <rdfs:label xml:lang="es">Elementos por página</rdfs:label>
-    <rdfs:label xml:lang="en">Items per page</rdfs:label>
-    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >Almacena el número de elementos a desplegar en una página de la lista de tareas.</rdfs:comment>
-    <swb:displayProperty>
-      <swbxf:DisplayProperty rdf:ID="dp_itemsPerPage">
-        <rdfs:label xml:lang="es">Elementos por página</rdfs:label>
-        <rdfs:label xml:lang="en">Items per page</rdfs:label>
-      </swbxf:DisplayProperty>
-    </swb:displayProperty>
-  </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="showProcessWPLink">
-    <swb:displayProperty>
-      <swbxf:DisplayProperty rdf:ID="dp_showProcessWPLink">
-        <rdfs:label xml:lang="en">Show link to process Web page</rdfs:label>
-        <rdfs:label xml:lang="es">Mostrar enlace a la página Web del proceso</rdfs:label>
+        <rdfs:label xml:lang="es">Filtrar por grupo de usuarios</rdfs:label>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
     <rdfs:domain rdf:resource="#UserTaskInboxResource"/>
   </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="configJSP">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_configJSP">
+        <rdfs:label xml:lang="en">Path to config JSP</rdfs:label>
+        <rdfs:label xml:lang="es">Ruta al JSP de configuración</rdfs:label>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#UserTaskInboxResource"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="itemsPerPage">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_itemsPerPage">
+        <rdfs:label xml:lang="en">Items per page</rdfs:label>
+        <rdfs:label xml:lang="es">Elementos por página</rdfs:label>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Almacena el número de elementos a desplegar en una página de la lista de tareas.</rdfs:comment>
+    <rdfs:label xml:lang="en">Items per page</rdfs:label>
+    <rdfs:label xml:lang="es">Elementos por página</rdfs:label>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+    <rdfs:domain rdf:resource="#UserTaskInboxResource"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="allowForward">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_allowForward">
+        <rdfs:label xml:lang="en">Allow task forwarding</rdfs:label>
+        <rdfs:label xml:lang="es">Permitir reasignación de tareas</rdfs:label>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:label xml:lang="en">Allow task forwarding</rdfs:label>
+    <rdfs:label xml:lang="es">Permitir reasignación de tareas</rdfs:label>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+    <rdfs:domain rdf:resource="#UserTaskInboxResource"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="showProcessWPLink">
+    <rdfs:domain rdf:resource="#UserTaskInboxResource"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_showProcessWPLink">
+        <rdfs:label xml:lang="es">Mostrar enlace a la página Web del proceso</rdfs:label>
+        <rdfs:label xml:lang="en">Show link to process Web page</rdfs:label>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+  </owl:DatatypeProperty>
   <swb:CodePackage rdf:ID="pkg">
-    <swb:prefix rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >utinbox</swb:prefix>
     <swb:package rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >org.semanticwb.process.resources.taskinbox</swb:package>
+    <swb:prefix rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >utinbox</swb:prefix>
   </swb:CodePackage>
 </rdf:RDF>
 
