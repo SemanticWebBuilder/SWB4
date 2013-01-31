@@ -26,6 +26,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 import javax.servlet.http.HttpServletRequest;
@@ -185,7 +186,14 @@ public class CreateProcessInstance extends GenericAdmResource{
             String pid = request.getParameter("prid");
             Process process = Process.ClassMgr.getProcess(pid, wp.getWebSite());
             
-            if(process!=null) inst = SWBProcessMgr.createProcessInstance(process, user);
+            if (process != null) {
+                inst = SWBProcessMgr.createSynchProcessInstance(process, user);
+                List<FlowNodeInstance> arr = SWBProcessMgr.getActiveUserTaskInstances(inst,response.getUser());                        
+                if (arr.size() > 0) {
+                    response.sendRedirect(arr.get(0).getUserTaskUrl());
+                    return;
+                }     
+            }
             
             String url=process.getProcessWebPage().getUrl();
             ResourceType rtype=ResourceType.ClassMgr.getResourceType("ProcessTaskInbox", wp.getWebSite());
