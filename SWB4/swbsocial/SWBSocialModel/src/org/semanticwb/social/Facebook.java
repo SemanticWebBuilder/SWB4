@@ -8,7 +8,6 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
-import java.security.GeneralSecurityException;
 import java.util.*;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -18,10 +17,8 @@ import org.json.JSONObject;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
-import org.semanticwb.base.util.SFBase64;
 import org.semanticwb.io.SWBFile;
 import org.semanticwb.io.SWBFileInputStream;
-import org.semanticwb.model.WebSite;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.social.listener.Classifier;
@@ -841,7 +838,6 @@ System.out.println("Facebook----2.2");
                 try {
                     JSONObject userData = new JSONObject(me);
                     String name = (String)userData.getString("name");
-                    setActive(true);
                     setSn_authenticated(true);
                     setAccessToken(accessToken);
                                         
