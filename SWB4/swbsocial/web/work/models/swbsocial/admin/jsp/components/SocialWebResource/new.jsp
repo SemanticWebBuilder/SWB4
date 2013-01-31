@@ -68,8 +68,15 @@ System.out.println("objUri="+objUri);
 <%
     if(socialNetwork==null)
     {
+    
 %>
         <form id="nc" dojoType="dijit.form.Form" class="swbform" action="<%=url%>" method="post">
+<%
+    }
+    else if(!socialNetwork.isSn_authenticated())
+    {
+%>
+        <p>¡ La cuenta no está autenticada !</p>
 <%
     }
 %>
