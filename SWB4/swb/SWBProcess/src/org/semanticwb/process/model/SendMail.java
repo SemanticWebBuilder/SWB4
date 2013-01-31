@@ -22,13 +22,13 @@
  */
 package org.semanticwb.process.model;
 
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.StringTokenizer;
+import javax.mail.internet.InternetAddress;
 import org.semanticwb.Logger;
-import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.User;
-import org.semanticwb.platform.SemanticClass;
-import org.semanticwb.platform.SemanticProperty;
 import org.semanticwb.process.utils.SWBScriptParser;
 
 
@@ -47,9 +47,41 @@ public class SendMail extends org.semanticwb.process.model.base.SendMailBase
         super.execute(instance, user);
         try
         {
+            ArrayList<InternetAddress> address = new ArrayList<InternetAddress>();
+            String from = SWBScriptParser.parser(instance, user, getFrom());
+            String subject = SWBScriptParser.parser(instance, user, getSubject());
+            String content = SWBScriptParser.parser(instance, user, getContent());
+            String to = SWBScriptParser.parser(instance, user, getTo());
+            
+            StringTokenizer strTk = null;
+            if (to != null && to.trim().length() > 0) {
+                if (to.indexOf(";") > 0) {
+                    strTk = new StringTokenizer(to, ";");
+                } else if (to.indexOf(",") > 0) {
+                    strTk = new StringTokenizer(to, ",");
+                }
+                
+                if (strTk != null) {
+                    while (strTk.hasMoreTokens()) {
+                        String token = strTk.nextToken();
+                        if (token == null) {
+                            continue;
+                        }
+                        InternetAddress toAddress = new InternetAddress();
+                        toAddress.setAddress(token);
+                        address.add(toAddress);
+                    }
+                } else {
+                    InternetAddress toAddress = new InternetAddress();
+                    toAddress.setAddress(to);
+                    address.add(toAddress);
+                }
+                SWBUtils.EMAIL.sendMail(from, user.getFullName(), address, null, null, subject, null, content, null, null, null);
+            }
             //replaceTags(instance, getContent());
-            SWBUtils.EMAIL.sendMail(SWBScriptParser.parser(instance, user, getTo()), SWBScriptParser.parser(instance, user, getSubject()), SWBScriptParser.parser(instance, user, getContent()));
-        }catch(Exception e)
+            
+            //SWBUtils.EMAIL.sendMail(SWBScriptParser.parser(instance, user, getTo()), SWBScriptParser.parser(instance, user, getSubject()), SWBScriptParser.parser(instance, user, getContent()));
+        } catch(Exception e)
         {
             log.error(e);
             FlowNode node=instance.getFlowNodeType();
