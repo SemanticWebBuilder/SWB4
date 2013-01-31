@@ -1,11 +1,14 @@
 package org.semanticwb.social;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.Date;
 import java.util.List;
 import javaQuery.j2ee.tinyURL;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
@@ -13,7 +16,9 @@ import org.semanticwb.model.SWBModel;
 import org.semanticwb.model.User;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.portal.api.SWBActionResponse;
-import org.semanticwb.social.listener.Classifier;
+import org.semanticwb.portal.api.SWBParamRequest;
+import org.semanticwb.portal.api.SWBResourceException;
+import org.semanticwb.portal.api.SWBResourceURL;
 import org.semanticwb.social.listener.twitter.SWBSocialStatusListener;
 import org.semanticwb.social.util.SWBSocialUtil;
 import twitter4j.FilterQuery;
@@ -28,6 +33,7 @@ import twitter4j.TwitterFactory;
 import twitter4j.TwitterStream;
 import twitter4j.TwitterStreamFactory;
 import twitter4j.auth.AccessToken;
+import twitter4j.auth.RequestToken;
 import twitter4j.conf.Configuration;
 import twitter4j.conf.ConfigurationBuilder;
 
@@ -36,6 +42,16 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
 
     Logger log = SWBUtils.getLogger(Twitter.class);
     TwitterStream trial=null;
+    
+    private RequestToken requestToken;
+    
+    public void setRequestToken(RequestToken requestToken) {
+        this.requestToken = requestToken;
+    }
+    
+    public RequestToken getRequestToken() {
+        return requestToken;
+    }
 
     public Twitter(org.semanticwb.platform.SemanticObject base) {
         super(base);
@@ -235,6 +251,69 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
             trial.shutdown();
             System.out.println("DETUVO LA CONEXION EN:"+this.getId());
         }
+    }
+
+    @Override
+    public void authenticate(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
+    {
+System.out.println("Twitter.autenticate.............");
+        String verifier = request.getParameter("oauth_verifier");
+        if(verifier==null)
+        {
+System.out.println("Twitter----paso 1");
+            twitter4j.Twitter twitterFI = new TwitterFactory().getInstance();
+            twitterFI.setOAuthConsumer(getAppKey(), getSecretKey());
+            try {
+                requestToken = twitterFI.getOAuthRequestToken(getRedirectUrl(request, paramRequest));
+                //response.sendRedirect(requestToken.getAuthorizationURL());
+                PrintWriter out = response.getWriter();
+                out.println("<script type=\"text/javascript\">");
+                out.println(" function ioauth() {");
+                out.println("  mywin = window.open('"+requestToken.getAuthorizationURL()+"','_blank','width=840,height=680',true);");
+                out.println("  mywin.focus();");
+                out.println(" }");
+                out.println(" if(confirm('autenticar la cuenta en twitter?')) {");
+                out.println("  ioauth();");
+                out.println(" }");
+                out.println("</script>");
+            }catch(TwitterException te) {
+                throw new IOException(te.getMessage());
+            }
+        }
+        else
+        {
+System.out.println("Twitter----2");
+            twitter4j.Twitter twitterFI = new TwitterFactory().getInstance();
+            twitterFI.setOAuthConsumer(getAppKey(), getSecretKey());
+            try {
+                AccessToken accessToken = twitterFI.getOAuthAccessToken(requestToken, verifier);
+                setAccessToken(accessToken.getToken());
+                setAccessTokenSecret(accessToken.getTokenSecret());
+                setSn_authenticated(true);
+                //SWBResourceURL posted = paramRequest.getRenderUrl().setMode("view").setParameter("objUri", getEncodedURI());
+                //response.sendRedirect(request.getContextPath() + posted);
+            }catch(TwitterException te) {
+te.printStackTrace(System.out);
+                throw new IOException(te.getMessage());
+            }catch(Exception e) {
+e.printStackTrace(System.out);
+                throw new IOException(e.getMessage());
+            }finally {
+                PrintWriter out = response.getWriter();
+                out.println("<script type=\"text/javascript\">");
+                out.println("  window.close();");
+                out.println("</script>");
+            }
+        }
+    }
+    
+    private String getRedirectUrl(HttpServletRequest request, SWBParamRequest paramRequest)
+    {
+System.out.println("getRedirectUrl....");
+        StringBuilder address = new StringBuilder(128);
+        address.append("http://").append(request.getServerName()).append(":").append(request.getServerPort()).append("/").append(paramRequest.getUser().getLanguage()).append("/").append(paramRequest.getResourceBase().getWebSiteId()).append("/"+paramRequest.getWebPage().getId()+"/_rid/").append(paramRequest.getResourceBase().getId()).append("/_mod/").append(paramRequest.getMode()).append("/_lang/").append(paramRequest.getUser().getLanguage());
+System.out.println("URL callback="+address);
+        return address.toString();
     }
 
     @Override
