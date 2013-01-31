@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.model.Resource;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.portal.api.GenericResource;
 import org.semanticwb.portal.api.SWBParamRequest;
@@ -47,7 +48,8 @@ public class TwitterAuthenticator extends GenericResource {
      * Url a la que redireccionará el sitio Twitter una vez que el usuario haya aceptado
      * dar el acceso de su cuenta a SWBSocial
      */
-    private String urlCallback = "http://swbsocial.mx:8080/firmaTwitter";
+    //private String urlCallback = "http://swbsocial.mx:8080/firmaTwitter";             
+    private String urlCallback;
     /**
      * Objeto que se encargará de hacer una petici&oacute;n al sitio de Twitter para generar
      * tokens permanentes que permitiran autenticar un usuario
@@ -68,8 +70,19 @@ public class TwitterAuthenticator extends GenericResource {
      * @throws SWBResourceException
      * @throws IOException
      */
+    
+    @Override
+    public void render(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        super.render(request, response, paramRequest);
+        //urlCallback = "http://"+request.getServerName()+":"+request.getServerPort()+"/"+paramRequest.getUser().getLanguage()+"/"+paramRequest.getResourceBase().getWebSiteId()+"/"+paramRequest.getWebPage().getId()+"/_rid/"+paramRequest.getResourceBase().getId()+"/_mod"+paramRequest.getMode()+"/_lang/"+paramRequest.getUser().getLanguage();        
+        //urlCallback = "http://miwebsite.mx:8088/firmaTwitter";
+    }
+    
+    
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+System.out.println("\n\n\n\n\ndoView.................");
+System.out.println("urlCallback="+urlCallback);
         try {
             //request.setAttribute("requestToken", request);
             request.setAttribute("paramRequest", paramRequest);
@@ -93,14 +106,17 @@ public class TwitterAuthenticator extends GenericResource {
      */
     @Override
     public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+System.out.println("\nprocessRequest......");
         if(paramRequest.getMode().equals("firstStepAuth")){
             doAuthorization(request, response, paramRequest);
-        } else if(request.getParameter("oauth_verifier") != null){
+        }else if(request.getParameter("oauth_verifier") != null) {
+System.out.println("modo="+paramRequest.getMode());
             String verifier = request.getParameter("oauth_verifier");
+System.out.println("verifier="+verifier);
             try {
-
                 accessToken = twitter.getOAuthAccessToken(requestToken, verifier);
-                SemanticObject semObj = SemanticObject.createSemanticObject(URLDecoder.decode(uriTwitter));
+                //SemanticObject semObj = SemanticObject.createSemanticObject(URLDecoder.decode(uriTwitter,"UTF-8"));
+                SemanticObject semObj = SemanticObject.createSemanticObject(uriTwitter);
                 org.semanticwb.social.Twitter twitterObj = (org.semanticwb.social.Twitter)semObj.createGenericInstance();
                 twitterObj.setAccessToken(accessToken.getToken());
                 twitterObj.setAccessTokenSecret(accessToken.getTokenSecret());
@@ -126,16 +142,26 @@ public class TwitterAuthenticator extends GenericResource {
      * @throws IOException
      */
     public void doAuthorization(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+System.out.println("doAuthorization..........");
         if(request.getParameter("uri") != null) {
             String uri = request.getParameter("uri");
-            uriTwitter = uri;
-            SemanticObject semObj = SemanticObject.createSemanticObject(URLDecoder.decode(uri));
+System.out.println("uri="+uri);
+            uriTwitter = URLDecoder.decode(uri,"UTF-8");
+System.out.println("uriTwitter="+uriTwitter);
+            SemanticObject semObj = SemanticObject.createSemanticObject(uriTwitter);
             org.semanticwb.social.Twitter twitterObj = (org.semanticwb.social.Twitter)semObj.createGenericInstance();
+System.out.println("twitterObj="+twitterObj);
             try {
                 twitter = new TwitterFactory().getInstance();
-                twitter.setOAuthConsumer(twitterObj.getAppKey(), twitterObj.getSecretKey());
-                requestToken = twitter.getOAuthRequestToken(urlCallback);
+System.out.println("AppKey="+twitterObj.getAppKey()+", SecretKey="+twitterObj.getSecretKey());                
+                twitter.setOAuthConsumer(twitterObj.getAppKey(), twitterObj.getSecretKey());                
+                
+                String urlCallback_ = "http://miwebsite.mx:"+request.getServerPort()+"/"+paramRequest.getUser().getLanguage()+"/"+paramRequest.getResourceBase().getWebSiteId()+"/"+paramRequest.getWebPage().getId()+"/_rid/"+paramRequest.getResourceBase().getId()+"/_mod/edit/_lang/"+paramRequest.getUser().getLanguage();
+                
+System.out.println("urlCallback_="+urlCallback_);
+                requestToken = twitter.getOAuthRequestToken(urlCallback_);
                 request.getSession().setAttribute("requestToken", requestToken);
+System.out.println("requestToken.getAuthorizationURL()="+requestToken.getAuthorizationURL());
                 response.sendRedirect(requestToken.getAuthorizationURL());
             } catch (TwitterException ex) {
                 log.error("Exception in: " + ex);
