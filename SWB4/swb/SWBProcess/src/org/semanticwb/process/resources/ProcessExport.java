@@ -103,7 +103,8 @@ public class ProcessExport extends GenericResource {
             if (zipFile.exists()) {
                 java.io.File extractTo = new File(path+"_tmp");
                 org.semanticwb.SWBUtils.IO.unzip(zipFile, extractTo);
-                String pkgData = SWBUtils.IO.readFileFromZipAsString(zipFile.getAbsolutePath(), "PkgData.json");
+                //String pkgData = SWBUtils.IO.readFileFromZipAsString(zipFile.getAbsolutePath(), "PkgData.json");
+                String pkgData = SWBUtils.IO.readInputStream(new FileInputStream(zipFile.getAbsolutePath()+"PkgData.json"));
                 try {
                     JSONObject data = new JSONObject(pkgData);
                     importProcessesPackage(data, extractTo, (ProcessSite) response.getWebPage().getWebSite());
