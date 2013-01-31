@@ -410,6 +410,14 @@ public class UserTaskInboxResource extends org.semanticwb.process.resources.task
             sb.append(mgr.renderElement(request, utinbox_showProcessWPLink, SWBFormMgr.MODE_EDIT));
             sb.append("        </td>");
             sb.append("      </tr>");
+            sb.append("      <tr>");
+            sb.append("        <td width=\"200px\" align=\"right\">");
+            sb.append(mgr.renderLabel(request, utinbox_allowForward, SWBFormMgr.MODE_VIEW));
+            sb.append("        </td>");
+            sb.append("        <td>");
+            sb.append(mgr.renderElement(request, utinbox_allowForward, SWBFormMgr.MODE_EDIT));
+            sb.append("        </td>");
+            sb.append("      </tr>");
             sb.append("    </table>");
             sb.append("    <button type=\"submit\" dojoType=\"dijit.form.Button\">Guardar</button>");
             sb.append("  </fieldset>");
