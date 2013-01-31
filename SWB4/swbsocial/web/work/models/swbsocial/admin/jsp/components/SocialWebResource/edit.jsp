@@ -4,6 +4,7 @@
     Author     : carlos.ramos
 --%>
 <%@page import="java.util.Iterator"%>
+<%@page import="java.net.URLDecoder"%>
 <%@page import="org.semanticwb.social.base.SocialSiteBase"%>
 <%@page import="org.semanticwb.social.SocialSite"%>
 <%@page import="org.semanticwb.social.SocialNetwork"%>
@@ -48,9 +49,10 @@
 <%
 try{
 System.out.println("********************   edit.jsp");
-    final String objUri = (String)request.getAttribute("objUri");
+    String objUri = (String)request.getAttribute("objUri");
     SocialNetwork socialNetwork;
     try {
+        objUri = URLDecoder.decode(objUri,"UTF-8");
         socialNetwork = (SocialNetwork)SemanticObject.getSemanticObject(objUri).getGenericInstance();
     }catch(Exception e) {
         out.println("<p>La cuenta no existe. Consulte a su administrador</p>");
