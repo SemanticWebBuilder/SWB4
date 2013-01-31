@@ -128,6 +128,11 @@ boolean showPwpLink = false;
 if (request.getAttribute("showPWpLink") != null) {
     showPwpLink = (Boolean) request.getAttribute("showPWpLink");
 }
+
+boolean allowForward = false;
+if (request.getAttribute("allowForward") != null) {
+    allowForward = (Boolean) request.getAttribute("allowForward");
+}
 String baseimg = SWBPortal.getWebWorkPath() + "/models/" + paramRequest.getWebPage().getWebSiteId() + "/css/images/";
 int maxPages = (Integer) request.getAttribute("maxPages");
 int pageNum = 1;
@@ -439,7 +444,7 @@ if (paramRequest.getMode().equals(paramRequest.Mode_VIEW)) {
                                                 %>
                                                 <td class="tban-accion"><a class="acc-atender" href="<%=utask.getTaskWebPage().getUrl()%>?suri=<%=instance.getEncodedURI()%>">Atender</a>
                                                 <%
-                                                if (instance.getAssignedto() != null) {
+                                                if (allowForward && instance.getAssignedto() != null) {
                                                     SWBResourceURL forward = paramRequest.getRenderUrl().setMode("forward");
                                                     %><a class="acc-delegar" href="<%=forward%>?suri=<%=instance.getEncodedURI()%>">Reasignar</a><%
                                                 }
