@@ -27,13 +27,16 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.*;
 import org.semanticwb.Logger;
+import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.model.FormValidateException;
+import org.semanticwb.model.Resource;
 import org.semanticwb.model.Role;
 import org.semanticwb.model.RoleRef;
 import org.semanticwb.model.SWBComparator;
@@ -42,6 +45,8 @@ import org.semanticwb.model.UserGroup;
 import org.semanticwb.model.UserRepository;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.platform.SemanticObject;
+import org.semanticwb.portal.SWBFormButton;
+import org.semanticwb.portal.SWBFormMgr;
 import org.semanticwb.portal.api.*;
 import org.semanticwb.process.model.FlowNodeInstance;
 import org.semanticwb.process.model.Process;
@@ -60,7 +65,22 @@ public class UserTaskInboxResource extends org.semanticwb.process.resources.task
     public static final int SORT_DATE = 1;
     public static final int SORT_NAME = 2;
     public static final int STATUS_ALL = -1;
-    private static final String paramCatalog = "idCol|nameCol|pnameCol|sdateCol|edateCol|actionsCol";
+    public static final String COL_IDPROCESS = "idProcessInstance";
+    public static final String COL_IDTASK = "idTaskInstance";
+    public static final String COL_NAMEPROCESS = "nameProcess";
+    public static final String COL_NAMETASK = "nameTask";
+    public static final String COL_TASKSUBJECT = "taskSubject";
+    public static final String COL_STARTTASK = "startTask";
+    public static final String COL_ENDTASK = "endTask";
+    public static final String COL_STARTPROCESS = "startProcess";
+    public static final String COL_ENDPROCESS = "endProcess";
+    public static final String COL_CREATORPROCESS = "creatorProcess";
+    public static final String COL_CREATORTASK = "creatorTask";
+    public static final String COL_ACTIONS = "actions";
+    public static final String COL_STATUSPROCESS = "statusProcess";
+    public static final String COL_STATUSTASK = "statusTask";
+    public static final String ATT_COLS = "cols";
+    private HashMap<String, String> colNames;
     
     private Comparator taskNameComparator = new Comparator() {
         String lang = "es";
@@ -85,27 +105,66 @@ public class UserTaskInboxResource extends org.semanticwb.process.resources.task
             return ret;
         }
     };*/
+    
+    private void initColNames() {
+        colNames = new HashMap<String, String>();
+        colNames.put(COL_IDPROCESS, "ID de instancia de proceso");
+        colNames.put(COL_IDTASK, "ID de instancia de tarea");
+        colNames.put(COL_TASKSUBJECT, "Asunto de la instancia de tarea");
+        colNames.put(COL_NAMEPROCESS, "Nombre de instancia de proceso");
+        colNames.put(COL_NAMETASK, "Nombre de instancia de tarea");
+        colNames.put(COL_STARTTASK, "Fecha de inicio de tarea");
+        colNames.put(COL_STARTPROCESS, "Fecha de inicio de proceso");
+        colNames.put(COL_ENDTASK, "Fecha de fin de tarea");
+        colNames.put(COL_ENDPROCESS, "Fecha de fin de proceso");
+        colNames.put(COL_CREATORPROCESS, "Creador de proceso");
+        colNames.put(COL_CREATORTASK, "Creador de tarea");
+        colNames.put(COL_STATUSPROCESS, "Estatus de proceso");
+        colNames.put(COL_STATUSTASK, "Estatus de tarea");
+        colNames.put(COL_ACTIONS, "Acciones");
+    }
 
     public UserTaskInboxResource()
     {
+        initColNames();
+    }
+    
+    /**
+     * Establece la configuración inicial de la bandeja de tareas.
+     */
+    private void initTaskInbox() {
+        Resource base = getResourceBase(); 
+        if (base.getAttribute(ATT_COLS+"1", "").equals("")) {
+            base.setAttribute(ATT_COLS+"1", COL_IDPROCESS+"|Caso");
+            base.setAttribute(ATT_COLS+"2", COL_NAMEPROCESS+"|Proceso");
+            base.setAttribute(ATT_COLS+"3", COL_NAMETASK+"|Tarea");
+            base.setAttribute(ATT_COLS+"4", COL_STARTTASK+"|Iniciada");
+            base.setAttribute(ATT_COLS+"5", COL_ENDTASK+"|Cerrada");
+            base.setAttribute(ATT_COLS+"6", COL_ACTIONS+"|Acciones");
+            try {
+                base.updateAttributesToDB();
+            } catch (Exception ex) {
+                log.error("UserTaskInboxResource - initTaskInbox", ex);
+            }
+        }
     }
 
    /**
    * Construye una nueva instancia de un UserTaskInboxResource dado un SemanticObject
    * @param base El SemanticObject con las propiedades para el UserTaskInboxResource
    */
-    public UserTaskInboxResource(org.semanticwb.platform.SemanticObject base)
-    {
+    public UserTaskInboxResource(org.semanticwb.platform.SemanticObject base) {
         super(base);
+        initColNames();
     }
 
     @Override
     public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         String mode = paramRequest.getMode();
-        if ("config".equals(mode)) {
-            doConfig(request, response, paramRequest);
-        } else if ("forward".equals(mode)) {
+        if ("forward".equals(mode)) {
             doForward(request, response, paramRequest);
+//        } else if ("config".equals(mode)) {
+//            doConfig(request, response, paramRequest);
         } else {
             super.processRequest(request, response, paramRequest);
         }
@@ -114,21 +173,8 @@ public class UserTaskInboxResource extends org.semanticwb.process.resources.task
     @Override
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
         String action = response.getAction();
-        if ("setDisplay".equals(action)) {
-            Enumeration params = request.getParameterNames();
-            String dCols = "";
-            while(params.hasMoreElements()) {
-                String param = (String)params.nextElement();
-                if (paramCatalog.contains(param)) {
-                    dCols += param;
-                    if (params.hasMoreElements()) {
-                        dCols += "|";
-                    }
-                }
-            }
-            setDisplayCols(dCols+"|actionsCol");
-            response.setMode(response.Mode_VIEW);
-        } else if ("CREATE".equals(action)) {
+        Resource base = getResourceBase();
+        if ("CREATE".equals(action)) {
             User user=response.getUser();
             String pid = request.getParameter("pid");
             ProcessInstance inst = null;
@@ -176,8 +222,46 @@ public class UserTaskInboxResource extends org.semanticwb.process.resources.task
                     fni.setAssignedto(owner);
                 }
             }
-            
             response.setMode(SWBParamRequest.Mode_VIEW);
+        } else if ("config".equals(action)) {
+//            Map map = request.getParameterMap();
+//            Iterator<String> keys = map.keySet().iterator();
+//            while (keys.hasNext()) {
+//                String key = keys.next();
+//                System.out.println("->"+key+": "+request.getParameter(key));
+//            }
+            
+            int i = 1;
+            ArrayList<String> conf = new ArrayList<String>();
+            while(!base.getAttribute(ATT_COLS+i, "").equals("")) {
+                String val = base.getAttribute(ATT_COLS+i);
+                String lbl = request.getParameter("lbl_"+i);
+                String sel = request.getParameter("sel_"+i);
+                
+                if (sel == null) {
+                    if (lbl != null && lbl.trim().length() > 0) {
+                        String []cfg = val.split("\\|");
+                        conf.add(cfg[0]+"|"+lbl.replaceAll("\\|", "_"));
+                    }
+                }
+                base.removeAttribute(ATT_COLS+i);
+                i++;
+            }
+            
+            i = 1;
+            Iterator<String> it = conf.iterator();
+            while (it.hasNext()) {
+                String key = it.next();
+                base.setAttribute(ATT_COLS+i, key);
+                i++;
+            }
+            
+            try {
+                base.updateAttributesToDB();
+            } catch (Exception e) {
+                log.error("UserTaskInboxResource - problema al actualizar base del recurso", e);
+            }
+            response.setMode(SWBParamRequest.Mode_ADMIN);
         } else {
             super.processAction(request, response);
         }
@@ -185,28 +269,260 @@ public class UserTaskInboxResource extends org.semanticwb.process.resources.task
 
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        initTaskInbox();
         String jsp = "/swbadmin/jsp/process/userTaskInbox.jsp";
         if (getViewJSP() != null && !getViewJSP().trim().equals("")) {
             jsp = getViewJSP();
         }
         //String jsp = SWBPortal.getWebWorkPath() + "/models/" + paramRequest.getWebPage().getWebSiteId() + "/jsp/process/taskInbox/userTaskInbox.jsp";
 
-        if (getDisplayCols() == null || getDisplayCols().trim().equals("")) {
-            setDisplayCols("idCol|pnameCol|nameCol|sdateCol|edateCol|actionsCol");
-        }
-
         try {
             RequestDispatcher rd = request.getRequestDispatcher(jsp);
             request.setAttribute("paramRequest", paramRequest);
             request.setAttribute("instances", getUserTaskInstances(request, paramRequest));
-            request.setAttribute("displayCols", getDisplayCols());
             request.setAttribute("statusWp", getDisplayMapWp());
             request.setAttribute("itemsPerPage", getItemsPerPage());
             request.setAttribute("showPWpLink", isShowProcessWPLink());
+            request.setAttribute("showPWpLink", isShowProcessWPLink());
+            request.setAttribute("base", getResourceBase());
             rd.include(request, response);
         } catch (Exception e) {
             log.error("Error including jsp in view mode", e);
         }
+    }
+    
+    
+//    public void doConfig(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+//        PrintWriter out = response.getWriter();
+//        StringBuilder sb = new StringBuilder();
+//        Resource base = getResourceBase();
+//        
+//        response.setHeader("Cache-Control", "no-cache");
+//        response.setHeader("Pragma", "no-cache");
+//        
+//        SWBResourceURL act = paramRequest.getActionUrl().setAction("config");
+//        sb.append("<form class=\"swbform\" action=\""+act+"\" id=\""+base.getId()+"/configForm\" onSubmit=\"submitForm('"+base.getId()+"/configForm'); return false;\">");
+//        sb.append("  <button type=\"submit\" dojoType=\"dijit.form.Button\">Enviar</button>");
+//        sb.append("</form>");
+//        out.println(sb.toString());
+//    }
+
+    @Override
+    public void doAdmin(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        PrintWriter out = response.getWriter();
+        StringBuilder sb = new StringBuilder();
+        Resource base = getResourceBase();
+        initTaskInbox();
+        
+        SWBFormMgr mgr = new SWBFormMgr(getSemanticObject(), null, SWBFormMgr.MODE_EDIT);
+        mgr.setSubmitByAjax(true);
+        mgr.setFilterHTMLTags(false);
+        mgr.addButton(SWBFormButton.newSaveButton());
+        mgr.setType(SWBFormMgr.TYPE_DOJO);
+        String act = paramRequest.getRenderUrl().setAction("update").toString();
+        
+        if("addCol".equals(paramRequest.getAction())) {
+            String col = request.getParameter("selectedCol");
+            if (col != null && colNames.containsKey(col)) {
+                int i = 1;
+                while(!base.getAttribute(ATT_COLS+i, "").equals("")) {
+                    i++;
+                }
+                base.setAttribute(ATT_COLS+i, col+"|"+colNames.get(col));
+            }
+            response.sendRedirect(paramRequest.getRenderUrl().setAction(null).toString());
+        } else if("swap".equals(paramRequest.getAction())) {
+            String dir = request.getParameter("dir");
+            String idx = request.getParameter("idx");
+            
+            if (idx != null && idx.trim().length() > 0 && dir != null) {
+                int pos = 0;
+                int newPos = 0;
+                boolean valid = false;
+                
+                String temp = base.getAttribute(ATT_COLS+idx);
+                if (temp != null) {
+                    try {
+                        pos = Integer.parseInt(idx);
+                    } catch (Exception e) {}
+
+                    if (dir.equals("down")) {
+                        newPos = pos + 1;
+                        if (pos > 0 && newPos > 0 && pos < newPos) {
+                            valid = true;
+                        }
+                    } else if (dir.equals("up")) {
+                        newPos = pos - 1;
+                        if (pos > 0 && newPos > 0 && pos > newPos) {
+                            valid = true;
+                        }
+                    }
+                    
+                    String tmp2 = base.getAttribute("prop" + newPos);
+                    if (tmp2 != null && valid) {
+                        base.setAttribute("prop" + pos, tmp2);
+                        base.setAttribute("prop" + newPos, temp);
+                    }
+                    
+                    try {
+                        base.updateAttributesToDB();
+                    } catch (Exception e) {
+                        log.error("Error al reordenar propiedad....", e);
+                    }
+                }
+            }
+            response.sendRedirect(paramRequest.getRenderUrl().setAction(null).toString());
+        } else if("update".equals(paramRequest.getAction())) {
+            try {
+                mgr.processForm(request);
+            } catch(FormValidateException e) {
+                log.error(e);
+            }
+            response.sendRedirect(paramRequest.getRenderUrl().setAction(null).toString());
+        } else {
+            SWBResourceURL addColUrl = paramRequest.getRenderUrl().setAction("addCol");
+            HashMap<String, String> availableCols = new HashMap<String, String>();
+            availableCols.putAll(colNames);
+            
+            sb.append("<form class=\"swbform\" method=\"post\" id=\"").append(mgr.getFormName()).append("\" action=\"").append(act).append("\" dojoType=\"dijit.form.Form\" onSubmit=\"submitForm('").append(mgr.getFormName()).append("');return false;\">");
+            sb.append(mgr.getFormHiddens());
+            sb.append("  <fieldset>");
+            sb.append("    <table>");
+            sb.append("      <tr>");
+            sb.append("        <td width=\"200px\" align=\"right\">").append("Identificador").append("</td>");
+            sb.append("        <td>").append(getId()).append("</td>");
+            sb.append("      </tr>");
+            sb.append("    </table>");
+            sb.append("  </fieldset>");
+            sb.append("  <fieldset><legend>Datos Generales</legend>");
+            sb.append("    <table>");
+            sb.append("      <tr>");
+            sb.append("        <td width=\"200px\" align=\"right\">");
+            sb.append(mgr.renderLabel(request, utinbox_viewJSP, SWBFormMgr.MODE_VIEW));
+            sb.append("        </td>");
+            sb.append("        <td>");
+            sb.append(mgr.renderElement(request, utinbox_viewJSP, SWBFormMgr.MODE_EDIT));
+            sb.append("        </td>");
+            sb.append("      </tr>");
+            sb.append("      <tr>");
+            sb.append("        <td width=\"200px\" align=\"right\">");
+            sb.append(mgr.renderLabel(request, utinbox_itemsPerPage, SWBFormMgr.MODE_VIEW));
+            sb.append("        </td>");
+            sb.append("        <td>");
+            sb.append(mgr.renderElement(request, utinbox_itemsPerPage, SWBFormMgr.MODE_EDIT));
+            sb.append("        </td>");
+            sb.append("      </tr>");
+            sb.append("      <tr>");
+            sb.append("        <td width=\"200px\" align=\"right\">");
+            sb.append(mgr.renderLabel(request, utinbox_displayMapWp, SWBFormMgr.MODE_VIEW));
+            sb.append("        </td>");
+            sb.append("        <td>");
+            sb.append(mgr.renderElement(request, utinbox_displayMapWp, SWBFormMgr.MODE_EDIT));
+            sb.append("        </td>");
+            sb.append("      </tr>");
+            sb.append("      <tr>");
+            sb.append("        <td width=\"200px\" align=\"right\">");
+            sb.append(mgr.renderLabel(request, utinbox_filterByGroup, SWBFormMgr.MODE_VIEW));
+            sb.append("        </td>");
+            sb.append("        <td>");
+            sb.append(mgr.renderElement(request, utinbox_filterByGroup, SWBFormMgr.MODE_EDIT));
+            sb.append("        </td>");
+            sb.append("      </tr>");
+            sb.append("      <tr>");
+            sb.append("        <td width=\"200px\" align=\"right\">");
+            sb.append(mgr.renderLabel(request, utinbox_showProcessWPLink, SWBFormMgr.MODE_VIEW));
+            sb.append("        </td>");
+            sb.append("        <td>");
+            sb.append(mgr.renderElement(request, utinbox_showProcessWPLink, SWBFormMgr.MODE_EDIT));
+            sb.append("        </td>");
+            sb.append("      </tr>");
+            sb.append("    </table>");
+            sb.append("    <button type=\"submit\" dojoType=\"dijit.form.Button\">Guardar</button>");
+            sb.append("  </fieldset>");
+            sb.append("</form>");
+            
+            sb.append("<form id=\"").append(getId()).append("/addColsForm\" class=\"swbform\" action=\"").append(addColUrl).append("\" dojoType=\"dijit.form.Form\" method=\"post\" onSubmit=\"submitForm('").append(getId()).append("/addColsForm'); return false;\">");
+            sb.append("  <fieldset>");
+            int i = 1;
+            HashMap<String, String> selectedCols = new HashMap<String, String>();
+            if (!base.getAttribute(ATT_COLS+i, "").equals("")) {
+                while(!base.getAttribute(ATT_COLS+i, "").equals("")) {
+                    String [] conf = base.getAttribute(ATT_COLS+i).split("\\|");
+                    if (conf.length == 2) {
+                        selectedCols.put(conf[0], conf[1]);
+                        if (availableCols.containsKey(conf[0])) {
+                            availableCols.remove(conf[0]);
+                        }
+                    }
+                    i++;
+                }
+            }
+            if (!availableCols.isEmpty()) {
+                sb.append("    <select dojoType=\"dijit.form.FilteringSelect\" name=\"selectedCol\">");
+                Iterator<String> keys = availableCols.keySet().iterator();
+                while (keys.hasNext()) {
+                    String key = keys.next();
+                    sb.append("      <option value=\"").append(key).append("\">").append(availableCols.get(key)).append("</option>");
+                }
+                sb.append("    </select>");
+                sb.append("    <button type=\"submit\" dojoType=\"dijit.form.Button\">Agregar columna</button><br/>");
+            }
+            sb.append("  </fieldset>");
+            sb.append("</form>");
+            
+            i = 1;
+            if (!base.getAttribute(ATT_COLS+i, "").equals("")) {
+                SWBResourceURL editUrl = paramRequest.getActionUrl().setAction("config");
+                sb.append("<form class=\"swbform\" id=\""+getId()+"/table\" method=\"post\" action=\""+editUrl+"\" dojoType=\"dijit.form.Form\" onSubmit=\"submitForm('"+getId()+"/table'); return false;\">");
+                sb.append("  <fieldset><legend>Configuración de despliegue</legend>");
+                sb.append("    <table>");
+                sb.append("      <tr>");
+                sb.append("        <th>Eliminar</th>");
+                sb.append("        <th>Ordenamiento</th>");
+                sb.append("        <th>Dato a mostrar</th>");
+                sb.append("        <th>Título de columna</th>");
+                sb.append("      </tr>");
+                
+                //TODO: Terminar de implementar la parte de mostrar la tabla, indexoutofbounds en linea 415
+                while(!base.getAttribute(ATT_COLS+i, "").equals("")) {
+                    String val = base.getAttribute(ATT_COLS+i);
+                    String cfg [] = val.split("\\|");
+                    sb.append("      <tr>");
+                    sb.append("        <td align=\"center\">");
+                    sb.append("          <input type=\"checkbox\" name=\"sel_"+i+"\"/>");
+                    sb.append("        </td>");
+                    sb.append("        <td align=\"center\">");
+                    SWBResourceURL swapUrl = paramRequest.getRenderUrl().setAction("swap").setParameter("idx", String.valueOf(i));
+                    if (i != 1) {
+                        swapUrl.setParameter("dir", "up");
+                        sb.append("          <a href=\"#\" onclick=\"submitUrl('"+swapUrl+"', this); return false;\" title=\"Subir\"><img src=\"").append(SWBPlatform.getContextPath()).append("/swbadmin/images/up.jpg\" /></a>");
+                    }
+                    if (!base.getAttribute(ATT_COLS+(i+1), "").equals("")) {
+                        swapUrl.setParameter("dir", "down");
+                        sb.append("          <a href=\"#\" onclick=\"submitUrl('"+swapUrl+"', this); return false;\" title=\"Bajar\"><img src=\"").append(SWBPlatform.getContextPath()).append("/swbadmin/images/down.jpg\" /></a>");
+                    }
+                    sb.append("        </td>");
+                    sb.append("        <td>").append(colNames.get(cfg[0])).append("</td>");
+                    sb.append("        <td><input type=\"text\" dojoType=\"dijit.form.TextBox\" id=\"lbl_").append(i).append("\" name=\"lbl_").append(i).append("\" value=\"").append(cfg[1]).append("\" /></td>");
+//                    sb.append("        <td>");
+                    //sb.append("          <a href=\"#\" onclick=\"showDialog('"+editUrl+"','Editar'); return false;\" title=\"Aplicar cambios\"><img src=\"").append(SWBPlatform.getContextPath()).append("/swbadmin/icons/activa.gif\" /></a>");
+                    //sb.append("          <a href=\"#\" onclick=\"window.location='"+delUrl+"'; return false;\" title=\"Eliminar\"><img src=\"").append(SWBPlatform.getContextPath()).append("/swbadmin/images/delete.gif\" /></a>");
+//                    sb.append("        </td>");
+                    sb.append("      </tr>");
+                    i++;
+                }
+                sb.append("    </table>");
+            }
+            sb.append("  </fieldset>");
+            sb.append("  <button type=\"submit\" dojoType=\"dijit.form.Button\">Actualizar columnas</button>");
+            sb.append("</form>");
+//        }
+//            SWBResourceURL render = paramRequest.getRenderUrl();
+//            sb.append("<a href=\"#\" onclick=\"submitUrl('"+render+"', this); return false;\">Modo</a>");
+//            sb.append("<a href=\""+render+"\">Modo</a>");
+            out.println(sb.toString());
+        }
+//        super.doAdmin(request, response, paramRequest);
     }
     
     public void doForward(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
@@ -298,22 +614,6 @@ public class UserTaskInboxResource extends org.semanticwb.process.resources.task
             }
         }
         out.println(sb.toString());
-    }
-
-    public void doConfig(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        String jsp = "/swbadmin/jsp/process/userTaskInboxConfig.jsp";
-        if (getViewJSP() != null && !getViewJSP().trim().equals("")) {
-            jsp = getViewJSP();
-        }
-        //String jsp = SWBPortal.getWebWorkPath() + "/models/" + paramRequest.getWebPage().getWebSiteId() + "/jsp/process/taskInbox/userTaskInboxConfig.jsp";
-        RequestDispatcher rd = request.getRequestDispatcher(jsp);
-        try {
-            request.setAttribute("paramRequest", paramRequest);
-            request.setAttribute("displayCols", getDisplayCols());
-            rd.include(request, response);
-        } catch (Exception e) {
-            log.error("Error including JSP in config mode", e);
-        }
     }
 
     /***
