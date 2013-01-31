@@ -454,6 +454,12 @@ if (paramRequest.getMode().equals(paramRequest.Mode_VIEW)) {
                                                 <a class="acc-mapa" href="<%=statusWp.getUrl()%>?suri=<%=instance.getFlowNodeType().getProcess().getEncodedURI()%>&mode=view<%=acts%>">Ver mapa</a>
                                                 <%
                                             }
+                                        } else if (conf[0].equals(UserTaskInboxResource.COL_TASKSUBJECT)) {
+                                            String subject = "--";
+                                            if (instance.getSubject() != null) {
+                                                subject = instance.getSubject();
+                                            }
+                                            %><td class="tban-tarea"><%=subject%><%
                                         }
                                         %>
                                         </td>
