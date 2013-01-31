@@ -26,7 +26,6 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.URLDecoder;
-import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Iterator;
 import javax.servlet.ServletInputStream;
@@ -52,10 +51,12 @@ import org.semanticwb.process.model.ConnectionObject;
 import org.semanticwb.process.model.Containerable;
 import org.semanticwb.process.model.GraphicalElement;
 import org.semanticwb.process.model.Collectionable;
+import org.semanticwb.process.model.IntermediateCatchEvent;
 import org.semanticwb.process.model.LoopCharacteristics;
 import org.semanticwb.process.model.MultiInstanceLoopCharacteristics;
 import org.semanticwb.process.model.ProcessSite;
 import org.semanticwb.process.model.StandarLoopCharacteristics;
+import org.semanticwb.process.model.TimerIntermediateCatchEvent;
 import org.semanticwb.process.model.UserTask;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -364,9 +365,13 @@ public class Modeler extends GenericResource {
                     Sortable sorble = (Sortable) obj;
                     ele.put(PROP_index, sorble.getIndex());
                 }
+                
+                if (obj instanceof IntermediateCatchEvent) {
+                    IntermediateCatchEvent ice = (IntermediateCatchEvent) obj;
+                    ele.put(PROP_isInterrupting, ice.isInterruptor());
+                }
 
                 if (obj instanceof ActivityConfable) {
-
                     ActivityConfable tsk = (ActivityConfable) obj;
                     if (tsk.getLoopCharacteristics() != null) {
                         LoopCharacteristics loopC = tsk.getLoopCharacteristics();
@@ -383,7 +388,6 @@ public class Modeler extends GenericResource {
                         }
                     }
                     ele.put(PROP_isForCompensation, Boolean.toString(tsk.isForCompensation()));
-
                 }
 
                 if (obj instanceof Collectionable) {
@@ -867,6 +871,11 @@ public class Modeler extends GenericResource {
                                     Sortable sorble = (Sortable) go;
                                     if(bupdate) sorble.setIndex(index);
                                 }
+                                
+                                if (ge instanceof TimerIntermediateCatchEvent) {
+                                    IntermediateCatchEvent ice = (IntermediateCatchEvent) ge;
+                                    if (bupdate) ice.setInterruptor(isInterrupting);
+                                }
 
                                 if (go instanceof ActivityConfable) {  //Task
                                     ActivityConfable tsk = (ActivityConfable) go;
@@ -976,6 +985,11 @@ public class Modeler extends GenericResource {
                             if (ge instanceof Sortable) {
                                 Sortable sorble = (Sortable) gi;
                                 sorble.setIndex(index);
+                            }
+                            
+                            if (ge instanceof TimerIntermediateCatchEvent) {
+                                IntermediateCatchEvent ice = (IntermediateCatchEvent) ge;
+                                ice.setInterruptor(isInterrupting);
                             }
 
                             if (ge instanceof ActivityConfable) {  //Task
