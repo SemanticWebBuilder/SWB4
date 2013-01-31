@@ -777,7 +777,7 @@ System.out.println("Facebook----paso 1");
             PrintWriter out = response.getWriter();
             out.println("<script type=\"text/javascript\">");
             out.println(" function ioauth() {");
-            out.println("  mywin = window.open("+url+",'_blank','width=840,height=680',true);");
+            out.println("  mywin = window.open('"+url+"','_blank','width=840,height=680',true);");
             out.println("  mywin.focus();");
             out.println(" }");
             out.println(" if(confirm('autenticar la cuenta en facebook?')) {");
