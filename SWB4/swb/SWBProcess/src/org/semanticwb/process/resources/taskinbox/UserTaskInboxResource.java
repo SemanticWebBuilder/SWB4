@@ -273,7 +273,7 @@ public class UserTaskInboxResource extends org.semanticwb.process.resources.task
             request.setAttribute("statusWp", getDisplayMapWp());
             request.setAttribute("itemsPerPage", getItemsPerPage());
             request.setAttribute("showPWpLink", isShowProcessWPLink());
-            request.setAttribute("showPWpLink", isShowProcessWPLink());
+            request.setAttribute("allowForward", isAllowForward());
             request.setAttribute("base", getResourceBase());
             rd.include(request, response);
         } catch (Exception e) {
