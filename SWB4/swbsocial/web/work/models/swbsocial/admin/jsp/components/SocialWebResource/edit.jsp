@@ -64,6 +64,12 @@ System.out.println("********************   edit.jsp");
 %>
 <div>
     <div>
+<%
+    if(!socialNetwork.isSn_authenticated())
+    {
+        out.println("<p>¡ La cuenta no está autenticada !</p>");
+    }
+%> 
         <form id="nc" dojoType="dijit.form.Form" class="swbform" action="<%=url%>" method="post">
             <div class="sm-div-grupo">
                 <p class="sm-row">
