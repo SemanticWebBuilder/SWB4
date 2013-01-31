@@ -163,8 +163,6 @@ public class UserTaskInboxResource extends org.semanticwb.process.resources.task
         String mode = paramRequest.getMode();
         if ("forward".equals(mode)) {
             doForward(request, response, paramRequest);
-//        } else if ("config".equals(mode)) {
-//            doConfig(request, response, paramRequest);
         } else {
             super.processRequest(request, response, paramRequest);
         }
@@ -224,13 +222,6 @@ public class UserTaskInboxResource extends org.semanticwb.process.resources.task
             }
             response.setMode(SWBParamRequest.Mode_VIEW);
         } else if ("config".equals(action)) {
-//            Map map = request.getParameterMap();
-//            Iterator<String> keys = map.keySet().iterator();
-//            while (keys.hasNext()) {
-//                String key = keys.next();
-//                System.out.println("->"+key+": "+request.getParameter(key));
-//            }
-            
             int i = 1;
             ArrayList<String> conf = new ArrayList<String>();
             while(!base.getAttribute(ATT_COLS+i, "").equals("")) {
@@ -274,7 +265,6 @@ public class UserTaskInboxResource extends org.semanticwb.process.resources.task
         if (getViewJSP() != null && !getViewJSP().trim().equals("")) {
             jsp = getViewJSP();
         }
-        //String jsp = SWBPortal.getWebWorkPath() + "/models/" + paramRequest.getWebPage().getWebSiteId() + "/jsp/process/taskInbox/userTaskInbox.jsp";
 
         try {
             RequestDispatcher rd = request.getRequestDispatcher(jsp);
@@ -291,22 +281,6 @@ public class UserTaskInboxResource extends org.semanticwb.process.resources.task
         }
     }
     
-    
-//    public void doConfig(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-//        PrintWriter out = response.getWriter();
-//        StringBuilder sb = new StringBuilder();
-//        Resource base = getResourceBase();
-//        
-//        response.setHeader("Cache-Control", "no-cache");
-//        response.setHeader("Pragma", "no-cache");
-//        
-//        SWBResourceURL act = paramRequest.getActionUrl().setAction("config");
-//        sb.append("<form class=\"swbform\" action=\""+act+"\" id=\""+base.getId()+"/configForm\" onSubmit=\"submitForm('"+base.getId()+"/configForm'); return false;\">");
-//        sb.append("  <button type=\"submit\" dojoType=\"dijit.form.Button\">Enviar</button>");
-//        sb.append("</form>");
-//        out.println(sb.toString());
-//    }
-
     @Override
     public void doAdmin(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         PrintWriter out = response.getWriter();
@@ -483,7 +457,6 @@ public class UserTaskInboxResource extends org.semanticwb.process.resources.task
                 sb.append("        <th>Título de columna</th>");
                 sb.append("      </tr>");
                 
-                //TODO: Terminar de implementar la parte de mostrar la tabla, indexoutofbounds en linea 415
                 while(!base.getAttribute(ATT_COLS+i, "").equals("")) {
                     String val = base.getAttribute(ATT_COLS+i);
                     String cfg [] = val.split("\\|");
@@ -504,10 +477,6 @@ public class UserTaskInboxResource extends org.semanticwb.process.resources.task
                     sb.append("        </td>");
                     sb.append("        <td>").append(colNames.get(cfg[0])).append("</td>");
                     sb.append("        <td><input type=\"text\" dojoType=\"dijit.form.TextBox\" id=\"lbl_").append(i).append("\" name=\"lbl_").append(i).append("\" value=\"").append(cfg[1]).append("\" /></td>");
-//                    sb.append("        <td>");
-                    //sb.append("          <a href=\"#\" onclick=\"showDialog('"+editUrl+"','Editar'); return false;\" title=\"Aplicar cambios\"><img src=\"").append(SWBPlatform.getContextPath()).append("/swbadmin/icons/activa.gif\" /></a>");
-                    //sb.append("          <a href=\"#\" onclick=\"window.location='"+delUrl+"'; return false;\" title=\"Eliminar\"><img src=\"").append(SWBPlatform.getContextPath()).append("/swbadmin/images/delete.gif\" /></a>");
-//                    sb.append("        </td>");
                     sb.append("      </tr>");
                     i++;
                 }
@@ -522,7 +491,6 @@ public class UserTaskInboxResource extends org.semanticwb.process.resources.task
 //            sb.append("<a href=\""+render+"\">Modo</a>");
             out.println(sb.toString());
         }
-//        super.doAdmin(request, response, paramRequest);
     }
     
     public void doForward(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
@@ -709,11 +677,8 @@ public class UserTaskInboxResource extends org.semanticwb.process.resources.task
         if (!pType.isValid()) {
             return false;
         }
-        
         canAccess = fni.haveAccess(user);
         
-        //System.out.println(fni+" "+pType+" "+canAccess);
-
         if (canAccess) {
             //Verificar filtrado por grupo
             if (isFilterByGroup()) {
