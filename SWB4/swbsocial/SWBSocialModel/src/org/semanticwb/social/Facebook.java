@@ -55,6 +55,7 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
      */
     @Override
     public void listen(Stream stream) {
+        
         HashMap<String, String> params = new HashMap<String, String>(2);
         params.put("access_token", this.getAccessToken());
 //        JSONArray nextQueries = null;

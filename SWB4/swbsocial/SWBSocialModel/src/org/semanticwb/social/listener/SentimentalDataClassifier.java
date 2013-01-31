@@ -65,6 +65,10 @@ public class SentimentalDataClassifier {
         this.stream=stream;
         this.socialNetwork=socialNetwork;
     
+        System.out.println("En SentimentalDataClassifier:"+this.externalPost);
+        System.out.println("En stream:"+this.stream);
+        System.out.println("En socialNetwork:"+this.socialNetwork);
+        
         getExternalPostData();
         this.model=WebSite.ClassMgr.getWebSite(stream.getSemanticObject().getModel().getName());
         initAnalysis();
@@ -73,12 +77,14 @@ public class SentimentalDataClassifier {
     private void getExternalPostData()
     {
         externalString2Clasify=externalPost.getMessage();
-        
+        //System.out.println("SentimentalDataClassifier/getExternalPostData:"+externalString2Clasify);
         //Si la descripción es diferente que nula, se agrega al texto a ser clasificado
+        /*
         if(externalPost.getDescription()!=null)
         {
             externalString2Clasify+=" "+externalPost.getDescription();
-        }
+        }*/
+        //System.out.println("SentimentalDataClassifier/getExternalPostData-2:"+externalString2Clasify);
     }
     
 
@@ -87,9 +93,9 @@ public class SentimentalDataClassifier {
      * así como la intensidad, eso en este momento, talvez se requiera realizar mas clasificaciones posteriormente.
      * Funciona bien al 15/06/2012
      */
-    private void initAnalysiss()
+    private void initAnalysis()
     {
-        
+        System.out.println("initAnalysis-J1");
         //Convierto todo el mensaje en minusculas
         externalString2Clasify=externalString2Clasify.toLowerCase();
 
@@ -112,7 +118,7 @@ public class SentimentalDataClassifier {
             {
                 continue;
             }
-
+            
             String word2FindTmp=word2Find;
             //System.out.println("word2Find:"+word2Find);
             NormalizerCharDuplicate normalizerCharDuplicate=SWBSocialUtil.Classifier.normalizer(word2Find);
@@ -158,7 +164,7 @@ public class SentimentalDataClassifier {
         
         //Si cumple el o los filtros, crea un objeto messageIn.
         
-        PostIn post=createPostInObj();
+        MessageIn post=(MessageIn)createPostInObj();
         
         if(sentimentalTweetValue>0)
         {
@@ -200,9 +206,9 @@ public class SentimentalDataClassifier {
      * Metodo Prueba
      */
     
-    private void initAnalysis()
+    private void initAnalysiss()
     {
-        
+        System.out.println("initAnalysis-1");
         //Normalizo
         externalString2Clasify=SWBSocialUtil.Classifier.normalizer(externalString2Clasify).getNormalizedPhrase();
 
@@ -226,7 +232,7 @@ public class SentimentalDataClassifier {
 
         //removePuntualSigns1();
         //externalString2Clasify=SWBSocialUtil.Strings.removePuntualSigns(externalString2Clasify, model);
-
+        System.out.println("initAnalysis-2");
         StringTokenizer st = new StringTokenizer(externalString2Clasify);
         while (st.hasMoreTokens())
         {
@@ -274,6 +280,7 @@ public class SentimentalDataClassifier {
                 sentimentalTweetValue+=sentimentalWordObj.getSentimentalValue();
             }
         }
+        System.out.println("initAnalysis-3");
         //System.out.println("sentimentalTweetValue Final:"+sentimentalTweetValue+", wordsCont:"+wordsCont);
         
         //Una vez que se tiene clasificado el mensaje por sentimientos y por intensidad, falta ver si cumple el filtro(s) del stream
@@ -286,7 +293,7 @@ public class SentimentalDataClassifier {
         
         PostIn post=createPostInObj();
         
-        
+        System.out.println("initAnalysis-4");
         if(sentimentalTweetValue>0)
         {
             float prom=sentimentalTweetValue/wordsCont;
@@ -311,15 +318,17 @@ public class SentimentalDataClassifier {
             post.setPostSentimentalValue(Float.parseFloat("0"));
             post.setPostSentimentalType(0); //Tweet Neutro, valor de 0 (Esto yo lo determiné)
         }
+        System.out.println("initAnalysis-5");
         if(IntensiveTweetValue>0)
         {
             float prom=IntensiveTweetValue/wordsCont;
             //System.out.println("IntensiveTweetValue Final:"+IntensiveTweetValue+", valor promedio:"+prom);
             post.setPostIntensityValue(prom);
         }
-        
+        System.out.println("initAnalysis-6");
         //Revisa si encuentra emoticones en el mensaje
         findEmoticones(post);
+        System.out.println("initAnalysis-7");
     }
     
     

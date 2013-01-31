@@ -234,7 +234,7 @@ public class Listener implements SWBAppObject {
             SocialNetwork socialNet=itNets.next();
             //System.out.println("SocialNetwork que tiene el stream:"+socialNet.getURI());
         }
-        if(stream.getPoolTime() > 0 && stream.getPhrase()!=null && stream.getPhrase().trim().length()>0 && stream.listSocialNetworks().hasNext())
+        if(stream.isActive() && stream.getPoolTime() > 0 && stream.getPhrase()!=null && stream.getPhrase().trim().length()>0 && stream.listSocialNetworks().hasNext())
         {
             return true;
         }
