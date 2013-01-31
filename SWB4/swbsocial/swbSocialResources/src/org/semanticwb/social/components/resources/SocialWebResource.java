@@ -19,6 +19,7 @@ import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.social.SocialNetwork;
 import org.semanticwb.social.SocialSite;
 import org.semanticwb.social.components.tree.ElementTreeNode;
+import org.semanticwb.social.utils.SWBSocialResourceUtils;
 
 /**
  *
@@ -113,9 +114,10 @@ System.out.println("********************   doAuthenticate.");
             socialNetwork.setAppKey(appId);            
             socialNetwork.setSecretKey(sk);
             
-//            ElementTreeNode treeItem = (ElementTreeNode)request.getAttribute("treeItem");
-//            SWBSocialResourceUtils.Events.insertNode2Tree_Event(treeItem, socialNetwork);
-//            SWBSocialResourceUtils.Events.setStatusMessage_Event("Cuenta creada");
+             ElementTreeNode treeItem = (ElementTreeNode)request.getAttribute("treeItem");
+             System.out.println("treeItem:"+treeItem);
+             SWBSocialResourceUtils.Resources.insertTreeNode(request, paramRequest, treeItem, socialNetwork); 
+             SWBSocialResourceUtils.Resources.setStatusMessage(request, paramRequest,"Cuenta creada");
             
             session.setAttribute("sw", socialNetwork);
             socialNetwork.authenticate(request, response, paramRequest);
