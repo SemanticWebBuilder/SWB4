@@ -257,7 +257,7 @@ if (paramRequest.getMode().equals(paramRequest.Mode_VIEW)) {
                 </li>
                 <li>
                     <b>Ordenamiento&nbsp;</b>
-                    <select onchange="loadPageUrl('<%=optsUrl.toString()%>', 'sort', this.options[this.selectedIndex].value)">
+                    <select onchange="loadPageUrl('<%=optsUrl%>', 'sort', this.options[this.selectedIndex].value)">
                         <option value="date" <%=sortType.equals("date")?"selected":""%>>Por fecha</option>
                         <option value="name" <%=sortType.equals("name")?"selected":""%>>Por proceso</option>
                     </select>
@@ -269,7 +269,7 @@ if (paramRequest.getMode().equals(paramRequest.Mode_VIEW)) {
                     optsUrl.setParameter("sort", sortType);
                     optsUrl.setParameter("sFilter", sFilter);
                     %>
-                    <select onchange="loadPageUrl('<%=optsUrl.toString()%>', 'pFilter', this.options[this.selectedIndex].value)">
+                    <select onchange="loadPageUrl('<%=optsUrl%>', 'pFilter', this.options[this.selectedIndex].value)">
                         <option value="" <%=pFilter.equals("")?"selected":""%>>Todos los procesos</option>
                         <%
                         Iterator<ProcessGroup> itgroups = SWBComparator.sortByDisplayName(ProcessGroup.ClassMgr.listProcessGroups(paramRequest.getWebPage().getWebSite()), lang);
@@ -312,7 +312,7 @@ if (paramRequest.getMode().equals(paramRequest.Mode_VIEW)) {
                         optsUrl.setParameter("pFilter", pFilter);
                     }
                     %>
-                    <select onchange="loadPageUrl('<%=optsUrl.toString()%>', 'sFilter', this.options[this.selectedIndex].value)">
+                    <select onchange="loadPageUrl('<%=optsUrl%>', 'sFilter', this.options[this.selectedIndex].value)">
                         <option value="<%=ProcessInstance.STATUS_PROCESSING%>" <%=sFilter.equals(String.valueOf(ProcessInstance.STATUS_PROCESSING))?"selected":""%>>Tareas Pendientes</option>
                         <option value="<%=ProcessInstance.STATUS_CLOSED%>" <%=sFilter.equals(String.valueOf(ProcessInstance.STATUS_CLOSED))?"selected":""%>>Tareas Terminadas</option>
                         <option value="<%=ProcessInstance.STATUS_ABORTED%>" <%=sFilter.equals(String.valueOf(ProcessInstance.STATUS_ABORTED))?"selected":""%>>Tareas Abortadas</option>
