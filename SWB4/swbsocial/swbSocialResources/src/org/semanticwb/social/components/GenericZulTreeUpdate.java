@@ -50,6 +50,9 @@ public class GenericZulTreeUpdate extends GenericForwardComposer
              String message=(String)requestScope.get("message");
              EventQueue<Event> eq = EventQueues.lookup("updateMsgWin", EventQueues.SESSION, true);
              eq.publish(new Event("onUpdateMsgWin", null, message));
+        }else if(action.equalsIgnoreCase("refreshNodeTitle")){
+             EventQueue<Event> eq = EventQueues.lookup("refreshNodo2Tree", EventQueues.SESSION, true);
+             eq.publish(new Event("onRefreshNode", null, treeItem));
         }
     }
 }

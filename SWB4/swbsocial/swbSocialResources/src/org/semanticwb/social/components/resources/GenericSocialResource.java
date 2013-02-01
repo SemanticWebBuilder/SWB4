@@ -74,7 +74,7 @@ public class GenericSocialResource extends GenericAdmResource
        {
            //Se elimina algo específico del objeto semantico (puede ser algo de filesystem, algo de BD, algun mensaje a un webservice,etc)
            //Y siempre se debe envíar a llamar al siguiente metodo para actualizar el arbol.
-           SWBSocialResourceUtils.Resources.updateTreeNode(request, paramRequest);
+           SWBSocialResourceUtils.Resources.removeTreeNode(request, paramRequest);
        }
        out.println("Contenido de Prueba Genérico.Jogg...-1");
     }
