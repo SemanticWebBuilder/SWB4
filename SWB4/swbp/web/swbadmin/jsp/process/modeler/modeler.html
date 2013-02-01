@@ -27,6 +27,7 @@
                     xlink:"http://www.w3.org/1999/xlink",
                     contents:[],
                     selected:[],
+                    resizeBox:[],
                     selectBox:null,
                     cmdkey:false,
                     ctrlkey:false,
@@ -63,7 +64,18 @@
                             _this.svg.mouseX=evt.clientX;
                             _this.svg.mouseY=evt.clientY;
                             
-                            if(_this.svg.dragObject!=null)  //dragObjects
+                            if(_this.svg.resizeObject!=null)
+                            {
+                                x=evt.clientX-_this.svg.dragOffsetX;
+                                y=evt.clientY-_this.svg.dragOffsetY;
+                                tx=x-_this.svg.resizeObject.parent.getX();
+                                ty=y-_this.svg.resizeObject.parent.getY();
+                                w=Math.abs(_this.svg.resizeObject.startW+tx*2*_this.svg.resizeObject.ix);
+                                h=Math.abs(_this.svg.resizeObject.startH+ty*2*_this.svg.resizeObject.iy);                                
+                                _this.svg.resizeObject.parent.resize(w,h);
+                                _this.updateResizeBox();
+                                
+                            }else if(_this.svg.dragObject!=null)  //dragObjects
                             {
                                 _this.selected.unselect=false; //si hace drag no deselecciona
                                 x=evt.clientX-_this.svg.dragOffsetX;
@@ -71,7 +83,7 @@
                                 
                                 if(_this.cmdkey==true) //Drag one
                                 {
-                                    _this.svg.dragObject.move(x,y);
+                                    _this.svg.dragObject.move(x,y);                                    
                                 }else //drag selecteds
                                 {
                                     tx=x-_this.svg.dragObject.getX();
@@ -81,6 +93,7 @@
                                     {                                
                                         _this.selected[i].traslate(tx, ty);
                                     }
+                                    _this.updateResizeBox();
                                 }
                             }else if(_this.selectBox!=null) //SelectBox
                             {
@@ -117,10 +130,7 @@
                                         {
                                             if(obj.selected!=true)
                                             {                                                
-                                                obj.setStyle("stroke:#2cff20");
-                                                obj.selected=true;                                    
-                                                _this.selected.push(obj);
-                                                //alert(obj);                                                
+                                                _this.selectObj(obj);
                                             }
                                         }else
                                         {
@@ -128,9 +138,7 @@
                                             {
                                                 if(obj.selected==true)
                                                 {
-                                                    obj.resetStyle();
-                                                    obj.selected=false;
-                                                    _this.selected.splice(_this.selected.indexOf(obj), 1);                                  
+                                                    _this.unSelectObj(obj);
                                                 }
                                             }
                                         }
@@ -149,8 +157,7 @@
                                 if(_this.selectBox==null)
                                 {
                                     _this.selectBox=document.createElementNS(_this.svgNS,"rect");
-                                    //_this.selectBox.setAttributeNS(_this.xlink,"href","#selectBox");
-                                    _this.selectBox.setAttributeNS(null,"style","fill:#f0f0f0;fill-opacity:.5;stroke-width:2;stroke-opacity:1;stroke:#2c5aa0");
+                                    _this.selectBox.setAttributeNS(null,"class","selectBox");
                                     _this.selectBox.setAttributeNS(null,"x",evt.clientX);
                                     _this.selectBox.setAttributeNS(null,"y",evt.clientY);
                                     _this.selectBox.setAttributeNS(null,"width",0);
@@ -165,6 +172,8 @@
                         _this.svg.onmouseup=function(evt)
                         {
                             _this.svg.dragObject=null;
+                            _this.svg.resizeObject=null;
+                            
                             //SelectBox
                             if(_this.selectBox!=null)
                             {
@@ -181,17 +190,109 @@
                         }
                         else if (window.attachEvent)
                         {
-                           window.attachEvent("onkeydown", _this.keydown);
-                           window.attachEvent("onkeyup", _this.keyup);
+                            window.attachEvent("onkeydown", _this.keydown);
+                            window.attachEvent("onkeyup", _this.keyup);
                         }
                         else
                         {
-                           window.onkeydown= _this.keydown;  
-                           window.onkeyup= _this.keyup;  
+                            window.onkeydown= _this.keydown;  
+                            window.onkeyup= _this.keyup;  
                         }
                         
                         _this.setWidth(1920);
                         _this.setHeight(1080);
+                    },
+                    
+                    updateResizeBox:function()
+                    {
+                        var _this=Modeler;
+                        for(i=0;i<_this.resizeBox.length;i++)
+                        {
+                            _this.resizeBox[i].update();
+                        }
+                    },
+                    
+                    createResizeBox:function(obj, ix, iy, cursor)
+                    {
+                        var _this=Modeler;
+                        var b=document.createElementNS(_this.svgNS,"use");
+                        b.setAttributeNS(_this.xlink,"href","#resizeBox");
+                        b.setAttributeNS(null,"style","cursor:"+cursor);
+                        b.init=function(_ix,_iy)
+                        {
+                            b.ix=_ix;
+                            b.iy=_iy;
+                            b.update();
+                        };
+                        b.setParent=function(_parent)
+                        {
+                            b.parent=_parent;
+                        };
+                        b.update=function()
+                        {
+                            b.setAttributeNS(null,"x",b.parent.getX()+(b.parent.getWidth()/2)*b.ix);
+                            b.setAttributeNS(null,"y",b.parent.getY()+(b.parent.getHeight()/2)*b.iy);
+                            //desc(b.sid+" "+Number(b.getAttributeNS(null,"x"))+" "+Number(b.getAttributeNS(null,"y")));
+                        };
+                        b.onmousedown=function(evt)
+                        {
+                            b.startW=b.parent.getWidth();
+                            b.startH=b.parent.getHeight();
+                            _this.svg.dragOffsetX=_this.svg.mouseX-obj.getAttributeNS(null,"x");
+                            _this.svg.dragOffsetY=_this.svg.mouseY-obj.getAttributeNS(null,"y");
+                            _this.svg.resizeObject=b;
+                            
+                            //Bug de chrome
+                            _this.stopPropagation(evt);
+                        };
+                        
+                        b.setParent(obj);
+                        b.init(ix,iy);
+                        _this.svg.appendChild(b);
+                        _this.resizeBox.push(b);                        
+                    },
+                    
+                    showResizeBoxes:function()
+                    {
+                        var _this=Modeler;
+                        if(_this.selected.length==1 && _this.selected[0].resizeable)
+                        {
+                            var obj=_this.selected[0];
+                            _this.createResizeBox(obj,-1,-1,"nw-resize");
+                            _this.createResizeBox(obj,0,-1,"n-resize");
+                            _this.createResizeBox(obj,1,-1,"ne-resize");
+                            _this.createResizeBox(obj,-1,0,"w-resize");
+                            _this.createResizeBox(obj,1,0,"e-resize");
+                            _this.createResizeBox(obj,-1,1,"sw-resize");
+                            _this.createResizeBox(obj,0,1,"s-resize");
+                            _this.createResizeBox(obj,1,1,"se-resize");
+                        }else
+                        {
+                            while((o=_this.resizeBox.pop())!=null)
+                            {
+                                _this.svg.removeChild(o);
+                            } 
+                            
+                        }
+                    },
+                    
+                    selectObj:function(obj)
+                    {
+                        var _this=Modeler;
+                        _this.selected.push(obj);
+                        obj.selected=true;   
+                        obj.setOverClass();
+                        _this.showResizeBoxes();
+                    },
+                    
+                    unSelectObj:function(obj)
+                    {
+                        var _this=Modeler;
+                        var i=_this.selected.indexOf(obj);
+                        _this.selected.splice(i, 1);
+                        obj.selected=false;
+                        obj.setBaseClass();
+                        _this.showResizeBoxes();
                     },
                     
                     unSelectAll:function()
@@ -199,9 +300,10 @@
                         var _this=Modeler;
                         while((o=_this.selected.pop())!=null)
                         {
-                            o.resetStyle();
+                            o.setBaseClass();
                             o.selected=false;
-                        }                       
+                        }        
+                        _this.showResizeBoxes();
                     },
                     
                     keydown:function(evt)
@@ -215,6 +317,7 @@
                             {
                                 _this.selected[i].remove();
                             }                             
+                            unSelectAll();
                             _this.stopPropagation(evt);
                         }else if((evt.keyCode==91 && evt.which==91) || (evt.keyCode==224 && evt.which==224))
                         {
@@ -247,31 +350,75 @@
                         if (evt.preventDefault) evt.preventDefault();
                         if (evt.stopPropagation) evt.stopPropagation();
                     },
-
-                    createObject:function(type, id, parent)
-                    {
-                        var _this=this;
-                        var obj = document.createElementNS(_this.svgNS,"use"); //to create a circle, for rectangle use rectangle
-                        obj.setAttributeNS(this.xlink,"href",type);
-                        if(id && id!=null)obj.setAttributeNS(null,"id",id);
                     
-                        obj.setStyle=function(style)
+                    createResizeObject:function(id, parent)
+                    {
+                        var _this=Modeler;
+                        //console.log(_this);
+                        var constructor=function()
                         {
-                            var _this=Modeler;
-                            obj.setAttributeNS(null,"style",style);
+                            var obj = document.createElementNS(_this.svgNS,"rect"); //to create a circle, for rectangle use rectangle
+                            obj.resizeable=true;
+                            //obj.setAttributeNS(_this.xlink,"href",type);
+                            return obj;
+                        };
+                        return _this.createObject(constructor,id,parent);
+                    },                    
+                    
+                    createUseObject:function(type, id, parent)
+                    {
+                        var _this=Modeler;
+                        //console.log(_this);
+                        var constructor=function()
+                        {
+                            var obj = document.createElementNS(_this.svgNS,"use"); //to create a circle, for rectangle use rectangle
+                            obj.setAttributeNS(_this.xlink,"href",type);
+                            return obj;
+                        };
+                        return _this.createObject(constructor,id,parent);
+                    },
+
+                    createObject:function(constructor, id, parent)
+                    {
+                        var _this=Modeler;
+                        var obj=constructor();
+                        if(id && id!=null)obj.setAttributeNS(null,"id",id);                    
+                        
+                        obj.setOverClass=function()
+                        {
+                            obj.setParamClass("oclass");
                         };
                         
-                        obj.resetStyle=function()
+                        obj.setBaseClass=function()
                         {
-                            var _this=Modeler;
-                            var s=document.getElementById(obj.getAttributeNS(_this.xlink,"href").substring(1)).getAttributeNS(null, "styled");
-                            if(s!=null)obj.setAttributeNS(null,"style",s);
+                            obj.setParamClass("bclass");
                         };
                         
-                        obj.resetStyle();                        
+                        obj.setParamClass=function(param)
+                        {
+                            var _this=Modeler;
+                            var l=obj.getAttributeNS(_this.xlink,"href");
+                            if(l && l!=null)
+                            {
+                                var o=document.getElementById(l.substring(1));
+                                if(o!=null)
+                                {
+                                    var s=o.getAttributeNS(null, param);
+                                    if(s!=null)obj.setAttributeNS(null,"class",s);
+                                }
+                            }else
+                            {
+                                var s=obj.getAttributeNS(null, param);
+                                if(s!=null)obj.setAttributeNS(null,"class",s);                                
+                            }
+                        };                        
+                        
+                        obj.setBaseClass();                        
                     
                         obj.onmousedown=function(evt)
                         {
+                            obj.startX=evt.clientX;
+                            obj.startY=evt.clientY;
                             _this.svg.dragOffsetX=_this.svg.mouseX-obj.getAttributeNS(null,"x");
                             _this.svg.dragOffsetY=_this.svg.mouseY-obj.getAttributeNS(null,"y");
                             _this.svg.dragObject=obj;
@@ -286,21 +433,19 @@
                         
                         obj.select=function(down)
                         {
-                            //desc(obj,true);
+                            //desc(obj.getBBox(),true);
                             var _this=Modeler;
-                            var i=_this.selected.indexOf(obj);
                             if(down==true)
                             {
-                                if(i==-1 && down==true)
+                                var i=_this.selected.indexOf(obj);
+                                if(i==-1)
                                 {
                                     if(_this.cmdkey==false) //deselect all
                                     {
                                         _this.unSelectAll();
                                     }
                                     //select one
-                                    obj.setStyle("stroke:#2cff20");
-                                    _this.selected.push(obj);
-                                    obj.selected=true;
+                                    _this.selectObj(obj);
                                 }else 
                                 {
                                     //can unselect
@@ -310,9 +455,7 @@
                             {
                                 if(_this.cmdkey==true && _this.selected.unselect==true) //unselect one
                                 {
-                                    _this.selected[i].resetStyle();
-                                    _this.selected[i].selected=false;
-                                    _this.selected.splice(i, 1);
+                                    _this.unSelectObj(obj);
                                 }                                 
                                 _this.selected.unselect=false;
                             }
@@ -336,7 +479,27 @@
                         obj.setY=function(y)
                         {
                             obj.setAttributeNS(null,"y",y);
-                        };                        
+                        };   
+                        
+                        obj.getWidth=function()
+                        {
+                            return Number(obj.getAttributeNS(null,"width"));
+                        };
+                    
+                        obj.getHeight=function()
+                        {
+                            return Number(obj.getAttributeNS(null,"height"));
+                        };
+                        
+                        obj.setWidth=function(w)
+                        {
+                            obj.setAttributeNS(null,"width",w);
+                        };
+                    
+                        obj.setHeight=function(h)
+                        {
+                            obj.setAttributeNS(null,"height",h);
+                        };                           
                     
                         obj.mousedown=function(evt)
                         {
@@ -345,14 +508,20 @@
 
                         obj.onmouseup=function(evt)
                         {
+                            _this=Modeler;
                             obj.mouseup(evt);
                             obj.select(false);
+                            
+                            //if(_this.selected.length==1 && obj.startX==evt.clientX && obj.startY==evt.clientY)
+                            //{
+                            //    //evento click de objeto
+                            //}
                         };
                     
                         obj.mouseup=function(evt)
                         {
                             //Sobreescribir
-                        };                
+                        };     
                     
                         obj.traslate=function(dx, dy)
                         {
@@ -360,6 +529,13 @@
                             var oy=obj.getY();
                             obj.move(ox+dx, oy+dy);
                         }
+                        
+                        obj.resize=function(w,h)
+                        {
+                            obj.setAttributeNS(null,"transform","translate("+(-w/2)+","+(-h/2)+")");
+                            obj.setWidth(w);
+                            obj.setHeight(h);                        
+                        };                        
 
                         obj.move=function(x,y)
                         {
@@ -404,8 +580,14 @@
                             return this;
                         };
                         
-                        obj.onclick =function(evt)
+                        obj.onclick=function(evt)
                         {
+                            return this.mouseclick(evt);
+                        }
+                        
+                        obj.mouseclick=function(evt)
+                        {
+                            //Sobre escribir
                             //previene de abrir nuevas ventanas al hacer click sobre elementos
                             return false;
                         }
@@ -424,11 +606,27 @@
                         _this.svg.appendChild(obj);
                         return obj;
                     },
+                    
+                    createTask:function(id, parent)
+                    {
+                        //Revisar ID
+                        var obj=this.createResizeObject(id,parent);
+                        obj.setAttributeNS(null,"bclass","task");
+                        obj.setAttributeNS(null,"oclass","task_o");
+                        obj.setAttributeNS(null,"rx",10);
+                        obj.setAttributeNS(null,"ry",10);
+                        obj.setBaseClass();                        
+                        obj.mouseup=function(x,y)
+                        {
+                            //alert("hola1");
+                        }
+                        return obj;
+                    },                    
                 
                     createStartEvent:function(id, parent)
                     {
                         //Revisar ID
-                        var obj=this.createObject("#startEvent",id,parent);
+                        var obj=this.createUseObject("#startEvent",id,parent);
                         obj.mouseup=function(x,y)
                         {
                             //alert("hola1");
@@ -453,27 +651,147 @@
                 {
                     var obj;
                 
-                    obj = Modeler.createObject("#task","tk1");
+                    //obj = Modeler.createUseObject("#task");
                 
-                    obj2 = Modeler.createObject("#endEvent","ee1",obj);
-                    obj2.move(100,200);                
+                    //obj2 = Modeler.createUseObject("#endEvent",null,obj);
+                    //obj2.move(100,200);                
                 
                     for(i=0;i<100;i++)
                     {
-                        obj3 = Modeler.createStartEvent("se"+i, obj2);
-                        obj3.move(i,100);
+                        //obj3 = Modeler.createStartEvent(null, obj2);
+                        //obj3.move(i,100);
                     }
                 
-                    obj = Modeler.createObject("#barra");                
+                    obj = Modeler.createUseObject("#barra");                
                 
-                    obj = Modeler.createObject("#test");                
+                    //obj = Modeler.createUseObject("#test");                
                 
-                    obj2 = Modeler.createObject("#intermediateEvent",null,obj);
-                    obj2.move(300,200);
+                    obj2 = Modeler.createUseObject("#startEvent",null,null);
+                    obj2.move(100,20);
+                    obj2 = Modeler.createUseObject("#signalStartEvent",null,null);
+                    obj2.move(130,20);
+                    obj2 = Modeler.createUseObject("#timerStartEvent",null,null);
+                    obj2.move(160,20);
+                    obj2 = Modeler.createUseObject("#ruleStartEvent",null,null);
+                    obj2.move(190,20);
+                    obj2 = Modeler.createUseObject("#multipleStartEvent",null,null);
+                    obj2.move(220,20);
+                    obj2 = Modeler.createUseObject("#parallelStartEvent",null,null);
+                    obj2.move(250,20);
+                    obj2 = Modeler.createUseObject("#errorStartEvent",null,null);
+                    obj2.move(280,20);
+                    obj2 = Modeler.createUseObject("#compensationStartEvent",null,null);
+                    obj2.move(310,20);
+                    obj2 = Modeler.createUseObject("#scalationStartEvent",null,null);
+                    obj2.move(340,20);
+                    obj2 = Modeler.createUseObject("#messageStartEvent",null,null);
+                    obj2.move(370,20);
+                    
+                    obj2 = Modeler.createUseObject("#intermediateEvent",null,null);
+                    obj2.move(100,70);
+                    obj2 = Modeler.createUseObject("#messageIntermediateThrowEvent",null,null);
+                    obj2.move(130,70);
+                    obj2 = Modeler.createUseObject("#timerIntermediateEvent",null,null);
+                    obj2.move(160,70);
+                    obj2 = Modeler.createUseObject("#errorIntermediateEvent",null,null);
+                    obj2.move(190,70);
+                    obj2 = Modeler.createUseObject("#cancelIntermediateEvent",null,null);
+                    obj2.move(220,70);
+                    obj2 = Modeler.createUseObject("#compensationIntermediateCatchEvent",null,null);
+                    obj2.move(250,70);
+                    obj2 = Modeler.createUseObject("#compensationIntermediateThrowEvent",null,null);
+                    obj2.move(280,70);
+                    obj2 = Modeler.createUseObject("#linkIntermediateCatchEvent",null,null);
+                    obj2.move(310,70);
+                    obj2 = Modeler.createUseObject("#linkIntermediateThrowEvent",null,null);
+                    obj2.move(340,70);
+                    obj2 = Modeler.createUseObject("#signalIntermediateCatchEvent",null,null);
+                    obj2.move(370,70);
+                    obj2 = Modeler.createUseObject("#signalIntermediateThrowEvent",null,null);
+                    obj2.move(400,70);
+                    obj2 = Modeler.createUseObject("#multipleIntermediateCatchEvent",null,null);
+                    obj2.move(430,70);
+                    obj2 = Modeler.createUseObject("#multipleIntermediateThrowEvent",null,null);
+                    obj2.move(460,70);
+                    obj2 = Modeler.createUseObject("#scalationIntermediateCatchEvent",null,null);
+                    obj2.move(490,70);
+                    obj2 = Modeler.createUseObject("#scalationIntermediateThrowEvent",null,null);
+                    obj2.move(520,70);
+                    obj2 = Modeler.createUseObject("#parallelIntermediateEvent",null,null);
+                    obj2.move(550,70);
+                    obj2 = Modeler.createUseObject("#messageIntermediateCatchEvent",null,null);
+                    obj2.move(580,70);
+                    
+                    
+                    obj2 = Modeler.createUseObject("#endEvent",null,null);
+                    obj2.move(100,120);
+                    obj2 = Modeler.createUseObject("#messageEndEvent",null,null);
+                    obj2.move(130,120);
+                    obj2 = Modeler.createUseObject("#errorEndEvent",null,null);
+                    obj2.move(160,120);
+                    obj2 = Modeler.createUseObject("#cancelationEndEvent",null,null);
+                    obj2.move(190,120);
+                    obj2 = Modeler.createUseObject("#compensationEndEvent",null,null);
+                    obj2.move(220,120);
+                    obj2 = Modeler.createUseObject("#signalEndEvent",null,null);
+                    obj2.move(250,120);
+                    obj2 = Modeler.createUseObject("#multipleEndEvent",null,null);
+                    obj2.move(280,120);
+                    obj2 = Modeler.createUseObject("#scalationEndEvent",null,null);
+                    obj2.move(310,120);
+                    obj2 = Modeler.createUseObject("#terminationEndEvent",null,null);
+                    obj2.move(340,120);
+                    
+                    obj2 = Modeler.createUseObject("#exclusiveDataGateway",null,null);
+                    obj2.move(100,180);
+                    obj2 = Modeler.createUseObject("#inclusiveDataGateway",null,null);
+                    obj2.move(160,180);
+                    obj2 = Modeler.createUseObject("#exclusiveStartGateway",null,null);
+                    obj2.move(220,180);
+                    obj2 = Modeler.createUseObject("#eventGateway",null,null);
+                    obj2.move(280,180);
+                    obj2 = Modeler.createUseObject("#parallelGateway",null,null);
+                    obj2.move(340,180);
+                    obj2 = Modeler.createUseObject("#parallelStartGateway",null,null);
+                    obj2.move(400,180);
+                    obj2 = Modeler.createUseObject("#complexGateway",null,null);
+                    obj2.move(460,180);
+                    
+                    obj2 = Modeler.createUseObject("#data",null,null);
+                    obj2.move(100,240);
+                    obj2 = Modeler.createUseObject("#dataInput",null,null);
+                    obj2.move(150,240);
+                    obj2 = Modeler.createUseObject("#dataOutput",null,null);
+                    obj2.move(200,240);
+                    obj2 = Modeler.createUseObject("#dataStore",null,null);
+                    obj2.move(250,240);
+                    
+                    
+                    obj2 = Modeler.createUseObject("#userTask",null,null);
+                    obj2.move(100,320);
+                    obj2 = Modeler.createUseObject("#serviceTask",null,null);
+                    obj2.move(200,320);
+                    obj2 = Modeler.createUseObject("#scriptTask",null,null);
+                    obj2.move(300,320);
+                    obj2 = Modeler.createUseObject("#ruleTask",null,null);
+                    obj2.move(400,320);
+                    obj2 = Modeler.createUseObject("#sendTask",null,null);
+                    obj2.move(500,320);
+                    obj2 = Modeler.createUseObject("#receiveTask",null,null);
+                    obj2.move(600,320);
+                    obj2 = Modeler.createUseObject("#manualTask",null,null);
+                    obj2.move(700,320);
+                    
+                    obj2 = Modeler.createUseObject("#pool",null,null);
+                    obj2.move(350,470);
                 
-                    Modeler.createStartEvent();
+                    obj2 = Modeler.createTask(null,null);
+                    //obj2.move(100,400);
+                    obj2.resize(100,100);
                 
-                    Modeler.createMessageStartEvent();
+                    //Modeler.createStartEvent();
+                
+                    //Modeler.createMessageStartEvent();
 
                 }
 
@@ -483,320 +801,153 @@
     <body onload="Modeler.init();draw();">
         <svg id="modeler" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="100" height="100">
             <defs id="globalDef">
-
-                <g id="barra" transform="translate(0,-455.65)">
-                    <use x="100" y="100" xlink:href="#reusableButton"/>
-                    <!--          
-                        <image
-                           y="115.96933"
-                           x="196.21428"
-                           id="image7347"
-                           xlink:href="file:////programming/proys/SWB4/swb/applets/SWBAppBPMNModeler/src/org/semanticwb/process/modeler/images/file2.png"
-                           height="43"
-                           width="49"
-                           style="display:none" />
-                        <image
-                           y="170.96983"
-                           x="411.21429"
-                           id="image7728"
-                           xlink:href="file:////programming/proys/SWB4/swb/applets/SWBAppBPMNModeler/src/org/semanticwb/process/modeler/images/task_2.png"
-                           height="43"
-                           width="49"
-                           style="display:none" />
-                        <image
-                           y="213.91927"
-                           x="411.21429"
-                           id="image7967"
-                           xlink:href="file:////programming/proys/SWB4/swb/applets/SWBAppBPMNModeler/src/org/semanticwb/process/modeler/images/subtask_2.png"
-                           height="43"
-                           width="49"
-                           style="display:none" />
-                        <image
-                           y="256.85519"
-                           x="411.21429"
-                           id="image8705"
-                           xlink:href="file:////programming/proys/SWB4/swb/applets/SWBAppBPMNModeler/src/org/semanticwb/process/modeler/images/task_call_2.png"
-                           height="43"
-                           width="49"
-                           style="display:none" />
-                        <image
-                           y="316.17926"
-                           x="335.61938"
-                           id="image8880"
-                           xlink:href="file:////programming/proys/SWB4/swb/applets/SWBAppBPMNModeler/src/org/semanticwb/process/modeler/images/start_2.png"
-                           height="43"
-                           width="49"
-                           style="display:none" />
-                        <image
-                           y="405.07269"
-                           x="223.99753"
-                           id="image9106"
-                           xlink:href="file:////programming/proys/SWB4/swb/applets/SWBAppBPMNModeler/src/org/semanticwb/process/modeler/images/inter_2.png"
-                           height="43"
-                           width="49"
-                           style="display:none" />
-                        <image
-                           y="399.43362"
-                           x="389.78571"
-                           id="image9233"
-                           xlink:href="file:////programming/proys/SWB4/swb/applets/SWBAppBPMNModeler/src/org/semanticwb/process/modeler/images/end_2.png"
-                           height="43"
-                           width="49"
-                           style="display:none" />
-                        <image
-                           y="229.43361"
-                           x="361.92856"
-                           id="image9648"
-                           xlink:href="file:////programming/proys/SWB4/swb/applets/SWBAppBPMNModeler/src/org/semanticwb/process/modeler/images/if_2.png"
-                           height="43"
-                           width="49"
-                           style="display:none" />
-                        <image
-                           y="441.93362"
-                           x="384.78571"
-                           id="image9844"
-                           xlink:href="file:////programming/proys/SWB4/swb/applets/SWBAppBPMNModeler/src/org/semanticwb/process/modeler/images/flow_2.png"
-                           height="43"
-                           width="49"
-                           style="display:none" />
-                        <image
-                           y="604.79077"
-                           x="378.71429"
-                           id="image10006"
-                           xlink:href="file:////programming/proys/SWB4/swb/applets/SWBAppBPMNModeler/src/org/semanticwb/process/modeler/images/anota_2.png"
-                           height="43"
-                           width="49"
-                           style="display:none" />
-                        <image
-                           y="619.79077"
-                           x="479.07144"
-                           id="image10137"
-                           xlink:href="file:////programming/proys/SWB4/swb/applets/SWBAppBPMNModeler/src/org/semanticwb/process/modeler/images/doc_2.png"
-                           height="43"
-                           width="49"
-                           style="display:none" />
-                        <image
-                           y="487.64789"
-                           x="434.78571"
-                           id="image10266"
-                           xlink:href="file:////programming/proys/SWB4/swb/applets/SWBAppBPMNModeler/src/org/semanticwb/process/modeler/images/pool_2.png"
-                           height="43"
-                           width="49"
-                           style="display:none" />
-                    -->    
-                    <g
-                        id="g10334"
-                        transform="translate(-471.21428,347.71423)">
-                        <g
-                            transform="translate(595.37654,-39.29079)"
-                            id="g3273">
-                            <image
-                                width="37"
-                                height="18"
-                                xlink:href="file:////programming/proys/SWB4/swb/applets/SWBAppBPMNModeler/src/org/semanticwb/process/modeler/images/barra_mov.png"
-                                id="image7061"
-                                x="-124.13931"
-                                y="147.21928" />
-                            <g
-                                transform="translate(0.08995799,0)"
-                                id="g7188">
-                                <image
-                                    y="147.21928"
-                                    x="-87.274498"
-                                    id="image7123"
-                                    xlink:href="file:////programming/proys/SWB4/swb/applets/SWBAppBPMNModeler/src/org/semanticwb/process/modeler/images/baja_1.png"
-                                    height="18"
-                                    width="12" />
-                                <image
-                                    style="display:none"
-                                    y="147.21928"
-                                    x="-87.274498"
-                                    id="image7185"
-                                    xlink:href="file:////programming/proys/SWB4/swb/applets/SWBAppBPMNModeler/src/org/semanticwb/process/modeler/images/baja_2.png"
-                                    height="18"
-                                    width="12" />
-                            </g>
-                        </g>
-                        <g
-                            transform="translate(275,9.852067)"
-                            id="g7350">
-                            <image
-                                y="115.84306"
-                                x="196.21428"
-                                id="image7251"
-                                xlink:href="file:////programming/proys/SWB4/swb/applets/SWBAppBPMNModeler/src/org/semanticwb/process/modeler/images/file1.png"
-                                height="43"
-                                width="49" 
-                                onmouseover="this.correspondingElement.setAttributeNS('http://www.w3.org/1999/xlink','href','file:////programming/proys/SWB4/swb/applets/SWBAppBPMNModeler/src/org/semanticwb/process/modeler/images/file2.png')"           
-                                onmouseout="this.setAttributeNS('http://www.w3.org/1999/xlink','href','file:////programming/proys/SWB4/swb/applets/SWBAppBPMNModeler/src/org/semanticwb/process/modeler/images/file1.png')"           
-                                />
-                        </g>
-                        <image
-                            width="49"
-                            height="12"
-                            xlink:href="file:////programming/proys/SWB4/swb/applets/SWBAppBPMNModeler/src/org/semanticwb/process/modeler/images/barra_division.png"
-                            id="image7556"
-                            x="471.21429"
-                            y="168.26781" />
-                        <g
-                            transform="translate(60,9.1377811)"
-                            id="g7731">
-                            <image
-                                y="170.96983"
-                                x="411.21429"
-                                id="image7650"
-                                xlink:href="file:////programming/proys/SWB4/swb/applets/SWBAppBPMNModeler/src/org/semanticwb/process/modeler/images/task_1.png"
-                                height="43"
-                                width="49" />
-                        </g>
-                        <g
-                            transform="translate(60,9.1377811)"
-                            id="g7970">
-                            <image
-                                y="213.91927"
-                                x="411.21429"
-                                id="image7857"
-                                xlink:href="file:////programming/proys/SWB4/swb/applets/SWBAppBPMNModeler/src/org/semanticwb/process/modeler/images/subtask_1.png"
-                                height="43"
-                                width="49" />
-                        </g>
-                        <g
-                            transform="translate(60,8.7806382)"
-                            id="g8708">
-                            <image
-                                y="256.85519"
-                                x="411.21429"
-                                id="image8627"
-                                xlink:href="file:////programming/proys/SWB4/swb/applets/SWBAppBPMNModeler/src/org/semanticwb/process/modeler/images/task_call_1.png"
-                                height="43"
-                                width="49" />
-                        </g>
-                        <g
-                            transform="translate(135.59491,-7.6793888)"
-                            id="g8883">
-                            <image
-                                y="316.17926"
-                                x="335.61938"
-                                id="image8786"
-                                xlink:href="file:////programming/proys/SWB4/swb/applets/SWBAppBPMNModeler/src/org/semanticwb/process/modeler/images/start_1.png"
-                                height="43"
-                                width="49" />
-                        </g>
-                        <g
-                            transform="translate(247.21677,-53.686379)"
-                            id="g9109">
-                            <image
-                                y="405.07269"
-                                x="223.99753"
-                                id="image9012"
-                                xlink:href="file:////programming/proys/SWB4/swb/applets/SWBAppBPMNModeler/src/org/semanticwb/process/modeler/images/inter_1.png"
-                                height="43"
-                                width="49" />
-                        </g>
-                        <g
-                            transform="translate(81.428593,-5.1785712)"
-                            id="g9236">
-                            <image
-                                y="399.43362"
-                                x="389.78571"
-                                id="image9171"
-                                xlink:href="file:////programming/proys/SWB4/swb/applets/SWBAppBPMNModeler/src/org/semanticwb/process/modeler/images/end_1.png"
-                                height="43"
-                                width="49" />
-                        </g>
-                        <g
-                            transform="translate(109.28574,207.57144)"
-                            id="g9651">
-                            <image
-                                y="229.43361"
-                                x="361.92856"
-                                id="image9570"
-                                xlink:href="file:////programming/proys/SWB4/swb/applets/SWBAppBPMNModeler/src/org/semanticwb/process/modeler/images/if_1.png"
-                                height="43"
-                                width="49" />
-                        </g>
-                        <image
-                            y="479.51642"
-                            x="471.21429"
-                            id="image9654"
-                            xlink:href="file:////programming/proys/SWB4/swb/applets/SWBAppBPMNModeler/src/org/semanticwb/process/modeler/images/barra_division.png"
-                            height="12"
-                            width="49" />
-                        <g
-                            transform="translate(86.428589,49.390319)"
-                            id="g9847">
-                            <image
-                                y="441.93362"
-                                x="384.78571"
-                                id="image9766"
-                                xlink:href="file:////programming/proys/SWB4/swb/applets/SWBAppBPMNModeler/src/org/semanticwb/process/modeler/images/flow_1.png"
-                                height="43"
-                                width="49" />
-                        </g>
-                        <g
-                            transform="translate(92.5,-59.482148)"
-                            id="g10009">
-                            <image
-                                y="604.79077"
-                                x="378.71429"
-                                id="image9944"
-                                xlink:href="file:////programming/proys/SWB4/swb/applets/SWBAppBPMNModeler/src/org/semanticwb/process/modeler/images/anota_1.png"
-                                height="43"
-                                width="49" />
-                        </g>
-                        <image
-                            width="49"
-                            height="12"
-                            xlink:href="file:////programming/proys/SWB4/swb/applets/SWBAppBPMNModeler/src/org/semanticwb/process/modeler/images/barra_division.png"
-                            id="image10012"
-                            x="471.21429"
-                            y="533.73083" />
-                        <image
-                            y="587.94525"
-                            x="471.21429"
-                            id="image10014"
-                            xlink:href="file:////programming/proys/SWB4/swb/applets/SWBAppBPMNModeler/src/org/semanticwb/process/modeler/images/barra_division.png"
-                            height="12"
-                            width="49" />
-                        <g
-                            transform="translate(-7.8571472,-20.232148)"
-                            id="g10140">
-                            <image
-                                y="619.79077"
-                                x="479.07144"
-                                id="image10075"
-                                xlink:href="file:////programming/proys/SWB4/swb/applets/SWBAppBPMNModeler/src/org/semanticwb/process/modeler/images/doc_1.png"
-                                height="43"
-                                width="49" />
-                        </g>
-                        <image
-                            width="49"
-                            height="12"
-                            xlink:href="file:////programming/proys/SWB4/swb/applets/SWBAppBPMNModeler/src/org/semanticwb/process/modeler/images/barra_division.png"
-                            id="image10143"
-                            x="471.21429"
-                            y="642.30237" />
-                        <g
-                            transform="translate(36.428589,166.07145)"
-                            id="g10269">
-                            <image
-                                y="487.64789"
-                                x="434.78571"
-                                id="image10204"
-                                xlink:href="file:////programming/proys/SWB4/swb/applets/SWBAppBPMNModeler/src/org/semanticwb/process/modeler/images/pool_1.png"
-                                height="43"
-                                width="49" />
-                        </g>
-                        <image
-                            width="49"
-                            height="8"
-                            xlink:href="file:////programming/proys/SWB4/swb/applets/SWBAppBPMNModeler/src/org/semanticwb/process/modeler/images/barra_bottom.png"
-                            id="image10331"
-                            x="471.21429"
-                            y="696.29083" />
-                    </g>
-                </g>                    
-
+                <style type="text/css"><![CDATA[
+                    
+                    .resizeBox {
+                        stroke:#008000;
+                        fill:url(#linearGradientStartEvent);
+                        fill-opacity:1;
+                        stroke-width:1.5;  
+                    }
+                    
+                    .task {
+                        stroke:#2c5aa0;
+                        fill:url(#linearGradientIntermediateEvent);
+                        fill-opacity:1;
+                        stroke-width:2;
+                    }
+                    
+                    .task_o {
+                        stroke:#2cff20;
+                        fill:url(#linearGradientIntermediateEvent);
+                        fill-opacity:1;
+                        stroke-width:2;
+                    }                    
+                    
+                    .startEvent
+                    {
+                        stroke:#008000;
+                        fill:url(#linearGradientStartEvent);
+                        fill-opacity:1;
+                        stroke-width:1.5;                        
+                    }
+                    
+                    .startEvent_o
+                    {
+                        stroke:#2cff20;
+                        fill:url(#linearGradientStartEvent);
+                        fill-opacity:1;
+                        stroke-width:1.5;                        
+                    }                    
+                    
+                    .intermediateEvent
+                    {
+                        stroke:#2c5aa0;
+                        fill:url(#linearGradientIntermediateEvent);
+                        fill-opacity:1;
+                        stroke-width:1.5;
+                    }
+                    
+                    .intermediateEvent_o
+                    {
+                        stroke:#2cff20;
+                        fill:url(#linearGradientIntermediateEvent);
+                        fill-opacity:1;
+                        stroke-width:1.5;
+                    }                    
+                    
+                    .intermediateEvent1
+                    {
+                        stroke:#2c5aa0;
+                        fill:none;
+                        stroke-width:1;
+                    } 
+                    
+                    .endEvent
+                    {
+                        stroke:#550000;
+                        fill:url(#linearGradientEndEvent);
+                        stroke-width:2.5;
+                    }
+                    
+                    .endEvent_o
+                    {
+                        stroke:#2cff20;
+                        fill:url(#linearGradientEndEvent);
+                        stroke-width:2.5;
+                    }    
+                    
+                    .gateway
+                    {
+                        stroke:#d4aa00;
+                        fill:url(#linearGradientGateway);
+                        fill-opacity:1;
+                        stroke-width:2;
+                        stroke-opacity:1;
+                        stroke-dasharray:none;
+                    }
+                    
+                    .gateway_o
+                    {
+                        stroke:#2cff20;
+                        fill:url(#linearGradientGateway);
+                        fill-opacity:1;
+                        stroke-width:2;
+                        stroke-opacity:1;
+                        stroke-dasharray:none;
+                    }                    
+                    
+                    .selectBox
+                    {
+                        fill:#f0f0f0;
+                        fill-opacity:.5;
+                        stroke-width:2;
+                        stroke-opacity:1;
+                        stroke:#2c5aa0                        
+                    }
+                    
+                    .taskMarker
+                    {
+                        stroke:#2c5aa0;
+                    }
+                    .pathMarker{
+                        fill:none;
+                        stroke-width:1;
+                    }
+                    .startMarker{
+                        stroke:#008000;
+                        fill:none;
+                        stroke-width:2.5;                        
+                    }
+                    .startMarker{
+                        stroke:#008000;
+                        fill:none;
+                        stroke-width:2.5;                        
+                    }
+                    .startFilledMarker{
+                        fill:#008000;
+                        stroke:none;
+                        stroke-width:1;
+                    }
+                    .intermediateMarker{
+                        stroke:#2c5aa0;
+                        fill:none;
+                        stroke-width:2.5;
+                    }      
+                    .intermediateFilledMarker{
+                        fill:#2c5aa0;
+                        stroke:#2c5aa0;
+                        stroke-width:1;
+                    }    
+                    .endFilledMarked
+                    {
+                        fill:#550000;   
+                        stroke:#550000;
+                        stroke-width:1;
+                    }
+                    
+                ]]></style>
+                <!--Definición de gradientes para las figuras-->
                 <linearGradient id="linearGradientStartEvent" x1="0%" y1="0%" x2="100%" y2="100%">
                     <stop offset="10%" style="stop-color:#ffffff;stop-opacity:1" />
                     <stop offset="90%" style="stop-color:#ccffaa;stop-opacity:1" />
@@ -809,30 +960,308 @@
                     <stop offset="10%" style="stop-color:#ffffff;stop-opacity:1" />
                     <stop offset="100%" style="stop-color:#87aade;stop-opacity:1" />
                 </linearGradient>
+                <linearGradient id="linearGradientGateway" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="10%" style="stop-color:#FFFDE2;stop-opacity:1" />
+                    <stop offset="100%" style="stop-color:#FFFAA6;stop-opacity:1" />
+                </linearGradient>
+                <linearGradient id="linearGradientDataObject" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="10%" style="stop-color:#ffffff;stop-opacity:1" />
+                    <stop offset="100%" style="stop-color:#afbac7;stop-opacity:1" />
+                </linearGradient>
                 
-                <rect id="selectBox" x="0" y="0" style="fill:url(#linearGradientIntermediateEvent);fill-opacity:1;stroke-width:2;stroke-opacity:1;stroke-dasharray:none"/>                
-
-                <g id="startEvent" styled="stroke:#008000">
-                    <circle r="25" style="fill:url(#linearGradientStartEvent);fill-opacity:1;stroke-width:2;stroke-opacity:1;stroke-dasharray:none;cursor:pointer"/>
-                </g>
-
-                <g id="endEvent" styled="stroke:#550000">
-                    <circle r="25" style="fill:url(#linearGradientEndEvent);fill-opacity:1;stroke-width:4;stroke-opacity:1;stroke-dasharray:none"/>
-                </g>
-
-                <g id="intermediateEvent" styled="stroke:#2c5aa0">
-                    <circle r="25" style="fill:url(#linearGradientIntermediateEvent);fill-opacity:1;stroke-width:2;stroke-opacity:1;stroke-dasharray:none"/>
-                    <circle r="22" style="fill-opacity:0;stroke-width:1;stroke-opacity:1;stroke-dasharray:none"/>
-                </g>
+                <rect id="resizeBox" x="-5" y="-5" width="10" height="10" class="resizeBox"/>
                 
-                <g id="task" styled="stroke:#2c5aa0">
-                    <rect x="-75" y="-50" rx="10" ry="10" width="150" height="100" style="fill:url(#linearGradientIntermediateEvent);fill-opacity:1;stroke-width:2;stroke-opacity:1;stroke-dasharray:none"/>
+                <!--definición de marcadores para las figuras-->
+                <path id="errorMarker" d="m 0.5,1051.8622 17.0774,-39.6847 15.0444,21.9792 19.5171,-27.474 L 34.8582,1048.199 19.8137,1029.6795 0.5,1051.8622 z" transform="scale(0.35,0.35) translate(-26, -1030)" />
+                <path id="ruleMarker" d="m 0,0 0,43.9063 46.75,0 0,-43.9063 z m 4.25,9.875 18.5,0 0,4.8438 -18.5,0 z m 20,0 18.5,0 0,4.8438 -18.5,0 z m -20,8 18.5,0 0,4.8438 -18.5,0 z m 20,0 18.5,0 0,4.8438 -18.5,0 z m -20,8 18.5,0 0,4.8438 -18.5,0 z m 20,0 18.5,0 0,4.8438 -18.5,0 z m -20,8 18.5,0 0,4.8438 -18.5,0 z m 20,0 18.5,0 0,4.8438 -18.5,0 z" transform="scale(0.35,0.35) translate(-23.5,-23.5)"/>
+                <path id="multipleMarker" d="m 0,0 -33.73973,0.37343 -10.78131,-31.973 27.07653,-20.13383 27.51552,19.52961 z" transform="scale(0.35,0.35) translate(17,23)" />
+                <path id="parallelMarker" d="m 0,0 0,19.4788 -19.45519,0 0,10.5627 19.45519,0 0,19.4787 10.58626,0 0,-19.4787 19.47871,0 0,-10.5627 -19.47871,0 0,-19.4788 z" transform="scale(0.35,0.35) translate(-5, -25)"/>
+                <path id="linkMarker" d="m 0,0 -20.432,-24.2007 0,16.9761 -25.0594,0 0,14.1289 25.0594,0 0,17.332 z" transform="scale(0.35,0.35) translate(23,0)"/>
+                <path id="complexMarker" d="m 0,0 0,15.875 -11.25,-11.2187 -2.34375,2.3125 11.25,11.25 -15.90625,0 0,3.3125 15.90625,0 -11.25,11.2187 2.34375,2.3438 11.25,-11.2188 0,15.875 3.28125,0 0,-15.9062 11.25,11.25 2.3125,-2.3438 -11.21875,-11.2187 15.875,0 0,-3.3125 -15.875,0 11.21875,-11.2188 -2.3125,-2.3437 -11.25,11.25 0,-15.9063 z" transform="translate(-1, -20)"/>
+                <path id="signalMarker" d="m 0,0 -23.59924,0 -23.59925,0 11.79962,-20.43755 11.79963,-20.43755 11.79962,20.43755 z" transform="scale(0.35,0.35) translate(24,14)"/>
+                <path id="scalationMarker" transform="scale(0.35,0.35) translate(0,-26)" d="m 0,0 -21.34041,47.167 21.34041,-17.3811 21.340402,17.3811 -21.340402,-47.167 z" />
+                <path id="cancelMarker" d="m 0,0 -18.3627,18.3627 -18.3848004,-18.3848 -3.3366,3.3367 18.3847004,18.3847 -18.3847004,18.3848 3.3366,3.3367 18.3848004,-18.3848 18.3627,18.3627 3.3366,-3.3367 -18.3626,-18.3627 18.3626,-18.3626 z" transform="scale(0.35,0.35) translate(18, -22)"/>
+                <path id="manualMarker" d="m 0,0 c -0.27155,0 -0.5225,0.072 -0.75179,0.1792 -0.007,0 -0.0189,0 -0.0259,0 -1.25518,0.3798 -2.16186,4.1013 -2.9035,6.1425 -0.22877,0.5536 -0.36294,1.1549 -0.36294,1.7916 l 0,4.7861 c 0,2.6228 2.13932,4.7348 4.79597,4.7348 l 5.0552,0 5.69034,0 7.72539,0 c 0.97664,0 1.76284,-0.7762 1.76284,-1.7404 0,-0.9641 -0.7862,-1.7403 -1.76284,-1.7403 l -3.11089,0 c 0.0118,-0.043 0.0283,-0.085 0.0389,-0.128 l 4.16081,0 c 0.97664,0 1.76285,-0.7762 1.76285,-1.7404 0,-0.9642 -2.73949,-1.7404 -1.76285,-1.7404 l -4.01823,0 0,-0.064 5.23667,0 c 0.97664,0 1.76284,-0.7762 1.76284,-1.7404 0,-0.9641 -0.7862,-1.7403 -1.76284,-1.7403 l -5.39221,0 c -0.0116,-0.046 -0.0132,-0.095 -0.0259,-0.1408 l 7.56984,0 c 0.97663,0 1.76284,-0.7762 1.76284,-1.7404 0,-0.9642 -0.78621,-1.7404 -1.76284,-1.7404 l -12.18433,0 -0.92031,0 c 0.69854,-0.2311 1.20547,-0.8686 1.20547,-1.638 0,-0.9642 -0.7862,-1.7404 -1.76284,-1.7404 l -10.01967,0 z" class="pathMarker" />
+                <g id="messageThrowMarker" transform="scale(1.3,1.3) translate(-7.5,-4.5)" >
+                    <path d="m 0,0 0,9.175062 14.84706,0 0,-9.175062 -0.0245,0 -7.40716,4.648917 -7.41535,-4.648917 z" style="stroke:#ffffff;stroke-opacity:0.4"/>
+                    <path d="m 0.6,0 6.88839,4.318911 6.88838,-4.318911" style="stroke:#ffffff;stroke-opacity:0.4"/>
                 </g>
-
-                <g id="test" styled="stroke:#2c5aa0">
+                <g id="messageCatchMarker" transform="scale(0.35,0.35) translate(-27,-17)" >
+                    <rect width="52.704407" height="32.573116" x="0" y="0"/>
+                    <path d="m 0,0 26.30906,16.49536 26.30905,-16.49536" id="path2824-1"/>
+                </g>
+                <g id="compensaMarker" transform="scale(0.35,0.35) translate(-2,-13)">
+                    <path d="m 0,0 -28.36636,0 14.18318,-24.56599 z" transform="matrix(0,-1,1,0,0,0)"/>
+                    <path d="m 0,0 -28.36636,0 14.18318,-24.56599 z" transform="matrix(0,-1,1,0,23,0)"/>
+                </g>
+                <g id="timerMarker" transform="scale(0.35,0.35) translate(-396,-219)" >
+                    <path d="m 232.18784,217.1541 a 40.089989,40.089989 0 1 1 -80.17997,0 40.089989,40.089989 0 1 1 80.17997,0 z" transform="matrix(0.6346099,0,0,0.6346099,274.19065,81.345956)"/>
+                    <path d="m 421.49964,219.1541 -8.76968,0"/>
+                    <path d="m 396.40906,193.78618 -0.0964,8.76915"/>
+                    <path d="m 370.76392,218.75252 8.76858,0.13882"/>
+                    <path d="m 396.04976,244.52342 0.0278,-8.76963"/>
+                    <path d="m 408.75323,219.1541 -12.86938,0"/>
+                    <path d="m 401.39526,204.36536 -4.8964,14.70678"/>
+                    <path d="m 414.26521,201.41346 -6.26889,6.13256"/>
+                    <path d="m 413.87083,237.28912 -6.13256,-6.26889"/>
+                    <path d="m 377.99517,236.89474 6.26889,-6.13256"/>
+                    <path d="m 378.38955,201.01908 6.13256,6.26889"/>
+                </g>
+                <g id="userMarker" class="taskMarker" transform="translate(0,-1042)">
+                    <path d="m 0,1039 c -3.3158023,0 -6,2.8058 -6,6.25 0,2.0045 0.9288788,3.7654 2.34375,4.9062 -3.3002786,1.7745 -5.6842907,5.8793 -6,10.75 l 19.3125,0 c -0.3158218,-4.8705 -2.7074728,-8.9755 -6,-10.75 C 5.0711212,1049.0154 6,1047.2545 6,1045.25 6,1041.8058 3.3158023,1039 0,1039 z" class="pathMarker" />
+                    <path d="m -377.4453,473.79996 a 9.3826418,9.3826418 0 0 1 -12.52292,0.66553" transform="matrix(0.6398828,0,0,0.66465394,245.76439,734.73647)" class="pathMarker" />
+                    <path d="m -5.1190626,1060.732 0,-3.8413" class="pathMarker"/>
+                    <path d="m 5.1190626,1060.732 0,-3.8413" class="pathMarker" />
+                    <path d="m 0.06204402,1039.6046 c -3.10856302,0 -5.66539592,2.4352 -5.68305502,5.5312 0.8963285,-1.0836 1.7094089,-1.6888 3.0835319,-1.6888 2.07094865,0 4.4437605,1.0758 6.2188589,0.7688 0.570252,-0.099 1.2624582,-0.3804 1.939646,-0.7272 -0.6073258,-2.271 -3.0493799,-3.884 -5.55898178,-3.884 z" style="fill:#2c5aa0;stroke-width:1;" />
+                </g>
+                <g id="serviceMarker" class="taskMarker">
+                    <path d="m 0,0 1.478093,-2.5912 c -0.762317,-0.4662 -1.601697,-0.8229 -2.495483,-1.0366 l -0.767843,2.8793 -2.495483,0 -0.787044,-2.8793 c -0.895236,0.2142 -1.733065,0.5691 -2.495483,1.0366 l 1.487693,2.5721 -1.766033,1.7659 -2.581869,-1.478 c -0.467511,0.7623 -0.822527,1.6003 -1.036583,2.4952 l 2.86981,0.7678 0,2.5048 -2.860209,0.7775 c 0.21606,0.8875 0.562993,1.7267 1.026982,2.4856 l 2.562669,-1.478" class="pathMarker" />
+                    <path d="m 0,0 c -0.989621,0.2366 -1.915788,0.629 -2.758588,1.1457 l 1.644541,2.8433 -1.952235,1.9521 -2.85408,-1.6338 c -0.516803,0.8427 -0.909247,1.769 -1.145882,2.7583 l 3.172388,0.8488 0,2.769 -3.161774,0.8593 c 0.238849,0.9811 0.622356,1.9088 1.135268,2.7477 l 2.832859,-1.6337 1.952235,1.952 -1.633935,2.8539 c 0.84654,0.5219 1.774518,0.918 2.769203,1.1564 l 0.848804,-3.1828 2.758588,0 0.870025,3.1828 c 0.988288,-0.238 1.914849,-0.6289 2.758588,-1.1459 l -1.644542,-2.8431 1.952236,-1.9521 2.864694,1.6337 c 0.515612,-0.8389 0.908032,-1.7642 1.145874,-2.7477 l -3.182994,-0.8593 0,-2.769 3.182994,-0.87 c -0.237717,-0.9884 -0.628065,-1.9158 -1.145874,-2.7583 l -2.854088,1.655 -1.952235,-1.9521 1.633935,-2.8645 c -0.842691,-0.5152 -1.77056,-0.9096 -2.758588,-1.1457 l -0.848804,3.1828 -2.758588,0 z m 2.238708,5.697 c 1.994007,0 3.607392,1.6133 3.607392,3.6072 0,1.9938 -1.613385,3.6176 -3.607392,3.6176 -1.994007,0 -3.607392,-1.6238 -3.607392,-3.6176 0,-1.9939 1.613385,-3.6072 3.607392,-3.6072 z" class="pathMarker" />
+                </g>
+                <g id="scriptMarker" class="taskMarker">
+                    <path d="m 0,0 c 3.5628793,2.98 3.5212524,7.9199 0,10.8403 l 0,0.1186 13.5952063,-10e-4 c 4.246065,-3.0502 4.698752,-8.6843 0.03211,-12.4597 -1.719778,-1.441 -2.097829,-3.2691 -2.297848,-5.5453 0,-1.9186 0.795633,-3.6321 2.05209,-4.7945 l -9.1791045,0 c -7.65536286,-0.3702 -8.7288909,8.3174 -4.2024826,11.8414 z" class="pathMarker" />
+                    <path d="m 0,-8 9.5315769,0" class="pathMarker" />
+                    <path d="m -0.5,-4.1568 9.5315769,0" class="pathMarker" />
+                    <path d="m 2.5,0 9.5315769,0" class="pathMarker" />
+                    <path d="m 4.5,4 9.5315768,0" class="pathMarker" />
+                    <path d="m 4,8 9.5315768,0" class="pathMarker" />
+                </g>
+                <!--Definición de eventos iniciales-->
+                <circle id="startEvent" r="15" bclass="startEvent" oclass="startEvent_o"/>
+                
+                <g id="messageStartEvent" bclass="startEvent" oclass="startEvent_o">
                     <use xlink:href="#startEvent" x="0" y="0"/>
-                    <use xlink:href="#endEvent" x="100" y="100"/>
-                </g>                    
+                    <use xlink:href="#messageCatchMarker" x="0" y="0" class="startMarker"/>
+                </g>
+                <g id="timerStartEvent" bclass="startEvent" oclass="startEvent_o">
+                    <use xlink:href="#startEvent" x="0" y="0"/>
+                    <use xlink:href="#timerMarker" x="0" y="0" class="startMarker"/>
+                </g>
+                <g id="ruleStartEvent" bclass="startEvent" oclass="startEvent_o">
+                    <use xlink:href="#startEvent" x="0" y="0"/>
+                    <use xlink:href="#ruleMarker" x="0" y="0" class="startFilledMarker"/>
+                </g>
+                <g id="signalStartEvent" bclass="startEvent" oclass="startEvent_o">
+                    <use xlink:href="#startEvent" x="0" y="0"/>
+                    <use xlink:href="#signalMarker" x="0" y="0" class="startMarker"/>
+                </g>
+                <g id="multipleStartEvent" bclass="startEvent" oclass="startEvent_o">
+                    <use xlink:href="#startEvent" x="0" y="0"/>
+                    <use xlink:href="#multipleMarker" x="0" y="0" class="startMarker"/>
+                </g>
+                <g id="parallelStartEvent" bclass="startEvent" oclass="startEvent_o">
+                    <use xlink:href="#startEvent" x="0" y="0"/>
+                    <use xlink:href="#parallelMarker" x="0" y="0" class="startMarker"/>
+                </g>
+                <g id="scalationStartEvent" bclass="startEvent" oclass="startEvent_o">
+                    <use xlink:href="#startEvent" x="0" y="0"/>
+                    <use xlink:href="#scalationMarker" x="0" y="0" class="startMarker"/>
+                </g>
+                <g id="errorStartEvent" bclass="startEvent" oclass="startEvent_o">
+                    <use xlink:href="#startEvent" x="0" y="0"/>
+                    <use xlink:href="#errorMarker" x="0" y="0" class="startMarker"/>
+                </g>
+                <g id="compensationStartEvent" bclass="startEvent" oclass="startEvent_o">
+                    <use xlink:href="#startEvent" x="0" y="0"/>
+                    <use xlink:href="#compensaMarker" x="0" y="0" class="startMarker"/>
+                </g>
+                <!--Definición de eventos intermedios-->
+                <g id="intermediateEvent" bclass="intermediateEvent" oclass="intermediateEvent_o">
+                    <circle r="15"/>
+                    <circle r="12" class="intermediateEvent1"/>
+                </g>
+                <g id="messageIntermediateCatchEvent" bclass="intermediateEvent" oclass="intermediateEvent_o">
+                    <use xlink:href="#intermediateEvent" x="0" y="0"/>
+                    <use xlink:href="#messageCatchMarker" x="0" y="0" class="intermediateMarker"/>
+                </g>
+                <g id="messageIntermediateThrowEvent" bclass="intermediateEvent" oclass="intermediateEvent_o">
+                    <use xlink:href="#intermediateEvent" x="0" y="0"/>
+                    <use xlink:href="#messageThrowMarker" x="0" y="0" class="intermediateFilledMarker"/>
+                </g>
+                <g id="timerIntermediateEvent" bclass="intermediateEvent" oclass="intermediateEvent_o">
+                    <use xlink:href="#intermediateEvent" x="0" y="0"/>
+                    <use xlink:href="#timerMarker" x="0" y="0" class="intermediateMarker"/>
+                </g>
+                <g id="errorIntermediateEvent" bclass="intermediateEvent" oclass="intermediateEvent_o">
+                    <use xlink:href="#intermediateEvent" x="0" y="0"/>
+                    <use xlink:href="#errorMarker" x="0" y="0" class="intermediateMarker"/>
+                </g>
+                <g id="cancelIntermediateEvent" bclass="intermediateEvent" oclass="intermediateEvent_o">
+                    <use xlink:href="#intermediateEvent" x="0" y="0"/>
+                    <use xlink:href="#cancelMarker" x="0" y="0" class="intermediateFilledMarker"/>
+                </g>
+                <g id="compensationIntermediateCatchEvent" bclass="intermediateEvent" oclass="intermediateEvent_o">
+                    <use xlink:href="#intermediateEvent" x="0" y="0"/>
+                    <use xlink:href="#compensaMarker" x="0" y="0" class="intermediateMarker"/>
+                </g>
+                <g id="compensationIntermediateThrowEvent" bclass="intermediateEvent" oclass="intermediateEvent_o">
+                    <use xlink:href="#intermediateEvent" x="0" y="0"/>
+                    <use xlink:href="#compensaMarker" x="0" y="0" class="intermediateFilledMarker"/>
+                </g>
+                <g id="ruleIntermediateEvent" bclass="intermediateEvent" oclass="intermediateEvent_o">
+                    <use xlink:href="#intermediateEvent" x="0" y="0"/>
+                    <use xlink:href="#ruleMarker" x="0" y="0" class="intermediateFilledMarker"/>
+                </g>
+                <g id="linkIntermediateCatchEvent" bclass="intermediateEvent" oclass="intermediateEvent_o">
+                    <use xlink:href="#intermediateEvent" x="0" y="0"/>
+                    <use xlink:href="#linkMarker" x="0" y="0" class="intermediateMarker"/>
+                </g>
+                <g id="linkIntermediateThrowEvent" bclass="intermediateEvent" oclass="intermediateEvent_o">
+                    <use xlink:href="#intermediateEvent" x="0" y="0"/>
+                    <use xlink:href="#linkMarker" x="0" y="0" class="intermediateFilledMarker"/>
+                </g>
+                <g id="signalIntermediateCatchEvent" bclass="intermediateEvent" oclass="intermediateEvent_o">
+                    <use xlink:href="#intermediateEvent" x="0" y="0"/>
+                    <use xlink:href="#signalMarker" x="0" y="0" class="intermediateMarker"/>
+                </g>
+                <g id="signalIntermediateThrowEvent" bclass="intermediateEvent" oclass="intermediateEvent_o">
+                    <use xlink:href="#intermediateEvent" x="0" y="0"/>
+                    <use xlink:href="#signalMarker" x="0" y="0" class="intermediateFilledMarker"/>
+                </g>
+                <g id="multipleIntermediateCatchEvent" bclass="intermediateEvent" oclass="intermediateEvent_o">
+                    <use xlink:href="#intermediateEvent" x="0" y="0"/>
+                    <use xlink:href="#multipleMarker" x="0" y="0" class="intermediateMarker"/>
+                </g>
+                <g id="multipleIntermediateThrowEvent" bclass="intermediateEvent" oclass="intermediateEvent_o">
+                    <use xlink:href="#intermediateEvent" x="0" y="0"/>
+                    <use xlink:href="#multipleMarker" x="0" y="0" class="intermediateFilledMarker"/>
+                </g>
+                <g id="scalationIntermediateCatchEvent" bclass="intermediateEvent" oclass="intermediateEvent_o">
+                    <use xlink:href="#intermediateEvent" x="0" y="0"/>
+                    <use xlink:href="#scalationMarker" x="0" y="0" class="intermediateMarker"/>
+                </g>
+                <g id="scalationIntermediateThrowEvent" bclass="intermediateEvent" oclass="intermediateEvent_o">
+                    <use xlink:href="#intermediateEvent" x="0" y="0"/>
+                    <use xlink:href="#scalationMarker" x="0" y="0" class="intermediateFilledMarker"/>
+                </g>
+                <g id="parallelIntermediateEvent" bclass="intermediateEvent" oclass="intermediateEvent_o">
+                    <use xlink:href="#intermediateEvent" x="0" y="0"/>
+                    <use xlink:href="#parallelMarker" x="0" y="0" class="intermediateMarker"/>
+                </g>
+                <!--Definición de eventos finales-->
+                <circle id="endEvent" r="15" bclass="endEvent" oclass="endEvent_o"/>
+                
+                <g id="messageEndEvent" bclass="endEvent" oclass="endEvent_o">
+                    <use xlink:href="#endEvent" x="0" y="0"/>
+                    <use xlink:href="#messageThrowMarker" x="0" y="0" class="endFilledMarked"/>
+                </g>
+                <g id="signalEndEvent" bclass="endEvent" oclass="endEvent_o">
+                    <use xlink:href="#endEvent" x="0" y="0"/>
+                    <use xlink:href="#signalMarker" x="0" y="0" class="endFilledMarked"/>
+                </g>
+                <g id="scalationEndEvent" bclass="endEvent" oclass="endEvent_o">
+                    <use xlink:href="#endEvent" x="0" y="0"/>
+                    <use xlink:href="#scalationMarker" x="0" y="0" class="endFilledMarked"/>
+                </g>
+                <g id="errorEndEvent" bclass="endEvent" oclass="endEvent_o">
+                    <use xlink:href="#endEvent" x="0" y="0"/>
+                    <use xlink:href="#errorMarker" x="0" y="0" class="endFilledMarked"/>
+                </g>
+                <g id="multipleEndEvent" bclass="endEvent" oclass="endEvent_o">
+                    <use xlink:href="#endEvent" x="0" y="0"/>
+                    <use xlink:href="#multipleMarker" x="0" y="0" class="endFilledMarked"/>
+                </g>
+                <g id="cancelationEndEvent" bclass="endEvent" oclass="endEvent_o">
+                    <use xlink:href="#endEvent" x="0" y="0"/>
+                    <use xlink:href="#cancelMarker" x="0" y="0" class="endFilledMarked"/>
+                </g>
+                <g id="terminationEndEvent" bclass="endEvent" oclass="endEvent_o">
+                    <use xlink:href="#endEvent" x="0" y="0"/>
+                    <circle r="8" class="endFilledMarked"/>
+                </g>
+                <g id="compensationEndEvent" bclass="endEvent" oclass="endEvent_o">
+                    <use xlink:href="#endEvent" x="0" y="0"/>
+                    <use xlink:href="#compensaMarker" x="0" y="0" class="endFilledMarked"/>
+                </g>
+                <!--Definición de compuertas-->
+                <rect id="gateway" x="-17.5" y="-17.5" width="35" height="35" bclass="gateway" oclass="gateway_o" transform="rotate(45,0,0)"/>
+                    
+                <g id="exclusiveDataGateway" bclass="gateway" oclass="gateway_o" >
+                    <use xlink:href="#gateway" x="0" y="0"/>
+                    <use xlink:href="#cancelMarker" x="0" y="0" style="stroke:none;fill:#d4aa00" transform="scale(1.3,1.3)"/>
+                </g>
+                <g id="inclusiveDataGateway" bclass="gateway" oclass="gateway_o" >
+                    <use xlink:href="#gateway" x="0" y="0"/>
+                    <circle r="14" style="fill:none;stroke:#d4aa00;stroke-width:2;"/>
+                </g>
+                <g id="exclusiveStartGateway" bclass="gateway" oclass="gateway_o" >
+                    <use xlink:href="#gateway" x="0" y="0"/>
+                    <circle r="14" style="fill:none;stroke:#d4aa00;stroke-width:2;"/>
+                    <use xlink:href="#multipleMarker" x="0" y="0" style="fill:none;stroke:#d4aa00;stroke-width:4.5;" transform="scale(0.9,0.9)"/>
+                </g>
+                <g id="eventGateway" bclass="gateway" oclass="gateway_o" >
+                    <use xlink:href="#gateway" x="0" y="0"/>
+                    <circle r="14" style="fill:none;stroke:#d4aa00;stroke-width:2;"/>
+                    <circle r="10" style="fill:none;stroke:#d4aa00;stroke-width:2;"/>
+                    <use xlink:href="#multipleMarker" x="0" y="0" style="fill:none;stroke:#d4aa00;stroke-width:6;" transform="scale(0.75,0.75)"/>
+                </g>
+                <g id="parallelGateway" bclass="gateway" oclass="gateway_o" >
+                    <use xlink:href="#gateway" x="0" y="0"/>
+                    <use xlink:href="#parallelMarker" x="0" y="0" style="stroke:none;fill:#d4aa00" transform="scale(1.5,1.5)"/>
+                </g>
+                <g id="parallelStartGateway" bclass="gateway" oclass="gateway_o" >
+                    <use xlink:href="#gateway" x="0" y="0"/>
+                    <circle r="14" style="fill:none;stroke:#d4aa00;stroke-width:2;"/>
+                    <use xlink:href="#parallelMarker" x="0" y="0" style="stroke:#d4aa00;fill:none;stroke-width:3.5;"/>
+                </g>
+                <g id="complexGateway" bclass="gateway" oclass="gateway_o" >
+                    <use xlink:href="#gateway" x="0" y="0"/>
+                    <use xlink:href="#complexMarker" x="0" y="0" style="stroke:none;fill:#d4aa00" transform="scale(0.7,0.7)"/>
+                </g>
+                <!--Definición de objetos de datos-->
+                <g id="data" styled="stroke:#666666">
+                    <path transform="scale(0.7,0.7)" d="m -25,-25 0,74.61135 58.22841,0 0,-55.2509 -19.88426,-19.36045 -38.34415,0 z" id="rect6567" style="fill:url(#linearGradientDataObject);stroke-width:2.5;" />
+                    <path transform="scale(0.7,0.7)" d="m 12.5,-24 0,19.5625 20.0601,0" id="rect6569" style="fill:none;stroke-width:2.5;" />
+                </g>
+                <g id="dataStore" styled="stroke:#666666;">
+                    <path d="m 0,0 c -27.75868,0 -50.28125,5.6228 -50.28125,12.5625 0,0.1516 0.0412,0.2871 0.0625,0.4375 l -0.0625,0 0,61.5624 0,0.3125 0.0312,0 c 0.68314,6.7909 22.92187,12.25 50.25,12.25 27.3249498,0 49.53067,-5.4602 50.21875,-12.25 l 0.0312,0 0,-0.3125 0,-61.5624 -0.0312,0 c 0.0212,-0.1501 0.0312,-0.2862 0.0312,-0.4375 0,-6.9397 -22.4913202,-12.5625 -50.25,-12.5625 z" style="fill:url(#linearGradientDataObject);stroke-width:2.5;" transform="scale(0.6,0.6) translate(22,-24)"/>
+                    <path d="m 0,0 c 0,6.9397 -22.5028602,12.5654 -50.26153,12.5654 -27.39179,0 -49.73975,-5.4833 -50.25272,-12.33" style="fill:none;stroke-width:2.5;" transform="scale(0.6,0.6) translate(72,-12)"/>
+                </g>	
+                <g id="dataInput" styled="stroke:#666666">
+                    <use xlink:href="#data" x="0" y="0"/>
+                    <use xlink:href="#linkMarker" x="-5" y="-8" style="fill:none;stroke:#666666;stroke-width:2.5;" transform="scale(0.8,0.8)"/>
+                </g>
+                <g id="dataOutput" styled="stroke:#666666">
+                    <use xlink:href="#data" x="0" y="0"/>
+                    <use xlink:href="#linkMarker" x="-5" y="-8" style="fill:#666666;stroke:none;stroke-width:2.5;" transform="scale(0.8,0.8)"/>
+                </g>
+                <!--Definición de tareas-->
+                <g id="task" styled="stroke:#2c5aa0">
+                    <rect x="-50" y="-30" rx="10" ry="10" width="100" height="60" class="task"/>
+                </g>
+                <g id="userTask" styled="stroke:#2c5aa0">
+                    <use xlink:href="#task" x="0" y="0"/>
+                    <use xlink:href="#userMarker" transform="scale(0.8,0.8) translate(-45, -30)"/>
+                </g>
+                <g id="serviceTask" styled="stroke:#2c5aa0">
+                    <use xlink:href="#task" x="0" y="0"/>
+                    <use xlink:href="#serviceMarker" transform="scale(0.8,0.8) translate(-43, -27)"/>
+                </g>
+                <g id="scriptTask" styled="stroke:#2c5aa0">
+                    <use xlink:href="#task" x="0" y="0"/>
+                    <use xlink:href="#scriptMarker" transform="scale(0.7,0.7) translate(-60, -24)"/>
+                </g>
+                <g id="ruleTask" styled="stroke:#2c5aa0">
+                    <use xlink:href="#task" x="0" y="0"/>
+                    <use xlink:href="#ruleMarker" transform="translate(-35, -17)" style="fill:#2c5aa0;"/>
+                </g>
+                <g id="sendTask" styled="stroke:#2c5aa0">
+                    <use xlink:href="#task" x="0" y="0"/>
+                    <use xlink:href="#messageThrowMarker" transform="translate(-35, -19)" style="fill:#2c5aa0;"/>
+                </g>
+                <g id="receiveTask" styled="stroke:#2c5aa0">
+                    <use xlink:href="#task" x="0" y="0"/>
+                    <use xlink:href="#messageCatchMarker" transform="translate(-35, -19)" style="fill:none;stroke:#2c5aa0;stroke-width:3;"/>
+                </g>
+                <g id="manualTask" styled="stroke:#2c5aa0">
+                    <use xlink:href="#task" x="0" y="0"/>
+                    <use xlink:href="#manualMarker" transform="scale(0.7,0.7) translate(-60, -35)" style="fill:none;stroke:#2c5aa0;stroke-width:4;"/>
+                </g>
+                <!--Definición de swimlanes-->
+                <g id="pool" styled="stroke:#ADADAE;">
+                    <rect width="600" x="-300" y="-100" height="200" style="fill:#E8E8FF;stroke-width:2"/>
+                    <path d="m -280,-100 l 0,200" style="fill:none;stroke-width:2;"/>
+                </g>
             </defs>
         </svg>
 
