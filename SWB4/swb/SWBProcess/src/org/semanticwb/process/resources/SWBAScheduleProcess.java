@@ -1285,7 +1285,7 @@ public class SWBAScheduleProcess extends GenericResource {
      */
     public void addElem(Document doc, Element parent, String elemName, String elemValue) {
         Element elem = doc.createElement(elemName);
-        elem.appendChild(doc.createTextNode(elemValue));
+        elem.appendChild(doc.createTextNode(elemValue==null?"":elemValue));
         parent.appendChild(elem);
     }
 
