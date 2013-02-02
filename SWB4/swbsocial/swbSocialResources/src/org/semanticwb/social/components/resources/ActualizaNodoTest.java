@@ -35,8 +35,8 @@ public class ActualizaNodoTest extends GenericSocialResource {
         System.out.println("treeItem k llega:"+treeItem.getData().getName());
         if(treeItem!=null)
         {
-            SWBSocialResourceUtils.Resources.refreshNodeTitle(request, paramRequest, treeItem, "Prueba Mod Titulo");
-            SWBSocialResourceUtils.Resources.setStatusMessage(request, paramRequest, "Nodo insertado..."); 
+            SWBSocialResourceUtils.Resources.refreshNodeTitle(request, treeItem, action);
+            SWBSocialResourceUtils.Resources.setStatusMessage(request, "Nodo insertado..."); 
         }
         
     }

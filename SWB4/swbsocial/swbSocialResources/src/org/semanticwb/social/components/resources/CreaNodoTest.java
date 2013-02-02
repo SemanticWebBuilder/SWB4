@@ -45,8 +45,8 @@ public class CreaNodoTest extends GenericSocialResource {
         System.out.println("treeItem k llega:"+treeItem.getData().getName());
         if(treeItem!=null)
         {
-            SWBSocialResourceUtils.Resources.insertTreeNode(request, paramRequest, treeItem, new_Stream);
-            SWBSocialResourceUtils.Resources.setStatusMessage(request, paramRequest, "Nodo insertado..."); 
+            SWBSocialResourceUtils.Resources.insertTreeNode(request, treeItem, new_Stream);
+            SWBSocialResourceUtils.Resources.setStatusMessage(request, "Nodo insertado..."); 
         }
         
     }

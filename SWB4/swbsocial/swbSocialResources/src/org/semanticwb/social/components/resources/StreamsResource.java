@@ -106,7 +106,7 @@ public class StreamsResource extends GenericSocialResource{
         WebSite wsite=(WebSite)request.getAttribute("wsite");
         User user = paramRequest.getUser();
         String uri = request.getParameter("sobjUri");
-        SWBSocialResourceUtils.Resources.updateTreeNode(request, paramRequest);
+        //SWBSocialResourceUtils.Resources.updateTreeNode(request, paramRequest);
         if(uri != null) {
             SemanticObject semObj = SemanticObject.createSemanticObject(uri);
             if(semObj != null) {
