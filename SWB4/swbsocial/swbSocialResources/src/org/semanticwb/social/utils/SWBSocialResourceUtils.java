@@ -51,6 +51,8 @@ public class SWBSocialResourceUtils {
     public static final String ACTION_DOUBLECLICK = "doubleClick";
     public static final String ACTION_REMOVE = "remove";
     public static final String ACTION2= "updateTree";
+    private static String SOCIALADMINID="swbsocial";
+    
     /**
      * Holds a reference to a log utility.
      * <p>Mantiene una referencia a la utiler&iacute;a de generaci&oacute;n de bit&aacute;coras.</p>
@@ -64,37 +66,24 @@ public class SWBSocialResourceUtils {
     static ArrayList<String> aDoubles = new ArrayList();
     static HashMap<String, String> hmapChanges = new HashMap();
 
-    /**
-     * Creates a new object of this class.
-     */
-    private SWBSocialResourceUtils() {
-        init();
-    }
-
+   
     /**
      * Retrieves a reference to the only one existing object of this class.
      * <p>Obtiene una referencia al &uacute;nico objeto existente de esta clase.</p>
      * @param applicationPath a string representing the path for this application
      * @return a reference to the only one existing object of this class
      */
-    static public synchronized SWBSocialResourceUtils createInstance() {
-        if (SWBSocialResourceUtils.instance == null) {
-            init();
-            SWBSocialResourceUtils.instance = new SWBSocialResourceUtils();
-        }
-        return SWBSocialResourceUtils.instance;
-    }
-
     /*
-     * Initializes the class variables needed to provide this object's services
-     * <p>Inicializa las variables de clase necesarias para proveer los servicios de este objeto.</p>
-     */
-    /**
-     * Inits the.
-     */
-    private static void init() {
-
+    static public synchronized SWBSocialResourceUtils createInstance() {
+        if (instance == null) {
+            instance = new SWBSocialResourceUtils();
+            SOCIALADMIN_WSITE=WebSite.ClassMgr.getWebSite("swbsocial");
+        }
+         
+        return instance;
     }
+    * */
+    
     
     //PARA EL USO DESDE LOS RECURSOS DE SWB
     
@@ -144,17 +133,16 @@ public class SWBSocialResourceUtils {
          * Metodo que crea el nodo de la nueva marca y la pasa al archivo zul cnf_GenericZulTreeUpdate, para que este levante un evento y
          * sea dicho evento manejado en el indexAdm.zul y este actualice el árbol, ya que no se puede actualizar sin que sea en un listener (Evento)
          */
-        public static void createNewBrandNode(HttpServletRequest request, SWBParamRequest paramRequest, WebSite newSite)
+        public static void createNewBrandNode(HttpServletRequest request, User user, WebSite newSite)
         {
             try
             {
-                WebSite adminWebSite=paramRequest.getWebPage().getWebSite();
-                User user=paramRequest.getUser();
-
+                WebSite adminWebSite=WebSite.ClassMgr.getWebSite(SOCIALADMINID);
+                
                 DisplayObject displayObj=(DisplayObject)SocialSite.sclass.getDisplayObject().createGenericInstance();
                 String sIconImg="off_"+displayObj.getIconClass();
                 //rootTreeNode.insert(new ElementTreeNode(new Element(newSite.getTitle(), newSite.getURI(), "/work/models/"+adminWebSite.getId()+"/admin/img/"+sIconImg),getTreeCategoryNodes(newSite, adminWebSite, user),true), rootTreeNode.getChildCount());
-                ElementTreeNode newBrandNode=new ElementTreeNode(new Element(newSite.getTitle(), newSite.getURI(), "/work/models/"+adminWebSite.getId()+"/admin/img/"+sIconImg),getTreeCategoryNodes(newSite, adminWebSite, user),true);
+                ElementTreeNode newBrandNode=new ElementTreeNode(new Element(newSite.getTitle(), newSite.getURI(), "/work/models/"+adminWebSite.getId()+"/admin/img/"+sIconImg),getTreeCategoryNodes(newSite, user),true);
                 request.setAttribute("action", "createNewBrand");
                 request.setAttribute("treeItem", newBrandNode);
                 RequestDispatcher dispatcher = request.getRequestDispatcher("/work/models/"+adminWebSite.getId()+"/admin/zul/cnf_GenericZulTreeUpdate.zul");
@@ -168,7 +156,7 @@ public class SWBSocialResourceUtils {
         
         /**
          * Este metodo es utilizado desde los recursos de swb.
-         * Metodo que actualiza un nodo del árbol.
+         * Metodo que elimina un nodo del árbol.
          * Cuando una clase controlada desde el árbol es de tipo social_DeleteControlable (interface de la ontologpia), el usuario
          * desarrollador puede agregar un recurso para manejar el evento "Eliminar" del árbol para las instancias de dicha clase,
          * en dicho recurso el usurio puede eliminar todo los datos especificos que desee para dicha instancia (Base de datos, filesystem, conexiones a webservices, etc)
@@ -176,7 +164,7 @@ public class SWBSocialResourceUtils {
          * @param request
          * @param paramRequest 
          */
-        public static void updateTreeNode(HttpServletRequest request, SWBParamRequest paramRequest)
+        public static void removeTreeNode(HttpServletRequest request, SWBParamRequest paramRequest)
         {
             try
             {
@@ -199,6 +187,31 @@ public class SWBSocialResourceUtils {
             }
         }
         
+        /**
+         * Metodo que actualiza un nodo (su título) desde un recurso de swb
+         * @param request
+         * @param paramRequest
+         * @param treeNode
+         * @param title 
+         */
+        public static void refreshNodeTitle(HttpServletRequest request, TreeNode treeNode, String title)
+        {
+            try
+            {
+                
+                if(treeNode==null) return;
+                ElementTreeNode etn=(ElementTreeNode)treeNode;
+                etn.getData().setName(title);
+                WebSite adminWebSite=WebSite.ClassMgr.getWebSite(SOCIALADMINID);
+                request.setAttribute("action","refreshNodeTitle"); 
+                RequestDispatcher dispatcher = request.getRequestDispatcher("/work/models/"+adminWebSite.getId()+"/admin/zul/cnf_GenericZulTreeUpdate.zul");
+                dispatcher.include(request, new SWBResponse());
+            }catch(Exception e)
+            {
+                log.debug(e);
+            }
+        }
+        
         
         /**
          * Este metodo es utilizado desde los recursos de swb.
@@ -207,13 +220,15 @@ public class SWBSocialResourceUtils {
          * @param paramRequest 
          */
         
-        public static void insertTreeNode(HttpServletRequest request, SWBParamRequest paramRequest, ElementTreeNode parentNode, SWBClass swbClass)
+        public static void insertTreeNode(HttpServletRequest request, ElementTreeNode parentNode, SWBClass swbClass)
         {
             try
             {
+                WebSite adminWebSite=WebSite.ClassMgr.getWebSite(SOCIALADMINID);
+                System.out.println("wsiteA Jorge:"+adminWebSite);
                 request.setAttribute("treeItem", parentNode);
                 request.setAttribute("swbClass", swbClass);
-                RequestDispatcher dispatcher = request.getRequestDispatcher("/work/models/"+paramRequest.getWebPage().getWebSiteId()+"/admin/zul/cnf_GenericZulTreeUpdate.zul");
+                RequestDispatcher dispatcher = request.getRequestDispatcher("/work/models/"+adminWebSite.getId()+"/admin/zul/cnf_GenericZulTreeUpdate.zul");
                 dispatcher.include(request, new SWBResponse());
             }catch(Exception e)
             {
@@ -224,13 +239,13 @@ public class SWBSocialResourceUtils {
          /*
          * Metodo que sirve para crear los nodos de tipo categorías a un nuevo nodo de tipo Marca.
          */
-        private static ElementTreeNode[] getTreeCategoryNodes(SWBModel model, WebSite adminWebSite, User user)
+        private static ElementTreeNode[] getTreeCategoryNodes(SWBModel model, User user)
         {
             try
             {
                 ArrayList<TreeNodePage> alist=new ArrayList();
-                WebSite adminWSite=WebSite.ClassMgr.getWebSite(adminWebSite.getId());
-                WebPage treePageHome=adminWSite.getWebPage("TreeCategoryNodes");
+                WebSite adminWebSite=WebSite.ClassMgr.getWebSite(SOCIALADMINID);
+                WebPage treePageHome=adminWebSite.getWebPage("TreeCategoryNodes");
                 int cont=0;
                 Iterator <WebPage> itChilds=treePageHome.listVisibleChilds(user.getLanguage());
                 while(itChilds.hasNext())
@@ -268,13 +283,14 @@ public class SWBSocialResourceUtils {
          * @param paramRequest 
          */
         
-        public static void setStatusMessage(HttpServletRequest request, SWBParamRequest paramRequest,String message)
+        public static void setStatusMessage(HttpServletRequest request, String message)
         {
             try
             {
+                WebSite adminWebSite=WebSite.ClassMgr.getWebSite(SOCIALADMINID);
                 request.setAttribute("action", "statusMsg");
                 request.setAttribute("message", message);
-                RequestDispatcher dispatcher = request.getRequestDispatcher("/work/models/"+paramRequest.getWebPage().getWebSiteId()+"/admin/zul/cnf_GenericZulTreeUpdate.zul");
+                RequestDispatcher dispatcher = request.getRequestDispatcher("/work/models/"+adminWebSite.getId()+"/admin/zul/cnf_GenericZulTreeUpdate.zul");
                 dispatcher.include(request, new SWBResponse());
             }catch(Exception e)
             {

@@ -116,8 +116,8 @@ System.out.println("********************   doAuthenticate.");
             
              ElementTreeNode treeItem = (ElementTreeNode)request.getAttribute("treeItem");
              System.out.println("treeItem:"+treeItem);
-             SWBSocialResourceUtils.Resources.insertTreeNode(request, paramRequest, treeItem, socialNetwork); 
-             SWBSocialResourceUtils.Resources.setStatusMessage(request, paramRequest,"Cuenta creada");
+             SWBSocialResourceUtils.Resources.insertTreeNode(request, treeItem, socialNetwork); 
+             SWBSocialResourceUtils.Resources.setStatusMessage(request, "Cuenta creada");
             
             session.setAttribute("sw", socialNetwork);
             socialNetwork.authenticate(request, response, paramRequest);

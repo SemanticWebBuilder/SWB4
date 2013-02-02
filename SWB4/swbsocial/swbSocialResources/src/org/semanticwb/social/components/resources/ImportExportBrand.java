@@ -106,7 +106,7 @@ public class ImportExportBrand extends GenericResource {
                 out.println("<script type=\"text/javascript\">");
                 if (request.getParameter("msgKey").equals("siteCreated")) {
                     out.println("parent.addItemByURI(parent.mtreeStore, null, '" + request.getParameter("wsUri") + "');");
-                    SWBSocialResourceUtils.Resources.createNewBrandNode(request, paramRequest, createdWebSite);
+                    SWBSocialResourceUtils.Resources.createNewBrandNode(request, paramRequest.getUser(), createdWebSite);
 
                 }
                 out.println("parent.showStatus('" + paramRequest.getLocaleString(request.getParameter("msgKey")) + "');");
@@ -650,5 +650,6 @@ public class ImportExportBrand extends GenericResource {
                 log.error(e);
             }
         }
+        
     }
 }
