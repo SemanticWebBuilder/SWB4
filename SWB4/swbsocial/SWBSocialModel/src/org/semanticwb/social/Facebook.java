@@ -838,11 +838,13 @@ System.out.println("Facebook----2.2");
                 String me = Facebook.graphRequest(graph_url, request.getHeader("user-agent"));
                 try {
                     JSONObject userData = new JSONObject(me);
-                    String name = (String)userData.getString("name");
-                    setSn_authenticated(true);
+System.out.println("userData="+userData);                    
+                    String username = userData.getString("username");
+                    setFacebookUserId(username);
                     setAccessToken(accessToken);
+                    setSn_authenticated(true);
                                         
-                    request.setAttribute("msg", name);
+                    request.setAttribute("msg", username);
                     PrintWriter out = response.getWriter();
                     out.println("<script type=\"text/javascript\">");
                     out.println("  window.close();");
