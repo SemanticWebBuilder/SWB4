@@ -196,7 +196,7 @@ public class StreamsResourceEdit extends GenericSocialResource {
                         try {
                             SemanticObject semObj1 = mgr.processForm(request);
                             Stream str = (Stream) semObj1.createGenericInstance();
-                            SWBSocialResourceUtils.Resources.refreshNodeTitle(request, treeItem, str.getTitle());
+                            SWBSocialResourceUtils.Resources.refreshNodeName(request, treeItem);
                             SWBSocialResourceUtils.Resources.setStatusMessage(request, "Nodo actualizado");
                         } catch (FormValidateException ex) {
                             log.error("Error in: " + ex);
