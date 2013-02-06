@@ -211,6 +211,18 @@ public final class SWBSTreeComposer extends GenericForwardComposer <Component> {
                                 }
                                 });
                                 treePopup.appendChild(mItemNew);
+                                
+                                Menuitem mItemRefresh=new Menuitem();
+                                mItemRefresh.setLabel("Refrescar");
+                                mItemRefresh.addEventListener(Events.ON_CLICK, new EventListener<Event>() {
+                                @Override
+                                public void onEvent(Event event) throws Exception {
+                                    SWBSocialResourceUtils.Zkoss.refreshNode(itemValue);
+                                    SWBSocialResourceUtils.Zkoss.setStatusMessage("Nodo refrescado...");
+                                }
+                                });
+                                treePopup.appendChild(mItemRefresh);
+                                
                                 treePopup.open(selectedTreeItem);
                             }else   //Es un elemento
                             {

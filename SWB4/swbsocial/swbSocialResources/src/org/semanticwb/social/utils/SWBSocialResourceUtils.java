@@ -66,6 +66,13 @@ public class SWBSocialResourceUtils {
     static ArrayList<String> aDoubles = new ArrayList();
     static HashMap<String, String> hmapChanges = new HashMap();
 
+    
+     /**
+     * Creates a new object of this class.
+     */
+    public SWBSocialResourceUtils() {
+       
+    }
    
     /**
      * Retrieves a reference to the only one existing object of this class.
@@ -73,16 +80,16 @@ public class SWBSocialResourceUtils {
      * @param applicationPath a string representing the path for this application
      * @return a reference to the only one existing object of this class
      */
-    /*
+    
     static public synchronized SWBSocialResourceUtils createInstance() {
+        System.out.println("Entra a SWBSocialResourceUtils/createInstance");
         if (instance == null) {
             instance = new SWBSocialResourceUtils();
-            SOCIALADMIN_WSITE=WebSite.ClassMgr.getWebSite("swbsocial");
         }
          
         return instance;
     }
-    * */
+    
     
     
     //PARA EL USO DESDE LOS RECURSOS DE SWB
@@ -194,14 +201,14 @@ public class SWBSocialResourceUtils {
          * @param treeNode
          * @param title 
          */
-        public static void refreshNodeTitle(HttpServletRequest request, TreeNode treeNode, String title)
+        public static void refreshNodeName(HttpServletRequest request, TreeNode treeNode)
         {
             try
             {
-                
                 if(treeNode==null) return;
                 ElementTreeNode etn=(ElementTreeNode)treeNode;
-                etn.getData().setName(title);
+                SemanticObject semObj=SemanticObject.createSemanticObject(etn.getData().getUri());
+                etn.getData().setName(semObj.getProperty(Descriptiveable.swb_title));
                 WebSite adminWebSite=WebSite.ClassMgr.getWebSite(SOCIALADMINID);
                 request.setAttribute("action","refreshNodeTitle"); 
                 RequestDispatcher dispatcher = request.getRequestDispatcher("/work/models/"+adminWebSite.getId()+"/admin/zul/cnf_GenericZulTreeUpdate.zul");
@@ -305,6 +312,23 @@ public class SWBSocialResourceUtils {
     public static class Zkoss 
     {
         
+         /**
+         * Metodo que actualiza un nodo del arbol de navegación
+         * los desarrolladores ya tuvieron que haber actualizado información del nodo(ej. título, icono, etc) por ellos mismos 
+         * esto con: ElementTreeNode.getData().setName(""), etc
+         * y despues mandar llamar este metodo para que se les refresque el árbol mostrando ese nodo con esas propiedades modificadas
+         * @param treeNode
+         * @param title 
+        */
+        /*
+        public static void refreshNodeData(TreeNode treeNode)
+        {
+            if(treeNode!=null)
+            {
+                EventQueue<Event> eq = EventQueues.lookup("refreshNodo2Tree", EventQueues.SESSION, true);
+                eq.publish(new Event("onRefreshNode", null, treeNode));
+            }
+        }*/
         
         /**
          * Metodo que actualiza el título a un nodo del arbol de navegación
@@ -314,30 +338,13 @@ public class SWBSocialResourceUtils {
          * @param title 
         */
         
-        public static void refreshNodeTitle(TreeNode treeNode, String title)
-        {
-            ElementTreeNode etn=(ElementTreeNode)treeNode;
-            etn.getData().setName(title);
-            if(treeNode!=null)
-            {
-                EventQueue<Event> eq = EventQueues.lookup("refreshNodo2Tree", EventQueues.SESSION, true);
-                eq.publish(new Event("onRefreshNode", null, treeNode));
-            }
-        }
-        
-         /**
-         * Metodo que actualiza un nodo del arbol de navegación
-         * los desarrolladores ya tuvieron que haber actualizado información del nodo(ej. título, icono, etc) por ellos mismos 
-         * esto con: ElementTreeNode.getData().setName(""), etc
-         * y despues mandar llamar este metodo para que se les refresque el árbol mostrando ese nodo con esas propiedades modificadas
-         * @param treeNode
-         * @param title 
-        */
-        
-        public static void refreshNodeData(TreeNode treeNode)
+        public static void refreshNodeName(TreeNode treeNode)
         {
             if(treeNode!=null)
             {
+                ElementTreeNode etn=(ElementTreeNode)treeNode;
+                SemanticObject semObj=SemanticObject.createSemanticObject(etn.getData().getUri());
+                etn.getData().setName(semObj.getProperty(Descriptiveable.swb_title));
                 EventQueue<Event> eq = EventQueues.lookup("refreshNodo2Tree", EventQueues.SESSION, true);
                 eq.publish(new Event("onRefreshNode", null, treeNode));
             }
@@ -347,7 +354,7 @@ public class SWBSocialResourceUtils {
         
         /**
         * Refreshes the given node
-        * Este metodo es llamado desde el archivo indexAdm.zul, mediante el disparo de evento de actualización de nodos de esta misma clase,
+        * Este metodo es llamado desde el archivo indexAdm.zul, mediante el disparo de evento de actualización de nodos de esta misma clase(ej. metodo "refreshNodeName",
         * pero es posible que también pueda ser llamado desde un recurso (Probar)
         * @param node The node to refresh
         */
@@ -536,6 +543,6 @@ public class SWBSocialResourceUtils {
             }
             return false;
         }
-
+       
     }
 }
