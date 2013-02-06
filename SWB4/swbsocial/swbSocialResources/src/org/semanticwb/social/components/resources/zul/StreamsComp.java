@@ -101,7 +101,7 @@ public class StreamsComp extends GenericForwardComposer
             {
                 stream.setTitle(title.getValue());
                 //Actualizar el árbol (actualizar título de Nodo)
-                SWBSocialResourceUtils.Zkoss.refreshNodeTitle(treeItem, title.getValue()); 
+                SWBSocialResourceUtils.Zkoss.refreshNodeName(treeItem); 
             }
             if(description.getValue()!=null)
             {
