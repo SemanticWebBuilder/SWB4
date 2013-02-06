@@ -100,6 +100,11 @@ public class ExternalPost {
      */
     private String location;
     
+    /**
+     * Indicates the type of post retrieved from the Social Net
+     */
+    private String postType;
+    
 
     /**
      * Creates a new instance of ExternalPost
@@ -381,6 +386,23 @@ public class ExternalPost {
     public void setLocation(String location)
     {
         this.location=location;
+    }
+
+    /**
+     * Returns the type of post retrieved from the social net. Facebook uses one
+     * of the following types: {@literal link}, {@literal page}, {@literal video},
+     * {@literal status}, {@literal user}, {@literal photo}.
+     * @return the postType
+     */
+    public String getPostType() {
+        return postType;
+    }
+
+    /**
+     * @param postType the postType to set
+     */
+    public void setPostType(String postType) {
+        this.postType = postType;
     }
     
 }
