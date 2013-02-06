@@ -59,7 +59,7 @@
                                 queOnRefreshNode.subscribe(new EventListener() {
                                     public void onEvent(Event evt) {
                                          TreeNode treeItem=(ElementTreeNode)evt.getData();
-                                         SWBSocialResourceUtils.Zkoss.refreshNode(treeItem);
+                                         SWBSocialResourceUtils.Zkoss.refreshNodeFromZul(treeItem);
                                     }
                                 });
                                 EventQueue queOnUpdateMsgWin = EventQueues.lookup("updateMsgWin", EventQueues.SESSION, true);
