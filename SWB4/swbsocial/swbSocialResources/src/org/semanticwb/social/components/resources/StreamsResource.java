@@ -7,7 +7,7 @@ package org.semanticwb.social.components.resources;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Enumeration;
+import java.util.Iterator;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.Logger;
@@ -22,6 +22,7 @@ import org.semanticwb.portal.api.SWBActionResponse;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.api.SWBResourceURL;
+import org.semanticwb.social.SocialNetwork;
 import org.semanticwb.social.Stream;
 import org.semanticwb.social.utils.SWBSocialResourceUtils;
 import org.semanticwb.social.components.tree.ElementTreeNode;
@@ -52,11 +53,6 @@ public class StreamsResource extends GenericSocialResource{
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
        String action=(String)request.getAttribute("action");
        WebSite wsite=(WebSite)request.getAttribute("wsite");
-       /*Enumeration enum1 = request.getAttributeNames();
-       while(enum1.hasMoreElements()){
-           Object eleObj = enum1.nextElement();
-           System.out.println("ele: " + eleObj + " value: " + request.getParameter(eleObj+""));
-       }*/
        User user=paramRequest.getUser();
        PrintWriter out = response.getWriter();
        if(action == null){
@@ -66,7 +62,8 @@ public class StreamsResource extends GenericSocialResource{
            String ws = request.getParameter("wsite");
            wsite = WebSite.ClassMgr.getWebSite(ws);
        }
-       if(action!=null && action.equals(SWBSocialResourceUtils.ACTION_ADD)) {
+       Iterator itSocial = SocialNetwork.ClassMgr.listSocialNetworks(wsite);
+       if(action!=null && action.equals(SWBSocialResourceUtils.ACTION_ADD) && itSocial.hasNext()) {
            SWBFormMgr mgr = new SWBFormMgr(Stream.sclass, wsite.getSemanticObject(), null);
            SWBResourceURL url = paramRequest.getActionUrl();
 
@@ -79,12 +76,72 @@ public class StreamsResource extends GenericSocialResource{
            mgr.setSubmitByAjax(false);
            url.setParameter("wsite",wsite.getId());
            url.setParameter("treeItem", request.getParameter("treeItem"));
-           mgr.setAction(url.toString());
-           SWBFormButton buttonAdd = SWBFormButton.newSaveButton();
-           mgr.addButton(buttonAdd);
-           out.println(mgr.renderForm(request));
-       } else if(action!=null && action.equals(SWBSocialResourceUtils.ACTION_EDIT)){
+           request.setAttribute("action", SWBSocialResourceUtils.ACTION_ADD);
+
+           out.println("<script type=\"text/javascript\">");
+           out.println("function validateData() {");
+           out.println("if(document.form." + Stream.swb_title.getName() + ".value == '') {");
+           out.println("alert('El campo " + Stream.swb_title.getLabel(lang) + " es requerido');");
+           out.println("document.form." + Stream.swb_title.getName() + ".focus()");
+           out.println("return false;");
+           out.println("}");
+           out.println("if(document.form." + Stream.social_stream_phrase.getName() + ".value == '') {");
+           out.println("alert('El campo " + Stream.social_stream_phrase.getLabel(lang) + " es requerido');");
+           out.println("document.form." + Stream.social_stream_phrase.getName() + ".focus()");
+           out.println("return false;");
+           out.println("}");
+           out.println("if(document.form." + Stream.social_hasStream_socialNetwork.getName() + ".value == '') {");
+           out.println("alert('Selecciona por lo menos una(s) " + Stream.social_hasStream_socialNetwork.getLabel(lang) + "');");
+           out.println("document.form." + Stream.social_hasStream_socialNetwork.getName() + ".focus()");
+           out.println("return false;");
+           out.println("}");
+           out.println("document.form.submit();");
+           out.println("alert('Stream creado');");
+           out.println("}");
+           out.println("</script>");
+           out.println("<form id=\"" + Stream.sclass + "\" method=\"post\" action=\"" + url + "\" class=\"swbform\" name=\"form\">");
+           out.println(mgr.getFormHiddens());
+           
+           out.println("<fieldset>");
+           out.println("<table>");
+           out.println("<tbody>");
+           out.println("<tr>");
+           out.println("<td align=\"right\">" + mgr.renderLabel(request,Stream.swb_title,SWBFormMgr.MODE_EDIT)+"</td>");
+           out.println("<td>" + mgr.renderElement(request, Stream.swb_title, SWBFormMgr.MODE_EDIT) + "</td>");
+           out.println("</tr>");
+           out.println("<tr>");
+           out.println("<td align=\"right\">" +mgr.renderLabel(request,Stream.swb_description,SWBFormMgr.MODE_EDIT)+"</td>");
+           out.println("<td>" + mgr.renderElement(request, Stream.swb_description, SWBFormMgr.MODE_EDIT)+"</td>");
+           out.println("</tr>");
+           out.println("<tr>");
+           out.println("<td align=\"right\">" + mgr.renderLabel(request,Stream.swb_active,SWBFormMgr.MODE_EDIT) + "</td>");
+           out.println("<td>" + mgr.renderElement(request, Stream.swb_active, SWBFormMgr.MODE_EDIT) + "</td>");
+           out.println("</tr>");
+           out.println("<tr>");
+           out.println("<td align=\"right\"><p>" + mgr.renderLabel(request,Stream.social_stream_phrase,SWBFormMgr.MODE_EDIT)+"<span>(Separa las frases por '|')</span></p></td>");
+           out.println("<td>" + mgr.renderElement(request, Stream.social_stream_phrase, SWBFormMgr.MODE_EDIT)+ "</td>");
+           out.println("</tr>");
+           out.println("<tr>");
+           out.println("<td align=\"right\">" + mgr.renderLabel(request,Stream.social_hasStream_socialNetwork,SWBFormMgr.MODE_EDIT) + "</td>");
+           out.println("<td>" + mgr.renderElement(request, Stream.social_hasStream_socialNetwork, SWBFormMgr.MODE_EDIT)+"</td>");
+           out.println("</tr>");
+           out.println("<tr>");
+           out.println("<td align=\"right\">" + mgr.renderLabel(request,Stream.social_stream_PoolTime,SWBFormMgr.MODE_EDIT)+"</td>");
+           out.println("<td>" + mgr.renderElement(request, Stream.social_stream_PoolTime, SWBFormMgr.MODE_EDIT) + "</td>");
+           out.println("</tr>");
+           out.println("<tr>");
+           out.println("<td align=\"center\" colspan=\"2\">");
+           out.println("<button type=\"button\" class=\"bnt1\" onclick=\"validateData()\">Guardar</button>");
+           out.println("</td>");
+           out.println("</tr>");
+           out.println("</tbody>");
+           out.println("</table>");
+           out.println("</fieldset>");
+           out.println("</form>");
+       } else if(action!=null && action.equals(SWBSocialResourceUtils.ACTION_EDIT) && itSocial.hasNext()){
            doEdit(request, response,paramRequest);
+       } else if(!itSocial.hasNext()) {
+            out.println("<p>No existen redes sociales para asociar. Para agregar una nueva red social, selecciona 'Redes Sociales en el árbol de navegación'</p>");
        }
     }
 
@@ -113,13 +170,6 @@ public class StreamsResource extends GenericSocialResource{
                SWBFormMgr mgr = new SWBFormMgr(semObj, null, SWBFormMgr.MODE_EDIT);
                SWBResourceURL url = paramRequest.getActionUrl().setParameter("action_", "edicion");
                mgr.setFilterRequired(false);
-               mgr.clearProperties();
-               mgr.addProperty(Stream.swb_title);
-               mgr.addProperty(Stream.swb_description);
-               mgr.addProperty(Stream.swb_active);
-               mgr.addProperty(Stream.social_stream_phrase);
-               mgr.addProperty(Stream.social_hasStream_socialNetwork);
-               mgr.addProperty(Stream.social_stream_PoolTime);
                String lang = "es";
                if(user != null) {
                    lang = user.getLanguage();
@@ -128,10 +178,66 @@ public class StreamsResource extends GenericSocialResource{
                mgr.setSubmitByAjax(false);
                url.setParameter("wsite",wsite.getId());
                url.setParameter("treeItem", request.getParameter("treeItem"));
-               mgr.setAction(url.toString());
-               SWBFormButton buttonAdd = SWBFormButton.newSaveButton();
-               mgr.addButton(buttonAdd);
-               out.println(mgr.renderForm(request));
+                out.println("<script type=\"text/javascript\">");
+                out.println("function validateData() {");
+                out.println("if(document.form." + Stream.swb_title.getName() + ".value == '') {");
+                out.println("alert('El campo " + Stream.swb_title.getLabel(lang) + " es requerido');");
+                out.println("document.form." + Stream.swb_title.getName() + ".focus()");
+                out.println("return false;");
+                out.println("}");
+                out.println("if(document.form." + Stream.social_stream_phrase.getName() + ".value == '') {");
+                out.println("alert('El campo " + Stream.social_stream_phrase.getLabel(lang) + " es requerido');");
+                out.println("document.form." + Stream.social_stream_phrase.getName() + ".focus()");
+                out.println("return false;");
+                out.println("}");
+                out.println("if(document.form." + Stream.social_hasStream_socialNetwork.getName() + ".value == '') {");
+                out.println("alert('Selecciona por lo menos una(s) " + Stream.social_hasStream_socialNetwork.getLabel(lang) + "');");
+                out.println("document.form." + Stream.social_hasStream_socialNetwork.getName() + ".focus()");
+                out.println("return false;");
+                out.println("}");
+                out.println("document.form.submit();");
+                out.println("}");
+                out.println("</script>");
+                out.println("<h3>Editar Stream</h3>");
+                out.println("<form id=\"" + Stream.sclass + "\" method=\"post\" action=\"" + url + "\" class=\"swbform\" name=\"form\">");
+                out.println(mgr.getFormHiddens());
+                out.println("<fieldset>");
+                out.println("<table>");
+                out.println("<tbody>");
+                out.println("<tr>");
+
+                out.println("<td align=\"right\">" + mgr.renderLabel(request,Stream.swb_title,SWBFormMgr.MODE_EDIT)+"</td>");
+                out.println("<td>" + mgr.renderElement(request, Stream.swb_title, SWBFormMgr.MODE_EDIT) + "</td>");
+                out.println("</tr>");
+                out.println("<tr>");
+                out.println("<td align=\"right\">" +mgr.renderLabel(request,Stream.swb_description,SWBFormMgr.MODE_EDIT)+"</td>");
+                out.println("<td>" + mgr.renderElement(request, Stream.swb_description, SWBFormMgr.MODE_EDIT)+"</td>");
+                out.println("</tr>");
+                out.println("<tr>");
+                out.println("<td align=\"right\">" + mgr.renderLabel(request,Stream.swb_active,SWBFormMgr.MODE_EDIT) + "</td>");
+                out.println("<td>" + mgr.renderElement(request, Stream.swb_active, SWBFormMgr.MODE_EDIT) + "</td>");
+                out.println("</tr>");
+                out.println("<tr>");
+                out.println("<td align=\"right\"><p>" + mgr.renderLabel(request,Stream.social_stream_phrase,SWBFormMgr.MODE_EDIT)+"<span>(Separa las frases por '|')</span></p></td>");
+                out.println("<td>" + mgr.renderElement(request, Stream.social_stream_phrase, SWBFormMgr.MODE_EDIT)+ "</td>");
+                out.println("</tr>");
+                out.println("<tr>");
+                out.println("<td align=\"right\">" + mgr.renderLabel(request,Stream.social_hasStream_socialNetwork,SWBFormMgr.MODE_EDIT) + "</td>");
+                out.println("<td>" + mgr.renderElement(request, Stream.social_hasStream_socialNetwork, SWBFormMgr.MODE_EDIT)+"</td>");
+                out.println("</tr>");
+                out.println("<tr>");
+                out.println("<td align=\"right\">" + mgr.renderLabel(request,Stream.social_stream_PoolTime,SWBFormMgr.MODE_EDIT)+"</td>");
+                out.println("<td>" + mgr.renderElement(request, Stream.social_stream_PoolTime, SWBFormMgr.MODE_EDIT) + "</td>");
+                out.println("</tr>");
+                out.println("<tr>");
+                out.println("<td align=\"center\" colspan=\"2\">");
+                out.println("<button type=\"button\" class=\"bnt1\" onclick=\"validateData()\">Guardar</button>");
+                out.println("</td>");
+                out.println("</tr>");
+                out.println("</tbody>");
+                out.println("</table>");
+                out.println("</fieldset>");
+                out.println("</form>");
             }
         }
     }
@@ -153,6 +259,7 @@ public class StreamsResource extends GenericSocialResource{
         String wsite=(String)request.getParameter("wsite");
         String action = (String) request.getParameter("action_");
         Object  treeItemObj = (Object) request.getParameter("treeItem");
+       // System.out.println("atribute action: " + request.getAttribute("action"));
         /*Enumeration enu2 = request.getAttributeNames();
         while(enu2.hasMoreElements()){
             System.out.println("atr: " + enu2.nextElement());
@@ -198,15 +305,22 @@ public class StreamsResource extends GenericSocialResource{
             mgr.addProperty(Stream.social_stream_phrase);
             mgr.addProperty(Stream.social_stream_PoolTime);
             mgr.addProperty(Stream.social_hasStream_socialNetwork);
+            Stream str = null;
             try {
                 semObj = mgr.processForm(request);
                 if(treeItem != null) {
-                    Stream str = (Stream)semObj.createGenericInstance();
-                    SWBSocialResourceUtils.Zkoss.refreshNodeTitle(treeItem, str.getTitle());
+                    str = (Stream)semObj.createGenericInstance();
+                    
                 }
             } catch(FormValidateException ex) {
                 log.error("Error in: " + ex);
             }
+            //SWBParamRequest paramRequest = (SWBParamRequest)response;
+            request.setAttribute("action", SWBSocialResourceUtils.ACTION_ADD);
+          //  SWBSocialResourceUtils.Resources.insertTreeNodeAction(request, response.getWebPage(), treeItem, str);
+          //  SWBSocialResourceUtils.Resources.setStatusMessageAction(request, response.getWebPage(), "Nodo insertado...");
+            //SWBSocialResourceUtils.Zkoss.refreshNodeTitle(treeItem, str.getTitle());
+
         }
         //------ to Do UpdateTreeNode
         
