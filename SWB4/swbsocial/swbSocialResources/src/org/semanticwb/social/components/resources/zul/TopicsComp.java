@@ -100,7 +100,7 @@ public class TopicsComp extends GenericForwardComposer
             {
                 socialTopic.setTitle(title.getValue());
                 //Actualizar el árbol (actualizar título de Nodo)
-                SWBSocialResourceUtils.Zkoss.refreshNodeName(treeItem);
+                SWBSocialResourceUtils.Zkoss.refreshNode(treeItem);
             }
             if(description.getValue()!=null)
             {
