@@ -47,6 +47,7 @@ import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.api.SWBResourceURL;
 import org.semanticwb.process.model.ActivityConfable;
+import org.semanticwb.process.model.CatchEvent;
 import org.semanticwb.process.model.ConnectionObject;
 import org.semanticwb.process.model.Containerable;
 import org.semanticwb.process.model.GraphicalElement;
@@ -806,7 +807,7 @@ public class Modeler extends GenericResource {
                         try {
                             isInterrupting = json.getBoolean(PROP_isInterrupting);
                         } catch (Exception e) {
-                            isInterrupting = null;
+                            isInterrupting = true;
                         }
 
                         try {
@@ -872,8 +873,8 @@ public class Modeler extends GenericResource {
                                     if(bupdate) sorble.setIndex(index);
                                 }
                                 
-                                if (ge instanceof TimerIntermediateCatchEvent) {
-                                    IntermediateCatchEvent ice = (IntermediateCatchEvent) ge;
+                                if (ge instanceof CatchEvent) {
+                                    CatchEvent ice = (CatchEvent) ge;
                                     if (bupdate) ice.setInterruptor(isInterrupting);
                                 }
 
