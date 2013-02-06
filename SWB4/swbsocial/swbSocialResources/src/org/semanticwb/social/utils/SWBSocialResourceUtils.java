@@ -201,7 +201,7 @@ public class SWBSocialResourceUtils {
          * @param treeNode
          * @param title 
          */
-        public static void refreshNodeName(HttpServletRequest request, TreeNode treeNode)
+        public static void refreshNode(HttpServletRequest request, TreeNode treeNode)
         {
             try
             {
@@ -338,7 +338,7 @@ public class SWBSocialResourceUtils {
          * @param title 
         */
         
-        public static void refreshNodeName(TreeNode treeNode)
+        public static void refreshNode(TreeNode treeNode)
         {
             if(treeNode!=null)
             {
@@ -358,7 +358,7 @@ public class SWBSocialResourceUtils {
         * pero es posible que también pueda ser llamado desde un recurso (Probar)
         * @param node The node to refresh
         */
-        public static void refreshNode(TreeNode node) {
+        public static void refreshNodeFromZul(TreeNode node) {
             if (node != null) {
                 TreeNode parent = node.getParent();
                 if (parent != null) 
