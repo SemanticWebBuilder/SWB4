@@ -19,6 +19,7 @@ import org.semanticwb.portal.api.SWBActionResponse;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.api.SWBResourceURL;
+import org.semanticwb.social.listener.Classifier;
 import org.semanticwb.social.listener.twitter.SWBSocialStatusListener;
 import org.semanticwb.social.util.SWBSocialUtil;
 import twitter4j.FilterQuery;
@@ -131,7 +132,7 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
 
     @Override
     public void listen(Stream stream) {
-        WebSite wsite=WebSite.ClassMgr.getWebSite(stream.getSemanticObject().getModel().getName());
+        //WebSite wsite=WebSite.ClassMgr.getWebSite(stream.getSemanticObject().getModel().getName());
         //System.out.println("Red SocialID:"+this.getId()+", Red Title:"+this.getTitle()+", sitio:"+wsite.getId());
 
         try {
@@ -140,34 +141,20 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
             QueryResult result=twitter.search(query);
             List<Tweet> tweets = result.getTweets();
             for (Tweet tweet : tweets) {
-                //System.out.println("@"+tweet.getFromUser()+", msg:"+tweet.getText());
-                SocialNetworkUser socialNetUser=SocialNetworkUser.getSocialNetworkUserbyIDAndSocialNet(String.valueOf(tweet.getFromUserId()), this, wsite);
-                if(socialNetUser==null)//
-                {
-                    //Si no existe el id del usuario para esa red social, lo crea.
-                    socialNetUser=SocialNetworkUser.ClassMgr.createSocialNetworkUser(wsite);
-                    socialNetUser.setSnu_id(String.valueOf(tweet.getFromUserId()));
-                    socialNetUser.setSnu_name("@"+tweet.getFromUser());
-                    socialNetUser.setSnu_SocialNetwork(this);
-                    socialNetUser.setCreated(new Date());
-                    //System.out.println("SocialNetworkUser Creado:"+socialNetUser.getSnu_id());
-                }else{
-                    //System.out.println("SocialNetworkUser Actualizado:"+socialNetUser.getSnu_id());
-                    socialNetUser.setUpdated(new Date());
+                ExternalPost external = new ExternalPost();
+                external.setPostId(String.valueOf(tweet.getId())); 
+                external.setCreatorId(String.valueOf(tweet.getFromUserId()));
+                external.setCreatorName("@"+tweet.getFromUser());
+                external.setCreationTime(""+tweet.getCreatedAt());
+                //external.setUpdateTime();
+                if (tweet.getText()!=null) {
+                    external.setMessage(tweet.getText());
                 }
-                socialNetUser.setFollowers(100);
-                socialNetUser.setFriends(100);
-
-                MessageIn message=MessageIn.ClassMgr.createMessageIn(String.valueOf(tweet.getId()), wsite);
-                message.setMsg_Text(tweet.getText());
-                message.setPostInSocialNetwork(this);
-                message.setPostInStream(stream);
-                if(socialNetUser!=null)
-                {
-                    message.setPostInSocialNetworkUser(socialNetUser);
-                }
-                this.addReceivedPost(message, String.valueOf(tweet.getId()), this);
-                //new Classifier(message);
+                //if (tweet.getAnnotations().) { TODO: Ver si en las anotaciones, se encuentra una descripción del tweet
+                //    external.setDescription(postsData.getJSONObject(k).getString("description"));
+                //}
+                
+                new Classifier(external, stream, this);
             }
         } catch (Exception te) {
             te.printStackTrace();

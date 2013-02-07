@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.StringTokenizer;
+import org.semanticwb.SWBPortal;
 import org.semanticwb.model.SWBModel;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.social.ExternalPost;
@@ -18,6 +19,7 @@ import org.semanticwb.social.PostIn;
 import org.semanticwb.social.Prepositions;
 import org.semanticwb.social.SentimentWords;
 import org.semanticwb.social.SentimentalLearningPhrase;
+import org.semanticwb.social.SocialAdmin;
 import org.semanticwb.social.SocialNetwork;
 import org.semanticwb.social.SocialNetworkUser;
 import org.semanticwb.social.Stream;
@@ -42,10 +44,12 @@ public class SentimentalDataClassifier {
 
     //PostIn post=null;
     String externalString2Clasify=null;
+    String externalString2Clasify_TMP;
     SWBModel model=null;
     float sentimentalTweetValue=0;
     float IntensiveTweetValue=0;
     int wordsCont=0;
+    WebSite wbAdmSocialSite=null;
     
     ExternalPost externalPost=null;
     Stream stream=null;
@@ -65,9 +69,9 @@ public class SentimentalDataClassifier {
         this.stream=stream;
         this.socialNetwork=socialNetwork;
     
-        System.out.println("En SentimentalDataClassifier:"+this.externalPost);
-        System.out.println("En stream:"+this.stream);
-        System.out.println("En socialNetwork:"+this.socialNetwork);
+        //System.out.println("En SentimentalDataClassifier:"+this.externalPost);
+        //System.out.println("En stream:"+this.stream);
+        //System.out.println("En socialNetwork:"+this.socialNetwork);
         
         getExternalPostData();
         this.model=WebSite.ClassMgr.getWebSite(stream.getSemanticObject().getModel().getName());
@@ -77,6 +81,7 @@ public class SentimentalDataClassifier {
     private void getExternalPostData()
     {
         externalString2Clasify=externalPost.getMessage();
+        
         //System.out.println("SentimentalDataClassifier/getExternalPostData:"+externalString2Clasify);
         //Si la descripción es diferente que nula, se agrega al texto a ser clasificado
         /*
@@ -93,9 +98,8 @@ public class SentimentalDataClassifier {
      * así como la intensidad, eso en este momento, talvez se requiera realizar mas clasificaciones posteriormente.
      * Funciona bien al 15/06/2012
      */
-    private void initAnalysis()
+    private void initAnalysiss()
     {
-        System.out.println("initAnalysis-J1");
         //Convierto todo el mensaje en minusculas
         externalString2Clasify=externalString2Clasify.toLowerCase();
 
@@ -105,6 +109,7 @@ public class SentimentalDataClassifier {
         //System.out.println("externalString2Clasify a revisado:"+externalString2Clasify+", sentimentalTweetValue:"+sentimentalTweetValue+", IntensiveTweetValue:+"+IntensiveTweetValue+", wordsCont:"+wordsCont);
 
         //Elimino Caracteres especiales (acentuados)
+        
         externalString2Clasify=SWBSocialUtil.Strings.replaceSpecialCharacters(externalString2Clasify);
 
         //removePuntualSigns1();
@@ -199,6 +204,7 @@ public class SentimentalDataClassifier {
         
         //Revisa si encuentra emoticones en el mensaje
         findEmoticones(post);
+        
     }
 
     /*Metodo cuya función es la de analizar la información de cada mensaje y determinar el sentimiento del mismo,
@@ -206,21 +212,25 @@ public class SentimentalDataClassifier {
      * Metodo Prueba
      */
     
-    private void initAnalysiss()
+    private void initAnalysis()
     {
-        System.out.println("initAnalysis-1");
         //Normalizo
+        //System.out.println("externalString2Clasify-0:"+externalString2Clasify);
+        externalString2Clasify_TMP=externalString2Clasify;
         externalString2Clasify=SWBSocialUtil.Classifier.normalizer(externalString2Clasify).getNormalizedPhrase();
+        //System.out.println("externalString2Clasify-Normalizado:"+externalString2Clasify);
 
         //System.out.println("externalString2Clasify-1:"+externalString2Clasify);
 
         //Se cambia toda la frase a su modo raiz
         externalString2Clasify=SWBSocialUtil.Classifier.getRootWord(externalString2Clasify);
+        //System.out.println("externalString2Clasify-Raiz:"+externalString2Clasify);
 
         //System.out.println("externalString2Clasify-2:"+externalString2Clasify);
 
         //Fonetizo
         externalString2Clasify=SWBSocialUtil.Classifier.phonematize(externalString2Clasify);
+        //System.out.println("externalString2Clasify-Fonetizado:"+externalString2Clasify);
 
         //Busco frases en objeto de aprendizaje (SentimentalLearningPhrase)
         //System.out.println("externalString2Clasify a revisar:"+externalString2Clasify);
@@ -230,19 +240,20 @@ public class SentimentalDataClassifier {
         //Elimino Caracteres especiales (acentuados)
         //externalString2Clasify=SWBSocialUtil.Strings.replaceSpecialCharacters(externalString2Clasify);
 
+        SocialAdmin socialAdminSite=SWBSocialUtil.Context.getSocialAdmSite();
+        System.out.println("initAnalysis/socialAdminSite Jorge:"+socialAdminSite);
         //removePuntualSigns1();
-        //externalString2Clasify=SWBSocialUtil.Strings.removePuntualSigns(externalString2Clasify, model);
-        System.out.println("initAnalysis-2");
+        externalString2Clasify=SWBSocialUtil.Strings.removePuntualSigns(externalString2Clasify, socialAdminSite);
         StringTokenizer st = new StringTokenizer(externalString2Clasify);
         while (st.hasMoreTokens())
         {
             String word2Find=st.nextToken();
-            //System.out.println("Palabra:"+word2Find);
-            /*
-            if(Prepositions.ClassMgr.getPrepositions(word2Find, model)!=null) //Elimino preposiciones
+            //System.out.println("Palabra monitorear:"+word2Find);
+            
+            if(Prepositions.ClassMgr.getPrepositions(word2Find, socialAdminSite)!=null) //Elimino preposiciones
             {
                 continue;
-            }*/
+            }
 
             //String word2FindTmp=word2Find;
             //System.out.println("word2Find:"+word2Find);
@@ -255,7 +266,7 @@ public class SentimentalDataClassifier {
             //word2Find=SWBSocialUtil.Classifier.phonematize(word2Find);
             //System.out.println("word Fonematizada:"+word2Find);
             //SentimentWords sentimentalWordObj=SentimentWords.getSentimentalWordByWord(model, word2Find);
-            SentimentWords sentimentalWordObj=SentimentWords.ClassMgr.getSentimentWords(word2Find, model);
+            SentimentWords sentimentalWordObj=SentimentWords.ClassMgr.getSentimentWords(word2Find, socialAdminSite);
             if(sentimentalWordObj!=null) //La palabra en cuestion ha sido encontrada en la BD
             {
                 //System.out.println("Palabra Encontrada:"+word2Find);
@@ -280,7 +291,7 @@ public class SentimentalDataClassifier {
                 sentimentalTweetValue+=sentimentalWordObj.getSentimentalValue();
             }
         }
-        System.out.println("initAnalysis-3");
+        
         //System.out.println("sentimentalTweetValue Final:"+sentimentalTweetValue+", wordsCont:"+wordsCont);
         
         //Una vez que se tiene clasificado el mensaje por sentimientos y por intensidad, falta ver si cumple el filtro(s) del stream
@@ -293,7 +304,6 @@ public class SentimentalDataClassifier {
         
         PostIn post=createPostInObj();
         
-        System.out.println("initAnalysis-4");
         if(sentimentalTweetValue>0)
         {
             float prom=sentimentalTweetValue/wordsCont;
@@ -318,17 +328,18 @@ public class SentimentalDataClassifier {
             post.setPostSentimentalValue(Float.parseFloat("0"));
             post.setPostSentimentalType(0); //Tweet Neutro, valor de 0 (Esto yo lo determiné)
         }
-        System.out.println("initAnalysis-5");
+        
         if(IntensiveTweetValue>0)
         {
             float prom=IntensiveTweetValue/wordsCont;
             //System.out.println("IntensiveTweetValue Final:"+IntensiveTweetValue+", valor promedio:"+prom);
             post.setPostIntensityValue(prom);
         }
-        System.out.println("initAnalysis-6");
+        
         //Revisa si encuentra emoticones en el mensaje
         findEmoticones(post);
-        System.out.println("initAnalysis-7");
+        MessageIn messageIn=(MessageIn)post;
+        //System.out.println("messageIn final:"+messageIn.getMsg_Text());
     }
     
     
@@ -373,7 +384,8 @@ public class SentimentalDataClassifier {
                     {
                         message.setPostPlace(externalPost.getLocation());
                     }
-                    
+                    //TODO:REVISAR EL SIGUIENTE BLOQUE DESPUES, AHORITA LO QUITÉ, PORQUE SE ESTA LLENANDO MUCHO LA BD
+                    /*
                     SocialNetworkUser socialNetUser=SocialNetworkUser.getSocialNetworkUserbyIDAndSocialNet(externalPost.getCreatorId(), socialNetwork, model);
                     if(socialNetUser==null)//
                     {
@@ -396,8 +408,9 @@ public class SentimentalDataClassifier {
                     {
                         message.setPostInSocialNetworkUser(socialNetUser);
                     }
+                    * */
                 }
-                socialNetwork.addReceivedPost(message, String.valueOf(externalPost.getPostId()), socialNetwork);
+                //socialNetwork.addReceivedPost(message, String.valueOf(externalPost.getPostId()), socialNetwork);
                 
                 return message;
     }
@@ -507,25 +520,30 @@ public class SentimentalDataClassifier {
     
     private void findEmoticones(PostIn post)
     {
+         //System.out.println("Emoti-1:"+externalString2Clasify_TMP);
          int contPositiveEmoticon=0;
          int contNegativeEmoticon=0;
-         StringTokenizer st = new StringTokenizer(externalString2Clasify);
+         StringTokenizer st = new StringTokenizer(externalString2Clasify_TMP);
          while (st.hasMoreTokens())
          {
-             String word2Find=st.nextToken();
+            String word2Find=st.nextToken();
             if(word2Find.indexOf("=)")>-1 || word2Find.indexOf(":)")>-1 || word2Find.indexOf(":))")>-1 || word2Find.indexOf("(:")>-1 || word2Find.indexOf(":-)")>-1 || word2Find.indexOf("(-:")>-1 || word2Find.indexOf("<3")>-1) //Sentimiento Positivo
              {
+                //System.out.println("Emoti-2:"+word2Find);
                 contPositiveEmoticon++;
              }else if(word2Find.indexOf("=(")>-1 || word2Find.indexOf(":(")>-1 || word2Find.indexOf(":((")>-1 || word2Find.indexOf("):")>-1 || word2Find.indexOf(":-(")>-1 || word2Find.indexOf(")-:")>-1) //Sentimineto negativo
              {
+                //System.out.println("Emoti-3:"+word2Find);
                 contNegativeEmoticon++;
              }
         }
         if(contPositiveEmoticon>contNegativeEmoticon)
         {
+            //System.out.println("Emoti-4:se puso-Positivo");
             post.setPostSentimentalEmoticonType(1);
         }else if(contPositiveEmoticon<contNegativeEmoticon)
         {
+            //System.out.println("Emoti-4:se puso-Negativo");
             post.setPostSentimentalEmoticonType(2);
         }
     }

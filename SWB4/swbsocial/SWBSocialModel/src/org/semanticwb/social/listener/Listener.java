@@ -141,7 +141,7 @@ public class Listener implements SWBAppObject {
                 {
                     //System.out.println("Entra a Listener/createUpdateTimers-3:"+stream.getURI());
                     removeTimer(stream);
-                    //System.out.println("Elimino timer k");
+                    System.out.println("Elimino timer k");
                 }else
                 {
                     //System.out.println("Entra a Listener/createUpdateTimers-4:"+stream.getURI());
@@ -161,8 +161,10 @@ public class Listener implements SWBAppObject {
         {
             if(createTimer(stream))
             {
+                //Se arranca un timer que se ejecutara cada tantos segundos configurados en el stream
+                System.out.println("Levanta Timer");
                 Timer timer = new Timer();
-                timer.schedule(new ListenerTask(stream), 0,stream.getPoolTime()*MILISEG_IN_SEGUNDO);
+                timer.schedule(new ListenerTask(stream), 0,stream.getPoolTime()*MILISEG_IN_SEGUNDO); 
                 htTimers.put(stream.getURI(), timer);
                 return true;
             }
@@ -180,7 +182,7 @@ public class Listener implements SWBAppObject {
         {
             if(htTimers.get(stream.getURI())!=null)
             {
-                //System.out.println("Entra a removeTimer de stream:"+stream.getURI());
+                System.out.println("Entra a removeTimer de stream:"+stream.getURI());
                 Timer timer=htTimers.get(stream.getURI());
                 htTimers.remove(stream.getURI());
                 timer.cancel();
@@ -196,7 +198,9 @@ public class Listener implements SWBAppObject {
         return null;
      }
 
-
+    /**
+     * Clase de tipo Timer, hecha a andar las redes sociales adjudicadas a un stream.
+     */ 
     private static class ListenerTask extends TimerTask
     {
         Stream stream=null;
@@ -207,33 +211,22 @@ public class Listener implements SWBAppObject {
         }
 
         public void run() {
+            System.out.println("Ejecuta Timer");
             Iterator<SocialNetwork> itSocialNets=stream.listSocialNetworks();
             while(itSocialNets.hasNext())
             {
                 SocialNetwork socialNet=itSocialNets.next();
+                System.out.println("Ejecuta Red Social/Listen:"+socialNet.getId());
                 socialNet.listen(stream);
             }
         }
      }
 
     /*
-     * Metodo cuya funcionalidad es la de crear un thread de un determinado stream
+     * Metodo cuya funcionalidad es la de verificar si se podría crear un thread de acuerdo a los datos que trae un stream dado.
      */
     private static boolean createTimer(Stream stream)
     {
-        //System.out.println("stream.getPoolTime():"+stream.getPoolTime());
-        //System.out.println("stream.getPhrase()-1:"+stream.getPhrase());
-        if(stream.getPhrase()!=null)
-        {
-            //System.out.println("stream.getPhrase()-2:"+stream.getPhrase().trim().length());
-        }
-        //System.out.println("stream.listSocialNetworks().hasNext():"+stream.listSocialNetworks().hasNext());
-        Iterator<SocialNetwork> itNets=stream.listSocialNetworks();
-        while(itNets.hasNext())
-        {
-            SocialNetwork socialNet=itNets.next();
-            //System.out.println("SocialNetwork que tiene el stream:"+socialNet.getURI());
-        }
         if(stream.isActive() && stream.getPoolTime() > 0 && stream.getPhrase()!=null && stream.getPhrase().trim().length()>0 && stream.listSocialNetworks().hasNext())
         {
             return true;
