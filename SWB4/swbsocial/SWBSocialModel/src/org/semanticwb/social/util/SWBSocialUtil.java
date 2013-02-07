@@ -12,9 +12,12 @@ import java.util.StringTokenizer;
 import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
 import org.semanticwb.Logger;
+import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.SWBModel;
+import org.semanticwb.model.WebSite;
 import org.semanticwb.social.PunctuationSign;
+import org.semanticwb.social.SocialAdmin;
 import org.semanticwb.social.WordsToMonitor;
 import org.semanticwb.social.util.lucene.SpanishAnalizer;
 
@@ -41,12 +44,13 @@ public class SWBSocialUtil {
     static private SWBSocialUtil instance;
     static ArrayList<String> aDoubles=new ArrayList();
     static HashMap<String, String> hmapChanges=new HashMap();
+    static private SocialAdmin swbSocialAdmSite=null;
 
     /**
      * Creates a new object of this class.
      */
-    private SWBSocialUtil() {
-        init();
+    public SWBSocialUtil() {
+       
     }
 
    
@@ -57,11 +61,12 @@ public class SWBSocialUtil {
      * @return a reference to the only one existing object of this class
      */
     static public synchronized SWBSocialUtil createInstance() {
-        if (SWBSocialUtil.instance == null) {
+        System.out.println("Entra a SWBSocialUtil/createInstance");
+        if (instance == null) {
+            instance = new SWBSocialUtil();
             init();
-            SWBSocialUtil.instance = new SWBSocialUtil();
         }
-        return SWBSocialUtil.instance;
+        return instance;
     }
     
      /*
@@ -74,6 +79,7 @@ public class SWBSocialUtil {
 
     private static void init()
     {
+         System.out.println("Init de SWBSocialUtil");
          //Carga Valores a ArrayList
          aDoubles.add("b");
          aDoubles.add("p");
@@ -115,6 +121,13 @@ public class SWBSocialUtil {
          hmapChanges.put("gi", "ji");
          hmapChanges.put("bb", "b");
          hmapChanges.put("c", "k");
+         
+         String swbsocialSite=SWBPortal.getWebProperties().getProperty("swbs/swbsocialsite", "swbsocial");
+         System.out.println("swbsocialsite en SWBSocualUtil:"+swbsocialSite);
+         if(swbsocialSite!=null)
+         {
+             swbSocialAdmSite=SocialAdmin.ClassMgr.getSocialAdmin(swbsocialSite);
+         }
     }
 
     public ArrayList getDoublesArray()
@@ -647,6 +660,16 @@ public class SWBSocialUtil {
             }
         }
 
+    }
+    
+    public static class Context
+    {
+        public static SocialAdmin getSocialAdmSite()
+        {
+            //TODO:ELIMINAR EL SIGUIENTE BLOQUE, YA QUE ESTE VALOR DEBE DE VENIR DEL ARCHIVO WEB.PROPERTIES y solo debe cargarse una vez
+            SocialAdmin swbSocialAdmSite=SocialAdmin.ClassMgr.getSocialAdmin("swbsocial");
+            return swbSocialAdmSite;
+        }
     }
     
 }

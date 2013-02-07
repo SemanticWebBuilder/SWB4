@@ -11,7 +11,7 @@ public abstract class PostInBase extends org.semanticwb.social.Post implements o
    */
     public static final org.semanticwb.platform.SemanticClass social_SocialNetworkUser=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#SocialNetworkUser");
    /**
-   * Usuario creador del Post que llega por el Listener (PostIn)
+   * Usuario creador del Post que llega por el Listener (PostIn). TODO: Al borrar un PostIn, no borro al SocialNetworkUser porque este podría obviamente tenear mas PostIn asociados. Tengo que despues revisar para que si ya un usuario no tiene PostIn(Porque x algun modo se hayan borrado) borre al SocialNetworkUser, ya que de no ser así se quedaran como basura en la BD, haciendo que esta cresca muchisimo.
    */
     public static final org.semanticwb.platform.SemanticProperty social_postInSocialNetworkUser=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#postInSocialNetworkUser");
    /**

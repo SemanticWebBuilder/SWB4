@@ -4,12 +4,8 @@ package org.semanticwb.social.base;
    /**
    * Clase que almacenara las diferentes cuentas de una organización para la red social Facebook. 
    */
-public abstract class FacebookBase extends org.semanticwb.social.SocialNetwork implements org.semanticwb.model.Activeable,org.semanticwb.social.Photoable,org.semanticwb.model.Descriptiveable,org.semanticwb.social.Oauthable,org.semanticwb.social.SocialNetPostable,org.semanticwb.social.Messageable,org.semanticwb.social.Listenerable,org.semanticwb.social.Secreteable,org.semanticwb.social.Videoable,org.semanticwb.model.Traceable
+public abstract class FacebookBase extends org.semanticwb.social.SocialNetwork implements org.semanticwb.social.Oauthable,org.semanticwb.model.Descriptiveable,org.semanticwb.social.Photoable,org.semanticwb.model.Activeable,org.semanticwb.social.SocialNetPostable,org.semanticwb.social.Messageable,org.semanticwb.social.Videoable,org.semanticwb.social.Secreteable,org.semanticwb.social.Listenerable,org.semanticwb.model.Traceable
 {
-   /**
-   * Fecha siguiente para busqueda en una red social.
-   */
-    public static final org.semanticwb.platform.SemanticProperty social_nextDatetoSearch=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#nextDatetoSearch");
    /**
    * Eliminar despues esta propiedad, ver si Jose puede eliminar la propiedad login que se encuentra en la clase padre(SocialNetwork).
    */
@@ -208,6 +204,29 @@ public abstract class FacebookBase extends org.semanticwb.social.SocialNetwork i
             return it;
         }
        /**
+       * Gets all org.semanticwb.social.Facebook with a determined SocialPostInv
+       * @param value SocialPostInv of the type org.semanticwb.social.SocialPost
+       * @param model Model of the org.semanticwb.social.Facebook
+       * @return Iterator with all the org.semanticwb.social.Facebook
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.Facebook> listFacebookBySocialPostInv(org.semanticwb.social.SocialPost value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.Facebook> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(social_hasSocialPostInv, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.social.Facebook with a determined SocialPostInv
+       * @param value SocialPostInv of the type org.semanticwb.social.SocialPost
+       * @return Iterator with all the org.semanticwb.social.Facebook
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.Facebook> listFacebookBySocialPostInv(org.semanticwb.social.SocialPost value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.Facebook> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(social_hasSocialPostInv,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
        * Gets all org.semanticwb.social.Facebook with a determined Creator
        * @param value Creator of the type org.semanticwb.model.User
        * @param model Model of the org.semanticwb.social.Facebook
@@ -262,24 +281,6 @@ public abstract class FacebookBase extends org.semanticwb.social.SocialNetwork i
     public void setTokenExpirationDate(java.util.Date value)
     {
         getSemanticObject().setDateProperty(social_tokenExpirationDate, value);
-    }
-
-/**
-* Gets the NextDatetoSearch property
-* @return String with the NextDatetoSearch
-*/
-    public String getNextDatetoSearch()
-    {
-        return getSemanticObject().getProperty(social_nextDatetoSearch);
-    }
-
-/**
-* Sets the NextDatetoSearch property
-* @param value long with the NextDatetoSearch
-*/
-    public void setNextDatetoSearch(String value)
-    {
-        getSemanticObject().setProperty(social_nextDatetoSearch, value);
     }
 
 /**
