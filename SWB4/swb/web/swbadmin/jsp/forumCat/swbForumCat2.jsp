@@ -807,7 +807,7 @@
     function validaforma2()
     {
         var content = editor1.getValue(false);
-
+        
         if(!content || content=='<br _moz_editor_bogus_node="TRUE" />' || content=='<br />')
         {
             alert('¡Debe ingresar un mensaje!');
@@ -824,7 +824,7 @@
     function validaforma()
     {
         var content = editor1.getValue(false);
-
+        
         if(!content || content=='<br _moz_editor_bogus_node="TRUE" />' || content=='<br />')
         {
             alert('¡Debe ingresar un mensaje!');
@@ -1171,7 +1171,7 @@
             <a href="<%=renderURL.toString(true)%>">Editar</a>&nbsp
             <%
                                                                 }
-                                                                if (user.isSigned() &&  (isAdmin  || ((question.getCreator() != null && user.getURI().equals(question.getCreator().getURI())))))
+                                                                if (user.isSigned() && ((question.getCreator() != null && user.getURI().equals(question.getCreator().getURI()))))
                                                                 {
                                                                     SWBResourceURL actionURLClose = paramRequest.getActionUrl();
                                                                     actionURLClose.setAction("removeQuestion");
@@ -1471,7 +1471,7 @@
                             <a href="<%=renderURL.toString(true)%>">Editar</a>&nbsp;&nbsp;
                             <%
                                                                                     }
-                                                                                    if (user.isSigned() &&  (isAdmin || favAnswer.getCreator() != null && user.getURI().equals(favAnswer.getCreator().getURI())))
+                                                                                    if (user.isSigned() && favAnswer.getCreator() != null && user.getURI().equals(favAnswer.getCreator().getURI()))
                                                                                     {
                                                                                         SWBResourceURL actionURLRemove = paramRequest.getActionUrl();
                                                                                         actionURLRemove.setAction("removeAnswer");
@@ -1644,12 +1644,12 @@
                             <a href="<%=renderURL.toString(true)%>">Editar</a>&nbsp;&nbsp;
                             <%
                                                                                     }
-                                                                                    if (user.isSigned() &&  (isAdmin || comAnswer.getCreator() != null && user.getURI().equals(comAnswer.getCreator().getURI())))
+                                                                                    if (user.isSigned() && comAnswer.getCreator() != null && user.getURI().equals(comAnswer.getCreator().getURI()))
                                                                                     {
                                                                                         SWBResourceURL actionURLRemove = paramRequest.getActionUrl();
                                                                                         actionURLRemove.setAction("removeAnswer");
                                                                                         actionURLRemove.setParameter("uri", comAnswer.getEncodedURI());
-                                                                                        //actionURLRemove.setParameter("org", "moderate");
+                                                                                        actionURLRemove.setParameter("org", "moderate");
                                                                                         actionURLRemove.setParameter("cat", comAnswer.getAnsQuestion().getWebpage().getId());
                                                                                         String text = clean(comAnswer.getAnswer(), 35);
                                                                                         text = SWBUtils.TEXT.encodeBase64(text);
@@ -1983,7 +1983,7 @@
                                                                                                                 }
                                                                                                             }
 
-                                                                                                            if (user.isSigned() && (isAdmin || (answer.getCreator() != null && user.getURI().equals(answer.getCreator().getURI()))))
+                                                                                                            if (user.isSigned() && answer.getCreator() != null && user.getURI().equals(answer.getCreator().getURI()))
                                                                                                             {
                                                                                                                 SWBResourceURL actionURLRemove = paramRequest.getActionUrl();
                                                                                                                 actionURLRemove.setAction("removeAnswer");
@@ -2307,7 +2307,7 @@
             %><a href="<%=renderURL.toString(true)%>">Editar</a>&nbsp;<%
                                             }
                                         }
-                                        if (user.isSigned() && (isAdmin || ((question.getCreator() != null && user.getURI().equals(question.getCreator().getURI())))))
+                                        if (user.isSigned() && ((question.getCreator() != null && user.getURI().equals(question.getCreator().getURI()))))
                                         {
                                             SWBResourceURL actionURLClose = paramRequest.getActionUrl();
                                             actionURLClose.setAction("removeQuestion");
@@ -2522,7 +2522,7 @@
                             <a href="<%=renderURL.toString(true)%>">Editar</a>&nbsp;&nbsp;
                             <%
                                                                             }
-                                                                            if (user.isSigned() && (isAdmin ||  (favAnswer.getCreator() != null && user.getURI().equals(favAnswer.getCreator().getURI()))))
+                                                                            if (user.isSigned() && favAnswer.getCreator() != null && user.getURI().equals(favAnswer.getCreator().getURI()))
                                                                             {
                                                                                 SWBResourceURL actionURLRemove = paramRequest.getActionUrl();
                                                                                 actionURLRemove.setAction("removeAnswer");
@@ -2760,7 +2760,7 @@
                             <a href="<%=renderURL.toString(true)%>">Editar</a>&nbsp;&nbsp;
                             <%
                                                                             }
-                                                                            if (user.isSigned() &&  (isAdmin || (comAnswer.getCreator() != null && user.getURI().equals(comAnswer.getCreator().getURI()))))
+                                                                            if (user.isSigned() && comAnswer.getCreator() != null && user.getURI().equals(comAnswer.getCreator().getURI()))
                                                                             {
                                                                                 SWBResourceURL actionURLRemove = paramRequest.getActionUrl();
                                                                                 actionURLRemove.setAction("removeAnswer");
@@ -3023,7 +3023,7 @@
                             <a href="<%=renderURL.toString(true)%>">Editar</a>&nbsp;&nbsp;
                             <%
                                                                                                     }
-                                                                                                    if (user.isSigned() && (isAdmin || ((answer.getCreator() != null && user.getURI().equals(answer.getCreator().getURI())))))
+                                                                                                    if (user.isSigned() && ((answer.getCreator() != null && user.getURI().equals(answer.getCreator().getURI()))))
                                                                                                     {
                                                                                                         SWBResourceURL actionURLClose = paramRequest.getActionUrl();
                                                                                                         actionURLClose.setAction("removeAnswer");
@@ -3256,7 +3256,7 @@
     function validaforma()
     {
         var content = editor1.getValue(false);
-
+        
         if(!content || content=='<br _moz_editor_bogus_node="TRUE" />' || content=='<br />')
         {
             alert('¡Debe ingresar un mensaje!');
@@ -3433,7 +3433,7 @@
     function validaforma()
     {
         var content = editor1.getValue(false);
-
+        
         if(!content || content=='<br _moz_editor_bogus_node="TRUE" />' || content=='<br />')
         {
             alert('¡Debe ingresar un mensaje!');
@@ -3609,7 +3609,7 @@
         function validaforma()
         {
             var content = editor1.getValue(false);
-
+            
             if(!content || content=='<br _moz_editor_bogus_node="TRUE" />' || content=='<br />')
             {
                 alert('¡Debe ingresar un mensaje!');
@@ -3758,15 +3758,7 @@
                 <li><%=fecha%></li>
             </ul>
             <%
-                                            String text = question.getQuestion();
-                                            text = text.replace("&lt;", "<");
-                                        text = text.replace("&gt;", ">");
-                                        text = text.replace("<em>", "<i>");
-                                        text = text.replace("</em>", "</i>");
-                                        text = text.replace("<strong>", "<b>");
-                                        text = text.replace("</strong>", "</b>");
-                                        
-
+                                            String text = clean(question.getQuestion(), 35);
                                             text = SWBUtils.TEXT.encodeBase64(text);
                                             if ("true".equals(request.getParameter("deleted")))
                                             {
@@ -3781,7 +3773,7 @@
                                                             actionURL.setAction("removeQuestion");
                                                             actionURL.setParameter("cat", cat.getId());
                                                             actionURL.setParameter("deleted", "true");
-                                                            //actionURL.setParameter("org", "moderate");
+                                                            actionURL.setParameter("org", "moderate");
                                                             actionURL.setParameter("uri", question.getEncodedURI());
 
             %>
@@ -3844,18 +3836,7 @@
                                         {
                                             fecha = datef.format(question.getCreated());
                                         }
-                                        String msg=question.getQuestion();
-                                        String Msg = "Mensaje original: ";
-
-                                        
-                                        msg = msg.replace("&lt;", "<");
-                                        msg = msg.replace("&gt;", ">");
-                                        msg = msg.replace("<em>", "<i>");
-                                        msg = msg.replace("</em>", "</i>");
-                                        msg = msg.replace("<strong>", "<b>");
-                                        msg = msg.replace("</strong>", "</b>");
-                                        Msg=Msg+msg;
-
+                                        String Msg = "Mensaje original: " + clean(question.getQuestion(), 35);
     %>
     <li>
 
@@ -3900,7 +3881,7 @@
                                                                                                 actionURL.setAction("removeAnswer");
                                                                                                 actionURL.setParameter("cat", cat.getId());
                                                                                                 actionURL.setParameter("deleted", "true");
-                                                                                                //actionURL.setParameter("org", "moderate");
+                                                                                                actionURL.setParameter("org", "moderate");
                                                                                                 actionURL.setParameter("uri", answer.getEncodedURI());
                     %>
 
@@ -4007,19 +3988,11 @@ No existen preguntas, ni respuestas para moderar.
     <p align="right"><a href="<%=addTema%>">Agregar Tema</a></p>
     <!--<h3>Foros de discusión</h3> -->
     <script type="text/javascript">
-        function replaceAll( text, busca, reemplaza ){
-	  while (text.toString().indexOf(busca) != -1)
-	      text = text.toString().replace(busca,reemplaza);
-	  return text;
-	}
         function eliminaTema(title,url)
         {
             if(confirm('¿Desea borrar el tema '+title+'?'))
             {
-                var str=url;
-                var n=replaceAll(str,' ','%');
-                
-                document.location=n;
+                document.location=url;
             }
         }
     </script>
@@ -4167,13 +4140,10 @@ No existen preguntas, ni respuestas para moderar.
                                 }
                                 String idTema = child.getId();
                                 String title = child.getTitle();
-                                title=title.replace('\"', ' ');
-                                title=title.replace('\'', ' ').trim();
                                 SWBResourceURL deleteTema = paramRequest.getRenderUrl();
                                 deleteTema.setAction("deleteTema");
                                 deleteTema.setParameter("idTema", idTema);
                                 String urlDeleteTema = deleteTema.toString();
-                                urlDeleteTema=urlDeleteTema.replace('%', ' ');
 
         %>
         <tr>
@@ -4194,7 +4164,7 @@ No existen preguntas, ni respuestas para moderar.
                                                 if (isAdmin)
                                                 {
                                                     SWBResourceURL moderate = paramRequest.getRenderUrl();
-                                                    //moderate.setAction("moderate");
+                                                    moderate.setAction("moderate");
                                                     moderate.setParameter("cat", child.getId());
                 %>
                 <%--<br/><a href="<%=moderate%>">Por autorizar: <%=numerosformat.format(totalxaccept)%></a>--%>
@@ -4249,7 +4219,6 @@ No existen preguntas, ni respuestas para moderar.
                                             if (isAdmin)
                                             {
             %>
-            
             <td><a href="javascript:eliminaTema('<%=title%>','<%=urlDeleteTema%>')">Borrar</a></td>
             <%
                                                             }
@@ -4274,6 +4243,5 @@ No existen preguntas, ni respuestas para moderar.
 <%
             }
 %>
-
 
 
