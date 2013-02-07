@@ -323,7 +323,7 @@ if (paramRequest.getMode().equals(paramRequest.Mode_VIEW)) {
         <%
         if (tinstances != null && tinstances.size() > 0) {
             %>
-            <div class="bandeja-combo">
+            <div>
                 <table class="tabla-bandeja">
                     <thead>
                         <tr>
@@ -446,17 +446,12 @@ if (paramRequest.getMode().equals(paramRequest.Mode_VIEW)) {
                                                 <%
                                                 if (allowForward && instance.getAssignedto() != null) {
                                                     SWBResourceURL forward = paramRequest.getRenderUrl().setMode("forward");
-                                                    %><a class="acc-delegar" href="<%=forward%>?suri=<%=instance.getEncodedURI()%>">Reasignar</a><%
+                                                    %><a class="acc-delegar" target="new" href="<%=forward%>?suri=<%=instance.getEncodedURI()%>">Reasignar</a><%
                                                 }
                                             }
                                             if (statusWp != null) {
-                                                String acts = getStatusInstances(instance.getProcessInstance(), ProcessInstance.STATUS_PROCESSING);
-                                                if (acts != null && !acts.trim().equals("")) {
-                                                    acts = "&currentActivities=" + URLEncoder.encode(acts);
-                                                }
                                                 %>
-                                                <!--a class="acc-mapa" target="_new" href="<%=statusWp.getUrl()%>?suri=<%=instance.getFlowNodeType().getProcess().getEncodedURI()%>&mode=view<%=acts%>&tp=<%=URLEncoder.encode(baseUrl+"/Bandeja")%>&rp=<%=URLEncoder.encode(baseUrl+"/Activos_de_Pocesos")%>">Ver mapa</a-->
-                                                <a class="acc-mapa" href="<%=statusWp.getUrl()%>?suri=<%=instance.getFlowNodeType().getProcess().getEncodedURI()%>&mode=view<%=acts%>">Ver mapa</a>
+                                                <a class="acc-mapa" href="<%=statusWp.getUrl()%>?suri=<%=instance.getProcessInstance().getEncodedURI()%>">Ver mapa</a>
                                                 <%
                                             }
                                         } else if (conf[0].equals(UserTaskInboxResource.COL_TASKSUBJECT)) {
