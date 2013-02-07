@@ -85,7 +85,7 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
                 //Genera todas las consultas a ejecutar en Facebook, una por frase almacenada en el Stream
                 generateBatchQuery(phrasesInStream, queriesArray);
                 
-                printMap(queriesArray);
+                //printMap(queriesArray);
                 if (queriesArray != null && queriesArray[0].containsKey("relative_url")) {
                     
                     params.put("batch", renderFacebookQueries(queriesArray));
