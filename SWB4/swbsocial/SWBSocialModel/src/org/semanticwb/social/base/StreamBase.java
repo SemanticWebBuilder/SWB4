@@ -4,7 +4,7 @@ package org.semanticwb.social.base;
    /**
    * Clase que contendra los streams que configurados para cada usuario 
    */
-public abstract class StreamBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Activeable,org.semanticwb.model.Traceable
+public abstract class StreamBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Activeable,org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable
 {
    /**
    * Clase que engloba a las diferentes clases que representan cada una de las redes sociales.
@@ -14,6 +14,14 @@ public abstract class StreamBase extends org.semanticwb.model.SWBClass implement
    * Redes sociales asociadas al stream. En estas redes sociales se escuchara la frase asociada a un stream.
    */
     public static final org.semanticwb.platform.SemanticProperty social_hasStream_socialNetwork=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#hasStream_socialNetwork");
+   /**
+   * Tipo de Sentimiento que se desea filtrar para un stream. 0=Neutro. 1=Positivo. 2=Negativo. (No debería de exisitir un valor diferente que este para esta propiedad). Exixte una constante a nivel de la clase SWBSocialUtils para estos valores.
+   */
+    public static final org.semanticwb.platform.SemanticProperty social_Stream_SentimentalTypeFilter=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#Stream_SentimentalTypeFilter");
+   /**
+   * Tipo de Intensidad que se desea filtrar para un stream. 2=Alta;1=Media;0=Baja;. (No debería de exisitir un valor diferente que este para esta propiedad). Exixte una constante a nivel de la clase SWBSocialUtils para estos valores.
+   */
+    public static final org.semanticwb.platform.SemanticProperty social_stream_IntensitiveTypeFilter=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#stream_IntensitiveTypeFilter");
    /**
    * Lapso de tiempo en que se busca la información. Ej. Cada x tiempo
    */
@@ -27,6 +35,10 @@ public abstract class StreamBase extends org.semanticwb.model.SWBClass implement
    */
     public static final org.semanticwb.platform.SemanticClass social_PostIn=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#PostIn");
     public static final org.semanticwb.platform.SemanticProperty social_hasPostIntInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#hasPostIntInv");
+   /**
+   * Valor númerico de klout que se desea filtrar para un stream. Los usuarios que tengan este klout o más y que hablen en las redes sociales configuradas para el stream, seran tomados sus mensajes para ser guardados en el sistema.
+   */
+    public static final org.semanticwb.platform.SemanticProperty social_stream_KloutValue=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#stream_KloutValue");
    /**
    * Clase que contendra los streams que configurados para cada usuario
    */
@@ -317,6 +329,42 @@ public abstract class StreamBase extends org.semanticwb.model.SWBClass implement
     }
 
 /**
+* Gets the Stream_SentimentalTypeFilter property
+* @return int with the Stream_SentimentalTypeFilter
+*/
+    public int getStream_SentimentalTypeFilter()
+    {
+        return getSemanticObject().getIntProperty(social_Stream_SentimentalTypeFilter);
+    }
+
+/**
+* Sets the Stream_SentimentalTypeFilter property
+* @param value long with the Stream_SentimentalTypeFilter
+*/
+    public void setStream_SentimentalTypeFilter(int value)
+    {
+        getSemanticObject().setIntProperty(social_Stream_SentimentalTypeFilter, value);
+    }
+
+/**
+* Gets the Stream_IntensitiveTypeFilter property
+* @return int with the Stream_IntensitiveTypeFilter
+*/
+    public int getStream_IntensitiveTypeFilter()
+    {
+        return getSemanticObject().getIntProperty(social_stream_IntensitiveTypeFilter);
+    }
+
+/**
+* Sets the Stream_IntensitiveTypeFilter property
+* @param value long with the Stream_IntensitiveTypeFilter
+*/
+    public void setStream_IntensitiveTypeFilter(int value)
+    {
+        getSemanticObject().setIntProperty(social_stream_IntensitiveTypeFilter, value);
+    }
+
+/**
 * Gets the Updated property
 * @return java.util.Date with the Updated
 */
@@ -547,5 +595,23 @@ public abstract class StreamBase extends org.semanticwb.model.SWBClass implement
     public void setTitle(String title, String lang)
     {
         getSemanticObject().setProperty(swb_title, title, lang);
+    }
+
+/**
+* Gets the Stream_KloutValue property
+* @return int with the Stream_KloutValue
+*/
+    public int getStream_KloutValue()
+    {
+        return getSemanticObject().getIntProperty(social_stream_KloutValue);
+    }
+
+/**
+* Sets the Stream_KloutValue property
+* @param value long with the Stream_KloutValue
+*/
+    public void setStream_KloutValue(int value)
+    {
+        getSemanticObject().setIntProperty(social_stream_KloutValue, value);
     }
 }
