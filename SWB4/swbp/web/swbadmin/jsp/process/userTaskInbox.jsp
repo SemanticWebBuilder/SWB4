@@ -439,10 +439,13 @@ if (paramRequest.getMode().equals(paramRequest.Mode_VIEW)) {
                                             }
                                             %><td class="tban-tarea"><%=status%><%
                                         } else if (conf[0].equals(UserTaskInboxResource.COL_ACTIONS)) {
+                                            %>
+                                            <td class="tban-accion">
+                                            <%
                                             UserTask utask = (UserTask) instance.getFlowNodeType();
                                             if (instance.getStatus() == ProcessInstance.STATUS_PROCESSING) {
                                                 %>
-                                                <td class="tban-accion"><a class="acc-atender" href="<%=utask.getTaskWebPage().getUrl()%>?suri=<%=instance.getEncodedURI()%>">Atender</a>
+                                                <a class="acc-atender" href="<%=utask.getTaskWebPage().getUrl()%>?suri=<%=instance.getEncodedURI()%>">Atender</a>
                                                 <%
                                                 if (allowForward && instance.getAssignedto() != null) {
                                                     SWBResourceURL forward = paramRequest.getRenderUrl().setMode("forward");
@@ -454,6 +457,9 @@ if (paramRequest.getMode().equals(paramRequest.Mode_VIEW)) {
                                                 <a class="acc-mapa" href="<%=statusWp.getUrl()%>?suri=<%=instance.getProcessInstance().getEncodedURI()%>">Ver mapa</a>
                                                 <%
                                             }
+                                            %>
+                                            </td>
+                                            <%
                                         } else if (conf[0].equals(UserTaskInboxResource.COL_TASKSUBJECT)) {
                                             String subject = "--";
                                             if (instance.getSubject() != null) {
