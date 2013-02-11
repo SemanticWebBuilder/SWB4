@@ -45,6 +45,19 @@ public class SWBSocialUtil {
     static ArrayList<String> aDoubles=new ArrayList();
     static HashMap<String, String> hmapChanges=new HashMap();
     static private SocialAdmin swbSocialAdmSite=null;
+    
+    //SENTIMENTAL STATATIC CONTANTS
+    static public int SENTIMENT_NEUTRAL=0;
+    static public int SENTIMENT_POSITIVE=1;
+    static public int SENTIMENT_NEGATIVE=2;
+    
+    //INTENSITIVE STATATIC CONTANTS
+    static public int INTENSITIVE_HIGH=2;
+    static public int INTENSITIVE_MEDIUM=1;
+    static public int INTENSITIVE_LOW=0;
+    
+    
+    
 
     /**
      * Creates a new object of this class.
