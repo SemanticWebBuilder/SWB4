@@ -3058,10 +3058,10 @@
       <swbxf:DisplayProperty rdf:ID="dp_urlValue">
         <swbxf:formElement>
           <swp:WikiUrlFormElement rdf:ID="WikiUrlFormElement_1">
+            <swbxf:textRegExp rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >^\[((https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w\.-]*)*\/?)(\|([a-z-A-Z0-9\u00E0-\u00FC]+)((\s[a-z-A-Z0-9\u00E0-\u00FC]+)+)?)?\]$</swbxf:textRegExp>
             <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
             >Caja de texto con validación de URL estilo wiki</rdfs:comment>
-            <swbxf:textRegExp rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-            >^\[((https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w\.-]*)*\/?)(\|[a-z-A-Z0-9\u00E0-\u00FC]+(\s[a-z-A-Z0-9\u00E0-\u00FC]+)+)?\]$</swbxf:textRegExp>
             <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
             >Caja de texto con validación de URL estilo wiki</rdfs:label>
           </swp:WikiUrlFormElement>
