@@ -51,7 +51,7 @@ import org.semanticwb.process.schema.FileCollection;
 
 /***
  * Recurso Panel de Control para monitoreo de instancias de procesos.
- * @author Hasdai Pacheco {haxdai@gmail.com}
+ * @author Hasdai Pacheco {ebenezer.sanchez@infotec.com.mx}
  */
 public class ControlPanelResource extends org.semanticwb.process.resources.controlpanel.base.ControlPanelResourceBase 
 {
