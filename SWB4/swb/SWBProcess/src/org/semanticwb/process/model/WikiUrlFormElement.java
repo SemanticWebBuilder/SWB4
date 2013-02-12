@@ -42,16 +42,23 @@ public class WikiUrlFormElement extends org.semanticwb.process.model.base.WikiUr
             imsg     = dobj.getInvalidMessage();
             disabled = dobj.isDisabled();
         }
-
+        
         if (DOJO) {
-            if (required && imsg == null) {
-                imsg = label + " es requerido.";
+            if (imsg == null || (imsg != null && imsg.trim().length() == 0)) {
+                if (required) {
+                    imsg = label + " es requerido.";
 
-                if (lang.equals("en")) {
-                    imsg = label + " is required.";
+                    if (lang.equals("en")) {
+                        imsg = label + " is required.";
+                    }
+                } else {
+                    imsg = label + " no es válido";
+                    if (lang.equals("en")) {
+                        imsg = label + " is not valid";
+                    }
                 }
             }
-
+            
             if (pmsg == null) {
                 pmsg = "Captura " + label + ".";
 
@@ -118,17 +125,14 @@ public class WikiUrlFormElement extends org.semanticwb.process.model.base.WikiUr
             String lbl = value;
             String url = value;
             if (value.startsWith("[")&& value.endsWith("]")) {
-                System.out.println("Entre corchetes");
                 String [] temp = value.replaceAll("\\[", "").replaceAll("\\]", "").split("\\|");
                 if (temp != null && temp.length == 2) {
-                    System.out.println("Valores: "+temp[0]+", "+temp[1]);
                     url = temp[0];
                     lbl = temp[1];
                 }
             }
             ret.append("<a href=\"" + url + "\">" + lbl + "</a>");
         }
-
         return ret.toString();
     }
 }
