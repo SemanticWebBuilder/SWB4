@@ -39,7 +39,7 @@ import org.semanticwb.process.model.RepositoryFile;
 
 /**
  * Parser para indexado y búsqueda de objetos {@link RepositoryFile}.
- * @author Hasdai Pacheco {haxdai@gmail.com}
+ * @author Hasdai Pacheco {ebenezer.sanchez@infotec.com.mx}
  */
 public class RepositoryFileParser extends GenericParser {
     private static final String ATT_USRGROUP = "fileOwnerUserGroup";
