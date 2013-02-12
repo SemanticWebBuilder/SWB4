@@ -57,7 +57,7 @@ import org.semanticwb.process.model.UserTask;
 
 /***
  * Recurso Bandeja de Tareas de Usuario.
- * @author Hasdai Pacheco {haxdai@gmail.com}
+ * @author Hasdai Pacheco {ebenezer.sanchez@infotec.com.mx}
  */
 public class UserTaskInboxResource extends org.semanticwb.process.resources.taskinbox.base.UserTaskInboxResourceBase 
 {
