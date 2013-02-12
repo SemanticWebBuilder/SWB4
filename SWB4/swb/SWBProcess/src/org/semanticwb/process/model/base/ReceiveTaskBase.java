@@ -1,7 +1,7 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class ReceiveTaskBase extends org.semanticwb.process.model.Task implements org.semanticwb.model.RoleRefable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Referensable,org.semanticwb.process.model.ResourceAssignmentable,org.semanticwb.model.Descriptiveable,org.semanticwb.process.model.ActivityConfable,org.semanticwb.model.Traceable,org.semanticwb.model.UserGroupRefable
+public abstract class ReceiveTaskBase extends org.semanticwb.process.model.Task implements org.semanticwb.model.Referensable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Descriptiveable,org.semanticwb.process.model.ResourceAssignmentable,org.semanticwb.model.UserGroupRefable,org.semanticwb.process.model.ActivityConfable,org.semanticwb.model.RoleRefable,org.semanticwb.model.Traceable
 {
     public static final org.semanticwb.platform.SemanticClass swp_ReceiveTask=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#ReceiveTask");
    /**
