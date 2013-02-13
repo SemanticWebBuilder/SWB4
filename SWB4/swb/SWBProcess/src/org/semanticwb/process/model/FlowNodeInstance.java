@@ -560,20 +560,24 @@ public class FlowNodeInstance extends org.semanticwb.process.model.base.FlowNode
         boolean canAccess = false;
         
         User owner = this.getAssignedto();
-        UserTask utask = (UserTask)this.getFlowNodeType();
+        GraphicalElement type = this.getFlowNodeType();
+        //UserTask utask = (UserTask)this.getFlowNodeType(); //Esto causaría un ClassCastException en algunos casos
         
         //Verificar permisos del usuario sobre la instancia
         if (owner != null) { //Tiene propieario
             if (owner.equals(user)) {
                 canAccess = true;
             }
-        } else if (user.haveAccess(utask)) { //No tiene propietario
-            GraphicalElement parent = utask.getParent();
-            if (parent == null || parent instanceof Pool || (parent != null && parent instanceof Lane && user.haveAccess(parent))) {
+        } else if (user.haveAccess(type)) { //No tiene propietario
+            if (type instanceof StartEvent) { //Si es un evento de inicio no hay que verificar los padres
                 canAccess = true;
+            } else {
+                GraphicalElement parent = type.getParent();
+                if (parent == null || parent instanceof Pool || (parent != null && parent instanceof Lane && user.haveAccess(parent))) {
+                    canAccess = true;
+                }
             }
         }
-        
         return canAccess;
     }    
 }
