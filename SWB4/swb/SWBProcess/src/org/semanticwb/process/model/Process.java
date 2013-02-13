@@ -31,6 +31,7 @@ import org.semanticwb.SWBUtils;
 import org.semanticwb.model.GenericIterator;
 import org.semanticwb.model.SWBClass;
 import org.semanticwb.model.SWBModel;
+import org.semanticwb.model.User;
 import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticObserver;
@@ -169,6 +170,34 @@ public class Process extends org.semanticwb.process.model.base.ProcessBase
             //wp=super.getProcessWebPage();
         }
         return wp;
-    }    
+    }
     
+    /**
+     * Verifica si el usuario puede acceder al proceso.
+     * @param user Usuario.
+     * @return true si el usuario tiene permisos para ver el proceso, false en otro caso.
+     */
+    public boolean haveAccess(User user) {
+        return (isValid() && user.haveAccess(this));
+    }
+    
+    /**
+     * Verifica si el usuario puede instanciar el proceso.
+     * @param user Usuario.
+     * @return true si el usuario puede instanciar el proceso, false en otro caso.
+     */
+    public boolean canInstantiate(User user) {
+        boolean ret = false;
+        boolean hasStart = false;
+        Iterator<GraphicalElement> elements = listContaineds();
+        while (elements.hasNext()) {
+            GraphicalElement ge = elements.next();
+            if (ge instanceof StartEvent) {
+                hasStart = true;
+                ret = user.haveAccess(ge);
+                break;
+            }
+        }
+        return hasStart && ret;
+    }
 }
