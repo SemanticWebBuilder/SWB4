@@ -27,6 +27,8 @@ import java.util.Iterator;
 import java.util.StringTokenizer;
 import javax.mail.internet.InternetAddress;
 import org.semanticwb.Logger;
+import org.semanticwb.SWBPortal;
+import org.semanticwb.SWBRuntimeException;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.User;
 import org.semanticwb.process.utils.SWBScriptParser;
@@ -48,7 +50,12 @@ public class SendMail extends org.semanticwb.process.model.base.SendMailBase
         try
         {
             ArrayList<InternetAddress> address = new ArrayList<InternetAddress>();
-            String from = SWBScriptParser.parser(instance, user, getFrom());
+            String from = getFrom();
+            if (from == null || from.trim().length() == 0) {
+                from = SWBPortal.getEnv("af/adminEmail");
+            } else {
+                from = SWBScriptParser.parser(instance, user, getFrom());
+            }
             String subject = SWBScriptParser.parser(instance, user, getSubject());
             String content = SWBScriptParser.parser(instance, user, getContent());
             String to = SWBScriptParser.parser(instance, user, getTo());
@@ -76,7 +83,12 @@ public class SendMail extends org.semanticwb.process.model.base.SendMailBase
                     toAddress.setAddress(to);
                     address.add(toAddress);
                 }
-                SWBUtils.EMAIL.sendMail(from, user.getFullName(), address, null, null, subject, null, content, null, null, null);
+                
+                if (SWBUtils.EMAIL.isValidEmailAddress(from) && !address.isEmpty()) {
+                    SWBUtils.EMAIL.sendMail(from, user.getFullName(), address, null, null, subject, null, content, null, null, null);
+                } else {
+                    throw new SWBRuntimeException("SendMail - Ocurrió un problema al enviar el correo, las direcciones no son válidas");
+                }
             }
             //replaceTags(instance, getContent());
             
