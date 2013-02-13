@@ -86,8 +86,10 @@ public class SWBProcessMgr
         Iterator<FlowNodeInstance> it = getFlowNodeInstanceWithStatus(site, status);
         while (it.hasNext()) {
             FlowNodeInstance flowNodeInstance = it.next();
-            if (process == null || (process != null && flowNodeInstance.getProcessInstance().getProcessType().equals(process))) {
-                instances.add(flowNodeInstance);
+            if (flowNodeInstance.getFlowNodeType() instanceof UserTask) {
+                if (process == null || (process != null && flowNodeInstance.getProcessInstance().getProcessType().equals(process))) {
+                    instances.add(flowNodeInstance);
+                }
             }
         }
         return instances;
