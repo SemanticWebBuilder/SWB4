@@ -153,7 +153,11 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
                 //}
                 aListExternalPost.add(external);
             }
-            new Classifier(aListExternalPost, stream, this);
+            //Si el ArrayList tiene tamaño mayor a 0, entonces es que existen mensajes para enviar al clasificador
+            if(aListExternalPost.size()>0)
+            {
+                new Classifier(aListExternalPost, stream, this);
+            }
         } catch (Exception te) {
             te.printStackTrace();
             System.out.println("Failed to search tweets: " + te.getMessage());
