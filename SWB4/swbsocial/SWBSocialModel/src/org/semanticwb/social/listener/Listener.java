@@ -86,13 +86,24 @@ public class Listener implements SWBAppObject {
         {
             //synchronized(stream)
             {
+                int time2Review=3;  //tiempo para darle chance a swb de terminar de grabar todas las propiedades a un stream, ya que lo hace una por una
                 if(rbThread==null)  //TODO:Ver que hago cuando puedan llegar algunos otros stream que se modifiquen cuando aun no haya terminado el thread.
-                {
+                {//El problema aqui sería la concurrencia, si modificam un stream la variable rbThread va a ser nula, por lo tanto va ha entrar
+                    //pero si modifican un trhread y despues modifican otro antes de que concluya el tiempo para empezar a revisar los datos del stream
+                    //,osea time2Review*MILISEG_IN_SEGUNDO, entonces la variable no va a estar en null, y simplemente no va ha levantar(crear) el nuevo
+                    //timer del segundo stream que llegó, y si llegan mas, pues de ninguno de los otros, aunque es dificil que lleguen tantos antes de 
+                    //que empiece el primer timer a corres, osea, antes de que pase el tiempo marcado por time2Review*MILISEG_IN_SEGUNDO, que debe ser
+                    //2 o 3 segundos como maximo, en ese tiempo ya sw debio de haber guardado todas las propiedades del stream cuando se modifgica este, no 
+                    //recuerdo si también pasa esto cuando apenas se crea como nuevo, pero creo que sí.
                     //System.out.println("Entra a Enviar a ReBind...");
                     rbThread=new ReBindThread(stream);
-                    rbThread.sleep(2*MILISEG_IN_SEGUNDO);
+                    //Pongo a dormir el thread 3 segundos antes de levantarlo, ya que al actualizar un stream, se actualiza en el modelo
+                    //propiedad por propiedad y yo necesito saber si el tiempo es mayor a 0, si las redes sociales NO viene vacias
+                    //y si las frases a monitorear TAMPOCO vienen vacias, es por eso que pongo a dormir el thread para dar chance a swb
+                    //de que ponga todos los valores correspondientes al stream antes de revisar sus datos y ver si se levanta(crea) el timer o no.
+                    rbThread.sleep(time2Review*MILISEG_IN_SEGUNDO);   
                     rbThread.start();
-                    rbThread=null;
+                    rbThread=null;  //Elimino la variable y por lo tanto el thread se envía al gc
                     return true;
                 }
             }
@@ -137,14 +148,17 @@ public class Listener implements SWBAppObject {
             try
             {
                 //System.out.println("Entra a Listener/createUpdateTimers-2:"+stream.getURI());
+                System.out.println("ListerJ1");
                 if(!createTimer(stream))
                 {
                     //System.out.println("Entra a Listener/createUpdateTimers-3:"+stream.getURI());
+                    System.out.println("ListerJ1.1");
                     removeTimer(stream);
                     System.out.println("Elimino timer k");
                 }else
                 {
                     //System.out.println("Entra a Listener/createUpdateTimers-4:"+stream.getURI());
+                    System.out.println("ListerJ2");
                     Timer timer=removeTimer(stream);
                     timer=new Timer();
                     timer.schedule(new ListenerTask(stream), 0,stream.getPoolTime()*MILISEG_IN_SEGUNDO);
@@ -159,6 +173,7 @@ public class Listener implements SWBAppObject {
             }
         }else
         {
+            System.out.println("ListerJ3");
             if(createTimer(stream))
             {
                 //Se arranca un timer que se ejecutara cada tantos segundos configurados en el stream
@@ -227,6 +242,7 @@ public class Listener implements SWBAppObject {
      */
     private static boolean createTimer(Stream stream)
     {
+        System.out.println("ListerJ5");
         if(stream.isActive() && stream.getPoolTime() > 0 && stream.getPhrase()!=null && stream.getPhrase().trim().length()>0 && stream.listSocialNetworks().hasNext())
         {
             return true;
