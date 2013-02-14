@@ -332,6 +332,7 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
                             int cont = 0;
                             JSONObject dataOnBody = new JSONObject(phraseResp.getString("body"));
                             JSONArray postsData = dataOnBody.getJSONArray("data");
+                            ArrayList <ExternalPost> aListExternalPost=new ArrayList();
                             for (int k = 0; k < postsData.length(); k++) {
                                 cont++;
                                 ExternalPost external = new ExternalPost();
@@ -361,7 +362,12 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
                                 if (postsData.getJSONObject(k).has("type")) {
                                     external.setPostType(postsData.getJSONObject(k).getString("type"));
                                 }
-                                new Classifier(external, stream, this);
+                                aListExternalPost.add(external);
+                            }
+                            //Si el ArrayList tiene tamaño mayor a 0, entonces es que existen mensajes para enviar al clasificador
+                            if(aListExternalPost.size()>0)
+                            {
+                                new Classifier(aListExternalPost, stream, this);
                             }
                             if (cont == Facebook.QUERYLIMIT) {
                                 isThereMoreMsgs = true;  //Esto indica la posibilidad de que en una consulta siguiente, se obtengan más mensajes
