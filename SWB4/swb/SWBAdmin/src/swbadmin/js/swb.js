@@ -349,6 +349,46 @@
           }
       }
 
+function submitFormPortal(formid)
+      {
+          var obj=dojo.byId(formid);
+          var objd=dijit.byId(formid);
+          var fid=formid;
+          if(!obj && objd) //si la forma esta dentro de un dialog
+          {
+              obj=objd.domNode;
+              fid=obj;
+          }
+          if(!objd || objd.isValid())
+          {
+              dojo.xhrPost({
+                  contentType: "application/x-www-form-urlencoded; charset=utf-8",
+                  url: obj.action,
+                  form: fid,
+                  load: function (data)
+                  {
+                          var panel=getContentPanel(obj);
+                          if(panel)
+                          {
+                              try
+                              {
+                                  var aux=panel.href;
+                                  panel.attr('content',data);
+                                  panel.href=aux;
+                                  if(!panel.suportScripts)runScripts(data);
+                              }catch(e){alert(e.message);}
+                          }
+                  },
+                  error: function (error) {
+                          //alert('Error: ', error);
+                  }
+              });
+          }else
+          {
+              alert("Datos Inválidos...");
+          }
+      }
+
       function encodeExtendedCharacters(str)
       {
           str=""+str;
