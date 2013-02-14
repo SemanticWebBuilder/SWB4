@@ -5,10 +5,11 @@
 package org.semanticwb.social.listener;
 
 import java.net.SocketException;
+import java.util.ArrayList;
+import java.util.Iterator;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.social.ExternalPost;
-import org.semanticwb.social.PostIn;
 import org.semanticwb.social.SocialNetwork;
 import org.semanticwb.social.Stream;
 import org.semanticwb.social.util.SendPostThread;
@@ -28,7 +29,7 @@ public class ClassifierThread extends java.lang.Thread {
     private static Logger log = SWBUtils.getLogger(SendPostThread.class);
     /** The emails. */
     //PostIn post = null;
-    ExternalPost externalPost=null;
+    ArrayList <ExternalPost> aListExternalPost=null;
     Stream stream=null;
     SocialNetwork socialNetwork=null;
 
@@ -42,8 +43,8 @@ public class ClassifierThread extends java.lang.Thread {
         this.post = post;
     }**/
     
-    public ClassifierThread(ExternalPost externalPost, Stream stream, SocialNetwork socialNetwork) throws java.net.SocketException {
-        this.externalPost = externalPost;
+    public ClassifierThread(ArrayList <ExternalPost> aListExternalPost, Stream stream, SocialNetwork socialNetwork) throws java.net.SocketException {
+        this.aListExternalPost = aListExternalPost;
         this.stream = stream;
         this.socialNetwork = socialNetwork;
     }
@@ -56,7 +57,12 @@ public class ClassifierThread extends java.lang.Thread {
     {
         try
         {
-           new SentimentalDataClassifier(externalPost, stream, socialNetwork);
+          Iterator<ExternalPost> itExternalThreads=aListExternalPost.iterator();  
+          while(itExternalThreads.hasNext())
+          {
+              ExternalPost externalPost=itExternalThreads.next();
+              new SentimentalDataClassifier(externalPost, stream, socialNetwork);
+          }
            /*
             String words2classify = null;
             if (post instanceof MessageIn) {

@@ -5,6 +5,7 @@
 
 package org.semanticwb.social.listener;
 
+import java.util.ArrayList;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.social.ExternalPost;
@@ -40,10 +41,10 @@ public class Classifier {
     }
     * */
     
-    public Classifier (ExternalPost externalPost, Stream stream, SocialNetwork socialNetwork)
+    public Classifier (ArrayList <ExternalPost> aListExternalPost, Stream stream, SocialNetwork socialNetwork)
     {
         try{
-            ClassifierThread classThread=new ClassifierThread(externalPost, stream, socialNetwork);
+            ClassifierThread classThread=new ClassifierThread(aListExternalPost, stream, socialNetwork);
             //System.out.println("THREAD CREADO:"+classThread);
             classThread.start();
             //System.out.println("classThread.isAlive():"+classThread);

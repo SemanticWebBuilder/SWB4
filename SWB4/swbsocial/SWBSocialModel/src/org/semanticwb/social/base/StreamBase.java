@@ -4,7 +4,7 @@ package org.semanticwb.social.base;
    /**
    * Clase que contendra los streams que configurados para cada usuario 
    */
-public abstract class StreamBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Activeable,org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable
+public abstract class StreamBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Traceable,org.semanticwb.model.Activeable,org.semanticwb.model.Descriptiveable
 {
    /**
    * Clase que engloba a las diferentes clases que representan cada una de las redes sociales.
@@ -15,13 +15,13 @@ public abstract class StreamBase extends org.semanticwb.model.SWBClass implement
    */
     public static final org.semanticwb.platform.SemanticProperty social_hasStream_socialNetwork=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#hasStream_socialNetwork");
    /**
-   * Tipo de Sentimiento que se desea filtrar para un stream. 0=Neutro. 1=Positivo. 2=Negativo. (No debería de exisitir un valor diferente que este para esta propiedad). Exixte una constante a nivel de la clase SWBSocialUtils para estos valores.
+   * Propiedad que indica si en el stream se desea aceptar que entren los mensajes que sean clasificados con sentimiento negativo
    */
-    public static final org.semanticwb.platform.SemanticProperty social_Stream_SentimentalTypeFilter=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#Stream_SentimentalTypeFilter");
+    public static final org.semanticwb.platform.SemanticProperty social_filterSentimentalNegative=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#filterSentimentalNegative");
    /**
-   * Tipo de Intensidad que se desea filtrar para un stream. 2=Alta;1=Media;0=Baja;. (No debería de exisitir un valor diferente que este para esta propiedad). Exixte una constante a nivel de la clase SWBSocialUtils para estos valores.
+   * Propiedad que indica si en el stream se desea aceptar que entren los mensajes que sean clasificados con intensidad baja
    */
-    public static final org.semanticwb.platform.SemanticProperty social_stream_IntensitiveTypeFilter=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#stream_IntensitiveTypeFilter");
+    public static final org.semanticwb.platform.SemanticProperty social_filterIntensityLow=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#filterIntensityLow");
    /**
    * Lapso de tiempo en que se busca la información. Ej. Cada x tiempo
    */
@@ -36,7 +36,23 @@ public abstract class StreamBase extends org.semanticwb.model.SWBClass implement
     public static final org.semanticwb.platform.SemanticClass social_PostIn=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#PostIn");
     public static final org.semanticwb.platform.SemanticProperty social_hasPostIntInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#hasPostIntInv");
    /**
-   * Valor númerico de klout que se desea filtrar para un stream. Los usuarios que tengan este klout o más y que hablen en las redes sociales configuradas para el stream, seran tomados sus mensajes para ser guardados en el sistema.
+   * Propiedad que indica si en el stream se desea aceptar que entren los mensajes que sean clasificados con intensidad alta
+   */
+    public static final org.semanticwb.platform.SemanticProperty social_filterIntensityHigh=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#filterIntensityHigh");
+   /**
+   * Propiedad que indica si en el stream se desea aceptar que entren los mensajes que sean clasificados con sentimiento neutro
+   */
+    public static final org.semanticwb.platform.SemanticProperty social_filterSentimentalNeutral=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#filterSentimentalNeutral");
+   /**
+   * Propiedad que indica si en el stream se desea aceptar que entren los mensajes que sean clasificados con sentimiento positivo
+   */
+    public static final org.semanticwb.platform.SemanticProperty social_filterSentimentalPositive=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#filterSentimentalPositive");
+   /**
+   * Propiedad que indica si en el stream se desea aceptar que entren los mensajes que sean clasificados con intensidad media
+   */
+    public static final org.semanticwb.platform.SemanticProperty social_filterIntensityMedium=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#filterIntensityMedium");
+   /**
+   * Valor númerico minimo de klout que se desea filtrar para un stream. Los usuarios que tengan este klout o más y que hablen en las redes sociales configuradas para el stream, seran tomados sus mensajes para ser guardados en el sistema.
    */
     public static final org.semanticwb.platform.SemanticProperty social_stream_KloutValue=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#stream_KloutValue");
    /**
@@ -329,42 +345,6 @@ public abstract class StreamBase extends org.semanticwb.model.SWBClass implement
     }
 
 /**
-* Gets the Stream_SentimentalTypeFilter property
-* @return int with the Stream_SentimentalTypeFilter
-*/
-    public int getStream_SentimentalTypeFilter()
-    {
-        return getSemanticObject().getIntProperty(social_Stream_SentimentalTypeFilter);
-    }
-
-/**
-* Sets the Stream_SentimentalTypeFilter property
-* @param value long with the Stream_SentimentalTypeFilter
-*/
-    public void setStream_SentimentalTypeFilter(int value)
-    {
-        getSemanticObject().setIntProperty(social_Stream_SentimentalTypeFilter, value);
-    }
-
-/**
-* Gets the Stream_IntensitiveTypeFilter property
-* @return int with the Stream_IntensitiveTypeFilter
-*/
-    public int getStream_IntensitiveTypeFilter()
-    {
-        return getSemanticObject().getIntProperty(social_stream_IntensitiveTypeFilter);
-    }
-
-/**
-* Sets the Stream_IntensitiveTypeFilter property
-* @param value long with the Stream_IntensitiveTypeFilter
-*/
-    public void setStream_IntensitiveTypeFilter(int value)
-    {
-        getSemanticObject().setIntProperty(social_stream_IntensitiveTypeFilter, value);
-    }
-
-/**
 * Gets the Updated property
 * @return java.util.Date with the Updated
 */
@@ -431,6 +411,42 @@ public abstract class StreamBase extends org.semanticwb.model.SWBClass implement
     public void setDescription(String description, String lang)
     {
         getSemanticObject().setProperty(swb_description, description, lang);
+    }
+
+/**
+* Gets the FilterSentimentalNegative property
+* @return boolean with the FilterSentimentalNegative
+*/
+    public boolean isFilterSentimentalNegative()
+    {
+        return getSemanticObject().getBooleanProperty(social_filterSentimentalNegative);
+    }
+
+/**
+* Sets the FilterSentimentalNegative property
+* @param value long with the FilterSentimentalNegative
+*/
+    public void setFilterSentimentalNegative(boolean value)
+    {
+        getSemanticObject().setBooleanProperty(social_filterSentimentalNegative, value);
+    }
+
+/**
+* Gets the FilterIntensityLow property
+* @return boolean with the FilterIntensityLow
+*/
+    public boolean isFilterIntensityLow()
+    {
+        return getSemanticObject().getBooleanProperty(social_filterIntensityLow);
+    }
+
+/**
+* Sets the FilterIntensityLow property
+* @param value long with the FilterIntensityLow
+*/
+    public void setFilterIntensityLow(boolean value)
+    {
+        getSemanticObject().setBooleanProperty(social_filterIntensityLow, value);
     }
 
 /**
@@ -525,6 +541,24 @@ public abstract class StreamBase extends org.semanticwb.model.SWBClass implement
          }
          return ret;
     }
+
+/**
+* Gets the FilterIntensityHigh property
+* @return boolean with the FilterIntensityHigh
+*/
+    public boolean isFilterIntensityHigh()
+    {
+        return getSemanticObject().getBooleanProperty(social_filterIntensityHigh);
+    }
+
+/**
+* Sets the FilterIntensityHigh property
+* @param value long with the FilterIntensityHigh
+*/
+    public void setFilterIntensityHigh(boolean value)
+    {
+        getSemanticObject().setBooleanProperty(social_filterIntensityHigh, value);
+    }
    /**
    * Sets the value for the property Creator
    * @param value Creator to set
@@ -565,6 +599,24 @@ public abstract class StreamBase extends org.semanticwb.model.SWBClass implement
     }
 
 /**
+* Gets the FilterSentimentalNeutral property
+* @return boolean with the FilterSentimentalNeutral
+*/
+    public boolean isFilterSentimentalNeutral()
+    {
+        return getSemanticObject().getBooleanProperty(social_filterSentimentalNeutral);
+    }
+
+/**
+* Sets the FilterSentimentalNeutral property
+* @param value long with the FilterSentimentalNeutral
+*/
+    public void setFilterSentimentalNeutral(boolean value)
+    {
+        getSemanticObject().setBooleanProperty(social_filterSentimentalNeutral, value);
+    }
+
+/**
 * Gets the Title property
 * @return String with the Title
 */
@@ -595,6 +647,42 @@ public abstract class StreamBase extends org.semanticwb.model.SWBClass implement
     public void setTitle(String title, String lang)
     {
         getSemanticObject().setProperty(swb_title, title, lang);
+    }
+
+/**
+* Gets the FilterSentimentalPositive property
+* @return boolean with the FilterSentimentalPositive
+*/
+    public boolean isFilterSentimentalPositive()
+    {
+        return getSemanticObject().getBooleanProperty(social_filterSentimentalPositive);
+    }
+
+/**
+* Sets the FilterSentimentalPositive property
+* @param value long with the FilterSentimentalPositive
+*/
+    public void setFilterSentimentalPositive(boolean value)
+    {
+        getSemanticObject().setBooleanProperty(social_filterSentimentalPositive, value);
+    }
+
+/**
+* Gets the FilterIntensityMedium property
+* @return boolean with the FilterIntensityMedium
+*/
+    public boolean isFilterIntensityMedium()
+    {
+        return getSemanticObject().getBooleanProperty(social_filterIntensityMedium);
+    }
+
+/**
+* Sets the FilterIntensityMedium property
+* @param value long with the FilterIntensityMedium
+*/
+    public void setFilterIntensityMedium(boolean value)
+    {
+        getSemanticObject().setBooleanProperty(social_filterIntensityMedium, value);
     }
 
 /**

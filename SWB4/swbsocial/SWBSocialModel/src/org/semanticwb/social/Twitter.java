@@ -4,7 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
-import java.util.Date;
+import java.util.ArrayList;
 import java.util.List;
 import javaQuery.j2ee.tinyURL;
 import javax.servlet.http.HttpServletRequest;
@@ -14,11 +14,9 @@ import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.SWBModel;
 import org.semanticwb.model.User;
-import org.semanticwb.model.WebSite;
 import org.semanticwb.portal.api.SWBActionResponse;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
-import org.semanticwb.portal.api.SWBResourceURL;
 import org.semanticwb.social.listener.Classifier;
 import org.semanticwb.social.listener.twitter.SWBSocialStatusListener;
 import org.semanticwb.social.util.SWBSocialUtil;
@@ -134,7 +132,7 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
     public void listen(Stream stream) {
         //WebSite wsite=WebSite.ClassMgr.getWebSite(stream.getSemanticObject().getModel().getName());
         //System.out.println("Red SocialID:"+this.getId()+", Red Title:"+this.getTitle()+", sitio:"+wsite.getId());
-
+        ArrayList <ExternalPost> aListExternalPost=new ArrayList();
         try {
             twitter4j.Twitter twitter = new TwitterFactory().getInstance();
             Query query = new Query(stream.getPhrase());
@@ -153,9 +151,9 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
                 //if (tweet.getAnnotations().) { TODO: Ver si en las anotaciones, se encuentra una descripción del tweet
                 //    external.setDescription(postsData.getJSONObject(k).getString("description"));
                 //}
-                
-                new Classifier(external, stream, this);
+                aListExternalPost.add(external);
             }
+            new Classifier(aListExternalPost, stream, this);
         } catch (Exception te) {
             te.printStackTrace();
             System.out.println("Failed to search tweets: " + te.getMessage());
