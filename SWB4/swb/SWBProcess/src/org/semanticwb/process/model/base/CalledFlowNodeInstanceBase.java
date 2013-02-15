@@ -1,7 +1,7 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class CalledFlowNodeInstanceBase extends org.semanticwb.process.model.FlowNodeInstance implements org.semanticwb.process.model.ProcessTraceable,org.semanticwb.model.Traceable
+public abstract class CalledFlowNodeInstanceBase extends org.semanticwb.process.model.FlowNodeInstance implements org.semanticwb.model.Traceable,org.semanticwb.process.model.ProcessTraceable
 {
     public static final org.semanticwb.platform.SemanticClass swp_CalledFlowNodeInstance=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#CalledFlowNodeInstance");
    /**
