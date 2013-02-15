@@ -1,7 +1,7 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class RepositoryDirectoryBase extends org.semanticwb.model.WebPage implements org.semanticwb.model.Hiddenable,org.semanticwb.model.Countryable,org.semanticwb.model.Filterable,org.semanticwb.model.MetaTagable,org.semanticwb.model.Activeable,org.semanticwb.model.Searchable,org.semanticwb.model.Viewable,org.semanticwb.model.Expirable,org.semanticwb.model.CalendarRefable,org.semanticwb.model.FilterableClass,org.semanticwb.model.FilterableNode,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.RoleRefable,org.semanticwb.model.Rankable,org.semanticwb.model.Tagable,org.semanticwb.model.Localeable,org.semanticwb.model.Referensable,org.semanticwb.model.RuleRefable,org.semanticwb.model.TemplateRefable,org.semanticwb.model.PFlowRefable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Indexable,org.semanticwb.model.Resourceable,org.semanticwb.model.Traceable,org.semanticwb.model.Undeleteable,org.semanticwb.model.Trashable
+public abstract class RepositoryDirectoryBase extends org.semanticwb.model.WebPage implements org.semanticwb.model.Referensable,org.semanticwb.model.CalendarRefable,org.semanticwb.model.PFlowRefable,org.semanticwb.model.Undeleteable,org.semanticwb.model.Resourceable,org.semanticwb.model.Searchable,org.semanticwb.model.Expirable,org.semanticwb.model.Tagable,org.semanticwb.model.FilterableClass,org.semanticwb.model.RoleRefable,org.semanticwb.model.Activeable,org.semanticwb.process.model.Ownerpropertyable,org.semanticwb.model.Indexable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Localeable,org.semanticwb.model.Hiddenable,org.semanticwb.model.Trashable,org.semanticwb.model.Countryable,org.semanticwb.model.Rankable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Viewable,org.semanticwb.model.Filterable,org.semanticwb.model.FilterableNode,org.semanticwb.model.MetaTagable,org.semanticwb.model.Traceable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.TemplateRefable
 {
     public static final org.semanticwb.platform.SemanticClass swp_RepositoryElement=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#RepositoryElement");
     public static final org.semanticwb.platform.SemanticProperty swp_hasRepositoryElementInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#hasRepositoryElementInv");
@@ -397,6 +397,29 @@ public abstract class RepositoryDirectoryBase extends org.semanticwb.model.WebPa
             return it;
         }
        /**
+       * Gets all org.semanticwb.process.model.RepositoryDirectory with a determined OwnerProperty
+       * @param value OwnerProperty of the type org.semanticwb.process.model.OwnerProperty
+       * @param model Model of the org.semanticwb.process.model.RepositoryDirectory
+       * @return Iterator with all the org.semanticwb.process.model.RepositoryDirectory
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.RepositoryDirectory> listRepositoryDirectoryByOwnerProperty(org.semanticwb.process.model.OwnerProperty value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.RepositoryDirectory> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_hasOwnerProperty, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.RepositoryDirectory with a determined OwnerProperty
+       * @param value OwnerProperty of the type org.semanticwb.process.model.OwnerProperty
+       * @return Iterator with all the org.semanticwb.process.model.RepositoryDirectory
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.RepositoryDirectory> listRepositoryDirectoryByOwnerProperty(org.semanticwb.process.model.OwnerProperty value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.RepositoryDirectory> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_hasOwnerProperty,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
        * Gets all org.semanticwb.process.model.RepositoryDirectory with a determined WebPageVirtualChild
        * @param value WebPageVirtualChild of the type org.semanticwb.model.WebPage
        * @param model Model of the org.semanticwb.process.model.RepositoryDirectory
@@ -608,6 +631,71 @@ public abstract class RepositoryDirectoryBase extends org.semanticwb.model.WebPa
          if(obj!=null)
          {
              ret=(org.semanticwb.process.model.RepositoryElement)obj.createGenericInstance();
+         }
+         return ret;
+    }
+   /**
+   * Gets all the org.semanticwb.process.model.OwnerProperty
+   * @return A GenericIterator with all the org.semanticwb.process.model.OwnerProperty
+   */
+
+    public org.semanticwb.model.GenericIterator<org.semanticwb.process.model.OwnerProperty> listOwnerProperties()
+    {
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.process.model.OwnerProperty>(getSemanticObject().listObjectProperties(swp_hasOwnerProperty));
+    }
+
+   /**
+   * Gets true if has a OwnerProperty
+   * @param value org.semanticwb.process.model.OwnerProperty to verify
+   * @return true if the org.semanticwb.process.model.OwnerProperty exists, false otherwise
+   */
+    public boolean hasOwnerProperty(org.semanticwb.process.model.OwnerProperty value)
+    {
+        boolean ret=false;
+        if(value!=null)
+        {
+           ret=getSemanticObject().hasObjectProperty(swp_hasOwnerProperty,value.getSemanticObject());
+        }
+        return ret;
+    }
+   /**
+   * Adds a OwnerProperty
+   * @param value org.semanticwb.process.model.OwnerProperty to add
+   */
+
+    public void addOwnerProperty(org.semanticwb.process.model.OwnerProperty value)
+    {
+        getSemanticObject().addObjectProperty(swp_hasOwnerProperty, value.getSemanticObject());
+    }
+   /**
+   * Removes all the OwnerProperty
+   */
+
+    public void removeAllOwnerProperty()
+    {
+        getSemanticObject().removeProperty(swp_hasOwnerProperty);
+    }
+   /**
+   * Removes a OwnerProperty
+   * @param value org.semanticwb.process.model.OwnerProperty to remove
+   */
+
+    public void removeOwnerProperty(org.semanticwb.process.model.OwnerProperty value)
+    {
+        getSemanticObject().removeObjectProperty(swp_hasOwnerProperty,value.getSemanticObject());
+    }
+
+   /**
+   * Gets the OwnerProperty
+   * @return a org.semanticwb.process.model.OwnerProperty
+   */
+    public org.semanticwb.process.model.OwnerProperty getOwnerProperty()
+    {
+         org.semanticwb.process.model.OwnerProperty ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swp_hasOwnerProperty);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.process.model.OwnerProperty)obj.createGenericInstance();
          }
          return ret;
     }

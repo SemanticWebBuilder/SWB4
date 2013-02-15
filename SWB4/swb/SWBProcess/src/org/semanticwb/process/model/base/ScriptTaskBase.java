@@ -1,7 +1,7 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class ScriptTaskBase extends org.semanticwb.process.model.Task implements org.semanticwb.model.Referensable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Descriptiveable,org.semanticwb.process.model.ResourceAssignmentable,org.semanticwb.process.model.Callable,org.semanticwb.model.UserGroupRefable,org.semanticwb.process.model.ActivityConfable,org.semanticwb.model.RoleRefable,org.semanticwb.model.Traceable
+public abstract class ScriptTaskBase extends org.semanticwb.process.model.Task implements org.semanticwb.process.model.Callable,org.semanticwb.model.Referensable,org.semanticwb.process.model.ActivityConfable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.RoleRefable,org.semanticwb.model.Traceable,org.semanticwb.process.model.ResourceAssignmentable,org.semanticwb.model.RuleRefable,org.semanticwb.model.UserGroupRefable
 {
     public static final org.semanticwb.platform.SemanticProperty swp_scriptCode=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#scriptCode");
     public static final org.semanticwb.platform.SemanticClass swp_ScriptTask=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#ScriptTask");

@@ -26,8 +26,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import org.semanticwb.SWBPlatform;
 import org.semanticwb.model.SWBClass;
 import org.semanticwb.model.User;
+import org.semanticwb.platform.SemanticLiteral;
+import org.semanticwb.platform.SemanticProperty;
 
 /**Clase que representa una instancia de un objeto de procesos. Es la superclase
  * de todas las instancias de los nodos de flujo y almacena información del estado
@@ -243,6 +246,42 @@ public class Instance extends org.semanticwb.process.model.base.InstanceBase
             return process.getStatus();
         }
         return 0;
+    }
+    
+    public void setOwnerproperties(User user)
+    {
+        Iterator<OwnerProperty> it = getProcessInstance().getProcessType().listOwnerProperties();
+        while (it.hasNext())
+        {
+            OwnerProperty ownerProperty = it.next();
+            String propid = ownerProperty.getUserProperty();
+            SemanticProperty prop=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticPropertyById(propid);
+            if (prop.isDataTypeProperty())
+            {
+                getSemanticObject().addLiteralProperty(prop,getSemanticObject().getLiteralProperty(prop));
+            } else {
+                getSemanticObject().addObjectProperty(prop,getSemanticObject().getObjectProperty(prop));
+            }
+        }
+    }
+    
+    public void setOwnerProperty(String propid, Object value)
+    {
+        SemanticProperty prop=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticPropertyById(propid);
+        getSemanticObject().addLiteralProperty(prop, new SemanticLiteral(value));
+    }
+
+    public Object getOwnerProperty(String propid)
+    {
+        SemanticProperty prop=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticPropertyById(propid);
+        return getSemanticObject().getLiteralProperty(prop).getValue();
+    }
+
+    @Override
+    public void setAssignedto(User user)
+    {
+        super.setAssignedto(user);
+        setOwnerproperties(user);
     }
     
 }
