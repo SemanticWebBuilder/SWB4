@@ -143,6 +143,7 @@ public class SWBProcessMgr
         ProcessInstance pinst=process.createInstance();
         UserGroup usrgrp=user.getUserGroup();
         if(usrgrp!=null)pinst.setOwnerUserGroup(usrgrp);
+        pinst.setOwnerproperties(user);
         pinst.start(user);
         return pinst;
     }
