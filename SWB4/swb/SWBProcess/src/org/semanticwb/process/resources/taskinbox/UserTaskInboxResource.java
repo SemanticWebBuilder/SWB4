@@ -694,7 +694,7 @@ public class UserTaskInboxResource extends org.semanticwb.process.resources.task
                 UserGroup uug = user.getUserGroup();
 
                 if (iug != null && uug != null) { //Si la instancia y el usuario tienen grupo
-                    if (uug.equals(iug)) { //Si tienen el mismo grupo
+                    if (user.hasUserGroup(iug)) { //Si el usuario tiene el grupo de la instancia
                         hasGroup = true;
                     }
                 } else if (iug == null && uug == null) { //Si el proceso y el usuario no tienen grupo
