@@ -1,7 +1,7 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class ProcessBase extends org.semanticwb.process.model.ProcessElement implements org.semanticwb.model.Filterable,org.semanticwb.model.Referensable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Activeable,org.semanticwb.process.model.Containerable,org.semanticwb.model.TemplateRefable,org.semanticwb.model.Descriptiveable,org.semanticwb.process.model.Callable,org.semanticwb.model.CalendarRefable,org.semanticwb.model.Expirable,org.semanticwb.model.FilterableClass,org.semanticwb.model.FilterableNode,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.RoleRefable,org.semanticwb.model.Resourceable,org.semanticwb.model.Traceable,org.semanticwb.model.Trashable
+public abstract class ProcessBase extends org.semanticwb.process.model.ProcessElement implements org.semanticwb.process.model.Callable,org.semanticwb.model.Referensable,org.semanticwb.model.CalendarRefable,org.semanticwb.model.Resourceable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Expirable,org.semanticwb.model.Filterable,org.semanticwb.model.RoleRefable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Activeable,org.semanticwb.process.model.Ownerpropertyable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Traceable,org.semanticwb.model.RuleRefable,org.semanticwb.process.model.Containerable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.Trashable,org.semanticwb.model.TemplateRefable
 {
    /**
    * Objeto que define un Role dentro de un repositorio de usuarios aplicable a un Usuario para filtrar componente, seccion, plantillas, etc.
@@ -393,6 +393,29 @@ public abstract class ProcessBase extends org.semanticwb.process.model.ProcessEl
         public static java.util.Iterator<org.semanticwb.process.model.Process> listProcessByResource(org.semanticwb.model.Resource value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.process.model.Process> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasResource,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.Process with a determined OwnerProperty
+       * @param value OwnerProperty of the type org.semanticwb.process.model.OwnerProperty
+       * @param model Model of the org.semanticwb.process.model.Process
+       * @return Iterator with all the org.semanticwb.process.model.Process
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.Process> listProcessByOwnerProperty(org.semanticwb.process.model.OwnerProperty value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.Process> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_hasOwnerProperty, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.Process with a determined OwnerProperty
+       * @param value OwnerProperty of the type org.semanticwb.process.model.OwnerProperty
+       * @return Iterator with all the org.semanticwb.process.model.Process
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.Process> listProcessByOwnerProperty(org.semanticwb.process.model.OwnerProperty value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.Process> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_hasOwnerProperty,value.getSemanticObject(),sclass));
             return it;
         }
        /**
@@ -1109,6 +1132,71 @@ public abstract class ProcessBase extends org.semanticwb.process.model.ProcessEl
     public void setFilterByOwnerUserGroup(boolean value)
     {
         getSemanticObject().setBooleanProperty(swp_filterByOwnerUserGroup, value);
+    }
+   /**
+   * Gets all the org.semanticwb.process.model.OwnerProperty
+   * @return A GenericIterator with all the org.semanticwb.process.model.OwnerProperty
+   */
+
+    public org.semanticwb.model.GenericIterator<org.semanticwb.process.model.OwnerProperty> listOwnerProperties()
+    {
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.process.model.OwnerProperty>(getSemanticObject().listObjectProperties(swp_hasOwnerProperty));
+    }
+
+   /**
+   * Gets true if has a OwnerProperty
+   * @param value org.semanticwb.process.model.OwnerProperty to verify
+   * @return true if the org.semanticwb.process.model.OwnerProperty exists, false otherwise
+   */
+    public boolean hasOwnerProperty(org.semanticwb.process.model.OwnerProperty value)
+    {
+        boolean ret=false;
+        if(value!=null)
+        {
+           ret=getSemanticObject().hasObjectProperty(swp_hasOwnerProperty,value.getSemanticObject());
+        }
+        return ret;
+    }
+   /**
+   * Adds a OwnerProperty
+   * @param value org.semanticwb.process.model.OwnerProperty to add
+   */
+
+    public void addOwnerProperty(org.semanticwb.process.model.OwnerProperty value)
+    {
+        getSemanticObject().addObjectProperty(swp_hasOwnerProperty, value.getSemanticObject());
+    }
+   /**
+   * Removes all the OwnerProperty
+   */
+
+    public void removeAllOwnerProperty()
+    {
+        getSemanticObject().removeProperty(swp_hasOwnerProperty);
+    }
+   /**
+   * Removes a OwnerProperty
+   * @param value org.semanticwb.process.model.OwnerProperty to remove
+   */
+
+    public void removeOwnerProperty(org.semanticwb.process.model.OwnerProperty value)
+    {
+        getSemanticObject().removeObjectProperty(swp_hasOwnerProperty,value.getSemanticObject());
+    }
+
+   /**
+   * Gets the OwnerProperty
+   * @return a org.semanticwb.process.model.OwnerProperty
+   */
+    public org.semanticwb.process.model.OwnerProperty getOwnerProperty()
+    {
+         org.semanticwb.process.model.OwnerProperty ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swp_hasOwnerProperty);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.process.model.OwnerProperty)obj.createGenericInstance();
+         }
+         return ret;
     }
    /**
    * Gets all the org.semanticwb.process.model.GraphicalElement
