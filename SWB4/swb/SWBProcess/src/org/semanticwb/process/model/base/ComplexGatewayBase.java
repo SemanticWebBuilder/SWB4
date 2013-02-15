@@ -1,10 +1,10 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class ComplexGatewayBase extends org.semanticwb.process.model.Gateway implements org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable
+public abstract class ComplexGatewayBase extends org.semanticwb.process.model.Gateway implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable
 {
    /**
-   * Número de tokens o flujos completados necesarios para que la compuerta se active cuando se usa como compuerta convergente.
+   * N√∫mero de tokens o flujos completados necesarios para que la compuerta se active cuando se usa como compuerta convergente.
    */
     public static final org.semanticwb.platform.SemanticProperty swp_startTokens=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#startTokens");
     public static final org.semanticwb.platform.SemanticClass swp_ComplexGateway=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#ComplexGateway");
