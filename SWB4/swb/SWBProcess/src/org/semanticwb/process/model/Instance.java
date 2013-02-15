@@ -258,15 +258,16 @@ public class Instance extends org.semanticwb.process.model.base.InstanceBase
             SemanticProperty prop=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticPropertyById(propid);
             if (prop.isDataTypeProperty())
             {
-                getSemanticObject().addLiteralProperty(prop,getSemanticObject().getLiteralProperty(prop));
+                getSemanticObject().addLiteralProperty(prop, user.getSemanticObject().getLiteralProperty(prop));
             } else {
-                getSemanticObject().addObjectProperty(prop,getSemanticObject().getObjectProperty(prop));
+                getSemanticObject().addObjectProperty(prop, user.getSemanticObject().getObjectProperty(prop));
             }
         }
     }
     
     public void setOwnerProperty(String propid, Object value)
     {
+        //TODO: Revisar si es literal u objeto
         SemanticProperty prop=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticPropertyById(propid);
         getSemanticObject().addLiteralProperty(prop, new SemanticLiteral(value));
     }
@@ -280,7 +281,6 @@ public class Instance extends org.semanticwb.process.model.base.InstanceBase
     @Override
     public void setAssignedto(User user)
     {
-        super.setAssignedto(user);
         setOwnerproperties(user);
     }
     
