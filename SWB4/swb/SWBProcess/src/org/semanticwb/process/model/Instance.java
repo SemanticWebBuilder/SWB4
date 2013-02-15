@@ -27,9 +27,11 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import org.semanticwb.SWBPlatform;
+import org.semanticwb.model.GenericObject;
 import org.semanticwb.model.SWBClass;
 import org.semanticwb.model.User;
 import org.semanticwb.platform.SemanticLiteral;
+import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticProperty;
 
 /**Clase que representa una instancia de un objeto de procesos. Es la superclase
@@ -258,24 +260,47 @@ public class Instance extends org.semanticwb.process.model.base.InstanceBase
             SemanticProperty prop=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticPropertyById(propid);
             if (prop.isDataTypeProperty())
             {
-                getSemanticObject().addLiteralProperty(prop, user.getSemanticObject().getLiteralProperty(prop));
+                getSemanticObject().setLiteralProperty(prop, user.getSemanticObject().getLiteralProperty(prop));
             } else {
-                getSemanticObject().addObjectProperty(prop, user.getSemanticObject().getObjectProperty(prop));
+                getSemanticObject().setObjectProperty(prop, user.getSemanticObject().getObjectProperty(prop));
             }
         }
     }
     
     public void setOwnerProperty(String propid, Object value)
     {
-        //TODO: Revisar si es literal u objeto
         SemanticProperty prop=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticPropertyById(propid);
-        getSemanticObject().addLiteralProperty(prop, new SemanticLiteral(value));
+        setOwnerProperty(prop,value);
     }
-
+    
+    public void setOwnerProperty(SemanticProperty prop, Object value)
+    {
+        //TODO: Revisar si es literal u objeto
+        if(prop.isDataTypeProperty())
+        {
+            getSemanticObject().setLiteralProperty(prop, new SemanticLiteral(value));
+        }else
+        {
+            if(value instanceof SemanticObject)getSemanticObject().setObjectProperty(prop,(SemanticObject)value);
+            else if(value instanceof GenericObject)getSemanticObject().setObjectProperty(prop,((GenericObject)value).getSemanticObject());
+        }
+    }
+    
     public Object getOwnerProperty(String propid)
     {
         SemanticProperty prop=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticPropertyById(propid);
-        return getSemanticObject().getLiteralProperty(prop).getValue();
+        return getOwnerProperty(prop);
+    }
+
+    public Object getOwnerProperty(SemanticProperty prop)
+    {
+        if(prop.isDataTypeProperty())
+        {
+            return getSemanticObject().getLiteralProperty(prop).getValue();
+        }else
+        {
+            return getSemanticObject().getObjectProperty(prop);
+        }
     }
 
     @Override
