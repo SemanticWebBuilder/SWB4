@@ -306,6 +306,7 @@ public class Instance extends org.semanticwb.process.model.base.InstanceBase
     @Override
     public void setAssignedto(User user)
     {
+        super.setAssignedto(user);
         setOwnerproperties(user);
     }
     
