@@ -1,7 +1,7 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class MessageEndEventBase extends org.semanticwb.process.model.EndEventNode implements org.semanticwb.model.Descriptiveable,org.semanticwb.process.model.ActionCodeable,org.semanticwb.process.model.ThrowMessageable,org.semanticwb.model.Traceable
+public abstract class MessageEndEventBase extends org.semanticwb.process.model.EndEventNode implements org.semanticwb.process.model.ThrowMessageable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable,org.semanticwb.process.model.ActionCodeable
 {
     public static final org.semanticwb.platform.SemanticClass swp_MessageEndEvent=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#MessageEndEvent");
    /**
