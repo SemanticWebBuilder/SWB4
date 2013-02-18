@@ -31,10 +31,8 @@ import org.semanticwb.platform.SemanticProperty;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.sql.Timestamp;
-
+import java.text.SimpleDateFormat;
 import java.util.Date;
-
 import javax.servlet.http.HttpServletRequest;
 
 // TODO: Auto-generated Javadoc
@@ -56,34 +54,6 @@ public class TimeStamp extends org.semanticwb.model.base.TimeStampBase {
     }
 
     /* (non-Javadoc)
-     * @see org.semanticwb.model.base.FormElementBase#process(javax.servlet.http.HttpServletRequest, org.semanticwb.platform.SemanticObject, org.semanticwb.platform.SemanticProperty)
-     */
-    /**
-     * Process.
-     * 
-     * @param request the request
-     * @param obj the obj
-     * @param prop the prop
-     */
-    @Override
-    public void process(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String propName) {
-        if (prop.getDisplayProperty() == null) {
-            return;
-        }
-
-        String value = request.getParameter(propName);
-
-        if (value != null && prop.isDateTime()) {
-            // System.out.println("old:"+old+" value:"+value);
-            try {
-                obj.setDateTimeProperty(prop, new Timestamp(Long.parseLong(value)));
-            } catch (Exception e) {
-                log.error(e);
-            }
-        }
-    }
-
-    /* (non-Javadoc)
      * @see org.semanticwb.model.base.FormElementBase#renderElement(javax.servlet.http.HttpServletRequest, org.semanticwb.platform.SemanticObject, org.semanticwb.platform.SemanticProperty, java.lang.String, java.lang.String, java.lang.String)
      */
     /**
@@ -100,23 +70,16 @@ public class TimeStamp extends org.semanticwb.model.base.TimeStampBase {
     @Override
     public String renderElement(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String propName, String type,
                                 String mode, String lang) {
+        boolean DOJO   = false;
         if (obj == null) {
             obj = new SemanticObject();
         }
 
-//        boolean IPHONE = false;
-//        boolean XHTML  = false;
-//        boolean DOJO   = false;
+        if ("dojo".equals(type)) {
+            DOJO = true;
+        }
 
-//        if (type.equals("iphone")) {
-//            IPHONE = true;
-//        } else if (type.equals("xhtml")) {
-//            XHTML = true;
-//        } else if (type.equals("dojo")) {
-//            DOJO = true;
-//        }
-
-        StringBuffer ret   = new StringBuffer();
+        StringBuilder ret   = new StringBuilder();
         String       name  = propName;
         //String       label = prop.getDisplayName(lang);
         Date         ndate = new Date();
@@ -129,19 +92,33 @@ public class TimeStamp extends org.semanticwb.model.base.TimeStampBase {
         if (date != null) {
             ndate = date;
         }
-
+        SimpleDateFormat timeFormat = new SimpleDateFormat("'T'HH:mm");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         String value = ndate.toString();
 
-        if (mode.equals("edit") || mode.equals("create")) {
-            ret.append("<span name=\"" + name + "\">" + value + "</span>");
-
-            if (date != null) {
-                ret.append("<input type=\"hidden\" name=\"" + name + "\" value=\"" + date.getTime() + "\">");
+        if ("edit".equals(mode) || "create".equals(mode)) {
+            ret.append("<input name=\"").append(name).append("_date\" ");
+            if (DOJO) {
+                ret.append("dojoType=\"dijit.form.DateTextBox\" ");
             }
+            ret.append("value=\"").append(dateFormat.format(ndate)).append("\" />");
+            ret.append("<input name=\"").append(name).append("_time\" ");
+            if (DOJO) {
+                ret.append("dojoType=\"dijit.form.TimeTextBox\" ");
+            }
+            ret.append("value=\"").append(timeFormat.format(ndate)).append("\" />");
         } else if (mode.equals("view")) {
-            ret.append("<span name=\"" + name + "\">" + value + "</span>");
+            ret.append("<span name=\"").append(name).append("\">").append(value).append("</span>");
         }
-
+//        if (mode.equals("edit") || mode.equals("create")) {
+//            ret.append("<span name=\"" + name + "\">" + value + "</span>");
+//
+//            if (date != null) {
+//                ret.append("<input type=\"hidden\" name=\"" + name + "\" value=\"" + date.getTime() + "\">");
+//            }
+//        } else if (mode.equals("view")) {
+//            ret.append("<span name=\"" + name + "\">" + value + "</span>");
+//        }
         return ret.toString();
     }
 }
