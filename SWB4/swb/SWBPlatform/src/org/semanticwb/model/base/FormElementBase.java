@@ -22,7 +22,10 @@
  */
 package org.semanticwb.model.base;
 
+import java.sql.Timestamp;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Locale;
@@ -78,6 +81,7 @@ public class FormElementBase extends GenericObjectBase implements FormElement, G
     /* (non-Javadoc)
      * @see org.semanticwb.model.FormElement#validate(javax.servlet.http.HttpServletRequest, org.semanticwb.platform.SemanticObject, org.semanticwb.platform.SemanticProperty)
      */
+    @Override
     public void validate(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String propName) throws FormValidateException
     {
 
@@ -86,6 +90,7 @@ public class FormElementBase extends GenericObjectBase implements FormElement, G
     /* (non-Javadoc)
      * @see org.semanticwb.model.FormElement#process(javax.servlet.http.HttpServletRequest, org.semanticwb.platform.SemanticObject, org.semanticwb.platform.SemanticProperty)
      */
+    @Override
     public void process(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String propName)
     {
         String smode=request.getParameter("smode");
@@ -105,7 +110,21 @@ public class FormElementBase extends GenericObjectBase implements FormElement, G
                 //System.out.println("old:"+old);
                 if(value!=null && (value.equals("true") || value.equals("on")) && (old==null || old.equals("false")))obj.setBooleanProperty(prop, true);
                 else if((value==null || value.equals("false")) && old!=null && old.equals("true")) obj.setBooleanProperty(prop, false);
-            }else
+            } else if (prop.isDateTime()) {
+                value = request.getParameter(propName+"_date");
+                String tvalue = request.getParameter(propName+"_time");
+                
+                if (value != null && tvalue != null) {
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
+                    try {
+                        Date dt = sdf.parse(value+tvalue);
+                        Timestamp ts = new Timestamp(dt.getTime());
+                        obj.setDateTimeProperty(prop, ts);
+                    } catch (ParseException ex) {
+                        log.error(ex);
+                    }
+                }
+            } else
             {
                 if(value!=null)
                 {
