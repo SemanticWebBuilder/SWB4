@@ -267,6 +267,10 @@ public class TableGeneric implements SWBObserver {
 	            columnMetaData.put("IS_NULLABLE", resultSet.getString("IS_NULLABLE"));
 	            columnMetaData.put("COLUMN_DEF", resultSet.getString("COLUMN_DEF"));
 	            columnMetaData.put("COLUMN_NAME", resultSet.getString("COLUMN_NAME"));
+                    if ("Oracle".equalsIgnoreCase(dbmd.getDatabaseProductName()))
+                        columnMetaData.put("IS_NULLABLE", resultSet.getString("NULLABLE"));
+                    else
+                        columnMetaData.put("IS_NULLABLE", resultSet.getString("IS_NULLABLE"));
 	            columns.add(columnMetaData);
 	        }
 	        con.close();
