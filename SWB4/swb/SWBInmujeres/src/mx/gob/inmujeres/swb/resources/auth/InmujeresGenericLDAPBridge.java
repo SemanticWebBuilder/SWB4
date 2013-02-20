@@ -363,9 +363,12 @@ public class InmujeresGenericLDAPBridge extends ExtUserRepInt
 
             }
             String login=ru.getLogin();
-            String login_user = login + "@inmujeres.local";
+            if(login.indexOf("@")==-1)
+            {
+                login+="@inmujeres.local";
+            }
             Autentificacion aut=new Autentificacion();
-            if(!aut.getSubordinados(login_user).isEmpty())
+            if(!aut.getSubordinados(login).isEmpty())
             {
                 ru.addRole(role);
             }
