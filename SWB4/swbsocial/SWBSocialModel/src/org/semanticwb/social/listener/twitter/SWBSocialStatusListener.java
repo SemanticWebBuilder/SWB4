@@ -13,11 +13,9 @@ import org.semanticwb.social.MessageIn;
 import org.semanticwb.social.SocialNetwork;
 import org.semanticwb.social.SocialNetworkUser;
 import org.semanticwb.social.Stream;
-import org.semanticwb.social.listener.Classifier;
 import twitter4j.MediaEntity;
 import twitter4j.Place;
 import twitter4j.Status;
-import org.zkoss.zk.ui.event.*;
 import twitter4j.StatusDeletionNotice;
 
 /**
@@ -149,7 +147,7 @@ public class SWBSocialStatusListener implements twitter4j.StatusListener {
                         socialNetUser=SocialNetworkUser.ClassMgr.createSocialNetworkUser(model);
                         socialNetUser.setSnu_id(""+userId);
                         socialNetUser.setSnu_name(name);
-                        socialNetUser.setSnu_SocialNetwork(socialNetwork);
+                        //socialNetUser.setSnu_SocialNetwork(socialNetwork);
                         socialNetUser.setCreated(userNetworkCreatedDate);
                         //System.out.println("SocialNetworkUser Creado:"+socialNetUser.getSnu_id());
                     }else{

@@ -4,7 +4,7 @@ package org.semanticwb.social.base;
    /**
    * Clase que almacenara las diferentes cuentas de una organización para la red social Flicker. 
    */
-public abstract class FlickerBase extends org.semanticwb.social.SocialNetwork implements org.semanticwb.model.Traceable,org.semanticwb.social.Secreteable,org.semanticwb.social.Oauthable,org.semanticwb.model.Activeable,org.semanticwb.social.Listenerable,org.semanticwb.social.SocialNetPostable,org.semanticwb.social.Photoable,org.semanticwb.model.Descriptiveable
+public abstract class FlickerBase extends org.semanticwb.social.SocialNetwork implements org.semanticwb.model.Activeable,org.semanticwb.social.Photoable,org.semanticwb.social.Oauthable,org.semanticwb.social.Secreteable,org.semanticwb.social.Listenerable,org.semanticwb.model.Descriptiveable,org.semanticwb.social.SocialNetPostable,org.semanticwb.model.Traceable
 {
    /**
    * Clase que almacenara las diferentes cuentas de una organización para la red social Flicker.
@@ -128,29 +128,6 @@ public abstract class FlickerBase extends org.semanticwb.social.SocialNetwork im
         public static java.util.Iterator<org.semanticwb.social.Flicker> listFlickerByPostListenerContainer(org.semanticwb.social.PostListenerContainer value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.social.Flicker> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(social_hasPostListenerContainer,value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.social.Flicker with a determined SocialNetworkUsersInv
-       * @param value SocialNetworkUsersInv of the type org.semanticwb.social.SocialNetworkUser
-       * @param model Model of the org.semanticwb.social.Flicker
-       * @return Iterator with all the org.semanticwb.social.Flicker
-       */
-
-        public static java.util.Iterator<org.semanticwb.social.Flicker> listFlickerBySocialNetworkUsersInv(org.semanticwb.social.SocialNetworkUser value,org.semanticwb.model.SWBModel model)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.social.Flicker> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(social_hasSocialNetworkUsersInv, value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.social.Flicker with a determined SocialNetworkUsersInv
-       * @param value SocialNetworkUsersInv of the type org.semanticwb.social.SocialNetworkUser
-       * @return Iterator with all the org.semanticwb.social.Flicker
-       */
-
-        public static java.util.Iterator<org.semanticwb.social.Flicker> listFlickerBySocialNetworkUsersInv(org.semanticwb.social.SocialNetworkUser value)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.social.Flicker> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(social_hasSocialNetworkUsersInv,value.getSemanticObject(),sclass));
             return it;
         }
        /**

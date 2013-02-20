@@ -4,7 +4,7 @@ package org.semanticwb.social.base;
    /**
    * Clase que almacenara las diferentes cuentas de una organización para la red social YouTube. 
    */
-public abstract class YoutubeBase extends org.semanticwb.social.SocialNetwork implements org.semanticwb.model.Traceable,org.semanticwb.social.Secreteable,org.semanticwb.social.Videoable,org.semanticwb.social.Authenticable,org.semanticwb.model.Activeable,org.semanticwb.social.Listenerable,org.semanticwb.social.SocialNetPostable,org.semanticwb.model.Descriptiveable
+public abstract class YoutubeBase extends org.semanticwb.social.SocialNetwork implements org.semanticwb.model.Activeable,org.semanticwb.social.Secreteable,org.semanticwb.social.Listenerable,org.semanticwb.model.Descriptiveable,org.semanticwb.social.Videoable,org.semanticwb.social.SocialNetPostable,org.semanticwb.model.Traceable,org.semanticwb.social.Authenticable
 {
    /**
    * Clase que almacenara las diferentes cuentas de una organización para la red social YouTube.
@@ -128,29 +128,6 @@ public abstract class YoutubeBase extends org.semanticwb.social.SocialNetwork im
         public static java.util.Iterator<org.semanticwb.social.Youtube> listYoutubeByPostListenerContainer(org.semanticwb.social.PostListenerContainer value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.social.Youtube> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(social_hasPostListenerContainer,value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.social.Youtube with a determined SocialNetworkUsersInv
-       * @param value SocialNetworkUsersInv of the type org.semanticwb.social.SocialNetworkUser
-       * @param model Model of the org.semanticwb.social.Youtube
-       * @return Iterator with all the org.semanticwb.social.Youtube
-       */
-
-        public static java.util.Iterator<org.semanticwb.social.Youtube> listYoutubeBySocialNetworkUsersInv(org.semanticwb.social.SocialNetworkUser value,org.semanticwb.model.SWBModel model)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.social.Youtube> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(social_hasSocialNetworkUsersInv, value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.social.Youtube with a determined SocialNetworkUsersInv
-       * @param value SocialNetworkUsersInv of the type org.semanticwb.social.SocialNetworkUser
-       * @return Iterator with all the org.semanticwb.social.Youtube
-       */
-
-        public static java.util.Iterator<org.semanticwb.social.Youtube> listYoutubeBySocialNetworkUsersInv(org.semanticwb.social.SocialNetworkUser value)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.social.Youtube> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(social_hasSocialNetworkUsersInv,value.getSemanticObject(),sclass));
             return it;
         }
        /**
