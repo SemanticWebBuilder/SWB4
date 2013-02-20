@@ -34,6 +34,7 @@ import org.semanticwb.SWBRuntimeException;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.base.*;
 import org.semanticwb.platform.SemanticClass;
+import org.semanticwb.platform.SemanticLiteral;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticProperty;
 import org.semanticwb.platform.SemanticVocabulary;
@@ -881,5 +882,41 @@ public class User extends UserBase implements Principal
             }
         }
     }
+    
+    public void setUserProperty(String propid, Object value)
+    {
+        SemanticProperty prop=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticPropertyById(propid);
+        setUserProperty(prop,value);
+    }
+    
+    public void setUserProperty(SemanticProperty prop, Object value)
+    {
+        //TODO: Revisar si es literal u objeto
+        if(prop.isDataTypeProperty())
+        {
+            getSemanticObject().setLiteralProperty(prop, new SemanticLiteral(value));
+        }else
+        {
+            if(value instanceof SemanticObject)getSemanticObject().setObjectProperty(prop,(SemanticObject)value);
+            else if(value instanceof GenericObject)getSemanticObject().setObjectProperty(prop,((GenericObject)value).getSemanticObject());
+        }
+    }
+    
+    public Object getUserProperty(String propid)
+    {
+        SemanticProperty prop=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticPropertyById(propid);
+        return getUserProperty(prop);
+    }
+
+    public Object getUserProperty(SemanticProperty prop)
+    {
+        if(prop.isDataTypeProperty())
+        {
+            return getSemanticObject().getLiteralProperty(prop).getValue();
+        }else
+        {
+            return getSemanticObject().getObjectProperty(prop);
+        }
+    }    
 
 }
