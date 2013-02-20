@@ -79,6 +79,9 @@ public class SemanticObject
     /** The m_objs. */
     private static Map<String, SemanticObject>m_objs=new ConcurrentHashMap<String, SemanticObject>();
     
+    /** The m_uris. */
+    private static ConcurrentHashMap<String, String>m_uris=new ConcurrentHashMap<String, String>();
+    
     /** The m_no_objs. */
     private static Map<String, Object>m_no_objs=new HashMapCache<String, Object>(1000);
     
@@ -435,12 +438,22 @@ public class SemanticObject
         SemanticObject ret=getSemanticObject(uri);
         if(ret==null && !m_no_objs.containsKey(uri))
         {
-            //System.out.println("model0:"+uri+" uri:"+uri+" base:"+smodel);        
-            synchronized(SemanticObject.class)
+            String i_uri=m_uris.putIfAbsent(uri, uri);
+            if(i_uri==null)i_uri=uri;
+            
+//            System.out.println("Sync:"+uri);
+//            synchronized(SemanticObject.class)
+            synchronized(i_uri)
             {
                 ret=getSemanticObject(uri);
-                if(ret==null)
+                if(ret==null && !m_no_objs.containsKey(uri))
                 {
+//                    System.out.println("Loading:"+uri);
+//                    try
+//                    {
+//                        Thread.sleep(100);
+//                    }catch(Exception e){}
+                    
                     //System.out.println("createSemanticObject:"+uri);
                     if(smodel!=null)
                     {
