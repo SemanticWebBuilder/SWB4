@@ -809,8 +809,8 @@ public class NewBrand extends GenericResource {
         String lang=paramRequest.getUser().getLanguage();
         try {
             out.println("<div dojoType=\"dijit.layout.ContentPane\" style=\"border:0px; width:100%; height:100%\">");
-            //out.println("<form class=\"swbform\" id=\"frmImport1\" action=\"" + url.toString() + "\" dojoType=\"dijit.form.Form\" onSubmit=\"submitForm('frmImport1');try{document.getElementById('csLoading').style.display='inline';}catch(noe){};return false;\" method=\"post\">");
-            out.println("<form class=\"swbform\" id=\"frmImport1\" action=\"" + url.toString() + "\" dojoType=\"dijit.form.Form\" onSubmit=\"submitForm('frmImport1'); return false;\" method=\"post\">");
+            out.println("<form class=\"swbform\" id=\"frmImport1\" action=\"" + url.toString() + "\" dojoType=\"dijit.form.Form\" onSubmit=\"submitForm('frmImport1');try{document.getElementById('csLoading').style.display='inline';}catch(noe){};return false;\" method=\"post\">");
+            //out.println("<form class=\"swbform\" id=\"frmImport1\" action=\"" + url.toString() + "\" dojoType=\"dijit.form.Form\" onSubmit=\"submitForm('frmImport1'); return false;\" method=\"post\">");
             out.println("<fieldset>");
             out.println("<table>");
             out.append("<tr><td align=\"right\">");
@@ -863,7 +863,7 @@ public class NewBrand extends GenericResource {
             out.println("</table>");
             out.println("</fieldset>");
             out.println("</form>");            
-            //out.println("<span id=\"csLoading\" style=\"width: 100px; display: none\" align=\"center\">&nbsp;&nbsp;&nbsp;<img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/images/loading.gif\"/></span>");
+            out.println("<span id=\"csLoading\" style=\"width: 100px; display: none\" align=\"center\">&nbsp;&nbsp;&nbsp;<img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/images/loading.gif\"/></span>");
             out.println("</div>");
         } catch (Exception e) {
             log.debug(e);
