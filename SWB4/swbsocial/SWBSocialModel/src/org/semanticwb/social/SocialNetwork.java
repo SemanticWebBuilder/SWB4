@@ -26,8 +26,10 @@ public class SocialNetwork extends org.semanticwb.social.base.SocialNetworkBase
     {
         SWBModel swbModel=SWBContext.getSWBModel(post.getSemanticObject().getModel().getName());
         
-         // Se crea un onjeto de persistencia, el cual contiene el post, la red social y el identificador creado
-        // en dicha red social para dicho post
+         // Se crea un objeto de persistencia, el cual contiene el post, la red social y el identificador creado
+        // en dicha red social para dicho post, esto es necesario ya que cuando se envía un post a varias redes sociales
+        // c/una de ellas genera su propio id del mensaje que le llega (por parte de SWBSocial) y este identificador nosotros
+        //lo tenemos que guardar de este lado para darle trazabilidad, por ejemplo: si alguien contesta nuestro mensaje, etc.
         SocialPost newSocialPost=SocialPost.ClassMgr.createSocialPost(socialPostId, swbModel);
         newSocialPost.setSocialPost(post);
         newSocialPost.setSocialNetwork(socialNetwork);
@@ -42,7 +44,7 @@ public class SocialNetwork extends org.semanticwb.social.base.SocialNetworkBase
        postContainer.setPc_SocialNetworkInv(socialNetwork);
        //System.out.println("Datos completamente guardados..");
 
-       //PRUEBAS......
+       //................................CÓDIGOS DE PRUEBAS......
        //Código siguiente es solo para verificar de guardado, quitar despues...
        Iterator <SocialPost> itSocialPost=SocialPost.ClassMgr.listSocialPosts();
        while(itSocialPost.hasNext())
@@ -68,16 +70,18 @@ public class SocialNetwork extends org.semanticwb.social.base.SocialNetworkBase
             }
         }
     }
+    
+    /**
+     * Metodo que agrega un postIn a un objeto (instancia) de la clase PostListenerContainer, el cual sirve para buscar por mes y año, todos los Post de entrada 
+     * que han llegado por el listener
+     * @param post
+     * @param socialPostId
+     * @param socialNetwork 
+     */
 
     public void addReceivedPost(PostIn post, String socialPostId, SocialNetwork socialNetwork)
     {
         SWBModel swbModel=SWBContext.getSWBModel(post.getSemanticObject().getModel().getName());
-
-         // Se crea un onjeto de persistencia, el cual contiene el post, la red social y el identificador creado
-        // en dicha red social para dicho post
-        SocialPost newSocialPost=SocialPost.ClassMgr.createSocialPost(socialPostId, swbModel);
-        newSocialPost.setSocialPost(post);
-        newSocialPost.setSocialNetwork(socialNetwork);
 
         //Se crea un objeto de persistencia siempre y cuando no este creado para un ciero año y mes, de lo
         //contrario, se reutiliza uno para ese año y mes.

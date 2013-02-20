@@ -1,14 +1,22 @@
 package org.semanticwb.social;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.io.Reader;
 import java.io.UnsupportedEncodingException;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
 import javaQuery.j2ee.tinyURL;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
@@ -18,6 +26,7 @@ import org.semanticwb.portal.api.SWBActionResponse;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.social.listener.Classifier;
+import org.semanticwb.social.listener.Listener;
 import org.semanticwb.social.listener.twitter.SWBSocialStatusListener;
 import org.semanticwb.social.util.SWBSocialUtil;
 import twitter4j.FilterQuery;
@@ -39,7 +48,8 @@ import twitter4j.conf.ConfigurationBuilder;
 
 public class Twitter extends org.semanticwb.social.base.TwitterBase {
 
-    Logger log = SWBUtils.getLogger(Twitter.class);
+    private static Logger log = SWBUtils.getLogger(Twitter.class);
+    
     TwitterStream trial=null;
     
     private RequestToken requestToken;
@@ -313,6 +323,112 @@ System.out.println("URL callback="+address);
     @Override
     public String doRequestAccess() {
         return null;
+    }
+    
+    
+    public double getUserKlout(String twitterUserID)
+    {
+        String url_1="http://api.klout.com/v2/identity.json/tw/"+twitterUserID;
+        String kloutJsonResponse_1=getData(url_1);
+        System.out.println("kloutResult step-1:"+kloutJsonResponse_1);
+        
+        //Obtener id de json
+        try
+        {
+            if(kloutJsonResponse_1!=null)
+            {
+                JSONObject userData = new JSONObject(kloutJsonResponse_1);
+                String kloutUserId = userData != null && userData.get("id") != null ? (String) userData.get("id") : "";
+                System.out.println("kloutId de Resultado en Json:"+kloutUserId);
+            
+                //Segunda llamada a la red social Klout, para obtener Json de Score del usuario (kloutUserId) encontrado
+                if(kloutUserId!=null)
+                {
+                    String url_2="http://api.klout.com/v2/user.json/"+kloutUserId+"/score";
+                    String kloutJsonResponse_2=getData(url_2);
+                    System.out.println("kloutResult step-2-Json:"+kloutJsonResponse_2);
+
+                    if(kloutJsonResponse_2!=null)
+                    {
+                         JSONObject userScoreData = new JSONObject(kloutJsonResponse_2);
+                         Double kloutUserScore = userScoreData != null && userScoreData.get("score") != null ? (Double) userScoreData.get("score") : 0.00;
+                         return Math.rint(kloutUserScore.doubleValue());
+                    }
+                }
+            }
+        }catch(JSONException je)
+        {
+            
+        }
+        return 0;
+    }
+    
+    private static String getData(String url)
+    {
+        String key="8fkzgz7ngf7bth3nk94gnxkd";
+        url=url+"?key="+key;
+        URLConnection conex = null;
+        String answer = null;
+        try {
+            System.out.println("Url a enviar a Klout:"+url);
+            URL pagina = new URL(url);
+           
+            String host = pagina.getHost();
+            //Se realiza la peticion a la página externa
+            conex = pagina.openConnection();
+            /*
+            if (userAgent != null) {
+                conex.setRequestProperty("user-agent", userAgent);
+            }*/
+            if (host != null) {
+                conex.setRequestProperty("host", host);
+            }
+            conex.setDoOutput(true);
+
+            conex.setConnectTimeout(5000);
+        } catch (Exception nexc) {
+            System.out.println("nexc Error:"+nexc.getMessage());
+            conex = null;
+        }
+        
+        //Analizar la respuesta a la peticion y obtener el access token
+        if (conex != null) {
+            try
+            {
+                answer = getResponse(conex.getInputStream());
+            }catch(Exception e)
+            {
+                log.error(e);
+            }
+        }
+        return answer;
+        
+    }
+    
+    
+     /**
+     * Lee un flujo de datos y lo convierte en un {@code String} con su contenido codificado en UTF-8
+     * @param data el flujo de datos a convertir
+     * @return un {@code String} que representa el contenido del flujo de datos especificado, codificado en UTF-8
+     * @throws IOException si ocurre un problema en la lectura del flujo de datos
+     */
+    private static String getResponse(InputStream data) throws IOException {
+        
+        StringBuilder response = new StringBuilder(256);
+        try
+        {
+            Reader in = new BufferedReader(new InputStreamReader(data, "UTF-8"));
+            char[] buffer = new char[1000];
+            int charsRead = 0;
+            while (charsRead >= 0) {
+                response.append(buffer, 0, charsRead);
+                charsRead = in.read(buffer);
+            }
+        }catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+        return response.toString();
     }
 
 }

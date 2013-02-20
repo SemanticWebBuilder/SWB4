@@ -17,12 +17,15 @@ public class SocialNetworkUser extends org.semanticwb.social.base.SocialNetworkU
 
     public static SocialNetworkUser getSocialNetworkUserbyIDAndSocialNet(String userId, SocialNetwork socialNetwork, SWBModel model)
     {
+        System.out.println("entra getSocialNetworkUserbyIDAndSocialNet-1:"+socialNetwork);
         Iterator<SemanticObject> it=model.getSemanticModel().listSubjects(social_snu_id, userId); //No encuentra
         while(it.hasNext())
         {
             SemanticObject obj=it.next();
             SocialNetworkUser socialNetUser=(SocialNetworkUser)obj.createGenericInstance();
-            if(socialNetUser.getSnu_SocialNetwork()!=null && socialNetUser.getSnu_SocialNetwork().getId().equals(socialNetwork.getId()));
+            System.out.println("socialNetUser.getSnu_SocialNetwork().getId():"+socialNetUser.getSnu_SocialNetwork().getId());
+            System.out.println("socialNetwork.getSemanticObject().getSemanticClass().getSemanticObject().getId():"+socialNetwork.getSemanticObject().getSemanticClass().getSemanticObject().getId());
+            if(socialNetUser.getSnu_SocialNetwork()!=null && socialNetUser.getSnu_SocialNetwork().getId().equals(socialNetwork.getSemanticObject().getSemanticClass().getSemanticObject().getId()));
             {
                   return socialNetUser;
             }
