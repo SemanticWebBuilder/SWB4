@@ -269,11 +269,11 @@ public class Login implements InternalServlet
                         sendRedirect(response, uri);
                         return;
                     } else {
-                        formChangePwd(request, response, dparams, user, "Error: contraseña y confirmación diferentes");
+                        formChangePwd(request, response, dparams, pcUser, "Error: contraseña y confirmación diferentes");
                         return;
                     }
                 }else {
-                        formChangePwd(request, response, dparams, user, "Error: contraseña anterior inválida");
+                        formChangePwd(request, response, dparams, pcUser, "Error: contraseña anterior inválida");
                         return;
                     }
             } catch (NullPointerException npe)
