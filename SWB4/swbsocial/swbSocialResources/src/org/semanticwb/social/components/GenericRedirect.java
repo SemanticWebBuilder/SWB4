@@ -78,7 +78,7 @@ public final class GenericRedirect extends GenericForwardComposer <Component>
                action = SWBSocialResourceUtils.ACTION_EDIT;
            }
            TreeNodePage treeNodePage=null;
-           if(requestScope.get("optionWepPage")!=null)
+           if(requestScope.get("optionWepPage")!=null && !action.equals("community"))
            {
                 optionWepPage=(WebPage)requestScope.get("optionWepPage");
                 //win_genRedirect.setTitle("Creación de:"+optionWepPage.getTitle());
@@ -123,6 +123,8 @@ public final class GenericRedirect extends GenericForwardComposer <Component>
                {
                    buildTabs();
                }
+            }else if (action.equals("community")) {
+                iframe_genRedirect.setSrc(wsiteAdm.getWebPage("Community").getUrl());
             }
         }catch(Exception e)
         {
