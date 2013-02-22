@@ -307,7 +307,63 @@ public class SWBSocialResourceUtils {
     }
     
     
-     //COMIENZAN METODOS PARA USO EN ZKOSS
+    public static class Semantic
+    {
+        
+        /**
+         * Elimina un objeto semantico, si este objeto es de tipo (interface de la ontología) Childrenable, entonces, primero borra todos
+         * los hijos y despues el objeto semantico requerido.
+         * @param semObj Objeto semantico que se requiere eliminar
+         */
+        public static void removeSemObjTreeNode(SemanticObject semObj)
+        {
+           if(semObj!=null)
+           {
+               if(semObj.getSemanticClass().isSubClass(Childrenable.social_Childrenable))
+               {
+                   if(SWBSocialResourceUtils.Semantic.removeObjChildrenable(semObj))
+                   {
+                        semObj.remove();
+                   }
+               }else
+               {
+                    semObj.remove();
+               }
+           }
+        }
+
+        /**
+         * Metodo para eliminar los todos los hijos de un elementos que sea de tipo Childrenale, de manera recursiva.
+         * @param semObj SemanticObject en el cual buscara nodos hijos, si los tiene los elimina
+         * @return true: Si eliminó satisfactoriamente, false: si no lo hizo.
+         */
+        public static boolean removeObjChildrenable(SemanticObject semObj) {
+            try {
+                Childrenable childrenable = (Childrenable) semObj.getGenericInstance();
+                Iterator<Childrenable> itChildren = childrenable.listChildrenObjInvs();
+                while (itChildren.hasNext()) {
+                    Childrenable children = itChildren.next();
+                    if (children.listChildrenObjInvs().hasNext()) {
+                        if(removeObjChildrenable(children.getSemanticObject()))
+                        {
+                            //System.out.println("Hijo que elimina-0:"+children.getSemanticObject());
+                            children.getSemanticObject().remove();
+                        }
+                    } else {
+                        //System.out.println("Hijo que elimina-1:"+children.getSemanticObject());
+                        children.getSemanticObject().remove();
+                    }
+                }
+                return true;
+            } catch (Exception e) {
+                log.error(e);
+            }
+            return false;
+        }
+       
+    }
+    
+    //COMIENZAN METODOS PARA USO EN ZKOSS
     
     public static class Zkoss 
     {
@@ -344,7 +400,11 @@ public class SWBSocialResourceUtils {
             {
                 ElementTreeNode etn=(ElementTreeNode)treeNode;
                 SemanticObject semObj=SemanticObject.createSemanticObject(etn.getData().getUri());
-                etn.getData().setName(semObj.getProperty(Descriptiveable.swb_title));
+                System.out.println("etn.getData().getUri():"+etn.getData().getUri());
+                if(semObj!=null)    //NO ES UNA CATEGORÍA, SI ES NULO, QUIERE DECIR QUE SI ES UNA CATEGORÍA.
+                {
+                    etn.getData().setName(semObj.getProperty(Descriptiveable.swb_title));
+                }     
                 EventQueue<Event> eq = EventQueues.lookup("refreshNodo2Tree", EventQueues.SESSION, true);
                 eq.publish(new Event("onRefreshNode", null, treeNode));
             }
@@ -486,62 +546,6 @@ public class SWBSocialResourceUtils {
                     log.error(e);
                 }
             }
-        }
-       
-    }
-    
-    public static class Semantic
-    {
-        
-        /**
-         * Elimina un objeto semantico, si este objeto es de tipo (interface de la ontología) Childrenable, entonces, primero borra todos
-         * los hijos y despues el objeto semantico requerido.
-         * @param semObj Objeto semantico que se requiere eliminar
-         */
-        public static void removeSemObjTreeNode(SemanticObject semObj)
-        {
-           if(semObj!=null)
-           {
-               if(semObj.getSemanticClass().isSubClass(Childrenable.social_Childrenable))
-               {
-                   if(SWBSocialResourceUtils.Semantic.removeObjChildrenable(semObj))
-                   {
-                        semObj.remove();
-                   }
-               }else
-               {
-                    semObj.remove();
-               }
-           }
-        }
-
-        /**
-         * Metodo para eliminar los todos los hijos de un elementos que sea de tipo Childrenale, de manera recursiva.
-         * @param semObj SemanticObject en el cual buscara nodos hijos, si los tiene los elimina
-         * @return true: Si eliminó satisfactoriamente, false: si no lo hizo.
-         */
-        public static boolean removeObjChildrenable(SemanticObject semObj) {
-            try {
-                Childrenable childrenable = (Childrenable) semObj.getGenericInstance();
-                Iterator<Childrenable> itChildren = childrenable.listChildrenObjInvs();
-                while (itChildren.hasNext()) {
-                    Childrenable children = itChildren.next();
-                    if (children.listChildrenObjInvs().hasNext()) {
-                        if(removeObjChildrenable(children.getSemanticObject()))
-                        {
-                            //System.out.println("Hijo que elimina-0:"+children.getSemanticObject());
-                            children.getSemanticObject().remove();
-                        }
-                    } else {
-                        //System.out.println("Hijo que elimina-1:"+children.getSemanticObject());
-                        children.getSemanticObject().remove();
-                    }
-                }
-                return true;
-            } catch (Exception e) {
-                log.error(e);
-            }
-            return false;
         }
        
     }
