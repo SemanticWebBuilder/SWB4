@@ -1,3 +1,6 @@
+  4.2.4.0
+    - BUG: Perdía el contexto al cambiar contraseña en la autenticación si el usuario no ponia la contraseña anterior o ponia diferentes nuevas contraseñas (serch)
+    - Se redujo la contención en la creación de semanticObjects a sólo URIs equivalentes(jei)
   4.2.3.0
     - BUG: High concurrency on hash table for internal and depurl tables (serch)
     - Se agregó interface para soporte en AWS (serch)
