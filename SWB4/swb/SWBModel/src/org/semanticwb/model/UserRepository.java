@@ -335,14 +335,18 @@ public class UserRepository extends UserRepositoryBase {
                 ret = (User) it.next();
             }
             if (EXTERNAL) {
-                boolean sync=bridge.syncUser(email, ret);
-                if (sync && null == ret) {
+                try { 
+                    bridge.syncUser(email, ret);
+                } catch (Exception noe) {
+                    log.trace("Syncing external user by email... ", noe);
+                }
+                //if (sync && null == ret) {
                     aux = getSemanticObject().getRDFResource().getModel().listStatements(null, User.swb_usrEmail.getRDFProperty(), getSemanticObject().getModel().getRDFModel().createLiteral(email));
                     it = new GenericIterator(SWBUtils.Collections.copyIterator(aux).iterator(), true);
                     if (it.hasNext()) {
                         ret = (User) it.next();
                     }
-                }
+                //}
             }
         }
         return ret;
