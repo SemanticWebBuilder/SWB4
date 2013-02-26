@@ -6,6 +6,7 @@ package mx.gob.inmujeres.swb.resources.auth;
 
 import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Properties;
 
 import javax.naming.Context;
@@ -18,6 +19,10 @@ import javax.naming.directory.DirContext;
 import javax.naming.directory.InitialDirContext;
 import javax.naming.directory.SearchControls;
 import javax.naming.directory.SearchResult;
+import mx.gob.inmujeres.swb.UserExtended;
+import mx.gob.inmujeres.swb.resources.sem.base.Autentificacion;
+import mx.gob.inmujeres.swb.resources.sem.base.UserLogin;
+import mx.gob.inmujeres.swb.resources.sem.base.UserSubordinado;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Role;
@@ -338,11 +343,28 @@ public class InmujeresGenericLDAPBridge extends ExtUserRepInt
         Attributes answer = null;
 
         String cn = getCNFromLogin(login);
-        //System.out.println("CN:" + cn);
+        if (ctx == null)
+        {
+            throw new NamingException("Contexto de conexión nulo cn: " + cn);
+        }
         answer = ctx.getAttributes(cn, attrIDs);
 
         ctx.close();
         return answer;
+    }
+
+    private User getUser(String login)
+    {
+        Iterator<User> users = userRep.listUsers();
+        while (users.hasNext())
+        {
+            User user = users.next();
+            if (login.equals(user.getLogin()))
+            {
+                return user;
+            }
+        }
+        return null;
     }
 
     /**
@@ -353,7 +375,13 @@ public class InmujeresGenericLDAPBridge extends ExtUserRepInt
      */
     public void loadAttrs2RecUser(Attributes attrs, User ru)
     {
-
+        Autentificacion aut = new Autentificacion();
+        String login = ru.getLogin();
+        if (login.indexOf("@") == -1)
+        {
+            login += "@inmujeres.local";
+        }
+        List<UserSubordinado> subordinados = aut.getSubordinados(login);
         Role role = userRep.getRole("evaluador");
         if (role != null)
         {
@@ -362,17 +390,46 @@ public class InmujeresGenericLDAPBridge extends ExtUserRepInt
                 ru.removeRole(role);
 
             }
-            String login=ru.getLogin();
-            if(login.indexOf("@")==-1)
-            {
-                login+="@inmujeres.local";
-            }
-            Autentificacion aut=new Autentificacion();
-            if(!aut.getSubordinados(login).isEmpty())
+
+
+            if (!subordinados.isEmpty())
             {
                 ru.addRole(role);
             }
         }
+        UserExtended ext = UserExtended.ClassMgr.getUserExtended(ru.getId(), ru.getUserRepository());
+        if (ext == null)
+        {
+            ext = UserExtended.ClassMgr.createUserExtended(ru.getId(), ru.getUserRepository());
+        }
+        ext.removeAllSubordinado();
+        for (UserSubordinado subordinado : subordinados)
+        {
+            String loginSubordinado = subordinado.getLogin();
+            User userSubordinado = getUser(loginSubordinado);
+            ext.addSubordinado(userSubordinado);
+            UserExtended extSubordinado = UserExtended.ClassMgr.getUserExtended(userSubordinado.getId(), userSubordinado.getUserRepository());
+            if (extSubordinado == null)
+            {
+                extSubordinado = UserExtended.ClassMgr.createUserExtended(userSubordinado.getId(), userSubordinado.getUserRepository());
+            }
+            UserLogin infoSubordinado = aut.getCamposLogin(loginSubordinado + "@inmujeres.local");
+            extSubordinado.setArea(infoSubordinado.getAreaAdscripcion());
+            extSubordinado.setExtensionUser(infoSubordinado.getExtension());
+            extSubordinado.setLevel(infoSubordinado.getNivel());
+            extSubordinado.setNoEmpleado(infoSubordinado.getNoEmpleado());
+            extSubordinado.setPuesto(infoSubordinado.getPuesto());
+            extSubordinado.setRfc(infoSubordinado.getRfc());
+        }
+        UserLogin info = aut.getCamposLogin(login);
+        ext.setArea(info.getAreaAdscripcion());
+        ext.setExtensionUser(info.getExtension());
+        ext.setLevel(info.getNivel());
+        ext.setNoEmpleado(info.getNoEmpleado());
+        ext.setPuesto(info.getPuesto());
+        ext.setRfc(info.getRfc());
+
+
         try
         {
             if (!"null".equals(fieldFirstName))
