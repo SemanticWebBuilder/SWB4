@@ -159,7 +159,7 @@ public class ProcessObserver extends org.semanticwb.process.model.base.ProcessOb
                     if(ppr.isActive())
                     {
                         //System.out.println("checking:"+ppr.getProcessPeriod());
-                        if(ppr.getProcessPeriod().isOnSchedule())
+                        if(ppr.getProcessPeriod().isOnSchedule(flowNodeInstance))
                         {
                             try
                             {
@@ -186,7 +186,7 @@ public class ProcessObserver extends org.semanticwb.process.model.base.ProcessOb
                             if(ppr.isActive())
                             {
                                 //System.out.println("checking:"+ppr.getProcessPeriod());
-                                if(ppr.getProcessPeriod().isOnSchedule())
+                                if(ppr.getProcessPeriod().isOnSchedule(null))
                                 {
                                     try
                                     {
@@ -258,6 +258,7 @@ public class ProcessObserver extends org.semanticwb.process.model.base.ProcessOb
 
     }
 
+    @Override
     public void notify(SemanticObject obj, Object prop, String lang, String action)
     {
         //System.out.println(obj+" "+prop+" "+action+" "+SemanticObject.ACT_CREATE);
