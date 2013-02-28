@@ -87,7 +87,7 @@ public class ProcessPeriod extends org.semanticwb.process.model.base.ProcessPeri
      *
      * @return true, if is on schedule
      */
-    public boolean isOnSchedule() {
+    public boolean isOnSchedule(FlowNodeInstance fni) {
         boolean  ret   = false;
         Date     today = new Date();
         NodeList nl    = getNodeList();
@@ -98,7 +98,7 @@ public class ProcessPeriod extends org.semanticwb.process.model.base.ProcessPeri
             {
                 Node interval = nl.item(x);
                 try {
-                    ret = eval(today, interval);
+                    ret = eval(today, interval, fni);
                     if (ret) {
                         ret = true;
                         break;
@@ -119,14 +119,14 @@ public class ProcessPeriod extends org.semanticwb.process.model.base.ProcessPeri
      * @return true, if successful
      * @throws Exception the exception
      */
-    private boolean eval(Date today, Node interval) throws Exception {
+    private boolean eval(Date today, Node interval, FlowNodeInstance fni) throws Exception {
         boolean ret = true;
         Date inidate = today;
         Date exdate = null;
         Date cdate=new Date(today.getYear(),today.getMonth(),today.getDate(),today.getHours(),today.getMinutes());
 
         boolean hasInter=((Element)interval).getElementsByTagName("inter").getLength()>0;
-
+        
         if (interval != null) {
             NodeList nl = interval.getChildNodes();
 
@@ -231,6 +231,23 @@ public class ProcessPeriod extends org.semanticwb.process.model.base.ProcessPeri
                     {
                         ret = false;
                         break;
+                    } else if (name.equals("timer")) {
+                        String time = nl.item(x).getFirstChild().getNodeValue();
+                        long inter = Long.parseLong(time)*1000*60;
+                        if (fni != null) {
+                            GraphicalElement subpro = fni.getFlowNodeType().getParent();
+                            if(subpro != null && subpro instanceof FlowNode)
+                            {
+                                FlowNodeInstance source = fni.getRelatedFlowNodeInstance((FlowNode)subpro);
+                                if (source != null) {
+                                    long created = source.getCreated().getTime();
+                                    long now = System.currentTimeMillis();
+                                    if (Math.abs(now-created) < inter) {
+                                        ret = false;
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -352,5 +369,4 @@ public class ProcessPeriod extends org.semanticwb.process.model.base.ProcessPeri
         }
         return ret;
     }
-
 }
