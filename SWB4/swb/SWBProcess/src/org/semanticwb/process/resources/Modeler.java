@@ -988,7 +988,7 @@ public class Modeler extends GenericResource {
                                 sorble.setIndex(index);
                             }
                             
-                            if (ge instanceof TimerIntermediateCatchEvent) {
+                            if (ge instanceof IntermediateCatchEvent) {
                                 IntermediateCatchEvent ice = (IntermediateCatchEvent) ge;
                                 ice.setInterruptor(isInterrupting);
                             }
