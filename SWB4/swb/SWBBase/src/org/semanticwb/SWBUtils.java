@@ -3271,7 +3271,7 @@ public class SWBUtils {
          */
         public static void setSMTPTls(boolean tls)
         {
-            SWBUtils.EMAIL.smtptls = smtptls;
+            SWBUtils.EMAIL.smtptls = tls;
         }
 
         /**
