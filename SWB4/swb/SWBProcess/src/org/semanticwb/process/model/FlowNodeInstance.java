@@ -130,6 +130,19 @@ public class FlowNodeInstance extends org.semanticwb.process.model.base.FlowNode
         super.close(user,status,action);
         //System.out.println("close("+user+","+status+","+action+","+nextObjects+")");
         
+        //Verificar si la instancia tiene eventos intermedios relacionados y cerrarlos
+        if (this.getFlowNodeType() instanceof Activity) {
+            Iterator<GraphicalElement> childs = this.getFlowNodeType().listChilds();
+            while (childs.hasNext()) {
+                GraphicalElement child = childs.next();
+                if (child instanceof IntermediateCatchEvent) {
+                    IntermediateCatchEvent inter = (IntermediateCatchEvent)child;
+                    FlowNodeInstance tc = this.getRelatedFlowNodeInstance(inter);
+                    tc.close(user, Instance.STATUS_CLOSED, Instance.ACTION_ACCEPT, false);
+                }
+            }
+        }
+        
         final User _user=user;
         final int _status=status;
         final boolean _nextObjects=nextObjects;
