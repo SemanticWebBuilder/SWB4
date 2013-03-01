@@ -14,7 +14,8 @@
 
 Inicia...
 <%
-    WebSite wsite=paramRequest.getWebPage().getWebSite();
+    //WebSite wsite=paramRequest.getWebPage().getWebSite();
+    WebSite wsite=WebSite.ClassMgr.getWebSite("swbsocial");
     //Elimina todos los objetos(instancias) de la clase PunctuationSign
     Iterator <PunctuationSign> itPuntSigns=PunctuationSign.ClassMgr.listPunctuationSigns(wsite);
     while(itPuntSigns.hasNext())

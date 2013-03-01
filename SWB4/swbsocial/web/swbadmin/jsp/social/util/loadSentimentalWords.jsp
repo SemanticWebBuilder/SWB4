@@ -17,7 +17,9 @@ Inicia...
 %>
 
 <%
-    WebSite wsite=paramRequest.getWebPage().getWebSite();
+    //WebSite wsite=paramRequest.getWebPage().getWebSite();
+    
+    WebSite wsite=WebSite.ClassMgr.getWebSite("swbsocial");
 
     initialize();
 
