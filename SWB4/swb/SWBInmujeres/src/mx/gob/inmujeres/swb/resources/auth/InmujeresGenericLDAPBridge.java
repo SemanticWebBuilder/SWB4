@@ -420,6 +420,8 @@ public class InmujeresGenericLDAPBridge extends ExtUserRepInt
             extSubordinado.setNoEmpleado(infoSubordinado.getNoEmpleado());
             extSubordinado.setPuesto(infoSubordinado.getPuesto());
             extSubordinado.setRfc(infoSubordinado.getRfc());
+            extSubordinado.setCc(infoSubordinado.getCc());
+            extSubordinado.setCcDescription(infoSubordinado.getCcDescription());
         }
         UserLogin info = aut.getCamposLogin(login);
         ext.setArea(info.getAreaAdscripcion());
@@ -428,6 +430,8 @@ public class InmujeresGenericLDAPBridge extends ExtUserRepInt
         ext.setNoEmpleado(info.getNoEmpleado());
         ext.setPuesto(info.getPuesto());
         ext.setRfc(info.getRfc());
+        ext.setCc(info.getCc());
+        ext.setCcDescription(info.getCcDescription());
 
 
         try
