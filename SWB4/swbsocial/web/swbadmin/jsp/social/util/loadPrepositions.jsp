@@ -8,7 +8,9 @@
 
 Inicia...
 <%
-    WebSite wsite=paramRequest.getWebPage().getWebSite();
+    //WebSite wsite=paramRequest.getWebPage().getWebSite();
+    
+    WebSite wsite=WebSite.ClassMgr.getWebSite("swbsocial");
     //Elimina todos los objetos(instancias) de la clase SentimentWords
     Iterator <Prepositions> itPrepositions=Prepositions.ClassMgr.listPrepositionses(wsite);
     while(itPrepositions.hasNext())

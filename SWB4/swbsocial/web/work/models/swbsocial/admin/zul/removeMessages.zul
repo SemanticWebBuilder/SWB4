@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<zk xmlns="http://www.zkoss.org/2005/zul">
+    <vbox apply="org.semanticwb.social.resources.removeMessages" hflex="true">
+        <hbox>
+            <label id="lblMessages"/>:
+            <label id="lblStream"/>
+        </hbox>
+        <label id="lblTotal"/>
+        <hbox align="center">
+            <!--
+            <button id="btnCancel"/>-->
+            <button id="btnDelete" image="/swbadmin/images/ok.png"/>
+        </hbox>
+    </vbox>
+</zk>

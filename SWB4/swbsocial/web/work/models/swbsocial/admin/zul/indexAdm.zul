@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?page style="width:100%;height:100%"?>
 <?script content="jq.IE6_ALPHAFIX='.png';"?>
-<borderlayout id="main" height="100%" sclass="minSize">
+<borderlayout id="main" sclass="minSize" apply="org.semanticwb.social.components.Community">
     <!--Inicia parte superior de pantalla de admin-->
     <north>
 		<hbox hflex="true" width="100%" height="70px" align="center" style="background: #424242;">
@@ -97,13 +97,13 @@
             <!--termina árbol de navegación-->
             <!--Ventana de mensajes-->
             <!--Inicia área de trabajo (Contenido) -->
-            <center id="wrkSpcRoot" border="normal">
-               <div height="100%">
-                   <window id="msgWindow" visible="false" border="none">
-                       <label id="msgLabel" />
-                   </window>
-                   <include id="content" mode="defer" progressing="true" vflex="true" hflex="true"/>
-              </div>
+            <center id="wrkSpcRoot" border="none" autoscroll="true" vflex="true" hflex="true">
+                    <vbox hflex="true" vflex="true">
+                        <tabbox hflex="true">
+                            <tabs id="tabs_gen"/>
+                        </tabbox>
+                        <include id="content" mode="defer" progressing="true" vflex="true" hflex="true"/>
+                    </vbox>
             </center>
             <!--Termina área de trabajo (Contenido) -->
             <!--Comienza área de widgets-->

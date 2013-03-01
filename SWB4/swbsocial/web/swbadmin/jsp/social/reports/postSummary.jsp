@@ -13,7 +13,10 @@
 <%@page import="static org.semanticwb.social.resources.reports.PostSummary.*"%>
 <jsp:useBean id="paramRequest" scope="request" type="org.semanticwb.portal.api.SWBParamRequest"/>
 <%
-    WebSite wsite = paramRequest.getWebPage().getWebSite();
+    //WebSite wsite = paramRequest.getWebPage().getWebSite();
+    String wsiteId=request.getParameter("wsite");
+    WebSite wsite=WebSite.ClassMgr.getWebSite(wsiteId);
+    System.out.println("wsite-J1:"+wsite.getId()); 
     
 //////////////////////
 int ipage;
@@ -22,8 +25,10 @@ try {
 }catch (NumberFormatException nfe) {
     ipage = 1;
 }
-Iterator<PostIn> itposts = PostIn.ClassMgr.listPostIns(wsite);
+//Iterator<PostIn> itposts = PostIn.ClassMgr.listPostIns(wsite);
+Iterator<MessageIn> itposts = MessageIn.ClassMgr.listMessageIns(wsite); 
 long el = SWBUtils.Collections.sizeOf(itposts);
+System.out.println("el:"+el);
 long paginas = el / PAGE_SIZE;
 if(el % PAGE_SIZE != 0) {
     paginas++;
@@ -57,7 +62,7 @@ if(fin - inicio > PAGE_SIZE) {
 inicio++;
 //////////////////////
 
-        String wsiteId=request.getParameter("wsite");
+        System.out.println("wsite-J2:"+wsiteId);
         SWBResourceURL url = paramRequest.getRenderUrl().setCallMethod(SWBResourceURL.Call_DIRECT);
         System.out.println("wsiteId en Jsp de PostSummary:"+wsiteId);
         url.setParameter("wsite", wsiteId);
@@ -137,10 +142,10 @@ out.println("}");
         out.println(" });");
         out.println("</script>");
         out.println("<p style=\"font-size:12px; font-weight:bold; text-align:center\">Total: "+el+"</p>");
-        out.println("<div id=\"ctnergrid\" style=\"height:670px; width:98%; border: 1px solid #DAE1FE; text-align:center;\">");
+        out.println("<div id=\"ctnergrid\" style=\"height:580px; width:98%; border: 1px solid #DAE1FE; text-align:center;\">");
         out.println("  <div id=\"gridMaster\"></div>");
         out.println("</div>");
-        
+System.out.println("paginas:"+paginas);        
 // paginación
 if(paginas > 1) {
     SWBResourceURL pagURL = paramRequest.getRenderUrl().setMode(SWBResourceURL.Mode_VIEW);

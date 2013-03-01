@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<zk xmlns="http://www.zkoss.org/2005/zul">
+    <window id="window" width="400px" height="300px" apply="org.semanticwb.social.resources.reports.revalida">
+        <vbox align="center" hflex="true">
+            <hbox align="center" hflex="true">
+                <label id="lblFrase" value="Frase: "/>
+                <textbox hflex="true" rows="5" id="txtFrase" placeholder=""/>
+            </hbox>
+            <hbox align="center" hflex="true">
+                <label id="lblTipo" value="Tipo de sentimiento: "/>  
+                <listbox id="lbTipo" mold="select" hflex="true">
+                    <listitem label="Neutro" selected="true" value="0"/>
+                    <listitem label="Positivo" value="1"/>
+                    <listitem label="Negativo" value="2"/>
+                </listbox>
+            </hbox>
+            <hbox align="center" hflex="true">
+                <label id="lblIntensidad" value="Intensidad: "/>
+                <listbox id="lbIntensidad" mold="select" hflex="true">
+                    <listitem label="Media" selected="true" value="0"/>
+                    <listitem label="Alta" value="1"/>
+                    <listitem label="Baja" value="2"/>
+                </listbox>
+            </hbox>
+            <hbox align="center">
+                <button id="btnCancela" label="Cancelar" tooltiptext="Cancelar"/>
+                <button id="btnEnvia" label="Enviar" tooltiptext="Enviar"/>
+            </hbox>
+        </vbox>
+    </window>
+</zk>

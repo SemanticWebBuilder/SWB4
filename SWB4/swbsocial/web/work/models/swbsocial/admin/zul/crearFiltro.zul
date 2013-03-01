@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<zk xmlns="http://www.zkoss.org/2005/zul">
+    <vbox apply="org.semanticwb.social.resources.crearFiltro" hflex="true" align="center">
+        <separator/>
+        <vbox>
+            
+            <hbox align="center">
+                <label id="lblSentimiento" value="Sentimiento" style="font-weight:bold;font-size:12pt"/>
+                <checkbox id="chNeutro"/>
+                <checkbox id="chPositivo" image="/swbadmin/images/emopos.png" />
+                <checkbox id="chNegativo" image="/swbadmin/images/emoneg.png"/>
+            </hbox>
+            <separator/>
+            <hbox align="center">
+                <label id="lblIntensidad" value="Intensidad" style="font-weight:bold;font-size:12pt"/>
+                <checkbox id="chMedia" label="Media"/>
+                <checkbox id="chAlta" image="/swbadmin/images/feelpos.png"/>
+                <checkbox id="chBaja" label="Baja" image="/swbadmin/images/feelneg.png"/>
+            </hbox>
+            <separator/>
+            <hbox align="center">
+                <label id="lblKlout" value="Klout:" style="font-weight:bold;font-size:12pt"/>
+                <slider id="slKlout"/>
+                <separator/>
+                <intbox id="inbKlout"/>
+            </hbox>
+            <separator/>
+        </vbox>
+        <button id="btnCrear" image="/swbadmin/images/ok.png"/>
+    </vbox>
+</zk>
