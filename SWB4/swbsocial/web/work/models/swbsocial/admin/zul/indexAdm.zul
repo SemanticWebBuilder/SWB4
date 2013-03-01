@@ -83,7 +83,7 @@
                                         ElementTreeNode treeItem=(ElementTreeNode)evt.getData();
                                         rootTreeNode.insert(treeItem, rootTreeNode.getChildCount());
                                         String msg_brandCreated=SWBUtils.TEXT.getLocaleString("org.semanticwb.social.components.locales.genericCompMsgs", "msg_brandCreated",new Locale(user.getLanguage()));
-                                        SWBSocialResourceUtils.Zkoss.setStatusMessage_Event(msg_brandCreated+":"+treeItem.getData().getName());
+                                        SWBSocialResourceUtils.Zkoss.setStatusMessage(msg_brandCreated+":"+treeItem.getData().getName());
                                     }
                                  });
                             ]]>
