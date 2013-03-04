@@ -499,7 +499,7 @@ public class SWBRuleMgr
             }
         } catch (Exception e)
         {
-            log.error(e);
+            log.error("SWBRuleMgr.exp:"+user+" -> "+SWBUtils.XML.domToXml(node.getOwnerDocument()),e);
         }
         //System.out.println(ret);
         return ret;
