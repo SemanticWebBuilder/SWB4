@@ -397,12 +397,20 @@ public class SWBRuleMgr
                 }
             }else if(name.equals(TAG_INT_USERIP)) //validacion de roles
             {
-                if(cond.equals("="))
+                if(user!=null && user.getIp()!=null)
                 {
-                    return user.getIp().startsWith(value);
+                    if(cond.equals("="))
+                    {
+                        return user.getIp().startsWith(value);
+                    }else
+                    {
+                        return !user.getIp().startsWith(value);
+                    }
                 }else
                 {
-                    return !user.getIp().startsWith(value);
+                    //Revisar y eliminar estas lineas si no se cumple la condicion anterior
+                    log.warn("SWBRuleMgr.exp:"+user+" -> "+SWBUtils.XML.domToXml(node.getOwnerDocument()));
+                    return false;
                 }
             }else if(name.equals(TAG_WEBPAGEHISTORY_ATT)) //validacion de roles
             {
