@@ -52,6 +52,7 @@ import org.semanticwb.servlet.internal.FrmProcess;
 import org.semanticwb.servlet.internal.GoogleSiteMap;
 import org.semanticwb.servlet.internal.InternalProxy;
 import org.semanticwb.servlet.internal.InternalServlet;
+import org.semanticwb.servlet.internal.LinkedData;
 import org.semanticwb.servlet.internal.Login;
 import org.semanticwb.servlet.internal.Monitor;
 import org.semanticwb.servlet.internal.MultipleFileUploader;
@@ -547,6 +548,10 @@ public class SWBVirtualHostFilter implements Filter
             InternalServlet p3p = new P3PFile();
             intServlets.put("w3c", p3p);
             p3p.init(filterConfig.getServletContext());
+            
+            InternalServlet linkedData = new LinkedData();
+            intServlets.put("resource", linkedData);
+            linkedData.init(filterConfig.getServletContext());            
 
             File file = new File(SWBUtils.getApplicationPath() + "/WEB-INF/depurls.txt");
             if (file.exists())
