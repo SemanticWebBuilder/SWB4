@@ -35,7 +35,9 @@ import com.hp.hpl.jena.query.*;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.RDFNode;
 import java.util.Iterator;
+import java.util.Map;
 import org.semanticwb.SWBPlatform;
+import org.semanticwb.platform.SemanticModel;
 
 
 
@@ -76,7 +78,8 @@ public class SWBADBSparql extends GenericResource {
         PrintWriter out=response.getWriter();
         String _query=request.getParameter("query");
         if(_query==null)_query="";
-        else _query=_query.trim();
+        else _query=_query.trim();        
+        String smodel=request.getParameter("model");
 
         out.println("<div class=\"swbform\">");
         out.println("<form dojoType=\"dijit.form.Form\" id=\""+getResourceBase().getId()+"/sparql\" action=\""+paramRequest.getRenderUrl()+"\" method=\"post\" onsubmit=\"submitForm('"+getResourceBase().getId()+"/sparql'); return false;\">");
@@ -95,6 +98,23 @@ public class SWBADBSparql extends GenericResource {
         out.println("<tr><td class=\"tabla\">");
         out.println("SPARQL:");
         out.println("</td></tr>");
+        out.println("<tr><td>");
+        out.print("Model: <select name=\"model\">");
+        out.print("<option value=\"_\">Ontology</option>");
+        
+        Iterator<Map.Entry<String,SemanticModel>> it2=SWBPlatform.getSemanticMgr().getModels().iterator();
+        while (it2.hasNext())
+        {
+            SemanticModel semanticModel = it2.next().getValue();
+            String selected="";
+            if(semanticModel.getName().equals(smodel))
+            {
+                selected=" selected";
+            }
+            out.print("<option value=\""+semanticModel.getName()+"\""+selected+">"+semanticModel.getName()+"</option>");
+        }        
+        out.println("</select>");
+        out.println("</td></tr>");        
         out.println("<tr><td>");
         out.print("<textarea name=\"query\" rows=10 cols=80>");
         out.print(_query);
@@ -116,6 +136,8 @@ public class SWBADBSparql extends GenericResource {
                 out.println("<table border=0>");
 
                 Model model=SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel();
+                
+                if(smodel!=null && !smodel.equals("_"))model=SWBPlatform.getSemanticMgr().getModel(smodel).getRDFModel();
 
                 String queryString = _query;
 
