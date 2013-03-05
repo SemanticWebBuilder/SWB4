@@ -35,7 +35,7 @@ import org.semanticwb.portal.api.GenericAdmResource;
 import org.semanticwb.portal.api.SWBActionResponse;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
-import twitter4j.Twitter;
+//import twitter4j.Twitter;
 
 // TODO: Auto-generated Javadoc
 /**
