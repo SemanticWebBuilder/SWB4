@@ -15,6 +15,7 @@ import org.semanticwb.social.SocialNetworkUser;
 import org.semanticwb.social.Stream;
 import twitter4j.MediaEntity;
 import twitter4j.Place;
+import twitter4j.StallWarning;
 import twitter4j.Status;
 import twitter4j.StatusDeletionNotice;
 
@@ -187,6 +188,11 @@ public class SWBSocialStatusListener implements twitter4j.StatusListener {
 
     @Override
     public void onException(Exception excptn) {
+    }
+
+    @Override
+    public void onStallWarning(StallWarning sw) {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
 }
