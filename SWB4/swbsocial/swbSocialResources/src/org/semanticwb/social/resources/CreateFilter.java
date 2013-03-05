@@ -13,6 +13,7 @@ import org.semanticwb.model.WebSite;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.social.Stream;
+import org.semanticwb.social.utils.SWBSocialResourceUtils;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
@@ -25,9 +26,9 @@ import org.zkoss.zul.*;
  *
  * @author carlos.alvarez
  */
-public class crearFiltro extends GenericForwardComposer<Component> {
+public class CreateFilter extends GenericForwardComposer<Component> {
 
-    private static Logger log = SWBUtils.getLogger(crearFiltro.class);
+    private static Logger log = SWBUtils.getLogger(CreateFilter.class);
     private SemanticObject semObject = null;
     private SWBParamRequest paramRequest = null;
     private User user = null;
@@ -103,10 +104,10 @@ public class crearFiltro extends GenericForwardComposer<Component> {
         if (stream.isFilterIntensityLow()) {
             chBaja.setChecked(true);
         }
-        if (stream.getStream_KloutValue() > 0) {
+//        if (stream.getStream_KloutValue() >= 0) {
             slKlout.setCurpos(stream.getStream_KloutValue());
             inbKlout.setValue(stream.getStream_KloutValue());
-        }
+//        }
         btnCrear.setLabel(SWBUtils.TEXT.getLocaleString(sLocale, "guardar", localeP));
         btnCrear.setTooltiptext(SWBUtils.TEXT.getLocaleString(sLocale, "guardar", localeP));
         btnCrear.addEventListener("onClick", new crearElFiltro());
@@ -145,9 +146,12 @@ public class crearFiltro extends GenericForwardComposer<Component> {
             } else {
                 stream.setFilterIntensityLow(false);
             }
-            if (slKlout.getCurpos() != 0) {
-                stream.setStream_KloutValue(inbKlout.intValue());
-            }
+//            if (slKlout.getCurpos() != 0) {
+                stream.setStream_KloutValue(slKlout.getCurpos());
+//            }
+            
+            SWBSocialResourceUtils.Zkoss.setStatusMessage("Filtro Actualizado...");
+            
         }
     }
 

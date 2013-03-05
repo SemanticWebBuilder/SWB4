@@ -228,6 +228,7 @@ public final class SWBSTreeComposer extends GenericForwardComposer<Component> {
                                                         action = TreeNodePage.getAction();
                                                     }
                                                 }
+                                                System.out.println("Antes de:"+zulPage);
                                                 WebSite wsite = (WebSite) semObj.getModel().getModelObject().createGenericInstance();
                                                 loadTab(element.getIconElement(), element.getName(), element.getUri() + wsite.getId(), itemValue, zulPage, action, wpageOption, wsite);
                                             }
@@ -279,7 +280,7 @@ public final class SWBSTreeComposer extends GenericForwardComposer<Component> {
 
                                         @Override
                                         public void onEvent(Event event) throws Exception {
-                                            messageBox.show(msg_sureOfdelete + ":" + itemValue.getData().getName(), "deleteConfirm", Messagebox.YES | Messagebox.NO, Messagebox.QUESTION,
+                                            messageBox.show(msg_sureOfdelete + ":" + itemValue.getData().getName(), "Eliminar elemento", Messagebox.YES | Messagebox.NO, Messagebox.QUESTION,
                                                     //messageBox.show("Esta seguro de eliminar este elemento?", "deleteConfirm", Messagebox.YES|Messagebox.NO, Messagebox.QUESTION,
                                                     new EventListener() {
 
@@ -393,9 +394,8 @@ public final class SWBSTreeComposer extends GenericForwardComposer<Component> {
 
                                         @Override
                                         public void onEvent(Event event) throws Exception {
-                                            messageBox.show(msg_sureOfdelete + ":" + itemValue.getData().getName(), "deleteConfirm", Messagebox.YES | Messagebox.NO, Messagebox.QUESTION,
+                                            messageBox.show(msg_sureOfdelete + ":" + itemValue.getData().getName(), "Eliminar Marca", Messagebox.YES | Messagebox.NO, Messagebox.QUESTION,
                                                     new EventListener() {
-
                                                         public void onEvent(Event evt) {
                                                             SemanticObject semObj = SemanticObject.createSemanticObject(itemValue.getData().getUri());
                                                             if (semObj != null) {
@@ -405,9 +405,7 @@ public final class SWBSTreeComposer extends GenericForwardComposer<Component> {
                                                                     WebSite wsite = (WebSite) semObj.getModel().getModelObject().createGenericInstance();
                                                                     try {
                                                                         ((Tab) page.getFellow("idTab" + element.getUri() + wsite.getId())).close();
-//                                                                        ((Tab) page.getFellow("idTab" + element.getUri() + semObj.getId())).close();
                                                                     } catch (Exception e) {
-                                                                        e.printStackTrace();
                                                                     }
                                                                 }
                                                                 elemenetTreeModel.remove(itemValue);
@@ -435,8 +433,8 @@ public final class SWBSTreeComposer extends GenericForwardComposer<Component> {
                             final Treeitem selectedTreeItem = (Treeitem) event.getTarget().getFellow("xxx" + event.getTarget().getAttribute("xxx"));   //Charly
                             final ElementTreeNode itemValue = (ElementTreeNode) selectedTreeItem.getValue();
                             final SemanticObject semObj = SemanticObject.createSemanticObject(itemValue.getData().getUri());
-                            if (!isCategory(itemValue.getData())) { //Si es una categoría
-                                if (itemValue.getParent().getData().getUri().equals("socialBrands")) {
+                            if (!isCategory(itemValue.getData())) { //Si No es una categoría
+                                if (itemValue.getParent().getData().getUri().equals("socialBrands")) {  //Si es una marca
                                     WebPage siteEditWebPage = wsiteAdm.getWebPage("siteOpt_Edit");
                                     String zulPage = null;
                                     String action = SWBSocialResourceUtils.ACTION_EDIT;
@@ -451,7 +449,7 @@ public final class SWBSTreeComposer extends GenericForwardComposer<Component> {
                                     }
                                     WebSite wsite = (WebSite) semObj.getModel().getModelObject().createGenericInstance();
                                     loadTab(element.getIconElement(), element.getName(), element.getUri() + wsite.getId(), itemValue, zulPage, action, siteEditWebPage, wsite);
-                                } else {
+                                } else {    //Si es un elemento
                                     WebPage wpage = wsiteAdm.getWebPage(itemValue.getData().getCategoryID());
                                     String zulPage = "";
                                     if (wpage != null && wpage instanceof TreeNodePage) {
@@ -460,6 +458,7 @@ public final class SWBSTreeComposer extends GenericForwardComposer<Component> {
                                             zulPage = TreeNodePage.getZulResourcePath();
                                         }
                                     }
+                                    System.out.println("zulPage:"+zulPage);
                                     WebSite wsite = WebSite.ClassMgr.getWebSite(SemanticObject.getSemanticObject(itemValue.getData().getUri()).getModel().getName());
                                     loadTab(element.getIconElement(), element.getName(), element.getUri() + wsite.getId(), itemValue, zulPage, SWBSocialResourceUtils.ACTION_DOUBLECLICK, null, wsite);
                                 }
@@ -551,6 +550,7 @@ public final class SWBSTreeComposer extends GenericForwardComposer<Component> {
             final WebPage wpageOption,
             final WebSite wsite) {
         content.setSrc(null);
+        System.out.println("loadTab zulPage:"+zulPage);
         content.setSrc(zulPage);
         content.setDynamicProperty("objUri", URLEncoder.encode(itemValue.getData().getUri()));
         content.setDynamicProperty("paramRequest", paramRequest);
@@ -573,7 +573,7 @@ public final class SWBSTreeComposer extends GenericForwardComposer<Component> {
             tbGral.setParent(tabs_gen);
             tbGral.setSelected(true);
         } catch (Exception e) {
-            ((Tab) self.getFellow("idTab" + uri)).setSelected(true);
+            ((Tab) page.getFellow("idTab" + uri)).setSelected(true);
         }
         tbGral.addEventListener(Events.ON_SELECT, new EventListener<Event>() {
 
