@@ -275,7 +275,7 @@ public class SWBACollectionConfig extends GenericAdmResource {
 //                        out.println("</option>");
 //                    }
 
-                    itsemcls = SWBComparator.sortSermanticObjects(comp,SWBPlatform.getSemanticMgr().getVocabulary().listSemanticClasses());
+                    itsemcls = SWBComparator.sortSemanticObjects(comp,SWBPlatform.getSemanticMgr().getVocabulary().listSemanticClasses());
                     while (itsemcls.hasNext()) {
                         
                         SemanticClass semClass = itsemcls.next();

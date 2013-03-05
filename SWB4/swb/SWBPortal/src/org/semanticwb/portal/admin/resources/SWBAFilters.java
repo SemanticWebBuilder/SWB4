@@ -185,7 +185,7 @@ public class SWBAFilters extends SWBATree {
                     
                     Iterator<SemanticObject> it=obj.listHerarquicalChilds();
 
-                    Iterator<SemanticObject> it2=SWBComparator.sortSermanticObjects(user.getLanguage(),it);
+                    Iterator<SemanticObject> it2=SWBComparator.sortSemanticObjects(user.getLanguage(),it);
                     while(it2.hasNext())
                     {
                         SemanticObject ch=it2.next();
@@ -250,7 +250,7 @@ public class SWBAFilters extends SWBATree {
 
         if(cls.isSubClass(FilterableNode.swb_FilterableNode))
         {
-            Iterator<SemanticObject> it=SWBObjectFilter.filter(SWBComparator.sortSermanticObjects(user.getLanguage(), obj.getModel().listInstancesOfClass(cls)),pf);
+            Iterator<SemanticObject> it=SWBObjectFilter.filter(SWBComparator.sortSemanticObjects(user.getLanguage(), obj.getModel().listInstancesOfClass(cls)),pf);
            
                 while(it.hasNext())
                 {
@@ -1531,7 +1531,7 @@ public class SWBAFilters extends SWBATree {
 
         if(cls!=null && cls.isSubClass(FilterableNode.swb_FilterableNode))
         {
-            Iterator<SemanticObject> it=SWBObjectFilter.filter(SWBComparator.sortSermanticObjects(user.getLanguage(), obj.getModel().listInstancesOfClass(cls)),pf);
+            Iterator<SemanticObject> it=SWBObjectFilter.filter(SWBComparator.sortSemanticObjects(user.getLanguage(), obj.getModel().listInstancesOfClass(cls)),pf);
             if(addChilds)
             {
                 while(it.hasNext())
@@ -1627,7 +1627,7 @@ public class SWBAFilters extends SWBATree {
             }
 
             Iterator<SemanticObject> it=obj.listHerarquicalChilds();
-            Iterator<SemanticObject> it2=SWBComparator.sortSermanticObjects(user.getLanguage(),it);
+            Iterator<SemanticObject> it2=SWBComparator.sortSemanticObjects(user.getLanguage(),it);
             while(it2.hasNext())
             {
                 SemanticObject ch=it2.next();
@@ -1698,7 +1698,7 @@ public class SWBAFilters extends SWBATree {
             Iterator<SemanticObject> it=obj.listHerarquicalChilds();
             if(addChilds)
             {
-                Iterator<SemanticObject> it2=SWBComparator.sortSermanticObjects(user.getLanguage(),it);
+                Iterator<SemanticObject> it2=SWBComparator.sortSemanticObjects(user.getLanguage(),it);
                 while(it2.hasNext())
                 {
                     SemanticObject ch=it2.next();
