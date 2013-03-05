@@ -182,7 +182,6 @@ if (ProcessForm.ADM_MODESIMPLE.equals(admMode)) {
                                                     }
                                                 }
                                                 FormElement ele = mgr.getFormElement(sprop);
-                                                ele.setLabel(map.get("label"));
                                                 SWBResourceURL urlmove = paramRequest.getActionUrl();
                                                 urlmove.setAction(ProcessForm.ACT_SWAP);
                                                 urlmove.setParameter(ProcessForm.PARAM_PROPIDX, "" + max);
@@ -203,7 +202,7 @@ if (ProcessForm.ADM_MODESIMPLE.equals(admMode)) {
                                                     }
                                                     %>
                                                 </td>
-                                                <td width="200px" align="right"><%=ele.renderLabel(request, null, sprop, varName + "." + sprop.getName(), SWBFormMgr.TYPE_DOJO, SWBFormMgr.MODE_CREATE, "es")%></td>
+                                                <td width="200px" align="right"><%=ele.renderLabel(request, null, sprop, varName + "." + sprop.getName(), SWBFormMgr.TYPE_DOJO, SWBFormMgr.MODE_CREATE, "es", map.get("label"))%></td>
                                                     <%
                                                     SemanticObject sofe = ont.getSemanticObject(fe);
                                                     if (sofe != null) {
