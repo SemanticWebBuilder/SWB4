@@ -118,7 +118,7 @@ import org.semanticwb.social.TreeNodePage;
         {
             TreeNodePage treeNode=itTreeNodes.next();
             String iconImgPath=SWBPortal.getWebWorkPath()+treeNode.getWorkPath()+"/"+treeNode.social_wpImg.getName()+"_"+treeNode.getId()+"_"+treeNode.getWpImg();
-            elementTreeNode[cont2]=new ElementTreeNode(new Element(treeNode.getTitle(), treeNode.getId(), treeNode.getZulResourcePath(), iconImgPath, null, model.getId()),getTreeNodeElements(treeNode.getClassUri(), model, treeNode.getId()), false);
+            elementTreeNode[cont2]=new ElementTreeNode(new Element(treeNode.getTitle(), treeNode.getId(), treeNode.getZulResourcePath(), iconImgPath, "", model.getId()),getTreeNodeElements(treeNode.getClassUri(), model, treeNode.getId()), false);
             cont2++;
         }
         return elementTreeNode;

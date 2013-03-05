@@ -186,7 +186,12 @@ public final class GenericRedirect extends GenericForwardComposer <Component>
                     tab.addEventListener(Events.ON_SELECT, new EventListener<Event>() {
                         @Override
                         public void onEvent(Event event) throws Exception {
-                            iframe_genRedirect.setSrc(treeNodePage.getUrl(user.getLanguage())+"?wsite="+wsite.getId()+"&action="+action+"&objUri="+objUri+"&itemUri="+URLEncoder.encode(treeItem.getData().getUri()));
+                            //if(treeNodePage.getZulResourcePath()!=null)
+                            //{
+                                //iframe_genRedirect.setSrc(treeNodePage.getZulResourcePath()+"?wsite="+wsite.getId()+"&action="+action+"&objUri="+objUri+"&itemUri="+URLEncoder.encode(treeItem.getData().getUri()));
+                            //}//else{
+                                iframe_genRedirect.setSrc(treeNodePage.getUrl(user.getLanguage())+"?wsite="+wsite.getId()+"&action="+action+"&objUri="+objUri+"&itemUri="+URLEncoder.encode(treeItem.getData().getUri()));
+                            //}
                         }
                      });
                  }
