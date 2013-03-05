@@ -22,6 +22,7 @@ import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.SWBModel;
 import org.semanticwb.model.User;
+import org.semanticwb.model.WebSite;
 import org.semanticwb.portal.api.SWBActionResponse;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
@@ -35,7 +36,7 @@ import twitter4j.QueryResult;
 import twitter4j.Status;
 import twitter4j.StatusListener;
 import twitter4j.StatusUpdate;
-import twitter4j.Tweet;
+//import twitter4j.Tweet;
 import twitter4j.TwitterException;
 import twitter4j.TwitterFactory;
 import twitter4j.TwitterStream;
@@ -51,6 +52,12 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
     private static Logger log = SWBUtils.getLogger(Twitter.class);
     
     TwitterStream trial=null;
+    
+    private Long lastTweetID; // get tweets since the tweet with ID 'lastTweetID' until now
+                              // In the first request the lastTweetID value is 0. This value MUST be updated in further executions
+    private int tweetsReceived;
+    
+    public List<Status> twitterResults;
     
     private RequestToken requestToken;
     
@@ -137,9 +144,172 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
         }
         return mensajeNuevo;
     }
+    
+    /**
+     * Returns the configuration object with OAuth Credentials
+     * Anonymous access is not allowed
+     */
+    private ConfigurationBuilder configureOAuth(){
+        ConfigurationBuilder cb = new ConfigurationBuilder();
+        cb.setDebugEnabled(true)
+          .setOAuthConsumerKey("V5Xp0RYFuf3N0WsHkqSOIQ")
+          .setOAuthConsumerSecret("4DZ9UrE4X5VavUjXzBcGFTvEsHVsCGOgIuLVSZMA8")
+          .setOAuthAccessToken("1137512760-v65LXmL07hgaOzZPGN6xlSiJGPNCx3BkipAuvnZ")
+          .setOAuthAccessTokenSecret("F4H9ruXp8YReBG28OTQyeEkHkHudm7IzMIbP8Ep8bzw");
+        /*
+         * When a twitter object is given use:
+         * Consumer Key: getAppKey()
+         * Consumer Secret: getSecretKey()
+         * Access token: getAccessToken()
+         * Access token Secret: getAccessTokenSecret()
+         */
+        return cb;
+    }
+    /**
+     * Gets the value in NextDatetoSearch and verifies is a Long number.
+     */
+    private void getLastTweetID(){
+        
+        if(this.getNextDatetoSearch()!= null){
+            try{
+                lastTweetID = Long.parseLong(this.getNextDatetoSearch());
+                System.out.println("RECOVERING NEXTDATETOSEARCH: " + this.getNextDatetoSearch());
+            }catch(NumberFormatException nfe){
+                lastTweetID = 0L;
+                log.error("Error in getLastTweetID():"  + nfe);
+                System.out.println("Invalid value found in NextDatetoSearch(). Set to 0");
+            }
+        }
+    }
+    
+    /**
+     * Sets the value to NextDatetoSearch. Verifies whether the passed value is greater than the stored or not.
+     */
+    private void setLastTweetID(Long tweetID){        
+        try{
+            Long storedValue = Long.parseLong(this.getNextDatetoSearch());
+            if(tweetID > storedValue){ //Only stores tweetID if it's greater than the current stored value
+                System.out.println("EL VALOR ALMACENADO ES:" +  tweetID.toString());
+                this.setNextDatetoSearch(tweetID.toString());
+            }else{
+                System.out.println("NO ESTÁ GUARDANDO NADA PORQUE EL VALOR ALMACENADO YA ES IGUAL O MAYOR AL ACTUAL");
+            }
+        }catch(NumberFormatException nfe){
+            log.error("Error in setLastTweetID():"  +nfe);
+            System.out.println("Problem Storing NextDatetoSearch");
+        }
+    }
+    
+    /**
+     * Formats phrases according to Query requirements.
+     * Replaces pipes by OR and encloses phrases with more than one word in double quotes.
+     * @param stream - phrases to search delimited by pipe
+     * @return Formated phrases.
+     */
+    private String getPhrases(String stream){
+        String parsedPhrases = null; // parsed phrases 
+        if (stream != null && !stream.isEmpty()) {
+            String[] phrasesStream = stream.split("\\|"); //Delimiter            
+            parsedPhrases = "";
+            String tmp;
+            int noOfPhrases = phrasesStream.length;
+            for (int i = 0; i < noOfPhrases; i++) {
+                tmp = phrasesStream[i].trim().replaceAll("\\s+", " "); //replace multiple spaces beetwen words for one only one space
+                parsedPhrases += ((tmp.contains(" ")) ? ("\"" + tmp + "\"") : tmp); // if spaces found, it means more than one word in a phrase
+                if ((i + 1) < noOfPhrases) {
+                    parsedPhrases += " OR ";
+                }
+            }
+        }        
+        return parsedPhrases;
+    }
 
     @Override
     public void listen(Stream stream) {
+        
+        WebSite wsite = WebSite.ClassMgr.getWebSite(stream.getSemanticObject().getModel().getName());
+        System.out.println("Red SocialID:"+this.getId()+", Red Title:"+this.getTitle()+", sitio:"+wsite.getId());
+        System.out.println("Creador:" + this.getCreator());
+        twitterResults = new ArrayList<Status>();
+        tweetsReceived = 0;
+        ArrayList <ExternalPost> aListExternalPost=new ArrayList();
+        
+        try{            
+            getLastTweetID(); //gets the value stored in NextDatetoSearch
+            twitter4j.Twitter twitter = new TwitterFactory(configureOAuth().build()).getInstance();            
+            String searchPhrases = getPhrases(stream.getPhrase());
+            twitter4j.Query query = new Query(searchPhrases);
+            query.setCount(100); //max tweets by request
+            
+            boolean canGetMoreTweets = true;
+            int iteration = 1;
+            long currentTweetID = 0L;
+            
+            do{
+                try{
+                    System.out.println("QUERY: " + query);
+                    twitter4j.QueryResult result = twitter.search(query);
+                    int noOfTweets = result.getTweets().size();
+                    System.out.println("\ntweets by request: " + noOfTweets);                    
+                    System.out.println("Iteracion: " + iteration);
+                    
+                    if(noOfTweets == 0){
+                        System.out.println("No more tweets available for the current query!!");
+                        canGetMoreTweets = false;
+                    }else{
+                        for(Status status : result.getTweets()){
+                            if(status.getId() <= lastTweetID){ //If value is ZERO then get all tweets available,
+                                canGetMoreTweets = false;      //If it's greater than ZERO, get tweets posted since the tweet with id lastTweetID
+                                System.out.println("SINCEID LIMIT REACHED!!!");
+                                break;
+                            }
+                            
+                                ExternalPost external = new ExternalPost();
+                                external.setPostId(String.valueOf(status.getId())); 
+                                external.setCreatorId(String.valueOf(status.getUser().getId()));
+                                external.setCreatorName("@"+status.getUser().getScreenName());
+                                external.setCreationTime(""+status.getCreatedAt());
+                                if (status.getText()!=null) {
+                                   external.setMessage(status.getText());
+                                }                            
+                                aListExternalPost.add(external);
+                                
+                            twitterResults.add(status);
+                            //System.out.println("User: @" + status.getUser().getScreenName() + "\tID:" + status.getId() + "\tTime:" + status.getCreatedAt() + "\tText:" + status.getText());
+                            currentTweetID = status.getId();
+                            tweetsReceived++;
+                        }
+
+                        if(iteration == 1){
+                            System.out.println("MaxTweetID:" + result.getMaxId());
+                            setLastTweetID(result.getMaxId());//Save ID of the most recent Tweet
+                        }
+
+                        query.setMaxId(currentTweetID -1L); //Get the next batch of 100 tweets
+                        iteration ++;
+                        System.out.println("\n\n------");
+                    }
+                }catch(TwitterException te){
+                    if(te.getErrorCode() == 88){
+                        System.out.println("getSecondsUntilReset: " + te.getRateLimitStatus().getSecondsUntilReset());
+                        canGetMoreTweets = false;
+                        System.out.println("\n\n\n RATE LIMIT EXCCEDED!!!");
+                    }
+                    log.error("Error getting tweets:"  + te );
+                }
+                
+            }while(canGetMoreTweets && tweetsReceived <17000);
+            
+            System.out.println("TOTAL TWEETS RECEIVED:" + tweetsReceived);
+            if(aListExternalPost.size()>0)
+            {
+                new Classifier(aListExternalPost, stream, this);
+            }
+        }catch(Exception e){            
+            log.error("Error in listen():"  + e );
+        }
+        
+        /*
         //WebSite wsite=WebSite.ClassMgr.getWebSite(stream.getSemanticObject().getModel().getName());
         //System.out.println("Red SocialID:"+this.getId()+", Red Title:"+this.getTitle()+", sitio:"+wsite.getId());
         ArrayList <ExternalPost> aListExternalPost=new ArrayList();
@@ -147,12 +317,12 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
             twitter4j.Twitter twitter = new TwitterFactory().getInstance();
             Query query = new Query(stream.getPhrase());
             QueryResult result=twitter.search(query);
-            List<Tweet> tweets = result.getTweets();
-            for (Tweet tweet : tweets) {
+            List<Status> tweets = result.getTweets();
+            for (Status tweet : tweets) {
                 ExternalPost external = new ExternalPost();
                 external.setPostId(String.valueOf(tweet.getId())); 
-                external.setCreatorId(String.valueOf(tweet.getFromUserId()));
-                external.setCreatorName("@"+tweet.getFromUser());
+                external.setCreatorId(String.valueOf(tweet.getUser().getScreenName()));
+                external.setCreatorName("@"+tweet.getUser().getScreenName());
                 external.setCreationTime(""+tweet.getCreatedAt());
                 //external.setUpdateTime();
                 if (tweet.getText()!=null) {
@@ -173,6 +343,7 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
             System.out.println("Failed to search tweets: " + te.getMessage());
             System.exit(-1);
         }
+        */
 
     }
 
