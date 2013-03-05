@@ -293,7 +293,7 @@ public class SentimentalDataClassifier {
                                 }
                             }else { //No existe en la BD, debo revisar su klout
                                 Kloutable socialNetKloutAble=(Kloutable) socialNetwork;
-                                userKloutScore=Integer.parseInt(""+socialNetKloutAble.getUserKlout(creatorId));
+                                userKloutScore=Double.valueOf(socialNetKloutAble.getUserKlout(creatorId)).intValue(); 
                                 if(userKloutScore>=stream.getStream_KloutValue())
                                 {
                                     createPostbyKlout=true;
