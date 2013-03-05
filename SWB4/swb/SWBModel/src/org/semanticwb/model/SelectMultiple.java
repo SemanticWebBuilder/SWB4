@@ -215,13 +215,13 @@ public class SelectMultiple extends org.semanticwb.model.base.SelectMultipleBase
 
                 if (isGlobalScope()) {
                     if (cls != null) {
-                        it = SWBComparator.sortSermanticObjects(lang, cls.listInstances());
+                        it = SWBComparator.sortSemanticObjects(lang, cls.listInstances());
                     } else {
-                        it = SWBComparator.sortSermanticObjects(lang,
+                        it = SWBComparator.sortSemanticObjects(lang,
                                 SWBPlatform.getSemanticMgr().getVocabulary().listSemanticClassesAsSemanticObjects());
                     }
                 } else {
-                    it = SWBComparator.sortSermanticObjects(lang, getModel().listInstancesOfClass(cls));
+                    it = SWBComparator.sortSemanticObjects(lang, getModel().listInstancesOfClass(cls));
                 }
 
                 while (it.hasNext()) {
@@ -264,13 +264,13 @@ public class SelectMultiple extends org.semanticwb.model.base.SelectMultipleBase
 
                 if (isGlobalScope()) {
                     if (cls != null) {
-                        it = SWBComparator.sortSermanticObjects(lang, cls.listInstances());
+                        it = SWBComparator.sortSemanticObjects(lang, cls.listInstances());
                     } else {
-                        it = SWBComparator.sortSermanticObjects(lang,
+                        it = SWBComparator.sortSemanticObjects(lang,
                         SWBPlatform.getSemanticMgr().getVocabulary().listSemanticClassesAsSemanticObjects());
                     }
                 } else {
-                    it = SWBComparator.sortSermanticObjects(lang, getModel().listInstancesOfClass(cls));
+                    it = SWBComparator.sortSemanticObjects(lang, getModel().listInstancesOfClass(cls));
                 }
 
                 while (it.hasNext()) {
