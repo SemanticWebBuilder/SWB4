@@ -105,8 +105,7 @@ public class WBMenuNivel extends GenericAdmResource
             { log.error("Error while loading default resource template: "+base.getId(), e); }
         }
     }
-    
-    
+        
     /**
      * Obtiene el resultado final del recurso en formato dom.
      * 
