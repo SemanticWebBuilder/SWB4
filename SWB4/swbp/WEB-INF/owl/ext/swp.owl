@@ -358,7 +358,7 @@
   <owl:Class rdf:ID="LoopCharacteristics">
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
     <rdfs:label xml:lang="en">Loop Characteristic</rdfs:label>
-    <rdfs:label xml:lang="es">Caracter√≠stica de Ciclo</rdfs:label>
+    <rdfs:label xml:lang="es">Característica de Ciclo</rdfs:label>
     <rdfs:subClassOf>
       <owl:Class rdf:about="#BaseElement"/>
     </rdfs:subClassOf>
@@ -850,7 +850,7 @@
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
   <owl:Class rdf:ID="SendMail">
-    <rdfs:label xml:lang="es">Env√≠o de correo</rdfs:label>
+    <rdfs:label xml:lang="es">Envío de correo</rdfs:label>
     <rdfs:label xml:lang="en">SendMail</rdfs:label>
     <rdfs:subClassOf rdf:resource="#ProcessService"/>
     <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
@@ -1538,7 +1538,7 @@
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="parentWebPage">
     <rdfs:label xml:lang="en">Parent Web Page</rdfs:label>
-    <rdfs:label xml:lang="es">P√°gina Web Padre</rdfs:label>
+    <rdfs:label xml:lang="es">Página Web Padre</rdfs:label>
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_parentWebPage">
         <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#SelectTree_Model_Blank"/>
@@ -1901,7 +1901,7 @@
   <owl:ObjectProperty rdf:ID="loopCharacteristics">
     <rdfs:range rdf:resource="#LoopCharacteristics"/>
     <rdfs:label xml:lang="en">Loop Characteristics</rdfs:label>
-    <rdfs:label xml:lang="es">Caracteristicas de Ciclo</rdfs:label>
+    <rdfs:label xml:lang="es">Características de Ciclo</rdfs:label>
     <rdfs:domain rdf:resource="#ActivityConfable"/>
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_loopCharacteristics">
@@ -2309,7 +2309,7 @@
     </swb:displayProperty>
     <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >value</swb:propertyCodeName>
-    <rdfs:label>Archivo{es}</rdfs:label>
+    <rdfs:label xml:lang="es">Archivo</rdfs:label>
     <rdfs:label xml:lang="en">File</rdfs:label>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="resourceAssignationRule">
@@ -2646,7 +2646,7 @@
       </swbxf:DisplayProperty>
     </swb:displayProperty>
     <rdfs:label xml:lang="en">Password</rdfs:label>
-    <rdfs:label xml:lang="es">Contrase√±a</rdfs:label>
+    <rdfs:label xml:lang="es">Contraseña</rdfs:label>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >password</swb:propertyCodeName>
