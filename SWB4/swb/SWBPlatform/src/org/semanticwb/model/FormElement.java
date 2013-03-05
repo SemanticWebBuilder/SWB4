@@ -63,6 +63,21 @@ public interface FormElement extends GenericObject
     public String renderLabel(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String propName, String type, String mode, String lang);
 
     /**
+     * Render label.
+     * 
+     * @param request the request
+     * @param obj the obj
+     * @param prop the prop
+     * @param type the type
+     * @param mode the mode
+     * @param lang the lang
+     * @param label the label
+     * @return the string
+     */
+    public String renderLabel(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String propName, String type, String mode, String lang, String label);
+    
+    
+    /**
      * Render element.
      *
      * @param request the request
@@ -189,5 +204,5 @@ public interface FormElement extends GenericObject
      */
     public void setModel(SemanticModel model);
 
-    public void setLabel(String label);
+    //public void setLabel(String label);
 }

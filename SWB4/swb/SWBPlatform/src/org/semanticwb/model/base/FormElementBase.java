@@ -63,7 +63,7 @@ public class FormElementBase extends GenericObjectBase implements FormElement, G
     /** The filter html tags. */
     private boolean filterHTMLTags=true;
 
-    private String label=null;
+    //private String label=null;
     
     private static SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");    
 
@@ -195,24 +195,6 @@ public class FormElementBase extends GenericObjectBase implements FormElement, G
         }
     }
 
-    /* (non-Javadoc)
-     * @see org.semanticwb.model.FormElement#renderLabel(javax.servlet.http.HttpServletRequest, org.semanticwb.platform.SemanticObject, org.semanticwb.platform.SemanticProperty, java.lang.String, java.lang.String, java.lang.String)
-     */
-    public String renderLabel(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String propName, String type, String mode, String lang)
-    {
-        String ret="";
-        String name=propName;
-        String label=this.label;
-        if(label==null)label=prop.getDisplayName(lang);
-        SemanticObject sobj=prop.getDisplayProperty();
-        boolean required=prop.isRequired();
-
-        String reqtxt=" &nbsp;";
-        if(!mode.equals("filter") && required)reqtxt=" <em>*</em>";
-
-        ret="<label for=\""+name+"\">"+label + reqtxt + "</label>";
-        return ret;
-    }
 
     /* (non-Javadoc)
      * @see org.semanticwb.model.FormElement#renderElement(javax.servlet.http.HttpServletRequest, org.semanticwb.platform.SemanticObject, org.semanticwb.platform.SemanticProperty, java.lang.String, java.lang.String, java.lang.String)
@@ -326,6 +308,30 @@ public class FormElementBase extends GenericObjectBase implements FormElement, G
     public void setFilterHTMLTags(boolean filterHTMLTags) {
         this.filterHTMLTags = filterHTMLTags;
     }
+    
+    /* (non-Javadoc)
+     * @see org.semanticwb.model.FormElement#renderLabel(javax.servlet.http.HttpServletRequest, org.semanticwb.platform.SemanticObject, org.semanticwb.platform.SemanticProperty, java.lang.String, java.lang.String, java.lang.String)
+     */
+    public String renderLabel(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String propName, String type, String mode, String lang, String label)
+    {
+        String ret="";
+        String name=propName;
+        //String label=this.label;
+        if(label==null)label=prop.getDisplayName(lang);
+        SemanticObject sobj=prop.getDisplayProperty();
+        boolean required=prop.isRequired();
+
+        String reqtxt=" &nbsp;";
+        if(!mode.equals("filter") && required)reqtxt=" <em>*</em>";
+
+        ret="<label for=\""+name+"\">"+label + reqtxt + "</label>";
+        return ret;
+    }    
+    
+    public String renderLabel(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String propName, String type, String mode, String lang)
+    {
+        return renderLabel(request, obj, prop, prop.getName(), type, mode, lang,null);
+    }
 
     public String renderLabel(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String type, String mode, String lang) {
         return renderLabel(request, obj, prop, prop.getName(), type, mode, lang);
@@ -343,9 +349,9 @@ public class FormElementBase extends GenericObjectBase implements FormElement, G
         process(request, obj, prop, prop.getName());
     }
 
-    public void setLabel(String label)
-    {
-        this.label=label;
-    }
+//    public void setLabel(String label)
+//    {
+//        this.label=label;
+//    }
 
 }

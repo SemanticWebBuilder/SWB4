@@ -872,7 +872,7 @@ public class SWBFormMgr implements SWBForms
         renderProp(request, ret, prop, prop.getName(), ele, mode);
     }
 
-
+    
     /**
      * Rederea propiedad (metodo interno del SWBFormMgr.
      * 
@@ -884,10 +884,24 @@ public class SWBFormMgr implements SWBForms
      */
     public void renderProp(HttpServletRequest request, StringBuffer ret, SemanticProperty prop, String propName, FormElement ele, String mode)
     {
+        renderProp(request, ret, prop, propName, ele, mode, null);
+    }
+
+    /**
+     * Rederea propiedad (metodo interno del SWBFormMgr.
+     * 
+     * @param request the request
+     * @param ret the ret
+     * @param prop the prop
+     * @param ele the ele
+     * @param mode the mode
+     */
+    public void renderProp(HttpServletRequest request, StringBuffer ret, SemanticProperty prop, String propName, FormElement ele, String mode, String label)
+    {
         SemanticObject obj=m_obj;
         if(obj==null)obj=new SemanticObject(m_ref.getModel(),m_cls);
         if(removed.contains(prop))return;
-        String label=null;
+        //String label=null;
         String element=null;
         boolean hidden=false;
         SemanticObject dispobj=prop.getDisplayProperty();
@@ -902,11 +916,11 @@ public class SWBFormMgr implements SWBForms
             {
                 if(m_propmap!=null)
                 {
-                    label=ele.renderLabel(request, obj, prop, propName, m_type, m_propmap.get(prop), m_lang);
+                    label=ele.renderLabel(request, obj, prop, propName, m_type, m_propmap.get(prop), m_lang,label);
                     element=ele.renderElement(request, obj, prop, propName, m_type, m_propmap.get(prop), m_lang);
                 }else
                 {
-                    label=ele.renderLabel(request, obj, prop, propName, m_type, mode, m_lang);
+                    label=ele.renderLabel(request, obj, prop, propName, m_type, mode, m_lang,label);
                     element=ele.renderElement(request, obj, prop, propName, m_type, mode, m_lang);
                 }
             }catch(Exception e){log.error("Element:"+ele,e);}
