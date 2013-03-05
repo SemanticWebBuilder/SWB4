@@ -231,8 +231,7 @@ public class SWBProcessFormMgr implements SWBForms
                         SWBFormMgr mgr=mgrs.get(pp.getVarName());
                         SemanticProperty prop=pp.getSemanticProperty();
                         FormElement ele=mgr.getFormElement(prop);
-                        if(pp.getVarTitle()!=null)ele.setLabel(pp.getVarTitle());
-                        mgr.renderProp(request, ret, prop, pp.getVarName()+"."+prop.getName(), ele, pp.getMode());
+                        mgr.renderProp(request, ret, prop, pp.getVarName()+"."+prop.getName(), ele, pp.getMode(),pp.getVarTitle());
                     }
                     ret.append("	    </table>\n");
                     ret.append("	</fieldset>\n");
@@ -401,10 +400,9 @@ public class SWBProcessFormMgr implements SWBForms
         //System.out.println(mgr.getVarReference());
         if(mgr.getVarReference()!=null)
         {
-            ele.setLabel(mgr.getVarReference().getDisplayName(m_lang));
+            return ele.renderLabel(request, mgr.getSemanticObject(), prop, varName+"."+prop.getName(), m_type, mode, m_lang, mgr.getVarReference().getDisplayName(m_lang));
         }
         return ele.renderLabel(request, mgr.getSemanticObject(), prop, varName+"."+prop.getName(), m_type, mode, m_lang);
-        //return mgr.renderLabel(request, prop, varName+"."+prop.getName(), mode);
     }
 
 //    /**
