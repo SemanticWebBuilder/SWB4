@@ -154,7 +154,7 @@ public class SWBAEditor extends GenericResource
      */
     public Iterator sortIterator(Iterator it)
     {
-        return SWBComparator.sortSermanticObjects(it);
+        return SWBComparator.sortSemanticObjects(it);
     }
 
     /**

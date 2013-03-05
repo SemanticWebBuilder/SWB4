@@ -1067,7 +1067,7 @@ public class SWBASOPropRefEditor extends GenericAdmResource {
             if(base.getAttribute(USE_GLOBAL, "0").equals("1"))
             {
                 HashMap hmso = new HashMap();
-                Iterator<Ontology> itont = SWBComparator.sortSermanticObjects(user.getLanguage(), SWBContext.listOntologies());
+                Iterator<Ontology> itont = SWBComparator.sortSemanticObjects(user.getLanguage(), SWBContext.listOntologies());
                 while(itont.hasNext())
                 {
                     Ontology ontology = itont.next();

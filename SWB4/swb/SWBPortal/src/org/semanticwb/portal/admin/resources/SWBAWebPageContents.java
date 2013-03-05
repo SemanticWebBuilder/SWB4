@@ -803,7 +803,7 @@ public class SWBAWebPageContents extends GenericResource {
 
             // Lista de Tipo de portlet disponibles de Global, separados por contenido y sistema
 
-//            Iterator<SemanticObject> itgso = SWBComparator.sortSermanticObjects(SWBContext.getGlobalWebSite().getSemanticObject().getModel().listInstancesOfClass(clsprop),user.getLanguage());
+//            Iterator<SemanticObject> itgso = SWBComparator.sortSemanticObjects(SWBContext.getGlobalWebSite().getSemanticObject().getModel().listInstancesOfClass(clsprop),user.getLanguage());
             Iterator<SemanticObject> itgso = SWBContext.getGlobalWebSite().getSemanticObject().getModel().listInstancesOfClass(clsprop);
             HashMap<String, SemanticObject> hmContent = new HashMap();
             HashMap<String, SemanticObject> hmSystem = new HashMap();
@@ -824,7 +824,7 @@ public class SWBAWebPageContents extends GenericResource {
             }
 
             //itgso = hmContent.values().iterator();
-            itgso = SWBComparator.sortSermanticObjects(user.getLanguage(), hmContent.values().iterator());
+            itgso = SWBComparator.sortSemanticObjects(user.getLanguage(), hmContent.values().iterator());
             if (hmContent.size() > 0) {
                 out.println("<table width=\"98%\">");
                 out.println("<thead>");
@@ -882,7 +882,7 @@ public class SWBAWebPageContents extends GenericResource {
                 out.println("</table> ");
             }
             //itgso = hmSystem.values().iterator();
-            itgso = SWBComparator.sortSermanticObjects(user.getLanguage(), hmSystem.values().iterator());
+            itgso = SWBComparator.sortSemanticObjects(user.getLanguage(), hmSystem.values().iterator());
             if (hmSystem.size() > 0) {
                 out.println("<table width=\"98%\">");
                 out.println("<thead>");
@@ -973,7 +973,7 @@ public class SWBAWebPageContents extends GenericResource {
             }
 
             //itso = hmContent.values().iterator();
-            itso = SWBComparator.sortSermanticObjects(user.getLanguage(), hmContent.values().iterator());
+            itso = SWBComparator.sortSemanticObjects(user.getLanguage(), hmContent.values().iterator());
             if (hmContent.size() > 0) {
                 out.println("<table width=\"98%\">");
                 out.println("<thead>");
@@ -1030,7 +1030,7 @@ public class SWBAWebPageContents extends GenericResource {
             //itso = hmSystem.values().iterator();
 
 
-            itso = SWBComparator.sortSermanticObjects(user.getLanguage(), hmSystem.values().iterator());
+            itso = SWBComparator.sortSemanticObjects(user.getLanguage(), hmSystem.values().iterator());
             if (hmSystem.size() > 0) {
                 out.println("<table width=\"98%\">");
                 out.println("<thead>");
