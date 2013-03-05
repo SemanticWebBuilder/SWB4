@@ -213,14 +213,14 @@ private String addObject(SemanticObject obj, String selected, String lang, Strin
                 if (cls != WebPage.sclass) {
                     if (isGlobalScope()) {
                         if (cls != null) {
-                            it = SWBComparator.sortSermanticObjects(lang, cls.listInstances());
+                            it = SWBComparator.sortSemanticObjects(lang, cls.listInstances());
                         } else {
-                            it = SWBComparator.sortSermanticObjects(
+                            it = SWBComparator.sortSemanticObjects(
                                 lang,
                                 SWBPlatform.getSemanticMgr().getVocabulary().listSemanticClassesAsSemanticObjects());
                         }
                     } else {
-                        it = SWBComparator.sortSermanticObjects(lang, getModel().listInstancesOfClass(cls));
+                        it = SWBComparator.sortSemanticObjects(lang, getModel().listInstancesOfClass(cls));
                     }
 
                     boolean hp = false;
