@@ -3,7 +3,7 @@ import java.util.List;
 
 import twitter4j.Query;
 import twitter4j.QueryResult;
-import twitter4j.Tweet;
+import twitter4j.Status;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
 import twitter4j.TwitterFactory;
@@ -25,9 +25,9 @@ public class TwitterSearchTest
         try {
             Query query = new Query("hola");
             QueryResult result=twitter.search(query);
-            List<Tweet> tweets = result.getTweets();
-            for (Tweet tweet : tweets) {
-                System.out.println("@" + tweet.getFromUser() + " - " + tweet.getText());
+            List<Status> tweets = result.getTweets();
+            for (Status tweet : tweets) {
+                System.out.println("@" + tweet.getUser().getScreenName() + " - " + tweet.getText());
             }
         } catch (TwitterException te) {
             te.printStackTrace();
