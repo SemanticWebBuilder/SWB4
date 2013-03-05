@@ -199,7 +199,7 @@ public class WBMenuNivel extends GenericAdmResource
             {
                 WebPage tphermano=itehermanos.next();
                if(user.haveAccess(tphermano))
-                {
+               {
                     Element ehermano = dom.createElement("brother");
                     ehermano.setAttribute("id", tphermano.getId());
                     ehermano.setAttribute("name", tphermano.getDisplayTitle(user.getLanguage()));
