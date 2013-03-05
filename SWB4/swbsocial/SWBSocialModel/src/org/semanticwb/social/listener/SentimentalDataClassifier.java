@@ -284,7 +284,7 @@ public class SentimentalDataClassifier {
                                     }
                                 }else{  //Si ya pasaron 5 o mas días de que se actualizó la info del usuario, entonces busca su score en Klout
                                     Kloutable socialNetKloutAble=(Kloutable) socialNetwork;
-                                    userKloutScore=Integer.parseInt(""+socialNetKloutAble.getUserKlout(creatorId));
+                                    userKloutScore=Double.valueOf(socialNetKloutAble.getUserKlout(creatorId)).intValue(); 
                                     if(userKloutScore>=stream.getStream_KloutValue())
                                     {
                                         createPostbyKlout=true;
