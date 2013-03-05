@@ -181,9 +181,9 @@ public class CallProcessElement extends org.semanticwb.process.model.base.CallPr
 
                 if (isGlobalScope()) {
                     if (cls != null) {
-                        it = SWBComparator.sortSermanticObjects(lang, cls.listInstances());
+                        it = SWBComparator.sortSemanticObjects(lang, cls.listInstances());
                     } else {
-                        it = SWBComparator.sortSermanticObjects(lang,
+                        it = SWBComparator.sortSemanticObjects(lang,
                                 SWBPlatform.getSemanticMgr().getVocabulary().listSemanticClassesAsSemanticObjects());
                     }
                 } else if (isUserRepository()) {
@@ -195,9 +195,9 @@ public class CallProcessElement extends org.semanticwb.process.model.base.CallPr
                         model = m.getSemanticObject().getModel();
                     }
 
-                    it = SWBComparator.sortSermanticObjects(lang, model.listInstancesOfClass(cls));
+                    it = SWBComparator.sortSemanticObjects(lang, model.listInstancesOfClass(cls));
                 } else {
-                    it = SWBComparator.sortSermanticObjects(lang, getModel().listInstancesOfClass(cls));
+                    it = SWBComparator.sortSemanticObjects(lang, getModel().listInstancesOfClass(cls));
                 }
 
                 if (it != null) {

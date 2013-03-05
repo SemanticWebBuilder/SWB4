@@ -166,9 +166,9 @@ public class SelectProcessItemAware extends org.semanticwb.process.model.base.Se
 
                 if (isGlobalScope()) {
                     if (cls != null) {
-                        it = SWBComparator.sortSermanticObjects(lang, cls.listInstances());
+                        it = SWBComparator.sortSemanticObjects(lang, cls.listInstances());
                     } else {
-                        it = SWBComparator.sortSermanticObjects(lang,
+                        it = SWBComparator.sortSemanticObjects(lang,
                                 SWBPlatform.getSemanticMgr().getVocabulary().listSemanticClassesAsSemanticObjects());
                     }
                 } else {
@@ -183,10 +183,10 @@ public class SelectProcessItemAware extends org.semanticwb.process.model.base.Se
                             ItemAware object = it3.next();
                             arr.add(object.getSemanticObject());
                         }
-                        it=SWBComparator.sortSermanticObjects(lang,arr.iterator());
+                        it=SWBComparator.sortSemanticObjects(lang,arr.iterator());
                     }else
                     {
-                        it = SWBComparator.sortSermanticObjects(lang, getModel().listInstancesOfClass(cls));
+                        it = SWBComparator.sortSemanticObjects(lang, getModel().listInstancesOfClass(cls));
                     }
                 }
 
