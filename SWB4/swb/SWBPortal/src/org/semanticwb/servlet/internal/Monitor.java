@@ -419,7 +419,7 @@ public class Monitor implements InternalServlet
     {
         if ("/ping".equals(request.getRequestURI())){
             response.setContentType("text/plain");
-            response.getWriter().println("System alive...");
+            response.getWriter().println("System alive... "+buffer.lastElement().upTime);
             return;
         }
         if (null == secretKey)
