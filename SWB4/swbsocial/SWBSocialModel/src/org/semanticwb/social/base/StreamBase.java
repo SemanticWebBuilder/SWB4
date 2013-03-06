@@ -4,7 +4,7 @@ package org.semanticwb.social.base;
    /**
    * Clase que contendra los streams que configurados para cada usuario 
    */
-public abstract class StreamBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Activeable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable
+public abstract class StreamBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Activeable,org.semanticwb.social.Geolocable,org.semanticwb.model.Traceable
 {
    /**
    * Clase que engloba a las diferentes clases que representan cada una de las redes sociales.
@@ -51,6 +51,10 @@ public abstract class StreamBase extends org.semanticwb.model.SWBClass implement
    * Propiedad que indica si en el stream se desea aceptar que entren los mensajes que sean clasificados con intensidad media
    */
     public static final org.semanticwb.platform.SemanticProperty social_filterIntensityMedium=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#filterIntensityMedium");
+   /**
+   * Número de resultados que se despliegan en las páginas de los reportes
+   */
+    public static final org.semanticwb.platform.SemanticProperty social_stream_resultPagnum=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#stream_resultPagnum");
    /**
    * Valor númerico minimo de klout que se desea filtrar para un stream. Los usuarios que tengan este klout o más y que hablen en las redes sociales configuradas para el stream, seran tomados sus mensajes para ser guardados en el sistema.
    */
@@ -240,6 +244,24 @@ public abstract class StreamBase extends org.semanticwb.model.SWBClass implement
     {
         super(base);
     }
+
+/**
+* Gets the GeoRadio property
+* @return float with the GeoRadio
+*/
+    public float getGeoRadio()
+    {
+        return getSemanticObject().getFloatProperty(social_geoRadio);
+    }
+
+/**
+* Sets the GeoRadio property
+* @param value long with the GeoRadio
+*/
+    public void setGeoRadio(float value)
+    {
+        getSemanticObject().setFloatProperty(social_geoRadio, value);
+    }
    /**
    * Gets all the org.semanticwb.social.SocialNetwork
    * @return A GenericIterator with all the org.semanticwb.social.SocialNetwork
@@ -414,6 +436,24 @@ public abstract class StreamBase extends org.semanticwb.model.SWBClass implement
     }
 
 /**
+* Gets the GeoCenterLongitude property
+* @return float with the GeoCenterLongitude
+*/
+    public float getGeoCenterLongitude()
+    {
+        return getSemanticObject().getFloatProperty(social_geoCenterLongitude);
+    }
+
+/**
+* Sets the GeoCenterLongitude property
+* @param value long with the GeoCenterLongitude
+*/
+    public void setGeoCenterLongitude(float value)
+    {
+        getSemanticObject().setFloatProperty(social_geoCenterLongitude, value);
+    }
+
+/**
 * Gets the FilterSentimentalNegative property
 * @return boolean with the FilterSentimentalNegative
 */
@@ -501,6 +541,42 @@ public abstract class StreamBase extends org.semanticwb.model.SWBClass implement
     public void setActive(boolean value)
     {
         getSemanticObject().setBooleanProperty(swb_active, value);
+    }
+
+/**
+* Gets the GeoCenterLatitude property
+* @return float with the GeoCenterLatitude
+*/
+    public float getGeoCenterLatitude()
+    {
+        return getSemanticObject().getFloatProperty(social_geoCenterLatitude);
+    }
+
+/**
+* Sets the GeoCenterLatitude property
+* @param value long with the GeoCenterLatitude
+*/
+    public void setGeoCenterLatitude(float value)
+    {
+        getSemanticObject().setFloatProperty(social_geoCenterLatitude, value);
+    }
+
+/**
+* Gets the GeoDistanceUnit property
+* @return String with the GeoDistanceUnit
+*/
+    public String getGeoDistanceUnit()
+    {
+        return getSemanticObject().getProperty(social_geoDistanceUnit);
+    }
+
+/**
+* Sets the GeoDistanceUnit property
+* @param value long with the GeoDistanceUnit
+*/
+    public void setGeoDistanceUnit(String value)
+    {
+        getSemanticObject().setProperty(social_geoDistanceUnit, value);
     }
    /**
    * Gets all the org.semanticwb.social.PostIn
@@ -683,6 +759,24 @@ public abstract class StreamBase extends org.semanticwb.model.SWBClass implement
     public void setFilterIntensityMedium(boolean value)
     {
         getSemanticObject().setBooleanProperty(social_filterIntensityMedium, value);
+    }
+
+/**
+* Gets the Stream_resultPagnum property
+* @return int with the Stream_resultPagnum
+*/
+    public int getStream_resultPagnum()
+    {
+        return getSemanticObject().getIntProperty(social_stream_resultPagnum);
+    }
+
+/**
+* Sets the Stream_resultPagnum property
+* @param value long with the Stream_resultPagnum
+*/
+    public void setStream_resultPagnum(int value)
+    {
+        getSemanticObject().setIntProperty(social_stream_resultPagnum, value);
     }
 
 /**

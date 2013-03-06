@@ -31,14 +31,6 @@ public abstract class PostInBase extends org.semanticwb.social.Post implements o
    */
     public static final org.semanticwb.platform.SemanticProperty social_postRetweets=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#postRetweets");
    /**
-   * Clase que va ha contener los Post que han sido tomados como base (es decir, que llegan por el listener y que se guardan en la clase PostListenerContainer) para crear un nuevo Post desde la herramienta y que se envía hacia las redes sociales.
-   */
-    public static final org.semanticwb.platform.SemanticClass social_PostListenerContainerBase=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#PostListenerContainerBase");
-   /**
-   * En esta propiedad se guarda el post que llegó por el listener y que sirvió de base para que se creara un post nuevo desde SSMCC.
-   */
-    public static final org.semanticwb.platform.SemanticProperty social_postListenerBase=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#postListenerBase");
-   /**
    * Lugar Geográfico de donde se envía el Post
    */
     public static final org.semanticwb.platform.SemanticProperty social_postPlace=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#postPlace");
@@ -209,29 +201,6 @@ public abstract class PostInBase extends org.semanticwb.social.Post implements o
         public static java.util.Iterator<org.semanticwb.social.PostIn> listPostInByPostInSocialNetwork(org.semanticwb.social.SocialNetwork value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.social.PostIn> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(social_postInSocialNetwork,value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.social.PostIn with a determined PostListenerBase
-       * @param value PostListenerBase of the type org.semanticwb.social.PostListenerContainerBase
-       * @param model Model of the org.semanticwb.social.PostIn
-       * @return Iterator with all the org.semanticwb.social.PostIn
-       */
-
-        public static java.util.Iterator<org.semanticwb.social.PostIn> listPostInByPostListenerBase(org.semanticwb.social.PostListenerContainerBase value,org.semanticwb.model.SWBModel model)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.social.PostIn> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(social_postListenerBase, value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.social.PostIn with a determined PostListenerBase
-       * @param value PostListenerBase of the type org.semanticwb.social.PostListenerContainerBase
-       * @return Iterator with all the org.semanticwb.social.PostIn
-       */
-
-        public static java.util.Iterator<org.semanticwb.social.PostIn> listPostInByPostListenerBase(org.semanticwb.social.PostListenerContainerBase value)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.social.PostIn> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(social_postListenerBase,value.getSemanticObject(),sclass));
             return it;
         }
        /**
@@ -429,44 +398,6 @@ public abstract class PostInBase extends org.semanticwb.social.Post implements o
     public void setPostRetweets(int value)
     {
         getSemanticObject().setIntProperty(social_postRetweets, value);
-    }
-   /**
-   * Sets the value for the property PostListenerBase
-   * @param value PostListenerBase to set
-   */
-
-    public void setPostListenerBase(org.semanticwb.social.PostListenerContainerBase value)
-    {
-        if(value!=null)
-        {
-            getSemanticObject().setObjectProperty(social_postListenerBase, value.getSemanticObject());
-        }else
-        {
-            removePostListenerBase();
-        }
-    }
-   /**
-   * Remove the value for PostListenerBase property
-   */
-
-    public void removePostListenerBase()
-    {
-        getSemanticObject().removeProperty(social_postListenerBase);
-    }
-
-   /**
-   * Gets the PostListenerBase
-   * @return a org.semanticwb.social.PostListenerContainerBase
-   */
-    public org.semanticwb.social.PostListenerContainerBase getPostListenerBase()
-    {
-         org.semanticwb.social.PostListenerContainerBase ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(social_postListenerBase);
-         if(obj!=null)
-         {
-             ret=(org.semanticwb.social.PostListenerContainerBase)obj.createGenericInstance();
-         }
-         return ret;
     }
 
 /**

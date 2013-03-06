@@ -7,7 +7,7 @@ package org.semanticwb.social.base;
 public abstract class SocialPostBase extends org.semanticwb.model.SWBClass 
 {
    /**
-   * Clase que comprende todos los tipos de Post que pueden ir siendo creados en la herramienta..
+   * Clase a Cambiar despues por "Relacional", esta y todas sus hijas. Clase que comprende todos los tipos de Post que pueden ir siendo creados en la herramienta..
    */
     public static final org.semanticwb.platform.SemanticClass social_Post=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#Post");
    /**
