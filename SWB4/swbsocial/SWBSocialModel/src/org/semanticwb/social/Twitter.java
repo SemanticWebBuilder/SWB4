@@ -12,6 +12,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 import javaQuery.j2ee.tinyURL;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -27,12 +28,10 @@ import org.semanticwb.portal.api.SWBActionResponse;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.social.listener.Classifier;
-import org.semanticwb.social.listener.Listener;
 import org.semanticwb.social.listener.twitter.SWBSocialStatusListener;
 import org.semanticwb.social.util.SWBSocialUtil;
 import twitter4j.FilterQuery;
 import twitter4j.Query;
-import twitter4j.QueryResult;
 import twitter4j.Status;
 import twitter4j.StatusListener;
 import twitter4j.StatusUpdate;
@@ -151,11 +150,18 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
      */
     private ConfigurationBuilder configureOAuth(){
         ConfigurationBuilder cb = new ConfigurationBuilder();
+        //cb.setDebugEnabled(true)
+        //  .setOAuthConsumerKey("V5Xp0RYFuf3N0WsHkqSOIQ")
+        //  .setOAuthConsumerSecret("4DZ9UrE4X5VavUjXzBcGFTvEsHVsCGOgIuLVSZMA8")
+        //  .setOAuthAccessToken("1137512760-v65LXmL07hgaOzZPGN6xlSiJGPNCx3BkipAuvnZ")
+        //  .setOAuthAccessTokenSecret("F4H9ruXp8YReBG28OTQyeEkHkHudm7IzMIbP8Ep8bzw");
+        
         cb.setDebugEnabled(true)
-          .setOAuthConsumerKey("V5Xp0RYFuf3N0WsHkqSOIQ")
-          .setOAuthConsumerSecret("4DZ9UrE4X5VavUjXzBcGFTvEsHVsCGOgIuLVSZMA8")
-          .setOAuthAccessToken("1137512760-v65LXmL07hgaOzZPGN6xlSiJGPNCx3BkipAuvnZ")
-          .setOAuthAccessTokenSecret("F4H9ruXp8YReBG28OTQyeEkHkHudm7IzMIbP8Ep8bzw");
+          .setOAuthConsumerKey(getAppKey())
+          .setOAuthConsumerSecret(getSecretKey())
+          .setOAuthAccessToken(getAccessToken())
+          .setOAuthAccessTokenSecret(getAccessTokenSecret());
+        
         /*
          * When a twitter object is given use:
          * Consumer Key: getAppKey()
@@ -179,6 +185,8 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
                 log.error("Error in getLastTweetID():"  + nfe);
                 System.out.println("Invalid value found in NextDatetoSearch(). Set to 0");
             }
+        }else{
+            lastTweetID=0L;
         }
     }
     
@@ -187,7 +195,9 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
      */
     private void setLastTweetID(Long tweetID){        
         try{
-            Long storedValue = Long.parseLong(this.getNextDatetoSearch());
+            Long storedValue=0L;
+            if(this.getNextDatetoSearch()!=null) storedValue = Long.parseLong(this.getNextDatetoSearch());
+            
             if(tweetID > storedValue){ //Only stores tweetID if it's greater than the current stored value
                 System.out.println("EL VALOR ALMACENADO ES:" +  tweetID.toString());
                 this.setNextDatetoSearch(tweetID.toString());
@@ -263,21 +273,25 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
                                 System.out.println("SINCEID LIMIT REACHED!!!");
                                 break;
                             }
-                            
-                                ExternalPost external = new ExternalPost();
-                                external.setPostId(String.valueOf(status.getId())); 
-                                external.setCreatorId(String.valueOf(status.getUser().getId()));
-                                external.setCreatorName("@"+status.getUser().getScreenName());
-                                external.setCreationTime(""+status.getCreatedAt());
-                                if (status.getText()!=null) {
-                                   external.setMessage(status.getText());
-                                }                            
-                                aListExternalPost.add(external);
                                 
-                            twitterResults.add(status);
-                            //System.out.println("User: @" + status.getUser().getScreenName() + "\tID:" + status.getId() + "\tTime:" + status.getCreatedAt() + "\tText:" + status.getText());
-                            currentTweetID = status.getId();
-                            tweetsReceived++;
+                                if(!status.isRetweet())
+                                {
+                                    ExternalPost external = new ExternalPost();
+                                    external.setPostId(String.valueOf(status.getId())); 
+                                    external.setCreatorId(String.valueOf(status.getUser().getId()));
+                                    external.setCreatorName("@"+status.getUser().getScreenName());
+                                    external.setCreationTime(""+status.getCreatedAt());
+                                    external.setDevice(status.getSource());
+                                    if (status.getText()!=null) {
+                                       external.setMessage(status.getText());
+                                    }                            
+                                    aListExternalPost.add(external);
+
+                                    twitterResults.add(status);
+                                    //System.out.println("User: @" + status.getUser().getScreenName() + "\tID:" + status.getId() + "\tTime:" + status.getCreatedAt() + "\tText:" + status.getText());
+                                    currentTweetID = status.getId();
+                                    tweetsReceived++;
+                                }
                         }
 
                         if(iteration == 1){
@@ -298,7 +312,7 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
                     log.error("Error getting tweets:"  + te );
                 }
                 
-            }while(canGetMoreTweets && tweetsReceived <17000);
+            }while(canGetMoreTweets && tweetsReceived <17000);  //Maximo permitido para extraer de twitter c/15 minutos
             
             System.out.println("TOTAL TWEETS RECEIVED:" + tweetsReceived);
             if(aListExternalPost.size()>0)
@@ -426,11 +440,11 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
     @Override
     public void authenticate(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
-System.out.println("Twitter.autenticate.............");
+        System.out.println("Twitter.autenticate.............");
         String verifier = request.getParameter("oauth_verifier");
         if(verifier==null)
         {
-System.out.println("Twitter----paso 1");
+            System.out.println("Twitter----paso 1");
             twitter4j.Twitter twitterFI = new TwitterFactory().getInstance();
             twitterFI.setOAuthConsumer(getAppKey(), getSecretKey());
             try {
@@ -510,14 +524,14 @@ System.out.println("URL callback="+address);
             {
                 JSONObject userData = new JSONObject(kloutJsonResponse_1);
                 String kloutUserId = userData != null && userData.get("id") != null ? (String) userData.get("id") : "";
-                System.out.println("kloutId de Resultado en Json:"+kloutUserId);
+                //System.out.println("kloutId de Resultado en Json:"+kloutUserId);
             
                 //Segunda llamada a la red social Klout, para obtener Json de Score del usuario (kloutUserId) encontrado
                 if(kloutUserId!=null)
                 {
                     String url_2="http://api.klout.com/v2/user.json/"+kloutUserId+"/score";
                     String kloutJsonResponse_2=getData(url_2);
-                    System.out.println("kloutResult step-2-Json:"+kloutJsonResponse_2);
+                    //System.out.println("kloutResult step-2-Json:"+kloutJsonResponse_2);
 
                     if(kloutJsonResponse_2!=null)
                     {
@@ -536,6 +550,8 @@ System.out.println("URL callback="+address);
     
     private static String getData(String url)
     {
+        //String key=SWBSocialUtil.Util.getSocialProperty("kloutKey");
+        //ver con Jei, como hacer clase singleton a SWBSocialUtil, para que una vez cargando el archivo de propiedades (networkconfig.properties), me traiga la llave definida ahi de klout
         String key="8fkzgz7ngf7bth3nk94gnxkd";
         url=url+"?key="+key;
         URLConnection conex = null;
