@@ -342,10 +342,10 @@ public class InmujeresGenericLDAPBridge extends ExtUserRepInt
         };
         Attributes answer = null;
 
-        System.out.println("login: "+login);
+        System.out.println("login: " + login);
         String cn = getCNFromLogin(login);
-        System.out.println("cn: "+cn);
-        
+        System.out.println("cn: " + cn);
+
         if (ctx == null)
         {
             throw new NamingException("Contexto de conexión nulo cn: " + cn);
@@ -410,21 +410,25 @@ public class InmujeresGenericLDAPBridge extends ExtUserRepInt
         {
             String loginSubordinado = subordinado.getLogin();
             User userSubordinado = getUser(loginSubordinado);
-            ext.addSubordinado(userSubordinado);
-            UserExtended extSubordinado = UserExtended.ClassMgr.getUserExtended(userSubordinado.getId(), userSubordinado.getUserRepository());
-            if (extSubordinado == null)
+            if (userSubordinado != null)
             {
-                extSubordinado = UserExtended.ClassMgr.createUserExtended(userSubordinado.getId(), userSubordinado.getUserRepository());
+                ext.addSubordinado(userSubordinado);
+                UserExtended extSubordinado = UserExtended.ClassMgr.getUserExtended(userSubordinado.getId(), userSubordinado.getUserRepository());
+                if (extSubordinado == null)
+                {
+                    extSubordinado = UserExtended.ClassMgr.createUserExtended(userSubordinado.getId(), userSubordinado.getUserRepository());
+                }
+                UserLogin infoSubordinado = aut.getCamposLogin(loginSubordinado + Autentificacion.PREFIX_INMUJERES);
+                extSubordinado.setArea(infoSubordinado.getAreaAdscripcion());
+                extSubordinado.setExtensionUser(infoSubordinado.getExtension());
+                extSubordinado.setLevel(infoSubordinado.getNivel());
+                extSubordinado.setNoEmpleado(infoSubordinado.getNoEmpleado());
+                extSubordinado.setPuesto(infoSubordinado.getPuesto());
+                extSubordinado.setRfc(infoSubordinado.getRfc());
+                extSubordinado.setCc(infoSubordinado.getCc());
+                extSubordinado.setCcDescription(infoSubordinado.getCcDescription());
             }
-            UserLogin infoSubordinado = aut.getCamposLogin(loginSubordinado + Autentificacion.PREFIX_INMUJERES);
-            extSubordinado.setArea(infoSubordinado.getAreaAdscripcion());
-            extSubordinado.setExtensionUser(infoSubordinado.getExtension());
-            extSubordinado.setLevel(infoSubordinado.getNivel());
-            extSubordinado.setNoEmpleado(infoSubordinado.getNoEmpleado());
-            extSubordinado.setPuesto(infoSubordinado.getPuesto());
-            extSubordinado.setRfc(infoSubordinado.getRfc());
-            extSubordinado.setCc(infoSubordinado.getCc());
-            extSubordinado.setCcDescription(infoSubordinado.getCcDescription());
+
         }
         UserLogin info = aut.getCamposLogin(login);
         ext.setArea(info.getAreaAdscripcion());
