@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Properties;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 import org.semanticwb.Logger;
@@ -71,7 +72,7 @@ public class SWBSocialResourceUtils {
      * Creates a new object of this class.
      */
     public SWBSocialResourceUtils() {
-       
+        
     }
    
     /**
