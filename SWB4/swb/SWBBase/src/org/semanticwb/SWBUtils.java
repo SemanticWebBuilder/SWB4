@@ -5332,7 +5332,7 @@ public class SWBUtils {
                 throw new NoSuchAlgorithmException("Can't get bytes from string in ISO8859-1", uee);
             }
             //return "{SHA-512}" + new BASE64Encoder().encode(messageDigest.digest(toEncode.getBytes()));
-            return "{SHA-512}"
+            return "{"+digestAlgorithm+"}"
                     + SFBase64.encodeBytes(messageDigest.digest(bits),
                     false);
         }
