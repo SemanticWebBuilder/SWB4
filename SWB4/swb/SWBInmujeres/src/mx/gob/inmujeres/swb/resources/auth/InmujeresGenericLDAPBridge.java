@@ -342,9 +342,9 @@ public class InmujeresGenericLDAPBridge extends ExtUserRepInt
         };
         Attributes answer = null;
 
-        System.out.println("login: " + login);
+        
         String cn = getCNFromLogin(login);
-        System.out.println("cn: " + cn);
+        
 
         if (ctx == null)
         {
