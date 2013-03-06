@@ -1112,6 +1112,7 @@ public class SemanticMgr implements SWBInstanceObject
             SemanticProperty publ = model.createSemanticProperty(SWBAdminURI + "/PublicKey", model.getModelObject().getSemanticClass(), SemanticVocabulary.OWL_DATATYPEPROPERTY, SemanticVocabulary.XMLS_STRING);
             model.getModelObject().setProperty(priv, llaves[0]);
             model.getModelObject().setProperty(publ, llaves[1]);
+            log.event("New KeyPair created... ");
         }
     }
 
