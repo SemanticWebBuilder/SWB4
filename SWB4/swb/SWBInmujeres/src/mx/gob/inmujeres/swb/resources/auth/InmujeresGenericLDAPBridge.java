@@ -255,7 +255,7 @@ public class InmujeresGenericLDAPBridge extends ExtUserRepInt
             int pos = login.indexOf("@inmujeres.local");
             if (pos == -1)
             {
-                login += "@inmujeres.local";
+                login += Autentificacion.PREFIX_INMUJERES;
             }
         }
         return login;
@@ -342,7 +342,10 @@ public class InmujeresGenericLDAPBridge extends ExtUserRepInt
         };
         Attributes answer = null;
 
+        System.out.println("login: "+login);
         String cn = getCNFromLogin(login);
+        System.out.println("cn: "+cn);
+        
         if (ctx == null)
         {
             throw new NamingException("Contexto de conexión nulo cn: " + cn);
@@ -379,7 +382,7 @@ public class InmujeresGenericLDAPBridge extends ExtUserRepInt
         String login = ru.getLogin();
         if (login.indexOf("@") == -1)
         {
-            login += "@inmujeres.local";
+            login += Autentificacion.PREFIX_INMUJERES;
         }
         List<UserSubordinado> subordinados = aut.getSubordinados(login);
         Role role = userRep.getRole("evaluador");
@@ -413,7 +416,7 @@ public class InmujeresGenericLDAPBridge extends ExtUserRepInt
             {
                 extSubordinado = UserExtended.ClassMgr.createUserExtended(userSubordinado.getId(), userSubordinado.getUserRepository());
             }
-            UserLogin infoSubordinado = aut.getCamposLogin(loginSubordinado + "@inmujeres.local");
+            UserLogin infoSubordinado = aut.getCamposLogin(loginSubordinado + Autentificacion.PREFIX_INMUJERES);
             extSubordinado.setArea(infoSubordinado.getAreaAdscripcion());
             extSubordinado.setExtensionUser(infoSubordinado.getExtension());
             extSubordinado.setLevel(infoSubordinado.getNivel());
