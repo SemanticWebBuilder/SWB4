@@ -4,7 +4,7 @@ package org.semanticwb.social.base;
    /**
    * Clase en donde se almacenan todos los post de tipo Photo y que entran por el Listener 
    */
-public abstract class PhotoInBase extends org.semanticwb.social.MessageIn implements org.semanticwb.social.PostImageable,org.semanticwb.social.PostTextable,org.semanticwb.model.Tagable,org.semanticwb.social.PostDataable,org.semanticwb.model.Traceable
+public abstract class PhotoInBase extends org.semanticwb.social.MessageIn implements org.semanticwb.model.Tagable,org.semanticwb.social.PostTextable,org.semanticwb.social.PostImageable,org.semanticwb.social.PostDataable,org.semanticwb.model.Traceable
 {
    /**
    * Clase en donde se almacenan todos los post de tipo Photo y que entran por el Listener
@@ -145,29 +145,6 @@ public abstract class PhotoInBase extends org.semanticwb.social.MessageIn implem
         public static java.util.Iterator<org.semanticwb.social.PhotoIn> listPhotoInByPostInSocialNetwork(org.semanticwb.social.SocialNetwork value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.social.PhotoIn> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(social_postInSocialNetwork,value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.social.PhotoIn with a determined PostListenerBase
-       * @param value PostListenerBase of the type org.semanticwb.social.PostListenerContainerBase
-       * @param model Model of the org.semanticwb.social.PhotoIn
-       * @return Iterator with all the org.semanticwb.social.PhotoIn
-       */
-
-        public static java.util.Iterator<org.semanticwb.social.PhotoIn> listPhotoInByPostListenerBase(org.semanticwb.social.PostListenerContainerBase value,org.semanticwb.model.SWBModel model)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.social.PhotoIn> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(social_postListenerBase, value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.social.PhotoIn with a determined PostListenerBase
-       * @param value PostListenerBase of the type org.semanticwb.social.PostListenerContainerBase
-       * @return Iterator with all the org.semanticwb.social.PhotoIn
-       */
-
-        public static java.util.Iterator<org.semanticwb.social.PhotoIn> listPhotoInByPostListenerBase(org.semanticwb.social.PostListenerContainerBase value)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.social.PhotoIn> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(social_postListenerBase,value.getSemanticObject(),sclass));
             return it;
         }
        /**

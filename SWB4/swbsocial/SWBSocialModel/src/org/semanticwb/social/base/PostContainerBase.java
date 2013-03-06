@@ -2,7 +2,7 @@ package org.semanticwb.social.base;
 
 
    /**
-   * Clase que contiene todos los post que han sido enviados a una determinada red social. La intención de crear esta clase es para que se agrupen los Post de cada red social por mes y año, y de esta manera sea mucho mas sencillo, optimo y rapido realizar las busquedas. 
+   * Clase a Cambiar despues por "Relacional". Clase que contiene todos los post que han sido enviados a una determinada red social. La intención de crear esta clase es para que se agrupen los Post de cada red social por mes y año, y de esta manera sea mucho mas sencillo, optimo y rapido realizar las busquedas. 
    */
 public abstract class PostContainerBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Traceable
 {
@@ -31,7 +31,7 @@ public abstract class PostContainerBase extends org.semanticwb.model.SWBClass im
    */
     public static final org.semanticwb.platform.SemanticProperty social_hasPost=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#hasPost");
    /**
-   * Clase que contiene todos los post que han sido enviados a una determinada red social. La intención de crear esta clase es para que se agrupen los Post de cada red social por mes y año, y de esta manera sea mucho mas sencillo, optimo y rapido realizar las busquedas.
+   * Clase a Cambiar despues por "Relacional". Clase que contiene todos los post que han sido enviados a una determinada red social. La intención de crear esta clase es para que se agrupen los Post de cada red social por mes y año, y de esta manera sea mucho mas sencillo, optimo y rapido realizar las busquedas.
    */
     public static final org.semanticwb.platform.SemanticClass social_PostContainer=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#PostContainer");
    /**

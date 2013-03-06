@@ -5,11 +5,14 @@
 
 package org.semanticwb.social.listener;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.StringTokenizer;
+import org.semanticwb.Logger;
+import org.semanticwb.SWBUtils;
 import org.semanticwb.model.SWBModel;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.social.ExternalPost;
@@ -23,7 +26,6 @@ import org.semanticwb.social.SocialAdmin;
 import org.semanticwb.social.SocialNetwork;
 import org.semanticwb.social.SocialNetworkUser;
 import org.semanticwb.social.Stream;
-import org.semanticwb.social.Twitter;
 import org.semanticwb.social.util.NormalizerCharDuplicate;
 import org.semanticwb.social.util.SWBSocialUtil;
 
@@ -39,6 +41,8 @@ import org.semanticwb.social.util.SWBSocialUtil;
  */
 
 public class SentimentalDataClassifier {
+    
+    private static Logger log = SWBUtils.getLogger(SentimentalDataClassifier.class);
 
     //PostIn post=null;
     String externalString2Clasify=null;
@@ -186,10 +190,8 @@ public class SentimentalDataClassifier {
         //Empieza manejo de filtros
         
         //Filtros por sentimiento
+        
         float promSentimentalValue=0; 
-        boolean filterPositives=stream.isFilterSentimentalPositive();
-        boolean filterNegatives=stream.isFilterSentimentalNegative();
-        boolean filterNeutrals=stream.isFilterSentimentalNeutral();
         int sentimentalTweetValueType=0;    //Por defecto sería neutro
         if(sentimentalTweetValue>0) //Se revisa de acuerdo al promedio de sentimentalTweetValue/wordsCont, que valor sentimental posee el tweet
         {
@@ -207,16 +209,25 @@ public class SentimentalDataClassifier {
             }
         }
         
+        boolean filterPositives=stream.isFilterSentimentalPositive();
+        boolean filterNegatives=stream.isFilterSentimentalNegative();
+        boolean filterNeutrals=stream.isFilterSentimentalNeutral();
+        
         boolean createPostInbySentiment=false;
-        if(sentimentalTweetValueType==1)
-        {
-            if(filterPositives) createPostInbySentiment=true;
-        }else if(sentimentalTweetValueType==2)
-        {
-            if(filterNegatives) createPostInbySentiment=true;
-        }else if(sentimentalTweetValueType==0)
-        {
-            if(filterNeutrals) createPostInbySentiment=true;
+        
+        //Si el stream no tiene filtros de sentimientos, es decir, que todos sean positivos o negativos, entonces los mensajes siempre pasarían este filtro
+        if((filterPositives && filterNegatives && filterNeutrals) || (!filterPositives && !filterNegatives && !filterNeutrals)) createPostInbySentiment=true;
+        else{
+            if(sentimentalTweetValueType==1)
+            {
+                if(filterPositives) createPostInbySentiment=true;
+            }else if(sentimentalTweetValueType==2)
+            {
+                if(filterNegatives) createPostInbySentiment=true;
+            }else if(sentimentalTweetValueType==0)
+            {
+                if(filterNeutrals) createPostInbySentiment=true;
+            }
         }
         
         //Filtros por intensidad
@@ -238,21 +249,25 @@ public class SentimentalDataClassifier {
         }
         
         boolean createPostInbyIntensity=false;
-        if(intensityTweetValueType==2)
-        {
-            if(filterIntensityHigh) createPostInbyIntensity=true;
-        }else if(intensityTweetValueType==1)
-        {
-            if(filterIntensityMedium) createPostInbyIntensity=true;
-        }else if(intensityTweetValueType==0)
-        {
-            if(filtrarIntensityLow) createPostInbyIntensity=true;
+        //Si el stream no tiene filtros de intensidad, es decir, que todos sean positivos o negativos, entonces los mensajes siempre pasarían este filtro
+        if((filterIntensityHigh && filterIntensityMedium && filtrarIntensityLow) || (!filterIntensityHigh && !filterIntensityMedium && !filtrarIntensityLow)) createPostInbyIntensity=true;
+        else{
+            if(intensityTweetValueType==2)
+            {
+                if(filterIntensityHigh) createPostInbyIntensity=true;
+            }else if(intensityTweetValueType==1)
+            {
+                if(filterIntensityMedium) createPostInbyIntensity=true;
+            }else if(intensityTweetValueType==0)
+            {
+                if(filtrarIntensityLow) createPostInbyIntensity=true;
+            }
         }
 
         
-        //if(createPostInbySentiment && createPostInbyIntensity)    //Si pasa los filtros, entonces se crea el mensaje, de lo contrario el mensaje de la red social nunca se persiste.
+        if(createPostInbySentiment && createPostInbyIntensity)    //Si pasa los filtros, entonces se crea el mensaje, de lo contrario el mensaje de la red social nunca se persiste.
         {
-            
+            System.out.println("PASA FILTRO DE SENTIMIENTOS E INTENSIDAD");
             //Si pasó filtro por sentimiento e intensidad, entonces revisa filtro por klout
             SocialNetworkUser socialNetUser=null;
             boolean createPostbyKlout=false;
@@ -260,7 +275,7 @@ public class SentimentalDataClassifier {
             int userKloutScore=0;
             {
                 //Filtro de Klout
-                stream.setStream_KloutValue(10);
+                //stream.setStream_KloutValue(10);
                 //Si se requiere filtrar por Klout, esto es porque exista un valo de klout para el stream>0
                 if(stream.getStream_KloutValue()>0 && socialNetwork.getSemanticObject().getSemanticClass().isSubClass(Kloutable.social_Kloutable))
                 {
@@ -273,14 +288,30 @@ public class SentimentalDataClassifier {
                             if(socialNetUser!=null)
                             {
                                 userKloutScore=socialNetUser.getSnu_klout();
+                                //System.out.println("userKloutScore:"+userKloutScore);
                                 int days=SWBSocialUtil.Util.Datediff(socialNetUser.getUpdated(), Calendar.getInstance().getTime());
+                                
+                                /*
+                                String patron = "yyyy/MM/dd:hh:mm:ss:SSS:a";
+                                SimpleDateFormat formato = new SimpleDateFormat(patron);
+                                // formateo
+                                System.out.println("Fecha Klout Registrada de usuario:"+formato.format(socialNetUser.getUpdated()));
+                                System.out.println("days Dif:"+days);
+                                * */
                                 if(days<5) //Si aun no pasan 5(TODO:Hacer configurable) días de la ultima actualización de los datos del usuario (incluyendo su klout), entonces toma el valor de klout que tiene guardado en BD
                                 {
                                     if(userKloutScore>=stream.getStream_KloutValue())
                                     {
                                         createPostbyKlout=true;
                                     }else{
-                                        System.out.println("ENTRA A createPostbyKlout Y ES IGUAL A FALSE");
+                                        //System.out.println("ENTRA A createPostbyKlout Y ES IGUAL A FALSE...");
+                                        Kloutable socialNetKloutAble=(Kloutable) socialNetwork;
+                                        userKloutScore=Double.valueOf(socialNetKloutAble.getUserKlout(creatorId)).intValue(); 
+                                        if(userKloutScore>=stream.getStream_KloutValue())
+                                        {
+                                            createPostbyKlout=true;
+                                            upDateSocialUserNetworkData=true;
+                                        }
                                     }
                                 }else{  //Si ya pasaron 5 o mas días de que se actualizó la info del usuario, entonces busca su score en Klout
                                     Kloutable socialNetKloutAble=(Kloutable) socialNetwork;
@@ -292,6 +323,7 @@ public class SentimentalDataClassifier {
                                     }
                                 }
                             }else { //No existe en la BD, debo revisar su klout
+                                //System.out.println("USUARIO NO EXISTE EN EL SISTEMA, REVISAR QUE KLOUT TIENE");
                                 Kloutable socialNetKloutAble=(Kloutable) socialNetwork;
                                 userKloutScore=Double.valueOf(socialNetKloutAble.getUserKlout(creatorId)).intValue(); 
                                 if(userKloutScore>=stream.getStream_KloutValue())
@@ -306,10 +338,10 @@ public class SentimentalDataClassifier {
                     createPostbyKlout=true;
                 }
             }
-            System.out.println("Klout de usuario del mensaje:"+createPostbyKlout);
+            //System.out.println("Klout de usuario del mensaje:"+createPostbyKlout);
             if(createPostbyKlout)   //Si pasa el filtro de Klout del usuario, entonces ya persite el mensaje en BD
             {
-            
+                System.out.println("Paso filtro de sentimientos, intensidad y klout---vamos a persistir el msg...");
                 PostIn post=createPostInObj(socialNetUser, userKloutScore, upDateSocialUserNetworkData);
 
                 //Guarda valores sentimentales en el PostIn (mensaje de entrada)
@@ -320,8 +352,8 @@ public class SentimentalDataClassifier {
                 post.setPostIntensityValue(promIntensityValue);
                 post.setPostIntesityType(intensityTweetValueType);
 
-                System.out.println("Valor sentimental puesto al final:"+post.getPostSentimentalValue());
-                System.out.println("Valor de intensidad puesto al final:"+post.getPostIntensityValue());
+                //System.out.println("Valor sentimental puesto al final:"+post.getPostSentimentalValue());
+                //System.out.println("Valor de intensidad puesto al final:"+post.getPostIntensityValue());
 
                 //Revisa si encuentra emoticones en el mensaje
                 findEmoticones(post);
@@ -338,8 +370,11 @@ public class SentimentalDataClassifier {
      */
     private PostIn createPostInObj(SocialNetworkUser socialNetUser, int userKloutScore, boolean upDateSocialUserNetworkData)
     {
+        MessageIn message=null;
+        try
+        {
            //Persistencia del mensaje
-                MessageIn message=MessageIn.ClassMgr.createMessageIn(String.valueOf(externalPost.getPostId()), model);
+                message=MessageIn.ClassMgr.createMessageIn(String.valueOf(externalPost.getPostId()), model);
                 message.setMsg_Text(externalPost.getMessage());
                 System.out.println("CREÓ EL MENSAJE CON TEXTO:"+message.getMsg_Text());
                 message.setPostInSocialNetwork(socialNetwork);
@@ -388,10 +423,10 @@ public class SentimentalDataClassifier {
                         socialNetUser.setCreated(externalPost.getUsercreation());
                         socialNetUser.setSnu_klout(userKloutScore);
                         
-                        System.out.println("SocialNetworkUser Creado:"+socialNetUser.getSnu_id());
+                        //System.out.println("SocialNetworkUser Creado:"+socialNetUser.getSnu_id());
                     }else if(upDateSocialUserNetworkData)
                     {
-                        System.out.println("SocialNetworkUser Actualizado:"+socialNetUser.getSnu_id());
+                        //System.out.println("SocialNetworkUser Actualizado:"+socialNetUser.getSnu_id());
                         socialNetUser.setFollowers(externalPost.getFollowers());
                         socialNetUser.setFriends(externalPost.getFriendsNumber());
                         socialNetUser.setSnu_klout(userKloutScore);
@@ -422,6 +457,11 @@ public class SentimentalDataClassifier {
                 //eficientes de todos los mensajes recibidos por las redes sociales.
                 //Por el momento, lo comento, para que no se llene tanto la BD, sin embargo, debo descomentarlo para producción.
                 //socialNetwork.addReceivedPost(message, String.valueOf(externalPost.getPostId()), socialNetwork);
+        }catch(Exception e)
+        {
+            e.printStackTrace();
+            log.error(e);
+        }
                 
                 return message;
     }
