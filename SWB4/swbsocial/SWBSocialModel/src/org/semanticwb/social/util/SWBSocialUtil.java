@@ -11,12 +11,14 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Properties;
 import java.util.StringTokenizer;
 import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.base.SWBAppObject;
 import org.semanticwb.model.SWBModel;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.social.PunctuationSign;
@@ -59,6 +61,8 @@ public class SWBSocialUtil {
     static public int INTENSITIVE_MEDIUM=1;
     static public int INTENSITIVE_LOW=0;
     
+    private static Properties prop = new Properties();
+    
     
     
 
@@ -66,7 +70,8 @@ public class SWBSocialUtil {
      * Creates a new object of this class.
      */
     public SWBSocialUtil() {
-       
+       System.out.println("Entra a SWBSocialUtil/createInstance");
+       init();
     }
 
    
@@ -80,7 +85,6 @@ public class SWBSocialUtil {
         System.out.println("Entra a SWBSocialUtil/createInstance");
         if (instance == null) {
             instance = new SWBSocialUtil();
-            init();
         }
         return instance;
     }
@@ -144,6 +148,14 @@ public class SWBSocialUtil {
          {
              swbSocialAdmSite=SocialAdmin.ClassMgr.getSocialAdmin(swbsocialSite);
          }
+         
+        try
+        { 
+            prop.load(SWBPortal.getFileFromWorkPath("/models/SWBSocial/swbsocialconfig.properties"));
+        }catch(Exception e)
+        {
+            log.error(e);
+        }
     }
 
     public ArrayList getDoublesArray()
@@ -715,6 +727,11 @@ public class SWBSocialUtil {
             long diferencia = fechaFinalMs - fechaInicialMs;
             double dias = Math.floor(diferencia / (1000 * 60 * 60 * 24));
             return ((int) dias);
+        }
+        
+        public static String getSocialProperty(String property)
+        {
+            return prop.getProperty(property);
         }
     }
     
