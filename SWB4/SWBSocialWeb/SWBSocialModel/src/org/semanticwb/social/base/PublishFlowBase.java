@@ -477,4 +477,13 @@ public abstract class PublishFlowBase extends org.semanticwb.model.SWBClass impl
     {
         getSemanticObject().setProperty(swb_title, title, lang);
     }
+
+   /**
+   * Gets the SocialSite
+   * @return a instance of org.semanticwb.social.SocialSite
+   */
+    public org.semanticwb.social.SocialSite getSocialSite()
+    {
+        return (org.semanticwb.social.SocialSite)getSemanticObject().getModel().getModelObject().createGenericInstance();
+    }
 }
