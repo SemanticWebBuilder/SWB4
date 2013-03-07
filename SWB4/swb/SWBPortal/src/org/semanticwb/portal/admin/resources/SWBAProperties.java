@@ -32,6 +32,7 @@ import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.base.util.SWBProperties;
 import org.semanticwb.model.*;
+import org.semanticwb.platform.SemanticMgr;
 import org.semanticwb.platform.SemanticProperty;
 import org.semanticwb.portal.api.*;
 
@@ -255,8 +256,8 @@ public class SWBAProperties extends GenericResource {
             }
             if (fileSelected.equals("System.properties"))
             {
-                SemanticProperty sp = SWBPlatform.getSemanticMgr().getModel(SWBPlatform.getSemanticMgr().SWBAdmin).getSemanticProperty(SWBPlatform.getSemanticMgr().SWBAdmin + "/PublicKey");
-                String publicKey = SWBPlatform.getSemanticMgr().getModel(SWBPlatform.getSemanticMgr().SWBAdmin).getModelObject().getProperty(sp);
+                SemanticProperty sp = SWBPlatform.getSemanticMgr().getModel(SemanticMgr.SWBAdmin).getSemanticProperty(SemanticMgr.SWBAdminURI + "/PublicKey");
+                String publicKey = SWBPlatform.getSemanticMgr().getModel(SemanticMgr.SWBAdmin).getModelObject().getProperty(sp);
                 if (null != publicKey)
                 {
                     out.println("<tr >");
@@ -267,7 +268,6 @@ public class SWBAProperties extends GenericResource {
                     out.println("</td>");
                     out.println("<td >" + publicKey.substring(publicKey.indexOf("|") + 1) + "</td>");
                     out.println("<td ><PRE >System Public Key</PRE></td>");
-
                     out.println("</tr>");
                 }
                 out.println("</tbody>");
