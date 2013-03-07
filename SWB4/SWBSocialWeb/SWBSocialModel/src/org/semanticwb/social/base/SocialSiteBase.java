@@ -4,8 +4,13 @@ package org.semanticwb.social.base;
    /**
    * Clase que hereda de swb:WebSite. Es un tipo de website Social. De esta manera se puede contar con todos los elementos en el arbol de navegación en la administración, y otros elementos utiles para Social Site. 
    */
-public abstract class SocialSiteBase extends org.semanticwb.model.WebSite implements org.semanticwb.model.Undeleteable,org.semanticwb.model.Countryable,org.semanticwb.model.Filterable,org.semanticwb.model.Traceable,org.semanticwb.model.OntologyDepable,org.semanticwb.model.Trashable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Localeable,org.semanticwb.model.Indexable,org.semanticwb.model.Activeable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.FilterableClass
+public abstract class SocialSiteBase extends org.semanticwb.model.WebSite implements org.semanticwb.model.OntologyDepable,org.semanticwb.model.FilterableClass,org.semanticwb.model.FilterableNode,org.semanticwb.model.Localeable,org.semanticwb.model.Trashable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Activeable,org.semanticwb.model.Undeleteable,org.semanticwb.model.Countryable,org.semanticwb.model.Indexable,org.semanticwb.model.Filterable,org.semanticwb.model.Traceable
 {
+    public static final org.semanticwb.platform.SemanticClass social_PublishFlow=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#PublishFlow");
+   /**
+   * Clase que contendra los streams que configurados para cada usuario
+   */
+    public static final org.semanticwb.platform.SemanticClass social_Stream=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#Stream");
    /**
    * Clase que hereda de swb:WebSite. Es un tipo de website Social. De esta manera se puede contar con todos los elementos en el arbol de navegación en la administración, y otros elementos utiles para Social Site.
    */
@@ -362,5 +367,59 @@ public abstract class SocialSiteBase extends org.semanticwb.model.WebSite implem
     public SocialSiteBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
+    }
+
+    public org.semanticwb.social.PublishFlow getPublishFlow(String id)
+    {
+        return org.semanticwb.social.PublishFlow.ClassMgr.getPublishFlow(id, this);
+    }
+
+    public java.util.Iterator<org.semanticwb.social.PublishFlow> listPublishFlows()
+    {
+        return org.semanticwb.social.PublishFlow.ClassMgr.listPublishFlows(this);
+    }
+
+    public org.semanticwb.social.PublishFlow createPublishFlow(String id)
+    {
+        return org.semanticwb.social.PublishFlow.ClassMgr.createPublishFlow(id,this);
+    }
+
+    public void removePublishFlow(String id)
+    {
+        org.semanticwb.social.PublishFlow.ClassMgr.removePublishFlow(id, this);
+    }
+    public boolean hasPublishFlow(String id)
+    {
+        return org.semanticwb.social.PublishFlow.ClassMgr.hasPublishFlow(id, this);
+    }
+
+    public org.semanticwb.social.Stream getStream(String id)
+    {
+        return org.semanticwb.social.Stream.ClassMgr.getStream(id, this);
+    }
+
+    public java.util.Iterator<org.semanticwb.social.Stream> listStreams()
+    {
+        return org.semanticwb.social.Stream.ClassMgr.listStreams(this);
+    }
+
+    public org.semanticwb.social.Stream createStream(String id)
+    {
+        return org.semanticwb.social.Stream.ClassMgr.createStream(id,this);
+    }
+
+    public org.semanticwb.social.Stream createStream()
+    {
+        long id=getSemanticObject().getModel().getCounter(social_Stream);
+        return org.semanticwb.social.Stream.ClassMgr.createStream(String.valueOf(id),this);
+    } 
+
+    public void removeStream(String id)
+    {
+        org.semanticwb.social.Stream.ClassMgr.removeStream(id, this);
+    }
+    public boolean hasStream(String id)
+    {
+        return org.semanticwb.social.Stream.ClassMgr.hasStream(id, this);
     }
 }

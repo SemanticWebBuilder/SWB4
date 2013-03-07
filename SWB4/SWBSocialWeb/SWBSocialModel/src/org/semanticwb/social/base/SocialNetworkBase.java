@@ -4,7 +4,7 @@ package org.semanticwb.social.base;
    /**
    * Clase que engloba a las diferentes clases que representan cada una de las redes sociales. 
    */
-public abstract class SocialNetworkBase extends org.semanticwb.model.SWBClass implements org.semanticwb.social.Secreteable,org.semanticwb.social.Listenerable,org.semanticwb.model.Activeable,org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable
+public abstract class SocialNetworkBase extends org.semanticwb.model.SWBClass implements org.semanticwb.social.Listenerable,org.semanticwb.model.Activeable,org.semanticwb.model.Descriptiveable,org.semanticwb.social.Secreteable,org.semanticwb.model.Traceable
 {
    /**
    * Clase a Cambiar despues por "Relacional".  En esta clase se guardan todos los post que lleguan por el listener, se estima que toda la info. que se guarde en este objeto debe de eliminarse aproximadamente c/mes, siendo este parametro configurable de acuerdo al tiempo que la organización quiera guardar  la información sobre los mensajes que lleguen por el listener. Cuando un post que llegue por el listener sea tomado como base para crear un nuevo post por la organización, se cree que debe copiarse la información de dicho post de esta clase hacia la clase PostListenerContainerBase.
@@ -18,10 +18,6 @@ public abstract class SocialNetworkBase extends org.semanticwb.model.SWBClass im
    * Bandera que indica si la red social se encuentra antenticada o no, esta propiedad se maneja desde el sistema. Si la red social regresa que la fecha de expiración de la autenticación ha concluido, se pone en false, para que despues se autentique nuevamente la cuenta de manera manual desde el modulo de cuentas de redes sociales.
    */
     public static final org.semanticwb.platform.SemanticProperty social_sn_authenticated=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#sn_authenticated");
-   /**
-   * Fecha siguiente para busqueda en una red social.
-   */
-    public static final org.semanticwb.platform.SemanticProperty social_nextDatetoSearch=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#nextDatetoSearch");
    /**
    * Clase a Cambiar despues por "Relacional". Clase que contiene todos los post que han sido enviados a una determinada red social. La intención de crear esta clase es para que se agrupen los Post de cada red social por mes y año, y de esta manera sea mucho mas sencillo, optimo y rapido realizar las busquedas.
    */
@@ -38,6 +34,14 @@ public abstract class SocialNetworkBase extends org.semanticwb.model.SWBClass im
    * Esta propiedad inversa me puede decir cuales son los mensajes que han llegado por el Listener por una determinada red social.
    */
     public static final org.semanticwb.platform.SemanticProperty social_hasPostInSocialNetworkInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#hasPostInSocialNetworkInv");
+   /**
+   * Clase en la que se guardan datos que sirven para realizar una siguiente busqueda en una determinada red social y en un determinado stream.
+   */
+    public static final org.semanticwb.platform.SemanticClass social_SocialNetStreamSearch=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#SocialNetStreamSearch");
+   /**
+   * Una red social puede tener varias fechas proximas de busqueda, una por cada stream en la que este configurada.
+   */
+    public static final org.semanticwb.platform.SemanticProperty social_hasSocialNetStreamSearchInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#hasSocialNetStreamSearchInv");
    /**
    * En este objeto se guardara el identificador que es asignado para cada post en cada una de las redes sociales, es decir, si un mismo post se envía hacia mas de una red social, cada una de esas redes sociales daran un identificador unico para ese post en esa red social, este lo tenemos que guardar nosotros en este objeto para fines de monitoreo de estatus del post en esa red social (En Proceso, Revisado, Publicado, etc), como nosotros para un post, independientemente de a cuantas redes sociales se envíe, solo creamos un objeto Post (Message, Photo, Video), tuvimos que crear esta clase para guardar el identificador de ese post para c/red social. En el ID de este objeto se colocara el id de ese post en esa red social.
    */
@@ -225,6 +229,29 @@ public abstract class SocialNetworkBase extends org.semanticwb.model.SWBClass im
             return it;
         }
        /**
+       * Gets all org.semanticwb.social.SocialNetwork with a determined SocialNetStreamSearchInv
+       * @param value SocialNetStreamSearchInv of the type org.semanticwb.social.SocialNetStreamSearch
+       * @param model Model of the org.semanticwb.social.SocialNetwork
+       * @return Iterator with all the org.semanticwb.social.SocialNetwork
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.SocialNetwork> listSocialNetworkBySocialNetStreamSearchInv(org.semanticwb.social.SocialNetStreamSearch value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.SocialNetwork> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(social_hasSocialNetStreamSearchInv, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.social.SocialNetwork with a determined SocialNetStreamSearchInv
+       * @param value SocialNetStreamSearchInv of the type org.semanticwb.social.SocialNetStreamSearch
+       * @return Iterator with all the org.semanticwb.social.SocialNetwork
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.SocialNetwork> listSocialNetworkBySocialNetStreamSearchInv(org.semanticwb.social.SocialNetStreamSearch value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.SocialNetwork> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(social_hasSocialNetStreamSearchInv,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
        * Gets all org.semanticwb.social.SocialNetwork with a determined SocialPostInv
        * @param value SocialPostInv of the type org.semanticwb.social.SocialPost
        * @param model Model of the org.semanticwb.social.SocialNetwork
@@ -408,24 +435,6 @@ public abstract class SocialNetworkBase extends org.semanticwb.model.SWBClass im
     }
 
 /**
-* Gets the NextDatetoSearch property
-* @return String with the NextDatetoSearch
-*/
-    public String getNextDatetoSearch()
-    {
-        return getSemanticObject().getProperty(social_nextDatetoSearch);
-    }
-
-/**
-* Sets the NextDatetoSearch property
-* @param value long with the NextDatetoSearch
-*/
-    public void setNextDatetoSearch(String value)
-    {
-        getSemanticObject().setProperty(social_nextDatetoSearch, value);
-    }
-
-/**
 * Gets the Updated property
 * @return java.util.Date with the Updated
 */
@@ -594,6 +603,45 @@ public abstract class SocialNetworkBase extends org.semanticwb.model.SWBClass im
          if(obj!=null)
          {
              ret=(org.semanticwb.social.PostIn)obj.createGenericInstance();
+         }
+         return ret;
+    }
+   /**
+   * Gets all the org.semanticwb.social.SocialNetStreamSearch
+   * @return A GenericIterator with all the org.semanticwb.social.SocialNetStreamSearch
+   */
+
+    public org.semanticwb.model.GenericIterator<org.semanticwb.social.SocialNetStreamSearch> listSocialNetStreamSearchInvs()
+    {
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.social.SocialNetStreamSearch>(getSemanticObject().listObjectProperties(social_hasSocialNetStreamSearchInv));
+    }
+
+   /**
+   * Gets true if has a SocialNetStreamSearchInv
+   * @param value org.semanticwb.social.SocialNetStreamSearch to verify
+   * @return true if the org.semanticwb.social.SocialNetStreamSearch exists, false otherwise
+   */
+    public boolean hasSocialNetStreamSearchInv(org.semanticwb.social.SocialNetStreamSearch value)
+    {
+        boolean ret=false;
+        if(value!=null)
+        {
+           ret=getSemanticObject().hasObjectProperty(social_hasSocialNetStreamSearchInv,value.getSemanticObject());
+        }
+        return ret;
+    }
+
+   /**
+   * Gets the SocialNetStreamSearchInv
+   * @return a org.semanticwb.social.SocialNetStreamSearch
+   */
+    public org.semanticwb.social.SocialNetStreamSearch getSocialNetStreamSearchInv()
+    {
+         org.semanticwb.social.SocialNetStreamSearch ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(social_hasSocialNetStreamSearchInv);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.social.SocialNetStreamSearch)obj.createGenericInstance();
          }
          return ret;
     }

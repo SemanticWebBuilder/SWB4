@@ -4,7 +4,7 @@ package org.semanticwb.social.base;
    /**
    * Clase que almacenara las diferentes cuentas de una organización para la red social Twitter. 
    */
-public abstract class TwitterBase extends org.semanticwb.social.SocialNetwork implements org.semanticwb.social.Secreteable,org.semanticwb.model.Traceable,org.semanticwb.social.SocialNetPostable,org.semanticwb.social.KeepAliveListenerable,org.semanticwb.social.Photoable,org.semanticwb.social.Messageable,org.semanticwb.social.Kloutable,org.semanticwb.social.Listenerable,org.semanticwb.social.Oauthable,org.semanticwb.model.Activeable,org.semanticwb.model.Descriptiveable
+public abstract class TwitterBase extends org.semanticwb.social.SocialNetwork implements org.semanticwb.social.Kloutable,org.semanticwb.social.Photoable,org.semanticwb.social.Messageable,org.semanticwb.social.KeepAliveListenerable,org.semanticwb.social.SocialNetPostable,org.semanticwb.social.Oauthable,org.semanticwb.social.Listenerable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Activeable,org.semanticwb.social.Secreteable,org.semanticwb.model.Traceable
 {
    /**
    * Clase que almacenara las diferentes cuentas de una organización para la red social Twitter.
@@ -174,6 +174,29 @@ public abstract class TwitterBase extends org.semanticwb.social.SocialNetwork im
         public static java.util.Iterator<org.semanticwb.social.Twitter> listTwitterByPostInSocialNetworkInv(org.semanticwb.social.PostIn value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.social.Twitter> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(social_hasPostInSocialNetworkInv,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.social.Twitter with a determined SocialNetStreamSearchInv
+       * @param value SocialNetStreamSearchInv of the type org.semanticwb.social.SocialNetStreamSearch
+       * @param model Model of the org.semanticwb.social.Twitter
+       * @return Iterator with all the org.semanticwb.social.Twitter
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.Twitter> listTwitterBySocialNetStreamSearchInv(org.semanticwb.social.SocialNetStreamSearch value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.Twitter> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(social_hasSocialNetStreamSearchInv, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.social.Twitter with a determined SocialNetStreamSearchInv
+       * @param value SocialNetStreamSearchInv of the type org.semanticwb.social.SocialNetStreamSearch
+       * @return Iterator with all the org.semanticwb.social.Twitter
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.Twitter> listTwitterBySocialNetStreamSearchInv(org.semanticwb.social.SocialNetStreamSearch value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.Twitter> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(social_hasSocialNetStreamSearchInv,value.getSemanticObject(),sclass));
             return it;
         }
        /**
