@@ -2,6 +2,7 @@
     - BUG: Perdía el contexto al cambiar contraseña en la autenticación si el usuario no ponia la contraseña anterior o ponia diferentes nuevas contraseñas (serch)
     - Se redujo la contención en la creación de semanticObjects a sólo URIs equivalentes(jei)
     - BUG: Al autenticar contra un repositorio de usuarios que se migró desde 3.x, invariablemente no autenticaba por que ComparablePassword regresaba incorrectamente el nombre del algoritmo de digestion (serch)
+    - mejoras al manejo del par de llaves para monitoreo
   4.2.3.0
     - BUG: High concurrency on hash table for internal and depurl tables (serch)
     - Se agregó interface para soporte en AWS (serch)
