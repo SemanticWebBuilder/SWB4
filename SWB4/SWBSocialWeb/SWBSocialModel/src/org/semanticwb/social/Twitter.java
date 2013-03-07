@@ -174,12 +174,12 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
     /**
      * Gets the value in NextDatetoSearch and verifies is a Long number.
      */
-    private void getLastTweetID(){
-        
-        if(this.getNextDatetoSearch()!= null){
+    private void getLastTweetID(Stream stream){
+        SocialNetStreamSearch socialStreamSerch=SocialNetStreamSearch.getSocialNetStreamSearchbyStreamAndSocialNetwork(stream, this);
+        if(socialStreamSerch!=null && socialStreamSerch.getNextDatetoSearch()!= null){
             try{
-                lastTweetID = Long.parseLong(this.getNextDatetoSearch());
-                System.out.println("RECOVERING NEXTDATETOSEARCH: " + this.getNextDatetoSearch());
+                lastTweetID = Long.parseLong(socialStreamSerch.getNextDatetoSearch());
+                System.out.println("RECOVERING NEXTDATETOSEARCH: " + socialStreamSerch.getNextDatetoSearch());
             }catch(NumberFormatException nfe){
                 lastTweetID = 0L;
                 log.error("Error in getLastTweetID():"  + nfe);
@@ -193,14 +193,15 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
     /**
      * Sets the value to NextDatetoSearch. Verifies whether the passed value is greater than the stored or not.
      */
-    private void setLastTweetID(Long tweetID){        
+    private void setLastTweetID(Long tweetID, Stream stream){        
         try{
             Long storedValue=0L;
-            if(this.getNextDatetoSearch()!=null) storedValue = Long.parseLong(this.getNextDatetoSearch());
+            SocialNetStreamSearch socialStreamSerch=SocialNetStreamSearch.getSocialNetStreamSearchbyStreamAndSocialNetwork(stream, this);
+            if(socialStreamSerch!=null && socialStreamSerch.getNextDatetoSearch()!=null) storedValue = Long.parseLong(socialStreamSerch.getNextDatetoSearch());
             
             if(tweetID > storedValue){ //Only stores tweetID if it's greater than the current stored value
                 System.out.println("EL VALOR ALMACENADO ES:" +  tweetID.toString());
-                this.setNextDatetoSearch(tweetID.toString());
+                socialStreamSerch.setNextDatetoSearch(tweetID.toString());
             }else{
                 System.out.println("NO ESTÁ GUARDANDO NADA PORQUE EL VALOR ALMACENADO YA ES IGUAL O MAYOR AL ACTUAL");
             }
@@ -245,7 +246,7 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
         ArrayList <ExternalPost> aListExternalPost=new ArrayList();
         
         try{            
-            getLastTweetID(); //gets the value stored in NextDatetoSearch
+            getLastTweetID(stream); //gets the value stored in NextDatetoSearch
             twitter4j.Twitter twitter = new TwitterFactory(configureOAuth().build()).getInstance();            
             String searchPhrases = getPhrases(stream.getPhrase());
             twitter4j.Query query = new Query(searchPhrases);
@@ -296,7 +297,7 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
 
                         if(iteration == 1){
                             System.out.println("MaxTweetID:" + result.getMaxId());
-                            setLastTweetID(result.getMaxId());//Save ID of the most recent Tweet
+                            setLastTweetID(result.getMaxId(), stream);//Save ID of the most recent Tweet
                         }
 
                         query.setMaxId(currentTweetID -1L); //Get the next batch of 100 tweets
