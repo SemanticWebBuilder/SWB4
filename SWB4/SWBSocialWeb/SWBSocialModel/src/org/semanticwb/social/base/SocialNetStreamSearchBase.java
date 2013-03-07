@@ -58,6 +58,12 @@ public abstract class SocialNetStreamSearchBase extends org.semanticwb.model.SWB
             java.util.Iterator it=sclass.listInstances();
             return new org.semanticwb.model.GenericIterator<org.semanticwb.social.SocialNetStreamSearch>(it, true);
         }
+
+        public static org.semanticwb.social.SocialNetStreamSearch createSocialNetStreamSearch(org.semanticwb.model.SWBModel model)
+        {
+            long id=model.getSemanticObject().getModel().getCounter(sclass);
+            return org.semanticwb.social.SocialNetStreamSearch.ClassMgr.createSocialNetStreamSearch(String.valueOf(id), model);
+        }
        /**
        * Gets a org.semanticwb.social.SocialNetStreamSearch
        * @param id Identifier for org.semanticwb.social.SocialNetStreamSearch
