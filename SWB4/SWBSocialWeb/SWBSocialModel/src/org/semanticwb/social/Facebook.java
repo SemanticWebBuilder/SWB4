@@ -83,7 +83,7 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
             //mensajes a la vez, se necesita pedir esta información por bloques
             do {
                 //Genera todas las consultas a ejecutar en Facebook, una por frase almacenada en el Stream
-                generateBatchQuery(phrasesInStream, queriesArray);
+                generateBatchQuery(phrasesInStream, queriesArray, stream);
                 
                 //printMap(queriesArray);
                 if (queriesArray != null && queriesArray[0].containsKey("relative_url")) {
@@ -99,7 +99,7 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
             } while (canGetMoreResults);
             
             //Almacena los nuevos limites para las busquedas posteriores en Facebook
-            storeSearchLimits(queriesArray);
+            storeSearchLimits(queriesArray, stream);
 
         } catch (JSONException jsone) {
             log.error("JSON al usar queries construidos", jsone);
@@ -145,7 +145,7 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
      * @param queriesArray contiene tanto los queryStrings a ejecutar en FB, como los
      *        url's devueltos por FB para las siguientes consultas
      */
-    private void storeSearchLimits(HashMap<String, String>[] queriesArray) {
+    private void storeSearchLimits(HashMap<String, String>[] queriesArray, Stream stream) {
         
         StringBuilder limits = new StringBuilder(64);
         try {
@@ -188,7 +188,12 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
                 }
             }
             if (limits.length() > 0) {
-                this.setNextDatetoSearch(limits.toString());
+                SocialNetStreamSearch socialStreamSerch=SocialNetStreamSearch.getSocialNetStreamSearchbyStreamAndSocialNetwork(stream, this);
+                if(socialStreamSerch!=null)
+                {
+                    socialStreamSerch.setNextDatetoSearch(limits.toString());
+                }
+                //this.setNextDatetoSearch(limits.toString());
             }
         } catch (Exception e) {
             log.error("Al formar URL de siguiente consulta a ejecutar en Facebook", e);
@@ -203,7 +208,7 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
      *        de post obtenidos en la b&uacute;squeda de la iteraci&oacute;n anterior
      */
     private void generateBatchQuery(String streamPhrase, HashMap<String,
-                                    String>[] queriesArray) throws Exception {
+                                    String>[] queriesArray, Stream stream) throws Exception {
         
         //TODO: Acordar que las frases almacenadas no contengan el simbolo =.
         String[] phrase = streamPhrase.split("\\|");
@@ -213,8 +218,9 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
 
             try {
                 //Se obtienen los limites desde los cuales se haran consultas en Facebook
-                if (this.getNextDatetoSearch() != null && !"".equals(this.getNextDatetoSearch())) {
-                    String[] phraseElements = this.getNextDatetoSearch().split(":");
+                SocialNetStreamSearch socialStreamSerch=SocialNetStreamSearch.getSocialNetStreamSearchbyStreamAndSocialNetwork(stream, this);
+                if (socialStreamSerch!=null && socialStreamSerch.getNextDatetoSearch() != null && !"".equals(socialStreamSerch.getNextDatetoSearch())) {
+                    String[] phraseElements = socialStreamSerch.getNextDatetoSearch().split(":");
                     for (int i = 0; i < phrase.length; i++) {
                         String[] pair = phraseElements[i].split("=");
                         //Se quita de la frase el sufijo: search_ o feed_ correspondiente a cada tipo de busqueda
