@@ -33,8 +33,6 @@ public class Stream extends org.semanticwb.social.base.StreamBase
                         System.out.println("Entra a Stream/Create...");
                         System.out.println("En la clase Stream-ADD:"+stream.getId()+", activo:"+stream.isActive());
                         
-                        
-                        
                         Listener.createUpdateTimers(stream);
                     }else if((action.equalsIgnoreCase("SET") && (semProp.getURI().equals(social_stream_PoolTime.getURI()) || semProp.getURI().equals(social_stream_phrase)))
                        || (action.equalsIgnoreCase("ADD") && semProp.getURI().equals(social_hasStream_socialNetwork.getURI()))
