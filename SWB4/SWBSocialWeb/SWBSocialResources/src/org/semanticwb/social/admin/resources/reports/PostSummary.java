@@ -54,7 +54,7 @@ public class PostSummary extends GenericResource {
     String webWorkPath = "/work";
     
     /** The path. */
-    final String path = SWBPlatform.getContextPath() +"/work/swbadmin/jsp/stream/";
+    //final String path = SWBPlatform.getContextPath() +"/work/SWBAdmin/jsp/stream/";
     
     @Override
     public void setResourceBase(Resource base) throws SWBResourceException {
@@ -137,7 +137,7 @@ public class PostSummary extends GenericResource {
         response.setHeader("Pragma", "no-cache");
         
         System.out.println("\n\n\tipage:" + request.getParameter("ipage") + "\n\n");
-        final String myPath = path+"postSummary.jsp";
+        final String myPath = SWBPlatform.getContextPath() +"/work/" + paramRequest.getWebPage().getWebSiteId() + "/jsp/stream/postSummary.jsp";
         if (request != null) {
             RequestDispatcher dis = request.getRequestDispatcher(myPath);
             if(dis != null) {
@@ -296,8 +296,7 @@ System.out.println("FIN en java: " + fin);
         response.setContentType("text/html;charset=iso-8859-1");
         response.setHeader("Cache-Control", "no-cache");
         response.setHeader("Pragma", "no-cache");
-        
-        final String myPath = path+"revalue.jsp";
+        final String myPath = SWBPlatform.getContextPath() +"/work/" + paramRequest.getWebPage().getWebSiteId() + "/jsp/stream/revalue.jsp";
         if (request != null) {
             RequestDispatcher dis = request.getRequestDispatcher(myPath);
             if(dis != null) {
