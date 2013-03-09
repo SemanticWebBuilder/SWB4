@@ -451,7 +451,6 @@
         <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
         <rdfs:comment>Catalogo de temas de un modelo (Marca)</rdfs:comment>
         <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
-        <rdfs:subClassOf rdf:resource="#Childrenable"/>
         <swb:displayObject>
           <swbxf:DisplayObject rdf:ID="do_SocialTopic">
             <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
@@ -474,6 +473,16 @@
     <rdfs:domain rdf:resource="#PostListenerContainer"/>
     <rdfs:range rdf:resource="#SocialNetwork"/>
     <rdfs:comment>Cuenta de Red Social a la que pertenece el grupo de postIn que llega por el Listener y que son agrupados por mes y año.</rdfs:comment>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasTopicPublishFlow">
+    <rdfs:comment>Un tema puede tener asignados multiples publishFlows</rdfs:comment>
+    <owl:inverseOf>
+      <owl:ObjectProperty rdf:ID="hasSocialTopicInv"/>
+    </owl:inverseOf>
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >publishFlow</swb:propertyCodeName>
+    <rdfs:range rdf:resource="#PublishFlow"/>
+    <rdfs:domain rdf:resource="#SocialTopic"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="hasChildrenObjInv"/>
   <owl:ObjectProperty rdf:ID="hasPostListenerContainer">
@@ -506,15 +515,6 @@
     <rdfs:label xml:lang="es">Redes Sociales</rdfs:label>
     <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >hasSocialNetwork</swb:propertyCodeName>
-  </owl:ObjectProperty>
-  <owl:ObjectProperty rdf:ID="topicPublishFlow">
-    <owl:inverseOf>
-      <owl:ObjectProperty rdf:ID="hasSocialTopicInv"/>
-    </owl:inverseOf>
-    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >publishFlow</swb:propertyCodeName>
-    <rdfs:range rdf:resource="#PublishFlow"/>
-    <rdfs:domain rdf:resource="#SocialTopic"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="hasPlc_Post">
     <rdfs:range rdf:resource="#PostIn"/>
