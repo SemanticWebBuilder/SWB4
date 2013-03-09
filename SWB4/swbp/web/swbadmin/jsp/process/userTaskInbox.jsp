@@ -4,6 +4,8 @@
     Author     : Hasdai Pacheco {haxdai@gmail.com}
 --%>
 
+<%@page import="org.semanticwb.process.model.SWBProcessMgr"%>
+<%@page import="org.semanticwb.model.WebSite"%>
 <%@page import="org.semanticwb.process.resources.taskinbox.UserTaskInboxResource"%>
 <%@page import="org.semanticwb.model.Resource"%>
 <%@page import="org.semanticwb.process.model.MessageStartEvent"%>
@@ -165,8 +167,6 @@ while(!base.getAttribute(UserTaskInboxResource.ATT_COLS+i, "").equals("")) {
     i++;
 }
 
-String baseUrl = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + "/" + SWBPortal.getContextPath() + paramRequest.getWebPage().getWebSiteId();
-
 ArrayList<FlowNodeInstance> tinstances = (ArrayList<FlowNodeInstance>) request.getAttribute("instances");
 //SWBResourceURL configUrl = paramRequest.getRenderUrl().setMode("config");
 if (paramRequest.getMode().equals(paramRequest.Mode_VIEW)) {
@@ -253,7 +253,7 @@ if (paramRequest.getMode().equals(paramRequest.Mode_VIEW)) {
                     <%
                     SWBResourceURL createUrl = paramRequest.getRenderUrl().setAction("createCase");
                     %>
-                    <a onclick="window.location='<%=createUrl%>'"><img src="<%=baseimg%>newProcess.png" alt="Iniciar nuevo Caso" title="Iniciar nuevo Caso"></a><!--input type="button" value="Iniciar proceso" onclick="window.location='<%=createUrl%>'"/-->
+                    <a onclick="window.location='<%=createUrl%>'">Iniciar nuevo Caso</a><!--input type="button" value="Iniciar proceso" onclick="window.location='<%=createUrl%>'"/-->
                 </li>
                 <li>
                     <b>Ordenamiento&nbsp;</b>
@@ -392,7 +392,7 @@ if (paramRequest.getMode().equals(paramRequest.Mode_VIEW)) {
                                             String screator = "Creado automáticamente";
                                             User creator = instance.getProcessInstance().getCreator();
                                             if (creator != null) {
-                                                if (creator.getFullName() != null && creator.getFullName().trim().equals("")) {
+                                                if (creator.getFullName() != null && !creator.getFullName().trim().equals("")) {
                                                     screator = creator.getFullName();
                                                 } else {
                                                     screator = creator.getLogin();
@@ -403,7 +403,7 @@ if (paramRequest.getMode().equals(paramRequest.Mode_VIEW)) {
                                             String screator = "Creado automáticamente";
                                             User creator = instance.getCreator();
                                             if (creator != null) {
-                                                if (creator.getFullName() != null && creator.getFullName().trim().equals("")) {
+                                                if (creator.getFullName() != null && !creator.getFullName().trim().equals("")) {
                                                     screator = creator.getFullName();
                                                 } else {
                                                     screator = creator.getLogin();
