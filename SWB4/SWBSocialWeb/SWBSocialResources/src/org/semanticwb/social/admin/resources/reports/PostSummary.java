@@ -54,7 +54,7 @@ public class PostSummary extends GenericResource {
     String webWorkPath = "/work";
     
     /** The path. */
-    final String path = SWBPlatform.getContextPath() +"/work/stream/";
+    final String path = SWBPlatform.getContextPath() +"/work/swbadmin/jsp/stream/";
     
     @Override
     public void setResourceBase(Resource base) throws SWBResourceException {
