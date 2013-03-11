@@ -11,75 +11,78 @@
 <p><strong><a href="<%=url%>">Página de inicio de los foros</a></strong></p>
 <%
             User user = paramRequest.getUser();
-            
-                String titulo = request.getParameter("title");
-                if (titulo != null && !titulo.trim().isEmpty())
-                {
-                    WebSite site = paramRequest.getWebPage().getWebSite();
-                    String id = SWBUtils.TEXT.replaceSpecialCharacters(titulo, true);
-                    id = SWBUtils.TEXT.encodeBase64(id);
-                    Logger log = SWBUtils.getLogger(SWBForumCatResource.class);
+            if (!user.isSigned())
+            {
+                return;
+            }
+            String titulo = request.getParameter("title");
+            if (titulo != null && !titulo.trim().isEmpty())
+            {
+                WebSite site = paramRequest.getWebPage().getWebSite();
+                String id = SWBUtils.TEXT.replaceSpecialCharacters(titulo, true);
+                id = SWBUtils.TEXT.encodeBase64(id);
+                Logger log = SWBUtils.getLogger(SWBForumCatResource.class);
 
-                    if(id.indexOf("%")!=-1)
+                if (id.indexOf("%") != -1)
+                {
+                    id = id.replace('%', 'A');
+                }
+                if (id.indexOf("\r") != -1)
+                {
+                    id = id.replace('\r', 'A');
+                }
+                if (id.indexOf("\n") != -1)
+                {
+                    id = id.replace('\n', 'A');
+                }
+                if (id.indexOf("=") != -1)
+                {
+                    id = id.replace('=', 'O');
+                }
+                log.error("id: " + id);
+
+
+                if (!WebPage.ClassMgr.hasWebPage(id, site))
+                {
+                    Resource base = paramRequest.getResourceBase();
+                    SemanticObject semanticBase = base.getResourceData();
+                    String pid = semanticBase.getProperty(SWBForumCatResource.forumCat_idCatPage, paramRequest.getWebPage().getId());
+                    WebPage wpp = paramRequest.getWebPage().getWebSite().getWebPage(pid);
+                    if (wpp != null)
                     {
-                        id=id.replace('%', 'A');
-                    }
-                    if(id.indexOf("\r")!=-1)
-                    {
-                        id=id.replace('\r', 'A');
-                    }
-                    if(id.indexOf("\n")!=-1)
-                    {
-                        id=id.replace('\n', 'A');
-                    }
-                    if(id.indexOf("=")!=-1)
-                    {
-                        id=id.replace('=', 'O');
-                    }
-                    log.error("id: "+id);
-                    
-                    
-                    if (!WebPage.ClassMgr.hasWebPage(id, site))
-                    {
-                        Resource base = paramRequest.getResourceBase();
-                        SemanticObject semanticBase = base.getResourceData();
-                        String pid = semanticBase.getProperty(SWBForumCatResource.forumCat_idCatPage, paramRequest.getWebPage().getId());
-                        WebPage wpp = paramRequest.getWebPage().getWebSite().getWebPage(pid);
-                        if (wpp != null)
+                        WebPage newTema = WebPage.ClassMgr.createWebPage(id, site);
+                        newTema.setCreator(user);
+                        newTema.setActive(true);
+                        String desc = request.getParameter("desc");
+                        if (desc != null && !desc.trim().isEmpty())
                         {
-                            WebPage newTema = WebPage.ClassMgr.createWebPage(id, site);
-                            newTema.setCreator(user);
-                            newTema.setActive(true);
-                            String desc = request.getParameter("desc");
-                            if (desc != null && !desc.trim().isEmpty())
-                            {
-                                newTema.setDescription(desc);
-                            }
-                            newTema.setTitle(titulo);
-                            newTema.setParent(wpp);
+                            newTema.setDescription(desc);
+                        }
+                        newTema.setTitle(titulo);
+                        newTema.setParent(wpp);
 %>
 <p>El tema con título "<%=titulo%>" fue creada correctamente.</p>
 <%
-                        }
-                        else
-                        {
+                    }
+                    else
+                    {
 %>
 <p>No se encontró la página de inicio de temas, favor de reportarlo con su admistrador de sitio.</p>
 <%                                                    }
 
 
-                    }
-                    else
-                    {
-%>
-Ya existe un tema con ese nombre, intente otro título.
-<%                                            }
                 }
                 else
                 {
 %>
+Ya existe un tema con ese nombre, intente otro título.
+<%                                            }
+            }
+            else
+            {
+%>
 <p>No se pudo dar de alta el tema, razon: titulo no especificado.
     <%                                }
-            
-%>
+
+    %>
 
