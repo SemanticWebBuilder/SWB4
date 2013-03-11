@@ -10,6 +10,10 @@
 <p><strong><a href="<%=url%>">Página de inicio de los foros</a></strong></p>
 <%
             User user = paramRequest.getUser();
+            if (!user.isSigned())
+            {
+                return;
+            }
             boolean isAdmin = false;
             Role role = user.getUserRepository().getRole("adminForum");
             if (role != null && user.hasRole(role))
@@ -50,7 +54,7 @@
 <%
                                     }
                                 }
-                            }                           
+                            }
 
                         }
                         else
