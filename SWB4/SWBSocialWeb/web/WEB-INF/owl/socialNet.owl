@@ -227,9 +227,7 @@
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
   <owl:Class rdf:ID="Flicker">
-    <swb:displayObject>
-      <swbxf:DisplayObject rdf:ID="do_Flicker"/>
-    </swb:displayObject>
+    <rdfs:label>Flicker</rdfs:label>
     <rdfs:comment>Clase que almacenara las diferentes cuentas de una organización para la red social Flicker.</rdfs:comment>
     <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:autogenId>
@@ -288,9 +286,7 @@
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
   <owl:Class rdf:ID="Youtube">
-    <swb:displayObject>
-      <swbxf:DisplayObject rdf:ID="do_Youtube"/>
-    </swb:displayObject>
+    <rdfs:label>Youtube</rdfs:label>
     <rdfs:comment>Clase que almacenara las diferentes cuentas de una organización para la red social YouTube.</rdfs:comment>
     <rdfs:subClassOf rdf:resource="#SocialNetwork"/>
     <rdfs:subClassOf rdf:resource="#Videoable"/>
@@ -330,7 +326,67 @@
     </swb:displayObject>
     <swb:hasHerarquicalNode>
       <swbxf:HerarquicalNode rdf:ID="hn_SocialNets">
-        <swbxf:heClass rdf:resource="#SocialNetwork"/>
+        <swb:hasHerarquicalNode>
+          <swbxf:HerarquicalNode rdf:ID="hn_Facebook">
+            <swbxf:heClass>
+              <swb:Class rdf:ID="Facebook">
+                <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+                <swb:displayObject rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#do_WebPage"/>
+                <rdfs:subClassOf rdf:resource="#Messageable"/>
+                <rdfs:subClassOf rdf:resource="#Photoable"/>
+                <rdfs:subClassOf rdf:resource="#Oauthable"/>
+                <rdfs:subClassOf rdf:resource="#SocialNetwork"/>
+                <rdfs:label>Facebook</rdfs:label>
+                <rdfs:comment>Clase que almacenara las diferentes cuentas de una organización para la red social Facebook.</rdfs:comment>
+                <rdfs:subClassOf rdf:resource="#Videoable"/>
+                <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+                >true</swb:autogenId>
+              </swb:Class>
+            </swbxf:heClass>
+            <swb:title rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >Facebook</swb:title>
+            <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+            >20</swb:index>
+            <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >swbIconTemplates</swb:iconClass>
+          </swbxf:HerarquicalNode>
+        </swb:hasHerarquicalNode>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >10</swb:index>
+        <swb:hasHerarquicalNode>
+          <swbxf:HerarquicalNode rdf:ID="hn_Twitter">
+            <swbxf:heClass>
+              <swb:Class rdf:ID="Twitter">
+                <rdfs:subClassOf rdf:resource="#SocialNetwork"/>
+                <rdfs:comment>Clase que almacenara las diferentes cuentas de una organización para la red social Twitter.</rdfs:comment>
+                <rdfs:label>Twitter</rdfs:label>
+                <rdfs:subClassOf rdf:resource="#Messageable"/>
+                <rdfs:subClassOf>
+                  <owl:Class rdf:ID="KeepAliveListenerable"/>
+                </rdfs:subClassOf>
+                <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+                <rdfs:subClassOf rdf:resource="#Photoable"/>
+                <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+                >true</swb:autogenId>
+                <rdfs:subClassOf>
+                  <swb:Interface rdf:ID="Kloutable">
+                    <rdfs:comment>Interface que se les agrega a las redes sociales a las cuales se pueda leer el klout de sus usuarios. Segun Klout, en este momento solo soporta twitter y google+</rdfs:comment>
+                    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBInterface"/>
+                    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+                  </swb:Interface>
+                </rdfs:subClassOf>
+                <rdfs:subClassOf rdf:resource="#Oauthable"/>
+                <swb:displayObject rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#do_WebPage"/>
+              </swb:Class>
+            </swbxf:heClass>
+            <swb:title rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >Twitter</swb:title>
+            <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+            >20</swb:index>
+            <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >swbIconTemplates</swb:iconClass>
+          </swbxf:HerarquicalNode>
+        </swb:hasHerarquicalNode>
         <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
         >swbIconTemplates</swb:iconClass>
         <swb:title xml:lang="es">Red Social</swb:title>
@@ -340,6 +396,8 @@
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#WebSite"/>
     <swb:hasHerarquicalNode>
       <swbxf:HerarquicalNode rdf:ID="hn_Streams">
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >20</swb:index>
         <swb:title rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
         >Stream</swb:title>
         <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
@@ -379,7 +437,7 @@
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
-  <owl:Class rdf:ID="KeepAliveListenerable">
+  <owl:Class rdf:about="#KeepAliveListenerable">
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBInterface"/>
     <rdfs:comment>Interface para las redes sociales que pueden mantener abierta la conección para realizar las busquedas (listener) como es el caso de Twitter con su Streaming Api.</rdfs:comment>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Interface"/>
@@ -1098,27 +1156,7 @@
     <rdfs:comment>Año en el cual es creada una instancia de PostListenerContainer, esta propiedad servira mucho  para buscar los postIn de manera optima, ya que pudieran ser muchos en un corto tiempo.</rdfs:comment>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="facebookUserId">
-    <rdfs:domain>
-      <swb:Class rdf:ID="Facebook">
-        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-        <swb:displayObject>
-          <swbxf:DisplayObject rdf:ID="do_Facebook">
-            <swbxf:doDispatcher rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-            >x.zul</swbxf:doDispatcher>
-            <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-            >facebook.png</swb:iconClass>
-          </swbxf:DisplayObject>
-        </swb:displayObject>
-        <rdfs:subClassOf rdf:resource="#Messageable"/>
-        <rdfs:subClassOf rdf:resource="#Photoable"/>
-        <rdfs:subClassOf rdf:resource="#Oauthable"/>
-        <rdfs:subClassOf rdf:resource="#SocialNetwork"/>
-        <rdfs:comment>Clase que almacenara las diferentes cuentas de una organización para la red social Facebook.</rdfs:comment>
-        <rdfs:subClassOf rdf:resource="#Videoable"/>
-        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-        >true</swb:autogenId>
-      </swb:Class>
-    </rdfs:domain>
+    <rdfs:domain rdf:resource="#Facebook"/>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_facebookUserId">
@@ -1294,29 +1332,6 @@
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <rdfs:domain rdf:resource="#PostIn"/>
   </owl:DatatypeProperty>
-  <swb:Interface rdf:ID="Kloutable">
-    <rdfs:comment>Interface que se les agrega a las redes sociales a las cuales se pueda leer el klout de sus usuarios. Segun Klout, en este momento solo soporta twitter y google+</rdfs:comment>
-    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBInterface"/>
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-  </swb:Interface>
-  <swb:Class rdf:ID="Twitter">
-    <rdfs:subClassOf rdf:resource="#SocialNetwork"/>
-    <rdfs:comment>Clase que almacenara las diferentes cuentas de una organización para la red social Twitter.</rdfs:comment>
-    <rdfs:subClassOf rdf:resource="#Messageable"/>
-    <rdfs:subClassOf rdf:resource="#KeepAliveListenerable"/>
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-    <rdfs:subClassOf rdf:resource="#Photoable"/>
-    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:autogenId>
-    <rdfs:subClassOf rdf:resource="#Kloutable"/>
-    <rdfs:subClassOf rdf:resource="#Oauthable"/>
-    <swb:displayObject>
-      <swbxf:DisplayObject rdf:ID="do_Twitter">
-        <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >twitter.png</swb:iconClass>
-      </swbxf:DisplayObject>
-    </swb:displayObject>
-  </swb:Class>
   <swb:Interface rdf:ID="DeleteControlable">
     <rdfs:comment>Interface que define que las instancias de una clase pueden ser eliminadas</rdfs:comment>
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBInterface"/>
@@ -1328,12 +1343,6 @@
     <swb:package rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >org.semanticwb.social</swb:package>
   </swb:CodePackage>
-  <swbxf:DisplayObject rdf:ID="do_SocialNetwork">
-    <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >socialnet.png</swb:iconClass>
-    <swbxf:doDispatcher rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >cnf_socialNetwork.zul</swbxf:doDispatcher>
-  </swbxf:DisplayObject>
   <swbxf:DisplayObject rdf:ID="do_Stream">
     <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >stream.png</swb:iconClass>
