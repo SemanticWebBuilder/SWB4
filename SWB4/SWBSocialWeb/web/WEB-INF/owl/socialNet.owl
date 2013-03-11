@@ -332,11 +332,12 @@
               <swb:Class rdf:ID="Facebook">
                 <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
                 <swb:displayObject rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#do_WebPage"/>
+                <rdfs:label xml:lang="es">Cuenta de Facebook</rdfs:label>
                 <rdfs:subClassOf rdf:resource="#Messageable"/>
                 <rdfs:subClassOf rdf:resource="#Photoable"/>
                 <rdfs:subClassOf rdf:resource="#Oauthable"/>
                 <rdfs:subClassOf rdf:resource="#SocialNetwork"/>
-                <rdfs:label>Facebook</rdfs:label>
+                <rdfs:label xml:lang="en">Facebook Account</rdfs:label>
                 <rdfs:comment>Clase que almacenara las diferentes cuentas de una organización para la red social Facebook.</rdfs:comment>
                 <rdfs:subClassOf rdf:resource="#Videoable"/>
                 <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
@@ -359,15 +360,16 @@
               <swb:Class rdf:ID="Twitter">
                 <rdfs:subClassOf rdf:resource="#SocialNetwork"/>
                 <rdfs:comment>Clase que almacenara las diferentes cuentas de una organización para la red social Twitter.</rdfs:comment>
-                <rdfs:label>Twitter</rdfs:label>
                 <rdfs:subClassOf rdf:resource="#Messageable"/>
                 <rdfs:subClassOf>
                   <owl:Class rdf:ID="KeepAliveListenerable"/>
                 </rdfs:subClassOf>
                 <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+                <rdfs:label xml:lang="es">Cuenta de Twitter</rdfs:label>
                 <rdfs:subClassOf rdf:resource="#Photoable"/>
                 <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
                 >true</swb:autogenId>
+                <rdfs:label xml:lang="en">Twitter Account</rdfs:label>
                 <rdfs:subClassOf>
                   <swb:Interface rdf:ID="Kloutable">
                     <rdfs:comment>Interface que se les agrega a las redes sociales a las cuales se pueda leer el klout de sus usuarios. Segun Klout, en este momento solo soporta twitter y google+</rdfs:comment>
