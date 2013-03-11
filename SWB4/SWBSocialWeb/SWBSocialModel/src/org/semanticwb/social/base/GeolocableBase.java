@@ -6,7 +6,7 @@ package org.semanticwb.social.base;
 public interface GeolocableBase extends org.semanticwb.model.GenericObject
 {
    /**
-   * Distancia del centro a buscar mensajes 
+   * Distancia del centro (punto de latitud y longitud) a buscar mensajes 
    */
     public static final org.semanticwb.platform.SemanticProperty social_geoRadio=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#geoRadio");
    /**
