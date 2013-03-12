@@ -122,7 +122,7 @@
                                 for(i=0;i<nodes.length;i++)
                                 {
                                     var obj=nodes.item(i);
-                                    if(obj.contents)    //Es un objeto grafico
+                                    if(obj.contents && obj.canSelect==true)    //Es un objeto grafico
                                     {
                                         var ox=obj.getX();
                                         var oy=obj.getY();
@@ -377,11 +377,29 @@
                         };
                         return _this.createObject(constructor,id,parent);
                     },
-
-                    createObject:function(constructor, id, parent)
+                    
+                    createUseBaseObject:function(type, id, parent)
+                    {
+                        var _this=Modeler;
+                        //console.log(_this);
+                        var constructor=function()
+                        {
+                            var obj = document.createElementNS(_this.svgNS,"use"); //to create a circle, for rectangle use rectangle
+                            obj.setAttributeNS(_this.xlink,"href",type);
+                            return obj;
+                        };
+                        return _this.createBaseObject(constructor,id,parent);
+                    },                    
+                    
+                    createBaseObject:function(constructor, id, parent)
                     {
                         var _this=Modeler;
                         var obj=constructor();
+                        
+                        obj.contents=[];                        
+                        obj.icons=[];      
+                        obj.canSelect=true;
+                        
                         if(id && id!=null)obj.setAttributeNS(null,"id",id);                    
                         
                         obj.setOverClass=function()
@@ -404,7 +422,7 @@
                                 if(o!=null)
                                 {
                                     var s=o.getAttributeNS(null, param);
-                                    if(s!=null)obj.setAttributeNS(null,"class",s);
+                                    if(s && s!=null)obj.setAttributeNS(null,"class",s);
                                 }
                             }else
                             {
@@ -414,6 +432,227 @@
                         };                        
                         
                         obj.setBaseClass();                        
+                    
+                        obj.getX=function()
+                        {
+                            return Number(obj.getAttributeNS(null,"x"));
+                        };
+                    
+                        obj.getY=function()
+                        {
+                            return Number(obj.getAttributeNS(null,"y"));
+                        };
+                        
+                        obj.setX=function(x)
+                        {
+                            obj.setAttributeNS(null,"x",x);
+                        };
+                    
+                        obj.setY=function(y)
+                        {
+                            obj.setAttributeNS(null,"y",y);
+                        };   
+                        
+                        obj.getWidth=function()
+                        {
+                            return Number(obj.getAttributeNS(null,"width"));
+                        };
+                    
+                        obj.getHeight=function()
+                        {
+                            return Number(obj.getAttributeNS(null,"height"));
+                        };
+                        
+                        obj.setWidth=function(w)
+                        {
+                            obj.setAttributeNS(null,"width",w);
+                        };
+                    
+                        obj.setHeight=function(h)
+                        {
+                            obj.setAttributeNS(null,"height",h);
+                        };                           
+                    
+                        obj.traslate=function(dx, dy)
+                        {
+                            var ox=obj.getX();
+                            var oy=obj.getY();
+                            obj.move(ox+dx, oy+dy);
+                        }
+                        
+                        obj.resize=function(w,h)
+                        {
+                            obj.setAttributeNS(null,"transform","translate("+(-w/2)+","+(-h/2)+")");
+                            obj.setWidth(w);
+                            obj.setHeight(h);        
+                            
+                            //Move Icons
+                            for (var i = obj.icons.length; i--;) 
+                            {
+                                var icon=obj.icons[i];
+                                var pw=w/2*icon.posx;
+                                var ph=h/2*icon.posy;
+                                icon.obj.move(obj.getX()+pw+icon.offx,obj.getY()+ph+icon.offy);
+                            }
+
+                            //Cambiar tamaño del texto
+                            if(obj.text && obj.text!=null)
+                            {
+                                var text_element = obj.text;
+                                var dy=10;
+                                var words = text_element.data.split(' ');
+                                var start_x = text_element.getX();
+
+                                //Eliminar childs
+                                var child=null;
+                                while((child=text_element.firstChild)!=null)
+                                {
+                                    text_element.removeChild(child);
+                                }
+
+                                var tspan_element = document.createElementNS(_this.svgNS, "tspan");	// Create first tspan element
+                                tspan_element.setAttributeNS(null, "x", start_x);
+                                var text_node = document.createTextNode(words[0]);			// Create text in tspan element
+
+                                tspan_element.appendChild(text_node);							// Add tspan element to DOM
+                                text_element.appendChild(tspan_element);						// Add text to tspan element
+                                var lin=1;
+                                for(var i=1; i<words.length; i++)
+                                {
+                                    var len = tspan_element.firstChild.data.length;				// Find number of letters in string
+                                    tspan_element.firstChild.data += " " + words[i];			// Add next word
+
+                                    if (tspan_element.getComputedTextLength() > w)
+                                    {
+                                        tspan_element.firstChild.data = tspan_element.firstChild.data.slice(0, len);	// Remove added word
+
+                                        var tspan_element = document.createElementNS(_this.svgNS, "tspan");		// Create new tspan element
+                                        tspan_element.setAttributeNS(null, "x", start_x);
+                                        tspan_element.setAttributeNS(null, "dy", dy);
+                                        text_node = document.createTextNode(words[i]);
+                                        tspan_element.appendChild(text_node);
+                                        text_element.appendChild(tspan_element);
+                                        lin++;
+                                    }
+                                }
+                                text_element.setY(obj.getY()+dy-lin*dy/2);
+                            }
+                            
+                        };                        
+
+                        obj.move=function(x,y)
+                        {
+                            var offx=x-obj.getX();
+                            var offy=y-obj.getY();
+                            obj.setX(x);
+                            obj.setY(y);
+                        
+                            //Move Childs
+                            for (var i = obj.contents.length; i--;) 
+                            {
+                                if(obj.contents[i].selected!=true)
+                                {
+                                    obj.contents[i].traslate(offx,offy);
+                                }
+                            }  
+                            //Move Icons
+                            for (var i = obj.icons.length; i--;) 
+                            {
+                                obj.icons[i].obj.traslate(offx,offy);
+                            }
+
+                            //Move Text
+                            if(obj.text && obj.text!=null)
+                            {
+                                obj.text.traslate(offx,offy);
+                                for (var i = obj.text.childNodes.length; i--;)
+                                {
+                                    obj.text.childNodes[i].setAttributeNS(null,"x",obj.text.getX());
+                                }
+                            }
+                        
+                            if(x+50>_this.getWidth())
+                            {
+                                _this.setWidth(x+50);
+                            }
+                            if(y+50>_this.getHeight())
+                            {
+                                _this.setHeight(y+50);
+                            }                           
+                        };    
+                        
+                        obj.remove = function(all) {
+                            if(!all)
+                            {
+                                while ((ax = obj.parent.contents.indexOf(obj)) !== -1) {
+                                    obj.parent.contents.splice(ax, 1);
+                                }
+                            }
+                            for (var i = obj.contents.length; i--;)
+                            {
+                                obj.contents[i].remove(true);
+                            }
+                            try
+                            {
+                                _this.svg.removeChild(obj);
+                            }catch(noe){}
+                            return this;
+                        };
+                        
+                        if(parent && parent!=null)
+                        {
+                            parent.contents.push(obj);
+                            obj.parent=parent;
+                        }else
+                        {
+                            _this.contents.push(obj);
+                            obj.parent=_this;
+                        }   
+                        
+                        //pos validas del 1 al 9, 1=esquina superior izquierda, 5=centro, 9=esquina inferior derecha
+                        obj.addIcon=function(type,posx,posy,offx,offy)
+                        {
+                            var iobj=_this.createUseBaseObject(type,null,null);
+                            iobj.canSelect=false;
+                            iobj.onmousedown=function(evt)
+                            {
+                                obj.onmousedown(evt);
+                            };
+                            var icon={obj:iobj,posx:posx,posy:posy,offx:offx,offy:offy};
+                            obj.icons.push(icon);
+                            
+                        };
+                        
+                        //pos validas del 1 al 9, 1=esquina superior izquierda, 5=centro, 9=esquina inferior derecha
+                        obj.setText=function(text)
+                        {
+                            if(obj.text)obj.text.remove();
+                            var constructor=function()
+                            {
+                                var tx = document.createElementNS(_this.svgNS,"text"); //to create a circle, for rectangle use rectangle
+                                //tx.appendChild(document.createTextNode(text));
+                                tx.setAttributeNS(null,"text-anchor","middle");
+                                tx.setAttributeNS(null,"font-size","11");
+                                tx.setAttributeNS(null,"font-family","Verdana, Geneva, sans-serif");
+                                return tx;
+                            };
+                            obj.text=_this.createBaseObject(constructor,null,null);
+                            obj.text.data=text;
+                            obj.text.canSelect=false;
+                            obj.text.onmousedown=function(evt)
+                            {
+                                obj.onmousedown(evt);
+                            };
+                        };                        
+                        
+                        _this.svg.appendChild(obj);
+                        return obj;
+                    },                    
+
+                    createObject:function(constructor, id, parent)
+                    {
+                        var _this=Modeler;
+                        var obj=_this.createBaseObject(constructor, id, parent);
                     
                         obj.onmousedown=function(evt)
                         {
@@ -461,46 +700,6 @@
                             }
                         };
                     
-                        obj.getX=function()
-                        {
-                            return Number(obj.getAttributeNS(null,"x"));
-                        };
-                    
-                        obj.getY=function()
-                        {
-                            return Number(obj.getAttributeNS(null,"y"));
-                        };
-                        
-                        obj.setX=function(x)
-                        {
-                            obj.setAttributeNS(null,"x",x);
-                        };
-                    
-                        obj.setY=function(y)
-                        {
-                            obj.setAttributeNS(null,"y",y);
-                        };   
-                        
-                        obj.getWidth=function()
-                        {
-                            return Number(obj.getAttributeNS(null,"width"));
-                        };
-                    
-                        obj.getHeight=function()
-                        {
-                            return Number(obj.getAttributeNS(null,"height"));
-                        };
-                        
-                        obj.setWidth=function(w)
-                        {
-                            obj.setAttributeNS(null,"width",w);
-                        };
-                    
-                        obj.setHeight=function(h)
-                        {
-                            obj.setAttributeNS(null,"height",h);
-                        };                           
-                    
                         obj.mousedown=function(evt)
                         {
                             //Sobreescribir
@@ -523,63 +722,6 @@
                             //Sobreescribir
                         };     
                     
-                        obj.traslate=function(dx, dy)
-                        {
-                            var ox=obj.getX();
-                            var oy=obj.getY();
-                            obj.move(ox+dx, oy+dy);
-                        }
-                        
-                        obj.resize=function(w,h)
-                        {
-                            obj.setAttributeNS(null,"transform","translate("+(-w/2)+","+(-h/2)+")");
-                            obj.setWidth(w);
-                            obj.setHeight(h);                        
-                        };                        
-
-                        obj.move=function(x,y)
-                        {
-                            var offx=x-obj.getX();
-                            var offy=y-obj.getY();
-                            obj.setX(x);
-                            obj.setY(y);
-                        
-                            for (var i = obj.contents.length; i--;) 
-                            {
-                                if(obj.contents[i].selected!=true)
-                                {
-                                    obj.contents[i].traslate(offx,offy);
-                                }
-                            }  
-                        
-                            if(x+50>_this.getWidth())
-                            {
-                                _this.setWidth(x+50);
-                            }
-                            if(y+50>_this.getHeight())
-                            {
-                                _this.setHeight(y+50);
-                            }                           
-                        };    
-                        
-                        obj.remove = function(all) {
-                            if(!all)
-                            {
-                                while ((ax = obj.parent.contents.indexOf(obj)) !== -1) {
-                                    obj.parent.contents.splice(ax, 1);
-                                }
-                            }
-                            for (var i = obj.contents.length; i--;)
-                            {
-                                obj.contents[i].remove(true);
-                            }
-                            try
-                            {
-                                _this.svg.removeChild(obj);
-                            }catch(noe){}
-                            return this;
-                        };
-                        
                         obj.onclick=function(evt)
                         {
                             return this.mouseclick(evt);
@@ -591,19 +733,6 @@
                             //previene de abrir nuevas ventanas al hacer click sobre elementos
                             return false;
                         }
-                    
-                        obj.contents=[];
-
-                        if(parent && parent!=null)
-                        {
-                            parent.contents.push(obj);
-                            obj.parent=parent;
-                        }else
-                        {
-                            _this.contents.push(obj);
-                            obj.parent=_this;
-                        }   
-                        _this.svg.appendChild(obj);
                         return obj;
                     },
                     
@@ -786,8 +915,10 @@
                     obj2.move(350,470);
                 
                     obj2 = Modeler.createTask(null,null);
-                    //obj2.move(100,400);
-                    obj2.resize(100,100);
+                    obj2.addIcon("#userMarker",-1,-1,15,10);
+                    obj2.setText("Tarea de Usuario");
+                    obj2.move(100,100);
+                    obj2.resize(100,60);
                 
                     //Modeler.createStartEvent();
                 
