@@ -41,7 +41,7 @@ create table resrepositorynotify
   idtm varchar(50) not null,
   topic varchar(101) null,
   rep_email varchar(99) null,
-  rep_role numeric(3) default 0 not null
+  rep_role varchar(50) default "0"
 );
 
 alter table resrepositorynotify 

@@ -57,7 +57,7 @@ CREATE TABLE resrepositorynotify (
   idtm varchar(50) default NULL,
   topic varchar(101) default NULL,
   rep_email varchar(99) default NULL,
-  rep_role int(3) unsigned NOT NULL default '0',
+  rep_role varchar(50) default '0',
   KEY rep_docId (rep_docId,idtm,topic)
 ) TYPE=MyISAM;
 

@@ -37,7 +37,7 @@ CREATE TABLE resrepositorynotify (
   idtm VARCHAR2(50) NULL,
   topic VARCHAR2(101) NULL,
   rep_email VARCHAR2(99) NULL,
-  rep_role NUMBER(3) NOT NULL 
+  rep_role VARCHAR2(50) DEFAULT '0' 
 );
 
 ALTER TABLE resrepositorynotify 

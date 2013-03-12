@@ -36,7 +36,7 @@ CREATE TABLE resrepositorynotify (
   idtm VARCHAR(50) NULL,
   topic VARCHAR(101) NULL,
   rep_email VARCHAR(99) NULL,
-  rep_role TINYINT NOT NULL,
+  rep_role VARCHAR(50) DEFAULT '0',
   PRIMARY KEY  (rep_docId,idtm,topic)
 );
 
