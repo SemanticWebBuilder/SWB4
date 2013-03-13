@@ -496,48 +496,7 @@
                             }
 
                             //Cambiar tamaño del texto
-                            if(obj.text && obj.text!=null)
-                            {
-                                var text_element = obj.text;
-                                var dy=10;
-                                var words = text_element.data.split(' ');
-                                var start_x = text_element.getX();
-
-                                //Eliminar childs
-                                var child=null;
-                                while((child=text_element.firstChild)!=null)
-                                {
-                                    text_element.removeChild(child);
-                                }
-
-                                var tspan_element = document.createElementNS(_this.svgNS, "tspan");	// Create first tspan element
-                                tspan_element.setAttributeNS(null, "x", start_x);
-                                var text_node = document.createTextNode(words[0]);			// Create text in tspan element
-
-                                tspan_element.appendChild(text_node);							// Add tspan element to DOM
-                                text_element.appendChild(tspan_element);						// Add text to tspan element
-                                var lin=1;
-                                for(var i=1; i<words.length; i++)
-                                {
-                                    var len = tspan_element.firstChild.data.length;				// Find number of letters in string
-                                    tspan_element.firstChild.data += " " + words[i];			// Add next word
-
-                                    if (tspan_element.getComputedTextLength() > w)
-                                    {
-                                        tspan_element.firstChild.data = tspan_element.firstChild.data.slice(0, len);	// Remove added word
-
-                                        var tspan_element = document.createElementNS(_this.svgNS, "tspan");		// Create new tspan element
-                                        tspan_element.setAttributeNS(null, "x", start_x);
-                                        tspan_element.setAttributeNS(null, "dy", dy);
-                                        text_node = document.createTextNode(words[i]);
-                                        tspan_element.appendChild(text_node);
-                                        text_element.appendChild(tspan_element);
-                                        lin++;
-                                    }
-                                }
-                                text_element.setY(obj.getY()+dy-lin*dy/2);
-                            }
-                            
+                            if(obj.text && obj.text!=null)obj.text.update();                            
                         };                        
 
                         obj.move=function(x,y)
@@ -627,22 +586,8 @@
                         obj.setText=function(text)
                         {
                             if(obj.text)obj.text.remove();
-                            var constructor=function()
-                            {
-                                var tx = document.createElementNS(_this.svgNS,"text"); //to create a circle, for rectangle use rectangle
-                                //tx.appendChild(document.createTextNode(text));
-                                tx.setAttributeNS(null,"text-anchor","middle");
-                                tx.setAttributeNS(null,"font-size","11");
-                                tx.setAttributeNS(null,"font-family","Verdana, Geneva, sans-serif");
-                                return tx;
-                            };
-                            obj.text=_this.createBaseObject(constructor,null,null);
-                            obj.text.data=text;
-                            obj.text.canSelect=false;
-                            obj.text.onmousedown=function(evt)
-                            {
-                                obj.onmousedown(evt);
-                            };
+                            obj.text=_this.createText(text,obj);
+                            obj.text.update();
                         };                        
                         
                         _this.svg.appendChild(obj);
@@ -736,6 +681,86 @@
                         return obj;
                     },
                     
+                    createText:function(text,parent)
+                    {
+                        var _this=Modeler;
+                        var constructor=function()
+                        {
+                            var tx = document.createElementNS(_this.svgNS,"text"); //to create a circle, for rectangle use rectangle
+                            //tx.appendChild(document.createTextNode(text));
+                            tx.setAttributeNS(null,"text-anchor","middle");
+                            tx.setAttributeNS(null,"font-size","11");
+                            tx.setAttributeNS(null,"font-family","Verdana, Geneva, sans-serif");
+                            return tx;
+                        };
+                        obj=_this.createBaseObject(constructor,null,null);                        
+                        obj.value=text;                                     //Valor de la caja de texto
+                        obj.canSelect=false;
+                        obj.onmousedown=function(evt)
+                        {
+                            parent.onmousedown(evt);
+                        };  
+                        
+                        parent.ondblclick=function(evt)
+                        {
+                            obj.ondblclick(evt);
+                        };
+                        
+                        obj.ondblclick=function(evt)
+                        {
+                            var txt=prompt("Texto:",obj.value);  
+                            if(txt!=null)
+                            {
+                                obj.value=txt;
+                                obj.update();
+                            }
+                        };
+                        
+                        obj.update=function()
+                        {
+                            var text_element = obj;
+                            var dy=10;
+                            var words = text_element.value.split(' ');
+                            var start_x = text_element.getX();
+
+                            //Eliminar childs
+                            var child=null;
+                            while((child=text_element.firstChild)!=null)
+                            {
+                                text_element.removeChild(child);
+                            }
+
+                            var tspan_element = document.createElementNS(_this.svgNS, "tspan");	// Create first tspan element
+                            tspan_element.setAttributeNS(null, "x", start_x);
+                            var text_node = document.createTextNode(words[0]);			// Create text in tspan element
+
+                            tspan_element.appendChild(text_node);							// Add tspan element to DOM
+                            text_element.appendChild(tspan_element);						// Add text to tspan element
+                            var lin=1;
+                            for(var i=1; i<words.length; i++)
+                            {
+                                var len = tspan_element.firstChild.data.length;				// Find number of letters in string
+                                tspan_element.firstChild.data += " " + words[i];			// Add next word
+
+                                if (tspan_element.getComputedTextLength() > parent.getWidth()-10)
+                                {
+                                    tspan_element.firstChild.data = tspan_element.firstChild.data.slice(0, len);	// Remove added word
+
+                                    var tspan_element = document.createElementNS(_this.svgNS, "tspan");		// Create new tspan element
+                                    tspan_element.setAttributeNS(null, "x", start_x);
+                                    tspan_element.setAttributeNS(null, "dy", dy);
+                                    text_node = document.createTextNode(words[i]);
+                                    tspan_element.appendChild(text_node);
+                                    text_element.appendChild(tspan_element);
+                                    lin++;
+                                }
+                            }
+                            text_element.setY(parent.getY()+dy-lin*dy/2);
+                        };
+                        
+                        return obj;
+                    },                     
+                    
                     createTask:function(id, parent)
                     {
                         //Revisar ID
@@ -772,7 +797,7 @@
                         //    alert("hola2");
                         //}
                         return obj;
-                    }                
+                    }
                 
                 };
 
@@ -915,7 +940,7 @@
                     obj2.move(350,470);
                 
                     obj2 = Modeler.createTask(null,null);
-                    obj2.addIcon("#userMarker",-1,-1,15,10);
+                    obj2.addIcon("#userMarker",-1,-1,13,8);
                     obj2.setText("Tarea de Usuario");
                     obj2.move(100,100);
                     obj2.resize(100,60);
