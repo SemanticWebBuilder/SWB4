@@ -13,6 +13,7 @@ import java.util.Iterator;
 import java.util.StringTokenizer;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.SWBModel;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.social.ExternalPost;
@@ -130,7 +131,7 @@ public class SentimentalDataClassifier {
         //Elimino Caracteres especiales (acentuados)
         externalString2Clasify=SWBSocialUtil.Strings.replaceSpecialCharacters(externalString2Clasify);
 
-        SocialAdmin socialAdminSite=SWBSocialUtil.Context.getSocialAdmSite();
+        SocialAdmin socialAdminSite=(SocialAdmin)SWBContext.getAdminWebSite();
         
         externalString2Clasify=SWBSocialUtil.Strings.removePuntualSigns(externalString2Clasify, socialAdminSite);
         
