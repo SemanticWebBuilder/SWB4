@@ -30,24 +30,16 @@
 
 package com.infotec.wb.resources.repository;
 
-
-import com.infotec.appfw.exception.*;
-import com.infotec.appfw.util.*;
 import javax.servlet.http.*;
 import java.sql.*;
 import java.io.*;
-import com.infotec.wb.util.*;
-import com.infotec.topicmaps.*;
-import com.infotec.wb.lib.*;
-import com.infotec.topicmaps.bean.*;
-import com.infotec.wb.core.*;
 import java.util.*;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
+import org.semanticwb.SWBUtils;
 import org.semanticwb.model.User;
 import org.semanticwb.model.WebPage;
 import org.semanticwb.model.WebSite;
-import org.semanticwb.platform.SemanticModel;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.api.SWBResourceURL;
@@ -62,8 +54,6 @@ import org.semanticwb.portal.api.SWBResourceURL;
  */
 public class AdmTopics {
     org.semanticwb.model.Resource base=null;
-    ResourceMgr Rmgr;
-
 
     /** Creates a new instance of AdmTopics */
     public AdmTopics() {
@@ -91,7 +81,7 @@ public class AdmTopics {
      */
     public String create(HttpServletRequest request, HttpServletResponse response, User user, WebPage topic, HashMap arguments, WebPage dir, SWBParamRequest paramsRequest) throws  SWBResourceException, IOException {
         StringBuffer ret = new StringBuffer();
-        String path = WBUtils.getInstance().getWebPath()+"wbadmin/resources/Repository/images/";
+        String path = SWBPlatform.getContextPath()+"/swbadmin/images/Repository/";
         SWBResourceURL url = paramsRequest.getRenderUrl();
         url.setParameter("repobj","AdmTopics");
         url.setParameter("repacc","createUpd");
@@ -144,11 +134,11 @@ public class AdmTopics {
      */
     public String changeName(HttpServletRequest request, HttpServletResponse response, User user, WebPage topic, HashMap arguments, WebPage dir, SWBParamRequest paramsRequest) throws  SWBResourceException, IOException {
         StringBuffer ret = new StringBuffer();
-        String path = WBUtils.getInstance().getWebPath()+"wbadmin/resources/Repository/images/";
+        String path = SWBPlatform.getContextPath()+"/swbadmin/images/Repository/";
         SWBResourceURL url = paramsRequest.getRenderUrl();
         ret.append("<b>");
         ret.append(paramsRequest.getLocaleString("msgRenameDirectory"));
-        ret.append("</b>\n<BR>");
+        ret.append("</b>\n<br/>");
         if(user.isSigned())  ret.append("<form action=\""+url+"?repobj=AdmTopics&repacc=changeNameUpd&reptp="+dir.getId()+"\" method=\"post\" >\n");
         ret.append("<table border=0 width=\"100%\">\n");
         ret.append("<tr><td colspan=2>");
@@ -247,7 +237,7 @@ public class AdmTopics {
         }
 
         ret = new StringBuffer();
-        ret.append("<script>");
+        ret.append("<script type=\"text/javascript\">");
         ret.append("alert('");
         ret.append(msg);
         ret.append("');");
@@ -299,7 +289,7 @@ public class AdmTopics {
         }
 
         StringBuffer ret = new StringBuffer();
-        ret.append("<script>");
+        ret.append("<script type=\"text/javascript\">");
         ret.append("alert('");
         ret.append(msg);
         ret.append("');");
@@ -330,7 +320,7 @@ public class AdmTopics {
         if(RemoveDirFiles(dir)){
             try{
                 // se deben de revisar si los t�picos tienen ag�n archivo borrado haciendo referencia a este o alg�n otro t�pico
-                Connection conn = WBUtils.getInstance().getDBConnection();
+                Connection conn = SWBUtils.DB.getDefaultConnection();
                 PreparedStatement pst = conn.prepareStatement("select * from resrepository where idtm=? and topic=?");
                 pst.setString(1, dir.getWebSiteId());
                 pst.setString(2, dir.getId());
@@ -366,7 +356,7 @@ public class AdmTopics {
         else{
             msg=paramsRequest.getLocaleString("msgCannotRemoveDirectory")+"...";
         }
-        ret.append("<script>");
+        ret.append("<script type=\"text/javascript\">");
         ret.append("alert('");
         ret.append(msg);
         ret.append("');");
@@ -393,7 +383,7 @@ public class AdmTopics {
         long resid=-1;
         boolean flagC=false;
         try{
-            con=WBUtils.getInstance().getDBConnection();
+            con=SWBUtils.DB.getDefaultConnection();
             Iterator iteDirChilds=dir.listChilds();
             // Verifies if exists subdirectory
             if(iteDirChilds.hasNext()){
@@ -423,7 +413,7 @@ public class AdmTopics {
             regresa=true;
         }
         catch(Exception e){
-            AFUtils.log(e,"Error in AdmTopics:RemoveTopicFiles",true);
+            Repository.log.error("Error in AdmTopics:RemoveTopicFiles",e);
         }
         finally{
             try{
@@ -432,7 +422,7 @@ public class AdmTopics {
                 if(con!=null)con.close();
             }
             catch(Exception e){
-                AFUtils.log(e,"Error while trying to close connections, AdmTopics:RemoveDirFiles",true);
+                Repository.log.error("Error while trying to close connections, AdmTopics:RemoveDirFiles",e);
             }
         }
         return regresa;
@@ -455,7 +445,7 @@ public class AdmTopics {
         try{
             org.semanticwb.model.Resource wbRes = dir.getWebSite().getResource(""+resid); //Rmgr.getResource(dir.getWebSiteId(),resid);
             org.semanticwb.model.Resource resource=wbRes; //.getResourceBase();
-            con=WBUtils.getInstance().getDBConnection();
+            con=SWBUtils.DB.getDefaultConnection();
             ps=con.prepareStatement("delete from resrepository where rep_docId=? and idtm=?");
             ps.setLong(1,id);
             ps.setString(2,dir.getWebSiteId());
@@ -484,7 +474,7 @@ public class AdmTopics {
             regresa=true;
         }
         catch(Exception e){
-            AFUtils.log(e,"Error in AdmTopics:RemoveFilesFromDB",true);
+            Repository.log.error("Error in AdmTopics:RemoveFilesFromDB",e);
         }
         finally{
             try{
@@ -492,7 +482,7 @@ public class AdmTopics {
                 if(con!=null)con.close();
             }
             catch(Exception e){
-                AFUtils.log(e,"Error while trying to close connections, AdmTopics:RemoveDirFiles",true);
+                Repository.log.error("Error while trying to close connections, AdmTopics:RemoveDirFiles",e);
             }
         }
         return regresa;
@@ -516,7 +506,7 @@ public class AdmTopics {
         String str_topicmapid = null;
         String str_topicid = null;
         try{
-            con=WBUtils.getInstance().getDBConnection();
+            con=SWBUtils.DB.getDefaultConnection();
             if(p_isfile == 1){
                 ps = con.prepareStatement("select rep_title from resrepository where rep_docId=? and idtm=?");
                 ps.setLong(1, p_fileid);
@@ -554,7 +544,7 @@ public class AdmTopics {
             con.close();
         }
         catch(Exception e){
-            AFUtils.log(e,"Error while create a record of the resource in RepositoryFile:saveLog",true);
+            Repository.log.error("Error while create a record of the resource in RepositoryFile:saveLog",e);
         }
         finally{
             ps = null;

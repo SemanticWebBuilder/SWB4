@@ -27,25 +27,30 @@
  */
 package com.infotec.wb.resources.repository;
 
-import com.infotec.appfw.exception.AFException;
-import com.infotec.appfw.util.AFUtils;
+//import com.infotec.appfw.exception.AFException;
+//import com.infotec.appfw.util.AFUtils;
+//import com.infotec.appfw.lib.mail.MailMessage;
+//import com.infotec.topicmaps.Topic;
+//import com.infotec.wb.core.*;
+//import com.infotec.wb.core.db.*;
+//import com.infotec.wb.lib.*;
+//import com.infotec.wb.util.WBUtils;
 import com.infotec.appfw.lib.mail.MailMessage;
-import com.infotec.topicmaps.Topic;
-import com.infotec.wb.core.*;
-import com.infotec.wb.core.db.*;
-import com.infotec.wb.lib.*;
-import com.infotec.wb.util.WBUtils;
 import java.io.IOException;
 import java.sql.*;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.servlet.http.*;
+import org.semanticwb.SWBPlatform;
+import org.semanticwb.SWBUtils;
+import org.semanticwb.base.util.SWBMail;
 import org.semanticwb.model.Role;
 import org.semanticwb.model.SWBModel;
 import org.semanticwb.model.User;
 import org.semanticwb.model.UserRepository;
 import org.semanticwb.model.WebPage;
+import org.semanticwb.model.WebSite;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.api.SWBResourceURL;
@@ -241,25 +246,26 @@ public class Notification {
 
         try {
             if (request.getParameter("suscribe") != null && request.getParameter("suscribe").equals("1")) {
-                conn = WBUtils.getDBConnection();
-                st = conn.prepareStatement("INSERT INTO resrepositorynotify (rep_docid, idtm,  topic, rep_email) VALUES (?,?,?,?)");
+                conn = SWBUtils.DB.getDefaultConnection();
+                st = conn.prepareStatement("INSERT INTO resrepositorynotify (rep_docid, idtm, topic, rep_email, rep_role) VALUES (?,?,?,?,?)");
                 id = 0;
                 try {
                     if (request.getParameter("repdocid") != null) {
                         id = Long.parseLong(request.getParameter("repdocid"));
                     }
                 } catch (Exception noe) {
-                    AFUtils.log(noe, "Error while trying to create a repository suscription.", true);
+                    Repository.log.error("Error while trying to create a repository suscription.", noe);
                 }
                 st.setLong(1, id);
                 st.setString(2, tp.getWebSiteId());
                 st.setString(3, tp.getId());
                 st.setString(4, user.getId());
+                st.setInt(5, 0);
                 count = st.executeUpdate();
                 st.close();
                 conn.close();
             } else {
-                conn = WBUtils.getDBConnection();
+                conn = SWBUtils.DB.getDefaultConnection();
                 st = conn.prepareStatement("DELETE from resrepositorynotify where rep_docid=? and idtm=? and topic=? and rep_email=?");
                 id = 0;
                 try {
@@ -267,7 +273,7 @@ public class Notification {
                         id = Long.parseLong(request.getParameter("repdocid"));
                     }
                 } catch (Exception noe) {
-                    AFUtils.log(noe, "Error while trying to delete a repository suscription.", true);
+                    Repository.log.error("Error while trying to delete a repository suscription.", noe);
                 }
                 st.setLong(1, id);
                 st.setString(2, tp.getWebSiteId());
@@ -295,7 +301,7 @@ public class Notification {
             sbfRet.append("\n</form>");
 
         } catch (SQLException e) {
-            AFUtils.log(e, "", true);
+            Repository.log.error(e);
         } finally {
             try {
                 if (conn != null && !conn.isClosed()) {
@@ -433,7 +439,7 @@ public class Notification {
         try {
             int count = 0;
             if (request.getParameter("suscribe") == null) {
-                conn = WBUtils.getDBConnection();
+                conn = SWBUtils.DB.getDefaultConnection();
                 pst = conn.prepareStatement("DELETE FROM resrepositorynotify WHERE rep_email=? and rep_docid=? and idtm=? and topic=?");
 
                 long id = 0;
@@ -442,7 +448,7 @@ public class Notification {
                         id = Long.parseLong(request.getParameter("repdocid"));
                     }
                 } catch (Exception noe) {
-                    AFUtils.log(noe, "Error while trying to remove a repository suscription.", true);
+                    Repository.log.error("Error while trying to remove a repository suscription.", noe);
                 }
 
                 pst.setString(1, user.getId());
@@ -470,7 +476,7 @@ public class Notification {
             sbfRet.append("\n</table>");
             sbfRet.append("\n</form>");
         } catch (SQLException e) {
-            AFUtils.log(e, "", true);
+            Repository.log.error(e);
         } finally {
             try {
                 if (conn != null && !conn.isClosed()) {
@@ -510,7 +516,7 @@ public class Notification {
         if (request.getParameter("repdocid") == null || (request.getParameter("repdocid") != null && request.getParameter("repdocid").trim().length() == 0)) {
             try {
 
-                conn = WBUtils.getDBConnection();
+                conn = SWBUtils.DB.getDefaultConnection();
                 String strQuery = "select * from resrepositorynotify where idtm=? and topic=? and rep_email=? and rep_docId=?";
                 pst = conn.prepareStatement(strQuery);
                 pst.setString(1, tp.getWebSiteId());
@@ -533,13 +539,13 @@ public class Notification {
 
 
             } catch (Exception e) {
-                AFUtils.log(e, "Error while check the user directory suscription. ", true);
+                Repository.log.error("Error while check the user directory suscription. ",e);
             }
         }
         if (request.getParameter("repdocid") != null && request.getParameter("repdocid").trim().length() > 0) {
             try {
 
-                conn = WBUtils.getDBConnection();
+                conn = SWBUtils.DB.getDefaultConnection();
                 pst = conn.prepareStatement("select * from resrepositorynotify where rep_docId=? and idtm=? and topic=? and rep_email=? ");
                 pst.setInt(1, Integer.parseInt(request.getParameter("repdocid")));
                 pst.setString(2, tp.getWebSiteId());
@@ -577,7 +583,7 @@ public class Notification {
                 }
 
             } catch (Exception e) {
-                AFUtils.log(e, "Error while trying to get repository document title. Notification.showNotification()", true);
+                Repository.log.error("Error while trying to get repository document title. Notification.showNotification()",e);
             } finally {
                 try {
                     if (conn != null && !conn.isClosed()) {
@@ -606,7 +612,7 @@ public class Notification {
             return arr;
         }
         try {
-            Connection conn = WBUtils.getDBConnection();
+            Connection conn = SWBUtils.DB.getDefaultConnection();
             PreparedStatement pst = conn.prepareStatement("SELECT rep_docId FROM resrepositorynotify WHERE rep_email=? AND idtm=? AND topic=?");
             pst.setString(1, user.getId());
             pst.setString(2, dir.getWebSiteId());
@@ -621,7 +627,7 @@ public class Notification {
             pst.close();
             conn.close();
         } catch (SQLException e) {
-            AFUtils.log(e, "", true);
+            Repository.log.error(e);
         }
 
         return arr;
@@ -652,7 +658,7 @@ public class Notification {
             ret.append("\n<tr><td colspan=2><HR size=\"1\" noshade></td></tr>");
             ret.append("\n<tr><td width=200><font size=2 face=\"Verdana, Arial, Helvetica, sans-serif\">" + paramsRequest.getLocaleString("msgSelectRoles") + ": </font></td><td align=left>");
         } catch (Exception e) {
-            AFUtils.log(e);
+            Repository.log.error(e);
         }
         String blocked = "";
         if (readonly) {
@@ -690,7 +696,7 @@ public class Notification {
         }
         long ldocid = Long.parseLong(docid);
         try {
-            conn = WBUtils.getDBConnection();
+            conn = SWBUtils.DB.getDefaultConnection();
             st = conn.prepareStatement("SELECT rep_role FROM resrepositorynotify WHERE idtm=? and topic=? and rep_role<>? and rep_docid=?");
             st.setString(1, dir.getWebSiteId());
             st.setString(2, dir.getId());
@@ -705,7 +711,7 @@ public class Notification {
             st.close();
             conn.close();
         } catch (SQLException e) {
-            AFUtils.log(e, "Error while get directory roles", true);
+            Repository.log.error("Error while get directory roles",e);
         } finally {
             try {
                 if (conn != null && !conn.isClosed()) {
@@ -735,7 +741,7 @@ public class Notification {
         }
         long ldocid = Long.parseLong(docid);
         try {
-            conn = WBUtils.getDBConnection();
+            conn = SWBUtils.DB.getDefaultConnection();
             st = conn.prepareStatement("DELETE from resrepositorynotify where rep_docid=? and idtm=? and topic=? and rep_role<>?");
             st.setLong(1, ldocid);
             st.setString(2, dir.getWebSiteId());
@@ -761,7 +767,7 @@ public class Notification {
             }
             conn.close();
         } catch (Exception e) {
-            AFUtils.log(e, "Error while updating role list in Repository.Notification.updateRoleList", true);
+            Repository.log.error("Error while updating role list in Repository.Notification.updateRoleList",e);
             return false;
         } finally {
             try {
@@ -841,6 +847,8 @@ public class Notification {
      */
     public void sendNotification(User user, org.semanticwb.model.Resource base, long docid, String title, String description, String filename, String comment, String fileDate, int version, String action, WebPage dir, SWBParamRequest paramsRequest, HttpServletRequest request) throws  SWBResourceException, IOException {
 
+        WebSite wsite = paramsRequest.getWebPage().getWebSite();
+        UserRepository urepo = wsite.getUserRepository();
         HashMap hmemails = new HashMap();
         String repositorio = paramsRequest.getUser().getUserRepository().getId();
         String strNotify = base.getAttribute("notify" + action, paramsRequest.getLocaleString("msgTheDocument") + " {getDocTitle} " + paramsRequest.getLocaleString("msgWasChanged") + " (" + action + ")");
@@ -873,7 +881,7 @@ public class Notification {
 
             // encontrando usuarios suscritos al directorio o documento para notificaci�n
 
-            Connection conn = WBUtils.getDBConnection();
+            Connection conn = SWBUtils.DB.getDefaultConnection();
             PreparedStatement pst = conn.prepareStatement("select rep_email from resrepositorynotify where idtm=? and topic=? and (rep_docid=0 or rep_docid=?) and rep_role=? group by rep_email");
             pst.setString(1, dir.getWebSiteId());
             pst.setString(2, dir.getId());
@@ -884,8 +892,8 @@ public class Notification {
             // agregando emails de usuarios suscritos
             int encontrados = 0;
             while (rs.next()) {
-                RecUser ruser = DBUser.getInstance().getUserById(rs.getString("rep_email"));
-                if (ruser.getActive() == 1) {
+                User ruser = urepo.getUser(rs.getString("rep_email"));
+                if (ruser.isActive()) {
                     hmemails.put(ruser.getEmail(), ruser.getEmail());
                     encontrados++;
                 }
@@ -896,7 +904,7 @@ public class Notification {
             conn.close();
 
             // se revisa si hereda notificaci�n de una carpeta padre
-            conn = WBUtils.getDBConnection();
+            conn = SWBUtils.DB.getDefaultConnection();
             pst = conn.prepareStatement("select idtm, topic, rep_email from resrepositorynotify where (rep_docid=0 or rep_docid=?) and rep_role=? and idtm=?");
             pst.setLong(1, docid);
             pst.setInt(2, 0);
@@ -910,8 +918,8 @@ public class Notification {
                 //Topic tp2 = dir.getMap().getTopic(strTopic.substring(strTopic.lastIndexOf("|")+1));
                 WebPage tp2 = dir.getWebSite().getWebPage(strTopic);
                 if (dir.isChildof(tp2)) {
-                    RecUser ruser = DBUser.getInstance().getUserById(rs.getString("rep_email"));
-                    if (ruser.getActive() == 1) {
+                    User ruser = urepo.getUser(rs.getString("rep_email"));
+                    if (ruser.isActive()) {
                         hmemails.put(ruser.getEmail(), ruser.getEmail());
                         //hmemails.put(DBUser.getInstance().getUserById(rs.getString("rep_email")).getEmail(),DBUser.getInstance().getUserById(rs.getString("rep_email")).getEmail());
                     }
@@ -923,7 +931,7 @@ public class Notification {
 
             // encontrando roles suscritos al directorio o documento para enviar la notificaci�n
             encontrados = 0;
-            conn = WBUtils.getDBConnection();
+            conn = SWBUtils.DB.getDefaultConnection();
             pst = conn.prepareStatement("select rep_role from resrepositorynotify where idtm=? and topic=? and (rep_docid=0 or rep_docid=?) and rep_email=? group by rep_role");
             pst.setString(1, dir.getWebSiteId());
             pst.setString(2, dir.getId());
@@ -955,7 +963,7 @@ public class Notification {
 
             // encontrando roles suscritos al directorio o documento para enviar la notificaci�n, HEREDADOS
 
-            conn = WBUtils.getDBConnection();
+            conn = SWBUtils.DB.getDefaultConnection();
             pst = conn.prepareStatement("select rep_role, topic  from resrepositorynotify where (rep_docid=0 or rep_docid=?) and rep_email=? and idtm=? group by rep_role, topic");
 
             pst.setLong(1, docid);
@@ -989,7 +997,7 @@ public class Notification {
 
 
             // generando lista de emails para enviar la notificaci�n
-            String from = AFUtils.getEnv("af/adminEmail", "webbuilder@infotec.com.mx");
+            String from = SWBPlatform.getEnv("af/adminEmail", "webbuilder@infotec.com.mx");
             StringBuffer send2emails = new StringBuffer();
             Iterator iteemails = hmemails.keySet().iterator();
             while (iteemails.hasNext()) {
@@ -1007,22 +1015,22 @@ public class Notification {
                 if (matchFound)
                 {
                     try {
-                        MailMessage mm = new MailMessage();
+                        SWBMail mm = new SWBMail();
                         mm.setSubject(paramsRequest.getLocaleString("msgDocChanges") + " " + base.getTitle() + " " + paramsRequest.getLocaleString("msgFromSite") + " " + base.getWebSite().getTitle());
-                        mm.setFrom(from);
-                        mm.addTo(email2send);
+                        mm.setFromEmail(from);
+                        mm.addAddress(email2send);
                         strNotify = "<table border=0 cellpadding=5 cellspacing=0><tr><td align=left>" + strNotify + "</td></tr></table>";
-                        mm.addHtml(strNotify);
+                        mm.setData(strNotify);
 
                         try {
-                            AFUtils.sendBGEmail(mm);
+                            SWBUtils.EMAIL.sendBGEmail(mm);
                         } catch (Exception e) {
-                            AFUtils.log(e, "Error while trying to send a Notification e-mail. Repository.Notification.sendNotification() to email:" + email2send, true);
+                            Repository.log.error("Error while trying to send a Notification e-mail. Repository.Notification.sendNotification() to email:" + email2send,e);
                         }
                         //AFUtils.getInstance().sendBGEmail(email2send,paramsRequest.getLocaleString("msgDocChanges")+" "+base.getTitle()+" "+paramsRequest.getLocaleString("msgFromSite")+" "+base.getTopicMap().getDbdata().getTitle(),strNotify);
                     }
                     catch (Exception exc) {
-                        AFUtils.log(exc, "Error while trying to send a Notification e-mail. Repository.Notification.sendNotification()", true);
+                        Repository.log.error("Error while trying to send a Notification e-mail. Repository.Notification.sendNotification()", exc);
                     }
                 }
                 //send2emails.append(email2send);
@@ -1041,7 +1049,7 @@ public class Notification {
             //}
 
         } catch (SQLException e) {
-            AFUtils.log(e, "Error while trying to send a Changes Repository Notification.", true);
+            Repository.log.error("Error while trying to send a Changes Repository Notification.",e);
         }
 
         //strNotify.replaceAll("{getUserName}", user.getFirstName() +" "+ user.getLastName());
@@ -1100,7 +1108,7 @@ public class Notification {
         try {
             this.base = base;
         } catch (Exception e) {
-            AFUtils.log(e, "Error in set resource base of Notification", true);
+            Repository.log.error("Error in set resource base of Notification", e);
         }
     }
 }

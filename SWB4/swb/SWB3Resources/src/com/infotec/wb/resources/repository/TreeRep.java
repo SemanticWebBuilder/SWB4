@@ -32,17 +32,22 @@ package com.infotec.wb.resources.repository;
 
 
 import javax.servlet.http.*;
-import com.infotec.wb.core.*;
-import com.infotec.wb.core.db.*;
-import com.infotec.wb.util.*;
-import com.infotec.appfw.exception.*;
-import com.infotec.appfw.util.*;
+//import com.infotec.wb.core.*;
+//import com.infotec.wb.core.db.*;
+//import com.infotec.wb.util.*;
+//import com.infotec.appfw.exception.*;
+//import com.infotec.appfw.util.*;
 import org.w3c.dom.*;
 import javax.xml.parsers.*;
 import java.util.*;
 import javax.xml.transform.*;
 import javax.xml.transform.stream.*;
-import com.infotec.topicmaps.*;
+import org.semanticwb.SWBException;
+import org.semanticwb.SWBPlatform;
+import org.semanticwb.SWBPortal;
+import org.semanticwb.SWBUtils;
+import org.semanticwb.model.Resource;
+//import com.infotec.topicmaps.*;
 import org.semanticwb.model.ResourceType;
 import org.semanticwb.model.User;
 import org.semanticwb.model.WebPage;
@@ -57,7 +62,7 @@ public class TreeRep {
 
      Resource base=null;
 
-    String webpath=(String)WBUtils.getInstance().getWebPath();
+    String webpath= SWBPlatform.getContextPath();
 
     Templates plt;
     Transformer trans;
@@ -83,10 +88,10 @@ public class TreeRep {
     {
         this.base=base;
         Document dom1=base.getDom();
-        strRes=(String)AFUtils.getInstance().getEnv("wb/admresource");
-        String rutawork=(String)WBUtils.getInstance().getWorkPath();
-        strWorkPath=(String)WBUtils.getInstance().getWorkPath();
-        if(base.getRecResource().getXml()==null)return;
+        strRes=SWBPlatform.getEnv("wb/admresource");
+        String rutawork=SWBPortal.getWorkPath();
+        strWorkPath=SWBPortal.getWorkPath();
+        if(base.getXml()==null)return;
         try
         {
             TransformerFactory transFact = TransformerFactory.newInstance();
@@ -95,25 +100,25 @@ public class TreeRep {
             {
                 template=dom1.getElementsByTagName("template");
                 //RecResourceType recobj = DBResourceType.getInstance().getResourceType(base.getTopicMapId(), base.getType());
-                ResourceType recobj = base.getNative().getResourceType();
+                ResourceType recobj = base.getResourceType();
                 if(template.getLength()>0)
                 {
-                    plt = transFact.newTemplates(new StreamSource(WBUtils.getInstance().getFileFromWorkPath("/resources/"+recobj.getTitle()+"/"+base.getId()+"/"+template.item(0).getChildNodes().item(0).getNodeValue())));
+                    plt = transFact.newTemplates(new StreamSource(SWBUtils.IO.getFileFromPath("/resources/"+recobj.getTitle()+"/"+base.getId()+"/"+template.item(0).getChildNodes().item(0).getNodeValue())));
                     trans = plt.newTransformer();
                 }
                 else
                 {
-                    AFUtils.log("Error en la definici�n del XML (Tag Template) en el recurso MapaSitio: "+base.getId(),true);
+                    Repository.log.error("Error en la definici�n del XML (Tag Template) en el recurso MapaSitio: "+base.getId());
                 }
             }
             else
             {
-                AFUtils.log("Error en la definici�n del XML en el recurso MapaSitio: "+base.getId(),true);
+                Repository.log.error("Error en la definici�n del XML en el recurso MapaSitio: "+base.getId());
             }
         }
         catch(Exception e)
         {
-            AFUtils.log(e,"Error:setResourceBase:toXml() recurso de tipo MapaSitio: "+base.getId(),true);
+            Repository.log.error("Error:setResourceBase:toXml() recurso de tipo MapaSitio: "+base.getId(),e);
         }
         try
         {
@@ -122,15 +127,15 @@ public class TreeRep {
         }
         catch(Exception e)
         {
-            AFUtils.log(e, "Error al interpretar xml del recurso tipo MapaSitio.",true);
+            Repository.log.error("Error al interpretar xml del recurso tipo MapaSitio.",e);
         }
     }
 
 
 
-     public String getHtml(HttpServletRequest request, HttpServletResponse response, User user, WebPage topicrec, HashMap arguments,WebPage topic) throws AFException {
+     public String getHtml(HttpServletRequest request, HttpServletResponse response, User user, WebPage topicrec, HashMap arguments,WebPage topic) throws SWBException {
         Document dcmDom=base.getDom();
-        if(dcmDom==null)throw new AFException("Dom nulo","getHtml()");
+        if(dcmDom==null)throw new SWBException("Dom nulo - getHtml()");
         StringBuffer sbfRet=new StringBuffer();
 
         String strResmaptopic=null;
@@ -178,7 +183,7 @@ public class TreeRep {
                         dom=db.newDocument();
                         Element el=dom.createElement("mapa");
                         el.setAttribute("title", "Repositorio de contenidos");
-                        el.setAttribute("path", WBUtils.getInstance().getWorkPath()+base.getResourceWorkPath()+"/");
+                        el.setAttribute("path", SWBPortal.getWorkPath()+base.getWorkPath()+"/");
                         dom.appendChild(el);
 
                             el=dom.createElement("topicm");
@@ -210,14 +215,14 @@ public class TreeRep {
                     }
                     catch(Exception e)
                     {
-                        AFUtils.log(e,"Error al agregar elementos al recurso de tipo MapaSitio:", true);
+                        Repository.log.error("Error al agregar elementos al recurso de tipo MapaSitio:",e);
                     }
                 }
-                sbfRet.append(AFUtils.getInstance().transformDom(plt, dom));
+                sbfRet.append(SWBUtils.XML.transformDom(plt, dom));
         }
         catch(Exception e)
         {
-            AFUtils.log(e,"Error en recurso MapaSitio al traer el Html",true);
+            Repository.log.error("Error en recurso MapaSitio al traer el Html",e);
         }
         return sbfRet.toString();
     }

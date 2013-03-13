@@ -32,14 +32,15 @@ package com.infotec.wb.resources.repository;
 
 
 import javax.servlet.http.*;
-import com.infotec.wb.util.*;
-import com.infotec.appfw.exception.*;
-import com.infotec.appfw.util.*;
+//import com.infotec.wb.util.*;
+//import com.infotec.appfw.exception.*;
+//import com.infotec.appfw.util.*;
 import org.w3c.dom.*;
 import javax.xml.parsers.*;
 import java.util.*;
 import javax.xml.transform.*;
 import java.io.IOException;
+import org.semanticwb.SWBPortal;
 import org.semanticwb.model.User;
 import org.semanticwb.model.WebPage;
 import org.semanticwb.model.WebSite;
@@ -62,7 +63,7 @@ public class TreeRepHtml {
 
     org.semanticwb.model.Resource base=null;
 
-    String webpath=(String)WBUtils.getInstance().getWebPath();
+    String webpath= SWBPortal.getContextPath();
 
     Templates plt;
     Transformer trans;
@@ -122,7 +123,7 @@ public class TreeRepHtml {
             String backg=" bgcolor=\"FFFFFF\"";
             String color="666666";
             //String path=WBUtils.getInstance().getWorkPath()+base.getResourceWorkPath();
-            String path1=""+webpath+"wbadmin/resources/Repository/images/";
+            String path1=""+webpath+"/swbadmin/images/Repository/";
 
             if(request.getParameter("reptp")!=null && !request.getParameter("reptp").trim().equals("")) {
                 tpid=tm.getWebPage(request.getParameter("reptp"));
@@ -241,7 +242,7 @@ public class TreeRepHtml {
 
         }
         catch(Exception e) {
-            AFUtils.log(e,"Error in resource "+"TreeRepHtml:getHtml",true);
+            Repository.log.error("Error in resource "+"TreeRepHtml:getHtml",e);
         }
         return sbfRet.toString();
     }
@@ -266,7 +267,7 @@ public class TreeRepHtml {
 
         StringBuffer sbfRet=new StringBuffer();
         try{
-            String path1=""+webpath+"wbadmin/resources/Repository/images/";
+            String path1=""+webpath+"/swbadmin/images/Repository/";
             //String path=WBUtils.getInstance().getWorkPath()+base.getResourceWorkPath();
 
             SWBResourceURLImp url1 = new SWBResourceURLImp(null,base,tpid,SWBResourceURLImp.UrlType_RENDER);
@@ -342,7 +343,7 @@ public class TreeRepHtml {
                 }
             }
         }catch(Exception e){
-            AFUtils.log(e,"Error in resource "+"TreeRepHtml:getChilds",true);
+            Repository.log.error("Error in resource "+"TreeRepHtml:getChilds",e);
         }
         return sbfRet.toString();
     }
@@ -441,7 +442,7 @@ public class TreeRepHtml {
             String backg=" bgcolor=\"FFFFFF\"";
             String color="666666";
             //String path=WBUtils.getInstance().getWorkPath()+base.getResourceWorkPath();
-            String path1=""+webpath+"wbadmin/resources/Repository/images/";
+            String path1=""+webpath+"/swbadmin/images/Repository/";
 
             if(request.getParameter("reptp")!=null && !request.getParameter("reptp").trim().equals("")) {
                 tpid=tm.getWebPage(request.getParameter("reptp"));
@@ -540,7 +541,7 @@ public class TreeRepHtml {
                 }
             }
             sbfRet.append("</TABLE>");
-            sbfRet.append("\n<script language=javascript>");
+            sbfRet.append("\n<script type=\"text/javascript\">");
             sbfRet.append("\n function enviar(frm){");
             sbfRet.append("\n   ");
             sbfRet.append("\n    window.opener.regresa(frm.repfiddoc.value,frm.reptp_original.value,frm.reptp.value,frm.repobj.value,frm.repiddoc.value);");
@@ -563,7 +564,7 @@ public class TreeRepHtml {
             if(user.isSigned()) sbfRet.append("</form>");
         }
         catch(Exception e) {
-            AFUtils.log(e,"Error in resource "+"TreeRepHtml:getHtml",true);
+            Repository.log.error("Error in resource "+"TreeRepHtml:getHtml",e);
         }
         return sbfRet.toString();
     }
@@ -588,7 +589,7 @@ public class TreeRepHtml {
         Document dcmDom=base.getDom();
         StringBuffer sbfRet=new StringBuffer();
         try{
-            String path1=""+webpath+"wbadmin/resources/Repository/images/";
+            String path1=""+webpath+"/swbadmin/images/Repository/";
             //String path=WBUtils.getInstance().getWorkPath()+base.getResourceWorkPath();
             String strUrl =tpc.getWebSite().getHomePage().getUrl();
             SWBResourceURL url1 = paramsRequest.getRenderUrl();
@@ -663,7 +664,7 @@ public class TreeRepHtml {
                 }
             }
         }catch(Exception e){
-            AFUtils.log(e,"Error in resource "+"TreeRepHtml:getChilds",true);
+            Repository.log.error("Error in resource "+"TreeRepHtml:getChilds",e);
         }
         return sbfRet.toString();
     }

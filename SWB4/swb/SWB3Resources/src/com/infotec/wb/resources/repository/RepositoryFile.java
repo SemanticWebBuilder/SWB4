@@ -27,14 +27,6 @@
  */
 package com.infotec.wb.resources.repository;
 
-import com.infotec.topicmaps.*;
-import com.infotec.wb.lib.WBResourceURL;
-import com.infotec.wb.core.*;
-import com.infotec.appfw.exception.*;
-import com.infotec.appfw.util.*;
-import com.infotec.wb.lib.WBParamRequest;
-import com.infotec.wb.util.WBUtils;
-import com.infotec.appfw.util.FileUpload;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.io.*;
@@ -44,17 +36,18 @@ import com.infotec.wb.core.db.*;
 import java.util.Locale;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Role;
-import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.User;
 import org.semanticwb.model.UserRepository;
 import org.semanticwb.model.WebPage;
-import org.semanticwb.model.WebSite;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.api.SWBResourceURL;
+import org.semanticwb.portal.indexer.SWBIndexer;
+import org.semanticwb.portal.util.FileUpload;
 
 /** Muestra la lista de los documentos existentes dentro del repositorio. Se pueden
  * agregar documentos, mostrar su informaci�n detallada, el historial de cada
@@ -183,7 +176,7 @@ public class RepositoryFile {
                 if (op.equals("delete")) {
                     delete(request, response, user, topic, hashMap, dir, this.resource, nivel, paramsRequest, fup);
 
-                    ret.append("<script language='JavaScript'> \r\n");
+                    ret.append("<script type='text/javascript'> \r\n");
                     ret.append("document.location='" + url1.toString() + "?reptp=" + dir.getId() + "';\r\n");
                     ret.append("</script>\r\n");
                 } else if (op.equals("add")) {
@@ -212,7 +205,7 @@ public class RepositoryFile {
                 } else if (op.equals("undocheckuout")) {
 
                     this.undocheckout(request, response, user, topic, hashMap, dir, this.resource, nivel);
-                    ret.append("<script language='JavaScript'>\r\n");
+                    ret.append("<script type='text/javascript'>\r\n");
                     ret.append("window.location='" + url1.toString() + "?reptp=" + dir.getId() + "';\r\n");
                     ret.append("</script>\r\n");
                 } else if (op.equals("updatetitle")) {
@@ -224,7 +217,7 @@ public class RepositoryFile {
                     ret.append("<form name=\"frmupdatetitle\" action=\"" + url1.toString() + "\" method=\"post\">");
                     ret.append("<input type=\"hidden\" name=\"repfop\" value=\"info\"><input type=\"hidden\" name=\"updated\" value=\"1\"><input type=\"hidden\" name=\"reptp\" value=\"" + dir.getId() + "\"><input type=\"hidden\" name=\"repfiddoc\" value=\"" + id + "\">");
                     ret.append("</form>");
-                    ret.append("<script language='JavaScript'>\r\n");
+                    ret.append("<script type='text/javascript'>\r\n");
                     ret.append("window.document.frmupdatetitle.submit();");
                     ret.append("</script>\r\n");
                 } else if (op.equals("mod")) {
@@ -233,7 +226,7 @@ public class RepositoryFile {
                     ret.append("<form name=\"frmnewversion\" action=\"" + url1.toString() + "\" method=\"post\">");
                     ret.append("<input type=\"hidden\" name=\"repfop\" value=\"history\"><input type=\"hidden\" name=\"reptp\" value=\"" + dir.getId() + "\"><input type=\"hidden\" name=\"repfiddoc\" value=\"" + id + "\">");
                     ret.append("</form>");
-                    ret.append("<script language='JavaScript'>\r\n");
+                    ret.append("<script type='text/javascript'>\r\n");
                     ret.append("window.document.frmnewversion.submit();");
                     ret.append("</script>\r\n");
                 } else if (op.equals("movedoctodir")) {
@@ -244,9 +237,9 @@ public class RepositoryFile {
                     WebPage toDir = dir.getWebSite().getWebPage(destino);
                     //System.out.println("movedoctodir");
                     if (!moveDoc2Dir(id, fromDir, toDir, user)) {
-                        AFUtils.log("Error while trying to move the document to another directory. RepositoryFile.getHtml.movedoctodir", true);
+                        Repository.log.error("Error while trying to move the document to another directory. RepositoryFile.getHtml.movedoctodir");
                     }
-                    ret.append("<script language='JavaScript'>\r\n");
+                    ret.append("<script type='text/javascript'>\r\n");
                     ret.append("window.location='" + url1.toString() + "?reptp=" + toDir.getId() + "';\r\n");
                     ret.append("</script>\r\n");
                 } else {
@@ -257,7 +250,7 @@ public class RepositoryFile {
             }
 
         } catch (IOException ioe) {
-            AFUtils.log(ioe, "Error in RepositoryFile.getHTML");
+            Repository.log.error( "Error in RepositoryFile.getHTML",ioe);
         }
 
         return ret.toString();
@@ -269,10 +262,10 @@ public class RepositoryFile {
     public void setResourceBase(org.semanticwb.model.Resource resource) {
         try {
             this.resource = resource;
-            path = WBUtils.getInstance().getWebPath() + "wbadmin/resources/Repository/images/";
+            path = SWBPlatform.getContextPath() + "/swbadmin/images/Repository/";
 
         } catch (Exception e) {
-            AFUtils.log(e, "", true);
+            Repository.log.error(e);
         }
     }
 
@@ -295,7 +288,7 @@ public class RepositoryFile {
             long id = Long.parseLong(request.getParameter("repfiddoc"));
             Connection con = null;
             try {
-                con = WBUtils.getDBConnection();
+                con = SWBUtils.DB.getDefaultConnection();
                 boolean cancheckin = false;
                 if (nivel == 3) {
                     cancheckin = true;
@@ -345,19 +338,19 @@ public class RepositoryFile {
                     saveLog("undocheckout", user, id, dir, "This user made checkout", 1);
                 }
             } catch (SQLException e) {
-                AFUtils.log(e, "Error in undocheckout", true);
+                Repository.log.error( "Error in undocheckout", e);
                 return;
             } finally {
                 if (con != null) {
                     try {
                         con.close();
                     } catch (Exception e) {
-                        AFUtils.log(e, "Error in undocheckout", true);
+                        Repository.log.error("Error in undocheckout",e);
                     }
                 }
             }
         } catch (Exception e) {
-            AFUtils.log(e, "Error in undocheckout", true);
+            Repository.log.error("Error in undocheckout", e);
         }
         return;
     }
@@ -413,7 +406,7 @@ public class RepositoryFile {
                         fileName = request.getRequestURL().toString();///MapaSitio.xslt?repfop=view&reptp=CNFWB_Rep11&repfiddoc=1&repinline=true
                         if (null != fileName) {
                             fileName = fileName.substring(fileName.lastIndexOf("/") + 1);
-                            con = WBUtils.getDBConnection();
+                            con = SWBUtils.DB.getDefaultConnection();
                             String sqlID = "select rrep.rep_docId as idDoc, rver.rep_fileName as fileName from resrepository rrep, resrepositoryversions rver "
                                     + " where rrep.topic=? and rrep.resId = ? and rrep.rep_docId = rver.rep_docId and rver.rep_fileName = ?";
                             pstID = con.prepareStatement(sqlID);
@@ -437,14 +430,14 @@ public class RepositoryFile {
                     }
 
                 } catch (Exception e) {
-                    AFUtils.log(e, "Error al buscar el archivo por nombre: " + fileName, true);
+                    Repository.log.error("Error al buscar el archivo por nombre: " + fileName, e);
                 } finally {
                     if (con != null) {
                         try {
                             con.close();
                             con = null;
                         } catch (Exception e) {
-                            AFUtils.log(e, "Error in RepositoryFile.view() -- 1.1 --", true);
+                            Repository.log.error( "Error in RepositoryFile.view() -- 1.1 --", e);
                         }
                     }
                     if (rsID != null) {
@@ -452,7 +445,7 @@ public class RepositoryFile {
                             rsID.close();
                             rsID = null;
                         } catch (Exception e) {
-                            AFUtils.log(e, "Error in RepositoryFile.view() -- 1.1 --", true);
+                            Repository.log.error( "Error in RepositoryFile.view() -- 1.1 --", e);
                         }
                     }
                     if (pstID != null) {
@@ -460,7 +453,7 @@ public class RepositoryFile {
                             pstID.close();
                             pstID = null;
                         } catch (Exception e) {
-                            AFUtils.log(e, "Error in RepositoryFile.view() -- 1.1 --", true);
+                            Repository.log.error( "Error in RepositoryFile.view() -- 1.1 --", e);
                         }
 
                     }
@@ -471,7 +464,7 @@ public class RepositoryFile {
             String sversion = request.getParameter("repfversion");
             int version = 1;
             try {
-                con = WBUtils.getDBConnection();
+                con = SWBUtils.DB.getDefaultConnection();
                 if (sversion == null) {
                     PreparedStatement psversion = con.prepareStatement("select rep_lastVersion from resrepository where rep_docId=? and idtm=?");
                     psversion.setLong(1, id);
@@ -520,22 +513,22 @@ public class RepositoryFile {
 
                     OutputStream out = response.getOutputStream();
                     InputStream in = SWBPortal.getFileFromWorkPath(resource.getWorkPath() + "/" + sfile);
-                    AFUtils.copyStream(in, out);
+                    SWBUtils.IO.copyStream(in, out);
                 }
             } catch (SQLException e) {
-                AFUtils.log(e, "Error in RepositoryFile.view() -- 1 -- ", true);
+                Repository.log.error("Error in RepositoryFile.view() -- 1 -- ", e);
                 return;
             } finally {
                 if (con != null) {
                     try {
                         con.close();
                     } catch (Exception e) {
-                        AFUtils.log(e, "Error in RepositoryFile.view() -- 1.1 --", true);
+                        Repository.log.error("Error in RepositoryFile.view() -- 1.1 --", e);
                     }
                 }
             }
         } catch (Exception e) {
-            AFUtils.log(e, "Error in RepositoryFile.view()", true);
+            Repository.log.error( "Error in RepositoryFile.view()", e);
         }
     }
 
@@ -563,7 +556,7 @@ public class RepositoryFile {
             long id = Long.parseLong(request.getParameter("repfiddoc"));
             Connection con = null;
             try {
-                con = WBUtils.getDBConnection();
+                con = SWBUtils.DB.getDefaultConnection();
                 PreparedStatement ps = con.prepareStatement("select rep_email from resrepository where rep_docId=? and idtm=?");
                 ps.setLong(1, id);
                 ps.setString(2, dir.getWebSiteId());
@@ -616,19 +609,19 @@ public class RepositoryFile {
 //                    indexFile(file_db, file_db, id, title, dir, paramsRequest);
                 }
             } catch (SQLException e) {
-                AFUtils.log(e, "Error in updatetitle", true);
+                Repository.log.error("Error in updatetitle", e);
                 return;
             } finally {
                 if (con != null) {
                     try {
                         con.close();
                     } catch (Exception e) {
-                        AFUtils.log(e, "Error in updatetitle", true);
+                        Repository.log.error( "Error in updatetitle", e);
                     }
                 }
             }
         } catch (Exception e) {
-            AFUtils.log(e, "Error in updatetitle", true);
+            Repository.log.error( "Error in updatetitle", e);
         }
     }
 
@@ -642,7 +635,7 @@ public class RepositoryFile {
 //                        w_indx_last.removeFile(f_last);  // Para eliminar un archivo del index
 //
 //                    } catch (Exception ex) {
-//                        AFUtils.log(ex, "Error while trying to remove a file from index.", true);
+//                        Repository.log.error(ex, "Error while trying to remove a file from index.", true);
 //                    }
 //                }
 //            }
@@ -660,7 +653,7 @@ public class RepositoryFile {
 //
 //                    w_indx.indexFile(f, title, url, dir, resource.getId());
 //                } catch (Exception ex) {
-//                    AFUtils.log(ex, "Error while trying to add a file to index.", true);
+//                    Repository.log.error(ex, "Error while trying to add a file to index.", true);
 //                }
 //            }
 //        }
@@ -701,7 +694,7 @@ public class RepositoryFile {
             String title = "";
             byte[] bcont = fup.getFileData("repfdoc");
             try {
-                con = WBUtils.getDBConnection();
+                con = SWBUtils.DB.getDefaultConnection();
                 boolean cancheckin = false;
                 PreparedStatement psuser = con.prepareStatement("select rep_title,rep_emailCheckOut from resrepository where rep_docId=? and idtm=?");
                 psuser.setLong(1, id);
@@ -722,12 +715,12 @@ public class RepositoryFile {
                 }
                 int version = 1;
                 int last_ver = 1;
-                PreparedStatement psmaxversion = con.prepareStatement("select max(rep_fileVersion) as max from resrepositoryversions where rep_docId=? and idtm=?");
+                PreparedStatement psmaxversion = con.prepareStatement("select MAX(rep_fileVersion) as maximo from resrepositoryversions where rep_docId=? and idtm=?");
                 psmaxversion.setLong(1, id);
                 psmaxversion.setString(2, dir.getWebSiteId());
                 ResultSet rsmax = psmaxversion.executeQuery();
                 if (rsmax.next()) {
-                    version = rsmax.getInt("max");
+                    version = rsmax.getInt("maximo");
                     last_ver = version;
                 }
                 rsmax.close();
@@ -759,12 +752,12 @@ public class RepositoryFile {
 ////                                w_indx_last.removeFile(f_last);  // Para eliminar un archivo del index
 ////
 ////                            } catch (Exception ex) {
-////                                AFUtils.log(ex, "Error while trying to remove a file from index.", true);
+////                                Repository.log.error(ex, "Error while trying to remove a file from index.", true);
 ////                            }
 ////                        }
 ////                    }
 //                }
-
+                
 //                File f = new File(WBUtils.getInstance().getWorkPath() + "/" + resource.getResourceWorkPath() + "/" + file_db);
 //                if (f.exists()) {
 //                    WBIndexer w_indx = WBIndexMgr.getInstance().getTopicMapIndexer(dir.getMap().getId());
@@ -777,7 +770,7 @@ public class RepositoryFile {
 //
 //                            w_indx.indexFile(f, title, url, dir, resource.getId());
 //                        } catch (Exception ex) {
-//                            AFUtils.log(ex, "Error while trying to add a file to index.", true);
+//                            Repository.log.error(ex, "Error while trying to add a file to index.", true);
 //                        }
 //                    }
 //                }
@@ -826,19 +819,19 @@ public class RepositoryFile {
                 rsdata.close();
                 psdata.close();
             } catch (SQLException e) {
-                AFUtils.log(e, "Error in newversion", true);
+                Repository.log.error("Error in newversion", e);
                 return;
             } finally {
                 if (con != null) {
                     try {
                         con.close();
                     } catch (Exception e) {
-                        AFUtils.log(e, "Error in newversion", true);
+                        Repository.log.error("Error in newversion",e);
                     }
                 }
             }
         } catch (Exception e) {
-            AFUtils.log(e, "Error in newversion", true);
+            Repository.log.error("Error in newversion",e);
         }
     }
 
@@ -865,7 +858,7 @@ public class RepositoryFile {
             long id = Long.parseLong(request.getParameter("repfiddoc"));
             Connection con = null;
             try {
-                con = WBUtils.getDBConnection();
+                con = SWBUtils.DB.getDefaultConnection();
                 boolean cancheckin = false;
                 PreparedStatement psuser = con.prepareStatement("select rep_emailCheckOut from resrepository where rep_docId=? and idtm=?");
                 psuser.setLong(1, id);
@@ -962,7 +955,7 @@ public class RepositoryFile {
                     ret.append("</table>");
                     ret.append("</form>");
 
-                    ret.append("<script language='JavaScript'>\r\n");
+                    ret.append("<script type='text/javascript'>\r\n");
                     ret.append("function textCounter(field,  maxlimit) {\r\n");
                     ret.append("if (field.value.length > maxlimit)\r\n");
                     ret.append("field.value = field.value.substring(0, maxlimit);\r\n");
@@ -1005,19 +998,19 @@ public class RepositoryFile {
                     ret.append("</script>\r\n");
                 }
             } catch (SQLException e) {
-                AFUtils.log(e, "Error in checkin", true);
+                Repository.log.error("Error in checkin",e);
                 return ret.toString();
             } finally {
                 if (con != null) {
                     try {
                         con.close();
                     } catch (Exception e) {
-                        AFUtils.log(e, "Error in checkin", true);
+                        Repository.log.error("Error in checkin", e);
                     }
                 }
             }
         } catch (Exception e) {
-            AFUtils.log(e, "Error in checkin", true);
+            Repository.log.error( "Error in checkin",e);
         }
         return ret.toString();
     }
@@ -1043,7 +1036,7 @@ public class RepositoryFile {
             long id = Long.parseLong(request.getParameter("repfiddoc"));
             Connection con = null;
             try {
-                con = WBUtils.getDBConnection();
+                con = SWBUtils.DB.getDefaultConnection();
                 PreparedStatement psstatus = con.prepareStatement("select rep_status from resrepository where rep_docId=? and idtm=?");
                 psstatus.setLong(1, id);
                 psstatus.setString(2, dir.getWebSiteId());
@@ -1068,19 +1061,19 @@ public class RepositoryFile {
                     saveLog("checkout", user, id, dir, "Description", 1);
                 }
             } catch (SQLException e) {
-                AFUtils.log(e, "Error on checkout", true);
+                Repository.log.error("Error on checkout", e);
                 return;
             } finally {
                 if (con != null) {
                     try {
                         con.close();
                     } catch (Exception e) {
-                        AFUtils.log(e, "Error in checkout", true);
+                        Repository.log.error("Error in checkout",e);
                     }
                 }
             }
         } catch (Exception e) {
-            AFUtils.log(e, "Error in checkout", true);
+            Repository.log.error( "Error in checkout",e);
         }
     }
 
@@ -1108,7 +1101,7 @@ public class RepositoryFile {
             long id = Long.parseLong(request.getParameter("repfiddoc"));
             Connection con = null;
             try {
-                con = WBUtils.getDBConnection();
+                con = SWBUtils.DB.getDefaultConnection();
                 if (nivel >= 2) {
                     boolean candelete = false;
                     if (nivel == 3) {
@@ -1159,19 +1152,19 @@ public class RepositoryFile {
 
                 return;
             } catch (SQLException e) {
-                AFUtils.log(e, "Error on delete", true);
+                Repository.log.error("Error on delete", e);
                 return;
             } finally {
                 if (con != null) {
                     try {
                         con.close();
                     } catch (Exception e) {
-                        AFUtils.log(e, "Error on delete", true);
+                        Repository.log.error("Error on delete",e);
                     }
                 }
             }
         } catch (Exception e) {
-            AFUtils.log(e, "Error on delete", true);
+            Repository.log.error("Error on delete",e);
         }
     }
 
@@ -1224,7 +1217,7 @@ public class RepositoryFile {
 
             tp = dir.getId();
             s_message = paramsRequest.getLocaleString("msgMustBeLogged");
-            ret.append("\n<script language='JavaScript'>");
+            ret.append("\n<script type='text/javascript'>");
             if (request.getParameter("updated") != null && request.getParameter("updated").equals("1")) {
                 ret.append("\n  alert('" + paramsRequest.getLocaleString("msgFileInfoUpdated") + ".');");
             }
@@ -1387,7 +1380,7 @@ public class RepositoryFile {
             ret.append("<TD colspan='10'><IMG src='" + path + "line.gif' width='100%' height='5'></TD>");
             ret.append("</TR>");
 
-            con = WBUtils.getDBConnection();
+            con = SWBUtils.DB.getDefaultConnection();
             ps = con.prepareStatement("select rep_docId, resId, rep_email, rep_title, rep_description, rep_lastVersion, rep_status, rep_emailCheckOut, rep_xml from resrepository where rep_docId=? and idtm=?");
             ps.setLong(1, id);
             ps.setString(2, dir.getWebSiteId());
@@ -1482,7 +1475,7 @@ public class RepositoryFile {
                         } catch (Exception e) {
 
                             s_author = "&nbsp;";
-                            AFUtils.log(e, "Error on method info class RepositoryFile trying to create new user docId" + ": " + id, true);
+                            Repository.log.error("Error on method info class RepositoryFile trying to create new user docId" + ": " + id,e);
                         }
                     }
                     ret.append("<FONT size='2' face='Verdana, Arial, Helvetica, sans-serif'>" + s_author + "</FONT>");
@@ -1694,7 +1687,7 @@ public class RepositoryFile {
             if (user.isSigned()) {
                 ret.append("</form>");
             }
-            ret.append("<script language='JavaScript'>\r\n");
+            ret.append("<script type='text/javascript'>\r\n");
             ret.append("function textCounter(field,  maxlimit) {\r\n");
             ret.append("if (field.value.length > maxlimit)\r\n");
             ret.append("field.value = field.value.substring(0, maxlimit);\r\n");
@@ -1731,14 +1724,14 @@ public class RepositoryFile {
 
 
         } catch (SQLException e) {
-            AFUtils.log(e, "Error on info", true);
+            Repository.log.error( "Error on info",e);
             return ret.toString();
         } finally {
             if (con != null) {
                 try {
                     con.close();
                 } catch (Exception e) {
-                    AFUtils.log(e, "Error on info", true);
+                    Repository.log.error( "Error on info",e);
                 }
             }
         }
@@ -1785,7 +1778,7 @@ public class RepositoryFile {
         //i_log = 1;
         try {
             String topicid = dir!=null?dir.getId():"";
-            con = WBUtils.getDBConnection();
+            con = SWBUtils.DB.getDefaultConnection();
             s_sql = "select * from resrepository where idtm=? and topic=? and resId=? and rep_deleted = 0";
             // Display results sorted by title or date
             if (request.getParameter("repordid") != null) {
@@ -1805,7 +1798,7 @@ public class RepositoryFile {
             s_message = paramsRequest.getLocaleString("msgMustBeLogged");
             String foldername = dir.getDisplayName();
             SWBResourceURL url = paramsRequest.getRenderUrl();
-            ret.append("\n<script language='JavaScript'>");
+            ret.append("\n<script type='text/javascript'>");
             ret.append("\n  function doSuscribe(ivar){");
             ret.append("\n      if( ivar == 0){");
             ret.append("\n          alert('" + s_message + "');");
@@ -2208,14 +2201,14 @@ public class RepositoryFile {
             ps.close();
             ret.append("</table>");
         } catch (SQLException e) {
-            AFUtils.log(e, "Error on showfiles", true);
+            Repository.log.error("Error on showfiles",e);
             return ret.toString();
         } finally {
             if (con != null) {
                 try {
                     con.close();
                 } catch (Exception e) {
-                    AFUtils.log(e, "Error on showfiles", true);
+                    Repository.log.error("Error on showfiles",e);
                 }
             }
         }
@@ -2245,9 +2238,9 @@ public class RepositoryFile {
             file = "ico_program.gif";
         } else if (type.indexOf(".txt") != -1 || type.indexOf(".properties") != -1) {
             file = "ico_text.gif";
-        } else if (type.indexOf(".doc") != -1 || type.indexOf(".docx") != -1) {
+        } else if (type.indexOf(".doc") != -1 || type.indexOf(".docx") != -1 || type.indexOf(".rtf") != -1) {
             file = "ico_word.gif";
-        } else if (type.indexOf(".xml") != -1 || type.indexOf(".xsl") != -1) {
+        } else if (type.indexOf(".xml") != -1 || type.indexOf(".xsl") != -1 || type.indexOf(".xslt") != -1) {
             file = "ico_xml.gif";
         } else if (type.indexOf(".mmap") != -1) {
             file = "ico_mindmanager.GIF";
@@ -2294,7 +2287,7 @@ public class RepositoryFile {
             file = "Text file";
         } else if (type.indexOf(".properties") != -1) {
             file = "Properties file";
-        } else if (type.indexOf(".doc") != -1 || type.indexOf(".docx") != -1) {
+        } else if (type.indexOf(".doc") != -1 || type.indexOf(".docx") != -1 || type.indexOf(".rtf") != -1) {
             file = "Microsoft Word";
         } else if (type.indexOf(".xml") != -1) {
             file = "XML file";
@@ -2306,7 +2299,7 @@ public class RepositoryFile {
             file = "Audio file";
         } else if (type.indexOf(".wav") != -1) {
             file = "Audio file";
-        } else if (type.indexOf(".xsl") != -1) {
+        } else if (type.indexOf(".xsl") != -1 || type.indexOf(".xslt") != -1) {
             file = "XSLT file";
         }
         return file;
@@ -2344,7 +2337,7 @@ public class RepositoryFile {
             id = Long.parseLong(request.getParameter("repfiddoc"));
             String topicid = dir.getId();
 
-            con = WBUtils.getDBConnection();
+            con = SWBUtils.DB.getDefaultConnection();
             ps = con.prepareStatement("select * from resrepositoryversions where rep_docId=? and idtm=?");
             ps.setLong(1, id);
             ps.setString(2, dir.getWebSiteId());
@@ -2392,7 +2385,7 @@ public class RepositoryFile {
                         }
                     } catch (Exception e) {
                         s_author = "&nbsp;";
-                        AFUtils.log(e, "Error on method history class RepositoryFile trying to create new user with email" + ": " + dir.getWebSite().getUserRepository().getUser(repemail).getEmail(), true);
+                        Repository.log.error("Error on method history class RepositoryFile trying to create new user with email" + ": " + dir.getWebSite().getUserRepository().getUser(repemail).getEmail(),e);
                     }
                 }
                 SWBResourceURL urlrecdoc = paramsRequest.getRenderUrl();
@@ -2451,7 +2444,7 @@ public class RepositoryFile {
             ps.close();
             ret.append("\n<TR><TD colspan='10' align='center'><input  type='button' name='n' value='" + paramsRequest.getLocaleString("msgBTNViewAllFiles") + "' onClick='javascript:init()'></TD></TR>");
             ret.append("\n</table>");
-            ret.append("<script language='JavaScript'>\r\n");
+            ret.append("<script type='text/javascript'>\r\n");
             ret.append("function textCounter(field,  maxlimit) {\r\n");
             ret.append("if (field.value.length > maxlimit)\r\n");
             ret.append("field.value = field.value.substring(0, maxlimit);\r\n");
@@ -2461,14 +2454,14 @@ public class RepositoryFile {
             ret.append("}\r\n");
             ret.append("</script>\r\n");
         } catch (SQLException e) {
-            AFUtils.log(e, "Error on history", true);
+            Repository.log.error("Error on history",e);
             return ret.toString();
         } finally {
             if (con != null) {
                 try {
                     con.close();
                 } catch (Exception e) {
-                    AFUtils.log(e, "Error on history", true);
+                    Repository.log.error("Error on history",e);
                 }
             }
         }
@@ -2504,7 +2497,7 @@ public class RepositoryFile {
         try {
             title = fup.getValue("repftitle");
         } catch (IOException ioe) {
-            AFUtils.log(ioe, "Error on insert");
+            Repository.log.error("Error on insert",ioe);
         }
 
         try {
@@ -2520,7 +2513,7 @@ public class RepositoryFile {
             }
             byte[] bcont = fup.getFileData("repfdoc");
 
-            con = WBUtils.getDBConnection();
+            con = SWBUtils.DB.getDefaultConnection();
             if (con == null) {
                 return ret.toString();
             }
@@ -2579,7 +2572,7 @@ public class RepositoryFile {
             }
 
 
-            filename = AFUtils.replaceSpecialCharacters(strfileName, true) + strFileExt;
+            filename = SWBUtils.TEXT.replaceSpecialCharacters(strfileName, true) + strFileExt;
 
             PreparedStatement ps2 = con.prepareStatement("insert into "
                     + "resrepositoryversions(rep_docId,idtm,rep_fileVersion,rep_email,rep_fileName,rep_fileSize,rep_fileDate,rep_comment,rep_create,rep_fileType) "
@@ -2623,26 +2616,26 @@ public class RepositoryFile {
 //                        String url = "" + urllineA + "/" + type + "?repfop=view&reptp=" + dir.getId() + "&repfiddoc=" + Long.toString(docid) + "&repinline=true";
 //                        w_indx.indexFile(f, title, url, dir, resource.getId());
 //                    } catch (Exception ex_ind) {
-//                        AFUtils.log(ex_ind, "Error while trying to index file.", true);
+//                        Repository.log.error(ex_ind, "Error while trying to index file.", true);
 //                    }
 //                }
 //            }
 
         } catch (Exception e) {
             if (filename != null) {
-                File fdoc = new File(WBUtils.getInstance().getWebWorkPath() + "/" + filename);
+                File fdoc = new File(SWBPortal.getWebWorkPath() + "/" + filename);
                 if (fdoc.exists()) {
                     fdoc.delete();
                 }
             }
-            AFUtils.log(e, "Error on insert", true);
+            Repository.log.error("Error on insert",e);
             return ret.toString();
         } finally {
             if (con != null) {
                 try {
                     con.close();
                 } catch (Exception e) {
-                    AFUtils.log(e, "Error on insert", true);
+                    Repository.log.error("Error on insert",e);
                 }
             }
         }
@@ -2716,7 +2709,7 @@ public class RepositoryFile {
         ret.append("\n</tr>");
         ret.append("\n</table>");
         ret.append("\n</form>");
-        ret.append("<script language='JavaScript'>\r\n");
+        ret.append("<script type='text/javascript'>\r\n");
         ret.append("function init(){\r\n");
         ret.append("document.location='" + url.toString() + "';\r\n");
         ret.append("}\r\n");
@@ -2772,7 +2765,7 @@ public class RepositoryFile {
         String str_topicmapid = null;
         String str_topicid = null;
         try {
-            con = WBUtils.getDBConnection();
+            con = SWBUtils.DB.getDefaultConnection();
             if (p_isfile == 1) {
                 ps = con.prepareStatement("select rep_title from resrepository where rep_docId=? and idtm=?");
                 ps.setLong(1, p_fileid);
@@ -2812,7 +2805,7 @@ public class RepositoryFile {
             ps.close();
             con.close();
         } catch (Exception e) {
-            AFUtils.log(e, "Error while trying to create a resource record at RepositoryFile:saveLog", true);
+            Repository.log.error("Error while trying to create a resource record at RepositoryFile:saveLog", e);
         } finally {
             ps = null;
             con = null;
@@ -2833,7 +2826,7 @@ public class RepositoryFile {
         PreparedStatement ps = null;
         if (!fromDir.getId().equals(toDir.getId())) {
             try {
-                conn = WBUtils.getDBConnection();
+                conn = SWBUtils.DB.getDefaultConnection();
                 ps = conn.prepareStatement("update resrepository set topic=? where rep_docId=? and topic=? and idtm=?");
                 ps.setString(1, toDir.getId());
                 ps.setLong(2, id);
@@ -2846,7 +2839,7 @@ public class RepositoryFile {
 
                 this.saveLog("Move", user, id, toDir, "The document was moved from  " + fromDir.getDisplayName(user.getLanguage()) + " to " + toDir.getDisplayName(user.getLanguage()) + " directory.", 1);
             } catch (Exception e) {
-                AFUtils.log(e, "Error while trying to move document with id: " + id + " from directory " + fromDir.getId() + " to directory " + toDir.getId(), true);
+                Repository.log.error("Error while trying to move document with id: " + id + " from directory " + fromDir.getId() + " to directory " + toDir.getId(),e);
             }
         }
 
