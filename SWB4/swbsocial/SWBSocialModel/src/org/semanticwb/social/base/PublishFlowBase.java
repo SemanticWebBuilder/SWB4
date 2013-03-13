@@ -11,6 +11,14 @@ public abstract class PublishFlowBase extends org.semanticwb.model.SWBClass impl
    * Inversa con la que obtenemos los temas a los que esta asociados un determinado flujo
    */
     public static final org.semanticwb.platform.SemanticProperty social_hasSocialTopicInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#hasSocialTopicInv");
+   /**
+   * Un usuario es una persona que tiene relación con el portal a través de un método de acceso.
+   */
+    public static final org.semanticwb.platform.SemanticClass swb_User=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#User");
+   /**
+   * Un flujo de publicación puede estar asignado a mas de un usuario. Esto es para que los usuarios sigan uno o mas flujos.
+   */
+    public static final org.semanticwb.platform.SemanticProperty social_hasUser=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#hasUser");
     public static final org.semanticwb.platform.SemanticClass social_PublishFlow=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#PublishFlow");
    /**
    * The semantic class that represents the currentObject
@@ -124,6 +132,29 @@ public abstract class PublishFlowBase extends org.semanticwb.model.SWBClass impl
         public static java.util.Iterator<org.semanticwb.social.PublishFlow> listPublishFlowBySocialTopic(org.semanticwb.social.SocialTopic value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.social.PublishFlow> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(social_hasSocialTopicInv,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.social.PublishFlow with a determined User
+       * @param value User of the type org.semanticwb.model.User
+       * @param model Model of the org.semanticwb.social.PublishFlow
+       * @return Iterator with all the org.semanticwb.social.PublishFlow
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.PublishFlow> listPublishFlowByUser(org.semanticwb.model.User value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.PublishFlow> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(social_hasUser, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.social.PublishFlow with a determined User
+       * @param value User of the type org.semanticwb.model.User
+       * @return Iterator with all the org.semanticwb.social.PublishFlow
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.PublishFlow> listPublishFlowByUser(org.semanticwb.model.User value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.PublishFlow> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(social_hasUser,value.getSemanticObject(),sclass));
             return it;
         }
        /**
@@ -307,6 +338,71 @@ public abstract class PublishFlowBase extends org.semanticwb.model.SWBClass impl
          if(obj!=null)
          {
              ret=(org.semanticwb.social.SocialTopic)obj.createGenericInstance();
+         }
+         return ret;
+    }
+   /**
+   * Gets all the org.semanticwb.model.User
+   * @return A GenericIterator with all the org.semanticwb.model.User
+   */
+
+    public org.semanticwb.model.GenericIterator<org.semanticwb.model.User> listUsers()
+    {
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.User>(getSemanticObject().listObjectProperties(social_hasUser));
+    }
+
+   /**
+   * Gets true if has a User
+   * @param value org.semanticwb.model.User to verify
+   * @return true if the org.semanticwb.model.User exists, false otherwise
+   */
+    public boolean hasUser(org.semanticwb.model.User value)
+    {
+        boolean ret=false;
+        if(value!=null)
+        {
+           ret=getSemanticObject().hasObjectProperty(social_hasUser,value.getSemanticObject());
+        }
+        return ret;
+    }
+   /**
+   * Adds a User
+   * @param value org.semanticwb.model.User to add
+   */
+
+    public void addUser(org.semanticwb.model.User value)
+    {
+        getSemanticObject().addObjectProperty(social_hasUser, value.getSemanticObject());
+    }
+   /**
+   * Removes all the User
+   */
+
+    public void removeAllUser()
+    {
+        getSemanticObject().removeProperty(social_hasUser);
+    }
+   /**
+   * Removes a User
+   * @param value org.semanticwb.model.User to remove
+   */
+
+    public void removeUser(org.semanticwb.model.User value)
+    {
+        getSemanticObject().removeObjectProperty(social_hasUser,value.getSemanticObject());
+    }
+
+   /**
+   * Gets the User
+   * @return a org.semanticwb.model.User
+   */
+    public org.semanticwb.model.User getUser()
+    {
+         org.semanticwb.model.User ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(social_hasUser);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.model.User)obj.createGenericInstance();
          }
          return ret;
     }
