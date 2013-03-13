@@ -111,7 +111,7 @@ public class UserRepository extends UserRepositoryBase {
         Iterator<SemanticClass> it = UserTypeDef.sclass.listSubClasses();
         while (it.hasNext()) {
             SemanticClass utd = it.next();
-            System.out.println("Adding: "+utd.getName());
+            //System.out.println("Adding: "+utd.getName());
             if (!DEFTYPE.equals(utd.getName())) {
                 userTypes.put(utd.getName(), utd);
             } else {
