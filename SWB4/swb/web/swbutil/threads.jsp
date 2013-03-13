@@ -13,7 +13,115 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
    "http://www.w3.org/TR/html4/loose.dtd">
+<%!
+    ThreadMXBean thbean = java.lang.management.ManagementFactory.getThreadMXBean();
+    /** The Constant SEGUNDO. */
+    final long SEGUNDO = 1000;
+    
+    /** The Constant MINUTO. */
+    final long MINUTO = 60 * SEGUNDO;
+    
+    /** The Constant HORA. */
+    final long HORA   = 60 * MINUTO;
+    
+    /** The Constant DIA. */
+    final long DIA    = 24 * HORA;    
+    
+    int countBLOCKEDThread()
+    {
+        int x=0;
+        long[] tiarr = thbean.getAllThreadIds();
+        for (long ct : tiarr)
+        {
+            ThreadInfo ti = thbean.getThreadInfo(ct);
+            if (ti.getThreadState().equals(Thread.State.BLOCKED))
+            x++;
+        }
+        return x;
+    }
 
+    String dumpBLOCKEDThreadWithStackTrace()
+    {
+        StringBuilder sb = new StringBuilder("ThreadDump: " + "\n");
+        long[] tiarr = thbean.getAllThreadIds();
+        for (long ct : tiarr)
+        {
+            ThreadInfo ti = thbean.getThreadInfo(ct);
+            if (ti.getThreadState().equals(Thread.State.BLOCKED))
+            sb.append(formatThreadInfo(thbean.getThreadInfo(ct, Integer.MAX_VALUE)));
+        }
+        return sb.toString();
+    }
+    
+    String formatThreadInfo(ThreadInfo ti)
+    {
+        StringBuilder sb = new StringBuilder("\"" + ti.getThreadName() + "\""
+                + " Id=" + ti.getThreadId()
+                + " in " + ti.getThreadState());
+        if (ti.getLockName() != null)
+        {
+            sb.append(" on lock=" + ti.getLockName());
+        }
+        if (ti.isSuspended())
+        {
+            sb.append(" (suspended)");
+        }
+        if (ti.isInNative())
+        {
+            sb.append(" (running in native)");
+        }
+        sb.append("\n");
+        if (ti.getLockOwnerName() != null)
+        {
+            sb.append("     owned by " + ti.getLockOwnerName()
+                    + " Id=" + ti.getLockOwnerId() + "\n");
+        }
+        for (StackTraceElement ste : ti.getStackTrace())
+        {
+            sb.append("    at " + ste.toString() + "\n");
+        }
+        sb.append("\n");
+        return sb.toString();
+    }    
+    
+    String dumpThreadWithStackTrace()
+    {
+
+        StringBuilder sb = new StringBuilder("ThreadDump: " + "\n");
+        long[] tiarr = thbean.getAllThreadIds();
+        for (long ct : tiarr)
+        {
+            sb.append("ThreadCpuTime: "+formatTime(thbean.getThreadCpuTime(ct)/1000000)+"\n");
+            sb.append(formatThreadInfo(thbean.getThreadInfo(ct, Integer.MAX_VALUE)));
+        }
+        return sb.toString();
+    }   
+
+    String formatTime(long t) 
+    {
+        String str;
+        if (t < 1 * MINUTO) {
+            String seconds = String.format("%.3f", t / (double)SEGUNDO);
+            str = ""+seconds+" Segundos";
+        } else {
+            long remaining = t;
+            long days = remaining / DIA;
+            remaining %= 1 * DIA;
+            long hours = remaining / HORA;
+            remaining %= 1 * HORA;
+            long minutes = remaining / MINUTO;
+
+            if (t >= 1 * DIA) {
+                str = ""+days+" dias, "+hours+" horas, "+minutes+" minutos";
+            } else if (t >= 1 * HORA) {
+                str = ""+hours+" horas, "+minutes+" minutos";
+            } else {
+                str = ""+minutes+" minutos";
+            }
+        }
+        return str;
+    }       
+%>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -21,6 +129,7 @@
     </head>
     <body>
         <%        
+
         User user=SWBContext.getAdminUser();
         if(user==null)
         {
@@ -55,10 +164,10 @@
             out.println("<h1>Threads:"+t.length+"</h1>");
 
         %>
-        <h1>Threads BLOCKED</h1>
-        <pre><%=SWBThreadDumper.dumpBLOCKEDThreadWithStackTrace()%></pre>
+        <h1>Threads BLOCKED <%=countBLOCKEDThread()%></h1>
+        <pre><%=dumpBLOCKEDThreadWithStackTrace()%></pre>
 
-        <h1>All Threads</h1>
-        <pre><%=SWBThreadDumper.dumpThreadWithStackTrace()%></pre>
+        <h1>All Threads <%=t.length%></h1>
+        <pre><%=dumpThreadWithStackTrace()%></pre>
     </body>
 </html>
