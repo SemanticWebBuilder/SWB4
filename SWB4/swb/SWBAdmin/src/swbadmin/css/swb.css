@@ -118,82 +118,101 @@ html, body, #main {
 .swbIconProcessU,
 .swbIconProcessW,
 .swbIconProcessF,
+.swbIconProcessE,
 .swbIconSubProcess,
 .swbIconSubProcessU,
 .swbIconSubProcessW,
 .swbIconSubProcessF,
+.swbIconSubProcessE,
 .swbIconAdhocSubProcess,
 .swbIconAdhocSubProcessU,
 .swbIconAdhocSubProcessW,
 .swbIconAdhocSubProcessF,
+.swbIconAdhocSubProcessE,
 .swbIconEventSubProcess,
 .swbIconEventSubProcessU,
 .swbIconEventSubProcessW,
 .swbIconEventSubProcessF,
+.swbIconEventSubProcessE,
 .swbIconTransactionSubProcess,
 .swbIconTransactionSubProcessU,
 .swbIconTransactionSubProcessW,
 .swbIconTransactionSubProcessF,
+.swbIconTransactionSubProcessE,
 .swbIconTask,
 .swbIconTaskU,
 .swbIconTaskW,
 .swbIconTaskF,
+.swbIconTaskE,
 .swbIconUserTask,
 .swbIconUserTaskU,
 .swbIconUserTaskW,
 .swbIconUserTaskF,
+.swbIconUserTaskE,
 .swbIconServiceTask,
 .swbIconServiceTaskU,
 .swbIconServiceTaskW,
 .swbIconServiceTaskF,
+.swbIconServiceTaskE,
 .swbIconScriptTask,
 .swbIconScriptTaskU,
 .swbIconScriptTaskW,
 .swbIconScriptTaskF,
+.swbIconScriptTaskE,
 .swbIconBusinessRuleTask,
 .swbIconBusinessRuleTaskU,
 .swbIconBusinessRuleTaskW,
 .swbIconBusinessRuleTaskF,
+.swbIconBusinessRuleTaskE,
 .swbIconManualTask,
 .swbIconManualTaskU,
 .swbIconManualTaskW,
 .swbIconManualTaskF,
+.swbIconManualTaskE,
 .swbIconSendTask,
 .swbIconSendTaskU,
 .swbIconSendTaskW,
 .swbIconSendTaskF,
+.swbIconSendTaskE,
 .swbIconReceiveTask,
 .swbIconReceiveTaskU,
 .swbIconReceiveTaskW,
 .swbIconReceiveTaskF,
+.swbIconReceiveTaskE,
 .swbIconCallTask,
 .swbIconCallTaskU,
 .swbIconCallTaskW,
 .swbIconCallTaskF,
+.swbIconCallTaskE,
 .swbIconCallManualTask,
 .swbIconCallManualTaskU,
 .swbIconCallManualTaskW,
 .swbIconCallManualTaskF,
+.swbIconCallManualTaskE,
 .swbIconCallBusinessRuleTask,
 .swbIconCallBusinessRuleTaskU,
 .swbIconCallBusinessRuleTaskW,
 .swbIconCallBusinessRuleTaskF,
+.swbIconCallBusinessRuleTaskE,
 .swbIconCallScriptTask,
 .swbIconCallScriptTaskU,
 .swbIconCallScriptTaskW,
 .swbIconCallScriptTaskF,
+.swbIconCallScriptTaskE,
 .swbIconCallUserTask,
 .swbIconCallUserTaskU,
 .swbIconCallUserTaskW,
 .swbIconCallUserTaskF,
+.swbIconCallUserTaskE,
 .swbIconCallProcess,
 .swbIconCallProcessU,
 .swbIconCallProcessW,
 .swbIconCallProcessF,
+.swbIconCallProcessE,
 .swbIconStartEvent,
-.swbIconStartEventU,
 .swbIconStartEventW,
 .swbIconStartEventF,
+.swbIconStartEventE,
 .swbIconMessageStartEvent,
 .swbIconTimerStartEvent,
 .swbIconRuleStartEvent,
@@ -250,9 +269,16 @@ html, body, #main {
 .swbIconDataStore,
 .swbIconPool,
 .swbIconLane,
-.swbIconLaneU,
 .swbIconLaneW,
 .swbIconLaneF,
+.swbIconLaneE,
+.swbIconProcessTools,
+.swbIconX509Certificates,
+.swbIconNotificationTemplates,
+.swbIconDBConnections,
+.swbIconWebServices,
+.swbIconOwnerProperties,
+.swbIconFileTemplates,
 .swbIconArtifact {
     background-repeat: no-repeat;
     width:20px;
@@ -329,88 +355,112 @@ html, body, #main {
 .swbIconProperty    { background-position: -240px -90px; }
 
 .swbIconProcess     { background-position: -460px -18px; }
+.swbIconProcessTools{ background-position: -500px -0px; }
+.swbIconX509Certificates { background-position: -480px -0px; }
+.swbIconNotificationTemplates { background-position: -600px -0px; }
+.swbIconDBConnections { background-position: -520px -0px; }
+.swbIconWebServices { background-position: -540px -0px; }
+.swbIconOwnerProperties { background-position: -560px -0px; }
+.swbIconFileTemplates { background-position: -580px -0px; }
 .swbIconProcessU    { background-position: -460px -36px; }
 .swbIconProcessW    { background-position: -459px -56px; }
 .swbIconProcessF    { background-position: -459px -56px; }
 .swbIconProcesses   { background-position: -460px -0px; }
 .swbIconSubProcess   { background-position: -0px -377px; }
-.swbIconSubProcessU   { background-position: -0px -377px; }
-.swbIconSubProcessW   { background-position: -0px -377px; }
+.swbIconSubProcessU   { background-position: -0px -435px; }
+.swbIconSubProcessW   { background-position: -0px -397px; }
 .swbIconSubProcessF   { background-position: -0px -377px; }
-.swbIconAdhocSubProcess   { background-position: -180px -377px; }
-.swbIconAdhocSubProcessY   { background-position: -180px -377px; }
-.swbIconAdhocSubProcessW   { background-position: -180px -377px; }
-.swbIconAdhocSubProcessF   { background-position: -180px -377px; }
-.swbIconEventSubProcess   { background-position: -40px -377px; }
-.swbIconEventSubProcessU   { background-position: -40px -377px; }
-.swbIconEventSubProcessW   { background-position: -40px -377px; }
-.swbIconEventSubProcessF   { background-position: -40px -377px; }
-.swbIconTransactionSubProcess   { background-position: -60px -377px; }
-.swbIconTransactionSubProcessU   { background-position: -60px -377px; }
-.swbIconTransactionSubProcessW   { background-position: -60px -377px; }
-.swbIconTransactionSubProcessF   { background-position: -60px -377px; }
-.swbIconTask   { background-position: -0px -305px; }
-.swbIconTaskU   { background-position: -0px -305px; }
-.swbIconTaskW   { background-position: -0px -305px; }
-.swbIconTaskF   { background-position: -0px -305px; }
-.swbIconUserTask   { background-position: -40px -305px; }
-.swbIconUserTaskU   { background-position: -40px -305px; }
-.swbIconUserTaskW   { background-position: -40px -305px; }
-.swbIconUserTaskF   { background-position: -40px -305px; }
-.swbIconServiceTask   { background-position: -120px -305px; }
-.swbIconServiceTaskU   { background-position: -120px -305px; }
-.swbIconServiceTaskW   { background-position: -120px -305px; }
-.swbIconServiceTaskF   { background-position: -120px -305px; }
-.swbIconScriptTask   { background-position: -80px -305px; }
-.swbIconScriptTaskU   { background-position: -80px -305px; }
-.swbIconScriptTaskW   { background-position: -80px -305px; }
-.swbIconScriptTaskF   { background-position: -80px -305px; }
-.swbIconBusinessRuleTask   { background-position: -240px -305px; }
-.swbIconBusinessRuleTaskU   { background-position: -240px -305px; }
-.swbIconBusinessRuleTaskW   { background-position: -240px -305px; }
-.swbIconBusinessRuleTaskF   { background-position: -240px -305px; }
-.swbIconManualTask   { background-position: -160px -305px; }
-.swbIconManualTaskU   { background-position: -160px -305px; }
-.swbIconManualTaskW   { background-position: -160px -305px; }
-.swbIconManualTaskF   { background-position: -160px -305px; }
-.swbIconSendTask   { background-position: -200px -305px; }
-.swbIconSendTaskU   { background-position: -200px -305px; }
-.swbIconSendTaskW   { background-position: -200px -305px; }
-.swbIconSendTaskF   { background-position: -200px -305px; }
-.swbIconReceiveTask   { background-position: -220px -305px; }
-.swbIconReceiveTaskU   { background-position: -220px -305px; }
-.swbIconReceiveTaskW   { background-position: -220px -305px; }
-.swbIconReceiveTaskF   { background-position: -220px -305px; }
-.swbIconCallTask   { background-position: -20px -305px; }
-.swbIconCallTaskU   { background-position: -20px -305px; }
-.swbIconCallTaskW   { background-position: -20px -305px; }
-.swbIconCallTaskF   { background-position: -20px -305px; }
-.swbIconCallManualTask   { background-position: -180px -305px; }
-.swbIconCallManualTaskU   { background-position: -180px -305px; }
-.swbIconCallManualTaskW   { background-position: -180px -305px; }
-.swbIconCallManualTaskF   { background-position: -180px -305px; }
-.swbIconCallBusinessRuleTask   { background-position: -260px -305px; }
-.swbIconCallBusinessRuleTaskU   { background-position: -260px -305px; }
-.swbIconCallBusinessRuleTaskW   { background-position: -260px -305px; }
-.swbIconCallBusinessRuleTaskF   { background-position: -260px -305px; }
-.swbIconCallScriptTask   { background-position: -100px -305px; }
-.swbIconCallScriptTaskU   { background-position: -100px -305px; }
-.swbIconCallScriptTaskW   { background-position: -100px -305px; }
-.swbIconCallScriptTaskF   { background-position: -100px -305px; }
-.swbIconCallUserTask   { background-position: -60px -305px; }
-.swbIconCallUserTaskU   { background-position: -60px -305px; }
-.swbIconCallUserTaskW   { background-position: -60px -305px; }
-.swbIconCallUserTaskF   { background-position: -60px -305px; }
-.swbIconCallProcess   { background-position: -240px -377px; }
-.swbIconCallProcessU   { background-position: -240px -377px; }
-.swbIconCallProcessW   { background-position: -240px -377px; }
-.swbIconCallProcessF   { background-position: -240px -377px; }
+.swbIconSubProcessE   { background-position: -0px -416px; }
+.swbIconAdhocSubProcess   { background-position: -180px -378px; }
+.swbIconAdhocSubProcessU   { background-position: -180px -435px; }
+.swbIconAdhocSubProcessW   { background-position: -180px -397px; }
+.swbIconAdhocSubProcessF   { background-position: -180px -378px; }
+.swbIconAdhocSubProcessE   { background-position: -180px -416px; }
+.swbIconEventSubProcess   { background-position: -40px -378px; }
+.swbIconEventSubProcessU   { background-position: -40px -435px; }
+.swbIconEventSubProcessW   { background-position: -40px -397px; }
+.swbIconEventSubProcessF   { background-position: -40px -378px; }
+.swbIconTransactionSubProcess   { background-position: -60px -378px; }
+.swbIconTransactionSubProcessU   { background-position: -60px -435px; }
+.swbIconTransactionSubProcessW   { background-position: -60px -397px; }
+.swbIconTransactionSubProcessF   { background-position: -60px -378px; }
+.swbIconTransactionSubProcessE   { background-position: -60px -416px; }
+.swbIconTask   { background-position: -0px -306px; }
+.swbIconTaskU   { background-position: -280px -363px; }
+.swbIconTaskW   { background-position: -280px -325px; }
+.swbIconTaskF   { background-position: -280px -306px; }
+.swbIconTaskE   { background-position: -280px -344px; }
+.swbIconUserTask   { background-position: -40px -306px; }
+.swbIconUserTaskU   { background-position: -320px -363px; }
+.swbIconUserTaskW   { background-position: -320px -325px; }
+.swbIconUserTaskF   { background-position: -320px -306px; }
+.swbIconUserTaskE   { background-position: -320px -344px; }
+.swbIconServiceTask   { background-position: -120px -306px; }
+.swbIconServiceTaskU   { background-position: -400px -363px; }
+.swbIconServiceTaskW   { background-position: -400px -325px; }
+.swbIconServiceTaskF   { background-position: -400px -306px; }
+.swbIconServiceTaskE   { background-position: -400px -344px; }
+.swbIconScriptTask   { background-position: -80px -306px; }
+.swbIconScriptTaskU   { background-position: -360px -363px; }
+.swbIconScriptTaskW   { background-position: -360px -325px; }
+.swbIconScriptTaskF   { background-position: -360px -306px; }
+.swbIconScriptTaskE   { background-position: -360px -344px; }
+.swbIconBusinessRuleTask   { background-position: -240px -306px; }
+.swbIconBusinessRuleTaskU   { background-position: -520px -363px; }
+.swbIconBusinessRuleTaskW   { background-position: -520px -325px; }
+.swbIconBusinessRuleTaskF   { background-position: -520px -306px; }
+.swbIconBusinessRuleTaskE   { background-position: -520px -344px; }
+.swbIconManualTask   { background-position: -160px -306px; }
+.swbIconManualTaskU   { background-position: -440px -363px; }
+.swbIconManualTaskW   { background-position: -440px -325px; }
+.swbIconManualTaskF   { background-position: -440px -306px; }
+.swbIconManualTaskE   { background-position: -440px -344px; }
+.swbIconSendTask   { background-position: -200px -306px; }
+.swbIconSendTaskU   { background-position: -480px -363px; }
+.swbIconSendTaskW   { background-position: -480px -325px; }
+.swbIconSendTaskF   { background-position: -480px -306px; }
+.swbIconSendTaskE   { background-position: -480px -344px; }
+.swbIconReceiveTask   { background-position: -220px -306px; }
+.swbIconReceiveTaskU   { background-position: -500px -363px; }
+.swbIconReceiveTaskW   { background-position: -500px -325px; }
+.swbIconReceiveTaskF   { background-position: -500px -306px; }
+.swbIconReceiveTaskE   { background-position: -500px -344px; }
+.swbIconCallTask   { background-position: -20px -306px; }
+.swbIconCallTaskU   { background-position: -300px -363px; }
+.swbIconCallTaskW   { background-position: -300px -325px; }
+.swbIconCallTaskF   { background-position: -300px -306px; }
+.swbIconCallTaskE   { background-position: -300px -344px; }
+.swbIconCallManualTask   { background-position: -180px -306px; }
+.swbIconCallManualTaskU   { background-position: -460px -363px; }
+.swbIconCallManualTaskW   { background-position: -460px -325px; }
+.swbIconCallManualTaskF   { background-position: -460px -306px; }
+.swbIconCallManualTaskE   { background-position: -460px -344px; }
+.swbIconCallBusinessRuleTask   { background-position: -260px -306px; }
+.swbIconCallBusinessRuleTaskU   { background-position: -540px -363px; }
+.swbIconCallBusinessRuleTaskW   { background-position: -540px -325px; }
+.swbIconCallBusinessRuleTaskF   { background-position: -540px -306px; }
+.swbIconCallBusinessRuleTaskE   { background-position: -540px -344px; }
+.swbIconCallScriptTask   { background-position: -100px -306px; }
+.swbIconCallScriptTaskU   { background-position: -380px -363px; }
+.swbIconCallScriptTaskW   { background-position: -380px -325px; }
+.swbIconCallScriptTaskF   { background-position: -380px -306px; }
+.swbIconCallScriptTaskE   { background-position: -380px -344px; }
+.swbIconCallUserTask   { background-position: -60px -306px; }
+.swbIconCallUserTaskU   { background-position: -340px -363px; }
+.swbIconCallUserTaskW   { background-position: -340px -325px; }
+.swbIconCallUserTaskF   { background-position: -340px -306px; }
+.swbIconCallUserTaskE   { background-position: -340px -344px; }
+.swbIconCallProcess   { background-position: -240px -378px; }
+.swbIconCallProcessU   { background-position: -240px -435px; }
+.swbIconCallProcessW   { background-position: -240px -397px; }
+.swbIconCallProcessF   { background-position: -240px -378px; }
+.swbIconCallProcessE   { background-position: -240px -416px; }
 .swbIconInclusiveGateway   { background-position: -400px -145px; }
 .swbIconParallelGateway    { background-position: -420px -145px; }
 .swbIconStartEvent   { background-position: -0px -234px; }
-.swbIconStartEventU   { background-position: -0px -234px; }
-.swbIconStartEventW   { background-position: -0px -234px; }
-.swbIconStartEventF   { background-position: -0px -234px; }
+.swbIconStartEventW   { background-position: -240px -234px; }
+.swbIconStartEventF   { background-position: -220px -234px; }
+.swbIconStartEventE   { background-position: -260px -234px; }
 .swbIconMessageStartEvent   { background-position: -20px -234px; }
 .swbIconTimerStartEvent   { background-position: -40px -234px; }
 .swbIconRuleStartEvent   { background-position: -60px -234px; }
@@ -467,9 +517,9 @@ html, body, #main {
 .swbIconDataStore { background-position: -80px -342px; }
 .swbIconPool   { background-position: -0px -360px; }
 .swbIconLane   { background-position: -20px -360px; }
-.swbIconLaneU   { background-position: -20px -360px; }
-.swbIconLaneW   { background-position: -20px -360px; }
-.swbIconLaneF   { background-position: -20px -360px; }
+.swbIconLaneW   { background-position: -60px -360px; }
+.swbIconLaneF   { background-position: -40px -360px; }
+.swbIconLaneE   { background-position: -80px -360px; }
 
 
 .admViewProperties table{ padding:0px; margin:-10px; width:100%; }
