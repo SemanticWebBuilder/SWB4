@@ -1,4 +1,4 @@
-package org.semanticwb.social.admin.resources.components;
+package org.semanticwb.social.admin.resources;
 
 import java.io.IOException;
 import java.io.PrintWriter;
