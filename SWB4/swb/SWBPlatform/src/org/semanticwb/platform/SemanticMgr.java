@@ -954,7 +954,7 @@ public class SemanticMgr implements SWBInstanceObject
      * @param action the action
      */
     public void notifyChange(SemanticObject obj, Object prop, String lang, String action) {
-        log.trace("notifyChange: obj:" + obj + " prop:" + prop + " " + action);
+        //log.trace("notifyChange: obj:" + obj + " prop:" + prop + " " + action);
         //System.out.println("notifyChange: obj:" + obj + " prop:" + prop + " " + action);
         if (obj.getURI() != null) {
             if (prop != null && prop instanceof SemanticProperty) {
@@ -1015,7 +1015,7 @@ public class SemanticMgr implements SWBInstanceObject
     public void notifyTSChange(SemanticObject obj, Statement stmt, String action, boolean remote) 
     {
         //System.out.println("notifyTSChange: obj:" + obj + " stmt:" + stmt + " " + action);
-        log.trace("notifyTSChange: obj:" + obj + " stmt:" + stmt + " " + action);
+        //log.trace("notifyTSChange: obj:" + obj + " stmt:" + stmt + " " + action);
         if (obj!=null && obj.getURI() != null) 
         {
             Iterator it = m_tsobservers.iterator();
@@ -1041,7 +1041,7 @@ public class SemanticMgr implements SWBInstanceObject
      */
     public void processExternalChange(String uri, String puri, Node node, String action)
     {
-        log.trace("processExternalChange: uri:" + uri + " puri:" + puri + " node:" + node+" "+action);  
+        //log.trace("processExternalChange: uri:" + uri + " puri:" + puri + " node:" + node+" "+action);  
         //System.out.println("processExternalChange:"+uri+" puri:" + puri + " node:;" + node+" "+action);  
         SemanticObject obj=SemanticObject.getSemanticObject(uri);
         if(obj==null)
@@ -1112,7 +1112,7 @@ public class SemanticMgr implements SWBInstanceObject
             SemanticProperty publ = model.createSemanticProperty(SWBAdminURI + "/PublicKey", model.getModelObject().getSemanticClass(), SemanticVocabulary.OWL_DATATYPEPROPERTY, SemanticVocabulary.XMLS_STRING);
             model.getModelObject().setProperty(priv, llaves[0]);
             model.getModelObject().setProperty(publ, llaves[1]);
-            log.event("New KeyPair created... ");
+            log.debug("New KeyPair created... ");
         }
     }
 
