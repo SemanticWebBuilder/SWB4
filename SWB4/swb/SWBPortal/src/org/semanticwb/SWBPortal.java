@@ -708,10 +708,12 @@ public class SWBPortal
         try
         {
             Connection con = SWBUtils.DB.getDefaultConnection();
-            Statement st = con.createStatement();
+            
+            //Statement st = con.createStatement();
             try
             {
-                ResultSet rs = st.executeQuery("select count(*) from swb_admlog");
+                ResultSet rs= con.getMetaData().getTablePrivileges(null,null, "swb_admlog");
+                //ResultSet rs = st.executeQuery("select count(*) from swb_admlog");
                 if (rs.next())
                 {
                     int x = rs.getInt(1);
@@ -726,7 +728,7 @@ public class SWBPortal
                 String xml = SWBUtils.IO.getFileFromPath(SWBUtils.getApplicationPath() + "/WEB-INF/xml/swb_logs.xml");
                 db.executeSQLScript(xml, SWBUtils.DB.getDatabaseName(), null);
             }
-            st.close();
+            //st.close();
             con.close();
         }
         catch (SQLException e)

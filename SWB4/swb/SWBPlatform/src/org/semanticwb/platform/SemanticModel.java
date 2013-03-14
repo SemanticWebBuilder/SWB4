@@ -88,6 +88,9 @@ public class SemanticModel
     
     /** The m_trace. */
     private boolean m_trace=true;
+    
+    /** The m_trace. */
+    private boolean m_dataModel=false;    
 
     /** The m_classes. */
     private List m_classes=null;
@@ -123,6 +126,18 @@ public class SemanticModel
     {
         return m_trace;
     }
+    
+    
+    /**
+     * Define si el modelo loggeara los cambios hechos por el usuario, asi como los servicios relacionados a los objetos
+     * 
+     * @return true, if is dataModel
+     * @return
+     */    
+    public boolean isDataModel()
+    {
+        return m_dataModel;
+    }
 
     /**
      * Activa o desactiva el logger de cambios en el modelo.
@@ -133,6 +148,16 @@ public class SemanticModel
     {
         m_trace=trace;
     }
+    
+    /**
+     * Activa o desactiva el logger de cambios en el modelo, asi como los servicios relacionados.
+     * 
+     * @param active the datamodel
+     */
+    public void setDataModel(boolean active)
+    {
+        m_dataModel=active;
+    }    
     
     /**
      * List subjects by double.
