@@ -7,742 +7,23 @@ and open the template in the editor.
     <head>
         <title>SWB Process Modeler</title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <style type="text/css">
-            .toolbarItem {
-                width: 49px;
-                vertical-align: bottom;
-            }
-            
-            .startEventItem {
-                background: url(modelerFrame_files/start_1.png) top center no-repeat;
-                position: relative;
-                float: left;
-                height:43px;
-                width:49px;
-            }
-            
-            .startEventItem:hover {
-                background: url(modelerFrame_files/start_2.png) top center no-repeat;
-            }
-            
-            .intereventItem {
-                background: url(modelerFrame_files/inter_1.png) top center no-repeat;
-                position: relative;
-                float: left;
-                height:43px;
-                width:49px;
-            }
-            
-            .intereventItem:hover {
-                background: url(modelerFrame_files/inter_2.png) top center no-repeat;
-            }
-            
-            .endeventItem {
-                background: url(modelerFrame_files/end_1.png) top center no-repeat;
-                position: relative;
-                float: left;
-                height:43px;
-                width:49px;
-            }
-            
-            .endeventItem:hover {
-                background: url(modelerFrame_files/end_2.png) top center no-repeat;
-            }
-            
-            .toolbarSeparator {
-                background: url(modelerFrame_files/barra_division.png) top center no-repeat;
-                position: relative;
-                float: left;
-                height:12px;
-                width:49px;
-            }
-            
-            .toolbarFooter {
-                background: url(modelerFrame_files/barra_bottom.png) top center no-repeat;
-                position: relative;
-                float: left;
-                height:8px;
-                width:49px;
-            }
-            
-            .taskItem {
-                background: url(modelerFrame_files/task_1.png) top center no-repeat;
-                position: relative;
-                float: left;
-                height:43px;
-                width:49px;
-            }
-            
-            .taskItem:hover {
-                background: url(modelerFrame_files/task_2.png) top center no-repeat;
-            }
-            
-            .taskcallItem {
-                background: url(modelerFrame_files/task_call_1.png) top center no-repeat;
-                position: relative;
-                float: left;
-                height:43px;
-                width:49px;
-            }
-            
-            .taskcallItem:hover {
-                background: url(modelerFrame_files/task_call_2.png) top center no-repeat;
-            }
-            
-            .subtaskItem {
-                background: url(modelerFrame_files/subtask_1.png) top center no-repeat;
-                position: relative;
-                float: left;
-                height:43px;
-                width:49px;
-            }
-            
-            .subtaskItem:hover {
-                background: url(modelerFrame_files/subtask_2.png) top center no-repeat;
-            }
-            
-            .gatewayItem {
-                background: url(modelerFrame_files/if_1.png) top center no-repeat;
-                position: relative;
-                float: left;
-                height:43px;
-                width:49px;
-            }
-            
-            .gatewayItem:hover {
-                background: url(modelerFrame_files/if_2.png) top center no-repeat;
-            }
-            
-            .artifactItem {
-                background: url(modelerFrame_files/anota_1.png) top center no-repeat;
-                position: relative;
-                float: left;
-                height:43px;
-                width:49px;
-            }
-            
-            .artifactItem:hover {
-                background: url(modelerFrame_files/anota_2.png) top center no-repeat;
-            }
-            
-            .dataobjectItem {
-                background: url(modelerFrame_files/doc_1.png) top center no-repeat;
-                position: relative;
-                float: left;
-                height:43px;
-                width:49px;
-            }
-            
-            .dataobjectItem:hover {
-                background: url(modelerFrame_files/doc_2.png) top center no-repeat;
-            }
-            
-            .poolItem {
-                background: url(modelerFrame_files/pool_1.png) top center no-repeat;
-                position: relative;
-                float: left;
-                height:43px;
-                width:49px;
-            }
-            
-            .poolItem:hover {
-                background: url(modelerFrame_files/pool_2.png) top center no-repeat;
-            }
-            
-            .flowItem {
-                background: url(modelerFrame_files/flow_1.png) top center no-repeat;
-                position: relative;
-                float: left;
-                height:43px;
-                width:49px;
-            }
-            
-            .flowItem:hover {
-                background: url(modelerFrame_files/flow_2.png) top center no-repeat;
-            }
-            
-            .normalStartEvent {
-                background: url(modelerFrame_files/start_normal1.png) top center no-repeat;
-                position: relative;
-                float: left;
-                height:43px;
-                width:37px;
-            }
-            
-            .normalStartEvent:hover {
-                background: url(modelerFrame_files/start_normal2.png) top center no-repeat;
-            }
-            
-            .signalStartEvent {
-                background: url(modelerFrame_files/start_senal1.png) top center no-repeat;
-                position: relative;
-                float: left;
-                height:43px;
-                width:37px;
-            }
-            
-            .signalStartEvent:hover {
-                background: url(modelerFrame_files/start_senal2.png) top center no-repeat;
-            }
-            
-            .timerStartEvent {
-                background: url(modelerFrame_files/start_tmp1.png) top center no-repeat;
-                position: relative;
-                float: left;
-                height:43px;
-                width:37px;
-            }
-            
-            .timerStartEvent:hover {
-                background: url(modelerFrame_files/start_tmp2.png) top center no-repeat;
-            }
-            
-            .compensaStartEvent {
-                background: url(modelerFrame_files/start_compensa1.png) top center no-repeat;
-                position: relative;
-                float: left;
-                height:43px;
-                width:37px;
-            }
-            
-            .compensaStartEvent:hover {
-                background: url(modelerFrame_files/start_compensa2.png) top center no-repeat;
-            }
-            
-            .ruleStartEvent {
-                background: url(modelerFrame_files/start_cond1.png) top center no-repeat;
-                position: relative;
-                float: left;
-                height:43px;
-                width:37px;
-            }
-            
-            .ruleStartEvent:hover {
-                background: url(modelerFrame_files/start_cond2.png) top center no-repeat;
-            }
-            
-            .errorStartEvent {
-                background: url(modelerFrame_files/start_error1.png) top center no-repeat;
-                position: relative;
-                float: left;
-                height:43px;
-                width:37px;
-            }
-            
-            .errorStartEvent:hover {
-                background: url(modelerFrame_files/start_error2.png) top center no-repeat;
-            }
-            
-            .scalaStartEvent {
-                background: url(modelerFrame_files/start_escala1.png) top center no-repeat;
-                position: relative;
-                float: left;
-                height:43px;
-                width:37px;
-            }
-            
-            .scalaStartEvent:hover {
-                background: url(modelerFrame_files/start_escala2.png) top center no-repeat;
-            }
-            
-            .messageStartEvent {
-                background: url(modelerFrame_files/start_msj1.png) top center no-repeat;
-                position: relative;
-                float: left;
-                height:43px;
-                width:37px;
-            }
-            
-            .messageStartEvent:hover {
-                background: url(modelerFrame_files/start_msj2.png) top center no-repeat;
-            }
-            
-            .multiStartEvent {
-                background: url(modelerFrame_files/start_multi1.png) top center no-repeat;
-                position: relative;
-                float: left;
-                height:43px;
-                width:37px;
-            }
-            
-            .multiStartEvent:hover {
-                background: url(modelerFrame_files/start_multi2.png) top center no-repeat;
-            }
-            
-            .parallelStartEvent {
-                background: url(modelerFrame_files/start_paralelo1.png) top center no-repeat;
-                position: relative;
-                float: left;
-                height:43px;
-                width:37px;
-            }
-            
-            .parallelStartEvent:hover {
-                background: url(modelerFrame_files/start_paralelo2.png) top center no-repeat;
-            }
-            
-            .normalInterEvent {
-                background: url(modelerFrame_files/inter_normal1.png) top center no-repeat;
-                position: relative;
-                float: left;
-                height:43px;
-                width:37px;
-            }
-            
-            .normalInterEvent:hover {
-                background: url(modelerFrame_files/inter_normal2.png) top center no-repeat;
-            }
-            
-            .cancelInterEvent {
-                background: url(modelerFrame_files/inter_cancel_1.png) top center no-repeat;
-                position: relative;
-                float: left;
-                height:43px;
-                width:37px;
-            }
-            
-            .cancelInterEvent:hover {
-                background: url(modelerFrame_files/inter_cancel_2.png) top center no-repeat;
-            }
-            
-            .compensaInterCatchEvent {
-                background: url(modelerFrame_files/inter_compensa_b_1.png) top center no-repeat;
-                position: relative;
-                float: left;
-                height:43px;
-                width:37px;
-            }
-            
-            .compensaInterCatchEvent:hover {
-                background: url(modelerFrame_files/inter_compensa_b_2.png) top center no-repeat;
-            }
-            
-            .compensaInterThrowEvent {
-                background: url(modelerFrame_files/inter_compensa_n_1.png) top center no-repeat;
-                position: relative;
-                float: left;
-                height:43px;
-                width:37px;
-            }
-            
-            .compensaInterThrowEvent:hover {
-                background: url(modelerFrame_files/inter_compensa_n_2.png) top center no-repeat;
-            }
-            
-            .ruleInterEvent {
-                background: url(modelerFrame_files/inter_cond1.png) top center no-repeat;
-                position: relative;
-                float: left;
-                height:43px;
-                width:37px;
-            }
-            
-            .ruleInterEvent:hover {
-                background: url(modelerFrame_files/inter_cond2.png) top center no-repeat;
-            }
-            
-            .linkInterCatchEvent {
-                background: url(modelerFrame_files/inter_enlace_b_1.png) top center no-repeat;
-                position: relative;
-                float: left;
-                height:43px;
-                width:37px;
-            }
-            
-            .linkInterCatchEvent:hover {
-                background: url(modelerFrame_files/inter_enlace_b_2.png) top center no-repeat;
-            }
-            
-            .linkInterThrowEvent {
-                background: url(modelerFrame_files/inter_enlace_n_1.png) top center no-repeat;
-                position: relative;
-                float: left;
-                height:43px;
-                width:37px;
-            }
-            
-            .linkInterThrowEvent:hover {
-                background: url(modelerFrame_files/inter_enlace_n_2.png) top center no-repeat;
-            }
-            
-            .errorInterEvent {
-                background: url(modelerFrame_files/inter_error1.png) top center no-repeat;
-                position: relative;
-                float: left;
-                height:43px;
-                width:37px;
-            }
-            
-            .errorInterEvent:hover {
-                background: url(modelerFrame_files/inter_error2.png) top center no-repeat;
-            }
-            
-            .scalaInterCatchEvent {
-                background: url(modelerFrame_files/inter_escala_b_1.png) top center no-repeat;
-                position: relative;
-                float: left;
-                height:43px;
-                width:37px;
-            }
-            
-            .scalaInterCatchEvent:hover {
-                background: url(modelerFrame_files/inter_escala_b_2.png) top center no-repeat;
-            }
-            
-            .scalaInterThrowEvent {
-                background: url(modelerFrame_files/inter_escala_n_1.png) top center no-repeat;
-                position: relative;
-                float: left;
-                height:43px;
-                width:37px;
-            }
-            
-            .scalaInterThrowEvent:hover {
-                background: url(modelerFrame_files/inter_escala_n_2.png) top center no-repeat;
-            }
-            
-            .messageInterCatchEvent {
-                background: url(modelerFrame_files/inter_msj_b_1.png) top center no-repeat;
-                position: relative;
-                float: left;
-                height:43px;
-                width:37px;
-            }
-            
-            .messageInterCatchEvent:hover {
-                background: url(modelerFrame_files/inter_msj_b_2.png) top center no-repeat;
-            }
-            
-            .messageInterThrowEvent {
-                background: url(modelerFrame_files/inter_msj_n_1.png) top center no-repeat;
-                position: relative;
-                float: left;
-                height:43px;
-                width:37px;
-            }
-            
-            .messageInterThrowEvent:hover {
-                background: url(modelerFrame_files/inter_msj_n_2.png) top center no-repeat;
-            }
-            
-            .multipleInterCatchEvent {
-                background: url(modelerFrame_files/inter_multi_b_1.png) top center no-repeat;
-                position: relative;
-                float: left;
-                height:43px;
-                width:37px;
-            }
-            
-            .multipleInterCatchEvent:hover {
-                background: url(modelerFrame_files/inter_multi_b_2.png) top center no-repeat;
-            }
-            
-            .multipleInterThrowEvent {
-                background: url(modelerFrame_files/inter_multi_n_1.png) top center no-repeat;
-                position: relative;
-                float: left;
-                height:43px;
-                width:37px;
-            }
-            
-            .multipleInterThrowEvent:hover {
-                background: url(modelerFrame_files/inter_multi_n_2.png) top center no-repeat;
-            }
-            
-            .parallelInterEvent {
-                background: url(modelerFrame_files/inter_paralelo1.png) top center no-repeat;
-                position: relative;
-                float: left;
-                height:43px;
-                width:37px;
-            }
-            
-            .parallelInterEvent:hover {
-                background: url(modelerFrame_files/inter_paralelo2.png) top center no-repeat;
-            }
-            
-            .signalInterCatchEvent {
-                background: url(modelerFrame_files/inter_senal_b_1.png) top center no-repeat;
-                position: relative;
-                float: left;
-                height:43px;
-                width:37px;
-            }
-            
-            .signalInterCatchEvent:hover {
-                background: url(modelerFrame_files/inter_senal_b_2.png) top center no-repeat;
-            }
-            
-            .signalInterThrowEvent {
-                background: url(modelerFrame_files/inter_senal_n_1.png) top center no-repeat;
-                position: relative;
-                float: left;
-                height:43px;
-                width:37px;
-            }
-            
-            .signalInterThrowEvent:hover {
-                background: url(modelerFrame_files/inter_senal_n_2.png) top center no-repeat;
-            }
-            
-            .timerInterEvent {
-                background: url(modelerFrame_files/inter_tmp1.png) top center no-repeat;
-                position: relative;
-                float: left;
-                height:43px;
-                width:37px;
-            }
-            
-            .timerInterEvent:hover {
-                background: url(modelerFrame_files/inter_tmp2.png) top center no-repeat;
-            }
-            
-            .normalEndEvent {
-                background: url(modelerFrame_files/end_normal1.png) top center no-repeat;
-                position: relative;
-                float: left;
-                height:43px;
-                width:37px;
-            }
-            
-            .normalEndEvent:hover {
-                background: url(modelerFrame_files/end_normal2.png) top center no-repeat;
-            }
-            
-            .cancelEndEvent {
-                background: url(modelerFrame_files/end_cancel1.png) top center no-repeat;
-                position: relative;
-                float: left;
-                height:43px;
-                width:37px;
-            }
-            
-            .cancelEndEvent:hover {
-                background: url(modelerFrame_files/end_cancel2.png) top center no-repeat;
-            }
-            
-            .compensaEndEvent {
-                background: url(modelerFrame_files/end_compensa1.png) top center no-repeat;
-                position: relative;
-                float: left;
-                height:43px;
-                width:37px;
-            }
-            
-            .compensaEndEvent:hover {
-                background: url(modelerFrame_files/end_compensa2.png) top center no-repeat;
-            }
-            
-            .errorEndEvent {
-                background: url(modelerFrame_files/end_error1.png) top center no-repeat;
-                position: relative;
-                float: left;
-                height:43px;
-                width:37px;
-            }
-            
-            .errorEndEvent:hover {
-                background: url(modelerFrame_files/end_error2.png) top center no-repeat;
-            }
-            
-            .escalaEndEvent {
-                background: url(modelerFrame_files/end_escala1.png) top center no-repeat;
-                position: relative;
-                float: left;
-                height:43px;
-                width:37px;
-            }
-            
-            .escalaEndEvent:hover {
-                background: url(modelerFrame_files/end_escala2.png) top center no-repeat;
-            }
-            
-            .messageEndEvent {
-                background: url(modelerFrame_files/end_msj1.png) top center no-repeat;
-                position: relative;
-                float: left;
-                height:43px;
-                width:37px;
-            }
-            
-            .messageEndEvent:hover {
-                background: url(modelerFrame_files/end_msj2.png) top center no-repeat;
-            }
-            
-            .multiEndEvent {
-                background: url(modelerFrame_files/end_multi1.png) top center no-repeat;
-                position: relative;
-                float: left;
-                height:43px;
-                width:37px;
-            }
-            
-            .multiEndEvent:hover {
-                background: url(modelerFrame_files/end_multi2.png) top center no-repeat;
-            }
-            
-            .signalEndEvent {
-                background: url(modelerFrame_files/end_senal1.png) top center no-repeat;
-                position: relative;
-                float: left;
-                height:43px;
-                width:37px;
-            }
-            
-            .signalEndEvent:hover {
-                background: url(modelerFrame_files/end_senal2.png) top center no-repeat;
-            }
-            
-            .terminalEndEvent {
-                background: url(modelerFrame_files/end_termina1.png) top center no-repeat;
-                position: relative;
-                float: left;
-                height:43px;
-                width:37px;
-            }
-            
-            .terminalEndEvent:hover {
-                background: url(modelerFrame_files/end_termina2.png) top center no-repeat;
-            }
-            
-            .abstractTask {
-                background: url(modelerFrame_files/task_normal1.png) top center no-repeat;
-                position: relative;
-                float: left;
-                height:43px;
-                width:37px;
-            }
-            
-            .abstractTask:hover {
-                background: url(modelerFrame_files/task_normal2.png) top center no-repeat;
-            }
-            
-            .userTask {
-                background: url(modelerFrame_files/task_usr1.png) top center no-repeat;
-                position: relative;
-                float: left;
-                height:43px;
-                width:37px;
-            }
-            
-            .userTask:hover {
-                background: url(modelerFrame_files/task_usr2.png) top center no-repeat;
-            }
-            
-            .scriptTask {
-                background: url(modelerFrame_files/task_script1.png) top center no-repeat;
-                position: relative;
-                float: left;
-                height:43px;
-                width:37px;
-            }
-            
-            .scriptTask:hover {
-                background: url(modelerFrame_files/task_script2.png) top center no-repeat;
-            }
-            
-            .serviceTask {
-                background: url(modelerFrame_files/task_servicio1.png) top center no-repeat;
-                position: relative;
-                float: left;
-                height:43px;
-                width:37px;
-            }
-            
-            .serviceTask:hover {
-                background: url(modelerFrame_files/task_servicio2.png) top center no-repeat;
-            }
-            
-            .sendTask {
-                background: url(modelerFrame_files/task_envio1.png) top center no-repeat;
-                position: relative;
-                float: left;
-                height:43px;
-                width:37px;
-            }
-            
-            .sendTask:hover {
-                background: url(modelerFrame_files/task_envio2.png) top center no-repeat;
-            }
-            
-            .receiveTask {
-                background: url(modelerFrame_files/task_recive1.png) top center no-repeat;
-                position: relative;
-                float: left;
-                height:43px;
-                width:37px;
-            }
-            
-            .receiveTask:hover {
-                background: url(modelerFrame_files/task_recive2.png) top center no-repeat;
-            }
-            
-            .ruleTask {
-                background: url(modelerFrame_files/task_rule1.png) top center no-repeat;
-                position: relative;
-                float: left;
-                height:43px;
-                width:37px;
-            }
-            
-            .ruleTask:hover {
-                background: url(modelerFrame_files/task_rule2.png) top center no-repeat;
-            }
-            
-            .manualTask {
-                background: url(modelerFrame_files/task_manual1.png) top center no-repeat;
-                position: relative;
-                float: left;
-                height:43px;
-                width:37px;
-            }
-            
-            .manualTask:hover {
-                background: url(modelerFrame_files/task_manual2.png) top center no-repeat;
-            }
-            
-            .toolbarHeader {
-                background: url(modelerFrame_files/barra_top.png) top center no-repeat;
-                position: relative;
-                float: left;
-                height:8px;
-                width:49px;
-            }
-            
-            .subbarStart {
-                background: url(modelerFrame_files/submenu_inicio.png) top center no-repeat;
-                position: relative;
-                float: left;
-                height:43px;
-                width:7px;
-            }
-            
-            .subbarEnd {
-                background: url(modelerFrame_files/submenu_fin.png) top center no-repeat;
-                position: relative;
-                float: left;
-                height:43px;
-                width:7px;
-            }
-            
-            .subbar {
-                overflow: hidden;
-                width:800px;
-            }
-            
-            .subbarHidden {
-                display: none;
-            }
-        </style>
+        <link href="modelerFrame_files/modelerFrame.css" rel="stylesheet" type="text/css">
     </head>
     <body>
         <h1>SWB Process Modeler</h1>
         <script type="text/javascript">
             function hideSubBars() {
-                document.getElementById("startEventsBar").setAttribute("class", "subbarHidden")
-                document.getElementById("interEventsBar").setAttribute("class", "subbarHidden")
-                document.getElementById("endEventsBar").setAttribute("class", "subbarHidden")
-                document.getElementById("tasksBar").setAttribute("class", "subbarHidden")
+                document.getElementById("startEventsBar").setAttribute("class", "subbarHidden");
+                document.getElementById("interEventsBar").setAttribute("class", "subbarHidden");
+                document.getElementById("endEventsBar").setAttribute("class", "subbarHidden");
+                document.getElementById("tasksBar").setAttribute("class", "subbarHidden");
+                document.getElementById("subtasksBar").setAttribute("class", "subbarHidden");
+                document.getElementById("calltasksBar").setAttribute("class", "subbarHidden");
+                document.getElementById("gatewaysBar").setAttribute("class", "subbarHidden");
+                document.getElementById("connectionsBar").setAttribute("class", "subbarHidden");
+                document.getElementById("artifactsBar").setAttribute("class", "subbarHidden");
+                document.getElementById("dataobjectsBar").setAttribute("class", "subbarHidden");
+                document.getElementById("swimlanesBar").setAttribute("class", "subbarHidden");
             }
             
             function showSubBar(barId) {
@@ -755,46 +36,46 @@ and open the template in the editor.
                 <span class="toolbarHeader"></span>
             </div>
             <div class="toolbarItem">
-                <span class="startEventItem" onclick="showSubBar('startEventsBar')"></span>
+                <span title="Eventos de inicio" class="startEventItem" onclick="showSubBar('startEventsBar')"></span>
             </div>
             <div class="toolbarItem">
-                <span class="intereventItem" onclick="showSubBar('interEventsBar')"></span>
+                <span title="Eventos intermedios" class="intereventItem" onclick="showSubBar('interEventsBar')"></span>
             </div>
             <div class="toolbarItem">
-                <span class="endeventItem" onclick="showSubBar('endEventsBar')"></span>
-            </div>
-            <div class="toolbarItem">
-                <span class="toolbarSeparator"></span>
-            </div>
-            <div class="toolbarItem">
-                <span class="taskItem" onclick="showSubBar('tasksBar')"></span>
-            </div>
-            <div class="toolbarItem">
-                <span class="subtaskItem" onclick="alert('hola')"></span>
-            </div>
-            <div class="toolbarItem">
-                <span class="taskcallItem" onclick="alert('hola')"></span>
-            </div>
-            <div class="toolbarItem">
-                <span class="gatewayItem" onclick="alert('hola')"></span>
+                <span title="Eventos finales" class="endeventItem" onclick="showSubBar('endEventsBar')"></span>
             </div>
             <div class="toolbarItem">
                 <span class="toolbarSeparator"></span>
             </div>
             <div class="toolbarItem">
-                <span class="flowItem" onclick="alert('hola')"></span>
+                <span title="Tareas" class="taskItem" onclick="showSubBar('tasksBar')"></span>
             </div>
             <div class="toolbarItem">
-                <span class="artifactItem" onclick="alert('hola')"></span>
+                <span title="Subprocesos" class="subtaskItem" onclick="showSubBar('subtasksBar')"></span>
             </div>
             <div class="toolbarItem">
-                <span class="dataobjectItem" onclick="alert('hola')"></span>
+                <span title="Tareas llamadas" class="taskcallItem" onclick="showSubBar('calltasksBar')"></span>
+            </div>
+            <div class="toolbarItem">
+                <span title="Compuertas" class="gatewayItem" onclick="showSubBar('gatewaysBar')"></span>
             </div>
             <div class="toolbarItem">
                 <span class="toolbarSeparator"></span>
             </div>
             <div class="toolbarItem">
-                <span class="poolItem" onclick="alert('hola')"></span>
+                <span title="Objetos de conexión" class="flowItem" onclick="showSubBar('connectionsBar')"></span>
+            </div>
+            <div class="toolbarItem">
+                <span title="Artefactos" class="artifactItem" onclick="showSubBar('artifactsBar')"></span>
+            </div>
+            <div class="toolbarItem">
+                <span title="Objetos de datos" class="dataobjectItem" onclick="showSubBar('dataobjectsBar')"></span>
+            </div>
+            <div class="toolbarItem">
+                <span class="toolbarSeparator"></span>
+            </div>
+            <div class="toolbarItem">
+                <span title="Swimlanes" class="poolItem" onclick="showSubBar('swimlanesBar')"></span>
             </div>
             <div class="toolbarItem">
                 <span class="toolbarFooter"></span>
@@ -803,63 +84,121 @@ and open the template in the editor.
         <div>
             <div id="startEventsBar" class="subbarHidden">
                 <span class="subbarStart"></span>
-                <span class="normalStartEvent" onclick="alert('hola');"></span>
-                <span class="signalStartEvent" onclick="alert('hola');"></span>
-                <span class="timerStartEvent" onclick="alert('hola');"></span>
-                <span class="ruleStartEvent" onclick="alert('hola');"></span>
-                <span class="compensaStartEvent" onclick="alert('hola');"></span>
-                <span class="errorStartEvent" onclick="alert('hola');"></span>
-                <span class="scalaStartEvent" onclick="alert('hola');"></span>
-                <span class="messageStartEvent" onclick="alert('hola');"></span>
-                <span class="multiStartEvent" onclick="alert('hola');"></span>
-                <span class="parallelStartEvent" onclick="alert('hola');"></span>
+                <span class="normalStartEvent" title="Inicio normal" onclick="alert('hola');"></span>
+                <span class="messageStartEvent" title="Inicio por mensaje" onclick="alert('hola');"></span>
+                <span class="timerStartEvent" title="Inicio temporizado"  onclick="alert('hola');"></span>
+                <span class="ruleStartEvent" title="Inicio por regla de negocio" onclick="alert('hola');"></span>
+                <span class="signalStartEvent" title="Inicio por señal" onclick="alert('hola');"></span>
+                <span class="multiStartEvent" title="Inicio por eventos múltiples" onclick="alert('hola');"></span>
+                <span class="parallelStartEvent" title="Inicio paralelo" onclick="alert('hola');"></span>
+                <span class="scalaStartEvent" title="Inicio por escalamiento" onclick="alert('hola');"></span>
+                <span class="errorStartEvent" title="Inicio por error" onclick="alert('hola');"></span>
+                <span class="compensaStartEvent" title="Inicio por compensación"  onclick="alert('hola');"></span>
                 <span class="subbarEnd"></span>
             </div>
             <div id="interEventsBar" class="subbarHidden">
                 <span class="subbarStart"></span>
-                <span class="normalInterEvent" onclick="alert('hola');"></span>
-                <span class="cancelInterEvent" onclick="alert('hola');"></span>
-                <span class="compensaInterThrowEvent" onclick="alert('hola');"></span>
-                <span class="compensaInterCatchEvent" onclick="alert('hola');"></span>
-                <span class="ruleInterEvent" onclick="alert('hola');"></span>
-                <span class="linkInterThrowEvent" onclick="alert('hola');"></span>
-                <span class="linkInterCatchEvent" onclick="alert('hola');"></span>
-                <span class="errorInterEvent" onclick="alert('hola');"></span>
-                <span class="scalaInterThrowEvent" onclick="alert('hola');"></span>
-                <span class="scalaInterCatchEvent" onclick="alert('hola');"></span>
-                <span class="messageInterThrowEvent" onclick="alert('hola');"></span>
-                <span class="messageInterCatchEvent" onclick="alert('hola');"></span>
-                <span class="multipleInterCatchEvent" onclick="alert('hola');"></span>
-                <span class="multipleInterThrowEvent" onclick="alert('hola');"></span>
-                <span class="parallelInterEvent" onclick="alert('hola');"></span>
-                <span class="signalInterCatchEvent" onclick="alert('hola');"></span>
-                <span class="signalInterThrowEvent" onclick="alert('hola');"></span>
-                <span class="timerInterEvent" onclick="alert('hola');"></span>
+                <span class="messageInterCatchEvent" title="Recepción de mensaje" onclick="alert('hola');"></span>
+                <span class="messageInterThrowEvent" title="Disparo de mensaje" onclick="alert('hola');"></span>
+                <span class="timerInterEvent" title="Temporizador" onclick="alert('hola');"></span>
+                <span class="errorInterEvent" title="Error" onclick="alert('hola');"></span>
+                <span class="cancelInterEvent" title="Cancelación" onclick="alert('hola');"></span>
+                <span class="compensaInterCatchEvent" title="Recepción de compensación" onclick="alert('hola');"></span>
+                <span class="compensaInterThrowEvent" title="Disparo de compensación" onclick="alert('hola');"></span>
+                <span class="ruleInterEvent" title="Regla de negocio" onclick="alert('hola');"></span>
+                <span class="linkInterCatchEvent" title="Continuación de enlace" onclick="alert('hola');"></span>
+                <span class="linkInterThrowEvent" title="Inicio de enlace" onclick="alert('hola');"></span>
+                <span class="signalInterCatchEvent" title="Recepción de señal" onclick="alert('hola');"></span>
+                <span class="signalInterThrowEvent" title="Disparo de señal" onclick="alert('hola');"></span>
+                <span class="multipleInterCatchEvent" title="Recepción múltiple" onclick="alert('hola');"></span>
+                <span class="multipleInterThrowEvent" title="Disparo múltiple" onclick="alert('hola');"></span>
+                <span class="scalaInterCatchEvent" title="Recepción de escalamiento" onclick="alert('hola');"></span>
+                <span class="scalaInterThrowEvent" title="Disparo de escalamiento" onclick="alert('hola');"></span>
+                <span class="parallelInterEvent" title="Paralelo" onclick="alert('hola');"></span>
                 <span class="subbarEnd"></span>
             </div>
             <div id="endEventsBar" class="subbarHidden">
                 <span class="subbarStart"></span>
-                <span class="normalEndEvent" onclick="alert('hola');"></span>
-                <span class="cancelEndEvent" onclick="alert('hola');"></span>
-                <span class="compensaEndEvent" onclick="alert('hola');"></span>
-                <span class="errorEndEvent" onclick="alert('hola');"></span>
-                <span class="escalaEndEvent" onclick="alert('hola');"></span>
-                <span class="messageEndEvent" onclick="alert('hola');"></span>
-                <span class="multiEndEvent" onclick="alert('hola');"></span>
-                <span class="signalEndEvent" onclick="alert('hola');"></span>
-                <span class="terminalEndEvent" onclick="alert('hola');"></span>
+                <span class="normalEndEvent" title="Fin normal" onclick="alert('hola');"></span>
+                <span class="messageEndEvent" title="Fin con mensaje"  onclick="alert('hola');"></span>
+                <span class="errorEndEvent" title="Fin con error"  onclick="alert('hola');"></span>
+                <span class="cancelEndEvent" title="Fin con cancelación" onclick="alert('hola');"></span>
+                <span class="compensaEndEvent" title="Fin con compensación"  onclick="alert('hola');"></span>
+                <span class="signalEndEvent" title="Fin con señal" onclick="alert('hola');"></span>
+                <span class="multiEndEvent" title="Fin múltiple"  onclick="alert('hola');"></span>
+                <span class="escalaEndEvent" title="Fin con escalamiento" onclick="alert('hola');"></span>
+                <span class="terminalEndEvent" title="Terminación" onclick="alert('hola');"></span>
                 <span class="subbarEnd"></span>
             </div>
             <div id="tasksBar" class="subbarHidden">
                 <span class="subbarStart"></span>
-                <span class="abstractTask" onclick="alert('hola');"></span>
-                <span class="userTask" onclick="alert('hola');"></span>
-                <span class="sendTask" onclick="alert('hola');"></span>
-                <span class="ruleTask" onclick="alert('hola');"></span>
-                <span class="receiveTask" onclick="alert('hola');"></span>
-                <span class="scriptTask" onclick="alert('hola');"></span>
-                <span class="serviceTask" onclick="alert('hola');"></span>
-                <span class="manualTask" onclick="alert('hola');"></span>
+                <span class="abstractTask" title="Tarea abstracta" onclick="alert('hola');"></span>
+                <span class="userTask" title="Tarea de usuario" onclick="alert('hola');"></span>
+                <span class="serviceTask" title="Tarea de servicio" onclick="alert('hola');"></span>
+                <span class="scriptTask" title="Tarea de script" onclick="alert('hola');"></span>
+                <span class="ruleTask" title="Tarea de regla de negocio" onclick="alert('hola');"></span>
+                <span class="manualTask" title="Tarea manual" onclick="alert('hola');"></span>
+                <span class="sendTask" title="Tarea de envío de mensaje" onclick="alert('hola');"></span>
+                <span class="receiveTask" title="Tarea de recepción de mensaje" onclick="alert('hola');"></span>
+                <span class="subbarEnd"></span>
+            </div>
+            <div id="subtasksBar" class="subbarHidden">
+                <span class="subbarStart"></span>
+                <span class="subProcess" title="Subproceso" onclick="alert('hola');"></span>
+                <span class="adhocsubProcess" title="Subproceso adhoc" onclick="alert('hola');"></span>
+                <span class="eventsubProcess" title="Subproceso de evento" onclick="alert('hola');"></span>
+                <span class="transactionsubProcess" title="Transacción" onclick="alert('hola');"></span>
+                <span class="subbarEnd"></span>
+            </div>
+            <div id="calltasksBar" class="subbarHidden">
+                <span class="subbarStart"></span>
+                <span class="callTask" title="Tarea llamada" onclick="alert('hola');"></span>
+                <span class="callmanualTask" title="Tarea manual llamada" onclick="alert('hola');"></span>
+                <span class="callruleTask" title="Tarea de regla de negocio llamada" onclick="alert('hola');"></span>
+                <span class="callscriptTask" title="Tarea de script llamada" onclick="alert('hola');"></span>
+                <span class="calluserTask" title="Tarea de usuario llamada" onclick="alert('hola');"></span>
+                <span class="callsubProcess" title="Subproceso llamado" onclick="alert('hola');"></span>
+                <span class="subbarEnd"></span>
+            </div>
+            <div id="gatewaysBar" class="subbarHidden">
+                <span class="subbarStart"></span>
+                <span class="exclusiveDataGateway" title="Exclusiva (datos)" onclick="alert('hola');"></span>
+                <span class="inclusiveDataGateway" title="Inclusiva (datos)" onclick="alert('hola');"></span>
+                <span class="exclusiveStartEventGateway" title="Exclusiva de inicio" onclick="alert('hola');"></span>
+                <span class="exclusiveEventGateway" title="Exclusiva (eventos)" onclick="alert('hola');"></span>
+                <span class="parallelGateway" title="Paralela" onclick="alert('hola');"></span>
+                <span class="parallelStartGateway" title="Paralela de inicio" onclick="alert('hola');"></span>
+                <span class="complexGateway" title="Compleja" onclick="alert('hola');"></span>
+                <span class="subbarEnd"></span>
+            </div>
+            <div id="connectionsBar" class="subbarHidden">
+                <span class="subbarStart"></span>
+                <span class="sequenceFlow" title="Flujo de secuencia" onclick="alert('hola');"></span>
+                <span class="conditionalFlow" title="Flujo condicional" onclick="alert('hola');"></span>
+                <span class="defaultFlow" title="Flujo por defecto" onclick="alert('hola');"></span>
+                <span class="messageFlow" title="Flujo de mensaje" onclick="alert('hola');"></span>
+                <span class="associationFlow" title="Asociación" onclick="alert('hola');"></span>
+                <span class="directionalassociationFlow" title="Asociación direccional" onclick="alert('hola');"></span>
+                <span class="subbarEnd"></span>
+            </div>
+            <div id="artifactsBar" class="subbarHidden">
+                <span class="subbarStart"></span>
+                <span class="annotation" title="Anotación" onclick="alert('hola');"></span>
+                <span class="group" title="Grupo" onclick="alert('hola');"></span>
+                <span class="subbarEnd"></span>
+            </div>
+            <div id="dataobjectsBar" class="subbarHidden">
+                <span class="subbarStart"></span>
+                <span class="dataObject" title="Dato" onclick="alert('hola');"></span>
+                <span class="dataInput" title="Dato de entrada" onclick="alert('hola');"></span>
+                <span class="dataOutput" title="Dato de salida" onclick="alert('hola');"></span>
+                <span class="dataStore" title="Almacén de datos" onclick="alert('hola');"></span>
+                <span class="subbarEnd"></span>
+            </div>
+            <div id="swimlanesBar" class="subbarHidden">
+                <span class="subbarStart"></span>
+                <span class="pool" title="Pool" onclick="alert('hola');"></span>
+                <span class="lane" title="Lane" onclick="alert('hola');"></span>
                 <span class="subbarEnd"></span>
             </div>
         </div>
