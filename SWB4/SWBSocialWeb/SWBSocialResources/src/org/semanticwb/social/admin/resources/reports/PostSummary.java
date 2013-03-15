@@ -20,7 +20,6 @@ import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Resource;
 import org.semanticwb.model.SWBComparator;
 import org.semanticwb.model.WebSite;
-//import org.semanticwb.portal.api.GenericAdmResource;
 import org.semanticwb.portal.api.GenericResource;
 import org.semanticwb.portal.api.SWBActionResponse;
 import org.semanticwb.portal.api.SWBParamRequest;
@@ -87,12 +86,15 @@ public class PostSummary extends GenericResource {
     @Override
     public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         final String mode = paramRequest.getMode();
-        if(Mode_JSON.equals(mode))
+        if(Mode_JSON.equals(mode)) {
             doJson(request, response, paramRequest);
-        else if(Mode_REVAL.equals(mode))
+        }
+        else if(Mode_REVAL.equals(mode)) {
             doRevalue(request, response, paramRequest);
-        else
+        }
+        else {
             super.processRequest(request, response, paramRequest);
+        }
     }
 
     @Override
@@ -135,23 +137,32 @@ public class PostSummary extends GenericResource {
         response.setContentType("text/html;charset=iso-8859-1");
         response.setHeader("Cache-Control", "no-cache");
         response.setHeader("Pragma", "no-cache");
-        
-        System.out.println("\n\n\tipage:" + request.getParameter("ipage") + "\n\n");
-        final String myPath = SWBPlatform.getContextPath() +"/work/" + paramRequest.getWebPage().getWebSiteId() + "/jsp/stream/postSummary.jsp";
-        if (request != null) {
-            RequestDispatcher dis = request.getRequestDispatcher(myPath);
-            if(dis != null) {
-                try {
-                    request.setAttribute("paramRequest", paramRequest);
-                    dis.include(request, response);
-                } catch (Exception e) {
-                    log.error(e);
-                    e.printStackTrace(System.out);
-                }
-            }
+        if(request.getParameter("doView") == null){            
+            doEdit(request, response, paramRequest);
+        }else{
+            final String myPath = SWBPlatform.getContextPath() +"/work/" + paramRequest.getWebPage().getWebSiteId() + "/jsp/stream/postSummary.jsp";
+            if (request != null) {
+                 RequestDispatcher dis = request.getRequestDispatcher(myPath);
+                 if(dis != null) {
+                     try {
+                         request.setAttribute("paramRequest", paramRequest);
+                         dis.include(request, response);
+                     } catch (Exception ex) {
+                         log.error(ex);
+                         ex.printStackTrace(System.out);
+                     }
+                 }
+             }
         }
+              
     }
-        
+
+    @Override
+    public void doEdit(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        response.getWriter().println("<iframe dojotype=\"dijit.layout.ContentPane\" src=\""+ paramRequest.getRenderUrl().setMode(SWBResourceURL.Mode_VIEW).setParameter("doView", "doView").setParameter("suri", request.getParameter("suri")) + "\" width=\"100%\" height=\"100%\" frameborder=\"0\" scrolling=\"no\" >");
+        response.getWriter().println("</iframe>");        
+    }
+            
     private void doJson(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
         response.setContentType("text/json;charset=iso-8859-1");
         
@@ -172,7 +183,7 @@ public class PostSummary extends GenericResource {
         }
         
         String wsiteId=request.getParameter("wsite");
-        System.out.println("wsiteId en PostSummary:"+wsiteId);
+        //System.out.println("wsiteId en PostSummary:"+wsiteId);
         int pos=wsiteId.indexOf("?");
         if(pos>-1) wsiteId=wsiteId.substring(0, pos);
         WebSite wsite=null;
@@ -188,7 +199,7 @@ public class PostSummary extends GenericResource {
         }
 
 //////////////////////        
-        System.out.println("ipage PostSummary: " + request.getParameter("ipage"));
+        //System.out.println("ipage PostSummary: " + request.getParameter("ipage"));
 int ipage;
 try {
     ipage = Integer.parseInt(request.getParameter("ipage"));
@@ -233,8 +244,8 @@ if(fin - inicio > PAGE_SIZE) {
 
 inicio = Integer.parseInt(request.getParameter("inicio"))-1;
 fin = Integer.parseInt(request.getParameter("fin"));
-System.out.println("INICIO en java: " +  inicio);
-System.out.println("FIN en java: " + fin);
+//System.out.println("INICIO en java: " +  inicio);
+//System.out.println("FIN en java: " + fin);
 //inicio++;
 //////////////////////
 
