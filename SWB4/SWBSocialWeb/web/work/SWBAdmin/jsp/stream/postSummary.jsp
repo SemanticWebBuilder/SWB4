@@ -14,16 +14,34 @@
 <%@page import="java.util.*"%>
 <%@page import="static org.semanticwb.social.admin.resources.reports.PostSummary.*"%>
 <jsp:useBean id="paramRequest" scope="request" type="org.semanticwb.portal.api.SWBParamRequest"/>
+<style type="text/css">
+            @import "/swbadmin/js/dojo/dojo/resources/dojo.css";
+            @import "/swbadmin/js/dojo/dijit/themes/soria/soria.css";
+            @import "/swbadmin/css/swb.css";
+            @import "/swbadmin/js/dojo/dojox/grid/resources/soriaGrid.css";
+            @import "/swbadmin/js/dojo/dojox/grid/resources/Grid.css";
+            html, body, #main{
+                overflow: auto;
+            }
+</style>    
+<link rel="stylesheet" type="text/css" media="all" href="/swbadmin/js/dojo/dijit/themes/soria/soria.css" />
+<link rel="stylesheet" type="text/css" media="all" href="/swbadmin/css/swb_portal.css" />
+<script type="text/javascript" >
+    var djConfig = {
+        parseOnLoad: true,
+        isDebug: false
+    };
+</script>
+<script type="text/javascript" src="/swbadmin/js/dojo/dojo/dojo.js" ></script>
+<script type="text/javascript" src="/swbadmin/js/swb.js" ></script>    
+
 <%
-    System.out.println("Entrando al reporte!!");
-    System.out.println("Suri:" + request.getParameter("suri"));
-    Stream stream = (Stream)SemanticObject.getSemanticObject(request.getParameter("suri")).getGenericInstance();
-    //WebSite wsite = paramRequest.getWebPage().getWebSite();
-    //String wsiteId=request.getParameter("wsite");
+    String objUri = request.getParameter("suri");
+    Stream stream = (Stream)SemanticObject.getSemanticObject(objUri).getGenericInstance();    
     String wsiteId = stream.getSemanticObject().getModel().getName();
-    System.out.println("wsiteId:" + wsiteId);
+    //System.out.println("wsiteId:" + wsiteId);
     WebSite wsite=WebSite.ClassMgr.getWebSite(wsiteId);
-    System.out.println("wsite-J1:"+wsite.getId()); 
+    //System.out.println("wsite-J1:"+wsite.getId()); 
     
 //////////////////////
 int ipage;
@@ -35,7 +53,7 @@ try {
 //Iterator<PostIn> itposts = PostIn.ClassMgr.listPostIns(wsite);
 Iterator<MessageIn> itposts = MessageIn.ClassMgr.listMessageIns(wsite); 
 long el = SWBUtils.Collections.sizeOf(itposts);
-System.out.println("el:"+el);
+//System.out.println("el:"+el);
 long paginas = el / PAGE_SIZE;
 if(el % PAGE_SIZE != 0) {
     paginas++;
@@ -69,21 +87,23 @@ if(fin - inicio > PAGE_SIZE) {
 inicio++;
 //////////////////////
 
-        System.out.println("Inicio:" + inicio + "\t Fin: " + fin);
-        System.out.println("wsite-J2:"+wsiteId);
+        //System.out.println("Inicio:" + inicio + "\t Fin: " + fin);
+        //System.out.println("wsite-J2:"+wsiteId);
         SWBResourceURL url = paramRequest.getRenderUrl().setCallMethod(SWBResourceURL.Call_DIRECT);
-        System.out.println("wsiteId en Jsp de PostSummary:"+wsiteId);
+        //System.out.println("wsiteId en Jsp de PostSummary:"+wsiteId);
         url.setParameter("wsite", wsiteId);
-        out.println("<script type=\"text/javascript\">");
+        url.setParameter("inicio", inicio+"");
+        url.setParameter("fin", fin+"");       
+        url.setParameter("ipage", ipage+"");
+        out.println("<script type=\"text/javascript\">");        
         //out.println(" dojo.require('dijit.dijit');");
         out.println(" dojo.require('dojox.grid.DataGrid');");
         out.println(" dojo.require('dojo.data.ItemFileReadStore');");
         //out.println(" dojo.require('dojo.parser');");
 out.println("dojox.grid.cells.dijit");
         
-        out.println(" function fillGrid(grid, uri) {");
-        out.println("   alert('llamando a fill grid' + );")
-        out.println("   grid.store = new dojo.data.ItemFileReadStore({url: uri+'?ipage="+ipage+"&inicio=" + inicio + "&fin=" + fin + "'});");
+        out.println(" function fillGrid(grid, uri) {");               
+        out.println("   grid.store = new dojo.data.ItemFileReadStore({url: uri});");
         out.println("   grid._refresh();");
         out.println(" }");
         
@@ -139,7 +159,7 @@ out.println("}");
 
         out.println("   gridMaster = new dojox.grid.DataGrid({");
         //out.println("      escapeHTMLInData: 'true',");     
-        //out.println("      preload: 'true',");
+        //out.println("      preload: 'true',");s
         out.println("      id: 'gridMaster',");
         out.println("      structure: layout,");
         //out.println("      rowSelector: '10px',");
@@ -152,9 +172,9 @@ out.println("}");
         out.println("</script>");
         out.println("<p style=\"font-size:12px; font-weight:bold; text-align:center\">Total: "+el+"</p>");
         out.println("<div id=\"ctnergrid\" style=\"height:580px; width:98%; border: 1px solid #DAE1FE; text-align:center;\">");
-        out.println("  <div id=\"gridMaster\"></div>");
+        out.println("  <div id=\"gridMaster\"></div>");        
         out.println("</div>");
-System.out.println("paginas:"+paginas);        
+//System.out.println("paginas:"+paginas);        
 // paginación
 if(paginas > 1) {
     SWBResourceURL pagURL = paramRequest.getRenderUrl().setMode(SWBResourceURL.Mode_VIEW);
@@ -163,10 +183,10 @@ if(paginas > 1) {
     String nextURL = "#";
     String previusURL = "#";
     if (ipage < paginas) {
-        nextURL = paramRequest.getRenderUrl().setParameter("ipage", Integer.toString(ipage+1)).setParameter("wsite", wsiteId).toString();        
+        nextURL = paramRequest.getRenderUrl().setParameter("ipage", Integer.toString(ipage+1)).setParameter("wsite", wsiteId).setParameter("doView", "doView").setParameter("suri", objUri).toString();        
     }
     if (ipage > 1) {
-        previusURL = paramRequest.getRenderUrl().setParameter("ipage", Integer.toString(ipage-1)).setParameter("wsite", wsiteId).toString();
+        previusURL = paramRequest.getRenderUrl().setParameter("ipage", Integer.toString(ipage-1)).setParameter("wsite", wsiteId).setParameter("doView", "doView").setParameter("suri", objUri).toString();
     }
     if (ipage > 1) {
         html.append("<a class=\"amfr-pagi\" href=\""+previusURL+"\">Anterior</a>&nbsp;");
@@ -177,7 +197,7 @@ if(paginas > 1) {
             if(i==ipage)
                 html.append("<strong>");
             else
-                html.append("<a class=\"amfr-pagi\" href=\""+paramRequest.getRenderUrl().setMode(SWBResourceURL.Mode_VIEW).setParameter("ipage", Integer.toString(i)).setParameter("wsite", wsiteId) +"\">");
+                html.append("<a class=\"amfr-pagi\" href=\""+paramRequest.getRenderUrl().setMode(SWBResourceURL.Mode_VIEW).setParameter("ipage", Integer.toString(i)).setParameter("wsite", wsiteId).setParameter("doView", "doView").setParameter("suri", objUri) +"\">");
             html.append(i);
             if(i==ipage)
                 html.append("</strong>&nbsp;");
