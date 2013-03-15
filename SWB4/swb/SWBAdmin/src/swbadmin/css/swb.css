@@ -274,11 +274,17 @@ html, body, #main {
 .swbIconLaneE,
 .swbIconProcessTools,
 .swbIconX509Certificates,
+.swbIconX509Certificate,
 .swbIconNotificationTemplates,
+.swbIconNotificationTemplate,
 .swbIconDBConnections,
+.swbIconDBConnection,
 .swbIconWebServices,
+.swbIconWebService,
 .swbIconOwnerProperties,
+.swbIconOwnerProperty,
 .swbIconFileTemplates,
+.swbIconFileTemplate,
 .swbIconArtifact {
     background-repeat: no-repeat;
     width:20px;
@@ -297,7 +303,7 @@ html, body, #main {
 .swbIconResourceF   { background-position: -120px -72px; }
 .swbIconResourceW   { background-position: -140px -72px; }
 .swbIconResourceE   { background-position: -160px -72px; }
-.swbIconResourceType { background-position: -340px -0px; }
+.swbIconResourceType{ background-position: -340px -0px; }
 .swbIconTemplates   { background-position: -140px -0px; }
 .swbIconTemplate    { background-position: -140px -18px; }
 .swbIconTemplateU   { background-position: -140px -36px; }
@@ -357,34 +363,40 @@ html, body, #main {
 .swbIconProcess     { background-position: -460px -18px; }
 .swbIconProcessTools{ background-position: -500px -0px; }
 .swbIconX509Certificates { background-position: -480px -0px; }
+.swbIconX509Certificate { background-position: -480px -18px; }
 .swbIconNotificationTemplates { background-position: -600px -0px; }
+.swbIconNotificationTemplate { background-position: -600px -18px; }
 .swbIconDBConnections { background-position: -520px -0px; }
+.swbIconDBConnection { background-position: -520px -18px; }
 .swbIconWebServices { background-position: -540px -0px; }
+.swbIconWebService { background-position: -540px -18px; }
 .swbIconOwnerProperties { background-position: -560px -0px; }
+.swbIconOwnerProperty { background-position: -560px -18px; }
 .swbIconFileTemplates { background-position: -580px -0px; }
+.swbIconProcessFileTemplate { background-position: -580px -18px; }
 .swbIconProcessU    { background-position: -460px -36px; }
 .swbIconProcessW    { background-position: -459px -56px; }
 .swbIconProcessF    { background-position: -459px -56px; }
 .swbIconProcesses   { background-position: -460px -0px; }
-.swbIconSubProcess   { background-position: -0px -377px; }
-.swbIconSubProcessU   { background-position: -0px -435px; }
-.swbIconSubProcessW   { background-position: -0px -397px; }
-.swbIconSubProcessF   { background-position: -0px -377px; }
-.swbIconSubProcessE   { background-position: -0px -416px; }
+.swbIconSubProcess   { background-position: -0px -378px; }
+.swbIconSubProcessU   { background-position: -0px -455px; }
+.swbIconSubProcessW   { background-position: -0px -416px; }
+.swbIconSubProcessF   { background-position: -0px -397px; }
+.swbIconSubProcessE   { background-position: -0px -435px; }
 .swbIconAdhocSubProcess   { background-position: -180px -378px; }
-.swbIconAdhocSubProcessU   { background-position: -180px -435px; }
-.swbIconAdhocSubProcessW   { background-position: -180px -397px; }
-.swbIconAdhocSubProcessF   { background-position: -180px -378px; }
-.swbIconAdhocSubProcessE   { background-position: -180px -416px; }
+.swbIconAdhocSubProcessU   { background-position: -180px -455px; }
+.swbIconAdhocSubProcessW   { background-position: -180px -416px; }
+.swbIconAdhocSubProcessF   { background-position: -180px -397px; }
+.swbIconAdhocSubProcessE   { background-position: -180px -435px; }
 .swbIconEventSubProcess   { background-position: -40px -378px; }
-.swbIconEventSubProcessU   { background-position: -40px -435px; }
-.swbIconEventSubProcessW   { background-position: -40px -397px; }
-.swbIconEventSubProcessF   { background-position: -40px -378px; }
+.swbIconEventSubProcessU   { background-position: -40px -455px; }
+.swbIconEventSubProcessW   { background-position: -40px -416px; }
+.swbIconEventSubProcessF   { background-position: -40px -397px; }
 .swbIconTransactionSubProcess   { background-position: -60px -378px; }
-.swbIconTransactionSubProcessU   { background-position: -60px -435px; }
-.swbIconTransactionSubProcessW   { background-position: -60px -397px; }
-.swbIconTransactionSubProcessF   { background-position: -60px -378px; }
-.swbIconTransactionSubProcessE   { background-position: -60px -416px; }
+.swbIconTransactionSubProcessU   { background-position: -60px -455px; }
+.swbIconTransactionSubProcessW   { background-position: -60px -416px; }
+.swbIconTransactionSubProcessF   { background-position: -60px -397px; }
+.swbIconTransactionSubProcessE   { background-position: -60px -435px; }
 .swbIconTask   { background-position: -0px -306px; }
 .swbIconTaskU   { background-position: -280px -363px; }
 .swbIconTaskW   { background-position: -280px -325px; }
@@ -451,10 +463,10 @@ html, body, #main {
 .swbIconCallUserTaskF   { background-position: -340px -306px; }
 .swbIconCallUserTaskE   { background-position: -340px -344px; }
 .swbIconCallProcess   { background-position: -240px -378px; }
-.swbIconCallProcessU   { background-position: -240px -435px; }
-.swbIconCallProcessW   { background-position: -240px -397px; }
-.swbIconCallProcessF   { background-position: -240px -378px; }
-.swbIconCallProcessE   { background-position: -240px -416px; }
+.swbIconCallProcessU   { background-position: -240px -455px; }
+.swbIconCallProcessW   { background-position: -240px -416px; }
+.swbIconCallProcessF   { background-position: -240px -397px; }
+.swbIconCallProcessE   { background-position: -240px -435px; }
 .swbIconInclusiveGateway   { background-position: -400px -145px; }
 .swbIconParallelGateway    { background-position: -420px -145px; }
 .swbIconStartEvent   { background-position: -0px -234px; }
