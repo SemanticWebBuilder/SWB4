@@ -284,6 +284,7 @@ html, body, #main {
 .swbIconOwnerProperties,
 .swbIconOwnerProperty,
 .swbIconFileTemplates,
+.swbIconProcessFileTemplate,
 .swbIconFileTemplate,
 .swbIconArtifact {
     background-repeat: no-repeat;
