@@ -10,7 +10,7 @@
 <%@page import="org.semanticwb.platform.SemanticProperty"%>
 <%@page import="org.semanticwb.portal.api.*"%>
 <%@page import="java.util.*"%>
-<%@page import="static org.semanticwb.social.resources.reports.PostSummary.*"%>
+<%@page import="static org.semanticwb.social.admin.resources.reports.PostSummary.*"%>
 <jsp:useBean id="paramRequest" scope="request" type="org.semanticwb.portal.api.SWBParamRequest"/>
 <!DOCTYPE html>
 <html>
