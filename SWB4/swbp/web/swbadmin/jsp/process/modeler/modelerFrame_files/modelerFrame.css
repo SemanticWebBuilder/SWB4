@@ -1,0 +1,1104 @@
+/* 
+    Document   : modelerFrame
+    Created on : 15/03/2013, 01:39:38 PM
+    Author     : hasdai
+    Description:
+        Purpose of the stylesheet follows.
+*/
+.toolbarItem {
+    width: 49px;
+    vertical-align: bottom;
+}
+
+.startEventItem {
+    background: url(start_1.png) top center no-repeat;
+    position: relative;
+    float: left;
+    height:43px;
+    width:49px;
+}
+
+.startEventItem:hover {
+    background: url(start_2.png) top center no-repeat;
+}
+
+.intereventItem {
+    background: url(inter_1.png) top center no-repeat;
+    position: relative;
+    float: left;
+    height:43px;
+    width:49px;
+}
+
+.intereventItem:hover {
+    background: url(inter_2.png) top center no-repeat;
+}
+
+.endeventItem {
+    background: url(end_1.png) top center no-repeat;
+    position: relative;
+    float: left;
+    height:43px;
+    width:49px;
+}
+
+.endeventItem:hover {
+    background: url(end_2.png) top center no-repeat;
+}
+
+.toolbarSeparator {
+    background: url(barra_division.png) top center no-repeat;
+    position: relative;
+    float: left;
+    height:12px;
+    width:49px;
+}
+
+.toolbarFooter {
+    background: url(barra_bottom.png) top center no-repeat;
+    position: relative;
+    float: left;
+    height:8px;
+    width:49px;
+}
+
+.taskItem {
+    background: url(task_1.png) top center no-repeat;
+    position: relative;
+    float: left;
+    height:43px;
+    width:49px;
+}
+
+.taskItem:hover {
+    background: url(task_2.png) top center no-repeat;
+}
+
+.taskcallItem {
+    background: url(task_call_1.png) top center no-repeat;
+    position: relative;
+    float: left;
+    height:43px;
+    width:49px;
+}
+
+.taskcallItem:hover {
+    background: url(task_call_2.png) top center no-repeat;
+}
+
+.subtaskItem {
+    background: url(subtask_1.png) top center no-repeat;
+    position: relative;
+    float: left;
+    height:43px;
+    width:49px;
+}
+
+.subtaskItem:hover {
+    background: url(subtask_2.png) top center no-repeat;
+}
+
+.gatewayItem {
+    background: url(if_1.png) top center no-repeat;
+    position: relative;
+    float: left;
+    height:43px;
+    width:49px;
+}
+
+.gatewayItem:hover {
+    background: url(if_2.png) top center no-repeat;
+}
+
+.artifactItem {
+    background: url(anota_1.png) top center no-repeat;
+    position: relative;
+    float: left;
+    height:43px;
+    width:49px;
+}
+
+.artifactItem:hover {
+    background: url(anota_2.png) top center no-repeat;
+}
+
+.dataobjectItem {
+    background: url(doc_1.png) top center no-repeat;
+    position: relative;
+    float: left;
+    height:43px;
+    width:49px;
+}
+
+.dataobjectItem:hover {
+    background: url(doc_2.png) top center no-repeat;
+}
+
+.poolItem {
+    background: url(pool_1.png) top center no-repeat;
+    position: relative;
+    float: left;
+    height:43px;
+    width:49px;
+}
+
+.poolItem:hover {
+    background: url(pool_2.png) top center no-repeat;
+}
+
+.flowItem {
+    background: url(flow_1.png) top center no-repeat;
+    position: relative;
+    float: left;
+    height:43px;
+    width:49px;
+}
+
+.flowItem:hover {
+    background: url(flow_2.png) top center no-repeat;
+}
+
+.normalStartEvent {
+    background: url(start_normal1.png) top center no-repeat;
+    position: relative;
+    float: left;
+    height:43px;
+    width:37px;
+}
+
+.normalStartEvent:hover {
+    background: url(start_normal2.png) top center no-repeat;
+}
+
+.signalStartEvent {
+    background: url(start_senal1.png) top center no-repeat;
+    position: relative;
+    float: left;
+    height:43px;
+    width:37px;
+}
+
+.signalStartEvent:hover {
+    background: url(start_senal2.png) top center no-repeat;
+}
+
+.timerStartEvent {
+    background: url(start_tmp1.png) top center no-repeat;
+    position: relative;
+    float: left;
+    height:43px;
+    width:37px;
+}
+
+.timerStartEvent:hover {
+    background: url(start_tmp2.png) top center no-repeat;
+}
+
+.compensaStartEvent {
+    background: url(start_compensa1.png) top center no-repeat;
+    position: relative;
+    float: left;
+    height:43px;
+    width:37px;
+}
+
+.compensaStartEvent:hover {
+    background: url(start_compensa2.png) top center no-repeat;
+}
+
+.ruleStartEvent {
+    background: url(start_cond1.png) top center no-repeat;
+    position: relative;
+    float: left;
+    height:43px;
+    width:37px;
+}
+
+.ruleStartEvent:hover {
+    background: url(start_cond2.png) top center no-repeat;
+}
+
+.errorStartEvent {
+    background: url(start_error1.png) top center no-repeat;
+    position: relative;
+    float: left;
+    height:43px;
+    width:37px;
+}
+
+.errorStartEvent:hover {
+    background: url(start_error2.png) top center no-repeat;
+}
+
+.scalaStartEvent {
+    background: url(start_escala1.png) top center no-repeat;
+    position: relative;
+    float: left;
+    height:43px;
+    width:37px;
+}
+
+.scalaStartEvent:hover {
+    background: url(start_escala2.png) top center no-repeat;
+}
+
+.messageStartEvent {
+    background: url(start_msj1.png) top center no-repeat;
+    position: relative;
+    float: left;
+    height:43px;
+    width:37px;
+}
+
+.messageStartEvent:hover {
+    background: url(start_msj2.png) top center no-repeat;
+}
+
+.multiStartEvent {
+    background: url(start_multi1.png) top center no-repeat;
+    position: relative;
+    float: left;
+    height:43px;
+    width:37px;
+}
+
+.multiStartEvent:hover {
+    background: url(start_multi2.png) top center no-repeat;
+}
+
+.parallelStartEvent {
+    background: url(start_paralelo1.png) top center no-repeat;
+    position: relative;
+    float: left;
+    height:43px;
+    width:37px;
+}
+
+.parallelStartEvent:hover {
+    background: url(start_paralelo2.png) top center no-repeat;
+}
+
+.normalInterEvent {
+    background: url(inter_normal1.png) top center no-repeat;
+    position: relative;
+    float: left;
+    height:43px;
+    width:37px;
+}
+
+.normalInterEvent:hover {
+    background: url(inter_normal2.png) top center no-repeat;
+}
+
+.cancelInterEvent {
+    background: url(inter_cancel_1.png) top center no-repeat;
+    position: relative;
+    float: left;
+    height:43px;
+    width:37px;
+}
+
+.cancelInterEvent:hover {
+    background: url(inter_cancel_2.png) top center no-repeat;
+}
+
+.compensaInterCatchEvent {
+    background: url(inter_compensa_b_1.png) top center no-repeat;
+    position: relative;
+    float: left;
+    height:43px;
+    width:37px;
+}
+
+.compensaInterCatchEvent:hover {
+    background: url(inter_compensa_b_2.png) top center no-repeat;
+}
+
+.compensaInterThrowEvent {
+    background: url(inter_compensa_n_1.png) top center no-repeat;
+    position: relative;
+    float: left;
+    height:43px;
+    width:37px;
+}
+
+.compensaInterThrowEvent:hover {
+    background: url(inter_compensa_n_2.png) top center no-repeat;
+}
+
+.ruleInterEvent {
+    background: url(inter_cond1.png) top center no-repeat;
+    position: relative;
+    float: left;
+    height:43px;
+    width:37px;
+}
+
+.ruleInterEvent:hover {
+    background: url(inter_cond2.png) top center no-repeat;
+}
+
+.linkInterCatchEvent {
+    background: url(inter_enlace_b_1.png) top center no-repeat;
+    position: relative;
+    float: left;
+    height:43px;
+    width:37px;
+}
+
+.linkInterCatchEvent:hover {
+    background: url(inter_enlace_b_2.png) top center no-repeat;
+}
+
+.linkInterThrowEvent {
+    background: url(inter_enlace_n_1.png) top center no-repeat;
+    position: relative;
+    float: left;
+    height:43px;
+    width:37px;
+}
+
+.linkInterThrowEvent:hover {
+    background: url(inter_enlace_n_2.png) top center no-repeat;
+}
+
+.errorInterEvent {
+    background: url(inter_error1.png) top center no-repeat;
+    position: relative;
+    float: left;
+    height:43px;
+    width:37px;
+}
+
+.errorInterEvent:hover {
+    background: url(inter_error2.png) top center no-repeat;
+}
+
+.scalaInterCatchEvent {
+    background: url(inter_escala_b_1.png) top center no-repeat;
+    position: relative;
+    float: left;
+    height:43px;
+    width:37px;
+}
+
+.scalaInterCatchEvent:hover {
+    background: url(inter_escala_b_2.png) top center no-repeat;
+}
+
+.scalaInterThrowEvent {
+    background: url(inter_escala_n_1.png) top center no-repeat;
+    position: relative;
+    float: left;
+    height:43px;
+    width:37px;
+}
+
+.scalaInterThrowEvent:hover {
+    background: url(inter_escala_n_2.png) top center no-repeat;
+}
+
+.messageInterCatchEvent {
+    background: url(inter_msj_b_1.png) top center no-repeat;
+    position: relative;
+    float: left;
+    height:43px;
+    width:37px;
+}
+
+.messageInterCatchEvent:hover {
+    background: url(inter_msj_b_2.png) top center no-repeat;
+}
+
+.messageInterThrowEvent {
+    background: url(inter_msj_n_1.png) top center no-repeat;
+    position: relative;
+    float: left;
+    height:43px;
+    width:37px;
+}
+
+.messageInterThrowEvent:hover {
+    background: url(inter_msj_n_2.png) top center no-repeat;
+}
+
+.multipleInterCatchEvent {
+    background: url(inter_multi_b_1.png) top center no-repeat;
+    position: relative;
+    float: left;
+    height:43px;
+    width:37px;
+}
+
+.multipleInterCatchEvent:hover {
+    background: url(inter_multi_b_2.png) top center no-repeat;
+}
+
+.multipleInterThrowEvent {
+    background: url(inter_multi_n_1.png) top center no-repeat;
+    position: relative;
+    float: left;
+    height:43px;
+    width:37px;
+}
+
+.multipleInterThrowEvent:hover {
+    background: url(inter_multi_n_2.png) top center no-repeat;
+}
+
+.parallelInterEvent {
+    background: url(inter_paralelo1.png) top center no-repeat;
+    position: relative;
+    float: left;
+    height:43px;
+    width:37px;
+}
+
+.parallelInterEvent:hover {
+    background: url(inter_paralelo2.png) top center no-repeat;
+}
+
+.signalInterCatchEvent {
+    background: url(inter_senal_b_1.png) top center no-repeat;
+    position: relative;
+    float: left;
+    height:43px;
+    width:37px;
+}
+
+.signalInterCatchEvent:hover {
+    background: url(inter_senal_b_2.png) top center no-repeat;
+}
+
+.signalInterThrowEvent {
+    background: url(inter_senal_n_1.png) top center no-repeat;
+    position: relative;
+    float: left;
+    height:43px;
+    width:37px;
+}
+
+.signalInterThrowEvent:hover {
+    background: url(inter_senal_n_2.png) top center no-repeat;
+}
+
+.timerInterEvent {
+    background: url(inter_tmp1.png) top center no-repeat;
+    position: relative;
+    float: left;
+    height:43px;
+    width:37px;
+}
+
+.timerInterEvent:hover {
+    background: url(inter_tmp2.png) top center no-repeat;
+}
+
+.normalEndEvent {
+    background: url(end_normal1.png) top center no-repeat;
+    position: relative;
+    float: left;
+    height:43px;
+    width:37px;
+}
+
+.normalEndEvent:hover {
+    background: url(end_normal2.png) top center no-repeat;
+}
+
+.cancelEndEvent {
+    background: url(end_cancel1.png) top center no-repeat;
+    position: relative;
+    float: left;
+    height:43px;
+    width:37px;
+}
+
+.cancelEndEvent:hover {
+    background: url(end_cancel2.png) top center no-repeat;
+}
+
+.compensaEndEvent {
+    background: url(end_compensa1.png) top center no-repeat;
+    position: relative;
+    float: left;
+    height:43px;
+    width:37px;
+}
+
+.compensaEndEvent:hover {
+    background: url(end_compensa2.png) top center no-repeat;
+}
+
+.errorEndEvent {
+    background: url(end_error1.png) top center no-repeat;
+    position: relative;
+    float: left;
+    height:43px;
+    width:37px;
+}
+
+.errorEndEvent:hover {
+    background: url(end_error2.png) top center no-repeat;
+}
+
+.escalaEndEvent {
+    background: url(end_escala1.png) top center no-repeat;
+    position: relative;
+    float: left;
+    height:43px;
+    width:37px;
+}
+
+.escalaEndEvent:hover {
+    background: url(end_escala2.png) top center no-repeat;
+}
+
+.messageEndEvent {
+    background: url(end_msj1.png) top center no-repeat;
+    position: relative;
+    float: left;
+    height:43px;
+    width:37px;
+}
+
+.messageEndEvent:hover {
+    background: url(end_msj2.png) top center no-repeat;
+}
+
+.multiEndEvent {
+    background: url(end_multi1.png) top center no-repeat;
+    position: relative;
+    float: left;
+    height:43px;
+    width:37px;
+}
+
+.multiEndEvent:hover {
+    background: url(end_multi2.png) top center no-repeat;
+}
+
+.signalEndEvent {
+    background: url(end_senal1.png) top center no-repeat;
+    position: relative;
+    float: left;
+    height:43px;
+    width:37px;
+}
+
+.signalEndEvent:hover {
+    background: url(end_senal2.png) top center no-repeat;
+}
+
+.terminalEndEvent {
+    background: url(end_termina1.png) top center no-repeat;
+    position: relative;
+    float: left;
+    height:43px;
+    width:37px;
+}
+
+.terminalEndEvent:hover {
+    background: url(end_termina2.png) top center no-repeat;
+}
+
+.abstractTask {
+    background: url(task_normal1.png) top center no-repeat;
+    position: relative;
+    float: left;
+    height:43px;
+    width:37px;
+}
+
+.abstractTask:hover {
+    background: url(task_normal2.png) top center no-repeat;
+}
+
+.userTask {
+    background: url(task_usr1.png) top center no-repeat;
+    position: relative;
+    float: left;
+    height:43px;
+    width:37px;
+}
+
+.userTask:hover {
+    background: url(task_usr2.png) top center no-repeat;
+}
+
+.scriptTask {
+    background: url(task_script1.png) top center no-repeat;
+    position: relative;
+    float: left;
+    height:43px;
+    width:37px;
+}
+
+.scriptTask:hover {
+    background: url(task_script2.png) top center no-repeat;
+}
+
+.serviceTask {
+    background: url(task_servicio1.png) top center no-repeat;
+    position: relative;
+    float: left;
+    height:43px;
+    width:37px;
+}
+
+.serviceTask:hover {
+    background: url(task_servicio2.png) top center no-repeat;
+}
+
+.sendTask {
+    background: url(task_envio1.png) top center no-repeat;
+    position: relative;
+    float: left;
+    height:43px;
+    width:37px;
+}
+
+.sendTask:hover {
+    background: url(task_envio2.png) top center no-repeat;
+}
+
+.receiveTask {
+    background: url(task_recive1.png) top center no-repeat;
+    position: relative;
+    float: left;
+    height:43px;
+    width:37px;
+}
+
+.receiveTask:hover {
+    background: url(task_recive2.png) top center no-repeat;
+}
+
+.ruleTask {
+    background: url(task_rule1.png) top center no-repeat;
+    position: relative;
+    float: left;
+    height:43px;
+    width:37px;
+}
+
+.ruleTask:hover {
+    background: url(task_rule2.png) top center no-repeat;
+}
+
+.manualTask {
+    background: url(task_manual1.png) top center no-repeat;
+    position: relative;
+    float: left;
+    height:43px;
+    width:37px;
+}
+
+.manualTask:hover {
+    background: url(task_manual2.png) top center no-repeat;
+}
+
+.subProcess {
+    background: url(subtask_colapsado1.png) top center no-repeat;
+    position: relative;
+    float: left;
+    height:43px;
+    width:37px;
+}
+
+.subProcess:hover {
+    background: url(subtask_colapsado2.png) top center no-repeat;
+}
+
+.adhocsubProcess {
+    background: url(subtask_adhoc1.png) top center no-repeat;
+    position: relative;
+    float: left;
+    height:43px;
+    width:37px;
+}
+
+.adhocsubProcess:hover {
+    background: url(subtask_adhoc2.png) top center no-repeat;
+}
+
+.eventsubProcess {
+    background: url(subtask_evento1.png) top center no-repeat;
+    position: relative;
+    float: left;
+    height:43px;
+    width:37px;
+}
+
+.eventsubProcess:hover {
+    background: url(subtask_evento2.png) top center no-repeat;
+}
+
+.transactionsubProcess {
+    background: url(subtask_transaccion1.png) top center no-repeat;
+    position: relative;
+    float: left;
+    height:43px;
+    width:37px;
+}
+
+.transactionsubProcess:hover {
+    background: url(subtask_transaccion2.png) top center no-repeat;
+}
+
+.callTask {
+    background: url(task_llamada1.png) top center no-repeat;
+    position: relative;
+    float: left;
+    height:43px;
+    width:37px;
+}
+
+.callTask:hover {
+    background: url(task_llamada2.png) top center no-repeat;
+}
+
+.callmanualTask {
+    background: url(task_call_manual1.png) top center no-repeat;
+    position: relative;
+    float: left;
+    height:43px;
+    width:37px;
+}
+
+.callmanualTask:hover {
+    background: url(task_call_manual2.png) top center no-repeat;
+}
+
+.callruleTask {
+    background: url(task_call_rule1.png) top center no-repeat;
+    position: relative;
+    float: left;
+    height:43px;
+    width:37px;
+}
+
+.callruleTask:hover {
+    background: url(task_call_rule2.png) top center no-repeat;
+}
+
+.callscriptTask {
+    background: url(task_call_script1.png) top center no-repeat;
+    position: relative;
+    float: left;
+    height:43px;
+    width:37px;
+}
+
+.callscriptTask:hover {
+    background: url(task_call_script2.png) top center no-repeat;
+}
+
+.calluserTask {
+    background: url(task_call_usr1.png) top center no-repeat;
+    position: relative;
+    float: left;
+    height:43px;
+    width:37px;
+}
+
+.calluserTask:hover {
+    background: url(task_call_usr2.png) top center no-repeat;
+}
+
+.callsubProcess {
+    background: url(subtask_llamada1.png) top center no-repeat;
+    position: relative;
+    float: left;
+    height:43px;
+    width:37px;
+}
+
+.callsubProcess:hover {
+    background: url(subtask_llamada2.png) top center no-repeat;
+}
+
+.exclusiveDataGateway {
+    background: url(gate_datos1.png) top center no-repeat;
+    position: relative;
+    float: left;
+    height:43px;
+    width:37px;
+}
+
+.exclusiveDataGateway:hover {
+    background: url(gate_datos2.png) top center no-repeat;
+}
+
+.inclusiveDataGateway {
+    background: url(gate_inclusiva_1.png) top center no-repeat;
+    position: relative;
+    float: left;
+    height:43px;
+    width:37px;
+}
+
+.inclusiveDataGateway:hover {
+    background: url(gate_inclusiva_2.png) top center no-repeat;
+}
+
+.exclusiveStartEventGateway {
+    background: url(gate_eventos_str_1.png) top center no-repeat;
+    position: relative;
+    float: left;
+    height:43px;
+    width:37px;
+}
+
+.exclusiveStartEventGateway:hover {
+    background: url(gate_eventos_str_2.png) top center no-repeat;
+}
+
+.parallelGateway {
+    background: url(gate_paralela_n_1.png) top center no-repeat;
+    position: relative;
+    float: left;
+    height:43px;
+    width:37px;
+}
+
+.parallelGateway:hover {
+    background: url(gate_paralela_n_2.png) top center no-repeat;
+}
+
+.exclusiveEventGateway {
+    background: url(gate_eventos_int_1.png) top center no-repeat;
+    position: relative;
+    float: left;
+    height:43px;
+    width:37px;
+}
+
+.exclusiveEventGateway:hover {
+    background: url(gate_eventos_int_2.png) top center no-repeat;
+}
+
+.parallelStartGateway {
+    background: url(gate_paralela_b_1.png) top center no-repeat;
+    position: relative;
+    float: left;
+    height:43px;
+    width:37px;
+}
+
+.parallelStartGateway:hover {
+    background: url(gate_paralela_b_2.png) top center no-repeat;
+}
+
+.complexGateway {
+    background: url(gate_compleja_1.png) top center no-repeat;
+    position: relative;
+    float: left;
+    height:43px;
+    width:37px;
+}
+
+.complexGateway:hover {
+    background: url(gate_compleja_2.png) top center no-repeat;
+}
+
+.sequenceFlow {
+    background: url(flow_normal1.png) top center no-repeat;
+    position: relative;
+    float: left;
+    height:43px;
+    width:37px;
+}
+
+.sequenceFlow:hover {
+    background: url(flow_normal2.png) top center no-repeat;
+}
+
+.conditionalFlow {
+    background: url(flow_condicion1.png) top center no-repeat;
+    position: relative;
+    float: left;
+    height:43px;
+    width:37px;
+}
+
+.conditionalFlow:hover {
+    background: url(flow_condicion2.png) top center no-repeat;
+}
+
+.defaultFlow {
+    background: url(flow_defecto1.png) top center no-repeat;
+    position: relative;
+    float: left;
+    height:43px;
+    width:37px;
+}
+
+.defaultFlow:hover {
+    background: url(flow_defecto2.png) top center no-repeat;
+}
+
+.messageFlow {
+    background: url(flow_msj1.png) top center no-repeat;
+    position: relative;
+    float: left;
+    height:43px;
+    width:37px;
+}
+
+.messageFlow:hover {
+    background: url(flow_msj2.png) top center no-repeat;
+}
+
+.associationFlow {
+    background: url(doc_dir_asocia1.png) top center no-repeat;
+    position: relative;
+    float: left;
+    height:43px;
+    width:37px;
+}
+
+.associationFlow:hover {
+    background: url(doc_dir_asocia2.png) top center no-repeat;
+}
+
+.directionalassociationFlow {
+    background: url(doc_asocia1.png) top center no-repeat;
+    position: relative;
+    float: left;
+    height:43px;
+    width:37px;
+}
+
+.directionalassociationFlow:hover {
+    background: url(doc_asocia2.png) top center no-repeat;
+}
+
+.annotation {
+    background: url(doc_anota1.png) top center no-repeat;
+    position: relative;
+    float: left;
+    height:43px;
+    width:37px;
+}
+
+.annotation:hover {
+    background: url(doc_anota2.png) top center no-repeat;
+}
+
+.group {
+    background: url(doc_grupo1.png) top center no-repeat;
+    position: relative;
+    float: left;
+    height:43px;
+    width:37px;
+}
+
+.group:hover {
+    background: url(doc_grupo2.png) top center no-repeat;
+}
+
+.dataObject {
+    background: url(doc_normal1.png) top center no-repeat;
+    position: relative;
+    float: left;
+    height:43px;
+    width:37px;
+}
+
+.dataObject:hover {
+    background: url(doc_normal2.png) top center no-repeat;
+}
+
+.dataInput {
+    background: url(doc_entrada1.png) top center no-repeat;
+    position: relative;
+    float: left;
+    height:43px;
+    width:37px;
+}
+
+.dataInput:hover {
+    background: url(doc_entrada2.png) top center no-repeat;
+}
+
+.dataOutput {
+    background: url(doc_salida1.png) top center no-repeat;
+    position: relative;
+    float: left;
+    height:43px;
+    width:37px;
+}
+
+.dataOutput:hover {
+    background: url(doc_salida2.png) top center no-repeat;
+}
+
+.dataStore {
+    background: url(doc_base1.png) top center no-repeat;
+    position: relative;
+    float: left;
+    height:43px;
+    width:37px;
+}
+
+.dataStore:hover {
+    background: url(doc_base2.png) top center no-repeat;
+}
+
+.pool {
+    background: url(pool_pool1.png) top center no-repeat;
+    position: relative;
+    float: left;
+    height:43px;
+    width:37px;
+}
+
+.pool:hover {
+    background: url(pool_pool2.png) top center no-repeat;
+}
+
+.lane {
+    background: url(pool_lane1.png) top center no-repeat;
+    position: relative;
+    float: left;
+    height:43px;
+    width:37px;
+}
+
+.lane:hover {
+    background: url(pool_lane2.png) top center no-repeat;
+}
+
+.toolbarHeader {
+    background: url(barra_top.png) top center no-repeat;
+    position: relative;
+    float: left;
+    height:8px;
+    width:49px;
+}
+
+.subbarStart {
+    background: url(submenu_inicio.png) top center no-repeat;
+    position: relative;
+    float: left;
+    height:43px;
+    width:7px;
+}
+
+.subbarEnd {
+    background: url(submenu_fin.png) top center no-repeat;
+    position: relative;
+    float: left;
+    height:43px;
+    width:7px;
+}
+
+.subbar {
+    overflow: hidden;
+    width:800px;
+}
+
+.subbarHidden {
+    display: none;
+}
