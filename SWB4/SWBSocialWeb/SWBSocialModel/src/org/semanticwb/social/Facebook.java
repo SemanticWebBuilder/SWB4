@@ -820,7 +820,7 @@ System.out.println("Facebook----paso 1");
             out.println("  mywin = window.open("+url+",'_blank','width=840,height=680',true);");
             out.println("  mywin.focus();");
             out.println(" }");
-            out.println(" if(confirm('autenticar la cuenta en facebook?')) {");
+            out.println(" if(confirm('¿Autenticar la cuenta en Facebook?')) {");
             out.println("  ioauth();");
             out.println(" }");
             out.println("</script>");

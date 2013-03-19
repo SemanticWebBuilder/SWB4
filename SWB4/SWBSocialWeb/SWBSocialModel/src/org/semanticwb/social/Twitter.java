@@ -457,7 +457,7 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
                 out.println("  mywin = window.open('"+requestToken.getAuthorizationURL()+"','_blank','width=840,height=680',true);");
                 out.println("  mywin.focus();");
                 out.println(" }");
-                out.println(" if(confirm('autenticar la cuenta en twitter?')) {");
+                out.println(" if(confirm('¿Autenticar la cuenta en Twitter?')) {");
                 out.println("  ioauth();");
                 out.println(" }");
                 out.println("</script>");
