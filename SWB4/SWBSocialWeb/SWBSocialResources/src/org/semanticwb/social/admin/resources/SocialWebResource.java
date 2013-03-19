@@ -14,7 +14,6 @@ import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.portal.api.GenericAdmResource;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
-import org.semanticwb.portal.api.SWBResourceURL;
 import org.semanticwb.social.SocialNetwork;
 import org.semanticwb.social.SocialSite;
 
@@ -47,13 +46,10 @@ public class SocialWebResource extends GenericAdmResource
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
-        System.out.println("\n\nEntrando al doview()");
-        System.out.println("THIS:" + this.toString());
         PrintWriter out = response.getWriter();
         User user = paramRequest.getUser();
         SocialNetwork socialNetwork;
-        String objUri = request.getParameter("suri"); //uri of socialNetwork
-        System.out.println("SURI:" + objUri);        
+        String objUri = request.getParameter("suri"); //uri of socialNetwork        
         
         try {
             socialNetwork = (SocialNetwork)SemanticObject.getSemanticObject(objUri).getGenericInstance();
@@ -70,8 +66,6 @@ public class SocialWebResource extends GenericAdmResource
                 System.out.println("EMPTY SOCIAL NET PARAMS");
                 return;
             }
-            System.out.println("Status OK. SocialNetwork=" + socialNetwork.toString());
-            System.out.println("appKey:" + socialNetwork.getAppKey() + " secretKey:" + socialNetwork.getSecretKey());
         }catch(Exception ex) {
             socialNetwork = null;
             System.out.println("No valid value for current social Network");
@@ -81,14 +75,58 @@ public class SocialWebResource extends GenericAdmResource
         if(user.isSigned()){
             if(socialNetwork.isSn_authenticated())
                {
-                out.println("<h3>La cuenta está autenticada correctamente</h3>");
+                out.println("<div class=\"swbform\">");
+                out.println("<table width=\"100%\" border=\"0px\">");            
+                out.println("   <tr>");
+                out.println("       <td style=\"text-align: center;\"><h3>La cuenta está autenticada correctamente</h3></td>");
+                out.println("   </tr>");
+                out.println("</table>");
+                out.println("</div>");                
             }else if(!socialNetwork.isSn_authenticated()){
-                out.println("<h3>La cuenta aún no está autenticada!</h3>");
-                out.println("<form type=\"dijit.form.Form\" id=\"nc\" action=\"" +  paramRequest.getRenderUrl().setMode(OAUTH_MODE) + "\" method=\"post\" onsubmit=\"submitForm('nc'); return false;\">");
-                out.println("   <input type=\"hidden\"  name=\"suri\" value=\"" + objUri +"\">");
-                out.println("   <input type=\"hidden\"  name=\"wsid\" value=\"" + socialNetwork.getSemanticObject().getModel().getName()+"\">");
-                out.println("   <input type=\"submit\" value=\"" + paramRequest.getLocaleString("lblSend") + "\"/>");
-                out.println("</form>");
+                out.println("<div class=\"swbform\">");
+                out.println("<table width=\"100%\" border=\"0px\">");            
+                out.println("   <tr>");
+                out.println("       <td style=\"text-align: center;\"><h3>La cuenta aún no está autenticada!</h3></td>");
+                out.println("   </tr>");
+                out.println("   <tr>");
+                out.println("       <td style=\"text-align: center;\">");
+                out.println("   <form type=\"dijit.form.Form\" id=\"nc\" action=\"" +  paramRequest.getRenderUrl().setMode(OAUTH_MODE) + "\" method=\"post\" onsubmit=\"submitForm('nc'); return false;\">");
+                out.println("       <input type=\"hidden\"  name=\"suri\" value=\"" + objUri +"\">");
+                out.println("       <input type=\"hidden\"  name=\"wsid\" value=\"" + socialNetwork.getSemanticObject().getModel().getName()+"\">");
+                out.println("       <button dojoType=\"dijit.form.Button\" type=\"submit\">" + paramRequest.getLocaleString("lblAuthentic") + "</button>");
+                out.println("   </form>");
+                out.println("       </td>");
+                out.println("   </tr>");
+                out.println("</table>");
+                out.println("</div>");
+                
+                /*
+                out.println("<div class=\"swbform\">");
+            //out.println("<form type=\"dijit.form.Form\" id=\"del\" action=\"" +  paramRequest.getActionUrl().setAction(SWBResourceURL.Action_REMOVE).setParameter("suri", objUri) + "\" method=\"post\" onsubmit=\"submitForm('del'); return false;\">");            
+            out.println("<form type=\"dijit.form.Form\" id=\"del\" action=\"" +  paramRequest.getActionUrl().setAction(SWBResourceURL.Action_REMOVE).setParameter("suri", objUri) + "\" method=\"post\" onsubmit=\"if(confirm('Los mensajes serán eliminados.')){submitForm('del'); return false;}else{return false;}\">");            
+            out.println("<table width=\"100%\" border=\"0px\">");            
+            out.println("   <tr>");
+            out.println("       <td style=\"text-align: center;\">El Stream <b>" + stream.getDisplayTitle(paramRequest.getUser().getLanguage())  + "</b> actualmente contiene <b>" + noOfMessages +  "</b> mensajes</td>");        
+            out.println("   </tr>");
+            if(noOfMessages >0L){
+                out.println("   <tr>");
+                out.println("       <td style=\"text-align: center;\">¿Eliminar todos los mensajes?</td>");
+                out.println("   </tr>");
+                out.println("   <tr>");
+                out.println("       <td style=\"text-align: center;\"><button dojoType=\"dijit.form.Button\" type=\"submit\">Eliminar</button></td>");
+                //out.println("       <td style=\"text-align: center;\"><button onclick=\"delete()\">Eliminar</button></td>");
+                //out.println("<button name=\"Delete\" value=\"Delete\" onClick=\"if(confirm('Deseas eliminar los mensajes?')){alert('Enviando'); document.getElementById('del').submit();}else{alert('NO enviando'); return false;}\">Eliminar</button>");
+                out.println("   </tr>");
+            }
+            out.println("</table>");
+            out.println("</form>");
+            out.println("</div>");
+            if(request.getParameter("deleted")!= null && request.getParameter("deleted").equals("ok")){
+                out.println("<script type=\"text/javascript\">");
+                    log.debug("showStatus");
+                    out.println("   showStatus('Mensajes eliminados');");            
+                out.println("</script>");
+            }*/
             }
         }else{
             out.println("<h3>Usuario no autorizado. Consulte a su administrador</h3>");
@@ -119,10 +157,7 @@ public class SocialWebResource extends GenericAdmResource
             SocialNetwork socialNetwork = (SocialNetwork)session.getAttribute("sw");
             session.removeAttribute("sw");
             objUri = socialNetwork.getURI();
-            System.out.println("Autenticada ya?:" + socialNetwork.isSn_authenticated());
-            System.out.println("ID:" + socialNetwork.getId());
-            System.out.println("title:" + socialNetwork.getTitle());
-            System.out.println("desc:" + socialNetwork.getDescription());
+            System.out.println("Autenticada ya?:" + socialNetwork.isSn_authenticated());        
             if(!socialNetwork.isSn_authenticated()) {
                 System.out.println("Vuelve a llamar a authenticate con los datos!");
                 socialNetwork.authenticate(request, response, paramRequest);
