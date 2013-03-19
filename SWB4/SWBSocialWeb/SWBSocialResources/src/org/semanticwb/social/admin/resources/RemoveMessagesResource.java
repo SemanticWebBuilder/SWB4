@@ -41,7 +41,8 @@ public class RemoveMessagesResource extends GenericResource {
             Iterator<MessageIn> itMess = MessageIn.ClassMgr.listMessageInByPostInStream(stream, wsite);
             long noOfMessages = SWBUtils.Collections.sizeOf(itMess);
             out.println("<div class=\"swbform\">");
-            out.println("<form type=\"dijit.form.Form\" id=\"del\" action=\"" +  paramRequest.getActionUrl().setAction(SWBResourceURL.Action_REMOVE).setParameter("suri", objUri) + "\" method=\"post\" onsubmit=\"submitForm('del'); return false;\">");            
+            //out.println("<form type=\"dijit.form.Form\" id=\"del\" action=\"" +  paramRequest.getActionUrl().setAction(SWBResourceURL.Action_REMOVE).setParameter("suri", objUri) + "\" method=\"post\" onsubmit=\"submitForm('del'); return false;\">");            
+            out.println("<form type=\"dijit.form.Form\" id=\"del\" action=\"" +  paramRequest.getActionUrl().setAction(SWBResourceURL.Action_REMOVE).setParameter("suri", objUri) + "\" method=\"post\" onsubmit=\"if(confirm('Los mensajes serán eliminados.')){submitForm('del'); return false;}else{return false;}\">");            
             out.println("<table width=\"100%\" border=\"0px\">");            
             out.println("   <tr>");
             out.println("       <td style=\"text-align: center;\">El Stream <b>" + stream.getDisplayTitle(paramRequest.getUser().getLanguage())  + "</b> actualmente contiene <b>" + noOfMessages +  "</b> mensajes</td>");        
@@ -52,9 +53,12 @@ public class RemoveMessagesResource extends GenericResource {
                 out.println("   </tr>");
                 out.println("   <tr>");
                 out.println("       <td style=\"text-align: center;\"><button dojoType=\"dijit.form.Button\" type=\"submit\">Eliminar</button></td>");
+                //out.println("       <td style=\"text-align: center;\"><button onclick=\"delete()\">Eliminar</button></td>");
+                //out.println("<button name=\"Delete\" value=\"Delete\" onClick=\"if(confirm('Deseas eliminar los mensajes?')){alert('Enviando'); document.getElementById('del').submit();}else{alert('NO enviando'); return false;}\">Eliminar</button>");
                 out.println("   </tr>");
             }
             out.println("</table>");
+            out.println("</form>");
             out.println("</div>");
             if(request.getParameter("deleted")!= null && request.getParameter("deleted").equals("ok")){
                 out.println("<script type=\"text/javascript\">");
@@ -87,20 +91,16 @@ public class RemoveMessagesResource extends GenericResource {
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {        
         String mode = response.getAction();
         String objUri = request.getParameter("suri");
-        if(mode.equals(SWBResourceURL.Action_REMOVE)){            
+        if(mode.equals(SWBResourceURL.Action_REMOVE)){
             if(objUri!= null){
                 try{
                     Stream stream = (Stream)SemanticObject.getSemanticObject(objUri).getGenericInstance();
                     String wsiteId = stream.getSemanticObject().getModel().getName();
                     WebSite wsite=WebSite.ClassMgr.getWebSite(wsiteId);
                     Iterator<MessageIn> itMess = MessageIn.ClassMgr.listMessageInByPostInStream(stream, wsite);
-                    int i =0 ;
+                    
                     while(itMess.hasNext()){
                         itMess.next().remove();
-                        if(i%100 == 0){
-                            System.out.println("\n\n Eliminados: " + i);
-                        }
-                        i++;
                     }
                 }catch(Exception e){
                     log.error(e.getMessage());
