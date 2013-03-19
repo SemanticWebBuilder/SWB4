@@ -98,35 +98,7 @@ public class SocialWebResource extends GenericAdmResource
                 out.println("       </td>");
                 out.println("   </tr>");
                 out.println("</table>");
-                out.println("</div>");
-                
-                /*
-                out.println("<div class=\"swbform\">");
-            //out.println("<form type=\"dijit.form.Form\" id=\"del\" action=\"" +  paramRequest.getActionUrl().setAction(SWBResourceURL.Action_REMOVE).setParameter("suri", objUri) + "\" method=\"post\" onsubmit=\"submitForm('del'); return false;\">");            
-            out.println("<form type=\"dijit.form.Form\" id=\"del\" action=\"" +  paramRequest.getActionUrl().setAction(SWBResourceURL.Action_REMOVE).setParameter("suri", objUri) + "\" method=\"post\" onsubmit=\"if(confirm('Los mensajes serán eliminados.')){submitForm('del'); return false;}else{return false;}\">");            
-            out.println("<table width=\"100%\" border=\"0px\">");            
-            out.println("   <tr>");
-            out.println("       <td style=\"text-align: center;\">El Stream <b>" + stream.getDisplayTitle(paramRequest.getUser().getLanguage())  + "</b> actualmente contiene <b>" + noOfMessages +  "</b> mensajes</td>");        
-            out.println("   </tr>");
-            if(noOfMessages >0L){
-                out.println("   <tr>");
-                out.println("       <td style=\"text-align: center;\">¿Eliminar todos los mensajes?</td>");
-                out.println("   </tr>");
-                out.println("   <tr>");
-                out.println("       <td style=\"text-align: center;\"><button dojoType=\"dijit.form.Button\" type=\"submit\">Eliminar</button></td>");
-                //out.println("       <td style=\"text-align: center;\"><button onclick=\"delete()\">Eliminar</button></td>");
-                //out.println("<button name=\"Delete\" value=\"Delete\" onClick=\"if(confirm('Deseas eliminar los mensajes?')){alert('Enviando'); document.getElementById('del').submit();}else{alert('NO enviando'); return false;}\">Eliminar</button>");
-                out.println("   </tr>");
-            }
-            out.println("</table>");
-            out.println("</form>");
-            out.println("</div>");
-            if(request.getParameter("deleted")!= null && request.getParameter("deleted").equals("ok")){
-                out.println("<script type=\"text/javascript\">");
-                    log.debug("showStatus");
-                    out.println("   showStatus('Mensajes eliminados');");            
-                out.println("</script>");
-            }*/
+                out.println("</div>");                              
             }
         }else{
             out.println("<h3>Usuario no autorizado. Consulte a su administrador</h3>");
@@ -141,7 +113,6 @@ public class SocialWebResource extends GenericAdmResource
         HttpSession session = request.getSession(true);
         if(session.getAttribute("sw")==null)
         {
-            System.out.println("doAuthenticate sw=null");
             /*SemanticClass sclass = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(sclassURI);
             long id = wsite.getSemanticObject().getModel().getCounter(sclass);
             SocialNetwork socialNetwork = (SocialNetwork)wsite.getSemanticObject().getModel().createGenericObject(wsite.getSemanticObject().getModel().getObjectUri(Long.toString(id), sclass), sclass);
@@ -152,44 +123,14 @@ public class SocialWebResource extends GenericAdmResource
             socialNetwork.authenticate(request, response, paramRequest);
         }
         else
-        {
-            System.out.println("doAuthenticate sw=ALGO");
+        {            
             SocialNetwork socialNetwork = (SocialNetwork)session.getAttribute("sw");
             session.removeAttribute("sw");
             objUri = socialNetwork.getURI();
-            System.out.println("Autenticada ya?:" + socialNetwork.isSn_authenticated());        
             if(!socialNetwork.isSn_authenticated()) {
-                System.out.println("Vuelve a llamar a authenticate con los datos!");
                 socialNetwork.authenticate(request, response, paramRequest);
-            }
-            
-            /*try {
-                Thread.sleep(3000);
-            } catch (InterruptedException e){}
-            System.out.println("Salio de Twitter y esta en doAuthenticate!");
-            response.sendRedirect(paramRequest.getRenderUrl().setMode(SWBResourceURL.Mode_VIEW).toString());
-            * */
-        }
-        /*
-        RequestDispatcher dis = null;
-        dis = request.getRequestDispatcher(basePath+"/new.jsp");
-        System.out.println("Anda tratando de redireccionar a algo que no existe:" + basePath+"/new.jsp");
-        try
-        {
-            request.setAttribute(ATTR_THIS, this);
-            request.setAttribute(ATTR_PARAMREQUEST, paramRequest);
-            request.setAttribute("objUri", objUri);
-            dis.include(request, response);
-        }catch (Exception e) {
-            log.error(e);
-            e.printStackTrace(System.out);
-        }*/
-        //System.out.println("SURI en doAuth:" + request.getParameter("suri"));
-        //paramRequest.getRenderUrl().setMode(SWBResourceURL.Mode_VIEW).setParameter("suri", "http://www.infotec.swb#social_Twitter:14");
-        //System.out.println("Debe de ir a:" + paramRequest.getRenderUrl().setMode(SWBResourceURL.Mode_VIEW));
-        //System.out.println("Va a hacer el redirect en el Authenticate");
-        //response.set
-        //response.sendRedirect(paramRequest.getRenderUrl().setMode(SWBResourceURL.Mode_VIEW) +"?suri=" + request.getParameter("suri"));
+            }                        
+        }        
     }
     
     @Override
