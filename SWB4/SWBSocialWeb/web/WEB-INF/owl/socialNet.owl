@@ -46,10 +46,7 @@
     </rdfs:subClassOf>
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
     <swb:displayObject>
-      <swbxf:DisplayObject rdf:ID="do_SocialNetwork">
-        <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >swbIconTemplates</swb:iconClass>
-      </swbxf:DisplayObject>
+      <swbxf:DisplayObject rdf:ID="do_SocialNetwork"/>
     </swb:displayObject>
     <rdfs:label xml:lang="es">Red Social</rdfs:label>
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Activeable"/>
@@ -207,7 +204,7 @@
                 <swb:displayObject>
                   <swbxf:DisplayObject rdf:ID="do_Twitter">
                     <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-                    >swbIconTemplates</swb:iconClass>
+                    >swbIconWebPage</swb:iconClass>
                   </swbxf:DisplayObject>
                 </swb:displayObject>
               </swb:Class>
@@ -230,7 +227,7 @@
                 <swb:displayObject>
                   <swbxf:DisplayObject rdf:ID="do_Facebook">
                     <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-                    >swbIconTemplates</swb:iconClass>
+                    >swbIconWebPage</swb:iconClass>
                   </swbxf:DisplayObject>
                 </swb:displayObject>
                 <rdfs:subClassOf rdf:resource="#Messageable"/>
