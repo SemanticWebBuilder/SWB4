@@ -5,6 +5,156 @@
     Description:
         Purpose of the stylesheet follows.
 */
+
+/****************** SVG ********************************************************/
+
+.resizeBox {
+    stroke:#008000;
+    fill:url(#linearGradientStartEvent);
+    fill-opacity:1;
+    stroke-width:1.5;  
+}
+
+.task {
+    stroke:#2c5aa0;
+    fill:url(#linearGradientIntermediateEvent);
+    fill-opacity:1;
+    stroke-width:2;
+}
+
+.task_o {
+    stroke:#2cff20;
+    fill:url(#linearGradientIntermediateEvent);
+    fill-opacity:1;
+    stroke-width:2;
+}                    
+
+.startEvent
+{
+    stroke:#008000;
+    fill:url(#linearGradientStartEvent);
+    fill-opacity:1;
+    stroke-width:1.5;                        
+}
+
+.startEvent_o
+{
+    stroke:#2cff20;
+    fill:url(#linearGradientStartEvent);
+    fill-opacity:1;
+    stroke-width:1.5;                        
+}                    
+
+.intermediateEvent
+{
+    stroke:#2c5aa0;
+    fill:url(#linearGradientIntermediateEvent);
+    fill-opacity:1;
+    stroke-width:1.5;
+}
+
+.intermediateEvent_o
+{
+    stroke:#2cff20;
+    fill:url(#linearGradientIntermediateEvent);
+    fill-opacity:1;
+    stroke-width:1.5;
+}                    
+
+.intermediateEvent1
+{
+    stroke:#2c5aa0;
+    fill:none;
+    stroke-width:1;
+} 
+
+.endEvent
+{
+    stroke:#550000;
+    fill:url(#linearGradientEndEvent);
+    stroke-width:2.5;
+}
+
+.endEvent_o
+{
+    stroke:#2cff20;
+    fill:url(#linearGradientEndEvent);
+    stroke-width:2.5;
+}    
+
+.gateway
+{
+    stroke:#d4aa00;
+    fill:url(#linearGradientGateway);
+    fill-opacity:1;
+    stroke-width:2;
+    stroke-opacity:1;
+    stroke-dasharray:none;
+}
+
+.gateway_o
+{
+    stroke:#2cff20;
+    fill:url(#linearGradientGateway);
+    fill-opacity:1;
+    stroke-width:2;
+    stroke-opacity:1;
+    stroke-dasharray:none;
+}                    
+
+.selectBox
+{
+    fill:#f0f0f0;
+    fill-opacity:.5;
+    stroke-width:2;
+    stroke-opacity:1;
+    stroke:#2c5aa0                        
+}
+
+.taskMarker
+{
+    stroke:#2c5aa0;
+}
+.pathMarker{
+    fill:none;
+    stroke-width:1;
+}
+.startMarker{
+    stroke:#008000;
+    fill:none;
+    stroke-width:2.5;                        
+}
+.startMarker{
+    stroke:#008000;
+    fill:none;
+    stroke-width:2.5;                        
+}
+.startFilledMarker{
+    fill:#008000;
+    stroke:none;
+    stroke-width:1;
+}
+.intermediateMarker{
+    stroke:#2c5aa0;
+    fill:none;
+    stroke-width:2.5;
+}      
+.intermediateFilledMarker{
+    fill:#2c5aa0;
+    stroke:#2c5aa0;
+    stroke-width:1;
+}    
+.endFilledMarked
+{
+    fill:#550000;   
+    stroke:#550000;
+    stroke-width:1;
+}
+
+
+
+/*****************************  TOOLBAR **********************************************/
+
 .toolbarItem {
     width: 49px;
     vertical-align: bottom;
@@ -1072,7 +1222,7 @@
 
 .toolbarHeader {
     background: url(barra_top.png) top center no-repeat;
-    position: relative;
+    /*position: relative;*/
     float: left;
     height:8px;
     width:49px;
@@ -1097,8 +1247,10 @@
 .subbar {
     overflow: hidden;
     width:800px;
+    position: absolute;
 }
 
 .subbarHidden {
     display: none;
+    position: absolute;
 }

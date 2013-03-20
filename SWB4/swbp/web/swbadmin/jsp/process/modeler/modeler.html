@@ -11,15 +11,16 @@
                     for (property in obj) {
                         if(content && content==true)
                         {
-                            ret+=property+"="+obj[property]+", ";
+                            ret+="-->"+property+"="+obj[property]+"\r\n";
                         }else
                         {
-                            ret+=property+", ";
+                            ret+="-->"+property+"\r\n";
                         }
                     }
                     console.log(ret);
                     //alert(ret);
-                }            
+                }
+           
 
                 var Modeler =
                     {
