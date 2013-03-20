@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<admresource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<xslfile>admresource.xslt</xslfile>
+	<form name="frmAdminSearch" action="true" method="post">
+	    <admdbconnmgr defconn="true"/>
+            <fieldset >
+                <statictext name="used">Configuración Funcionamiento del Recurso</statictext>
+                <input type="radio" id="usedas0" name="usedas" label="Utilizar para Búsqueda de Recurso o Contenido:" value="true" />
+                <input type="radio" id="usedas1" name="usedas" label="Utilizar para Búsqueda de Tema :" value="false" checked="true" />
+            </fieldset>
+            <fieldset>
+                <input type="submit" name="btnSave" id="btnSave" value="Guardar" onclick="return jsValida(this.form)" />
+                <input type="reset"  name="btnReset" id="btnReset" value="Restablecer" />
+            </fieldset>
+	</form>
+</admresource>
