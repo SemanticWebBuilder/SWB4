@@ -16,7 +16,6 @@ import org.semanticwb.SWBPlatform;
 import org.semanticwb.model.Resource;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.User;
-import org.semanticwb.model.WebPage;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticObject;
@@ -166,28 +165,20 @@ public class SearchSocialTopic extends GenericAdmResource {
                         }
                     }
                 } else {
-
-                    System.out.println("Busqueda x tema ...,searctxt:"+searctxt);
                     SocialTopic socialtopic = null;
                     socialtopic = SocialTopic.ClassMgr.getSocialTopic(searctxt, ws); 
-                    System.out.println("Busqueda x tema-1:"+socialtopic);
                     if (searchtype.equals("id") && socialtopic != null) {
-                        System.out.println("Busqueda x tema-2-Id:"+socialtopic);
                         hmresult.put(socialtopic, socialtopic);
                     } else {
-                        System.out.println("Busqueda x tema-3-Titulo:"+socialtopic);
                         Iterator<SocialTopic> itwp = SocialTopic.ClassMgr.listSocialTopics(ws);
                         while (itwp.hasNext()) {
                             socialtopic = itwp.next(); 
-                            System.out.println("wp:"+socialtopic.getDisplayTitle(usr.getLanguage()));
                             if (!searchtype.equals("id") && socialtopic.getDisplayTitle(usr.getLanguage())!=null&&socialtopic.getDisplayTitle(usr.getLanguage()).indexOf(searctxt) > -1) {
-                                System.out.println("Busqueda x tema-3.1-Titulo:"+socialtopic.getTitle());
                                 hmresult.put(socialtopic, socialtopic);
                             }
                         }
                     }
                 }
-                System.out.println("Busqueda x tema-4:"+hmresult.size());
                 if (hmresult.size() > 0) {
                     out.println("<table width=\"100%\">");
                     out.println("<tr>");
