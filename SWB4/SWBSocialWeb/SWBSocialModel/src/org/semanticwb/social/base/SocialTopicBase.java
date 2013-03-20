@@ -4,7 +4,7 @@ package org.semanticwb.social.base;
    /**
    * Catalogo de temas de un modelo (Marca) 
    */
-public abstract class SocialTopicBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable
+public abstract class SocialTopicBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Activeable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable
 {
    /**
    * Catalogo de temas de un modelo (Marca)
@@ -49,12 +49,6 @@ public abstract class SocialTopicBase extends org.semanticwb.model.SWBClass impl
         {
             java.util.Iterator it=sclass.listInstances();
             return new org.semanticwb.model.GenericIterator<org.semanticwb.social.SocialTopic>(it, true);
-        }
-
-        public static org.semanticwb.social.SocialTopic createSocialTopic(org.semanticwb.model.SWBModel model)
-        {
-            long id=model.getSemanticObject().getModel().getCounter(sclass);
-            return org.semanticwb.social.SocialTopic.ClassMgr.createSocialTopic(String.valueOf(id), model);
         }
        /**
        * Gets a org.semanticwb.social.SocialTopic
@@ -433,6 +427,24 @@ public abstract class SocialTopicBase extends org.semanticwb.model.SWBClass impl
     {
         getSemanticObject().setProperty(swb_description, description, lang);
     }
+
+/**
+* Gets the Active property
+* @return boolean with the Active
+*/
+    public boolean isActive()
+    {
+        return getSemanticObject().getBooleanProperty(swb_active);
+    }
+
+/**
+* Sets the Active property
+* @param value long with the Active
+*/
+    public void setActive(boolean value)
+    {
+        getSemanticObject().setBooleanProperty(swb_active, value);
+    }
    /**
    * Sets the value for the property PublishFlow
    * @param value PublishFlow to set
@@ -580,5 +592,14 @@ public abstract class SocialTopicBase extends org.semanticwb.model.SWBClass impl
              ret=(org.semanticwb.social.Post)obj.createGenericInstance();
          }
          return ret;
+    }
+
+   /**
+   * Gets the SocialSite
+   * @return a instance of org.semanticwb.social.SocialSite
+   */
+    public org.semanticwb.social.SocialSite getSocialSite()
+    {
+        return (org.semanticwb.social.SocialSite)getSemanticObject().getModel().getModelObject().createGenericInstance();
     }
 }

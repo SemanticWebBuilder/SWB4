@@ -4,8 +4,12 @@ package org.semanticwb.social.base;
    /**
    * Clase que hereda de swb:WebSite. Es un tipo de website Social. De esta manera se puede contar con todos los elementos en el arbol de navegación en la administración, y otros elementos utiles para Social Site. 
    */
-public abstract class SocialSiteBase extends org.semanticwb.model.WebSite implements org.semanticwb.model.Activeable,org.semanticwb.model.Indexable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Filterable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Trashable,org.semanticwb.model.Localeable,org.semanticwb.model.Traceable,org.semanticwb.model.Undeleteable,org.semanticwb.model.FilterableClass,org.semanticwb.model.OntologyDepable,org.semanticwb.model.Countryable
+public abstract class SocialSiteBase extends org.semanticwb.model.WebSite implements org.semanticwb.model.FilterableClass,org.semanticwb.model.Undeleteable,org.semanticwb.model.Activeable,org.semanticwb.model.Countryable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Localeable,org.semanticwb.model.Indexable,org.semanticwb.model.OntologyDepable,org.semanticwb.model.Traceable,org.semanticwb.model.Filterable,org.semanticwb.model.Trashable
 {
+   /**
+   * Catalogo de temas de un modelo (Marca)
+   */
+    public static final org.semanticwb.platform.SemanticClass social_SocialTopic=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#SocialTopic");
     public static final org.semanticwb.platform.SemanticClass social_PublishFlow=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#PublishFlow");
    /**
    * Clase que contendra los streams que configurados para cada usuario
@@ -367,6 +371,30 @@ public abstract class SocialSiteBase extends org.semanticwb.model.WebSite implem
     public SocialSiteBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
+    }
+
+    public org.semanticwb.social.SocialTopic getSocialTopic(String id)
+    {
+        return org.semanticwb.social.SocialTopic.ClassMgr.getSocialTopic(id, this);
+    }
+
+    public java.util.Iterator<org.semanticwb.social.SocialTopic> listSocialTopics()
+    {
+        return org.semanticwb.social.SocialTopic.ClassMgr.listSocialTopics(this);
+    }
+
+    public org.semanticwb.social.SocialTopic createSocialTopic(String id)
+    {
+        return org.semanticwb.social.SocialTopic.ClassMgr.createSocialTopic(id,this);
+    }
+
+    public void removeSocialTopic(String id)
+    {
+        org.semanticwb.social.SocialTopic.ClassMgr.removeSocialTopic(id, this);
+    }
+    public boolean hasSocialTopic(String id)
+    {
+        return org.semanticwb.social.SocialTopic.ClassMgr.hasSocialTopic(id, this);
     }
 
     public org.semanticwb.social.PublishFlow getPublishFlow(String id)
