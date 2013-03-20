@@ -12,76 +12,104 @@ and open the template in the editor.
     <body>
         <h1>SWB Process Modeler</h1>
         <script type="text/javascript">
-            function hideSubBars() {
-                document.getElementById("startEventsBar").setAttribute("class", "subbarHidden");
-                document.getElementById("interEventsBar").setAttribute("class", "subbarHidden");
-                document.getElementById("endEventsBar").setAttribute("class", "subbarHidden");
-                document.getElementById("tasksBar").setAttribute("class", "subbarHidden");
-                document.getElementById("subtasksBar").setAttribute("class", "subbarHidden");
-                document.getElementById("calltasksBar").setAttribute("class", "subbarHidden");
-                document.getElementById("gatewaysBar").setAttribute("class", "subbarHidden");
-                document.getElementById("connectionsBar").setAttribute("class", "subbarHidden");
-                document.getElementById("artifactsBar").setAttribute("class", "subbarHidden");
-                document.getElementById("dataobjectsBar").setAttribute("class", "subbarHidden");
-                document.getElementById("swimlanesBar").setAttribute("class", "subbarHidden");
-            }
             
-            function showSubBar(barId) {
-                hideSubBars();
-                document.getElementById(barId).setAttribute("class", "subbar");
+            var ToolBar =
+            {
+            
+                intervalOver:null,
+
+                hideSubBars: function() {
+                    document.getElementById("startEventsBar").setAttribute("class", "subbarHidden");
+                    document.getElementById("interEventsBar").setAttribute("class", "subbarHidden");
+                    document.getElementById("endEventsBar").setAttribute("class", "subbarHidden");
+                    document.getElementById("tasksBar").setAttribute("class", "subbarHidden");
+                    document.getElementById("subtasksBar").setAttribute("class", "subbarHidden");
+                    document.getElementById("calltasksBar").setAttribute("class", "subbarHidden");
+                    document.getElementById("gatewaysBar").setAttribute("class", "subbarHidden");
+                    document.getElementById("connectionsBar").setAttribute("class", "subbarHidden");
+                    document.getElementById("artifactsBar").setAttribute("class", "subbarHidden");
+                    document.getElementById("dataobjectsBar").setAttribute("class", "subbarHidden");
+                    document.getElementById("swimlanesBar").setAttribute("class", "subbarHidden");
+                },
+
+                showSubBar: function(barId,obj) {
+                    ToolBar.hideSubBars();
+                    var ele=document.getElementById(barId);
+                    ele.setAttribute("class", "subbar");
+
+                    if(obj)
+                    {
+                        //alert(obj.offsetTop);
+                        ele.style.top=obj.offsetTop+"px";
+                        ele.style.left=(obj.offsetLeft+47)+"px";
+                        //ele.offsetLeft=obj.offsetLeft;
+                        //alert(ele.offsetTop);
+                        //desc(obj,true);
+                    }
+                },
+                
+                outToolBar: function()
+                {
+                    ToolBar.intervalOver=setTimeout(ToolBar.hideSubBars,1000);
+                },
+                
+                overToolBar: function()
+                {
+                    clearTimeout(ToolBar.intervalOver);
+                }
+                
             }
         </script>
-        <div>
+        <div onmouseout="ToolBar.outToolBar()" onmouseover="ToolBar.overToolBar()">
             <div class="toolbarItem">
                 <span class="toolbarHeader"></span>
             </div>
             <div class="toolbarItem">
-                <span title="Eventos de inicio" class="startEventItem" onclick="showSubBar('startEventsBar')"></span>
+                <span title="Eventos de inicio" class="startEventItem" onclick="ToolBar.showSubBar('startEventsBar',this)"></span>
             </div>
             <div class="toolbarItem">
-                <span title="Eventos intermedios" class="intereventItem" onclick="showSubBar('interEventsBar')"></span>
+                <span title="Eventos intermedios" class="intereventItem" onclick="ToolBar.showSubBar('interEventsBar',this)"></span>
             </div>
             <div class="toolbarItem">
-                <span title="Eventos finales" class="endeventItem" onclick="showSubBar('endEventsBar')"></span>
-            </div>
-            <div class="toolbarItem">
-                <span class="toolbarSeparator"></span>
-            </div>
-            <div class="toolbarItem">
-                <span title="Tareas" class="taskItem" onclick="showSubBar('tasksBar')"></span>
-            </div>
-            <div class="toolbarItem">
-                <span title="Subprocesos" class="subtaskItem" onclick="showSubBar('subtasksBar')"></span>
-            </div>
-            <div class="toolbarItem">
-                <span title="Tareas llamadas" class="taskcallItem" onclick="showSubBar('calltasksBar')"></span>
-            </div>
-            <div class="toolbarItem">
-                <span title="Compuertas" class="gatewayItem" onclick="showSubBar('gatewaysBar')"></span>
+                <span title="Eventos finales" class="endeventItem" onclick="ToolBar.showSubBar('endEventsBar',this)"></span>
             </div>
             <div class="toolbarItem">
                 <span class="toolbarSeparator"></span>
             </div>
             <div class="toolbarItem">
-                <span title="Objetos de conexión" class="flowItem" onclick="showSubBar('connectionsBar')"></span>
+                <span title="Tareas" class="taskItem" onclick="ToolBar.showSubBar('tasksBar',this)"></span>
             </div>
             <div class="toolbarItem">
-                <span title="Artefactos" class="artifactItem" onclick="showSubBar('artifactsBar')"></span>
+                <span title="Subprocesos" class="subtaskItem" onclick="ToolBar.showSubBar('subtasksBar',this)"></span>
             </div>
             <div class="toolbarItem">
-                <span title="Objetos de datos" class="dataobjectItem" onclick="showSubBar('dataobjectsBar')"></span>
+                <span title="Tareas llamadas" class="taskcallItem" onclick="ToolBar.showSubBar('calltasksBar',this)"></span>
+            </div>
+            <div class="toolbarItem">
+                <span title="Compuertas" class="gatewayItem" onclick="ToolBar.showSubBar('gatewaysBar',this)"></span>
             </div>
             <div class="toolbarItem">
                 <span class="toolbarSeparator"></span>
             </div>
             <div class="toolbarItem">
-                <span title="Swimlanes" class="poolItem" onclick="showSubBar('swimlanesBar')"></span>
+                <span title="Objetos de conexión" class="flowItem" onclick="ToolBar.showSubBar('connectionsBar',this)"></span>
+            </div>
+            <div class="toolbarItem">
+                <span title="Artefactos" class="artifactItem" onclick="ToolBar.showSubBar('artifactsBar',this)"></span>
+            </div>
+            <div class="toolbarItem">
+                <span title="Objetos de datos" class="dataobjectItem" onclick="ToolBar.showSubBar('dataobjectsBar',this)"></span>
+            </div>
+            <div class="toolbarItem">
+                <span class="toolbarSeparator"></span>
+            </div>
+            <div class="toolbarItem">
+                <span title="Swimlanes" class="poolItem" onclick="ToolBar.showSubBar('swimlanesBar',this)"></span>
             </div>
             <div class="toolbarItem">
                 <span class="toolbarFooter"></span>
             </div>
-        </div>
-        <div>
+            
             <div id="startEventsBar" class="subbarHidden">
                 <span class="subbarStart"></span>
                 <span class="normalStartEvent" title="Inicio normal" onclick="alert('hola');"></span>
@@ -203,8 +231,7 @@ and open the template in the editor.
             </div>
         </div>
         <div style="border:1px solid black; margin-left:49px;">
-            <svg>
-            </svg>
+            <svg></svg>
         </div>
     </body>
 </html>
