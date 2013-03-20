@@ -5,7 +5,6 @@
 
 package org.semanticwb.social.listener;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
