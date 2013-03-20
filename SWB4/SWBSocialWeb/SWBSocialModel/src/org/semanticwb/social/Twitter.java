@@ -363,7 +363,7 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
     }
 
 
-    @Override
+    //@Override
     public void listenAlive(SWBModel model) {
         try {
             StatusListener listener = new SWBSocialStatusListener(model, this, null);
@@ -428,7 +428,7 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
         }
     }
 
-    @Override
+    //@Override
     public void stopListenAlive() {
         if(trial!=null)
         {
