@@ -21,6 +21,7 @@ import org.json.JSONObject;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.SWBModel;
 import org.semanticwb.model.User;
 import org.semanticwb.model.WebSite;
@@ -179,11 +180,11 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
         if(socialStreamSerch!=null && socialStreamSerch.getNextDatetoSearch()!= null){
             try{
                 lastTweetID = Long.parseLong(socialStreamSerch.getNextDatetoSearch());
-                System.out.println("RECOVERING NEXTDATETOSEARCH: " + socialStreamSerch.getNextDatetoSearch());
+                //System.out.println("RECOVERING NEXTDATETOSEARCH: " + socialStreamSerch.getNextDatetoSearch());
             }catch(NumberFormatException nfe){
                 lastTweetID = 0L;
                 log.error("Error in getLastTweetID():"  + nfe);
-                System.out.println("Invalid value found in NextDatetoSearch(). Set to 0");
+                //System.out.println("Invalid value found in NextDatetoSearch(). Set to 0");
             }
         }else{
             lastTweetID=0L;
@@ -200,14 +201,14 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
             if(socialStreamSerch!=null && socialStreamSerch.getNextDatetoSearch()!=null) storedValue = Long.parseLong(socialStreamSerch.getNextDatetoSearch());
             
             if(tweetID > storedValue){ //Only stores tweetID if it's greater than the current stored value
-                System.out.println("EL VALOR ALMACENADO ES:" +  tweetID.toString());
+                //System.out.println("EL VALOR ALMACENADO ES:" +  tweetID.toString());
                 socialStreamSerch.setNextDatetoSearch(tweetID.toString());
             }else{
-                System.out.println("NO ESTÁ GUARDANDO NADA PORQUE EL VALOR ALMACENADO YA ES IGUAL O MAYOR AL ACTUAL");
+                //System.out.println("NO ESTÁ GUARDANDO NADA PORQUE EL VALOR ALMACENADO YA ES IGUAL O MAYOR AL ACTUAL");
             }
         }catch(NumberFormatException nfe){
             log.error("Error in setLastTweetID():"  +nfe);
-            System.out.println("Problem Storing NextDatetoSearch");
+            //System.out.println("Problem Storing NextDatetoSearch");
         }
     }
     
@@ -239,8 +240,8 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
     public void listen(Stream stream) {
         
         WebSite wsite = WebSite.ClassMgr.getWebSite(stream.getSemanticObject().getModel().getName());
-        System.out.println("Red SocialID:"+this.getId()+", Red Title:"+this.getTitle()+", sitio:"+wsite.getId());
-        System.out.println("Creador:" + this.getCreator());
+        //System.out.println("Red SocialID:"+this.getId()+", Red Title:"+this.getTitle()+", sitio:"+wsite.getId());
+        //System.out.println("Creador:" + this.getCreator());
         twitterResults = new ArrayList<Status>();
         tweetsReceived = 0;
         ArrayList <ExternalPost> aListExternalPost=new ArrayList();
@@ -258,20 +259,20 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
             
             do{
                 try{
-                    System.out.println("QUERY: " + query);
+                    //System.out.println("QUERY: " + query);
                     twitter4j.QueryResult result = twitter.search(query);
                     int noOfTweets = result.getTweets().size();
-                    System.out.println("\ntweets by request: " + noOfTweets);                    
-                    System.out.println("Iteracion: " + iteration);
+                    //System.out.println("\ntweets by request: " + noOfTweets);                    
+                    //System.out.println("Iteracion: " + iteration);
                     
                     if(noOfTweets == 0){
-                        System.out.println("No more tweets available for the current query!!");
+                        //System.out.println("No more tweets available for the current query!!");
                         canGetMoreTweets = false;
                     }else{
                         for(Status status : result.getTweets()){
                             if(status.getId() <= lastTweetID){ //If value is ZERO then get all tweets available,
                                 canGetMoreTweets = false;      //If it's greater than ZERO, get tweets posted since the tweet with id lastTweetID
-                                System.out.println("SINCEID LIMIT REACHED!!!");
+                                //System.out.println("SINCEID LIMIT REACHED!!!");
                                 break;
                             }
                                 
@@ -296,26 +297,26 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
                         }
 
                         if(iteration == 1){
-                            System.out.println("MaxTweetID:" + result.getMaxId());
+                            //System.out.println("MaxTweetID:" + result.getMaxId());
                             setLastTweetID(result.getMaxId(), stream);//Save ID of the most recent Tweet
                         }
 
                         query.setMaxId(currentTweetID -1L); //Get the next batch of 100 tweets
                         iteration ++;
-                        System.out.println("\n\n------");
+                        //System.out.println("\n\n------");
                     }
                 }catch(TwitterException te){
                     if(te.getErrorCode() == 88){
-                        System.out.println("getSecondsUntilReset: " + te.getRateLimitStatus().getSecondsUntilReset());
+                        //System.out.println("getSecondsUntilReset: " + te.getRateLimitStatus().getSecondsUntilReset());
                         canGetMoreTweets = false;
-                        System.out.println("\n\n\n RATE LIMIT EXCCEDED!!!");
+                        //System.out.println("\n\n\n RATE LIMIT EXCCEDED!!!");
                     }
                     log.error("Error getting tweets:"  + te );
                 }
                 
             }while(canGetMoreTweets && tweetsReceived <17000);  //Maximo permitido para extraer de twitter c/15 minutos
             
-            System.out.println("TOTAL TWEETS RECEIVED:" + tweetsReceived);
+            //System.out.println("TOTAL TWEETS RECEIVED:" + tweetsReceived);
             if(aListExternalPost.size()>0)
             {
                 new Classifier(aListExternalPost, stream, this);
@@ -423,7 +424,7 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
 
             //trial.sample();
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            //System.out.println(e.getMessage());
             log.error(e);
         }
     }
@@ -434,18 +435,18 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
         {
             trial.cleanUp();
             trial.shutdown();
-            System.out.println("DETUVO LA CONEXION EN:"+this.getId());
+            //System.out.println("DETUVO LA CONEXION EN:"+this.getId());
         }
     }
 
     @Override
     public void authenticate(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
-        System.out.println("Twitter.autenticate.............");
+        //System.out.println("Twitter.autenticate.............");
         String verifier = request.getParameter("oauth_verifier");
         if(verifier==null)
         {
-            System.out.println("Twitter----paso 1");
+            //System.out.println("Twitter----paso 1");
             twitter4j.Twitter twitterFI = new TwitterFactory().getInstance();
             twitterFI.setOAuthConsumer(getAppKey(), getSecretKey());
             try {
@@ -467,7 +468,7 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
         }
         else
         {
-System.out.println("Twitter----2");
+            //System.out.println("Twitter----2");
             twitter4j.Twitter twitterFI = new TwitterFactory().getInstance();
             twitterFI.setOAuthConsumer(getAppKey(), getSecretKey());
             try {
@@ -478,10 +479,10 @@ System.out.println("Twitter----2");
                 //SWBResourceURL posted = paramRequest.getRenderUrl().setMode("view").setParameter("objUri", getEncodedURI());
                 //response.sendRedirect(request.getContextPath() + posted);
             }catch(TwitterException te) {
-te.printStackTrace(System.out);
+                te.printStackTrace(System.out);
                 throw new IOException(te.getMessage());
             }catch(Exception e) {
-e.printStackTrace(System.out);
+                e.printStackTrace(System.out);
                 throw new IOException(e.getMessage());
             }finally {
                 PrintWriter out = response.getWriter();
@@ -494,10 +495,10 @@ e.printStackTrace(System.out);
     
     private String getRedirectUrl(HttpServletRequest request, SWBParamRequest paramRequest)
     {
-System.out.println("getRedirectUrl....");
+        //System.out.println("getRedirectUrl....");
         StringBuilder address = new StringBuilder(128);
         address.append("http://").append(request.getServerName()).append(":").append(request.getServerPort()).append("/").append(paramRequest.getUser().getLanguage()).append("/").append(paramRequest.getResourceBase().getWebSiteId()).append("/"+paramRequest.getWebPage().getId()+"/_rid/").append(paramRequest.getResourceBase().getId()).append("/_mod/").append(paramRequest.getMode()).append("/_lang/").append(paramRequest.getUser().getLanguage());
-System.out.println("URL callback="+address);
+        //System.out.println("URL callback="+address);
         return address.toString();
     }
 
@@ -516,7 +517,7 @@ System.out.println("URL callback="+address);
     {
         String url_1="http://api.klout.com/v2/identity.json/tw/"+twitterUserID;
         String kloutJsonResponse_1=getData(url_1);
-        System.out.println("kloutResult step-1:"+kloutJsonResponse_1);
+        //System.out.println("kloutResult step-1:"+kloutJsonResponse_1);
         
         //Obtener id de json
         try
@@ -551,46 +552,47 @@ System.out.println("URL callback="+address);
     
     private static String getData(String url)
     {
-        //String key=SWBSocialUtil.Util.getSocialProperty("kloutKey");
-        //ver con Jei, como hacer clase singleton a SWBSocialUtil, para que una vez cargando el archivo de propiedades (networkconfig.properties), me traiga la llave definida ahi de klout
-        String key="8fkzgz7ngf7bth3nk94gnxkd";
-        url=url+"?key="+key;
-        URLConnection conex = null;
         String answer = null;
-        try {
-            System.out.println("Url a enviar a Klout:"+url);
-            URL pagina = new URL(url);
-           
-            String host = pagina.getHost();
-            //Se realiza la peticion a la página externa
-            conex = pagina.openConnection();
-            /*
-            if (userAgent != null) {
-                conex.setRequestProperty("user-agent", userAgent);
-            }*/
-            if (host != null) {
-                conex.setRequestProperty("host", host);
-            }
-            conex.setDoOutput(true);
+        String key=SWBContext.getAdminWebSite().getProperty("kloutKey");
+        //String key="8fkzgz7ngf7bth3nk94gnxkd";
+        if(key!=null)
+        {
+            url=url+"?key="+key;
+            URLConnection conex = null;
+            try {
+                //System.out.println("Url a enviar a Klout:"+url);
+                URL pagina = new URL(url);
 
-            conex.setConnectTimeout(5000);
-        } catch (Exception nexc) {
-            System.out.println("nexc Error:"+nexc.getMessage());
-            conex = null;
-        }
+                String host = pagina.getHost();
+                //Se realiza la peticion a la página externa
+                conex = pagina.openConnection();
+                /*
+                if (userAgent != null) {
+                    conex.setRequestProperty("user-agent", userAgent);
+                }*/
+                if (host != null) {
+                    conex.setRequestProperty("host", host);
+                }
+                conex.setDoOutput(true);
+
+                conex.setConnectTimeout(5000);
+            } catch (Exception nexc) {
+                //System.out.println("nexc Error:"+nexc.getMessage());
+                conex = null;
+            }
         
-        //Analizar la respuesta a la peticion y obtener el access token
-        if (conex != null) {
-            try
-            {
-                answer = getResponse(conex.getInputStream());
-            }catch(Exception e)
-            {
-                log.error(e);
+            //Analizar la respuesta a la peticion y obtener el access token
+            if (conex != null) {
+                try
+                {
+                    answer = getResponse(conex.getInputStream());
+                }catch(Exception e)
+                {
+                    log.error(e);
+                }
             }
         }
         return answer;
-        
     }
     
     

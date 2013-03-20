@@ -16,13 +16,10 @@ import java.util.StringTokenizer;
 import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
 import org.semanticwb.Logger;
-import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.base.SWBAppObject;
 import org.semanticwb.model.SWBModel;
-import org.semanticwb.model.WebSite;
 import org.semanticwb.social.PunctuationSign;
-import org.semanticwb.social.SocialAdmin;
 import org.semanticwb.social.WordsToMonitor;
 import org.semanticwb.social.util.lucene.SpanishAnalizer;
 
@@ -35,7 +32,7 @@ import org.semanticwb.social.util.lucene.SpanishAnalizer;
  * Clase de tipo utilerías 
  */
 
-public class SWBSocialUtil {
+public class SWBSocialUtil implements SWBAppObject{
 
     /**
      * Holds a reference to a log utility.
@@ -49,7 +46,6 @@ public class SWBSocialUtil {
     static private SWBSocialUtil instance;
     static ArrayList<String> aDoubles=new ArrayList();
     static HashMap<String, String> hmapChanges=new HashMap();
-    static private SocialAdmin swbSocialAdmSite=null;
     
     //SENTIMENTAL STATATIC CONTANTS
     static public int SENTIMENT_NEUTRAL=0;
@@ -71,6 +67,7 @@ public class SWBSocialUtil {
      */
     public SWBSocialUtil() {
        System.out.println("Entra a SWBSocialUtil/createInstance");
+       //createInstance();
        init();
     }
 
@@ -89,17 +86,33 @@ public class SWBSocialUtil {
         return instance;
     }
     
-     /*
-     * Initializes the class variables needed to provide this object's services
-     * <p>Inicializa las variables de clase necesarias para proveer los servicios de este objeto.</p>
-     */
-    /**
-     * Inits the.
-     */
-
-    private static void init()
+     
+    public ArrayList getDoublesArray()
     {
-         System.out.println("Init de SWBSocialUtil");
+        return aDoubles;
+    }
+
+    /*
+     * Metodo que regresa phonemas
+     */
+    public HashMap getChangesMap()
+    {
+        return hmapChanges;
+    }
+
+    @Override
+    public void destroy() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public void refresh() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public void init() {
+        System.out.println("Init de SWBSocialUtil-Jorge");
          //Carga Valores a ArrayList
          aDoubles.add("b");
          aDoubles.add("p");
@@ -142,33 +155,6 @@ public class SWBSocialUtil {
          hmapChanges.put("bb", "b");
          hmapChanges.put("c", "k");
          
-         String swbsocialSite=SWBPortal.getWebProperties().getProperty("swbs/swbsocialsite", "swbsocial");
-         System.out.println("swbsocialsite en SWBSocualUtil:"+swbsocialSite);
-         if(swbsocialSite!=null)
-         {
-             swbSocialAdmSite=SocialAdmin.ClassMgr.getSocialAdmin(swbsocialSite);
-         }
-         
-        try
-        { 
-            prop.load(SWBPortal.getFileFromWorkPath("/models/SWBSocial/swbsocialconfig.properties"));
-        }catch(Exception e)
-        {
-            log.error(e);
-        }
-    }
-
-    public ArrayList getDoublesArray()
-    {
-        return aDoubles;
-    }
-
-    /*
-     * Metodo que regresa phonemas
-     */
-    public HashMap getChangesMap()
-    {
-        return hmapChanges;
     }
 
     public static class Strings {
@@ -690,15 +676,6 @@ public class SWBSocialUtil {
 
     }
     
-    public static class Context
-    {
-        public static SocialAdmin getSocialAdmSite()
-        {
-            //TODO:ELIMINAR EL SIGUIENTE BLOQUE, YA QUE ESTE VALOR DEBE DE VENIR DEL ARCHIVO WEB.PROPERTIES y solo debe cargarse una vez
-            SocialAdmin swbSocialAdmSite=SocialAdmin.ClassMgr.getSocialAdmin("swbsocial");
-            return swbSocialAdmSite;
-        }
-    }
     
     public static class Util
     {
@@ -727,11 +704,6 @@ public class SWBSocialUtil {
             long diferencia = fechaFinalMs - fechaInicialMs;
             double dias = Math.floor(diferencia / (1000 * 60 * 60 * 24));
             return ((int) dias);
-        }
-        
-        public static String getSocialProperty(String property)
-        {
-            return prop.getProperty(property);
         }
     }
     
