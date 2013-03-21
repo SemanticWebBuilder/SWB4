@@ -20,6 +20,7 @@ import org.semanticwb.social.SocialSite;
 /**
  *
  * @author carlos.ramos
+ * @modified by Francisco.Jimenez
  */
 public class SocialWebResource extends GenericAdmResource
 {

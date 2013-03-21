@@ -25,7 +25,6 @@ import org.semanticwb.model.WebSite;
 import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticMgr;
 import org.semanticwb.platform.SemanticModel;
-import org.semanticwb.portal.admin.resources.SWBImportWebSite;
 import org.semanticwb.portal.api.GenericResource;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
