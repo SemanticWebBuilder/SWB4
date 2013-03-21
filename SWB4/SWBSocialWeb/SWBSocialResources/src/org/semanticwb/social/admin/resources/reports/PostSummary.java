@@ -36,6 +36,7 @@ import twitter4j.internal.org.json.JSONObject;
 /**
  *
  * @author carlos.ramos
+ * @modified by Francisco.Jimenez
  */
 public class PostSummary extends GenericResource {
     /** The log. */
