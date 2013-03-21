@@ -749,8 +749,8 @@
 
             obj.ondblclick=function(evt)
             {
-                var txt=prompt("Texto:",obj.value);  
-                if(txt!=null)
+                var txt=prompt("Texto:",obj.value);                  
+                if(txt && txt!=null)
                 {
                     obj.value=txt;
                     obj.update();
