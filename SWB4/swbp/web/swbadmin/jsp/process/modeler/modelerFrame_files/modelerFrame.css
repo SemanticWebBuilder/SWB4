@@ -1245,9 +1245,8 @@
 }
 
 .subbar {
-    overflow: hidden;
-    width:800px;
     position: absolute;
+    /*border: #000 solid 1px;*/
 }
 
 .subbarHidden {
