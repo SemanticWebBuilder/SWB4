@@ -732,9 +732,10 @@
                 tx.setAttributeNS(null,"font-family","Verdana, Geneva, sans-serif");
                 return tx;
             };
-            obj=_this.createBaseObject(constructor,null,null);                        
+            obj=_this.createBaseObject(constructor,null,null);                  
             obj.value=text;                                     //Valor de la caja de texto
             obj.canSelect=false;
+            obj.setAttributeNS(null,"class","textLabel");
             obj.onmousedown=function(evt)
             {
                 //desc(evt,true);
