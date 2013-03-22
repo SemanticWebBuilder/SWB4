@@ -80,6 +80,7 @@
         <copy file="../applets/TMswbadmin/dist/TMswbadmin.jar" todir="${build.classes.dir}//swbadmin/lib"/>
         <copy file="../applets/TMWBView/dist/TMWBView.jar" todir="${build.classes.dir}//swbadmin/lib"/>
     -->
+    
         <target name="-post-compile">
         <copy file="../applets/DragDrop/dist/SWBAplDragDrop.jar" todir="${build.classes.dir}//swbadmin/lib"/>
         <copy file="../applets/EditFilters/dist/SWBAplEditFilters.jar" todir="${build.classes.dir}//swbadmin/lib"/>
