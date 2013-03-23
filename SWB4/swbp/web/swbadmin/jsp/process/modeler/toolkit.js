@@ -102,7 +102,8 @@
 
                     if(_this.cmdkey==true) //Drag one
                     {
-                        _this.svg.dragObject.move(x,y);                                    
+                        _this.svg.dragObject.move(x,y);
+                        _this.updateResizeBox();
                     }else //drag selecteds
                     {
                         tx=x-_this.svg.dragObject.getX();
@@ -590,10 +591,26 @@
                 {
                     obj.contents[i].remove(true);
                 }
+                
+                //Elimina Iconos
+                if(obj.icons)
+                {
+                    for (var i = obj.icons.length; i--;)
+                    {
+                        obj.icons[i].obj.remove();
+                    }
+                }
+                //Elimina Texto
+                if(obj.text && obj.text!=null)obj.text.remove();
+                
                 try
                 {
                     _this.svg.removeChild(obj);
                 }catch(noe){}
+                
+                _this.unSelectObj(obj);
+                _this.showResizeBoxes();
+                
                 return this;
             };
 
@@ -616,6 +633,10 @@
                 {
                     obj.onmousedown(evt);
                 };
+                iobj.onmouseup=function(evt)
+                {
+                    obj.onmouseup(evt);
+                };                
                 var icon={obj:iobj,posx:posx,posy:posy,offx:offx,offy:offy};
                 obj.icons.push(icon);
 
@@ -732,7 +753,7 @@
                 tx.setAttributeNS(null,"font-family","Verdana, Geneva, sans-serif");
                 return tx;
             };
-            obj=_this.createBaseObject(constructor,null,null);                  
+            var obj=_this.createBaseObject(constructor,null,null);                  
             obj.value=text;                                     //Valor de la caja de texto
             obj.canSelect=false;
             obj.setAttributeNS(null,"class","textLabel");
@@ -740,8 +761,15 @@
             {
                 //desc(evt,true);
                 parent.onmousedown(evt);
-                _this.stopPropagation(evt);
-            };  
+                //_this.stopPropagation(evt);
+            }; 
+            
+            obj.onmouseup=function(evt)
+            {
+                //desc(evt,true);
+                parent.onmouseup(evt);
+                //_this.stopPropagation(evt);
+            };              
 
             parent.ondblclick=function(evt)
             {
