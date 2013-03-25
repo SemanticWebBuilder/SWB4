@@ -337,14 +337,20 @@ public class GenericFormElement extends FormElementBase {
                 }
 
                 ret.append("<span>");
+                                
 
                 if (value != null) {
-                    //ret.append("<a href=\"?suri=" + value.getEncodedURI() + "\" onclick=\"addNewTab('" + value.getURI()
-                    //           + "', null, '" + value.getDisplayName(lang) + "');return false;\">");
-                    ret.append(value.getDisplayName());
-                    //ret.append("</a>");
+                    if("swb".equals(value.getSemanticClass().getPrefix()))
+                    {
+                        ret.append("<a href=\"?suri=" + value.getEncodedURI() + "\" onclick=\"addNewTab('" + value.getURI()
+                               + "', null, '" + value.getDisplayName(lang) + "');return false;\">");
+                        ret.append(value.getDisplayName());
+                        ret.append("</a>");
+                    }else
+                    {
+                        ret.append(value.getDisplayName());
+                    }
                 }
-
                 ret.append("</span>");
             }
         }

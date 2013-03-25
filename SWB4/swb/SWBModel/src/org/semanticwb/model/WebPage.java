@@ -173,7 +173,15 @@ public class WebPage extends WebPageBase
      */
     public String getUrl(String lang)
     {
-        String url=getWebPageURL(lang);
+        String country=null;
+        User user=SWBContext.getSessionUser(getWebSite().getUserRepository().getId());
+        if(user!=null)
+        {
+            if(lang==null)lang=user.getLanguage();
+            country=user.getCountry();
+        }
+        
+        String url=getDisplayWebPageURL(lang);
         if(url!=null)
         {
             {
@@ -193,7 +201,6 @@ public class WebPage extends WebPageBase
             return url;
         }else if(getFriendlyURL()!=null)
         {
-            User user=SWBContext.getSessionUser(getWebSite().getUserRepository().getId());
             Iterator<FriendlyURL> it=listFriendlyURLs();
             FriendlyURL furl=null;
             int cg=0;
@@ -204,12 +211,12 @@ public class WebPage extends WebPageBase
                 int a=1;
                 if(user!=null && friendlyURL.getLanguage()!=null)
                 {
-                    if(friendlyURL.getLanguage().getId().equals(user.getLanguage()))a += 3;
+                    if(friendlyURL.getLanguage().getId().equals(lang))a += 3;
                     else continue;
                 }
                 if(user!=null && friendlyURL.getCountry()!=null)
                 {
-                    if(friendlyURL.getCountry().getId().equals(user.getCountry()))a += 2;
+                    if(friendlyURL.getCountry().getId().equals(country))a += 2;
                     else continue;
                 }
                 if(cg<a)
@@ -222,7 +229,7 @@ public class WebPage extends WebPageBase
             }
             if(furl!=null)return SWBPlatform.getContextPath()+furl.getURL();
         }
-        return getRealUrl();
+        return getRealUrl(lang,country);
     }
     
     /** Regresa una representacion en html de la ruta de navegacion de la pagina.
