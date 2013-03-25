@@ -12,7 +12,7 @@
    -khtml-user-select: none;
    -webkit-user-select: none;
    -ms-user-select: none;
-   user-select: none;    
+   user-select: none;
    cursor: default;
 }
 
@@ -51,7 +51,23 @@
     fill:url(#linearGradientStartEvent);
     fill-opacity:1;
     stroke-width:1.5;                        
-}                    
+}
+
+.swimlane
+{
+    stroke:#ADADAE;
+    fill:url(#linearGradientStartEvent);
+    fill-opacity:1;
+    stroke-width:1.5;                        
+}
+
+.swimlane_o
+{
+    stroke:#2cff20;
+    fill:url(#linearGradientStartEvent);
+    fill-opacity:1;
+    stroke-width:1.5;                        
+}
 
 .intermediateEvent
 {
@@ -108,7 +124,25 @@
     stroke-width:2;
     stroke-opacity:1;
     stroke-dasharray:none;
-}                    
+}
+
+.itemAware {
+    stroke:#666666;
+    /*fill:url(#linearGradientGateway);*/
+    fill-opacity:1;
+    stroke-width:2;
+    stroke-opacity:1;
+    stroke-dasharray:none;
+}
+
+.itemAware_o {
+    stroke:#2cff20;
+    /*fill:url(#linearGradientGateway);*/
+    fill-opacity:1;
+    stroke-width:2;
+    stroke-opacity:1;
+    stroke-dasharray:none;
+}
 
 .selectBox
 {
