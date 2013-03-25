@@ -55,7 +55,6 @@
             <td style="text-align: center;"><a style="cursor: pointer;" title="Video" onclick="postHtml('<%=url.setMode("post").setParameters(argsV)%>', 'postType')"><img src="/swbadmin/images/video.png"/></a></td>
        </tr>        
     </table>
-    </form>
 </div>
 <br/><br/>
 <br/><br/>
