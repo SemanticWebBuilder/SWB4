@@ -4,7 +4,7 @@ package org.semanticwb.model.base;
    /**
    * Una Página Web es el elemento de SemanticWebBuilder a través del cual se estructura la información del portal. 
    */
-public abstract class WebPageBase extends org.semanticwb.model.Topic implements org.semanticwb.model.Indexable,org.semanticwb.model.Localeable,org.semanticwb.model.Searchable,org.semanticwb.model.PFlowRefable,org.semanticwb.model.Expirable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.Resourceable,org.semanticwb.model.MetaTagable,org.semanticwb.model.Referensable,org.semanticwb.model.Undeleteable,org.semanticwb.model.Filterable,org.semanticwb.model.Hiddenable,org.semanticwb.model.CalendarRefable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Countryable,org.semanticwb.model.FilterableClass,org.semanticwb.model.RoleRefable,org.semanticwb.model.Tagable,org.semanticwb.model.Viewable,org.semanticwb.model.TemplateRefable,org.semanticwb.model.Rankable,org.semanticwb.model.Traceable,org.semanticwb.model.Activeable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Trashable,org.semanticwb.model.FilterableNode
+public abstract class WebPageBase extends org.semanticwb.model.Topic implements org.semanticwb.model.Expirable,org.semanticwb.model.Filterable,org.semanticwb.model.Referensable,org.semanticwb.model.PFlowRefable,org.semanticwb.model.Trashable,org.semanticwb.model.Undeleteable,org.semanticwb.model.TemplateRefable,org.semanticwb.model.Hiddenable,org.semanticwb.model.Resourceable,org.semanticwb.model.CalendarRefable,org.semanticwb.model.Tagable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Activeable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Traceable,org.semanticwb.model.RoleRefable,org.semanticwb.model.Viewable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.Rankable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Indexable,org.semanticwb.model.Searchable,org.semanticwb.model.Localeable,org.semanticwb.model.FilterableClass,org.semanticwb.model.MetaTagable,org.semanticwb.model.Countryable
 {
    /**
    * Una Página Web es el elemento de SemanticWebBuilder a través del cual se estructura la información del portal.
@@ -1659,6 +1659,21 @@ public abstract class WebPageBase extends org.semanticwb.model.Topic implements 
     public void setWebPageURL(String value)
     {
         getSemanticObject().setProperty(swb_webPageURL, value);
+    }
+
+    public String getWebPageURL(String lang)
+    {
+        return getSemanticObject().getProperty(swb_webPageURL, null, lang);
+    }
+
+    public String getDisplayWebPageURL(String lang)
+    {
+        return getSemanticObject().getLocaleProperty(swb_webPageURL, lang);
+    }
+
+    public void setWebPageURL(String webPageURL, String lang)
+    {
+        getSemanticObject().setProperty(swb_webPageURL, webPageURL, lang);
     }
    /**
    * Gets all the org.semanticwb.model.FriendlyURL
