@@ -173,7 +173,7 @@ public class WebPage extends WebPageBase
      */
     public String getUrl(String lang)
     {
-        String url=getWebPageURL();
+        String url=getWebPageURL(lang);
         if(url!=null)
         {
             {
