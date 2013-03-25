@@ -181,21 +181,42 @@
                 ret = Modeler.createTask(null,null);
                 ret.addIcon("#userMarker",-1,-1,13,8);
                 ret.setText("Tarea de Usuario");
-                //ret.move(100,100);
                 ret.resize(100,60);
             }
             else if(type=='serviceTask') {
                 ret = Modeler.createTask(null,null);
                 ret.addIcon("#serviceMarker",-1,-1,13,8);
                 ret.setText("Tarea de Servicio");
-                //ret.move(100,100);
                 ret.resize(100,60);
             }
             else if(type=='scriptTask') {
                 ret = Modeler.createTask(null,null);
-                ret.addIcon("#scriptMarker",-1,-1,13,8);
+                ret.addIcon("#scriptMarker",-1,-1,7,13);
                 ret.setText("Tarea de Script");
-                //ret.move(100,100);
+                ret.resize(100,60);
+            }
+            else if(type=='ruleTask') {
+                ret = Modeler.createTask(null,null);
+                ret.addIcon("#ruleMarker",-1,-1,12,12);
+                ret.setText("Tarea de regla de negocio");
+                ret.resize(100,60);
+            }
+            else if(type=='manualTask') {
+                ret = Modeler.createTask(null,null);
+                ret.addIcon("#manualMarker",-1,-1,9,6);
+                ret.setText("Tarea Manual");
+                ret.resize(100,60);
+            }
+            else if(type=='sendTask') {
+                ret = Modeler.createTask(null,null);
+                ret.addIcon("#messageThrowMarker",-1,-1,13,10);
+                ret.setText("Tarea de envío de mensaje");
+                ret.resize(100,60);
+            }
+            else if(type=='receiveTask') {
+                ret = Modeler.createTask(null,null);
+                ret.addIcon("#messageCatchMarker",-1,-1,13,10);
+                ret.setText("Tarea de recepción de mensaje");
                 ret.resize(100,60);
             }
             return ret;
@@ -322,34 +343,49 @@
         obj2 = Modeler.createObject("#dataStore",null,null);
         obj2.move(250,240);
 
-
-        obj2 = Modeler.createObject("#userTask",null,null);
+        obj2 = Modeler.createTask(null,null);
+        obj2.addIcon("#userMarker",-1,-1,13,10);
+        obj2.resize(100,60);
+        obj2.setText("Tarea de usuario");
         obj2.move(100,320);
-        obj2 = Modeler.createObject("#serviceTask",null,null);
+        
+        obj2 = Modeler.createTask(null,null);
+        obj2.addIcon("#serviceMarker",-1,-1,13,8);
+        obj2.setText("Tarea de Servicio");
+        obj2.resize(100,60);
         obj2.move(200,320);
-        obj2 = Modeler.createObject("#scriptTask",null,null);
+        
+        obj2 = Modeler.createTask(null,null);
+        obj2.addIcon("#scriptMarker",-1,-1,7,13);
+        obj2.setText("Tarea de Script");
+        obj2.resize(100,60);
         obj2.move(300,320);
-        obj2 = Modeler.createObject("#ruleTask",null,null);
+        
+        obj2 = Modeler.createTask(null,null);
+        obj2.addIcon("#ruleMarker",-1,-1,12,12);
+        obj2.setText("Tarea de regla de negocio");
+        obj2.resize(100,60);
         obj2.move(400,320);
-        obj2 = Modeler.createObject("#sendTask",null,null);
+        
+        obj2 = Modeler.createTask(null,null);
+        obj2.addIcon("#messageThrowMarker",-1,-1,13,10);
+        obj2.setText("Tarea de envío de mensaje");
+        obj2.resize(100,60);
         obj2.move(500,320);
-        obj2 = Modeler.createObject("#receiveTask",null,null);
+        
+        obj2 = Modeler.createTask(null,null);
+        obj2.addIcon("#messageCatchMarker",-1,-1,13,10);
+        obj2.setText("Tarea de recepción de mensaje");
+        obj2.resize(100,60);
         obj2.move(600,320);
-        obj2 = Modeler.createObject("#manualTask",null,null);
+        
+        obj2 = Modeler.createTask(null,null);
+        obj2.addIcon("#manualMarker",-1,-1,9,6);
+        obj2.setText("Tarea Manual");
+        obj2.resize(100,60);
         obj2.move(700,320);
 
         obj2 = Modeler.createObject("#pool",null,null);
         obj2.move(350,470);
-
-//        obj2 = Modeler.createTask(null,null);
-//        obj2.addIcon("#userMarker",-1,-1,13,8);
-//        obj2.setText("Tarea de Usuario");
-//        obj2.move(100,100);
-//        obj2.resize(100,60);
-
-        //Modeler.createStartEvent();
-
-        //Modeler.createMessageStartEvent();
-
     }
 
