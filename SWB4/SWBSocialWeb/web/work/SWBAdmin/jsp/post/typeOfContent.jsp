@@ -1,7 +1,8 @@
 <%-- 
     Document   : typeOfContent
     Created on : 20/03/2013, 06:04:12 PM
-    Author     : francisco.jimenez
+    Author     : Jorge.Jimenez
+    Modified by:Francisco.Jimenez
 --%>
 
 <%@page contentType="text/html" pageEncoding="x-iso-8859-11"%>

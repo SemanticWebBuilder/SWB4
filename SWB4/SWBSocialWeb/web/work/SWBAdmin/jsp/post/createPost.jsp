@@ -56,8 +56,6 @@
        </tr>        
     </table>
 </div>
-<br/><br/>
-<br/><br/>
 
 <div id="postType" dojoType="dijit.layout.ContentPane">
 </div>
