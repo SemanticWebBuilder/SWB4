@@ -15,9 +15,9 @@
 <%    
     String objUri = (String) request.getParameter("suri");
     SemanticObject semanticObject = SemanticObject.createSemanticObject(objUri);
-    SocialTopic socialN = (SocialTopic) semanticObject.createGenericInstance();
-    String marca = socialN.getSemanticObject().getModel().getName();    
-    WebSite wsite = WebSite.ClassMgr.getWebSite(marca);
+    SocialTopic socialTopic = (SocialTopic) semanticObject.createGenericInstance();
+    String brand = socialTopic.getSemanticObject().getModel().getName();    
+    WebSite wsite = WebSite.ClassMgr.getWebSite(brand);
     SWBResourceURL url = paramRequest.getRenderUrl();
     //String action = paramRequest.getAction();    
     

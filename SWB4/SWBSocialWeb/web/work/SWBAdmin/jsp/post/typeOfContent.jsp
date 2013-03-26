@@ -13,16 +13,16 @@
 <%@page import="org.semanticwb.*,org.semanticwb.platform.*,org.semanticwb.portal.*,org.semanticwb.model.*,java.util.*,org.semanticwb.base.util.*"%>
 <jsp:useBean id="paramRequest" scope="request" type="org.semanticwb.portal.api.SWBParamRequest"/>
 <%
-    String valor = (String) request.getAttribute("valor");    
+    String contentType = (String) request.getAttribute("valor");    
     String objUri = request.getParameter("objUri");    
-    SocialTopic s = (SocialTopic)SemanticObject.getSemanticObject(objUri).getGenericInstance();   
-    String marca = s.getSemanticObject().getModel().getName();
+    SocialTopic socialTopic = (SocialTopic)SemanticObject.getSemanticObject(objUri).getGenericInstance(); // creates social topic to get Model Name
+    String brand = socialTopic.getSemanticObject().getModel().getName(); //gets brand name
     SWBResourceURL urlAction = paramRequest.getActionUrl();
-    WebSite wsite = WebSite.ClassMgr.getWebSite(marca);
+    WebSite wsite = WebSite.ClassMgr.getWebSite(brand);
        
     urlAction.setParameter("objUri", objUri);
-    urlAction.setParameter("wsite", marca);           
-    if (valor.equals("postMessage")) {
+    urlAction.setParameter("wsite", brand);           
+    if (contentType.equals("postMessage")) {
         urlAction.setParameter("toPost", "msg");
         SWBFormMgr messageFormMgr = new SWBFormMgr(Message.sclass.getSemanticObject(), null, SWBFormMgr.MODE_CREATE);
         messageFormMgr.setType(SWBFormMgr.TYPE_DOJO);
@@ -59,7 +59,7 @@
         </ul>
     </form>
 </div> 
-<%} else if (valor.equals("uploadPhoto")) {
+<%} else if (contentType.equals("uploadPhoto")) {
     urlAction.setParameter("toPost", "photo");
     SWBFormMgr photoMgr = new SWBFormMgr(Photo.sclass, paramRequest.getWebPage().getWebSite().getSemanticObject(), null);
     photoMgr.setType(SWBFormMgr.TYPE_DOJO);
@@ -106,7 +106,7 @@
     </form>
 </div>
 
-<%} else if (valor.equals("uploadVideo")) {
+<%} else if (contentType.equals("uploadVideo")) {
     urlAction.setParameter("toPost", "video");
     SWBFormMgr videoMgr = new SWBFormMgr(Video.sclass, paramRequest.getWebPage().getWebSite().getSemanticObject(), null);
     videoMgr.setType(SWBFormMgr.TYPE_DOJO);
@@ -149,5 +149,6 @@
         </ul>
     </form>
 </div>
-<%    }
+<%    
+    }
 %>
