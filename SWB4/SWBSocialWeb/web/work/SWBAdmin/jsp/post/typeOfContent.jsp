@@ -4,8 +4,6 @@
     Author     : Jorge.Jimenez
     Modified by:Francisco.Jimenez
 --%>
-
-<%@page contentType="text/html" pageEncoding="x-iso-8859-11"%>
 <%@page import="org.semanticwb.portal.api.SWBParamRequest"%>
 <%@page import="org.semanticwb.social.*"%>
 <%@page import="org.semanticwb.SWBUtils"%>
