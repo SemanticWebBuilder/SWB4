@@ -76,7 +76,7 @@
         {
             var _this=this;
             _this.svg=document.getElementById(svgid);
-            //desc(document.body,true);
+            //desc(_this.svg,true);
 
             _this.svg.onmousemove=function(evt)
             {
@@ -198,6 +198,50 @@
             {
                 var ret=_this.onmouseup(evt);
                 if(ret==false)return;
+                
+                //Drop
+                if(_this.svg.dragObject!=null)
+                {
+                    //alert(_this.selected);
+                    //_this.selected
+                    //desc(_this.svg.childNodes[0],true);
+                    var droped=false;
+                    
+                    for (var i = _this.svg.childNodes.length; i-- && i>=0;)
+                    {
+                        var obj=_this.svg.childNodes[i];
+                        if(obj && obj.contents)
+                        {   
+                            if(obj==_this.svg.dragObject)
+                            {
+                                for (;i-- && i>=0;)
+                                {
+                                    obj=_this.svg.childNodes[i];
+                                    if(obj.inBounds && obj.inBounds(_this.svg.dragObject.getX(), _this.svg.dragObject.getY()))
+                                    {
+                                        if(_this.selected.indexOf(obj)==-1)
+                                        {
+                                            obj.onDropObjects(_this.selected);
+                                            i=0;
+                                            droped=true;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    if(droped==false)
+                    {
+                        for (var i = _this.selected.length; i--;)
+                        {
+                            if(_this.selected.indexOf(_this.selected[i].parent)==-1)
+                            {
+                                _this.selected[i].setParent(null);
+                            }
+                        }                          
+                    }
+                    
+                }
                 
                 _this.svg.dragObject=null;
                 _this.svg.resizeObject=null;
@@ -321,8 +365,12 @@
             var _this=ToolKit;
             _this.selected.push(obj);
             obj.selected=true;   
-            obj.setOverClass();
-            _this.showResizeBoxes();
+            obj.setOverClass();           
+            setTimeout(function()
+            {
+                obj.moveFirst();
+                _this.showResizeBoxes();
+            },10); //Se invoca en un thread para evitar problema de chrome            
         },
 
         unSelectObj:function(obj)
@@ -613,17 +661,52 @@
                 
                 return this;
             };
-
-            if(parent && parent!=null)
+            
+            //Mueve el elemento al primer plano
+            obj.moveFirst = function()
             {
-                parent.contents.push(obj);
-                obj.parent=parent;
-            }else
+                //alert("obj:"+obj.icons.length);
+                _this.svg.appendChild(obj);
+                
+                //mueve Iconos
+                if(obj.icons)
+                {
+                    for (var i = obj.icons.length; i--;)
+                    {
+                        obj.icons[i].obj.moveFirst();
+                    }
+                }
+                //mueve texto
+                if(obj.text && obj.text!=null)obj.text.moveFirst();
+                
+                //mueve contenidos
+                for (var i = obj.contents.length; i--;)
+                {
+                    obj.contents[i].moveFirst();
+                }
+                
+            };
+            
+            obj.setParent = function(newParent)
             {
-                _this.contents.push(obj);
-                obj.parent=_this;
-            }   
-
+                if(obj.parent)
+                {
+                    while ((ax = obj.parent.contents.indexOf(obj)) !== -1) {
+                        obj.parent.contents.splice(ax, 1);
+                    }                    
+                }
+                
+                if(newParent && newParent!=null)
+                {
+                    newParent.contents.push(obj);
+                    obj.parent=newParent;
+                }else
+                {
+                    _this.contents.push(obj);
+                    obj.parent=_this;
+                }                 
+            };
+            
             //pos validas del 1 al 9, 1=esquina superior izquierda, 5=centro, 9=esquina inferior derecha
             obj.addIcon=function(type,posx,posy,offx,offy)
             {
@@ -643,14 +726,41 @@
             };
 
             //pos validas del 1 al 9, 1=esquina superior izquierda, 5=centro, 9=esquina inferior derecha
-            obj.setText=function(text)
+            obj.setText=function(text,posx,posy,width)
             {
                 if(obj.text)obj.text.remove();
                 obj.text=_this.createText(text,obj);
+                obj.text.textPX=posx;
+                obj.text.textPY=posy;
+                obj.text.textW=width;
                 obj.text.update();
-            };                        
+            };  
+            
+            obj.onDropObjects=function(objs)
+            {
+                for (var i = objs.length; i--;)
+                {
+                    if(objs.indexOf(objs[i].parent)==-1)
+                    {
+                        objs[i].setParent(obj);
+                    }
+                }
+            };
+            
+            obj.inBounds=function(x,y)
+            {
+                return (obj.getWidth()/2-(Math.abs(obj.getX()-x))>=0 && (obj.getHeight()/2-Math.abs(obj.getY()-y))>=0)
+            };
 
+            obj.setParent(parent);
             _this.svg.appendChild(obj);
+            if(obj.getWidth()==0 && obj.getHeight()==0)
+            {
+                var bb=obj.getBBox();
+                obj.setWidth(bb.width);
+                obj.setHeight(bb.height);
+            }            
+            
             return obj;
         },                    
 
@@ -792,7 +902,7 @@
                 var dy=10;
                 var words = text_element.value.split(' ');
                 var start_x = text_element.getX();
-
+                
                 //Eliminar childs
                 var child=null;
                 while((child=text_element.firstChild)!=null)
@@ -807,12 +917,16 @@
                 tspan_element.appendChild(text_node);							// Add tspan element to DOM
                 text_element.appendChild(tspan_element);						// Add text to tspan element
                 var lin=1;
+                
+                var w=parent.getWidth();
+                if(obj.textW)w=obj.textW;
+                
                 for(var i=1; i<words.length; i++)
                 {
                     var len = tspan_element.firstChild.data.length;				// Find number of letters in string
                     tspan_element.firstChild.data += " " + words[i];			// Add next word
-
-                    if (tspan_element.getComputedTextLength() > parent.getWidth()-10)
+                    
+                    if (tspan_element.getComputedTextLength() > w-10)
                     {
                         tspan_element.firstChild.data = tspan_element.firstChild.data.slice(0, len);	// Remove added word
 
@@ -825,7 +939,14 @@
                         lin++;
                     }
                 }
-                text_element.setY(parent.getY()+dy-lin*dy/2);
+                
+                var offy=0;
+                if(obj.textPY)offy=obj.textPY*(parent.getHeight()/2+lin*dy/2+dy/2);            
+                text_element.setY(parent.getY()+dy-lin*dy/2+offy);
+                
+                var offx=0;
+                if(obj.textPX)offx=obj.textPX*((w/2)+dy/2);            
+                text_element.setX(parent.getX()+offx);
             };
 
             return obj;

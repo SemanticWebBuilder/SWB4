@@ -128,7 +128,11 @@
         mapObject:function(type)
         {
             var ret = null;
-            if(type=='normalStartEvent')ret=Modeler.createObject("#startEvent",null,null);
+            if(type=='normalStartEvent')
+            {
+                ret=Modeler.createObject("#startEvent",null,null);
+                ret.setText("Evento de Inicio",0,1,80);
+            }
             else if(type=='messageStartEvent')ret=Modeler.createObject("#messageStartEvent",null,null);
             else if(type=='timerStartEvent')ret=Modeler.createObject("#timerStartEvent",null,null);
             else if(type=='ruleStartEvent')ret=Modeler.createObject("#ruleStartEvent",null,null);
@@ -385,7 +389,16 @@
         obj2.resize(100,60);
         obj2.move(700,320);
 
-        obj2 = Modeler.createObject("#pool",null,null);
-        obj2.move(350,470);
+        obj = Modeler.createObject("#pool",null,null);
+        obj.moveFirst=function(){};
+        //obj.mouseup=function(evt){alert("up")};
+        obj.move(350,470);
+        
+        obj2 = Modeler.createTask(null,null);
+        obj2.addIcon("#manualMarker",-1,-1,9,6);
+        obj2.setText("Tarea Contenida");
+        obj2.resize(100,60);
+        obj2.move(400,500);        
+        obj2.setParent(obj);
     }
 
