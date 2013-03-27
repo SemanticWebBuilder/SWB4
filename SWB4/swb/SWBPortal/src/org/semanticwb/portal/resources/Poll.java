@@ -379,8 +379,9 @@ public class Poll extends GenericResource {
                 }catch(Exception noe) {
                     display = Display.POPUP;
                 }
-                if(display==Display.SLIDE)
+                if(display==Display.SLIDE) {
                     html.append("<div id=\""+PREF+base.getId()+"\" class=\"swb-encuesta-res\">&nbsp;</div>");
+                }
                 response.getWriter().println(html.toString());
             }catch(TransformerException te) {
                 log.error(te);
@@ -1836,11 +1837,19 @@ System.out.println("2. removeAllNodes");
         script.append("            }");
         script.append("    }");
         script.append("    if( optValue!=null ) {");
-        boolean isPopup = Boolean.valueOf(base.getAttribute("display", "true")).booleanValue();
-        if( isPopup )
-            script.append("   window.open(url+'&radiobutton='+optValue, '_newenc', '"+win+"');");
-        else
-            script.append("   postHtml(url+'&radiobutton='+optValue,'"+PREF+base.getId()+"'); expande();");
+        
+        Display display;
+        try {
+            display = Display.valueOf(base.getAttribute("display", Display.SLIDE.name()));
+        }catch(Exception noe) {
+            display = Display.POPUP;
+        }        
+        if(display==Display.POPUP) {
+            script.append("   window.open(url+'&radiobutton='+optValue, '_newenc', '").append(win).append("');");
+        }
+        else {
+            script.append("   postHtml(url+'&radiobutton='+optValue,'" + PREF).append(base.getId()).append("'); expande();");
+        }
         script.append("   }else {");
         script.append("      alert('"+paramRequest.getLocaleString("msgView_msgAnswer")+"');");
         script.append("   }");
