@@ -37,6 +37,20 @@
     stroke-width:2;
 }                    
 
+.callactivity {
+    stroke:#2c5aa0;
+    fill:url(#linearGradientIntermediateEvent);
+    fill-opacity:1;
+    stroke-width:4;
+}
+
+.callactivity_o {
+    stroke:#2cff20;
+    fill:url(#linearGradientIntermediateEvent);
+    fill-opacity:1;
+    stroke-width:4;
+}
+
 .startEvent
 {
     stroke:#008000;
