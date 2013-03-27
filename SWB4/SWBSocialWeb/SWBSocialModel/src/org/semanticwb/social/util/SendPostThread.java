@@ -81,6 +81,7 @@ public class SendPostThread extends java.lang.Thread {
                                 photoable.postPhoto((Photo)postableObj.getPost(), postableObj.getRequest(), postableObj.getResponse());
                             }else if(action.equals("video") && postable instanceof Videoable)
                             {
+                                System.out.println("ENTRA A SENTVIDEO...");
                                 Videoable videoable=(Videoable) postable;
                                 videoable.postVideo((Video)postableObj.getPost(), postableObj.getRequest(), postableObj.getResponse());
                             }

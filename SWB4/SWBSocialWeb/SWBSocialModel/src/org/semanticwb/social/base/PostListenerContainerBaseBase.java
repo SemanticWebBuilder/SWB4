@@ -19,11 +19,11 @@ public abstract class PostListenerContainerBaseBase extends org.semanticwb.model
    */
     public static final org.semanticwb.platform.SemanticClass social_SocialNetwork=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#SocialNetwork");
    /**
-   * Cuenta de Red Social a la que pertenece el post que llega por el Listener y que es tomado como base para crear un nuevo post desde la herramienta y que sera enviado a una o mas redes sociales.
+   * Cuenta de Red Social a la que pertenece el post que llega por el Listener y que es tomado como base para crear un nuevo post desde la herramienta y que sera enviado a una o mas redes sociales. Ver si quito esta propiedad, no me acuerdo porque la puse, talvez para hacer las busquedas por red social y que estas fueran mas rapidas.
    */
     public static final org.semanticwb.platform.SemanticProperty social_plcb_SocialNetwork=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#plcb_SocialNetwork");
    /**
-   * Clase que comprende todos los tipos de Post de Salida que pueden ir siendo creados en la herramienta y que seran publicados a partir de esto en las diferentes redes sociales.
+   * Clase que comprende todos los tipos de Post de Salida que pueden ir siendo creados en la herramienta y que seran publicados a partir de esto en las diferentes redes sociales. Esta clase no se relaciona con una red social (con la clase SocialNetwork) porque un post de salida (desde la herramienta) podría ser enviado a diferentes redes sociales, sin embargo, es el mismo post de salida. Donde esta a que red social se envía esta en las instancias de la clase PostContainer.
    */
     public static final org.semanticwb.platform.SemanticClass social_PostOut=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#PostOut");
    /**

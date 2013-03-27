@@ -4,10 +4,10 @@ package org.semanticwb.social.base;
    /**
    * Clase que engloba a las diferentes clases que representan cada una de las redes sociales. 
    */
-public abstract class SocialNetworkBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Activeable,org.semanticwb.social.Listenerable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable,org.semanticwb.social.Secreteable
+public abstract class SocialNetworkBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Activeable,org.semanticwb.model.Descriptiveable,org.semanticwb.social.Secreteable,org.semanticwb.model.Traceable,org.semanticwb.social.Listenerable
 {
    /**
-   * Clase a Cambiar despues por "Relacional".  En esta clase se guardan todos los post que lleguan por el listener, se estima que toda la info. que se guarde en este objeto debe de eliminarse aproximadamente c/mes, siendo este parametro configurable de acuerdo al tiempo que la organización quiera guardar  la información sobre los mensajes que lleguen por el listener. Cuando un post que llegue por el listener sea tomado como base para crear un nuevo post por la organización, se cree que debe copiarse la información de dicho post de esta clase hacia la clase PostListenerContainerBase.
+   * Clase a Cambiar despues por "Relacional".  En esta clase se guardan todos los post que lleguan por el listener, se estima que toda la info. que se guarde en este objeto debe de eliminarse aproximadamente c/mes, siendo este parametro configurable de acuerdo al tiempo que la organización quiera guardar  la información sobre los mensajes que lleguen por el listener. Cuando un post que llegue por el listener sea tomado como base para crear un nuevo post por la organización, se cree que debe copiarse la información de dicho post de esta clase hacia la clase PostListenerContainerBase.Se almacenan por mes y año, de esta manera sera mucho mas rapido hacer las busquedas sobre las instancias de esta clase.
    */
     public static final org.semanticwb.platform.SemanticClass social_PostListenerContainer=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#PostListenerContainer");
    /**
