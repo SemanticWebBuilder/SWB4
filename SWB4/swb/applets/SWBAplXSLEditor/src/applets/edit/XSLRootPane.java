@@ -2,6 +2,7 @@ package applets.edit;
 
 import java.awt.Font;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileNotFoundException;
@@ -20,22 +21,29 @@ import javax.swing.JOptionPane;
 import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JRootPane;
 import javax.swing.UIManager;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
+import javax.swing.text.JTextComponent;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 import org.fife.ui.rtextarea.Gutter;
 import org.fife.ui.rtextarea.RTextScrollPane;
 
 public class XSLRootPane extends JRootPane implements HyperlinkListener, SyntaxConstants {
+
     private RTextScrollPane scrollPane;
     private RSyntaxTextArea textArea;
     private String filename;
+    private JMenuItem localJMenuItem;
+    private JTextComponent textComponentPrueba;
 
     public XSLRootPane() {
         textArea = createTextArea();
         //setContent("JavaExample.txt");
         //textArea.setText("Hola mundo");
+        System.out.println("xslrootpane");
         textArea.setSyntaxEditingStyle("text/xml");
         this.scrollPane = new RTextScrollPane(textArea, true);
         Gutter localGutter = this.scrollPane.getGutter();
@@ -44,6 +52,8 @@ public class XSLRootPane extends JRootPane implements HyperlinkListener, SyntaxC
         localGutter.setBookmarkIcon(new ImageIcon(localURL));
         getContentPane().add(this.scrollPane);
         setJMenuBar(createMenuBar());
+
+
     }
 
 //  private void addItem(String paramString1, String paramString2, String paramString3, ButtonGroup paramButtonGroup, JMenu paramJMenu)
@@ -53,9 +63,9 @@ public class XSLRootPane extends JRootPane implements HyperlinkListener, SyntaxC
 //    paramButtonGroup.add(localJRadioButtonMenuItem);
 //    paramJMenu.add(localJRadioButtonMenuItem);
 //  }
-
     private JMenuBar createMenuBar() {
         JMenuBar localJMenuBar = new JMenuBar();
+        System.out.println("createmenubar");
 
         //    JMenu localJMenu = new JMenu("Language");
         //    ButtonGroup localButtonGroup = new ButtonGroup();
@@ -68,12 +78,29 @@ public class XSLRootPane extends JRootPane implements HyperlinkListener, SyntaxC
         //    localJMenu.getItem(1).setSelected(true);
         //    localJMenuBar.add(localJMenu);
         JMenu localJMenu = new JMenu("Archivo");
-        JMenuItem localJMenuItem = new JMenuItem(new SaveAction());
+
+        localJMenuItem = new JMenuItem(new SaveAction());
+
+
+
         localJMenu.add(localJMenuItem);
+        localJMenuItem.setEnabled(false);
+
         localJMenuBar.add(localJMenu);
-        localJMenuItem = new JMenuItem(new CloseAction());
-        localJMenu.add(localJMenuItem);
+
+       /* JMenuItem localJMenuItemClose = new JMenuItem("Salir");
+        localJMenu.add(localJMenuItemClose);
         localJMenuBar.add(localJMenu);
+        localJMenuItemClose.addActionListener(
+                new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent evento) {
+                        System.exit(0);
+                    }
+                }
+                );
+*/
+
 
         localJMenu = new JMenu("Ver");
         JCheckBoxMenuItem localJCheckBoxMenuItem = new JCheckBoxMenuItem(new MonospacedFontAction());
@@ -102,15 +129,15 @@ public class XSLRootPane extends JRootPane implements HyperlinkListener, SyntaxC
         localJMenuBar.add(localJMenu);
 
         localJMenu = new JMenu("Ayuda");
-        localJMenuItem = new JMenuItem(new AboutAction());
-        localJMenu.add(localJMenuItem);
+        JMenuItem localJMenuItemHelp = new JMenuItem(new AboutAction());
+        localJMenu.add(localJMenuItemHelp);
         localJMenuBar.add(localJMenu);
 
         return localJMenuBar;
     }
 
-    private RSyntaxTextArea createTextArea()
-    {
+    private RSyntaxTextArea createTextArea() {
+        System.out.println("createarea");
         RSyntaxTextArea localRSyntaxTextArea = new RSyntaxTextArea(25, 70);
         localRSyntaxTextArea.setCaretPosition(0);
         localRSyntaxTextArea.addHyperlinkListener(this);
@@ -120,49 +147,69 @@ public class XSLRootPane extends JRootPane implements HyperlinkListener, SyntaxC
         return localRSyntaxTextArea;
     }
 
-    void focusTextArea()
-    {
+    void focusTextArea() {
         textArea.requestFocusInWindow();
+        textArea.getDocument().addDocumentListener(new DocumentListener() {
+
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                localJMenuItem.setEnabled(true);
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                localJMenuItem.setEnabled(true);
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                localJMenuItem.setEnabled(true);
+
+            }
+        });
     }
 
     @Override
-    public void hyperlinkUpdate(HyperlinkEvent paramHyperlinkEvent)
-    {
+    public void hyperlinkUpdate(HyperlinkEvent paramHyperlinkEvent) {
+        System.out.println("hyperlinkupdate");
         if (paramHyperlinkEvent.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
             URL localURL = paramHyperlinkEvent.getURL();
-            if (localURL == null)
+            if (localURL == null) {
                 UIManager.getLookAndFeel().provideErrorFeedback(null);
-            else
+            } else {
                 JOptionPane.showMessageDialog(this, "URL clicked:\n" + localURL.toString());
+            }
         }
     }
-    
+
     public void setText(String text) {
+        System.out.println("settext");
         textArea.setText(text);
     }
 
-    public void setContent(String filename)
-    {
+    public void setContent(String filename) {
+        System.out.println("setcontent");
         //ClassLoader localClassLoader = getClass().getClassLoader();
         BufferedReader localBufferedReader = null;
         try {
             //localBufferedReader = new BufferedReader(new InputStreamReader(localClassLoader.getResourceAsStream(filename), "UTF-8"));
-System.out.println("XSLRootPane.......");
-System.out.println("filename="+filename);
-            localBufferedReader = new BufferedReader(new FileReader(filename));  
+            System.out.println("XSLRootPane.......");
+            System.out.println("filename=" + filename);
+            localBufferedReader = new BufferedReader(new FileReader(filename));
             textArea.read(localBufferedReader, null);
             localBufferedReader.close();
             this.filename = filename;
 
             textArea.setCaretPosition(0);
-        }catch (RuntimeException localRuntimeException) {
+        } catch (RuntimeException localRuntimeException) {
             throw localRuntimeException;
-        }catch (Exception localException) {
+        } catch (Exception localException) {
             textArea.setText("Type here to see syntax highlighting");
         }
     }
 
     private class WordWrapAction extends AbstractAction {
+
         public WordWrapAction() {
             putValue("Name", "Word Wrap");
         }
@@ -174,6 +221,7 @@ System.out.println("filename="+filename);
     }
 
     private class ViewLineNumbersAction extends AbstractAction {
+
         public ViewLineNumbersAction() {
             putValue("Name", "Line Numbers");
         }
@@ -184,8 +232,8 @@ System.out.println("filename="+filename);
         }
     }
 
-    private class ViewLineHighlightAction extends AbstractAction
-    {
+    private class ViewLineHighlightAction extends AbstractAction {
+
         public ViewLineHighlightAction() {
             putValue("Name", "Current Line Highlight");
         }
@@ -196,8 +244,8 @@ System.out.println("filename="+filename);
         }
     }
 
-    private class ToggleAntiAliasingAction extends AbstractAction
-    {
+    private class ToggleAntiAliasingAction extends AbstractAction {
+
         private boolean selected;
 
         public ToggleAntiAliasingAction() {
@@ -213,6 +261,7 @@ System.out.println("filename="+filename);
     }
 
     private class MonospacedFontAction extends AbstractAction {
+
         private boolean selected;
 
         public MonospacedFontAction() {
@@ -225,7 +274,7 @@ System.out.println("filename="+filename);
             this.selected = (!this.selected);
             if (this.selected) {
                 XSLRootPane.this.textArea.setFont(RSyntaxTextArea.getDefaultFont());
-            }else {
+            } else {
                 Font localFont = new Font("Dialog", 0, 13);
                 XSLRootPane.this.textArea.setFont(localFont);
             }
@@ -233,6 +282,7 @@ System.out.println("filename="+filename);
     }
 
     private class MarkOccurrencesAction extends AbstractAction {
+
         public MarkOccurrencesAction() {
             putValue("Name", "Mark Occurrences");
         }
@@ -244,26 +294,26 @@ System.out.println("filename="+filename);
     }
 
     /*private class ChangeSyntaxStyleAction extends AbstractAction {
-        private String res;
-        private String style;
+    private String res;
+    private String style;
 
-        public ChangeSyntaxStyleAction(String paramString1, String paramString2, String arg4) {
-            putValue("Name", paramString1);
-            this.res = paramString2;
-            //Object localObject;
-            //this.style = localObject;
-        }
+    public ChangeSyntaxStyleAction(String paramString1, String paramString2, String arg4) {
+    putValue("Name", paramString1);
+    this.res = paramString2;
+    //Object localObject;
+    //this.style = localObject;
+    }
 
-        @Override
-        public void actionPerformed(ActionEvent paramActionEvent) {
-            System.out.println("\n\n...................\nactionPerformed...");
-            XSLRootPane.this.setContent(this.res);
-            XSLRootPane.this.textArea.setCaretPosition(0);
-            XSLRootPane.this.textArea.setSyntaxEditingStyle(this.style);
-        }
+    @Override
+    public void actionPerformed(ActionEvent paramActionEvent) {
+    System.out.println("\n\n...................\nactionPerformed...");
+    XSLRootPane.this.setContent(this.res);
+    XSLRootPane.this.textArea.setCaretPosition(0);
+    XSLRootPane.this.textArea.setSyntaxEditingStyle(this.style);
+    }
     }*/
-
     private class BookmarksAction extends AbstractAction {
+
         public BookmarksAction() {
             putValue("Name", "Bookmarks");
         }
@@ -275,6 +325,7 @@ System.out.println("filename="+filename);
     }
 
     private class AnimateBracketMatchingAction extends AbstractAction {
+
         public AnimateBracketMatchingAction() {
             putValue("Name", "Animate Bracket Matching");
         }
@@ -286,17 +337,23 @@ System.out.println("filename="+filename);
     }
 
     private class AboutAction extends AbstractAction {
+
         public AboutAction() {
-            putValue("Name", "Cómo usar el editor...");
+            putValue("Name", "CÃ³mo usar el editor...");
         }
 
         @Override
         public void actionPerformed(ActionEvent paramActionEvent) {
-            JOptionPane.showMessageDialog(XSLRootPane.this, "Escribir aqui la ayuda", "Ayuda", 1);
+
+            JOptionPane.showMessageDialog(XSLRootPane.this, 
+                      "El editor de texto es utilizado para"
+                    + "\ncorregir o editar el cÃ³digo fuente"
+                    + "\ndel archivo XSL de la plantilla actual.\n", "Ayuda", 1);
         }
     }
-  
+
     private class SaveAction extends AbstractAction {
+
         public SaveAction() {
             putValue("Name", "Guardar");
         }
@@ -304,18 +361,22 @@ System.out.println("filename="+filename);
         @Override
         public void actionPerformed(ActionEvent paramActionEvent) {
             //JOptionPane.showMessageDialog(XSLRootPane.this, "<html><b>RSyntaxTextArea</b> - A Swing syntax highlighting text component<br>Version 1.5.0<br>Licensed under the LGPL", "About RSyntaxTextArea", 1);
+
             BufferedWriter bw = null;
             try {
                 bw = new BufferedWriter(new FileWriter(filename));
                 textArea.write(bw);
-            }catch (FileNotFoundException ex) {
+
+
+
+            } catch (FileNotFoundException ex) {
                 ex.printStackTrace(System.out);
-            }catch (IOException ex) {
+            } catch (IOException ex) {
                 ex.printStackTrace(System.out);
-            }finally {
+            } finally {
                 //Close the BufferedWriter
                 try {
-                    if(bw != null) {
+                    if (bw != null) {
                         bw.flush();
                         bw.close();
                     }
@@ -325,15 +386,16 @@ System.out.println("filename="+filename);
             }
         }
     }
-  
-    private class CloseAction extends AbstractAction {
-        public CloseAction() {
-            putValue("Name", "Salir");
-        }
 
-        @Override
-        public void actionPerformed(ActionEvent paramActionEvent) {
-            JOptionPane.showMessageDialog(XSLRootPane.this, "Adiós", "falta codigo", 1);
-        }
+    /* private class CloseAction extends AbstractAction {
+
+    public CloseAction() {
+    putValue("Name", "Salir");
     }
+
+    @Override
+    public void actionPerformed(ActionEvent paramActionEvent) {
+    JOptionPane.showMessageDialog(XSLRootPane.this, "AdiÃ³s", "falta codigo", 1);
+    }
+    }*/
 }
