@@ -35,7 +35,8 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
     private static final String PREF = "--";    
     
     /** Inicio de la URL utilizada para las peticiones de informacion a Facebook */
-    private static final String FACEBOOKGRAPH = "https://graph.facebook.com/";
+    private static final String FACEBOOKGRAPH = "https://graph-video.facebook.com/";
+    
     
     /** Indica el numero de mensajes maximo a extraer en cada busqueda */
     private static final short QUERYLIMIT = 100;
@@ -490,8 +491,8 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
         }
     }
 
-    public void postVideo(Video video, HttpServletRequest request, SWBActionResponse response) {
-        
+    public void postVideo(Video video, HttpServletRequest request, SWBActionResponse response) 
+    {
         Map<String, String> params = new HashMap<String, String>(3);
         if (this.getAccessToken() != null) {
             params.put("access_token", this.getAccessToken());
@@ -511,8 +512,7 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
             
             if (videoFile.exists()) {
                 SWBFileInputStream fileStream = new SWBFileInputStream(videoFile);
-                String facebookResponse = postFileRequest(params, url,
-                        video.getVideo(), fileStream, "POST", "video");
+                String facebookResponse = postFileRequest(params, url, video.getVideo(), fileStream, "POST", "video");
                 jsonResponse = new JSONObject(facebookResponse);
             }
             if (jsonResponse != null && jsonResponse.get("id") != null) {
@@ -646,7 +646,6 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
      */
     private String postFileRequest(Map<String, String> params, String url, String fileName,
             InputStream fileStream, String method, String itemToPost) {
-
         HttpURLConnection conex = null;
         OutputStream urlOut = null;
         InputStream in = null;
@@ -669,11 +668,9 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
             conex.setUseCaches(false);
             conex.setRequestProperty("Content-Type", "multipart/form-data; boundary=" + boundary);
             conex.setRequestProperty("MIME-version", "1.0");
-
             conex.connect();
             urlOut = conex.getOutputStream();
             DataOutputStream out = new DataOutputStream(urlOut);
-            
             for (Map.Entry<String, String> entry : params.entrySet()) {
                 out.writeBytes(PREF + boundary + CRLF);
                 out.writeBytes("Content-Type: text/plain;charset=UTF-8" + CRLF);
@@ -683,11 +680,9 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
                 out.write(valueBytes);
                 out.writeBytes(CRLF);
             }
-
             out.writeBytes(PREF + boundary + CRLF);
             out.writeBytes("Content-Type: " + (itemToPost.equals("photo") ? "image" : "file") + CRLF);
             out.writeBytes("Content-disposition: form-data; filename=\"" + fileName + "\"" + CRLF);
-
             // Write the file
             out.writeBytes(CRLF);
             byte buf[] = new byte[1024];
@@ -696,7 +691,6 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
                 out.write(buf, 0, len);
                 len = fileStream.read(buf);
             }
-
             out.writeBytes(CRLF + PREF + boundary + PREF + CRLF);
             out.flush();
             in = conex.getInputStream();
