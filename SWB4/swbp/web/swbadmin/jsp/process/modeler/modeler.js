@@ -87,6 +87,22 @@
             }
             return obj;
         },                    
+        
+        createCallTask:function(id, parent)
+        {
+            //Revisar ID
+            var obj=ToolKit.createResizeObject(id,parent);
+            obj.setAttributeNS(null,"bclass","callactivity");
+            obj.setAttributeNS(null,"oclass","callactivity_o");
+            obj.setAttributeNS(null,"rx",10);
+            obj.setAttributeNS(null,"ry",10);
+            obj.setBaseClass();                        
+            obj.mouseup=function(x,y)
+            {
+                //alert("hola1");
+            }
+            return obj;
+        },
 
         createStartEvent:function(id, parent)
         {
@@ -131,56 +147,194 @@
             if(type=='normalStartEvent')
             {
                 ret=Modeler.createObject("#startEvent",null,null);
-                ret.setText("Evento de Inicio",0,1,80);
+                ret.setText("Inicio Normal",0,1,80);
             }
-            else if(type=='messageStartEvent')ret=Modeler.createObject("#messageStartEvent",null,null);
-            else if(type=='timerStartEvent')ret=Modeler.createObject("#timerStartEvent",null,null);
-            else if(type=='ruleStartEvent')ret=Modeler.createObject("#ruleStartEvent",null,null);
-            else if(type=='signalStartEvent')ret=Modeler.createObject("#signalStartEvent",null,null);
-            else if(type=='multiStartEvent')ret=Modeler.createObject("#multipleStartEvent",null,null);
-            else if(type=='parallelStartEvent')ret=Modeler.createObject("#parallelStartEvent",null,null);
-            else if(type=='scalaStartEvent')ret= Modeler.createObject("#scalationStartEvent",null,null);
-            else if(type=='errorStartEvent')ret= Modeler.createObject("#errorStartEvent",null,null);
-            else if(type=='compensaStartEvent')ret= Modeler.createObject("#compensationStartEvent",null,null);
-            else if(type=='messageInterCatchEvent')ret= Modeler.createObject("#messageIntermediateCatchEvent",null,null);
-            else if(type=='messageInterThrowEvent')ret= Modeler.createObject("#messageIntermediateThrowEvent",null,null);
-            else if(type=='timerInterEvent')ret= Modeler.createObject("#timerIntermediateEvent",null,null);
-            else if(type=='errorInterEvent')ret= Modeler.createObject("#errorIntermediateEvent",null,null);
-            else if(type=='cancelInterEvent')ret= Modeler.createObject("#cancelIntermediateEvent",null,null);
-            else if(type=='compensaInterCatchEvent')ret= Modeler.createObject("#compensationIntermediateCatchEvent",null,null);
-            else if(type=='compensaInterThrowEvent')ret= Modeler.createObject("#compensationIntermediateThrowEvent",null,null);
-            else if(type=='ruleInterEvent')ret= Modeler.createObject("#ruleIntermediateEvent",null,null);
-            else if(type=='linkInterCatchEvent')ret= Modeler.createObject("#linkIntermediateCatchEvent",null,null);
-            else if(type=='linkInterThrowEvent')ret= Modeler.createObject("#linkIntermediateThrowEvent",null,null);
-            else if(type=='signalInterCatchEvent')ret= Modeler.createObject("#signalIntermediateCatchEvent",null,null);
-            else if(type=='signalInterThrowEvent')ret= Modeler.createObject("#signalIntermediateThrowEvent",null,null);
-            else if(type=='multipleInterCatchEvent')ret= Modeler.createObject("#multipleIntermediateCatchEvent",null,null);
-            else if(type=='multipleInterThrowEvent')ret= Modeler.createObject("#multipleIntermediateThrowEvent",null,null);
-            else if(type=='scalaInterCatchEvent')ret= Modeler.createObject("#scalationIntermediateCatchEvent",null,null);
-            else if(type=='scalaInterThrowEvent')ret= Modeler.createObject("#scalationIntermediateThrowEvent",null,null);
-            else if(type=='parallelInterEvent')ret= Modeler.createObject("#parallelIntermediateEvent",null,null);
-            else if(type=='normalEndEvent')ret= Modeler.createObject("#endEvent",null,null);
-            else if(type=='messageEndEvent')ret= Modeler.createObject("#messageEndEvent",null,null);
-            else if(type=='errorEndEvent')ret= Modeler.createObject("#errorEndEvent",null,null);
-            else if(type=='cancelEndEvent')ret= Modeler.createObject("#cancelationEndEvent",null,null);
-            else if(type=='compensaEndEvent')ret= Modeler.createObject("#compensationEndEvent",null,null);
-            else if(type=='signalEndEvent')ret= Modeler.createObject("#signalEndEvent",null,null);
-            else if(type=='multiEndEvent')ret= Modeler.createObject("#multipleEndEvent",null,null);
-            else if(type=='escalaEndEvent')ret= Modeler.createObject("#scalationEndEvent",null,null);
-            else if(type=='terminalEndEvent')ret= Modeler.createObject("#terminationEndEvent",null,null);
-            else if(type=='exclusiveDataGateway')ret= Modeler.createObject("#exclusiveDataGateway",null,null);
-            else if(type=='inclusiveDataGateway')ret= Modeler.createObject("#inclusiveDataGateway",null,null);
-            else if(type=='exclusiveStartEventGateway')ret= Modeler.createObject("#exclusiveStartGateway",null,null);
-            else if(type=='exclusiveEventGateway')ret= Modeler.createObject("#eventGateway",null,null);
-            else if(type=='parallelGateway')ret= Modeler.createObject("#parallelGateway",null,null);
-            else if(type=='parallelStartGateway')ret= Modeler.createObject("#parallelStartGateway",null,null);
-            else if(type=='complexGateway')ret= Modeler.createObject("#complexGateway",null,null);
+            else if(type=='messageStartEvent'){
+                ret=Modeler.createObject("#messageStartEvent",null,null);
+                ret.setText("Inicio por mensaje",0,1,80);
+            }
+            else if(type=='timerStartEvent'){
+                ret=Modeler.createObject("#timerStartEvent",null,null);
+                ret.setText("Inicio temporizado",0,1,80);
+            }
+            else if(type=='ruleStartEvent') {
+                ret=Modeler.createObject("#ruleStartEvent",null,null);
+                ret.setText("Inicio por regla de negocio",0,1,80);
+            }
+            else if(type=='signalStartEvent') {
+                ret=Modeler.createObject("#signalStartEvent",null,null);
+                ret.setText("Inicio por señal",0,1,80);
+            }
+            else if(type=='multiStartEvent') {
+                ret=Modeler.createObject("#multipleStartEvent",null,null);
+                ret.setText("Inicio múltiple",0,1,80);
+            }
+            else if(type=='parallelStartEvent') {
+                ret=Modeler.createObject("#parallelStartEvent",null,null);
+                ret.setText("Inicio paralelo",0,1,80);
+            }
+            else if(type=='scalaStartEvent') {
+                ret= Modeler.createObject("#scalationStartEvent",null,null);
+                ret.setText("Inicio por escalamiento",0,1,80);
+            }
+            else if(type=='errorStartEvent') {
+                ret= Modeler.createObject("#errorStartEvent",null,null);
+                ret.setText("Inicio por error",0,1,80);
+            }
+            else if(type=='compensaStartEvent') {
+                ret= Modeler.createObject("#compensationStartEvent",null,null);
+                ret.setText("Inicio por compensación",0,1,80);
+            }
+            else if(type=='messageInterCatchEvent') {
+                ret= Modeler.createObject("#messageIntermediateCatchEvent",null,null);
+                ret.setText("Recepción de mensaje",0,1,80);
+            }
+            else if(type=='messageInterThrowEvent') {
+                ret= Modeler.createObject("#messageIntermediateThrowEvent",null,null);
+                ret.setText("Envío de mensaje",0,1,80);
+            }
+            else if(type=='timerInterEvent') {
+                ret= Modeler.createObject("#timerIntermediateEvent",null,null);
+                ret.setText("Temporizador",0,1,80);
+            }
+            else if(type=='errorInterEvent') {
+                ret= Modeler.createObject("#errorIntermediateEvent",null,null);
+                ret.setText("Recepción de error",0,1,80);
+            }
+            else if(type=='cancelInterEvent') {
+                ret= Modeler.createObject("#cancelIntermediateEvent",null,null);
+                ret.setText("Cancelación",0,1,80);
+            }
+            else if(type=='compensaInterCatchEvent') {
+                ret= Modeler.createObject("#compensationIntermediateCatchEvent",null,null);
+                ret.setText("Recepción de compensación",0,1,80);
+            }
+            else if(type=='compensaInterThrowEvent') {
+                ret= Modeler.createObject("#compensationIntermediateThrowEvent",null,null);
+                ret.setText("Disparo de compensación",0,1,80);
+            }
+            else if(type=='ruleInterEvent') {
+                ret= Modeler.createObject("#ruleIntermediateEvent",null,null);
+                ret.setText("Regla de negocio",0,1,80);
+            }
+            else if(type=='linkInterCatchEvent') {
+                ret= Modeler.createObject("#linkIntermediateCatchEvent",null,null);
+                ret.setText("Recepción de enlace",0,1,80);
+            }
+            else if(type=='linkInterThrowEvent') {
+                ret= Modeler.createObject("#linkIntermediateThrowEvent",null,null);
+                ret.setText("Disparo de enlace",0,1,80);
+            }
+            else if(type=='signalInterCatchEvent') {
+                ret= Modeler.createObject("#signalIntermediateCatchEvent",null,null);
+                ret.setText("Recepción de señal",0,1,80);
+            }
+            else if(type=='signalInterThrowEvent') {
+                ret= Modeler.createObject("#signalIntermediateThrowEvent",null,null);
+                ret.setText("Disparo de señal",0,1,80);
+            }
+            else if(type=='multipleInterCatchEvent') {
+                ret= Modeler.createObject("#multipleIntermediateCatchEvent",null,null);
+                ret.setText("Recepción múltiple",0,1,80);
+            }
+            else if(type=='multipleInterThrowEvent') {
+                ret= Modeler.createObject("#multipleIntermediateThrowEvent",null,null);
+                ret.setText("Disparo múltiple",0,1,80);
+            }
+            else if(type=='scalaInterCatchEvent') {
+                ret= Modeler.createObject("#scalationIntermediateCatchEvent",null,null);
+                ret.setText("Recepción de escalamiento",0,1,80);
+            }
+            else if(type=='scalaInterThrowEvent') {
+                ret= Modeler.createObject("#scalationIntermediateThrowEvent",null,null);
+                ret.setText("Disparo de escalamiento",0,1,80);
+            }
+            else if(type=='parallelInterEvent') {
+                ret= Modeler.createObject("#parallelIntermediateEvent",null,null);
+                ret.setText("Paralelo",0,1,80);
+            }
+            else if(type=='normalEndEvent') {
+                ret= Modeler.createObject("#endEvent",null,null);
+                ret.setText("Fin normal",0,1,80);
+            }
+            else if(type=='messageEndEvent') {
+                ret= Modeler.createObject("#messageEndEvent",null,null);
+                ret.setText("Fin con mensaje",0,1,80);
+            }
+            else if(type=='errorEndEvent') {
+                ret= Modeler.createObject("#errorEndEvent",null,null);
+                ret.setText("Fin con error",0,1,80);
+            }
+            else if(type=='cancelEndEvent') {
+                ret= Modeler.createObject("#cancelationEndEvent",null,null);
+                ret.setText("Fin con cancelación",0,1,80);
+            }
+            else if(type=='compensaEndEvent') {
+                ret= Modeler.createObject("#compensationEndEvent",null,null);
+                ret.setText("Fin con compensación",0,1,80);
+            }
+            else if(type=='signalEndEvent') {
+                ret= Modeler.createObject("#signalEndEvent",null,null);
+                ret.setText("Fin con señal",0,1,80);
+            }
+            else if(type=='multiEndEvent') {
+                ret= Modeler.createObject("#multipleEndEvent",null,null);
+                ret.setText("Fin múltiple",0,1,80);
+            }
+            else if(type=='escalaEndEvent') {
+                ret= Modeler.createObject("#scalationEndEvent",null,null);
+                ret.setText("Fin con escalamiento",0,1,80);
+            }
+            else if(type=='terminalEndEvent') {
+                ret= Modeler.createObject("#terminationEndEvent",null,null);
+                ret.setText("Terminación",0,1,80);
+            }
+            else if(type=='exclusiveDataGateway') {
+                ret= Modeler.createObject("#exclusiveDataGateway",null,null);
+                ret.setText("Exclusiva (datos)",0,1,80);
+            }
+            else if(type=='inclusiveDataGateway') {
+                ret= Modeler.createObject("#inclusiveDataGateway",null,null);
+                ret.setText("Inclusiva (datos)",0,1,80);
+            }
+            else if(type=='exclusiveStartEventGateway') {
+                ret= Modeler.createObject("#exclusiveStartGateway",null,null);
+                ret.setText("Exclusiva de inicio",0,1,80);
+            }
+            else if(type=='exclusiveEventGateway') {
+                ret= Modeler.createObject("#eventGateway",null,null);
+                ret.setText("Exclusiva (eventos)",0,1,80);
+            }
+            else if(type=='parallelGateway') {
+                ret= Modeler.createObject("#parallelGateway",null,null);
+                ret.setText("Paralela",0,1,80);
+            }
+            else if(type=='parallelStartGateway') {
+                ret= Modeler.createObject("#parallelStartGateway",null,null);
+                ret.setText("Paralela de inicio",0,1,80);
+            }
+            else if(type=='complexGateway') {
+                ret= Modeler.createObject("#complexGateway",null,null);
+                ret.setText("Compleja",0,1,80);
+            }
             else if(type=='annotation')ret= Modeler.createObject("#xxxxxxx",null,null);
             else if(type=='group')ret= Modeler.createObject("#xxxxxxx",null,null);
-            else if(type=='dataObject')ret= Modeler.createObject("#data",null,null);
-            else if(type=='dataInput')ret= Modeler.createObject("#dataInput",null,null);
-            else if(type=='dataOutput')ret= Modeler.createObject("#dataOutput",null,null);
-            else if(type=='dataStore')ret= Modeler.createObject("#dataStore",null,null);
+            else if(type=='dataObject') {
+                ret= Modeler.createObject("#data",null,null);
+                ret.setText("Dato",0,1,80);
+            }
+            else if(type=='dataInput') {
+                ret= Modeler.createObject("#dataInput",null,null);
+                ret.setText("Dato de entrada",0,1,80);
+            }
+            else if(type=='dataOutput') {
+                ret= Modeler.createObject("#dataOutput",null,null);
+                ret.setText("Dato de salida",0,1,80);
+            }
+            else if(type=='dataStore') {
+                ret= Modeler.createObject("#dataStore",null,null);
+                ret.setText("Almacén de datos",0,1,80);
+            }
             else if(type=='userTask') {
                 ret = Modeler.createTask(null,null);
                 ret.addIcon("#userMarker",-1,-1,13,8);
@@ -223,6 +377,40 @@
                 ret.setText("Tarea de recepción de mensaje");
                 ret.resize(100,60);
             }
+            else if(type=='abstractTask') {
+                ret = Modeler.createTask(null,null);
+                ret.setText("Tarea abstracta");
+                ret.resize(100,60);
+            }
+            else if(type=='callTask') {
+                ret = Modeler.createCallTask(null,null);
+                ret.setText("Tarea reusada");
+                ret.resize(100,60);
+            }
+            else if(type=='callmanualTask') {
+                ret = Modeler.createCallTask(null,null);
+                ret.addIcon("#manualMarker",-1,-1,9,6);
+                ret.setText("Tarea manual reusada");
+                ret.resize(100,60);
+            }
+            else if(type=='callruleTask') {
+                ret = Modeler.createCallTask(null,null);
+                ret.addIcon("#ruleMarker",-1,-1,12,12);
+                ret.setText("Tarea de regla de negocio reusada");
+                ret.resize(100,60);
+            }
+            else if(type=='callscriptTask') {
+                ret = Modeler.createCallTask(null,null);
+                ret.addIcon("#scriptMarker",-1,-1,7,13);
+                ret.setText("Tarea de script reusada");
+                ret.resize(100,60);
+            }
+            else if(type=='calluserTask') {
+                ret = Modeler.createCallTask(null,null);
+                ret.addIcon("#userMarker",-1,-1,13,8);
+                ret.setText("Tarea de usuario reusada");
+                ret.resize(100,60);
+            }
             return ret;
         }
         
@@ -247,158 +435,140 @@
 
         //obj = Modeler.createObject("#test");                
 
-        obj2 = Modeler.createObject("#startEvent",null,null);
-        obj2.move(100,20);
-        obj2 = Modeler.createObject("#signalStartEvent",null,null);
-        obj2.move(130,20);
-        obj2 = Modeler.createObject("#timerStartEvent",null,null);
+        obj2 = Modeler.mapObject("normalStartEvent");
+        obj2.move(80,20);
+        obj2 = Modeler.mapObject("messageStartEvent");
         obj2.move(160,20);
-        obj2 = Modeler.createObject("#ruleStartEvent",null,null);
-        obj2.move(190,20);
-        obj2 = Modeler.createObject("#multipleStartEvent",null,null);
-        obj2.move(220,20);
-        obj2 = Modeler.createObject("#parallelStartEvent",null,null);
-        obj2.move(250,20);
-        obj2 = Modeler.createObject("#errorStartEvent",null,null);
-        obj2.move(280,20);
-        obj2 = Modeler.createObject("#compensationStartEvent",null,null);
-        obj2.move(310,20);
-        obj2 = Modeler.createObject("#scalationStartEvent",null,null);
-        obj2.move(340,20);
-        obj2 = Modeler.createObject("#messageStartEvent",null,null);
-        obj2.move(370,20);
+        obj2 = Modeler.mapObject("timerStartEvent");
+        obj2.move(240,20);
+        obj2 = Modeler.mapObject("ruleStartEvent");
+        obj2.move(320,20);
+        obj2 = Modeler.mapObject("signalStartEvent");
+        obj2.move(400,20);
+        obj2 = Modeler.mapObject("multiStartEvent");
+        obj2.move(480,20);
+        obj2 = Modeler.mapObject("parallelStartEvent");
+        obj2.move(560,20);
+        obj2 = Modeler.mapObject("scalaStartEvent");
+        obj2.move(640,20);
+        obj2 = Modeler.mapObject("errorStartEvent");
+        obj2.move(720,20);
+        obj2 = Modeler.mapObject("compensaStartEvent");
+        obj2.move(800,20);
 
-        obj2 = Modeler.createObject("#intermediateEvent",null,null);
-        obj2.move(100,70);
-        obj2 = Modeler.createObject("#messageIntermediateThrowEvent",null,null);
-        obj2.move(130,70);
-        obj2 = Modeler.createObject("#timerIntermediateEvent",null,null);
-        obj2.move(160,70);
-        obj2 = Modeler.createObject("#errorIntermediateEvent",null,null);
-        obj2.move(190,70);
-        obj2 = Modeler.createObject("#cancelIntermediateEvent",null,null);
-        obj2.move(220,70);
-        obj2 = Modeler.createObject("#compensationIntermediateCatchEvent",null,null);
-        obj2.move(250,70);
-        obj2 = Modeler.createObject("#compensationIntermediateThrowEvent",null,null);
-        obj2.move(280,70);
-        obj2 = Modeler.createObject("#linkIntermediateCatchEvent",null,null);
-        obj2.move(310,70);
-        obj2 = Modeler.createObject("#linkIntermediateThrowEvent",null,null);
-        obj2.move(340,70);
-        obj2 = Modeler.createObject("#signalIntermediateCatchEvent",null,null);
-        obj2.move(370,70);
-        obj2 = Modeler.createObject("#signalIntermediateThrowEvent",null,null);
-        obj2.move(400,70);
-        obj2 = Modeler.createObject("#multipleIntermediateCatchEvent",null,null);
-        obj2.move(430,70);
-        obj2 = Modeler.createObject("#multipleIntermediateThrowEvent",null,null);
-        obj2.move(460,70);
-        obj2 = Modeler.createObject("#scalationIntermediateCatchEvent",null,null);
-        obj2.move(490,70);
-        obj2 = Modeler.createObject("#scalationIntermediateThrowEvent",null,null);
-        obj2.move(520,70);
-        obj2 = Modeler.createObject("#parallelIntermediateEvent",null,null);
-        obj2.move(550,70);
-        obj2 = Modeler.createObject("#messageIntermediateCatchEvent",null,null);
-        obj2.move(580,70);
+        obj2 = Modeler.mapObject("messageInterCatchEvent");
+        obj2.move(80,90);
+        obj2 = Modeler.mapObject("messageInterThrowEvent");
+        obj2.move(160,90);
+        obj2 = Modeler.mapObject("errorInterEvent");
+        obj2.move(240,90);
+        obj2 = Modeler.mapObject("cancelInterEvent");
+        obj2.move(320,90);
+        obj2 = Modeler.mapObject("compensaInterCatchEvent");
+        obj2.move(400,90);
+        obj2 = Modeler.mapObject("compensaInterThrowEvent");
+        obj2.move(480,90);
+        obj2 = Modeler.mapObject("ruleInterEvent");
+        obj2.move(560,90);
+        obj2 = Modeler.mapObject("linkInterCatchEvent");
+        obj2.move(640,90);
+        obj2 = Modeler.mapObject("linkInterThrowEvent");
+        obj2.move(720,90);
+        obj2 = Modeler.mapObject("signalInterCatchEvent");
+        obj2.move(800,90);
+        obj2 = Modeler.mapObject("signalInterThrowEvent");
+        obj2.move(880,90);
+        obj2 = Modeler.mapObject("multipleInterCatchEvent");
+        obj2.move(960,90);
+        obj2 = Modeler.mapObject("multipleInterThrowEvent");
+        obj2.move(1040,90);
+        obj2 = Modeler.mapObject("scalaInterCatchEvent");
+        obj2.move(1120,90);
+        obj2 = Modeler.mapObject("scalaInterThrowEvent");
+        obj2.move(1200,90);
+        obj2 = Modeler.mapObject("parallelInterEvent");
+        obj2.move(1280,90);
 
+        obj2 = Modeler.mapObject("normalEndEvent");
+        obj2.move(80,160);
+        obj2 = Modeler.mapObject("messageEndEvent");
+        obj2.move(160,160);
+        obj2 = Modeler.mapObject("errorEndEvent");
+        obj2.move(240,160);
+        obj2 = Modeler.mapObject("cancelEndEvent");
+        obj2.move(320,160);
+        obj2 = Modeler.mapObject("compensaEndEvent");
+        obj2.move(400,160);
+        obj2 = Modeler.mapObject("signalEndEvent");
+        obj2.move(480,160);
+        obj2 = Modeler.mapObject("multiEndEvent");
+        obj2.move(560,160);
+        obj2 = Modeler.mapObject("escalaEndEvent");
+        obj2.move(640,160);
+        obj2 = Modeler.mapObject("terminalEndEvent");
+        obj2.move(720,160);
 
-        obj2 = Modeler.createObject("#endEvent",null,null);
-        obj2.move(100,120);
-        obj2 = Modeler.createObject("#messageEndEvent",null,null);
-        obj2.move(130,120);
-        obj2 = Modeler.createObject("#errorEndEvent",null,null);
-        obj2.move(160,120);
-        obj2 = Modeler.createObject("#cancelationEndEvent",null,null);
-        obj2.move(190,120);
-        obj2 = Modeler.createObject("#compensationEndEvent",null,null);
-        obj2.move(220,120);
-        obj2 = Modeler.createObject("#signalEndEvent",null,null);
-        obj2.move(250,120);
-        obj2 = Modeler.createObject("#multipleEndEvent",null,null);
-        obj2.move(280,120);
-        obj2 = Modeler.createObject("#scalationEndEvent",null,null);
-        obj2.move(310,120);
-        obj2 = Modeler.createObject("#terminationEndEvent",null,null);
-        obj2.move(340,120);
+        obj2 = Modeler.mapObject("exclusiveDataGateway");
+        obj2.move(80,240);
+        obj2 = Modeler.mapObject("inclusiveDataGateway");
+        obj2.move(160,240);
+        obj2 = Modeler.mapObject("exclusiveStartEventGateway");
+        obj2.move(240,240);
+        obj2 = Modeler.mapObject("exclusiveEventGateway");
+        obj2.move(320,240);
+        obj2 = Modeler.mapObject("parallelGateway");
+        obj2.move(400,240);
+        obj2 = Modeler.mapObject("parallelStartGateway");
+        obj2.move(480,240);
+        obj2 = Modeler.mapObject("complexGateway");
+        obj2.move(560,240);
 
-        obj2 = Modeler.createObject("#exclusiveDataGateway",null,null);
-        obj2.move(100,180);
-        obj2 = Modeler.createObject("#inclusiveDataGateway",null,null);
-        obj2.move(160,180);
-        obj2 = Modeler.createObject("#exclusiveStartGateway",null,null);
-        obj2.move(220,180);
-        obj2 = Modeler.createObject("#eventGateway",null,null);
-        obj2.move(280,180);
-        obj2 = Modeler.createObject("#parallelGateway",null,null);
-        obj2.move(340,180);
-        obj2 = Modeler.createObject("#parallelStartGateway",null,null);
-        obj2.move(400,180);
-        obj2 = Modeler.createObject("#complexGateway",null,null);
-        obj2.move(460,180);
+        obj2 = Modeler.mapObject("dataObject");
+        obj2.move(80,320);
+        obj2 = Modeler.mapObject("dataInput");
+        obj2.move(160,320);
+        obj2 = Modeler.mapObject("dataOutput");
+        obj2.move(240,320);
+        obj2 = Modeler.mapObject("dataStore");
+        obj2.move(320,320);
 
-        obj2 = Modeler.createObject("#data",null,null);
-        obj2.move(100,240);
-        obj2 = Modeler.createObject("#dataInput",null,null);
-        obj2.move(150,240);
-        obj2 = Modeler.createObject("#dataOutput",null,null);
-        obj2.move(200,240);
-        obj2 = Modeler.createObject("#dataStore",null,null);
-        obj2.move(250,240);
-
-        obj2 = Modeler.createTask(null,null);
-        obj2.addIcon("#userMarker",-1,-1,13,10);
-        obj2.resize(100,60);
-        obj2.setText("Tarea de usuario");
-        obj2.move(100,320);
+        obj2 = Modeler.mapObject("abstractTask");
+        obj2.move(100,420);
+        obj2 = Modeler.mapObject("userTask");
+        obj2.move(200,420);
+        obj2 = Modeler.mapObject("serviceTask");
+        obj2.move(300,420);
+        obj2 = Modeler.mapObject("scriptTask");
+        obj2.move(400,420);
+        obj2 = Modeler.mapObject("ruleTask");
+        obj2.move(500,420);
+        obj2 = Modeler.mapObject("sendTask");
+        obj2.move(600,420);
+        obj2 = Modeler.mapObject("receiveTask");
+        obj2.move(700,420);
+        obj2 = Modeler.mapObject("manualTask");
+        obj2.move(800,420);
+        obj2 = Modeler.mapObject("callTask");
+        obj2.move(900,420);
+        obj2 = Modeler.mapObject("callmanualTask");
+        obj2.move(1000,420);
+        obj2 = Modeler.mapObject("callruleTask");
+        obj2.move(1100,420);
+        obj2 = Modeler.mapObject("callscriptTask");
+        obj2.move(1200,420);
+        obj2 = Modeler.mapObject("calluserTask");
+        obj2.move(1300,420);
         
-        obj2 = Modeler.createTask(null,null);
-        obj2.addIcon("#serviceMarker",-1,-1,13,8);
-        obj2.setText("Tarea de Servicio");
-        obj2.resize(100,60);
-        obj2.move(200,320);
-        
-        obj2 = Modeler.createTask(null,null);
-        obj2.addIcon("#scriptMarker",-1,-1,7,13);
-        obj2.setText("Tarea de Script");
-        obj2.resize(100,60);
-        obj2.move(300,320);
-        
-        obj2 = Modeler.createTask(null,null);
-        obj2.addIcon("#ruleMarker",-1,-1,12,12);
-        obj2.setText("Tarea de regla de negocio");
-        obj2.resize(100,60);
-        obj2.move(400,320);
-        
-        obj2 = Modeler.createTask(null,null);
-        obj2.addIcon("#messageThrowMarker",-1,-1,13,10);
-        obj2.setText("Tarea de envío de mensaje");
-        obj2.resize(100,60);
-        obj2.move(500,320);
-        
-        obj2 = Modeler.createTask(null,null);
-        obj2.addIcon("#messageCatchMarker",-1,-1,13,10);
-        obj2.setText("Tarea de recepción de mensaje");
-        obj2.resize(100,60);
-        obj2.move(600,320);
-        
-        obj2 = Modeler.createTask(null,null);
-        obj2.addIcon("#manualMarker",-1,-1,9,6);
-        obj2.setText("Tarea Manual");
-        obj2.resize(100,60);
-        obj2.move(700,320);
-
         obj = Modeler.createObject("#pool",null,null);
         obj.moveFirst=function(){};
         //obj.mouseup=function(evt){alert("up")};
-        obj.move(350,470);
+        obj.move(350,580);
         
         obj2 = Modeler.createTask(null,null);
         obj2.addIcon("#manualMarker",-1,-1,9,6);
         obj2.setText("Tarea Contenida");
         obj2.resize(100,60);
-        obj2.move(400,500);        
+        obj2.move(400,600);        
         obj2.setParent(obj);
     }
 
