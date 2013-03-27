@@ -210,7 +210,7 @@ public class Timeline extends GenericResource{
         try {
             System.out.println("Get the next 25 tweets!!");
             Paging paging = new Paging(); //used to set maxId, count
-            paging.count(5);
+            paging.count(10);
             if(maxTweetID >0L){
                 paging.setMaxId(maxTweetID-1);
             }
@@ -284,7 +284,7 @@ public class Timeline extends GenericResource{
                 out.println("</table>");
                 out.println("</fieldset>");
                 */
-                doGetTweets(request, response, paramRequest, status);
+                doPrintTweet(request, response, paramRequest, status, response.getWriter());
                 i++;
             }
             out.println("<label id=\"moreTwitLabel\"><a href=\"#\" onclick=\"appendHtmlTmp('" + renderURL.setMode("getMoreTweets").setParameter("maxTweetID", maxTweetID+"") + "','getMoreTweets');try{this.parentNode.parentNode.removeChild( this.parentNode );}catch(noe){}; return false;\">More tweets</a></label>");
@@ -296,41 +296,35 @@ public class Timeline extends GenericResource{
         }
     }
     
-    public static void doGetTweets(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest, Status status) throws SWBResourceException, IOException {
-        PrintWriter out = response.getWriter();
-        System.out.println("1");
+    public static void doPrintTweet(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest, Status status, java.io.Writer writer) throws SWBResourceException, IOException {
+        //PrintWriter out = (PrintWriter)writer;
         String objUri = request.getParameter("suri");        
-        System.out.println("2");
         SWBResourceURL actionURL = paramRequest.getActionUrl();
-        System.out.println("3");
         SWBResourceURL renderURL = paramRequest.getRenderUrl();
-        System.out.println("4");
         if(objUri!= null){
             actionURL.setParameter("suri", objUri);
             renderURL.setParameter("suri", objUri);
         }
-        System.out.println("5");
         Long maxTweetID;
         try{
             maxTweetID = Long.parseLong(request.getParameter("maxTweetID"));
         }catch(NumberFormatException nfe){
             maxTweetID =0L;
         }
-        System.out.println("6");
         try {            
                 maxTweetID = status.getId();
-                out.println("<fieldset>");
-                out.println("<table style=\"width: 100%; border: 0px\">");
-                out.println("<tr>");
-                out.println("   <td colspan=\"2\">");
-                out.println("   <b>" + status.getUser().getName() + "<b> " + status.getUser().getScreenName());
-                out.println("   </td>");
-                out.println("</tr>");
-                out.println("<tr>");
-                out.println("   <td  width=\"10%\">");
-                out.println("       <img src=\"" + status.getUser().getProfileImageURL() + "\"/>");
-                out.println("   </td>");
-                out.println("   <td width=\"90%\">");                
+                writer.write("<fieldset>");
+                writer.write("<table style=\"width: 100%; border: 0px\">");
+                writer.write("<tr>");
+                writer.write("   <td colspan=\"2\">");
+                writer.write("   " + status.getUser().getName() + " <b>" + status.getUser().getScreenName()+ "</b>");
+                writer.write("   </td>");
+                writer.write("</tr>");
+                writer.write("<tr>");
+                writer.write("   <td  width=\"10%\">");
+                writer.write("       <img src=\"" + status.getUser().getProfileImageURL() + "\"/>");
+                writer.write("   </td>");
+                writer.write("   <td width=\"90%\">");                
                 String statusText = status.getText(); // It's necessary to include URL for media, hash tags and usernames
                 
                 URLEntity urlEnts[] = status.getURLEntities();
@@ -361,33 +355,33 @@ public class Timeline extends GenericResource{
                     }
                 }
                 
-                out.println(        statusText);
-                out.println("   </td>");
-                out.println("</tr>");
-                out.println("<tr>");
-                out.println("   <td colspan=\"2\">");
+                writer.write(        statusText);
+                writer.write("   </td>");
+                writer.write("</tr>");
+                writer.write("<tr>");
+                writer.write("   <td colspan=\"2\">");
                 
-                    out.println("<div id=\"" + status.getId() + "\" dojoType=\"dijit.layout.ContentPane\">");
+                    writer.write("<div id=\"" + status.getId() + "\" dojoType=\"dijit.layout.ContentPane\">");
                     long minutes = (long)(new Date().getTime()/60000) - (status.getCreatedAt().getTime()/60000);
-                    out.print("Created:<b>" + (int)minutes + "</b> minutes ago - - Retweeted: <b>" + status.getRetweetCount() + "</b> times ");                    
-                    out.println("<a href=\"\" onclick=\"showDialog('" + renderURL.setMode("replyTweet").setParameter("id", status.getId()+"").setParameter("userName", "@" + status.getUser().getScreenName()) + "','Reply to @" + status.getUser().getScreenName() + "');return false;\">Reply</a>");
+                    writer.write("Created:<b>" + (int)minutes + "</b> minutes ago - - Retweeted: <b>" + status.getRetweetCount() + "</b> times ");                    
+                    writer.write("<a href=\"\" onclick=\"showDialog('" + renderURL.setMode("replyTweet").setParameter("id", status.getId()+"").setParameter("userName", "@" + status.getUser().getScreenName()) + "','Reply to @" + status.getUser().getScreenName() + "');return false;\">Reply</a>");
                     if(status.isRetweetedByMe()){
                         actionURL.setAction("undoRT");
-                        //out.println("<a href=\"\"  onclick=\"submitUrl('" + action.setParameter("id", status.getId()+"").toString() + "',this);return false;" +"\">Undo Retweet</a>");
-                        out.println("Undo Retweet");
+                        //writer.write("<a href=\"\"  onclick=\"submitUrl('" + action.setParameter("id", status.getId()+"").toString() + "',this);return false;" +"\">Undo Retweet</a>");
+                        writer.write("Undo Retweet");
                     }else{
                         actionURL.setAction("doRT");
-                        out.println("<a href=\"#\"  onclick=\"postHtml('" + actionURL.setParameter("id", status.getId()+"") + "','" + status.getId() + "'); return false;" +"\">Retweet</a>");
+                        writer.write("<a href=\"#\"  onclick=\"postHtml('" + actionURL.setParameter("id", status.getId()+"") + "','" + status.getId() + "'); return false;" +"\">Retweet</a>");
                     }
-                out.println("   </div>");
-                out.println("   </td>");
-                out.println("</tr>");          
-                out.println("</table>");
-                out.println("</fieldset>");             
+                writer.write("   </div>");
+                writer.write("   </td>");
+                writer.write("</tr>");          
+                writer.write("</table>");
+                writer.write("</fieldset>");             
         } catch (Exception te) {
             System.out.println("Se presento un error!!");
             te.printStackTrace();
             System.out.println("Failed to get timeline: " + te.getMessage());            
-        }
+        }        
     }
 }
