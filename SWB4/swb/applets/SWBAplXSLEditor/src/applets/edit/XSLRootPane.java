@@ -11,21 +11,18 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URL;
 import javax.swing.AbstractAction;
-import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
-import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JRootPane;
 import javax.swing.UIManager;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
-import javax.swing.text.JTextComponent;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 import org.fife.ui.rtextarea.Gutter;
@@ -37,12 +34,10 @@ public class XSLRootPane extends JRootPane implements HyperlinkListener, SyntaxC
     private RSyntaxTextArea textArea;
     private String filename;
     private JMenuItem localJMenuItem;
-    private JTextComponent textComponentPrueba;
+  
 
     public XSLRootPane() {
         textArea = createTextArea();
-        //setContent("JavaExample.txt");
-        //textArea.setText("Hola mundo");
         System.out.println("xslrootpane");
         textArea.setSyntaxEditingStyle("text/xml");
         this.scrollPane = new RTextScrollPane(textArea, true);
@@ -55,28 +50,9 @@ public class XSLRootPane extends JRootPane implements HyperlinkListener, SyntaxC
 
 
     }
-
-//  private void addItem(String paramString1, String paramString2, String paramString3, ButtonGroup paramButtonGroup, JMenu paramJMenu)
-//  {
-//    JRadioButtonMenuItem localJRadioButtonMenuItem = new JRadioButtonMenuItem(new ChangeSyntaxStyleAction(paramString1, paramString2, paramString3));
-//
-//    paramButtonGroup.add(localJRadioButtonMenuItem);
-//    paramJMenu.add(localJRadioButtonMenuItem);
-//  }
+    
     private JMenuBar createMenuBar() {
         JMenuBar localJMenuBar = new JMenuBar();
-        System.out.println("createmenubar");
-
-        //    JMenu localJMenu = new JMenu("Language");
-        //    ButtonGroup localButtonGroup = new ButtonGroup();
-        //    addItem("C", "CExample.txt", "text/c", localButtonGroup, localJMenu);
-        //    addItem("Java", "JavaExample.txt", "text/java", localButtonGroup, localJMenu);
-        //    addItem("Perl", "PerlExample.txt", "text/perl", localButtonGroup, localJMenu);
-        //    addItem("Ruby", "RubyExample.txt", "text/ruby", localButtonGroup, localJMenu);
-        //    addItem("SQL", "SQLExample.txt", "text/sql", localButtonGroup, localJMenu);
-        //    addItem("XML", "XMLExample.txt", "text/mxml", localButtonGroup, localJMenu);
-        //    localJMenu.getItem(1).setSelected(true);
-        //    localJMenuBar.add(localJMenu);
         JMenu localJMenu = new JMenu("Archivo");
 
         localJMenuItem = new JMenuItem(new SaveAction());
@@ -85,23 +61,15 @@ public class XSLRootPane extends JRootPane implements HyperlinkListener, SyntaxC
 
         localJMenu.add(localJMenuItem);
         localJMenuItem.setEnabled(false);
+        localJMenuItem.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+              localJMenuItem.setEnabled(false);
+            }
+        });
 
         localJMenuBar.add(localJMenu);
-
-       /* JMenuItem localJMenuItemClose = new JMenuItem("Salir");
-        localJMenu.add(localJMenuItemClose);
-        localJMenuBar.add(localJMenu);
-        localJMenuItemClose.addActionListener(
-                new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent evento) {
-                        System.exit(0);
-                    }
-                }
-                );
-*/
-
-
         localJMenu = new JMenu("Ver");
         JCheckBoxMenuItem localJCheckBoxMenuItem = new JCheckBoxMenuItem(new MonospacedFontAction());
         localJCheckBoxMenuItem.setSelected(true);
@@ -125,14 +93,11 @@ public class XSLRootPane extends JRootPane implements HyperlinkListener, SyntaxC
         localJCheckBoxMenuItem = new JCheckBoxMenuItem(new MarkOccurrencesAction());
         localJCheckBoxMenuItem.setSelected(true);
         localJMenu.add(localJCheckBoxMenuItem);
-
         localJMenuBar.add(localJMenu);
-
         localJMenu = new JMenu("Ayuda");
         JMenuItem localJMenuItemHelp = new JMenuItem(new AboutAction());
         localJMenu.add(localJMenuItemHelp);
         localJMenuBar.add(localJMenu);
-
         return localJMenuBar;
     }
 
@@ -171,7 +136,6 @@ public class XSLRootPane extends JRootPane implements HyperlinkListener, SyntaxC
 
     @Override
     public void hyperlinkUpdate(HyperlinkEvent paramHyperlinkEvent) {
-        System.out.println("hyperlinkupdate");
         if (paramHyperlinkEvent.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
             URL localURL = paramHyperlinkEvent.getURL();
             if (localURL == null) {
@@ -183,18 +147,12 @@ public class XSLRootPane extends JRootPane implements HyperlinkListener, SyntaxC
     }
 
     public void setText(String text) {
-        System.out.println("settext");
         textArea.setText(text);
     }
 
     public void setContent(String filename) {
-        System.out.println("setcontent");
-        //ClassLoader localClassLoader = getClass().getClassLoader();
         BufferedReader localBufferedReader = null;
         try {
-            //localBufferedReader = new BufferedReader(new InputStreamReader(localClassLoader.getResourceAsStream(filename), "UTF-8"));
-            System.out.println("XSLRootPane.......");
-            System.out.println("filename=" + filename);
             localBufferedReader = new BufferedReader(new FileReader(filename));
             textArea.read(localBufferedReader, null);
             localBufferedReader.close();
@@ -209,7 +167,6 @@ public class XSLRootPane extends JRootPane implements HyperlinkListener, SyntaxC
     }
 
     private class WordWrapAction extends AbstractAction {
-
         public WordWrapAction() {
             putValue("Name", "Word Wrap");
         }
@@ -233,7 +190,6 @@ public class XSLRootPane extends JRootPane implements HyperlinkListener, SyntaxC
     }
 
     private class ViewLineHighlightAction extends AbstractAction {
-
         public ViewLineHighlightAction() {
             putValue("Name", "Current Line Highlight");
         }
@@ -245,7 +201,6 @@ public class XSLRootPane extends JRootPane implements HyperlinkListener, SyntaxC
     }
 
     private class ToggleAntiAliasingAction extends AbstractAction {
-
         private boolean selected;
 
         public ToggleAntiAliasingAction() {
@@ -261,7 +216,6 @@ public class XSLRootPane extends JRootPane implements HyperlinkListener, SyntaxC
     }
 
     private class MonospacedFontAction extends AbstractAction {
-
         private boolean selected;
 
         public MonospacedFontAction() {
@@ -282,7 +236,6 @@ public class XSLRootPane extends JRootPane implements HyperlinkListener, SyntaxC
     }
 
     private class MarkOccurrencesAction extends AbstractAction {
-
         public MarkOccurrencesAction() {
             putValue("Name", "Mark Occurrences");
         }
@@ -293,27 +246,7 @@ public class XSLRootPane extends JRootPane implements HyperlinkListener, SyntaxC
         }
     }
 
-    /*private class ChangeSyntaxStyleAction extends AbstractAction {
-    private String res;
-    private String style;
-
-    public ChangeSyntaxStyleAction(String paramString1, String paramString2, String arg4) {
-    putValue("Name", paramString1);
-    this.res = paramString2;
-    //Object localObject;
-    //this.style = localObject;
-    }
-
-    @Override
-    public void actionPerformed(ActionEvent paramActionEvent) {
-    System.out.println("\n\n...................\nactionPerformed...");
-    XSLRootPane.this.setContent(this.res);
-    XSLRootPane.this.textArea.setCaretPosition(0);
-    XSLRootPane.this.textArea.setSyntaxEditingStyle(this.style);
-    }
-    }*/
     private class BookmarksAction extends AbstractAction {
-
         public BookmarksAction() {
             putValue("Name", "Bookmarks");
         }
@@ -325,7 +258,6 @@ public class XSLRootPane extends JRootPane implements HyperlinkListener, SyntaxC
     }
 
     private class AnimateBracketMatchingAction extends AbstractAction {
-
         public AnimateBracketMatchingAction() {
             putValue("Name", "Animate Bracket Matching");
         }
@@ -337,44 +269,36 @@ public class XSLRootPane extends JRootPane implements HyperlinkListener, SyntaxC
     }
 
     private class AboutAction extends AbstractAction {
-
         public AboutAction() {
-            putValue("Name", "CÃ³mo usar el editor...");
+            putValue("Name", "Cómo usar el editor...");
         }
 
         @Override
         public void actionPerformed(ActionEvent paramActionEvent) {
 
-            JOptionPane.showMessageDialog(XSLRootPane.this, 
-                      "El editor de texto es utilizado para"
-                    + "\ncorregir o editar el cÃ³digo fuente"
-                    + "\ndel archivo XSL de la plantilla actual.\n", "Ayuda", 1);
+            JOptionPane.showMessageDialog(XSLRootPane.this,
+                    "Este editor de texto es utilizado para"
+                    + "\neditar el archivo XSLT"
+                    + "\ndel componente actual.\n", "Ayuda", 1);
         }
     }
 
     private class SaveAction extends AbstractAction {
-
         public SaveAction() {
             putValue("Name", "Guardar");
         }
 
         @Override
         public void actionPerformed(ActionEvent paramActionEvent) {
-            //JOptionPane.showMessageDialog(XSLRootPane.this, "<html><b>RSyntaxTextArea</b> - A Swing syntax highlighting text component<br>Version 1.5.0<br>Licensed under the LGPL", "About RSyntaxTextArea", 1);
-
             BufferedWriter bw = null;
             try {
                 bw = new BufferedWriter(new FileWriter(filename));
                 textArea.write(bw);
-
-
-
             } catch (FileNotFoundException ex) {
                 ex.printStackTrace(System.out);
             } catch (IOException ex) {
                 ex.printStackTrace(System.out);
             } finally {
-                //Close the BufferedWriter
                 try {
                     if (bw != null) {
                         bw.flush();
