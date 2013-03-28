@@ -419,6 +419,7 @@ public class SemanticVocabulary
      */
     public SemanticClass getSemanticClassById(String classId)
     {
+        if(classId==null)return null;
         return clsbyid.get(classId);
     }
 
@@ -430,6 +431,7 @@ public class SemanticVocabulary
      */
     public SemanticClass getSemanticClassByJavaName(String className)
     {
+        if(className==null)return null;
         return clsbyname.get(className);
     }
     
@@ -441,6 +443,7 @@ public class SemanticVocabulary
      */
     public SemanticClass getSemanticClassByVirtualJavaName(String className)
     {
+        if(className==null)return null;
         return clsbyVirtualName.get(className);
     }    
 
