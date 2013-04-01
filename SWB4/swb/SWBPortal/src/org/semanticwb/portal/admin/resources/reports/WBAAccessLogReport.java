@@ -964,8 +964,8 @@ public class WBAAccessLogReport extends GenericResource {
                 out.println("<td>"+paramsRequest.getLocaleString("th_Resource")+"</td>");
                 out.println("</tr>");
             
-                Vector vec_rep = (Vector) hm_detail.get(key);
-                Iterator<String> ite_rep = vec_rep.iterator();
+                List list_rep = (List) hm_detail.get(key);//////@
+                Iterator<String> ite_rep = list_rep.iterator();//////@
                 int i=1;
                 while(ite_rep.hasNext()) {
                     StringTokenizer s_token = new StringTokenizer(ite_rep.next(),"|");
@@ -1067,8 +1067,8 @@ public class WBAAccessLogReport extends GenericResource {
                 detail.appendChild(dom.createTextNode(""));
                 report.appendChild(detail);
 
-                Vector vec_rep = (Vector) hm_detail.get(key);
-                Iterator<String> ite_rep = vec_rep.iterator();
+                List list_rep = (List) hm_detail.get(key);//////@
+                Iterator<String> ite_rep = list_rep.iterator();//////@
                 renglones = 0;
                 while(ite_rep.hasNext()) {
                     StringTokenizer s_token = new StringTokenizer(ite_rep.next(),"|");
@@ -1284,7 +1284,7 @@ public class WBAAccessLogReport extends GenericResource {
             Iterator<String> files = getFileNames(siteId, (GregorianCalendar)first.clone(), (GregorianCalendar)last.clone());
             if(files.hasNext()) {                
                 String s_key=null;
-                Vector vec_rep = null;
+                List list_rep = null;//////@
                 while(files.hasNext()) {
                     filename = files.next();
                     File f = new File(filename);
@@ -1335,7 +1335,7 @@ public class WBAAccessLogReport extends GenericResource {
                             if(deviceId!=null && !t[9].equalsIgnoreCase(deviceId))
                                 continue;
                             //10-s_aux receives language
-                            if(languageId!=null && t[10].equalsIgnoreCase(languageId))
+                            if(languageId!=null && !t[10].equalsIgnoreCase(languageId) && !languageId.equalsIgnoreCase("0"))//////@
                                 continue;
                             //11-s_aux receives time in miliseconds, this value no matter
                             // seek for resource id
@@ -1477,12 +1477,12 @@ public class WBAAccessLogReport extends GenericResource {
                                     }
                                     s_key = line.substring(0,13) + ":00-"+s_hourfin;
                                 }
-                                vec_rep = (Vector) hm_detail.get(s_key);
-                                if(null == vec_rep) {
-                                    vec_rep=new Vector();
+                                list_rep = (List) hm_detail.get(s_key);//////@
+                                if(null == list_rep) {//////@
+                                    list_rep=new ArrayList();//////@
                                 }
-                                vec_rep.add(line);
-                                hm_detail.put(s_key,vec_rep);
+                                list_rep.add(line);//////@
+                                hm_detail.put(s_key,list_rep);//////@
                             }
                         }// line in file
 
