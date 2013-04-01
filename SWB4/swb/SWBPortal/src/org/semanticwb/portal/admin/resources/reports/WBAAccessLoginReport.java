@@ -172,9 +172,10 @@ public class WBAAccessLoginReport extends GenericResource {
 
         if (null != hm_detail) {
             if (null != s_key) {
-                Vector vec_rep = (Vector) hm_detail.get(s_key);
-                if (null != vec_rep && !vec_rep.isEmpty()) {
-                    Iterator<String> ite_rep = vec_rep.iterator();
+                //Vector vec_rep = (Vector) hm_detail.get(s_key);
+                List list_rep = (List) hm_detail.get(s_key);
+                if (null != list_rep && !list_rep.isEmpty()) {
+                    Iterator<String> ite_rep = list_rep.iterator();
                     int i = 1;
                     while (ite_rep.hasNext()) {
                         StringTokenizer token = new StringTokenizer(ite_rep.next(), "|");
@@ -225,7 +226,6 @@ public class WBAAccessLoginReport extends GenericResource {
             }
             // If there are repositories it continues
             if (hm_repository.size() > I_ACCESS) {
-                String address = paramsRequest.getWebPage().getUrl();
 
                 GregorianCalendar now = new GregorianCalendar();
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -347,7 +347,7 @@ public class WBAAccessLoginReport extends GenericResource {
                 ret.append("<form method=\"Post\" class=\"box\" action=\"\" id=\"frmrep\" name=\"frmrep\">\n");
                 ret.append("<fieldset>\n");
                 ret.append("<table border=\"0\" width=\"95%\" align=\"center\">\n");
-                ret.append("<tr><td width=\"200\"></td><td width=\"200\"></td><td width=\"200\"></td><td width=\"200\"></td></tr>\n");
+                ret.append("<tr><td width=\"100\"></td><td width=\"200\"></td><td width=\"200\"></td><td width=\"200\"></td></tr>\n");
 
                 ret.append("<tr>\n");
                 ret.append("<td><label for=\"wb_repository\">" + paramsRequest.getLocaleString("repository") + ":</label></td>\n");
@@ -559,7 +559,7 @@ public class WBAAccessLoginReport extends GenericResource {
      * @throws IOException Signals that an I/O exception has occurred.
      */
     public void doGraph(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
-        StringBuffer ret = new StringBuffer();
+        StringBuilder ret = new StringBuilder();
         Resource base = paramsRequest.getResourceBase();
         Iterator<String[]> ar_pag = null;
 
@@ -701,8 +701,8 @@ public class WBAAccessLoginReport extends GenericResource {
                 out.println("<td>" + paramsRequest.getLocaleString("th_IDsession") + "</td>");
                 out.println("</tr>");
 
-                Vector vec_rep = (Vector) hm_detail.get(key);
-                Iterator<String> ite_rep = vec_rep.iterator();
+                List list_rep = (List) hm_detail.get(key);
+                Iterator<String> ite_rep = list_rep.iterator();
                 int i = 1;
                 while (ite_rep.hasNext()) {
                     StringTokenizer token = new StringTokenizer(ite_rep.next(), "|");
@@ -783,8 +783,8 @@ public class WBAAccessLoginReport extends GenericResource {
                 detail.appendChild(dom.createTextNode(""));
                 report.appendChild(detail);
 
-                Vector vec_rep = (Vector) hm_detail.get(key);
-                Iterator<String> ite_rep = vec_rep.iterator();
+                List list_rep = (List) hm_detail.get(key);
+                Iterator<String> ite_rep = list_rep.iterator();
                 renglones = 0;
                 while (ite_rep.hasNext()) {
                     StringTokenizer s_token = new StringTokenizer(ite_rep.next(), "|");
@@ -831,49 +831,21 @@ public class WBAAccessLoginReport extends GenericResource {
     /**
      * Gets the file names.
      * 
-     * @param request the request
+     * @param repId id of selected repository
+     * @param first the first date of the interval
+     * @param last the last date of the interval
      * @return the file names
      * @return
      */
-    public Iterator<String> getFileNames(HttpServletRequest request) {
+    //public Iterator<String> getFileNames(HttpServletRequest request) {
+    public Iterator<String> getFileNames(String repId, GregorianCalendar first, GregorianCalendar last) {
         ArrayList files = new ArrayList();
 
         String accessLogPath = SWBPlatform.getEnv("swb/accessLog");
         String period = SWBPortal.getEnv("swb/accessLogPeriod");
         String path = SWBPortal.getWorkPath();
-        String repId = request.getParameter("repid");
 
-        GregorianCalendar cal = new GregorianCalendar();
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-        String fecha11 = request.getParameter("fecha11") == null ? sdf.format(cal.getTime()) : request.getParameter("fecha11");
-        try {
-            sdf.parse(fecha11);
-        } catch (ParseException pe) {
-            fecha11 = sdf.format(cal.getTime());
-        }
-        String t11 = request.getParameter("t11") == null ? "00:00" : request.getParameter("t11");
-
-        String fecha12 = request.getParameter("fecha12") == null ? sdf.format(cal.getTime()) : request.getParameter("fecha12");
-        try {
-            sdf.parse(fecha12);
-        } catch (ParseException pe) {
-            fecha12 = sdf.format(cal.getTime());
-        }
-        String t12 = request.getParameter("t12") == null ? "23:59" : request.getParameter("t12");
-
-        int year11 = Integer.parseInt(fecha11.substring(6, 10), 10);
-        int month11 = Integer.parseInt(fecha11.substring(3, 5), 10);
-        int day11 = Integer.parseInt(fecha11.substring(0, 2), 10);
-        int hour11 = Integer.parseInt(t11.substring(0, 2), 10);
-        int minute11 = Integer.parseInt(t11.substring(3, 5), 10);
-        int year12 = Integer.parseInt(fecha12.substring(6, 10), 10);
-        int month12 = Integer.parseInt(fecha12.substring(3, 5), 10);
-        int day12 = Integer.parseInt(fecha12.substring(0, 2), 10);
-        int hour12 = Integer.parseInt(t12.substring(0, 2), 10);
-        int minute12 = Integer.parseInt(t12.substring(3, 5), 10);
-
-        GregorianCalendar first = new GregorianCalendar(year11, month11 - 1, day11, hour11, minute11);
-        GregorianCalendar last = new GregorianCalendar(year12, month12 - 1, day12, hour12, minute12);
 
         if (repId != null) {
             String realpath = path + accessLogPath + "_" + repId + "_logins.";
@@ -916,18 +888,12 @@ public class WBAAccessLoginReport extends GenericResource {
     private Iterator<String[]> getReportResults(HttpServletRequest request, SWBParamRequest paramsRequest) {
         final int I_ZERO = 0;
         final int I_ONE = 1;
-        final int I_TWO = 2;
-        final int I_THREE = 3;
-        final int I_FOUR = 4;
-        final int I_FIVE = 5;
         final int I_TWENTYFOUR = 24;
-        final int I_LESSONE = -1;
 
         hm_detail = new HashMap();
 
         ArrayList al_pag = new ArrayList();
         GregorianCalendar datefile = null;
-        GregorianCalendar datedisplay = null;
         GregorianCalendar datedefault = null;
         String[] arr_data = null;
 
@@ -950,35 +916,26 @@ public class WBAAccessLoginReport extends GenericResource {
         int i_hourfin = 0;
         int i_start = 0;
 
+        String repId = request.getParameter("repid");
         //Get current date
         GregorianCalendar now = new GregorianCalendar();
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         GregorianCalendar first = new GregorianCalendar();
         GregorianCalendar last = new GregorianCalendar();
 
-        String fecha11 = request.getParameter("fecha11") == null ? sdf.format(now.getTime()) : request.getParameter("fecha11");
+        String fecha11 = request.getParameter("fecha11") == null ? sdf.format(now.getTime()) : request.getParameter("fecha11")+" "+(request.getParameter("t11")==null ? "00:00":request.getParameter("t11"));
         try {
-            Date dt = sdf.parse(fecha11);
-            first.setTime(dt);
+            first.setTime(sdf.parse(fecha11));
         } catch (ParseException pe) {
-            fecha11 = sdf.format(now.getTime());
             first.setTime(now.getTime());
         }
-        String t11 = request.getParameter("t11") == null ? "00:00" : request.getParameter("t11");
-        first.set(Calendar.HOUR_OF_DAY, Integer.parseInt(t11.substring(0, 2), 10));
-        first.set(Calendar.MINUTE, Integer.parseInt(t11.substring(3, 5), 10));
 
-        String fecha12 = request.getParameter("fecha12") == null ? sdf.format(now.getTime()) : request.getParameter("fecha12");
+        String fecha12 = request.getParameter("fecha12") == null ? sdf.format(now.getTime()) : request.getParameter("fecha12")+" "+(request.getParameter("t12")==null ? "23:59":request.getParameter("t12"));
         try {
-            Date dt = sdf.parse(fecha12);
-            last.setTime(dt);
+            last.setTime(sdf.parse(fecha12));
         } catch (ParseException pe) {
-            fecha12 = sdf.format(now.getTime());
             last.setTime(now.getTime());
-        }
-        String t12 = request.getParameter("t12") == null ? "23:59" : request.getParameter("t12");
-        last.set(Calendar.HOUR_OF_DAY, Integer.parseInt(t12.substring(0, 2), 10));
-        last.set(Calendar.MINUTE, Integer.parseInt(t12.substring(3, 5), 10));
+        }        
 
         String ipadduser = request.getParameter("ipuser") == null ? "" : request.getParameter("ipuser");
         if (!ipadduser.equalsIgnoreCase("")) {
@@ -1005,11 +962,13 @@ public class WBAAccessLoginReport extends GenericResource {
         try {
             sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
             //Get log filenames
-            Iterator<String> files = getFileNames(request);
+            //Iterator<String> files = getFileNames(request);
+            Iterator<String> files = getFileNames(repId, (GregorianCalendar)first.clone(), (GregorianCalendar)last.clone());
             //If there are files
             if (files.hasNext()) {
                 String s_key = null;
-                Vector vec_rep = null;
+                //Vector vec_rep = null;
+                List list_rep = null;
                 //While a file exist
                 while (files.hasNext()) {
                     //Get file name
@@ -1187,12 +1146,12 @@ public class WBAAccessLoginReport extends GenericResource {
                                 }
                                 s_key = line.substring(0, 13) + ":00-" + s_hourfin;
                             }
-                            vec_rep = (Vector) hm_detail.get(s_key);
-                            if (null == vec_rep) {
-                                vec_rep = new Vector();
+                            list_rep = (List) hm_detail.get(s_key);
+                            if (null == list_rep) {
+                                list_rep = new ArrayList();
                             }
-                            vec_rep.add(line);
-                            hm_detail.put(s_key, vec_rep);
+                            list_rep.add(line);
+                            hm_detail.put(s_key, list_rep);
                         /*}*/
                         }// line in file
 
