@@ -25,6 +25,7 @@ import org.semanticwb.social.SentimentalLearningPhrase;
 import org.semanticwb.social.SocialAdmin;
 import org.semanticwb.social.SocialNetwork;
 import org.semanticwb.social.SocialNetworkUser;
+import org.semanticwb.social.SocialTopic;
 import org.semanticwb.social.Stream;
 import org.semanticwb.social.util.NormalizerCharDuplicate;
 import org.semanticwb.social.util.SWBSocialUtil;
@@ -136,6 +137,7 @@ public class SentimentalDataClassifier {
         
         System.out.println("ANALISIS-5:sentimentalTweetValue:"+externalString2Clasify);
         
+        ArrayList<String> aListWords=new ArrayList();
         StringTokenizer st = new StringTokenizer(externalString2Clasify);
         while (st.hasMoreTokens())
         {
@@ -151,6 +153,7 @@ public class SentimentalDataClassifier {
             //System.out.println("word2Find:"+word2Find);
             NormalizerCharDuplicate normalizerCharDuplicate=SWBSocialUtil.Classifier.normalizer(word2Find);
             word2Find=normalizerCharDuplicate.getNormalizedPhrase();
+            aListWords.add(word2Find);
             //System.out.println("word Normalizada:"+word2Find);
             //Aplicar snowball a la palabra
             //word2Find=SWBSocialUtil.Classifier.getRootWord(word2Find);
@@ -359,6 +362,77 @@ public class SentimentalDataClassifier {
                 findEmoticones(post);
                 //MessageIn messageIn=(MessageIn)post;
                 //System.out.println("messageIn final:"+messageIn.getMsg_Text());
+                
+                //Clasificación por palabras relacionadas a un tema
+                clasifyMsgbySocialTopic(post);
+            }
+        }
+    }
+    
+    /*
+     * Metodo que revisa el mensaje del post de entrada, si concuerda con algunas de las palabras clave
+     * encontradas en algún SocialTopic (Tema), entonces al PostIn le asocia dicho Tema.
+     */
+    public void clasifyMsgbySocialTopic(PostIn post)
+    {
+         //Elimino Caracteres especiales (acentuados)
+        String externalMsgTMP=SWBSocialUtil.Strings.replaceSpecialCharacters(externalString2Clasify_TMP);
+
+        SocialAdmin socialAdminSite=(SocialAdmin)SWBContext.getAdminWebSite();
+
+        externalMsgTMP=SWBSocialUtil.Strings.removePuntualSigns(externalMsgTMP, socialAdminSite);
+        
+        ArrayList<String> amsgWords=new ArrayList();
+        String[] msgWords=externalMsgTMP.split(" ");
+        for(int i=0;i<msgWords.length;i++)
+        {
+            String msgWord=msgWords[i];
+            if(msgWord!=null && msgWord.length()>0)
+            {
+                amsgWords.add(msgWord.toLowerCase());
+            }
+        }
+                
+                
+        Iterator <SocialTopic> itSocialTopics=SocialTopic.ClassMgr.listSocialTopics();
+        while(itSocialTopics.hasNext())
+        {
+            SocialTopic socialTopic=itSocialTopics.next();
+            String sTags=socialTopic.getTags();
+            boolean existWord=false;
+            if(sTags!=null && sTags.length()>0)
+            {
+                String[] tags=sTags.split("\\|");  //Dividir valores
+                for(int i=0;i<tags.length;i++)
+                {
+                    String tag=tags[i];
+                    //System.out.println("tag:"+tag);
+                    
+                    //Elimino Caracteres especiales (acentuados)
+                    tag=SWBSocialUtil.Strings.replaceSpecialCharacters(tag);
+
+                    tag=SWBSocialUtil.Strings.removePuntualSigns(tag, socialAdminSite);
+                    
+                    //System.out.println("Tag2_Final:"+tag);
+                    //
+                    
+                    //Si una de las palabras clave de un tema esta en el mensaje de entrada, entonces se agrega al postIn ese tema 
+                    //y ya no se continua iterando en los temas
+                    if(amsgWords.contains(tag.toLowerCase()))
+                    {
+                       //System.out.println("tag SI esta contenido en las palabras:"+tag);
+                       //Hice que un msg de entrada solo se pudiera asignar a un tema debido a que si fuera a mas, entonces sería revisado el mismo msg por 
+                       //varios usuarios en varios flujos, es mejor que se vaya solo a un flujo, asignando bien las palabras clave a cada tema (que no se repitan) 
+                       // y si se clasificó a un tema que no debia de ser (por no colocar correctamente las palabras clave), las personas en un flujo podrían
+                       //reclasificar en cualquier momento el mensaje, para que se vaya a otro tema y por consiguiente a otro flujo.
+                       post.setSocialTopic(socialTopic);    
+                       existWord=true;
+                       break;
+                    }
+                }
+                if(existWord) {
+                    break;
+                }    //Ahora se saldría del while.
             }
         }
     }

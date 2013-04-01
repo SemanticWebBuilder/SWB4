@@ -4,7 +4,7 @@ package org.semanticwb.social.base;
    /**
    * Catalogo de temas de un modelo (Marca) 
    */
-public abstract class SocialTopicBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Activeable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable
+public abstract class SocialTopicBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Activeable,org.semanticwb.model.Tagable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable
 {
    /**
    * Catalogo de temas de un modelo (Marca)
@@ -553,6 +553,39 @@ public abstract class SocialTopicBase extends org.semanticwb.model.SWBClass impl
     public void setTitle(String title, String lang)
     {
         getSemanticObject().setProperty(swb_title, title, lang);
+    }
+
+/**
+* Gets the Tags property
+* @return String with the Tags
+*/
+    public String getTags()
+    {
+        return getSemanticObject().getProperty(swb_tags);
+    }
+
+/**
+* Sets the Tags property
+* @param value long with the Tags
+*/
+    public void setTags(String value)
+    {
+        getSemanticObject().setProperty(swb_tags, value);
+    }
+
+    public String getTags(String lang)
+    {
+        return getSemanticObject().getProperty(swb_tags, null, lang);
+    }
+
+    public String getDisplayTags(String lang)
+    {
+        return getSemanticObject().getLocaleProperty(swb_tags, lang);
+    }
+
+    public void setTags(String tags, String lang)
+    {
+        getSemanticObject().setProperty(swb_tags, tags, lang);
     }
    /**
    * Gets all the org.semanticwb.social.Post
