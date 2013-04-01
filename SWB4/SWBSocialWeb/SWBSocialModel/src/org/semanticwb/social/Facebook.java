@@ -35,7 +35,10 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
     private static final String PREF = "--";    
     
     /** Inicio de la URL utilizada para las peticiones de informacion a Facebook */
-    private static final String FACEBOOKGRAPH = "https://graph-video.facebook.com/";
+    //private static final String FACEBOOKGRAPH = "https://graph-video.facebook.com/";
+    private static final String FACEBOOKGRAPH = "https://graph.facebook.com/";
+    
+     private static final String FACEBOOKGRAPH_VIDEO = "https://graph-video.facebook.com/";
     
     
     /** Indica el numero de mensajes maximo a extraer en cada busqueda */
@@ -48,21 +51,6 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
         super(base);
     }
 
-    
-    private void printMap(HashMap<String, String>[] queriesArray) {
-        
-        if (queriesArray != null) {
-        for (int i = 0; i < queriesArray.length; i++) {
-            System.out.println("Consulta: " + i);
-            Iterator<String> it = queriesArray[i].keySet().iterator();
-            while (it.hasNext()) {
-                String key = it.next();
-                System.out.println("  " + key + " = " + queriesArray[i].get(key));
-            }
-        }
-        }
-    }
-    
     /**
      * Ejecuta las operaciones para extraer informaci&oacute;n de Facebook, 
      * en base a los criterios especificados en el stream indicado.
@@ -313,10 +301,8 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
         try {
             JSONArray mainObject = new JSONArray(response);
             if (mainObject != null) {
-                
                 for (int j = 0; j < mainObject.length(); j++) {
                     if (mainObject.getJSONObject(j) != null) {
-                        
                         boolean isResponseEmpty = false;
                         JSONObject phraseResp = mainObject.getJSONObject(j);
                         if (phraseResp.getInt("code") != 200) {
@@ -503,7 +489,8 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
         if (video.getDescription() != null) {
             params.put("description", video.getDescription());
         }
-        String url = Facebook.FACEBOOKGRAPH + this.getFacebookUserId() + "/videos";
+        //String url = Facebook.FACEBOOKGRAPH + this.getFacebookUserId() + "/videos";
+        String url = Facebook.FACEBOOKGRAPH_VIDEO + this.getFacebookUserId() + "/videos";        
         JSONObject jsonResponse = null;
         
         try {
@@ -803,10 +790,10 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
         String state = request.getParameter("state");
         String error = request.getParameter("error");
         HttpSession session = request.getSession(true);
-System.out.println("Facebook.autenticate.............");
+        //System.out.println("Facebook.autenticate.............");
         if(code==null)
         {
-System.out.println("Facebook----paso 1");
+            //System.out.println("Facebook----paso 1");
             String url = doRequestPermissions(request, paramRequest);
             PrintWriter out = response.getWriter();
             out.println("<script type=\"text/javascript\">");
@@ -821,13 +808,13 @@ System.out.println("Facebook----paso 1");
         }
         else if( state!=null && state.equals(session.getAttribute("state")) && error==null  )
         {
-System.out.println("Facebook----2");
+            //System.out.println("Facebook----2");
             session.removeAttribute("state");
             String accessToken = null;
 //            long secsToExpiration = 0L;
             String token_url = "https://graph.facebook.com/oauth/access_token?" + "client_id="+getAppKey()+"&redirect_uri=" + URLEncoder.encode(getRedirectUrl(request, paramRequest), "utf-8") + "&client_secret="+getSecretKey()+"&code=" + code;
 //            if(accessToken == null) {
-System.out.println("Facebook----2.1");
+            //System.out.println("Facebook----2.1");
             URL pagina = new URL(token_url);
             URLConnection conex = null;
             try {
@@ -842,15 +829,15 @@ System.out.println("Facebook----2.1");
                 conex.setConnectTimeout(5000);
             }catch(Exception nexc) {
                 conex = null;
-System.out.println("error error error error error error error error 1");
-//System.out.println("error........"+nexc);
+            //System.out.println("error error error error error error error error 1");
+            //System.out.println("error........"+nexc);
             }
             if (conex != null) {
                 String answer;
                 try{
                 answer = SWBUtils.IO.readInputStream(conex.getInputStream());
                 }catch(Exception e) {
-System.out.println("error error error error error error error error 3\n"+e);
+                    //System.out.println("error error error error error error error error 3\n"+e);
                 answer = "";
                 }
                 String aux = null;
@@ -867,12 +854,12 @@ System.out.println("error error error error error error error error 3\n"+e);
             }
 //            }
             if(accessToken != null) {
-System.out.println("Facebook----2.2");
+                //System.out.println("Facebook----2.2");
                 String graph_url = "https://graph.facebook.com/me?access_token=" + accessToken;
                 String me = Facebook.graphRequest(graph_url, request.getHeader("user-agent"));
                 try {
                     JSONObject userData = new JSONObject(me);
-System.out.println("userData="+userData);                    
+                    //System.out.println("userData="+userData);                    
                     String username = userData.getString("username");
                     setFacebookUserId(username);
                     setAccessToken(accessToken);
@@ -890,13 +877,13 @@ System.out.println("userData="+userData);
                     out.println("<script type=\"text/javascript\">");
                     out.println("  window.close();");
                     out.println("</script>");
-System.out.println("error error error error error error error error 2");
+                    //System.out.println("error error error error error error error error 2");
                 }
             }
         }
         else
         {
-System.out.println("problemas");
+            //System.out.println("problemas");
             session.removeAttribute("state");
             //System.out.println("ERROR:Se ha encontrado un problema con la respuesta obtenida, se considera no aut&eacute;ntica.");
             PrintWriter out = response.getWriter();
@@ -935,7 +922,7 @@ System.out.println("problemas");
     
     @Override
     public String doRequestPermissions() {
-//System.out.println("Facebook.doRequestPermissions()");
+    //System.out.println("Facebook.doRequestPermissions()");
         return null;
     }
     
