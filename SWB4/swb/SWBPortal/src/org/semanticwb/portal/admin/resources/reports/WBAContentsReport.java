@@ -47,6 +47,8 @@ import org.semanticwb.portal.api.SWBResourceException;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.semanticwb.model.GenericObject;
+import org.semanticwb.model.Versionable;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -132,7 +134,7 @@ public class WBAContentsReport extends GenericResource {
         String websiteId = request.getParameter("site");
 
         SWBResourceURL url=paramsRequest.getRenderUrl();
-        url.setCallMethod(url.Call_DIRECT);
+        url.setCallMethod(SWBResourceURL.Call_DIRECT);
         url.setMode("rendertree");
 
         String section = request.getParameter("reptp");
@@ -193,6 +195,16 @@ public class WBAContentsReport extends GenericResource {
                     obj.put("loc", portlet.getWorkPath());
                     obj.put("url", hostAndPort + webPage.getUrl());
                     obj.put("lastUpdate", df.format(webPage.getUpdated()));
+                    try{
+                        GenericObject gObj = portlet.getResourceData().createGenericInstance();
+                        if( gObj instanceof Versionable){
+                            obj.put("lastVersion", ((Versionable)gObj).getLastVersion().getVersionNumber());
+                            obj.put("actVersion", ((Versionable)gObj).getActualVersion().getVersionNumber());
+                        }
+                    }catch(Exception e){
+                        obj.put("lastVersion", "-");
+                        obj.put("actVersion", "-");
+                    }
                     //obj.put("uri", portlet.getURI());
                     //obj.put("breaken", "No");
                     jarr.put(obj);
@@ -202,7 +214,8 @@ public class WBAContentsReport extends GenericResource {
             }
         }
         if(request.getParameter("sons")!=null && request.getParameter("sons").equalsIgnoreCase("1")) {
-            doDataStore(webPage, jarr, lang);
+            //doDataStore(webPage, jarr, lang);
+            doDataStore(webPage.listChilds(), jarr, lang);
         }
         response.getOutputStream().println(jobj.toString());
     }
@@ -214,8 +227,9 @@ public class WBAContentsReport extends GenericResource {
      * @param jarr the jarr
      * @param lang the lang
      */
-    private void doDataStore(WebPage node, JSONArray jarr, final String lang) {
-        Iterator<WebPage> childs = node.listVisibleChilds(lang);
+    //private void doDataStore(WebPage node, JSONArray jarr, final String lang) {
+    private void doDataStore(Iterator<WebPage> childs, JSONArray jarr, final String lang) {
+        //Iterator<WebPage> childs = node.listVisibleChilds(lang);
         while(childs.hasNext()) {
             WebPage webPage = childs.next();
             Iterator<Resource> portlets = webPage.listResources();
@@ -223,7 +237,7 @@ public class WBAContentsReport extends GenericResource {
                 Resource portlet = portlets.next();
                 if(portlet.getResourceType().getResourceMode()==1) {
                     JSONObject obj = new JSONObject();
-                    try {
+                    try {                        
                         obj.put("id", portlet.getId());
                         obj.put("sect", webPage.getDisplayName(lang));
                         obj.put("tipo", portlet.getResourceType().getDisplayTitle(lang));
@@ -233,6 +247,16 @@ public class WBAContentsReport extends GenericResource {
                         obj.put("loc", portlet.getWorkPath());
                         obj.put("url", hostAndPort + webPage.getUrl());
                         obj.put("lastUpdate", df.format(webPage.getUpdated()));
+                        try{
+                            GenericObject gObj = portlet.getResourceData().createGenericInstance();
+                            if( gObj instanceof Versionable){
+                                obj.put("lastVersion", ((Versionable)gObj).getLastVersion().getVersionNumber());
+                                obj.put("actVersion", ((Versionable)gObj).getActualVersion().getVersionNumber());
+                            }
+                        }catch(Exception e){
+                            obj.put("lastVersion", "-");
+                            obj.put("actVersion", "-");
+                        }
                         //obj.put("uri", portlet.getURI());
                         //obj.put("breaken", "No");
                         jarr. put(obj);
@@ -241,7 +265,8 @@ public class WBAContentsReport extends GenericResource {
                 }
             }
             if(webPage.listChilds().hasNext()) {
-                doDataStore(webPage, jarr, lang);
+//                doDataStore(webPage, jarr, lang);
+                doDataStore(webPage.listChilds(), jarr, lang);
             }
         }
     }
@@ -295,7 +320,7 @@ public class WBAContentsReport extends GenericResource {
                 }
 
                 SWBResourceURL url = paramsRequest.getRenderUrl();
-                url.setCallMethod(url.Call_DIRECT);
+                url.setCallMethod(SWBResourceURL.Call_DIRECT);
 
                 out.println("<script type=\"text/javascript\">");
 
@@ -325,11 +350,13 @@ public class WBAContentsReport extends GenericResource {
                 out.println("      { field:\"id\", width:\"50px\", name:\"Id\" },");
                 out.println("      { field:\"tipo\", width:\"100px\", name:\"Tipo contenido\" },");
                 out.println("      { field:\"contenido\", width:\"100px\", name:\"Contenido\" },");
+                out.println("      { field:\"lastVersion\", width:\"60px\", name:\"Versiones\" },");
+                out.println("      { field:\"actVersion\", width:\"60px\", name:\"Versión actual\" },");
                 out.println("      { field:\"prior\", width:\"50px\", name:\"Prioridad\" },");
                 out.println("      { field:\"active\", width:\"50px\", name:\"Activo\" },");
                 out.println("      { field:\"loc\", width:\"100px\", name:\"Localidad\" },");
-                out.println("      { field:\"url\", width:\"200px\", name:\"URL\" },");
-                out.println("      { field:\"lastUpdate\", width: \"125px\", name:\"Última modificación\" }");
+                out.println("      { field:\"url\", width:\"200px\", name:\"URL\" },");                
+                out.println("      { field:\"lastUpdate\", width: \"70px\", name:\"Última modificación\" }");
                 out.println("   ];");
 
                 out.println("   gridMaster = new dojox.grid.DataGrid({");
@@ -497,6 +524,8 @@ public class WBAContentsReport extends GenericResource {
         html.append("  <th>Id</th>");
         html.append("  <th>Tipo contenido</th>");
         html.append("  <th>Contenido</th>");
+        html.append("  <th>Versiones</th>");
+        html.append("  <th>Versión actual</th>");
         html.append("  <th>Prioridad</th>");
         html.append("  <th>Activo</th>");
         html.append("  <th>Localidad</th>");
@@ -513,15 +542,25 @@ public class WBAContentsReport extends GenericResource {
             Resource portlet = portlets.next();
             if(portlet.getResourceType().getResourceMode()==1) {
                 html.append("<tr>");
-                html.append("  <td>"+webPage.getDisplayTitle(language)+"</td>");
-                html.append("  <td>"+portlet.getId()+"</td>");
-                html.append("  <td>"+portlet.getResourceType().getDisplayTitle(language)+"</td>");
-                html.append("  <td>"+portlet.getDisplayTitle(language)+"</td>");
-                html.append("  <td>"+portlet.getPriority()+"</td>");
-                html.append("  <td>"+(portlet.isActive()?"Si":"No")+"</td>");
-                html.append("  <td>"+portlet.getWorkPath()+"</td>");
-                html.append("  <td>"+hostAndPort + webPage.getUrl()+"</td>");
-                html.append("  <td>" +df.format(webPage.getUpdated()) +"</td>");
+                html.append("  <td>").append(webPage.getDisplayTitle(language)).append("</td>");
+                html.append("  <td>").append(portlet.getId()).append("</td>");
+                html.append("  <td>").append(portlet.getResourceType().getDisplayTitle(language)).append("</td>");
+                html.append("  <td>").append(portlet.getDisplayTitle(language)).append("</td>");
+                try{
+                    GenericObject gObj = portlet.getResourceData().createGenericInstance();
+                    if( gObj instanceof Versionable){
+                        html.append("  <td>").append(((Versionable)gObj).getLastVersion().getVersionNumber()).append("</td>");
+                        html.append("  <td>").append(((Versionable)gObj).getActualVersion().getVersionNumber()).append("</td>");
+                    }
+                }catch(Exception e){
+                    html.append("  <td>-</td>");
+                    html.append("  <td>-</td>");
+                }
+                html.append("  <td>").append(portlet.getPriority()).append("</td>");
+                html.append("  <td>").append(portlet.isActive()?"Si":"No").append("</td>");
+                html.append("  <td>").append(portlet.getWorkPath()).append("</td>");
+                html.append("  <td>").append(hostAndPort).append(webPage.getUrl()).append("</td>");
+                html.append("  <td>").append(df.format(webPage.getUpdated())).append("</td>");
                 //html.append("  <td>"+portlet.getURI()+"</td>");
                 //html.append("  <td>No</td>");
                 html.append("</tr>");
@@ -557,15 +596,25 @@ public class WBAContentsReport extends GenericResource {
                 Resource portlet = portlets.next();
                 if(portlet.getResourceType().getResourceMode()==1) {
                     html.append("<tr>");
-                    html.append("  <td>"+webPage.getDisplayTitle(language)+"</td>");
-                    html.append("  <td>"+portlet.getId()+"</td>");
-                    html.append("  <td>"+portlet.getResourceType().getDisplayTitle(language)+"</td>");
-                    html.append("  <td>"+portlet.getDisplayTitle(language)+"</td>");
-                    html.append("  <td>"+portlet.getPriority()+"</td>");
-                    html.append("  <td>"+(portlet.isActive()?"Si":"No")+"</td>");
-                    html.append("  <td>"+portlet.getWorkPath()+"</td>");
-                    html.append("  <td>"+hostAndPort + webPage.getUrl()+"</td>");
-                    html.append("  <td>" +df.format(webPage.getUpdated()) +"</td>");
+                    html.append("  <td>").append(webPage.getDisplayTitle(language)).append("</td>");
+                    html.append("  <td>").append(portlet.getId()).append("</td>");
+                    html.append("  <td>").append(portlet.getResourceType().getDisplayTitle(language)).append("</td>");
+                    html.append("  <td>").append(portlet.getDisplayTitle(language)).append("</td>");
+                    try{
+                        GenericObject gObj = portlet.getResourceData().createGenericInstance();
+                        if( gObj instanceof Versionable){
+                            html.append("  <td>").append(((Versionable)gObj).getLastVersion().getVersionNumber()).append("</td>");
+                            html.append("  <td>").append(((Versionable)gObj).getActualVersion().getVersionNumber()).append("</td>");
+                        }
+                    }catch(Exception e){
+                        html.append("  <td>-</td>");
+                        html.append("  <td>-</td>");
+                    }
+                    html.append("  <td>").append(portlet.getPriority()).append("</td>");
+                    html.append("  <td>").append(portlet.isActive()?"Si":"No").append("</td>");
+                    html.append("  <td>").append(portlet.getWorkPath()).append("</td>");
+                    html.append("  <td>").append(hostAndPort).append(webPage.getUrl()).append("</td>");
+                    html.append("  <td>").append(df.format(webPage.getUpdated())).append("</td>");
                     //html.append("  <td>"+portlet.getURI()+"</td>");
                     //html.append("  <td>No</td>");
                     html.append("</tr>");
@@ -620,6 +669,22 @@ public class WBAContentsReport extends GenericResource {
                 Element contenido = dom.createElement("content");
                 contenido.appendChild(dom.createTextNode(portlet.getDisplayTitle(language)));
                 resource.appendChild(contenido);
+                Element noVersiones = dom.createElement("lastVersion");
+                Element versionActual = dom.createElement("actualVersion");
+                try{
+                    GenericObject gObj = portlet.getResourceData().createGenericInstance();
+                    if( gObj instanceof Versionable){
+                        noVersiones.appendChild(dom.createTextNode("" + ((Versionable)gObj).getLastVersion().getVersionNumber()));
+                        resource.appendChild(noVersiones);
+                        versionActual.appendChild(dom.createTextNode("" + ((Versionable)gObj).getActualVersion().getVersionNumber()));
+                        resource.appendChild(versionActual);
+                    }
+                }catch(Exception e){
+                    noVersiones.appendChild(dom.createTextNode("-"));
+                    resource.appendChild(noVersiones);
+                    versionActual.appendChild(dom.createTextNode("-"));
+                    resource.appendChild(versionActual);
+                }
                 Element prior = dom.createElement("priority");
                 prior.appendChild(dom.createTextNode(Integer.toString(portlet.getPriority())));
                 resource.appendChild(prior);
@@ -683,6 +748,22 @@ public class WBAContentsReport extends GenericResource {
                     Element contenido = dom.createElement("content");
                     contenido.appendChild(dom.createTextNode(portlet.getDisplayTitle(language)));
                     resource.appendChild(contenido);
+                    Element noVersiones = dom.createElement("lastVersion");
+                    Element versionActual = dom.createElement("actualVersion");
+                    try{
+                        GenericObject gObj = portlet.getResourceData().createGenericInstance();
+                        if( gObj instanceof Versionable){
+                            noVersiones.appendChild(dom.createTextNode("" + ((Versionable)gObj).getLastVersion().getVersionNumber()));
+                            resource.appendChild(noVersiones);
+                            versionActual.appendChild(dom.createTextNode("" + ((Versionable)gObj).getActualVersion().getVersionNumber()));
+                            resource.appendChild(versionActual);
+                        }
+                    }catch(Exception e){
+                        noVersiones.appendChild(dom.createTextNode("-"));
+                        resource.appendChild(noVersiones);
+                        versionActual.appendChild(dom.createTextNode("-"));
+                        resource.appendChild(versionActual);
+                    }
                     Element prior = dom.createElement("priority");
                     prior.appendChild(dom.createTextNode(Integer.toString(portlet.getPriority())));
                     resource.appendChild(prior);
