@@ -104,9 +104,9 @@ public class WBAAccessLogReport extends GenericResource {
             doRenderDeviceSelect(request, response, paramsRequest);
         }else if(mode.equalsIgnoreCase("fillLangSel")) {
             doRenderLanguageSelect(request, response, paramsRequest);
-        }else if(mode.equalsIgnoreCase("fillUTSel")) {
+        }/*else if(mode.equalsIgnoreCase("fillUTSel")) {
             doRenderUserTypeSelect(request, response, paramsRequest);
-        }else if(paramsRequest.getMode().equals("report_detail")) {
+        }*/else if(paramsRequest.getMode().equals("report_detail")) {
             doDetail(request,response,paramsRequest);
         }else if(mode.equalsIgnoreCase("xls")) {
             doRepExcel(request, response, paramsRequest);
@@ -147,8 +147,8 @@ public class WBAAccessLogReport extends GenericResource {
         ret.append("<select name=\"wb_devid\" id=\"wb_devid\" size=\"6\" >");
         while(!devs.isEmpty()) {
             Device device = devs.get(0);
-            ret.append("<option value=\""+device.getId()+"\"");
-            ret.append(">"+space+device.getDisplayTitle(language)+"</option>");
+            ret.append("<option value=\"").append(device.getId()).append("\"");
+            ret.append(">").append(space).append(device.getDisplayTitle(language)).append("</option>");
             devs.remove(0);
             if(device.listChilds().hasNext()) {
                 renderDeviceSelect(devs, device, language, ret, space+"&nbsp;&nbsp;&nbsp;");
@@ -182,8 +182,8 @@ public class WBAAccessLogReport extends GenericResource {
 
         while(!devs.isEmpty()) {
             Device device = devs.get(0);
-            ret.append("<option value=\""+device.getId()+"\"");
-            ret.append(">"+space+device.getDisplayTitle(language)+"</option>");
+            ret.append("<option value=\"").append(device.getId()).append("\"");
+            ret.append(">").append(space).append(device.getDisplayTitle(language)).append("</option>");
             origList.remove(device);
             devs.remove(0);
             if(device.listChilds().hasNext()) {
@@ -230,6 +230,7 @@ public class WBAAccessLogReport extends GenericResource {
      * @throws SWBResourceException the sWB resource exception
      * @throws IOException Signals that an I/O exception has occurred.
      */
+    /*
     public void doRenderUserTypeSelect(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
         response.setContentType("text/html;charset=iso-8859-1");
 
@@ -241,6 +242,7 @@ public class WBAAccessLogReport extends GenericResource {
         out.flush();
         out.close();
     }
+    */
 
     /**
      * Do fill report agregate.
@@ -304,9 +306,9 @@ public class WBAAccessLogReport extends GenericResource {
 
         if(null!=hm_detail) {
             if(null!=s_key) {
-                Vector vec_rep = (Vector) hm_detail.get(s_key);
-                if( null!=vec_rep && !vec_rep.isEmpty() ) {
-                    Iterator<String> ite_rep = vec_rep.iterator();
+                List lst_rep = (List)hm_detail.get(s_key);
+                if( null!=lst_rep && !lst_rep.isEmpty() ) {
+                    Iterator<String> ite_rep = lst_rep.iterator();
                     int i=1;
                     while(ite_rep.hasNext()) {
                         StringTokenizer s_token = new StringTokenizer(ite_rep.next(),"|");
@@ -373,6 +375,7 @@ public class WBAAccessLogReport extends GenericResource {
         StringBuilder ret = new StringBuilder();
 
         HashMap<String, String> hm_sites = new HashMap<String, String>();
+
         try {
             // Evaluates if there are sites
             Iterator<WebSite> webSites = SWBContext.listWebSites();
@@ -384,7 +387,7 @@ public class WBAAccessLogReport extends GenericResource {
                 }
             }
             // If there are sites continue
-            if( !hm_sites.isEmpty() ) {
+            if(!hm_sites.isEmpty()) {
                 //String address = paramsRequest.getWebPage().getUrl();
                 String websiteId = request.getParameter("wb_site")==null ? (String)hm_sites.keySet().iterator().next():request.getParameter("wb_site");
                 String repositoryName = SWBContext.getWebSite(websiteId).getUserRepository().getDisplayTitle(paramsRequest.getUser().getLanguage());
@@ -405,8 +408,8 @@ public class WBAAccessLogReport extends GenericResource {
                 ret.append("dojo.addOnLoad(refresh);\n");
 
                 ret.append("function refresh() {\n");
-                ret.append("    postHtml('"+url+"'+'/_mod/fillDevSel'+'?site='+dojo.byId('wb_site').options[dojo.byId('wb_site').selectedIndex].value,'dev_cntr');\n");
-                ret.append("    postHtml('"+url+"'+'/_mod/fillLangSel'+'?site='+dojo.byId('wb_site').options[dojo.byId('wb_site').selectedIndex].value,'lang_cntr');\n");
+                ret.append("    postHtml('").append(url).append("'+'/_mod/fillDevSel'+'?site='+dojo.byId('wb_site').options[dojo.byId('wb_site').selectedIndex].value,'dev_cntr');\n");
+                ret.append("    postHtml('").append(url).append("'+'/_mod/fillLangSel'+'?site='+dojo.byId('wb_site').options[dojo.byId('wb_site').selectedIndex].value,'lang_cntr');\n");
                 //ret.append("    postHtml('"+url+"'+'/_mod/fillUTSel'+'?site='+dojo.byId('wb_site').options[dojo.byId('wb_site').selectedIndex].value,'ut_cntr');\n");
                 ret.append("}\n");
 
@@ -500,7 +503,7 @@ public class WBAAccessLogReport extends GenericResource {
                 ret.append("function doApply() {\n");
                 ret.append("   var params = getParams();\n");
                 ret.append("   var grid = dijit.byId('gridMaster');\n");
-                ret.append("   fillGrid(grid, '"+url+"', 'fillGridAgrd', params);\n");
+                ret.append("   fillGrid(grid, '").append(url).append("', 'fillGridAgrd', params);\n");
                 ret.append("}\n");
                 
                 ret.append("function getAgregate() {\n");
@@ -516,22 +519,22 @@ public class WBAAccessLogReport extends GenericResource {
                 ret.append("function doDetail(size, key) { \n");
                 ret.append("   var params = getParams();\n");
                 ret.append("   params += '&key='+key;\n");
-                ret.append("   window.open(\""+url.setMode("report_detail")+"\"+params,\"detailWindow\", size);\n");
+                ret.append("   window.open(\"").append(url.setMode("report_detail")).append("\"+params,\"detailWindow\", size);\n");
                 ret.append("}\n");
                 
                 ret.append("function doGraph(size) {\n");
                 ret.append("   var params = getParams();\n");
-                ret.append("   window.open(\""+url.setMode("histogram")+"\"+params,\"graphWindow\",size);\n");
+                ret.append("   window.open(\"").append(url.setMode("histogram")).append("\"+params,\"graphWindow\",size);\n");
                 ret.append("}\n");
 
                 ret.append("function doExcel(size) {\n");
                 ret.append("   var params = getParams();\n");
-                ret.append("   window.open(\""+url.setMode("xls")+"\"+params,\"graphWindow\",size);\n");
+                ret.append("   window.open(\"").append(url.setMode("xls")).append("\"+params,\"graphWindow\",size);\n");
                 ret.append("}\n");
 
                 ret.append("function doXml(size) {\n");
                 ret.append("   var params = getParams();\n");
-                ret.append("   window.open(\""+url.setMode("xml")+"\"+params,\"graphWindow\",size);\n");
+                ret.append("   window.open(\"").append(url.setMode("xml")).append("\"+params,\"graphWindow\",size);\n");
                 ret.append("}\n");
 
                 ret.append("</script>\n");
@@ -540,20 +543,20 @@ public class WBAAccessLogReport extends GenericResource {
                 ret.append("<form id=\"frmrep\" name=\"frmrep\" method=\"post\" action=\"\">\n");
                 ret.append("<fieldset>\n");
                 ret.append("<table border=\"0\" width=\"95%\" align=\"center\">\n");
-                ret.append("<tr><td width=\"200\"></td><td width=\"200\"></td><td width=\"200\"></td><td width=\"200\"></td></tr>\n");
+                ret.append("<tr><td width=\"100\"></td><td width=\"200\"></td><td width=\"200\"></td><td width=\"200\"></td></tr>\n");
 
                 ret.append("<tr>\n");
-                ret.append("<td><label for=\"wb_site\">" + paramsRequest.getLocaleString("site") + ":</label></td>\n");
+                ret.append("<td><label for=\"wb_site\">").append(paramsRequest.getLocaleString("site")).append(":</label></td>\n");
                 ret.append("<td>\n");
                 ret.append("<select name=\"wb_site\" id=\"wb_site\" onChange=\"refresh();\" >\n");
                 Iterator<String> itKeys = hm_sites.keySet().iterator();
                 while(itKeys.hasNext()) {
                     String key = itKeys.next();
-                    ret.append("<option value=\"" + key + "\"");
+                    ret.append("<option value=\"").append(key).append("\"");
                     if(key.equalsIgnoreCase(websiteId)) {
                         ret.append(" selected=\"selected\"");
                     }
-                    ret.append(">" + (String)hm_sites.get(key) + "</option>");
+                    ret.append(">").append((String)hm_sites.get(key)).append("</option>");
                 }
                 ret.append("</select>\n");
                 ret.append("</td>\n");
@@ -562,7 +565,7 @@ public class WBAAccessLogReport extends GenericResource {
                 ret.append("</tr>\n");
                 
                 ret.append("<tr>\n");
-                ret.append("<td>"+paramsRequest.getLocaleString("by_range")+":&nbsp;</td>\n");
+                ret.append("<td>").append(paramsRequest.getLocaleString("by_range")).append(":&nbsp;</td>\n");
                 ret.append("<td>&nbsp;</td>\n");
                 ret.append("<td>&nbsp;</td>\n");
                 ret.append("<td>&nbsp;</td>\n");
@@ -572,7 +575,7 @@ public class WBAAccessLogReport extends GenericResource {
                 ret.append("<td>&nbsp;</td>\n");
                 ret.append("<td align=\"left\" colspan=\"2\">\n");
                 ret.append("<label for=\"wb_fecha11\">Del:&nbsp;</label>\n");
-                ret.append("<input type=\"text\" name=\"wb_fecha11\" onblur=\"if(!this.value){this.focus();}\" id=\"wb_fecha11\" value=\""+sdf.format(now.getTime())+"\" dojoType=\"dijit.form.DateTextBox\" required=\"true\" constraints=\"{datePattern:'dd/MM/yyyy'}\" maxlength=\"10\" style=\"width:110px;\" hasDownArrow=\"true\" />\n");
+                ret.append("<input type=\"text\" name=\"wb_fecha11\" onblur=\"if(!this.value){this.focus();}\" id=\"wb_fecha11\" value=\"").append(sdf.format(now.getTime())).append("\" dojoType=\"dijit.form.DateTextBox\" required=\"true\" constraints=\"{datePattern:'dd/MM/yyyy'}\" maxlength=\"10\" style=\"width:110px;\" hasDownArrow=\"true\" />\n");
                 /*ret.append("</td>\n");
                 ret.append("<td>\n");*/
                 ret.append("&nbsp;&nbsp;");
@@ -586,7 +589,7 @@ public class WBAAccessLogReport extends GenericResource {
                 ret.append("<td>&nbsp;</td>\n");
                 ret.append("<td align=\"left\" colspan=\"2\">\n");
                 ret.append("<label for=\"wb_fecha12\">&nbsp;&nbsp;Al:&nbsp;</label>\n");
-                ret.append("<input type=\"text\" name=\"wb_fecha12\" onblur=\"if(!this.value){this.focus();}\" id=\"wb_fecha12\" value=\""+sdf.format(now.getTime())+"\" dojoType=\"dijit.form.DateTextBox\" required=\"true\" constraints=\"{datePattern:'dd/MM/yyyy'}\" maxlength=\"10\" style=\"width:110px;\" hasDownArrow=\"true\" />\n");
+                ret.append("<input type=\"text\" name=\"wb_fecha12\" onblur=\"if(!this.value){this.focus();}\" id=\"wb_fecha12\" value=\"").append(sdf.format(now.getTime())).append("\" dojoType=\"dijit.form.DateTextBox\" required=\"true\" constraints=\"{datePattern:'dd/MM/yyyy'}\" maxlength=\"10\" style=\"width:110px;\" hasDownArrow=\"true\" />\n");
                 /*ret.append("</td>\n");
                 ret.append("<td>\n");*/
                 ret.append("&nbsp;&nbsp;");
@@ -597,25 +600,25 @@ public class WBAAccessLogReport extends GenericResource {
                 ret.append("</tr>\n");
 
                 ret.append("<tr>\n");
-                ret.append("<td><label for=\"wb_ipuser\">"+paramsRequest.getLocaleString("ipaddress_user")+":&nbsp;</label></td>\n");
+                ret.append("<td><label for=\"wb_ipuser\">").append(paramsRequest.getLocaleString("ipaddress_user")).append(":&nbsp;</label></td>\n");
                 ret.append("<td><input type=\"text\" name=\"wb_ipuser\" id=\"wb_ipuser\" size=\"20\" /></td>\n");
-                ret.append("<td><label for=\"wb_ipserver\">"+paramsRequest.getLocaleString("ipaddress_server")+":&nbsp;</label></td>\n");
+                ret.append("<td><label for=\"wb_ipserver\">").append(paramsRequest.getLocaleString("ipaddress_server")).append(":&nbsp;</label></td>\n");
                 ret.append("<td><input type=\"text\" name=\"wb_ipserver\" id=\"wb_ipserver\" size=\"20\" /></td>\n");
                 ret.append("</tr>\n");
 
                 ret.append("<tr>\n");
-                ret.append("<td><label for=\"wb_sectid\">"+paramsRequest.getLocaleString("sectionid")+":&nbsp;</label></td>\n");
+                ret.append("<td><label for=\"wb_sectid\">").append(paramsRequest.getLocaleString("sectionid")).append(":&nbsp;</label></td>\n");
                 ret.append("<td>\n");
                 ret.append("<input type=\"text\" name=\"wb_sectid\" id=\"wb_sectid\" size=\"20\" />");
                 ret.append("</td>\n");
-                ret.append("<td><label for=\"wb_subsect\">"+paramsRequest.getLocaleString("subsections")+":&nbsp;</label></td>\n");
+                ret.append("<td><label for=\"wb_subsect\">").append(paramsRequest.getLocaleString("subsections")).append(":&nbsp;</label></td>\n");
                 ret.append("<td>\n");
                 ret.append("<input type=\"checkbox\" name=\"wb_subsect\" id=\"wb_subsect\" value=\"true\" />\n");
                 ret.append("</td>\n");
                 ret.append("</tr>\n");
 
                 ret.append("<tr>\n");
-                ret.append("<td><label for=\"wb_userid\">"+paramsRequest.getLocaleString("user")+":&nbsp;</label></td>\n");
+                ret.append("<td><label for=\"wb_userid\">").append(paramsRequest.getLocaleString("user")).append(":&nbsp;</label></td>\n");
                 ret.append("<td><input type=\"text\" name=\"wb_userid\" id=\"wb_userid\" size=\"20\" /></td>\n");
                 ret.append("<td>");
                 //ret.append("<label for=\"wb_usertype\">"+paramsRequest.getLocaleString("user_type")+":&nbsp;");
@@ -627,12 +630,12 @@ public class WBAAccessLogReport extends GenericResource {
 
                 ret.append("<tr>\n");
                 // DEVICES
-                ret.append("<td><label for=\"wb_devid\">"+paramsRequest.getLocaleString("device")+":&nbsp;</label></td>\n");
+                ret.append("<td><label for=\"wb_devid\">").append(paramsRequest.getLocaleString("device")).append(":&nbsp;</label></td>\n");
                 ret.append("<td>\n");
                 ret.append("<div id=\"dev_cntr\"></div>\n");
                 ret.append("</td>\n");
                 // LANGUAGES
-                ret.append("<td><label for=\"wb_langid\">"+paramsRequest.getLocaleString("language")+":&nbsp;</label></td>\n");
+                ret.append("<td><label for=\"wb_langid\">").append(paramsRequest.getLocaleString("language")).append(":&nbsp;</label></td>\n");
                 ret.append("<td>\n");
                 ret.append("<div id=\"lang_cntr\"></div>\n");
                 ret.append("</td>\n");
@@ -640,30 +643,30 @@ public class WBAAccessLogReport extends GenericResource {
 
                 ret.append("<tr>\n");
                 // RESOURCE
-                ret.append("<td><label for=\"wb_resid\">"+paramsRequest.getLocaleString("id_resource")+":&nbsp;</label></td>\n");
+                ret.append("<td><label for=\"wb_resid\">").append(paramsRequest.getLocaleString("id_resource")).append(":&nbsp;</label></td>\n");
                 ret.append("<td><input type=\"text\" name=\"wb_resid\" id=\"wb_resid\" size=\"20\" maxlength=\"4\" /></td>\n");
                 // SESSION
-                ret.append("<td><label for=\"wb_sessid\">"+paramsRequest.getLocaleString("session")+":&nbsp;</label></td>\n");
+                ret.append("<td><label for=\"wb_sessid\">").append(paramsRequest.getLocaleString("session")).append(":&nbsp;</label></td>\n");
                 ret.append("<td><input type=\"text\" name=\"wb_sessid\" id=\"wb_sessid\" size=\"20\" /></td>\n");
                 ret.append("</tr>\n");
 
                 ret.append("<tr>\n");
                 // USER REPOSITORY
-                ret.append("<td><label for=\"wb_urepid\">"+paramsRequest.getLocaleString("repository")+":&nbsp;</label></td>\n");
+                ret.append("<td><label for=\"wb_urepid\">").append(paramsRequest.getLocaleString("repository")).append(":&nbsp;</label></td>\n");
                 ret.append("<td>\n");
-                ret.append("<input type=\"text\" name=\"wb_urepid\" id=\"wb_urepid\" value=\""+repositoryName+"\" readonly=\"readonly\" />\n");
+                ret.append("<input type=\"text\" name=\"wb_urepid\" id=\"wb_urepid\" value=\"").append(repositoryName).append("\" readonly=\"readonly\" />\n");
                 ret.append("</td>\n");
                 ret.append("<td></td>\n");
                 ret.append("<td></td>\n");
                 ret.append("</tr>\n");
 
                 ret.append("<tr>\n");
-                ret.append("<td height=\"25px\">"+paramsRequest.getLocaleString("agregate_by")+":&nbsp;</td>\n");
+                ret.append("<td height=\"25px\">").append(paramsRequest.getLocaleString("agregate_by")).append(":&nbsp;</td>\n");
                 ret.append("<td colspan=\"3\" height=\"25px\">\n");
-                ret.append("<label><input type=\"radio\" name=\"wb_agregate\" value=\"1\" />"+paramsRequest.getLocaleString("by_year")+"</label>&nbsp;&nbsp;\n");
-                ret.append("<label><input type=\"radio\" name=\"wb_agregate\" value=\"2\" checked=\"checked\" />"+paramsRequest.getLocaleString("by_month")+"</label>&nbsp;&nbsp;\n");
-                ret.append("<label><input type=\"radio\" name=\"wb_agregate\" value=\"3\" />"+paramsRequest.getLocaleString("by_day")+"</label>&nbsp;&nbsp;\n");
-                ret.append("<label><input type=\"radio\" name=\"wb_agregate\" value=\"4\" />"+paramsRequest.getLocaleString("by_hour")+"</label>\n");
+                ret.append("<label><input type=\"radio\" name=\"wb_agregate\" value=\"1\" />").append(paramsRequest.getLocaleString("by_year")).append("</label>&nbsp;&nbsp;\n");
+                ret.append("<label><input type=\"radio\" name=\"wb_agregate\" value=\"2\" checked=\"checked\" />").append(paramsRequest.getLocaleString("by_month")).append("</label>&nbsp;&nbsp;\n");
+                ret.append("<label><input type=\"radio\" name=\"wb_agregate\" value=\"3\" />").append(paramsRequest.getLocaleString("by_day")).append("</label>&nbsp;&nbsp;\n");
+                ret.append("<label><input type=\"radio\" name=\"wb_agregate\" value=\"4\" />").append(paramsRequest.getLocaleString("by_hour")).append("</label>\n");
                 ret.append("</td>\n");
                 ret.append("</tr>\n");
                 ret.append("</table>\n");
@@ -674,9 +677,9 @@ public class WBAAccessLogReport extends GenericResource {
                 ret.append(" <tr>\n");
                 ret.append("     <td colspan=\"4\">&nbsp;&nbsp;&nbsp;\n");
                 ret.append("     <button dojoType=\"dijit.form.Button\" onClick=\"doXml('width=600, height=550, scrollbars, resizable, alwaysRaised, menubar')\">XML</button>&nbsp;\n");
-                ret.append("     <button dojoType=\"dijit.form.Button\" onClick=\"doExcel('width=600, height=550, scrollbars, resizable, alwaysRaised, menubar')\">"+paramsRequest.getLocaleString("spread_sheet")+"</button>&nbsp;\n");
-                ret.append("     <button dojoType=\"dijit.form.Button\" onClick=\"doGraph('width=600, height=550, scrollbars, resizable')\">"+paramsRequest.getLocaleString("histogram")+"</button>&nbsp;\n");
-                ret.append("     <button dojoType=\"dijit.form.Button\" onClick=\"doApply()\">"+paramsRequest.getLocaleString("apply")+"</button>\n");
+                ret.append("     <button dojoType=\"dijit.form.Button\" onClick=\"doExcel('width=600, height=550, scrollbars, resizable, alwaysRaised, menubar')\">").append(paramsRequest.getLocaleString("spread_sheet")).append("</button>&nbsp;\n");
+                ret.append("     <button dojoType=\"dijit.form.Button\" onClick=\"doGraph('width=600, height=550, scrollbars, resizable')\">").append(paramsRequest.getLocaleString("histogram")).append("</button>&nbsp;\n");
+                ret.append("     <button dojoType=\"dijit.form.Button\" onClick=\"doApply()\">").append(paramsRequest.getLocaleString("apply")).append("</button>\n");
                 ret.append("     </td>\n");
                 ret.append(" </tr>\n");
                 ret.append("</table>\n");
@@ -697,14 +700,14 @@ public class WBAAccessLogReport extends GenericResource {
 
                 ret.append("</div>\n");
             }else { // There are not sites and displays a message
-                ret.append("\n<form method=\"Post\" class=\"box\" action=\"" + paramsRequest.getWebPage().getUrl() + "\" id=\"frmrep\" name=\"frmrep\">");
+                ret.append("\n<form method=\"post\" class=\"box\" action=\"").append(paramsRequest.getWebPage().getUrl()).append("\" id=\"frmrep\" name=\"frmrep\">");
                 ret.append("\n<table border=0 width=\"100%\">");
                 ret.append("\n<tr><td colspan=\"4\">&nbsp;</td></tr>");
                 ret.append("\n<tr><td colspan=\"4\">&nbsp;</td></tr>");
                 ret.append("\n<tr><td colspan=\"4\">&nbsp;</td></tr>");
                 ret.append("\n<tr>");
                 ret.append("\n<td>&nbsp;</td>");
-                ret.append("\n<td colspan=\"2\" align=\"center\" class=\"datos\">" + paramsRequest.getLocaleString("no_sites_found") + "</td>");
+                ret.append("\n<td colspan=\"2\" align=\"center\" class=\"datos\">").append(paramsRequest.getLocaleString("no_sites_found")).append("</td>");
                 ret.append("\n<td>&nbsp;</td>");
                 ret.append("\n</tr>");
                 ret.append("\n<tr><td colspan=\"4\">&nbsp;</td></tr>");
@@ -731,7 +734,7 @@ public class WBAAccessLogReport extends GenericResource {
         PrintWriter out = response.getWriter();
 
         SWBResourceURL url=paramsRequest.getRenderUrl();
-        url.setCallMethod(paramsRequest.Call_DIRECT).setMode("fillGridDtd");
+        url.setCallMethod(SWBParamRequest.Call_DIRECT).setMode("fillGridDtd");
 
         request.getSession(true).setAttribute("alfilter", request.getParameter("key"));
 
@@ -813,7 +816,7 @@ public class WBAAccessLogReport extends GenericResource {
      * @throws IOException Signals that an I/O exception has occurred.
      */
     public void doGraph(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
-        StringBuffer ret = new StringBuffer();
+        StringBuilder ret = new StringBuilder();
         Resource base = paramsRequest.getResourceBase();
         Iterator<String[]> ar_pag = null;
 
@@ -821,15 +824,15 @@ public class WBAAccessLogReport extends GenericResource {
             ret.append("<html>\n");
             ret.append("<head>\n");
             ret.append("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=iso-8859-1\" />\n");
-            ret.append("<title>" + paramsRequest.getLocaleString("access_log_report") + "</title>\n");
+            ret.append("<title>").append(paramsRequest.getLocaleString("access_log_report")).append("</title>\n");
 
             ret.append("<style type=\"text/css\">\n");
-            ret.append("@import \""+SWBPlatform.getContextPath()+"/swbadmin/js/dojo/dojo/resources/dojo.css\";\n");
-            ret.append("@import \""+SWBPlatform.getContextPath()+"/swbadmin/js/dojo/dijit/themes/soria/soria.css\";\n");
-            ret.append("@import \""+SWBPlatform.getContextPath()+"/swbadmin/css/swb.css\";\n");
+            ret.append("@import \"").append(SWBPlatform.getContextPath()).append("/swbadmin/js/dojo/dojo/resources/dojo.css\";\n");
+            ret.append("@import \"").append(SWBPlatform.getContextPath()).append("/swbadmin/js/dojo/dijit/themes/soria/soria.css\";\n");
+            ret.append("@import \"").append(SWBPlatform.getContextPath()).append("/swbadmin/css/swb.css\";\n");
             ret.append("</style>\n");
 
-            ret.append("<script type=\"text/javascript\" src=\""+SWBPlatform.getContextPath()+"/swbadmin/js/dojo/dojo/dojo.js\" djConfig=\"parseOnLoad: true, isDebug: false\"></script>\n");
+            ret.append("<script type=\"text/javascript\" src=\"").append(SWBPlatform.getContextPath()).append("/swbadmin/js/dojo/dojo/dojo.js\" djConfig=\"parseOnLoad: true, isDebug: false\"></script>\n");
             ret.append("<script type=\"text/javascript\">\n");
             ret.append("    function doPrint() {\n");
             ret.append("        window.print();\n");
@@ -843,12 +846,12 @@ public class WBAAccessLogReport extends GenericResource {
             ret.append("<body class=\"soria\">\n");
             ret.append("<table border=\"0\" width=\"98%\" >\n");
             ret.append("<tr>\n");
-            ret.append("<td colspan=\"3\"><img src=\""+SWBPlatform.getContextPath()+"/swbadmin/images/swb-logo-hor.jpg\" width=\"180\" height=\"36\" /></td>\n");
+            ret.append("<td colspan=\"3\"><img src=\"").append(SWBPlatform.getContextPath()).append("/swbadmin/images/swb-logo-hor.jpg\" width=\"180\" height=\"36\" /></td>\n");
             ret.append("</tr>\n");
             ret.append("<tr>\n");
             ret.append("<td colspan=\"3\" align=\"right\">\n");
-            ret.append("<button dojoType=\"dijit.form.Button\" onClick=\"doPrint()\">"+paramsRequest.getLocaleString("print")+"</button>&nbsp;\n");
-            ret.append("<button dojoType=\"dijit.form.Button\" onClick=\"doClose()\">"+paramsRequest.getLocaleString("close")+"</button>&nbsp;\n");
+            ret.append("<button dojoType=\"dijit.form.Button\" onClick=\"doPrint()\">").append(paramsRequest.getLocaleString("print")).append("</button>&nbsp;\n");
+            ret.append("<button dojoType=\"dijit.form.Button\" onClick=\"doClose()\">").append(paramsRequest.getLocaleString("close")).append("</button>&nbsp;\n");
             ret.append("</td>\n");
             ret.append("</tr>\n");
             ret.append("<tr>\n");
@@ -860,19 +863,19 @@ public class WBAAccessLogReport extends GenericResource {
             int ndata = 0;
             ar_pag = getReportResults(request, paramsRequest);
             if(ar_pag.hasNext()) {
-                ret.append("<APPLET code=\"applets.graph.WBGraph.class\" archive=\""+SWBPlatform.getContextPath()+"/swbadmin/lib/SWBAplGraph.jar\" width=\"98%\" height=\"450\">\n");
+                ret.append("<APPLET code=\"applets.graph.WBGraph.class\" archive=\"").append(SWBPlatform.getContextPath()).append("/swbadmin/lib/SWBAplGraph.jar\" width=\"98%\" height=\"450\">\n");
                 ret.append("<param name=\"GraphType\" value=\"Lines\">\n");
                 ret.append("<param name=\"ncdata\" value=\"1\">\n");
                 ret.append("<param name=\"percent\" value=\"false\">\n");
                 while(ar_pag.hasNext()) {
                     String[] data = ar_pag.next();
-                    ret.append("<param name=\"label"+ndata+"\" value=\""+data[0]+"\">\n");
-                    ret.append("<param name=\"data"+ndata+"\"  value=\""+data[1]+"\">\n");
+                    ret.append("<param name=\"label").append(ndata).append("\" value=\"").append(data[0]).append("\">\n");
+                    ret.append("<param name=\"data").append(ndata).append("\"  value=\"").append(data[1]).append("\">\n");
                     ndata++;
                 }
                 String title = paramsRequest.getLocaleString("access_log_report");
-                ret.append("<param name=\"Title\" value=\"" + title + "\">\n");
-                ret.append("<param name=\"ndata\" value=\""+ ndata +"\">\n");
+                ret.append("<param name=\"Title\" value=\"").append(title).append("\">\n");
+                ret.append("<param name=\"ndata\" value=\"").append(ndata).append("\">\n");
                 ret.append("<param name=\"color0\" value=\"66,138,212\">\n");
                 ret.append("<param name=\"barname0\" value=\"Hits\">\n");
                 ret.append("<param name=\"zoom\" value=\"true\">\n");
@@ -1144,50 +1147,19 @@ public class WBAAccessLogReport extends GenericResource {
     /**
      * Gets the file names.
      * 
-     * @param request the request
+     * @param siteId The id of the site
      * @return the file names
      * @return
      */
-    public Iterator<String> getFileNames(HttpServletRequest request) {
+    public Iterator<String> getFileNames(String siteId, GregorianCalendar first, GregorianCalendar last) {
         ArrayList files = new ArrayList();
 
         String accessLogPath = SWBPlatform.getEnv("swb/accessLog");
         String period = SWBPlatform.getEnv("swb/accessLogPeriod");
         String path = SWBPortal.getWorkPath();
-        String siteId = request.getParameter("siteid");
 
-        GregorianCalendar cal = new GregorianCalendar();
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-        String fecha11 = request.getParameter("fecha11")==null ? sdf.format(cal.getTime()):request.getParameter("fecha11");
-        try {
-            sdf.parse(fecha11);
-        }catch(ParseException pe){
-            fecha11 = sdf.format(cal.getTime());
-        }
-        String t11 = request.getParameter("t11")==null ? "00:00":request.getParameter("t11");
-
-        String fecha12 = request.getParameter("fecha12")==null ? sdf.format(cal.getTime()):request.getParameter("fecha12");
-        try {
-            sdf.parse(fecha12);
-        }catch(ParseException pe){
-            fecha12 = sdf.format(cal.getTime());
-        }
-        String t12 = request.getParameter("t12")==null ? "23:59":request.getParameter("t12");
-
-        int year11 = Integer.parseInt(fecha11.substring(6,10),10);
-        int month11 = Integer.parseInt(fecha11.substring(3,5),10);
-        int day11 = Integer.parseInt(fecha11.substring(0,2),10);
-        int hour11 = Integer.parseInt(t11.substring(0,2),10);
-        int minute11 = Integer.parseInt(t11.substring(3,5),10);
-        int year12 = Integer.parseInt(fecha12.substring(6,10),10);
-        int month12 = Integer.parseInt(fecha12.substring(3,5),10);
-        int day12 = Integer.parseInt(fecha12.substring(0,2),10);
-        int hour12 = Integer.parseInt(t12.substring(0,2),10);
-        int minute12 = Integer.parseInt(t12.substring(3,5),10);
-
-        GregorianCalendar first = new GregorianCalendar(year11, month11-1, day11, hour11, minute11);
-        GregorianCalendar last  = new GregorianCalendar(year12, month12-1, day12, hour12, minute12);
-
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");        
+        
         if(siteId!=null) {
             String realpath = path + accessLogPath + "_" + siteId + "_acc.";
 
@@ -1276,32 +1248,23 @@ public class WBAAccessLogReport extends GenericResource {
 
         GregorianCalendar now = new GregorianCalendar();
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
-
         String date11 = request.getParameter("fecha11")==null ? sdf.format(now.getTime()):request.getParameter("fecha11")+" "+(request.getParameter("t11")==null ? "00:00":request.getParameter("t11"));
+        GregorianCalendar first = new GregorianCalendar();
+
         try {
-            sdf.parse(date11);
+            first.setTime(sdf.parse(date11));
         }catch(ParseException pe){
-            date11 = sdf.format(now.getTime());
-        }
-        int year11 = Integer.parseInt(date11.substring(6,10),10);
-        int month11 = Integer.parseInt(date11.substring(3,5),10);
-        int day11 = Integer.parseInt(date11.substring(0,2),10);
-        int hour11 = Integer.parseInt(date11.substring(11,13),10);
-        int minute11 = Integer.parseInt(date11.substring(14,16),10);
-        GregorianCalendar first = new GregorianCalendar(year11, month11-1, day11, hour11, minute11);
+            first.setTime(now.getTime());
+        }        
 
         String date12 = request.getParameter("fecha12")==null ? sdf.format(now.getTime()):request.getParameter("fecha12")+" "+(request.getParameter("t12")==null ? "23:59":request.getParameter("t12"));
+        GregorianCalendar last  = new GregorianCalendar();
+
         try {
-            sdf.parse(date12);
+            last.setTime(sdf.parse(date12));
         }catch(ParseException pe){
-            date12 = sdf.format(now.getTime());
+            last.setTime(now.getTime());
         }
-        int year12 = Integer.parseInt(date12.substring(6,10),10);
-        int month12 = Integer.parseInt(date12.substring(3,5),10);
-        int day12 = Integer.parseInt(date12.substring(0,2),10);
-        int hour12 = Integer.parseInt(date12.substring(11,13),10);
-        int minute12 = Integer.parseInt(date12.substring(14,16),10);
-        GregorianCalendar last  = new GregorianCalendar(year12, month12-1, day12, hour12, minute12);
 
         String ipadduser = request.getParameter("ipuser");
         String ipaddserver = request.getParameter("ipserver");
@@ -1314,12 +1277,11 @@ public class WBAAccessLogReport extends GenericResource {
         String userId = request.getParameter("userid");
         String languageId = request.getParameter("langid");
         String deviceId = request.getParameter("devid");
-        String usertypeId = null;
         String resourceId = request.getParameter("resid");
         String agregateId = request.getParameter("agregate")==null ? "2":request.getParameter("agregate");
         
         try {
-            Iterator<String> files = getFileNames(request);
+            Iterator<String> files = getFileNames(siteId, (GregorianCalendar)first.clone(), (GregorianCalendar)last.clone());
             if(files.hasNext()) {                
                 String s_key=null;
                 Vector vec_rep = null;
