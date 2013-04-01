@@ -26,9 +26,9 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.net.SocketException;
 import java.util.Iterator;
 import java.security.Principal;
+import java.util.Locale;
 import java.util.regex.Matcher;
 import javax.security.auth.Subject;
 import javax.security.auth.callback.CallbackHandler;
@@ -269,11 +269,11 @@ public class Login implements InternalServlet
                         sendRedirect(response, uri);
                         return;
                     } else {
-                        formChangePwd(request, response, dparams, pcUser, "Error: contraseña y confirmación diferentes");
+                        formChangePwd(request, response, dparams, pcUser, SWBUtils.TEXT.getLocaleString("org.semanticwb.servlet.internal.Login", "errdifconf", new Locale(dparams.getUser().getLanguage())));
                         return;
                     }
                 }else {
-                        formChangePwd(request, response, dparams, pcUser, "Error: contraseña anterior inválida");
+                        formChangePwd(request, response, dparams, pcUser, SWBUtils.TEXT.getLocaleString("org.semanticwb.servlet.internal.Login", "errnomatch", new Locale(dparams.getUser().getLanguage())));
                         return;
                     }
             } catch (NullPointerException npe)
@@ -304,7 +304,7 @@ public class Login implements InternalServlet
             } catch (Exception ex)
             {
                 log.error("Can't Instanciate a CallBackHandler for UserRepository " + ur.getId() + "\n" + CBHClassName, ex);
-                response.sendError(500, "Authentication System failure!!!");
+                response.sendError(500, "Authentication System failure!!!" +ex.getMessage());
                 return;
             }
             try
@@ -328,7 +328,7 @@ public class Login implements InternalServlet
                                 SWBUtils.CryptoWrapper.comparablePassword(
                                 tmpPass, alg)) && tmpuser.isRequestChangePassword())
                         {
-                            formChangePwd(request, response, dparams, tmpuser, "Debe actualizar su contraseña.");
+                            formChangePwd(request, response, dparams, tmpuser, SWBUtils.TEXT.getLocaleString("org.semanticwb.servlet.internal.Login", "errmustupd", new Locale(dparams.getUser().getLanguage())));
                             return;
                         }
                     }
@@ -338,9 +338,11 @@ public class Login implements InternalServlet
                 }
                 markFailedAttepmt(request.getParameter("wb_username"));
                 log.debug("Can't log User", ex); 
-                String alert = "User non existent";
+                String alert = SWBUtils.TEXT.getLocaleString("org.semanticwb.servlet.internal.Login", "alert", new Locale(dparams.getUser().getLanguage()));         
+                    //    "User non existent";
                 if (isblocked(request.getParameter("wb_username"))){
-                    alert = "User has been temporarily blocked";
+                    alert = SWBUtils.TEXT.getLocaleString("org.semanticwb.servlet.internal.Login", "blocked", new Locale(dparams.getUser().getLanguage()));
+                   // "User has been temporarily blocked";
                 }
                 doResponse(request, response, dparams, alert, authMethod);
                 return;
