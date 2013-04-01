@@ -1,3 +1,5 @@
+  4.2.5.0
+    - Mensajes de error en login más claros
   4.2.4.0
     - BUG: Perdía el contexto al cambiar contraseña en la autenticación si el usuario no ponia la contraseña anterior o ponia diferentes nuevas contraseñas (serch)
     - Se redujo la contención en la creación de semanticObjects a sólo URIs equivalentes(jei)
