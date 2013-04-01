@@ -40,7 +40,6 @@ import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Resource;
-import org.semanticwb.model.User;
 import org.semanticwb.portal.admin.admresources.util.WBAdmResourceUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -1755,7 +1754,7 @@ System.out.println("2. removeAllNodes");
         script.append("        optionObj = new Option(pInTxt.value, pInTxt.value);");
         script.append("        pInSel.options[pInSel.length]=optionObj;");
         script.append("      }else {");
-        script.append("        alert('"+paramRequest.getLocaleString("msgBadUrl")+"');");
+        script.append("        alert('").append(paramRequest.getLocaleString("msgBadUrl")).append("');");
         script.append("      }");
         script.append("    }");
         script.append("}\n");
@@ -1851,7 +1850,7 @@ System.out.println("2. removeAllNodes");
             script.append("   postHtml(url+'&radiobutton='+optValue,'" + PREF).append(base.getId()).append("'); expande();");
         }
         script.append("   }else {");
-        script.append("      alert('"+paramRequest.getLocaleString("msgView_msgAnswer")+"');");
+        script.append("      alert('").append(paramRequest.getLocaleString("msgView_msgAnswer")).append("');");
         script.append("   }");
         script.append("}");
 
