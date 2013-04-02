@@ -2,6 +2,11 @@
     - Se agrego propiedad de SemanticModel para poder definir si el Modelo es un Modelo de Datos (No es observado para notificar cambios y generar logs)(Jei)
     - Se agrego la posibilidad de Indexar Documentos Aduntos en SWBIndexer (Jei)
     - Mensajes de error en login más claros (serch)
+    - Los reportes para vista en html se manejan con dojo, anteriormente se usaba jasper (Carlos).
+    - Se corrigieron los filtros de los reporteadores (Carlos).
+    - El reporte de contenido muestra dos nuevas columnas, versión y  (Carlos).
+    - Se corrigió el editor de plantillas XSL para los recursos que las ocupan (Carlos).
+    - Se corrigió una validación para el tipo de despliegue del Poll (Carlos).
   4.2.4.0
     - BUG: Perdía el contexto al cambiar contraseña en la autenticación si el usuario no ponia la contraseña anterior o ponia diferentes nuevas contraseñas (serch)
     - Se redujo la contención en la creación de semanticObjects a sólo URIs equivalentes(jei)
