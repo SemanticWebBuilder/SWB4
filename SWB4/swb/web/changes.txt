@@ -1,4 +1,5 @@
   4.2.5.0
+    - Se agrego la posibilidad de Indexar Documentos Aduntos en SWBIndexer (Jei)
     - Mensajes de error en login más claros (serch)
   4.2.4.0
     - BUG: Perdía el contexto al cambiar contraseña en la autenticación si el usuario no ponia la contraseña anterior o ponia diferentes nuevas contraseñas (serch)
