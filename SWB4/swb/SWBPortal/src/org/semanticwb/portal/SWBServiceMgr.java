@@ -102,8 +102,8 @@ public class SWBServiceMgr implements SemanticObserver, SemanticTSObserver, SWBO
 
             if(obj.getModel().isTraceable())SWBPortal.getDBAdmLog().saveAdmLog(usr, obj, prop, action);
             
-            boolean iswebsite=false;
-            if(obj!=null && obj.getModel().getModelObject().instanceOf(WebSite.sclass))iswebsite=true;            
+            //boolean iswebsite=false;
+            //if(obj!=null && obj.getModel().getModelObject().instanceOf(WebSite.sclass))iswebsite=true;            
 
             SemanticClass cls = obj.getSemanticClass();
             if(cls!=null && cls.isSWB())
@@ -136,7 +136,7 @@ public class SWBServiceMgr implements SemanticObserver, SemanticTSObserver, SWBO
                             dir=new java.io.File(SWBPortal.getWorkPath() + "/models/" + obj.getId() + "/Resource");
                             dir.mkdirs();
                         }
-                        if(iswebsite && obj.instanceOf(Template.sclass))
+                        if(obj.instanceOf(Template.sclass))
                         {
                             String ctx=SWBPlatform.getContextPath();
                             Template tpl=(Template)obj.createGenericInstance();
@@ -161,7 +161,7 @@ public class SWBServiceMgr implements SemanticObserver, SemanticTSObserver, SWBO
                             SWBUtils.IO.removeDirectory(SWBPortal.getWorkPath() + obj.getWorkPath());
                         }
 
-                        if(iswebsite && obj.instanceOf(ResourceType.sclass))
+                        if(obj.instanceOf(ResourceType.sclass))
                         {
                             try
                             {
@@ -181,7 +181,7 @@ public class SWBServiceMgr implements SemanticObserver, SemanticTSObserver, SWBO
                 } else if (prop instanceof SemanticProperty)
                 {
                     //System.out.println("obj2:"+obj+" "+Resource.sclass+"="+Resource.sclass+" prop:"+prop+"="+Resource.swb_resourceSubType);
-                    if(iswebsite && prop.equals(ResourceType.swb_resourceClassName) && obj.instanceOf(ResourceType.sclass))
+                    if(prop.equals(ResourceType.swb_resourceClassName) && obj.instanceOf(ResourceType.sclass))
                     {
                         try
                         {
@@ -201,7 +201,7 @@ public class SWBServiceMgr implements SemanticObserver, SemanticTSObserver, SWBO
                         }catch(Exception e){log.error(e);}
                     }
 
-                    if(iswebsite && prop.equals(Resource.swb_resourceSubType) && obj.instanceOf(Resource.sclass))
+                    if(prop.equals(Resource.swb_resourceSubType) && obj.instanceOf(Resource.sclass))
                     {
                         Resource res=(Resource)obj.createGenericInstance();
                         if(res.getResourceType()==null)
@@ -214,14 +214,12 @@ public class SWBServiceMgr implements SemanticObserver, SemanticTSObserver, SWBO
                             }
                         }
                     }                    
+                    if(obj.getModel().isTraceable())updateObject(obj,usr);
                 }else
                 {
                     //TODO: SemanticClass
                 }
             }
-            
-            if(prop!=null && prop instanceof SemanticProperty && obj.getModel().isTraceable())updateObject(obj,usr);
-            
         }finally
         {
             //no se envian a otras maquinas
@@ -405,7 +403,7 @@ public class SWBServiceMgr implements SemanticObserver, SemanticTSObserver, SWBO
             msg.append(action);
             SWBPortal.getMessageCenter().sendMessage(msg.toString());
         }
-        if(obj!=null && !obj.getModel().isDataModel() && obj.getModel().getModelObject().instanceOf(WebSite.sclass))
+        if(obj!=null && !obj.getModel().isDataModel())
         {
             processCacheService(obj, stmt, action);
         }
