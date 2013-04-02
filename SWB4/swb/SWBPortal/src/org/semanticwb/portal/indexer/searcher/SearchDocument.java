@@ -22,9 +22,15 @@
  */
 package org.semanticwb.portal.indexer.searcher;
 
+import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 import org.semanticwb.model.Searchable;
 import org.semanticwb.model.GenericObject;
+import org.semanticwb.model.WebPage;
 import org.semanticwb.platform.SemanticObject;
+import org.semanticwb.portal.indexer.FileSearchWrapper;
+import org.semanticwb.portal.indexer.SWBIndexer;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -51,6 +57,9 @@ public class SearchDocument implements Comparable {
     
     /** The {@link Searchable} object contained in the document. */
     private Searchable m_sdoc=null;
+    
+    //Todos los atributos de documento
+    private Map map=null;
 
     /**
      * Instantiates a new search document.
@@ -62,10 +71,11 @@ public class SearchDocument implements Comparable {
      * @param summary   the summary of the document. El resumen del documento.
      * @param score     the score of the document. La puntuación del documento.
      */
-    public SearchDocument(String uri, String summary, float score) {
+    public SearchDocument(String uri, String summary, float score, Map map) {
         this.m_score=score;
         this.m_uri=uri;
         this.m_summary=summary;
+        this.map=map;
     }
 
     /**
@@ -77,11 +87,24 @@ public class SearchDocument implements Comparable {
      */
     public Searchable getSearchable() {
         if(m_sdoc==null) {
-            SemanticObject sobj=SemanticObject.createSemanticObject(m_uri);
-            if(sobj!=null) {
-                GenericObject inst=sobj.createGenericInstance();
-                if(inst instanceof Searchable) {
-                    m_sdoc=(Searchable)inst;
+            if(m_uri.startsWith("file:"))
+            {
+                WebPage page=null;
+                SemanticObject obj=SemanticObject.createSemanticObject((String)map.get("wuri"));
+                if(obj!=null)
+                {
+                    page=(WebPage)SemanticObject.createSemanticObject((String)map.get("wuri")).createGenericInstance();
+                }
+                
+                m_sdoc=new FileSearchWrapper(new File(m_uri.substring(5)), (String)map.get(SWBIndexer.ATT_TITLE), (String)map.get(SWBIndexer.ATT_DESCRIPTION), (String)map.get(SWBIndexer.ATT_TAGS), (String)map.get(SWBIndexer.ATT_URL), page);
+            }else
+            {
+                SemanticObject sobj=SemanticObject.createSemanticObject(m_uri);
+                if(sobj!=null) {
+                    GenericObject inst=sobj.createGenericInstance();
+                    if(inst instanceof Searchable) {
+                        m_sdoc=(Searchable)inst;
+                    }
                 }
             }
         }
@@ -162,4 +185,10 @@ public class SearchDocument implements Comparable {
     public int compareTo(Object o) {
         return 1;
     }
+
+    public Map getMap()
+    {
+        return map;
+    }
+        
 }
