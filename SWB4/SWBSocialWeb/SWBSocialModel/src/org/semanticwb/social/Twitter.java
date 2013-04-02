@@ -286,6 +286,13 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
                                     if (status.getText()!=null) {
                                        external.setMessage(status.getText());
                                     }                            
+                                    external.setFollowers(status.getUser().getFollowersCount());
+                                    external.setFriendsNumber(status.getUser().getFriendsCount());
+                                    if(status.getPlace()!=null)
+                                    {
+                                        external.setPlace(status.getPlace().getFullName());
+                                    }
+                                    
                                     aListExternalPost.add(external);
 
                                     twitterResults.add(status);
