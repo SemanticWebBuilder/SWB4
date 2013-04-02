@@ -194,7 +194,7 @@ public class PostSummary extends GenericResource {
         {
              wsite=WebSite.ClassMgr.getWebSite(wsiteId);
              Iterator<PostIn> itposts = PostIn.ClassMgr.listPostIns(wsite);
-             itposts = SWBComparator.sortByCreated(itposts, false);
+             //itposts = SWBComparator.sortByCreated(itposts, false);   //COMENTADO POR JORGE JIMENEZ, YA QUE NO SE NECESITA ESTA LINEA
              posts = SWBUtils.Collections.copyIterator(itposts);
              size = posts.size();
         }
@@ -291,6 +291,7 @@ fin = Integer.parseInt(request.getParameter("fin"));
                         obj.put("fllwrs","0");
                         obj.put("frds","0");
                     }
+                    System.out.println("En reporte-place:"+msg.getPostPlace());
                     obj.put("plc", msg.getPostPlace()==null?"--":msg.getPostPlace());
                     jarr.put(obj);
                 }catch (Exception jse) {
