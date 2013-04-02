@@ -1865,7 +1865,6 @@
   <owl:ObjectProperty rdf:ID="modifiedBy">
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#dp_modifiedBy">
-        <rdfs:label xml:lang="en">Modified by</rdfs:label>
         <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
         >230</swb:index>
         <rdfs:label xml:lang="es">Modificado por</rdfs:label>
@@ -1879,12 +1878,7 @@
             >100</swb:index>
           </swbxf:PropertyGroup>
         </swbxf:propGroup>
-        <swbxf:formElement>
-          <swbxf:ObjectElement rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#ObjectElement_1">
-            <rdfs:label xml:lang="en">Generic Related Objects</rdfs:label>
-            <rdfs:label xml:lang="es">Objetos Relacionados Genericos</rdfs:label>
-          </swbxf:ObjectElement>
-        </swbxf:formElement>
+        <rdfs:label xml:lang="en">Modified by</rdfs:label>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
     <rdfs:range rdf:resource="#User"/>
@@ -2488,14 +2482,13 @@
   <owl:ObjectProperty rdf:ID="creator">
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#dp_creator">
-        <rdfs:label xml:lang="en">Creator User</rdfs:label>
         <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
         >210</swb:index>
         <rdfs:label xml:lang="es">Usuario Creador</rdfs:label>
         <swbxf:propDisabled rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
         >false</swbxf:propDisabled>
         <swbxf:propGroup rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#pg_Trace"/>
-        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#ObjectElement_1"/>
+        <rdfs:label xml:lang="en">Creator User</rdfs:label>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
     <rdfs:domain rdf:resource="#Traceable"/>
@@ -4868,6 +4861,7 @@
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#dp_webPageURL">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextBox"/>
         <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
         >70</swb:index>
       </swbxf:DisplayProperty>
@@ -5734,6 +5728,10 @@
     <swbxf:so_userRepository rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swbxf:so_userRepository>
   </swbxf:SelectOne>
+  <swbxf:ObjectElement rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#ObjectElement_1">
+    <rdfs:label xml:lang="en">Generic Related Objects</rdfs:label>
+    <rdfs:label xml:lang="es">Objetos Relacionados Genericos</rdfs:label>
+  </swbxf:ObjectElement>
   <swbxf:RichText rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#RichTextEditor">
     <rdfs:label xml:lang="en">Rich text editor</rdfs:label>
     <rdfs:label xml:lang="es">Editor de texto enriquecido</rdfs:label>
