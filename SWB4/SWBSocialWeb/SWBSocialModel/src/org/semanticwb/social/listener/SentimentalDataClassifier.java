@@ -454,7 +454,6 @@ public class SentimentalDataClassifier {
                 message.setPostInSocialNetwork(socialNetwork);
                 message.setPostInStream(stream);
                 
-                message.setPostRetweets(Integer.parseInt(""+externalPost.getRetweets()));
                 //System.out.println("Ya en Msg ReTweets:"+message.getPostRetweets());
                 if(externalPost.getDevice()!=null)    //Dispositivo utilizado
                 {
@@ -483,6 +482,10 @@ public class SentimentalDataClassifier {
                     {
                         message.setPostPlace(externalPost.getLocation());
                     }
+                    if(externalPost.getRetweets()>0)
+                    {
+                        message.setPostRetweets(externalPost.getRetweets());
+                    }
                     
                     
                     if(socialNetUser==null) //Si el usuario no existe en la red social, Twitter, Faebook, etc, entonces crealo
@@ -496,6 +499,8 @@ public class SentimentalDataClassifier {
                         socialNetUser.setSnu_SocialNetwork(socialNetwork.getSemanticObject().getSemanticClass().getSemanticObject());
                         socialNetUser.setCreated(externalPost.getUsercreation());
                         socialNetUser.setSnu_klout(userKloutScore);
+                        socialNetUser.setFollowers(externalPost.getFollowers());
+                        socialNetUser.setFriends(externalPost.getFriendsNumber());
                         
                         //System.out.println("SocialNetworkUser Creado:"+socialNetUser.getSnu_id());
                     }else if(upDateSocialUserNetworkData)
