@@ -4,7 +4,6 @@
  */
 package org.semanticwb.linkeddata.spider.repository.mysqldatabase;
 
-import java.io.Reader;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
