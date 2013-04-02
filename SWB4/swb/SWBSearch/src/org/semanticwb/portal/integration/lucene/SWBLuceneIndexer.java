@@ -32,11 +32,13 @@ import com.hp.hpl.jena.query.larq.IndexBuilderString;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Locale;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
+import org.apache.lucene.document.Fieldable;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
@@ -542,7 +544,16 @@ public class SWBLuceneIndexer extends SWBIndexer
                 for (int i = 0; i < topDocs.length; i++) {
                     Document doc = searcher.doc(topDocs[i].doc);
                     float normScore = (topDocs[i].score - minScore)/(maxScore - minScore);
-                    ret.add(new SearchDocument(doc.get(ATT_URI), doc.get(ATT_SUMMARY), normScore)); //Es correcto este score?
+                    
+                    HashMap map=new HashMap();
+                    Iterator<Fieldable> it=doc.getFields().iterator();
+                    while (it.hasNext())
+                    {
+                        Fieldable fieldable = it.next();
+                        map.put(fieldable.name(), fieldable.stringValue());
+                    }
+                    
+                    ret.add(new SearchDocument(doc.get(ATT_URI), doc.get(ATT_SUMMARY), normScore, map)); //Es correcto este score?
                 }
             } catch(Exception e) {
                 log.error(e);
