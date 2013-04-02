@@ -1,4 +1,5 @@
   4.2.5.0
+    - Se agrego propiedad de SemanticModel para poder definir si el Modelo es un Modelo de Datos (No es observado para notificar cambios y generar logs)(Jei)
     - Se agrego la posibilidad de Indexar Documentos Aduntos en SWBIndexer (Jei)
     - Mensajes de error en login más claros (serch)
   4.2.4.0
