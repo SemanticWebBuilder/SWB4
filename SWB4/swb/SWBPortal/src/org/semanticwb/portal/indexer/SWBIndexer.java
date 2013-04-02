@@ -44,6 +44,7 @@ import org.semanticwb.model.WebPage;
 import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticModel;
 import org.semanticwb.platform.SemanticObject;
+import org.semanticwb.portal.indexer.parser.FileParser;
 import org.semanticwb.portal.indexer.parser.GenericParser;
 import org.semanticwb.portal.indexer.parser.ResourceParser;
 import org.semanticwb.portal.indexer.parser.UserParser;
@@ -249,6 +250,7 @@ public abstract class SWBIndexer
         registerParser(Resource.class, new ResourceParser());
         registerParser(WebPage.class, new WebPageParser());
         registerParser(User.class, new UserParser());
+        registerParser(FileSearchWrapper.class, new FileParser());
     }
     
 
