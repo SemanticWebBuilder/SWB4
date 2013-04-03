@@ -75,18 +75,18 @@
 
 .swimlane
 {
-    stroke:#ADADAE;
-    fill:url(#linearGradientStartEvent);
+    fill: #E8E8FF;
+    stroke-width:2;
+    stroke: #ADADAE;
     fill-opacity:1;
-    stroke-width:1.5;                        
 }
 
 .swimlane_o
 {
     stroke:#2cff20;
-    fill:url(#linearGradientStartEvent);
+    fill: #E8E8FF;
+    stroke-width:2;
     fill-opacity:1;
-    stroke-width:1.5;                        
 }
 
 .intermediateEvent
