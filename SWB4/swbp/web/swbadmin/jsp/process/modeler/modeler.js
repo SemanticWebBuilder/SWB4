@@ -384,7 +384,7 @@
             }
             else if(type=='ruleTask') {
                 ret = Modeler.createTask(null,null);
-                ret.addIcon("#ruleMarker",-1,-1,12,12);
+                ret.addIcon("#taskRuleMarker",-1,-1,12,12);
                 ret.setText("Tarea de regla de negocio");
                 ret.resize(100,60);
             }
@@ -396,13 +396,13 @@
             }
             else if(type=='sendTask') {
                 ret = Modeler.createTask(null,null);
-                ret.addIcon("#messageThrowMarker",-1,-1,13,10);
+                ret.addIcon("#taskMessageThrowMarker",-1,-1,13,10);
                 ret.setText("Tarea de envío de mensaje");
                 ret.resize(100,60);
             }
             else if(type=='receiveTask') {
                 ret = Modeler.createTask(null,null);
-                ret.addIcon("#messageCatchMarker",-1,-1,13,10);
+                ret.addIcon("#taskMessageCatchMarker",-1,-1,13,10);
                 ret.setText("Tarea de recepción de mensaje");
                 ret.resize(100,60);
             }
@@ -424,7 +424,7 @@
             }
             else if(type=='callruleTask') {
                 ret = Modeler.createCallTask(null,null);
-                ret.addIcon("#ruleMarker",-1,-1,12,12);
+                ret.addIcon("#taskRuleMarker",-1,-1,12,12);
                 ret.setText("Tarea de regla de negocio reusada");
                 ret.resize(100,60);
             }
