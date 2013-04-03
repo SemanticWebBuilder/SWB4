@@ -405,7 +405,7 @@
                 {
                     _this.selected[i].remove();
                 }                             
-                unSelectAll();
+                _this.unSelectAll();
                 _this.stopPropagation(evt);
             }else if((evt.keyCode==91 && evt.which==91) || (evt.keyCode==224 && evt.which==224))
             {
