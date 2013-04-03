@@ -659,7 +659,10 @@
                 //Move Text
                 if(obj.text && obj.text!=null)
                 {
-                    obj.text.traslate(offx,offy);
+                    //obj.text.traslate(offx,offy);
+                    obj.text.PX=offx;
+                    obj.text.PY=offy;
+                    obj.text.update();
                     for (var i = obj.text.childNodes.length; i--;)
                     {
                         obj.text.childNodes[i].setAttributeNS(null,"x",obj.text.getX());
@@ -774,13 +777,14 @@
             };
 
             //pos validas del 1 al 9, 1=esquina superior izquierda, 5=centro, 9=esquina inferior derecha
-            obj.setText=function(text,posx,posy,width)
+            obj.setText=function(text,posx,posy,width,orientation)
             {
                 if(obj.text)obj.text.remove();
                 obj.text=_this.createText(text,obj);
                 obj.text.textPX=posx;
                 obj.text.textPY=posy;
                 obj.text.textW=width;
+                obj.text.textO=orientation;
                 obj.text.update();
             };  
             
@@ -986,6 +990,11 @@
                         text_element.appendChild(tspan_element);
                         lin++;
                     }
+                }
+                
+                if(obj.textO==2) {
+                    text_element.setAttributeNS(null, "transform", "rotate(45)");
+                    console.log("rotando");
                 }
                 
                 var offy=0;
