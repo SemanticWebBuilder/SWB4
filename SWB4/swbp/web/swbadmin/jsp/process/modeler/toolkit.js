@@ -438,6 +438,54 @@
             if (evt.preventDefault) evt.preventDefault();
             if (evt.stopPropagation) evt.stopPropagation();
         },
+        
+        /*createPath:function(marker_start, marker_mid, marker_end, dash_array, styleClass) {
+            var _this=ToolKit;
+            //console.log(_this);
+            var ret = document.createElementNS(_this.svgNS,"path"); 
+            ret.setAttributeNS(null, "d", "M0 0");
+            if (dash_array && dash_array != null) {
+                ret.setAttributeNS(null, "stroke-dasharray", dash_array);
+            }
+            if (marker_start && marker_start != null) {
+                ret.setAttributeNS(null, "marker-start", "url(#"+marker_start+")");
+            }
+            if (marker_mid && marker_mid != null) {
+                ret.setAttributeNS(null, "marker-mid", "url(#"+marker_mid+")");
+            }
+            if (marker_end && marker_end != null) {
+                ret.setAttributeNS(null, "marker-end", "url(#"+marker_end+")");
+            }
+            if (styleClass && styleClass != null) {
+                ret.setAttributeNS(null, "class", styleClass);
+            }
+            //obj.resizeable=false;
+            //desc(ret, true);
+            ret.addPoint = function (x,y) {
+                var seg = ret.createSVGPathSegLinetoAbs(x, y);
+                ret.pathSegList.appendItem(seg);
+            }
+            ret.setStartPoint=function(x,y) {
+                ret.pathSegList.replaceItem(ret.createSVGPathSegMovetoAbs(x, y), 0);
+            }
+            ret.move=function(x,y) {
+                
+            }
+            ret.setClass=function(styleC) {
+                ret.setAttributeNS(null, "class", styleC);
+            }
+            ret.setEndPoint=function(x,y) {
+                if (ret.pathSegList.numberOfItems > 1) {
+                    desc(ret.pathSegList.getItem(ret.pathSegList.numberOfItems-1),true);
+                    ret.pathSegList.replaceItem(ret.createSVGPathSegLinetoAbs(x, y), ret.pathSegList.numberOfItems-1);
+                } else {
+                    var seg = ret.createSVGPathSegLinetoAbs(x, y);
+                    ret.pathSegList.appendItem(seg);
+                }
+            }
+            _this.svg.appendChild(ret);
+            return ret;
+        },*/
 
         createResizeObject:function(id, parent)
         {
