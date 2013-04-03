@@ -35,7 +35,13 @@
     fill:url(#linearGradientIntermediateEvent);
     fill-opacity:1;
     stroke-width:2;
-}                    
+}
+
+.sequenceFlowLine {
+    fill: none;
+    stroke-width: 2;
+    stroke: #000000;
+}
 
 .callactivity {
     stroke:#2c5aa0;
