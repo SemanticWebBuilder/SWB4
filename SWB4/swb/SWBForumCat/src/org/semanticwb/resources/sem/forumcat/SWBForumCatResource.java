@@ -1,6 +1,7 @@
 package org.semanticwb.resources.sem.forumcat;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -167,6 +168,7 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
                                 question.setWebpage(webPage);
                             }
                         }
+                        notificaMensaje(user, request, question.getQuestion());
                         if (isIsModerate())
                         {
                             question.setQueStatus(STATUS_REGISTERED);
@@ -457,6 +459,7 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
                             //answer.setAnswer(placeAnchors(answer.getAnswer()));
                             answer.setReferences(request.getParameter("references"));
                             answer.setCreated(Calendar.getInstance().getTime());
+                            notificaRespuestaMensaje(user, request, answer.getAnswer(), answer.getAnsQuestion().getQuestion());
                             if (isIsModerate())
                             {
                                 answer.setAnsStatus(STATUS_REGISTERED);
@@ -1718,5 +1721,140 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
             }
         }
         return ret;
+    }
+    public void notificaMensaje(User user, HttpServletRequest request, String titulo) throws MalformedURLException
+    {
+        Role role = user.getUserRepository().getRole("adminForum");
+
+        if (role != null)
+        {
+            ArrayList<InternetAddress> aAddress = new ArrayList<InternetAddress>();
+            Iterator<User> users = user.getUserRepository().listUsers();
+            while (users.hasNext())
+            {
+                User userSite = users.next();
+                if (userSite.getEmail() != null && userSite.hasRole(role))
+                {
+                    InternetAddress address1 = new InternetAddress();
+                    address1.setAddress(userSite.getEmail());
+                    aAddress.add(address1);
+
+                }
+            }
+            SWBMail swbMail = new SWBMail();
+            swbMail.setAddress(aAddress);
+            swbMail.setContentType("text/html");
+            String port = "";
+            if (request.getServerPort() != 80)
+            {
+                port = ":" + request.getServerPort();
+            }
+
+            
+            URL urilocal = new URL(request.getScheme() + "://" + request.getServerName() + port);
+            swbMail.setData("Se creó el mensaje: " + titulo + " en el sitio: " + urilocal.toString());
+            swbMail.setSubject("Mensaje de foro creado");
+            swbMail.setFromEmail(SWBPlatform.getEnv("af/adminEmail"));
+            swbMail.setHostName(SWBPlatform.getEnv("swb/smtpServer"));
+
+            aAddress = new ArrayList<InternetAddress>();
+            if (user.getEmail() != null)
+            {
+                InternetAddress address1 = new InternetAddress();
+                address1.setAddress(user.getEmail());
+                aAddress.add(address1);
+            }
+            swbMail = new SWBMail();
+            swbMail.setAddress(aAddress);
+            swbMail.setContentType("text/html");
+            port = "";
+            if (request.getServerPort() != 80)
+            {
+                port = ":" + request.getServerPort();
+            }
+
+            
+            urilocal = new URL(request.getScheme() + "://" + request.getServerName() + port);
+            swbMail.setData("Se creó el tema con el nombre " + titulo + " en el sitio: " + urilocal.toString());
+            swbMail.setSubject("Mensaje de foro creado");
+            swbMail.setFromEmail(SWBPlatform.getEnv("af/adminEmail"));
+            swbMail.setHostName(SWBPlatform.getEnv("swb/smtpServer"));
+        }
+    }
+
+    public void notificaRespuestaMensaje(User user, HttpServletRequest request, String respuesta,String mensaje) throws MalformedURLException
+    {
+        Role role = user.getUserRepository().getRole("adminForum");
+
+        if (role != null)
+        {
+            ArrayList<InternetAddress> aAddress = new ArrayList<InternetAddress>();
+            Iterator<User> users = user.getUserRepository().listUsers();
+            while (users.hasNext())
+            {
+                User userSite = users.next();
+                if (userSite.getEmail() != null && userSite.hasRole(role))
+                {
+                    InternetAddress address1 = new InternetAddress();
+                    address1.setAddress(userSite.getEmail());
+                    aAddress.add(address1);
+
+                }
+            }
+            SWBMail swbMail = new SWBMail();
+            swbMail.setAddress(aAddress);
+            swbMail.setContentType("text/html");
+            String port = "";
+            if (request.getServerPort() != 80)
+            {
+                port = ":" + request.getServerPort();
+            }
+
+
+            URL urilocal = new URL(request.getScheme() + "://" + request.getServerName() + port);
+            swbMail.setData("Se creó una respuesta para un mensaje: " + respuesta + " mensaje: "+ mensaje +" en el sitio: " + urilocal.toString());
+            swbMail.setSubject("Respuesta a mensaje de foro creado");
+            swbMail.setFromEmail(SWBPlatform.getEnv("af/adminEmail"));
+            swbMail.setHostName(SWBPlatform.getEnv("swb/smtpServer"));
+
+            try
+            {
+                SWBUtils.EMAIL.sendBGEmail(swbMail);
+            }
+            catch(Exception e)
+            {
+                log.error(e);
+            }
+            aAddress = new ArrayList<InternetAddress>();
+            if (user.getEmail() != null)
+            {
+                InternetAddress address1 = new InternetAddress();
+                address1.setAddress(user.getEmail());
+                aAddress.add(address1);
+            }
+            swbMail = new SWBMail();
+            swbMail.setAddress(aAddress);
+            swbMail.setContentType("text/html");
+            port = "";
+            if (request.getServerPort() != 80)
+            {
+                port = ":" + request.getServerPort();
+            }
+
+
+            urilocal = new URL(request.getScheme() + "://" + request.getServerName() + port);
+            swbMail.setData("Se creó el tema con el nombre " + mensaje + " en el sitio: " + urilocal.toString());
+            swbMail.setSubject("Mensaje de foro creado");
+            swbMail.setFromEmail(SWBPlatform.getEnv("af/adminEmail"));
+            swbMail.setHostName(SWBPlatform.getEnv("swb/smtpServer"));
+            try
+            {
+                SWBUtils.EMAIL.sendBGEmail(swbMail);
+            }
+            catch(Exception e)
+            {
+                log.error(e);
+            }
+        }
     }
 }
