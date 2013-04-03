@@ -89,12 +89,61 @@
             var obj=ToolKit.createResizeObject(id,parent);
             obj.setAttributeNS(null,"bclass","swimlane");
             obj.setAttributeNS(null,"oclass","swimlane_o");
-            //obj.setAttributeNS(null,"rx",10);
-            //obj.setAttributeNS(null,"ry",10);
-            obj.setBaseClass();                        
+            obj.setBaseClass();
+            
+            var constructor=function()
+            {
+                var tx = document.createElementNS(ToolKit.svgNS,"path"); //to create a circle, for rectangle use rectangle
+                return tx;
+            };
+            
+            if (obj.headerLine && obj.headerLine != null) {
+                obj.headerLine.remove();
+            } else {
+                var line=ToolKit.createBaseObject(constructor,null,null);
+                obj.headerLine = line;
+            }
+            //ToolKit.svg.removeChild(line);
+            
+            
             obj.mouseup=function(x,y)
             {
                 //alert("hola1");
+            }
+            
+            var fMove = obj.move;
+            var fResize = obj.resize;
+            var fRemove = obj.remove;
+            var fMoveFirst = obj.moveFirst;
+            
+            obj.updateHeaderLine=function() {
+                obj.headerLine.setAttributeNS(null, "d", "M"+(obj.getX()-obj.getWidth()/2 + 20)+" "+(obj.getY()-obj.getHeight()/2) +" L"+(obj.getX()-obj.getWidth()/2 + 20)+" "+(obj.getY()+obj.getHeight()/2));
+                obj.headerLine.setAttributeNS(null,"bclass","swimlane");
+                obj.headerLine.setAttributeNS(null,"oclass","swimlane_o");
+                obj.headerLine.setBaseClass();
+                if (obj.nextSibling) {
+                    ToolKit.svg.insertBefore(obj.headerLine, obj.nextSibling);
+                }
+            }
+            
+            obj.remove=function() {
+                obj.headerLine.remove();
+                fRemove();
+            }
+            
+            obj.moveFirst=function() {
+                fMoveFirst();
+                obj.updateHeaderLine();
+            }
+            
+            obj.resize= function(w, h) {
+                fResize(w, h);
+                obj.updateHeaderLine();
+            }
+            
+            obj.move = function(x, y) {
+                fMove(x,y);
+                obj.updateHeaderLine();
             }
             return obj;
         },
@@ -458,7 +507,7 @@
             }
             else if (type=="pool") {
                 ret = Modeler.createSwimLane(null, null);
-                ret.setText("Pool",0,0,0,1);
+                ret.setText("Pool con un nombre muy largo ajustable a 200 pixeles",0,0,200,2);
                 ret.resize(600,200);
             }
             return ret;
@@ -612,7 +661,7 @@
         obj2 = Modeler.mapObject("pool");
         obj2.move(1300,420);
         
-        obj = Modeler.createObject("#pool",null,null);
+        obj = Modeler.mapObject("pool");
         obj.moveFirst=function(){};
         //obj.mouseup=function(evt){alert("up")};
         obj.move(350,580);
