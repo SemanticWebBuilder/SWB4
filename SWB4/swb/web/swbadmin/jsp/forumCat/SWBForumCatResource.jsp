@@ -1,3 +1,7 @@
+c<%@page import="org.semanticwb.base.util.SWBMail"%>
+<%@page import="javax.mail.internet.InternetAddress"%>
+<%@page import="javax.mail.internet.InternetAddress"%>
+<%@page import="org.semanticwb.portal.api.SWBResourceURLImp"%>
 <%@page import="java.text.DateFormatSymbols"%>
 <%@page import="java.net.*"%><%@page import="org.semanticwb.model.*"%><%@page import="java.text.SimpleDateFormat"%><%@page import="java.text.DecimalFormat"%><%@page import="org.semanticwb.portal.api.SWBResourceURL"%><%@page import="org.semanticwb.portal.api.SWBParamRequest"%><%@page import="org.semanticwb.resources.sem.forumcat.*"%>
 <%@page import="org.semanticwb.portal.SWBFormMgr"%><%@page import="org.semanticwb.SWBPortal"%><%@page import="org.semanticwb.portal.SWBFormButton"%><%@page import="org.semanticwb.platform.SemanticObject"%>
@@ -6,6 +10,8 @@
 <%@page import="org.semanticwb.SWBPlatform"%><%@page import="org.semanticwb.SWBUtils"%><%@page import="org.semanticwb.platform.SemanticProperty"%><%@page import="org.semanticwb.resources.sem.forumcat.SWBForumCatResource"%>
 
 <%!
+    
+
     public static String getTimeAgo(Date CreationDate, String lang)
     {
         return getTimeAgo(new Date(), CreationDate, lang);
@@ -835,12 +841,12 @@
         }
 
         var code=document.getElementById('formaCaptura');
-                var codeValue=code.elements['code'].value;
-                if(!codeValue || codeValue=='')
-                {
-                        alert('¡Debe ingresar el texto de la imagen!');
-                        code.focus();
-                        return;
+        var codeValue=code.elements['code'].value;
+        if(!codeValue || codeValue=='')
+        {
+            alert('¡Debe ingresar el texto de la imagen!');
+            code.focus();
+            return;
         }
         if(!confirm('¿El mensaje es correcto?'))
         {
@@ -900,10 +906,10 @@
                 <td>
 
                     <div class="crear_carta">
-                        
+
                         <img src="/swbadmin/jsp/securecode.jsp" alt="" id="imgseccode" width="155" height="65" /><a href="javascript:changeSecureCodeImage('imgseccode');">Cambiar imagen</a>
                         <p><label for="cmnt_seccode">El texto de la imagen es: &nbsp;&nbsp;</label><input maxlength="4" size="4" id="code" type="text" name="code" value=""/></p>
-                            
+
 
                         <!-- <p class="maximo_caracteres"><b>Los mensajes y respuestas del foro deberán ser aprobados antes de ser publicados.</b></p> -->
                         <p class="maximo_caracteres">Máximo 2000 caracteres&nbsp;&nbsp;
@@ -1090,7 +1096,7 @@
                                     date = getTimeAgo(question.getCreated(), user.getLanguage());
                                 }
                                 String msg = question.getQuestion();//clean(question.getQuestion());
-    %>
+%>
 
     <%
                                     msg = msg.replace("&lt;", "<");
@@ -1146,100 +1152,100 @@
                                                             if (innapropiateCount > forum.getMaxInnapropiateCount())
                                                             {
             %>&nbsp;&nbsp;&nbsp;<%=queInappropriate%> reportes de mensaje inapropiado&nbsp;<%
-                                                                            }
-                                                                            else
-                                                                            {
-
-
-            %><a href="<%=markQuestionAsInnapropiate.toString(true)%>">Reportar como inapropiado</a>&nbsp; Reportes: <%=queInappropriate%><%
-                                                                            }
-
                                                                         }
                                                                         else
                                                                         {
+
+
+            %><a href="<%=markQuestionAsInnapropiate.toString(true)%>">Reportar como inapropiado</a>&nbsp; Reportes: <%=queInappropriate%><%
+                                                                        }
+
+                                                                    }
+                                                                    else
+                                                                    {
             %>
             <%=queInappropriate%> Reportes como inapropiado&nbsp;
             <%
-                                                                        }
+                                                                    }
 
             %>
             <%
-                                                                        if (user.isSigned())
-                                                                        {
+                                                                    if (user.isSigned())
+                                                                    {
             %>
             <br/><br/><a href="<%=renderURL.toString(true)%>">Responder</a>&nbsp;
             <%
-                                                                        }
+                                                                    }
             %>
 
 
             <%
-                                                                    }
-
                                                                 }
-                                                                if (!question.isClosed() && user.isSigned() && question.getCreator() != null && user.getURI().equals(question.getCreator().getURI()))
-                                                                {
-                                                                    renderURL.setAction("editQuestion");
-                                                                    renderURL.setParameter("org", "edit");
-                                                                    renderURL.setParameter("cat", question.getWebpage().getId());
-                                                                    renderURL.setParameter("cat", question.getWebpage().getId());
+
+                                                            }
+                                                            if (!question.isClosed() && user.isSigned() && question.getCreator() != null && user.getURI().equals(question.getCreator().getURI()))
+                                                            {
+                                                                renderURL.setAction("editQuestion");
+                                                                renderURL.setParameter("org", "edit");
+                                                                renderURL.setParameter("cat", question.getWebpage().getId());
+                                                                renderURL.setParameter("cat", question.getWebpage().getId());
             %>
             <a href="<%=renderURL.toString(true)%>">Editar</a>&nbsp
             <%
-                                                                }
-                                                                if (user.isSigned() && (isAdmin || ((question.getCreator() != null && user.getURI().equals(question.getCreator().getURI())))))
-                                                                {
-                                                                    SWBResourceURL actionURLClose = paramRequest.getActionUrl();
-                                                                    actionURLClose.setAction("removeQuestion");
-                                                                    //actionURLClose.setParameter("org", "showDetail");
-                                                                    actionURLClose.setParameter("cat", question.getWebpage().getId());
-                                                                    actionURLClose.setParameter("uri", question.getEncodedURI());
-                                                                    String text = clean(question.getQuestion(), 35);
-                                                                    text = SWBUtils.TEXT.encodeBase64(text);
+                                                            }
+                                                            if (user.isSigned() && (isAdmin || ((question.getCreator() != null && user.getURI().equals(question.getCreator().getURI())))))
+                                                            {
+                                                                SWBResourceURL actionURLClose = paramRequest.getActionUrl();
+                                                                actionURLClose.setAction("removeQuestion");
+                                                                //actionURLClose.setParameter("org", "showDetail");
+                                                                actionURLClose.setParameter("cat", question.getWebpage().getId());
+                                                                actionURLClose.setParameter("uri", question.getEncodedURI());
+                                                                String text = clean(question.getQuestion(), 35);
+                                                                text = SWBUtils.TEXT.encodeBase64(text);
             %>
             <a href="javascript:deleteMsg('<%=actionURLClose.toString(true)%>','<%=text%>')">Eliminar</a>&nbsp;
             <%
-                                                                }
-                                                                if (user.isSigned() && isAdmin)
-                                                                {
-                                                                    SWBResourceURL actionURLClose = paramRequest.getActionUrl();
-                                                                    actionURLClose.setAction("RejectQuestion");
-                                                                    actionURLClose.setParameter("org", "showDetail");
-                                                                    actionURLClose.setParameter("cat", question.getWebpage().getId());
-                                                                    actionURLClose.setParameter("uri", question.getEncodedURI());
-                                                                    actionURLClose.setParameter("deleted", "true");
+                                                            }
+                                                            if (user.isSigned() && isAdmin)
+                                                            {
+                                                                SWBResourceURL actionURLClose = paramRequest.getActionUrl();
+                                                                actionURLClose.setAction("RejectQuestion");
+                                                                actionURLClose.setParameter("org", "showDetail");
+                                                                actionURLClose.setParameter("cat", question.getWebpage().getId());
+                                                                actionURLClose.setParameter("uri", question.getEncodedURI());
+                                                                actionURLClose.setParameter("deleted", "true");
 
-                                                                    String text = clean(question.getQuestion(), 35);
-                                                                    text = SWBUtils.TEXT.encodeBase64(text);
+                                                                String text = clean(question.getQuestion(), 35);
+                                                                text = SWBUtils.TEXT.encodeBase64(text);
 
 
             %>
             <%-- <a href="javascript:rejectMsg('<%=actionURLClose.toString(true)%>','<%=text%>')">Dar de baja</a>&nbsp; --%>
             <%
 
-                                                                }
-                                                                if (!question.isClosed() && user.isSigned() && (isAdmin || (question.getCreator() != null && user.getURI().equals(question.getCreator().getURI()))))
-                                                                {
-                                                                    SWBResourceURL actionURLClose = paramRequest.getActionUrl();
-                                                                    actionURLClose.setAction("closeQuestion");
-                                                                    actionURLClose.setParameter("org", "showDetail");
-                                                                    actionURLClose.setParameter("cat", question.getWebpage().getId());
-                                                                    actionURLClose.setParameter("uri", question.getEncodedURI());
-                                                                    String text = clean(question.getQuestion(), 35);
-                                                                    text = SWBUtils.TEXT.encodeBase64(text);
+                                                            }
+                                                            if (!question.isClosed() && user.isSigned() && (isAdmin || (question.getCreator() != null && user.getURI().equals(question.getCreator().getURI()))))
+                                                            {
+                                                                SWBResourceURL actionURLClose = paramRequest.getActionUrl();
+                                                                actionURLClose.setAction("closeQuestion");
+                                                                actionURLClose.setParameter("org", "showDetail");
+                                                                actionURLClose.setParameter("cat", question.getWebpage().getId());
+                                                                actionURLClose.setParameter("uri", question.getEncodedURI());
+                                                                String text = clean(question.getQuestion(), 35);
+                                                                text = SWBUtils.TEXT.encodeBase64(text);
             %>
             <%-- <a href="javascript:closeMsg('<%=actionURLClose.toString(true)%>','<%=text%>')">Cerrar</a>&nbsp; --%>
             <%
 
-                                                                }
-                                                                if (question.isClosed() && user.isSigned() && (isAdmin || (question.getCreator() != null && user.getURI().equals(question.getCreator().getURI()))))
-                                                                {
-                                                                    SWBResourceURL actionURLClose = paramRequest.getActionUrl();
-                                                                    actionURLClose.setAction("openQuestion");
-                                                                    actionURLClose.setParameter("org", "showDetail");
-                                                                    actionURLClose.setParameter("uri", question.getEncodedURI());
-                                                                    String text = clean(question.getQuestion(), 35);
-                                                                    text = SWBUtils.TEXT.encodeBase64(text);
+                                                            }
+                                                            if (question.isClosed() && user.isSigned() && (isAdmin || (question.getCreator() != null && user.getURI().equals(question.getCreator().getURI()))))
+                                                            {
+                                                                SWBResourceURL actionURLClose = paramRequest.getActionUrl();
+                                                                actionURLClose.setAction("openQuestion");
+                                                                actionURLClose.setParameter("org", "showDetail");
+                                                                actionURLClose.setParameter("uri", question.getEncodedURI());
+                                                                String text = clean(question.getQuestion(), 35);
+                                                                text = SWBUtils.TEXT.encodeBase64(text);
             %>
             <a href="javascript:openMsg('<%=actionURLClose.toString(true)%>','<%=text%>')">Abrir de nuevo la pregunta</a>&nbsp;
             <%
@@ -1366,42 +1372,42 @@
                     </div> --%>
                         <div class="foto">
                             <%
-                                                                                    String msgresp = clean(favAnswer.getAnswer());
+                                                                                String msgresp = clean(favAnswer.getAnswer());
 
-                                                                                    if (favAnswer.getCreator().getPhoto() != null)
-                                                                                    {
-                                                                                        photo = baseimg + favAnswer.getCreator().getPhoto();
-                                                                                    }
-                                                                                    else if (otherURL != null)
-                                                                                    {
-                                                                                        photo = otherURL + "&username=" + favAnswer.getCreator().getLogin();
-                                                                                    }
+                                                                                if (favAnswer.getCreator().getPhoto() != null)
+                                                                                {
+                                                                                    photo = baseimg + favAnswer.getCreator().getPhoto();
+                                                                                }
+                                                                                else if (otherURL != null)
+                                                                                {
+                                                                                    photo = otherURL + "&username=" + favAnswer.getCreator().getLogin();
+                                                                                }
                             %>
                             <img alt="imagen usuario"  width="40" height="40" src="<%=photo%>"/>
                         </div>
                         <div class="respuesta_gral">
                             <span class="usuario"><%=creator%></span>
                             <%
-                                                                                    String daterespuesta = "";
-                                                                                    if (favAnswer.getCreated() != null)
-                                                                                    {
-                                                                                        daterespuesta = getTimeAgo(favAnswer.getCreated(), user.getLanguage());
-                                                                                    }
+                                                                                String daterespuesta = "";
+                                                                                if (favAnswer.getCreated() != null)
+                                                                                {
+                                                                                    daterespuesta = getTimeAgo(favAnswer.getCreated(), user.getLanguage());
+                                                                                }
                             %>
                             <%=daterespuesta%> <br/><br/>Re: <%=msgresp%><br/><br/>
                         </div>
                         <div class="herramientas_foro_gral">
 
                             <%
-                                                                                    if (user.isSigned() && semanticBase.getBooleanProperty(SWBForumCatResource.forumCat_isAnswerVotable))
+                                                                                if (user.isSigned() && semanticBase.getBooleanProperty(SWBForumCatResource.forumCat_isAnswerVotable))
+                                                                                {
+                                                                                    if (!favAnswer.isAnonymous() && !user.getURI().equals(favAnswer.getCreator().getURI()) && !favAnswer.userHasVoted(user))
                                                                                     {
-                                                                                        if (!favAnswer.isAnonymous() && !user.getURI().equals(favAnswer.getCreator().getURI()) && !favAnswer.userHasVoted(user))
-                                                                                        {
-                                                                                            actionURL.setParameter("uri", favAnswer.getURI());
-                                                                                            actionURL.setAction("voteAnswer");
-                                                                                            actionURL.setParameter("likeVote", "true");
-                                                                                            actionURL.setParameter("org", "edit");
-                                                                                            actionURL.setParameter("page", request.getParameter("page"));
+                                                                                        actionURL.setParameter("uri", favAnswer.getURI());
+                                                                                        actionURL.setAction("voteAnswer");
+                                                                                        actionURL.setParameter("likeVote", "true");
+                                                                                        actionURL.setParameter("org", "edit");
+                                                                                        actionURL.setParameter("page", request.getParameter("page"));
                             %>
 
                             <a href="<%=actionURL.toString(true)%>"><img width="18" height="18" alt="Me gusta" src="<%=defaultbaseimg%>icon_me_gusta.png"/></a>(<%=nLike%>)
@@ -1420,45 +1426,45 @@
                             <img width="18" height="18" alt="No me gusta" src="<%=defaultbaseimg%>icon_no_gusta.png"/>(<%=nUnlike%>)
 
                             <%
-                                                                                        }
                                                                                     }
-                                                                                    /*
-                                                                                    if (user.isSigned() && semanticBase.getBooleanProperty(SWBForumCatResource.forumCat_markIrrelevantAnswers))
-                                                                                    {
-                                                                                    if (!favAnswer.isAnonymous() && !favAnswer.getCreator().getURI().equals(user.getURI()) && !favAnswer.userHasVoted(user))
-                                                                                    {
-                                                                                    actionURL = paramRequest.getActionUrl();
-                                                                                    actionURL.setParameter("uri", favAnswer.getURI());
-                                                                                    actionURL.setAction("voteAnswer");
-                                                                                    actionURL.setParameter("irrelevant", "true");
-                                                                                    actionURL.setParameter("org", "edit");
-                                                                                    actionURL.setParameter("page", request.getParameter("page"));*/
+                                                                                }
+                                                                                /*
+                                                                                if (user.isSigned() && semanticBase.getBooleanProperty(SWBForumCatResource.forumCat_markIrrelevantAnswers))
+                                                                                {
+                                                                                if (!favAnswer.isAnonymous() && !favAnswer.getCreator().getURI().equals(user.getURI()) && !favAnswer.userHasVoted(user))
+                                                                                {
+                                                                                actionURL = paramRequest.getActionUrl();
+                                                                                actionURL.setParameter("uri", favAnswer.getURI());
+                                                                                actionURL.setAction("voteAnswer");
+                                                                                actionURL.setParameter("irrelevant", "true");
+                                                                                actionURL.setParameter("org", "edit");
+                                                                                actionURL.setParameter("page", request.getParameter("page"));*/
                             %>
                             <%--
                                                         <a href="<%=actionURL.toString(true)%>"><img width="18" height="18" alt="¿Eso qué?" src="<%=defaultbaseimg%>icon_eso_que.png" /></a>(<%=favAnswer.getAnsIrrelevant()%>) ¿Esto qu&eacute;?
                             --%>
                             <%
-                                                                                    /*}
-                                                                                    else
-                                                                                    {*/
+                                                                                /*}
+                                                                                else
+                                                                                {*/
                             %>
                             <%--
                                                         <img width="18" height="18" alt="¿Eso qué?" src="<%=defaultbaseimg%>icon_eso_que.png"/>(<%=favAnswer.getAnsIrrelevant()%>) ¿Esto qu&eacute;?
                             --%>
                             <%
-                                                                                    /*}
-                                                                                    }*/
+                                                                                /*}
+                                                                                }*/
 
-                                                                                    if (user.isSigned() && semanticBase.getBooleanProperty(SWBForumCatResource.forumCat_markInnapropiateAnswers))
+                                                                                if (user.isSigned() && semanticBase.getBooleanProperty(SWBForumCatResource.forumCat_markInnapropiateAnswers))
+                                                                                {
+                                                                                    if (!favAnswer.isAnonymous() && !favAnswer.isAnsIsAppropiate() && !favAnswer.getCreator().getURI().equals(user.getURI()))
                                                                                     {
-                                                                                        if (!favAnswer.isAnonymous() && !favAnswer.isAnsIsAppropiate() && !favAnswer.getCreator().getURI().equals(user.getURI()))
+                                                                                        actionURL.setAction("markAnswerAsInnapropiate");
+                                                                                        actionURL.setParameter("uri", favAnswer.getURI());
+                                                                                        actionURL.setParameter("org", "showDetail");
+                                                                                        actionURL.setParameter("cat", favAnswer.getAnsQuestion().getWebpage().getId());
+                                                                                        if (favAnswer.getAnsInappropriate() > forum.getMaxInnapropiateCount())
                                                                                         {
-                                                                                            actionURL.setAction("markAnswerAsInnapropiate");
-                                                                                            actionURL.setParameter("uri", favAnswer.getURI());
-                                                                                            actionURL.setParameter("org", "showDetail");
-                                                                                            actionURL.setParameter("cat", favAnswer.getAnsQuestion().getWebpage().getId());
-                                                                                            if (favAnswer.getAnsInappropriate() > forum.getMaxInnapropiateCount())
-                                                                                            {
                             %>
 
                             <%=favAnswer.getAnsInappropriate()%> reportes de mensaje inapropiado<br/><br/>
@@ -1483,46 +1489,46 @@
                             %>
 
                             <%
-                                                                                        }
                                                                                     }
-                                                                                    if (!favAnswer.getAnsQuestion().isClosed() && user.isSigned() && favAnswer.getCreator() != null && user.getURI().equals(favAnswer.getCreator().getURI()))
-                                                                                    {
-                                                                                        renderURL.setAction("editAnswer");
-                                                                                        renderURL.setParameter("uri", favAnswer.getURI());
-                                                                                        renderURL.setParameter("org", "edit");
-                                                                                        renderURL.setParameter("cat", favAnswer.getAnsQuestion().getWebpage().getId());
+                                                                                }
+                                                                                if (!favAnswer.getAnsQuestion().isClosed() && user.isSigned() && favAnswer.getCreator() != null && user.getURI().equals(favAnswer.getCreator().getURI()))
+                                                                                {
+                                                                                    renderURL.setAction("editAnswer");
+                                                                                    renderURL.setParameter("uri", favAnswer.getURI());
+                                                                                    renderURL.setParameter("org", "edit");
+                                                                                    renderURL.setParameter("cat", favAnswer.getAnsQuestion().getWebpage().getId());
                             %>
                             <a href="<%=renderURL.toString(true)%>">Editar</a>&nbsp;&nbsp;
                             <%
-                                                                                    }
-                                                                                    if (user.isSigned() && (isAdmin || favAnswer.getCreator() != null && user.getURI().equals(favAnswer.getCreator().getURI())))
-                                                                                    {
-                                                                                        SWBResourceURL actionURLRemove = paramRequest.getActionUrl();
-                                                                                        actionURLRemove.setAction("removeAnswer");
-                                                                                        actionURLRemove.setParameter("uri", favAnswer.getEncodedURI());
-                                                                                        actionURLRemove.setParameter("org", "showDetail");
-                                                                                        actionURLRemove.setParameter("cat", favAnswer.getAnsQuestion().getWebpage().getId());
-                                                                                        String text = clean(favAnswer.getAnswer(), 35);
-                                                                                        text = SWBUtils.TEXT.encodeBase64(text);
+                                                                                }
+                                                                                if (user.isSigned() && (isAdmin || favAnswer.getCreator() != null && user.getURI().equals(favAnswer.getCreator().getURI())))
+                                                                                {
+                                                                                    SWBResourceURL actionURLRemove = paramRequest.getActionUrl();
+                                                                                    actionURLRemove.setAction("removeAnswer");
+                                                                                    actionURLRemove.setParameter("uri", favAnswer.getEncodedURI());
+                                                                                    actionURLRemove.setParameter("org", "showDetail");
+                                                                                    actionURLRemove.setParameter("cat", favAnswer.getAnsQuestion().getWebpage().getId());
+                                                                                    String text = clean(favAnswer.getAnswer(), 35);
+                                                                                    text = SWBUtils.TEXT.encodeBase64(text);
                             %>
                             <a href="javascript:deleteMsg('<%=actionURLRemove.toString(true)%>','<%=text%>')">Eliminar</a>&nbsp;&nbsp;
                             <%
-                                                                                    }
-                                                                                    if (user.isSigned() && isAdmin)
-                                                                                    {
-                                                                                        SWBResourceURL actionURLRemove = paramRequest.getActionUrl();
-                                                                                        actionURLRemove.setAction("RejectAnswer");
-                                                                                        actionURLRemove.setParameter("org", "showDetail");
-                                                                                        actionURLRemove.setParameter("cat", favAnswer.getAnsQuestion().getWebpage().getId());
-                                                                                        actionURLRemove.setParameter("deleted", "true");
-                                                                                        actionURLRemove.setParameter("uri", favAnswer.getEncodedURI());
-                                                                                        String text = clean(favAnswer.getAnswer(), 35);
-                                                                                        text = SWBUtils.TEXT.encodeBase64(text);
+                                                                                }
+                                                                                if (user.isSigned() && isAdmin)
+                                                                                {
+                                                                                    SWBResourceURL actionURLRemove = paramRequest.getActionUrl();
+                                                                                    actionURLRemove.setAction("RejectAnswer");
+                                                                                    actionURLRemove.setParameter("org", "showDetail");
+                                                                                    actionURLRemove.setParameter("cat", favAnswer.getAnsQuestion().getWebpage().getId());
+                                                                                    actionURLRemove.setParameter("deleted", "true");
+                                                                                    actionURLRemove.setParameter("uri", favAnswer.getEncodedURI());
+                                                                                    String text = clean(favAnswer.getAnswer(), 35);
+                                                                                    text = SWBUtils.TEXT.encodeBase64(text);
                             %>
 
                             <%-- <a href="javascript:rejectMsg('<%=actionURLRemove.toString(true)%>','<%=text%>')">Dar de baja</a>&nbsp;&nbsp; --%>
                             <%
-                                                                                    }
+                                                                                }
                             %>
 
                         </div>
@@ -1606,14 +1612,14 @@
                     </div>--%>
                         <div class="foto">
                             <%
-                                                                                    if (comAnswer.getCreator().getPhoto() != null)
-                                                                                    {
-                                                                                        photo = baseimg + comAnswer.getCreator().getPhoto();
-                                                                                    }
-                                                                                    else if (otherURL != null)
-                                                                                    {
-                                                                                        photo = otherURL + "&username=" + comAnswer.getCreator().getLogin();
-                                                                                    }
+                                                                                if (comAnswer.getCreator().getPhoto() != null)
+                                                                                {
+                                                                                    photo = baseimg + comAnswer.getCreator().getPhoto();
+                                                                                }
+                                                                                else if (otherURL != null)
+                                                                                {
+                                                                                    photo = otherURL + "&username=" + comAnswer.getCreator().getLogin();
+                                                                                }
 
                             %>
                             <img alt="imagen usuario"  width="40" height="40" src="<%=photo%>"/>
@@ -1621,25 +1627,25 @@
                         <div class="respuesta_gral">
                             <span class="usuario"><%=creator%></span>
                             <%
-                                                                                    String msgresp = clean(comAnswer.getAnswer());
-                                                                                    String daterespuesta = "";
-                                                                                    if (comAnswer.getCreated() != null)
-                                                                                    {
-                                                                                        daterespuesta = getTimeAgo(comAnswer.getCreated(), user.getLanguage());
-                                                                                    }
+                                                                                String msgresp = clean(comAnswer.getAnswer());
+                                                                                String daterespuesta = "";
+                                                                                if (comAnswer.getCreated() != null)
+                                                                                {
+                                                                                    daterespuesta = getTimeAgo(comAnswer.getCreated(), user.getLanguage());
+                                                                                }
                             %>
                             <%=daterespuesta%> <br/><br/>Re: <%=msgresp%><br/><br/>
                             <%
-                                                                                    if (user.isSigned() && semanticBase.getBooleanProperty(SWBForumCatResource.forumCat_markInnapropiateAnswers))
+                                                                                if (user.isSigned() && semanticBase.getBooleanProperty(SWBForumCatResource.forumCat_markInnapropiateAnswers))
+                                                                                {
+                                                                                    if (!comAnswer.isAnonymous() && !comAnswer.isAnsIsAppropiate() && !comAnswer.getCreator().getURI().equals(user.getURI()))
                                                                                     {
-                                                                                        if (!comAnswer.isAnonymous() && !comAnswer.isAnsIsAppropiate() && !comAnswer.getCreator().getURI().equals(user.getURI()))
+                                                                                        actionURL.setAction("markAnswerAsInnapropiate");
+                                                                                        actionURL.setParameter("uri", comAnswer.getURI());
+                                                                                        actionURL.setParameter("org", "showDetail");
+                                                                                        actionURL.setParameter("cat", comAnswer.getAnsQuestion().getWebpage().getId());
+                                                                                        if (comAnswer.getAnsInappropriate() > forum.getMaxInnapropiateCount())
                                                                                         {
-                                                                                            actionURL.setAction("markAnswerAsInnapropiate");
-                                                                                            actionURL.setParameter("uri", comAnswer.getURI());
-                                                                                            actionURL.setParameter("org", "showDetail");
-                                                                                            actionURL.setParameter("cat", comAnswer.getAnsQuestion().getWebpage().getId());
-                                                                                            if (comAnswer.getAnsInappropriate() > forum.getMaxInnapropiateCount())
-                                                                                            {
                             %><%=comAnswer.getAnsInappropriate()%> reportes de mensaje inapropiado<br/><br/>
                             <%
                                                                                                                         }
@@ -1656,62 +1662,62 @@
                                                                                                                     {
                             %><%=comAnswer.getAnsInappropriate()%> reportes de mensaje inapropiado<br/><br/>
                             <%
-                                                                                        }
                                                                                     }
-                                                                                    if (!comAnswer.getAnsQuestion().isClosed() && user.isSigned() && comAnswer.getCreator() != null && user.getURI().equals(comAnswer.getCreator().getURI()))
-                                                                                    {
-                                                                                        renderURL.setAction("editAnswer");
-                                                                                        renderURL.setParameter("uri", comAnswer.getURI());
-                                                                                        renderURL.setParameter("org", "edit");
-                                                                                        renderURL.setParameter("cat", comAnswer.getAnsQuestion().getWebpage().getId());
+                                                                                }
+                                                                                if (!comAnswer.getAnsQuestion().isClosed() && user.isSigned() && comAnswer.getCreator() != null && user.getURI().equals(comAnswer.getCreator().getURI()))
+                                                                                {
+                                                                                    renderURL.setAction("editAnswer");
+                                                                                    renderURL.setParameter("uri", comAnswer.getURI());
+                                                                                    renderURL.setParameter("org", "edit");
+                                                                                    renderURL.setParameter("cat", comAnswer.getAnsQuestion().getWebpage().getId());
                             %>
                             <a href="<%=renderURL.toString(true)%>">Editar</a>&nbsp;&nbsp;
                             <%
-                                                                                    }
-                                                                                    if (user.isSigned() && (isAdmin || comAnswer.getCreator() != null && user.getURI().equals(comAnswer.getCreator().getURI())))
-                                                                                    {
-                                                                                        SWBResourceURL actionURLRemove = paramRequest.getActionUrl();
-                                                                                        actionURLRemove.setAction("removeAnswer");
-                                                                                        actionURLRemove.setParameter("uri", comAnswer.getEncodedURI());
-                                                                                        //actionURLRemove.setParameter("org", "moderate");
-                                                                                        actionURLRemove.setParameter("cat", comAnswer.getAnsQuestion().getWebpage().getId());
-                                                                                        String text = clean(comAnswer.getAnswer(), 35);
-                                                                                        text = SWBUtils.TEXT.encodeBase64(text);
+                                                                                }
+                                                                                if (user.isSigned() && (isAdmin || comAnswer.getCreator() != null && user.getURI().equals(comAnswer.getCreator().getURI())))
+                                                                                {
+                                                                                    SWBResourceURL actionURLRemove = paramRequest.getActionUrl();
+                                                                                    actionURLRemove.setAction("removeAnswer");
+                                                                                    actionURLRemove.setParameter("uri", comAnswer.getEncodedURI());
+                                                                                    //actionURLRemove.setParameter("org", "moderate");
+                                                                                    actionURLRemove.setParameter("cat", comAnswer.getAnsQuestion().getWebpage().getId());
+                                                                                    String text = clean(comAnswer.getAnswer(), 35);
+                                                                                    text = SWBUtils.TEXT.encodeBase64(text);
                             %>
 
                             <a href="javascript:deleteMsg('<%=actionURLRemove.toString(true)%>','<%=text%>')">Eliminar</a>&nbsp;&nbsp;
                             <%
-                                                                                    }
-                                                                                    if (user.isSigned() && isAdmin)
-                                                                                    {
-                                                                                        SWBResourceURL actionURLRemove = paramRequest.getActionUrl();
-                                                                                        actionURLRemove.setAction("RejectAnswer");
+                                                                                }
+                                                                                if (user.isSigned() && isAdmin)
+                                                                                {
+                                                                                    SWBResourceURL actionURLRemove = paramRequest.getActionUrl();
+                                                                                    actionURLRemove.setAction("RejectAnswer");
 
-                                                                                        actionURLRemove.setParameter("org", "showDetail");
-                                                                                        actionURLRemove.setParameter("cat", comAnswer.getAnsQuestion().getWebpage().getId());
-                                                                                        actionURLRemove.setParameter("deleted", "true");
-                                                                                        actionURLRemove.setParameter("uri", comAnswer.getEncodedURI());
-                                                                                        String text = clean(comAnswer.getAnswer(), 35);
-                                                                                        text = SWBUtils.TEXT.encodeBase64(text);
+                                                                                    actionURLRemove.setParameter("org", "showDetail");
+                                                                                    actionURLRemove.setParameter("cat", comAnswer.getAnsQuestion().getWebpage().getId());
+                                                                                    actionURLRemove.setParameter("deleted", "true");
+                                                                                    actionURLRemove.setParameter("uri", comAnswer.getEncodedURI());
+                                                                                    String text = clean(comAnswer.getAnswer(), 35);
+                                                                                    text = SWBUtils.TEXT.encodeBase64(text);
                             %>
 
                             <%--<a href="javascript:rejectMsg('<%=actionURLRemove.toString(true)%>','<%=text%>')">Dar de baja</a>&nbsp;&nbsp;--%>
                             <%
-                                                                                    }
+                                                                                }
                             %>
                         </div>
                         <div class="herramientas_foro_gral">
 
                             <%
-                                                                                    if (user.isSigned() && semanticBase.getBooleanProperty(SWBForumCatResource.forumCat_isAnswerVotable))
+                                                                                if (user.isSigned() && semanticBase.getBooleanProperty(SWBForumCatResource.forumCat_isAnswerVotable))
+                                                                                {
+                                                                                    if (!comAnswer.isAnonymous() && !user.getURI().equals(comAnswer.getCreator().getURI()) && !comAnswer.userHasVoted(user))
                                                                                     {
-                                                                                        if (!comAnswer.isAnonymous() && !user.getURI().equals(comAnswer.getCreator().getURI()) && !comAnswer.userHasVoted(user))
-                                                                                        {
-                                                                                            actionURL.setParameter("uri", comAnswer.getURI());
-                                                                                            actionURL.setAction("voteAnswer");
-                                                                                            actionURL.setParameter("likeVote", "true");
-                                                                                            actionURL.setParameter("org", "edit");
-                                                                                            actionURL.setParameter("page", request.getParameter("page"));
+                                                                                        actionURL.setParameter("uri", comAnswer.getURI());
+                                                                                        actionURL.setAction("voteAnswer");
+                                                                                        actionURL.setParameter("likeVote", "true");
+                                                                                        actionURL.setParameter("org", "edit");
+                                                                                        actionURL.setParameter("page", request.getParameter("page"));
                             %>
 
                             <a href="<%=actionURL.toString(true)%>"><img width="18" height="18" alt="Me gusta" src="<%=defaultbaseimg%>icon_me_gusta.png"/></a>(<%=nLike%>)
@@ -1732,34 +1738,34 @@
                             <img width="18" height="18" alt="No me gusta" src="<%=defaultbaseimg%>icon_no_gusta.png"/>(<%=nUnlike%>)
 
                             <%
-                                                                                        }
                                                                                     }
-                                                                                    /*
-                                                                                    if (user.isSigned() && semanticBase.getBooleanProperty(SWBForumCatResource.forumCat_markIrrelevantAnswers))
-                                                                                    {
-                                                                                    if (!comAnswer.isAnonymous() && !comAnswer.getCreator().getURI().equals(user.getURI()) && !comAnswer.userHasVoted(user))
-                                                                                    {
-                                                                                    actionURL = paramRequest.getActionUrl();
-                                                                                    actionURL.setParameter("uri", comAnswer.getURI());
-                                                                                    actionURL.setAction("voteAnswer");
-                                                                                    actionURL.setParameter("irrelevant", "true");
-                                                                                    actionURL.setParameter("org", "edit");
-                                                                                    actionURL.setParameter("page", request.getParameter("page"));*/
+                                                                                }
+                                                                                /*
+                                                                                if (user.isSigned() && semanticBase.getBooleanProperty(SWBForumCatResource.forumCat_markIrrelevantAnswers))
+                                                                                {
+                                                                                if (!comAnswer.isAnonymous() && !comAnswer.getCreator().getURI().equals(user.getURI()) && !comAnswer.userHasVoted(user))
+                                                                                {
+                                                                                actionURL = paramRequest.getActionUrl();
+                                                                                actionURL.setParameter("uri", comAnswer.getURI());
+                                                                                actionURL.setAction("voteAnswer");
+                                                                                actionURL.setParameter("irrelevant", "true");
+                                                                                actionURL.setParameter("org", "edit");
+                                                                                actionURL.setParameter("page", request.getParameter("page"));*/
                             %>
                             <%--
                                                         <a href="<%=actionURL.toString(true)%>"><img width="18" height="18" alt="¿Eso qué?" src="<%=defaultbaseimg%>icon_eso_que.png"/></a>(<%=comAnswer.getAnsIrrelevant()%>) ¿Esto qu&eacute;?
                             --%>
                             <%
-                                                                                    /*}
-                                                                                    else
-                                                                                    {*/
+                                                                                /*}
+                                                                                else
+                                                                                {*/
                             %>
                             <%--
                                                         <img width="18" height="18" alt="¿Eso qué?" src="<%=defaultbaseimg%>icon_eso_que.png"/>(<%=comAnswer.getAnsIrrelevant()%>) ¿Esto qu&eacute;?
                             --%>
                             <%
-                                                                                    /*}
-                                                                                    }*/
+                                                                                /*}
+                                                                                }*/
                             %>
 
                         </div>
@@ -1847,78 +1853,78 @@
 
 
                 %><li class="titulo"><%=text%> <%=numberResp%> <%=textresp%> de un total de <%=itotalanswers%> <%=textresp2%></li><%
-                                                                        ianswers = 0;
-                                                                        while (answers.hasNext())
+                                                                    ianswers = 0;
+                                                                    while (answers.hasNext())
+                                                                    {
+                                                                        Answer answer = answers.next();
+                                                                        /*if (answer != null && answer.getAnsStatus() == SWBForumCatResource.STATUS_ACEPTED)*/
+                                                                        if (answer != null)
                                                                         {
-                                                                            Answer answer = answers.next();
-                                                                            /*if (answer != null && answer.getAnsStatus() == SWBForumCatResource.STATUS_ACEPTED)*/
-                                                                            if (answer != null)
+                                                                            ianswers++;
+                                                                            if (ianswers > MAX_RESPUESTAS)
                                                                             {
-                                                                                ianswers++;
-                                                                                if (ianswers > MAX_RESPUESTAS)
-                                                                                {
-                                                                                    break;
-                                                                                }
-                                                                                String starimg = baseimg + "star_vacia.png";
-                                                                                String alt = "Vacía";
-                                                                                int points = 0;
-                                                                                creator = "Anónimo";
+                                                                                break;
+                                                                            }
+                                                                            String starimg = baseimg + "star_vacia.png";
+                                                                            String alt = "Vacía";
+                                                                            int points = 0;
+                                                                            creator = "Anónimo";
 
-                                                                                if (!answer.isAnonymous() && semanticBase.getBooleanProperty(SWBForumCatResource.forumCat_useScoreSystem))
+                                                                            if (!answer.isAnonymous() && semanticBase.getBooleanProperty(SWBForumCatResource.forumCat_useScoreSystem))
+                                                                            {
+                                                                                starimg = baseimg;
+                                                                                points = getUserPoints(answer.getCreator(), wpage.getWebSite());
+                                                                                if (points <= 30)
                                                                                 {
-                                                                                    starimg = baseimg;
-                                                                                    points = getUserPoints(answer.getCreator(), wpage.getWebSite());
-                                                                                    if (points <= 30)
-                                                                                    {
-                                                                                        starimg = baseimg + "star_vacia.png";
-                                                                                        alt = "Vacía";
-                                                                                    }
-                                                                                    else if (points >= 31 && points <= 80)
-                                                                                    {
-                                                                                        starimg = baseimg + "star_plata.png";
-                                                                                        alt = "Plata";
-                                                                                    }
-                                                                                    else if (points >= 81 && points <= 130)
-                                                                                    {
-                                                                                        starimg = baseimg + "star_oro.png";
-                                                                                        alt = "Oro";
-                                                                                    }
-                                                                                    else if (points >= 131)
-                                                                                    {
-                                                                                        starimg = baseimg + "star_diamante.png";
-                                                                                        alt = "Diamante";
-                                                                                    }
+                                                                                    starimg = baseimg + "star_vacia.png";
+                                                                                    alt = "Vacía";
                                                                                 }
+                                                                                else if (points >= 31 && points <= 80)
+                                                                                {
+                                                                                    starimg = baseimg + "star_plata.png";
+                                                                                    alt = "Plata";
+                                                                                }
+                                                                                else if (points >= 81 && points <= 130)
+                                                                                {
+                                                                                    starimg = baseimg + "star_oro.png";
+                                                                                    alt = "Oro";
+                                                                                }
+                                                                                else if (points >= 131)
+                                                                                {
+                                                                                    starimg = baseimg + "star_diamante.png";
+                                                                                    alt = "Diamante";
+                                                                                }
+                                                                            }
 
-                                                                                photo = defaultbaseimg + "/profilePlaceholder.jpg";
-                                                                                if (!answer.isAnonymous())
+                                                                            photo = defaultbaseimg + "/profilePlaceholder.jpg";
+                                                                            if (!answer.isAnonymous())
+                                                                            {
+                                                                                creator = answer.getCreator().getFullName();
+                                                                                if (answer.getCreator().getPhoto() != null)
                                                                                 {
-                                                                                    creator = answer.getCreator().getFullName();
-                                                                                    if (answer.getCreator().getPhoto() != null)
+                                                                                    photo = SWBPortal.getWebWorkPath() + answer.getCreator().getPhoto();
+                                                                                }
+                                                                            }
+                                                                            renderURL.setParameter("uri", answer.getURI());
+                                                                            actionURL.setParameter("uri", answer.getURI());
+                                                                            nLike = 0;
+                                                                            nUnlike = 0;
+                                                                            if (semanticBase.getBooleanProperty(SWBForumCatResource.forumCat_isAnswerVotable))
+                                                                            {
+                                                                                Iterator<AnswerVote> itAnswerVote = AnswerVote.ClassMgr.listAnswerVoteByAnswerVote(answer);
+                                                                                while (itAnswerVote.hasNext())
+                                                                                {
+                                                                                    AnswerVote answerVote = itAnswerVote.next();
+                                                                                    if (answerVote.isLikeAnswer())
                                                                                     {
-                                                                                        photo = SWBPortal.getWebWorkPath() + answer.getCreator().getPhoto();
+                                                                                        nLike++;
+                                                                                    }
+                                                                                    else if (!answerVote.isIrrelevantVote())
+                                                                                    {
+                                                                                        nUnlike++;
                                                                                     }
                                                                                 }
-                                                                                renderURL.setParameter("uri", answer.getURI());
-                                                                                actionURL.setParameter("uri", answer.getURI());
-                                                                                nLike = 0;
-                                                                                nUnlike = 0;
-                                                                                if (semanticBase.getBooleanProperty(SWBForumCatResource.forumCat_isAnswerVotable))
-                                                                                {
-                                                                                    Iterator<AnswerVote> itAnswerVote = AnswerVote.ClassMgr.listAnswerVoteByAnswerVote(answer);
-                                                                                    while (itAnswerVote.hasNext())
-                                                                                    {
-                                                                                        AnswerVote answerVote = itAnswerVote.next();
-                                                                                        if (answerVote.isLikeAnswer())
-                                                                                        {
-                                                                                            nLike++;
-                                                                                        }
-                                                                                        else if (!answerVote.isIrrelevantVote())
-                                                                                        {
-                                                                                            nUnlike++;
-                                                                                        }
-                                                                                    }
-                                                                                }
+                                                                            }
                 %>
                 <li class="grupo_respuestas_gral">
                     <div class="respuestas_gral">
@@ -3021,19 +3027,19 @@
 
                             %><%=answer.getAnsInappropriate()%> reportes de mensaje inapropiado<br/><br/>
                             <%
-                                                                                                                                    }
-                                                                                                                                    else
-                                                                                                                                    {
-                                                                                                                                        String queInappropriate = numerosformat.format(answer.getAnsInappropriate());
+                                                                                                                            }
+                                                                                                                            else
+                                                                                                                            {
+                                                                                                                                String queInappropriate = numerosformat.format(answer.getAnsInappropriate());
                             %>  <a href="<%=actionURL.toString(true)%>">Reportar como inapropiado</a>&nbsp;Reportes: <%=queInappropriate%><br/><br/>
                             <%
 
-                                                                                                                                    }
+                                                                                                                            }
 
 
-                                                                                                                                }
-                                                                                                                                else
-                                                                                                                                {
+                                                                                                                        }
+                                                                                                                        else
+                                                                                                                        {
                             %><%=answer.getAnsInappropriate()%> reportes de mensaje inapropiado<br/><br/>
                             <%
                                                                                             }
@@ -3106,9 +3112,9 @@
                             <a href="<%=actionURL.toString(true)%>"><img width="18" height="18" alt="No me gusta" src="<%=defaultbaseimg%>icon_no_gusta.png"/></a>(<%=nUnlike%>)
 
                             <%
-                                                                                                                                }
-                                                                                                                                else
-                                                                                                                                {
+                                                                                                                        }
+                                                                                                                        else
+                                                                                                                        {
                             %>
 
                             <img width="18" height="18" alt="Me gusta" src="<%=defaultbaseimg%>icon_me_gusta.png"/>(<%=nLike%>)
@@ -3289,12 +3295,12 @@
         }
 
         var code=document.getElementById('formaCaptura');
-                var codeValue=code.elements['code'].value;
-                if(!codeValue || codeValue=='')
-                {
-                        alert('¡Debe ingresar el texto de la imagen!');
-                        code.focus();
-                        return;
+        var codeValue=code.elements['code'].value;
+        if(!codeValue || codeValue=='')
+        {
+            alert('¡Debe ingresar el texto de la imagen!');
+            code.focus();
+            return;
         }
         if(!confirm('¿El mensaje es correcto?'))
         {
@@ -3352,10 +3358,10 @@
                 <td>
 
                     <div class="crear_carta">
-                        
+
                         <img src="/swbadmin/jsp/securecode.jsp" alt="" id="imgseccode" width="155" height="65" /><a href="javascript:changeSecureCodeImage('imgseccode');">Cambiar imagen</a>
                         <p><label for="cmnt_seccode">El texto de la imagen es:&nbsp;&nbsp;</label><input maxlength="4" type="text" size="4" id="code" name="code" value=""/></p>
-                           
+
 
                         <!--<p class="maximo_caracteres"><b>Los mensajes y respuestas del foro deberán ser aprobados antes de ser publicados.</b></p>-->
                         <p class="maximo_caracteres">Máximo 2000 caracteres&nbsp;&nbsp;</p>
@@ -3442,12 +3448,12 @@
             return;
         }
         var code=document.getElementById('formaCaptura');
-                        var codeValue=code.elements['code'].value;
-                        if(!codeValue || codeValue=='')
-                        {
-                                alert('¡Debe ingresar el texto de la imagen!');
-                                code.focus();
-                                return;
+        var codeValue=code.elements['code'].value;
+        if(!codeValue || codeValue=='')
+        {
+            alert('¡Debe ingresar el texto de la imagen!');
+            code.focus();
+            return;
         }
         if(!confirm('¿La respuesta es correcta?'))
         {
@@ -3619,13 +3625,13 @@
                 return;
             }
             var code=document.getElementById('formaCaptura');
-                    var codeValue=code.elements['code'].value;
-                    if(!codeValue || codeValue=='')
-                    {
-                        alert('¡Debe ingresar el texto de la imagen!');
-                        code.focus();
-                        return;
-        }
+            var codeValue=code.elements['code'].value;
+            if(!codeValue || codeValue=='')
+            {
+                alert('¡Debe ingresar el texto de la imagen!');
+                code.focus();
+                return;
+            }
             if(!confirm('¿La respuesta es correcta?'))
             {
                 return;
