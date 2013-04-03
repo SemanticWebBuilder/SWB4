@@ -70,7 +70,18 @@
         {
             var obj=ToolKit.createUseObject(type,id,parent);
             return obj;
-        },    
+        },
+        
+        /*createPath:function(marker_start, marker_mid, marker_end, dash_array, styleClass) {
+            var obj = ToolKit.createPath(marker_start, marker_mid, marker_end, dash_array, styleClass);
+            obj.setArrowType= function(type) {
+                ret.setAttributeNS(null, "marker-end", "url(#"+type+")");
+            }
+            obj.setTailType= function(type) {
+                ret.setAttributeNS(null, "marker-start", "url(#"+type+")");
+            }
+            return obj;
+        },*/
     
         createTask:function(id, parent)
         {
@@ -143,8 +154,26 @@
        
         mapObject:function(type)
         {
-            var ret = null;
-            if(type=='normalStartEvent')
+            /*var ret = null;
+            if(type=='sequenceFlow') {
+                ret = Modeler.createPath(null, null, "sequenceArrow", null,"sequenceFlowLine");
+            }
+            if(type=='messageFlow') {
+                ret = Modeler.createPath("messageTail", null, "messageArrow", "5,5", "sequenceFlowLine");
+            }
+            if(type=='conditionalFlow') {
+                ret = Modeler.createPath("conditionTail", null, "sequenceArrow", null, "sequenceFlowLine");
+            }
+            if(type=='defaultFlow') {
+                ret = Modeler.createPath("defaultTail", null, "sequenceArrow", null, "sequenceFlowLine");
+            }
+            if(type=='associationFlow') {
+                ret = Modeler.createPath(null, null, null, "5,5", "sequenceFlowLine");
+            }
+            if(type=='directionalassociationFlow') {
+                ret = Modeler.createPath(null, null, "messageArrow", "5,5", "sequenceFlowLine");
+            }
+            else*/ if(type=='normalStartEvent')
             {
                 ret=Modeler.createObject("#startEvent",null,null);
                 ret.setText("Inicio Normal",0,1,80);
@@ -570,5 +599,41 @@
         obj2.resize(100,60);
         obj2.move(400,600);        
         obj2.setParent(obj);
+        
+//        obj2 = Modeler.mapObject("conditionalFlow");
+//        obj2.setStartPoint(10,10);
+//        obj2.addPoint(10,20);
+//        obj2.addPoint(30,20);
+//        //obj2.addPoint(30,40);
+//        obj2.setEndPoint(100,100);
+//        
+//        obj2 = Modeler.mapObject("messageFlow");
+//        obj2.setStartPoint(150,150);
+//        obj2.addPoint(150,350);
+//        obj2.addPoint(260,350);
+//        obj2.addPoint(280,350);
+//        obj2.setEndPoint(500,500);
+//        
+//        obj2 = Modeler.mapObject("sequenceFlow");
+//        obj2.setStartPoint(300,300);
+//        obj2.setEndPoint(300,100);
+//        
+//        obj2 = Modeler.mapObject("defaultFlow");
+//        obj2.setStartPoint(200,200);
+//        obj2.setEndPoint(250,190);
+//        
+//        obj2 = Modeler.mapObject("associationFlow");
+//        obj2.setStartPoint(350,200);
+//        obj2.addPoint(350,250);
+//        obj2.addPoint(400,200);
+//        obj2.addPoint(410,200);
+//        obj2.setEndPoint(500,190);
+//        
+//        obj2 = Modeler.mapObject("directionalassociationFlow");
+//        obj2.setStartPoint(350,10);
+//        obj2.addPoint(350,150);
+//        obj2.addPoint(400,100);
+//        obj2.addPoint(430,100);
+        //obj2.setEndPoint(400,190);
     }
 
