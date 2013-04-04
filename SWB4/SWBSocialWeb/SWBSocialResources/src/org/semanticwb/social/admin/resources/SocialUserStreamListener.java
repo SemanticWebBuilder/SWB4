@@ -36,6 +36,7 @@ public class SocialUserStreamListener implements UserStreamListener {
     @Override
     public void onStatus(Status status) {
         this.socialStatus.add(status);
+        System.out.println("New status: @" + status.getUser().getScreenName());
     }
 
     //We need to define actions for all the other events.
