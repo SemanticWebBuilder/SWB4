@@ -221,18 +221,19 @@ public class Poll extends GenericResource {
         try
         {
             display = Display.valueOf(base.getAttribute("display", Display.SLIDE.name()));
-        }catch(Exception noe)
+        }
+        catch(Exception noe)
         {
             display = Display.POPUP;
         }
 
-        SWBResourceURL url = paramRequest.getRenderUrl();
+        SWBResourceURL url = paramRequest.getRenderUrl().setCallMethod(SWBParamRequest.Call_DIRECT);
         url.setParameter("NombreCookie", "VotosEncuesta" + base.getId());
         if(display==Display.SIMPLE) {
             url.setMode("accesible");
         }else {
             url.setMode("showResults");
-            url.setCallMethod(paramRequest.Call_DIRECT);
+            //url.setCallMethod(SWBParamRequest.Call_DIRECT);
         }
 
         Document  dom = SWBUtils.XML.getNewDocument();
@@ -290,13 +291,17 @@ public class Poll extends GenericResource {
         e = dom.createElement("results");
         e.setAttribute("title", base.getAttribute("msg_viewresults", paramRequest.getLocaleString("lblAdmin_msgResults").replaceAll("\"", "")));
         if(display==Display.POPUP)
+        {            
             e.setAttribute("action", "abreResultados('"+url.toString(true)+"')");
+        }
         else if(display==Display.SLIDE)
+        {
             e.setAttribute("action", "postHtml('"+url.toString(true)+"','"+PREF+base.getId()+"'); expande();");
-        else {
-//            url = new SWBResourceURLImp(request, base, paramRequest.getWebPage(), SWBResourceURL.UrlType_RENDER);
-//            url.setMode("accesible");
-            e.setAttribute("action", "window.location.href='"+url.toString(true)+"'");
+        }
+        else
+        {
+            //e.setAttribute("action", "window.location.href='"+url.toString(true)+"'");
+            e.setAttribute("action", "postHtml('"+url.toString(true)+"','"+PREF+base.getId()+"')");
         }
         e.setAttribute("path", path);
         e.setAttribute("title", paramRequest.getLocaleString("msgResults_title"));
@@ -371,7 +376,7 @@ public class Poll extends GenericResource {
                     }
                 }
                 StringBuilder html = new StringBuilder(SWBUtils.XML.transformDom(curtpl, dom));
-                html.append(getRenderScript(paramRequest));
+                //html.append(getRenderScript(paramRequest));
                 Display display;
                 try {
                     display = Display.valueOf(base.getAttribute("display", Display.SLIDE.name()));
@@ -382,6 +387,7 @@ public class Poll extends GenericResource {
                 if(display!=Display.POPUP) {
                     html.append("<div id=\""+PREF).append(base.getId()).append("\" class=\"swb-encuesta-res\">&nbsp;</div>");
                 }
+                html.append(getRenderScript(paramRequest));
                 response.getWriter().println(html.toString());
             }catch(TransformerException te) {
                 log.error(te);
