@@ -69,9 +69,10 @@ public class Timeline extends GenericResource{
                 String attName = (String)e.nextElement();
                 //System.out.println(attName  + ":" +session.getAttribute(attName));
         }
-        if(session.getAttribute("twitterStream") == null && session.getAttribute("tweetsListener") == null){ //If we don't have a stream for the current session, create one
+        if((session.getAttribute("twitterStream") == null && session.getAttribute("tweetsListener") == null) || ((SocialUserStreamListener)session.getAttribute("tweetsListener")).streamActive == false){ //If we don't have a stream for the current session, create one
             twitterStream = new TwitterStreamFactory(configureOAuth(semanticTwitter).build()).getInstance();
-            tweetsListener = new SocialUserStreamListener();
+            //tweetsListener = new SocialUserStreamListener();
+            tweetsListener = new SocialUserStreamListener(twitterStream);
             twitterStream.addListener(tweetsListener);//Saving statuses in local variable of the listener
             twitterStream.user();//This method internally starts a thread
             session.setAttribute("tweetsListener", tweetsListener);
@@ -222,7 +223,9 @@ public class Timeline extends GenericResource{
                            log.error("Error when printing tweet:" , te);
                        }
                    }
-
+                   //As user has requested the tweets in ArrayList
+                   //Restart the timer to keep thread alive
+                   tweetsListener.startTime = System.currentTimeMillis();
                    tweetsListener.socialStatus.clear();
                 }
             }
