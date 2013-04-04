@@ -5,14 +5,17 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.URL;
 import javax.swing.AbstractAction;
 import javax.swing.ImageIcon;
 import javax.swing.JCheckBoxMenuItem;
+import javax.swing.JFileChooser;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -23,6 +26,7 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
+
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 import org.fife.ui.rtextarea.Gutter;
@@ -33,43 +37,68 @@ public class XSLRootPane extends JRootPane implements HyperlinkListener, SyntaxC
     private RTextScrollPane scrollPane;
     private RSyntaxTextArea textArea;
     private String filename;
+    private boolean isDefaultTemplate;
     private JMenuItem localJMenuItem;
-  
 
     public XSLRootPane() {
-        textArea = createTextArea();
-        System.out.println("xslrootpane");
+        this(true);
+    }
+
+    public XSLRootPane(boolean isDefaultTemplate) {
+        this.isDefaultTemplate = isDefaultTemplate;
+        
+        textArea = createTextArea();        
         textArea.setSyntaxEditingStyle("text/xml");
-        this.scrollPane = new RTextScrollPane(textArea, true);
-        Gutter localGutter = this.scrollPane.getGutter();
+        scrollPane = new RTextScrollPane(textArea, true);
+        Gutter localGutter = scrollPane.getGutter();
         localGutter.setBookmarkingEnabled(true);
         URL localURL = getClass().getClassLoader().getResource("bookmark.png");
         localGutter.setBookmarkIcon(new ImageIcon(localURL));
-        getContentPane().add(this.scrollPane);
+        getContentPane().add(scrollPane);
         setJMenuBar(createMenuBar());
-
-
     }
-    
+
+//  private void addItem(String paramString1, String paramString2, String paramString3, ButtonGroup paramButtonGroup, JMenu paramJMenu)
+//  {
+//    JRadioButtonMenuItem localJRadioButtonMenuItem = new JRadioButtonMenuItem(new ChangeSyntaxStyleAction(paramString1, paramString2, paramString3));
+//
+//    paramButtonGroup.add(localJRadioButtonMenuItem);
+//    paramJMenu.add(localJRadioButtonMenuItem);
+//  }
     private JMenuBar createMenuBar() {
         JMenuBar localJMenuBar = new JMenuBar();
+
+        //    JMenu localJMenu = new JMenu("Language");
+        //    ButtonGroup localButtonGroup = new ButtonGroup();
+        //    addItem("C", "CExample.txt", "text/c", localButtonGroup, localJMenu);
+        //    addItem("Java", "JavaExample.txt", "text/java", localButtonGroup, localJMenu);
+        //    addItem("Perl", "PerlExample.txt", "text/perl", localButtonGroup, localJMenu);
+        //    addItem("Ruby", "RubyExample.txt", "text/ruby", localButtonGroup, localJMenu);
+        //    addItem("SQL", "SQLExample.txt", "text/sql", localButtonGroup, localJMenu);
+        //    addItem("XML", "XMLExample.txt", "text/mxml", localButtonGroup, localJMenu);
+        //    localJMenu.getItem(1).setSelected(true);
+        //    localJMenuBar.add(localJMenu);
         JMenu localJMenu = new JMenu("Archivo");
 
         localJMenuItem = new JMenuItem(new SaveAction());
-
-
-
         localJMenu.add(localJMenuItem);
-        localJMenuItem.setEnabled(false);
-        localJMenuItem.addActionListener(new ActionListener() {
 
+        //El boton Guardar esta desactivado
+        localJMenuItem.setEnabled(false);
+
+        //archivo default, el boton Guardar se activa
+        if(isDefaultTemplate) {
+            localJMenuItem.setEnabled(true);
+        }
+        
+        localJMenuItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-              localJMenuItem.setEnabled(false);
+                localJMenuItem.setEnabled(false);
             }
         });
-
         localJMenuBar.add(localJMenu);
+        
         localJMenu = new JMenu("Ver");
         JCheckBoxMenuItem localJCheckBoxMenuItem = new JCheckBoxMenuItem(new MonospacedFontAction());
         localJCheckBoxMenuItem.setSelected(true);
@@ -94,15 +123,20 @@ public class XSLRootPane extends JRootPane implements HyperlinkListener, SyntaxC
         localJCheckBoxMenuItem.setSelected(true);
         localJMenu.add(localJCheckBoxMenuItem);
         localJMenuBar.add(localJMenu);
+
         localJMenu = new JMenu("Ayuda");
         JMenuItem localJMenuItemHelp = new JMenuItem(new AboutAction());
         localJMenu.add(localJMenuItemHelp);
         localJMenuBar.add(localJMenu);
+
+        JMenuItem localJMenuItemExit = new JMenuItem(new AboutActionExit());
+        localJMenu.add(localJMenuItemExit);
+        localJMenuBar.add(localJMenu);
+
         return localJMenuBar;
     }
 
     private RSyntaxTextArea createTextArea() {
-        System.out.println("createarea");
         RSyntaxTextArea localRSyntaxTextArea = new RSyntaxTextArea(25, 70);
         localRSyntaxTextArea.setCaretPosition(0);
         localRSyntaxTextArea.addHyperlinkListener(this);
@@ -140,7 +174,7 @@ public class XSLRootPane extends JRootPane implements HyperlinkListener, SyntaxC
             URL localURL = paramHyperlinkEvent.getURL();
             if (localURL == null) {
                 UIManager.getLookAndFeel().provideErrorFeedback(null);
-            } else {
+            }else {
                 JOptionPane.showMessageDialog(this, "URL clicked:\n" + localURL.toString());
             }
         }
@@ -151,22 +185,27 @@ public class XSLRootPane extends JRootPane implements HyperlinkListener, SyntaxC
     }
 
     public void setContent(String filename) {
+        //ClassLoader localClassLoader = getClass().getClassLoader();
         BufferedReader localBufferedReader = null;
         try {
             localBufferedReader = new BufferedReader(new FileReader(filename));
             textArea.read(localBufferedReader, null);
             localBufferedReader.close();
             this.filename = filename;
-
             textArea.setCaretPosition(0);
-        } catch (RuntimeException localRuntimeException) {
+            //archivo default, no editable
+            if(isDefaultTemplate) {
+                textArea.setEditable(false);
+            }
+        }catch (RuntimeException localRuntimeException) {
             throw localRuntimeException;
-        } catch (Exception localException) {
+        }catch (Exception localException) {
             textArea.setText("Type here to see syntax highlighting");
         }
     }
 
     private class WordWrapAction extends AbstractAction {
+
         public WordWrapAction() {
             putValue("Name", "Word Wrap");
         }
@@ -190,6 +229,7 @@ public class XSLRootPane extends JRootPane implements HyperlinkListener, SyntaxC
     }
 
     private class ViewLineHighlightAction extends AbstractAction {
+
         public ViewLineHighlightAction() {
             putValue("Name", "Current Line Highlight");
         }
@@ -201,6 +241,7 @@ public class XSLRootPane extends JRootPane implements HyperlinkListener, SyntaxC
     }
 
     private class ToggleAntiAliasingAction extends AbstractAction {
+
         private boolean selected;
 
         public ToggleAntiAliasingAction() {
@@ -216,6 +257,7 @@ public class XSLRootPane extends JRootPane implements HyperlinkListener, SyntaxC
     }
 
     private class MonospacedFontAction extends AbstractAction {
+
         private boolean selected;
 
         public MonospacedFontAction() {
@@ -236,6 +278,7 @@ public class XSLRootPane extends JRootPane implements HyperlinkListener, SyntaxC
     }
 
     private class MarkOccurrencesAction extends AbstractAction {
+
         public MarkOccurrencesAction() {
             putValue("Name", "Mark Occurrences");
         }
@@ -245,8 +288,9 @@ public class XSLRootPane extends JRootPane implements HyperlinkListener, SyntaxC
             XSLRootPane.this.textArea.setMarkOccurrences(!XSLRootPane.this.textArea.getMarkOccurrences());
         }
     }
-
+    
     private class BookmarksAction extends AbstractAction {
+
         public BookmarksAction() {
             putValue("Name", "Bookmarks");
         }
@@ -258,6 +302,7 @@ public class XSLRootPane extends JRootPane implements HyperlinkListener, SyntaxC
     }
 
     private class AnimateBracketMatchingAction extends AbstractAction {
+
         public AnimateBracketMatchingAction() {
             putValue("Name", "Animate Bracket Matching");
         }
@@ -269,57 +314,102 @@ public class XSLRootPane extends JRootPane implements HyperlinkListener, SyntaxC
     }
 
     private class AboutAction extends AbstractAction {
+
         public AboutAction() {
-            putValue("Name", "Cómo usar el editor...");
+            putValue("Name", "Cómo usar este editor...");
         }
 
         @Override
         public void actionPerformed(ActionEvent paramActionEvent) {
-
-            JOptionPane.showMessageDialog(XSLRootPane.this,
-                    "Este editor de texto es utilizado para"
-                    + "\neditar el archivo XSLT"
-                    + "\ndel componente actual.\n", "Ayuda", 1);
-        }
-    }
-
-    private class SaveAction extends AbstractAction {
-        public SaveAction() {
-            putValue("Name", "Guardar");
-        }
-
-        @Override
-        public void actionPerformed(ActionEvent paramActionEvent) {
-            BufferedWriter bw = null;
-            try {
-                bw = new BufferedWriter(new FileWriter(filename));
-                textArea.write(bw);
-            } catch (FileNotFoundException ex) {
-                ex.printStackTrace(System.out);
-            } catch (IOException ex) {
-                ex.printStackTrace(System.out);
-            } finally {
-                try {
-                    if (bw != null) {
-                        bw.flush();
-                        bw.close();
-                    }
-                } catch (IOException ex) {
-                    ex.printStackTrace(System.out);
-                }
+            if( !isDefaultTemplate )
+            {
+                JOptionPane.showMessageDialog(XSLRootPane.this,
+                        "El editor de texto es utilizado para corregir o editar el "
+                        + "\narchivo XSL de la plantilla actual.", "Ayuda", 1);
+            }
+            else
+            {
+                JOptionPane.showMessageDialog(XSLRootPane.this,
+                        "Puede guardar una copia del archivo para modificarla y reemplazar la plantilla actual.", "Ayuda", 1);
             }
         }
     }
 
-    /* private class CloseAction extends AbstractAction {
+    private class AboutActionExit extends AbstractAction {
 
-    public CloseAction() {
-    putValue("Name", "Salir");
+        public AboutActionExit() {
+            putValue("Name", "Cómo salir del editor...");
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent paramActionEvent) {
+            JOptionPane.showMessageDialog(XSLRootPane.this,
+                    "Para salir del editor seleccione la pestaña Administrar.", "Ayuda", 1);
+        }
     }
 
-    @Override
-    public void actionPerformed(ActionEvent paramActionEvent) {
-    JOptionPane.showMessageDialog(XSLRootPane.this, "AdiÃ³s", "falta codigo", 1);
+    private class SaveAction extends AbstractAction {
+        
+        public SaveAction() {
+            if( !isDefaultTemplate ) {
+                putValue("Name", "Guardar");
+            }else {
+                putValue("Name", "Guardar como...");
+            }
+
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            if(isDefaultTemplate) {
+                String texto = textArea.getText();
+                JFileChooser chooser = new JFileChooser();
+
+                int retval = chooser.showSaveDialog(null);
+                if (retval == JFileChooser.APPROVE_OPTION) {
+                    PrintWriter printwriter = null;
+                    try {
+                        File JFC = chooser.getSelectedFile();
+                        String PATH = JFC.getAbsolutePath();
+                        printwriter = new PrintWriter(JFC);
+                        printwriter.print(texto);
+                        printwriter.close();
+
+                        if (!(PATH.endsWith(".xsl"))) {
+                            File temp = new File(PATH + ".xsl");
+                            JFC.renameTo(temp);//renombramos el archivo
+                        }
+                        return;
+                    } catch (FileNotFoundException ex) {
+                        JOptionPane.showMessageDialog(null, "Error al guardar el archivo!", "Oops! Error", JOptionPane.ERROR_MESSAGE);
+                    } finally {
+                        printwriter.close();
+                    }
+
+
+                }
+            }else {
+                BufferedWriter bw = null;
+                try {
+                    bw = new BufferedWriter(new FileWriter(filename));
+                    textArea.write(bw);
+                } catch (FileNotFoundException ex) {
+                    ex.printStackTrace(System.out);
+                } catch (IOException ex) {
+                    ex.printStackTrace(System.out);
+                } finally {
+                    //Close the BufferedWriter
+                    try {
+                        if (bw != null) {
+                            bw.flush();
+                            bw.close();
+                        }
+                    } catch (IOException ex) {
+                        ex.printStackTrace(System.out);
+                    }
+                }
+            }
+
+        }
     }
-    }*/
 }
