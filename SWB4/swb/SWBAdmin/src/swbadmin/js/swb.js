@@ -1637,9 +1637,8 @@ function replaceChars4Id(value, lowercase)
         return re.test(strValue);
     }
     
-    function isUrl(url) {
-	//var regex = /^(https?|ftp):\/\/[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(([0-9]{1,5})?.*)?$/;
-	var regex = /^(https?|ftp):\/\/[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(([0-9]{1,5})?\/?(\?(\w=\S*)+(&\w=\S*)*))?$/;
+    function isUrl(url) {	
+	var regex = /^(https?|ftp):\/\/[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(\/.*)*(([0-9]{1,5})?(\?(\w=\S*)+(&\w=\S*)*))?$/;
         return regex.test(url);
     }
     
