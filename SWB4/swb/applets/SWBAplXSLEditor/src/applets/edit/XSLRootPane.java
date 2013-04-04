@@ -39,6 +39,7 @@ public class XSLRootPane extends JRootPane implements HyperlinkListener, SyntaxC
     private String filename;
     private boolean isDefaultTemplate;
     private JMenuItem localJMenuItem;
+    private JMenuItem localJMenuItemSaveAs;
 
     public XSLRootPane() {
         this(true);
@@ -81,22 +82,21 @@ public class XSLRootPane extends JRootPane implements HyperlinkListener, SyntaxC
         JMenu localJMenu = new JMenu("Archivo");
 
         localJMenuItem = new JMenuItem(new SaveAction());
-        localJMenu.add(localJMenuItem);
-
-        //El boton Guardar esta desactivado
-        localJMenuItem.setEnabled(false);
-
-        //archivo default, el boton Guardar se activa
-        if(isDefaultTemplate) {
-            localJMenuItem.setEnabled(true);
-        }
-        
-        localJMenuItem.addActionListener(new ActionListener() {
+        if (!isDefaultTemplate) {            
+            localJMenu.add(localJMenuItem);
+            //El boton Guardar esta desactivado
+            localJMenuItem.setEnabled(false);
+            localJMenuBar.add(localJMenu);
+            localJMenuItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 localJMenuItem.setEnabled(false);
             }
         });
+        }   
+        //BOTON GUARDAR COMO
+        localJMenuItemSaveAs = new JMenuItem(new SaveAsAction());
+        localJMenu.add(localJMenuItemSaveAs);
         localJMenuBar.add(localJMenu);
         
         localJMenu = new JMenu("Ver");
@@ -410,6 +410,42 @@ public class XSLRootPane extends JRootPane implements HyperlinkListener, SyntaxC
                 }
             }
 
+        }
+    }
+    
+    private class SaveAsAction extends AbstractAction
+    {
+        public SaveAsAction() {
+            putValue("Name", "Guardar como");
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+
+            String texto = textArea.getText();
+            JFileChooser chooser = new JFileChooser();
+
+            int retval = chooser.showSaveDialog(null);
+            if (retval == JFileChooser.APPROVE_OPTION) {
+                PrintWriter printwriter = null;
+                try {
+                    File JFC = chooser.getSelectedFile();
+                    String PATH = JFC.getAbsolutePath();
+                    printwriter = new PrintWriter(JFC);
+                    printwriter.print(texto);
+                    printwriter.close();
+
+                    if (!(PATH.endsWith(".xsl"))) {
+                        File temp = new File(PATH + ".xsl");
+                        JFC.renameTo(temp);//renombramos el archivo
+                    }
+                    return;
+                } catch (FileNotFoundException ex) {
+                    JOptionPane.showMessageDialog(null, "Error al guardar el archivo!", "Oops! Error", JOptionPane.ERROR_MESSAGE);
+                } finally {
+                    printwriter.close();
+                }
+            }
         }
     }
 }
