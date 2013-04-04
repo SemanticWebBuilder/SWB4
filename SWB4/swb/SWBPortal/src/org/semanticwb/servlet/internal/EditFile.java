@@ -49,47 +49,49 @@ public class EditFile implements InternalServlet {
     @Override
     public void doProcess(HttpServletRequest request, HttpServletResponse response, DistributorParams dparams) throws IOException, ServletException {
         try {
-            String lang=dparams.getUser().getLanguage();
             String path = request.getParameter("file");
             String f = request.getParameter("file");
             String fileName=null;
             Resource base=null;   
             String newcontent = request.getParameter("content");
             PrintWriter out = response.getWriter();
-            if (Boolean.TRUE) {
-                out.println("<html>");
-                out.println("<head>");
-                out.println("<meta http-equiv='Content-Type' content='text/html; charset=utf-8'>");
-                out.println("<title>EditArea</title>");
-                out.println("<script language=\"javascript\" type=\"text/javascript\" src=\"/swb/swbadmin/js/editarea/edit_area/edit_area_full.js\"></script>");
-                out.println("</head>");
-                out.println("<body>");
-                out.println("<applet alt=\"editar xsl\" codebase=\""+SWBPlatform.getContextPath()+"/\" code=\"applets.edit.XSLEditorApplet\" archive=\"swbadmin/lib/SWBAplXSLEditor.jar, swbadmin/lib/rsyntaxtextarea.jar\" width=\"100%\" height=\"100%\">");
-                out.println("  <param name=\"file\" value=\""+f+"\" />");
-                out.println("</applet>");
-                out.println("</body> \n");
-                out.println("</html> \n");
-            }else {
-                File file=new File(SWBPortal.getWorkPath()+path);
-                FileOutputStream output = new FileOutputStream(file);
-                output.write(newcontent.getBytes());
-                output.flush();
-                output.close();
-                String attr=request.getParameter("attr");
-                if(attr!=null) {
-                    base.setAttribute(request.getParameter("attr"), fileName);
-                    base.updateAttributesToDB();                    
-                }
-                if(base!=null){
-                    //Redireccionamiento a la administración del recurso en cuestion
-                    SWBResourceURLImp url=new SWBResourceURLImp(request, base, dparams.getWebPage(), SWBResourceURL.UrlType_RENDER);
-                    url.setResourceBase(base);
-                    url.setMode(SWBResourceURLImp.Mode_ADMIN);
-                    url.setWindowState(SWBResourceURLImp.WinState_MAXIMIZED);
-                    url.setAction("edit");
-                    response.sendRedirect(url.toString());
-                }
+//            if(Boolean.TRUE) {
+            out.println("<html>");
+            out.println("<head>");
+            out.println(" <meta http-equiv='Content-Type' content='text/html; charset=utf-8'>");
+            out.println(" <title>Editar</title>");
+            //out.println(" <script language=\"javascript\" type=\"text/javascript\" src=\"/swb/swbadmin/js/editarea/edit_area/edit_area_full.js\"></script>");
+            out.println("</head>");
+            out.println("<body>");
+            out.println("<applet alt=\"editar xsl\" codebase=\""+SWBPlatform.getContextPath()+"/\" code=\"applets.edit.XSLEditorApplet\" archive=\"swbadmin/lib/SWBAplXSLEditor.jar, swbadmin/lib/rsyntaxtextarea.jar\" width=\"100%\" height=\"100%\">");
+            out.println("  <param name=\"file\" value=\""+f+"\" />");
+            out.println("  <param name=\"isDefaultTemplate\" value=\"false\" />");
+            out.println("</applet>");
+            out.println("</body> \n");
+            out.println("</html> \n");
+//            }
+//            else
+//            {
+            File file=new File(SWBPortal.getWorkPath()+path);
+            FileOutputStream output = new FileOutputStream(file);
+            output.write(newcontent.getBytes());
+            output.flush();
+            output.close();
+            String attr=request.getParameter("attr");
+            if(attr!=null) {
+                base.setAttribute(request.getParameter("attr"), fileName);
+                base.updateAttributesToDB();                    
             }
+            if(base!=null) {
+                //Redireccionamiento a la administración del recurso en cuestion
+                SWBResourceURLImp url=new SWBResourceURLImp(request, base, dparams.getWebPage(), SWBResourceURL.UrlType_RENDER);
+                url.setResourceBase(base);
+                url.setMode(SWBResourceURLImp.Mode_ADMIN);
+                url.setWindowState(SWBResourceURLImp.WinState_MAXIMIZED);
+                url.setAction("edit");
+                response.sendRedirect(url.toString());
+            }
+//            }
         } catch (Exception e) {
             log.debug(e);
         }

@@ -25,11 +25,13 @@ package org.semanticwb.servlet.internal;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.URLEncoder;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.Logger;
+import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 
@@ -50,40 +52,35 @@ public class ShowFile implements InternalServlet {
     public void doProcess(HttpServletRequest request, HttpServletResponse response, DistributorParams dparams) throws IOException, ServletException {
         try {
             String path = request.getParameter("file");
-            String pathType=request.getParameter("pathType");
+            String pathType = request.getParameter("pathType");
             String content = "";
-            if(pathType.equals("def")) {
-                    content=SWBUtils.IO.readInputStream(SWBPortal.getAdminFileStream(path));
-            }else if(pathType.equals("res")) {
-                    content=SWBUtils.IO.readInputStream(SWBPortal.getFileFromWorkPath(path));
-            }else {
-                FileInputStream fileInput=new FileInputStream(path);
-                content=SWBUtils.IO.readInputStream(fileInput);
+            if (pathType.equals("def")) {
+                content = SWBUtils.IO.readInputStream(SWBPortal.getAdminFileStream(path));
+            } else if (pathType.equals("res")) {
+                content = SWBUtils.IO.readInputStream(SWBPortal.getFileFromWorkPath(path));
+            } else {
+                FileInputStream fileInput = new FileInputStream(path);
+                content = SWBUtils.IO.readInputStream(fileInput);
             }
-
-            StringBuilder htm = new StringBuilder();
-            htm.append("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\"\n");
-            htm.append("\"http://www.w3.org/TR/html4/strict.dtd\">\n");
-            htm.append("<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"es\" lang=\"es\">\n");
-            htm.append("    <META HTTP-EQUIV=\"CONTENT-TYPE\" CONTENT=\"text/html; charset=ISO-8859-1\">\n");
-            htm.append("    <META HTTP-EQUIV=\"CACHE-CONTROL\" CONTENT=\"NO-CACHE\">\n");
-            htm.append("    <META HTTP-EQUIV=\"PRAGMA\" CONTENT=\"NO-CACHE\">\n");
-            htm.append("<head>\n");
-            htm.append("<title>SemanticWebBuilder - Show file</title>\n");
-            htm.append("</head>\n");
-            htm.append("<body class=\"soria\">\n");
-            htm.append("  <p><input type=\"button\" onclick=\"history.go(-1);\" value=\"Regresar\"/></p>");
-            htm.append("  <p><textarea cols=\"100\" rows=\"45\">");
-            htm.append(content);
-            htm.append("  </textarea></p>\n");
-            htm.append("  <p><input type=\"button\" onclick=\"history.go(-1);\" value=\"Regresar\"/></p>\n");
-            htm.append("</body>\n");
-            htm.append("</html>");
             PrintWriter out = response.getWriter();
-            out.println(htm.toString());
+
+            out.println("<html>");
+            out.println("<head>");
+            out.println(" <meta http-equiv='Content-Type' content='text/html; charset=utf-8'>");
+            out.println(" <title>EditArea Test</title>");
+            //out.println(" <script language=\"javascript\" type=\"text/javascript\" src=\"/swb/swbadmin/js/editarea/edit_area/edit_area_full.js\"></script>");
+            out.println("</head>");
+            out.println("<body>");
+            out.println(" <applet alt=\"editar xsl\" codebase=\"" + SWBPlatform.getContextPath() + "/\" code=\"applets.edit.XSLEditorApplet\" archive=\"swbadmin/lib/SWBAplXSLEditor.jar, swbadmin/lib/rsyntaxtextarea.jar\" width=\"100%\" height=\"100%\">");
+            out.println("  <param name=\"content\" value=\"" + URLEncoder.encode(content, "UTF-8") + "\" />");
+            out.println("  <param name=\"isDefaultTemplate\" value=\"true\" />");
+            out.println(" </applet>");
+            out.println("</body> \n");
+            out.println("</html> \n");
+
         } catch (Exception e) {
             e.printStackTrace(System.out);
-            log.error(e);
+            log.debug(e);
         }
     }
 
