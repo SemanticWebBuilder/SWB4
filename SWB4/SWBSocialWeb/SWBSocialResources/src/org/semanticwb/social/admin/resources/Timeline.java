@@ -6,13 +6,12 @@ package org.semanticwb.social.admin.resources;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
-import java.util.logging.Level;
+import java.util.Enumeration;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
@@ -23,21 +22,18 @@ import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.api.SWBResourceURL;
 import org.semanticwb.social.Twitter;
+import twitter4j.HashtagEntity;
+import twitter4j.MediaEntity;
+import twitter4j.Paging;
 import twitter4j.Status;
+import twitter4j.StatusUpdate;
 import twitter4j.TwitterException;
 import twitter4j.TwitterFactory;
-import twitter4j.conf.ConfigurationBuilder;
-import twitter4j.StatusUpdate;
-import twitter4j.Paging;
-import twitter4j.URLEntity;
-import twitter4j.MediaEntity;
-import twitter4j.UserMentionEntity;
-import twitter4j.HashtagEntity;
 import twitter4j.TwitterStream;
 import twitter4j.TwitterStreamFactory;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
+import twitter4j.URLEntity;
+import twitter4j.UserMentionEntity;
+import twitter4j.conf.ConfigurationBuilder;
 /**
  *
  * @author francisco.jimenez
@@ -65,31 +61,38 @@ public class Timeline extends GenericResource{
         Twitter semanticTwitter = (Twitter) semanticObject.createGenericInstance();
         twitter = new TwitterFactory(configureOAuth(semanticTwitter).build()).getInstance();
         //socialStatus = new ArrayList<Status>();
-        TwitterStream twitterStream = new TwitterStreamFactory(configureOAuth(semanticTwitter).build()).getInstance();
-        SocialUserStreamListener tweetsListener = new SocialUserStreamListener();
-        twitterStream.addListener(tweetsListener);//Saving statuses
-        twitterStream.user();
-        System.out.println("Listener started!");
+        //Start the listener
+        TwitterStream twitterStream = null; //The stream
+        SocialUserStreamListener tweetsListener = null; //The listener reads tweets received in the home timeline
+        HttpSession session = request.getSession(true);
+        for(Enumeration e = session.getAttributeNames(); e.hasMoreElements(); ){
+                String attName = (String)e.nextElement();
+                //System.out.println(attName  + ":" +session.getAttribute(attName));
+        }
+        if(session.getAttribute("twitterStream") == null && session.getAttribute("tweetsListener") == null){ //If we don't have a stream for the current session, create one
+            twitterStream = new TwitterStreamFactory(configureOAuth(semanticTwitter).build()).getInstance();
+            tweetsListener = new SocialUserStreamListener();
+            twitterStream.addListener(tweetsListener);//Saving statuses in local variable of the listener
+            twitterStream.user();//This method internally starts a thread
+            session.setAttribute("tweetsListener", tweetsListener);
+            session.setAttribute("twitterStream", twitterStream);
+            System.out.println("Listener started!");
+        }else{
+             if(session.getAttribute("tweetsListener") != null){//Cleans all 'new' statuses in ArrayList because they are loaded on tab refresh
+                 ((SocialUserStreamListener)session.getAttribute("tweetsListener")).socialStatus.clear();
+             }
+        }
         
         String jspResponse = SWBPlatform.getContextPath() +"/work/" + paramRequest.getWebPage().getWebSiteId() +"/jsp/post/timeline.jsp";
         RequestDispatcher dis = request.getRequestDispatcher(jspResponse);
         try {
             request.setAttribute("paramRequest", paramRequest);
-            request.setAttribute("twitterBean", twitter);
-            request.setAttribute("tweetsListener", tweetsListener);
+            request.setAttribute("twitterBean", twitter);            
             //request.setAttribute("statuses", socialStatus);
             dis.include(request, response);
         } catch (Exception e) {
             log.error("Error in doView() for requestDispatcher" , e);
-        }
-        
-        //Start listener
-        ///TwitterStream twitterStream = new TwitterStreamFactory(configureOAuth(semanticTwitter).build()).getInstance();
-        ///SocialUserStreamListener tweetsListener = new SocialUserStreamListener(socialStatus,response.getWriter());
-        ///twitterStream.addListener(tweetsListener);//Saving statuses        
-        // user() method internally creates a thread which manipulates TwitterStream and calls these adequate listener methods continuously.
-        ///twitterStream.user();
-        ///System.out.println("Listener started!");
+        }                
     }
 
     @Override
@@ -147,8 +150,7 @@ public class Timeline extends GenericResource{
     @Override
     public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         String mode = paramRequest.getMode();
-        PrintWriter out = response.getWriter();        
-        System.out.println("Mode requested:" + mode);
+        PrintWriter out = response.getWriter();
         if(mode!= null && mode.equals("getMoreTweets")){//Gets more Tweets
             System.out.println("brings more tweets");
             doGetMoreTweets(request, response, paramRequest);
@@ -205,21 +207,32 @@ public class Timeline extends GenericResource{
             out.println("</fieldset>");
             out.println("</form>");
             out.println("<span id=\"csLoading\" style=\"width: 100px; display: none\" align=\"center\">&nbsp;&nbsp;&nbsp;<img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/images/loading.gif\"/></span>");
-        }else if(mode.equals("doGetStreamUser")){
+        }else if(mode.equals("doGetStreamUser")){//Displays new statuses obtained with the stream
             HttpSession session = request.getSession(true);
             if(session.getAttribute("tweetsListener")!=null){
                 SocialUserStreamListener tweetsListener = (SocialUserStreamListener)session.getAttribute("tweetsListener");
                 if(tweetsListener.socialStatus.size() > 0){
-                   System.out.println("EXISTEN REGISTROS: " + tweetsListener.socialStatus.size());
+                   //System.out.println("EXISTEN REGISTROS: " + tweetsListener.socialStatus.size());
                    int i;
                    for(i = tweetsListener.socialStatus.size()-1 ; i >= 0 ; i-- ){//Most recent status first
+                       try{
                        //System.out.println("TEXTO: " + tweetsListener.socialStatus.get(i).getText());
-                       doPrintTweet(request, response, paramRequest, tweetsListener.socialStatus.get(i), response.getWriter());
+                       doPrintTweet(request, response, paramRequest, tweetsListener.socialStatus.get(i), twitter.getId(), response.getWriter());
+                       }catch(TwitterException te){
+                           log.error("Error when printing tweet:" , te);
+                       }
                    }
 
                    tweetsListener.socialStatus.clear();
-                }else{
-                   System.out.println("NO EXISTEN REGISTROS!");
+                }
+            }
+        }else if(mode.equals("newTweets")){//Displays a status message when new tweets received from stream
+            HttpSession session = request.getSession(true);
+            if(session.getAttribute("tweetsListener")!=null){
+                SocialUserStreamListener tweetsListener = (SocialUserStreamListener)session.getAttribute("tweetsListener");
+                int noOfNewTweets = tweetsListener.socialStatus.size();
+                if(noOfNewTweets > 0){
+                   out.println("<a href=\"#\" onclick=\"appendHtmlAt('" + paramRequest.getRenderUrl().setMode("doGetStreamUser") + "','stream','top'); try{dojo.byId(this.parentNode.id).innerHTML = '';}catch(noe){}; return false;\">You have <b>" + noOfNewTweets +  "</b> new tweet" + (noOfNewTweets > 1 ? "s" : "") +  "</a>");
                 }
             }
         }else{
@@ -254,77 +267,10 @@ public class Timeline extends GenericResource{
             int i = 0;
             for (Status status : twitter.getHomeTimeline(paging)) {
                 maxTweetID = status.getId();
-                /*
-                out.println("<fieldset>");
-                out.println("<table style=\"width: 100%; border: 0px\">");
-                out.println("<tr>");
-                out.println("   <td colspan=\"2\">");
-                out.println("   <b>" + status.getUser().getName() + "<b> " + status.getUser().getScreenName());
-                out.println("   </td>");
-                out.println("</tr>");
-                out.println("<tr>");
-                out.println("   <td  width=\"10%\">");
-                out.println("       <img src=\"" + status.getUser().getProfileImageURL() + "\"/>");
-                out.println("   </td>");
-                out.println("   <td width=\"90%\">");                
-                String statusText = status.getText(); // It's necessary to include URL for media, hash tags and usernames
-                
-                URLEntity urlEnts[] = status.getURLEntities();
-                if(urlEnts!=null && urlEnts.length >0){
-                    for(URLEntity urlEnt: urlEnts){                       
-                        statusText=statusText.replace(urlEnt.getURL(), "<a href=\"" + urlEnt.getURL() +  "\">" + urlEnt.getURL() +"</a>");
-                    }
-                }
-                
-                MediaEntity mediaEnts[] = status.getMediaEntities();
-                if(mediaEnts!=null && mediaEnts.length >0){
-                    for(MediaEntity mediaEnt: mediaEnts){       
-                        statusText=statusText.replace(mediaEnt.getURL(), "<a href=\"" + mediaEnt.getURL() +  "\">" + mediaEnt.getURL() +"</a>");
-                    }
-                }
-
-                HashtagEntity htEnts[] = status.getHashtagEntities(); //Probably it would be better to look for HTs with regex
-                if(htEnts!=null && htEnts.length >0){
-                    for(HashtagEntity htEnt: htEnts){       
-                        statusText=statusText.replace("#" + htEnt.getText(), "<a href=\"https://twitter.com/search?q=%23" + htEnt.getText() +  "&src=hash\">#"+ htEnt.getText() +"</a>");
-                    }
-                }
-                
-                UserMentionEntity usrEnts[] = status.getUserMentionEntities(); //Probably it would be better to look for User Mentions with regex 
-                if(usrEnts!=null && usrEnts.length >0){
-                    for(UserMentionEntity usrEnt: usrEnts){
-                        statusText=statusText.replace("@" + usrEnt.getScreenName(), "<a href=\"https://twitter.com/" + usrEnt.getScreenName() +  "\">@"+ usrEnt.getScreenName() +"</a>");
-                    }
-                }
-                
-                out.println(        statusText);
-                out.println("   </td>");
-                out.println("</tr>");
-                out.println("<tr>");
-                out.println("   <td colspan=\"2\">");
-                
-                    out.println("<div id=\"" + status.getId() + "\" dojoType=\"dijit.layout.ContentPane\">");
-                    long minutes = (long)(new Date().getTime()/60000) - (status.getCreatedAt().getTime()/60000);
-                    out.print("Created:<b>" + (int)minutes + "</b> minutes ago - - Retweeted: <b>" + status.getRetweetCount() + "</b> times ");                    
-                    out.println("<a href=\"\" onclick=\"showDialog('" + renderURL.setMode("replyTweet").setParameter("id", status.getId()+"").setParameter("userName", "@" + status.getUser().getScreenName()) + "','Reply to @" + status.getUser().getScreenName() + "');return false;\">Reply</a>");
-                    if(status.isRetweetedByMe()){
-                        actionURL.setAction("undoRT");
-                        //out.println("<a href=\"\"  onclick=\"submitUrl('" + action.setParameter("id", status.getId()+"").toString() + "',this);return false;" +"\">Undo Retweet</a>");
-                        out.println("Undo Retweet");
-                    }else{
-                        actionURL.setAction("doRT");
-                        out.println("<a href=\"#\"  onclick=\"postHtml('" + actionURL.setParameter("id", status.getId()+"") + "','" + status.getId() + "'); return false;" +"\">Retweet</a>");
-                    }
-                out.println("   </div>");
-                out.println("   </td>");
-                out.println("</tr>");          
-                out.println("</table>");
-                out.println("</fieldset>");
-                */
-                doPrintTweet(request, response, paramRequest, status, response.getWriter());
+                doPrintTweet(request, response, paramRequest, status, twitter.getId(),response.getWriter());
                 i++;
             }
-            out.println("<label id=\"moreTwitLabel\"><a href=\"#\" onclick=\"appendHtmlAtBottom('" + renderURL.setMode("getMoreTweets").setParameter("maxTweetID", maxTweetID+"") + "','getMoreTweets');try{this.parentNode.parentNode.removeChild( this.parentNode );}catch(noe){}; return false;\">More tweets</a></label>");
+            out.println("<label id=\"moreTwitLabel\"><a href=\"#\" onclick=\"appendHtmlAt('" + renderURL.setMode("getMoreTweets").setParameter("maxTweetID", maxTweetID+"") + "','getMoreTweets','bottom');try{this.parentNode.parentNode.removeChild( this.parentNode );}catch(noe){}; return false;\">More tweets</a></label>");
             System.out.println("Total tweets:" + i);
         } catch (Exception te) {
             System.out.println("Se presento un error!!");
@@ -333,7 +279,7 @@ public class Timeline extends GenericResource{
         }
     }
     
-    public static void doPrintTweet(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest, Status status, java.io.Writer writer) throws SWBResourceException, IOException {
+    public static void doPrintTweet(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest, Status status, Long currenUser, java.io.Writer writer) throws SWBResourceException, IOException {
         //PrintWriter out = (PrintWriter)writer;
         String objUri = request.getParameter("suri");        
         SWBResourceURL actionURL = paramRequest.getActionUrl();
@@ -398,18 +344,20 @@ public class Timeline extends GenericResource{
                 writer.write("<tr>");
                 writer.write("   <td colspan=\"2\">");
                 
-                    writer.write("<div id=\"" + status.getId() + "\" dojoType=\"dijit.layout.ContentPane\">");
-                    long minutes = (long)(new Date().getTime()/60000) - (status.getCreatedAt().getTime()/60000);
-                    writer.write("Created:<b>" + (int)minutes + "</b> minutes ago - - Retweeted: <b>" + status.getRetweetCount() + "</b> times ");                    
-                    writer.write("<a href=\"\" onclick=\"showDialog('" + renderURL.setMode("replyTweet").setParameter("id", status.getId()+"").setParameter("userName", "@" + status.getUser().getScreenName()) + "','Reply to @" + status.getUser().getScreenName() + "');return false;\">Reply</a>  ");
-                    if(status.isRetweetedByMe()){
-                        actionURL.setAction("undoRT");
-                        //writer.write("<a href=\"\"  onclick=\"submitUrl('" + action.setParameter("id", status.getId()+"").toString() + "',this);return false;" +"\">Undo Retweet</a>");
-                        writer.write("Undo Retweet");
-                    }else{
-                        actionURL.setAction("doRT");
-                        writer.write("<a href=\"#\"  onclick=\"postHtml('" + actionURL.setParameter("id", status.getId()+"") + "','" + status.getId() + "'); return false;" +"\">Retweet</a>");
-                    }
+                writer.write("<div id=\"" + status.getId() + "\" dojoType=\"dijit.layout.ContentPane\">");
+                long minutes = (long)(new Date().getTime()/60000) - (status.getCreatedAt().getTime()/60000);
+                writer.write("Created:<b>" + (int)minutes + "</b> minutes ago - - Retweeted: <b>" + status.getRetweetCount() + "</b> times ");                    
+                writer.write("<a href=\"\" onclick=\"showDialog('" + renderURL.setMode("replyTweet").setParameter("id", status.getId()+"").setParameter("userName", "@" + status.getUser().getScreenName()) + "','Reply to @" + status.getUser().getScreenName() + "');return false;\">Reply</a>  ");
+                if(status.isRetweetedByMe()){
+                    actionURL.setAction("undoRT");
+                    //writer.write("<a href=\"\"  onclick=\"submitUrl('" + action.setParameter("id", status.getId()+"").toString() + "',this);return false;" +"\">Undo Retweet</a>");
+                    writer.write("Undo Retweet");
+                }else if(status.getUser().getId() == currenUser){ //User cannot retweet its own tweet
+                    writer.write("My tweet");
+                }else{
+                    actionURL.setAction("doRT");
+                    writer.write("<a href=\"#\"  onclick=\"postHtml('" + actionURL.setParameter("id", status.getId()+"") + "','" + status.getId() + "'); return false;" +"\">Retweet</a>");
+                }
                 writer.write("   </div>");
                 writer.write("   </td>");
                 writer.write("</tr>");          
