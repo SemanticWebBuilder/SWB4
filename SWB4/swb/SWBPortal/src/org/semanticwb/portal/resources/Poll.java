@@ -378,8 +378,9 @@ public class Poll extends GenericResource {
                 }catch(Exception noe) {
                     display = Display.POPUP;
                 }
-                if(display==Display.SLIDE) {
-                    html.append("<div id=\""+PREF+base.getId()+"\" class=\"swb-encuesta-res\">&nbsp;</div>");
+                //if(display==Display.SLIDE) {
+                if(display!=Display.POPUP) {
+                    html.append("<div id=\""+PREF).append(base.getId()).append("\" class=\"swb-encuesta-res\">&nbsp;</div>");
                 }
                 response.getWriter().println(html.toString());
             }catch(TransformerException te) {
@@ -405,16 +406,16 @@ public class Poll extends GenericResource {
         response.setHeader("Pragma","no-cache"); //HTTP 1.0
 
         StringBuilder html = new StringBuilder();
-        try {
+//        try {
             Document dom = getDom(request, response, paramRequest);
-            html.append( SWBUtils.XML.transformDom(tpl,dom) );
+//            html.append( SWBUtils.XML.transformDom(tpl,dom) );
 
             vote(request, response, paramRequest);
             dom = SWBUtils.XML.xmlToDom( getResourceBase().getData() );
             html.append(getPollResults(request, paramRequest, dom));
-        }catch(TransformerException te) {
-            log.error("Error in a resource Poll while transforms the document. ", te);
-        }
+//        }catch(TransformerException te) {
+//            log.error("Error in a resource Poll while transforms the document. ", te);
+//        }
         response.getWriter().println(html.toString());
     }
 
@@ -1152,7 +1153,6 @@ public class Poll extends GenericResource {
                     base.updateAttributesToDB();
                     Document dom=SWBUtils.XML.xmlToDom(base.getXml());
                     if(dom!=null) {
-System.out.println("1. removeAllNodes");                        
                         removeAllNodes(dom, Node.ELEMENT_NODE, "option");
                     }else {
                         dom = SWBUtils.XML.getNewDocument();
@@ -1171,7 +1171,6 @@ System.out.println("1. removeAllNodes");
                             dom.getFirstChild().appendChild(emn);
                         }
                     }
-System.out.println("2. removeAllNodes");                    
                     removeAllNodes(dom, Node.ELEMENT_NODE, "link");
                     value = null != fup.getValue("link") && !"".equals(fup.getValue("link").trim()) ? fup.getValue("link").trim() : null;
                     if(value!=null)
