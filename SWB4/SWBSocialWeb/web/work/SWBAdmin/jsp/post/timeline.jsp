@@ -71,17 +71,7 @@
     });
     }
 </script>
-<%!
-    ConfigurationBuilder configureOAuth(Twitter twitter){
-        ConfigurationBuilder cb = new ConfigurationBuilder();
-        cb.setDebugEnabled(true)
-          .setOAuthConsumerKey("V5Xp0RYFuf3N0WsHkqSOIQ")
-          .setOAuthConsumerSecret("4DZ9UrE4X5VavUjXzBcGFTvEsHVsCGOgIuLVSZMA8")
-          .setOAuthAccessToken("1137512760-v65LXmL07hgaOzZPGN6xlSiJGPNCx3BkipAuvnZ")
-          .setOAuthAccessTokenSecret("F4H9ruXp8YReBG28OTQyeEkHkHudm7IzMIbP8Ep8bzw");
-        return cb;
-    }     
-%>
+
 <%    
     String objUri = (String) request.getParameter("suri");
     SemanticObject semanticObject = SemanticObject.createSemanticObject(objUri);
