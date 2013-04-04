@@ -273,9 +273,7 @@ public class Timeline extends GenericResource{
             out.println("<label id=\"moreTwitLabel\"><a href=\"#\" onclick=\"appendHtmlAt('" + renderURL.setMode("getMoreTweets").setParameter("maxTweetID", maxTweetID+"") + "','getMoreTweets','bottom');try{this.parentNode.parentNode.removeChild( this.parentNode );}catch(noe){}; return false;\">More tweets</a></label>");
             System.out.println("Total tweets:" + i);
         } catch (Exception te) {
-            System.out.println("Se presento un error!!");
-            te.printStackTrace();
-            System.out.println("Failed to get timeline: " + te.getMessage());            
+            log.error("Error when getting timeline: ", te);
         }
     }
     
@@ -364,9 +362,7 @@ public class Timeline extends GenericResource{
                 writer.write("</table>");
                 writer.write("</fieldset>");             
         } catch (Exception te) {
-            System.out.println("Se presento un error!!");
-            te.printStackTrace();
-            System.out.println("Failed to get timeline: " + te.getMessage());            
+            log.error("Error when getting timeline: ", te);
         }        
     }
 }
