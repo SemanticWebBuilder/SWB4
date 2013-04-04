@@ -4,15 +4,13 @@
  */
 package org.semanticwb.social.admin.resources;
 
-import java.io.IOException;
 import java.io.Writer;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import twitter4j.DirectMessage;
 import twitter4j.StallWarning;
 import twitter4j.Status;
 import twitter4j.StatusDeletionNotice;
+import twitter4j.TwitterStream;
 import twitter4j.User;
 import twitter4j.UserList;
 import twitter4j.UserStreamListener;
@@ -23,20 +21,37 @@ import twitter4j.UserStreamListener;
  */
 public class SocialUserStreamListener implements UserStreamListener {
     public ArrayList<Status> socialStatus;//ArrayList of Status
-    public Writer out;
+    private TwitterStream twitterStream;
+    public Long startTime;
+    private Long totalRunningTime;
+    public boolean streamActive = true;
     
     public SocialUserStreamListener(){
         this.socialStatus = new ArrayList<Status>();
     }
+    public SocialUserStreamListener(TwitterStream twitterStream){
+        this.startTime = System.currentTimeMillis();
+        this.twitterStream = twitterStream;
+        this.socialStatus = new ArrayList<Status>();
+    }
     public SocialUserStreamListener(ArrayList<Status> socialStatus, Writer out){
         this.socialStatus = socialStatus;
-        this.out = out;
     }
     
     @Override
     public void onStatus(Status status) {
         this.socialStatus.add(status);
-        System.out.println("New status: @" + status.getUser().getScreenName());
+        this.totalRunningTime = System.currentTimeMillis() - this.startTime ;
+        System.out.println("difference: " + this.totalRunningTime);
+        if (this.totalRunningTime > 60000*15){//Has been alive for 15 min since last interaction
+           System.out.println("15 minutes of inactivity. Time to stop the thread!");
+           this.twitterStream.cleanUp();
+           this.twitterStream.shutdown();
+           this.twitterStream = null;
+           this.streamActive = false;
+       }else{
+            System.out.println("New status: @" + status.getUser().getScreenName());
+        }
     }
 
     //We need to define actions for all the other events.
