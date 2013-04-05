@@ -50,6 +50,7 @@
     fill:url(#linearGradientIntermediateEvent);
     fill-opacity:1;
     stroke-width:4;
+    cursor:hand;
 }
 
 .callactivity_o {
@@ -57,6 +58,7 @@
     fill:url(#linearGradientIntermediateEvent);
     fill-opacity:1;
     stroke-width:4;
+    cursor:hand;
 }
 
 .startEvent
@@ -64,7 +66,8 @@
     stroke:#008000;
     fill:url(#linearGradientStartEvent);
     fill-opacity:1;
-    stroke-width:1.5;                        
+    stroke-width:1.5;
+    cursor:hand;
 }
 
 .startEvent_o
@@ -72,7 +75,8 @@
     stroke:#2cff20;
     fill:url(#linearGradientStartEvent);
     fill-opacity:1;
-    stroke-width:1.5;                        
+    stroke-width:1.5;
+    cursor: hand;
 }
 
 .swimlane
@@ -97,6 +101,7 @@
     fill:url(#linearGradientIntermediateEvent);
     fill-opacity:1;
     stroke-width:1.5;
+    cursor:hand;
 }
 
 .intermediateEvent_o
@@ -105,6 +110,7 @@
     fill:url(#linearGradientIntermediateEvent);
     fill-opacity:1;
     stroke-width:1.5;
+    cursor:hand;
 }                    
 
 .intermediateEvent1
@@ -119,6 +125,7 @@
     stroke:#550000;
     fill:url(#linearGradientEndEvent);
     stroke-width:2.5;
+    cursor:hand;
 }
 
 .endEvent_o
@@ -126,44 +133,35 @@
     stroke:#2cff20;
     fill:url(#linearGradientEndEvent);
     stroke-width:2.5;
+    cursor:hand;
 }    
 
 .gateway
 {
     stroke:#d4aa00;
     fill:url(#linearGradientGateway);
-    fill-opacity:1;
     stroke-width:2;
-    stroke-opacity:1;
-    stroke-dasharray:none;
+    cursor:hand;
 }
 
 .gateway_o
 {
     stroke:#2cff20;
     fill:url(#linearGradientGateway);
-    fill-opacity:1;
     stroke-width:2;
-    stroke-opacity:1;
-    stroke-dasharray:none;
+    cursor:hand;
 }
 
 .itemAware {
     stroke:#666666;
-    /*fill:url(#linearGradientGateway);*/
-    fill-opacity:1;
     stroke-width:2;
-    stroke-opacity:1;
-    stroke-dasharray:none;
+    cursor:hand;
 }
 
 .itemAware_o {
     stroke:#2cff20;
-    /*fill:url(#linearGradientGateway);*/
-    fill-opacity:1;
     stroke-width:2;
-    stroke-opacity:1;
-    stroke-dasharray:none;
+    cursor:hand;
 }
 
 .selectBox
@@ -171,7 +169,6 @@
     fill:#f0f0f0;
     fill-opacity:.5;
     stroke-width:1;
-    stroke-opacity:1;
     stroke:#2c5aa0                        
 }
 
