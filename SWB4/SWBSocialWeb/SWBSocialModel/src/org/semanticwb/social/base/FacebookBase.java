@@ -4,7 +4,7 @@ package org.semanticwb.social.base;
    /**
    * Clase que almacenara las diferentes cuentas de una organización para la red social Facebook. 
    */
-public abstract class FacebookBase extends org.semanticwb.social.SocialNetwork implements org.semanticwb.social.Photoable,org.semanticwb.social.Secreteable,org.semanticwb.model.Descriptiveable,org.semanticwb.social.Videoable,org.semanticwb.social.Oauthable,org.semanticwb.social.Messageable,org.semanticwb.model.Traceable,org.semanticwb.social.SocialNetPostable,org.semanticwb.social.Listenerable,org.semanticwb.model.Activeable
+public abstract class FacebookBase extends org.semanticwb.social.SocialNetwork implements org.semanticwb.model.Traceable,org.semanticwb.social.Listenerable,org.semanticwb.social.Secreteable,org.semanticwb.social.Messageable,org.semanticwb.social.SocialNetPostable,org.semanticwb.model.Descriptiveable,org.semanticwb.social.Photoable,org.semanticwb.model.Activeable,org.semanticwb.social.Videoable,org.semanticwb.social.Oauthable
 {
    /**
    * Eliminar despues esta propiedad, ver si Jose puede eliminar la propiedad login que se encuentra en la clase padre(SocialNetwork).
@@ -113,46 +113,46 @@ public abstract class FacebookBase extends org.semanticwb.social.SocialNetwork i
         }
        /**
        * Gets all org.semanticwb.social.Facebook with a determined PostListenerContainer
-       * @param value PostListenerContainer of the type org.semanticwb.social.PostListenerContainer
+       * @param value PostListenerContainer of the type org.semanticwb.social.PostInContainer
        * @param model Model of the org.semanticwb.social.Facebook
        * @return Iterator with all the org.semanticwb.social.Facebook
        */
 
-        public static java.util.Iterator<org.semanticwb.social.Facebook> listFacebookByPostListenerContainer(org.semanticwb.social.PostListenerContainer value,org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.social.Facebook> listFacebookByPostListenerContainer(org.semanticwb.social.PostInContainer value,org.semanticwb.model.SWBModel model)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.social.Facebook> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(social_hasPostListenerContainer, value.getSemanticObject(),sclass));
             return it;
         }
        /**
        * Gets all org.semanticwb.social.Facebook with a determined PostListenerContainer
-       * @param value PostListenerContainer of the type org.semanticwb.social.PostListenerContainer
+       * @param value PostListenerContainer of the type org.semanticwb.social.PostInContainer
        * @return Iterator with all the org.semanticwb.social.Facebook
        */
 
-        public static java.util.Iterator<org.semanticwb.social.Facebook> listFacebookByPostListenerContainer(org.semanticwb.social.PostListenerContainer value)
+        public static java.util.Iterator<org.semanticwb.social.Facebook> listFacebookByPostListenerContainer(org.semanticwb.social.PostInContainer value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.social.Facebook> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(social_hasPostListenerContainer,value.getSemanticObject(),sclass));
             return it;
         }
        /**
        * Gets all org.semanticwb.social.Facebook with a determined PostContainer
-       * @param value PostContainer of the type org.semanticwb.social.PostContainer
+       * @param value PostContainer of the type org.semanticwb.social.PostOutContainer
        * @param model Model of the org.semanticwb.social.Facebook
        * @return Iterator with all the org.semanticwb.social.Facebook
        */
 
-        public static java.util.Iterator<org.semanticwb.social.Facebook> listFacebookByPostContainer(org.semanticwb.social.PostContainer value,org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.social.Facebook> listFacebookByPostContainer(org.semanticwb.social.PostOutContainer value,org.semanticwb.model.SWBModel model)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.social.Facebook> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(social_hasPostContainer, value.getSemanticObject(),sclass));
             return it;
         }
        /**
        * Gets all org.semanticwb.social.Facebook with a determined PostContainer
-       * @param value PostContainer of the type org.semanticwb.social.PostContainer
+       * @param value PostContainer of the type org.semanticwb.social.PostOutContainer
        * @return Iterator with all the org.semanticwb.social.Facebook
        */
 
-        public static java.util.Iterator<org.semanticwb.social.Facebook> listFacebookByPostContainer(org.semanticwb.social.PostContainer value)
+        public static java.util.Iterator<org.semanticwb.social.Facebook> listFacebookByPostContainer(org.semanticwb.social.PostOutContainer value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.social.Facebook> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(social_hasPostContainer,value.getSemanticObject(),sclass));
             return it;

@@ -4,7 +4,7 @@ package org.semanticwb.social.base;
    /**
    * Clase que almacenara las diferentes cuentas de una organización para la red social YouTube. 
    */
-public abstract class YoutubeBase extends org.semanticwb.social.SocialNetwork implements org.semanticwb.social.Authenticable,org.semanticwb.social.Secreteable,org.semanticwb.social.SocialNetPostable,org.semanticwb.social.Listenerable,org.semanticwb.model.Activeable,org.semanticwb.model.Descriptiveable,org.semanticwb.social.Videoable,org.semanticwb.model.Traceable
+public abstract class YoutubeBase extends org.semanticwb.social.SocialNetwork implements org.semanticwb.model.Traceable,org.semanticwb.social.Secreteable,org.semanticwb.social.Listenerable,org.semanticwb.model.Activeable,org.semanticwb.social.Videoable,org.semanticwb.social.Authenticable,org.semanticwb.social.SocialNetPostable,org.semanticwb.model.Descriptiveable
 {
    /**
    * Clase que almacenara las diferentes cuentas de una organización para la red social YouTube.
@@ -109,46 +109,46 @@ public abstract class YoutubeBase extends org.semanticwb.social.SocialNetwork im
         }
        /**
        * Gets all org.semanticwb.social.Youtube with a determined PostListenerContainer
-       * @param value PostListenerContainer of the type org.semanticwb.social.PostListenerContainer
+       * @param value PostListenerContainer of the type org.semanticwb.social.PostInContainer
        * @param model Model of the org.semanticwb.social.Youtube
        * @return Iterator with all the org.semanticwb.social.Youtube
        */
 
-        public static java.util.Iterator<org.semanticwb.social.Youtube> listYoutubeByPostListenerContainer(org.semanticwb.social.PostListenerContainer value,org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.social.Youtube> listYoutubeByPostListenerContainer(org.semanticwb.social.PostInContainer value,org.semanticwb.model.SWBModel model)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.social.Youtube> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(social_hasPostListenerContainer, value.getSemanticObject(),sclass));
             return it;
         }
        /**
        * Gets all org.semanticwb.social.Youtube with a determined PostListenerContainer
-       * @param value PostListenerContainer of the type org.semanticwb.social.PostListenerContainer
+       * @param value PostListenerContainer of the type org.semanticwb.social.PostInContainer
        * @return Iterator with all the org.semanticwb.social.Youtube
        */
 
-        public static java.util.Iterator<org.semanticwb.social.Youtube> listYoutubeByPostListenerContainer(org.semanticwb.social.PostListenerContainer value)
+        public static java.util.Iterator<org.semanticwb.social.Youtube> listYoutubeByPostListenerContainer(org.semanticwb.social.PostInContainer value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.social.Youtube> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(social_hasPostListenerContainer,value.getSemanticObject(),sclass));
             return it;
         }
        /**
        * Gets all org.semanticwb.social.Youtube with a determined PostContainer
-       * @param value PostContainer of the type org.semanticwb.social.PostContainer
+       * @param value PostContainer of the type org.semanticwb.social.PostOutContainer
        * @param model Model of the org.semanticwb.social.Youtube
        * @return Iterator with all the org.semanticwb.social.Youtube
        */
 
-        public static java.util.Iterator<org.semanticwb.social.Youtube> listYoutubeByPostContainer(org.semanticwb.social.PostContainer value,org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.social.Youtube> listYoutubeByPostContainer(org.semanticwb.social.PostOutContainer value,org.semanticwb.model.SWBModel model)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.social.Youtube> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(social_hasPostContainer, value.getSemanticObject(),sclass));
             return it;
         }
        /**
        * Gets all org.semanticwb.social.Youtube with a determined PostContainer
-       * @param value PostContainer of the type org.semanticwb.social.PostContainer
+       * @param value PostContainer of the type org.semanticwb.social.PostOutContainer
        * @return Iterator with all the org.semanticwb.social.Youtube
        */
 
-        public static java.util.Iterator<org.semanticwb.social.Youtube> listYoutubeByPostContainer(org.semanticwb.social.PostContainer value)
+        public static java.util.Iterator<org.semanticwb.social.Youtube> listYoutubeByPostContainer(org.semanticwb.social.PostOutContainer value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.social.Youtube> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(social_hasPostContainer,value.getSemanticObject(),sclass));
             return it;
