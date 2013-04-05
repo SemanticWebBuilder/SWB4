@@ -379,7 +379,7 @@
             var _this=ToolKit;
             _this.selected.push(obj);
             obj.selected=true;   
-            obj.setOverClass();   
+            obj.setOverClass();
             if(!noShowResize)
             {
                 setTimeout(function()
