@@ -79,6 +79,7 @@ public class Timeline extends GenericResource{
         }else{
              if(session.getAttribute("tweetsListener") != null){//If the tab is refreshed, clean all 'new' statuses in ArrayList
                  ((SocialUserStreamListener)session.getAttribute("tweetsListener")).socialStatus.clear();
+                 ((SocialUserStreamListener)session.getAttribute("tweetsListener")).startTime = System.currentTimeMillis();
              }
         }
         
