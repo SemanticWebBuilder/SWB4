@@ -39,7 +39,7 @@ public class SocialNetwork extends org.semanticwb.social.base.SocialNetworkBase
        //contrario, se reutiliza uno para ese año y mes.
        //Una vez esto, se agrega el post al objeto creado o reutilizado.
        Date date=post.getCreated();
-       PostContainer postContainer=PostContainer.getPostContainerByDate(date, swbModel);
+       PostOutContainer postContainer=PostOutContainer.getPostContainerByDate(date, swbModel);
        postContainer.addPost(post);
        postContainer.setPc_SocialNetworkInv(socialNetwork);
        //System.out.println("Datos completamente guardados..");
@@ -54,10 +54,10 @@ public class SocialNetwork extends org.semanticwb.social.base.SocialNetworkBase
        }
 
 
-        Iterator <PostContainer> itPostContainers=PostContainer.ClassMgr.listPostContainers();
+        Iterator <PostOutContainer> itPostContainers=PostOutContainer.ClassMgr.listPostOutContainers();
         while(itPostContainers.hasNext())
         {
-            PostContainer postCont=itPostContainers.next();
+            PostOutContainer postCont=itPostContainers.next();
             System.out.println("postCont:"+postCont);
             System.out.println("postCont Year:"+postCont.getYear());
             System.out.println("postCont Month:"+postCont.getMonth());
@@ -87,7 +87,7 @@ public class SocialNetwork extends org.semanticwb.social.base.SocialNetworkBase
         //contrario, se reutiliza uno para ese año y mes.
         //Una vez esto, se agrega el post al objeto creado o reutilizado.
        Date date=post.getCreated();
-       PostListenerContainer plcContainer=PostListenerContainer.getPostListenerContainerByDate(date, swbModel);
+       PostInContainer plcContainer=PostInContainer.getPostListenerContainerByDate(date, swbModel);
        plcContainer.addPlc_Post(post);
        plcContainer.setPlc_SocialNetworkInv(socialNetwork);
        //System.out.println("Datos completamente guardados..");
