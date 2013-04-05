@@ -4,7 +4,7 @@ package org.semanticwb.social.base;
    /**
    * Catalogo de temas de un modelo (Marca) 
    */
-public abstract class SocialTopicBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Activeable,org.semanticwb.model.Tagable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable
+public abstract class SocialTopicBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Traceable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.Activeable,org.semanticwb.model.Tagable,org.semanticwb.model.Referensable,org.semanticwb.model.Descriptiveable
 {
    /**
    * Catalogo de temas de un modelo (Marca)
@@ -226,6 +226,29 @@ public abstract class SocialTopicBase extends org.semanticwb.model.SWBClass impl
         public static java.util.Iterator<org.semanticwb.social.SocialTopic> listSocialTopicByPost(org.semanticwb.social.Post value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.social.SocialTopic> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(social_hasPostInv,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.social.SocialTopic with a determined UserGroupRef
+       * @param value UserGroupRef of the type org.semanticwb.model.UserGroupRef
+       * @param model Model of the org.semanticwb.social.SocialTopic
+       * @return Iterator with all the org.semanticwb.social.SocialTopic
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.SocialTopic> listSocialTopicByUserGroupRef(org.semanticwb.model.UserGroupRef value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.SocialTopic> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasUserGroupRef, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.social.SocialTopic with a determined UserGroupRef
+       * @param value UserGroupRef of the type org.semanticwb.model.UserGroupRef
+       * @return Iterator with all the org.semanticwb.social.SocialTopic
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.SocialTopic> listSocialTopicByUserGroupRef(org.semanticwb.model.UserGroupRef value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.SocialTopic> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasUserGroupRef,value.getSemanticObject(),sclass));
             return it;
         }
     }
@@ -623,6 +646,80 @@ public abstract class SocialTopicBase extends org.semanticwb.model.SWBClass impl
          if(obj!=null)
          {
              ret=(org.semanticwb.social.Post)obj.createGenericInstance();
+         }
+         return ret;
+    }
+   /**
+   * Gets all the org.semanticwb.model.UserGroupRef
+   * @return A GenericIterator with all the org.semanticwb.model.UserGroupRef
+   */
+
+    public org.semanticwb.model.GenericIterator<org.semanticwb.model.UserGroupRef> listUserGroupRefs()
+    {
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.UserGroupRef>(getSemanticObject().listObjectProperties(swb_hasUserGroupRef));
+    }
+
+   /**
+   * Gets true if has a UserGroupRef
+   * @param value org.semanticwb.model.UserGroupRef to verify
+   * @return true if the org.semanticwb.model.UserGroupRef exists, false otherwise
+   */
+    public boolean hasUserGroupRef(org.semanticwb.model.UserGroupRef value)
+    {
+        boolean ret=false;
+        if(value!=null)
+        {
+           ret=getSemanticObject().hasObjectProperty(swb_hasUserGroupRef,value.getSemanticObject());
+        }
+        return ret;
+    }
+
+   /**
+   * Gets all the UserGroupRefs inherits
+   * @return A GenericIterator with all the org.semanticwb.model.UserGroupRef
+   */
+    public org.semanticwb.model.GenericIterator<org.semanticwb.model.UserGroupRef> listInheritUserGroupRefs()
+    {
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.UserGroupRef>(getSemanticObject().listInheritProperties(swb_hasUserGroupRef));
+    }
+   /**
+   * Adds a UserGroupRef
+   * @param value org.semanticwb.model.UserGroupRef to add
+   */
+
+    public void addUserGroupRef(org.semanticwb.model.UserGroupRef value)
+    {
+        getSemanticObject().addObjectProperty(swb_hasUserGroupRef, value.getSemanticObject());
+    }
+   /**
+   * Removes all the UserGroupRef
+   */
+
+    public void removeAllUserGroupRef()
+    {
+        getSemanticObject().removeProperty(swb_hasUserGroupRef);
+    }
+   /**
+   * Removes a UserGroupRef
+   * @param value org.semanticwb.model.UserGroupRef to remove
+   */
+
+    public void removeUserGroupRef(org.semanticwb.model.UserGroupRef value)
+    {
+        getSemanticObject().removeObjectProperty(swb_hasUserGroupRef,value.getSemanticObject());
+    }
+
+   /**
+   * Gets the UserGroupRef
+   * @return a org.semanticwb.model.UserGroupRef
+   */
+    public org.semanticwb.model.UserGroupRef getUserGroupRef()
+    {
+         org.semanticwb.model.UserGroupRef ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_hasUserGroupRef);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.model.UserGroupRef)obj.createGenericInstance();
          }
          return ret;
     }

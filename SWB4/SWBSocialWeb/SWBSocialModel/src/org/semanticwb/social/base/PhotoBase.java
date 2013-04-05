@@ -4,7 +4,7 @@ package org.semanticwb.social.base;
    /**
    * Clase que sera creada cuando un post sea de tipo Foto (una imagen), como lo es flicker y facebook (cuando se envía una foto a facebook). 
    */
-public abstract class PhotoBase extends org.semanticwb.social.PostOut implements org.semanticwb.social.PostDataable,org.semanticwb.model.Tagable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable,org.semanticwb.social.PostImageable
+public abstract class PhotoBase extends org.semanticwb.social.PostOut implements org.semanticwb.model.Traceable,org.semanticwb.social.PostImageable,org.semanticwb.model.Tagable,org.semanticwb.model.Descriptiveable,org.semanticwb.social.PostDataable
 {
    /**
    * Clase que sera creada cuando un post sea de tipo Foto (una imagen), como lo es flicker y facebook (cuando se envía una foto a facebook).
@@ -109,25 +109,48 @@ public abstract class PhotoBase extends org.semanticwb.social.PostOut implements
         }
        /**
        * Gets all org.semanticwb.social.Photo with a determined PostListenerBase
-       * @param value PostListenerBase of the type org.semanticwb.social.PostListenerContainerBase
+       * @param value PostListenerBase of the type org.semanticwb.social.PostOutListenerContainerBase
        * @param model Model of the org.semanticwb.social.Photo
        * @return Iterator with all the org.semanticwb.social.Photo
        */
 
-        public static java.util.Iterator<org.semanticwb.social.Photo> listPhotoByPostListenerBase(org.semanticwb.social.PostListenerContainerBase value,org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.social.Photo> listPhotoByPostListenerBase(org.semanticwb.social.PostOutListenerContainerBase value,org.semanticwb.model.SWBModel model)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.social.Photo> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(social_postListenerBase, value.getSemanticObject(),sclass));
             return it;
         }
        /**
        * Gets all org.semanticwb.social.Photo with a determined PostListenerBase
-       * @param value PostListenerBase of the type org.semanticwb.social.PostListenerContainerBase
+       * @param value PostListenerBase of the type org.semanticwb.social.PostOutListenerContainerBase
        * @return Iterator with all the org.semanticwb.social.Photo
        */
 
-        public static java.util.Iterator<org.semanticwb.social.Photo> listPhotoByPostListenerBase(org.semanticwb.social.PostListenerContainerBase value)
+        public static java.util.Iterator<org.semanticwb.social.Photo> listPhotoByPostListenerBase(org.semanticwb.social.PostOutListenerContainerBase value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.social.Photo> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(social_postListenerBase,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.social.Photo with a determined PostInOrigen
+       * @param value PostInOrigen of the type org.semanticwb.social.PostIn
+       * @param model Model of the org.semanticwb.social.Photo
+       * @return Iterator with all the org.semanticwb.social.Photo
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.Photo> listPhotoByPostInOrigen(org.semanticwb.social.PostIn value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.Photo> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(social_postInOrigen, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.social.Photo with a determined PostInOrigen
+       * @param value PostInOrigen of the type org.semanticwb.social.PostIn
+       * @return Iterator with all the org.semanticwb.social.Photo
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.Photo> listPhotoByPostInOrigen(org.semanticwb.social.PostIn value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.Photo> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(social_postInOrigen,value.getSemanticObject(),sclass));
             return it;
         }
        /**
@@ -154,24 +177,47 @@ public abstract class PhotoBase extends org.semanticwb.social.PostOut implements
             return it;
         }
        /**
-       * Gets all org.semanticwb.social.Photo with a determined PostContainer_PostInv
-       * @param value PostContainer_PostInv of the type org.semanticwb.social.PostContainer
+       * Gets all org.semanticwb.social.Photo with a determined SocialNetwork
+       * @param value SocialNetwork of the type org.semanticwb.social.SocialNetwork
        * @param model Model of the org.semanticwb.social.Photo
        * @return Iterator with all the org.semanticwb.social.Photo
        */
 
-        public static java.util.Iterator<org.semanticwb.social.Photo> listPhotoByPostContainer_PostInv(org.semanticwb.social.PostContainer value,org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.social.Photo> listPhotoBySocialNetwork(org.semanticwb.social.SocialNetwork value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.Photo> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(social_hasSocialNetwork, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.social.Photo with a determined SocialNetwork
+       * @param value SocialNetwork of the type org.semanticwb.social.SocialNetwork
+       * @return Iterator with all the org.semanticwb.social.Photo
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.Photo> listPhotoBySocialNetwork(org.semanticwb.social.SocialNetwork value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.Photo> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(social_hasSocialNetwork,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.social.Photo with a determined PostContainer_PostInv
+       * @param value PostContainer_PostInv of the type org.semanticwb.social.PostOutContainer
+       * @param model Model of the org.semanticwb.social.Photo
+       * @return Iterator with all the org.semanticwb.social.Photo
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.Photo> listPhotoByPostContainer_PostInv(org.semanticwb.social.PostOutContainer value,org.semanticwb.model.SWBModel model)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.social.Photo> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(social_hasPostContainer_PostInv, value.getSemanticObject(),sclass));
             return it;
         }
        /**
        * Gets all org.semanticwb.social.Photo with a determined PostContainer_PostInv
-       * @param value PostContainer_PostInv of the type org.semanticwb.social.PostContainer
+       * @param value PostContainer_PostInv of the type org.semanticwb.social.PostOutContainer
        * @return Iterator with all the org.semanticwb.social.Photo
        */
 
-        public static java.util.Iterator<org.semanticwb.social.Photo> listPhotoByPostContainer_PostInv(org.semanticwb.social.PostContainer value)
+        public static java.util.Iterator<org.semanticwb.social.Photo> listPhotoByPostContainer_PostInv(org.semanticwb.social.PostOutContainer value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.social.Photo> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(social_hasPostContainer_PostInv,value.getSemanticObject(),sclass));
             return it;
