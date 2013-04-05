@@ -57,10 +57,106 @@
         {
             ToolKit.init(svgid);            
             ToolKit.onmousedown=Modeler.onmousedown;
+            ToolKit.onmousemove=Modeler.onmousemove;
+            ToolKit.onmouseup=Modeler.onmouseup;
             if(!ToolKit.svg.offsetLeft)ToolKit.svg.offsetLeft=60;
             if(!ToolKit.svg.offsetTop)ToolKit.svg.offsetTop=10;
         },
-        
+                
+        onmousedown:function(evt)
+        {
+            if(Modeler.creationId!=null)
+            {
+                var obj=Modeler.mapObject(Modeler.creationId);
+                if(obj.move) //es un FlowNode
+                {                
+                    obj.move(ToolKit.getEventX(evt), ToolKit.getEventY(evt));
+                }else   //Es un ConnectionObject
+                {
+                    if(Modeler.creationDropObject!=null)
+                    {
+                        Modeler.dragConnection=Modeler.mapObject(Modeler.creationId);
+                        Modeler.creationDropObject.addOutConnection(Modeler.dragConnection);
+                        Modeler.dragConnection.setEndPoint(Modeler.creationDropObject.getX(),Modeler.creationDropObject.getY());                        
+                    }
+                }
+//                obj.setX(ToolKit.getEventX(evt));
+//                obj.setY(ToolKit.getEventY(evt));
+                //desc(evt,true);
+                Modeler.creationId=null;
+                Modeler.creationDropObject=null;
+                return false;
+            }
+            return true;
+        },    
+                
+        onmousemove:function(evt)
+        {
+            //console.log(evt);
+            if(Modeler.dragConnection!=null)
+            {
+                if(Modeler.dragConnection.toObject!=null)
+                {
+                    Modeler.dragConnection.toObject=null;
+                    ToolKit.unSelectAll();
+                }
+                Modeler.dragConnection.setEndPoint(ToolKit.getEventX(evt), ToolKit.getEventY(evt));
+                return false;
+            }
+            return true;
+        },  
+                
+        onmouseup:function(evt)
+        {
+            if(Modeler.dragConnection!=null)
+            {
+                if(Modeler.dragConnection.toObject==null)
+                {
+                    Modeler.dragConnection.remove();
+                    
+                }else
+                {
+                    Modeler.dragConnection.toObject.addInConnection(Modeler.dragConnection);
+                }
+                Modeler.dragConnection=null;
+            }
+            return true;
+        },                  
+                
+        objectMouseDown:function(evt,obj)
+        {
+            if(Modeler.creationId!=null)
+            {
+                Modeler.creationDropObject=obj;
+                return false;
+            }
+            
+            if(evt.button==2)
+            {
+                Modeler.dragConnection=Modeler.mapObject("sequenceFlow");
+                obj.addOutConnection(Modeler.dragConnection);
+                Modeler.dragConnection.setEndPoint(obj.getX(),obj.getY());
+                return false;
+            }
+            return true;            
+        },      
+                
+        objectMouseMove:function(evt,obj)
+        {
+            //console.log("objectMouseOver:"+evt+" "+obj);
+            if(Modeler.dragConnection!=null)
+            {
+                if(Modeler.dragConnection.fromObject!=obj && Modeler.dragConnection.toObject!=obj)
+                {
+                    ToolKit.unSelectAll();
+                    ToolKit.selectObj(obj,true);
+                    Modeler.dragConnection.toObject=obj;
+                    Modeler.dragConnection.setEndPoint(obj.getX(),obj.getY());
+                }
+                ToolKit.stopPropagation(evt);
+            }            
+        },                   
+                
         creationStart:function(span)
         {
             Modeler.creationId=span.getAttribute("class");
@@ -69,19 +165,104 @@
         createObject:function(type, id, parent)
         {
             var obj=ToolKit.createUseObject(type,id,parent);
+            obj.mousedown=function(evt){return Modeler.objectMouseDown(evt,obj);}
+            obj.onmousemove=function(evt){return Modeler.objectMouseMove(evt,obj);}
+
             return obj;
         },
-        
-        /*createPath:function(marker_start, marker_mid, marker_end, dash_array, styleClass) {
-            var obj = ToolKit.createPath(marker_start, marker_mid, marker_end, dash_array, styleClass);
+                
+        createConnectionPath:function(marker_start, marker_mid, marker_end, dash_array, styleClass) 
+        {
+            var obj = ToolKit.createConnectionPath(0,0,0,0,marker_start, marker_mid, marker_end, dash_array, styleClass);
             obj.setArrowType= function(type) {
-                ret.setAttributeNS(null, "marker-end", "url(#"+type+")");
+                obj.setAttributeNS(null, "marker-end", "url(#"+type+")");
             }
             obj.setTailType= function(type) {
-                ret.setAttributeNS(null, "marker-start", "url(#"+type+")");
+                obj.setAttributeNS(null, "marker-start", "url(#"+type+")");
             }
+            obj.soff=0;
+            obj.eoff=0;
+            
+            //obj.addPoint(0,0);
+            obj.addPoint(0,0);
+            obj.addPoint(0,0);
+            
+            obj.setStartPoint=function(x,y) {
+                obj.setPoint(0,x,y);
+                obj.xs=x;
+                obj.ys=y;
+                obj.updateInterPoints();
+            }
+                    
+            obj.setEndPoint=function(x,y) {
+                obj.xe=x;
+                obj.ye=y;
+                obj.setPoint(obj.pathSegList.numberOfItems-1,x,y);
+                obj.updateInterPoints();
+            }
+            
+            obj.updateInterPoints=function()
+            {
+                var p0=obj.pathSegList.getItem(0);
+                var p3=obj.pathSegList.getItem(3);
+                
+                var fw=0;if(obj.fromObject!=null)fw=obj.fromObject.getWidth()/2;
+                var fh=0;if(obj.fromObject!=null)fh=obj.fromObject.getHeight()/2;
+                var tw=0;if(obj.toObject!=null)tw=obj.toObject.getWidth()/2;
+                var th=0;if(obj.toObject!=null)th=obj.toObject.getHeight()/2;
+                
+                var dx=obj.xe-obj.xs;
+                var dy=obj.ye-obj.ys;
+                
+                //console.log("updateInterPoints:"+obj.pathSegList.numberOfItems+" "+p1.fixed+" "+p2.fixed);
+                if((Math.abs(dx)-fw-tw)>=(Math.abs(dy)-fh-th))  //Caso X
+                {
+                    if(dx>0)dx=1;
+                    else if(dx<0)dx=-1;
+                    
+                    p0.x=obj.xs+dx*(fw+obj.soff);
+                    p3.x=obj.xe-dx*(tw+obj.eoff);
+                    p3.y=obj.ye;
+                    p0.y=obj.ys;
+                    
+                    
+                    if(obj.pathSegList.numberOfItems==4 && obj.fixed==false)
+                    {
+                        var p1=obj.pathSegList.getItem(1);
+                        var p2=obj.pathSegList.getItem(2);
+                        
+                        p1.x=(p3.x-p0.x)/2+p0.x;
+                        p2.x=p1.x;
+                        p1.y=p0.y;
+                        p2.y=p3.y;
+                    }                    
+                    
+                }else   //Caso Y
+                {
+                    if(dy>0)dy=1;
+                    else if(dy<0)dy=-1;
+                    
+                    p0.y=obj.ys+dy*(fh+obj.soff);
+                    p3.y=obj.ye-dy*(th+obj.eoff);
+                    p3.x=obj.xe;
+                    p0.x=obj.xs;
+                    
+                    if(obj.pathSegList.numberOfItems==4 && obj.fixed==false)
+                    {
+                        var p1=obj.pathSegList.getItem(1);
+                        var p2=obj.pathSegList.getItem(2);
+                    
+                        p1.y=(p3.y-p0.y)/2+p0.y;
+                        p2.y=p1.y;
+                        p1.x=p0.x;
+                        p2.x=p3.x;
+                    }                                        
+                }
+                
+            }            
+            
             return obj;
-        },*/
+        },
         
         createSwimLane:function(id, parent)
         {
@@ -105,10 +286,25 @@
             }
             //ToolKit.svg.removeChild(line);
             
-            
-            obj.mouseup=function(x,y)
+            obj.mousedown=function(evt)
             {
-                //alert("hola1");
+                if(ToolKit.getEventX(evt)<obj.getX()-obj.getWidth()/2+20)
+                {
+                    return Modeler.objectMouseDown(evt,obj);
+                }
+                return false;
+            }
+            
+            obj.onmousemove=function(evt)
+            {
+                if(Modeler.dragConnection!=null)  //Valida no conectar objetos hijos del pool
+                {
+                    if(Modeler.dragConnection.fromObject.isChild(obj))
+                    {
+                        return false;
+                    }
+                }                                
+                return Modeler.objectMouseMove(evt,obj);
             }
             
             var fMove = obj.move;
@@ -132,7 +328,7 @@
             }
             
             obj.moveFirst=function() {
-                fMoveFirst();
+                //fMoveFirst();
                 obj.updateHeaderLine();
             }
             
@@ -160,85 +356,51 @@
             obj.mouseup=function(x,y)
             {
                 //alert("hola1");
+                return true;
             }
+            obj.mousedown=function(evt){return Modeler.objectMouseDown(evt,obj);}
+            obj.onmousemove=function(evt){return Modeler.objectMouseMove(evt,obj);}
+            
             return obj;
         },
         
         createCallTask:function(id, parent)
         {
             //Revisar ID
-            var obj=ToolKit.createResizeObject(id,parent);
+            var obj=Modeler.createTask(id,parent);
             obj.setAttributeNS(null,"bclass","callactivity");
             obj.setAttributeNS(null,"oclass","callactivity_o");
-            obj.setAttributeNS(null,"rx",10);
-            obj.setAttributeNS(null,"ry",10);
             obj.setBaseClass();                        
-            obj.mouseup=function(x,y)
-            {
-                //alert("hola1");
-            }
             return obj;
         },
 
-        createStartEvent:function(id, parent)
-        {
-            //Revisar ID
-            var obj=this.createObject("#startEvent",id,parent);
-            obj.mouseup=function(x,y)
-            {
-                //alert("hola1");
-            }
-            return obj;
-        },
-
-        createMessageStartEvent:function(id, parent)
-        {
-            //Revisar ID
-            var obj=this.createStartEvent(id,parent);
-            //obj.mouseup=function(x,y)
-            //{
-            //    alert("hola2");
-            //}
-            return obj;
-        },
-        
-        onmousedown:function(evt)
-        {
-            if(Modeler.creationId!=null)
-            {
-                var obj=Modeler.mapObject(Modeler.creationId);
-                obj.move(ToolKit.getEventX(evt), ToolKit.getEventY(evt));
-//                obj.setX(ToolKit.getEventX(evt));
-//                obj.setY(ToolKit.getEventY(evt));
-                //desc(evt,true);
-                Modeler.creationId=null;
-                return false;
-            }
-            return true;
-        },
-       
         mapObject:function(type)
         {
-            /*var ret = null;
+            var ret = null;
             if(type=='sequenceFlow') {
-                ret = Modeler.createPath(null, null, "sequenceArrow", null,"sequenceFlowLine");
+                ret = Modeler.createConnectionPath(null, null, "sequenceArrow", null,"sequenceFlowLine");
+                ret.eoff=10;
             }
             if(type=='messageFlow') {
-                ret = Modeler.createPath("messageTail", null, "messageArrow", "5,5", "sequenceFlowLine");
+                ret = Modeler.createConnectionPath("messageTail", null, "messageArrow", "5,5", "sequenceFlowLine");
+                ret.eoff=10;
             }
             if(type=='conditionalFlow') {
-                ret = Modeler.createPath("conditionTail", null, "sequenceArrow", null, "sequenceFlowLine");
+                ret = Modeler.createConnectionPath("conditionTail", null, "sequenceArrow", null, "sequenceFlowLine");
+                ret.eoff=10;
             }
             if(type=='defaultFlow') {
-                ret = Modeler.createPath("defaultTail", null, "sequenceArrow", null, "sequenceFlowLine");
+                ret = Modeler.createConnectionPath("defaultTail", null, "sequenceArrow", null, "sequenceFlowLine");
+                ret.eoff=10;
             }
             if(type=='associationFlow') {
-                ret = Modeler.createPath(null, null, null, "5,5", "sequenceFlowLine");
+                ret = Modeler.createConnectionPath(null, null, null, "5,5", "sequenceFlowLine");
             }
             if(type=='directionalassociationFlow') {
-                ret = Modeler.createPath(null, null, "messageArrow", "5,5", "sequenceFlowLine");
+                ret = Modeler.createConnectionPath(null, null, "messageArrow", "5,5", "sequenceFlowLine");
+                ret.eoff=10;
             }
-            else*/ if(type=='normalStartEvent')
+            else if(type=='normalStartEvent')
             {
                 ret=Modeler.createObject("#startEvent",null,null);
                 ret.setText("Inicio Normal",0,1,80,1);
@@ -672,41 +834,56 @@
         obj2.resize(100,60);
         obj2.move(400,600);        
         obj2.setParent(obj);
+/*        
+        obj2 = Modeler.mapObject("conditionalFlow");
+        obj2.setPoint(0,10,10);
+        obj2.setPoint(1,10,20);
+        obj2.setPoint(2,30,20);
+        obj2.setPoint(3,100,100);
         
-//        obj2 = Modeler.mapObject("conditionalFlow");
-//        obj2.setStartPoint(10,10);
-//        obj2.addPoint(10,20);
-//        obj2.addPoint(30,20);
-//        //obj2.addPoint(30,40);
-//        obj2.setEndPoint(100,100);
-//        
-//        obj2 = Modeler.mapObject("messageFlow");
-//        obj2.setStartPoint(150,150);
-//        obj2.addPoint(150,350);
-//        obj2.addPoint(260,350);
-//        obj2.addPoint(280,350);
-//        obj2.setEndPoint(500,500);
-//        
-//        obj2 = Modeler.mapObject("sequenceFlow");
-//        obj2.setStartPoint(300,300);
-//        obj2.setEndPoint(300,100);
-//        
-//        obj2 = Modeler.mapObject("defaultFlow");
-//        obj2.setStartPoint(200,200);
-//        obj2.setEndPoint(250,190);
-//        
-//        obj2 = Modeler.mapObject("associationFlow");
-//        obj2.setStartPoint(350,200);
-//        obj2.addPoint(350,250);
-//        obj2.addPoint(400,200);
-//        obj2.addPoint(410,200);
-//        obj2.setEndPoint(500,190);
-//        
-//        obj2 = Modeler.mapObject("directionalassociationFlow");
-//        obj2.setStartPoint(350,10);
-//        obj2.addPoint(350,150);
-//        obj2.addPoint(400,100);
-//        obj2.addPoint(430,100);
-        //obj2.setEndPoint(400,190);
+        obj2 = Modeler.mapObject("messageFlow");
+        obj2.setPoint(0,150,150);
+        obj2.setPoint(1,150,350);
+        obj2.setPoint(2.260,350);
+        obj2.setPoint(3,280,350);
+        obj2.addPoint(500,500);
+        
+        obj2 = Modeler.mapObject("associationFlow");
+        obj2.setPoint(0,350,200);
+        obj2.setPoint(1,350,250);
+        obj2.setPoint(2,400,200);
+        obj2.setPoint(3,500,190);
+        
+        obj2 = Modeler.mapObject("directionalassociationFlow");
+        obj2.setPoint(0,350,10);
+        obj2.setPoint(1,350,150);
+        obj2.setPoint(2,400,100);
+        obj2.setPoint(3,430,100);
+        obj2.addPoint(400,190);
+        obj2.listSegments();
+        
+*/        
+        
+        obj1 = Modeler.mapObject("userTask");
+        obj1.move(200,700);        
+        
+        obj2 = Modeler.mapObject("userTask");
+        obj2.move(400,800);        
+        
+        con1 = Modeler.mapObject("sequenceFlow");
+        obj1.addOutConnection(con1);
+        obj2.addInConnection(con1);
+        
+        obj1 = Modeler.mapObject("userTask");
+        obj1.move(400,700);        
+        
+        obj2 = Modeler.mapObject("userTask");
+        obj2.move(600,800);        
+        
+        con1 = Modeler.mapObject("defaultFlow");
+        obj1.addOutConnection(con1);
+        obj2.addInConnection(con1);        
+        
+        
     }
 
