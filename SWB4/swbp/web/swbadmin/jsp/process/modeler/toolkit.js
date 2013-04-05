@@ -144,6 +144,7 @@
                     _this.selectBox.setAttributeNS(null,"width",w);
                     _this.selectBox.setAttributeNS(null,"y",y);
                     _this.selectBox.setAttributeNS(null,"height",h);
+                    //_this.svg.appendChild(_this.selectBox);
 
                     var nodes=_this.svg.childNodes;
                     for(i=0;i<nodes.length;i++)
@@ -383,7 +384,7 @@
             {
                 setTimeout(function()
                 {
-                    obj.moveFirst();
+                        obj.moveFirst();
                     _this.showResizeBoxes();
                 },10); //Se invoca en un thread para evitar problema de chrome            
             }
@@ -904,7 +905,7 @@
                 iobj.onmousemove=function(evt)
                 {
                     obj.onmousemove(evt);
-                };                 
+                };
                 var icon={obj:iobj,posx:posx,posy:posy,offx:offx,offy:offy};
                 obj.icons.push(icon);
 
