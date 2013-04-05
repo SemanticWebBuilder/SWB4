@@ -43,7 +43,7 @@
        </tr>
        <tr>
             <td style="text-align: center;">
-                <select name="socialSite" id="socialSite" onchange="javascript:postHtml('<%=url.setMode("socialTopics")%>?socialSite='+escape(document.formSites.socialSite[document.formSites.socialSite.selectedIndex].value), 'socialTopics');"> 
+                <select name="socialSite" id="socialSite" onchange="javascript:postHtml('<%=url.setMode("afterChooseSite")%>?socialSite='+escape(document.formSites.socialSite[document.formSites.socialSite.selectedIndex].value), 'socialTopics');"> 
                      <option value="" selected="selected">Seleccione una marca...</option>
                     <%
                         Iterator<SocialSite> itSocialSites=sortByDisplayNameSet(SocialSite.ClassMgr.listSocialSites(), user.getLanguage());  
@@ -62,7 +62,7 @@
        </form>
     </table>
 </div>
-<div id="socialTopics" dojoType="dijit.layout.ContentPane">
+<div id="socialTopics" dojoType="dijit.layout.ContentPane" style="width:100%; height:100%;">
 </div>
 
 <%!
