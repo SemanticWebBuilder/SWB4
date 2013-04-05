@@ -153,7 +153,9 @@
                         {
                             var ox=obj.getX();
                             var oy=obj.getY();
-                            if(ox>=x && ox<=x+w && oy>=y && oy<=y+h)
+                            var bb = _this.selectBox.getBBox();
+                            if ((ox-obj.getWidth()/2 > bb.x && ox+obj.getWidth()/2 < (bb.x+bb.width)) && (oy-obj.getHeight()/2 > bb.y && oy+obj.getHeight()/2 < bb.y+bb.height))
+                            //if(ox>=x && ox<=x+w && oy>=y && oy<=y+h)
                             {
                                 if(obj.selected!=true)
                                 {                                                
@@ -191,6 +193,7 @@
                         _this.selectBox.setAttributeNS(null,"y",_this.getEventY(evt));
                         _this.selectBox.setAttributeNS(null,"width",0);
                         _this.selectBox.setAttributeNS(null,"height",0);
+                        _this.selectBox.setAttributeNS(null,"stroke-dasharray","4,4");
                         _this.svg.appendChild(_this.selectBox);
                         _this.svg.dragOffsetX=_this.getEventX(evt);
                         _this.svg.dragOffsetY=_this.getEventY(evt);                                    
