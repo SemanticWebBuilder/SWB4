@@ -21,10 +21,10 @@ import twitter4j.UserStreamListener;
  */
 public class SocialUserStreamListener implements UserStreamListener {
     public ArrayList<Status> socialStatus;//ArrayList of Status
-    private TwitterStream twitterStream;
-    public Long startTime;
-    private Long totalRunningTime;
-    public boolean streamActive = true;
+    private TwitterStream twitterStream;  //Reference to twitterStream to stop the listener
+    public Long startTime;                //Time when the listener was started
+    private Long totalRunningTime;        //Total time of execution of the listener
+    public boolean streamActive = true;   //When the listener is halted the value changes
     
     public SocialUserStreamListener(){
         this.socialStatus = new ArrayList<Status>();
@@ -33,15 +33,12 @@ public class SocialUserStreamListener implements UserStreamListener {
         this.startTime = System.currentTimeMillis();
         this.twitterStream = twitterStream;
         this.socialStatus = new ArrayList<Status>();
-    }
-    public SocialUserStreamListener(ArrayList<Status> socialStatus, Writer out){
-        this.socialStatus = socialStatus;
-    }
+    }   
     
     @Override
     public void onStatus(Status status) {
         this.socialStatus.add(status);
-        this.totalRunningTime = System.currentTimeMillis() - this.startTime ;
+        this.totalRunningTime = System.currentTimeMillis() - this.startTime;
         System.out.println("difference: " + this.totalRunningTime);
         if (this.totalRunningTime > 60000*15){//Has been alive for 15 min since last interaction
            System.out.println("15 minutes of inactivity. Time to stop the thread!");
@@ -51,7 +48,7 @@ public class SocialUserStreamListener implements UserStreamListener {
            this.streamActive = false;
        }else{
             System.out.println("New status: @" + status.getUser().getScreenName());
-        }
+       }
     }
 
     //We need to define actions for all the other events.
