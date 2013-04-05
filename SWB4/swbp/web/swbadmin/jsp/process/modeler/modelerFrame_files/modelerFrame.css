@@ -13,7 +13,7 @@
    -webkit-user-select: none;
    -ms-user-select: none;
    user-select: none;
-   cursor: default;
+   cursor: hand;
 }
 
 .resizeBox {
@@ -28,6 +28,7 @@
     fill:url(#linearGradientIntermediateEvent);
     fill-opacity:1;
     stroke-width:2;
+    cursor:hand;
 }
 
 .task_o {
@@ -35,6 +36,7 @@
     fill:url(#linearGradientIntermediateEvent);
     fill-opacity:1;
     stroke-width:2;
+    cursor:hand;
 }
 
 .sequenceFlowLine {
@@ -176,6 +178,7 @@
 .taskMarker
 {
     stroke:#2c5aa0;
+    cursor:hand;
 }
 .pathMarker{
     fill:none;
@@ -198,19 +201,23 @@
 }
 .intermediateMarker{
     stroke:#2c5aa0;
-    fill:none;
+    fill:#ffffff;
+    fill-opacity:0.1;
     stroke-width:2.5;
+    cursor:hand;
 }      
 .intermediateFilledMarker{
     fill:#2c5aa0;
     stroke:#2c5aa0;
     stroke-width:1;
+    cursor:hand;
 }    
 .endFilledMarked
 {
     fill:#550000;   
     stroke:#550000;
     stroke-width:1;
+    cursor:hand;
 }
 
 
