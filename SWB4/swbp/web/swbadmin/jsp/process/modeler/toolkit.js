@@ -194,7 +194,7 @@
                         _this.selectBox.setAttributeNS(null,"y",_this.getEventY(evt));
                         _this.selectBox.setAttributeNS(null,"width",0);
                         _this.selectBox.setAttributeNS(null,"height",0);
-                        _this.selectBox.setAttributeNS(null,"stroke-dasharray","4,4");
+                        //_this.selectBox.setAttributeNS(null,"stroke-dasharray","4,4");
                         _this.svg.appendChild(_this.selectBox);
                         _this.svg.dragOffsetX=_this.getEventX(evt);
                         _this.svg.dragOffsetY=_this.getEventY(evt);                                    
