@@ -41,8 +41,6 @@ import twitter4j.conf.ConfigurationBuilder;
 public class Timeline extends GenericResource{
     private static Logger log = SWBUtils.getLogger(Timeline.class);
     private twitter4j.Twitter twitter;
-    //private ArrayList<Status> socialStatus;
-    //SocialUserStreamListener tweetsListener;
     
     private ConfigurationBuilder configureOAuth(org.semanticwb.social.Twitter tw){
         ConfigurationBuilder cb = new ConfigurationBuilder();
@@ -60,18 +58,18 @@ public class Timeline extends GenericResource{
         SemanticObject semanticObject = SemanticObject.createSemanticObject(objUri);
         Twitter semanticTwitter = (Twitter) semanticObject.createGenericInstance();
         twitter = new TwitterFactory(configureOAuth(semanticTwitter).build()).getInstance();
-        //socialStatus = new ArrayList<Status>();
+        
         //Start the listener
-        TwitterStream twitterStream = null; //The stream
+        TwitterStream twitterStream = null;             //The stream
         SocialUserStreamListener tweetsListener = null; //The listener reads tweets received in the home timeline
         HttpSession session = request.getSession(true);
-        for(Enumeration e = session.getAttributeNames(); e.hasMoreElements(); ){
-                String attName = (String)e.nextElement();
-                //System.out.println(attName  + ":" +session.getAttribute(attName));
-        }
-        if((session.getAttribute("twitterStream") == null && session.getAttribute("tweetsListener") == null) || ((SocialUserStreamListener)session.getAttribute("tweetsListener")).streamActive == false){ //If we don't have a stream for the current session, create one
+        //for(Enumeration e = session.getAttributeNames(); e.hasMoreElements(); ){
+        //        String attName = (String)e.nextElement();
+        //        System.out.println(attName  + ":" +session.getAttribute(attName));
+        //}
+        if((session.getAttribute("twitterStream") == null && session.getAttribute("tweetsListener") == null) ||
+                ((SocialUserStreamListener)session.getAttribute("tweetsListener")).streamActive == false){ //If no stream found for the current session, create one.
             twitterStream = new TwitterStreamFactory(configureOAuth(semanticTwitter).build()).getInstance();
-            //tweetsListener = new SocialUserStreamListener();
             tweetsListener = new SocialUserStreamListener(twitterStream);
             twitterStream.addListener(tweetsListener);//Saving statuses in local variable of the listener
             twitterStream.user();//This method internally starts a thread
@@ -79,7 +77,7 @@ public class Timeline extends GenericResource{
             session.setAttribute("twitterStream", twitterStream);
             System.out.println("Listener started!");
         }else{
-             if(session.getAttribute("tweetsListener") != null){//Cleans all 'new' statuses in ArrayList because they are loaded on tab refresh
+             if(session.getAttribute("tweetsListener") != null){//If the tab is refreshed, clean all 'new' statuses in ArrayList
                  ((SocialUserStreamListener)session.getAttribute("tweetsListener")).socialStatus.clear();
              }
         }
@@ -89,7 +87,6 @@ public class Timeline extends GenericResource{
         try {
             request.setAttribute("paramRequest", paramRequest);
             request.setAttribute("twitterBean", twitter);            
-            //request.setAttribute("statuses", socialStatus);
             dis.include(request, response);
         } catch (Exception e) {
             log.error("Error in doView() for requestDispatcher" , e);
@@ -100,12 +97,9 @@ public class Timeline extends GenericResource{
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {        
         String action = response.getAction();
         String objUri = request.getParameter("suri");
-        //SemanticObject semanticObject = SemanticObject.createSemanticObject(objUri);
         Long id = Long.parseLong(request.getParameter("id"));
-        //Twitter twit = (Twitter) semanticObject.createGenericInstance();        
 
         if(action.equals("doRT")){ //Makes the retweet
-            //twitter4j.Twitter twitter = new TwitterFactory(configureOAuth(twit).build()).getInstance();            
             try {
                 Status st = twitter.retweetStatus(id); // El id de st Deberá ser guardado para poder deshacer el RT
                 response.setRenderParameter("id", id+"");
@@ -117,7 +111,6 @@ public class Timeline extends GenericResource{
                 log.error("Error when trying to retweet ", ex);
             }
         }else if(action.equals("undoRT")){
-            //twitter4j.Twitter twitter = new TwitterFactory(configureOAuth(twit).build()).getInstance();            
             try {
                 System.out.println("Undo Retwit!");
                 twitter.destroyStatus(id); //Va a ser necesario guardar los ID de los RT's hechos
@@ -135,7 +128,6 @@ public class Timeline extends GenericResource{
                 log.error("Error when trying to undo retweet ", ex);
             }
         }else if(action.equals("sendReply")){
-            //twitter4j.Twitter twitter = new TwitterFactory(configureOAuth(twit).build()).getInstance();            
             try {
                 String answer = request.getParameter("replyText");
                 System.out.println("Answer Text:" + answer);
@@ -158,10 +150,7 @@ public class Timeline extends GenericResource{
         }else if(mode!= null && mode.equals("retweetSent")){//Displays updated data of retweeted tweet
             SWBResourceURL renderURL = paramRequest.getRenderUrl();
             String objUri = request.getParameter("suri");
-            //SemanticObject semanticObject = SemanticObject.createSemanticObject(objUri);
             Long id = Long.parseLong(request.getParameter("id"));
-            //Twitter twit = (Twitter) semanticObject.createGenericInstance();
-            //twitter4j.Twitter twitter = new TwitterFactory(configureOAuth(twit).build()).getInstance();
             
             try {
                 Status originalStatus = twitter.showStatus(id);
@@ -217,7 +206,6 @@ public class Timeline extends GenericResource{
                    int i;
                    for(i = tweetsListener.socialStatus.size()-1 ; i >= 0 ; i-- ){//Most recent status first
                        try{
-                       //System.out.println("TEXTO: " + tweetsListener.socialStatus.get(i).getText());
                        doPrintTweet(request, response, paramRequest, tweetsListener.socialStatus.get(i), twitter.getId(), response.getWriter());
                        }catch(TwitterException te){
                            log.error("Error when printing tweet:" , te);
@@ -281,7 +269,6 @@ public class Timeline extends GenericResource{
     }
     
     public static void doPrintTweet(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest, Status status, Long currenUser, java.io.Writer writer) throws SWBResourceException, IOException {
-        //PrintWriter out = (PrintWriter)writer;
         String objUri = request.getParameter("suri");        
         SWBResourceURL actionURL = paramRequest.getActionUrl();
         SWBResourceURL renderURL = paramRequest.getRenderUrl();
