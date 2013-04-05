@@ -39,7 +39,7 @@ public class CreateGenericPost extends CreatePost {
     
     @Override
     public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        if (paramRequest.getMode().equals("socialTopics")) {
+        if (paramRequest.getMode().equals("afterChooseSite")) {
             doSocialTopics(request, response, paramRequest);
         }else if (paramRequest.getMode().equals("genericPost")) {
             doCreateGenericPost(request, response, paramRequest);
