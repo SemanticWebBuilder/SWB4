@@ -78,16 +78,7 @@
     //Twitter semanticTwitter = (Twitter) semanticObject.createGenericInstance();
     //SWBResourceURL actionURL = paramRequest.getActionUrl().setParameter("suri", objUri);
     SWBResourceURL renderURL = paramRequest.getRenderUrl().setParameter("suri", objUri);
-    //Date currentDate;
     long maxTweetID = 0L;
-    //TwitterStream twitterStream = new TwitterStreamFactory(configureOAuth(semanticTwitter).build()).getInstance();
-    //SocialUserStreamListener tweetsListener = new SocialUserStreamListener(statuses,out);
-    //twitterStream.addListener(tweetsListener);//Saving statuses in statuses
-    // user() method internally creates a thread which manipulates TwitterStream and calls these adequate listener methods continuously.
-    //twitterStream.user();    
-    //request.setAttribute("tweetsListener", tweetsListener);
-    //session.setAttribute("tweetsListener", tweetsListener);
-    
 %>
 
 <div dojoType="dojox.layout.ContentPane">
@@ -97,22 +88,22 @@
    </script>
 </div>
    
-    <style type="text/css">
-        div.bar{
-          background-color: #F5F5F5;
-          border-top: 1px solid #DDDDDD;
-          box-shadow: 0 3px 8px rgba(0, 0, 0, 0.05) inset;
-          cursor: pointer;
-          display: block;
-          font-size: 13px;
-          font-weight: normal;
-          padding: 10px 1px;
-          position: relative;
-          text-align: center;          
-      }
-    </style>
+<style type="text/css">
+    div.bar{
+      background-color: #F5F5F5;
+      border-top: 1px solid #DDDDDD;
+      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.05) inset;
+      cursor: pointer;
+      display: block;
+      font-size: 13px;
+      font-weight: normal;
+      padding: 10px 1px;
+      position: relative;
+      text-align: center;          
+    }
+</style>
 
-    <div class="swbform">
+<div class="swbform">
 <%
     try {
             //gets Twitter4j instance with account credentials
