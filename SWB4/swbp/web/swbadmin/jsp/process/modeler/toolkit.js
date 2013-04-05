@@ -78,8 +78,15 @@
             _this.svg=document.getElementById(svgid);
             //desc(_this.svg,true);
 
+            _this.svg.oncontextmenu=function(evt)
+            {
+                return false;
+            };
+
             _this.svg.onmousemove=function(evt)
             {
+                if(_this.onmousemove(evt)==false)return;
+                
                 _this.svg.mouseX=_this.getEventX(evt);
                 _this.svg.mouseY=_this.getEventY(evt);
 
@@ -170,9 +177,7 @@
 
             _this.svg.onmousedown=function(evt)
             {
-                var ret=_this.onmousedown(evt);
-                
-                if(ret==false)return;
+                if(_this.onmousedown(evt)==false)return;
                 
                 //SelectBox
                 if(_this.svg.dragObject==null)
@@ -196,8 +201,7 @@
 
             _this.svg.onmouseup=function(evt)
             {
-                var ret=_this.onmouseup(evt);
-                if(ret==false)return;
+                if(_this.onmouseup(evt)==false)return;
                 
                 //Drop
                 if(_this.svg.dragObject!=null)
@@ -273,6 +277,12 @@
 
             _this.setWidth(1920);
             _this.setHeight(1080);
+        },
+        
+        onmousemove:function(evt)
+        {
+            //implementar
+            return true;
         },
         
         onmousedown:function(evt)
@@ -360,17 +370,20 @@
             }
         },
 
-        selectObj:function(obj)
+        selectObj:function(obj,noShowResize)
         {
             var _this=ToolKit;
             _this.selected.push(obj);
             obj.selected=true;   
-            obj.setOverClass();           
-            setTimeout(function()
+            obj.setOverClass();   
+            if(!noShowResize)
             {
-                obj.moveFirst();
-                _this.showResizeBoxes();
-            },10); //Se invoca en un thread para evitar problema de chrome            
+                setTimeout(function()
+                {
+                    obj.moveFirst();
+                    _this.showResizeBoxes();
+                },10); //Se invoca en un thread para evitar problema de chrome            
+            }
         },
 
         unSelectObj:function(obj)
@@ -439,10 +452,17 @@
             if (evt.stopPropagation) evt.stopPropagation();
         },
         
-        /*createPath:function(marker_start, marker_mid, marker_end, dash_array, styleClass) {
+        
+        createConnectionPath:function(x1, y1, x2, y2, marker_start, marker_mid, marker_end, dash_array, styleClass) 
+        {
             var _this=ToolKit;
             //console.log(_this);
             var ret = document.createElementNS(_this.svgNS,"path"); 
+
+            ret.fixed=false;
+            ret.fromObject=null;
+            ret.toObject=null;
+            
             ret.setAttributeNS(null, "d", "M0 0");
             if (dash_array && dash_array != null) {
                 ret.setAttributeNS(null, "stroke-dasharray", dash_array);
@@ -465,27 +485,71 @@
                 var seg = ret.createSVGPathSegLinetoAbs(x, y);
                 ret.pathSegList.appendItem(seg);
             }
+            
             ret.setStartPoint=function(x,y) {
-                ret.pathSegList.replaceItem(ret.createSVGPathSegMovetoAbs(x, y), 0);
+                ret.setPoint(0,x,y);
             }
-            ret.move=function(x,y) {
+                    
+            ret.setEndPoint=function(x,y) {
+                ret.setPoint(ret.pathSegList.numberOfItems-1,x,y);
+            }            
+            
+            ret.setPoint = function(p,x,y)
+            {
+                ret.pathSegList.getItem(p).x=x;
+                ret.pathSegList.getItem(p).y=y;
+            }
+                    
+            ret.listSegments=function() {
+                for (var i=0; i < ret.pathSegList.numberOfItems; i++) {
+                    //desc(ret.pathSegList.getItem(i),true);
+                    var segment=ret.pathSegList.getItem(i);
+                    if (segment.pathSegType==SVGPathSeg.PATHSEG_LINETO_ABS) {
+                       console.log("lineto "+segment);
+                    } else if (segment.pathSegType==SVGPathSeg.PATHSEG_MOVETO_ABS) {
+                        console.log("moveto "+segment);
+                    }
+                }
+            }
+            
+            ret.translate=function(x,y) 
+            {
+                for (var i=0; i < ret.pathSegList.numberOfItems; i++) 
+                {
+                    var segment=ret.pathSegList.getItem(i);
+                    segment.x=segment.x+x;
+                    segment.y=segment.y+y;
+                }                
+            }
+            
+            ret.remove=function()
+            {
+                //remove fromObject
+                if(ret.fromObject!=null && (ax = ret.fromObject.outConnections.indexOf(ret)) !== -1) {
+                    ret.fromObject.outConnections.splice(ax, 1);
+                }                
                 
+                //remove toObject
+                if(ret.toObject!=null && (ax = ret.toObject.inConnections.indexOf(ret)) !== -1) {
+                    ret.toObject.inConnections.splice(ax, 1);
+                }                
+                
+                try
+                {
+                    _this.svg.removeChild(ret);
+                }catch(noe){}
             }
+            
+            ret.setPoint(x1,y1);
+            ret.addPoint(x2,y2);
+            
             ret.setClass=function(styleC) {
                 ret.setAttributeNS(null, "class", styleC);
             }
-            ret.setEndPoint=function(x,y) {
-                if (ret.pathSegList.numberOfItems > 1) {
-                    desc(ret.pathSegList.getItem(ret.pathSegList.numberOfItems-1),true);
-                    ret.pathSegList.replaceItem(ret.createSVGPathSegLinetoAbs(x, y), ret.pathSegList.numberOfItems-1);
-                } else {
-                    var seg = ret.createSVGPathSegLinetoAbs(x, y);
-                    ret.pathSegList.appendItem(seg);
-                }
-            }
+
             _this.svg.appendChild(ret);
             return ret;
-        },*/
+        },
 
         createResizeObject:function(id, parent)
         {
@@ -531,12 +595,20 @@
         {
             var _this=ToolKit;
             var obj=constructor();
-
+            
+            obj.text=null;
             obj.contents=[];                        
             obj.icons=[];      
+            obj.inConnections=[];
+            obj.outConnections=[];
             obj.canSelect=true;
 
-            if(id && id!=null)obj.setAttributeNS(null,"id",id);                    
+            if(id && id!=null)obj.setAttributeNS(null,"id",id);       
+            
+            obj.oncontextmenu=function(evt)
+            {
+                return false;
+            };            
 
             obj.setOverClass=function()
             {
@@ -632,7 +704,19 @@
                 }
 
                 //Cambiar tamaño del texto
-                if(obj.text && obj.text!=null)obj.text.update();                            
+                if(obj.text!=null)obj.text.update();      
+                
+                //Move InConnections
+                for(var i = obj.inConnections.length; i--;)
+                {
+                    obj.inConnections[i].updateInterPoints();
+                }                
+                
+                //Move OutConnections
+                for(var i = obj.outConnections.length; i--;)
+                {
+                    obj.outConnections[i].updateInterPoints();
+                }                 
             };                        
 
             obj.move=function(x,y)
@@ -657,7 +741,7 @@
                 }
 
                 //Move Text
-                if(obj.text && obj.text!=null)
+                if(obj.text!=null)
                 {
                     //obj.text.traslate(offx,offy);
                     obj.text.PX=offx;
@@ -668,6 +752,18 @@
                         obj.text.childNodes[i].setAttributeNS(null,"x",obj.text.getX());
                     }
                 }
+                
+                //Move InConnections
+                for(var i = obj.inConnections.length; i--;)
+                {
+                    obj.inConnections[i].setEndPoint(x,y);
+                }                
+                
+                //Move OutConnections
+                for(var i = obj.outConnections.length; i--;)
+                {
+                    obj.outConnections[i].setStartPoint(x,y);
+                }                
 
                 if(x+50>_this.getWidth())
                 {
@@ -686,6 +782,7 @@
                         obj.parent.contents.splice(ax, 1);
                     }
                 }
+                
                 for (var i = obj.contents.length; i--;)
                 {
                     obj.contents[i].remove(true);
@@ -700,7 +797,20 @@
                     }
                 }
                 //Elimina Texto
-                if(obj.text && obj.text!=null)obj.text.remove();
+                if(obj.text!=null)obj.text.remove();
+                
+                //Eliminar Conexiones
+                //Move InConnections
+                for(var i = obj.inConnections.length; i--;)
+                {
+                    obj.inConnections[i].remove();
+                }                
+                
+                //Move OutConnections
+                for(var i = obj.outConnections.length; i--;)
+                {
+                    obj.outConnections[i].remove();
+                }                  
                 
                 try
                 {
@@ -728,7 +838,7 @@
                     }
                 }
                 //mueve texto
-                if(obj.text && obj.text!=null)obj.text.moveFirst();
+                if(obj.text!=null)obj.text.moveFirst();
                 
                 //mueve contenidos
                 for (var i = obj.contents.length; i--;)
@@ -758,6 +868,23 @@
                 }                 
             };
             
+            obj.isChild = function(parent)
+            {
+                if(obj.parent!=null)
+                {
+                    if(obj.parent==parent)return true;
+                    else 
+                    {
+                        if(obj.parent.isChild)
+                        {
+                            return obj.parent.isChild(parent);
+                        }
+                        return false;
+                    }
+                }
+                return false;
+            };
+            
             //pos validas del 1 al 9, 1=esquina superior izquierda, 5=centro, 9=esquina inferior derecha
             obj.addIcon=function(type,posx,posy,offx,offy)
             {
@@ -770,7 +897,11 @@
                 iobj.onmouseup=function(evt)
                 {
                     obj.onmouseup(evt);
-                };                
+                };      
+                iobj.onmousemove=function(evt)
+                {
+                    obj.onmousemove(evt);
+                };                 
                 var icon={obj:iobj,posx:posx,posy:posy,offx:offx,offy:offy};
                 obj.icons.push(icon);
 
@@ -779,7 +910,7 @@
             //pos validas del 1 al 9, 1=esquina superior izquierda, 5=centro, 9=esquina inferior derecha
             obj.setText=function(text,posx,posy,width,orientation)
             {
-                if(obj.text)obj.text.remove();
+                if(obj.text!=null)obj.text.remove();
                 obj.text=_this.createText(text,obj);
                 obj.text.textPX=posx;
                 obj.text.textPY=posy;
@@ -803,6 +934,21 @@
             {
                 return (obj.getWidth()/2-(Math.abs(obj.getX()-x))>=0 && (obj.getHeight()/2-Math.abs(obj.getY()-y))>=0)
             };
+            
+            obj.addInConnection=function(connectionPath)
+            {
+                obj.inConnections.push(connectionPath);
+                connectionPath.toObject=obj;
+                connectionPath.setEndPoint(obj.getX(),obj.getY());
+                
+            };
+            
+            obj.addOutConnection=function(connectionPath)
+            {
+                obj.outConnections.push(connectionPath);
+                connectionPath.fromObject=obj;
+                connectionPath.setStartPoint(obj.getX(),obj.getY());
+            };
 
             obj.setParent(parent);
             _this.svg.appendChild(obj);
@@ -823,19 +969,32 @@
 
             obj.onmousedown=function(evt)
             {
-                obj.startX=_this.getEventX(evt);
-                obj.startY=_this.getEventY(evt);
-                _this.svg.dragOffsetX=_this.svg.mouseX-obj.getAttributeNS(null,"x");
-                _this.svg.dragOffsetY=_this.svg.mouseY-obj.getAttributeNS(null,"y");
-                _this.svg.dragObject=obj;
-                obj.mousedown(evt);
-                obj.select(true);
+                console.log(evt);
+                if(obj.mousedown(evt))
+                {
+                    obj.startX=_this.getEventX(evt);
+                    obj.startY=_this.getEventY(evt);
+                    _this.svg.dragOffsetX=_this.svg.mouseX-obj.getAttributeNS(null,"x");
+                    _this.svg.dragOffsetY=_this.svg.mouseY-obj.getAttributeNS(null,"y");
+                    _this.svg.dragObject=obj;
+                    obj.select(true);
+                }
             };
 
-            //obj.onmousemove=function(evt)
-            //{
-            //    console.log("id:"+obj.getAttributeNS(null,"id"));                            
-            //};
+//            obj.onmousemove=function(evt)
+//            {
+//                //console.log("id:"+obj.getAttributeNS(null,"id"));                            
+//                if(obj.mousemove(evt))
+//                {
+//                    //
+//                }
+//            };
+
+//            obj.mousemove=function(evt)
+//            {
+//                //Sobreescribir
+//                return true;
+//            };  
 
             obj.select=function(down)
             {
@@ -870,13 +1029,16 @@
             obj.mousedown=function(evt)
             {
                 //Sobreescribir
+                return true;
             };
 
             obj.onmouseup=function(evt)
             {
                 _this=ToolKit;
-                obj.mouseup(evt);
-                obj.select(false);
+                if(obj.mouseup(evt))
+                {
+                    obj.select(false);
+                }
 
                 //if(_this.selected.length==1 && obj.startX==_this.getEventX(evt) && obj.startY==_this.getEventY(evt))
                 //{
@@ -887,18 +1049,22 @@
             obj.mouseup=function(evt)
             {
                 //Sobreescribir
-            };     
-
+                return true;
+            };    
+            
             obj.onclick=function(evt)
             {
-                return this.mouseclick(evt);
+                if(this.mouseclick(evt))
+                {
+
+                }
+                //return this.mouseclick(evt);
             }
 
             obj.mouseclick=function(evt)
             {
                 //Sobre escribir
-                //previene de abrir nuevas ventanas al hacer click sobre elementos
-                return false;
+                return true;
             }
             return obj;
         },
@@ -923,14 +1089,18 @@
             {
                 //desc(evt,true);
                 parent.onmousedown(evt);
-                //_this.stopPropagation(evt);
             }; 
             
             obj.onmouseup=function(evt)
             {
                 //desc(evt,true);
                 parent.onmouseup(evt);
-                //_this.stopPropagation(evt);
+            };  
+            
+            obj.onmousemove=function(evt)
+            {
+                //desc(evt,true);
+                parent.onmousemove(evt);
             };              
 
             parent.ondblclick=function(evt)
