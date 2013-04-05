@@ -822,6 +822,8 @@ public class NewBrand extends GenericResource {
             out.println("<input type=\"text\" id=\"swb_create_id\" name=\"wsid\" dojoType=\"dijit.form.ValidationTextBox\" required=\"true\" promptMessage=\"Captura Identificador.\" isValid=\"return canCreateSemanticObject(this.textbox.value);\" invalidMessage=\"Identificador invalido.\" trim=\"true\" >");
             out.println("</td>");
             out.append("</tr>");
+            out.println("<input type=\"hidden\" name=\"wsrepository\" value=\"uradm\"/>"); 
+            /*
             out.append("<tr><td align=\"right\">");
             out.println(paramRequest.getLocaleString("usrRep")+" <em>*</em>");
             out.println("</td><td>");
@@ -830,10 +832,12 @@ public class NewBrand extends GenericResource {
             Iterator<UserRepository> itUsrReps = SWBContext.listUserRepositories();
             while (itUsrReps.hasNext()) {
                 UserRepository usrRep = itUsrReps.next();
+                System.out.println("usrRep.getId():"+usrRep.getId());
                 out.println("<option value=\"" + usrRep.getId() + "\">" + usrRep.getDisplayTitle(lang) + "</option>");
             }
             out.println("</select>");
             out.println("</td></tr>");
+            * */
             /*
             Iterator<SemanticClass> itcls = WebSite.sclass.listSubClasses();
             if(itcls.hasNext())
