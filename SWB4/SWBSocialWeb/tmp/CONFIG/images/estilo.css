@@ -1,0 +1,26 @@
+/* CSS Document */
+body {	margin: 0;	padding:0;}
+#centrado {	text-align:center;}
+/* ------------ html-gral -------- */
+#html-gral { margin-top:60px; margin-left:auto;	margin-right:auto; width:550px;	height:490px; background:url(fondo-login-light.jpg); font-family:Verdana, Arial, Helvetica, sans-serif;
+	color: #666666;	text-align:justify;}
+#html-contenido{	padding-top:120px;}
+#html-contenido h1{		text-align:center;	padding-bottom: 10px; 	font-size: 25px;	color: #0c2581;}
+#html-contenido p, #html-contenido h2{	font-size:16px;	padding-right: 40px;}
+#html-contenido form {	font-size:16px;	padding: 0px;	text-align:center;}
+#html-contenido form table { margin:0px auto;}
+#html-contenido td {color: #F89938; font-size:17px; font-weight:bold; letter-spacing:0; margin:0; padding:5px; text-align:right;}
+
+#html-contenido h2{	font-size:20px;	font-weight:bold;}
+#html-contenido ul{	padding:0;	margin:0;}
+#html-contenido li{	margin: 20px 40px 10px 40px}
+#html-contenido li a{	color: #336699}
+#html-pie {	background:#060d14;	padding: 10px;	font-size:10px;	margin-top: 105px;	border-top: #FFFFFF 1px solid;}
+#html-pie a {	text-decoration:none;	color:#3d78b4;}
+#semius {	position: absolute;	top: 355px;	left: inherit;	margin-left:530px;	margin-right:auto;}
+.fieldtxt { border:#f89938 solid 1px; height: 18px; color:#f89938; padding-right:30px; width:210px;}
+.botonLogin {  background:#F57C00; border:1px solid #F89938;  color:#FFFFFF !important;  font-weight:bold;  height:25px;  margin-top:10px;  width:80px;}
+.aleft { text-align:left !important;}
+#html-login-pie{ margin-top:55px; font-size: 11px; text-align:left;  color: #f89938; padding-left:215px; }
+#html-login-pie span{ font-size: 13px; font-weight: bold; }
+#html-login-pie a{ color: #f89938; text-decoration: none;}
