@@ -54,6 +54,7 @@ import org.semanticwb.servlet.internal.InternalProxy;
 import org.semanticwb.servlet.internal.InternalServlet;
 import org.semanticwb.servlet.internal.LinkedData;
 import org.semanticwb.servlet.internal.Login;
+import org.semanticwb.servlet.internal.LongFileUploader;
 import org.semanticwb.servlet.internal.Monitor;
 import org.semanticwb.servlet.internal.MultipleFileUploader;
 import org.semanticwb.servlet.internal.P3PFile;
@@ -540,6 +541,10 @@ public class SWBVirtualHostFilter implements Filter
             InternalServlet fileUploader = new MultipleFileUploader();
             intServlets.put("multiuploader", fileUploader);
             fileUploader.init(filterConfig.getServletContext());
+            
+            InternalServlet longfileUploader = new LongFileUploader();
+            intServlets.put("bduplaoder", longfileUploader);
+            longfileUploader.init(filterConfig.getServletContext());
 
             InternalServlet robot = new RobotFile();
             intServlets.put("robots.txt", robot);
