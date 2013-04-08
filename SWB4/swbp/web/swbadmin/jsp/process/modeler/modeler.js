@@ -71,6 +71,7 @@
                 if(obj.move) //es un FlowNode
                 {                
                     obj.move(ToolKit.getEventX(evt), ToolKit.getEventY(evt));
+                    obj.snap2Grid();
                 }else   //Es un ConnectionObject
                 {
                     if(Modeler.creationDropObject!=null)
@@ -376,7 +377,12 @@
         
         createSubProcess: function(id, parent, type) {
             var obj=Modeler.createTask(id,parent);
-            obj.addIcon("#subProcessMarker",0,1,-1,-10);
+            var icon=obj.addIcon("#subProcessMarker",0,1,-1,-10);
+            
+            icon.obj.ondblclick=function(evt)
+            {
+                alert("Hola");
+            };
             
             if (type=="eventsubProcess") {
                 obj.setAttributeNS(null,"bclass","eventSubTask");
