@@ -274,7 +274,7 @@
             
             var constructor=function()
             {
-                var tx = document.createElementNS(ToolKit.svgNS,"path"); //to create a circle, for rectangle use rectangle
+                var tx = document.createElementNS(ToolKit.svgNS,"path");
                 return tx;
             };
             
@@ -371,6 +371,65 @@
             obj.setAttributeNS(null,"bclass","callactivity");
             obj.setAttributeNS(null,"oclass","callactivity_o");
             obj.setBaseClass();                        
+            return obj;
+        },
+        
+        createSubProcess: function(id, parent, type) {
+            var obj=Modeler.createTask(id,parent);
+            obj.addIcon("#subProcessMarker",0,1,-1,-10);
+            
+            if (type=="eventsubProcess") {
+                obj.setAttributeNS(null,"bclass","eventSubTask");
+                obj.setAttributeNS(null,"oclass","eventSubTask_o");
+                obj.setBaseClass();                        
+            }
+            /*else if (type=="transactionsubProcess")
+            {
+                var constructor=function()
+                {
+                    var tx = document.createElementNS(ToolKit.svgNS,"rect");
+                    return tx;
+                };
+                
+                var fMove = obj.move;
+                var fResize = obj.resize;
+                var fRemove = obj.remove;
+
+                if (obj.innerRect && obj.innerRect!= null) {
+                    obj.innerRect.remove();
+                } else {
+                    var rect=ToolKit.createBaseObject(constructor,null,null);
+                    obj.canSelect=false;
+                    obj.innerRect = rect;
+                }
+                
+                obj.updateInnerRect=function() {
+                    obj.innerRect.setX(obj.x);
+                    obj.innerRect.setY(obj.y);
+                    obj.innerRect.setWidth(obj.getWidth()-5);
+                    obj.innerRect.setHeight(obj.getHeight()-5);
+                }
+                
+                obj.remove=function() {
+                    obj.innerRect.remove();
+                    fRemove();
+                }
+
+                obj.moveFirst=function() {
+                    //fMoveFirst();
+                    obj.updateInnerRect();
+                }
+
+                obj.resize= function(w, h) {
+                    fResize(w, h);
+                    obj.updateInnerRect();
+                }
+
+                obj.move = function(x, y) {
+                    fMove(x,y);
+                    obj.updateInnerRect();
+                }
+            }*/
             return obj;
         },
 
@@ -665,6 +724,21 @@
                 ret = Modeler.createCallTask(null,null);
                 ret.addIcon("#userMarker",-1,-1,13,8);
                 ret.setText("Tarea de usuario reusada",0,0,0,1);
+                ret.resize(100,60);
+            }
+            else if(type=='subProcess') {
+                ret = Modeler.createSubProcess(null, null, "");
+                ret.setText("SubProceso",0,0,200,1);
+                ret.resize(100,60);
+            }
+            else if(type=='eventsubProcess') {
+                ret = Modeler.createSubProcess(null, null, "eventsubProcess");
+                ret.setText("SubProceso",0,0,200,1);
+                ret.resize(100,60);
+            }
+            else if(type=='transactionsubProcess') {
+                ret = Modeler.createSubProcess(null, null, "transactionsubProcess");
+                ret.setText("SubProceso",0,0,200,1);
                 ret.resize(100,60);
             }
             else if (type=="pool") {
