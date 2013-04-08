@@ -291,6 +291,10 @@
                     <marker id="messageTail" viewBox="-5 -5 10 10" refX="3" refY="0" markerUnits="strokeWidth" markerWidth="6" markerHeight="6" orient="auto" fill="none" stroke="black" stroke-width="1.5" stroke-dasharray="0">
                         <circle r="3">
                     </marker>
+                    <g id="subProcessMarker" class="taskMarker">
+                      <rect x="-7" y="-7" width="14" height="14"/>
+                      <path d="M-5 0 L5 0 M0 -5 L0 5 "/>
+                    </g>
                     <!--Definición de eventos iniciales-->
                     <circle id="startEvent" r="15" bclass="startEvent" oclass="startEvent_o"/>
 
@@ -483,8 +487,9 @@
                         <path d="m 0,0 c 0,6.9397 -22.5028602,12.5654 -50.26153,12.5654 -27.39179,0 -49.73975,-5.4833 -50.25272,-12.33" style="fill:none;stroke-width:2.5;" transform="scale(0.6,0.6) translate(72,-12)"/>
                     </g>	
                     <g id="dataInput" bclass="itemaware" oclass="itemaware_o">
-                        <use xlink:href="#data" x="0" y="0"/>
-                        <use xlink:href="#linkMarker" x="-5" y="-8" style="fill:none;stroke:#666666;stroke-width:2.5;" transform="scale(0.8,0.8)"/>
+                        <!--use xlink:href="#data" x="0" y="0"/-->
+                        <path d="M0 0 L30 0 L30 30" />
+                        <!--use xlink:href="#linkMarker" x="-5" y="-8" style="fill:none;stroke:#666666;stroke-width:2.5;" transform="scale(0.8,0.8)"/-->
                     </g>
                     <g id="dataOutput" bclass="itemaware" oclass="itemaware_o">
                         <use xlink:href="#data" x="0" y="0"/>
