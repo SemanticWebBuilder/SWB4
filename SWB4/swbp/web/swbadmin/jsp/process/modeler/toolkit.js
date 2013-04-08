@@ -28,6 +28,8 @@
         selectBox:null,
         cmdkey:false,
         ctrlkey:false,
+        snap2Grid:true,
+        snap2GridSize:10,
 
 
         getWidth:function()
@@ -106,6 +108,12 @@
                     _this.selected.unselect=false; //si hace drag no deselecciona
                     x=_this.getEventX(evt)-_this.svg.dragOffsetX;
                     y=_this.getEventY(evt)-_this.svg.dragOffsetY;
+
+//                    if(_this.snap2Grid)
+//                    {
+//                        x=Math.round(x/_this.snap2GridSize)*_this.snap2GridSize;
+//                        y=Math.round(y/_this.snap2GridSize)*_this.snap2GridSize;
+//                    }
 
                     if(_this.cmdkey==true) //Drag one
                     {
@@ -249,6 +257,14 @@
                         }                          
                     }
                     
+                    if(_this.snap2Grid)
+                    {
+                        for (var i = _this.selected.length; i--;)
+                        {
+                            _this.selected[i].move(Math.round(_this.selected[i].getX()/_this.snap2GridSize)*_this.snap2GridSize,Math.round(_this.selected[i].getY()/_this.snap2GridSize)*_this.snap2GridSize);
+                        }                          
+                        _this.updateResizeBox();
+                    }                                                            
                 }
                 
                 _this.svg.dragObject=null;
