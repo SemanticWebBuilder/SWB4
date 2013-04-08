@@ -22,9 +22,9 @@ CREATE TABLE resrepository (
   rep_status tinyint(3) unsigned default NULL,
   rep_emailCheckOut varchar(99) default NULL,
   rep_deleted tinyint(3) unsigned default NULL,
-  rep_create timestamp(14) NOT NULL,
+  rep_create timestamp NOT NULL,
   PRIMARY KEY  (rep_docId,idtm)
-) TYPE=MyISAM;
+) ;
 
 
 
@@ -41,11 +41,11 @@ CREATE TABLE resrepositorylog (
   rep_topicid varchar(50) default NULL,
   rep_topicmapid varchar(50) default NULL,
   rep_objectid bigint(20) unsigned NOT NULL default '0',
-  rep_dateaction timestamp(14) NOT NULL,
+  rep_dateaction timestamp NOT NULL,
   rep_description varchar(255) default NULL,
   rep_isfile tinyint(3) unsigned NOT NULL default '0',
   rep_ipuser varchar(15) default '127.0.0.1'
-) TYPE=MyISAM;
+) ;
 
 
 #
@@ -59,7 +59,7 @@ CREATE TABLE resrepositorynotify (
   rep_email varchar(99) default NULL,
   rep_role varchar(50) default '0',
   KEY rep_docId (rep_docId,idtm,topic)
-) TYPE=MyISAM;
+) ;
 
 
 
@@ -74,9 +74,9 @@ CREATE TABLE resrepositoryversions (
   rep_email varchar(99) default NULL,
   rep_fileName varchar(255) NOT NULL default '',
   rep_fileSize bigint(20) unsigned NOT NULL default '0',
-  rep_fileDate timestamp(14) NOT NULL,
+  rep_fileDate timestamp NOT NULL,
   rep_fileType varchar(100) default NULL,
   rep_comment varchar(255) default NULL,
-  rep_create timestamp(14) NOT NULL,
+  rep_create timestamp NOT NULL,
   PRIMARY KEY  (rep_docId,rep_fileVersion,idtm)
-) TYPE=MyISAM;
+) ;
