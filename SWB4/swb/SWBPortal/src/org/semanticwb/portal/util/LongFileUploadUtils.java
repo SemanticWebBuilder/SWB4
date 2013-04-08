@@ -155,4 +155,12 @@ public class LongFileUploadUtils {
         }
         return ret;
     }
+    
+    public void updateChanges(){
+        new Thread(){
+                public void run(){
+                    saveData();
+                }
+            }.start();
+    }
 }
