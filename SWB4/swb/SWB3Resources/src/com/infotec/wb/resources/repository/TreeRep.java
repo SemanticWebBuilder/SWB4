@@ -32,11 +32,6 @@ package com.infotec.wb.resources.repository;
 
 
 import javax.servlet.http.*;
-//import com.infotec.wb.core.*;
-//import com.infotec.wb.core.db.*;
-//import com.infotec.wb.util.*;
-//import com.infotec.appfw.exception.*;
-//import com.infotec.appfw.util.*;
 import org.w3c.dom.*;
 import javax.xml.parsers.*;
 import java.util.*;
@@ -47,7 +42,6 @@ import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Resource;
-//import com.infotec.topicmaps.*;
 import org.semanticwb.model.ResourceType;
 import org.semanticwb.model.User;
 import org.semanticwb.model.WebPage;
@@ -60,7 +54,7 @@ import org.semanticwb.model.WebSite;
  */
 public class TreeRep {
 
-     Resource base=null;
+    Resource base=null;
 
     String webpath= SWBPlatform.getContextPath();
 
@@ -89,7 +83,7 @@ public class TreeRep {
         this.base=base;
         Document dom1=base.getDom();
         strRes=SWBPlatform.getEnv("wb/admresource");
-        String rutawork=SWBPortal.getWorkPath();
+        //String rutawork=SWBPortal.getWorkPath();
         strWorkPath=SWBPortal.getWorkPath();
         if(base.getXml()==null)return;
         try
@@ -103,7 +97,7 @@ public class TreeRep {
                 ResourceType recobj = base.getResourceType();
                 if(template.getLength()>0)
                 {
-                    plt = transFact.newTemplates(new StreamSource(SWBUtils.IO.getFileFromPath("/resources/"+recobj.getTitle()+"/"+base.getId()+"/"+template.item(0).getChildNodes().item(0).getNodeValue())));
+                    plt = transFact.newTemplates(new StreamSource(SWBUtils.IO.getFileFromPath("/resources/"+base.getId()+"/"+template.item(0).getChildNodes().item(0).getNodeValue())));
                     trans = plt.newTransformer();
                 }
                 else
@@ -144,7 +138,7 @@ public class TreeRep {
 
         try
         {
-                WebSite tm   =topic.getWebSite();
+                WebSite tm   = topic.getWebSite();
 
                 Document dom=null;
                 WebPage tpid=null;
@@ -246,7 +240,7 @@ public class TreeRep {
      */
     public String getChilds(WebPage tpid, WebPage tpc, User user, Document dom, Element el, Vector vctPath, int intLevel, int intWidth,String topicrec)
     {
-        Document dcmDom=base.getDom();
+        //Document dcmDom=base.getDom();
         String strResmaptopic=null;
               strResmaptopic=topicrec;
         String strUrl =tpc.getWebSite().getHomePage().getUrl();
