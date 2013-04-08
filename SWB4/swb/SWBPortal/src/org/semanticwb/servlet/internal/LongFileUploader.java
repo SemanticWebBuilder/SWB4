@@ -27,7 +27,6 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
-//import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -48,7 +47,7 @@ import org.semanticwb.portal.util.PendingFile;
  *
  * @author serch
  */
-public class LongFileUploader implements InternalServlet {
+public final class LongFileUploader implements InternalServlet {
 
     private static Logger log = SWBUtils.getLogger(LongFileUploader.class);
     private static final int CHUNK_SIZE = 10 * 1024 * 1024; //10MB
@@ -56,7 +55,7 @@ public class LongFileUploader implements InternalServlet {
     private static File tmpplace;
 
     {
-        tmpplace = new File(org.semanticwb.SWBPortal.getWorkPath() + "/lngtmp/");
+        tmpplace = new File(org.semanticwb.SWBPortal.getWorkPath() + "/lngtmp/"); //workingpath
         fileUtil = LongFileUploadUtils.getFileManager(tmpplace);
         //Maintenance and startup
     }
@@ -72,39 +71,33 @@ public class LongFileUploader implements InternalServlet {
     public void doProcess(HttpServletRequest request,
             HttpServletResponse response, DistributorParams dparams) 
             throws IOException, ServletException {
-        System.out.println("********************** LongFileUploades.doProcess**********************");
+        if (!dparams.getUser().isSigned()) return;
         String uri = request.getRequestURI();
         String cntx = request.getContextPath();
         String path = uri.substring(cntx.length());
         int inicmd = path.indexOf("/", 1);
         int endcmd = path.indexOf("/", inicmd + 1);
-        System.out.println("ini:" + inicmd + " end:" + endcmd);
         String cmd = "";
         if (endcmd > -1) {
             cmd = path.substring(inicmd + 1, endcmd);
         } else {
             cmd = path.substring(inicmd + 1);
         }
-        String parm = "";
+        String param = "";
         if (endcmd > -1 && path.length() > endcmd) {
-            parm = path.substring(endcmd + 1);
+            param = path.substring(endcmd + 1);
         }
-
-        System.out.println("path:" + path);
-        System.out.println("cmd:" + cmd);
-        System.out.println("parm:" + parm);
-        //System.out.println("UUID:"+UUID.randomUUID());
-
+        log.debug("cmd: "+cmd+" - "+param);
         if (cmd.equals("start")) {
             startUploadProcess(request, response, dparams);
         } else if (cmd.equals("uploadSolicitude")) {
             uploadSolicitude(request, response, dparams);
         } else if (cmd.equals("uploadchunk")) {
-            uploadChunk(request, response, dparams, parm);
+            uploadChunk(request, response, dparams, param);
         } else if (cmd.equals("abortupload")) {
-            abortUpload(request, response, dparams, parm);
+            abortUpload(request, response, dparams, param);
         } else if (cmd.equals("eofcheck")) {
-            eofCheck(request, response, dparams, parm);
+            eofCheck(request, response, dparams, param);
         }
 
     }
@@ -189,20 +182,16 @@ public class LongFileUploader implements InternalServlet {
                         if ("crc".equals(item.getFieldName())) {
                             crc = item.getString();
                         }
-                        System.out.println("field: " + item.getFieldName() + ": " + item.getString());
                     }
                 }
                 String calcCrc = calcCRC(uplFile, false);
-                System.out.println("calcCRC:" + calcCrc);
                 if (calcCrc.equals(crc)) {
                     File updfile = new File(workfiledir, pf.getFilename());
                     if (!updfile.exists()) {
                         boolean worked = uplFile.renameTo(updfile);
-                        System.out.println("worked:" + worked);
                         if (!worked) {
                             throw new IOException("Can't rename a file");
                         }
-                        System.out.println("updfile:" + updfile.exists() + ":" + updfile.getCanonicalPath());
                     } else {
                         FileOutputStream fos = new FileOutputStream(updfile, 
                                 true);
@@ -263,6 +252,8 @@ public class LongFileUploader implements InternalServlet {
                     orig.delete();
                     ret = true;
                 }
+                workfiledir.delete();
+                fileUtil.updateChanges();
             }
         }
         response.setHeader("mimetype", "text/json-comment-filtered");
