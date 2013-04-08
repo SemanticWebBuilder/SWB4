@@ -158,7 +158,7 @@
                     for(i=0;i<nodes.length;i++)
                     {
                         var obj=nodes.item(i);
-                        if(obj.contents && obj.canSelect==true)    //Es un objeto grafico
+                        if(obj.contents && obj.canSelect==true && !obj.hidden)    //Es un objeto grafico
                         {
                             var ox=obj.getX();
                             var oy=obj.getY();
@@ -261,7 +261,7 @@
                     {
                         for (var i = _this.selected.length; i--;)
                         {
-                            _this.selected[i].move(Math.round(_this.selected[i].getX()/_this.snap2GridSize)*_this.snap2GridSize,Math.round(_this.selected[i].getY()/_this.snap2GridSize)*_this.snap2GridSize);
+                            _this.selected[i].snap2Grid();
                         }                          
                         _this.updateResizeBox();
                     }                                                            
@@ -382,12 +382,18 @@
                 _this.createResizeBox(obj,1,1,"se-resize");
             }else
             {
-                while((o=_this.resizeBox.pop())!=null)
-                {
-                    _this.svg.removeChild(o);
-                } 
+                _this.hideResizeBoxes()
 
             }
+        },
+                
+        hideResizeBoxes:function()
+        {
+            var _this=ToolKit;
+            while((o=_this.resizeBox.pop())!=null)
+            {
+                _this.svg.removeChild(o);
+            } 
         },
 
         selectObj:function(obj,noShowResize)
@@ -413,7 +419,7 @@
             _this.selected.splice(i, 1);
             obj.selected=false;
             obj.setBaseClass();
-            _this.showResizeBoxes();
+            _this.hideResizeBoxes();
         },
 
         unSelectAll:function()
@@ -424,7 +430,7 @@
                 o.setBaseClass();
                 o.selected=false;
             }        
-            _this.showResizeBoxes();
+            _this.hideResizeBoxes();
         },
 
         keydown:function(evt)
@@ -434,11 +440,14 @@
             if(evt.keyCode==8 && evt.which==8)
             //if(evt.keyCode==32 && evt.which==32)
             {
-                for (var i = _this.selected.length; i--;) 
+                try
                 {
-                    _this.selected[i].remove();
-                }                             
-                _this.unSelectAll();
+                    for (var i = _this.selected.length; i--;) 
+                    {
+                        _this.selected[i].remove();
+                    }                             
+                    _this.unSelectAll();
+                }catch(e){console.log(e)};
                 _this.stopPropagation(evt);
             }else if((evt.keyCode==91 && evt.which==91) || (evt.keyCode==224 && evt.which==224))
             {
@@ -447,6 +456,12 @@
             }else if(evt.keyCode==17 && evt.which==17)
             {
                 _this.ctrlkey=true;
+                
+                for (var i = _this.selected.length; i--;) 
+                {
+                    _this.selected[i].hide();
+                }   
+                
                 _this.stopPropagation(evt);
             }
         },
@@ -477,53 +492,53 @@
         {
             var _this=ToolKit;
             //console.log(_this);
-            var ret = document.createElementNS(_this.svgNS,"path"); 
+            var obj = document.createElementNS(_this.svgNS,"path"); 
 
-            ret.fixed=false;
-            ret.fromObject=null;
-            ret.toObject=null;
+            obj.fixed=false;
+            obj.fromObject=null;
+            obj.toObject=null;
             
-            ret.setAttributeNS(null, "d", "M0 0");
+            obj.setAttributeNS(null, "d", "M0 0");
             if (dash_array && dash_array != null) {
-                ret.setAttributeNS(null, "stroke-dasharray", dash_array);
+                obj.setAttributeNS(null, "stroke-dasharray", dash_array);
             }
             if (marker_start && marker_start != null) {
-                ret.setAttributeNS(null, "marker-start", "url(#"+marker_start+")");
+                obj.setAttributeNS(null, "marker-start", "url(#"+marker_start+")");
             }
             if (marker_mid && marker_mid != null) {
-                ret.setAttributeNS(null, "marker-mid", "url(#"+marker_mid+")");
+                obj.setAttributeNS(null, "marker-mid", "url(#"+marker_mid+")");
             }
             if (marker_end && marker_end != null) {
-                ret.setAttributeNS(null, "marker-end", "url(#"+marker_end+")");
+                obj.setAttributeNS(null, "marker-end", "url(#"+marker_end+")");
             }
             if (styleClass && styleClass != null) {
-                ret.setAttributeNS(null, "class", styleClass);
+                obj.setAttributeNS(null, "class", styleClass);
             }
             //obj.resizeable=false;
-            //desc(ret, true);
-            ret.addPoint = function (x,y) {
-                var seg = ret.createSVGPathSegLinetoAbs(x, y);
-                ret.pathSegList.appendItem(seg);
+            //desc(obj, true);
+            obj.addPoint = function (x,y) {
+                var seg = obj.createSVGPathSegLinetoAbs(x, y);
+                obj.pathSegList.appendItem(seg);
             }
             
-            ret.setStartPoint=function(x,y) {
-                ret.setPoint(0,x,y);
+            obj.setStartPoint=function(x,y) {
+                obj.setPoint(0,x,y);
             }
                     
-            ret.setEndPoint=function(x,y) {
-                ret.setPoint(ret.pathSegList.numberOfItems-1,x,y);
+            obj.setEndPoint=function(x,y) {
+                obj.setPoint(obj.pathSegList.numberOfItems-1,x,y);
             }            
             
-            ret.setPoint = function(p,x,y)
+            obj.setPoint = function(p,x,y)
             {
-                ret.pathSegList.getItem(p).x=x;
-                ret.pathSegList.getItem(p).y=y;
+                obj.pathSegList.getItem(p).x=x;
+                obj.pathSegList.getItem(p).y=y;
             }
                     
-            ret.listSegments=function() {
-                for (var i=0; i < ret.pathSegList.numberOfItems; i++) {
-                    //desc(ret.pathSegList.getItem(i),true);
-                    var segment=ret.pathSegList.getItem(i);
+            obj.listSegments=function() {
+                for (var i=0; i < obj.pathSegList.numberOfItems; i++) {
+                    //desc(obj.pathSegList.getItem(i),true);
+                    var segment=obj.pathSegList.getItem(i);
                     if (segment.pathSegType==SVGPathSeg.PATHSEG_LINETO_ABS) {
                        console.log("lineto "+segment);
                     } else if (segment.pathSegType==SVGPathSeg.PATHSEG_MOVETO_ABS) {
@@ -532,43 +547,55 @@
                 }
             }
             
-            ret.translate=function(x,y) 
+            obj.translate=function(x,y) 
             {
-                for (var i=0; i < ret.pathSegList.numberOfItems; i++) 
+                for (var i=0; i < obj.pathSegList.numberOfItems; i++) 
                 {
-                    var segment=ret.pathSegList.getItem(i);
+                    var segment=obj.pathSegList.getItem(i);
                     segment.x=segment.x+x;
                     segment.y=segment.y+y;
                 }                
             }
             
-            ret.remove=function()
+            obj.remove=function()
             {
                 //remove fromObject
-                if(ret.fromObject!=null && (ax = ret.fromObject.outConnections.indexOf(ret)) !== -1) {
-                    ret.fromObject.outConnections.splice(ax, 1);
+                if(obj.fromObject!=null && (ax = obj.fromObject.outConnections.indexOf(obj)) !== -1) {
+                    obj.fromObject.outConnections.splice(ax, 1);
                 }                
                 
                 //remove toObject
-                if(ret.toObject!=null && (ax = ret.toObject.inConnections.indexOf(ret)) !== -1) {
-                    ret.toObject.inConnections.splice(ax, 1);
+                if(obj.toObject!=null && (ax = obj.toObject.inConnections.indexOf(obj)) !== -1) {
+                    obj.toObject.inConnections.splice(ax, 1);
                 }                
                 
                 try
                 {
-                    _this.svg.removeChild(ret);
+                    _this.svg.removeChild(obj);
                 }catch(noe){}
             }
             
-            ret.setPoint(x1,y1);
-            ret.addPoint(x2,y2);
+            obj.hide=function()
+            {
+                obj.style.display="none";
+                obj.hidden=true;
+            }
             
-            ret.setClass=function(styleC) {
-                ret.setAttributeNS(null, "class", styleC);
+            obj.show=function()
+            {
+                obj.style.display="";
+                obj.hidden=false;
+            }
+            
+            obj.setPoint(x1,y1);
+            obj.addPoint(x2,y2);
+            
+            obj.setClass=function(styleC) {
+                obj.setAttributeNS(null, "class", styleC);
             }
 
-            _this.svg.appendChild(ret);
-            return ret;
+            _this.svg.appendChild(obj);
+            return obj;
         },
 
         createResizeObject:function(id, parent)
@@ -622,6 +649,7 @@
             obj.inConnections=[];
             obj.outConnections=[];
             obj.canSelect=true;
+            obj.hidden=false;
 
             if(id && id!=null)obj.setAttributeNS(null,"id",id);       
             
@@ -837,11 +865,86 @@
                     _this.svg.removeChild(obj);
                 }catch(noe){}
                 
-                _this.unSelectObj(obj);
-                _this.showResizeBoxes();
+                //_this.unSelectObj(obj);
+                _this.hideResizeBoxes();
                 
                 return this;
             };
+            
+            obj.hide = function() {
+                
+                obj.style.display="none";
+                obj.hidden=true;
+                
+                for (var i = obj.contents.length; i--;)
+                {
+                    obj.contents[i].hide();
+                }
+                
+                //Elimina Iconos
+                if(obj.icons)
+                {
+                    for (var i = obj.icons.length; i--;)
+                    {
+                        obj.icons[i].obj.hide();
+                    }
+                }
+                //Elimina Texto
+                if(obj.text!=null)obj.text.hide();
+                
+                //Eliminar Conexiones
+                //Move InConnections
+                for(var i = obj.inConnections.length; i--;)
+                {
+                    obj.inConnections[i].hide();
+                }                
+                
+                //Move OutConnections
+                for(var i = obj.outConnections.length; i--;)
+                {
+                    obj.outConnections[i].hide();
+                }                  
+                
+                //_this.unSelectObj(obj);
+                _this.hideResizeBoxes();               
+                return this;
+            };     
+            
+            obj.show = function(all) {
+                
+                obj.style.display="";
+                obj.hidden=false;
+                
+                for (var i = obj.contents.length; i--;)
+                {
+                    obj.contents[i].show();
+                }
+                
+                //Elimina Iconos
+                if(obj.icons)
+                {
+                    for (var i = obj.icons.length; i--;)
+                    {
+                        obj.icons[i].obj.show();
+                    }
+                }
+                //Elimina Texto
+                if(obj.text!=null)obj.text.show();
+                
+                //Eliminar Conexiones
+                //Move InConnections
+                for(var i = obj.inConnections.length; i--;)
+                {
+                    obj.inConnections[i].show();
+                }                
+                
+                //Move OutConnections
+                for(var i = obj.outConnections.length; i--;)
+                {
+                    obj.outConnections[i].show();
+                }                  
+                return this;
+            };               
             
             //Mueve el elemento al primer plano
             obj.moveFirst = function()
@@ -922,8 +1025,13 @@
                 {
                     obj.onmousemove(evt);
                 };
+                iobj.ondblclick=function(evt)
+                {
+                    obj.ondblclick(evt);
+                };                
                 var icon={obj:iobj,posx:posx,posy:posy,offx:offx,offy:offy};
                 obj.icons.push(icon);
+                return icon;
 
             };
 
@@ -969,6 +1077,15 @@
                 connectionPath.fromObject=obj;
                 connectionPath.setStartPoint(obj.getX(),obj.getY());
             };
+            
+            obj.snap2Grid=function()
+            {
+                if(ToolKit.snap2Grid)
+                {
+                    obj.move(Math.round(obj.getX()/_this.snap2GridSize)*_this.snap2GridSize,Math.round(obj.getY()/_this.snap2GridSize)*_this.snap2GridSize);
+                }
+            }
+            
 
             obj.setParent(parent);
             _this.svg.appendChild(obj);
