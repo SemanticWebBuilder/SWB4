@@ -32,9 +32,6 @@ package com.infotec.wb.resources.repository;
 
 
 import javax.servlet.http.*;
-//import com.infotec.wb.util.*;
-//import com.infotec.appfw.exception.*;
-//import com.infotec.appfw.util.*;
 import org.w3c.dom.*;
 import javax.xml.parsers.*;
 import java.util.*;
@@ -251,7 +248,7 @@ public class TreeRepHtml {
     /** Obtiene los t�picos hijo relacionados al t�pico solicitado bajo una estructura jer�rquica.
      ** @param tpid Topic object thats represents a directory
      * @param tpc Topic object thats represents a directory
-     * @param user The WBUser object in session
+     * @param user The User object in session
      * @param vctPath A Vector object that hold the topic parents
      * @param intLevel Level of the user
      * @param intWidth The width size value
@@ -263,7 +260,7 @@ public class TreeRepHtml {
     public String getChilds(WebPage tpid, WebPage tpc, User user, Vector vctPath, int intLevel, int intWidth,String topicrec,int widthsize, SWBParamRequest paramsRequest) {
 
         Document dcmDom=base.getDom();
-        String strResmaptopic=null;
+        //String strResmaptopic=null;
 
         StringBuffer sbfRet=new StringBuffer();
         try{
@@ -276,6 +273,7 @@ public class TreeRepHtml {
             Iterator<WebPage> it=tpc.listChilds();
             while(it.hasNext()) {
                 WebPage tpsub=it.next();
+                if(!tpsub.hasVirtualParent(tpc)) tpsub.addVirtualParent(tpsub);
                 if(tpsub.getId()!=null && user.haveAccess(tpsub)) {
                     if(vTopic.contains(tpsub)) break;
                     vTopic.addElement(tpsub);
@@ -487,7 +485,7 @@ public class TreeRepHtml {
             while(it.hasNext()){
                 intLevel=1;
                 WebPage tp=it.next();
-
+                if(!tp.hasVirtualParent(tpsite)) tp.addVirtualParent(tpsite);
                 if(tp.getId()!=null) {
                     backg=" bgcolor=\"FFFFFF\"";
                     color="666666";
@@ -602,7 +600,7 @@ public class TreeRepHtml {
 
             while(it.hasNext()) {
                 WebPage tpsub=it.next();
-
+                if(!tpsub.hasVirtualParent(tpc)) tpsub.addVirtualParent(tpsub);
                 if(tpsub.getId()!=null && user.haveAccess(tpsub)) {
                     if(vTopic.contains(tpsub)) break;
                     vTopic.addElement(tpsub);

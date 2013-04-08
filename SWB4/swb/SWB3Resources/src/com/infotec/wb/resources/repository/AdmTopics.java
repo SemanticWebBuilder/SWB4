@@ -148,7 +148,7 @@ public class AdmTopics {
         ret.append("<tr><td width=200>");
         ret.append("<FONT face=\"Verdana, Arial, Helvetica, sans-serif\">"+paramsRequest.getLocaleString("msgDirectoryName")+":</FONT>");
         ret.append("</td><td align=left>");
-        ret.append("<input type=\"text\" name=\"name\" value=\""+dir.getDisplayName(dir.getWebSite().getLanguage().getId())+"\">\n");
+        ret.append("<input type=\"text\" name=\"name\" value=\""+dir.getDisplayName()+"\">\n");
         ret.append("</td></tr>");
         ret.append("<tr><td width=200>");
         ret.append("<FONT face=\"Verdana, Arial, Helvetica, sans-serif\">"+paramsRequest.getLocaleString("msgOrderName")+":</FONT>");
@@ -206,6 +206,9 @@ public class AdmTopics {
                 aux.setTitle(name);
                 aux.setLanguage(ws.getLanguage());
                 aux.setParent(dir);
+                aux.addVirtualParent(dir);
+                
+                
                 //aux.setId(TopicMgr.getInstance().getIdGenerator().getID(name, dir.getMap().getId()));
 
                 //aux.setSubjectIdentity(new SubjectIdentity(paramsRequest.getTopic().getUrl(aux)));
@@ -222,6 +225,7 @@ public class AdmTopics {
                 }
                 aux.setActive(true);
                 aux.setIndexable(false);
+                
 //                dir.getMap().addTopic(aux);
 //                dir.getMap().update2DB();
                 rd=aux;
@@ -267,7 +271,10 @@ public class AdmTopics {
         WebPage rd=dir;
         if(name!=null){
             try{
-                dir.setSortName(name);
+                dir.setTitle(name);
+                dir.setSortName(s_id);
+                WebPage parent = dir.getParent();
+                if(!dir.hasVirtualParent(parent)) dir.addVirtualParent(parent);
                 
 //                dir.getBaseNames().clear();
 //                BaseName bn=new BaseName(name);

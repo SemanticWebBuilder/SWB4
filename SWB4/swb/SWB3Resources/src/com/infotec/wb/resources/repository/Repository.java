@@ -285,6 +285,7 @@ public class Repository extends org.semanticwb.portal.api.GenericResource {
                 }
                 
             } else {
+                
                 //System.out.println("Repository:ShowDirs");
                 String ver = repobj;
                 if (ver == null) {
@@ -1490,8 +1491,8 @@ public class Repository extends org.semanticwb.portal.api.GenericResource {
                     ps.setString(1, base.getId());
                     ps.setInt(2, 1);
                     ps.setString(3, strTopicMap);
-                    //System.out.println("select * from resrepository where resId="+base.getId()+" and rep_deleted = 1 and idtm="+strTopicMap+" order by rep_title");
-                    //System.out.println("select * from resrepository where resId="+getResourceBase().getId()+" and rep_deleted = 1 and idtm="+strTopicMap+" order by rep_title");
+                    System.out.println("select * from resrepository where resId="+base.getId()+" and rep_deleted = 1 and idtm="+strTopicMap+" order by rep_title");
+                    System.out.println("select * from resrepository where resId="+getResourceBase().getId()+" and rep_deleted = 1 and idtm="+strTopicMap+" order by rep_title");
                     rs = ps.executeQuery();
                     out.println("<tr> ");
                     out.println("<td class=valores>");
