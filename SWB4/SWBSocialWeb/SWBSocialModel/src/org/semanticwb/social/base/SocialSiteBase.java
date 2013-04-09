@@ -4,7 +4,7 @@ package org.semanticwb.social.base;
    /**
    * Clase que hereda de swb:WebSite. Es un tipo de website Social. De esta manera se puede contar con todos los elementos en el arbol de navegación en la administración, y otros elementos utiles para Social Site. 
    */
-public abstract class SocialSiteBase extends org.semanticwb.model.WebSite implements org.semanticwb.model.Traceable,org.semanticwb.model.FilterableNode,org.semanticwb.model.FilterableClass,org.semanticwb.model.OntologyDepable,org.semanticwb.model.Undeleteable,org.semanticwb.model.Trashable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Localeable,org.semanticwb.model.Countryable,org.semanticwb.model.Activeable,org.semanticwb.model.Indexable,org.semanticwb.model.Filterable
+public abstract class SocialSiteBase extends org.semanticwb.model.WebSite implements org.semanticwb.model.OntologyDepable,org.semanticwb.model.FilterableClass,org.semanticwb.model.FilterableNode,org.semanticwb.model.Localeable,org.semanticwb.model.Trashable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Activeable,org.semanticwb.model.Undeleteable,org.semanticwb.model.Countryable,org.semanticwb.model.Indexable,org.semanticwb.model.Filterable,org.semanticwb.model.Traceable
 {
    /**
    * Catalogo de temas de un modelo (Marca)
@@ -15,6 +15,10 @@ public abstract class SocialSiteBase extends org.semanticwb.model.WebSite implem
    * Clase que contendra los streams que configurados para cada usuario
    */
     public static final org.semanticwb.platform.SemanticClass social_Stream=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#Stream");
+   /**
+   * Clase principal para manejo de reglas en swbSocial
+   */
+    public static final org.semanticwb.platform.SemanticClass social_SocialRule=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#SocialRule");
    /**
    * Clase que hereda de swb:WebSite. Es un tipo de website Social. De esta manera se puede contar con todos los elementos en el arbol de navegación en la administración, y otros elementos utiles para Social Site.
    */
@@ -449,5 +453,35 @@ public abstract class SocialSiteBase extends org.semanticwb.model.WebSite implem
     public boolean hasStream(String id)
     {
         return org.semanticwb.social.Stream.ClassMgr.hasStream(id, this);
+    }
+
+    public org.semanticwb.social.SocialRule getSocialRule(String id)
+    {
+        return org.semanticwb.social.SocialRule.ClassMgr.getSocialRule(id, this);
+    }
+
+    public java.util.Iterator<org.semanticwb.social.SocialRule> listSocialRules()
+    {
+        return org.semanticwb.social.SocialRule.ClassMgr.listSocialRules(this);
+    }
+
+    public org.semanticwb.social.SocialRule createSocialRule(String id)
+    {
+        return org.semanticwb.social.SocialRule.ClassMgr.createSocialRule(id,this);
+    }
+
+    public org.semanticwb.social.SocialRule createSocialRule()
+    {
+        long id=getSemanticObject().getModel().getCounter(social_SocialRule);
+        return org.semanticwb.social.SocialRule.ClassMgr.createSocialRule(String.valueOf(id),this);
+    } 
+
+    public void removeSocialRule(String id)
+    {
+        org.semanticwb.social.SocialRule.ClassMgr.removeSocialRule(id, this);
+    }
+    public boolean hasSocialRule(String id)
+    {
+        return org.semanticwb.social.SocialRule.ClassMgr.hasSocialRule(id, this);
     }
 }

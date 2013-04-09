@@ -4,7 +4,7 @@ package org.semanticwb.social.base;
    /**
    * Clase que contendra los streams que configurados para cada usuario 
    */
-public abstract class StreamBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Traceable,org.semanticwb.social.Geolocable,org.semanticwb.model.Activeable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Filterable,org.semanticwb.model.Descriptiveable
+public abstract class StreamBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Referensable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Activeable,org.semanticwb.model.FilterableClass,org.semanticwb.social.SocialRuleRefable,org.semanticwb.model.Filterable,org.semanticwb.model.Traceable,org.semanticwb.social.Geolocable
 {
    /**
    * Clase que engloba a las diferentes clases que representan cada una de las redes sociales.
@@ -258,6 +258,29 @@ public abstract class StreamBase extends org.semanticwb.model.SWBClass implement
         public static java.util.Iterator<org.semanticwb.social.Stream> listStreamByCreator(org.semanticwb.model.User value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.social.Stream> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_creator,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.social.Stream with a determined SocialRuleRef
+       * @param value SocialRuleRef of the type org.semanticwb.social.SocialRuleRef
+       * @param model Model of the org.semanticwb.social.Stream
+       * @return Iterator with all the org.semanticwb.social.Stream
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.Stream> listStreamBySocialRuleRef(org.semanticwb.social.SocialRuleRef value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.Stream> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(social_hasSocialRuleRef, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.social.Stream with a determined SocialRuleRef
+       * @param value SocialRuleRef of the type org.semanticwb.social.SocialRuleRef
+       * @return Iterator with all the org.semanticwb.social.Stream
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.Stream> listStreamBySocialRuleRef(org.semanticwb.social.SocialRuleRef value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.Stream> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(social_hasSocialRuleRef,value.getSemanticObject(),sclass));
             return it;
         }
     }
@@ -687,24 +710,6 @@ public abstract class StreamBase extends org.semanticwb.model.SWBClass implement
          }
          return ret;
     }
-
-/**
-* Gets the FilterIntensityHigh property
-* @return boolean with the FilterIntensityHigh
-*/
-    public boolean isFilterIntensityHigh()
-    {
-        return getSemanticObject().getBooleanProperty(social_filterIntensityHigh);
-    }
-
-/**
-* Sets the FilterIntensityHigh property
-* @param value long with the FilterIntensityHigh
-*/
-    public void setFilterIntensityHigh(boolean value)
-    {
-        getSemanticObject().setBooleanProperty(social_filterIntensityHigh, value);
-    }
    /**
    * Sets the value for the property Creator
    * @param value Creator to set
@@ -742,6 +747,24 @@ public abstract class StreamBase extends org.semanticwb.model.SWBClass implement
              ret=(org.semanticwb.model.User)obj.createGenericInstance();
          }
          return ret;
+    }
+
+/**
+* Gets the FilterIntensityHigh property
+* @return boolean with the FilterIntensityHigh
+*/
+    public boolean isFilterIntensityHigh()
+    {
+        return getSemanticObject().getBooleanProperty(social_filterIntensityHigh);
+    }
+
+/**
+* Sets the FilterIntensityHigh property
+* @param value long with the FilterIntensityHigh
+*/
+    public void setFilterIntensityHigh(boolean value)
+    {
+        getSemanticObject().setBooleanProperty(social_filterIntensityHigh, value);
     }
 
 /**
@@ -829,6 +852,71 @@ public abstract class StreamBase extends org.semanticwb.model.SWBClass implement
     public void setFilterIntensityMedium(boolean value)
     {
         getSemanticObject().setBooleanProperty(social_filterIntensityMedium, value);
+    }
+   /**
+   * Gets all the org.semanticwb.social.SocialRuleRef
+   * @return A GenericIterator with all the org.semanticwb.social.SocialRuleRef
+   */
+
+    public org.semanticwb.model.GenericIterator<org.semanticwb.social.SocialRuleRef> listSocialRuleRefs()
+    {
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.social.SocialRuleRef>(getSemanticObject().listObjectProperties(social_hasSocialRuleRef));
+    }
+
+   /**
+   * Gets true if has a SocialRuleRef
+   * @param value org.semanticwb.social.SocialRuleRef to verify
+   * @return true if the org.semanticwb.social.SocialRuleRef exists, false otherwise
+   */
+    public boolean hasSocialRuleRef(org.semanticwb.social.SocialRuleRef value)
+    {
+        boolean ret=false;
+        if(value!=null)
+        {
+           ret=getSemanticObject().hasObjectProperty(social_hasSocialRuleRef,value.getSemanticObject());
+        }
+        return ret;
+    }
+   /**
+   * Adds a SocialRuleRef
+   * @param value org.semanticwb.social.SocialRuleRef to add
+   */
+
+    public void addSocialRuleRef(org.semanticwb.social.SocialRuleRef value)
+    {
+        getSemanticObject().addObjectProperty(social_hasSocialRuleRef, value.getSemanticObject());
+    }
+   /**
+   * Removes all the SocialRuleRef
+   */
+
+    public void removeAllSocialRuleRef()
+    {
+        getSemanticObject().removeProperty(social_hasSocialRuleRef);
+    }
+   /**
+   * Removes a SocialRuleRef
+   * @param value org.semanticwb.social.SocialRuleRef to remove
+   */
+
+    public void removeSocialRuleRef(org.semanticwb.social.SocialRuleRef value)
+    {
+        getSemanticObject().removeObjectProperty(social_hasSocialRuleRef,value.getSemanticObject());
+    }
+
+   /**
+   * Gets the SocialRuleRef
+   * @return a org.semanticwb.social.SocialRuleRef
+   */
+    public org.semanticwb.social.SocialRuleRef getSocialRuleRef()
+    {
+         org.semanticwb.social.SocialRuleRef ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(social_hasSocialRuleRef);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.social.SocialRuleRef)obj.createGenericInstance();
+         }
+         return ret;
     }
 
 /**
