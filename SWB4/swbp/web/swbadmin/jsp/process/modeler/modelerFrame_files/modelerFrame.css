@@ -68,6 +68,7 @@
     fill: none;
     stroke-width: 2;
     stroke: #000000;
+    cursor:hand;
 }
 
 .callactivity {
@@ -127,12 +128,14 @@
     stroke:#ffffff;
     stroke-opacity:0.1;
     stroke-width:8;
+    cursor: hand;
 }
 
 .sequenceFlowSubLine_o {
     fill:none;
     stroke:#F0F0F0;
     stroke-width:8;
+    cursor:hand;
 }
 
 .swimlane
