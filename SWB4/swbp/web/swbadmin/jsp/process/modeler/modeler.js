@@ -378,10 +378,11 @@
         createSubProcess: function(id, parent, type) {
             var obj=Modeler.createTask(id,parent);
             var icon=obj.addIcon("#subProcessMarker",0,1,-1,-10);
+            obj.subLayer={parent:obj};
             
             icon.obj.ondblclick=function(evt)
             {
-                alert("Hola");
+                ToolKit.setLayer(obj.subLayer);
             };
             
             if (type=="eventsubProcess") {
