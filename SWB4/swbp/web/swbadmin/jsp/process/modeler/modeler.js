@@ -175,6 +175,11 @@
         createConnectionPath:function(marker_start, marker_mid, marker_end, dash_array, styleClass) 
         {
             var obj = ToolKit.createConnectionPath(0,0,0,0,marker_start, marker_mid, marker_end, dash_array, styleClass);
+            obj.subLine = ToolKit.createConnectionPath(0,0,0,0,null, null, null, null, null);
+            obj.subLine.setStyleClass=function(cls) {
+                obj.subLine.setAttributeNS(null,"class",cls);
+            }
+            
             obj.setArrowType= function(type) {
                 obj.setAttributeNS(null, "marker-end", "url(#"+type+")");
             }
@@ -250,8 +255,8 @@
                     
                     if(obj.pathSegList.numberOfItems==4 && obj.fixed==false)
                     {
-                        var p1=obj.pathSegList.getItem(1);
-                        var p2=obj.pathSegList.getItem(2);
+                        p1=obj.pathSegList.getItem(1);
+                        p2=obj.pathSegList.getItem(2);
                     
                         p1.y=(p3.y-p0.y)/2+p0.y;
                         p2.y=p1.y;
@@ -259,9 +264,44 @@
                         p2.x=p3.x;
                     }                                        
                 }
-                
-            }            
+                obj.updateSubLine();
+            }
+            var fRemove = obj.remove;
             
+            obj.remove=function() {
+                obj.subLine.remove();
+                fRemove();
+            }
+            
+//            obj.onmouseover=function(evt) {
+//                obj.subLine.setStyleClass("sequenceFlowSubLine_o");
+//            }
+//            
+//            obj.subLine.onmouseover=function(evt) {
+//                obj.subLine.setStyleClass("sequenceFlowSubLine_o");
+//            }
+//            
+//            obj.subLine.onmouseout=function(evt) {
+//                obj.subLine.setStyleClass("sequenceFlowSubLine");
+//            }
+//            
+//            obj.onmouseout=function(evt) {
+//                obj.subLine.setStyleClass("sequenceFlowSubLine");
+//            }
+            
+            obj.updateSubLine= function() {
+                obj.subLine.pathSegList.clear();
+                for (var i=0; i<obj.pathSegList.numberOfItems; i++) {
+                    var segment = obj.pathSegList.getItem(i);
+                    if (segment.pathSegType==SVGPathSeg.PATHSEG_LINETO_ABS) {
+                        obj.subLine.pathSegList.appendItem(obj.subLine.createSVGPathSegLinetoAbs(segment.x, segment.y));
+                    } else if (segment.pathSegType==SVGPathSeg.PATHSEG_MOVETO_ABS) {
+                       obj.subLine.pathSegList.appendItem(obj.subLine.createSVGPathSegMovetoAbs(segment.x, segment.y));
+                    }
+                }
+                ToolKit.svg.insertBefore(obj.subLine, obj);
+                obj.subLine.setAttributeNS(null,"class","sequenceFlowSubLine");
+            }
             return obj;
         },
         
