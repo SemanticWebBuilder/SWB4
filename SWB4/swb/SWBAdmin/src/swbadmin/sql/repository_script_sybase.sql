@@ -1,7 +1,7 @@
 create table resrepository 
 (
   rep_docId numeric(20) default 0 not null,
-  resId numeric(20) default 0 not null,
+  resId varchar(255) default "0" not null,
   idtm varchar(50) not null,
   topic varchar(101) not null ,
   rep_email varchar(99) null,

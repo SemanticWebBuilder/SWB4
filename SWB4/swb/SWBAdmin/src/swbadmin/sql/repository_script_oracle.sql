@@ -1,6 +1,6 @@
 CREATE TABLE resrepository (
   rep_docId NUMBER(20) NOT NULL,
-  resId NUMBER(20) NOT NULL,
+  resId VARCHAR2(255) NOT NULL,
   idtm VARCHAR2(50) NOT NULL,
   topic VARCHAR2(101) NOT NULL,
   rep_email VARCHAR2(99) NULL,
