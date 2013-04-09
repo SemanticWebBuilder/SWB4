@@ -181,8 +181,118 @@
         </div>
         <div style="margin-left:49px;">
             <svg id="modeler" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="100" height="100" class="modeler">
-                <defs id="globalDef">
+                <style type="text/css"><![CDATA[
+                    .resizeBox {
+                        stroke:#008000;
+                        fill:url(#linearGradientStartEvent);
+                        stroke-width:1.5;  
+                    }
+                    .task {
+                        stroke:#2c5aa0;
+                        fill:url(#linearGradientIntermediateEvent);
+                        stroke-width:2;
+                        cursor:hand;
+                    }
+                    .task_o {
+                        stroke:#2cff20;
+                        fill:url(#linearGradientIntermediateEvent);
+                        stroke-width:2;
+                        cursor:hand;
+                    }
+                    .callactivity {
+                        stroke:#2c5aa0;
+                        fill:url(#linearGradientIntermediateEvent);
+                        stroke-width:4;
+                        cursor:hand;
+                    }
 
+                    .callactivity_o {
+                        stroke:#2cff20;
+                        fill:url(#linearGradientIntermediateEvent);
+                        stroke-width:4;
+                        cursor:hand;
+                    }
+                    .eventsubTask {
+                        stroke:#2c5aa0;
+                        fill:url(#linearGradientIntermediateEvent);
+                        stroke-width:2;
+                        cursor:hand;
+                        stroke-dasharray:6,4;
+                    }
+
+                    .eventsubTask_o {
+                        stroke:#2cff20;
+                        fill:url(#linearGradientIntermediateEvent);
+                        stroke-width:2;
+                        cursor:hand;
+                        stroke-dasharray:6,4;
+                    }
+                    .startEvent
+                    {
+                        stroke:#008000;
+                        fill:url(#linearGradientStartEvent);
+                        stroke-width:1.5;
+                        cursor:hand;
+                    }
+
+                    .startEvent_o
+                    {
+                        stroke:#2cff20;
+                        fill:url(#linearGradientStartEvent);
+                        stroke-width:1.5;
+                        cursor: hand;
+                    }
+                    .intermediateEvent
+                    {
+                        stroke:#2c5aa0;
+                        fill:url(#linearGradientIntermediateEvent);
+                        fill-opacity:1;
+                        stroke-width:1.5;
+                        cursor:hand;
+                    }
+
+                    .intermediateEvent_o
+                    {
+                        stroke:#2cff20;
+                        fill:url(#linearGradientIntermediateEvent);
+                        fill-opacity:1;
+                        stroke-width:1.5;
+                    cursor:hand;
+                    }
+                    .endEvent
+                    {
+                        stroke:#550000;
+                        fill:url(#linearGradientEndEvent);
+                        stroke-width:2.5;
+                        cursor:hand;
+                    }
+
+                    .endEvent_o
+                    {
+                        stroke:#2cff20;
+                        fill:url(#linearGradientEndEvent);
+                        stroke-width:2.5;
+                        cursor:hand;
+                    }    
+
+                    .gateway
+                    {
+                        stroke:#d4aa00;
+                        fill:url(#linearGradientGateway);
+                        stroke-width:2;
+                        cursor:hand;
+                    }
+
+                    .gateway_o
+                    {
+                        stroke:#2cff20;
+                        fill:url(#linearGradientGateway);
+                        stroke-width:2;
+                        cursor:hand;
+                    }
+                ]]></style>
+                <defs id="globalDef">
+                
                     <!--Definición de gradientes para las figuras-->
                     <linearGradient id="linearGradientStartEvent" x1="0%" y1="0%" x2="100%" y2="100%">
                         <stop offset="10%" style="stop-color:#ffffff;stop-opacity:1" />
