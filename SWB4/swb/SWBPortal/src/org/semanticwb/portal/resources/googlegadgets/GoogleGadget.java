@@ -22,6 +22,7 @@
  */
 package org.semanticwb.portal.resources.googlegadgets;
 
+import com.sun.org.apache.xpath.internal.res.XPATHErrorResources;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
@@ -30,10 +31,11 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.Enumeration;
 import java.util.HashSet;
-import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Set;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.Logger;
@@ -53,35 +55,27 @@ import org.semanticwb.portal.api.SWBResourceURL;
 public class GoogleGadget extends GenericResource
 {
 
+    private GadgetLoader loader = new GadgetLoader();
     /** The Constant COUNTRY_ATTRIBUTE. */
     private static final String COUNTRY_ATTRIBUTE = "country";
-    
     /** The Constant GOOGLE_URL. */
     private static final String GOOGLE_URL = "http://www.google.com";
-    
     /** The Constant PATH_DIRECTORY. */
     private static final String PATH_DIRECTORY = "/ig/directory";
-    
     /** The Constant LANGUAGE_ATTRIBUTE. */
     private static final String LANGUAGE_ATTRIBUTE = "lang";
-    
     /** The Constant URL_ATTRIBUTE. */
     private static final String URL_ATTRIBUTE = "url";
-    
     /** The UR l_ frame. */
     private static String URL_FRAME = "http://www.gmodules.com/ig/ifr";
-    
     /** The UR l_ directory. */
     private static String URL_DIRECTORY = GOOGLE_URL + PATH_DIRECTORY + "?synd=trogedit&source=gghp";
-    
     /** The LAN g_ parameter. */
     private static String LANG_PARAMETER = "hl";
-    
     /** The Constant URL_TO_FIND. */
     private static final String URL_TO_FIND = "n_32\\x3durl%3Dhttp";
-    
     /** The log. */
-    private static Logger log = SWBUtils.getLogger(GenericResource.class);
+    public static Logger log = SWBUtils.getLogger(GoogleGadget.class);
 
     /* (non-Javadoc)
      * @see org.semanticwb.portal.api.GenericResource#processAction(javax.servlet.http.HttpServletRequest, org.semanticwb.portal.api.SWBActionResponse)
@@ -118,7 +112,7 @@ public class GoogleGadget extends GenericResource
             catch (MalformedURLException mfe)
             {
                 log.error(mfe);
-            //AFUtils.log(mfe);
+                //AFUtils.log(mfe);
             }
         }
         String title = request.getParameter("title");
@@ -182,6 +176,10 @@ public class GoogleGadget extends GenericResource
         {
             doChangeConfig(request, response, paramsRequest);
         }
+        else if (paramsRequest.getMode().equals("addGadget"))
+        {
+            doaddGadget(request, response, paramsRequest);
+        }
         else if (paramsRequest.getMode().equals("changeGadget"))
         {
             doChangeGadget(request, response, paramsRequest);
@@ -231,7 +229,7 @@ public class GoogleGadget extends GenericResource
         URL url = new URL(directoryURL);
         URLConnection con = url.openConnection();
         InputStream in = con.getInputStream();
-        StringBuffer html = new StringBuffer();
+        StringBuilder html = new StringBuilder();
         byte[] buffer = new byte[8 * 1024];
         int read = in.read(buffer);
         while (read != -1)
@@ -381,21 +379,39 @@ public class GoogleGadget extends GenericResource
             SWBParamRequest paramsRequest) throws IOException, SWBResourceException
     {
 
-        SWBResourceURL urlaction = paramsRequest.getActionUrl();
-        String parameters = "synd=trogedit&num=9&hl=" + paramsRequest.getUser().getLanguage() + "&iframeId=tr_moduleDirectory-iframegoog_1221086410332";
+        if (loader.getPage() == 0)
+        {
+            loader.next();
+        }
+        String jsp = "/swbadmin/jsp/" + this.getClass().getSimpleName() + "/list.jsp";
+        RequestDispatcher rd = request.getRequestDispatcher(jsp);
+        request.setAttribute("paramRequest", paramsRequest);
+        request.setAttribute("loader", loader);
+
+        try
+        {
+            rd.include(request, response);
+        }
+        catch (Exception e)
+        {
+            log.error(e);
+        }
+        /*SWBResourceURL urlaction = paramsRequest.getActionUrl();
+        
+        String parameters = "synd=open";
         if (request.getParameter("q") != null)
         {
-            parameters += "&q=" + request.getParameter("q");
+        parameters += "&q=" + request.getParameter("q");
         }
         if (request.getQueryString() != null && request.getParameter("wblastversion") == null && request.getParameter("tpcomm") == null && request.getParameter("tm") == null)
         {
-            parameters = request.getQueryString();
+        parameters = request.getQueryString();
         }
         String url = GOOGLE_URL + PATH_DIRECTORY + "?" + parameters;
         URL urlPage = new URL(url);
         URLConnection con = urlPage.openConnection();
         InputStream in = con.getInputStream();
-        String html2 = SWBUtils.IO.readInputStream(in,"utf-8"); //AFUtils.getInstance().readInputStream(in);
+        String html2 = SWBUtils.IO.readInputStream(in, "utf-8"); //AFUtils.getInstance().readInputStream(in);
         StringBuffer html = new StringBuffer(html2);
         replace(html, "<html>", "");
         replace(html, "</html>", "");
@@ -404,52 +420,51 @@ public class GoogleGadget extends GenericResource
         replace(html, "<a href=\"javascript:openAddByUrl();\">", "</a>", "");
 
 
-        //int pos = html.indexOf("/ig/f/ZtcZ_UMr1Ww/ig.js");
-        /*if(pos==-1)
+
+        String pathTofound = "\"" + "/gadgets/directory";
+        replace(html, pathTofound, "\"http://www.google.com/gadgets/directory");
+
+
+        pathTofound = GOOGLE_URL + "/gadgets/directory" + "?";
+        replace(html, pathTofound, "http://" + request.getServerName() + ":" + request.getServerPort() + "" + paramsRequest.getRenderUrl() + "?");
+        //replace(html, "_IFPC.call(\"tr_moduleDirectory-iframegoog_1221086410332\", \"pickGadget\", [url], \"/ifpc_relay\", null, null);", "if(confirm('¿Desea agregar este gadget?'))location='" + urlaction + "?url='+url;");
+        replace(html, "function _addModule(url) {", "}", "function _addModule(url) {\r\nif(confirm('¿Desea agregar este gadget?'))location='" + urlaction + "?url='+url;}");
+        replace(html, "action=\"http://www.google.com/gadgets/directory\"", "action=\"#\"");
+        PrintWriter out = response.getWriter();
+        out.println("<div>");
+        String urlGadget = this.getResourceBase().getAttribute("url");
+        if (urlGadget != null && !urlGadget.equals(""))
         {
-        pos = html.indexOf("/ig/f/s-9mlIkxfvs/ig.js");
+        out.println("<table width='100%'  border='0' cellpadding='5' cellspacing='0'> ");
+        SWBResourceURL urlback = paramsRequest.getRenderUrl();
+        urlback.setMode(urlback.Mode_ADMIN);
+        out.println("<tr><td align='right'><form name='frmback' method='post' action='" + urlback + "'><input type='hidden' name='back' value='" + paramsRequest.getLocaleString("back") + "'></input><button dojoType=\"dijit.form.Button\" type='button' onClick='frmback.submit();'>" + paramsRequest.getLocaleString("back") + "</button></form></td></tr>");
+        out.println("<tr><td ><HR size='1' noshade/></td></tr>");
+        out.println("</table>");
         }
-        if(pos==-1)
-        {
-        pos = html.indexOf("/ig/f/C0R-Dtev__A/ig.js");
-        }*/
-        /*if (pos == -1)
-        {
-            pos = html.indexOf("<script src=\"/ig/f/");
-        }*/
-        /*if (pos != -1)
-        {*/
-            //html.insert(pos + 13, GOOGLE_URL);
-            String pathTofound = "\"" + "/gadgets/directory";
-            replace(html, pathTofound, "\"http://www.google.com/gadgets/directory");
-            
+        out.println(html.toString());
+        out.println("</div>");
 
-            pathTofound = GOOGLE_URL + "/gadgets/directory" + "?";
-            replace(html, pathTofound, "http://" + request.getServerName() + ":" + request.getServerPort() + "" + paramsRequest.getRenderUrl() + "?");
-            //replace(html, "_IFPC.call(\"tr_moduleDirectory-iframegoog_1221086410332\", \"pickGadget\", [url], \"/ifpc_relay\", null, null);", "if(confirm('¿Desea agregar este gadget?'))location='" + urlaction + "?url='+url;");
-            replace(html, "function _addModule(url) {", "}","function _addModule(url) {\r\nif(confirm('¿Desea agregar este gadget?'))location='" + urlaction + "?url='+url;}");
-            replace(html, "action=\"http://www.google.com/gadgets/directory\"", "action=\"#\"");
-            PrintWriter out = response.getWriter();
-            out.println("<div>");
-            String urlGadget = this.getResourceBase().getAttribute("url");
-            if (urlGadget != null && !urlGadget.equals(""))
-            {
-                out.println("<table width='100%'  border='0' cellpadding='5' cellspacing='0'> ");
-                SWBResourceURL urlback = paramsRequest.getRenderUrl();
-                urlback.setMode(urlback.Mode_ADMIN);
-                out.println("<tr><td align='right'><form name='frmback' method='post' action='" + urlback + "'><input type='hidden' name='back' value='" + paramsRequest.getLocaleString("back") + "'></input><button dojoType=\"dijit.form.Button\" type='button' onClick='frmback.submit();'>" + paramsRequest.getLocaleString("back") + "</button></form></td></tr>");
-                out.println("<tr><td ><HR size='1' noshade/></td></tr>");
-                out.println("</table>");
-            }
-            out.println(html.toString());
-            out.println("</div>");
+        out.close();
 
-            out.close();
-        /*}
-        else
+         */
+
+
+    }
+
+    public static void main(String[] args)
+    {
+        GadgetLoader loader = new GadgetLoader();
+        int res = loader.next();
+        /*while(res!=0)
         {
-            doAddFromList2(request, response, paramsRequest);
+        res=loader.next();
         }*/
+
+        for (URL url : loader.getList())
+        {
+            Gadget g = new Gadget(url);
+        }
     }
 
     /**
@@ -480,7 +495,7 @@ public class GoogleGadget extends GenericResource
                 catch (MalformedURLException mfe)
                 {
                     log.error(mfe);
-                //AFUtils.log(mfe);
+                    //AFUtils.log(mfe);
                 }
             }
             pos = html.indexOf(URL_TO_FIND);
@@ -577,7 +592,7 @@ public class GoogleGadget extends GenericResource
             catch (Exception e)
             {
                 log.error(e);
-            //AFUtils.log(e);
+                //AFUtils.log(e);
             }
         }
         String w = this.getResourceBase().getAttribute("w", gadget.getWidth());
@@ -635,7 +650,7 @@ public class GoogleGadget extends GenericResource
                         out.println("<tr><td class=\"valores\">" + label + "</td><td>");
                         out.println("<select  name='" + name + "'>");
 
-                        Hashtable<String, String> values = gadget.getValues(name, localeUser);
+                        Map<String, String> values = gadget.getValues(name, localeUser);
                         for (String value : values.keySet())
                         {
                             boolean selected = false;
@@ -659,7 +674,7 @@ public class GoogleGadget extends GenericResource
             catch (Exception e)
             {
                 log.error(e);
-            //AFUtils.log(e);
+                //AFUtils.log(e);
             }
         }
         SWBResourceURL urlback = paramsRequest.getRenderUrl();
@@ -693,12 +708,12 @@ public class GoogleGadget extends GenericResource
             catch (IllegalArgumentException e)
             {
                 log.error(e);
-            //AFUtils.log(e);
+                //AFUtils.log(e);
             }
             catch (MalformedURLException e)
             {
                 log.error(e);
-            //AFUtils.log(e);
+                //AFUtils.log(e);
             }
 
         }
@@ -766,7 +781,7 @@ public class GoogleGadget extends GenericResource
             catch (Exception ex)
             {
                 log.error(ex);
-            //AFUtils.log(ex);
+                //AFUtils.log(ex);
             }
 
             out.println("<tr><td >" + paramsRequest.getLocaleString("orign") + ":</td><td ><a href='" + url + "' target='_blank'>" + url + "</a></td></tr>");
@@ -798,29 +813,60 @@ public class GoogleGadget extends GenericResource
             doAddFromList(request, response, paramsRequest);
         }
     }
-    
+
     /**
      * Asign google gadget.
      * 
      * @param url the url
      * @param values the values
      */
-    public void asignGoogleGadget(String url,Hashtable<String,String> values)
+    public void asignGoogleGadget(String url, Map<String, String> values)
     {
-        this.getResourceBase().setAttribute(URL_ATTRIBUTE,url);
-        for(String key : values.keySet())
+        this.getResourceBase().setAttribute(URL_ATTRIBUTE, url);
+        for (String key : values.keySet())
         {
-            String value=values.get(key);
-            this.getResourceBase().setAttribute(key,value);
+            String value = values.get(key);
+            this.getResourceBase().setAttribute(key, value);
 
         }
         try
         {
             this.getResourceBase().updateAttributesToDB();
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             log.error(e);
+        }
+    }
+
+    private void doaddGadget(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws IOException,SWBResourceException
+    {
+        String url = request.getParameter(URL_ATTRIBUTE);
+        if (url != null)
+        {
+            this.getResourceBase().setAttribute(URL_ATTRIBUTE, url);
+            Gadget g=new Gadget(new URL(url));
+            try
+            {
+                String title=g.getTitle(new Locale(paramsRequest.getUser().getLanguage()));
+                this.getResourceBase().setAttribute("title", title);
+
+            }
+            catch(Exception e)
+            {
+                log.error(e);
+
+            }
+
+            try
+            {
+                this.getResourceBase().updateAttributesToDB();
+            }
+            catch (Exception e)
+            {
+                log.error(e);
+            }
+            doChangeConfig(request, response, paramsRequest);            
         }
     }
 }
