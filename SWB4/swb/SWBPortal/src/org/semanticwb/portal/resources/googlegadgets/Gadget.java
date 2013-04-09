@@ -25,22 +25,21 @@ package org.semanticwb.portal.resources.googlegadgets;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URL;
+import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Set;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
-import org.jdom.output.XMLOutputter;
 import org.jdom.xpath.XPath;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Resource;
-
 
 // TODO: Auto-generated Javadoc
 /**
@@ -50,54 +49,40 @@ import org.semanticwb.model.Resource;
  */
 public class Gadget
 {
-    
+
     /** The log. */
     private static Logger log = SWBUtils.getLogger(Gadget.class);
-    
     /** The Constant DEFAULT_VALUE. */
     private static final String DEFAULT_VALUE = "default_value";
-    
     /** The Constant MESSAGES_ATTRIBUTE. */
     private static final String MESSAGES_ATTRIBUTE = "messages";
-    
     /** The Constant MSG_LOCALE. */
     private static final String MSG_LOCALE = "__MSG_locale__";
-    
     /** The Constant PATH_FIRST_LOCALE. */
     private static final String PATH_FIRST_LOCALE = "/Module/ModulePrefs/Locale[1]";
-    
     /** The Constant PATH_USER_PREFERENCES. */
     private static final String PATH_USER_PREFERENCES = "/Module/UserPref[@name=\'";
-    
     /** The Constant TITLE_ATTRIBUTE. */
     private static final String TITLE_ATTRIBUTE = "title";
-    
     /** The builder. */
     private static SAXBuilder builder = new SAXBuilder();
-    
     /** The documents. */
-    private static Hashtable<URL, Document> documents = new Hashtable<URL, Document>();
-    
+    private static Map<URL, Document> documents = new HashMap<URL, Document>();
     /** The U p_ prefix. */
     private static String UP_PREFIX = "__UP_";
-    
     /** The U p_ sufix. */
     private static String UP_SUFIX = "__";
-    
     /** The MS g_ prefix. */
     private static String MSG_PREFIX = "__MSG_";
-    
     /** The MS g_ sufix. */
     private static String MSG_SUFIX = "__";
-    
     /** The url. */
     private URL url;
-    
     /** The module. */
     private Document module;
-    
     /** The module prefs. */
     private Element modulePrefs;
+    private Map<Locale, String> locales = new HashMap<Locale, String>();
 
     /**
      * Instantiates a new gadget.
@@ -108,6 +93,7 @@ public class Gadget
     {
         this.url = url;
         module = getDocument(url);
+
         if (module == null)
         {
             throw new IllegalArgumentException("The gadget xml was not found");
@@ -117,6 +103,29 @@ public class Gadget
             try
             {
                 modulePrefs = (Element) XPath.newInstance("/Module/ModulePrefs").selectSingleNode(module);
+
+
+                /*List<Element> nodes = XPath.newInstance("/Module/ModulePrefs/Locale").selectNodes(module);
+                for (Element locale : nodes)
+                {
+                String language = locale.getAttributeValue("lang");
+                String country = locale.getAttributeValue("country");
+                String message = locale.getAttributeValue("messages");
+                Locale localeToAdd = null;
+                if (language != null)
+                {
+                if (country == null)
+                {
+                localeToAdd = new Locale(language);
+                }
+                else
+                {
+                localeToAdd = new Locale(language, country);
+                }
+                locales.put(localeToAdd, message);
+                }
+                }*/
+
                 if (modulePrefs == null)
                 {
                     throw new IllegalArgumentException("The tag ModulePrefs was not found");
@@ -136,9 +145,9 @@ public class Gadget
      * @param locale the locale
      * @return the values
      */
-    public Hashtable<String, String> getValues(String name, Locale locale)
+    public Map<String, String> getValues(String name, Locale locale)
     {
-        Hashtable<String, String> getValues = new Hashtable<String, String>();
+        Map<String, String> getValues = new HashMap<String, String>();
         try
         {
             XPath xpath = XPath.newInstance(PATH_USER_PREFERENCES + name + "']/EnumValue");
@@ -375,7 +384,7 @@ public class Gadget
      */
     public String getParameters(Resource resource, Locale localeUser)
     {
-        StringBuffer buffer = new StringBuffer();
+        StringBuilder buffer = new StringBuilder();
         Iterator<String> names = resource.getAttributeNames();
         while (names.hasNext())
         {
@@ -383,7 +392,7 @@ public class Gadget
             String value = resource.getAttribute(name);
             if (value != null && !name.equals("url"))
             {
-                buffer.append("&" + name + "=" + value);
+                buffer.append("&").append(name).append("=").append(value);
             }
         }
         if (buffer.length() == 0)
@@ -435,6 +444,42 @@ public class Gadget
             log.error(e);
             //AFUtils.log(e);
         }
+
+    }
+
+    private Document getAllLocale()
+    {
+        Document getLocale = null;
+
+        try
+        {
+            XPath xpath = XPath.newInstance("/Module/ModulePrefs/Locale[@lang='all']");
+            Element eLanguage = (Element) xpath.selectSingleNode(module);
+            if (eLanguage != null)
+            {
+                if (eLanguage.getAttributeValue(MESSAGES_ATTRIBUTE) != null)
+                {
+                    URI base = url.toURI();
+                    URI relative = new URI(eLanguage.getAttributeValue(MESSAGES_ATTRIBUTE));
+                    URI urlDocumentLanguage = base.resolve(relative);
+                    Document docLanguage = getDocument(urlDocumentLanguage.toURL());
+                    if (docLanguage != null)
+                    {
+                        getLocale = docLanguage;
+                    }
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            log.error(e);
+            //AFUtils.log(e);
+        }
+        if (getLocale == null)
+        {
+            getLocale = getDefaultLanguage();
+        }
+        return getLocale;
 
     }
 
@@ -591,6 +636,20 @@ public class Gadget
         return getDocument;
     }
 
+    private String getMessageTag(String data)
+    {
+        int pos = data.indexOf(MSG_PREFIX);
+        if (pos != -1)
+        {
+            int pos2 = data.indexOf(MSG_SUFIX, pos + MSG_PREFIX.length());
+            if (pos2 != -1)
+            {
+                return data.substring(pos + MSG_PREFIX.length(), pos2);
+            }
+        }
+        return null;
+    }
+
     /**
      * Gets the text from language.
      * 
@@ -624,30 +683,36 @@ public class Gadget
             }
             try
             {
-                if (bundleName.startsWith(MSG_PREFIX))
+                while (bundleName.indexOf(MSG_PREFIX) != -1)
                 {
-                    XMLOutputter xMLOutputter = new XMLOutputter();
+                    String tag = getMessageTag(bundleName);
                     Document language = getLocale(locale);
                     if (language != null)
                     {
-                        //xMLOutputter.output(language, System.out);
-                        String msgName = bundleName;
-                        if (msgName.startsWith(MSG_PREFIX))
-                        {
-                            msgName = msgName.substring(MSG_PREFIX.length());
-                        }
-                        if (msgName.endsWith(MSG_SUFIX))
-                        {
-                            msgName = msgName.substring(0, msgName.length() - MSG_SUFIX.length());
-                        }
-                        XPath xpath = XPath.newInstance("/messagebundle/msg[@name='" + msgName + "']");
+                        XPath xpath = XPath.newInstance("/messagebundle/msg[@name='" + tag + "']");
                         Element eMsg = (Element) xpath.selectSingleNode(language);
+                        if (eMsg == null) // No existe
+                        {
+                            language = getAllLocale();
+                            if (language != null)
+                            {
+                                eMsg = (Element) xpath.selectSingleNode(language);
+                            }
+                        }
+
                         if (eMsg != null && eMsg.getValue() != null && !eMsg.getValue().equals(""))
                         {
-                            getTextFromLanguage = eMsg.getValue();
+                            String value = eMsg.getValue();
+                            bundleName = bundleName.replace(MSG_PREFIX + tag + MSG_SUFIX, value);
                         }
+                        else
+                        {
+                            bundleName = bundleName.replace(MSG_PREFIX + tag + MSG_SUFIX, "");
+                        }
+
                     }
                 }
+                getTextFromLanguage=bundleName;
             }
             catch (Exception e)
             {
