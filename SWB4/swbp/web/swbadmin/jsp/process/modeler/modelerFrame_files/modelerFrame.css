@@ -41,28 +41,26 @@
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.2),  0 0 50px rgba(0, 0, 0, 0.1);*/
 }
 
-.resizeBox {
+/*.resizeBox {
     stroke:#008000;
     fill:url(#linearGradientStartEvent);
     fill-opacity:1;
     stroke-width:1.5;  
-}
+}*/
 
-.task {
+/*.task {
     stroke:#2c5aa0;
     fill:url(#linearGradientIntermediateEvent);
-    fill-opacity:1;
     stroke-width:2;
     cursor:hand;
-}
+}*/
 
-.task_o {
+/*.task_o {
     stroke:#2cff20;
     fill:url(#linearGradientIntermediateEvent);
-    fill-opacity:1;
     stroke-width:2;
     cursor:hand;
-}
+}*/
 
 .sequenceFlowLine {
     fill: none;
@@ -71,7 +69,7 @@
     cursor:hand;
 }
 
-.callactivity {
+/*.callactivity {
     stroke:#2c5aa0;
     fill:url(#linearGradientIntermediateEvent);
     fill-opacity:1;
@@ -90,7 +88,6 @@
 .eventsubTask {
     stroke:#2c5aa0;
     fill:url(#linearGradientIntermediateEvent);
-    fill-opacity:1;
     stroke-width:2;
     cursor:hand;
     stroke-dasharray:6,4;
@@ -99,7 +96,6 @@
 .eventsubTask_o {
     stroke:#2cff20;
     fill:url(#linearGradientIntermediateEvent);
-    fill-opacity:1;
     stroke-width:2;
     cursor:hand;
     stroke-dasharray:6,4;
@@ -109,7 +105,6 @@
 {
     stroke:#008000;
     fill:url(#linearGradientStartEvent);
-    fill-opacity:1;
     stroke-width:1.5;
     cursor:hand;
 }
@@ -118,10 +113,9 @@
 {
     stroke:#2cff20;
     fill:url(#linearGradientStartEvent);
-    fill-opacity:1;
     stroke-width:1.5;
     cursor: hand;
-}
+}*/
 
 .sequenceFlowSubLine {
     fill:none;
@@ -153,12 +147,11 @@
     stroke-width:2;
     fill-opacity:1;
 }
-
+/*
 .intermediateEvent
 {
     stroke:#2c5aa0;
     fill:url(#linearGradientIntermediateEvent);
-    fill-opacity:1;
     stroke-width:1.5;
     cursor:hand;
 }
@@ -167,11 +160,10 @@
 {
     stroke:#2cff20;
     fill:url(#linearGradientIntermediateEvent);
-    fill-opacity:1;
     stroke-width:1.5;
     cursor:hand;
-}                    
-
+}
+*/
 .intermediateEvent1
 {
     stroke:#2c5aa0;
@@ -179,7 +171,7 @@
     stroke-width:1;
 } 
 
-.endEvent
+/*.endEvent
 {
     stroke:#550000;
     fill:url(#linearGradientEndEvent);
@@ -209,7 +201,7 @@
     fill:url(#linearGradientGateway);
     stroke-width:2;
     cursor:hand;
-}
+}*/
 
 .itemAware {
     stroke:#666666;
