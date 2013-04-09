@@ -97,6 +97,19 @@
     cursor: hand;
 }
 
+.sequenceFlowSubLine {
+    fill:none;
+    stroke:#ffffff;
+    stroke-opacity:0.1;
+    stroke-width:8;
+}
+
+.sequenceFlowSubLine_o {
+    fill:none;
+    stroke:#F0F0F0;
+    stroke-width:8;
+}
+
 .swimlane
 {
     fill: #E8E8FF;
