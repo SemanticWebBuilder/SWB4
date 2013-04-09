@@ -1,6 +1,6 @@
 CREATE TABLE resrepository (
   rep_docId bigint NOT NULL default '0',
-  resId bigint NOT NULL default '0',
+  resId varchar(255) NOT NULL default '0',
   idtm varchar(50) NOT NULL,
   topic varchar(101) NOT NULL default '',
   rep_email varchar(99) default NULL,
