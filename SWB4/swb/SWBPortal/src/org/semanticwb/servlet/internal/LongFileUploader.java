@@ -112,11 +112,14 @@ public final class LongFileUploader implements InternalServlet {
         out.print("{\"chunkSize\":" + CHUNK_SIZE);
         ArrayList<PendingFile> lpf = fileUtil.getListOfPendingFiles(userStr);
         if (!lpf.isEmpty()) {
-            out.print(", \"listFiles\":[");
+            out.print(", \"pendingFiles\":[");
+            boolean doComma = false;
             for (PendingFile pf : lpf) {
-                out.print("\"fileInfo\":{\"id\":\"" + pf.getId() + "\",\"size\":"
+                if (doComma) out.print(",");
+                out.print("{\"id\":\"" + pf.getId() + "\",\"size\":"
                         + pf.getSize() + ",\"filename\":\"" + pf.getFilename()
-                        + "\",\"crc\":\"" + pf.getIniCRC() + "\"},");
+                        + "\",\"crc\":\"" + pf.getIniCRC() + "\"}");
+                doComma = true;
             }
             out.print("]");
         }
