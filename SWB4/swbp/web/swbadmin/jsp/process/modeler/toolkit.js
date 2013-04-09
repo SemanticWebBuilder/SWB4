@@ -30,7 +30,24 @@
         ctrlkey:false,
         snap2Grid:true,
         snap2GridSize:10,
+        layer:null,
 
+        setLayer:function(layer)
+        {
+            var _this=ToolKit;
+            _this.layer=layer;
+            for (var i = _this.contents.length; i--;) 
+            {
+                if(_this.contents[i].layer==layer)
+                {
+                    _this.contents[i].show();
+                }else
+                {
+                    _this.contents[i].hide();
+                }
+
+            } 
+        },
 
         getWidth:function()
         {
@@ -435,8 +452,8 @@
 
         keydown:function(evt)
         {
-            var _this=ToolKit;
             //desc(evt,true);
+            var _this=ToolKit;
             if(evt.keyCode==8 && evt.which==8)
             //if(evt.keyCode==32 && evt.which==32)
             {
@@ -457,12 +474,33 @@
             {
                 _this.ctrlkey=true;
                 
-                for (var i = _this.selected.length; i--;) 
-                {
-                    _this.selected[i].hide();
-                }   
-                
+//                if(_this.selected.length>0)
+//                {
+//                    for (var i = _this.selected.length; i--;) 
+//                    {
+//                        _this.selected[i].hide();
+//                    } 
+//                    _this.unSelectAll();
+//                }else
+//                {
+//                    for (var i = _this.contents.length; i--;) 
+//                    {
+//                        _this.contents[i].show();
+//                    } 
+//                }
                 _this.stopPropagation(evt);
+            }else if(evt.keyCode==65 && evt.which==65)
+            {
+                if(_this.cmdkey)
+                {
+                    for (var i = _this.contents.length; i--;) 
+                    {
+                        if(!_this.contents[i].hidden && _this.contents[i].canSelect)
+                        {
+                            _this.selectObj(_this.contents[i])
+                        }
+                        
+                    }                 }
             }
         },
 
@@ -542,7 +580,7 @@
                     if (segment.pathSegType==SVGPathSeg.PATHSEG_LINETO_ABS) {
                        console.log("lineto "+segment);
                     } else if (segment.pathSegType==SVGPathSeg.PATHSEG_MOVETO_ABS) {
-                        console.log("moveto "+segment);
+                       console.log("moveto "+segment);
                     }
                 }
             }
@@ -650,6 +688,7 @@
             obj.outConnections=[];
             obj.canSelect=true;
             obj.hidden=false;
+            obj.layer=_this.layer;
 
             if(id && id!=null)obj.setAttributeNS(null,"id",id);       
             
@@ -1106,7 +1145,7 @@
 
             obj.onmousedown=function(evt)
             {
-                console.log(evt);
+                //console.log(evt);
                 if(obj.mousedown(evt))
                 {
                     obj.startX=_this.getEventX(evt);
