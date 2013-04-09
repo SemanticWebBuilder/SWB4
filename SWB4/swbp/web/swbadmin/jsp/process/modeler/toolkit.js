@@ -49,24 +49,41 @@
             } 
         },
 
+        /*Revisar*/
         getWidth:function()
         {
-            return this.svg.width.baseVal.value;
+            if (this.svg.width.baseVal) {
+                return this.svg.width.baseVal.value;
+            } else {
+                return this.svg.width;
+            }
         },
 
         getHeight:function()
         {
-            return this.svg.height.baseVal.value;
+            if (this.svg.height.baseVal) {
+                return this.svg.height.baseVal.value;
+            } else {
+                return this.svg.height;
+            }
         },
 
         setWidth:function(width)
         {
-            this.svg.width.baseVal.value=width;
+            if (this.svg.width.baseVal) {
+                this.svg.width.baseVal.value=width;
+            } else {
+                this.svg.width=width;
+            }
         },
 
         setHeight:function(height)
         {
-            this.svg.height.baseVal.value=height;
+            if (this.svg.height.baseVal) {
+                this.svg.height.baseVal.value=height;
+            } else {
+                this.svg.height=height;
+            }
         },         
         
         getEventX:function(evt)
@@ -202,7 +219,7 @@
                 }
 
             };
-
+            
             _this.svg.onmousedown=function(evt)
             {
                 if(_this.onmousedown(evt)==false)return;
@@ -225,7 +242,7 @@
                         _this.svg.dragOffsetY=_this.getEventY(evt);                                    
                     }
                 }
-                
+                evt.preventDefault();
             };                         
 
             _this.svg.onmouseup=function(evt)
