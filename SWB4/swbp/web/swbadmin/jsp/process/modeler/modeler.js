@@ -905,7 +905,7 @@
             }
             else if (type=="pool") {
                 ret = Modeler.createSwimLane(null, null);
-                ret.setText("Pool con un nombre muy largo ajustable a 200 pixeles",0,0,200,2);
+                ret.setText("Pool con un nombre muy largo ajustable a 200 pixeles",-1,0,200,2);
                 ret.resize(600,200);
             }
             return ret;
