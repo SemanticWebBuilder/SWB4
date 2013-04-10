@@ -417,7 +417,7 @@
         
         createSubProcess: function(id, parent, type) {
             var obj=Modeler.createTask(id,parent);
-            var icon=obj.addIcon("#subProcessMarker",0,1,-1,-10);
+            var icon=obj.addIcon("#subProcessMarker",0,1,-1,-12);
             obj.subLayer={parent:obj};
             
             icon.obj.ondblclick=function(evt)
@@ -430,53 +430,55 @@
                 obj.setAttributeNS(null,"oclass","eventSubTask_o");
                 obj.setBaseClass();                        
             }
-            /*else if (type=="transactionsubProcess")
+            else if (type=="transactionsubProcess")
             {
-                var constructor=function()
-                {
-                    var tx = document.createElementNS(ToolKit.svgNS,"rect");
-                    return tx;
-                };
-                
-                var fMove = obj.move;
-                var fResize = obj.resize;
-                var fRemove = obj.remove;
-
-                if (obj.innerRect && obj.innerRect!= null) {
-                    obj.innerRect.remove();
+                if (obj.subSquare && obj.subSquare!= null) {
+                    obj.subSquare.remove();
                 } else {
-                    var rect=ToolKit.createBaseObject(constructor,null,null);
-                    obj.canSelect=false;
-                    obj.innerRect = rect;
+                    var constructor=function()
+                    {
+                        var tx = document.createElementNS(ToolKit.svgNS,"rect");
+                        tx.setAttributeNS(null,"rx",10);
+                        tx.setAttributeNS(null,"ry",10);
+                        return tx;
+                    };
+                    var square=ToolKit.createBaseObject(constructor,null,null);
+                    obj.subSquare = square;
+                    obj.subSquare.setAttributeNS(null,"class","transactionSquare");
+                    obj.subSquare.canSelect=false;
+                    
+                    obj.updateSubSquare=function() {
+                        obj.subSquare.move(obj.getX(),obj.getY());
+                        obj.subSquare.resize(obj.getWidth()-8,obj.getHeight()-8);
+                        if (obj.nextSibling) {
+                            ToolKit.svg.insertBefore(obj.subSquare, obj.nextSibling);
+                        }
+                    }
                 }
                 
-                obj.updateInnerRect=function() {
-                    obj.innerRect.setX(obj.x);
-                    obj.innerRect.setY(obj.y);
-                    obj.innerRect.setWidth(obj.getWidth()-5);
-                    obj.innerRect.setHeight(obj.getHeight()-5);
-                }
+                var fMove=obj.move;
+                var fResize=obj.resize;
+                var fMoveFirst=obj.moveFirst;
                 
-                obj.remove=function() {
-                    obj.innerRect.remove();
-                    fRemove();
-                }
-
-                obj.moveFirst=function() {
-                    //fMoveFirst();
-                    obj.updateInnerRect();
-                }
-
-                obj.resize= function(w, h) {
-                    fResize(w, h);
-                    obj.updateInnerRect();
-                }
-
-                obj.move = function(x, y) {
+                obj.move=function(x,y) {
                     fMove(x,y);
-                    obj.updateInnerRect();
+                    if(obj.subSquare && obj.subSquare!=null) {
+                        obj.updateSubSquare();
+                    }
                 }
-            }*/
+                
+                obj.resize=function(w,h) {
+                    fResize(w,h);
+                    if(obj.subSquare && obj.subSquare!=null) {
+                        obj.updateSubSquare();
+                    }
+                }
+                
+                obj.moveFirst=function() {
+                    fMoveFirst();
+                    obj.updateSubSquare();
+                }
+            }
             return obj;
         },
 
