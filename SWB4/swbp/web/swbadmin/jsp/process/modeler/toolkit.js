@@ -38,16 +38,28 @@
             _this.layer=layer;
             for (var i = _this.contents.length; i--;) 
             {
-                if(_this.contents[i].layer==layer)
+                if(_this.contents[i].layer===layer)
                 {
                     _this.contents[i].show();
                 }else
                 {
-                    _this.contents[i].hide();
+                    if(_this.contents[i].hide)_this.contents[i].hide();
                 }
-
             } 
         },
+                
+        removeLayer:function(layer)
+        {
+            var _this=ToolKit;
+            _this.layer=layer;
+            for (var i = _this.contents.length; i--;) 
+            {
+                if(_this.contents[i].layer===layer)
+                {
+                    _this.contents[i].remove();
+                }
+            } 
+        },                
 
         /*Revisar*/
         getWidth:function()
@@ -133,7 +145,9 @@
                     tx=x-_this.svg.resizeObject.parent.getX();
                     ty=y-_this.svg.resizeObject.parent.getY();
                     w=Math.abs(_this.svg.resizeObject.startW+tx*2*_this.svg.resizeObject.ix);
-                    h=Math.abs(_this.svg.resizeObject.startH+ty*2*_this.svg.resizeObject.iy);                                
+                    h=Math.abs(_this.svg.resizeObject.startH+ty*2*_this.svg.resizeObject.iy); 
+                    if((_this.svg.resizeObject.parent.getX()-w/2)<0)w=_this.svg.resizeObject.parent.getX()*2;
+                    if((_this.svg.resizeObject.parent.getY()-h/2)<0)h=_this.svg.resizeObject.parent.getY()*2;
                     _this.svg.resizeObject.parent.resize(w,h);
                     _this.updateResizeBox();
 
@@ -267,7 +281,7 @@
                                 for (;i-- && i>=0;)
                                 {
                                     obj=_this.svg.childNodes[i];
-                                    if(obj.inBounds && obj.inBounds(_this.svg.dragObject.getX(), _this.svg.dragObject.getY()))
+                                    if(obj.hidden==false && obj.inBounds && obj.inBounds(_this.svg.dragObject.getX(), _this.svg.dragObject.getY()))
                                     {
                                         if(_this.selected.indexOf(obj)==-1)
                                         {
@@ -825,8 +839,32 @@
 
             obj.move=function(x,y)
             {
+                //Crecemos pantalla
+                if(x+obj.getWidth()/2>_this.getWidth())
+                {
+                    _this.setWidth(x+obj.getWidth()/2);
+                }
+                if(y+obj.getHeight()/2>_this.getHeight())
+                {
+                    _this.setHeight(y+obj.getHeight()/2);
+                }    
+                
+                if(obj.canSelect==true)
+                {
+                    //Validamos bordes
+                    if(x-obj.getWidth()/2<0)
+                    {
+                        x=obj.getWidth()/2;
+                    }
+                    if(y-obj.getHeight()/2<0)
+                    {
+                        y=obj.getHeight()/2;
+                    }                    
+                }
+                
                 var offx=x-obj.getX();
                 var offy=y-obj.getY();
+                
                 obj.setX(x);
                 obj.setY(y);
 
@@ -868,15 +906,6 @@
                 {
                     obj.outConnections[i].setStartPoint(x,y);
                 }                
-
-                if(x+50>_this.getWidth())
-                {
-                    _this.setWidth(x+50);
-                }
-                if(y+50>_this.getHeight())
-                {
-                    _this.setHeight(y+50);
-                }                           
             };    
 
             obj.remove = function(all) {
@@ -1142,7 +1171,6 @@
                 }
             }
             
-
             obj.setParent(parent);
             _this.svg.appendChild(obj);
             if(obj.getWidth()==0 && obj.getHeight()==0)
