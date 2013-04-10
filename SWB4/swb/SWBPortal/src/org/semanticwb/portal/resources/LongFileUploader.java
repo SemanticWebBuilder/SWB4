@@ -132,6 +132,9 @@ out.println("<script type=\"text/javascript\">");
     @Override
     public void setResourceBase(Resource base) throws SWBResourceException {
         super.setResourceBase(base); 
+        if (null==base.getAttribute("frmPath")){
+            base.setAttribute("frmPath","/");
+        }
         path = base.getAttribute("frmPath");
     }
     
