@@ -319,13 +319,8 @@
                 return tx;
             };
             
-            if (obj.headerLine && obj.headerLine != null) {
-                obj.headerLine.remove();
-            } else {
-                var line=ToolKit.createBaseObject(constructor,null,null);
-                obj.headerLine = line;
-            }
-            //ToolKit.svg.removeChild(line);
+            var line=ToolKit.createBaseObject(constructor,null,null);
+            obj.headerLine = line;
             
             obj.mousedown=function(evt)
             {
@@ -415,6 +410,70 @@
             return obj;
         },
         
+        createAnnotationArtifact:function(id, parent) {
+            var obj= ToolKit.createResizeObject(id,parent);
+            obj.setAttributeNS(null,"oclass","annotationArtifactRect_o");
+            obj.setAttributeNS(null,"bclass","annotationArtifactRect");
+            obj.setBaseClass();
+            
+            var constructor=function()
+            {
+                var tx = document.createElementNS(ToolKit.svgNS,"path");
+                return tx;
+            };
+            
+            var line=ToolKit.createBaseObject(constructor,null,null);
+            obj.subLine = line;
+            obj.subLine.canSelect=false;
+            obj.subLine.setAttributeNS(null,"bclass","annotationArtifact");
+            obj.subLine.setAttributeNS(null,"oclass","annotationArtifact");
+            obj.subLine.setBaseClass();
+            obj.mouseup=function(x,y)
+            {
+                //alert("hola1");
+                return true;
+            };
+            //obj.mousedown=function(evt){return Modeler.objectMouseDown(evt,obj);}
+            obj.onmousemove=function(evt){return Modeler.objectMouseMove(evt,obj);}
+            
+            obj.updateSubLine=function() {
+                obj.subLine.setAttributeNS(null, "d", "M"+(obj.getX()-obj.getWidth()/2 + 20)+" "+(obj.getY()-obj.getHeight()/2) 
+                    +" L"+(obj.getX()-obj.getWidth()/2)+" "+(obj.getY()-obj.getHeight()/2) 
+                    +" L"+(obj.getX()-obj.getWidth()/2)+" "+(obj.getY()+obj.getHeight()/2)
+                    +" L"+(obj.getX()-obj.getWidth()/2+20)+" "+(obj.getY()+obj.getHeight()/2));
+                if (obj.nextSibling) {
+                    ToolKit.svg.insertBefore(obj.subLine, obj.nextSibling);
+                }
+            }
+
+            var fMove=obj.move;
+            var fRemove=obj.remove;
+            var fResize=obj.resize;
+            var fMoveFirst = obj.moveFirst;
+            
+            obj.move=function(x,y) {
+                fMove(x,y);
+                obj.updateSubLine();
+            }
+            
+            obj.remove=function() {
+                obj.subLine.remove();
+                fRemove();
+            }
+            
+            obj.moveFirst=function() {
+                fMoveFirst();
+                obj.updateSubLine();
+            }
+            
+            obj.resize=function(w,h) {
+                fResize(w,h);
+                obj.updateSubLine();
+            }
+            
+            return obj;
+        },
+        
         createGroupArtifact:function(id,parent) {
             var obj= ToolKit.createResizeObject(id,parent);
             obj.setAttributeNS(null,"oclass","group_o");
@@ -426,6 +485,7 @@
             obj.subLine = rect;
             obj.subLine.onmousedown=obj.onmousedown;
             obj.subLine.onmouseup=obj.onmouseup;
+            obj.subLine.onmousemove=obj.onmousemove;
             
             obj.updateSubLine=function() {
                 if (obj.subLine && obj.subLine!=null) {
@@ -731,7 +791,11 @@
                 ret= Modeler.createGroupArtifact(null,null);
                 ret.resize(300,300);
             }
-            else if(type=='annotation')ret= Modeler.createObject("#xxxxxxx",null,null);
+            else if(type=='annotation'){
+                ret= Modeler.createAnnotationArtifact(null, null);
+                ret.setText("Anotación de texto",0,0,0,1);
+                ret.resize(200,60);
+            }
             else if(type=='dataObject') {
                 ret= Modeler.createObject("#data",null,null);
                 ret.setText("Dato",0,1,80,1);
