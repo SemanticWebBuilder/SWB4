@@ -179,14 +179,23 @@
                 <span class="subbarEnd"></span>
             </div>
         </div>
+        <div class="navBar" id="navBar">
+            <ul class="breadcrumbs alt1">
+                <li class="first"><a href="#">Inicio</a></li>
+                <li><a href="#">Proceso</a></li>
+                <li><a href="#">SubProceso1</a></li>
+                <li><a href="#">SubProceso2</a></li>
+                <li class="last"><a href="#">SubProceso3</a></li>
+            </ul>
+        </div>
         <div style="margin-left:49px;">
             <svg id="modeler" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="100" height="100" class="modeler">
                 <style type="text/css"><![CDATA[
-                    .resizeBox {
+                    /*.resizeBox {
                         stroke:#008000;
                         fill:url(#linearGradientStartEvent);
                         stroke-width:1.5;  
-                    }
+                    }*/
                     .task {
                         stroke:#2c5aa0;
                         fill:url(#linearGradientIntermediateEvent);
@@ -315,8 +324,8 @@
                         <stop offset="100%" style="stop-color:#afbac7;stop-opacity:1" />
                     </linearGradient>
 
-                    <rect id="resizeBox" x="-4.5" y="-4.5" width="9" height="9" class="resizeBox"/>
-
+                    <!--rect id="resizeBox" x="-4.5" y="-4.5" width="9" height="9" class="resizeBox"/-->
+                    <circle id="resizeBox" cx="0" cy="0" r="5" class="resizeBox"/>
                     <!--definición de marcadores para las figuras-->
                     <path id="errorMarker" d="m 0.5,1051.8622 17.0774,-39.6847 15.0444,21.9792 19.5171,-27.474 L 34.8582,1048.199 19.8137,1029.6795 0.5,1051.8622 z" transform="scale(0.35,0.35) translate(-26, -1030)" />
                     <g id="ruleMarker">
@@ -655,6 +664,6 @@
                     </g>
                 </defs>
             </svg>
-        </div>        
+        </div>
     </body>
 </html>
