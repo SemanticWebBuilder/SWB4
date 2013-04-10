@@ -41,8 +41,54 @@
 <jsp:useBean id="facebookBean" scope="request" type="org.semanticwb.social.Facebook"/>
 <%@page import="static org.semanticwb.social.admin.resources.FacebookWall.*"%>
 
+
 <%@page contentType="text/html" pageEncoding="x-iso-8859-11"%>
+
+<script type="text/javascript" id="appends">
+    appendHtmlAt = function(url, tagid, location){
+     dojo.xhrPost({
+        url: url,
+        load: function(response)
+        {
+            var tag=dojo.byId(tagid);
+            if(tag){
+                var pan=dijit.byId(tagid);
+                if(pan && pan.attr)
+                {
+                    if(location == "bottom"){
+                       pan.attr('content', tag.innerHTML + response);
+                    }else if(location == "top"){
+                       pan.attr('content', response + tag.innerHTML);
+                    }
+                }else
+                {
+                    if(location == "bottom"){
+                       tag.innerHTML = tag.innerHTML + response;
+                    }else if(location == "top"){
+                       tag.innerHTML = response + tag.innerHTML;
+                    }
+                }
+            }else {
+                //alert("No existe ningun elemento con id " + tagid);
+            }
+            return response;
+        },
+        error: function(response)
+        {
+            if(dojo.byId(tagid)) {
+                dojo.byId(tagid).innerHTML = "<p>Ocurrio un error con respuesta:<br />" + response + "</p>";
+            }else {
+                //alert("No existe ningun elemento con id " + tagid);
+            }
+            return response;
+        },
+        handleAs: "text"
+    });
+    }
+</script>
+
 <%!
+/*
 public String postRequest(Map<String, String> params, String url,
             String userAgent, String method) throws IOException {
         
@@ -96,7 +142,8 @@ public String postRequest(Map<String, String> params, String url,
         }
         return response;
     }
-
+*/
+/*
 public boolean parseResponse(String response, JspWriter out, HttpServletRequest request, SWBParamRequest paramRequest) {
         
         boolean isThereMoreMsgs = false;
@@ -105,7 +152,8 @@ public boolean parseResponse(String response, JspWriter out, HttpServletRequest 
                         boolean isResponseEmpty = false;
                         //JSONObject phraseResp = mainObject.getJSONObject(j);
                         JSONObject phraseResp = new JSONObject(response);
-                        System.out.println("Tamanio del arreglo:" + phraseResp.length());                       
+                        System.out.println("Tamanio del arreglo:" + phraseResp.length());
+*/                                             
                         //if (phraseResp.getInt("code") != 200) {
                             //Si hubo un problema con la consulta, se extrae la descripci?n del problema
                             /*StringBuilder errorMsg = new StringBuilder(128);
@@ -122,6 +170,7 @@ public boolean parseResponse(String response, JspWriter out, HttpServletRequest 
                             log.error(errorMsg.toString());
                             continue;*/
                         //} else
+                        /*
                             int cont = 0;
                             JSONArray postsData = phraseResp.getJSONArray("data");
                             System.out.println("ARREGLO DE DATOS:" + postsData.length());
@@ -129,7 +178,7 @@ public boolean parseResponse(String response, JspWriter out, HttpServletRequest 
                                 cont++;
                                 imprime(out,  postsData.getJSONObject(k), request, paramRequest);                                
                                 //System.out.println("JSONProperty:" + postsData.getJSONObject(k).);
-                            }
+                            }*/
 //                            //Si el ArrayList tiene tama?o mayor a 0, entonces es que existen mensajes para enviar al clasificador
 //                            if(aListExternalPost.size()>0)
 //                            {
@@ -158,6 +207,7 @@ public boolean parseResponse(String response, JspWriter out, HttpServletRequest 
                             queriesArray[j].put("nextQuery", nextPage);
                             queriesArray[j].put("msgCounted", Integer.toString(cont));
                             * */
+                            /*
         } catch (JSONException jsone) {
             
             System.out.println("Problemas al parsear respuesta de Facebook" + jsone);
@@ -207,7 +257,7 @@ void imprime(JspWriter writer, JSONObject postsData, HttpServletRequest request,
             writer.write(" Likes: <b>");
             JSONArray likes = postsData.getJSONObject("likes").getJSONArray("data");
             for (int k = 0; k < likes.length(); k++) {
-                writer.write(likes.getJSONObject(k).getString("name") + ", ");
+                writer.write(likes.getJSONObject(k).getString("name") + "(" + likes.getJSONObject(k).getString("id") + "), ");
                 if(likes.getJSONObject(k).getString("id").equals("100000536460020")){
                     //My User id is in 'the likes' of this post
                     iLikedPost = true;
@@ -221,7 +271,7 @@ void imprime(JspWriter writer, JSONObject postsData, HttpServletRequest request,
             writer.write(" <a href=\"\"  onclick=\"submitUrl('" + actionURL.setAction("doLike").setParameter("commentID", postsData.getString("id")).toString() + "',this);return false;" +"\">Like</a>");
         }
         
-        
+        */
         /*
         writer.write("<div id=\"" + status.getId() + "\" dojoType=\"dijit.layout.ContentPane\">");
         long minutes = (long)(new Date().getTime()/60000) - (status.getCreatedAt().getTime()/60000);
@@ -237,7 +287,7 @@ void imprime(JspWriter writer, JSONObject postsData, HttpServletRequest request,
             actionURL.setAction("doRT");
             writer.write("<a href=\"#\"  onclick=\"postHtml('" + actionURL.setParameter("id", status.getId()+"") + "','" + status.getId() + "'); return false;" +"\">Retweet</a>");
         }*/
-        
+        /*
         writer.write("   </div>");
         writer.write("   </td>");
         
@@ -249,16 +299,34 @@ void imprime(JspWriter writer, JSONObject postsData, HttpServletRequest request,
            e.printStackTrace();
        }
     return;
-}
+}*/
 %>
+
+<div dojoType="dojox.layout.ContentPane">
+    <script type="dojo/method">
+      eval(document.getElementById("appends").innerHTML);
+   </script>
+</div>
+      
+<div class="swbform">
+<div align="center"><h2>Showing USER's wall. </h2><br/></div>
+<div class="bar" id="newPostsAvailable" dojoType="dojox.layout.ContentPane"></div>
+<div id="facebookStream"></div>
 <%
     HashMap<String, String> params = new HashMap<String, String>(2);
     params.put("access_token", facebookBean.getAccessToken());
-    params.put("limit", "6");
+    params.put("limit", "10");
     System.out.println("SURI jsp: " + paramRequest.getMode().toString());
+    String objUri = (String) request.getParameter("suri");
     
     //params.put("callback", "?");
     String fbResponse = postRequest(params, "https://graph.facebook.com/me/home",
                         "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95", "GET");
-    boolean t = parseResponse(fbResponse, out, request, paramRequest);
+    String untilPost = parseResponse(fbResponse, out, request, paramRequest);//Get the older posts until 'untilPost'
+    SWBResourceURL renderURL = paramRequest.getRenderUrl();
+    
 %>
+<div align="center" id="getMorePosts" dojoType="dijit.layout.ContentPane">
+    <label id="morePostsLabel"><a href="#" onclick="appendHtmlAt('<%=renderURL.setMode("getMorePosts").setParameter("until", untilPost).setParameter("suri", objUri)%>','getMorePosts', 'bottom');try{this.parentNode.parentNode.removeChild( this.parentNode );}catch(noe){}; return false;">More posts</a></label>
+</div>
+</div>
