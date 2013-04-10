@@ -377,11 +377,23 @@ public class SWBSocialRule extends GenericResource {
         hmAttr.put("Tipo", "TEXT");
         hmOper.put(">", paramRequest.getLocaleString("msgGreater"));
         hmAttr.put("Operador", hmOper);
-        comboAtt.put(Stream.social_stream_KloutValue.getName(), hmAttr); //falta tag de IP
+        comboAtt.put(Stream.social_stream_KloutValue.getName(), hmAttr);
+        
+         //Words
+        hmAttr = new HashMap();
+        hmOper = new HashMap();
+        hmValues = new HashMap();
+        hmAttr.put("Etiqueta", paramRequest.getLocaleString("msgWords"));   ///////////////////////////
+        hmAttr.put("Tipo", "TEXT");
+        hmOper.put("=", paramRequest.getLocaleString("msgSameAs"));
+        hmAttr.put("Operador", hmOper);
+        comboAtt.put(MessageIn.social_msg_Text.getName(), hmAttr);
+        
         
         int numero = 0;
-        vecOrderAtt.add(numero++, PostIn.social_postSentimentalType.getName()); //RuleMgr.TAG_INT_ISREGISTERED
-        vecOrderAtt.add(numero++, Stream.social_stream_KloutValue.getName()); //falta tag de IP
+        vecOrderAtt.add(numero++, PostIn.social_postSentimentalType.getName()); 
+        vecOrderAtt.add(numero++, Stream.social_stream_KloutValue.getName()); 
+        vecOrderAtt.add(numero++, MessageIn.social_msg_Text.getName()); 
         
  /*       
 
@@ -1052,6 +1064,7 @@ public class SWBSocialRule extends GenericResource {
                 strXMLRule += "<rule/>";
             }
             try {
+                System.out.println("strXMLRule_George:"+strXMLRule);
                 rRule.setXml(strXMLRule);
                 rRule = null;
                 dom = SWBUtils.XML.xmlToDom(strXMLRule);
