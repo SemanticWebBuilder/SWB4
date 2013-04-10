@@ -90,7 +90,9 @@ LongFileUploader.prototype.sendFile = function(file) {
 LongFileUploader.prototype.finishFile = function(porEnviar) {
     var result = this.get(this.baseURL + "/eofcheck/" + porEnviar.id + "?dirToPlace=" + this.ruta);
     if (result.saved)
-        alert("El archivo "+porEnviar.name+" se grabó en "+this.ruta);
+        alert("El archivo "+porEnviar.name+" fue guardado en "+this.ruta);
+    else
+        alert("El archivo no pudo moverse a "+this.ruta);
 }
 
 LongFileUploader.prototype.processFile = function(porEnviar) {
