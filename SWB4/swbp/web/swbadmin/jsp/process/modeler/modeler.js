@@ -415,6 +415,52 @@
             return obj;
         },
         
+        createGroupArtifact:function(id,parent) {
+            var obj= ToolKit.createResizeObject(id,parent);
+            obj.setAttributeNS(null,"oclass","group_o");
+            obj.setAttributeNS(null,"bclass","group");
+            obj.setBaseClass();
+            obj.setAttributeNS(null,"stroke-dasharray","20,5,3,5");
+            
+            var rect=document.createElementNS(ToolKit.svgNS,"rect");
+            obj.subLine = rect;
+            obj.subLine.onmousedown=obj.onmousedown;
+            obj.subLine.onmouseup=obj.onmouseup;
+            
+            obj.updateSubLine=function() {
+                if (obj.subLine && obj.subLine!=null) {
+                    obj.subLine.setAttributeNS(null,"x",obj.getX()-obj.getWidth()/2);
+                    obj.subLine.setAttributeNS(null,"y",obj.getY()-obj.getHeight()/2);
+                    obj.subLine.setAttributeNS(null,"width",obj.getWidth());
+                    obj.subLine.setAttributeNS(null,"height",obj.getHeight());
+                    ToolKit.svg.insertBefore(obj.subLine, obj);
+                    obj.subLine.setAttributeNS(null,"class","sequenceFlowSubLine");
+                }
+            }
+            
+            var fMove=obj.move;
+            var fRemove=obj.remove;
+            var fResize=obj.resize;
+            
+            obj.move=function(x,y) {
+                fMove(x,y);
+                obj.updateSubLine();
+            }
+            
+            obj.resize=function(w,h) {
+                fResize(w,h);
+                obj.updateSubLine();
+            }
+            
+            obj.remove=function(all) {
+                ToolKit.svg.removeChild(obj.subLine);
+                fRemove(all);
+                obj.subLine=null;
+            }
+            
+            return obj;
+        },
+        
         createSubProcess: function(id, parent, type) {
             var obj=Modeler.createTask(id,parent);
             var icon=obj.addIcon("#subProcessMarker",0,1,-1,-12);
@@ -681,8 +727,11 @@
                 ret= Modeler.createObject("#complexGateway",null,null);
                 ret.setText("Compleja",0,1,80,1);
             }
+            else if(type=='group') {
+                ret= Modeler.createGroupArtifact(null,null);
+                ret.resize(300,300);
+            }
             else if(type=='annotation')ret= Modeler.createObject("#xxxxxxx",null,null);
-            else if(type=='group')ret= Modeler.createObject("#xxxxxxx",null,null);
             else if(type=='dataObject') {
                 ret= Modeler.createObject("#data",null,null);
                 ret.setText("Dato",0,1,80,1);
