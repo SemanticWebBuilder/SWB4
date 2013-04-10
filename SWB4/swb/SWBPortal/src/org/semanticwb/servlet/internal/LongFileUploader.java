@@ -71,7 +71,7 @@ public final class LongFileUploader implements InternalServlet {
     public void doProcess(HttpServletRequest request,
             HttpServletResponse response, DistributorParams dparams) 
             throws IOException, ServletException {
-        if (!dparams.getUser().isSigned()) return;
+        //if (!dparams.getUser().isSigned()) return;
         String uri = request.getRequestURI();
         String cntx = request.getContextPath();
         String path = uri.substring(cntx.length());
@@ -98,6 +98,8 @@ public final class LongFileUploader implements InternalServlet {
             abortUpload(request, response, dparams, param);
         } else if (cmd.equals("eofcheck")) {
             eofCheck(request, response, dparams, param);
+        } else if (cmd.equals("status")) {
+            giveStatus(request, response, dparams, param);
         }
 
     }
@@ -115,6 +117,7 @@ public final class LongFileUploader implements InternalServlet {
             out.print(", \"pendingFiles\":[");
             boolean doComma = false;
             for (PendingFile pf : lpf) {
+                if (pf.isDone()) continue;
                 if (doComma) out.print(",");
                 out.print("{\"id\":\"" + pf.getId() + "\",\"size\":"
                         + pf.getSize() + ",\"filename\":\"" + pf.getFilename()
@@ -162,9 +165,9 @@ public final class LongFileUploader implements InternalServlet {
 
     private void uploadChunk(HttpServletRequest request,
             HttpServletResponse response, DistributorParams dparams,
-            String parm) throws IOException, ServletException {
-        File workfiledir = new File(tmpplace, parm);
-        PendingFile pf = fileUtil.getPendingFileFromId(parm);
+            String param) throws IOException, ServletException {
+        File workfiledir = new File(tmpplace, param);
+        PendingFile pf = fileUtil.getPendingFileFromId(param);
         if (!workfiledir.exists()) {
             workfiledir.mkdirs();
         }
@@ -221,8 +224,8 @@ public final class LongFileUploader implements InternalServlet {
 
     private void abortUpload(HttpServletRequest request,
             HttpServletResponse response, DistributorParams dparams,
-            String parm) throws IOException, ServletException {
-        boolean ret=fileUtil.removePendingFile(parm);
+            String param) throws IOException, ServletException {
+        boolean ret=fileUtil.removePendingFile(param);
         response.setHeader("mimetype", "text/json-comment-filtered");
         PrintWriter out = response.getWriter();
         out.print("{\"deleted\":\"" + ret+"\"}");
@@ -230,15 +233,15 @@ public final class LongFileUploader implements InternalServlet {
 
     private void eofCheck(HttpServletRequest request,
             HttpServletResponse response, DistributorParams dparams,
-            String parm) throws IOException, ServletException {
+            String param) throws IOException, ServletException {
         String pdir = request.getParameter("dirToPlace");
         boolean ret = false;
         File dir = new File(org.semanticwb.SWBPortal.getWorkPath(), pdir);
         if (dir.exists()) {
-            PendingFile pf = fileUtil.getPendingFileFromId(parm);
+            PendingFile pf = fileUtil.getPendingFileFromId(param);
             File dest = new File(dir,pf.getFilename());
             if (!dest.exists()) {
-                File workfiledir = new File(tmpplace, parm);
+                File workfiledir = new File(tmpplace, param);
                 File orig = new File(workfiledir,pf.getFilename());
                 ret = orig.renameTo(dest);
                 if (!ret){
@@ -289,5 +292,21 @@ public final class LongFileUploader implements InternalServlet {
             }
         }
         return Long.toHexString(crc.getValue());
+    }
+
+    private void giveStatus(HttpServletRequest request, 
+            HttpServletResponse response, DistributorParams dparams, 
+            String param) throws IOException {
+        PendingFile pf = fileUtil.getPendingFileFromId(param);
+        response.setHeader("mimetype", "text/json-comment-filtered");
+        PrintWriter out = response.getWriter();
+        long localsize = 0;
+        File wrkfile = new File(tmpplace, pf.getId());
+        File updFile = new File(wrkfile, pf.getFilename());
+        if (updFile.exists()) {
+            localsize = updFile.length();
+        }
+        out.print("{\"id\":\""+ pf.getId() + "\",\"bytesRecived\":" + 
+                localsize + "}");
     }
 }
