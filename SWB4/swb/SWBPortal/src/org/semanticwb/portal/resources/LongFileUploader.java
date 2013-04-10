@@ -59,10 +59,19 @@ public class LongFileUploader extends GenericResource {
                 + "<script src=\"/swbadmin/js/longfu/swblongfileuploader.js\">"
                 + "</script><script type=\"text/javascript\">"
                 + "var lfu = new LongFileUploader(\"" + url + "\",\"" + path + 
-                "\");</script>");
+                "\", \""+id+"\");</script>");
         out.println("<div id=\"" + id + "\"><form>file: <input type=\"file\" "
                 + "name=\"updfile\" id=\"updfile\" "
-                + "onchange=\"lfu.sendFile(this)\"/></form></div>");
+                + "onchange=\"lfu.sendFile(this)\"/>"
+                + "<div id=\"progressBar\" style=\"width:100%; height:15px; "
+                + "border:1px solid #000; overflow:hidden;\">"
+                + "<div id=\""+id+"_percentage\" style=\"width:0%; height:15px; "
+                + "border-right: 1px solid #000000; background: #0000ff;\">"
+                + "</div><div id=\""+id+"_label\" style=\"color: #000000; "
+                + "font-size: 15px; font-style: italic; font-weight: "
+                + "bold; left: 25px; position: relative; top: -16px;\">"
+                + "</div></div>"
+                + "</form></div>");
 
 
     }
