@@ -4,8 +4,12 @@ package org.semanticwb.social.base;
    /**
    * Clase a Cambiar despues por "Relacional", esta y todas sus hijas. Clase que comprende todos los tipos de Post que pueden ir siendo creados en la herramienta.. 
    */
-public abstract class PostBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Tagable,org.semanticwb.model.Traceable
+public abstract class PostBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Traceable,org.semanticwb.model.Tagable
 {
+   /**
+   * Indica si un mensaje es prioritario o no. Esta propiedad aplica tanto si es un mensaje de entrada (PostIn) o de salida (PostOut).
+   */
+    public static final org.semanticwb.platform.SemanticProperty social_isPrioritary=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#isPrioritary");
    /**
    * Catalogo de temas de un modelo (Marca)
    */
@@ -246,6 +250,24 @@ public abstract class PostBase extends org.semanticwb.model.SWBClass implements 
     public void setCreated(java.util.Date value)
     {
         getSemanticObject().setDateProperty(swb_created, value);
+    }
+
+/**
+* Gets the IsPrioritary property
+* @return boolean with the IsPrioritary
+*/
+    public boolean isIsPrioritary()
+    {
+        return getSemanticObject().getBooleanProperty(social_isPrioritary);
+    }
+
+/**
+* Sets the IsPrioritary property
+* @param value long with the IsPrioritary
+*/
+    public void setIsPrioritary(boolean value)
+    {
+        getSemanticObject().setBooleanProperty(social_isPrioritary, value);
     }
    /**
    * Sets the value for the property Creator

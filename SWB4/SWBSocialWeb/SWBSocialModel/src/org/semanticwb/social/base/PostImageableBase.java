@@ -6,7 +6,7 @@ package org.semanticwb.social.base;
 public interface PostImageableBase extends org.semanticwb.social.PostDataable
 {
    /**
-   * Propiedad que almacena el nombre(referencia) de la foto en un objeto Post que lo requiera. 
+   * Photo 
    */
     public static final org.semanticwb.platform.SemanticProperty social_photo=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#photo");
    /**
