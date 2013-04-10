@@ -138,6 +138,7 @@
     stroke-width:2;
     stroke: #ADADAE;
     fill-opacity:1;
+    cursor:hand;
 }
 
 .swimlane_o
@@ -146,6 +147,7 @@
     fill: #E8E8FF;
     stroke-width:2;
     fill-opacity:1;
+    cursor: hand;
 }
 /*
 .intermediateEvent
@@ -221,6 +223,50 @@
     fill-opacity:.5;
     stroke-width:1;
     stroke:#2c5aa0                        
+}
+
+.transactionSquare {
+    stroke:#2c5aa0;
+    cursor:hand;
+    fill:none;
+    stroke-width:1.5;
+}
+
+.group {
+    stroke:#2c5aa0;
+    cursor:hand;
+    fill:none;
+    stroke-width:1.5;
+}
+
+.annotationArtifact {
+    fill:none;
+    stroke:#000000;
+    stroke-width:1.5px;
+    cursor:hand;
+}
+
+.annotationArtifactRect {
+    fill:none;
+    stroke:none;
+    fill:#E6E6E6;
+    fill-opacity:0.2;
+    cursor:hand;
+}
+
+.annotationArtifactRect_o {
+    fill:none;
+    fill:#E6E6E6;
+    stroke:#2cff20;
+    fill-opacity:0.2;
+    cursor:hand;
+}
+
+.group_o {
+    stroke:#2cff20;
+    cursor:hand;
+    fill:none;
+    stroke-width:1.5;
 }
 
 .taskMarker
