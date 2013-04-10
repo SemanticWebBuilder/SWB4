@@ -28,6 +28,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.model.Resource;
 import org.semanticwb.portal.api.GenericResource;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
@@ -78,6 +79,7 @@ public class LongFileUploader extends GenericResource {
             getResourceBase().setAttribute("frmPath", frmPath);
             try {
                 getResourceBase().updateAttributesToDB();
+                path = frmPath;
             } catch (Exception e) {
                 log.error(e);
             }
@@ -117,4 +119,13 @@ out.println("<script type=\"text/javascript\">");
     out.println("</div>");
 
     }
+
+    @Override
+    public void setResourceBase(Resource base) throws SWBResourceException {
+        super.setResourceBase(base); 
+        path = base.getAttribute("frmPath");
+    }
+    
+    
+    
 }
