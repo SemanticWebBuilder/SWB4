@@ -1,9 +1,10 @@
-function LongFileUploader(baseURL, ruta) {
+function LongFileUploader(baseURL, ruta, eleid) {
     this.baseURL = baseURL;
     this.ruta = ruta;
     this.toSendFiles = new Array();
     start = this.get(this.baseURL + "/start");
     this.chunkSize = start.chunkSize;
+    this.eleid = eleid;
 }
 
 LongFileUploader.prototype.get = function(url, postdata) {
@@ -88,11 +89,13 @@ LongFileUploader.prototype.sendFile = function(file) {
 }
 
 LongFileUploader.prototype.finishFile = function(porEnviar) {
+    document.getElementById(this.eleid + "_percentage").style.width = 100 + '%';
+    document.getElementById(this.eleid + "_label").innerHTML = 100 + '%';
     var result = this.get(this.baseURL + "/eofcheck/" + porEnviar.id + "?dirToPlace=" + this.ruta);
     if (result.saved)
-        alert("El archivo "+porEnviar.name+" fue guardado en "+this.ruta);
+        alert("El archivo " + porEnviar.name + " fue guardado en " + this.ruta);
     else
-        alert("El archivo no pudo moverse a "+this.ruta);
+        alert("El archivo no pudo moverse a " + this.ruta);
 }
 
 LongFileUploader.prototype.processFile = function(porEnviar) {
@@ -105,6 +108,9 @@ LongFileUploader.prototype.processFile = function(porEnviar) {
         var chunk = this.getFragment(porEnviar.blob, ini, end);
         var reader = new FileReader();
         var me = this;
+        var progress = ini * 100 / porEnviar.size;
+        document.getElementById(this.eleid + "_percentage").style.width = progress + '%';
+        document.getElementById(this.eleid + "_label").innerHTML = progress + '%';
         reader.onloadend = function(e) {
             if (e.target.readyState == FileReader.DONE) {
                 var digest = crc32(e.target.result);
