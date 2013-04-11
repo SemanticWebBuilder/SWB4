@@ -21,7 +21,7 @@ public class GadgetLoader
 {
 
     private static Logger log = SWBUtils.getLogger(GoogleGadget.class);
-    private int start = 0;
+    private int start = 1;
     private List<URL> gadgets = new ArrayList<URL>();
     private String GOOGLE_URL = "http://www.google.com/ig/directory?type=gadgets&start=";
 
@@ -39,7 +39,7 @@ public class GadgetLoader
     }
     public int next()
     {
-        start++;
+        start+=7;
         String urlTofind = GOOGLE_URL + start;
         try
         {
