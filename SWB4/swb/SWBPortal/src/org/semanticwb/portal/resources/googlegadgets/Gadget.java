@@ -758,6 +758,10 @@ public class Gadget
                         }
 
                     }
+                    else
+                    {
+                        bundleName = bundleName.replace(MSG_PREFIX + tag + MSG_SUFIX, "");
+                    }
                 }
                 getTextFromLanguage = bundleName;
             }
