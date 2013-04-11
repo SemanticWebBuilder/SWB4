@@ -22,7 +22,6 @@
  */
 package org.semanticwb.portal.resources.googlegadgets;
 
-import com.sun.org.apache.xpath.internal.res.XPATHErrorResources;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
@@ -32,12 +31,16 @@ import java.net.URLConnection;
 import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.jdom.Document;
+import org.jdom.Element;
+import org.jdom.xpath.XPath;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.portal.api.GenericResource;
@@ -55,6 +58,8 @@ import org.semanticwb.portal.api.SWBResourceURL;
 public class GoogleGadget extends GenericResource
 {
 
+    private static String MSG_SUFIX = "__";
+    private static String MSG_PREFIX = "__MSG_";
     private GadgetLoader loader = new GadgetLoader();
     /** The Constant COUNTRY_ATTRIBUTE. */
     private static final String COUNTRY_ATTRIBUTE = "country";
@@ -131,7 +136,7 @@ public class GoogleGadget extends GenericResource
                     {
                         if (!(name.equals(LANGUAGE_ATTRIBUTE) || name.equals("w") || name.equals("h") || name.equals("title")))
                         {
-                            name = "up_" + name;
+                            //name = "up_" + name;
                         }
                         if (name.equals(LANGUAGE_ATTRIBUTE))
                         {
@@ -175,6 +180,10 @@ public class GoogleGadget extends GenericResource
         if (paramsRequest.getMode().equals("changeConfig"))
         {
             doChangeConfig(request, response, paramsRequest);
+        }
+        else if (paramsRequest.getMode().equals("ifr"))
+        {
+            doFrame(request, response, paramsRequest);
         }
         else if (paramsRequest.getMode().equals("addGadget"))
         {
@@ -636,6 +645,7 @@ public class GoogleGadget extends GenericResource
             {
                 for (String name : gadget.getParameterNames())
                 {
+                    name = "up_"+name;
                     String label = gadget.getDisplayName(name, localeUser);
                     String defaultValue = gadget.getDefaultValue(name, localeUser);
                     String dataType = gadget.getDataType(name);
@@ -659,7 +669,7 @@ public class GoogleGadget extends GenericResource
                             {
                                 selected = true;
                             }
-                            if (this.getResourceBase().getAttribute("up_" + name, "").equals(value))
+                            if (this.getResourceBase().getAttribute(name, "").equals(value))
                             {
                                 selected = true;
                             }
@@ -704,6 +714,11 @@ public class GoogleGadget extends GenericResource
                 String w = this.getResourceBase().getAttribute("w", gadget.getWidth());
                 String h = this.getResourceBase().getAttribute("h", gadget.getHeight());
                 out.println("<iframe scrolling=\"no\" frameborder=\"0\" width=\"" + w + "px\" height=\"" + h + "px\" src=\"" + URL_FRAME + "?url=" + url + parameters + "\"></iframe>");
+                /*SWBResourceURL urlframe = paramsRequest.getRenderUrl();
+                urlframe.setMode("ifr");
+                urlframe.setCallMethod(SWBResourceURL.Call_DIRECT);
+                urlframe.setParameter("url", url);
+                out.println("<iframe scrolling=\"no\" frameborder=\"0\" width=\"" + w + "px\" height=\"" + h + "px\" src=\"" + urlframe + parameters + "\"></iframe>");*/
             }
             catch (IllegalArgumentException e)
             {
@@ -839,20 +854,20 @@ public class GoogleGadget extends GenericResource
         }
     }
 
-    private void doaddGadget(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws IOException,SWBResourceException
+    private void doaddGadget(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws IOException, SWBResourceException
     {
         String url = request.getParameter(URL_ATTRIBUTE);
         if (url != null)
         {
             this.getResourceBase().setAttribute(URL_ATTRIBUTE, url);
-            Gadget g=new Gadget(new URL(url));
+            Gadget g = new Gadget(new URL(url));
             try
             {
-                String title=g.getTitle(new Locale(paramsRequest.getUser().getLanguage()));
+                String title = g.getTitle(new Locale(paramsRequest.getUser().getLanguage()));
                 this.getResourceBase().setAttribute("title", title);
 
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 log.error(e);
 
@@ -866,7 +881,49 @@ public class GoogleGadget extends GenericResource
             {
                 log.error(e);
             }
-            doChangeConfig(request, response, paramsRequest);            
+            doChangeConfig(request, response, paramsRequest);
+        }
+    }
+
+    
+
+    
+
+    private void doFrame(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws IOException
+    {
+        String url = request.getParameter("url");
+        if (url != null)
+        {
+            try
+            {
+                Gadget g = new Gadget(new URL(url));                
+                String mode = request.getParameter("mode");
+                String lang = request.getParameter("lang");
+                if (lang == null)
+                {
+                    lang = paramsRequest.getUser().getLanguage();
+                }
+                String country = request.getParameter("country");
+                if ("all".equalsIgnoreCase(country))
+                {
+                    country = null;
+                }
+                Locale locale = new Locale(lang);
+                if (country != null)
+                {
+                    locale = new Locale(lang, country);
+                }
+                String content = g.getContent(mode,locale,paramsRequest.getResourceBase());
+                PrintWriter out = response.getWriter();
+                out.write(content);
+                out.close();
+
+            }
+            catch (MalformedURLException me)
+            {
+                log.error(me);
+            }
+
         }
     }
 }
