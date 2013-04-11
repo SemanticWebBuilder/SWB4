@@ -1051,8 +1051,16 @@ public class Gadget
             {
                 src = "http://" + src;
             }
-            URI urlimage = new URI(src);
-            getSrcImage = url.toURI().resolve(urlimage).toString();
+            try
+            {
+                URI urlimage = new URI(src);
+                getSrcImage = url.toURI().resolve(urlimage).toString();
+            }
+            catch(Exception e)
+            {
+                log.debug(e);
+                return src;
+            }
         }
         else
         {
