@@ -25,6 +25,7 @@ package org.semanticwb.portal.resources.googlegadgets;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -32,6 +33,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+import java.util.StringTokenizer;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
@@ -157,7 +159,7 @@ public class Gadget
                 Element eEnumValue = (Element) listEnumValues.get(j);
                 String value = eEnumValue.getAttributeValue("value");
                 String displayValue = eEnumValue.getAttributeValue("display_value");
-                displayValue = getTextFromLanguage(displayValue, locale);
+                displayValue = getTextFromLanguage(displayValue, locale, null);
                 getValues.put(value, displayValue);
             }
         }
@@ -186,7 +188,7 @@ public class Gadget
             if (eUserPref.getAttributeValue(DEFAULT_VALUE) != null)
             {
                 String defaultValue = eUserPref.getAttributeValue(DEFAULT_VALUE);
-                defaultValue = getTextFromLanguage(defaultValue, locale);
+                defaultValue = getTextFromLanguage(defaultValue, locale, null);
                 getDefaultValue = defaultValue;
             }
         }
@@ -301,7 +303,7 @@ public class Gadget
             {
                 getDisplayName = eUserPref.getAttributeValue("name");
             }
-            getDisplayName = getTextFromLanguage(getDisplayName, locale);
+            getDisplayName = getTextFromLanguage(getDisplayName, locale, null);
         }
         catch (JDOMException jde)
         {
@@ -403,6 +405,23 @@ public class Gadget
         return buffer.toString();
     }
 
+    public Map<String, String> getParametersMap(Resource resource, Locale localeUser)
+    {
+        Map<String, String> parameters = new HashMap<String, String>();
+        Iterator<String> names = resource.getAttributeNames();
+        while (names.hasNext())
+        {
+            String name = names.next();
+            String value = resource.getAttribute(name);
+            if (value != null && !name.equals("url"))
+            {
+                parameters.put(name, value);
+            }
+        }
+
+        return parameters;
+    }
+
     /**
      * Sets the default parameters.
      * 
@@ -489,7 +508,7 @@ public class Gadget
      * @param locale the locale
      * @return the locale
      */
-    private Document getLocale(Locale locale)
+    public Document getLocale(Locale locale)
     {
         Document getLocale = null;
         String language = locale.getLanguage();
@@ -583,7 +602,7 @@ public class Gadget
      * @param locale the locale
      * @return the value from user pref
      */
-    private String getValueFromUserPref(String bundleName, Locale locale)
+    private String getDefaultValueFromUserPref(String bundleName, Locale locale)
     {
         String nameUserpref = getName(bundleName);
         try
@@ -593,7 +612,7 @@ public class Gadget
             if (eUserPref != null && eUserPref.getAttributeValue(DEFAULT_VALUE) != null)
             {
                 String defaultValue = eUserPref.getAttributeValue(DEFAULT_VALUE);
-                defaultValue = getTextFromLanguage(defaultValue, locale);
+                //defaultValue = getTextFromLanguage(defaultValue, locale);
                 bundleName = bundleName.replaceAll(UP_PREFIX + nameUserpref + UP_SUFIX, defaultValue);
             }
         }
@@ -650,6 +669,20 @@ public class Gadget
         return null;
     }
 
+    private String getParameterTag(String data)
+    {
+        int pos = data.indexOf(UP_PREFIX);
+        if (pos != -1)
+        {
+            int pos2 = data.indexOf(UP_SUFIX, pos + UP_PREFIX.length());
+            if (pos2 != -1)
+            {
+                return data.substring(pos + UP_PREFIX.length(), pos2);
+            }
+        }
+        return null;
+    }
+
     /**
      * Gets the text from language.
      * 
@@ -657,7 +690,7 @@ public class Gadget
      * @param locale the locale
      * @return the text from language
      */
-    private String getTextFromLanguage(String bundleName, Locale locale)
+    public String getTextFromLanguage(String bundleName, Locale locale, Map<String, String> parameters)
     {
         String getTextFromLanguage = bundleName;
         if (bundleName != null)
@@ -676,10 +709,24 @@ public class Gadget
                 bundleName = bundleName.replaceAll(MSG_LOCALE, lang + "_" + country);
                 getTextFromLanguage = bundleName;
             }
-            int pos = bundleName.indexOf(UP_SUFIX);
-            if (pos != -1)
+            int pos = bundleName.indexOf(UP_PREFIX);
+            while (pos != -1)
             {
-                bundleName = getValueFromUserPref(bundleName, locale);
+                if (parameters == null || parameters.isEmpty())
+                {
+                    bundleName = getDefaultValueFromUserPref(bundleName, locale);
+                }
+                else
+                {
+                    String tag = getParameterTag(bundleName);
+                    String value = parameters.get(tag);
+                    if (value == null)
+                    {
+                        value = "";
+                    }
+                    bundleName = bundleName.replace(UP_PREFIX + tag + UP_SUFIX, value);
+                }
+                pos = bundleName.indexOf(UP_PREFIX);
             }
             try
             {
@@ -712,7 +759,7 @@ public class Gadget
 
                     }
                 }
-                getTextFromLanguage=bundleName;
+                getTextFromLanguage = bundleName;
             }
             catch (Exception e)
             {
@@ -722,6 +769,246 @@ public class Gadget
         }
         return getTextFromLanguage;
 
+    }
+
+    public String getHomeContent()
+    {
+        return getContentMode("home");
+    }
+    public String getCanvasContent()
+    {
+        return getContentMode("canvas");
+    }
+
+    public String getDefaultContent()
+    {
+        return getContentMode("default");
+    }
+
+    public String getPreviewtContent()
+    {
+        return getContentMode("preview");
+    }
+
+    public String getContentMode(String mode)
+    {
+        String content = "";
+        try
+        {
+            XPath xpath = XPath.newInstance("/Module/Content");
+            List<Element> nodes = xpath.selectNodes(module);
+            for (Element element : nodes)
+            {
+                String view = element.getAttributeValue("view");
+                if (view != null && view.indexOf(mode) != -1)
+                {
+                    content = element.getText();
+                }
+            }
+
+        }
+        catch (Exception e)
+        {
+            log.error(e);
+        }
+        return content;
+    }
+
+    public boolean isURLContent()
+    {
+        try
+        {
+            XPath xpath = XPath.newInstance("/Module/Content");
+            List<Element> elements = xpath.selectNodes(module);
+            for (Element element : elements)
+            {
+                String type = element.getAttributeValue("type");
+
+                if ("url".equalsIgnoreCase(type))
+                {
+                    return true;
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            log.error(e);
+
+            return false;
+        }
+        return false;
+    }
+
+    public boolean isHTMLContent()
+    {
+        try
+        {
+            XPath xpath = XPath.newInstance("/Module/Content");
+            List<Element> elements = xpath.selectNodes(module);
+            for (Element element : elements)
+            {
+                String type = element.getAttributeValue("type");
+
+                if ("html".equalsIgnoreCase(type))
+                {
+                    return true;
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            log.error(e);
+
+            return false;
+        }
+        return false;
+    }
+
+    public String getFirstHTMLContent()
+    {        
+        try
+        {
+            XPath xpath = XPath.newInstance("/Module/Content[0]");
+            Element element = (Element)xpath.selectSingleNode(module);
+            return element.getText();
+        }
+        catch(Exception e)
+        {
+            log.error(e);
+
+        }
+        return "";
+    }
+    public Set<String> getModes()
+    {
+        Set<String> modes = new HashSet<String>();
+        try
+        {
+            XPath xpath = XPath.newInstance("/Module/Content");
+            List<Element> elements = xpath.selectNodes(module);
+            for (Element element : elements)
+            {
+                String view = element.getAttributeValue("view");
+                if (view != null)
+                {
+                    StringTokenizer st = new StringTokenizer(view, ",");
+                    while (st.hasMoreTokens())
+                    {
+                        String mode = st.nextToken();
+                        modes.add(mode);
+                    }
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            log.error(e);
+        }
+        return modes;
+    }
+
+    public int getHTMLCountContents()
+    {
+        
+        try
+        {
+            XPath xpath = XPath.newInstance("/Module/Content[@type='html']");
+            List<Element> elements = xpath.selectNodes(module);
+            return elements.size();
+        }
+        catch (Exception e)
+        {
+            log.error(e);
+        }
+        return 0;
+    }
+
+    public String getContent(String mode, Map<String, String> parameters)
+    {
+        String content="";
+        try
+        {
+            if (isURLContent())
+            {
+                XPath xpath = XPath.newInstance("/Module/Content[@type='url']");
+                Element econtent = (Element) xpath.selectSingleNode(module);
+                String href = econtent.getAttributeValue("href");
+                StringBuilder qstring = new StringBuilder();
+                if (!parameters.isEmpty())
+                {
+                    qstring.append("?");
+                }
+                for (String key : parameters.keySet())
+                {
+                    if (key.startsWith("up_"))
+                    {
+                        String value = parameters.get(key);
+                        if (key.startsWith("up_"))
+                        {
+                            key = key.substring("up_".length());
+                        }
+                        qstring.append(key);
+                        qstring.append("=");
+                        qstring.append(value);
+                        qstring.append("&");
+                    }
+                }
+                content = "<iframe src=\"" + href + qstring + "\">";
+            }
+            else if(isHTMLContent())
+            {
+                if(getHTMLCountContents()==1)
+                {
+                    content=getFirstHTMLContent();
+                }
+                else if(getHTMLCountContents()>1)
+                {                    
+                    if(mode==null) // no hay modo
+                    {
+                        content=getDefaultContent();
+                        if("".equals(content))
+                        {
+                            content=getCanvasContent();
+                        }
+                    }
+                    else
+                    {
+                        content=getContentMode(mode);
+                    }
+                }
+                
+            }
+        }
+        catch (Exception e)
+        {
+            log.error(e);
+        }
+        return content;
+    }
+
+    public String getContent(String mode, Locale locale, Resource resource)
+    {
+        Map<String, String> parameters = getParametersMap(resource, locale);
+        String content = getContent(mode, parameters);
+        content = parseContent(content, locale, null);
+        return content;
+    }
+
+    public String parseContent(String content, Locale locale, Map<String, String> parameters)
+    {
+        int pos = content.indexOf(MSG_PREFIX);
+        while (pos != -1)
+        {
+            int pos2 = content.indexOf(MSG_SUFIX, pos + MSG_PREFIX.length());
+            if (pos2 != -1)
+            {
+                String tag = content.substring(pos, pos2 + MSG_SUFIX.length());
+                String newText = getTextFromLanguage(tag, locale, parameters);
+                content = content.replace(tag, newText);
+            }
+            pos = content.indexOf(MSG_PREFIX);
+        }
+        return content;
     }
 
     /**
@@ -737,7 +1024,7 @@ public class Gadget
         if (this.modulePrefs.getAttributeValue("description") != null)
         {
             getDescription = this.modulePrefs.getAttributeValue("description");
-            getDescription = getTextFromLanguage(getDescription, locale);
+            getDescription = getTextFromLanguage(getDescription, locale, null);
         }
         return getDescription;
     }
@@ -755,7 +1042,7 @@ public class Gadget
         if (modulePrefs.getAttributeValue("thumbnail") != null)
         {
             String src = modulePrefs.getAttributeValue("thumbnail");
-            src = getTextFromLanguage(src, locale);
+            src = getTextFromLanguage(src, locale, null);
             if (!src.startsWith("http://") && src.startsWith("www"))
             {
                 src = "http://" + src;
@@ -768,7 +1055,7 @@ public class Gadget
             if (modulePrefs.getAttributeValue("screenshot") != null)
             {
                 String src = modulePrefs.getAttributeValue("screenshot");
-                src = getTextFromLanguage(src, locale);
+                src = getTextFromLanguage(src, locale, null);
                 if (!src.startsWith("http://") && src.startsWith("www"))
                 {
                     src = "http://" + src;
@@ -793,7 +1080,7 @@ public class Gadget
         String getDirectoryTitle = null;
         if (modulePrefs.getAttributeValue("directory_title") != null)
         {
-            getDirectoryTitle = getTextFromLanguage(modulePrefs.getAttributeValue("directory_title"), locale);
+            getDirectoryTitle = getTextFromLanguage(modulePrefs.getAttributeValue("directory_title"), locale, null);
         }
         if (getDirectoryTitle == null)
         {
@@ -872,7 +1159,7 @@ public class Gadget
         if (modulePrefs.getAttributeValue(TITLE_ATTRIBUTE) != null)
         {
             getTitle = modulePrefs.getAttributeValue(TITLE_ATTRIBUTE);
-            getTitle = getTextFromLanguage(getTitle, locale);
+            getTitle = getTextFromLanguage(getTitle, locale, null);
         }
         return getTitle;
     }
