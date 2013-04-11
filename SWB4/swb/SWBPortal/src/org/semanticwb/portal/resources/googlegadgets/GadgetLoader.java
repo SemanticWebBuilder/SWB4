@@ -8,8 +8,8 @@ import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLDecoder;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 
@@ -22,7 +22,7 @@ public class GadgetLoader
 
     private static Logger log = SWBUtils.getLogger(GoogleGadget.class);
     private int start = 0;
-    private Set<URL> gadgets = new HashSet<URL>();
+    private List<URL> gadgets = new ArrayList<URL>();
     private String GOOGLE_URL = "http://www.google.com/ig/directory?type=gadgets&start=";
 
     public GadgetLoader()
