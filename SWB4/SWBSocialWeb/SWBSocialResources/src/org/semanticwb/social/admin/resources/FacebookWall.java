@@ -251,7 +251,7 @@ public class FacebookWall extends GenericResource {
             response.setRenderParameter("liked", "ok");
             response.setRenderParameter("access_token", facebook.getAccessToken());
             System.out.println("LIKE-End");
-            response.setMode("likeSent"); //show RT Message and update div
+            response.setMode("likeSent"); //show Like Message and update div
         }else if(action.equals("doUnlike")){    //If you liked a post from your friends you can do unlike simply
             System.out.println("UNLIKE-Start"); //If you liked a post from a user you gave like, you cannot give unlike
             String objUri = (String) request.getParameter("suri");
@@ -269,7 +269,17 @@ public class FacebookWall extends GenericResource {
             response.setRenderParameter("unliked", "ok");
             response.setRenderParameter("access_token", facebook.getAccessToken());
             System.out.println("UNLIKE-End");
-            response.setMode("unlikeSent"); //show RT Message and update div
+            response.setMode("unlikeSent"); //show Like Message and update div
+        }else if(action.equals("sendReply")){
+            try {
+                String answer = request.getParameter("replyText");
+                System.out.println("Answer Text:" + answer);
+                //twitter.updateStatus(new StatusUpdate(answer).inReplyToStatusId(id));
+                response.setRenderParameter("repliedPost", "ok");
+                response.setMode("postSent");                
+            } catch (Exception ex) {
+                log.error("Error when trying to reply ", ex);
+            }
         }
     }
 
@@ -278,6 +288,8 @@ public class FacebookWall extends GenericResource {
         String mode = paramRequest.getMode();
         SWBResourceURL actionURL = paramRequest.getActionUrl();
         actionURL.setParameter("suri", request.getParameter("suri"));        
+        System.out.println("suri:" + request.getParameter("suri"));
+        System.out.println("mode:" + mode);
         PrintWriter out = response.getWriter();
         if(mode!= null && mode.equals("getMorePosts")){//Gets more Posts
             System.out.println("brings more posts");
@@ -334,6 +346,32 @@ public class FacebookWall extends GenericResource {
             } catch (Exception ex) {
                 log.error("Error when trying to like/unlike post ", ex);
             }
+        }else if(mode!= null && mode.equals("replyPost")){//Displays dialog to create tweet
+            actionURL.setParameter("commentID", request.getParameter("commentID"));
+            actionURL.setParameter("suri", request.getParameter("suri"));
+
+            out.println("<form type=\"dijit.form.Form\" id=\"createPost\" action=\"" +  actionURL.setAction("sendReply") + "\" method=\"post\" onsubmit=\"submitForm('createPost'); try{document.getElementById('csLoading').style.display='inline';}catch(noe){}; return false;\">");            
+            out.println("<fieldset>");
+            out.println("<table>");
+            out.println("<tr>"); 
+            out.println("   <td>");
+            out.println("       <textarea type=\"dijit.form.Textarea\" name=\"replyText\" id=\"replyText\" rows=\"4\" cols=\"50\"></textarea>");
+            out.println("   </td>");
+            out.println("</tr>");
+            out.println("<tr>");
+            out.println("       <td style=\"text-align: center;\"><button dojoType=\"dijit.form.Button\" type=\"submit\">Reply</button></td>");
+            out.println("</tr>");
+            out.println("</table>");
+            out.println("</fieldset>");
+            out.println("</form>");
+            out.println("<span id=\"csLoading\" style=\"width: 100px; display: none\" align=\"center\">&nbsp;&nbsp;&nbsp;<img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/images/loading.gif\"/></span>");
+        }else if(mode!= null && mode.equals("postSent")){//Hides dialog used to create Post
+            if(request.getParameter("repliedPost") != null && request.getParameter("repliedPost").equals("ok")){
+                out.println("<script type=\"text/javascript\">");
+                out.println("   hideDialog();");
+                out.println("   showStatus('Post sent');");
+                out.println("</script>");
+            }
         }else {
             super.processRequest(request, response, paramRequest);
         }
@@ -377,7 +415,7 @@ public class FacebookWall extends GenericResource {
                     System.out.println("ARREGLO DE DATOS:" + postsData.length());
                     for (int k = 0; k < postsData.length(); k++) {
                         cont++;
-                        imprime(out,  postsData.getJSONObject(k), request, paramRequest);                                
+                        printPost(out,  postsData.getJSONObject(k), request, paramRequest);                                
                     }
                     if(phraseResp.has("paging")){
                         JSONObject pagingData = phraseResp.getJSONObject("paging");
@@ -402,11 +440,13 @@ public class FacebookWall extends GenericResource {
         return until;
     }
     
-    public static void imprime(Writer writer, JSONObject postsData, HttpServletRequest request, SWBParamRequest paramRequest){
+    public static void printPost(Writer writer, JSONObject postsData, HttpServletRequest request, SWBParamRequest paramRequest){
         try{
             SWBResourceURL actionURL = paramRequest.getActionUrl();
             actionURL.setParameter("suri",request.getParameter("suri"));
-
+            
+            SWBResourceURL renderURL = paramRequest.getRenderUrl();
+            renderURL.setParameter("suri",request.getParameter("suri"));
 
             writer.write("<fieldset>");
             writer.write("<table style=\"width: 100%; border: 0px\">");
@@ -479,7 +519,7 @@ public class FacebookWall extends GenericResource {
                 writer.write(" Likes: <b>");
                 JSONArray likes = postsData.getJSONObject("likes").getJSONArray("data");
                 for (int k = 0; k < likes.length(); k++) {
-                    writer.write(likes.getJSONObject(k).getString("name") + "(" + likes.getJSONObject(k).getString("id") + "), ");
+                    writer.write(likes.getJSONObject(k).getString("name") + ", ");
                     if(likes.getJSONObject(k).getString("id").equals("100000536460020")){
                         //My User id is in 'the likes' of this post
                         iLikedPost = true;
@@ -492,7 +532,7 @@ public class FacebookWall extends GenericResource {
             }else{
                 writer.write(" <a href=\"\"  onclick=\"submitUrl('" + actionURL.setAction("doLike").setParameter("commentID", postsData.getString("id")).toString() + "',this);return false;" +"\">Like</a>");
             }
-
+            writer.write(" <a href=\"\" onclick=\"showDialog('" + renderURL.setMode("replyPost").setParameter("commentID", postsData.getString("id")) + "','Reply to " + postsData.getJSONObject("from").getString("name") + "');return false;\">Reply</a>  ");
             writer.write("   </div>");
             writer.write("   </td>");
 
