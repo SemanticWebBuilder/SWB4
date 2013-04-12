@@ -1,6 +1,9 @@
 package applets.edit;
 
 import java.awt.Font;
+import java.awt.Toolkit;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.StringSelection;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
@@ -21,6 +24,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JRootPane;
+import javax.swing.JSeparator;
 import javax.swing.UIManager;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -40,6 +44,8 @@ public class XSLRootPane extends JRootPane implements HyperlinkListener, SyntaxC
     private boolean isDefaultTemplate;
     private JMenuItem localJMenuItem;
     private JMenuItem localJMenuItemSaveAs;
+    private Clipboard portapapeles;
+    private String textoCopiado;
 
     public XSLRootPane() {
         this(true);
@@ -98,6 +104,102 @@ public class XSLRootPane extends JRootPane implements HyperlinkListener, SyntaxC
         localJMenuItemSaveAs = new JMenuItem(new SaveAsAction());
         localJMenu.add(localJMenuItemSaveAs);
         localJMenuBar.add(localJMenu);
+        
+        
+        if (!isDefaultTemplate) {
+            localJMenu = new JMenu("Editar");
+            JMenuItem localJMenuItemasteUndo = new JMenuItem("Deshacer");
+            localJMenu.add(localJMenuItemasteUndo);
+            localJMenuItemasteUndo.addActionListener(new ActionListener() {
+
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    textArea.undoLastAction();
+                }
+            });
+
+            JMenuItem localJMenuItemasteRedo = new JMenuItem("Rehacer");
+            localJMenu.add(localJMenuItemasteRedo);
+            localJMenuItemasteRedo.addActionListener(new ActionListener() {
+
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    textArea.redoLastAction();
+                }
+            });
+
+            localJMenu.add(new JSeparator());
+
+            JMenuItem localJMenuItemasteCut = new JMenuItem("Cortar");
+            localJMenu.add(localJMenuItemasteCut);
+            localJMenuItemasteCut.addActionListener(new ActionListener() {
+
+                @Override
+                public void actionPerformed(ActionEvent e) {
+
+                    int inicio = textArea.getSelectionStart();
+                    int fin = textArea.getSelectionEnd();
+                    String s = textArea.getText();
+                    textoCopiado = s.substring(inicio, fin);
+                    portapapeles = Toolkit.getDefaultToolkit().getSystemClipboard();
+                    StringSelection texto = new StringSelection("" + textoCopiado);
+                    portapapeles.setContents(texto, texto);
+                    textArea.cut();
+                }
+            });
+
+            JMenuItem localJMenuItemCopy = new JMenuItem("Copiar");
+            localJMenu.add(localJMenuItemCopy);
+            localJMenuItemCopy.addActionListener(new ActionListener() {
+
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    textArea.copy();
+                    int inicio = textArea.getSelectionStart();
+                    int fin = textArea.getSelectionEnd();
+                    String s = textArea.getText();
+                    textoCopiado = s.substring(inicio, fin);
+                    portapapeles = Toolkit.getDefaultToolkit().getSystemClipboard();
+                    StringSelection texto = new StringSelection("" + textoCopiado);
+                    portapapeles.setContents(texto, texto);
+                }
+            });
+
+            JMenuItem localJMenuItemPaste = new JMenuItem("Pegar");
+            localJMenu.add(localJMenuItemPaste);
+            localJMenuItemPaste.addActionListener(new ActionListener() {
+
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    textArea.paste();
+                }
+            });
+
+            JMenuItem localJMenuItemDelete = new JMenuItem("Eliminar");
+            localJMenu.add(localJMenuItemDelete);
+            localJMenuItemDelete.addActionListener(new ActionListener() {
+
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                textArea.cut();
+                }
+            });
+
+            localJMenu.add(new JSeparator());
+
+            JMenuItem localJMenuItemSelectAll = new JMenuItem("Seleccionar todo");
+            localJMenu.add(localJMenuItemSelectAll);
+            localJMenuItemSelectAll.addActionListener(new ActionListener() {
+
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    textArea.selectAll();
+                }
+            });
+
+
+            localJMenuBar.add(localJMenu);
+        }
         
         localJMenu = new JMenu("Ver");
         JCheckBoxMenuItem localJCheckBoxMenuItem = new JCheckBoxMenuItem(new MonospacedFontAction());
