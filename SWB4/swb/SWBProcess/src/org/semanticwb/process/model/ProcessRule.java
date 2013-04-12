@@ -60,7 +60,7 @@ public class ProcessRule extends org.semanticwb.process.model.base.ProcessRuleBa
             //System.out.println("time:"+ (System.currentTimeMillis()-ini ));
         }catch(Exception e)
         {
-            log.error(e);
+            log.error("Error al evaluar regla en proceso "+instance.getProcessInstance().getProcessType().getId()+" - "+instance.getFlowNodeType().getId(),e);
         }
         //String action=source.getAction();
         if(ret!=null && ret instanceof Boolean)
