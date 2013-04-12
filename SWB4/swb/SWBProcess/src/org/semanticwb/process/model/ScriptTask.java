@@ -35,7 +35,7 @@ public class ScriptTask extends org.semanticwb.process.model.base.ScriptTaskBase
     public ScriptTask(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
-    }  
+    }
     
     @Override
     public void execute(FlowNodeInstance instance, User user)
@@ -51,7 +51,7 @@ public class ScriptTask extends org.semanticwb.process.model.base.ScriptTaskBase
             }
         }catch(Exception e)
         {
-            log.error(e);
+            log.error("Error al ejecutar script en proceso "+instance.getProcessInstance().getProcessType().getId()+" - "+instance.getFlowNodeType().getId(),e);
 
             Iterator<GraphicalElement> it=listChilds();
             while (it.hasNext())
