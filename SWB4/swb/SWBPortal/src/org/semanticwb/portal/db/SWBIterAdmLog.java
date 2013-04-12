@@ -82,19 +82,22 @@ public class SWBIterAdmLog implements java.util.Iterator
      */
     public boolean hasNext()
     {
-        try
+        if(!closed)
         {
-            if (!checked)
+            try
             {
-                next = rs.next();
-                checked = true;
+                if (!checked)
+                {
+                    next = rs.next();
+                    checked = true;
+                }
+            } catch (Exception e)
+            {
+                log.error(SWBUtils.TEXT.getLocaleString("locale_core", "error_IterAdmLog_hasNext()_isAfter"), e);
             }
-        } catch (Exception e)
-        {
-            log.error(SWBUtils.TEXT.getLocaleString("locale_core", "error_IterAdmLog_hasNext()_isAfter"), e);
-        }
-        if (!next) close();
-        return next;
+            if (!next) close();
+            return next;
+        }else return false;
     }
 
     /**
@@ -113,7 +116,7 @@ public class SWBIterAdmLog implements java.util.Iterator
                 return new SWBRecAdmLog(rs);
             } else
             {
-                next = rs.next();
+                next=hasNext();
                 checked = false;
                 if (next) return new SWBRecAdmLog(rs);
             }
