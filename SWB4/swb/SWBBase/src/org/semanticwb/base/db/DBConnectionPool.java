@@ -164,6 +164,19 @@ public class DBConnectionPool {
                     con = null;
                     return getConnection();
                 }
+                
+                try
+                {
+                    Statement st=con.getNativeConnection().createStatement();
+                    st.close();
+                }catch(Exception e)
+                {
+                    log.warn("Removed bad connection "+con.getId()+" (desc) from " + name + ", " + con.getDescription());
+                    //con.printTrackTrace(System.out);
+                    con.destroyConnection();
+                    con=null;
+                    return getConnection();
+                }                                
                 /*
                 try
                 {
