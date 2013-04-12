@@ -542,9 +542,10 @@ public class SWBVirtualHostFilter implements Filter
             intServlets.put("multiuploader", fileUploader);
             fileUploader.init(filterConfig.getServletContext());
             
-            InternalServlet longfileUploader = new LongFileUploader();
-            intServlets.put("bduplaoder", longfileUploader);
-            longfileUploader.init(filterConfig.getServletContext());
+            //Test Service
+//            InternalServlet longfileUploader = new LongFileUploader();
+//            intServlets.put("bduplaoder", longfileUploader);
+//            longfileUploader.init(filterConfig.getServletContext());
 
             InternalServlet robot = new RobotFile();
             intServlets.put("robots.txt", robot);
