@@ -712,6 +712,7 @@
             var _this=ToolKit;
             var obj=constructor();
             
+            obj.elementType="BaseObject";
             obj.text=null;
             obj.contents=[];                        
             obj.icons=[];      
