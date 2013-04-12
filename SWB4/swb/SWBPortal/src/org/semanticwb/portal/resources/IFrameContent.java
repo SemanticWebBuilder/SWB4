@@ -97,13 +97,17 @@ public class IFrameContent extends GenericAdmResource
                 height = null;
             }
             String url = base.getAttribute("url","#");
-            String script = base.getAttribute("script");
-            
-            String scrolling = base.getAttribute("scrolling");
-//System.out.println("scrolling="+scrolling);
+            String script = base.getAttribute("script");            
+            String scrolling = base.getAttribute("scrolling");            
+            String title = base.getAttribute("title");
             
             //out.print("<iframe id=\"ifc_"+base.getId()+"\" name=\"ifc_"+base.getId()+"\" ");
             out.print("<iframe id=\"iframecontentswb\" name=\"iframecontentswb\" ");
+            
+            if(title!=null && !title.isEmpty()) {
+                out.print(" title=\""+title+"\" ");
+            }
+            
             String passparams = base.getAttribute("passparam", "0");
             if ("1".equals(passparams))
             {

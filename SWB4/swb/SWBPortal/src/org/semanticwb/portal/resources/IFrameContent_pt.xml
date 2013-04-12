@@ -5,6 +5,7 @@
         <admdbconnmgr defconn="true"/>
         <fieldset legend="Configurações de conteúdo">
             <input type="text" name="url" label="Endereço web" promptMessage="Endereço Web" jsrequired="true"/>
+            <input type="text" name="title" label="Título" promptMessage="Título" maxlength="55" regExp="[a-zA-Z0-9\u00C0-\u00FF' ]+" invalidMessage="Somente letras, números e espaços"/>
         </fieldset>
 
         <div title="Aparência" open="true">

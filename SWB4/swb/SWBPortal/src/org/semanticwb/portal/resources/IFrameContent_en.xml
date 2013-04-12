@@ -5,6 +5,7 @@
         <admdbconnmgr defconn="true"/>
         <fieldset legend="Content Settings">
             <input type="text" name="url" label="Web Address" promptMessage="Web address" jsrequired="true"/>
+            <input type="text" name="title" label="Title" promptMessage="Title" maxlength="55" regExp="[a-zA-Z0-9\u00C0-\u00FF' ]+" invalidMessage="Only letters, numbers and spaces"/>
         </fieldset>
 
         <div title="Look &amp; Feel" open="true">
