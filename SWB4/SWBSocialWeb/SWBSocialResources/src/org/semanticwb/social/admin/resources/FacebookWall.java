@@ -425,6 +425,22 @@ public class FacebookWall extends GenericResource {
             writer.write(story + message);        
             writer.write("   </td>");
             writer.write("</tr>");
+            //Picture if exists, start
+            if(postsData.has("picture")){
+            writer.write("<tr>");
+            writer.write("   <td  width=\"10%\">"); 
+            writer.write("       &nbsp;");
+            writer.write("   </td>");
+            writer.write("   <td width=\"90%\">");
+            writer.write("      <div id=\"img" + postsData.getString("id") + "\" style=\"width: 250px; height: 250px; border: thick #666666; overflow: hidden; position: relative;\">");
+            writer.write("      <img src=\"" + postsData.getString("picture").replace("_s.", "_n.") + "\" style=\"position: absolute;\" onload=\"imageLoad(" + "this, img" + postsData.getString("id") + ");\"/>");
+            //writer.write("      <div class=\"imageContainer\">");
+            //writer.write("       <img class=\"imagePost\" src=\"" + postsData.getString("picture") + "\"/>");
+            writer.write("      </div>");
+            writer.write("   </td>");
+            writer.write("</tr>");
+            }
+            //Picture if exists, end
             //Comments,start
             if(postsData.has("comments")){
                 if(postsData.getJSONObject("comments").has("data")){
