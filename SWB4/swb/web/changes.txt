@@ -1,3 +1,7 @@
+  4.2.5.1
+    - Se agregó menú Edit al editor de plantillas XSL para los recursos que las ocupan. Esto es para plantillas personalizadas. (Carlos).
+    - Se agregó atributo title al recurso IframeContent (Carlos).
+    - Se agregó nuevo recurso para generar códigos QR. Para configurarlo usar: org.semanticwb.portal.resources.QRCodeGenerator. (Carlos)
   4.2.5.0
     - Se agrego propiedad de SemanticModel para poder definir si el Modelo es un Modelo de Datos (No es observado para notificar cambios y generar logs)(Jei)
     - Se agrego la posibilidad de Indexar Documentos Aduntos en SWBIndexer (Jei)
