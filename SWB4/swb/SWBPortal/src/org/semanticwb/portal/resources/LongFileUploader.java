@@ -40,6 +40,7 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Resource;
+import org.semanticwb.platform.SemanticLiteral;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticProperty;
 import org.semanticwb.portal.api.GenericResource;
@@ -80,20 +81,23 @@ public class LongFileUploader extends GenericResource {
             throws SWBResourceException, IOException {
         PrintWriter out = response.getWriter();
         String uri = request.getRequestURI();
-        String urlBase = paramRequest.getRenderUrl().setCallMethod(SWBResourceURL.Call_DIRECT).toString();//paramRequest.getWebPage().getRealUrl();
+        String urlBase = paramRequest.getRenderUrl().setCallMethod(
+                SWBResourceURL.Call_DIRECT).toString();//paramRequest.getWebPage().getRealUrl();
         SemanticObject so = null;
 //        System.out.println("requestUri:" + uri);
 //        System.out.println("RenderURL:" + paramRequest.getRenderUrl());
 //        System.out.println("WebPage:" + paramRequest.getWebPage().getRealUrl());
 //        System.out.println("WebPageId:" + paramRequest.getWebPage().getId());
 //        System.out.println("urlBase:" + urlBase);
-        int start = uri.indexOf(paramRequest.getWebPage().getId()) + paramRequest.getWebPage().getId().length();
+//        int start = uri.indexOf(paramRequest.getWebPage().getId()) + 
+//                paramRequest.getWebPage().getId().length();
         String path = "";
         String cmd = "";
         String param = "";
         if ("".equals(cmd) && request.getParameter(parameter) != null) {
 //            System.out.println("parameter:"+request.getParameter(parameter));
-            so = paramRequest.getWebPage().getWebSite().getSemanticModel().getSemanticObject(request.getParameter(parameter));
+            so = paramRequest.getWebPage().getWebSite().getSemanticModel()
+                    .getSemanticObject(request.getParameter(parameter));
 //            System.out.println("so:"+so);
 //            System.out.println("sosClass:"+so.getSemanticClass().getURI());
 //            System.out.println("classUri:"+classUri);
@@ -142,23 +146,29 @@ public class LongFileUploader extends GenericResource {
             String id = SWBUtils.TEXT.replaceSpecialCharacters(
                     paramRequest.getResourceBase().getTitle(), true);
             String url = "/bduplaoder";
-            out.println("<script src=\"/swbadmin/js/longfu/json2.js\"></script>"
-                    + "<script src=\"/swbadmin/js/longfu/swblongfileuploader.js\">"
-                    + "</script><script type=\"text/javascript\">"
-                    + "var " + id + "_lfu = new LongFileUploader(\"" + urlBase + "\",\"" + so.getId() //Revisar...
-                    + "\", \"" + id + "\");</script>");
-            out.println("<div id=\"" + id + "\"><form>file: <input type=\"file\" "
-                    + "name=\"updfile\" id=\"updfile\" "
-                    + "onchange=\"" + id + "_lfu.sendFile(this)\"/>"
-                    + "<div id=\"progressBar\" style=\"width:100%; height:15px; "
-                    + "border:1px solid #000; overflow:hidden;\">"
-                    + "<div id=\"" + id + "_percentage\" style=\"width:0%; height:15px; "
-                    + "border-right: 1px solid #000000; background: #0000ff;\">"
-                    + "</div><div id=\"" + id + "_label\" style=\"color: #000000; "
-                    + "font-size: 15px; font-style: italic; font-weight: "
-                    + "bold; left: 25px; position: relative; top: -16px;\">"
-                    + "</div></div>"
-                    + "</form></div>");
+            
+            if (null!=so) {
+                out.println("<script src=\"/swbadmin/js/longfu/json2.js\"></script>"
+                        + "<script src=\"/swbadmin/js/longfu/swblongfileuploader.js\">"
+                        + "</script><script type=\"text/javascript\">"
+                        + "var " + id + "_lfu = new LongFileUploader(\"" + urlBase + 
+                        "\",\"" + so.getId() //Revisar...
+                        + "\", \"" + id + "\");</script>");
+                out.println("<div id=\"" + id + "\"><form>file: <input type=\"file\" "
+                        + "name=\"updfile\" id=\"updfile\" "
+                        + "onchange=\"" + id + "_lfu.sendFile(this)\"/>"
+                        + "<div id=\"progressBar\" style=\"width:100%; height:15px; "
+                        + "border:1px solid #000; overflow:hidden;\">"
+                        + "<div id=\"" + id + "_percentage\" style=\"width:0%; height:15px; "
+                        + "border-right: 1px solid #000000; background: #0000ff;\">"
+                        + "</div><div id=\"" + id + "_label\" style=\"color: #000000; "
+                        + "font-size: 15px; font-style: italic; font-weight: "
+                        + "bold; left: 25px; position: relative; top: -16px;\">"
+                        + "</div></div>"
+                        + "</form></div>");
+            } else {
+                out.print("No se encontró el objeto semántico relacionado");
+            }
         }
 
     }
@@ -249,7 +259,8 @@ public class LongFileUploader extends GenericResource {
         propertyName = base.getAttribute("frmProperty");
     }
 
-    private void startUploadProcess(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws IOException {
+    private void startUploadProcess(HttpServletRequest request, HttpServletResponse 
+            response, SWBParamRequest paramRequest) throws IOException {
         String userStr = paramRequest.getUser().getUserRepository().getId() + ":"
                 + paramRequest.getUser().getId() + ":"
                 + paramRequest.getUser().getLogin();
@@ -277,7 +288,8 @@ public class LongFileUploader extends GenericResource {
         out.print("}");
     }
 
-    private void uploadSolicitude(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws IOException {
+    private void uploadSolicitude(HttpServletRequest request, HttpServletResponse 
+            response, SWBParamRequest paramRequest) throws IOException {
         String filename = request.getParameter("filename");
         String size = request.getParameter("size");
         String crc = request.getParameter("iniCRC");
@@ -310,7 +322,8 @@ public class LongFileUploader extends GenericResource {
                 + pf.getId() + "\",\"bytesRecived\":" + localsize + "}}");
     }
 
-    private void uploadChunk(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest, String param) {
+    private void uploadChunk(HttpServletRequest request, HttpServletResponse 
+            response, SWBParamRequest paramRequest, String param) {
         File workfiledir = new File(tmpplace, param);
         PendingFile pf = fileUtil.getPendingFileFromId(param);
         if (!workfiledir.exists()) {
@@ -394,7 +407,8 @@ public class LongFileUploader extends GenericResource {
         return Long.toHexString(crc.getValue());
     }
 
-    private void abortUpload(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest, String param)
+    private void abortUpload(HttpServletRequest request, HttpServletResponse 
+            response, SWBParamRequest paramRequest, String param)
             throws IOException {
         boolean ret = fileUtil.removePendingFile(param);
         response.setHeader("mimetype", "text/json-comment-filtered");
@@ -402,9 +416,11 @@ public class LongFileUploader extends GenericResource {
         out.print("{\"deleted\":\"" + ret + "\"}");
     }
 
-    private void eofCheck(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest, String param)
+    private void eofCheck(HttpServletRequest request, HttpServletResponse 
+            response, SWBParamRequest paramRequest, String param)
             throws IOException {
         String pdir = request.getParameter("dirToPlace");
+//        System.out.println("pdir1: "+pdir);
         String key = request.getSession(true).getId();
         ArrayList<SemanticObject> also = enProceso.get(key);
         boolean ret = false;
@@ -418,6 +434,7 @@ public class LongFileUploader extends GenericResource {
             }
             if (null!=so){
                 pdir = so.getWorkPath();
+//                System.out.println("pdir2: "+pdir);
                 File dir = new File(org.semanticwb.SWBPortal.getWorkPath(), pdir);
                 if (!dir.exists()){
                     dir.mkdirs();
@@ -443,8 +460,21 @@ public class LongFileUploader extends GenericResource {
                             orig.delete();
                             ret = true;
                         }
-                        SemanticProperty sp = so.getSemanticClass().getProperty(propertyName);
-                        so.setProperty(sp, dest.getName());
+                        SemanticProperty sp = so.getSemanticClass()
+                                .getProperty(propertyName);
+                        if (propertyName.startsWith("has")){
+                            so.addLiteralProperty(sp, 
+                                    new SemanticLiteral(dest.getName()));
+                        } else {
+                            String currVal = so.getProperty(sp);
+                            if (null!=currVal){
+                                File currFile = new File(dir, currVal);
+                                if (currFile.exists()){
+                                    currFile.delete();
+                                }
+                            }
+                            so.setProperty(sp, dest.getName());
+                        }
                         workfiledir.delete();
                         fileUtil.updateChanges();
                     }
@@ -456,7 +486,8 @@ public class LongFileUploader extends GenericResource {
         out.print("{\"saved\":\"" + ret + "\"}");
     }
 
-    private void giveStatus(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest, String param)
+    private void giveStatus(HttpServletRequest request, HttpServletResponse 
+            response, SWBParamRequest paramRequest, String param)
             throws IOException {
         PendingFile pf = fileUtil.getPendingFileFromId(param);
         response.setHeader("mimetype", "text/json-comment-filtered");
