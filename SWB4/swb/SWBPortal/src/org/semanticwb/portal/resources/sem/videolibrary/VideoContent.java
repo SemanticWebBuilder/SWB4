@@ -22,7 +22,6 @@
  */
 package org.semanticwb.portal.resources.sem.videolibrary;
 
-
 import java.io.IOException;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.*;
@@ -34,12 +33,12 @@ import org.semanticwb.portal.api.*;
 /**
  * The Class VideoContent.
  */
-public class VideoContent extends org.semanticwb.portal.resources.sem.videolibrary.base.VideoContentBase 
+public class VideoContent extends org.semanticwb.portal.resources.sem.videolibrary.base.VideoContentBase
 {
-    
+
     /** The Constant log. */
     private static final Logger log = SWBUtils.getLogger(VideoContent.class);
-    
+
     /**
      * Instantiates a new video content.
      */
@@ -56,7 +55,7 @@ public class VideoContent extends org.semanticwb.portal.resources.sem.videolibra
     {
         super(base);
     }
-    
+
     /**
      * Gets the preview.
      * 
@@ -65,13 +64,13 @@ public class VideoContent extends org.semanticwb.portal.resources.sem.videolibra
     public String getPreview()
     {
         String ret = null;
-        if(this.getCode()!=null)
+        if (this.getCode() != null)
         {
-            String code=SWBUtils.TEXT.decodeExtendedCharacters(this.getCode());
-
+            String code = SWBUtils.TEXT.decodeExtendedCharacters(this.getCode());
+            code=code.replace("http://www.youtube.com/embed/", "http://www.youtube.com/v/");
             //******************  is YouTube  ***********************************
             String pre = "http://www.youtube.com/v/";
-            String post = "\">";
+            String post = "\"";
             int s = code.indexOf(pre);
             if (s >= 0)
             {
@@ -96,9 +95,31 @@ public class VideoContent extends org.semanticwb.portal.resources.sem.videolibra
                 ret = "http://i.ytimg.com/vi/" + ret + "/default.jpg";
             }
         }
+        else
+        {
+            if (ret == null)
+            {
+                String google = this.getVideoWebPage();
+                if (google != null)
+                {
+                    int pos = google.indexOf("v=");
+                    if (pos != -1)
+                    {
+                        String id = google.substring(pos + 2);
+                        int pos2 = id.indexOf("&", pos + 2);
+                        if (pos2 != -1)
+                        {
+                            id = id.substring(0, pos);
+                        }
+                        ret = "http://i.ytimg.com/vi/" + id + "/default.jpg";
+                    }
+
+                }
+            }
+        }
         return ret;
     }
-    
+
     /* (non-Javadoc)
      * @see org.semanticwb.portal.api.GenericResource#doView(HttpServletRequest, HttpServletResponse, SWBParamRequest)
      */
@@ -119,5 +140,4 @@ public class VideoContent extends org.semanticwb.portal.resources.sem.videolibra
         }
         return;
     }
-
 }
