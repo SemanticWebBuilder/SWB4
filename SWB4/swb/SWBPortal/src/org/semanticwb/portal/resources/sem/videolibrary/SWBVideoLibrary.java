@@ -241,7 +241,7 @@ public class SWBVideoLibrary extends org.semanticwb.portal.resources.sem.videoli
     @Override
     public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
-        if (paramRequest.getMode().equals("month"))
+        if ("month".equals(paramRequest.getMode()))
         {
             doShowVideosByMonth(request, response, paramRequest);
         }
