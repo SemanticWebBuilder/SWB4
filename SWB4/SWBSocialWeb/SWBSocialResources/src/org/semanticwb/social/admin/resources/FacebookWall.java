@@ -274,6 +274,21 @@ public class FacebookWall extends GenericResource {
             try {
                 String answer = request.getParameter("replyText");
                 System.out.println("Answer Text:" + answer);
+                    System.out.println("Reply-Start"); //If you liked a post from a user you gave like, you cannot give unlike
+                    String objUri = (String) request.getParameter("suri");
+                    String commentID = (String)request.getParameter("commentID");
+                    SemanticObject semanticObject = SemanticObject.createSemanticObject(objUri);
+                    Facebook facebook = (Facebook)semanticObject.createGenericInstance();
+                    HashMap<String, String> params = new HashMap<String, String>(2);
+                    params.put("access_token", facebook.getAccessToken());
+                    params.put("message", answer);
+                    System.out.println("\n\nComment ID:" + commentID);
+                    String fbResponse = postRequest(params, "https://graph.facebook.com/" + commentID + "/comments" ,
+                                    "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95", "POST");
+                    System.out.println("Response: " + fbResponse);
+                    response.setRenderParameter("commentID", commentID);
+                    response.setRenderParameter("suri", objUri);
+                    System.out.println("Reply-End");
                 //twitter.updateStatus(new StatusUpdate(answer).inReplyToStatusId(id));
                 response.setRenderParameter("repliedPost", "ok");
                 response.setMode("postSent");                
@@ -287,15 +302,16 @@ public class FacebookWall extends GenericResource {
     public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         String mode = paramRequest.getMode();
         SWBResourceURL actionURL = paramRequest.getActionUrl();
-        actionURL.setParameter("suri", request.getParameter("suri"));        
+        SWBResourceURL renderURL = paramRequest.getRenderUrl();
+        actionURL.setParameter("suri", request.getParameter("suri"));
+        renderURL.setParameter("suri",request.getParameter("suri"));
         System.out.println("suri:" + request.getParameter("suri"));
         System.out.println("mode:" + mode);
         PrintWriter out = response.getWriter();
         if(mode!= null && mode.equals("getMorePosts")){//Gets more Posts
             System.out.println("brings more posts");
             doGetMorePosts(request, response, paramRequest);
-        }else if(mode!= null && mode.equals("likeSent") || mode.equals("unlikeSent")){//Displays updated data of liked status
-            SWBResourceURL renderURL = paramRequest.getRenderUrl();
+        }else if(mode!= null && mode.equals("likeSent") || mode.equals("unlikeSent")){//Displays updated data of liked/unliked status
             String commentID = request.getParameter("commentID");
             String accessToken = request.getParameter("access_token");
             
@@ -317,11 +333,13 @@ public class FacebookWall extends GenericResource {
 
                 boolean iLikedPost = false;
                 if(likeResp.has("likes")){
-                    out.write(" Likes: <b>");
+                    String objUri = request.getParameter("suri");
+                    SemanticObject semanticObject = SemanticObject.createSemanticObject(objUri);                    
+                    Facebook facebook = (Facebook)semanticObject.createGenericInstance();
                     JSONArray likes = likeResp.getJSONObject("likes").getJSONArray("data");
                     for (int k = 0; k < likes.length(); k++) {
-                        out.write(likes.getJSONObject(k).getString("name") + "(" + likes.getJSONObject(k).getString("id") +"), " );
-                        if(likes.getJSONObject(k).getString("id").equals("100000536460020")){
+                        out.write(likes.getJSONObject(k).getString("name") + ", " );
+                        if(likes.getJSONObject(k).getString("id").equals(facebook.getFacebookUserId())){
                             //My User id is in 'the likes' of this post
                             iLikedPost = true;
                         }
@@ -333,7 +351,7 @@ public class FacebookWall extends GenericResource {
                 }else{
                     out.write(" <a href=\"\"  onclick=\"submitUrl('" + actionURL.setAction("doLike").setParameter("commentID", likeResp.getString("id")).toString() + "',this);return false;" +"\">Like</a>");
                 }
-                
+                out.write(" <a href=\"\" onclick=\"showDialog('" + renderURL.setMode("replyPost").setParameter("commentID", likeResp.getString("id")) + "','Reply to " + likeResp.getJSONObject("from").getString("name") + "');return false;\">Reply</a>  ");
                 if(request.getParameter("liked") != null && request.getParameter("liked").equals("ok")){
                     out.println("<script type=\"text/javascript\">");
                     out.println("   showStatus('Post liked successfully');");
@@ -346,7 +364,7 @@ public class FacebookWall extends GenericResource {
             } catch (Exception ex) {
                 log.error("Error when trying to like/unlike post ", ex);
             }
-        }else if(mode!= null && mode.equals("replyPost")){//Displays dialog to create tweet
+        }else if(mode!= null && mode.equals("replyPost")){//Displays dialog to create post
             actionURL.setParameter("commentID", request.getParameter("commentID"));
             actionURL.setParameter("suri", request.getParameter("suri"));
 
@@ -372,7 +390,16 @@ public class FacebookWall extends GenericResource {
                 out.println("   showStatus('Post sent');");
                 out.println("</script>");
             }
-        }else {
+        }else if(mode!=null && mode.equals("displayPicture")){
+            out.println("<fieldset>");
+            //out.println("<div align=\"center\" id=\"" +request.getParameter("id") +"\" dojoType=\"dijit.layout.ContentPane\" style=\"width: 800px; height: 600px; border: thick #666666; overflow: hidden; position: relative;\">");
+            //out.println("      <img src=\"" + request.getParameter("picture") + "\" style=\"position: relative;\" onload=\"loadLargeImage(" + "this, " + request.getParameter("id") + ");\"/>");
+            out.println("<div align=\"center\" dojoType=\"dijit.layout.ContentPane\" style=\"border: thick #666666; overflow: hidden; position: relative;\">");
+            out.println("      <img src=\"" + request.getParameter("picture") + "\" style=\"position: relative;\"/>");
+            out.println("</div>");
+            out.println("</fieldset>");
+        }
+        else {
             super.processRequest(request, response, paramRequest);
         }
     }
@@ -405,9 +432,7 @@ public class FacebookWall extends GenericResource {
         
         String  until="";
         
-        try {           
-                boolean isResponseEmpty = false;
-                //JSONObject phraseResp = mainObject.getJSONObject(j);
+        try {
                 JSONObject phraseResp = new JSONObject(response);
                 System.out.println("Tamanio del arreglo:" + phraseResp.length());                       
                     int cont = 0;
@@ -460,9 +485,9 @@ public class FacebookWall extends GenericResource {
             writer.write("       <img src=\"http://graph.facebook.com/" + postsData.getJSONObject("from").getString("id") +"/picture\"/>");
             writer.write("   </td>");
             writer.write("   <td width=\"90%\">");                
-            String story = postsData.has("story") ? postsData.getString("story") : ""; // It's necessary to include the URL for media, hash tags and usernames
-            String message = postsData.has("message") ? postsData.getString("message") : ""; // It's necessary to include the URL for media, hash tags and usernames
-            writer.write(story + message);        
+            String story = postsData.has("story") ? postsData.getString("story") : "";
+            String message = postsData.has("message") ? postsData.getString("message") : "";
+            writer.write((story + message).replace("\n", "</br>"));
             writer.write("   </td>");
             writer.write("</tr>");
             //Picture if exists, start
@@ -473,7 +498,9 @@ public class FacebookWall extends GenericResource {
             writer.write("   </td>");
             writer.write("   <td width=\"90%\">");
             writer.write("      <div id=\"img" + postsData.getString("id") + "\" style=\"width: 250px; height: 250px; border: thick #666666; overflow: hidden; position: relative;\">");
-            writer.write("      <img src=\"" + postsData.getString("picture").replace("_s.", "_n.") + "\" style=\"position: absolute;\" onload=\"imageLoad(" + "this, img" + postsData.getString("id") + ");\"/>");
+            writer.write("      <a href=\"#\" onclick=\"showDialog('" + renderURL.setMode("displayPicture").setParameter("picture", postsData.getString("picture").replace("_s.", "_n.")).setParameter("id", "imgLarge" + postsData.getString("id")) +
+                    "','Picture from " + postsData.getJSONObject("from").getString("name").replace("'", "") + "'); return false;\"><img src=\"" + postsData.getString("picture").replace("_s.", "_n.") + "\" style=\"position: relative;\" onload=\"imageLoad(" + "this, img" + postsData.getString("id") + ");\"/></a>");
+            System.out.println("USERNAME:"  + postsData.getJSONObject("from").getString("name").replace("'", "")  + "\n\n");
             //writer.write("      <div class=\"imageContainer\">");
             //writer.write("       <img class=\"imagePost\" src=\"" + postsData.getString("picture") + "\"/>");
             writer.write("      </div>");
@@ -494,7 +521,7 @@ public class FacebookWall extends GenericResource {
                     for (int k = 0; k < comments.length(); k++) {
                         writer.write("<img src=\"http://graph.facebook.com/" + comments.getJSONObject(k).getJSONObject("from").getString("id") +"/picture?width=30&height=30\"/> ");
                         writer.write(comments.getJSONObject(k).getJSONObject("from").getString("name") + ": ");
-                        writer.write(comments.getJSONObject(k).getString("message") + "</br> ");
+                        writer.write(comments.getJSONObject(k).getString("message").replace("\n", "</br>") + "</br> ");
                     }
 
                     writer.write("   </td>");
