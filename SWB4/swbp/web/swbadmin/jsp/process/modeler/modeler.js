@@ -2,6 +2,1141 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
+
+/***************************Elementos genéricos**************************/
+    var _GraphicalElement = function(obj) {
+        var _this = obj;
+        _this.superClasses = new Array();
+        
+        _this.addSuperClass = function(clsName) {
+            _this.superClasses.push(clsName);
+        }
+        
+        _this.isSubClass = function(clsName) {
+            var ret = false;
+            for (var i = 0; i < _this.superClasses.length; i++) {
+                if(_this.superClasses[i] == clsName) {
+                    ret = true;
+                    break;
+                }
+            }
+            return ret;
+        }
+        
+        _this.canStartLink=function(link) {
+            return true;
+        }
+        
+        _this.canEndLink=function(link) {
+            if(link.fromObject!=_this) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+        
+        _this.canAddToDiagram=function() {
+            return true;
+        }
+        
+        _this.canAttach=function(parent) {
+            return false;
+        }
+        
+        return _this;
+    };
+    
+    var _FlowNode = function (obj) {
+        var _this = new _GraphicalElement(obj);
+        var fCanEnd = _this.canEndLink;
+        _this.addSuperClass("GraphicalElement");
+        _this.canAttach = function(parent) {
+            var ret = false;
+            if (parent.type=="Pool" || parent.type=="Lane") {
+                ret = true;
+            }
+            return ret;
+        }
+        
+        _this.canEndLink = function(link) {
+            var ret = fCanEnd(link);
+            
+            if (link.type=="SequenceFlow") {
+                //TODO: Implementar
+            }
+            
+            if (link.type=="AssociationFlow") {
+                if (!(link.fromObject.type=="Artifact" || link.fromObject.type=="DataObject") && !(link.fromObject.type=="CompensationIntermediateCatchEvent" && link.fromObject.parent.isSubClass("Activity"))) {
+                    ret = false;
+                }
+            }
+            
+            if (link.type=="MessageFlow") {
+                //TODO:Implementar
+            }
+            return ret;
+        }
+        return _this;
+    }
+    
+    /***************************Eventos iniciales****************************/
+    var _Event = function (obj) {
+        var _this = new _FlowNode(obj);
+        _this.addSuperClass("FlowNode");
+        _this.canStartLink=function(link) {
+            if (link.type=="ConditionalFlow") {
+                return false;
+            }
+            return true;
+        }
+        return _this;
+    };
+    
+    var _CatchEvent = function(obj) {
+        var _this = new _Event(obj);
+        _this.addSuperClass("Event");
+        
+        return _this;
+    };
+    
+    var _ThrowEvent = function(obj) {
+        var _this = new _Event(obj);
+        _this.addSuperClass("Event");
+        var fCanEnd = _this.canEndLink;
+        _this.canEndLink = function(link) {
+            var ret = fCanEnd(link);
+            if (link.fromObject.type=="EventBasedGateway") {
+                ret = false;
+            }
+            return ret;
+        }
+        return _this;
+    };
+    
+    var _StartEvent = function(obj) {
+        var _this = new _CatchEvent(obj);
+        _this.addSuperClass("CatchEvent");
+        var fCanEnd = _this.canEndLink;
+        var fCanAdd = _this.canAddToDiagram;
+        
+        _this.canEndLink=function(link) {
+            var ret = fCanEnd(link);
+            if (link.type=="MessageFlow") {
+                ret = false;
+            }
+            return ret;
+        }
+        
+        _this.canAddToDiagram=function() {
+            var ret=fCanAdd();
+            
+            //TODO:Implementar
+            return ret;
+        }
+        
+        return _this;
+    };
+    
+    var _MessageStartEvent = function (obj) {
+        var _this = new _StartEvent(obj);
+        _this.addSuperClass("StartEvent");
+        var fCanEnd = _this.canEndLink;
+        
+        _this.canEndLink=function(link) {
+            var ret = fCanEnd(link);
+            if (_this.inConnections.length==0) {
+                ret = true;
+            }
+            return ret;
+        }
+        
+        _this.canAddToDiagram=function() {
+            var ret = true;
+            //TODO:Implementar
+            return ret;
+        }
+        
+        return _this;
+    };
+    
+    var _TimerStartEvent = function(obj) {
+        var _this = new _StartEvent(obj);
+        _this.addSuperClass("StartEvent");
+        _this.canAddToDiagram = function () {
+            var ret = true;
+            //TODO: Implementar
+            return ret;
+        }
+    };
+    
+    var _RuleStartEvent = function(obj) {
+        var _this = new _StartEvent(obj);
+        _this.addSuperClass("StartEvent");
+        _this.canAddToDiagram = function () {
+            var ret = true;
+            //TODO: Implementar
+            return ret;
+        }
+        
+        return _this;
+    };
+    
+    var _SignalStartEvent = function(obj) {
+        var _this = new _StartEvent(obj);
+        _this.addSuperClass("StartEvent");
+        _this.canAddToDiagram = function () {
+            var ret = true;
+            //TODO: Implementar
+            return ret;
+        }
+        
+        return _this;
+    };
+    
+    var _MultipleStartEvent = function (obj) {
+        var _this = new _StartEvent(obj);
+        _this.addSuperClass("StartEvent");
+        _this.canAddToDiagram = function () {
+            var ret = true;
+            //TODO: Implementar
+            return ret;
+        }
+        
+        return _this;
+    };
+    
+    var _ParallelStartEvent = function(obj) {
+        var _this = new _StartEvent(obj);
+        _this.addSuperClass("StartEvent");
+        _this.canAddToDiagram = function () {
+            var ret = true;
+            //TODO: Implementar
+            return ret;
+        }
+        
+        return _this;
+    };
+    
+    var _ScalationStartEvent = function(obj) {
+        var _this = new _StartEvent(obj);
+        _this.addSuperClass("StartEvent");
+        _this.canAddToDiagram = function () {
+            var ret = true;
+            //TODO: Implementar
+            return ret;
+        }
+        
+        return _this;
+    };
+    
+    var _ErrorStartEvent = function(obj) {
+        var _this = new _StartEvent(obj);
+        _this.addSuperClass("StartEvent");
+        _this.canAddToDiagram = function () {
+            var ret = true;
+            //TODO: Implementar
+            return ret;
+        }
+        
+        return _this;
+    };
+    
+    var _CompensationStartEvent = function(obj) {
+        var _this = new _StartEvent(obj);
+        _this.addSuperClass("StartEvent");
+        _this.canAddToDiagram = function () {
+            var ret = true;
+            //TODO: Implementar
+            return ret;
+        }
+        
+        return _this;
+    };
+    
+    /***************************Eventos intermedios**************************/
+    var _IntermediateCatchEvent = function (obj) {
+        var _this = new _CatchEvent(obj);
+        _this.addSuperClass("CatchEvent");
+        var fCanAttach = _this.canAttach;
+        var fCanEnd = _this.canEndLink;
+        var fCanStart = _this.canStartLink;
+        
+        _this.canAttach = function(parent) {
+            var ret = fCanAttach(parent);
+            if (ret || parent.isSubClass("Activity")) {
+                ret = true;
+            }
+            
+            if (parent.isSubClass("CallActivity")) {
+                ret = false;
+            }
+            return ret;
+        }
+        
+        _this.canEndLink = function (link) {
+            var ret = fCanEnd(link);
+            var c = 0;
+            
+            for (var i = 0; i < _this.inConnections.length; i++) {
+                if (_this.inConnections[i].type=="SequenceFlow") {
+                    c++;
+                }
+            }
+            
+            if (link.type=="SequenceFlow") {
+                if (_this.parent.isSubClass("Activity")) {
+                    ret = false;
+                } else if (c != 0) {
+                    ret = false;
+                }
+            }
+            return ret;
+        }
+        
+        _this.canStartLink = function(link) {
+            var ret = fCanStart(link);
+            var c = 0;
+            
+            for (var i = 0; i < _this.outConnections.length; i++) {
+                if (_this.inConnections[i].type=="SequenceFlow") {
+                    c++;
+                }
+            }
+            
+            if (link.type=="SequenceFlow" && c != 0) {
+                ret = false;
+            }
+            
+            return ret;
+        }
+        
+        return _this;
+    };
+    
+    var _MessageIntermediateCatchEvent = function(obj) {
+        var _this = new _IntermediateCatchEvent(obj);
+        var fCanEnd = _this.canEndLink;
+        var fCanStart = _this.canStartLink;
+        
+        _this.addSuperClass("IntermediateCatchEvent");
+        
+        _this.canEndLink = function(link) {
+            var ret = fCanEnd(link);
+            var c = 0;
+            
+            for (var i = 0; i < _this.inConnections.length; i++) {
+                if (_this.inConnections[i].type=="MessageFlow") {
+                    c++;
+                }
+            }
+            
+            if (link.type=="MessageFlow" && c != 0) {
+                ret = false;
+            }
+            
+            if (link.type=="SequenceFlow" && link.fromObject.type=="ExclusiveIntermediateEventGateway") {
+                for (i = 0; i < _this.outConnections.length; i++) {
+                    if (_this.inConnections[i].type=="SequenceFlow" && _this.inConnections[i].toObject.type=="ReceiveTask") {
+                        ret = false;
+                        break;
+                    }
+                }
+            }
+            
+            return ret;
+        }
+        
+        _this.canStartLink = function (link) {
+            var ret = fCanStart(link);
+            if (link.type=="MessageFlow") {
+                ret = false;
+            }
+            return ret;
+        }
+        
+        return _this;
+    };
+    
+    var _ErrorIntermediateCatchEvent = function (obj) {
+        var _this = new _IntermediateCatchEvent(obj);
+        _this.addSuperClass("IntermediateCatchEvent");
+        
+        _this.canEndLink = function (link) {
+            return false;
+        }
+        
+        return _this;
+    };
+    
+    var _CancelationIntermediateCatchEvent = function (obj) {
+        var _this = new _IntermediateCatchEvent(obj);
+        _this.addSuperClass("IntermediateCatchEvent");
+        
+        _this.canAttach = function (parent) {
+            var ret = false;
+            if(parent.type=="Pool" || parent.type=="Lane" || parent.type=="TransactionSubProcess") {
+                ret = true;
+            } else {
+                ret = false;
+            }
+            
+            return ret;
+        }
+        
+        _this.canEndLink = function (link) {
+            return false;
+        }
+        
+        return _this;
+    };
+    
+    var _CompensationIntermediateCatchEvent = function (obj) {
+        var _this = new _IntermediateCatchEvent(obj);
+        var fCanStart = _this.canStartLink;
+        _this.addSuperClass("IntermediateCatchEvent");
+        
+        _this.canStartLink = function(link) {
+            var ret = fCanStart(link);
+            if (_this.parent.isSubClass("Activity")) {
+                if (!link.type=="DirectionalAssociation") {
+                    ret = false;
+                }
+            }
+            return ret;
+        }
+        
+        return _this;
+    };
+    
+    var _LinkIntermediateCatchEvent = function (obj) {
+        var _this = new _IntermediateCatchEvent(obj);
+        var fCanStart = _this.canStartLink;
+        var fCanAttach = _this.canAttach;
+        _this.addSuperClass("IntermediateCatchEvent");
+        
+        _this.canEndLink = function(link) {
+            return false;
+        }
+        
+        _this.canStartLink = function(link) {
+            var ret = fCanStart(link);
+            if (link.type=="MessageFlow") {
+                ret = false;
+            }
+            return ret;
+        }
+        
+        _this.canAttach = function (parent) {
+            var ret = fCanAttach(parent);
+            if (parent.isSubClass("Activity")) {
+                ret = false;
+            }
+            return ret;
+        }
+        return _this;
+    };
+    
+    var _SignalIntermediateCatchEvent = function (obj) {
+        var _this = new _IntermediateCatchEvent(obj);
+        _this.addSuperClass("IntermediateCatchEvent");
+        
+        _this.canAttach = function(parent) {
+            var ret = false;
+            if (parent.isSubClass("Activity") || parent.type=="Pool" || parent.type=="Lane") {
+                ret = true;
+            }
+            return ret;
+        }
+        
+        return _this;
+    };
+    
+    var _MultipleIntermediateCatchEvent = function (obj) {
+        var _this = new _IntermediateCatchEvent(obj);
+        _this.addSuperClass("IntermediateCatchEvent");
+        return _this;
+    };
+    
+    var _ScalationIntermediateCatchEvent = function (obj) {
+        var _this = new _IntermediateCatchEvent(obj);
+        var fCanEnd = _this.canEndLink;
+        
+        _this.addSuperClass("IntermediateCatchEvent");
+        
+        _this.canAttach = function(parent) {
+            var ret = false;
+            if (parent.isSubClass("Activity") || parent.type=="Pool" || parent.type=="Lane") {
+                ret = true;
+            }
+            return ret;
+        }
+        
+        _this.canEndLink = function(link) {
+            var ret = fCanEnd(link);
+            if (link.type=="SequenceFlow" && link.fromObject.type=="EventBasedGateway") {
+                ret = false;
+            }
+            return ret;
+        }
+        
+        return _this;
+    };
+    
+    var _ParallelIntermediateCatchEvent = function (obj) {
+        var _this = new _IntermediateCatchEvent(obj);
+        var fCanAttach = _this.canAttach;
+        _this.addSuperClass("IntermediateCatchEvent");
+        
+        _this.canAttach = function (parent) {
+            var ret = fCanAttach(parent);
+            if (parent.isSubClass("Activity")) {
+                ret = false;
+            }
+            return ret;
+        }
+        return _this;
+    };
+    
+    var _RuleIntermediateCatchEvent = function (obj) {
+        var _this = new _IntermediateCatchEvent(obj);
+        _this.addSuperClass("IntermediateCatchEvent");
+        
+        _this.canAttach = function (parent) {
+            var ret = false;
+            if (parent.isSubClass("Activity") || parent.type=="Pool" || parent.type=="Lane") {
+                ret = true;
+            }
+            return ret;
+        }
+        return _this;
+    };
+    
+    var _MessageIntermediateThrowEvent = function(obj) {
+        var _this = new _IntermediateThrowEvent(obj);
+        var fCanEnd = _this.canEndLink;
+        var fCanStart = _this.canStartLink;
+        
+        _this.addSuperClass("IntermediateThrowEvent");
+        
+        _this.canStartLink = function(link) {
+            var ret = fCanStart(link);
+            var c = 0;
+            
+            for (var i = 0; i < _this.outConnections.length; i++) {
+                if (_this.outConnections[i].type=="MessageFlow") {
+                    c++;
+                }
+            }
+            
+            if (link.type=="MessageFlow" && c != 0) {
+                ret = false;
+            }
+            return ret;
+        }
+        
+        _this.canEndLink = function (link) {
+            var ret = fCanEnd(link);
+            if (link.type=="MessageFlow") {
+                ret = false;
+            }
+            return ret;
+        }
+        
+        return _this;
+    };
+    
+    var _CompensationIntermediateThrowEvent = function(obj) {
+        var _this = new _IntermediateThrowEvent(obj);
+        _this.addSuperClass("IntermediateThrowEvent");
+        return _this;
+    };
+    
+    var _LinkIntermediateThrowEvent = function(obj) {
+        var _this = new _IntermediateThrowEvent(obj);
+        var fCanEnd = _this.canEndLink;
+        
+        _this.addSuperClass("IntermediateThrowEvent");
+        
+        _this.canStartLink = function(link) {
+            return false;
+        }
+        
+        _this.canEndLink = function(link) {
+            var ret = fCanEnd(link);
+            if (link.type=="MessageFlow") {
+                ret = false;
+            }
+            return ret;
+        }
+        
+        return _this;
+    };
+    
+    var _SignalIntermediateThrowEvent = function(obj) {
+        var _this = new _IntermediateThrowEvent(obj);
+        _this.addSuperClass("IntermediateThrowEvent");
+        return _this;
+    };
+    
+    var _MultipleIntermediateThrowEvent = function(obj) {
+        var _this = new _IntermediateThrowEvent(obj);
+        _this.addSuperClass("IntermediateThrowEvent");
+        return _this;
+    };
+    
+    var _ScalationIntermediateThrowEvent = function(obj) {
+        var _this = new _IntermediateThrowEvent(obj);
+        _this.addSuperClass("IntermediateThrowEvent");
+        return _this;
+    };
+    
+    /***************************Eventos finales****************************/
+    var _EndEvent = function(obj) {
+        var _this = new _ThrowEvent(obj);
+        _this.addSuperClass("ThrowEvent");
+        var fCanEnd = _this.canEndLink;
+        var fCanAdd = _this.canAddToDiagram;
+        
+        _this.canStartLink = function(link) {
+            return false;
+        }
+        
+        _this.canEndLink = function(link) {
+            var ret = fCanEnd(link);
+            if (link.type!="SequenceFlow") {
+                ret = false;
+            } else if (link.type=="SequenceFlow" && link.fromObject.type=="ExclusiveIntermediateEventGateway") {
+                ret = false;
+            }
+            return ret;
+        }
+        
+        _this.canAddToDiagram = function () {
+            var ret = fCanAdd();
+            //TODO:Implementar
+            return ret;
+        }
+        
+        return _this;
+    }
+    
+    var _MessageEndEvent = function (obj) {
+        var _this = new _EndEvent(obj);
+        _this.addSuperClass("EndEvent");
+        _this.canStartLink = function(link) {
+            var ret = false;
+            if (link.type=="MessageFlow") {
+                ret = true;
+            }
+            return ret;
+        }
+        
+        return _this;
+    };
+    
+    var _ErrorEndEvent = function (obj) {
+        var _this = new _EndEvent(obj);
+        _this.addSuperClass("EndEvent");
+        return _this;
+    };
+    
+    var _CancelationEndEvent = function (obj) {
+        var _this = new _EndEvent(obj);
+        _this.addSuperClass("EndEvent");
+        return _this;
+    };
+    
+    var _CompensationEndEvent = function (obj) {
+        var _this = new _EndEvent(obj);
+        _this.addSuperClass("EndEvent");
+        return _this;
+    };
+    
+    var _SignalEndEvent = function (obj) {
+        var _this = new _EndEvent(obj);
+        _this.addSuperClass("EndEvent");
+        return _this;
+    };
+    
+    var _MultipleEndEvent = function (obj) {
+        var _this = new _EndEvent(obj);
+        _this.addSuperClass("EndEvent");
+        return _this;
+    };
+    
+    var _ScalationEndEvent = function (obj) {
+        var _this = new _EndEvent(obj);
+        _this.addSuperClass("EndEvent");
+        return _this;
+    };
+    
+    var _TerminationEndEvent = function (obj) {
+        var _this = new _EndEvent(obj);
+        _this.addSuperClass("EndEvent");
+        return _this;
+    };
+    
+    /******************************Compuertas*******************************/
+    var _Gateway = function (obj) {
+        var _this = new _FlowNode(obj);
+        var fCanStart = _this.canStartLink;
+        var fCanEnd = _this.canEndLink;
+        
+        _this.addSuperClass("FlowNode");
+        _this.canStartLink = function (link) {
+            var ret = fCanStart(link);
+            var ci = 0;
+            var co = 0;
+            
+            for (var i = 0; i < _this.inConnections.length; i++) {
+                if (_this.inConnections[i].type=="SequenceFlow") {
+                    ci++;
+                }
+            }
+            
+            for (i = 0; i < _this.outConnections.length; i++) {
+                if (_this.outConnections[i].type=="SequenceFlow") {
+                    co++;
+                }
+            }
+            
+            if (link.type=="MessageFlow") {
+                ret = false;
+            }
+            
+            if (link.type=="SequenceFlow") {
+                if (ci > 1 && co != 0) {
+                    ret = false;
+                }
+            }
+            return ret;
+        }
+        
+        _this.canEndLink = function (link) {
+            var ret = fCanEnd(link);
+            var ci = 0;
+            var co = 0;
+            
+            for (var i = 0; i < _this.inConnections.length; i++) {
+                if (_this.inConnections[i].type=="SequenceFlow") {
+                    ci++;
+                }
+            }
+            
+            for (i = 0; i < _this.outConnections.length; i++) {
+                if (_this.outConnections[i].type=="SequenceFlow") {
+                    co++;
+                }
+            }
+            
+            if (link.type=="MessageFlow") {
+                ret = false;
+            }
+            
+            if (link.type=="SequenceFlow") {
+                if (co > 1 && ci != 0) {
+                    ret = false;
+                }
+            }
+            return ret;
+        }
+        return _this;
+    };
+    
+    var _ExclusiveGateway = function (obj) {
+        var _this = new _Gateway(obj);
+        var fCanStart = _this.canStartLink;
+        var fCanEnd = _this.canEndLink;
+        
+        _this.addSuperClass("Gateway");
+        
+        _this.canStartLink = function(link) {
+            var ret = fCanStart(link);
+            var c = 0;
+            
+            for (var i = 0; i < _this.outConnections.length; i++) {
+                if (_this.outConnections[i].type=="DefaultFlow") {
+                    c++;
+                }
+            }
+            
+            if (!link.type=="ConditionalFlow" || link.type=="DefaultFlow") {
+                ret = false;
+            }
+            
+            if (link.type=="DefaultFlow" && c > 0) {
+                ret = false;
+            }
+            return ret;
+        }
+        
+        _this.canEndLink = function(link) {
+            var ret = fCanEnd(link);
+            if (link.fromObject.type=="EventBasedGateway") {
+                ret = false;
+            }
+            return ret;
+        }
+        
+        return _this;
+    };
+    
+    var _EventBasedGateway = function(obj) {
+        var _this = new _Gateway(obj);
+        var fCanStart = _this.canStartLink;
+        _this.addSuperClass("Gateway");
+        
+        _this.canStartLink = function(link) {
+            var ret = fCanStart(link);
+            if (link.type=="DefaultFlow") {
+                ret = false;
+            } else if (link.type=="ConditionalFlow") {
+                return false;
+            }
+            return ret;
+        }
+        return _this;
+    };
+    
+    var _InclusiveGateway = function(obj) {
+        var _this = new _Gateway(obj);
+        var fCanStart = _this.canStartLink;
+        _this.addSuperClass("Gateway");
+        
+        _this.canStartLink = function(link) {
+            var ret = fCanStart(link);
+            var c = 0;
+            
+            for (var i = 0; i < _this.outConnections.length; i++) {
+                if (_this.outConnections[i].type=="DefaultFlow") {
+                    c++;
+                }
+            }
+            
+            if (!(link.type=="ConditionalFlow" || link.type=="DefaultFlow")) {
+                ret = false;
+            }
+
+            if (link.type=="DefaultFlow" && c > 0) {
+                ret = false;
+            }
+            return ret;
+        }
+        return _this;
+    };
+    
+    var _ExclusiveStartEventGateway = function (obj) {
+        var _this = new _EventBasedGateway(obj);
+        _this.addSuperClass("EventBasedGateway");
+        return _this;
+    };
+    
+    var _ExclusiveIntermediateEventGateway = function (obj) {
+        var _this = new _EventBasedGateway(obj);
+        _this.addSuperClass("EventBasedGateway");
+        return _this;
+    };
+    
+    var _ComplexGateway = function (obj) {
+        var _this = new _Gateway(obj);
+        _this.addSuperClass("Gateway");
+        return _this;
+    };
+    
+    var _ParallelGateway = function (obj) {
+        var _this = new _Gateway(obj);
+        var fCanStart = _this.canStartLink;
+        
+        _this.addSuperClass("Gateway");
+        
+        _this.canStartLink = function(link) {
+            var ret = fCanStart(link);
+            if (link.type=="ConditionalFlow" || link.type=="DefaultFlow") {
+                ret = false;
+            }
+            return ret;
+        }
+        return _this;
+    };
+    
+    /***************************Objetos de datos*******************************/
+    var _DataObject = function(obj) {
+        var _this = new _GraphicalElement(obj);
+        var fCanAttach = _this.canAttach;
+        var fCanEnd = _this.canEndLink;
+        var fCanStart = _this.canStartLink;
+        
+        _this.addSuperClass("GraphicalElement");
+        
+        _this.canAttach = function(parent) {
+            var ret = fCanAttach(parent);
+            if(parent.type=="Pool" || parent.type=="Lane") {
+                ret = true;
+            }
+            return ret;
+        }
+        
+        _this.canStartLink = function(link) {
+            var ret = fCanStart(link);
+            if (!link.type=="AssociationFlow") {
+                ret = false;
+            }
+            return ret;
+        }
+        
+        _this.canEndLink = function(link) {
+            var ret = fCanEnd(link);
+            if (!link.type=="AssociationFlow") {
+                ret = false;
+            } else if (link.fromObject.isSubClass("Artifact")) {
+                ret = false;
+            }
+            return ret;
+        }
+        return _this;
+    };
+    
+    var _DataInput = function (obj) {
+        var _this = new _DataObject(obj);
+        _this.addSuperClass("DataObject");
+        return _this;
+    };
+    
+    var _DataOutput = function (obj) {
+        var _this = new _DataObject(obj);
+        _this.addSuperClass("DataObject");
+        return _this;
+    };
+    
+    var _DataStore = function (obj) {
+        var _this = new _DataObject(obj);
+        _this.addSuperClass("DataObject");
+        return _this;
+    };
+    /******************************Swimlanes*******************************/
+    var _Pool = function (obj) {
+        var _this = new _GraphicalElement(obj);
+        var fCanAdd = _this.canAddToDiagram;
+        
+        _this.addSuperClass("GraphicalElement");
+        
+        _this.canStartLink = function(link) {
+            var ret = true;
+            if (link.type=="SequenceFlow") {
+                ret = false;
+            }
+            return ret;
+        }
+        
+        _this.canEndLink = function(link) {
+            var ret = true;
+            if (link.type=="SequenceFlow") {
+                ret = false;
+            }
+            if (link.type=="MessageFlow") {
+                //TODO:Implementar
+            }
+            if (link.type=="AssociationFlow") {
+                ret = false;
+            }
+            return ret;
+        }
+        
+        _this.canAddToDiagram = function() {
+            var ret = fCanAdd();
+            //TODO:Implementar
+            return ret;
+        }
+        return _this;
+    }
+    
+    /******************************Actividades*******************************/
+    var _Activity = function(obj) {
+        var _this = new _FlowNode(obj);
+        var fCanStart = _this.canStartLink;
+        var fCanEnd = _this.canEndLink;
+        
+        _this.addSuperClass("FlowNode");
+        
+        _this.canStartLink = function(link) {
+            var ret = fCanStart(link);
+            if (link.type=="DefaultFlow") {
+                ret = false;
+            }
+            return ret;
+        }
+        
+        _this.canEndLink = function(link) {
+            var ret = fCanEnd(link);
+            if (link.type=="DirectionalAssociation" && link.fromObject.type=="CompensationIntermediateCatchEvent") {
+                ret = true;            
+            } else if (link.fromObject.type=="ExclusiveIntermediateEventGateway") {
+                ret = false;
+            }
+            return ret;
+        }
+        return _this;
+    };
+    
+    var _CallActivity = function(obj) {
+        var _this = new _Activity(obj);
+        _this.addSuperClass("Activity");
+        return _this;
+    };
+    
+    var _Task = function(obj) {
+        var _this = new _Activity(obj);
+        _this.addSuperClass("Activity");
+        return _this;
+    };
+    
+    var _CallTask = function(obj) {
+        var _this = new _CallActivity(obj);
+        _this.addSuperClass("CallActivity");
+        return _this;
+    };
+    
+    var _UserTask = function(obj) {
+        var _this = new _Task(obj);
+        _this.addSuperClass("Task");
+        return _this;
+    };
+    
+    var _ServiceTask = function(obj) {
+        var _this = new _Task(obj);
+        _this.addSuperClass("Task");
+        return _this;
+    };
+    
+    var _BusinessRuleTask = function(obj) {
+        var _this = new _Task(obj);
+        _this.addSuperClass("Task");
+        return _this;
+    };
+    
+    var _CallManualTask = function(obj) {
+        var _this = new _CallTask(obj);
+        _this.addSuperClass("CallTask");
+        return _this;
+    };
+    
+    var _CallBusinessRuleTask = function(obj) {
+        var _this = new _CallTask(obj);
+        _this.addSuperClass("CallTask");
+        return _this;
+    };
+    
+    var _CallScriptTask = function(obj) {
+        var _this = new _CallTask(obj);
+        _this.addSuperClass("CallTask");
+        return _this;
+    };
+    
+    var _CallUserTask = function(obj) {
+        var _this = new _CallTask(obj);
+        _this.addSuperClass("CallTask");
+        return _this;
+    };
+    
+    var _ScriptTask = function(obj) {
+        var _this = new _Task(obj);
+        var fCanStart = _this.canStartLink;
+        var fCanEnd = _this.canEndLink;
+        
+        _this.addSuperClass("Task");
+        
+        _this.canStartLink = function(link) {
+            var ret = fCanStart(link);
+            if (link.type=="MessageFlow") {
+                ret = false;
+            }
+            return ret;
+        }
+        
+        _this.canEndLink = function(link) {
+            var ret = fCanEnd(link);
+            if (link.type=="MessageFlow") {
+                ret = false;
+            }
+            return ret;
+        }
+        return _this;
+    };
+    
+    var _SendTask = function(obj) {
+        var _this = new _Task(obj);
+        var fCanEnd = _this.canEndLink;
+        
+        _this.addSuperClass("Task");
+        
+        _this.canEndLink = function(link) {
+            var ret = fCanEnd(link);
+            if (link.type=="MessageFlow") {
+                ret = false;
+            }
+            return ret;
+        }
+        return _this;
+    };
+    
+    var _ReceiveTask = function(obj) {
+        var _this = new _Task(obj);
+        var fCanStart = _this.canStartLink;
+        var fCanEnd = _this.canEndLink;
+        
+        _this.addSuperClass("Task");
+        
+        _this.canStartLink = function(link) {
+            var ret = fCanStart(link);
+            if (link.type=="MessageFlow") {
+                ret = false;
+            }
+            return ret;
+        }
+        
+        _this.canEndLink = function(link) {
+            var ret = fCanEnd(link);
+            if (link.type=="SequenceFlow" && link.fromObject.type=="ExclusiveIntermediateEventGateway") {
+                ret = true;
+                for (var i = 0; i < link.fromObject.outConnections.length; i++) {
+                    if (link.fromObject.outConnections[i].type=="SequenceFlow" && link.toObject.outConnections[i].type=="MessageIntermediateCatchEvent") {
+                        ret = false;
+                        break;
+                    }
+                }
+            }
+            return ret;
+        }
+        return _this;
+    };
+    
+    var _ManualTask = function(obj) {
+        var _this = new _Task(obj);
+        var fCanStart = _this.canStartLink;
+        var fCanEnd = _this.canEndLink;
+        
+        _this.addSuperClass("Task");
+        
+        _this.canStartLink = function(link) {
+            var ret = fCanStart(link);
+            if (link.type=="MessageFlow") {
+                ret = false;
+            }
+            return ret;
+        }
+        
+        _this.canEndLink = function(link) {
+            var ret = fCanEnd(link);
+            if (link.type=="MessageFlow") {
+                ret = false;
+            }
+            return ret;
+        }
+        return _this;
+    };
+    
+    
+    
     var ToolBar =
     {
 
