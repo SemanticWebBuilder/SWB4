@@ -84,5 +84,16 @@ public class SWBModel extends org.semanticwb.model.base.SWBModelBase {
         }        
         return null;
     }
+    
+    public String getModelProperty(String id)
+    {
+        Iterator<ModelProperty> it=listModelProperties();
+        while (it.hasNext())
+        {
+            ModelProperty modelProperty = it.next();
+            if(modelProperty.getId().equals(id))return modelProperty.getValue();
+        }
+        return null;
+    }
 
 }
