@@ -4,8 +4,16 @@ package org.semanticwb.social.base;
    /**
    * Clase principal para manejo de reglas en swbSocial 
    */
-public abstract class SocialRuleBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.XMLable,org.semanticwb.model.Traceable,org.semanticwb.model.Filterable,org.semanticwb.model.Descriptiveable
+public abstract class SocialRuleBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.XMLable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable,org.semanticwb.model.Filterable
 {
+   /**
+   * Clase padre de todas las acciones posibles en swbsocial
+   */
+    public static final org.semanticwb.platform.SemanticClass social_Action=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#Action");
+   /**
+   * Una Regla puede tener acciones
+   */
+    public static final org.semanticwb.platform.SemanticProperty social_hasAction=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#hasAction");
     public static final org.semanticwb.platform.SemanticClass social_SocialRuleRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#SocialRuleRef");
     public static final org.semanticwb.platform.SemanticProperty social_hasSocialRuleRefInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#hasSocialRuleRefInv");
    /**
@@ -107,6 +115,29 @@ public abstract class SocialRuleBase extends org.semanticwb.model.SWBClass imple
         public static java.util.Iterator<org.semanticwb.social.SocialRule> listSocialRuleByModifiedBy(org.semanticwb.model.User value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.social.SocialRule> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_modifiedBy,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.social.SocialRule with a determined Action
+       * @param value Action of the type org.semanticwb.social.Action
+       * @param model Model of the org.semanticwb.social.SocialRule
+       * @return Iterator with all the org.semanticwb.social.SocialRule
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.SocialRule> listSocialRuleByAction(org.semanticwb.social.Action value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.SocialRule> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(social_hasAction, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.social.SocialRule with a determined Action
+       * @param value Action of the type org.semanticwb.social.Action
+       * @return Iterator with all the org.semanticwb.social.SocialRule
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.SocialRule> listSocialRuleByAction(org.semanticwb.social.Action value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.SocialRule> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(social_hasAction,value.getSemanticObject(),sclass));
             return it;
         }
        /**
@@ -294,6 +325,71 @@ public abstract class SocialRuleBase extends org.semanticwb.model.SWBClass imple
     public void setXml(String value)
     {
         getSemanticObject().setProperty(swb_xml, value);
+    }
+   /**
+   * Gets all the org.semanticwb.social.Action
+   * @return A GenericIterator with all the org.semanticwb.social.Action
+   */
+
+    public org.semanticwb.model.GenericIterator<org.semanticwb.social.Action> listActions()
+    {
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.social.Action>(getSemanticObject().listObjectProperties(social_hasAction));
+    }
+
+   /**
+   * Gets true if has a Action
+   * @param value org.semanticwb.social.Action to verify
+   * @return true if the org.semanticwb.social.Action exists, false otherwise
+   */
+    public boolean hasAction(org.semanticwb.social.Action value)
+    {
+        boolean ret=false;
+        if(value!=null)
+        {
+           ret=getSemanticObject().hasObjectProperty(social_hasAction,value.getSemanticObject());
+        }
+        return ret;
+    }
+   /**
+   * Adds a Action
+   * @param value org.semanticwb.social.Action to add
+   */
+
+    public void addAction(org.semanticwb.social.Action value)
+    {
+        getSemanticObject().addObjectProperty(social_hasAction, value.getSemanticObject());
+    }
+   /**
+   * Removes all the Action
+   */
+
+    public void removeAllAction()
+    {
+        getSemanticObject().removeProperty(social_hasAction);
+    }
+   /**
+   * Removes a Action
+   * @param value org.semanticwb.social.Action to remove
+   */
+
+    public void removeAction(org.semanticwb.social.Action value)
+    {
+        getSemanticObject().removeObjectProperty(social_hasAction,value.getSemanticObject());
+    }
+
+   /**
+   * Gets the Action
+   * @return a org.semanticwb.social.Action
+   */
+    public org.semanticwb.social.Action getAction()
+    {
+         org.semanticwb.social.Action ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(social_hasAction);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.social.Action)obj.createGenericInstance();
+         }
+         return ret;
     }
    /**
    * Sets the value for the property Creator

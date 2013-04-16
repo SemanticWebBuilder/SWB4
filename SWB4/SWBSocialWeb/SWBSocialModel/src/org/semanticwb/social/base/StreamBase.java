@@ -4,7 +4,7 @@ package org.semanticwb.social.base;
    /**
    * Clase que contendra los streams que configurados para cada usuario 
    */
-public abstract class StreamBase extends org.semanticwb.model.SWBClass implements org.semanticwb.social.Geolocable,org.semanticwb.model.Traceable,org.semanticwb.social.SocialRuleRefable,org.semanticwb.model.Filterable,org.semanticwb.model.Activeable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Referensable,org.semanticwb.model.Descriptiveable
+public abstract class StreamBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Activeable,org.semanticwb.model.Descriptiveable,org.semanticwb.social.Geolocable,org.semanticwb.model.Traceable,org.semanticwb.model.Filterable,org.semanticwb.model.Referensable,org.semanticwb.model.FilterableClass,org.semanticwb.social.SocialRuleRefable
 {
    /**
    * Clase que engloba a las diferentes clases que representan cada una de las redes sociales.

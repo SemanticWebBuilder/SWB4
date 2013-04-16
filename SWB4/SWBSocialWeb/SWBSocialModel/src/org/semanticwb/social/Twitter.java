@@ -523,7 +523,7 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
     {
         String url_1="http://api.klout.com/v2/identity.json/tw/"+twitterUserID;
         String kloutJsonResponse_1=getData(url_1);
-        //System.out.println("kloutResult step-1:"+kloutJsonResponse_1);
+        System.out.println("kloutResult step-1:"+kloutJsonResponse_1);
         
         //Obtener id de json
         try
@@ -532,14 +532,14 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
             {
                 JSONObject userData = new JSONObject(kloutJsonResponse_1);
                 String kloutUserId = userData != null && userData.get("id") != null ? (String) userData.get("id") : "";
-                //System.out.println("kloutId de Resultado en Json:"+kloutUserId);
+                System.out.println("kloutId de Resultado en Json:"+kloutUserId);
             
                 //Segunda llamada a la red social Klout, para obtener Json de Score del usuario (kloutUserId) encontrado
                 if(kloutUserId!=null)
                 {
                     String url_2="http://api.klout.com/v2/user.json/"+kloutUserId+"/score";
                     String kloutJsonResponse_2=getData(url_2);
-                    //System.out.println("kloutResult step-2-Json:"+kloutJsonResponse_2);
+                    System.out.println("kloutResult step-2-Json:"+kloutJsonResponse_2);
 
                     if(kloutJsonResponse_2!=null)
                     {
@@ -559,14 +559,16 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
     private static String getData(String url)
     {
         String answer = null;
-        String key=SWBContext.getAdminWebSite().getProperty("kloutKey");
-        //String key="8fkzgz7ngf7bth3nk94gnxkd";
+        //String key=SWBContext.getAdminWebSite().getProperty("kloutKey");    //TODO:Ver con Jei x que no funciona esto...
+        String key=SWBSocialUtil.Util.getModelPropertyValue(SWBContext.getAdminWebSite(), "kloutKey");
+        //if(key==null) key="8fkzgz7ngf7bth3nk94gnxkd";   //Solo para fines de pruebas, quitar despues y dejar línea anterior.
+        System.out.println("key para KLOUT--Gg:"+key);
         if(key!=null)
         {
             url=url+"?key="+key;
             URLConnection conex = null;
             try {
-                //System.out.println("Url a enviar a Klout:"+url);
+                System.out.println("Url a enviar a Klout:"+url);
                 URL pagina = new URL(url);
 
                 String host = pagina.getHost();
@@ -583,7 +585,7 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
 
                 conex.setConnectTimeout(5000);
             } catch (Exception nexc) {
-                //System.out.println("nexc Error:"+nexc.getMessage());
+                System.out.println("nexc Error:"+nexc.getMessage());
                 conex = null;
             }
         
