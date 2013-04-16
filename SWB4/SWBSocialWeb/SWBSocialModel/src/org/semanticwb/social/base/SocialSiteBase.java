@@ -4,8 +4,12 @@ package org.semanticwb.social.base;
    /**
    * Clase que hereda de swb:WebSite. Es un tipo de website Social. De esta manera se puede contar con todos los elementos en el arbol de navegación en la administración, y otros elementos utiles para Social Site. 
    */
-public abstract class SocialSiteBase extends org.semanticwb.model.WebSite implements org.semanticwb.model.Indexable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Traceable,org.semanticwb.model.Trashable,org.semanticwb.model.Undeleteable,org.semanticwb.model.OntologyDepable,org.semanticwb.model.Activeable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Filterable,org.semanticwb.model.Localeable,org.semanticwb.model.Countryable,org.semanticwb.model.Descriptiveable
+public abstract class SocialSiteBase extends org.semanticwb.model.WebSite implements org.semanticwb.model.Activeable,org.semanticwb.model.Indexable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Filterable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Trashable,org.semanticwb.model.Localeable,org.semanticwb.model.Traceable,org.semanticwb.model.Undeleteable,org.semanticwb.model.FilterableClass,org.semanticwb.model.OntologyDepable,org.semanticwb.model.Countryable
 {
+   /**
+   * Acción específica mediante la cual se envía un correo electrónico
+   */
+    public static final org.semanticwb.platform.SemanticClass social_SendEmail=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#SendEmail");
    /**
    * Catalogo de temas de un modelo (Marca)
    */
@@ -15,6 +19,14 @@ public abstract class SocialSiteBase extends org.semanticwb.model.WebSite implem
    * Clase que contendra los streams que configurados para cada usuario
    */
     public static final org.semanticwb.platform.SemanticClass social_Stream=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#Stream");
+   /**
+   * Acción específica mediante la cual se envía un mensaje por defecto a una o varias redes sociales seleccionadas
+   */
+    public static final org.semanticwb.platform.SemanticClass social_SendPost=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#SendPost");
+   /**
+   * Acción específica mediante la cual se marca un mensaje como prioritario. Esto en la propiedad "IsPrioritary" de un mensaje (Post).
+   */
+    public static final org.semanticwb.platform.SemanticClass social_MarkMsgAsPrioritary=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#MarkMsgAsPrioritary");
    /**
    * Clase principal para manejo de reglas en swbSocial
    */
@@ -377,6 +389,36 @@ public abstract class SocialSiteBase extends org.semanticwb.model.WebSite implem
         super(base);
     }
 
+    public org.semanticwb.social.SendEmail getSendEmail(String id)
+    {
+        return org.semanticwb.social.SendEmail.ClassMgr.getSendEmail(id, this);
+    }
+
+    public java.util.Iterator<org.semanticwb.social.SendEmail> listSendEmails()
+    {
+        return org.semanticwb.social.SendEmail.ClassMgr.listSendEmails(this);
+    }
+
+    public org.semanticwb.social.SendEmail createSendEmail(String id)
+    {
+        return org.semanticwb.social.SendEmail.ClassMgr.createSendEmail(id,this);
+    }
+
+    public org.semanticwb.social.SendEmail createSendEmail()
+    {
+        long id=getSemanticObject().getModel().getCounter(social_SendEmail);
+        return org.semanticwb.social.SendEmail.ClassMgr.createSendEmail(String.valueOf(id),this);
+    } 
+
+    public void removeSendEmail(String id)
+    {
+        org.semanticwb.social.SendEmail.ClassMgr.removeSendEmail(id, this);
+    }
+    public boolean hasSendEmail(String id)
+    {
+        return org.semanticwb.social.SendEmail.ClassMgr.hasSendEmail(id, this);
+    }
+
     public org.semanticwb.social.SocialTopic getSocialTopic(String id)
     {
         return org.semanticwb.social.SocialTopic.ClassMgr.getSocialTopic(id, this);
@@ -453,6 +495,66 @@ public abstract class SocialSiteBase extends org.semanticwb.model.WebSite implem
     public boolean hasStream(String id)
     {
         return org.semanticwb.social.Stream.ClassMgr.hasStream(id, this);
+    }
+
+    public org.semanticwb.social.SendPost getSendPost(String id)
+    {
+        return org.semanticwb.social.SendPost.ClassMgr.getSendPost(id, this);
+    }
+
+    public java.util.Iterator<org.semanticwb.social.SendPost> listSendPosts()
+    {
+        return org.semanticwb.social.SendPost.ClassMgr.listSendPosts(this);
+    }
+
+    public org.semanticwb.social.SendPost createSendPost(String id)
+    {
+        return org.semanticwb.social.SendPost.ClassMgr.createSendPost(id,this);
+    }
+
+    public org.semanticwb.social.SendPost createSendPost()
+    {
+        long id=getSemanticObject().getModel().getCounter(social_SendPost);
+        return org.semanticwb.social.SendPost.ClassMgr.createSendPost(String.valueOf(id),this);
+    } 
+
+    public void removeSendPost(String id)
+    {
+        org.semanticwb.social.SendPost.ClassMgr.removeSendPost(id, this);
+    }
+    public boolean hasSendPost(String id)
+    {
+        return org.semanticwb.social.SendPost.ClassMgr.hasSendPost(id, this);
+    }
+
+    public org.semanticwb.social.MarkMsgAsPrioritary getMarkMsgAsPrioritary(String id)
+    {
+        return org.semanticwb.social.MarkMsgAsPrioritary.ClassMgr.getMarkMsgAsPrioritary(id, this);
+    }
+
+    public java.util.Iterator<org.semanticwb.social.MarkMsgAsPrioritary> listMarkMsgAsPrioritaries()
+    {
+        return org.semanticwb.social.MarkMsgAsPrioritary.ClassMgr.listMarkMsgAsPrioritaries(this);
+    }
+
+    public org.semanticwb.social.MarkMsgAsPrioritary createMarkMsgAsPrioritary(String id)
+    {
+        return org.semanticwb.social.MarkMsgAsPrioritary.ClassMgr.createMarkMsgAsPrioritary(id,this);
+    }
+
+    public org.semanticwb.social.MarkMsgAsPrioritary createMarkMsgAsPrioritary()
+    {
+        long id=getSemanticObject().getModel().getCounter(social_MarkMsgAsPrioritary);
+        return org.semanticwb.social.MarkMsgAsPrioritary.ClassMgr.createMarkMsgAsPrioritary(String.valueOf(id),this);
+    } 
+
+    public void removeMarkMsgAsPrioritary(String id)
+    {
+        org.semanticwb.social.MarkMsgAsPrioritary.ClassMgr.removeMarkMsgAsPrioritary(id, this);
+    }
+    public boolean hasMarkMsgAsPrioritary(String id)
+    {
+        return org.semanticwb.social.MarkMsgAsPrioritary.ClassMgr.hasMarkMsgAsPrioritary(id, this);
     }
 
     public org.semanticwb.social.SocialRule getSocialRule(String id)

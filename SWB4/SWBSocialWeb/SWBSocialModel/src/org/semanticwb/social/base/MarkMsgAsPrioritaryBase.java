@@ -4,7 +4,7 @@ package org.semanticwb.social.base;
    /**
    * Acción específica mediante la cual se marca un mensaje como prioritario. Esto en la propiedad "IsPrioritary" de un mensaje (Post). 
    */
-public abstract class MarkMsgAsPrioritaryBase extends org.semanticwb.social.Action 
+public abstract class MarkMsgAsPrioritaryBase extends org.semanticwb.social.Action implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable
 {
    /**
    * Acción específica mediante la cual se marca un mensaje como prioritario. Esto en la propiedad "IsPrioritary" de un mensaje (Post).
@@ -84,6 +84,75 @@ public abstract class MarkMsgAsPrioritaryBase extends org.semanticwb.social.Acti
         {
             return (getMarkMsgAsPrioritary(id, model)!=null);
         }
+       /**
+       * Gets all org.semanticwb.social.MarkMsgAsPrioritary with a determined ModifiedBy
+       * @param value ModifiedBy of the type org.semanticwb.model.User
+       * @param model Model of the org.semanticwb.social.MarkMsgAsPrioritary
+       * @return Iterator with all the org.semanticwb.social.MarkMsgAsPrioritary
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.MarkMsgAsPrioritary> listMarkMsgAsPrioritaryByModifiedBy(org.semanticwb.model.User value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.MarkMsgAsPrioritary> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_modifiedBy, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.social.MarkMsgAsPrioritary with a determined ModifiedBy
+       * @param value ModifiedBy of the type org.semanticwb.model.User
+       * @return Iterator with all the org.semanticwb.social.MarkMsgAsPrioritary
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.MarkMsgAsPrioritary> listMarkMsgAsPrioritaryByModifiedBy(org.semanticwb.model.User value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.MarkMsgAsPrioritary> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_modifiedBy,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.social.MarkMsgAsPrioritary with a determined ActionRuleInv
+       * @param value ActionRuleInv of the type org.semanticwb.social.SocialRule
+       * @param model Model of the org.semanticwb.social.MarkMsgAsPrioritary
+       * @return Iterator with all the org.semanticwb.social.MarkMsgAsPrioritary
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.MarkMsgAsPrioritary> listMarkMsgAsPrioritaryByActionRuleInv(org.semanticwb.social.SocialRule value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.MarkMsgAsPrioritary> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(social_actionRuleInv, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.social.MarkMsgAsPrioritary with a determined ActionRuleInv
+       * @param value ActionRuleInv of the type org.semanticwb.social.SocialRule
+       * @return Iterator with all the org.semanticwb.social.MarkMsgAsPrioritary
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.MarkMsgAsPrioritary> listMarkMsgAsPrioritaryByActionRuleInv(org.semanticwb.social.SocialRule value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.MarkMsgAsPrioritary> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(social_actionRuleInv,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.social.MarkMsgAsPrioritary with a determined Creator
+       * @param value Creator of the type org.semanticwb.model.User
+       * @param model Model of the org.semanticwb.social.MarkMsgAsPrioritary
+       * @return Iterator with all the org.semanticwb.social.MarkMsgAsPrioritary
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.MarkMsgAsPrioritary> listMarkMsgAsPrioritaryByCreator(org.semanticwb.model.User value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.MarkMsgAsPrioritary> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_creator, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.social.MarkMsgAsPrioritary with a determined Creator
+       * @param value Creator of the type org.semanticwb.model.User
+       * @return Iterator with all the org.semanticwb.social.MarkMsgAsPrioritary
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.MarkMsgAsPrioritary> listMarkMsgAsPrioritaryByCreator(org.semanticwb.model.User value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.MarkMsgAsPrioritary> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_creator,value.getSemanticObject(),sclass));
+            return it;
+        }
     }
 
     public static MarkMsgAsPrioritaryBase.ClassMgr getMarkMsgAsPrioritaryClassMgr()
@@ -98,5 +167,14 @@ public abstract class MarkMsgAsPrioritaryBase extends org.semanticwb.social.Acti
     public MarkMsgAsPrioritaryBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
+    }
+
+   /**
+   * Gets the SocialSite
+   * @return a instance of org.semanticwb.social.SocialSite
+   */
+    public org.semanticwb.social.SocialSite getSocialSite()
+    {
+        return (org.semanticwb.social.SocialSite)getSemanticObject().getModel().getModelObject().createGenericInstance();
     }
 }

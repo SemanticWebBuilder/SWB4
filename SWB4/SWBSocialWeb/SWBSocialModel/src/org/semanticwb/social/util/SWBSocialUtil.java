@@ -18,8 +18,15 @@ import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.base.SWBAppObject;
+import org.semanticwb.model.ModelProperty;
 import org.semanticwb.model.SWBModel;
+import org.semanticwb.social.Message;
+import org.semanticwb.social.MessageIn;
+import org.semanticwb.social.PostIn;
 import org.semanticwb.social.PunctuationSign;
+import org.semanticwb.social.SocialNetwork;
+import org.semanticwb.social.SocialSite;
+import org.semanticwb.social.Stream;
 import org.semanticwb.social.WordsToMonitor;
 import org.semanticwb.social.util.lucene.SpanishAnalizer;
 
@@ -679,6 +686,27 @@ public class SWBSocialUtil implements SWBAppObject{
     
     public static class Util
     {
+        /**
+         * Metodo que obtiene el valor de la propiedad que le llega como parametro en un determinado modelo
+         * @param model
+         * @param propertyID
+         * @return 
+         */
+       public static String getModelPropertyValue(SWBModel model, String propertyID)
+       {
+           Iterator<ModelProperty> itModelProps=model.listModelProperties();
+           while(itModelProps.hasNext())
+           {
+               ModelProperty modelProp=itModelProps.next();
+               if(modelProp.getId().equals(propertyID))
+               {
+                   return modelProp.getValue();
+               }
+           }
+           return null;
+       }
+        
+        
         //Diferencias entre dos fechas
         //@param fechaInicial La fecha de inicio
         //@param fechaFinal  La fecha de fin
@@ -705,6 +733,25 @@ public class SWBSocialUtil implements SWBAppObject{
             double dias = Math.floor(diferencia / (1000 * 60 * 60 * 24));
             return ((int) dias);
         }
+        
+        
+        public static String replaceTags(String message, PostIn postIn, SocialSite socialSite, Stream stream, SocialNetwork socialNetwork) {
+
+        message = SWBUtils.TEXT.replaceAll(message, "{brand.title}", socialSite.getTitle());
+        message = SWBUtils.TEXT.replaceAll(message, "{stream.title}", stream.getTitle());
+        message = SWBUtils.TEXT.replaceAll(message, "{net.title}", socialNetwork.getTitle());
+        try
+        {
+            System.out.println("Mensaje del post:"+((MessageIn)postIn).getMsg_Text());
+            message = SWBUtils.TEXT.replaceAll(message, "{post.message}", ((MessageIn)postIn).getMsg_Text());
+        }catch(Exception e)
+        {
+            log.error(e);
+        }
+       
+        return message;
+    }
+        
     }
     
 }

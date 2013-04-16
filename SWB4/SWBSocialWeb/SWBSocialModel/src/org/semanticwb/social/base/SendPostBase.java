@@ -4,7 +4,7 @@ package org.semanticwb.social.base;
    /**
    * Acción específica mediante la cual se envía un mensaje por defecto a una o varias redes sociales seleccionadas 
    */
-public abstract class SendPostBase extends org.semanticwb.social.ActionMsg implements org.semanticwb.social.SocialNetworkable
+public abstract class SendPostBase extends org.semanticwb.social.ActionMsg implements org.semanticwb.model.Descriptiveable,org.semanticwb.social.SocialNetworkable,org.semanticwb.model.Traceable
 {
    /**
    * Acción específica mediante la cual se envía un mensaje por defecto a una o varias redes sociales seleccionadas
@@ -83,6 +83,75 @@ public abstract class SendPostBase extends org.semanticwb.social.ActionMsg imple
         public static boolean hasSendPost(String id, org.semanticwb.model.SWBModel model)
         {
             return (getSendPost(id, model)!=null);
+        }
+       /**
+       * Gets all org.semanticwb.social.SendPost with a determined ModifiedBy
+       * @param value ModifiedBy of the type org.semanticwb.model.User
+       * @param model Model of the org.semanticwb.social.SendPost
+       * @return Iterator with all the org.semanticwb.social.SendPost
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.SendPost> listSendPostByModifiedBy(org.semanticwb.model.User value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.SendPost> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_modifiedBy, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.social.SendPost with a determined ModifiedBy
+       * @param value ModifiedBy of the type org.semanticwb.model.User
+       * @return Iterator with all the org.semanticwb.social.SendPost
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.SendPost> listSendPostByModifiedBy(org.semanticwb.model.User value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.SendPost> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_modifiedBy,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.social.SendPost with a determined ActionRuleInv
+       * @param value ActionRuleInv of the type org.semanticwb.social.SocialRule
+       * @param model Model of the org.semanticwb.social.SendPost
+       * @return Iterator with all the org.semanticwb.social.SendPost
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.SendPost> listSendPostByActionRuleInv(org.semanticwb.social.SocialRule value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.SendPost> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(social_actionRuleInv, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.social.SendPost with a determined ActionRuleInv
+       * @param value ActionRuleInv of the type org.semanticwb.social.SocialRule
+       * @return Iterator with all the org.semanticwb.social.SendPost
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.SendPost> listSendPostByActionRuleInv(org.semanticwb.social.SocialRule value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.SendPost> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(social_actionRuleInv,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.social.SendPost with a determined Creator
+       * @param value Creator of the type org.semanticwb.model.User
+       * @param model Model of the org.semanticwb.social.SendPost
+       * @return Iterator with all the org.semanticwb.social.SendPost
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.SendPost> listSendPostByCreator(org.semanticwb.model.User value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.SendPost> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_creator, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.social.SendPost with a determined Creator
+       * @param value Creator of the type org.semanticwb.model.User
+       * @return Iterator with all the org.semanticwb.social.SendPost
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.SendPost> listSendPostByCreator(org.semanticwb.model.User value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.SendPost> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_creator,value.getSemanticObject(),sclass));
+            return it;
         }
        /**
        * Gets all org.semanticwb.social.SendPost with a determined SocialNetworks
@@ -186,5 +255,14 @@ public abstract class SendPostBase extends org.semanticwb.social.ActionMsg imple
              ret=(org.semanticwb.social.SocialNetwork)obj.createGenericInstance();
          }
          return ret;
+    }
+
+   /**
+   * Gets the SocialSite
+   * @return a instance of org.semanticwb.social.SocialSite
+   */
+    public org.semanticwb.social.SocialSite getSocialSite()
+    {
+        return (org.semanticwb.social.SocialSite)getSemanticObject().getModel().getModelObject().createGenericInstance();
     }
 }

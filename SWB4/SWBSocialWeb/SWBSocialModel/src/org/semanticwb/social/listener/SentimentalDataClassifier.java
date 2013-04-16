@@ -15,19 +15,26 @@ import org.semanticwb.SWBUtils;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.SWBModel;
 import org.semanticwb.model.WebSite;
+import org.semanticwb.social.Action;
 import org.semanticwb.social.ExternalPost;
 import org.semanticwb.social.Kloutable;
+import org.semanticwb.social.MarkMsgAsPrioritary;
 import org.semanticwb.social.MessageIn;
 import org.semanticwb.social.PostIn;
 import org.semanticwb.social.Prepositions;
+import org.semanticwb.social.SendEmail;
+import org.semanticwb.social.SendPost;
 import org.semanticwb.social.SentimentWords;
 import org.semanticwb.social.SentimentalLearningPhrase;
 import org.semanticwb.social.SocialAdmin;
 import org.semanticwb.social.SocialNetwork;
 import org.semanticwb.social.SocialNetworkUser;
+import org.semanticwb.social.SocialRule;
+import org.semanticwb.social.SocialRuleRef;
 import org.semanticwb.social.SocialTopic;
 import org.semanticwb.social.Stream;
 import org.semanticwb.social.util.NormalizerCharDuplicate;
+import org.semanticwb.social.util.SWBSocialRuleMgr;
 import org.semanticwb.social.util.SWBSocialUtil;
 
 /**
@@ -280,20 +287,25 @@ public class SentimentalDataClassifier {
                 //Filtro de Klout
                 //stream.setStream_KloutValue(10);
                 //Si se requiere filtrar por Klout, esto es porque exista un valo de klout para el stream>0
+                System.out.println("Klout-0, stream k:"+stream.getStream_KloutValue()+",boolean:"+socialNetwork.getSemanticObject().getSemanticClass().isSubClass(Kloutable.social_Kloutable));
                 if(stream.getStream_KloutValue()>0 && socialNetwork.getSemanticObject().getSemanticClass().isSubClass(Kloutable.social_Kloutable))
                 {
+                    System.out.println("Klout-1");
                     String creatorId=externalPost.getCreatorId();
                     if(creatorId!=null) //Siempre debería externalPost.getCreatorId() traer un valor, por lo tanto debería entrar a este if
                     {
+                        System.out.println("Klout-2:"+creatorId);
                         //Revisar si existe el usuario en nuestra BD y si ya paso mas de 5 días en mi cache.
                         {
                             socialNetUser=SocialNetworkUser.getSocialNetworkUserbyIDAndSocialNet(""+creatorId, socialNetwork, model);
+                            System.out.println("Klout-3:"+socialNetUser);
                             if(socialNetUser!=null)
                             {
                                 userKloutScore=socialNetUser.getSnu_klout();
+                                System.out.println("Klout-4:"+userKloutScore);
                                 //System.out.println("userKloutScore:"+userKloutScore);
                                 int days=SWBSocialUtil.Util.Datediff(socialNetUser.getUpdated(), Calendar.getInstance().getTime());
-                                
+                                System.out.println("Klout-5:"+days);
                                 /*
                                 String patron = "yyyy/MM/dd:hh:mm:ss:SSS:a";
                                 SimpleDateFormat formato = new SimpleDateFormat(patron);
@@ -317,8 +329,10 @@ public class SentimentalDataClassifier {
                                         }
                                     }
                                 }else{  //Si ya pasaron 5 o mas días de que se actualizó la info del usuario, entonces busca su score en Klout
+                                    System.out.println("YA PASARON MAS DE 5 DÍAS, BUSCAR KLOUT DE USUARIO...");
                                     Kloutable socialNetKloutAble=(Kloutable) socialNetwork;
                                     userKloutScore=Double.valueOf(socialNetKloutAble.getUserKlout(creatorId)).intValue(); 
+                                    System.out.println("userKloutScore K TRAJO:"+userKloutScore);
                                     if(userKloutScore>=stream.getStream_KloutValue())
                                     {
                                         createPostbyKlout=true;
@@ -326,13 +340,14 @@ public class SentimentalDataClassifier {
                                     }
                                 }
                             }else { //No existe en la BD, debo revisar su klout
-                                //System.out.println("USUARIO NO EXISTE EN EL SISTEMA, REVISAR QUE KLOUT TIENE");
+                                System.out.println("USUARIO NO EXISTE EN EL SISTEMA, REVISAR QUE KLOUT TIENE");
                                 Kloutable socialNetKloutAble=(Kloutable) socialNetwork;
                                 userKloutScore=Double.valueOf(socialNetKloutAble.getUserKlout(creatorId)).intValue(); 
                                 if(userKloutScore>=stream.getStream_KloutValue())
                                 {
                                     createPostbyKlout=true;
                                 }
+                                System.out.println("createPostbyKlout:"+createPostbyKlout);
                             }
                         }
                         //Termina de revisar si existe el usuario en nuestra BD y si ya paso mas de 5 días en mi cache.
@@ -341,7 +356,7 @@ public class SentimentalDataClassifier {
                     createPostbyKlout=true;
                 }
             }
-            //System.out.println("Klout de usuario del mensaje:"+createPostbyKlout);
+            System.out.println("Klout de usuario del mensaje:"+createPostbyKlout);
             if(createPostbyKlout)   //Si pasa el filtro de Klout del usuario, entonces ya persite el mensaje en BD
             {
                 System.out.println("Paso filtro de sentimientos, intensidad y klout---vamos a persistir el msg...");
@@ -365,6 +380,60 @@ public class SentimentalDataClassifier {
                 
                 //Clasificación por palabras relacionadas a un tema
                 clasifyMsgbySocialTopic(post);
+                
+                boolean firstTime=true;
+                boolean rulesClassifierValue=false;
+                boolean rulesClassifierValueTmp=false;
+                ArrayList<SocialRule> streamRules=new ArrayList();
+                //Momento de revisar las reglas del stream
+                Iterator <SocialRuleRef> itsocialRuleRefs =stream.listSocialRuleRefs(); 
+                System.out.println("itsocialRuleRefs jorge:"+itsocialRuleRefs.hasNext());
+                while(itsocialRuleRefs.hasNext())
+                {
+                   SocialRuleRef socialRuleRef=itsocialRuleRefs.next();
+                   if(socialRuleRef.isActive() && socialRuleRef.getSocialRule()!=null)
+                   {
+                        System.out.println("ReglaRef k:"+socialRuleRef);
+                        SWBSocialRuleMgr socialRuleMgr=new SWBSocialRuleMgr();
+                        SocialRule socialRule=socialRuleRef.getSocialRule();
+                        rulesClassifierValueTmp=socialRuleMgr.eval(post, socialRule);
+                        System.out.println("rulesClassifierValueTmp-1:"+rulesClassifierValue);
+                        if(firstTime) {
+                            rulesClassifierValue=rulesClassifierValueTmp;
+                            firstTime=false;
+                        }else
+                        {
+                            rulesClassifierValue=rulesClassifierValue && rulesClassifierValueTmp;
+                            System.out.println("rulesClassifierValue-2:"+rulesClassifierValue);
+                        }
+                        streamRules.add(socialRule);
+                   }
+                }
+                System.out.println("rulesClassifierValue-Final:"+rulesClassifierValue);
+                //Si el mensaje cumple con las reglas que tiene el stream por el cual provinó, entonces se ejecutan las acciones asignadas a dichas reglas.
+                if(rulesClassifierValue)
+                {
+                    Iterator<SocialRule> itRules=streamRules.iterator();
+                    while(itRules.hasNext())
+                    {
+                        SocialRule socialRule=itRules.next();
+                        Iterator <Action> itActions=socialRule.listActions();
+                        while(itActions.hasNext())
+                        {
+                            Action action=itActions.next();
+                            if(action instanceof SendEmail)
+                            {
+                               SendEmail.sendEmail(action, post, stream, socialNetwork);
+                            }else if(action instanceof SendPost)
+                            {
+                               SendPost.sendPost(action, post);
+                            }else if(action instanceof MarkMsgAsPrioritary)
+                            {
+                               MarkMsgAsPrioritary.markMsgAsPrioritary(action,post);
+                            }
+                        }
+                    }
+                }
             }
         }
     }
