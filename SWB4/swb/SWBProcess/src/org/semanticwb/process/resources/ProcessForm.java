@@ -1,573 +1,422 @@
-/*
- * SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración,
- * colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de
- * información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes
- * fuentes, donde a la información se le asigna un significado, de forma que pueda ser interpretada y
- * procesada por personas y/o sistemas, es una creación original del Fondo de Información y Documentación
- * para la Industria INFOTEC, cuyo registro se encuentra actualmente en trámite.
- *
- * INFOTEC pone a su disposición la herramienta SemanticWebBuilder a través de su licenciamiento abierto al público (‘open source’),
- * en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición;
- * aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software,
- * todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización
- * del SemanticWebBuilder 4.0.
- *
- * INFOTEC no otorga garantía sobre SemanticWebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita,
- * siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar
- * de la misma.
- *
- * Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente
- * dirección electrónica:
- *  http://www.semanticwebbuilder.org
- */
 package org.semanticwb.process.resources;
 
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.NodeIterator;
 import com.hp.hpl.jena.rdf.model.RDFNode;
-import java.io.*;
+import java.io.BufferedInputStream;
+import java.io.BufferedWriter;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.security.GeneralSecurityException;
 import java.security.Signature;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateFactory;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.StringTokenizer;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
-import org.semanticwb.model.*;
+import org.semanticwb.model.DisplayProperty;
+import org.semanticwb.model.FormElement;
+import org.semanticwb.model.Resource;
+import org.semanticwb.model.SWBClass;
+import org.semanticwb.model.User;
+import org.semanticwb.model.WebSite;
 import org.semanticwb.platform.*;
 import org.semanticwb.portal.SWBFormMgr;
 import org.semanticwb.portal.SWBForms;
-import org.semanticwb.portal.api.*;
+import org.semanticwb.portal.api.GenericResource;
+import org.semanticwb.portal.api.SWBActionResponse;
+import org.semanticwb.portal.api.SWBParamRequest;
+import org.semanticwb.portal.api.SWBParameters;
+import org.semanticwb.portal.api.SWBResourceException;
+import org.semanticwb.portal.api.SWBResourceURL;
 import org.semanticwb.portal.util.Base64;
 import org.semanticwb.process.forms.SWBFormMgrLayer;
-import org.semanticwb.process.model.*;
+import org.semanticwb.process.model.DataTypes;
+import org.semanticwb.process.model.FlowNodeInstance;
+import org.semanticwb.process.model.Instance;
+import org.semanticwb.process.model.ItemAware;
+import org.semanticwb.process.model.ItemAwareReference;
+import org.semanticwb.process.model.SWBProcessFormMgr;
+import org.semanticwb.process.model.SWBProcessMgr;
+import org.semanticwb.process.model.UserTask;
+import org.semanticwb.process.model.X509Certificate;
+import org.semanticwb.process.model.X509SingInstance;
 
 /**
- *
  * @author javier.solis
+ * @modified by Juan Fernández
+ * @modified by Hasdai Pacheco {ebenezer.sanchez@infotec.com.mx}
  */
 public class ProcessForm extends GenericResource {
-
-    /**
-     * The log.
-     */
-    private Logger log = SWBUtils.getLogger(ProcessForm.class);
-    private HashMap<String, SemanticObject> hmFormEle = null;
-    static final String ADMINMODE_SIMPLE = "simple";
-    static final String ADMINMODE_ADVANCE = "advance";
-    static final String FE_MODE_VIEW = "view";
-    static final String FE_MODE_EDIT = "edit";
-    static final String FE_DEFAULT = "generico";
-    static final String MODE_SIGN = "sign";
-    static final String MODE_ACUSE = "acuse";
-
-    @Override
-    public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        PrintWriter out = response.getWriter();
-        String lang = paramRequest.getUser().getLanguage();
-
-        StringBuilder ret = new StringBuilder("");
-        User user = paramRequest.getUser();
-
-        Resource base = getResourceBase();
-
-        String adminMode = base.getAttribute("adminMode", ADMINMODE_SIMPLE);
-
-        String action = paramRequest.getAction();
-
-        String suri = request.getParameter("suri");
-        if (suri == null) {
-            out.println("Parámetro no definido...");
-            return;
-        }
-
-        SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
-        FlowNodeInstance foi = (FlowNodeInstance) ont.getGenericObject(suri);
-
-
-        User asigned = foi.getAssignedto();
-        if (asigned != null && !asigned.equals(user)) {
-            out.println("Tarea asignada previamente a otro usuario...");
-            return;
-        }
-
-        if (foi.getStatus() == Instance.STATUS_CLOSED || foi.getStatus() == Instance.STATUS_ABORTED || foi.getStatus() == Instance.STATUS_STOPED) {
-            out.println("La tarea ya ha sido ejecutada...");
-            return;
-        }
-
-        if (asigned == null) {
-            foi.setAssigned(new Date());
-            foi.setAssignedto(user);
-        }
-
-        SWBProcessFormMgr mgr = new SWBProcessFormMgr(foi);
-        mgr.setAction(paramRequest.getActionUrl().setAction("process").toString());
-        mgr.clearProperties();
-
-        HashMap<String, SemanticClass> hmclass = new HashMap<String, SemanticClass>();
-        HashMap<String, SemanticProperty> hmprops = new HashMap<String, SemanticProperty>();
-        Iterator<ItemAwareReference> it = foi.listHeraquicalItemAwareReference().iterator();
-        while (it.hasNext()) {
-            ItemAwareReference item = it.next();
-            SWBClass obj = item.getProcessObject();
-
-            if (obj != null) {
-                SemanticClass cls = obj.getSemanticObject().getSemanticClass();
-
-                hmclass.put(item.getItemAware().getName(), cls);
-
-                Iterator<SemanticProperty> itp = cls.listProperties();
-                while (itp.hasNext()) {
-                    SemanticProperty prop = itp.next();
-                    hmprops.put(item.getItemAware().getName() + "|" + prop.getPropId(), prop);
-                }
-            }
-        }
-
-        if (ADMINMODE_SIMPLE.equals(adminMode)) {
-
-            out.println(SWBForms.DOJO_REQUIRED);
-
-            SWBResourceURL urlact = paramRequest.getActionUrl();
-            urlact.setAction("process");
-            out.println("<script type=\"text/javascript\">function validateForm" + foi.getId() + "(form) {if (form.validate()) {return true;} else {alert('Algunos de los datos no son válidos. Verifique la información proporcionada.'); return false;}}</script>");
-            out.println("<div id=\"processForm\">");
-            out.println("<form id=\"" + foi.getId() + "/form\" dojoType=\"dijit.form.Form\" class=\"swbform\" action=\"" + urlact + "\" method=\"post\" onSubmit=\"return validateForm" + foi.getId() + "(this);\">");
-            out.println("<input type=\"hidden\" name=\"suri\" value=\"" + suri + "\"/>");
-            out.println("<input type=\"hidden\" name=\"smode\" value=\"edit\"/>");
-
-            boolean printHeaders = false;
-
-            int max = 1;
-            while (!base.getAttribute("prop" + max, "").equals("")) {
-
-                String val = base.getAttribute("prop" + max);
-                String varName = "";
-                String propid = "";
-                String modo = "";
-                String fe = "";
-                StringTokenizer stoken = new StringTokenizer(val, "|");
-                if (stoken.hasMoreTokens()) {
-                    varName = stoken.nextToken();
-                    propid = stoken.nextToken();
-                    modo = stoken.nextToken();
-                    fe = stoken.nextToken();
-                }
-
-                SemanticProperty semprop = hmprops.get(varName + "|" + propid);
-
-                String strMode = "";
-
-                SemanticClass semclass = hmclass.get(varName);
-
-                if (semclass != null && semprop != null) {
-                    if (modo.equals(FE_MODE_VIEW)) {
-                        mgr.addProperty(semprop, varName, SWBFormMgr.MODE_VIEW);
-                        strMode = SWBFormMgr.MODE_VIEW;
-                    } else if (modo.equals(FE_MODE_EDIT)) {
-                        mgr.addProperty(semprop, varName, SWBFormMgr.MODE_EDIT);
-                        strMode = SWBFormMgr.MODE_VIEW;
-                    }
-
-                    SemanticObject sofe = ont.getSemanticObject(fe);
-
-                    SWBProcessFormMgr fmgr = new SWBProcessFormMgr(foi);
-
-                    if (!printHeaders) {
-                        out.println("<fieldset>");
-//                        out.println("<legend>Datos Generales</legend>");
-                        out.println("<table>");
-                        printHeaders = true;
-                    }
-
-                    out.println("<tr><td width=\"200px\" align=\"right\"><label for=\"title\">" + fmgr.renderLabel(request, semprop, varName, modo) + "</label></td>");
-                    out.println("<td>");
-                    if (null != sofe) {
-                        FormElement frme = (FormElement) sofe.createGenericInstance();
-                        out.println(fmgr.renderElement(request, varName, semprop, frme, modo));
-                    } else {
-                        out.println(fmgr.renderElement(request, varName, semprop, modo));
-                    }
-                    out.println("</td></tr>");
-                }
-                max++;
-            }
-
-            if (printHeaders) {
-                out.println("    </table>");
-                out.println("</fieldset>");
-            }
-
-            out.println("<fieldset><span align=\"center\">");
-
-            if (base.getAttribute("btnSave", "").equals("use")) {
-                out.println("<button dojoType=\"dijit.form.Button\" type=\"submit\">Guardar</button>");
-            }
-            if (base.getAttribute("btnAccept", "").equals("use")) {
-                out.println("<button dojoType=\"dijit.form.Button\" name=\"accept\" type=\"submit\">Concluir Tarea</button>");
-            }
-            if (base.getAttribute("btnReject", "").equals("use")) {
-                out.println("<button dojoType=\"dijit.form.Button\" name=\"reject\" type=\"submit\">Rechazar Tarea</button>");
-            }
-            if (base.getAttribute("btnCancel", "").equals("use")) {
-                out.println("<button dojoType=\"dijit.form.Button\" onclick=\"window.location='" + foi.getUserTaskInboxUrl() + "?suri=" + suri + "'\">Regresar</button>");
-            }
-
-            out.println("</span></fieldset>");
-            out.println("</form>");
-            out.println("</div>");
-
-        } else if (ADMINMODE_ADVANCE.equals(adminMode)) {
-            if (action.equals("add") || action.equals("edit")) {
-                String basepath = SWBPortal.getWorkPath() + base.getWorkPath() + "/";
-                String xml = SWBUtils.IO.getFileFromPath(basepath + "code.xml");
-//                if(null==xml)  xml=base.getXmlConf();
-                if (xml != null && xml.trim().length() > 0) {
-                    SWBFormMgrLayer swbFormMgrLayer = new SWBFormMgrLayer(xml, paramRequest, request);
-                    String html = swbFormMgrLayer.getHtml();
-                    ret.append(html);
-                }
-            }
-            out.println(ret.toString());
-        }
-    }
-
-    
-    public void doAcuse(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        PrintWriter out = response.getWriter();
-        Resource base = getResourceBase();
-        User user = paramRequest.getUser();
-        
-        String suri = request.getParameter("suri");
-        if (suri == null) {
-            out.println("Parámetro no definido...");
-            return;
-        }
-        
-        String x509 = request.getParameter("sg");
-        if (x509 == null) {
-            out.println("Parámetro no definido...");
-            return;
-        }
-
-        SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
-        FlowNodeInstance foi = (FlowNodeInstance) ont.getGenericObject(suri);
-        X509SingInstance x509SingInstance = (X509SingInstance) ont.getGenericObject(x509);
-        
-        if (null==x509SingInstance){
-            out.println("El objeto no se encontró...");
-            return;
-        }
-        
-        out.println(SWBForms.DOJO_REQUIRED);
-        
-        out.println("<div id=\"processForm\" class=\"swbform\">");
-        out.println("<h2>Acuse de Firma</h2>");
-        out.println("<fieldset>");
-        out.println("<table>");
-        
-        out.println("<tr>");
-        
-        
-        
-        out.println("<td width=\"200px\" align=\"right\"><label for=\"title\">Valor Firmado:</label></td>");
-        out.println("<td><div id=\"code\">");
-        out.println(htmlwrap(x509SingInstance.getOriginalString(), 50));
-        out.println("</div></td></tr>");
-        
-        out.println("<td width=\"200px\" align=\"right\"><label for=\"title\">Firma:</label></td>");
-        out.println("<td><div id=\"code\">");
-        out.println(htmlwrap(x509SingInstance.getSignedString(), 50));
-        out.println("<div></td></tr>");
-        
-        out.println("<td width=\"200px\" align=\"right\"><label for=\"title\">Instancia de proceso:</label></td>");
-        out.println("<td>");
-        out.println(x509SingInstance.getFlowNodeInstance().getProcessInstance().getProcessType().getDisplayTitle(paramRequest.getUser().getLanguage()));
-        out.println("</td></tr>");
-        
-        out.println("<td width=\"200px\" align=\"right\"><label for=\"title\">Instancia de Tarea:</label></td>");
-        out.println("<td>");
-        out.println(x509SingInstance.getFlowNodeInstance().getFlowNodeType().getDisplayTitle(paramRequest.getUser().getLanguage()));
-        out.println("</td></tr>");
-
-        out.println("<td width=\"200px\" align=\"right\"><label for=\"title\">Firmada por:</label></td>");
-        out.println("<td>");
-        out.println(x509SingInstance.getCertificate().getName());
-        out.println("</td></tr>");
-        
-        out.println("<td width=\"200px\" align=\"right\"><label for=\"title\">RFC:</label></td>");
-        out.println("<td>");
-        out.println(x509SingInstance.getCertificate().getSerial());
-        out.println("</td></tr>");
-        
-        out.println("<td width=\"200px\" align=\"right\"><label for=\"title\">Fecha:</label></td>");
-        out.println("<td>");
-        out.println(x509SingInstance.getCreated());
-        out.println("</td></tr>");
-        
-        out.println("    </table>");
-        out.println("</fieldset>");
-        out.println("<fieldset><span align=\"center\">");
-       // out.println("<button dojoType=\"dijit.form.Button\" name=\"btn_signed\" type=\"submit\">Concluir Tarea</button>");
-        
-        out.println("<button dojoType=\"dijit.form.Button\" onclick=\"window.location='" + foi.getUserTaskInboxUrl() + "?suri=" + suri + "'\">Salir</button>");
-        
-        out.println("</span></fieldset>");
-        out.println("</div>");
-        
-    }
-    
-    public void doSign(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        PrintWriter out = response.getWriter();
-        Resource base = getResourceBase();
-        User user = paramRequest.getUser();
-        
-        String suri = request.getParameter("suri");
-        if (suri == null) {
-            out.println("Parámetro no definido...");
-            return;
-        }
-        
-        SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
-        FlowNodeInstance foi = (FlowNodeInstance) ont.getGenericObject(suri);
-        
-        boolean canSign=false;
-        if(user.getExternalID()!=null)
-        {
-            Iterator<SemanticObject>it = foi.getProcessSite().getSemanticModel().listSubjects(X509Certificate.swp_X509Serial, user.getExternalID()); //TODO: Modificar Búsqueda
-            if (it.hasNext()){        
-                canSign=true;
-            }        
-        }
-        if(!canSign)
-        {
-            out.println("Su usuario no tiene un certificado registrado para poder firmar este documento, favor de contactar al administrador del sitio...");
-            return;
-        }
-        if(request.getParameter("err")!=null)
-        {
-            out.println("<script type=\"text/javascript\">alert('Error al procesar la firma del documento (Firma invalida)...')</script>");
-        }
-        
-
-        String SigCad = getStringToSign(foi); 
-        String signTemp=null;
-        try {
-            signTemp=SWBUtils.CryptoWrapper.comparablePassword(SigCad);
-        } catch (GeneralSecurityException gse){
-            log.error(gse);
-        }
-        
-        User asigned = foi.getAssignedto();
-        if (asigned != null && !asigned.equals(user)) {
-            out.println("Tarea asignada previamente a otro usuario...");
-            return;
-        }
-
-        if (foi.getStatus() == Instance.STATUS_CLOSED || foi.getStatus() == Instance.STATUS_ABORTED || foi.getStatus() == Instance.STATUS_STOPED) {
-            out.println("La tarea ya ha sido ejecutada...");
-            return;
-        }
-
-        SWBResourceURL urlact = paramRequest.getActionUrl();
-        urlact.setAction("processSign");
-       
-        out.println(SWBForms.DOJO_REQUIRED);
-        
-        out.println("<script type=\"text/javascript\">function validateForm" + foi.getId() + "(form) {if (form.validate()) {return true;} else {alert('Algunos de los datos no son válidos. Verifique la información proporcionada.'); return false;}}");
-        out.println("function setSignature(data){ dataElement = document.getElementById('hiddenSign'); dataElement.value=data; form = document.getElementById('" + foi.getId() + "/form'); alert('Documento Firmado');form.submit();}</script>");
-        out.println("<div id=\"processForm\">");
-        out.println("<form id=\"" + foi.getId() + "/form\" dojoType=\"dijit.form.Form\" class=\"swbform\" action=\"" + urlact + "\" method=\"post\" onSubmit=\"return validateForm" + foi.getId() + "(this);\">");
-        out.println("<input type=\"hidden\" name=\"suri\" value=\"" + suri + "\"/>");
-        //out.println("<input type=\"hidden\" name=\"smode\" value=\"edit\"/>");
-        out.println("<input type=\"hidden\" id=\"hiddenSign\" name=\"hiddenSign\" value=\"\"/>");
-        out.println("<fieldset>");
-        out.println("<table>");
-        
-        out.println("<tr>");
-        out.println("<td width=\"200px\" align=\"right\"><label for=\"title\">Firmar documento:</label></td>");
-        out.println("<td>");
-        out.println("<applet code=\"signatureapplet.SignatureApplet.class\" codebase=\"/swbadmin/lib\" archive=\""
-                    + SWBPlatform.getContextPath()
-                    + "/swbadmin/lib/SWBAplDigitalSignature.jar\" width=\"600\" height=\"250\">");
-        out.println("<param name=\"message\" value=\"" + signTemp + "\">");
-        out.println("</applet>");
-        out.println("</td></tr>");
-        out.println("    </table>");
-        out.println("</fieldset>");
-        out.println("<fieldset><span align=\"center\">");
-       // out.println("<button dojoType=\"dijit.form.Button\" name=\"btn_signed\" type=\"submit\">Concluir Tarea</button>");
-        if (base.getAttribute("btnCancel", "").equals("use")) {
-            out.println("<button dojoType=\"dijit.form.Button\" onclick=\"window.location='" + foi.getUserTaskInboxUrl() + "?suri=" + suri + "'\">Regresar</button>");
-        }
-        out.println("</span></fieldset>");
-        out.println("</form>");
-        out.println("</div>");
-
-    }
-
-    public String getFormHTML(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
-        StringBuilder ret = new StringBuilder();
-        Resource base = getResourceBase();
-
-        SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
-        UserTask ut = (UserTask) base.getResourceable();
-
-        HashMap<String, SemanticClass> hmclass = new HashMap<String, SemanticClass>();
-        HashMap<String, SemanticProperty> hmprops = new HashMap<String, SemanticProperty>();
-
-        Iterator<ItemAware> it = ut.listHerarquicalRelatedItemAwarePlusNullOutputs().iterator();
-        while (it.hasNext()) {
-            ItemAware item = it.next();
-
-            SemanticClass cls = item.getItemSemanticClass();
-            if (cls != null) {
-                hmclass.put(item.getName(), cls);
-
-                Iterator<SemanticProperty> itp = cls.listProperties();
-                while (itp.hasNext()) {
-                    SemanticProperty prop = itp.next();
-                    hmprops.put(prop.getPropId(), prop);
-                }
-            }
-
-            //TODO: Agregar propiedades del item
-        }
-
-        ret.append("<div id=\"processForm\">");
-        ret.append("\n<form");
-
-        if (request.getParameter("useDojo") != null && request.getParameter("useDojo").equals("dojo")) {
-            ret.append(" htmlType=\"dojo\" ");
-        }
-        ret.append(" class=\"swbform\">");
-
-        ret.append("\n    <fieldset>");
-//        ret.append("\n      <legend>Datos Generales</legend>");
-        ret.append("\n      <table>");
-
-        int max = 1;
-        while (!base.getAttribute("prop" + max, "").equals("")) {
-
-            String val = base.getAttribute("prop" + max);
-            String varName = "";
-            String propid = "";
-            String modo = "";
-            String fe = "";
-            StringTokenizer stoken = new StringTokenizer(val, "|");
-            if (stoken.hasMoreTokens()) {
-                varName = stoken.nextToken();
-                propid = stoken.nextToken();
-                modo = stoken.nextToken();
-                fe = stoken.nextToken();
-            }
-
-            SemanticProperty semprop = hmprops.get(propid);
-
-            String strMode = "";
-
-            SemanticClass semclass = hmclass.get(varName);
-
-            if (semclass != null && semprop != null) {
-                if (modo.equals(FE_MODE_VIEW)) {
-                    strMode = SWBFormMgr.MODE_VIEW;
-                } else if (modo.equals(FE_MODE_EDIT)) {
-                    strMode = SWBFormMgr.MODE_EDIT;
-                }
-                SemanticObject sofe = ont.getSemanticObject(fe);
-                String strFE = "";
-
-                if (null != sofe) {
-                    strFE = "formElement=\"" + sofe.getDisplayName(response.getUser().getLanguage()) + "\"";
-                }
-
-                ret.append("\n     <tr>");
-                ret.append("\n       <td width=\"200px\" align=\"right\"><label name=\"" + varName + "." + semprop.getName() + "\" /></td>");
-                ret.append("\n       <td><property name=\"" + varName + "." + semprop.getName() + "\" " + strFE + " mode=\"" + strMode + "\" /></td>");
-                ret.append("\n    </tr>");
-            }
-            max++;
-        }
-
-        ret.append("\n      </table> ");
-        ret.append("\n      </fieldset> ");
-        ret.append("\n      <fieldset>");
-
-        // validar que botones seleccionaron
-        if (request.getParameter("btnSave") != null) {
-            ret.append("\n          <Button type=\"savebtn\"/>");
-        }
-        if (request.getParameter("btnAccept") != null) {
-            ret.append("\n          <Button type=\"submit\" name=\"accept\" title=\"Concluir Tarea\" isBusyButton=\"true\" />");
-        }
-        if (request.getParameter("btnReject") != null) {
-            ret.append("\n          <Button isBusyButton=\"true\" name=\"reject\" title=\"Rechazar Tarea\" type=\"submit\" />");
-        }
-        if (request.getParameter("btnCancel") != null) {
-            ret.append("\n          <Button type=\"cancelbtn\"/>");
-        }
-
-        ret.append("\n      </fieldset>");
-        ret.append("\n</form>");
-        ret.append("\n</div>");
-
-        return ret.toString();
-    }
-    
-    private String getStringToSign(FlowNodeInstance flowNodeInstance) {
-
-        Iterator<ItemAwareReference> it = flowNodeInstance.listHeraquicalItemAwareReference().iterator();
-
-        ByteArrayOutputStream bout = new ByteArrayOutputStream();
-
-        Model model = ModelFactory.createDefaultModel();
-
-        while (it.hasNext()) {
-            ItemAwareReference itemAwareReference = it.next();
-            model.add(itemAwareReference.getProcessObject()
-                    .getSemanticObject().getRDFResource().listProperties());
-                    
-        }
-        // "RDF/XML", "RDF/XML-ABBREV", "N-TRIPLE" and "N3"
-        model.write(bout, "N-TRIPLE");
-
-        String ret = null;
-        try {
-        ret = bout.toString("UTF8");
-        } catch (IOException ioe){
-            log.error(ioe);
-        }
-        return ret;
-    }
+    public static final String ATT_PARAMREQUEST = "paramRequest";
+    public static final String MODE_EDITPROP = "editProp";
+    public static final String MODE_SIGN = "sign";
+    public static final String MODE_ACUSE = "acuse";
+    public static final String PARAM_PROPIDX = "prop";
+    public static final String PARAM_PROPMODE = "propMode";
+    public static final String PARAM_PROPFE = "propFe";
+    public static final String PARAM_PROPLBL = "propLabel";
+    public static final String PARAM_DIR = "dir";
+    public static final String PARAM_ADMMODE = "adminMode";
+    public static final String PARAM_BTNID = "buttonId";
+    public static final String PARAM_ROLES = "roles";
+    public static final String ADM_MODEADVANCED = "advance";
+    public static final String ADM_MODESIMPLE = "simple";
+    public static final String ATT_TASK = "task";
+    public static final String ATT_RBASE = "rbase";
+    public static final String ACT_TOGGLEBUTTON = "toggleBut";
+    public static final String ACT_ADDPROPS = "addProps";
+    public static final String ACT_REMOVEPROP = "removeProp";
+    public static final String ACT_UPDPROP = "updateProp";
+    public static final String ACT_UPDBTNLABEL = "updateButtonLabel";
+    public static final String ACT_UPDATEXML = "updateXml";
+    public static final String ACT_SAVEXML = "saveXml";
+    public static final String ACT_PROCESSSIGN = "processSign";
+    public static final String ACT_SWAP = "swap";
+    public static final String ACT_UPDADMINMODE = "updateMode";
+    public static final String ACT_PROCESS = "process";
+    public static final String FE_DEFAULT = "generico";
+    public static final String FE_MODE_VIEW = "view";
+    public static final String FE_MODE_EDIT = "edit";
+    public static final Logger log = SWBUtils.getLogger(ProcessForm.class);
 
     @Override
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
+        String action = response.getAction();
         Resource base = getResourceBase();
-
-        UserTask ut = null;
         String suri = request.getParameter("suri");
+        User user = response.getUser();
+        response.setRenderParameter("suri", suri);
+        String lang = "es";
+        if (user != null && user.getLanguage() != null) {
+            lang = user.getLanguage();
+        }
+        
+        if (ACT_UPDBTNLABEL.equals(action)) {
+            String btn = request.getParameter(FormsBuilderResource.PARAM_BTNID);
+            String label = request.getParameter("btnLabel");
+            
+            if (label != null && label.trim().length() >0) {
+                if ("btnAccept".equals(btn)) {
+                    base.setAttribute("btnAcceptLabel", label);
+                }
+                if ("btnReject".equals(btn)) {
+                    base.setAttribute("btnRejectLabel", label);
+                }
+                if ("btnCancel".equals(btn)) {
+                    base.setAttribute("btnCancelLabel", label);
+                }
+                if ("btnSave".equals(btn)) {
+                    base.setAttribute("btnSaveLabel", label);
+                }
+            }
+            response.setMode(SWBActionResponse.Mode_ADMIN);
+        } else if (ACT_TOGGLEBUTTON.equals(action)) {
+            String toggle = request.getParameter("btns");
+            if (base.getAttribute("btnAcceptLabel","").equals("")) {
+                base.setAttribute("btnAcceptLabel", "Concluir Tarea");
+            }
 
-        if ("updAdminMode".equals(response.getAction())) {
+            if (base.getAttribute("btnRejectLabel","").equals("")) {
+                base.setAttribute("btnRejectLabel", "Rechazar Tarea");
+            }
 
-            base.setAttribute("adminMode", request.getParameter("adminMode"));
+            if (base.getAttribute("btnCancelLabel","").equals("")) {
+                base.setAttribute("btnCancelLabel", "Regresar");
+            }
+
+            if (base.getAttribute("btnSaveLabel","").equals("")) {
+                base.setAttribute("btnSaveLabel", "Guardar");
+            }
+            
+            if ("accept".equals(toggle)) {
+                if(base.getAttribute("btnAccept", "").equals("use")) {
+                    base.removeAttribute("btnAccept");
+                } else {
+                    base.setAttribute("btnAccept", "use");
+                }
+            }
+            if ("reject".equals(toggle)) {
+                if(base.getAttribute("btnReject", "").equals("use")) {
+                    base.removeAttribute("btnReject");
+                } else {
+                    base.setAttribute("btnReject", "use");
+                }
+            }
+            if ("cancel".equals(toggle)) {
+                if(base.getAttribute("btnCancel", "").equals("use")) {
+                    base.removeAttribute("btnCancel");
+                } else {
+                    base.setAttribute("btnCancel", "use");
+                }
+            }
+            if ("save".equals(toggle)) {
+                if(base.getAttribute("btnSave", "").equals("use")) {
+                    base.removeAttribute("btnSave");
+                } else {
+                    base.setAttribute("btnSave", "use");
+                }
+            }
+            if ("sign".equals(toggle)) {
+                if(base.getAttribute("useSign", "").equals("use")) {
+                    base.removeAttribute("useSign");
+                } else {
+                    base.setAttribute("useSign", "use");
+                }
+            }
+            
+            try {
+                base.updateAttributesToDB();
+            } catch (Exception e) {
+                log.error("FormsBuilderResource - Error al actualizar la configuración de botones.",e);
+            }
+        } else if (ACT_ADDPROPS.equals(action)) {
+            UserTask task = null;
+            if (getResourceBase().getResourceable() instanceof UserTask) {
+                task = (UserTask) getResourceBase().getResourceable();
+            }
+            HashMap<String, ItemAware> userDefinedVars = new HashMap<String, ItemAware>();
+            
+            HashMap<String, SemanticProperty> allprops = new HashMap<String, SemanticProperty>();
+            if (task != null) {
+                Iterator<ItemAware> it = task.listHerarquicalRelatedItemAwarePlusNullOutputs().iterator();
+                while (it.hasNext()) {
+                    ItemAware item = it.next();
+                    SemanticClass cls = item.getItemSemanticClass();
+                    if (cls != null) {
+                        Iterator<SemanticProperty> itp = cls.listProperties();
+                        while (itp.hasNext()) {
+                            SemanticProperty prop = itp.next();
+                            String name = item.getName() + "|" + prop.getPropId();
+                            if (cls.isSubClass(DataTypes.sclass) && !userDefinedVars.containsKey(name)) {
+                                userDefinedVars.put(name, item);
+                            }
+                            if (!prop.getPropId().equals("swb:valid") && !allprops.containsKey(name)) {
+                                allprops.put(name, prop);
+                            }
+                        }
+                    }
+                }
+                
+                //Obtener la lista de propiedades a agregar
+                String[] props = request.getParameterValues("properties");
+                HashMap<String, String> hmparam = new HashMap<String, String>();
+                if (props != null && props.length > 0) {
+                    for (int j = 0; j < props.length; j++) {
+                        hmparam.put(props[j], props[j]);
+                    }
+                }
+
+                //Recuperar las propiedades ya configuradas
+                HashMap<Integer, String> hmprops = new HashMap();
+                int i = 1;
+                int j = 1;
+                while (!base.getAttribute("prop" + i, "").equals("")) {
+                    String val = base.getAttribute("prop" + i);
+                    HashMap<String, String> propMap = getPropertiesMap(val);
+                    String propKey = propMap.get("varName") +"|"+ propMap.get("propId");
+                    
+                    if (allprops.containsKey(propKey)) {
+                        hmprops.put(new Integer(j++), val);
+                        if (hmparam.containsKey(propKey)) {
+                            hmparam.remove(propKey);
+                        }
+                    }
+                    
+                    base.removeAttribute("prop" + i);
+                    i++;
+                }
+
+                //Agregar propiedades faltantes
+                String defaultFE = FE_DEFAULT;
+                String defaultMode = FE_MODE_EDIT;
+                String defaultLabel = "";
+                String defaultRoles = "";
+
+                // agregando al hmprops las propiedades nuevas
+                Iterator<String> itpar = hmparam.keySet().iterator();
+                while (itpar.hasNext()) {
+                    String strnew = itpar.next();
+                    HashMap<String, String> propMap = getPropertiesMap(strnew);
+                    SemanticProperty sempro = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticPropertyById(propMap.get("propId"));
+                    if (sempro != null) {
+                        String name = propMap.get("varName")+"|"+propMap.get("propId");
+                        if (userDefinedVars.containsKey(name)) {
+                            defaultLabel = userDefinedVars.get(name).getDisplayTitle(lang);
+                        } else {
+                            defaultLabel = sempro.getDisplayName(response.getUser().getLanguage());
+                        }
+                        SemanticObject dp = sempro.getDisplayProperty();
+                        if (dp != null) {
+                            DisplayProperty disprop = new DisplayProperty(dp);
+                            SemanticObject semobjFE = disprop.getFormElement();
+                            if (semobjFE != null) {
+                                defaultFE = semobjFE.getURI();
+                            } else {
+                                defaultFE = FE_DEFAULT;
+                            }
+                        }
+                    } else {
+                        defaultFE = FE_DEFAULT;
+                    }
+
+                    String value = strnew + "|" + defaultMode + "|" + defaultFE + "|" + defaultLabel + "|" + defaultRoles;
+                    hmprops.put(new Integer(j), value);
+                    j++;
+                }
+
+                //guardando las propiedades
+                Iterator<Integer> itprop = hmprops.keySet().iterator();
+                while (itprop.hasNext()) {
+                    Integer integer = itprop.next();
+                    String thisprop = hmprops.get(integer);
+                    base.setAttribute("prop" + integer, thisprop);
+                }
+
+                try {
+                    base.updateAttributesToDB();
+                } catch (Exception e) {
+                    log.error("Error al guardar las propiedades de acuerdo al display property.",e);
+                }
+            }
+        } else if (ACT_REMOVEPROP.equals(action)) {
+            String prop = request.getParameter(PARAM_PROPIDX);
+
+            ArrayList<String> hmprops = new ArrayList<String>();
+            int i = 1;
+            while (!base.getAttribute("prop" + i, "").equals("")) {
+                if (!("" + i).equals(prop)) {
+                    hmprops.add(base.getAttribute("prop" + i));
+                }
+                base.removeAttribute("prop" + i);
+                i++;
+            }
+            
+            i = 1;
+            Iterator<String> itprop = hmprops.iterator();
+            while (itprop.hasNext()) {
+                String thisprop = itprop.next();
+                base.setAttribute("prop" + i, thisprop);
+                i++;
+            }
+            
+            try {
+                base.updateAttributesToDB();
+            } catch (Exception ex) {
+                log.error("Error al actualizar la propiedad",ex);
+            }
+        } else if (ACT_UPDPROP.equals(action)) {
+            String propId = request.getParameter(PARAM_PROPIDX);
+            if (!base.getAttribute("prop"+propId, "").equals("")) {
+                String str = base.getAttribute("prop"+propId, "");
+                HashMap<String, String> propMap = getPropertiesMap(str);
+                
+                SemanticProperty sprop = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticPropertyById(propMap.get("propId"));
+                String label = request.getParameter(PARAM_PROPLBL);
+                String mode = request.getParameter(PARAM_PROPMODE);
+                String formElement = request.getParameter(PARAM_PROPFE);
+                String [] roles = request.getParameterValues(PARAM_ROLES);
+                
+                if (sprop != null) {
+                    if (label != null) {
+                        propMap.put("label", label);
+                    }
+                    if (mode != null && propMap.get("mode") != null) {
+                        propMap.put("mode", mode);
+                    }
+                    if (formElement != null && propMap.get("fe") != null) {
+                        propMap.put("fe", formElement);
+                    }
+                    if (roles != null && roles.length > 0) {
+                        String roleList = "";
+                        for (int i = 0; i < roles.length; i++) {
+                            String rName = roles[i];
+                            if (rName.trim().length() > 0) {
+                                roleList += rName;
+                            }
+                            if (i < roles.length) {
+                                roleList += ":";
+                            }
+                        }
+                        propMap.put("roles", roleList);
+                    }
+                    
+                    base.setAttribute("prop"+propId, propMap.get("varName") + "|" + propMap.get("propId") + "|" + propMap.get("mode") + "|" + propMap.get("fe") + "|" + propMap.get("label") + "|" + propMap.get("roles"));
+                    try {
+                        base.updateAttributesToDB();
+                    } catch (Exception ex) {
+                        log.error("Error al actualizar la propiedad",ex);
+                    }
+                    
+                    request.getSession(true).setAttribute("reload", true);
+                }
+            }
+            response.setMode(SWBActionResponse.Mode_ADMIN);
+        } else if (ACT_SWAP.equals(action)) {
+            String dir = request.getParameter(PARAM_DIR);
+            String propid = request.getParameter(PARAM_PROPIDX);
+            
+            if (propid != null && propid.trim().length() > 0 && dir != null) {
+                int pos = 0;
+                int newPos = 0;
+                boolean valid = false;
+                
+                String temp = base.getAttribute("prop"+propid);
+                if (temp != null) {
+                    try {
+                        pos = Integer.parseInt(propid);
+                    } catch (Exception e) {}
+
+                    if (dir.equals("down")) {
+                        newPos = pos + 1;
+                        if (pos > 0 && newPos > 0 && pos < newPos) {
+                            valid = true;
+                        }
+                    } else if (dir.equals("up")) {
+                        newPos = pos - 1;
+                        if (pos > 0 && newPos > 0 && pos > newPos) {
+                            valid = true;
+                        }
+                    }
+                    
+                    String tmp2 = base.getAttribute("prop" + newPos);
+                    if (tmp2 != null && valid) {
+                        base.setAttribute("prop" + pos, tmp2);
+                        base.setAttribute("prop" + newPos, temp);
+                    }
+                    
+                    try {
+                        base.updateAttributesToDB();
+                    } catch (Exception e) {
+                        log.error("Error al reordenar propiedad....", e);
+                    }
+                }
+            }
+        } else if (ACT_UPDADMINMODE.equals(action)) {
+            base.setAttribute(PARAM_ADMMODE, request.getParameter(PARAM_ADMMODE));
             try {
                 base.updateAttributesToDB();
             } catch (Exception e) {
                 log.error("Error al actualizar el modo de administración del recurso.",e);
             }
-
-            if (request.getParameter("suri") != null) {
-                response.setRenderParameter("suri", suri);
-            }
-
-        } else if ("updXMLConfig".equals(response.getAction())) {
-
+        } else if (ACT_UPDATEXML.equals(action)) {
             String basepath = SWBPortal.getWorkPath() + base.getWorkPath() + "/";
             File xmlFile = new File(basepath);
             if (!xmlFile.exists()) {
@@ -585,8 +434,7 @@ public class ProcessForm extends GenericResource {
                     log.error("Error saving file: " + xmlFile.getAbsolutePath(), e);
                 }
             }
-
-        } else if ("saveXMLFile".equals(response.getAction())) {
+        } else if (ACT_SAVEXML.equals(action)) {
             String basepath = SWBPortal.getWorkPath() + base.getWorkPath() + "/";
             File xmlFile = new File(basepath);
             if (xmlFile.exists()) {
@@ -605,9 +453,7 @@ public class ProcessForm extends GenericResource {
                     log.error("Error saving file: " + xmlFile.getAbsolutePath(), e);
                 }
             }
-
-            response.setMode(SWBActionResponse.Mode_ADMIN);
-        } else if ("processSign".equals(response.getAction())) {
+        } else if (ACT_PROCESSSIGN.equals(action)) {
             FlowNodeInstance foi = (FlowNodeInstance) SWBPlatform.getSemanticMgr().getOntology().getGenericObject(suri);
             if (suri == null) {
                 return;
@@ -623,7 +469,6 @@ public class ProcessForm extends GenericResource {
 
             String appletHidden = request.getParameter("hiddenSign");
             //System.out.println("appletValue:"+appletHidden);
-            User user = response.getUser();
             try {
                 CertificateFactory cf = CertificateFactory.getInstance("X.509");
                 if(user.getExternalID()!=null)
@@ -692,12 +537,8 @@ public class ProcessForm extends GenericResource {
                 log.error("Error al firmar la tarea...", gse);
             }
             // TODO: falta procesar el parámetro del applet de la firma
-            
             // al final se cierra ....
-            
-            
-
-        } else if ("process".equals(response.getAction())) {
+        } else if (ACT_PROCESS.equals(action)) {
             FlowNodeInstance foi = (FlowNodeInstance) SWBPlatform.getSemanticMgr().getOntology().getGenericObject(suri);
             if (suri == null) {
                 return;
@@ -706,22 +547,12 @@ public class ProcessForm extends GenericResource {
             mgr.clearProperties();
 
             HashMap<String, String> hmprops = new HashMap();
-
             int i = 1;
             while (!base.getAttribute("prop" + i, "").equals("")) {
-
                 String sprop = base.getAttribute("prop" + i);
-                StringTokenizer stoken = new StringTokenizer(sprop, "|");
+                HashMap<String, String> propMap = getPropertiesMap(sprop);
 
-                String varName = "";
-                String propid = "";
-
-                if (stoken.hasMoreTokens()) {
-                    varName = stoken.nextToken();
-                    propid = stoken.nextToken();
-                }
-
-                hmprops.put(varName + "|" + propid, sprop);
+                hmprops.put(propMap.get("varName") + "|" + propMap.get("propId"), sprop);
                 i++;
             }
 
@@ -745,24 +576,23 @@ public class ProcessForm extends GenericResource {
             }
             try {
                 mgr.processForm(request);
-                
-                String action=null;
+                String act=null;
                 String redirect=null;
 
                 // validar por si requiere firmado
-                if (base.getAttribute("useSign", "").equals("true")) {
+                if (base.getAttribute("useSign", "").equals("use")) {
                     //redireccionamiento a doSign
                     response.setMode(MODE_SIGN);
                     //response.setAction("");
                 } else if (request.getParameter("accept") != null) {
-                    action=Instance.ACTION_ACCEPT;
+                    act=Instance.ACTION_ACCEPT;
                 } else if (request.getParameter("reject") != null) {
-                    action=Instance.ACTION_REJECT;
+                    act=Instance.ACTION_REJECT;
                 }
                 
-                if(action!=null)
+                if(act!=null)
                 {
-                    foi.close(response.getUser(), action);
+                    foi.close(response.getUser(), act);
                     if(foi.getFlowNodeType() instanceof UserTask && ((UserTask)foi.getFlowNodeType()).isLinkNextUserTask())
                     {
                         List<FlowNodeInstance> arr=SWBProcessMgr.getActiveUserTaskInstances(foi.getProcessInstance(),response.getUser());                        
@@ -782,796 +612,278 @@ public class ProcessForm extends GenericResource {
                 {
                     response.sendRedirect(redirect);
                 }
-                
             } catch (Exception e) {
                 log.error("Error al procesar ....",e);
                 response.setRenderParameter("err", "invalidForm");
             }
-            
-            
-
-        } else if ("removeprop".equals(response.getAction())) {
-            String prop = request.getParameter("prop");
-
-            HashMap<Integer, String> hmprops = new HashMap();
-            int i = 1;
-            while (!base.getAttribute("prop" + i, "").equals("")) {
-                //System.out.println(i + " = " + base.getAttribute("prop" + i));
-                if (!prop.equals("" + i)) {
-                    hmprops.put(new Integer(i), base.getAttribute("prop" + i));
-                }
-                base.removeAttribute("prop" + i);
-                i++;
-            }
-
-            ArrayList list = new ArrayList(hmprops.keySet());
-            Collections.sort(list);
-
-            i = 1;
-            Iterator<Integer> itprop = list.iterator();
-            while (itprop.hasNext()) {
-                Integer integer = itprop.next();
-                String thisprop = hmprops.get(integer);
-                base.setAttribute("prop" + i, thisprop);
-                i++;
-            }
-            try {
-                base.updateAttributesToDB();
-            } catch (Exception e) {
-                log.error("Error al eliminar y guardar las propiedades del recurso en la DB.", e);
-            }
-        } else if ("addprops".equals(response.getAction())) {
-
-            //configuración de botones
-            if (request.getParameter("btnSave") != null) {
-                base.setAttribute("btnSave", request.getParameter("btnSave"));
-            } else {
-                base.removeAttribute("btnSave");
-            }
-            if (request.getParameter("btnAccept") != null) {
-                base.setAttribute("btnAccept", request.getParameter("btnAccept"));
-            } else {
-                base.removeAttribute("btnAccept");
-            }
-            if (request.getParameter("btnReject") != null) {
-                base.setAttribute("btnReject", request.getParameter("btnReject"));
-            } else {
-                base.removeAttribute("btnReject");
-            }
-            if (request.getParameter("btnCancel") != null) {
-                base.setAttribute("btnCancel", request.getParameter("btnCancel"));
-            } else {
-                base.removeAttribute("btnCancel");
-            }
-            if (request.getParameter("useSign") != null) {
-                base.setAttribute("useSign", request.getParameter("useSign"));
-            } else {
-                base.removeAttribute("useSign");
-            }
-
-            String[] props = request.getParameterValues("existentes");
-
-            HashMap<Integer, String> hmprops = new HashMap();
-            int i = 1;
-            while (!base.getAttribute("prop" + i, "").equals("")) {
-                hmprops.put(new Integer(i), base.getAttribute("prop" + i));
-                base.removeAttribute("prop" + i);
-                i++;
-            }
-
-            HashMap<String, String> hmparam = new HashMap();
-
-            if (props != null && props.length > 0) {
-                for (int j = 0; j < props.length; j++) {
-                    hmparam.put(props[j], props[j]);
-                }
-            }
-
-            Iterator<Integer> itstr = hmprops.keySet().iterator();
-            while (itstr.hasNext()) {
-                Integer intg = itstr.next();
-                String sprop = hmprops.get(intg);
-
-                StringTokenizer stoken = new StringTokenizer(sprop, "|");
-
-                String varName = "";
-                String propid = "";
-
-                if (stoken.hasMoreTokens()) {
-                    varName = stoken.nextToken();
-                    propid = stoken.nextToken();
-                }
-
-                if (hmparam.get(varName + "|" + propid) != null) {
-                    hmparam.remove(varName + "|" + propid);
-
-                } else if (hmparam.get(varName + "|" + propid) == null) {
-                    itstr.remove();
-                }
-
-            }
-
-            int maximo = 0;
-            Iterator<Integer> itint = hmprops.keySet().iterator();
-            while (itint.hasNext()) {
-                Integer num = itint.next();
-                if (num.intValue() > maximo) {
-                    maximo = num.intValue();
-                }
-            }
-
-            //Agregar propiedades faltantes
-
-            String defaultFE = FE_DEFAULT;
-            String defaultMode = FE_MODE_EDIT;
-
-            HashMap<String, String> hmclsprop = new HashMap<String, String>();
-
-            // agregando al hmprops las propiedades nuevas
-            Iterator<String> itpar = hmparam.keySet().iterator();
-            while (itpar.hasNext()) {
-
-                String strnew = itpar.next();
-
-                StringTokenizer stoken = new StringTokenizer(strnew, "|");
-
-                String varName = "";
-                String propid = "";
-
-                if (stoken.hasMoreTokens()) {
-                    varName = stoken.nextToken();
-                    propid = stoken.nextToken();
-                }
-
-                SemanticProperty sempro = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticPropertyById(propid);
-                //System.out.println("sempro: "+sempro);
-                if (sempro != null) {
-                    SemanticObject dp = sempro.getDisplayProperty();
-
-                    if (dp != null) {
-                        //tiene displayproperty
-                        DisplayProperty disprop = new DisplayProperty(dp);
-
-                        //FormElement por defecto
-                        SemanticObject semobjFE = disprop.getFormElement();
-                        if (semobjFE != null) {
-                            defaultFE = semobjFE.getURI();
-                        } else {
-                            defaultFE = FE_DEFAULT;
-                        }
-                    }
-                } else {
-                    defaultFE = FE_DEFAULT;
-                }
-
-                String value = strnew + "|" + defaultMode + "|" + defaultFE;
-                hmclsprop.put(strnew, value);
-            }
-
-            // ordenando las propiedades
-            ArrayList list = new ArrayList(hmprops.keySet());
-            Collections.sort(list);
-
-            //guardando las propiedades
-            i = 1;
-            Iterator<Integer> itprop = list.iterator();
-            while (itprop.hasNext()) {
-                Integer integer = itprop.next();
-                String thisprop = hmprops.get(integer);
-                base.setAttribute("prop" + i, thisprop);
-                i++;
-            }
-
-            // guardando las propiedades de acuerdo al index del display property
-
-            ArrayList list2 = new ArrayList(hmclsprop.keySet());
-            Collections.sort(list2);
-
-            Iterator<String> itprop2 = list2.iterator();
-            while (itprop2.hasNext()) {
-                String string = itprop2.next();
-                String thisprop = hmclsprop.get(string);
-                base.setAttribute("prop" + i, thisprop);
-                i++;
-            }
-
-            try {
-                base.updateAttributesToDB();
-            } catch (Exception e) {
-                log.error("Error al guardar las propiedades de acuerdo al display property.",e);
-            }
-
-
-        } else if ("swap".equals(response.getAction())) {
-            String direction = request.getParameter("direction");
-            String propid = request.getParameter("prop");
-            if (null != direction && "down".equals(direction)) {
-                String tmp = base.getAttribute("prop" + propid);
-                if (tmp != null) {
-                    int pos = 0;
-                    int posdown = 0;
-                    try {
-                        pos = Integer.parseInt(propid);
-                        posdown = pos + 1;
-                    } catch (Exception e) {
-                    }
-                    String tmp2 = base.getAttribute("prop" + posdown);
-                    if (tmp2 != null && pos > 0 && posdown > 0 && pos < posdown) {
-                        base.setAttribute("prop" + pos, tmp2);
-                        base.setAttribute("prop" + posdown, tmp);
-                    }
-                }
-
-            } else if (null != direction && "up".equals(direction)) {
-                String tmp = base.getAttribute("prop" + propid);
-                if (tmp != null) {
-                    int pos = 0;
-                    int posup = 0;
-                    try {
-                        pos = Integer.parseInt(propid);
-                        posup = pos - 1;
-                    } catch (Exception e) {
-                    }
-                    String tmp2 = base.getAttribute("prop" + posup);
-                    if (tmp2 != null && pos > 0 && posup > 0 && pos > posup) {
-                        base.setAttribute("prop" + pos, tmp2);
-                        base.setAttribute("prop" + posup, tmp);
-                    }
-                }
-            }
-            try {
-                base.updateAttributesToDB();
-            } catch (Exception e) {
-                log.error("Error al subir la propiedad....", e);
-            }
-
-        } else if ("updtItem".equals(response.getAction())) {
-
-            String pid = request.getParameter("prop");
-            if (pid != null) {
-                String prop2change = base.getAttribute("prop" + pid);
-                if (null != prop2change) {
-                    StringTokenizer stoken = new StringTokenizer(prop2change, "|");
-                    String varName = "";
-                    String propid = "";
-                    String modo = "";
-                    String fele = "";
-
-                    try {
-                        if (stoken.hasMoreTokens()) {
-                            varName = stoken.nextToken();
-                            propid = stoken.nextToken();
-                            modo = stoken.nextToken();
-                            fele = stoken.nextToken();
-                        }
-
-                        if (request.getParameter("feuri") != null) {
-                            fele = request.getParameter("feuri");
-                        }
-                        if (request.getParameter("mode") != null) {
-                            modo = request.getParameter("mode");
-                        }
-
-                        String newvalue = varName + "|" + propid + "|" + modo + "|" + fele;
-
-                        base.setAttribute("prop" + pid, newvalue);
-                        base.updateAttributesToDB();
-
-                    } catch (Exception e) {
-                        log.error("Error al cambiar el orden de las propiedades.", e);
-                        base.setAttribute("prop" + pid, prop2change);
-                        try {
-                            base.updateAttributesToDB();
-                        } catch (Exception eupd) {
-                            log.error("Error al restaurar el valor de la propiedad.", eupd);
-                        }
-
-                    }
-                }
-            }
-        } else if ("update".equals(response.getAction())) {
-            try {
-                FlowNodeInstance foi = (FlowNodeInstance) SWBPlatform.getSemanticMgr().getOntology().getGenericObject(suri);
-                String basepath = SWBPortal.getWorkPath() + base.getWorkPath() + "/code.xml";
-                String xml = SWBUtils.IO.getFileFromPath(basepath); //base.getXmlConf();//bundle.getBundle(getClass().getName(), new java.util.Locale(user.getLanguage()));
-                if (xml != null && xml.trim().length() > 0) {
-                    SWBFormMgrLayer.update2DB(request, response, foi, xml);
-                }
-                response.setAction(SWBActionResponse.Action_EDIT);
-            } catch (Exception e) {
-                log.error(e);
-            }
+        } else {
+            super.processAction(request, response);
         }
-        response.setRenderParameter("suri", suri);
+    }
+    
+    @Override
+    public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        String mode = paramRequest.getMode();
+        if (MODE_EDITPROP.equals(mode)) {
+            doConfig(request, response, paramRequest);
+        } else if (MODE_SIGN.equals(mode)) {
+            doSign(request, response, paramRequest);
+        } else if (MODE_ACUSE.equals(mode)) {
+            doAcuse(request, response, paramRequest);
+        } else {
+            super.processRequest(request, response, paramRequest);
+        }
     }
 
     @Override
     public void doAdmin(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        String jsp = "/swbadmin/jsp/process/formsBuilder/admin.jsp";
         Resource base = getResourceBase();
+        response.setHeader("Cache-Control", "no-cache");
+        response.setHeader("Pragma", "no-cache");
+        
+        RequestDispatcher rd = request.getRequestDispatcher(jsp);
+        try {
+            request.setAttribute(ATT_PARAMREQUEST, paramRequest);
+            request.setAttribute(ATT_RBASE, base);
+            if (base.getResourceable() instanceof UserTask) {
+                request.setAttribute(ATT_TASK, (UserTask)base.getResourceable());
+            }
+            rd.include(request, response);
+        } catch (Exception ex) {
+            log.error("FormsBuilderResource - Error including admin.jsp", ex);
+        }
+    }
+
+    @Override
+    public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         PrintWriter out = response.getWriter();
-        User user = paramRequest.getUser();
-        String lang = user.getLanguage();
+        String lang = paramRequest.getUser().getLanguage();
         String suri = request.getParameter("suri");
+        StringBuilder ret = new StringBuilder("");
+        User user = paramRequest.getUser();
+        Resource base = getResourceBase();
+        WebSite site = paramRequest.getWebPage().getWebSite();
+        HashMap<String, ItemAware> userDefinedVars = new HashMap<String, ItemAware>();
 
+        String adminMode = base.getAttribute("adminMode", ADM_MODESIMPLE);
         String action = paramRequest.getAction();
-
-        String adminMode = base.getAttribute("adminMode", ADMINMODE_SIMPLE);
-
-        if (action != null && (action.equals(ADMINMODE_ADVANCE) || action.equals(ADMINMODE_SIMPLE))) {
-            adminMode = action;
+        
+        if (suri == null) {
+            out.println("<script type=\"text/javascript\">"
+                    + " alert('No ha sido posible recuperar la instancia en ejecución.');"
+                    + "</script>");
+            return;
         }
-
-        HashMap<String, String> hmsc = new HashMap();
-        HashMap<String, SemanticProperty> hmprops = new HashMap();
-        HashMap<String, SemanticProperty> hmselected = new HashMap();
-
-        UserTask ut = null;
-        if (base.getResourceable() instanceof UserTask) {
-            ut = (UserTask) base.getResourceable();
-
-        }
-
-        if (request.getParameter("errormsg") != null) {
-            out.println("<script type=\"text/javascript\">");
-            out.println("   alert('" + request.getParameter("errormsg") + "');");
-            out.println("</script>");
-        }
-
-        if (ut == null) {
-            out.println("Parámetro no definido...");
+        
+        SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
+        FlowNodeInstance foi = (FlowNodeInstance) ont.getGenericObject(suri);
+        String viewUrl = foi.getUserTaskInboxUrl();
+        
+        User asigned = foi.getAssignedto();
+        if (asigned != null && !asigned.equals(user)) {
+            out.println("<script type=\"text/javascript\">"
+                    + " alert('Esta tarea ya ha sido asignada a otro usuario');"
+                    + "window.location='" + viewUrl + "';"
+                    + "</script>");
             return;
         }
 
-        SemanticOntology ont = SWBPlatform.getSemanticMgr().getSchema();
-        SemanticVocabulary sv = SWBPlatform.getSemanticMgr().getVocabulary();
-
-        if (hmFormEle == null) {
-            hmFormEle = new HashMap<String, SemanticObject>();
-
-            Iterator<SemanticObject> itfe = ont.listInstancesOfClass(sv.getSemanticClass(SemanticVocabulary.SWB_FORMELEMENT));
-            while (itfe.hasNext()) {
-                SemanticObject sofe = itfe.next();
-                hmFormEle.put(sofe.getURI(), sofe);
-            }
+        if (foi.getStatus() == Instance.STATUS_CLOSED || foi.getStatus() == Instance.STATUS_ABORTED || foi.getStatus() == Instance.STATUS_STOPED) {
+            out.println("<script type=\"text/javascript\">"
+                    + " alert('Esta tarea ya ha sido concluida.');"
+                    + "window.location='" + viewUrl + "';"
+                    + "</script>");
+            return;
         }
 
-        Iterator<ItemAware> it = ut.listHerarquicalRelatedItemAwarePlusNullOutputs().iterator();
+        if (asigned == null) {
+            foi.setAssigned(new Date());
+            foi.setAssignedto(user);
+        }
+
+        SWBProcessFormMgr mgr = new SWBProcessFormMgr(foi);
+        mgr.setAction(paramRequest.getActionUrl().setAction(ACT_PROCESS).toString());
+        mgr.clearProperties();
+
+        HashMap<String, SemanticClass> hmclass = new HashMap<String, SemanticClass>();
+        HashMap<String, SemanticProperty> hmprops = new HashMap<String, SemanticProperty>();
+        Iterator<ItemAwareReference> it = foi.listHeraquicalItemAwareReference().iterator();
         while (it.hasNext()) {
-            ItemAware item = it.next();
-            SemanticClass cls = item.getItemSemanticClass();
-            if (cls != null) {
+            ItemAwareReference item = it.next();
+            SWBClass obj = item.getProcessObject();
+
+            if (obj != null) {
+                SemanticClass cls = obj.getSemanticObject().getSemanticClass();
+
+                hmclass.put(item.getItemAware().getName(), cls);
                 Iterator<SemanticProperty> itp = cls.listProperties();
                 while (itp.hasNext()) {
                     SemanticProperty prop = itp.next();
-                    String name = item.getName() + "|" + prop.getPropId();
-                    hmsc.put(name, prop.getPropertyCodeName());
+                    String name = item.getItemAware().getName() + "|" + prop.getPropId();
+                    if (cls.isSubClass(DataTypes.sclass) && !userDefinedVars.containsKey(name)) {
+                        userDefinedVars.put(name, item.getItemAware());
+                    }
                     hmprops.put(name, prop);
                 }
             }
         }
 
-        int max = 1;
-        while (!base.getAttribute("prop" + max, "").equals("")) {
+        if (ADM_MODESIMPLE.equals(adminMode)) {
+            SWBResourceURL urlact = paramRequest.getActionUrl();
+            urlact.setAction(ACT_PROCESS);
+            out.println(SWBForms.DOJO_REQUIRED);
+            
+            out.println("<script type=\"text/javascript\">function validateForm" + foi.getId() + "(form) {var frm = dijit.byId(form); if (frm.isValid()) {return true;} else {alert('Algunos de los datos no son válidos. Verifique la información proporcionada.'); return false;}}</script>");
+            out.println("<div id=\"processForm\">");
+            out.println("<form name=\""+foi.getId()+"\" id=\"" + foi.getId() + "/form\" dojoType=\"dijit.form.Form\" class=\"swbform\" action=\"" + urlact + "\" method=\"post\" onSubmit=\"return validateForm"+foi.getId()+"('"+foi.getId()+"/form');\">");
+            out.println("<input type=\"hidden\" name=\"suri\" value=\"" + suri + "\"/>");
+            out.println("<input type=\"hidden\" name=\"smode\" value=\"edit\"/>");
 
-            String val = base.getAttribute("prop" + max);
-            String varName = "";
-            String propid = "";
-            String modo = "";
-            String fe = "";
-            StringTokenizer stoken = new StringTokenizer(val, "|");
-            if (stoken.hasMoreTokens()) {
-                varName = stoken.nextToken();
-                propid = stoken.nextToken();
-                modo = stoken.nextToken();
-                fe = stoken.nextToken();
-            }
-            if (hmprops.get(varName + "|" + propid) != null) {
-                SemanticProperty sprop = ont.getSemanticProperty(propid);
-                hmselected.put(varName + "|" + propid, sprop);
-            }
-            max++;
-        }
+            boolean printHeaders = false;
+            int max = 1;
+            if (!base.getAttribute("prop" + max, "").equals("")) {
+                while (!base.getAttribute("prop" + max, "").equals("")) {
+                    String val = base.getAttribute("prop" + max);
+                    HashMap<String, String> propsMap = getPropertiesMap(val);
+                    SemanticProperty semprop = hmprops.get(propsMap.get("varName") + "|" + propsMap.get("propId"));
 
-        out.println("<div class=\"swbform\">");
+                    String strMode = "";
+                    SemanticClass semclass = hmclass.get(propsMap.get("varName"));
 
-        if (ADMINMODE_SIMPLE.equals(adminMode)) {
+                    if (semclass != null && semprop != null) {
+//                        boolean canUserView = false;
+//                        
+//                        String roleList = propsMap.get("roles");
+//                        if (roleList == null || roleList.trim().equals("")) {
+//                            canUserView = true;
+//                        } else {
+//                            canUserView = false;
+//                            StringTokenizer stk = new StringTokenizer(roleList, ":");
+//                            while(stk.hasMoreTokens()) {
+//                                String rId = stk.nextToken();
+//                                Role role = site.getUserRepository().getRole(rId);
+//                                if (user.hasRole(role)) {
+//                                    canUserView = true;
+//                                    break;
+//                                }
+//                            }
+//                        }
+//                        
+//                        if (canUserView) {
+                            if (FE_MODE_VIEW.equals(propsMap.get("mode"))) {
+                                mgr.addProperty(semprop, propsMap.get("varName"), SWBFormMgr.MODE_VIEW);
+                                strMode = SWBFormMgr.MODE_VIEW;
+                            } else if (FE_MODE_EDIT.equals(propsMap.get("mode"))) {
+                                mgr.addProperty(semprop, propsMap.get("varName"), SWBFormMgr.MODE_EDIT);
+                                strMode = SWBFormMgr.MODE_VIEW;
+                            }
 
-            out.println("<script type=\"text/javascript\">");
-            out.println("function MoveItems(lstbxFrom,lstbxTo) ");
-            out.println("{ ");
-            out.println("	var varFromBox = document.getElementById(lstbxFrom); ");
-            out.println("	var varToBox = document.getElementById(lstbxTo); ");
-            out.println("	if ((varFromBox != null) && (varToBox != null))  ");
-            out.println("	{  ");
-            out.println("		if(varFromBox.length < 1)  ");
-            out.println("		{ ");
-            out.println("			alert('No hay propiedades en la lista.'); ");
-            out.println("			return false; ");
-            out.println("		} ");
-            out.println("		if(varFromBox.options.selectedIndex == -1) // no hay elementos seleccionados");
-            out.println("		{ ");
-            out.println("			alert('Selecciona una propiedad de la lista.'); ");
-            out.println("			return false; ");
-            out.println("		} ");
-            out.println("		while ( varFromBox.options.selectedIndex >= 0 )  ");
-            out.println("		{  ");
-            out.println("			var newOption = new Option(); // crea una opcion en el select  ");
-            out.println("			newOption.text = varFromBox.options[varFromBox.options.selectedIndex].text;  ");
-            out.println("			newOption.value = varFromBox.options[varFromBox.options.selectedIndex].value;  ");
-            out.println("			varToBox.options[varToBox.length] = newOption; //agrega la opción al final del select destino");
-            out.println("			varFromBox.remove(varFromBox.options.selectedIndex); //quita la opción del select origen ");
-            out.println("		}  ");
-            out.println("	} ");
-            out.println("	return false;  ");
-            out.println("} ");
-
-            out.println("function enviatodos(lstbox)");
-            out.println("{");
-            out.println("	var list = document.getElementById(lstbox);");
-            out.println("	for (var i=0; i<list.options.length; i++){");
-            out.println("	 list.options[i].selected=true;");
-            out.println("	}");
-            out.println("	return true;");
-            out.println("}");
-            out.println("   function updItem(uri,param,sel) {");
-            out.println("       var valor = sel.options[sel.options.selectedIndex].value;");
-            out.println("       var url = uri+'&'+param+'='+escape(valor);");
-            out.println("       window.location=url;");
-            out.println("}");
-            out.println("</script>");
-
-            SWBResourceURL urladd = paramRequest.getActionUrl();
-            urladd.setAction("addprops");
-
-            long idform = System.currentTimeMillis();
-
-            out.println("<form action=\"" + urladd + "\" id=\"" + idform + "/forma\" method=\"post\" onsubmit=\"if(enviatodos('" + idform + "/existentes')) { this.form.submit(); return false; } else { return false;}\">");
-            out.println("<input type=\"hidden\" name=\"suri\" value=\"" + suri + "\">");
-            out.println("<fieldset>");
-            out.println("<legend>" + "Configuración" + "</legend>");
-            out.println("<table border=\"0\" width=\"100%\" >");
-            out.println("<tr>");
-            out.println("<th>Propiedades");
-            out.println("</th>");
-            out.println("<th>");
-            out.println("</th>");
-            out.println("<th>Seleccionadas");
-            out.println("</th>");
-            out.println("</tr>");
-            out.println("<tr>");
-            out.println("<td>");
-
-            ArrayList list = new ArrayList(hmprops.keySet());
-            Collections.sort(list);
-
-            // select con la lista de propiedades existentes
-            out.println("<select size=\"10\" name=\"propiedades\" id=\"" + idform + "/propiedades\" multiple style=\"width: 100%;\">");
-            //Iterator<String> its = hmprops.keySet().iterator();
-            Iterator<String> its = list.iterator();
-            while (its.hasNext()) {
-
-                String str = its.next();
-                String varName = "";
-                String propid = "";
-                StringTokenizer stoken = new StringTokenizer(str, "|");
-                if (stoken.hasMoreTokens()) {
-                    varName = stoken.nextToken();
-                    propid = stoken.nextToken();
-                }
-                if (hmselected.get(str) == null) {
-                    SemanticProperty sp = hmprops.get(str);
-                    if (!propid.equals("swb:valid")) {
-                        out.println("<option value=\"" + str + "\">");
-                        out.println(varName + "." + sp.getPropertyCodeName());
-                        out.println("</option>");
+                            SemanticObject sofe = ont.getSemanticObject(propsMap.get("fe"));
+                            //String roles = propsMap.get("roles");
+                            SWBProcessFormMgr fmgr = new SWBProcessFormMgr(foi);
+                            FormElement ele = fmgr.getFormElement(semprop, propsMap.get("varName"));
+                            if (!printHeaders) {
+                                out.println("<fieldset>");
+        //                        out.println("<legend>Datos Generales</legend>");
+                                out.println("<table>");
+                                printHeaders = true;
+                            }
+                            
+                            if (propsMap.get("label") == null) {
+                                if (userDefinedVars.containsKey(propsMap.get("varName") + "|" + propsMap.get("propId"))) {
+                                    propsMap.put("label", userDefinedVars.get(propsMap.get("varName") + "|" + propsMap.get("propId")).getDisplayTitle(lang));
+                                } else {
+                                    propsMap.put("label", semprop.getDisplayName(lang));
+                                }
+                            }
+                            if (ele == null) {
+                                out.println("<tr><td width=\"200px\" align=\"right\"><label for=\"title\">" + fmgr.renderLabel(request, semprop, propsMap.get("varName"), propsMap.get("mode")) + "</label></td>");
+                            } else {
+                                //ele.setLabel(propsMap.get("label"));
+                                out.println("<tr><td width=\"200px\" align=\"right\"><label for=\"title\">" + ele.renderLabel(request, null, semprop, propsMap.get("varName") + "." + semprop.getName(), SWBFormMgr.TYPE_DOJO, SWBFormMgr.MODE_CREATE, lang, propsMap.get("label")) + "</label></td>");
+                            }
+                            out.println("<td>");
+                            if (null != sofe) {
+                                FormElement frme = (FormElement) sofe.createGenericInstance();
+                                out.println(fmgr.renderElement(request, propsMap.get("varName"), semprop, frme, propsMap.get("mode")));
+                            } else {
+                                out.println(fmgr.renderElement(request, propsMap.get("varName"), semprop, propsMap.get("mode")));
+                            }
+                            out.println("</td></tr>");
+//                        }
                     }
+                    max++;
+                }
+
+                if (printHeaders) {
+                    out.println("    </table>");
+                    out.println("</fieldset>");
                 }
             }
-            out.println("</select>");
-            out.println("</td>");
-            out.println("<td valign=\"middle\" width=\"25px\">");
-            // botones
-            out.println("<button dojoType=\"dijit.form.Button\" type = \"button\" style=\"width: 25px;\" id = \"" + idform + "btnMoveLeft\" onclick = \"MoveItems('" + idform + "/existentes','" + idform + "/propiedades');\"><-</button><br>");
-            out.println("<button dojoType=\"dijit.form.Button\" type = \"button\" style=\"width: 25px;\" id = \"" + idform + "btnMoveRight\" onclick = \"MoveItems('" + idform + "/propiedades','" + idform + "/existentes');\">-></button>");
-            out.println("</td>");
-            out.println("<td>");
-            // select con la lista de propiedades seleccionadas
-            out.println("<select size=\"10\" name=\"existentes\" id=\"" + idform + "/existentes\" multiple style=\"width: 100%;\">");
-            its = hmselected.keySet().iterator();
-            while (its.hasNext()) {
-                String str = its.next();
-                String varName = "";
-                String propid = "";
-                StringTokenizer stoken = new StringTokenizer(str, "|");
-                if (stoken.hasMoreTokens()) {
-                    varName = stoken.nextToken();
-                    propid = stoken.nextToken();
-                }
 
-
-                SemanticProperty sp = hmprops.get(str);
-                out.println("<option value=\"" + str + "\">");
-                out.println(varName + "." + sp.getPropertyCodeName());
-                out.println("</option>");
+            boolean btnSave = base.getAttribute("btnSave", "").equals("use")?true:false;
+            boolean btnAccept = base.getAttribute("btnAccept", "").equals("use")?true:false;
+            boolean btnReject = base.getAttribute("btnReject", "").equals("use")?true:false;
+            boolean btnCancel = base.getAttribute("btnCancel", "").equals("use")?true:false;
+            
+            if (btnSave || btnAccept || btnReject || btnCancel) {
+                out.println("<fieldset><span align=\"center\">");
             }
-            out.println("</select>");
-            out.println("</td>");
-            out.println("</tr>");
-
-            //botones para despliegue en forma básica
-
-            out.println("<tr>");
-            out.println("<td>");
-            out.println("<input type=\"checkbox\" name=\"btnAccept\" id=\"" + idform + "_btnAccept\" value=\"use\" " + (base.getAttribute("btnAccept", "").equals("use") ? "checked" : "") + "><label for=\"" + idform + "_btnAccept\">Utilizar botón aceptar</label>");
-            out.println("</td>");
-            out.println("</tr>");
-            out.println("<tr>");
-            out.println("<td>");
-            out.println("<input type=\"checkbox\" name=\"btnReject\" id=\"" + idform + "_btnReject\" value=\"use\" " + (base.getAttribute("btnReject", "").equals("use") ? "checked" : "") + "><label for=\"" + idform + "_btnReject\">Utilizar botón rechazar</label>");
-            out.println("</td>");
-            out.println("</tr>");
-            out.println("<tr>");
-            out.println("<td>");
-            out.println("<input type=\"checkbox\" name=\"btnCancel\" id=\"" + idform + "_btnCancel\" value=\"use\" " + (base.getAttribute("btnCancel", "").equals("use") ? "checked" : "") + "><label for=\"" + idform + "_btnCancel\">Utilizar boton cancelar</label>");
-            out.println("</td>");
-            out.println("</tr>");
-            out.println("<tr>");
-            out.println("<td>");
-            out.println("<input type=\"checkbox\" name=\"btnSave\" id=\"" + idform + "_btnSave\" value=\"use\" " + (base.getAttribute("btnSave", "").equals("use") ? "checked" : "") + "><label for=\"" + idform + "_btnSave\">Utilizar botón guardar</label>");
-            out.println("</td>");
-            out.println("</tr>");
-            out.println("<tr>");
-            out.println("<td>");
-            out.println("<input type=\"checkbox\" name=\"useSign\" id=\"" + idform + "_useSign\" value=\"true\" " + (base.getAttribute("useSign", "").equals("true") ? "checked" : "") + "><label for=\"" + idform + "_useSign\">Utilizar firmado</label>");
-            out.println("</td>");
-            out.println("</tr>");
-
-            out.println("<tr>");
-            out.println("<td colspan=\"3\" >");
-            // botones para guadar cambios
-            out.println("<button  dojoType=\"dijit.form.Button\" type=\"submit\">Guardar</button>");
-            out.println("</td>");
-            out.println("</tr>");
-            out.println("</table>");
-            out.println("</fieldset>");
-            out.println("<fieldset>");
-            out.println("<table border=\"0\" width=\"100%\">");
-            out.println("<tr>");
-            out.println("<th>Acción");
-            out.println("</th>");
-            out.println("<th>Propiedad");
-            out.println("</th>");
-            out.println("<th>FormElement");
-            out.println("</th>");
-            out.println("<th>Modo");
-            out.println("</th>");
-            out.println("</tr>");
-            int i = 1;
-            while (!base.getAttribute("prop" + i, "").equals("")) {
-                String val = base.getAttribute("prop" + i);
-                String varName = "";
-                String propid = "";
-                String modo = "";
-                String fe = "";
-                StringTokenizer stoken = new StringTokenizer(val, "|");
-                if (stoken.hasMoreTokens()) {
-                    varName = stoken.nextToken();
-                    propid = stoken.nextToken();
-                    modo = stoken.nextToken();
-                    fe = stoken.nextToken();
-                }
-                out.println("<tr>");
-
-                SWBResourceURL urlrem = paramRequest.getActionUrl();
-                urlrem.setAction("removeprop");
-                urlrem.setParameter("prop", "" + i);
-                urlrem.setParameter("suri", suri);
-
-                out.println("<td>");
-                out.println("<a href=\"#\" onclick=\"window.location='" + urlrem + "'; return false;\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/images/delete.gif\" border=\"0\" alt=\"eliminar\"></a>");
-
-                if (i != max - 1) {
-                    SWBResourceURL urldown = paramRequest.getActionUrl();
-                    urldown.setAction("swap");
-                    urldown.setParameter("suri", suri);
-                    urldown.setParameter("prop", "" + i);
-                    urldown.setParameter("direction", "down");
-                    out.println("<a href=\"#\" onclick=\"window.location='" + urldown + "'; return false;\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/images/down.jpg\" border=\"0\" alt=\"bajar\"></a>");
-                } else {
-                    out.println("<img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/images/space.jpg\" border=\"0\" >");
-                }
-
-                if (i != 1) //sorderdown>0
-                {
-                    SWBResourceURL urlup = paramRequest.getActionUrl();
-                    urlup.setAction("swap");
-                    urlup.setParameter("suri", suri);
-                    urlup.setParameter("prop", "" + i);
-                    urlup.setParameter("direction", "up");
-                    urlup.setParameter("ract", "config");
-                    out.println("<a href=\"#\" onclick=\"window.location='" + urlup + "'; return false;\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/images/up.jpg\" border=\"0\" alt=\"subir\"></a>");
-                }
-                out.println("</td>");
-                out.println("<td>");
-
-                out.println(varName + "." + hmsc.get(varName + "|" + propid));
-
-                out.println("</td>");
-                out.println("<td>");
-
-                SWBResourceURL urlupd = paramRequest.getActionUrl();
-                urlupd.setAction("updtItem");
-                urlupd.setParameter("prop", "" + i);
-                urlupd.setParameter("suri", suri);
-
-                out.println("<select id=\"" + suri + "/" + i + "/sfe\" name=\"formElement\" style=\"width:300px;\" onchange=\"updItem('" + urlupd + "','feuri',this);\" >"); //
-                out.println(getFESelect(fe, paramRequest, hmprops.get(varName + "|" + propid)));
-                out.println("</select>");
-                out.println("</td>");
-                out.println("<td>");
-                out.println("<select id=\"" + suri + "/" + i + "/smode\" name=\"mode\" style=\"width:80px;\" onchange=\"updItem('" + urlupd + "','mode',this);\">"); //
-                out.println("<option value=\"edit\" " + (modo.equals("edit") ? "selected" : "") + " >Edit</option>");
-                out.println("<option value=\"view\" " + (modo.equals("view") ? "selected" : "") + " >View</option>");
-                out.println("</select>");
-                out.println("</td>");
-                out.println("</tr>");
-                i++;
+            if (btnSave) {
+                out.println("<button dojoType=\"dijit.form.Button\" type=\"submit\">"+base.getAttribute("btnSaveLabel","Guardar")+"</button>");
             }
-
-            out.println("</table>");
-            out.println("</fieldset>");
-
-            if (hmprops.size() > 0) {
-                out.println("<fieldset>");
-                SWBResourceURL urladv = paramRequest.getRenderUrl();
-                urladv.setAction(ADMINMODE_ADVANCE);
-                out.println("<button dojoType=\"dijit.form.Button\" type=\"button\" onclick=\"window.location='" + urladv + "'; return false;\">Ir al modo avanzado</button>");
-                out.println("</fieldset>");
+            if (btnAccept) {
+                out.println("<button dojoType=\"dijit.form.Button\" name=\"accept\" type=\"submit\">"+base.getAttribute("btnAcceptLabel","Concluir Tarea")+"</button>");
+            }
+            if (btnReject) {
+                out.println("<button dojoType=\"dijit.form.Button\" name=\"reject\" type=\"submit\">"+base.getAttribute("btnRejectLabel","Rechazar Tarea")+"</button>");
+            }
+            if (btnCancel) {
+                out.println("<button dojoType=\"dijit.form.Button\" onclick=\"window.location='" + foi.getUserTaskInboxUrl() + "?suri=" + suri + "'\">"+base.getAttribute("btnCancelLabel","Regresar")+"</button>");
+            }
+            if (btnSave || btnAccept || btnReject || btnCancel) {
+                out.println("</span></fieldset>");
             }
             out.println("</form>");
-
-        } else if (ADMINMODE_ADVANCE.equals(adminMode)) {
-            SWBResourceURL urladd = paramRequest.getActionUrl();
-            urladd.setAction("updAdminMode");
-            out.println("<form action=\"" + urladd + "\" id=\"" + suri + "/forma\" method=\"post\" onsubmit=\"if(enviatodos('existentes')) { this.form.submit(); return false; } else { return false;}\">");
-            out.println("<input type=\"hidden\" name=\"suri\" value=\"" + suri + "\">");
-            out.println("<fieldset>");
-            out.println("<legend>" + "Modo avanzado" + "</legend>");
-            out.println("<table>");
-
-            out.println("<tr>");
-            out.println("<td>");
-            out.println("<input type=\"checkbox\" name=\"adminMode\" id=\"" + suri + "_adminmode\"  " + (adminMode.equals(ADMINMODE_ADVANCE) ? "checked" : "") + " value=\"" + ADMINMODE_ADVANCE + "\"><label for=\"" + suri + "_adminmode\">Utilizar modo avanzado</label>");
-            out.println("</td>");
-            out.println("</tr>");
-            out.println("</table>");
-
-            out.println("</fieldset>");
-            out.println("<fieldset>");
-            out.println("<table>");
-            out.println("<tr>");
-            out.println("<td colspan=\"3\" align=\"center\">");
-
-            out.println("<button dojoType=\"dijit.form.Button\" type=\"submit\">Guardar</button>");
-
-            SWBResourceURL urlbck = paramRequest.getRenderUrl();
-            urlbck.setAction(ADMINMODE_SIMPLE);
-            urlbck.setParameter("suri", suri);
-
-            out.println("<button  dojoType=\"dijit.form.Button\" type=\"button\" onclick=\"window.location='" + urlbck + "'; return false;\">Regresar</button>");
-
-            out.println("</td>");
-            out.println("</tr>");
-            out.println("</table>");
-            out.println("</fieldset>");
-            out.println("</form>");
-
-            if (base.getAttribute("adminMode") != null && base.getAttribute("adminMode").equals(ADMINMODE_ADVANCE)) {
-
-                urladd = paramRequest.getActionUrl();
-                urladd.setAction("updXMLConfig");
-                out.println("<form action=\"" + urladd + "\" id=\"" + suri + "/forma\" method=\"post\" onsubmit=\"if(enviatodos('existentes')) { this.form.submit(); return false; } else { return false;}\">");
-                out.println("<input type=\"hidden\" name=\"suri\" value=\"" + suri + "\">");
-                out.println("<fieldset>");
-                out.println("<legend>" + "Configuración XML" + "</legend>");
-                out.println("<table>");
-
-                out.println("<tr>");
-                out.println("<td>");
-                out.println("<input type=\"checkbox\" name=\"btnAccept\" id=\"" + suri + "_btnAccept\" value=\"incluir\"><label for=\"" + suri + "_btnAccept\">Utilizar botón aceptar</label>");
-                out.println("</td>");
-                out.println("</tr>");
-                out.println("<tr>");
-                out.println("<td>");
-                out.println("<input type=\"checkbox\" name=\"btnReject\" id=\"" + suri + "_btnReject\" value=\"incluir\"><label for=\"" + suri + "_btnReject\">Utilizar botón rechazar</label>");
-                out.println("</td>");
-                out.println("</tr>");
-                out.println("<tr>");
-                out.println("<td>");
-                out.println("<input type=\"checkbox\" name=\"btnCancel\" id=\"" + suri + "_btnCancel\" value=\"incluir\"><label for=\"" + suri + "_btnCancel\">Utilizar boton cancelar</label>");
-                out.println("</td>");
-                out.println("</tr>");
-                out.println("<tr>");
-                out.println("<td>");
-                out.println("<input type=\"checkbox\" name=\"btnSave\" id=\"" + suri + "_btnSave\" value=\"incluir\"><label for=\"" + suri + "_btnSave\">Utilizar botón guardar</label>");
-                out.println("</td>");
-                out.println("</tr>");
-                out.println("<tr>");
-                out.println("<td>");
-                out.println("<input type=\"checkbox\" name=\"useDojo\" id=\"" + suri + "_useDojo\" value=\"dojo\"><label for=\"" + suri + "_useDojo\">Utilizar Dojo</label>");
-                out.println("</td>");
-                out.println("</tr>");
-                out.println("</table>");
-
-                out.println("</fieldset>");
-                out.println("<fieldset>");
-                out.println("<table>");
-                out.println("<tr>");
-                out.println("<td colspan=\"3\" align=\"center\">");
-
-                out.println("<button dojoType=\"dijit.form.Button\" type=\"submit\">Generar XML</button>");
-                out.println("</td>");
-                out.println("</tr>");
-                out.println("</table>");
-                out.println("</fieldset>");
-                out.println("</form>");
-
+            out.println("</div>");
+        } else if (ADM_MODEADVANCED.equals(adminMode)) {
+            if (action.equals("add") || action.equals("edit")) {
                 String basepath = SWBPortal.getWorkPath() + base.getWorkPath() + "/";
-                String value = SWBUtils.IO.getFileFromPath(basepath + "code.xml");
-
-                if (null != value && value.trim().length() > 0) {
-
-                    StringBuilder ret = new StringBuilder(400);
-                    SWBResourceURL url = paramRequest.getActionUrl().setAction("saveXMLFile");
-
-                    //Despliegue del editor
-                    ret.append("<script type=\"text/javascript\" src=\"");
-                    ret.append(SWBPlatform.getContextPath());
-                    ret.append("/swbadmin/js/editarea/edit_area/edit_area_full.js\"></script>\n");
-                    ret.append("<script type=\"text/javascript\" charset=\"UTF-8\">\n");
-                    ret.append("editAreaLoader.init({\n");
-                    ret.append("    id : \"resource");
-                    ret.append(base.getId());
-                    ret.append("\"\n    ,language: \"");
-                    ret.append(paramRequest.getUser().getLanguage().toLowerCase());
-                    ret.append("\"\n    ,syntax: \"xml\"\n");
-                    ret.append("    ,start_highlight: true\n");
-                    ret.append("    ,toolbar: \"save, |, search, go_to_line,");
-                    ret.append(" |, undo, redo, |, select_font,|, change_smooth_selection,");
-                    ret.append(" highlight, reset_highlight, |, help\"\n");
-                    ret.append("    ,is_multi_files: false\n");
-                    ret.append("    ,save_callback: \"my_save\"\n");
-                    ret.append("    ,allow_toggle: false\n");
-                    ret.append("});\n");
-                    ret.append("\n");
-                    ret.append("  function my_save(id, content){\n");
-                    ret.append("    var elemento = document.getElementById(\"hiddencode\");\n");
-                    ret.append("    elemento.value = content;\n");
-                    ret.append("    document.xmledition.submit();\n");
-                    ret.append("  }\n");
-                    ret.append("</script>\n");
-                    ret.append("<form name=\"xmledition\" action=\"");
-                    ret.append(url.toString());
-                    ret.append("\" method=\"post\">\n");
-                    ret.append("<textarea id=\"resource");
-                    ret.append(base.getId());
-                    ret.append("\" name=\"resource");
-                    ret.append(base.getId());
-                    ret.append("\" rows=\"25");
-                    ret.append("\" cols=\"95\">");
-                    ret.append(value);
-                    ret.append("</textarea>\n");
-                    ret.append("<input type=\"hidden\" id=\"hiddencode\" name=\"hiddencode\" value=\"\"/>\n");
-
-                    out.println(ret.toString());
+                String xml = SWBUtils.IO.getFileFromPath(basepath + "code.xml");
+//                if(null==xml)  xml=base.getXmlConf();
+                if (xml != null && xml.trim().length() > 0) {
+                    SWBFormMgrLayer swbFormMgrLayer = new SWBFormMgrLayer(xml, paramRequest, request);
+                    String html = swbFormMgrLayer.getHtml();
+                    ret.append(html);
                 }
             }
+            out.println(ret.toString());
         }
-        out.println("</div>");
     }
-
-    public String getFESelect(String FEsel, SWBParamRequest paramRequest, SemanticProperty sprop) {
-
+    
+    public void doConfig(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        String jsp = "/swbadmin/jsp/process/formsBuilder/config.jsp";
+        Resource base = getResourceBase();
+        response.setContentType("text/html; charset=ISO-8859-1");
+        response.setHeader("Cache-Control", "no-cache");
+        response.setHeader("Pragma", "no-cache");
+        
+        RequestDispatcher rd = request.getRequestDispatcher(jsp);
+        try {
+            request.setAttribute(ATT_PARAMREQUEST, paramRequest);
+            request.setAttribute(ATT_RBASE, base);
+            if (base.getResourceable() instanceof UserTask) {
+                request.setAttribute(ATT_TASK, (UserTask)base.getResourceable());
+            }
+            rd.include(request, response);
+        } catch (Exception ex) {
+            log.error("FormsBuilderResource - Error including config.jsp", ex);
+        }
+    }
+    
+    public static String getFESelect(String FEsel, SWBParamRequest paramRequest, SemanticProperty sprop) {
+    
         User usr = paramRequest.getUser();
         SemanticOntology ont = SWBPlatform.getSemanticMgr().getSchema();
         SemanticVocabulary sv = SWBPlatform.getSemanticMgr().getVocabulary();
@@ -1658,44 +970,343 @@ public class ProcessForm extends GenericResource {
             }
             ret.append("\n</optgroup>");
         }
+        return ret.toString();
+    }
+    
+    public static HashMap<String, String> getPropertiesMap(String str) {
+        HashMap<String, String> ret = new HashMap<String, String>();
+        
+        StringTokenizer stoken = new StringTokenizer(str, "|");
+        if (stoken.hasMoreTokens()) {
+            ret.put("varName", stoken.nextToken());
+        }
+        if (stoken.hasMoreTokens()) {
+            ret.put("propId", stoken.nextToken());
+        }
+        if (stoken.hasMoreTokens()) {
+            ret.put("mode", stoken.nextToken());
+        }
+        if (stoken.hasMoreTokens()) {
+            ret.put("fe", stoken.nextToken());
+        }
+        if (stoken.hasMoreTokens()) {
+            ret.put("label", stoken.nextToken());
+        }
+        if (stoken.hasMoreTokens()) {
+            ret.put("roles", stoken.nextToken());
+        }
+        return ret;
+    }
+    
+    public String getFormHTML(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
+        StringBuilder ret = new StringBuilder();
+        Resource base = getResourceBase();
+
+        SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
+        UserTask ut = (UserTask) base.getResourceable();
+
+        HashMap<String, SemanticClass> hmclass = new HashMap<String, SemanticClass>();
+        HashMap<String, SemanticProperty> hmprops = new HashMap<String, SemanticProperty>();
+
+        Iterator<ItemAware> it = ut.listHerarquicalRelatedItemAwarePlusNullOutputs().iterator();
+        while (it.hasNext()) {
+            ItemAware item = it.next();
+
+            SemanticClass cls = item.getItemSemanticClass();
+            if (cls != null) {
+                hmclass.put(item.getName(), cls);
+
+                Iterator<SemanticProperty> itp = cls.listProperties();
+                while (itp.hasNext()) {
+                    SemanticProperty prop = itp.next();
+                    hmprops.put(prop.getPropId(), prop);
+                }
+            }
+
+            //TODO: Agregar propiedades del item
+        }
+
+        ret.append("<div id=\"processForm\">");
+        ret.append("\n<form");
+
+        if (request.getParameter("useDojo") != null && request.getParameter("useDojo").equals("dojo")) {
+            ret.append(" htmlType=\"dojo\" ");
+        }
+        ret.append(" class=\"swbform\">");
+
+        ret.append("\n    <fieldset>");
+//        ret.append("\n      <legend>Datos Generales</legend>");
+        ret.append("\n      <table>");
+
+        int max = 1;
+        while (!base.getAttribute("prop" + max, "").equals("")) {
+
+            String val = base.getAttribute("prop" + max);
+            String varName = "";
+            String propid = "";
+            String modo = "";
+            String fe = "";
+            String label = "";
+            StringTokenizer stoken = new StringTokenizer(val, "|");
+            if (stoken.hasMoreTokens()) {
+                varName = stoken.nextToken();
+                propid = stoken.nextToken();
+                modo = stoken.nextToken();
+                fe = stoken.nextToken();
+                label = stoken.nextToken();
+            }
+
+            SemanticProperty semprop = hmprops.get(propid);
+
+            String strMode = "";
+
+            SemanticClass semclass = hmclass.get(varName);
+
+            if (semclass != null && semprop != null) {
+                if (modo.equals(FE_MODE_VIEW)) {
+                    strMode = SWBFormMgr.MODE_VIEW;
+                } else if (modo.equals(FE_MODE_EDIT)) {
+                    strMode = SWBFormMgr.MODE_EDIT;
+                }
+                SemanticObject sofe = ont.getSemanticObject(fe);
+                String strFE = "";
+
+                if (null != sofe) {
+                    strFE = "formElement=\"" + sofe.getDisplayName(response.getUser().getLanguage()) + "\"";
+                }
+
+                ret.append("\n     <tr>");
+                ret.append("\n       <td width=\"200px\" align=\"right\"><label name=\"" + varName + "." + semprop.getName() + "\" /></td>");
+                ret.append("\n       <td><property name=\"" + varName + "." + semprop.getName() + "\" " + strFE + " mode=\"" + strMode + "\" /></td>");
+                ret.append("\n    </tr>");
+            }
+            max++;
+        }
+
+        ret.append("\n      </table> ");
+        ret.append("\n      </fieldset> ");
+        ret.append("\n      <fieldset>");
+
+        // validar que botones seleccionaron
+        if (base.getAttribute("btnSave") != null) {
+            ret.append("\n          <Button type=\"savebtn\"/>");
+        }
+        if (base.getAttribute("btnAccept") != null) {
+            ret.append("\n          <Button type=\"submit\" name=\"accept\" title=\"Concluir Tarea\" isBusyButton=\"true\" />");
+        }
+        if (base.getAttribute("btnReject") != null) {
+            ret.append("\n          <Button isBusyButton=\"true\" name=\"reject\" title=\"Rechazar Tarea\" type=\"submit\" />");
+        }
+        if (base.getAttribute("btnCancel") != null) {
+            ret.append("\n          <Button type=\"cancelbtn\"/>");
+        }
+
+        ret.append("\n      </fieldset>");
+        ret.append("\n</form>");
+        ret.append("\n</div>");
 
         return ret.toString();
     }
-
-    @Override
-    public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        if (paramRequest.getMode().equals(MODE_SIGN)) {
-            doSign(request, response, paramRequest);
-        } else if (paramRequest.getMode().equals(MODE_ACUSE)) {
-            doAcuse(request, response, paramRequest);
-        } else{
-            super.processRequest(request, response, paramRequest);
+    
+    public void doSign(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        PrintWriter out = response.getWriter();
+        Resource base = getResourceBase();
+        User user = paramRequest.getUser();
+        
+        String suri = request.getParameter("suri");
+        SWBResourceURL viewUrl = paramRequest.getRenderUrl().setMode(SWBParamRequest.Mode_VIEW).setParameter("suri", suri);
+        
+        if (suri == null) {
+            out.println("<script type=\"text/javascript\">"
+                    + " alert('No ha sido posible recuperar la instancia en ejecución.');"
+                    + "window.location='" + viewUrl + "';"
+                    + "</script>");
+            return;
         }
-    }
-
-    public boolean hasProperty(SWBParameters paramRequest, String varName, SemanticProperty prop) {
-        boolean ret = false;
-        String data = paramRequest.getResourceBase().getData(paramRequest.getWebPage());
-        if (data != null && data.indexOf(varName + "|" + prop.getPropId()) > -1) {
-            ret = true;
+        
+        SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
+        FlowNodeInstance foi = (FlowNodeInstance) ont.getGenericObject(suri);
+        
+        boolean canSign=false;
+        if(user.getExternalID()!=null)
+        {
+            Iterator<SemanticObject>it = foi.getProcessSite().getSemanticModel().listSubjects(X509Certificate.swp_X509Serial, user.getExternalID()); //TODO: Modificar Búsqueda
+            if (it.hasNext()){        
+                canSign=true;
+            }        
         }
-        return ret;
-    }
-
-    public boolean isViewProperty(SWBParameters paramRequest, String varName, SemanticProperty prop, HashMap<String, String> hm) {
-        boolean ret = false;
-        String data = hm.get(varName + "|" + prop.getPropId());
-        if (data != null && data.indexOf(varName + "|" + prop.getPropId() + "|view") > -1) {
-            ret = true;
+        if(!canSign)
+        {
+            out.println("<script type=\"text/javascript\">"
+                    + " alert('No existe un certificado registrado para poder firmar esta tarea. Por favor contacte al administrador del sitio.');"
+                    + "window.location='" + viewUrl + "';"
+                    + "</script>");
+            return;
         }
-        return ret;
-    }
+        if(request.getParameter("err")!=null)
+        {
+            out.println("<script type=\"text/javascript\">alert('Ocurrió un problema al procesar la firma del documento. La firma proporcionada es invalida.'); window.location='" + viewUrl + "';</script>");
+        }
 
-    public boolean isEditProperty(SWBParameters paramRequest, String varName, SemanticProperty prop, HashMap<String, String> hm) {
-        boolean ret = false;
-        String data = hm.get(varName + "|" + prop.getPropId());
-        if (data != null && data.indexOf(varName + "|" + prop.getPropId() + "|edit") > -1) {
-            ret = true;
+        String SigCad = getStringToSign(foi); 
+        String signTemp=null;
+        try {
+            signTemp=SWBUtils.CryptoWrapper.comparablePassword(SigCad);
+        } catch (GeneralSecurityException gse){
+            log.error(gse);
+        }
+        
+        User asigned = foi.getAssignedto();
+        if (asigned != null && !asigned.equals(user)) {
+            out.println("<script type=\"text/javascript\">"
+                    + " alert('Esta tarea ya ha sido asignada a otro usuario');"
+                    + "window.location='" + viewUrl + "';"
+                    + "</script>");
+            return;
+        }
+
+        if (foi.getStatus() == Instance.STATUS_CLOSED || foi.getStatus() == Instance.STATUS_ABORTED || foi.getStatus() == Instance.STATUS_STOPED) {
+            out.println("<script type=\"text/javascript\">"
+                    + " alert('Esta tarea ya ha sido concluida.');"
+                    + "window.location='" + viewUrl + "';"
+                    + "</script>");
+            return;
+        }
+
+        SWBResourceURL urlact = paramRequest.getActionUrl();
+        urlact.setAction(ACT_PROCESSSIGN);
+       
+        out.println(SWBForms.DOJO_REQUIRED);
+        
+        out.println("<script type=\"text/javascript\">function validateForm" + foi.getId() + "(form) {if (form.validate()) {return true;} else {alert('Algunos de los datos no son válidos. Verifique la información proporcionada.'); return false;}}");
+        out.println("function setSignature(data){ dataElement = document.getElementById('hiddenSign'); dataElement.value=data; form = document.getElementById('" + foi.getId() + "/form'); alert('Documento Firmado');form.submit();}</script>");
+        out.println("<div id=\"processForm\">");
+        out.println("<form id=\"" + foi.getId() + "/form\" dojoType=\"dijit.form.Form\" class=\"swbform\" action=\"" + urlact + "\" method=\"post\" onSubmit=\"return validateForm" + foi.getId() + "(this);\">");
+        out.println("<input type=\"hidden\" name=\"suri\" value=\"" + suri + "\"/>");
+        //out.println("<input type=\"hidden\" name=\"smode\" value=\"edit\"/>");
+        out.println("<input type=\"hidden\" id=\"hiddenSign\" name=\"hiddenSign\" value=\"\"/>");
+        out.println("<fieldset>");
+        out.println("<table>");
+        
+        out.println("<tr>");
+        out.println("<td width=\"200px\" align=\"right\"><label for=\"title\">Firmar documento:</label></td>");
+        out.println("<td>");
+        out.println("<applet code=\"signatureapplet.SignatureApplet.class\" codebase=\"/swbadmin/lib\" archive=\""
+                    + SWBPlatform.getContextPath()
+                    + "/swbadmin/lib/SWBAplDigitalSignature.jar\" width=\"600\" height=\"250\">");
+        out.println("<param name=\"message\" value=\"" + signTemp + "\">");
+        out.println("</applet>");
+        out.println("</td></tr>");
+        out.println("    </table>");
+        out.println("</fieldset>");
+        out.println("<fieldset><span align=\"center\">");
+       // out.println("<button dojoType=\"dijit.form.Button\" name=\"btn_signed\" type=\"submit\">Concluir Tarea</button>");
+        if (base.getAttribute("btnCancel", "").equals("use")) {
+            out.println("<button dojoType=\"dijit.form.Button\" onclick=\"window.location='" + foi.getUserTaskInboxUrl() + "?suri=" + suri + "'\">Regresar</button>");
+        }
+        out.println("</span></fieldset>");
+        out.println("</form>");
+        out.println("</div>");
+    }
+    
+    public void doAcuse(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        PrintWriter out = response.getWriter();
+        
+        String suri = request.getParameter("suri");
+        if (suri == null) {
+            out.println("Parámetro no definido...");
+            return;
+        }
+        
+        String x509 = request.getParameter("sg");
+        if (x509 == null) {
+            out.println("Parámetro no definido...");
+            return;
+        }
+
+        SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
+        FlowNodeInstance foi = (FlowNodeInstance) ont.getGenericObject(suri);
+        X509SingInstance x509SingInstance = (X509SingInstance) ont.getGenericObject(x509);
+        
+        if (null==x509SingInstance){
+            out.println("El objeto no se encontró...");
+            return;
+        }
+        
+        out.println(SWBForms.DOJO_REQUIRED);
+        
+        out.println("<div id=\"processForm\" class=\"swbform\">");
+        out.println("<h2>Acuse de Firma</h2>");
+        out.println("<fieldset>");
+        out.println("<table>");
+        
+        out.println("<tr>");
+        out.println("<td width=\"200px\" align=\"right\"><label for=\"title\">Valor Firmado:</label></td>");
+        out.println("<td><div id=\"code\">");
+        out.println(htmlwrap(x509SingInstance.getOriginalString(), 50));
+        out.println("</div></td></tr>");
+        
+        out.println("<td width=\"200px\" align=\"right\"><label for=\"title\">Firma:</label></td>");
+        out.println("<td><div id=\"code\">");
+        out.println(htmlwrap(x509SingInstance.getSignedString(), 50));
+        out.println("<div></td></tr>");
+        
+        out.println("<td width=\"200px\" align=\"right\"><label for=\"title\">Instancia de proceso:</label></td>");
+        out.println("<td>");
+        out.println(x509SingInstance.getFlowNodeInstance().getProcessInstance().getProcessType().getDisplayTitle(paramRequest.getUser().getLanguage()));
+        out.println("</td></tr>");
+        
+        out.println("<td width=\"200px\" align=\"right\"><label for=\"title\">Instancia de Tarea:</label></td>");
+        out.println("<td>");
+        out.println(x509SingInstance.getFlowNodeInstance().getFlowNodeType().getDisplayTitle(paramRequest.getUser().getLanguage()));
+        out.println("</td></tr>");
+
+        out.println("<td width=\"200px\" align=\"right\"><label for=\"title\">Firmada por:</label></td>");
+        out.println("<td>");
+        out.println(x509SingInstance.getCertificate().getName());
+        out.println("</td></tr>");
+        
+        out.println("<td width=\"200px\" align=\"right\"><label for=\"title\">RFC:</label></td>");
+        out.println("<td>");
+        out.println(x509SingInstance.getCertificate().getSerial());
+        out.println("</td></tr>");
+        
+        out.println("<td width=\"200px\" align=\"right\"><label for=\"title\">Fecha:</label></td>");
+        out.println("<td>");
+        out.println(x509SingInstance.getCreated());
+        out.println("</td></tr>");
+        
+        out.println("    </table>");
+        out.println("</fieldset>");
+        out.println("<fieldset><span align=\"center\">");
+       // out.println("<button dojoType=\"dijit.form.Button\" name=\"btn_signed\" type=\"submit\">Concluir Tarea</button>");
+        
+        out.println("<button dojoType=\"dijit.form.Button\" onclick=\"window.location='" + foi.getUserTaskInboxUrl() + "?suri=" + suri + "'\">Salir</button>");
+        
+        out.println("</span></fieldset>");
+        out.println("</div>");
+    }
+    
+    private String getStringToSign(FlowNodeInstance flowNodeInstance) {
+
+        Iterator<ItemAwareReference> it = flowNodeInstance.listHeraquicalItemAwareReference().iterator();
+        ByteArrayOutputStream bout = new ByteArrayOutputStream();
+
+        Model model = ModelFactory.createDefaultModel();
+        while (it.hasNext()) {
+            ItemAwareReference itemAwareReference = it.next();
+            model.add(itemAwareReference.getProcessObject()
+                    .getSemanticObject().getRDFResource().listProperties());
+                    
+        }
+        // "RDF/XML", "RDF/XML-ABBREV", "N-TRIPLE" and "N3"
+        model.write(bout, "N-TRIPLE");
+
+        String ret = null;
+        try {
+        ret = bout.toString("UTF8");
+        } catch (IOException ioe){
+            log.error(ioe);
         }
         return ret;
     }
@@ -1716,5 +1327,23 @@ public class ProcessForm extends GenericResource {
         }
         ret.append("</pre>");
         return ret.toString();
+    }
+    
+    public boolean isViewProperty(SWBParameters paramRequest, String varName, SemanticProperty prop, HashMap<String, String> hm) {
+        boolean ret = false;
+        String data = hm.get(varName + "|" + prop.getPropId());
+        if (data != null && data.indexOf(varName + "|" + prop.getPropId() + "|view") > -1) {
+            ret = true;
+        }
+        return ret;
+    }
+
+    public boolean isEditProperty(SWBParameters paramRequest, String varName, SemanticProperty prop, HashMap<String, String> hm) {
+        boolean ret = false;
+        String data = hm.get(varName + "|" + prop.getPropId());
+        if (data != null && data.indexOf(varName + "|" + prop.getPropId() + "|edit") > -1) {
+            ret = true;
+        }
+        return ret;
     }
 }
