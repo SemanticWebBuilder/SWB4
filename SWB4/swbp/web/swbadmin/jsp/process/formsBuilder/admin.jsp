@@ -309,11 +309,6 @@ if (ProcessForm.ADM_MODESIMPLE.equals(admMode)) {
                 }
                 %>
             </div>
-            <div dojoType="dijit.Dialog" style="display:none;" id="configDialog" title="Agregar">
-                <div dojoType="dojox.layout.ContentPane" id="configDialogImp" executeScripts="true">
-                    Cargando...
-                </div>
-            </div>
             <div id="elePropsDialog" style="display:none;" dojoType="dijit.Dialog" title="Agregar propiedad">
                 <%
                 SWBResourceURL urladd = paramRequest.getActionUrl().setAction(ProcessForm.ACT_ADDPROPS);
@@ -399,6 +394,11 @@ if (ProcessForm.ADM_MODESIMPLE.equals(admMode)) {
             }
         }
         %>
+    </div>
+</div>
+<div dojoType="dijit.Dialog" style="display:none;" id="configDialog" title="Agregar">
+    <div dojoType="dojox.layout.ContentPane" id="configDialogImp" executeScripts="true">
+        Cargando...
     </div>
 </div>
 <script type="text/javascript">
