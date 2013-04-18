@@ -273,7 +273,7 @@ public class TreeRepHtml {
             Iterator<WebPage> it=tpc.listChilds();
             while(it.hasNext()) {
                 WebPage tpsub=it.next();
-                if(!tpsub.hasVirtualParent(tpc)) tpsub.addVirtualParent(tpsub);
+                //if(!tpsub.hasVirtualParent(tpc)) tpsub.addVirtualParent(tpsub);
                 if(tpsub.getId()!=null && user.haveAccess(tpsub)) {
                     if(vTopic.contains(tpsub)) break;
                     vTopic.addElement(tpsub);
@@ -485,7 +485,7 @@ public class TreeRepHtml {
             while(it.hasNext()){
                 intLevel=1;
                 WebPage tp=it.next();
-                if(!tp.hasVirtualParent(tpsite)) tp.addVirtualParent(tpsite);
+                //if(!tp.hasVirtualParent(tpsite)) tp.addVirtualParent(tpsite);
                 if(tp.getId()!=null) {
                     backg=" bgcolor=\"FFFFFF\"";
                     color="666666";
@@ -600,7 +600,7 @@ public class TreeRepHtml {
 
             while(it.hasNext()) {
                 WebPage tpsub=it.next();
-                if(!tpsub.hasVirtualParent(tpc)) tpsub.addVirtualParent(tpsub);
+                //if(!tpsub.hasVirtualParent(tpc)) tpsub.addVirtualParent(tpsub);
                 if(tpsub.getId()!=null && user.haveAccess(tpsub)) {
                     if(vTopic.contains(tpsub)) break;
                     vTopic.addElement(tpsub);
