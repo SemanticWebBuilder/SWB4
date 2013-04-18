@@ -177,6 +177,7 @@ public abstract class WebSiteBase extends org.semanticwb.model.SWBModel implemen
             org.semanticwb.platform.SemanticMgr mgr=org.semanticwb.SWBPlatform.getSemanticMgr();
             org.semanticwb.model.WebSite ret=null;
             org.semanticwb.platform.SemanticModel model=mgr.getModel(id);
+            //System.out.println("getWebSite:"+id+" "+model);
             if(model!=null)
             {
                 org.semanticwb.platform.SemanticObject obj=model.getSemanticObject(model.getObjectUri(id,sclass));
