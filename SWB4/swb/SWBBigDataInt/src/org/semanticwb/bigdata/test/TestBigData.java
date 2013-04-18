@@ -115,6 +115,8 @@ public class TestBigData {
             e.printStackTrace();
         }    
         
+        //sail.getDatabase().getAccessPath(null, null, null).rangeCount(true);
+        
         System.out.println("Size:"+sail.getDatabase().getStatementCount()+" "+sail.getDatabase().getURICount());
                 
 //        BigdataGraph graph = new BigdataGraph(sail,false);
