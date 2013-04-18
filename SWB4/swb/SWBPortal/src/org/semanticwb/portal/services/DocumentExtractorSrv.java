@@ -128,74 +128,90 @@ public class DocumentExtractorSrv implements HSSFListener {
                 break;
         }
     }
-    
-    
-    public String WordExtractor(File file) throws java.io.IOException {
+
+    public String WordExtractor(File file, String ext) throws java.io.IOException {
 
         String returnData = null;
         FileInputStream fis = null;
-        
+
         try {
             fis = new FileInputStream(file);
-            org.apache.poi.hwpf.extractor.WordExtractor wext = new org.apache.poi.hwpf.extractor.WordExtractor(fis);
-            returnData = wext.getText();
+            if ("doc".equals(ext.toLowerCase())) {
+                org.apache.poi.hwpf.extractor.WordExtractor wext = new org.apache.poi.hwpf.extractor.WordExtractor(fis);
+                returnData = wext.getText();
+            } else if ("docx".equals(ext.toLowerCase())) {
+                org.apache.poi.hwpf.extractor.WordExtractor wext = new org.apache.poi.hwpf.extractor.WordExtractor(fis);
+                returnData = wext.getText();
+            }
             return returnData;
         } catch (Exception e) {
-            log.error("Error al extraer el texto del documento Word. ",e);
+            log.error("Error al extraer el texto del documento Word. ", e);
             throw new IOException("Error al extraer el texto del documento Word (" + file.getPath() + "): " + e);
         }
     }
-    
-     public String ExcelExtractor(File file) throws java.io.IOException {
+
+    public String ExcelExtractor(File file, String ext) throws java.io.IOException {
 
         String returnData = null;
         FileInputStream fis = null;
-        
+
         try {
             fis = new FileInputStream(file);
-            POIFSFileSystem fileSystem = new POIFSFileSystem(fis);
-            org.apache.poi.hssf.extractor.ExcelExtractor wext = new org.apache.poi.hssf.extractor.ExcelExtractor(fileSystem);
-            returnData = wext.getText();
+            if ("xls".equals(ext.toLowerCase())) {
+                POIFSFileSystem fileSystem = new POIFSFileSystem(fis);
+                org.apache.poi.hssf.extractor.ExcelExtractor wext = new org.apache.poi.hssf.extractor.ExcelExtractor(fileSystem);
+                returnData = wext.getText();
+            } else if ("xlsx".equals(ext.toLowerCase())) {
+                POIFSFileSystem fileSystem = new POIFSFileSystem(fis);
+                org.apache.poi.hssf.extractor.ExcelExtractor wext = new org.apache.poi.hssf.extractor.ExcelExtractor(fileSystem);
+                returnData = wext.getText();
+
+            }
             return returnData;
         } catch (Exception e) {
-            log.error("Error al extraer el texto del documento Excel. ",e);
+            log.error("Error al extraer el texto del documento Excel. ", e);
             throw new IOException("Error al extraer el texto del documento Excel (" + file.getPath() + "): " + e);
         }
     }
-     
-     public String PPTExtractor(File file) throws java.io.IOException {
+
+    public String PPTExtractor(File file, String ext) throws java.io.IOException {
 
         String returnData = null;
         FileInputStream fis = null;
-        
+        if (ext == null) {
+            ext = "";
+        }
         try {
             fis = new FileInputStream(file);
-            org.apache.poi.hslf.extractor.PowerPointExtractor wext = new org.apache.poi.hslf.extractor.PowerPointExtractor(fis);
-            returnData = wext.getText()+" "+wext.getNotes();
+            if ("ppt".equals(ext.toLowerCase())) {
+                org.apache.poi.hslf.extractor.PowerPointExtractor wext = new org.apache.poi.hslf.extractor.PowerPointExtractor(fis);
+                returnData = wext.getText() + " " + wext.getNotes();
+            } else if ("pptx".equals(ext.toLowerCase())) {
+                org.apache.poi.hslf.extractor.PowerPointExtractor wext = new org.apache.poi.hslf.extractor.PowerPointExtractor(fis);
+                returnData = wext.getText() + " " + wext.getNotes();
+            }
             return returnData;
         } catch (Exception e) {
-            log.error("Error al extraer el texto del documento Excel. ",e);
+            log.error("Error al extraer el texto del documento Excel. ", e);
             throw new IOException("Error al extraer el texto del documento Excel (" + file.getPath() + "): " + e);
         }
     }
-     
-      public String TxtExtractor(File file) throws java.io.IOException {
+
+    public String TxtExtractor(File file) throws java.io.IOException {
 
         String returnData = null;
         FileInputStream fis = null;
-        
+
         try {
             fis = new FileInputStream(file);
             returnData = SWBUtils.IO.readInputStream(fis);
-            System.out.println("Text extractor: "+returnData);
+            System.out.println("Text extractor: " + returnData);
             return returnData;
         } catch (Exception e) {
-            log.error("Error al extraer el texto del documento de Text. ",e);
+            log.error("Error al extraer el texto del documento de Text. ", e);
             throw new IOException("Error al extraer el texto del documento de Texto (" + file.getPath() + "): " + e);
         }
     }
-        
-    
 }
 
 class MyPOIFSReaderListener implements POIFSReaderListener {
@@ -263,8 +279,6 @@ class MyPOIFSReaderListener implements POIFSReaderListener {
     }
 }
 
-
-
 class SavePPTString {
 
     String str = null;
@@ -276,6 +290,4 @@ class SavePPTString {
     public String getPPTStr() {
         return str;
     }
-
-    
 }
