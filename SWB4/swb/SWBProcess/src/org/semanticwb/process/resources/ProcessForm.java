@@ -110,7 +110,7 @@ public class ProcessForm extends GenericResource {
         }
         
         if (ACT_UPDBTNLABEL.equals(action)) {
-            String btn = request.getParameter(FormsBuilderResource.PARAM_BTNID);
+            String btn = request.getParameter(ProcessForm.PARAM_BTNID);
             String label = request.getParameter("btnLabel");
             
             if (label != null && label.trim().length() >0) {
