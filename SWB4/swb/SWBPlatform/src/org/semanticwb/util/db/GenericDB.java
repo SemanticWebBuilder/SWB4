@@ -76,6 +76,9 @@ public class GenericDB {
     
     static final String DB_DERBY = "APACHE DERBY"; //Apache Derby
     
+    static final String DB_VIRTUOSO = "OPENLINK VIRTUOSO VDBMS";
+    
+    
     //static final String SQL_ARRAY = "ARRAY";
     //static final String SQL_TEXT = "TEXT";
     /** The Constant SQL_CHAR. */
@@ -961,6 +964,7 @@ public class GenericDB {
         hmDialect.put(DB_SYBASE, "org.hibernate.dialect.SybaseDialect");
         hmDialect.put(DB_DB2, "org.hibernate.dialect.DB2Dialect");
         hmDialect.put(DB_DERBY, "org.hibernate.dialect.DerbyDialect");
+        hmDialect.put(DB_VIRTUOSO, "org.hibernate.dialect.HSQLDialect");
         
     }
     
@@ -1078,8 +1082,9 @@ public class GenericDB {
         hmSyntax.put("POINTBASE", hmPOINTBASE);
         hmSyntax.put("POSTGRESSQL", hmPOSTGRESSQL);
         hmSyntax.put("SYBASE", hmSYBASE);
-        hmSyntax.put("DB2", hmDB2);
-        hmSyntax.put("APACHE DERBY", hmDERBY); //Apache Derby
+        hmSyntax.put(DB_DB2, hmDB2);
+        hmSyntax.put(DB_DERBY, hmDERBY); //Apache Derby
+        hmSyntax.put(DB_VIRTUOSO, hmHSQL); 
 
     }
 }

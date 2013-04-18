@@ -177,7 +177,13 @@ public class SemanticLiteral
         Boolean ret=null;
         if(literal!=null)
         {
-            ret=literal.getBoolean();
+            if(literal.getDatatypeURI().endsWith("#boolean"))
+            {
+                ret=literal.getBoolean();
+            }else if(literal.getDatatypeURI().endsWith("#integer"))
+            {
+                ret=(literal.getInt()==1);
+            }
         }else if(m_obj instanceof Boolean)
         {
             ret=(Boolean)m_obj;
