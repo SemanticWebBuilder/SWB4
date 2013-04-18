@@ -23,6 +23,7 @@
 package org.semanticwb.process.model;
 
 import org.semanticwb.model.User;
+import org.semanticwb.process.utils.Point;
 
 
 public class ConnectionObject extends org.semanticwb.process.model.base.ConnectionObjectBase 
@@ -41,5 +42,148 @@ public class ConnectionObject extends org.semanticwb.process.model.base.Connecti
     {
         return true;
     }
-
+    
+    public Point getSartConnectionPoint(GraphicalElement ini, GraphicalElement end) {
+        Point ret = null;
+        double retX = 0;
+        double retY = 0;
+        Point lnode = new Point(end.getX(), end.getY());
+        
+        if (getConnectionPoints() != null && getConnectionPoints().trim().length() > 0) {
+            String [] handles = getConnectionPoints().split("\\|");
+            Point p = Point.fromString(handles[0]);
+            if (p != null) {
+                lnode = new Point(p.getX(), p.getY());
+            }
+        }
+        
+        if (ini != null && end != null) {
+            double dx = lnode.getX() - ini.getX();
+            double dy = lnode.getY() - ini.getY();
+            if(Math.abs(dx) >= Math.abs(dy)) {
+                if(dx > 0) {
+                    retX = ini.getX() + ini.getWidth() / 2 + 2;
+                } else {
+                    retX = ini.getX() - ini.getWidth() / 2 - 2;
+                }
+            } else {
+                retX = ini.getX();
+            }
+            
+            if(Math.abs(dy) > Math.abs(dx)) {
+                if(dy > 0) {
+                    retY = ini.getY() + ini.getHeight() / 2 + 2;
+                } else {
+                    retY = ini.getY() - ini.getHeight() / 2 - 2;
+                }
+            } else {
+                retY = ini.getY();
+            }
+            ret = new Point(retX, retY);
+        }
+        
+        return ret;
+    }
+        
+    public Point getEndConnectionPoint(GraphicalElement ini, GraphicalElement end) {
+        Point ret = null;
+        double retX = 0;
+        double retY = 0;
+        Point lnode = new Point(end.getX(), end.getY());
+        
+        if (getConnectionPoints() != null && getConnectionPoints().trim().length() > 0) {
+            String [] handles = getConnectionPoints().split("\\|");
+            Point p = Point.fromString(handles[handles.length-1]);
+            if (p != null) {
+                lnode = new Point(p.getX(), p.getY());
+            }
+        }
+        
+        if (ini != null && end != null) {
+            double dx = lnode.getX() - ini.getX();
+            double dy = lnode.getY() - ini.getY();
+            if(Math.abs(dx) >= Math.abs(dy)) {
+                if(dx > 0) {
+                    retX = ini.getX() + ini.getWidth() / 2 + 2;
+                } else {
+                    retX = ini.getX() - ini.getWidth() / 2 - 2;
+                }
+            } else {
+                retX = ini.getX();
+            }
+            
+            if(Math.abs(dy) > Math.abs(dx)) {
+                if(dy > 0) {
+                    retY = ini.getY() + ini.getHeight() / 2 + 2;
+                } else {
+                    retY = ini.getY() - ini.getHeight() / 2 - 2;
+                }
+            } else {
+                retY = ini.getY();
+            }
+            ret = new Point(retX, retY);
+        }
+        
+        return ret;
+    }
+    
+    public double getInter1ConnectionX(GraphicalElement ini, GraphicalElement end, Point pini, Point pend) {
+        double ret = 0;
+        
+        if(end != null) {
+            if(ini.getY() != pini.getY()) {
+                ret = pini.getX();
+            } else {
+                ret = pini.getX() + (pend.getX() - pini.getX()) / 2;
+            }
+        } else {
+            ret = pini.getX();
+        }
+        return ret;
+    }
+    
+    public double getInter1ConnectionY(GraphicalElement ini, GraphicalElement end, Point pini, Point pend) {
+        double ret = 0;
+        
+        if(end != null) {
+            if(ini.getY() != pini.getY()) {
+                ret = pini.getY()+(pend.getY() - pini.getY())/2;
+            } else {
+                ret = pini.getY();
+            }
+        } else {
+            ret = pini.getY();
+        }
+        return ret;
+    }
+    
+    public double getInter2ConnectionX(GraphicalElement ini, GraphicalElement end, Point pini, Point pend) {
+        double ret = 0;
+        
+        if(end != null) {
+            if(end.getY() != pend.getY()) {
+                ret = pend.getX();
+            } else {
+                ret = pini.getX() + (pend.getX() - pini.getX()) / 2;
+            }
+        } else {
+            ret = getInter1ConnectionX(ini, end, pini, pend);
+        }
+        return ret;
+    }
+    
+    public double getInter2ConnectionY(GraphicalElement ini, GraphicalElement end, Point pini, Point pend) {
+        double ret = 0;
+        
+        if(end != null) {
+            if(end.getY() != pend.getY()) {
+                ret = pini.getY() + (pend.getY() - pini.getY()) / 2;
+            } else {
+                ret = pend.getY();
+            }
+        } else {
+            ret = getInter1ConnectionY(ini, end, pini, pend);
+        }
+        return ret;
+    }
 }
