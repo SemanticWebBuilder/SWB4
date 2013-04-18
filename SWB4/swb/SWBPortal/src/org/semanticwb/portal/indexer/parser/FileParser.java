@@ -83,16 +83,16 @@ public class FileParser extends GenericParser {
             String ftype = nombre.substring(nombre.lastIndexOf(".") + 1);
             DocumentExtractorSrv dxsrv = new DocumentExtractorSrv();
             try {
-                if (ftype.equals("txt")) {
+                if (ftype.toLowerCase().equals("txt")) {
                     docdata = dxsrv.TxtExtractor(f);
-                } else if (ftype.equals("pdf")) {
+                } else if (ftype.toLowerCase().equals("pdf")) {
                     docdata = dxsrv.pdfExtractor(f);
-                } else if (ftype.equals("doc") || ftype.equals("docx")) {
-                    docdata = dxsrv.WordExtractor(f);
-                } else if (ftype.equals("xls") || ftype.equals("xlsx")) {
-                    docdata = dxsrv.ExcelExtractor(f);
-                } else if (ftype.equals("ppt") || ftype.equals("pptx")) {
-                    docdata = dxsrv.PPTExtractor(f);
+                } else if (ftype.toLowerCase().equals("doc") || ftype.toLowerCase().equals("docx")) {
+                    docdata = dxsrv.WordExtractor(f,ftype);
+                } else if (ftype.toLowerCase().equals("xls") || ftype.toLowerCase().equals("xlsx")) {
+                    docdata = dxsrv.ExcelExtractor(f,ftype);
+                } else if (ftype.toLowerCase().equals("ppt") || ftype.toLowerCase().equals("pptx")) {
+                    docdata = dxsrv.PPTExtractor(f,ftype);
                 }
             } catch (Exception e) {
                 log.error("Error al obtener el texto del documento. FileParser",e);
