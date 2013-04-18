@@ -23,13 +23,13 @@ public class FileSearchWrapper implements Searchable
     private String tags;
     
     
-    public FileSearchWrapper(File file, String title, String description, String tags, String url, Searchable page)
+    public FileSearchWrapper(File file, String title, String description, String tags, String url, Searchable resource)
     {
         this.file=file;
         this.title=title;
         this.description=description;
         this.url=url;
-        this.page=page;
+        this.page=resource;
         this.tags=tags;
     }
 
@@ -93,6 +93,7 @@ public class FileSearchWrapper implements Searchable
 
     public String getTitle()
     {
+        System.out.println("Título archivo..."+title);
         return title;
     }
 
@@ -126,9 +127,9 @@ public class FileSearchWrapper implements Searchable
         this.url = url;
     }
 
-    public void setSearchable(Searchable page)
+    public void setSearchable(Searchable resource)
     {
-        this.page = page;
+        this.page = resource;
     }
 
     public String getTags()

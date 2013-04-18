@@ -27,6 +27,7 @@ import java.util.HashMap;
 import java.util.Map;
 import org.semanticwb.model.Searchable;
 import org.semanticwb.model.GenericObject;
+import org.semanticwb.model.Resource;
 import org.semanticwb.model.WebPage;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.portal.indexer.FileSearchWrapper;
@@ -89,14 +90,15 @@ public class SearchDocument implements Comparable {
         if(m_sdoc==null) {
             if(m_uri.startsWith("file:"))
             {
-                WebPage page=null;
+                //WebPage page=null;
+                Resource resource = null;
                 SemanticObject obj=SemanticObject.createSemanticObject((String)map.get("wuri"));
                 if(obj!=null)
                 {
-                    page=(WebPage)SemanticObject.createSemanticObject((String)map.get("wuri")).createGenericInstance();
+                    resource=(Resource)SemanticObject.createSemanticObject((String)map.get("wuri")).createGenericInstance();
                 }
                 
-                m_sdoc=new FileSearchWrapper(new File(m_uri.substring(5)), (String)map.get(SWBIndexer.ATT_TITLE), (String)map.get(SWBIndexer.ATT_DESCRIPTION), (String)map.get(SWBIndexer.ATT_TAGS), (String)map.get(SWBIndexer.ATT_URL), page);
+                m_sdoc=new FileSearchWrapper(new File(m_uri.substring(5)), (String)map.get(SWBIndexer.ATT_TITLE), (String)map.get(SWBIndexer.ATT_DESCRIPTION), (String)map.get(SWBIndexer.ATT_TAGS), (String)map.get(SWBIndexer.ATT_URL), resource);
             }else
             {
                 SemanticObject sobj=SemanticObject.createSemanticObject(m_uri);
