@@ -110,6 +110,8 @@ public class SWBPlatform
     
     public final static String PRESIST_TYPE_SWBTSMONGO="swbtsmongo";
     
+    public final static String PRESIST_TYPE_VIRTUOSO="virtuoso";
+    
     public final static String PRESIST_TYPE_SWBTSGEMFIRE="swbtsgemfire";
 
     /** The persistence type. */
@@ -388,6 +390,9 @@ public class SWBPlatform
         }else if(PRESIST_TYPE_SWBTSMONGO.equalsIgnoreCase(persistenceType))
         {
             SWBPlatform.persistenceType = PRESIST_TYPE_SWBTSMONGO;
+        }else if(PRESIST_TYPE_VIRTUOSO.equalsIgnoreCase(persistenceType))
+        {
+            SWBPlatform.persistenceType = PRESIST_TYPE_VIRTUOSO;
         }else if(PRESIST_TYPE_SWBTSGEMFIRE.equalsIgnoreCase(persistenceType))
         {
             SWBPlatform.persistenceType = PRESIST_TYPE_SWBTSGEMFIRE;
@@ -914,6 +919,11 @@ public class SWBPlatform
     public static boolean isSWBTSMongo()
     {
         return persistenceType==PRESIST_TYPE_SWBTSMONGO;
+    }    
+            
+    public static boolean isVirtuoso()
+    {
+        return persistenceType==PRESIST_TYPE_VIRTUOSO;
     }    
     
     public static boolean isSWBTSGemFire()

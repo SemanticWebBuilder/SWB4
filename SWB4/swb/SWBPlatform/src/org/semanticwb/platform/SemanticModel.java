@@ -540,6 +540,7 @@ public class SemanticModel
     public String getObjectUri(String id, SemanticClass cls)
     {
         String ret=getNameSpace();
+        //System.out.println("namespace:"+id+" "+cls+" "+ret);
         if(cls!=null && !cls.isSWBModel())
         {
             //cls=cls.getRootClass(); //busca la clase raiz

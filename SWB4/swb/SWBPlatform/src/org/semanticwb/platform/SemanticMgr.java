@@ -71,6 +71,8 @@ public class SemanticMgr implements SWBInstanceObject
     
     private boolean semobjCache=false;
     
+    private boolean userRepCache=false;
+    
     private ClassLoader classLoader=getClass().getClassLoader();
 
     /**
@@ -247,6 +249,7 @@ public class SemanticMgr implements SWBInstanceObject
     {
         tripleCache=Boolean.parseBoolean(SWBPlatform.getEnv("swb/tripleFullCache","false"));
         semobjCache=Boolean.parseBoolean(SWBPlatform.getEnv("swb/semanticObjectFullCache","true"));
+        userRepCache=Boolean.parseBoolean(SWBPlatform.getEnv("swb/userRepositoryFullCache","false"));
         log.event("TripleFullCache:"+tripleCache);
         log.event("SemanticObjectFullCache:"+semobjCache);
 
@@ -272,6 +275,9 @@ public class SemanticMgr implements SWBInstanceObject
         } else if (SWBPlatform.isSWBTSMongo())
         {
             clsname="org.semanticwb.triplestore.mongo.SWBTSMongo";
+        } else if (SWBPlatform.isVirtuoso())
+        {
+            clsname="org.semanticwb.triplestore.virtuoso.SWBTSVirtuoso";
         } else if (SWBPlatform.isSWBTSGemFire())
         {
             clsname="org.semanticwb.triplestore.gemfire.SWBTSGemFire";
@@ -604,8 +610,11 @@ public class SemanticMgr implements SWBInstanceObject
             if (semobjCache && !(model.getRDFModel().getGraph() instanceof GraphCached)) 
             {
                 //Se cambia cache de grafo por cache de semanticObjects
-                log.event("LoadingModel:"+name+" FullCache");
-                SemanticObject.loadFullCache(model);
+                if(userRepCache || !name.endsWith("_usr"))
+                {
+                    log.event("LoadingModel:"+name+" FullCache");
+                    SemanticObject.loadFullCache(model);
+                }
             }            
         }
     }
@@ -791,10 +800,13 @@ public class SemanticMgr implements SWBInstanceObject
         
         Model model = loadRDFDBModel(name);
         model.setNsPrefix(name, nameSpace);
+        //System.out.println("getNsPrefix:"+model.getNsPrefixURI(name));
         model.close();
 
         SemanticModel ret = loadDBModel(name, cached);
+        //ret.setNameSpace(nameSpace);
         model = ret.getRDFModel();
+        //System.out.println("ret:"+ret+" model:"+model);
 //        model.setNsPrefix(name+"_"+SemanticVocabulary.SWB_NS, nameSpace);
 //        model.setNsPrefix(name, SemanticVocabulary.URI+SemanticVocabulary.SWB_NS);
         //model.setNsPrefixes(m_schema.getRDFOntModel().getNsPrefixMap());
