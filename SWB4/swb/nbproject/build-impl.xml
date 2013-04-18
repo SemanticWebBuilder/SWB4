@@ -382,6 +382,11 @@ or ant -Dj2ee.platform.classpath=&lt;server_classpath&gt; (where no properties f
             </and>
         </condition>
     </target>
+    <target name="-init-test-properties">
+        <property name="test.binaryincludes" value="&lt;nothing&gt;"/>
+        <property name="test.binarytestincludes" value=""/>
+        <property name="test.binaryexcludes" value=""/>
+    </target>
     <target if="${nb.junit.single}" name="-init-macrodef-junit-single" unless="${nb.junit.batch}">
         <macrodef name="junit" uri="http://www.netbeans.org/ns/web-project/2">
             <attribute default="${includes}" name="includes"/>
@@ -404,7 +409,7 @@ or ant -Dj2ee.platform.classpath=&lt;server_classpath&gt; (where no properties f
             </sequential>
         </macrodef>
     </target>
-    <target if="${nb.junit.batch}" name="-init-macrodef-junit-batch" unless="${nb.junit.single}">
+    <target depends="-init-test-properties" if="${nb.junit.batch}" name="-init-macrodef-junit-batch" unless="${nb.junit.single}">
         <macrodef name="junit" uri="http://www.netbeans.org/ns/web-project/2">
             <attribute default="${includes}" name="includes"/>
             <attribute default="${excludes}" name="excludes"/>
@@ -417,6 +422,9 @@ or ant -Dj2ee.platform.classpath=&lt;server_classpath&gt; (where no properties f
                     <batchtest todir="${build.test.results.dir}">
                         <fileset dir="${test.src.dir}" excludes="@{excludes},${excludes}" includes="@{includes}">
                             <filename name="@{testincludes}"/>
+                        </fileset>
+                        <fileset dir="${build.test.classes.dir}" excludes="@{excludes},${excludes},${test.binaryexcludes}" includes="${test.binaryincludes}">
+                            <filename name="${test.binarytestincludes}"/>
                         </fileset>
                     </batchtest>
                     <syspropertyset>
@@ -544,7 +552,7 @@ or ant -Dj2ee.platform.classpath=&lt;server_classpath&gt; (where no properties f
             </sequential>
         </macrodef>
     </target>
-    <target if="${nb.junit.batch}" name="-init-macrodef-junit-debug-batch">
+    <target depends="-init-test-properties" if="${nb.junit.batch}" name="-init-macrodef-junit-debug-batch">
         <macrodef name="junit-debug" uri="http://www.netbeans.org/ns/web-project/2">
             <attribute default="${includes}" name="includes"/>
             <attribute default="${excludes}" name="excludes"/>
@@ -557,6 +565,9 @@ or ant -Dj2ee.platform.classpath=&lt;server_classpath&gt; (where no properties f
                     <batchtest todir="${build.test.results.dir}">
                         <fileset dir="${test.src.dir}" excludes="@{excludes},${excludes}" includes="@{includes}">
                             <filename name="@{testincludes}"/>
+                        </fileset>
+                        <fileset dir="${build.test.classes.dir}" excludes="@{excludes},${excludes},${test.binaryexcludes}" includes="${test.binaryincludes}">
+                            <filename name="${test.binarytestincludes}"/>
                         </fileset>
                     </batchtest>
                     <syspropertyset>
@@ -810,11 +821,11 @@ exists or setup the property manually. For example like this:
                 pre NB7.2 profiling section; consider it deprecated
             -->
     <target depends="-profile-pre-init, init, -profile-post-init, -profile-init-check" if="profiler.info.jvmargs.agent" name="profile-init"/>
-    <target name="-profile-pre-init">
+    <target if="profiler.info.jvmargs.agent" name="-profile-pre-init">
         <!-- Empty placeholder for easier customization. -->
         <!-- You can override this target in the ../build.xml file. -->
     </target>
-    <target name="-profile-post-init">
+    <target if="profiler.info.jvmargs.agent" name="-profile-post-init">
         <!-- Empty placeholder for easier customization. -->
         <!-- You can override this target in the ../build.xml file. -->
     </target>
@@ -893,6 +904,9 @@ exists or setup the property manually. For example like this:
         <ant antfile="${project.SWBTripleStoreMongo}/build.xml" inheritall="false" target="jar">
             <property name="deploy.on.save" value="false"/>
         </ant>
+        <ant antfile="${project.SWBVirtuosoInt}/build.xml" inheritall="false" target="jar">
+            <property name="deploy.on.save" value="false"/>
+        </ant>
         <ant antfile="${project.SWBXMLRPCCommon}/build.xml" inheritall="false" target="jar">
             <property name="deploy.on.save" value="false"/>
         </ant>
@@ -964,6 +978,9 @@ exists or setup the property manually. For example like this:
         <ant antfile="${project.SWBTripleStoreMongo}/build.xml" inheritall="false" target="jar">
             <property name="deploy.on.save" value="false"/>
         </ant>
+        <ant antfile="${project.SWBVirtuosoInt}/build.xml" inheritall="false" target="jar">
+            <property name="deploy.on.save" value="false"/>
+        </ant>
         <ant antfile="${project.SWBXMLRPCCommon}/build.xml" inheritall="false" target="jar">
             <property name="deploy.on.save" value="false"/>
         </ant>
@@ -1002,7 +1019,7 @@ exists or setup the property manually. For example like this:
     <target if="has.persistence.xml" name="-copy-persistence-xml">
         <mkdir dir="${build.web.dir}/WEB-INF/classes/META-INF"/>
         <copy todir="${build.web.dir}/WEB-INF/classes/META-INF">
-            <fileset dir="${persistence.xml.dir}" includes="persistence.xml"/>
+            <fileset dir="${persistence.xml.dir}" includes="persistence.xml orm.xml"/>
         </copy>
     </target>
     <target name="-post-compile">
@@ -1199,7 +1216,6 @@ exists or setup the property manually. For example like this:
         <copyfiles files="${file.reference.xmlbeans-2.3.0.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
         <copyfiles files="${file.reference.poi-3.7-20101029.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
         <copyfiles files="${file.reference.poi-ooxml-3.7-20101029.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
-        <copyfiles files="${file.reference.poi-scratchpad-3.5-FINAL-20090928.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
         <copyfiles files="${reference.SWBTOWB3Compatibility.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
         <copyfiles files="${file.reference.antlrworks-1.4.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
         <copyfiles files="${reference.SWBSIP.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
@@ -1223,6 +1239,9 @@ exists or setup the property manually. For example like this:
         <copyfiles files="${reference.SWBTripleStoreMongo.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
         <copyfiles files="${file.reference.mongo-2.7.0.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
         <copyfiles files="${file.reference.commons-pool-1.5.6.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
+        <copyfiles files="${reference.SWBVirtuosoInt.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
+        <copyfiles files="${file.reference.virt_jena.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
+        <copyfiles files="${file.reference.virtjdbc3.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
         <mkdir dir="${build.web.dir}/META-INF"/>
         <manifest file="${build.web.dir}/META-INF/MANIFEST.MF" mode="update"/>
     </target>
@@ -1312,7 +1331,6 @@ exists or setup the property manually. For example like this:
         <copyfiles files="${file.reference.xmlbeans-2.3.0.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
         <copyfiles files="${file.reference.poi-3.7-20101029.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
         <copyfiles files="${file.reference.poi-ooxml-3.7-20101029.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
-        <copyfiles files="${file.reference.poi-scratchpad-3.5-FINAL-20090928.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
         <copyfiles files="${reference.SWBTOWB3Compatibility.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
         <copyfiles files="${file.reference.antlrworks-1.4.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
         <copyfiles files="${reference.SWBSIP.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
@@ -1336,6 +1354,9 @@ exists or setup the property manually. For example like this:
         <copyfiles files="${reference.SWBTripleStoreMongo.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
         <copyfiles files="${file.reference.mongo-2.7.0.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
         <copyfiles files="${file.reference.commons-pool-1.5.6.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${reference.SWBVirtuosoInt.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${file.reference.virt_jena.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${file.reference.virtjdbc3.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
     </target>
     <target depends="init" if="dist.ear.dir" name="-clean-webinf-lib">
         <delete dir="${build.web.dir}/WEB-INF/lib"/>
@@ -1548,7 +1569,7 @@ exists or setup the property manually. For example like this:
             <jvmarg value="${profiler.j2ee.agentID}"/>
         </nbstartprofiledserver>
     </target>
-    <target if="profiler.info.jvmargs.agent" name="-profile-test-single-pre72">
+    <target depends="profile-init,compile-test-single" if="profiler.info.jvmargs.agent" name="-profile-test-single-pre72">
         <fail unless="netbeans.home">This target only works when run from inside the NetBeans IDE.</fail>
         <nbprofiledirect>
             <classpath>
@@ -1751,6 +1772,7 @@ exists or setup the property manually. For example like this:
         <ant antfile="${project.SWBTOWB3Compatibility}/nbbuild.xml" inheritall="false" target="clean"/>
         <ant antfile="${project.SWBTripleStore}/build.xml" inheritall="false" target="clean"/>
         <ant antfile="${project.SWBTripleStoreMongo}/build.xml" inheritall="false" target="clean"/>
+        <ant antfile="${project.SWBVirtuosoInt}/build.xml" inheritall="false" target="clean"/>
         <ant antfile="${project.SWBXMLRPCCommon}/build.xml" inheritall="false" target="clean"/>
         <ant antfile="${project.SWBXMRPCServer}/build.xml" inheritall="false" target="clean"/>
     </target>
