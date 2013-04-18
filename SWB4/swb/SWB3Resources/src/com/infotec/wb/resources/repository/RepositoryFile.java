@@ -46,19 +46,22 @@ import org.semanticwb.model.WebPage;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.api.SWBResourceURL;
+import org.semanticwb.portal.indexer.FileSearchWrapper;
 import org.semanticwb.portal.indexer.SWBIndexer;
 import org.semanticwb.portal.util.FileUpload;
 
-/** Muestra la lista de los documentos existentes dentro del repositorio. Se pueden
- * agregar documentos, mostrar su informaci�n detallada, el historial de cada
- * documento, vista preliminar, borrar el documento del repositorio, sacar el
- * documento del repositorio para su revisi�n o modificaci�n y actualizar el
+/**
+ * Muestra la lista de los documentos existentes dentro del repositorio. Se
+ * pueden agregar documentos, mostrar su informaci�n detallada, el historial de
+ * cada documento, vista preliminar, borrar el documento del repositorio, sacar
+ * el documento del repositorio para su revisi�n o modificaci�n y actualizar el
  * documento.
  *
  * Show the repository list of the existing documents. It can add new documents,
  * show document detail, document history, document preview, erase document from
- * the repository, make a check out for review or for a modification, check in with
- * the updated document.
+ * the repository, make a check out for review or for a modification, check in
+ * with the updated document.
+ *
  * @author Victor Lorenzana
  */
 public class RepositoryFile {
@@ -69,11 +72,15 @@ public class RepositoryFile {
     protected Notification notification = new Notification();
     protected TreeRepHtml dirs = new TreeRepHtml();
 
-    /** Creates a new instance of RepositoryFile */
+    /**
+     * Creates a new instance of RepositoryFile
+     */
     public RepositoryFile() {
     }
 
-    /** User html view of the repository resource files
+    /**
+     * User html view of the repository resource files
+     *
      * @param request Input parameters
      * @param response the answer to the user request
      * @param user WBUser object in session
@@ -89,7 +96,9 @@ public class RepositoryFile {
         return getHtml(request, response, user, topic, hashMap, topic, level, paramsRequest);
     }
 
-    /** Gets the user level into the repository
+    /**
+     * Gets the user level into the repository
+     *
      * @param user WBUser object to get the access level
      * @param tmid Topic map identifier
      * @return An integer value of the user level
@@ -97,41 +106,45 @@ public class RepositoryFile {
     public int getLevelUser(User user, String tmid) {
 
 
-        int level=0;
-        String adm=resource.getAttribute("admin");
+        int level = 0;
+        String adm = resource.getAttribute("admin");
         User usr = user;
         UserRepository usrRep = usr.getUserRepository();
         Role rol = null;
-        if(adm!=null)
-        {
+        if (adm != null) {
             rol = usrRep.getRole(adm);
             //int r=Integer.parseInt(adm);
-            if(user.hasRole(rol)) level=3;
+            if (user.hasRole(rol)) {
+                level = 3;
+            }
+        } else {
+            level = 3;
         }
-        else level=3;
 
-        if(level==0)
-        {
-            String mdy=resource.getAttribute("modify");
-            if(mdy!=null)
-            {
+        if (level == 0) {
+            String mdy = resource.getAttribute("modify");
+            if (mdy != null) {
                 rol = usrRep.getRole(mdy);
                 //int r=Integer.parseInt(mdy);
-                if(user.hasRole(rol)) level=2;
+                if (user.hasRole(rol)) {
+                    level = 2;
+                }
+            } else {
+                level = 2;
             }
-            else level=2;
         }
 
-        if(level==0)
-        {
-            String viw=resource.getAttribute("view");
-            if(viw!=null)
-            {
+        if (level == 0) {
+            String viw = resource.getAttribute("view");
+            if (viw != null) {
                 rol = usrRep.getRole(viw);
                 //int r=Integer.parseInt(viw);
-                 if(user.hasRole(rol)) level=1;
+                if (user.hasRole(rol)) {
+                    level = 1;
+                }
+            } else {
+                level = 1;
             }
-            else level=1;
         }
         return level;
 
@@ -139,6 +152,7 @@ public class RepositoryFile {
 
     /**
      * User html view of the repository resource files
+     *
      * @return The html code of existing files in the repository
      * @param request Input parameters
      * @param response the answer to the user request
@@ -150,7 +164,7 @@ public class RepositoryFile {
      * @param paramsRequest a list of objects (topic, user, action, ...)
      * @throws AFException An Application Framework exception
      */
-    public String getHtml(HttpServletRequest request, HttpServletResponse response, User user, WebPage topic, HashMap hashMap, WebPage dir, int nivel, SWBParamRequest paramsRequest) throws  SWBResourceException, IOException {
+    public String getHtml(HttpServletRequest request, HttpServletResponse response, User user, WebPage topic, HashMap hashMap, WebPage dir, int nivel, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
 
         String accept = request.getHeader("accept");
         if (null != accept) {
@@ -250,13 +264,15 @@ public class RepositoryFile {
             }
 
         } catch (IOException ioe) {
-            Repository.log.error( "Error in RepositoryFile.getHTML",ioe);
+            Repository.log.error("Error in RepositoryFile.getHTML", ioe);
         }
 
         return ret.toString();
     }
 
-    /** Load the Resource object information
+    /**
+     * Load the Resource object information
+     *
      * @param resource The Resource object
      */
     public void setResourceBase(org.semanticwb.model.Resource resource) {
@@ -269,7 +285,9 @@ public class RepositoryFile {
         }
     }
 
-    /** Cancel the file reservation
+    /**
+     * Cancel the file reservation
+     *
      * @param request Input parameters
      * @param response the answer to the user request
      * @param user WBUser object in session
@@ -338,14 +356,14 @@ public class RepositoryFile {
                     saveLog("undocheckout", user, id, dir, "This user made checkout", 1);
                 }
             } catch (SQLException e) {
-                Repository.log.error( "Error in undocheckout", e);
+                Repository.log.error("Error in undocheckout", e);
                 return;
             } finally {
                 if (con != null) {
                     try {
                         con.close();
                     } catch (Exception e) {
-                        Repository.log.error("Error in undocheckout",e);
+                        Repository.log.error("Error in undocheckout", e);
                     }
                 }
             }
@@ -357,6 +375,7 @@ public class RepositoryFile {
 
     /**
      * Get the file to user view from the repository
+     *
      * @param request Input parameters
      * @param response the answer to the user request
      * @param user WBUser object in session
@@ -437,7 +456,7 @@ public class RepositoryFile {
                             con.close();
                             con = null;
                         } catch (Exception e) {
-                            Repository.log.error( "Error in RepositoryFile.view() -- 1.1 --", e);
+                            Repository.log.error("Error in RepositoryFile.view() -- 1.1 --", e);
                         }
                     }
                     if (rsID != null) {
@@ -445,7 +464,7 @@ public class RepositoryFile {
                             rsID.close();
                             rsID = null;
                         } catch (Exception e) {
-                            Repository.log.error( "Error in RepositoryFile.view() -- 1.1 --", e);
+                            Repository.log.error("Error in RepositoryFile.view() -- 1.1 --", e);
                         }
                     }
                     if (pstID != null) {
@@ -453,7 +472,7 @@ public class RepositoryFile {
                             pstID.close();
                             pstID = null;
                         } catch (Exception e) {
-                            Repository.log.error( "Error in RepositoryFile.view() -- 1.1 --", e);
+                            Repository.log.error("Error in RepositoryFile.view() -- 1.1 --", e);
                         }
 
                     }
@@ -528,11 +547,13 @@ public class RepositoryFile {
                 }
             }
         } catch (Exception e) {
-            Repository.log.error( "Error in RepositoryFile.view()", e);
+            Repository.log.error("Error in RepositoryFile.view()", e);
         }
     }
 
-    /** Updates the file information
+    /**
+     * Updates the file information
+     *
      * @param request Input parameters
      * @param response the answer to the user request
      * @param user WBUser object in session
@@ -606,7 +627,7 @@ public class RepositoryFile {
                     } else {
                         file_db = id + "_" + version;
                     }
-//                    indexFile(file_db, file_db, id, title, dir, paramsRequest);
+                    indexFile(file_db, file_db, id, title, description, dir, paramsRequest);
                 }
             } catch (SQLException e) {
                 Repository.log.error("Error in updatetitle", e);
@@ -616,51 +637,48 @@ public class RepositoryFile {
                     try {
                         con.close();
                     } catch (Exception e) {
-                        Repository.log.error( "Error in updatetitle", e);
+                        Repository.log.error("Error in updatetitle", e);
                     }
                 }
             }
         } catch (Exception e) {
-            Repository.log.error( "Error in updatetitle", e);
+            Repository.log.error("Error in updatetitle", e);
         }
     }
 
-//    private void indexFile(String file_remove, String file_index, long f_id, String title, Topic dir, WBParamRequest paramsRequest) throws AFException {
-//        //if (indxRemove) {
-//            File f_last = new File(WBUtils.getInstance().getWorkPath() + "/" + resource.getResourceWorkPath() + "/" + file_remove);
-//            if (f_last.exists()) {
-//                WBIndexer w_indx_last = WBIndexMgr.getInstance().getTopicMapIndexer(dir.getMap().getId());
-//                if (w_indx_last != null) {
-//                    try {
-//                        w_indx_last.removeFile(f_last);  // Para eliminar un archivo del index
-//
-//                    } catch (Exception ex) {
-//                        Repository.log.error(ex, "Error while trying to remove a file from index.", true);
-//                    }
-//                }
-//            }
-//        //}
-//
-//        File f = new File(WBUtils.getInstance().getWorkPath() + "/" + resource.getResourceWorkPath() + "/" + file_index);
-//        if (f.exists()) {
-//            WBIndexer w_indx = WBIndexMgr.getInstance().getTopicMapIndexer(dir.getMap().getId());
-//            if (w_indx != null) {
-//                try {
-//                    String type = f.getName();
-//                    WBResourceURL urllineA = paramsRequest.getRenderUrl();
-//                    urllineA.setCallMethod(urllineA.Call_DIRECT);
-//                    String url = "" + urllineA + "/" + type + "?repfop=view&reptp=" + dir.getId() + "&repfiddoc=" + Long.toString(f_id) + "&repinline=true";
-//
-//                    w_indx.indexFile(f, title, url, dir, resource.getId());
-//                } catch (Exception ex) {
-//                    Repository.log.error(ex, "Error while trying to add a file to index.", true);
-//                }
-//            }
-//        }
-//    }
+    private void indexFile(String file_remove, String file_index, long f_id, String title,String description, WebPage dir, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
+        
+        System.out.println("Indexando archivo....");
+            File f_last = new File(SWBPortal.getWorkPath() + "/" + resource.getWorkPath() + "/" + file_remove);
+            if (f_last.exists()) {
+                    try {
+                        System.out.println("Quitando archivo del indice...");
+                        SWBPortal.getIndexMgr().getDefaultIndexer().removeSearchable("file:"+f_last.getAbsolutePath());
+                    } catch (Exception ex) {
+                        Repository.log.error("Error while trying to remove a file from index.", ex);
+                    }
+            }
 
+            File f = new File(SWBPortal.getWorkPath() + "/" + resource.getWorkPath() + "/" + file_index);
+            if (f.exists()) {
+                try {
+                    System.out.println("Poniendo archivo en indice....");
+                    String type = f.getName();
+                    SWBResourceURL urllineA = paramsRequest.getRenderUrl();
+                    urllineA.setCallMethod(SWBResourceURL.Call_DIRECT);
+                    String url = "" + urllineA + "/" + type + "?repfop=view&reptp=" + dir.getId() + "&repfiddoc=" + Long.toString(f_id) + "&repinline=true";
+                    FileSearchWrapper fsw = new FileSearchWrapper(f, title, description, null, url, resource);
+                    SWBPortal.getIndexMgr().getDefaultIndexer().indexSerchable(fsw);
+                } catch (Exception ex_ind) {
+                    Repository.log.error("Error while trying to index file.", ex_ind);
+                }
+            }
+    }
+    
+    
     /**
      * Generates a new version of the file
+     *
      * @param fup File upload object
      * @param request Input parameters
      * @param response the answer to the user request
@@ -692,16 +710,18 @@ public class RepositoryFile {
             }
 
             String title = "";
+            String description = "";
             byte[] bcont = fup.getFileData("repfdoc");
             try {
                 con = SWBUtils.DB.getDefaultConnection();
                 boolean cancheckin = false;
-                PreparedStatement psuser = con.prepareStatement("select rep_title,rep_emailCheckOut from resrepository where rep_docId=? and idtm=?");
+                PreparedStatement psuser = con.prepareStatement("select rep_title,rep_emailCheckOut, rep_description from resrepository where rep_docId=? and idtm=?");
                 psuser.setLong(1, id);
                 psuser.setString(2, dir.getWebSiteId());
                 ResultSet rsuser = psuser.executeQuery();
                 if (rsuser.next()) {
                     title = rsuser.getString("rep_title");
+                    description = rsuser.getString("rep_description");
                     if (user.getId() != null) {
                         if (rsuser.getString("rep_emailCheckOut").equals(user.getId())) {
                             cancheckin = true;
@@ -740,42 +760,7 @@ public class RepositoryFile {
 
                 SWBPortal.writeFileToWorkPath(resource.getWorkPath() + "/" + file_db, new ByteArrayInputStream(bcont), user);
 
-                //indexFile(file_last, file_db, id, title, dir, paramsRequest);
-
-
-//                if (version != last_ver) {
-//                    File f_last = new File(WBUtils.getInstance().getWorkPath() + "/" + resource.getResourceWorkPath() + "/" + file_last);
-////                    if (f_last.exists()) {
-////                        WBIndexer w_indx_last = WBIndexMgr.getInstance().getTopicMapIndexer(dir.getMap().getId());
-////                        if (w_indx_last != null) {
-////                            try {
-////                                w_indx_last.removeFile(f_last);  // Para eliminar un archivo del index
-////
-////                            } catch (Exception ex) {
-////                                Repository.log.error(ex, "Error while trying to remove a file from index.", true);
-////                            }
-////                        }
-////                    }
-//                }
-                
-//                File f = new File(WBUtils.getInstance().getWorkPath() + "/" + resource.getResourceWorkPath() + "/" + file_db);
-//                if (f.exists()) {
-//                    WBIndexer w_indx = WBIndexMgr.getInstance().getTopicMapIndexer(dir.getMap().getId());
-//                    if (w_indx != null) {
-//                        try {
-//                            String type = f.getName();
-//                            WBResourceURL urllineA = paramsRequest.getRenderUrl();
-//                            urllineA.setCallMethod(urllineA.Call_DIRECT);
-//                            String url = "" + urllineA + "/" + type + "?repfop=view&reptp=" + dir.getId() + "&repfiddoc=" + Long.toString(id) + "&repinline=true";
-//
-//                            w_indx.indexFile(f, title, url, dir, resource.getId());
-//                        } catch (Exception ex) {
-//                            Repository.log.error(ex, "Error while trying to add a file to index.", true);
-//                        }
-//                    }
-//                }
-
-//                WBUtils.getInstance().writeFileToWorkPath(resource.getResourceWorkPath()+"/"+file_db, new ByteArrayInputStream(bcont), user.getId());
+                indexFile(file_last, file_db, id, title, description, dir, paramsRequest);
 
                 PreparedStatement ps = con.prepareStatement("update resrepository set rep_lastVersion=?,rep_status=?,rep_emailCheckOut=? where rep_docId=? and idtm=?");
                 ps.setInt(1, version);
@@ -806,7 +791,7 @@ public class RepositoryFile {
                 ResultSet rsdata = psdata.executeQuery();
                 if (rsdata.next()) {
                     title = rsdata.getString("rep_title");
-                    String description = rsdata.getString("rep_description");
+                    description = rsdata.getString("rep_description");
                     String comment = fup.getValue("repfdescription");
 
                     DateFormat df = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT, new java.util.Locale("es"));
@@ -826,16 +811,18 @@ public class RepositoryFile {
                     try {
                         con.close();
                     } catch (Exception e) {
-                        Repository.log.error("Error in newversion",e);
+                        Repository.log.error("Error in newversion", e);
                     }
                 }
             }
         } catch (Exception e) {
-            Repository.log.error("Error in newversion",e);
+            Repository.log.error("Error in newversion", e);
         }
     }
 
-    /** Creates a new version form of file
+    /**
+     * Creates a new version form of file
+     *
      * @param request Input parameters
      * @param response the answer to the user request
      * @param user WBUser object in session
@@ -998,7 +985,7 @@ public class RepositoryFile {
                     ret.append("</script>\r\n");
                 }
             } catch (SQLException e) {
-                Repository.log.error("Error in checkin",e);
+                Repository.log.error("Error in checkin", e);
                 return ret.toString();
             } finally {
                 if (con != null) {
@@ -1010,13 +997,14 @@ public class RepositoryFile {
                 }
             }
         } catch (Exception e) {
-            Repository.log.error( "Error in checkin",e);
+            Repository.log.error("Error in checkin", e);
         }
         return ret.toString();
     }
 
     /**
      * User's file reservation for modification
+     *
      * @param request Input parameters
      * @param response the answer to the user request
      * @param user WBUser object in session
@@ -1068,17 +1056,18 @@ public class RepositoryFile {
                     try {
                         con.close();
                     } catch (Exception e) {
-                        Repository.log.error("Error in checkout",e);
+                        Repository.log.error("Error in checkout", e);
                     }
                 }
             }
         } catch (Exception e) {
-            Repository.log.error( "Error in checkout",e);
+            Repository.log.error("Error in checkout", e);
         }
     }
 
     /**
      * Eliminates the selected file from repository
+     *
      * @param fup File upload object
      * @param request Input parameters
      * @param response the answer to the user request
@@ -1091,7 +1080,7 @@ public class RepositoryFile {
      * @param paramsRequest a list of objects (topic, user, action, ...)
      * @throws AFException An exception of type AF (Applicatioon Framework)
      */
-    public synchronized void delete(HttpServletRequest request, HttpServletResponse response, User user, WebPage topic, HashMap hashMap, WebPage dir, org.semanticwb.model.Resource resource, int nivel, SWBParamRequest paramsRequest, FileUpload fup) throws  SWBResourceException, IOException {
+    public synchronized void delete(HttpServletRequest request, HttpServletResponse response, User user, WebPage topic, HashMap hashMap, WebPage dir, org.semanticwb.model.Resource resource, int nivel, SWBParamRequest paramsRequest, FileUpload fup) throws SWBResourceException, IOException {
 
         if (nivel == 0) {
             return;
@@ -1159,16 +1148,18 @@ public class RepositoryFile {
                     try {
                         con.close();
                     } catch (Exception e) {
-                        Repository.log.error("Error on delete",e);
+                        Repository.log.error("Error on delete", e);
                     }
                 }
             }
         } catch (Exception e) {
-            Repository.log.error("Error on delete",e);
+            Repository.log.error("Error on delete", e);
         }
     }
 
-    /** Shows the file information
+    /**
+     * Shows the file information
+     *
      * @param request Input parameters
      * @param response the answer to the user request
      * @param user WBUser object in session
@@ -1388,15 +1379,15 @@ public class RepositoryFile {
 
             if (rs.next()) {
                 long repdocid = rs.getLong("rep_docId");
-                long represid = rs.getLong("resId");
+                String represid = rs.getString("resId");
                 s_author = rs.getString("rep_email");
                 String reptitle = rs.getString("rep_title");
                 String repdescription = rs.getString("rep_description");
                 int replastversion = rs.getInt("rep_lastVersion");
                 int repstatus = rs.getInt("rep_status");
                 String repemailCOut = rs.getString("rep_emailCheckOut");
-                
-                String repxml =rs.getAsciiStream("rep_xml")!=null?SWBUtils.IO.readInputStream(rs.getAsciiStream("rep_xml")):null;
+
+                String repxml = rs.getAsciiStream("rep_xml") != null ? SWBUtils.IO.readInputStream(rs.getAsciiStream("rep_xml")) : null;
                 //String repxml = com.infotec.appfw.util.AFUtils.getInstance().readInputStream(rs.getAsciiStream("rep_xml")); //rs.getString("rep_xml");
 
                 ret.append("<TR>");
@@ -1475,7 +1466,7 @@ public class RepositoryFile {
                         } catch (Exception e) {
 
                             s_author = "&nbsp;";
-                            Repository.log.error("Error on method info class RepositoryFile trying to create new user docId" + ": " + id,e);
+                            Repository.log.error("Error on method info class RepositoryFile trying to create new user docId" + ": " + id, e);
                         }
                     }
                     ret.append("<FONT size='2' face='Verdana, Arial, Helvetica, sans-serif'>" + s_author + "</FONT>");
@@ -1724,14 +1715,14 @@ public class RepositoryFile {
 
 
         } catch (SQLException e) {
-            Repository.log.error( "Error on info",e);
+            Repository.log.error("Error on info", e);
             return ret.toString();
         } finally {
             if (con != null) {
                 try {
                     con.close();
                 } catch (Exception e) {
-                    Repository.log.error( "Error on info",e);
+                    Repository.log.error("Error on info", e);
                 }
             }
         }
@@ -1741,6 +1732,7 @@ public class RepositoryFile {
 
     /**
      * Shows a list of existing files in the directory
+     *
      * @param request the input parameters
      * @param response the answerd to the request
      * @param user A WBUser object
@@ -1777,7 +1769,7 @@ public class RepositoryFile {
         }
         //i_log = 1;
         try {
-            String topicid = dir!=null?dir.getId():"";
+            String topicid = dir != null ? dir.getId() : "";
             con = SWBUtils.DB.getDefaultConnection();
             s_sql = "select * from resrepository where idtm=? and topic=? and resId=? and rep_deleted = 0";
             // Display results sorted by title or date
@@ -2201,21 +2193,23 @@ public class RepositoryFile {
             ps.close();
             ret.append("</table>");
         } catch (SQLException e) {
-            Repository.log.error("Error on showfiles",e);
+            Repository.log.error("Error on showfiles", e);
             return ret.toString();
         } finally {
             if (con != null) {
                 try {
                     con.close();
                 } catch (Exception e) {
-                    Repository.log.error("Error on showfiles",e);
+                    Repository.log.error("Error on showfiles", e);
                 }
             }
         }
         return ret.toString();
     }
 
-    /** Get the file name icon to represents the file type
+    /**
+     * Get the file name icon to represents the file type
+     *
      * @param filename The file's name
      * @return The name of the icon thats represents the file type
      */
@@ -2256,7 +2250,9 @@ public class RepositoryFile {
         return file;
     }
 
-    /** Get the file type
+    /**
+     * Get the file type
+     *
      * @param filename The name of the file
      * @return The file type
      */
@@ -2305,7 +2301,9 @@ public class RepositoryFile {
         return file;
     }
 
-    /** Get the existing versions of the file
+    /**
+     * Get the existing versions of the file
+     *
      * @param request Input parameters
      * @param response the answer to the user request
      * @param user WBUser object in session
@@ -2385,7 +2383,7 @@ public class RepositoryFile {
                         }
                     } catch (Exception e) {
                         s_author = "&nbsp;";
-                        Repository.log.error("Error on method history class RepositoryFile trying to create new user with email" + ": " + dir.getWebSite().getUserRepository().getUser(repemail).getEmail(),e);
+                        Repository.log.error("Error on method history class RepositoryFile trying to create new user with email" + ": " + dir.getWebSite().getUserRepository().getUser(repemail).getEmail(), e);
                     }
                 }
                 SWBResourceURL urlrecdoc = paramsRequest.getRenderUrl();
@@ -2454,14 +2452,14 @@ public class RepositoryFile {
             ret.append("}\r\n");
             ret.append("</script>\r\n");
         } catch (SQLException e) {
-            Repository.log.error("Error on history",e);
+            Repository.log.error("Error on history", e);
             return ret.toString();
         } finally {
             if (con != null) {
                 try {
                     con.close();
                 } catch (Exception e) {
-                    Repository.log.error("Error on history",e);
+                    Repository.log.error("Error on history", e);
                 }
             }
         }
@@ -2470,6 +2468,7 @@ public class RepositoryFile {
 
     /**
      * Add new file into the repository
+     *
      * @return The action for generates a new file into the repository
      * @param fup A File upload object
      * @param request Input parameters
@@ -2497,7 +2496,7 @@ public class RepositoryFile {
         try {
             title = fup.getValue("repftitle");
         } catch (IOException ioe) {
-            Repository.log.error("Error on insert",ioe);
+            Repository.log.error("Error on insert", ioe);
         }
 
         try {
@@ -2604,22 +2603,24 @@ public class RepositoryFile {
             notification.sendNotification(user, resource, docid, title, description, filename, comment, fileDate, version, action, dir, paramsRequest, request);
             saveLog("upload", user, docid, dir, "Description", 1);
 
-//            File f = new File(WBUtils.getInstance().getWorkPath() + "/" + resource.getResourceWorkPath() + "/" + file_db);
-//
-//            if (f.exists()) {
-//                WBIndexer w_indx = WBIndexMgr.getInstance().getTopicMapIndexer(dir.getMap().getId());
-//                if (w_indx != null) {
-//                    try {
-//                        String type = f.getName();
-//                        WBResourceURL urllineA = paramsRequest.getRenderUrl();
-//                        urllineA.setCallMethod(urllineA.Call_DIRECT);
-//                        String url = "" + urllineA + "/" + type + "?repfop=view&reptp=" + dir.getId() + "&repfiddoc=" + Long.toString(docid) + "&repinline=true";
-//                        w_indx.indexFile(f, title, url, dir, resource.getId());
-//                    } catch (Exception ex_ind) {
-//                        Repository.log.error(ex_ind, "Error while trying to index file.", true);
-//                    }
-//                }
-//            }
+            //  INDEXAR ARCHIVO
+
+            File f = new File(SWBPortal.getWorkPath() + "/" + resource.getWorkPath() + "/" + file_db);
+
+            if (f.exists()) {
+                try {
+                    String type = f.getName();
+                    SWBResourceURL urllineA = paramsRequest.getRenderUrl();
+                    urllineA.setCallMethod(SWBResourceURL.Call_DIRECT);
+                    String url = "" + urllineA + "/" + type + "?repfop=view&reptp=" + dir.getId() + "&repfiddoc=" + Long.toString(docid) + "&repinline=true";
+                    FileSearchWrapper fsw = new FileSearchWrapper(f, title, description, null, url, resource);
+                    SWBPortal.getIndexMgr().getDefaultIndexer().indexSerchable(fsw);
+                } catch (Exception ex_ind) {
+                    Repository.log.error("Error while trying to index file.", ex_ind);
+                }
+            }
+
+            //  TERMINA INDEXAR ARCHIVO
 
         } catch (Exception e) {
             if (filename != null) {
@@ -2628,21 +2629,23 @@ public class RepositoryFile {
                     fdoc.delete();
                 }
             }
-            Repository.log.error("Error on insert",e);
+            Repository.log.error("Error on insert", e);
             return ret.toString();
         } finally {
             if (con != null) {
                 try {
                     con.close();
                 } catch (Exception e) {
-                    Repository.log.error("Error on insert",e);
+                    Repository.log.error("Error on insert", e);
                 }
             }
         }
         return ret.toString();
     }
 
-    /** Add file form to upload a new file into the repository
+    /**
+     * Add file form to upload a new file into the repository
+     *
      * @param request Input parameters
      * @param response the answer to the user request
      * @param user WBUser object in session
@@ -2749,6 +2752,7 @@ public class RepositoryFile {
 
     /**
      * Save the user action in the data base
+     *
      * @param p_action The user action
      * @param user User object
      * @param p_fileid File identifier
@@ -2814,6 +2818,7 @@ public class RepositoryFile {
 
     /**
      * Move a file from one folder to another
+     *
      * @param id File identifier
      * @param fromDir Topic that represents the directory source
      * @param toDir Topic that represents the directory destination
@@ -2839,7 +2844,7 @@ public class RepositoryFile {
 
                 this.saveLog("Move", user, id, toDir, "The document was moved from  " + fromDir.getDisplayName(user.getLanguage()) + " to " + toDir.getDisplayName(user.getLanguage()) + " directory.", 1);
             } catch (Exception e) {
-                Repository.log.error("Error while trying to move document with id: " + id + " from directory " + fromDir.getId() + " to directory " + toDir.getId(),e);
+                Repository.log.error("Error while trying to move document with id: " + id + " from directory " + fromDir.getId() + " to directory " + toDir.getId(), e);
             }
         }
 

@@ -37,6 +37,7 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.model.Resource;
 import org.semanticwb.model.ResourceType;
 import org.semanticwb.model.Role;
 import org.semanticwb.model.User;
@@ -46,6 +47,8 @@ import org.semanticwb.model.WebSite;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.api.SWBResourceURL;
+import org.semanticwb.portal.indexer.FileSearchWrapper;
+import org.semanticwb.portal.indexer.SWBIndexer;
 import org.semanticwb.portal.util.FileUpload;
 
 
@@ -851,7 +854,7 @@ public class Repository extends org.semanticwb.portal.api.GenericResource {
         String strtopic = null;
         String strpartone = null;
         String strparttwo = null;
-        long lresid = 0;
+        String lresid = "0";
         int j = 0;
         
         HashMap hmtables = new HashMap();
@@ -861,11 +864,11 @@ public class Repository extends org.semanticwb.portal.api.GenericResource {
             // Get the related records
             //con = WBUtils.getInstance().getDBConnection();
             con = SWBUtils.DB.getConnection(tmp_conn, "Repository.uninstall() -- repositoy topics -- ");
-            pst = con.prepareStatement("select resid, topic from resrepository where idtm=? group by resid, topic");
+            pst = con.prepareStatement("select resId, topic from resrepository where idtm=? group by resId, topic");
             pst.setString(1, recobj.getWebSite().getId());
             rs = pst.executeQuery();
             while (rs.next()) {
-                lresid = rs.getLong("resid");
+                lresid = rs.getString("resId");
                 
                 strtopic = rs.getString("topic");
                 if (strtopic != null) {
@@ -1373,7 +1376,7 @@ public class Repository extends org.semanticwb.portal.api.GenericResource {
             
         }  // ----------------- Termina remove
         
-        out.println("<p class=box>");
+        out.println("<div class=box>");
         out.println("<table width=\"100%\" border=\"0\" cellspacing=\"0\" cellpadding=\"10\">");
         out.println("<tr>");
         out.println("<td class=tabla>");
@@ -1386,6 +1389,7 @@ public class Repository extends org.semanticwb.portal.api.GenericResource {
                 try {
                     //con = WBUtils.getInstance().getDBConnection();
                     con = SWBUtils.DB.getConnection(tmp_conn, "Repository.doAdmin() -- recover folder --");
+                    if(null==con) con = SWBUtils.DB.getDefaultConnection();
                     cmd = request.getParameter("cmd");
                     WebSite oTM = null;
                     WebPage oRep = null;
@@ -1454,45 +1458,50 @@ public class Repository extends org.semanticwb.portal.api.GenericResource {
                                     ps.setString(2, strTopicMap);
                                     ps.executeUpdate();
                                     ps.close();
+                                    
+                                    // Quitar archhivos del index
+                                    
                                     File fdir = new File(SWBPortal.getWorkPath() + "/" + base.getWorkPath() + "/");
                                     String filestarts = id + "_";
-//                                    File[] files=fdir.listFiles();
-//                                    // eliminando archivos
-//                                    WBIndexer w_indx_last = WBIndexMgr.getInstance().getTopicMapIndexer(strTopicMap);
-//                                    for(int j=0;j<files.length;j++)
-//                                    {
-//                                        File f=files[j];
-//                                        if(f.getName().startsWith(filestarts))
-//                                        {
-//                                            if(f.exists()&&j==(files.length-1))
-//                                            {
-//                                                if(w_indx_last!=null)
-//                                                {
-//                                                    try
-//                                                    {
-//                                                        w_indx_last.removeFile(f);  // Para eliminar un archivo del index
-//                                                    }
-//                                                    catch(Exception ex)
-//                                                    {
-//                                                        log.error(ex,"Error while trying to remove a file from index.",true);
-//                                                    }
-//                                                }
-//                                            }
-//                                            f.delete();
-//                                        }
-//                                    }
+                                    File[] files=fdir.listFiles();
+                                    // eliminando archivos
+                                    SWBIndexer swbindx = SWBPortal.getIndexMgr().getDefaultIndexer();
+                                    for(int j=0;j<files.length;j++)
+                                    {
+                                        File f=files[j];
+                                        if(f.getName().startsWith(filestarts))
+                                        {
+                                            if(f.exists()&&j==(files.length-1))
+                                            {
+                                                
+                                                if(swbindx!=null)
+                                                {
+                                                    try
+                                                    {
+                                                        swbindx.removeSearchable("file:"+f.getAbsolutePath());  // Para eliminar un archivo del index
+                                                    }
+                                                    catch(Exception ex)
+                                                    {
+                                                        log.error("Error while trying to remove a file from index.",ex);
+                                                    }
+                                                }
+                                            }
+                                            f.delete();
+                                        }
+                                    }
+                                    ///  termina quitar archivos del index
                                 }
                             }
                         }
                     }
                     
-                    s_sql = "select * from resrepository where resId=? and rep_deleted = ? and idtm=? order by rep_title";
+                    s_sql = "select * from resrepository where resId = ? and rep_deleted = ? and idtm = ? order by rep_title";
                     ps = con.prepareStatement(s_sql);
                     ps.setString(1, base.getId());
                     ps.setInt(2, 1);
                     ps.setString(3, strTopicMap);
-                    System.out.println("select * from resrepository where resId="+base.getId()+" and rep_deleted = 1 and idtm="+strTopicMap+" order by rep_title");
-                    System.out.println("select * from resrepository where resId="+getResourceBase().getId()+" and rep_deleted = 1 and idtm="+strTopicMap+" order by rep_title");
+                    //System.out.println("select * from resrepository where resId="+base.getId()+" and rep_deleted = 1 and idtm="+strTopicMap+" order by rep_title");
+                    //System.out.println("select * from resrepository where resId="+getResourceBase().getId()+" and rep_deleted = 1 and idtm="+strTopicMap+" order by rep_title");
                     rs = ps.executeQuery();
                     out.println("<tr> ");
                     out.println("<td class=valores>");
@@ -1546,16 +1555,38 @@ public class Repository extends org.semanticwb.portal.api.GenericResource {
                                 nameFolder = tpSubDir.getDisplayName(user.getLanguage()) + folderborrado;
                             } else {
                                 tpSubDir = tpMAP.getWebPage(tpsid); //,false);
-                                nameFolder = tpSubDir.getDisplayName(user.getLanguage());
+                                if(tpSubDir!=null) nameFolder = tpSubDir.getDisplayName(user.getLanguage());
+                                else nameFolder = "Carpeta no encontrada: ("+tpsid+")";
                             }
                             
                             WebSite wsite = paramsRequest.getWebPage().getWebSite();
+                            String userID =repemail;
+                            if(repemail.indexOf("_")!=-1){
+                                userID = repemail.substring(0,repemail.indexOf("_"));
+                            }
+                            
+                            //String userRepoID = repemail.substring(repemail.indexOf("_"));
+                            //System.out.println("usr Repo id : "+userRepoID);
+                            
                             UserRepository urepo = wsite.getUserRepository();
+                            
+                            //UserRepository urepo = UserRepository.ClassMgr.getUserRepository(userRepoID);
+                           // if(null==urepo) urepo = wsite.getUserRepository();
                             
                             out.println("<td class=datos>" + nameFolder + "</td>");
                             out.println("<td class=datos>" + reptitle + "</td>");
                             out.println("<td class=datos>" + SWBUtils.TEXT.getStrDate(new java.util.Date(repcreate.getTime()), "es") + "</td>");
-                            out.println("<td class=datos><a href=\"mailto:" + urepo.getUser(repemail).getEmail() + "\">" + urepo.getUser(repemail).getEmail() + "</a></td>");
+                            //System.out.println("email de la db: "+repemail+"-----"+userID);
+                            User usrrepo = urepo.getUser(userID);
+                            String usrEMAIL = null;
+                            if(usrrepo!=null&&usrrepo.getEmail()!=null) {
+                                usrEMAIL = usrrepo.getEmail();
+                            }
+                            else {
+                                usrEMAIL = "No se encontró usuario";
+                            }
+                            
+                            out.println("<td class=datos><a href=\"mailto:" + usrEMAIL + "\">" + usrEMAIL + "</a></td>");
                             
                             out.println("<td class=datos>");
                             if (canRecover(str_tm, str_topic)) {
@@ -1564,7 +1595,7 @@ public class Repository extends org.semanticwb.portal.api.GenericResource {
                                 out.println("<img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/images/Repository/recover.gif\" border=0 title=\"" + paramsRequest.getLocaleString("msgAltRestore") + "\" >");
                             }
                             out.println("&nbsp;<a class=link href=\"javascript: DoConfirm(" + str_doc + ");\">" + "<img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/images/trash_vacio.gif\" border=0 title=\"" + paramsRequest.getLocaleString("msgAltEliminate") + "\" >" + "</a>");
-                            out.println("</tr>");
+                            out.println("</td></tr>");
                         }
                     } catch (Exception e) {
                         Repository.log.error("Error al mostrar archivos eliminados...", e);
@@ -1628,10 +1659,7 @@ public class Repository extends org.semanticwb.portal.api.GenericResource {
                     out.println("      ");
                     out.println("  }");
                     out.println("</script>");
-                    out.println("</td>");
-                    out.println("</tr>");
-                    out.println("</table>");
-                    out.println("</p>");
+                    
                 } catch (Exception e) {
                     log.error("Error in method Repository.doAdmin() when action is ShowOld, resource is " + base.getId(), e);
                 } finally {
@@ -1735,7 +1763,6 @@ public class Repository extends org.semanticwb.portal.api.GenericResource {
                     strNotify = strMsg.toString();
                 }
                 
-                
                 out.println("<td><textarea class=campos name=\"notificationcreate\" cols=60 rows=10>" + strNotify + "</textarea></td></tr>");
                 out.println("<tr><td align=right class=valores width=150>" + paramsRequest.getLocaleString("msgUpdNotificationMessage") + ":</td>");
                 
@@ -1837,6 +1864,10 @@ public class Repository extends org.semanticwb.portal.api.GenericResource {
                     out.println("</script>");
                 }
             }
+            out.println("</td>");
+                    out.println("</tr>");
+                    out.println("</table>");
+                    out.println("</div>");
         } else {
             try {
                 FileUpload fUpload = new FileUpload();
@@ -2084,6 +2115,7 @@ public class Repository extends org.semanticwb.portal.api.GenericResource {
         
         return sbfRet.toString();
     }
+
     /**
      * @param request
      * @param response
@@ -2091,76 +2123,91 @@ public class Repository extends org.semanticwb.portal.api.GenericResource {
      * @throws AFException
      * @throws IOException
      */
-//    public void doIndex(HttpServletRequest request, HttpServletResponse response, WBParamRequest paramsRequest) throws AFException, IOException
-//    {
-    //System.out.println("Repository.doIndex");
-//        Resource base = getResourceBase();
-//        String idtm=base.getWebSiteId();
-//        long resid = base.getId();
-//        WBIndexer w_indx = WBIndexMgr.getInstance().getTopicMapIndexer(idtm);
-//        //remover
-//        w_indx.removeContent(resid, idtm);
-//
-//        Connection conn = null;
-//        PreparedStatement pst=null;
-//        PreparedStatement pst1=null;
-//        ResultSet rs = null;
-//        ResultSet rs1 = null;
-//        try
-//        {
-//            conn = WBUtils.getDBConnection();
-//            pst = conn.prepareStatement("select rep_title,rep_docId,rep_lastVersion from resrepository where resId=? and idtm=?");
-//            pst.setLong(1, resid);
-//            pst.setString(2, idtm);
-//            rs = pst.executeQuery();
-//            while(rs.next())
-//            {
-//                String title=rs.getString("rep_title");
-//                long docid = rs.getLong("rep_docId");
-//                int i_version = rs.getInt("rep_lastVersion");
-//                pst1= conn.prepareStatement("select rep_fileName from resrepositoryversions where rep_docId=? and rep_fileVersion=? and idtm=?");
-//                pst1.setLong(1, docid);
-//                pst1.setInt(2, i_version);
-//                pst1.setString(3,idtm);
-//                rs1 = pst1.executeQuery();
-//                while(rs1.next())
-//                {
-//                    String file_name=rs1.getString("rep_fileName");
-//                    int pos=file_name.lastIndexOf('.');
-//                    if(pos!=-1)
-//                    {
-//                        String file_db=docid+"_"+i_version+file_name.substring(pos);;
-//                        File f = new File(WBUtils.getInstance().getWorkPath()+"/"+base.getResourceWorkPath()+"/"+file_db);
-//                        if(f.exists())
-//                        {
-//                            if(w_indx!=null)
-//                            {
-//                                try
-//                                {
-//                                    String type = f.getName();
-//                                    WBResourceURL urllineA = paramsRequest.getRenderUrl();
-//                                    urllineA.setCallMethod(urllineA.Call_DIRECT).setMode(WBResourceURL.Mode_VIEW);
-//                                    String url="" + urllineA + "/" + type + "?repfop=view&reptp=" + paramsRequest.getTopic().getId() + "&repfiddoc=" + Long.toString(docid) + "&repinline=true";
-//                                    w_indx.indexFile(f,title,url,paramsRequest.getTopic(),base.getId());
-//                                }
-//                                catch(Exception ex)
-//                                {
-//                                    log.error(ex,"Error while trying to add a file to index.",true);
-//                                }
-//                            }
-//                        }
-//                    }
-//                }
-//                rs1.close();
-//                pst1.close();
-//            }
-//            rs.close();
-//            pst.close();
-//            conn.close();
-//        }
-//        catch(Exception e)
-//        {
-//            log.error(e,WBUtils.dateFormat(new Timestamp(System.currentTimeMillis()))+" - Error while trying to index files of Repository resource with id:"+resid+", from TopicMap:"+idtm,false);
-//        }
-//    }
+    @Override
+    public void doIndex(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+    
+    System.out.println("Repository.doIndex");
+        Resource base = getResourceBase();
+        String idtm=base.getWebSiteId();
+        String resid = base.getId();
+        SWBIndexer w_indx = SWBPortal.getIndexMgr().getDefaultIndexer();
+
+        Connection conn = null;
+        PreparedStatement pst=null;
+        PreparedStatement pst1=null;
+        ResultSet rs = null;
+        ResultSet rs1 = null;
+        try
+        {
+            conn = SWBUtils.DB.getDefaultConnection();
+            pst = conn.prepareStatement("select topic,rep_title,rep_description,rep_docId,rep_lastVersion from resrepository where resId=? and idtm=?");
+            pst.setString(1, resid);
+            pst.setString(2, idtm);
+            rs = pst.executeQuery();
+            while(rs.next())
+            {
+                String webpageid = rs.getString("topic");
+                String title=rs.getString("rep_title");
+                String description=rs.getString("rep_description");
+                long docid = rs.getLong("rep_docId");
+                int i_version = rs.getInt("rep_lastVersion");
+                pst1= conn.prepareStatement("select rep_fileName from resrepositoryversions where rep_docId=? and rep_fileVersion=? and idtm=?");
+                pst1.setLong(1, docid);
+                pst1.setInt(2, i_version);
+                pst1.setString(3,idtm);
+                rs1 = pst1.executeQuery();
+                while(rs1.next())
+                {
+                    String file_name=rs1.getString("rep_fileName");
+                    int pos=file_name.lastIndexOf('.');
+                    if(pos!=-1)
+                    {
+                        String file_db=docid+"_"+i_version+file_name.substring(pos);;
+                        File f = new File(SWBPortal.getWorkPath() +"/"+base.getWorkPath()+"/"+file_db);
+                        ////////////////// quitar del indice anterior
+                        if (f.exists()) {
+                            try {
+                               w_indx.removeSearchable("file:"+f.getAbsolutePath());
+                            } catch (Exception ex) {
+                                Repository.log.error("Error while trying to remove a file from index.", ex);
+                            }
+                        
+                        //////////////           
+                        
+                        ///// agregando archivo al nuevo indice
+                            try {
+                                String type = f.getName();
+                                SWBResourceURL urllineA = paramRequest.getRenderUrl();
+                                urllineA.setCallMethod(SWBResourceURL.Call_DIRECT);
+                                String url = "" + urllineA + "/" + type + "?repfop=view&reptp=" + webpageid + "&repfiddoc=" + Long.toString(docid) + "&repinline=true";
+                                FileSearchWrapper fsw = new FileSearchWrapper(f, title, description, null, url, base);
+                                w_indx.indexSerchable(fsw);
+                            } catch (Exception ex_ind) {
+                                Repository.log.error("Error while trying to index file.", ex_ind);
+                            }
+                        }
+                        //////////////////////
+                    }
+                }
+                rs1.close();
+                pst1.close();
+            }
+            rs.close();
+            pst.close();
+            conn.close();
+        }
+        catch(Exception e)
+        {
+            log.error(SWBUtils.TEXT.iso8601DateFormat(new java.util.Date(System.currentTimeMillis()))+" - Error while trying to index files of Repository resource with id:"+resid+", from WebSite:"+idtm,e);
+        }
+        finally{
+            if (conn != null) {
+                    try {
+                        conn.close();
+                    } catch (Exception e) {
+                        log.error("Error in Repository.doIndex",e);
+                    }
+                }
+        }
+    }
 }
