@@ -1,7 +1,7 @@
 <%-- 
     Document   : userTaskInbox
     Created on : 2/08/2011, 10:10:59 AM
-    Author     : Hasdai Pacheco {haxdai@gmail.com}
+    Author     : Hasdai Pacheco {ebenezer.sanchez@infotec.com.mx}
 --%>
 
 <%@page import="org.semanticwb.process.model.SWBProcessMgr"%>
@@ -135,7 +135,6 @@ boolean allowForward = false;
 if (request.getAttribute("allowForward") != null) {
     allowForward = (Boolean) request.getAttribute("allowForward");
 }
-String baseimg = SWBPortal.getWebWorkPath() + "/models/" + paramRequest.getWebPage().getWebSiteId() + "/css/images/";
 int maxPages = (Integer) request.getAttribute("maxPages");
 int pageNum = 1;
 boolean applyFilter = true;
@@ -176,7 +175,7 @@ if (paramRequest.getMode().equals(paramRequest.Mode_VIEW)) {
         ArrayList<Process> pccs = null;
         //Obtener los eventos de inicio
         Iterator<StartEvent> startEvents = StartEvent.ClassMgr.listStartEvents(paramRequest.getWebPage().getWebSite());
-        SWBResourceURL createUrl = paramRequest.getActionUrl().setAction("CREATE");
+        SWBResourceURL createUrl = paramRequest.getActionUrl().setAction(UserTaskInboxResource.ACT_CREATE);
         while(startEvents.hasNext()) {
             StartEvent sevt = startEvents.next();
             //Si el usuario tiene permisos en el evento
@@ -448,7 +447,7 @@ if (paramRequest.getMode().equals(paramRequest.Mode_VIEW)) {
                                                 <a class="acc-atender" href="<%=utask.getTaskWebPage().getUrl()%>?suri=<%=instance.getEncodedURI()%>">Atender</a>
                                                 <%
                                                 if (allowForward && instance.getAssignedto() != null) {
-                                                    SWBResourceURL forward = paramRequest.getRenderUrl().setMode("forward");
+                                                    SWBResourceURL forward = paramRequest.getRenderUrl().setMode(UserTaskInboxResource.MODE_FWD);
                                                     %><a class="acc-delegar" target="new" href="<%=forward%>?suri=<%=instance.getEncodedURI()%>">Reasignar</a><%
                                                 }
                                             }
