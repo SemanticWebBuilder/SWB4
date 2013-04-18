@@ -80,6 +80,17 @@ public class UserTaskInboxResource extends org.semanticwb.process.resources.task
     public static final String COL_STATUSPROCESS = "statusProcess";
     public static final String COL_STATUSTASK = "statusTask";
     public static final String ATT_COLS = "cols";
+    public static final String ACT_UPDATE = "update";
+    public static final String ACT_CREATE = "create";
+    public static final String ACT_ADDCOL = "addCol";
+    public static final String ACT_DELCOL = "delCol";
+    public static final String ACT_CONFIG = "config";
+    public static final String ACT_SWAP = "swap";
+    public static final String PARAM_INDEX = "idx";
+    public static final String PARAM_DIR = "dir";
+    public static final String PARAM_COL = "selectedCol";
+    public static final String PARAM_PID = "pid";
+    public static final String MODE_FWD = "forward";
     private HashMap<String, String> colNames;
     
     private Comparator taskNameComparator = new Comparator() {
@@ -88,6 +99,7 @@ public class UserTaskInboxResource extends org.semanticwb.process.resources.task
             lang = lng;
         }
 
+        @Override
         public int compare(Object t, Object t1) {
             return ((FlowNodeInstance)t).getFlowNodeType().getDisplayTitle(lang).compareTo(((FlowNodeInstance)t1).getFlowNodeType().getDisplayTitle(lang));
         }
@@ -161,7 +173,7 @@ public class UserTaskInboxResource extends org.semanticwb.process.resources.task
     @Override
     public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         String mode = paramRequest.getMode();
-        if ("forward".equals(mode)) {
+        if (MODE_FWD.equals(mode)) {
             doForward(request, response, paramRequest);
         } else {
             super.processRequest(request, response, paramRequest);
@@ -170,70 +182,120 @@ public class UserTaskInboxResource extends org.semanticwb.process.resources.task
 
     @Override
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
-        String action = response.getAction();
+        String act = response.getAction();
         Resource base = getResourceBase();
-        if ("CREATE".equals(action)) {
-            User user=response.getUser();
-            String pid = request.getParameter("pid");
-            ProcessInstance inst = null;
+        
+        if (ACT_UPDATE.equals(act)) {
+            SWBFormMgr mgr = new SWBFormMgr(getSemanticObject(), null, SWBFormMgr.MODE_EDIT);
+            try {
+                mgr.processForm(request);
+            } catch(FormValidateException e) {
+                log.error(e);
+            }
+        } else if (ACT_SWAP.equals(act)) {
+            String dir = request.getParameter(PARAM_DIR);
+            String idx = request.getParameter(PARAM_INDEX);
             
-            if (pid != null && !pid.trim().equals("")) {
-                Process process = Process.ClassMgr.getProcess(pid, response.getWebPage().getWebSite());
-                if (process != null) 
-                {
-                    inst = SWBProcessMgr.createSynchProcessInstance(process, user);
-                    List<FlowNodeInstance> arr=SWBProcessMgr.getActiveUserTaskInstances(inst,response.getUser());                        
-                    if(arr.size()>0)
-                    {
-                        response.sendRedirect(arr.get(0).getUserTaskUrl());
-                        return;
-                    }                    
+            if (idx != null && idx.trim().length() > 0 && dir != null) {
+                int pos = 0;
+                int newPos = 0;
+                boolean valid = false;
+                
+                String temp = base.getAttribute(ATT_COLS+idx);
+                if (temp != null) {
+                    try {
+                        pos = Integer.parseInt(idx);
+                    } catch (Exception e) {}
+
+                    if (dir.equals("down")) {
+                        newPos = pos + 1;
+                        if (pos > 0 && newPos > 0 && pos < newPos) {
+                            valid = true;
+                        }
+                    } else if (dir.equals("up")) {
+                        newPos = pos - 1;
+                        if (pos > 0 && newPos > 0 && pos > newPos) {
+                            valid = true;
+                        }
+                    }
+                    
+                    String tmp2 = base.getAttribute(ATT_COLS + newPos);
+                    if (tmp2 != null && valid) {
+                        base.setAttribute(ATT_COLS + pos, tmp2);
+                        base.setAttribute(ATT_COLS + newPos, temp);
+                    }
+                    
+                    try {
+                        base.updateAttributesToDB();
+                    } catch (Exception e) {
+                        log.error("Error al reordenar propiedad....", e);
+                    }
                 }
             }
-            if (inst != null) {
-                request.getSession(true).setAttribute("msg", "OK"+inst.getId());
-            }
-            response.setMode(response.Mode_VIEW);
-        } else if ("setPageItems".equals(action)) {
-            String ipp = request.getParameter("ipp");
-            int itemsPerPage = 0;
-            
-            if (ipp == null || ipp.trim().equals("")) {
-                ipp = "5";
+        } else if (ACT_ADDCOL.equals(act)) {
+            String col = request.getParameter(PARAM_COL);
+            if (col != null && colNames.containsKey(col)) {
+                int i = 1;
+                while(!base.getAttribute(ATT_COLS+i, "").equals("")) {
+                    i++;
+                }
+                base.setAttribute(ATT_COLS+i, col+"|"+colNames.get(col));
             }
             
             try {
-                itemsPerPage = Integer.parseInt(ipp);
-            } catch (NumberFormatException e) {
-                log.error("UserTaskInboxResource",e);
+                base.updateAttributesToDB();
+            } catch (Exception e) {
+                log.error("UserTaskInboxResource - Error al agregar columna", e);
             }
-            setItemsPerPage(itemsPerPage);
-            response.setMode(response.Mode_VIEW);
-        } else if ("forward".equals(action)) {
-            String suri = request.getParameter("suri");
-            String sowner = request.getParameter("owner");
-            SemanticObject sobj = SemanticObject.createSemanticObject(suri);
-            if (sobj != null) {
-                FlowNodeInstance fni = (FlowNodeInstance)sobj.createGenericInstance();
-                if (fni != null) {
-                    User owner = response.getWebPage().getWebSite().getUserRepository().getUser(sowner);
-                    fni.setAssignedto(owner);
+        } else if (ACT_DELCOL.equals(act)) {
+            int idx = -1;
+            
+            try {
+                idx = Integer.parseInt(request.getParameter(PARAM_INDEX));
+            } catch (NumberFormatException ex) {
+                idx = -1;
+            }
+            
+            if (idx != -1) {
+                int i = 1;
+                ArrayList<String> conf = new ArrayList<String>();
+                while(!base.getAttribute(ATT_COLS+i, "").equals("")) {
+                    String val = base.getAttribute(ATT_COLS+i);
+
+                    if (i != idx) {
+                        conf.add(val);
+                    }
+                    base.removeAttribute(ATT_COLS+i);
+                    i++;
+                }
+
+                i = 1;
+                Iterator<String> it = conf.iterator();
+                while (it.hasNext()) {
+                    String key = it.next();
+                    base.setAttribute(ATT_COLS+i, key);
+                    i++;
+                }
+
+                try {
+                    base.updateAttributesToDB();
+                } catch (Exception e) {
+                    log.error("UserTaskInboxResource - Error al eliminar columna", e);
                 }
             }
-            response.setMode(SWBParamRequest.Mode_VIEW);
-        } else if ("config".equals(action)) {
+        } else if (ACT_CONFIG.equals(act)) {
             int i = 1;
             ArrayList<String> conf = new ArrayList<String>();
+            
             while(!base.getAttribute(ATT_COLS+i, "").equals("")) {
                 String val = base.getAttribute(ATT_COLS+i);
                 String lbl = request.getParameter("lbl_"+i);
-                String sel = request.getParameter("sel_"+i);
+                String []cfg = val.split("\\|");
                 
-                if (sel == null) {
-                    if (lbl != null && lbl.trim().length() > 0) {
-                        String []cfg = val.split("\\|");
-                        conf.add(cfg[0]+"|"+lbl.replaceAll("\\|", "_"));
-                    }
+                if (lbl != null && lbl.trim().length() > 0 && !lbl.equals(cfg[1])) {
+                    conf.add(cfg[0]+"|"+lbl.replaceAll("\\|", ""));
+                } else {
+                    conf.add(val);
                 }
                 base.removeAttribute(ATT_COLS+i);
                 i++;
@@ -250,14 +312,43 @@ public class UserTaskInboxResource extends org.semanticwb.process.resources.task
             try {
                 base.updateAttributesToDB();
             } catch (Exception e) {
-                log.error("UserTaskInboxResource - problema al actualizar base del recurso", e);
+                log.error("UserTaskInboxResource - Error al actualizar etiqueta", e);
             }
-            response.setMode(SWBParamRequest.Mode_ADMIN);
+        } else if (ACT_CREATE.equals(act)) {
+            User user = response.getUser();
+            String pid = request.getParameter(PARAM_PID);
+            ProcessInstance inst = null;
+            
+            if (pid != null && !pid.trim().equals("")) {
+                Process process = Process.ClassMgr.getProcess(pid, response.getWebPage().getWebSite());
+                if (process != null)  {
+                    inst = SWBProcessMgr.createSynchProcessInstance(process, user);
+                    List<FlowNodeInstance> arr = SWBProcessMgr.getActiveUserTaskInstances(inst,response.getUser());                        
+                    if(arr.size() > 0) {
+                        response.sendRedirect(arr.get(0).getUserTaskUrl());
+                        return;
+                    }                    
+                }
+            }
+            if (inst != null) {
+                request.getSession(true).setAttribute("msg", "OK"+inst.getId());
+            }
+        } else if (MODE_FWD.equals(act)) {
+            String suri = request.getParameter("suri");
+            String sowner = request.getParameter("owner");
+            SemanticObject sobj = SemanticObject.createSemanticObject(suri);
+            User owner = response.getWebPage().getWebSite().getUserRepository().getUser(sowner);
+            if (sobj != null && owner != null) {
+                FlowNodeInstance fni = (FlowNodeInstance)sobj.createGenericInstance();
+                if (fni != null) {
+                    fni.setAssignedto(owner);
+                }
+            }
         } else {
             super.processAction(request, response);
         }
     }
-
+    
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         initTaskInbox();
@@ -288,217 +379,157 @@ public class UserTaskInboxResource extends org.semanticwb.process.resources.task
         Resource base = getResourceBase();
         initTaskInbox();
         
+        HashMap<String, String> availableCols = new HashMap<String, String>();
+        availableCols.putAll(colNames);
+        
+        //Formulario de datos generales de la bandeja
         SWBFormMgr mgr = new SWBFormMgr(getSemanticObject(), null, SWBFormMgr.MODE_EDIT);
-        mgr.setSubmitByAjax(true);
-        mgr.setFilterHTMLTags(false);
         mgr.addButton(SWBFormButton.newSaveButton());
         mgr.setType(SWBFormMgr.TYPE_DOJO);
-        String act = paramRequest.getRenderUrl().setAction("update").toString();
         
-        if("addCol".equals(paramRequest.getAction())) {
-            String col = request.getParameter("selectedCol");
-            if (col != null && colNames.containsKey(col)) {
-                int i = 1;
-                while(!base.getAttribute(ATT_COLS+i, "").equals("")) {
-                    i++;
+        sb.append("<form id=").append(mgr.getFormName()).append(" dojoType=\"dijit.form.Form\" class=\"swbform\" action=\"").append(paramRequest.getActionUrl().setAction(ACT_UPDATE).toString()).append("\" method=\"post\" onSubmit=\"submitForm('").append(mgr.getFormName()).append("');return false;\">");
+        sb.append(SWBFormMgr.DOJO_REQUIRED);
+        sb.append(mgr.getFormHiddens());
+        sb.append("  <fieldset>");
+        sb.append("    <table>");
+        sb.append("      <tr>");
+        sb.append("        <td width=\"200px\" align=\"right\">").append("Identificador:&nbsp;").append("</td>");
+        sb.append("        <td>").append(getId()).append("</td>");
+        sb.append("      </tr>");
+        sb.append("    </table>");
+        sb.append("  </fieldset>");
+        sb.append("  <fieldset><legend>Datos Generales</legend>");
+        sb.append("    <table>");
+        sb.append("      <tr>");
+        sb.append("        <td width=\"200px\" align=\"right\">");
+        sb.append(mgr.renderLabel(request, utinbox_viewJSP, SWBFormMgr.MODE_VIEW));
+        sb.append("        </td>");
+        sb.append("        <td>");
+        sb.append(mgr.renderElement(request, utinbox_viewJSP, SWBFormMgr.MODE_EDIT));
+        sb.append("        </td>");
+        sb.append("      </tr>");
+        sb.append("      <tr>");
+        sb.append("        <td width=\"200px\" align=\"right\">");
+        sb.append(mgr.renderLabel(request, utinbox_itemsPerPage, SWBFormMgr.MODE_VIEW));
+        sb.append("        </td>");
+        sb.append("        <td>");
+        sb.append(mgr.renderElement(request, utinbox_itemsPerPage, SWBFormMgr.MODE_EDIT));
+        sb.append("        </td>");
+        sb.append("      </tr>");
+        sb.append("      <tr>");
+        sb.append("        <td width=\"200px\" align=\"right\">");
+        sb.append(mgr.renderLabel(request, utinbox_displayMapWp, SWBFormMgr.MODE_VIEW));
+        sb.append("        </td>");
+        sb.append("        <td>");
+        sb.append(mgr.renderElement(request, utinbox_displayMapWp, SWBFormMgr.MODE_EDIT));
+        sb.append("        </td>");
+        sb.append("      </tr>");
+        sb.append("      <tr>");
+        sb.append("        <td width=\"200px\" align=\"right\">");
+        sb.append(mgr.renderLabel(request, utinbox_filterByGroup, SWBFormMgr.MODE_VIEW));
+        sb.append("        </td>");
+        sb.append("        <td>");
+        sb.append(mgr.renderElement(request, utinbox_filterByGroup, SWBFormMgr.MODE_EDIT));
+        sb.append("        </td>");
+        sb.append("      </tr>");
+        sb.append("      <tr>");
+        sb.append("        <td width=\"200px\" align=\"right\">");
+        sb.append(mgr.renderLabel(request, utinbox_showProcessWPLink, SWBFormMgr.MODE_VIEW));
+        sb.append("        </td>");
+        sb.append("        <td>");
+        sb.append(mgr.renderElement(request, utinbox_showProcessWPLink, SWBFormMgr.MODE_EDIT));
+        sb.append("        </td>");
+        sb.append("      </tr>");
+        sb.append("      <tr>");
+        sb.append("        <td width=\"200px\" align=\"right\">");
+        sb.append(mgr.renderLabel(request, utinbox_allowForward, SWBFormMgr.MODE_VIEW));
+        sb.append("        </td>");
+        sb.append("        <td>");
+        sb.append(mgr.renderElement(request, utinbox_allowForward, SWBFormMgr.MODE_EDIT));
+        sb.append("        </td>");
+        sb.append("      </tr>");
+        sb.append("    </table>");
+        sb.append("    <button type=\"submit\" dojoType=\"dijit.form.Button\">Guardar</button>");
+        sb.append("  </fieldset>");
+        sb.append("</form>");
+        
+        //Formulario para agregar columnas disponibles
+        SWBResourceURL addColUrl = paramRequest.getActionUrl().setAction(ACT_ADDCOL);
+        sb.append("<form id=\"").append(getId()).append("/addColsForm\" class=\"swbform\" action=\"").append(addColUrl).append("\" dojoType=\"dijit.form.Form\" method=\"post\" onSubmit=\"submitForm('").append(getId()).append("/addColsForm'); return false;\">");
+        sb.append("  <fieldset>");
+        int i = 1;
+        HashMap<String, String> selectedCols = new HashMap<String, String>();
+        if (!base.getAttribute(ATT_COLS+i, "").equals("")) {
+            while(!base.getAttribute(ATT_COLS+i, "").equals("")) {
+                String [] conf = base.getAttribute(ATT_COLS+i).split("\\|");
+                if (conf.length == 2) {
+                    selectedCols.put(conf[0], conf[1]);
+                    if (availableCols.containsKey(conf[0])) {
+                        availableCols.remove(conf[0]);
+                    }
                 }
-                base.setAttribute(ATT_COLS+i, col+"|"+colNames.get(col));
+                i++;
             }
-            response.sendRedirect(paramRequest.getRenderUrl().setAction(null).toString());
-        } else if("swap".equals(paramRequest.getAction())) {
-            String dir = request.getParameter("dir");
-            String idx = request.getParameter("idx");
-            
-            if (idx != null && idx.trim().length() > 0 && dir != null) {
-                int pos = 0;
-                int newPos = 0;
-                boolean valid = false;
-                
-                String temp = base.getAttribute(ATT_COLS+idx);
-                if (temp != null) {
-                    try {
-                        pos = Integer.parseInt(idx);
-                    } catch (Exception e) {}
-
-                    if (dir.equals("down")) {
-                        newPos = pos + 1;
-                        if (pos > 0 && newPos > 0 && pos < newPos) {
-                            valid = true;
-                        }
-                    } else if (dir.equals("up")) {
-                        newPos = pos - 1;
-                        if (pos > 0 && newPos > 0 && pos > newPos) {
-                            valid = true;
-                        }
-                    }
-                    
-                    String tmp2 = base.getAttribute("prop" + newPos);
-                    if (tmp2 != null && valid) {
-                        base.setAttribute("prop" + pos, tmp2);
-                        base.setAttribute("prop" + newPos, temp);
-                    }
-                    
-                    try {
-                        base.updateAttributesToDB();
-                    } catch (Exception e) {
-                        log.error("Error al reordenar propiedad....", e);
-                    }
-                }
-            }
-            response.sendRedirect(paramRequest.getRenderUrl().setAction(null).toString());
-        } else if("update".equals(paramRequest.getAction())) {
-            try {
-                mgr.processForm(request);
-            } catch(FormValidateException e) {
-                log.error(e);
-            }
-            response.sendRedirect(paramRequest.getRenderUrl().setAction(null).toString());
-        } else {
-            SWBResourceURL addColUrl = paramRequest.getRenderUrl().setAction("addCol");
-            HashMap<String, String> availableCols = new HashMap<String, String>();
-            availableCols.putAll(colNames);
-            
-            sb.append("<form class=\"swbform\" method=\"post\" id=\"").append(mgr.getFormName()).append("\" action=\"").append(act).append("\" dojoType=\"dijit.form.Form\" onSubmit=\"submitForm('").append(mgr.getFormName()).append("');return false;\">");
-            sb.append(mgr.getFormHiddens());
-            sb.append("  <fieldset>");
-            sb.append("    <table>");
-            sb.append("      <tr>");
-            sb.append("        <td width=\"200px\" align=\"right\">").append("Identificador").append("</td>");
-            sb.append("        <td>").append(getId()).append("</td>");
-            sb.append("      </tr>");
-            sb.append("    </table>");
-            sb.append("  </fieldset>");
-            sb.append("  <fieldset><legend>Datos Generales</legend>");
-            sb.append("    <table>");
-            sb.append("      <tr>");
-            sb.append("        <td width=\"200px\" align=\"right\">");
-            sb.append(mgr.renderLabel(request, utinbox_viewJSP, SWBFormMgr.MODE_VIEW));
-            sb.append("        </td>");
-            sb.append("        <td>");
-            sb.append(mgr.renderElement(request, utinbox_viewJSP, SWBFormMgr.MODE_EDIT));
-            sb.append("        </td>");
-            sb.append("      </tr>");
-            sb.append("      <tr>");
-            sb.append("        <td width=\"200px\" align=\"right\">");
-            sb.append(mgr.renderLabel(request, utinbox_itemsPerPage, SWBFormMgr.MODE_VIEW));
-            sb.append("        </td>");
-            sb.append("        <td>");
-            sb.append(mgr.renderElement(request, utinbox_itemsPerPage, SWBFormMgr.MODE_EDIT));
-            sb.append("        </td>");
-            sb.append("      </tr>");
-            sb.append("      <tr>");
-            sb.append("        <td width=\"200px\" align=\"right\">");
-            sb.append(mgr.renderLabel(request, utinbox_displayMapWp, SWBFormMgr.MODE_VIEW));
-            sb.append("        </td>");
-            sb.append("        <td>");
-            sb.append(mgr.renderElement(request, utinbox_displayMapWp, SWBFormMgr.MODE_EDIT));
-            sb.append("        </td>");
-            sb.append("      </tr>");
-            sb.append("      <tr>");
-            sb.append("        <td width=\"200px\" align=\"right\">");
-            sb.append(mgr.renderLabel(request, utinbox_filterByGroup, SWBFormMgr.MODE_VIEW));
-            sb.append("        </td>");
-            sb.append("        <td>");
-            sb.append(mgr.renderElement(request, utinbox_filterByGroup, SWBFormMgr.MODE_EDIT));
-            sb.append("        </td>");
-            sb.append("      </tr>");
-            sb.append("      <tr>");
-            sb.append("        <td width=\"200px\" align=\"right\">");
-            sb.append(mgr.renderLabel(request, utinbox_showProcessWPLink, SWBFormMgr.MODE_VIEW));
-            sb.append("        </td>");
-            sb.append("        <td>");
-            sb.append(mgr.renderElement(request, utinbox_showProcessWPLink, SWBFormMgr.MODE_EDIT));
-            sb.append("        </td>");
-            sb.append("      </tr>");
-            sb.append("      <tr>");
-            sb.append("        <td width=\"200px\" align=\"right\">");
-            sb.append(mgr.renderLabel(request, utinbox_allowForward, SWBFormMgr.MODE_VIEW));
-            sb.append("        </td>");
-            sb.append("        <td>");
-            sb.append(mgr.renderElement(request, utinbox_allowForward, SWBFormMgr.MODE_EDIT));
-            sb.append("        </td>");
-            sb.append("      </tr>");
-            sb.append("    </table>");
-            sb.append("    <button type=\"submit\" dojoType=\"dijit.form.Button\">Guardar</button>");
-            sb.append("  </fieldset>");
-            sb.append("</form>");
-            
-            sb.append("<form id=\"").append(getId()).append("/addColsForm\" class=\"swbform\" action=\"").append(addColUrl).append("\" dojoType=\"dijit.form.Form\" method=\"post\" onSubmit=\"submitForm('").append(getId()).append("/addColsForm'); return false;\">");
-            sb.append("  <fieldset>");
-            int i = 1;
-            HashMap<String, String> selectedCols = new HashMap<String, String>();
-            if (!base.getAttribute(ATT_COLS+i, "").equals("")) {
-                while(!base.getAttribute(ATT_COLS+i, "").equals("")) {
-                    String [] conf = base.getAttribute(ATT_COLS+i).split("\\|");
-                    if (conf.length == 2) {
-                        selectedCols.put(conf[0], conf[1]);
-                        if (availableCols.containsKey(conf[0])) {
-                            availableCols.remove(conf[0]);
-                        }
-                    }
-                    i++;
-                }
-            }
-            if (!availableCols.isEmpty()) {
-                sb.append("    <select dojoType=\"dijit.form.FilteringSelect\" name=\"selectedCol\">");
-                Iterator<String> keys = availableCols.keySet().iterator();
-                while (keys.hasNext()) {
-                    String key = keys.next();
-                    sb.append("      <option value=\"").append(key).append("\">").append(availableCols.get(key)).append("</option>");
-                }
-                sb.append("    </select>");
-                sb.append("    <button type=\"submit\" dojoType=\"dijit.form.Button\">Agregar columna</button><br/>");
-            }
-            sb.append("  </fieldset>");
-            sb.append("</form>");
-            
-            i = 1;
-            if (!base.getAttribute(ATT_COLS+i, "").equals("")) {
-                SWBResourceURL editUrl = paramRequest.getActionUrl().setAction("config");
-                sb.append("<form class=\"swbform\" id=\""+getId()+"/table\" method=\"post\" action=\""+editUrl+"\" dojoType=\"dijit.form.Form\" onSubmit=\"submitForm('"+getId()+"/table'); return false;\">");
-                sb.append("  <fieldset><legend>Configuración de despliegue</legend>");
-                sb.append("    <table>");
-                sb.append("      <tr>");
-                sb.append("        <th>Eliminar</th>");
-                sb.append("        <th>Ordenamiento</th>");
-                sb.append("        <th>Dato a mostrar</th>");
-                sb.append("        <th>Título de columna</th>");
-                sb.append("      </tr>");
-                
-                while(!base.getAttribute(ATT_COLS+i, "").equals("")) {
-                    String val = base.getAttribute(ATT_COLS+i);
-                    String cfg [] = val.split("\\|");
-                    sb.append("      <tr>");
-                    sb.append("        <td align=\"center\">");
-                    sb.append("          <input type=\"checkbox\" name=\"sel_"+i+"\"/>");
-                    sb.append("        </td>");
-                    sb.append("        <td align=\"center\">");
-                    SWBResourceURL swapUrl = paramRequest.getRenderUrl().setAction("swap").setParameter("idx", String.valueOf(i));
-                    if (i != 1) {
-                        swapUrl.setParameter("dir", "up");
-                        sb.append("          <a href=\"#\" onclick=\"submitUrl('"+swapUrl+"', this); return false;\" title=\"Subir\"><img src=\"").append(SWBPlatform.getContextPath()).append("/swbadmin/images/up.jpg\" /></a>");
-                    }
-                    if (!base.getAttribute(ATT_COLS+(i+1), "").equals("")) {
-                        swapUrl.setParameter("dir", "down");
-                        sb.append("          <a href=\"#\" onclick=\"submitUrl('"+swapUrl+"', this); return false;\" title=\"Bajar\"><img src=\"").append(SWBPlatform.getContextPath()).append("/swbadmin/images/down.jpg\" /></a>");
-                    }
-                    sb.append("        </td>");
-                    sb.append("        <td>").append(colNames.get(cfg[0])).append("</td>");
-                    sb.append("        <td><input type=\"text\" dojoType=\"dijit.form.TextBox\" id=\"lbl_").append(i).append("\" name=\"lbl_").append(i).append("\" value=\"").append(cfg[1]).append("\" /></td>");
-                    sb.append("      </tr>");
-                    i++;
-                }
-                sb.append("    </table>");
-            }
-            sb.append("  </fieldset>");
-            sb.append("  <button type=\"submit\" dojoType=\"dijit.form.Button\">Actualizar columnas</button>");
-            sb.append("</form>");
-//        }
-//            SWBResourceURL render = paramRequest.getRenderUrl();
-//            sb.append("<a href=\"#\" onclick=\"submitUrl('"+render+"', this); return false;\">Modo</a>");
-//            sb.append("<a href=\""+render+"\">Modo</a>");
-            out.println(sb.toString());
         }
+        if (!availableCols.isEmpty()) {
+            sb.append("    <select dojoType=\"dijit.form.FilteringSelect\" name=\"selectedCol\">");
+            Iterator<String> keys = availableCols.keySet().iterator();
+            while (keys.hasNext()) {
+                String key = keys.next();
+                sb.append("      <option value=\"").append(key).append("\">").append(availableCols.get(key)).append("</option>");
+            }
+            sb.append("    </select>");
+            sb.append("    <button type=\"submit\" dojoType=\"dijit.form.Button\">Agregar columna</button><br/>");
+        }
+        sb.append("  </fieldset>");
+        sb.append("</form>");
+        
+        //Tabla de columnas
+        i = 1;
+        if (!"".equals(base.getAttribute(ATT_COLS+i, ""))) {
+            SWBResourceURL editUrl = paramRequest.getActionUrl().setAction(ACT_CONFIG);
+            sb.append("<form class=\"swbform\" id=\"").append(getId()).append("/table\" method=\"post\" action=\"").append(editUrl).append("\" dojoType=\"dijit.form.Form\" onSubmit=\"submitForm('").append(getId()).append("/table'); return false;\">");
+            sb.append("<div class=\"swbform\">");
+            sb.append("  <fieldset><legend>Configuración de despliegue</legend>");
+            sb.append("    <table>");
+            sb.append("      <tr>");
+            sb.append("        <th>Ordenamiento</th>");
+            sb.append("        <th>Dato a mostrar</th>");
+            sb.append("        <th>Título de columna</th>");
+            sb.append("      </tr>");
+
+            while(!base.getAttribute(ATT_COLS+i, "").equals("")) {
+                String val = base.getAttribute(ATT_COLS+i);
+                String cfg [] = val.split("\\|");
+                sb.append("      <tr>");
+                sb.append("        <td align=\"center\">");
+                
+                SWBResourceURL swapUrl = paramRequest.getActionUrl().setAction(ACT_SWAP).setParameter(PARAM_INDEX, String.valueOf(i));
+                SWBResourceURL delUrl = paramRequest.getActionUrl().setAction(ACT_DELCOL).setParameter(PARAM_INDEX, String.valueOf(i));
+                if (i != 1) {
+                    swapUrl.setParameter(PARAM_DIR, "up");
+                    sb.append("          <a href=\"#\" onclick=\"submitUrl('").append(swapUrl).append("', this);\" title=\"Subir\"><img src=\"").append(SWBPlatform.getContextPath()).append("/swbadmin/images/up.jpg\" /></a>");
+                }
+                if (!base.getAttribute(ATT_COLS+(i+1), "").equals("")) {
+                    swapUrl.setParameter(PARAM_DIR, "down");
+                    sb.append("          <a href=\"#\" onclick=\"submitUrl('").append(swapUrl).append("', this);\" title=\"Bajar\"><img src=\"").append(SWBPlatform.getContextPath()).append("/swbadmin/images/down.jpg\" /></a>");
+                }
+                sb.append("        </td>");
+                sb.append("        <td>").append(colNames.get(cfg[0])).append("</td>");
+                sb.append("        <td>");
+                //sb.append("          <input onkeyup=\"console.log(event); if (event.keyCode==13) {console.log(event); alert(event)}; return false;\" type=\"text\" dojoType=\"dijit.form.TextBox\" id=\"lbl_").append(i).append("\" name=\"lbl_").append(i).append("\" value=\"").append(cfg[1]).append("\" />");
+                sb.append("          <input type=\"text\" dojoType=\"dijit.form.TextBox\" id=\"lbl_").append(i).append("\" name=\"lbl_").append(i).append("\" value=\"").append(cfg[1]).append("\" />");
+                sb.append("          <a href=\"#\" title=\"Eliminar propiedad\" onclick=\"submitUrl('").append(delUrl).append("',this);\"><img src=\"").append(SWBPlatform.getContextPath()).append("/swbadmin/images/delete.gif\"/></a>");
+                sb.append("        </td>");
+                sb.append("      </tr>");
+                i++;
+            }
+            sb.append("    </table>");
+        }
+        sb.append("  </fieldset>");
+        sb.append("  <button type=\"submit\" dojoType=\"dijit.form.Button\">Actualizar columnas</button>");
+        sb.append("</form>");
+        out.println(sb.toString());
     }
     
     public void doForward(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
@@ -549,7 +580,7 @@ public class UserTaskInboxResource extends org.semanticwb.process.resources.task
             }
             
             if (tPartners != null && tPartners.hasNext() && fni != null) {
-                SWBResourceURL forward = paramRequest.getActionUrl().setAction("forward");
+                SWBResourceURL forward = paramRequest.getActionUrl().setAction(MODE_FWD);
                 SWBResourceURL url = paramRequest.getRenderUrl().setMode(SWBParamRequest.Mode_VIEW);
                 sb.append("<script type=\"text/javascript\">");
                 sb.append(" dojo.require(\"dijit.form.Form\");");
@@ -557,7 +588,7 @@ public class UserTaskInboxResource extends org.semanticwb.process.resources.task
                 sb.append(" dojo.require(\"dijit.form.Button\");");
                 sb.append("</script>");
                 sb.append("<form class=\"swbform\" dojoType=\"dijit.form.Form\" action=\"").append(forward).append("\">");
-                sb.append("  <input type=\"hidden\" name=\"suri\" value=\""+suri+"\"/>");
+                sb.append("  <input type=\"hidden\" name=\"suri\" value=\"").append(suri).append("\"/>");
                 sb.append("  <fieldset>");
                 sb.append("    <table>");
                 sb.append("      <tr>");
