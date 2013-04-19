@@ -10,7 +10,7 @@
         
         _this.addSuperClass = function(clsName) {
             _this.superClasses.push(clsName);
-        }
+        };
         
         _this.isSubClass = function(clsName) {
             var ret = false;
@@ -21,11 +21,11 @@
                 }
             }
             return ret;
-        }
+        };
         
         _this.canStartLink=function(link) {
             return true;
-        }
+        };
         
         _this.canEndLink=function(link) {
             if(link.fromObject!=_this) {
@@ -33,15 +33,15 @@
             } else {
                 return false;
             }
-        }
+        };
         
         _this.canAddToDiagram=function() {
             return true;
-        }
+        };
         
         _this.canAttach=function(parent) {
             return false;
-        }
+        };
         
         return _this;
     };
@@ -56,7 +56,7 @@
                 ret = true;
             }
             return ret;
-        }
+        };
         
         _this.canEndLink = function(link) {
             var ret = fCanEnd(link);
@@ -75,9 +75,9 @@
                 //TODO:Implementar
             }
             return ret;
-        }
+        };
         return _this;
-    }
+    };
     
     /***************************Eventos iniciales****************************/
     var _Event = function (obj) {
@@ -109,7 +109,7 @@
                 ret = false;
             }
             return ret;
-        }
+        };
         return _this;
     };
     
@@ -125,14 +125,13 @@
                 ret = false;
             }
             return ret;
-        }
+        };
         
         _this.canAddToDiagram=function() {
             var ret=fCanAdd();
-            
             //TODO:Implementar
             return ret;
-        }
+        };
         
         return _this;
     };
@@ -148,14 +147,13 @@
                 ret = true;
             }
             return ret;
-        }
+        };
         
         _this.canAddToDiagram=function() {
             var ret = true;
             //TODO:Implementar
             return ret;
-        }
-        
+        };
         return _this;
     };
     
@@ -166,7 +164,7 @@
             var ret = true;
             //TODO: Implementar
             return ret;
-        }
+        };
     };
     
     var _RuleStartEvent = function(obj) {
@@ -176,8 +174,7 @@
             var ret = true;
             //TODO: Implementar
             return ret;
-        }
-        
+        };
         return _this;
     };
     
@@ -188,8 +185,7 @@
             var ret = true;
             //TODO: Implementar
             return ret;
-        }
-        
+        };
         return _this;
     };
     
@@ -200,8 +196,7 @@
             var ret = true;
             //TODO: Implementar
             return ret;
-        }
-        
+        };
         return _this;
     };
     
@@ -212,8 +207,7 @@
             var ret = true;
             //TODO: Implementar
             return ret;
-        }
-        
+        };
         return _this;
     };
     
@@ -224,8 +218,7 @@
             var ret = true;
             //TODO: Implementar
             return ret;
-        }
-        
+        };
         return _this;
     };
     
@@ -236,8 +229,7 @@
             var ret = true;
             //TODO: Implementar
             return ret;
-        }
-        
+        };
         return _this;
     };
     
@@ -248,8 +240,7 @@
             var ret = true;
             //TODO: Implementar
             return ret;
-        }
-        
+        };
         return _this;
     };
     
@@ -271,7 +262,7 @@
                 ret = false;
             }
             return ret;
-        }
+        };
         
         _this.canEndLink = function (link) {
             var ret = fCanEnd(link);
@@ -291,7 +282,7 @@
                 }
             }
             return ret;
-        }
+        };
         
         _this.canStartLink = function(link) {
             var ret = fCanStart(link);
@@ -306,10 +297,8 @@
             if (link.type=="SequenceFlow" && c != 0) {
                 ret = false;
             }
-            
             return ret;
-        }
-        
+        };
         return _this;
     };
     
@@ -317,7 +306,6 @@
         var _this = new _IntermediateCatchEvent(obj);
         var fCanEnd = _this.canEndLink;
         var fCanStart = _this.canStartLink;
-        
         _this.addSuperClass("IntermediateCatchEvent");
         
         _this.canEndLink = function(link) {
@@ -342,9 +330,8 @@
                     }
                 }
             }
-            
             return ret;
-        }
+        };
         
         _this.canStartLink = function (link) {
             var ret = fCanStart(link);
@@ -352,8 +339,7 @@
                 ret = false;
             }
             return ret;
-        }
-        
+        };
         return _this;
     };
     
@@ -363,7 +349,7 @@
         
         _this.canEndLink = function (link) {
             return false;
-        }
+        };
         
         return _this;
     };
@@ -379,14 +365,12 @@
             } else {
                 ret = false;
             }
-            
             return ret;
-        }
+        };
         
         _this.canEndLink = function (link) {
             return false;
-        }
-        
+        };
         return _this;
     };
     
@@ -403,8 +387,7 @@
                 }
             }
             return ret;
-        }
-        
+        };
         return _this;
     };
     
@@ -416,7 +399,7 @@
         
         _this.canEndLink = function(link) {
             return false;
-        }
+        };
         
         _this.canStartLink = function(link) {
             var ret = fCanStart(link);
@@ -424,7 +407,7 @@
                 ret = false;
             }
             return ret;
-        }
+        };
         
         _this.canAttach = function (parent) {
             var ret = fCanAttach(parent);
@@ -432,7 +415,7 @@
                 ret = false;
             }
             return ret;
-        }
+        };
         return _this;
     };
     
@@ -446,7 +429,7 @@
                 ret = true;
             }
             return ret;
-        }
+        };
         
         return _this;
     };
@@ -469,7 +452,7 @@
                 ret = true;
             }
             return ret;
-        }
+        };
         
         _this.canEndLink = function(link) {
             var ret = fCanEnd(link);
@@ -477,8 +460,7 @@
                 ret = false;
             }
             return ret;
-        }
-        
+        };
         return _this;
     };
     
@@ -493,7 +475,7 @@
                 ret = false;
             }
             return ret;
-        }
+        };
         return _this;
     };
     
@@ -507,7 +489,7 @@
                 ret = true;
             }
             return ret;
-        }
+        };
         return _this;
     };
     
@@ -532,7 +514,7 @@
                 ret = false;
             }
             return ret;
-        }
+        };
         
         _this.canEndLink = function (link) {
             var ret = fCanEnd(link);
@@ -540,7 +522,7 @@
                 ret = false;
             }
             return ret;
-        }
+        };
         
         return _this;
     };
@@ -559,7 +541,7 @@
         
         _this.canStartLink = function(link) {
             return false;
-        }
+        };
         
         _this.canEndLink = function(link) {
             var ret = fCanEnd(link);
@@ -567,7 +549,7 @@
                 ret = false;
             }
             return ret;
-        }
+        };
         
         return _this;
     };
@@ -599,7 +581,7 @@
         
         _this.canStartLink = function(link) {
             return false;
-        }
+        };
         
         _this.canEndLink = function(link) {
             var ret = fCanEnd(link);
@@ -609,16 +591,16 @@
                 ret = false;
             }
             return ret;
-        }
+        };
         
         _this.canAddToDiagram = function () {
             var ret = fCanAdd();
             //TODO:Implementar
             return ret;
-        }
+        };
         
         return _this;
-    }
+    };
     
     var _MessageEndEvent = function (obj) {
         var _this = new _EndEvent(obj);
@@ -629,7 +611,7 @@
                 ret = true;
             }
             return ret;
-        }
+        };
         
         return _this;
     };
@@ -710,7 +692,7 @@
                 }
             }
             return ret;
-        }
+        };
         
         _this.canEndLink = function (link) {
             var ret = fCanEnd(link);
@@ -739,7 +721,7 @@
                 }
             }
             return ret;
-        }
+        };
         return _this;
     };
     
@@ -768,7 +750,7 @@
                 ret = false;
             }
             return ret;
-        }
+        };
         
         _this.canEndLink = function(link) {
             var ret = fCanEnd(link);
@@ -776,7 +758,7 @@
                 ret = false;
             }
             return ret;
-        }
+        };
         
         return _this;
     };
@@ -794,7 +776,7 @@
                 return false;
             }
             return ret;
-        }
+        };
         return _this;
     };
     
@@ -821,7 +803,7 @@
                 ret = false;
             }
             return ret;
-        }
+        };
         return _this;
     };
     
@@ -855,7 +837,7 @@
                 ret = false;
             }
             return ret;
-        }
+        };
         return _this;
     };
     
@@ -874,7 +856,7 @@
                 ret = true;
             }
             return ret;
-        }
+        };
         
         _this.canStartLink = function(link) {
             var ret = fCanStart(link);
@@ -882,7 +864,7 @@
                 ret = false;
             }
             return ret;
-        }
+        };
         
         _this.canEndLink = function(link) {
             var ret = fCanEnd(link);
@@ -892,7 +874,7 @@
                 ret = false;
             }
             return ret;
-        }
+        };
         return _this;
     };
     
@@ -926,7 +908,7 @@
                 ret = false;
             }
             return ret;
-        }
+        };
         
         _this.canEndLink = function(link) {
             var ret = true;
@@ -940,15 +922,15 @@
                 ret = false;
             }
             return ret;
-        }
+        };
         
         _this.canAddToDiagram = function() {
             var ret = fCanAdd();
             //TODO:Implementar
             return ret;
-        }
+        };
         return _this;
-    }
+    };
     
     /******************************Actividades*******************************/
     var _Activity = function(obj) {
@@ -964,7 +946,7 @@
                 ret = false;
             }
             return ret;
-        }
+        };
         
         _this.canEndLink = function(link) {
             var ret = fCanEnd(link);
@@ -974,7 +956,7 @@
                 ret = false;
             }
             return ret;
-        }
+        };
         return _this;
     };
     
@@ -1051,7 +1033,7 @@
                 ret = false;
             }
             return ret;
-        }
+        };
         
         _this.canEndLink = function(link) {
             var ret = fCanEnd(link);
@@ -1059,7 +1041,7 @@
                 ret = false;
             }
             return ret;
-        }
+        };
         return _this;
     };
     
@@ -1075,7 +1057,7 @@
                 ret = false;
             }
             return ret;
-        }
+        };
         return _this;
     };
     
@@ -1092,7 +1074,7 @@
                 ret = false;
             }
             return ret;
-        }
+        };
         
         _this.canEndLink = function(link) {
             var ret = fCanEnd(link);
@@ -1106,7 +1088,7 @@
                 }
             }
             return ret;
-        }
+        };
         return _this;
     };
     
@@ -1123,7 +1105,7 @@
                 ret = false;
             }
             return ret;
-        }
+        };
         
         _this.canEndLink = function(link) {
             var ret = fCanEnd(link);
@@ -1131,11 +1113,11 @@
                 ret = false;
             }
             return ret;
-        }
+        };
         return _this;
     };
     
-    
+    /*****************************Barra de herramientas************************/
     
     var ToolBar =
     {
@@ -1182,8 +1164,9 @@
             clearTimeout(ToolBar.intervalOver);
         }
 
-    }  
+    };
     
+    /**********************************Modeler*******************************/
     var Modeler =
     {
         creationId:null,                                      //Objeto temporal para creacion de instancias
@@ -1204,9 +1187,13 @@
             {
                 var obj=Modeler.mapObject(Modeler.creationId);
                 if(obj.move) //es un FlowNode
-                {                
-                    obj.move(ToolKit.getEventX(evt), ToolKit.getEventY(evt));
-                    obj.snap2Grid();
+                {
+                    if (obj.canAddToDiagram()) {
+                        obj.move(ToolKit.getEventX(evt), ToolKit.getEventY(evt));
+                        obj.snap2Grid();
+                    } else {
+                        obj.remove();
+                    }
                 }else   //Es un ConnectionObject
                 {
                     if(Modeler.creationDropObject!=null)
@@ -1757,8 +1744,8 @@
             }
             else if(type=='normalStartEvent')
             {
-                ret=Modeler.createObject("#startEvent",null,null);
-                ret.elementType="StartEvent";
+                ret=new _StartEvent(Modeler.createObject("#startEvent",null,null));
+                //ret.elementType="StartEvent";
                 ret.setText("Inicio Normal",0,1,80,1);
             }
             else if(type=='messageStartEvent'){
@@ -1822,9 +1809,10 @@
                 ret.setText("Temporizador",0,1,80,1);
             }
             else if(type=='errorInterEvent') {
-                ret= Modeler.createObject("#errorIntermediateEvent",null,null);
-                ret.elementType="ErrorIntermediateCatchEvent";
+                ret= new _ErrorIntermediateCatchEvent(Modeler.createObject("#errorIntermediateEvent",null,null));
+                //ret.elementType="ErrorIntermediateCatchEvent";
                 ret.setText("Recepción de error",0,1,80,1);
+                
             }
             else if(type=='cancelInterEvent') {
                 ret= Modeler.createObject("#cancelIntermediateEvent",null,null);
@@ -2003,8 +1991,8 @@
                 ret.setText("Almacén de datos",0,1,80,1);
             }
             else if(type=='userTask') {
-                ret = Modeler.createTask(null,null);
-                ret.elementType="UserTask";
+                ret = new _UserTask(Modeler.createTask(null,null));
+                //ret.elementType="UserTask";
                 ret.addIcon("#userMarker",-1,-1,13,8);
                 ret.setText("Tarea de Usuario",0,0,0,1);
                 ret.resize(100,60);
