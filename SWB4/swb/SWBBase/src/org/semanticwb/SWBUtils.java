@@ -108,10 +108,10 @@ import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
-import org.apache.poi.POITextExtractor;
-import org.apache.poi.extractor.ExtractorFactory;
-import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
-import org.apache.poi.openxml4j.exceptions.OpenXML4JException;
+//import org.apache.poi.POITextExtractor;
+//import org.apache.poi.extractor.ExtractorFactory;
+//import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+//import org.apache.poi.openxml4j.exceptions.OpenXML4JException;
 import org.apache.xmlbeans.XmlException;
 import org.semanticwb.base.util.*;
 import org.semanticwb.base.util.parser.html.HTMLParser;
@@ -1932,14 +1932,14 @@ public class SWBUtils {
          * @throws XmlException the xml exception
          * @throws IOException Signals that an I/O exception has occurred.
          */
-        public static String parseOfficeFile(File file)
-                throws InvalidFormatException, OpenXML4JException, XmlException,
-                java.io.IOException
-        {
-
-            POITextExtractor textExtractor = ExtractorFactory.createExtractor(file);
-            return textExtractor.getText();
-        }
+//        public static String parseOfficeFile(File file)
+//                throws InvalidFormatException, OpenXML4JException, XmlException,
+//                java.io.IOException
+//        {
+//
+//            POITextExtractor textExtractor = ExtractorFactory.createExtractor(file);
+//            return textExtractor.getText();
+//        }
 
 //        /**
 //         * Extracts all the text from a PDF formatted file.
