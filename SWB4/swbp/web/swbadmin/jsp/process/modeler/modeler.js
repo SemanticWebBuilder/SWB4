@@ -6,6 +6,7 @@
 /***************************Elementos genéricos**************************/
     var _GraphicalElement = function(obj) {
         var _this = obj;
+        _this.elementType="GraphicalElement";
         _this.superClasses = new Array();
         
         _this.addSuperClass = function(clsName) {
@@ -46,9 +47,15 @@
         return _this;
     };
     
+    var _ConnectionObject = function(obj) {
+      var _this = obj;
+      _this.elementType="ConnectionObject";
+    };
+    
     var _FlowNode = function (obj) {
         var _this = new _GraphicalElement(obj);
         var fCanEnd = _this.canEndLink;
+        _this.elementType="FlowNode";
         _this.addSuperClass("GraphicalElement");
         _this.canAttach = function(parent) {
             var ret = false;
@@ -79,9 +86,42 @@
         return _this;
     };
     
+    /***************************Objetos de conexión**************************/
+    
+    var _SequenceFlow = function(obj) {
+      var _this = new _ConnectionObject(obj);
+      _this.elementType="SequenceFlow";
+    };
+    
+    var _MessageFlow = function(obj) {
+      var _this = new _ConnectionObject(obj);
+      _this.elementType="MessageFlow";
+    };
+    
+    var _ConditionalFlow = function(obj) {
+      var _this = new _SequenceFlow(obj);
+      _this.elementType="ConditionalFlow";
+    };
+    
+    var _DefaultFlow = function(obj) {
+      var _this = new _SequenceFlow(obj);
+      _this.elementType="DefaultFlow";
+    };
+    
+    var _AssociationFlow = function(obj) {
+      var _this = new _ConnectionObject(obj);
+      _this.elementType="AssociationFlow";
+    };
+    
+    var _DirectionalAssociation = function(obj) {
+      var _this = new _AssociationFlow(obj);
+      _this.elementType="AssociationFlow";
+    };
+    
     /***************************Eventos iniciales****************************/
     var _Event = function (obj) {
         var _this = new _FlowNode(obj);
+        _this.elementType="_Event";
         _this.addSuperClass("FlowNode");
         _this.canStartLink=function(link) {
             if (link.type=="ConditionalFlow") {
@@ -94,6 +134,7 @@
     
     var _CatchEvent = function(obj) {
         var _this = new _Event(obj);
+        _this.elementType="CatchEvent";
         _this.addSuperClass("Event");
         
         return _this;
@@ -101,6 +142,7 @@
     
     var _ThrowEvent = function(obj) {
         var _this = new _Event(obj);
+        _this.elementType="ThrowEvent";
         _this.addSuperClass("Event");
         var fCanEnd = _this.canEndLink;
         _this.canEndLink = function(link) {
@@ -115,6 +157,7 @@
     
     var _StartEvent = function(obj) {
         var _this = new _CatchEvent(obj);
+        _this.elementType="StartEvent";
         _this.addSuperClass("CatchEvent");
         var fCanEnd = _this.canEndLink;
         var fCanAdd = _this.canAddToDiagram;
@@ -138,6 +181,7 @@
     
     var _MessageStartEvent = function (obj) {
         var _this = new _StartEvent(obj);
+        _this.elementType="MessageStartEvent";
         _this.addSuperClass("StartEvent");
         var fCanEnd = _this.canEndLink;
         
@@ -159,6 +203,7 @@
     
     var _TimerStartEvent = function(obj) {
         var _this = new _StartEvent(obj);
+        _this.elementType="TimerStartEvent";
         _this.addSuperClass("StartEvent");
         _this.canAddToDiagram = function () {
             var ret = true;
@@ -169,6 +214,7 @@
     
     var _RuleStartEvent = function(obj) {
         var _this = new _StartEvent(obj);
+        _this.elementType="RuleStartEvent";
         _this.addSuperClass("StartEvent");
         _this.canAddToDiagram = function () {
             var ret = true;
@@ -180,6 +226,7 @@
     
     var _SignalStartEvent = function(obj) {
         var _this = new _StartEvent(obj);
+        _this.elementType="SignalStartEvent";
         _this.addSuperClass("StartEvent");
         _this.canAddToDiagram = function () {
             var ret = true;
@@ -191,6 +238,7 @@
     
     var _MultipleStartEvent = function (obj) {
         var _this = new _StartEvent(obj);
+        _this.elementType="MultipleStartEvent";
         _this.addSuperClass("StartEvent");
         _this.canAddToDiagram = function () {
             var ret = true;
@@ -202,6 +250,7 @@
     
     var _ParallelStartEvent = function(obj) {
         var _this = new _StartEvent(obj);
+        _this.elementType="ParallelStartEvent";
         _this.addSuperClass("StartEvent");
         _this.canAddToDiagram = function () {
             var ret = true;
@@ -213,6 +262,7 @@
     
     var _ScalationStartEvent = function(obj) {
         var _this = new _StartEvent(obj);
+        _this.elementType="ScalationStartEvent";
         _this.addSuperClass("StartEvent");
         _this.canAddToDiagram = function () {
             var ret = true;
@@ -224,6 +274,7 @@
     
     var _ErrorStartEvent = function(obj) {
         var _this = new _StartEvent(obj);
+        _this.elementType="ErrorStartEvent";
         _this.addSuperClass("StartEvent");
         _this.canAddToDiagram = function () {
             var ret = true;
@@ -235,6 +286,7 @@
     
     var _CompensationStartEvent = function(obj) {
         var _this = new _StartEvent(obj);
+        _this.elementType="CompensationStartEvent";
         _this.addSuperClass("StartEvent");
         _this.canAddToDiagram = function () {
             var ret = true;
@@ -247,6 +299,7 @@
     /***************************Eventos intermedios**************************/
     var _IntermediateCatchEvent = function (obj) {
         var _this = new _CatchEvent(obj);
+        _this.elementType="IntermediateCatchEvent";
         _this.addSuperClass("CatchEvent");
         var fCanAttach = _this.canAttach;
         var fCanEnd = _this.canEndLink;
@@ -304,6 +357,7 @@
     
     var _MessageIntermediateCatchEvent = function(obj) {
         var _this = new _IntermediateCatchEvent(obj);
+        _this.elementType="MessageIntermediateCatchEvent";
         var fCanEnd = _this.canEndLink;
         var fCanStart = _this.canStartLink;
         _this.addSuperClass("IntermediateCatchEvent");
@@ -345,6 +399,7 @@
     
     var _ErrorIntermediateCatchEvent = function (obj) {
         var _this = new _IntermediateCatchEvent(obj);
+        _this.elementType="ErrorIntermediateCatchEvent";
         _this.addSuperClass("IntermediateCatchEvent");
         
         _this.canEndLink = function (link) {
@@ -356,6 +411,7 @@
     
     var _CancelationIntermediateCatchEvent = function (obj) {
         var _this = new _IntermediateCatchEvent(obj);
+        _this.elementType="CancelationIntermediateCatchEvent";
         _this.addSuperClass("IntermediateCatchEvent");
         
         _this.canAttach = function (parent) {
@@ -377,6 +433,7 @@
     var _CompensationIntermediateCatchEvent = function (obj) {
         var _this = new _IntermediateCatchEvent(obj);
         var fCanStart = _this.canStartLink;
+        _this.elementType="CompensationIntermediateCatchEvent";
         _this.addSuperClass("IntermediateCatchEvent");
         
         _this.canStartLink = function(link) {
@@ -395,6 +452,7 @@
         var _this = new _IntermediateCatchEvent(obj);
         var fCanStart = _this.canStartLink;
         var fCanAttach = _this.canAttach;
+        _this.elementType="LinkIntermediateCatchEvent";
         _this.addSuperClass("IntermediateCatchEvent");
         
         _this.canEndLink = function(link) {
@@ -421,6 +479,7 @@
     
     var _SignalIntermediateCatchEvent = function (obj) {
         var _this = new _IntermediateCatchEvent(obj);
+        _this.elementType="SignalIntermediateCatchEvent";
         _this.addSuperClass("IntermediateCatchEvent");
         
         _this.canAttach = function(parent) {
@@ -436,6 +495,7 @@
     
     var _MultipleIntermediateCatchEvent = function (obj) {
         var _this = new _IntermediateCatchEvent(obj);
+        _this.elementType="MultipleIntermediateCatchEvent";
         _this.addSuperClass("IntermediateCatchEvent");
         return _this;
     };
@@ -444,6 +504,7 @@
         var _this = new _IntermediateCatchEvent(obj);
         var fCanEnd = _this.canEndLink;
         
+        _this.elementType="ScalationIntermediateCatchEvent";
         _this.addSuperClass("IntermediateCatchEvent");
         
         _this.canAttach = function(parent) {
@@ -467,6 +528,7 @@
     var _ParallelIntermediateCatchEvent = function (obj) {
         var _this = new _IntermediateCatchEvent(obj);
         var fCanAttach = _this.canAttach;
+        _this.elementType="ParallelIntermediateCatchEvent";
         _this.addSuperClass("IntermediateCatchEvent");
         
         _this.canAttach = function (parent) {
@@ -481,6 +543,7 @@
     
     var _RuleIntermediateCatchEvent = function (obj) {
         var _this = new _IntermediateCatchEvent(obj);
+        _this.elementType="RuleIntermediateCatchEvent";
         _this.addSuperClass("IntermediateCatchEvent");
         
         _this.canAttach = function (parent) {
@@ -497,7 +560,7 @@
         var _this = new _IntermediateThrowEvent(obj);
         var fCanEnd = _this.canEndLink;
         var fCanStart = _this.canStartLink;
-        
+        _this.elementType="MessageIntermediateThrowEvent";
         _this.addSuperClass("IntermediateThrowEvent");
         
         _this.canStartLink = function(link) {
@@ -529,6 +592,7 @@
     
     var _CompensationIntermediateThrowEvent = function(obj) {
         var _this = new _IntermediateThrowEvent(obj);
+        _this.elementType="CompensationIntermediateThrowEvent";
         _this.addSuperClass("IntermediateThrowEvent");
         return _this;
     };
@@ -537,6 +601,7 @@
         var _this = new _IntermediateThrowEvent(obj);
         var fCanEnd = _this.canEndLink;
         
+        _this.elementType="LinkIntermediateThrowEvent";
         _this.addSuperClass("IntermediateThrowEvent");
         
         _this.canStartLink = function(link) {
@@ -556,18 +621,21 @@
     
     var _SignalIntermediateThrowEvent = function(obj) {
         var _this = new _IntermediateThrowEvent(obj);
+        _this.elementType="SignalIntermediateThrowEvent";
         _this.addSuperClass("IntermediateThrowEvent");
         return _this;
     };
     
     var _MultipleIntermediateThrowEvent = function(obj) {
         var _this = new _IntermediateThrowEvent(obj);
+        _this.elementType="MultipleIntermediateThrowEvent";
         _this.addSuperClass("IntermediateThrowEvent");
         return _this;
     };
     
     var _ScalationIntermediateThrowEvent = function(obj) {
         var _this = new _IntermediateThrowEvent(obj);
+        _this.elementType="ScalationIntermediateThrowEvent";
         _this.addSuperClass("IntermediateThrowEvent");
         return _this;
     };
@@ -575,6 +643,7 @@
     /***************************Eventos finales****************************/
     var _EndEvent = function(obj) {
         var _this = new _ThrowEvent(obj);
+        _this.elementType="EndEvent";
         _this.addSuperClass("ThrowEvent");
         var fCanEnd = _this.canEndLink;
         var fCanAdd = _this.canAddToDiagram;
@@ -604,6 +673,7 @@
     
     var _MessageEndEvent = function (obj) {
         var _this = new _EndEvent(obj);
+        _this.elementType="MessageEndEvent";
         _this.addSuperClass("EndEvent");
         _this.canStartLink = function(link) {
             var ret = false;
@@ -618,42 +688,49 @@
     
     var _ErrorEndEvent = function (obj) {
         var _this = new _EndEvent(obj);
+        _this.elementType="ErrorEndEvent";
         _this.addSuperClass("EndEvent");
         return _this;
     };
     
     var _CancelationEndEvent = function (obj) {
         var _this = new _EndEvent(obj);
+        _this.elementType="CancelationEndEvent";
         _this.addSuperClass("EndEvent");
         return _this;
     };
     
     var _CompensationEndEvent = function (obj) {
         var _this = new _EndEvent(obj);
+        _this.elementType="CompensationEndEvent";
         _this.addSuperClass("EndEvent");
         return _this;
     };
     
     var _SignalEndEvent = function (obj) {
         var _this = new _EndEvent(obj);
+        _this.elementType="SignalEvent";
         _this.addSuperClass("EndEvent");
         return _this;
     };
     
     var _MultipleEndEvent = function (obj) {
         var _this = new _EndEvent(obj);
+        _this.elementType="MultipleEndEvent";
         _this.addSuperClass("EndEvent");
         return _this;
     };
     
     var _ScalationEndEvent = function (obj) {
         var _this = new _EndEvent(obj);
+        _this.elementType="ScalationEndEvent";
         _this.addSuperClass("EndEvent");
         return _this;
     };
     
     var _TerminationEndEvent = function (obj) {
         var _this = new _EndEvent(obj);
+        _this.elementType="TerminationEndEvent";
         _this.addSuperClass("EndEvent");
         return _this;
     };
@@ -664,6 +741,7 @@
         var fCanStart = _this.canStartLink;
         var fCanEnd = _this.canEndLink;
         
+        _this.elementType="Gateway";
         _this.addSuperClass("FlowNode");
         _this.canStartLink = function (link) {
             var ret = fCanStart(link);
@@ -730,6 +808,7 @@
         var fCanStart = _this.canStartLink;
         var fCanEnd = _this.canEndLink;
         
+        _this.elementType="ExclusiveGateway";
         _this.addSuperClass("Gateway");
         
         _this.canStartLink = function(link) {
@@ -766,6 +845,7 @@
     var _EventBasedGateway = function(obj) {
         var _this = new _Gateway(obj);
         var fCanStart = _this.canStartLink;
+        _this.elementType="EventBasedGateway";
         _this.addSuperClass("Gateway");
         
         _this.canStartLink = function(link) {
@@ -783,6 +863,8 @@
     var _InclusiveGateway = function(obj) {
         var _this = new _Gateway(obj);
         var fCanStart = _this.canStartLink;
+        
+        _this.elementType="InclusiveGateway";
         _this.addSuperClass("Gateway");
         
         _this.canStartLink = function(link) {
@@ -809,18 +891,21 @@
     
     var _ExclusiveStartEventGateway = function (obj) {
         var _this = new _EventBasedGateway(obj);
+        _this.elementType="ExclusiveStartEventGateway";
         _this.addSuperClass("EventBasedGateway");
         return _this;
     };
     
     var _ExclusiveIntermediateEventGateway = function (obj) {
         var _this = new _EventBasedGateway(obj);
+        _this.elementType="ExclusiveIntermediateEventGateway";
         _this.addSuperClass("EventBasedGateway");
         return _this;
     };
     
     var _ComplexGateway = function (obj) {
         var _this = new _Gateway(obj);
+        _this.elementType="ComplexGateway";
         _this.addSuperClass("Gateway");
         return _this;
     };
@@ -829,6 +914,7 @@
         var _this = new _Gateway(obj);
         var fCanStart = _this.canStartLink;
         
+        _this.elementType="ParallelGateway";
         _this.addSuperClass("Gateway");
         
         _this.canStartLink = function(link) {
@@ -848,6 +934,7 @@
         var fCanEnd = _this.canEndLink;
         var fCanStart = _this.canStartLink;
         
+        _this.elementType="DataObject";
         _this.addSuperClass("GraphicalElement");
         
         _this.canAttach = function(parent) {
@@ -880,18 +967,21 @@
     
     var _DataInput = function (obj) {
         var _this = new _DataObject(obj);
+        _this.elementType="DataInput";
         _this.addSuperClass("DataObject");
         return _this;
     };
     
     var _DataOutput = function (obj) {
         var _this = new _DataObject(obj);
+        _this.elementType="DataOutput";
         _this.addSuperClass("DataObject");
         return _this;
     };
     
     var _DataStore = function (obj) {
         var _this = new _DataObject(obj);
+        _this.elementType="DataStore";
         _this.addSuperClass("DataObject");
         return _this;
     };
@@ -899,7 +989,7 @@
     var _Pool = function (obj) {
         var _this = new _GraphicalElement(obj);
         var fCanAdd = _this.canAddToDiagram;
-        
+        _this.elementType="Pool";
         _this.addSuperClass("GraphicalElement");
         
         _this.canStartLink = function(link) {
@@ -938,6 +1028,7 @@
         var fCanStart = _this.canStartLink;
         var fCanEnd = _this.canEndLink;
         
+        _this.elementType="Activity";
         _this.addSuperClass("FlowNode");
         
         _this.canStartLink = function(link) {
@@ -962,60 +1053,70 @@
     
     var _CallActivity = function(obj) {
         var _this = new _Activity(obj);
+        _this.elementType="CallActivity";
         _this.addSuperClass("Activity");
         return _this;
     };
     
     var _Task = function(obj) {
         var _this = new _Activity(obj);
+        _this.elementType="Task";
         _this.addSuperClass("Activity");
         return _this;
     };
     
     var _CallTask = function(obj) {
         var _this = new _CallActivity(obj);
+        _this.elementType="CallTask";
         _this.addSuperClass("CallActivity");
         return _this;
     };
     
     var _UserTask = function(obj) {
         var _this = new _Task(obj);
+        _this.elementType="UserTask";
         _this.addSuperClass("Task");
         return _this;
     };
     
     var _ServiceTask = function(obj) {
         var _this = new _Task(obj);
+        _this.elementType="ServiceTask";
         _this.addSuperClass("Task");
         return _this;
     };
     
     var _BusinessRuleTask = function(obj) {
         var _this = new _Task(obj);
+        _this.elementType="BusinessRuleTask";
         _this.addSuperClass("Task");
         return _this;
     };
     
     var _CallManualTask = function(obj) {
         var _this = new _CallTask(obj);
+        _this.elementType="CallManualTask";
         _this.addSuperClass("CallTask");
         return _this;
     };
     
     var _CallBusinessRuleTask = function(obj) {
         var _this = new _CallTask(obj);
+        _this.elementType="CallBusinessRuleTask";
         _this.addSuperClass("CallTask");
         return _this;
     };
     
     var _CallScriptTask = function(obj) {
         var _this = new _CallTask(obj);
+        _this.elementType="CallScriptTask";
         _this.addSuperClass("CallTask");
         return _this;
     };
     
     var _CallUserTask = function(obj) {
         var _this = new _CallTask(obj);
+        _this.elementType="CallUserTask";
         _this.addSuperClass("CallTask");
         return _this;
     };
@@ -1025,6 +1126,7 @@
         var fCanStart = _this.canStartLink;
         var fCanEnd = _this.canEndLink;
         
+        _this.elementType="ScriptTask";
         _this.addSuperClass("Task");
         
         _this.canStartLink = function(link) {
@@ -1049,6 +1151,7 @@
         var _this = new _Task(obj);
         var fCanEnd = _this.canEndLink;
         
+        _this.elementType="SendTask";
         _this.addSuperClass("Task");
         
         _this.canEndLink = function(link) {
@@ -1066,6 +1169,7 @@
         var fCanStart = _this.canStartLink;
         var fCanEnd = _this.canEndLink;
         
+        _this.elementType="ReceiveTask";
         _this.addSuperClass("Task");
         
         _this.canStartLink = function(link) {
@@ -1097,6 +1201,7 @@
         var fCanStart = _this.canStartLink;
         var fCanEnd = _this.canEndLink;
         
+        _this.elementType="ManualTask";
         _this.addSuperClass("Task");
         
         _this.canStartLink = function(link) {
