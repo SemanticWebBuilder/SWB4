@@ -313,6 +313,23 @@
     cursor:hand;
 }
 
+.toolTip {
+    fill:lightyellow;
+    stroke:gold;
+    stroke-width:1;
+}
+.errorToolTip {
+    fill:lightpink;
+    stroke:red;
+    stroke-width:1;
+}
+
+.warningToolTip {
+    fill:#EFB81F;
+    stroke:orange;
+    stroke-width:1;
+}
+
 /*****************************  NAVBAR **********************************************/
 
 .navbar {
