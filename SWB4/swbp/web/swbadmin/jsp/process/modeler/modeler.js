@@ -50,6 +50,7 @@
     var _ConnectionObject = function(obj) {
       var _this = obj;
       _this.elementType="ConnectionObject";
+      return _this;
     };
     
     var _FlowNode = function (obj) {
@@ -59,7 +60,7 @@
         _this.addSuperClass("GraphicalElement");
         _this.canAttach = function(parent) {
             var ret = false;
-            if (parent.type=="Pool" || parent.type=="Lane") {
+            if (parent.elementType=="Pool" || parent.elementType=="Lane") {
                 ret = true;
             }
             return ret;
@@ -68,17 +69,17 @@
         _this.canEndLink = function(link) {
             var ret = fCanEnd(link);
             
-            if (link.type=="SequenceFlow") {
+            if (link.elementType=="SequenceFlow") {
                 //TODO: Implementar
             }
             
-            if (link.type=="AssociationFlow") {
-                if (!(link.fromObject.type=="Artifact" || link.fromObject.type=="DataObject") && !(link.fromObject.type=="CompensationIntermediateCatchEvent" && link.fromObject.parent.isSubClass("Activity"))) {
+            if (link.elementType=="AssociationFlow") {
+                if (!(link.fromObject.elementType=="Artifact" || link.fromObject.elementType=="DataObject") && !(link.fromObject.elementType=="CompensationIntermediateCatchEvent" && link.fromObject.parent.isSubClass("Activity"))) {
                     ret = false;
                 }
             }
             
-            if (link.type=="MessageFlow") {
+            if (link.elementType=="MessageFlow") {
                 //TODO:Implementar
             }
             return ret;
@@ -91,31 +92,37 @@
     var _SequenceFlow = function(obj) {
       var _this = new _ConnectionObject(obj);
       _this.elementType="SequenceFlow";
+      return _this;
     };
     
     var _MessageFlow = function(obj) {
       var _this = new _ConnectionObject(obj);
       _this.elementType="MessageFlow";
+      return _this;
     };
     
     var _ConditionalFlow = function(obj) {
       var _this = new _SequenceFlow(obj);
       _this.elementType="ConditionalFlow";
+      return _this;
     };
     
     var _DefaultFlow = function(obj) {
       var _this = new _SequenceFlow(obj);
       _this.elementType="DefaultFlow";
+      return _this;
     };
     
     var _AssociationFlow = function(obj) {
       var _this = new _ConnectionObject(obj);
       _this.elementType="AssociationFlow";
+      return _this;
     };
     
     var _DirectionalAssociation = function(obj) {
       var _this = new _AssociationFlow(obj);
       _this.elementType="AssociationFlow";
+      return _this;
     };
     
     /***************************Eventos iniciales****************************/
@@ -124,7 +131,7 @@
         _this.elementType="_Event";
         _this.addSuperClass("FlowNode");
         _this.canStartLink=function(link) {
-            if (link.type=="ConditionalFlow") {
+            if (link.elementType=="ConditionalFlow") {
                 return false;
             }
             return true;
@@ -147,7 +154,7 @@
         var fCanEnd = _this.canEndLink;
         _this.canEndLink = function(link) {
             var ret = fCanEnd(link);
-            if (link.fromObject.type=="EventBasedGateway") {
+            if (link.fromObject.elementType=="EventBasedGateway") {
                 ret = false;
             }
             return ret;
@@ -164,7 +171,7 @@
         
         _this.canEndLink=function(link) {
             var ret = fCanEnd(link);
-            if (link.type=="MessageFlow") {
+            if (link.elementType=="MessageFlow") {
                 ret = false;
             }
             return ret;
@@ -299,11 +306,12 @@
     /***************************Eventos intermedios**************************/
     var _IntermediateCatchEvent = function (obj) {
         var _this = new _CatchEvent(obj);
-        _this.elementType="IntermediateCatchEvent";
-        _this.addSuperClass("CatchEvent");
         var fCanAttach = _this.canAttach;
         var fCanEnd = _this.canEndLink;
         var fCanStart = _this.canStartLink;
+        
+        _this.elementType="IntermediateCatchEvent";
+        _this.addSuperClass("CatchEvent");
         
         _this.canAttach = function(parent) {
             var ret = fCanAttach(parent);
@@ -322,12 +330,12 @@
             var c = 0;
             
             for (var i = 0; i < _this.inConnections.length; i++) {
-                if (_this.inConnections[i].type=="SequenceFlow") {
+                if (_this.inConnections[i].elementType=="SequenceFlow") {
                     c++;
                 }
             }
             
-            if (link.type=="SequenceFlow") {
+            if (link.elementType=="SequenceFlow") {
                 if (_this.parent.isSubClass("Activity")) {
                     ret = false;
                 } else if (c != 0) {
@@ -342,12 +350,12 @@
             var c = 0;
             
             for (var i = 0; i < _this.outConnections.length; i++) {
-                if (_this.inConnections[i].type=="SequenceFlow") {
+                if (_this.inConnections[i].elementType=="SequenceFlow") {
                     c++;
                 }
             }
             
-            if (link.type=="SequenceFlow" && c != 0) {
+            if (link.elementType=="SequenceFlow" && c != 0) {
                 ret = false;
             }
             return ret;
@@ -357,9 +365,10 @@
     
     var _MessageIntermediateCatchEvent = function(obj) {
         var _this = new _IntermediateCatchEvent(obj);
-        _this.elementType="MessageIntermediateCatchEvent";
         var fCanEnd = _this.canEndLink;
         var fCanStart = _this.canStartLink;
+        
+        _this.elementType="MessageIntermediateCatchEvent";
         _this.addSuperClass("IntermediateCatchEvent");
         
         _this.canEndLink = function(link) {
@@ -367,18 +376,18 @@
             var c = 0;
             
             for (var i = 0; i < _this.inConnections.length; i++) {
-                if (_this.inConnections[i].type=="MessageFlow") {
+                if (_this.inConnections[i].elementType=="MessageFlow") {
                     c++;
                 }
             }
             
-            if (link.type=="MessageFlow" && c != 0) {
+            if (link.elementType=="MessageFlow" && c != 0) {
                 ret = false;
             }
             
-            if (link.type=="SequenceFlow" && link.fromObject.type=="ExclusiveIntermediateEventGateway") {
+            if (link.elementType=="SequenceFlow" && link.fromObject.elementType=="ExclusiveIntermediateEventGateway") {
                 for (i = 0; i < _this.outConnections.length; i++) {
-                    if (_this.inConnections[i].type=="SequenceFlow" && _this.inConnections[i].toObject.type=="ReceiveTask") {
+                    if (_this.inConnections[i].elementType=="SequenceFlow" && _this.inConnections[i].toObject.elementType=="ReceiveTask") {
                         ret = false;
                         break;
                     }
@@ -389,7 +398,7 @@
         
         _this.canStartLink = function (link) {
             var ret = fCanStart(link);
-            if (link.type=="MessageFlow") {
+            if (link.elementType=="MessageFlow") {
                 ret = false;
             }
             return ret;
@@ -416,7 +425,7 @@
         
         _this.canAttach = function (parent) {
             var ret = false;
-            if(parent.type=="Pool" || parent.type=="Lane" || parent.type=="TransactionSubProcess") {
+            if(parent.elementType=="Pool" || parent.elementType=="Lane" || parent.elementType=="TransactionSubProcess") {
                 ret = true;
             } else {
                 ret = false;
@@ -439,7 +448,7 @@
         _this.canStartLink = function(link) {
             var ret = fCanStart(link);
             if (_this.parent.isSubClass("Activity")) {
-                if (!link.type=="DirectionalAssociation") {
+                if (!link.elementType=="DirectionalAssociation") {
                     ret = false;
                 }
             }
@@ -461,7 +470,7 @@
         
         _this.canStartLink = function(link) {
             var ret = fCanStart(link);
-            if (link.type=="MessageFlow") {
+            if (link.elementType=="MessageFlow") {
                 ret = false;
             }
             return ret;
@@ -484,7 +493,7 @@
         
         _this.canAttach = function(parent) {
             var ret = false;
-            if (parent.isSubClass("Activity") || parent.type=="Pool" || parent.type=="Lane") {
+            if (parent.isSubClass("Activity") || parent.elementType=="Pool" || parent.elementType=="Lane") {
                 ret = true;
             }
             return ret;
@@ -509,7 +518,7 @@
         
         _this.canAttach = function(parent) {
             var ret = false;
-            if (parent.isSubClass("Activity") || parent.type=="Pool" || parent.type=="Lane") {
+            if (parent.isSubClass("Activity") || parent.elementType=="Pool" || parent.elementType=="Lane") {
                 ret = true;
             }
             return ret;
@@ -517,7 +526,7 @@
         
         _this.canEndLink = function(link) {
             var ret = fCanEnd(link);
-            if (link.type=="SequenceFlow" && link.fromObject.type=="EventBasedGateway") {
+            if (link.elementType=="SequenceFlow" && link.fromObject.elementType=="EventBasedGateway") {
                 ret = false;
             }
             return ret;
@@ -548,7 +557,7 @@
         
         _this.canAttach = function (parent) {
             var ret = false;
-            if (parent.isSubClass("Activity") || parent.type=="Pool" || parent.type=="Lane") {
+            if (parent.isSubClass("Activity") || parent.elementType=="Pool" || parent.elementType=="Lane") {
                 ret = true;
             }
             return ret;
@@ -568,12 +577,12 @@
             var c = 0;
             
             for (var i = 0; i < _this.outConnections.length; i++) {
-                if (_this.outConnections[i].type=="MessageFlow") {
+                if (_this.outConnections[i].elementType=="MessageFlow") {
                     c++;
                 }
             }
             
-            if (link.type=="MessageFlow" && c != 0) {
+            if (link.elementType=="MessageFlow" && c != 0) {
                 ret = false;
             }
             return ret;
@@ -581,7 +590,7 @@
         
         _this.canEndLink = function (link) {
             var ret = fCanEnd(link);
-            if (link.type=="MessageFlow") {
+            if (link.elementType=="MessageFlow") {
                 ret = false;
             }
             return ret;
@@ -610,7 +619,7 @@
         
         _this.canEndLink = function(link) {
             var ret = fCanEnd(link);
-            if (link.type=="MessageFlow") {
+            if (link.elementType=="MessageFlow") {
                 ret = false;
             }
             return ret;
@@ -654,9 +663,9 @@
         
         _this.canEndLink = function(link) {
             var ret = fCanEnd(link);
-            if (link.type!="SequenceFlow") {
+            if (link.elementType!="SequenceFlow") {
                 ret = false;
-            } else if (link.type=="SequenceFlow" && link.fromObject.type=="ExclusiveIntermediateEventGateway") {
+            } else if (link.elementType=="SequenceFlow" && link.fromObject.elementType=="ExclusiveIntermediateEventGateway") {
                 ret = false;
             }
             return ret;
@@ -677,7 +686,7 @@
         _this.addSuperClass("EndEvent");
         _this.canStartLink = function(link) {
             var ret = false;
-            if (link.type=="MessageFlow") {
+            if (link.elementType=="MessageFlow") {
                 ret = true;
             }
             return ret;
@@ -749,22 +758,22 @@
             var co = 0;
             
             for (var i = 0; i < _this.inConnections.length; i++) {
-                if (_this.inConnections[i].type=="SequenceFlow") {
+                if (_this.inConnections[i].elementType=="SequenceFlow") {
                     ci++;
                 }
             }
             
             for (i = 0; i < _this.outConnections.length; i++) {
-                if (_this.outConnections[i].type=="SequenceFlow") {
+                if (_this.outConnections[i].elementType=="SequenceFlow") {
                     co++;
                 }
             }
             
-            if (link.type=="MessageFlow") {
+            if (link.elementType=="MessageFlow") {
                 ret = false;
             }
             
-            if (link.type=="SequenceFlow") {
+            if (link.elementType=="SequenceFlow") {
                 if (ci > 1 && co != 0) {
                     ret = false;
                 }
@@ -778,22 +787,22 @@
             var co = 0;
             
             for (var i = 0; i < _this.inConnections.length; i++) {
-                if (_this.inConnections[i].type=="SequenceFlow") {
+                if (_this.inConnections[i].elementType=="SequenceFlow") {
                     ci++;
                 }
             }
             
             for (i = 0; i < _this.outConnections.length; i++) {
-                if (_this.outConnections[i].type=="SequenceFlow") {
+                if (_this.outConnections[i].elementType=="SequenceFlow") {
                     co++;
                 }
             }
             
-            if (link.type=="MessageFlow") {
+            if (link.elementType=="MessageFlow") {
                 ret = false;
             }
             
-            if (link.type=="SequenceFlow") {
+            if (link.elementType=="SequenceFlow") {
                 if (co > 1 && ci != 0) {
                     ret = false;
                 }
@@ -816,16 +825,16 @@
             var c = 0;
             
             for (var i = 0; i < _this.outConnections.length; i++) {
-                if (_this.outConnections[i].type=="DefaultFlow") {
+                if (_this.outConnections[i].elementType=="DefaultFlow") {
                     c++;
                 }
             }
             
-            if (!link.type=="ConditionalFlow" || link.type=="DefaultFlow") {
+            if (!link.elementType=="ConditionalFlow" || link.elementType=="DefaultFlow") {
                 ret = false;
             }
             
-            if (link.type=="DefaultFlow" && c > 0) {
+            if (link.elementType=="DefaultFlow" && c > 0) {
                 ret = false;
             }
             return ret;
@@ -833,7 +842,7 @@
         
         _this.canEndLink = function(link) {
             var ret = fCanEnd(link);
-            if (link.fromObject.type=="EventBasedGateway") {
+            if (link.fromObject.elementType=="EventBasedGateway") {
                 ret = false;
             }
             return ret;
@@ -850,9 +859,9 @@
         
         _this.canStartLink = function(link) {
             var ret = fCanStart(link);
-            if (link.type=="DefaultFlow") {
+            if (link.elementType=="DefaultFlow") {
                 ret = false;
-            } else if (link.type=="ConditionalFlow") {
+            } else if (link.elementType=="ConditionalFlow") {
                 return false;
             }
             return ret;
@@ -872,16 +881,16 @@
             var c = 0;
             
             for (var i = 0; i < _this.outConnections.length; i++) {
-                if (_this.outConnections[i].type=="DefaultFlow") {
+                if (_this.outConnections[i].elementType=="DefaultFlow") {
                     c++;
                 }
             }
             
-            if (!(link.type=="ConditionalFlow" || link.type=="DefaultFlow")) {
+            if (!(link.elementType=="ConditionalFlow" || link.elementType=="DefaultFlow")) {
                 ret = false;
             }
 
-            if (link.type=="DefaultFlow" && c > 0) {
+            if (link.elementType=="DefaultFlow" && c > 0) {
                 ret = false;
             }
             return ret;
@@ -919,7 +928,7 @@
         
         _this.canStartLink = function(link) {
             var ret = fCanStart(link);
-            if (link.type=="ConditionalFlow" || link.type=="DefaultFlow") {
+            if (link.elementType=="ConditionalFlow" || link.elementType=="DefaultFlow") {
                 ret = false;
             }
             return ret;
@@ -939,7 +948,7 @@
         
         _this.canAttach = function(parent) {
             var ret = fCanAttach(parent);
-            if(parent.type=="Pool" || parent.type=="Lane") {
+            if(parent.elementType=="Pool" || parent.elementType=="Lane") {
                 ret = true;
             }
             return ret;
@@ -947,7 +956,7 @@
         
         _this.canStartLink = function(link) {
             var ret = fCanStart(link);
-            if (!link.type=="AssociationFlow") {
+            if (!link.elementType=="AssociationFlow") {
                 ret = false;
             }
             return ret;
@@ -955,7 +964,7 @@
         
         _this.canEndLink = function(link) {
             var ret = fCanEnd(link);
-            if (!link.type=="AssociationFlow") {
+            if (!link.elementType=="AssociationFlow") {
                 ret = false;
             } else if (link.fromObject.isSubClass("Artifact")) {
                 ret = false;
@@ -994,7 +1003,7 @@
         
         _this.canStartLink = function(link) {
             var ret = true;
-            if (link.type=="SequenceFlow") {
+            if (link.elementType=="SequenceFlow") {
                 ret = false;
             }
             return ret;
@@ -1002,13 +1011,13 @@
         
         _this.canEndLink = function(link) {
             var ret = true;
-            if (link.type=="SequenceFlow") {
+            if (link.elementType=="SequenceFlow") {
                 ret = false;
             }
-            if (link.type=="MessageFlow") {
+            if (link.elementType=="MessageFlow") {
                 //TODO:Implementar
             }
-            if (link.type=="AssociationFlow") {
+            if (link.elementType=="AssociationFlow") {
                 ret = false;
             }
             return ret;
@@ -1033,7 +1042,7 @@
         
         _this.canStartLink = function(link) {
             var ret = fCanStart(link);
-            if (link.type=="DefaultFlow") {
+            if (link.elementType=="DefaultFlow") {
                 ret = false;
             }
             return ret;
@@ -1041,9 +1050,9 @@
         
         _this.canEndLink = function(link) {
             var ret = fCanEnd(link);
-            if (link.type=="DirectionalAssociation" && link.fromObject.type=="CompensationIntermediateCatchEvent") {
+            if (link.elementType=="DirectionalAssociation" && link.fromObject.elementType=="CompensationIntermediateCatchEvent") {
                 ret = true;            
-            } else if (link.fromObject.type=="ExclusiveIntermediateEventGateway") {
+            } else if (link.fromObject.elementType=="ExclusiveIntermediateEventGateway") {
                 ret = false;
             }
             return ret;
@@ -1131,7 +1140,7 @@
         
         _this.canStartLink = function(link) {
             var ret = fCanStart(link);
-            if (link.type=="MessageFlow") {
+            if (link.elementType=="MessageFlow") {
                 ret = false;
             }
             return ret;
@@ -1139,7 +1148,7 @@
         
         _this.canEndLink = function(link) {
             var ret = fCanEnd(link);
-            if (link.type=="MessageFlow") {
+            if (link.elementType=="MessageFlow") {
                 ret = false;
             }
             return ret;
@@ -1156,7 +1165,7 @@
         
         _this.canEndLink = function(link) {
             var ret = fCanEnd(link);
-            if (link.type=="MessageFlow") {
+            if (link.elementType=="MessageFlow") {
                 ret = false;
             }
             return ret;
@@ -1174,7 +1183,7 @@
         
         _this.canStartLink = function(link) {
             var ret = fCanStart(link);
-            if (link.type=="MessageFlow") {
+            if (link.elementType=="MessageFlow") {
                 ret = false;
             }
             return ret;
@@ -1182,10 +1191,10 @@
         
         _this.canEndLink = function(link) {
             var ret = fCanEnd(link);
-            if (link.type=="SequenceFlow" && link.fromObject.type=="ExclusiveIntermediateEventGateway") {
+            if (link.elementType=="SequenceFlow" && link.fromObject.elementType=="ExclusiveIntermediateEventGateway") {
                 ret = true;
                 for (var i = 0; i < link.fromObject.outConnections.length; i++) {
-                    if (link.fromObject.outConnections[i].type=="SequenceFlow" && link.toObject.outConnections[i].type=="MessageIntermediateCatchEvent") {
+                    if (link.fromObject.outConnections[i].elementType=="SequenceFlow" && link.toObject.outConnections[i].elementType=="MessageIntermediateCatchEvent") {
                         ret = false;
                         break;
                     }
@@ -1206,7 +1215,7 @@
         
         _this.canStartLink = function(link) {
             var ret = fCanStart(link);
-            if (link.type=="MessageFlow") {
+            if (link.elementType=="MessageFlow") {
                 ret = false;
             }
             return ret;
@@ -1214,7 +1223,7 @@
         
         _this.canEndLink = function(link) {
             var ret = fCanEnd(link);
-            if (link.type=="MessageFlow") {
+            if (link.elementType=="MessageFlow") {
                 ret = false;
             }
             return ret;
@@ -1824,32 +1833,32 @@
         {
             var ret = null;
             if(type=='sequenceFlow') {
-                ret = Modeler.createConnectionPath(null, null, "sequenceArrow", null,"sequenceFlowLine");
-                ret.elementType="SequenceFlow";
+                ret = new _SequenceFlow(Modeler.createConnectionPath(null, null, "sequenceArrow", null,"sequenceFlowLine"));
+                //ret.elementType="SequenceFlow";
                 ret.eoff=10;
             }
             if(type=='messageFlow') {
-                ret = Modeler.createConnectionPath("messageTail", null, "messageArrow", "5,5", "sequenceFlowLine");
-                ret.elementType="MessageFlow";
+                ret = new _MessageFlow(Modeler.createConnectionPath("messageTail", null, "messageArrow", "5,5", "sequenceFlowLine"));
+                //ret.elementType="MessageFlow";
                 ret.eoff=10;
             }
             if(type=='conditionalFlow') {
-                ret = Modeler.createConnectionPath("conditionTail", null, "sequenceArrow", null, "sequenceFlowLine");
-                ret.elementType="ConditionalFlow";
+                ret = new _ConditionalFlow(Modeler.createConnectionPath("conditionTail", null, "sequenceArrow", null, "sequenceFlowLine"));
+                //ret.elementType="ConditionalFlow";
                 ret.eoff=10;
             }
             if(type=='defaultFlow') {
-                ret = Modeler.createConnectionPath("defaultTail", null, "sequenceArrow", null, "sequenceFlowLine");
-                ret.elementType="DefaultFlow";
+                ret = new _DefaultFlow(Modeler.createConnectionPath("defaultTail", null, "sequenceArrow", null, "sequenceFlowLine"));
+                //ret.elementType="DefaultFlow";
                 ret.eoff=10;
             }
             if(type=='associationFlow') {
-                ret = Modeler.createConnectionPath(null, null, null, "5,5", "sequenceFlowLine");
-                ret.elementType="AssociationFlow";
+                ret = new _AssociationFlow(Modeler.createConnectionPath(null, null, null, "5,5", "sequenceFlowLine"));
+                //ret.elementType="AssociationFlow";
             }
             if(type=='directionalassociationFlow') {
-                ret = Modeler.createConnectionPath(null, null, "messageArrow", "5,5", "sequenceFlowLine");
-                ret.elementType="DirectionalAssociation";
+                ret = new _DirectionalAssociation(Modeler.createConnectionPath(null, null, "messageArrow", "5,5", "sequenceFlowLine"));
+                //ret.elementType="DirectionalAssociation";
                 ret.eoff=10;
             }
             else if(type=='normalStartEvent')
