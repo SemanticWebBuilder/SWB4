@@ -6,17 +6,17 @@
 /***************************Elementos genéricos**************************/
     var _GraphicalElement = function(obj) {
         var _this = obj;
-        _this.elementType="GraphicalElement";
-        _this.superClasses = new Array();
+        _this.types = new Array();
         
-        _this.addSuperClass = function(clsName) {
-            _this.superClasses.push(clsName);
+        _this.setElementType = function(typeName) {
+            _this.elementType = typeName;
+            _this.types.push(typeName);
         };
         
-        _this.isSubClass = function(clsName) {
+        _this.typeOf = function(typeName) {
             var ret = false;
-            for (var i = 0; i < _this.superClasses.length; i++) {
-                if(_this.superClasses[i] == clsName) {
+            for (var i = 0; i < _this.types.length; i++) {
+                if(_this.types[i] == typeName) {
                     ret = true;
                     break;
                 }
@@ -44,20 +44,44 @@
             return false;
         };
         
+        _this.getDefaultFlow = function() {
+            return null;
+        };
+        
+        _this.setElementType("GraphicalElement");
+        
         return _this;
     };
     
     var _ConnectionObject = function(obj) {
-      var _this = obj;
-      _this.elementType="ConnectionObject";
+        var _this = obj;
+        _this.types = new Array();
+        
+        _this.setElementType = function(typeName) {
+            _this.elementType = typeName;
+            _this.types.push(typeName);
+        };
+        
+        _this.typeOf = function(typeName) {
+            var ret = false;
+            for (var i = 0; i < _this.types.length; i++) {
+                if(_this.types[i] == typeName) {
+                    ret = true;
+                    break;
+                }
+            }
+            return ret;
+        };
+        
+      _this.setElementType("ConnectionObject");
       return _this;
     };
     
     var _FlowNode = function (obj) {
         var _this = new _GraphicalElement(obj);
         var fCanEnd = _this.canEndLink;
-        _this.elementType="FlowNode";
-        _this.addSuperClass("GraphicalElement");
+        _this.setElementType("FlowNode");
+
         _this.canAttach = function(parent) {
             var ret = false;
             if (parent.elementType=="Pool" || parent.elementType=="Lane") {
@@ -74,7 +98,7 @@
             }
             
             if (link.elementType=="AssociationFlow") {
-                if (!(link.fromObject.elementType=="Artifact" || link.fromObject.elementType=="DataObject") && !(link.fromObject.elementType=="CompensationIntermediateCatchEvent" && link.fromObject.parent.isSubClass("Activity"))) {
+                if (!(link.fromObject.elementType=="Artifact" || link.fromObject.elementType=="DataObject") && !(link.fromObject.elementType=="CompensationIntermediateCatchEvent" && link.fromObject.parent.typeOf("Activity"))) {
                     ret = false;
                 }
             }
@@ -91,66 +115,65 @@
     
     var _SequenceFlow = function(obj) {
       var _this = new _ConnectionObject(obj);
-      _this.elementType="SequenceFlow";
+      _this.setElementType("SequenceFlow");
       return _this;
     };
     
     var _MessageFlow = function(obj) {
       var _this = new _ConnectionObject(obj);
-      _this.elementType="MessageFlow";
+      _this.setElementType("MessageFlow");
       return _this;
     };
     
     var _ConditionalFlow = function(obj) {
       var _this = new _SequenceFlow(obj);
-      _this.elementType="ConditionalFlow";
+      _this.setElementType("ConditionalFlow");
       return _this;
     };
     
     var _DefaultFlow = function(obj) {
       var _this = new _SequenceFlow(obj);
-      _this.elementType="DefaultFlow";
+      _this.setElementType("DefaultFlow");
       return _this;
     };
     
     var _AssociationFlow = function(obj) {
       var _this = new _ConnectionObject(obj);
-      _this.elementType="AssociationFlow";
+      _this.setElementType("AssociationFlow");
       return _this;
     };
     
     var _DirectionalAssociation = function(obj) {
       var _this = new _AssociationFlow(obj);
-      _this.elementType="AssociationFlow";
+      _this.setElementType("AssociationFlow");
       return _this;
     };
     
     /***************************Eventos iniciales****************************/
     var _Event = function (obj) {
         var _this = new _FlowNode(obj);
-        _this.elementType="_Event";
-        _this.addSuperClass("FlowNode");
+        _this.setElementType("Event");
+
         _this.canStartLink=function(link) {
             if (link.elementType=="ConditionalFlow") {
                 return false;
             }
             return true;
-        }
+        };
         return _this;
     };
     
     var _CatchEvent = function(obj) {
         var _this = new _Event(obj);
-        _this.elementType="CatchEvent";
-        _this.addSuperClass("Event");
+        _this.setElementType("CatchEvent");
         
         return _this;
     };
     
     var _ThrowEvent = function(obj) {
         var _this = new _Event(obj);
-        _this.elementType="ThrowEvent";
-        _this.addSuperClass("Event");
+        _this.setElementType("ThrowEvent");
+
         var fCanEnd = _this.canEndLink;
         _this.canEndLink = function(link) {
             var ret = fCanEnd(link);
@@ -164,17 +187,12 @@
     
     var _StartEvent = function(obj) {
         var _this = new _CatchEvent(obj);
-        _this.elementType="StartEvent";
-        _this.addSuperClass("CatchEvent");
-        var fCanEnd = _this.canEndLink;
         var fCanAdd = _this.canAddToDiagram;
+
+        _this.setElementType("StartEvent");
         
         _this.canEndLink=function(link) {
-            var ret = fCanEnd(link);
-            if (link.elementType=="MessageFlow") {
-                ret = false;
-            }
-            return ret;
+            return false;
         };
         
         _this.canAddToDiagram=function() {
@@ -182,22 +200,18 @@
             //TODO:Implementar
             return ret;
         };
-        
         return _this;
     };
     
     var _MessageStartEvent = function (obj) {
         var _this = new _StartEvent(obj);
-        _this.elementType="MessageStartEvent";
-        _this.addSuperClass("StartEvent");
-        var fCanEnd = _this.canEndLink;
+        _this.setElementType("MessageStartEvent");
         
         _this.canEndLink=function(link) {
-            var ret = fCanEnd(link);
-            if (_this.inConnections.length==0) {
-                ret = true;
+            if (link.elementType=="MessageFlow" && _this.inConnections.length==0) {
+                return true;
             }
-            return ret;
+            return false;
         };
         
         _this.canAddToDiagram=function() {
@@ -210,19 +224,21 @@
     
     var _TimerStartEvent = function(obj) {
         var _this = new _StartEvent(obj);
-        _this.elementType="TimerStartEvent";
-        _this.addSuperClass("StartEvent");
+        _this.setElementType("TimerStartEvent");
+        
         _this.canAddToDiagram = function () {
             var ret = true;
             //TODO: Implementar
             return ret;
         };
+        
+        return _this;
     };
     
     var _RuleStartEvent = function(obj) {
         var _this = new _StartEvent(obj);
-        _this.elementType="RuleStartEvent";
-        _this.addSuperClass("StartEvent");
+        _this.setElementType("RuleStartEvent");
+
         _this.canAddToDiagram = function () {
             var ret = true;
             //TODO: Implementar
@@ -233,8 +249,8 @@
     
     var _SignalStartEvent = function(obj) {
         var _this = new _StartEvent(obj);
-        _this.elementType="SignalStartEvent";
-        _this.addSuperClass("StartEvent");
+        _this.setElementType("SignalStartEvent");
+
         _this.canAddToDiagram = function () {
             var ret = true;
             //TODO: Implementar
@@ -245,8 +261,8 @@
     
     var _MultipleStartEvent = function (obj) {
         var _this = new _StartEvent(obj);
-        _this.elementType="MultipleStartEvent";
-        _this.addSuperClass("StartEvent");
+        _this.setElementType("MultipleStartEvent");
+
         _this.canAddToDiagram = function () {
             var ret = true;
             //TODO: Implementar
@@ -257,8 +273,8 @@
     
     var _ParallelStartEvent = function(obj) {
         var _this = new _StartEvent(obj);
-        _this.elementType="ParallelStartEvent";
-        _this.addSuperClass("StartEvent");
+        _this.setElementType("ParallelStartEvent");
+
         _this.canAddToDiagram = function () {
             var ret = true;
             //TODO: Implementar
@@ -269,8 +285,8 @@
     
     var _ScalationStartEvent = function(obj) {
         var _this = new _StartEvent(obj);
-        _this.elementType="ScalationStartEvent";
-        _this.addSuperClass("StartEvent");
+        _this.setElementType("ScalationStartEvent");
+
         _this.canAddToDiagram = function () {
             var ret = true;
             //TODO: Implementar
@@ -281,8 +297,8 @@
     
     var _ErrorStartEvent = function(obj) {
         var _this = new _StartEvent(obj);
-        _this.elementType="ErrorStartEvent";
-        _this.addSuperClass("StartEvent");
+        _this.setElementType("ErrorStartEvent");
+
         _this.canAddToDiagram = function () {
             var ret = true;
             //TODO: Implementar
@@ -293,8 +309,8 @@
     
     var _CompensationStartEvent = function(obj) {
         var _this = new _StartEvent(obj);
-        _this.elementType="CompensationStartEvent";
-        _this.addSuperClass("StartEvent");
+        _this.setElementType("CompensationStartEvent");
+
         _this.canAddToDiagram = function () {
             var ret = true;
             //TODO: Implementar
@@ -310,16 +326,15 @@
         var fCanEnd = _this.canEndLink;
         var fCanStart = _this.canStartLink;
         
-        _this.elementType="IntermediateCatchEvent";
-        _this.addSuperClass("CatchEvent");
+        _this.setElementType("IntermediateCatchEvent");
         
         _this.canAttach = function(parent) {
             var ret = fCanAttach(parent);
-            if (ret || parent.isSubClass("Activity")) {
+            if (ret || parent.typeOf("Activity")) {
                 ret = true;
             }
             
-            if (parent.isSubClass("CallActivity")) {
+            if (parent.typeOf("CallActivity")) {
                 ret = false;
             }
             return ret;
@@ -336,7 +351,7 @@
             }
             
             if (link.elementType=="SequenceFlow") {
-                if (_this.parent.isSubClass("Activity")) {
+                if (_this.parent && _this.parent != null && _this.parent.typeOf("Activity")) {
                     ret = false;
                 } else if (c != 0) {
                     ret = false;
@@ -350,7 +365,56 @@
             var c = 0;
             
             for (var i = 0; i < _this.outConnections.length; i++) {
+                if (_this.outConnections[i].elementType=="SequenceFlow") {
+                    c++;
+                }
+            }
+            
+            if (link.elementType=="SequenceFlow" && c != 0) {
+                ret = false;
+            }
+            return ret;
+        };
+        return _this;
+    };
+    
+    var _IntermediateThrowEvent = function (obj) {
+        var _this = new _CatchEvent(obj);
+        var fCanEnd = _this.canEndLink;
+        var fCanStart = _this.canStartLink;
+        
+        _this.setElementType("IntermediateThrowEvent");
+        
+        _this.canAttach = function(parent) {
+            var ret = true;
+            if (!(parent.elementType=="Pool" || parent.elementType=="Lane")) {
+                ret = false;
+            }
+            return ret;
+        };
+        
+        _this.canEndLink = function (link) {
+            var ret = fCanEnd(link);
+            var c = 0;
+            
+            for (var i = 0; i < _this.inConnections.length; i++) {
                 if (_this.inConnections[i].elementType=="SequenceFlow") {
+                    c++;
+                }
+            }
+            
+            if (link.elementType=="SequenceFlow" && c != 0) {
+                ret = false;
+            }
+            return ret;
+        };
+        
+        _this.canStartLink = function(link) {
+            var ret = fCanStart(link);
+            var c = 0;
+            
+            for (var i = 0; i < _this.outConnections.length; i++) {
+                if (_this.outConnections[i].elementType=="SequenceFlow") {
                     c++;
                 }
             }
@@ -368,8 +432,7 @@
         var fCanEnd = _this.canEndLink;
         var fCanStart = _this.canStartLink;
         
-        _this.elementType="MessageIntermediateCatchEvent";
-        _this.addSuperClass("IntermediateCatchEvent");
+        _this.setElementType("MessageIntermediateCatchEvent");
         
         _this.canEndLink = function(link) {
             var ret = fCanEnd(link);
@@ -408,8 +471,7 @@
     
     var _ErrorIntermediateCatchEvent = function (obj) {
         var _this = new _IntermediateCatchEvent(obj);
-        _this.elementType="ErrorIntermediateCatchEvent";
-        _this.addSuperClass("IntermediateCatchEvent");
+        _this.setElementType("ErrorIntermediateCatchEvent");
         
         _this.canEndLink = function (link) {
             return false;
@@ -418,10 +480,24 @@
         return _this;
     };
     
+    var _TimerIntermediateCatchEvent = function (obj) {
+        var _this = new _IntermediateCatchEvent(obj);
+        _this.setElementType("TimerIntermediateCatchEvent");
+        
+        _this.canAttach = function (parent) {
+            var ret = false;
+            if (parent.typeOf("Activity") || parent.elementType=="Pool" || parent.elementType=="Lane") {
+                ret = true;
+            }
+            return ret;
+        };
+        
+        return _this;
+    };
+    
     var _CancelationIntermediateCatchEvent = function (obj) {
         var _this = new _IntermediateCatchEvent(obj);
-        _this.elementType="CancelationIntermediateCatchEvent";
-        _this.addSuperClass("IntermediateCatchEvent");
+        _this.setElementType("CancelationIntermediateCatchEvent");
         
         _this.canAttach = function (parent) {
             var ret = false;
@@ -442,13 +518,13 @@
     var _CompensationIntermediateCatchEvent = function (obj) {
         var _this = new _IntermediateCatchEvent(obj);
         var fCanStart = _this.canStartLink;
-        _this.elementType="CompensationIntermediateCatchEvent";
-        _this.addSuperClass("IntermediateCatchEvent");
+        
+        _this.setElementType("CompensationIntermediateCatchEvent");
         
         _this.canStartLink = function(link) {
             var ret = fCanStart(link);
-            if (_this.parent.isSubClass("Activity")) {
-                if (!link.elementType=="DirectionalAssociation") {
+            if (_this.parent && _this.parent != null && _this.parent.typeOf("Activity")) {
+                if (link.elementType!="DirectionalAssociation") {
                     ret = false;
                 }
             }
@@ -461,8 +537,8 @@
         var _this = new _IntermediateCatchEvent(obj);
         var fCanStart = _this.canStartLink;
         var fCanAttach = _this.canAttach;
-        _this.elementType="LinkIntermediateCatchEvent";
-        _this.addSuperClass("IntermediateCatchEvent");
+        
+        _this.setElementType("LinkIntermediateCatchEvent");
         
         _this.canEndLink = function(link) {
             return false;
@@ -478,7 +554,7 @@
         
         _this.canAttach = function (parent) {
             var ret = fCanAttach(parent);
-            if (parent.isSubClass("Activity")) {
+            if (parent.typeOf("Activity")) {
                 ret = false;
             }
             return ret;
@@ -488,12 +564,11 @@
     
     var _SignalIntermediateCatchEvent = function (obj) {
         var _this = new _IntermediateCatchEvent(obj);
-        _this.elementType="SignalIntermediateCatchEvent";
-        _this.addSuperClass("IntermediateCatchEvent");
+        _this.setElementType("SignalIntermediateCatchEvent");
         
         _this.canAttach = function(parent) {
             var ret = false;
-            if (parent.isSubClass("Activity") || parent.elementType=="Pool" || parent.elementType=="Lane") {
+            if (parent.typeOf("Activity") || parent.elementType=="Pool" || parent.elementType=="Lane") {
                 ret = true;
             }
             return ret;
@@ -504,8 +579,7 @@
     
     var _MultipleIntermediateCatchEvent = function (obj) {
         var _this = new _IntermediateCatchEvent(obj);
-        _this.elementType="MultipleIntermediateCatchEvent";
-        _this.addSuperClass("IntermediateCatchEvent");
+        _this.setElementType("MultipleIntermediateCatchEvent");
         return _this;
     };
     
@@ -513,12 +587,11 @@
         var _this = new _IntermediateCatchEvent(obj);
         var fCanEnd = _this.canEndLink;
         
-        _this.elementType="ScalationIntermediateCatchEvent";
-        _this.addSuperClass("IntermediateCatchEvent");
+        _this.setElementType("ScalationIntermediateCatchEvent");
         
         _this.canAttach = function(parent) {
             var ret = false;
-            if (parent.isSubClass("Activity") || parent.elementType=="Pool" || parent.elementType=="Lane") {
+            if (parent.typeOf("Activity") || parent.elementType=="Pool" || parent.elementType=="Lane") {
                 ret = true;
             }
             return ret;
@@ -537,12 +610,12 @@
     var _ParallelIntermediateCatchEvent = function (obj) {
         var _this = new _IntermediateCatchEvent(obj);
         var fCanAttach = _this.canAttach;
-        _this.elementType="ParallelIntermediateCatchEvent";
-        _this.addSuperClass("IntermediateCatchEvent");
+        
+        _this.setElementType("ParallelIntermediateCatchEvent");
         
         _this.canAttach = function (parent) {
             var ret = fCanAttach(parent);
-            if (parent.isSubClass("Activity")) {
+            if (parent.typeOf("Activity")) {
                 ret = false;
             }
             return ret;
@@ -552,12 +625,11 @@
     
     var _RuleIntermediateCatchEvent = function (obj) {
         var _this = new _IntermediateCatchEvent(obj);
-        _this.elementType="RuleIntermediateCatchEvent";
-        _this.addSuperClass("IntermediateCatchEvent");
+        _this.setElementType("RuleIntermediateCatchEvent");
         
         _this.canAttach = function (parent) {
             var ret = false;
-            if (parent.isSubClass("Activity") || parent.elementType=="Pool" || parent.elementType=="Lane") {
+            if (parent.typeOf("Activity") || parent.elementType=="Pool" || parent.elementType=="Lane") {
                 ret = true;
             }
             return ret;
@@ -569,8 +641,8 @@
         var _this = new _IntermediateThrowEvent(obj);
         var fCanEnd = _this.canEndLink;
         var fCanStart = _this.canStartLink;
-        _this.elementType="MessageIntermediateThrowEvent";
-        _this.addSuperClass("IntermediateThrowEvent");
+        
+        _this.setElementType("MessageIntermediateThrowEvent");
         
         _this.canStartLink = function(link) {
             var ret = fCanStart(link);
@@ -601,8 +673,7 @@
     
     var _CompensationIntermediateThrowEvent = function(obj) {
         var _this = new _IntermediateThrowEvent(obj);
-        _this.elementType="CompensationIntermediateThrowEvent";
-        _this.addSuperClass("IntermediateThrowEvent");
+        _this.setElementType("CompensationIntermediateThrowEvent");
         return _this;
     };
     
@@ -610,8 +681,7 @@
         var _this = new _IntermediateThrowEvent(obj);
         var fCanEnd = _this.canEndLink;
         
-        _this.elementType="LinkIntermediateThrowEvent";
-        _this.addSuperClass("IntermediateThrowEvent");
+        _this.setElementType("LinkIntermediateThrowEvent");
         
         _this.canStartLink = function(link) {
             return false;
@@ -630,32 +700,29 @@
     
     var _SignalIntermediateThrowEvent = function(obj) {
         var _this = new _IntermediateThrowEvent(obj);
-        _this.elementType="SignalIntermediateThrowEvent";
-        _this.addSuperClass("IntermediateThrowEvent");
+        _this.setElementType("SignalIntermediateThrowEvent");
         return _this;
     };
     
     var _MultipleIntermediateThrowEvent = function(obj) {
         var _this = new _IntermediateThrowEvent(obj);
-        _this.elementType="MultipleIntermediateThrowEvent";
-        _this.addSuperClass("IntermediateThrowEvent");
+        _this.setElementType("MultipleIntermediateThrowEvent");
         return _this;
     };
     
     var _ScalationIntermediateThrowEvent = function(obj) {
         var _this = new _IntermediateThrowEvent(obj);
-        _this.elementType="ScalationIntermediateThrowEvent";
-        _this.addSuperClass("IntermediateThrowEvent");
+        _this.setElementType("ScalationIntermediateThrowEvent");
         return _this;
     };
     
     /***************************Eventos finales****************************/
     var _EndEvent = function(obj) {
         var _this = new _ThrowEvent(obj);
-        _this.elementType="EndEvent";
-        _this.addSuperClass("ThrowEvent");
         var fCanEnd = _this.canEndLink;
         var fCanAdd = _this.canAddToDiagram;
+
+        _this.setElementType("EndEvent");
         
         _this.canStartLink = function(link) {
             return false;
@@ -663,7 +730,7 @@
         
         _this.canEndLink = function(link) {
             var ret = fCanEnd(link);
-            if (link.elementType!="SequenceFlow") {
+            if (!link.typeOf("SequenceFlow")) {
                 ret = false;
             } else if (link.elementType=="SequenceFlow" && link.fromObject.elementType=="ExclusiveIntermediateEventGateway") {
                 ret = false;
@@ -682,8 +749,8 @@
     
     var _MessageEndEvent = function (obj) {
         var _this = new _EndEvent(obj);
-        _this.elementType="MessageEndEvent";
-        _this.addSuperClass("EndEvent");
+        _this.setElementType("MessageEndEvent");
+
         _this.canStartLink = function(link) {
             var ret = false;
             if (link.elementType=="MessageFlow") {
@@ -697,50 +764,43 @@
     
     var _ErrorEndEvent = function (obj) {
         var _this = new _EndEvent(obj);
-        _this.elementType="ErrorEndEvent";
-        _this.addSuperClass("EndEvent");
+        _this.setElementType("ErrorEndEvent");
         return _this;
     };
     
     var _CancelationEndEvent = function (obj) {
         var _this = new _EndEvent(obj);
-        _this.elementType="CancelationEndEvent";
-        _this.addSuperClass("EndEvent");
+        _this.setElementType("CancelationEndEvent");
         return _this;
     };
     
     var _CompensationEndEvent = function (obj) {
         var _this = new _EndEvent(obj);
-        _this.elementType="CompensationEndEvent";
-        _this.addSuperClass("EndEvent");
+        _this.setElementType("CompensationEndEvent");
         return _this;
     };
     
     var _SignalEndEvent = function (obj) {
         var _this = new _EndEvent(obj);
-        _this.elementType="SignalEvent";
-        _this.addSuperClass("EndEvent");
+        _this.setElementType("SignalEvent");
         return _this;
     };
     
     var _MultipleEndEvent = function (obj) {
         var _this = new _EndEvent(obj);
-        _this.elementType="MultipleEndEvent";
-        _this.addSuperClass("EndEvent");
+        _this.setElementType("MultipleEndEvent");
         return _this;
     };
     
     var _ScalationEndEvent = function (obj) {
         var _this = new _EndEvent(obj);
-        _this.elementType="ScalationEndEvent";
-        _this.addSuperClass("EndEvent");
+        _this.setElementType("ScalationEndEvent");
         return _this;
     };
     
     var _TerminationEndEvent = function (obj) {
         var _this = new _EndEvent(obj);
-        _this.elementType="TerminationEndEvent";
-        _this.addSuperClass("EndEvent");
+        _this.setElementType("TerminationEndEvent");
         return _this;
     };
     
@@ -750,8 +810,7 @@
         var fCanStart = _this.canStartLink;
         var fCanEnd = _this.canEndLink;
         
-        _this.elementType="Gateway";
-        _this.addSuperClass("FlowNode");
+        _this.setElementType("Gateway");
         _this.canStartLink = function (link) {
             var ret = fCanStart(link);
             var ci = 0;
@@ -817,8 +876,7 @@
         var fCanStart = _this.canStartLink;
         var fCanEnd = _this.canEndLink;
         
-        _this.elementType="ExclusiveGateway";
-        _this.addSuperClass("Gateway");
+        _this.setElementType("ExclusiveGateway");
         
         _this.canStartLink = function(link) {
             var ret = fCanStart(link);
@@ -829,8 +887,7 @@
                     c++;
                 }
             }
-            
-            if (!link.elementType=="ConditionalFlow" || link.elementType=="DefaultFlow") {
+            if (!(link.elementType=="ConditionalFlow" || link.elementType=="DefaultFlow")) {
                 ret = false;
             }
             
@@ -854,8 +911,7 @@
     var _EventBasedGateway = function(obj) {
         var _this = new _Gateway(obj);
         var fCanStart = _this.canStartLink;
-        _this.elementType="EventBasedGateway";
-        _this.addSuperClass("Gateway");
+        _this.setElementType("EventBasedGateway");
         
         _this.canStartLink = function(link) {
             var ret = fCanStart(link);
@@ -869,12 +925,17 @@
         return _this;
     };
     
+    var _ParallelStartEventGateway = function(obj) {
+        var _this = new _EventBasedGateway(obj);
+        _this.setElementType("ParallelStartEventGateway");
+        return _this;
+    };
+    
     var _InclusiveGateway = function(obj) {
         var _this = new _Gateway(obj);
         var fCanStart = _this.canStartLink;
         
-        _this.elementType="InclusiveGateway";
-        _this.addSuperClass("Gateway");
+        _this.setElementType("InclusiveGateway");
         
         _this.canStartLink = function(link) {
             var ret = fCanStart(link);
@@ -900,22 +961,19 @@
     
     var _ExclusiveStartEventGateway = function (obj) {
         var _this = new _EventBasedGateway(obj);
-        _this.elementType="ExclusiveStartEventGateway";
-        _this.addSuperClass("EventBasedGateway");
+        _this.setElementType("ExclusiveStartEventGateway");
         return _this;
     };
     
     var _ExclusiveIntermediateEventGateway = function (obj) {
         var _this = new _EventBasedGateway(obj);
-        _this.elementType="ExclusiveIntermediateEventGateway";
-        _this.addSuperClass("EventBasedGateway");
+        _this.setElementType("ExclusiveIntermediateEventGateway");
         return _this;
     };
     
     var _ComplexGateway = function (obj) {
         var _this = new _Gateway(obj);
-        _this.elementType="ComplexGateway";
-        _this.addSuperClass("Gateway");
+        _this.setElementType("ComplexGateway");
         return _this;
     };
     
@@ -923,8 +981,7 @@
         var _this = new _Gateway(obj);
         var fCanStart = _this.canStartLink;
         
-        _this.elementType="ParallelGateway";
-        _this.addSuperClass("Gateway");
+        _this.setElementType("ParallelGateway");
         
         _this.canStartLink = function(link) {
             var ret = fCanStart(link);
@@ -943,8 +1000,7 @@
         var fCanEnd = _this.canEndLink;
         var fCanStart = _this.canStartLink;
         
-        _this.elementType="DataObject";
-        _this.addSuperClass("GraphicalElement");
+        _this.setElementType("DataObject");
         
         _this.canAttach = function(parent) {
             var ret = fCanAttach(parent);
@@ -956,7 +1012,7 @@
         
         _this.canStartLink = function(link) {
             var ret = fCanStart(link);
-            if (!link.elementType=="AssociationFlow") {
+            if (link.elementType!="AssociationFlow") {
                 ret = false;
             }
             return ret;
@@ -964,9 +1020,9 @@
         
         _this.canEndLink = function(link) {
             var ret = fCanEnd(link);
-            if (!link.elementType=="AssociationFlow") {
+            if (!link.typeOf("AssociationFlow")) {
                 ret = false;
-            } else if (link.fromObject.isSubClass("Artifact")) {
+            } else if (link.fromObject.typeOf("DataObject")) {
                 ret = false;
             }
             return ret;
@@ -976,30 +1032,105 @@
     
     var _DataInput = function (obj) {
         var _this = new _DataObject(obj);
-        _this.elementType="DataInput";
-        _this.addSuperClass("DataObject");
+        _this.setElementType("DataInput");
         return _this;
     };
     
     var _DataOutput = function (obj) {
         var _this = new _DataObject(obj);
-        _this.elementType="DataOutput";
-        _this.addSuperClass("DataObject");
+        _this.setElementType("DataOutput");
         return _this;
     };
     
     var _DataStore = function (obj) {
         var _this = new _DataObject(obj);
-        _this.elementType="DataStore";
-        _this.addSuperClass("DataObject");
+        _this.setElementType("DataStore");
         return _this;
     };
+    
+    /***************************Artefactos*******************************/
+    var _Artifact = function(obj) {
+        var _this = new _GraphicalElement(obj);
+        var fCanStart = _this.canStartLink;
+        var fCanEnd = _this.canEndLink;
+        
+        _this.setElementType("Artifact");
+        
+        _this.canAttach = function(parent) {
+            var ret = false;
+            if (parent.elementType=="Pool" || parent.elementType=="Lane") {
+                ret = true;
+            }
+            return ret;
+        };
+        
+        _this.canStartLink = function (link) {
+            var ret = fCanStart(link);
+            if (link.elementType!="AssociationFlow") {
+                ret = false;
+            }
+            return ret;
+        };
+        
+        _this.canEndLink = function(link) {
+            var ret = fCanEnd(link);
+            if (link.elementType!="AssociationFlow") {
+                ret = false;
+            } else if (link.fromObject.typeOf("Artifact") || link.fromObject.typeOf("DataObject")) {
+                
+            }
+            return ret;
+        };
+        return _this;
+    };
+    
+    var _AnnotationArtifact = function(obj) {
+        var _this = new _Artifact(obj);
+        var fCanStart = _this.canStartLink;
+        var fCanEnd = _this.canEndLink;
+        
+        _this.setElementType("AnnotationArtifact");
+        
+        _this.canStartLink = function(link) {
+            var ret = fCanStart(link);
+            if (link.elementType=="DirectionalAssociation") {
+                ret = false;
+            }
+            return ret;
+        };
+        
+        _this.canEndLink = function(link) {
+            var ret = fCanEnd(link);
+            if (link.fromObject.typeOf("Artifact")) {
+                ret = false;
+            } else if (link.elementType=="DirectionalAssociation") {
+                ret = false;
+            }
+            return ret;
+        };
+        return _this;
+    };
+    
+    var _Group = function(obj) {
+        var _this = new _Artifact(obj);
+        
+        _this.setElementType("GroupArtifact");
+        _this.canStartLink = function(link) {
+            return false;
+        };
+        
+        _this.canEndLink = function(link) {
+            return false;
+        };
+        
+        return _this;
+    };
+    
     /******************************Swimlanes*******************************/
     var _Pool = function (obj) {
         var _this = new _GraphicalElement(obj);
         var fCanAdd = _this.canAddToDiagram;
-        _this.elementType="Pool";
-        _this.addSuperClass("GraphicalElement");
+        _this.setElementType("Pool");
         
         _this.canStartLink = function(link) {
             var ret = true;
@@ -1037,8 +1168,7 @@
         var fCanStart = _this.canStartLink;
         var fCanEnd = _this.canEndLink;
         
-        _this.elementType="Activity";
-        _this.addSuperClass("FlowNode");
+        _this.setElementType("Activity");
         
         _this.canStartLink = function(link) {
             var ret = fCanStart(link);
@@ -1062,71 +1192,61 @@
     
     var _CallActivity = function(obj) {
         var _this = new _Activity(obj);
-        _this.elementType="CallActivity";
-        _this.addSuperClass("Activity");
+        _this.setElementType("CallActivity");
         return _this;
     };
     
     var _Task = function(obj) {
         var _this = new _Activity(obj);
-        _this.elementType="Task";
-        _this.addSuperClass("Activity");
+        _this.setElementType("Task");
         return _this;
     };
     
     var _CallTask = function(obj) {
         var _this = new _CallActivity(obj);
-        _this.elementType="CallTask";
-        _this.addSuperClass("CallActivity");
+        _this.setElementType("CallTask");
         return _this;
     };
     
     var _UserTask = function(obj) {
         var _this = new _Task(obj);
-        _this.elementType="UserTask";
-        _this.addSuperClass("Task");
+        _this.setElementType("UserTask");
         return _this;
     };
     
     var _ServiceTask = function(obj) {
         var _this = new _Task(obj);
-        _this.elementType="ServiceTask";
-        _this.addSuperClass("Task");
+        _this.setElementType("ServiceTask");
         return _this;
     };
     
     var _BusinessRuleTask = function(obj) {
         var _this = new _Task(obj);
-        _this.elementType="BusinessRuleTask";
-        _this.addSuperClass("Task");
+        _this.setElementType("BusinessRuleTask");
         return _this;
     };
     
     var _CallManualTask = function(obj) {
         var _this = new _CallTask(obj);
-        _this.elementType="CallManualTask";
-        _this.addSuperClass("CallTask");
+        _this.setElementType("CallManualTask");
         return _this;
     };
     
     var _CallBusinessRuleTask = function(obj) {
         var _this = new _CallTask(obj);
-        _this.elementType="CallBusinessRuleTask";
-        _this.addSuperClass("CallTask");
+        _this.setElementType("CallBusinessRuleTask");
         return _this;
     };
     
     var _CallScriptTask = function(obj) {
         var _this = new _CallTask(obj);
-        _this.elementType="CallScriptTask";
-        _this.addSuperClass("CallTask");
+        _this.setElementType("CallScriptTask");
         return _this;
     };
     
     var _CallUserTask = function(obj) {
         var _this = new _CallTask(obj);
-        _this.elementType="CallUserTask";
-        _this.addSuperClass("CallTask");
+        _this.setElementType("CallUserTask");
         return _this;
     };
     
@@ -1135,8 +1255,7 @@
         var fCanStart = _this.canStartLink;
         var fCanEnd = _this.canEndLink;
         
-        _this.elementType="ScriptTask";
-        _this.addSuperClass("Task");
+        _this.setElementType("ScriptTask");
         
         _this.canStartLink = function(link) {
             var ret = fCanStart(link);
@@ -1160,8 +1279,7 @@
         var _this = new _Task(obj);
         var fCanEnd = _this.canEndLink;
         
-        _this.elementType="SendTask";
-        _this.addSuperClass("Task");
+        _this.setElementType("SendTask");
         
         _this.canEndLink = function(link) {
             var ret = fCanEnd(link);
@@ -1178,8 +1296,7 @@
         var fCanStart = _this.canStartLink;
         var fCanEnd = _this.canEndLink;
         
-        _this.elementType="ReceiveTask";
-        _this.addSuperClass("Task");
+        _this.setElementType("ReceiveTask");
         
         _this.canStartLink = function(link) {
             var ret = fCanStart(link);
@@ -1210,8 +1327,7 @@
         var fCanStart = _this.canStartLink;
         var fCanEnd = _this.canEndLink;
         
-        _this.elementType="ManualTask";
-        _this.addSuperClass("Task");
+        _this.setElementType("ManualTask");
         
         _this.canStartLink = function(link) {
             var ret = fCanStart(link);
@@ -1224,6 +1340,49 @@
         _this.canEndLink = function(link) {
             var ret = fCanEnd(link);
             if (link.elementType=="MessageFlow") {
+                ret = false;
+            }
+            return ret;
+        };
+        return _this;
+    };
+    
+    var _SubProcess = function(obj) {
+        var _this = new _Activity(obj);
+        _this.setElementType("SubProcess");
+        return _this;
+    };
+    
+    var _AdhocSubProcess = function(obj) {
+        var _this = new _SubProcess(obj);
+        _this.setElementType("AdhocSubProcess");
+        return _this;
+    };
+    
+    var _TransactionSubProcess = function(obj) {
+        var _this = new _SubProcess(obj);
+        _this.setElementType("TransactionSubProcess");
+        return _this;
+    };
+    
+    var _EventSubProcess = function(obj) {
+        var _this = new _SubProcess(obj);
+        var fCanStart = _this.canStartLink;
+        var fCanEnd = _this.canStartLink;
+        
+        _this.setElementType("EventSubProcess");
+        
+        _this.canStartLink = function(link) {
+            var ret = fCanStart(link);
+            if (link.typeOf("SequenceFlow")) {
+                ret = false;
+            }
+            return ret;
+        };
+        
+        _this.canEndLink = function(link) {
+            var ret = fCanEnd(link);
+            if (link.typeOf("SequenceFlow")) {
                 ret = false;
             }
             return ret;
@@ -1355,10 +1514,13 @@
                 if(Modeler.dragConnection.toObject==null)
                 {
                     Modeler.dragConnection.remove();
-                    
                 }else
                 {
-                    Modeler.dragConnection.toObject.addInConnection(Modeler.dragConnection);
+                    if (Modeler.dragConnection.toObject.canEndLink(Modeler.dragConnection)) {
+                        Modeler.dragConnection.toObject.addInConnection(Modeler.dragConnection);
+                    } else {
+                        Modeler.dragConnection.remove();
+                    }
                 }
                 Modeler.dragConnection=null;
             }
@@ -1376,8 +1538,14 @@
             if(evt.button==2)
             {
                 Modeler.dragConnection=Modeler.mapObject("sequenceFlow");
+                if (obj.canStartLink(Modeler.dragConnection)) {
+                
                 obj.addOutConnection(Modeler.dragConnection);
                 Modeler.dragConnection.setEndPoint(obj.getX(),obj.getY());
+                } else {
+                    Modeler.dragConnection.remove();
+                    Modeler.dragConnection = null;
+                }
                 return false;
             }
             return true;            
@@ -1409,7 +1577,6 @@
             var obj=ToolKit.createUseObject(type,id,parent);
             obj.mousedown=function(evt){return Modeler.objectMouseDown(evt,obj);}
             obj.onmousemove=function(evt){return Modeler.objectMouseMove(evt,obj);}
-
             return obj;
         },
                 
@@ -1868,63 +2035,63 @@
                 ret.setText("Inicio Normal",0,1,80,1);
             }
             else if(type=='messageStartEvent'){
-                ret=Modeler.createObject("#messageStartEvent",null,null);
-                ret.elementType="MessageStartEvent";
+                ret=new _MessageStartEvent(Modeler.createObject("#messageStartEvent",null,null));
+                //ret.elementType="MessageStartEvent";
                 ret.setText("Inicio por mensaje",0,1,80,1);
             }
             else if(type=='timerStartEvent'){
-                ret=Modeler.createObject("#timerStartEvent",null,null);
-                ret.elementType="TimerStartEvent";
+                ret=new _TimerStartEvent(Modeler.createObject("#timerStartEvent",null,null));
+                //ret.elementType="TimerStartEvent";
                 ret.setText("Inicio temporizado",0,1,80,1);
             }
             else if(type=='ruleStartEvent') {
-                ret=Modeler.createObject("#ruleStartEvent",null,null);
-                ret.elementType="RuleStartEvent";
+                ret=new _RuleStartEvent(Modeler.createObject("#ruleStartEvent",null,null));
+                //ret.elementType="RuleStartEvent";
                 ret.setText("Inicio por regla de negocio",0,1,80,1);
             }
             else if(type=='signalStartEvent') {
-                ret=Modeler.createObject("#signalStartEvent",null,null);
-                ret.elementType="SignalStartEvent";
+                ret=new _SignalStartEvent(Modeler.createObject("#signalStartEvent",null,null));
+                //ret.elementType="SignalStartEvent";
                 ret.setText("Inicio por señal",0,1,80,1);
             }
             else if(type=='multiStartEvent') {
-                ret=Modeler.createObject("#multipleStartEvent",null,null);
-                ret.elementType="MultipleStartEvent";
+                ret=new _MultipleStartEvent(Modeler.createObject("#multipleStartEvent",null,null));
+                //ret.elementType="MultipleStartEvent";
                 ret.setText("Inicio múltiple",0,1,80,1);
             }
             else if(type=='parallelStartEvent') {
-                ret=Modeler.createObject("#parallelStartEvent",null,null);
-                ret.elementType="ParallelStartEvent";
+                ret=new _ParallelStartEvent(Modeler.createObject("#parallelStartEvent",null,null));
+                //ret.elementType="ParallelStartEvent";
                 ret.setText("Inicio paralelo",0,1,80,1);
             }
             else if(type=='scalaStartEvent') {
-                ret= Modeler.createObject("#scalationStartEvent",null,null);
-                ret.elementType="ScalationStartEvent";
+                ret= new _ScalationStartEvent(Modeler.createObject("#scalationStartEvent",null,null));
+                //ret.elementType="ScalationStartEvent";
                 ret.setText("Inicio por escalamiento",0,1,80,1);
             }
             else if(type=='errorStartEvent') {
-                ret= Modeler.createObject("#errorStartEvent",null,null);
-                ret.elementType="ErrorStartEvent";
+                ret= new _ErrorStartEvent(Modeler.createObject("#errorStartEvent",null,null));
+                //ret.elementType="ErrorStartEvent";
                 ret.setText("Inicio por error",0,1,80,1);
             }
             else if(type=='compensaStartEvent') {
-                ret= Modeler.createObject("#compensationStartEvent",null,null);
-                ret.elementType="CompensationStartEvent";
+                ret= new _CompensationStartEvent(Modeler.createObject("#compensationStartEvent",null,null));
+                //ret.elementType="CompensationStartEvent";
                 ret.setText("Inicio por compensación",0,1,80,1);
             }
             else if(type=='messageInterCatchEvent') {
-                ret= Modeler.createObject("#messageIntermediateCatchEvent",null,null);
-                ret.elementType="MessageIntermediateCatchEvent";
+                ret=new _MessageIntermediateCatchEvent(Modeler.createObject("#messageIntermediateCatchEvent",null,null));
+                //ret.elementType="MessageIntermediateCatchEvent";
                 ret.setText("Recepción de mensaje",0,1,80,1);
             }
             else if(type=='messageInterThrowEvent') {
-                ret= Modeler.createObject("#messageIntermediateThrowEvent",null,null);
-                ret.elementType="MessageIntermediateThrowEvent";
+                ret= new _MessageIntermediateThrowEvent(Modeler.createObject("#messageIntermediateThrowEvent",null,null));
+                //ret.elementType="MessageIntermediateThrowEvent";
                 ret.setText("Envío de mensaje",0,1,80,1);
             }
             else if(type=='timerInterEvent') {
-                ret= Modeler.createObject("#timerIntermediateEvent",null,null);
-                ret.elementType="TimerIntermediateCatchEvent";
+                ret= new _TimerIntermediateCatchEvent(Modeler.createObject("#timerIntermediateEvent",null,null));
+                //ret.elementType="TimerIntermediateCatchEvent";
                 ret.setText("Temporizador",0,1,80,1);
             }
             else if(type=='errorInterEvent') {
@@ -1934,68 +2101,68 @@
                 
             }
             else if(type=='cancelInterEvent') {
-                ret= Modeler.createObject("#cancelIntermediateEvent",null,null);
-                ret.elementType="CancelationIntermediateCatchEvent";
+                ret= new _CancelationIntermediateCatchEvent(Modeler.createObject("#cancelIntermediateEvent",null,null));
+                //ret.elementType="CancelationIntermediateCatchEvent";
                 ret.setText("Cancelación",0,1,80,1);
             }
             else if(type=='compensaInterCatchEvent') {
-                ret= Modeler.createObject("#compensationIntermediateCatchEvent",null,null);
-                ret.elementType="CompensationIntermediateCatchEvent";
+                ret= new _CompensationIntermediateCatchEvent(Modeler.createObject("#compensationIntermediateCatchEvent",null,null));
+                //ret.elementType="CompensationIntermediateCatchEvent";
                 ret.setText("Recepción de compensación",0,1,80,1);
             }
             else if(type=='compensaInterThrowEvent') {
-                ret= Modeler.createObject("#compensationIntermediateThrowEvent",null,null);
-                ret.elementType="CompensationIntermediateThrowEvent";
+                ret= new _CompensationIntermediateCatchEvent(Modeler.createObject("#compensationIntermediateThrowEvent",null,null));
+                //ret.elementType="CompensationIntermediateThrowEvent";
                 ret.setText("Disparo de compensación",0,1,80,1);
             }
             else if(type=='ruleInterEvent') {
-                ret= Modeler.createObject("#ruleIntermediateEvent",null,null);
-                ret.elementType="RuleIntermediateCatchEvent";
+                ret= new _RuleIntermediateCatchEvent(Modeler.createObject("#ruleIntermediateEvent",null,null));
+                //ret.elementType="RuleIntermediateCatchEvent";
                 ret.setText("Regla de negocio",0,1,80,1);
             }
             else if(type=='linkInterCatchEvent') {
-                ret= Modeler.createObject("#linkIntermediateCatchEvent",null,null);
-                ret.elementType="LinkIntermediateCatchEvent";
+                ret= new _LinkIntermediateCatchEvent(Modeler.createObject("#linkIntermediateCatchEvent",null,null));
+                //ret.elementType="LinkIntermediateCatchEvent";
                 ret.setText("Recepción de enlace",0,1,80,1);
             }
             else if(type=='linkInterThrowEvent') {
-                ret= Modeler.createObject("#linkIntermediateThrowEvent",null,null);
-                ret.elementType="LinkIntermediateThrowEvent";
+                ret= new _LinkIntermediateThrowEvent(Modeler.createObject("#linkIntermediateThrowEvent",null,null));
+                //ret.elementType="LinkIntermediateThrowEvent";
                 ret.setText("Disparo de enlace",0,1,80,1);
             }
             else if(type=='signalInterCatchEvent') {
-                ret= Modeler.createObject("#signalIntermediateCatchEvent",null,null);
-                ret.elementType="SignalIntermediateCatchEvent";
+                ret= new _SignalIntermediateCatchEvent(Modeler.createObject("#signalIntermediateCatchEvent",null,null));
+                //ret.elementType="SignalIntermediateCatchEvent";
                 ret.setText("Recepción de señal",0,1,80,1);
             }
             else if(type=='signalInterThrowEvent') {
-                ret= Modeler.createObject("#signalIntermediateThrowEvent",null,null);
-                ret.elementType="SignalIntermediateThrowEvent";
+                ret= new _SignalIntermediateThrowEvent(Modeler.createObject("#signalIntermediateThrowEvent",null,null));
+                //ret.elementType="SignalIntermediateThrowEvent";
                 ret.setText("Disparo de señal",0,1,80,1);
             }
             else if(type=='multipleInterCatchEvent') {
-                ret= Modeler.createObject("#multipleIntermediateCatchEvent",null,null);
-                ret.elementType="MultipleIntermediateCatchEvent";
+                ret= new _MultipleIntermediateCatchEvent(Modeler.createObject("#multipleIntermediateCatchEvent",null,null));
+                //ret.elementType="MultipleIntermediateCatchEvent";
                 ret.setText("Recepción múltiple",0,1,80,1);
             }
             else if(type=='multipleInterThrowEvent') {
-                ret= Modeler.createObject("#multipleIntermediateThrowEvent",null,null);
-                ret.elementType="MultipleIntermediateThrowEvent";
+                ret= new _MultipleIntermediateThrowEvent(Modeler.createObject("#multipleIntermediateThrowEvent",null,null));
+                //ret.elementType="MultipleIntermediateThrowEvent";
                 ret.setText("Disparo múltiple",0,1,80,1);
             }
             else if(type=='scalaInterCatchEvent') {
-                ret= Modeler.createObject("#scalationIntermediateCatchEvent",null,null);
-                ret.elementType="ScalationIntermediateCatchEvent";
+                ret= new _ScalationIntermediateCatchEvent(Modeler.createObject("#scalationIntermediateCatchEvent",null,null));
+                //ret.elementType="ScalationIntermediateCatchEvent";
                 ret.setText("Recepción de escalamiento",0,1,80,1);
             }
             else if(type=='scalaInterThrowEvent') {
-                ret= Modeler.createObject("#scalationIntermediateThrowEvent",null,null);
-                ret.elementType="ScalationIntermediateThrowEvent";
+                ret= new _ScalationIntermediateThrowEvent(Modeler.createObject("#scalationIntermediateThrowEvent",null,null));
+                //ret.elementType="ScalationIntermediateThrowEvent";
                 ret.setText("Disparo de escalamiento",0,1,80,1);
             }
             else if(type=='parallelInterEvent') {
-                ret= Modeler.createObject("#parallelIntermediateEvent",null,null);
-                ret.elementType="ParallelIntermediateCatchEvent";
+                ret= new _ParallelIntermediateCatchEvent(Modeler.createObject("#parallelIntermediateEvent",null,null));
+                //ret.elementType="ParallelIntermediateCatchEvent";
                 ret.setText("Paralelo",0,1,80,1);
             }
             else if(type=='normalEndEvent') {
@@ -2044,69 +2211,69 @@
                 ret.setText("Terminación",0,1,80,1);
             }
             else if(type=='exclusiveDataGateway') {
-                ret= Modeler.createObject("#exclusiveDataGateway",null,null);
-                ret.elementType="ExclusiveGateway";
+                ret= new _ExclusiveGateway(Modeler.createObject("#exclusiveDataGateway",null,null));
+                //ret.elementType="ExclusiveGateway";
                 ret.setText("Exclusiva (datos)",0,1,80,1);
             }
             else if(type=='inclusiveDataGateway') {
-                ret= Modeler.createObject("#inclusiveDataGateway",null,null);
-                ret.elementType="InclusiveGateway";
+                ret= new _InclusiveGateway(Modeler.createObject("#inclusiveDataGateway",null,null));
+                //ret.elementType="InclusiveGateway";
                 ret.setText("Inclusiva (datos)",0,1,80,1);
             }
             else if(type=='exclusiveStartEventGateway') {
-                ret= Modeler.createObject("#exclusiveStartGateway",null,null);
-                ret.elementType="ExclusiveStartEventGateway";
+                ret= new _ExclusiveStartEventGateway(Modeler.createObject("#exclusiveStartGateway",null,null));
+                //ret.elementType="ExclusiveStartEventGateway";
                 ret.setText("Exclusiva de inicio",0,1,80,1);
             }
             else if(type=='exclusiveEventGateway') {
-                ret= Modeler.createObject("#eventGateway",null,null);
-                ret.elementType="EventBasedGateway";
+                ret= new _EventBasedGateway(Modeler.createObject("#eventGateway",null,null));
+                //ret.elementType="EventBasedGateway";
                 ret.setText("Exclusiva (eventos)",0,1,80,1);
             }
             else if(type=='parallelGateway') {
-                ret= Modeler.createObject("#parallelGateway",null,null);
-                ret.elementType="ParallelGateway";
+                ret= new _ParallelGateway(Modeler.createObject("#parallelGateway",null,null));
+                //ret.elementType="ParallelGateway";
                 ret.setText("Paralela",0,1,80,1);
             }
             else if(type=='parallelStartGateway') {
-                ret= Modeler.createObject("#parallelStartGateway",null,null);
-                ret.elementType="ParallelStartEventGateway";
+                ret= new _ParallelStartEventGateway(Modeler.createObject("#parallelStartGateway",null,null));
+                //ret.elementType="ParallelStartEventGateway";
                 ret.setText("Paralela de inicio",0,1,80,1);
             }
             else if(type=='complexGateway') {
-                ret= Modeler.createObject("#complexGateway",null,null);
-                ret.elementType="ComplexGateway";
+                ret= new _ComplexGateway(Modeler.createObject("#complexGateway",null,null));
+                //ret.elementType="ComplexGateway";
                 ret.setText("Compleja",0,1,80,1);
             }
             else if(type=='group') {
-                ret= Modeler.createGroupArtifact(null,null);
-                ret.elementType="GroupArtifact";
+                ret= new _Group(Modeler.createGroupArtifact(null,null));
+                //ret.elementType="GroupArtifact";
                 ret.resize(300,300);
             }
             else if(type=='annotation'){
-                ret= Modeler.createAnnotationArtifact(null, null);
-                ret.elementType="AnnotationArtifact";
+                ret= new _AnnotationArtifact(Modeler.createAnnotationArtifact(null, null));
+                //ret.elementType="AnnotationArtifact";
                 ret.setText("Anotación de texto",0,0,0,1);
                 ret.resize(200,60);
             }
             else if(type=='dataObject') {
-                ret= Modeler.createObject("#data",null,null);
-                ret.elementType="DataObject";
+                ret= new _DataObject(Modeler.createObject("#data",null,null));
+                //ret.elementType="DataObject";
                 ret.setText("Dato",0,1,80,1);
             }
             else if(type=='dataInput') {
-                ret= Modeler.createObject("#dataInput",null,null);
-                ret.elementType="DataInput";
+                ret= new _DataInput(Modeler.createObject("#dataInput",null,null));
+                //ret.elementType="DataInput";
                 ret.setText("Dato de entrada",0,1,80,1);
             }
             else if(type=='dataOutput') {
-                ret= Modeler.createObject("#dataOutput",null,null);
-                ret.elementType="DataOutput";
+                ret= new _DataOutput(Modeler.createObject("#dataOutput",null,null));
+                //ret.elementType="DataOutput";
                 ret.setText("Dato de salida",0,1,80,1);
             }
             else if(type=='dataStore') {
-                ret= Modeler.createObject("#dataStore",null,null);
-                ret.elementType="DataStore";
+                ret= new _DataStore(Modeler.createObject("#dataStore",null,null));
+                //ret.elementType="DataStore";
                 ret.setText("Almacén de datos",0,1,80,1);
             }
             else if(type=='userTask') {
@@ -2117,83 +2284,83 @@
                 ret.resize(100,60);
             }
             else if(type=='serviceTask') {
-                ret = Modeler.createTask(null,null);
-                ret.elementType="ServiceTask";
+                ret = new _ServiceTask(Modeler.createTask(null,null));
+                //ret.elementType="ServiceTask";
                 ret.addIcon("#serviceMarker",-1,-1,13,8);
                 ret.setText("Tarea de Servicio",0,0,0,1);
                 ret.resize(100,60);
             }
             else if(type=='scriptTask') {
-                ret = Modeler.createTask(null,null);
-                ret.elementType="ScriptTask";
+                ret = new _ScriptTask(Modeler.createTask(null,null));
+                //ret.elementType="ScriptTask";
                 ret.addIcon("#scriptMarker",-1,-1,7,13);
                 ret.setText("Tarea de Script",0,0,0,1);
                 ret.resize(100,60);
             }
             else if(type=='ruleTask') {
-                ret = Modeler.createTask(null,null);
-                ret.elementType="BusinessRuleTask";
+                ret = new _BusinessRuleTask(Modeler.createTask(null,null));
+                //ret.elementType="BusinessRuleTask";
                 ret.addIcon("#taskRuleMarker",-1,-1,12,12);
                 ret.setText("Tarea de regla de negocio",0,0,0,1);
                 ret.resize(100,60);
             }
             else if(type=='manualTask') {
-                ret = Modeler.createTask(null,null);
-                ret.elementType="ManualTask";
+                ret = new _ManualTask(Modeler.createTask(null,null));
+                //ret.elementType="ManualTask";
                 ret.addIcon("#manualMarker",-1,-1,9,6);
                 ret.setText("Tarea Manual",0,0,0,1);
                 ret.resize(100,60);
             }
             else if(type=='sendTask') {
-                ret = Modeler.createTask(null,null);
-                ret.elementType="SendTask";
+                ret = new _SendTask(Modeler.createTask(null,null));
+                //ret.elementType="SendTask";
                 ret.addIcon("#taskMessageThrowMarker",-1,-1,13,10);
                 ret.setText("Tarea de envío de mensaje",0,0,0,1);
                 ret.resize(100,60);
             }
             else if(type=='receiveTask') {
-                ret = Modeler.createTask(null,null);
-                ret.elementType="ReceiveTask";
+                ret = new _ReceiveTask(Modeler.createTask(null,null));
+                //ret.elementType="ReceiveTask";
                 ret.addIcon("#taskMessageCatchMarker",-1,-1,13,10);
                 ret.setText("Tarea de recepción de mensaje",0,0,0,1);
                 ret.resize(100,60);
             }
             else if(type=='abstractTask') {
-                ret = Modeler.createTask(null,null);
-                ret.elementType="Task";
+                ret = new _Task(Modeler.createTask(null,null));
+                //ret.elementType="Task";
                 ret.setText("Tarea abstracta",0,0,0,1);
                 ret.resize(100,60);
             }
             else if(type=='callTask') {
-                ret = Modeler.createCallTask(null,null);
-                ret.elementType="CallTask";
+                ret = new _CallTask(Modeler.createCallTask(null,null));
+                //ret.elementType="CallTask";
                 ret.setText("Tarea reusada",0,0,0,1);
                 ret.resize(100,60);
             }
             else if(type=='callmanualTask') {
-                ret = Modeler.createCallTask(null,null);
-                ret.elementType="CallManualTask";
+                ret = new _CallManualTask(Modeler.createCallTask(null,null));
+                //ret.elementType="CallManualTask";
                 ret.addIcon("#manualMarker",-1,-1,9,6);
                 ret.setText("Tarea manual reusada",0,0,0,1);
                 ret.resize(100,60);
             }
             else if(type=='callruleTask') {
-                ret = Modeler.createCallTask(null,null);
-                ret.elementType="CallBusinessRuleTask";
+                ret = new _CallBusinessRuleTask(Modeler.createCallTask(null,null));
+                //ret.elementType="CallBusinessRuleTask";
                 ret.addIcon("#taskRuleMarker",-1,-1,12,12);
                 ret.setText("Tarea de regla de negocio reusada",0,0,0,1);
                 ret.resize(100,60);
             }
             else if(type=='callscriptTask') {
-                ret = Modeler.createCallTask(null,null);
-                ret.elementType="CallScriptTask";
+                ret = new _CallScriptTask(Modeler.createCallTask(null,null));
+                //ret.elementType="CallScriptTask";
                 ret.addIcon("#scriptMarker",-1,-1,7,13);
                 ret.setText("Tarea de script reusada",0,0,0,1);
                 ret.resize(100,60);
             }
             else if(type=='calluserTask') {
-                ret = Modeler.createCallTask(null,null);
-                ret.elementType="CallUserTask";
+                ret = new _CallBusinessRuleTask(Modeler.createCallTask(null,null));
+                //ret.elementType="CallUserTask";
                 ret.addIcon("#userMarker",-1,-1,13,8);
                 ret.setText("Tarea de usuario reusada",0,0,0,1);
                 ret.resize(100,60);
