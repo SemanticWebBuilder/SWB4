@@ -14,7 +14,6 @@
                 ret+="-->"+property+"\r\n";
             }
         }
-        console.log(ret);
         //alert(ret);
     }
 
@@ -31,6 +30,7 @@
         snap2Grid:true,
         snap2GridSize:10,
         layer:null,
+        tooltip:null,
 
         setLayer:function(layer)
         {
@@ -412,6 +412,38 @@
             b.init(ix,iy);
             _this.svg.appendChild(b);
             _this.resizeBox.push(b);                        
+        },
+                
+        showTooltip:function(x, y, tooltipText, width, tooltipType) {
+            var _this=ToolKit;
+            var constructor = function() {
+                var obj = document.createElementNS(_this.svgNS,"rect");
+                return obj;
+            }
+            
+            var obj = ToolKit.createBaseObject(constructor, null, null);
+            obj.setAttributeNS(null,"class","toolTip");
+            
+            if (tooltipType=="Error") {
+                obj.setAttributeNS(null,"class","errorToolTip");
+            } else if (tooltipType=="Warning") {
+                obj.setAttributeNS(null,"class","warningToolTip");
+            }
+            obj.setWidth(width);
+            obj.setHeight(150);
+            obj.move(x,y);
+            
+            obj.setText(tooltipText);
+            
+            _this.tooltip=obj;
+        },
+                
+        hideToolTip:function() {
+            var _this=ToolKit;
+            if (_this.tooltip != null) {
+                _this.tooltip.remove(true);
+                _this.tooltip=null;
+            }
         },
 
         showResizeBoxes:function()
@@ -1089,8 +1121,9 @@
                 }else
                 {
                     _this.contents.push(obj);
-                    obj.parent=_this;
-                }                 
+                    //obj.parent=_this;
+                    obj.parent=null;
+                }
             };
             
             obj.isChild = function(parent)
@@ -1155,9 +1188,11 @@
                 {
                     if(objs.indexOf(objs[i].parent)==-1)
                     {
+                        if (objs[i].canAttach(obj)) {
                             objs[i].setParent(obj);
                         }
                     }
+                }
             };
             
             obj.inBounds=function(x,y)
