@@ -416,32 +416,38 @@
                 
         showTooltip:function(x, y, tooltipText, width, tooltipType) {
             var _this=ToolKit;
-            var constructor = function() {
-                var obj = document.createElementNS(_this.svgNS,"rect");
-                return obj;
-            }
             
-            var obj = ToolKit.createBaseObject(constructor, null, null);
-            obj.setAttributeNS(null,"class","toolTip");
+            _this.hideToolTip();
+            
+            _this.tooltip = document.createElementNS(_this.svgNS,"rect");
+            _this.tooltip.setAttributeNS(null, "rx", "10");
+            _this.tooltip.setAttributeNS(null, "ry", "10");
+            _this.tooltip.setAttributeNS(null,"class","toolTip");
             
             if (tooltipType=="Error") {
-                obj.setAttributeNS(null,"class","errorToolTip");
+                _this.tooltip.setAttributeNS(null,"class","errorToolTip");
             } else if (tooltipType=="Warning") {
-                obj.setAttributeNS(null,"class","warningToolTip");
+                _this.tooltip.setAttributeNS(null,"class","warningToolTip");
             }
-            obj.setWidth(width);
-            obj.setHeight(150);
-            obj.move(x,y);
             
-            obj.setText(tooltipText);
+            _this.tooltip.setAttributeNS(null,"width",width);
+                _this.tooltip.setAttributeNS(null,"height","60");
             
-            _this.tooltip=obj;
+            _this.tooltip.move=function(x, y) {
+                _this.tooltip.setAttributeNS(null,"x",x);
+                _this.tooltip.setAttributeNS(null,"y",y);
+            };
+            
+            _this.tooltip.move(x, y);
+            
+            //TODO: Agregar el texto al tooltip
+            _this.svg.appendChild(_this.tooltip);
         },
                 
         hideToolTip:function() {
             var _this=ToolKit;
             if (_this.tooltip != null) {
-                _this.tooltip.remove(true);
+                _this.svg.removeChild(_this.tooltip);
                 _this.tooltip=null;
             }
         },
