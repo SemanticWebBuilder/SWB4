@@ -272,7 +272,7 @@ public class SWBUserMgr
         log.debug("User-Agent:"+useragent);
         //System.out.println("User-Agent:"+useragent);
         if(useragent!=null)
-        {
+        {            
             Iterator<Device> listaDev = site.listDevices();
             int coincide = 0;
             while (listaDev.hasNext())
