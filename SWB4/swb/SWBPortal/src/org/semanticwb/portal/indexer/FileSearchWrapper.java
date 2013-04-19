@@ -26,11 +26,11 @@ public class FileSearchWrapper implements Searchable
     public FileSearchWrapper(File file, String title, String description, String tags, String url, Searchable resource)
     {
         this.file=file;
-        this.title=title;
-        this.description=description;
+        this.title=title==null?"":title;
+        this.description=description==null?"":description;;
         this.url=url;
         this.page=resource;
-        this.tags=tags;
+        this.tags=tags==null?"":tags;;
     }
 
     @Override
