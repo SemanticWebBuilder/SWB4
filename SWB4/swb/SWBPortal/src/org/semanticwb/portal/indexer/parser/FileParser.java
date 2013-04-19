@@ -137,12 +137,12 @@ public class FileParser extends GenericParser {
         map.put(SWBIndexer.ATT_CLASS, new IndexTerm(SWBIndexer.ATT_CLASS, getIndexClass(gen), false, IndexTerm.INDEXED_TOKENIZED_NO_ANALYZED));
         map.put(SWBIndexer.ATT_CATEGORY, new IndexTerm(SWBIndexer.ATT_CATEGORY, getIndexCategory(gen), false, IndexTerm.INDEXED_TOKENIZED_NO_ANALYZED));
         map.put(SWBIndexer.ATT_MODEL, new IndexTerm(SWBIndexer.ATT_MODEL, getIndexModel(gen), false, IndexTerm.INDEXED_ANALYZED));
-        map.put(SWBIndexer.ATT_TITLE, new IndexTerm(SWBIndexer.ATT_TITLE, getIndexTitle(gen), false, IndexTerm.INDEXED_ANALYZED));
-        map.put(SWBIndexer.ATT_DESCRIPTION, new IndexTerm(SWBIndexer.ATT_DESCRIPTION, getIndexDescription(gen), false, IndexTerm.INDEXED_ANALYZED));
-        map.put(SWBIndexer.ATT_TAGS, new IndexTerm(SWBIndexer.ATT_TAGS, getIndexTags(gen), false, IndexTerm.INDEXED_ANALYZED));
+        map.put(SWBIndexer.ATT_TITLE, new IndexTerm(SWBIndexer.ATT_TITLE, getIndexTitle(gen), true, IndexTerm.INDEXED_ANALYZED));
+        map.put(SWBIndexer.ATT_DESCRIPTION, new IndexTerm(SWBIndexer.ATT_DESCRIPTION, getIndexDescription(gen), true, IndexTerm.INDEXED_ANALYZED));
+        map.put(SWBIndexer.ATT_TAGS, new IndexTerm(SWBIndexer.ATT_TAGS, getIndexTags(gen), true, IndexTerm.INDEXED_ANALYZED));
         map.put(SWBIndexer.ATT_UPDATED, new IndexTerm(SWBIndexer.ATT_UPDATED, getIndexLastUpdated(gen), true, IndexTerm.INDEXED_NO_ANALYZED));
         map.put(SWBIndexer.ATT_URL, new IndexTerm(SWBIndexer.ATT_URL, getUrl(gen), true, IndexTerm.INDEXED_NO_ANALYZED));
-        map.put(SWBIndexer.ATT_DATA, new IndexTerm(SWBIndexer.ATT_DATA, getIndexData(gen), true, IndexTerm.INDEXED_NO_ANALYZED));
+        map.put(SWBIndexer.ATT_DATA, new IndexTerm(SWBIndexer.ATT_DATA, getIndexData(gen), false, IndexTerm.INDEXED_NO_ANALYZED));
         map.put("wuri", new IndexTerm("wuri", ((FileSearchWrapper) gen).getSearchable().getURI(), true, IndexTerm.INDEXED_NO_ANALYZED));
         return map;
     }
