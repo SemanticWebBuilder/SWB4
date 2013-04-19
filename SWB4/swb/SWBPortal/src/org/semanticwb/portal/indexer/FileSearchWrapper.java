@@ -93,7 +93,7 @@ public class FileSearchWrapper implements Searchable
 
     public String getTitle()
     {
-        System.out.println("Título archivo..."+title);
+        //System.out.println("Título archivo..."+title);
         return title;
     }
 
