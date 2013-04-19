@@ -648,11 +648,11 @@ public class RepositoryFile {
 
     private void indexFile(String file_remove, String file_index, long f_id, String title,String description, WebPage dir, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
         
-        System.out.println("Indexando archivo....");
+        //System.out.println("Indexando archivo....");
             File f_last = new File(SWBPortal.getWorkPath() + "/" + resource.getWorkPath() + "/" + file_remove);
             if (f_last.exists()) {
                     try {
-                        System.out.println("Quitando archivo del indice...");
+                        //System.out.println("Quitando archivo del indice...");
                         SWBPortal.getIndexMgr().getDefaultIndexer().removeSearchable("file:"+f_last.getAbsolutePath());
                     } catch (Exception ex) {
                         Repository.log.error("Error while trying to remove a file from index.", ex);
@@ -662,7 +662,7 @@ public class RepositoryFile {
             File f = new File(SWBPortal.getWorkPath() + "/" + resource.getWorkPath() + "/" + file_index);
             if (f.exists()) {
                 try {
-                    System.out.println("Poniendo archivo en indice....");
+                    //System.out.println("Poniendo archivo en indice....");
                     String type = f.getName();
                     SWBResourceURL urllineA = paramsRequest.getRenderUrl();
                     urllineA.setCallMethod(SWBResourceURL.Call_DIRECT);
@@ -692,7 +692,7 @@ public class RepositoryFile {
      * @throws AFException An Application Framework exception
      */
     public synchronized void newversion(HttpServletRequest request, HttpServletResponse response, User user, WebPage topic, HashMap hashMap, WebPage dir, org.semanticwb.model.Resource resource, int nivel, SWBParamRequest paramsRequest, FileUpload fup) throws SWBResourceException, IOException {
-        System.out.println("RepositoryFile.newversion");
+        //System.out.println("RepositoryFile.newversion");
         if (nivel < 2) {
             return;
         }
