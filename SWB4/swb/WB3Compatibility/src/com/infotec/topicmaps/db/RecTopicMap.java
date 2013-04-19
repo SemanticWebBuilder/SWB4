@@ -59,6 +59,18 @@ public class RecTopicMap implements WBDBRecord
     public RecTopicMap(org.semanticwb.model.WebSite website)
     {
         ws = website;
+        id=ws.getId();
+        if(ws.getUserRepository().getCreator()!=null)idadm = ws.getUserRepository().getCreator().getId();
+        title = ws.getTitle();
+        home = ws.getHomePage().getId();
+        if(ws.getLanguage()!=null)lang = ws.getLanguage().getId();
+        description = ws.getDescription();
+        active = ws.isActive()?1:0;
+        if(ws.getCreated()!=null)created = new Timestamp(ws.getCreated().getTime());
+        if(ws.getUpdated()!=null)lastupdate = new Timestamp(ws.getUpdated().getTime());
+        deleted = ws.isDeleted()?1:0;
+        repository = ws.getUserRepository().getId();
+        indexer = SWBPortal.getIndexMgr().getModelIndexer(ws).getName();        
     }
 
     public org.semanticwb.model.WebSite getNative()
@@ -113,8 +125,7 @@ public class RecTopicMap implements WBDBRecord
 
     public RecTopicMap(String id)
     {
-        this();
-        this.id = id;
+        this(SWBContext.getWebSite(id));
     }
     
     public RecTopicMap(String id, String idadm, String title, String home, String lang, String description, int active, String xml, Timestamp created, Timestamp lastupdate, int deleted, int system, String repository)
@@ -571,21 +582,17 @@ public class RecTopicMap implements WBDBRecord
                 ws = SWBContext.getWebSite(id);
             if(null!=ws)
             {
-                idadm = ws.getUserRepository().getCreator().getId();
+                if(ws.getUserRepository().getCreator()!=null)idadm = ws.getUserRepository().getCreator().getId();
                 title = ws.getTitle();
                 home = ws.getHomePage().getId();
-                lang = ws.getLanguage().getId();
+                if(ws.getLanguage()!=null)lang = ws.getLanguage().getId();
                 description = ws.getDescription();
                 active = ws.isActive()?1:0;
-                //TODO:
-                //xml = com.infotec.appfw.util.AFUtils.getInstance().readInputStream(rs.getAsciiStream("xml"));
-                created = new Timestamp(ws.getCreated().getTime());
-                lastupdate = new Timestamp(ws.getUpdated().getTime());
+                if(ws.getCreated()!=null)created = new Timestamp(ws.getCreated().getTime());
+                if(ws.getUpdated()!=null)lastupdate = new Timestamp(ws.getUpdated().getTime());
                 deleted = ws.isDeleted()?1:0;
-                //TODO:
-                //system = rs.getInt("system");
                 repository = ws.getUserRepository().getId();
-                indexer = SWBPortal.getIndexMgr().getModelIndexer(ws).getName();
+                indexer = SWBPortal.getIndexMgr().getModelIndexer(ws).getName();       
             }
             Iterator it = observers.iterator();
             while (it.hasNext())
@@ -594,7 +601,8 @@ public class RecTopicMap implements WBDBRecord
             }
         } catch (Exception e)
         {
-            throw new AFException("No fue posible cargar el elemento...\n" + e.getMessage(), "RecTopicMap:load()");
+            e.printStackTrace();
+            throw new AFException("No fue posible cargar el elemento...\n" + e.getMessage(), "RecTopicMap:load()",e);
         } 
     }
 

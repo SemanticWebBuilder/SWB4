@@ -275,6 +275,10 @@ public class TopicMap
      */
     public Topic getHome()
     {
+        if(m_home==null)
+        {
+            m_home=new Topic(ws.getHomePage());
+        }
         return m_home;
     }
 
@@ -283,7 +287,7 @@ public class TopicMap
     public void setHome(Topic home)
     {
         m_home = home;
-        dbdata.setHome(home.getId());
+        ws.setHomePage(home.getNative());
         if (syncronized) changes.add("um:");
     }
 
