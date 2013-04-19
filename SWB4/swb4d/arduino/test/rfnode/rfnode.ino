@@ -22,6 +22,9 @@
 #if defined(__AVR_ATtiny4313__) || defined(__AVR_ATtiny2313__) 
   #define LED 7
   #define SENS 6
+#elif defined(__AVR_ATtiny44__) || defined(__AVR_ATtiny84__) 
+  #define LED 3
+  #define SENS 7  
 #else 
   #define LED 9
   #define SENS 8
@@ -51,7 +54,7 @@
     digitalWrite(LED, LOW);        
     delay(100);
     
-    rfm.initRFM(RFM_433,1,2);   
+    rfm.initRFM(RFM_433,1,3);   
     
     digitalWrite(LED, HIGH);
     delay(100);
