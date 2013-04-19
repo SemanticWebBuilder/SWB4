@@ -29,6 +29,11 @@ import org.apache.poi.hpsf.*;
 import org.apache.poi.poifs.eventfilesystem.*;
 import org.apache.poi.util.LittleEndian;
 import java.io.*;
+import org.apache.poi.POIDocument;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.xslf.XSLFSlideShow;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 
@@ -140,7 +145,8 @@ public class DocumentExtractorSrv implements HSSFListener {
                 org.apache.poi.hwpf.extractor.WordExtractor wext = new org.apache.poi.hwpf.extractor.WordExtractor(fis);
                 returnData = wext.getText();
             } else if ("docx".equals(ext.toLowerCase())) {
-                org.apache.poi.hwpf.extractor.WordExtractor wext = new org.apache.poi.hwpf.extractor.WordExtractor(fis);
+                XWPFDocument doc = new XWPFDocument(fis);
+                org.apache.poi.xwpf.extractor.XWPFWordExtractor wext = new org.apache.poi.xwpf.extractor.XWPFWordExtractor(doc);
                 returnData = wext.getText();
             }
             return returnData;
@@ -158,15 +164,15 @@ public class DocumentExtractorSrv implements HSSFListener {
         try {
             fis = new FileInputStream(file);
             if ("xls".equals(ext.toLowerCase())) {
-                POIFSFileSystem fileSystem = new POIFSFileSystem(fis);
-                org.apache.poi.hssf.extractor.ExcelExtractor wext = new org.apache.poi.hssf.extractor.ExcelExtractor(fileSystem);
+                HSSFWorkbook wb = new HSSFWorkbook(new POIFSFileSystem(fis));
+                org.apache.poi.hssf.extractor.ExcelExtractor wext = new org.apache.poi.hssf.extractor.ExcelExtractor(wb);
+                wext.setFormulasNotResults(true);
+                wext.setIncludeSheetNames(false);
                 returnData = wext.getText();
             } else if ("xlsx".equals(ext.toLowerCase())) {
-                POIFSFileSystem fileSystem = new POIFSFileSystem(fis);
-                org.apache.poi.hssf.extractor.ExcelExtractor wext = new org.apache.poi.hssf.extractor.ExcelExtractor(fileSystem);
-                returnData = wext.getText();
-
-            }
+                XSSFWorkbook exls = new XSSFWorkbook(fis);
+                org.apache.poi.xssf.extractor.XSSFExcelExtractor wext = new org.apache.poi.xssf.extractor.XSSFExcelExtractor(exls);
+                returnData = wext.getText();          }
             return returnData;
         } catch (Exception e) {
             log.error("Error al extraer el texto del documento Excel. ", e);
@@ -187,8 +193,9 @@ public class DocumentExtractorSrv implements HSSFListener {
                 org.apache.poi.hslf.extractor.PowerPointExtractor wext = new org.apache.poi.hslf.extractor.PowerPointExtractor(fis);
                 returnData = wext.getText() + " " + wext.getNotes();
             } else if ("pptx".equals(ext.toLowerCase())) {
-                org.apache.poi.hslf.extractor.PowerPointExtractor wext = new org.apache.poi.hslf.extractor.PowerPointExtractor(fis);
-                returnData = wext.getText() + " " + wext.getNotes();
+                XSLFSlideShow fppt = new XSLFSlideShow(file.getPath());
+                org.apache.poi.xslf.extractor.XSLFPowerPointExtractor wext = new org.apache.poi.xslf.extractor.XSLFPowerPointExtractor(fppt);
+                returnData = wext.getText(true,true);
             }
             return returnData;
         } catch (Exception e) {
@@ -205,7 +212,7 @@ public class DocumentExtractorSrv implements HSSFListener {
         try {
             fis = new FileInputStream(file);
             returnData = SWBUtils.IO.readInputStream(fis);
-            System.out.println("Text extractor: " + returnData);
+            //System.out.println("Text extractor: " + returnData);
             return returnData;
         } catch (Exception e) {
             log.error("Error al extraer el texto del documento de Text. ", e);

@@ -71,13 +71,13 @@ public class FileParser extends GenericParser {
     public String getIndexData(Searchable gen) {
         //Implementar validar por tipo de archivo
 
-        System.out.println("FilePARSER....");
+        //System.out.println("FilePARSER....");
         FileSearchWrapper fsw = (FileSearchWrapper) gen;
         File f = fsw.getFile();
         String nombre = f.getName();
         String docdata = null;
         
-        System.out.println("Nombre archivo..."+nombre);
+        //System.out.println("Nombre archivo..."+nombre);
         
         if (nombre != null && nombre.lastIndexOf(".") > -1) {
             String ftype = nombre.substring(nombre.lastIndexOf(".") + 1);
@@ -154,13 +154,13 @@ public class FileParser extends GenericParser {
 
     @Override
     public String getSummary(Searchable gen, String lang) {
-        System.out.println("fparser summary:"+((FileSearchWrapper) gen).getDescription());
+        //System.out.println("fparser summary:"+((FileSearchWrapper) gen).getDescription());
         return ((FileSearchWrapper) gen).getDescription();
     }
 
     @Override
     public String getTitle(Searchable gen, String lang) {
-        System.out.println("fparser titulo:"+((FileSearchWrapper) gen).getTitle());
+        //System.out.println("fparser titulo:"+((FileSearchWrapper) gen).getTitle());
         return ((FileSearchWrapper) gen).getTitle();
     }
 
