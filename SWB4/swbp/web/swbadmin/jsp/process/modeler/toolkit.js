@@ -724,6 +724,22 @@
 
             if(id && id!=null)obj.setAttributeNS(null,"id",id);       
             
+            obj.canAddToDiagram=function() {
+                return true;
+            };
+            
+            obj.canStartLink=function(link) {
+                return true;
+            };
+            
+            obj.canEndLink=function(link) {
+                return true;
+            };
+            
+            obj.canAttach=function(parent) {
+                return true;
+            };
+            
             obj.oncontextmenu=function(evt)
             {
                 return false;
@@ -1139,14 +1155,14 @@
                 {
                     if(objs.indexOf(objs[i].parent)==-1)
                     {
-                        objs[i].setParent(obj);
+                            objs[i].setParent(obj);
+                        }
                     }
-                }
             };
             
             obj.inBounds=function(x,y)
             {
-                return (obj.getWidth()/2-(Math.abs(obj.getX()-x))>=0 && (obj.getHeight()/2-Math.abs(obj.getY()-y))>=0)
+                return (obj.getWidth()/2-(Math.abs(obj.getX()-x))>=0 && (obj.getHeight()/2-Math.abs(obj.getY()-y))>=0);
             };
             
             obj.addInConnection=function(connectionPath)
@@ -1188,7 +1204,7 @@
         {
             var _this=ToolKit;
             var obj=_this.createBaseObject(constructor, id, parent);
-
+            
             obj.onmousedown=function(evt)
             {
                 //console.log(evt);
