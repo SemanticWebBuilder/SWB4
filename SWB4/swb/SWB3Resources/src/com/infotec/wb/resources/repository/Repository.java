@@ -2126,7 +2126,7 @@ public class Repository extends org.semanticwb.portal.api.GenericResource {
     @Override
     public void doIndex(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
     
-    System.out.println("Repository.doIndex");
+    //System.out.println("Repository.doIndex");
         Resource base = getResourceBase();
         String idtm=base.getWebSiteId();
         String resid = base.getId();
@@ -2179,6 +2179,7 @@ public class Repository extends org.semanticwb.portal.api.GenericResource {
                                 String type = f.getName();
                                 SWBResourceURL urllineA = paramRequest.getRenderUrl();
                                 urllineA.setCallMethod(SWBResourceURL.Call_DIRECT);
+                                urllineA.setMode(SWBResourceURL.Mode_VIEW);  
                                 String url = "" + urllineA + "/" + type + "?repfop=view&reptp=" + webpageid + "&repfiddoc=" + Long.toString(docid) + "&repinline=true";
                                 FileSearchWrapper fsw = new FileSearchWrapper(f, title, description, null, url, base);
                                 w_indx.indexSerchable(fsw);
