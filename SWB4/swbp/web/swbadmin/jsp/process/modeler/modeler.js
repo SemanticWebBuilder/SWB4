@@ -1198,9 +1198,14 @@
                 {
                     if(Modeler.creationDropObject!=null)
                     {
-                        Modeler.dragConnection=Modeler.mapObject(Modeler.creationId);
-                        Modeler.creationDropObject.addOutConnection(Modeler.dragConnection);
-                        Modeler.dragConnection.setEndPoint(Modeler.creationDropObject.getX(),Modeler.creationDropObject.getY());                        
+                        Modeler.dragConnection=obj;//Modeler.mapObject(Modeler.creationId);
+                        if (Modeler.creationDropObject.canStartLink(Modeler.dragConnection)) {
+                            Modeler.creationDropObject.addOutConnection(Modeler.dragConnection);
+                            Modeler.dragConnection.setEndPoint(Modeler.creationDropObject.getX(),Modeler.creationDropObject.getY());                        
+                        } else {
+                            Modeler.dragConnection.remove();
+                            Modeler.dragConnection = null;
+                        }
                     }
                 }
 //                obj.setX(ToolKit.getEventX(evt));
@@ -1880,48 +1885,48 @@
                 ret.setText("Paralelo",0,1,80,1);
             }
             else if(type=='normalEndEvent') {
-                ret= Modeler.createObject("#endEvent",null,null);
-                ret.elementType="EndEvent";
+                ret= new _EndEvent(Modeler.createObject("#endEvent",null,null));
+                //ret.elementType="EndEvent";
                 ret.setText("Fin normal",0,1,80,1);
             }
             else if(type=='messageEndEvent') {
-                ret= Modeler.createObject("#messageEndEvent",null,null);
-                ret.elementType="MessageEndEvent";
+                ret= new _MessageEndEvent(Modeler.createObject("#messageEndEvent",null,null));
+                //ret.elementType="MessageEndEvent";
                 ret.setText("Fin con mensaje",0,1,80,1);
             }
             else if(type=='errorEndEvent') {
-                ret= Modeler.createObject("#errorEndEvent",null,null);
-                ret.elementType="ErrorEndEvent";
+                ret= new _ErrorEndEvent(Modeler.createObject("#errorEndEvent",null,null));
+                //ret.elementType="ErrorEndEvent";
                 ret.setText("Fin con error",0,1,80,1);
             }
             else if(type=='cancelEndEvent') {
-                ret= Modeler.createObject("#cancelationEndEvent",null,null);
-                ret.elementType="CancelationEndEvent";
+                ret= new _CancelationEndEvent(Modeler.createObject("#cancelationEndEvent",null,null));
+                //ret.elementType="CancelationEndEvent";
                 ret.setText("Fin con cancelación",0,1,80,1);
             }
             else if(type=='compensaEndEvent') {
-                ret= Modeler.createObject("#compensationEndEvent",null,null);
-                ret.elementType="CompensationEndEvent";
+                ret= new _CompensationEndEvent(Modeler.createObject("#compensationEndEvent",null,null));
+                //ret.elementType="CompensationEndEvent";
                 ret.setText("Fin con compensación",0,1,80,1);
             }
             else if(type=='signalEndEvent') {
-                ret= Modeler.createObject("#signalEndEvent",null,null);
-                ret.elementType="SignalEndEvent";
+                ret= new _SignalEndEvent(Modeler.createObject("#signalEndEvent",null,null));
+                //ret.elementType="SignalEndEvent";
                 ret.setText("Fin con señal",0,1,80,1);
             }
             else if(type=='multiEndEvent') {
-                ret= Modeler.createObject("#multipleEndEvent",null,null);
-                ret.elementType="MultipleEndEvent";
+                ret= new _MultipleEndEvent(Modeler.createObject("#multipleEndEvent",null,null));
+                //ret.elementType="MultipleEndEvent";
                 ret.setText("Fin múltiple",0,1,80,1);
             }
             else if(type=='escalaEndEvent') {
-                ret= Modeler.createObject("#scalationEndEvent",null,null);
-                ret.elementType="ScalationEndEvent";
+                ret= new _ScalationEndEvent(Modeler.createObject("#scalationEndEvent",null,null));
+                //ret.elementType="ScalationEndEvent";
                 ret.setText("Fin con escalamiento",0,1,80,1);
             }
             else if(type=='terminalEndEvent') {
-                ret= Modeler.createObject("#terminationEndEvent",null,null);
-                ret.elementType="TerminationEndEvent";
+                ret= new _TerminationEndEvent(Modeler.createObject("#terminationEndEvent",null,null));
+                //ret.elementType="TerminationEndEvent";
                 ret.setText("Terminación",0,1,80,1);
             }
             else if(type=='exclusiveDataGateway') {
