@@ -581,12 +581,12 @@ public class SWBPortal
 
             //System.out.println("Checking OntEditor...");
 
-            site = SWBContext.getOntEditor();
-            if (site == null)
-            {
-                log.event("Creating Ontology Editor WebSite...");
-                SWBPlatform.getSemanticMgr().createModel(SWBContext.WEBSITE_ONTEDITOR, "http://www.semanticwb.org/SWBOntEdit#");
-            }
+//            site = SWBContext.getOntEditor();
+//            if (site == null)
+//            {
+//                log.event("Creating Ontology Editor WebSite...");
+//                SWBPlatform.getSemanticMgr().createModel(SWBContext.WEBSITE_ONTEDITOR, "http://www.semanticwb.org/SWBOntEdit#");
+//            }
 
             UserRepository urep = SWBContext.getAdminRepository();
             if (urep == null)
@@ -651,6 +651,7 @@ public class SWBPortal
                 }
             }
 
+            
             //Check for GlobalWebSite
             site = SWBContext.getGlobalWebSite();
             if (site == null)
@@ -697,6 +698,7 @@ public class SWBPortal
                 urep.setCallBackHandlerClassName("org.semanticwb.security.auth.SWB4CallbackHandlerLoginPasswordImp");
                 site.setUserRepository(urep);
             }
+            
         }
         catch (Exception e)
         {
