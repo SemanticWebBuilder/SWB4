@@ -44,7 +44,6 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Properties;
 import java.util.StringTokenizer;
-import java.util.Vector;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
@@ -55,7 +54,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.SWBUtils.IO;
 import org.semanticwb.aws.AWSServices;
-import org.semanticwb.aws.SWBAWSDataUtils;
 import org.semanticwb.css.parser.Attribute;
 import org.semanticwb.css.parser.CSSParser;
 import org.semanticwb.css.parser.Selector;
@@ -714,21 +712,21 @@ public class SWBPortal
             Statement st = con.createStatement();
             try
             {
-                //ResultSet rs= con.getMetaData().getTablePrivileges(null,null, "swb_admlog");
-                ResultSet rs = st.executeQuery("select count(*) from swb_admlog");
-                if (rs.next())
+                String tabla[] ={"TABLE"};
+                ResultSet rs = con.getMetaData().getTables(null, null, "swb_admlog", tabla);
+                if(!rs.next())
                 {
-                    int x = rs.getInt(1);
+                    log.event("Creating Logs Tables... "+SWBUtils.DB.getDatabaseName());
+                    GenericDB db = new GenericDB();
+                    String xml = SWBUtils.IO.getFileFromPath(SWBUtils.getApplicationPath() + "/WEB-INF/xml/swb_logs.xml");
+                    db.executeSQLScript(xml, SWBUtils.DB.getDatabaseName(), null);
                 }
                 rs.close();
             }
-            catch (SQLException ne)
+            catch (SQLException e)
             {
                 //ne.printStackTrace();
-                log.event("Creating Logs Tables... "+SWBUtils.DB.getDatabaseName());
-                GenericDB db = new GenericDB();
-                String xml = SWBUtils.IO.getFileFromPath(SWBUtils.getApplicationPath() + "/WEB-INF/xml/swb_logs.xml");
-                db.executeSQLScript(xml, SWBUtils.DB.getDatabaseName(), null);
+                log.error(e);
             }
             st.close();
             con.close();
