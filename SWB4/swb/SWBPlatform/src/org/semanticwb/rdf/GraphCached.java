@@ -22,9 +22,11 @@
  */
 package org.semanticwb.rdf;
 
+import com.hp.hpl.jena.graph.BulkUpdateHandler;
 import com.hp.hpl.jena.graph.Graph;
 import com.hp.hpl.jena.graph.GraphListener;
 import com.hp.hpl.jena.graph.Node;
+import com.hp.hpl.jena.graph.TransactionHandler;
 import com.hp.hpl.jena.graph.Triple;
 import com.hp.hpl.jena.mem.faster.GraphMemFaster;
 import com.hp.hpl.jena.shared.PrefixMapping;
@@ -52,7 +54,7 @@ public class GraphCached extends GraphMemFaster implements GraphListener
     public GraphCached(Graph base)
     {
         super();
-        getBulkUpdateHandler().add(base);
+        super.getBulkUpdateHandler().add(base);
         this.base=base;
         getEventManager().register(this);
     }
@@ -191,8 +193,7 @@ public class GraphCached extends GraphMemFaster implements GraphListener
     {
         return base;
     }
-
-
+    
 //    static long c=0;
 //    @Override
 //    protected ExtendedIterator<Triple> graphBaseFind(Node s, Node p, Node o)
@@ -202,5 +203,19 @@ public class GraphCached extends GraphMemFaster implements GraphListener
 //        return super.graphBaseFind(s, p, o);
 //    }
 
+    @Override
+    public TransactionHandler getTransactionHandler()
+    {
+        TransactionHandler ret=base.getTransactionHandler();
+        if(ret==null)ret=super.getTransactionHandler(); //To change body of generated methods, choose Tools | Templates.
+        return ret;
+    }
 
+    @Override
+    public BulkUpdateHandler getBulkUpdateHandler()
+    {
+        BulkUpdateHandler ret=base.getBulkUpdateHandler();
+        if(ret==null)ret=super.getBulkUpdateHandler(); //To change body of generated methods, choose Tools | Templates.
+        return ret;
+    }
 }
