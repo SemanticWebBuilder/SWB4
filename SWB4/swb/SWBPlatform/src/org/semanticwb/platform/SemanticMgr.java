@@ -669,7 +669,7 @@ public class SemanticMgr implements SWBInstanceObject
                 it.close();
                 try {
                     FileInputStream in = new FileInputStream(SWBUtils.getApplicationPath() + SWBPlatform.createInstance().getAdminFile());
-                    if (model instanceof ModelRDB) {
+                    if (model.supportsTransactions()) {
                         ModelRDB m = (ModelRDB) model;
                         try {
                             //m.setDoDuplicateCheck( false );
@@ -805,7 +805,7 @@ public class SemanticMgr implements SWBInstanceObject
 
         SemanticModel ret = loadDBModel(name, cached);
         //ret.setNameSpace(nameSpace);
-        model = ret.getRDFModel();
+        //model = ret.getRDFModel();
         //System.out.println("ret:"+ret+" model:"+model);
 //        model.setNsPrefix(name+"_"+SemanticVocabulary.SWB_NS, nameSpace);
 //        model.setNsPrefix(name, SemanticVocabulary.URI+SemanticVocabulary.SWB_NS);
@@ -838,6 +838,7 @@ public class SemanticMgr implements SWBInstanceObject
         SemanticModel ret = createModel(name, namespace);
         Model model = ret.getRDFModel();
         try {
+            //System.out.println("createDBModelByRDF:"+model.supportsTransactions()+" "+model+" "+model.getGraph()+" "+model.getGraph().getTransactionHandler()+" "+model.getGraph().getTransactionHandler().transactionsSupported());
             if (model.supportsTransactions()) {
                 try {
                     //m.setDoDuplicateCheck( false );
