@@ -234,8 +234,17 @@ public class DBConnectionManager {
                 if (con != null)
                 {
                     if (description == null)
-                    {
+                    {                        
                         description = "NoDesc";
+                        
+                        StringBuffer buf=new StringBuffer();
+                        StackTraceElement eles[]=Thread.currentThread().getStackTrace();
+                        for(int i=0;i<eles.length;i++)
+                        {
+                            buf.append(eles[i].toString());
+                            buf.append("\n");
+                        }
+                        description=buf.toString();
                     }
                     con.setDescription(description);
                 }
@@ -266,6 +275,7 @@ public class DBConnectionManager {
                 log.error("Error to get JNDI Pool Connection...", ex);
             }
         }
+        //System.out.println("getConnections:"+ret);
         return ret;
     }
 
