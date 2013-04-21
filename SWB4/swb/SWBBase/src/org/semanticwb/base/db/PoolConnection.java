@@ -77,6 +77,12 @@ public class PoolConnection implements java.sql.Connection {
     /** The stack. */
     private StackTraceElement stack[] = null;
     private String threadName = null;
+    
+    public PoolConnection(Connection con)
+    {
+        this(con,null);
+    }
+    
 
     /**
      * Instantiates a new pool connection.
@@ -86,11 +92,15 @@ public class PoolConnection implements java.sql.Connection {
      */
     public PoolConnection(Connection con, DBConnectionPool pool)
     {
+        //System.out.println("PoolConnection:"+this+" "+pool);
         idle_time = System.currentTimeMillis();
         this.con = con;
         this.pool = pool;
-        pool.checkedOut++;
-        log.trace("PoolConnection(" + getId() + "," + pool.getName() + "):" + pool.checkedOut);
+        if(pool!=null)
+        {
+            pool.checkedOut++;
+            log.trace("PoolConnection(" + getId() + "," + pool.getName() + "):" + pool.checkedOut);
+        }
         init();
     }
 
@@ -253,6 +263,8 @@ public class PoolConnection implements java.sql.Connection {
      */
     public void close() throws SQLException
     {
+        //System.out.println("close:"+this+" "+isclosed);
+        
         if (isclosed == false)
         {
             if (destroy)
@@ -268,7 +280,7 @@ public class PoolConnection implements java.sql.Connection {
                 }
             }
             isclosed = true;
-            pool.getConnectionManager().getTimeLock().removeConnection(this);
+            if(pool!=null)pool.getConnectionManager().getTimeLock().removeConnection(this);
             idle_time = System.currentTimeMillis();
             try
             {
@@ -279,12 +291,12 @@ public class PoolConnection implements java.sql.Connection {
             }
             try
             {
-                pool.freeConnection(this);
+                if(pool!=null)pool.freeConnection(this);
             } catch (Exception e)
             {
                 log.error("Connection " + description + ", freeConnection:", e);
             }
-            log.trace("close:(" + getId() + "," + pool.getName() + "):" + pool.checkedOut);
+            if(pool!=null)log.trace("close:(" + getId() + "," + pool.getName() + "):" + pool.checkedOut);
         }
     }
 
@@ -508,8 +520,11 @@ public class PoolConnection implements java.sql.Connection {
         {
             isdestroyed = true;
             isclosed = true;
-            pool.checkedOut--;
-            pool.getConnectionManager().getTimeLock().removeConnection(this);
+            if(pool!=null)
+            {
+                pool.checkedOut--;
+                pool.getConnectionManager().getTimeLock().removeConnection(this);
+            }
             try
             {
                 //System.out.println("******************close****************");
@@ -519,7 +534,7 @@ public class PoolConnection implements java.sql.Connection {
             {
                 log.error("Connection " + description + " finalize:" + e);
             }
-            log.debug("destroyConnection:(" + getId() + "," + pool.getName() + "):" + pool.checkedOut);
+            if(pool!=null)log.debug("destroyConnection:(" + getId() + "," + pool.getName() + "):" + pool.checkedOut);
         }
     }
 
@@ -529,6 +544,8 @@ public class PoolConnection implements java.sql.Connection {
     @Override
     protected void finalize() throws Throwable
     {
+        //System.out.println("finalize:"+this+" "+isclosed+" "+isdestroyed);
+
         // We are no longer referenced by anyone (including the
         // connection pool). Time to close down.
         try
