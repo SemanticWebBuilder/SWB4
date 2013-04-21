@@ -31,7 +31,11 @@ import com.hp.hpl.jena.graph.TransactionHandler;
 import com.hp.hpl.jena.graph.Triple;
 import com.hp.hpl.jena.graph.TripleMatch;
 import com.hp.hpl.jena.graph.impl.GraphBase;
+import com.hp.hpl.jena.query.Query;
+import com.hp.hpl.jena.query.QueryFactory;
+import com.hp.hpl.jena.query.QuerySolution;
 import com.hp.hpl.jena.rdf.model.AnonId;
+import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.rdf.model.impl.ModelCom;
 import com.hp.hpl.jena.shared.AddDeniedException;
 import com.hp.hpl.jena.shared.DeleteDeniedException;
@@ -49,6 +53,9 @@ import java.util.Iterator;
 import java.util.List;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.triplestore.ext.GraphExt;
+import virtuoso.jena.driver.VirtuosoQueryExecution;
+import virtuoso.jena.driver.VirtuosoQueryExecutionFactory;
 import virtuoso.sql.ExtendedString;
 import virtuoso.sql.RdfBox;
 
@@ -56,7 +63,7 @@ import virtuoso.sql.RdfBox;
  *
  * @author jei
  */
-public class SWBVirtGraph extends GraphBase
+public class SWBVirtGraph extends GraphBase implements GraphExt
 {
     private static Logger log = SWBUtils.getLogger(SWBVirtGraph.class);
 
@@ -409,6 +416,7 @@ public class SWBVirtGraph extends GraphBase
      * more efficient
      */
 //--java5 or newer    @Override
+    @Override
     protected int graphBaseSize()
     {
         StringBuffer sb = new StringBuffer("select count(*) from (sparql define input:storage \"\" ");
@@ -1070,15 +1078,135 @@ public class SWBVirtGraph extends GraphBase
         return (timestampBuf.toString());
     }
 
-//    @Override
-//    public long count(TripleMatch tm, String stype)
-//    {
-//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-//    }
-//
-//    @Override
-//    public ExtendedIterator<Triple> find(TripleMatch tm, String stype, Long limit, Long offset, String sortby)
-//    {
-//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-//    }
+    @Override
+    public long count(TripleMatch tm, String stype)
+    {
+        StringBuffer sb = new StringBuffer("select count(*) from (sparql define input:storage \"\" ");
+
+        if (ruleSet != null)
+        {
+            sb.append(" define input:inference '" + ruleSet + "'\n ");
+        }
+
+        if (useSameAs)
+        {
+            sb.append(" define input:same-as \"yes\"\n ");
+        }
+        
+        String S = "?s";
+        String P = "?p";
+        String O = "?o";
+
+        if (tm.getMatchSubject() != null)
+        {
+            S = Node2Str(tm.getMatchSubject());
+        }
+
+        if (tm.getMatchPredicate() != null)
+        {
+            P = Node2Str(tm.getMatchPredicate());
+        }
+
+        if (tm.getMatchObject() != null)
+        {
+            O = Node2Str(tm.getMatchObject());
+        }        
+
+        if (readFromAllGraphs)
+        {
+            sb.append(" select * where { "+S+" "+P+" "+O+" })f");
+        } else
+        {
+            sb.append(" select * where { graph `iri(??)` { "+S+" "+P+" "+O+" }})f");
+        }
+
+        ResultSet rs = null;
+        int ret = 0;
+
+        //checkOpen();
+
+        try
+        {
+            Connection con=m_transactionHandler.getConnection();
+            java.sql.PreparedStatement ps = prepareStatement(con,sb.toString());
+
+            if (!readFromAllGraphs)
+            {
+                ps.setString(1, graphName);
+            }
+
+            rs = ps.executeQuery();
+            if (rs.next())
+            {
+                ret = rs.getInt(1);
+            }
+            rs.close();
+            ps.close();
+            con.close();
+        } catch (Exception e)
+        {
+            throw new JenaException(e);
+        }
+        return ret;
+    }
+
+    @Override
+    public ExtendedIterator<Triple> find(TripleMatch tm, String stype, Long limit, Long offset, String sortby)
+    {
+        String S, P, O;
+        StringBuffer sb = new StringBuffer("sparql ");
+
+        //checkOpen();
+
+        S = " ?s ";
+        P = " ?p ";
+        O = " ?o ";
+
+        if (tm.getMatchSubject() != null)
+        {
+            S = Node2Str(tm.getMatchSubject());
+        }
+
+        if (tm.getMatchPredicate() != null)
+        {
+            P = Node2Str(tm.getMatchPredicate());
+        }
+
+        if (tm.getMatchObject() != null)
+        {
+            O = Node2Str(tm.getMatchObject());
+        }
+
+        if (ruleSet != null)
+        {
+            sb.append(" define input:inference '" + ruleSet + "'\n ");
+        }
+
+        if (useSameAs)
+        {
+            sb.append(" define input:same-as \"yes\"\n ");
+        }
+
+        if (readFromAllGraphs)
+        {
+            sb.append(" select * where { " + S + " " + P + " " + O + " }");
+        } else
+        {
+            sb.append(" select * from <" + graphName + "> where { " + S + " " + P + " " + O + " }");
+        }
+        
+        if(limit!=null)sb.append(" LIMIT "+limit);
+        if(offset!=null)sb.append(" OFFSET "+offset);
+
+        try
+        {
+            Connection con=m_transactionHandler.getConnection();
+            java.sql.PreparedStatement stmt;
+            stmt = prepareStatement(con,sb.toString());
+            return new SWBVirtResSetIter(this, stmt.executeQuery(), stmt, tm);
+        } catch (Exception e)
+        {
+            throw new JenaException(e);
+        }
+    }
 }
