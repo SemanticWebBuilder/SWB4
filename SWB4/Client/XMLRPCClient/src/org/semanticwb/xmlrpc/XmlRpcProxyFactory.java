@@ -240,6 +240,7 @@ public class XmlRpcProxyFactory implements java.lang.reflect.InvocationHandler, 
         return ObjectToreturn;
     }
 
+    @Override
     public Set<Part> getResponseParts()
     {
         return parts;
