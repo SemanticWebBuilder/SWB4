@@ -395,15 +395,15 @@ public abstract class XMLRPCServlet extends HttpServlet
         StringBuilder messageError = new StringBuilder(e.getLocalizedMessage() + RETURN);
         for (StackTraceElement element : e.getStackTrace())
         {
-            messageError.append(element.toString() + RETURN);
+            messageError.append(element.toString()).append(RETURN);
         }
         if (e.getCause() != null)
         {
             messageError.append(" cause: \r\n");
-            messageError.append(e.getCause().getLocalizedMessage() + RETURN);
+            messageError.append(e.getCause().getLocalizedMessage()).append(RETURN);
             for (StackTraceElement element : e.getCause().getStackTrace())
             {
-                messageError.append(element.toString() + RETURN);
+                messageError.append(element.toString()).append(RETURN);
             }
         }
 
