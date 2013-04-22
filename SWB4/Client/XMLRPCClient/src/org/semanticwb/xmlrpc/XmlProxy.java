@@ -29,6 +29,7 @@
 package org.semanticwb.xmlrpc;
 
 import java.net.URI;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -37,6 +38,9 @@ import java.util.Set;
  */
 public interface XmlProxy
 {
+    public Map<String,String> getHeaders();
+    public void setHeaders(Map<String,String> headers);
+
     public URI getWebAddress();
     public void setWebAddress(URI uri);
     
