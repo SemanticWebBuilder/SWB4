@@ -52,56 +52,67 @@ public class XmlRpcProxyFactory implements java.lang.reflect.InvocationHandler, 
         return webAddress;
     }
 
+    @Override
     public void setWebAddress(URI uri)
     {
         this.webAddress = uri;
     }
 
+    @Override
     public String getUser()
     {
         return user;
     }
 
+    @Override
     public void setUser(String user)
     {
         this.user = user;
     }
 
+    @Override
     public String getPassword()
     {
         return this.password;
     }
 
+    @Override
     public void setPassword(String password)
     {
         this.password = password;
     }
 
+    @Override
     public URI getProxyAddress()
     {
         return proxyAddress;
     }
 
+    @Override
     public void setProxyAddress(URI proxyAddress)
     {
         this.proxyAddress = proxyAddress;
     }
 
+    @Override
     public int getProxyPort()
     {
         return proxyPort;
     }
 
+    @Override
     public void setProxyPort(int proxyPort)
     {
         this.proxyPort = proxyPort;
     }
 
+    @Override
     public void addAttachment(Attachment attachment)
     {
         this.attachments.add(attachment);
     }
 
+    @Override
     public void clearAttachments()
     {
         this.attachments.clear();
@@ -123,6 +134,7 @@ public class XmlRpcProxyFactory implements java.lang.reflect.InvocationHandler, 
         this.webAddress = webAddress;
     }
 
+    @Override
     public Object invoke(Object proxy, Method m, Object[] args)
             throws Throwable
     {
