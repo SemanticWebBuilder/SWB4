@@ -226,7 +226,7 @@ public abstract class XMLRPCServlet extends HttpServlet
 
     private static void sendResponse(ServletResponse response, Document docResponse, Response objToResponse) throws IOException
     {
-        if (objToResponse.getResponseParts() == null || objToResponse.getResponseParts().size() == 0)
+        if (objToResponse.getResponseParts() == null || objToResponse.getResponseParts().isEmpty())
         {
             response.setContentType("text/xml;charset=utf-8");
             ServletOutputStream out = response.getOutputStream();
