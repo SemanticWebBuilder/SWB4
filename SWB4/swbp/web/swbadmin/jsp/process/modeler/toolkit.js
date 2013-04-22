@@ -133,6 +133,7 @@
 
             _this.svg.onmousemove=function(evt)
             {
+                _this.hideToolTip();
                 if(_this.onmousemove(evt)==false)return;
                 
                 _this.svg.mouseX=_this.getEventX(evt);
@@ -414,40 +415,52 @@
             _this.resizeBox.push(b);                        
         },
                 
-        showTooltip:function(x, y, tooltipText, width, tooltipType) {
+        showTooltip:function(pos, tooltipText, width, tooltipType) {
             var _this=ToolKit;
             
             _this.hideToolTip();
-            
-            _this.tooltip = document.createElementNS(_this.svgNS,"rect");
-            _this.tooltip.setAttributeNS(null, "rx", "10");
-            _this.tooltip.setAttributeNS(null, "ry", "10");
-            _this.tooltip.setAttributeNS(null,"class","toolTip");
-            
-            if (tooltipType=="Error") {
-                _this.tooltip.setAttributeNS(null,"class","errorToolTip");
-            } else if (tooltipType=="Warning") {
-                _this.tooltip.setAttributeNS(null,"class","warningToolTip");
-            }
-            
-            _this.tooltip.setAttributeNS(null,"width",width);
-                _this.tooltip.setAttributeNS(null,"height","60");
-            
-            _this.tooltip.move=function(x, y) {
-                _this.tooltip.setAttributeNS(null,"x",x);
-                _this.tooltip.setAttributeNS(null,"y",y);
+            var cons = function() {
+                var obj = document.createElementNS(_this.svgNS,"rect");
+                obj.setAttributeNS(null, "rx", "10");
+                obj.setAttributeNS(null, "ry", "10");
+                return obj;
             };
             
-            _this.tooltip.move(x, y);
+            var msgBox = _this.createBaseObject(cons, null, null);
+            msgBox.setAttributeNS(null,"class","toolTip");
+            msgBox.setAttributeNS(null,"filter","url(#dropshadow)");
             
-            //TODO: Agregar el texto al tooltip
-            _this.svg.appendChild(_this.tooltip);
+            if (tooltipType=="Error") {
+                msgBox.setAttributeNS(null,"class","errorToolTip");
+            } else if (tooltipType=="Warning") {
+                msgBox.setAttributeNS(null,"class","warningToolTip");
+            }
+            
+            msgBox.onmousemove = function() {
+                return false;
+            }
+            
+            msgBox.setText(tooltipText,0,0,width,1);
+            msgBox.canSelect=false;
+            msgBox.resize(width, 60);
+            msgBox.move(window.pageXOffset+msgBox.getWidth()/2+10, window.pageYOffset+msgBox.getHeight()/2+10);
+            
+            var anim = document.createElementNS(_this.svgNS, "animate");
+            anim.setAttributeNS(null, "attributeType", "CSS");
+            anim.setAttributeNS(null, "attributeName", "opacity");
+            anim.setAttributeNS(null, "from", "0");
+            anim.setAttributeNS(null, "to", "1");
+            anim.setAttributeNS(null, "dur", "2s");
+            msgBox.appendChild(anim);
+            
+            _this.tooltip=msgBox;
         },
                 
         hideToolTip:function() {
             var _this=ToolKit;
             if (_this.tooltip != null) {
-                _this.svg.removeChild(_this.tooltip);
+                _this.tooltip.remove(true);
+                //_this.svg.removeChild(_this.tooltip);
                 _this.tooltip=null;
             }
         },
@@ -966,8 +979,13 @@
             obj.remove = function(all) {
                 if(!all)
                 {
-                    while ((ax = obj.parent.contents.indexOf(obj)) !== -1) {
-                        obj.parent.contents.splice(ax, 1);
+                    //En algunos casos, el parent es nulo, es decir, el canvas
+                    var parent = obj.parent;
+                    if (parent == null) {
+                        parent = _this;
+                    }
+                    while ((ax = parent.contents.indexOf(obj)) !== -1) {
+                        parent.contents.splice(ax, 1);
                     }
                 }
                 
