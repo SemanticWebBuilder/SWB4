@@ -81,7 +81,7 @@ class XmlRpcClient
         return responseProperties;
     }
 
-    public Response execute(Class clazz, String methodName, Object[] parameters, Set<Attachment> attachments) throws XmlRpcException, HttpException,ConnectException
+    public Response execute(Class clazz, String methodName, Object[] parameters, Set<Attachment> attachments,Map<String,String> headers) throws XmlRpcException, HttpException,ConnectException
     {
         for (Attachment attachment : attachments)
         {
@@ -94,7 +94,7 @@ class XmlRpcClient
                 throw new XmlRpcException("The attachment '" + attachment.getName() + "' does not exist");
             }
         }
-        Document requestDoc = serializeRequest(methodName, parameters);
+        Document requestDoc = serializeRequest(methodName, parameters,headers);
         XmlResponse response = request(requestDoc, attachments);        
         try
         {
