@@ -46,6 +46,7 @@ public class XmlRpcProxyFactory implements java.lang.reflect.InvocationHandler, 
     private URI proxyAddress;
     private int proxyPort;
 
+    @Override
     public URI getWebAddress()
     {
         return webAddress;
