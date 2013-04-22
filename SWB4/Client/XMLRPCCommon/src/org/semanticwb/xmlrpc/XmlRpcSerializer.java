@@ -36,6 +36,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
@@ -145,14 +146,38 @@ public class XmlRpcSerializer
         return parameters.toArray();
     }
 
-    public static Document serializeRequest(String pMethodName, Object[] pParams) throws XmlRpcException
+    public static Document serializeRequest(String pMethodName, Object[] pParams,Map<String,String> headers) throws XmlRpcException
     {
+
         Document doc = new Document();
         Element methodCall = new Element("methodCall");
+        doc.setRootElement(methodCall);
+        if(headers!=null && !headers.isEmpty())
+        {
+            for(String key : headers.keySet())
+            {
+                if(key.equals("methodName"))
+                {
+                    throw new XmlRpcException("The header can not be methodName");
+                }
+            }
+            Element eheaders = new Element("headers");
+            methodCall.addContent(eheaders);
+            for(String key : headers.keySet())
+            {
+                Element eheader = new Element("header");
+                eheaders.addContent(eheader);
+                eheader.setAttribute("name",key);
+
+                String value=headers.get(key);   
+                eheader.setText(value);
+            }
+        }
+        
         Element methodName = new Element("methodName");
         methodName.setText(pMethodName);
         methodCall.addContent(methodName);
-        doc.setRootElement(methodCall);
+        
         Element params = new Element("params");
         if (pParams != null)
         {
@@ -430,7 +455,7 @@ public class XmlRpcSerializer
     {
         if (clazz == Boolean.class || clazz == boolean.class)
         {
-            return new Boolean(data);
+            return data;
         }
         else if(clazz.isAssignableFrom(Boolean.class))
         {
