@@ -27,6 +27,7 @@
  */
 package org.semanticwb.xmlrpc;
 
+import java.util.Collections;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -68,6 +69,20 @@ public abstract class XMLRPCServlet extends HttpServlet
     //private static Hashtable<String, Object> cacheObjects = new Hashtable<String, Object>();
     private static final String PREFIX_PROPERTY_PATH = "org.semanticwb.xmlrpc.";
     private static final String XMLRPC_DOCUMENT = "xmlrpc";
+    private static final Set<RPCFilter> filters=Collections.synchronizedSet(new HashSet<RPCFilter>());
+
+    public void addFilter(RPCFilter filter)
+    {
+        filters.add(filter);        
+    }
+    public void removeFilter(RPCFilter filter)
+    {
+        filters.remove(filter);
+    }
+    public void clear()
+    {
+        filters.clear();
+    }
 
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
@@ -99,7 +114,10 @@ public abstract class XMLRPCServlet extends HttpServlet
 
             try
             {
-
+                for(RPCFilter filter : filters)
+                {
+                    filter.doFilter(xmlrpcDocument);
+                }
                 String methodName = getMethodName(xmlrpcDocument);
                 ArrayList<Method> methods = getMethods(methodName);
                 Object[] parameters = deserializeRequest(xmlrpcDocument, methods);
