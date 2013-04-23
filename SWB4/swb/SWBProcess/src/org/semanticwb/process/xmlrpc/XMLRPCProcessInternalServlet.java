@@ -30,6 +30,7 @@ public class XMLRPCProcessInternalServlet implements InternalServlet
     {
         log.event("Initializing XMLRPCProcessServlet...");
         servletContext.init("org.semanticwb.process.xmlrpc.");
+        ProcessServlet.addMappingType("RPCProcess", RPCProcessImp.class);
     }
 
     @Override
