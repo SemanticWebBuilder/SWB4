@@ -183,6 +183,11 @@ public abstract class OfficeServlet extends XMLRPCServlet
 
     }
 
+    
+    public void doWSDL(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+    {
+       super.doWDSL(request, response); 
+    }
     /**
      * Do get.
      * 
