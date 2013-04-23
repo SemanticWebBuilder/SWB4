@@ -22,7 +22,7 @@ public class ProcessServlet extends XMLRPCServlet
     public void init() throws ServletException
     {
         log.event("Adding mappingType RPCProcess to RPC...");
-        addMappingType("RPCProcess", RPCProcessImp.class);
+        
     }
 
     public boolean isAuthenticate(String pUserName, String pPassword)
