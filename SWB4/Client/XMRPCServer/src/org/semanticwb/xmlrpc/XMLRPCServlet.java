@@ -97,7 +97,7 @@ public abstract class XMLRPCServlet extends HttpServlet
     {
         Document docResponse = new Document();
         response.setContentType("text/xml;charset=utf-8");
-        Map<String,String> elements = new HashMap<String,String>();
+        Map<String, String> elements = new HashMap<String, String>();
         Enumeration<Object> names = System.getProperties().keys();
         while (names.hasMoreElements())
         {
@@ -105,16 +105,16 @@ public abstract class XMLRPCServlet extends HttpServlet
             String value = System.getProperty(name);
             if (name != null && name.startsWith(PREFIX_PROPERTY_PATH))
             {
-                String key=name.substring(PREFIX_PROPERTY_PATH.length());
-                elements.put(key,value);
+                String key = name.substring(PREFIX_PROPERTY_PATH.length());
+                elements.put(key, value);
             }
         }
         Element definitions = new Element("wsdl");
         docResponse.addContent(definitions);
         for (String mapping : elements.keySet())
         {
-            String clazz=elements.get(mapping);
-            addClass(clazz,mapping,definitions);
+            String clazz = elements.get(mapping);
+            addClass(clazz, mapping, definitions);
         }
         ServletOutputStream out = response.getOutputStream();
         XMLOutputter xMLOutputter = new XMLOutputter();
@@ -347,12 +347,22 @@ public abstract class XMLRPCServlet extends HttpServlet
         return classFullPath;
     }
 
-    private void addParam(Element methodName, Class type,String comment)
+    private void addParam(Element methodName, Class type, String comment)
     {
-        Element param = new Element("param");
-        if(comment!=null)
-        {            
-            param.setAttribute("description",comment);
+        addType(methodName, type, comment, "param");
+    }
+
+    private void addReturns(Element methodName, Class type, String comment)
+    {
+        addType(methodName, type, comment, "returns");
+    }
+
+    private void addType(Element methodName, Class type, String comment, String name)
+    {
+        Element param = new Element(name);
+        if (comment != null)
+        {
+            param.setAttribute("description", comment);
         }
         methodName.addContent(param);
         String value = type.getCanonicalName();
@@ -360,24 +370,28 @@ public abstract class XMLRPCServlet extends HttpServlet
         {
             value = "string";
         }
-        else if (type.equals(Integer.class) || type.equals(Long.class))
+        else if (type.equals(Integer.class) || type.equals(Long.class) || type.getName().equals("int") || type.getName().equals("long"))
         {
             value = "int";
         }
-        else if (type.equals(Boolean.class))
+        else if (type.equals(Boolean.class)  || type.getName().equals("boolean"))
         {
             value = "boolean";
         }
-        else if (type.equals(Double.class) || type.equals(Float.class))
+        else if (type.equals(Double.class) || type.equals(Float.class) || type.getName().equals("double") || type.getName().equals("float"))
         {
             value = "double";
         }
+        else if (type.equals(Void.class) || type.getName().equals("void"))
+        {
+            value = "void";
+        }
         else if (type.isArray())
         {
-            value = "struct";
+            value = "array";
             Class _arrayIs = type.getComponentType();
-            String commentStruct=null;
-            addParam(param, _arrayIs,commentStruct);
+            String commentStruct = null;
+            addType(param, _arrayIs, commentStruct,"field");
         }
         else if (type.equals(Date.class) || type.equals(Calendar.class))
         {
@@ -385,20 +399,21 @@ public abstract class XMLRPCServlet extends HttpServlet
         }
         else
         {
-            for(Field field : type.getDeclaredFields())
+            value = "struct";
+            for (Field field : type.getDeclaredFields())
             {
-                Class classField=field.getType();
-                String commentfield=null;
-                XmlRpcDescription description=field.getAnnotation(XmlRpcDescription.class);
-                if(description!=null)
+                Class classField = field.getType();
+                String commentfield = null;
+                XmlRpcDescription description = field.getAnnotation(XmlRpcDescription.class);
+                if (description != null)
                 {
-                    commentfield=description.description();
+                    commentfield = description.description();
                 }
-                addParam(param,classField,commentfield);
-            }            
+                addType(param, classField, commentfield,"field");
+            }
         }
-        param.setText(value);
-        
+        param.setAttribute("type", value);
+
     }
 
     private Response execute(String objectName, Method method, Object[] parameters, Set<Part> parts, String user, String password) throws ClassNotFoundException, XmlRpcException, InstantiationException, IllegalAccessException, NoSuchMethodException
@@ -590,7 +605,7 @@ public abstract class XMLRPCServlet extends HttpServlet
         }
     }
 
-    private void addClass(String clazz,String mapping, Element definition)
+    private void addClass(String clazz, String mapping, Element definition)
     {
         try
         {
@@ -601,37 +616,47 @@ public abstract class XMLRPCServlet extends HttpServlet
                 {
                     if (!Modifier.isStatic(m.getModifiers()) && Modifier.isPublic(m.getModifiers()) && m.isAnnotationPresent(XmlRpcMethod.class))
                     {
-                        
+
                         XmlRpcMethod annotation = m.getAnnotation(XmlRpcMethod.class);
                         String name = annotation.methodName();
-                        Element methodName = new Element("methodName");
-                        if(m.isAnnotationPresent(XmlRpcDescription.class))
+                        Element methodName = new Element("method");
+                        if (m.isAnnotationPresent(XmlRpcDescription.class))
                         {
                             XmlRpcDescription description = m.getAnnotation(XmlRpcDescription.class);
-                            if(description!=null)
-                            {                                
-                                methodName.setAttribute("description",description.description());
+                            if (description != null)
+                            {
+                                methodName.setAttribute("description", description.description());
                             }
                         }
-                        methodName.setText(name);
+                        methodName.setAttribute("name", name);
                         definition.addContent(methodName);
-                        int index=0;
+                        int index = 0;
+                        Element params = new Element("params");
+                        methodName.addContent(params);
                         for (Class type : m.getParameterTypes())
                         {
                             Annotation[][] annotations = m.getParameterAnnotations();
-
-                            String comment=null;
-                            for(Annotation annotationparam : annotations[index])
+                            String comment = null;
+                            for (Annotation annotationparam : annotations[index])
                             {
-                                if(annotationparam.annotationType().equals(XmlRpcDescription.class))
+                                if (annotationparam.annotationType().equals(XmlRpcDescription.class))
                                 {
-                                    XmlRpcDescription description=(XmlRpcDescription)annotationparam;
-                                    comment=description.description();
+                                    XmlRpcDescription description = (XmlRpcDescription) annotationparam;
+                                    comment = description.description();
                                 }
-                            }                            
-                            addParam(methodName, type,comment);
+                            }
+                            addParam(params, type, comment);
                             index++;
                         }
+
+                        Class classReturn = m.getReturnType();
+                        String commentReturns = null;
+                        XmlRpcReturns xmlRpcReturns = m.getAnnotation(XmlRpcReturns.class);
+                        if (xmlRpcReturns != null)
+                        {
+                            commentReturns = xmlRpcReturns.returns();
+                        }
+                        addReturns(methodName, classReturn, commentReturns);
                     }
                 }
             }
