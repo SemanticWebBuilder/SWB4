@@ -66,6 +66,7 @@ public class GateWayOffice implements InternalServlet
     private OfficeServlet officeServlet = new OfficeServlet()
     {
 
+        @Override
         public boolean isAuthenticate(String pUserName, String pPassword)
         {
             UserRepository ur = SWBContext.getAdminWebSite().getUserRepository();
@@ -95,6 +96,7 @@ public class GateWayOffice implements InternalServlet
      * @param config the config
      * @throws ServletException the servlet exception
      */
+    @Override
     public void init(ServletContext config) throws ServletException
     {
         log.event("Initializing GatewayOffice...");
