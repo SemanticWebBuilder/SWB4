@@ -2,7 +2,6 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package org.semanticwb.process.xmlrpc;
 
 import java.io.IOException;
@@ -20,11 +19,12 @@ import org.semanticwb.xmlrpc.XMLRPCServlet;
  *
  * @author victor.lorenzana
  */
-public class XMLRPCProcessInternalServlet implements InternalServlet{
+public class XMLRPCProcessInternalServlet implements InternalServlet
+{
 
     static Logger log = SWBUtils.getLogger(XMLRPCProcessInternalServlet.class);
-    ProcessServlet servletContext=new ProcessServlet();
-    
+    ProcessServlet servletContext = new ProcessServlet();
+
     @Override
     public void init(ServletContext config) throws ServletException
     {
@@ -34,7 +34,18 @@ public class XMLRPCProcessInternalServlet implements InternalServlet{
     @Override
     public void doProcess(HttpServletRequest request, HttpServletResponse response, DistributorParams dparams) throws IOException, ServletException
     {
-        servletContext.service(request, response);        
-    }
+        if (request.getMethod().toLowerCase().equals("post"))
+        {
+            servletContext.doPost(request, response);
+        }
+        else
+        {
+            if (request.getParameter("wsdl") != null)
+            {
+                servletContext.doWDSL(request, response);
 
+                return;
+            }
+        }
+    }
 }
