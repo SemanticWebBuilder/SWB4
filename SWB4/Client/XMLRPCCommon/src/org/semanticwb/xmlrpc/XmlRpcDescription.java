@@ -17,7 +17,7 @@ import java.lang.annotation.Target;
  * @author victor.lorenzana
  */
 @Documented
-@Target({ElementType.METHOD,ElementType.ANNOTATION_TYPE})
+@Target({ElementType.METHOD,ElementType.PARAMETER,ElementType.FIELD,ElementType.ANNOTATION_TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 @Inherited
 public @interface XmlRpcDescription
