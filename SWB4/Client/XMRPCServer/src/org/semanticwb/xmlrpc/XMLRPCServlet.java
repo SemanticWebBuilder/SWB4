@@ -73,10 +73,14 @@ public abstract class XMLRPCServlet extends HttpServlet
     private static Logger log = SWBUtils.getLogger(XMLRPCServlet.class);
     private static final String RETURN = "\r\n";
     //private static Hashtable<String, Object> cacheObjects = new Hashtable<String, Object>();
-    private static final String PREFIX_PROPERTY_PATH = "org.semanticwb.xmlrpc.";
+    private static String PREFIX_PROPERTY_PATH = "org.semanticwb.xmlrpc.";
     private static final String XMLRPC_DOCUMENT = "xmlrpc";
     private static final Set<RPCFilter> filters = Collections.synchronizedSet(new HashSet<RPCFilter>());
-
+    
+    public void init(String path)
+    {
+        PREFIX_PROPERTY_PATH=path;
+    }
     public void addFilter(RPCFilter filter)
     {
         filters.add(filter);
@@ -677,7 +681,7 @@ public abstract class XMLRPCServlet extends HttpServlet
         }
         catch (ClassNotFoundException cnfe)
         {
-            log.debug(cnfe);
+            log.error(cnfe);
         }
 
     }
