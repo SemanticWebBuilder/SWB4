@@ -65,7 +65,7 @@ public class RPCProcessImp extends XmlRpcObject implements RPCProcess
     }
 
     @Override
-    public List<String> getProcessInstances(String APIKey, String processSiteID, int instanceStatus, String SiteID) throws Exception
+    public String[] getProcessInstances(String APIKey, String processSiteID, int instanceStatus, String SiteID) throws Exception
     {
         List<String> getProcessInstances = new ArrayList<String>();
         WebSite site = WebSite.ClassMgr.getWebSite(SiteID);
@@ -85,7 +85,7 @@ public class RPCProcessImp extends XmlRpcObject implements RPCProcess
             ProcessInstance pi = gi.next();
             getProcessInstances.add(pi.getId());
         }
-        return getProcessInstances;
+        return getProcessInstances.toArray(new String[getProcessInstances.size()]);
     }
 
     /*@Override
@@ -107,7 +107,7 @@ public class RPCProcessImp extends XmlRpcObject implements RPCProcess
     return getProcessInstances;
     }*/
     @Override
-    public List<String> listUserTaskInstances(String APIKey, String UserID, String processSiteID, String ProcessID, int instanceStatus, String SiteID) throws Exception
+    public String[] listUserTaskInstances(String APIKey, String UserID, String processSiteID, String ProcessID, int instanceStatus, String SiteID) throws Exception
     {
         List<String> listUserTaskInstances = new ArrayList<String>();
         WebSite site = WebSite.ClassMgr.getWebSite(SiteID);
@@ -135,7 +135,7 @@ public class RPCProcessImp extends XmlRpcObject implements RPCProcess
         {
             listUserTaskInstances.add(flow.getId());
         }
-        return listUserTaskInstances;
+        return listUserTaskInstances.toArray(new String[listUserTaskInstances.size()]);
     }
 
     @Override
