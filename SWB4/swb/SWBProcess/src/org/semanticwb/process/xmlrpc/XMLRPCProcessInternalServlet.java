@@ -29,7 +29,7 @@ public class XMLRPCProcessInternalServlet implements InternalServlet
     public void init(ServletContext config) throws ServletException
     {
         log.event("Initializing XMLRPCProcessServlet...");
-        servletContext.init();
+        servletContext.init("org.semanticwb.process.xmlrpc");
     }
 
     @Override
