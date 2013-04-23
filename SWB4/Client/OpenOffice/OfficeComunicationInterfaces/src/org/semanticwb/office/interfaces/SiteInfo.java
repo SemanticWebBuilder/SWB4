@@ -28,11 +28,14 @@
 
 package org.semanticwb.office.interfaces;
 
+import org.semanticwb.xmlrpc.XmlRpcDescription;
+
 /**
  *
  * @author victor.lorenzana
  */
 public class SiteInfo {
+    @XmlRpcDescription(description="id del sitio")
     public String id;
     public String title;
     public String description;
