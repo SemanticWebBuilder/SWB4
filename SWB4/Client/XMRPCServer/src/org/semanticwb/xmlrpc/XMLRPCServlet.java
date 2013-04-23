@@ -80,6 +80,14 @@ public abstract class XMLRPCServlet extends HttpServlet
     public void init(String path)
     {
         PREFIX_PROPERTY_PATH=path;
+        try
+        {
+            super.init();
+        }
+        catch(Exception e)
+        {
+            log.error(e);            
+        }
     }
     public void addFilter(RPCFilter filter)
     {
