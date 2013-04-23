@@ -46,5 +46,5 @@ import java.lang.annotation.Target;
 @Inherited
 public @interface XmlRpcMethod 
 {
-    String methodName();
+    String methodName();    
 }
