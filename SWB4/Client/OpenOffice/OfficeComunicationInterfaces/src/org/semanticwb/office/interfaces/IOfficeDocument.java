@@ -43,7 +43,7 @@ public interface IOfficeDocument
     @XmlRpcMethod(methodName = "OfficeDocument.save")
     @XmlRpcDescription(description="Save the document")
     @XmlRpcReturns(returns="Regresa el identificador del documento")
-    public String save(@XmlRpcDescription(description="title of document") @XmlRpcParam(name="title") String title, String description, String repositoryName, String categoryID, String type, String nodeType, String file, PropertyInfo[] properties, String[] values) throws Exception;
+    public String save(@XmlRpcDescription(description="title of document") @XmlRpcParam(name="title") String title,@XmlRpcParam(name="description") String description, @XmlRpcParam(name="repositoryName")String repositoryName, @XmlRpcParam(name="categoryID")String categoryID, @XmlRpcParam(name="type")String type, @XmlRpcParam(name="nodeType")String nodeType, @XmlRpcParam(name="file")String file, @XmlRpcParam(name="properties") PropertyInfo[] properties, @XmlRpcParam(name="values") String[] values) throws Exception;
 
     @XmlRpcMethod(methodName = "OfficeDocument.setTitle")
     public void setTitle(String repositoryName, String contentID, String title) throws Exception;
