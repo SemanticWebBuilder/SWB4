@@ -114,7 +114,7 @@ public abstract class XMLRPCServlet extends HttpServlet
         {
             String name = names.nextElement().toString();
             String value = System.getProperty(name);
-            System.out.println("key:"+name+" value:"+value);
+            System.out.println("key:"+name+" value:"+value+" llave: "+PREFIX_PROPERTY_PATH);
             if (name != null && name.startsWith(PREFIX_PROPERTY_PATH))
             {
                 String key = name.substring(PREFIX_PROPERTY_PATH.length());
