@@ -361,6 +361,12 @@ public class GateWayOffice implements InternalServlet
         }
         else
         {
+            if (request.getParameter("wsdl")!=null)
+            {
+                officeServlet.doWSDL(request, response);
+                
+                return;
+            }
             String contentId = request.getParameter("contentId");
             String versionName = request.getParameter("versionName");
             String repositoryName = request.getParameter("repositoryName");
