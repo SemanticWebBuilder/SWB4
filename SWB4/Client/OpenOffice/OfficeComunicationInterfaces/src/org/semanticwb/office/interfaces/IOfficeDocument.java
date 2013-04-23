@@ -28,6 +28,7 @@
 package org.semanticwb.office.interfaces;
 
 import java.util.Date;
+import org.semanticwb.xmlrpc.XmlRpcDescription;
 import org.semanticwb.xmlrpc.XmlRpcMethod;
 
 /**
@@ -38,7 +39,8 @@ public interface IOfficeDocument
 {
 
     @XmlRpcMethod(methodName = "OfficeDocument.save")
-    public String save(String title, String description, String repositoryName, String categoryID, String type, String nodeType, String file, PropertyInfo[] properties, String[] values) throws Exception;
+    @XmlRpcDescription(description="Save the document")
+    public String save(@XmlRpcDescription(description="title") String title, String description, String repositoryName, String categoryID, String type, String nodeType, String file, PropertyInfo[] properties, String[] values) throws Exception;
 
     @XmlRpcMethod(methodName = "OfficeDocument.setTitle")
     public void setTitle(String repositoryName, String contentID, String title) throws Exception;
