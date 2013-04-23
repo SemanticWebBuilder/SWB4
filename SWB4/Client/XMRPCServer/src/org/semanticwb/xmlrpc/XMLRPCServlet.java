@@ -649,8 +649,16 @@ public abstract class XMLRPCServlet extends HttpServlet
                                     comment = description.description();
                                 }
                             }
+
                             String nameparam = null;
-                            //nameparam = m.getTypeParameters()[index].getName();
+                            for (Annotation annotationparam : annotations[index])
+                            {
+                                if (annotationparam.annotationType().equals(XmlRpcParam.class))
+                                {
+                                    XmlRpcParam param = (XmlRpcParam) annotationparam;
+                                    nameparam = param.name();
+                                }
+                            }
                             addParam(params, type, comment, nameparam);
                             index++;
                         }
