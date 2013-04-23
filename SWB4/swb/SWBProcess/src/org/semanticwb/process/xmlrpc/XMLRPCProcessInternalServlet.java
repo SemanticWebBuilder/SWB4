@@ -24,7 +24,7 @@ public class XMLRPCProcessInternalServlet implements InternalServlet{
 
     static Logger log = SWBUtils.getLogger(XMLRPCProcessInternalServlet.class);
     ProcessServlet servletContext=new ProcessServlet();
-
+    
     @Override
     public void init(ServletContext config) throws ServletException
     {
