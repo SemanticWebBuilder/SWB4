@@ -609,9 +609,8 @@ public abstract class XMLRPCServlet extends HttpServlet
                         {
                             XmlRpcDescription description = m.getAnnotation(XmlRpcDescription.class);
                             if(description!=null)
-                            {
-                                Comment comment=new Comment(description.description());
-                                methodName.addContent(comment);
+                            {                                
+                                methodName.setAttribute("description",description.description());
                             }
                         }
                         methodName.setText(name);
