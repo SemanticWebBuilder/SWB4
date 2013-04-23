@@ -1,39 +1,45 @@
 /**  
-* SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración, 
-* colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de 
-* información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes 
-* fuentes, donde a la información se le asigna un significado, de forma que pueda ser interpretada y 
-* procesada por personas y/o sistemas, es una creación original del Fondo de Información y Documentación 
-* para la Industria INFOTEC, cuyo registro se encuentra actualmente en trámite. 
-* 
-* INFOTEC pone a su disposición la herramienta SemanticWebBuilder a través de su licenciamiento abierto al público (‘open source’), 
-* en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición; 
-* aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software, 
-* todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización 
-* del SemanticWebBuilder 4.0. 
-* 
-* INFOTEC no otorga garantía sobre SemanticWebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita, 
-* siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar 
-* de la misma. 
-* 
-* Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente 
-* dirección electrónica: 
-*  http://www.semanticwebbuilder.org
-**/ 
- 
+ * SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración,
+ * colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de
+ * información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes
+ * fuentes, donde a la información se le asigna un significado, de forma que pueda ser interpretada y
+ * procesada por personas y/o sistemas, es una creación original del Fondo de Información y Documentación
+ * para la Industria INFOTEC, cuyo registro se encuentra actualmente en trámite.
+ *
+ * INFOTEC pone a su disposición la herramienta SemanticWebBuilder a través de su licenciamiento abierto al público (‘open source’),
+ * en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición;
+ * aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software,
+ * todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización
+ * del SemanticWebBuilder 4.0.
+ *
+ * INFOTEC no otorga garantía sobre SemanticWebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita,
+ * siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar
+ * de la misma.
+ *
+ * Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente
+ * dirección electrónica:
+ *  http://www.semanticwebbuilder.org
+ **/
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
 package org.semanticwb.xmlrpc;
 
+import java.lang.annotation.Annotation;
+import java.util.Date;
 import java.util.Collections;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -45,6 +51,7 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.jdom.Comment;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
@@ -69,24 +76,72 @@ public abstract class XMLRPCServlet extends HttpServlet
     //private static Hashtable<String, Object> cacheObjects = new Hashtable<String, Object>();
     private static final String PREFIX_PROPERTY_PATH = "org.semanticwb.xmlrpc.";
     private static final String XMLRPC_DOCUMENT = "xmlrpc";
-    private static final Set<RPCFilter> filters=Collections.synchronizedSet(new HashSet<RPCFilter>());
+    private static final Set<RPCFilter> filters = Collections.synchronizedSet(new HashSet<RPCFilter>());
 
     public void addFilter(RPCFilter filter)
     {
-        filters.add(filter);        
+        filters.add(filter);
     }
+
     public void removeFilter(RPCFilter filter)
     {
         filters.remove(filter);
     }
+
     public void clear()
     {
         filters.clear();
     }
 
+    public void doWDSL(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+    {
+        Document docResponse = new Document();
+        response.setContentType("text/xml;charset=utf-8");
+        Map<String,String> elements = new HashMap<String,String>();
+        Enumeration<Object> names = System.getProperties().keys();
+        while (names.hasMoreElements())
+        {
+            String name = names.nextElement().toString();
+            String value = System.getProperty(name);
+            if (name != null && name.startsWith(PREFIX_PROPERTY_PATH))
+            {
+                String key=name.substring(PREFIX_PROPERTY_PATH.length());
+                elements.put(key,value);
+            }
+        }
+        Element definitions = new Element("wsdl");
+        docResponse.addContent(definitions);
+        for (String mapping : elements.keySet())
+        {
+            String clazz=elements.get(mapping);
+            addClass(clazz,mapping,definitions);
+        }
+        ServletOutputStream out = response.getOutputStream();
+        XMLOutputter xMLOutputter = new XMLOutputter();
+        String xml = xMLOutputter.outputString(docResponse);
+        out.write(xml.getBytes("utf-8"));
+        out.flush();
+        out.close();
+
+    }
+
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+    {
+        if (request.getParameter("wsdl") != null)
+        {
+            doWDSL(request, response);
+        }
+        else
+        {
+            super.doGet(request, response);
+        }
+    }
+
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
+
         try
         {
             Document xmlrpcDocument;
@@ -114,7 +169,7 @@ public abstract class XMLRPCServlet extends HttpServlet
 
             try
             {
-                for(RPCFilter filter : filters)
+                for (RPCFilter filter : filters)
                 {
                     filter.doFilter(xmlrpcDocument);
                 }
@@ -123,14 +178,14 @@ public abstract class XMLRPCServlet extends HttpServlet
                 Object[] parameters = deserializeRequest(xmlrpcDocument, methods);
                 Method method = getMethod(methodName, methods, parameters);
                 String objectName = method.getDeclaringClass().getName();
-                String user="",pass="";
-                if(request.getAttribute("user")!=null)
+                String user = "", pass = "";
+                if (request.getAttribute("user") != null)
                 {
-                    user=request.getAttribute("user").toString();
+                    user = request.getAttribute("user").toString();
                 }
-                if(request.getAttribute("password")!=null)
+                if (request.getAttribute("password") != null)
                 {
-                    pass=request.getAttribute("password").toString();
+                    pass = request.getAttribute("password").toString();
                 }
                 Response objResponse = execute(objectName, method, parameters, parts, user, pass);
                 Document docResponse = serializeResponse(objResponse.getObject());
@@ -138,7 +193,7 @@ public abstract class XMLRPCServlet extends HttpServlet
 
             }
             catch (Exception cne)
-            {                
+            {
                 try
                 {
                     Document docResponse = XMLRPCServlet.getException(cne);
@@ -161,7 +216,7 @@ public abstract class XMLRPCServlet extends HttpServlet
             catch (Exception ex)
             {
                 // No se puede hacer nada, no puede seralizar la respuesta, debe guardar el error en el log
-                log.error(ex);                
+                log.error(ex);
             }
         }
 
@@ -292,6 +347,60 @@ public abstract class XMLRPCServlet extends HttpServlet
         return classFullPath;
     }
 
+    private void addParam(Element methodName, Class type,String comment)
+    {
+        Element param = new Element("param");
+        if(comment!=null)
+        {            
+            param.setAttribute("description",comment);
+        }
+        methodName.addContent(param);
+        String value = type.getCanonicalName();
+        if (type.equals(String.class))
+        {
+            value = "string";
+        }
+        else if (type.equals(Integer.class) || type.equals(Long.class))
+        {
+            value = "int";
+        }
+        else if (type.equals(Boolean.class))
+        {
+            value = "boolean";
+        }
+        else if (type.equals(Double.class) || type.equals(Float.class))
+        {
+            value = "double";
+        }
+        else if (type.isArray())
+        {
+            value = "struct";
+            Class _arrayIs = type.getComponentType();
+            String commentStruct=null;
+            addParam(param, _arrayIs,commentStruct);
+        }
+        else if (type.equals(Date.class) || type.equals(Calendar.class))
+        {
+            value = "dateTime.iso8601";
+        }
+        else
+        {
+            for(Field field : type.getDeclaredFields())
+            {
+                Class classField=field.getType();
+                String commentfield=null;
+                XmlRpcDescription description=field.getAnnotation(XmlRpcDescription.class);
+                if(description!=null)
+                {
+                    commentfield=description.description();
+                }
+                addParam(param,classField,commentfield);
+            }            
+        }
+        param.setText(value);
+        
+    }
+
     private Response execute(String objectName, Method method, Object[] parameters, Set<Part> parts, String user, String password) throws ClassNotFoundException, XmlRpcException, InstantiationException, IllegalAccessException, NoSuchMethodException
     {
         Class clazz = method.getDeclaringClass();
@@ -355,7 +464,7 @@ public abstract class XMLRPCServlet extends HttpServlet
             log.error(e);
             throw e;
         }
-        
+
     }
 
     private static ArrayList<Method> getMethods(String pCallMethod) throws XmlRpcException, JDOMException, ClassNotFoundException
@@ -479,5 +588,59 @@ public abstract class XMLRPCServlet extends HttpServlet
             Class clazz = mapType.get(objectName);
             addMappingType(objectName, clazz);
         }
+    }
+
+    private void addClass(String clazz,String mapping, Element definition)
+    {
+        try
+        {
+            Class oclazz = Class.forName(clazz);
+            for (Class _interface : oclazz.getInterfaces())
+            {
+                for (Method m : _interface.getDeclaredMethods())
+                {
+                    if (!Modifier.isStatic(m.getModifiers()) && Modifier.isPublic(m.getModifiers()) && m.isAnnotationPresent(XmlRpcMethod.class))
+                    {
+                        
+                        XmlRpcMethod annotation = m.getAnnotation(XmlRpcMethod.class);
+                        String name = annotation.methodName();
+                        Element methodName = new Element("methodName");
+                        if(m.isAnnotationPresent(XmlRpcDescription.class))
+                        {
+                            XmlRpcDescription description = m.getAnnotation(XmlRpcDescription.class);
+                            if(description!=null)
+                            {
+                                Comment comment=new Comment(description.description());
+                                methodName.addContent(comment);
+                            }
+                        }
+                        methodName.setText(name);
+                        definition.addContent(methodName);
+                        int index=0;
+                        for (Class type : m.getParameterTypes())
+                        {
+                            Annotation[][] annotations = m.getParameterAnnotations();
+
+                            String comment=null;
+                            for(Annotation annotationparam : annotations[index])
+                            {
+                                if(annotationparam.annotationType().equals(XmlRpcDescription.class))
+                                {
+                                    XmlRpcDescription description=(XmlRpcDescription)annotationparam;
+                                    comment=description.description();
+                                }
+                            }                            
+                            addParam(methodName, type,comment);
+                            index++;
+                        }
+                    }
+                }
+            }
+        }
+        catch (ClassNotFoundException cnfe)
+        {
+            log.debug(cnfe);
+        }
+
     }
 }
