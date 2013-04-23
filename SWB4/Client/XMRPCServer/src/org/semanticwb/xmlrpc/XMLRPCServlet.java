@@ -347,22 +347,26 @@ public abstract class XMLRPCServlet extends HttpServlet
         return classFullPath;
     }
 
-    private void addParam(Element methodName, Class type, String comment)
+    private void addParam(Element methodName, Class type, String comment, String name)
     {
-        addType(methodName, type, comment, "param");
+        addType(methodName, type, comment, "param", name);
     }
 
     private void addReturns(Element methodName, Class type, String comment)
     {
-        addType(methodName, type, comment, "returns");
+        addType(methodName, type, comment, "returns", null);
     }
 
-    private void addType(Element methodName, Class type, String comment, String name)
+    private void addType(Element methodName, Class type, String comment, String paramname, String name)
     {
-        Element param = new Element(name);
+        Element param = new Element(paramname);
         if (comment != null)
         {
             param.setAttribute("description", comment);
+        }
+        if (name != null)
+        {
+            param.setAttribute("name", name);
         }
         methodName.addContent(param);
         String value = type.getCanonicalName();
@@ -374,7 +378,7 @@ public abstract class XMLRPCServlet extends HttpServlet
         {
             value = "int";
         }
-        else if (type.equals(Boolean.class)  || type.getName().equals("boolean"))
+        else if (type.equals(Boolean.class) || type.getName().equals("boolean"))
         {
             value = "boolean";
         }
@@ -391,7 +395,7 @@ public abstract class XMLRPCServlet extends HttpServlet
             value = "array";
             Class _arrayIs = type.getComponentType();
             String commentStruct = null;
-            addType(param, _arrayIs, commentStruct,"field");
+            addType(param, _arrayIs, commentStruct, "typeof",type.getComponentType().getSimpleName());
         }
         else if (type.equals(Date.class) || type.equals(Calendar.class))
         {
@@ -403,13 +407,14 @@ public abstract class XMLRPCServlet extends HttpServlet
             for (Field field : type.getDeclaredFields())
             {
                 Class classField = field.getType();
+
                 String commentfield = null;
                 XmlRpcDescription description = field.getAnnotation(XmlRpcDescription.class);
                 if (description != null)
                 {
                     commentfield = description.description();
-                }
-                addType(param, classField, commentfield,"field");
+                }                
+                addType(param, classField, commentfield, "field",field.getName());
             }
         }
         param.setAttribute("type", value);
@@ -645,7 +650,9 @@ public abstract class XMLRPCServlet extends HttpServlet
                                     comment = description.description();
                                 }
                             }
-                            addParam(params, type, comment);
+                            String nameparam = null;
+                            //nameparam = m.getTypeParameters()[index].getName();
+                            addParam(params, type, comment, nameparam);
                             index++;
                         }
 
