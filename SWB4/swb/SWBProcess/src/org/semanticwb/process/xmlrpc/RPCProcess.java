@@ -14,7 +14,7 @@ import org.semanticwb.xmlrpc.XmlRpcParam;
  *
  * @author victor.lorenzana
  */
-public interface RPCProcess {
+public interface RPCProcess  {
     @XmlRpcMethod(methodName="RPCProcess.closeProcessInstance")
     @XmlRpcDescription(description="Close a process instance")
     public void closeProcessInstance(@XmlRpcDescription(description="Parameter for the APIKey registered in apikey.config") @XmlRpcParam(name="APIKey")String APIKey,String UserID,String InstanceID,int closeStatus,String closeAction,String SiteID) throws Exception;
