@@ -5,6 +5,7 @@
     <admdbconnmgr defconn="true"/>
     <fieldset legend="Configuración de contenido">
         <input type="file" id="video" name="video" label="Video (flv, swf, avi, wmv, mov, rm, mp1, mp2, mp4, mpg)" showfile="true" filetype="flv|swf|avi|wmv|mov|rm|mp1|mp2|mp4|mpg" isshowfiletype="true" isremovefile="true" removemsg="Quitar video" size="40" />
+        <input type="file" id="xml" name="xml" label="Archivo(xml,srt)" showfile="true" filetype="xml|srt" isshowfiletype="true" isremovefile="true" removemsg="Quitar archivo" size="40" />
         <input type="file" id="preview" name="preview" label="Imagen de previsualización" showfile="true" filetype="gif|jpg|bmp|png" isshowfiletype="true" isremovefile="true" removemsg="Quitar Imagen" size="40" />
         <statictext name="auto">Iniciar automáticamente</statictext>
         <input type="radio" id="automatic0" name="automatic" label="Si" value="true" checked="true" />
@@ -57,160 +58,504 @@
     </fieldset>
     </div>
 
-    <div title="Video FLV" open="false">
-    <fieldset legend="Aspecto del video FLV">
-     <statictext name="viewer">
+
+             <div title="Video FLV" open="false">
+            <fieldset legend="Aspecto del video FLV">
+
+
+                <statictext name="bgcolor">
         <![CDATA[
         <table border="0" width="99%">
             <tr>
-              <td align="right">Color del marco del reproductor (hexadecimal)</td>
-              <td class="valores">
-                <input type="text" id="viewer" name="viewer" value="{@db_viewer}" size="7" maxlength="7" />
-                <span style="background-color:{@db_viewer};">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+
+
+              <td align="right">Primer color de gradiente (hexadecimal)</td>
+              <td class="valoresSubti">
+                <input type="text" id="bgcolor1" name="bgcolor1" value="{@db_bgcolor1}" size="7" maxlength="7" />
+                <span style="background-color:{@db_bgcolor1};">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+              </td>
+
+
+              <td align="right">Segundo color de gradiente (hexadecimal)</td>
+              <td class="valoresSubti">
+                <input type="text" id="bgcolor2" name="bgcolor2" value="{@db_bgcolor2}" size="7" maxlength="7" />
+                <span style="background-color:{@db_bgcolor2};">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
               </td>
             </tr>
             <tr>
-              <td class="datos" width="200px" align="right">Otro color<span id="plt_viewer"></span></td>
-              <td class="valores">
-                <div id="cp_viewer"></div>
+             <td class="datos" width="200px" align="right">Otro color<span id="plt_bgcolor1"></span></td>
+              <td class="valoresSubti">
+                <div id="cp_bgcolor1"></div>
+              </td>
+              <td class="datos" width="200px" align="right">Otro color<span id="plt_bgcolor2"></span></td>
+              <td class="valoresSubti">
+                <div id="cp_bgcolor2"></div>
               </td>
             </tr>
         </table>
+
         <script type="text/javascript">
             dojo.addOnLoad(function(){
-                var myPalette = new dijit.ColorPalette( {palette:"7x10", onChange: function(val){ dojo.byId("viewer").value=val; dojo.byId("plt_viewer").style.color=val; dojo.byId("plt_viewer").innerHTML=val;}}, "cp_viewer" );
+                var myPalette = new dijit.ColorPalette( {palette:"7x10", onChange: function(val){ dojo.byId("bgcolor1").value=val; dojo.byId("plt_bgcolor1").style.color=val; dojo.byId("plt_bgcolor1").innerHTML=val;}}, "cp_bgcolor1" );
+            });
+        </script>
+        <script type="text/javascript">
+            dojo.addOnLoad(function(){
+                var myPalette = new dijit.ColorPalette( {palette:"7x10", onChange: function(val){ dojo.byId("bgcolor2").value=val; dojo.byId("plt_bgcolor2").style.color=val; dojo.byId("plt_bgcolor2").innerHTML=val;}}, "cp_bgcolor2" );
             });
         </script>
         ]]>
-    </statictext>
-    <statictext name="gradient">
+                </statictext>
+
+
+                <statictext name="gradient">
         <![CDATA[
         <table border="0" width="99%">
             <tr>
-              <td align="right">Color de gradiente (hexadecimal)</td>
+              <td align="right">Mostrar título:</td>
               <td class="valores">
-                <input type="text" id="gradient" name="gradient" value="{@db_gradient}" size="7" maxlength="7" />
-                <span style="background-color:{@db_gradient};">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+              <label for="" class="swbform-label">Si</label><input type="radio" name="titulo" id="titulo0" value="true" />
+              <label for="" class="swbform-label">No</label><input type="radio" name="titulo" id="titulo1" value="false" />
+              </td>
+              <td align="right">Usar subtítulos</td>
+              <td class="valores">
+              <label for="" class="swbform-label">Si</label><input type="radio" name="srt" id="srt0" value="true" />
+              <label for="" class="swbform-label">No</label><input type="radio" name="srt" id="srt1" value="false" />
               </td>
             </tr>
             <tr>
-              <td class="datos" width="200px" align="right">Otro color<span id="plt_gradient"></span></td>
-              <td class="valores">
-                <div id="cp_gradient"></div>
+             <br>
+          </tr>
+        </table>
+
+        ]]>
+                </statictext>
+
+                <statictext name="control">
+        <![CDATA[
+        <table border="0" width="99%">
+            <tr>
+
+
+              <td align="right">Color fondo de subtitulos</td>
+              <td class="valoresSub">
+                <input type="text" id="srtbgcolor" name="srtbgcolor" value="{@db_srtbgcolor}" size="7" maxlength="7" />
+                <span style="background-color:{@db_srtbgcolor};">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+              </td>
+
+
+              <td align="right">Color de subtitulos</td>
+              <td class="valoresSub">
+                <input type="text" id="srtcolor" name="srtcolor" value="{@db_srtcolor}" size="7" maxlength="7" />
+                <span style="background-color:{@db_srtcolor};">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+              </td>
+            </tr>
+            <tr>
+             <td class="datos" width="200px" align="right">Otro color<span id="plt_panelBgSub"></span></td>
+              <td class="valoresSub">
+                <div id="cp_panelBgSub"></div>
+              </td>
+              <td class="datos" width="200px" align="right">Otro color<span id="plt_panelSub"></span></td>
+              <td class="valoresSub">
+                <div id="cp_panelSub"></div>
               </td>
             </tr>
         </table>
+
         <script type="text/javascript">
             dojo.addOnLoad(function(){
-                var myPalette = new dijit.ColorPalette( {palette:"7x10", onChange: function(val){ dojo.byId("gradient").value=val; dojo.byId("plt_gradient").style.color=val; dojo.byId("plt_gradient").innerHTML=val;}}, "cp_gradient" );
+                var myPalette = new dijit.ColorPalette( {palette:"7x10", onChange: function(val){ dojo.byId("srtbgcolor").value=val; dojo.byId("plt_panelBgSub").style.color=val; dojo.byId("plt_panelBgSub").innerHTML=val;}}, "cp_panelBgSub" );
+            });
+        </script>
+        <script type="text/javascript">
+            dojo.addOnLoad(function(){
+                var myPalette = new dijit.ColorPalette( {palette:"7x10", onChange: function(val){ dojo.byId("srtcolor").value=val; dojo.byId("plt_panelSub").style.color=val; dojo.byId("plt_panelSub").innerHTML=val;}}, "cp_panelSub" );
             });
         </script>
         ]]>
-    </statictext>
-    <statictext name="panel">
+                </statictext>
+
+
+                <statictext name="over">
+        <![CDATA[
+        <table border="0" width="99%">
+            <tr>
+
+              <td align="right">Tamaño de los subtitulos (Default 11)</td>
+              <td class="valores">
+                <input type="text" id="srtsize"  name="srtsize"  maxlength="2" onkeypress="return sizeSub(event);" />
+              </td>
+              <td align="right">Mostrar botón subtitulos</td>
+              <td class="valores">
+                <label for="" class="swbform-label">Si</label><input type="radio" name="showswitchsubtitles" id="showswitchsubtitles0" value="true" />
+                <label for="" class="swbform-label">No</label><input type="radio" name="showswitchsubtitles" id="showswitchsubtitles1" value="false" />
+              </td>
+             </tr>
+
+
+      </table>
+        ]]>
+                </statictext>
+
+
+            <script type="text/javascript">
+        <![CDATA[
+        dojo.require("dijit.ColorPalette");
+       function sizeSub(e) {
+        var keynum = window.event ? window.event.keyCode : e.which;
+        if ( keynum == 8 ) return true;
+        return /\d/.test(String.fromCharCode(keynum));
+        }
+        ]]>
+            </script>
+
+
+
+
+                <statictext name="show">
+        <![CDATA[
+        <table border="0" width="99%">
+            <tr>
+              <td align="right">Mostrar botón para pantalla completa</td>
+              <td class="valores">
+                <label for="" class="swbform-label">Si</label><input type="radio" name="showfullscreen" id="showfullscreen0" value="true" />
+                <label for="" class="swbform-label">No</label><input type="radio" name="showfullscreen" id="showfullscreen1" value="false" />
+              </td>
+                <td align="right">Mostrar botón stop</td>
+              <td class="valores">
+                <label for="" class="swbform-label">Si</label><input type="radio" name="showstop" id="showstop0" value="true" />
+                <label for="" class="swbform-label">No</label><input type="radio" name="showstop" id="showstop1" value="false" />
+              </td>
+            </tr>
+            <tr>
+            </tr>
+        </table>
+        ]]>
+                </statictext>
+
+                <statictext name="color">
         <![CDATA[
         <table border="0" width="99%">
             <tr>
               <td align="right">Color del tablero de control (hexadecimal)</td>
-              <td class="valores">
-                <input type="text" id="panel" name="panel" value="{@db_panel}" size="7" maxlength="7" />
-                <span style="background-color:{@db_panel};">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+              <td class="color">
+                <input type="text" id="playercolor" name="playercolor" value="{@db_playercolor}" size="7" maxlength="7" />
+                <span style="background-color:{@db_playercolor};">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+              </td>
+              <td align="right">Color de los botones (hexadecimal)</td>
+              <td class="color">
+                <input type="text" id="buttoncolor" name="buttoncolor" value="{@db_buttoncolor}" size="7" maxlength="7" />
+                <span style="background-color:{@db_buttoncolor};">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
               </td>
             </tr>
             <tr>
-              <td class="datos" width="200px" align="right">Otro color<span id="plt_panel"></span></td>
-              <td class="valores">
-                <div id="cp_panel"></div>
+              <td class="datos" width="200px" align="right">Otro color<span id="plt_playercolor"></span></td>
+              <td class="color">
+                <div id="cp_playercolor"></div>
+              </td>
+              <td class="datos" width="200px" align="right">Otro color<span id="plt_buttoncolor"></span></td>
+              <td class="color">
+                <div id="cp_buttoncolor"></div>
               </td>
             </tr>
-        </table>
+          </table>
         <script type="text/javascript">
             dojo.addOnLoad(function(){
-                var myPalette = new dijit.ColorPalette( {palette:"7x10", onChange: function(val){ dojo.byId("panel").value=val; dojo.byId("plt_panel").style.color=val; dojo.byId("plt_panel").innerHTML=val;}}, "cp_panel" );
+                var myPalette = new dijit.ColorPalette( {palette:"7x10", onChange: function(val){ dojo.byId("playercolor").value=val; dojo.byId("plt_playercolor").style.color=val; dojo.byId("plt_playercolor").innerHTML=val;}}, "cp_playercolor" );
             });
         </script>
-        ]]>
-    </statictext>
-    <statictext name="control">
-        <![CDATA[
-        <table border="0" width="99%">
-            <tr>
-              <td align="right">Color de los controles (hexadecimal)</td>
-              <td class="valores">
-                <input type="text" id="control" name="control" value="{@db_control}" size="7" maxlength="7" />
-                <span style="background-color:{@db_control};">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-              </td>
-            </tr>
-            <tr>
-              <td class="datos" width="200px" align="right">Otro color<span id="plt_control"></span></td>
-              <td class="valores">
-                <div id="cp_control"></div>
-              </td>
-            </tr>
-        </table>
-        <script type="text/javascript">
+         <script type="text/javascript">
             dojo.addOnLoad(function(){
-                var myPalette = new dijit.ColorPalette( {palette:"7x10", onChange: function(val){ dojo.byId("control").value=val; dojo.byId("plt_control").style.color=val; dojo.byId("plt_control").innerHTML=val;}}, "cp_control" );
+                var myPalette = new dijit.ColorPalette( {palette:"7x10", onChange: function(val){ dojo.byId("buttoncolor").value=val; dojo.byId("plt_buttoncolor").style.color=val; dojo.byId("plt_buttoncolor").innerHTML=val;}}, "cp_buttoncolor" );
             });
-        </script>
-        ]]>
-    </statictext>
-    <statictext name="over">
-        <![CDATA[
-        <table border="0" width="99%">
-            <tr>
-              <td align="right">Color para indicar selección (hexadecimal)</td>
-              <td class="valores">
-                <input type="text" id="over" name="over" value="{@db_over}" size="7" maxlength="7" />
-                <span style="background-color:{@db_over};">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-              </td>
-            </tr>
-            <tr>
-              <td class="datos" width="200px" align="right">Otro color<span id="plt_over"></span></td>
-              <td class="valores">
-                <div id="cp_over"></div>
-              </td>
-            </tr>
-        </table>
-        <script type="text/javascript">
-            dojo.addOnLoad(function(){
-                var myPalette = new dijit.ColorPalette( {palette:"7x10", onChange: function(val){ dojo.byId("over").value=val; dojo.byId("plt_over").style.color=val; dojo.byId("plt_over").innerHTML=val;}}, "cp_over" );
-            });
-        </script>
-        ]]>
-    </statictext>
-    <statictext name="slider">
-        <![CDATA[
-        <table border="0" width="99%">
-            <tr>
-              <td align="right">Color de la barra de tiempo (hexadecimal)</td>
-              <td class="valores">
-                <input type="text" id="slider" name="slider" value="{@db_slider}" size="7" maxlength="7" />
-                <span style="background-color:{@db_slider};">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-              </td>
-            </tr>
-            <tr>
-              <td class="datos" width="200px" align="right">Otro color<span id="plt_slider"></span></td>
-              <td class="valores">
-                <div id="cp_slider"></div>
-              </td>
-            </tr>
-        </table>
-        <script type="text/javascript">
-            dojo.addOnLoad(function(){
-                var myPalette = new dijit.ColorPalette( {palette:"7x10", onChange: function(val){ dojo.byId("slider").value=val; dojo.byId("plt_slider").style.color=val; dojo.byId("plt_slider").innerHTML=val;}}, "cp_slider" );
-            });
-        </script>
-        ]]>
-    </statictext>
+         </script>
 
-    </fieldset>
-    </div>
+        ]]>
+                </statictext>
 
-    <fieldset>
-        <input type="submit" value="Guardar" onclick="return jsValida(this.form)" />
-        <input type="reset"  value="Restablecer" />
-    </fieldset>
+
+                <statictext name="slider">
+        <![CDATA[
+        <table border="0" width="99%">
+            <tr>
+              <td align="right">Primer color de la barra de tiempo (hexadecimal)</td>
+              <td class="slider">
+                <input type="text" id="slidercolor1" name="slidercolor1" value="{@db_slidercolor1}" size="7" maxlength="7" />
+                <span style="background-color:{@db_slidercolor1};">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+              </td>
+            <td align="right">Color para indicar selección (hexadecimal)</td>
+              <td class="slider">
+                <input type="text" id="buttonovercolor" name="buttonovercolor" value="{@db_buttonovercolor}" size="7" maxlength="7" />
+                <span style="background-color:{@db_buttonovercolor};">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+              </td>
+            </tr>
+            <tr>
+              <td class="datos" width="200px" align="right">Otro color<span id="plt_slidercolor1"></span></td>
+              <td class="slider">
+                <div id="cp_slidercolor1"></div>
+              </td>
+               <td class="datos" width="200px" align="right">Otro color<span id="plt_buttonovercolor"></span></td>
+              <td class="slider">
+                <div id="cp_buttonovercolor"></div>
+              </td>
+              </tr>
+        </table>
+        <script type="text/javascript">
+            dojo.addOnLoad(function(){
+                var myPalette = new dijit.ColorPalette( {palette:"7x10", onChange: function(val){ dojo.byId("slidercolor1").value=val; dojo.byId("plt_slidercolor1").style.color=val; dojo.byId("plt_slidercolor1").innerHTML=val;}}, "cp_slidercolor1" );
+            });
+        </script>
+         <script type="text/javascript">
+            dojo.addOnLoad(function(){
+                var myPalette = new dijit.ColorPalette( {palette:"7x10", onChange: function(val){ dojo.byId("buttonovercolor").value=val; dojo.byId("plt_buttonovercolor").style.color=val; dojo.byId("plt_buttonovercolor").innerHTML=val;}}, "cp_buttonovercolor" );
+            });
+        </script>
+        ]]>
+                </statictext>
+
+                <statictext name="select">
+        <![CDATA[
+        <table border="0" width="99%">
+            <tr>
+              <td align="right">Segundo color de la barra de tiempo (hexadecimal)</td>
+              <td class="valores">
+                <input type="text" id="slidercolor2" name="slidercolor2" value="{@db_slidercolor2}" size="7" maxlength="7" />
+                <span style="background-color:{@db_slidercolor2};">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+              </td>
+              <td align="right">Color de la barra de tiempo cuando el cursor pase por encima (hexadecimal)</td>
+              <td class="valores">
+                <input type="text" id="sliderovercolor" name="sliderovercolor" value="{@db_sliderovercolor}" size="7" maxlength="7" />
+                <span style="background-color:{@db_sliderovercolor};">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+              </td>
+            </tr>
+            <tr>
+              <td class="datos" width="200px" align="right">Otro color<span id="plt_slidercolor2"></span></td>
+              <td class="valores">
+                <div id="cp_slidercolor2"></div>
+              </td>
+                <td class="datos" width="200px" align="right">Otro color<span id="plt_sliderovercolor"></span></td>
+              <td class="valores">
+                <div id="cp_sliderovercolor"></div>
+              </td>
+            </tr>
+        </table>
+         <script type="text/javascript">
+            dojo.addOnLoad(function(){
+                var myPalette = new dijit.ColorPalette( {palette:"7x10", onChange: function(val){ dojo.byId("slidercolor2").value=val; dojo.byId("plt_slidercolor2").style.color=val; dojo.byId("plt_slidercolor2").innerHTML=val;}}, "cp_slidercolor2" );
+            });
+        </script>
+                <script type="text/javascript">
+            dojo.addOnLoad(function(){
+                var myPalette = new dijit.ColorPalette( {palette:"7x10", onChange: function(val){ dojo.byId("sliderovercolor").value=val; dojo.byId("plt_sliderovercolor").style.color=val; dojo.byId("plt_sliderovercolor").innerHTML=val;}}, "cp_sliderovercolor" );
+            });
+        </script>
+        ]]>
+                </statictext>
+
+
+
+                <statictext name="button">
+        <![CDATA[
+        <table border="0" width="99%">
+            <tr>
+              <td align="right">Mostrar botón volumen</td>
+              <td class="valores">
+                <label for="" class="swbform-label">Si</label><input type="radio" name="showvolume" id="showvolume0" value="true" />
+                <label for="" class="swbform-label">No</label><input type="radio" name="showvolume" id="showvolume1" value="false" />
+              </td>
+               <br>
+              <td align="right">Seleccione: </td>
+              <td class="valores">
+                <label for="" class="swbform-label">Mostrar botón tiempo</label><input type="radio" name="showtime" id="showtime0" value="true" />
+                <label for="" class="swbform-label">Mostrar tiempo restante</label><input type="radio" name="showtime" id="showtime1" value="false" />
+              </td>
+                <br>
+            </tr>
+
+        </table>
+        ]]>
+                </statictext>
+
+                <statictext name="select">
+        <![CDATA[
+        <table border="0" width="99%">
+            <tr>
+              <td align="right">Mostrar barra de botones:</td>
+              <td class="valores">
+                    <select name="showplayer" label="Modo Reproductor barra de visualización:">
+                        <option value="autohide" selected="selected">Auto</option>
+                        <option value="always">Siempre</option>
+                        <option value="never">Nunca</option>
+                    </select>
+                     <br>
+              </td>
+              <br>
+              <td align="right">Mostrar el progreso de carga:</td>
+              <td class="valores">
+                    <select name="showloading" label="Cargando modo de visualización de la barra:">
+                        <option value="autohide" selected="selected" >Auto</option>
+                        <option value="always">Siempre</option>
+                        <option value="never">Nunca</option>
+                    </select>
+                     <br>
+                </td>
+                <br>
+            </tr>
+
+        </table>
+
+        ]]>
+                </statictext>
+
+
+
+
+
+
+                <statictext name="show">
+        <![CDATA[
+        <table border="0" width="99%">
+            <tr>
+              <td align="right">Activar atajos</td>
+              <td class="valores">
+                    <label for="" class="swbform-label">Si</label><input type="radio" name="shortcut" id="shortcut0" value="true" />
+                    <label for="" class="swbform-label">No</label><input type="radio" name="shortcut" id="shortcut1" value="false" />
+
+              </td>
+              <br>
+              <td align="right">Mostrar el icono de reproducción</td>
+              <td class="valores">
+                    <label for="" class="swbform-label">Si</label><input type="radio" name="showiconplay" id="showiconplay0" value="true" />
+                    <label for="" class="swbform-label">No</label><input type="radio" name="showiconplay" id="showiconplay1" value="false" />
+
+              </td>
+
+            </tr>
+            <tr><br></tr>
+
+        </table>
+
+        ]]>
+                </statictext>
+
+
+
+
+                <statictext name="selectIcon">
+        <![CDATA[
+        <table border="0" width="99%">
+            <tr>
+              <td align="right">Color de icono de reproducción(hexadecimal)</td>
+              <td class="icon">
+                <input type="text" id="iconplaycolor" name="iconplaycolor" value="{@db_iconplaycolor}" size="7" maxlength="7" />
+                <span style="background-color:{@db_iconplaycolor};">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+              </td>
+             <td align="right">Color de fondo del icono de reproducción (hexadecimal)</td>
+              <td class="icon1">
+                <input type="text" id="iconplaybgcolor" name="iconplaybgcolor" value="{@db_iconplaybgcolor}" size="7" maxlength="7" />
+                <span style="background-color:{@db_iconplaybgcolor};">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+              </td>
+            </tr>
+            <tr>
+              <td class="datos" width="200px" align="right">Otro color<span id="plt_slidericonplaycolor"></span></td>
+              <td class="valores">
+                <div id="cp_slidericonplaycolor"></div>
+              </td>
+
+                <td class="datos" width="200px" align="right">Otro color<span id="plt_slidericonplaybgcolor"></span></td>
+              <td class="valores">
+                <div id="cp_slidericonplaybgcolor"></div>
+              </td>
+
+            </tr>
+        </table>
+         <script type="text/javascript">
+            dojo.addOnLoad(function(){
+                var myPalette = new dijit.ColorPalette( {palette:"7x10", onChange: function(val){ dojo.byId("iconplaycolor").value=val; dojo.byId("plt_slidericonplaycolor").style.color=val; dojo.byId("plt_slidericonplaycolor").innerHTML=val;}}, "cp_slidericonplaycolor" );
+            });
+        </script>
+                <script type="text/javascript">
+            dojo.addOnLoad(function(){
+                var myPalette = new dijit.ColorPalette( {palette:"7x10", onChange: function(val){ dojo.byId("iconplaybgcolor").value=val; dojo.byId("plt_slidericonplaybgcolor").style.color=val; dojo.byId("plt_slidericonplaybgcolor").innerHTML=val;}}, "cp_slidericonplaybgcolor" );
+            });
+        </script>
+        ]]>
+                </statictext>
+
+                <statictext name="select">
+        <![CDATA[
+        <table border="0" width="99%">
+            <tr>
+              <td align="right">Color de la barra de carga (hexadecimal)</td>
+              <td class="valores">
+                <input type="text" id="loadingcolor" name="loadingcolor" value="{@db_loadingcolor}" size="7" maxlength="7" />
+                <span style="background-color:{@db_loadingcolor};">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+              </td>
+
+      <td align="right">Visualización del cursor:</td>
+              <td class="valores">
+                    <select name="showmouse" label="Visualización del cursor del ratón:">
+                        <option value="autohide" selected="selected">Auto</option>
+                        <option value="always">Siempre</option>
+                        <option value="never">Nunca</option>
+                    </select>
+              </td>
+            </tr>
+            <tr>
+              <td class="datos" width="200px" align="right">Otro color<span id="plt_sliderColorLoading"></span></td>
+              <td class="valores">
+                <div id="cp_sliderColorLoading"></div>
+              </td>
+        </table>
+        <script type="text/javascript">
+            dojo.addOnLoad(function(){
+                var myPalette = new dijit.ColorPalette( {palette:"7x10", onChange: function(val){ dojo.byId("loadingcolor").value=val; dojo.byId("plt_sliderColorLoading").style.color=val; dojo.byId("plt_sliderColorLoading").innerHTML=val;}}, "cp_sliderColorLoading" );
+            });
+        </script>
+
+        ]]>
+                </statictext>
+
+
+                <statictext name="over">
+
+        <![CDATA[
+        <table border="0" width="99%">
+            <tr>
+              <td align="right">Volumen inicial (Entre 0-200)</td>
+              <td class="valores">
+                <input type="text" id="volumen" name="volumen" size="3" maxlength="3" onkeypress="return justNumbers(event);"/>
+              </td>
+              <br>
+              <td align="right">Transparencia de la barra (Entre 0-100)</td>
+              <td class="valores">
+                <input type="text" id="playeralpha"  name="playeralpha"  maxlength="3" onkeypress="return justNumbers(event);" />
+              </td>
+              <br>
+            </tr>
+        </table>
+
+        ]]>
+                </statictext>
+            </fieldset>
+
+            <script type="text/javascript">
+        <![CDATA[
+        dojo.require("dijit.ColorPalette");
+       function justNumbers(e) {
+        var keynum = window.event ? window.event.keyCode : e.which;
+        if ( keynum == 8 ) return true;
+        return /\d/.test(String.fromCharCode(keynum));
+        }
+        ]]>
+            </script>
+
+        </div>
+
+        <fieldset>
+            <input type="submit" value="Guardar" onclick="return jsValida(this.form)" />
+            <input type="reset"  value="Restablecer" />
+        </fieldset>
     </form>
 
     <script type="text/javascript">
