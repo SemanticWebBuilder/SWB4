@@ -65,7 +65,7 @@ public class RPCProcessImp extends XmlRpcObject implements RPCProcess
     }
 
     @Override
-    public String[] getProcessInstances(String APIKey, String processSiteID, int instanceStatus, String SiteID) throws Exception
+    public String[] getProcessInstances(String APIKey, int instanceStatus, String SiteID) throws Exception
     {
         List<String> getProcessInstances = new ArrayList<String>();
         WebSite site = WebSite.ClassMgr.getWebSite(SiteID);
@@ -74,7 +74,7 @@ public class RPCProcessImp extends XmlRpcObject implements RPCProcess
             throw new Exception("The site " + SiteID + " was not found");
         }
 
-        ProcessSite p = ProcessSite.ClassMgr.getProcessSite(processSiteID);
+        ProcessSite p = ProcessSite.ClassMgr.getProcessSite(SiteID);
         if (p == null)
         {
             throw new Exception("The ProcessSite with id " + SiteID + " was not found");
@@ -107,7 +107,7 @@ public class RPCProcessImp extends XmlRpcObject implements RPCProcess
     return getProcessInstances;
     }*/
     @Override
-    public String[] listUserTaskInstances(String APIKey, String UserID, String processSiteID, String ProcessID, int instanceStatus, String SiteID) throws Exception
+    public String[] listUserTaskInstances(String APIKey, String UserID, String ProcessID, int instanceStatus, String SiteID) throws Exception
     {
         List<String> listUserTaskInstances = new ArrayList<String>();
         WebSite site = WebSite.ClassMgr.getWebSite(SiteID);
@@ -120,10 +120,10 @@ public class RPCProcessImp extends XmlRpcObject implements RPCProcess
         {
             throw new Exception("The User with id " + UserID + " was not found");
         }
-        ProcessSite processSite = ProcessSite.ClassMgr.getProcessSite(processSiteID);
+        ProcessSite processSite = ProcessSite.ClassMgr.getProcessSite(SiteID);
         if (processSite == null)
         {
-            throw new Exception("The processSite with id " + processSiteID + " was not found");
+            throw new Exception("The processSite with id " + SiteID + " was not found");
         }
         org.semanticwb.process.model.Process p = org.semanticwb.process.model.Process.ClassMgr.getProcess(ProcessID, site);
         if (p == null)
