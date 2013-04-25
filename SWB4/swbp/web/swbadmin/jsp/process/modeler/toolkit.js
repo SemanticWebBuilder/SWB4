@@ -133,9 +133,7 @@
 
             _this.svg.onmousemove=function(evt)
             {
-                _this.hideToolTip();
                 if(_this.onmousemove(evt)==false)return;
-                
                 _this.svg.mouseX=_this.getEventX(evt);
                 _this.svg.mouseY=_this.getEventY(evt);
 
@@ -415,53 +413,58 @@
             _this.resizeBox.push(b);                        
         },
                 
-        showTooltip:function(pos, tooltipText, width, tooltipType) {
+        createToolTip:function() {
             var _this=ToolKit;
-            
-            _this.hideToolTip();
-            var cons = function() {
+            var constructor = function() {
                 var obj = document.createElementNS(_this.svgNS,"rect");
                 obj.setAttributeNS(null, "rx", "10");
                 obj.setAttributeNS(null, "ry", "10");
                 return obj;
             };
             
-            var msgBox = _this.createBaseObject(cons, null, null);
+            var msgBox = _this.createBaseObject(constructor, null, null);
             msgBox.setAttributeNS(null,"class","toolTip");
             msgBox.setAttributeNS(null,"filter","url(#dropshadow)");
-            
-            if (tooltipType=="Error") {
-                msgBox.setAttributeNS(null,"class","errorToolTip");
-            } else if (tooltipType=="Warning") {
-                msgBox.setAttributeNS(null,"class","warningToolTip");
-            }
-            
+            msgBox.canSelect=false;
             msgBox.onmousemove = function() {
                 return false;
-            }
-            
-            msgBox.setText(tooltipText,0,0,width,1);
-            msgBox.canSelect=false;
-            msgBox.resize(width, 60);
-            msgBox.move(window.pageXOffset+msgBox.getWidth()/2+10, window.pageYOffset+msgBox.getHeight()/2+10);
-            
-            var anim = document.createElementNS(_this.svgNS, "animate");
-            anim.setAttributeNS(null, "attributeType", "CSS");
-            anim.setAttributeNS(null, "attributeName", "opacity");
-            anim.setAttributeNS(null, "from", "0");
-            anim.setAttributeNS(null, "to", "1");
-            anim.setAttributeNS(null, "dur", "2s");
-            msgBox.appendChild(anim);
+            };
+            msgBox.onmouseup = function() {
+                return false;
+            };
             
             _this.tooltip=msgBox;
+        },
+
+        showTooltip:function(pos, tooltipText, width, tooltipType) {
+            var _this=ToolKit;
+            
+            if (_this.tooltip == null) _this.createToolTip();
+            
+            if (tooltipType=="Error") {
+                _this.tooltip.setAttributeNS(null,"class","errorToolTip");
+            } else if (tooltipType=="Warning") {
+                _this.tooltip.setAttributeNS(null,"class","warningToolTip");
+            }
+            _this.tooltip.setText(tooltipText,0,0,width,1);
+            _this.tooltip.resize(width, 60);
+            _this.tooltip.move(window.pageXOffset+_this.tooltip.getWidth()/2+10, window.pageYOffset+_this.tooltip.getHeight()/2+10);
+    
+//            var anim = document.createElementNS(_this.svgNS, "animate");
+//            anim.setAttributeNS(null, "attributeType", "CSS");
+//            anim.setAttributeNS(null, "attributeName", "opacity");
+//            anim.setAttributeNS(null, "from", "0");
+//            anim.setAttributeNS(null, "to", "1");
+//            anim.setAttributeNS(null, "dur", "2s");
+//            _this.tooltip.appendChild(anim);
+                _this.tooltip.show();
         },
                 
         hideToolTip:function() {
             var _this=ToolKit;
             if (_this.tooltip != null) {
-                _this.tooltip.remove(true);
+                _this.tooltip.hide();
                 //_this.svg.removeChild(_this.tooltip);
-                _this.tooltip=null;
             }
         },
 
