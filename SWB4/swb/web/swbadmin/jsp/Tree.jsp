@@ -605,9 +605,6 @@
         SemanticModel model=obj.getModel();
         String type=cls.getClassId();
         
-        boolean finalAccess=DisplayObject.getDisplayMode(cls).equals(DisplayObject.DISPLAYMODE_FINAL);        //Puede limitar la desendencia
-        boolean classFullAccess=DisplayObject.getDisplayMode(cls).equals(DisplayObject.DISPLAYMODE_FULL_ACCESS);        //Nivel de acceso definido por clase en la ontologia
-
         boolean virtual=virparent!=null;
         //System.out.println("obj:"+obj+" virtual:"+virparent);
 
@@ -663,7 +660,7 @@
         jobj.putOpt("menus", menus);
 
         //TODO:separar treeController
-        if(fullaccess && !finalAccess && classFullAccess && !cls.equals(WebSite.sclass) && !cls.isSubClass(WebSite.sclass) && !virtual)
+        if(fullaccess && DisplayObject.canCreateChilds(cls) && !cls.equals(WebSite.sclass) && !cls.isSubClass(WebSite.sclass) && !virtual)
         {
             //menus creacion
             Iterator<SemanticProperty> pit=cls.listHerarquicalProperties();
@@ -690,7 +687,7 @@
                     if(checkInverse(cls, rcls, inv))
                     {
                         DisplayObject dpc=DisplayObject.getDisplayObject(rcls);
-                        if((dpc==null || !dpc.isDoNotInstanceable()) && DisplayObject.getDisplayMode(rcls).equals(DisplayObject.DISPLAYMODE_FULL_ACCESS))
+                        if((dpc==null || !dpc.isDoNotInstanceable()) && DisplayObject.canCreate(rcls))
                         {
                             menus.put(getMenuItem(getLocaleString("add",lang)+" "+rcls.getDisplayName(lang), getLocaleString("icon_add",null),getAction("showDialog", SWBPlatform.getContextPath()+"/swbadmin/jsp/SemObjectEditor.jsp?scls="+rcls.getEncodedURI()+"&sref="+obj.getEncodedURI()+"&sprop="+prop.getEncodedURI(),getLocaleString("add",lang)+" "+rcls.getDisplayName(lang))));
                         }
@@ -713,7 +710,7 @@
                                 {
                                     //System.out.println("addMenu");
                                     DisplayObject dpc=DisplayObject.getDisplayObject(scls);
-                                    if((dpc==null || !dpc.isDoNotInstanceable()) && DisplayObject.getDisplayMode(scls).equals(DisplayObject.DISPLAYMODE_FULL_ACCESS))
+                                    if((dpc==null || !dpc.isDoNotInstanceable()) && DisplayObject.canCreate(scls))
                                     {
                                         menus.put(getMenuItem(getLocaleString("add",lang)+" "+scls.getDisplayName(lang), getLocaleString("icon_add",null),getAction("showDialog", SWBPlatform.getContextPath()+"/swbadmin/jsp/SemObjectEditor.jsp?scls="+scls.getEncodedURI()+"&sref="+obj.getEncodedURI()+"&sprop="+prop.getEncodedURI(),getLocaleString("add",lang)+" "+scls.getDisplayName(lang))));
                                     }
@@ -758,7 +755,7 @@
         //menus.put(getMenuItem(getLocaleString("clone",lang), getLocaleString("icon_clone",null), getAction("showStatusURLConfirm",SWBPlatform.getContextPath()+"/swbadmin/jsp/clone.jsp?suri="+obj.getEncodedURI(),getLocaleString("clone",lang)+" "+cls.getDisplayName(lang))));
         //menu remove
 
-        if(fullaccess && classFullAccess && SWBPortal.getAdminFilterMgr().haveClassAction(user, cls, AdminFilter.ACTION_DELETE))
+        if(fullaccess && DisplayObject.canDelete(cls) && SWBPortal.getAdminFilterMgr().haveClassAction(user, cls, AdminFilter.ACTION_DELETE))
         {
             if(!virtual)
             {
