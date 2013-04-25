@@ -88,6 +88,8 @@ public class RPCProcessImp extends XmlRpcObject implements RPCProcess
         return getProcessInstances.toArray(new String[getProcessInstances.size()]);
     }
 
+  
+
     /*@Override
     public List<String> getProcessInstances(String APIKey, int instanceStatus, String SiteID) throws Exception
     {
