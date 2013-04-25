@@ -301,7 +301,7 @@
                             {
                                 _this.selected[i].setParent(null);
                             }
-                        }                          
+                        }
                     }
                     
                     if(_this.snap2Grid)
