@@ -605,6 +605,7 @@
         SemanticModel model=obj.getModel();
         String type=cls.getClassId();
         
+        boolean finalAccess=DisplayObject.getDisplayMode(cls).equals(DisplayObject.DISPLAYMODE_FINAL);        //Puede limitar la desendencia
         boolean classFullAccess=DisplayObject.getDisplayMode(cls).equals(DisplayObject.DISPLAYMODE_FULL_ACCESS);        //Nivel de acceso definido por clase en la ontologia
 
         boolean virtual=virparent!=null;
@@ -662,7 +663,7 @@
         jobj.putOpt("menus", menus);
 
         //TODO:separar treeController
-        if(fullaccess && classFullAccess && !cls.equals(WebSite.sclass) && !cls.isSubClass(WebSite.sclass) && !virtual)
+        if(fullaccess && !finalAccess && classFullAccess && !cls.equals(WebSite.sclass) && !cls.isSubClass(WebSite.sclass) && !virtual)
         {
             //menus creacion
             Iterator<SemanticProperty> pit=cls.listHerarquicalProperties();
