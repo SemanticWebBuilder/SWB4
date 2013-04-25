@@ -113,26 +113,31 @@
         
         _this.canEndLink = function(link) {
             var ret = fCanEnd(link);
+            var msg = null;
             
             if (link.elementType=="SequenceFlow") {
                 if (link.fromObject.getContainer() == null && link.fromObject.getPool() !== _this.getPool()) {
-                    ToolKit.showTooltip(0, "Un flujo de secuencia no puede cruzar los límites del Pool", 200, "Error");
+                    msg = "Un flujo de secuencia no puede cruzar los límites del Pool";
                     ret = false;
                 }
             }
             
             if (link.elementType=="AssociationFlow") {
                 if (!(link.fromObject.elementType=="Artifact" || link.fromObject.elementType=="DataObject") && !(link.fromObject.elementType=="CompensationIntermediateCatchEvent" && link.fromObject.parent.typeOf("Activity"))) {
-                    ToolKit.showTooltip(0, "Un flujo de asociación no puede conectar dos Nodos de Flujo", 200, "Error");
+                    msg = "Un flujo de asociación no puede conectar dos nodos de flujo";
                     ret = false;
                 }
             }
             
             if (link.elementType=="MessageFlow") {
                 if (link.fromObject.getPool() == _this.getPool()) {
-                    ToolKit.showTooltip(0, "Un flujo de mensage sólo puede darse entre pools", 200, "Error");
+                    msg = "Un flujo de mensage sólo puede darse entre pools";
                     ret = false;
                 }
+            }
+            
+            if (msg!=null) {
+                ToolKit.showTooltip(0, msg, 200, "Error");
             }
             return ret;
         };
@@ -215,51 +220,139 @@
         return _this;
     };
     
-    var _StartEvent = function(obj) {
+    var _StartEventNode = function (obj) {
         var _this = new _CatchEvent(obj);
-        var fCanAdd = _this.canAddToDiagram;
-
-        _this.setElementType("StartEvent");
+        
+        _this.setElementType("StartEventNode");
         
         _this.canEndLink=function(link) {
-            ToolKit.showTooltip(0, "Un evento inicial no puede tener flujos de secuencia entrantes", 200, "Error");
+            ToolKit.showTooltip(0, "Un evento inicial no puede tener flujos entrantes", 200, "Error");
             return false;
         };
         
+        _this.canAddToDiagram = function() {
+            var ret = true;
+            var c = 0;
+            var msg = null;
+            
+            if (ToolKit.layer != null) {
+                for (var i = ToolKit.contents.length; i--;)  {
+                    if(ToolKit.contents[i].layer===_this.layer && ToolKit.contents[i].typeOf && ToolKit.contents[i].typeOf("StartEventNode")) {
+                        c++;
+                    }
+                }
+                
+                if (c != 1) {
+                    ret = false;
+                    msg = "Un subproceso no puede tener más de un evento de inicio";
+                } else if (ToolKit.layer.parent.elementType=="AdhocSubProcess") {
+                    ret = false;
+                    msg = "Un subproceso ad-hoc no puede tener eventos de inicio";
+                }
+                
+                if (msg!=null) {
+                    ToolKit.showTooltip(0, msg, 200, "Error");
+                }
+            }
+            
+            return ret;
+        };
+        
+        return _this;
+    };
+    
+    var _StartEvent = function(obj) {
+        var _this = new _StartEventNode(obj);
+        var fCanAdd = _this.canAddToDiagram;
+        
+        _this.setElementType("StartEvent");
+        
         _this.canAddToDiagram=function() {
-            var ret=fCanAdd();
-            //TODO:Implementar
+            var ret = fCanAdd();
+            var msg = null;
+            
+            if (ret && ToolKit.layer != null) {
+                if (ToolKit.layer.parent.elementType=="EventSubProcess") {
+                    ret = false;
+                    msg = "Un subproceso de evento no puede contener un evento de inicio normal";
+                }
+            }
+            
+            if (msg!=null) {
+                ToolKit.showTooltip(0, msg, 200, "Error");
+            }
             return ret;
         };
         return _this;
     };
     
     var _MessageStartEvent = function (obj) {
-        var _this = new _StartEvent(obj);
+        var _this = new _StartEventNode(obj);
+        var fCanEnd = _this.canEndLink;
+        var fCanAdd = _this.canAddToDiagram;
+        
         _this.setElementType("MessageStartEvent");
         
         _this.canEndLink=function(link) {
-            if (link.elementType=="MessageFlow" && _this.inConnections.length==0) {
-                return true;
+            var ret = fCanEnd(link);
+            
+            if (link.elementType=="MessageFlow") {
+                if (_this.inConnections.length==0) {
+                    ToolKit.hideToolTip();
+                    ret = true;
+                } else {
+                    ToolKit.showTooltip(0, "Un evento inicial de mensage no puede tener más de un flujo entrante", 200, "Error");
+                    ret = false;
+                }
+            } else {
+                ToolKit.showTooltip(0, "Un evento inicial de mensage sólo puede tener flujos de mensaje entrantes", 200, "Error");
+                ret = false;
             }
-            return false;
+            return ret;
         };
         
         _this.canAddToDiagram=function() {
-            var ret = true;
-            //TODO:Implementar
+            var ret = fCanAdd();
+            var msg = null;
+            
+            if (ret && ToolKit.layer != null) {
+                if (ToolKit.layer.parent.elementType!="EventSubProcess") {
+                    ret = false;
+                    msg = "Un subproceso debe iniciar con un evento normal";
+                }
+            }
+            if (msg!=null) {
+                ToolKit.showTooltip(0, msg, 200, "Error");
+            }
             return ret;
         };
         return _this;
     };
     
     var _TimerStartEvent = function(obj) {
-        var _this = new _StartEvent(obj);
+        var _this = new _StartEventNode(obj);
+        var fCanAdd = _this.canAddToDiagram;
+        
         _this.setElementType("TimerStartEvent");
         
         _this.canAddToDiagram = function () {
-            var ret = true;
-            //TODO: Implementar
+            var ret = fCanAdd();
+            var msg = null;
+            
+            if (ret && ToolKit.layer != null) {
+                ret = false;
+                
+                if (ToolKit.layer.parent.elementType=="SubProcess") {
+                    msg = "Un subproceso debe iniciar con un evento normal";
+                }
+                if (ToolKit.layer.parent.elementType=="EventSubProcess") {
+                    msg = "Un subproceso de evento no puede iniciar con un evento temporizado";
+                }
+            }
+
+            if (msg!=null) {
+                ToolKit.showTooltip(0, msg, 200, "Error");
+            }
             return ret;
         };
         
@@ -267,84 +360,214 @@
     };
     
     var _RuleStartEvent = function(obj) {
-        var _this = new _StartEvent(obj);
+        var _this = new _StartEventNode(obj);
+        var fCanAdd = _this.canAddToDiagram;
+        
         _this.setElementType("RuleStartEvent");
 
         _this.canAddToDiagram = function () {
-            var ret = true;
-            //TODO: Implementar
+            var ret = fCanAdd();
+            var msg = null;
+            
+            if (ret && ToolKit.layer != null) {
+                if (ToolKit.layer.parent.elementType=="SubProcess") {
+                    ret = false;
+                    msg = "Un subproceso debe iniciar con un evento normal";
+                }
+
+                if (ToolKit.layer.parent.elementType=="EventSubProcess") {
+                    ret = true;
+                }
+            }
+            
+            if (msg!=null) {
+                ToolKit.showTooltip(0, msg, 200, "Error");
+            }
             return ret;
         };
         return _this;
     };
     
     var _SignalStartEvent = function(obj) {
-        var _this = new _StartEvent(obj);
+        var _this = new _StartEventNode(obj);
+        var fCanAdd = _this.canAddToDiagram;
+        
         _this.setElementType("SignalStartEvent");
 
         _this.canAddToDiagram = function () {
-            var ret = true;
-            //TODO: Implementar
+            var ret = fCanAdd();
+            var msg = null;
+            
+            if (ret && ToolKit.layer != null) {
+                if (ToolKit.layer.parent.elementType!="EventSubProcess") {
+                    msg = "Un subproceso debe iniciar con un evento normal";
+                    ret = false;
+                }
+
+                if (ToolKit.layer.parent.elementType=="AdhocSubProcess") {
+                    ret = false;
+                    msg = "Un subproceso ad-hoc no debe tener eventos de inicio";
+                }
+            
+                if (msg!=null) {
+                    ToolKit.showTooltip(0, msg, 200, "Error");
+                }
+            }
             return ret;
         };
         return _this;
     };
     
     var _MultipleStartEvent = function (obj) {
-        var _this = new _StartEvent(obj);
+        var _this = new _StartEventNode(obj);
+        var fCanAdd = _this.canAddToDiagram;
+        
         _this.setElementType("MultipleStartEvent");
 
         _this.canAddToDiagram = function () {
-            var ret = true;
-            //TODO: Implementar
+            var ret = fCanAdd();
+            var msg = null;
+            
+            if (ret && ToolKit.layer != null) {
+                if (ToolKit.layer.parent.elementType=="SubProcess") {
+                    ret = false;
+                    msg = "Un subproceso debe iniciar con un evento normal";
+                }
+
+                if (ToolKit.layer.parent.elementType=="EventSubProcess") {
+                    ret = true;
+                }
+            }
+            
+            if (msg!=null) {
+                ToolKit.showTooltip(0, msg, 200, "Error");
+            }
             return ret;
         };
         return _this;
     };
     
     var _ParallelStartEvent = function(obj) {
-        var _this = new _StartEvent(obj);
+        var _this = new _StartEventNode(obj);
+        var fCanAdd = _this.canAddToDiagram;
+        
         _this.setElementType("ParallelStartEvent");
 
         _this.canAddToDiagram = function () {
-            var ret = true;
-            //TODO: Implementar
+            var ret = fCanAdd();
+            var msg = null;
+            
+            if (ret && ToolKit.layer != null) {
+                if (ToolKit.layer.parent.elementType=="SubProcess") {
+                    ret = false;
+                    msg = "Un subproceso debe iniciar con un evento normal";
+                }
+                
+                if (ret && ToolKit.layer.parent.elementType=="EventSubProcess") {
+                    msg = "Un subproceso de evento no puede contener un evento de inicio paralelo";
+                    ret = false;
+                }
+            }
+            
+            if (msg!=null) {
+                ToolKit.showTooltip(0, msg, 200, "Error");
+            }
             return ret;
         };
         return _this;
     };
     
     var _ScalationStartEvent = function(obj) {
-        var _this = new _StartEvent(obj);
+        var _this = new _StartEventNode(obj);
+        var fcanAdd = _this.canAddToDiagram;
+        
         _this.setElementType("ScalationStartEvent");
 
         _this.canAddToDiagram = function () {
-            var ret = true;
-            //TODO: Implementar
+            var ret = fcanAdd();
+            var msg = null;
+            
+            if (ToolKit.layer == null) {
+                msg = "Este evento no puede usarse en un proceso de nivel superior";
+                ret = false;
+            } else if (ret && ToolKit.layer != null) {
+                if (ToolKit.layer.parent.elementType=="SubProcess") {
+                    ret = false;
+                    msg = "Un subproceso debe iniciar con un evento normal";
+                }
+                
+                if (ToolKit.layer.parent.elementType=="EventSubProcess") {
+                    ret = true;
+                }
+            }
+            
+            if (msg!=null) {
+                ToolKit.showTooltip(0, msg, 200, "Error");
+            }
             return ret;
         };
         return _this;
     };
     
     var _ErrorStartEvent = function(obj) {
-        var _this = new _StartEvent(obj);
+        var _this = new _StartEventNode(obj);
+        var fcanAdd = _this.canAddToDiagram;
+        
         _this.setElementType("ErrorStartEvent");
 
         _this.canAddToDiagram = function () {
-            var ret = true;
-            //TODO: Implementar
+            var ret = fcanAdd();
+            var msg = null;
+            
+            if (ToolKit.layer == null) {
+                msg = "Este evento no puede usarse en un proceso de nivel superior";
+                ret = false;
+            } else if (ret && ToolKit.layer != null) {
+                if (ToolKit.layer.parent.elementType=="SubProcess") {
+                    ret = false;
+                    msg = "Un subproceso debe iniciar con un evento normal";
+                }
+
+                if (ToolKit.layer.parent.elementType=="EventSubProcess") {
+                    ret = true;
+                }
+            }
+            
+            if (msg!=null) {
+                ToolKit.showTooltip(0, msg, 200, "Error");
+            }
             return ret;
         };
         return _this;
     };
     
     var _CompensationStartEvent = function(obj) {
-        var _this = new _StartEvent(obj);
+        var _this = new _StartEventNode(obj);
+        var fcanAdd = _this.canAddToDiagram;
+        
         _this.setElementType("CompensationStartEvent");
 
         _this.canAddToDiagram = function () {
-            var ret = true;
-            //TODO: Implementar
+            var ret = fcanAdd();
+            var msg = null;
+            
+            if (ToolKit.layer == null) {
+                msg = "Este evento no puede usarse en un proceso de nivel superior";
+                ret = false;
+            } else if (ret && ToolKit.layer != null) {
+                if (ToolKit.layer.parent.elementType=="SubProcess") {
+                    ret = false;
+                    msg = "Un subproceso debe iniciar con un evento normal";
+                }
+
+                if (ToolKit.layer.parent.elementType=="EventSubProcess") {
+                    ret = true;
+                }
+            }
+            
+            if (msg!=null) {
+                ToolKit.showTooltip(0, msg, 200, "Error");
+            }
             return ret;
         };
         return _this;
@@ -773,6 +996,7 @@
         _this.canAddToDiagram = function () {
             var ret = fCanAdd();
             //TODO:Implementar
+            
             return ret;
         };
         
@@ -2037,383 +2261,321 @@
             var ret = null;
             if(type=='sequenceFlow') {
                 ret = new _SequenceFlow(Modeler.createConnectionPath(null, null, "sequenceArrow", null,"sequenceFlowLine"));
-                //ret.elementType="SequenceFlow";
                 ret.eoff=10;
             }
             if(type=='messageFlow') {
                 ret = new _MessageFlow(Modeler.createConnectionPath("messageTail", null, "messageArrow", "5,5", "sequenceFlowLine"));
-                //ret.elementType="MessageFlow";
-                ret.eoff=10;
+                ret.eoff=5;
+                ret.soff=10;
             }
             if(type=='conditionalFlow') {
                 ret = new _ConditionalFlow(Modeler.createConnectionPath("conditionTail", null, "sequenceArrow", null, "sequenceFlowLine"));
-                //ret.elementType="ConditionalFlow";
                 ret.eoff=10;
+                ret.soff=10;
             }
             if(type=='defaultFlow') {
                 ret = new _DefaultFlow(Modeler.createConnectionPath("defaultTail", null, "sequenceArrow", null, "sequenceFlowLine"));
-                //ret.elementType="DefaultFlow";
                 ret.eoff=10;
             }
             if(type=='associationFlow') {
                 ret = new _AssociationFlow(Modeler.createConnectionPath(null, null, null, "5,5", "sequenceFlowLine"));
-                //ret.elementType="AssociationFlow";
             }
             if(type=='directionalassociationFlow') {
                 ret = new _DirectionalAssociation(Modeler.createConnectionPath(null, null, "messageArrow", "5,5", "sequenceFlowLine"));
-                //ret.elementType="DirectionalAssociation";
                 ret.eoff=10;
             }
             else if(type=='normalStartEvent')
             {
                 ret=new _StartEvent(Modeler.createObject("#startEvent",null,null));
-                //ret.elementType="StartEvent";
                 ret.setText("Inicio Normal",0,1,80,1);
             }
             else if(type=='messageStartEvent'){
                 ret=new _MessageStartEvent(Modeler.createObject("#messageStartEvent",null,null));
-                //ret.elementType="MessageStartEvent";
                 ret.setText("Inicio por mensaje",0,1,80,1);
             }
             else if(type=='timerStartEvent'){
                 ret=new _TimerStartEvent(Modeler.createObject("#timerStartEvent",null,null));
-                //ret.elementType="TimerStartEvent";
                 ret.setText("Inicio temporizado",0,1,80,1);
             }
             else if(type=='ruleStartEvent') {
                 ret=new _RuleStartEvent(Modeler.createObject("#ruleStartEvent",null,null));
-                //ret.elementType="RuleStartEvent";
                 ret.setText("Inicio por regla de negocio",0,1,80,1);
             }
             else if(type=='signalStartEvent') {
                 ret=new _SignalStartEvent(Modeler.createObject("#signalStartEvent",null,null));
-                //ret.elementType="SignalStartEvent";
                 ret.setText("Inicio por señal",0,1,80,1);
             }
             else if(type=='multiStartEvent') {
                 ret=new _MultipleStartEvent(Modeler.createObject("#multipleStartEvent",null,null));
-                //ret.elementType="MultipleStartEvent";
                 ret.setText("Inicio múltiple",0,1,80,1);
             }
             else if(type=='parallelStartEvent') {
                 ret=new _ParallelStartEvent(Modeler.createObject("#parallelStartEvent",null,null));
-                //ret.elementType="ParallelStartEvent";
                 ret.setText("Inicio paralelo",0,1,80,1);
             }
             else if(type=='scalaStartEvent') {
                 ret= new _ScalationStartEvent(Modeler.createObject("#scalationStartEvent",null,null));
-                //ret.elementType="ScalationStartEvent";
                 ret.setText("Inicio por escalamiento",0,1,80,1);
             }
             else if(type=='errorStartEvent') {
                 ret= new _ErrorStartEvent(Modeler.createObject("#errorStartEvent",null,null));
-                //ret.elementType="ErrorStartEvent";
                 ret.setText("Inicio por error",0,1,80,1);
             }
             else if(type=='compensaStartEvent') {
                 ret= new _CompensationStartEvent(Modeler.createObject("#compensationStartEvent",null,null));
-                //ret.elementType="CompensationStartEvent";
                 ret.setText("Inicio por compensación",0,1,80,1);
             }
             else if(type=='messageInterCatchEvent') {
                 ret=new _MessageIntermediateCatchEvent(Modeler.createObject("#messageIntermediateCatchEvent",null,null));
-                //ret.elementType="MessageIntermediateCatchEvent";
                 ret.setText("Recepción de mensaje",0,1,80,1);
             }
             else if(type=='messageInterThrowEvent') {
                 ret= new _MessageIntermediateThrowEvent(Modeler.createObject("#messageIntermediateThrowEvent",null,null));
-                //ret.elementType="MessageIntermediateThrowEvent";
                 ret.setText("Envío de mensaje",0,1,80,1);
             }
             else if(type=='timerInterEvent') {
                 ret= new _TimerIntermediateCatchEvent(Modeler.createObject("#timerIntermediateEvent",null,null));
-                //ret.elementType="TimerIntermediateCatchEvent";
                 ret.setText("Temporizador",0,1,80,1);
             }
             else if(type=='errorInterEvent') {
                 ret= new _ErrorIntermediateCatchEvent(Modeler.createObject("#errorIntermediateEvent",null,null));
-                //ret.elementType="ErrorIntermediateCatchEvent";
                 ret.setText("Recepción de error",0,1,80,1);
-                
             }
             else if(type=='cancelInterEvent') {
                 ret= new _CancelationIntermediateCatchEvent(Modeler.createObject("#cancelIntermediateEvent",null,null));
-                //ret.elementType="CancelationIntermediateCatchEvent";
                 ret.setText("Cancelación",0,1,80,1);
             }
             else if(type=='compensaInterCatchEvent') {
                 ret= new _CompensationIntermediateCatchEvent(Modeler.createObject("#compensationIntermediateCatchEvent",null,null));
-                //ret.elementType="CompensationIntermediateCatchEvent";
                 ret.setText("Recepción de compensación",0,1,80,1);
             }
             else if(type=='compensaInterThrowEvent') {
                 ret= new _CompensationIntermediateCatchEvent(Modeler.createObject("#compensationIntermediateThrowEvent",null,null));
-                //ret.elementType="CompensationIntermediateThrowEvent";
                 ret.setText("Disparo de compensación",0,1,80,1);
             }
             else if(type=='ruleInterEvent') {
                 ret= new _RuleIntermediateCatchEvent(Modeler.createObject("#ruleIntermediateEvent",null,null));
-                //ret.elementType="RuleIntermediateCatchEvent";
                 ret.setText("Regla de negocio",0,1,80,1);
             }
             else if(type=='linkInterCatchEvent') {
                 ret= new _LinkIntermediateCatchEvent(Modeler.createObject("#linkIntermediateCatchEvent",null,null));
-                //ret.elementType="LinkIntermediateCatchEvent";
                 ret.setText("Recepción de enlace",0,1,80,1);
             }
             else if(type=='linkInterThrowEvent') {
                 ret= new _LinkIntermediateThrowEvent(Modeler.createObject("#linkIntermediateThrowEvent",null,null));
-                //ret.elementType="LinkIntermediateThrowEvent";
                 ret.setText("Disparo de enlace",0,1,80,1);
             }
             else if(type=='signalInterCatchEvent') {
                 ret= new _SignalIntermediateCatchEvent(Modeler.createObject("#signalIntermediateCatchEvent",null,null));
-                //ret.elementType="SignalIntermediateCatchEvent";
                 ret.setText("Recepción de señal",0,1,80,1);
             }
             else if(type=='signalInterThrowEvent') {
                 ret= new _SignalIntermediateThrowEvent(Modeler.createObject("#signalIntermediateThrowEvent",null,null));
-                //ret.elementType="SignalIntermediateThrowEvent";
                 ret.setText("Disparo de señal",0,1,80,1);
             }
             else if(type=='multipleInterCatchEvent') {
                 ret= new _MultipleIntermediateCatchEvent(Modeler.createObject("#multipleIntermediateCatchEvent",null,null));
-                //ret.elementType="MultipleIntermediateCatchEvent";
                 ret.setText("Recepción múltiple",0,1,80,1);
             }
             else if(type=='multipleInterThrowEvent') {
                 ret= new _MultipleIntermediateThrowEvent(Modeler.createObject("#multipleIntermediateThrowEvent",null,null));
-                //ret.elementType="MultipleIntermediateThrowEvent";
                 ret.setText("Disparo múltiple",0,1,80,1);
             }
             else if(type=='scalaInterCatchEvent') {
                 ret= new _ScalationIntermediateCatchEvent(Modeler.createObject("#scalationIntermediateCatchEvent",null,null));
-                //ret.elementType="ScalationIntermediateCatchEvent";
                 ret.setText("Recepción de escalamiento",0,1,80,1);
             }
             else if(type=='scalaInterThrowEvent') {
                 ret= new _ScalationIntermediateThrowEvent(Modeler.createObject("#scalationIntermediateThrowEvent",null,null));
-                //ret.elementType="ScalationIntermediateThrowEvent";
                 ret.setText("Disparo de escalamiento",0,1,80,1);
             }
             else if(type=='parallelInterEvent') {
                 ret= new _ParallelIntermediateCatchEvent(Modeler.createObject("#parallelIntermediateEvent",null,null));
-                //ret.elementType="ParallelIntermediateCatchEvent";
                 ret.setText("Paralelo",0,1,80,1);
             }
             else if(type=='normalEndEvent') {
                 ret= new _EndEvent(Modeler.createObject("#endEvent",null,null));
-                //ret.elementType="EndEvent";
                 ret.setText("Fin normal",0,1,80,1);
             }
             else if(type=='messageEndEvent') {
                 ret= new _MessageEndEvent(Modeler.createObject("#messageEndEvent",null,null));
-                //ret.elementType="MessageEndEvent";
                 ret.setText("Fin con mensaje",0,1,80,1);
             }
             else if(type=='errorEndEvent') {
                 ret= new _ErrorEndEvent(Modeler.createObject("#errorEndEvent",null,null));
-                //ret.elementType="ErrorEndEvent";
                 ret.setText("Fin con error",0,1,80,1);
             }
             else if(type=='cancelEndEvent') {
                 ret= new _CancelationEndEvent(Modeler.createObject("#cancelationEndEvent",null,null));
-                //ret.elementType="CancelationEndEvent";
                 ret.setText("Fin con cancelación",0,1,80,1);
             }
             else if(type=='compensaEndEvent') {
                 ret= new _CompensationEndEvent(Modeler.createObject("#compensationEndEvent",null,null));
-                //ret.elementType="CompensationEndEvent";
                 ret.setText("Fin con compensación",0,1,80,1);
             }
             else if(type=='signalEndEvent') {
                 ret= new _SignalEndEvent(Modeler.createObject("#signalEndEvent",null,null));
-                //ret.elementType="SignalEndEvent";
                 ret.setText("Fin con señal",0,1,80,1);
             }
             else if(type=='multiEndEvent') {
                 ret= new _MultipleEndEvent(Modeler.createObject("#multipleEndEvent",null,null));
-                //ret.elementType="MultipleEndEvent";
                 ret.setText("Fin múltiple",0,1,80,1);
             }
             else if(type=='escalaEndEvent') {
                 ret= new _ScalationEndEvent(Modeler.createObject("#scalationEndEvent",null,null));
-                //ret.elementType="ScalationEndEvent";
                 ret.setText("Fin con escalamiento",0,1,80,1);
             }
             else if(type=='terminalEndEvent') {
                 ret= new _TerminationEndEvent(Modeler.createObject("#terminationEndEvent",null,null));
-                //ret.elementType="TerminationEndEvent";
                 ret.setText("Terminación",0,1,80,1);
             }
             else if(type=='exclusiveDataGateway') {
                 ret= new _ExclusiveGateway(Modeler.createObject("#exclusiveDataGateway",null,null));
-                //ret.elementType="ExclusiveGateway";
                 ret.setText("Exclusiva (datos)",0,1,80,1);
             }
             else if(type=='inclusiveDataGateway') {
                 ret= new _InclusiveGateway(Modeler.createObject("#inclusiveDataGateway",null,null));
-                //ret.elementType="InclusiveGateway";
                 ret.setText("Inclusiva (datos)",0,1,80,1);
             }
             else if(type=='exclusiveStartEventGateway') {
                 ret= new _ExclusiveStartEventGateway(Modeler.createObject("#exclusiveStartGateway",null,null));
-                //ret.elementType="ExclusiveStartEventGateway";
                 ret.setText("Exclusiva de inicio",0,1,80,1);
             }
             else if(type=='exclusiveEventGateway') {
                 ret= new _EventBasedGateway(Modeler.createObject("#eventGateway",null,null));
-                //ret.elementType="EventBasedGateway";
                 ret.setText("Exclusiva (eventos)",0,1,80,1);
             }
             else if(type=='parallelGateway') {
                 ret= new _ParallelGateway(Modeler.createObject("#parallelGateway",null,null));
-                //ret.elementType="ParallelGateway";
                 ret.setText("Paralela",0,1,80,1);
             }
             else if(type=='parallelStartGateway') {
                 ret= new _ParallelStartEventGateway(Modeler.createObject("#parallelStartGateway",null,null));
-                //ret.elementType="ParallelStartEventGateway";
                 ret.setText("Paralela de inicio",0,1,80,1);
             }
             else if(type=='complexGateway') {
                 ret= new _ComplexGateway(Modeler.createObject("#complexGateway",null,null));
-                //ret.elementType="ComplexGateway";
                 ret.setText("Compleja",0,1,80,1);
             }
             else if(type=='group') {
                 ret= new _Group(Modeler.createGroupArtifact(null,null));
-                //ret.elementType="GroupArtifact";
                 ret.resize(300,300);
             }
             else if(type=='annotation'){
                 ret= new _AnnotationArtifact(Modeler.createAnnotationArtifact(null, null));
-                //ret.elementType="AnnotationArtifact";
                 ret.setText("Anotación de texto",0,0,0,1);
                 ret.resize(200,60);
             }
             else if(type=='dataObject') {
                 ret= new _DataObject(Modeler.createObject("#data",null,null));
-                //ret.elementType="DataObject";
                 ret.setText("Dato",0,1,80,1);
             }
             else if(type=='dataInput') {
                 ret= new _DataInput(Modeler.createObject("#dataInput",null,null));
-                //ret.elementType="DataInput";
                 ret.setText("Dato de entrada",0,1,80,1);
             }
             else if(type=='dataOutput') {
                 ret= new _DataOutput(Modeler.createObject("#dataOutput",null,null));
-                //ret.elementType="DataOutput";
                 ret.setText("Dato de salida",0,1,80,1);
             }
             else if(type=='dataStore') {
                 ret= new _DataStore(Modeler.createObject("#dataStore",null,null));
-                //ret.elementType="DataStore";
                 ret.setText("Almacén de datos",0,1,80,1);
             }
             else if(type=='userTask') {
                 ret = new _UserTask(Modeler.createTask(null,null));
-                //ret.elementType="UserTask";
                 ret.addIcon("#userMarker",-1,-1,13,8);
                 ret.setText("Tarea de Usuario",0,0,0,1);
                 ret.resize(100,60);
             }
             else if(type=='serviceTask') {
                 ret = new _ServiceTask(Modeler.createTask(null,null));
-                //ret.elementType="ServiceTask";
                 ret.addIcon("#serviceMarker",-1,-1,13,8);
                 ret.setText("Tarea de Servicio",0,0,0,1);
                 ret.resize(100,60);
             }
             else if(type=='scriptTask') {
                 ret = new _ScriptTask(Modeler.createTask(null,null));
-                //ret.elementType="ScriptTask";
                 ret.addIcon("#scriptMarker",-1,-1,7,13);
                 ret.setText("Tarea de Script",0,0,0,1);
                 ret.resize(100,60);
             }
             else if(type=='ruleTask') {
                 ret = new _BusinessRuleTask(Modeler.createTask(null,null));
-                //ret.elementType="BusinessRuleTask";
                 ret.addIcon("#taskRuleMarker",-1,-1,12,12);
                 ret.setText("Tarea de regla de negocio",0,0,0,1);
                 ret.resize(100,60);
             }
             else if(type=='manualTask') {
                 ret = new _ManualTask(Modeler.createTask(null,null));
-                //ret.elementType="ManualTask";
                 ret.addIcon("#manualMarker",-1,-1,9,6);
                 ret.setText("Tarea Manual",0,0,0,1);
                 ret.resize(100,60);
             }
             else if(type=='sendTask') {
                 ret = new _SendTask(Modeler.createTask(null,null));
-                //ret.elementType="SendTask";
                 ret.addIcon("#taskMessageThrowMarker",-1,-1,13,10);
                 ret.setText("Tarea de envío de mensaje",0,0,0,1);
                 ret.resize(100,60);
             }
             else if(type=='receiveTask') {
                 ret = new _ReceiveTask(Modeler.createTask(null,null));
-                //ret.elementType="ReceiveTask";
                 ret.addIcon("#taskMessageCatchMarker",-1,-1,13,10);
                 ret.setText("Tarea de recepción de mensaje",0,0,0,1);
                 ret.resize(100,60);
             }
             else if(type=='abstractTask') {
                 ret = new _Task(Modeler.createTask(null,null));
-                //ret.elementType="Task";
                 ret.setText("Tarea abstracta",0,0,0,1);
                 ret.resize(100,60);
             }
             else if(type=='callTask') {
                 ret = new _CallTask(Modeler.createCallTask(null,null));
-                //ret.elementType="CallTask";
                 ret.setText("Tarea reusada",0,0,0,1);
                 ret.resize(100,60);
             }
             else if(type=='callmanualTask') {
                 ret = new _CallManualTask(Modeler.createCallTask(null,null));
-                //ret.elementType="CallManualTask";
                 ret.addIcon("#manualMarker",-1,-1,9,6);
                 ret.setText("Tarea manual reusada",0,0,0,1);
                 ret.resize(100,60);
             }
             else if(type=='callruleTask') {
                 ret = new _CallBusinessRuleTask(Modeler.createCallTask(null,null));
-                //ret.elementType="CallBusinessRuleTask";
                 ret.addIcon("#taskRuleMarker",-1,-1,12,12);
                 ret.setText("Tarea de regla de negocio reusada",0,0,0,1);
                 ret.resize(100,60);
             }
             else if(type=='callscriptTask') {
                 ret = new _CallScriptTask(Modeler.createCallTask(null,null));
-                //ret.elementType="CallScriptTask";
                 ret.addIcon("#scriptMarker",-1,-1,7,13);
                 ret.setText("Tarea de script reusada",0,0,0,1);
                 ret.resize(100,60);
             }
             else if(type=='calluserTask') {
                 ret = new _CallBusinessRuleTask(Modeler.createCallTask(null,null));
-                //ret.elementType="CallUserTask";
                 ret.addIcon("#userMarker",-1,-1,13,8);
                 ret.setText("Tarea de usuario reusada",0,0,0,1);
                 ret.resize(100,60);
             }
             else if(type=='subProcess') {
                 ret = new _SubProcess(Modeler.createSubProcess(null, null, ""));
-                ret.setText("SubProceso",0,0,200,1);
+                ret.setText("Subproceso",0,0,200,1);
+                ret.resize(100,60);
+            }
+            else if(type=='adhocsubProcess') {
+                ret = new _AdhocSubProcess(Modeler.createSubProcess(null, null, ""));
+                ret.setText("Subproceso adhoc",0,0,200,1);
                 ret.resize(100,60);
             }
             else if(type=='eventsubProcess') {
                 ret = new _EventSubProcess(Modeler.createSubProcess(null, null, "eventsubProcess"));
-                ret.setText("SubProceso",0,0,200,1);
+                ret.setText("Subproceso de evento",0,0,200,1);
                 ret.resize(100,60);
             }
             else if(type=='transactionsubProcess') {
                 ret = new _TransactionSubProcess(Modeler.createSubProcess(null, null, "transactionsubProcess"));
-                ret.setText("SubProceso",0,0,200,1);
+                ret.setText("Transación",0,0,200,1);
                 ret.resize(100,60);
             }
             else if (type=="pool") {
