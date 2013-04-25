@@ -48,6 +48,27 @@
             return null;
         };
         
+        _this.getFirstGraphParent = function() {
+            var ret = _this.parent;
+            if (ret == null) {
+                return _this;
+            } else {
+                return ret.getFirstGraphParent();
+            }
+        };
+        
+        _this.getPool = function() {
+            var ret = _this.getFirstGraphParent();
+            if (ret != null && ret.elementType=="Pool") {
+                return ret;
+            }
+            return null;
+        };
+        
+        _this.getContainer = function() {
+            return _this.layer?_this.layer:null;
+        };
+        
         _this.setElementType("GraphicalElement");
         
         return _this;
@@ -94,17 +115,24 @@
             var ret = fCanEnd(link);
             
             if (link.elementType=="SequenceFlow") {
-                //TODO: Implementar
+                if (link.fromObject.getContainer() == null && link.fromObject.getPool() !== _this.getPool()) {
+                    ToolKit.showTooltip(0, "Un flujo de secuencia no puede cruzar los límites del Pool", 200, "Error");
+                    ret = false;
+                }
             }
             
             if (link.elementType=="AssociationFlow") {
                 if (!(link.fromObject.elementType=="Artifact" || link.fromObject.elementType=="DataObject") && !(link.fromObject.elementType=="CompensationIntermediateCatchEvent" && link.fromObject.parent.typeOf("Activity"))) {
+                    ToolKit.showTooltip(0, "Un flujo de asociación no puede conectar dos Nodos de Flujo", 200, "Error");
                     ret = false;
                 }
             }
             
             if (link.elementType=="MessageFlow") {
-                //TODO:Implementar
+                if (link.fromObject.getPool() == _this.getPool()) {
+                    ToolKit.showTooltip(0, "Un flujo de mensage sólo puede darse entre pools", 200, "Error");
+                    ret = false;
+                }
             }
             return ret;
         };
@@ -155,7 +183,8 @@
         _this.setElementType("Event");
 
         _this.canStartLink=function(link) {
-            if (link.elementType=="ConditionalFlow") {
+            if (link.elementType=="ConditionalFlow" || link.elementType=="DefaultFlow") {
+                ToolKit.showTooltip(0, "Un evento no puede tener flujos condicionales de salida", 200, "Error");
                 return false;
             }
             return true;
@@ -177,7 +206,8 @@
         var fCanEnd = _this.canEndLink;
         _this.canEndLink = function(link) {
             var ret = fCanEnd(link);
-            if (link.fromObject.elementType=="EventBasedGateway") {
+            if (link.fromObject.typeOf("EventBasedGateway")) {
+                ToolKit.showTooltip(0, "Un evento inicial no puede tener flujos de secuencia entrantes", 200, "Error");
                 ret = false;
             }
             return ret;
@@ -192,6 +222,7 @@
         _this.setElementType("StartEvent");
         
         _this.canEndLink=function(link) {
+            ToolKit.showTooltip(0, "Un evento inicial no puede tener flujos de secuencia entrantes", 200, "Error");
             return false;
         };
         
@@ -725,6 +756,7 @@
         _this.setElementType("EndEvent");
         
         _this.canStartLink = function(link) {
+            ToolKit.showTooltip("","Un evento final sólo puede tener flujos de secuencia entrantes", 250, "Error")
             return false;
         };
         
@@ -1524,6 +1556,7 @@
                 }
                 Modeler.dragConnection=null;
             }
+            ToolKit.hideToolTip();
             return true;
         },                  
                 
@@ -1539,9 +1572,8 @@
             {
                 Modeler.dragConnection=Modeler.mapObject("sequenceFlow");
                 if (obj.canStartLink(Modeler.dragConnection)) {
-                
-                obj.addOutConnection(Modeler.dragConnection);
-                Modeler.dragConnection.setEndPoint(obj.getX(),obj.getY());
+                    obj.addOutConnection(Modeler.dragConnection);
+                    Modeler.dragConnection.setEndPoint(obj.getX(),obj.getY());
                 } else {
                     Modeler.dragConnection.remove();
                     Modeler.dragConnection = null;
@@ -1558,10 +1590,14 @@
             {
                 if(Modeler.dragConnection.fromObject!=obj && Modeler.dragConnection.toObject!=obj)
                 {
-                    ToolKit.unSelectAll();
-                    ToolKit.selectObj(obj,true);
-                    Modeler.dragConnection.toObject=obj;
-                    Modeler.dragConnection.setEndPoint(obj.getX(),obj.getY());
+                    if (obj.canEndLink(Modeler.dragConnection)) {
+                        ToolKit.unSelectAll();
+                        ToolKit.selectObj(obj,true);
+                        Modeler.dragConnection.toObject=obj;
+                        Modeler.dragConnection.setEndPoint(obj.getX(),obj.getY());
+                    } else {
+                        Modeler.dragConnection.setEndPoint(ToolKit.getEventX(evt), ToolKit.getEventY(evt));
+                    }
                 }
                 ToolKit.stopPropagation(evt);
             }            
@@ -2366,26 +2402,22 @@
                 ret.resize(100,60);
             }
             else if(type=='subProcess') {
-                ret = Modeler.createSubProcess(null, null, "");
-                ret.elementType="SubProcess";
+                ret = new _SubProcess(Modeler.createSubProcess(null, null, ""));
                 ret.setText("SubProceso",0,0,200,1);
                 ret.resize(100,60);
             }
             else if(type=='eventsubProcess') {
-                ret = Modeler.createSubProcess(null, null, "eventsubProcess");
-                ret.elementType="EventSubProcess";
+                ret = new _EventSubProcess(Modeler.createSubProcess(null, null, "eventsubProcess"));
                 ret.setText("SubProceso",0,0,200,1);
                 ret.resize(100,60);
             }
             else if(type=='transactionsubProcess') {
-                ret = Modeler.createSubProcess(null, null, "transactionsubProcess");
-                ret.elementType="TransactionSubProcess";
+                ret = new _TransactionSubProcess(Modeler.createSubProcess(null, null, "transactionsubProcess"));
                 ret.setText("SubProceso",0,0,200,1);
                 ret.resize(100,60);
             }
             else if (type=="pool") {
-                ret = Modeler.createSwimLane(null, null);
-                ret.elementType="Pool";
+                ret = new _Pool(Modeler.createSwimLane(null, null));
                 ret.setText("Pool con un nombre muy largo ajustable a 200 pixeles",-1,0,200,2);
                 ret.resize(600,200);
             }
@@ -2541,12 +2573,11 @@
         obj2.move(1300,420);
         
         obj = Modeler.mapObject("pool");
-        obj.moveFirst=function(){};
+        //obj.moveFirst=function(){};
         //obj.mouseup=function(evt){alert("up")};
         obj.move(350,580);
         
-        obj2 = Modeler.createTask(null,null);
-        obj2.addIcon("#manualMarker",-1,-1,9,6);
+        obj2 = Modeler.mapObject("manualTask");
         obj2.setText("Tarea Contenida");
         obj2.resize(100,60);
         obj2.move(400,600);        
@@ -2582,7 +2613,7 @@
 */        
         
         obj1 = Modeler.mapObject("userTask");
-        obj1.move(200,700);        
+        obj1.move(200,700);
         
         obj2 = Modeler.mapObject("userTask");
         obj2.move(400,800);        
@@ -2599,7 +2630,7 @@
         
         con1 = Modeler.mapObject("defaultFlow");
         obj1.addOutConnection(con1);
-        obj2.addInConnection(con1);        
+        obj2.addInConnection(con1);  
         
         
     }
