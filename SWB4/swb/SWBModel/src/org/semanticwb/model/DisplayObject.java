@@ -34,6 +34,7 @@ import org.semanticwb.platform.SemanticObject;
 public class DisplayObject extends org.semanticwb.model.base.DisplayObjectBase 
 {
     public static final String DISPLAYMODE_FULL_ACCESS="full_access";
+    public static final String DISPLAYMODE_FINAL="final";
     public static final String DISPLAYMODE_EDIT_ONLY="edit_only";
     public static final String DISPLAYMODE_HERARQUICAL_EDIT_ONLY="herarquical_edit_only";
     
@@ -56,6 +57,58 @@ public class DisplayObject extends org.semanticwb.model.base.DisplayObjectBase
         }
         return null;
     }
+    
+    public static boolean canCreate(SemanticClass cls)
+    {
+        if(getDisplayMode(cls)==DISPLAYMODE_FULL_ACCESS)
+        {
+            return true;
+        }
+        else if(getDisplayMode(cls)==DISPLAYMODE_EDIT_ONLY)
+        {
+            return false;
+        }
+        else if(getDisplayMode(cls)==DISPLAYMODE_FINAL)
+        {
+            return true;
+        }
+        return false;
+    }
+    
+    public static boolean canDelete(SemanticClass cls)
+    {
+        if(getDisplayMode(cls)==DISPLAYMODE_FULL_ACCESS)
+        {
+            return true;
+        }
+        else if(getDisplayMode(cls)==DISPLAYMODE_EDIT_ONLY)
+        {
+            return false;
+        }
+        else if(getDisplayMode(cls)==DISPLAYMODE_FINAL)
+        {
+            return true;
+        }
+        return false;       
+    }
+    
+    public static boolean canCreateChilds(SemanticClass cls)
+    {
+        if(getDisplayMode(cls)==DISPLAYMODE_FULL_ACCESS)
+        {
+            return true;
+        }
+        else if(getDisplayMode(cls)==DISPLAYMODE_EDIT_ONLY)
+        {
+            return false;
+        }
+        else if(getDisplayMode(cls)==DISPLAYMODE_FINAL)
+        {
+            return false;
+        }
+        return false;        
+    }
+    
     
     public static String getDisplayMode(SemanticClass cls)
     {
