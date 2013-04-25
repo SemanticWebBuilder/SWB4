@@ -115,20 +115,36 @@ public class DisplayObject extends org.semanticwb.model.base.DisplayObjectBase
         String ret=DISPLAYMODE_FULL_ACCESS;
         DisplayObject dp=getDisplayObject(cls);
         String mode=null;
-        if(dp!=null)mode=dp.getDisplayMode();
+        if(dp!=null)
+        {
+            mode=dp.getDisplayMode();
+        }
+
         if(mode==null)
         {
             Iterator<SemanticClass> it=cls.listSuperClasses(true);
             while (it.hasNext()) {
                 SemanticClass semanticClass = it.next();
-                if(semanticClass.isSWBClass())return getDisplayMode(semanticClass);
+                if(semanticClass.isSWBClass())
+                {
+                    return getDisplayMode(semanticClass);
+                }
             }
         }
         //else if(mode.equals(DISPLAYMODE_FULL_ACCESS))return true;
-        else if(mode.equals(DISPLAYMODE_EDIT_ONLY))return DISPLAYMODE_EDIT_ONLY;
-        else if(mode.equals(DISPLAYMODE_HERARQUICAL_EDIT_ONLY))return DISPLAYMODE_HERARQUICAL_EDIT_ONLY;
+        else if(mode.equals(DISPLAYMODE_EDIT_ONLY))
+        {
+            return DISPLAYMODE_EDIT_ONLY;
+        }
+        else if(mode.equals(DISPLAYMODE_HERARQUICAL_EDIT_ONLY))
+        {
+            return DISPLAYMODE_HERARQUICAL_EDIT_ONLY;
+        }
+        else if(mode.equals(DISPLAYMODE_FINAL))
+        {
+            return DISPLAYMODE_FINAL;
+        }
         return ret;
-    }      
-    
+    }
 }
 
