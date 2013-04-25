@@ -1,0 +1,260 @@
+<?xml version="1.0"?>
+<rdf:RDF
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:swb="http://www.semanticwebbuilder.org/swb4/ontology#"
+    xmlns:lodp="http://www.semanticwebbuilder.org.mx/ontology/lodp.owl#"
+    xmlns:owl="http://www.w3.org/2002/07/owl#"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+  xml:base="http://www.semanticwebbuilder.org.mx/ontology/lodp.owl">
+  <owl:Ontology rdf:about="">
+    <owl:versionInfo rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Created with TopBraid Composer</owl:versionInfo>
+    <owl:imports rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology"/>
+  </owl:Ontology>
+  <owl:Class rdf:ID="Commentable">
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBInterface"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Dataset">
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="Versionable"/>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Activeable"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Tagable"/>
+    <rdfs:subClassOf rdf:resource="#Commentable"/>
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="Hitable"/>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="Rankable"/>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Publisher">
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#User"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Comment">
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Activeable"/>
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="Approveable"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="#Rankable">
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBInterface"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Institution">
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
+  </owl:Class>
+  <owl:Class rdf:ID="DatasetVersion">
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Developer">
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#User"/>
+  </owl:Class>
+  <owl:Class rdf:about="#Approveable">
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBInterface"/>
+  </owl:Class>
+  <owl:Class rdf:about="#Versionable">
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBInterface"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Application">
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
+    <rdfs:subClassOf rdf:resource="#Rankable"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Activeable"/>
+    <rdfs:subClassOf rdf:resource="#Approveable"/>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#Hitable"/>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="#Commentable"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Tagable"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Sector">
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
+  </owl:Class>
+  <owl:Class rdf:ID="ApplicationType">
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Topic">
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
+  </owl:Class>
+  <owl:Class rdf:about="#Hitable">
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBInterface"/>
+  </owl:Class>
+  <owl:ObjectProperty rdf:ID="parentTopic">
+    <rdfs:domain rdf:resource="#Topic"/>
+    <rdfs:range rdf:resource="#Topic"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="previousVersion">
+    <rdfs:domain rdf:resource="#DatasetVersion"/>
+    <rdfs:range rdf:resource="#DatasetVersion"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="sector">
+    <owl:inverseOf>
+      <owl:ObjectProperty rdf:ID="hasInstitution"/>
+    </owl:inverseOf>
+    <rdfs:range rdf:resource="#Sector"/>
+    <rdfs:domain rdf:resource="#Institution"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="nextVersion">
+    <rdfs:domain rdf:resource="#DatasetVersion"/>
+    <rdfs:range rdf:resource="#DatasetVersion"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="publisher">
+    <rdfs:domain rdf:resource="#Dataset"/>
+    <rdfs:range rdf:resource="#Publisher"/>
+    <owl:inverseOf>
+      <owl:ObjectProperty rdf:ID="hasPubDataset"/>
+    </owl:inverseOf>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="verPublisher">
+    <rdfs:domain rdf:resource="#DatasetVersion"/>
+    <rdfs:range rdf:resource="#Publisher"/>
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >publisher</swb:propertyCodeName>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasComment">
+    <rdfs:domain rdf:resource="#Commentable"/>
+    <rdfs:range rdf:resource="#Comment"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasApplicationType">
+    <rdfs:domain rdf:resource="#Application"/>
+    <rdfs:range rdf:resource="#ApplicationType"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="pubInstitution">
+    <rdfs:domain rdf:resource="#Publisher"/>
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >institution</swb:propertyCodeName>
+    <rdfs:range rdf:resource="#Institution"/>
+    <owl:inverseOf>
+      <owl:ObjectProperty rdf:ID="hasPublisher"/>
+    </owl:inverseOf>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasRelatedDataset">
+    <rdfs:domain rdf:resource="#Application"/>
+    <rdfs:range rdf:resource="#Dataset"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="#hasPubDataset">
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >hasDataset</swb:propertyCodeName>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasTopic">
+    <rdfs:domain rdf:resource="#Dataset"/>
+    <rdfs:range rdf:resource="#Topic"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="institution">
+    <rdfs:domain rdf:resource="#Dataset"/>
+    <rdfs:range rdf:resource="#Institution"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="lastVersion">
+    <rdfs:domain rdf:resource="#Versionable"/>
+    <rdfs:range rdf:resource="#DatasetVersion"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="actualVersion">
+    <rdfs:domain rdf:resource="#Versionable"/>
+    <rdfs:range rdf:resource="#DatasetVersion"/>
+  </owl:ObjectProperty>
+  <owl:DatatypeProperty rdf:ID="commUserName">
+    <rdfs:domain rdf:resource="#Comment"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="topLevelName">
+    <rdfs:comment>Enlace de alto nivel</rdfs:comment>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#Institution"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="views">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#long"/>
+    <rdfs:domain rdf:resource="#Hitable"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="comment">
+    <rdfs:domain rdf:resource="#Comment"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="verComment">
+    <rdfs:domain rdf:resource="#DatasetVersion"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >comment</swb:propertyCodeName>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="chiefName">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#Publisher"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="validated">
+    <rdfs:domain rdf:resource="#DatasetVersion"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+    <rdfs:comment>Validacion del sistema de si es correcto el archivo</rdfs:comment>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="ranks">
+    <rdfs:domain rdf:resource="#Rankable"/>
+    <rdfs:comment>Numero total de veces calificado</rdfs:comment>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#long"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="lastView">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#dateTime"/>
+    <rdfs:domain rdf:resource="#Hitable"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="chiefEmail">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#Publisher"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="reviewed">
+    <rdfs:domain rdf:resource="#Approveable"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="version">
+    <rdfs:domain rdf:resource="#DatasetVersion"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="inappropriate">
+    <rdfs:domain rdf:resource="#Comment"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="filePath">
+    <rdfs:domain rdf:resource="#DatasetVersion"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="downloads">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#long"/>
+    <rdfs:domain rdf:resource="#Hitable"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="commUserEmail">
+    <rdfs:domain rdf:resource="#Comment"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="versionHash">
+    <rdfs:domain rdf:resource="#DatasetVersion"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="lastDownload">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#dateTime"/>
+    <rdfs:domain rdf:resource="#Hitable"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="approved">
+    <rdfs:comment>Posible aprobacion de un supervisor</rdfs:comment>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+    <rdfs:domain rdf:resource="#Approveable"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="average">
+    <rdfs:domain rdf:resource="#Rankable"/>
+    <rdfs:comment>Promedio de calificaciones</rdfs:comment>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
+  </owl:DatatypeProperty>
+</rdf:RDF>
+
+<!-- Created with TopBraid Composer -->
