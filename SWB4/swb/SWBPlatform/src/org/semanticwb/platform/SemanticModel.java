@@ -716,7 +716,8 @@ public class SemanticModel
     {
         Model m=getRDFModel();
 
-        OntModel ont=SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel();
+        //OntModel ont=SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel();
+        OntModel ont=SWBPlatform.getSemanticMgr().getSchema().getRDFOntModel();
         OntProperty ontprop=null;
         if (SemanticVocabulary.OWL_DATATYPEPROPERTY.equals(uriType)){
             ontprop=ont.createDatatypeProperty(uri);
@@ -746,7 +747,8 @@ public class SemanticModel
     public SemanticClass createSemanticClass(String uri)
     {
         Model m=getRDFModel();
-        OntModel ont=SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel();
+        //OntModel ont=SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel();
+        OntModel ont=SWBPlatform.getSemanticMgr().getSchema().getRDFOntModel();
         Resource res = ont.getResource(uri);
         Statement st = m.getProperty(res, RDF.type);//m.getProperty(SemanticVocabulary.RDF_TYPE));
         if (null==st)
@@ -767,7 +769,8 @@ public class SemanticModel
      */
     public SemanticClass registerClass(String uri)
     {
-        OntModel ont=SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel();
+        //OntModel ont=SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel();
+        OntModel ont=SWBPlatform.getSemanticMgr().getSchema().getRDFOntModel();
         OntClass ontcls=ont.getOntClass(uri);
         SemanticClass cls=new SemanticClass(ontcls);
         SWBPlatform.getSemanticMgr().getVocabulary().registerClass(cls);

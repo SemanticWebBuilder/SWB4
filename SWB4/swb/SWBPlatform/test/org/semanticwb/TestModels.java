@@ -62,7 +62,7 @@ public class TestModels {
         //SWBPlatform.getSemanticMgr().addBaseOntology(base+"../../../web/WEB-INF/owl/office.owl");
         SWBPlatform.getSemanticMgr().loadBaseVocabulary();
         SWBPlatform.getSemanticMgr().loadDBModels();
-        SWBPlatform.getSemanticMgr().getOntology().rebind();
+        SWBPlatform.getSemanticMgr().rebind();
         SemanticModel model=SWBPlatform.getSemanticMgr().createDBModel("class", "htp://www.class.com#",true);
     }
 

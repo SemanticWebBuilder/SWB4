@@ -29,6 +29,7 @@ package performance;
  */
 
 import java.util.Iterator;
+import java.util.Map;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -66,7 +67,7 @@ public class PerformanceTest
         SWBPlatform.getSemanticMgr().addBaseOntology(base+"/../../../web/WEB-INF/owl/office.owl");
         SWBPlatform.getSemanticMgr().loadBaseVocabulary();
         SWBPlatform.getSemanticMgr().loadDBModels();
-        SWBPlatform.getSemanticMgr().getOntology().rebind();
+        SWBPlatform.getSemanticMgr().rebind();
     }
 
     @AfterClass
@@ -92,7 +93,7 @@ public class PerformanceTest
     {
         long time=System.currentTimeMillis();
         
-        SemanticOntology ontology=SWBPlatform.getSemanticMgr().getOntology();
+        //SemanticOntology ontology=SWBPlatform.getSemanticMgr().getSchema();
         SemanticVocabulary voc=SWBPlatform.getSemanticMgr().getVocabulary();
         System.out.println("Time:"+(System.currentTimeMillis()-time));
         time=System.currentTimeMillis();
@@ -138,6 +139,21 @@ public class PerformanceTest
         
         System.out.println("Time:"+(System.currentTimeMillis()-time));
         
+        SemanticClass cls=voc.getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#WebSite");
+        System.out.println(cls);
+        Iterator<SemanticClass> it=cls.listSubClasses();
+        while (it.hasNext())
+        {
+            SemanticClass semanticClass = it.next();
+            System.out.println(semanticClass);
+        }
+        
+        Iterator<Map.Entry<String,SemanticModel>> it2=SWBPlatform.getSemanticMgr().getModels().iterator();
+        while (it2.hasNext())
+        {
+            Map.Entry<String, SemanticModel> entry = it2.next();
+            System.out.println(entry.getKey());
+        }
         
     }
 }
