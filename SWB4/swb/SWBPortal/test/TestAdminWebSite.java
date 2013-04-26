@@ -77,7 +77,7 @@ public class TestAdminWebSite {
         SWBPlatform.getSemanticMgr().addBaseOntology(base+"../../../web/WEB-INF/owl/office.owl");
         SWBPlatform.getSemanticMgr().loadBaseVocabulary();
         SWBPlatform.getSemanticMgr().loadDBModels();
-        SWBPlatform.getSemanticMgr().getOntology().rebind();
+        SWBPlatform.getSemanticMgr().rebind();
     }
 
     @AfterClass

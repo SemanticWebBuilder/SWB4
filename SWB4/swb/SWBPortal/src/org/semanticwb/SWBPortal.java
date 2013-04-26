@@ -54,6 +54,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.SWBUtils.IO;
 import org.semanticwb.aws.AWSServices;
+import org.semanticwb.base.db.PoolConnection;
 import org.semanticwb.css.parser.Attribute;
 import org.semanticwb.css.parser.CSSParser;
 import org.semanticwb.css.parser.Selector;
@@ -708,13 +709,27 @@ public class SWBPortal
         try
         {
             Connection con = SWBUtils.DB.getDefaultConnection();
+            //Statement st = con.createStatement();
             
-            Statement st = con.createStatement();
+//Connection con = DriverManager.getConnection(...);
+//OracleConnection ocon = (OracleConnection)con;
+//// Disable TABLE_REMARKS columns
+//ocon.setRemarksReporting(false);
+//DatabaseMetaData dmd = ocd.getMetaData();
+//ResultSet res = dmd.getTables(...);
+            
+            
             try
             {
-                String tabla[] ={"TABLE"};
-                ResultSet rs = con.getMetaData().getTables(null, null, "swb_admlog", tabla);
-                if(!rs.next())
+                //String tabla[] ={"TABLE"};
+                //ResultSet rs = con.getMetaData().getTables(null, null, "swb_admlog", tabla);
+                ResultSet rs = con.getMetaData().getTables(null, null, "%", null);
+                boolean hasTable=false;
+                while(rs.next())
+                {
+                    if(rs.getString(3).toLowerCase().indexOf("swb_admlog")>-1)hasTable=true;
+                }
+                if(!hasTable)
                 {
                     log.event("Creating Logs Tables... "+SWBUtils.DB.getDatabaseName());
                     GenericDB db = new GenericDB();
@@ -728,7 +743,7 @@ public class SWBPortal
                 //ne.printStackTrace();
                 log.error(e);
             }
-            st.close();
+            //st.close();
             con.close();
         }
         catch (SQLException e)
@@ -948,7 +963,7 @@ public class SWBPortal
         //TODO agregar RDFa
         //System.out.println("end loadDBModels");
 
-        SWBPlatform.getSemanticMgr().getOntology().rebind();
+        SWBPlatform.getSemanticMgr().rebind();
         //System.out.println("End loadSemanticModels");
     }
 
