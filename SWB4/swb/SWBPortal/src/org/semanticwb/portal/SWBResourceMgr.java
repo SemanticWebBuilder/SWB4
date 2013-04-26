@@ -139,7 +139,7 @@ private SWBResourceCachedMgr cache;
                 loadResourceTypeModel(type);
             }
         }
-        SWBPlatform.getSemanticMgr().getSchema().rebind();
+        SWBPlatform.getSemanticMgr().rebind();
     }
 
     /**
