@@ -964,7 +964,7 @@ public class GenericDB {
         hmDialect.put(DB_SYBASE, "org.hibernate.dialect.SybaseDialect");
         hmDialect.put(DB_DB2, "org.hibernate.dialect.DB2Dialect");
         hmDialect.put(DB_DERBY, "org.hibernate.dialect.DerbyDialect");
-        hmDialect.put(DB_VIRTUOSO, "org.hibernate.dialect.HSQLDialect");
+        hmDialect.put(DB_VIRTUOSO, "org.hibernate.dialect.DerbyDialect");
         
     }
     
@@ -1084,7 +1084,7 @@ public class GenericDB {
         hmSyntax.put("SYBASE", hmSYBASE);
         hmSyntax.put(DB_DB2, hmDB2);
         hmSyntax.put(DB_DERBY, hmDERBY); //Apache Derby
-        hmSyntax.put(DB_VIRTUOSO, hmHSQL); 
+        hmSyntax.put(DB_VIRTUOSO, hmDERBY); 
 
     }
 }

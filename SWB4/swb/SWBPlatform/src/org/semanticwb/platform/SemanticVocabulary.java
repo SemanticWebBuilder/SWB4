@@ -289,7 +289,7 @@ public class SemanticVocabulary
      * Filter properties.
      * 
      */
-    private void filterProperties()
+    public void filterProperties()
     {
         //System.out.println("filterProperties");
         Iterator<SemanticClass> tpcit=listSemanticClasses();
@@ -561,6 +561,16 @@ public class SemanticVocabulary
      */
     public void registerClass(SemanticClass cls)
     {
+        registerClass(cls, true);
+    }    
+    
+    /**
+     * Register class.
+     * 
+     * @param cls the cls
+     */
+    public void registerClass(SemanticClass cls, boolean filterProps)
+    {
         if (!classes.containsKey(cls.getURI()))
         {
             log.trace("Registering SemanticClass:" + cls + " --> " + cls.getClassName());
@@ -574,7 +584,7 @@ public class SemanticVocabulary
                     addSemanticProperty(prop);
                 }
             }
-            filterProperties(cls);
+            if(filterProps)filterProperties(cls);
         }
     }
 }

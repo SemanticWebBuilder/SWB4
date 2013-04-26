@@ -176,10 +176,11 @@ public class SemanticClass
     private void init()
     {
         //TODO
-        if(m_class.getURI()!=null)
-        {
-            m_ontclass=SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel().getOntClass(m_class.getURI());
-        }
+//        m_ontclass=m_class;
+//        if(m_class.getURI()!=null)
+//        {
+//            m_ontclass=SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel().getOntClass(m_class.getURI());
+//        }
         //System.out.println(m_ontclass+" "+m_ontclass);
         m_props=new HashMap();
         herarquicalProps=new ArrayList();
@@ -944,14 +945,39 @@ public class SemanticClass
      */
     public Iterator<SemanticObject> listInstances(boolean direct)
     {
-        //return SWBPlatform.getSemanticMgr().getOntology().listInstancesOfClass(this);
-        if(m_ontclass!=null)
+        //System.out.println("listInstances:"+this);
+        //TODO: concat iterators
+        ArrayList<SemanticObject> arr=new ArrayList();
+        //Iterar sobre modelos de datos
+        Iterator<Map.Entry<String,SemanticModel>> it2=SWBPlatform.getSemanticMgr().getModels().iterator();
+        while (it2.hasNext())
         {
-            return new SemanticObjectIterator(m_ontclass.listInstances(direct));
-        }else
+            Map.Entry<String, SemanticModel> entry = it2.next();
+            Iterator<SemanticObject> it=entry.getValue().listInstancesOfClass(this,!direct);
+            while (it.hasNext())
+            {
+                SemanticObject semanticObject = it.next();
+                arr.add(semanticObject);
+                //System.out.println(entry.getKey()+" "+semanticObject);
+            }
+        }        
+        //Iterar sobre schema
+        Iterator<SemanticObject> it3=new SemanticObjectIterator(m_class.listInstances(direct));
+        while (it3.hasNext())
         {
-            return new SemanticObjectIterator(m_class.listInstances(direct));
-        }
+            SemanticObject semanticObject = it3.next();
+            arr.add(semanticObject);
+            //System.out.println("schema "+semanticObject);
+        }   
+        return arr.iterator();
+//        //return SWBPlatform.getSemanticMgr().getOntology().listInstancesOfClass(this);
+//        if(m_ontclass!=null)
+//        {
+//            return new SemanticObjectIterator(m_ontclass.listInstances(direct));
+//        }else
+//        {
+//            return new SemanticObjectIterator(m_class.listInstances(direct));
+//        }
     }
 
     /**

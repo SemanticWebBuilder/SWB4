@@ -279,6 +279,7 @@ public class SWBPlatform
     {
         return semanticMgr;
     }
+    
 
     /**
      * Gets the version.

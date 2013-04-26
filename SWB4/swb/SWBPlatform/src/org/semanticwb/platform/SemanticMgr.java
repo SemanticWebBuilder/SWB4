@@ -333,8 +333,9 @@ public class SemanticMgr implements SWBInstanceObject
         while (tpcit.hasNext()) {
             SemanticClass cls = tpcit.next();
             //System.out.println("register class:"+cls);
-            vocabulary.registerClass(cls);
+            vocabulary.registerClass(cls,false);
         }
+        vocabulary.filterProperties();        
         //System.out.println("voc ini");
         vocabulary.init();
     }
@@ -1147,6 +1148,12 @@ public class SemanticMgr implements SWBInstanceObject
     {
         //System.out.println("setClassLoader:"+classLoader);
         this.classLoader = classLoader;
-    }        
+    }      
+    
+    public void rebind()
+    {
+        getSchema().rebind();
+        getOntology().rebind();
+    }
 
 }
