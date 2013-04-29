@@ -67,11 +67,14 @@ public class SWBASetAlert extends GenericResource {
                 fm.processForm(request);
                 Monitor.setAlertParameter(aa);
             }catch(FormValidateException e){log.error(e);}
-            response.sendRedirect(paramRequest.getRenderUrl().setAction(null).toString());
+            response.sendRedirect(paramRequest.getRenderUrl().setAction(null).setParameter("saved", "true").toString());
         }else
         {
             fm.setAction(paramRequest.getRenderUrl().setAction("update").toString());
             out.print(fm.renderForm(request));
+            if ("true".equals(request.getParameter("saved"))){
+                out.print("<script type=\"text/javascript\">showStatus('Alarma actualizada');</script>");
+            }
         }
     }
 
