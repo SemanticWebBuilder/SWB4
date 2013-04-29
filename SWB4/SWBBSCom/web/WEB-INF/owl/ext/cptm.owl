@@ -1,0 +1,2051 @@
+<?xml version="1.0"?>
+<rdf:RDF
+    xmlns:swbxf="http://www.semanticwebbuilder.org/swb4/xforms/ontology#"
+    xmlns:cptm="http://www.semanticwebbuilder.org/swb4/cptm#"
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+    xmlns:owl="http://www.w3.org/2002/07/owl#"
+    xmlns:dp_="http://www.semanticwebbuilder.org/swb4/community#dp_@"
+    xmlns:swb="http://www.semanticwebbuilder.org/swb4/ontology#"
+  xml:base="http://www.semanticwebbuilder.org/swb4/cptm">
+  <owl:Ontology rdf:about="">
+    <owl:imports rdf:resource="http://www.semanticwebbuilder.org/swb4/community"/>
+    <owl:versionInfo rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Created with TopBraid Composer</owl:versionInfo>
+  </owl:Ontology>
+  <owl:Class rdf:ID="How2Travel">
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >false</swb:autogenId>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#WebPage"/>
+    <rdfs:label xml:lang="es">Como Viajar</rdfs:label>
+    <rdfs:label xml:lang="en">How to Travel</rdfs:label>
+    <rdfs:comment>Clase que se encarga de administrar el Catálogo de secciones que se despliegan en el menú "Como Viajar".</rdfs:comment>
+    <swb:displayObject>
+      <rdf:Description rdf:about="http://www.semanticwebbuilder.org/swb4/community#do_WebPage">
+        <swbxf:dragSupport rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >true</swbxf:dragSupport>
+        <swbxf:dropMatchLevel rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >2</swbxf:dropMatchLevel>
+      </rdf:Description>
+    </swb:displayObject>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+  </owl:Class>
+  <owl:Class rdf:ID="CPTMGeneralWebPage">
+    <rdfs:subClassOf>
+      <swb:Interface rdf:ID="cptmDescriptionPage">
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBInterface"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Interface>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#WebPage"/>
+    <rdfs:subClassOf>
+      <swb:Interface rdf:ID="cptmgeneralData">
+        <rdfs:comment>Interface cptm</rdfs:comment>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBInterface"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Interface>
+    </rdfs:subClassOf>
+    <rdfs:comment>Tipo de Página, este tipo no se puede crear en el árbol de WebBuilder, solo sirve para ponerle la interfaz de fotos y que las subclases de esta clase poseean los atributos de esta interface (cptmGeneralData).</rdfs:comment>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+  </owl:Class>
+  <owl:Class rdf:ID="GeographicPoint">
+    <rdfs:subClassOf>
+      <swb:Interface rdf:ID="LocalityInt">
+        <rdfs:comment>Interfaz que define propiedades en comun para un Punto Geografico y una Marca Regional</rdfs:comment>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBInterface"/>
+        <rdfs:label xml:lang="es">Localidad</rdfs:label>
+        <rdfs:label xml:lang="en">Locality</rdfs:label>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Interface>
+    </rdfs:subClassOf>
+    <swb:displayObject rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#do_WebPage"/>
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="CPTMWebPage"/>
+    </rdfs:subClassOf>
+    <rdfs:label xml:lang="en">Geographic Point</rdfs:label>
+    <rdfs:comment>Clase que hereda de WebPage.Mediante estas se administra el catálogo de Puntos Geográficos (Cancun, Tampico, etc)</rdfs:comment>
+    <rdfs:label xml:lang="es">Punto geográfico</rdfs:label>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom>
+          <swb:Class rdf:ID="State">
+            <rdfs:subClassOf rdf:resource="#CPTMGeneralWebPage"/>
+            <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+            <rdfs:subClassOf>
+              <swb:Interface rdf:ID="cptmGeo">
+                <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBInterface"/>
+                <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+              </swb:Interface>
+            </rdfs:subClassOf>
+            <rdfs:label xml:lang="es">Estado</rdfs:label>
+            <rdfs:subClassOf>
+              <swb:Interface rdf:ID="videoable">
+                <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBInterface"/>
+                <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+              </swb:Interface>
+            </rdfs:subClassOf>
+            <rdfs:label xml:lang="en">Stete</rdfs:label>
+            <rdfs:comment>Clase que hereda de WebPage.Mediante esta se administra el catálogo de Estados de la República (Ej. Tamaulipas, Morelos)</rdfs:comment>
+            <swb:displayObject rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#do_WebPage"/>
+            <rdfs:subClassOf>
+              <owl:Restriction>
+                <owl:allValuesFrom>
+                  <owl:Class rdf:about="#CPTMWebPage"/>
+                </owl:allValuesFrom>
+                <owl:onProperty rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#hasWebPageChild"/>
+              </owl:Restriction>
+            </rdfs:subClassOf>
+            <rdfs:subClassOf>
+              <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#webPageParent"/>
+                <owl:allValuesFrom>
+                  <swb:Class rdf:ID="Region">
+                    <rdfs:subClassOf rdf:resource="#videoable"/>
+                    <rdfs:subClassOf rdf:resource="#CPTMGeneralWebPage"/>
+                    <rdfs:comment>Clase que hereda de WebPage.Mediante estas se administra el catálogo de Regiones. (Ej. Norte, Centro, Peninsula de Yucatan, etc)</rdfs:comment>
+                    <rdfs:subClassOf>
+                      <owl:Restriction>
+                        <owl:allValuesFrom rdf:resource="#State"/>
+                        <owl:onProperty rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#hasWebPageChild"/>
+                      </owl:Restriction>
+                    </rdfs:subClassOf>
+                    <swb:displayObject rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#do_WebPage"/>
+                    <rdfs:label xml:lang="es">Region</rdfs:label>
+                    <rdfs:label xml:lang="en">Region</rdfs:label>
+                    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+                  </swb:Class>
+                </owl:allValuesFrom>
+              </owl:Restriction>
+            </rdfs:subClassOf>
+          </swb:Class>
+        </owl:allValuesFrom>
+        <owl:onProperty rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#webPageParent"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+  </owl:Class>
+  <owl:Class rdf:ID="EditNoteType">
+    <rdfs:comment>Catalogo de Tipos de Notas (Tipo 1/Primarias|Tipo 2/Secundarias|Tipo 3/Terciarias)</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+  </owl:Class>
+  <owl:Class rdf:ID="CompanyChain">
+    <rdfs:subClassOf>
+      <swb:Class rdf:ID="GeneralCompany">
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/community#Addressable"/>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Resourceable"/>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Searchable"/>
+        <rdfs:subClassOf rdf:resource="#cptmgeneralData"/>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Indexable"/>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Geolocalizable"/>
+        <rdfs:comment>Interface para datos generales de Cadenas, Marcas y Empresas</rdfs:comment>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Tagable"/>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Class>
+    </rdfs:subClassOf>
+    <rdfs:label xml:lang="es">Cadena de Empresas</rdfs:label>
+    <swb:displayObject rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#do_WebPage"/>
+    <rdfs:comment>Clase que administra el catálogo de Cadenas de Empresas</rdfs:comment>
+    <rdfs:label xml:lang="en">Company Chain</rdfs:label>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+  </owl:Class>
+  <owl:Class rdf:ID="TravelRoute">
+    <rdfs:subClassOf rdf:resource="#CPTMGeneralWebPage"/>
+    <rdfs:comment>Clase que se encarga de manejar el catálogo de "Rutas de Viaje" (Ej. Ruta del Vino, Ruta Morelos, etc)</rdfs:comment>
+    <swb:displayObject rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#do_WebPage"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom>
+          <swb:Class rdf:ID="TravelRouteType">
+            <rdfs:subClassOf rdf:resource="#CPTMGeneralWebPage"/>
+            <rdfs:comment>Clase que se encarga de administrar el cátalogo de "Tipos de Rutas de Viaje" (Ej. Rutas Turisticas, Rutas Bicentenario, etc)</rdfs:comment>
+            <swb:displayObject rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#do_WebPage"/>
+            <rdfs:subClassOf>
+              <owl:Restriction>
+                <owl:allValuesFrom rdf:resource="#TravelRoute"/>
+                <owl:onProperty rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#hasWebPageChild"/>
+              </owl:Restriction>
+            </rdfs:subClassOf>
+            <rdfs:label xml:lang="es">Tipo de Ruta de Viaje</rdfs:label>
+            <rdfs:label xml:lang="en">Travel Route Type</rdfs:label>
+            <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+          </swb:Class>
+        </owl:allValuesFrom>
+        <owl:onProperty rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#webPageParent"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:label xml:lang="en">Travel Route</rdfs:label>
+    <rdfs:label xml:lang="es">Ruta de Viaje</rdfs:label>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+  </owl:Class>
+  <owl:Class rdf:ID="CompanyLine">
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
+    <rdfs:label xml:lang="es">Griro de Empresa</rdfs:label>
+    <rdfs:label xml:lang="en">Company Line</rdfs:label>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Searchable"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+  </owl:Class>
+  <owl:Class rdf:ID="EventCategory">
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
+    <rdfs:comment>Categorías para los tipos de Eventos, ej. "Turisticos", Industria de Negocio"</rdfs:comment>
+    <swb:displayObject rdf:resource="http://www.semanticwebbuilder.org/swb4/community#do_WebPage"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >false</swb:autogenId>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+  </owl:Class>
+  <owl:Class rdf:ID="New">
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Resourceable"/>
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
+    <rdfs:label xml:lang="es">Noticia</rdfs:label>
+    <rdfs:comment>Catálogo de Noticias</rdfs:comment>
+    <rdfs:label xml:lang="en">New</rdfs:label>
+  </owl:Class>
+  <owl:Class rdf:ID="Activity">
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom>
+          <swb:Class rdf:ID="ActivityRef">
+            <rdfs:subClassOf>
+              <owl:Restriction>
+                <owl:allValuesFrom rdf:resource="#Activity"/>
+                <owl:onProperty rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#webPageParent"/>
+              </owl:Restriction>
+            </rdfs:subClassOf>
+            <swb:displayObject rdf:resource="http://www.semanticwebbuilder.org/swb4/community#do_WebPage"/>
+            <rdfs:subClassOf rdf:resource="#cptmGeo"/>
+            <rdfs:subClassOf rdf:resource="#videoable"/>
+            <rdfs:label xml:lang="en">Destination Activity</rdfs:label>
+            <rdfs:label xml:lang="es">Actividad en un Destino</rdfs:label>
+            <rdfs:comment>Actividad en un específico "Destino", si le quisiera agregar un Directorio de empresas aqui, tendría que tener una relación además de con el Destino, con el objeto  SPType</rdfs:comment>
+            <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+            <rdfs:subClassOf rdf:resource="#CPTMGeneralWebPage"/>
+          </swb:Class>
+        </owl:allValuesFrom>
+        <owl:onProperty rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#hasWebPageChild"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <swb:displayObject rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#do_WebPage"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom>
+          <swb:Class rdf:ID="ActivityType">
+            <rdfs:subClassOf rdf:resource="#CPTMGeneralWebPage"/>
+            <rdfs:comment>Clase que hereda de WebPage.Mediante esta se administra el catálogo de tipos de actividades (Ej. Aventura y Ecoturismo, Cultura)</rdfs:comment>
+            <swb:displayObject rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#do_WebPage"/>
+            <rdfs:label xml:lang="es">Tipo de Actividad</rdfs:label>
+            <rdfs:label xml:lang="en">Activity Type</rdfs:label>
+            <rdfs:subClassOf>
+              <owl:Restriction>
+                <owl:allValuesFrom rdf:resource="#Activity"/>
+                <owl:onProperty rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#hasWebPageChild"/>
+              </owl:Restriction>
+            </rdfs:subClassOf>
+            <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+          </swb:Class>
+        </owl:allValuesFrom>
+        <owl:onProperty rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#webPageParent"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:label xml:lang="es">Actividad</rdfs:label>
+    <rdfs:subClassOf rdf:resource="#videoable"/>
+    <rdfs:subClassOf rdf:resource="#CPTMGeneralWebPage"/>
+    <rdfs:label xml:lang="en">Activity</rdfs:label>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+    <rdfs:subClassOf rdf:resource="#cptmGeo"/>
+    <rdfs:comment>Clase que se encarga de administrar el catálogo de Actividades (Buceo, Pesca, etc)</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:ID="RegionalBrand">
+    <rdfs:subClassOf rdf:resource="#LocalityInt"/>
+    <rdfs:subClassOf rdf:resource="#CPTMGeneralWebPage"/>
+    <swb:displayObject rdf:resource="http://www.semanticwebbuilder.org/swb4/community#do_WebPage"/>
+    <rdfs:label xml:lang="es">Marca Regional</rdfs:label>
+    <rdfs:label xml:lang="en">Regional Brand</rdfs:label>
+    <rdfs:comment>Catálogo de Marcas Regionales (Ej. Riviera Maya, Riviera Nayarit, etc). Estos contienen Puntos Geográficos.</rdfs:comment>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+  </owl:Class>
+  <owl:Class rdf:about="#CPTMWebPage">
+    <rdfs:subClassOf rdf:resource="#videoable"/>
+    <swb:displayObject rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#do_WebPage"/>
+    <rdfs:comment>Páginas web para Puntos Geográficos, se agrego esta clase para que solo se pudieran agregar Puntos geográficos en un elemento de tipo "Estado/State"</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="#CPTMGeneralWebPage"/>
+    <rdfs:label xml:lang="en">CPTM WebPage</rdfs:label>
+    <rdfs:label xml:lang="es">CPTM Página Web</rdfs:label>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+  </owl:Class>
+  <owl:ObjectProperty rdf:ID="hasEditNoteExperienceInv"/>
+  <owl:ObjectProperty rdf:ID="hasCompActivityRef">
+    <rdfs:domain>
+      <swb:Class rdf:ID="Company">
+        <rdfs:subClassOf rdf:resource="#GeneralCompany"/>
+        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >false</swb:autogenId>
+        <rdfs:comment>Clase principal del sistema de visit-méxico. Una instancia de esta clase es en donde se almacena toda la información de un proveedor de servicios especifico.</rdfs:comment>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Localeable"/>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Expirable"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Class>
+    </rdfs:domain>
+    <rdfs:range rdf:resource="#ActivityRef"/>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_hasCompActivityRef">
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >20</swb:index>
+        <swbxf:formElement>
+          <cptm:SelectMultiple2 rdf:ID="SelectMultiple2_1"/>
+        </swbxf:formElement>
+        <swbxf:propGroup>
+          <swbxf:PropertyGroup rdf:ID="others">
+            <rdfs:label xml:lang="en">Other data</rdfs:label>
+            <rdfs:label xml:lang="es">Otros datos</rdfs:label>
+            <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+            >200</swb:index>
+          </swbxf:PropertyGroup>
+        </swbxf:propGroup>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:label xml:lang="es">Actividades Referenciadas</rdfs:label>
+    <rdfs:label xml:lang="en">Referenced Activities</rdfs:label>
+    <owl:inverseOf>
+      <owl:ObjectProperty rdf:ID="hasCompanyActivityRefInv"/>
+    </owl:inverseOf>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="proxGeographicPointInv">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_proxGeographicPointInv"/>
+    </swb:displayProperty>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasEventState">
+    <owl:inverseOf>
+      <owl:ObjectProperty rdf:ID="hasEventStateInv"/>
+    </owl:inverseOf>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_hasEventState">
+        <swbxf:formElement rdf:resource="#SelectMultiple2_1"/>
+        <swbxf:propGroup rdf:resource="#others"/>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >160</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:comment>El evento se asiga a uno o varios estados en esta propiedad</rdfs:comment>
+    <rdfs:label xml:lang="en">State</rdfs:label>
+    <rdfs:label xml:lang="es">Estado</rdfs:label>
+    <rdfs:range rdf:resource="#State"/>
+    <rdfs:domain>
+      <swb:Class rdf:ID="Event">
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
+        <rdfs:label xml:lang="es">Evento</rdfs:label>
+        <swb:displayObject rdf:resource="http://www.semanticwebbuilder.org/swb4/community#do_WebPage"/>
+        <rdfs:label xml:lang="en">Event</rdfs:label>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Localeable"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Searchable"/>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Tagable"/>
+        <rdfs:subClassOf rdf:resource="#cptmgeneralData"/>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#RuleRefable"/>
+        <rdfs:comment>Clase que hereda de WebPage.Mediante estas se administra el catálogo de Eventos.</rdfs:comment>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Countryable"/>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Resourceable"/>
+        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >false</swb:autogenId>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
+      </swb:Class>
+    </rdfs:domain>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasPromoCompany">
+    <rdfs:domain>
+      <swb:Class rdf:ID="Promotion">
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Calendarable"/>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
+        <rdfs:subClassOf rdf:resource="#cptmgeneralData"/>
+        <rdfs:label xml:lang="en">Promotion</rdfs:label>
+        <rdfs:label xml:lang="es">Promoción</rdfs:label>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Class>
+    </rdfs:domain>
+    <rdfs:range rdf:resource="#Company"/>
+    <rdfs:label xml:lang="es">Empresas Participantes</rdfs:label>
+    <rdfs:label xml:lang="en">Involved Companies</rdfs:label>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_hasPromoCompany">
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >50</swb:index>
+        <swbxf:formElement rdf:resource="#SelectMultiple2_1"/>
+        <swbxf:propGroup rdf:resource="#others"/>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasCompanyLocalityInv"/>
+  <owl:ObjectProperty rdf:ID="promoCompanyBrandInv"/>
+  <owl:ObjectProperty rdf:ID="arefLocalityInv"/>
+  <owl:ObjectProperty rdf:ID="hasPromotion">
+    <rdfs:range rdf:resource="#Promotion"/>
+    <rdfs:comment>Promociones de la Compañia</rdfs:comment>
+    <rdfs:label xml:lang="es">Promoción</rdfs:label>
+    <rdfs:label xml:lang="en">Promotion</rdfs:label>
+    <owl:inverseOf>
+      <owl:ObjectProperty rdf:ID="promoCompanyInv"/>
+    </owl:inverseOf>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_hasPromotion">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#ObjectElement_1"/>
+        <swbxf:propGroup rdf:resource="#others"/>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >30</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:domain rdf:resource="#GeneralCompany"/>
+    <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:removeDependency>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="chainCompanyBrandInv"/>
+  <owl:ObjectProperty rdf:ID="ExpLocality">
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >locality</swb:propertyCodeName>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_ExperienceDestinationProp">
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >200</swb:index>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#selectOneModel"/>
+        <swbxf:propGroup rdf:resource="#others"/>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:domain>
+      <swb:Class rdf:ID="ExperienceRef">
+        <rdfs:subClassOf rdf:resource="#cptmGeo"/>
+        <rdfs:subClassOf>
+          <owl:Restriction>
+            <owl:allValuesFrom>
+              <swb:Class rdf:ID="Experience">
+                <rdfs:subClassOf rdf:resource="#videoable"/>
+                <rdfs:label xml:lang="en">Experience</rdfs:label>
+                <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+                >false</swb:autogenId>
+                <rdfs:subClassOf rdf:resource="#cptmGeo"/>
+                <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+                <rdfs:subClassOf rdf:resource="#CPTMGeneralWebPage"/>
+                <swb:displayObject rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#do_WebPage"/>
+                <rdfs:subClassOf>
+                  <owl:Restriction>
+                    <owl:allValuesFrom>
+                      <swb:Class rdf:ID="ExperienceType">
+                        <rdfs:subClassOf rdf:resource="#CPTMGeneralWebPage"/>
+                        <rdfs:label xml:lang="es">Tipo de Experiencia</rdfs:label>
+                        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+                        >false</swb:autogenId>
+                        <rdfs:label xml:lang="en">Experience type</rdfs:label>
+                        <rdfs:subClassOf>
+                          <owl:Restriction>
+                            <owl:allValuesFrom rdf:resource="#Experience"/>
+                            <owl:onProperty rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#hasWebPageChild"/>
+                          </owl:Restriction>
+                        </rdfs:subClassOf>
+                        <rdfs:comment>Clase que hereda de WebPage.Mediante estas se administra el catálogo de tipos de  experiencias (Ej. Romance, Sol y Playa)</rdfs:comment>
+                        <swb:displayObject rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#do_WebPage"/>
+                        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+                      </swb:Class>
+                    </owl:allValuesFrom>
+                    <owl:onProperty rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#webPageParent"/>
+                  </owl:Restriction>
+                </rdfs:subClassOf>
+                <rdfs:comment>Clase que hereda de WebPage.Mediante estas se administra el catálogo de experiencias (Ej. Bodas, Parejas)</rdfs:comment>
+                <rdfs:subClassOf>
+                  <owl:Restriction>
+                    <owl:allValuesFrom rdf:resource="#ExperienceRef"/>
+                    <owl:onProperty rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#hasWebPageChild"/>
+                  </owl:Restriction>
+                </rdfs:subClassOf>
+                <rdfs:label xml:lang="es">Experiencia</rdfs:label>
+              </swb:Class>
+            </owl:allValuesFrom>
+            <owl:onProperty rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#webPageParent"/>
+          </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf rdf:resource="#CPTMGeneralWebPage"/>
+        <swb:displayObject rdf:resource="http://www.semanticwebbuilder.org/swb4/community#do_WebPage"/>
+        <rdfs:label xml:lang="en">Experience Destination</rdfs:label>
+        <rdfs:subClassOf rdf:resource="#videoable"/>
+        <rdfs:comment>Experiencia en un específico "Destino", si le quisiera agregar un Directorio de empresas aqui, tendría que tener una relación además de con el Destino, con el objeto  SPType</rdfs:comment>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+        <rdfs:label xml:lang="es">Experiencia en Destino</rdfs:label>
+      </swb:Class>
+    </rdfs:domain>
+    <rdfs:range rdf:resource="#LocalityInt"/>
+    <rdfs:label xml:lang="es">Localidad</rdfs:label>
+    <rdfs:label xml:lang="en">Locality</rdfs:label>
+    <owl:inverseOf>
+      <owl:ObjectProperty rdf:ID="ExpLocalityInv"/>
+    </owl:inverseOf>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasCompanyLine">
+    <owl:inverseOf>
+      <owl:ObjectProperty rdf:ID="CompLineCompanyDataInv"/>
+    </owl:inverseOf>
+    <rdfs:range rdf:resource="#CompanyLine"/>
+    <rdfs:label xml:lang="es">Giros</rdfs:label>
+    <rdfs:label xml:lang="en">Business Lines</rdfs:label>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_hasCompanyLine">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#SelectMultipleModelWithBlank"/>
+        <swbxf:propGroup rdf:resource="#others"/>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >10</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:domain rdf:resource="#GeneralCompany"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasEventInv"/>
+  <owl:ObjectProperty rdf:ID="hasNoteExperience">
+    <owl:inverseOf rdf:resource="#hasEditNoteExperienceInv"/>
+    <rdfs:label xml:lang="en">Related Experiences</rdfs:label>
+    <rdfs:label xml:lang="es">Experiencias Relacionadas</rdfs:label>
+    <rdfs:comment>Experiencias asociadas a la nota editorial</rdfs:comment>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_hasNoteExperience">
+        <swbxf:propGroup rdf:resource="#others"/>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >60</swb:index>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#SelectMultipleModelWithBlank"/>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:range rdf:resource="#Experience"/>
+    <rdfs:domain>
+      <swb:Class rdf:ID="EditNote">
+        <rdfs:subClassOf rdf:resource="#CPTMGeneralWebPage"/>
+        <rdfs:label xml:lang="es">Nota Editorial</rdfs:label>
+        <rdfs:label xml:lang="en">Editorial Note</rdfs:label>
+        <rdfs:subClassOf>
+          <owl:Restriction>
+            <owl:allValuesFrom>
+              <swb:Class rdf:ID="EditNoteBase">
+                <rdfs:subClassOf rdf:resource="#CPTMGeneralWebPage"/>
+                <swb:displayObject rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#do_WebPage"/>
+                <rdfs:label xml:lang="en">Edit Note Base</rdfs:label>
+                <rdfs:label xml:lang="es">Base de Notas Editoriales</rdfs:label>
+                <rdfs:subClassOf>
+                  <owl:Restriction>
+                    <owl:allValuesFrom rdf:resource="#EditNote"/>
+                    <owl:onProperty rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#hasWebPageChild"/>
+                  </owl:Restriction>
+                </rdfs:subClassOf>
+                <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+              </swb:Class>
+            </owl:allValuesFrom>
+            <owl:onProperty rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#webPageParent"/>
+          </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:comment>Notas Editoriales</rdfs:comment>
+        <swb:displayObject rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#do_WebPage"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Class>
+    </rdfs:domain>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasRegGeographicPoint">
+    <rdfs:domain rdf:resource="#RegionalBrand"/>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_hasRegDestination">
+        <swbxf:propGroup rdf:resource="#others"/>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#SelectMultipleModel"/>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >10</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <owl:inverseOf>
+      <owl:ObjectProperty rdf:ID="hasRegGeographicPointInv"/>
+    </owl:inverseOf>
+    <rdfs:range rdf:resource="#GeographicPoint"/>
+    <rdfs:label xml:lang="en">Geographic Point</rdfs:label>
+    <rdfs:comment>Destinos con los que esta conformada la "Marca Regional".Pudiera ser cualaquier subclase de la clase "GeographicPoint"</rdfs:comment>
+    <rdfs:label xml:lang="es">Punto Geográfico</rdfs:label>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasStateDestinationType">
+    <rdfs:domain rdf:resource="#State"/>
+    <rdfs:label xml:lang="es">Tipo de Destino</rdfs:label>
+    <rdfs:label xml:lang="en">Destination Type</rdfs:label>
+    <rdfs:range>
+      <swb:Class rdf:ID="DestinationType">
+        <rdfs:comment>Clase para administrar tipos de Destinos, pudiendo ser: Destinos, Pueblos Mágicos ó Atractivos</rdfs:comment>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Class>
+    </rdfs:range>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_hasStateDestinationType">
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >10</swb:index>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#SelectMultipleModel"/>
+        <swbxf:propGroup rdf:resource="#others"/>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <owl:inverseOf>
+      <owl:ObjectProperty rdf:ID="hasStateDestinationTypeInv"/>
+    </owl:inverseOf>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasGeneralAttribute">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_hasGeneralAttribute">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#SelectMultipleModelWithBlank"/>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >210</swb:index>
+        <swbxf:propGroup rdf:resource="#others"/>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:label xml:lang="en">Attractives</rdfs:label>
+    <rdfs:label xml:lang="es">Atractivos</rdfs:label>
+    <rdfs:comment>Atributos Generales que tiene un Destino (Playa, Ruinas Arqueologicas, etc). Del Catalogo del objeto GeneralAttractive</rdfs:comment>
+    <rdfs:range>
+      <swb:Class rdf:ID="GeneralAttractive">
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
+        <rdfs:comment>Catalogo de Atractivos Generales (Playa, Ruinas Arqueologicas, etc). Administrado desde una colección. Los Destinos tendran este tipo de atributos</rdfs:comment>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Class>
+    </rdfs:range>
+    <rdfs:domain rdf:resource="#LocalityInt"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="brandCompanyChain">
+    <rdfs:domain>
+      <swb:Class rdf:ID="CompanyBrand">
+        <rdfs:label xml:lang="en">Company Brand</rdfs:label>
+        <swb:displayObject rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#do_WebPage"/>
+        <rdfs:comment>Clase se administra el catálogo de Marcas de Empresas</rdfs:comment>
+        <rdfs:subClassOf rdf:resource="#GeneralCompany"/>
+        <rdfs:label xml:lang="es">Marca de Empresa</rdfs:label>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Class>
+    </rdfs:domain>
+    <rdfs:range rdf:resource="#CompanyChain"/>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_brandCompanyChain">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#selectOneModelWithBlank"/>
+        <swbxf:propGroup rdf:resource="#others"/>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >10</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <owl:inverseOf rdf:resource="#chainCompanyBrandInv"/>
+    <rdfs:label xml:lang="es">Cadena a la que pertenece</rdfs:label>
+    <rdfs:label xml:lang="en">Chain it belongs to</rdfs:label>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasExpReferencedActivities">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_hasExpReferencedActivities">
+        <swbxf:propGroup rdf:resource="#others"/>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >30</swb:index>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#SelectMultipleModelWithBlank"/>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:label xml:lang="es">Activiadades Referenciadas</rdfs:label>
+    <rdfs:label xml:lang="en">Referenced Activities</rdfs:label>
+    <rdfs:range rdf:resource="#ActivityRef"/>
+    <rdfs:domain rdf:resource="#Experience"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasNewDestinationInv">
+    <rdfs:label xml:lang="es">Noticia</rdfs:label>
+    <rdfs:label xml:lang="en">New</rdfs:label>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_hasNewDestinationInv">
+        <swbxf:propGroup rdf:resource="#others"/>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#SelectMultipleModel"/>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >200</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="arefActivity">
+    <rdfs:domain rdf:resource="#ActivityRef"/>
+    <rdfs:range rdf:resource="#Activity"/>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_arefActivity">
+        <swbxf:propGroup rdf:resource="#others"/>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#selectOneModel"/>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >100</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:label xml:lang="es">Actividad</rdfs:label>
+    <rdfs:label xml:lang="en">Activity</rdfs:label>
+    <owl:inverseOf>
+      <owl:ObjectProperty rdf:ID="arefActivityInv"/>
+    </owl:inverseOf>
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >activity</swb:propertyCodeName>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasGeographicPointsEventInv">
+    <rdfs:comment>Inversa.Mediante esta se puede saber en que destinos se encuentra asignado un cierto evento.</rdfs:comment>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_hasDestinationEventInv">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#SelectMultipleModel"/>
+        <swbxf:propGroup rdf:resource="#others"/>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >200</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="expExperience">
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >experience</swb:propertyCodeName>
+    <rdfs:range rdf:resource="#Experience"/>
+    <rdfs:domain rdf:resource="#ExperienceRef"/>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_expExperience">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#selectOneModel"/>
+        <swbxf:propGroup rdf:resource="#others"/>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >100</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:label xml:lang="es">Experienca</rdfs:label>
+    <rdfs:label xml:lang="en">Experience</rdfs:label>
+    <owl:inverseOf>
+      <owl:ObjectProperty rdf:ID="expExperienceInv"/>
+    </owl:inverseOf>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasEditNoteActivityInv"/>
+  <owl:ObjectProperty rdf:ID="hasNewLocality">
+    <owl:inverseOf>
+      <owl:ObjectProperty rdf:ID="hasNewGeographicPointInv"/>
+    </owl:inverseOf>
+    <rdfs:label xml:lang="es">Destino</rdfs:label>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_hasNewDestination">
+        <swbxf:propGroup rdf:resource="#others"/>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#SelectMultipleModel"/>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >20</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:label xml:lang="en">Destination</rdfs:label>
+    <rdfs:domain rdf:resource="#New"/>
+    <rdfs:range rdf:resource="#LocalityInt"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasNewInv">
+    <rdfs:label xml:lang="es">Tipo</rdfs:label>
+    <rdfs:label xml:lang="en">Type</rdfs:label>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_hasNewInv">
+        <swbxf:propGroup rdf:resource="#others"/>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#SelectMultipleModel"/>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >200</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasNoteStateInv"/>
+  <owl:ObjectProperty rdf:ID="hasEventExperience">
+    <rdfs:label xml:lang="es">Experiencias Relacionadas</rdfs:label>
+    <rdfs:range rdf:resource="#Experience"/>
+    <rdfs:comment>Experiencias referenciadas a un Evento</rdfs:comment>
+    <rdfs:domain rdf:resource="#Event"/>
+    <rdfs:label xml:lang="en">Related Experiences</rdfs:label>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_hasEventExperience">
+        <swbxf:propGroup rdf:resource="#others"/>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#SelectMultipleModelWithBlank"/>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >140</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="EventDestinationPropInv">
+    <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:removeDependency>
+    <rdfs:comment>Es removeDependency = true, ya que quiero que si se elimina el destino también se elimine el EvetDestination, y Nunca al reves</rdfs:comment>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="TravelStyleGeographicPointInv">
+    <rdfs:comment>Es removeDependency = true, ya que quiero que si se elimina el destino también se elimine el TravelStyleDestination, y Nunca al reves</rdfs:comment>
+    <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:removeDependency>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="#hasRegGeographicPointInv">
+    <rdfs:comment>En que Regiones se encuentra un Destino</rdfs:comment>
+    <rdfs:label xml:lang="en">Regional Brand</rdfs:label>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_hasRegDestinationInv">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#selectOneModelWithBlank"/>
+        <swbxf:propGroup rdf:resource="#others"/>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >20</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:label xml:lang="es">Marca Regional</rdfs:label>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasNoteState">
+    <owl:inverseOf rdf:resource="#hasNoteStateInv"/>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_hasNoteState">
+        <swbxf:propGroup rdf:resource="#others"/>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >80</swb:index>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#SelectMultipleModelWithBlank"/>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:label xml:lang="es">Estados Relacionados</rdfs:label>
+    <rdfs:label xml:lang="en">Related States</rdfs:label>
+    <rdfs:comment>Estado(s)  Relacionado(s) a las Notas Editoriales.</rdfs:comment>
+    <rdfs:range rdf:resource="#State"/>
+    <rdfs:domain rdf:resource="#EditNote"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasNoteActivity">
+    <owl:inverseOf rdf:resource="#hasEditNoteActivityInv"/>
+    <rdfs:label xml:lang="es">Actividades Relacionadas</rdfs:label>
+    <rdfs:label xml:lang="en">Related Activities</rdfs:label>
+    <rdfs:comment>Actividades asociadas a la nota editorial</rdfs:comment>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_hasNoteActivity">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#SelectMultipleModelWithBlank"/>
+        <swbxf:propGroup rdf:resource="#others"/>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >50</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:range rdf:resource="#Activity"/>
+    <rdfs:domain rdf:resource="#EditNote"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasActLocality">
+    <owl:inverseOf>
+      <owl:ObjectProperty rdf:ID="hasActLocalityInv"/>
+    </owl:inverseOf>
+    <rdfs:domain rdf:resource="#Activity"/>
+    <rdfs:range rdf:resource="#LocalityInt"/>
+    <rdfs:comment>Destinos referenciados a una Actividad</rdfs:comment>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_hasActLocality">
+        <swbxf:propGroup rdf:resource="#others"/>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#SelectMultipleModelWithBlank"/>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >10</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:label xml:lang="en">Destinations</rdfs:label>
+    <rdfs:label xml:lang="es">Destinos</rdfs:label>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasEventGeographicPointInv"/>
+  <owl:ObjectProperty rdf:ID="noteType">
+    <rdfs:domain rdf:resource="#EditNote"/>
+    <rdfs:range rdf:resource="#EditNoteType"/>
+    <rdfs:label xml:lang="en">Note type</rdfs:label>
+    <rdfs:label xml:lang="es">Tipo de Nota</rdfs:label>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_noteType">
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >200</swb:index>
+        <swbxf:propGroup rdf:resource="#others"/>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#selectOneModel"/>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasEventActivityRef">
+    <rdfs:label xml:lang="en">Related activities</rdfs:label>
+    <rdfs:label xml:lang="es">Actividades Relacionadas</rdfs:label>
+    <rdfs:comment>Referencia de un evento a una determinada actividad ej. Festival de Buceo, no necesariamente puede ocurrir siempre.</rdfs:comment>
+    <rdfs:range rdf:resource="#Activity"/>
+    <rdfs:domain rdf:resource="#Event"/>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_eventActivityRef">
+        <swbxf:propGroup rdf:resource="#others"/>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#SelectMultipleModelWithBlank"/>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >130</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <owl:inverseOf>
+      <owl:ObjectProperty rdf:ID="hasEventActivityRefInv"/>
+    </owl:inverseOf>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasEventLocality">
+    <rdfs:label xml:lang="en">Destination</rdfs:label>
+    <rdfs:domain rdf:resource="#Event"/>
+    <rdfs:label xml:lang="es">Destino</rdfs:label>
+    <rdfs:range rdf:resource="#LocalityInt"/>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_eventGeographicPoint">
+        <swbxf:formElement rdf:resource="#SelectMultiple2_1"/>
+        <swbxf:propGroup rdf:resource="#others"/>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >150</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <owl:inverseOf rdf:resource="#hasEventGeographicPointInv"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasExpActivity">
+    <rdfs:label xml:lang="es">Actividades</rdfs:label>
+    <rdfs:range rdf:resource="#Activity"/>
+    <rdfs:comment>Actividades referenciadas a una Experiencia</rdfs:comment>
+    <rdfs:domain rdf:resource="#Experience"/>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_hasExpActivity">
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >20</swb:index>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#SelectMultipleModelWithBlank"/>
+        <swbxf:propGroup rdf:resource="#others"/>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:label xml:lang="en">Activities</rdfs:label>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasGeographicPointProxInv"/>
+  <owl:ObjectProperty rdf:ID="compCompanyBrand">
+    <rdfs:domain rdf:resource="#Company"/>
+    <rdfs:label xml:lang="es">Marca a la que pertenece</rdfs:label>
+    <rdfs:label xml:lang="en">Brand it belogns to</rdfs:label>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_compCompanyBrand">
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >5</swb:index>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#selectOneModelWithBlank"/>
+        <swbxf:propGroup rdf:resource="#others"/>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:range rdf:resource="#CompanyBrand"/>
+    <owl:inverseOf>
+      <owl:ObjectProperty rdf:ID="brandCompanyInv"/>
+    </owl:inverseOf>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="remoteFuntionality">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_remoteFuntionality">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#SelectMultipleModelWithBlank"/>
+        <swbxf:propGroup>
+          <swbxf:PropertyGroup rdf:ID="cptmRemoteRelations">
+            <rdfs:label xml:lang="en">Remote Relations Config</rdfs:label>
+            <rdfs:label xml:lang="es">Configuración de relaciones remotas</rdfs:label>
+            <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+            >500</swb:index>
+          </swbxf:PropertyGroup>
+        </swbxf:propGroup>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >30</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:range>
+      <swb:Class rdf:ID="RemoteFuntionalityCat">
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
+        <rdfs:label xml:lang="en">Functionality</rdfs:label>
+        <rdfs:label xml:lang="es">Funcionalidad</rdfs:label>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Class>
+    </rdfs:range>
+    <rdfs:label xml:lang="en">Remote Funtionality</rdfs:label>
+    <rdfs:label xml:lang="es">Funcionalidad Remota</rdfs:label>
+    <rdfs:domain>
+      <swb:Class rdf:ID="ModelRelation">
+        <rdfs:label xml:lang="en">Relation with other Site</rdfs:label>
+        <rdfs:label xml:lang="es">Relación con otro Sitio</rdfs:label>
+        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >true</swb:autogenId>
+        <rdfs:comment>Relación de una sección con otra sección de otro modelo</rdfs:comment>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Class>
+    </rdfs:domain>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasCompLocality">
+    <rdfs:label xml:lang="en">Destinations</rdfs:label>
+    <rdfs:range rdf:resource="#LocalityInt"/>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_hasCompLocality">
+        <swbxf:propGroup rdf:resource="#others"/>
+        <swbxf:formElement rdf:resource="#SelectMultiple2_1"/>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >20</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:label xml:lang="es">Destinos</rdfs:label>
+    <owl:inverseOf rdf:resource="#hasCompanyLocalityInv"/>
+    <rdfs:domain rdf:resource="#GeneralCompany"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="#hasEventActivityRefInv">
+    <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:removeDependency>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasModelRelation">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_hasModelRelation">
+        <swbxf:propGroup rdf:resource="#cptmRemoteRelations"/>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#ObjectElement_1"/>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >10</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:label xml:lang="en">Remote Model Relations</rdfs:label>
+    <rdfs:label xml:lang="es">Relaciones Remotas de Modelos</rdfs:label>
+    <rdfs:range rdf:resource="#ModelRelation"/>
+    <rdfs:domain rdf:resource="#CPTMGeneralWebPage"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasCompExperienceRef">
+    <rdfs:domain rdf:resource="#Company"/>
+    <rdfs:range rdf:resource="#ExperienceRef"/>
+    <rdfs:label xml:lang="es">Experiencias Referenciadas</rdfs:label>
+    <rdfs:label xml:lang="en">Referenced Experiences</rdfs:label>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_hasCompExperienceRef">
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >30</swb:index>
+        <swbxf:propGroup rdf:resource="#others"/>
+        <swbxf:formElement rdf:resource="#SelectMultiple2_1"/>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <owl:inverseOf>
+      <owl:ObjectProperty rdf:ID="hasCompanyExperienceRefInv"/>
+    </owl:inverseOf>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="eventEventType">
+    <owl:inverseOf rdf:resource="#hasEventInv"/>
+    <rdfs:label xml:lang="en">Event type</rdfs:label>
+    <rdfs:label xml:lang="es">Tipo de evento</rdfs:label>
+    <rdfs:comment>Tipo de Evento al que pertenece un evento</rdfs:comment>
+    <rdfs:range>
+      <swb:Class rdf:ID="EventType">
+        <swb:displayObject rdf:resource="http://www.semanticwebbuilder.org/swb4/community#do_WebPage"/>
+        <rdfs:label xml:lang="es">Tipo de Evento</rdfs:label>
+        <rdfs:label xml:lang="en">Event Type</rdfs:label>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
+        <rdfs:comment>Clase que hereda de WebPage.Mediante estas se administra el catálogo de tipos de eventos.pueden ser Ej. "Carnavales", "Congresos", etc</rdfs:comment>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Class>
+    </rdfs:range>
+    <rdfs:domain rdf:resource="#Event"/>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_eventEventType">
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >10</swb:index>
+        <swbxf:propGroup rdf:resource="#others"/>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#selectOneModel"/>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasCompanyTypeInv"/>
+  <owl:ObjectProperty rdf:ID="hasTravelRouteInv"/>
+  <owl:ObjectProperty rdf:ID="newType">
+    <owl:inverseOf>
+      <owl:ObjectProperty rdf:ID="newTypeInv"/>
+    </owl:inverseOf>
+    <rdfs:label xml:lang="en">New Type</rdfs:label>
+    <rdfs:label xml:lang="es">Tipo de Noticia</rdfs:label>
+    <rdfs:comment>Tipo de la noticia</rdfs:comment>
+    <rdfs:range>
+      <swb:Class rdf:ID="NewType">
+        <rdfs:label xml:lang="es">Tipo de Noticia</rdfs:label>
+        <rdfs:label xml:lang="en">New Type</rdfs:label>
+        <rdfs:comment>Catalogo de Tipos de Noticias</rdfs:comment>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Class>
+    </rdfs:range>
+    <rdfs:domain rdf:resource="#New"/>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_newType">
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >10</swb:index>
+        <swbxf:propGroup rdf:resource="#others"/>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#selectOneModel"/>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="etEventCategory">
+    <owl:inverseOf>
+      <owl:ObjectProperty rdf:ID="hasEventTypeInv"/>
+    </owl:inverseOf>
+    <rdfs:range rdf:resource="#EventCategory"/>
+    <rdfs:domain rdf:resource="#EventType"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasDestinationType">
+    <owl:inverseOf>
+      <owl:ObjectProperty rdf:ID="hasDestinationTypeInv"/>
+    </owl:inverseOf>
+    <rdfs:label xml:lang="en">Destination Type</rdfs:label>
+    <rdfs:label xml:lang="es">Tipo de Destino</rdfs:label>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_hasDestinationType">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#SelectMultipleModel"/>
+        <swbxf:propGroup rdf:resource="#others"/>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >200</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:range rdf:resource="#DestinationType"/>
+    <rdfs:domain rdf:resource="#GeographicPoint"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasProximity">
+    <rdfs:domain rdf:resource="#LocalityInt"/>
+    <rdfs:range rdf:resource="#LocalityInt"/>
+    <rdfs:label xml:lang="es">Cercanias</rdfs:label>
+    <rdfs:label xml:lang="en">Proximities</rdfs:label>
+    <rdfs:comment>Cercanias</rdfs:comment>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_hasProximity">
+        <swbxf:formElement rdf:resource="#SelectMultiple2_1"/>
+        <swbxf:propGroup rdf:resource="#others"/>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >40</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasExperienceLocalityInv"/>
+  <owl:ObjectProperty rdf:ID="trTravelRouteType">
+    <owl:inverseOf rdf:resource="#hasTravelRouteInv"/>
+    <rdfs:label xml:lang="en">Travel Route Type</rdfs:label>
+    <rdfs:label xml:lang="es">Tipo de Ruta de Viaje</rdfs:label>
+    <rdfs:comment>Tipo de ruta de viaje a la cual pertenece la Ruta de Viaje</rdfs:comment>
+    <rdfs:range rdf:resource="#TravelRouteType"/>
+    <rdfs:domain rdf:resource="#TravelRoute"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="arefLocality">
+    <rdfs:domain rdf:resource="#ActivityRef"/>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_ActivityDestination">
+        <swbxf:propGroup rdf:resource="#others"/>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#selectOneModel"/>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >200</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:range rdf:resource="#LocalityInt"/>
+    <rdfs:label xml:lang="es">Localidad</rdfs:label>
+    <rdfs:label xml:lang="en">Locality</rdfs:label>
+    <owl:inverseOf rdf:resource="#arefLocalityInv"/>
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >locality</swb:propertyCodeName>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasLocality">
+    <owl:inverseOf>
+      <owl:ObjectProperty rdf:ID="hasLocalityEditNoteInv"/>
+    </owl:inverseOf>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_hasLocality">
+        <swbxf:propGroup rdf:resource="#others"/>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#SelectMultipleModelWithBlank"/>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >70</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:comment>Destinos relacionados con la nota editorial</rdfs:comment>
+    <rdfs:label xml:lang="en">Related Destinations</rdfs:label>
+    <rdfs:label xml:lang="es">Destinos Relacionados</rdfs:label>
+    <rdfs:range rdf:resource="#LocalityInt"/>
+    <rdfs:domain rdf:resource="#EditNote"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="promoChainInv"/>
+  <owl:ObjectProperty rdf:about="#newTypeInv">
+    <rdfs:label xml:lang="en">New</rdfs:label>
+    <rdfs:label xml:lang="es">Notica</rdfs:label>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasMorePhoto">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_hasMorePhoto">
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >40</swb:index>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#ObjectElement_1"/>
+        <swbxf:propGroup>
+          <swbxf:PropertyGroup rdf:ID="Fotos">
+            <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+            >150</swb:index>
+            <rdfs:label xml:lang="en">Photos</rdfs:label>
+            <rdfs:label xml:lang="es">Fotos</rdfs:label>
+          </swbxf:PropertyGroup>
+        </swbxf:propGroup>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:label xml:lang="en">More Photos</rdfs:label>
+    <rdfs:label xml:lang="es">Mas Fotos</rdfs:label>
+    <rdfs:range>
+      <swb:Class rdf:ID="Photo">
+        <rdfs:comment>Clase generica para fotos</rdfs:comment>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
+        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >false</swb:autogenId>
+        <rdfs:label xml:lang="es">Más Fotos</rdfs:label>
+        <rdfs:label xml:lang="en">More Photos</rdfs:label>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Class>
+    </rdfs:range>
+    <rdfs:domain rdf:resource="#cptmgeneralData"/>
+    <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:removeDependency>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="#hasNewGeographicPointInv">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_hasGeographicPointInv">
+        <swbxf:propGroup rdf:resource="#others"/>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#SelectMultipleModel"/>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >30</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:label xml:lang="es">Noticias</rdfs:label>
+    <rdfs:label xml:lang="en">News</rdfs:label>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasCompanyType">
+    <owl:inverseOf rdf:resource="#hasCompanyTypeInv"/>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_hasCompanyType">
+        <swbxf:propGroup rdf:resource="#others"/>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#SelectMultipleModelWithBlank"/>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >15</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:label xml:lang="en">Company Type</rdfs:label>
+    <rdfs:label xml:lang="es">Tipo de Empresa</rdfs:label>
+    <rdfs:range>
+      <swb:Class rdf:ID="CompanyType">
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
+        <rdfs:label xml:lang="en">Company Type</rdfs:label>
+        <rdfs:label xml:lang="es">Tipo de Empresa</rdfs:label>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Class>
+    </rdfs:range>
+    <rdfs:domain rdf:resource="#GeneralCompany"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasExpLocality">
+    <owl:inverseOf rdf:resource="#hasExperienceLocalityInv"/>
+    <rdfs:domain rdf:resource="#Experience"/>
+    <rdfs:range rdf:resource="#LocalityInt"/>
+    <rdfs:comment>Destinos referenciados a una Experiencia</rdfs:comment>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_hasExpLocality">
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >10</swb:index>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#SelectMultipleModelWithBlank"/>
+        <swbxf:propGroup rdf:resource="#others"/>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:label xml:lang="es">Destinos</rdfs:label>
+    <rdfs:label xml:lang="en">Referenced</rdfs:label>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasTravelRouteLocality">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_hasDestination">
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >200</swb:index>
+        <swbxf:propGroup rdf:resource="#others"/>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#SelectMultipleModel"/>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:domain rdf:resource="#TravelRoute"/>
+    <owl:inverseOf rdf:resource="#hasTravelRouteInv"/>
+    <rdfs:range rdf:resource="#LocalityInt"/>
+    <rdfs:label xml:lang="es">Destinos</rdfs:label>
+    <rdfs:label xml:lang="en">Destinations</rdfs:label>
+  </owl:ObjectProperty>
+  <owl:DatatypeProperty rdf:ID="internalURL">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_internalURL">
+        <swbxf:propGroup>
+          <swbxf:PropertyGroup rdf:ID="internalRedirect">
+            <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+            >100</swb:index>
+            <rdfs:label xml:lang="en">Internal Redirect Selection</rdfs:label>
+            <rdfs:label xml:lang="es">Selección de Redirección Interna</rdfs:label>
+          </swbxf:PropertyGroup>
+        </swbxf:propGroup>
+        <swbxf:formElement>
+          <cptm:TreeSelect rdf:ID="TreeSelect_1"/>
+        </swbxf:formElement>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >10</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:label xml:lang="es">Página interna de redirección</rdfs:label>
+    <rdfs:label xml:lang="en">Internal URL</rdfs:label>
+    <rdfs:comment>URL interna de redirección de la página</rdfs:comment>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#How2Travel"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="cptm_latitude">
+    <rdfs:label xml:lang="es">Latitud</rdfs:label>
+    <rdfs:label xml:lang="en">Latitude</rdfs:label>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_latitude">
+        <swbxf:propGroup rdf:resource="#others"/>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >5</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
+    <rdfs:domain rdf:resource="#cptmGeo"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="destWeather">
+    <rdfs:domain rdf:resource="#GeographicPoint"/>
+    <rdfs:label xml:lang="en">Weather string</rdfs:label>
+    <rdfs:label xml:lang="es">Cadena de clima</rdfs:label>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_destWeather">
+        <swbxf:propGroup rdf:resource="#others"/>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextBox"/>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >10</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="photo">
+    <rdfs:label xml:lang="es">Foto Principal</rdfs:label>
+    <rdfs:label xml:lang="en">Main Photo</rdfs:label>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_photo">
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >20</swb:index>
+        <swbxf:formElement>
+          <swb:DojoImageUpload rdf:ID="DojoImageUploadCptm">
+            <swbxf:fileMaxSize rdf:datatype="http://www.w3.org/2001/XMLSchema#long"
+            >300000</swbxf:fileMaxSize>
+            <swbxf:imgThumbnail rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+            >false</swbxf:imgThumbnail>
+            <swbxf:fileFilter rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            > jpg file:*.jpg|jpeg file:*.jpeg|png file:*.png</swbxf:fileFilter>
+            <swbxf:imgCrop rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+            >false</swbxf:imgCrop>
+          </swb:DojoImageUpload>
+        </swbxf:formElement>
+        <swbxf:propGroup rdf:resource="#Fotos"/>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#cptmgeneralData"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="longitude">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_longitude">
+        <swbxf:propGroup rdf:resource="#others"/>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >6</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#double"/>
+    <rdfs:domain rdf:resource="#LocalityInt"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="isLeadingEvent">
+    <rdfs:domain rdf:resource="#Event"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+    <rdfs:comment>Definie si es un evento destacado o no lo es</rdfs:comment>
+    <rdfs:label xml:lang="en">Leading Event</rdfs:label>
+    <rdfs:label xml:lang="es">Evento destacado</rdfs:label>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_isLeadingEvent">
+        <swbxf:propGroup rdf:resource="#others"/>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >100</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="URLpromotion">
+    <rdfs:domain rdf:resource="#Promotion"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:label xml:lang="es">URL de promotión</rdfs:label>
+    <rdfs:label xml:lang="en">URL promotion</rdfs:label>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_URLpromotion">
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >10</swb:index>
+        <swbxf:propGroup rdf:resource="#others"/>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="eventInitDate">
+    <rdfs:domain rdf:resource="#Event"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:comment>Fecha de Inicio del Evento</rdfs:comment>
+    <rdfs:label xml:lang="es">Fecha de Inicio</rdfs:label>
+    <rdfs:label xml:lang="en">Start date</rdfs:label>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_eventInitDate">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#DateElement_1"/>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >110</swb:index>
+        <swbxf:propGroup rdf:resource="#others"/>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="remoteModelRel">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_remoteModelRel">
+        <swbxf:propGroup rdf:resource="#cptmRemoteRelations"/>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextBox"/>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >10</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:label xml:lang="en">Remote Model</rdfs:label>
+    <rdfs:label xml:lang="es">Modelo Remoto</rdfs:label>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#ModelRelation"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="photoAlt">
+    <rdfs:label xml:lang="es">Texto Alterno de Foto Principal</rdfs:label>
+    <rdfs:domain rdf:resource="#cptmgeneralData"/>
+    <rdfs:label xml:lang="en">Alt Text of Photo</rdfs:label>
+    <rdfs:comment>Campo para capturar algún texto alterno para la foto, este es localizado</rdfs:comment>
+    <swb:localeable rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:localeable>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_photoAlt">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextBox"/>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >22</swb:index>
+        <swbxf:propGroup rdf:resource="#Fotos"/>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="cptmAbstractDescription">
+    <rdfs:domain rdf:resource="#cptmDescriptionPage"/>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_cptmAbstractDescription">
+        <swbxf:propGroup>
+          <swbxf:PropertyGroup rdf:ID="AbstractDescription">
+            <rdfs:label xml:lang="en">Abstract Description</rdfs:label>
+            <rdfs:label xml:lang="es">Descripción Abstracta</rdfs:label>
+            <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+            >150</swb:index>
+          </swbxf:PropertyGroup>
+        </swbxf:propGroup>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextArea_Description"/>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >5</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:label xml:lang="es">Descripción Foto Contenido</rdfs:label>
+    <swb:localeable rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:localeable>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:label xml:lang="en">Photo Content Descripción</rdfs:label>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="eventIsWithoutLink">
+    <rdfs:domain rdf:resource="#Event"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+    <rdfs:label xml:lang="es">Sin Lliga</rdfs:label>
+    <rdfs:label xml:lang="en">WithOut link</rdfs:label>
+    <rdfs:comment>Propiedad con la cual se puede especificar si un evento no tiene liga</rdfs:comment>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_eventIsWithoutLink">
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >110</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="noteHomeIndex">
+    <rdfs:domain rdf:resource="#EditNote"/>
+    <rdfs:label xml:lang="es">Número de Ordenamiento en Home</rdfs:label>
+    <rdfs:label xml:lang="en">Home Sort Index</rdfs:label>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_noteHomeIndex">
+        <swbxf:propGroup rdf:resource="#others"/>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >30</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="sm2_nullSuport">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >nullSuport</swb:propertyCodeName>
+    <rdfs:domain>
+      <swb:FormElement rdf:ID="SelectMultiple2">
+        <rdfs:label xml:lang="es">Select Multiple 2</rdfs:label>
+        <rdfs:comment>Select Multiple2</rdfs:comment>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBFormElement"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:FormElement>
+    </rdfs:domain>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="cptmHiddenTopic">
+    <rdfs:label xml:lang="en">Hidden Topic for Cptm</rdfs:label>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+    <rdfs:comment>Sección oculta</rdfs:comment>
+    <rdfs:label xml:lang="es">Sección oculta de Cptm</rdfs:label>
+    <rdfs:domain rdf:resource="#CPTMGeneralWebPage"/>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_cptmHiddenTopic">
+        <swbxf:propGroup rdf:resource="#others"/>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="PhotoImage">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_PhotoImage">
+        <swbxf:formElement>
+          <swb:DojoImageUpload rdf:ID="dojoEscudoUpload">
+            <swbxf:fileMaxSize rdf:datatype="http://www.w3.org/2001/XMLSchema#long"
+            >300000</swbxf:fileMaxSize>
+            <swbxf:fileFilter rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            > jpg file:*.jpg|jpeg file:*.jpeg|png file:*.png</swbxf:fileFilter>
+            <swbxf:imgCrop rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+            >false</swbxf:imgCrop>
+          </swb:DojoImageUpload>
+        </swbxf:formElement>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:domain rdf:resource="#Photo"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:comment>Imagen de la foto</rdfs:comment>
+    <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >false</swb:required>
+    <rdfs:label xml:lang="es">Foto</rdfs:label>
+    <rdfs:label xml:lang="en">Photo</rdfs:label>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="isRepeatable">
+    <rdfs:label xml:lang="en">is Repeatable</rdfs:label>
+    <rdfs:label xml:lang="es">Es Repetible</rdfs:label>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_isRepeatable">
+        <swbxf:propGroup rdf:resource="#others"/>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >121</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:comment>Determina si el evento se repite en la misma fecha indicada de inicio y de fin</rdfs:comment>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+    <rdfs:domain rdf:resource="#Event"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="sm2_globalScope">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >globalScope</swb:propertyCodeName>
+    <rdfs:domain rdf:resource="#SelectMultiple2"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="eventLeadingPhoto">
+    <rdfs:label xml:lang="en">Photo to Leading Event</rdfs:label>
+    <rdfs:label xml:lang="es">Foto para evento Destacado</rdfs:label>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_LeadingPhoto">
+        <swbxf:propGroup rdf:resource="#Fotos"/>
+        <swbxf:formElement>
+          <swb:DojoImageUpload rdf:ID="dojoLeadingPhotoUpload">
+            <swbxf:imgMaxWidth rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+            >353</swbxf:imgMaxWidth>
+            <swbxf:imgMaxHeight rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+            >109</swbxf:imgMaxHeight>
+            <swbxf:fileFilter rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            > jpg file:*.jpg|jpeg file:*.jpeg|png file:*.png</swbxf:fileFilter>
+          </swb:DojoImageUpload>
+        </swbxf:formElement>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >35</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >leadingPhoto</swb:propertyCodeName>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#Event"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="videoyoutube">
+    <rdfs:label xml:lang="en">Video</rdfs:label>
+    <rdfs:label xml:lang="es">Cadena de Video</rdfs:label>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_videoyoutube">
+        <swbxf:propGroup rdf:resource="#others"/>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >11</swb:index>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextBox"/>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:comment>Id de video de youtube</rdfs:comment>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#videoable"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="isathome">
+    <rdfs:label xml:lang="es">Colocar en home</rdfs:label>
+    <rdfs:label xml:lang="en">at Home</rdfs:label>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_isathome">
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >20</swb:index>
+        <swbxf:propGroup rdf:resource="#others"/>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+    <rdfs:domain rdf:resource="#EditNote"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="photoEscudoAlt">
+    <rdfs:label xml:lang="en">Alt Text for Secundary Photo</rdfs:label>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:comment>Texto alterno para imagen de Escudo, localizable</rdfs:comment>
+    <rdfs:domain rdf:resource="#cptmgeneralData"/>
+    <rdfs:label xml:lang="es">Texto Alterno para Foto Secundaria</rdfs:label>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_photoEscudoAlt">
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >31</swb:index>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextBox"/>
+        <swbxf:propGroup rdf:resource="#Fotos"/>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <swb:localeable rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:localeable>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="eventInternalURL">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_eventInternalURL">
+        <swbxf:formElement rdf:resource="#TreeSelect_1"/>
+        <swbxf:propGroup rdf:resource="#internalRedirect"/>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:label xml:lang="en">Internal URL</rdfs:label>
+    <rdfs:label xml:lang="es">Página interna de redirección</rdfs:label>
+    <rdfs:comment>Redireccionamiento a sección interna de la instancia de SWB</rdfs:comment>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#Event"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="cptm_longitude">
+    <rdfs:label xml:lang="es">Longitud</rdfs:label>
+    <rdfs:label xml:lang="en">Longitude</rdfs:label>
+    <swb:displayProperty rdf:resource="#dp_longitude"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
+    <rdfs:domain rdf:resource="#cptmGeo"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="remoteWebPageRel">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_remoteWebPageRel">
+        <swbxf:propGroup rdf:resource="#cptmRemoteRelations"/>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextBox"/>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >20</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:label xml:lang="en">Remote WebPage ID</rdfs:label>
+    <rdfs:label xml:lang="es">ID de Página Remota</rdfs:label>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#ModelRelation"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="eventEndDate">
+    <rdfs:domain rdf:resource="#Event"/>
+    <rdfs:comment>Fecha final del Evento</rdfs:comment>
+    <rdfs:label xml:lang="es">Fecha de Fin</rdfs:label>
+    <rdfs:label xml:lang="en">End Date</rdfs:label>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_eventEndDate">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#DateElement_1"/>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >120</swb:index>
+        <swbxf:propGroup rdf:resource="#others"/>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="latitude">
+    <swb:displayProperty rdf:resource="#dp_latitude"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#double"/>
+    <rdfs:domain rdf:resource="#LocalityInt"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="photoAuthor">
+    <rdfs:domain rdf:resource="#cptmgeneralData"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:comment>Nombre del autor de la foto principal</rdfs:comment>
+    <rdfs:label xml:lang="es">Autor de Foto Principal</rdfs:label>
+    <rdfs:label xml:lang="en">Main Photo Author</rdfs:label>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_photoAuthor">
+        <swbxf:propGroup rdf:resource="#Fotos"/>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >21</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="eventURL">
+    <rdfs:domain rdf:resource="#Event"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:label xml:lang="es">URL externo</rdfs:label>
+    <rdfs:label xml:lang="en">External URL</rdfs:label>
+    <rdfs:comment>URL externo, el cual debe ser colocado solo cuando se desee ver el evento en un sitio externo</rdfs:comment>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_eventURL">
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >100</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="isinHome">
+    <rdfs:label xml:lang="es">Se despliega en la principal</rdfs:label>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+    <rdfs:label xml:lang="en">Is in home</rdfs:label>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="editNoteInternalURL">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_editNoteInternalURL">
+        <swbxf:propGroup rdf:resource="#internalRedirect"/>
+        <swbxf:formElement rdf:resource="#TreeSelect_1"/>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:comment>Redirección a una ágina interna de la instancia de SWB</rdfs:comment>
+    <rdfs:label xml:lang="en">Internal URL</rdfs:label>
+    <rdfs:label xml:lang="es">Página interna de redirección</rdfs:label>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#EditNote"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="URLTargetPromotion">
+    <rdfs:domain rdf:resource="#Promotion"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_URLTargetPromotion">
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >15</swb:index>
+        <swbxf:propGroup rdf:resource="#others"/>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:label>Target</rdfs:label>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="hasfiles">
+    <rdfs:label xml:lang="es">Archivo</rdfs:label>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_file">
+        <swbxf:formElement>
+          <swb:DojoFileUpload rdf:ID="fUploadTest">
+            <swbxf:fileMaxSize rdf:datatype="http://www.w3.org/2001/XMLSchema#long"
+            >5000000</swbxf:fileMaxSize>
+          </swb:DojoFileUpload>
+        </swbxf:formElement>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:label xml:lang="en">File</rdfs:label>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="photoEscudo">
+    <rdfs:label xml:lang="es">Foto Secundaria</rdfs:label>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_photoEscudo">
+        <swbxf:formElement rdf:resource="#dojoEscudoUpload"/>
+        <swbxf:propGroup rdf:resource="#Fotos"/>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >30</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#cptmgeneralData"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="PhotoAlt">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_PhotoAlt">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextBox"/>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#Photo"/>
+    <rdfs:comment>Texto Alterno de la Foto</rdfs:comment>
+    <rdfs:label xml:lang="es">Texto Alterno de la Foto</rdfs:label>
+    <rdfs:label xml:lang="en">Photo Alt Text</rdfs:label>
+    <swb:localeable rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:localeable>
+  </owl:DatatypeProperty>
+  <swbxf:DisplayProperty rdf:ID="dp_proxGeographicPoint">
+    <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#selectOneModel"/>
+    <swbxf:propGroup rdf:resource="#others"/>
+    <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+    >10</swb:index>
+  </swbxf:DisplayProperty>
+  <swbxf:DisplayProperty rdf:ID="dp_hasLocalityProx">
+    <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#SelectMultipleModel"/>
+    <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+    >20</swb:index>
+    <swbxf:propGroup rdf:resource="#others"/>
+  </swbxf:DisplayProperty>
+  <swbxf:DisplayProperty rdf:ID="dp_festLocality">
+    <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+    >200</swb:index>
+    <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#selectOneModel"/>
+    <swbxf:propGroup rdf:resource="#others"/>
+  </swbxf:DisplayProperty>
+  <swbxf:DisplayProperty rdf:ID="dp_EventDestinationProp">
+    <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+    >200</swb:index>
+    <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#selectOneModel"/>
+    <swbxf:propGroup rdf:resource="#others"/>
+  </swbxf:DisplayProperty>
+  <swb:FlashImageUpload rdf:ID="FlashImageUpload_1"/>
+  <swbxf:DisplayProperty rdf:ID="dp_isMagicCounty">
+    <swbxf:propHidden rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swbxf:propHidden>
+    <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+    >6</swb:index>
+  </swbxf:DisplayProperty>
+  <swb:Class rdf:ID="EmailText">
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Sortable"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
+    <rdfs:label xml:lang="es">Texto de Email</rdfs:label>
+    <rdfs:label xml:lang="en">Email Text</rdfs:label>
+    <rdfs:comment>Clase que se encarga de administrar textos para correos electrónicos</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </swb:Class>
+  <swbxf:DisplayProperty rdf:ID="dp_TravelStyleDestinationProp">
+    <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+    >200</swb:index>
+    <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#selectOneModel"/>
+    <swbxf:propGroup rdf:resource="#others"/>
+  </swbxf:DisplayProperty>
+  <swbxf:DisplayProperty rdf:ID="dp_hasEvent">
+    <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+    >190</swb:index>
+    <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#SelectMultipleModel"/>
+  </swbxf:DisplayProperty>
+  <swb:Class rdf:ID="Parameter">
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Sortable"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
+    <rdfs:comment>Clase que se encarga de administrar parametros en general que puedan ser utilizados en el desarrollo del sistema.</rdfs:comment>
+    <rdfs:label xml:lang="es">Parametro</rdfs:label>
+    <rdfs:label xml:lang="en">Parameter</rdfs:label>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </swb:Class>
+  <swbxf:DisplayProperty rdf:ID="dp_hasDestPhotos">
+    <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+    >10</swb:index>
+    <swbxf:propGroup rdf:resource="#Fotos"/>
+    <swbxf:formElement rdf:resource="#DojoImageUploadCptm"/>
+  </swbxf:DisplayProperty>
+  <swbxf:DisplayProperty rdf:ID="dp_hasDestinationExperienceInv">
+    <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#SelectMultipleModel"/>
+    <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+    >200</swb:index>
+  </swbxf:DisplayProperty>
+  <swbxf:DisplayProperty rdf:ID="dp_cptm_latitude">
+    <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextBox"/>
+  </swbxf:DisplayProperty>
+  <swbxf:DisplayProperty rdf:ID="dp_isAttractive">
+    <swbxf:propHidden rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swbxf:propHidden>
+    <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+    >7</swb:index>
+  </swbxf:DisplayProperty>
+  <swbxf:DisplayProperty rdf:ID="dp_isDestination">
+    <swbxf:propHidden rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swbxf:propHidden>
+    <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+    >5</swb:index>
+  </swbxf:DisplayProperty>
+  <swbxf:DisplayProperty rdf:ID="dp_destPrincipalPhoto">
+    <swbxf:formElement rdf:resource="#DojoImageUploadCptm"/>
+    <swbxf:propGroup rdf:resource="#Fotos"/>
+    <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+    >200</swb:index>
+  </swbxf:DisplayProperty>
+  <swbxf:DisplayProperty rdf:ID="dp_hasGeographicPoint">
+    <swbxf:propGroup rdf:resource="#others"/>
+    <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#SelectMultipleModel"/>
+    <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+    >200</swb:index>
+  </swbxf:DisplayProperty>
+  <swb:SWBFormElement rdf:ID="destinationFlashPhotos"/>
+  <swb:Class rdf:ID="Canal">
+    <rdfs:subClassOf rdf:resource="#CPTMGeneralWebPage"/>
+    <rdfs:comment>Objeto que se encarga de administrar el catálogo de Canales del sitio (Ej. Destinos, Actividades).</rdfs:comment>
+    <swb:displayObject rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#do_WebPage"/>
+    <rdfs:label xml:lang="en">Canal</rdfs:label>
+    <rdfs:label xml:lang="es">Canal</rdfs:label>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </swb:Class>
+  <swbxf:DisplayProperty rdf:ID="dp_tsrefLocality">
+    <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+    >200</swb:index>
+    <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#selectOneModel"/>
+    <swbxf:propGroup rdf:resource="#others"/>
+  </swbxf:DisplayProperty>
+  <swb:SWBFormElement rdf:ID="dojoImageUploadCptm"/>
+  <swbxf:DisplayObject rdf:ID="cptm_doWebPageHidden">
+    <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >swbIconWebPage</swb:iconClass>
+    <swbxf:dropMatchLevel rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+    >2</swbxf:dropMatchLevel>
+    <swbxf:dragSupport rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swbxf:dragSupport>
+    <swbxf:doNotInstanceable rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swbxf:doNotInstanceable>
+  </swbxf:DisplayObject>
+  <swbxf:DisplayProperty rdf:ID="dp_hasDestinationActivity">
+    <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+    >200</swb:index>
+    <swbxf:propGroup rdf:resource="#others"/>
+    <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#SelectMultipleModel"/>
+  </swbxf:DisplayProperty>
+  <swbxf:DisplayProperty rdf:ID="dp_arefShowasChild">
+    <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+    >300</swb:index>
+    <swbxf:propGroup rdf:resource="#others"/>
+  </swbxf:DisplayProperty>
+  <swbxf:DisplayProperty rdf:ID="dp_acttPhoto">
+    <swbxf:formElement rdf:resource="#DojoImageUploadCptm"/>
+    <swbxf:propGroup rdf:resource="#others"/>
+    <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+    >10</swb:index>
+  </swbxf:DisplayProperty>
+  <swbxf:DisplayProperty rdf:ID="dp_noteUrl">
+    <swbxf:propGroup rdf:resource="#others"/>
+    <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+    >40</swb:index>
+  </swbxf:DisplayProperty>
+  <swbxf:DisplayProperty rdf:ID="dp_hasNew">
+    <swbxf:propGroup rdf:resource="#others"/>
+    <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#SelectMultipleModel"/>
+    <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+    >200</swb:index>
+  </swbxf:DisplayProperty>
+  <swb:FormElement rdf:ID="TreeSelect">
+    <rdfs:label>TreeSelect</rdfs:label>
+    <rdfs:comment>TreeSelect</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBFormElement"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </swb:FormElement>
+  <swbxf:DisplayProperty rdf:ID="dp_companyBrandPromotion">
+    <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+    >50</swb:index>
+    <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#ObjectElement_1"/>
+    <swbxf:propGroup rdf:resource="#others"/>
+  </swbxf:DisplayProperty>
+  <swb:FlashImageUpload rdf:ID="destFlashPhoto">
+    <swbxf:imgMaxWidth rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+    >89</swbxf:imgMaxWidth>
+    <swbxf:imgMaxHeight rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+    >67</swbxf:imgMaxHeight>
+    <swbxf:imgCrop rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swbxf:imgCrop>
+    <swbxf:fileMaxSize rdf:datatype="http://www.w3.org/2001/XMLSchema#long"
+    >5000000</swbxf:fileMaxSize>
+    <swbxf:fileFilter rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >jpg file:*.jpg|jpeg file:*.jpeg|png file:*.png</swbxf:fileFilter>
+  </swb:FlashImageUpload>
+  <swbxf:DisplayProperty rdf:ID="dp_notePhoto">
+    <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+    >70</swb:index>
+    <swbxf:formElement rdf:resource="#DojoImageUploadCptm"/>
+  </swbxf:DisplayProperty>
+  <swbxf:DisplayProperty rdf:ID="dp_tsrefTravelStyle">
+    <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+    >100</swb:index>
+    <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#selectOneModel"/>
+    <swbxf:propGroup rdf:resource="#others"/>
+  </swbxf:DisplayProperty>
+  <swbxf:DisplayProperty rdf:ID="dp_festFestivity">
+    <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+    >100</swb:index>
+    <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#selectOneModel"/>
+    <swbxf:propGroup rdf:resource="#others"/>
+  </swbxf:DisplayProperty>
+  <swbxf:DisplayProperty rdf:ID="dp_hasTravelStyle">
+    <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#SelectMultipleModel"/>
+    <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+    >220</swb:index>
+  </swbxf:DisplayProperty>
+  <swbxf:DisplayProperty rdf:ID="dp_hasDestinationExperience">
+    <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#SelectMultipleModel"/>
+    <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+    >210</swb:index>
+  </swbxf:DisplayProperty>
+  <swbxf:DisplayProperty rdf:ID="dp_noteindex">
+    <swbxf:propGroup rdf:resource="#others"/>
+    <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+    >10</swb:index>
+  </swbxf:DisplayProperty>
+  <swbxf:DisplayProperty rdf:ID="dp_hasDestinationTravelRouteInv">
+    <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#SelectMultipleModel"/>
+    <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+    >300</swb:index>
+    <swbxf:propGroup rdf:resource="#others"/>
+  </swbxf:DisplayProperty>
+  <swbxf:DisplayProperty rdf:ID="dp_hasTravelStyleInv">
+    <swbxf:propGroup rdf:resource="#others"/>
+    <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#SelectMultipleModel"/>
+    <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+    >200</swb:index>
+  </swbxf:DisplayProperty>
+  <swbxf:DisplayProperty rdf:ID="dp_hasCompChainPromotion">
+    <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+    >50</swb:index>
+    <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#ObjectElement_1"/>
+    <swbxf:propGroup rdf:resource="#others"/>
+  </swbxf:DisplayProperty>
+  <swbxf:DisplayProperty rdf:ID="dp_hasDestinationActivityInv">
+    <swbxf:propGroup rdf:resource="#others"/>
+    <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#SelectMultipleModel"/>
+    <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+    >200</swb:index>
+  </swbxf:DisplayProperty>
+  <swb:Model rdf:ID="CPTMWebSite">
+    <swb:hasHerarquicalNode rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_PFlows"/>
+    <swb:hasHerarquicalNode rdf:resource="http://www.semanticwebbuilder.org/swb4/community#hn_CommUtils"/>
+    <swb:hasHerarquicalNode rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_Dnss"/>
+    <rdfs:comment>Clase que hereda de swb:WebSite. Es un tipo de website para CPTM. De esta manera se puede contar con todos los elementos en el arbol de navegación en la administración, y otros elementos utiles para CPTM.</rdfs:comment>
+    <swb:hasClass rdf:resource="#Canal"/>
+    <swb:hasHerarquicalNode rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_Camps"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#WebSite"/>
+    <swb:hasHerarquicalNode rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_Rules"/>
+    <swb:hasClass rdf:resource="#Region"/>
+    <swb:hasClass rdf:resource="#CPTMWebPage"/>
+    <swb:hasHerarquicalNode rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_Languages"/>
+    <swb:hasClass rdf:resource="http://www.semanticwebbuilder.org/swb4/community#MicroSiteWebPageUtil"/>
+    <swb:hasClass rdf:resource="#Event"/>
+    <swb:hasClass rdf:resource="#EditNote"/>
+    <swb:hasHerarquicalNode rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_PTStrategies"/>
+    <swb:hasHerarquicalNode rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_Devices"/>
+    <swb:hasClass rdf:resource="#TravelRouteType"/>
+    <swb:hasHerarquicalNode rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_Countries"/>
+    <swb:hasClass rdf:resource="#Experience"/>
+    <swb:hasClass rdf:resource="#Activity"/>
+    <swb:hasClass rdf:resource="#ExperienceRef"/>
+    <swb:hasHerarquicalNode rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_Collections"/>
+    <swb:hasHerarquicalNode rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_PTSystems"/>
+    <swb:hasClass rdf:resource="#GeographicPoint"/>
+    <swb:hasHerarquicalNode rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_MetaTags"/>
+    <swb:hasClass rdf:resource="http://www.semanticwebbuilder.org/swb4/community#MicroSite"/>
+    <swb:hasClass rdf:resource="#How2Travel"/>
+    <swb:hasHerarquicalNode rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_PTContents"/>
+    <swb:hasClass rdf:resource="#TravelRoute"/>
+    <swb:hasClass rdf:resource="#EditNoteBase"/>
+    <swb:hasClass rdf:resource="#ExperienceType"/>
+    <swb:hasClass rdf:resource="#EventType"/>
+    <swb:hasClass rdf:resource="#ActivityType"/>
+    <swb:hasHerarquicalNode rdf:resource="http://www.semanticwebbuilder.org/swb4/community#hn_MicroSiteTypes"/>
+    <swb:hasClass rdf:resource="#State"/>
+    <swb:hasHerarquicalNode rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_Calendars"/>
+    <rdfs:label>Sitio de CPTM</rdfs:label>
+    <swb:hasClass rdf:resource="#RegionalBrand"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <swb:hasClass rdf:resource="#ActivityRef"/>
+    <swb:hasHerarquicalNode rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_Templates"/>
+    <swb:hasHerarquicalNode rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_ResourceCollections"/>
+    <swb:displayObject rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#do_AdminWebSite"/>
+    <swb:hasHerarquicalNode rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_Roles"/>
+  </swb:Model>
+  <swbxf:DisplayProperty rdf:ID="dp_noteCanal">
+    <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+    >20</swb:index>
+    <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#selectOneModelWithBlank"/>
+  </swbxf:DisplayProperty>
+  <swb:CodePackage rdf:ID="pkg">
+    <swb:package rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >org.semanticwb.cptm</swb:package>
+    <swb:prefix rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >cptm</swb:prefix>
+  </swb:CodePackage>
+</rdf:RDF>
+
+<!-- Created with TopBraid Composer -->
