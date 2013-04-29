@@ -194,6 +194,7 @@ public class LongFileUploader extends GenericResource {
                 parameter = frmParameter;
                 classUri = frmClass;
                 propertyName = frmProperty;
+                out.print("<script type=\"text/javascript\">showStatus('Configuración actualizada');</script>");
             } catch (Exception e) {
                 log.error(e);
             }
@@ -209,7 +210,7 @@ public class LongFileUploader extends GenericResource {
         out.println(new StringBuilder().append(
                 "<form dojoType=\"dijit.form.Form\" id=\"").append(
                 getResourceBase().getId()).append("/frmPath\" action=\"").append(
-                paramRequest.getRenderUrl()).append("\" method=\"post\" >").toString());
+                paramRequest.getRenderUrl()).append("\" method=\"post\" class=\"swbform\"  >").toString());
         out.println("<input type=\"hidden\" name=\"act\" value=\"upd\">");
 
         out.println("<fieldset>");
