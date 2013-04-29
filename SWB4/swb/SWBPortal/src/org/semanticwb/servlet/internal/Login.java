@@ -768,7 +768,7 @@ public class Login implements InternalServlet
              while(llist.hasNext()){
                  SWBSessionObject so = llist.next();
                  Iterator<Principal> lpri = so.getSubjectByUserRep(usserrep).getPrincipals().iterator();
-                 if (lpri.hasNext() && ((User)lpri.next()).getLogin().equalsIgnoreCase(login))
+                 if (lpri.hasNext() && login.equalsIgnoreCase(((User)lpri.next()).getLogin()))
                      throw new LoginException("User already logged in");
              }
         }
