@@ -73,6 +73,13 @@ public class InstallZipThread extends java.lang.Thread {
     public void run() {
         try {
             String modelspath = SWBPortal.getWorkPath() + "/models/";
+            
+            //Begins New 29/Abril/2013
+            String siteTemplateTmpPath= SWBPortal.getWorkPath() + "/sitetemplates/tmp/";    
+            File dirUnzipTmp=new File(siteTemplateTmpPath);
+            if(!dirUnzipTmp.exists()) dirUnzipTmp.mkdirs();
+            //Ends New
+                
             if (file2read == null) {
                 file2read = "siteInfo.xml";
             }
@@ -111,7 +118,9 @@ public class InstallZipThread extends java.lang.Thread {
                     newTitle = oldTitle;
                     newWebSiteTitle = oldTitle;
                 }
-                java.io.File extractTo = new File(modelspath + newId);
+                //java.io.File extractTo = new File(modelspath + newId);
+                File extractTo = new File(dirUnzipTmp + "/" + newId);
+                File newModelDir= new File(modelspath + newId);
                 //Descomprimir zip
                 org.semanticwb.SWBUtils.IO.unzip(zipFile, extractTo);
                 //Mover directorios de modelos a directorio work leyendo rdfs
@@ -120,7 +129,7 @@ public class InstallZipThread extends java.lang.Thread {
                     File file = fieldsUnziped[i];
                     if (file.isDirectory()) { //
                         if (file.getName().equals(oldIDModel)) { //Es la carpeta del modelo principal a cargar
-                            SWBUtils.IO.copyStructure(file.getAbsolutePath() + "/", extractTo.getAbsolutePath() + "/");
+                            SWBUtils.IO.copyStructure(file.getAbsolutePath() + "/", newModelDir.getAbsolutePath() + "/");
                             SWBUtils.IO.removeDirectory(file.getAbsolutePath());
                         } else {
                             if (file.getName().endsWith("_usr") || file.getName().endsWith("_rep")) {
@@ -133,7 +142,7 @@ public class InstallZipThread extends java.lang.Thread {
                                     wbmodelType = "_rep";
                                 }
 
-                                SWBUtils.IO.copyStructure(file.getAbsolutePath(), extractTo.getAbsolutePath() + wbmodelType + "/");
+                                SWBUtils.IO.copyStructure(file.getAbsolutePath(), newModelDir.getAbsolutePath() + wbmodelType + "/");
                                 SWBUtils.IO.removeDirectory(file.getAbsolutePath());
                             } else { //Puede ser un submodelo tipo sitio
                                 //TODO
@@ -149,7 +158,7 @@ public class InstallZipThread extends java.lang.Thread {
                 
                 //Parseo de nombre de NameSpace anteriores por nuevos
                 String newNs = "http://www." + newId + ".swb#";
-                File fileModel = new File(modelspath + newId + "/" + oldIDModel + ".nt");
+                File fileModel = new File(dirUnzipTmp + "/" + newId + "/" + oldIDModel + ".nt");
                 FileInputStream frdfio = new FileInputStream(fileModel);
                 InputStream io=frdfio;
                 if(!oldNamespace.equals(newNs))
@@ -195,7 +204,7 @@ public class InstallZipThread extends java.lang.Thread {
                         }
                     }
                     //Buscar rdf del submodelo
-                    fileModel = new File(modelspath + newId + "/" + xmodelID + ".nt");
+                    fileModel = new File(dirUnzipTmp + "/" + newId + "/" + xmodelID + ".nt");
                     if (fileModel != null && fileModel.exists()) {
                         frdfio = new FileInputStream(fileModel);
                         String rdfmodel = SWBUtils.IO.readInputStream(frdfio);
@@ -230,6 +239,7 @@ public class InstallZipThread extends java.lang.Thread {
                         fileModel.delete();
                     }
                 }
+                extractTo.delete(); //Elimina directorio temporal de sitio en /work/sitetemplates/[newID]/
                 istatus = 80;
                 if (website != null) {
                     Iterator<ResourceType> it = website.listResourceTypes();
