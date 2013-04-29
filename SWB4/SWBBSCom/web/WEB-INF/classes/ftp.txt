@@ -1,0 +1,15 @@
+WEB-INF
+WEB-INF/classes
+work
+swbadmin
+applets
+WEB-INF/lib
+WEB-INF/topicmaps
+swbutil
+WEB-INF/classes/db.properties
+WEB-INF/classes/license.properties
+WEB-INF/classes/topicmaps.properties
+WEB-INF/classes/user.properties
+WEB-INF/classes/web.properties
+WEB-INF/web.xml
+WEB-INF/classes/ftp.txt
