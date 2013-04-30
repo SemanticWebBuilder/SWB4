@@ -380,15 +380,15 @@
     </swb:hasHerarquicalNode>
     <swb:hasHerarquicalNode>
       <swbxf:HerarquicalNode rdf:ID="hn_SocialPFlow">
-        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >50</swb:index>
+        <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >swbSocialIconPFlows</swb:iconClass>
         <swbxf:heClass>
           <owl:Class rdf:ID="SocialPFlow"/>
         </swbxf:heClass>
         <swb:title xml:lang="en">Social PFlow</swb:title>
         <swb:title xml:lang="es">Flujo Social</swb:title>
-        <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >swbIconPFlows</swb:iconClass>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >50</swb:index>
       </swbxf:HerarquicalNode>
     </swb:hasHerarquicalNode>
     <swb:hasClass>
@@ -469,7 +469,7 @@
     <swb:displayObject>
       <swbxf:DisplayObject rdf:ID="do_IconPflow">
         <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >swbIconPFlow</swb:iconClass>
+        >swbSocialIconPFlow</swb:iconClass>
       </swbxf:DisplayObject>
     </swb:displayObject>
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Filterable"/>
@@ -565,6 +565,13 @@
   <owl:ObjectProperty rdf:ID="pfinstResource">
     <rdfs:range>
       <swb:Class rdf:ID="PostOut">
+        <rdfs:subClassOf>
+          <swb:Interface rdf:ID="SocialPFlowRefable">
+            <rdfs:comment>Interfaz que define propiedades para elementos que pueden tener referencia a flujos de publicacion</rdfs:comment>
+            <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Referensable"/>
+            <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+          </swb:Interface>
+        </rdfs:subClassOf>
         <rdfs:comment>Clase que comprende todos los tipos de Post de Salida que pueden ir siendo creados en la herramienta y que seran publicados a partir de esto en las diferentes redes sociales. Esta clase no se relaciona con una red social (con la clase SocialNetwork) porque un post de salida (desde la herramienta) podría ser enviado a diferentes redes sociales, sin embargo, es el mismo post de salida. Donde esta a que red social se envía esta en las instancias de la clase PostContainer.</rdfs:comment>
         <rdfs:subClassOf>
           <swb:Class rdf:ID="Post">
@@ -792,6 +799,14 @@
     <rdfs:domain rdf:resource="#PostIn"/>
     <rdfs:range rdf:resource="#SocialNetworkUser"/>
     <rdfs:comment>Usuario creador del Post que llega por el Listener (PostIn). TODO: Al borrar un PostIn, no borro al SocialNetworkUser porque este podría obviamente tenear mas PostIn asociados. Tengo que despues revisar para que si ya un usuario no tiene PostIn(Porque x algun modo se hayan borrado) borre al SocialNetworkUser, ya que de no ser así se quedaran como basura en la BD, haciendo que esta cresca muchisimo.</rdfs:comment>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasPFlowRef">
+    <rdfs:range rdf:resource="#SocialPFlowRef"/>
+    <swb:inheritProperty rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:inheritProperty>
+    <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:removeDependency>
+    <rdfs:domain rdf:resource="#SocialPFlowRefable"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:about="#hasPostInv">
     <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
