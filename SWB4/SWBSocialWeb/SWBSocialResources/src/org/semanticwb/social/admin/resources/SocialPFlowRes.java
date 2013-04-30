@@ -21,20 +21,20 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.GenericObject;
-import org.semanticwb.model.PFlow;
-import org.semanticwb.model.ResourceType;
 import org.semanticwb.model.Role;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.User;
 import org.semanticwb.model.WebPage;
 import org.semanticwb.model.WebSite;
+import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticOntology;
-import org.semanticwb.portal.admin.resources.SWBAWorkflow;
 import org.semanticwb.portal.admin.resources.workflow.proxy.WorkflowResponse;
 import org.semanticwb.portal.api.GenericResource;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.api.SWBResourceURL;
+import org.semanticwb.social.PostOut;
+import org.semanticwb.social.SocialPFlow;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -45,16 +45,16 @@ import org.w3c.dom.Text;
  *
  * @author jorge.jimenez
  */
-public class SocialPFlow extends GenericResource
+public class SocialPFlowRes extends GenericResource
 {
 
     /** The log. */
-    private Logger log = SWBUtils.getLogger(SocialPFlow.class);
+    private Logger log = SWBUtils.getLogger(SocialPFlowRes.class);
 
     /**
      * Creates a new instance of WBAWorkflow.
      */
-    public SocialPFlow()
+    public SocialPFlowRes()
     {
     }
 
@@ -194,7 +194,7 @@ public class SocialPFlow extends GenericResource
             Element eid = (Element) src.getElementsByTagName("id").item(0);
             Text etext = (Text) eid.getFirstChild();
             String id = etext.getNodeValue();
-            PFlow pflow = (PFlow) SWBPlatform.getSemanticMgr().getOntology().getGenericObject(id);
+            SocialPFlow pflow = (SocialPFlow) SWBPlatform.getSemanticMgr().getOntology().getGenericObject(id);
             try
             {
                 String xml = pflow.getXml();
@@ -258,7 +258,7 @@ public class SocialPFlow extends GenericResource
             }
         }
 
-        Collections.sort(users, new SocialPFlow.OrdenaUsuarios());
+        Collections.sort(users, new SocialPFlowRes.OrdenaUsuarios());
         Iterator itUsers = users.iterator();
         while (itUsers.hasNext())
         {
@@ -371,10 +371,41 @@ public class SocialPFlow extends GenericResource
      * @param tm the tm
      * @return the resource type cat
      */
-    public void getResourceTypeCat(Element res, String tm)
+    public void getResourceTypeCat(Element res, String tm, String lang)
     {
+        System.out.println("Entra a getResourceTypeCat J...,lang:"+lang);
         HashSet<String> resources = new HashSet<String>();
         WebSite map = SWBContext.getWebSite(tm);
+        
+        try
+        {
+            Iterator<SemanticClass> itSemClasses=PostOut.sclass.listSubClasses();//SocialPFlowRefable.social_SocialPFlowRef.listSubClasses();
+            while(itSemClasses.hasNext())
+            {
+                SemanticClass semClass=itSemClasses.next();
+                System.out.println("semClass-G:"+semClass+", id:"+semClass.getClassId());
+                System.out.println("Class label:"+semClass.getLabel(lang)); 
+                System.out.println("map:"+map);
+                
+                resources.add(semClass.getClassId());
+                String sLabel=semClass.getLabel("es");
+                if(semClass.getLabel(lang)!=null) sLabel=semClass.getLabel(lang);
+                Element erole = addNode("resourceType", "" + semClass.getClassId(), sLabel, res); 
+                erole.setAttribute("topicmap", map.getId());
+                erole.setAttribute("topicmapname", map.getTitle());
+                String description = semClass.getComment("es");
+                if(semClass.getComment(lang) != null) description = semClass.getComment(lang);
+                if(description.trim().length()==0) description="_";
+                addElement("description", description, erole);
+                
+            }
+        }catch(Exception e)
+        {
+            System.out.println("Error Goe:"+e.getMessage());
+            log.error(e);
+        }
+        
+        /*
         Iterator<ResourceType> elements = map.listResourceTypes();
         while (elements.hasNext())
         {
@@ -396,6 +427,7 @@ public class SocialPFlow extends GenericResource
                 }
             }
         }
+        */
     }
 
     /**
@@ -411,6 +443,7 @@ public class SocialPFlow extends GenericResource
      */
     public Document getDocument(User user, Document src, String cmd, SWBParamRequest paramRequest, HttpServletRequest request)
     {
+        String lang=paramRequest.getUser().getLanguage();
         Document dom = null;
         try
         {
@@ -432,7 +465,7 @@ public class SocialPFlow extends GenericResource
             }
             else if (cmd.equals("getResourceTypeCat"))
             {
-                getResourceTypeCat(res, tm);
+                getResourceTypeCat(res, tm, lang);
             }
             else if (cmd.equals("getcatUsers"))
             {
@@ -710,12 +743,14 @@ public class SocialPFlow extends GenericResource
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
+        System.out.println("Hola-Entra a doView...");
         String id = request.getParameter("suri");
         SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
         GenericObject go = ont.getGenericObject(id);
-        PFlow pfgo = (PFlow) go;
+        System.out.println("go J:"+go.getSemanticObject().getSemanticClass());
+        SocialPFlow pfgo = (SocialPFlow) go;
 //        System.out.println("pf xml: " + pfgo.getXml());
-        if (pfgo != null && (pfgo.getXml() == null || (pfgo.getXml() != null && pfgo.getXml().trim().length() == 0)))
+        if (pfgo != null && (pfgo.getXml() == null || (pfgo.getXml() != null && pfgo.getXml().trim().length() == 0)))  
         {
 //            System.out.println("pf xml es NULL");
             Document newdoc = SWBUtils.XML.getNewDocument();
@@ -870,7 +905,7 @@ public class SocialPFlow extends GenericResource
                 description = etext.getNodeValue();
             }
             //User user = SWBContext.getWebSite(tm).getUserRepository().getUser(userid);
-            PFlow pflow = (PFlow) SWBPlatform.getSemanticMgr().getOntology().getGenericObject(idpflow);
+            SocialPFlow pflow = (SocialPFlow) SWBPlatform.getSemanticMgr().getOntology().getGenericObject(idpflow);
             //pflow.setCreator(user);
 //            pflow.setUpdated(new Timestamp(System.currentTimeMillis()));
 //            pflow.setDescription(description);
@@ -923,7 +958,7 @@ public class SocialPFlow extends GenericResource
                 }
                 else
                 {
-                    throw new SWBResourceException("The xml has not a workflows element (updatePflow)");
+                    throw new SWBResourceException("The xml has not a workflows element (updateSocialPflow)");
                 }
             }
             catch (Exception e)
@@ -934,7 +969,7 @@ public class SocialPFlow extends GenericResource
         }
         else
         {
-            throw new SWBResourceException("The xml has not a workflow element (updatePflow)");
+            throw new SWBResourceException("The xml has not a workflow element (updateSocialPflow)");
         }
 
     }
