@@ -6,6 +6,7 @@ package org.semanticwb.social.admin.resources;
 
 import java.io.IOException;
 import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Iterator;
 import java.util.List;
@@ -17,18 +18,21 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Resource;
-import org.semanticwb.model.User;
-import org.semanticwb.model.UserGroupRef;
 import org.semanticwb.model.WebSite;
-import org.semanticwb.portal.api.GenericAdmResource;
+import org.semanticwb.platform.SemanticObject;
+import org.semanticwb.portal.api.GenericResource;
 import org.semanticwb.portal.api.SWBActionResponse;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.api.SWBResourceURL;
-import org.semanticwb.social.MessageIn;
-import org.semanticwb.social.PostIn;
+import org.semanticwb.social.Message;
+import org.semanticwb.social.Photo;
+import org.semanticwb.social.PostOut;
 import org.semanticwb.social.SentimentalLearningPhrase;
+import org.semanticwb.social.SocialNetwork;
 import org.semanticwb.social.SocialTopic;
+import org.semanticwb.social.Video;
+import org.semanticwb.social.admin.resources.reports.PostSummary;
 import org.semanticwb.social.util.SWBSocialUtil;
 import twitter4j.internal.org.json.JSONArray;
 import twitter4j.internal.org.json.JSONException;
@@ -38,16 +42,15 @@ import twitter4j.internal.org.json.JSONObject;
  *
  * @author jorge.jimenez
  */
-public class MsgReviewContainer extends GenericAdmResource {
+public class SocialTopicMsgOut extends GenericResource {
 
     /**
      * The log.
      */
-    private static Logger log = SWBUtils.getLogger(MsgReviewContainer.class);
+    private static Logger log = SWBUtils.getLogger(PostSummary.class);
     public static final int PAGE_SIZE = 25; //Líneas por página
     public static final String Mode_JSON = "json";
-    public static final String Mode_REVAL = "rv";
-    public static final String Mode_PRINCIPAL="afterChooseSite";
+    public static final String Mode_SOURCE = "source";
     public static int xxx = 1000;
     /**
      * The tpl.
@@ -58,58 +61,24 @@ public class MsgReviewContainer extends GenericAdmResource {
      */
     String webWorkPath = "/work";
 
+    /**
+     * The path.
+     */
+    //final String path = SWBPlatform.getContextPath() +"/work/SWBAdmin/jsp/stream/";
     @Override
     public void setResourceBase(Resource base) throws SWBResourceException {
         super.setResourceBase(base);
     }
 
     @Override
-    public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException 
-    {
+    public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         final String mode = paramRequest.getMode();
-        if(mode.equals(Mode_PRINCIPAL))
-        {
-            doPrincipal(request, response, paramRequest); 
-        }else if (Mode_JSON.equals(mode)) {
+        if (Mode_JSON.equals(mode)) {
             doJson(request, response, paramRequest);
-        } else if (Mode_REVAL.equals(mode)) {
-            doRevalue(request, response, paramRequest);
+        } else if (Mode_SOURCE.equals(mode)) {
+            doShowSource(request, response, paramRequest);
         } else {
             super.processRequest(request, response, paramRequest);
-        }
-    }
-    
-    public void doPrincipal(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        try{
-            System.out.println("Entra a doPrincipal GG");
-            response.setContentType("text/html;charset=iso-8859-1");
-            response.setHeader("Cache-Control", "no-cache");
-            response.setHeader("Pragma", "no-cache");
-            if (request.getParameter("doView") == null) {
-                System.out.println("Entra a doPrincipal GG-1");
-                request.setAttribute("socialSite", request.getParameter("socialSite"));
-                doEdit(request, response, paramRequest);
-            } else {
-                System.out.println("Entra a doPrincipal GG-1");
-                final String myPath = SWBPlatform.getContextPath() + "/work/" + paramRequest.getWebPage().getWebSiteId() + "/jsp/review/msgReviewContainer.jsp";
-                if (request != null) {
-                    RequestDispatcher dis = request.getRequestDispatcher(myPath);
-                    if (dis != null) {
-                        try {
-                            System.out.println("Entra a doPrincipal G3:"+request.getParameter("socialSite"));
-                            request.setAttribute("socialSite", request.getParameter("socialSite"));
-                            request.setAttribute("paramRequest", paramRequest);
-                            dis.include(request, response);
-                        } catch (Exception ex) {
-                            log.error(ex);
-                            ex.printStackTrace(System.out);
-                        }
-                    }
-                }
-            }
-        }catch(Exception e)
-        {
-            log.error(e);
         }
     }
 
@@ -147,21 +116,7 @@ public class MsgReviewContainer extends GenericAdmResource {
             }
         }
     }
-    
-    @Override
-    public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        String basePath=SWBPlatform.getContextPath() +"/work/" + paramRequest.getWebPage().getWebSiteId() +"/jsp/post/";
-        String jspResponse = basePath+"socialSites.jsp";
-        RequestDispatcher dis = request.getRequestDispatcher(jspResponse);
-        try {
-            request.setAttribute("paramRequest", paramRequest);
-            dis.include(request, response);
-        } catch (Exception e) {
-            log.error(e);
-        }
-    }
 
-    /*
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         response.setContentType("text/html;charset=iso-8859-1");
@@ -170,7 +125,7 @@ public class MsgReviewContainer extends GenericAdmResource {
         if (request.getParameter("doView") == null) {
             doEdit(request, response, paramRequest);
         } else {
-            final String myPath = SWBPlatform.getContextPath() + "/work/" + paramRequest.getWebPage().getWebSiteId() + "/jsp/review/msgReviewContainer.jsp";
+            final String myPath = SWBPlatform.getContextPath() + "/work/" + paramRequest.getWebPage().getWebSiteId() + "/jsp/socialTopic/socialTopicMsgOut.jsp";
             if (request != null) {
                 RequestDispatcher dis = request.getRequestDispatcher(myPath);
                 if (dis != null) {
@@ -185,19 +140,20 @@ public class MsgReviewContainer extends GenericAdmResource {
             }
         }
 
-    }*/
+    }
 
     @Override
     public void doEdit(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        response.getWriter().println("<iframe dojotype=\"dijit.layout.ContentPane\" src=\"" + paramRequest.getRenderUrl().setMode(Mode_PRINCIPAL).setParameter("doView", "doView").setParameter("socialSite", request.getParameter("socialSite")) + "\" width=\"100%\" height=\"100%\" frameborder=\"0\" scrolling=\"no\" >"); 
+        response.getWriter().println("<iframe dojotype=\"dijit.layout.ContentPane\" src=\"" + paramRequest.getRenderUrl().setMode(SWBResourceURL.Mode_VIEW).setParameter("doView", "doView").setParameter("suri", request.getParameter("suri")) + "\" width=\"100%\" height=\"100%\" frameborder=\"0\" scrolling=\"no\" >");
         response.getWriter().println("</iframe>");
     }
 
     private void doJson(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
-        User user=paramsRequest.getUser();
         response.setContentType("text/json;charset=iso-8859-1");
 
+        String lang = paramsRequest.getUser().getLanguage();
         Locale locale = new Locale("es", "mx");
+        NumberFormat nf = NumberFormat.getIntegerInstance(locale);
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MMM/yy HH:mm", locale);
         DecimalFormat df = new DecimalFormat("#.#");
 
@@ -212,40 +168,25 @@ public class MsgReviewContainer extends GenericAdmResource {
         }
 
         String wsiteId = request.getParameter("wsite");
+        //System.out.println("wsiteId en PostSummary:"+wsiteId);
         int pos = wsiteId.indexOf("?");
         if (pos > -1) {
             wsiteId = wsiteId.substring(0, pos);
         }
         WebSite wsite = null;
-        List<PostIn> posts = null;
+        List<PostOut> posts = null;
         int size = 0;
         if (wsiteId != null) {
-            
+            String sTopic=request.getParameter("sTopic");
             wsite = WebSite.ClassMgr.getWebSite(wsiteId);
-            /*
-            Iterator<PostIn> itposts = PostIn.ClassMgr.listPostIns(wsite);
-            posts = SWBUtils.Collections.copyIterator(itposts);
-            size = posts.size();
-            */
-            Iterator <UserGroupRef> itUserGroupRef=UserGroupRef.ClassMgr.listUserGroupRefs(wsite);
-            while(itUserGroupRef.hasNext())
+            SocialTopic socialTopic=SocialTopic.ClassMgr.getSocialTopic(sTopic, wsite);
+            if(socialTopic!=null)
             {
-                UserGroupRef userGroupRef=itUserGroupRef.next(); 
-                if(userGroupRef.getUserGroup().hasUser(user))
-                {
-                    Iterator <SocialTopic> itSocialTopics=SocialTopic.ClassMgr.listSocialTopicByUserGroupRef(userGroupRef);
-                    while(itSocialTopics.hasNext())
-                    {
-                        SocialTopic socialTopic=itSocialTopics.next();
-                        //Extraigo cuales son los mensajes de un SocialTopic
-                        Iterator<PostIn> itPostIns=PostIn.ClassMgr.listPostInBySocialTopic(socialTopic);
-                        posts = SWBUtils.Collections.copyIterator(itPostIns);
-                        size = posts.size(); 
-                    }
-                }
+                Iterator<PostOut> itposts = PostOut.ClassMgr.listPostOutBySocialTopic(socialTopic);
+                posts = SWBUtils.Collections.copyIterator(itposts);
+                size = posts.size();
             }
         }
-
 
         int ipage;
         try {
@@ -261,7 +202,7 @@ public class MsgReviewContainer extends GenericAdmResource {
         int inicio = 0;
         int fin = PAGE_SIZE;
 
-        // Mantiene la consistencia al eliminar elementos
+        // Mantiene la consistencia al eliminar elementos   
         if (ipage > paginas) {
             ipage--;
         }
@@ -292,75 +233,80 @@ public class MsgReviewContainer extends GenericAdmResource {
 
         inicio = Integer.parseInt(request.getParameter("inicio")) - 1;
         fin = Integer.parseInt(request.getParameter("fin"));
-        //System.out.println("INICIO en java: " +  inicio);
-        //System.out.println("FIN en java: " + fin);
+        //System.out.println("INICIO en java-J: " +  inicio);
+        //System.out.println("FIN en java-J: " + fin);
         //inicio++;
         //////////////////////
 
-        PostIn post;
+        PostOut post;
         for (int i = inicio; i < fin && i < size; i++) {
             post = posts.get(i);
-            if (post instanceof MessageIn) {
-                MessageIn msg = (MessageIn) post;
-                JSONObject obj = new JSONObject();
-                try {
-                    obj.put("fl", i + 1);
-                    try {
-                        obj.put("cta", msg.getPostSource());
-                    } catch (Exception e) {
-                        obj.put("cta", "--");
-                    }
-                    // try {
-                    //        obj.put("sn",msg.getPostInSocialNetwork().getClass().getSimpleName());
-                    //     }catch(Exception e) {
-                    //        obj.put("sn","--");
-                    //     }
-                    try {
-                        obj.put("date", sdf.format(msg.getCreated()));
-                    } catch (Exception e) {
-                        obj.put("date", "--");
-                    }
-                    obj.put("msg", msg.getMsg_Text());
-                    obj.put("feel", msg.getPostSentimentalType());
-                    obj.put("eicon", msg.getPostSentimentalEmoticonType());
-                    obj.put("int", df.format(msg.getPostIntensityValue()));
-                    try {
-                        obj.put("rp", msg.getPostRetweets());
-                    } catch (Exception e) {
-                        obj.put("rp", "0");
-                    }
-                    try {
-                        obj.put("user", msg.getPostInSocialNetworkUser().getSnu_name());
-                        obj.put("fllwrs", msg.getPostInSocialNetworkUser().getFollowers());
-                        obj.put("frds", msg.getPostInSocialNetworkUser().getFriends());
-                    } catch (Exception e) {
-                        obj.put("user", "--");
-                        obj.put("fllwrs", "0");
-                        obj.put("frds", "0");
-                    }
-                    obj.put("plc", msg.getPostPlace() == null ? "--" : msg.getPostPlace());
-                    obj.put("topic", msg.getSocialTopic() == null ? "--" : msg.getSocialTopic().getTitle());
-                    jarr.put(obj);
-                } catch (Exception jse) {
-                    System.out.println(jse.getMessage());
-                    jse.printStackTrace(System.out);
-                    continue;
+            Message message=null;
+            Photo photo=null;
+            Video video=null;
+            JSONObject obj = new JSONObject();
+            try
+            {
+                obj.put("fl",i+1);
+                if(post instanceof Message) {
+                    message=(Message)post;
+                    obj.put("type", "Message");
+                    obj.put("element", message.getMsg_Text());
+                    //obj.put("postIn", "M_"+post.getId());
                 }
+                else if(post instanceof Photo) {
+                    photo=(Photo)post;
+                    obj.put("type", "Photo");
+                    obj.put("element", photo.getPhoto());
+                    //obj.put("postIn", "P_"+post.getId());
+                }
+                else if(post instanceof Video) {
+                    video=(Video)post;
+                    obj.put("type", "Video");
+                    obj.put("element", video.getVideo());
+                    //obj.put("postIn", "V_"+post.getId());
+                }
+                obj.put("nets", getSocialNets(post));
+                obj.put("isShared", post.isIsMsgShared());
+                if(post.getPostInOrigen()!=null) obj.put("postIn", post.getPostInOrigen());
+                else obj.put("postIn", "---");
+                obj.put("crated", sdf.format(post.getCreated()));
+                obj.put("crator", post.getCreator().getFullName());
+                
+                jarr.put(obj);
+            } catch (Exception jse) {
+                continue;
             }
+            
         }
         //response.getOutputStream().println(jobj.toString());
         response.getWriter().print(jobj.toString());
     }
+    
+    private String getSocialNets(PostOut postOut)
+    {
+        String socialNets="";
+        Iterator<SocialNetwork> itSocialNets=postOut.listSocialNetworks();
+        while(itSocialNets.hasNext())
+        {
+            SocialNetwork socialNet=itSocialNets.next();
+            if(socialNets.length()>0) socialNets+=",";
+            socialNets+=socialNet.getTitle();
+        }
+        return socialNets;
+    }
 
-    public void doRevalue(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+    public void doShowSource(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         response.setContentType("text/html;charset=iso-8859-1");
         response.setHeader("Cache-Control", "no-cache");
         response.setHeader("Pragma", "no-cache");
-        final String myPath = SWBPlatform.getContextPath() + "/work/" + paramRequest.getWebPage().getWebSiteId() + "/jsp/stream/revalue.jsp";
+        final String myPath = SWBPlatform.getContextPath() + "/work/" + paramRequest.getWebPage().getWebSiteId() + "/jsp/socialTopic/socialTopicMsgOut.jsp?showSource=1";
         if (request != null) {
             RequestDispatcher dis = request.getRequestDispatcher(myPath);
             if (dis != null) {
                 try {
+                    SemanticObject semObject = SemanticObject.createSemanticObject(request.getParameter("postUri"));
+                    request.setAttribute("sObjPostOut", semObject);
                     request.setAttribute("paramRequest", paramRequest);
                     dis.include(request, response);
                 } catch (Exception e) {

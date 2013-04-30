@@ -36,6 +36,10 @@ import org.w3c.dom.Element;
  * @author jorge.jimenez
  */
 public class SWBSocialRule extends GenericResource {
+    
+    private static final String SENTIMENT_TYPE=PostIn.social_postSentimentalType.getName();
+    private static final String KLOUT_VALUE=Stream.social_stream_KloutValue.getName();
+    private static final String MESSAGE_TEXT=MessageIn.social_msg_Text.getName();
 
     /** The log. */
     private Logger log = SWBUtils.getLogger(SWBSocialRule.class);
@@ -346,7 +350,7 @@ public class SWBSocialRule extends GenericResource {
      */
     private void loadComboAttr(String tmid, String ruleid, SWBParamRequest paramRequest) throws SWBResourceException, java.io.IOException 
     {
-
+        
         log.debug("loadComboAttr ruleid: " + ruleid + ", tmid: " + tmid);
 
         WebSite ws = SWBContext.getWebSite(tmid);
@@ -367,7 +371,7 @@ public class SWBSocialRule extends GenericResource {
         hmValues.put("2", paramRequest.getLocaleString("msgNegative"));
         hmValues.put("0", paramRequest.getLocaleString("msgNeutral"));
         hmAttr.put("Valor", hmValues);
-        comboAtt.put(PostIn.social_postSentimentalType.getName(), hmAttr); //RuleMgr.TAG_INT_ISREGISTERED
+        comboAtt.put(SENTIMENT_TYPE, hmAttr); //RuleMgr.TAG_INT_ISREGISTERED
 
         //Klout
         hmAttr = new HashMap();
@@ -377,7 +381,7 @@ public class SWBSocialRule extends GenericResource {
         hmAttr.put("Tipo", "TEXT");
         hmOper.put(">", paramRequest.getLocaleString("msgGreater"));
         hmAttr.put("Operador", hmOper);
-        comboAtt.put(Stream.social_stream_KloutValue.getName(), hmAttr);
+        comboAtt.put(KLOUT_VALUE, hmAttr);
         
          //Words
         hmAttr = new HashMap();
@@ -387,13 +391,13 @@ public class SWBSocialRule extends GenericResource {
         hmAttr.put("Tipo", "TEXT");
         hmOper.put("=", paramRequest.getLocaleString("msgSameAs"));
         hmAttr.put("Operador", hmOper);
-        comboAtt.put(MessageIn.social_msg_Text.getName(), hmAttr);
+        comboAtt.put(MESSAGE_TEXT, hmAttr);
         
         
         int numero = 0;
-        vecOrderAtt.add(numero++, PostIn.social_postSentimentalType.getName()); 
-        vecOrderAtt.add(numero++, Stream.social_stream_KloutValue.getName()); 
-        vecOrderAtt.add(numero++, MessageIn.social_msg_Text.getName()); 
+        vecOrderAtt.add(numero++, SENTIMENT_TYPE); 
+        vecOrderAtt.add(numero++, KLOUT_VALUE); 
+        vecOrderAtt.add(numero++, MESSAGE_TEXT); 
         
  /*       
 

@@ -26,6 +26,7 @@ import org.semanticwb.social.Message;
 import org.semanticwb.social.Messageable;
 import org.semanticwb.social.Photo;
 import org.semanticwb.social.Photoable;
+import org.semanticwb.social.PostOut;
 import org.semanticwb.social.SocialNetwork;
 import org.semanticwb.social.SocialTopic;
 import org.semanticwb.social.Video;
@@ -105,12 +106,17 @@ public class CreatePost extends GenericResource {
                         SemanticObject sobj = mgr.processForm(request);
                         org.semanticwb.social.Post post = (org.semanticwb.social.Post) sobj.createGenericInstance();
                         post.setSocialTopic(socialTopic);
+                        //Convierto a un post de salida para poderle agregar cada red social a la que se envía dicho post
+                        PostOut postOut=(PostOut)post;
                         //Revisa las redes sociales a las cuales se tiene que enviar el Post
                         String[] socialUris = socialUri.split("\\|");  //Dividir valores
                         for (int i = 0; i < socialUris.length; i++) {
                             String tmp_socialUri = socialUris[i];
                             SemanticObject semObject = SemanticObject.createSemanticObject(tmp_socialUri, wsite.getSemanticModel());
                             SocialNetwork socialNet = (SocialNetwork) semObject.createGenericInstance();
+                            //Se agrega la red social de salida al post
+                            postOut.addSocialNetwork(socialNet);
+                            //Se revisa si es de tipo mensaje, foto o video.
                             if (toPost.equals("msg") && socialNet instanceof Messageable) {
                                 System.out.println("MENSAJE!!");
                                 //TODO: YO CREO QUE LO QUE TENGO QUE HACER AQUI, ES UN THREAD POR CADA UNA DE LAS REDES SOCIALES A LAS QUE SE ENVÍE UN POST
