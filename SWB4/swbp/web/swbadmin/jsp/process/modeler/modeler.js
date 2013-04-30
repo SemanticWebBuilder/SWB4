@@ -688,7 +688,7 @@
         _this.canEndLink = function (link) {
             var ret = fCanEnd(link);
             var msg = null;
-            
+            console.log(ret);
             if (ret && link.elementType=="MessageFlow") {
                 msg = "Un evento intermedio no puede tener flujos de mensaje entrantes";
                 ret = false;
@@ -939,6 +939,7 @@
     var _ParallelIntermediateCatchEvent = function (obj) {
         var _this = new _IntermediateCatchEvent(obj);
         var fCanAttach = _this.canAttach;
+        var fCanEnd = _this.canEndLink;
         
         _this.setElementType("ParallelIntermediateCatchEvent");
         
@@ -946,6 +947,15 @@
             var ret = fCanAttach(parent);
             if (ret && parent.typeOf("Activity")) {
                 ToolKit.showTooltip(0, "Un evento intermedio paralelo no puede adherirse a una actividad", 200, "Error");
+                ret = false;
+            }
+            return ret;
+        };
+        
+        _this.canEndLink = function(link) {
+            var ret = fCanEnd(link);
+            if (link.fromObject.typeOf("EventBasedGateway")) {
+                ToolKit.showTooltip(0, "Un evento intermedio paralelo no puede conectarse con una compuerta basada en eventos", 200, "Error");
                 ret = false;
             }
             return ret;
@@ -1161,60 +1171,68 @@
         var fCanEnd = _this.canEndLink;
         
         _this.setElementType("Gateway");
-        _this.canStartLink = function (link) {
+        
+        _this.canStartLink = function(link) {
             var ret = fCanStart(link);
-            var ci = 0;
+            var ci = 0; 
             var co = 0;
+            var msg = null;
             
-            for (var i = 0; i < _this.inConnections.length; i++) {
-                if (_this.inConnections[i].elementType=="SequenceFlow") {
-                    ci++;
+            if (ret && link.elementType=="SequenceFlow") {
+                for (var i = 0; i < _this.inConnections.length; i++) {
+                    if (_this.inConnections[i].elementType=="SequenceFlow") {
+                        ci++;
+                    }
                 }
-            }
-            
-            for (i = 0; i < _this.outConnections.length; i++) {
-                if (_this.outConnections[i].elementType=="SequenceFlow") {
-                    co++;
+                
+                for (var i = 0; i < _this.outConnections.length; i++) {
+                    if (_this.outConnections[i].elementType=="SequenceFlow") {
+                        co++;
+                    }
                 }
-            }
-            
-            if (link.elementType=="MessageFlow") {
-                ret = false;
-            }
-            
-            if (link.elementType=="SequenceFlow") {
+                
                 if (ci > 1 && co != 0) {
+                    msg = "Una compuerta convergente sólo puede tener un flujo de secuencia saliente";
                     ret = false;
                 }
+            }
+            if (msg!=null) {
+                ToolKit.showTooltip(0, msg, 200, "Error");
             }
             return ret;
         };
         
-        _this.canEndLink = function (link) {
+        _this.canEndLink = function(link) {
             var ret = fCanEnd(link);
-            var ci = 0;
+            var ci = 0; 
             var co = 0;
+            var msg = null;
             
-            for (var i = 0; i < _this.inConnections.length; i++) {
-                if (_this.inConnections[i].elementType=="SequenceFlow") {
-                    ci++;
-                }
-            }
-            
-            for (i = 0; i < _this.outConnections.length; i++) {
-                if (_this.outConnections[i].elementType=="SequenceFlow") {
-                    co++;
-                }
-            }
-            
-            if (link.elementType=="MessageFlow") {
-                ret = false;
-            }
-            
-            if (link.elementType=="SequenceFlow") {
-                if (co > 1 && ci != 0) {
+            if (ret && link.elementType=="SequenceFlow") {
+                if (link.fromObject.typeOf("EventBasedGateway")) {
+                    msg = "Esta compuerta no puede conectarse con una compuerta basada en eventos"
                     ret = false;
+                } else {
+                    for (var i = 0; i < _this.inConnections.length; i++) {
+                        if (_this.inConnections[i].elementType=="SequenceFlow") {
+                            ci++;
+                        }
+                    }
+
+                    for (var i = 0; i < _this.outConnections.length; i++) {
+                        if (_this.outConnections[i].elementType=="SequenceFlow") {
+                            co++;
+                        }
+                    }
+
+                    if (co > 1 && ci != 0) {
+                        msg = "Una compuerta divergente sólo puede tener un flujo de secuencia entrante";
+                        ret = false;
+                    }
                 }
+            }
+            if (msg!=null) {
+                ToolKit.showTooltip(0, msg, 200, "Error");
             }
             return ret;
         };
@@ -1224,51 +1242,102 @@
     var _ExclusiveGateway = function (obj) {
         var _this = new _Gateway(obj);
         var fCanStart = _this.canStartLink;
-        var fCanEnd = _this.canEndLink;
         
         _this.setElementType("ExclusiveGateway");
         
         _this.canStartLink = function(link) {
             var ret = fCanStart(link);
-            var c = 0;
+            var msg = null;
             
-            for (var i = 0; i < _this.outConnections.length; i++) {
-                if (_this.outConnections[i].elementType=="DefaultFlow") {
-                    c++;
+            if (ret && !(link.elementType=="ConditionalFlow" || link.elementType=="DefaultFlow" || link.typeOf("AssociationFlow"))) {
+                msg = "Una compuerta exclusiva sólo puede conectarse usando flujos condicionales, flujos por defecto o asociaciones";
+                ret = false;
+            } else if (ret && (link.elementType=="DefaultFlow" || link.elementType=="ConditionalFlow")) {
+                var dou = 0;
+                var co = 0;
+                var ci = 0;
+                
+                for (var i = 0; i < _this.outConnections.length; i++) {
+                    if (_this.outConnections[i].elementType=="DefaultFlow") {
+                        dou++;
+                    }
+                    if (_this.outConnections[i].elementType=="ConditionalFlow") {
+                        co++;
+                    }
+                }
+                
+                co = co+dou;
+                
+                for (var i = 0; i < _this.inConnections.length; i++) {
+                    if (!_this.inConnections[i].typeOf("AssociationFlow")) {
+                        ci++;
+                    }
+                }
+
+                if (link.elementType=="DefaultFlow" && dou > 0) {
+                    msg = "Una compuerta exclusiva sólo puede tener un flujo por defecto saliente";
+                    ret = false;
+                } else if (ci > 1 && co != 0) {
+                    msg = "Una compuerta convergente sólo puede tener un flujo saliente";
+                    ret = false;
                 }
             }
-            if (!(link.elementType=="ConditionalFlow" || link.elementType=="DefaultFlow")) {
-                ret = false;
-            }
-            
-            if (link.elementType=="DefaultFlow" && c > 0) {
-                ret = false;
+            if (msg!=null) {
+                ToolKit.showTooltip(0, msg, 200, "Error");
             }
             return ret;
         };
         
         _this.canEndLink = function(link) {
-            var ret = fCanEnd(link);
-            if (link.fromObject.elementType=="EventBasedGateway") {
+            var ret = true;
+            var msg = null;
+            var co = 0;
+            var ci = 0;
+
+            if (link.fromObject.typeOf("EventBasedGateway")) {
+                msg = "Esta compuerta no puede conectarse con una compuerta basada en eventos"
                 ret = false;
+            } else {
+                for (var i = 0; i < _this.outConnections.length; i++) {
+                    if (!_this.outConnections[i].typeOf("AssociationFlow")) {
+                        co++;
+                    }
+                }
+
+                for (var i = 0; i < _this.inConnections.length; i++) {
+                    if (!_this.inConnections[i].typeOf("AssociationFlow")) {
+                        ci++;
+                    }
+                }
+                if (ci > 0 && co != 0) {
+                    msg = "Una compuerta divergente sólo puede tener un flujo entrante";
+                    ret = false;
+                }
+            }
+            if (msg!=null) {
+                ToolKit.showTooltip(0, msg, 200, "Error");
             }
             return ret;
         };
-        
         return _this;
     };
     
     var _EventBasedGateway = function(obj) {
         var _this = new _Gateway(obj);
         var fCanStart = _this.canStartLink;
+        
         _this.setElementType("EventBasedGateway");
         
         _this.canStartLink = function(link) {
             var ret = fCanStart(link);
-            if (link.elementType=="DefaultFlow") {
+            var msg = null;
+            
+            if (ret && (link.elementType=="ConditionalFlow" || link.elementType=="DefaultFlow")) {
+                msg = "Una compuerta basada en eventos no puede conectarse usando flujos condicionales";
                 ret = false;
-            } else if (link.elementType=="ConditionalFlow") {
-                return false;
+            }
+            if (msg!=null) {
+                ToolKit.showTooltip(0, msg, 200, "Error");
             }
             return ret;
         };
@@ -1289,20 +1358,75 @@
         
         _this.canStartLink = function(link) {
             var ret = fCanStart(link);
-            var c = 0;
+            var msg = null;
             
-            for (var i = 0; i < _this.outConnections.length; i++) {
-                if (_this.outConnections[i].elementType=="DefaultFlow") {
-                    c++;
+            if (ret && !(link.elementType=="ConditionalFlow" || link.elementType=="DefaultFlow" || link.typeOf("AssociationFlow"))) {
+                msg = "Una compuerta inclusiva sólo puede conectarse usando flujos condicionales, flujos por defecto o asociaciones";
+                ret = false;
+            } else if (ret && (link.elementType=="DefaultFlow" || link.elementType=="ConditionalFlow")) {
+                var dou = 0;
+                var co = 0;
+                var ci = 0;
+                
+                for (var i = 0; i < _this.outConnections.length; i++) {
+                    if (_this.outConnections[i].elementType=="DefaultFlow") {
+                        dou++;
+                    }
+                    if (_this.outConnections[i].elementType=="ConditionalFlow") {
+                        co++;
+                    }
+                }
+                
+                co = co+dou;
+                
+                for (var i = 0; i < _this.inConnections.length; i++) {
+                    if (!_this.inConnections[i].typeOf("AssociationFlow")) {
+                        ci++;
+                    }
+                }
+
+                if (link.elementType=="DefaultFlow" && dou > 0) {
+                    msg = "Una compuerta inclusiva sólo puede tener un flujo por defecto saliente";
+                    ret = false;
+                } else if (ci > 1 && co != 0) {
+                    msg = "Una compuerta convergente sólo puede tener un flujo saliente";
+                    ret = false;
                 }
             }
-            
-            if (!(link.elementType=="ConditionalFlow" || link.elementType=="DefaultFlow")) {
-                ret = false;
+            if (msg!=null) {
+                ToolKit.showTooltip(0, msg, 200, "Error");
             }
+            return ret;
+        };
+        
+        _this.canEndLink = function(link) {
+            var ret = true;
+            var msg = null;
+            var co = 0;
+            var ci = 0;
 
-            if (link.elementType=="DefaultFlow" && c > 0) {
+            if (link.fromObject.typeOf("EventBasedGateway")) {
+                msg = "Esta compuerta no puede conectarse con una compuerta basada en eventos"
                 ret = false;
+            } else {
+                for (var i = 0; i < _this.outConnections.length; i++) {
+                    if (!_this.outConnections[i].typeOf("AssociationFlow")) {
+                        co++;
+                    }
+                }
+
+                for (var i = 0; i < _this.inConnections.length; i++) {
+                    if (!_this.inConnections[i].typeOf("AssociationFlow")) {
+                        ci++;
+                    }
+                }
+                if (ci > 0 && co != 0) {
+                    msg = "Una compuerta divergente sólo puede tener un flujo entrante";
+                    ret = false;
+                }
+            }
+            if (msg!=null) {
+                ToolKit.showTooltip(0, msg, 200, "Error");
             }
             return ret;
         };
@@ -1337,6 +1461,38 @@
             var ret = fCanStart(link);
             if (link.elementType=="ConditionalFlow" || link.elementType=="DefaultFlow") {
                 ret = false;
+            }
+            return ret;
+        };
+        
+        _this.canEndLink = function(link) {
+            var ret = true;
+            var msg = null;
+            var co = 0;
+            var ci = 0;
+
+            if (link.fromObject.typeOf("EventBasedGateway")) {
+                msg = "Esta compuerta no puede conectarse con una compuerta basada en eventos"
+                ret = false;
+            } else {
+                for (var i = 0; i < _this.outConnections.length; i++) {
+                    if (!_this.outConnections[i].typeOf("AssociationFlow")) {
+                        co++;
+                    }
+                }
+
+                for (var i = 0; i < _this.inConnections.length; i++) {
+                    if (!_this.inConnections[i].typeOf("AssociationFlow")) {
+                        ci++;
+                    }
+                }
+                if (ci > 0 && co != 0) {
+                    msg = "Una compuerta divergente sólo puede tener un flujo entrante";
+                    ret = false;
+                }
+            }
+            if (msg!=null) {
+                ToolKit.showTooltip(0, msg, 200, "Error");
             }
             return ret;
         };
@@ -2465,7 +2621,7 @@
                 ret.setText("Recepción de compensación",0,1,80,1);
             }
             else if(type=='compensaInterThrowEvent') {
-                ret= new _CompensationIntermediateCatchEvent(Modeler.createObject("#compensationIntermediateThrowEvent",null,null));
+                ret= new _CompensationIntermediateThrowEvent(Modeler.createObject("#compensationIntermediateThrowEvent",null,null));
                 ret.setText("Disparo de compensación",0,1,80,1);
             }
             else if(type=='ruleInterEvent') {
