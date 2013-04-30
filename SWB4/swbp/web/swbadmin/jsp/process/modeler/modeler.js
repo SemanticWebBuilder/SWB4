@@ -1031,12 +1031,12 @@
     };
     
     /***************************Eventos finales****************************/
-    var _EndEvent = function(obj) {
+    var _EndEventNode = function(obj) {
         var _this = new _ThrowEvent(obj);
         var fCanEnd = _this.canEndLink;
         var fCanAdd = _this.canAddToDiagram;
-
-        _this.setElementType("EndEvent");
+        
+        _this.setElementType("EndEventNode");
         
         _this.canStartLink = function(link) {
             ToolKit.showTooltip("","Un evento final sólo puede tener flujos de secuencia entrantes", 250, "Error")
@@ -1045,36 +1045,70 @@
         
         _this.canEndLink = function(link) {
             var ret = fCanEnd(link);
-            if (!link.typeOf("SequenceFlow")) {
-                ret = false;
-            } else if (link.elementType=="SequenceFlow" && link.fromObject.elementType=="ExclusiveIntermediateEventGateway") {
+            
+            if (ret && link.elementType=="MessageFlow") {
+                ToolKit.showTooltip("","Un evento final sólo puede tener flujos de secuencia entrantes", 250, "Error")
                 ret = false;
             }
             return ret;
         };
         
-        _this.canAddToDiagram = function () {
+        _this.canAddToDiagram = function() {
             var ret = fCanAdd();
-            //TODO:Implementar
+            var msg = null;
             
-            return ret;
+            if (ret) {
+                if (ToolKit.layer != null && ToolKit.layer.parent.elementType=="AdhocSubProcess") {
+                    msg = "Un subproceso ad-hoc no puede tener eventos finales";
+                    ret = false;
+                }
+            }
+            if (msg!=null) {
+                ToolKit.showTooltip(0, msg, 200, "Error");
+            }
         };
-        
+        return _this;
+    };
+    
+    var _EndEvent = function(obj) {
+        var _this = new _EndEventNode(obj);
+        _this.setElementType("EndEvent");
         return _this;
     };
     
     var _MessageEndEvent = function (obj) {
         var _this = new _EndEvent(obj);
+        var fCanStart = _this.canStartLink;
+        
         _this.setElementType("MessageEndEvent");
 
         _this.canStartLink = function(link) {
-            var ret = false;
-            if (link.elementType=="MessageFlow") {
-                ret = true;
+            var ret = fCanStart(link);
+            var msg = null;
+
+            if (ret || link.elementType=="MessageFlow") {
+                if (link.elementType=="MessageFlow") {
+                    ToolKit.hideToolTip();
+                    ret = true;
+                    var c = 0;
+
+                    for (var i = 0; i < _this.outConnections.length; i++) {
+                        if (_this.outConnections[i].elementType=="MessageFlow") {
+                            c++;
+                        }
+                    }
+
+                    if (c != 0) {
+                        ret = false;
+                        msg = "Un evento final de mensaje no puede tener más de un flujo de mensaje saliente";
+                    }
+                }
+            }
+            if (msg!=null) {
+                ToolKit.showTooltip(0, msg, 200, "Error");
             }
             return ret;
         };
-        
         return _this;
     };
     
