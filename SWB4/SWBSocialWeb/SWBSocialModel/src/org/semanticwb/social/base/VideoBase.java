@@ -4,7 +4,7 @@ package org.semanticwb.social.base;
    /**
    * Clase que sera creada cuando un post sea de tipo video, como lo es para youtube y facebook (cuando se envía un video a facebook). 
    */
-public abstract class VideoBase extends org.semanticwb.social.PostOut implements org.semanticwb.social.PostVideoable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Tagable,org.semanticwb.social.PostDataable,org.semanticwb.model.Traceable
+public abstract class VideoBase extends org.semanticwb.social.PostOut implements org.semanticwb.model.Descriptiveable,org.semanticwb.social.PostVideoable,org.semanticwb.social.PostDataable,org.semanticwb.model.Tagable,org.semanticwb.model.Traceable
 {
    /**
    * Clase que sera creada cuando un post sea de tipo video, como lo es para youtube y facebook (cuando se envía un video a facebook).
@@ -105,29 +105,6 @@ public abstract class VideoBase extends org.semanticwb.social.PostOut implements
         public static java.util.Iterator<org.semanticwb.social.Video> listVideoByModifiedBy(org.semanticwb.model.User value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.social.Video> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_modifiedBy,value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.social.Video with a determined PostListenerBase
-       * @param value PostListenerBase of the type org.semanticwb.social.PostOutListenerContainerBase
-       * @param model Model of the org.semanticwb.social.Video
-       * @return Iterator with all the org.semanticwb.social.Video
-       */
-
-        public static java.util.Iterator<org.semanticwb.social.Video> listVideoByPostListenerBase(org.semanticwb.social.PostOutListenerContainerBase value,org.semanticwb.model.SWBModel model)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.social.Video> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(social_postListenerBase, value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.social.Video with a determined PostListenerBase
-       * @param value PostListenerBase of the type org.semanticwb.social.PostOutListenerContainerBase
-       * @return Iterator with all the org.semanticwb.social.Video
-       */
-
-        public static java.util.Iterator<org.semanticwb.social.Video> listVideoByPostListenerBase(org.semanticwb.social.PostOutListenerContainerBase value)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.social.Video> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(social_postListenerBase,value.getSemanticObject(),sclass));
             return it;
         }
        /**
@@ -243,6 +220,29 @@ public abstract class VideoBase extends org.semanticwb.social.PostOut implements
         public static java.util.Iterator<org.semanticwb.social.Video> listVideoBySocialTopic(org.semanticwb.social.SocialTopic value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.social.Video> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(social_socialTopic,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.social.Video with a determined PflowInstance
+       * @param value PflowInstance of the type org.semanticwb.social.SocialPFlowInstance
+       * @param model Model of the org.semanticwb.social.Video
+       * @return Iterator with all the org.semanticwb.social.Video
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.Video> listVideoByPflowInstance(org.semanticwb.social.SocialPFlowInstance value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.Video> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(social_pflowInstance, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.social.Video with a determined PflowInstance
+       * @param value PflowInstance of the type org.semanticwb.social.SocialPFlowInstance
+       * @return Iterator with all the org.semanticwb.social.Video
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.Video> listVideoByPflowInstance(org.semanticwb.social.SocialPFlowInstance value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.Video> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(social_pflowInstance,value.getSemanticObject(),sclass));
             return it;
         }
     }
