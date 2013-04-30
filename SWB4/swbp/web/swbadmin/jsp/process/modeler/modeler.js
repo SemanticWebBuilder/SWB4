@@ -683,7 +683,6 @@
         var _this = new _ThrowEvent(obj);
         var fCanEnd = _this.canEndLink;
         var fCanStart = _this.canStartLink;
-        var msg = null;
         
         _this.setElementType("IntermediateThrowEvent");
         
@@ -723,7 +722,9 @@
             var c = 0;
             
             var msg = null;
-            
+            if (link.elementType=="MessageFlow") {
+                ToolKit.hideToolTip();
+            }
             if (ret && link.elementType=="SequenceFlow") {
                 for (var i = 0; i < _this.outConnections.length; i++) {
                     if (_this.outConnections[i].elementType=="SequenceFlow") {
@@ -1699,7 +1700,7 @@
         _this.canAddToDiagram = function() {
             var ret = fCanAdd();
             if (ToolKit.layer != null) {
-                ToolKit.showTooltip("","Un subproceso no puede contener pools", 250, "Error")
+                ToolKit.showTooltip("","Un subproceso no puede contener pools", 250, "Error");
                 ret = false;
             }
             return ret;
@@ -1725,9 +1726,13 @@
         
         _this.canEndLink = function(link) {
             var ret = fCanEnd(link);
-            if (link.elementType=="DirectionalAssociation" && link.fromObject.elementType=="CompensationIntermediateCatchEvent") {
-                ret = true;            
-            } else if (link.fromObject.elementType=="ExclusiveIntermediateEventGateway") {
+            
+            if (link.typeOf("AssociationFlow") && link.fromObject.typeOf("DataObject")) {
+                ret = true;
+            }
+            if (ret && link.elementType == "MessageFlow") {
+                ret = false;
+            } else if (ret && link.fromObject.elementType=="ExclusiveIntermediateEventGateway") {
                 ret = false;
             }
             return ret;
@@ -1797,62 +1802,38 @@
     
     var _ScriptTask = function(obj) {
         var _this = new _Task(obj);
-        var fCanStart = _this.canStartLink;
-        var fCanEnd = _this.canEndLink;
-        
         _this.setElementType("ScriptTask");
-        
-        _this.canStartLink = function(link) {
-            var ret = fCanStart(link);
-            if (link.elementType=="MessageFlow") {
-                ret = false;
-            }
-            return ret;
-        };
-        
-        _this.canEndLink = function(link) {
-            var ret = fCanEnd(link);
-            if (link.elementType=="MessageFlow") {
-                ret = false;
-            }
-            return ret;
-        };
         return _this;
     };
     
     var _SendTask = function(obj) {
         var _this = new _Task(obj);
-        var fCanEnd = _this.canEndLink;
+        var fCanStart = _this.canStartLink;
         
         _this.setElementType("SendTask");
         
-        _this.canEndLink = function(link) {
-            var ret = fCanEnd(link);
-            if (link.elementType=="MessageFlow") {
-                ret = false;
+        _this.canStartLink = function(link) {
+            var ret = fCanStart(link);
+            if (ret || link.elementType=="MessageFlow") {
+                ToolKit.hideToolTip();
+                ret = true;
             }
-            return ret;
+            return ret; 
         };
         return _this;
     };
     
     var _ReceiveTask = function(obj) {
         var _this = new _Task(obj);
-        var fCanStart = _this.canStartLink;
         var fCanEnd = _this.canEndLink;
         
         _this.setElementType("ReceiveTask");
         
-        _this.canStartLink = function(link) {
-            var ret = fCanStart(link);
-            if (link.elementType=="MessageFlow") {
-                ret = false;
-            }
-            return ret;
-        };
-        
         _this.canEndLink = function(link) {
             var ret = fCanEnd(link);
+            if (ret || link.elementType=="MessageFlow") {
+                ret = true;
+            }
             if (link.elementType=="SequenceFlow" && link.fromObject.elementType=="ExclusiveIntermediateEventGateway") {
                 ret = true;
                 for (var i = 0; i < link.fromObject.outConnections.length; i++) {
@@ -1869,26 +1850,7 @@
     
     var _ManualTask = function(obj) {
         var _this = new _Task(obj);
-        var fCanStart = _this.canStartLink;
-        var fCanEnd = _this.canEndLink;
-        
         _this.setElementType("ManualTask");
-        
-        _this.canStartLink = function(link) {
-            var ret = fCanStart(link);
-            if (link.elementType=="MessageFlow") {
-                ret = false;
-            }
-            return ret;
-        };
-        
-        _this.canEndLink = function(link) {
-            var ret = fCanEnd(link);
-            if (link.elementType=="MessageFlow") {
-                ret = false;
-            }
-            return ret;
-        };
         return _this;
     };
     
@@ -1920,6 +1882,7 @@
         _this.canStartLink = function(link) {
             var ret = fCanStart(link);
             if (link.typeOf("SequenceFlow")) {
+                ToolKit.showTooltip("","Un subproceso de evento no puede conectarse usando flujos de secuencia", 250, "Error")
                 ret = false;
             }
             return ret;
@@ -1928,6 +1891,7 @@
         _this.canEndLink = function(link) {
             var ret = fCanEnd(link);
             if (link.typeOf("SequenceFlow")) {
+                ToolKit.showTooltip("","Un subproceso de evento no puede conectarse usando flujos de secuencia", 250, "Error")
                 ret = false;
             }
             return ret;
