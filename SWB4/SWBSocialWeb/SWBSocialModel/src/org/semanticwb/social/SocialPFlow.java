@@ -10,4 +10,13 @@ public class SocialPFlow extends org.semanticwb.social.base.SocialPFlowBase
     {
         super(base);
     }
+    
+     /**
+   * Gets the WebSite
+   * @return a instance of org.semanticwb.model.WebSite
+   */
+    public org.semanticwb.model.WebSite getWebSite()
+    {
+        return (org.semanticwb.model.WebSite)getSemanticObject().getModel().getModelObject().createGenericInstance();
+    }
 }
