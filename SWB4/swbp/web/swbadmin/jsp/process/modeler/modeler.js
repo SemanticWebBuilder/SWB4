@@ -111,6 +111,21 @@
             return ret;
         };
         
+        _this.canStartLink = function (link) {
+            var ret = true;
+            var msg = null;
+            
+            if (link.elementType=="MessageFlow") {
+                msg = "Un nodo de flujo no puede tener flujos de mensaje salientes";
+                ret = false;
+            }
+            
+            if (msg!=null) {
+                ToolKit.showTooltip(0, msg, 200, "Error");
+            }
+            return ret;
+        };
+        
         _this.canEndLink = function(link) {
             var ret = fCanEnd(link);
             var msg = null;
@@ -123,7 +138,7 @@
             }
             
             if (link.elementType=="AssociationFlow") {
-                if (!(link.fromObject.elementType=="Artifact" || link.fromObject.elementType=="DataObject") && !(link.fromObject.elementType=="CompensationIntermediateCatchEvent" && link.fromObject.parent.typeOf("Activity"))) {
+                if (!(link.fromObject.elementType=="Artifact" || link.fromObject.elementType=="DataObject") && !(link.fromObject.elementType=="CompensationIntermediateCatchEvent" && link.fromObject.parent && link.fromObject.parent.typeOf("Activity"))) {
                     msg = "Un flujo de asociación no puede conectar dos nodos de flujo";
                     ret = false;
                 }
@@ -178,21 +193,24 @@
     
     var _DirectionalAssociation = function(obj) {
       var _this = new _AssociationFlow(obj);
-      _this.setElementType("AssociationFlow");
+      _this.setElementType("DirectionalAssociation");
       return _this;
     };
     
     /***************************Eventos iniciales****************************/
     var _Event = function (obj) {
         var _this = new _FlowNode(obj);
+        var fCanStart = _this.canStartLink;
+        
         _this.setElementType("Event");
 
         _this.canStartLink=function(link) {
-            if (link.elementType=="ConditionalFlow" || link.elementType=="DefaultFlow") {
+            var ret = fCanStart(link);
+            if (ret && (link.elementType=="ConditionalFlow" || link.elementType=="DefaultFlow")) {
                 ToolKit.showTooltip(0, "Un evento no puede tener flujos condicionales de salida", 200, "Error");
-                return false;
+                ret = false;
             }
-            return true;
+            return ret;
         };
         return _this;
     };
@@ -211,8 +229,8 @@
         var fCanEnd = _this.canEndLink;
         _this.canEndLink = function(link) {
             var ret = fCanEnd(link);
-            if (link.fromObject.typeOf("EventBasedGateway")) {
-                ToolKit.showTooltip(0, "Un evento inicial no puede tener flujos de secuencia entrantes", 200, "Error");
+            if (ret && link.fromObject.typeOf("EventBasedGateway")) {
+                ToolKit.showTooltip(0, "Un evento disparador no puede conectarse con una compuerta basada en eventos", 200, "Error");
                 ret = false;
             }
             return ret;
@@ -584,48 +602,75 @@
         
         _this.canAttach = function(parent) {
             var ret = fCanAttach(parent);
-            if (ret || parent.typeOf("Activity")) {
+            var msg = null;
+            
+            if (ret || (parent.typeOf && parent.typeOf("Activity") && _this.inConnections.length==0)) {
                 ret = true;
             }
             
-            if (parent.typeOf("CallActivity")) {
+            if (parent.typeOf && parent.typeOf("CallActivity")) {
+                msg = "Este evento no puede adherirse a una actividad llamada";
                 ret = false;
+            }
+            if (msg!=null) {
+                ToolKit.showTooltip(0, msg, 200, "Error");
             }
             return ret;
         };
         
         _this.canEndLink = function (link) {
             var ret = fCanEnd(link);
-            var c = 0;
+            var msg = null;
             
-            for (var i = 0; i < _this.inConnections.length; i++) {
-                if (_this.inConnections[i].elementType=="SequenceFlow") {
-                    c++;
-                }
+            if (ret && link.elementType=="MessageFlow") {
+                msg = "Un evento intermedio no puede tener flujos de mensaje entrantes";
+                ret = false;
             }
             
-            if (link.elementType=="SequenceFlow") {
-                if (_this.parent && _this.parent != null && _this.parent.typeOf("Activity")) {
+            if (ret && link.elementType=="SequenceFlow") {
+                if (ret && _this.parent && _this.parent != null && _this.parent.typeOf("Activity")) {
+                    msg = "Un evento adherido no puede tener flujos de secuencia entrantes";
                     ret = false;
-                } else if (c != 0) {
-                    ret = false;
+                } else {
+                    var c = 0;
+                    for (var i = 0; i < _this.inConnections.length; i++) {
+                        if (_this.inConnections[i].elementType=="SequenceFlow") {
+                            c++;
+                        }
+                    }
+
+                    if (c != 0) {
+                        msg = "Un evento intermedio sólo puede tener un flujo de secuencia entrante";
+                        ret = false;
+                    }
                 }
+            }
+            if (msg!=null) {
+                ToolKit.showTooltip(0, msg, 200, "Error");
             }
             return ret;
         };
         
+        
         _this.canStartLink = function(link) {
             var ret = fCanStart(link);
-            var c = 0;
+            var msg = null;
             
-            for (var i = 0; i < _this.outConnections.length; i++) {
-                if (_this.outConnections[i].elementType=="SequenceFlow") {
-                    c++;
+            if (ret && link.elementType=="SequenceFlow") {
+                var c = 0;
+                for (var i = 0; i < _this.outConnections.length; i++) {
+                    if (_this.outConnections[i].elementType=="SequenceFlow") {
+                        c++;
+                    }
+                }
+
+                if (c != 0) {
+                    msg = "Un evento intermedio sólo puede tener un flujo de secuencia saliente";
+                    ret = false;
                 }
             }
-            
-            if (link.elementType=="SequenceFlow" && c != 0) {
-                ret = false;
+            if (msg!=null) {
+                ToolKit.showTooltip(0, msg, 200, "Error");
             }
             return ret;
         };
@@ -633,32 +678,38 @@
     };
     
     var _IntermediateThrowEvent = function (obj) {
-        var _this = new _CatchEvent(obj);
+        var _this = new _ThrowEvent(obj);
         var fCanEnd = _this.canEndLink;
         var fCanStart = _this.canStartLink;
+        var msg = null;
         
         _this.setElementType("IntermediateThrowEvent");
         
-        _this.canAttach = function(parent) {
-            var ret = true;
-            if (!(parent.elementType=="Pool" || parent.elementType=="Lane")) {
-                ret = false;
-            }
-            return ret;
-        };
-        
         _this.canEndLink = function (link) {
             var ret = fCanEnd(link);
-            var c = 0;
+            var msg = null;
             
-            for (var i = 0; i < _this.inConnections.length; i++) {
-                if (_this.inConnections[i].elementType=="SequenceFlow") {
-                    c++;
-                }
+            if (ret && link.elementType=="MessageFlow") {
+                msg = "Un evento intermedio no puede tener flujos de mensaje entrantes";
+                ret = false;
             }
             
-            if (link.elementType=="SequenceFlow" && c != 0) {
-                ret = false;
+            if (ret && link.elementType == "SequenceFlow") {
+                var c = 0;
+                for (var i = 0; i < _this.inConnections.length; i++) {
+                    if (_this.inConnections[i].elementType=="SequenceFlow") {
+                        c++;
+                    }
+                }
+                
+                if (c != 0) {
+                    msg = "Un evento intermedio sólo puede tener un flujo de secuencia entrante";
+                    ret = false;
+                }
+            }
+
+            if (msg!=null) {
+                ToolKit.showTooltip(0, msg, 200, "Error");
             }
             return ret;
         };
@@ -667,14 +718,21 @@
             var ret = fCanStart(link);
             var c = 0;
             
-            for (var i = 0; i < _this.outConnections.length; i++) {
-                if (_this.outConnections[i].elementType=="SequenceFlow") {
-                    c++;
+            var msg = null;
+            
+            if (ret && link.elementType=="SequenceFlow") {
+                for (var i = 0; i < _this.outConnections.length; i++) {
+                    if (_this.outConnections[i].elementType=="SequenceFlow") {
+                        c++;
+                    }
+                }
+                if (c != 0) {
+                    msg = "Un evento intermedio sólo puede tener un flujo de secuencia saliente";
+                    ret = false;
                 }
             }
-            
-            if (link.elementType=="SequenceFlow" && c != 0) {
-                ret = false;
+            if (msg!=null) {
+                ToolKit.showTooltip(0, msg, 200, "Error");
             }
             return ret;
         };
@@ -690,33 +748,49 @@
         
         _this.canEndLink = function(link) {
             var ret = fCanEnd(link);
-            var c = 0;
+            var msg = null;
             
-            for (var i = 0; i < _this.inConnections.length; i++) {
-                if (_this.inConnections[i].elementType=="MessageFlow") {
-                    c++;
-                }
-            }
-            
-            if (link.elementType=="MessageFlow" && c != 0) {
-                ret = false;
-            }
-            
-            if (link.elementType=="SequenceFlow" && link.fromObject.elementType=="ExclusiveIntermediateEventGateway") {
-                for (i = 0; i < _this.outConnections.length; i++) {
-                    if (_this.inConnections[i].elementType=="SequenceFlow" && _this.inConnections[i].toObject.elementType=="ReceiveTask") {
+            if (ret && link.elementType=="SequenceFlow" && link.fromObject.elementType=="ExclusiveIntermediateEventGateway") {
+                for (var i = 0; i < link.fromObject.outConnections.length; i++) {
+                    if (link.fromObject.outConnections[i].elementType=="SequenceFlow" && link.fromObject.outConnections[i].toObject && link.fromObject.outConnections[i].toObject.elementType=="ReceiveTask") {
                         ret = false;
                         break;
                     }
                 }
+            } else if (ret || link.elementType=="MessageFlow") {
+                msg = null;
+                ToolKit.hideToolTip();
+                
+                var c = 0;
+                for (var i = 0; i < _this.inConnections.length; i++) {
+                    if (_this.inConnections[i].elementType=="MessageFlow") {
+                        c++;
+                    }
+                }
+                
+                if (c != 0) {
+                    msg = "Un evento intermedio de mensaje sólo puede tener un flujo de mensaje entrante";
+                    ret = false;
+                } else {
+                    ret = true;
+                }
+            }
+
+            if (msg!=null) {
+                ToolKit.showTooltip(0, msg, 200, "Error");
             }
             return ret;
         };
         
         _this.canStartLink = function (link) {
             var ret = fCanStart(link);
+            var msg = null;
+            
             if (link.elementType=="MessageFlow") {
-                ret = false;
+                msg = "Un evento intermedio receptor de mensaje no puede tener flujos de mensaje salientes";
+            }
+            if (msg!=null) {
+                ToolKit.showTooltip(0, msg, 200, "Error");
             }
             return ret;
         };
@@ -725,9 +799,20 @@
     
     var _ErrorIntermediateCatchEvent = function (obj) {
         var _this = new _IntermediateCatchEvent(obj);
+        var fCanEnd = _this.canEndLink;
+        
         _this.setElementType("ErrorIntermediateCatchEvent");
         
         _this.canEndLink = function (link) {
+            var ret = fCanEnd(link);
+            var msg = null;
+            
+            if (ret) {
+                msg = "Un evento intermedio de error no puede tener flujos de secuencia entrantes";
+            }
+            if (msg!=null) {
+                ToolKit.showTooltip(0, msg, 200, "Error");
+            }
             return false;
         };
         
@@ -737,35 +822,43 @@
     var _TimerIntermediateCatchEvent = function (obj) {
         var _this = new _IntermediateCatchEvent(obj);
         _this.setElementType("TimerIntermediateCatchEvent");
-        
-        _this.canAttach = function (parent) {
-            var ret = false;
-            if (parent.typeOf("Activity") || parent.elementType=="Pool" || parent.elementType=="Lane") {
-                ret = true;
-            }
-            return ret;
-        };
-        
         return _this;
     };
     
     var _CancelationIntermediateCatchEvent = function (obj) {
         var _this = new _IntermediateCatchEvent(obj);
+        var fCanAttach = _this.canAttach;
+        var fCanEnd = _this.canEndLink;
+        
         _this.setElementType("CancelationIntermediateCatchEvent");
         
-        _this.canAttach = function (parent) {
-            var ret = false;
-            if(parent.elementType=="Pool" || parent.elementType=="Lane" || parent.elementType=="TransactionSubProcess") {
-                ret = true;
-            } else {
+        _this.canAttach = function(parent) {
+            var ret = fCanAttach(parent);
+            var msg = null;
+            
+            if (ret && parent.elementType!="TransactionSubProcess") {
+                msg = "Un evento de cancelación sólo puede adherirse a una Transacción";
                 ret = false;
+            }
+            if (msg!=null) {
+                ToolKit.showTooltip(0, msg, 200, "Error");
             }
             return ret;
         };
         
         _this.canEndLink = function (link) {
+            var ret = fCanEnd(link);
+            var msg = null;
+            
+            if (ret) {
+                msg = "Un evento intermedio de cancelación no puede tener flujos de secuencia entrantes";
+            }
+            if (msg!=null) {
+                ToolKit.showTooltip(0, msg, 200, "Error");
+            }
             return false;
         };
+        
         return _this;
     };
     
@@ -777,10 +870,14 @@
         
         _this.canStartLink = function(link) {
             var ret = fCanStart(link);
-            if (_this.parent && _this.parent != null && _this.parent.typeOf("Activity")) {
-                if (link.elementType!="DirectionalAssociation") {
-                    ret = false;
-                }
+            var msg = null;
+            
+            if (ret && _this.parent && _this.parent != null && _this.parent.typeOf("Activity") && link.elementType != "DirectionalAssociation") {
+                msg = "Este evento adherido sólo puede conectarse mediante asociaciones direccionales";
+                ret = false;
+            }
+            if (msg!=null) {
+                ToolKit.showTooltip(0, msg, 200, "Error");
             }
             return ret;
         };
@@ -789,26 +886,19 @@
     
     var _LinkIntermediateCatchEvent = function (obj) {
         var _this = new _IntermediateCatchEvent(obj);
-        var fCanStart = _this.canStartLink;
         var fCanAttach = _this.canAttach;
         
         _this.setElementType("LinkIntermediateCatchEvent");
         
         _this.canEndLink = function(link) {
+            ToolKit.showTooltip(0, "Un evento receptor de enlace no puede tener flujos entrantes", 200, "Error");
             return false;
         };
         
-        _this.canStartLink = function(link) {
-            var ret = fCanStart(link);
-            if (link.elementType=="MessageFlow") {
-                ret = false;
-            }
-            return ret;
-        };
-        
-        _this.canAttach = function (parent) {
+        _this.canAttach = function(parent) {
             var ret = fCanAttach(parent);
-            if (parent.typeOf("Activity")) {
+            if (ret && parent.typeOf("Activity")) {
+                ToolKit.showTooltip(0, "Un evento de enlace no puede adherirse a una actividad", 200, "Error");
                 ret = false;
             }
             return ret;
@@ -819,14 +909,6 @@
     var _SignalIntermediateCatchEvent = function (obj) {
         var _this = new _IntermediateCatchEvent(obj);
         _this.setElementType("SignalIntermediateCatchEvent");
-        
-        _this.canAttach = function(parent) {
-            var ret = false;
-            if (parent.typeOf("Activity") || parent.elementType=="Pool" || parent.elementType=="Lane") {
-                ret = true;
-            }
-            return ret;
-        };
         
         return _this;
     };
@@ -843,17 +925,10 @@
         
         _this.setElementType("ScalationIntermediateCatchEvent");
         
-        _this.canAttach = function(parent) {
-            var ret = false;
-            if (parent.typeOf("Activity") || parent.elementType=="Pool" || parent.elementType=="Lane") {
-                ret = true;
-            }
-            return ret;
-        };
-        
         _this.canEndLink = function(link) {
             var ret = fCanEnd(link);
-            if (link.elementType=="SequenceFlow" && link.fromObject.elementType=="EventBasedGateway") {
+            if (ret && link.elementType=="SequenceFlow" && link.fromObject.typeOf("EventBasedGateway")) {
+                ToolKit.showTooltip(0, "Una evento receptor de de escalamiento no puede conectarse con una compuerta basada en eventos", 200, "Error");
                 ret = false;
             }
             return ret;
@@ -869,7 +944,8 @@
         
         _this.canAttach = function (parent) {
             var ret = fCanAttach(parent);
-            if (parent.typeOf("Activity")) {
+            if (ret && parent.typeOf("Activity")) {
+                ToolKit.showTooltip(0, "Un evento intermedio paralelo no puede adherirse a una actividad", 200, "Error");
                 ret = false;
             }
             return ret;
@@ -880,44 +956,37 @@
     var _RuleIntermediateCatchEvent = function (obj) {
         var _this = new _IntermediateCatchEvent(obj);
         _this.setElementType("RuleIntermediateCatchEvent");
-        
-        _this.canAttach = function (parent) {
-            var ret = false;
-            if (parent.typeOf("Activity") || parent.elementType=="Pool" || parent.elementType=="Lane") {
-                ret = true;
-            }
-            return ret;
-        };
         return _this;
     };
     
     var _MessageIntermediateThrowEvent = function(obj) {
         var _this = new _IntermediateThrowEvent(obj);
-        var fCanEnd = _this.canEndLink;
         var fCanStart = _this.canStartLink;
         
         _this.setElementType("MessageIntermediateThrowEvent");
         
         _this.canStartLink = function(link) {
             var ret = fCanStart(link);
-            var c = 0;
+            var msg = null;
             
-            for (var i = 0; i < _this.outConnections.length; i++) {
-                if (_this.outConnections[i].elementType=="MessageFlow") {
-                    c++;
+            if (ret || link.elementType=="MessageFlow") {
+                if (link.elementType=="MessageFlow") {
+                    var c = 0;
+                    for (var i = 0; i < _this.outConnections.length; i++) {
+                        if (_this.outConnections[i].elementType=="MessageFlow") {
+                            c++;
+                        }
+                    }
+
+                    if (c == 0) {
+                        ret = true;
+                    } else {
+                        msg = "Un evento disparador de mensaje no puede tener más de un flujo de mensaje saliente";
+                    }
                 }
             }
-            
-            if (link.elementType=="MessageFlow" && c != 0) {
-                ret = false;
-            }
-            return ret;
-        };
-        
-        _this.canEndLink = function (link) {
-            var ret = fCanEnd(link);
-            if (link.elementType=="MessageFlow") {
-                ret = false;
+            if (msg!=null) {
+                ToolKit.showTooltip(0, msg, 200, "Error");
             }
             return ret;
         };
@@ -933,22 +1002,13 @@
     
     var _LinkIntermediateThrowEvent = function(obj) {
         var _this = new _IntermediateThrowEvent(obj);
-        var fCanEnd = _this.canEndLink;
         
         _this.setElementType("LinkIntermediateThrowEvent");
         
         _this.canStartLink = function(link) {
+            ToolKit.showTooltip(0, "Un evento disparador de enlace no puede tener flujos de salida", 200, "Error");
             return false;
         };
-        
-        _this.canEndLink = function(link) {
-            var ret = fCanEnd(link);
-            if (link.elementType=="MessageFlow") {
-                ret = false;
-            }
-            return ret;
-        };
-        
         return _this;
     };
     
@@ -1567,7 +1627,7 @@
             if (link.elementType=="SequenceFlow" && link.fromObject.elementType=="ExclusiveIntermediateEventGateway") {
                 ret = true;
                 for (var i = 0; i < link.fromObject.outConnections.length; i++) {
-                    if (link.fromObject.outConnections[i].elementType=="SequenceFlow" && link.toObject.outConnections[i].elementType=="MessageIntermediateCatchEvent") {
+                    if (link.fromObject.outConnections[i].elementType=="SequenceFlow" && link.fromObject.outConnections[i].toObject && link.fromObject.outConnections[i].toObject.elementType=="MessageIntermediateCatchEvent") {
                         ret = false;
                         break;
                     }
@@ -2221,6 +2281,27 @@
                     obj.subSquare.setAttributeNS(null,"class","transactionSquare");
                     obj.subSquare.canSelect=false;
                     
+                    obj.subSquare.onmousedown=function(evt)
+                    {
+                        obj.onmousedown(evt);
+                    };
+                    obj.subSquare.onmouseup=function(evt)
+                    {
+                        obj.onmouseup(evt);
+                    };      
+                    obj.subSquare.onmousemove=function(evt)
+                    {
+                        obj.onmousemove(evt);
+                    };
+                    obj.subSquare.ondblclick=function(evt)
+                    {
+                        obj.ondblclick(evt);
+                    };
+                    
+                    obj.subSquare.onDropObjects=function(objs) {
+                        obj.onDropObjects(objs);
+                    };
+                    
                     obj.updateSubSquare=function() {
                         obj.subSquare.move(obj.getX(),obj.getY());
                         obj.subSquare.resize(obj.getWidth()-8,obj.getHeight()-8);
@@ -2442,7 +2523,7 @@
                 ret.setText("Exclusiva de inicio",0,1,80,1);
             }
             else if(type=='exclusiveEventGateway') {
-                ret= new _EventBasedGateway(Modeler.createObject("#eventGateway",null,null));
+                ret= new _ExclusiveIntermediateEventGateway(Modeler.createObject("#eventGateway",null,null));
                 ret.setText("Exclusiva (eventos)",0,1,80,1);
             }
             else if(type=='parallelGateway') {
@@ -2575,7 +2656,7 @@
             }
             else if(type=='transactionsubProcess') {
                 ret = new _TransactionSubProcess(Modeler.createSubProcess(null, null, "transactionsubProcess"));
-                ret.setText("Transación",0,0,200,1);
+                ret.setText("Transacción",0,0,200,1);
                 ret.resize(100,60);
             }
             else if (type=="pool") {
