@@ -8,7 +8,6 @@
 <%@page import="org.semanticwb.portal.api.SWBParamRequest"%>
 <%@page import="org.semanticwb.portal.api.SWBResourceURL"%>
 
-
 <%    
         User user=paramRequest.getUser(); 
         SWBResourceURL url = paramRequest.getRenderUrl();   

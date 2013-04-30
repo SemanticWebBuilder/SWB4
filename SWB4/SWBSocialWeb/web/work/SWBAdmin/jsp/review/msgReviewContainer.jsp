@@ -4,7 +4,6 @@
     Author     : Jorge.Jiménez
 --%><%@page import="org.semanticwb.social.admin.resources.MsgReviewContainer"%>
 
-Entra k
 <jsp:useBean id="paramRequest" scope="request" type="org.semanticwb.portal.api.SWBParamRequest"/>
 <%@page import="org.semanticwb.platform.SemanticObject"%>
 <%@page contentType="text/html" pageEncoding="ISO-8859-1"%>
@@ -38,6 +37,15 @@ Entra k
 <script type="text/javascript" src="/swbadmin/js/swb.js" ></script>    
 
 <%
+/*
+System.out.println("en MsgRvwJJ");
+Iterator <PostIn> itPostInsTmps=PostIn.ClassMgr.listPostIns(); 
+while(itPostInsTmps.hasNext())
+{
+    PostIn postIn=itPostInsTmps.next(); 
+    System.out.println("postIn todos:"+postIn);
+}*/
+
 int PAGE_SIZE=MsgReviewContainer.PAGE_SIZE;
 SemanticObject semObj=SemanticObject.getSemanticObject(request.getParameter("socialSite"));  
 SocialSite socialSite=(SocialSite)semObj.createGenericInstance();  
@@ -49,7 +57,7 @@ try {
 }catch (NumberFormatException nfe) {
     ipage = 1;
 }
-
+System.out.println("socialSite en JspJJ:"+socialSite);
 //Iterator<MessageIn> itposts = MessageIn.ClassMgr.listMessageIns(wsite); 
 long el = 0;
 User user=paramRequest.getUser();
@@ -57,23 +65,40 @@ Iterator <UserGroupRef> itUserGroupRef=UserGroupRef.ClassMgr.listUserGroupRefs(s
 while(itUserGroupRef.hasNext())
 {
     UserGroupRef userGroupRef=itUserGroupRef.next(); 
+    System.out.println("socialSite en JspJ-1:"+userGroupRef);
     if(userGroupRef.getUserGroup().hasUser(user))
     {
+        System.out.println("socialSite en JspJ-2:"+userGroupRef);
         Iterator <SocialTopic> itSocialTopics=SocialTopic.ClassMgr.listSocialTopicByUserGroupRef(userGroupRef);
         while(itSocialTopics.hasNext())
         {
             SocialTopic socialTopic=itSocialTopics.next();
+            System.out.println("socialSite en JspJ-3:"+socialTopic);
             //Extraigo cuales son los mensajes de un SocialTopic
-            Iterator<PostIn> itPostIns=PostIn.ClassMgr.listPostInBySocialTopic(socialTopic);
+            Iterator<PostIn> itPostIns=PostIn.ClassMgr.listPostInBySocialTopic(socialTopic); 
             while(itPostIns.hasNext())
             {
-                PostIn postIn=itPostIns.next(); 
-                el++;
+                try
+                {
+                    /*
+                    PostIn postIn=itPostIns.next(); 
+                    if(postIn.getPostInSocialNetworkUser()!=null)
+                    {
+                        postIn.getPostInSocialNetworkUser().remove();;
+                    }
+                    postIn.remove(); 
+                    * */
+                    //System.out.println("socialSite en JspJ-4:"+el);
+                    el++;
+                }catch(Exception e)
+                {
+                    System.out.println("Error al borrar PostIn:"+e.getMessage()); 
+                }
             }    
         }
     }
 }
-
+System.out.println("Borro el:"+el);
 long paginas = el / PAGE_SIZE;
 if(el % PAGE_SIZE != 0) {
     paginas++;
@@ -174,7 +199,8 @@ out.println("}");
         out.println("      { field:'user',width:'9%',name:'Usuario', styles:'font-size:11px;', headerStyles:'font-size:11px;text-align:center;' },");
         out.println("      { field:'fllwrs', width:'5%', name:'Seguidores', styles:'font-size:11px;text-align:right;', headerStyles:'font-size:11px;text-align:center;' },");
         out.println("      { field:'frds',width: '5%',name:'Amigos', styles:'font-size:11px;text-align:right;', headerStyles:'font-size:11px;text-align:center;' },");
-        out.println("      { field:'plc',width: '8%',name:'Lugar', styles:'font-size:11px;', headerStyles:'font-size:11px;text-align:center;' }");
+        out.println("      { field:'plc',width: '8%',name:'Lugar', styles:'font-size:11px;', headerStyles:'font-size:11px;text-align:center;' },");
+        out.println("      { field:'topic',width: '8%',name:'Tema', styles:'font-size:11px;', headerStyles:'font-size:11px;text-align:center;' }");
         out.println("   ];");
 
         out.println("   gridMaster = new dojox.grid.DataGrid({");
