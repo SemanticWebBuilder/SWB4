@@ -66,7 +66,7 @@
         };
         
         _this.getContainer = function() {
-            return _this.layer?_this.layer:null;
+            return _this.layer?_this.layer.parent:null;
         };
         
         _this.setElementType("GraphicalElement");
@@ -86,7 +86,7 @@
         _this.typeOf = function(typeName) {
             var ret = false;
             for (var i = 0; i < _this.types.length; i++) {
-                if(_this.types[i] == typeName) {
+                if(_this.types[i] === typeName) {
                     ret = true;
                     break;
                 }
@@ -1894,6 +1894,7 @@
                 ToolKit.showTooltip("","Un subproceso de evento no puede conectarse usando flujos de secuencia", 250, "Error")
                 ret = false;
             }
+            
             return ret;
         };
         return _this;
@@ -2530,6 +2531,58 @@
             }
             return obj;
         },
+                
+        getJSONObject: function(obj) {
+            var ret = {};
+            
+            if (!obj.typeOf) return null;
+            
+            ret.class = obj.elementType;
+            ret.uri="";//TODO:Extraer uri
+            ret.title = obj.text.value;
+            if (obj.typeOf("GraphicalElement")) {
+                ret.container = obj.getContainer();//TODO: Obtener ID
+                ret.parent = obj.parent;//TODO: Obtener ID
+                ret.labelSize="12";//TODO:Extraer tamaño de la fuente
+                ret.description=ret.title;//TODO:Extraer descripción
+                ret.x=obj.getX();
+                ret.y=obj.getY();
+                ret.w=obj.getWidth();
+                ret.h=obj.getHeight();
+                ret.isMultiInstance=false;//TODO: agregar método para verificar multiinstancia
+                ret.isSequentialMultiInstance=false;//TODO: agregar método para verificar multiinstancia
+                ret.isLoop=false;//TODO: agregar método para verificar ciclo
+                ret.isForCompensation=false;//TODO: agregar método para verificar compensación
+                if (obj.typeOf("IntermediateCatchEvent")) {
+                    ret.isInterrupting=false;//TODO: agregar método para verificar interrupción
+                }
+                
+                if (obj.typeOf("DataObject")) {
+                    ret.isCollection=false;//TODO: agregar método para verificar colección
+                }
+                if (obj.elementType=="Lane") {
+                    ret.index=0;//TODO: agregar método para verificar índice
+                }
+            }
+            
+            if (obj.typeOf("ConnectionObject")) {
+                ret.start=obj.fromObject;//TODO: Obtener ID
+                ret.end = obj.toObject;//TODO: Obtener ID
+                ret.connectionPoints = "0,0|0,0";//TODO: Agregar método para obtener puntos intermedios
+
+            }
+            return ret;
+        },
+                
+        getProcessJSON:function() {
+            var ret = {uri:"test", nodes:[]};
+            
+            for (var i = 0; i < ToolKit.contents.length; i++) {
+                ret.nodes.push(Modeler.getJSONObject(ToolKit.contents[i]));
+            }
+            console.log(ret);
+            return ret;
+        },
 
         mapObject:function(type)
         {
@@ -3067,8 +3120,7 @@
         
         con1 = Modeler.mapObject("defaultFlow");
         obj1.addOutConnection(con1);
-        obj2.addInConnection(con1);  
-        
-        
+        obj2.addInConnection(con1);
+        Modeler.getProcessJSON();   
     }
 
