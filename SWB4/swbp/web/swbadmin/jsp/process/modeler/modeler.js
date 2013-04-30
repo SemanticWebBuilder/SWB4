@@ -1208,7 +1208,11 @@
             var co = 0;
             var msg = null;
             
-            if (ret && link.elementType=="SequenceFlow") {
+            if (ret && link.elementType=="MessageFlow") {
+                ret = false;
+            } else if (ret && link.fromObject.typeOf("DataObject")) {
+                ret = false;
+            } else if (ret && link.elementType=="SequenceFlow") {
                 if (link.fromObject.typeOf("EventBasedGateway")) {
                     msg = "Esta compuerta no puede conectarse con una compuerta basada en eventos"
                     ret = false;
@@ -1293,8 +1297,15 @@
             var msg = null;
             var co = 0;
             var ci = 0;
-
-            if (link.fromObject.typeOf("EventBasedGateway")) {
+            
+            if (ret && link.elementType=="MessageFlow") {
+                ret = false;
+            } else if (ret && link.typeOf("AssociationFlow") && link.fromObject.typeOf("FlowNode")) {
+                msg = "Un flujo de asociación no puede conectar dos nodos de flujo"
+                ret = false;
+            } else if (ret && link.fromObject.typeOf("DataObject")) {
+                ret = false;
+            } else if (link.fromObject.typeOf("EventBasedGateway")) {
                 msg = "Esta compuerta no puede conectarse con una compuerta basada en eventos"
                 ret = false;
             } else {
@@ -1404,8 +1415,15 @@
             var msg = null;
             var co = 0;
             var ci = 0;
-
-            if (link.fromObject.typeOf("EventBasedGateway")) {
+            
+            if (ret && link.elementType=="MessageFlow") {
+                ret = false;
+            } else if (ret && link.typeOf("AssociationFlow") && link.fromObject.typeOf("FlowNode")) {
+                msg = "Un flujo de asociación no puede conectar dos nodos de flujo"
+                ret = false;
+            } else if (ret && link.fromObject.typeOf("DataObject")) {
+                ret = false;
+            } else if (link.fromObject.typeOf("EventBasedGateway")) {
                 msg = "Esta compuerta no puede conectarse con una compuerta basada en eventos"
                 ret = false;
             } else {
@@ -1470,8 +1488,15 @@
             var msg = null;
             var co = 0;
             var ci = 0;
-
-            if (link.fromObject.typeOf("EventBasedGateway")) {
+            
+            if (ret && link.elementType=="MessageFlow") {
+                ret = false;
+            } else if (ret && link.typeOf("AssociationFlow") && link.fromObject.typeOf("FlowNode")) {
+                msg = "Un flujo de asociación no puede conectar dos nodos de flujo"
+                ret = false;
+            } else if (ret && link.fromObject.typeOf("DataObject")) {
+                ret = false;
+            } else if (link.fromObject.typeOf("EventBasedGateway")) {
                 msg = "Esta compuerta no puede conectarse con una compuerta basada en eventos"
                 ret = false;
             } else {
@@ -1518,18 +1543,31 @@
         
         _this.canStartLink = function(link) {
             var ret = fCanStart(link);
+            var msg = null;
+            
             if (link.elementType!="AssociationFlow") {
+                msg ="Un objeto de datos sólo puede conectarse usando flujos de asociación";
                 ret = false;
+            }
+            if (msg!=null) {
+                ToolKit.showTooltip(0, msg, 200, "Error");
             }
             return ret;
         };
         
         _this.canEndLink = function(link) {
             var ret = fCanEnd(link);
+            var msg = null;
+            
             if (!link.typeOf("AssociationFlow")) {
+                msg ="Un objeto de datos sólo puede conectarse usando flujos de asociación";
                 ret = false;
-            } else if (link.fromObject.typeOf("DataObject")) {
+            } else if (!link.fromObject.typeOf("Activty")) {
+                msg ="Los objetos de datos sólo pueden asociarse con actividades";
                 ret = false;
+            }
+            if (msg!=null) {
+                ToolKit.showTooltip(0, msg, 200, "Error");
             }
             return ret;
         };
