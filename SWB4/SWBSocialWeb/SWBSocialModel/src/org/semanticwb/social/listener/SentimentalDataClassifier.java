@@ -444,6 +444,7 @@ public class SentimentalDataClassifier {
      */
     public void clasifyMsgbySocialTopic(PostIn post)
     {
+        System.out.println("Asocialcion de socialTopic-23-1");
          //Elimino Caracteres especiales (acentuados)
         String externalMsgTMP=SWBSocialUtil.Strings.replaceSpecialCharacters(externalString2Clasify_TMP);
 
@@ -462,6 +463,7 @@ public class SentimentalDataClassifier {
             }
         }
                 
+        System.out.println("Asocialcion de socialTopic-23");
                 
         Iterator <SocialTopic> itSocialTopics=SocialTopic.ClassMgr.listSocialTopics();
         while(itSocialTopics.hasNext())
@@ -494,6 +496,7 @@ public class SentimentalDataClassifier {
                        //varios usuarios en varios flujos, es mejor que se vaya solo a un flujo, asignando bien las palabras clave a cada tema (que no se repitan) 
                        // y si se clasificó a un tema que no debia de ser (por no colocar correctamente las palabras clave), las personas en un flujo podrían
                        //reclasificar en cualquier momento el mensaje, para que se vaya a otro tema y por consiguiente a otro flujo.
+                       System.out.println("Al post se le asocial SocialTopic:"+socialTopic.getURI());
                        post.setSocialTopic(socialTopic);    
                        existWord=true;
                        break;

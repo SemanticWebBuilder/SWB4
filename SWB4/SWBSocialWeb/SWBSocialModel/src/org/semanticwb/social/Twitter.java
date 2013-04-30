@@ -82,7 +82,7 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
                 twitter.setOAuthAccessToken(accessToken);
 //                StatusUpdate sup = new StatusUpdate(new String(message.getMsg_Text().getBytes(), "utf-8"));
                 StatusUpdate sup = new StatusUpdate(new String(shortUrl(message.getMsg_Text()).getBytes(), "ISO-8859-1"));
-
+                
                 Status stat = twitter.updateStatus(sup);
                 Long longStat = stat.getId();
                 // System.out.println("longStat: " + longStat + " texto: " + stat.getText());

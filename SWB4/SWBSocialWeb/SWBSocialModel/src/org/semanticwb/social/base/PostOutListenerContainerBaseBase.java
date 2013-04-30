@@ -23,14 +23,6 @@ public abstract class PostOutListenerContainerBaseBase extends org.semanticwb.mo
    */
     public static final org.semanticwb.platform.SemanticProperty social_plcb_SocialNetwork=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#plcb_SocialNetwork");
    /**
-   * Clase que comprende todos los tipos de Post de Salida que pueden ir siendo creados en la herramienta y que seran publicados a partir de esto en las diferentes redes sociales. Esta clase no se relaciona con una red social (con la clase SocialNetwork) porque un post de salida (desde la herramienta) podría ser enviado a diferentes redes sociales, sin embargo, es el mismo post de salida. Donde esta a que red social se envía esta en las instancias de la clase PostContainer.
-   */
-    public static final org.semanticwb.platform.SemanticClass social_PostOut=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#PostOut");
-   /**
-   * Propiedad inversa que nos proporciona todos los post que han sido creados desde el SSMCC en cuencecuencia de una instancia de Post que llega por el listener, es decir, de un post que es tomado como base para crear nuevos post, estos post que son tomados como base, estan en la clase PostListenerContainerBase (Osea en esta)
-   */
-    public static final org.semanticwb.platform.SemanticProperty social_hasNewCreatedPostInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#hasNewCreatedPostInv");
-   /**
    * Clase a Cambiar despues por "Relacional".  Clase que va ha contener los Post que han sido tomados como base (es decir, que llegan por el listener y que se guardan en la clase PostListenerContainer) para crear un nuevo Post desde la herramienta y que se envía hacia las redes sociales.Si se elimina un post que ha sido tomado como base(PostIn), se debe de eliminar la instancia asociada de esta clase (en la propiedad plcb_Post). NO UTILIZAR ESTA CLASE, YA REEMPLACE SU FUNCIONALIDAD COLOCANDO 2 PROPIEDADES A LA CLASE PostOut:postInOrigen y hasSocialNetwork.
    */
     public static final org.semanticwb.platform.SemanticClass social_PostOutListenerContainerBase=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#PostOutListenerContainerBase");
@@ -192,29 +184,6 @@ public abstract class PostOutListenerContainerBaseBase extends org.semanticwb.mo
         public static java.util.Iterator<org.semanticwb.social.PostOutListenerContainerBase> listPostOutListenerContainerBaseByPlcb_SocialNetwork(org.semanticwb.social.SocialNetwork value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.social.PostOutListenerContainerBase> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(social_plcb_SocialNetwork,value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.social.PostOutListenerContainerBase with a determined NewCreatedPostInv
-       * @param value NewCreatedPostInv of the type org.semanticwb.social.PostOut
-       * @param model Model of the org.semanticwb.social.PostOutListenerContainerBase
-       * @return Iterator with all the org.semanticwb.social.PostOutListenerContainerBase
-       */
-
-        public static java.util.Iterator<org.semanticwb.social.PostOutListenerContainerBase> listPostOutListenerContainerBaseByNewCreatedPostInv(org.semanticwb.social.PostOut value,org.semanticwb.model.SWBModel model)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.social.PostOutListenerContainerBase> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(social_hasNewCreatedPostInv, value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.social.PostOutListenerContainerBase with a determined NewCreatedPostInv
-       * @param value NewCreatedPostInv of the type org.semanticwb.social.PostOut
-       * @return Iterator with all the org.semanticwb.social.PostOutListenerContainerBase
-       */
-
-        public static java.util.Iterator<org.semanticwb.social.PostOutListenerContainerBase> listPostOutListenerContainerBaseByNewCreatedPostInv(org.semanticwb.social.PostOut value)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.social.PostOutListenerContainerBase> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(social_hasNewCreatedPostInv,value.getSemanticObject(),sclass));
             return it;
         }
     }
@@ -417,45 +386,6 @@ public abstract class PostOutListenerContainerBaseBase extends org.semanticwb.mo
          if(obj!=null)
          {
              ret=(org.semanticwb.social.SocialNetwork)obj.createGenericInstance();
-         }
-         return ret;
-    }
-   /**
-   * Gets all the org.semanticwb.social.PostOut
-   * @return A GenericIterator with all the org.semanticwb.social.PostOut
-   */
-
-    public org.semanticwb.model.GenericIterator<org.semanticwb.social.PostOut> listNewCreatedPostInvs()
-    {
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.social.PostOut>(getSemanticObject().listObjectProperties(social_hasNewCreatedPostInv));
-    }
-
-   /**
-   * Gets true if has a NewCreatedPostInv
-   * @param value org.semanticwb.social.PostOut to verify
-   * @return true if the org.semanticwb.social.PostOut exists, false otherwise
-   */
-    public boolean hasNewCreatedPostInv(org.semanticwb.social.PostOut value)
-    {
-        boolean ret=false;
-        if(value!=null)
-        {
-           ret=getSemanticObject().hasObjectProperty(social_hasNewCreatedPostInv,value.getSemanticObject());
-        }
-        return ret;
-    }
-
-   /**
-   * Gets the NewCreatedPostInv
-   * @return a org.semanticwb.social.PostOut
-   */
-    public org.semanticwb.social.PostOut getNewCreatedPostInv()
-    {
-         org.semanticwb.social.PostOut ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(social_hasNewCreatedPostInv);
-         if(obj!=null)
-         {
-             ret=(org.semanticwb.social.PostOut)obj.createGenericInstance();
          }
          return ret;
     }

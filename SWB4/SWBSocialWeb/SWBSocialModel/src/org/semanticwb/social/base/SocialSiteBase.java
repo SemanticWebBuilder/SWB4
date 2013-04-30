@@ -4,7 +4,7 @@ package org.semanticwb.social.base;
    /**
    * Clase que hereda de swb:WebSite. Es un tipo de website Social. De esta manera se puede contar con todos los elementos en el arbol de navegación en la administración, y otros elementos utiles para Social Site. 
    */
-public abstract class SocialSiteBase extends org.semanticwb.model.WebSite implements org.semanticwb.model.Activeable,org.semanticwb.model.Indexable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Filterable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Trashable,org.semanticwb.model.Localeable,org.semanticwb.model.Traceable,org.semanticwb.model.Undeleteable,org.semanticwb.model.FilterableClass,org.semanticwb.model.OntologyDepable,org.semanticwb.model.Countryable
+public abstract class SocialSiteBase extends org.semanticwb.model.WebSite implements org.semanticwb.model.Localeable,org.semanticwb.model.Indexable,org.semanticwb.model.Trashable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Traceable,org.semanticwb.model.Filterable,org.semanticwb.model.OntologyDepable,org.semanticwb.model.Countryable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Activeable,org.semanticwb.model.Undeleteable,org.semanticwb.model.FilterableNode
 {
    /**
    * Acción específica mediante la cual se envía un correo electrónico
@@ -20,9 +20,21 @@ public abstract class SocialSiteBase extends org.semanticwb.model.WebSite implem
    */
     public static final org.semanticwb.platform.SemanticClass social_Stream=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#Stream");
    /**
+   * Un Flujo de Publicación es una serie de autorizaciones por las que pasa un contenido antes de publicarse en un Sitio Web
+   */
+    public static final org.semanticwb.platform.SemanticClass social_SocialPFlow=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#SocialPFlow");
+   /**
+   * Instancia de un recurso asociado a un flujo de publicación.
+   */
+    public static final org.semanticwb.platform.SemanticClass social_SocialPFlowInstance=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#SocialPFlowInstance");
+   /**
    * Acción específica mediante la cual se envía un mensaje por defecto a una o varias redes sociales seleccionadas
    */
     public static final org.semanticwb.platform.SemanticClass social_SendPost=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#SendPost");
+   /**
+   * Referencia a un objeto de tipo PFlow
+   */
+    public static final org.semanticwb.platform.SemanticClass social_SocialPFlowRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#SocialPFlowRef");
    /**
    * Acción específica mediante la cual se marca un mensaje como prioritario. Esto en la propiedad "IsPrioritary" de un mensaje (Post).
    */
@@ -497,6 +509,66 @@ public abstract class SocialSiteBase extends org.semanticwb.model.WebSite implem
         return org.semanticwb.social.Stream.ClassMgr.hasStream(id, this);
     }
 
+    public org.semanticwb.social.SocialPFlow getSocialPFlow(String id)
+    {
+        return org.semanticwb.social.SocialPFlow.ClassMgr.getSocialPFlow(id, this);
+    }
+
+    public java.util.Iterator<org.semanticwb.social.SocialPFlow> listSocialPFlows()
+    {
+        return org.semanticwb.social.SocialPFlow.ClassMgr.listSocialPFlows(this);
+    }
+
+    public org.semanticwb.social.SocialPFlow createSocialPFlow(String id)
+    {
+        return org.semanticwb.social.SocialPFlow.ClassMgr.createSocialPFlow(id,this);
+    }
+
+    public org.semanticwb.social.SocialPFlow createSocialPFlow()
+    {
+        long id=getSemanticObject().getModel().getCounter(social_SocialPFlow);
+        return org.semanticwb.social.SocialPFlow.ClassMgr.createSocialPFlow(String.valueOf(id),this);
+    } 
+
+    public void removeSocialPFlow(String id)
+    {
+        org.semanticwb.social.SocialPFlow.ClassMgr.removeSocialPFlow(id, this);
+    }
+    public boolean hasSocialPFlow(String id)
+    {
+        return org.semanticwb.social.SocialPFlow.ClassMgr.hasSocialPFlow(id, this);
+    }
+
+    public org.semanticwb.social.SocialPFlowInstance getSocialPFlowInstance(String id)
+    {
+        return org.semanticwb.social.SocialPFlowInstance.ClassMgr.getSocialPFlowInstance(id, this);
+    }
+
+    public java.util.Iterator<org.semanticwb.social.SocialPFlowInstance> listSocialPFlowInstances()
+    {
+        return org.semanticwb.social.SocialPFlowInstance.ClassMgr.listSocialPFlowInstances(this);
+    }
+
+    public org.semanticwb.social.SocialPFlowInstance createSocialPFlowInstance(String id)
+    {
+        return org.semanticwb.social.SocialPFlowInstance.ClassMgr.createSocialPFlowInstance(id,this);
+    }
+
+    public org.semanticwb.social.SocialPFlowInstance createSocialPFlowInstance()
+    {
+        long id=getSemanticObject().getModel().getCounter(social_SocialPFlowInstance);
+        return org.semanticwb.social.SocialPFlowInstance.ClassMgr.createSocialPFlowInstance(String.valueOf(id),this);
+    } 
+
+    public void removeSocialPFlowInstance(String id)
+    {
+        org.semanticwb.social.SocialPFlowInstance.ClassMgr.removeSocialPFlowInstance(id, this);
+    }
+    public boolean hasSocialPFlowInstance(String id)
+    {
+        return org.semanticwb.social.SocialPFlowInstance.ClassMgr.hasSocialPFlowInstance(id, this);
+    }
+
     public org.semanticwb.social.SendPost getSendPost(String id)
     {
         return org.semanticwb.social.SendPost.ClassMgr.getSendPost(id, this);
@@ -525,6 +597,36 @@ public abstract class SocialSiteBase extends org.semanticwb.model.WebSite implem
     public boolean hasSendPost(String id)
     {
         return org.semanticwb.social.SendPost.ClassMgr.hasSendPost(id, this);
+    }
+
+    public org.semanticwb.social.SocialPFlowRef getSocialPFlowRef(String id)
+    {
+        return org.semanticwb.social.SocialPFlowRef.ClassMgr.getSocialPFlowRef(id, this);
+    }
+
+    public java.util.Iterator<org.semanticwb.social.SocialPFlowRef> listSocialPFlowRefs()
+    {
+        return org.semanticwb.social.SocialPFlowRef.ClassMgr.listSocialPFlowRefs(this);
+    }
+
+    public org.semanticwb.social.SocialPFlowRef createSocialPFlowRef(String id)
+    {
+        return org.semanticwb.social.SocialPFlowRef.ClassMgr.createSocialPFlowRef(id,this);
+    }
+
+    public org.semanticwb.social.SocialPFlowRef createSocialPFlowRef()
+    {
+        long id=getSemanticObject().getModel().getCounter(social_SocialPFlowRef);
+        return org.semanticwb.social.SocialPFlowRef.ClassMgr.createSocialPFlowRef(String.valueOf(id),this);
+    } 
+
+    public void removeSocialPFlowRef(String id)
+    {
+        org.semanticwb.social.SocialPFlowRef.ClassMgr.removeSocialPFlowRef(id, this);
+    }
+    public boolean hasSocialPFlowRef(String id)
+    {
+        return org.semanticwb.social.SocialPFlowRef.ClassMgr.hasSocialPFlowRef(id, this);
     }
 
     public org.semanticwb.social.MarkMsgAsPrioritary getMarkMsgAsPrioritary(String id)
