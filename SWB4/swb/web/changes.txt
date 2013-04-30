@@ -1,3 +1,5 @@
+  4.2.5.2
+    - BUG 79: posibilidad de encontrar un null como login en una sessión aún no establecida (serch)
   4.2.5.1
     - Se agregó menú Edit al editor de plantillas XSL para los recursos que las ocupan. Esto es para plantillas personalizadas. (Carlos).
     - Se agregó atributo title al recurso IframeContent (Carlos).
