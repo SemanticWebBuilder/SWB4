@@ -137,7 +137,7 @@
                 }
             }
             
-            if (link.elementType=="AssociationFlow") {
+            if (link.elementType=="AssociationFlow" && link.fromObject.elementType!="AnnotationArtifact") {
                 if (!(link.fromObject.elementType=="Artifact" || link.fromObject.elementType=="DataObject") && !(link.fromObject.elementType=="CompensationIntermediateCatchEvent" && link.fromObject.parent && link.fromObject.parent.typeOf("Activity"))) {
                     msg = "Un flujo de asociación no puede conectar dos nodos de flujo";
                     ret = false;
@@ -622,7 +622,9 @@
             var ret = fCanEnd(link);
             var msg = null;
             
-            if (ret && link.elementType=="MessageFlow") {
+            if (ret && link.typeOf("AssociationFlow") && link.fromObject.typeOf("DataObject")) {
+                ret = false;
+            } else if (ret && link.elementType=="MessageFlow") {
                 msg = "Un evento intermedio no puede tener flujos de mensaje entrantes";
                 ret = false;
             }
@@ -688,8 +690,10 @@
         _this.canEndLink = function (link) {
             var ret = fCanEnd(link);
             var msg = null;
-            console.log(ret);
-            if (ret && link.elementType=="MessageFlow") {
+            
+            if (ret && link.typeOf("AssociationFlow") && link.fromObject.typeOf("DataObject")) {
+                ret = false;
+            } else if (ret && link.elementType=="MessageFlow") {
                 msg = "Un evento intermedio no puede tener flujos de mensaje entrantes";
                 ret = false;
             }
@@ -993,6 +997,7 @@
                     } else {
                         msg = "Un evento disparador de mensaje no puede tener más de un flujo de mensaje saliente";
                     }
+                    //TODO:Checar 
                 }
             }
             if (msg!=null) {
@@ -1057,7 +1062,9 @@
             var ret = fCanEnd(link);
             
             if (ret && link.elementType=="MessageFlow") {
-                ToolKit.showTooltip("","Un evento final sólo puede tener flujos de secuencia entrantes", 250, "Error")
+                ToolKit.showTooltip("","Un evento final sólo puede tener flujos de secuencia entrantes", 250, "Error");
+                ret = false;
+            } else if (ret && link.typeOf("AssociationFlow") && link.fromObject.typeOf("DataObject")) {
                 ret = false;
             }
             return ret;
@@ -1300,7 +1307,7 @@
             
             if (ret && link.elementType=="MessageFlow") {
                 ret = false;
-            } else if (ret && link.typeOf("AssociationFlow") && link.fromObject.typeOf("FlowNode")) {
+            } else if (ret && link.typeOf("AssociationFlow") && (link.fromObject.typeOf("FlowNode") || link.fromObject.elementType=="Pool")) {
                 msg = "Un flujo de asociación no puede conectar dos nodos de flujo"
                 ret = false;
             } else if (ret && link.fromObject.typeOf("DataObject")) {
@@ -1418,7 +1425,7 @@
             
             if (ret && link.elementType=="MessageFlow") {
                 ret = false;
-            } else if (ret && link.typeOf("AssociationFlow") && link.fromObject.typeOf("FlowNode")) {
+            } else if (ret && link.typeOf("AssociationFlow") && (link.fromObject.typeOf("FlowNode") || link.fromObject.elementType=="Pool")) {
                 msg = "Un flujo de asociación no puede conectar dos nodos de flujo"
                 ret = false;
             } else if (ret && link.fromObject.typeOf("DataObject")) {
@@ -1491,7 +1498,7 @@
             
             if (ret && link.elementType=="MessageFlow") {
                 ret = false;
-            } else if (ret && link.typeOf("AssociationFlow") && link.fromObject.typeOf("FlowNode")) {
+            } else if (ret && link.typeOf("AssociationFlow") && (link.fromObject.typeOf("FlowNode") || link.fromObject.elementType=="Pool")) {
                 msg = "Un flujo de asociación no puede conectar dos nodos de flujo"
                 ret = false;
             } else if (ret && link.fromObject.typeOf("DataObject")) {
@@ -1545,7 +1552,7 @@
             var ret = fCanStart(link);
             var msg = null;
             
-            if (link.elementType!="AssociationFlow") {
+            if (!link.typeOf("AssociationFlow")) {
                 msg ="Un objeto de datos sólo puede conectarse usando flujos de asociación";
                 ret = false;
             }
@@ -1559,10 +1566,10 @@
             var ret = fCanEnd(link);
             var msg = null;
             
-            if (!link.typeOf("AssociationFlow")) {
+            if (ret && !link.typeOf("AssociationFlow")) {
                 msg ="Un objeto de datos sólo puede conectarse usando flujos de asociación";
                 ret = false;
-            } else if (!link.fromObject.typeOf("Activty")) {
+            } else if (ret && !link.fromObject.typeOf("Activity")) {
                 msg ="Los objetos de datos sólo pueden asociarse con actividades";
                 ret = false;
             }
@@ -1610,7 +1617,7 @@
         
         _this.canStartLink = function (link) {
             var ret = fCanStart(link);
-            if (link.elementType!="AssociationFlow") {
+            if (ret && !link.typeOf("AssociationFlow")) {
                 ret = false;
             }
             return ret;
@@ -1621,7 +1628,7 @@
             if (link.elementType!="AssociationFlow") {
                 ret = false;
             } else if (link.fromObject.typeOf("Artifact") || link.fromObject.typeOf("DataObject")) {
-                
+                ret = false;
             }
             return ret;
         };
@@ -1637,17 +1644,7 @@
         
         _this.canStartLink = function(link) {
             var ret = fCanStart(link);
-            if (link.elementType=="DirectionalAssociation") {
-                ret = false;
-            }
-            return ret;
-        };
-        
-        _this.canEndLink = function(link) {
-            var ret = fCanEnd(link);
-            if (link.fromObject.typeOf("Artifact")) {
-                ret = false;
-            } else if (link.elementType=="DirectionalAssociation") {
+            if (ret && link.elementType=="DirectionalAssociation") {
                 ret = false;
             }
             return ret;
@@ -1678,7 +1675,8 @@
         
         _this.canStartLink = function(link) {
             var ret = true;
-            if (link.elementType=="SequenceFlow") {
+            if (!(link.elementType=="AssociationFlow" || link.elementType=="MessageFlow")) {
+                ToolKit.showTooltip("","Un pool sólo puede conectarse usando flujos de mensaje", 250, "Error");
                 ret = false;
             }
             return ret;
@@ -1689,10 +1687,10 @@
             if (link.elementType=="SequenceFlow") {
                 ret = false;
             }
-            if (link.elementType=="MessageFlow") {
-                //TODO:Implementar
+            if (link.elementType=="MessageFlow" && link.fromObject.getPool() == _this) {
+                ret = false;
             }
-            if (link.elementType=="AssociationFlow") {
+            if (link.elementType=="AssociationFlow" && link.fromObject.elementType!="AnnotationArtifact") {
                 ret = false;
             }
             return ret;
@@ -1700,7 +1698,10 @@
         
         _this.canAddToDiagram = function() {
             var ret = fCanAdd();
-            //TODO:Implementar
+            if (ToolKit.layer != null) {
+                ToolKit.showTooltip("","Un subproceso no puede contener pools", 250, "Error")
+                ret = false;
+            }
             return ret;
         };
         return _this;
@@ -2389,6 +2390,7 @@
                 //alert("hola1");
                 return true;
             };
+            obj.mousedown=function(evt){return Modeler.objectMouseDown(evt,obj);}
             //obj.mousedown=function(evt){return Modeler.objectMouseDown(evt,obj);}
             obj.onmousemove=function(evt){return Modeler.objectMouseMove(evt,obj);}
             
