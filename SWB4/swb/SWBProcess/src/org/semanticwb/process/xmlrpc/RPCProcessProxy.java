@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 
-package org.semacticwb.rpc.process;
+package org.semanticwb.process.xmlrpc;
 
 import org.semanticwb.xmlrpc.XmlProxy;
 
