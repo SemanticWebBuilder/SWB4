@@ -42,9 +42,7 @@ import org.semanticwb.process.model.ItemAware;
 import org.semanticwb.process.model.ItemAwareReference;
 import org.semanticwb.process.model.ProcessInstance;
 
-
 //itext libraries to write PDF file
-
 public class ResourceReports extends org.semanticwb.process.resources.reports.base.ResourceReportsBase {
 
     private static org.semanticwb.Logger log = SWBUtils.getLogger(ResourceReports.class);
@@ -132,7 +130,6 @@ public class ResourceReports extends org.semanticwb.process.resources.reports.ba
         RequestDispatcher rd = request.getRequestDispatcher(path);
         request.setAttribute("paramRequest", paramRequest);
 
-
         Report report = Report.ClassMgr.getReport(request.getParameter("idReport"), paramRequest.getWebPage().getWebSite());
         FileReport fr = FileReport.ClassMgr.createFileReport(paramRequest.getWebPage().getWebSite());
         String extension = request.getParameter("extension").toString();
@@ -147,8 +144,8 @@ public class ResourceReports extends org.semanticwb.process.resources.reports.ba
         String title = report.getTitle() + " " + fr.getId();
         exportReport(name, title, extension, report, getProcessInstances(request, paramRequest));
 //        System.out.println("se creo reporte...");
-        PrintWriter out = response.getWriter();
-        out.println("Se creo reporte " + fr.getTitle());
+//        PrintWriter out = response.getWriter();
+//        out.println("Se creo reporte " + fr.getTitle());
         pRequest = paramRequest;
         try {
             rd.include(request, response);
@@ -426,6 +423,7 @@ public class ResourceReports extends org.semanticwb.process.resources.reports.ba
             Iterator<SemanticProperty> propReport = Report.sclass.listProperties();
             while (propReport.hasNext()) {
                 SemanticProperty semProp = propReport.next();
+                System.out.println("getName: " + semProp.getName());
                 reportMgr.addProperty(semProp);
             }
             try {
