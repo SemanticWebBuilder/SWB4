@@ -21,9 +21,10 @@ public interface RPCProcess  {
     @XmlRpcMethod(methodName="RPCProcess.closeTaskInstance")
     public void closeTaskInstance(String APIKey, String UserID, String UserGroupsIDs, String InstanceID, int closeStatus, String closeAction, String SiteID) throws Exception;
     @XmlRpcMethod(methodName="RPCProcess.getProcessInstances")
-    public String[] getProcessInstances(String APIKey, int instanceStatus, String SiteID) throws Exception;
+    @XmlRpcDescription(description="Gets the process instances with the given instanceStatus and SiteID")
+    public InstanceInfo[] getProcessInstances(String APIKey, int instanceStatus, String SiteID) throws Exception;
     @XmlRpcMethod(methodName="RPCProcess.listUserTaskInstances")
-    public String[] listUserTaskInstances(String APIKey, String UserID, String ProcessID, int instanceStatus, String SiteID) throws Exception;
+    public FlowNodeInstanceInfo[] listUserTaskInstances(String APIKey, String UserID, String ProcessID, int instanceStatus, String SiteID) throws Exception;
     @XmlRpcMethod(methodName="RPCProcess.getProcessInstanceStatus")
     public int getProcessInstanceStatus(String APIKey, String processInstanceID, String SiteID) throws Exception;
 }
