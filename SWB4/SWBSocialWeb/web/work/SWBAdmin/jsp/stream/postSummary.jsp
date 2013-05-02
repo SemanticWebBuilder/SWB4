@@ -51,7 +51,9 @@ try {
     ipage = 1;
 }
 //Iterator<PostIn> itposts = PostIn.ClassMgr.listPostIns(wsite);
-Iterator<MessageIn> itposts = MessageIn.ClassMgr.listMessageIns(wsite); 
+//Iterator<MessageIn> itposts = MessageIn.ClassMgr.listMessageIns(wsite); 
+Iterator<MessageIn> itposts = MessageIn.ClassMgr.listMessageInByPostInStream(stream, wsite);
+
 long el = SWBUtils.Collections.sizeOf(itposts);
 //System.out.println("el:"+el);
 long paginas = el / PAGE_SIZE;
