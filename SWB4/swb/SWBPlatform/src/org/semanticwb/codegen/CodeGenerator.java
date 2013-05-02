@@ -403,12 +403,16 @@ public class CodeGenerator
     public void generateCode(String prefix, boolean createSWBContext, File pDirectory) throws CodeGeneratorException
     {
 
+         //System.out.println("Prefix:"+prefix);
         SemanticMgr mgr = SWBPlatform.getSemanticMgr();
         Iterator<SemanticClass> tpcit = mgr.getVocabulary().listSemanticClasses();
         while (tpcit.hasNext())
         {
             SemanticClass tpc = tpcit.next();
-            if (prefix == null || (tpc.getPrefix().equals(prefix)))
+           //System.out.println("SemClass:"+tpc.toString());
+            //System.out.println("SemClass:"+tpc.getClassName());
+            //System.out.println("TPC.getPrefix:"+tpc.getPrefix());
+            if (prefix == null || (prefix.equals(tpc.getPrefix())))
             {
                 checkClass(tpc);
             }
@@ -424,7 +428,7 @@ public class CodeGenerator
             }
             else
             {
-                if (tpc.getPrefix().equals(prefix))
+                if (prefix.equals(tpc.getPrefix()))
                 {
                     create = true;
                 }
