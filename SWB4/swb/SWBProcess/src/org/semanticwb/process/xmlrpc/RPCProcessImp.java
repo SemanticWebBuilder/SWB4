@@ -5,8 +5,8 @@
 package org.semanticwb.process.xmlrpc;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
-import org.semanticwb.model.GenericIterator;
 import org.semanticwb.model.User;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.process.model.FlowNodeInstance;
@@ -65,30 +65,23 @@ public class RPCProcessImp extends XmlRpcObject implements RPCProcess
     }
 
     @Override
-    public String[] getProcessInstances(String APIKey, int instanceStatus, String SiteID) throws Exception
+    public InstanceInfo[] getProcessInstances(String APIKey, int instanceStatus, String SiteID) throws Exception
     {
-        List<String> getProcessInstances = new ArrayList<String>();
-        WebSite site = WebSite.ClassMgr.getWebSite(SiteID);
-        if (site == null)
-        {
-            throw new Exception("The site " + SiteID + " was not found");
-        }
-
+        List<InstanceInfo> getProcessInstances = new ArrayList<InstanceInfo>();
         ProcessSite p = ProcessSite.ClassMgr.getProcessSite(SiteID);
-        if (p == null)
-        {
+        
+        if (p == null) {
             throw new Exception("The ProcessSite with id " + SiteID + " was not found");
         }
-        GenericIterator<ProcessInstance> gi = SWBProcessMgr.getProcessInstanceWithStatus(p, instanceStatus);
-        while (gi.hasNext())
-        {
-            ProcessInstance pi = gi.next();
-            getProcessInstances.add(pi.getId());
+        Iterator<ProcessInstance> gi = SWBProcessMgr.getProcessInstanceWithStatus(p, instanceStatus);
+        if (gi.hasNext()) {
+            while (gi.hasNext()) {
+                ProcessInstance pi = gi.next();
+                getProcessInstances.add(getProcessInstanceInfo(pi));
+            }
         }
-        return getProcessInstances.toArray(new String[getProcessInstances.size()]);
+        return getProcessInstances.toArray(new InstanceInfo[getProcessInstances.size()]);
     }
-
-  
 
     /*@Override
     public List<String> getProcessInstances(String APIKey, int instanceStatus, String SiteID) throws Exception
@@ -109,35 +102,36 @@ public class RPCProcessImp extends XmlRpcObject implements RPCProcess
     return getProcessInstances;
     }*/
     @Override
-    public String[] listUserTaskInstances(String APIKey, String UserID, String ProcessID, int instanceStatus, String SiteID) throws Exception
+    public FlowNodeInstanceInfo[] listUserTaskInstances(String APIKey, String UserID, String ProcessID, int instanceStatus, String SiteID) throws Exception
     {
-        List<String> listUserTaskInstances = new ArrayList<String>();
-        WebSite site = WebSite.ClassMgr.getWebSite(SiteID);
-        if (site == null)
-        {
-            throw new Exception("The site " + SiteID + " was not found");
-        }
+        List<FlowNodeInstanceInfo> listUserTaskInstances = new ArrayList<FlowNodeInstanceInfo>();
+        ProcessSite site = ProcessSite.ClassMgr.getProcessSite(SiteID);
         User u = site.getUserRepository().getUser(UserID);
-        if (u == null)
-        {
-            throw new Exception("The User with id " + UserID + " was not found");
-        }
-        ProcessSite processSite = ProcessSite.ClassMgr.getProcessSite(SiteID);
-        if (processSite == null)
-        {
+        int status = instanceStatus<0?FlowNodeInstance.STATUS_PROCESSING:instanceStatus;
+        
+        if (site == null) {
             throw new Exception("The processSite with id " + SiteID + " was not found");
         }
+        
+        if (u == null) {
+            throw new Exception("The User with id " + UserID + " was not found");
+        }
+        
         org.semanticwb.process.model.Process p = org.semanticwb.process.model.Process.ClassMgr.getProcess(ProcessID, site);
-        if (p == null)
-        {
-            throw new Exception("The Process with id " + ProcessID + " was not found");
+        
+        Iterator<FlowNodeInstance> flows = SWBProcessMgr.getUserTaskInstancesWithStatus(site, status, p).iterator();
+        while (flows.hasNext()) {
+            FlowNodeInstance fni = flows.next();
+            if (validUserTaskInstance(fni, u, status)) {
+                FlowNodeInstanceInfo info = getFlowNodeInstanceInfo(fni);
+                System.out.println("->id:"+info.id);
+                listUserTaskInstances.add(info);
+            }
         }
-        List<FlowNodeInstance> flows = SWBProcessMgr.getUserTaskInstancesWithStatus(processSite, instanceStatus, p);
-        for (FlowNodeInstance flow : flows)
-        {
-            listUserTaskInstances.add(flow.getId());
-        }
-        return listUserTaskInstances.toArray(new String[listUserTaskInstances.size()]);
+        System.out.println("--->id:"+listUserTaskInstances.get(0).id);
+        FlowNodeInstanceInfo [] ret = listUserTaskInstances.toArray(new FlowNodeInstanceInfo[listUserTaskInstances.size()]);
+        System.out.println("----->id:"+ret[0].id);
+        return ret;
     }
 
     @Override
@@ -154,5 +148,55 @@ public class RPCProcessImp extends XmlRpcObject implements RPCProcess
             throw new Exception("The ProcessInstance with id " + processInstanceID + " was not found");
         }
         return pi.getStatus();
+    }
+    
+    public InstanceInfo getProcessInstanceInfo(ProcessInstance pi) {
+        InstanceInfo ret = new InstanceInfo();
+        ret.id = pi.getId();
+        ret.title = pi.getProcessType().getTitle();
+        ret.description = pi.getProcessType().getDescription();
+        ret.status = pi.getStatus();
+        ret.creator = pi.getCreator()==null?null:pi.getCreator().getId();
+        ret.created = pi.getCreated();
+        ret.closed = pi.getEnded();
+        ret.closedBy = pi.getEndedby()==null?null:pi.getEndedby().getId();
+        return ret;
+    }
+    
+    public FlowNodeInstanceInfo getFlowNodeInstanceInfo(FlowNodeInstance flow) {
+        FlowNodeInstanceInfo ret = new FlowNodeInstanceInfo();
+        ret.id = flow.getId();
+        ret.title = flow.getFlowNodeType().getTitle();
+        ret.description = flow.getFlowNodeType().getDescription();
+        ret.status = flow.getStatus();
+        ret.creator = flow.getCreator()==null?null:flow.getCreator().getId();
+        ret.assignedTo = flow.getAssignedto()==null?null:flow.getAssignedto().getId();
+        ret.assigned = flow.getAssigned();
+        ret.created = flow.getCreated();
+        ret.closed = flow.getEnded();
+        ret.closedBy = flow.getEndedby()==null?null:flow.getEndedby().getId();
+        ret.subject = flow.getSubject();
+        ret.processInstance = getProcessInstanceInfo(flow.getProcessInstance());
+        return ret;
+    }
+    
+    private boolean validUserTaskInstance(FlowNodeInstance fni, User user, int statusFilter) {
+        boolean hasStatus = false;
+        boolean canAccess = false;
+        
+        org.semanticwb.process.model.Process pType = fni.getProcessInstance().getProcessType();
+        
+        if (!pType.isValid()) {
+            return false;
+        }
+        canAccess = fni.haveAccess(user);
+        
+        if (canAccess) {
+            //Verificar filtrado por estatus
+            if (statusFilter > 0 && fni.getStatus() == statusFilter) {
+                hasStatus = true;
+            }
+        }
+        return canAccess && hasStatus;
     }
 }
