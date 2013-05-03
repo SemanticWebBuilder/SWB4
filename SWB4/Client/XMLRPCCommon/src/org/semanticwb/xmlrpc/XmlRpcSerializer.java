@@ -416,7 +416,7 @@ public class XmlRpcSerializer
     private static void serializeStruct(Object obj, Element structElement) throws XmlRpcException
     {
         Class clazz = obj.getClass();
-        for (Field field : clazz.getDeclaredFields())
+        for (Field field : clazz.getFields())
         {
             try
             {
