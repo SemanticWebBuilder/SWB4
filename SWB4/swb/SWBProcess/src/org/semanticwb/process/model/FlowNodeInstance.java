@@ -32,7 +32,6 @@ import org.semanticwb.model.*;
 import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticObject;
 
-
 public class FlowNodeInstance extends org.semanticwb.process.model.base.FlowNodeInstanceBase 
 {
     public static Logger log=SWBUtils.getLogger(ProcessRule.class);
@@ -571,6 +570,8 @@ public class FlowNodeInstance extends org.semanticwb.process.model.base.FlowNode
     public boolean haveAccess(User user) 
     {
         boolean canAccess = false;
+        
+        if (getProcessInstance().getStatus() == ProcessInstance.STATUS_CLOSED) return false;
         
         User owner = this.getAssignedto();
         GraphicalElement type = this.getFlowNodeType();
