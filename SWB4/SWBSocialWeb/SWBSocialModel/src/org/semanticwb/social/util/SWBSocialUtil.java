@@ -13,22 +13,42 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Properties;
 import java.util.StringTokenizer;
+import javax.servlet.http.HttpServletRequest;
 import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.base.SWBAppObject;
 import org.semanticwb.model.ModelProperty;
+import org.semanticwb.model.PFlowInstance;
 import org.semanticwb.model.SWBModel;
+import org.semanticwb.model.User;
+import org.semanticwb.model.WebSite;
+import org.semanticwb.platform.SemanticClass;
+import org.semanticwb.platform.SemanticObject;
+import org.semanticwb.portal.SWBFormMgr;
+import org.semanticwb.portal.api.SWBActionResponse;
 import org.semanticwb.social.Message;
 import org.semanticwb.social.MessageIn;
+import org.semanticwb.social.Messageable;
+import org.semanticwb.social.Photo;
+import org.semanticwb.social.Photoable;
 import org.semanticwb.social.PostIn;
+import org.semanticwb.social.PostOut;
 import org.semanticwb.social.PunctuationSign;
 import org.semanticwb.social.SocialNetwork;
+import org.semanticwb.social.SocialPFlow;
+import org.semanticwb.social.SocialPFlowInstance;
 import org.semanticwb.social.SocialSite;
+import org.semanticwb.social.SocialTopic;
 import org.semanticwb.social.Stream;
+import org.semanticwb.social.Video;
+import org.semanticwb.social.Videoable;
 import org.semanticwb.social.WordsToMonitor;
 import org.semanticwb.social.util.lucene.SpanishAnalizer;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
 
 /**
  *
@@ -38,51 +58,46 @@ import org.semanticwb.social.util.lucene.SpanishAnalizer;
 /*
  * Clase de tipo utilerías 
  */
-
-public class SWBSocialUtil implements SWBAppObject{
+public class SWBSocialUtil implements SWBAppObject {
 
     /**
-     * Holds a reference to a log utility.
-     * <p>Mantiene una referencia a la utiler&iacute;a de generaci&oacute;n de bit&aacute;coras.</p>
+     * Holds a reference to a log utility. <p>Mantiene una referencia a la
+     * utiler&iacute;a de generaci&oacute;n de bit&aacute;coras.</p>
      */
     private static Logger log = SWBUtils.getLogger(SWBSocialUtil.class);
     /**
-     * Holds a reference to an object of this class.
-     * <p>Mantiene una referencia a un objeto de esta clase.</p>
+     * Holds a reference to an object of this class. <p>Mantiene una referencia
+     * a un objeto de esta clase.</p>
      */
     static private SWBSocialUtil instance;
-    static ArrayList<String> aDoubles=new ArrayList();
-    static HashMap<String, String> hmapChanges=new HashMap();
-    
+    static ArrayList<String> aDoubles = new ArrayList();
+    static HashMap<String, String> hmapChanges = new HashMap();
     //SENTIMENTAL STATATIC CONTANTS
-    static public int SENTIMENT_NEUTRAL=0;
-    static public int SENTIMENT_POSITIVE=1;
-    static public int SENTIMENT_NEGATIVE=2;
-    
+    static public int SENTIMENT_NEUTRAL = 0;
+    static public int SENTIMENT_POSITIVE = 1;
+    static public int SENTIMENT_NEGATIVE = 2;
     //INTENSITIVE STATATIC CONTANTS
-    static public int INTENSITIVE_HIGH=2;
-    static public int INTENSITIVE_MEDIUM=1;
-    static public int INTENSITIVE_LOW=0;
-    
+    static public int INTENSITIVE_HIGH = 2;
+    static public int INTENSITIVE_MEDIUM = 1;
+    static public int INTENSITIVE_LOW = 0;
     private static Properties prop = new Properties();
-    
-    
-    
 
     /**
      * Creates a new object of this class.
      */
     public SWBSocialUtil() {
-       System.out.println("Entra a SWBSocialUtil/createInstance");
-       //createInstance();
-       init();
+        System.out.println("Entra a SWBSocialUtil/createInstance");
+        //createInstance();
+        init();
     }
 
-   
     /**
      * Retrieves a reference to the only one existing object of this class.
-     * <p>Obtiene una referencia al &uacute;nico objeto existente de esta clase.</p>
-     * @param applicationPath a string representing the path for this application
+     * <p>Obtiene una referencia al &uacute;nico objeto existente de esta
+     * clase.</p>
+     *
+     * @param applicationPath a string representing the path for this
+     * application
      * @return a reference to the only one existing object of this class
      */
     static public synchronized SWBSocialUtil createInstance() {
@@ -92,18 +107,15 @@ public class SWBSocialUtil implements SWBAppObject{
         }
         return instance;
     }
-    
-     
-    public ArrayList getDoublesArray()
-    {
+
+    public ArrayList getDoublesArray() {
         return aDoubles;
     }
 
     /*
      * Metodo que regresa phonemas
      */
-    public HashMap getChangesMap()
-    {
+    public HashMap getChangesMap() {
         return hmapChanges;
     }
 
@@ -120,62 +132,62 @@ public class SWBSocialUtil implements SWBAppObject{
     @Override
     public void init() {
         System.out.println("Init de SWBSocialUtil-Jorge");
-         //Carga Valores a ArrayList
-         aDoubles.add("b");
-         aDoubles.add("p");
-         aDoubles.add("q");
-         aDoubles.add("s");
-         aDoubles.add("c");
-         aDoubles.add("g");
-         aDoubles.add("n");
-         aDoubles.add("m");
-         aDoubles.add("l");
-         aDoubles.add("p");
-         aDoubles.add("t");
-         aDoubles.add("f");
-         aDoubles.add("d");
+        //Carga Valores a ArrayList
+        aDoubles.add("b");
+        aDoubles.add("p");
+        aDoubles.add("q");
+        aDoubles.add("s");
+        aDoubles.add("c");
+        aDoubles.add("g");
+        aDoubles.add("n");
+        aDoubles.add("m");
+        aDoubles.add("l");
+        aDoubles.add("p");
+        aDoubles.add("t");
+        aDoubles.add("f");
+        aDoubles.add("d");
 
 
-         //Carga valores a HashMap
-         hmapChanges.put("nge", "nje");
-         hmapChanges.put("ngi", "nji");
-         hmapChanges.put("ch", "ch");
-         hmapChanges.put("cc", "ks");
-         hmapChanges.put("ci", "si");
-         hmapChanges.put("qu", "k");
-         hmapChanges.put("w", "gu");
-         hmapChanges.put("nn", "n");
-         hmapChanges.put("mm", "m");
-         hmapChanges.put("ll", "y");
-         hmapChanges.put("pp", "p");
-         hmapChanges.put("ce", "se");
-         hmapChanges.put("q", "k");
-         hmapChanges.put("ss", "s");
-         hmapChanges.put("ge", "je");
-         hmapChanges.put("tt", "t");
-         hmapChanges.put("ff", "f");
-         hmapChanges.put("v", "b");
-         hmapChanges.put("x", "ks");
-         hmapChanges.put("z", "s");
-         hmapChanges.put("dd", "d");
-         hmapChanges.put("gi", "ji");
-         hmapChanges.put("bb", "b");
-         hmapChanges.put("c", "k");
-         
+        //Carga valores a HashMap
+        hmapChanges.put("nge", "nje");
+        hmapChanges.put("ngi", "nji");
+        hmapChanges.put("ch", "ch");
+        hmapChanges.put("cc", "ks");
+        hmapChanges.put("ci", "si");
+        hmapChanges.put("qu", "k");
+        hmapChanges.put("w", "gu");
+        hmapChanges.put("nn", "n");
+        hmapChanges.put("mm", "m");
+        hmapChanges.put("ll", "y");
+        hmapChanges.put("pp", "p");
+        hmapChanges.put("ce", "se");
+        hmapChanges.put("q", "k");
+        hmapChanges.put("ss", "s");
+        hmapChanges.put("ge", "je");
+        hmapChanges.put("tt", "t");
+        hmapChanges.put("ff", "f");
+        hmapChanges.put("v", "b");
+        hmapChanges.put("x", "ks");
+        hmapChanges.put("z", "s");
+        hmapChanges.put("dd", "d");
+        hmapChanges.put("gi", "ji");
+        hmapChanges.put("bb", "b");
+        hmapChanges.put("c", "k");
+
     }
 
     public static class Strings {
 
         /**
          * Lee una string y devuelve las palabras que se encuentren dentro.
+         *
          * @param text Texto a procesar
          * @return Listado de palabras procesadas
          */
         public static ArrayList<String> stripWordsByLine(String text) {
             StringTokenizer st = new StringTokenizer(text);
             ArrayList<String> words = new ArrayList<String>();
-            while (st.hasMoreTokens())
-            {
+            while (st.hasMoreTokens()) {
                 String temp = st.nextToken();
                 String word = temp.replaceAll("\\W+", "");
                 words.add(word);
@@ -186,38 +198,34 @@ public class SWBSocialUtil implements SWBAppObject{
         /*
          * Elimina signos de puntualcion
          */
-        public static String removePuntualSigns(String text, SWBModel model)
-        {
-            Iterator <PunctuationSign> itPunctuationSigns=PunctuationSign.ClassMgr.listPunctuationSigns(model);
-            while(itPunctuationSigns.hasNext())
-            {
-                PunctuationSign puncSign=itPunctuationSigns.next();
-                text=text.replaceAll(puncSign.getPuntuationSign(), "");
+        public static String removePuntualSigns(String text, SWBModel model) {
+            Iterator<PunctuationSign> itPunctuationSigns = PunctuationSign.ClassMgr.listPunctuationSigns(model);
+            while (itPunctuationSigns.hasNext()) {
+                PunctuationSign puncSign = itPunctuationSigns.next();
+                text = text.replaceAll(puncSign.getPuntuationSign(), "");
             }
             return text;
         }
 
-
-         /**
-         * Lee una string caracter por caracter y si encuentra que existen en el mismo
-         * mas de un caracter en mayusculas, entonces lo considera como una palabra (String)
-         * intensa y regresa true, de lo contrario regresa false
-         * @param word Palabra a procesar, Limitnumber es el limite para considerar una palabra intensa
-         * @return True si tiene la palabra mas mayusculas que el número que llega en el parametro Limitnumber
-          * o false de lo contrario
+        /**
+         * Lee una string caracter por caracter y si encuentra que existen en el
+         * mismo mas de un caracter en mayusculas, entonces lo considera como
+         * una palabra (String) intensa y regresa true, de lo contrario regresa
+         * false
+         *
+         * @param word Palabra a procesar, Limitnumber es el limite para
+         * considerar una palabra intensa
+         * @return True si tiene la palabra mas mayusculas que el número que
+         * llega en el parametro Limitnumber o false de lo contrario
          */
-        public static boolean isIntensiveWordByUpperCase(String word, int limitNumber)
-        {
-            int cont=0;
+        public static boolean isIntensiveWordByUpperCase(String word, int limitNumber) {
+            int cont = 0;
             int l = word.length();
-            for (int x = 0; x < l; x++)
-            {
+            for (int x = 0; x < l; x++) {
                 char chr = word.charAt(x);
-                if (chr >= 'A' && chr <= 'Z')
-                {
+                if (chr >= 'A' && chr <= 'Z') {
                     cont++;
-                    if(cont>=limitNumber)
-                    {
+                    if (cont >= limitNumber) {
                         return true;
                     }
                 }
@@ -225,32 +233,32 @@ public class SWBSocialUtil implements SWBAppObject{
             return false;
         }
 
-
         /**
          * Replaces accented characters and blank spaces in the string given.
-         * Makes the changes in a case sensitive manner, the following are some examples
-         * of the changes this method makes: <br>
+         * Makes the changes in a case sensitive manner, the following are some
+         * examples of the changes this method makes: <br>
          *
          * @param txt a string in which the characters are going to be replaced
-         * @param replaceSpaces a {@code boolean} indicating if blank spaces are going to be replaced or not
-         * @param ch a {@code char} especifica algún caracter de puntuación permitido
+         * @param replaceSpaces a {@code boolean} indicating if blank spaces are
+         * going to be replaced or not
+         * @param ch a {@code char} especifica algún caracter de puntuación
+         * permitido
          * @return a string similar to {@code txt} but with neither accented or
-         * special characters nor symbols in it. un objeto string similar
-         * a {@code txt} pero sin caracteres acentuados o especiales y sin s&iacute;mbolos
-         * {@literal Á} is replaced by {@literal A} <br>
-         * {@literal Ê} is replaced by {@literal E} <br>
-         * {@literal Ï} is replaced by {@literal I} <br>
-         * {@literal â} is replaced by {@literal a} <br>
-         * {@literal ç} is replaced by {@literal c} <br>
-         * and blank spaces are replaced by underscore characters, any symbol in
-         * {@code txt} other than underscore is eliminated.
-         * <p>Reemplaza caracteres acentuados y espacios en blanco en {@code txt}.
-         * Realiza los cambios respetando caracteres en may&uacute;sculas o min&uacute;sculas
-         * los caracteres en blanco son reemplazados por guiones bajos, cualquier s&iacute;mbolo
-         * diferente a gui&oacute;n bajo es eliminado.</p>
+         * special characters nor symbols in it. un objeto string similar a
+         * {@code txt} pero sin caracteres acentuados o especiales y sin
+         * s&iacute;mbolos {@literal Á} is replaced by {@literal A} <br>
+         * {@literal Ê} is replaced by {@literal E} <br> {@literal Ï} is
+         * replaced by {@literal I} <br> {@literal â} is replaced by
+         * {@literal a} <br> {@literal ç} is replaced by {@literal c} <br> and
+         * blank spaces are replaced by underscore characters, any symbol in
+         * {@code txt} other than underscore is eliminated. <p>Reemplaza
+         * caracteres acentuados y espacios en blanco en {@code txt}. Realiza
+         * los cambios respetando caracteres en may&uacute;sculas o
+         * min&uacute;sculas los caracteres en blanco son reemplazados por
+         * guiones bajos, cualquier s&iacute;mbolo diferente a gui&oacute;n bajo
+         * es eliminado.</p>
          */
-        public static String replaceSpecialCharacters(String txt)
-        {
+        public static String replaceSpecialCharacters(String txt) {
             StringBuilder ret = new StringBuilder();
             String aux = txt;
             //aux = aux.toLowerCase();
@@ -323,19 +331,16 @@ public class SWBSocialUtil implements SWBAppObject{
             aux = aux.replace('ý', 'y');
 
             int l = aux.length();
-            for (int x = 0; x < l; x++)
-            {
+            for (int x = 0; x < l; x++) {
                 char chr = aux.charAt(x);
-                if (chr==' ' || (chr >= '0' && chr <= '9') || (chr >= 'a' && chr <= 'z')
-                        || (chr >= 'A' && chr <= 'Z') || chr == '_')
-                {
+                if (chr == ' ' || (chr >= '0' && chr <= '9') || (chr >= 'a' && chr <= 'z')
+                        || (chr >= 'A' && chr <= 'Z') || chr == '_') {
                     ret.append(chr);
                 }
             }
             aux = ret.toString();
             return aux;
         }
-
     }
 
     public static class words2Monitor {
@@ -449,8 +454,7 @@ public class SWBSocialUtil implements SWBAppObject{
             //Palabras acerca de la compañia
             String words2monitor = "";
             String[] companyWords = getCompanyWords(model);
-            if(companyWords!=null)
-            {
+            if (companyWords != null) {
                 for (int i = 0; i < companyWords.length; i++) {
                     System.out.println("companyWord[" + i + "]:" + companyWords[i]);
                     if (words2monitor.length() == 0) {
@@ -462,8 +466,7 @@ public class SWBSocialUtil implements SWBAppObject{
             }
             //Palabras acerca de la competencia
             String[] competitionWords = getCompetitionWords(model);
-            if(competitionWords!=null)
-            {
+            if (competitionWords != null) {
                 for (int i = 0; i < competitionWords.length; i++) {
                     System.out.println("competitionWords[" + i + "]:" + competitionWords[i]);
                     if (words2monitor.length() == 0) {
@@ -475,8 +478,7 @@ public class SWBSocialUtil implements SWBAppObject{
             }
             //Palabras acerca de productos y servicios
             String[] pAndServWords = getProductAndServicesWords(model);
-            if(pAndServWords!=null)
-            {
+            if (pAndServWords != null) {
                 for (int i = 0; i < pAndServWords.length; i++) {
                     System.out.println("pAndServWords[" + i + "]:" + pAndServWords[i]);
                     if (words2monitor.length() == 0) {
@@ -488,8 +490,7 @@ public class SWBSocialUtil implements SWBAppObject{
             }
             //Palabras acerca de productos y servicios
             String[] otherWords = getOtherWords(model);
-            if(otherWords!=null)
-            {
+            if (otherWords != null) {
                 for (int i = 0; i < otherWords.length; i++) {
                     System.out.println("otherWords[" + i + "]:" + otherWords[i]);
                     if (words2monitor.length() == 0) {
@@ -506,53 +507,44 @@ public class SWBSocialUtil implements SWBAppObject{
     /*
      * Metodo que normaliza una palabra, esto de acuerdo a definición realizada internamente en el área
      */
-    public static class Classifier
-    {
-        public static NormalizerCharDuplicate normalizer(String in_word)
-        {
-            boolean isCharDuplicate=false;
-            String tmp="";
-            char [] in_wordArray=in_word.toCharArray();
-            for(int i=0;i<in_wordArray.length;i++)
-            {
-                String in_wordChar=String.valueOf(in_wordArray[i]);
-                if(tmp.length()>1)
-                {
-                    if(aDoubles.contains(in_wordChar))
-                    {
-                        if(tmp.substring(tmp.length()-2, tmp.length()-1).equalsIgnoreCase(tmp.substring(tmp.length()-1)) && (tmp.substring(tmp.length()-1).equalsIgnoreCase(in_wordChar)))
-                        {
-                            isCharDuplicate=true;
+    public static class Classifier {
+
+        public static NormalizerCharDuplicate normalizer(String in_word) {
+            boolean isCharDuplicate = false;
+            String tmp = "";
+            char[] in_wordArray = in_word.toCharArray();
+            for (int i = 0; i < in_wordArray.length; i++) {
+                String in_wordChar = String.valueOf(in_wordArray[i]);
+                if (tmp.length() > 1) {
+                    if (aDoubles.contains(in_wordChar)) {
+                        if (tmp.substring(tmp.length() - 2, tmp.length() - 1).equalsIgnoreCase(tmp.substring(tmp.length() - 1)) && (tmp.substring(tmp.length() - 1).equalsIgnoreCase(in_wordChar))) {
+                            isCharDuplicate = true;
                             continue;
-                        }else
-                        {
-                            tmp+=in_wordChar;
+                        } else {
+                            tmp += in_wordChar;
                         }
-                    }else{
-                        if(tmp.substring(tmp.length()-1).equalsIgnoreCase(in_wordChar))
-                        {
-                            isCharDuplicate=true;
+                    } else {
+                        if (tmp.substring(tmp.length() - 1).equalsIgnoreCase(in_wordChar)) {
+                            isCharDuplicate = true;
                             continue;
-                        }else{
-                            tmp+=in_wordChar;
+                        } else {
+                            tmp += in_wordChar;
                         }
                     }
-                }else{
-                    tmp+=in_wordChar;
+                } else {
+                    tmp += in_wordChar;
                 }
             }
 
             //If que Revisa si los primeros 2 caracteres son iguales, si es así, elimina el Primero.
-            if(tmp.length()>2 && tmp.substring(0,1).equalsIgnoreCase(tmp.substring(1,2)))
-            {
-                isCharDuplicate=true;
-                tmp=tmp.substring(1);
+            if (tmp.length() > 2 && tmp.substring(0, 1).equalsIgnoreCase(tmp.substring(1, 2))) {
+                isCharDuplicate = true;
+                tmp = tmp.substring(1);
             }
             //If que Revisa si los ultimos 2 caracteres son iguales, si es así, elimina el último.
-            if(tmp.length()>2 && tmp.substring(tmp.length()-2, tmp.length()-1).equalsIgnoreCase(tmp.substring(tmp.length()-1)))
-            {
-                isCharDuplicate=true;
-                tmp=tmp.substring(0, tmp.length()-1);
+            if (tmp.length() > 2 && tmp.substring(tmp.length() - 2, tmp.length() - 1).equalsIgnoreCase(tmp.substring(tmp.length() - 1))) {
+                isCharDuplicate = true;
+                tmp = tmp.substring(0, tmp.length() - 1);
             }
 
             return new NormalizerCharDuplicate(tmp, isCharDuplicate);
@@ -563,156 +555,140 @@ public class SWBSocialUtil implements SWBAppObject{
          * Metodo que regresa el fonema de una palabra, esto de acuerdo a definición
          * realizada internamente en el área.
          */
-        public static String phonematize(String phase)
-        {
-            if(phase==null || phase.isEmpty()) return phase;
-            String tmp="";
+        public static String phonematize(String phase) {
+            if (phase == null || phase.isEmpty()) {
+                return phase;
+            }
+            String tmp = "";
             String out_word = "";
             phase = phase.toLowerCase();
 
-            char [] in_wordArray=phase.toCharArray();
-            for(int i=0;i<in_wordArray.length;i++)
-            {
-                String in_wordChar=String.valueOf(in_wordArray[i]);
-                if(aDoubles.contains(in_wordChar))
-                {
-                    tmp+=in_wordChar;
+            char[] in_wordArray = phase.toCharArray();
+            for (int i = 0; i < in_wordArray.length; i++) {
+                String in_wordChar = String.valueOf(in_wordArray[i]);
+                if (aDoubles.contains(in_wordChar)) {
+                    tmp += in_wordChar;
                     continue;
-                }else if(tmp.trim().length()>0)    //Busca sonidos que se representan graficamente con dos caracteres
+                } else if (tmp.trim().length() > 0) //Busca sonidos que se representan graficamente con dos caracteres
                 {
-                    if(hmapChanges.containsKey(tmp + in_wordChar))
-                    {
+                    if (hmapChanges.containsKey(tmp + in_wordChar)) {
                         out_word += hmapChanges.get(tmp + in_wordChar);
                         tmp = "";
                         continue;
-                    }else if(hmapChanges.containsKey(tmp))
-                    {
-                        out_word+= hmapChanges.get(tmp) + in_wordChar;
+                    } else if (hmapChanges.containsKey(tmp)) {
+                        out_word += hmapChanges.get(tmp) + in_wordChar;
                         tmp = "";
                         continue;
                     }
-                    if(hmapChanges.containsKey(in_wordChar))
-                    {
-                        if(aDoubles.contains(hmapChanges.get(in_wordChar)))
-                        {
-                            tmp+=hmapChanges.get(in_wordChar);
+                    if (hmapChanges.containsKey(in_wordChar)) {
+                        if (aDoubles.contains(hmapChanges.get(in_wordChar))) {
+                            tmp += hmapChanges.get(in_wordChar);
                             continue;
                         }
                     } else {
-                            out_word+=tmp+in_wordChar;
-                            tmp="";
-                            continue;
-                        }
-                }else { //Mapea los caracteres con su sonido correspondiente
-                    if(hmapChanges.containsKey(in_wordChar))
-                    {
-                        if(aDoubles.contains(hmapChanges.get(in_wordChar)))
-                        {
-                            tmp+=hmapChanges.get(in_wordChar);
-                            continue;
-                        }else{
-                            out_word+=hmapChanges.get(in_wordChar);
-                            tmp="";
-                            continue;
-                        }
-                    }else if(in_wordChar.equalsIgnoreCase("h")){  //Elimina la h
+                        out_word += tmp + in_wordChar;
+                        tmp = "";
                         continue;
                     }
-                    out_word+=in_wordChar;
-                    tmp="";
+                } else { //Mapea los caracteres con su sonido correspondiente
+                    if (hmapChanges.containsKey(in_wordChar)) {
+                        if (aDoubles.contains(hmapChanges.get(in_wordChar))) {
+                            tmp += hmapChanges.get(in_wordChar);
+                            continue;
+                        } else {
+                            out_word += hmapChanges.get(in_wordChar);
+                            tmp = "";
+                            continue;
+                        }
+                    } else if (in_wordChar.equalsIgnoreCase("h")) {  //Elimina la h
+                        continue;
+                    }
+                    out_word += in_wordChar;
+                    tmp = "";
                     continue;
                 }
             }
-            if(tmp.length()>0)
-            {
-                out_word+=tmp;
-                tmp="";
+            if (tmp.length() > 0) {
+                out_word += tmp;
+                tmp = "";
             }
 
             return out_word;
         }
 
         /*
-        public static String getRootWord(String word)
-        {
-            try
-            {
-                TokenStream tokenStream = new SpanishAnalizer().tokenStream("word", new StringReader(word));
-                //OffsetAttribute offsetAttribute = tokenStream.addAttribute(OffsetAttribute.class);
-                CharTermAttribute charTermAttribute = tokenStream.addAttribute(CharTermAttribute.class);
-                while (tokenStream.incrementToken()) {
-                    String term = charTermAttribute.toString();
-                    if(term!=null) return term;
-                    else return word;
-                }
-            }catch(Exception e){
-                log.error(e);
-            }
-            return word;
-        }*/
+         public static String getRootWord(String word)
+         {
+         try
+         {
+         TokenStream tokenStream = new SpanishAnalizer().tokenStream("word", new StringReader(word));
+         //OffsetAttribute offsetAttribute = tokenStream.addAttribute(OffsetAttribute.class);
+         CharTermAttribute charTermAttribute = tokenStream.addAttribute(CharTermAttribute.class);
+         while (tokenStream.incrementToken()) {
+         String term = charTermAttribute.toString();
+         if(term!=null) return term;
+         else return word;
+         }
+         }catch(Exception e){
+         log.error(e);
+         }
+         return word;
+         }*/
 
         /*
          * Metodo que regrasa la raíz de una palabra
          */
-        public static String getRootWord(String phrase)
-        {
-            String sphrase="";
-            try
-            {
+        public static String getRootWord(String phrase) {
+            String sphrase = "";
+            try {
                 TokenStream tokenStream = new SpanishAnalizer().tokenStream("word", new StringReader(phrase));
                 //OffsetAttribute offsetAttribute = tokenStream.addAttribute(OffsetAttribute.class);
                 CharTermAttribute charTermAttribute = tokenStream.addAttribute(CharTermAttribute.class);
                 while (tokenStream.incrementToken()) {
                     String term = charTermAttribute.toString();
-                    if(term!=null && sphrase.trim().length()>0) {
-                        sphrase+=" "+term;
-                    }else if(term!=null) {
-                        sphrase=term;
+                    if (term != null && sphrase.trim().length() > 0) {
+                        sphrase += " " + term;
+                    } else if (term != null) {
+                        sphrase = term;
                     }
                 }
-            }catch(Exception e){
+            } catch (Exception e) {
                 log.error(e);
             }
-            if(sphrase.trim().length()>0)
-            {
+            if (sphrase.trim().length() > 0) {
                 return sphrase;
-            }else{
+            } else {
                 return phrase;
             }
         }
-
     }
-    
-    
-    public static class Util
-    {
+
+    public static class Util {
+
         /**
-         * Metodo que obtiene el valor de la propiedad que le llega como parametro en un determinado modelo
+         * Metodo que obtiene el valor de la propiedad que le llega como
+         * parametro en un determinado modelo
+         *
          * @param model
          * @param propertyID
-         * @return 
+         * @return
          */
-       public static String getModelPropertyValue(SWBModel model, String propertyID)
-       {
-           Iterator<ModelProperty> itModelProps=model.listModelProperties();
-           while(itModelProps.hasNext())
-           {
-               ModelProperty modelProp=itModelProps.next();
-               if(modelProp.getId().equals(propertyID))
-               {
-                   return modelProp.getValue();
-               }
-           }
-           return null;
-       }
-        
-        
+        public static String getModelPropertyValue(SWBModel model, String propertyID) {
+            Iterator<ModelProperty> itModelProps = model.listModelProperties();
+            while (itModelProps.hasNext()) {
+                ModelProperty modelProp = itModelProps.next();
+                if (modelProp.getId().equals(propertyID)) {
+                    return modelProp.getValue();
+                }
+            }
+            return null;
+        }
+
         //Diferencias entre dos fechas
         //@param fechaInicial La fecha de inicio
         //@param fechaFinal  La fecha de fin
         //@return Retorna el numero de dias entre dos fechas
-        public static int Datediff(Date fechaInicial, Date fechaFinal)
-        {
+        public static int Datediff(Date fechaInicial, Date fechaFinal) {
 
             DateFormat df = DateFormat.getDateInstance(DateFormat.MEDIUM);
             String fechaInicioString = df.format(fechaInicial);
@@ -733,26 +709,350 @@ public class SWBSocialUtil implements SWBAppObject{
             double dias = Math.floor(diferencia / (1000 * 60 * 60 * 24));
             return ((int) dias);
         }
-        
-        
+
         public static String replaceTags(String message, PostIn postIn, SocialSite socialSite, Stream stream, SocialNetwork socialNetwork) {
 
-        message = SWBUtils.TEXT.replaceAll(message, "{brand.title}", socialSite.getTitle());
-        message = SWBUtils.TEXT.replaceAll(message, "{stream.title}", stream.getTitle());
-        message = SWBUtils.TEXT.replaceAll(message, "{net.title}", socialNetwork.getTitle());
-        try
-        {
-            System.out.println("Mensaje del post:"+((MessageIn)postIn).getMsg_Text());
-            message = SWBUtils.TEXT.replaceAll(message, "{post.message}", ((MessageIn)postIn).getMsg_Text());
-        }catch(Exception e)
-        {
-            log.error(e);
-        }
-       
-        return message;
-    }
-        
-    }
-    
-}
+            message = SWBUtils.TEXT.replaceAll(message, "{brand.title}", socialSite.getTitle());
+            message = SWBUtils.TEXT.replaceAll(message, "{stream.title}", stream.getTitle());
+            message = SWBUtils.TEXT.replaceAll(message, "{net.title}", socialNetwork.getTitle());
+            try {
+                System.out.println("Mensaje del post:" + ((MessageIn) postIn).getMsg_Text());
+                message = SWBUtils.TEXT.replaceAll(message, "{post.message}", ((MessageIn) postIn).getMsg_Text());
+            } catch (Exception e) {
+                log.error(e);
+            }
 
+            return message;
+        }
+    }
+
+    public static class PFlowMgr 
+    {
+
+        public static void sendNewPost(PostIn postIn, SocialTopic socialTopic, SocialPFlow socialPFlow, ArrayList<SocialNetwork> aSocialNets, WebSite wsite, String toPost, HttpServletRequest request, SWBActionResponse response) {
+            try {
+                //if(postIn==null && socialTopic!=null) wsite=WebSite.ClassMgr.getWebSite(socialTopic.getSemanticObject().getModel().getName());
+                System.out.println("sendNewPost/toPost:"+toPost);
+                SWBFormMgr mgr = null;
+                if (toPost.equals("msg")) {
+                    mgr = new SWBFormMgr(Message.sclass, wsite.getSemanticObject(), null);
+                } else if (toPost.equals("photo")) {
+                    mgr = new SWBFormMgr(Photo.sclass, wsite.getSemanticObject(), null);
+                } else if (toPost.equals("video")) {
+                    mgr = new SWBFormMgr(Video.sclass, wsite.getSemanticObject(), null);
+                }
+                System.out.println("sendNewPost/mgr:"+mgr);
+                if (mgr != null) {
+                    System.out.println("sendNewPost-1");
+                    mgr.setFilterRequired(false);
+                    SemanticObject sobj = mgr.processForm(request);
+                    org.semanticwb.social.Post post = (org.semanticwb.social.Post) sobj.createGenericInstance();
+                    post.setSocialTopic(socialTopic);
+                    //Convierto a un post de salida para poderle agregar cada red social a la que se envía dicho post
+                    PostOut postOut = (PostOut) post;
+                    System.out.println("Creo postOut:"+postOut);
+                    //SocialPFlow al que se va ha enviar el nuevo post, si no tiene(que llegue Nulo), entonces se envía el PostOut sin pasar por flujo
+                    if (socialPFlow != null) {
+                        sendPostOutToAuthorize(postOut, socialPFlow, "");
+                        //initPostOut(postOut, socialPFlow, "");
+                    } else {
+                        //Revisa las redes sociales a las cuales se tiene que enviar el Post
+                        //String[] socialUris = socialUri.split("\\|");  //Dividir valores
+                        Iterator<SocialNetwork> itSocialNets = aSocialNets.iterator();
+                        while (itSocialNets.hasNext()) {
+                            SocialNetwork socialNet = itSocialNets.next();
+                            //SemanticObject semObject = SemanticObject.createSemanticObject(tmp_socialUri, wsite.getSemanticModel());
+                            //SocialNetwork socialNet = (SocialNetwork) semObject.createGenericInstance();
+                            //Se agrega la red social de salida al post
+                            postOut.addSocialNetwork(socialNet);
+                            //Se revisa si es de tipo mensaje, foto o video.
+                            if (toPost.equals("msg") && socialNet instanceof Messageable) {
+                                System.out.println("MENSAJE!!");
+                                //TODO: YO CREO QUE LO QUE TENGO QUE HACER AQUI, ES UN THREAD POR CADA UNA DE LAS REDES SOCIALES A LAS QUE SE ENVÍE UN POST
+                                Messageable messageable = (Messageable) socialNet;
+                                //messageable.postMsg((Message) post, request, response);
+                                PostableObj postableObj = new PostableObj(messageable, post, toPost, request, response);
+                                SendPostThread sendPostThread = new SendPostThread();
+                                sendPostThread.addPostAble(postableObj);
+                                sendPostThread.start();
+                            } else if (toPost.equals("photo") && socialNet instanceof Photoable) {
+                                System.out.println("PHOTO!!");
+                                //TODO: YO CREO QUE LO QUE TENGO QUE HACER AQUI, ES UN THREAD POR CADA UNA DE LAS REDES SOCIALES A LAS QUE SE ENVÍE UN POST
+                                Photoable photoable = (Photoable) socialNet;
+                                //photoable.postPhoto((Photo) post, request, response);
+                                PostableObj postableObj = new PostableObj(photoable, post, toPost, request, response);
+                                SendPostThread sendPostThread = new SendPostThread();
+                                sendPostThread.addPostAble(postableObj);
+                                sendPostThread.start();
+                            } else if (toPost.equals("video") && socialNet instanceof Videoable) {
+                                System.out.println("VIDEO!!");
+                                //TODO: YO CREO QUE LO QUE TENGO QUE HACER AQUI, ES UN THREAD POR CADA UNA DE LAS REDES SOCIALES A LAS QUE SE ENVÍE UN POST
+                                Videoable videoable = (Videoable) socialNet;
+                                //videoable.postVideo((Video) post, request, response);
+                                PostableObj postableObj = new PostableObj(videoable, post, toPost, request, response);
+                                SendPostThread sendPostThread = new SendPostThread();
+                                sendPostThread.addPostAble(postableObj);
+                                sendPostThread.start();
+                            }
+                        }
+                    }
+                }
+            } catch (Exception e) {
+                log.error(e);
+            }
+        }
+        
+        /**
+     * Send resource to authorize.
+     * 
+     * @param resource the resource
+     * @param pflow the pflow
+     * @param message the message
+     * @param user the user
+     */
+    public static void sendPostOutToAuthorize(PostOut postOut, SocialPFlow pflow, String message)
+    {
+        if (message == null)
+        {
+            message = "";
+        }
+        WebSite wsite=WebSite.ClassMgr.getWebSite(postOut.getSemanticObject().getModel().getName());
+        //String typeresource = resource.getResourceType().getId();
+        SemanticClass semClass=postOut.getSemanticObject().getSemanticClass().listSubClasses().next(); 
+        String typeresource=semClass.getClassId();
+        Document docflow = SWBUtils.XML.xmlToDom(pflow.getXml());
+        Element workflow = (Element) docflow.getElementsByTagName("workflow").item(0);
+        NodeList resourceTypes = workflow.getElementsByTagName("resourceType");
+        for (int ires = 0; ires < resourceTypes.getLength(); ires++)
+        {
+            Element eres = (Element) resourceTypes.item(ires);
+            String iresw = eres.getAttribute("id");
+            
+            if (iresw.equals(typeresource) && wsite.getId().equals(eres.getAttribute("topicmap")))
+            {
+                int version = (int) Double.parseDouble(workflow.getAttribute("version"));
+                SocialPFlowInstance instance = SocialPFlowInstance.ClassMgr.createSocialPFlowInstance(wsite);
+                instance.setPflow(pflow);
+                postOut.setPflowInstance(instance);
+                instance.setPfinstPostOut(postOut);
+                instance.setStatus(1);
+                instance.setVersion(version);
+                initPostOut(postOut, pflow, message);
+            }
+        }
+    }
+
+        /**
+         * Inits the content.
+         *
+         * @param postOut the PostOut
+         * @param pflow the SocialPFlow
+         * @param message the message
+         */
+        private static void initPostOut(PostOut postOut, SocialPFlow pflow, String message) {
+            SocialPFlowInstance instance = postOut.getPflowInstance();
+            String version = String.valueOf(instance.getVersion());
+            String activity = null;
+            String xml = pflow.getXml(); 
+            Document docxml = SWBUtils.XML.xmlToDom(xml);
+            NodeList workflows = docxml.getElementsByTagName("workflow");
+            for (int i = 0; i < workflows.getLength(); i++) {
+                Element workflow = (Element) workflows.item(i);
+                version = version + ".0";
+                if ((workflow.getAttribute("version")).equals(version)) {
+                    Element ecurrentActivity = null;
+                    NodeList activities = workflow.getElementsByTagName("activity");
+                    if (activities.getLength() > 0) {
+                        ecurrentActivity = (Element) activities.item(0);
+                        activity = ((Element) activities.item(0)).getAttribute("name");
+                    }
+                    try {
+                        instance.setStep(activity);
+                        long tinit = System.currentTimeMillis();
+                        instance.setTime(new Date(tinit));
+                        if (ecurrentActivity.getAttribute("type").equals("Activity")) {
+                            long days = Long.parseLong(ecurrentActivity.getAttribute("days"));
+                            long hours = 0;
+                            if (ecurrentActivity.getAttribute("hours") != null && !ecurrentActivity.getAttribute("hours").equals("")) {
+                                hours = Long.parseLong(ecurrentActivity.getAttribute("hours"));
+                            }
+                            if (days > 0 || hours > 0) {
+                                long milliseconds = ((hours * 3600) + (days * 86400)) * 1000;
+                                //TODO agregar control de tiempo
+                            /*Timestamp timestart = occ.getDbdata().getFlowtime();
+                                 long timefirst = timestart.getTime() + milliseconds;
+                                 ControlFlow controlFlow = new ControlFlow(occ, new java.util.Date(timefirst), activity);
+                                 PFlowSrv.addControlFlow(controlFlow);*/
+                            }
+                        }
+                    } catch (Exception e) {
+                        log.error(e);
+                    }
+                    String messageType = "I";
+                    mailToNotify(postOut, activity, messageType, message);
+                }
+
+            }
+        }
+
+        /**
+         * Mail to notify.
+         *
+         * @param resource the resource
+         * @param activityName the activity name
+         * @param messageType the message type
+         * @param message the message
+         */
+        private static void mailToNotify(PostOut postOut, String activityName, String messageType, String message) {
+            /*
+            User wbuser = postOut.getCreator();
+            Locale locale = Locale.getDefault();
+            try {
+                ResourceBundle bundle = null;
+                try {
+                    bundle = ResourceBundle.getBundle("org/semanticwb/portal/PFlowManager", locale);
+                } catch (Exception e) {
+                    bundle = ResourceBundle.getBundle("org/semanticwb/portal/PFlowManager");
+                }
+                if (postOut.getPflowInstance() != null) {
+                    WebSite site = postOut.getWebSite();
+                    PFlow flow = resource.getPflowInstance().getPflow();
+                    Document docdef = SWBUtils.XML.xmlToDom(flow.getXml());
+                    int version = resource.getPflowInstance().getVersion();
+                    NodeList workflows = docdef.getElementsByTagName("workflow");
+                    for (int iworkflow = 0; iworkflow < workflows.getLength(); iworkflow++) {
+                        Element eworkflow = (Element) workflows.item(iworkflow);
+                        if (eworkflow.getAttribute("version").equals(version + ".0")) {
+                            NodeList activities = eworkflow.getElementsByTagName("activity");
+                            for (int i = 0; i < activities.getLength(); i++) {
+                                Element activity = (Element) activities.item(i);
+                                if (i == 0 && messageType.equalsIgnoreCase("I")) {
+                                    activityName = activity.getAttribute("name");
+                                }
+                                if (activity.getAttribute("name").equalsIgnoreCase(activityName)) {
+                                    if (activity.getAttribute("type").equalsIgnoreCase("AuthorActivity")) {
+                                        User user = resource.getCreator();
+                                        String msgMail = bundle.getString("msg1") + " " + resource.getId() + " " + bundle.getString("msg2") + " '" + resource.getTitle() + "' " + bundle.getString("msg3") + ".";
+
+                                        msgMail += "\r\n" + bundle.getString("msg4") + ": " + wbuser.getFirstName() + " " + wbuser.getLastName();
+                                        msgMail += "\r\n" + bundle.getString("msg5") + ": " + wbuser.getLogin();
+
+                                        msgMail += "\r\n" + bundle.getString("msg6") + ": " + message;
+                                        msgMail += "\r\n" + bundle.getString("sitio") + ": " + site.getTitle() + ".\r\n";
+                                        msgMail += "\r\n" + bundle.getString("paso") + ": " + activityName + ".\r\n";
+                                        if (activity.getAttribute("days") != null && activity.getAttribute("hours") != null) {
+                                            if (!(activity.getAttribute("days").equals("0") && activity.getAttribute("hours").equals("0"))) {
+                                                msgMail += "\r\n" + bundle.getString("msgr1") + " " + activity.getAttribute("days") + " " + bundle.getString("days") + " " + bundle.getString("and") + " " + activity.getAttribute("hours") + " " + bundle.getString("hours") + " .";
+                                            }
+                                        }
+                                        WebPage page = (WebPage) resource.getResourceable();
+                                        HashMap args = new HashMap();
+                                        args.put("language", Locale.getDefault().getLanguage());
+                                        msgMail += "\r\n" + bundle.getString("seccion") + ": " + page.getTitle() + ".\r\n";
+                                        SWBUtils.EMAIL.sendBGEmail(user.getEmail(), bundle.getString("msg7") + " " + resource.getId() + " " + bundle.getString("msg8"), msgMail);
+                                    } else if (activity.getAttribute("type").equalsIgnoreCase("EndActivity")) {
+                                        User user = resource.getCreator();
+                                        String msgMail = bundle.getString("msg1") + " " + resource.getId() + " " + bundle.getString("msg2") + " '" + resource.getTitle() + "' " + bundle.getString("msg9") + ".";
+                                        msgMail += "\r\n" + bundle.getString("sitio") + ": " + site.getTitle() + ".\r\n";
+                                        msgMail += "\r\n" + bundle.getString("paso") + ": " + activityName + ".\r\n";
+                                        if (messageType.equalsIgnoreCase("N") && message != null && !message.equalsIgnoreCase("")) {
+                                            msgMail += "\r\n" + bundle.getString("msg6") + ": " + message;
+                                        }
+                                        WebPage page = (WebPage) resource.getResourceable();
+                                        HashMap args = new HashMap();
+                                        args.put("language", Locale.getDefault().getLanguage());
+                                        msgMail += "\r\n" + bundle.getString("seccion") + ": " + page.getTitle() + ".\r\n";
+                                        SWBUtils.EMAIL.sendBGEmail(user.getEmail(), bundle.getString("msg7") + " " + resource.getId() + " " + bundle.getString("msg10") + "", msgMail);
+                                    } else if (activity.getAttribute("type").equalsIgnoreCase("Activity")) {
+                                        HashSet<User> husers = new HashSet<User>();
+                                        NodeList users = activity.getElementsByTagName("user");
+                                        for (int j = 0; j < users.getLength(); j++) {
+                                            Element user = (Element) users.item(j);
+                                            String userid = user.getAttribute("id");
+                                            User recuser = SWBContext.getAdminRepository().getUser(userid);
+                                            husers.add(recuser);
+                                        }
+                                        NodeList roles = activity.getElementsByTagName("role");
+                                        for (int j = 0; j < roles.getLength(); j++) {
+                                            Element erole = (Element) roles.item(j);
+                                            try {
+                                                //Enumeration eusers = DBUser.getInstance(erole.getAttribute("repository")).getUsers();
+                                                Iterator<User> eusers = SWBContext.getUserRepository(erole.getAttribute("repository")).listUsers();
+                                                while (eusers.hasNext()) {
+                                                    User user = eusers.next();
+                                                    Iterator<Role> itroles = user.listRoles();
+                                                    while (itroles.hasNext()) {
+                                                        Role role = itroles.next();
+                                                        if (role.getId().equals(erole.getAttribute("id"))) {
+                                                            husers.add(user);
+                                                        }
+                                                    }
+                                                }
+                                            } catch (Exception e) {
+                                                log.error(e);
+                                            }
+                                        }
+                                        //envía correo
+                                        String to = "";
+                                        Iterator<User> itusers = husers.iterator();
+                                        while (itusers.hasNext()) {
+                                            User user = itusers.next();
+                                            if (user != null && user.getEmail() != null && to.indexOf(user.getEmail()) == -1) {
+                                                to += user.getEmail() + ";";
+                                            }
+                                        }
+                                        if (to.endsWith(";")) {
+                                            to = to.substring(0, to.length() - 1);
+                                        }
+                                        if (!to.equalsIgnoreCase("")) {
+                                            String subject = bundle.getString("msg7") + " " + resource.getId() + " " + bundle.getString("msg11");
+                                            String msg = bundle.getString("msg1") + " " + resource.getId() + " " + bundle.getString("msg2") + " '" + resource.getTitle() + "' " + bundle.getString("msg12") + " '" + activityName + "'.\r\n";
+                                            msg += "\r\n" + bundle.getString("sitio") + ": " + site.getTitle() + ".\r\n";
+                                            msg += "\r\n" + bundle.getString("paso") + ": " + activityName + ".\r\n";
+                                            WebPage page = (WebPage) resource.getResourceable();
+                                            HashMap args = new HashMap();
+                                            args.put("language", Locale.getDefault().getLanguage());
+                                            msg += "\r\n" + bundle.getString("seccion") + ": " + page.getTitle() + ".\r\n";
+
+                                            if ((messageType.equalsIgnoreCase("I") || messageType.equalsIgnoreCase("N")) && message != null && !message.equalsIgnoreCase("")) {
+                                                msg += "\r\n" + bundle.getString("msg6") + ": " + message;
+                                            }
+                                            if (messageType.equalsIgnoreCase("A")) {
+
+                                                // envía correo al creador del contenido
+                                                User user = resource.getCreator();
+                                                String msgMail = bundle.getString("sitio") + ": " + site.getTitle() + ".\r\n";
+                                                msgMail += "\r\n" + bundle.getString("paso") + ": " + activityName + ".\r\n";
+                                                //msgMail+=bundle.getString("url")+": "+ObjRes.getAdminUrl()+".\r\n";
+                                                msgMail += "\r\n" + bundle.getString("seccion") + ": " + page.getTitle() + ".\r\n";
+                                                msgMail += "\r\n" + bundle.getString("msg13") + " " + resource.getId() + " " + bundle.getString("msg14");
+
+                                                SWBUtils.EMAIL.sendBGEmail(user.getEmail(), bundle.getString("msg13") + " " + resource.getId() + " " + bundle.getString("msg14"), msgMail);
+
+                                                // avisa al los revisores de la expiración de la revisión delc ontenido
+                                                msg += "\r\n" + bundle.getString("msg13") + " " + resource.getId() + " " + bundle.getString("msg14");
+                                            }
+                                            if (activity.getAttribute("days") != null && activity.getAttribute("hours") != null) {
+                                                if (!(activity.getAttribute("days").equals("0") && activity.getAttribute("hours").equals("0"))) {
+                                                    msg += "\r\n" + bundle.getString("msgr1") + " " + activity.getAttribute("days") + " " + bundle.getString("days") + " " + bundle.getString("and") + " " + activity.getAttribute("hours") + " " + bundle.getString("hours") + " .";
+                                                }
+                                            }
+
+                                            SWBUtils.EMAIL.sendBGEmail(to, subject, msg);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                }
+
+            } catch (Exception e) {
+                log.error(e);
+                return;
+            }
+            * */
+        }
+    }
+}

@@ -4,7 +4,7 @@ package org.semanticwb.social.base;
    /**
    * Clase a Cambiar despues por "Relacional", esta y todas sus hijas. Clase que comprende todos los tipos de Post que pueden ir siendo creados en la herramienta.. 
    */
-public abstract class PostBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Tagable,org.semanticwb.model.Traceable
+public abstract class PostBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Traceable,org.semanticwb.model.Tagable
 {
    /**
    * Indica si un mensaje es prioritario o no. Esta propiedad aplica tanto si es un mensaje de entrada (PostIn) o de salida (PostOut).
