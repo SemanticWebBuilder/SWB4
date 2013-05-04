@@ -315,19 +315,19 @@
 
 .toolTip {
     fill:lightyellow;
-    stroke:gold;
-    stroke-width:1;
+    stroke:#000000;
+    stroke-width:1.5;
 }
 .errorToolTip {
     fill:lightpink;
-    stroke:red;
-    stroke-width:1;
+    stroke:#000000;
+    stroke-width:1.5;
 }
 
 .warningToolTip {
     fill:#EFB81F;
-    stroke:orange;
-    stroke-width:1;
+    stroke:#000000;
+    stroke-width:1.5;
 }
 
 /*****************************  NAVBAR **********************************************/
