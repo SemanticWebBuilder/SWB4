@@ -46,7 +46,7 @@ public class RPCProcessImp extends XmlRpcObject implements RPCProcess
     }
 
     @Override
-    public void closeTaskInstance(String APIKey, String UserID, String UserGroupsIDs, String InstanceID, int closeStatus, String closeAction, String SiteID) throws Exception
+    public void closeTaskInstance(String APIKey, String UserID, String InstanceID, int closeStatus, String closeAction, String SiteID) throws Exception
     {
         WebSite site = WebSite.ClassMgr.getWebSite(SiteID);
         if (site == null)
@@ -150,7 +150,7 @@ public class RPCProcessImp extends XmlRpcObject implements RPCProcess
     }
     
     @Override
-    public void createProcessInstance(String APIKey, String ProcessID, String UserID, String SiteID) throws Exception {
+    public String createProcessInstance(String APIKey, String ProcessID, String UserID, String SiteID) throws Exception {
         ProcessSite site = ProcessSite.ClassMgr.getProcessSite(SiteID);
         if (site == null)
         {
@@ -168,6 +168,7 @@ public class RPCProcessImp extends XmlRpcObject implements RPCProcess
         ProcessInstance pi = SWBProcessMgr.createProcessInstance(p, u);
         //TODO: Checar por qué no se asigna
         pi.setCreator(u);
+        return pi==null?null:pi.getId();
     }
 
     @Override
