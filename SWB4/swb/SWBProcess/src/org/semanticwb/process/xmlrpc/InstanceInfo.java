@@ -19,4 +19,4 @@ public class InstanceInfo {
     public Date closed;
     public String creator;
     public String closedBy;
-;}
+}
