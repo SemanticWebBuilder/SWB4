@@ -129,8 +129,28 @@ out.println("  return '--';");
 out.println(" }");
 out.println("}");
 out.println("formatNumber = function(value) {");
+//out.println(" alert('value:'+value);");  
+out.println("if(value.indexOf('#')!=-1){");
+out.println("return value;");
+out.println("}");
 out.println(" return isNaN(value)?'...':dojo.number.format(value, {pattern:\"#,###\"});");
 out.println("}");
+
+out.println("function showPopUpResponse(value,pageURL,title, w, h) {");
+//out.println("alert('value en showPopUp:'+value)");
+out.println(" var left = (screen.width/2)-(w/2);");
+out.println(" var top = (screen.height/2)-(h/2);");
+out.println(" var targetWin = window.open (pageURL+'?postUri='+value, title, 'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=no, copyhistory=no, width='+w+', height='+h+', top='+top+', left='+left);");
+out.println(" return false;");
+out.println("}");
+out.println("function postInSource(value) {");
+//out.println("alert('valueJ0:'+value)");
+out.println("  return value;");
+out.println("}");
+
+//out.println("formatUri = functionUri(value) {");
+//out.println(" return value;");
+//out.println("}");
         
 out.println(" var layout= null;");
 out.println(" var jStrMaster = null;");
@@ -151,7 +171,8 @@ out.println("      { field:'rp',  width:'3%',name:'Réplica', styles:'font-size:1
 out.println("      { field:'user',width:'9%',name:'Usuario', styles:'font-size:11px;', headerStyles:'font-size:11px;text-align:center;' },");
 out.println("      { field:'fllwrs', width:'5%', name:'Seguidores', styles:'font-size:11px;text-align:right;', headerStyles:'font-size:11px;text-align:center;' },");
 out.println("      { field:'frds',width: '5%',name:'Amigos', styles:'font-size:11px;text-align:right;', headerStyles:'font-size:11px;text-align:center;' },");
-out.println("      { field:'plc',width: '8%',name:'Lugar', styles:'font-size:11px;', headerStyles:'font-size:11px;text-align:center;' }");
+out.println("      { field:'plc',width: '8%',name:'Lugar', styles:'font-size:11px;', headerStyles:'font-size:11px;text-align:center;' },");
+out.println("      { field:'postIn',width:'5%', name:'Responder', formatter:function(value){var artf=postInSource(value);if(value!='---'){return '<a href=\"javascript:void(0)\" onclick=\"showPopUpResponse(\\''+escape(artf)+'\\',\\'"+paramRequest.getRenderUrl().setMode(Mode_RESPONSE) +"\\',\\'Responder\\',500,250)\" >Responder</a>';}else {return '---';};}, styles:'text-align:center;font-size:10px;', headerStyles:'font-size:11px;text-align:center;' }"); 
 out.println("   ];");
 
 out.println("   gridMaster = new dojox.grid.DataGrid({");

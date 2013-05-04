@@ -12,18 +12,25 @@
 <%@page import="org.semanticwb.*,org.semanticwb.platform.*,org.semanticwb.portal.*,org.semanticwb.model.*,java.util.*,org.semanticwb.base.util.*"%>
 <jsp:useBean id="paramRequest" scope="request" type="org.semanticwb.portal.api.SWBParamRequest"/>
 <%
+    System.out.println("Entra a Jsp...TypeOfContent...");
     String contentType = (String) request.getAttribute("valor");    
-    String objUri = request.getParameter("objUri");    
-    SocialTopic socialTopic = (SocialTopic)SemanticObject.getSemanticObject(objUri).getGenericInstance(); // creates social topic to get Model Name
-    String brand = socialTopic.getSemanticObject().getModel().getName(); //gets brand name
+    String objUri = request.getParameter("objUri"); 
+    System.out.println("objUri:"+objUri);      
+    //SocialTopic socialTopic = (SocialTopic)SemanticObject.getSemanticObject(objUri).getGenericInstance(); // creates social topic to get Model Name
+    //String brand = socialTopic.getSemanticObject().getModel().getName(); //gets brand name
     SWBResourceURL urlAction = paramRequest.getActionUrl();
-    WebSite wsite = WebSite.ClassMgr.getWebSite(brand);
-       
+    WebSite wsite = WebSite.ClassMgr.getWebSite(request.getParameter("wsite"));
+    System.out.println("wsite:"+wsite);
+    String postInSN=request.getParameter("postInSN"); 
+      
     urlAction.setParameter("objUri", objUri);
-    urlAction.setParameter("wsite", brand);           
+    //urlAction.setParameter("wsite", brand);           
+    urlAction.setParameter("wsite", wsite.getSemanticObject().getModel().getName());           
     if (contentType.equals("postMessage")) {
+        System.out.println("Entra a if postMessage");
         urlAction.setParameter("toPost", "msg");
         SWBFormMgr messageFormMgr = new SWBFormMgr(Message.sclass.getSemanticObject(), null, SWBFormMgr.MODE_CREATE);
+        //messageFormMgr.setAction(SWBResourceURL.Action_ADD);
         messageFormMgr.setType(SWBFormMgr.TYPE_DOJO);
         messageFormMgr.setFilterRequired(false);
         String lang = "";
@@ -37,19 +44,35 @@
 <div class="swbform">
     <form dojoType="dijit.form.Form" id="frmUploadText" action="<%=urlAction.setAction("postMessage")%>" onsubmit="submitForm('frmUploadText'); return false;" method="post">
         <%= messageFormMgr.getFormHiddens()%>
-        <ul><b>Seleccione las redes sociales a las cuales desea enviar el post</b></ul>
         <%
-            Iterator<SocialNetwork> it = SocialNetwork.ClassMgr.listSocialNetworks(wsite);
-            while (it.hasNext()) {
-                SocialNetwork socialNetwork = (SocialNetwork) it.next();
-                if (socialNetwork instanceof Messageable) {
-        %>
-        <li>
-            <input type="checkbox" name="<%=socialNetwork.getURI()%>"/><%=socialNetwork.getTitle()%>
-        </li>
-        <%
-                }
-            }%>
+            System.out.println("postInSN:"+postInSN);
+            if(postInSN==null)
+            {
+                %>
+                <ul><b>Seleccione las redes sociales a las cuales desea enviar el post</b></ul>
+                <%
+                    Iterator<SocialNetwork> it = SocialNetwork.ClassMgr.listSocialNetworks(wsite);
+                    while (it.hasNext()) {
+                        SocialNetwork socialNetwork = (SocialNetwork) it.next();
+                        if (socialNetwork instanceof Messageable) {
+                            %>
+                            <li>
+                                <input type="checkbox" name="<%=socialNetwork.getURI()%>"/><%=socialNetwork.getTitle()%>
+                            </li>
+                            <%
+                        }
+                    }
+            }else
+            {
+                System.out.println("Entra a postInSN:"+postInSN);
+                SocialNetwork socialNet=(SocialNetwork)SemanticObject.getSemanticObject(postInSN).createGenericInstance(); 
+                System.out.println("Entra a postInSN/socialNet:"+socialNet);
+                if(socialNet==null) return;
+                %>
+                    <input type="hidden" name="socialNetUri" value="<%=socialNet.getURI()%>"/>
+                <%
+            }
+         %>
         <div class="etiqueta"><label for="title"><%=Message.social_Message.getDisplayName(lang)%>: </label></div>
         <div class="campo"><%=messageFormMgr.renderElement(request, Message.social_msg_Text, messageFormMgr.MODE_CREATE)%></div>
         
