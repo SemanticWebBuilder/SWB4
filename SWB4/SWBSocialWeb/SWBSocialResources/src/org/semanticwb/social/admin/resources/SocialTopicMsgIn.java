@@ -8,10 +8,12 @@ import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.Logger;
@@ -19,6 +21,7 @@ import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Resource;
 import org.semanticwb.model.WebSite;
+import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.portal.api.GenericResource;
 import org.semanticwb.portal.api.SWBActionResponse;
 import org.semanticwb.portal.api.SWBParamRequest;
@@ -27,6 +30,9 @@ import org.semanticwb.portal.api.SWBResourceURL;
 import org.semanticwb.social.MessageIn;
 import org.semanticwb.social.PostIn;
 import org.semanticwb.social.SentimentalLearningPhrase;
+import org.semanticwb.social.SocialNetwork;
+import org.semanticwb.social.SocialPFlow;
+import org.semanticwb.social.SocialPFlowRef;
 import org.semanticwb.social.SocialTopic;
 import org.semanticwb.social.admin.resources.reports.PostSummary;
 import org.semanticwb.social.util.SWBSocialUtil;
@@ -47,6 +53,7 @@ public class SocialTopicMsgIn extends GenericResource {
     public static final int PAGE_SIZE = 25; //Líneas por página
     public static final String Mode_JSON = "json";
     public static final String Mode_REVAL = "rv";
+    public static final String Mode_RESPONSE = "response";
     public static int xxx = 1000;
     /**
      * The tpl.
@@ -70,10 +77,14 @@ public class SocialTopicMsgIn extends GenericResource {
     public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         final String mode = paramRequest.getMode();
         if (Mode_JSON.equals(mode)) {
-            doJson(request, response, paramRequest);
+            doJson(request, response, paramRequest); 
         } else if (Mode_REVAL.equals(mode)) {
             doRevalue(request, response, paramRequest);
-        } else {
+        } else if (Mode_RESPONSE.equals(mode)) {
+            doResponse(request, response, paramRequest);
+        } else if (paramRequest.getMode().equals("post")) {
+            doCreatePost(request, response, paramRequest);
+        }else {
             super.processRequest(request, response, paramRequest);
         }
     }
@@ -82,7 +93,39 @@ public class SocialTopicMsgIn extends GenericResource {
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
         final Resource base = getResourceBase();
         final String action = response.getAction();
-        if (SWBResourceURL.Action_EDIT.equals(action)) {
+        if (action.equals("postMessage")) {
+            System.out.println("Entra a processAction/ADD..");
+            if(request.getParameter("objUri")!=null)
+            {
+                PostIn postIn=(PostIn)SemanticObject.getSemanticObject(request.getParameter("objUri")).createGenericInstance();
+                SocialTopic socialTopic=postIn.getSocialTopic();
+                
+                SocialNetwork socialNet=(SocialNetwork)SemanticObject.getSemanticObject(request.getParameter("socialNetUri")).createGenericInstance();
+                ArrayList aSocialNets=new ArrayList();
+                aSocialNets.add(socialNet);
+                
+                WebSite wsite=WebSite.ClassMgr.getWebSite(request.getParameter("wsite")); 
+                
+                //En este momento en el siguiente código saco uno de los SocialPFlowRef que tiene el SocialTopic del PostIn que se esta contestando,
+                //Obviamente debo de quitar este código y el SocialPFlowRef debe llegar como parametro, que es de acuerdo al SocialPFlow que el usuario
+                //desee enviar el PostOut que realizó.
+                SocialPFlow socialPFlow=null;
+                Iterator<SocialPFlowRef> itflowRefs=socialTopic.listPFlowRefs();
+                while(itflowRefs.hasNext())
+                {
+                    SocialPFlowRef socialPflowRef=itflowRefs.next();
+                    socialPFlow=socialPflowRef.getPflow();
+                }
+                
+                System.out.println("postIn:"+postIn);
+                System.out.println("socialNet:"+socialNet);
+                System.out.println("swsite:"+wsite);
+                System.out.println("socialPFlow:"+socialPFlow);
+                
+                
+                SWBSocialUtil.PFlowMgr.sendNewPost(postIn, postIn.getSocialTopic(), socialPFlow, aSocialNets, wsite, request.getParameter("toPost"), request, response);
+            }
+        }else if (SWBResourceURL.Action_EDIT.equals(action)) {
             WebSite wsite = base.getWebSite();
             try {
                 String[] phrases = request.getParameter("fw").split(";");
@@ -277,6 +320,7 @@ public class SocialTopicMsgIn extends GenericResource {
                     }
                     //System.out.println("En reporte-place:" + msg.getPostPlace());
                     obj.put("plc", msg.getPostPlace() == null ? "--" : msg.getPostPlace());
+                    obj.put("postIn", post.getURI());
                     jarr.put(obj);
                 } catch (Exception jse) {
                     //jse.printStackTrace(System.out);
@@ -306,4 +350,44 @@ public class SocialTopicMsgIn extends GenericResource {
             }
         }
     }
+    
+    private void doResponse(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        response.setContentType("text/html;charset=iso-8859-1");
+        response.setHeader("Cache-Control", "no-cache");
+        response.setHeader("Pragma", "no-cache");
+        final String myPath = SWBPlatform.getContextPath() + "/work/" + paramRequest.getWebPage().getWebSiteId() + "/jsp/socialTopic/socialTopicMsgInResponse.jsp?showSource=1";
+        if (request != null) {
+            RequestDispatcher dis = request.getRequestDispatcher(myPath);
+            if (dis != null) {
+                try {
+                    SemanticObject semObject = SemanticObject.createSemanticObject(request.getParameter("postUri"));
+                    request.setAttribute("sObjPostIn", semObject);
+                    request.setAttribute("paramRequest", paramRequest);
+                    dis.include(request, response);
+                } catch (Exception e) {
+                    log.error(e);
+                    e.printStackTrace(System.out);
+                }
+            }
+        }
+    }
+    
+    public void doCreatePost(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {        
+        System.out.println("\ndoCreatePost");
+        RequestDispatcher rd = request.getRequestDispatcher(SWBPlatform.getContextPath() +"/work/" + paramRequest.getWebPage().getWebSiteId() +"/jsp/post/typeOfContent.jsp");
+        request.setAttribute("valor", request.getParameter("valor"));
+        request.setAttribute("wsite", request.getParameter("wsite"));
+        request.setAttribute("objUri", request.getParameter("objUri"));
+        //request.setAttribute("action", request.getParameter("action"));
+        request.setAttribute("paramRequest", paramRequest);
+        System.out.println("valor en doCreatePost:"+request.getParameter("valor"));
+        System.out.println("valor en wsite:"+request.getParameter("wsite"));
+        System.out.println("valor en objUri:"+request.getParameter("objUri"));
+        try {
+            rd.include(request, response);
+        } catch (ServletException ex) {
+            log.error("Error al enviar los datos a typeOfContent.jsp " + ex.getMessage());
+        }
+    }
+    
 }

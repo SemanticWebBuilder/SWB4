@@ -373,7 +373,6 @@ public class SocialPFlowRes extends GenericResource
      */
     public void getResourceTypeCat(Element res, String tm, String lang)
     {
-        System.out.println("Entra a getResourceTypeCat J...,lang:"+lang);
         HashSet<String> resources = new HashSet<String>();
         WebSite map = SWBContext.getWebSite(tm);
         
@@ -383,14 +382,15 @@ public class SocialPFlowRes extends GenericResource
             while(itSemClasses.hasNext())
             {
                 SemanticClass semClass=itSemClasses.next();
-                System.out.println("semClass-G:"+semClass+", id:"+semClass.getClassId());
-                System.out.println("Class label:"+semClass.getLabel(lang)); 
-                System.out.println("map:"+map);
+                //System.out.println("semClass-G:"+semClass+", id:"+semClass.getClassId());
+                //System.out.println("Class label:"+semClass.getLabel(lang)); 
+                //System.out.println("map:"+map);
                 
                 resources.add(semClass.getClassId());
                 String sLabel=semClass.getLabel("es");
                 if(semClass.getLabel(lang)!=null) sLabel=semClass.getLabel(lang);
-                Element erole = addNode("resourceType", "" + semClass.getClassId(), sLabel, res); 
+                Element erole = addNode("resourceType", "" + semClass.getClassId(), sLabel, res);     //Comentado Jorge 05/Mayo/2013
+                //Element erole = addNode("PostType", "" + semClass.getClassId(), sLabel, res);     //Agregado por el de arriba- Jorge 05/Mayo/2013
                 erole.setAttribute("topicmap", map.getId());
                 erole.setAttribute("topicmapname", map.getTitle());
                 String description = semClass.getComment("es");
@@ -401,7 +401,7 @@ public class SocialPFlowRes extends GenericResource
             }
         }catch(Exception e)
         {
-            System.out.println("Error Goe:"+e.getMessage());
+            //System.out.println("Error Goe:"+e.getMessage());
             log.error(e);
         }
         
@@ -743,11 +743,11 @@ public class SocialPFlowRes extends GenericResource
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
-        System.out.println("Hola-Entra a doView...");
+        //System.out.println("Hola-Entra a doView...");
         String id = request.getParameter("suri");
         SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
         GenericObject go = ont.getGenericObject(id);
-        System.out.println("go J:"+go.getSemanticObject().getSemanticClass());
+        //System.out.println("go J:"+go.getSemanticObject().getSemanticClass());
         SocialPFlow pfgo = (SocialPFlow) go;
 //        System.out.println("pf xml: " + pfgo.getXml());
         if (pfgo != null && (pfgo.getXml() == null || (pfgo.getXml() != null && pfgo.getXml().trim().length() == 0)))  
