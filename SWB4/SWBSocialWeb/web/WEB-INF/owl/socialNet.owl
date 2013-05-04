@@ -727,6 +727,10 @@
     >true</swb:inheritProperty>
     <rdfs:range rdf:resource="#SocialPFlowRef"/>
   </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="pfinstPostOut">
+    <rdfs:range rdf:resource="#PostOut"/>
+    <rdfs:domain rdf:resource="#SocialPFlowInstance"/>
+  </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="hasPostContainer_PostInv">
     <rdfs:comment>Propiedad inversa que me regresa los postContainers con los cuales tiene referencia un objeto(instancia) PostOut, recordemos que se crea una instancia de PostContainer por una red social, de modo que si se envía un postOut a varias redes sociales(lo cual puede pasar) pues se deverían de crear varios postContainers (Si es que no hay ya creados) por cada una de estas redes sociales a las cuales se envía el PostOut.</rdfs:comment>
   </owl:ObjectProperty>
@@ -743,15 +747,12 @@
     <rdfs:comment>Objeto Red Social a la cual se hace referencia.</rdfs:comment>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="pflowInstance">
-    <rdfs:domain rdf:resource="#PostOut"/>
     <rdfs:label xml:lang="es">Instancia de flujo de publicación</rdfs:label>
     <rdfs:label xml:lang="en">Publish Flow Instance</rdfs:label>
     <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:removeDependency>
     <rdfs:range rdf:resource="#SocialPFlowInstance"/>
-    <owl:inverseOf>
-      <owl:ObjectProperty rdf:ID="pfinstResource"/>
-    </owl:inverseOf>
+    <rdfs:domain rdf:resource="#PostOut"/>
     <swb:displayProperty rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#dp_pflowInstance"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="pc_SocialNetworkInv">
@@ -766,10 +767,6 @@
     <rdfs:comment>Cuenta de Red Social a la que pertenece el post que llega por el Listener y que es tomado como base para crear un nuevo post desde la herramienta y que sera enviado a una o mas redes sociales. Ver si quito esta propiedad, no me acuerdo porque la puse, talvez para hacer las busquedas por red social y que estas fueran mas rapidas.</rdfs:comment>
     <rdfs:range rdf:resource="#SocialNetwork"/>
     <rdfs:domain rdf:resource="#PostOutListenerContainerBase"/>
-  </owl:ObjectProperty>
-  <owl:ObjectProperty rdf:about="#pfinstResource">
-    <rdfs:domain rdf:resource="#SocialPFlowInstance"/>
-    <rdfs:range rdf:resource="#PostOut"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="postInSocialNetwork">
     <rdfs:domain rdf:resource="#PostIn"/>
