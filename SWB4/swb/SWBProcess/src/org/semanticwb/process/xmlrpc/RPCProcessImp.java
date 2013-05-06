@@ -10,6 +10,7 @@ import java.util.List;
 import org.semanticwb.model.User;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.process.model.FlowNodeInstance;
+import org.semanticwb.process.model.Instance;
 import org.semanticwb.process.model.ProcessInstance;
 import org.semanticwb.process.model.ProcessSite;
 import org.semanticwb.process.model.Process;
@@ -48,13 +49,16 @@ public class RPCProcessImp extends XmlRpcObject implements RPCProcess
     @Override
     public void closeTaskInstance(String APIKey, String UserID, String InstanceID, int closeStatus, String closeAction, String SiteID) throws Exception
     {
-        WebSite site = WebSite.ClassMgr.getWebSite(SiteID);
+        String act = Instance.ACTION_ACCEPT;
+        int stat = Instance.STATUS_CLOSED;
+        
+        ProcessSite site = ProcessSite.ClassMgr.getProcessSite(SiteID);
         if (site == null)
         {
             throw new Exception("The site " + SiteID + " was not found");
         }
-        FlowNodeInstance pi = FlowNodeInstance.ClassMgr.getFlowNodeInstance(InstanceID, site);
-        if (pi == null)
+        FlowNodeInstance fni = FlowNodeInstance.ClassMgr.getFlowNodeInstance(InstanceID, site);
+        if (fni == null)
         {
             throw new Exception("The FlowNodeInstance with id " + InstanceID + " was not found");
         }
@@ -63,7 +67,13 @@ public class RPCProcessImp extends XmlRpcObject implements RPCProcess
         {
             throw new Exception("The User with id " + UserID + " was not found");
         }
-        pi.close(u, closeStatus, closeAction);
+        if (closeAction != null && closeAction.length()>0) {
+            act = closeAction; 
+        }
+        if (closeStatus >= 2 && closeStatus <= 4) {
+            stat = closeStatus;
+        }
+        fni.close(u, stat, act);
     }
 
     @Override
@@ -246,12 +256,7 @@ public class RPCProcessImp extends XmlRpcObject implements RPCProcess
         if (!pType.isValid()) {
             return false;
         }
-        
-        System.out.println("Process is valid");
         canAccess = fni.haveAccess(user);
-        
-        System.out.println(canAccess?"Instance is valid":"Instance is valid");
-        
         if (canAccess) {
             //Verificar filtrado por estatus
             if (statusFilter > 0 && fni.getStatus() == statusFilter) {
