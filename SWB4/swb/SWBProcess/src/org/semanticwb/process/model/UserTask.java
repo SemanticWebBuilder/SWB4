@@ -59,7 +59,6 @@ public class UserTask extends org.semanticwb.process.model.base.UserTaskBase
                 List<User> users=SWBProcessMgr.getUsers(instance);
                 int s=users.size();
                 User assigned=users.get(new Random().nextInt(s));                
-                instance.setAssigned(new Date());
                 instance.setAssignedto(assigned);
                 //System.out.println("assigned:"+assigned);
                 NotificationTemplate tpl=getProcess().getAssigmentNotificationTemplate();
@@ -81,6 +80,7 @@ public class UserTask extends org.semanticwb.process.model.base.UserTaskBase
             {
                 instance.setAssignedto(user);
             }
+            instance.setAssigned(new Date());
         }
     }
     
