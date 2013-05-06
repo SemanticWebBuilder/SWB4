@@ -10,7 +10,6 @@ import java.util.List;
 import org.semanticwb.model.User;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.process.model.FlowNodeInstance;
-import org.semanticwb.process.model.Instance;
 import org.semanticwb.process.model.ProcessInstance;
 import org.semanticwb.process.model.ProcessSite;
 import org.semanticwb.process.model.Process;
@@ -28,7 +27,10 @@ public class RPCProcessImp extends XmlRpcObject implements RPCProcess
     @Override
     public void closeProcessInstance(String APIKey, String UserID, String InstanceID, int closeStatus, String closeAction, String SiteID) throws Exception
     {
-        WebSite site = WebSite.ClassMgr.getWebSite(SiteID);
+        String act = ProcessInstance.ACTION_ACCEPT;
+        int stat = ProcessInstance.STATUS_CLOSED;
+        
+        ProcessSite site = ProcessSite.ClassMgr.getProcessSite(SiteID);
         if (site == null)
         {
             throw new Exception("The site " + SiteID + " was not found");
@@ -43,14 +45,20 @@ public class RPCProcessImp extends XmlRpcObject implements RPCProcess
         {
             throw new Exception("The user " + UserID + " was not found");
         }
-        pi.close(u, closeStatus, closeAction);
+        if (closeAction != null && closeAction.length()>0) {
+            act = closeAction; 
+        }
+        if (closeStatus >= 2 && closeStatus <= 4) {
+            stat = closeStatus;
+        }
+        pi.close(u, stat, act);
     }
 
     @Override
     public void closeTaskInstance(String APIKey, String UserID, String InstanceID, int closeStatus, String closeAction, String SiteID) throws Exception
     {
-        String act = Instance.ACTION_ACCEPT;
-        int stat = Instance.STATUS_CLOSED;
+        String act = FlowNodeInstance.ACTION_ACCEPT;
+        int stat = FlowNodeInstance.STATUS_CLOSED;
         
         ProcessSite site = ProcessSite.ClassMgr.getProcessSite(SiteID);
         if (site == null)
@@ -95,24 +103,6 @@ public class RPCProcessImp extends XmlRpcObject implements RPCProcess
         return getProcessInstances.toArray(new InstanceInfo[getProcessInstances.size()]);
     }
 
-    /*@Override
-    public List<String> getProcessInstances(String APIKey, int instanceStatus, String SiteID) throws Exception
-    {
-    List<String> getProcessInstances = new ArrayList<String>();
-    WebSite site = WebSite.ClassMgr.getWebSite(SiteID);
-    if (site == null)
-    {
-    throw new Exception("The site " + SiteID + " was not found");
-    }
-    Iterator<ProcessSite> sites = ProcessSite.ClassMgr.listProcessSites(site);
-    while (sites.hasNext())
-    {
-    ProcessSite p = sites.next();
-    List<String> tmp=getProcessInstances(APIKey, p.getId(), instanceStatus, SiteID);
-    getProcessInstances.addAll(tmp);
-    }
-    return getProcessInstances;
-    }*/
     @Override
     public FlowNodeInstanceInfo[] listUserTaskInstances(String APIKey, String UserID, String ProcessID, int instanceStatus, String SiteID) throws Exception
     {
