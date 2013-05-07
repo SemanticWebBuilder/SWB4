@@ -49,14 +49,14 @@
 
 /*.task {
     stroke:#2c5aa0;
-    fill:url(#linearGradientIntermediateEvent);
+    fill:url(images/#linearGradientIntermediateEvent);
     stroke-width:2;
     cursor:hand;
 }*/
 
 /*.task_o {
     stroke:#2cff20;
-    fill:url(#linearGradientIntermediateEvent);
+    fill:url(images/#linearGradientIntermediateEvent);
     stroke-width:2;
     cursor:hand;
 }*/
@@ -70,7 +70,7 @@
 
 /*.callactivity {
     stroke:#2c5aa0;
-    fill:url(#linearGradientIntermediateEvent);
+    fill:url(images/#linearGradientIntermediateEvent);
     fill-opacity:1;
     stroke-width:4;
     cursor:hand;
@@ -78,7 +78,7 @@
 
 .callactivity_o {
     stroke:#2cff20;
-    fill:url(#linearGradientIntermediateEvent);
+    fill:url(images/#linearGradientIntermediateEvent);
     fill-opacity:1;
     stroke-width:4;
     cursor:hand;
@@ -86,7 +86,7 @@
 
 .eventsubTask {
     stroke:#2c5aa0;
-    fill:url(#linearGradientIntermediateEvent);
+    fill:url(images/#linearGradientIntermediateEvent);
     stroke-width:2;
     cursor:hand;
     stroke-dasharray:6,4;
@@ -94,7 +94,7 @@
 
 .eventsubTask_o {
     stroke:#2cff20;
-    fill:url(#linearGradientIntermediateEvent);
+    fill:url(images/#linearGradientIntermediateEvent);
     stroke-width:2;
     cursor:hand;
     stroke-dasharray:6,4;
@@ -103,7 +103,7 @@
 .startEvent
 {
     stroke:#008000;
-    fill:url(#linearGradientStartEvent);
+    fill:url(images/#linearGradientStartEvent);
     stroke-width:1.5;
     cursor:hand;
 }
@@ -111,7 +111,7 @@
 .startEvent_o
 {
     stroke:#2cff20;
-    fill:url(#linearGradientStartEvent);
+    fill:url(images/#linearGradientStartEvent);
     stroke-width:1.5;
     cursor: hand;
 }*/
@@ -152,7 +152,7 @@
 .intermediateEvent
 {
     stroke:#2c5aa0;
-    fill:url(#linearGradientIntermediateEvent);
+    fill:url(images/#linearGradientIntermediateEvent);
     stroke-width:1.5;
     cursor:hand;
 }
@@ -160,7 +160,7 @@
 .intermediateEvent_o
 {
     stroke:#2cff20;
-    fill:url(#linearGradientIntermediateEvent);
+    fill:url(images/#linearGradientIntermediateEvent);
     stroke-width:1.5;
     cursor:hand;
 }
@@ -175,7 +175,7 @@
 /*.endEvent
 {
     stroke:#550000;
-    fill:url(#linearGradientEndEvent);
+    fill:url(images/#linearGradientEndEvent);
     stroke-width:2.5;
     cursor:hand;
 }
@@ -183,7 +183,7 @@
 .endEvent_o
 {
     stroke:#2cff20;
-    fill:url(#linearGradientEndEvent);
+    fill:url(images/#linearGradientEndEvent);
     stroke-width:2.5;
     cursor:hand;
 }    
@@ -191,7 +191,7 @@
 .gateway
 {
     stroke:#d4aa00;
-    fill:url(#linearGradientGateway);
+    fill:url(images/#linearGradientGateway);
     stroke-width:2;
     cursor:hand;
 }
@@ -199,7 +199,7 @@
 .gateway_o
 {
     stroke:#2cff20;
-    fill:url(#linearGradientGateway);
+    fill:url(images/#linearGradientGateway);
     stroke-width:2;
     cursor:hand;
 }*/
@@ -364,7 +364,7 @@ ul.breadcrumbs li a{
     font-size:0.9em;
     zoom:1;
     margin:0;
-    background:url(icon-arrow-right.png) no-repeat right center;
+    background:url(images/icon-arrow-right.png) no-repeat right center;
 }
 
 ul.breadcrumbs li.last a{
@@ -386,7 +386,7 @@ ul.breadcrumbs.alt1{
 
 ul.breadcrumbs.alt1 li a{
     padding:10px 25px 10px 15px;
-    background:url(breadcrumbs-bg.gif) no-repeat right center;
+    background:url(images/breadcrumbs-bg.gif) no-repeat right center;
     text-decoration:none;
     border-top:1px solid #efefef;
     border-bottom:1px solid #efefef;
@@ -415,7 +415,7 @@ ul.breadcrumbs.alt1 li.last a{
 }
 
 .startEventItem {
-    background: url(start_1.png) top center no-repeat;
+    background: url(images/start_1.png) top center no-repeat;
     position: relative;
     float: left;
     height:43px;
@@ -423,11 +423,11 @@ ul.breadcrumbs.alt1 li.last a{
 }
 
 .startEventItem:hover {
-    background: url(start_2.png) top center no-repeat;
+    background: url(images/start_2.png) top center no-repeat;
 }
 
 .intereventItem {
-    background: url(inter_1.png) top center no-repeat;
+    background: url(images/inter_1.png) top center no-repeat;
     position: relative;
     float: left;
     height:43px;
@@ -435,11 +435,11 @@ ul.breadcrumbs.alt1 li.last a{
 }
 
 .intereventItem:hover {
-    background: url(inter_2.png) top center no-repeat;
+    background: url(images/inter_2.png) top center no-repeat;
 }
 
 .endeventItem {
-    background: url(end_1.png) top center no-repeat;
+    background: url(images/end_1.png) top center no-repeat;
     position: relative;
     float: left;
     height:43px;
@@ -447,11 +447,11 @@ ul.breadcrumbs.alt1 li.last a{
 }
 
 .endeventItem:hover {
-    background: url(end_2.png) top center no-repeat;
+    background: url(images/end_2.png) top center no-repeat;
 }
 
 .toolbarSeparator {
-    background: url(barra_division.png) top center no-repeat;
+    background: url(images/barra_division.png) top center no-repeat;
     position: relative;
     float: left;
     height:12px;
@@ -459,7 +459,7 @@ ul.breadcrumbs.alt1 li.last a{
 }
 
 .toolbarFooter {
-    background: url(barra_bottom.png) top center no-repeat;
+    background: url(images/barra_bottom.png) top center no-repeat;
     position: relative;
     float: left;
     height:8px;
@@ -467,7 +467,7 @@ ul.breadcrumbs.alt1 li.last a{
 }
 
 .taskItem {
-    background: url(task_1.png) top center no-repeat;
+    background: url(images/task_1.png) top center no-repeat;
     position: relative;
     float: left;
     height:43px;
@@ -475,11 +475,11 @@ ul.breadcrumbs.alt1 li.last a{
 }
 
 .taskItem:hover {
-    background: url(task_2.png) top center no-repeat;
+    background: url(images/task_2.png) top center no-repeat;
 }
 
 .taskcallItem {
-    background: url(task_call_1.png) top center no-repeat;
+    background: url(images/task_call_1.png) top center no-repeat;
     position: relative;
     float: left;
     height:43px;
@@ -487,11 +487,11 @@ ul.breadcrumbs.alt1 li.last a{
 }
 
 .taskcallItem:hover {
-    background: url(task_call_2.png) top center no-repeat;
+    background: url(images/task_call_2.png) top center no-repeat;
 }
 
 .subtaskItem {
-    background: url(subtask_1.png) top center no-repeat;
+    background: url(images/subtask_1.png) top center no-repeat;
     position: relative;
     float: left;
     height:43px;
@@ -499,11 +499,11 @@ ul.breadcrumbs.alt1 li.last a{
 }
 
 .subtaskItem:hover {
-    background: url(subtask_2.png) top center no-repeat;
+    background: url(images/subtask_2.png) top center no-repeat;
 }
 
 .gatewayItem {
-    background: url(if_1.png) top center no-repeat;
+    background: url(images/if_1.png) top center no-repeat;
     position: relative;
     float: left;
     height:43px;
@@ -511,11 +511,11 @@ ul.breadcrumbs.alt1 li.last a{
 }
 
 .gatewayItem:hover {
-    background: url(if_2.png) top center no-repeat;
+    background: url(images/if_2.png) top center no-repeat;
 }
 
 .artifactItem {
-    background: url(anota_1.png) top center no-repeat;
+    background: url(images/anota_1.png) top center no-repeat;
     position: relative;
     float: left;
     height:43px;
@@ -523,11 +523,11 @@ ul.breadcrumbs.alt1 li.last a{
 }
 
 .artifactItem:hover {
-    background: url(anota_2.png) top center no-repeat;
+    background: url(images/anota_2.png) top center no-repeat;
 }
 
 .dataobjectItem {
-    background: url(doc_1.png) top center no-repeat;
+    background: url(images/doc_1.png) top center no-repeat;
     position: relative;
     float: left;
     height:43px;
@@ -535,11 +535,11 @@ ul.breadcrumbs.alt1 li.last a{
 }
 
 .dataobjectItem:hover {
-    background: url(doc_2.png) top center no-repeat;
+    background: url(images/doc_2.png) top center no-repeat;
 }
 
 .poolItem {
-    background: url(pool_1.png) top center no-repeat;
+    background: url(images/pool_1.png) top center no-repeat;
     position: relative;
     float: left;
     height:43px;
@@ -547,11 +547,11 @@ ul.breadcrumbs.alt1 li.last a{
 }
 
 .poolItem:hover {
-    background: url(pool_2.png) top center no-repeat;
+    background: url(images/pool_2.png) top center no-repeat;
 }
 
 .flowItem {
-    background: url(flow_1.png) top center no-repeat;
+    background: url(images/flow_1.png) top center no-repeat;
     position: relative;
     float: left;
     height:43px;
@@ -559,11 +559,11 @@ ul.breadcrumbs.alt1 li.last a{
 }
 
 .flowItem:hover {
-    background: url(flow_2.png) top center no-repeat;
+    background: url(images/flow_2.png) top center no-repeat;
 }
 
 .normalStartEvent {
-    background: url(start_normal1.png) top center no-repeat;
+    background: url(images/start_normal1.png) top center no-repeat;
     position: relative;
     float: left;
     height:43px;
@@ -571,11 +571,11 @@ ul.breadcrumbs.alt1 li.last a{
 }
 
 .normalStartEvent:hover {
-    background: url(start_normal2.png) top center no-repeat;
+    background: url(images/start_normal2.png) top center no-repeat;
 }
 
 .signalStartEvent {
-    background: url(start_senal1.png) top center no-repeat;
+    background: url(images/start_senal1.png) top center no-repeat;
     position: relative;
     float: left;
     height:43px;
@@ -583,11 +583,11 @@ ul.breadcrumbs.alt1 li.last a{
 }
 
 .signalStartEvent:hover {
-    background: url(start_senal2.png) top center no-repeat;
+    background: url(images/start_senal2.png) top center no-repeat;
 }
 
 .timerStartEvent {
-    background: url(start_tmp1.png) top center no-repeat;
+    background: url(images/start_tmp1.png) top center no-repeat;
     position: relative;
     float: left;
     height:43px;
@@ -595,11 +595,11 @@ ul.breadcrumbs.alt1 li.last a{
 }
 
 .timerStartEvent:hover {
-    background: url(start_tmp2.png) top center no-repeat;
+    background: url(images/start_tmp2.png) top center no-repeat;
 }
 
 .compensaStartEvent {
-    background: url(start_compensa1.png) top center no-repeat;
+    background: url(images/start_compensa1.png) top center no-repeat;
     position: relative;
     float: left;
     height:43px;
@@ -607,11 +607,11 @@ ul.breadcrumbs.alt1 li.last a{
 }
 
 .compensaStartEvent:hover {
-    background: url(start_compensa2.png) top center no-repeat;
+    background: url(images/start_compensa2.png) top center no-repeat;
 }
 
 .ruleStartEvent {
-    background: url(start_cond1.png) top center no-repeat;
+    background: url(images/start_cond1.png) top center no-repeat;
     position: relative;
     float: left;
     height:43px;
@@ -619,11 +619,11 @@ ul.breadcrumbs.alt1 li.last a{
 }
 
 .ruleStartEvent:hover {
-    background: url(start_cond2.png) top center no-repeat;
+    background: url(images/start_cond2.png) top center no-repeat;
 }
 
 .errorStartEvent {
-    background: url(start_error1.png) top center no-repeat;
+    background: url(images/start_error1.png) top center no-repeat;
     position: relative;
     float: left;
     height:43px;
@@ -631,11 +631,11 @@ ul.breadcrumbs.alt1 li.last a{
 }
 
 .errorStartEvent:hover {
-    background: url(start_error2.png) top center no-repeat;
+    background: url(images/start_error2.png) top center no-repeat;
 }
 
 .scalaStartEvent {
-    background: url(start_escala1.png) top center no-repeat;
+    background: url(images/start_escala1.png) top center no-repeat;
     position: relative;
     float: left;
     height:43px;
@@ -643,11 +643,11 @@ ul.breadcrumbs.alt1 li.last a{
 }
 
 .scalaStartEvent:hover {
-    background: url(start_escala2.png) top center no-repeat;
+    background: url(images/start_escala2.png) top center no-repeat;
 }
 
 .messageStartEvent {
-    background: url(start_msj1.png) top center no-repeat;
+    background: url(images/start_msj1.png) top center no-repeat;
     position: relative;
     float: left;
     height:43px;
@@ -655,11 +655,11 @@ ul.breadcrumbs.alt1 li.last a{
 }
 
 .messageStartEvent:hover {
-    background: url(start_msj2.png) top center no-repeat;
+    background: url(images/start_msj2.png) top center no-repeat;
 }
 
 .multiStartEvent {
-    background: url(start_multi1.png) top center no-repeat;
+    background: url(images/start_multi1.png) top center no-repeat;
     position: relative;
     float: left;
     height:43px;
@@ -667,11 +667,11 @@ ul.breadcrumbs.alt1 li.last a{
 }
 
 .multiStartEvent:hover {
-    background: url(start_multi2.png) top center no-repeat;
+    background: url(images/start_multi2.png) top center no-repeat;
 }
 
 .parallelStartEvent {
-    background: url(start_paralelo1.png) top center no-repeat;
+    background: url(images/start_paralelo1.png) top center no-repeat;
     position: relative;
     float: left;
     height:43px;
@@ -679,11 +679,11 @@ ul.breadcrumbs.alt1 li.last a{
 }
 
 .parallelStartEvent:hover {
-    background: url(start_paralelo2.png) top center no-repeat;
+    background: url(images/start_paralelo2.png) top center no-repeat;
 }
 
 .normalInterEvent {
-    background: url(inter_normal1.png) top center no-repeat;
+    background: url(images/inter_normal1.png) top center no-repeat;
     position: relative;
     float: left;
     height:43px;
@@ -691,11 +691,11 @@ ul.breadcrumbs.alt1 li.last a{
 }
 
 .normalInterEvent:hover {
-    background: url(inter_normal2.png) top center no-repeat;
+    background: url(images/inter_normal2.png) top center no-repeat;
 }
 
 .cancelInterEvent {
-    background: url(inter_cancel_1.png) top center no-repeat;
+    background: url(images/inter_cancel_1.png) top center no-repeat;
     position: relative;
     float: left;
     height:43px;
@@ -703,11 +703,11 @@ ul.breadcrumbs.alt1 li.last a{
 }
 
 .cancelInterEvent:hover {
-    background: url(inter_cancel_2.png) top center no-repeat;
+    background: url(images/inter_cancel_2.png) top center no-repeat;
 }
 
 .compensaInterCatchEvent {
-    background: url(inter_compensa_b_1.png) top center no-repeat;
+    background: url(images/inter_compensa_b_1.png) top center no-repeat;
     position: relative;
     float: left;
     height:43px;
@@ -715,11 +715,11 @@ ul.breadcrumbs.alt1 li.last a{
 }
 
 .compensaInterCatchEvent:hover {
-    background: url(inter_compensa_b_2.png) top center no-repeat;
+    background: url(images/inter_compensa_b_2.png) top center no-repeat;
 }
 
 .compensaInterThrowEvent {
-    background: url(inter_compensa_n_1.png) top center no-repeat;
+    background: url(images/inter_compensa_n_1.png) top center no-repeat;
     position: relative;
     float: left;
     height:43px;
@@ -727,11 +727,11 @@ ul.breadcrumbs.alt1 li.last a{
 }
 
 .compensaInterThrowEvent:hover {
-    background: url(inter_compensa_n_2.png) top center no-repeat;
+    background: url(images/inter_compensa_n_2.png) top center no-repeat;
 }
 
 .ruleInterEvent {
-    background: url(inter_cond1.png) top center no-repeat;
+    background: url(images/inter_cond1.png) top center no-repeat;
     position: relative;
     float: left;
     height:43px;
@@ -739,11 +739,11 @@ ul.breadcrumbs.alt1 li.last a{
 }
 
 .ruleInterEvent:hover {
-    background: url(inter_cond2.png) top center no-repeat;
+    background: url(images/inter_cond2.png) top center no-repeat;
 }
 
 .linkInterCatchEvent {
-    background: url(inter_enlace_b_1.png) top center no-repeat;
+    background: url(images/inter_enlace_b_1.png) top center no-repeat;
     position: relative;
     float: left;
     height:43px;
@@ -751,11 +751,11 @@ ul.breadcrumbs.alt1 li.last a{
 }
 
 .linkInterCatchEvent:hover {
-    background: url(inter_enlace_b_2.png) top center no-repeat;
+    background: url(images/inter_enlace_b_2.png) top center no-repeat;
 }
 
 .linkInterThrowEvent {
-    background: url(inter_enlace_n_1.png) top center no-repeat;
+    background: url(images/inter_enlace_n_1.png) top center no-repeat;
     position: relative;
     float: left;
     height:43px;
@@ -763,11 +763,11 @@ ul.breadcrumbs.alt1 li.last a{
 }
 
 .linkInterThrowEvent:hover {
-    background: url(inter_enlace_n_2.png) top center no-repeat;
+    background: url(images/inter_enlace_n_2.png) top center no-repeat;
 }
 
 .errorInterEvent {
-    background: url(inter_error1.png) top center no-repeat;
+    background: url(images/inter_error1.png) top center no-repeat;
     position: relative;
     float: left;
     height:43px;
@@ -775,11 +775,11 @@ ul.breadcrumbs.alt1 li.last a{
 }
 
 .errorInterEvent:hover {
-    background: url(inter_error2.png) top center no-repeat;
+    background: url(images/inter_error2.png) top center no-repeat;
 }
 
 .scalaInterCatchEvent {
-    background: url(inter_escala_b_1.png) top center no-repeat;
+    background: url(images/inter_escala_b_1.png) top center no-repeat;
     position: relative;
     float: left;
     height:43px;
@@ -787,11 +787,11 @@ ul.breadcrumbs.alt1 li.last a{
 }
 
 .scalaInterCatchEvent:hover {
-    background: url(inter_escala_b_2.png) top center no-repeat;
+    background: url(images/inter_escala_b_2.png) top center no-repeat;
 }
 
 .scalaInterThrowEvent {
-    background: url(inter_escala_n_1.png) top center no-repeat;
+    background: url(images/inter_escala_n_1.png) top center no-repeat;
     position: relative;
     float: left;
     height:43px;
@@ -799,11 +799,11 @@ ul.breadcrumbs.alt1 li.last a{
 }
 
 .scalaInterThrowEvent:hover {
-    background: url(inter_escala_n_2.png) top center no-repeat;
+    background: url(images/inter_escala_n_2.png) top center no-repeat;
 }
 
 .messageInterCatchEvent {
-    background: url(inter_msj_b_1.png) top center no-repeat;
+    background: url(images/inter_msj_b_1.png) top center no-repeat;
     position: relative;
     float: left;
     height:43px;
@@ -811,11 +811,11 @@ ul.breadcrumbs.alt1 li.last a{
 }
 
 .messageInterCatchEvent:hover {
-    background: url(inter_msj_b_2.png) top center no-repeat;
+    background: url(images/inter_msj_b_2.png) top center no-repeat;
 }
 
 .messageInterThrowEvent {
-    background: url(inter_msj_n_1.png) top center no-repeat;
+    background: url(images/inter_msj_n_1.png) top center no-repeat;
     position: relative;
     float: left;
     height:43px;
@@ -823,11 +823,11 @@ ul.breadcrumbs.alt1 li.last a{
 }
 
 .messageInterThrowEvent:hover {
-    background: url(inter_msj_n_2.png) top center no-repeat;
+    background: url(images/inter_msj_n_2.png) top center no-repeat;
 }
 
 .multipleInterCatchEvent {
-    background: url(inter_multi_b_1.png) top center no-repeat;
+    background: url(images/inter_multi_b_1.png) top center no-repeat;
     position: relative;
     float: left;
     height:43px;
@@ -835,11 +835,11 @@ ul.breadcrumbs.alt1 li.last a{
 }
 
 .multipleInterCatchEvent:hover {
-    background: url(inter_multi_b_2.png) top center no-repeat;
+    background: url(images/inter_multi_b_2.png) top center no-repeat;
 }
 
 .multipleInterThrowEvent {
-    background: url(inter_multi_n_1.png) top center no-repeat;
+    background: url(images/inter_multi_n_1.png) top center no-repeat;
     position: relative;
     float: left;
     height:43px;
@@ -847,11 +847,11 @@ ul.breadcrumbs.alt1 li.last a{
 }
 
 .multipleInterThrowEvent:hover {
-    background: url(inter_multi_n_2.png) top center no-repeat;
+    background: url(images/inter_multi_n_2.png) top center no-repeat;
 }
 
 .parallelInterEvent {
-    background: url(inter_paralelo1.png) top center no-repeat;
+    background: url(images/inter_paralelo1.png) top center no-repeat;
     position: relative;
     float: left;
     height:43px;
@@ -859,11 +859,11 @@ ul.breadcrumbs.alt1 li.last a{
 }
 
 .parallelInterEvent:hover {
-    background: url(inter_paralelo2.png) top center no-repeat;
+    background: url(images/inter_paralelo2.png) top center no-repeat;
 }
 
 .signalInterCatchEvent {
-    background: url(inter_senal_b_1.png) top center no-repeat;
+    background: url(images/inter_senal_b_1.png) top center no-repeat;
     position: relative;
     float: left;
     height:43px;
@@ -871,11 +871,11 @@ ul.breadcrumbs.alt1 li.last a{
 }
 
 .signalInterCatchEvent:hover {
-    background: url(inter_senal_b_2.png) top center no-repeat;
+    background: url(images/inter_senal_b_2.png) top center no-repeat;
 }
 
 .signalInterThrowEvent {
-    background: url(inter_senal_n_1.png) top center no-repeat;
+    background: url(images/inter_senal_n_1.png) top center no-repeat;
     position: relative;
     float: left;
     height:43px;
@@ -883,11 +883,11 @@ ul.breadcrumbs.alt1 li.last a{
 }
 
 .signalInterThrowEvent:hover {
-    background: url(inter_senal_n_2.png) top center no-repeat;
+    background: url(images/inter_senal_n_2.png) top center no-repeat;
 }
 
 .timerInterEvent {
-    background: url(inter_tmp1.png) top center no-repeat;
+    background: url(images/inter_tmp1.png) top center no-repeat;
     position: relative;
     float: left;
     height:43px;
@@ -895,11 +895,11 @@ ul.breadcrumbs.alt1 li.last a{
 }
 
 .timerInterEvent:hover {
-    background: url(inter_tmp2.png) top center no-repeat;
+    background: url(images/inter_tmp2.png) top center no-repeat;
 }
 
 .normalEndEvent {
-    background: url(end_normal1.png) top center no-repeat;
+    background: url(images/end_normal1.png) top center no-repeat;
     position: relative;
     float: left;
     height:43px;
@@ -907,11 +907,11 @@ ul.breadcrumbs.alt1 li.last a{
 }
 
 .normalEndEvent:hover {
-    background: url(end_normal2.png) top center no-repeat;
+    background: url(images/end_normal2.png) top center no-repeat;
 }
 
 .cancelEndEvent {
-    background: url(end_cancel1.png) top center no-repeat;
+    background: url(images/end_cancel1.png) top center no-repeat;
     position: relative;
     float: left;
     height:43px;
@@ -919,11 +919,11 @@ ul.breadcrumbs.alt1 li.last a{
 }
 
 .cancelEndEvent:hover {
-    background: url(end_cancel2.png) top center no-repeat;
+    background: url(images/end_cancel2.png) top center no-repeat;
 }
 
 .compensaEndEvent {
-    background: url(end_compensa1.png) top center no-repeat;
+    background: url(images/end_compensa1.png) top center no-repeat;
     position: relative;
     float: left;
     height:43px;
@@ -931,11 +931,11 @@ ul.breadcrumbs.alt1 li.last a{
 }
 
 .compensaEndEvent:hover {
-    background: url(end_compensa2.png) top center no-repeat;
+    background: url(images/end_compensa2.png) top center no-repeat;
 }
 
 .errorEndEvent {
-    background: url(end_error1.png) top center no-repeat;
+    background: url(images/end_error1.png) top center no-repeat;
     position: relative;
     float: left;
     height:43px;
@@ -943,11 +943,11 @@ ul.breadcrumbs.alt1 li.last a{
 }
 
 .errorEndEvent:hover {
-    background: url(end_error2.png) top center no-repeat;
+    background: url(images/end_error2.png) top center no-repeat;
 }
 
 .escalaEndEvent {
-    background: url(end_escala1.png) top center no-repeat;
+    background: url(images/end_escala1.png) top center no-repeat;
     position: relative;
     float: left;
     height:43px;
@@ -955,11 +955,11 @@ ul.breadcrumbs.alt1 li.last a{
 }
 
 .escalaEndEvent:hover {
-    background: url(end_escala2.png) top center no-repeat;
+    background: url(images/end_escala2.png) top center no-repeat;
 }
 
 .messageEndEvent {
-    background: url(end_msj1.png) top center no-repeat;
+    background: url(images/end_msj1.png) top center no-repeat;
     position: relative;
     float: left;
     height:43px;
@@ -967,11 +967,11 @@ ul.breadcrumbs.alt1 li.last a{
 }
 
 .messageEndEvent:hover {
-    background: url(end_msj2.png) top center no-repeat;
+    background: url(images/end_msj2.png) top center no-repeat;
 }
 
 .multiEndEvent {
-    background: url(end_multi1.png) top center no-repeat;
+    background: url(images/end_multi1.png) top center no-repeat;
     position: relative;
     float: left;
     height:43px;
@@ -979,11 +979,11 @@ ul.breadcrumbs.alt1 li.last a{
 }
 
 .multiEndEvent:hover {
-    background: url(end_multi2.png) top center no-repeat;
+    background: url(images/end_multi2.png) top center no-repeat;
 }
 
 .signalEndEvent {
-    background: url(end_senal1.png) top center no-repeat;
+    background: url(images/end_senal1.png) top center no-repeat;
     position: relative;
     float: left;
     height:43px;
@@ -991,11 +991,11 @@ ul.breadcrumbs.alt1 li.last a{
 }
 
 .signalEndEvent:hover {
-    background: url(end_senal2.png) top center no-repeat;
+    background: url(images/end_senal2.png) top center no-repeat;
 }
 
 .terminalEndEvent {
-    background: url(end_termina1.png) top center no-repeat;
+    background: url(images/end_termina1.png) top center no-repeat;
     position: relative;
     float: left;
     height:43px;
@@ -1003,11 +1003,11 @@ ul.breadcrumbs.alt1 li.last a{
 }
 
 .terminalEndEvent:hover {
-    background: url(end_termina2.png) top center no-repeat;
+    background: url(images/end_termina2.png) top center no-repeat;
 }
 
 .abstractTask {
-    background: url(task_normal1.png) top center no-repeat;
+    background: url(images/task_normal1.png) top center no-repeat;
     position: relative;
     float: left;
     height:43px;
@@ -1015,11 +1015,11 @@ ul.breadcrumbs.alt1 li.last a{
 }
 
 .abstractTask:hover {
-    background: url(task_normal2.png) top center no-repeat;
+    background: url(images/task_normal2.png) top center no-repeat;
 }
 
 .userTask {
-    background: url(task_usr1.png) top center no-repeat;
+    background: url(images/task_usr1.png) top center no-repeat;
     position: relative;
     float: left;
     height:43px;
@@ -1027,11 +1027,11 @@ ul.breadcrumbs.alt1 li.last a{
 }
 
 .userTask:hover {
-    background: url(task_usr2.png) top center no-repeat;
+    background: url(images/task_usr2.png) top center no-repeat;
 }
 
 .scriptTask {
-    background: url(task_script1.png) top center no-repeat;
+    background: url(images/task_script1.png) top center no-repeat;
     position: relative;
     float: left;
     height:43px;
@@ -1039,11 +1039,11 @@ ul.breadcrumbs.alt1 li.last a{
 }
 
 .scriptTask:hover {
-    background: url(task_script2.png) top center no-repeat;
+    background: url(images/task_script2.png) top center no-repeat;
 }
 
 .serviceTask {
-    background: url(task_servicio1.png) top center no-repeat;
+    background: url(images/task_servicio1.png) top center no-repeat;
     position: relative;
     float: left;
     height:43px;
@@ -1051,11 +1051,11 @@ ul.breadcrumbs.alt1 li.last a{
 }
 
 .serviceTask:hover {
-    background: url(task_servicio2.png) top center no-repeat;
+    background: url(images/task_servicio2.png) top center no-repeat;
 }
 
 .sendTask {
-    background: url(task_envio1.png) top center no-repeat;
+    background: url(images/task_envio1.png) top center no-repeat;
     position: relative;
     float: left;
     height:43px;
@@ -1063,11 +1063,11 @@ ul.breadcrumbs.alt1 li.last a{
 }
 
 .sendTask:hover {
-    background: url(task_envio2.png) top center no-repeat;
+    background: url(images/task_envio2.png) top center no-repeat;
 }
 
 .receiveTask {
-    background: url(task_recive1.png) top center no-repeat;
+    background: url(images/task_recive1.png) top center no-repeat;
     position: relative;
     float: left;
     height:43px;
@@ -1075,11 +1075,11 @@ ul.breadcrumbs.alt1 li.last a{
 }
 
 .receiveTask:hover {
-    background: url(task_recive2.png) top center no-repeat;
+    background: url(images/task_recive2.png) top center no-repeat;
 }
 
 .ruleTask {
-    background: url(task_rule1.png) top center no-repeat;
+    background: url(images/task_rule1.png) top center no-repeat;
     position: relative;
     float: left;
     height:43px;
@@ -1087,11 +1087,11 @@ ul.breadcrumbs.alt1 li.last a{
 }
 
 .ruleTask:hover {
-    background: url(task_rule2.png) top center no-repeat;
+    background: url(images/task_rule2.png) top center no-repeat;
 }
 
 .manualTask {
-    background: url(task_manual1.png) top center no-repeat;
+    background: url(images/task_manual1.png) top center no-repeat;
     position: relative;
     float: left;
     height:43px;
@@ -1099,11 +1099,11 @@ ul.breadcrumbs.alt1 li.last a{
 }
 
 .manualTask:hover {
-    background: url(task_manual2.png) top center no-repeat;
+    background: url(images/task_manual2.png) top center no-repeat;
 }
 
 .subProcess {
-    background: url(subtask_colapsado1.png) top center no-repeat;
+    background: url(images/subtask_colapsado1.png) top center no-repeat;
     position: relative;
     float: left;
     height:43px;
@@ -1111,11 +1111,11 @@ ul.breadcrumbs.alt1 li.last a{
 }
 
 .subProcess:hover {
-    background: url(subtask_colapsado2.png) top center no-repeat;
+    background: url(images/subtask_colapsado2.png) top center no-repeat;
 }
 
 .adhocsubProcess {
-    background: url(subtask_adhoc1.png) top center no-repeat;
+    background: url(images/subtask_adhoc1.png) top center no-repeat;
     position: relative;
     float: left;
     height:43px;
@@ -1123,11 +1123,11 @@ ul.breadcrumbs.alt1 li.last a{
 }
 
 .adhocsubProcess:hover {
-    background: url(subtask_adhoc2.png) top center no-repeat;
+    background: url(images/subtask_adhoc2.png) top center no-repeat;
 }
 
 .eventsubProcess {
-    background: url(subtask_evento1.png) top center no-repeat;
+    background: url(images/subtask_evento1.png) top center no-repeat;
     position: relative;
     float: left;
     height:43px;
@@ -1135,11 +1135,11 @@ ul.breadcrumbs.alt1 li.last a{
 }
 
 .eventsubProcess:hover {
-    background: url(subtask_evento2.png) top center no-repeat;
+    background: url(images/subtask_evento2.png) top center no-repeat;
 }
 
 .transactionsubProcess {
-    background: url(subtask_transaccion1.png) top center no-repeat;
+    background: url(images/subtask_transaccion1.png) top center no-repeat;
     position: relative;
     float: left;
     height:43px;
@@ -1147,11 +1147,11 @@ ul.breadcrumbs.alt1 li.last a{
 }
 
 .transactionsubProcess:hover {
-    background: url(subtask_transaccion2.png) top center no-repeat;
+    background: url(images/subtask_transaccion2.png) top center no-repeat;
 }
 
 .callTask {
-    background: url(task_llamada1.png) top center no-repeat;
+    background: url(images/task_llamada1.png) top center no-repeat;
     position: relative;
     float: left;
     height:43px;
@@ -1159,11 +1159,11 @@ ul.breadcrumbs.alt1 li.last a{
 }
 
 .callTask:hover {
-    background: url(task_llamada2.png) top center no-repeat;
+    background: url(images/task_llamada2.png) top center no-repeat;
 }
 
 .callmanualTask {
-    background: url(task_call_manual1.png) top center no-repeat;
+    background: url(images/task_call_manual1.png) top center no-repeat;
     position: relative;
     float: left;
     height:43px;
@@ -1171,11 +1171,11 @@ ul.breadcrumbs.alt1 li.last a{
 }
 
 .callmanualTask:hover {
-    background: url(task_call_manual2.png) top center no-repeat;
+    background: url(images/task_call_manual2.png) top center no-repeat;
 }
 
 .callruleTask {
-    background: url(task_call_rule1.png) top center no-repeat;
+    background: url(images/task_call_rule1.png) top center no-repeat;
     position: relative;
     float: left;
     height:43px;
@@ -1183,11 +1183,11 @@ ul.breadcrumbs.alt1 li.last a{
 }
 
 .callruleTask:hover {
-    background: url(task_call_rule2.png) top center no-repeat;
+    background: url(images/task_call_rule2.png) top center no-repeat;
 }
 
 .callscriptTask {
-    background: url(task_call_script1.png) top center no-repeat;
+    background: url(images/task_call_script1.png) top center no-repeat;
     position: relative;
     float: left;
     height:43px;
@@ -1195,11 +1195,11 @@ ul.breadcrumbs.alt1 li.last a{
 }
 
 .callscriptTask:hover {
-    background: url(task_call_script2.png) top center no-repeat;
+    background: url(images/task_call_script2.png) top center no-repeat;
 }
 
 .calluserTask {
-    background: url(task_call_usr1.png) top center no-repeat;
+    background: url(images/task_call_usr1.png) top center no-repeat;
     position: relative;
     float: left;
     height:43px;
@@ -1207,11 +1207,11 @@ ul.breadcrumbs.alt1 li.last a{
 }
 
 .calluserTask:hover {
-    background: url(task_call_usr2.png) top center no-repeat;
+    background: url(images/task_call_usr2.png) top center no-repeat;
 }
 
 .callsubProcess {
-    background: url(subtask_llamada1.png) top center no-repeat;
+    background: url(images/subtask_llamada1.png) top center no-repeat;
     position: relative;
     float: left;
     height:43px;
@@ -1219,11 +1219,11 @@ ul.breadcrumbs.alt1 li.last a{
 }
 
 .callsubProcess:hover {
-    background: url(subtask_llamada2.png) top center no-repeat;
+    background: url(images/subtask_llamada2.png) top center no-repeat;
 }
 
 .exclusiveDataGateway {
-    background: url(gate_datos1.png) top center no-repeat;
+    background: url(images/gate_datos1.png) top center no-repeat;
     position: relative;
     float: left;
     height:43px;
@@ -1231,11 +1231,11 @@ ul.breadcrumbs.alt1 li.last a{
 }
 
 .exclusiveDataGateway:hover {
-    background: url(gate_datos2.png) top center no-repeat;
+    background: url(images/gate_datos2.png) top center no-repeat;
 }
 
 .inclusiveDataGateway {
-    background: url(gate_inclusiva_1.png) top center no-repeat;
+    background: url(images/gate_inclusiva_1.png) top center no-repeat;
     position: relative;
     float: left;
     height:43px;
@@ -1243,11 +1243,11 @@ ul.breadcrumbs.alt1 li.last a{
 }
 
 .inclusiveDataGateway:hover {
-    background: url(gate_inclusiva_2.png) top center no-repeat;
+    background: url(images/gate_inclusiva_2.png) top center no-repeat;
 }
 
 .exclusiveStartEventGateway {
-    background: url(gate_eventos_str_1.png) top center no-repeat;
+    background: url(images/gate_eventos_str_1.png) top center no-repeat;
     position: relative;
     float: left;
     height:43px;
@@ -1255,11 +1255,11 @@ ul.breadcrumbs.alt1 li.last a{
 }
 
 .exclusiveStartEventGateway:hover {
-    background: url(gate_eventos_str_2.png) top center no-repeat;
+    background: url(images/gate_eventos_str_2.png) top center no-repeat;
 }
 
 .parallelGateway {
-    background: url(gate_paralela_n_1.png) top center no-repeat;
+    background: url(images/gate_paralela_n_1.png) top center no-repeat;
     position: relative;
     float: left;
     height:43px;
@@ -1267,11 +1267,11 @@ ul.breadcrumbs.alt1 li.last a{
 }
 
 .parallelGateway:hover {
-    background: url(gate_paralela_n_2.png) top center no-repeat;
+    background: url(images/gate_paralela_n_2.png) top center no-repeat;
 }
 
 .exclusiveEventGateway {
-    background: url(gate_eventos_int_1.png) top center no-repeat;
+    background: url(images/gate_eventos_int_1.png) top center no-repeat;
     position: relative;
     float: left;
     height:43px;
@@ -1279,11 +1279,11 @@ ul.breadcrumbs.alt1 li.last a{
 }
 
 .exclusiveEventGateway:hover {
-    background: url(gate_eventos_int_2.png) top center no-repeat;
+    background: url(images/gate_eventos_int_2.png) top center no-repeat;
 }
 
 .parallelStartGateway {
-    background: url(gate_paralela_b_1.png) top center no-repeat;
+    background: url(images/gate_paralela_b_1.png) top center no-repeat;
     position: relative;
     float: left;
     height:43px;
@@ -1291,11 +1291,11 @@ ul.breadcrumbs.alt1 li.last a{
 }
 
 .parallelStartGateway:hover {
-    background: url(gate_paralela_b_2.png) top center no-repeat;
+    background: url(images/gate_paralela_b_2.png) top center no-repeat;
 }
 
 .complexGateway {
-    background: url(gate_compleja_1.png) top center no-repeat;
+    background: url(images/gate_compleja_1.png) top center no-repeat;
     position: relative;
     float: left;
     height:43px;
@@ -1303,11 +1303,11 @@ ul.breadcrumbs.alt1 li.last a{
 }
 
 .complexGateway:hover {
-    background: url(gate_compleja_2.png) top center no-repeat;
+    background: url(images/gate_compleja_2.png) top center no-repeat;
 }
 
 .sequenceFlow {
-    background: url(flow_normal1.png) top center no-repeat;
+    background: url(images/flow_normal1.png) top center no-repeat;
     position: relative;
     float: left;
     height:43px;
@@ -1315,11 +1315,11 @@ ul.breadcrumbs.alt1 li.last a{
 }
 
 .sequenceFlow:hover {
-    background: url(flow_normal2.png) top center no-repeat;
+    background: url(images/flow_normal2.png) top center no-repeat;
 }
 
 .conditionalFlow {
-    background: url(flow_condicion1.png) top center no-repeat;
+    background: url(images/flow_condicion1.png) top center no-repeat;
     position: relative;
     float: left;
     height:43px;
@@ -1327,11 +1327,11 @@ ul.breadcrumbs.alt1 li.last a{
 }
 
 .conditionalFlow:hover {
-    background: url(flow_condicion2.png) top center no-repeat;
+    background: url(images/flow_condicion2.png) top center no-repeat;
 }
 
 .defaultFlow {
-    background: url(flow_defecto1.png) top center no-repeat;
+    background: url(images/flow_defecto1.png) top center no-repeat;
     position: relative;
     float: left;
     height:43px;
@@ -1339,11 +1339,11 @@ ul.breadcrumbs.alt1 li.last a{
 }
 
 .defaultFlow:hover {
-    background: url(flow_defecto2.png) top center no-repeat;
+    background: url(images/flow_defecto2.png) top center no-repeat;
 }
 
 .messageFlow {
-    background: url(flow_msj1.png) top center no-repeat;
+    background: url(images/flow_msj1.png) top center no-repeat;
     position: relative;
     float: left;
     height:43px;
@@ -1351,11 +1351,11 @@ ul.breadcrumbs.alt1 li.last a{
 }
 
 .messageFlow:hover {
-    background: url(flow_msj2.png) top center no-repeat;
+    background: url(images/flow_msj2.png) top center no-repeat;
 }
 
 .associationFlow {
-    background: url(doc_dir_asocia1.png) top center no-repeat;
+    background: url(images/doc_dir_asocia1.png) top center no-repeat;
     position: relative;
     float: left;
     height:43px;
@@ -1363,11 +1363,11 @@ ul.breadcrumbs.alt1 li.last a{
 }
 
 .associationFlow:hover {
-    background: url(doc_dir_asocia2.png) top center no-repeat;
+    background: url(images/doc_dir_asocia2.png) top center no-repeat;
 }
 
 .directionalassociationFlow {
-    background: url(doc_asocia1.png) top center no-repeat;
+    background: url(images/doc_asocia1.png) top center no-repeat;
     position: relative;
     float: left;
     height:43px;
@@ -1375,11 +1375,11 @@ ul.breadcrumbs.alt1 li.last a{
 }
 
 .directionalassociationFlow:hover {
-    background: url(doc_asocia2.png) top center no-repeat;
+    background: url(images/doc_asocia2.png) top center no-repeat;
 }
 
 .annotation {
-    background: url(doc_anota1.png) top center no-repeat;
+    background: url(images/doc_anota1.png) top center no-repeat;
     position: relative;
     float: left;
     height:43px;
@@ -1387,11 +1387,11 @@ ul.breadcrumbs.alt1 li.last a{
 }
 
 .annotation:hover {
-    background: url(doc_anota2.png) top center no-repeat;
+    background: url(images/doc_anota2.png) top center no-repeat;
 }
 
 .group {
-    background: url(doc_grupo1.png) top center no-repeat;
+    background: url(images/doc_grupo1.png) top center no-repeat;
     position: relative;
     float: left;
     height:43px;
@@ -1399,11 +1399,11 @@ ul.breadcrumbs.alt1 li.last a{
 }
 
 .group:hover {
-    background: url(doc_grupo2.png) top center no-repeat;
+    background: url(images/doc_grupo2.png) top center no-repeat;
 }
 
 .dataObject {
-    background: url(doc_normal1.png) top center no-repeat;
+    background: url(images/doc_normal1.png) top center no-repeat;
     position: relative;
     float: left;
     height:43px;
@@ -1411,11 +1411,11 @@ ul.breadcrumbs.alt1 li.last a{
 }
 
 .dataObject:hover {
-    background: url(doc_normal2.png) top center no-repeat;
+    background: url(images/doc_normal2.png) top center no-repeat;
 }
 
 .dataInput {
-    background: url(doc_entrada1.png) top center no-repeat;
+    background: url(images/doc_entrada1.png) top center no-repeat;
     position: relative;
     float: left;
     height:43px;
@@ -1423,11 +1423,11 @@ ul.breadcrumbs.alt1 li.last a{
 }
 
 .dataInput:hover {
-    background: url(doc_entrada2.png) top center no-repeat;
+    background: url(images/doc_entrada2.png) top center no-repeat;
 }
 
 .dataOutput {
-    background: url(doc_salida1.png) top center no-repeat;
+    background: url(images/doc_salida1.png) top center no-repeat;
     position: relative;
     float: left;
     height:43px;
@@ -1435,11 +1435,11 @@ ul.breadcrumbs.alt1 li.last a{
 }
 
 .dataOutput:hover {
-    background: url(doc_salida2.png) top center no-repeat;
+    background: url(images/doc_salida2.png) top center no-repeat;
 }
 
 .dataStore {
-    background: url(doc_base1.png) top center no-repeat;
+    background: url(images/doc_base1.png) top center no-repeat;
     position: relative;
     float: left;
     height:43px;
@@ -1447,11 +1447,11 @@ ul.breadcrumbs.alt1 li.last a{
 }
 
 .dataStore:hover {
-    background: url(doc_base2.png) top center no-repeat;
+    background: url(images/doc_base2.png) top center no-repeat;
 }
 
 .pool {
-    background: url(pool_pool1.png) top center no-repeat;
+    background: url(images/pool_pool1.png) top center no-repeat;
     position: relative;
     float: left;
     height:43px;
@@ -1459,11 +1459,11 @@ ul.breadcrumbs.alt1 li.last a{
 }
 
 .pool:hover {
-    background: url(pool_pool2.png) top center no-repeat;
+    background: url(images/pool_pool2.png) top center no-repeat;
 }
 
 .lane {
-    background: url(pool_lane1.png) top center no-repeat;
+    background: url(images/pool_lane1.png) top center no-repeat;
     position: relative;
     float: left;
     height:43px;
@@ -1471,11 +1471,11 @@ ul.breadcrumbs.alt1 li.last a{
 }
 
 .lane:hover {
-    background: url(pool_lane2.png) top center no-repeat;
+    background: url(images/pool_lane2.png) top center no-repeat;
 }
 
 .toolbarHeader {
-    background: url(barra_top.png) top center no-repeat;
+    background: url(images/barra_top.png) top center no-repeat;
     /*position: relative;*/
     float: left;
     height:8px;
@@ -1483,7 +1483,7 @@ ul.breadcrumbs.alt1 li.last a{
 }
 
 .subbarStart {
-    background: url(submenu_inicio.png) top center no-repeat;
+    background: url(images/submenu_inicio.png) top center no-repeat;
     position: relative;
     float: left;
     height:43px;
@@ -1491,7 +1491,7 @@ ul.breadcrumbs.alt1 li.last a{
 }
 
 .subbarEnd {
-    background: url(submenu_fin.png) top center no-repeat;
+    background: url(images/submenu_fin.png) top center no-repeat;
     position: relative;
     float: left;
     height:43px;
