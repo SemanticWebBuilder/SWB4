@@ -6,16 +6,24 @@
 <%@page contentType="text/html"%>
 <head>
     <meta http-equiv="X-UA-Compatible" content="IE=9; IE=8; IE=7" >
+    <script type="text/javascript" src="/swbadmin/js/dojo/dojo/dojo.js" djConfig="parseOnLoad: true, isDebug: false, locale: 'es'" ></script>
     <script src="/swbadmin/js/swb_admin.js"></script>
     <script src="/swbadmin/js/swb.js"></script>
     <script type="text/javascript" src="/swbadmin/jsp/process/modeler/toolkit.js"></script>
     <script type="text/javascript" src="/swbadmin/jsp/process/modeler/modeler.js"></script>
     <link href="/swbadmin/jsp/process/modeler/modelerFrame.css" rel="stylesheet" type="text/css">
+    
+    <script type="text/javascript" >
+        dojo.require("dojox.layout.ExpandoPane");
+    </script>
 </head>
-<body onload="Modeler.init('modeler');draw();">
+<body onload="Modeler.init('modeler');">
     <div id="toolBar" onmouseout="ToolBar.outToolBar();" onmouseover="ToolBar.overToolBar(); this.style.opacity=1;" style="position: fixed;">
         <div class="toolbarItem">
             <span class="toolbarHeader"></span>
+        </div>
+        <div class="toolbarItem">
+            <span title="Archivo" class="fileItem" onclick="ToolBar.showSubBar('fileBar',this)"></span>
         </div>
         <div class="toolbarItem">
             <span title="Eventos de inicio" class="startEventItem" onclick="ToolBar.showSubBar('startEventsBar', this)"></span>
@@ -63,6 +71,11 @@
             <span class="toolbarFooter"></span>
         </div>
 
+        <div id="fileBar" class="subbarHidden" style="width: 385px;">
+            <span class="subbarStart"></span>
+            <span class="storeProcess" title="Enviar modelo" onclick="Modeler.submitCommand('')"></span>
+            <span class="subbarEnd"></span>
+        </div>
         <div id="startEventsBar" class="subbarHidden" style="width: 385px;">
             <span class="subbarStart"></span>
             <span class="normalStartEvent" title="Inicio normal" onclick="Modeler.creationStart(this)"></span>
