@@ -1908,6 +1908,7 @@
         intervalOver:null,
 
         hideSubBars: function() {
+            document.getElementById("fileBar").setAttribute("class", "subbarHidden");
             document.getElementById("startEventsBar").setAttribute("class", "subbarHidden");
             document.getElementById("interEventsBar").setAttribute("class", "subbarHidden");
             document.getElementById("endEventsBar").setAttribute("class", "subbarHidden");
@@ -2572,6 +2573,32 @@
 
             }
             return ret;
+        },
+
+/***********Utilerías para manipular la información de los procesos*************/
+        loadProcess: function() {
+            clearCanvas();
+        },
+                
+        submitCommand:function(url) {
+            dojo.xhrGet({
+                url: url,
+                load: function(response, ioArgs) {
+                    console.log(response);
+                    return response;
+                },
+                error: function(response, ioArgs){
+                    console.log("error");
+                    return response;
+                },
+                handleAs: "json"
+            });
+        },
+                
+        clearCanvas: function() {
+            for (var i=0; i<ToolKit.contents.length; i++) {
+                ToolKit.contents[i].remove();
+            }
         },
                 
         getProcessJSON:function() {
