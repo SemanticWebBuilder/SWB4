@@ -51,7 +51,7 @@ public class ProcessServlet extends XMLRPCServlet
      * Verifica si el usuario y contraseña proporcionados son válidos para autenticarse.
      * @param pUserName Nombre de usuario.
      * @param pPassword Contraseña.
-     * @return 
+     * @return true si el usuario y contraseña proporcionados son válidos para autenticarse.
      */
     public boolean isAuthenticate(String pUserName, String pPassword)
     {
