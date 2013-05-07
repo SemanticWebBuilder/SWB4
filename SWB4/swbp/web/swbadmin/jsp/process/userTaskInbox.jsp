@@ -4,8 +4,6 @@
     Author     : Hasdai Pacheco {ebenezer.sanchez@infotec.com.mx}
 --%>
 
-<%@page import="org.semanticwb.process.model.SWBProcessMgr"%>
-<%@page import="org.semanticwb.model.WebSite"%>
 <%@page import="org.semanticwb.process.resources.taskinbox.UserTaskInboxResource"%>
 <%@page import="org.semanticwb.model.Resource"%>
 <%@page import="org.semanticwb.process.model.MessageStartEvent"%>
@@ -345,135 +343,137 @@ if (paramRequest.getMode().equals(paramRequest.Mode_VIEW)) {
                         Iterator<FlowNodeInstance> instances = tinstances.iterator();
                         while(instances.hasNext()) {
                             FlowNodeInstance instance = instances.next();
-                            WebPage pwp = instance.getProcessWebPage();
-                            String status = "--";
-                            %>
-                            <tr>
-                                <%
-                                itCols = cols.iterator();
-                                while(itCols.hasNext()) {
-                                    String val = itCols.next();
-                                    String []conf = val.split("\\|");
-                                    if (conf.length == 2) {
-                                        if (conf[0].equals(UserTaskInboxResource.COL_IDPROCESS)) {
-                                            %><td class="tban-id"><%=instance.getProcessInstance().getId()%><%
-                                        } else if (conf[0].equals(UserTaskInboxResource.COL_IDTASK)) {
-                                            %><td class="tban-id"><%=instance.getId()%><%
-                                        } else if (conf[0].equals(UserTaskInboxResource.COL_NAMEPROCESS)) {
-                                            String pName = instance.getFlowNodeType().getProcess().getDisplayTitle(lang);
-                                            if(pwp != null && showPwpLink) {
-                                                pName = "<a href=\"" + pwp.getUrl() + "\">" + pName + "</a>";
-                                            }
-                                            %><td class="tban-tarea"><%=pName%><%
-                                        } else if (conf[0].equals(UserTaskInboxResource.COL_NAMETASK)) {
-                                            %><td class="tban-tarea"><%=instance.getFlowNodeType().getDisplayTitle(lang)%><%
-                                        } else if (conf[0].equals(UserTaskInboxResource.COL_STARTPROCESS)) {
-                                            %><td class="tban-inicia"><%=SWBUtils.TEXT.getStrDate(instance.getProcessInstance().getCreated(), lang, "dd/mm/yy - hh:%m")%><%
-                                        } else if (conf[0].equals(UserTaskInboxResource.COL_STARTTASK)) {
-                                            %><td class="tban-inicia"><%=SWBUtils.TEXT.getStrDate(instance.getCreated(), lang, "dd/mm/yy - hh:%m")%><%
-                                        } else if (conf[0].equals(UserTaskInboxResource.COL_ENDPROCESS)) {
-                                            String ended = "--";
-                                            if (instance.getProcessInstance().getStatus() == Instance.STATUS_CLOSED || instance.getProcessInstance().getStatus() == Instance.STATUS_ABORTED) {
-                                                if (instance.getProcessInstance().getEnded() != null) {
-                                                    ended = SWBUtils.TEXT.getStrDate(instance.getProcessInstance().getEnded(), lang, "dd/mm/yy - hh:%m");
+                            if (instance.getProcessInstance().getStatus() == Instance.STATUS_PROCESSING) {
+                                WebPage pwp = instance.getProcessWebPage();
+                                String status = "--";
+                                %>
+                                <tr>
+                                    <%
+                                    itCols = cols.iterator();
+                                    while(itCols.hasNext()) {
+                                        String val = itCols.next();
+                                        String []conf = val.split("\\|");
+                                        if (conf.length == 2) {
+                                            if (conf[0].equals(UserTaskInboxResource.COL_IDPROCESS)) {
+                                                %><td class="tban-id"><%=instance.getProcessInstance().getId()%><%
+                                            } else if (conf[0].equals(UserTaskInboxResource.COL_IDTASK)) {
+                                                %><td class="tban-id"><%=instance.getId()%><%
+                                            } else if (conf[0].equals(UserTaskInboxResource.COL_NAMEPROCESS)) {
+                                                String pName = instance.getFlowNodeType().getProcess().getDisplayTitle(lang);
+                                                if(pwp != null && showPwpLink) {
+                                                    pName = "<a href=\"" + pwp.getUrl() + "\">" + pName + "</a>";
                                                 }
-                                            }
-                                            %><td class="tban-cerrada"><%=ended%><%
-                                        } else if (conf[0].equals(UserTaskInboxResource.COL_ENDTASK)) {
-                                            String ended = "--";
-                                            if (instance.getStatus() == Instance.STATUS_CLOSED || instance.getStatus() == Instance.STATUS_ABORTED) {
-                                                if (instance.getEnded() != null) {
-                                                    ended = SWBUtils.TEXT.getStrDate(instance.getEnded(), lang, "dd/mm/yy - hh:%m");
+                                                %><td class="tban-tarea"><%=pName%><%
+                                            } else if (conf[0].equals(UserTaskInboxResource.COL_NAMETASK)) {
+                                                %><td class="tban-tarea"><%=instance.getFlowNodeType().getDisplayTitle(lang)%><%
+                                            } else if (conf[0].equals(UserTaskInboxResource.COL_STARTPROCESS)) {
+                                                %><td class="tban-inicia"><%=SWBUtils.TEXT.getStrDate(instance.getProcessInstance().getCreated(), lang, "dd/mm/yy - hh:%m")%><%
+                                            } else if (conf[0].equals(UserTaskInboxResource.COL_STARTTASK)) {
+                                                %><td class="tban-inicia"><%=SWBUtils.TEXT.getStrDate(instance.getCreated(), lang, "dd/mm/yy - hh:%m")%><%
+                                            } else if (conf[0].equals(UserTaskInboxResource.COL_ENDPROCESS)) {
+                                                String ended = "--";
+                                                if (instance.getProcessInstance().getStatus() == Instance.STATUS_CLOSED || instance.getProcessInstance().getStatus() == Instance.STATUS_ABORTED) {
+                                                    if (instance.getProcessInstance().getEnded() != null) {
+                                                        ended = SWBUtils.TEXT.getStrDate(instance.getProcessInstance().getEnded(), lang, "dd/mm/yy - hh:%m");
+                                                    }
                                                 }
-                                            }
-                                            %><td class="tban-cerrada"><%=ended%><%
-                                        } else if (conf[0].equals(UserTaskInboxResource.COL_CREATORPROCESS)) {
-                                            String screator = "Creado automáticamente";
-                                            User creator = instance.getProcessInstance().getCreator();
-                                            if (creator != null) {
-                                                if (creator.getFullName() != null && !creator.getFullName().trim().equals("")) {
-                                                    screator = creator.getFullName();
-                                                } else {
-                                                    screator = creator.getLogin();
+                                                %><td class="tban-cerrada"><%=ended%><%
+                                            } else if (conf[0].equals(UserTaskInboxResource.COL_ENDTASK)) {
+                                                String ended = "--";
+                                                if (instance.getStatus() == Instance.STATUS_CLOSED || instance.getStatus() == Instance.STATUS_ABORTED) {
+                                                    if (instance.getEnded() != null) {
+                                                        ended = SWBUtils.TEXT.getStrDate(instance.getEnded(), lang, "dd/mm/yy - hh:%m");
+                                                    }
                                                 }
-                                            }
-                                            %><td class="tban-tarea"><%=screator%><%
-                                        } else if (conf[0].equals(UserTaskInboxResource.COL_CREATORTASK)) {
-                                            String screator = "Creado automáticamente";
-                                            User creator = instance.getCreator();
-                                            if (creator != null) {
-                                                if (creator.getFullName() != null && !creator.getFullName().trim().equals("")) {
-                                                    screator = creator.getFullName();
-                                                } else {
-                                                    screator = creator.getLogin();
+                                                %><td class="tban-cerrada"><%=ended%><%
+                                            } else if (conf[0].equals(UserTaskInboxResource.COL_CREATORPROCESS)) {
+                                                String screator = "Creado automáticamente";
+                                                User creator = instance.getProcessInstance().getCreator();
+                                                if (creator != null) {
+                                                    if (creator.getFullName() != null && !creator.getFullName().trim().equals("")) {
+                                                        screator = creator.getFullName();
+                                                    } else {
+                                                        screator = creator.getLogin();
+                                                    }
                                                 }
-                                            }
-                                            %><td class="tban-tarea"><%=screator%><%
-                                        } else if (conf[0].equals(UserTaskInboxResource.COL_STATUSPROCESS)) {
-                                            int st = instance.getProcessInstance().getStatus();
-                                            if (st == Instance.STATUS_ABORTED) {
-                                                status = "Abortado";
-                                            } else if (st == Instance.STATUS_CLOSED) {
-                                                status = "Cerrado";
-                                            } if (st == Instance.STATUS_INIT) {
-                                                status = "Iniciado";
-                                            } if (st == Instance.STATUS_OPEN || st == Instance.STATUS_PROCESSING) {
-                                                status = "En proceso";
-                                            } if (st == Instance.STATUS_STOPED) {
-                                                status = "Detenido";
-                                            }
-                                            %><td class="tban-tarea"><%=status%><%
-                                        } else if (conf[0].equals(UserTaskInboxResource.COL_STATUSTASK)) {
-                                            int st = instance.getStatus();
-                                            if (st == Instance.STATUS_ABORTED) {
-                                                status = "Abortada";
-                                            } else if (st == Instance.STATUS_CLOSED) {
-                                                status = "Cerrada";
-                                            } if (st == Instance.STATUS_INIT) {
-                                                status = "Iniciada";
-                                            } if (st == Instance.STATUS_OPEN || st == Instance.STATUS_PROCESSING) {
-                                                status = "En proceso";
-                                            } if (st == Instance.STATUS_STOPED) {
-                                                status = "Detenida";
-                                            }
-                                            %><td class="tban-tarea"><%=status%><%
-                                        } else if (conf[0].equals(UserTaskInboxResource.COL_ACTIONS)) {
-                                            %>
-                                            <td class="tban-accion">
-                                            <%
-                                            UserTask utask = (UserTask) instance.getFlowNodeType();
-                                            if (instance.getStatus() == ProcessInstance.STATUS_PROCESSING) {
+                                                %><td class="tban-tarea"><%=screator%><%
+                                            } else if (conf[0].equals(UserTaskInboxResource.COL_CREATORTASK)) {
+                                                String screator = "Creado automáticamente";
+                                                User creator = instance.getCreator();
+                                                if (creator != null) {
+                                                    if (creator.getFullName() != null && !creator.getFullName().trim().equals("")) {
+                                                        screator = creator.getFullName();
+                                                    } else {
+                                                        screator = creator.getLogin();
+                                                    }
+                                                }
+                                                %><td class="tban-tarea"><%=screator%><%
+                                            } else if (conf[0].equals(UserTaskInboxResource.COL_STATUSPROCESS)) {
+                                                int st = instance.getProcessInstance().getStatus();
+                                                if (st == Instance.STATUS_ABORTED) {
+                                                    status = "Abortado";
+                                                } else if (st == Instance.STATUS_CLOSED) {
+                                                    status = "Cerrado";
+                                                } if (st == Instance.STATUS_INIT) {
+                                                    status = "Iniciado";
+                                                } if (st == Instance.STATUS_OPEN || st == Instance.STATUS_PROCESSING) {
+                                                    status = "En proceso";
+                                                } if (st == Instance.STATUS_STOPED) {
+                                                    status = "Detenido";
+                                                }
+                                                %><td class="tban-tarea"><%=status%><%
+                                            } else if (conf[0].equals(UserTaskInboxResource.COL_STATUSTASK)) {
+                                                int st = instance.getStatus();
+                                                if (st == Instance.STATUS_ABORTED) {
+                                                    status = "Abortada";
+                                                } else if (st == Instance.STATUS_CLOSED) {
+                                                    status = "Cerrada";
+                                                } if (st == Instance.STATUS_INIT) {
+                                                    status = "Iniciada";
+                                                } if (st == Instance.STATUS_OPEN || st == Instance.STATUS_PROCESSING) {
+                                                    status = "En proceso";
+                                                } if (st == Instance.STATUS_STOPED) {
+                                                    status = "Detenida";
+                                                }
+                                                %><td class="tban-tarea"><%=status%><%
+                                            } else if (conf[0].equals(UserTaskInboxResource.COL_ACTIONS)) {
                                                 %>
-                                                <a class="acc-atender" href="<%=utask.getTaskWebPage().getUrl()%>?suri=<%=instance.getEncodedURI()%>">Atender</a>
+                                                <td class="tban-accion">
                                                 <%
-                                                if (allowForward && instance.getAssignedto() != null) {
-                                                    SWBResourceURL forward = paramRequest.getRenderUrl().setMode(UserTaskInboxResource.MODE_FWD);
-                                                    %><a class="acc-delegar" target="new" href="<%=forward%>?suri=<%=instance.getEncodedURI()%>">Reasignar</a><%
+                                                UserTask utask = (UserTask) instance.getFlowNodeType();
+                                                if (instance.getStatus() == ProcessInstance.STATUS_PROCESSING) {
+                                                    %>
+                                                    <a class="acc-atender" href="<%=utask.getTaskWebPage().getUrl()%>?suri=<%=instance.getEncodedURI()%>">Atender</a>
+                                                    <%
+                                                    if (allowForward && instance.getAssignedto() != null) {
+                                                        SWBResourceURL forward = paramRequest.getRenderUrl().setMode(UserTaskInboxResource.MODE_FWD);
+                                                        %><a class="acc-delegar" target="new" href="<%=forward%>?suri=<%=instance.getEncodedURI()%>">Reasignar</a><%
+                                                    }
                                                 }
-                                            }
-                                            if (statusWp != null) {
+                                                if (statusWp != null) {
+                                                    %>
+                                                    <a class="acc-mapa" href="<%=statusWp.getUrl()%>?suri=<%=instance.getProcessInstance().getEncodedURI()%>">Ver mapa</a>
+                                                    <%
+                                                }
                                                 %>
-                                                <a class="acc-mapa" href="<%=statusWp.getUrl()%>?suri=<%=instance.getProcessInstance().getEncodedURI()%>">Ver mapa</a>
+                                                </td>
                                                 <%
+                                            } else if (conf[0].equals(UserTaskInboxResource.COL_TASKSUBJECT)) {
+                                                String subject = "--";
+                                                if (instance.getSubject() != null) {
+                                                    subject = instance.getSubject();
+                                                }
+                                                %><td class="tban-tarea"><%=subject%><%
                                             }
                                             %>
                                             </td>
                                             <%
-                                        } else if (conf[0].equals(UserTaskInboxResource.COL_TASKSUBJECT)) {
-                                            String subject = "--";
-                                            if (instance.getSubject() != null) {
-                                                subject = instance.getSubject();
-                                            }
-                                            %><td class="tban-tarea"><%=subject%><%
                                         }
-                                        %>
-                                        </td>
-                                        <%
                                     }
-                                }
-                                %>
-                            </tr>
+                                    %>
+                                </tr>
                             <%
+                            }
                         }
                         %>
                     </tbody>
