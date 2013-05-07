@@ -12,10 +12,6 @@
     <script type="text/javascript" src="/swbadmin/jsp/process/modeler/toolkit.js"></script>
     <script type="text/javascript" src="/swbadmin/jsp/process/modeler/modeler.js"></script>
     <link href="/swbadmin/jsp/process/modeler/modelerFrame.css" rel="stylesheet" type="text/css">
-    
-    <script type="text/javascript" >
-        dojo.require("dojox.layout.ExpandoPane");
-    </script>
 </head>
 <body onload="Modeler.init('modeler');">
     <div id="toolBar" onmouseout="ToolBar.outToolBar();" onmouseover="ToolBar.overToolBar(); this.style.opacity=1;" style="position: fixed;">
