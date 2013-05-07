@@ -426,6 +426,18 @@ ul.breadcrumbs.alt1 li.last a{
     background: url(images/start_2.png) top center no-repeat;
 }
 
+.fileItem {
+    background: url(images/file1.png) top center no-repeat;
+    position: relative;
+    float: left;
+    height:43px;
+    width:49px;
+}
+
+.fileItem:hover {
+    background: url(images/file2.png) top center no-repeat;
+}
+
 .intereventItem {
     background: url(images/inter_1.png) top center no-repeat;
     position: relative;
@@ -560,6 +572,18 @@ ul.breadcrumbs.alt1 li.last a{
 
 .flowItem:hover {
     background: url(images/flow_2.png) top center no-repeat;
+}
+
+.storeProcess {
+    background: url(images/file_enviar1.png) top center no-repeat;
+    position: relative;
+    float: left;
+    height:43px;
+    width:37px;
+}
+
+.storeProcess:hover {
+    background: url(images/file_enviar2.png) top center no-repeat;
 }
 
 .normalStartEvent {
