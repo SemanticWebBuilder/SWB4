@@ -586,6 +586,18 @@ ul.breadcrumbs.alt1 li.last a{
     background: url(images/file_enviar2.png) top center no-repeat;
 }
 
+.saveAsImage {
+    background: url(images/file_saveasimage1.png) top center no-repeat;
+    position: relative;
+    float: left;
+    height:43px;
+    width:37px;
+}
+
+.saveAsImage:hover {
+    background: url(images/file_enviar2.png) top center no-repeat;
+}
+
 .normalStartEvent {
     background: url(images/start_normal1.png) top center no-repeat;
     position: relative;
