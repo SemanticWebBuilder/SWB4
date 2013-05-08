@@ -7,7 +7,7 @@
     var _GraphicalElement = function(obj) {
         var _this = obj;
         _this.types = new Array();
-        _this.uri = Modeler.itemsCount++;
+        _this.id = Modeler.itemsCount++;
         
         _this.setElementType = function(typeName) {
             _this.elementType = typeName;
@@ -15,7 +15,7 @@
         };
         
         _this.setURI = function(uri) {
-            _this.uri = uri;
+            _this.id = uri;
         };
         
         _this.typeOf = function(typeName) {
@@ -82,7 +82,7 @@
     var _ConnectionObject = function(obj) {
         var _this = obj;
         _this.types = new Array();
-        _this.uri = Modeler.itemsCount++;
+        _this.id = Modeler.itemsCount++;
         
         _this.setElementType = function(typeName) {
             _this.elementType = typeName;
@@ -90,7 +90,7 @@
         };
         
         _this.setURI = function(uri) {
-            _this.uri = uri;
+            _this.id = uri;
         };
         
         _this.typeOf = function(typeName) {
@@ -2644,6 +2644,7 @@
                 i++;
             }
             
+            //Construir swimlanes
             for (i = 0; i < swimlanes.length; i++) {
                 var tmp = swimlanes[i];
                 if (tmp.class==="Pool") { //Por el momento se ignoran lanes
@@ -2659,6 +2660,7 @@
                 }
             }
             
+            //Construir flowNodes
             for (i = 0; i < flowNodes.length; i++) {
                 var tmp = flowNodes[i];
                 var obj = Modeler.mapObject(tmp.class);
@@ -2676,33 +2678,54 @@
                 }
             }
             
-//            for (i=0; i< ToolKit.contents.length; i++) {
-//                if (obj.typeOf) {
-//                    console.log(ToolKit.contents[i].uri);
-//                    console.log(ToolKit.contents[i]);
-//                }
-//            }
-//            
-//           //TODO:Conectar objetos
             for (i = 0; i < connObjects.length; i++) {
                 var tmp = connObjects[i];
                 var obj = Modeler.mapObject(tmp.class);
                 obj.setURI(tmp.uri);
-                console.log(getGraphElementByURI(null, tmp.start));
-                //console.log(tmp.end);
                 
+                var start = Modeler.getGraphElementByURI(null, tmp.start);
+                var end = Modeler.getGraphElementByURI(null, tmp.end);
+                
+                if (start != null && end != null) {
+                    start.addOutConnection(obj);
+                    end.addInConnection(obj);
+                }
             }
+            
+            //Asignar contenedores y padres de los flowNodes
+            for (i = 0; i < flowNodes.length; i++) {
+                var tmp = flowNodes[i];
+                var obj = Modeler.getGraphElementByURI(null, tmp.uri);
+                
+                if (tmp.container && tmp.container != null) {
+                    var par = Modeler.getGraphElementByURI(null, tmp.container);
+                    if (par != null && obj != null) {
+                        obj.layer = par.subLayer;
+                    }
+                }
+                
+//                if (tmp.parent && tmp.parent != null) {
+//                    var par = Modeler.getGraphElementByURI(null, tmp.parent);
+//                    if (par != null && obj != null) {
+//                        obj.setParent(par);
+//                    }
+//                }
+            }
+            
+            ToolKit.setLayer(null);
         },
                 
         getGraphElementByURI:function(parent, uri) {
-            if (parent == null) {
-                parent = Modeler;
+            var par = parent;
+            if (par === null) {
+                par = ToolKit;
             }
-            for (var i = 0; i < parent.contents.length; i++) {
-                if (parent.contents[i].getURI && parent.contents[i].getURI == uri) {
-                    return parent.contents[i];
-                } else if (parent.contents[i].contents) {
-                    return getGraphElementByURI(parent.contents[i], uri);
+            
+            //console.log("uri: "+uri);
+            for (var i = 0; i< par.contents.length; i++) {
+                if (par.contents[i].id && par.contents[i].id === uri) {
+                    //console.log("encontrado");
+                    return par.contents[i];
                 }
             }
             return null;
