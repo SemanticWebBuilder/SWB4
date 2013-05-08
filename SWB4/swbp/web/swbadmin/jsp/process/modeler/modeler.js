@@ -7,10 +7,15 @@
     var _GraphicalElement = function(obj) {
         var _this = obj;
         _this.types = new Array();
+        _this.uri = Modeler.itemsCount++;
         
         _this.setElementType = function(typeName) {
             _this.elementType = typeName;
             _this.types.push(typeName);
+        };
+        
+        _this.setURI = function(uri) {
+            _this.uri = uri;
         };
         
         _this.typeOf = function(typeName) {
@@ -77,10 +82,15 @@
     var _ConnectionObject = function(obj) {
         var _this = obj;
         _this.types = new Array();
+        _this.uri = Modeler.itemsCount++;
         
         _this.setElementType = function(typeName) {
             _this.elementType = typeName;
             _this.types.push(typeName);
+        };
+        
+        _this.setURI = function(uri) {
+            _this.uri = uri;
         };
         
         _this.typeOf = function(typeName) {
@@ -201,8 +211,13 @@
     var _Event = function (obj) {
         var _this = new _FlowNode(obj);
         var fCanStart = _this.canStartLink;
+        var fSetText = _this.setText;
         
         _this.setElementType("Event");
+
+        _this.setText = function(text) {
+            fSetText(text,0,1,80,1)
+        }
 
         _this.canStartLink=function(link) {
             var ret = fCanStart(link);
@@ -1177,8 +1192,13 @@
         var _this = new _FlowNode(obj);
         var fCanStart = _this.canStartLink;
         var fCanEnd = _this.canEndLink;
+        var fSetText = _this.setText;
         
         _this.setElementType("Gateway");
+        
+        _this.setText = function(text) {
+            fSetText(text,0,1,80,1);
+        };
         
         _this.canStartLink = function(link) {
             var ret = fCanStart(link);
@@ -1538,8 +1558,13 @@
         var fCanAttach = _this.canAttach;
         var fCanEnd = _this.canEndLink;
         var fCanStart = _this.canStartLink;
+        var fSetText = _this.setText;
         
         _this.setElementType("DataObject");
+        
+        _this.setText = function(text) {
+            fSetText(text,0,1,80,1);
+        };
         
         _this.canAttach = function(parent) {
             var ret = fCanAttach(parent);
@@ -1639,9 +1664,13 @@
     var _AnnotationArtifact = function(obj) {
         var _this = new _Artifact(obj);
         var fCanStart = _this.canStartLink;
-        var fCanEnd = _this.canEndLink;
+        var fSetText = _this.setText;
         
         _this.setElementType("AnnotationArtifact");
+        
+        _this.setText = function(text) {
+            fSetText(text,0,0,0,1);
+        };
         
         _this.canStartLink = function(link) {
             var ret = fCanStart(link);
@@ -1672,7 +1701,13 @@
     var _Pool = function (obj) {
         var _this = new _GraphicalElement(obj);
         var fCanAdd = _this.canAddToDiagram;
+        var fSetText = _this.setText;
+        
         _this.setElementType("Pool");
+        
+        _this.setText = function(text) {
+            fSetText("Pool con un nombre muy largo ajustable a 200 pixeles",-1,0,200,2);
+        };
         
         _this.canStartLink = function(link) {
             var ret = true;
@@ -1713,8 +1748,13 @@
         var _this = new _FlowNode(obj);
         var fCanStart = _this.canStartLink;
         var fCanEnd = _this.canEndLink;
+        var fSetText = _this.setText;
         
         _this.setElementType("Activity");
+        
+        _this.setText = function(text) {
+            fSetText(text,0,0,0,1);    
+        };
         
         _this.canStartLink = function(link) {
             var ret = fCanStart(link);
@@ -1954,7 +1994,8 @@
     var Modeler =
     {
         creationId:null,                                      //Objeto temporal para creacion de instancias
-        
+        itemsCount:0,
+                
         init:function(svgid)
         {
             ToolKit.init(svgid);            
@@ -2049,7 +2090,7 @@
             
             if(evt.button==2)
             {
-                Modeler.dragConnection=Modeler.mapObject("sequenceFlow");
+                Modeler.dragConnection=Modeler.mapObject("SequenceFlow");
                 if (obj.canStartLink(Modeler.dragConnection)) {
                     obj.addOutConnection(Modeler.dragConnection);
                     Modeler.dragConnection.setEndPoint(obj.getX(),obj.getY());
@@ -2084,7 +2125,7 @@
                 
         creationStart:function(span)
         {
-            Modeler.creationId=span.getAttribute("class");
+            Modeler.creationId=span.getAttribute("cId");
         },
         
         createObject:function(type, id, parent)
@@ -2576,22 +2617,108 @@
         },
 
 /***********Utilerías para manipular la información de los procesos*************/
-        loadProcess: function() {
-            clearCanvas();
+        loadProcess: function(jsonString) {
+            var json = JSON.parse(jsonString);
+            var jsarr = json.nodes;
+            var i = 0;
+            var swimlanes = [];
+            var connObjects = [];
+            var flowNodes = [];
+            
+            Modeler.clearCanvas();
+            ToolKit.setLayer(null);
+            
+            while(i < jsarr.length) {
+                var tmp = jsarr[i];
+                var cls = tmp.class;
+                //console.log(cls);
+                if (cls == "Lane" || cls == "Pool") {
+                    swimlanes.push(tmp);
+                } else if (cls === "SequenceFlow" || cls === "ConditionalFlow" 
+                        || cls === "DefaultFlow" || cls === "AssociationFlow" 
+                        || cls === "DirectionalAssociation" || cls === "MessageFlow") {
+                    connObjects.push(tmp);
+                } else {
+                    flowNodes.push(tmp);
+                }
+                i++;
+            }
+            
+            for (i = 0; i < swimlanes.length; i++) {
+                var tmp = swimlanes[i];
+                if (tmp.class==="Pool") { //Por el momento se ignoran lanes
+                    var obj = Modeler.mapObject(tmp.class);
+                    obj.setURI(tmp.uri);
+                    
+                    if (tmp.title != null) {
+                        obj.setText(tmp.title);
+                    }
+                    obj.resize(tmp.w, tmp.h);
+                    obj.move(tmp.x, tmp.y);
+                }
+            }
+            
+            for (i = 0; i < flowNodes.length; i++) {
+                var tmp = flowNodes[i];
+                var obj = Modeler.mapObject(tmp.class);
+                obj.setURI(tmp.uri);
+                
+                if (obj.typeOf("GraphicalElement")) {
+                    if (tmp.title != null) {
+                        obj.setText(tmp.title);
+                    }
+                    obj.move(tmp.x, tmp.y);
+                    if (obj.resizeable != null && obj.resizeable) {
+                        obj.resize(tmp.w, tmp.h);
+                    }
+                }
+            }
+            
+//            for (i=0; i< ToolKit.contents.length; i++) {
+//                if (obj.typeOf) {
+//                    console.log(ToolKit.contents[i].uri);
+//                    console.log(ToolKit.contents[i]);
+//                }
+//            }
+//            
+//           //TODO:Conectar objetos
+            for (i = 0; i < connObjects.length; i++) {
+                var tmp = connObjects[i];
+                var obj = Modeler.mapObject(tmp.class);
+                obj.setURI(tmp.uri);
+                console.log(getGraphElementByURI(null, tmp.start));
+                //console.log(tmp.end);
+                
+            }
         },
                 
-        submitCommand:function(url) {
+        getGraphElementByURI:function(parent, uri) {
+            if (parent == null) {
+                parent = Modeler;
+            }
+            for (var i = 0; i < parent.contents.length; i++) {
+                if (parent.contents[i].getURI && parent.contents[i].getURI == uri) {
+                    return parent.contents[i];
+                } else if (parent.contents[i].contents) {
+                    return getGraphElementByURI(parent.contents[i], uri);
+                }
+            }
+            return null;
+        },
+
+        submitCommand:function(url, callbackHandler){
             dojo.xhrGet({
                 url: url,
                 load: function(response, ioArgs) {
-                    console.log(response);
+                    //console.log(response);
+                    callbackHandler(response);
                     return response;
                 },
-                error: function(response, ioArgs){
-                    console.log("error");
+                error: function(response, ioArgs) {
+                    //console.log("error");
                     return response;
                 },
-                handleAs: "json"
+                handleAs: "text"
             });
         },
                 
@@ -2614,333 +2741,325 @@
         mapObject:function(type)
         {
             var ret = null;
-            if(type=='sequenceFlow') {
+            if(type=='SequenceFlow') {
                 ret = new _SequenceFlow(Modeler.createConnectionPath(null, null, "sequenceArrow", null,"sequenceFlowLine"));
                 ret.eoff=10;
             }
-            if(type=='messageFlow') {
+            if(type=='MessageFlow') {
                 ret = new _MessageFlow(Modeler.createConnectionPath("messageTail", null, "messageArrow", "5,5", "sequenceFlowLine"));
                 ret.eoff=5;
                 ret.soff=10;
             }
-            if(type=='conditionalFlow') {
+            if(type=='ConditionalFlow') {
                 ret = new _ConditionalFlow(Modeler.createConnectionPath("conditionTail", null, "sequenceArrow", null, "sequenceFlowLine"));
                 ret.eoff=10;
                 ret.soff=10;
             }
-            if(type=='defaultFlow') {
+            if(type=='DefaultFlow') {
                 ret = new _DefaultFlow(Modeler.createConnectionPath("defaultTail", null, "sequenceArrow", null, "sequenceFlowLine"));
                 ret.eoff=10;
             }
-            if(type=='associationFlow') {
+            if(type=='AssociationFlow') {
                 ret = new _AssociationFlow(Modeler.createConnectionPath(null, null, null, "5,5", "sequenceFlowLine"));
             }
-            if(type=='directionalassociationFlow') {
+            if(type=='DirectionalAssociation') {
                 ret = new _DirectionalAssociation(Modeler.createConnectionPath(null, null, "messageArrow", "5,5", "sequenceFlowLine"));
                 ret.eoff=10;
             }
-            else if(type=='normalStartEvent')
+            else if(type=='StartEvent')
             {
                 ret=new _StartEvent(Modeler.createObject("#startEvent",null,null));
-                ret.setText("Inicio Normal",0,1,80,1);
+                ret.setText("Inicio Normal");
             }
-            else if(type=='messageStartEvent'){
+            else if(type=='MessageStartEvent'){
                 ret=new _MessageStartEvent(Modeler.createObject("#messageStartEvent",null,null));
-                ret.setText("Inicio por mensaje",0,1,80,1);
+                ret.setText("Inicio por mensaje");
             }
-            else if(type=='timerStartEvent'){
+            else if(type=='TimerStartEvent'){
                 ret=new _TimerStartEvent(Modeler.createObject("#timerStartEvent",null,null));
-                ret.setText("Inicio temporizado",0,1,80,1);
+                ret.setText("Inicio temporizado");
             }
-            else if(type=='ruleStartEvent') {
+            else if(type=='RuleStartEvent') {
                 ret=new _RuleStartEvent(Modeler.createObject("#ruleStartEvent",null,null));
-                ret.setText("Inicio por regla de negocio",0,1,80,1);
+                ret.setText("Inicio por regla de negocio");
             }
-            else if(type=='signalStartEvent') {
+            else if(type=='SignalStartEvent') {
                 ret=new _SignalStartEvent(Modeler.createObject("#signalStartEvent",null,null));
-                ret.setText("Inicio por señal",0,1,80,1);
+                ret.setText("Inicio por señal");
             }
-            else if(type=='multiStartEvent') {
+            else if(type=='MultipleStartEvent') {
                 ret=new _MultipleStartEvent(Modeler.createObject("#multipleStartEvent",null,null));
-                ret.setText("Inicio múltiple",0,1,80,1);
+                ret.setText("Inicio múltiple");
             }
-            else if(type=='parallelStartEvent') {
+            else if(type=='ParallelStartEvent') {
                 ret=new _ParallelStartEvent(Modeler.createObject("#parallelStartEvent",null,null));
-                ret.setText("Inicio paralelo",0,1,80,1);
+                ret.setText("Inicio paralelo");
             }
-            else if(type=='scalaStartEvent') {
+            else if(type=='ScalationStartEvent') {
                 ret= new _ScalationStartEvent(Modeler.createObject("#scalationStartEvent",null,null));
-                ret.setText("Inicio por escalamiento",0,1,80,1);
+                ret.setText("Inicio por escalamiento");
             }
-            else if(type=='errorStartEvent') {
+            else if(type=='ErrorStartEvent') {
                 ret= new _ErrorStartEvent(Modeler.createObject("#errorStartEvent",null,null));
-                ret.setText("Inicio por error",0,1,80,1);
+                ret.setText("Inicio por error");
             }
-            else if(type=='compensaStartEvent') {
+            else if(type=='CompensationStartEvent') {
                 ret= new _CompensationStartEvent(Modeler.createObject("#compensationStartEvent",null,null));
-                ret.setText("Inicio por compensación",0,1,80,1);
+                ret.setText("Inicio por compensación");
             }
-            else if(type=='messageInterCatchEvent') {
+            else if(type=='MessageIntermediateCatchEvent') {
                 ret=new _MessageIntermediateCatchEvent(Modeler.createObject("#messageIntermediateCatchEvent",null,null));
-                ret.setText("Recepción de mensaje",0,1,80,1);
+                ret.setText("Recepción de mensaje");
             }
-            else if(type=='messageInterThrowEvent') {
+            else if(type=='MessageIntermediateThrowEvent') {
                 ret= new _MessageIntermediateThrowEvent(Modeler.createObject("#messageIntermediateThrowEvent",null,null));
-                ret.setText("Envío de mensaje",0,1,80,1);
+                ret.setText("Envío de mensaje");
             }
-            else if(type=='timerInterEvent') {
+            else if(type=='TimerIntermediateCatchEvent') {
                 ret= new _TimerIntermediateCatchEvent(Modeler.createObject("#timerIntermediateEvent",null,null));
-                ret.setText("Temporizador",0,1,80,1);
+                ret.setText("Temporizador");
             }
-            else if(type=='errorInterEvent') {
+            else if(type=='ErrorIntermediateCatchEvent') {
                 ret= new _ErrorIntermediateCatchEvent(Modeler.createObject("#errorIntermediateEvent",null,null));
-                ret.setText("Recepción de error",0,1,80,1);
+                ret.setText("Recepción de error");
             }
-            else if(type=='cancelInterEvent') {
+            else if(type=='CancelationIntermediateCatchEvent') {
                 ret= new _CancelationIntermediateCatchEvent(Modeler.createObject("#cancelIntermediateEvent",null,null));
-                ret.setText("Cancelación",0,1,80,1);
+                ret.setText("Cancelación");
             }
-            else if(type=='compensaInterCatchEvent') {
+            else if(type=='CompensationIntermediateCatchEvent') {
                 ret= new _CompensationIntermediateCatchEvent(Modeler.createObject("#compensationIntermediateCatchEvent",null,null));
-                ret.setText("Recepción de compensación",0,1,80,1);
+                ret.setText("Recepción de compensación");
             }
-            else if(type=='compensaInterThrowEvent') {
+            else if(type=='CompensationIntermediateThrowEvent') {
                 ret= new _CompensationIntermediateThrowEvent(Modeler.createObject("#compensationIntermediateThrowEvent",null,null));
-                ret.setText("Disparo de compensación",0,1,80,1);
+                ret.setText("Disparo de compensación");
             }
-            else if(type=='ruleInterEvent') {
+            else if(type=='RuleIntermediateCatchEvent') {
                 ret= new _RuleIntermediateCatchEvent(Modeler.createObject("#ruleIntermediateEvent",null,null));
-                ret.setText("Regla de negocio",0,1,80,1);
+                ret.setText("Regla de negocio");
             }
-            else if(type=='linkInterCatchEvent') {
+            else if(type=='LinkIntermediateCatchEvent') {
                 ret= new _LinkIntermediateCatchEvent(Modeler.createObject("#linkIntermediateCatchEvent",null,null));
-                ret.setText("Recepción de enlace",0,1,80,1);
+                ret.setText("Recepción de enlace");
             }
-            else if(type=='linkInterThrowEvent') {
+            else if(type=='LinkIntermediateThrowEvent') {
                 ret= new _LinkIntermediateThrowEvent(Modeler.createObject("#linkIntermediateThrowEvent",null,null));
-                ret.setText("Disparo de enlace",0,1,80,1);
+                ret.setText("Disparo de enlace");
             }
-            else if(type=='signalInterCatchEvent') {
+            else if(type=='SignalIntermediateCatchEvent') {
                 ret= new _SignalIntermediateCatchEvent(Modeler.createObject("#signalIntermediateCatchEvent",null,null));
-                ret.setText("Recepción de señal",0,1,80,1);
+                ret.setText("Recepción de señal");
             }
-            else if(type=='signalInterThrowEvent') {
+            else if(type=='SignalIntermediateThrowEvent') {
                 ret= new _SignalIntermediateThrowEvent(Modeler.createObject("#signalIntermediateThrowEvent",null,null));
-                ret.setText("Disparo de señal",0,1,80,1);
+                ret.setText("Disparo de señal");
             }
-            else if(type=='multipleInterCatchEvent') {
+            else if(type=='MultipleIntermediateCatchEvent') {
                 ret= new _MultipleIntermediateCatchEvent(Modeler.createObject("#multipleIntermediateCatchEvent",null,null));
-                ret.setText("Recepción múltiple",0,1,80,1);
+                ret.setText("Recepción múltiple");
             }
-            else if(type=='multipleInterThrowEvent') {
+            else if(type=='MultipleIntermediateThrowEvent') {
                 ret= new _MultipleIntermediateThrowEvent(Modeler.createObject("#multipleIntermediateThrowEvent",null,null));
-                ret.setText("Disparo múltiple",0,1,80,1);
+                ret.setText("Disparo múltiple");
             }
-            else if(type=='scalaInterCatchEvent') {
+            else if(type=='ScalationIntermediateCatchEvent') {
                 ret= new _ScalationIntermediateCatchEvent(Modeler.createObject("#scalationIntermediateCatchEvent",null,null));
-                ret.setText("Recepción de escalamiento",0,1,80,1);
+                ret.setText("Recepción de escalamiento");
             }
-            else if(type=='scalaInterThrowEvent') {
+            else if(type=='ScalationIntermediateThrowEvent') {
                 ret= new _ScalationIntermediateThrowEvent(Modeler.createObject("#scalationIntermediateThrowEvent",null,null));
-                ret.setText("Disparo de escalamiento",0,1,80,1);
+                ret.setText("Disparo de escalamiento");
             }
-            else if(type=='parallelInterEvent') {
+            else if(type=='ParallelIntermediateCatchEvent') {
                 ret= new _ParallelIntermediateCatchEvent(Modeler.createObject("#parallelIntermediateEvent",null,null));
-                ret.setText("Paralelo",0,1,80,1);
+                ret.setText("Paralelo");
             }
-            else if(type=='normalEndEvent') {
+            else if(type=='EndEvent') {
                 ret= new _EndEvent(Modeler.createObject("#endEvent",null,null));
-                ret.setText("Fin normal",0,1,80,1);
+                ret.setText("Fin normal");
             }
-            else if(type=='messageEndEvent') {
+            else if(type=='MessageEndEvent') {
                 ret= new _MessageEndEvent(Modeler.createObject("#messageEndEvent",null,null));
-                ret.setText("Fin con mensaje",0,1,80,1);
+                ret.setText("Fin con mensaje");
             }
-            else if(type=='errorEndEvent') {
+            else if(type=='ErrorEndEvent') {
                 ret= new _ErrorEndEvent(Modeler.createObject("#errorEndEvent",null,null));
-                ret.setText("Fin con error",0,1,80,1);
+                ret.setText("Fin con error");
             }
-            else if(type=='cancelEndEvent') {
+            else if(type=='CancelationEndEvent') {
                 ret= new _CancelationEndEvent(Modeler.createObject("#cancelationEndEvent",null,null));
-                ret.setText("Fin con cancelación",0,1,80,1);
+                ret.setText("Fin con cancelación");
             }
-            else if(type=='compensaEndEvent') {
+            else if(type=='CompensationEndEvent') {
                 ret= new _CompensationEndEvent(Modeler.createObject("#compensationEndEvent",null,null));
-                ret.setText("Fin con compensación",0,1,80,1);
+                ret.setText("Fin con compensación");
             }
-            else if(type=='signalEndEvent') {
+            else if(type=='SignalEndEvent') {
                 ret= new _SignalEndEvent(Modeler.createObject("#signalEndEvent",null,null));
-                ret.setText("Fin con señal",0,1,80,1);
+                ret.setText("Fin con señal");
             }
-            else if(type=='multiEndEvent') {
+            else if(type=='MultipleEndEvent') {
                 ret= new _MultipleEndEvent(Modeler.createObject("#multipleEndEvent",null,null));
-                ret.setText("Fin múltiple",0,1,80,1);
+                ret.setText("Fin múltiple");
             }
-            else if(type=='escalaEndEvent') {
+            else if(type=='ScalationEndEvent') {
                 ret= new _ScalationEndEvent(Modeler.createObject("#scalationEndEvent",null,null));
-                ret.setText("Fin con escalamiento",0,1,80,1);
+                ret.setText("Fin con escalamiento");
             }
-            else if(type=='terminalEndEvent') {
+            else if(type=='TerminationEndEvent') {
                 ret= new _TerminationEndEvent(Modeler.createObject("#terminationEndEvent",null,null));
-                ret.setText("Terminación",0,1,80,1);
+                ret.setText("Terminación");
             }
-            else if(type=='exclusiveDataGateway') {
+            else if(type=='ExclusiveGateway') {
                 ret= new _ExclusiveGateway(Modeler.createObject("#exclusiveDataGateway",null,null));
-                ret.setText("Exclusiva (datos)",0,1,80,1);
             }
-            else if(type=='inclusiveDataGateway') {
+            else if(type=='InclusiveGateway') {
                 ret= new _InclusiveGateway(Modeler.createObject("#inclusiveDataGateway",null,null));
-                ret.setText("Inclusiva (datos)",0,1,80,1);
             }
-            else if(type=='exclusiveStartEventGateway') {
+            else if(type=='ExclusiveStartEventGateway') {
                 ret= new _ExclusiveStartEventGateway(Modeler.createObject("#exclusiveStartGateway",null,null));
-                ret.setText("Exclusiva de inicio",0,1,80,1);
             }
-            else if(type=='exclusiveEventGateway') {
+            else if(type=='ExclusiveIntermediateEventGateway') {
                 ret= new _ExclusiveIntermediateEventGateway(Modeler.createObject("#eventGateway",null,null));
-                ret.setText("Exclusiva (eventos)",0,1,80,1);
             }
-            else if(type=='parallelGateway') {
+            else if(type=='ParallelGateway') {
                 ret= new _ParallelGateway(Modeler.createObject("#parallelGateway",null,null));
-                ret.setText("Paralela",0,1,80,1);
             }
-            else if(type=='parallelStartGateway') {
+            else if(type=='ParallelStartEventGateway') {
                 ret= new _ParallelStartEventGateway(Modeler.createObject("#parallelStartGateway",null,null));
-                ret.setText("Paralela de inicio",0,1,80,1);
             }
-            else if(type=='complexGateway') {
+            else if(type=='ComplexGateway') {
                 ret= new _ComplexGateway(Modeler.createObject("#complexGateway",null,null));
-                ret.setText("Compleja",0,1,80,1);
             }
-            else if(type=='group') {
+            else if(type=='Group') {
                 ret= new _Group(Modeler.createGroupArtifact(null,null));
                 ret.resize(300,300);
             }
-            else if(type=='annotation'){
+            else if(type=='AnnotationArtifact'){
                 ret= new _AnnotationArtifact(Modeler.createAnnotationArtifact(null, null));
-                ret.setText("Anotación de texto",0,0,0,1);
+                ret.setText("Anotación de texto");
                 ret.resize(200,60);
             }
-            else if(type=='dataObject') {
+            else if(type=='DataObject') {
                 ret= new _DataObject(Modeler.createObject("#data",null,null));
-                ret.setText("Dato",0,1,80,1);
+                ret.setText("Dato");
             }
-            else if(type=='dataInput') {
+            else if(type=='DataInput') {
                 ret= new _DataInput(Modeler.createObject("#dataInput",null,null));
-                ret.setText("Dato de entrada",0,1,80,1);
+                ret.setText("Dato de entrada");
             }
-            else if(type=='dataOutput') {
+            else if(type=='DataOutput') {
                 ret= new _DataOutput(Modeler.createObject("#dataOutput",null,null));
-                ret.setText("Dato de salida",0,1,80,1);
+                ret.setText("Dato de salida");
             }
-            else if(type=='dataStore') {
+            else if(type=='DataStore') {
                 ret= new _DataStore(Modeler.createObject("#dataStore",null,null));
-                ret.setText("Almacén de datos",0,1,80,1);
+                ret.setText("Almacén de datos");
             }
-            else if(type=='userTask') {
+            else if(type=='UserTask') {
                 ret = new _UserTask(Modeler.createTask(null,null));
                 ret.addIcon("#userMarker",-1,-1,13,8);
-                ret.setText("Tarea de Usuario",0,0,0,1);
+                ret.setText("Tarea de Usuario");
                 ret.resize(100,60);
             }
-            else if(type=='serviceTask') {
+            else if(type=='ServiceTask') {
                 ret = new _ServiceTask(Modeler.createTask(null,null));
                 ret.addIcon("#serviceMarker",-1,-1,13,8);
-                ret.setText("Tarea de Servicio",0,0,0,1);
+                ret.setText("Tarea de Servicio");
                 ret.resize(100,60);
             }
-            else if(type=='scriptTask') {
+            else if(type=='ScriptTask') {
                 ret = new _ScriptTask(Modeler.createTask(null,null));
                 ret.addIcon("#scriptMarker",-1,-1,7,13);
-                ret.setText("Tarea de Script",0,0,0,1);
+                ret.setText("Tarea de Script");
                 ret.resize(100,60);
             }
-            else if(type=='ruleTask') {
+            else if(type=='BusinessRuleTask') {
                 ret = new _BusinessRuleTask(Modeler.createTask(null,null));
                 ret.addIcon("#taskRuleMarker",-1,-1,12,12);
-                ret.setText("Tarea de regla de negocio",0,0,0,1);
+                ret.setText("Tarea de regla de negocio");
                 ret.resize(100,60);
             }
-            else if(type=='manualTask') {
+            else if(type=='ManualTask') {
                 ret = new _ManualTask(Modeler.createTask(null,null));
                 ret.addIcon("#manualMarker",-1,-1,9,6);
-                ret.setText("Tarea Manual",0,0,0,1);
+                ret.setText("Tarea Manual");
                 ret.resize(100,60);
             }
-            else if(type=='sendTask') {
+            else if(type=='SendTask') {
                 ret = new _SendTask(Modeler.createTask(null,null));
                 ret.addIcon("#taskMessageThrowMarker",-1,-1,13,10);
-                ret.setText("Tarea de envío de mensaje",0,0,0,1);
+                ret.setText("Tarea de envío de mensaje");
                 ret.resize(100,60);
             }
-            else if(type=='receiveTask') {
+            else if(type=='ReceiveTask') {
                 ret = new _ReceiveTask(Modeler.createTask(null,null));
                 ret.addIcon("#taskMessageCatchMarker",-1,-1,13,10);
-                ret.setText("Tarea de recepción de mensaje",0,0,0,1);
+                ret.setText("Tarea de recepción de mensaje");
                 ret.resize(100,60);
             }
-            else if(type=='abstractTask') {
+            else if(type=='Task') {
                 ret = new _Task(Modeler.createTask(null,null));
-                ret.setText("Tarea abstracta",0,0,0,1);
+                ret.setText("Tarea abstracta");
                 ret.resize(100,60);
             }
-            else if(type=='callTask') {
+            else if(type=='CallTask') {
                 ret = new _CallTask(Modeler.createCallTask(null,null));
-                ret.setText("Tarea reusada",0,0,0,1);
+                ret.setText("Tarea reusada");
                 ret.resize(100,60);
             }
-            else if(type=='callmanualTask') {
+            else if(type=='CallManualTask') {
                 ret = new _CallManualTask(Modeler.createCallTask(null,null));
                 ret.addIcon("#manualMarker",-1,-1,9,6);
-                ret.setText("Tarea manual reusada",0,0,0,1);
+                ret.setText("Tarea manual reusada");
                 ret.resize(100,60);
             }
-            else if(type=='callruleTask') {
+            else if(type=='CallBusinessRuleTask') {
                 ret = new _CallBusinessRuleTask(Modeler.createCallTask(null,null));
                 ret.addIcon("#taskRuleMarker",-1,-1,12,12);
-                ret.setText("Tarea de regla de negocio reusada",0,0,0,1);
+                ret.setText("Tarea de regla de negocio reusada");
                 ret.resize(100,60);
             }
-            else if(type=='callscriptTask') {
+            else if(type=='CallScriptTask') {
                 ret = new _CallScriptTask(Modeler.createCallTask(null,null));
                 ret.addIcon("#scriptMarker",-1,-1,7,13);
-                ret.setText("Tarea de script reusada",0,0,0,1);
+                ret.setText("Tarea de script reusada");
                 ret.resize(100,60);
             }
-            else if(type=='calluserTask') {
+            else if(type=='CallBusinessRuleTask') {
                 ret = new _CallBusinessRuleTask(Modeler.createCallTask(null,null));
                 ret.addIcon("#userMarker",-1,-1,13,8);
-                ret.setText("Tarea de usuario reusada",0,0,0,1);
+                ret.setText("Tarea de usuario reusada");
                 ret.resize(100,60);
             }
-            else if(type=='subProcess') {
+            else if(type=='SubProcess') {
                 ret = new _SubProcess(Modeler.createSubProcess(null, null, ""));
-                ret.setText("Subproceso",0,0,200,1);
+                ret.setText("Subproceso");
                 ret.resize(100,60);
             }
-            else if(type=='adhocsubProcess') {
+            else if(type=='AdhocSubProcess') {
                 ret = new _AdhocSubProcess(Modeler.createSubProcess(null, null, ""));
-                ret.setText("Subproceso adhoc",0,0,200,1);
+                ret.setText("Subproceso adhoc");
                 ret.resize(100,60);
             }
-            else if(type=='eventsubProcess') {
+            else if(type=='EventSubProcess') {
                 ret = new _EventSubProcess(Modeler.createSubProcess(null, null, "eventsubProcess"));
-                ret.setText("Subproceso de evento",0,0,200,1);
+                ret.setText("Subproceso de evento");
                 ret.resize(100,60);
             }
-            else if(type=='transactionsubProcess') {
+            else if(type=='TransactionSubProcess') {
                 ret = new _TransactionSubProcess(Modeler.createSubProcess(null, null, "transactionsubProcess"));
-                ret.setText("Transacción",0,0,200,1);
+                ret.setText("Transacción");
                 ret.resize(100,60);
             }
-            else if (type=="pool") {
+            else if (type=="Pool") {
                 ret = new _Pool(Modeler.createSwimLane(null, null));
-                ret.setText("Pool con un nombre muy largo ajustable a 200 pixeles",-1,0,200,2);
+                ret.setText("Pool con un nombre muy largo ajustable a 200 pixeles");
                 ret.resize(600,200);
             }
             return ret;
         }
-        
     }    
     
     function draw()
@@ -2962,143 +3081,143 @@
 
         //obj = Modeler.createObject("#test");                
 
-        obj2 = Modeler.mapObject("normalStartEvent");
-        obj2.move(80,20);
-        obj2 = Modeler.mapObject("messageStartEvent");
-        obj2.move(160,20);
-        obj2 = Modeler.mapObject("timerStartEvent");
-        obj2.move(240,20);
-        obj2 = Modeler.mapObject("ruleStartEvent");
-        obj2.move(320,20);
-        obj2 = Modeler.mapObject("signalStartEvent");
-        obj2.move(400,20);
-        obj2 = Modeler.mapObject("multiStartEvent");
-        obj2.move(480,20);
-        obj2 = Modeler.mapObject("parallelStartEvent");
-        obj2.move(560,20);
-        obj2 = Modeler.mapObject("scalaStartEvent");
-        obj2.move(640,20);
-        obj2 = Modeler.mapObject("errorStartEvent");
-        obj2.move(720,20);
-        obj2 = Modeler.mapObject("compensaStartEvent");
-        obj2.move(800,20);
-
-        obj2 = Modeler.mapObject("messageInterCatchEvent");
-        obj2.move(80,90);
-        obj2 = Modeler.mapObject("messageInterThrowEvent");
-        obj2.move(160,90);
-        obj2 = Modeler.mapObject("errorInterEvent");
-        obj2.move(240,90);
-        obj2 = Modeler.mapObject("cancelInterEvent");
-        obj2.move(320,90);
-        obj2 = Modeler.mapObject("compensaInterCatchEvent");
-        obj2.move(400,90);
-        obj2 = Modeler.mapObject("compensaInterThrowEvent");
-        obj2.move(480,90);
-        obj2 = Modeler.mapObject("ruleInterEvent");
-        obj2.move(560,90);
-        obj2 = Modeler.mapObject("linkInterCatchEvent");
-        obj2.move(640,90);
-        obj2 = Modeler.mapObject("linkInterThrowEvent");
-        obj2.move(720,90);
-        obj2 = Modeler.mapObject("signalInterCatchEvent");
-        obj2.move(800,90);
-        obj2 = Modeler.mapObject("signalInterThrowEvent");
-        obj2.move(880,90);
-        obj2 = Modeler.mapObject("multipleInterCatchEvent");
-        obj2.move(960,90);
-        obj2 = Modeler.mapObject("multipleInterThrowEvent");
-        obj2.move(1040,90);
-        obj2 = Modeler.mapObject("scalaInterCatchEvent");
-        obj2.move(1120,90);
-        obj2 = Modeler.mapObject("scalaInterThrowEvent");
-        obj2.move(1200,90);
-        obj2 = Modeler.mapObject("parallelInterEvent");
-        obj2.move(1280,90);
-
-        obj2 = Modeler.mapObject("normalEndEvent");
-        obj2.move(80,160);
-        obj2 = Modeler.mapObject("messageEndEvent");
-        obj2.move(160,160);
-        obj2 = Modeler.mapObject("errorEndEvent");
-        obj2.move(240,160);
-        obj2 = Modeler.mapObject("cancelEndEvent");
-        obj2.move(320,160);
-        obj2 = Modeler.mapObject("compensaEndEvent");
-        obj2.move(400,160);
-        obj2 = Modeler.mapObject("signalEndEvent");
-        obj2.move(480,160);
-        obj2 = Modeler.mapObject("multiEndEvent");
-        obj2.move(560,160);
-        obj2 = Modeler.mapObject("escalaEndEvent");
-        obj2.move(640,160);
-        obj2 = Modeler.mapObject("terminalEndEvent");
-        obj2.move(720,160);
-
-        obj2 = Modeler.mapObject("exclusiveDataGateway");
-        obj2.move(80,240);
-        obj2 = Modeler.mapObject("inclusiveDataGateway");
-        obj2.move(160,240);
-        obj2 = Modeler.mapObject("exclusiveStartEventGateway");
-        obj2.move(240,240);
-        obj2 = Modeler.mapObject("exclusiveEventGateway");
-        obj2.move(320,240);
-        obj2 = Modeler.mapObject("parallelGateway");
-        obj2.move(400,240);
-        obj2 = Modeler.mapObject("parallelStartGateway");
-        obj2.move(480,240);
-        obj2 = Modeler.mapObject("complexGateway");
-        obj2.move(560,240);
-
-        obj2 = Modeler.mapObject("dataObject");
-        obj2.move(80,320);
-        obj2 = Modeler.mapObject("dataInput");
-        obj2.move(160,320);
-        obj2 = Modeler.mapObject("dataOutput");
-        obj2.move(240,320);
-        obj2 = Modeler.mapObject("dataStore");
-        obj2.move(320,320);
-
-        obj2 = Modeler.mapObject("abstractTask");
-        obj2.move(100,420);
-        obj2 = Modeler.mapObject("userTask");
-        obj2.move(200,420);
-        obj2 = Modeler.mapObject("serviceTask");
-        obj2.move(300,420);
-        obj2 = Modeler.mapObject("scriptTask");
-        obj2.move(400,420);
-        obj2 = Modeler.mapObject("ruleTask");
-        obj2.move(500,420);
-        obj2 = Modeler.mapObject("sendTask");
-        obj2.move(600,420);
-        obj2 = Modeler.mapObject("receiveTask");
-        obj2.move(700,420);
-        obj2 = Modeler.mapObject("manualTask");
-        obj2.move(800,420);
-        obj2 = Modeler.mapObject("callTask");
-        obj2.move(900,420);
-        obj2 = Modeler.mapObject("callmanualTask");
-        obj2.move(1000,420);
-        obj2 = Modeler.mapObject("callruleTask");
-        obj2.move(1100,420);
-        obj2 = Modeler.mapObject("callscriptTask");
-        obj2.move(1200,420);
-        obj2 = Modeler.mapObject("calluserTask");
-        obj2.move(1300,420);
-        
-        obj2 = Modeler.mapObject("pool");
-        obj2.move(1300,420);
-        
-        obj = Modeler.mapObject("pool");
-        //obj.moveFirst=function(){};
-        //obj.mouseup=function(evt){alert("up")};
-        obj.move(350,580);
-        
-        obj2 = Modeler.mapObject("manualTask");
-        obj2.setText("Tarea Contenida");
-        obj2.resize(100,60);
-        obj2.move(400,600);        
-        obj2.setParent(obj);
+//        obj2 = Modeler.mapObject("StartEvent");
+//        obj2.move(80,20);
+//        obj2 = Modeler.mapObject("MessageStartEvent");
+//        obj2.move(160,20);
+//        obj2 = Modeler.mapObject("TimerStartEvent");
+//        obj2.move(240,20);
+//        obj2 = Modeler.mapObject("ruleStartEvent");
+//        obj2.move(320,20);
+//        obj2 = Modeler.mapObject("signalStartEvent");
+//        obj2.move(400,20);
+//        obj2 = Modeler.mapObject("multiStartEvent");
+//        obj2.move(480,20);
+//        obj2 = Modeler.mapObject("parallelStartEvent");
+//        obj2.move(560,20);
+//        obj2 = Modeler.mapObject("scalaStartEvent");
+//        obj2.move(640,20);
+//        obj2 = Modeler.mapObject("errorStartEvent");
+//        obj2.move(720,20);
+//        obj2 = Modeler.mapObject("compensaStartEvent");
+//        obj2.move(800,20);
+//
+//        obj2 = Modeler.mapObject("messageInterCatchEvent");
+//        obj2.move(80,90);
+//        obj2 = Modeler.mapObject("messageInterThrowEvent");
+//        obj2.move(160,90);
+//        obj2 = Modeler.mapObject("errorInterEvent");
+//        obj2.move(240,90);
+//        obj2 = Modeler.mapObject("cancelInterEvent");
+//        obj2.move(320,90);
+//        obj2 = Modeler.mapObject("compensaInterCatchEvent");
+//        obj2.move(400,90);
+//        obj2 = Modeler.mapObject("compensaInterThrowEvent");
+//        obj2.move(480,90);
+//        obj2 = Modeler.mapObject("ruleInterEvent");
+//        obj2.move(560,90);
+//        obj2 = Modeler.mapObject("linkInterCatchEvent");
+//        obj2.move(640,90);
+//        obj2 = Modeler.mapObject("linkInterThrowEvent");
+//        obj2.move(720,90);
+//        obj2 = Modeler.mapObject("signalInterCatchEvent");
+//        obj2.move(800,90);
+//        obj2 = Modeler.mapObject("signalInterThrowEvent");
+//        obj2.move(880,90);
+//        obj2 = Modeler.mapObject("multipleInterCatchEvent");
+//        obj2.move(960,90);
+//        obj2 = Modeler.mapObject("multipleInterThrowEvent");
+//        obj2.move(1040,90);
+//        obj2 = Modeler.mapObject("scalaInterCatchEvent");
+//        obj2.move(1120,90);
+//        obj2 = Modeler.mapObject("scalaInterThrowEvent");
+//        obj2.move(1200,90);
+//        obj2 = Modeler.mapObject("parallelInterEvent");
+//        obj2.move(1280,90);
+//
+//        obj2 = Modeler.mapObject("normalEndEvent");
+//        obj2.move(80,160);
+//        obj2 = Modeler.mapObject("messageEndEvent");
+//        obj2.move(160,160);
+//        obj2 = Modeler.mapObject("errorEndEvent");
+//        obj2.move(240,160);
+//        obj2 = Modeler.mapObject("cancelEndEvent");
+//        obj2.move(320,160);
+//        obj2 = Modeler.mapObject("compensaEndEvent");
+//        obj2.move(400,160);
+//        obj2 = Modeler.mapObject("signalEndEvent");
+//        obj2.move(480,160);
+//        obj2 = Modeler.mapObject("multiEndEvent");
+//        obj2.move(560,160);
+//        obj2 = Modeler.mapObject("escalaEndEvent");
+//        obj2.move(640,160);
+//        obj2 = Modeler.mapObject("terminalEndEvent");
+//        obj2.move(720,160);
+//
+//        obj2 = Modeler.mapObject("exclusiveDataGateway");
+//        obj2.move(80,240);
+//        obj2 = Modeler.mapObject("inclusiveDataGateway");
+//        obj2.move(160,240);
+//        obj2 = Modeler.mapObject("exclusiveStartEventGateway");
+//        obj2.move(240,240);
+//        obj2 = Modeler.mapObject("exclusiveEventGateway");
+//        obj2.move(320,240);
+//        obj2 = Modeler.mapObject("parallelGateway");
+//        obj2.move(400,240);
+//        obj2 = Modeler.mapObject("parallelStartGateway");
+//        obj2.move(480,240);
+//        obj2 = Modeler.mapObject("complexGateway");
+//        obj2.move(560,240);
+//
+//        obj2 = Modeler.mapObject("dataObject");
+//        obj2.move(80,320);
+//        obj2 = Modeler.mapObject("dataInput");
+//        obj2.move(160,320);
+//        obj2 = Modeler.mapObject("dataOutput");
+//        obj2.move(240,320);
+//        obj2 = Modeler.mapObject("dataStore");
+//        obj2.move(320,320);
+//
+//        obj2 = Modeler.mapObject("abstractTask");
+//        obj2.move(100,420);
+//        obj2 = Modeler.mapObject("userTask");
+//        obj2.move(200,420);
+//        obj2 = Modeler.mapObject("serviceTask");
+//        obj2.move(300,420);
+//        obj2 = Modeler.mapObject("scriptTask");
+//        obj2.move(400,420);
+//        obj2 = Modeler.mapObject("ruleTask");
+//        obj2.move(500,420);
+//        obj2 = Modeler.mapObject("sendTask");
+//        obj2.move(600,420);
+//        obj2 = Modeler.mapObject("receiveTask");
+//        obj2.move(700,420);
+//        obj2 = Modeler.mapObject("manualTask");
+//        obj2.move(800,420);
+//        obj2 = Modeler.mapObject("callTask");
+//        obj2.move(900,420);
+//        obj2 = Modeler.mapObject("callmanualTask");
+//        obj2.move(1000,420);
+//        obj2 = Modeler.mapObject("callruleTask");
+//        obj2.move(1100,420);
+//        obj2 = Modeler.mapObject("callscriptTask");
+//        obj2.move(1200,420);
+//        obj2 = Modeler.mapObject("calluserTask");
+//        obj2.move(1300,420);
+//        
+//        obj2 = Modeler.mapObject("pool");
+//        obj2.move(1300,420);
+//        
+//        obj = Modeler.mapObject("pool");
+//        //obj.moveFirst=function(){};
+//        //obj.mouseup=function(evt){alert("up")};
+//        obj.move(350,580);
+//        
+//        obj2 = Modeler.mapObject("manualTask");
+//        obj2.setText("Tarea Contenida");
+//        obj2.resize(100,60);
+//        obj2.move(400,600);        
+//        obj2.setParent(obj);
 /*        
         obj2 = Modeler.mapObject("conditionalFlow");
         obj2.setPoint(0,10,10);
@@ -3129,25 +3248,25 @@
         
 */        
         
-        obj1 = Modeler.mapObject("userTask");
-        obj1.move(200,700);
-        
-        obj2 = Modeler.mapObject("userTask");
-        obj2.move(400,800);        
-        
-        con1 = Modeler.mapObject("sequenceFlow");
-        obj1.addOutConnection(con1);
-        obj2.addInConnection(con1);
-        
-        obj1 = Modeler.mapObject("userTask");
-        obj1.move(400,700);        
-        
-        obj2 = Modeler.mapObject("userTask");
-        obj2.move(600,800);        
-        
-        con1 = Modeler.mapObject("defaultFlow");
-        obj1.addOutConnection(con1);
-        obj2.addInConnection(con1);
-        Modeler.getProcessJSON();   
+//        obj1 = Modeler.mapObject("userTask");
+//        obj1.move(200,700);
+//        
+//        obj2 = Modeler.mapObject("userTask");
+//        obj2.move(400,800);        
+//        
+//        con1 = Modeler.mapObject("sequenceFlow");
+//        obj1.addOutConnection(con1);
+//        obj2.addInConnection(con1);
+//        
+//        obj1 = Modeler.mapObject("userTask");
+//        obj1.move(400,700);        
+//        
+//        obj2 = Modeler.mapObject("userTask");
+//        obj2.move(600,800);        
+//        
+//        con1 = Modeler.mapObject("defaultFlow");
+//        obj1.addOutConnection(con1);
+//        obj2.addInConnection(con1);
+//        Modeler.getProcessJSON();   
     }
 
