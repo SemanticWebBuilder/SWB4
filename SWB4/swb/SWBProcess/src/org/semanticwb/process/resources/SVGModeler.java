@@ -36,13 +36,13 @@ import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.GenericObject;
 import org.semanticwb.model.Sortable;
-import org.semanticwb.process.model.Process;
 import org.semanticwb.platform.SemanticOntology;
 import org.semanticwb.portal.api.GenericResource;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.api.SWBResourceURL;
 import org.semanticwb.process.model.ActivityConfable;
+import org.semanticwb.process.model.Process;
 import org.semanticwb.process.model.Collectionable;
 import org.semanticwb.process.model.ConnectionObject;
 import org.semanticwb.process.model.Containerable;
@@ -60,6 +60,7 @@ public class SVGModeler extends GenericResource {
     private static Logger log = SWBUtils.getLogger(SVGModeler.class);
     public static final String MODE_MODELER = "modeler";
     public static final String MODE_GATEWAY = "gateway";
+    public static final String MODE_EXPORT = "export";
     public static final String ACT_GETPROCESSJSON = "getProcessJSON";
     private static final String PROP_CLASS = "class";
     private static final String PROP_TITLE = "title";
@@ -95,6 +96,8 @@ public class SVGModeler extends GenericResource {
             doModeler(request, response, paramRequest);
         } else if (MODE_GATEWAY.equals(mode)) {
             doGateway(request, response, paramRequest);
+        }  else if (MODE_EXPORT.equals(mode)) {
+            doExport(request, response, paramRequest);
         } else {
             super.processRequest(request, response, paramRequest);
         }
@@ -122,6 +125,7 @@ public class SVGModeler extends GenericResource {
             log.error(ex);
         }
     }
+    
     public void doGateway(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         OutputStream outs = response.getOutputStream();
         String action = paramRequest.getAction();
@@ -199,6 +203,39 @@ public class SVGModeler extends GenericResource {
 //            outs.write(ret.getBytes());
 //            //System.out.println("out:"+new String(ret.getBytes()));
 //        }
+    }
+    
+    public void doExport(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        OutputStream outs = response.getOutputStream();
+        String format = request.getParameter("output_format");
+        String data = request.getParameter("data");
+        
+        Process p = (Process) SWBPlatform.getSemanticMgr().getOntology().getGenericObject(request.getParameter("suri"));
+        
+        if (p != null) {
+            response.setHeader("Cache-Control", "no-cache");
+            response.setHeader("Pragma", "no-cache");
+            response.setHeader("Content-Disposition", "attachment; filename=\"" + p.getTitle() + "."+format+"\";");
+            
+            if ("svg".equalsIgnoreCase(format)) {
+                response.setContentType("image/svg+xml");
+                outs.write(data.getBytes("UTF-8"));
+            } //else if ("png".equalsIgnoreCase(format)) {
+//                response.setContentType("image/png");
+//                PNGTranscoder t = new PNGTranscoder();
+//                
+//                TranscoderInput ti = new TranscoderInput(new ByteArrayInputStream(data.getBytes("UTF-8")));
+//                TranscoderOutput to = new TranscoderOutput(outs);
+//                try {
+//                    t.transcode(ti, to);
+//                } catch (TranscoderException ex) {
+//                    log.error(ex);
+//                }
+//            }
+            
+            outs.flush();
+            outs.close();
+        }
     }
     
     /** Utilizado para generar un JSON del modelo, para la comunicacion con el applet
