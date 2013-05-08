@@ -2655,6 +2655,7 @@
                     }
                     obj.resize(tmp.w, tmp.h);
                     obj.move(tmp.x, tmp.y);
+                    obj.snap2Grid();
                 }
             }
             
@@ -2667,10 +2668,11 @@
                     if (tmp.title != null) {
                         obj.setText(tmp.title);
                     }
-                    obj.move(tmp.x, tmp.y);
                     if (obj.resizeable != null && obj.resizeable) {
                         obj.resize(tmp.w, tmp.h);
                     }
+                    obj.move(tmp.x, tmp.y);
+                    obj.snap2Grid();
                 }
             }
             
