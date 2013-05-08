@@ -56,6 +56,8 @@
     <rdfs:subClassOf>
       <owl:Class rdf:ID="StateMachinable"/>
     </rdfs:subClassOf>
+    <swb:classCodePackage rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >org.semanticwb.bsc.accessory</swb:classCodePackage>
     <swb:displayObject>
       <swbxf:DisplayObject rdf:ID="do_Period">
         <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
