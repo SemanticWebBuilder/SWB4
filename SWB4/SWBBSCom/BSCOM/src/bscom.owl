@@ -30,6 +30,7 @@
     >true</swb:autogenId>
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Sortable"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Iconable"/>
     <rdfs:subClassOf>
       <swb:Class rdf:ID="BSCAccessory">
         <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
@@ -117,7 +118,6 @@
     <rdfs:subClassOf>
       <owl:Class rdf:ID="Blockable"/>
     </rdfs:subClassOf>
-    <rdfs:subClassOf rdf:resource="#StateMachinable"/>
     <swb:classCodePackage rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >org.semanticwb.bsc.accessory</swb:classCodePackage>
     <swb:displayObject>
@@ -415,8 +415,8 @@
   <owl:ObjectProperty rdf:ID="next">
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_Next">
+        <rdfs:label xml:lang="es">Siguiente</rdfs:label>
         <rdfs:label xml:lang="en">Next</rdfs:label>
-        <rdfs:label xml:lang="es">Período siguiente</rdfs:label>
         <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#selectOneModelWithBlank"/>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
@@ -452,8 +452,8 @@
   <owl:ObjectProperty rdf:ID="previus">
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_Previus">
+        <rdfs:label xml:lang="es">Anterior</rdfs:label>
         <rdfs:label xml:lang="en">Previus</rdfs:label>
-        <rdfs:label xml:lang="es">Período anterior</rdfs:label>
         <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#selectOneModelWithBlank"/>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
@@ -529,6 +529,19 @@
       </swbxf:DisplayProperty>
     </swb:displayProperty>
     <rdfs:domain rdf:resource="#Period"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="icon">
+    <swb:defaultValue rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >unknown.png</swb:defaultValue>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_icon">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#fe_DojoFileUpload"/>
+        <rdfs:label xml:lang="en">Icon</rdfs:label>
+        <rdfs:label xml:lang="es">Ícono</rdfs:label>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#State"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="prefix">
     <rdfs:domain rdf:resource="#Recognizable"/>
