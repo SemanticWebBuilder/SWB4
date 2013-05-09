@@ -59,35 +59,35 @@
   </owl:Class>
   <owl:Class rdf:ID="Hitable"/>
   <owl:ObjectProperty rdf:ID="license">
+    <rdfs:range rdf:resource="http://www.semanticwebbuilder.org/lodpCodeGen#LicenseType"/>
     <rdfs:label xml:lang="en">License</rdfs:label>
-    <rdfs:range rdf:resource="#LicenseType"/>
     <rdfs:domain rdf:resource="#Dataset"/>
     <rdfs:label xml:lang="es">Licencia</rdfs:label>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="parentTopic">
+    <rdfs:range rdf:resource="http://www.semanticwebbuilder.org/lodpCodeGen#Topic"/>
     <rdfs:domain rdf:resource="#Topic"/>
-    <rdfs:range rdf:resource="#Topic"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="dataset">
+    <rdfs:range rdf:resource="http://www.semanticwebbuilder.org/lodpCodeGen#Dataset"/>
+    <rdfs:domain rdf:resource="#DatasetLog"/>
     <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >Dataset</rdfs:label>
-    <rdfs:domain rdf:resource="#DatasetLog"/>
-    <rdfs:range rdf:resource="#Dataset"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="nextVersion">
     <rdfs:range rdf:resource="http://www.semanticwebbuilder.org/lodpCodeGen#DatasetVersion"/>
     <rdfs:domain rdf:resource="#DatasetVersion"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="sector">
+    <rdfs:range rdf:resource="http://www.semanticwebbuilder.org/lodpCodeGen#Sector"/>
     <owl:inverseOf>
       <owl:ObjectProperty rdf:ID="hasInstitution"/>
     </owl:inverseOf>
-    <rdfs:range rdf:resource="#Sector"/>
     <rdfs:domain rdf:resource="#Institution"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="verPublisher">
+    <rdfs:range rdf:resource="http://www.semanticwebbuilder.org/lodpCodeGen#Publisher"/>
     <rdfs:domain rdf:resource="#DatasetVersion"/>
-    <rdfs:range rdf:resource="#Publisher"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="hasComment">
     <rdfs:range rdf:resource="http://www.semanticwebbuilder.org/lodpCodeGen#Comment"/>
@@ -108,7 +108,7 @@
     <rdfs:domain rdf:resource="#Application"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="hasTag">
-    <rdfs:range rdf:resource="#Tag"/>
+    <rdfs:range rdf:resource="http://www.semanticwebbuilder.org/lodpCodeGen#Tag"/>
     <rdfs:label xml:lang="es">Etiquetas</rdfs:label>
     <rdfs:domain rdf:resource="#Dataset"/>
   </owl:ObjectProperty>
@@ -121,7 +121,6 @@
   <owl:ObjectProperty rdf:ID="hasPublisher"/>
   <owl:ObjectProperty rdf:ID="hasPubDataset"/>
   <owl:ObjectProperty rdf:ID="logUser">
-    <rdfs:range rdf:resource="http://xmlns.com/foaf/0.1/Person"/>
     <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >Persona que ejecutó la acción sobre el dataset</rdfs:comment>
     <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
@@ -129,12 +128,12 @@
     <rdfs:domain rdf:resource="#DatasetLog"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="hasTopic">
+    <rdfs:range rdf:resource="http://www.semanticwebbuilder.org/lodpCodeGen#Topic"/>
     <rdfs:domain rdf:resource="#Dataset"/>
-    <rdfs:range rdf:resource="#Topic"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="institution">
+    <rdfs:range rdf:resource="http://www.semanticwebbuilder.org/lodpCodeGen#Institution"/>
     <rdfs:domain rdf:resource="#Dataset"/>
-    <rdfs:range rdf:resource="#Institution"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="datasetVersion">
     <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
@@ -144,8 +143,8 @@
     <rdfs:range rdf:resource="#DatasetVersion"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="actualVersion">
-    <rdfs:domain rdf:resource="#Versionable"/>
-    <rdfs:range rdf:resource="#DatasetVersion"/>
+    <rdfs:domain rdf:resource="http://www.semanticwebbuilder.org/lodpCodeGen#Versionable"/>
+    <rdfs:range rdf:resource="http://www.semanticwebbuilder.org/lodpCodeGen#DatasetVersion"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="distributionFormat">
     <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
@@ -163,10 +162,10 @@
     <rdfs:domain rdf:resource="#DatasetVersion"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="publisher">
+    <rdfs:range rdf:resource="http://www.semanticwebbuilder.org/lodpCodeGen#Publisher"/>
+    <rdfs:domain rdf:resource="#Dataset"/>
     <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >Enlace técnico, es el que publica(carga) el dataset</rdfs:comment>
-    <rdfs:domain rdf:resource="#Dataset"/>
-    <rdfs:range rdf:resource="#Publisher"/>
     <owl:inverseOf rdf:resource="#hasPubDataset"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="pubInstitution">
@@ -175,8 +174,8 @@
     <rdfs:range rdf:resource="#Institution"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="lastVersion">
+    <rdfs:range rdf:resource="http://www.semanticwebbuilder.org/lodpCodeGen#DatasetVersion"/>
     <rdfs:domain rdf:resource="#Versionable"/>
-    <rdfs:range rdf:resource="#DatasetVersion"/>
   </owl:ObjectProperty>
   <owl:DatatypeProperty rdf:ID="institutionDescription">
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
