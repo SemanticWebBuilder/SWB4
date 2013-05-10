@@ -23,11 +23,11 @@
 
     if (request.getParameter("alertmsg") != null) {
         String strMsg = request.getParameter("alertmsg");
-        strMsg = strMsg.replace("<br>", "\\n\\r");
+//        strMsg = strMsg.replace("<br>", "\\n\\r");
 %>
-<script type="text/javascript">
-    alert('<%=strMsg%>');
-</script>
+<div >
+    <%=strMsg%>
+</div>
 <%
     }
 
@@ -105,10 +105,10 @@
                 if(canAddEmail('<%=repositoryId%>',strEmail)){
                     valid=true;
                 }else{
-                    email.displayMessage( "<%=paramRequest.getLocaleString("lblEmailDupl")%>" );
+                    email.displayMessage( "Correo duplicado" );
                 }
             }else{
-                email.displayMessage( "<%=paramRequest.getLocaleString("lblEmailFault")%>" );
+                email.displayMessage( "Correo inválido" );
             }
         }
         return valid;
@@ -189,7 +189,7 @@
             </div>
             <div>
                 <p class="icv-3col">
-                    <a href="#" onclick="openSplash();return false;">Términos y condiciones</a>
+                    <a href="#" _onclick="openSplash();return false;">Términos y condiciones</a>
                 </p>
                 <p>
                     <label for="acept"><b>*</b>Acepto los términos y condiciones:</label>
