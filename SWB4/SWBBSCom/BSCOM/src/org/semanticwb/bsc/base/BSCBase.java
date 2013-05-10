@@ -1,10 +1,13 @@
 package org.semanticwb.bsc.base;
 
 
-public abstract class BSCBase extends org.semanticwb.model.WebSite implements org.semanticwb.model.OntologyDepable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Indexable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Trashable,org.semanticwb.model.Filterable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Activeable,org.semanticwb.model.Countryable,org.semanticwb.model.Localeable,org.semanticwb.model.Undeleteable,org.semanticwb.model.Traceable
+public abstract class BSCBase extends org.semanticwb.model.WebSite implements org.semanticwb.model.Activeable,org.semanticwb.model.Undeleteable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Filterable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Trashable,org.semanticwb.model.Localeable,org.semanticwb.model.Indexable,org.semanticwb.model.Traceable,org.semanticwb.model.FilterableClass,org.semanticwb.model.OntologyDepable,org.semanticwb.model.Countryable
 {
     public static final org.semanticwb.platform.SemanticClass bsc_BSC=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#BSC");
     public static final org.semanticwb.platform.SemanticProperty bsc_parent=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#parent");
+    public static final org.semanticwb.platform.SemanticProperty bsc_logo=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#logo");
+    public static final org.semanticwb.platform.SemanticProperty bsc_vision=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#vision");
+    public static final org.semanticwb.platform.SemanticProperty bsc_mission=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#mission");
     public static final org.semanticwb.platform.SemanticClass bsc_Measure=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#Measure");
     public static final org.semanticwb.platform.SemanticClass bsc_Objective=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#Objective");
     public static final org.semanticwb.platform.SemanticClass bsc_Indicator=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#Indicator");
@@ -429,6 +432,60 @@ public abstract class BSCBase extends org.semanticwb.model.WebSite implements or
              ret=(org.semanticwb.bsc.BSC)obj.createGenericInstance();
          }
          return ret;
+    }
+
+/**
+* Gets the Logo property
+* @return String with the Logo
+*/
+    public String getLogo()
+    {
+        return getSemanticObject().getProperty(bsc_logo);
+    }
+
+/**
+* Sets the Logo property
+* @param value long with the Logo
+*/
+    public void setLogo(String value)
+    {
+        getSemanticObject().setProperty(bsc_logo, value);
+    }
+
+/**
+* Gets the Vision property
+* @return String with the Vision
+*/
+    public String getVision()
+    {
+        return getSemanticObject().getProperty(bsc_vision);
+    }
+
+/**
+* Sets the Vision property
+* @param value long with the Vision
+*/
+    public void setVision(String value)
+    {
+        getSemanticObject().setProperty(bsc_vision, value);
+    }
+
+/**
+* Gets the Mission property
+* @return String with the Mission
+*/
+    public String getMission()
+    {
+        return getSemanticObject().getProperty(bsc_mission);
+    }
+
+/**
+* Sets the Mission property
+* @param value long with the Mission
+*/
+    public void setMission(String value)
+    {
+        getSemanticObject().setProperty(bsc_mission, value);
     }
 
     public org.semanticwb.bsc.element.Measure getMeasure(String id)
