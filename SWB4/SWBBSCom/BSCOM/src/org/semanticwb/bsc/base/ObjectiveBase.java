@@ -1,8 +1,10 @@
 package org.semanticwb.bsc.base;
 
 
-public abstract class ObjectiveBase extends org.semanticwb.model.WebPage implements org.semanticwb.model.CalendarRefable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Indexable,org.semanticwb.model.FilterableNode,org.semanticwb.model.TemplateRefable,org.semanticwb.model.Hiddenable,org.semanticwb.model.PFlowRefable,org.semanticwb.model.RuleRefable,org.semanticwb.bsc.Measurable,org.semanticwb.bsc.Recognizable,org.semanticwb.model.Referensable,org.semanticwb.model.Traceable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.Searchable,org.semanticwb.model.MetaTagable,org.semanticwb.model.Tagable,org.semanticwb.model.Rankable,org.semanticwb.model.Trashable,org.semanticwb.model.Filterable,org.semanticwb.model.RoleRefable,org.semanticwb.model.Expirable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Activeable,org.semanticwb.model.Countryable,org.semanticwb.model.Localeable,org.semanticwb.model.Viewable,org.semanticwb.model.Resourceable,org.semanticwb.model.Undeleteable
+public abstract class ObjectiveBase extends org.semanticwb.model.WebPage implements org.semanticwb.model.Activeable,org.semanticwb.model.Expirable,org.semanticwb.model.Filterable,org.semanticwb.model.Hiddenable,org.semanticwb.model.Rankable,org.semanticwb.model.Resourceable,org.semanticwb.model.Searchable,org.semanticwb.model.Tagable,org.semanticwb.model.RuleRefable,org.semanticwb.bsc.Measurable,org.semanticwb.model.MetaTagable,org.semanticwb.model.Traceable,org.semanticwb.model.Viewable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Countryable,org.semanticwb.model.Undeleteable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.PFlowRefable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Trashable,org.semanticwb.model.Referensable,org.semanticwb.model.Localeable,org.semanticwb.model.RoleRefable,org.semanticwb.model.TemplateRefable,org.semanticwb.model.Indexable,org.semanticwb.model.CalendarRefable
 {
+    public static final org.semanticwb.platform.SemanticClass bsc_Initiative=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#Initiative");
+    public static final org.semanticwb.platform.SemanticProperty bsc_hasInitiative=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#hasInitiative");
     public static final org.semanticwb.platform.SemanticClass bsc_Objective=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#Objective");
    /**
    * The semantic class that represents the currentObject
@@ -168,6 +170,29 @@ public abstract class ObjectiveBase extends org.semanticwb.model.WebPage impleme
         public static java.util.Iterator<org.semanticwb.bsc.Objective> listObjectiveByChild(org.semanticwb.model.WebPage value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.bsc.Objective> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasWebPageChild,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.bsc.Objective with a determined Initiative
+       * @param value Initiative of the type org.semanticwb.bsc.element.Initiative
+       * @param model Model of the org.semanticwb.bsc.Objective
+       * @return Iterator with all the org.semanticwb.bsc.Objective
+       */
+
+        public static java.util.Iterator<org.semanticwb.bsc.Objective> listObjectiveByInitiative(org.semanticwb.bsc.element.Initiative value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.Objective> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(bsc_hasInitiative, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.bsc.Objective with a determined Initiative
+       * @param value Initiative of the type org.semanticwb.bsc.element.Initiative
+       * @return Iterator with all the org.semanticwb.bsc.Objective
+       */
+
+        public static java.util.Iterator<org.semanticwb.bsc.Objective> listObjectiveByInitiative(org.semanticwb.bsc.element.Initiative value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.Objective> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(bsc_hasInitiative,value.getSemanticObject(),sclass));
             return it;
         }
        /**
@@ -577,6 +602,71 @@ public abstract class ObjectiveBase extends org.semanticwb.model.WebPage impleme
         super(base);
     }
    /**
+   * Gets all the org.semanticwb.bsc.element.Initiative
+   * @return A GenericIterator with all the org.semanticwb.bsc.element.Initiative
+   */
+
+    public org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Initiative> listInitiatives()
+    {
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Initiative>(getSemanticObject().listObjectProperties(bsc_hasInitiative));
+    }
+
+   /**
+   * Gets true if has a Initiative
+   * @param value org.semanticwb.bsc.element.Initiative to verify
+   * @return true if the org.semanticwb.bsc.element.Initiative exists, false otherwise
+   */
+    public boolean hasInitiative(org.semanticwb.bsc.element.Initiative value)
+    {
+        boolean ret=false;
+        if(value!=null)
+        {
+           ret=getSemanticObject().hasObjectProperty(bsc_hasInitiative,value.getSemanticObject());
+        }
+        return ret;
+    }
+   /**
+   * Adds a Initiative
+   * @param value org.semanticwb.bsc.element.Initiative to add
+   */
+
+    public void addInitiative(org.semanticwb.bsc.element.Initiative value)
+    {
+        getSemanticObject().addObjectProperty(bsc_hasInitiative, value.getSemanticObject());
+    }
+   /**
+   * Removes all the Initiative
+   */
+
+    public void removeAllInitiative()
+    {
+        getSemanticObject().removeProperty(bsc_hasInitiative);
+    }
+   /**
+   * Removes a Initiative
+   * @param value org.semanticwb.bsc.element.Initiative to remove
+   */
+
+    public void removeInitiative(org.semanticwb.bsc.element.Initiative value)
+    {
+        getSemanticObject().removeObjectProperty(bsc_hasInitiative,value.getSemanticObject());
+    }
+
+   /**
+   * Gets the Initiative
+   * @return a org.semanticwb.bsc.element.Initiative
+   */
+    public org.semanticwb.bsc.element.Initiative getInitiative()
+    {
+         org.semanticwb.bsc.element.Initiative ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(bsc_hasInitiative);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.bsc.element.Initiative)obj.createGenericInstance();
+         }
+         return ret;
+    }
+   /**
    * Gets all the org.semanticwb.bsc.element.Measure
    * @return A GenericIterator with all the org.semanticwb.bsc.element.Measure
    */
@@ -640,24 +730,6 @@ public abstract class ObjectiveBase extends org.semanticwb.model.WebPage impleme
              ret=(org.semanticwb.bsc.element.Measure)obj.createGenericInstance();
          }
          return ret;
-    }
-
-/**
-* Gets the Prefix property
-* @return String with the Prefix
-*/
-    public String getPrefix()
-    {
-        return getSemanticObject().getProperty(bsc_prefix);
-    }
-
-/**
-* Sets the Prefix property
-* @param value long with the Prefix
-*/
-    public void setPrefix(String value)
-    {
-        getSemanticObject().setProperty(bsc_prefix, value);
     }
 
    /**

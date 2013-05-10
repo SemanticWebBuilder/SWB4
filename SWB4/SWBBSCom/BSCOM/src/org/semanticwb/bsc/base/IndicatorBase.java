@@ -1,7 +1,7 @@
 package org.semanticwb.bsc.base;
 
 
-public abstract class IndicatorBase extends org.semanticwb.model.WebPage implements org.semanticwb.model.CalendarRefable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Indexable,org.semanticwb.model.FilterableNode,org.semanticwb.model.TemplateRefable,org.semanticwb.model.Hiddenable,org.semanticwb.model.PFlowRefable,org.semanticwb.model.RuleRefable,org.semanticwb.bsc.Measurable,org.semanticwb.bsc.Recognizable,org.semanticwb.bsc.Committable,org.semanticwb.model.Referensable,org.semanticwb.model.Traceable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.Searchable,org.semanticwb.model.MetaTagable,org.semanticwb.model.Tagable,org.semanticwb.model.Rankable,org.semanticwb.model.Trashable,org.semanticwb.model.Filterable,org.semanticwb.model.RoleRefable,org.semanticwb.model.Expirable,org.semanticwb.model.Activeable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Countryable,org.semanticwb.model.Localeable,org.semanticwb.model.Viewable,org.semanticwb.model.Resourceable,org.semanticwb.model.Undeleteable
+public abstract class IndicatorBase extends org.semanticwb.model.WebPage implements org.semanticwb.model.Activeable,org.semanticwb.model.Expirable,org.semanticwb.model.Filterable,org.semanticwb.model.Hiddenable,org.semanticwb.model.Rankable,org.semanticwb.model.Resourceable,org.semanticwb.model.Searchable,org.semanticwb.model.Tagable,org.semanticwb.model.RuleRefable,org.semanticwb.bsc.Measurable,org.semanticwb.model.MetaTagable,org.semanticwb.model.Traceable,org.semanticwb.model.Viewable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Countryable,org.semanticwb.model.Undeleteable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.PFlowRefable,org.semanticwb.bsc.Committable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Trashable,org.semanticwb.model.Referensable,org.semanticwb.model.Localeable,org.semanticwb.model.RoleRefable,org.semanticwb.model.TemplateRefable,org.semanticwb.model.Indexable,org.semanticwb.model.CalendarRefable
 {
     public static final org.semanticwb.platform.SemanticClass bsc_Indicator=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#Indicator");
    /**
@@ -640,24 +640,6 @@ public abstract class IndicatorBase extends org.semanticwb.model.WebPage impleme
              ret=(org.semanticwb.bsc.element.Measure)obj.createGenericInstance();
          }
          return ret;
-    }
-
-/**
-* Gets the Prefix property
-* @return String with the Prefix
-*/
-    public String getPrefix()
-    {
-        return getSemanticObject().getProperty(bsc_prefix);
-    }
-
-/**
-* Sets the Prefix property
-* @param value long with the Prefix
-*/
-    public void setPrefix(String value)
-    {
-        getSemanticObject().setProperty(bsc_prefix, value);
     }
 
 /**
