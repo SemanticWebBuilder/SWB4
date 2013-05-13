@@ -37,16 +37,18 @@ public class VirtuosoSPARQLExample1 {
 
 /*			STEP 1			*/
 		VirtGraph set = new VirtGraph ("jdbc:virtuoso://swb4d.semanticbuilder.com:1111", "dba", "dba");
-
+                VirtModel model=new VirtModel(set);
 /*			STEP 2			*/
 
 
 /*			STEP 3			*/
 /*		Select all data in virtuoso	*/
-		Query sparql = QueryFactory.create("SELECT * WHERE { GRAPH ?graph { ?s ?p ?o } } limit 100");
+                String query="SELECT * WHERE { GRAPH ?graph { ?s ?p ?o } } limit 100";
+		Query sparql = QueryFactory.create(query);
 
 /*			STEP 4			*/
-		VirtuosoQueryExecution vqe = VirtuosoQueryExecutionFactory.create (sparql, set);
+		//VirtuosoQueryExecution vqe = VirtuosoQueryExecutionFactory.create (query, set);
+		QueryExecution vqe = QueryExecutionFactory.create(sparql, model);
 
 		ResultSet results = vqe.execSelect();
 		while (results.hasNext()) {
