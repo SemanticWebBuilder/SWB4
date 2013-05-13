@@ -235,6 +235,7 @@ public class SemanticObject
         if(m_res!=null)
         {
             initInverse(m_model.getRDFModel().listStatements(null, null, m_res));
+            //TODO: Revisar inversas de otros modelos
         }
     }
     

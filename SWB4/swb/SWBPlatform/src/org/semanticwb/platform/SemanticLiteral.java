@@ -187,6 +187,9 @@ public class SemanticLiteral
         }else if(m_obj instanceof Boolean)
         {
             ret=(Boolean)m_obj;
+        }else if(m_obj instanceof Integer)
+        {
+            ret=((Integer)m_obj)==1;
         }
         if(ret==null)ret=false;
         return ret;
