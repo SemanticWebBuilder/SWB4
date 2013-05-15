@@ -1,6 +1,6 @@
 <%-- 
     Document   : view
-    Created on : 6/05/2013, 08:26:08 PM
+    Created on : 14/05/2013, 07:26:08 PM
     Author     : rene.jara
 --%>
 <%@page import="org.semanticwb.*"%>
@@ -16,26 +16,6 @@
     String context = SWBPortal.getContextPath();
     String url = paramRequest.getActionUrl().setAction(paramRequest.Action_ADD).toString();
     String repositoryId = wpage.getWebSite().getUserRepository().getId();
-    String firstName = "";
-    if (request.getParameter("firstName") != null) {
-        firstName = request.getParameter("firstName");
-    }
-    String lastName = "";
-    if (request.getParameter("lastName") != null) {
-        lastName = request.getParameter("lastName");
-    }
-    String secondLastName = "";
-    if (request.getParameter("secondLastName") != null) {
-        secondLastName = request.getParameter("secondLastName");
-    }
-    String email = "";
-    if (request.getParameter("email") != null) {
-        email = request.getParameter("email");
-    }
-    String login = "";
-    if (request.getParameter("login") != null) {
-        login = request.getParameter("login");
-    }
 
     if (request.getParameter("msg") != null) {
         String strMsg = request.getParameter("msg");
@@ -115,42 +95,10 @@
         var strEmail = email.getValue();
         if(strEmail!=""){
             if(isValidEmail(strEmail)){
-                if(canAddEmail('<%=repositoryId%>',strEmail)){
-                    valid=true;
-                }else{
-                    email.displayMessage( "Correo duplicado" );
-                }
+                valid=true;
             }else{
                 email.displayMessage( "Correo inválido" );
             }
-        }
-        return valid;
-    }
-    function isValidLogin(){
-        var valid=false;
-        var login = dijit.byId( "login" );
-        var filter = /^[a-zA-Z0-9.@]+$/;
-        var strLogin = login.getValue();
-        if(strLogin!=""){
-            if(filter.test(strLogin)){
-                if(canAddLogin('<%=repositoryId%>',strLogin)){
-                    valid=true;
-                }else{
-                    login.displayMessage( "Nombre de usuario duplicado" );
-                }
-            }else{
-                login.displayMessage( "Nombre de usuario inválido" );
-            }
-        }
-        return valid;
-    }
-
-    function isValidPass() {
-        var valid = false;
-        var passwd = dijit.byId("passwd").getValue();
-        var login = dijit.byId( "login" ).getValue();
-        if(!isEmpty(passwd) && passwd!=login){
-            valid = true;
         }
         return valid;
     }
@@ -160,32 +108,18 @@
         <form id="form1ru" dojoType="dijit.form.Form" class="swbform" action="<%=url%>" method="post">
             <div>
                 <p>
-                    <label for="lastName"><b>*</b>Primer apellido</label>
-                    <input type="text" name="lastName" id="lastName" dojoType="dijit.form.ValidationTextBox" value="<%=lastName%>" required="true" promptMessage="Ingresa tu primer apellido" invalidMessage="El apellido es requerido" trim="true" regExp="[a-zA-Z\u00C0-\u00FF' ]+" />
-                </p>
-                <p>
-                    <label for="secondLastName">Segundo apellido</label>
-                    <input type="text" name="secondLastName" id="secondLastName" dojoType="dijit.form.ValidationTextBox" value="<%=secondLastName%>" required="false" promptMessage="Ingresa tu segundo apellido" trim="true" regExp="[a-zA-Z\u00C0-\u00FF' ]+"/>
-                </p>
-            </div>
-            <div>
-                <p>
                     <label for="firstName"><b>*</b>Nombre</label>
-                    <input type="text" name="firstName" id="firstName" dojoType="dijit.form.ValidationTextBox" value="<%=firstName%>"  required="true" promptMessage="Ingresa tu nombre(s)" invalidMessage="El nombre es requerido" trim="true" regExp="[a-zA-Z\u00C0-\u00FF' ]+"/>
+                    <input type="text" name="firstName" id="firstName" dojoType="dijit.form.ValidationTextBox" value=""  required="true" promptMessage="Ingresa tu nombre(s)" invalidMessage="El nombre es requerido" trim="true" regExp="[a-zA-Z\u00C0-\u00FF' ]+"/>
                 </p>
                 <p>
                     <label for="email"><b>*</b>Correo electronico de contacto</label>
-                    <input type="text" name="email" id="email2" dojoType="dijit.form.ValidationTextBox" value="<%=email%>" maxlength="60" required="true" promptMessage="Ingresa tu correo electrónico válido de contacto" invalidMessage="El correo electrónico válido es requerido" isValid="return isValidThisEmail()" trim="true"/>
+                    <input type="text" name="email" id="email2" dojoType="dijit.form.ValidationTextBox" value="" maxlength="60" required="true" promptMessage="Ingresa tu correo electrónico válido de contacto" invalidMessage="El correo electrónico válido es requerido" isValid="return isValidThisEmail()" trim="true"/>
                 </p>
             </div>
             <div>
                 <p>
-                    <label for="login"><b>*</b>Usuario</label>
-                    <input type="text" name="login" id="login" dojoType="dijit.form.ValidationTextBox" value="<%=login%>" maxlength="18" required="true" promptMessage="Ingresa un nombre de usuario" invalidMessage="El nombre de usuario es requerido"  isValid="return isValidLogin()" trim="true" />
-                </p>
-                <p>
-                    <label for="passwd"><b>*</b>Contraseña</label>
-                    <input type="password" name="passwd" id="passwd" dojoType="dijit.form.ValidationTextBox" value="" maxlength="12" required="true" promptMessage="Ingresa un contraseña" invalidMessage="La contraseña es requerida" isValid="return isValidPass();" trim="true" />
+                    <label for="comment"><b>*</b>Comentario</label>
+                    <textarea id="comment" name="comment" data-dojo-type="dijit.form.Textarea"  required="true" promptMessage="Ingresa tu comentario" invalidMessage="Tu comentario tiene coracteres inválidos" trim="true" regExp="[a-zA-Z\u00C0-\u00FF'.,:;?!¿¡ ]+"></textarea>
                 </p>
             </div>
             <div>
@@ -204,7 +138,7 @@
                 </p>
                 <p>
                     <label for="acept"><b>*</b>Acepto los términos y condiciones:</label>
-                    <input type="checkbox" name="acept" id="acept" maxlength="8" value="true" dojoType="dijit.form.CheckBox" required="true" promptMessage="Debesa aceptar los terminos y condiciones de uso" invalidMessage="Debesa aceptar los terminos y condiciones de uso" isValid="return confirm('this.checkbox.value==true')"/>
+                    <input type="checkbox" name="acept" id="acept" maxlength="8" value="true" dojoType="dijit.form.CheckBox" required="true" promptMessage="promp" invalidMessage="invalid" isValid="return confirm('this.checkbox.value==true')"/>
                 </p>
             </div>
             <div class="centro">
