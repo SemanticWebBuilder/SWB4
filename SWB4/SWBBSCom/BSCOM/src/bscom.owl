@@ -97,19 +97,14 @@
           <owl:Restriction>
             <owl:allValuesFrom>
               <swb:Class rdf:ID="Indicator">
-                <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-                >true</swb:autogenId>
+                <rdfs:subClassOf>
+                  <owl:Class rdf:ID="Updateable"/>
+                </rdfs:subClassOf>
                 <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#WebPage"/>
                 <swb:classCodePackage rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
                 >org.semanticwb.bsc</swb:classCodePackage>
-                <rdfs:subClassOf>
-                  <swb:Interface rdf:ID="Committable">
-                    <swb:classCodePackage rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-                    >org.semanticwb.bsc</swb:classCodePackage>
-                    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBInterface"/>
-                    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-                  </swb:Interface>
-                </rdfs:subClassOf>
+                <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+                >true</swb:autogenId>
                 <swb:displayObject>
                   <swbxf:DisplayObject rdf:ID="do_Indicator">
                     <rdfs:label xml:lang="en">Indicator</rdfs:label>
@@ -200,9 +195,16 @@
         <swb:classCodePackage rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
         >org.semanticwb.bsc.element</swb:classCodePackage>
         <rdfs:subClassOf>
-          <owl:Class rdf:ID="Updateable"/>
+          <owl:Class rdf:about="#Updateable"/>
         </rdfs:subClassOf>
-        <rdfs:subClassOf rdf:resource="#Committable"/>
+        <rdfs:subClassOf>
+          <swb:Interface rdf:ID="Committable">
+            <swb:classCodePackage rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >org.semanticwb.bsc</swb:classCodePackage>
+            <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBInterface"/>
+            <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+          </swb:Interface>
+        </rdfs:subClassOf>
         <rdfs:subClassOf rdf:resource="#BSCElement"/>
         <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
         >true</swb:autogenId>
@@ -406,10 +408,6 @@
     <swb:hasClass rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#MenuItem"/>
     <swb:hasHerarquicalNode rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_Countries"/>
   </owl:Class>
-  <owl:Class rdf:ID="Attachment">
-    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBInterface"/>
-    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Interface"/>
-  </owl:Class>
   <owl:Class rdf:about="#Updateable">
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBInterface"/>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Interface"/>
@@ -427,6 +425,69 @@
     >false</swb:removeDependency>
     <rdfs:range rdf:resource="#BSC"/>
   </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasTheme">
+    <rdfs:range rdf:resource="#Theme"/>
+    <swb:herarquicalRelation rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:herarquicalRelation>
+    <rdfs:domain rdf:resource="#Perspective"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasObjective">
+    <rdfs:range rdf:resource="#Objective"/>
+    <swb:herarquicalRelation rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:herarquicalRelation>
+    <rdfs:domain rdf:resource="#Theme"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasInitiative">
+    <rdfs:domain rdf:resource="#Objective"/>
+    <rdfs:range rdf:resource="#Initiative"/>
+    <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >false</swb:removeDependency>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasMeasure">
+    <rdfs:domain rdf:resource="#Measurable"/>
+    <rdfs:range rdf:resource="#Measure"/>
+    <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >false</swb:removeDependency>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="sponsor">
+    <rdfs:label xml:lang="en">Sponsor</rdfs:label>
+    <rdfs:label xml:lang="es">Esponsor</rdfs:label>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_sponsor">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#selectOneUserRepWithBlank"/>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Persiste información del patrocinador de un indicador</rdfs:comment>
+    <rdfs:range rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#User"/>
+    <rdfs:domain rdf:resource="#Indicator"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="champion">
+    <rdfs:label xml:lang="es">Campeón</rdfs:label>
+    <rdfs:label xml:lang="en">Champion</rdfs:label>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_champion">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#selectOneUserRepWithBlank"/>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:range rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#User"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Persiste la información de un usuario que es considerado como  el encargado de liderear el indicador</rdfs:comment>
+    <rdfs:domain rdf:resource="#Indicator"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="championFacilitator">
+    <rdfs:label xml:lang="en">Champion facilitator</rdfs:label>
+    <rdfs:label xml:lang="es">Facilitador de campeón</rdfs:label>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_championFacilitator">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#selectOneUserRepWithBlank"/>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Persiste información de un facilitador de campeón en una indicador</rdfs:comment>
+    <rdfs:range rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#User"/>
+    <rdfs:domain rdf:resource="#Indicator"/>
+  </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="next">
     <rdfs:range rdf:resource="#StateMachinable"/>
     <rdfs:domain rdf:resource="#StateMachinable"/>
@@ -438,12 +499,6 @@
       </swbxf:DisplayProperty>
     </swb:displayProperty>
   </owl:ObjectProperty>
-  <owl:ObjectProperty rdf:ID="hasTheme">
-    <rdfs:range rdf:resource="#Theme"/>
-    <swb:herarquicalRelation rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:herarquicalRelation>
-    <rdfs:domain rdf:resource="#Perspective"/>
-  </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="period">
     <rdfs:domain rdf:resource="#Measure"/>
     <rdfs:range rdf:resource="#Period"/>
@@ -451,6 +506,30 @@
     >true</swb:required>
     <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >false</swb:removeDependency>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasEvidence">
+    <rdfs:label xml:lang="es">Evidencias</rdfs:label>
+    <rdfs:label xml:lang="en">Evidence</rdfs:label>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_hasEvidence">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#ObjectElement_1"/>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Periste las evidencias asociadas a un indicador</rdfs:comment>
+    <rdfs:range>
+      <swb:Class rdf:ID="Evidence">
+        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >true</swb:autogenId>
+        <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >Clase que permite definir los atributos de las evidencias de un Indicador</rdfs:comment>
+        <rdfs:subClassOf rdf:resource="#BSCTracing"/>
+        <swb:classCodePackage rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >org.semanticwb.bsc.tracing</swb:classCodePackage>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Class>
+    </rdfs:range>
+    <rdfs:domain rdf:resource="#Indicator"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="measure">
     <rdfs:domain rdf:resource="#Series"/>
@@ -475,12 +554,6 @@
     >true</swb:herarquicalRelation>
     <rdfs:domain rdf:resource="#StateGroup"/>
   </owl:ObjectProperty>
-  <owl:ObjectProperty rdf:ID="hasObjective">
-    <rdfs:range rdf:resource="#Objective"/>
-    <swb:herarquicalRelation rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:herarquicalRelation>
-    <rdfs:domain rdf:resource="#Theme"/>
-  </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="previus">
     <rdfs:range rdf:resource="#StateMachinable"/>
     <rdfs:domain rdf:resource="#StateMachinable"/>
@@ -492,18 +565,6 @@
       </swbxf:DisplayProperty>
     </swb:displayProperty>
   </owl:ObjectProperty>
-  <owl:ObjectProperty rdf:ID="hasInitiative">
-    <rdfs:domain rdf:resource="#Objective"/>
-    <rdfs:range rdf:resource="#Initiative"/>
-    <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >false</swb:removeDependency>
-  </owl:ObjectProperty>
-  <owl:ObjectProperty rdf:ID="hasMeasure">
-    <rdfs:domain rdf:resource="#Measurable"/>
-    <rdfs:range rdf:resource="#Measure"/>
-    <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >false</swb:removeDependency>
-  </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="status">
     <rdfs:domain rdf:resource="#Measure"/>
     <rdfs:range rdf:resource="#State"/>
@@ -512,27 +573,29 @@
     <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >false</swb:removeDependency>
   </owl:ObjectProperty>
-  <owl:DatatypeProperty rdf:ID="mission">
-    <rdfs:domain rdf:resource="#BSC"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  <owl:DatatypeProperty rdf:ID="goals">
+    <rdfs:label xml:lang="en">Goals</rdfs:label>
+    <rdfs:label xml:lang="es">Metas</rdfs:label>
     <swb:displayProperty>
-      <swbxf:DisplayProperty rdf:ID="dp_mission">
-        <rdfs:label xml:lang="es">Misión</rdfs:label>
-        <rdfs:label xml:lang="en">Mission</rdfs:label>
-        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextArea_Description"/>
-      </swbxf:DisplayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_goals"/>
     </swb:displayProperty>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Persiste información de las metas de un indicador</rdfs:comment>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#Indicator"/>
   </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="recommendations">
-    <rdfs:domain rdf:resource="#Updateable"/>
+  <owl:DatatypeProperty rdf:ID="informationSource">
+    <rdfs:label xml:lang="en">Information source</rdfs:label>
+    <rdfs:label xml:lang="es">Fuente de información</rdfs:label>
     <swb:displayProperty>
-      <swbxf:DisplayProperty rdf:ID="dp_recommendations">
-        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextArea_Description"/>
-        <rdfs:label xml:lang="es">Recomendaciones</rdfs:label>
-        <rdfs:label xml:lang="en">Recommendations</rdfs:label>
+      <swbxf:DisplayProperty rdf:ID="dp_informationSource">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextBox"/>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Persiste una fuente de información de un indicador</rdfs:comment>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#Indicator"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="blocked">
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
@@ -544,51 +607,10 @@
       <swbxf:DisplayProperty rdf:ID="dp_Start">
         <rdfs:label xml:lang="es">Fecha inicial</rdfs:label>
         <rdfs:label xml:lang="en">Start date</rdfs:label>
-        <swbxf:formElement>
-          <bsc:Periodicity rdf:ID="validPeriod_1"/>
-        </swbxf:formElement>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#dateFrom"/>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#date"/>
-  </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="inTime">
-    <rdfs:domain rdf:resource="#Period"/>
-    <swb:displayProperty>
-      <swbxf:DisplayProperty rdf:ID="dp_InTime">
-        <rdfs:label xml:lang="es">En tiempo de medición</rdfs:label>
-        <rdfs:label xml:lang="en">Measuring time</rdfs:label>
-        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#BooleanElement_1"/>
-      </swbxf:DisplayProperty>
-    </swb:displayProperty>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
-  </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="icon">
-    <rdfs:domain rdf:resource="#State"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-    <swb:displayProperty>
-      <swbxf:DisplayProperty rdf:ID="dp_icon">
-        <rdfs:label xml:lang="es">Ícono</rdfs:label>
-        <rdfs:label xml:lang="en">Icon</rdfs:label>
-        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#fe_DojoFileUpload"/>
-      </swbxf:DisplayProperty>
-    </swb:displayProperty>
-    <swb:defaultValue rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >unknown.png</swb:defaultValue>
-  </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="formatPattern">
-    <rdfs:domain rdf:resource="#Series"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-  </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="vision">
-    <rdfs:domain rdf:resource="#BSC"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-    <swb:displayProperty>
-      <swbxf:DisplayProperty rdf:ID="dp_vision">
-        <rdfs:label xml:lang="es">Visión</rdfs:label>
-        <rdfs:label xml:lang="en">Vision</rdfs:label>
-        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextArea_Description"/>
-      </swbxf:DisplayProperty>
-    </swb:displayProperty>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="logo">
     <rdfs:domain rdf:resource="#BSC"/>
@@ -603,16 +625,18 @@
       </swbxf:DisplayProperty>
     </swb:displayProperty>
   </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="actualEnd">
-    <rdfs:domain rdf:resource="#Schedule"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#date"/>
+  <owl:DatatypeProperty rdf:ID="unitMesure">
+    <rdfs:label xml:lang="en">Unit mesure</rdfs:label>
+    <rdfs:label xml:lang="es">Unidad de medida</rdfs:label>
     <swb:displayProperty>
-      <swbxf:DisplayProperty rdf:ID="dp_actualEnd">
-        <rdfs:label xml:lang="es">Fecha de finalización real</rdfs:label>
-        <rdfs:label xml:lang="en">Actual end date</rdfs:label>
-        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#dateTo"/>
+      <swbxf:DisplayProperty rdf:ID="dp_unitMesure">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextBox"/>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Persiste la unidad de medida de un indicador</rdfs:comment>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#Indicator"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="percentageProgress">
     <rdfs:domain rdf:resource="#Updateable"/>
@@ -624,6 +648,19 @@
         <rdfs:label xml:lang="en">Percentage progress</rdfs:label>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="formula">
+    <rdfs:label xml:lang="en">Formula</rdfs:label>
+    <rdfs:label xml:lang="es">Fórmula</rdfs:label>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_formula">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextArea_Description"/>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Persiste información de una formula para el cálculo de un indicador</rdfs:comment>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#Indicator"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="commited">
     <rdfs:domain rdf:resource="#Committable"/>
@@ -640,22 +677,31 @@
     <swb:defaultValue rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >false</swb:defaultValue>
   </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="value">
-    <rdfs:domain rdf:resource="#Series"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
+  <owl:DatatypeProperty rdf:ID="notesFormula">
+    <rdfs:label xml:lang="es">Notas a la fórmula</rdfs:label>
+    <rdfs:label xml:lang="en">Notes formula</rdfs:label>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_notesFormula">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextArea_Description"/>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Persiste información de una nota a la fórmula de un indicador</rdfs:comment>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#Indicator"/>
   </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="inicio">
-    <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:required>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#date"/>
-    <rdfs:domain>
-      <swb:FormElement rdf:ID="Periodicity">
-        <swb:classCodePackage rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >org.semanticwb.bsc.formelement</swb:classCodePackage>
-        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBFormElement"/>
-        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-      </swb:FormElement>
-    </rdfs:domain>
+  <owl:DatatypeProperty rdf:ID="measurementFrequency">
+    <rdfs:label xml:lang="en">Measurement frequency</rdfs:label>
+    <rdfs:label xml:lang="es">Frecuencia de medición</rdfs:label>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Persiste la frecuencia de medida de un indicador</rdfs:comment>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_measurementFrequency">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextArea_Description"/>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#Indicator"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="plannedStart">
     <rdfs:domain rdf:resource="#Schedule"/>
@@ -679,15 +725,14 @@
       </swbxf:DisplayProperty>
     </swb:displayProperty>
   </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="hasAttachments">
-    <rdfs:domain rdf:resource="#Attachment"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-  </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="fin">
-    <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:required>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#date"/>
-    <rdfs:domain rdf:resource="#Periodicity"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain>
+      <swb:FormElement rdf:ID="Periodicity">
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBFormElement"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:FormElement>
+    </rdfs:domain>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="prefix">
     <swb:displayProperty>
@@ -702,17 +747,6 @@
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <rdfs:domain rdf:resource="#Recognizable"/>
   </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="plannedEnd">
-    <rdfs:domain rdf:resource="#Schedule"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#date"/>
-    <swb:displayProperty>
-      <swbxf:DisplayProperty rdf:ID="dp_plannedEnd">
-        <rdfs:label xml:lang="es">Fecha de finalización planeada</rdfs:label>
-        <rdfs:label xml:lang="en">Planned end date</rdfs:label>
-        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#dateTo"/>
-      </swbxf:DisplayProperty>
-    </swb:displayProperty>
-  </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="analysis">
     <rdfs:domain rdf:resource="#Updateable"/>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
@@ -724,13 +758,125 @@
       </swbxf:DisplayProperty>
     </swb:displayProperty>
   </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="mission">
+    <rdfs:domain rdf:resource="#BSC"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_mission">
+        <rdfs:label xml:lang="es">Misión</rdfs:label>
+        <rdfs:label xml:lang="en">Mission</rdfs:label>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextArea_Description"/>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="recommendations">
+    <rdfs:domain rdf:resource="#Updateable"/>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_recommendations">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextArea_Description"/>
+        <rdfs:label xml:lang="es">Recomendaciones</rdfs:label>
+        <rdfs:label xml:lang="en">Recommendations</rdfs:label>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="folio">
+    <rdfs:label xml:lang="en">Folio</rdfs:label>
+    <rdfs:label xml:lang="es">Folio</rdfs:label>
+    <swb:externalInvocation rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:externalInvocation>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_folio">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextBox"/>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Persiste información de un folio automático</rdfs:comment>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#Indicator"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="inTime">
+    <rdfs:domain rdf:resource="#Period"/>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_InTime">
+        <rdfs:label xml:lang="es">En tiempo de medición</rdfs:label>
+        <rdfs:label xml:lang="en">Measuring time</rdfs:label>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#BooleanElement_1"/>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="formatPattern">
+    <rdfs:domain rdf:resource="#Series"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="icon">
+    <rdfs:domain rdf:resource="#State"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_icon">
+        <rdfs:label xml:lang="es">Ícono</rdfs:label>
+        <rdfs:label xml:lang="en">Icon</rdfs:label>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#fe_DojoFileUpload"/>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <swb:defaultValue rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >unknown.png</swb:defaultValue>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="vision">
+    <rdfs:domain rdf:resource="#BSC"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_vision">
+        <rdfs:label xml:lang="es">Visión</rdfs:label>
+        <rdfs:label xml:lang="en">Vision</rdfs:label>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextArea_Description"/>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="actualEnd">
+    <rdfs:domain rdf:resource="#Schedule"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#date"/>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_actualEnd">
+        <rdfs:label xml:lang="es">Fecha de finalización real</rdfs:label>
+        <rdfs:label xml:lang="en">Actual end date</rdfs:label>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#dateTo"/>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="value">
+    <rdfs:domain rdf:resource="#Series"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="inicio">
+    <rdfs:domain rdf:resource="#Periodicity"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="attached">
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Persiste el documento, memorandum o adjunto asociado a un Indicador</rdfs:comment>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#Evidence"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="plannedEnd">
+    <rdfs:domain rdf:resource="#Schedule"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#date"/>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_plannedEnd">
+        <rdfs:label xml:lang="es">Fecha de finalización planeada</rdfs:label>
+        <rdfs:label xml:lang="en">Planned end date</rdfs:label>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#dateTo"/>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+  </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="end">
     <rdfs:domain rdf:resource="#Period"/>
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_End">
         <rdfs:label xml:lang="es">Fecha final</rdfs:label>
         <rdfs:label xml:lang="en">End date</rdfs:label>
-        <swbxf:formElement rdf:resource="#validPeriod_1"/>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#dateTo"/>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#dateTime"/>
@@ -751,6 +897,7 @@
     <swb:package rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >org.semanticwb.bsc</swb:package>
   </swb:CodePackage>
+  <bsc:Periodicity rdf:ID="validPeriod_1"/>
   <swbxf:DisplayProperty rdf:ID="dP_End"/>
   <swb:Class rdf:ID="Distinctive">
     <swb:displayObject>
@@ -768,4 +915,4 @@
   </swb:Class>
 </rdf:RDF>
 
-<!-- Created with TopBraid Composer -->
+<!-- Created with TopBraid -->
