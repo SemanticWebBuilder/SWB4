@@ -13,6 +13,41 @@
     >Created with TopBraid Composer</owl:versionInfo>
     <owl:imports rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology"/>
   </owl:Ontology>
+  <owl:Class rdf:ID="Initiative">
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Sortable"/>
+    <swb:displayObject>
+      <swbxf:DisplayObject rdf:ID="do_Initiative">
+        <swbxf:dragSupport rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >false</swbxf:dragSupport>
+        <rdfs:label xml:lang="en">Initiative</rdfs:label>
+        <rdfs:label xml:lang="es">Iniciativa</rdfs:label>
+        <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >swbIconWebPage</swb:iconClass>
+      </swbxf:DisplayObject>
+    </swb:displayObject>
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="Schedule"/>
+    </rdfs:subClassOf>
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="BSCElement"/>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <swb:Interface rdf:ID="Committable">
+        <swb:classCodePackage rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >org.semanticwb.bsc</swb:classCodePackage>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBInterface"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Interface>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="Updateable"/>
+    </rdfs:subClassOf>
+    <swb:classCodePackage rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >org.semanticwb.bsc.element</swb:classCodePackage>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+  </owl:Class>
   <owl:Class rdf:ID="Series">
     <swb:classCodePackage rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >org.semanticwb.bsc.tracing</swb:classCodePackage>
@@ -56,7 +91,7 @@
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBInterface"/>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Interface"/>
   </owl:Class>
-  <owl:Class rdf:ID="BSCElement">
+  <owl:Class rdf:about="#BSCElement">
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Activeable"/>
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
@@ -98,7 +133,7 @@
             <owl:allValuesFrom>
               <swb:Class rdf:ID="Indicator">
                 <rdfs:subClassOf>
-                  <owl:Class rdf:ID="Updateable"/>
+                  <owl:Class rdf:about="#Updateable"/>
                 </rdfs:subClassOf>
                 <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#WebPage"/>
                 <swb:classCodePackage rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
@@ -141,31 +176,7 @@
     </swb:hasClass>
     <swb:hasHerarquicalNode>
       <swbxf:HerarquicalNode rdf:ID="hn_Initiatives">
-        <swbxf:heClass>
-          <swb:Class rdf:ID="Initiative">
-            <swb:classCodePackage rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-            >org.semanticwb.bsc.element</swb:classCodePackage>
-            <rdfs:subClassOf>
-              <owl:Class rdf:about="#Updateable"/>
-            </rdfs:subClassOf>
-            <rdfs:subClassOf>
-              <swb:Interface rdf:ID="Committable">
-                <swb:classCodePackage rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-                >org.semanticwb.bsc</swb:classCodePackage>
-                <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBInterface"/>
-                <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-              </swb:Interface>
-            </rdfs:subClassOf>
-            <rdfs:subClassOf rdf:resource="#BSCElement"/>
-            <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-            >true</swb:autogenId>
-            <rdfs:subClassOf>
-              <owl:Class rdf:ID="Schedule"/>
-            </rdfs:subClassOf>
-            <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Sortable"/>
-            <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-          </swb:Class>
-        </swbxf:heClass>
+        <swbxf:heClass rdf:resource="#Initiative"/>
         <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
         >swbIconWebPage</swb:iconClass>
         <swb:title xml:lang="es">Iniciativas</swb:title>
@@ -176,6 +187,8 @@
       </swbxf:HerarquicalNode>
     </swb:hasHerarquicalNode>
     <swb:hasClass rdf:resource="#Indicator"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Objeto que define un Scorecard</rdfs:comment>
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#WebSite"/>
     <swb:hasClass>
       <owl:Class rdf:ID="Risk"/>
@@ -186,6 +199,8 @@
           <swb:Class rdf:ID="Action">
             <swb:displayObject>
               <swbxf:DisplayObject rdf:ID="do_Action">
+                <rdfs:label xml:lang="en">Action</rdfs:label>
+                <rdfs:label xml:lang="es">Acción</rdfs:label>
                 <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
                 >swbIconWebPage</swb:iconClass>
               </swbxf:DisplayObject>
@@ -230,7 +245,9 @@
     <swb:displayObject>
       <swbxf:DisplayObject rdf:ID="do_BSC">
         <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >swbIconWebPage</swb:iconClass>
+        >swbIconWebSite</swb:iconClass>
+        <rdfs:label xml:lang="en">Balanced Scorecard</rdfs:label>
+        <rdfs:label xml:lang="es">Tablero de control</rdfs:label>
       </swbxf:DisplayObject>
     </swb:displayObject>
     <swb:classCodePackage rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
@@ -273,6 +290,10 @@
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Sortable"/>
     <swb:displayObject>
       <swbxf:DisplayObject rdf:ID="do_Perspective">
+        <swbxf:dragSupport rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >false</swbxf:dragSupport>
+        <rdfs:label xml:lang="en">Perspective</rdfs:label>
+        <rdfs:label xml:lang="es">Perspectiva</rdfs:label>
         <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
         >swbIconWebPage</swb:iconClass>
       </swbxf:DisplayObject>
@@ -294,6 +315,8 @@
   <owl:Class rdf:ID="Theme">
     <swb:displayObject>
       <swbxf:DisplayObject rdf:ID="do_Theme">
+        <rdfs:label xml:lang="en">Strategic theme</rdfs:label>
+        <rdfs:label xml:lang="es">Tema estratégico</rdfs:label>
         <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
         >swbIconWebPage</swb:iconClass>
       </swbxf:DisplayObject>
@@ -329,6 +352,8 @@
   <owl:Class rdf:about="#Risk">
     <swb:displayObject>
       <swbxf:DisplayObject rdf:ID="do_Risk">
+        <rdfs:label xml:lang="en">Risk</rdfs:label>
+        <rdfs:label xml:lang="es">Riesgo</rdfs:label>
         <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
         >swbIconWebPage</swb:iconClass>
       </swbxf:DisplayObject>
@@ -410,7 +435,7 @@
     <swb:displayObject>
       <swbxf:DisplayObject rdf:ID="do_AdminBSC">
         <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >swbIconSocialAdminSite</swb:iconClass>
+        >swbIconWebSite</swb:iconClass>
       </swbxf:DisplayObject>
     </swb:displayObject>
     <rdfs:label xml:lang="en">BSC Management</rdfs:label>
