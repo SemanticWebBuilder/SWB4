@@ -3,117 +3,170 @@
     Created on : 14/05/2013, 07:26:08 PM
     Author     : rene.jara
 --%>
+<%@page import="com.infotec.lodp.swb.Developer"%>
+<%@page import="com.infotec.lodp.swb.Comment"%>
+<%@page import="java.util.Iterator"%>
+<%@page import="org.semanticwb.platform.SemanticObject"%>
+<%@page import="org.semanticwb.platform.SemanticOntology"%>
+<%@page import="com.infotec.lodp.swb.Application"%>
+<%@page import="com.infotec.lodp.swb.Dataset"%>
 <%@page import="org.semanticwb.*"%>
 <%@page import="org.semanticwb.model.*"%>
 <%@page import="org.semanticwb.portal.api.*"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <jsp:useBean id="paramRequest" scope="request" type="org.semanticwb.portal.api.SWBParamRequest" /><html>
-<%
-    WebPage wpage = paramRequest.getWebPage();
-    WebSite wsite = wpage.getWebSite();
-    User usr = paramRequest.getUser();
-    String contextPath = SWBPlatform.getContextPath();
-    String context = SWBPortal.getContextPath();
-    String url = paramRequest.getActionUrl().setAction(paramRequest.Action_ADD).toString();
-    String repositoryId = wpage.getWebSite().getUserRepository().getId();
+    <%
+                WebPage wpage = paramRequest.getWebPage();
+                WebSite wsite = wpage.getWebSite();
+                User usr = paramRequest.getUser();
+                String contextPath = SWBPlatform.getContextPath();
+                String context = SWBPortal.getContextPath();
+                Resource base = paramRequest.getResourceBase();
+                String repositoryId = wpage.getWebSite().getUserRepository().getId();
+                System.out.println("2");
 
-    if (request.getParameter("msg") != null) {
-        String strMsg = request.getParameter("msg");
-//        strMsg = strMsg.replace("<br>", "\\n\\r");
-%>
-<div>
-    <%=strMsg%>
-</div>
-<%
-    }
+                String suri;
+//                suri = "http://www.LODP.swb#lodpcg_Dataset:3";
+    //    uri"http://www.LODP.swb#lodpcg_Application:2";
+                SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
+                SemanticObject sobj = null;
 
-%>
-<script type="text/javascript">
-    <!--
-    // scan page for widgets and instantiate them
-    dojo.require("dojo.parser");
-    dojo.require("dijit._Calendar");
-    dojo.require("dijit.ProgressBar");
-    dojo.require("dijit.TitlePane");
-    dojo.require("dijit.TooltipDialog");
-    dojo.require("dijit.Dialog");
-    // editor:
-    dojo.require("dijit.Editor");
+                GenericObject gobj = null;
+                Iterator<Comment> itco = null;
+                if (suri != null && !suri.equals("")) {
+                    //sobj = ont.getSemanticObject(suri);
+                    gobj = ont.getGenericObject(suri);
+                    if (gobj != null && gobj instanceof Application) {
+                        Application ap = (Application) gobj;
+                        itco = ap.listComments();
 
-    // various Form elemetns
-    dojo.require("dijit.form.Form");
-    dojo.require("dijit.form.CheckBox");
-    dojo.require("dijit.form.Textarea");
-    dojo.require("dijit.form.FilteringSelect");
-    dojo.require("dijit.form.TextBox");
-    dojo.require("dijit.form.DateTextBox");
-    dojo.require("dijit.form.TimeTextBox");
-    dojo.require("dijit.form.Button");
-    dojo.require("dijit.form.NumberSpinner");
-    dojo.require("dijit.form.Slider");
-    dojo.require("dojox.form.BusyButton");
-    dojo.require("dojox.form.TimeSpinner");
-    dojo.require("dijit.form.ValidationTextBox");
-    dojo.require("dijit.layout.ContentPane");
-    dojo.require("dijit.form.NumberTextBox");
-    dojo.require("dijit.form.DropDownButton");
+                    } else if (gobj != null && gobj instanceof Dataset) {
+                        Dataset ds = (Dataset) gobj;
+                        itco = ds.listComments();
+                    }
+                }
+                if (request.getParameter("msg") != null) {
+                    String strMsg = request.getParameter("msg");
+    //        strMsg = strMsg.replace("<br>", "\\n\\r");
+    %>
+    <div>
+        <%=strMsg%>
+    </div>
+    <%
+                }
+                System.out.println("3");
+                if (suri != null && !suri.equals("")) {
+                    String name = "";
+                    String email = "";
+                    gobj = usr.getSemanticObject().getGenericInstance();
+                    if (gobj instanceof Developer) {
+                        Developer de = (Developer) gobj;
+                        name = de.getFullName();
+                        email = de.getEmail();
+                    }
 
-    function enviar() {
-        var objd=dijit.byId('form1ru');
+    %>
+    <script type="text/javascript">
+        <!--
+        // scan page for widgets and instantiate them
+        dojo.require("dojo.parser");
+        dojo.require("dijit._Calendar");
+        dojo.require("dijit.ProgressBar");
+        dojo.require("dijit.TitlePane");
+        dojo.require("dijit.TooltipDialog");
+        dojo.require("dijit.Dialog");
+        // editor:
+        dojo.require("dijit.Editor");
 
-        if(objd.validate())
-        {
-            if(isEmpty('cmnt_seccode')) {
-                alert('Para registrarte es necesario que escribas el texto de la imagen.\\nEn caso de no ser claro puedes cambiarlo haciendo clic en <<Cambiar imagen>>.');
-            }else{
-                if (!validateReadAgree()){
-                    alert('Para registrarte es necesario que aceptar los términos y condiciones');
+        // various Form elemetns
+        dojo.require("dijit.form.Form");
+        dojo.require("dijit.form.CheckBox");
+        dojo.require("dijit.form.Textarea");
+        dojo.require("dijit.form.FilteringSelect");
+        dojo.require("dijit.form.TextBox");
+        dojo.require("dijit.form.DateTextBox");
+        dojo.require("dijit.form.TimeTextBox");
+        dojo.require("dijit.form.Button");
+        dojo.require("dijit.form.NumberSpinner");
+        dojo.require("dijit.form.Slider");
+        dojo.require("dojox.form.BusyButton");
+        dojo.require("dojox.form.TimeSpinner");
+        dojo.require("dijit.form.ValidationTextBox");
+        dojo.require("dijit.layout.ContentPane");
+        dojo.require("dijit.form.NumberTextBox");
+        dojo.require("dijit.form.DropDownButton");
+
+        function enviar() {
+            var objd=dijit.byId('form1ru');
+
+            if(objd.validate())
+            {
+                if(isEmpty('cmnt_seccode')) {
+                    alert('Para registrarte es necesario que escribas el texto de la imagen.\\nEn caso de no ser claro puedes cambiarlo haciendo clic en <<Cambiar imagen>>.');
                 }else{
-                   return true;
+                    if (!validateReadAgree()){
+                        alert('Para registrarte es necesario que aceptar los términos y condiciones');
+                    }else{
+                        return true;
+                    }
+                }
+            }else {
+                alert("Datos incompletos");
+            }
+            return false;
+        }
+        function validateReadAgree(){
+            var ret=false;
+            ret=dijit.byId("acept").checked;
+            return ret;
+        }
+        function changeSecureCodeImage(imgid) {
+            var img = dojo.byId(imgid);
+            if(img) {
+                var rn = Math.floor(Math.random()*99999);
+                img.src = "<%=context%>/swbadmin/jsp/securecode.jsp?sAttr=cdlog&nc="+rn;
+            }
+        }
+        function isValidThisEmail(){
+            var valid=false;
+            var email = dijit.byId( "email2" );
+            var strEmail = email.getValue();
+            if(strEmail!=""){
+                if(isValidEmail(strEmail)){
+                    valid=true;
+                }else{
+                    email.displayMessage( "Correo inválido" );
                 }
             }
-        }else {
-            alert("Datos incompletos");
+            return valid;
         }
-        return false;
-    }
-    function validateReadAgree(){
-        var ret=false;
-        ret=dijit.byId("acept").checked;
-        return ret;
-    }
-    function changeSecureCodeImage(imgid) {
-        var img = dojo.byId(imgid);
-        if(img) {
-            var rn = Math.floor(Math.random()*99999);
-            img.src = "<%=context%>/swbadmin/jsp/securecode.jsp?sAttr=cdlog&nc="+rn;
-        }
-    }
-    function isValidThisEmail(){
-        var valid=false;
-        var email = dijit.byId( "email2" );
-        var strEmail = email.getValue();
-        if(strEmail!=""){
-            if(isValidEmail(strEmail)){
-                valid=true;
-            }else{
-                email.displayMessage( "Correo inválido" );
-            }
-        }
-        return valid;
-    }
-    -->
-</script>
+        -->
+    </script>
     <div>
-        <form id="form1ru" dojoType="dijit.form.Form" class="swbform" action="<%=url%>" method="post">
+        <%
+                if (itco != null) {
+                    while (itco.hasNext()) {
+                        Comment co = itco.next();
+
+        %>    <p><b><%=co.getCommUserName()%>-<%=co.getCommUserEmail()%></b><%=co.getComment()%></p>
+        <%
+                    }
+                }
+                SWBResourceURLImp urladd = new SWBResourceURLImp(request, base, wpage, SWBResourceURLImp.UrlType_ACTION);
+                urladd.setAction(SWBResourceURL.Action_ADD);
+                urladd.setParameter("suri", suri);
+        %>
+    </div>
+    <div>
+        <form id="form1ru" dojoType="dijit.form.Form" class="swbform" action="<%=urladd%>" method="post">
             <div>
                 <p>
-                    <label for="firstName"><b>*</b>Nombre</label>
-                    <input type="text" name="firstName" id="firstName" dojoType="dijit.form.ValidationTextBox" value=""  required="true" promptMessage="Ingresa tu nombre(s)" invalidMessage="El nombre es requerido" trim="true" regExp="[a-zA-Z\u00C0-\u00FF' ]+"/>
+                    <label for="name"><b>*</b>Nombre</label>
+                    <input type="text" name="name" id="name" dojoType="dijit.form.ValidationTextBox" value="<%=name%>"  required="true" promptMessage="Ingresa tu nombre(s)" invalidMessage="El nombre es requerido" trim="true" regExp="[a-zA-Z\u00C0-\u00FF' ]+"/>
                 </p>
                 <p>
                     <label for="email"><b>*</b>Correo electronico de contacto</label>
-                    <input type="text" name="email" id="email2" dojoType="dijit.form.ValidationTextBox" value="" maxlength="60" required="true" promptMessage="Ingresa tu correo electrónico válido de contacto" invalidMessage="El correo electrónico válido es requerido" isValid="return isValidThisEmail()" trim="true"/>
+                    <input type="text" name="email" id="email" dojoType="dijit.form.ValidationTextBox" value="<%=email%>" maxlength="60" required="true" promptMessage="Ingresa tu correo electrónico válido de contacto" invalidMessage="El correo electrónico válido es requerido" isValid="return isValidThisEmail()" trim="true"/>
                 </p>
             </div>
             <div>
@@ -147,4 +200,6 @@
             </div>
         </form>
     </div>
-
+    <%
+                }
+    %>
