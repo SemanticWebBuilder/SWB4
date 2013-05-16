@@ -33,8 +33,13 @@ public class Periodicity extends org.semanticwb.bsc.formelement.base.Periodicity
         if (obj == null) {
             obj = new SemanticObject();
         }
-        
+
+        // boolean IPHONE=false;
+        // boolean XHTML=false;
         boolean DOJO = false;
+
+        // if(type.equals("iphone"))IPHONE=true;
+        // else if(type.equals("xhtml"))XHTML=true;
         if (type.equals("dojo")) {
             DOJO = true;
         }
@@ -101,13 +106,13 @@ public class Periodicity extends org.semanticwb.bsc.formelement.base.Periodicity
             value = "";
         }
         
-        if(type.equals("dojo")) {
-            setAttribute("isValid",
-                         "return validateElement('" + propName + "','" + getValidateURL(obj, prop)
-                         + "',this.textbox.value);");
-        }else {
-            setAttribute("isValid", null);
-        }
+if(type.equals("dojo")) {
+    setAttribute("isValid",
+                 "return validateElement('" + propName + "','" + getValidateURL(obj, prop)
+                 + "',this.textbox.value);");
+}else {
+    setAttribute("isValid", null);
+}
 
         if (mode.equals("edit") || mode.equals("create")) {
             ret.append("<input name=\"" + name + "\" value=\"" + value + "\"");
@@ -137,13 +142,17 @@ public class Periodicity extends org.semanticwb.bsc.formelement.base.Periodicity
         } else if (mode.equals("view")) {
             ret.append("<span name=\"" + name + "\">" + value + "</span>");
         }
+//System.out.println("\n\n"+ret);
         return ret.toString();
     }
     
     @Override
     public void validate(javax.servlet.http.HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String propName) throws FormValidateException
     {
+System.out.print("validate_...");
+System.out.println(", obj="+obj+", id="+obj.getId());
         String value = request.getParameter(propName);
+System.out.println("value="+value);
         Date date = null;
         try {
             date = format.parse(value);
@@ -155,6 +164,7 @@ public class Periodicity extends org.semanticwb.bsc.formelement.base.Periodicity
                 throw new FormValidateException("El valor es incorrecto");
             }
         }
+
 //        System.out.print(" obj="+obj);
 //        System.out.print(" prop="+prop);
 //        System.out.println(", propName="+propName);
@@ -164,6 +174,7 @@ public class Periodicity extends org.semanticwb.bsc.formelement.base.Periodicity
         Iterator<Period> iperiods = Period.ClassMgr.listPeriods(model);
         while(iperiods.hasNext()) {
             Period p = iperiods.next();
+System.out.println("p="+p);
             if( obj.equals(p) ) {
                 continue;
             }
@@ -171,28 +182,39 @@ public class Periodicity extends org.semanticwb.bsc.formelement.base.Periodicity
                 throw new FormValidateException("fecha invalida");
             }
         }
+System.out.println("al parece todo salio bien");
     }
     
     @Override
     public void process(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String propName)
     {
-        String value = request.getParameter(propName);
-        Date fvalue = null;
-        try
-        {
-            fvalue = format.parse(value);                    
-            obj.setDateProperty(prop, fvalue);
-        }
-        catch(Exception e)
-        {
-            try {
-                SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+System.out.println("\n\nprocess........................");
+//        try
+//        {
+            //validate(request, obj, prop, propName);
+            String value = request.getParameter(propName);
+            Date fvalue = null;
+            try
+            {
                 fvalue = format.parse(value);                    
                 obj.setDateProperty(prop, fvalue);
-            }catch(Exception p) {
             }
-            System.out.println("\n\n\n excepcion 2");
-        }
+            catch(Exception e)
+            {
+                try {
+                    SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+                    fvalue = format.parse(value);                    
+                    obj.setDateProperty(prop, fvalue);
+                }catch(Exception p) {
+                }
+            }
+//        }
+//        catch(Exception e)
+//        {
+//            String value = request.getParameter(propName);
+//            value = "";
+//System.out.println("value "+value+" deberia ser blanco");
+//        }
     }
     
     @Override
