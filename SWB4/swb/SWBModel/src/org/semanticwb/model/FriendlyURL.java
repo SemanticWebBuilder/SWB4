@@ -22,11 +22,16 @@
  */
 package org.semanticwb.model;
 
+import com.hp.hpl.jena.rdf.model.Property;
+import com.hp.hpl.jena.rdf.model.Statement;
+import com.hp.hpl.jena.vocabulary.RDF;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.concurrent.ConcurrentHashMap;
+import org.semanticwb.SWBPlatform;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticObserver;
+import org.semanticwb.platform.SemanticTSObserver;
 
 
 public class FriendlyURL extends org.semanticwb.model.base.FriendlyURLBase 
@@ -42,25 +47,47 @@ public class FriendlyURL extends org.semanticwb.model.base.FriendlyURLBase
 
     static
     {
-        swb_friendlyURL.registerObserver(new SemanticObserver()
-        {
-            public void notify(SemanticObject obj, Object prop, String lang, String action)
-            {
-                removeObject(obj);
-                addFriendlyUrl((FriendlyURL)obj.createGenericInstance());
-            }
-        });
+        SWBPlatform.getSemanticMgr().registerTSObserver(new SemanticTSObserver() {
 
-        swb_FriendlyURL.registerObserver(new SemanticObserver()
-        {
-            public void notify(SemanticObject obj, Object prop, String lang, String action)
+            @Override
+            public void notify(SemanticObject obj, Statement stmt, String action, boolean remote)
             {
-                if(action.equals(SemanticObject.ACT_REMOVE))
+                Property p=stmt.getPredicate();
+                if(p.equals(swb_friendlyURL.getRDFProperty()))
                 {
-                    removeObject(obj);
+                    if(action.equals(SemanticObject.ACT_REMOVE))
+                    {
+                        System.out.println("remove friendly...");
+                        removeObject(obj);
+                    }else
+                    {
+                        System.out.println("add friendly...");
+                        addFriendlyUrl((FriendlyURL)obj.createGenericInstance());                    
+                    }
                 }
-            }
+            }            
         });
+        
+        
+//        swb_friendlyURL.registerObserver(new SemanticObserver()
+//        {
+//            public void notify(SemanticObject obj, Object prop, String lang, String action)
+//            {
+//                removeObject(obj);
+//                addFriendlyUrl((FriendlyURL)obj.createGenericInstance());
+//            }
+//        });
+//
+//        swb_FriendlyURL.registerObserver(new SemanticObserver()
+//        {
+//            public void notify(SemanticObject obj, Object prop, String lang, String action)
+//            {
+//                if(action.equals(SemanticObject.ACT_REMOVE))
+//                {
+//                    removeObject(obj);
+//                }
+//            }
+//        });
     }
 
     private static void removeObject(SemanticObject obj)
