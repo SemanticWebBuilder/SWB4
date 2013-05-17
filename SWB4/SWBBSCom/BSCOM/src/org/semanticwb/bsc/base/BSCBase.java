@@ -1,8 +1,14 @@
 package org.semanticwb.bsc.base;
 
 
-public abstract class BSCBase extends org.semanticwb.model.WebSite implements org.semanticwb.model.Activeable,org.semanticwb.model.Undeleteable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Filterable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Trashable,org.semanticwb.model.Localeable,org.semanticwb.model.Indexable,org.semanticwb.model.Traceable,org.semanticwb.model.FilterableClass,org.semanticwb.model.OntologyDepable,org.semanticwb.model.Countryable
+   /**
+   * Objeto que define un Scorecard 
+   */
+public abstract class BSCBase extends org.semanticwb.model.WebSite implements org.semanticwb.model.OntologyDepable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Indexable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Trashable,org.semanticwb.model.Filterable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Activeable,org.semanticwb.model.Countryable,org.semanticwb.model.Localeable,org.semanticwb.model.Undeleteable,org.semanticwb.model.Traceable
 {
+   /**
+   * Objeto que define un Scorecard
+   */
     public static final org.semanticwb.platform.SemanticClass bsc_BSC=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#BSC");
     public static final org.semanticwb.platform.SemanticProperty bsc_parent=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#parent");
     public static final org.semanticwb.platform.SemanticProperty bsc_logo=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#logo");
@@ -518,64 +524,64 @@ public abstract class BSCBase extends org.semanticwb.model.WebSite implements or
         return org.semanticwb.bsc.element.Measure.ClassMgr.hasMeasure(id, this);
     }
 
-    public org.semanticwb.bsc.Objective getObjective(String id)
+    public org.semanticwb.bsc.element.Objective getObjective(String id)
     {
-        return org.semanticwb.bsc.Objective.ClassMgr.getObjective(id, this);
+        return org.semanticwb.bsc.element.Objective.ClassMgr.getObjective(id, this);
     }
 
-    public java.util.Iterator<org.semanticwb.bsc.Objective> listObjectives()
+    public java.util.Iterator<org.semanticwb.bsc.element.Objective> listObjectives()
     {
-        return org.semanticwb.bsc.Objective.ClassMgr.listObjectives(this);
+        return org.semanticwb.bsc.element.Objective.ClassMgr.listObjectives(this);
     }
 
-    public org.semanticwb.bsc.Objective createObjective(String id)
+    public org.semanticwb.bsc.element.Objective createObjective(String id)
     {
-        return org.semanticwb.bsc.Objective.ClassMgr.createObjective(id,this);
+        return org.semanticwb.bsc.element.Objective.ClassMgr.createObjective(id,this);
     }
 
-    public org.semanticwb.bsc.Objective createObjective()
+    public org.semanticwb.bsc.element.Objective createObjective()
     {
         long id=getSemanticObject().getModel().getCounter(bsc_Objective);
-        return org.semanticwb.bsc.Objective.ClassMgr.createObjective(String.valueOf(id),this);
+        return org.semanticwb.bsc.element.Objective.ClassMgr.createObjective(String.valueOf(id),this);
     } 
 
     public void removeObjective(String id)
     {
-        org.semanticwb.bsc.Objective.ClassMgr.removeObjective(id, this);
+        org.semanticwb.bsc.element.Objective.ClassMgr.removeObjective(id, this);
     }
     public boolean hasObjective(String id)
     {
-        return org.semanticwb.bsc.Objective.ClassMgr.hasObjective(id, this);
+        return org.semanticwb.bsc.element.Objective.ClassMgr.hasObjective(id, this);
     }
 
-    public org.semanticwb.bsc.Indicator getIndicator(String id)
+    public org.semanticwb.bsc.element.Indicator getIndicator(String id)
     {
-        return org.semanticwb.bsc.Indicator.ClassMgr.getIndicator(id, this);
+        return org.semanticwb.bsc.element.Indicator.ClassMgr.getIndicator(id, this);
     }
 
-    public java.util.Iterator<org.semanticwb.bsc.Indicator> listIndicators()
+    public java.util.Iterator<org.semanticwb.bsc.element.Indicator> listIndicators()
     {
-        return org.semanticwb.bsc.Indicator.ClassMgr.listIndicators(this);
+        return org.semanticwb.bsc.element.Indicator.ClassMgr.listIndicators(this);
     }
 
-    public org.semanticwb.bsc.Indicator createIndicator(String id)
+    public org.semanticwb.bsc.element.Indicator createIndicator(String id)
     {
-        return org.semanticwb.bsc.Indicator.ClassMgr.createIndicator(id,this);
+        return org.semanticwb.bsc.element.Indicator.ClassMgr.createIndicator(id,this);
     }
 
-    public org.semanticwb.bsc.Indicator createIndicator()
+    public org.semanticwb.bsc.element.Indicator createIndicator()
     {
         long id=getSemanticObject().getModel().getCounter(bsc_Indicator);
-        return org.semanticwb.bsc.Indicator.ClassMgr.createIndicator(String.valueOf(id),this);
+        return org.semanticwb.bsc.element.Indicator.ClassMgr.createIndicator(String.valueOf(id),this);
     } 
 
     public void removeIndicator(String id)
     {
-        org.semanticwb.bsc.Indicator.ClassMgr.removeIndicator(id, this);
+        org.semanticwb.bsc.element.Indicator.ClassMgr.removeIndicator(id, this);
     }
     public boolean hasIndicator(String id)
     {
-        return org.semanticwb.bsc.Indicator.ClassMgr.hasIndicator(id, this);
+        return org.semanticwb.bsc.element.Indicator.ClassMgr.hasIndicator(id, this);
     }
 
     public org.semanticwb.bsc.tracing.Risk getRisk(String id)
