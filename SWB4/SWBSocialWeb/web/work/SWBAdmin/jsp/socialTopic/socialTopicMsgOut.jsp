@@ -16,20 +16,25 @@
 <%@page import="static org.semanticwb.social.admin.resources.SocialTopicMsgOut.*"%>
 <jsp:useBean id="paramRequest" scope="request" type="org.semanticwb.portal.api.SWBParamRequest"/>
 <%
+System.out.println("Entra a SocialOut-1");
 if(request.getParameter("showSource")!=null)
 {
     SemanticObject sObjPostOut=(SemanticObject)request.getAttribute("sObjPostOut");
-    if(sObjPostOut.createGenericInstance() instanceof org.semanticwb.social.Message)   
+    System.out.println("Entra a SocialOut-2:"+sObjPostOut);
+    if(sObjPostOut.createGenericInstance() instanceof org.semanticwb.social.MessageIn)   
     {
-        Message message=(Message)sObjPostOut.createGenericInstance();
-        //showData(message.getPostInOrigen().get);
+        MessageIn messageIn=(MessageIn)sObjPostOut.createGenericInstance();
+        out.println(showData(messageIn, "msg", paramRequest));
     }else if(sObjPostOut.createGenericInstance()  instanceof Photo)
     {
-        Photo photo=(Photo)sObjPostOut.createGenericInstance();
+        PhotoIn photoIn=(PhotoIn)sObjPostOut.createGenericInstance();
+         out.println(showData(photoIn, "photo", paramRequest));
         //System.out.println("Es una foto");
     }else if(sObjPostOut.createGenericInstance()  instanceof Video)
     {
-        Video video=(Video)sObjPostOut.createGenericInstance();
+        VideoIn videoIn=(VideoIn)sObjPostOut.createGenericInstance();
+        System.out.println("video:"+videoIn); 
+         out.println(showData(videoIn, "video", paramRequest));
         //System.out.println("Es un Video");
     }                    
 }else
@@ -153,9 +158,11 @@ out.println("      { field:'type', width:'6%', name:'Tipo', styles:'font-size:11
 out.println("      { field:'element',width:'6%',name:'Elemento', styles:'font-size:11px;', headerStyles:'font-size:11px;text-align:center;' },");
 out.println("      { field:'nets', width:'43%',name:'Redes de envio', styles:'font-size:10px;', headerStyles:'font-size:11px;text-align:center;' },");
 out.println("      { field:'isShared', width:'43%',name:'Difundido', styles:'font-size:10px;', headerStyles:'font-size:11px;text-align:center;' },");
-out.println("      { field:'postIn',width:'5%', name:'Origen', formatter:function(value){var artf=postInSource(value);if(artf!='---'){return '<a href=\"javascript:void(0)\" onclick=\"showPopUp(\\''+escape(artf)+'\\',\\'"+paramRequest.getRenderUrl().setMode(Mode_SOURCE).setCallMethod(SWBResourceURL.Call_DIRECT) +"\\',\\'reevaluando\\',500,250)\" >revaluar</a>';}else {return '---';};}, styles:'text-align:center;font-size:10px;', headerStyles:'font-size:11px;text-align:center;' },"); 
+out.println("      { field:'postIn',width:'5%', name:'Origen', formatter:function(value){var artf=postInSource(value);if(artf!='---'){return '<a href=\"javascript:void(0)\" onclick=\"showPopUp(\\''+escape(artf)+'\\',\\'"+paramRequest.getRenderUrl().setMode(Mode_SOURCE).setCallMethod(SWBResourceURL.Call_DIRECT) +"\\',\\'Origen\\',500,250)\" >Origen</a>';}else {return '---';};}, styles:'text-align:center;font-size:10px;', headerStyles:'font-size:11px;text-align:center;' },"); 
 out.println("      { field:'crated', width:'43%',name:'Fecha', styles:'font-size:10px;', headerStyles:'font-size:11px;text-align:center;' },");
-out.println("      { field:'crator', width:'43%',name:'Usuario', styles:'font-size:10px;', headerStyles:'font-size:11px;text-align:center;' }");
+out.println("      { field:'crator', width:'43%',name:'Usuario', styles:'font-size:10px;', headerStyles:'font-size:11px;text-align:center;' },");
+out.println("      { field:'pflow', width:'43%',name:'Flujo', styles:'font-size:10px;', headerStyles:'font-size:11px;text-align:center;' },");
+out.println("      { field:'step', width:'43%',name:'Paso', styles:'font-size:10px;', headerStyles:'font-size:11px;text-align:center;' }");
 out.println("   ];");
 
 out.println("   gridMaster = new dojox.grid.DataGrid({");
@@ -217,20 +224,43 @@ if(paginas > 1) {
 %>
 
 <%!
-private String showData()
+private String showData(PostIn postIn, String postOutType, SWBParamRequest paramRequest)
 {
+    if(postIn==null) return null;
     StringBuilder strb=new StringBuilder();  
-    
-    strb.append("<table border=\"0\" cellspacing=\"5\">");
-    strb.append("<tr align=\"center\"><th colspan=\"5\" align=\"center\">Mensaje Origen</th></tr>");
-    strb.append("    <tr>");
-    strb.append("        <td></td>");
-    strb.append("        <td></td>");
-    strb.append("        <td></td>");
-    strb.append("        <td></td>");
-    strb.append("        <td></td>");
-    strb.append("    </tr>");
-    strb.append("</table>");
+    try
+    {
+        strb.append("<table border=\"0\" cellspacing=\"5\">");
+        strb.append("<tr>");
+        strb.append("<td>");
+        strb.append(postOutType.equals("msg")?paramRequest.getLocaleString("message"):postOutType.equals("photo")?paramRequest.getLocaleString("photo"):postOutType.equals("video")?paramRequest.getLocaleString("video"):"---");
+        strb.append("</td>");
+        strb.append("</tr>");
+        strb.append("<tr>");
+        strb.append("<td>");
+        if(postIn instanceof  MessageIn)
+        {
+            MessageIn msgIn=(MessageIn)postIn;
+            strb.append(msgIn.getMsg_Text()!=null?msgIn.getMsg_Text():"---");
+        }else if(postIn instanceof  PhotoIn)
+        {
+            PhotoIn photoIn=(PhotoIn)postIn;
+            strb.append(photoIn.getPhoto());
+            strb.append("<br>"+photoIn.getMsg_Text()!=null?photoIn.getMsg_Text():"---");
+        }else if(postIn instanceof  VideoIn)
+        {
+            VideoIn videoIn=(VideoIn)postIn;
+            strb.append(videoIn.getVideo());
+            strb.append("<br>"+videoIn.getMsg_Text()!=null?videoIn.getMsg_Text():"---");
+        }
+        strb.append("</td>");
+        strb.append("</tr>");
+      strb.append("</table>");  
+        
+    }catch(Exception e)
+    {
+        log.error(e); 
+    }
     
     return strb.toString();
 }

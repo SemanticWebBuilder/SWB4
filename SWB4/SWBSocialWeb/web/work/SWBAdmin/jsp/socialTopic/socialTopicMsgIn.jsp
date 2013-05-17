@@ -34,6 +34,7 @@
 </script>
 <script type="text/javascript" src="/swbadmin/js/dojo/dojo/dojo.js" ></script>
 <script type="text/javascript" src="/swbadmin/js/swb.js" ></script>    
+ <script type="text/javascript" charset="utf-8" src="/swbadmin/js/swb_admin.js"></script>
 
 <%
     String objUri = request.getParameter("suri");
@@ -141,6 +142,7 @@ out.println("function showPopUpResponse(value,pageURL,title, w, h) {");
 out.println(" var left = (screen.width/2)-(w/2);");
 out.println(" var top = (screen.height/2)-(h/2);");
 out.println(" var targetWin = window.open (pageURL+'?postUri='+value, title, 'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=no, copyhistory=no, width='+w+', height='+h+', top='+top+', left='+left);");
+//out.println("showDialog('"+pageURL+'?postUri='+value+ "','" + paramRequest.getLocaleString("comentary") + "'); return false;);
 out.println(" return false;");
 out.println("}");
 out.println("function postInSource(value) {");
@@ -173,6 +175,7 @@ out.println("      { field:'fllwrs', width:'5%', name:'Seguidores', styles:'font
 out.println("      { field:'frds',width: '5%',name:'Amigos', styles:'font-size:11px;text-align:right;', headerStyles:'font-size:11px;text-align:center;' },");
 out.println("      { field:'plc',width: '8%',name:'Lugar', styles:'font-size:11px;', headerStyles:'font-size:11px;text-align:center;' },");
 out.println("      { field:'postIn',width:'5%', name:'Responder', formatter:function(value){var artf=postInSource(value);if(value!='---'){return '<a href=\"javascript:void(0)\" onclick=\"showPopUpResponse(\\''+escape(artf)+'\\',\\'"+paramRequest.getRenderUrl().setMode(Mode_RESPONSE) +"\\',\\'Responder\\',500,250)\" >Responder</a>';}else {return '---';};}, styles:'text-align:center;font-size:10px;', headerStyles:'font-size:11px;text-align:center;' }"); 
+//out.println("      { field:'postIn',width:'5%', name:'Responder', formatter:function(value){var artf=postInSource(value);if(value!='---'){return '<a href=\"showDialog(\\'"+paramRequest.getRenderUrl().setMode(Mode_RESPONSE)+"?postUri=xxx\\',\\'Responder\\'); return false;\" onclick=\"showDialog(\\'"+paramRequest.getRenderUrl().setMode(Mode_RESPONSE)+"?postUri=xxx\\',\\'Responder\\'); return false;\">Responder</a>';}else {return '---';};}, styles:'text-align:center;font-size:10px;', headerStyles:'font-size:11px;text-align:center;' }"); 
 out.println("   ];");
 
 out.println("   gridMaster = new dojox.grid.DataGrid({");
