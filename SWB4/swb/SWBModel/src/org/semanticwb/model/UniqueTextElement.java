@@ -88,7 +88,7 @@ public class UniqueTextElement extends org.semanticwb.model.base.UniqueTextEleme
 //            throw new FormValidateException("No se permiten espacios:" + value);
 //        }
 
-        System.out.println("obj:"+obj.getURI()+" prop:"+prop+" propName:"+propName+" value:"+value);
+        //System.out.println("obj:"+obj.getURI()+" prop:"+prop+" propName:"+propName+" value:"+value);
         
         if (value != null)
         {
@@ -139,12 +139,12 @@ public class UniqueTextElement extends org.semanticwb.model.base.UniqueTextEleme
             SemanticClass sclass = prop.getDomainClass();
             Iterator<SemanticObject> itso = obj.getModel().listSubjects(prop, value);
             
-            System.out.println("sclass:"+sclass.getURI()+" model1:"+obj.getModel().getName()+" model2:"+getModel().getName());
+            //System.out.println("sclass:"+sclass.getURI()+" model1:"+obj.getModel().getName()+" model2:"+getModel().getName());
             
             while (itso.hasNext())
             {
                 SemanticObject sObj = itso.next(); 
-                System.out.println("sObj:"+sObj);
+                //System.out.println("sObj:"+sObj);
                 if(!obj.getSemanticClass().equals(sObj.getSemanticClass()))
                 {
                     continue;
@@ -153,7 +153,7 @@ public class UniqueTextElement extends org.semanticwb.model.base.UniqueTextEleme
                 {
                     continue;
                 }                
-                System.out.println("Ya existe:"+sObj);
+                //System.out.println("Ya existe:"+sObj);
                 //existe texto igual
                 throw new FormValidateException("Ya existe Texto(URL):" + value);
             }
