@@ -271,14 +271,14 @@ public class SocialDocumentsToAuhorize extends GenericResource
                     if(resource.getPflowInstance()!=null)
                     {
                         out.println("<tr>");
-                        out.println("<td>paramRequest.getLocaleString(\"flow\")</td>");
+                        out.println("<td>"+paramRequest.getLocaleString("flow")+"</td>");
                         out.println("<td>"+resource.getPflowInstance().getPflow().getDisplayTitle(lang) +"</td>");
                         out.println("</tr>");
                     }
                     if(resource.getSocialTopic()!=null)
                     {
                         out.println("<tr>");
-                        out.println("<td>paramRequest.getLocaleString(\"topic\")</td>");
+                        out.println("<td>"+paramRequest.getLocaleString("topic")+"</td>");
                         out.println("<td>"+resource.getSocialTopic().getDisplayTitle(lang) +"</td>");
                         out.println("</tr>");
                     }
@@ -361,6 +361,9 @@ public class SocialDocumentsToAuhorize extends GenericResource
                 out.println(paramRequest.getLocaleString("step"));
                 out.println("</th>");
                 out.println("<th>");
+                out.println(paramRequest.getLocaleString("socialNet"));
+                out.println("</th>");
+                out.println("<th>");
                 out.println(paramRequest.getLocaleString("action"));
                 out.println("</th>");
                 out.println("</tr>");
@@ -384,12 +387,11 @@ public class SocialDocumentsToAuhorize extends GenericResource
 
                     WebPage wpShowPostOut = wsite.getWebPage("ShowPostOut");
                     Resource resrPostOut = wsite.getResource("143");
-                    System.out.println("postOut a request:"+resource.getId());
                     request.setAttribute("postOut", resource.getId());
                     
                     SWBParamRequestImp paramreq = new SWBParamRequestImp(request, resrPostOut, wpShowPostOut, user);
                     SWBResourceURL urlpreview=paramreq.getRenderUrl().setCallMethod(SWBParamRequestImp.Call_DIRECT);
-                    urlpreview.setParameter("postOut", resource.getId());
+                    urlpreview.setParameter("postOut", resource.getURI());
                     urlpreview.setParameter("wsite", resource.getSemanticObject().getModel().getName());
                    
 
@@ -405,6 +407,9 @@ public class SocialDocumentsToAuhorize extends GenericResource
                     out.println("</td>");
                     out.println("<td width='20%'>");
                     out.println(resource.getPflowInstance().getStep());
+                    out.println("</td>");
+                    out.println("<td width='20%'>");
+                    out.println(resource.getSocialNetwork()!=null?resource.getSocialNetwork().getDisplayTitle(lang):"---");
                     out.println("</td>");
                     out.println("</td>");
                     out.println("<td width='20%'>");
