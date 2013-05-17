@@ -10,8 +10,11 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Locale;
 import java.util.Properties;
+import java.util.ResourceBundle;
 import java.util.StringTokenizer;
 import javax.servlet.http.HttpServletRequest;
 import org.apache.lucene.analysis.TokenStream;
@@ -20,9 +23,12 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.base.SWBAppObject;
 import org.semanticwb.model.ModelProperty;
-import org.semanticwb.model.PFlowInstance;
+import org.semanticwb.model.PFlow;
+import org.semanticwb.model.Role;
+import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.SWBModel;
 import org.semanticwb.model.User;
+import org.semanticwb.model.WebPage;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticObject;
@@ -80,6 +86,11 @@ public class SWBSocialUtil implements SWBAppObject {
     static public int INTENSITIVE_HIGH = 2;
     static public int INTENSITIVE_MEDIUM = 1;
     static public int INTENSITIVE_LOW = 0;
+    static public String MESSAGE="message";
+    static public String PHOTO="photo";
+    static public String VIDEO="video";
+    
+    
     private static Properties prop = new Properties();
 
     /**
@@ -101,7 +112,7 @@ public class SWBSocialUtil implements SWBAppObject {
      * @return a reference to the only one existing object of this class
      */
     static public synchronized SWBSocialUtil createInstance() {
-        System.out.println("Entra a SWBSocialUtil/createInstance");
+        //System.out.println("Entra a SWBSocialUtil/createInstance");
         if (instance == null) {
             instance = new SWBSocialUtil();
         }
@@ -750,17 +761,27 @@ public class SWBSocialUtil implements SWBAppObject {
                     post.setSocialTopic(socialTopic);
                     //Convierto a un post de salida para poderle agregar cada red social a la que se envía dicho post
                     PostOut postOut = (PostOut) post;
-                    System.out.println("Creo postOut:"+postOut);
+                    //Si el PostOut que se acaba de crear, fue en consecuencia de una respuesta de una PostIn, este se agrega al nuevo PostOut
+                    if(postIn!=null)    
+                    {
+                        postOut.setPostInOrigen(postIn);
+                    }
+                    System.out.println("Creo postOut:"+postOut+",socialPFlow:"+socialPFlow);
                     //SocialPFlow al que se va ha enviar el nuevo post, si no tiene(que llegue Nulo), entonces se envía el PostOut sin pasar por flujo
                     if (socialPFlow != null) {
-                        sendPostOutToAuthorize(postOut, socialPFlow, "");
+                        System.out.println("Entra a J1");
+                        String socialFlowComment=request.getParameter("socialFlowComment");
+                        System.out.println("processAction/socialFlowComment--GG:"+socialFlowComment);
+                        sendPostOutToAuthorize(postOut, socialPFlow, socialFlowComment);
                         //initPostOut(postOut, socialPFlow, "");
                     } else {
+                        System.out.println("Entra a J2");
                         //Revisa las redes sociales a las cuales se tiene que enviar el Post
                         //String[] socialUris = socialUri.split("\\|");  //Dividir valores
                         Iterator<SocialNetwork> itSocialNets = aSocialNets.iterator();
                         while (itSocialNets.hasNext()) {
                             SocialNetwork socialNet = itSocialNets.next();
+                            System.out.println("Entra a J2-1:"+socialNet);
                             //SemanticObject semObject = SemanticObject.createSemanticObject(tmp_socialUri, wsite.getSemanticModel());
                             //SocialNetwork socialNet = (SocialNetwork) semObject.createGenericInstance();
                             //Se agrega la red social de salida al post
@@ -818,8 +839,13 @@ public class SWBSocialUtil implements SWBAppObject {
         }
         WebSite wsite=WebSite.ClassMgr.getWebSite(postOut.getSemanticObject().getModel().getName());
         //String typeresource = resource.getResourceType().getId();
-        SemanticClass semClass=postOut.getSemanticObject().getSemanticClass().listSubClasses().next(); 
+        System.out.println("wsite:"+wsite+",postOut:"+postOut);
+        System.out.println("postOut-1:"+postOut.getSemanticObject().getSemanticClass());
+        System.out.println("postOut-2:"+postOut.getSemanticObject().getSemanticClass().listSubClasses());
+        SemanticClass semClass=postOut.getSemanticObject().getSemanticClass(); 
+        System.out.println("sendPostOutToAuthorize/semClass:"+semClass);
         String typeresource=semClass.getClassId();
+        System.out.println("typeresource:"+typeresource);
         Document docflow = SWBUtils.XML.xmlToDom(pflow.getXml());
         Element workflow = (Element) docflow.getElementsByTagName("workflow").item(0);
         NodeList resourceTypes = workflow.getElementsByTagName("resourceType");
@@ -827,11 +853,13 @@ public class SWBSocialUtil implements SWBAppObject {
         {
             Element eres = (Element) resourceTypes.item(ires);
             String iresw = eres.getAttribute("id");
-            
+            System.out.println("iresw:"+iresw);
             if (iresw.equals(typeresource) && wsite.getId().equals(eres.getAttribute("topicmap")))
             {
                 int version = (int) Double.parseDouble(workflow.getAttribute("version"));
+                System.out.println("iresw-version/typeresource:"+version);
                 SocialPFlowInstance instance = SocialPFlowInstance.ClassMgr.createSocialPFlowInstance(wsite);
+                System.out.println("iresw-instance:"+instance);
                 instance.setPflow(pflow);
                 postOut.setPflowInstance(instance);
                 instance.setPfinstPostOut(postOut);
@@ -851,28 +879,35 @@ public class SWBSocialUtil implements SWBAppObject {
          */
         private static void initPostOut(PostOut postOut, SocialPFlow pflow, String message) {
             SocialPFlowInstance instance = postOut.getPflowInstance();
+            System.out.println("iresw-initPostOut/instance:"+instance);
             String version = String.valueOf(instance.getVersion());
             String activity = null;
             String xml = pflow.getXml(); 
             Document docxml = SWBUtils.XML.xmlToDom(xml);
             NodeList workflows = docxml.getElementsByTagName("workflow");
+            System.out.println("initPostOut/xml:"+xml);
             for (int i = 0; i < workflows.getLength(); i++) {
                 Element workflow = (Element) workflows.item(i);
+                System.out.println("initPostOut/workflow:"+workflow);
                 version = version + ".0";
                 if ((workflow.getAttribute("version")).equals(version)) {
+                    System.out.println("initPostOut/version:"+version);
                     Element ecurrentActivity = null;
                     NodeList activities = workflow.getElementsByTagName("activity");
                     if (activities.getLength() > 0) {
                         ecurrentActivity = (Element) activities.item(0);
                         activity = ((Element) activities.item(0)).getAttribute("name");
+                        System.out.println("initPostOut/activity:"+activity);
                     }
                     try {
                         instance.setStep(activity);
+                        System.out.println("initPostOut/activity-2:"+activity);
                         long tinit = System.currentTimeMillis();
                         instance.setTime(new Date(tinit));
                         if (ecurrentActivity.getAttribute("type").equals("Activity")) {
                             long days = Long.parseLong(ecurrentActivity.getAttribute("days"));
                             long hours = 0;
+                            System.out.println("initPostOut/days:"+days);
                             if (ecurrentActivity.getAttribute("hours") != null && !ecurrentActivity.getAttribute("hours").equals("")) {
                                 hours = Long.parseLong(ecurrentActivity.getAttribute("hours"));
                             }
@@ -889,6 +924,7 @@ public class SWBSocialUtil implements SWBAppObject {
                         log.error(e);
                     }
                     String messageType = "I";
+                    System.out.println("initPostOut/messageType:"+messageType);
                     mailToNotify(postOut, activity, messageType, message);
                 }
 
@@ -904,25 +940,29 @@ public class SWBSocialUtil implements SWBAppObject {
          * @param message the message
          */
         private static void mailToNotify(PostOut postOut, String activityName, String messageType, String message) {
-            /*
+            System.out.println("mailToNotify-1");
+            
             User wbuser = postOut.getCreator();
             Locale locale = Locale.getDefault();
+            System.out.println("locale:"+locale.getLanguage());
             try {
                 ResourceBundle bundle = null;
                 try {
-                    bundle = ResourceBundle.getBundle("org/semanticwb/portal/PFlowManager", locale);
+                    bundle = ResourceBundle.getBundle("org/semanticwb/social/util/pflow/SocialPFlowMgr", locale);
                 } catch (Exception e) {
-                    bundle = ResourceBundle.getBundle("org/semanticwb/portal/PFlowManager");
+                    bundle = ResourceBundle.getBundle("org/semanticwb/social/util/pflow/SocialPFlowMgr");
                 }
                 if (postOut.getPflowInstance() != null) {
-                    WebSite site = postOut.getWebSite();
-                    PFlow flow = resource.getPflowInstance().getPflow();
+                    System.out.println("mailToNotify-1");
+                    WebSite wsite=WebSite.ClassMgr.getWebSite(postOut.getSemanticObject().getModel().getName());
+                    SocialPFlow flow = postOut.getPflowInstance().getPflow();
                     Document docdef = SWBUtils.XML.xmlToDom(flow.getXml());
-                    int version = resource.getPflowInstance().getVersion();
+                    int version = postOut.getPflowInstance().getVersion();
                     NodeList workflows = docdef.getElementsByTagName("workflow");
                     for (int iworkflow = 0; iworkflow < workflows.getLength(); iworkflow++) {
                         Element eworkflow = (Element) workflows.item(iworkflow);
                         if (eworkflow.getAttribute("version").equals(version + ".0")) {
+                            System.out.println("mailToNotify-2");
                             NodeList activities = eworkflow.getElementsByTagName("activity");
                             for (int i = 0; i < activities.getLength(); i++) {
                                 Element activity = (Element) activities.item(i);
@@ -930,40 +970,44 @@ public class SWBSocialUtil implements SWBAppObject {
                                     activityName = activity.getAttribute("name");
                                 }
                                 if (activity.getAttribute("name").equalsIgnoreCase(activityName)) {
+                                    System.out.println("mailToNotify-2");
                                     if (activity.getAttribute("type").equalsIgnoreCase("AuthorActivity")) {
-                                        User user = resource.getCreator();
-                                        String msgMail = bundle.getString("msg1") + " " + resource.getId() + " " + bundle.getString("msg2") + " '" + resource.getTitle() + "' " + bundle.getString("msg3") + ".";
+                                        System.out.println("mailToNotify-4");
+                                        User user = postOut.getCreator();
+                                        String msgMail = bundle.getString("msg1") + " " + postOut.getId() + " " + bundle.getString("msg2") + " '" + postOut.getMsg_Text() + "' " + bundle.getString("msg3") + ".";
 
                                         msgMail += "\r\n" + bundle.getString("msg4") + ": " + wbuser.getFirstName() + " " + wbuser.getLastName();
                                         msgMail += "\r\n" + bundle.getString("msg5") + ": " + wbuser.getLogin();
 
                                         msgMail += "\r\n" + bundle.getString("msg6") + ": " + message;
-                                        msgMail += "\r\n" + bundle.getString("sitio") + ": " + site.getTitle() + ".\r\n";
+                                        msgMail += "\r\n" + bundle.getString("sitio") + ": " + wsite.getTitle() + ".\r\n";
                                         msgMail += "\r\n" + bundle.getString("paso") + ": " + activityName + ".\r\n";
                                         if (activity.getAttribute("days") != null && activity.getAttribute("hours") != null) {
                                             if (!(activity.getAttribute("days").equals("0") && activity.getAttribute("hours").equals("0"))) {
                                                 msgMail += "\r\n" + bundle.getString("msgr1") + " " + activity.getAttribute("days") + " " + bundle.getString("days") + " " + bundle.getString("and") + " " + activity.getAttribute("hours") + " " + bundle.getString("hours") + " .";
                                             }
                                         }
-                                        WebPage page = (WebPage) resource.getResourceable();
+                                        SocialTopic socialTopic = (SocialTopic) postOut.getSocialTopic();
                                         HashMap args = new HashMap();
                                         args.put("language", Locale.getDefault().getLanguage());
-                                        msgMail += "\r\n" + bundle.getString("seccion") + ": " + page.getTitle() + ".\r\n";
-                                        SWBUtils.EMAIL.sendBGEmail(user.getEmail(), bundle.getString("msg7") + " " + resource.getId() + " " + bundle.getString("msg8"), msgMail);
+                                        msgMail += "\r\n" + bundle.getString("socialTopic") + ": " + socialTopic.getTitle() + ".\r\n";
+                                        SWBUtils.EMAIL.sendBGEmail(user.getEmail(), bundle.getString("msg7") + " " + postOut.getId() + " " + bundle.getString("msg8"), msgMail);
                                     } else if (activity.getAttribute("type").equalsIgnoreCase("EndActivity")) {
-                                        User user = resource.getCreator();
-                                        String msgMail = bundle.getString("msg1") + " " + resource.getId() + " " + bundle.getString("msg2") + " '" + resource.getTitle() + "' " + bundle.getString("msg9") + ".";
-                                        msgMail += "\r\n" + bundle.getString("sitio") + ": " + site.getTitle() + ".\r\n";
+                                        System.out.println("mailToNotify-5");
+                                        User user = postOut.getCreator();
+                                        String msgMail = bundle.getString("msg1") + " " + postOut.getId() + " " + bundle.getString("msg2") + " '" + postOut.getMsg_Text() + "' " + bundle.getString("msg9") + ".";
+                                        msgMail += "\r\n" + bundle.getString("sitio") + ": " + wsite.getTitle() + ".\r\n";
                                         msgMail += "\r\n" + bundle.getString("paso") + ": " + activityName + ".\r\n";
                                         if (messageType.equalsIgnoreCase("N") && message != null && !message.equalsIgnoreCase("")) {
                                             msgMail += "\r\n" + bundle.getString("msg6") + ": " + message;
                                         }
-                                        WebPage page = (WebPage) resource.getResourceable();
+                                        SocialTopic socialTopic = (SocialTopic) postOut.getSocialTopic();
                                         HashMap args = new HashMap();
                                         args.put("language", Locale.getDefault().getLanguage());
-                                        msgMail += "\r\n" + bundle.getString("seccion") + ": " + page.getTitle() + ".\r\n";
-                                        SWBUtils.EMAIL.sendBGEmail(user.getEmail(), bundle.getString("msg7") + " " + resource.getId() + " " + bundle.getString("msg10") + "", msgMail);
+                                        msgMail += "\r\n" + bundle.getString("socialTopic") + ": " + socialTopic.getTitle() + ".\r\n";
+                                        SWBUtils.EMAIL.sendBGEmail(user.getEmail(), bundle.getString("msg7") + " " + postOut.getId() + " " + bundle.getString("msg10") + "", msgMail);
                                     } else if (activity.getAttribute("type").equalsIgnoreCase("Activity")) {
+                                        System.out.println("mailToNotify-6");
                                         HashSet<User> husers = new HashSet<User>();
                                         NodeList users = activity.getElementsByTagName("user");
                                         for (int j = 0; j < users.getLength(); j++) {
@@ -1005,14 +1049,15 @@ public class SWBSocialUtil implements SWBAppObject {
                                             to = to.substring(0, to.length() - 1);
                                         }
                                         if (!to.equalsIgnoreCase("")) {
-                                            String subject = bundle.getString("msg7") + " " + resource.getId() + " " + bundle.getString("msg11");
-                                            String msg = bundle.getString("msg1") + " " + resource.getId() + " " + bundle.getString("msg2") + " '" + resource.getTitle() + "' " + bundle.getString("msg12") + " '" + activityName + "'.\r\n";
-                                            msg += "\r\n" + bundle.getString("sitio") + ": " + site.getTitle() + ".\r\n";
+                                            System.out.println("mailToNotify-7");
+                                            String subject = bundle.getString("msg7") + " " + postOut.getId() + " " + bundle.getString("msg11");
+                                            String msg = bundle.getString("msg1") + " " + postOut.getId() + " " + bundle.getString("msg2") + " '" + postOut.getMsg_Text() + "' " + bundle.getString("msg12") + " '" + activityName + "'.\r\n";
+                                            msg += "\r\n" + bundle.getString("sitio") + ": " + wsite.getTitle() + ".\r\n";
                                             msg += "\r\n" + bundle.getString("paso") + ": " + activityName + ".\r\n";
-                                            WebPage page = (WebPage) resource.getResourceable();
+                                            SocialTopic socialTopic = (SocialTopic) postOut.getSocialTopic();
                                             HashMap args = new HashMap();
                                             args.put("language", Locale.getDefault().getLanguage());
-                                            msg += "\r\n" + bundle.getString("seccion") + ": " + page.getTitle() + ".\r\n";
+                                            msg += "\r\n" + bundle.getString("socialTopic") + ": " + socialTopic.getTitle() + ".\r\n";
 
                                             if ((messageType.equalsIgnoreCase("I") || messageType.equalsIgnoreCase("N")) && message != null && !message.equalsIgnoreCase("")) {
                                                 msg += "\r\n" + bundle.getString("msg6") + ": " + message;
@@ -1020,25 +1065,28 @@ public class SWBSocialUtil implements SWBAppObject {
                                             if (messageType.equalsIgnoreCase("A")) {
 
                                                 // envía correo al creador del contenido
-                                                User user = resource.getCreator();
-                                                String msgMail = bundle.getString("sitio") + ": " + site.getTitle() + ".\r\n";
+                                                User user = postOut.getCreator();
+                                                String msgMail = bundle.getString("sitio") + ": " + wsite.getTitle() + ".\r\n";
                                                 msgMail += "\r\n" + bundle.getString("paso") + ": " + activityName + ".\r\n";
                                                 //msgMail+=bundle.getString("url")+": "+ObjRes.getAdminUrl()+".\r\n";
-                                                msgMail += "\r\n" + bundle.getString("seccion") + ": " + page.getTitle() + ".\r\n";
-                                                msgMail += "\r\n" + bundle.getString("msg13") + " " + resource.getId() + " " + bundle.getString("msg14");
+                                                msgMail += "\r\n" + bundle.getString("socialTopic") + ": " + socialTopic.getTitle() + ".\r\n";
+                                                msgMail += "\r\n" + bundle.getString("msg13") + " " + postOut.getId() + " " + bundle.getString("msg14");
 
-                                                SWBUtils.EMAIL.sendBGEmail(user.getEmail(), bundle.getString("msg13") + " " + resource.getId() + " " + bundle.getString("msg14"), msgMail);
+                                                SWBUtils.EMAIL.sendBGEmail(user.getEmail(), bundle.getString("msg13") + " " + postOut.getId() + " " + bundle.getString("msg14"), msgMail);
 
                                                 // avisa al los revisores de la expiración de la revisión delc ontenido
-                                                msg += "\r\n" + bundle.getString("msg13") + " " + resource.getId() + " " + bundle.getString("msg14");
+                                                msg += "\r\n" + bundle.getString("msg13") + " " + postOut.getId() + " " + bundle.getString("msg14");
                                             }
                                             if (activity.getAttribute("days") != null && activity.getAttribute("hours") != null) {
+                                                System.out.println("mailToNotify-8");
                                                 if (!(activity.getAttribute("days").equals("0") && activity.getAttribute("hours").equals("0"))) {
+                                                    System.out.println("mailToNotify-9");
                                                     msg += "\r\n" + bundle.getString("msgr1") + " " + activity.getAttribute("days") + " " + bundle.getString("days") + " " + bundle.getString("and") + " " + activity.getAttribute("hours") + " " + bundle.getString("hours") + " .";
                                                 }
                                             }
-
+                                            System.out.println("Va a enviar correo...J-to:"+to+",subject:"+subject+",msg:"+msg);
                                             SWBUtils.EMAIL.sendBGEmail(to, subject, msg);
+                                            System.out.println("Va a enviar correo...J1");
                                         }
                                     }
                                 }
@@ -1052,7 +1100,6 @@ public class SWBSocialUtil implements SWBAppObject {
                 log.error(e);
                 return;
             }
-            * */
         }
     }
 }

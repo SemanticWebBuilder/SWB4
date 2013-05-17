@@ -4,7 +4,7 @@ package org.semanticwb.social.base;
    /**
    * Clase a Cambiar despues por "Relacional", esta y todas sus hijas. Clase que comprende todos los tipos de Post que pueden ir siendo creados en la herramienta.. 
    */
-public abstract class PostBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Traceable,org.semanticwb.model.Tagable
+public abstract class PostBase extends org.semanticwb.model.SWBClass implements org.semanticwb.social.PostTextable,org.semanticwb.social.PostDataable,org.semanticwb.model.Tagable,org.semanticwb.model.Traceable
 {
    /**
    * Indica si un mensaje es prioritario o no. Esta propiedad aplica tanto si es un mensaje de entrada (PostIn) o de salida (PostOut).
@@ -339,6 +339,24 @@ public abstract class PostBase extends org.semanticwb.model.SWBClass implements 
     public void setTags(String tags, String lang)
     {
         getSemanticObject().setProperty(swb_tags, tags, lang);
+    }
+
+/**
+* Gets the Msg_Text property
+* @return String with the Msg_Text
+*/
+    public String getMsg_Text()
+    {
+        return getSemanticObject().getProperty(social_msg_Text);
+    }
+
+/**
+* Sets the Msg_Text property
+* @param value long with the Msg_Text
+*/
+    public void setMsg_Text(String value)
+    {
+        getSemanticObject().setProperty(social_msg_Text, value);
     }
    /**
    * Sets the value for the property SocialTopic
