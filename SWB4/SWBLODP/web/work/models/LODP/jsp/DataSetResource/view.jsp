@@ -4,6 +4,7 @@
     Author     : juan.fernandez
 --%>
 
+<%@page import="com.infotec.lodp.swb.DatasetLog"%>
 <%@page import="com.infotec.lodp.swb.DatasetVersion"%>
 <%@page import="java.util.Date"%>
 <%@page import="com.infotec.lodp.swb.Tag"%>
@@ -150,7 +151,7 @@
         } else {
             // llamado como contenido
             if (action.equals("")) {
-                String txtTitleSearch = "Búsqueda de Data Sets";
+                String txtTitleSearch = paramRequest.getLocaleString("lbl_searchDS1"); // Búsqueda de Datasets
 
                 Date startSearch = new Date(System.currentTimeMillis());
 
@@ -159,13 +160,17 @@
                 if (null != filteruri && filteruri.trim().length() > 0) {
                     go = ont.getGenericObject(filteruri);
                     if (go != null) {
-                        if (filterby.equals(DataSetResource.FILTER_INSTITUTION) && go instanceof Institution) {
+                        if ( go instanceof Institution) { //filterby.equals(DataSetResource.FILTER_INSTITUTION) &&
+                            System.out.println("Filtrado por institucion....");
                             itds1 = Dataset.ClassMgr.listDatasetByInstitution((Institution) go,wsite); 
-                        } else if (filterby.equals(DataSetResource.FILTER_TOPIC) && go instanceof Topic) {
+                        } else if (go instanceof Topic) { //filterby.equals(DataSetResource.FILTER_TOPIC) && 
+                            System.out.println("Filtrado por tema....");
                             itds1 = Dataset.ClassMgr.listDatasetByTopic((Topic) go,wsite);
-                        } else if (filterby.equals(DataSetResource.FILTER_SECTOR) && go instanceof Sector) {
+                        } else if ( go instanceof Sector) { //filterby.equals(DataSetResource.FILTER_SECTOR) &&
+                            System.out.println("Filtrado por sector....");
                             itds1 = Dataset.ClassMgr.listDatasetByDatasetSector((Sector) go,wsite);
                         } else {
+                            System.out.println("SIN Filtro....");
                             itds1 = Dataset.ClassMgr.listDatasets(wsite);
                         }
                     } else {
@@ -182,12 +187,12 @@
                 // obteniendo Datasets que coincidan con el texto a buscar
                 String queryinput = request.getParameter("search");
                 System.out.println("query..."+queryinput);
-                String queryOriginal = queryinput != null ? queryinput : "Search";
+                String queryOriginal = queryinput != null ? queryinput : paramRequest.getLocaleString("btn_search");//"Search"
                 if (null == queryinput) {
                     queryinput = "";
                 } else {
                     queryinput = queryinput.trim().toLowerCase();
-                    txtTitleSearch = "Resultado de la búsqueda";
+                    txtTitleSearch = paramRequest.getLocaleString("lbl_searchDS2"); //Resultado de la búsqueda
                 }
 
                 // Se guardan ds que coinciden con la búsqueda
@@ -247,13 +252,18 @@
                     hmcp.put(ds.getURI(), ds);
                 }
 //                System.out.println("Antes de ordenar DS....");
-                
-                Iterator<Dataset> itds = DataSetResource.orderDS(hmcp.values().iterator(), orderby);
-                intSize = SWBUtils.Collections.sizeOf(itds);
-
+                Iterator<Dataset> itds = null;
+                System.out.println("size: "+hmcp.size());
+                if(hmcp.size()>0){
+                    itds = DataSetResource.orderDS(hmcp.values().iterator(), orderby);
+                    intSize=hmcp.size();
+                } else {
+                //itds = DataSetResource.orderDS(hmcp.values().iterator(), orderby);
+                intSize = 0;
+                }
 //                 System.out.println("Tamaño DS...."+intSize);
 
-                 itds = DataSetResource.orderDS(hmcp.values().iterator(), orderby);
+                 //itds = DataSetResource.orderDS(hmcp.values().iterator(), orderby);
 
                 Date endSearch = new Date(System.currentTimeMillis());
                 long searchTime = endSearch.getTime() - startSearch.getTime();
@@ -267,31 +277,26 @@
         <input type="hidden" name="filter" value="<%=filterby%>"/>
         <%
             }
-            if (queryinput != null && queryinput.trim().length() > 0) {
-        %>
-        <input type="hidden" name="search" value="<%=queryinput%>"/>
-        <%
-            }
         %>
         <ul>
             <li>
-                <label for="txt_search"><%=txtTitleSearch%></label><input type="text" name="search" value="<%=queryOriginal%>" onfocus="if (this.value == 'Search') {this.value = ''};"><button type="submit">Buscar</button>
+                <label for="txt_search"><%=txtTitleSearch%></label><input type="text" name="search" value="<%=queryOriginal%>" onfocus="if (this.value == 'Search'  || this.value == 'Buscar') {this.value = ''};"><button type="submit"><%=paramRequest.getLocaleString("btn_search")%></button>
                 <%
                     // si hubo búsqueda
                     if (null != queryinput && queryinput.trim().length() > 0) {
                         if (intSize > 0) {
                 %>
                 <br/>
-                Cerca de <%=intSize%> resultados
+                <%=paramRequest.getLocaleString("btn_almost")%> <%=intSize%> <%=paramRequest.getLocaleString("btn_results")%>
                 <%
                 } else {
                 %>
                 <br/>
-                No hubo resultados 
+                <%=paramRequest.getLocaleString("msg_noresults")%>
                 <%                            }
                     // tiempo en segundos de lo que se tardó la búsqueda
                 %>
-                (<%=searchTimeSecs%> segundos)
+                (<%=searchTimeSecs%> <%=paramRequest.getLocaleString("msg_secs")%>)
                 <%
                     }
                 %>        
@@ -302,14 +307,14 @@
 <div class="izquierdo">
     <div class="izq_sector">
         <ul>
-            <li><h3>Filtrar por Sector</h3></li>
+            <li><h3><%=paramRequest.getLocaleString("lbl_sectorFilter")%></h3></li>
                     <%
                         Iterator<Sector> itsec = Sector.ClassMgr.listSectors(wsite);
                         while (itsec.hasNext()) {
                             Sector sec = itsec.next();
 
                             SWBResourceURL url = paramRequest.getRenderUrl();
-                            url.setParameter("filteruri", sec.getEncodedURI());
+                            url.setParameter("filteruri", sec.getURI());
                             if (null != orderby) {
                                 url.setParameter("order", orderby);
                             }
@@ -326,14 +331,14 @@
     </div>
     <div class="izq_institucion">
         <ul>
-            <li><h3>Filtrar por Institucion</h3></li>
+            <li><h3><%=paramRequest.getLocaleString("lbl_institFilter")%></h3></li>
                 <%
                     Iterator<Institution> itins = Institution.ClassMgr.listInstitutions(wsite);
                     while (itins.hasNext()) {
                         Institution inst = itins.next();
 
                         SWBResourceURL url = paramRequest.getRenderUrl();
-                        url.setParameter("filteruri", inst.getEncodedURI());
+                        url.setParameter("filteruri", inst.getURI());
                         if (null != orderby) {
                             url.setParameter("order", orderby);
                         }
@@ -349,13 +354,13 @@
     </div>
     <div class="izq_tema">
         <ul>
-            <li><h3>Filtrar por Tema</h3></li>
+            <li><h3><%=paramRequest.getLocaleString("lbl_topicFilter")%></h3></li>
                 <%
                     Iterator<Topic> ittop = Topic.ClassMgr.listTopics(wsite);
                     while (ittop.hasNext()) {
                         Topic inst = ittop.next();
                         SWBResourceURL url = paramRequest.getRenderUrl();
-                        url.setParameter("filteruri", inst.getEncodedURI());
+                        url.setParameter("filteruri", inst.getURI());
                         if (null != orderby) {
                             url.setParameter("order", orderby);
                         }
@@ -399,12 +404,12 @@
             }
 
         %>
-        <label>Ordenar</label>
+        <label><%=paramRequest.getLocaleString("lbl_orderby")%></label>
         <p>
-            <input type="radio" id="ordercreated" name="order" value="created" <%=ckdCreated%> onclick="window.location = '<%=urlorder.toString()%>&order=<%=DataSetResource.ORDER_CREATED%>';"><label for="ordercreated">Más reciente</label>
-            <input type="radio" id="orderview" name="order" value="view" <%=ckdView%> onclick="window.location = '<%=urlorder.toString()%>&order=<%=DataSetResource.ORDER_VIEW%>';"><label for="orderview">Más visitado</label>
-            <input type="radio" id="orderdownload" name="order" value="download" <%=ckdDownload%> onclick="window.location = '<%=urlorder.toString()%>&order=<%=DataSetResource.ORDER_DOWNLOAD%>';"><label for="orderdownload">Más descargado</label>
-            <input type="radio" id="orderrank" name="order" value="value" <%=ckdRank%> onclick="window.location = '<%=urlorder.toString()%>&order=<%=DataSetResource.ORDER_RANK%>';"><label for="orderrank">Mejor calificado</label>
+            <input type="radio" id="ordercreated" name="order" value="created" <%=ckdCreated%> onclick="window.location = '<%=urlorder.toString()%>&order=<%=DataSetResource.ORDER_CREATED%>';"><label for="ordercreated"><%=paramRequest.getLocaleString("lbl_byrecent")%></label>
+            <input type="radio" id="orderview" name="order" value="view" <%=ckdView%> onclick="window.location = '<%=urlorder.toString()%>&order=<%=DataSetResource.ORDER_VIEW%>';"><label for="orderview"><%=paramRequest.getLocaleString("lbl_byvisited")%></label>
+            <input type="radio" id="orderdownload" name="order" value="download" <%=ckdDownload%> onclick="window.location = '<%=urlorder.toString()%>&order=<%=DataSetResource.ORDER_DOWNLOAD%>';"><label for="orderdownload"><%=paramRequest.getLocaleString("lbl_bydownload")%></label>
+            <input type="radio" id="orderrank" name="order" value="value" <%=ckdRank%> onclick="window.location = '<%=urlorder.toString()%>&order=<%=DataSetResource.ORDER_RANK%>';"><label for="orderrank"><%=paramRequest.getLocaleString("lbl_byvaluated")%></label>
         </p>
     </div>
     <%
@@ -448,7 +453,7 @@
                     %>
             <li>
                 <label><a href="<%=urldet.toString()%>"><%=ds.getDatasetTitle()%></a></label> 
-                Publicador:<%=ds.getInstitution().getInstitutionTitle()%>&nbsp;&nbsp;&nbsp;Formats:<%=ds.getDatasetFormat()%>&nbsp;&nbsp;&nbsp;Actualización:<%=sdf.format(ds.getDatasetUpdated())%><br/>
+                <%=paramRequest.getLocaleString("lbl_publisher")%>:<%=ds.getInstitution().getInstitutionTitle()%>&nbsp;&nbsp;&nbsp;<%=paramRequest.getLocaleString("lbl_formats")%>:<%=ds.getDatasetFormat()%>&nbsp;&nbsp;&nbsp;<%=paramRequest.getLocaleString("lbl_updated")%>:<%=sdf.format(ds.getDatasetUpdated())%><br/>
                 <p><%=ds.getDatasetDescription()%></p>
             </li>
             <%
@@ -510,7 +515,7 @@
                         urlNext.setParameter("search", queryinput);
                     }
 
-                    out.println("<a href=\"#\" onclick=\"window.location='" + urlNext + "';\">Ir al inicio</a> ");
+                    out.println("<a href=\"#\" onclick=\"window.location='" + urlNext + "';\">"+paramRequest.getLocaleString("pg_gofirst")+"</a> ");
                 }
 
                 for (int z = inicia; z < finaliza; z++) {
@@ -557,7 +562,7 @@
                     if (queryinput != null && queryinput.trim().length() > 0) {
                         urlNext.setParameter("search", queryinput);
                     }
-                    out.println("<a href=\"#\" onclick=\"window.location='" + urlNext + "';\">Ir al final</a> ");
+                    out.println("<a href=\"#\" onclick=\"window.location='" + urlNext + "';\">"+paramRequest.getLocaleString("pg_golast")+"</a> ");
                 }
 
             }
@@ -568,9 +573,9 @@
     <%
     } else if (action.equals("detail")) {  // detalle del Dataset seleccionado
 
-        System.out.println("Detalle DS.........");
+        //System.out.println("Detalle DS.........");
         String suri = request.getParameter("suri");
-        System.out.println("URI........."+suri);
+        //System.out.println("URI........."+suri);
         go = ont.getGenericObject(suri);
         if (go instanceof Dataset) {
     %>
@@ -596,7 +601,7 @@
                 <label>Creación:</label><p><%=sdf2.format(ds.getDatasetCreated())%></p>
             </li>
             <li>
-                <label>Actualización:</label><p><%=sdf2.format(ds.getDatasetUpdated())%></p>
+                <label><%=paramRequest.getLocaleString("lbl_updated")%>:</label><p><%=sdf2.format(ds.getDatasetUpdated())%></p>
             </li>
             <li>
                 <label>Sitio Web del emisor</label><p><%=ds.getInstitution() != null ? ds.getInstitution().getInstitutionHome() : ""%></p> 
@@ -617,13 +622,20 @@
                 <label>Etiquetas:</label><p><%=taglist%></p>
             </li>
             <li>
-                <label>Formato:</label><p><%=ds.getDatasetFormat()%></p> 
+                <label><%=paramRequest.getLocaleString("lbl_formats")%>:</label><p><%=ds.getDatasetFormat()%></p> 
             </li>
             <li>
-                <label>URL:</label><p><%=ds.getDatasetDescription()%></p>
+                <%
+                SWBResourceURL urldown = paramRequest.getRenderUrl();
+                urldown.setCallMethod(SWBResourceURL.Call_DIRECT);
+                urldown.setParameter("suri",ds.getURI());
+                urldown.setParameter("act","file");
+                urldown.setMode(DataSetResource.MODE_FILE);
+                %>
+                <label>URL:</label><p><%=ds.getDatasetURL()%><a href="<%=urldown.toString()%>">Descargar</a></p>
             </li>
             <li>
-                <label>Valoración:</label><p><%=ds.getRanks()%></p>
+                <label>Valoración:</label><p><%=ds.getAverage()%></p>
                 <div>
                     5 Excelente<br/>
                     4 Recomendable<br/>
@@ -674,7 +686,15 @@
                 </p>
             </li>
             <li>
-                <label>Exportar fichas del dataset:</label><p><button>RDF</button>&nbsp;<button>JSON</button></p>
+                <%
+                SWBResourceURL url = paramRequest.getRenderUrl();
+                url.setCallMethod(SWBResourceURL.Call_DIRECT);
+                url.setParameter("suri",ds.getURI());
+                url.setParameter("act","meta");
+                url.setMode(DataSetResource.MODE_FILE);
+                //url.setParameter("mformat", DataSetResource.RDF_MIME_TYPE);
+                %>
+                <label>Exportar fichas del dataset:</label><p><a href="<%=url.toString()%>&mformat=<%=DataSetResource.META_FORMAT_RDF%>">RDF</a>&nbsp;<a href="<%=url.toString()%>&mformat=<%=DataSetResource.META_FORMAT_JSON%>">JSON</a></p>
             </li>
             <li>
                 <label>Visitas:</label><p><%=ds.getViews()%></p>
@@ -708,7 +728,7 @@
             } else {
 
             %>
-            <li>No se encntraron aplicaciones relacionadas.</li>
+            <li>No se encontraron aplicaciones relacionadas.</li>
                 <%
             }
                 %>
@@ -718,17 +738,33 @@
 <%
             }
         } else if("stats".equals(action)){
+            System.out.println("Stats DS.........");
+        String suri = request.getParameter("suri");
+        System.out.println("URI........."+suri);
+        go = ont.getGenericObject(suri);
+        if (go instanceof Dataset) {
+            
+            Dataset ds = (Dataset) go; 
+                    
+             Iterator<DatasetLog> itdslog  = DatasetLog.ClassMgr.listDatasetLogByDataset(ds, wsite);
+            
      %>
 <div>
     <table>
         <thead>
             <tr>
-                <th>Total de descargas</th><th>Institución</th><th>Dataset</th><th>Descargas</th><th>Última descarga</th><th>Visitas</th><th>Última visita</th>
+                <th>Descargas</th><th>Última descarga</th><th>Visitas</th><th>Última visita</th>
             </tr>
         </thead>
+        <tbody>
+            <tr>
+                <td></td><td></td><td></td><td>Descargas</td><td>Última descarga</td><td>Visitas</td><td>Última visita</td>
+            </tr>
+        </tbody>
     </table>
 </div>
     <%
+        }
         }
 
     }
