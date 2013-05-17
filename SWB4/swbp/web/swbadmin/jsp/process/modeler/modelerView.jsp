@@ -20,8 +20,10 @@ exportUrl.setMode(SVGModeler.MODE_EXPORT);
 <head>
     <meta http-equiv="X-UA-Compatible" content="IE=9; IE=8; IE=7" >
     <script type="text/javascript" src="/swbadmin/js/dojo/dojo/dojo.js" djConfig="parseOnLoad: true, isDebug: false, locale: 'es'" ></script>
+    <!--
     <script src="/swbadmin/js/swb_admin.js"></script>
     <script src="/swbadmin/js/swb.js"></script>
+    -->
     <script type="text/javascript" src="/swbadmin/jsp/process/modeler/toolkit.js"></script>
     <script type="text/javascript" src="/swbadmin/jsp/process/modeler/modeler.js"></script>
     <link href="/swbadmin/jsp/process/modeler/modelerFrame.css" rel="stylesheet" type="text/css">
