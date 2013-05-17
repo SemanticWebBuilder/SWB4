@@ -2732,6 +2732,7 @@
         },
 
         submitCommand:function(url, callbackHandler){
+            //reemplazar dojo por invocaciones directas por ajax
             dojo.xhrGet({
                 url: url,
                 load: function(response, ioArgs) {
