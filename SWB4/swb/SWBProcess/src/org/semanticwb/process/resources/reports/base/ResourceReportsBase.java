@@ -5,11 +5,11 @@ public abstract class ResourceReportsBase extends org.semanticwb.portal.api.Gene
 {
     public static final org.semanticwb.platform.SemanticClass swb_Resource=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Resource");
     public static final org.semanticwb.platform.SemanticProperty swb_semanticResourceInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#semanticResourceInv");
-    public static final org.semanticwb.platform.SemanticProperty rep_pageElements=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://org.semanticwb.resources/Reports#pageElements");
-    public static final org.semanticwb.platform.SemanticClass rep_Report=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://org.semanticwb.resources/Reports#Report");
-    public static final org.semanticwb.platform.SemanticProperty rep_hasReport=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://org.semanticwb.resources/Reports#hasReport");
-    public static final org.semanticwb.platform.SemanticClass rep_ResourceReports=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://org.semanticwb.resources/Reports#ResourceReports");
-    public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://org.semanticwb.resources/Reports#ResourceReports");
+    public static final org.semanticwb.platform.SemanticProperty rep_pageElements=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://org.semanticwb.process.resources/Reports#pageElements");
+    public static final org.semanticwb.platform.SemanticClass rep_Report=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://org.semanticwb.process.resources/Reports#Report");
+    public static final org.semanticwb.platform.SemanticProperty rep_hasReport=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://org.semanticwb.process.resources/Reports#hasReport");
+    public static final org.semanticwb.platform.SemanticClass rep_ResourceReports=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://org.semanticwb.process.resources/Reports#ResourceReports");
+    public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://org.semanticwb.process.resources/Reports#ResourceReports");
 
     public ResourceReportsBase()
     {
@@ -99,8 +99,8 @@ public abstract class ResourceReportsBase extends org.semanticwb.portal.api.Gene
         getSemanticObject().setIntProperty(rep_pageElements, value);
     }
    /**
-   * Gets all the org.semanticwb.process.reports.Report
-   * @return A GenericIterator with all the org.semanticwb.process.reports.Report
+   * Gets all the org.semanticwb.process.resources.reports.Report
+   * @return A GenericIterator with all the org.semanticwb.process.resources.reports.Report
    */
 
     public org.semanticwb.model.GenericIterator<org.semanticwb.process.resources.reports.Report> listReports()
@@ -110,8 +110,8 @@ public abstract class ResourceReportsBase extends org.semanticwb.portal.api.Gene
 
    /**
    * Gets true if has a Report
-   * @param value org.semanticwb.process.reports.Report to verify
-   * @return true if the org.semanticwb.process.reports.Report exists, false otherwise
+   * @param value org.semanticwb.process.resources.reports.Report to verify
+   * @return true if the org.semanticwb.process.resources.reports.Report exists, false otherwise
    */
     public boolean hasReport(org.semanticwb.process.resources.reports.Report value)
     {
@@ -124,7 +124,7 @@ public abstract class ResourceReportsBase extends org.semanticwb.portal.api.Gene
     }
    /**
    * Adds a Report
-   * @param value org.semanticwb.process.reports.Report to add
+   * @param value org.semanticwb.process.resources.reports.Report to add
    */
 
     public void addReport(org.semanticwb.process.resources.reports.Report value)
@@ -141,7 +141,7 @@ public abstract class ResourceReportsBase extends org.semanticwb.portal.api.Gene
     }
    /**
    * Removes a Report
-   * @param value org.semanticwb.process.reports.Report to remove
+   * @param value org.semanticwb.process.resources.reports.Report to remove
    */
 
     public void removeReport(org.semanticwb.process.resources.reports.Report value)
@@ -151,7 +151,7 @@ public abstract class ResourceReportsBase extends org.semanticwb.portal.api.Gene
 
    /**
    * Gets the Report
-   * @return a org.semanticwb.process.reports.Report
+   * @return a org.semanticwb.process.resources.reports.Report
    */
     public org.semanticwb.process.resources.reports.Report getReport()
     {
