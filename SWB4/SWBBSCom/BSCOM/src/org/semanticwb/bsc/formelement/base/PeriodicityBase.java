@@ -1,11 +1,17 @@
 package org.semanticwb.bsc.formelement.base;
 
 
+   /**
+   * Período válidos son los que no tienen intervalos de tiempo traslapados 
+   */
 public abstract class PeriodicityBase extends org.semanticwb.model.base.FormElementBase 
 {
     public static final org.semanticwb.platform.SemanticProperty bsc_dateConstraints=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#dateConstraints");
     public static final org.semanticwb.platform.SemanticProperty bsc_dateOnChange=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#dateOnChange");
     public static final org.semanticwb.platform.SemanticProperty bsc_dateId=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#dateId");
+   /**
+   * Período válidos son los que no tienen intervalos de tiempo traslapados
+   */
     public static final org.semanticwb.platform.SemanticClass bsc_Periodicity=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#Periodicity");
    /**
    * The semantic class that represents the currentObject
