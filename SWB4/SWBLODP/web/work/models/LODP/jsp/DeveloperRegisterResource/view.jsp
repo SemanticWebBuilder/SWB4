@@ -84,10 +84,10 @@
         if(objd.validate())
         {
             if(isEmpty('cmnt_seccode')) {
-                alert('Para registrarte es necesario que escribas el texto de la imagen.\\nEn caso de no ser claro puedes cambiarlo haciendo clic en <<Cambiar imagen>>.');
+                alert('<%=paramRequest.getLocaleString("promptMsgCaptcha")%>');
             }else{
                 if (!validateReadAgree()){
-                    alert('Para registrarte es necesario que aceptar los términos y condiciones');
+                    alert('<%=paramRequest.getLocaleString("msgErrAgreement")%>');
                 }else{
                    return true;
                 }
@@ -111,17 +111,17 @@
     }
     function isValidThisEmail(){
         var valid=false;
-        var email = dijit.byId( "email2" );
+        var email = dijit.byId( "email" );
         var strEmail = email.getValue();
         if(strEmail!=""){
             if(isValidEmail(strEmail)){
                 if(canAddEmail('<%=repositoryId%>',strEmail)){
                     valid=true;
                 }else{
-                    email.displayMessage( "Correo duplicado" );
+                    email.displayMessage( "<%=paramRequest.getLocaleString("lblEmailDupl")%>" );
                 }
             }else{
-                email.displayMessage( "Correo inválido" );
+                email.displayMessage( "<%=paramRequest.getLocaleString("lblEmailFault")%>" );
             }
         }
         return valid;
@@ -132,14 +132,14 @@
         var filter = /^[a-zA-Z0-9.@]+$/;
         var strLogin = login.getValue();
         if(strLogin!=""){
-            if(filter.test(strLogin)){
+            if(filter.test(strLogin)&&strLogin.length>2){
                 if(canAddLogin('<%=repositoryId%>',strLogin)){
                     valid=true;
                 }else{
-                    login.displayMessage( "Nombre de usuario duplicado" );
+                    login.displayMessage( "<%=paramRequest.getLocaleString("lblLoginDupl")%>" );
                 }
             }else{
-                login.displayMessage( "Nombre de usuario inválido" );
+                login.displayMessage( "<%=paramRequest.getLocaleString("lblLoginFault")%>" );
             }
         }
         return valid;
@@ -160,56 +160,56 @@
         <form id="form1ru" dojoType="dijit.form.Form" class="swbform" action="<%=url%>" method="post">
             <div>
                 <p>
-                    <label for="lastName"><b>*</b>Primer apellido</label>
-                    <input type="text" name="lastName" id="lastName" dojoType="dijit.form.ValidationTextBox" value="<%=lastName%>" required="true" promptMessage="Ingresa tu primer apellido" invalidMessage="El apellido es requerido" trim="true" regExp="[a-zA-Z\u00C0-\u00FF' ]+" />
+                    <label for="lastName"><b>*</b><%=paramRequest.getLocaleString("lblLastName")%></label>
+                    <input type="text" name="lastName" id="lastName" dojoType="dijit.form.ValidationTextBox" value="<%=lastName%>" required="true" _promptMessage="<%=paramRequest.getLocaleString("promptMsgLastName")%>" invalidMessage="<%=paramRequest.getLocaleString("lblLastNameFault")%>" trim="true" regExp="[a-zA-Z\u00C0-\u00FF' ]+" />
                 </p>
                 <p>
-                    <label for="secondLastName">Segundo apellido</label>
-                    <input type="text" name="secondLastName" id="secondLastName" dojoType="dijit.form.ValidationTextBox" value="<%=secondLastName%>" required="false" promptMessage="Ingresa tu segundo apellido" trim="true" regExp="[a-zA-Z\u00C0-\u00FF' ]+"/>
-                </p>
-            </div>
-            <div>
-                <p>
-                    <label for="firstName"><b>*</b>Nombre</label>
-                    <input type="text" name="firstName" id="firstName" dojoType="dijit.form.ValidationTextBox" value="<%=firstName%>"  required="true" promptMessage="Ingresa tu nombre(s)" invalidMessage="El nombre es requerido" trim="true" regExp="[a-zA-Z\u00C0-\u00FF' ]+"/>
-                </p>
-                <p>
-                    <label for="email"><b>*</b>Correo electronico de contacto</label>
-                    <input type="text" name="email" id="email2" dojoType="dijit.form.ValidationTextBox" value="<%=email%>" maxlength="60" required="true" promptMessage="Ingresa tu correo electrónico válido de contacto" invalidMessage="El correo electrónico válido es requerido" isValid="return isValidThisEmail()" trim="true"/>
+                    <label for="secondLastName"><%=paramRequest.getLocaleString("lblSecondLastName")%></label>
+                    <input type="text" name="secondLastName" id="secondLastName" dojoType="dijit.form.ValidationTextBox" value="<%=secondLastName%>" required="false" _promptMessage="<%=paramRequest.getLocaleString("promptMsgSecondLastName")%>" invalidMessage="<%=paramRequest.getLocaleString("lblSecondLastNameFault")%>" trim="true" regExp="[a-zA-Z\u00C0-\u00FF' ]+"/>
                 </p>
             </div>
             <div>
                 <p>
-                    <label for="login"><b>*</b>Usuario</label>
-                    <input type="text" name="login" id="login" dojoType="dijit.form.ValidationTextBox" value="<%=login%>" maxlength="18" required="true" promptMessage="Ingresa un nombre de usuario" invalidMessage="El nombre de usuario es requerido"  isValid="return isValidLogin()" trim="true" />
+                    <label for="firstName"><b>*</b><%=paramRequest.getLocaleString("lblFirstName")%></label>
+                    <input type="text" name="firstName" id="firstName" dojoType="dijit.form.ValidationTextBox" value="<%=firstName%>"  required="true" _promptMessage="<%=paramRequest.getLocaleString("promptMsgFirstName")%>" invalidMessage="<%=paramRequest.getLocaleString("lblFirstNameFault")%>" trim="true" regExp="[a-zA-Z\u00C0-\u00FF' ]+"/>
                 </p>
                 <p>
-                    <label for="passwd"><b>*</b>Contraseña</label>
-                    <input type="password" name="passwd" id="passwd" dojoType="dijit.form.ValidationTextBox" value="" maxlength="12" required="true" promptMessage="Ingresa un contraseña" invalidMessage="La contraseña es requerida" isValid="return isValidPass();" trim="true" />
+                    <label for="email"><b>*</b><%=paramRequest.getLocaleString("lblEmail")%></label>
+                    <input type="text" name="email" id="email" dojoType="dijit.form.ValidationTextBox" value="<%=email%>" maxlength="60" required="true" _promptMessage="<%=paramRequest.getLocaleString("promptMsgEmail")%>" invalidMessage="<%=paramRequest.getLocaleString("lblEmailFault")%>" isValid="return isValidThisEmail()" trim="true"/>
+                </p>
+            </div>
+            <div>
+                <p>
+                    <label for="login"><b>*</b><%=paramRequest.getLocaleString("lblLogin")%></label>
+                    <input type="text" name="login" id="login" dojoType="dijit.form.ValidationTextBox" value="<%=login%>" maxlength="18" required="true" _promptMessage="<%=paramRequest.getLocaleString("promptMsgLogin")%>" invalidMessage="<%=paramRequest.getLocaleString("lblLoginFault")%>"  isValid="return isValidLogin()" trim="true" />
+                </p>
+                <p>
+                    <label for="passwd"><b>*</b><%=paramRequest.getLocaleString("lblPassword")%></label>
+                    <input type="password" name="passwd" id="passwd" dojoType="dijit.form.ValidationTextBox" value="" maxlength="12" required="true" _promptMessage="<%=paramRequest.getLocaleString("promptMsgPassword")%>" invalidMessage="<%=paramRequest.getLocaleString("lblPasswordFault")%>" isValid="return isValidPass();" trim="true" />
                 </p>
             </div>
             <div>
                 <p>
                     <img src="<%=context%>/swbadmin/jsp/securecode.jsp?sAttr=cdlog" id="imgseccode" width="200" height="100" alt="" />
-                    <br/>¿No lo puedes ver?&nbsp;<a href="#" onclick="changeSecureCodeImage('imgseccode');">Intenta otro texto</a>
+                    <br/><%=paramRequest.getLocaleString("lblTryRead")%><a href="#" onclick="changeSecureCodeImage('imgseccode');"><%=paramRequest.getLocaleString("lblTryAnotherText")%></a>
                 </p>
                 <p>
-                    <label for="cmnt_seccode"><b>*</b>Ingresa el texto de la imagen</label>
-                    <input type="text" name="cmnt_seccode" id="cmnt_seccode" maxlength="8" value="" dojoType="dijit.form.ValidationTextBox" required="true" promptMessage="Ingreasa el texto de la imagen" invalidMessage="El texto de  la imagen es requerido" trim="true"/>
+                    <label for="cmnt_seccode"><b>*</b><%=paramRequest.getLocaleString("lblCaptcha")%></label>
+                    <input type="text" name="cmnt_seccode" id="cmnt_seccode" maxlength="8" value="" dojoType="dijit.form.ValidationTextBox" required="true" _promptMessage="<%=paramRequest.getLocaleString("promptMsgCaptcha")%>" invalidMessage="<%=paramRequest.getLocaleString("msgErrSecureCodeRequired")%>" trim="true"/>
                 </p>
             </div>
             <div>
                 <p class="icv-3col">
-                    <a href="#" _onclick="openSplash();return false;">Términos y condiciones</a>
+                    <a href="#" _onclick="openSplash();return false;"><%=paramRequest.getLocaleString("lblLinkAgreement")%></a>
                 </p>
                 <p>
-                    <label for="acept"><b>*</b>Acepto los términos y condiciones:</label>
-                    <input type="checkbox" name="acept" id="acept" maxlength="8" value="true" dojoType="dijit.form.CheckBox" required="true" promptMessage="Debesa aceptar los terminos y condiciones de uso" invalidMessage="Debesa aceptar los terminos y condiciones de uso" isValid="return confirm('this.checkbox.value==true')"/>
+                    <label for="acept"><b>*</b><%=paramRequest.getLocaleString("lblAgreement")%></label>
+                    <input type="checkbox" name="acept" id="acept" maxlength="8" value="true" dojoType="dijit.form.CheckBox" required="true" _promptMessage="<%=paramRequest.getLocaleString("lblAgreement")%>" invalidMessage="<%=paramRequest.getLocaleString("lblAgreement")%>" isValid="return confirm('this.checkbox.value==true')"/>
                 </p>
             </div>
             <div class="centro">
-                <input type="reset" value="Borrar"/>
-                <input type="submit" onclick="return enviar()" value="Enviar"/>
+                <input type="reset" value="<%=paramRequest.getLocaleString("lblReset")%>"/>
+                <input type="submit" onclick="return enviar()" value="<%=paramRequest.getLocaleString("lblSubmit")%>"/>
             </div>
         </form>
     </div>
