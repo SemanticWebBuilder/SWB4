@@ -1,7 +1,7 @@
 package org.semanticwb.bsc.element.base;
 
 
-public abstract class IndicatorBase extends org.semanticwb.bsc.element.BSCElement implements org.semanticwb.model.Activeable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable
+public abstract class IndicatorBase extends org.semanticwb.bsc.element.BSCElement implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Activeable,org.semanticwb.bsc.Updateable,org.semanticwb.model.Traceable
 {
    /**
    * Clase que permite definir los atributos de las evidencias de un Indicador
@@ -12,17 +12,13 @@ public abstract class IndicatorBase extends org.semanticwb.bsc.element.BSCElemen
    */
     public static final org.semanticwb.platform.SemanticProperty bsc_hasEvidence=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#hasEvidence");
    /**
-   * Un usuario es una persona que tiene relación con el portal a través de un método de acceso.
-   */
-    public static final org.semanticwb.platform.SemanticClass swb_User=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#User");
-   /**
-   * Persiste la información de un usuario que es considerado como  el encargado de liderear el indicador
-   */
-    public static final org.semanticwb.platform.SemanticProperty bsc_champion=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#champion");
-   /**
    * Persiste la unidad de medida de un indicador
    */
     public static final org.semanticwb.platform.SemanticProperty bsc_unitMesure=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#unitMesure");
+   /**
+   * Un usuario es una persona que tiene relación con el portal a través de un método de acceso.
+   */
+    public static final org.semanticwb.platform.SemanticClass swb_User=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#User");
    /**
    * Persiste información de un facilitador de campeón en una indicador
    */
@@ -43,10 +39,6 @@ public abstract class IndicatorBase extends org.semanticwb.bsc.element.BSCElemen
    * Persiste una fuente de información de un indicador
    */
     public static final org.semanticwb.platform.SemanticProperty bsc_informationSource=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#informationSource");
-   /**
-   * Persiste información del patrocinador de un indicador
-   */
-    public static final org.semanticwb.platform.SemanticProperty bsc_sponsor=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#sponsor");
    /**
    * Persiste información de las metas de un indicador
    */
@@ -177,29 +169,6 @@ public abstract class IndicatorBase extends org.semanticwb.bsc.element.BSCElemen
             return it;
         }
        /**
-       * Gets all org.semanticwb.bsc.element.Indicator with a determined Champion
-       * @param value Champion of the type org.semanticwb.model.User
-       * @param model Model of the org.semanticwb.bsc.element.Indicator
-       * @return Iterator with all the org.semanticwb.bsc.element.Indicator
-       */
-
-        public static java.util.Iterator<org.semanticwb.bsc.element.Indicator> listIndicatorByChampion(org.semanticwb.model.User value,org.semanticwb.model.SWBModel model)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Indicator> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(bsc_champion, value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.bsc.element.Indicator with a determined Champion
-       * @param value Champion of the type org.semanticwb.model.User
-       * @return Iterator with all the org.semanticwb.bsc.element.Indicator
-       */
-
-        public static java.util.Iterator<org.semanticwb.bsc.element.Indicator> listIndicatorByChampion(org.semanticwb.model.User value)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Indicator> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(bsc_champion,value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
        * Gets all org.semanticwb.bsc.element.Indicator with a determined ChampionFacilitator
        * @param value ChampionFacilitator of the type org.semanticwb.model.User
        * @param model Model of the org.semanticwb.bsc.element.Indicator
@@ -243,29 +212,6 @@ public abstract class IndicatorBase extends org.semanticwb.bsc.element.BSCElemen
         public static java.util.Iterator<org.semanticwb.bsc.element.Indicator> listIndicatorByCreator(org.semanticwb.model.User value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Indicator> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_creator,value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.bsc.element.Indicator with a determined Sponsor
-       * @param value Sponsor of the type org.semanticwb.model.User
-       * @param model Model of the org.semanticwb.bsc.element.Indicator
-       * @return Iterator with all the org.semanticwb.bsc.element.Indicator
-       */
-
-        public static java.util.Iterator<org.semanticwb.bsc.element.Indicator> listIndicatorBySponsor(org.semanticwb.model.User value,org.semanticwb.model.SWBModel model)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Indicator> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(bsc_sponsor, value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.bsc.element.Indicator with a determined Sponsor
-       * @param value Sponsor of the type org.semanticwb.model.User
-       * @return Iterator with all the org.semanticwb.bsc.element.Indicator
-       */
-
-        public static java.util.Iterator<org.semanticwb.bsc.element.Indicator> listIndicatorBySponsor(org.semanticwb.model.User value)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Indicator> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(bsc_sponsor,value.getSemanticObject(),sclass));
             return it;
         }
     }
@@ -348,43 +294,23 @@ public abstract class IndicatorBase extends org.semanticwb.bsc.element.BSCElemen
          }
          return ret;
     }
-   /**
-   * Sets the value for the property Champion
-   * @param value Champion to set
-   */
 
-    public void setChampion(org.semanticwb.model.User value)
+/**
+* Gets the PercentageProgress property
+* @return float with the PercentageProgress
+*/
+    public float getPercentageProgress()
     {
-        if(value!=null)
-        {
-            getSemanticObject().setObjectProperty(bsc_champion, value.getSemanticObject());
-        }else
-        {
-            removeChampion();
-        }
-    }
-   /**
-   * Remove the value for Champion property
-   */
-
-    public void removeChampion()
-    {
-        getSemanticObject().removeProperty(bsc_champion);
+        return getSemanticObject().getFloatProperty(bsc_percentageProgress);
     }
 
-   /**
-   * Gets the Champion
-   * @return a org.semanticwb.model.User
-   */
-    public org.semanticwb.model.User getChampion()
+/**
+* Sets the PercentageProgress property
+* @param value long with the PercentageProgress
+*/
+    public void setPercentageProgress(float value)
     {
-         org.semanticwb.model.User ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(bsc_champion);
-         if(obj!=null)
-         {
-             ret=(org.semanticwb.model.User)obj.createGenericInstance();
-         }
-         return ret;
+        getSemanticObject().setFloatProperty(bsc_percentageProgress, value);
     }
 
 /**
@@ -482,6 +408,42 @@ public abstract class IndicatorBase extends org.semanticwb.bsc.element.BSCElemen
     }
 
 /**
+* Gets the Recommendations property
+* @return String with the Recommendations
+*/
+    public String getRecommendations()
+    {
+        return getSemanticObject().getProperty(bsc_recommendations);
+    }
+
+/**
+* Sets the Recommendations property
+* @param value long with the Recommendations
+*/
+    public void setRecommendations(String value)
+    {
+        getSemanticObject().setProperty(bsc_recommendations, value);
+    }
+
+/**
+* Gets the Analysis property
+* @return String with the Analysis
+*/
+    public String getAnalysis()
+    {
+        return getSemanticObject().getProperty(bsc_analysis);
+    }
+
+/**
+* Sets the Analysis property
+* @param value long with the Analysis
+*/
+    public void setAnalysis(String value)
+    {
+        getSemanticObject().setProperty(bsc_analysis, value);
+    }
+
+/**
 * Gets the NotesFormula property
 * @return String with the NotesFormula
 */
@@ -515,44 +477,6 @@ public abstract class IndicatorBase extends org.semanticwb.bsc.element.BSCElemen
     public void setInformationSource(String value)
     {
         getSemanticObject().setProperty(bsc_informationSource, value);
-    }
-   /**
-   * Sets the value for the property Sponsor
-   * @param value Sponsor to set
-   */
-
-    public void setSponsor(org.semanticwb.model.User value)
-    {
-        if(value!=null)
-        {
-            getSemanticObject().setObjectProperty(bsc_sponsor, value.getSemanticObject());
-        }else
-        {
-            removeSponsor();
-        }
-    }
-   /**
-   * Remove the value for Sponsor property
-   */
-
-    public void removeSponsor()
-    {
-        getSemanticObject().removeProperty(bsc_sponsor);
-    }
-
-   /**
-   * Gets the Sponsor
-   * @return a org.semanticwb.model.User
-   */
-    public org.semanticwb.model.User getSponsor()
-    {
-         org.semanticwb.model.User ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(bsc_sponsor);
-         if(obj!=null)
-         {
-             ret=(org.semanticwb.model.User)obj.createGenericInstance();
-         }
-         return ret;
     }
 
 /**

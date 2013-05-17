@@ -4,7 +4,7 @@ package org.semanticwb.bsc.accessory.base;
    /**
    * Período de medición. 
    */
-public abstract class PeriodBase extends org.semanticwb.bsc.accessory.BSCAccessory implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Activeable,org.semanticwb.model.Sortable,org.semanticwb.bsc.Blockable,org.semanticwb.model.Traceable
+public abstract class PeriodBase extends org.semanticwb.bsc.accessory.BSCAccessory implements org.semanticwb.model.Descriptiveable,org.semanticwb.bsc.Blockable,org.semanticwb.model.Activeable,org.semanticwb.model.Sortable,org.semanticwb.model.Traceable
 {
     public static final org.semanticwb.platform.SemanticProperty bsc_inTime=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#inTime");
     public static final org.semanticwb.platform.SemanticProperty bsc_start=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#start");
