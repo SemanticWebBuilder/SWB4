@@ -82,7 +82,7 @@ public class Flicker extends org.semanticwb.social.base.FlickerBase
                requestContext.setAuth(auth);
                flickr.setAuth(auth);
                SWBFile file = new SWBFile(photoSend);//path + photo.getPhoto();
-               String description = photo.getDescription(user.getLanguage()) == null ? (photo.getDescription() == null ? "" : photo.getDescription()) : photo.getDescription(user.getLanguage());
+               String description = photo.getMsg_Text()!= null ? photo.getMsg_Text() : "";
                InputStream fileInputStream = null;
                Uploader uploader = flickr.getUploader();
                List<String> list = new ArrayList();
@@ -96,7 +96,7 @@ public class Flicker extends org.semanticwb.social.base.FlickerBase
                try {
                    fileInputStream = new FileInputStream(file);
                    UploadMetaData uploadMetaData = new UploadMetaData();
-                   uploadMetaData.setTitle(photo.getTitle());
+                   uploadMetaData.setTitle("SWBSocial");    //TODO:En este momento envío "SWBSocial", ver como aparece este título en la Red Social
                    uploadMetaData.setPublicFlag(true);
                    uploadMetaData.setDescription(description);
                    uploadMetaData.setTags(list);
