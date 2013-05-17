@@ -1,22 +1,23 @@
 package org.semanticwb.process.resources.reports.base;
 
 
-public abstract class FileReportBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable
+public abstract class FileReportBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable,org.semanticwb.model.Activeable
 {
-    public static final org.semanticwb.platform.SemanticClass rep_Report=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://org.semanticwb.resources/Reports#Report");
-    public static final org.semanticwb.platform.SemanticProperty rep_fileNameReport=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://org.semanticwb.resources/Reports#fileNameReport");
-    public static final org.semanticwb.platform.SemanticClass rep_FileReport=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://org.semanticwb.resources/Reports#FileReport");
+    public static final org.semanticwb.platform.SemanticClass rep_Report=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://org.semanticwb.process.resources/Reports#Report");
+    public static final org.semanticwb.platform.SemanticProperty rep_fileNameReport=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://org.semanticwb.process.resources/Reports#fileNameReport");
+    public static final org.semanticwb.platform.SemanticProperty rep_extension=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://org.semanticwb.process.resources/Reports#extension");
+    public static final org.semanticwb.platform.SemanticClass rep_FileReport=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://org.semanticwb.process.resources/Reports#FileReport");
    /**
    * The semantic class that represents the currentObject
    */
-    public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://org.semanticwb.resources/Reports#FileReport");
+    public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://org.semanticwb.process.resources/Reports#FileReport");
 
     public static class ClassMgr
     {
        /**
        * Returns a list of FileReport for a model
        * @param model Model to find
-       * @return Iterator of org.semanticwb.process.reports.FileReport
+       * @return Iterator of org.semanticwb.process.resources.reports.FileReport
        */
 
         public static java.util.Iterator<org.semanticwb.process.resources.reports.FileReport> listFileReports(org.semanticwb.model.SWBModel model)
@@ -25,8 +26,8 @@ public abstract class FileReportBase extends org.semanticwb.model.SWBClass imple
             return new org.semanticwb.model.GenericIterator<org.semanticwb.process.resources.reports.FileReport>(it, true);
         }
        /**
-       * Returns a list of org.semanticwb.process.reports.FileReport for all models
-       * @return Iterator of org.semanticwb.process.reports.FileReport
+       * Returns a list of org.semanticwb.process.resources.reports.FileReport for all models
+       * @return Iterator of org.semanticwb.process.resources.reports.FileReport
        */
 
         public static java.util.Iterator<org.semanticwb.process.resources.reports.FileReport> listFileReports()
@@ -41,39 +42,39 @@ public abstract class FileReportBase extends org.semanticwb.model.SWBClass imple
             return org.semanticwb.process.resources.reports.FileReport.ClassMgr.createFileReport(String.valueOf(id), model);
         }
        /**
-       * Gets a org.semanticwb.process.reports.FileReport
-       * @param id Identifier for org.semanticwb.process.reports.FileReport
-       * @param model Model of the org.semanticwb.process.reports.FileReport
-       * @return A org.semanticwb.process.reports.FileReport
+       * Gets a org.semanticwb.process.resources.reports.FileReport
+       * @param id Identifier for org.semanticwb.process.resources.reports.FileReport
+       * @param model Model of the org.semanticwb.process.resources.reports.FileReport
+       * @return A org.semanticwb.process.resources.reports.FileReport
        */
         public static org.semanticwb.process.resources.reports.FileReport getFileReport(String id, org.semanticwb.model.SWBModel model)
         {
             return (org.semanticwb.process.resources.reports.FileReport)model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
         }
        /**
-       * Create a org.semanticwb.process.reports.FileReport
-       * @param id Identifier for org.semanticwb.process.reports.FileReport
-       * @param model Model of the org.semanticwb.process.reports.FileReport
-       * @return A org.semanticwb.process.reports.FileReport
+       * Create a org.semanticwb.process.resources.reports.FileReport
+       * @param id Identifier for org.semanticwb.process.resources.reports.FileReport
+       * @param model Model of the org.semanticwb.process.resources.reports.FileReport
+       * @return A org.semanticwb.process.resources.reports.FileReport
        */
         public static org.semanticwb.process.resources.reports.FileReport createFileReport(String id, org.semanticwb.model.SWBModel model)
         {
             return (org.semanticwb.process.resources.reports.FileReport)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
         }
        /**
-       * Remove a org.semanticwb.process.reports.FileReport
-       * @param id Identifier for org.semanticwb.process.reports.FileReport
-       * @param model Model of the org.semanticwb.process.reports.FileReport
+       * Remove a org.semanticwb.process.resources.reports.FileReport
+       * @param id Identifier for org.semanticwb.process.resources.reports.FileReport
+       * @param model Model of the org.semanticwb.process.resources.reports.FileReport
        */
         public static void removeFileReport(String id, org.semanticwb.model.SWBModel model)
         {
             model.getSemanticObject().getModel().removeSemanticObject(model.getSemanticObject().getModel().getObjectUri(id,sclass));
         }
        /**
-       * Returns true if exists a org.semanticwb.process.reports.FileReport
-       * @param id Identifier for org.semanticwb.process.reports.FileReport
-       * @param model Model of the org.semanticwb.process.reports.FileReport
-       * @return true if the org.semanticwb.process.reports.FileReport exists, false otherwise
+       * Returns true if exists a org.semanticwb.process.resources.reports.FileReport
+       * @param id Identifier for org.semanticwb.process.resources.reports.FileReport
+       * @param model Model of the org.semanticwb.process.resources.reports.FileReport
+       * @return true if the org.semanticwb.process.resources.reports.FileReport exists, false otherwise
        */
 
         public static boolean hasFileReport(String id, org.semanticwb.model.SWBModel model)
@@ -81,10 +82,10 @@ public abstract class FileReportBase extends org.semanticwb.model.SWBClass imple
             return (getFileReport(id, model)!=null);
         }
        /**
-       * Gets all org.semanticwb.process.reports.FileReport with a determined ModifiedBy
+       * Gets all org.semanticwb.process.resources.reports.FileReport with a determined ModifiedBy
        * @param value ModifiedBy of the type org.semanticwb.model.User
-       * @param model Model of the org.semanticwb.process.reports.FileReport
-       * @return Iterator with all the org.semanticwb.process.reports.FileReport
+       * @param model Model of the org.semanticwb.process.resources.reports.FileReport
+       * @return Iterator with all the org.semanticwb.process.resources.reports.FileReport
        */
 
         public static java.util.Iterator<org.semanticwb.process.resources.reports.FileReport> listFileReportByModifiedBy(org.semanticwb.model.User value,org.semanticwb.model.SWBModel model)
@@ -93,9 +94,9 @@ public abstract class FileReportBase extends org.semanticwb.model.SWBClass imple
             return it;
         }
        /**
-       * Gets all org.semanticwb.process.reports.FileReport with a determined ModifiedBy
+       * Gets all org.semanticwb.process.resources.reports.FileReport with a determined ModifiedBy
        * @param value ModifiedBy of the type org.semanticwb.model.User
-       * @return Iterator with all the org.semanticwb.process.reports.FileReport
+       * @return Iterator with all the org.semanticwb.process.resources.reports.FileReport
        */
 
         public static java.util.Iterator<org.semanticwb.process.resources.reports.FileReport> listFileReportByModifiedBy(org.semanticwb.model.User value)
@@ -104,10 +105,10 @@ public abstract class FileReportBase extends org.semanticwb.model.SWBClass imple
             return it;
         }
        /**
-       * Gets all org.semanticwb.process.reports.FileReport with a determined FileNameReport
-       * @param value FileNameReport of the type org.semanticwb.process.reports.Report
-       * @param model Model of the org.semanticwb.process.reports.FileReport
-       * @return Iterator with all the org.semanticwb.process.reports.FileReport
+       * Gets all org.semanticwb.process.resources.reports.FileReport with a determined FileNameReport
+       * @param value FileNameReport of the type org.semanticwb.process.resources.reports.Report
+       * @param model Model of the org.semanticwb.process.resources.reports.FileReport
+       * @return Iterator with all the org.semanticwb.process.resources.reports.FileReport
        */
 
         public static java.util.Iterator<org.semanticwb.process.resources.reports.FileReport> listFileReportByFileNameReport(org.semanticwb.process.resources.reports.Report value,org.semanticwb.model.SWBModel model)
@@ -116,9 +117,9 @@ public abstract class FileReportBase extends org.semanticwb.model.SWBClass imple
             return it;
         }
        /**
-       * Gets all org.semanticwb.process.reports.FileReport with a determined FileNameReport
-       * @param value FileNameReport of the type org.semanticwb.process.reports.Report
-       * @return Iterator with all the org.semanticwb.process.reports.FileReport
+       * Gets all org.semanticwb.process.resources.reports.FileReport with a determined FileNameReport
+       * @param value FileNameReport of the type org.semanticwb.process.resources.reports.Report
+       * @return Iterator with all the org.semanticwb.process.resources.reports.FileReport
        */
 
         public static java.util.Iterator<org.semanticwb.process.resources.reports.FileReport> listFileReportByFileNameReport(org.semanticwb.process.resources.reports.Report value)
@@ -127,10 +128,10 @@ public abstract class FileReportBase extends org.semanticwb.model.SWBClass imple
             return it;
         }
        /**
-       * Gets all org.semanticwb.process.reports.FileReport with a determined Creator
+       * Gets all org.semanticwb.process.resources.reports.FileReport with a determined Creator
        * @param value Creator of the type org.semanticwb.model.User
-       * @param model Model of the org.semanticwb.process.reports.FileReport
-       * @return Iterator with all the org.semanticwb.process.reports.FileReport
+       * @param model Model of the org.semanticwb.process.resources.reports.FileReport
+       * @return Iterator with all the org.semanticwb.process.resources.reports.FileReport
        */
 
         public static java.util.Iterator<org.semanticwb.process.resources.reports.FileReport> listFileReportByCreator(org.semanticwb.model.User value,org.semanticwb.model.SWBModel model)
@@ -139,9 +140,9 @@ public abstract class FileReportBase extends org.semanticwb.model.SWBClass imple
             return it;
         }
        /**
-       * Gets all org.semanticwb.process.reports.FileReport with a determined Creator
+       * Gets all org.semanticwb.process.resources.reports.FileReport with a determined Creator
        * @param value Creator of the type org.semanticwb.model.User
-       * @return Iterator with all the org.semanticwb.process.reports.FileReport
+       * @return Iterator with all the org.semanticwb.process.resources.reports.FileReport
        */
 
         public static java.util.Iterator<org.semanticwb.process.resources.reports.FileReport> listFileReportByCreator(org.semanticwb.model.User value)
@@ -204,24 +205,6 @@ public abstract class FileReportBase extends org.semanticwb.model.SWBClass imple
     }
 
 /**
-* Gets the Updated property
-* @return java.util.Date with the Updated
-*/
-    public java.util.Date getUpdated()
-    {
-        return getSemanticObject().getDateProperty(swb_updated);
-    }
-
-/**
-* Sets the Updated property
-* @param value long with the Updated
-*/
-    public void setUpdated(java.util.Date value)
-    {
-        getSemanticObject().setDateProperty(swb_updated, value);
-    }
-
-/**
 * Gets the Created property
 * @return java.util.Date with the Created
 */
@@ -237,6 +220,24 @@ public abstract class FileReportBase extends org.semanticwb.model.SWBClass imple
     public void setCreated(java.util.Date value)
     {
         getSemanticObject().setDateProperty(swb_created, value);
+    }
+
+/**
+* Gets the Updated property
+* @return java.util.Date with the Updated
+*/
+    public java.util.Date getUpdated()
+    {
+        return getSemanticObject().getDateProperty(swb_updated);
+    }
+
+/**
+* Sets the Updated property
+* @param value long with the Updated
+*/
+    public void setUpdated(java.util.Date value)
+    {
+        getSemanticObject().setDateProperty(swb_updated, value);
     }
 
 /**
@@ -271,6 +272,24 @@ public abstract class FileReportBase extends org.semanticwb.model.SWBClass imple
     {
         getSemanticObject().setProperty(swb_description, description, lang);
     }
+
+/**
+* Gets the Active property
+* @return boolean with the Active
+*/
+    public boolean isActive()
+    {
+        return getSemanticObject().getBooleanProperty(swb_active);
+    }
+
+/**
+* Sets the Active property
+* @param value long with the Active
+*/
+    public void setActive(boolean value)
+    {
+        getSemanticObject().setBooleanProperty(swb_active, value);
+    }
    /**
    * Sets the value for the property FileNameReport
    * @param value FileNameReport to set
@@ -297,7 +316,7 @@ public abstract class FileReportBase extends org.semanticwb.model.SWBClass imple
 
    /**
    * Gets the FileNameReport
-   * @return a org.semanticwb.process.reports.Report
+   * @return a org.semanticwb.process.resources.reports.Report
    */
     public org.semanticwb.process.resources.reports.Report getFileNameReport()
     {
@@ -379,5 +398,23 @@ public abstract class FileReportBase extends org.semanticwb.model.SWBClass imple
     public void setTitle(String title, String lang)
     {
         getSemanticObject().setProperty(swb_title, title, lang);
+    }
+
+/**
+* Gets the Extension property
+* @return String with the Extension
+*/
+    public String getExtension()
+    {
+        return getSemanticObject().getProperty(rep_extension);
+    }
+
+/**
+* Sets the Extension property
+* @param value long with the Extension
+*/
+    public void setExtension(String value)
+    {
+        getSemanticObject().setProperty(rep_extension, value);
     }
 }
