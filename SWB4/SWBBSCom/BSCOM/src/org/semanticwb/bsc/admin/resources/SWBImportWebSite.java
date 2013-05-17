@@ -30,6 +30,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.bsc.BSC;
 import org.semanticwb.model.Device;
 import org.semanticwb.model.Language;
 import org.semanticwb.model.ResourceType;
@@ -854,10 +855,12 @@ public class SWBImportWebSite extends GenericResource {
                 out.println(paramRequest.getLocaleString("wstype")+" <em>*</em>");
                 out.println("</td><td>");
                 out.println("<select name=\"wstype\">");
-                out.println("<option value=\""+WebSite.sclass.getClassId()+"\">" + WebSite.sclass.getDisplayName(lang) + "</option>");
+                //out.println("<option value=\""+WebSite.sclass.getClassId()+"\">" + WebSite.sclass.getDisplayName(lang) + "</option>");
                 while (itcls.hasNext()) {
                     SemanticClass cls = itcls.next();
-                    out.println("<option value=\"" + cls.getClassId() + "\">" + cls.getDisplayName(lang) + "</option>");
+                    if(BSC.bsc_BSC.equals(cls)) {
+                        out.println("<option value=\"" + cls.getClassId() + "\">" + cls.getDisplayName(lang) + "</option>");
+                    }
                 }
                 out.println("</select>");
                 out.println("</td></tr>");
