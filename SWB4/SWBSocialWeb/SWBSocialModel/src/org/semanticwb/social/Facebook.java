@@ -438,15 +438,15 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
         if (this.getAccessToken() != null) {
             params.put("access_token", this.getAccessToken());
         }
-        if (photo.getDescription() != null) {
-            params.put("message", photo.getDescription());
+        if (photo.getMsg_Text() != null) {
+            params.put("message", photo.getMsg_Text());
         }
         String url = Facebook.FACEBOOKGRAPH + this.getFacebookUserId() + "/photos";
         JSONObject jsonResponse = null;
         
         try {
             String photoPath = SWBPortal.getWorkPath() + photo.getWorkPath()
-                    + "/" + Photo.social_photo.getName() + "_" + photo.getId() 
+                    + "/" + Photo.social_Photo.getName() + "_" + photo.getId() 
                     + "_" + photo.getPhoto();
             SWBFile photoFile = new SWBFile(photoPath);
             
@@ -483,11 +483,12 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
         if (this.getAccessToken() != null) {
             params.put("access_token", this.getAccessToken());
         }
+        /*
         if (video.getTitle() != null) {
-            params.put("title", video.getTitle());
-        }
-        if (video.getDescription() != null) {
-            params.put("description", video.getDescription());
+            params.put("title", video.getTitle());    //TODO:Estoy enviando esto como título a la red social, ver como lo pone en la misma
+        }*/
+        if (video.getMsg_Text() != null) {
+            params.put("description", video.getMsg_Text());
         }
         //String url = Facebook.FACEBOOKGRAPH + this.getFacebookUserId() + "/videos";
         String url = Facebook.FACEBOOKGRAPH_VIDEO + this.getFacebookUserId() + "/videos";        
