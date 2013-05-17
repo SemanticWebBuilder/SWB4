@@ -11,7 +11,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -428,7 +427,7 @@ public class ResourceReports extends org.semanticwb.process.resources.reports.ba
             }
             try {
                 SemanticObject sem = reportMgr.processForm(request);
-                Report report = (Report) sem.createGenericInstance();
+                Report report = (Report) sem.createGenericInstance(); 
                 report.setTitle(replaceCaracter(report.getTitle()));
                 response.setRenderParameter("idReport", report.getId());
                 response.setMode(SWBResourceURL.Mode_EDIT);
