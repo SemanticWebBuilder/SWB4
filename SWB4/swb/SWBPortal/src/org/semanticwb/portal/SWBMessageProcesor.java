@@ -66,7 +66,7 @@ public class SWBMessageProcesor extends TimerTask
      */
     public void init()
     {
-        timer=new Timer();
+        timer=new Timer("SWBMessageProcessor");
         timer.schedule(this,1000,1000);        
     }
 
