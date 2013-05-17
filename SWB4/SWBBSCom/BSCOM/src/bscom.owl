@@ -13,6 +13,83 @@
     <owl:versionInfo rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >Created with TopBraid Composer</owl:versionInfo>
   </owl:Ontology>
+  <owl:Class rdf:ID="Periodicity">
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Período válidos son los que no tienen intervalos de tiempo traslapados</rdfs:comment>
+    <swb:classCodePackage rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >org.semanticwb.bsc.formelement</swb:classCodePackage>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBFormElement"/>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#FormElement"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Evidence">
+    <swb:classCodePackage rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >org.semanticwb.bsc.tracing</swb:classCodePackage>
+    <rdfs:subClassOf>
+      <swb:Class rdf:ID="BSCTracing">
+        <swb:classCodePackage rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >org.semanticwb.bsc.tracing</swb:classCodePackage>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Activeable"/>
+        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >true</swb:autogenId>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Class>
+    </rdfs:subClassOf>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Clase que permite definir los atributos de las evidencias de un Indicador</rdfs:comment>
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+  </owl:Class>
+  <owl:Class rdf:ID="State">
+    <rdfs:subClassOf>
+      <swb:Interface rdf:ID="StateMachinable">
+        <swb:classCodePackage rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >org.semanticwb.bsc</swb:classCodePackage>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBInterface"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Interface>
+    </rdfs:subClassOf>
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Sortable"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Iconable"/>
+    <rdfs:subClassOf>
+      <swb:Class rdf:ID="BSCAccessory">
+        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >true</swb:autogenId>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Activeable"/>
+        <swb:classCodePackage rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >org.semanticwb.bsc.accessory</swb:classCodePackage>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Class>
+    </rdfs:subClassOf>
+    <swb:classCodePackage rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >org.semanticwb.bsc.accessory</swb:classCodePackage>
+    <swb:displayObject>
+      <swbxf:DisplayObject rdf:ID="do_State">
+        <rdfs:label xml:lang="en">State</rdfs:label>
+        <rdfs:label xml:lang="es">Estado</rdfs:label>
+        <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >swbIconWebPage</swb:iconClass>
+      </swbxf:DisplayObject>
+    </swb:displayObject>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Recognizable">
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBInterface"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Interfaz que define propiedades para los elementos que pueden identificarse mediante un prefijo</rdfs:comment>
+    <rdfs:label xml:lang="es">Identificable</rdfs:label>
+    <rdfs:label xml:lang="en">Recognizable</rdfs:label>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Interface"/>
+  </owl:Class>
   <owl:Class rdf:ID="Deliverable">
     <swb:classCodePackage rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >org.semanticwb.bsc.element</swb:classCodePackage>
@@ -65,12 +142,58 @@
     >org.semanticwb.bsc.element</swb:classCodePackage>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
-  <owl:Class rdf:ID="Champion">
-    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >Lista de champions</rdfs:comment>
+  <owl:Class rdf:ID="Objective">
+    <swb:displayObject>
+      <swbxf:DisplayObject rdf:ID="do_Objetive">
+        <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >swbIconWebPage</swb:iconClass>
+        <rdfs:label xml:lang="es">Objetivo</rdfs:label>
+        <rdfs:label xml:lang="en">Objetive</rdfs:label>
+        <swbxf:dragSupport rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >true</swbxf:dragSupport>
+      </swbxf:DisplayObject>
+    </swb:displayObject>
+    <rdfs:subClassOf rdf:resource="#BSCElement"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#hasWebPageChild"/>
+        <owl:allValuesFrom>
+          <swb:Class rdf:ID="Indicator">
+            <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+            >true</swb:autogenId>
+            <rdfs:subClassOf>
+              <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#webPageParent"/>
+                <owl:allValuesFrom rdf:resource="#Objective"/>
+              </owl:Restriction>
+            </rdfs:subClassOf>
+            <swb:displayObject>
+              <swbxf:DisplayObject rdf:ID="do_Indicator">
+                <swb:displayMode rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+                >final</swb:displayMode>
+                <rdfs:label xml:lang="es">Indicador</rdfs:label>
+                <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+                >swbIconWebPage</swb:iconClass>
+                <swbxf:dragSupport rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+                >true</swbxf:dragSupport>
+                <swbxf:dropMatchLevel rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+                >2</swbxf:dropMatchLevel>
+                <rdfs:label xml:lang="en">Indicator</rdfs:label>
+              </swbxf:DisplayObject>
+            </swb:displayObject>
+            <rdfs:subClassOf rdf:resource="#BSCElement"/>
+            <swb:classCodePackage rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >org.semanticwb.bsc.element</swb:classCodePackage>
+            <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+          </swb:Class>
+        </owl:allValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
     <swb:classCodePackage rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >org.semanticwb.bsc.formelement</swb:classCodePackage>
-    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBFormElement"/>
+    >org.semanticwb.bsc.element</swb:classCodePackage>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
   <owl:Class rdf:ID="Period">
     <rdfs:label xml:lang="en">Period</rdfs:label>
@@ -79,19 +202,7 @@
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
     <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:autogenId>
-    <rdfs:subClassOf>
-      <swb:Class rdf:ID="BSCAccessory">
-        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-        >true</swb:autogenId>
-        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
-        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
-        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Activeable"/>
-        <swb:classCodePackage rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >org.semanticwb.bsc.accessory</swb:classCodePackage>
-        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
-        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-      </swb:Class>
-    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="#BSCAccessory"/>
     <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >Período de medición.</rdfs:comment>
     <rdfs:subClassOf>
@@ -106,11 +217,98 @@
       </swbxf:DisplayObject>
     </swb:displayObject>
   </owl:Class>
+  <owl:Class rdf:ID="AdminBSC">
+    <swb:hasHerarquicalNode rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_Languages"/>
+    <swb:hasClass rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#ObjectBehavior"/>
+    <swb:hasHerarquicalNode rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_UserGroups"/>
+    <swb:hasHerarquicalNode>
+      <swbxf:HerarquicalNode rdf:ID="hn_StatesGroups">
+        <swbxf:heClass>
+          <swb:Class rdf:ID="StateGroup">
+            <swb:classCodePackage rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >org.semanticwb.bsc.accessory</swb:classCodePackage>
+            <rdfs:subClassOf rdf:resource="#BSCAccessory"/>
+            <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+            >true</swb:autogenId>
+            <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
+            <swb:displayObject>
+              <swbxf:DisplayObject rdf:ID="do_StateGroup">
+                <rdfs:label xml:lang="en">Group of states</rdfs:label>
+                <rdfs:label xml:lang="es">Grupo de estados</rdfs:label>
+                <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+                >swbIconWebPage</swb:iconClass>
+              </swbxf:DisplayObject>
+            </swb:displayObject>
+            <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+          </swb:Class>
+        </swbxf:heClass>
+        <swb:title xml:lang="es">Grupos de estados</swb:title>
+        <swb:title xml:lang="en">Groups of states</swb:title>
+        <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >swbIconWebPage</swb:iconClass>
+      </swbxf:HerarquicalNode>
+    </swb:hasHerarquicalNode>
+    <swb:hasHerarquicalNode rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_Devices"/>
+    <swb:hasHerarquicalNode rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_Roles"/>
+    <swb:hasHerarquicalNode rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_Dnss"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#AdminWebSite"/>
+    <swb:hasHerarquicalNode rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_PTContents"/>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Model"/>
+    <swb:hasHerarquicalNode rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_Templates"/>
+    <swb:hasHerarquicalNode>
+      <swbxf:HerarquicalNode rdf:ID="hn_Periods">
+        <swbxf:heClass rdf:resource="#Period"/>
+        <swb:title xml:lang="es">Períodos</swb:title>
+        <swb:title xml:lang="en">Periods</swb:title>
+        <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >swbIconDnss</swb:iconClass>
+      </swbxf:HerarquicalNode>
+    </swb:hasHerarquicalNode>
+    <rdfs:comment xml:lang="es">Administración de BSC</rdfs:comment>
+    <swb:displayObject>
+      <swbxf:DisplayObject rdf:ID="do_AdminBSC">
+        <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >swbIconWebSite</swb:iconClass>
+      </swbxf:DisplayObject>
+    </swb:displayObject>
+    <rdfs:label xml:lang="en">BSC Management</rdfs:label>
+    <swb:classCodePackage rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >org.semanticwb.bsc.admin</swb:classCodePackage>
+    <rdfs:label xml:lang="es">Administador de BSC</rdfs:label>
+    <swb:hasClass rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#MenuItem"/>
+    <swb:hasHerarquicalNode rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_Countries"/>
+  </owl:Class>
+  <owl:Class rdf:about="#Blockable">
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBInterface"/>
+    <swb:classCodePackage rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >org.semanticwb.bsc</swb:classCodePackage>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Interface"/>
+  </owl:Class>
   <owl:Class rdf:about="#Committable">
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBInterface"/>
     <swb:classCodePackage rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >org.semanticwb.bsc</swb:classCodePackage>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Interface"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Attachment">
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBInterface"/>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Interface"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Action">
+    <swb:classCodePackage rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >org.semanticwb.bsc.tracing</swb:classCodePackage>
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <rdfs:subClassOf rdf:resource="#BSCTracing"/>
+    <swb:displayObject>
+      <swbxf:DisplayObject rdf:ID="do_Action">
+        <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >swbIconWebPage</swb:iconClass>
+        <rdfs:label xml:lang="es">Acción</rdfs:label>
+        <rdfs:label xml:lang="en">Action</rdfs:label>
+      </swbxf:DisplayObject>
+    </swb:displayObject>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
   <owl:Class rdf:ID="BSC">
     <swb:hasClass>
@@ -123,9 +321,7 @@
         <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
       </swb:Class>
     </swb:hasClass>
-    <swb:hasClass>
-      <owl:Class rdf:ID="Objective"/>
-    </swb:hasClass>
+    <swb:hasClass rdf:resource="#Objective"/>
     <swb:hasHerarquicalNode>
       <swbxf:HerarquicalNode rdf:ID="hn_Initiatives">
         <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
@@ -138,38 +334,7 @@
         <swbxf:heClass rdf:resource="#Initiative"/>
       </swbxf:HerarquicalNode>
     </swb:hasHerarquicalNode>
-    <swb:hasClass>
-      <swb:Class rdf:ID="Indicator">
-        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-        >true</swb:autogenId>
-        <rdfs:subClassOf>
-          <owl:Restriction>
-            <owl:onProperty rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#webPageParent"/>
-            <owl:allValuesFrom>
-              <owl:Class rdf:about="#Objective"/>
-            </owl:allValuesFrom>
-          </owl:Restriction>
-        </rdfs:subClassOf>
-        <swb:displayObject>
-          <swbxf:DisplayObject rdf:ID="do_Indicator">
-            <swb:displayMode rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-            >final</swb:displayMode>
-            <rdfs:label xml:lang="es">Indicador</rdfs:label>
-            <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-            >swbIconWebPage</swb:iconClass>
-            <swbxf:dragSupport rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-            >true</swbxf:dragSupport>
-            <swbxf:dropMatchLevel rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-            >2</swbxf:dropMatchLevel>
-            <rdfs:label xml:lang="en">Indicator</rdfs:label>
-          </swbxf:DisplayObject>
-        </swb:displayObject>
-        <rdfs:subClassOf rdf:resource="#BSCElement"/>
-        <swb:classCodePackage rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >org.semanticwb.bsc.element</swb:classCodePackage>
-        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-      </swb:Class>
-    </swb:hasClass>
+    <swb:hasClass rdf:resource="#Indicator"/>
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#WebSite"/>
     <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >Objeto que define un Scorecard</rdfs:comment>
@@ -179,19 +344,7 @@
         >org.semanticwb.bsc.tracing</swb:classCodePackage>
         <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
         >true</swb:autogenId>
-        <rdfs:subClassOf>
-          <swb:Class rdf:ID="BSCTracing">
-            <swb:classCodePackage rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-            >org.semanticwb.bsc.tracing</swb:classCodePackage>
-            <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
-            <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
-            <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Activeable"/>
-            <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-            >true</swb:autogenId>
-            <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
-            <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-          </swb:Class>
-        </rdfs:subClassOf>
+        <rdfs:subClassOf rdf:resource="#BSCTracing"/>
         <swb:displayObject>
           <swbxf:DisplayObject rdf:ID="do_Risk">
             <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
@@ -209,16 +362,12 @@
         <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
         >swbIconWebPage</swb:iconClass>
         <swb:title xml:lang="en">Actions</swb:title>
-        <swbxf:heClass>
-          <owl:Class rdf:ID="Action"/>
-        </swbxf:heClass>
+        <swbxf:heClass rdf:resource="#Action"/>
       </swbxf:HerarquicalNode>
     </swb:hasHerarquicalNode>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Model"/>
     <swb:hasHerarquicalNode rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_PTContents"/>
-    <swb:hasClass>
-      <owl:Class rdf:about="#Action"/>
-    </swb:hasClass>
+    <swb:hasClass rdf:resource="#Action"/>
     <swb:hasHerarquicalNode rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_Languages"/>
     <swb:hasHerarquicalNode>
       <swbxf:HerarquicalNode rdf:ID="hn_Perspectives">
@@ -232,9 +381,7 @@
           <swb:Class rdf:ID="Perspective">
             <swb:classCodePackage rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
             >org.semanticwb.bsc.element</swb:classCodePackage>
-            <rdfs:subClassOf>
-              <owl:Class rdf:ID="Recognizable"/>
-            </rdfs:subClassOf>
+            <rdfs:subClassOf rdf:resource="#Recognizable"/>
             <swb:displayObject>
               <swbxf:DisplayObject rdf:ID="do_Perspective">
                 <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
@@ -310,177 +457,6 @@
     </swb:displayObject>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
-  <owl:Class rdf:ID="Periodicity">
-    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >Período válidos son los que no tienen intervalos de tiempo traslapados</rdfs:comment>
-    <swb:classCodePackage rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >org.semanticwb.bsc.formelement</swb:classCodePackage>
-    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBFormElement"/>
-    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#FormElement"/>
-  </owl:Class>
-  <owl:Class rdf:ID="Evidence">
-    <swb:classCodePackage rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >org.semanticwb.bsc.tracing</swb:classCodePackage>
-    <rdfs:subClassOf rdf:resource="#BSCTracing"/>
-    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >Clase que permite definir los atributos de las evidencias de un Indicador</rdfs:comment>
-    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:autogenId>
-    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
-  </owl:Class>
-  <owl:Class rdf:about="#Recognizable">
-    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBInterface"/>
-    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >Interfaz que define propiedades para los elementos que pueden identificarse mediante un prefijo</rdfs:comment>
-    <rdfs:label xml:lang="es">Identificable</rdfs:label>
-    <rdfs:label xml:lang="en">Recognizable</rdfs:label>
-    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Interface"/>
-  </owl:Class>
-  <owl:Class rdf:ID="State">
-    <rdfs:subClassOf>
-      <swb:Interface rdf:ID="StateMachinable">
-        <swb:classCodePackage rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >org.semanticwb.bsc</swb:classCodePackage>
-        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBInterface"/>
-        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-      </swb:Interface>
-    </rdfs:subClassOf>
-    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:autogenId>
-    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
-    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Sortable"/>
-    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Iconable"/>
-    <rdfs:subClassOf rdf:resource="#BSCAccessory"/>
-    <swb:classCodePackage rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >org.semanticwb.bsc.accessory</swb:classCodePackage>
-    <swb:displayObject>
-      <swbxf:DisplayObject rdf:ID="do_State">
-        <rdfs:label xml:lang="en">State</rdfs:label>
-        <rdfs:label xml:lang="es">Estado</rdfs:label>
-        <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >swbIconWebPage</swb:iconClass>
-      </swbxf:DisplayObject>
-    </swb:displayObject>
-    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
-  </owl:Class>
-  <owl:Class rdf:ID="Sponsor">
-    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >Lista de sponsors</rdfs:comment>
-    <swb:classCodePackage rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >org.semanticwb.bsc.formelement</swb:classCodePackage>
-    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBFormElement"/>
-  </owl:Class>
-  <owl:Class rdf:about="#Objective">
-    <swb:displayObject>
-      <swbxf:DisplayObject rdf:ID="do_Objetive">
-        <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >swbIconWebPage</swb:iconClass>
-        <rdfs:label xml:lang="es">Objetivo</rdfs:label>
-        <rdfs:label xml:lang="en">Objetive</rdfs:label>
-        <swbxf:dragSupport rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-        >true</swbxf:dragSupport>
-      </swbxf:DisplayObject>
-    </swb:displayObject>
-    <rdfs:subClassOf rdf:resource="#BSCElement"/>
-    <rdfs:subClassOf>
-      <owl:Restriction>
-        <owl:onProperty rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#hasWebPageChild"/>
-        <owl:allValuesFrom rdf:resource="#Indicator"/>
-      </owl:Restriction>
-    </rdfs:subClassOf>
-    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:autogenId>
-    <swb:classCodePackage rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >org.semanticwb.bsc.element</swb:classCodePackage>
-    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
-  </owl:Class>
-  <owl:Class rdf:ID="AdminBSC">
-    <swb:hasHerarquicalNode rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_Languages"/>
-    <swb:hasClass rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#ObjectBehavior"/>
-    <swb:hasHerarquicalNode rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_UserGroups"/>
-    <swb:hasHerarquicalNode>
-      <swbxf:HerarquicalNode rdf:ID="hn_StatesGroups">
-        <swbxf:heClass>
-          <swb:Class rdf:ID="StateGroup">
-            <swb:classCodePackage rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-            >org.semanticwb.bsc.accessory</swb:classCodePackage>
-            <rdfs:subClassOf rdf:resource="#BSCAccessory"/>
-            <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-            >true</swb:autogenId>
-            <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
-            <swb:displayObject>
-              <swbxf:DisplayObject rdf:ID="do_StateGroup">
-                <rdfs:label xml:lang="en">Group of states</rdfs:label>
-                <rdfs:label xml:lang="es">Grupo de estados</rdfs:label>
-                <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-                >swbIconWebPage</swb:iconClass>
-              </swbxf:DisplayObject>
-            </swb:displayObject>
-            <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-          </swb:Class>
-        </swbxf:heClass>
-        <swb:title xml:lang="es">Grupos de estados</swb:title>
-        <swb:title xml:lang="en">Groups of states</swb:title>
-        <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >swbIconWebPage</swb:iconClass>
-      </swbxf:HerarquicalNode>
-    </swb:hasHerarquicalNode>
-    <swb:hasHerarquicalNode rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_Devices"/>
-    <swb:hasHerarquicalNode rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_Roles"/>
-    <swb:hasHerarquicalNode rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_Dnss"/>
-    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#AdminWebSite"/>
-    <swb:hasHerarquicalNode rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_PTContents"/>
-    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Model"/>
-    <swb:hasHerarquicalNode rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_Templates"/>
-    <swb:hasHerarquicalNode>
-      <swbxf:HerarquicalNode rdf:ID="hn_Periods">
-        <swbxf:heClass rdf:resource="#Period"/>
-        <swb:title xml:lang="es">Períodos</swb:title>
-        <swb:title xml:lang="en">Periods</swb:title>
-        <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >swbIconDnss</swb:iconClass>
-      </swbxf:HerarquicalNode>
-    </swb:hasHerarquicalNode>
-    <rdfs:comment xml:lang="es">Administración de BSC</rdfs:comment>
-    <swb:displayObject>
-      <swbxf:DisplayObject rdf:ID="do_AdminBSC">
-        <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >swbIconWebSite</swb:iconClass>
-      </swbxf:DisplayObject>
-    </swb:displayObject>
-    <rdfs:label xml:lang="en">BSC Management</rdfs:label>
-    <swb:classCodePackage rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >org.semanticwb.bsc.admin</swb:classCodePackage>
-    <rdfs:label xml:lang="es">Administador de BSC</rdfs:label>
-    <swb:hasClass rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#MenuItem"/>
-    <swb:hasHerarquicalNode rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_Countries"/>
-  </owl:Class>
-  <owl:Class rdf:about="#Blockable">
-    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBInterface"/>
-    <swb:classCodePackage rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >org.semanticwb.bsc</swb:classCodePackage>
-    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Interface"/>
-  </owl:Class>
-  <owl:Class rdf:ID="Attachment">
-    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBInterface"/>
-    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Interface"/>
-  </owl:Class>
-  <owl:Class rdf:about="#Action">
-    <swb:classCodePackage rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >org.semanticwb.bsc.tracing</swb:classCodePackage>
-    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:autogenId>
-    <rdfs:subClassOf rdf:resource="#BSCTracing"/>
-    <swb:displayObject>
-      <swbxf:DisplayObject rdf:ID="do_Action">
-        <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >swbIconWebPage</swb:iconClass>
-        <rdfs:label xml:lang="es">Acción</rdfs:label>
-        <rdfs:label xml:lang="en">Action</rdfs:label>
-      </swbxf:DisplayObject>
-    </swb:displayObject>
-    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
-  </owl:Class>
   <owl:ObjectProperty rdf:ID="parent">
     <rdfs:range rdf:resource="#BSC"/>
     <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
@@ -530,7 +506,22 @@
     >Persiste información del patrocinador de un indicador</rdfs:comment>
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_sponsor">
-        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#selectOneUserRepWithBlank"/>
+        <swbxf:propPromptMessage xml:lang="en">Select a sponsor for the objective</swbxf:propPromptMessage>
+        <swbxf:propPromptMessage xml:lang="es">Selecciona un sponsor para el objetivo</swbxf:propPromptMessage>
+        <rdfs:label xml:lang="en">Sponsor</rdfs:label>
+        <rdfs:label xml:lang="es">Sponsor</rdfs:label>
+        <swbxf:formElement>
+          <bsc:SelectOneUserByRoleGroup rdf:ID="sponsors">
+            <swbxf:so_nullSuport rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+            >true</swbxf:so_nullSuport>
+            <rdfs:label xml:lang="en">Sponsor</rdfs:label>
+            <rdfs:label xml:lang="es">Sponsor</rdfs:label>
+            <swbxf:so_userRepository rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+            >true</swbxf:so_userRepository>
+            <bsc:so_userGroupId rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >Sponsors</bsc:so_userGroupId>
+          </bsc:SelectOneUserByRoleGroup>
+        </swbxf:formElement>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
     <rdfs:label xml:lang="es">Esponsor</rdfs:label>
@@ -551,7 +542,20 @@
     <rdfs:range rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#User"/>
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_champion">
-        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#selectOneUserRepWithBlank"/>
+        <swbxf:propPromptMessage xml:lang="en">Select a champion for the objective</swbxf:propPromptMessage>
+        <swbxf:propPromptMessage xml:lang="es">Seleccione un champion para el objetivo</swbxf:propPromptMessage>
+        <swbxf:formElement>
+          <bsc:SelectOneUserByRoleGroup rdf:ID="champions">
+            <rdfs:label xml:lang="en">Champion</rdfs:label>
+            <rdfs:label xml:lang="es">Champion</rdfs:label>
+            <swbxf:so_userRepository rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+            >true</swbxf:so_userRepository>
+            <swbxf:so_nullSuport rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+            >true</swbxf:so_nullSuport>
+            <bsc:so_userGroupId rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >Champions</bsc:so_userGroupId>
+          </bsc:SelectOneUserByRoleGroup>
+        </swbxf:formElement>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
     <rdfs:label xml:lang="en">Champion</rdfs:label>
@@ -698,6 +702,19 @@
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <rdfs:domain rdf:resource="#Periodicity"/>
   </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="modelId">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >filterModelId</swb:propertyCodeName>
+    <rdfs:domain>
+      <swb:FormElement rdf:ID="SelectOneUserByRoleGroup">
+        <swb:classCodePackage rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >org.semanticwb.bsc.formelement</swb:classCodePackage>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#SelectOne"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:FormElement>
+    </rdfs:domain>
+  </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="logo">
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_logo">
@@ -814,6 +831,18 @@
     </swb:displayProperty>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#date"/>
     <rdfs:domain rdf:resource="#Schedule"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="so_userGroupId">
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >filterUserGroupId</swb:propertyCodeName>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#SelectOneUserByRoleGroup"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="so_roleIds">
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >filterRoleIds</swb:propertyCodeName>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#SelectOneUserByRoleGroup"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="prefix">
     <rdfs:domain rdf:resource="#Recognizable"/>
@@ -987,7 +1016,6 @@
     <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >swbIconWebPage</swb:iconClass>
   </swbxf:DisplayObject>
-  <bsc:Champion rdf:ID="champions"/>
   <swb:CodePackage rdf:ID="pkg">
     <swb:package rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >org.semanticwb.bsc</swb:package>
@@ -1005,7 +1033,6 @@
     <rdfs:subClassOf rdf:resource="#BSCTracing"/>
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
   </swb:Class>
-  <bsc:Sponsor rdf:ID="sponsors"/>
   <swbxf:HerarquicalNode rdf:ID="hn_Objetives">
     <swbxf:heClass rdf:resource="#Objective"/>
     <swb:title xml:lang="es">Objetivo</swb:title>
