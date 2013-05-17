@@ -1,6 +1,24 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+ * SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración,
+ * colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de
+ * información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes
+ * fuentes, donde a la información se le asigna un significado, de forma que pueda ser interpretada y
+ * procesada por personas y/o sistemas, es una creación original del Fondo de Información y Documentación
+ * para la Industria INFOTEC, cuyo registro se encuentra actualmente en trámite.
+ *
+ * INFOTEC pone a su disposición la herramienta SemanticWebBuilder a través de su licenciamiento abierto al público (‘open source’),
+ * en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición;
+ * aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software,
+ * todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización
+ * del SemanticWebBuilder 4.0.
+ *
+ * INFOTEC no otorga garantía sobre SemanticWebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita,
+ * siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar
+ * de la misma.
+ *
+ * Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente
+ * dirección electrónica:
+ *  http://www.semanticwebbuilder.org
  */
 package org.semanticwb.social.admin.resources;
 
@@ -12,36 +30,34 @@ import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
-import org.semanticwb.model.GenericObject;
 import org.semanticwb.model.Resource;
-import org.semanticwb.model.Resourceable;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.User;
-import org.semanticwb.model.Versionable;
 import org.semanticwb.model.WebPage;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticProperty;
-import org.semanticwb.portal.PFlowManager;
-import org.semanticwb.portal.admin.resources.SWBDocumentsToAuthorize;
 import org.semanticwb.portal.api.GenericResource;
-import org.semanticwb.portal.api.GenericSemResource;
 import org.semanticwb.portal.api.SWBActionResponse;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBParamRequestImp;
 import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.api.SWBResourceURL;
 import org.semanticwb.social.PostOut;
+import org.semanticwb.social.SocialPFlow;
+import org.semanticwb.social.util.SocialLoader;
 
+// TODO: Auto-generated Javadoc
 /**
- *
- * @author jorge.jimenez
+ * The Class SWBDocumentsToAuthorize.
+ * 
+ * @author Jorge.Jiménez
  */
-public class SocialDocumentsToAuhorize extends GenericResource
+public class SocialDocumentsToAuhorize extends GenericResource 
 {
 
     /** The log. */
-    private static Logger log = SWBUtils.getLogger(SWBDocumentsToAuthorize.class);
+    private static Logger log = SWBUtils.getLogger(SocialDocumentsToAuhorize.class);
 
     /* (non-Javadoc)
      * @see org.semanticwb.portal.api.GenericResource#processAction(javax.servlet.http.HttpServletRequest, org.semanticwb.portal.api.SWBActionResponse)
@@ -91,6 +107,7 @@ public class SocialDocumentsToAuhorize extends GenericResource
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
+        String lang=paramRequest.getUser().getLanguage();
         int show = 2;
         if (request.getParameter("show") != null)
         {
@@ -133,9 +150,6 @@ public class SocialDocumentsToAuhorize extends GenericResource
             out.println("</script>");
 
             
-
-            
-
             out.println("<form class=\"swbform\" name='frmseecontentsToAuthorize' action='" + paramRequest.getRenderUrl() + "' method='post'>");
             out.println("<fieldset>");
             out.println("<select name='site' dojoType=\"dojox.form.DropDownSelect\" autocomplete=\"false\">");
@@ -188,85 +202,93 @@ public class SocialDocumentsToAuhorize extends GenericResource
             out.println("</fieldset>");
             out.println("</form>");
 
-            PostOut[] postOuts;
+            PostOut[] resources;
             if (show == 1)
             {
-                //postOuts = SWBPortal.getPFlowManager().getContentsAtFlowAll(sitetoShow);
-            }
+                resources = SocialLoader.getPFlowManager().getContentsAtFlowAll(sitetoShow);  
+            } 
             else if (show == 3)
             {
-                //resources = SWBPortal.getPFlowManager().getContentsAtFlow(user, sitetoShow);
+                resources = SocialLoader.getPFlowManager().getContentsAtFlow(user, sitetoShow);
             }
             else
             {
-                //resources = SWBPortal.getPFlowManager().getContentsAtFlowOfUser(user, sitetoShow);
+                resources = SocialLoader.getPFlowManager().getContentsAtFlowOfUser(user, sitetoShow);
             }
 
-/*
+
             if (resources.length > 0)
             {
                 // create dialog
-                for (Resource resource : resources)
+                for (PostOut resource : resources)
                 {
-                    GenericObject go=null;
-                    boolean semanresource=false;
-                    if(resource.getResourceData()!=null)
+                    
+                    String id=resource.getEncodedURI().replace('%', '_').replace(':', '_').replace('/', '_');
+                    String resTitle=resource.getMsg_Text()!=null?resource.getMsg_Text().replace('"','\''):"";
+                    out.println("<div dojoType=\"dijit.Dialog\" id=\""+id+"\" title=\""+paramRequest.getLocaleString("properties")+" ("+resTitle+")\">");
+                    out.println("<form class=\"swbform\">");
+                    out.println("<fieldset>");
+                    out.println("<table>");
+                    out.println("<tr>");
+                    out.println("<th>");
+                    out.println(paramRequest.getLocaleString("propiedad_label"));
+                    out.println("</th>");
+                    out.println("<th>");
+                    out.println(paramRequest.getLocaleString("valor_value"));
+                    out.println("</th>");
+                    out.println("</tr>");
+                    Iterator<SemanticProperty> props=resource.getSemanticObject().getSemanticClass().listProperties();
+                    while(props.hasNext())
                     {
-                        go=resource.getResourceData().createGenericInstance();
-                        semanresource=go instanceof GenericSemResource;
-                    }
-                    if(semanresource)
-                    {
-                        String id=resource.getEncodedURI().replace('%', '_').replace(':', '_').replace('/', '_');
-
-                        out.println("<div dojoType=\"dijit.Dialog\" id=\""+id+"\" title=\""+paramRequest.getLocaleString("properties")+" ("+resource.getTitle().replace('"','\'')+")\">");
-                        out.println("<form class=\"swbform\">");
-                        out.println("<fieldset>");
-                        out.println("<table>");
-                        out.println("<tr>");
-                        out.println("<th>");
-                        out.println(paramRequest.getLocaleString("propiedad_label"));
-                        out.println("</th>");
-                        out.println("<th>");
-                        out.println(paramRequest.getLocaleString("valor_value"));
-                        out.println("</th>");
-                        out.println("</tr>");
-                        Iterator<SemanticProperty> props=resource.getResourceData().getSemanticClass().listProperties();
-                        while(props.hasNext())
+                        SemanticProperty prop=props.next();
+                        if(prop.getDisplayProperty()!=null)
                         {
-                            SemanticProperty prop=props.next();
-                            if(prop.getDisplayProperty()!=null)
+                            String label=prop.getDisplayName(paramRequest.getUser().getLanguage());
+                            String value=null;
+                            if(prop.isDataTypeProperty())
                             {
-                                String label=prop.getDisplayName(paramRequest.getUser().getLanguage());
-                                String value=null;
-                                if(prop.isDataTypeProperty())
-                                {
-                                    value=go.getSemanticObject().getProperty(prop);
-                                }
-                                else if(prop.isObjectProperty())
-                                {
-                                    SemanticObject ovalue=go.getSemanticObject().getObjectProperty(prop);
-                                    if(ovalue!=null)
-                                    {
-                                        value=ovalue.getDisplayName(paramRequest.getUser().getLanguage());
-                                    }
-                                }
-                                if(value==null)
-                                {
-                                    value=paramRequest.getLocaleString("novalue");
-                                }
-                               
-                                out.println("<tr>");
-                                out.println("<td>"+ label +"</td>");
-                                out.println("<td>"+value+"</td>");
-                                out.println("</tr>");
+                                value=resource.getSemanticObject().getProperty(prop);
                             }
+                            else if(prop.isObjectProperty())
+                            {
+                                SemanticObject ovalue=resource.getSemanticObject().getObjectProperty(prop);
+                                if(ovalue!=null)
+                                {
+                                    value=ovalue.getDisplayName(paramRequest.getUser().getLanguage());
+                                }
+                            }
+                            if(value==null)
+                            {
+                                value=paramRequest.getLocaleString("novalue");
+                            }
+
+                            out.println("<tr>");
+                            out.println("<td>"+ label +"</td>");
+                            out.println("<td>"+value+"</td>");
+                            out.println("</tr>");
                         }
-                        out.println("</table>");
-                        out.println("</fieldset>");
-                        out.println("</form>");
-                        out.println("</div>");
                     }
+                    if(resource.getPflowInstance()!=null)
+                    {
+                        out.println("<tr>");
+                        out.println("<td>paramRequest.getLocaleString(\"flow\")</td>");
+                        out.println("<td>"+resource.getPflowInstance().getPflow().getDisplayTitle(lang) +"</td>");
+                        out.println("</tr>");
+                    }
+                    if(resource.getSocialTopic()!=null)
+                    {
+                        out.println("<tr>");
+                        out.println("<td>paramRequest.getLocaleString(\"topic\")</td>");
+                        out.println("<td>"+resource.getSocialTopic().getDisplayTitle(lang) +"</td>");
+                        out.println("</tr>");
+                    }
+                    
+                    
+                    out.println("</table>");
+                    out.println("</fieldset>");
+                    out.println("</form>");
+                    out.println("</div>");
+                    
                 }
                 if(resources.length>0)
                 {
@@ -330,7 +352,10 @@ public class SocialDocumentsToAuhorize extends GenericResource
                 out.println(paramRequest.getLocaleString("title"));
                 out.println("</th>");
                 out.println("<th>");
-                out.println(paramRequest.getLocaleString("page"));
+                out.println(paramRequest.getLocaleString("topic"));
+                out.println("</th>");
+                out.println("<th>");
+                out.println(paramRequest.getLocaleString("flow"));
                 out.println("</th>");
                 out.println("<th>");
                 out.println(paramRequest.getLocaleString("step"));
@@ -339,11 +364,11 @@ public class SocialDocumentsToAuhorize extends GenericResource
                 out.println(paramRequest.getLocaleString("action"));
                 out.println("</th>");
                 out.println("</tr>");
-                for (Resource resource : resources)
+                for (PostOut resource : resources)
                 {
                     out.println("<tr>");
                     //out.println("<td width='10%'>");
-                    PFlowManager manager=new PFlowManager();                    
+                    /*
                     SWBParamRequestImp  paramreq=new SWBParamRequestImp(request, resource, paramRequest.getWebPage(), user);
                     SWBResourceURL urlpreview=paramreq.getRenderUrl().setCallMethod(SWBParamRequestImp.Call_DIRECT);
                     if(resource.getResourceData().createGenericInstance() instanceof Versionable)
@@ -354,54 +379,59 @@ public class SocialDocumentsToAuhorize extends GenericResource
                             urlpreview.setParameter("numversion", String.valueOf(v.getLastVersion().getVersionNumber()));
                         }
                     }
-                    //out.println("<input type=\"radio\" onClick=\"javascript:habilita("+ manager.isReviewer(resource, user) +",'"+urlpreview+"')\" name=\"res\" value=\"" + resource.getId() + "\"></input>");
+                    * **/
+                    WebSite wsite = SWBContext.getAdminWebSite();
+
+                    WebPage wpShowPostOut = wsite.getWebPage("ShowPostOut");
+                    Resource resrPostOut = wsite.getResource("143");
+                    System.out.println("postOut a request:"+resource.getId());
+                    request.setAttribute("postOut", resource.getId());
+                    
+                    SWBParamRequestImp paramreq = new SWBParamRequestImp(request, resrPostOut, wpShowPostOut, user);
+                    SWBResourceURL urlpreview=paramreq.getRenderUrl().setCallMethod(SWBParamRequestImp.Call_DIRECT);
+                    urlpreview.setParameter("postOut", resource.getId());
+                    urlpreview.setParameter("wsite", resource.getSemanticObject().getModel().getName());
+                   
 
                     //out.println("</td>");
                     out.println("<td width='30%'>");
-                    out.println(resource.getTitle());
+                    out.println(resource.getMsg_Text()!=null?resource.getMsg_Text():"");
                     out.println("</td>");
                     out.println("<td width='30%'>");
-                    Iterator<Resourceable> resourceables = resource.listResourceables();
-                    while (resourceables.hasNext())
-                    {
-                        Resourceable resourceable = resourceables.next();
-                        if (resourceable instanceof WebPage)
-                        {
-                            out.println(((WebPage) resourceable).getTitle());
-                            break;
-                        }
-                    }
+                    out.println(resource.getSocialTopic().getTitle()!=null?resource.getSocialTopic().getTitle():"");
+                    out.println("</td>");
+                    out.println("<td width='20%'>");
+                    out.println(resource.getPflowInstance().getPflow().getDisplayTitle(lang));
                     out.println("</td>");
                     out.println("<td width='20%'>");
                     out.println(resource.getPflowInstance().getStep());
                     out.println("</td>");
                     out.println("</td>");
                     out.println("<td width='20%'>");
-                    boolean semanresource=false;
-                    if(resource.getResourceData()!=null)
-                    {
-                        GenericObject go=resource.getResourceData().createGenericInstance();
-                        semanresource=go instanceof GenericSemResource;
-                    }
-                    if(semanresource)
+                    try
                     {
                         String id=resource.getEncodedURI().replace('%', '_').replace(':', '_').replace('/', '_');
                         String imgview=SWBPortal.getContextPath()+"/swbadmin/icons/preview.gif";                        
                         out.println("<a title=\""+ paramRequest.getLocaleString("properties") +"\" onclick=\"view('"+urlpreview+"','"+ id +"')\" href=\"#\"><img src=\""+imgview+"\" alt=\""+paramRequest.getLocaleString("properties")+"\"></a>");
-                    }   
-                    String imgedit=SWBPortal.getContextPath()+"/swbadmin/icons/editar_1.gif";
-                    out.println("<a title=\""+paramRequest.getLocaleString("edit")+"\" href=\"#\" onclick=\"parent.selectTab('"+ resource.getURI() +"','"+ SWBPortal.getContextPath() +"/swbadmin/jsp/objectTab.jsp','"+ resource.getTitle() +"','bh_AdminPorltet');return false;\"><img  src=\""+imgedit+"\"></a>");
-                    if(manager.isReviewer(resource, user))
-                    {                        
-                        String imgauthorize=SWBPortal.getContextPath()+"/swbadmin/icons/activa.gif";
-                        out.println("<a title=\""+paramRequest.getLocaleString("authorize")+"\" href=\"#\" onclick=\"showAuthorize('"+ resource.getId() +"')\"><img  src=\""+imgauthorize+"\"></a>");
-                        String imgreject=SWBPortal.getContextPath()+"/swbadmin/images/delete.gif";
-                        out.println("<a title=\""+paramRequest.getLocaleString("reject")+"\" href=\"#\" onclick=\"showReject('"+ resource.getId() +"')\"><img  src=\""+imgreject+"\"></a>");
+                        String imgedit=SWBPortal.getContextPath()+"/swbadmin/icons/editar_1.gif";
+                        out.println("<a title=\""+paramRequest.getLocaleString("edit")+"\" href=\"#\" onclick=\"parent.selectTab('"+ resource.getURI() +"','"+ SWBPortal.getContextPath() +"/swbadmin/jsp/objectTab.jsp','"+ "TEST" +"','bh_AdminPorltet');return false;\"><img  src=\""+imgedit+"\"></a>");
+                        if(SocialLoader.getPFlowManager().isReviewer(resource, user))
+                        {                        
+                            String imgauthorize=SWBPortal.getContextPath()+"/swbadmin/icons/activa.gif";
+                            out.println("<a title=\""+paramRequest.getLocaleString("authorize")+"\" href=\"#\" onclick=\"showAuthorize('"+ resource.getId() +"')\"><img  src=\""+imgauthorize+"\"></a>");
+                            String imgreject=SWBPortal.getContextPath()+"/swbadmin/images/delete.gif";
+                            out.println("<a title=\""+paramRequest.getLocaleString("reject")+"\" href=\"#\" onclick=\"showReject('"+ resource.getId() +"')\"><img  src=\""+imgreject+"\"></a>");
+                        }
+                    }catch(Exception e)
+                    {
+                        log.error(e);
                     }
                     
                     out.println("</td>");
                     out.println("</tr>");
-                }                
+                    
+                }      
+                
                 out.println("</table>");
                 out.println("<fieldset>");
                 out.println("</form>");
@@ -475,6 +505,7 @@ public class SocialDocumentsToAuhorize extends GenericResource
                 out.println("</div>");
 
             }
+            
         }
         else
         {
@@ -485,7 +516,5 @@ public class SocialDocumentsToAuhorize extends GenericResource
         out.println("<div id='previewcontent'>");
         out.println("</div>");
         out.close();
-    }**/
-}
     }
 }
