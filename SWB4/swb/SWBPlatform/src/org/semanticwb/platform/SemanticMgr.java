@@ -1028,7 +1028,7 @@ public class SemanticMgr implements SWBInstanceObject
      */
     public void notifyTSChange(SemanticObject obj, Statement stmt, String action, boolean remote) 
     {
-        System.out.println("notifyTSChange: obj:" + obj + " stmt:" + stmt + " " + action+" "+remote);
+        //System.out.println("notifyTSChange: obj:" + obj + " stmt:" + stmt + " " + action+" "+remote);
         //log.trace("notifyTSChange: obj:" + obj + " stmt:" + stmt + " " + action);
         if (obj!=null && obj.getURI() != null) 
         {
@@ -1056,7 +1056,7 @@ public class SemanticMgr implements SWBInstanceObject
     public void processExternalChange(String uri, String puri, Node node, String action)
     {
         //log.trace("processExternalChange: uri:" + uri + " puri:" + puri + " node:" + node+" "+action);  
-        System.out.println("processExternalChange:"+uri+" puri:" + puri + " node:;" + node+" "+action);  
+        //System.out.println("processExternalChange:"+uri+" puri:" + puri + " node:;" + node+" "+action);  
         SemanticObject obj=SemanticObject.getSemanticObject(uri);
         if(obj==null)
         {
