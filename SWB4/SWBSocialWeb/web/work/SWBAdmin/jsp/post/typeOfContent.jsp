@@ -12,14 +12,26 @@
 <%@page import="org.semanticwb.*,org.semanticwb.platform.*,org.semanticwb.portal.*,org.semanticwb.model.*,java.util.*,org.semanticwb.base.util.*"%>
 <jsp:useBean id="paramRequest" scope="request" type="org.semanticwb.portal.api.SWBParamRequest"/>
 <%
+    WebSite wsite = WebSite.ClassMgr.getWebSite(request.getParameter("wsite"));
     System.out.println("Entra a Jsp...TypeOfContent...");
     String contentType = (String) request.getAttribute("valor");    
+    System.out.println("contentType:"+contentType);
     String objUri = request.getParameter("objUri"); 
-    System.out.println("objUri:"+objUri);      
+    System.out.println("objUri-JJ:"+objUri);  
+    SemanticObject semObj=SemanticObject.createSemanticObject(objUri); 
+    PostIn postIn=null;
+    System.out.println("objUri-postIn-si o no:"+semObj.getSemanticClass().isSubClass(PostIn.social_PostIn));  
+    if(semObj.getSemanticClass().isSubClass(PostIn.social_PostIn)) 
+    {
+        postIn=(PostIn)semObj.createGenericInstance();
+        System.out.println("objUri-postIn:"+postIn);  
+    }
+    
+    
     //SocialTopic socialTopic = (SocialTopic)SemanticObject.getSemanticObject(objUri).getGenericInstance(); // creates social topic to get Model Name
     //String brand = socialTopic.getSemanticObject().getModel().getName(); //gets brand name
     SWBResourceURL urlAction = paramRequest.getActionUrl();
-    WebSite wsite = WebSite.ClassMgr.getWebSite(request.getParameter("wsite"));
+   
     System.out.println("wsite:"+wsite);
     String postInSN=request.getParameter("postInSN"); 
       
@@ -76,6 +88,42 @@
         <div class="etiqueta"><label for="title"><%=Message.social_Message.getDisplayName(lang)%>: </label></div>
         <div class="campo"><%=messageFormMgr.renderElement(request, Message.social_msg_Text, messageFormMgr.MODE_CREATE)%></div>
         
+         <%
+        if(postIn!=null)
+        {
+            SocialTopic socialTopic=postIn.getSocialTopic();
+            Iterator<SocialPFlowRef> itSocialPFlowRefs=socialTopic.listInheritPFlowRefs();
+             %>    
+            <br/><br/><br/><br/>
+            <div class="etiqueta"><label for="socialFlow">Flujo de publicación:</label></div>
+            <div class="campo">
+            <%
+            boolean firstTime=false;
+            while(itSocialPFlowRefs.hasNext())
+            {
+                SocialPFlowRef socialFlowRef=itSocialPFlowRefs.next();
+                SocialPFlow socialPFlow=socialFlowRef.getPflow();
+                if(socialPFlow.isActive())
+                {
+                    if(!firstTime){%><select name="socialFlow"><%}%>
+                    <option value="<%=socialPFlow.getURI()%>"><%=socialPFlow.getDisplayTitle(lang)%> </option>
+                <%
+                    if(!firstTime){%></select><%firstTime=true;}
+                }
+            }
+            %>
+            </div>
+            <%if(firstTime){%>
+                <div class="etiqueta"><label for="socialFlowComment">Comentario:</label></div>
+                <div class="campo">
+                    <textarea name="socialFlowComment"></textarea>
+                </div>
+            <%
+           }
+        }
+        %>
+        
+        
         <ul class="btns_final">
             <button dojoType="dijit.form.Button" type="submit">Enviar</button>
         </ul>
@@ -122,6 +170,42 @@
 
         <div class="etiqueta"><label for="photo"><%=photoMgr.renderLabel(request, Photo.social_photo, photoMgr.MODE_CREATE)%>: </label></div>
         <%=photoMgr.getFormElement(Photo.social_photo).renderElement(request, obj2, Photo.social_photo, SWBFormMgr.TYPE_DOJO, SWBFormMgr.MODE_CREATE, lang)%>       
+        
+        <%
+        if(postIn!=null)
+        {
+            SocialTopic socialTopic=postIn.getSocialTopic();
+            Iterator<SocialPFlowRef> itSocialPFlowRefs=socialTopic.listInheritPFlowRefs();
+             %>    
+            <br/><br/><br/><br/>
+            <div class="etiqueta"><label for="socialFlow">Flujo de publicación:</label></div>
+            <div class="campo">
+            <%
+            boolean firstTime=false;
+            while(itSocialPFlowRefs.hasNext())
+            {
+                SocialPFlowRef socialFlowRef=itSocialPFlowRefs.next();
+                SocialPFlow socialPFlow=socialFlowRef.getPflow();
+                if(socialPFlow.isActive())
+                {
+                    if(!firstTime){%><select name="socialFlow"><%}%>
+                    <option value="<%=socialPFlow.getURI()%>"><%=socialPFlow.getDisplayTitle(lang)%> </option>
+                <%
+                    if(!firstTime){%></select><%firstTime=true;}
+                }
+            }
+            %>
+            </div>
+             <%if(firstTime){%>
+            <div class="etiqueta"><label for="socialFlowComment">Comentario:</label></div>
+            <div class="campo">
+                <textarea name="socialFlowComment"></textarea>
+            </div>
+            <%
+            }
+        }
+        %>
+        
         <ul class="btns_final">
             <button dojoType="dijit.form.Button" type="submit">Enviar</button>
         </ul>
@@ -166,6 +250,41 @@
         <div class="campo"><%=videoMgr.renderElement(request, Video.swb_tags, videoMgr.MODE_CREATE)%></div>
         <div class="etiqueta"><label for="title"><%=videoMgr.renderLabel(request, Video.social_video, videoMgr.MODE_CREATE)%>: </label></div>
         <div class="campo"><%=videoMgr.getFormElement(Video.social_video).renderElement(request, videoSemObj, Video.social_video, SWBFormMgr.TYPE_DOJO, SWBFormMgr.MODE_CREATE, lang)%></div>       
+        <%
+        if(postIn!=null)
+        {
+            SocialTopic socialTopic=postIn.getSocialTopic();
+            Iterator<SocialPFlowRef> itSocialPFlowRefs=socialTopic.listInheritPFlowRefs();
+        %>    
+            <div class="etiqueta">Flujo de Publicación</div>        
+            <div class="etiqueta"><label for="socialFlow">Flujo de publicación</label></div>
+            <div class="campo">
+            <%
+            boolean firstTime=false;
+            while(itSocialPFlowRefs.hasNext())
+            {
+                SocialPFlowRef socialFlowRef=itSocialPFlowRefs.next();
+                SocialPFlow socialPFlow=socialFlowRef.getPflow();
+                if(socialPFlow.isActive())
+                {
+                    if(!firstTime){%><select name="socialFlow"><%}%>
+                    <option value="<%=socialPFlow.getURI()%>"><%=socialPFlow.getDisplayTitle(lang)%> </option>
+                <%
+                    if(!firstTime){%></select><%firstTime=true;}
+                }
+            }
+            %>
+            </div>
+            <%if(firstTime){%>
+            <div class="etiqueta"><label for="socialFlowComment">Comentario</label></div>
+            <div class="campo">
+                <textarea name="socialFlowComment"></textarea>
+            </div>
+            <%
+            }
+        }
+        %>
+        
         <ul class="btns_final">
             <button dojoType="dijit.form.Button" type="submit">Enviar</button>
         </ul>
