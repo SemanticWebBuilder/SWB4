@@ -39,8 +39,8 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase
     {
         System.out.println("Video K llega a Youtube:"+video);
         System.out.println("Video id:"+video.getId());
-        System.out.println("Video title:"+video.getTitle());
-        System.out.println("Video descr:"+video.getDescription());
+        //System.out.println("Video title:"+video.getTitle());
+        //System.out.println("Video descr:"+video.getDescription());
         System.out.println("Video Tags:"+video.getTags());
         System.out.println("Video getVideo:"+video.getVideo());
         YouTubeService service = getYouTubeService();
@@ -67,7 +67,7 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase
                 mg.addCategory(new MediaCategory(YouTubeNamespace.CATEGORY_SCHEME, "Autos"));       // Debe estar desde la configuración de la red social
                 mg.addCategory(new MediaCategory(YouTubeNamespace.DEVELOPER_TAG_SCHEME, "xyzzy"));  // Debe estar desde la configuración de la red social
 
-                String title = video.getTitle();
+                String title = "SWBSocial"; //TODO:Ver como aparece este título en YouTube y si lo requiere o es opcional
                 if (title != null && title.trim().length() > 0) {
                     mg.setTitle(new MediaTitle());
                     mg.getTitle().setPlainTextContent(title);
@@ -85,7 +85,7 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase
                         mg.getKeywords().addKeyword(keywords);
                     }
                 }
-                String description = video.getDescription();
+                String description = video.getMsg_Text();
                 if (description != null && description.trim().length() > 0) {
                     mg.setDescription(new MediaDescription());
                     mg.getDescription().setPlainTextContent(description);

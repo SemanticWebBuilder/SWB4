@@ -4,7 +4,7 @@ package org.semanticwb.social.base;
    /**
    * Clase en donde se almacenan todos los post de tipo Mensaje y que entran por el Listener 
    */
-public abstract class MessageInBase extends org.semanticwb.social.PostIn implements org.semanticwb.social.PostDataable,org.semanticwb.model.Traceable,org.semanticwb.social.PostTextable,org.semanticwb.model.Tagable
+public abstract class MessageInBase extends org.semanticwb.social.PostIn implements org.semanticwb.social.PostTextable,org.semanticwb.social.PostDataable,org.semanticwb.model.Tagable,org.semanticwb.model.Traceable
 {
    /**
    * Clase en donde se almacenan todos los post de tipo Mensaje y que entran por el Listener
@@ -230,23 +230,5 @@ public abstract class MessageInBase extends org.semanticwb.social.PostIn impleme
     public MessageInBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
-    }
-
-/**
-* Gets the Msg_Text property
-* @return String with the Msg_Text
-*/
-    public String getMsg_Text()
-    {
-        return getSemanticObject().getProperty(social_msg_Text);
-    }
-
-/**
-* Sets the Msg_Text property
-* @param value long with the Msg_Text
-*/
-    public void setMsg_Text(String value)
-    {
-        getSemanticObject().setProperty(social_msg_Text, value);
     }
 }

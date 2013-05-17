@@ -4,7 +4,7 @@ package org.semanticwb.social.base;
    /**
    * Clase que sera creada cuando un post sea de tipo mensaje 
    */
-public abstract class MessageBase extends org.semanticwb.social.PostOut implements org.semanticwb.social.PostDataable,org.semanticwb.model.Traceable,org.semanticwb.social.PostTextable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Tagable
+public abstract class MessageBase extends org.semanticwb.social.PostOut implements org.semanticwb.social.PostTextable,org.semanticwb.social.PostDataable,org.semanticwb.model.Tagable,org.semanticwb.model.Traceable
 {
    /**
    * Clase que sera creada cuando un post sea de tipo mensaje
@@ -259,23 +259,5 @@ public abstract class MessageBase extends org.semanticwb.social.PostOut implemen
     public MessageBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
-    }
-
-/**
-* Gets the Msg_Text property
-* @return String with the Msg_Text
-*/
-    public String getMsg_Text()
-    {
-        return getSemanticObject().getProperty(social_msg_Text);
-    }
-
-/**
-* Sets the Msg_Text property
-* @param value long with the Msg_Text
-*/
-    public void setMsg_Text(String value)
-    {
-        getSemanticObject().setProperty(social_msg_Text, value);
     }
 }

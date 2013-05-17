@@ -14,20 +14,15 @@ import java.util.ResourceBundle;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.GenericIterator;
-import org.semanticwb.model.PFlow;
-import org.semanticwb.model.PFlowInstance;
-import org.semanticwb.model.PFlowRef;
-import org.semanticwb.model.Resource;
-import org.semanticwb.model.ResourceType;
-import org.semanticwb.model.Resourceable;
 import org.semanticwb.model.Role;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.User;
-import org.semanticwb.model.Versionable;
-import org.semanticwb.model.WebPage;
 import org.semanticwb.model.WebSite;
-import org.semanticwb.portal.FlowNotification;
+import org.semanticwb.social.PostOut;
 import org.semanticwb.social.SocialPFlow;
+import org.semanticwb.social.SocialPFlowInstance;
+import org.semanticwb.social.SocialPFlowRef;
+import org.semanticwb.social.SocialTopic;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -40,9 +35,9 @@ import org.w3c.dom.NodeList;
 
 // TODO: Auto-generated Javadoc
 /**
- * The Class PFlowManager.
+ * The Class SocialPFlowMgr.
  * 
- * @author victor.lorenzana
+ * @author jorge.jimenez
  * Si status es -1= enviado al autor del contenido, es como si no fuera enviado
  * Si status es 0 = no enviado ninguna vez
  * Si status es 1= aprovado, pero no necesariamnete autorizado
@@ -76,36 +71,31 @@ public class SocialPFlowMgr {
      * @param resource the resource
      * @return the flows to send content
      */
-    public static SocialPFlow[] getFlowsToSendContent(Resource resource)
+    public static SocialPFlow[] getFlowsToSendContent(PostOut resource)
     {
         HashSet<SocialPFlow> flows = new HashSet<SocialPFlow>();
-        WebSite site = resource.getWebSite();
-        Iterator<Resourceable> resourceables = resource.listResourceables();
-        while (resourceables.hasNext())
+        //WebSite site = WebSite.ClassMgr.getWebSite(resource.getSemanticObject().getModel().getName());
+        SocialTopic socialTopic=resource.getSocialTopic();
+        
+        for (SocialPFlow flow : getFlows(socialTopic))
         {
-            Resourceable resourceable = resourceables.next();
-            if (resourceable != null && resourceable instanceof WebPage)
+            String _xml = flow.getXml();
+            Document docflow = SWBUtils.XML.xmlToDom(_xml);
+            Element workflow = (Element) docflow.getElementsByTagName("workflow").item(0);
+            NodeList resourceTypes = workflow.getElementsByTagName("resourceType");
+            for (int ires = 0; ires < resourceTypes.getLength(); ires++)
             {
-                WebPage page = (WebPage) resourceable;
-                for (SocialPFlow flow : getFlows(page))
+                Element eres = (Element) resourceTypes.item(ires);
+                String iresw = eres.getAttribute("id");
+                //ResourceType type = site.getResourceType(iresw);
+                //if (resource.getResourceType().equals(type))
+                if (resource.getSemanticObject().getSemanticClass().getClassId().equals(iresw))
                 {
-                    String _xml = flow.getXml();
-                    Document docflow = SWBUtils.XML.xmlToDom(_xml);
-                    Element workflow = (Element) docflow.getElementsByTagName("workflow").item(0);
-                    NodeList resourceTypes = workflow.getElementsByTagName("resourceType");
-                    for (int ires = 0; ires < resourceTypes.getLength(); ires++)
-                    {
-                        Element eres = (Element) resourceTypes.item(ires);
-                        String iresw = eres.getAttribute("id");
-                        ResourceType type = site.getResourceType(iresw);
-                        if (resource.getResourceType().equals(type))
-                        {
-                            flows.add(flow); 
-                        }
-                    }
+                    flows.add(flow); 
                 }
             }
         }
+            
         return flows.toArray(new SocialPFlow[flows.size()]);
     }
 
@@ -115,13 +105,13 @@ public class SocialPFlowMgr {
      * @param page the page
      * @return the flows
      */
-    public static SocialPFlow[] getFlows(WebPage page)
+    public static SocialPFlow[] getFlows(SocialTopic page)
     {
-        HashSet<PFlow> flows = new HashSet<PFlow>();
-        GenericIterator<PFlowRef> refs = page.listInheritPFlowRefs();
+        HashSet<SocialPFlow> flows = new HashSet<SocialPFlow>();
+        GenericIterator<SocialPFlowRef> refs = page.listInheritPFlowRefs();
         while (refs.hasNext())
         {
-            PFlowRef ref = refs.next();
+            SocialPFlowRef ref = refs.next();
             if (ref.isActive())
             {
                 flows.add(ref.getPflow());
@@ -137,28 +127,28 @@ public class SocialPFlowMgr {
      * @param site the site
      * @return the contents at flow of user
      */
-    public static Resource[] getContentsAtFlowOfUser(User user, WebSite site)
+    public static PostOut[] getContentsAtFlowOfUser(User user, WebSite site)
     {
-        HashSet<Resource> getContentsAtFlowOfUser = new HashSet<Resource>();
+        HashSet<PostOut> getContentsAtFlowOfUser = new HashSet<PostOut>();
         if (site != null)
         {
-            Iterator<PFlow> flows = site.listPFlows();
+            Iterator<SocialPFlow> flows = SocialPFlow.ClassMgr.listSocialPFlows(site);
             while (flows.hasNext())
             {
-                PFlow flow = flows.next();
-                Iterator<PFlowInstance> instances = flow.listPFlowInstances();
+                SocialPFlow flow = flows.next();
+                Iterator<SocialPFlowInstance> instances = flow.listSocialPFlowinstances();
                 while (instances.hasNext())
                 {
-                    PFlowInstance instance = instances.next();
-                    Resource resource = instance.getPfinstResource();
-                    if (resource != null && isInFlow(resource) && resource.getCreator() != null && resource.getCreator().equals(user))
+                    SocialPFlowInstance instance = instances.next();
+                    PostOut postOut = instance.getPfinstPostOut();
+                    if (postOut != null && isInFlow(postOut) && postOut.getCreator() != null && postOut.getCreator().equals(user))
                     {
-                        getContentsAtFlowOfUser.add(resource);
+                        getContentsAtFlowOfUser.add(postOut);
                     }
                 }
             }
         }
-        return getContentsAtFlowOfUser.toArray(new Resource[getContentsAtFlowOfUser.size()]);
+        return getContentsAtFlowOfUser.toArray(new PostOut[getContentsAtFlowOfUser.size()]);
     }
 
     /**
@@ -167,28 +157,29 @@ public class SocialPFlowMgr {
      * @param site the site
      * @return the contents at flow all
      */
-    public static Resource[] getContentsAtFlowAll(WebSite site)
+    public static PostOut[] getContentsAtFlowAll(WebSite site)
     {
-        HashSet<Resource> getContentsAtFlowAll = new HashSet<Resource>();
+        HashSet<PostOut> getContentsAtFlowAll = new HashSet<PostOut>();
         if (site != null)
         {
-            Iterator<PFlow> flows = site.listPFlows();
+            //Iterator<PFlow> flows = site.listPFlows();
+            Iterator<SocialPFlow> flows = SocialPFlow.ClassMgr.listSocialPFlows(site);
             while (flows.hasNext())
             {
-                PFlow flow = flows.next();
-                Iterator<PFlowInstance> instances = flow.listPFlowInstances();
+                SocialPFlow flow = flows.next();
+                Iterator<SocialPFlowInstance> instances = flow.listSocialPFlowinstances(); 
                 while (instances.hasNext())
                 {
-                    PFlowInstance instance = instances.next();
-                    Resource resource = instance.getPfinstResource();
-                    if (resource != null && isInFlow(resource))
+                    SocialPFlowInstance instance = instances.next();
+                    PostOut postOut = instance.getPfinstPostOut();
+                    if (postOut != null && isInFlow(postOut))
                     {
-                        getContentsAtFlowAll.add(resource);
+                        getContentsAtFlowAll.add(postOut);
                     }
                 }
             }
         }
-        return getContentsAtFlowAll.toArray(new Resource[getContentsAtFlowAll.size()]);
+        return getContentsAtFlowAll.toArray(new PostOut[getContentsAtFlowAll.size()]);
     }
 
     /**
@@ -198,20 +189,20 @@ public class SocialPFlowMgr {
      * @param site the site
      * @return the contents at flow
      */
-    public static Resource[] getContentsAtFlow(User user, WebSite site)
+    public static PostOut[] getContentsAtFlow(User user, WebSite site)
     {        
-        HashSet<Resource> getContentsAtFlow = new HashSet<Resource>();
+        HashSet<PostOut> getContentsAtFlow = new HashSet<PostOut>();
         if (site != null)
         {
-            Iterator<PFlow> flows = site.listPFlows();
+            Iterator<SocialPFlow> flows = SocialPFlow.ClassMgr.listSocialPFlows(site);
             while (flows.hasNext())
             {
-                PFlow flow = flows.next();                
-                Iterator<PFlowInstance> instances = flow.listPFlowInstances();
+                SocialPFlow flow = flows.next();                
+                Iterator<SocialPFlowInstance> instances = flow.listSocialPFlowinstances();
                 while (instances.hasNext())
                 {
-                    PFlowInstance instance = instances.next();
-                    Resource resource = instance.getPfinstResource();                    
+                    SocialPFlowInstance instance = instances.next();
+                    PostOut resource = instance.getPfinstPostOut();                    
                     if (resource != null && isInFlow(resource) && isReviewer(resource, user))
                     {
                         getContentsAtFlow.add(resource);
@@ -219,7 +210,7 @@ public class SocialPFlowMgr {
                 }
             }
         }
-        return getContentsAtFlow.toArray(new Resource[getContentsAtFlow.size()]);
+        return getContentsAtFlow.toArray(new PostOut[getContentsAtFlow.size()]);
     }
 
     /**
@@ -228,20 +219,20 @@ public class SocialPFlowMgr {
      * @param pflow the pflow
      * @return the contents at flow
      */
-    public static Resource[] getContentsAtFlow(PFlow pflow)
+    public static PostOut[] getContentsAtFlow(SocialPFlow pflow)
     {
-        HashSet<Resource> getContentsAtFlow = new HashSet<Resource>();
-        Iterator<PFlowInstance> instances = pflow.listPFlowInstances();
+        HashSet<PostOut> getContentsAtFlow = new HashSet<PostOut>();
+        Iterator<SocialPFlowInstance> instances = pflow.listSocialPFlowinstances();
         while (instances.hasNext())
         {
-            PFlowInstance instance = instances.next();
-            Resource resource = instance.getPfinstResource();
+            SocialPFlowInstance instance = instances.next();
+            PostOut resource = instance.getPfinstPostOut();
             if (resource != null && isInFlow(resource))
             {
                 getContentsAtFlow.add(resource);
             }
         }
-        return getContentsAtFlow.toArray(new Resource[getContentsAtFlow.size()]);
+        return getContentsAtFlow.toArray(new PostOut[getContentsAtFlow.size()]);
     }
 
     /**
@@ -251,23 +242,23 @@ public class SocialPFlowMgr {
      * @param site the site
      * @return the contents at flow
      */
-    public static Resource[] getContentsAtFlow(PFlow pflow, WebSite site)
+    public static PostOut[] getContentsAtFlow(SocialPFlow pflow, WebSite site)
     {
-        HashSet<Resource> getContentsAtFlow = new HashSet<Resource>();
+        HashSet<PostOut> getContentsAtFlow = new HashSet<PostOut>();
         if (site != null)
         {
-            Iterator<PFlowInstance> instances = pflow.listPFlowInstances();
+            Iterator<SocialPFlowInstance> instances = pflow.listSocialPFlowinstances();
             while (instances.hasNext())
             {
-                PFlowInstance instance = instances.next();
+                SocialPFlowInstance instance = instances.next();
                 if (instance.getPflow().getWebSite().equals(site))
                 {
-                    Resource resource = instance.getPfinstResource();
+                    PostOut resource = instance.getPfinstPostOut();
                     getContentsAtFlow.add(resource);
                 }
             }
         }
-        return getContentsAtFlow.toArray(new Resource[getContentsAtFlow.size()]);
+        return getContentsAtFlow.toArray(new PostOut[getContentsAtFlow.size()]);
     }
 
     /**
@@ -276,15 +267,15 @@ public class SocialPFlowMgr {
      * @param user the user
      * @return the contents at flow
      */
-    public static Resource[] getContentsAtFlow(User user)
+    public static PostOut[] getContentsAtFlow(User user)
     {
-        HashSet<Resource> getContentsAtFlow = new HashSet<Resource>();
+        HashSet<PostOut> getContentsAtFlow = new HashSet<PostOut>();
         Iterator<WebSite> sites = SWBContext.listWebSites();
         while (sites.hasNext())
         {
             WebSite site = sites.next();
-            Resource[] resources = getContentsAtFlowAll(site);
-            for (Resource resource : resources)
+            PostOut[] resources = getContentsAtFlowAll(site);
+            for (PostOut resource : resources)
             {
                 if (resource != null && isInFlow(resource) && isReviewer(resource, user))
                 {
@@ -292,7 +283,7 @@ public class SocialPFlowMgr {
                 }
             }
         }
-        return getContentsAtFlow.toArray(new Resource[getContentsAtFlow.size()]);
+        return getContentsAtFlow.toArray(new PostOut[getContentsAtFlow.size()]);
     }
 
     /**
@@ -300,15 +291,15 @@ public class SocialPFlowMgr {
      * 
      * @return the contents at flow
      */
-    public static Resource[] getContentsAtFlow()
+    public static PostOut[] getContentsAtFlow()
     {
-        HashSet<Resource> getContentsAtFlow = new HashSet<Resource>();
+        HashSet<PostOut> getContentsAtFlow = new HashSet<PostOut>();
         Iterator<WebSite> sites = SWBContext.listWebSites();
         while (sites.hasNext())
         {
             WebSite site = sites.next();
-            Resource[] resources = getContentsAtFlowAll(site);
-            for (Resource resource : resources)
+            PostOut[] resources = getContentsAtFlowAll(site);
+            for (PostOut resource : resources)
             {
                 if (resource != null && isInFlow(resource))
                 {
@@ -316,7 +307,7 @@ public class SocialPFlowMgr {
                 }
             }
         }
-        return getContentsAtFlow.toArray(new Resource[getContentsAtFlow.size()]);
+        return getContentsAtFlow.toArray(new PostOut[getContentsAtFlow.size()]);
     }
 
     /**
@@ -325,9 +316,9 @@ public class SocialPFlowMgr {
      * @param resource the resource
      * @return the activity name
      */
-    public static String getActivityName(Resource resource)
+    public static String getActivityName(PostOut resource)
     {
-        PFlowInstance instance = resource.getPflowInstance();
+        SocialPFlowInstance instance = resource.getPflowInstance();
         if (instance != null)
         {
             return instance.getStep();
@@ -345,14 +336,14 @@ public class SocialPFlowMgr {
      * @param user the user
      * @return true, if is reviewer
      */
-    public static boolean isReviewer(Resource resource, User user)
+    public static boolean isReviewer(PostOut resource, User user)
     {
         boolean isReviewer = false;
-        PFlowInstance instance = resource.getPflowInstance();
+        SocialPFlowInstance instance = resource.getPflowInstance();
         if (instance != null && instance.getStatus() > 0)
         {
             String activityName = instance.getStep();
-            PFlow flow = instance.getPflow();
+            SocialPFlow flow = instance.getPflow();
             int version = instance.getVersion();
             if (activityName != null)
             {
@@ -403,7 +394,7 @@ public class SocialPFlowMgr {
      * @param user the user
      * @param msg the msg
      */
-    public static void approveResource(Resource resource, User user, String msg)
+    public static void approveResource(PostOut resource, User user, String msg)
     {
         approveResource(resource, user, msg, null);
     }
@@ -416,13 +407,13 @@ public class SocialPFlowMgr {
      * @param msg the msg
      * @param notification the notification
      */
-    public static void approveResource(Resource resource, User user, String msg, FlowNotification notification)
+    public static void approveResource(PostOut resource, User user, String msg, SocialFlowNotification notification)
     {
-        PFlowInstance instance = resource.getPflowInstance();
+        SocialPFlowInstance instance = resource.getPflowInstance();
         if (instance != null && instance.getStatus() > 0)
         {
             int version = instance.getVersion();
-            PFlow flow = instance.getPflow();
+            SocialPFlow flow = instance.getPflow();
             if (isReviewer(resource, user))
             {
                 String activityName = instance.getStep();
@@ -506,6 +497,7 @@ public class SocialPFlowMgr {
                                         {
                                             notification.autorize(resource);
                                         }
+                                        /*  LOS PostOut NO SON VERSIONABLES
                                         if(resource.getResourceData().instanceOf(Versionable.swb_Versionable))
                                         {
                                             Versionable v=(Versionable)resource.getResourceData().createGenericInstance();
@@ -514,7 +506,7 @@ public class SocialPFlowMgr {
                                                 v.getLastVersion().setVersionAuthorized(true);
                                                 v.setActualVersion(v.getLastVersion());
                                             }
-                                        }
+                                        }**/
                                     }
                                     else if (serviceName.equals("noauthorize"))
                                     {
@@ -523,15 +515,17 @@ public class SocialPFlowMgr {
                                         {
                                             notification.noAutorize(resource);
                                         }
+                                        /*LOS PostOut NO SON VERSIONABLES
                                         if(resource.getResourceData().instanceOf(Versionable.swb_Versionable))
                                         {
                                             Versionable v=(Versionable)resource.getResourceData().createGenericInstance();
                                             v.getLastVersion().setVersionAuthorized(false);
                                         }
+                                        * */
                                     }
                                     else if (serviceName.equals("publish"))
                                     {
-                                        resource.setActive(true);                                        
+                                        //resource.setActive(true);  TODOSOCIAL:LOS PostOut NO SON ACTIVEABLES, Ver si desde aquí envío a publicar el PostOut a su red social.
                                         if (notification != null)
                                         {
                                             notification.publish(resource);
@@ -555,9 +549,9 @@ public class SocialPFlowMgr {
      * @param pflow the pflow
      * @param msgReject the msg reject
      */
-    private static void rejectContent(Resource resource, String activity, PFlow pflow, String msgReject)
+    private static void rejectContent(PostOut resource, String activity, SocialPFlow pflow, String msgReject)
     {
-        PFlowInstance instance = resource.getPflowInstance();
+        SocialPFlowInstance instance = resource.getPflowInstance();
         int version = instance.getVersion();
         Document docxml = SWBUtils.XML.xmlToDom(pflow.getXml());
         NodeList workflows = docxml.getElementsByTagName("workflow");
@@ -655,7 +649,8 @@ public class SocialPFlowMgr {
                             }
                             else if (serviceName.equals("publish"))
                             {
-                                resource.setActive(true);
+                                //TODOSOCIAL:Como el PostOut no es activable, ver que voy a hacer aqui, talvez ya tenga que publicar el mensaje(PostOut) en su red social
+                                //resource.setActive(true); 
                             }
                         }
                     }
@@ -672,9 +667,9 @@ public class SocialPFlowMgr {
      * @param user the user
      * @param msg the msg
      */
-    public static void rejectResource(Resource resource, User user, String msg)
+    public static void rejectResource(PostOut resource, User user, String msg)
     {
-        PFlowInstance instance = resource.getPflowInstance();
+        SocialPFlowInstance instance = resource.getPflowInstance();
         if (instance != null && instance.getStatus() > 0)
         {
             if (isReviewer(resource, user))
@@ -683,14 +678,14 @@ public class SocialPFlowMgr {
                 try
                 {
                     rejectContent(resource, activityName, instance.getPflow(), msg);
-                    PFlow pflow = instance.getPflow();
+                    SocialPFlow pflow = instance.getPflow();
                     sendNotificationReject(msg, resource, pflow, String.valueOf(instance.getVersion()), activityName, user);
 
                 }
                 catch (Exception ue)
                 {
                     instance.setStatus(1);
-                    resource.setActive(false);//.setActive(0);
+                    //resource.setActive(false);//.setActive(0);  //TODOSOCIAL: Dado que el PostOut no es activable, ver si desde aqui ya lo publico.
                 }
             }
             else
@@ -712,9 +707,9 @@ public class SocialPFlowMgr {
      * @param pflow the pflow
      * @param message the message
      */
-    private static void initContent(Resource resource, PFlow pflow, String message)
+    private static void initContent(PostOut resource, SocialPFlow pflow, String message)
     {
-        PFlowInstance instance = resource.getPflowInstance();
+        SocialPFlowInstance instance = resource.getPflowInstance();
         String version = String.valueOf(instance.getVersion());
         String activity = null;
         String xml = pflow.getXml();
@@ -778,7 +773,7 @@ public class SocialPFlowMgr {
      * @param activityName the activity name
      * @param wbUser the wb user
      */
-    private static void sendNotificationReject(String message, Resource resource, PFlow pflow, String version, String activityName, User wbUser)
+    private static void sendNotificationReject(String message, PostOut resource, SocialPFlow pflow, String version, String activityName, User wbUser)
     {
         Document docworkflow = SWBUtils.XML.xmlToDom(pflow.getXml());
         NodeList workflows = docworkflow.getElementsByTagName("workflow");
@@ -800,7 +795,9 @@ public class SocialPFlowMgr {
                             Element notification = (Element) notifications.item(k);
                             if (notification.getAttribute("type").equals("user"))
                             {
-                                User recuser = resource.getWebSite().getUserRepository().getUser(notification.getAttribute("to"));
+                                //TODOSOCIAL:Revisar si me trae el sitio la sig. línea.
+                                WebSite wsite=WebSite.ClassMgr.getWebSite(resource.getSemanticObject().getModel().getName());
+                                User recuser = wsite.getUserRepository().getUser(notification.getAttribute("to"));
                                 toUsers.add(recuser.getEmail());
                             }
                             else
@@ -845,12 +842,13 @@ public class SocialPFlowMgr {
                             {
                                 log.error(e);
                             }
-                            ResourceBundle resourceBundle = ResourceBundle.getBundle("org/semanticwb/portal/PFlowManager", locale);
+                            ResourceBundle resourceBundle = ResourceBundle.getBundle("org/semanticwb/social/util/pflow/SocialPFlowMgr", locale);
                             String subject = resourceBundle.getString("subjectReject");
                             String msg = resourceBundle.getString("msg1") + " " + resource.getId() + " " + resourceBundle.getString("msg3") + " " + activityName + resourceBundle.getString("msg2") + wbUser.getFirstName() + " " + wbUser.getLastName();
-                            msg += "\r\n\r\n" + resourceBundle.getString("title") + " " + resource.getTitle();
-                            msg += "\r\n" + resourceBundle.getString("section") + " " + ((WebPage) resource.getResourceable()).getTitle();
-                            msg += "\r\n" + resourceBundle.getString("site") + " " + resource.getWebSite().getTitle();
+                            msg += "\r\n\r\n" + resourceBundle.getString("title") + " " + resource.getMsg_Text();
+                            msg += "\r\n" + resourceBundle.getString("tema") + " " + resource.getSocialTopic().getTitle();
+                            WebSite wsite=WebSite.ClassMgr.getWebSite(resource.getSemanticObject().getModel().getName());
+                            msg += "\r\n" + resourceBundle.getString("site") + " " + wsite.getTitle();
                             msg += "\r\n" + resourceBundle.getString("mensaje") + " " + message;
                             try
                             {
@@ -876,13 +874,14 @@ public class SocialPFlowMgr {
      * @param message the message
      * @param user the user
      */
-    public static void sendResourceToAuthorize(Resource resource, PFlow pflow, String message, User user)
+    public static void sendResourceToAuthorize(PostOut resource, SocialPFlow pflow, String message, User user)
     {
+        WebSite wsite=WebSite.ClassMgr.getWebSite(resource.getSemanticObject().getModel().getName());
         if (message == null)
         {
             message = "";
         }
-        String typeresource = resource.getResourceType().getId();
+        String typeresource = resource.getSemanticObject().getSemanticClass().getClassId();
         Document docflow = SWBUtils.XML.xmlToDom(pflow.getXml());
         Element workflow = (Element) docflow.getElementsByTagName("workflow").item(0);
         NodeList resourceTypes = workflow.getElementsByTagName("resourceType");
@@ -890,13 +889,13 @@ public class SocialPFlowMgr {
         {
             Element eres = (Element) resourceTypes.item(ires);
             String iresw = eres.getAttribute("id");
-            if (iresw.equals(typeresource) && resource.getWebSite().getId().equals(eres.getAttribute("topicmap")))
+            if (iresw.equals(typeresource) && wsite.getId().equals(eres.getAttribute("topicmap")))
             {
                 int version = (int) Double.parseDouble(workflow.getAttribute("version"));
-                PFlowInstance instance = PFlowInstance.ClassMgr.createPFlowInstance(resource.getWebSite());
+                SocialPFlowInstance instance = SocialPFlowInstance.ClassMgr.createSocialPFlowInstance(wsite);
                 instance.setPflow(pflow);
                 resource.setPflowInstance(instance);
-                instance.setPfinstResource(resource);
+                instance.setPfinstPostOut(resource);
                 instance.setStatus(1);
                 instance.setVersion(version);
                 initContent(resource, pflow, message);
@@ -910,7 +909,7 @@ public class SocialPFlowMgr {
      * @param resource the resource
      * @return true, if is authorized
      */
-    public static boolean isAuthorized(Resource resource)
+    public static boolean isAuthorized(PostOut resource)
     {
         if (resource == null)
         {
@@ -922,7 +921,7 @@ public class SocialPFlowMgr {
         }
         else
         {
-            PFlowInstance instance = resource.getPflowInstance();
+            SocialPFlowInstance instance = resource.getPflowInstance();
             if (instance != null)
             {
                 if (instance.getStatus() == 2)
@@ -947,19 +946,19 @@ public class SocialPFlowMgr {
      * @param resource the resource
      * @return true, if is in flow
      */
-    public static boolean isInFlow(Resource resource)
+    public static boolean isInFlow(PostOut postOut)
     {
-        if (resource.getPflowInstance() == null)
+        if (postOut.getPflowInstance() == null)
         {
             return false;
         }
         else
         {
-            if(resource.getPflowInstance().getStatus() == 3 && resource.getPflowInstance().getStep() != null)
+            if(postOut.getPflowInstance().getStatus() == 3 && postOut.getPflowInstance().getStep() != null)
             {
                 return true;
             }
-            if (!(resource.getPflowInstance().getStatus() == 3 || resource.getPflowInstance().getStatus() == 2 || resource.getPflowInstance().getStep() == null))
+            if (!(postOut.getPflowInstance().getStatus() == 3 || postOut.getPflowInstance().getStatus() == 2 || postOut.getPflowInstance().getStep() == null))
             {
                 return true;
             }
@@ -969,12 +968,59 @@ public class SocialPFlowMgr {
 
     /**
      * Need an authorization.
-     * 
+     * Un PostOut va ha requerir autorización siempre y cuando este relacionado a un tema (lo cual siempre debería de ser)
      * @param resource the resource
      * @return true, if successful
      */
-    public static boolean needAnAuthorization(Resource resource)
+    public static boolean needAnAuthorization(PostOut resource)
     {
+        SocialTopic socialTopic=resource.getSocialTopic();
+        Iterator<SocialPFlowRef> refs = socialTopic.listInheritPFlowRefs();
+        while (refs.hasNext())
+        {
+            SocialPFlowRef ref = refs.next();
+            if (ref.isActive())
+            {
+                SocialPFlow pflow = ref.getPflow();
+                if (pflow != null)
+                {
+                    String typeresource = resource.getSemanticObject().getSemanticClass().getClassId();
+                    Document docflow = SWBUtils.XML.xmlToDom(pflow.getXml());
+                    Element workflow = (Element) docflow.getElementsByTagName("workflow").item(0);
+                    NodeList resourceTypes = workflow.getElementsByTagName("resourceType");
+                    for (int ires = 0; ires < resourceTypes.getLength(); ires++)
+                    {
+                        Element eres = (Element) resourceTypes.item(ires);
+                        String iresw = eres.getAttribute("id");
+
+                        if (iresw.equals(typeresource))
+                        {
+                            if (resource.getPflowInstance() == null)
+                            {
+                                return true;
+                            }
+                            else
+                            {
+                                SocialPFlowInstance instance = resource.getPflowInstance();
+                                switch (instance.getStatus())
+                                {
+                                    case -1:
+                                    case 0: //no enviado
+                                        return true;
+                                    case 3: //rechazado
+                                        return true;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+           
+        return false;
+        
+        
+        /*
         Iterator<Resourceable> resourceables = resource.listResourceables();
         while (resourceables.hasNext())
         {
@@ -1026,218 +1072,196 @@ public class SocialPFlowMgr {
             }
         }
         return false;
+        * **/
     }
 
-    /**
-     * Mail to notify.
-     * 
-     * @param resource the resource
-     * @param activityName the activity name
-     * @param messageType the message type
-     * @param message the message
-     */
-    private static void mailToNotify(Resource resource, String activityName, String messageType, String message)
-    {
-        User wbuser = resource.getCreator();
-        Locale locale = Locale.getDefault();
-        try
-        {
-            ResourceBundle bundle = null;
-            try
-            {
-                bundle = ResourceBundle.getBundle("org/semanticwb/portal/PFlowManager", locale);
-            }
-            catch (Exception e)
-            {
-                bundle = ResourceBundle.getBundle("org/semanticwb/portal/PFlowManager");
-            }
-            if (resource.getPflowInstance() != null)
-            {
-                WebSite site = resource.getWebSite();
-                PFlow flow = resource.getPflowInstance().getPflow();
-                Document docdef = SWBUtils.XML.xmlToDom(flow.getXml());
-                int version = resource.getPflowInstance().getVersion();
-                NodeList workflows = docdef.getElementsByTagName("workflow");
-                for (int iworkflow = 0; iworkflow < workflows.getLength(); iworkflow++)
-                {
-                    Element eworkflow = (Element) workflows.item(iworkflow);
-                    if (eworkflow.getAttribute("version").equals(version + ".0"))
-                    {
-                        NodeList activities = eworkflow.getElementsByTagName("activity");
-                        for (int i = 0; i < activities.getLength(); i++)
-                        {
-                            Element activity = (Element) activities.item(i);
-                            if (i == 0 && messageType.equalsIgnoreCase("I"))
-                            {
-                                activityName = activity.getAttribute("name");
-                            }
-                            if (activity.getAttribute("name").equalsIgnoreCase(activityName))
-                            {
-                                if (activity.getAttribute("type").equalsIgnoreCase("AuthorActivity"))
-                                {
-                                    User user = resource.getCreator();
-                                    String msgMail = bundle.getString("msg1") + " " + resource.getId() + " " + bundle.getString("msg2") + " '" + resource.getTitle() + "' " + bundle.getString("msg3") + ".";
-
-                                    msgMail += "\r\n" + bundle.getString("msg4") + ": " + wbuser.getFirstName() + " " + wbuser.getLastName();
-                                    msgMail += "\r\n" + bundle.getString("msg5") + ": " + wbuser.getLogin();
-
-                                    msgMail += "\r\n" + bundle.getString("msg6") + ": " + message;
-                                    msgMail += "\r\n" + bundle.getString("sitio") + ": " + site.getTitle() + ".\r\n";
-                                    msgMail += "\r\n" + bundle.getString("paso") + ": " + activityName + ".\r\n";
-                                    if (activity.getAttribute("days") != null && activity.getAttribute("hours") != null)
-                                    {
-                                        if (!(activity.getAttribute("days").equals("0") && activity.getAttribute("hours").equals("0")))
-                                        {
-                                            msgMail += "\r\n" + bundle.getString("msgr1") + " " + activity.getAttribute("days") + " " + bundle.getString("days") + " " + bundle.getString("and") + " " + activity.getAttribute("hours") + " " + bundle.getString("hours") + " .";
-                                        }
-                                    }
-                                    WebPage page = (WebPage) resource.getResourceable();
-                                    HashMap args = new HashMap();
-                                    args.put("language", Locale.getDefault().getLanguage());
-                                    msgMail += "\r\n" + bundle.getString("seccion") + ": " + page.getTitle() + ".\r\n";
-                                    SWBUtils.EMAIL.sendBGEmail(user.getEmail(), bundle.getString("msg7") + " " + resource.getId() + " " + bundle.getString("msg8"), msgMail);
+     /**
+         * Mail to notify.
+         *
+         * @param resource the resource
+         * @param activityName the activity name
+         * @param messageType the message type
+         * @param message the message
+         */
+        private static void mailToNotify(PostOut postOut, String activityName, String messageType, String message) {
+            System.out.println("mailToNotify-1");
+            
+            User wbuser = postOut.getCreator();
+            Locale locale = Locale.getDefault();
+            System.out.println("locale:"+locale.getLanguage());
+            try {
+                ResourceBundle bundle = null;
+                try {
+                    bundle = ResourceBundle.getBundle("org/semanticwb/social/util/pflow/SocialPFlowMgr", locale);
+                } catch (Exception e) {
+                    bundle = ResourceBundle.getBundle("org/semanticwb/social/util/pflow/SocialPFlowMgr");
+                }
+                if (postOut.getPflowInstance() != null) {
+                    System.out.println("mailToNotify-1");
+                    WebSite wsite=WebSite.ClassMgr.getWebSite(postOut.getSemanticObject().getModel().getName());
+                    SocialPFlow flow = postOut.getPflowInstance().getPflow();
+                    Document docdef = SWBUtils.XML.xmlToDom(flow.getXml());
+                    int version = postOut.getPflowInstance().getVersion();
+                    NodeList workflows = docdef.getElementsByTagName("workflow");
+                    for (int iworkflow = 0; iworkflow < workflows.getLength(); iworkflow++) {
+                        Element eworkflow = (Element) workflows.item(iworkflow);
+                        if (eworkflow.getAttribute("version").equals(version + ".0")) {
+                            System.out.println("mailToNotify-2");
+                            NodeList activities = eworkflow.getElementsByTagName("activity");
+                            for (int i = 0; i < activities.getLength(); i++) {
+                                Element activity = (Element) activities.item(i);
+                                if (i == 0 && messageType.equalsIgnoreCase("I")) {
+                                    activityName = activity.getAttribute("name");
                                 }
-                                else if (activity.getAttribute("type").equalsIgnoreCase("EndActivity"))
-                                {
-                                    User user = resource.getCreator();
-                                    String msgMail = bundle.getString("msg1") + " " + resource.getId() + " " + bundle.getString("msg2") + " '" + resource.getTitle() + "' " + bundle.getString("msg9") + ".";
-                                    msgMail += "\r\n" + bundle.getString("sitio") + ": " + site.getTitle() + ".\r\n";
-                                    msgMail += "\r\n" + bundle.getString("paso") + ": " + activityName + ".\r\n";
-                                    if (messageType.equalsIgnoreCase("N") && message != null && !message.equalsIgnoreCase(""))
-                                    {
+                                if (activity.getAttribute("name").equalsIgnoreCase(activityName)) {
+                                    System.out.println("mailToNotify-2");
+                                    if (activity.getAttribute("type").equalsIgnoreCase("AuthorActivity")) {
+                                        System.out.println("mailToNotify-4");
+                                        User user = postOut.getCreator();
+                                        String msgMail = bundle.getString("msg1") + " " + postOut.getId() + " " + bundle.getString("msg2") + " '" + postOut.getMsg_Text() + "' " + bundle.getString("msg3") + ".";
+
+                                        msgMail += "\r\n" + bundle.getString("msg4") + ": " + wbuser.getFirstName() + " " + wbuser.getLastName();
+                                        msgMail += "\r\n" + bundle.getString("msg5") + ": " + wbuser.getLogin();
+
                                         msgMail += "\r\n" + bundle.getString("msg6") + ": " + message;
-                                    }
-                                    WebPage page = (WebPage) resource.getResourceable();
-                                    HashMap args = new HashMap();
-                                    args.put("language", Locale.getDefault().getLanguage());
-                                    msgMail += "\r\n" + bundle.getString("seccion") + ": " + page.getTitle() + ".\r\n";
-                                    SWBUtils.EMAIL.sendBGEmail(user.getEmail(), bundle.getString("msg7") + " " + resource.getId() + " " + bundle.getString("msg10") + "", msgMail);
-                                }
-                                else if (activity.getAttribute("type").equalsIgnoreCase("Activity"))
-                                {
-                                    HashSet<User> husers = new HashSet<User>();
-                                    NodeList users = activity.getElementsByTagName("user");
-                                    for (int j = 0; j < users.getLength(); j++)
-                                    {
-                                        Element user = (Element) users.item(j);
-                                        String userid = user.getAttribute("id");
-                                        User recuser = SWBContext.getAdminRepository().getUser(userid);
-                                        husers.add(recuser);
-                                    }
-                                    NodeList roles = activity.getElementsByTagName("role");
-                                    for (int j = 0; j < roles.getLength(); j++)
-                                    {
-                                        Element erole = (Element) roles.item(j);
-                                        try
-                                        {
-                                            //Enumeration eusers = DBUser.getInstance(erole.getAttribute("repository")).getUsers();
-                                            Iterator<User> eusers = SWBContext.getUserRepository(erole.getAttribute("repository")).listUsers();
-                                            while (eusers.hasNext())
-                                            {
-                                                User user = eusers.next();
-                                                Iterator<Role> itroles = user.listRoles();
-                                                while (itroles.hasNext())
-                                                {
-                                                    Role role = itroles.next();
-                                                    if (role.getId().equals(erole.getAttribute("id")))
-                                                    {
-                                                        husers.add(user);
-                                                    }
-                                                }
+                                        msgMail += "\r\n" + bundle.getString("sitio") + ": " + wsite.getTitle() + ".\r\n";
+                                        msgMail += "\r\n" + bundle.getString("paso") + ": " + activityName + ".\r\n";
+                                        if (activity.getAttribute("days") != null && activity.getAttribute("hours") != null) {
+                                            if (!(activity.getAttribute("days").equals("0") && activity.getAttribute("hours").equals("0"))) {
+                                                msgMail += "\r\n" + bundle.getString("msgr1") + " " + activity.getAttribute("days") + " " + bundle.getString("days") + " " + bundle.getString("and") + " " + activity.getAttribute("hours") + " " + bundle.getString("hours") + " .";
                                             }
                                         }
-                                        catch (Exception e)
-                                        {
-                                            log.error(e);
-                                        }
-                                    }
-                                    //envía correo
-                                    String to = "";
-                                    Iterator<User> itusers = husers.iterator();
-                                    while (itusers.hasNext())
-                                    {
-                                        User user = itusers.next();
-                                        if (user != null && user.getEmail() != null && to.indexOf(user.getEmail()) == -1)
-                                        {
-                                            to += user.getEmail() + ";";
-                                        }
-                                    }
-                                    if (to.endsWith(";"))
-                                    {
-                                        to = to.substring(0, to.length() - 1);
-                                    }
-                                    if (!to.equalsIgnoreCase(""))
-                                    {
-                                        String subject = bundle.getString("msg7") + " " + resource.getId() + " " + bundle.getString("msg11");
-                                        String msg = bundle.getString("msg1") + " " + resource.getId() + " " + bundle.getString("msg2") + " '" + resource.getTitle() + "' " + bundle.getString("msg12") + " '" + activityName + "'.\r\n";
-                                        msg += "\r\n" + bundle.getString("sitio") + ": " + site.getTitle() + ".\r\n";
-                                        msg += "\r\n" + bundle.getString("paso") + ": " + activityName + ".\r\n";
-                                        WebPage page = (WebPage) resource.getResourceable();
+                                        SocialTopic socialTopic = (SocialTopic) postOut.getSocialTopic();
                                         HashMap args = new HashMap();
                                         args.put("language", Locale.getDefault().getLanguage());
-                                        msg += "\r\n" + bundle.getString("seccion") + ": " + page.getTitle() + ".\r\n";
-
-                                        if ((messageType.equalsIgnoreCase("I") || messageType.equalsIgnoreCase("N")) && message != null && !message.equalsIgnoreCase(""))
-                                        {
-                                            msg += "\r\n" + bundle.getString("msg6") + ": " + message;
+                                        msgMail += "\r\n" + bundle.getString("socialTopic") + ": " + socialTopic.getTitle() + ".\r\n";
+                                        SWBUtils.EMAIL.sendBGEmail(user.getEmail(), bundle.getString("msg7") + " " + postOut.getId() + " " + bundle.getString("msg8"), msgMail);
+                                    } else if (activity.getAttribute("type").equalsIgnoreCase("EndActivity")) {
+                                        System.out.println("mailToNotify-5");
+                                        User user = postOut.getCreator();
+                                        String msgMail = bundle.getString("msg1") + " " + postOut.getId() + " " + bundle.getString("msg2") + " '" + postOut.getMsg_Text() + "' " + bundle.getString("msg9") + ".";
+                                        msgMail += "\r\n" + bundle.getString("sitio") + ": " + wsite.getTitle() + ".\r\n";
+                                        msgMail += "\r\n" + bundle.getString("paso") + ": " + activityName + ".\r\n";
+                                        if (messageType.equalsIgnoreCase("N") && message != null && !message.equalsIgnoreCase("")) {
+                                            msgMail += "\r\n" + bundle.getString("msg6") + ": " + message;
                                         }
-                                        if (messageType.equalsIgnoreCase("A"))
-                                        {
-
-                                            // envía correo al creador del contenido
-                                            User user = resource.getCreator();
-                                            String msgMail = bundle.getString("sitio") + ": " + site.getTitle() + ".\r\n";
-                                            msgMail += "\r\n" + bundle.getString("paso") + ": " + activityName + ".\r\n";
-                                            //msgMail+=bundle.getString("url")+": "+ObjRes.getAdminUrl()+".\r\n";
-                                            msgMail += "\r\n" + bundle.getString("seccion") + ": " + page.getTitle() + ".\r\n";
-                                            msgMail += "\r\n" + bundle.getString("msg13") + " " + resource.getId() + " " + bundle.getString("msg14");
-
-                                            SWBUtils.EMAIL.sendBGEmail(user.getEmail(), bundle.getString("msg13") + " " + resource.getId() + " " + bundle.getString("msg14"), msgMail);
-
-                                            // avisa al los revisores de la expiración de la revisión delc ontenido
-                                            msg += "\r\n" + bundle.getString("msg13") + " " + resource.getId() + " " + bundle.getString("msg14");
+                                        SocialTopic socialTopic = (SocialTopic) postOut.getSocialTopic();
+                                        HashMap args = new HashMap();
+                                        args.put("language", Locale.getDefault().getLanguage());
+                                        msgMail += "\r\n" + bundle.getString("socialTopic") + ": " + socialTopic.getTitle() + ".\r\n";
+                                        SWBUtils.EMAIL.sendBGEmail(user.getEmail(), bundle.getString("msg7") + " " + postOut.getId() + " " + bundle.getString("msg10") + "", msgMail);
+                                    } else if (activity.getAttribute("type").equalsIgnoreCase("Activity")) {
+                                        System.out.println("mailToNotify-6");
+                                        HashSet<User> husers = new HashSet<User>();
+                                        NodeList users = activity.getElementsByTagName("user");
+                                        for (int j = 0; j < users.getLength(); j++) {
+                                            Element user = (Element) users.item(j);
+                                            String userid = user.getAttribute("id");
+                                            User recuser = SWBContext.getAdminRepository().getUser(userid);
+                                            husers.add(recuser);
                                         }
-                                        if (activity.getAttribute("days") != null && activity.getAttribute("hours") != null)
-                                        {
-                                            if (!(activity.getAttribute("days").equals("0") && activity.getAttribute("hours").equals("0")))
-                                            {
-                                                msg += "\r\n" + bundle.getString("msgr1") + " " + activity.getAttribute("days") + " " + bundle.getString("days") + " " + bundle.getString("and") + " " + activity.getAttribute("hours") + " " + bundle.getString("hours") + " .";
+                                        NodeList roles = activity.getElementsByTagName("role");
+                                        for (int j = 0; j < roles.getLength(); j++) {
+                                            Element erole = (Element) roles.item(j);
+                                            try {
+                                                //Enumeration eusers = DBUser.getInstance(erole.getAttribute("repository")).getUsers();
+                                                Iterator<User> eusers = SWBContext.getUserRepository(erole.getAttribute("repository")).listUsers();
+                                                while (eusers.hasNext()) {
+                                                    User user = eusers.next();
+                                                    Iterator<Role> itroles = user.listRoles();
+                                                    while (itroles.hasNext()) {
+                                                        Role role = itroles.next();
+                                                        if (role.getId().equals(erole.getAttribute("id"))) {
+                                                            husers.add(user);
+                                                        }
+                                                    }
+                                                }
+                                            } catch (Exception e) {
+                                                log.error(e);
                                             }
                                         }
+                                        //envía correo
+                                        String to = "";
+                                        Iterator<User> itusers = husers.iterator();
+                                        while (itusers.hasNext()) {
+                                            User user = itusers.next();
+                                            if (user != null && user.getEmail() != null && to.indexOf(user.getEmail()) == -1) {
+                                                to += user.getEmail() + ";";
+                                            }
+                                        }
+                                        if (to.endsWith(";")) {
+                                            to = to.substring(0, to.length() - 1);
+                                        }
+                                        if (!to.equalsIgnoreCase("")) {
+                                            System.out.println("mailToNotify-7");
+                                            String subject = bundle.getString("msg7") + " " + postOut.getId() + " " + bundle.getString("msg11");
+                                            String msg = bundle.getString("msg1") + " " + postOut.getId() + " " + bundle.getString("msg2") + " '" + postOut.getMsg_Text() + "' " + bundle.getString("msg12") + " '" + activityName + "'.\r\n";
+                                            msg += "\r\n" + bundle.getString("sitio") + ": " + wsite.getTitle() + ".\r\n";
+                                            msg += "\r\n" + bundle.getString("paso") + ": " + activityName + ".\r\n";
+                                            SocialTopic socialTopic = (SocialTopic) postOut.getSocialTopic();
+                                            HashMap args = new HashMap();
+                                            args.put("language", Locale.getDefault().getLanguage());
+                                            msg += "\r\n" + bundle.getString("socialTopic") + ": " + socialTopic.getTitle() + ".\r\n";
 
-                                        SWBUtils.EMAIL.sendBGEmail(to, subject, msg);
+                                            if ((messageType.equalsIgnoreCase("I") || messageType.equalsIgnoreCase("N")) && message != null && !message.equalsIgnoreCase("")) {
+                                                msg += "\r\n" + bundle.getString("msg6") + ": " + message;
+                                            }
+                                            if (messageType.equalsIgnoreCase("A")) {
+
+                                                // envía correo al creador del contenido
+                                                User user = postOut.getCreator();
+                                                String msgMail = bundle.getString("sitio") + ": " + wsite.getTitle() + ".\r\n";
+                                                msgMail += "\r\n" + bundle.getString("paso") + ": " + activityName + ".\r\n";
+                                                //msgMail+=bundle.getString("url")+": "+ObjRes.getAdminUrl()+".\r\n";
+                                                msgMail += "\r\n" + bundle.getString("socialTopic") + ": " + socialTopic.getTitle() + ".\r\n";
+                                                msgMail += "\r\n" + bundle.getString("msg13") + " " + postOut.getId() + " " + bundle.getString("msg14");
+
+                                                SWBUtils.EMAIL.sendBGEmail(user.getEmail(), bundle.getString("msg13") + " " + postOut.getId() + " " + bundle.getString("msg14"), msgMail);
+
+                                                // avisa al los revisores de la expiración de la revisión delc ontenido
+                                                msg += "\r\n" + bundle.getString("msg13") + " " + postOut.getId() + " " + bundle.getString("msg14");
+                                            }
+                                            if (activity.getAttribute("days") != null && activity.getAttribute("hours") != null) {
+                                                System.out.println("mailToNotify-8");
+                                                if (!(activity.getAttribute("days").equals("0") && activity.getAttribute("hours").equals("0"))) {
+                                                    System.out.println("mailToNotify-9");
+                                                    msg += "\r\n" + bundle.getString("msgr1") + " " + activity.getAttribute("days") + " " + bundle.getString("days") + " " + bundle.getString("and") + " " + activity.getAttribute("hours") + " " + bundle.getString("hours") + " .";
+                                                }
+                                            }
+                                            System.out.println("Va a enviar correo...J-to:"+to+",subject:"+subject+",msg:"+msg);
+                                            SWBUtils.EMAIL.sendBGEmail(to, subject, msg);
+                                            System.out.println("Va a enviar correo...J1");
+                                        }
                                     }
                                 }
                             }
                         }
                     }
+
                 }
 
+            } catch (Exception e) {
+                log.error(e);
+                return;
             }
-
         }
-        catch (Exception e)
-        {
-            log.error(e);
-            return;
-        }
-    }
+    
 
     /**
      * Noauthorize content.
      * 
      * @param resource the resource
      */
-    private static void noauthorizeContent(Resource resource)
+    private static void noauthorizeContent(PostOut resource)
     {
-        PFlowInstance instance = resource.getPflowInstance();
+        SocialPFlowInstance instance = resource.getPflowInstance();
 
         try
         {
             instance.setStatus(3);
             String activityName = instance.getStep();
             int version = instance.getVersion();
-            PFlow pflow = instance.getPflow();
+            SocialPFlow pflow = instance.getPflow();
             if (instance.getStep() != null)
             {
                 Document docdef = SWBUtils.XML.xmlToDom(pflow.getXml());

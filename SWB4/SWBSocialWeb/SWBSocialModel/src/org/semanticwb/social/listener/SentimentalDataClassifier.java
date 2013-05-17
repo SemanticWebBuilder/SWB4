@@ -20,6 +20,7 @@ import org.semanticwb.social.ExternalPost;
 import org.semanticwb.social.Kloutable;
 import org.semanticwb.social.MarkMsgAsPrioritary;
 import org.semanticwb.social.MessageIn;
+import org.semanticwb.social.PhotoIn;
 import org.semanticwb.social.PostIn;
 import org.semanticwb.social.Prepositions;
 import org.semanticwb.social.SendEmail;
@@ -33,6 +34,7 @@ import org.semanticwb.social.SocialRule;
 import org.semanticwb.social.SocialRuleRef;
 import org.semanticwb.social.SocialTopic;
 import org.semanticwb.social.Stream;
+import org.semanticwb.social.VideoIn;
 import org.semanticwb.social.util.NormalizerCharDuplicate;
 import org.semanticwb.social.util.SWBSocialRuleMgr;
 import org.semanticwb.social.util.SWBSocialUtil;
@@ -516,15 +518,25 @@ public class SentimentalDataClassifier {
      */
     private PostIn createPostInObj(SocialNetworkUser socialNetUser, int userKloutScore, boolean upDateSocialUserNetworkData)
     {
-        MessageIn message=null;
+        PostIn postIn=null;
         try
         {
            //Persistencia del mensaje
-                message=MessageIn.ClassMgr.createMessageIn(String.valueOf(externalPost.getPostId()), model);
-                message.setMsg_Text(externalPost.getMessage());
-                System.out.println("CREÓ EL MENSAJE CON TEXTO:"+message.getMsg_Text());
-                message.setPostInSocialNetwork(socialNetwork);
-                message.setPostInStream(stream);
+                if(externalPost.getPostType().equals(SWBSocialUtil.MESSAGE))
+                {
+                    postIn=MessageIn.ClassMgr.createMessageIn(String.valueOf(externalPost.getPostId()), model);
+                }else if(externalPost.getPostType().equals(SWBSocialUtil.PHOTO))
+                {
+                    postIn=PhotoIn.ClassMgr.createPhotoIn(String.valueOf(externalPost.getPostId()), model);
+                }else if(externalPost.getPostType().equals(SWBSocialUtil.VIDEO))
+                {
+                    postIn=VideoIn.ClassMgr.createVideoIn(String.valueOf(externalPost.getPostId()), model);
+                }
+        
+                postIn.setMsg_Text(externalPost.getMessage());
+                System.out.println("CREÓ EL MENSAJE CON TEXTO:"+postIn.getMsg_Text());
+                postIn.setPostInSocialNetwork(socialNetwork);
+                postIn.setPostInStream(stream);
                 
                 //System.out.println("Ya en Msg ReTweets:"+message.getPostRetweets());
                 if(externalPost.getDevice()!=null)    //Dispositivo utilizado
@@ -541,7 +553,7 @@ public class SentimentalDataClassifier {
                     }else{
                         source=externalPost.getDevice();
                     }
-                   message.setPostSource(source);
+                   postIn.setPostSource(source);
                 }
                 //System.out.println("Ya en Msg source:"+source);
 
@@ -549,14 +561,14 @@ public class SentimentalDataClassifier {
                 {
                     if(externalPost.getPlace()!=null)
                     {
-                        message.setPostPlace(externalPost.getPlace());
+                        postIn.setPostPlace(externalPost.getPlace());
                     }else if(externalPost.getLocation()!=null)
                     {
-                        message.setPostPlace(externalPost.getLocation());
+                        postIn.setPostPlace(externalPost.getLocation());
                     }
                     if(externalPost.getRetweets()>0)
                     {
-                        message.setPostRetweets(externalPost.getRetweets());
+                        postIn.setPostRetweets(externalPost.getRetweets());
                     }
                     
                     
@@ -586,7 +598,7 @@ public class SentimentalDataClassifier {
                     
                     if(socialNetUser!=null)
                     {
-                        message.setPostInSocialNetworkUser(socialNetUser);
+                        postIn.setPostInSocialNetworkUser(socialNetUser);
                     }
                 }
                 
@@ -614,7 +626,7 @@ public class SentimentalDataClassifier {
             log.error(e);
         }
                 
-                return message;
+                return postIn;
     }
     
     

@@ -105,7 +105,7 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
             twitter4j.Twitter twitter = new TwitterFactory().getInstance();
             twitter.setOAuthConsumer(this.getAppKey(), this.getSecretKey());
             AccessToken accessToken = new AccessToken(this.getAccessToken(), this.getAccessTokenSecret());
-            String description = photo.getDescription(user.getLanguage()) == null ? (photo.getDescription() == null ? "" : photo.getDescription()) : photo.getDescription(user.getLanguage());
+            String description = photo.getMsg_Text()!= null ? photo.getMsg_Text() : "";
             twitter.setOAuthAccessToken(accessToken);
             String photoSend = SWBPortal.getWorkPath() + photo.getWorkPath() + "/" + Photo.social_photo.getName()
                     + "_" + photo.getId() + "_" + photo.getPhoto();
