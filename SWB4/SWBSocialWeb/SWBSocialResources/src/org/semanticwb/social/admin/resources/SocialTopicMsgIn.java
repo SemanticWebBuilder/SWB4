@@ -32,7 +32,6 @@ import org.semanticwb.social.PostIn;
 import org.semanticwb.social.SentimentalLearningPhrase;
 import org.semanticwb.social.SocialNetwork;
 import org.semanticwb.social.SocialPFlow;
-import org.semanticwb.social.SocialPFlowRef;
 import org.semanticwb.social.SocialTopic;
 import org.semanticwb.social.admin.resources.reports.PostSummary;
 import org.semanticwb.social.util.SWBSocialUtil;
@@ -109,13 +108,21 @@ public class SocialTopicMsgIn extends GenericResource {
                 //En este momento en el siguiente código saco uno de los SocialPFlowRef que tiene el SocialTopic del PostIn que se esta contestando,
                 //Obviamente debo de quitar este código y el SocialPFlowRef debe llegar como parametro, que es de acuerdo al SocialPFlow que el usuario
                 //desee enviar el PostOut que realizó.
+                /**
                 SocialPFlow socialPFlow=null;
                 Iterator<SocialPFlowRef> itflowRefs=socialTopic.listPFlowRefs();
                 while(itflowRefs.hasNext())
                 {
                     SocialPFlowRef socialPflowRef=itflowRefs.next();
                     socialPFlow=socialPflowRef.getPflow();
+                }**/
+                String socialFlow=request.getParameter("socialFlow");
+                SocialPFlow socialPFlow=null;
+                if(socialFlow!=null && socialFlow.trim().length()>0)
+                {
+                    socialPFlow=(SocialPFlow)SemanticObject.createSemanticObject(socialFlow).createGenericInstance();
                 }
+                System.out.println("processAction/socialPFlow--GG:"+socialPFlow);
                 
                 System.out.println("postIn:"+postIn);
                 System.out.println("socialNet:"+socialNet);

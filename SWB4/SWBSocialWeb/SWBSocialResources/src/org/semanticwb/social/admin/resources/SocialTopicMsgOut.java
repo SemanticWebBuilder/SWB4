@@ -30,6 +30,7 @@ import org.semanticwb.social.Photo;
 import org.semanticwb.social.PostOut;
 import org.semanticwb.social.SentimentalLearningPhrase;
 import org.semanticwb.social.SocialNetwork;
+import org.semanticwb.social.SocialPFlow;
 import org.semanticwb.social.SocialTopic;
 import org.semanticwb.social.Video;
 import org.semanticwb.social.admin.resources.reports.PostSummary;
@@ -47,11 +48,11 @@ public class SocialTopicMsgOut extends GenericResource {
     /**
      * The log.
      */
-    private static Logger log = SWBUtils.getLogger(PostSummary.class);
+    public static Logger log = SWBUtils.getLogger(PostSummary.class);
     public static final int PAGE_SIZE = 25; //Líneas por página
     public static final String Mode_JSON = "json";
     public static final String Mode_SOURCE = "source";
-    public static int xxx = 1000;
+    
     /**
      * The tpl.
      */
@@ -268,8 +269,22 @@ public class SocialTopicMsgOut extends GenericResource {
                 }
                 obj.put("nets", getSocialNets(post));
                 obj.put("isShared", post.isIsMsgShared());
+                System.out.println("post.getPostInOrigen()-GGeorge:"+post.getPostInOrigen());
                 if(post.getPostInOrigen()!=null) obj.put("postIn", post.getPostInOrigen());
                 else obj.put("postIn", "---");
+                
+                System.out.println("post.getPflowInstance():"+post.getPflowInstance());
+                if(post.getPflowInstance()!=null)
+                {
+                    SocialPFlow socialPflow=post.getPflowInstance().getPflow();
+                    obj.put("pflow", socialPflow.getDisplayTitle(lang));
+                    obj.put("step", post.getPflowInstance().getStep());
+                }else{
+                    obj.put("status", "---");
+                    obj.put("step", "---");
+                }
+                
+                
                 obj.put("crated", sdf.format(post.getCreated()));
                 obj.put("crator", post.getCreator().getFullName());
                 
