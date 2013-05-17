@@ -6,32 +6,30 @@ package org.semanticwb.process.resources.reports.base;
    */
 public abstract class ColumnReportBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Traceable,org.semanticwb.model.Sortable
 {
-    public static final org.semanticwb.platform.SemanticProperty rep_titleColumn=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://org.semanticwb.resources/Reports#titleColumn");
-    public static final org.semanticwb.platform.SemanticProperty rep_nameProperty=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://org.semanticwb.resources/Reports#nameProperty");
-    public static final org.semanticwb.platform.SemanticProperty rep_columnVisible=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://org.semanticwb.resources/Reports#columnVisible");
-   /**
-   * Almacena los filtros creados para un reporte
-   */
-    public static final org.semanticwb.platform.SemanticClass rep_FilterReport=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://org.semanticwb.resources/Reports#FilterReport");
-    public static final org.semanticwb.platform.SemanticProperty rep_filter=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://org.semanticwb.resources/Reports#filter");
-    public static final org.semanticwb.platform.SemanticClass rep_Report=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://org.semanticwb.resources/Reports#Report");
-    public static final org.semanticwb.platform.SemanticProperty rep_reportName=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://org.semanticwb.resources/Reports#reportName");
-    public static final org.semanticwb.platform.SemanticProperty rep_enabledOrder=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://org.semanticwb.resources/Reports#enabledOrder");
+    public static final org.semanticwb.platform.SemanticProperty rep_titleColumn=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://org.semanticwb.process.resources/Reports#titleColumn");
+    public static final org.semanticwb.platform.SemanticProperty rep_nameProperty=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://org.semanticwb.process.resources/Reports#nameProperty");
+    public static final org.semanticwb.platform.SemanticProperty rep_columnVisible=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://org.semanticwb.process.resources/Reports#columnVisible");
+    public static final org.semanticwb.platform.SemanticProperty rep_defaultValue=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://org.semanticwb.process.resources/Reports#defaultValue");
+    public static final org.semanticwb.platform.SemanticProperty rep_filter=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://org.semanticwb.process.resources/Reports#filter");
+    public static final org.semanticwb.platform.SemanticClass rep_Report=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://org.semanticwb.process.resources/Reports#Report");
+    public static final org.semanticwb.platform.SemanticProperty rep_reportName=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://org.semanticwb.process.resources/Reports#reportName");
+    public static final org.semanticwb.platform.SemanticProperty rep_enabledOrder=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://org.semanticwb.process.resources/Reports#enabledOrder");
+    public static final org.semanticwb.platform.SemanticProperty rep_defaultValueMax=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://org.semanticwb.process.resources/Reports#defaultValueMax");
    /**
    * Almacena las columnas pertenecientes a determinado reporte
    */
-    public static final org.semanticwb.platform.SemanticClass rep_ColumnReport=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://org.semanticwb.resources/Reports#ColumnReport");
+    public static final org.semanticwb.platform.SemanticClass rep_ColumnReport=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://org.semanticwb.process.resources/Reports#ColumnReport");
    /**
    * The semantic class that represents the currentObject
    */
-    public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://org.semanticwb.resources/Reports#ColumnReport");
+    public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://org.semanticwb.process.resources/Reports#ColumnReport");
 
     public static class ClassMgr
     {
        /**
        * Returns a list of ColumnReport for a model
        * @param model Model to find
-       * @return Iterator of org.semanticwb.process.reports.ColumnReport
+       * @return Iterator of org.semanticwb.process.resources.reports.ColumnReport
        */
 
         public static java.util.Iterator<org.semanticwb.process.resources.reports.ColumnReport> listColumnReports(org.semanticwb.model.SWBModel model)
@@ -40,8 +38,8 @@ public abstract class ColumnReportBase extends org.semanticwb.model.SWBClass imp
             return new org.semanticwb.model.GenericIterator<org.semanticwb.process.resources.reports.ColumnReport>(it, true);
         }
        /**
-       * Returns a list of org.semanticwb.process.reports.ColumnReport for all models
-       * @return Iterator of org.semanticwb.process.reports.ColumnReport
+       * Returns a list of org.semanticwb.process.resources.reports.ColumnReport for all models
+       * @return Iterator of org.semanticwb.process.resources.reports.ColumnReport
        */
 
         public static java.util.Iterator<org.semanticwb.process.resources.reports.ColumnReport> listColumnReports()
@@ -56,39 +54,39 @@ public abstract class ColumnReportBase extends org.semanticwb.model.SWBClass imp
             return org.semanticwb.process.resources.reports.ColumnReport.ClassMgr.createColumnReport(String.valueOf(id), model);
         }
        /**
-       * Gets a org.semanticwb.process.reports.ColumnReport
-       * @param id Identifier for org.semanticwb.process.reports.ColumnReport
-       * @param model Model of the org.semanticwb.process.reports.ColumnReport
-       * @return A org.semanticwb.process.reports.ColumnReport
+       * Gets a org.semanticwb.process.resources.reports.ColumnReport
+       * @param id Identifier for org.semanticwb.process.resources.reports.ColumnReport
+       * @param model Model of the org.semanticwb.process.resources.reports.ColumnReport
+       * @return A org.semanticwb.process.resources.reports.ColumnReport
        */
         public static org.semanticwb.process.resources.reports.ColumnReport getColumnReport(String id, org.semanticwb.model.SWBModel model)
         {
             return (org.semanticwb.process.resources.reports.ColumnReport)model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
         }
        /**
-       * Create a org.semanticwb.process.reports.ColumnReport
-       * @param id Identifier for org.semanticwb.process.reports.ColumnReport
-       * @param model Model of the org.semanticwb.process.reports.ColumnReport
-       * @return A org.semanticwb.process.reports.ColumnReport
+       * Create a org.semanticwb.process.resources.reports.ColumnReport
+       * @param id Identifier for org.semanticwb.process.resources.reports.ColumnReport
+       * @param model Model of the org.semanticwb.process.resources.reports.ColumnReport
+       * @return A org.semanticwb.process.resources.reports.ColumnReport
        */
         public static org.semanticwb.process.resources.reports.ColumnReport createColumnReport(String id, org.semanticwb.model.SWBModel model)
         {
             return (org.semanticwb.process.resources.reports.ColumnReport)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
         }
        /**
-       * Remove a org.semanticwb.process.reports.ColumnReport
-       * @param id Identifier for org.semanticwb.process.reports.ColumnReport
-       * @param model Model of the org.semanticwb.process.reports.ColumnReport
+       * Remove a org.semanticwb.process.resources.reports.ColumnReport
+       * @param id Identifier for org.semanticwb.process.resources.reports.ColumnReport
+       * @param model Model of the org.semanticwb.process.resources.reports.ColumnReport
        */
         public static void removeColumnReport(String id, org.semanticwb.model.SWBModel model)
         {
             model.getSemanticObject().getModel().removeSemanticObject(model.getSemanticObject().getModel().getObjectUri(id,sclass));
         }
        /**
-       * Returns true if exists a org.semanticwb.process.reports.ColumnReport
-       * @param id Identifier for org.semanticwb.process.reports.ColumnReport
-       * @param model Model of the org.semanticwb.process.reports.ColumnReport
-       * @return true if the org.semanticwb.process.reports.ColumnReport exists, false otherwise
+       * Returns true if exists a org.semanticwb.process.resources.reports.ColumnReport
+       * @param id Identifier for org.semanticwb.process.resources.reports.ColumnReport
+       * @param model Model of the org.semanticwb.process.resources.reports.ColumnReport
+       * @return true if the org.semanticwb.process.resources.reports.ColumnReport exists, false otherwise
        */
 
         public static boolean hasColumnReport(String id, org.semanticwb.model.SWBModel model)
@@ -96,10 +94,10 @@ public abstract class ColumnReportBase extends org.semanticwb.model.SWBClass imp
             return (getColumnReport(id, model)!=null);
         }
        /**
-       * Gets all org.semanticwb.process.reports.ColumnReport with a determined ModifiedBy
+       * Gets all org.semanticwb.process.resources.reports.ColumnReport with a determined ModifiedBy
        * @param value ModifiedBy of the type org.semanticwb.model.User
-       * @param model Model of the org.semanticwb.process.reports.ColumnReport
-       * @return Iterator with all the org.semanticwb.process.reports.ColumnReport
+       * @param model Model of the org.semanticwb.process.resources.reports.ColumnReport
+       * @return Iterator with all the org.semanticwb.process.resources.reports.ColumnReport
        */
 
         public static java.util.Iterator<org.semanticwb.process.resources.reports.ColumnReport> listColumnReportByModifiedBy(org.semanticwb.model.User value,org.semanticwb.model.SWBModel model)
@@ -108,9 +106,9 @@ public abstract class ColumnReportBase extends org.semanticwb.model.SWBClass imp
             return it;
         }
        /**
-       * Gets all org.semanticwb.process.reports.ColumnReport with a determined ModifiedBy
+       * Gets all org.semanticwb.process.resources.reports.ColumnReport with a determined ModifiedBy
        * @param value ModifiedBy of the type org.semanticwb.model.User
-       * @return Iterator with all the org.semanticwb.process.reports.ColumnReport
+       * @return Iterator with all the org.semanticwb.process.resources.reports.ColumnReport
        */
 
         public static java.util.Iterator<org.semanticwb.process.resources.reports.ColumnReport> listColumnReportByModifiedBy(org.semanticwb.model.User value)
@@ -119,33 +117,10 @@ public abstract class ColumnReportBase extends org.semanticwb.model.SWBClass imp
             return it;
         }
        /**
-       * Gets all org.semanticwb.process.reports.ColumnReport with a determined Filter
-       * @param value Filter of the type org.semanticwb.process.reports.FilterReport
-       * @param model Model of the org.semanticwb.process.reports.ColumnReport
-       * @return Iterator with all the org.semanticwb.process.reports.ColumnReport
-       */
-
-        public static java.util.Iterator<org.semanticwb.process.resources.reports.ColumnReport> listColumnReportByFilter(org.semanticwb.process.resources.reports.FilterReport value,org.semanticwb.model.SWBModel model)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.resources.reports.ColumnReport> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(rep_filter, value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.process.reports.ColumnReport with a determined Filter
-       * @param value Filter of the type org.semanticwb.process.reports.FilterReport
-       * @return Iterator with all the org.semanticwb.process.reports.ColumnReport
-       */
-
-        public static java.util.Iterator<org.semanticwb.process.resources.reports.ColumnReport> listColumnReportByFilter(org.semanticwb.process.resources.reports.FilterReport value)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.resources.reports.ColumnReport> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(rep_filter,value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.process.reports.ColumnReport with a determined Creator
+       * Gets all org.semanticwb.process.resources.reports.ColumnReport with a determined Creator
        * @param value Creator of the type org.semanticwb.model.User
-       * @param model Model of the org.semanticwb.process.reports.ColumnReport
-       * @return Iterator with all the org.semanticwb.process.reports.ColumnReport
+       * @param model Model of the org.semanticwb.process.resources.reports.ColumnReport
+       * @return Iterator with all the org.semanticwb.process.resources.reports.ColumnReport
        */
 
         public static java.util.Iterator<org.semanticwb.process.resources.reports.ColumnReport> listColumnReportByCreator(org.semanticwb.model.User value,org.semanticwb.model.SWBModel model)
@@ -154,9 +129,9 @@ public abstract class ColumnReportBase extends org.semanticwb.model.SWBClass imp
             return it;
         }
        /**
-       * Gets all org.semanticwb.process.reports.ColumnReport with a determined Creator
+       * Gets all org.semanticwb.process.resources.reports.ColumnReport with a determined Creator
        * @param value Creator of the type org.semanticwb.model.User
-       * @return Iterator with all the org.semanticwb.process.reports.ColumnReport
+       * @return Iterator with all the org.semanticwb.process.resources.reports.ColumnReport
        */
 
         public static java.util.Iterator<org.semanticwb.process.resources.reports.ColumnReport> listColumnReportByCreator(org.semanticwb.model.User value)
@@ -165,10 +140,10 @@ public abstract class ColumnReportBase extends org.semanticwb.model.SWBClass imp
             return it;
         }
        /**
-       * Gets all org.semanticwb.process.reports.ColumnReport with a determined ReportName
-       * @param value ReportName of the type org.semanticwb.process.reports.Report
-       * @param model Model of the org.semanticwb.process.reports.ColumnReport
-       * @return Iterator with all the org.semanticwb.process.reports.ColumnReport
+       * Gets all org.semanticwb.process.resources.reports.ColumnReport with a determined ReportName
+       * @param value ReportName of the type org.semanticwb.process.resources.reports.Report
+       * @param model Model of the org.semanticwb.process.resources.reports.ColumnReport
+       * @return Iterator with all the org.semanticwb.process.resources.reports.ColumnReport
        */
 
         public static java.util.Iterator<org.semanticwb.process.resources.reports.ColumnReport> listColumnReportByReportName(org.semanticwb.process.resources.reports.Report value,org.semanticwb.model.SWBModel model)
@@ -177,9 +152,9 @@ public abstract class ColumnReportBase extends org.semanticwb.model.SWBClass imp
             return it;
         }
        /**
-       * Gets all org.semanticwb.process.reports.ColumnReport with a determined ReportName
-       * @param value ReportName of the type org.semanticwb.process.reports.Report
-       * @return Iterator with all the org.semanticwb.process.reports.ColumnReport
+       * Gets all org.semanticwb.process.resources.reports.ColumnReport with a determined ReportName
+       * @param value ReportName of the type org.semanticwb.process.resources.reports.Report
+       * @return Iterator with all the org.semanticwb.process.resources.reports.ColumnReport
        */
 
         public static java.util.Iterator<org.semanticwb.process.resources.reports.ColumnReport> listColumnReportByReportName(org.semanticwb.process.resources.reports.Report value)
@@ -278,24 +253,6 @@ public abstract class ColumnReportBase extends org.semanticwb.model.SWBClass imp
     }
 
 /**
-* Gets the Updated property
-* @return java.util.Date with the Updated
-*/
-    public java.util.Date getUpdated()
-    {
-        return getSemanticObject().getDateProperty(swb_updated);
-    }
-
-/**
-* Sets the Updated property
-* @param value long with the Updated
-*/
-    public void setUpdated(java.util.Date value)
-    {
-        getSemanticObject().setDateProperty(swb_updated, value);
-    }
-
-/**
 * Gets the Created property
 * @return java.util.Date with the Created
 */
@@ -311,6 +268,24 @@ public abstract class ColumnReportBase extends org.semanticwb.model.SWBClass imp
     public void setCreated(java.util.Date value)
     {
         getSemanticObject().setDateProperty(swb_created, value);
+    }
+
+/**
+* Gets the Updated property
+* @return java.util.Date with the Updated
+*/
+    public java.util.Date getUpdated()
+    {
+        return getSemanticObject().getDateProperty(swb_updated);
+    }
+
+/**
+* Sets the Updated property
+* @param value long with the Updated
+*/
+    public void setUpdated(java.util.Date value)
+    {
+        getSemanticObject().setDateProperty(swb_updated, value);
     }
 
 /**
@@ -332,6 +307,24 @@ public abstract class ColumnReportBase extends org.semanticwb.model.SWBClass imp
     }
 
 /**
+* Gets the DefaultValue property
+* @return String with the DefaultValue
+*/
+    public String getDefaultValue()
+    {
+        return getSemanticObject().getProperty(rep_defaultValue);
+    }
+
+/**
+* Sets the DefaultValue property
+* @param value long with the DefaultValue
+*/
+    public void setDefaultValue(String value)
+    {
+        getSemanticObject().setProperty(rep_defaultValue, value);
+    }
+
+/**
 * Gets the Index property
 * @return int with the Index
 */
@@ -347,44 +340,6 @@ public abstract class ColumnReportBase extends org.semanticwb.model.SWBClass imp
     public void setIndex(int value)
     {
         getSemanticObject().setIntProperty(swb_index, value);
-    }
-   /**
-   * Sets the value for the property Filter
-   * @param value Filter to set
-   */
-
-    public void setFilter(org.semanticwb.process.resources.reports.FilterReport value)
-    {
-        if(value!=null)
-        {
-            getSemanticObject().setObjectProperty(rep_filter, value.getSemanticObject());
-        }else
-        {
-            removeFilter();
-        }
-    }
-   /**
-   * Remove the value for Filter property
-   */
-
-    public void removeFilter()
-    {
-        getSemanticObject().removeProperty(rep_filter);
-    }
-
-   /**
-   * Gets the Filter
-   * @return a org.semanticwb.process.reports.FilterReport
-   */
-    public org.semanticwb.process.resources.reports.FilterReport getFilter()
-    {
-         org.semanticwb.process.resources.reports.FilterReport ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(rep_filter);
-         if(obj!=null)
-         {
-             ret=(org.semanticwb.process.resources.reports.FilterReport)obj.createGenericInstance();
-         }
-         return ret;
     }
    /**
    * Sets the value for the property Creator
@@ -450,7 +405,7 @@ public abstract class ColumnReportBase extends org.semanticwb.model.SWBClass imp
 
    /**
    * Gets the ReportName
-   * @return a org.semanticwb.process.reports.Report
+   * @return a org.semanticwb.process.resources.reports.Report
    */
     public org.semanticwb.process.resources.reports.Report getReportName()
     {
@@ -479,5 +434,23 @@ public abstract class ColumnReportBase extends org.semanticwb.model.SWBClass imp
     public void setEnabledOrder(boolean value)
     {
         getSemanticObject().setBooleanProperty(rep_enabledOrder, value);
+    }
+
+/**
+* Gets the DefaultValueMax property
+* @return String with the DefaultValueMax
+*/
+    public String getDefaultValueMax()
+    {
+        return getSemanticObject().getProperty(rep_defaultValueMax);
+    }
+
+/**
+* Sets the DefaultValueMax property
+* @param value long with the DefaultValueMax
+*/
+    public void setDefaultValueMax(String value)
+    {
+        getSemanticObject().setProperty(rep_defaultValueMax, value);
     }
 }
