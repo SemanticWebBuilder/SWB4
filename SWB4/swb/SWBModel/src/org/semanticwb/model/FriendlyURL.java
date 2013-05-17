@@ -57,11 +57,11 @@ public class FriendlyURL extends org.semanticwb.model.base.FriendlyURLBase
                 {
                     if(action.equals(SemanticObject.ACT_REMOVE))
                     {
-                        System.out.println("remove friendly...");
+                        //System.out.println("remove friendly...");
                         removeObject(obj);
                     }else
                     {
-                        System.out.println("add friendly...");
+                        //System.out.println("add friendly...");
                         addFriendlyUrl((FriendlyURL)obj.createGenericInstance());                    
                     }
                 }
