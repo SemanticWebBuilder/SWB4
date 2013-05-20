@@ -18,4 +18,5 @@ public class Perspective extends org.semanticwb.bsc.element.base.PerspectiveBase
     public synchronized void setSerial(int value) {
         super.setSerial(value);
     }
+    
 }

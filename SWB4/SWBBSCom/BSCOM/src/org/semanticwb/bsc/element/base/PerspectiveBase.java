@@ -294,4 +294,5 @@ public abstract class PerspectiveBase extends org.semanticwb.bsc.element.BSCElem
     {
         return (org.semanticwb.bsc.BSC)getSemanticObject().getModel().getModelObject().createGenericInstance();
     }
+    
 }
