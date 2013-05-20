@@ -5,6 +5,9 @@ package org.semanticwb.bsc.base;
    */
 public interface RecognizableBase extends org.semanticwb.model.GenericObject
 {
+   /**
+   * Abreviatura del elemento 
+   */
     public static final org.semanticwb.platform.SemanticProperty bsc_prefix=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#prefix");
    /**
    * Interfaz que define propiedades para los elementos que pueden identificarse mediante un prefijo 
