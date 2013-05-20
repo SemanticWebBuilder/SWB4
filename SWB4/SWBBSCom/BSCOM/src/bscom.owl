@@ -932,12 +932,6 @@
     </swb:displayProperty>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
   </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="folio">
-    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >Persiste la serialización de la abreviatura de elementos</rdfs:comment>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
-    <rdfs:domain rdf:resource="#Serializable"/>
-  </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="inTime">
     <rdfs:domain rdf:resource="#Period"/>
     <swb:displayProperty>
@@ -948,6 +942,12 @@
       </swbxf:DisplayProperty>
     </swb:displayProperty>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="serial">
+    <rdfs:domain rdf:resource="#Serializable"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Persiste la serialización de la abreviatura de elementos</rdfs:comment>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="formatPattern">
     <rdfs:domain rdf:resource="#Series"/>
