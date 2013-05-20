@@ -11,11 +11,13 @@ public class Objective extends org.semanticwb.bsc.element.base.ObjectiveBase
     @Override
     public synchronized int getSerial() {
         setSerial(super.getSerial()+1);
+System.out.println("Objetivo getSerial="+super.getSerial());
         return super.getSerial();
     }
 
     @Override
     public synchronized void setSerial(int value) {
+System.out.println("Objetivo setSerial value="+value);
         super.setSerial(value);
     }
 
@@ -23,13 +25,16 @@ public class Objective extends org.semanticwb.bsc.element.base.ObjectiveBase
     public String getPrefix() {
         String prefix = super.getPrefix();
         if(prefix==null) {
-            setPrefix(getTheme().getPerspective().getPrefix());
+            prefix = getTheme().getPerspective().getPrefix();
+            setPrefix(prefix);
         }
+System.out.println("Objetivo prefix="+prefix);
         return prefix;
     }
 
     @Override
     public void setPrefix(String value) {
+System.out.println("Objetivo setPrefix value="+value);
         super.setPrefix(value + getTheme().getPerspective().getSerial());
            
     }
