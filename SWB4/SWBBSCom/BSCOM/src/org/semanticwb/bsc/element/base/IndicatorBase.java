@@ -1,7 +1,7 @@
 package org.semanticwb.bsc.element.base;
 
 
-public abstract class IndicatorBase extends org.semanticwb.bsc.element.BSCElement implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Activeable,org.semanticwb.bsc.Updateable,org.semanticwb.model.Traceable
+public abstract class IndicatorBase extends org.semanticwb.bsc.element.BSCElement implements org.semanticwb.bsc.Updateable,org.semanticwb.bsc.Recognizable,org.semanticwb.model.Activeable,org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable
 {
    /**
    * Clase que permite definir los atributos de las evidencias de un Indicador
@@ -24,13 +24,11 @@ public abstract class IndicatorBase extends org.semanticwb.bsc.element.BSCElemen
    */
     public static final org.semanticwb.platform.SemanticProperty bsc_championFacilitator=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#championFacilitator");
    /**
-   * Persiste información de un folio automático
-   */
-    public static final org.semanticwb.platform.SemanticProperty bsc_folio=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#folio");
-   /**
    * Persiste la frecuencia de medida de un indicador
    */
     public static final org.semanticwb.platform.SemanticProperty bsc_measurementFrequency=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#measurementFrequency");
+    public static final org.semanticwb.platform.SemanticClass bsc_Objective=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#Objective");
+    public static final org.semanticwb.platform.SemanticProperty bsc_objectiveInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#objectiveInv");
    /**
    * Persiste información de una nota a la fórmula de un indicador
    */
@@ -123,29 +121,6 @@ public abstract class IndicatorBase extends org.semanticwb.bsc.element.BSCElemen
             return (getIndicator(id, model)!=null);
         }
        /**
-       * Gets all org.semanticwb.bsc.element.Indicator with a determined Evidence
-       * @param value Evidence of the type org.semanticwb.bsc.tracing.Evidence
-       * @param model Model of the org.semanticwb.bsc.element.Indicator
-       * @return Iterator with all the org.semanticwb.bsc.element.Indicator
-       */
-
-        public static java.util.Iterator<org.semanticwb.bsc.element.Indicator> listIndicatorByEvidence(org.semanticwb.bsc.tracing.Evidence value,org.semanticwb.model.SWBModel model)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Indicator> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(bsc_hasEvidence, value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.bsc.element.Indicator with a determined Evidence
-       * @param value Evidence of the type org.semanticwb.bsc.tracing.Evidence
-       * @return Iterator with all the org.semanticwb.bsc.element.Indicator
-       */
-
-        public static java.util.Iterator<org.semanticwb.bsc.element.Indicator> listIndicatorByEvidence(org.semanticwb.bsc.tracing.Evidence value)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Indicator> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(bsc_hasEvidence,value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
        * Gets all org.semanticwb.bsc.element.Indicator with a determined ModifiedBy
        * @param value ModifiedBy of the type org.semanticwb.model.User
        * @param model Model of the org.semanticwb.bsc.element.Indicator
@@ -169,6 +144,29 @@ public abstract class IndicatorBase extends org.semanticwb.bsc.element.BSCElemen
             return it;
         }
        /**
+       * Gets all org.semanticwb.bsc.element.Indicator with a determined Evidence
+       * @param value Evidence of the type org.semanticwb.bsc.tracing.Evidence
+       * @param model Model of the org.semanticwb.bsc.element.Indicator
+       * @return Iterator with all the org.semanticwb.bsc.element.Indicator
+       */
+
+        public static java.util.Iterator<org.semanticwb.bsc.element.Indicator> listIndicatorByEvidence(org.semanticwb.bsc.tracing.Evidence value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Indicator> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(bsc_hasEvidence, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.bsc.element.Indicator with a determined Evidence
+       * @param value Evidence of the type org.semanticwb.bsc.tracing.Evidence
+       * @return Iterator with all the org.semanticwb.bsc.element.Indicator
+       */
+
+        public static java.util.Iterator<org.semanticwb.bsc.element.Indicator> listIndicatorByEvidence(org.semanticwb.bsc.tracing.Evidence value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Indicator> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(bsc_hasEvidence,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
        * Gets all org.semanticwb.bsc.element.Indicator with a determined ChampionFacilitator
        * @param value ChampionFacilitator of the type org.semanticwb.model.User
        * @param model Model of the org.semanticwb.bsc.element.Indicator
@@ -189,6 +187,29 @@ public abstract class IndicatorBase extends org.semanticwb.bsc.element.BSCElemen
         public static java.util.Iterator<org.semanticwb.bsc.element.Indicator> listIndicatorByChampionFacilitator(org.semanticwb.model.User value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Indicator> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(bsc_championFacilitator,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.bsc.element.Indicator with a determined Objective
+       * @param value Objective of the type org.semanticwb.bsc.element.Objective
+       * @param model Model of the org.semanticwb.bsc.element.Indicator
+       * @return Iterator with all the org.semanticwb.bsc.element.Indicator
+       */
+
+        public static java.util.Iterator<org.semanticwb.bsc.element.Indicator> listIndicatorByObjective(org.semanticwb.bsc.element.Objective value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Indicator> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(bsc_objectiveInv, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.bsc.element.Indicator with a determined Objective
+       * @param value Objective of the type org.semanticwb.bsc.element.Objective
+       * @return Iterator with all the org.semanticwb.bsc.element.Indicator
+       */
+
+        public static java.util.Iterator<org.semanticwb.bsc.element.Indicator> listIndicatorByObjective(org.semanticwb.bsc.element.Objective value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Indicator> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(bsc_objectiveInv,value.getSemanticObject(),sclass));
             return it;
         }
        /**
@@ -370,23 +391,23 @@ public abstract class IndicatorBase extends org.semanticwb.bsc.element.BSCElemen
     }
 
 /**
-* Gets the Folio property
-* @return String with the Folio
+* Gets the Prefix property
+* @return String with the Prefix
 */
-    public String getFolio()
+    public String getPrefix()
     {
         //Override this method in Indicator object
-        return getSemanticObject().getProperty(bsc_folio,false);
+        return getSemanticObject().getProperty(bsc_prefix,false);
     }
 
 /**
-* Sets the Folio property
-* @param value long with the Folio
+* Sets the Prefix property
+* @param value long with the Prefix
 */
-    public void setFolio(String value)
+    public void setPrefix(String value)
     {
         //Override this method in Indicator object
-        getSemanticObject().setProperty(bsc_folio, value,false);
+        getSemanticObject().setProperty(bsc_prefix, value,false);
     }
 
 /**
@@ -423,6 +444,44 @@ public abstract class IndicatorBase extends org.semanticwb.bsc.element.BSCElemen
     public void setRecommendations(String value)
     {
         getSemanticObject().setProperty(bsc_recommendations, value);
+    }
+   /**
+   * Sets the value for the property Objective
+   * @param value Objective to set
+   */
+
+    public void setObjective(org.semanticwb.bsc.element.Objective value)
+    {
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(bsc_objectiveInv, value.getSemanticObject());
+        }else
+        {
+            removeObjective();
+        }
+    }
+   /**
+   * Remove the value for Objective property
+   */
+
+    public void removeObjective()
+    {
+        getSemanticObject().removeProperty(bsc_objectiveInv);
+    }
+
+   /**
+   * Gets the Objective
+   * @return a org.semanticwb.bsc.element.Objective
+   */
+    public org.semanticwb.bsc.element.Objective getObjective()
+    {
+         org.semanticwb.bsc.element.Objective ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(bsc_objectiveInv);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.bsc.element.Objective)obj.createGenericInstance();
+         }
+         return ret;
     }
 
 /**
