@@ -1,7 +1,7 @@
 package org.semanticwb.bsc.element.base;
 
 
-public abstract class PerspectiveBase extends org.semanticwb.bsc.element.BSCElement implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Activeable,org.semanticwb.model.Sortable,org.semanticwb.bsc.Recognizable,org.semanticwb.model.Traceable
+public abstract class PerspectiveBase extends org.semanticwb.bsc.element.BSCElement implements org.semanticwb.bsc.Serializable,org.semanticwb.bsc.Recognizable,org.semanticwb.model.Activeable,org.semanticwb.model.Sortable,org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable
 {
     public static final org.semanticwb.platform.SemanticClass bsc_Theme=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#Theme");
     public static final org.semanticwb.platform.SemanticProperty bsc_hasTheme=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#hasTheme");
@@ -182,6 +182,26 @@ public abstract class PerspectiveBase extends org.semanticwb.bsc.element.BSCElem
     {
         getSemanticObject().setIntProperty(swb_index, value);
     }
+
+/**
+* Gets the Prefix property
+* @return String with the Prefix
+*/
+    public String getPrefix()
+    {
+        //Override this method in Perspective object
+        return getSemanticObject().getProperty(bsc_prefix,false);
+    }
+
+/**
+* Sets the Prefix property
+* @param value long with the Prefix
+*/
+    public void setPrefix(String value)
+    {
+        //Override this method in Perspective object
+        getSemanticObject().setProperty(bsc_prefix, value,false);
+    }
    /**
    * Gets all the org.semanticwb.bsc.element.Theme
    * @return A GenericIterator with all the org.semanticwb.bsc.element.Theme
@@ -249,21 +269,21 @@ public abstract class PerspectiveBase extends org.semanticwb.bsc.element.BSCElem
     }
 
 /**
-* Gets the Prefix property
-* @return String with the Prefix
+* Gets the Serial property
+* @return int with the Serial
 */
-    public String getPrefix()
+    public int getSerial()
     {
-        return getSemanticObject().getProperty(bsc_prefix);
+        return getSemanticObject().getIntProperty(bsc_serial);
     }
 
 /**
-* Sets the Prefix property
-* @param value long with the Prefix
+* Sets the Serial property
+* @param value long with the Serial
 */
-    public void setPrefix(String value)
+    public void setSerial(int value)
     {
-        getSemanticObject().setProperty(bsc_prefix, value);
+        getSemanticObject().setIntProperty(bsc_serial, value);
     }
 
    /**

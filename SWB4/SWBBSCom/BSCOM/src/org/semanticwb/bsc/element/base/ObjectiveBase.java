@@ -1,10 +1,12 @@
 package org.semanticwb.bsc.element.base;
 
 
-public abstract class ObjectiveBase extends org.semanticwb.bsc.element.BSCElement implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Activeable,org.semanticwb.model.Traceable
+public abstract class ObjectiveBase extends org.semanticwb.bsc.element.BSCElement implements org.semanticwb.bsc.Serializable,org.semanticwb.bsc.Recognizable,org.semanticwb.model.Activeable,org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable
 {
     public static final org.semanticwb.platform.SemanticClass bsc_Indicator=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#Indicator");
     public static final org.semanticwb.platform.SemanticProperty bsc_hasIndicator=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#hasIndicator");
+    public static final org.semanticwb.platform.SemanticClass bsc_Theme=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#Theme");
+    public static final org.semanticwb.platform.SemanticProperty bsc_themeInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#themeInv");
     public static final org.semanticwb.platform.SemanticClass bsc_Initiative=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#Initiative");
     public static final org.semanticwb.platform.SemanticProperty bsc_hasInitiative=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#hasInitiative");
    /**
@@ -12,15 +14,11 @@ public abstract class ObjectiveBase extends org.semanticwb.bsc.element.BSCElemen
    */
     public static final org.semanticwb.platform.SemanticClass swb_User=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#User");
    /**
-   * Persiste la información de un usuario que es considerado como  el encargado de liderear el indicador
+   * Usuario que se asigna como responsable de conseguir el objetivo
    */
     public static final org.semanticwb.platform.SemanticProperty bsc_champion=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#champion");
    /**
-   * Persiste el folio que se utilizará en forma autómatica para la generación de identificadores en un identificador
-   */
-    public static final org.semanticwb.platform.SemanticProperty bsc_folioIndicator=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#folioIndicator");
-   /**
-   * Persiste información del patrocinador de un indicador
+   * Un usuario que se asigna como dueño del objetivo
    */
     public static final org.semanticwb.platform.SemanticProperty bsc_sponsor=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#sponsor");
     public static final org.semanticwb.platform.SemanticClass bsc_Objective=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#Objective");
@@ -142,6 +140,29 @@ public abstract class ObjectiveBase extends org.semanticwb.bsc.element.BSCElemen
         public static java.util.Iterator<org.semanticwb.bsc.element.Objective> listObjectiveByIndicator(org.semanticwb.bsc.element.Indicator value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Objective> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(bsc_hasIndicator,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.bsc.element.Objective with a determined Theme
+       * @param value Theme of the type org.semanticwb.bsc.element.Theme
+       * @param model Model of the org.semanticwb.bsc.element.Objective
+       * @return Iterator with all the org.semanticwb.bsc.element.Objective
+       */
+
+        public static java.util.Iterator<org.semanticwb.bsc.element.Objective> listObjectiveByTheme(org.semanticwb.bsc.element.Theme value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Objective> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(bsc_themeInv, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.bsc.element.Objective with a determined Theme
+       * @param value Theme of the type org.semanticwb.bsc.element.Theme
+       * @return Iterator with all the org.semanticwb.bsc.element.Objective
+       */
+
+        public static java.util.Iterator<org.semanticwb.bsc.element.Objective> listObjectiveByTheme(org.semanticwb.bsc.element.Theme value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Objective> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(bsc_themeInv,value.getSemanticObject(),sclass));
             return it;
         }
        /**
@@ -317,6 +338,44 @@ public abstract class ObjectiveBase extends org.semanticwb.bsc.element.BSCElemen
          return ret;
     }
    /**
+   * Sets the value for the property Theme
+   * @param value Theme to set
+   */
+
+    public void setTheme(org.semanticwb.bsc.element.Theme value)
+    {
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(bsc_themeInv, value.getSemanticObject());
+        }else
+        {
+            removeTheme();
+        }
+    }
+   /**
+   * Remove the value for Theme property
+   */
+
+    public void removeTheme()
+    {
+        getSemanticObject().removeProperty(bsc_themeInv);
+    }
+
+   /**
+   * Gets the Theme
+   * @return a org.semanticwb.bsc.element.Theme
+   */
+    public org.semanticwb.bsc.element.Theme getTheme()
+    {
+         org.semanticwb.bsc.element.Theme ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(bsc_themeInv);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.bsc.element.Theme)obj.createGenericInstance();
+         }
+         return ret;
+    }
+   /**
    * Gets all the org.semanticwb.bsc.element.Initiative
    * @return A GenericIterator with all the org.semanticwb.bsc.element.Initiative
    */
@@ -421,21 +480,23 @@ public abstract class ObjectiveBase extends org.semanticwb.bsc.element.BSCElemen
     }
 
 /**
-* Gets the FolioIndicator property
-* @return String with the FolioIndicator
+* Gets the Prefix property
+* @return String with the Prefix
 */
-    public String getFolioIndicator()
+    public String getPrefix()
     {
-        return getSemanticObject().getProperty(bsc_folioIndicator);
+        //Override this method in Objective object
+        return getSemanticObject().getProperty(bsc_prefix,false);
     }
 
 /**
-* Sets the FolioIndicator property
-* @param value long with the FolioIndicator
+* Sets the Prefix property
+* @param value long with the Prefix
 */
-    public void setFolioIndicator(String value)
+    public void setPrefix(String value)
     {
-        getSemanticObject().setProperty(bsc_folioIndicator, value);
+        //Override this method in Objective object
+        getSemanticObject().setProperty(bsc_prefix, value,false);
     }
    /**
    * Sets the value for the property Sponsor
@@ -474,6 +535,24 @@ public abstract class ObjectiveBase extends org.semanticwb.bsc.element.BSCElemen
              ret=(org.semanticwb.model.User)obj.createGenericInstance();
          }
          return ret;
+    }
+
+/**
+* Gets the Serial property
+* @return int with the Serial
+*/
+    public int getSerial()
+    {
+        return getSemanticObject().getIntProperty(bsc_serial);
+    }
+
+/**
+* Sets the Serial property
+* @param value long with the Serial
+*/
+    public void setSerial(int value)
+    {
+        getSemanticObject().setIntProperty(bsc_serial, value);
     }
 
    /**
