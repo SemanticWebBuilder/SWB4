@@ -22,7 +22,7 @@ public class Indicator extends org.semanticwb.bsc.element.base.IndicatorBase
             try {
                 prefix = getObjective().getPrefix().trim() + "." + getObjective().getSerial();
             }catch(Exception e) {
-                prefix = getObjective().getTitle() + "." + getObjective().getSerial();
+                prefix = getObjective().getTitle().substring(0, 1).toUpperCase() + "." + getObjective().getSerial();
             }
             setPrefix(prefix);
         }
