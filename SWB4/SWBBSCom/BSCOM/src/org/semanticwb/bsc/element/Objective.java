@@ -28,7 +28,7 @@ System.out.println("Objetivo setSerial value="+value);
             try {
                 prefix = getTheme().getPerspective().getPrefix().trim() + getTheme().getPerspective().getSerial();
             }catch(Exception e) {
-                prefix = getTheme().getPerspective().getTitle() + getTheme().getPerspective().getSerial();
+                prefix = getTheme().getPerspective().getTitle().substring(0, 1).toUpperCase() + getTheme().getPerspective().getSerial();
             }
             setPrefix(prefix);
         }
