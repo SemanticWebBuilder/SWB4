@@ -4,6 +4,9 @@
     Author     : juan.fernandez
 --%>
 
+<%@page import="com.infotec.lodp.swb.Developer"%>
+<%@page import="com.infotec.lodp.swb.Publisher"%>
+<%@page import="java.util.TreeSet"%>
 <%@page import="com.infotec.lodp.swb.DatasetLog"%>
 <%@page import="com.infotec.lodp.swb.DatasetVersion"%>
 <%@page import="java.util.Date"%>
@@ -112,40 +115,6 @@
 <%
     }
 
-%>
-<script type="text/javascript">
-    <!--
-    // scan page for widgets and instantiate them
-    dojo.require("dojo.parser");
-    dojo.require("dijit._Calendar");
-    dojo.require("dijit.ProgressBar");
-    dojo.require("dijit.TitlePane");
-    dojo.require("dijit.TooltipDialog");
-    dojo.require("dijit.Dialog");
-    // editor:
-    dojo.require("dijit.Editor");
-
-    // various Form elemetns
-    dojo.require("dijit.form.Form");
-    dojo.require("dijit.form.CheckBox");
-    dojo.require("dijit.form.Textarea");
-    dojo.require("dijit.form.FilteringSelect");
-    dojo.require("dijit.form.TextBox");
-    dojo.require("dijit.form.DateTextBox");
-    dojo.require("dijit.form.TimeTextBox");
-    dojo.require("dijit.form.Button");
-    dojo.require("dijit.form.NumberSpinner");
-    dojo.require("dijit.form.Slider");
-    dojo.require("dojox.form.BusyButton");
-    dojo.require("dojox.form.TimeSpinner");
-    dojo.require("dijit.form.ValidationTextBox");
-    dojo.require("dijit.layout.ContentPane");
-    //dojo.require("dijit.form.Select");
-    dojo.require("dijit.form.NumberTextBox");
-    dojo.require("dijit.form.DropDownButton");
-
-    -- ></script>
-    <%
         if (paramRequest.getCallMethod() == SWBParamRequest.Call_STRATEGY) {
             // llamada como estrategia
         } else {
@@ -161,16 +130,16 @@
                     go = ont.getGenericObject(filteruri);
                     if (go != null) {
                         if ( go instanceof Institution) { //filterby.equals(DataSetResource.FILTER_INSTITUTION) &&
-                            System.out.println("Filtrado por institucion....");
+                            //System.out.println("Filtrado por institucion....");
                             itds1 = Dataset.ClassMgr.listDatasetByInstitution((Institution) go,wsite); 
                         } else if (go instanceof Topic) { //filterby.equals(DataSetResource.FILTER_TOPIC) && 
-                            System.out.println("Filtrado por tema....");
+                            //System.out.println("Filtrado por tema....");
                             itds1 = Dataset.ClassMgr.listDatasetByTopic((Topic) go,wsite);
                         } else if ( go instanceof Sector) { //filterby.equals(DataSetResource.FILTER_SECTOR) &&
-                            System.out.println("Filtrado por sector....");
+                            //System.out.println("Filtrado por sector....");
                             itds1 = Dataset.ClassMgr.listDatasetByDatasetSector((Sector) go,wsite);
                         } else {
-                            System.out.println("SIN Filtro....");
+                            //System.out.println("SIN Filtro....");
                             itds1 = Dataset.ClassMgr.listDatasets(wsite);
                         }
                     } else {
@@ -237,7 +206,7 @@
                             txtDS.append(LODPUtils.getDSTagList(ds));
                             String reviewTXT = txtDS.toString().trim().toLowerCase(); // texto completo en donde se buscará la ocurrencia
                             //System.out.println("Texto DS: "+reviewTXT);
-                            if ((reviewQuery(hmquery, reviewTXT)) && hmresults.get(ds.getURI()) == null) {  //||txtAuto.indexOf(queryinput)>-1 
+                            if ((DataSetResource.reviewQuery(hmquery, reviewTXT)) && hmresults.get(ds.getURI()) == null) {  //||txtAuto.indexOf(queryinput)>-1 
                                 hmresults.put(ds.getURI(), ds);
                             }
                         }
@@ -589,37 +558,37 @@
         <h2><%=ds.getDatasetTitle()%></h2> 
         <ul>
             <li>
-                <label>Descripción:</label><p><%=ds.getDatasetDescription()%></p>
+                <label><%=paramRequest.getLocaleString("lbl_description")%>:</label><p><%=ds.getDatasetDescription()%></p>
             </li>
             <li>
-                <label>Institución:</label><p><%=ds.getInstitution() != null ? ds.getInstitution().getInstitutionTitle() : ""%></p> 
+                <label><%=paramRequest.getLocaleString("lbl_institution")%>:</label><p><%=ds.getInstitution() != null ? ds.getInstitution().getInstitutionTitle() : ""%></p> 
             </li>
             <li>
-                <label>Enlace Técnico:</label><p><%=ds.getInstitution() != null ? ds.getInstitution().getTopLevelName() : "No disponible"%></p>
+                <label><%=paramRequest.getLocaleString("lbl_technicalContact")%>:</label><p><%=ds.getInstitution() != null ? ds.getInstitution().getTopLevelName() : "No disponible"%></p>
             </li>
             <li>
-                <label>Creación:</label><p><%=sdf2.format(ds.getDatasetCreated())%></p>
+                <label><%=paramRequest.getLocaleString("lbl_created")%>:</label><p><%=sdf2.format(ds.getDatasetCreated())%></p>
             </li>
             <li>
                 <label><%=paramRequest.getLocaleString("lbl_updated")%>:</label><p><%=sdf2.format(ds.getDatasetUpdated())%></p>
             </li>
             <li>
-                <label>Sitio Web del emisor</label><p><%=ds.getInstitution() != null ? ds.getInstitution().getInstitutionHome() : ""%></p> 
+                <label><%=paramRequest.getLocaleString("lbl_publisherwebsite")%></label><p><%=ds.getInstitution() != null ? ds.getInstitution().getInstitutionHome() : ""%></p> 
             </li>
             <li>
-                <label>Email contacto:</label><p><%=ds.getPublisher() != null ? ds.getPublisher().getEmail() : ""%></p> 
+                <label><%=paramRequest.getLocaleString("lbl_emailContact")%>:</label><p><%=ds.getPublisher() != null ? ds.getPublisher().getEmail() : ""%></p> 
             </li>
             <li>
-                <label>Licencia de uso:</label><p title="<%=ds.getLicense() != null ? ds.getLicense().getLicenseDescription() : ""%>"><%=ds.getLicense() != null ? ds.getLicense().getLicenseTitle() : "No asignada"%></p>
+                <label><%=paramRequest.getLocaleString("lbl_licenseUse")%>:</label><p title="<%=ds.getLicense() != null ? ds.getLicense().getLicenseDescription() : ""%>"><%=ds.getLicense() != null ? ds.getLicense().getLicenseTitle() : "No asignada"%></p>
             </li>
             <li>
-                <label>Versión:</label><p><%=ds.getActualVersion() != null ? ds.getActualVersion().getVersion() : "---"%></p>
+                <label><%=paramRequest.getLocaleString("lbl_version")%>:</label><p><%=ds.getActualVersion() != null ? ds.getActualVersion().getVersion() : "---"%></p>
             </li>
             <li>
                 <%
                     String taglist = LODPUtils.getDSTagList(ds);
                 %>
-                <label>Etiquetas:</label><p><%=taglist%></p>
+                <label><%=paramRequest.getLocaleString("lbl_labels")%>:</label><p><%=taglist%></p>
             </li>
             <li>
                 <label><%=paramRequest.getLocaleString("lbl_formats")%>:</label><p><%=ds.getDatasetFormat()%></p> 
@@ -632,16 +601,16 @@
                 urldown.setParameter("act","file");
                 urldown.setMode(DataSetResource.MODE_FILE);
                 %>
-                <label>URL:</label><p><%=ds.getDatasetURL()%><a href="<%=urldown.toString()%>">Descargar</a></p>
+                <label>URL:</label><p><%=ds.getDatasetURL()%><a href="<%=urldown.toString()%>"><%=paramRequest.getLocaleString("lbl_updated")%>Descargar</a></p>
             </li>
             <li>
-                <label>Valoración:</label><p><%=ds.getAverage()%></p>
+                <label><%=paramRequest.getLocaleString("lbl_rated")%>Valoración:</label><p><%=ds.getAverage()%></p>
                 <div>
-                    5 Excelente<br/>
-                    4 Recomendable<br/>
-                    3 Bueno<br/>
-                    2 Regular<br/>
-                    1 No recomendable<br/>
+                    5 <%=paramRequest.getLocaleString("lbl_val5")%><br/>
+                    4 <%=paramRequest.getLocaleString("lbl_val4")%><br/>
+                    3 <%=paramRequest.getLocaleString("lbl_val3")%><br/>
+                    2 <%=paramRequest.getLocaleString("lbl_val2")%><br/>
+                    1 <%=paramRequest.getLocaleString("lbl_val1")%><br/>
                 </div>
             </li>
             <%
@@ -659,12 +628,12 @@
 
             %>
             <li>
-                <label>Actualizaciones del dataset:</label>
+                <label><%=paramRequest.getLocaleString("lbl_updated")%>:</label>
                 <p>
                 <table>
                     <thead>
                         <tr>
-                            <th>Número de versión / revisión</th><th>Fecha de actualización</th>
+                            <th><%=paramRequest.getLocaleString("lbl_versionNum")%></th><th><%=paramRequest.getLocaleString("lbl_DateUpdate")%></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -694,13 +663,13 @@
                 url.setMode(DataSetResource.MODE_FILE);
                 //url.setParameter("mformat", DataSetResource.RDF_MIME_TYPE);
                 %>
-                <label>Exportar fichas del dataset:</label><p><a href="<%=url.toString()%>&mformat=<%=DataSetResource.META_FORMAT_RDF%>">RDF</a>&nbsp;<a href="<%=url.toString()%>&mformat=<%=DataSetResource.META_FORMAT_JSON%>">JSON</a></p>
+                <label><%=paramRequest.getLocaleString("lbl_exportDSmeta")%>:</label><p><a href="<%=url.toString()%>&mformat=<%=DataSetResource.META_FORMAT_RDF%>">RDF</a>&nbsp;<a href="<%=url.toString()%>&mformat=<%=DataSetResource.META_FORMAT_JSON%>">JSON</a></p>
             </li>
             <li>
-                <label>Visitas:</label><p><%=ds.getViews()%></p>
+                <label><%=paramRequest.getLocaleString("lbl_views")%>:</label><p><%=ds.getViews()%></p>
             </li>
             <li>
-                <label>Descargas:</label><p><%=ds.getDownloads()%></p>
+                <label><%=paramRequest.getLocaleString("lbl_downloads")%>:</label><p><%=ds.getDownloads()%></p>
             </li>
             <li>
                 <%
@@ -708,12 +677,12 @@
                     urlstats.setParameter("suri", ds.getURI());
                     urlstats.setParameter("act", "stats");
                 %>
-                <p><a href="<%=urlstats.toString()%>">Estadísticas del dataset</a></p> 
+                <p><a href="<%=urlstats.toString()%>"><%=paramRequest.getLocaleString("lbl_statsDS")%></a></p> 
             </li>
         </ul>
     </div>   
     <div>
-        <label>Aplicaciones relacionadas</label>
+        <label><%=paramRequest.getLocaleString("lbl_relatesApps")%></label>
         <ul>
             <%  // lista de aplicaciones relacionadas
             Iterator<Application> itapp = Application.ClassMgr.listApplicationByRelatedDataset(ds, wsite);
@@ -728,7 +697,7 @@
             } else {
 
             %>
-            <li>No se encontraron aplicaciones relacionadas.</li>
+            <li><%=paramRequest.getLocaleString("lbl_NOrelatesApps")%></li>
                 <%
             }
                 %>
@@ -744,22 +713,235 @@
         go = ont.getGenericObject(suri);
         if (go instanceof Dataset) {
             
-            Dataset ds = (Dataset) go; 
-                    
+            HashMap<String, TreeSet<DatasetLog>> hmlogs = new HashMap<String, TreeSet<DatasetLog>>();
+             Dataset ds = (Dataset) go; 
+             TreeSet<DatasetLog> tsd = null;
+             TreeSet<DatasetLog> tsv =null;
              Iterator<DatasetLog> itdslog  = DatasetLog.ClassMgr.listDatasetLogByDataset(ds, wsite);
-            
+             while(itdslog.hasNext()){
+                 DatasetLog dslog = itdslog.next();
+                 if(LODPUtils.Log_Type_Download==dslog.getLogType()){
+                     if(hmlogs.get("downloads")==null){
+                         // nuevo treeset para logs downloads
+                         tsd =  new TreeSet<DatasetLog>();
+                     } 
+                     tsd = hmlogs.get("downloads") ;
+                     tsd.add(dslog);
+                 } else if(LODPUtils.Log_Type_View==dslog.getLogType()){
+                     if(hmlogs.get("views")==null){
+                         // nuevo treeset para logs downloads
+                         tsv = new TreeSet<DatasetLog>();
+                     }
+                     tsv = hmlogs.get("views"); 
+                     tsv.add(dslog);
+                 }
+             }
+             
+             Set<DatasetLog> sdv = DataSetResource.sortDSLogByCreated(tsv.iterator(), false);
+             Set<DatasetLog> sdd = DataSetResource.sortDSLogByCreated(tsd.iterator(), false);
+             // informacion registrada en el log
+             long numviews = sdv.size();
+             long numdload = sdd.size();
+             
+             Date dateldload = null;
+             Date datelviews = null;
+             DatasetLog dslogtmp = null; 
+             // obteniendo la fecha de la ultima vez que se vio el dataset
+             if(numviews>0){
+                 if(sdv.iterator().hasNext()){
+                     Iterator<DatasetLog> itdslogv = sdv.iterator();
+                     if(itdslogv.hasNext()){
+                         dslogtmp = itdslogv.next();
+                         datelviews = dslogtmp.getLogCreated();
+                     }
+                 }
+             }
+             // obteniendo la fecha de la ultima vez que se descargó el dataset
+             if(numdload>0){ 
+                 if(sdd.iterator().hasNext()){
+                     Iterator<DatasetLog> itdslogd = sdd.iterator();
+                     if(itdslogd.hasNext()){
+                         dslogtmp = itdslogd.next();
+                         dateldload = dslogtmp.getLogCreated(); 
+                     }
+                 }
+             }
+             
      %>
 <div>
     <table>
         <thead>
             <tr>
-                <th>Descargas</th><th>Última descarga</th><th>Visitas</th><th>Última visita</th>
+                <th><%=paramRequest.getLocaleString("lbl_downloads")%></th>
+                <th><%=paramRequest.getLocaleString("lbl_lastDownload")%></th>
+                <th><%=paramRequest.getLocaleString("lbl_views")%></th>
+                <th><%=paramRequest.getLocaleString("lbl_lastView")%></th>
             </tr>
         </thead>
         <tbody>
+            <%
+            Iterator<DatasetLog> itdsl = DatasetLog.ClassMgr.listDatasetLogByDataset(ds); 
+            while(itdsl.hasNext()){
+                DatasetLog dslog = itdsl.next();
+                // preguntar como se desplegarán las estadísticas
+            }
+            SWBResourceURL urlst2 = paramRequest.getRenderUrl();
+            urlst2.setParameter("suri", suri);
+            urlst2.setParameter("act", "stats2");  //statType
+            
+            %>
             <tr>
-                <td></td><td></td><td></td><td>Descargas</td><td>Última descarga</td><td>Visitas</td><td>Última visita</td>
+                <td><a href="<%=urlst2.toString()%>&statType=<%=LODPUtils.Log_Type_Download%>" title="ver lista de descargas"><%=ds.getDownloads()%></a></td><td><%=dateldload!=null?sdf2.format(dateldload):"---"%></td><td><a href="<%=urlst2.toString()%>&statType=<%=LODPUtils.Log_Type_View%>" title="ver lista de visitas"><%= ds.getDatasetView()%></a></td><td><%=datelviews!=null?sdf2.format(datelviews):"---"%></td>
             </tr>
+        </tbody>
+    </table>
+</div>
+    <%
+        }
+        } else if("stats2".equals(action)){
+            System.out.println("Stats DownLoad / Views.........");
+        String suri = request.getParameter("suri");
+        String statType = request.getParameter("statType");
+        String tmpType1 = ""+LODPUtils.Log_Type_Download; 
+        String tmpType2 = ""+LODPUtils.Log_Type_View; 
+        boolean isViews = Boolean.FALSE;
+        if(null!=statType&&tmpType1.equals(statType)){
+            isViews = Boolean.FALSE;
+        }
+        if(null!=statType&&tmpType2.equals(statType)){
+            isViews = Boolean.TRUE;
+        }
+        System.out.println("URI........."+suri);
+        go = ont.getGenericObject(suri);
+        if (go instanceof Dataset) {
+            
+            HashMap<String, TreeSet<DatasetLog>> hmlogs = new HashMap<String, TreeSet<DatasetLog>>();
+             Dataset ds = (Dataset) go; 
+             TreeSet<DatasetLog> tsd = null;
+             TreeSet<DatasetLog> tsv =null;
+             Iterator<DatasetLog> itdslog  = DatasetLog.ClassMgr.listDatasetLogByDataset(ds, wsite);
+             while(itdslog.hasNext()){
+                 DatasetLog dslog = itdslog.next();
+                 if(LODPUtils.Log_Type_Download==dslog.getLogType()){
+                     if(hmlogs.get("downloads")==null){
+                         // nuevo treeset para logs downloads
+                         tsd =  new TreeSet<DatasetLog>();
+                     } 
+                     tsd = hmlogs.get("downloads") ;
+                     tsd.add(dslog);
+                 } else if(LODPUtils.Log_Type_View==dslog.getLogType()){
+                     if(hmlogs.get("views")==null){
+                         // nuevo treeset para logs downloads
+                         tsv = new TreeSet<DatasetLog>();
+                     }
+                     tsv = hmlogs.get("views"); 
+                     tsv.add(dslog);
+                 }
+             }
+             
+             Set<DatasetLog> sdv = DataSetResource.sortDSLogByCreated(tsv.iterator(), false);
+             Set<DatasetLog> sdd = DataSetResource.sortDSLogByCreated(tsd.iterator(), false);
+             // informacion registrada en el log
+             long numviews = sdv.size();
+             long numdload = sdd.size();
+             
+             Date dateldload = null;
+             Date datelviews = null;
+             DatasetLog dslogtmp = null; 
+             // obteniendo la fecha de la ultima vez que se vio el dataset
+             if(numviews>0){
+                 if(sdv.iterator().hasNext()){
+                     Iterator<DatasetLog> itdslogv = sdv.iterator();
+                     if(itdslogv.hasNext()){
+                         dslogtmp = itdslogv.next();
+                         datelviews = dslogtmp.getLogCreated();
+                     }
+                 }
+             }
+             // obteniendo la fecha de la ultima vez que se descargó el dataset
+             if(numdload>0){ 
+                 if(sdd.iterator().hasNext()){
+                     Iterator<DatasetLog> itdslogd = sdd.iterator();
+                     if(itdslogd.hasNext()){
+                         dslogtmp = itdslogd.next();
+                         dateldload = dslogtmp.getLogCreated(); 
+                     }
+                 }
+             }
+             
+     %>
+<div>
+    <table>
+        <thead>
+            <tr>
+                <%
+                if(!isViews){  // Son descargas
+                %>
+                <th><%=paramRequest.getLocaleString("lbl_downloads")%></th>
+                <th><%=paramRequest.getLocaleString("lbl_description")%></th>
+                <th><%=paramRequest.getLocaleString("lbl_date")%></th>    
+                <%
+                } else {  // Son visitas
+                %>
+                <th><%=paramRequest.getLocaleString("lbl_views")%></th>
+                <th><%=paramRequest.getLocaleString("lbl_description")%></th>
+                <th><%=paramRequest.getLocaleString("lbl_date")%></th>                
+                <% 
+                }
+                %>
+            </tr>
+        </thead>
+        <tbody>
+            <%
+            Iterator<DatasetLog> itdsl = null;
+                if(!isViews){
+                    itdsl = sdd.iterator();
+                } else {
+                    itdsl = sdv.iterator();
+                }
+                //itdsl = DatasetLog.ClassMgr.listDatasetLogByDataset(ds); 
+                GenericObject gol = null;
+                User usrlog = null;
+                String usrname = "";
+                
+            while(itdsl.hasNext()){
+                DatasetLog dslog = itdsl.next();
+                Date dcreated = dslog.getLogCreated();
+                String txtDescrip = dslog.getLogDescription()!=null?dslog.getLogDescription().trim():"---";
+                // preguntar como se desplegarán las estadísticas
+                gol = null;
+                usrlog = dslog.getLogUser();
+                if(null!=usrlog&&usrlog.getSemanticObject()!=null){
+                    gol = usrlog.getSemanticObject().createGenericInstance();
+                }
+                if(null!=gol){
+                    if(gol instanceof Publisher){
+                        Institution inst =  ((Publisher)gol).getPubInstitution();
+                        if(null!=inst&&inst.getInstitutionTitle()!=null)
+                        {
+                            usrname = inst.getInstitutionTitle() + " / "+ ((Publisher)gol).getFullName();
+                        } else {
+                            usrname = ((Publisher)gol).getFullName();
+                        }
+                    } else if( gol instanceof Developer) { 
+                        usrname = ((Publisher)gol).getFullName();
+                        
+                    } else {
+                        if(usrlog.isRegistered()){
+                            usrname = usrlog.getFullName();
+                        } else {
+                            usrname = "Anónimo";
+                        }
+                    } 
+                }
+                %>
+            <tr>
+                <td><%=usrname%></td><td><%=txtDescrip%></td><td><%=dcreated!=null?sdf2.format(dcreated):"---"%></td>
+            </tr>
+                <%
+            }
+            
+            %>
         </tbody>
     </table>
 </div>
@@ -771,22 +953,3 @@
     // Termina llamado como contenido
 %>
 
-<%!
-    public boolean reviewQuery(HashMap<String, String> hm, String texto) {
-        boolean res = Boolean.FALSE;
-        System.out.println("Revisando query....");
-        if (null != hm) {
-            Iterator<String> itstr = hm.keySet().iterator();
-            while (itstr.hasNext()) {
-                String skey = itstr.next();
-                System.out.println("key..."+texto.indexOf(skey));
-                if (texto.indexOf(skey) > -1) {
-                    res = Boolean.TRUE;
-                    break;
-                } 
-            }
-        }
-        return res;
-    }
-
-%>
