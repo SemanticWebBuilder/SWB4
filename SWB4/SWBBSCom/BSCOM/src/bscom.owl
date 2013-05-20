@@ -569,6 +569,11 @@
     <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >Usuario que se asigna como responsable de conseguir el objetivo</rdfs:comment>
   </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="myObjective">
+    <owl:inverseOf rdf:resource="#hasIndicator"/>
+    <rdfs:range rdf:resource="#Objective"/>
+    <rdfs:domain rdf:resource="#Indicator"/>
+  </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="championFacilitator">
     <rdfs:label xml:lang="es">Facilitador de champion</rdfs:label>
     <rdfs:label xml:lang="en">Champion facilitator</rdfs:label>
@@ -594,6 +599,11 @@
         <rdfs:label xml:lang="es">Siguiente</rdfs:label>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="myPerspective">
+    <rdfs:range rdf:resource="#Perspective"/>
+    <owl:inverseOf rdf:resource="#hasObjective"/>
+    <rdfs:domain rdf:resource="#Objective"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="period">
     <rdfs:domain rdf:resource="#Measure"/>
