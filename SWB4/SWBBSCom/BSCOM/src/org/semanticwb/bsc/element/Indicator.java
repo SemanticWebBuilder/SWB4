@@ -19,7 +19,11 @@ public class Indicator extends org.semanticwb.bsc.element.base.IndicatorBase
     public String getPrefix() {
         String prefix = super.getPrefix();
         if(prefix==null) {
-            prefix = getObjective().getPrefix() + "." + getObjective().getSerial();
+            try {
+                prefix = getObjective().getPrefix().trim() + "." + getObjective().getSerial();
+            }catch(Exception e) {
+                prefix = getObjective().getTitle() + "." + getObjective().getSerial();
+            }
             setPrefix(prefix);
         }
         return prefix;
