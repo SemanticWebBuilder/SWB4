@@ -25,7 +25,7 @@ System.out.println("Objetivo setSerial value="+value);
     public String getPrefix() {
         String prefix = super.getPrefix();
         if(prefix==null) {
-            prefix = getTheme().getPerspective().getPrefix();
+            prefix = getTheme().getPerspective().getPrefix() + getTheme().getPerspective().getSerial();
             setPrefix(prefix);
         }
 System.out.println("Objetivo prefix="+prefix);
@@ -35,7 +35,7 @@ System.out.println("Objetivo prefix="+prefix);
     @Override
     public void setPrefix(String value) {
 System.out.println("Objetivo setPrefix value="+value);
-        super.setPrefix(value + getTheme().getPerspective().getSerial());
+        super.setPrefix(value);
            
     }
 }
