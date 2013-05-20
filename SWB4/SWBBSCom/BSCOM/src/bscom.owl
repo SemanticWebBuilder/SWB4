@@ -126,6 +126,12 @@
     <swb:hasClass>
       <swb:Class rdf:ID="Objective">
         <rdfs:subClassOf>
+          <swb:Interface rdf:ID="Serializable">
+            <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBInterface"/>
+            <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+          </swb:Interface>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
           <swb:Interface rdf:ID="Recognizable">
             <rdfs:label xml:lang="en">Recognizable</rdfs:label>
             <rdfs:label xml:lang="es">Identificable</rdfs:label>
@@ -273,6 +279,7 @@
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
   <owl:Class rdf:about="#Perspective">
+    <rdfs:subClassOf rdf:resource="#Serializable"/>
     <rdfs:subClassOf rdf:resource="#BSCElement"/>
     <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:autogenId>
@@ -432,6 +439,7 @@
     <swb:hasHerarquicalNode rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_Countries"/>
   </owl:Class>
   <owl:Class rdf:about="#Indicator">
+    <rdfs:subClassOf rdf:resource="#Recognizable"/>
     <rdfs:subClassOf>
       <owl:Class rdf:about="#Updateable"/>
     </rdfs:subClassOf>
@@ -873,6 +881,8 @@
     >filterRoleIds</swb:propertyCodeName>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="prefix">
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Abreviatura del elemento</rdfs:comment>
     <swb:localeable rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >false</swb:localeable>
     <swb:externalInvocation rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
@@ -923,21 +933,10 @@
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="folio">
-    <rdfs:label xml:lang="en">Folio</rdfs:label>
-    <rdfs:label xml:lang="es">Folio</rdfs:label>
-    <swb:externalInvocation rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:externalInvocation>
-    <swb:displayProperty>
-      <swbxf:DisplayProperty rdf:ID="dp_folio">
-        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >40</swb:index>
-        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextBox"/>
-      </swbxf:DisplayProperty>
-    </swb:displayProperty>
     <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >Persiste información de un folio automático</rdfs:comment>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-    <rdfs:domain rdf:resource="#Indicator"/>
+    >Persiste la serialización de la abreviatura de elementos</rdfs:comment>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+    <rdfs:domain rdf:resource="#Serializable"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="inTime">
     <rdfs:domain rdf:resource="#Period"/>
@@ -953,10 +952,6 @@
   <owl:DatatypeProperty rdf:ID="formatPattern">
     <rdfs:domain rdf:resource="#Series"/>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-  </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="folioObjective">
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
-    <rdfs:domain rdf:resource="#Perspective"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="icon">
     <rdfs:domain rdf:resource="#State"/>
@@ -993,27 +988,21 @@
       </swbxf:DisplayProperty>
     </swb:displayProperty>
   </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="folioIndicator">
-    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >Persiste el folio que se utilizará en forma autómatica para la generación de identificadores en un identificador</rdfs:comment>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-    <rdfs:domain rdf:resource="#Objective"/>
-  </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="value">
     <rdfs:domain rdf:resource="#Series"/>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
-  </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="dateConstraints">
-    <rdfs:domain rdf:resource="#Periodicity"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >constraints</swb:propertyCodeName>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="attached">
     <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >Persiste el documento, memorandum o adjunto asociado a un Indicador</rdfs:comment>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <rdfs:domain rdf:resource="#Evidence"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="dateConstraints">
+    <rdfs:domain rdf:resource="#Periodicity"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >constraints</swb:propertyCodeName>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="hasAttachments">
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
@@ -1065,6 +1054,11 @@
     <swbxf:dropMatchLevel rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
     >2</swbxf:dropMatchLevel>
   </swbxf:DisplayObject>
+  <swbxf:DisplayProperty rdf:ID="dp_folio">
+    <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+    >40</swb:index>
+    <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextBox"/>
+  </swbxf:DisplayProperty>
   <bsc:SelectOneUserByRoleGroup rdf:ID="facilitators">
     <swbxf:so_userRepository rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swbxf:so_userRepository>
