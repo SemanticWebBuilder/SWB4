@@ -564,4 +564,5 @@ public abstract class ObjectiveBase extends org.semanticwb.bsc.element.BSCElemen
         return (org.semanticwb.bsc.BSC)getSemanticObject().getModel().getModelObject().createGenericInstance();
     }
     
+    
 }
