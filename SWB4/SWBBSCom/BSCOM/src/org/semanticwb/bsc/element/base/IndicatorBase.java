@@ -582,4 +582,5 @@ public abstract class IndicatorBase extends org.semanticwb.bsc.element.BSCElemen
     {
         return (org.semanticwb.bsc.BSC)getSemanticObject().getModel().getModelObject().createGenericInstance();
     }
+    
 }

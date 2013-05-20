@@ -34,4 +34,5 @@ public class Indicator extends org.semanticwb.bsc.element.base.IndicatorBase
         super.setPrefix(value);
            
     }
+    
 }
