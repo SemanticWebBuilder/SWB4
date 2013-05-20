@@ -487,13 +487,25 @@
     >false</swb:removeDependency>
     <rdfs:range rdf:resource="#BSC"/>
   </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="objectiveInv">
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >objective</swb:propertyCodeName>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="perspectiveInv">
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >perspective</swb:propertyCodeName>
+  </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="hasTheme">
+    <owl:inverseOf rdf:resource="#perspectiveInv"/>
     <rdfs:range rdf:resource="#Theme"/>
     <swb:herarquicalRelation rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:herarquicalRelation>
     <rdfs:domain rdf:resource="#Perspective"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="hasObjective">
+    <owl:inverseOf>
+      <owl:ObjectProperty rdf:ID="themeInv"/>
+    </owl:inverseOf>
     <rdfs:range rdf:resource="#Objective"/>
     <swb:herarquicalRelation rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:herarquicalRelation>
@@ -538,6 +550,7 @@
     <rdfs:domain rdf:resource="#Objective"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="hasIndicator">
+    <owl:inverseOf rdf:resource="#objectiveInv"/>
     <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:removeDependency>
     <swb:herarquicalRelation rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
@@ -569,10 +582,9 @@
     <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >Usuario que se asigna como responsable de conseguir el objetivo</rdfs:comment>
   </owl:ObjectProperty>
-  <owl:ObjectProperty rdf:ID="myObjective">
-    <owl:inverseOf rdf:resource="#hasIndicator"/>
-    <rdfs:range rdf:resource="#Objective"/>
-    <rdfs:domain rdf:resource="#Indicator"/>
+  <owl:ObjectProperty rdf:about="#themeInv">
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >theme</swb:propertyCodeName>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="championFacilitator">
     <rdfs:label xml:lang="es">Facilitador de champion</rdfs:label>
@@ -599,11 +611,6 @@
         <rdfs:label xml:lang="es">Siguiente</rdfs:label>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
-  </owl:ObjectProperty>
-  <owl:ObjectProperty rdf:ID="myPerspective">
-    <rdfs:range rdf:resource="#Perspective"/>
-    <owl:inverseOf rdf:resource="#hasObjective"/>
-    <rdfs:domain rdf:resource="#Objective"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="period">
     <rdfs:domain rdf:resource="#Measure"/>
