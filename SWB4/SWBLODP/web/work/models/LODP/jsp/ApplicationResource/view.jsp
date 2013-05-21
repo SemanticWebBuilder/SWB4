@@ -542,7 +542,7 @@
     
     System.out.println("NOMBRE COMPLETO AUTHOR" + " " + fullName);
     
-        boolean bupdated = LODPUtils.updateAPPViews(aps);  // se actualiza los views
+        boolean bupdated = LODPUtils.updateAppViews(aps);  // se actualiza los views
 //        System.out.println("booleano" + " " + bupdated);
 //        System.out.println("titulo" + " " + aps.getAppTitle());
 //        System.out.println("autor" + " " + aps.getAppAuthor());
