@@ -27,6 +27,8 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.URL;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -95,6 +97,14 @@ public class LongFileUploader extends GenericResource {
         String path = "";
         String cmd = "";
         String param = "";
+        String redirectedURL = URLDecoder.decode(request.getParameter(redirectURL),"ISO8859-1");
+        if (!redirectedURL.startsWith("/")){
+            redirectedURL = "";
+        }
+        
+        
+        
+        
         if ("".equals(cmd) && request.getParameter(parameter) != null) {
 //            System.out.println("parameter:"+request.getParameter(parameter));
             so = paramRequest.getWebPage().getWebSite().getSemanticModel()
@@ -154,7 +164,7 @@ public class LongFileUploader extends GenericResource {
                         + "</script><script type=\"text/javascript\">"
                         + "var " + id + "_lfu = new LongFileUploader(\"" + urlBase + 
                         "\",\"" + so.getId() //Revisar...
-                        + "\", \"" + id + "\",\""+redirectURL+"\");</script>");
+                        + "\", \"" + id + "\",\""+redirectedURL+"\");</script>");
                 out.println("<div id=\"" + id + "\"><form>file: <input type=\"file\" "
                         + "name=\"updfile\" id=\"updfile\" "
                         + "onchange=\"" + id + "_lfu.sendFile(this)\"/>"
@@ -237,7 +247,7 @@ public class LongFileUploader extends GenericResource {
         out.print("<input name=\"frmProperty\" value=\"" + frmProperty + "\">");
         
         out.println("<br/>");
-        out.println("URL para redireccionar al terminar");
+        out.println("Nombre del parámetro que contiene el URL para redireccionar al terminar");
         out.println("<br/>");
         out.print("<input name=\"frmRedirectURL\" value=\"" + frmRedirectURL + "\">");
 
