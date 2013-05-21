@@ -3,6 +3,8 @@
     Created on : 8/05/2013, 03:34:59 PM
     Author     : Lennin
 --%>
+<%@page import="com.infotec.lodp.swb.Publisher"%>
+<%@page import="com.infotec.lodp.swb.Developer"%>
 <%@page import="com.infotec.lodp.swb.resources.ApplicationResource"%>
 <%@page import="com.infotec.lodp.swb.Dataset"%>
 <%@page import="com.infotec.lodp.swb.resources.DataSetResource"%>
@@ -18,7 +20,8 @@
 <%@page import="com.infotec.lodp.swb.LicenseType"%>
 <%@page import="java.util.Iterator"%>
 <%@page import="org.semanticwb.portal.api.SWBResourceURL"%>
-<jsp:useBean id="paramRequest" scope="request" class="org.semanticwb.portal.api.SWBParamRequest"/>
+<!DOCTYPE html>
+<jsp:useBean id="paramRequest" scope="request" type="org.semanticwb.portal.api.SWBParamRequest" />
 
 
 <%
@@ -30,7 +33,7 @@
     WebSite wsite = wpage.getWebSite();
     String cancelar = "cancel";
     
-    if(user.isSigned()){
+    if(null!=user&&user.isSigned()&& (user.getSemanticObject().createGenericInstance() instanceof Developer || user.getSemanticObject().createGenericInstance() instanceof Publisher)){
  %>
 
  <script type="text/javascript">

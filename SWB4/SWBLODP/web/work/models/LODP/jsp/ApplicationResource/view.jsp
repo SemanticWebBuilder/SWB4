@@ -584,7 +584,7 @@
                 &nbsp;
                 &nbsp;
                 <%
-                if(user.isSigned()){
+                if(user.isSigned()&& (user.getSemanticObject().createGenericInstance() instanceof Developer || user.getSemanticObject().createGenericInstance() instanceof Publisher)){
                 %>
                     <a href="<%=renderURL.setMode(SWBResourceURL.Mode_EDIT).setParameter("uri", aps.getEncodedURI())%>" ><%=paramRequest.getLocaleString("lbl_editar")%></a>
                 <%
