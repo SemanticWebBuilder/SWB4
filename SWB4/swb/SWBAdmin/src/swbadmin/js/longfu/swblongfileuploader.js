@@ -1,10 +1,11 @@
-function LongFileUploader(baseURL, ruta, eleid) {
+function LongFileUploader(baseURL, ruta, eleid, endurl) {
     this.baseURL = baseURL;
     this.ruta = ruta;
     this.toSendFiles = new Array();
     start = this.get(this.baseURL + "/start");
     this.chunkSize = start.chunkSize;
     this.eleid = eleid;
+    this.endurl = endurl;
 }
 
 LongFileUploader.prototype.get = function(url, postdata) {
@@ -96,6 +97,7 @@ LongFileUploader.prototype.finishFile = function(porEnviar) {
         alert("El archivo " + porEnviar.name + " fue guardado en " + this.ruta);
     else
         alert("El archivo no pudo moverse a " + this.ruta);
+    window.location=endurl;
 }
 
 LongFileUploader.prototype.processFile = function(porEnviar) {
