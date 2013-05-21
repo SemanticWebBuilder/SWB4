@@ -65,6 +65,7 @@ public class LongFileUploader extends GenericResource {
     private String parameter = "";
     private String classUri = "";
     private String propertyName = "";
+    private String redirectURL = "";
 
     {
         tmpplace = new File(org.semanticwb.SWBPortal.getWorkPath() + "/lngtmp/"); //workingpath
@@ -153,7 +154,7 @@ public class LongFileUploader extends GenericResource {
                         + "</script><script type=\"text/javascript\">"
                         + "var " + id + "_lfu = new LongFileUploader(\"" + urlBase + 
                         "\",\"" + so.getId() //Revisar...
-                        + "\", \"" + id + "\");</script>");
+                        + "\", \"" + id + "\",\""+redirectURL+"\");</script>");
                 out.println("<div id=\"" + id + "\"><form>file: <input type=\"file\" "
                         + "name=\"updfile\" id=\"updfile\" "
                         + "onchange=\"" + id + "_lfu.sendFile(this)\"/>"
@@ -177,9 +178,10 @@ public class LongFileUploader extends GenericResource {
     public void doAdmin(HttpServletRequest request, HttpServletResponse response,
             SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         PrintWriter out = response.getWriter();
-        String frmParameter = getResourceBase().getAttribute("frmParameter");
-        String frmClass = getResourceBase().getAttribute("frmClass");
-        String frmProperty = getResourceBase().getAttribute("frmProperty");
+        String frmParameter = getResourceBase().getAttribute("frmParameter","");
+        String frmClass = getResourceBase().getAttribute("frmClass","");
+        String frmProperty = getResourceBase().getAttribute("frmProperty","");
+        String frmRedirectURL = getResourceBase().getAttribute("frmRedirectURL","");
 
         String act = request.getParameter("act");
         if (act != null) {
@@ -189,11 +191,14 @@ public class LongFileUploader extends GenericResource {
             getResourceBase().setAttribute("frmClass", frmClass);
             frmProperty = request.getParameter("frmProperty");
             getResourceBase().setAttribute("frmProperty", frmProperty);
+            frmRedirectURL = request.getParameter("frmRedirectURL");
+            getResourceBase().setAttribute("frmRedirectURL", frmRedirectURL);
             try {
                 getResourceBase().updateAttributesToDB();
                 parameter = frmParameter;
                 classUri = frmClass;
                 propertyName = frmProperty;
+                redirectURL = frmRedirectURL;
                 out.print("<script type=\"text/javascript\">showStatus('Configuración actualizada');</script>");
             } catch (Exception e) {
                 log.error(e);
@@ -230,6 +235,11 @@ public class LongFileUploader extends GenericResource {
         out.println("Nombre de la propiedad a actualizar");
         out.println("<br/>");
         out.print("<input name=\"frmProperty\" value=\"" + frmProperty + "\">");
+        
+        out.println("<br/>");
+        out.println("URL para redireccionar al terminar");
+        out.println("<br/>");
+        out.print("<input name=\"frmRedirectURL\" value=\"" + frmRedirectURL + "\">");
 
         out.println("<br/>");
 
@@ -258,6 +268,10 @@ public class LongFileUploader extends GenericResource {
             base.setAttribute("frmProperty", "");
         }
         propertyName = base.getAttribute("frmProperty");
+        if (null == base.getAttribute("frmRedirectURL")) {
+            base.setAttribute("frmRedirectURL", "");
+        }
+        propertyName = base.getAttribute("frmRedirectURL");
     }
 
     private void startUploadProcess(HttpServletRequest request, HttpServletResponse 
