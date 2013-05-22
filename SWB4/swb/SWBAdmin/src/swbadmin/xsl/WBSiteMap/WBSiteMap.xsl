@@ -6,7 +6,7 @@
         <li>
             <xsl:if test="@leaf = '0'">
                 <a class="icomap">
-                    <xsl:attribute name="onclick"><xsl:value-of select="@onclick"/></xsl:attribute>
+                    <xsl:attribute name="href"><xsl:value-of select="@href"/></xsl:attribute>
                     <span>
                         <xsl:value-of select="@key"/>
                     </span>
@@ -14,11 +14,11 @@
             </xsl:if>
             <xsl:if test="@leaf = '1'">
                 <a class="icomap-trans">
-                    <xsl:attribute name="onclick"><xsl:value-of select="@onclick"/></xsl:attribute>
+                    <xsl:attribute name="href"><xsl:value-of select="href"/></xsl:attribute>
                 </a>
             </xsl:if>
             <a>
-                <xsl:attribute name="onclick"><xsl:value-of select="@url"/></xsl:attribute>
+                <xsl:attribute name="href"><xsl:value-of select="@url"/></xsl:attribute>
                 <xsl:value-of select="@title"/>
             </a>
             <xsl:for-each select="branch">
