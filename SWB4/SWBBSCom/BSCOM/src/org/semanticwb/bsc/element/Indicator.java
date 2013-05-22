@@ -14,14 +14,14 @@ public class Indicator extends org.semanticwb.bsc.element.base.IndicatorBase
     /**
      * Obtiene el prefijo para identificar un indicador. 
      * En caso de que el prefijo sea nulo, asigna un prefijo en autom&aacute;tico. 
-     * @return {@code String} Regresa un string con el prefijo asociado al identificador, 
-     * si el identificador es asignado en autom&aacute;tico utiliza el prefijo del objetivo
-     * seguido de un número consecutivo asignado por un motor.
+     * @return {@code String} Regresa un string con el prefijo asociado al indicador, 
+     * si el prefijo es asignado en autom&aacute;tico utiliza el prefijo del objetivo
+     * seguido de un n&uacute;mero consecutivo asignado por un motor.
      * <p>
      * Ejemplo:
      * </p> 
      * <p>
-     * El motor asigna un n&uacute;mero 1 para el Objetivo F1, se obtendr&iacute;a el siguiente identificador: 
+     * El motor asigna un n&uacute;mero 1 para el Objetivo F1, se obtendr&iacute;a el siguiente prefijo: 
      *  {@literal  F1.1 }
      * </p>
      */
