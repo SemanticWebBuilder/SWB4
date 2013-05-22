@@ -132,9 +132,9 @@ public class WBSiteMap extends GenericAdmResource
      */
     public Document getDom(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         Resource base=getResourceBase();
-        SWBResourceURL url=paramRequest.getRenderUrl();
-        url.setCallMethod(url.Call_DIRECT);
-        url.setMode("bind");
+        SWBResourceURL url=paramRequest.getRenderUrl().setCallMethod(SWBResourceURL.Call_DIRECT).setMode("bind");
+//        url.setCallMethod(url.Call_DIRECT);
+//        url.setMode("bind");
         int level;
         try {
             level = Integer.parseInt(base.getAttribute("level"),10);
@@ -167,9 +167,9 @@ public class WBSiteMap extends GenericAdmResource
         PrintWriter out = response.getWriter();
         Resource base=getResourceBase();
 
-        SWBResourceURL url=paramRequest.getRenderUrl();
-        url.setCallMethod(url.Call_DIRECT);
-        url.setMode("bind");
+        SWBResourceURL url = paramRequest.getRenderUrl().setCallMethod(SWBResourceURL.Call_DIRECT).setMode("bind");
+//        url.setCallMethod(url.Call_DIRECT);
+//        url.setMode("bind");
 
         HashMap params = new HashMap();
         Enumeration<String> names = request.getParameterNames();
@@ -505,12 +505,12 @@ if(tmhome == null) {
                 if(opened) {
                     params.append("&"+tmhome.getId()+"=1");
                     node.setAttribute("leaf", "0");
-                    node.setAttribute("onclick", "getHtml('"+url+"?reptm="+tmit.getId()+"&reptp=" + tmhome.getId()+params+"','tree_'+'"+base.getWebSiteId()+"')");
+                    node.setAttribute("href", "javascript:getHtml('"+url+"?reptm="+tmit.getId()+"&reptp=" + tmhome.getId()+params+"','tree_'+'"+base.getWebSiteId()+"');return false;");
                     node.setAttribute("key", "-");
                 }else {
                     params.append("&"+tmhome.getId()+"=0");
                     node.setAttribute("leaf", "0");
-                    node.setAttribute("onclick", "getHtml('"+url+"?reptm="+tmit.getId()+"&reptp=" + tmhome.getId()+params+"','tree_'+'"+base.getWebSiteId()+"')");
+                    node.setAttribute("href", "javascript:getHtml('"+url+"?reptm="+tmit.getId()+"&reptp=" + tmhome.getId()+params+"','tree_'+'"+base.getWebSiteId()+"');return false;");
                     node.setAttribute("key", "+");
                 }
 
@@ -602,14 +602,14 @@ if(tpsite == null) {
                     if(opened) {
                         params.append("&"+tmhome.getId()+"=0");
                         node.setAttribute("leaf", "0");
-                        node.setAttribute("onclick", "getHtml('"+url+"?reptm="+tmit.getId()+"&reptp=" + tmhome.getId()+params+"','tree_'+'"+base.getWebSiteId()+"')");
+                        node.setAttribute("href", "javascript:getHtml('"+url+"?reptm="+tmit.getId()+"&reptp=" + tmhome.getId()+params+"','tree_'+'"+base.getWebSiteId()+"');return false;");
                         node.setAttribute("key", "+");
                         if(level==0)
                             opened = false;
                     }else {
                         params.append("&"+tmhome.getId()+"=1");
                         node.setAttribute("leaf", "0");
-                        node.setAttribute("onclick", "getHtml('"+url+"?reptm="+tmit.getId()+"&reptp=" + tmhome.getId()+params+"','tree_'+'"+base.getWebSiteId()+"')");
+                        node.setAttribute("href", "javascript:getHtml('"+url+"?reptm="+tmit.getId()+"&reptp=" + tmhome.getId()+params+"','tree_'+'"+base.getWebSiteId()+"');return false;");
                         node.setAttribute("key", "-");
                         opened = true;
                     }
@@ -617,12 +617,12 @@ if(tpsite == null) {
                     if(opened) {
                         params.append("&"+tmhome.getId()+"=1");
                         node.setAttribute("leaf", "0");
-                        node.setAttribute("onclick", "getHtml('"+url+"?reptm="+tmit.getId()+"&reptp=" + tmhome.getId()+params+"','tree_'+'"+base.getWebSiteId()+"')");
+                        node.setAttribute("href", "javascript:getHtml('"+url+"?reptm="+tmit.getId()+"&reptp=" + tmhome.getId()+params+"','tree_'+'"+base.getWebSiteId()+"');return false;");
                         node.setAttribute("key", "-");
                     }else {
                         params.append("&"+tmhome.getId()+"=0");
                         node.setAttribute("leaf", "0");
-                        node.setAttribute("onclick", "getHtml('"+url+"?reptm="+tmit.getId()+"&reptp=" + tmhome.getId()+params+"','tree_'+'"+base.getWebSiteId()+"')");
+                        node.setAttribute("href", "javascript:getHtml('"+url+"?reptm="+tmit.getId()+"&reptp=" + tmhome.getId()+params+"','tree_'+'"+base.getWebSiteId()+"');return false;");
                         node.setAttribute("key", "+");
                     }
                 }
@@ -683,14 +683,14 @@ if(tpsite == null) {
                             if(opened) {
                                 params.append("&"+webpage.getId()+"=0");
                                 child.setAttribute("leaf", "0");
-                                child.setAttribute("onclick", "getHtml('"+url+"?reptm="+tmit.getId()+"&reptp="+webpage.getId()+params+"','tree_'+'"+tmit.getId()+"')");
+                                child.setAttribute("href", "javascript:getHtml('"+url+"?reptm="+tmit.getId()+"&reptp="+webpage.getId()+params+"','tree_'+'"+tmit.getId()+"');return false;");
                                 child.setAttribute("key", "+");
                                 if(this.level==level)
                                     opened = false;
                             }else {
                                 params.append("&"+webpage.getId()+"=1");
                                 child.setAttribute("leaf", "0");
-                                child.setAttribute("onclick", "getHtml('"+url+"?reptm="+tmit.getId()+"&reptp="+webpage.getId()+params+"','tree_'+'"+tmit.getId()+"')");
+                                child.setAttribute("href", "javascript:getHtml('"+url+"?reptm="+tmit.getId()+"&reptp="+webpage.getId()+params+"','tree_'+'"+tmit.getId()+"');return false;");
                                 child.setAttribute("key", "-");
                                 opened = true;
                             }
@@ -698,12 +698,12 @@ if(tpsite == null) {
                             if(opened) {
                                 params.append("&"+webpage.getId()+"=1");
                                 child.setAttribute("leaf", "0");
-                                child.setAttribute("onclick", "getHtml('"+url+"?reptm="+tmit.getId()+"&reptp="+webpage.getId()+params+"','tree_'+'"+tmit.getId()+"')");
+                                child.setAttribute("href", "javascript:getHtml('"+url+"?reptm="+tmit.getId()+"&reptp="+webpage.getId()+params+"','tree_'+'"+tmit.getId()+"');return false;");
                                 child.setAttribute("key", "-");
                             }else {
                                 params.append("&"+webpage.getId()+"=0");
                                 child.setAttribute("leaf", "0");
-                                child.setAttribute("onclick", "getHtml('"+url+"?reptm="+tmit.getId()+"&reptp="+webpage.getId()+params+"','tree_'+'"+tmit.getId()+"')");
+                                child.setAttribute("href", "javascript:getHtml('"+url+"?reptm="+tmit.getId()+"&reptp="+webpage.getId()+params+"','tree_'+'"+tmit.getId()+"');return false;");
                                 child.setAttribute("key", "+");
                             }
                         }
@@ -767,13 +767,13 @@ if(tpsite == null) {
                             if(opened) {
                                 params.append("&"+webpage.getId()+"=0");
                                 child.setAttribute("leaf", "0");
-                                child.setAttribute("onclick", "getHtml('"+url+"?reptm="+tmit.getId()+"&reptp="+webpage.getId()+params+"','tree_'+'"+tmit.getId()+"')");
+                                child.setAttribute("href", "javascript:getHtml('"+url+"?reptm="+tmit.getId()+"&reptp="+webpage.getId()+params+"','tree_'+'"+tmit.getId()+"');return false;");
                                 child.setAttribute("key", "+");
                                 opened = false;
                             }else {
                                 params.append("&"+webpage.getId()+"=1");
                                 child.setAttribute("leaf", "0");
-                                child.setAttribute("onclick", "getHtml('"+url+"?reptm="+tmit.getId()+"&reptp="+webpage.getId()+params+"','tree_'+'"+tmit.getId()+"')");
+                                child.setAttribute("href", "javascript:getHtml('"+url+"?reptm="+tmit.getId()+"&reptp="+webpage.getId()+params+"','tree_'+'"+tmit.getId()+"');return false;");
                                 child.setAttribute("key", "-");
                                 opened = true;
                             }
@@ -781,12 +781,12 @@ if(tpsite == null) {
                             if(opened) {
                                 params.append("&"+webpage.getId()+"=1");
                                 child.setAttribute("leaf", "0");
-                                child.setAttribute("onclick", "getHtml('"+url+"?reptm="+tmit.getId()+"&reptp="+webpage.getId()+params+"','tree_'+'"+tmit.getId()+"')");
+                                child.setAttribute("href", "javascript:getHtml('"+url+"?reptm="+tmit.getId()+"&reptp="+webpage.getId()+params+"','tree_'+'"+tmit.getId()+"');return false;");
                                 child.setAttribute("key", "-");
                             }else {
                                 params.append("&"+webpage.getId()+"=0");
                                 child.setAttribute("leaf", "0");
-                                child.setAttribute("onclick", "getHtml('"+url+"?reptm="+tmit.getId()+"&reptp="+webpage.getId()+params+"','tree_'+'"+tmit.getId()+"')");
+                                child.setAttribute("href", "javascript:getHtml('"+url+"?reptm="+tmit.getId()+"&reptp="+webpage.getId()+params+"','tree_'+'"+tmit.getId()+"');return false;");
                                 child.setAttribute("key", "+");
                             }
                         }
