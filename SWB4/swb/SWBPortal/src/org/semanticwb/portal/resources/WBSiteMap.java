@@ -168,8 +168,8 @@ public class WBSiteMap extends GenericAdmResource
         Resource base=getResourceBase();
 
         SWBResourceURL url = paramRequest.getRenderUrl().setCallMethod(SWBResourceURL.Call_DIRECT).setMode("bind");
-//        url.setCallMethod(url.Call_DIRECT);
-//        url.setMode("bind");
+        url.setCallMethod(url.Call_DIRECT);
+        url.setMode("bind");
 
         HashMap params = new HashMap();
         Enumeration<String> names = request.getParameterNames();
@@ -520,7 +520,7 @@ if(tmhome == null) {
 //                    html.append("</a>");
                 }else {
                     node.setAttribute("title", tmhome.getDisplayTitle(user.getLanguage()));
-                    node.setAttribute("url", "window.location='"+tmhome.getUrl()+"'");
+                    node.setAttribute("url", tmhome.getUrl());
                 }
 
                 if(opened) {
@@ -633,7 +633,7 @@ if(tpsite == null) {
 //                    html.append("</a>");
                 }else {
                     node.setAttribute("title", tmhome.getDisplayTitle(user.getLanguage()));
-                    node.setAttribute("url", "window.location='"+tmhome.getUrl()+"'");
+                    node.setAttribute("url", tmhome.getUrl());
                 }
 
                 if(tpsite!=null && opened) {                
@@ -714,7 +714,7 @@ if(tpsite == null) {
 //                            html.append("</a>");
                         }else {
                             child.setAttribute("title", webpage.getDisplayTitle(user.getLanguage()));
-                            child.setAttribute("url", "window.location='"+webpage.getUrl()+"'");
+                            child.setAttribute("url", webpage.getUrl());
                         }
 
                         if(opened) {
@@ -727,8 +727,8 @@ if(tpsite == null) {
 //                            html.append(webpage.getDisplayTitle(this.language));
 //                            html.append("</a>");
                         }else {
-                            child.setAttribute("url", "window.location='"+webpage.getUrl()+"'");
                             child.setAttribute("title", webpage.getDisplayTitle(user.getLanguage()));
+                            child.setAttribute("url", webpage.getUrl());
                         }
                     }
                 }
@@ -797,7 +797,7 @@ if(tpsite == null) {
 //                            html.append("</a>");
                         }else {
                             child.setAttribute("title", webpage.getDisplayTitle(user.getLanguage()));
-                            child.setAttribute("url", "window.location='"+webpage.getUrl()+"'");
+                            child.setAttribute("url", webpage.getUrl());
                         }
 
                         if(opened) {
@@ -809,9 +809,9 @@ if(tpsite == null) {
 //                            html.append("<a onclick=\"getHtml('"+url+"?reptm="+tmit.getId()+"&reptp="+webpage.getId()+params+"','tree_'+'"+tmit.getId()+"')\">");
 //                            html.append(webpage.getDisplayTitle(this.language));
 //                            html.append("</a>");
-                        }else {                            
-                            child.setAttribute("url", "window.location='"+webpage.getUrl()+"'");
+                        }else {
                             child.setAttribute("title", webpage.getDisplayTitle(user.getLanguage()));
+                            child.setAttribute("url", webpage.getUrl());
                         }
                     }
                 }
