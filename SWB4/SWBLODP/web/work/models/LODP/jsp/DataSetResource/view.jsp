@@ -349,9 +349,6 @@
         <%
             SWBResourceURL urlorder = paramRequest.getRenderUrl();
             urlorder.setParameter("act", "");
-            if (null != filterby) {
-                urlorder.setParameter("filter", filterby);
-            }
             if (null != filteruri) {
                 urlorder.setParameter("filteruri", filteruri);
             }
@@ -401,6 +398,7 @@
             <li><h3>No se encontraron Data-Sets</h3></li>
                     <%                                } else {
 
+                    String wpurl = wpage.getUrl()+"?act=detail&suri=";
                         while (itds.hasNext()) {
 
                             //PAGINACION ////////////////////
@@ -416,12 +414,12 @@
 
 
                             Dataset ds = itds.next();
-                            SWBResourceURL urldet = paramRequest.getRenderUrl();
-                            urldet.setParameter("act", "detail");
-                            urldet.setParameter("suri", ds.getURI());
+                           // SWBResourceURL urldet = paramRequest.getRenderUrl();
+                           // urldet.setParameter("act", "detail");
+                           // urldet.setParameter("suri", ds.getURI());
                     %>
             <li>
-                <label><a href="<%=urldet.toString()%>"><%=ds.getDatasetTitle()%></a></label> 
+                <label><a href="<%=wpurl+ ds.getURI()%>"><%=ds.getDatasetTitle()%></a></label> 
                 <%=paramRequest.getLocaleString("lbl_publisher")%>:<%=ds.getInstitution().getInstitutionTitle()%>&nbsp;&nbsp;&nbsp;<%=paramRequest.getLocaleString("lbl_formats")%>:<%=ds.getDatasetFormat()%>&nbsp;&nbsp;&nbsp;<%=paramRequest.getLocaleString("lbl_updated")%>:<%=sdf.format(ds.getDatasetUpdated())%><br/>
                 <p><%=ds.getDatasetDescription()%></p>
             </li>
@@ -474,9 +472,6 @@
                     if (null != direction) {
                         urlNext.setParameter("direction", direction);
                     }
-                    if (null != filterby) {
-                        urlNext.setParameter("filter", filterby);
-                    }
                     if (null != filteruri) {
                         urlNext.setParameter("filteruri", filteruri);
                     }
@@ -495,10 +490,6 @@
                     }
                     if (null != direction) {
                         urlNext.setParameter("direction", direction);
-                    }
-
-                    if (null != filterby) {
-                        urlNext.setParameter("filter", filterby);
                     }
                     if (null != filteruri) {
                         urlNext.setParameter("filteruri", filteruri);
@@ -521,9 +512,6 @@
                     }
                     if (null != direction) {
                         urlNext.setParameter("direction", direction);
-                    }
-                    if (null != filterby) {
-                        urlNext.setParameter("filter", filterby);
                     }
                     if (null != filteruri) {
                         urlNext.setParameter("filteruri", filteruri);
@@ -552,7 +540,8 @@
     <%
         Dataset ds = (Dataset) go;
         //ds.getDatasetDescription()
-        boolean bupdated = LODPUtils.updateDSViews(ds);  // se actualiza los views
+        
+        boolean bupdated = ds.incViews(); //LODPUtils.updateDSViews(ds);  // se actualiza los views
 %>
     <div>
         <h2><%=ds.getDatasetTitle()%></h2> 
@@ -715,19 +704,11 @@
             
             HashMap<String, TreeSet<DatasetLog>> hmlogs = new HashMap<String, TreeSet<DatasetLog>>();
              Dataset ds = (Dataset) go; 
-             TreeSet<DatasetLog> tsd = null;
              TreeSet<DatasetLog> tsv =null;
              Iterator<DatasetLog> itdslog  = DatasetLog.ClassMgr.listDatasetLogByDataset(ds, wsite);
              while(itdslog.hasNext()){
                  DatasetLog dslog = itdslog.next();
-                 if(LODPUtils.Log_Type_Download==dslog.getLogType()){
-                     if(hmlogs.get("downloads")==null){
-                         // nuevo treeset para logs downloads
-                         tsd =  new TreeSet<DatasetLog>();
-                     } 
-                     tsd = hmlogs.get("downloads") ;
-                     tsd.add(dslog);
-                 } else if(LODPUtils.Log_Type_View==dslog.getLogType()){
+                    if(LODPUtils.Log_Type_View==dslog.getLogType()){
                      if(hmlogs.get("views")==null){
                          // nuevo treeset para logs downloads
                          tsv = new TreeSet<DatasetLog>();
@@ -738,11 +719,8 @@
              }
              
              Set<DatasetLog> sdv = DataSetResource.sortDSLogByCreated(tsv.iterator(), false);
-             Set<DatasetLog> sdd = DataSetResource.sortDSLogByCreated(tsd.iterator(), false);
              // informacion registrada en el log
              long numviews = sdv.size();
-             long numdload = sdd.size();
-             
              Date dateldload = null;
              Date datelviews = null;
              DatasetLog dslogtmp = null; 
@@ -757,15 +735,8 @@
                  }
              }
              // obteniendo la fecha de la ultima vez que se descargó el dataset
-             if(numdload>0){ 
-                 if(sdd.iterator().hasNext()){
-                     Iterator<DatasetLog> itdslogd = sdd.iterator();
-                     if(itdslogd.hasNext()){
-                         dslogtmp = itdslogd.next();
-                         dateldload = dslogtmp.getLogCreated(); 
-                     }
-                 }
-             }
+             dateldload = ds.getLastDownload();
+             
              
      %>
 <div>
@@ -776,22 +747,25 @@
                 <th><%=paramRequest.getLocaleString("lbl_lastDownload")%></th>
                 <th><%=paramRequest.getLocaleString("lbl_views")%></th>
                 <th><%=paramRequest.getLocaleString("lbl_lastView")%></th>
+                <th><%=paramRequest.getLocaleString("lbl_numcomments")%></th>
+                <th><%=paramRequest.getLocaleString("lbl_numappss")%></th>
             </tr>
         </thead>
         <tbody>
             <%
-            Iterator<DatasetLog> itdsl = DatasetLog.ClassMgr.listDatasetLogByDataset(ds); 
-            while(itdsl.hasNext()){
-                DatasetLog dslog = itdsl.next();
-                // preguntar como se desplegarán las estadísticas
-            }
+            long numcomm= SWBUtils.Collections.sizeOf(ds.listComments());
+            long numapps= SWBUtils.Collections.sizeOf(Application.ClassMgr.listApplicationByRelatedDataset(ds)); 
             SWBResourceURL urlst2 = paramRequest.getRenderUrl();
             urlst2.setParameter("suri", suri);
-            urlst2.setParameter("act", "stats2");  //statType
-            
+            urlst2.setParameter("act", "stats2");  //statType         
             %>
             <tr>
-                <td><a href="<%=urlst2.toString()%>&statType=<%=LODPUtils.Log_Type_Download%>" title="ver lista de descargas"><%=ds.getDownloads()%></a></td><td><%=dateldload!=null?sdf2.format(dateldload):"---"%></td><td><a href="<%=urlst2.toString()%>&statType=<%=LODPUtils.Log_Type_View%>" title="ver lista de visitas"><%= ds.getDatasetView()%></a></td><td><%=datelviews!=null?sdf2.format(datelviews):"---"%></td>
+                <td><a href="<%=urlst2.toString()%>&statType=<%=LODPUtils.Log_Type_Download%>" title="ver lista de descargas"><%=ds.getDownloads()%></a></td>
+                <td><%=dateldload!=null?sdf2.format(dateldload):"---"%></td>
+                <td><a href="<%=urlst2.toString()%>&statType=<%=LODPUtils.Log_Type_View%>" title="ver lista de visitas"><%= ds.getDatasetView()%></a></td>
+                <td><%=datelviews!=null?sdf2.format(datelviews):"---"%></td>
+                <td><%=numcomm%></td>
+                <td><%=numapps%></td>
             </tr>
         </tbody>
     </table>
