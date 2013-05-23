@@ -5,5 +5,5 @@ import org.semanticwb.portal.api.SWBActionResponse;
 
 public interface Messageable extends org.semanticwb.social.base.MessageableBase
 {
-     public void postMsg(Message message, HttpServletRequest request, SWBActionResponse response);
+     public void postMsg(Message message);
 }

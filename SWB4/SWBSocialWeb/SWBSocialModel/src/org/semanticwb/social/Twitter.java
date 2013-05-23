@@ -73,7 +73,7 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
     }
 
     @Override
-    public void postMsg(Message message, HttpServletRequest request, SWBActionResponse response) {
+    public void postMsg(Message message) {
         if (message != null && message.getMsg_Text() != null && message.getMsg_Text().trim().length() > 1) {
             twitter4j.Twitter twitter = new TwitterFactory().getInstance();
             try {
@@ -98,9 +98,8 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
         }
     }
 
-    public void postPhoto(Photo photo, HttpServletRequest request, SWBActionResponse response) {
-        User user = response.getUser();
-
+    public void postPhoto(Photo photo) {
+        
         if (photo != null && photo.getPhoto() != null && photo.getPhoto().trim().length() > 1) {
             twitter4j.Twitter twitter = new TwitterFactory().getInstance();
             twitter.setOAuthConsumer(this.getAppKey(), this.getSecretKey());

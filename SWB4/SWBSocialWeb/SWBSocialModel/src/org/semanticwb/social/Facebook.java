@@ -393,8 +393,7 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
         return isThereMoreMsgs;
     }
     
-    public void postMsg(Message message, HttpServletRequest request,
-                        SWBActionResponse response) {
+    public void postMsg(Message message) {
         
         Map<String, String> params = new HashMap<String, String>(2);
         params.put("access_token", this.getAccessToken());
@@ -431,8 +430,7 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
         }
     }
 
-    public void postPhoto(Photo photo, HttpServletRequest request,
-                          SWBActionResponse response) {
+    public void postPhoto(Photo photo) {
         
         Map<String, String> params = new HashMap<String, String>(2);
         if (this.getAccessToken() != null) {
@@ -477,7 +475,7 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
         }
     }
 
-    public void postVideo(Video video, HttpServletRequest request, SWBActionResponse response) 
+    public void postVideo(Video video) 
     {
         Map<String, String> params = new HashMap<String, String>(3);
         if (this.getAccessToken() != null) {

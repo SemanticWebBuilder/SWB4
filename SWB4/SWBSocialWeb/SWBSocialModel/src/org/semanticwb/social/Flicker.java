@@ -58,12 +58,12 @@ public class Flicker extends org.semanticwb.social.base.FlickerBase
 
     
     @Override
-    public void postPhoto(org.semanticwb.social.Photo photo, HttpServletRequest request, SWBActionResponse response) {
-        String action = response.getAction();
+    public void postPhoto(org.semanticwb.social.Photo photo) {
+        //String action = response.getAction();
         Flickr flickr = null;
-        User user = response.getUser();
-
-        if(UPLOAD_Photo.equals(action) && photo != null && photo.getPhoto() != null) {
+        
+        //if(UPLOAD_Photo.equals(action) && photo != null && photo.getPhoto() != null) {
+        if(photo != null && photo.getPhoto() != null) {
            String photoSend = SWBPortal.getWorkPath() + photo.getWorkPath() + "/" + org.semanticwb.social.Photo.social_photo.getName() +
                      "_" + photo.getId() + "_" + photo.getPhoto();
 

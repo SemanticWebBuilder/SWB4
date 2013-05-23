@@ -23,6 +23,7 @@ import org.semanticwb.social.SocialPFlow;
 import org.semanticwb.social.SocialPFlowInstance;
 import org.semanticwb.social.SocialPFlowRef;
 import org.semanticwb.social.SocialTopic;
+import org.semanticwb.social.util.SWBSocialUtil;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -525,10 +526,19 @@ public class SocialPFlowMgr {
                                     }
                                     else if (serviceName.equals("publish"))
                                     {
-                                        //resource.setActive(true);  TODOSOCIAL:LOS PostOut NO SON ACTIVEABLES, Ver si desde aquí envío a publicar el PostOut a su red social.
-                                        if (notification != null)
+                                        System.out.println("ESTA LISTO PARA PUBLICAR EL POSTOut en SocialPFlowMgr/approveResource,notification:"+notification);
+                                        try
                                         {
-                                            notification.publish(resource);
+                                            SWBSocialUtil.PostOutUtil.publishPost(resource, null, null);
+                                            resource.setPublished(true);
+                                            if (notification != null)
+                                            {
+                                                System.out.println("En approveResource--13:"+notification);
+                                                notification.publish(resource);
+                                            }
+                                        }catch(Exception se)
+                                        {
+                                            log.error(se);
                                         }
                                     }
                                 }
@@ -649,8 +659,21 @@ public class SocialPFlowMgr {
                             }
                             else if (serviceName.equals("publish"))
                             {
-                                //TODOSOCIAL:Como el PostOut no es activable, ver que voy a hacer aqui, talvez ya tenga que publicar el mensaje(PostOut) en su red social
-                                //resource.setActive(true); 
+                                try
+                                {
+                                    System.out.println("ESTA LISTO PARA PUBLICAR EL POSTOut en SocialPFlowMgr/rejectContent");
+                                    SWBSocialUtil.PostOutUtil.publishPost(resource, null, null);
+                                    resource.setPublished(true);
+                                    /*
+                                    if (notification != null)
+                                    {
+                                        System.out.println("En approveResource--13:"+notification);
+                                        notification.publish(resource);
+                                    }*/
+                                }catch(Exception se)
+                                {
+                                    log.error(se);
+                                }
                             }
                         }
                     }
@@ -707,7 +730,7 @@ public class SocialPFlowMgr {
      * @param pflow the pflow
      * @param message the message
      */
-    private static void initContent(PostOut resource, SocialPFlow pflow, String message)
+    public static void initContent(PostOut resource, SocialPFlow pflow, String message)
     {
         SocialPFlowInstance instance = resource.getPflowInstance();
         String version = String.valueOf(instance.getVersion());
@@ -874,7 +897,7 @@ public class SocialPFlowMgr {
      * @param message the message
      * @param user the user
      */
-    public static void sendResourceToAuthorize(PostOut resource, SocialPFlow pflow, String message, User user)
+    public static void sendResourceToAuthorize(PostOut resource, SocialPFlow pflow, String message)
     {
         WebSite wsite=WebSite.ClassMgr.getWebSite(resource.getSemanticObject().getModel().getName());
         if (message == null)
@@ -992,7 +1015,6 @@ public class SocialPFlowMgr {
                     {
                         Element eres = (Element) resourceTypes.item(ires);
                         String iresw = eres.getAttribute("id");
-
                         if (iresw.equals(typeresource))
                         {
                             if (resource.getPflowInstance() == null)
@@ -1007,6 +1029,7 @@ public class SocialPFlowMgr {
                                     case -1:
                                     case 0: //no enviado
                                         return true;
+                                    case 1: return true;    //TODOSOCIAL:REVISAR-Puesto por Jorge Jiménez    
                                     case 3: //rechazado
                                         return true;
                                 }
@@ -1083,12 +1106,10 @@ public class SocialPFlowMgr {
          * @param messageType the message type
          * @param message the message
          */
-        private static void mailToNotify(PostOut postOut, String activityName, String messageType, String message) {
-            System.out.println("mailToNotify-1");
+        public static void mailToNotify(PostOut postOut, String activityName, String messageType, String message) {
             
             User wbuser = postOut.getCreator();
             Locale locale = Locale.getDefault();
-            System.out.println("locale:"+locale.getLanguage());
             try {
                 ResourceBundle bundle = null;
                 try {
@@ -1097,7 +1118,6 @@ public class SocialPFlowMgr {
                     bundle = ResourceBundle.getBundle("org/semanticwb/social/util/pflow/SocialPFlowMgr");
                 }
                 if (postOut.getPflowInstance() != null) {
-                    System.out.println("mailToNotify-1");
                     WebSite wsite=WebSite.ClassMgr.getWebSite(postOut.getSemanticObject().getModel().getName());
                     SocialPFlow flow = postOut.getPflowInstance().getPflow();
                     Document docdef = SWBUtils.XML.xmlToDom(flow.getXml());
@@ -1106,7 +1126,6 @@ public class SocialPFlowMgr {
                     for (int iworkflow = 0; iworkflow < workflows.getLength(); iworkflow++) {
                         Element eworkflow = (Element) workflows.item(iworkflow);
                         if (eworkflow.getAttribute("version").equals(version + ".0")) {
-                            System.out.println("mailToNotify-2");
                             NodeList activities = eworkflow.getElementsByTagName("activity");
                             for (int i = 0; i < activities.getLength(); i++) {
                                 Element activity = (Element) activities.item(i);
@@ -1114,9 +1133,7 @@ public class SocialPFlowMgr {
                                     activityName = activity.getAttribute("name");
                                 }
                                 if (activity.getAttribute("name").equalsIgnoreCase(activityName)) {
-                                    System.out.println("mailToNotify-2");
                                     if (activity.getAttribute("type").equalsIgnoreCase("AuthorActivity")) {
-                                        System.out.println("mailToNotify-4");
                                         User user = postOut.getCreator();
                                         String msgMail = bundle.getString("msg1") + " " + postOut.getId() + " " + bundle.getString("msg2") + " '" + postOut.getMsg_Text() + "' " + bundle.getString("msg3") + ".";
 
@@ -1137,7 +1154,6 @@ public class SocialPFlowMgr {
                                         msgMail += "\r\n" + bundle.getString("socialTopic") + ": " + socialTopic.getTitle() + ".\r\n";
                                         SWBUtils.EMAIL.sendBGEmail(user.getEmail(), bundle.getString("msg7") + " " + postOut.getId() + " " + bundle.getString("msg8"), msgMail);
                                     } else if (activity.getAttribute("type").equalsIgnoreCase("EndActivity")) {
-                                        System.out.println("mailToNotify-5");
                                         User user = postOut.getCreator();
                                         String msgMail = bundle.getString("msg1") + " " + postOut.getId() + " " + bundle.getString("msg2") + " '" + postOut.getMsg_Text() + "' " + bundle.getString("msg9") + ".";
                                         msgMail += "\r\n" + bundle.getString("sitio") + ": " + wsite.getTitle() + ".\r\n";
@@ -1151,7 +1167,6 @@ public class SocialPFlowMgr {
                                         msgMail += "\r\n" + bundle.getString("socialTopic") + ": " + socialTopic.getTitle() + ".\r\n";
                                         SWBUtils.EMAIL.sendBGEmail(user.getEmail(), bundle.getString("msg7") + " " + postOut.getId() + " " + bundle.getString("msg10") + "", msgMail);
                                     } else if (activity.getAttribute("type").equalsIgnoreCase("Activity")) {
-                                        System.out.println("mailToNotify-6");
                                         HashSet<User> husers = new HashSet<User>();
                                         NodeList users = activity.getElementsByTagName("user");
                                         for (int j = 0; j < users.getLength(); j++) {
@@ -1193,7 +1208,6 @@ public class SocialPFlowMgr {
                                             to = to.substring(0, to.length() - 1);
                                         }
                                         if (!to.equalsIgnoreCase("")) {
-                                            System.out.println("mailToNotify-7");
                                             String subject = bundle.getString("msg7") + " " + postOut.getId() + " " + bundle.getString("msg11");
                                             String msg = bundle.getString("msg1") + " " + postOut.getId() + " " + bundle.getString("msg2") + " '" + postOut.getMsg_Text() + "' " + bundle.getString("msg12") + " '" + activityName + "'.\r\n";
                                             msg += "\r\n" + bundle.getString("sitio") + ": " + wsite.getTitle() + ".\r\n";
@@ -1222,15 +1236,11 @@ public class SocialPFlowMgr {
                                                 msg += "\r\n" + bundle.getString("msg13") + " " + postOut.getId() + " " + bundle.getString("msg14");
                                             }
                                             if (activity.getAttribute("days") != null && activity.getAttribute("hours") != null) {
-                                                System.out.println("mailToNotify-8");
                                                 if (!(activity.getAttribute("days").equals("0") && activity.getAttribute("hours").equals("0"))) {
-                                                    System.out.println("mailToNotify-9");
                                                     msg += "\r\n" + bundle.getString("msgr1") + " " + activity.getAttribute("days") + " " + bundle.getString("days") + " " + bundle.getString("and") + " " + activity.getAttribute("hours") + " " + bundle.getString("hours") + " .";
                                                 }
                                             }
-                                            System.out.println("Va a enviar correo...J-to:"+to+",subject:"+subject+",msg:"+msg);
                                             SWBUtils.EMAIL.sendBGEmail(to, subject, msg);
-                                            System.out.println("Va a enviar correo...J1");
                                         }
                                     }
                                 }
