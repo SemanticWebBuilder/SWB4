@@ -68,6 +68,7 @@ public class SocialSentPost extends GenericResource {
     /** The Mode_ action. */
     String Mode_Action = "paction";
     String Mode_PFlowMsg="doPflowMsg";
+    String Mode_PreView="preview";
 
     /**
      * Creates a new instance of SWBAWebPageContents.
@@ -338,7 +339,6 @@ public class SocialSentPost extends GenericResource {
             
             SWBResourceURL urlpre = paramRequest.getRenderUrl();
             urlpre.setParameter("suri", id);
-            urlpre.setParameter("act", "");
             urlpre.setParameter("page", "" + p);
             urlpre.setParameter("sval", sobj.getURI());
             urlpre.setParameter("preview", "true");
@@ -372,7 +372,7 @@ public class SocialSentPost extends GenericResource {
                 if (canSend2Flow) {
                     SWBResourceURL url2flow = paramRequest.getRenderUrl();
                     url2flow.setParameter("suri", id);
-                    url2flow.setMode("doPflowMsg");
+                    url2flow.setMode(Mode_PFlowMsg);
                     url2flow.setParameter("sval", sobj.getURI());
                     url2flow.setParameter("page", "" + p);
                     url2flow.setParameter("pfid", pfid);
@@ -432,7 +432,11 @@ public class SocialSentPost extends GenericResource {
             out.println("<td>");
             if(sobj.getPostInSource()!=null)
             {
-                out.println("<a href=\""+paramRequest.getRenderUrl().setMode(Mode_SOURCE).setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("postUri", sobj.getURI()) +"\">Origen</a>");
+                SWBResourceURL url=paramRequest.getRenderUrl().setMode(Mode_SOURCE).setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("postUri", sobj.getPostInSource().getURI());  
+                //out.println("<a href=\"#\" title=\"" + paramRequest.getLocaleString("senddocument2flow") + "\" onclick=\"showDialog('" + url2flow + "','" + paramRequest.getLocaleString("comentary") + "'); return false;\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/images/enviar-flujo.gif\" border=\"0\" alt=\"" + paramRequest.getLocaleString("senddocument2flow") + "\"></a>");
+                out.println("<a href=\"#\" title=\"" + paramRequest.getLocaleString("source") + "\" onclick=\"showDialog('" + url + "','" + paramRequest.getLocaleString("source") + "'); return false;\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/images/enviar-flujo.gif\" border=\"0\" alt=\"" + paramRequest.getLocaleString("source") + "\"></a>");
+                
+                //paramRequest.getRenderUrl().setMode(Mode_SOURCE).setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("postUri", sobj.getURI()) +"\">Origen</a>");
             }else{
                 out.println("---");
             }
@@ -537,14 +541,17 @@ public class SocialSentPost extends GenericResource {
      * @throws IOException Signals that an I/O exception has occurred.
      */
     public void doPreview(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        System.out.println("Entra a doPreview");
         String id = request.getParameter("sval");
         PrintWriter out = response.getWriter();
         out.println("<fieldset>");
         out.println("<legend>" + paramRequest.getLocaleString("previewdocument") + "</legend>");
         try {
+            /*
             SWBResource res = SWBPortal.getResourceMgr().getResource(id);
             ((SWBParamRequestImp) paramRequest).setResourceBase(res.getResourceBase());
             res.render(request, response, paramRequest);
+            **/
         } catch (Exception e) {
             log.error("Error while getting content string ,id:" + id, e);
         }
@@ -1004,6 +1011,7 @@ public class SocialSentPost extends GenericResource {
      * Show the source message of One PostOut that comes as a parameter "postUri"
      */
     public void doShowSource(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        System.out.println("Entra a doShowSourceJ");
         response.setContentType("text/html;charset=iso-8859-1");
         response.setHeader("Cache-Control", "no-cache");
         response.setHeader("Pragma", "no-cache");
