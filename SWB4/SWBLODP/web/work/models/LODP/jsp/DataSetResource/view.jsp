@@ -419,7 +419,7 @@
                            // urldet.setParameter("suri", ds.getURI());
                     %>
             <li>
-                <label><a href="<%=wpurl+ ds.getURI()%>"><%=ds.getDatasetTitle()%></a></label> 
+                <label><a href="<%=wpurl+ ds.getEncodedURI()%>"><%=ds.getDatasetTitle()%></a></label> 
                 <%=paramRequest.getLocaleString("lbl_publisher")%>:<%=ds.getInstitution().getInstitutionTitle()%>&nbsp;&nbsp;&nbsp;<%=paramRequest.getLocaleString("lbl_formats")%>:<%=ds.getDatasetFormat()%>&nbsp;&nbsp;&nbsp;<%=paramRequest.getLocaleString("lbl_updated")%>:<%=sdf.format(ds.getDatasetUpdated())%><br/>
                 <p><%=ds.getDatasetDescription()%></p>
             </li>
