@@ -32,6 +32,7 @@ import org.semanticwb.social.SocialTopic;
 import org.semanticwb.social.Video;
 import org.semanticwb.social.Videoable;
 import org.semanticwb.social.util.PostableObj;
+import org.semanticwb.social.util.SWBSocialUtil;
 import org.semanticwb.social.util.SendPostThread;
 
 /**
@@ -101,7 +102,8 @@ public class CreatePost extends GenericResource {
                     } else if (toPost.equals("video")) {
                         mgr = new SWBFormMgr(Video.sclass, wsite.getSemanticObject(), null);
                     }
-                    if (mgr != null) {
+                    if (mgr != null) 
+                    {
                         mgr.setFilterRequired(false);
                         SemanticObject sobj = mgr.processForm(request);
                         org.semanticwb.social.Post post = (org.semanticwb.social.Post) sobj.createGenericInstance();
@@ -116,6 +118,11 @@ public class CreatePost extends GenericResource {
                             SocialNetwork socialNet = (SocialNetwork) semObject.createGenericInstance();
                             //Se agrega la red social de salida al post
                             postOut.addSocialNetwork(socialNet);
+                        }
+                            
+                            SWBSocialUtil.PostOutUtil.publishPost(postOut, request, response);
+                            
+                            /*
                             //Se revisa si es de tipo mensaje, foto o video.
                             if (toPost.equals("msg") && socialNet instanceof Messageable) {
                                 System.out.println("MENSAJE!!");
@@ -148,21 +155,19 @@ public class CreatePost extends GenericResource {
                                 sendPostThread.start();
                                 response.setMode(SWBResourceURL.Mode_EDIT);
                             }
-                        }
-                    }
-                }
+                            * */
+                 }
+               }
             } else {
                 response.setMode(SWBResourceURL.Mode_EDIT);
             }
         } catch (Exception e) {
             log.error(e.getMessage());
-            System.out.println("Error en process Action");
             e.printStackTrace();
         }
     }
 
     public void doCreatePost(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {        
-        System.out.println("\ndoCreatePost");
         RequestDispatcher rd = request.getRequestDispatcher(SWBPlatform.getContextPath() +"/work/" + paramRequest.getWebPage().getWebSiteId() +"/jsp/post/typeOfContent.jsp");
         request.setAttribute("valor", request.getParameter("valor"));
         request.setAttribute("wsite", request.getParameter("wsite"));

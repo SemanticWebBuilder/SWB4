@@ -269,8 +269,8 @@ public class SocialTopicMsgOut extends GenericResource {
                 }
                 obj.put("nets", getSocialNets(post));
                 obj.put("isShared", post.isIsMsgShared());
-                System.out.println("post.getPostInOrigen()-GGeorge:"+post.getPostInOrigen());
-                if(post.getPostInOrigen()!=null) obj.put("postIn", post.getPostInOrigen());
+                System.out.println("post.getPostInOrigen()-GGeorge:"+post.getPostInSource());
+                if(post.getPostInSource()!=null) obj.put("postIn", post.getPostInSource());
                 else obj.put("postIn", "---");
                 
                 System.out.println("post.getPflowInstance():"+post.getPflowInstance());

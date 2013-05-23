@@ -44,7 +44,6 @@ import org.semanticwb.portal.api.SWBParamRequestImp;
 import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.api.SWBResourceURL;
 import org.semanticwb.social.PostOut;
-import org.semanticwb.social.SocialPFlow;
 import org.semanticwb.social.util.SocialLoader;
 
 // TODO: Auto-generated Javadoc
@@ -72,8 +71,11 @@ public class SocialDocumentsToAuhorize extends GenericResource
             WebSite site = SWBContext.getWebSite(request.getParameter("site"));            
             if (site != null)
             {
-                Resource resource = site.getResource(request.getParameter("res"));                
-                if (resource != null && SWBPortal.getPFlowManager().isReviewer(resource, user))
+                SemanticObject semObj=SemanticObject.getSemanticObject(request.getParameter("res"));
+                if(semObj==null) return;
+                if(!(semObj.createGenericInstance() instanceof PostOut)) return;
+                PostOut postOut=(PostOut)semObj.createGenericInstance();
+                if (postOut != null && SocialLoader.getPFlowManager().isReviewer(postOut, user))
                 {
                     String msg = request.getParameter("msg");                    
                     if (!msg.trim().equals(""))
@@ -81,11 +83,11 @@ public class SocialDocumentsToAuhorize extends GenericResource
                         String action = request.getParameter("wbaction");                        
                         if (action.equals("a"))
                         {
-                            SWBPortal.getPFlowManager().approveResource(resource, user, msg);
+                            SocialLoader.getPFlowManager().approveResource(postOut, user, msg);
                         }
                         if (action.equals("r"))
                         {
-                            SWBPortal.getPFlowManager().rejectResource(resource, user, msg);
+                            SocialLoader.getPFlowManager().rejectResource(postOut, user, msg);
                         }
                     }
                 }                
@@ -409,6 +411,7 @@ public class SocialDocumentsToAuhorize extends GenericResource
                     out.println(resource.getPflowInstance().getStep());
                     out.println("</td>");
                     out.println("<td width='20%'>");
+                    
                     out.println(resource.getSocialNetwork()!=null?resource.getSocialNetwork().getDisplayTitle(lang):"---");
                     out.println("</td>");
                     out.println("</td>");
@@ -423,9 +426,9 @@ public class SocialDocumentsToAuhorize extends GenericResource
                         if(SocialLoader.getPFlowManager().isReviewer(resource, user))
                         {                        
                             String imgauthorize=SWBPortal.getContextPath()+"/swbadmin/icons/activa.gif";
-                            out.println("<a title=\""+paramRequest.getLocaleString("authorize")+"\" href=\"#\" onclick=\"showAuthorize('"+ resource.getId() +"')\"><img  src=\""+imgauthorize+"\"></a>");
+                            out.println("<a title=\""+paramRequest.getLocaleString("authorize")+"\" href=\"#\" onclick=\"showAuthorize('"+ resource.getURI() +"')\"><img  src=\""+imgauthorize+"\"></a>");
                             String imgreject=SWBPortal.getContextPath()+"/swbadmin/images/delete.gif";
-                            out.println("<a title=\""+paramRequest.getLocaleString("reject")+"\" href=\"#\" onclick=\"showReject('"+ resource.getId() +"')\"><img  src=\""+imgreject+"\"></a>");
+                            out.println("<a title=\""+paramRequest.getLocaleString("reject")+"\" href=\"#\" onclick=\"showReject('"+ resource.getURI() +"')\"><img  src=\""+imgreject+"\"></a>");
                         }
                     }catch(Exception e)
                     {

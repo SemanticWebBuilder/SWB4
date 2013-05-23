@@ -93,11 +93,9 @@ public class SocialTopicMsgIn extends GenericResource {
         final Resource base = getResourceBase();
         final String action = response.getAction();
         if (action.equals("postMessage")) {
-            System.out.println("Entra a processAction/ADD..");
             if(request.getParameter("objUri")!=null)
             {
                 PostIn postIn=(PostIn)SemanticObject.getSemanticObject(request.getParameter("objUri")).createGenericInstance();
-                SocialTopic socialTopic=postIn.getSocialTopic();
                 
                 SocialNetwork socialNet=(SocialNetwork)SemanticObject.getSemanticObject(request.getParameter("socialNetUri")).createGenericInstance();
                 ArrayList aSocialNets=new ArrayList();
@@ -122,15 +120,9 @@ public class SocialTopicMsgIn extends GenericResource {
                 {
                     socialPFlow=(SocialPFlow)SemanticObject.createSemanticObject(socialFlow).createGenericInstance();
                 }
-                System.out.println("processAction/socialPFlow--GG:"+socialPFlow);
-                
-                System.out.println("postIn:"+postIn);
-                System.out.println("socialNet:"+socialNet);
-                System.out.println("swsite:"+wsite);
-                System.out.println("socialPFlow:"+socialPFlow);
                 
                 
-                SWBSocialUtil.PFlowMgr.sendNewPost(postIn, postIn.getSocialTopic(), socialPFlow, aSocialNets, wsite, request.getParameter("toPost"), request, response);
+                SWBSocialUtil.PostOutUtil.sendNewPost(postIn, postIn.getSocialTopic(), socialPFlow, aSocialNets, wsite, request.getParameter("toPost"), request, response);
             }
         }else if (SWBResourceURL.Action_EDIT.equals(action)) {
             WebSite wsite = base.getWebSite();
@@ -380,16 +372,12 @@ public class SocialTopicMsgIn extends GenericResource {
     }
     
     public void doCreatePost(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {        
-        System.out.println("\ndoCreatePost");
         RequestDispatcher rd = request.getRequestDispatcher(SWBPlatform.getContextPath() +"/work/" + paramRequest.getWebPage().getWebSiteId() +"/jsp/post/typeOfContent.jsp");
         request.setAttribute("valor", request.getParameter("valor"));
         request.setAttribute("wsite", request.getParameter("wsite"));
         request.setAttribute("objUri", request.getParameter("objUri"));
         //request.setAttribute("action", request.getParameter("action"));
         request.setAttribute("paramRequest", paramRequest);
-        System.out.println("valor en doCreatePost:"+request.getParameter("valor"));
-        System.out.println("valor en wsite:"+request.getParameter("wsite"));
-        System.out.println("valor en objUri:"+request.getParameter("objUri"));
         try {
             rd.include(request, response);
         } catch (ServletException ex) {
