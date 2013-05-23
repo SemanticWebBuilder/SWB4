@@ -198,7 +198,7 @@
                             txtDS.append(" ");
                             txtDS.append(ds.getDatasetDescription() != null ? ds.getDatasetDescription().trim() : "");
                             txtDS.append(" ");
-                            txtDS.append(LODPUtils.getDSTagList(ds));
+                            txtDS.append(LODPUtils.getDSTagList(ds,","));
                             String reviewTXT = txtDS.toString().trim().toLowerCase(); // texto completo en donde se buscará la ocurrencia
                             //System.out.println("Texto DS: "+reviewTXT);
                             if ((DataSetResource.reviewQuery(hmquery, reviewTXT)) && hmresults.get(ds.getURI()) == null) {  //||txtAuto.indexOf(queryinput)>-1 
@@ -567,7 +567,7 @@
             </li>
             <li>
                 <%
-                    String taglist = LODPUtils.getDSTagList(ds);
+                    String taglist = LODPUtils.getDSTagList(ds,",");
                 %>
                 <label><%=paramRequest.getLocaleString("lbl_labels")%>:</label><p><%=taglist%></p>
             </li>
