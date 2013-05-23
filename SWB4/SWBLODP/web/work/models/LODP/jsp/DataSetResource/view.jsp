@@ -149,13 +149,8 @@
                     itds1 = Dataset.ClassMgr.listDatasets(wsite);
                 }
 
-                //List<Dataset> listsize = SWBUtils.Collections.copyIterator(itds1);  
-                
-                System.out.println("Listado DS .... ");
-                
                 // obteniendo Datasets que coincidan con el texto a buscar
                 String queryinput = request.getParameter("search");
-                System.out.println("query..."+queryinput);
                 String queryOriginal = queryinput != null ? queryinput : paramRequest.getLocaleString("btn_search");//"Search"
                 if (null == queryinput) {
                     queryinput = "";
@@ -220,7 +215,6 @@
                     Dataset ds = itds1.next();
                     hmcp.put(ds.getURI(), ds);
                 }
-//                System.out.println("Antes de ordenar DS....");
                 Iterator<Dataset> itds = null;
                 System.out.println("size: "+hmcp.size());
                 if(hmcp.size()>0){
@@ -230,9 +224,6 @@
                 //itds = DataSetResource.orderDS(hmcp.values().iterator(), orderby);
                 intSize = 0;
                 }
-//                 System.out.println("Tamaño DS...."+intSize);
-
-                 //itds = DataSetResource.orderDS(hmcp.values().iterator(), orderby);
 
                 Date endSearch = new Date(System.currentTimeMillis());
                 long searchTime = endSearch.getTime() - startSearch.getTime();
@@ -274,11 +265,11 @@
     </form>
 </div>
 <div class="izquierdo">
+    <!--
     <div class="izq_sector">
         <ul>
-            <li><h3><%=paramRequest.getLocaleString("lbl_sectorFilter")%></h3></li>
-                    <%
-                        Iterator<Sector> itsec = Sector.ClassMgr.listSectors(wsite);
+            <li><h3><%//=paramRequest.getLocaleString("lbl_sectorFilter")%></h3></li>
+                    <%/*                        Iterator<Sector> itsec = Sector.ClassMgr.listSectors(wsite);
                         while (itsec.hasNext()) {
                             Sector sec = itsec.next();
 
@@ -290,14 +281,15 @@
                             if (queryinput != null && queryinput.trim().length() > 0) {
                                 url.setParameter("search", queryinput);
                             }
-
+*/
                     %>
-            <li><a href="<%=url.toString()%>" title="<%=sec.getSectorDescription() != null ? sec.getSectorDescription().trim() : sec.getSectorTitle()%>"><%=sec.getSectorTitle()%></a></li>  
+            <li><a href="<%//=url.toString()%>" title="<%//=sec.getSectorDescription() != null ? sec.getSectorDescription().trim() : sec.getSectorTitle()%>"><%//=sec.getSectorTitle()%></a></li>  
                 <%
-                    }
+                  //  }
                 %>
         </ul>   
     </div>
+        -->
     <div class="izq_institucion">
         <ul>
             <li><h3><%=paramRequest.getLocaleString("lbl_institFilter")%></h3></li>
@@ -395,7 +387,7 @@
             <%
                 if (intSize == 0) {
             %>
-            <li><h3>No se encontraron Data-Sets</h3></li>
+            <li><h3><%=paramRequest.getLocaleString("lbl_notDSfound")%></h3></li>
                     <%                                } else {
 
                     String wpurl = wpage.getUrl()+"?act=detail&suri=";
@@ -736,8 +728,7 @@
              }
              // obteniendo la fecha de la ultima vez que se descargó el dataset
              dateldload = ds.getLastDownload();
-             
-             
+
      %>
 <div>
     <table>
