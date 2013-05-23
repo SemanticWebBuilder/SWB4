@@ -25,22 +25,15 @@
  dojo.require("dojox.layout.ExpandoPane");
 </script>
 <%
-System.out.println("Entra a Jsp Response-0");
 if(request.getParameter("showSource")!=null)
 {
     SWBResourceURL url = paramRequest.getRenderUrl();
-    System.out.println("Entra a Jsp Response");
     SemanticObject sObjPostIn=(SemanticObject)request.getAttribute("sObjPostIn");
-    System.out.println("Entra a Jsp Response-1:"+sObjPostIn);
     PostIn postIn=(PostIn)sObjPostIn.createGenericInstance();
-    System.out.println("Entra a Jsp Response-2:"+postIn);
     SocialNetwork postInSN=postIn.getPostInSocialNetwork();
-    System.out.println("Entra a Jsp Response-3:"+postInSN);
     
     Map args = new HashMap();
-    System.out.println("wsite k:"+postIn.getSemanticObject().getModel().getName());
     args.put("wsite", postIn.getSemanticObject().getModel().getName());
-    System.out.println("objUri k:"+postIn.getURI());
     args.put("objUri", postIn.getURI());
     args.put("postInSN", postInSN.getURI());
     
