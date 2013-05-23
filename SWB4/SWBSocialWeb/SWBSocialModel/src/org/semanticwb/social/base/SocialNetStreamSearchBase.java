@@ -15,7 +15,7 @@ public abstract class SocialNetStreamSearchBase extends org.semanticwb.model.SWB
    */
     public static final org.semanticwb.platform.SemanticProperty social_snss_SocialNetwork=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#snss_SocialNetwork");
    /**
-   * Fecha siguiente para busqueda en una red social.
+   * Fecha o id siguiente para busqueda en una red social.
    */
     public static final org.semanticwb.platform.SemanticProperty social_nextDatetoSearch=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#nextDatetoSearch");
    /**

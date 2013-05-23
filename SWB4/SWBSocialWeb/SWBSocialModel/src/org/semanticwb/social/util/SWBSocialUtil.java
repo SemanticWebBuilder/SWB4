@@ -5,6 +5,7 @@
 package org.semanticwb.social.util;
 
 import java.io.StringReader;
+import java.net.SocketException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -42,6 +43,7 @@ import org.semanticwb.social.Photoable;
 import org.semanticwb.social.PostIn;
 import org.semanticwb.social.PostOut;
 import org.semanticwb.social.PunctuationSign;
+import org.semanticwb.social.SocialFlow.SocialPFlowMgr;
 import org.semanticwb.social.SocialNetwork;
 import org.semanticwb.social.SocialPFlow;
 import org.semanticwb.social.SocialPFlowInstance;
@@ -737,13 +739,14 @@ public class SWBSocialUtil implements SWBAppObject {
         }
     }
 
-    public static class PFlowMgr 
+    public static class PostOutUtil
     {
 
-        public static void sendNewPost(PostIn postIn, SocialTopic socialTopic, SocialPFlow socialPFlow, ArrayList<SocialNetwork> aSocialNets, WebSite wsite, String toPost, HttpServletRequest request, SWBActionResponse response) {
+        public static void sendNewPost(PostIn postIn, SocialTopic socialTopic, SocialPFlow socialPFlow, ArrayList<SocialNetwork> aSocialNets, WebSite wsite, String toPost, HttpServletRequest request, SWBActionResponse response) 
+        {
             try {
                 //if(postIn==null && socialTopic!=null) wsite=WebSite.ClassMgr.getWebSite(socialTopic.getSemanticObject().getModel().getName());
-                System.out.println("sendNewPost/toPost:"+toPost);
+                //System.out.println("sendNewPost/toPost:"+toPost);
                 SWBFormMgr mgr = null;
                 if (toPost.equals("msg")) {
                     mgr = new SWBFormMgr(Message.sclass, wsite.getSemanticObject(), null);
@@ -754,7 +757,6 @@ public class SWBSocialUtil implements SWBAppObject {
                 }
                 System.out.println("sendNewPost/mgr:"+mgr);
                 if (mgr != null) {
-                    System.out.println("sendNewPost-1");
                     mgr.setFilterRequired(false);
                     SemanticObject sobj = mgr.processForm(request);
                     org.semanticwb.social.Post post = (org.semanticwb.social.Post) sobj.createGenericInstance();
@@ -764,64 +766,89 @@ public class SWBSocialUtil implements SWBAppObject {
                     //Si el PostOut que se acaba de crear, fue en consecuencia de una respuesta de una PostIn, este se agrega al nuevo PostOut
                     if(postIn!=null)    
                     {
-                        postOut.setPostInOrigen(postIn);
+                        postOut.setPostInSource(postIn);
                     }
-                    System.out.println("Creo postOut:"+postOut+",socialPFlow:"+socialPFlow);
+                    //Le agrego las redes sociales a las cuales se enviara el postOut, si se creó de una contestación, 
+                    //sería solo una red social la que vendría en el parametro "aSocialNets"
+                    for(int i=0;i<aSocialNets.size();i++)
+                    {
+                        SocialNetwork socialNet=aSocialNets.get(i);
+                        if(socialNet!=null)
+                        {
+                            postOut.addSocialNetwork(socialNet);
+                        }
+                    }
+                    
+                    
                     //SocialPFlow al que se va ha enviar el nuevo post, si no tiene(que llegue Nulo), entonces se envía el PostOut sin pasar por flujo
                     if (socialPFlow != null) {
-                        System.out.println("Entra a J1");
-                        String socialFlowComment=request.getParameter("socialFlowComment");
-                        System.out.println("processAction/socialFlowComment--GG:"+socialFlowComment);
-                        sendPostOutToAuthorize(postOut, socialPFlow, socialFlowComment);
-                        //initPostOut(postOut, socialPFlow, "");
+                        SocialLoader.getPFlowManager().sendResourceToAuthorize(postOut, socialPFlow, toPost);
+                        //sendPostOutToAuthorize(postOut, socialPFlow, socialFlowComment);
                     } else {
-                        System.out.println("Entra a J2");
                         //Revisa las redes sociales a las cuales se tiene que enviar el Post
                         //String[] socialUris = socialUri.split("\\|");  //Dividir valores
-                        Iterator<SocialNetwork> itSocialNets = aSocialNets.iterator();
-                        while (itSocialNets.hasNext()) {
-                            SocialNetwork socialNet = itSocialNets.next();
-                            System.out.println("Entra a J2-1:"+socialNet);
-                            //SemanticObject semObject = SemanticObject.createSemanticObject(tmp_socialUri, wsite.getSemanticModel());
-                            //SocialNetwork socialNet = (SocialNetwork) semObject.createGenericInstance();
-                            //Se agrega la red social de salida al post
-                            postOut.addSocialNetwork(socialNet);
-                            //Se revisa si es de tipo mensaje, foto o video.
-                            if (toPost.equals("msg") && socialNet instanceof Messageable) {
-                                System.out.println("MENSAJE!!");
-                                //TODO: YO CREO QUE LO QUE TENGO QUE HACER AQUI, ES UN THREAD POR CADA UNA DE LAS REDES SOCIALES A LAS QUE SE ENVÍE UN POST
-                                Messageable messageable = (Messageable) socialNet;
-                                //messageable.postMsg((Message) post, request, response);
-                                PostableObj postableObj = new PostableObj(messageable, post, toPost, request, response);
-                                SendPostThread sendPostThread = new SendPostThread();
-                                sendPostThread.addPostAble(postableObj);
-                                sendPostThread.start();
-                            } else if (toPost.equals("photo") && socialNet instanceof Photoable) {
-                                System.out.println("PHOTO!!");
-                                //TODO: YO CREO QUE LO QUE TENGO QUE HACER AQUI, ES UN THREAD POR CADA UNA DE LAS REDES SOCIALES A LAS QUE SE ENVÍE UN POST
-                                Photoable photoable = (Photoable) socialNet;
-                                //photoable.postPhoto((Photo) post, request, response);
-                                PostableObj postableObj = new PostableObj(photoable, post, toPost, request, response);
-                                SendPostThread sendPostThread = new SendPostThread();
-                                sendPostThread.addPostAble(postableObj);
-                                sendPostThread.start();
-                            } else if (toPost.equals("video") && socialNet instanceof Videoable) {
-                                System.out.println("VIDEO!!");
-                                //TODO: YO CREO QUE LO QUE TENGO QUE HACER AQUI, ES UN THREAD POR CADA UNA DE LAS REDES SOCIALES A LAS QUE SE ENVÍE UN POST
-                                Videoable videoable = (Videoable) socialNet;
-                                //videoable.postVideo((Video) post, request, response);
-                                PostableObj postableObj = new PostableObj(videoable, post, toPost, request, response);
-                                SendPostThread sendPostThread = new SendPostThread();
-                                sendPostThread.addPostAble(postableObj);
-                                sendPostThread.start();
-                            }
-                        }
+                        publishPost(postOut, request, response);
                     }
                 }
             } catch (Exception e) {
                 log.error(e);
             }
         }
+        
+        /*
+         * Publica un PostOut que llegue como parametro
+         * Publish a PostOut that comes as parameter
+         * Los parametros request y response no se utilizan, probar y si funciona así para postear en Flicker y Youtube,
+         * despues eliminarlos de los parametros que recibe este metodo.
+         */
+        public static void publishPost(PostOut postOut, HttpServletRequest request, SWBActionResponse response) throws SocketException
+        {
+            //try
+            {    
+                Iterator<SocialNetwork> itSocialNets = postOut.listSocialNetworks();
+                while (itSocialNets.hasNext()) {
+                    SocialNetwork socialNet = itSocialNets.next();
+                    //SemanticObject semObject = SemanticObject.createSemanticObject(tmp_socialUri, wsite.getSemanticModel());
+                    //SocialNetwork socialNet = (SocialNetwork) semObject.createGenericInstance();
+                    //Se agrega la red social de salida al post
+                    postOut.addSocialNetwork(socialNet);
+                    //Se revisa si es de tipo mensaje, foto o video.
+                    if (postOut instanceof Message && socialNet instanceof Messageable) {
+                        System.out.println("MENSAJE!!");
+                        //TODO: YO CREO QUE LO QUE TENGO QUE HACER AQUI, ES UN THREAD POR CADA UNA DE LAS REDES SOCIALES A LAS QUE SE ENVÍE UN POST
+                        Messageable messageable = (Messageable) socialNet;
+                        //messageable.postMsg((Message) post, request, response);
+                        PostableObj postableObj = new PostableObj(messageable, postOut, request, response);
+                        SendPostThread sendPostThread = new SendPostThread();
+                        sendPostThread.addPostAble(postableObj);
+                        sendPostThread.start();
+                    } else if (postOut instanceof Photo && socialNet instanceof Photoable) {
+                        System.out.println("PHOTO!!");
+                        //TODO: YO CREO QUE LO QUE TENGO QUE HACER AQUI, ES UN THREAD POR CADA UNA DE LAS REDES SOCIALES A LAS QUE SE ENVÍE UN POST
+                        Photoable photoable = (Photoable) socialNet;
+                        //photoable.postPhoto((Photo) post, request, response);
+                        PostableObj postableObj = new PostableObj(photoable, postOut, request, response);
+                        SendPostThread sendPostThread = new SendPostThread();
+                        sendPostThread.addPostAble(postableObj);
+                        sendPostThread.start();
+                    } else if (postOut instanceof Video && socialNet instanceof Videoable) {
+                        System.out.println("VIDEO!!");
+                        //TODO: YO CREO QUE LO QUE TENGO QUE HACER AQUI, ES UN THREAD POR CADA UNA DE LAS REDES SOCIALES A LAS QUE SE ENVÍE UN POST
+                        Videoable videoable = (Videoable) socialNet;
+                        //videoable.postVideo((Video) post, request, response);
+                        PostableObj postableObj = new PostableObj(videoable, postOut, request, response);
+                        SendPostThread sendPostThread = new SendPostThread();
+                        sendPostThread.addPostAble(postableObj);
+                        sendPostThread.start();
+                    }
+                }
+            }//catch(Exception e)
+            {
+                //log.error(e);
+            }
+            
+        }
+        
         
         /**
      * Send resource to authorize.
@@ -831,6 +858,7 @@ public class SWBSocialUtil implements SWBAppObject {
      * @param message the message
      * @param user the user
      */
+        /*
     public static void sendPostOutToAuthorize(PostOut postOut, SocialPFlow pflow, String message)
     {
         if (message == null)
@@ -865,10 +893,12 @@ public class SWBSocialUtil implements SWBAppObject {
                 instance.setPfinstPostOut(postOut);
                 instance.setStatus(1);
                 instance.setVersion(version);
-                initPostOut(postOut, pflow, message);
+                SocialLoader.getPFlowManager().initContent(postOut, pflow, message);
+                //initPostOut(postOut, pflow, message);
             }
         }
     }
+    * **/
 
         /**
          * Inits the content.
@@ -877,59 +907,54 @@ public class SWBSocialUtil implements SWBAppObject {
          * @param pflow the SocialPFlow
          * @param message the message
          */
+    /*
         private static void initPostOut(PostOut postOut, SocialPFlow pflow, String message) {
             SocialPFlowInstance instance = postOut.getPflowInstance();
-            System.out.println("iresw-initPostOut/instance:"+instance);
             String version = String.valueOf(instance.getVersion());
             String activity = null;
             String xml = pflow.getXml(); 
             Document docxml = SWBUtils.XML.xmlToDom(xml);
             NodeList workflows = docxml.getElementsByTagName("workflow");
-            System.out.println("initPostOut/xml:"+xml);
             for (int i = 0; i < workflows.getLength(); i++) {
                 Element workflow = (Element) workflows.item(i);
-                System.out.println("initPostOut/workflow:"+workflow);
                 version = version + ".0";
                 if ((workflow.getAttribute("version")).equals(version)) {
-                    System.out.println("initPostOut/version:"+version);
                     Element ecurrentActivity = null;
                     NodeList activities = workflow.getElementsByTagName("activity");
                     if (activities.getLength() > 0) {
                         ecurrentActivity = (Element) activities.item(0);
                         activity = ((Element) activities.item(0)).getAttribute("name");
-                        System.out.println("initPostOut/activity:"+activity);
                     }
                     try {
                         instance.setStep(activity);
-                        System.out.println("initPostOut/activity-2:"+activity);
                         long tinit = System.currentTimeMillis();
                         instance.setTime(new Date(tinit));
                         if (ecurrentActivity.getAttribute("type").equals("Activity")) {
                             long days = Long.parseLong(ecurrentActivity.getAttribute("days"));
                             long hours = 0;
-                            System.out.println("initPostOut/days:"+days);
                             if (ecurrentActivity.getAttribute("hours") != null && !ecurrentActivity.getAttribute("hours").equals("")) {
                                 hours = Long.parseLong(ecurrentActivity.getAttribute("hours"));
                             }
                             if (days > 0 || hours > 0) {
                                 long milliseconds = ((hours * 3600) + (days * 86400)) * 1000;
                                 //TODO agregar control de tiempo
-                            /*Timestamp timestart = occ.getDbdata().getFlowtime();
-                                 long timefirst = timestart.getTime() + milliseconds;
-                                 ControlFlow controlFlow = new ControlFlow(occ, new java.util.Date(timefirst), activity);
-                                 PFlowSrv.addControlFlow(controlFlow);*/
+                                //Timestamp timestart = occ.getDbdata().getFlowtime();
+                                // long timefirst = timestart.getTime() + milliseconds;
+                                // ControlFlow controlFlow = new ControlFlow(occ, new java.util.Date(timefirst), activity);
+                                // PFlowSrv.addControlFlow(controlFlow);
                             }
                         }
                     } catch (Exception e) {
                         log.error(e);
                     }
                     String messageType = "I";
-                    System.out.println("initPostOut/messageType:"+messageType);
-                    mailToNotify(postOut, activity, messageType, message);
+                    SocialPFlowMgr.mailToNotify(postOut, activity, messageType, message);
+                    //mailToNotify(postOut, activity, messageType, message);
                 }
 
             }
         }
+**/
 
         /**
          * Mail to notify.
@@ -939,6 +964,7 @@ public class SWBSocialUtil implements SWBAppObject {
          * @param messageType the message type
          * @param message the message
          */
+        /*
         private static void mailToNotify(PostOut postOut, String activityName, String messageType, String message) {
             System.out.println("mailToNotify-1");
             
@@ -1101,5 +1127,9 @@ public class SWBSocialUtil implements SWBAppObject {
                 return;
             }
         }
+        * */
+ 
+        
     }
+    
 }

@@ -13,6 +13,7 @@ import org.semanticwb.social.Message;
 import org.semanticwb.social.Messageable;
 import org.semanticwb.social.Photo;
 import org.semanticwb.social.Photoable;
+import org.semanticwb.social.Post;
 import org.semanticwb.social.SocialNetPostable;
 import org.semanticwb.social.Video;
 import org.semanticwb.social.Videoable;
@@ -67,25 +68,27 @@ public class SendPostThread extends java.lang.Thread {
                      if(obj instanceof PostableObj)
                      {
                        PostableObj postableObj=(PostableObj) obj;
-                       SocialNetPostable postable=postableObj.getPostable();
-                       String action=postableObj.getAction();
-                       if(action!=null)
+                       if(postableObj.getPost()!=null && postableObj.getPostable()!=null)
                        {
-                           if(action.equals("msg") && postable instanceof Messageable)
-                            {
-                                Messageable messageable=(Messageable) postable;
-                                messageable.postMsg((Message)postableObj.getPost(), postableObj.getRequest(), postableObj.getResponse());
-                            }else if(action.equals("photo") && postable instanceof Photoable)
-                            {
-                                Photoable photoable=(Photoable) postable;
-                                photoable.postPhoto((Photo)postableObj.getPost(), postableObj.getRequest(), postableObj.getResponse());
-                            }else if(action.equals("video") && postable instanceof Videoable)
-                            {
-                                System.out.println("ENTRA A SENTVIDEO...");
-                                Videoable videoable=(Videoable) postable;
-                                videoable.postVideo((Video)postableObj.getPost(), postableObj.getRequest(), postableObj.getResponse());
-                            }
+                         Post postOut=postableObj.getPost();  
+                         SocialNetPostable postable=postableObj.getPostable();
+                        
+                         if(postOut instanceof Message && postable instanceof Messageable)
+                          {
+                              Messageable messageable=(Messageable) postable;
+                              messageable.postMsg((Message)postableObj.getPost());
+                          }else if(postOut instanceof Photo && postable instanceof Photoable)
+                          {
+                              Photoable photoable=(Photoable) postable;
+                              photoable.postPhoto((Photo)postableObj.getPost());
+                          }else if(postOut instanceof Video && postable instanceof Videoable)
+                          {
+                              System.out.println("ENTRA A SENTVIDEO...");
+                              Videoable videoable=(Videoable) postable;
+                              videoable.postVideo((Video)postableObj.getPost());
+                          }
                        }
+                       
                      }
                     } catch (Exception e)
                     {

@@ -14,13 +14,10 @@ import com.google.gdata.data.youtube.YtPublicationState;
 import java.io.File;
 import java.net.URL;
 import java.util.StringTokenizer;
-import javax.servlet.http.HttpServletRequest;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.WebSite;
-import org.semanticwb.portal.api.SWBActionResponse;
-import org.semanticwb.social.util.SWBSocialUtil;
 
 
 public class Youtube extends org.semanticwb.social.base.YoutubeBase 
@@ -35,7 +32,7 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase
         super(base);
     }
 
-    public void postVideo(Video video, HttpServletRequest request, SWBActionResponse response)
+    public void postVideo(Video video)
     {
         System.out.println("Video K llega a Youtube:"+video);
         System.out.println("Video id:"+video.getId());
@@ -47,11 +44,11 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase
         if (service == null) {
             return;
         }
-        String action = response.getAction();
+        //String action = response.getAction();
         try {
-            if (action.equals("uploadVideo")) {
+            //if (action.equals("uploadVideo")) {
 
-                WebSite wsite=response.getWebPage().getWebSite();
+            //    WebSite wsite=response.getWebPage().getWebSite();
                 
                 VideoEntry newEntry = new VideoEntry();
 
@@ -149,9 +146,9 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase
                 }
 
 
-                response.setRenderParameter("jspResponse", "/swbadmin/jsp/social/videoable/videoable.jsp");
-                response.setRenderParameter("videoId", newEntry.getId());
-            }
+                //response.setRenderParameter("jspResponse", "/swbadmin/jsp/social/videoable/videoable.jsp");
+                //response.setRenderParameter("videoId", newEntry.getId());
+            //}
         } catch (Exception e) {
             log.error(e);
         }

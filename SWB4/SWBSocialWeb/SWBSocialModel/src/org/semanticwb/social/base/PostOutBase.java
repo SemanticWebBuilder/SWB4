@@ -4,7 +4,7 @@ package org.semanticwb.social.base;
    /**
    * Clase que comprende todos los tipos de Post de Salida que pueden ir siendo creados en la herramienta y que seran publicados a partir de esto en las diferentes redes sociales. Esta clase no se relaciona con una red social (con la clase SocialNetwork) porque un post de salida (desde la herramienta) podría ser enviado a diferentes redes sociales, sin embargo, es el mismo post de salida. Donde esta a que red social se envía esta en las instancias de la clase PostContainer. 
    */
-public abstract class PostOutBase extends org.semanticwb.social.Post implements org.semanticwb.social.PostTextable,org.semanticwb.social.PostDataable,org.semanticwb.model.Tagable,org.semanticwb.model.Traceable
+public abstract class PostOutBase extends org.semanticwb.social.Post implements org.semanticwb.model.Tagable,org.semanticwb.social.PostTextable,org.semanticwb.social.PostDataable,org.semanticwb.model.Traceable
 {
    /**
    * Clase que comprende todos los tipos de Post de entrada (Povientes del Listener)que pueden ir siendo creados en la herramienta.
@@ -13,7 +13,7 @@ public abstract class PostOutBase extends org.semanticwb.social.Post implements 
    /**
    * PostIn que sirvió como origen de esta instancia de PostOut
    */
-    public static final org.semanticwb.platform.SemanticProperty social_postInOrigen=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#postInOrigen");
+    public static final org.semanticwb.platform.SemanticProperty social_postInSource=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#postInSource");
    /**
    * Propiedad que indica si el mensaje de salida (PostOut) se origina de un mensaje que estamos solamente compartiendo de otro mensaje que llego desde PostIn, es decir, desde la red social Twitter, sería como darle a un mensaje de otra persona "retweet" y desde facebook, sería como darle a un mensaje de otra persona "Share".
    */
@@ -34,6 +34,10 @@ public abstract class PostOutBase extends org.semanticwb.social.Post implements 
    * Propiedad inversa que me regresa los postContainers con los cuales tiene referencia un objeto(instancia) PostOut, recordemos que se crea una instancia de PostContainer por una red social, de modo que si se envía un postOut a varias redes sociales(lo cual puede pasar) pues se deverían de crear varios postContainers (Si es que no hay ya creados) por cada una de estas redes sociales a las cuales se envía el PostOut.
    */
     public static final org.semanticwb.platform.SemanticProperty social_hasPostContainer_PostInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#hasPostContainer_PostInv");
+   /**
+   * Define si un PostOut se encuentra en estado de publicado o no.
+   */
+    public static final org.semanticwb.platform.SemanticProperty social_published=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#published");
    /**
    * Instancia de un recurso asociado a un flujo de publicación.
    */
@@ -135,26 +139,26 @@ public abstract class PostOutBase extends org.semanticwb.social.Post implements 
             return it;
         }
        /**
-       * Gets all org.semanticwb.social.PostOut with a determined PostInOrigen
-       * @param value PostInOrigen of the type org.semanticwb.social.PostIn
+       * Gets all org.semanticwb.social.PostOut with a determined PostInSource
+       * @param value PostInSource of the type org.semanticwb.social.PostIn
        * @param model Model of the org.semanticwb.social.PostOut
        * @return Iterator with all the org.semanticwb.social.PostOut
        */
 
-        public static java.util.Iterator<org.semanticwb.social.PostOut> listPostOutByPostInOrigen(org.semanticwb.social.PostIn value,org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.social.PostOut> listPostOutByPostInSource(org.semanticwb.social.PostIn value,org.semanticwb.model.SWBModel model)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.social.PostOut> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(social_postInOrigen, value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.PostOut> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(social_postInSource, value.getSemanticObject(),sclass));
             return it;
         }
        /**
-       * Gets all org.semanticwb.social.PostOut with a determined PostInOrigen
-       * @param value PostInOrigen of the type org.semanticwb.social.PostIn
+       * Gets all org.semanticwb.social.PostOut with a determined PostInSource
+       * @param value PostInSource of the type org.semanticwb.social.PostIn
        * @return Iterator with all the org.semanticwb.social.PostOut
        */
 
-        public static java.util.Iterator<org.semanticwb.social.PostOut> listPostOutByPostInOrigen(org.semanticwb.social.PostIn value)
+        public static java.util.Iterator<org.semanticwb.social.PostOut> listPostOutByPostInSource(org.semanticwb.social.PostIn value)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.social.PostOut> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(social_postInOrigen,value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.PostOut> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(social_postInSource,value.getSemanticObject(),sclass));
             return it;
         }
        /**
@@ -288,37 +292,37 @@ public abstract class PostOutBase extends org.semanticwb.social.Post implements 
         super(base);
     }
    /**
-   * Sets the value for the property PostInOrigen
-   * @param value PostInOrigen to set
+   * Sets the value for the property PostInSource
+   * @param value PostInSource to set
    */
 
-    public void setPostInOrigen(org.semanticwb.social.PostIn value)
+    public void setPostInSource(org.semanticwb.social.PostIn value)
     {
         if(value!=null)
         {
-            getSemanticObject().setObjectProperty(social_postInOrigen, value.getSemanticObject());
+            getSemanticObject().setObjectProperty(social_postInSource, value.getSemanticObject());
         }else
         {
-            removePostInOrigen();
+            removePostInSource();
         }
     }
    /**
-   * Remove the value for PostInOrigen property
+   * Remove the value for PostInSource property
    */
 
-    public void removePostInOrigen()
+    public void removePostInSource()
     {
-        getSemanticObject().removeProperty(social_postInOrigen);
+        getSemanticObject().removeProperty(social_postInSource);
     }
 
    /**
-   * Gets the PostInOrigen
+   * Gets the PostInSource
    * @return a org.semanticwb.social.PostIn
    */
-    public org.semanticwb.social.PostIn getPostInOrigen()
+    public org.semanticwb.social.PostIn getPostInSource()
     {
          org.semanticwb.social.PostIn ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(social_postInOrigen);
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(social_postInSource);
          if(obj!=null)
          {
              ret=(org.semanticwb.social.PostIn)obj.createGenericInstance();
@@ -446,6 +450,24 @@ public abstract class PostOutBase extends org.semanticwb.social.Post implements 
              ret=(org.semanticwb.social.PostOutContainer)obj.createGenericInstance();
          }
          return ret;
+    }
+
+/**
+* Gets the Published property
+* @return boolean with the Published
+*/
+    public boolean isPublished()
+    {
+        return getSemanticObject().getBooleanProperty(social_published);
+    }
+
+/**
+* Sets the Published property
+* @param value long with the Published
+*/
+    public void setPublished(boolean value)
+    {
+        getSemanticObject().setBooleanProperty(social_published, value);
     }
    /**
    * Sets the value for the property PflowInstance

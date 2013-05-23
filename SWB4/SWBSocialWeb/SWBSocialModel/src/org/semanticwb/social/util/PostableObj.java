@@ -25,15 +25,15 @@ public class PostableObj {
     HttpServletRequest request=null;
     SWBActionResponse response=null;
     Post post=null;
-    String action=null;
+    //String action=null;
 
-    public PostableObj(SocialNetPostable postAble,  Post post, String action, HttpServletRequest request, SWBActionResponse response)
+    public PostableObj(SocialNetPostable postAble,  Post post, HttpServletRequest request, SWBActionResponse response)
     {
         this.postAble=postAble;
         this.request=request;
         this.response=response;
         this.post=post;
-        this.action=action;
+        //this.action=action;
     }
 
     public SocialNetPostable getPostable()
@@ -46,10 +46,11 @@ public class PostableObj {
         return post;
     }
 
+    /*
     public String getAction()
     {
         return action;
-    }
+    }*/
 
     public HttpServletRequest getRequest()
     {
