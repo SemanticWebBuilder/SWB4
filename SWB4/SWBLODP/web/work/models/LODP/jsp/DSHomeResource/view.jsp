@@ -56,22 +56,18 @@
 
     WebPage wpage = paramRequest.getWebPage();
     WebSite wsite = wpage.getWebSite();
-    User usr = paramRequest.getUser();
     Resource base = paramRequest.getResourceBase();
-    String roladmin = base.getAttribute("rolid", "");
-    Role role = wsite.getUserRepository().getRole(roladmin);
     String datosWP = base.getAttribute("datosid", "Datos");
 
     long intSize = 0;
 
     String strNumItems = base.getAttribute("numpag", "10");
-    String npage = request.getParameter("page");
+    String strNumNewDS = base.getAttribute("numds", "3");
     String orderby = request.getParameter("order");
     String filteruri = request.getParameter("filteruri");
     String action = request.getParameter("act");
 
     SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
-    SemanticObject so = null;
     GenericObject go = null;
 
     int numPages = 10;
@@ -80,7 +76,12 @@
     } catch (Exception e) {
         numPages = 10;
     }
-
+    int numDS = 3;
+    try {
+        numDS = Integer.parseInt(strNumNewDS);
+    } catch (Exception e) {
+        numDS = 3;
+    }
     if (orderby == null) {
         orderby = "date";
     }
@@ -90,71 +91,137 @@
 
     //12/junio/2013
     SimpleDateFormat sdf2 = new SimpleDateFormat("dd/MMMMM/yyyy", new Locale("es"));
-    if (request.getParameter("alertmsg") != null) {
-        String strMsg = request.getParameter("alertmsg");
-        strMsg = strMsg.replace("<br>", "\\n\\r");
-%>
-<script type="text/javascript">
-    alert('<%=strMsg%>');
-</script>
-<%
-    }
+    if (paramRequest.getCallMethod() == SWBParamRequest.Call_STRATEGY) {
+        // llamada como estrategia
+        // mostrar los más nuevos
 
-        if (paramRequest.getCallMethod() == SWBParamRequest.Call_STRATEGY) {
-            // llamada como estrategia
+        // ordenamiento orderby y filtrado de DataSets
+        Iterator<Dataset> itds1 = Dataset.ClassMgr.listDatasets(wsite);
+
+        // dejo en hm los ds
+        HashMap<String, Dataset> hmcp = new HashMap<String, Dataset>();
+        while (itds1.hasNext()) {
+            Dataset ds = itds1.next();
+            hmcp.put(ds.getURI(), ds);
+        }
+
+        Iterator<Dataset> itds = null;
+        if (hmcp.size() > 0) {
+            itds = DataSetResource.orderDS(hmcp.values().iterator(), orderby);
+            intSize = hmcp.size();
         } else {
-            // llamado como contenido
-            if (action.equals("")) {
-                // ordenamiento orderby y filtrado de DataSets
-                Iterator<Dataset> itds1 = null;
-                if (null != filteruri && filteruri.trim().length() > 0) {
-                    go = ont.getGenericObject(filteruri);
-                    if (go != null) {
-                        if (go instanceof Topic) { 
-                            itds1 = Dataset.ClassMgr.listDatasetByTopic((Topic) go,wsite);
-                        } else {
-                            itds1 = Dataset.ClassMgr.listDatasets(wsite);
+            intSize = 0;
+        }
+
+        //num elementos a mostrar
+        long l = numDS;
+        int x = 0;
+%>
+<div ><label>Datos</label>
+    <ul>
+        <%
+            if (intSize == 0) {
+        %>
+        <li><h3><%=paramRequest.getLocaleString("lbl_notDSfound")%></h3></li>
+                <%                                } else {
+                    String wpurl = wsite.getWebPage(datosWP).getUrl() + "?act=detail&suri=";
+                    while (itds.hasNext()) {
+
+                        //NUMERO DE LEMENTOS A MOSTRAR ////////////////////
+                        if (x == l) {
+                            break;
                         }
-                    } else {
-                        itds1 = Dataset.ClassMgr.listDatasets(wsite);
-                    }
+                        x++;
+                        /////////////////////////////////
+
+                        Dataset ds = itds.next();
+                        StringBuilder topiclist = new StringBuilder("");
+                        Iterator<Topic> ittop = ds.listTopics();
+                        while (ittop.hasNext()) {
+                            Topic topic = ittop.next();
+                            topiclist.append(topic.getTopicTitle() != null ? topic.getTopicTitle() : "");
+                            if (ittop.hasNext()) {
+                                topiclist.append(" ");
+                            }
+                        }
+                %>
+        <li>
+            <label><a title="<%=ds.getDatasetDescription()%>" href="<%=wpurl + ds.getEncodedURI()%>"><%=ds.getDatasetTitle()%></a></label> 
+            <span><%=topiclist.toString()%></span>
+            <span><%=ds.getInstitution().getInstitutionTitle()%></span>
+        </li>
+        <%
+                }
+            }
+        %>
+    </ul>
+</div>
+<%
+} else {
+    // llamado como contenido
+    if (action.equals("")) {
+        // ordenamiento orderby y filtrado de DataSets
+        Iterator<Dataset> itds1 = null;
+        if (null != filteruri && filteruri.trim().length() > 0) {
+            go = ont.getGenericObject(filteruri);
+            if (go != null) {
+                if (go instanceof Topic) {
+                    itds1 = Dataset.ClassMgr.listDatasetByTopic((Topic) go, wsite);
                 } else {
                     itds1 = Dataset.ClassMgr.listDatasets(wsite);
                 }
-                // dejo en hm los ds
-                HashMap<String, Dataset> hmcp = new HashMap<String, Dataset>();
-                while(itds1.hasNext()){
-                    Dataset ds = itds1.next();
-                    hmcp.put(ds.getURI(), ds);
-                }
-                Iterator<Dataset> itds = null;
-                if(hmcp.size()>0){
-                    itds = DataSetResource.orderDS(hmcp.values().iterator(), orderby);
-                    intSize=hmcp.size();
-                } else {
-                intSize = 0;
-                }
+            } else {
+                itds1 = Dataset.ClassMgr.listDatasets(wsite);
+            }
+        } else {
+            itds1 = Dataset.ClassMgr.listDatasets(wsite);
+        }
 
-    %>
-    <div class="izq_tema">
-        <ul>
-            <li><h3><%//=paramRequest.getLocaleString("lbl_topicFilter")%></h3></li>
-                <%
-                    Iterator<Topic> ittop = Topic.ClassMgr.listTopics(wsite);
-                    while (ittop.hasNext()) {
-                        Topic inst = ittop.next();
-                        SWBResourceURL url = paramRequest.getRenderUrl();
-                        url.setParameter("filteruri", inst.getURI());
-                        if (null != orderby) {
-                            url.setParameter("order", orderby);
-                        }
-                %>
-            <li><a href="<%=url.toString()%>" title="<%=inst.getTopicDescription() != null ? inst.getTopicDescription().trim() : inst.getTopicTitle()%>"><%=inst.getTopicTitle()%></a></li> 
-                <%
-                    }
-                %>
-        </ul>  
-    </div>
+        // dejo en hm los ds
+        HashMap<String, Dataset> hmcp = new HashMap<String, Dataset>();
+        while (itds1.hasNext()) {
+            Dataset ds = itds1.next();
+            hmcp.put(ds.getURI(), ds);
+        }
+
+        Iterator<Dataset> itds = null;
+        if (hmcp.size() > 0) {
+            itds = DataSetResource.orderDS(hmcp.values().iterator(), orderby);
+            intSize = hmcp.size();
+        } else {
+            intSize = 0;
+        }
+
+        SWBResourceURL url = paramRequest.getRenderUrl();
+        if (null != orderby) {
+            url.setParameter("order", orderby);
+        }
+%>
+<script type="text/javascript">
+    function reload(value) {
+        var urlthis = '<%=url.toString()%>&filteruri=';
+        window.location = urlthis + value;
+        return false;
+    }
+</script>
+<div class="izq_tema">
+    <label for="filteruri">sobre:</label> <select name="filteruri" onchange="reload(this.value);">
+        <option value="">Todos los temas</option>
+        <%
+            String selection = "";
+            Iterator<Topic> ittop = Topic.ClassMgr.listTopics(wsite);
+            while (ittop.hasNext()) {
+                Topic inst = ittop.next();
+                selection = "";
+                if (null != filteruri && inst.getURI().equals(filteruri)) {
+                    selection = "selected";
+                }
+        %>
+        <option value="<%=inst.getEncodedURI()%>" title="<%=inst.getTopicDescription() != null ? inst.getTopicDescription().trim() : inst.getTopicTitle()%>" <%=selection%>  ><%=inst.getTopicTitle()%></option> 
+        <%
+            }
+        %>
+    </select>  
 </div>
 <div class="derecho">
     <div class="derecho_ordena">
@@ -201,25 +268,28 @@
             %>
             <li><h3><%=paramRequest.getLocaleString("lbl_notDSfound")%></h3></li>
                     <%                                } else {
-                        String wpurl = wsite.getWebPage(datosWP).getUrl()+"?act=detail&suri=";
-                        while (itds.hasNext()) { 
+                        String wpurl = wsite.getWebPage(datosWP).getUrl() + "?act=detail&suri=";
+                        while (itds.hasNext()) {
 
                             //NUMERO DE LEMENTOS A MOSTRAR ////////////////////
-                            if ( x == l) {
+                            if (x == l) {
                                 break;
                             }
                             x++;
                             /////////////////////////////////
 
-                            Dataset ds = itds.next(); 
+                            Dataset ds = itds.next();
                             //SWBResourceURL urldet = paramRequest.getRenderUrl();
                             //urldet.setParameter("act", "detail");
                             //urldet.setParameter("suri", ds.getEncodedURI());
-                           
+                            String icontype = "default";
+                            if (ds.getDatasetFormat() != null) {
+                                icontype = ds.getDatasetFormat();
+                            }
                     %>
-            <li>
-                <label><a title="<%=ds.getDatasetDescription()%>" href="<%=wpurl+ds.getEncodedURI()%>"><%=ds.getDatasetTitle()%></a></label> 
-                <%=paramRequest.getLocaleString("lbl_publisher")%>:<%=ds.getInstitution().getInstitutionTitle()%><br/>
+            <li class="ico_<%=icontype%>">
+                <label><a title="<%=ds.getDatasetDescription()%>" href="<%=wpurl + ds.getEncodedURI()%>"><%=ds.getDatasetTitle()%></a></label> 
+                <span><%=ds.getInstitution() != null && ds.getInstitution().getInstitutionTitle() != null ? ds.getInstitution().getInstitutionTitle() : ""%></span>
             </li>
             <%
                     }
@@ -228,8 +298,8 @@
         </ul>
     </div>
 </div>
-    <%
-        }  
+<%
+        }
     }
     // Termina llamado como contenido
 %>
