@@ -27,8 +27,8 @@
                 String repositoryId = wpage.getWebSite().getUserRepository().getId();
 
                 String suri=request.getParameter("suri");
-                if(suri==null)
-                    suri = "http://www.LODP.swb#lodpcg_Dataset:3";
+ //               if(suri==null)
+ //                   suri = "http://www.LODP.swb#lodpcg_Dataset:3";
                //    uri"http://www.LODP.swb#lodpcg_Application:2";
                 SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
                 SemanticObject sobj = null;
