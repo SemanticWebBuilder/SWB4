@@ -56,7 +56,7 @@
 </header> 
 <body>        
     <div  class="slider4">       
-        <%if(intSize){                    
+        <%if(intSize){
             while(listDatasetOrd.hasNext() && count < maxDS){
                 Dataset dataset = listDatasetOrd.next();
                 Institution institution = dataset.getInstitution();
@@ -76,8 +76,7 @@
         </div>
         <%
                 count++;
-            }
-            System.out.println("count: "+ count);
+            }            
         }else{%>
             Información no disponible
         <%
