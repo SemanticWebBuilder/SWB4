@@ -106,6 +106,8 @@ int main(int argc, char** argv) {
                                 flag = 1;
                             }
                         }
+                    } else {
+                        printf("\n\n\n");
                     }
                 }
 
