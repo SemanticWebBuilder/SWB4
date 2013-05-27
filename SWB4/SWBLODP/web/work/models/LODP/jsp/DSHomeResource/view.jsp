@@ -153,8 +153,10 @@
         <%
                 }
             }
+            String wpurl = wsite.getWebPage(datosWP).getUrl() ;
         %>
     </ul>
+    <span><a href="<%=wpurl%>">Ver Catálogo de Datos</a></span>
 </div>
 <%
 } else {
