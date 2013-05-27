@@ -117,7 +117,7 @@
         long l = numDS;
         int x = 0;
 %>
-<div ><label>Datos</label>
+<div ><label><%=paramRequest.getLocaleString("lbl_data")%></label>
     <ul>
         <%
             if (intSize == 0) {
@@ -156,7 +156,7 @@
             String wpurl = wsite.getWebPage(datosWP).getUrl() ;
         %>
     </ul>
-    <span><a href="<%=wpurl%>">Ver Catálogo de Datos</a></span>
+    <span><a href="<%=wpurl%>"><%=paramRequest.getLocaleString("lbl_catalogdata")%></a></span>
 </div>
 <%
 } else {
@@ -207,8 +207,8 @@
     }
 </script>
 <div class="izq_tema">
-    <label for="filteruri">sobre:</label> <select name="filteruri" onchange="reload(this.value);">
-        <option value="">Todos los temas</option>
+    <label for="filteruri"><%=paramRequest.getLocaleString("lbl_about")%>:</label> <select name="filteruri" onchange="reload(this.value);">
+        <option value=""><%=paramRequest.getLocaleString("lbl_alltopics")%></option>
         <%
             String selection = "";
             Iterator<Topic> ittop = Topic.ClassMgr.listTopics(wsite);
