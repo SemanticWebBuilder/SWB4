@@ -1,3 +1,5 @@
+  4.2.5.5
+    - BUG: Error en la propagación de los cambios en URLFriendly en esquema de balanceo (Jei)
   4.2.5.2
     - BUG 79: posibilidad de encontrar un null como login en una sessión aún no establecida (serch)
   4.2.5.1
