@@ -48,10 +48,16 @@ String suri = request.getParameter("suri");
                     }
                     
                 }
+                
+                String urlBase = "/work"+inOb.getWorkPath();
+                String nameLogo= "institutionLogo_"+inOb.getId()+"_"+inOb.getInstitutionLogo();
+                String urlLogo = urlBase + "/"+nameLogo;
+                
+                
  %> 
             
    <div>
-       <img src="<%=SWBPortal.getWorkPath() + inOb.getWorkPath() + "/" +  inOb.getInstitutionLogo()%>" width="200" height="150" />
+       <img src="<%=urlLogo%>" width="200" height="150" />
         <h2><%=inOb.getInstitutionTitle()%></h2> 
         <h3><%=inOb.getInstitutionDescription()%></h3>
         <ul>
