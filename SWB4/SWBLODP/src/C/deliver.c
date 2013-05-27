@@ -60,57 +60,60 @@ int main(int argc, char** argv) {
     int page=-1;
     char *base ="/apps/DataSetsReposiroty";  //"/apps/dataLink";
     method = getenv("REQUEST_METHOD");
-    if (strcmp(method,"GET")==0){
+    if ((method!=NULL)&&(strcmp(method,"GET")==0)){
         file = getenv("PATH_INFO");
         query = getenv("QUERY_STRING");
-        sscanf(query,"page=%d",&page);
-        char *bkdir = strstr(file,"..");
-        if (bkdir==NULL) {
-            strcpy(tmp, base);
-            strncat(tmp,file, 512);
-            if (access(tmp, R_OK)==0){
-                setMimeType(tmp, file);
-                sendFile(tmp);
-            } else if (page>0){
-                char pag[16];
-                sprintf(pag,"_%d",page);
-                strncat(tmp,pag,16);
+        if (query!=NULL)
+            sscanf(query,"page=%d",&page);
+        if (file!=NULL) {
+            char *bkdir = strstr(file,"..");
+            if (bkdir==NULL) {
+                strcpy(tmp, base);
+                strncat(tmp,file, 512);
                 if (access(tmp, R_OK)==0){
                     setMimeType(tmp, file);
                     sendFile(tmp);
-                }
-            } else {
-                page=1;
-                char ldir[1024];
-                char pag[16];
-                int flag = 0;
-                sprintf(pag,"_%d",page);
-                strcpy(ldir, tmp);
-                strncat(ldir,pag, 16);
-                if (access(ldir, R_OK)==0){
-                    setMimeType(tmp, file);
-                    page=0;
+                } else if (page>0){
+                    char pag[16];
+                    sprintf(pag,"_%d",page);
+                    strncat(tmp,pag,16);
+                    if (access(tmp, R_OK)==0){
+                        setMimeType(tmp, file);
+                        sendFile(tmp);
+                    }
+                } else {
+                    page=1;
+                    char ldir[1024];
+                    char pag[16];
+                    int flag = 0;
                     sprintf(pag,"_%d",page);
                     strcpy(ldir, tmp);
                     strncat(ldir,pag, 16);
                     if (access(ldir, R_OK)==0){
-                        sendFile(ldir);
-                    }
-                    while (flag == 0){
-                        page++;
+                        setMimeType(tmp, file);
+                        page=0;
                         sprintf(pag,"_%d",page);
                         strcpy(ldir, tmp);
                         strncat(ldir,pag, 16);
                         if (access(ldir, R_OK)==0){
                             sendFile(ldir);
-                        } else {
-                            flag = 1;
+                        }
+                        while (flag == 0){
+                            page++;
+                            sprintf(pag,"_%d",page);
+                            strcpy(ldir, tmp);
+                            strncat(ldir,pag, 16);
+                            if (access(ldir, R_OK)==0){
+                                sendFile(ldir);
+                            } else {
+                                flag = 1;
+                            }
                         }
                     }
                 }
+
+
             }
-            
-            
         }
     }
     return (EXIT_SUCCESS);
