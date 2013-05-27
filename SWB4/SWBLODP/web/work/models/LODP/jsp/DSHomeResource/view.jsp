@@ -285,11 +285,11 @@
                             //urldet.setParameter("act", "detail");
                             //urldet.setParameter("suri", ds.getEncodedURI());
                             String icontype = "default";
-                            if (ds.getDatasetFormat() != null) {
+                            if (ds.getDatasetFormat() != null && ds.getDatasetFormat().trim().length()>0) {
                                 icontype = ds.getDatasetFormat();
                             }
                     %>
-            <li class="ico_<%=icontype%>">
+            <li class="ico-<%=icontype%>">
                 <label><a title="<%=ds.getDatasetDescription()%>" href="<%=wpurl + ds.getEncodedURI()%>"><%=ds.getDatasetTitle()%></a></label> 
                 <span><%=ds.getInstitution() != null && ds.getInstitution().getInstitutionTitle() != null ? ds.getInstitution().getInstitutionTitle() : ""%></span>
             </li>
