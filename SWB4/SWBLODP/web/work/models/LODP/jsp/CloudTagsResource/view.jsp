@@ -32,7 +32,7 @@
        <%while(cloudTags.hasNext()){
            Tag tag = cloudTags.next();
            String urlData = wsite.getWebPage("Datos").getUrl();
-           String urlTag = urlData+"?tag="+tag.getTagName()+"&act=detail";
+           String urlTag = urlData+"?search="+tag.getTagName();
        %>
        <li class="<%=tag.getProperty("classCSS")%>">
            <a href="<%=urlTag%>" rel="<%=tag.getProperty("weight")%>">
