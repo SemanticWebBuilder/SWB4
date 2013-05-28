@@ -33,23 +33,22 @@ Author     : rene.jara
                 Iterator<Comment> itco = Comment.ClassMgr.listComments(wsite);
                 if (request.getParameter("msg") != null) {
                     String strMsg = request.getParameter("msg");
-    //        strMsg = strMsg.replace("<br>", "\\n\\r");
     %>
     <div>
         <%=strMsg%>
     </div>
     <%
                 }
-                    String name = "";
-                    String email = "";
-                    int nInappropriate;
-                    gobj = usr.getSemanticObject().getGenericInstance();
-                    if (gobj instanceof Developer) {
-                        Developer de = (Developer) gobj;
-                        name = de.getFullName();
-                        email = de.getEmail();
-                    }
-                    if (itco != null) {
+                String name = "";
+                String email = "";
+                int nInappropriate;
+                gobj = usr.getSemanticObject().getGenericInstance();
+                if (gobj instanceof Developer) {
+                    Developer de = (Developer) gobj;
+                    name = de.getFullName();
+                    email = de.getEmail();
+                }
+                if (itco != null) {
     %>
     <div>
         <%
@@ -58,7 +57,8 @@ Author     : rene.jara
             } catch (NumberFormatException ignored) {
                 nInappropriate = 1;
             }
-            ArrayList<Comment> alco = CommentsManageResource.listComments(itco, nInappropriate);
+//            ArrayList<Comment> alco = CommentsManageResource.listComments(itco, nInappropriate);
+            ArrayList<Comment> alco = CommentsManageResource.listCommentsByDataset(Dataset.ClassMgr.listDatasets(wsite), nInappropriate);
             Iterator<Comment> itvco = alco.iterator();
             int tRec = alco.size();
             int nPag = 0;
@@ -83,8 +83,6 @@ Author     : rene.jara
             urlapv.setAction(CommentsManageResource.Action_APPROVE);
             SWBResourceURLImp urlrvw = new SWBResourceURLImp(request, base, wpage, SWBResourceURLImp.UrlType_ACTION);
             urlrvw.setAction(CommentsManageResource.Action_REVIEWED);
-        //while (itvco.hasNext()) {
-        //                            Comment co = itvco.next();
             for (int x = iRec; x < fRec && x < tRec; x++) {
                 Comment co = alco.get(x);
                 urlapv.setParameter("cid", co.getId());
@@ -122,6 +120,5 @@ Author     : rene.jara
         </div>
     </div>
     <%
-                    }
-                
+                }
     %>

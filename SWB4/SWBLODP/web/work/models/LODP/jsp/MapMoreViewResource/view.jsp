@@ -16,11 +16,14 @@
 <jsp:useBean id="paramRequest" scope="request" type="org.semanticwb.portal.api.SWBParamRequest" /><html>
 <%
     WebSite wsite=paramRequest.getWebPage().getWebSite();
+    Resource base=paramRequest.getResourceBase();
     Iterator<Dataset> itds=Dataset.ClassMgr.listDatasets(wsite);
     Iterator<Dataset> sds=DataSetResource.sortByViews(itds,false).iterator();
+    String dsid=base.getAttribute("datosid");
+    WebPage dswp=wsite.getWebPage(dsid);
     while(sds.hasNext()){
         Dataset dataset=sds.next();
-        if(dataset.getDatasetFormat().toLowerCase().equals("kml")){
+//        if(dataset.getDatasetFormat().toLowerCase().equals("kml")){
             String path=dataset.getActualVersion().getFilePath();                    
 %>
 <script type="text/javascript" src="http://maps.google.com/maps/api/js?v=3&amp;sensor=false&amp;language=es&amp;region=MX"></script>
@@ -32,8 +35,8 @@
 
     function initializeMap() {
         var divMap = document.getElementById("mapCanvas");
-        divMap.style.width="200px";
-        divMap.style.height="200px";
+        divMap.style.width="300px";
+        divMap.style.height="180px";
         var latlng = new google.maps.LatLng(22.99885, -101.77734);
         var myOptions = {
             zoom: 3,
@@ -61,14 +64,13 @@
         }
         //-->
 </script>
+<div class="mapa_titulo"><a href="<%=dswp.getUrl()%>?act=detail&suri=<%=dataset.getEncodedURI()%>" ><%=dataset.getDatasetTitle()%></a></div>
 <div id="mapCanvas" class="mapa" ></div>
 <script type="text/javascript">
     initializeMap();
 </script>
 <%
-       if(path!=null&&!path.equals("")){
         break;
-       }
-    }
+//    }
 }
 %>
