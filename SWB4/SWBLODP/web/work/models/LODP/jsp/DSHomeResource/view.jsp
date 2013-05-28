@@ -129,7 +129,7 @@
         <%
             if (intSize == 0) {
         %>
-        <li><strong><%=paramRequest.getLocaleString("lbl_notDSfound")%></strong></li>
+        <li><p><%=paramRequest.getLocaleString("lbl_notDSfound")%></p></li>
                 <%                                } else {
                     String wpurl = wsite.getWebPage(datosWP).getUrl() + "?act=detail&suri=";
                     while (itds.hasNext()) {
