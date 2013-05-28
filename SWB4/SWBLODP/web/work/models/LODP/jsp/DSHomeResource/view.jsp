@@ -260,7 +260,7 @@
             }
 
             //<label><% = paramRequest.getLocaleString("lbl_orderby") % > </label>
-            SWBResourceURL 
+           
         %>
         
             <a href="<%=urlorder.toString()%>&order=<%=DataSetResource.ORDER_CREATED%>';" <%=ckdCreated%>><%=paramRequest.getLocaleString("lbl_byrecent")%></a> 
