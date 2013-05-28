@@ -91,6 +91,9 @@
 
     //12/junio/2013
     SimpleDateFormat sdf2 = new SimpleDateFormat("dd/MMMMM/yyyy", new Locale("es"));
+    
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    
     if (paramRequest.getCallMethod() == SWBParamRequest.Call_STRATEGY) {
         // llamada como estrategia
         // mostrar los más nuevos
@@ -119,12 +122,14 @@
         long l = numDS;
         int x = 0;
 %>
-<div ><label><%=paramRequest.getLocaleString("lbl_data")%></label>
+<!--
+<div ><label><%//=paramRequest.getLocaleString("lbl_data")%></label>
+-->
     <ul>
         <%
             if (intSize == 0) {
         %>
-        <li><h3><%=paramRequest.getLocaleString("lbl_notDSfound")%></h3></li>
+        <li><strong><%=paramRequest.getLocaleString("lbl_notDSfound")%></strong></li>
                 <%                                } else {
                     String wpurl = wsite.getWebPage(datosWP).getUrl() + "?act=detail&suri=";
                     while (itds.hasNext()) {
@@ -148,9 +153,9 @@
                         }
                 %>
         <li>
-            <label><a title="<%=ds.getDatasetDescription()%>" href="<%=wpurl + ds.getEncodedURI()%>"><%=ds.getDatasetTitle()%></a></label> 
-            <span><%=topiclist.toString()%></span>
-            <span><%=ds.getInstitution().getInstitutionTitle()%></span>
+            <a title="<%=ds.getDatasetDescription()%>" href="<%=wpurl + ds.getEncodedURI()%>"><%=ds.getDatasetTitle()%></a><br/> 
+            <strong><%=topiclist.toString()%></strong><br/>
+            <em><%=ds.getInstitution().getInstitutionTitle()%></em>
         </li>
         <%
                 }
@@ -158,8 +163,11 @@
             String wpurl = wsite.getWebPage(datosWP).getUrl() ;
         %>
     </ul>
-    <span><a href="<%=wpurl%>"><%=paramRequest.getLocaleString("lbl_catalogdata")%></a></span>
+   
+<!-- 
+ <span><a href="<%//=wpurl%>"><%//=paramRequest.getLocaleString("lbl_catalogdata")%></a></span>
 </div>
+-->
 <%
 } else {
     // llamado como contenido
@@ -208,8 +216,9 @@
         return false;
     }
 </script>
-<div class="izq_tema">
-    <label for="filteruri"><%=paramRequest.getLocaleString("lbl_about")%>:</label> <select name="filteruri" onchange="reload(this.value);">
+<div class="sobre">
+    <span><%=paramRequest.getLocaleString("lbl_about")%>:</span> 
+    <select name="filteruri" onchange="reload(this.value);">
         <option value=""><%=paramRequest.getLocaleString("lbl_alltopics")%></option>
         <%
             String selection = "";
@@ -227,8 +236,8 @@
         %>
     </select>  
 </div>
-<div class="derecho">
-    <div class="derecho_ordena">
+<div class="listado">
+    <div class="orden">
         <%
             SWBResourceURL urlorder = paramRequest.getRenderUrl();
             urlorder.setParameter("act", "");
@@ -240,24 +249,24 @@
             if (null != orderby) {
                 //urlorder.setParameter("order", orderby);
                 if (orderby.equals(DataSetResource.ORDER_CREATED)) {
-                    ckdCreated = "checked";
+                    ckdCreated = "class=\"selected\""; 
                 } else if (orderby.equals(DataSetResource.ORDER_VIEW)) {
-                    ckdView = "checked";
+                    ckdView = "class=\"selected\""; 
                 } else if (orderby.equals(DataSetResource.ORDER_DOWNLOAD)) {
-                    ckdDownload = "checked";
+                    ckdDownload = "class=\"selected\""; 
                 } else if (orderby.equals(DataSetResource.ORDER_RANK)) {
-                    ckdRank = "checked";
+                    ckdRank = "class=\"selected\""; 
                 }
             }
 
+            //<label><% = paramRequest.getLocaleString("lbl_orderby") % > </label>
+            SWBResourceURL 
         %>
-        <label><%=paramRequest.getLocaleString("lbl_orderby")%></label>
-        <p>
-            <input type="radio" id="ordercreated" name="order" value="created" <%=ckdCreated%> onclick="window.location = '<%=urlorder.toString()%>&order=<%=DataSetResource.ORDER_CREATED%>';"><label for="ordercreated"><%=paramRequest.getLocaleString("lbl_byrecent")%></label> 
-            <input type="radio" id="orderview" name="order" value="view" <%=ckdView%> onclick="window.location = '<%=urlorder.toString()%>&order=<%=DataSetResource.ORDER_VIEW%>';"><label for="orderview"><%=paramRequest.getLocaleString("lbl_byvisited")%></label> 
-            <input type="radio" id="orderdownload" name="order" value="download" <%=ckdDownload%> onclick="window.location = '<%=urlorder.toString()%>&order=<%=DataSetResource.ORDER_DOWNLOAD%>';"><label for="orderdownload"><%=paramRequest.getLocaleString("lbl_bydownload")%></label>
-            <input type="radio" id="orderrank" name="order" value="value" <%=ckdRank%> onclick="window.location = '<%=urlorder.toString()%>&order=<%=DataSetResource.ORDER_RANK%>';"><label for="orderrank"><%=paramRequest.getLocaleString("lbl_byvaluated")%></label>
-        </p>
+        
+            <a href="<%=urlorder.toString()%>&order=<%=DataSetResource.ORDER_CREATED%>';" <%=ckdCreated%>><%=paramRequest.getLocaleString("lbl_byrecent")%></a> 
+            <a <%=ckdView%> href="<%=urlorder.toString()%>&order=<%=DataSetResource.ORDER_VIEW%>"><%=paramRequest.getLocaleString("lbl_byvisited")%></a> 
+            <a <%=ckdDownload%> href="<%=urlorder.toString()%>&order=<%=DataSetResource.ORDER_DOWNLOAD%>"><%=paramRequest.getLocaleString("lbl_bydownload")%></a>
+            <a <%=ckdRank%> href="<%=urlorder.toString()%>&order=<%=DataSetResource.ORDER_RANK%>"><%=paramRequest.getLocaleString("lbl_byvaluated")%></a>
     </div>
     <%
 
@@ -265,13 +274,14 @@
         long l = intSize;
         int x = 0;
     %>
-    <div class="listadataset">
-        <ul>
+    <div class="lista10">
+        <ol>
             <%
                 if (intSize == 0) {
             %>
-            <li><h3><%=paramRequest.getLocaleString("lbl_notDSfound")%></h3></li>
+            <li class="r1"><em><%=paramRequest.getLocaleString("lbl_notDSfound")%></em></li>
                     <%                                } else {
+                    boolean doPaint = Boolean.TRUE;
                         String wpurl = wsite.getWebPage(datosWP).getUrl() + "?act=detail&suri=";
                         while (itds.hasNext()) {
 
@@ -290,16 +300,22 @@
                             if (ds.getDatasetFormat() != null && ds.getDatasetFormat().trim().length()>0) {
                                 icontype = ds.getDatasetFormat();
                             }
+                            String pintar = "r1";
+                            if(!doPaint){
+                                pintar = "r2";
+                            }
+                            doPaint = !doPaint; 
                     %>
-            <li class="ico-<%=icontype%>">
-                <label><a title="<%=ds.getDatasetDescription()%>" href="<%=wpurl + ds.getEncodedURI()%>"><%=ds.getDatasetTitle()%></a></label> 
-                <span><%=ds.getInstitution() != null && ds.getInstitution().getInstitutionTitle() != null ? ds.getInstitution().getInstitutionTitle() : ""%></span>
+            <li class="<%=pintar%>">
+                <a class="ico-<%=icontype%>" title="<%=ds.getDatasetDescription()%>" href="<%=wpurl + ds.getEncodedURI()%>"><%=ds.getDatasetTitle()%></a>
+                <em><%=ds.getInstitution() != null && ds.getInstitution().getInstitutionTitle() != null ? ds.getInstitution().getInstitutionTitle() : ""%></em>
             </li>
             <%
                     }
                 }
             %>
-        </ul>
+        </ol>
+        <div class="clear"></div>
     </div>
 </div>
 <%
