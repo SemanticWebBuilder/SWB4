@@ -74,7 +74,7 @@
         <%
             if (intSize == 0) {
         %>
-        <li><h3><p><%=paramRequest.getLocaleString("lbl_notAPPFound")%></p></h3></li>
+        <li><p><%=paramRequest.getLocaleString("lbl_notAPPFound")%></p></li>
                 <%  
             } else {
                 
