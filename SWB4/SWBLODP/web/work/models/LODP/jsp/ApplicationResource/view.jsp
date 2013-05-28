@@ -94,12 +94,11 @@
                 go = ont.getGenericObject(filteruri);
                 if (go != null) {
 
-                    if (filterby.equals(ApplicationResource.FILTER_CATEGORY) && go instanceof Category) {
+                    if (go instanceof Category) {
                         itAp1 = Application.ClassMgr.listApplicationByCategory((Category) go, wsite);
-                    } else if (filterby.equals(ApplicationResource.FILTER_INSTITUTION) && go instanceof Institution) {
+                    } else if (go instanceof Institution) {
 
-                        Institution inst = (Institution) go;
-                        Iterator<Dataset> itIns = Dataset.ClassMgr.listDatasetByInstitution(inst, wsite);
+                        Iterator<Dataset> itIns = Dataset.ClassMgr.listDatasetByInstitution((Institution) go, wsite);
                         HashMap<String, Application> hmFilterInst = new HashMap<String, Application>();
 
                         while (itIns.hasNext()) {
@@ -115,8 +114,39 @@
 
                         itAp1 = hmFilterInst.values().iterator();
 
-                    } else if (filterby.equals(ApplicationResource.FILTER_AUTHOR) && go instanceof Developer) {
-                        //itAp1 = Application.ClassMgr.listDatasetByDatasetSector((Developer) go,wsite);
+                    } else if (go instanceof Developer) {
+                        Developer devAutor = (Developer) go;
+                        Iterator<Application> listApp = Application.ClassMgr.listApplications(wsite);
+                        HashMap<String, Application> hmFilterAutor = new HashMap<String, Application>();
+                        
+                        while(listApp.hasNext()){
+                            Application apAutor = listApp.next();
+                            GenericObject goAutorDes = apAutor.getAppAuthor().createGenericInstance();
+                            User usAutorDes = (User)goAutorDes;
+                            
+                            if(devAutor.getFullName().equals(usAutorDes.getFullName())){
+                                hmFilterAutor.put(apAutor.getURI(), apAutor);                   
+                            }
+                        }
+                        itAp1 = hmFilterAutor.values().iterator();
+                        
+                    } else if(go instanceof Publisher){
+                                          
+                        Iterator<Dataset> dsPub = Dataset.ClassMgr.listDatasetByPublisher((Publisher) go, wsite);
+                        HashMap<String, Application> hmFilterPub = new HashMap<String, Application>();
+                        
+                        while (dsPub.hasNext()) {
+
+                            Dataset appPub = dsPub.next();
+                            Iterator<Application> itAppPub = Application.ClassMgr.listApplicationByRelatedDataset(appPub, wsite);
+
+                            while (itAppPub.hasNext()) {
+                                Application appliPub = itAppPub.next();
+                                hmFilterPub.put(appliPub.getURI(), appliPub);                              
+                            }
+                            
+                        }
+                       itAp1 = hmFilterPub.values().iterator(); 
                     } else {
                         itAp1 = Application.ClassMgr.listApplications(wsite);
                     }
@@ -300,25 +330,50 @@
                 %>
         </ul>  
     </div>
-    <!--        <div class="izq_autor">
-                <ul>
-                     <li><h3><%--=paramRequest.getLocaleString("lbl_filterAuthor")--></h3></li>-->
-    <%--
-        Iterator<Topic> ittop = Topic.ClassMgr.listTopics(wsite);
-        while (ittop.hasNext()) {
-            Topic inst = ittop.next();
+    <div class="izq_autor">
+     <ul>
+        <li><h3><%=paramRequest.getLocaleString("lbl_filterAuthor")%></h3></li>
+     <%
+        Iterator<Application> itAppAuthor = Application.ClassMgr.listApplications(wsite);
+        
+        while (itAppAuthor.hasNext()) {
+
+            Application aplication = itAppAuthor.next();
             SWBResourceURL url = paramRequest.getRenderUrl();
-            url.setParameter("filteruri", inst.getEncodedURI());
+            url.setParameter("filteruri", aplication.getEncodedURI());
+            GenericObject objAutor = aplication.getAppAuthor().createGenericInstance();
+            String descPb = "";
+            String filterAuthor = "";
+            
+            if( objAutor instanceof Publisher){
+                Publisher pb = (Publisher)objAutor;
+                if(pb.getPubInstitution() != null){
+                   filterAuthor = pb.getPubInstitution().getInstitutionTitle();
+                   descPb = pb.getPubInstitution().getInstitutionDescription();
+                }
+            }
+            
+            if(objAutor instanceof Developer){
+                Developer dv = (Developer)objAutor;
+                filterAuthor = dv.getFullName();
+            }
+            
             if (null != orderby) {
                 url.setParameter("order", orderby);
             }
-    --%>
-     <!--<li><a href="<%--=url.toString()%>"><%=inst.getTopicTitle()--%></a></li>--> 
-    <%--
-        }
-    --%>
-    <!--            </ul>  
-            </div>-->
+            
+            System.out.println("Descripcion institucion" + " " + descPb);
+            System.out.println("nombre autor" + " " + filterAuthor);
+            
+            if(!(descPb.equals("") && filterAuthor.equals(""))){
+
+        %>
+            <li><a href="<%=url.toString()%>" title="<%=descPb != null ? descPb.trim() : ""%>"><%=filterAuthor%></a></li>  
+        <%
+            }}
+        %>
+    </ul>  
+   </div>
 </div>
 
 <div class="derecho">
@@ -386,7 +441,7 @@
                             }
                             x++;
                             /////////////////////////////////
-                    Application apls = itAppList.next();
+                    Application apls = itAp.next();
                     SWBResourceURL urldet = paramRequest.getRenderUrl();
                     urldet.setParameter("act", "detail");
                     urldet.setParameter("suri", apls.getURI());
@@ -572,6 +627,14 @@
             </li>
             <li>
                 <label><%=paramRequest.getLocaleString("lbl_visitasDetalle")%></label>&nbsp;&nbsp;&nbsp;&nbsp;<%=aps.getViews()%>
+            </li>
+            
+             <%
+                    Long comment = SWBUtils.Collections.sizeOf(aps.listComments());
+            %>
+            
+            <li>
+                <label><%=paramRequest.getLocaleString("lbl_numComment")%></label>&nbsp;&nbsp;&nbsp;&nbsp;<%=comment%>
             </li>
             <p>
             <p>
