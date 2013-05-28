@@ -102,7 +102,9 @@
         HashMap<String, Dataset> hmcp = new HashMap<String, Dataset>();
         while (itds1.hasNext()) {
             Dataset ds = itds1.next();
-            hmcp.put(ds.getURI(), ds);
+            //if(ds.isDatasetActive()&&ds.isApproved()){
+                hmcp.put(ds.getURI(), ds);
+            //}
         }
 
         Iterator<Dataset> itds = null;
