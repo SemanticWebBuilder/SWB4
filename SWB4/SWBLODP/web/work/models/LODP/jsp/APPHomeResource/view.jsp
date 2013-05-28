@@ -69,12 +69,12 @@
         long l = numAPP;
         int x = 0;
 %>
-<div ><label><%=paramRequest.getLocaleString("lbl_titleAPP")%></label>
+<div>
     <ul>
         <%
             if (intSize == 0) {
         %>
-        <li><h3><%=paramRequest.getLocaleString("lbl_notAPPFound")%></h3></li>
+        <li><h3><p><%=paramRequest.getLocaleString("lbl_notAPPFound")%></p></h3></li>
                 <%  
             } else {
                 
