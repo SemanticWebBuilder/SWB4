@@ -28,6 +28,7 @@ import com.hp.hpl.jena.rdf.model.Property;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.concurrent.ConcurrentHashMap;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
@@ -249,30 +250,30 @@ public class SemanticVocabulary
     
     //public static final String SWB_NS="swbns";
     /** The classes. */
-    public HashMap<String, SemanticClass> classes;
+    public ConcurrentHashMap<String, SemanticClass> classes;
     
     /** The properties. */
-    public HashMap<String, SemanticProperty> properties;
+    public ConcurrentHashMap<String, SemanticProperty> properties;
     
     /** The clsbyid. */
-    public HashMap<String, SemanticClass> clsbyid;
+    public ConcurrentHashMap<String, SemanticClass> clsbyid;
     
     /** The clsbyname. */
-    public HashMap<String, SemanticClass> clsbyname;
+    public ConcurrentHashMap<String, SemanticClass> clsbyname;
     
     /** The clsbyname. */
-    public HashMap<String, SemanticClass> clsbyVirtualName;    
+    public ConcurrentHashMap<String, SemanticClass> clsbyVirtualName;    
 
     /**
      * Instantiates a new semantic vocabulary.
      */
     public SemanticVocabulary()
     {
-        classes = new HashMap();
-        clsbyid = new HashMap();
-        clsbyname = new HashMap();
-        clsbyVirtualName = new HashMap();
-        properties = new HashMap();
+        classes = new ConcurrentHashMap();
+        clsbyid = new ConcurrentHashMap();
+        clsbyname = new ConcurrentHashMap();
+        clsbyVirtualName = new ConcurrentHashMap();
+        properties = new ConcurrentHashMap();
     }
 
     /**
