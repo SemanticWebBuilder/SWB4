@@ -442,12 +442,10 @@
                             x++;
                             /////////////////////////////////
                     Application apls = itAp.next();
-                    SWBResourceURL urldet = paramRequest.getRenderUrl();
-                    urldet.setParameter("act", "detail");
-                    urldet.setParameter("suri", apls.getURI());
+                    String wpurl = wpage.getUrl()+"?act=detail&suri=";
             %>
             <li>
-                <label><a href="<%=urldet.toString()%>"><%=apls.getAppTitle()%></a></label> 
+                <label><a href="<%=wpurl + apls.getEncodedURI()%>"><%=apls.getAppTitle()%></a></label> 
                 <br/>
                 <p><%=apls.getAppDescription()%></p>
             </li>
@@ -707,15 +705,19 @@
                 <%                    }
                 %>
         </ul>
-    </div>
-    
+    </div>  
 </div> 
 
 <%
-    }}}
+}}}   
+ if(user.isSigned()&& (user.getSemanticObject().createGenericInstance() instanceof Developer || user.getSemanticObject().createGenericInstance() instanceof Publisher)){
 %>
 
 <p><a href="<%=renderURL.setMode(ApplicationResource.ADD_APPLICATION)%>"><%=paramRequest.getLocaleString("lbl_subirApp")%></a></p>
+
+<%
+ }
+%>
 
 <%!
     public boolean reviewQuery(HashMap<String, String> hm, String texto) {

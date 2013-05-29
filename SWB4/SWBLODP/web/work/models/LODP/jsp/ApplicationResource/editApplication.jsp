@@ -20,7 +20,9 @@
 <%@page import="com.infotec.lodp.swb.LicenseType"%>
 <%@page import="java.util.Iterator"%>
 <%@page import="org.semanticwb.portal.api.SWBResourceURL"%>
-<jsp:useBean id="paramRequest" scope="request" class="org.semanticwb.portal.api.SWBParamRequest"/>
+
+<!DOCTYPE html>
+<jsp:useBean id="paramRequest" scope="request" type="org.semanticwb.portal.api.SWBParamRequest" />
 
 
 <%
