@@ -379,8 +379,19 @@
                         if (queryinput != null && queryinput.trim().length() > 0) {
                             url.setParameter("search", queryinput);
                         }                    
+                        
+                        String nomclass = topic.getTopicTitle();
+                        if(null==nomclass) {
+                            nomclass="default";
+                         } else {
+                            nomclass=nomclass.trim();
+                            if(nomclass.trim().length()>5){
+                                nomclass=nomclass.trim().substring(0, 5);
+                            } 
+                        }
+                        nomclass = SWBUtils.TEXT.replaceSpecialCharacters(nomclass,true);
                     %>
-                <li><a href="<%=url.toString()%>"><%=paramRequest.getLocaleString("lbl_all")%></a></li>  
+                <li><a class="tema-<%=nomclass%>" href="<%=url.toString()%>"><%=paramRequest.getLocaleString("lbl_all")%></a></li>  
                 <%
                 } else {
                     Iterator<Topic> ittop = Topic.ClassMgr.listTopics(wsite);
