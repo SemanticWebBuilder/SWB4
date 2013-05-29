@@ -13,7 +13,7 @@ import org.semanticwb.social.Message;
 import org.semanticwb.social.Messageable;
 import org.semanticwb.social.Photo;
 import org.semanticwb.social.Photoable;
-import org.semanticwb.social.Post;
+import org.semanticwb.social.PostOut;
 import org.semanticwb.social.SocialNetPostable;
 import org.semanticwb.social.Video;
 import org.semanticwb.social.Videoable;
@@ -70,22 +70,25 @@ public class SendPostThread extends java.lang.Thread {
                        PostableObj postableObj=(PostableObj) obj;
                        if(postableObj.getPost()!=null && postableObj.getPostable()!=null)
                        {
-                         Post postOut=postableObj.getPost();  
+                         PostOut postOut=(PostOut)postableObj.getPost();   
                          SocialNetPostable postable=postableObj.getPostable();
                         
                          if(postOut instanceof Message && postable instanceof Messageable)
                           {
                               Messageable messageable=(Messageable) postable;
                               messageable.postMsg((Message)postableObj.getPost());
+                              postOut.setPublished(true);
                           }else if(postOut instanceof Photo && postable instanceof Photoable)
                           {
                               Photoable photoable=(Photoable) postable;
                               photoable.postPhoto((Photo)postableObj.getPost());
+                              postOut.setPublished(true);
                           }else if(postOut instanceof Video && postable instanceof Videoable)
                           {
                               System.out.println("ENTRA A SENTVIDEO...");
                               Videoable videoable=(Videoable) postable;
                               videoable.postVideo((Video)postableObj.getPost());
+                              postOut.setPublished(true);
                           }
                        }
                        

@@ -811,7 +811,7 @@ public class SWBSocialUtil implements SWBAppObject {
                     //SemanticObject semObject = SemanticObject.createSemanticObject(tmp_socialUri, wsite.getSemanticModel());
                     //SocialNetwork socialNet = (SocialNetwork) semObject.createGenericInstance();
                     //Se agrega la red social de salida al post
-                    postOut.addSocialNetwork(socialNet);
+                    //postOut.addSocialNetwork(socialNet);
                     //Se revisa si es de tipo mensaje, foto o video.
                     if (postOut instanceof Message && socialNet instanceof Messageable) {
                         System.out.println("MENSAJE!!");
