@@ -60,6 +60,21 @@
     </div>
     <%
                 }
+                if (suri != null && !suri.equals("")) {
+                    String name = "";
+                    String email = "";
+                    int nInappropriate;
+                    gobj = usr.getSemanticObject().getGenericInstance();
+                    if (gobj instanceof Developer) {
+                        Developer de = (Developer) gobj;
+                        name = de.getFullName();
+                        email = de.getEmail();
+                    }else if (gobj instanceof Publisher) {
+                        Publisher pu = (Publisher) gobj;
+                        name = pu.getFullName();
+                        email = "---";//pu.getEmail();
+                    }
+                    if (itco != null) {
     %>
     <script type="text/javascript">
         <!--
@@ -137,23 +152,6 @@
         }
         -->
     </script>
-    <%
-                if (suri != null && !suri.equals("")) {
-                    String name = "";
-                    String email = "";
-                    int nInappropriate;
-                    gobj = usr.getSemanticObject().getGenericInstance();
-                    if (gobj instanceof Developer) {
-                        Developer de = (Developer) gobj;
-                        name = de.getFullName();
-                        email = de.getEmail();
-                    }else if (gobj instanceof Publisher) {
-                        Publisher pu = (Publisher) gobj;
-                        name = pu.getFullName();
-                        email = "---";//pu.getEmail();
-                    }
-                    if (itco != null) {
-    %>
     <div>
         <%
                         try{
