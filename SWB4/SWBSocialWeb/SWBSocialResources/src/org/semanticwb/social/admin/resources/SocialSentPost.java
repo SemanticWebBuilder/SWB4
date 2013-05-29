@@ -6,12 +6,7 @@ package org.semanticwb.social.admin.resources;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.net.SocketException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Iterator;
-import java.util.Locale;
 import java.util.Set;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
@@ -21,7 +16,6 @@ import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Activeable;
-import org.semanticwb.model.Descriptiveable;
 import org.semanticwb.model.FormValidateException;
 import org.semanticwb.model.PFlowInstance;
 import org.semanticwb.model.Resource;
@@ -38,8 +32,6 @@ import org.semanticwb.portal.SWBFormMgr;
 import org.semanticwb.portal.api.GenericResource;
 import org.semanticwb.portal.api.SWBActionResponse;
 import org.semanticwb.portal.api.SWBParamRequest;
-import org.semanticwb.portal.api.SWBParamRequestImp;
-import org.semanticwb.portal.api.SWBResource;
 import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.api.SWBResourceURL;
 import org.semanticwb.social.Message;
@@ -141,11 +133,11 @@ public class SocialSentPost extends GenericResource {
         if(id==null) return;
 
         SocialTopic socialTopic = (SocialTopic)SemanticObject.getSemanticObject(id).getGenericInstance();    
-        String wsiteId = socialTopic.getSemanticObject().getModel().getName();
+        //String wsiteId = socialTopic.getSemanticObject().getModel().getName();
         
         PrintWriter out = response.getWriter();
-        Resource base = getResourceBase();
-        User user = paramRequest.getUser();
+        //Resource base = getResourceBase();
+        //User user = paramRequest.getUser();
         
         /*
         String busqueda = request.getParameter("search");
@@ -344,11 +336,13 @@ public class SocialSentPost extends GenericResource {
             urlpre.setParameter("preview", "true");
             out.println("<a href=\"#\" title=\"" + paramRequest.getLocaleString("previewdocument") + "\" onclick=\"submitUrl('" + urlpre + "',this); return false;\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/icons/preview.gif\" border=\"0\" alt=\"" + paramRequest.getLocaleString("previewdocument") + "\"></a>");
             
-            //if (canEdit) {
-                out.println("<a href=\"#\"  title=\"" + paramRequest.getLocaleString("documentAdmin") + "\" onclick=\"\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/icons/editar_1.gif\" border=\"0\" alt=\"" + "documentAdmin" + "\"></a>");
-            //} else {
-            //    out.println("<img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/icons/editar_1.gif\" border=\"0\" alt=\"" + "documentAdmin" + "\">");
-            //}
+            if (send2Flow) {    //Social:Solo cuando se puede enviar el documento a flujo, se muestra la opción de editar, si el documento esta en flujo no se muestra.
+                //if (canEdit) {
+                    out.println("<a href=\"#\"  title=\"" + paramRequest.getLocaleString("documentAdmin") + "\" onclick=\"\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/icons/editar_1.gif\" border=\"0\" alt=\"" + "documentAdmin" + "\"></a>");
+                //} else {
+                //    out.println("<img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/icons/editar_1.gif\" border=\"0\" alt=\"" + "documentAdmin" + "\">");
+                //}
+            }
              
             
                 
@@ -377,7 +371,7 @@ public class SocialSentPost extends GenericResource {
                     url2flow.setParameter("page", "" + p);
                     url2flow.setParameter("pfid", pfid);
                     out.println("<a href=\"#\" title=\"" + paramRequest.getLocaleString("senddocument2flow") + "\" onclick=\"showDialog('" + url2flow + "','" + paramRequest.getLocaleString("comentary") + "'); return false;\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/images/enviar-flujo.gif\" border=\"0\" alt=\"" + paramRequest.getLocaleString("senddocument2flow") + "\"></a>");
-                } else {
+                } else {    //TODOSOCIAL:VER CUANDO PUEDE PASAR ESTA OPCIÓN (ELSE).
                     out.println("<img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/images/enviar-flujo.gif\" border=\"0\" alt=\"" + paramRequest.getLocaleString("senddocument2flow") + "\" title=\"" + paramRequest.getLocaleString("canNOTsenddocument2flow") + "\">");
                 }
             } else if (isInFlow && !isAuthorized) {
@@ -409,20 +403,24 @@ public class SocialSentPost extends GenericResource {
             //Show Networks
             out.println("<td>");
             String nets="---";
+            System.out.println("socialNet:"+sobj.getSocialNetwork()+",redes:"+sobj.listSocialNetworks().hasNext());
             boolean firstTime=true;
             Iterator<SocialNetwork> itPostSocialNets=sobj.listSocialNetworks();
             while(itPostSocialNets.hasNext())
             {
                 SocialNetwork socialNet=itPostSocialNets.next();
-                String sSocialNet=socialNet.getTitle(lang);
+                System.out.println("socialNet-1:"+socialNet);
+                String sSocialNet=socialNet.getDisplayTitle(lang);
+                System.out.println("socialNet-2:"+sSocialNet);
                 if(sSocialNet!=null && sSocialNet.trim().length()>0)
                 {
+                    System.out.println("socialNet-3:"+sSocialNet);
                     if(firstTime) 
                     {
-                        nets=""+socialNet.getTitle(lang);
+                        nets=""+sSocialNet;
                         firstTime=false;
                     }
-                    else nets+="|"+socialNet.getDisplayTitle(lang);
+                    else nets+="|"+sSocialNet;
                 }
             }
             out.println(nets);
@@ -433,10 +431,7 @@ public class SocialSentPost extends GenericResource {
             if(sobj.getPostInSource()!=null)
             {
                 SWBResourceURL url=paramRequest.getRenderUrl().setMode(Mode_SOURCE).setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("postUri", sobj.getPostInSource().getURI());  
-                //out.println("<a href=\"#\" title=\"" + paramRequest.getLocaleString("senddocument2flow") + "\" onclick=\"showDialog('" + url2flow + "','" + paramRequest.getLocaleString("comentary") + "'); return false;\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/images/enviar-flujo.gif\" border=\"0\" alt=\"" + paramRequest.getLocaleString("senddocument2flow") + "\"></a>");
-                out.println("<a href=\"#\" title=\"" + paramRequest.getLocaleString("source") + "\" onclick=\"showDialog('" + url + "','" + paramRequest.getLocaleString("source") + "'); return false;\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/images/enviar-flujo.gif\" border=\"0\" alt=\"" + paramRequest.getLocaleString("source") + "\"></a>");
-                
-                //paramRequest.getRenderUrl().setMode(Mode_SOURCE).setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("postUri", sobj.getURI()) +"\">Origen</a>");
+                out.println("<a href=\"#\" title=\"" + paramRequest.getLocaleString("source") + "\" onclick=\"showDialog('" + url + "','" + paramRequest.getLocaleString("source") + "'); return false;\">Origen(Image)</a>");
             }else{
                 out.println("---");
             }
@@ -463,7 +458,7 @@ public class SocialSentPost extends GenericResource {
                 urlu.setParameter("suri", sobj.getURI());
                 urlu.setParameter("act", "updstatus");
                 //out.println("J1");
-                out.println("<a href=\"#\" onclick=\"showStatusURL('" + urlu + "'); \" />Publicar</a>");
+                out.println("<a href=\"#\" onclick=\"showStatusURL('" + urlu + "'); \" />"+paramRequest.getLocaleString("publish")+"</a>");
             } else {    //El PostOut ya se envío
                if(!isInFlow && !needAuthorization && !isAuthorized)
                {
@@ -475,7 +470,6 @@ public class SocialSentPost extends GenericResource {
                else if(isInFlow && needAuthorization && !isAuthorized){
                     out.println("En Flujo");
                }
-               //out.println("<img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/images/enviar-flujo.gif\" border=\"0\" alt=\"" + paramRequest.getLocaleString("publish") + "\" title=\"" + paramRequest.getLocaleString("canNOTsenddocument2flow") + "\">");
             }
             out.println("</td>");
             
@@ -541,19 +535,34 @@ public class SocialSentPost extends GenericResource {
      * @throws IOException Signals that an I/O exception has occurred.
      */
     public void doPreview(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        System.out.println("Entra a doPreview");
-        String id = request.getParameter("sval");
+        String postUri=request.getParameter("sval");
         PrintWriter out = response.getWriter();
         out.println("<fieldset>");
         out.println("<legend>" + paramRequest.getLocaleString("previewdocument") + "</legend>");
         try {
+            final String path = SWBPlatform.getContextPath() + "/work/" + paramRequest.getWebPage().getWebSiteId() + "/jsp/review/showPostOut.jsp";
+            if (request != null) {
+                RequestDispatcher dis = request.getRequestDispatcher(path);
+                if (dis != null) {
+                    try {
+                        SemanticObject semObject = SemanticObject.createSemanticObject(postUri);
+                        request.setAttribute("postOut", semObject);
+                        request.setAttribute("paramRequest", paramRequest);
+                        dis.include(request, response);
+                    } catch (Exception e) {
+                        log.error(e);
+                        e.printStackTrace(System.out);
+                    }
+                }
+            }
+            
             /*
             SWBResource res = SWBPortal.getResourceMgr().getResource(id);
             ((SWBParamRequestImp) paramRequest).setResourceBase(res.getResourceBase());
             res.render(request, response, paramRequest);
             **/
         } catch (Exception e) {
-            log.error("Error while getting content string ,id:" + id, e);
+            log.error("Error while getting content string ,id:" + postUri, e);
         }
         out.println("</fieldset>");
     }
@@ -881,7 +890,6 @@ public class SocialSentPost extends GenericResource {
                 errormsg = paramRequest.getLocaleString("statERRORmsg1");
             }
         } else if ("updstatus".equals(action)) {
-            System.out.println("va a publicar Post..:"+obj);
             if(obj!=null)
             {
                 PostOut postOut=(PostOut)obj.createGenericInstance();
