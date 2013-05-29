@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.semanticwb.social.admin.resources;
+package org.semanticwb.social.admin.resources.BORRAR;
 
 import java.io.IOException;
 import java.text.DecimalFormat;
@@ -123,6 +123,7 @@ public class SocialTopicMsgIn extends GenericResource {
                 
                 
                 SWBSocialUtil.PostOutUtil.sendNewPost(postIn, postIn.getSocialTopic(), socialPFlow, aSocialNets, wsite, request.getParameter("toPost"), request, response);
+                
             }
         }else if (SWBResourceURL.Action_EDIT.equals(action)) {
             WebSite wsite = base.getWebSite();
