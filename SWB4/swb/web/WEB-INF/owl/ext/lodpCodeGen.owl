@@ -151,6 +151,24 @@
       </swbxf:DisplayProperty>
     </swb:displayProperty>
   </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticwebbuilder.org.mx/ontology/lodp.owl#verComment">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_comment">
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >Comentario</rdfs:label>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextArea_Description"/>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticwebbuilder.org.mx/ontology/lodp.owl#chiefName">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_pubChiefName">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextBox"/>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >Nombre del Jefe</rdfs:label>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+  </rdf:Description>
   <rdf:Description rdf:about="http://www.semanticwebbuilder.org.mx/ontology/lodp.owl#appTypeTitle">
     <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:required>
@@ -182,8 +200,26 @@
       </swbxf:DisplayProperty>
     </swb:displayProperty>
   </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticwebbuilder.org.mx/ontology/lodp.owl#pubCertificate">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_pubCertificate">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextBox"/>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >Certificado</rdfs:label>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+  </rdf:Description>
   <rdf:Description rdf:about="http://www.semanticwebbuilder.org.mx/ontology/lodp.owl#datasetDescription">
     <swb:displayProperty rdf:resource="#dp_licTypeDescription"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticwebbuilder.org.mx/ontology/lodp.owl#datasetActive">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_active">
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >Activo</rdfs:label>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#Activate_1"/>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
   </rdf:Description>
   <swb:Class rdf:ID="LicenseType">
     <rdfs:label xml:lang="en">License type</rdfs:label>
@@ -198,15 +234,6 @@
     </rdfs:subClassOf>
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
   </swb:Class>
-  <rdf:Description rdf:about="http://www.semanticwebbuilder.org.mx/ontology/lodp.owl#datasetActive">
-    <swb:displayProperty>
-      <swbxf:DisplayProperty rdf:ID="dp_active">
-        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >Activo</rdfs:label>
-        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#Activate_1"/>
-      </swbxf:DisplayProperty>
-    </swb:displayProperty>
-  </rdf:Description>
   <rdf:Description rdf:about="http://www.semanticwebbuilder.org.mx/ontology/lodp.owl#topicDescription">
     <swb:displayProperty rdf:resource="#dp_licTypeDescription"/>
   </rdf:Description>
@@ -263,6 +290,15 @@
     </rdfs:subClassOf>
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
   </swb:Class>
+  <rdf:Description rdf:about="http://www.semanticwebbuilder.org.mx/ontology/lodp.owl#validated">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_validated">
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >Validado</rdfs:label>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#BooleanElement_1"/>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+  </rdf:Description>
   <rdf:Description rdf:about="http://www.semanticwebbuilder.org.mx/ontology/lodp.owl#chiefEmail">
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_chiefEmail">
@@ -289,6 +325,24 @@
     <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >pkg</rdfs:label>
   </swb:CodePackage>
+  <rdf:Description rdf:about="http://www.semanticwebbuilder.org.mx/ontology/lodp.owl#pubUniAdmin">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_pubUnit">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextBox"/>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >Unidad Administrativa a la que pertenece</rdfs:label>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticwebbuilder.org.mx/ontology/lodp.owl#pubRFC">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_pubRFC">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextBox"/>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >RFC</rdfs:label>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+  </rdf:Description>
   <rdf:Description rdf:about="http://www.semanticwebbuilder.org.mx/ontology/lodp.owl#licenseDescription">
     <swb:displayProperty rdf:resource="#dp_licTypeDescription"/>
     <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
@@ -307,6 +361,15 @@
     </rdfs:subClassOf>
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
   </swb:Class>
+  <rdf:Description rdf:about="http://www.semanticwebbuilder.org.mx/ontology/lodp.owl#verPublisher">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_dvpublisher">
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >Publicador</rdfs:label>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#selectOneUserRepWithBlank"/>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+  </rdf:Description>
   <rdf:Description rdf:about="http://www.semanticwebbuilder.org.mx/ontology/lodp.owl#hasComment">
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_comments">
@@ -326,7 +389,7 @@
       <swbxf:DisplayProperty rdf:ID="dp_topics">
         <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
         >Temas</rdfs:label>
-        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#ObjectElement_1"/>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#SelectMultipleModelWithBlank"/>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
   </rdf:Description>
@@ -353,6 +416,24 @@
       <swbxf:DisplayProperty rdf:ID="dp_updated">
         <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
         >Actualizado</rdfs:label>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#DateElement_1"/>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticwebbuilder.org.mx/ontology/lodp.owl#version">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_versionnum">
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >Número de versión</rdfs:label>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextBox"/>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticwebbuilder.org.mx/ontology/lodp.owl#versionCreated">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_dvcreated">
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >Fecha creación</rdfs:label>
         <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#DateElement_1"/>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
@@ -411,12 +492,30 @@
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org.mx/ontology/lodp.owl#Application"/>
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
   </swb:Class>
+  <rdf:Description rdf:about="http://www.semanticwebbuilder.org.mx/ontology/lodp.owl#pubPhone">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_pubPhone">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextBox"/>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >Teléfono</rdfs:label>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+  </rdf:Description>
   <rdf:Description rdf:about="http://www.semanticwebbuilder.org.mx/ontology/lodp.owl#hasTag">
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_tags">
         <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#SelectMultipleModel"/>
         <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
         >Etiquetas</rdfs:label>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticwebbuilder.org.mx/ontology/lodp.owl#filePath">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_dvfilename">
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >Nombre del archivo</rdfs:label>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextBox"/>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
   </rdf:Description>
@@ -453,12 +552,12 @@
     </rdfs:subClassOf>
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
   </swb:Class>
-  <rdf:Description rdf:about="http://www.semanticwebbuilder.org.mx/ontology/lodp.owl#appTitle">
+  <rdf:Description rdf:about="http://www.semanticwebbuilder.org.mx/ontology/lodp.owl#topicTitle">
     <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:required>
     <swb:displayProperty rdf:resource="#dp_licTypeTitle"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticwebbuilder.org.mx/ontology/lodp.owl#topicTitle">
+  <rdf:Description rdf:about="http://www.semanticwebbuilder.org.mx/ontology/lodp.owl#appTitle">
     <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:required>
     <swb:displayProperty rdf:resource="#dp_licTypeTitle"/>
@@ -475,8 +574,26 @@
   <rdf:Description rdf:about="http://www.semanticwebbuilder.org.mx/ontology/lodp.owl#appAuthor">
     <rdfs:range rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#User"/>
   </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticwebbuilder.org.mx/ontology/lodp.owl#pubDirGral">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_pubDirGral">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextBox"/>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >Dirección general a la que pertenece</rdfs:label>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+  </rdf:Description>
   <rdf:Description rdf:about="http://www.semanticwebbuilder.org.mx/ontology/lodp.owl#sectorDescription">
     <swb:displayProperty rdf:resource="#dp_licTypeDescription"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticwebbuilder.org.mx/ontology/lodp.owl#datasetSize">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_DSsize">
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >Tamaño</rdfs:label>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextBox"/>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
   </rdf:Description>
   <swb:Class rdf:ID="Tag">
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
@@ -491,11 +608,11 @@
     </rdfs:subClassOf>
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
   </swb:Class>
-  <rdf:Description rdf:about="http://www.semanticwebbuilder.org.mx/ontology/lodp.owl#datasetSize">
+  <rdf:Description rdf:about="http://www.semanticwebbuilder.org.mx/ontology/lodp.owl#versionHash">
     <swb:displayProperty>
-      <swbxf:DisplayProperty rdf:ID="dp_DSsize">
+      <swbxf:DisplayProperty rdf:ID="dp_dvhashsign">
         <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >Tamaño</rdfs:label>
+        >Cadena firmada (hash)</rdfs:label>
         <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextBox"/>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
@@ -547,6 +664,24 @@
     >true</swb:required>
     <swb:displayProperty rdf:resource="#dp_licTypeTitle"/>
   </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticwebbuilder.org.mx/ontology/lodp.owl#views">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_dshit">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextBox"/>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >Visitas</rdfs:label>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticwebbuilder.org.mx/ontology/lodp.owl#pubInstitution">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_pubInstitution">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#selectOneModelWithBlank"/>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >Institución</rdfs:label>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+  </rdf:Description>
   <rdf:Description rdf:about="http://www.semanticwebbuilder.org.mx/ontology/lodp.owl#tagName">
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_name">
@@ -558,6 +693,15 @@
   </rdf:Description>
   <rdf:Description rdf:about="http://www.semanticwebbuilder.org.mx/ontology/lodp.owl#lastVersion">
     <swb:displayProperty rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#dp_lastVersion"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticwebbuilder.org.mx/ontology/lodp.owl#pubPosition">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_pubCargo">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextBox"/>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >Cargo</rdfs:label>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
   </rdf:Description>
 </rdf:RDF>
 
