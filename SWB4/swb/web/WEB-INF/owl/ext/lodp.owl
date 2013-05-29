@@ -317,7 +317,7 @@
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="pubDirGral">
     <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >pub dir gral</rdfs:label>
+    >Dirección general a la que pertenece</rdfs:label>
     <rdfs:domain rdf:resource="#Publisher"/>
     <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >Dirección General a la que pertenece</rdfs:comment>
@@ -490,10 +490,10 @@
     <rdfs:domain rdf:resource="#DatasetVersion"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="versionCreated">
-    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >version created</rdfs:label>
-    <rdfs:domain rdf:resource="#DatasetVersion"/>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#dateTime"/>
+    <rdfs:domain rdf:resource="#DatasetVersion"/>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Fecha creación</rdfs:label>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="password">
     <rdfs:domain rdf:resource="http://xmlns.com/foaf/0.1/Person"/>
