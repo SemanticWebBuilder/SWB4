@@ -17,9 +17,12 @@
 <%@page import="static org.semanticwb.social.admin.resources.SocialTopicMsgOut.*"%>
 <jsp:useBean id="paramRequest" scope="request" type="org.semanticwb.portal.api.SWBParamRequest"/>
 <%
+System.out.println("Entra a SocialSentPost_sObjPostOut:"+request.getAttribute("sObjPostOut"));
 SemanticObject sObjPostOut=(SemanticObject)request.getAttribute("sObjPostOut");
+System.out.println("Entra a SocialSentPost-3:"+sObjPostOut);
 if(sObjPostOut.createGenericInstance() instanceof org.semanticwb.social.MessageIn)   
 {
+    System.out.println("Entra a SocialSentPost-4");
     MessageIn messageIn=(MessageIn)sObjPostOut.createGenericInstance();
     out.println(showData(messageIn, "msg", paramRequest));
 }else if(sObjPostOut.createGenericInstance()  instanceof Photo)

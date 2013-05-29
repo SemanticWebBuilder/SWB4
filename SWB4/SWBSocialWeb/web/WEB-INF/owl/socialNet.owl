@@ -356,6 +356,19 @@
     <swb:hasHerarquicalNode>
       <swbxf:HerarquicalNode rdf:ID="hn_SocialNets">
         <swb:hasHerarquicalNode>
+          <swbxf:HerarquicalNode rdf:ID="hn_Youtube">
+            <swbxf:heClass>
+              <owl:Class rdf:ID="Youtube"/>
+            </swbxf:heClass>
+            <swb:title rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >YouTube</swb:title>
+            <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+            >30</swb:index>
+            <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >swbIconYoutubeGrp</swb:iconClass>
+          </swbxf:HerarquicalNode>
+        </swb:hasHerarquicalNode>
+        <swb:hasHerarquicalNode>
           <swbxf:HerarquicalNode rdf:ID="hn_Facebook">
             <swbxf:heClass>
               <swb:Class rdf:ID="Facebook">
@@ -670,15 +683,22 @@
     <rdfs:subClassOf rdf:resource="#PostVideoable"/>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
-  <owl:Class rdf:ID="Youtube">
-    <rdfs:label>Youtube</rdfs:label>
-    <rdfs:comment>Clase que almacenara las diferentes cuentas de una organización para la red social YouTube.</rdfs:comment>
-    <rdfs:subClassOf rdf:resource="#SocialNetwork"/>
-    <rdfs:subClassOf rdf:resource="#Videoable"/>
+  <owl:Class rdf:about="#Youtube">
+    <rdfs:subClassOf rdf:resource="#Authenticable"/>
+    <swb:displayObject>
+      <swbxf:DisplayObject rdf:ID="do_YouTube">
+        <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >swbIconTwitter</swb:iconClass>
+      </swbxf:DisplayObject>
+    </swb:displayObject>
     <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:autogenId>
-    <rdfs:subClassOf rdf:resource="#Authenticable"/>
+    <rdfs:label xml:lang="en">YouTube Account</rdfs:label>
+    <rdfs:label xml:lang="es">Cuenta de Youtube</rdfs:label>
+    <rdfs:comment>Clase que almacenara las diferentes cuentas de una organización para la red social YouTube.</rdfs:comment>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+    <rdfs:subClassOf rdf:resource="#SocialNetwork"/>
+    <rdfs:subClassOf rdf:resource="#Videoable"/>
   </owl:Class>
   <owl:Class rdf:ID="SocialNetStreamSearch">
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
