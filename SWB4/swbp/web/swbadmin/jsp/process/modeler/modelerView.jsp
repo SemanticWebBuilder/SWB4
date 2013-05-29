@@ -85,7 +85,7 @@ exportUrl.setMode(SVGModeler.MODE_EXPORT);
         <div id="fileBar" class="subbarHidden" style="width: 385px;">
             <span class="subbarStart"></span>
             <span class="storeProcess" title="Enviar modelo" onclick="Modeler.submitCommand('<%=url%>')"></span>
-            <span class="saveAsImage" title="Guardar como imagen" onclick="submit_download_form('png')"></span>
+            <span class="saveAsImage" title="Guardar como imagen" onclick="submit_download_form('svg')"></span>
             <span class="subbarEnd"></span>
         </div>
         <div id="startEventsBar" class="subbarHidden" style="width: 385px;">
@@ -280,6 +280,27 @@ exportUrl.setMode(SVGModeler.MODE_EXPORT);
                 stroke-width:1.5;
                 cursor: hand;
             }
+ 
+            .intermediateInterruptingEvent
+            {
+                stroke:#2c5aa0;
+                fill:url(#linearGradientIntermediateEvent);
+                fill-opacity:1;
+                stroke-width:1.5;
+                stroke-dasharray: 3,3;
+                /*stroke-dashoffset: 5;*/
+            }
+            
+            .intermediateInterruptingEvent_o
+            {
+                stroke:#2cff20;
+                fill:url(#linearGradientIntermediateEvent);
+                fill-opacity:1;
+                stroke-width:1.5;
+                stroke-dasharray: 3,3;
+                /*stroke-dashoffset: 5;*/
+            }
+            
             .intermediateEvent
             {
                 stroke:#2c5aa0;
