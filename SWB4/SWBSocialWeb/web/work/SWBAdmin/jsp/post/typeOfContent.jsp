@@ -13,6 +13,7 @@
 <jsp:useBean id="paramRequest" scope="request" type="org.semanticwb.portal.api.SWBParamRequest"/>
 <%
     WebSite wsite = WebSite.ClassMgr.getWebSite(request.getParameter("wsite"));
+    System.out.println("Entra a TypeOfContent..:"+wsite);
     String contentType = (String) request.getAttribute("valor");    
     String objUri = request.getParameter("objUri"); 
     SemanticObject semObj=SemanticObject.createSemanticObject(objUri); 

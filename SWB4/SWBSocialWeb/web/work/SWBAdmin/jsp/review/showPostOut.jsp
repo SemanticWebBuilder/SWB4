@@ -12,15 +12,11 @@
 <%@page import="org.semanticwb.platform.SemanticProperty"%>
 <%@page import="org.semanticwb.portal.api.*"%>
 <%@page import="java.util.*"%>
-<%@page import="static org.semanticwb.social.admin.resources.SocialTopicMsgIn.*"%> 
 <jsp:useBean id="paramRequest" scope="request" type="org.semanticwb.portal.api.SWBParamRequest"/>
-
 <%
-    if(request.getAttribute("wsite")==null || request.getAttribute("postOut")==null) return;
+    if(request.getAttribute("postOut")==null) return;
     
-    //WebSite wsite=(WebSite)request.getAttribute("wsite");
     SemanticObject semObj=(SemanticObject)request.getAttribute("postOut");
-    
     
     out.println("<table>");
     out.println("<tr>");
