@@ -621,8 +621,6 @@
             <li>
                 <label><%=paramRequest.getLocaleString("lbl_urlDetalle")%></label>&nbsp;&nbsp;&nbsp;&nbsp;<%=aps.getAppURL()%>
             </li>
-            <li><label><%=paramRequest.getLocaleString("lbl_valoracionDetalle")%></label>&nbsp;&nbsp;&nbsp;&nbsp;<%=aps.getRanks()%>
-            </li>
             <li>
                 <label><%=paramRequest.getLocaleString("lbl_visitasDetalle")%></label>&nbsp;&nbsp;&nbsp;&nbsp;<%=aps.getViews()%>
             </li>
