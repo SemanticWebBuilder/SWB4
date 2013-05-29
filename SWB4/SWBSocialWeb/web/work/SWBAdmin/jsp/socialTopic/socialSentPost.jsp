@@ -14,7 +14,6 @@
 <%@page import="org.semanticwb.platform.SemanticProperty"%>
 <%@page import="org.semanticwb.portal.api.*"%>
 <%@page import="java.util.*"%>
-<%@page import="static org.semanticwb.social.admin.resources.SocialTopicMsgOut.*"%>
 <jsp:useBean id="paramRequest" scope="request" type="org.semanticwb.portal.api.SWBParamRequest"/>
 <%
 System.out.println("Entra a SocialSentPost_sObjPostOut:"+request.getAttribute("sObjPostOut"));
@@ -74,7 +73,7 @@ private String showData(PostIn postIn, String postOutType, SWBParamRequest param
         
     }catch(Exception e)
     {
-        log.error(e); 
+        //log.error(e); 
     }
     
     return strb.toString();
