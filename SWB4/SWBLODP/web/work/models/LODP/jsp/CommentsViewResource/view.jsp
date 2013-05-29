@@ -3,6 +3,7 @@
     Created on : 14/05/2013, 07:26:08 PM
     Author     : rene.jara
 --%>
+<%@page import="com.infotec.lodp.swb.Publisher"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="com.infotec.lodp.swb.resources.CommentsViewResource"%>
 <%@page import="com.infotec.lodp.swb.Developer"%>
@@ -27,6 +28,7 @@
                 String repositoryId = wpage.getWebSite().getUserRepository().getId();
 
                 String suri=request.getParameter("suri");
+                String encuri="";
  //               if(suri==null)
  //                   suri = "http://www.LODP.swb#lodpcg_Dataset:3";
                //    uri"http://www.LODP.swb#lodpcg_Application:2";
@@ -41,10 +43,12 @@
                     if (gobj != null && gobj instanceof Application) {
                         Application ap = (Application) gobj;
                         itco = ap.listComments();
+                        encuri =ap.getEncodedURI();
 
                     } else if (gobj != null && gobj instanceof Dataset) {
                         Dataset ds = (Dataset) gobj;
                         itco = ds.listComments();
+                        encuri =ds.getEncodedURI();
                     }
                 }
                 if (request.getParameter("msg") != null) {
@@ -143,6 +147,10 @@
                         Developer de = (Developer) gobj;
                         name = de.getFullName();
                         email = de.getEmail();
+                    }else if (gobj instanceof Publisher) {
+                        Publisher pu = (Publisher) gobj;
+                        name = pu.getFullName();
+                        email = "---";//pu.getEmail();
                     }
                     if (itco != null) {
     %>
@@ -195,16 +203,18 @@
         <div>
             <ul>
         <%
-                SWBResourceURL rurl=paramRequest.getRenderUrl();
+                String rurl=wpage.getUrl();
                 for(int x=0;x<tPag;x++){
                     if(x==nPag){
         %>
                 <li><%=(x+1)%></li>
         <%
                     }else{
-                        rurl.setParameter("npag",x+"");
+                        rurl+="?act=detail";
+                        rurl+="&suri="+encuri;
+                        rurl+="&npag="+x;
         %>
-                <li><a href="<%=rurl.toString()%>"><%=(x+1)%></a></li>
+                <li><a href="<%=rurl%>"><%=(x+1)%></a></li>
         <%
                     }
                 }
@@ -214,8 +224,8 @@
     </div>
     <%
           }
-          SWBResourceURLImp urladd = new SWBResourceURLImp(request, base, wpage, SWBResourceURLImp.UrlType_ACTION);
-          urladd.setAction(SWBResourceURL.Action_ADD);
+          SWBResourceURLImp urladd= new SWBResourceURLImp(request, base, wpage, SWBResourceURLImp.UrlType_ACTION);
+          urladd.setAction(CommentsViewResource.Action_COMMENT);
           urladd.setParameter("suri", suri);
     %>
     <div>
