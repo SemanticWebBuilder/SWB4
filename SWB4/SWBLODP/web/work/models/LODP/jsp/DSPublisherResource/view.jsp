@@ -60,8 +60,10 @@
     WebPage wpage = paramRequest.getWebPage();
     WebSite wsite = wpage.getWebSite();
     User usr = paramRequest.getUser();
+    //out.println("Clase a actualizar: "+DatasetVersion.lodpcg_DatasetVersion.getURI());
+    //out.println("Propiedad a actualizar: "+DatasetVersion.lodp_filePath.getName());
     
-    /*
+/*
     
     if(request.getParameter("createuser")!=null&&request.getParameter("createuser").equals("true")){
         UserRepository usrrep = wsite.getUserRepository();
@@ -72,8 +74,8 @@
         newpub.setLastName("sfp");
         newpub.setLogin("juan");
                 }
-    
     */
+
 
 
     Publisher pub = LODPUtils.getPublisher(usr);
@@ -345,10 +347,7 @@
     <div class="derecho_ordena">
         <%
             SWBResourceURL urlorder = paramRequest.getRenderUrl();
-            urlorder.setParameter("act", "");
-            if (null != filterby) {
-                urlorder.setParameter("filter", filterby);
-            }
+            urlorder.setParameter("act", "myds");
             if (null != filteruri) {
                 urlorder.setParameter("filteruri", filteruri);
             }
@@ -435,7 +434,9 @@
 
                         SWBResourceURL urlsummary = paramRequest.getRenderUrl();
                         urlsummary.setParameter("summary", "show");
-                        urlsummary.setParameter("suri", ds.getEncodedURI());
+                        urlsummary.setParameter("act", "myds");
+                        urlsummary.setParameter("order", orderby);
+                        urlsummary.setParameter("suri", ds.getShortURI());
 
                         SWBResourceURL urldet = paramRequest.getRenderUrl();
                         urldet.setMode(SWBResourceURL.Mode_EDIT);
@@ -458,16 +459,11 @@
                         }
                 %>
                 <tr <%=toPaint%>>
-                    <td onclick="window.location = '<%=urlsummary.toString()%>';
-        return false;"><%=ds.getDatasetTitle()%><td> 
-                    <td onclick="window.location = '<%=urlsummary.toString()%>';
-        return false;"><%=ds.getDatasetDescription()%></td>    
-                    <td onclick="window.location = '<%=urlsummary.toString()%>';
-        return false;"><%=ds.getDatasetFormat()%></td>
-                    <td onclick="window.location = '<%=urlsummary.toString()%>';
-        return false;"><%=sdf.format(ds.getDatasetUpdated())%></td>
-                    <td onclick="window.location = '<%=urlsummary.toString()%>';
-        return false;"><%=LODPUtils.getDSTagList(ds, ",")%></td> 
+                    <td onclick="window.location = '<%=urlsummary.toString()%>'; "><%=ds.getDatasetTitle()%><td> 
+                    <td onclick="window.location = '<%=urlsummary.toString()%>';"><%=ds.getDatasetDescription()%></td>    
+                    <td onclick="window.location = '<%=urlsummary.toString()%>';"><%=ds.getDatasetFormat()%></td>
+                    <td onclick="window.location = '<%=urlsummary.toString()%>';"><%=sdf.format(ds.getDatasetUpdated())%></td>
+                    <td onclick="window.location = '<%=urlsummary.toString()%>';"><%=LODPUtils.getDSTagList(ds, ",")%></td> 
                     <td><a href="<%=urldet.toString()%>">Ver</a><a href="<%=urlremove.toString()%>">Eliminar</a></td> 
                 </tr>
                 <%
@@ -492,6 +488,7 @@
             <%
             // Mostrar Informacion Dataset
             Dataset ds = null;
+            suri = SemanticObject.shortToFullURI(suri);
             go = ont.getGenericObject(suri);
             if (null != go && go instanceof Dataset) {
                 ds = (Dataset) go;
@@ -581,16 +578,7 @@
     </ul>
     
 </div>
-    <div>
-        <ul>
-            <%
-                SWBResourceURL urlstats = paramRequest.getRenderUrl();
-                urlstats.setMode(DSPublisherResource.MODE_STATS);
-                urlstats.setParameter("suri",ds.getEncodedURI());
-            %>
-            <li><a href="<%=urlstats.toString()%>">Ver estadísticas</a></li>
-        </ul>
-    </div>
+
             </div>
 <%
 } 
