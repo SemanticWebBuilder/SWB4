@@ -825,6 +825,7 @@
 <%
             }
         } else if("stats".equals(action)){
+        
             System.out.println("Stats DS.........");
         String suri = request.getParameter("suri");
         System.out.println("URI........."+suri);
