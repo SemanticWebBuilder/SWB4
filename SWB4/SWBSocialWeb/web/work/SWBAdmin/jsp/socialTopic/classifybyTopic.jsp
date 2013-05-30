@@ -32,6 +32,7 @@
     SWBResourceURL actionUrl = paramRequest.getActionUrl();
     actionUrl.setAction("changeSocialTopic");
     actionUrl.setParameter("postUri", post.getURI());
+    actionUrl.setParameter("wsite", wsite.getURI());
     %>
     <div class="swbform">
     <fieldset>
