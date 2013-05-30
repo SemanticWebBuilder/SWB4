@@ -574,17 +574,14 @@ public class SocialTopicInBox extends GenericResource {
                 }
             }else if (action.equals(SWBActionResponse.Action_REMOVE)) {
                 if (request.getParameter("suri") != null && request.getParameter("postUri") != null) {
-                    WebSite wsite = WebSite.ClassMgr.getWebSite(request.getParameter("wsite"));
-                    if (wsite != null) {
-                        SemanticObject semObj = SemanticObject.getSemanticObject(request.getParameter("postUri"));
-                        if (semObj != null) {
-                            PostIn postIn = (PostIn) semObj.createGenericInstance();
-                            postIn.remove();
+                    SemanticObject semObj = SemanticObject.getSemanticObject(request.getParameter("postUri"));
+                    if (semObj != null) {
+                        PostIn postIn = (PostIn) semObj.createGenericInstance();
+                        postIn.remove();
 
-                            response.setMode(SWBActionResponse.Mode_EDIT);
-                            response.setRenderParameter("statusMsg", response.getLocaleString("postDeleted"));
-                            response.setRenderParameter("suri", request.getParameter("suri"));
-                        }
+                        response.setMode(SWBActionResponse.Mode_EDIT);
+                        response.setRenderParameter("statusMsg", response.getLocaleString("postDeleted"));
+                        response.setRenderParameter("suri", request.getParameter("suri"));
                     }
                 }
             }
