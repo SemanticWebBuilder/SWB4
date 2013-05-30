@@ -112,7 +112,7 @@
     //12 Jun 2013, 11:35
     //SimpleDateFormat sdf = new SimpleDateFormat("dd MMM yyyy, h:mm a", new Locale("es"));
     //12 jun 2013
-    SimpleDateFormat sdf = new SimpleDateFormat("dd MMM yyyy", new Locale("es"));
+    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", new Locale("es"));
     //12/junio/2013
     SimpleDateFormat sdf2 = new SimpleDateFormat("dd/MMMMM/yyyy", new Locale("es"));
     if (request.getParameter("alertmsg") != null) {
@@ -315,7 +315,7 @@
 
     </form>
 </div>
-<div class="izquierdo">
+<div class="izq">
     <!--
     <div class="izq_sector">
         <ul>
@@ -341,15 +341,14 @@
         </ul>   
     </div>
         -->
-    <div class="izq_institucion">
+        <p class="rubro"><%=paramRequest.getLocaleString("lbl_institFilter")%></p>
         <ul>
-            <li><h3><%=paramRequest.getLocaleString("lbl_institFilter")%></h3></li>
                 <%
                 if(null!=filteruri&&filteruri.trim().length()>0){
                     go = ont.getGenericObject(filteruri);
                     Institution inst = (Institution)go;
                         %>
-                <li><%=inst.getInstitutionTitle()%></li>
+                <li><a href="#" class="tema-inst"><%=inst.getInstitutionTitle()%></a></li>
                 <%
                     SWBResourceURL url = paramRequest.getRenderUrl();
                         if(null!=filtertopic && filtertopic.trim().length()>0) {
@@ -362,7 +361,7 @@
                             url.setParameter("search", queryinput);
                         }                    
                     %>
-                <li><a href="<%=url.toString()%>"><%=paramRequest.getLocaleString("lbl_all")%></a></li>  
+                <li><a href="<%=url.toString()%>" class="tema-todos"><%=paramRequest.getLocaleString("lbl_all")%></a></li>  
                 <%
                 } else {
                     Iterator<Institution> itins = Institution.ClassMgr.listInstitutions(wsite);
@@ -381,23 +380,32 @@
                             url.setParameter("search", queryinput);
                         }
                 %>
-            <li><a href="<%=url.toString()%>" title="<%=inst.getInstitutionDescription() != null ? inst.getInstitutionDescription().trim() : inst.getInstitutionTitle()%>"><%=inst.getInstitutionTitle()%></a></li> 
+            <li><a href="<%=url.toString()%>" class="tema-inst" title="<%=inst.getInstitutionDescription() != null ? inst.getInstitutionDescription().trim() : inst.getInstitutionTitle()%>"><%=inst.getInstitutionTitle()%></a></li> 
                 <%
                     }
                 }
                 
                 %>
         </ul>  
-    </div>
-    <div class="izq_tema">
+
+        <p class="rubro"><%=paramRequest.getLocaleString("lbl_topicFilter")%></p>
         <ul>
-            <li><h3><%=paramRequest.getLocaleString("lbl_topicFilter")%></h3></li>
                 <%
                 if(null!=filtertopic&&filtertopic.trim().length()>0){
                     go = ont.getGenericObject(filtertopic);
                     Topic topic = (Topic)go;
+                    String nomclass = topic.getTopicTitle();
+                        if(null==nomclass) {
+                            nomclass="default";
+                         } else {
+                            nomclass=nomclass.trim();
+                            if(nomclass.trim().length()>5){
+                                nomclass=nomclass.trim().substring(0, 5);
+                            } 
+                        }
+                        nomclass = SWBUtils.TEXT.replaceSpecialCharacters(nomclass,true);
                         %>
-                <li><%=topic.getTopicTitle()%></li>
+                <li><a class="tema-<%=nomclass%>" href="#"><%=topic.getTopicTitle()%></a></li>
                 <%
                     SWBResourceURL url = paramRequest.getRenderUrl();
                         if(null!=filtertopic && filtertopic.trim().length()>0) {
@@ -409,19 +417,8 @@
                         if (queryinput != null && queryinput.trim().length() > 0) {
                             url.setParameter("search", queryinput);
                         }                    
-                        
-                        String nomclass = topic.getTopicTitle();
-                        if(null==nomclass) {
-                            nomclass="default";
-                         } else {
-                            nomclass=nomclass.trim();
-                            if(nomclass.trim().length()>5){
-                                nomclass=nomclass.trim().substring(0, 5);
-                            } 
-                        }
-                        nomclass = SWBUtils.TEXT.replaceSpecialCharacters(nomclass,true);
                     %>
-                <li><a class="tema-<%=nomclass%>" href="<%=url.toString()%>"><%=paramRequest.getLocaleString("lbl_all")%></a></li>  
+                <li><a class="tema-todos" href="<%=url.toString()%>"><%=paramRequest.getLocaleString("lbl_all")%></a></li>  
                 <%
                 } else {
                     Iterator<Topic> ittop = Topic.ClassMgr.listTopics(wsite);
@@ -438,16 +435,27 @@
                         if (queryinput != null && queryinput.trim().length() > 0) { 
                             url.setParameter("search", queryinput);
                         }
+                        String nomclass = inst.getTopicTitle();
+                        if(null==nomclass) {
+                            nomclass="default";
+                         } else {
+                            nomclass=nomclass.trim();
+                            if(nomclass.trim().length()>5){
+                                nomclass=nomclass.trim().substring(0, 5);
+                            } 
+                        }
+                        nomclass = SWBUtils.TEXT.replaceSpecialCharacters(nomclass,true);
                 %>
-            <li><a href="<%=url.toString()%>" title="<%=inst.getTopicDescription() != null ? inst.getTopicDescription().trim() : inst.getTopicTitle()%>"><%=inst.getTopicTitle()%></a></li> 
+            <li><a class="tema-<%=nomclass%>" href="<%=url.toString()%>" title="<%=inst.getTopicDescription() != null ? inst.getTopicDescription().trim() : inst.getTopicTitle()%>"><%=inst.getTopicTitle()%></a></li> 
                 <%
                     }
             }
                 %>
         </ul>  
-    </div>
 </div>
-<div class="listado">
+<div class="der">
+    <div id="temasdatos">
+         <div class="listado">
     <div class="orden">
         <%
             SWBResourceURL urlorder = paramRequest.getRenderUrl();
@@ -494,12 +502,12 @@
         }
         int x = 0;
     %>
-    <div class="listadataset">
-        <ul>
+    <div class="lista10">
+        <ol>
             <%
                 if (intSize == 0) {
             %>
-            <li><h3><%=paramRequest.getLocaleString("lbl_notDSfound")%></h3></li>
+            <li><%=paramRequest.getLocaleString("lbl_notDSfound")%></li>
                     <%                                } else {
 
                     String wpurl = wpage.getUrl()+"?act=detail&suri=";
@@ -527,20 +535,17 @@
                             }
                             
                     %>
-            <li>
-                <label><a class="ico-<%=icontype%>" href="<%=wpurl+ ds.getShortURI()%>"><%=ds.getDatasetTitle()%></a></label> 
-                <%=paramRequest.getLocaleString("lbl_publisher")%>:<%=ds.getInstitution().getInstitutionTitle()%>&nbsp;&nbsp;&nbsp;<%=paramRequest.getLocaleString("lbl_formats")%>:<%=ds.getDatasetFormat()%>&nbsp;&nbsp;&nbsp;<%=paramRequest.getLocaleString("lbl_updated")%>:<%=sdf.format(ds.getDatasetUpdated())%><br/>
+            <li><a class="ico-<%=icontype%>" href="<%=wpurl+ ds.getShortURI()%>"><%=ds.getDatasetTitle()%></a><br/>
+                <p><em><%=sdf.format(ds.getDatasetUpdated())%> - <%=ds.getInstitution().getInstitutionTitle()%></em></p>
                 <p><%=ds.getDatasetDescription()%></p>
             </li>
             <%
                     }
                 }
             %>
-        </ul>
+        </ol>
     </div>
-</div>
-<div class="paginar">
-    <p>
+<div class="pager">
         <%
             if (p > 0 || x < l) //Requiere paginacion
             {
@@ -549,7 +554,10 @@
                 if ((l % ps) > 0) {
                     pages++;
                 }
-
+%>
+ <div class="pager-total">Página <%=p%>/<%=pages%></div>       
+ <div class="pager-index">
+    <%
                 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
                 int inicia = 0;
@@ -591,7 +599,7 @@
                         urlNext.setParameter("search", queryinput);
                     }
 
-                    out.println("<a href=\"#\" onclick=\"window.location='" + urlNext + "';\">"+paramRequest.getLocaleString("pg_gofirst")+"</a> ");
+                    out.println("<a href=\"#\" onclick=\"window.location='" + urlNext + "';\">&lt; "+paramRequest.getLocaleString("pg_gofirst")+"</a> ");
                 }
 
                 for (int z = inicia; z < finaliza; z++) {
@@ -615,7 +623,7 @@
                     if (z != p) {
                         out.println("<a href=\"#\" onclick=\"window.location='" + urlNext + "';\">" + (z + 1) + "</a> ");
                     } else {
-                        out.println((z + 1) + " ");
+                        out.println("<span>"+(z + 1) + "</span> ");
                     }
 
                 }
@@ -637,14 +645,17 @@
                     if (queryinput != null && queryinput.trim().length() > 0) {
                         urlNext.setParameter("search", queryinput);
                     }
-                    out.println("<a href=\"#\" onclick=\"window.location='" + urlNext + "';\">"+paramRequest.getLocaleString("pg_golast")+"</a> ");
+                    out.println("<a href=\"#\" onclick=\"window.location='" + urlNext + "';\">"+paramRequest.getLocaleString("pg_golast")+" &gt;</a> ");
                 }
-
+%>
+ </div>
+</div>
+<%
             }
-
-
         %>
-    </p></div>
+    </div>
+    </div>
+</div>
     <%
     } else if (action.equals("detail")) {  // detalle del Dataset seleccionado
 
