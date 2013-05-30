@@ -669,8 +669,8 @@
     <%
         Dataset ds = (Dataset) go;
         //ds.getDatasetDescription()
-        
-        boolean bupdated = ds.incViews(); //LODPUtils.updateDSViews(ds);  // se actualiza los views
+        ds.sendView(request, usr, wpage);
+        //boolean bupdated = ds.incViews(); //LODPUtils.updateDSViews(ds);  // se actualiza los views
 %>
     <div>
         <h2><%=ds.getDatasetTitle()%></h2> 
