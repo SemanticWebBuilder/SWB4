@@ -674,8 +674,35 @@ public class SWBSocialUtil implements SWBAppObject {
                 return phrase;
             }
         }
+        
+        
+        public static String getRootPhrase(String phrase) {
+            String sphrase = "";
+            try {
+                TokenStream tokenStream = new SpanishAnalizer().tokenStreamWOStopWords("word", new StringReader(phrase));
+                //OffsetAttribute offsetAttribute = tokenStream.addAttribute(OffsetAttribute.class);
+                CharTermAttribute charTermAttribute = tokenStream.addAttribute(CharTermAttribute.class);
+                while (tokenStream.incrementToken()) {
+                    String term = charTermAttribute.toString();
+                    if (term != null && sphrase.trim().length() > 0) {
+                        sphrase += " " + term;
+                    } else if (term != null) {
+                        sphrase = term;
+                    }
+                }
+            } catch (Exception e) {
+                log.error(e);
+            }
+            if (sphrase.trim().length() > 0) {
+                return sphrase;
+            } else {
+                return phrase;
+            }
+        }
+        
     }
-
+    
+    
     public static class Util {
 
         /**
