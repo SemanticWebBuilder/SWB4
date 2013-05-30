@@ -134,10 +134,14 @@ public class SocialTopicInBox extends GenericResource {
         }*/
         
 
-        if (request.getParameter("dialog") != null && request.getParameter("dialog").equals("close")) {
+        if (request.getParameter("statusMsg") != null) {
             out.println("<script type=\"javascript\">");
-            out.println(" hideDialog(); ");
-            if(request.getParameter("statusMsg")!=null) {
+            if(request.getParameter("dialog")!=null && request.getParameter("dialog").equals("close"))
+            {
+                out.println(" hideDialog(); ");
+            }
+            if(request.getParameter("statusMsg")!=null) 
+            {
                 out.println("   showStatus('" + request.getParameter("statusMsg") + "');");
             }
             if(request.getParameter("reloadTap")!=null)
@@ -276,9 +280,11 @@ public class SocialTopicInBox extends GenericResource {
             //Remove
             SWBResourceURL urlr = paramRequest.getActionUrl();
             urlr.setParameter("suri", id);
-            urlr.setParameter("sval", postIn.getURI());
+            urlr.setParameter("postUri", postIn.getURI());
             urlr.setParameter("page", "" + p);
-            urlr.setAction("remove");
+            urlr.setAction(SWBResourceURL.Action_REMOVE);
+            
+            
             
             out.println("<a href=\"#\" title=\"" + paramRequest.getLocaleString("remove") + "\" onclick=\"if(confirm('" + paramRequest.getLocaleString("confirm_remove") + " " + 
                     SWBUtils.TEXT.scape4Script(postIn.getMsg_Text()) + "?'))" + "{ submitUrl('" + urlr + "',this); } else { return false;}\">"
@@ -492,6 +498,7 @@ public class SocialTopicInBox extends GenericResource {
                 }
                 response.setMode(SWBActionResponse.Mode_EDIT);
                 response.setRenderParameter("dialog","close");
+                response.setRenderParameter("statusMsg", response.getLocaleString("msgTopicChanged"));
                 response.setRenderParameter("reloadTap","1");
                 response.setRenderParameter("suri", stOld.getURI());
             }
@@ -564,6 +571,21 @@ public class SocialTopicInBox extends GenericResource {
                 } catch (Exception e) {
                     response.setRenderParameter("alertmsg", "Inténtalo de nuevo");
                     log.error(e);
+                }
+            }else if (action.equals(SWBActionResponse.Action_REMOVE)) {
+                if (request.getParameter("suri") != null && request.getParameter("postUri") != null) {
+                    WebSite wsite = WebSite.ClassMgr.getWebSite(request.getParameter("wsite"));
+                    if (wsite != null) {
+                        SemanticObject semObj = SemanticObject.getSemanticObject(request.getParameter("postUri"));
+                        if (semObj != null) {
+                            PostIn postIn = (PostIn) semObj.createGenericInstance();
+                            postIn.remove();
+
+                            response.setMode(SWBActionResponse.Mode_EDIT);
+                            response.setRenderParameter("statusMsg", response.getLocaleString("postDeleted"));
+                            response.setRenderParameter("suri", request.getParameter("suri"));
+                        }
+                    }
                 }
             }
         

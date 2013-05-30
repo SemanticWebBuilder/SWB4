@@ -468,15 +468,15 @@ public class StreamInBox extends GenericResource {
     
     @Override
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
-        System.out.println("Entra a StreamInBox/processA");
+        //System.out.println("Entra a StreamInBox/processA");
         final Resource base = getResourceBase();
         String action = response.getAction();
-        System.out.println("Entra a InBox_processAction-1:"+action);
+        //System.out.println("Entra a InBox_processAction-1:"+action);
         if(action.equals("changeSocialTopic"))
         {
             if(request.getParameter("postUri")!=null && request.getParameter("newSocialTopic")!=null)
             {
-                System.out.println("processAction/1");
+                //System.out.println("processAction/1");
                 SemanticObject semObj=SemanticObject.getSemanticObject(request.getParameter("postUri"));
                 PostIn post=(PostIn)semObj.createGenericInstance();
                 Stream stOld=post.getPostInStream();
@@ -505,7 +505,7 @@ public class StreamInBox extends GenericResource {
             Stream stOld=post.getPostInStream();
             try {
                 String[] phrases = request.getParameter("fw").split(";");
-                //System.out.println("Entra a processA/reValue-2:"+phrases);
+                ///System.out.println("Entra a processA/reValue-2:"+phrases);
                 int nv = Integer.parseInt(request.getParameter("nv"));
                 //System.out.println("Entra a processA/reValue-3:"+nv);
                 int dpth = Integer.parseInt(request.getParameter("dpth"));
@@ -515,13 +515,16 @@ public class StreamInBox extends GenericResource {
                     phrase = phrase.toLowerCase().trim();
                     //System.out.println("Entra a processA/reValue-4.1:"+phrase);
                     phrase = SWBSocialUtil.Classifier.normalizer(phrase).getNormalizedPhrase();
-                    phrase = SWBSocialUtil.Classifier.getRootWord(phrase);
+                    //System.out.println("Entra a processA/reValue-4.2--J:"+phrase);
+                    phrase = SWBSocialUtil.Classifier.getRootPhrase(phrase);
+                    //System.out.println("Entra a processA/reValue-4.3--J:"+phrase);
                     phrase = SWBSocialUtil.Classifier.phonematize(phrase);
+                    //System.out.println("Entra a processA/reValue-4.4:"+phrase);
                     slp = SentimentalLearningPhrase.getSentimentalLearningPhrasebyPhrase(phrase, wsite);
                     if (slp == null) {
                         //System.out.println("Entra a processA/reValue-5:"+phrase);
                         phrase = SWBSocialUtil.Classifier.normalizer(phrase).getNormalizedPhrase();
-                        phrase = SWBSocialUtil.Classifier.getRootWord(phrase);
+                        phrase = SWBSocialUtil.Classifier.getRootPhrase(phrase);
                         phrase = SWBSocialUtil.Classifier.phonematize(phrase);
                         slp = SentimentalLearningPhrase.ClassMgr.createSentimentalLearningPhrase(wsite);
                         //System.out.println("Entra a processA/reValue-5-1:"+phrase);

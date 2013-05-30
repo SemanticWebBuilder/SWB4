@@ -37,6 +37,10 @@ import twitter4j.internal.org.json.JSONObject;
 /**
  *
  * @author jorge.jimenez
+ * 
+ * Clase que lista todos los mensages de entrada que se encuentran en los SocialTopic que un usuario 
+ * (por pertenecer a un grupo de usuarios que se encuentre asignado en alguno de estos SocialTopics) 
+ * tiene derecho de  ver
  */
 public class MsgReviewContainer extends GenericAdmResource {
 
@@ -220,13 +224,10 @@ public class MsgReviewContainer extends GenericAdmResource {
         List<PostIn> posts = null;
         int size = 0;
         if (wsiteId != null) {
-            
+            //Aqui se hace el filtrado principal, es decir, todos los mensages de entrada que se encuentran en los SocialTopic
+            //que un usuario (por pertenecer a un grupo de usuarios que se encuentre asignado en alguno de estos SocialTopics) 
+            //tiene derecho de  ver
             wsite = WebSite.ClassMgr.getWebSite(wsiteId);
-            /*
-            Iterator<PostIn> itposts = PostIn.ClassMgr.listPostIns(wsite);
-            posts = SWBUtils.Collections.copyIterator(itposts);
-            size = posts.size();
-            */
             Iterator <UserGroupRef> itUserGroupRef=UserGroupRef.ClassMgr.listUserGroupRefs(wsite);
             while(itUserGroupRef.hasNext())
             {
