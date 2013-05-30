@@ -372,6 +372,9 @@ public class StreamInBoxNoTopic extends GenericResource {
         out.println("</fieldset>");
         
         
+        System.out.println("J-P:"+p);
+        System.out.println("J-X:"+x);
+        
         if (p > 0 || x < l) //Requiere paginacion
         {
             out.println("<fieldset>");
@@ -388,9 +391,14 @@ public class StreamInBoxNoTopic extends GenericResource {
                 SWBResourceURL urlNew = paramRequest.getRenderUrl();
                 urlNew.setParameter("suri", id);
                 urlNew.setParameter("page", "" + z);
+                System.out.println("J2-P:"+p);
+                System.out.println("J2-X:"+x);
+                if(p==0 && z==0) continue;
                 if (z != p) {
                     out.println("<a href=\"#\" onclick=\"submitUrl('" + urlNew + "',this); return false;\">" + (z + 1) + "</a> ");
                 } else {
+                    System.out.println("J3-P:"+p);
+                    System.out.println("J3-X:"+x);
                     out.println((z + 1) + " ");
                 }
             }

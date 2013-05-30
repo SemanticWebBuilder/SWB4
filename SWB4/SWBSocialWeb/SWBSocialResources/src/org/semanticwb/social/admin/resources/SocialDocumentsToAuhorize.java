@@ -161,24 +161,24 @@ public class SocialDocumentsToAuhorize extends GenericResource
                 WebSite site = sites.next();
                 if (!(site.getId().equals(SWBContext.WEBSITE_ADMIN) || site.getId().equals(SWBContext.WEBSITE_GLOBAL) || site.getId().equals(SWBContext.WEBSITE_ONTEDITOR)))
                 {
+                    /*
                     if (sitetoShow == null)
                     {
                         sitetoShow = site;
                         out.println("<option selected value='" + site.getId() + "'>" + site.getTitle() + "</option>");
                     }
                     else
-                    {
+                    {*/
                         if (sitetoShow.getId().equals(site.getId()))
                         {
-                            out.println("<option selected value='" + site.getId() + "'>" + site.getTitle() + "</option>");
+                            out.println("<option selected=\"true\" value='" + site.getId() + "'>" + site.getTitle() + "</option>");
                         }
                         else
                         {
                             out.println("<option value='" + site.getId() + "'>" + site.getTitle() + "</option>");
                         }
 
-                    }
-
+                    //}
                 }
             }
             out.println("</select>");
