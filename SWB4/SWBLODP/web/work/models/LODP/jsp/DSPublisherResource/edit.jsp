@@ -28,7 +28,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <jsp:useBean id="paramRequest" scope="request" type="org.semanticwb.portal.api.SWBParamRequest" /><html>
 <%
-   System.out.println("en edit.JSP -- agregar o editar dataset"); 
+   //System.out.println("en edit.JSP -- agregar o editar dataset"); 
     WebPage wpage = paramRequest.getWebPage();
     WebSite wsite = wpage.getWebSite();
     User usr = paramRequest.getUser();
@@ -39,7 +39,7 @@
     String repositoryId = wpage.getWebSite().getUserRepository().getId();
     String suri = request.getParameter("suri");
     
-    System.out.println("URI:"+suri);
+    //System.out.println("URI:"+suri);
     
     String action = request.getParameter("act");
     if(null==action) action="";
@@ -90,7 +90,7 @@
     
     if (!isNew) { 
         
-        System.out.println("Cargando datos DataSET.....");
+        //System.out.println("Cargando datos DataSET.....");
         //Se cargan datos del dataset en variables
         Publisher pub_ds = ds.getPublisher();
         
@@ -257,7 +257,7 @@
                 </p>
                 <p>
                     <label for="dsdescription"><%=paramRequest.getLocaleString("lbl_description")%></label>
-                    <input type="text" name="dsdescription" id="dsdescription" dojoType="dijit.form.Textarea" value="<%=dsdescription%>" required="false" invalidMessage="<%=paramRequest.getLocaleString("lbl_descriptionmissing")%>" trim="true" _regExp="[a-zA-Z\u00C0-\u00FF' ]+"/>
+                    <textarea name="dsdescription" id="dsdescription" dojoType="dijit.form.Textarea" value="<%=dsdescription%>" required="false" invalidMessage="<%=paramRequest.getLocaleString("lbl_descriptionmissing")%>" trim="true" rows="20" cols="50"><%=dsdescription%></textarea>
                 </p>
              <!-- Etiquetas -->
                 <p>
@@ -272,7 +272,7 @@
                           selected = "";
                           if(SWBResourceURL.Action_EDIT.equals(action) && null!=ds && ds.hasTag(tag) ){
                               selected = "selected";
-                          }
+                          }   
                     %>
                     <option value="<%=tag.getEncodedURI()%>" <%=selected%>><%=tag.getTagName()%> </option>
                     <%

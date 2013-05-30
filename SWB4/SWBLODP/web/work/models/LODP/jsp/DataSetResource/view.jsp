@@ -71,7 +71,19 @@
     String npage = request.getParameter("page"); // página a mostrar
     String orderby = request.getParameter("order"); // tipo de ordenamiento
     String filtertopic= request.getParameter("filtertopic"); // uri del tema
-    String filteruri = request.getParameter("filteruri");  // uri de la insstitucion
+    String filteruri = request.getParameter("filteruri");  // uri de la institucion
+    String filtertopicshort= filtertopic; // uri del tema
+    String filterurishort = filteruri;  // uri de la institucion
+    if(null!=filtertopic){
+        filtertopic = SemanticObject.shortToFullURI(filtertopic);
+    }
+    if(null!=filteruri){
+        filteruri = SemanticObject.shortToFullURI(filteruri);
+    }
+    
+    
+    
+    
     String direction = request.getParameter("direction");
     String action = request.getParameter("act"); // accion
 
@@ -127,24 +139,34 @@
                 Iterator<Dataset> itds1 = null;
                 
                  if (null != filteruri && filteruri.trim().length() > 0 && null != filtertopic && filtertopic.trim().length() > 0)  { // por tema y por institucion
+                     
+                     //System.out.println("Filtro por tema y por Institucion...");
+                     //System.out.println("Institucion..."+filteruri);
+                     //System.out.println("Tema..."+filtertopic); 
+                     
                      go = ont.getGenericObject(filteruri);
                      got = ont.getGenericObject(filtertopic);
                       itds1 = Dataset.ClassMgr.listDatasetByInstitution((Institution) go,wsite); 
                       TreeSet<Dataset> set = new TreeSet();
                       while(itds1.hasNext()){  // revisando si el dtaset tiene el tema asociado.
                           Dataset dsfiltered = itds1.next();
+                          //System.out.println(dsfiltered.getInstitution().getInstitutionTitle()); 
                           if(dsfiltered.hasTopic((Topic)got)){
+                              //System.out.println("Se agregó dataset...");
                               set.add(dsfiltered);
                           }
                       }
                       itds1 = set.iterator(); // pasando el resultado de los dos filtros al iterador
                  } else  if (null != filteruri && filteruri.trim().length() > 0 && null == filtertopic)  {  // por institucion
+                     //System.out.println("Filtro Institucion...");
                      go = ont.getGenericObject(filteruri);
                       itds1 = Dataset.ClassMgr.listDatasetByInstitution((Institution) go,wsite); 
-                 } if (null == filteruri && null != filtertopic && filtertopic.trim().length() > 0)  {  // por tema
+                 } else if (null == filteruri && null != filtertopic && filtertopic.trim().length() > 0)  {  // por tema
+                     //System.out.println("Filtro por tema...");
                      got = ont.getGenericObject(filtertopic);
-                     itds1 = Dataset.ClassMgr.listDatasetByTopic((Topic) go,wsite);
+                     itds1 = Dataset.ClassMgr.listDatasetByTopic((Topic) got,wsite);
                  } else { // sin filtro
+                     //System.out.println("Sin filtro...");
                      itds1 = Dataset.ClassMgr.listDatasets(wsite);
                  }
                 
@@ -258,12 +280,18 @@
         <%
             if (filtertopic != null && filtertopic.trim().length() > 0) {
         %>
-        <input type="hidden" name="filter" value="<%=filtertopic%>"/>
+        <input type="hidden" name="filtertopic" value="<%=filtertopic%>"/>
         <%
             }
         %>
-        <ul>
-            <li>
+        <%
+            if (filteruri != null && filteruri.trim().length() > 0) {
+        %>
+        <input type="hidden" name="filteruri" value="<%=filteruri%>"/>
+        <%
+            }
+        %>
+
                 <label for="txt_search"><%=txtTitleSearch%></label><input type="text" name="search" value="<%=queryOriginal%>" onfocus="if (this.value == 'Search'  || this.value == 'Buscar') {this.value = ''};"><button type="submit"><%=paramRequest.getLocaleString("btn_search")%></button>
                 <%
                     // si hubo búsqueda
@@ -284,8 +312,7 @@
                 <%
                     }
                 %>        
-            </li>
-        </ul>
+
     </form>
 </div>
 <div class="izquierdo">
@@ -326,7 +353,7 @@
                 <%
                     SWBResourceURL url = paramRequest.getRenderUrl();
                         if(null!=filtertopic && filtertopic.trim().length()>0) {
-                            url.setParameter("filtertopic", filtertopic);
+                            url.setParameter("filtertopic", filtertopicshort); 
                         }
                         if (null != orderby) {
                             url.setParameter("order", orderby);
@@ -343,9 +370,12 @@
                         Institution inst = itins.next();
 
                         SWBResourceURL url = paramRequest.getRenderUrl();
-                        url.setParameter("filteruri", inst.getURI());
+                        url.setParameter("filteruri", inst.getShortURI());
                         if (null != orderby) {
                             url.setParameter("order", orderby);
+                        }
+                         if (null != filtertopic) {
+                            url.setParameter("filtertopic", filtertopicshort); 
                         }
                         if (queryinput != null && queryinput.trim().length() > 0) {
                             url.setParameter("search", queryinput);
@@ -364,14 +394,14 @@
             <li><h3><%=paramRequest.getLocaleString("lbl_topicFilter")%></h3></li>
                 <%
                 if(null!=filtertopic&&filtertopic.trim().length()>0){
-                go = ont.getGenericObject(filtertopic);
+                    go = ont.getGenericObject(filtertopic);
                     Topic topic = (Topic)go;
                         %>
                 <li><%=topic.getTopicTitle()%></li>
                 <%
                     SWBResourceURL url = paramRequest.getRenderUrl();
                         if(null!=filtertopic && filtertopic.trim().length()>0) {
-                            url.setParameter("filteruri", filteruri); 
+                            url.setParameter("filteruri", filterurishort); 
                         }
                         if (null != orderby) {
                             url.setParameter("order", orderby);
@@ -398,9 +428,12 @@
                     while (ittop.hasNext()) {
                         Topic inst = ittop.next();
                         SWBResourceURL url = paramRequest.getRenderUrl();
-                        url.setParameter("filteruri", inst.getURI());
+                        url.setParameter("filtertopic", inst.getShortURI());
                         if (null != orderby) {
                             url.setParameter("order", orderby);
+                        }
+                        if(null!=filteruri){
+                            url.setParameter("filteruri", filterurishort); 
                         }
                         if (queryinput != null && queryinput.trim().length() > 0) { 
                             url.setParameter("search", queryinput);
@@ -420,7 +453,10 @@
             SWBResourceURL urlorder = paramRequest.getRenderUrl();
             urlorder.setParameter("act", "");
             if (null != filteruri) {
-                urlorder.setParameter("filteruri", filteruri);
+                urlorder.setParameter("filteruri", filterurishort);
+            }
+            if (null != filtertopic) {
+                urlorder.setParameter("filtertopic", filtertopicshort);
             }
             if (queryinput != null && queryinput.trim().length() > 0) {
                 urlorder.setParameter("search", queryinput);
@@ -494,7 +530,7 @@
                             
                     %>
             <li>
-                <label><a class="ico-<%=icontype%>" href="<%=wpurl+ ds.getEncodedURI()%>"><%=ds.getDatasetTitle()%></a></label> 
+                <label><a class="ico-<%=icontype%>" href="<%=wpurl+ ds.getShortURI()%>"><%=ds.getDatasetTitle()%></a></label> 
                 <%=paramRequest.getLocaleString("lbl_publisher")%>:<%=ds.getInstitution().getInstitutionTitle()%>&nbsp;&nbsp;&nbsp;<%=paramRequest.getLocaleString("lbl_formats")%>:<%=ds.getDatasetFormat()%>&nbsp;&nbsp;&nbsp;<%=paramRequest.getLocaleString("lbl_updated")%>:<%=sdf.format(ds.getDatasetUpdated())%><br/>
                 <p><%=ds.getDatasetDescription()%></p>
             </li>
@@ -548,7 +584,10 @@
                         urlNext.setParameter("direction", direction);
                     }
                     if (null != filteruri) {
-                        urlNext.setParameter("filteruri", filteruri);
+                        urlNext.setParameter("filteruri", filterurishort);
+                    }
+                    if (null != filtertopic) {
+                        urlNext.setParameter("filtertopic", filtertopicshort);
                     }
                     if (queryinput != null && queryinput.trim().length() > 0) {
                         urlNext.setParameter("search", queryinput);
@@ -567,7 +606,10 @@
                         urlNext.setParameter("direction", direction);
                     }
                     if (null != filteruri) {
-                        urlNext.setParameter("filteruri", filteruri);
+                        urlNext.setParameter("filteruri", filterurishort);
+                    }
+                    if (null != filtertopic) {
+                        urlNext.setParameter("filtertopic", filtertopicshort);
                     }
                     if (queryinput != null && queryinput.trim().length() > 0) {
                         urlNext.setParameter("search", queryinput);
@@ -589,7 +631,10 @@
                         urlNext.setParameter("direction", direction);
                     }
                     if (null != filteruri) {
-                        urlNext.setParameter("filteruri", filteruri);
+                        urlNext.setParameter("filteruri", filterurishort);
+                    }
+                    if (null != filtertopic) {
+                        urlNext.setParameter("filtertopic", filtertopicshort);
                     }
                     if (queryinput != null && queryinput.trim().length() > 0) {
                         urlNext.setParameter("search", queryinput);
@@ -608,7 +653,7 @@
         //System.out.println("Detalle DS.........");
         String suri = request.getParameter("suri");
         //System.out.println("URI........."+suri);
-        go = ont.getGenericObject(suri);
+        go = ont.getGenericObject(SemanticObject.shortToFullURI(suri));
         if (go instanceof Dataset) {
     %>
 <div>
@@ -661,7 +706,7 @@
                 <%
                 SWBResourceURL urldown = paramRequest.getRenderUrl();
                 urldown.setCallMethod(SWBResourceURL.Call_DIRECT);
-                urldown.setParameter("suri",ds.getURI());
+                urldown.setParameter("suri",ds.getShortURI());
                 urldown.setParameter("act","file");
                 urldown.setMode(DataSetResource.MODE_FILE);
                 %>
@@ -722,7 +767,7 @@
                 <%
                 SWBResourceURL url = paramRequest.getRenderUrl();
                 url.setCallMethod(SWBResourceURL.Call_DIRECT);
-                url.setParameter("suri",ds.getURI());
+                url.setParameter("suri",ds.getShortURI());
                 url.setParameter("act","meta");
                 url.setMode(DataSetResource.MODE_FILE);
                 //url.setParameter("mformat", DataSetResource.RDF_MIME_TYPE);
@@ -738,7 +783,7 @@
             <li>
                 <%
                     SWBResourceURL urlstats = paramRequest.getRenderUrl();
-                    urlstats.setParameter("suri", ds.getURI());
+                    urlstats.setParameter("suri", ds.getShortURI());
                     urlstats.setParameter("act", "stats");
                 %>
                 <p><a href="<%=urlstats.toString()%>"><%=paramRequest.getLocaleString("lbl_statsDS")%></a></p> 
@@ -774,7 +819,7 @@
             System.out.println("Stats DS.........");
         String suri = request.getParameter("suri");
         System.out.println("URI........."+suri);
-        go = ont.getGenericObject(suri);
+        go = ont.getGenericObject(SemanticObject.shortToFullURI(suri));
         if (go instanceof Dataset) {
             
             HashMap<String, TreeSet<DatasetLog>> hmlogs = new HashMap<String, TreeSet<DatasetLog>>();
@@ -860,7 +905,7 @@
             isViews = Boolean.TRUE;
         }
         System.out.println("URI........."+suri);
-        go = ont.getGenericObject(suri);
+        go = ont.getGenericObject(SemanticObject.shortToFullURI(suri));
         if (go instanceof Dataset) {
             
             HashMap<String, TreeSet<DatasetLog>> hmlogs = new HashMap<String, TreeSet<DatasetLog>>();
