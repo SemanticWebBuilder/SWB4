@@ -596,6 +596,8 @@
     System.out.println("NOMBRE COMPLETO AUTHOR" + " " + fullName);
     
         boolean bupdated = LODPUtils.updateAppViews(aps);  // se actualiza los views
+        aps.sendView(request, user, wpage);
+        
 //        System.out.println("booleano" + " " + bupdated);
 //        System.out.println("titulo" + " " + aps.getAppTitle());
 //        System.out.println("autor" + " " + aps.getAppAuthor());
@@ -619,7 +621,7 @@
                 <label><%=paramRequest.getLocaleString("lbl_licenciaDetalle")%></label>&nbsp;&nbsp;&nbsp;&nbsp;<%=aps.getAppLicense() != null ? aps.getAppLicense().getLicenseTitle() : ""%>
             </li>
             <li>
-                <label><%=paramRequest.getLocaleString("lbl_urlDetalle")%></label>&nbsp;&nbsp;&nbsp;&nbsp;<%=aps.getAppURL()%>
+                <label><%=paramRequest.getLocaleString("lbl_urlDetalle")%></label>&nbsp;&nbsp;&nbsp;&nbsp;<a href="<%=renderURL.setMode(ApplicationResource.REDIRECT_URL).setParameter("uri", aps.getEncodedURI())%>" ><%=aps.getAppURL()%></a>
             </li>
             <li>
                 <label><%=paramRequest.getLocaleString("lbl_visitasDetalle")%></label>&nbsp;&nbsp;&nbsp;&nbsp;<%=aps.getViews()%>
