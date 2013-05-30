@@ -1038,7 +1038,7 @@ public class SWBAccessLog implements SWBAppObject
      * 
      * @param it the it
      */
-    private void updateHitsIter(Iterator it)
+    public void updateHitsIter(Iterator it)
     {
         while(it.hasNext())
         {
