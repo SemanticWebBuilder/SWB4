@@ -447,8 +447,8 @@
         </ul>  
     </div>
 </div>
-<div class="derecho">
-    <div class="derecho_ordena">
+<div class="listado">
+    <div class="orden">
         <%
             SWBResourceURL urlorder = paramRequest.getRenderUrl();
             urlorder.setParameter("act", "");
@@ -461,28 +461,26 @@
             if (queryinput != null && queryinput.trim().length() > 0) {
                 urlorder.setParameter("search", queryinput);
             }
+
             String ckdCreated = "", ckdView = "", ckdDownload = "", ckdRank = "";
             if (null != orderby) {
                 //urlorder.setParameter("order", orderby);
                 if (orderby.equals(DataSetResource.ORDER_CREATED)) {
-                    ckdCreated = "checked";
+                    ckdCreated = "class=\"selected\""; 
                 } else if (orderby.equals(DataSetResource.ORDER_VIEW)) {
-                    ckdView = "checked";
+                    ckdView = "class=\"selected\""; 
                 } else if (orderby.equals(DataSetResource.ORDER_DOWNLOAD)) {
-                    ckdDownload = "checked";
+                    ckdDownload = "class=\"selected\""; 
                 } else if (orderby.equals(DataSetResource.ORDER_RANK)) {
-                    ckdRank = "checked";
+                    ckdRank = "class=\"selected\""; 
                 }
             }
 
         %>
-        <label><%=paramRequest.getLocaleString("lbl_orderby")%></label>
-        <p>
-            <input type="radio" id="ordercreated" name="order" value="created" <%=ckdCreated%> onclick="window.location = '<%=urlorder.toString()%>&order=<%=DataSetResource.ORDER_CREATED%>';"><label for="ordercreated"><%=paramRequest.getLocaleString("lbl_byrecent")%></label>
-            <input type="radio" id="orderview" name="order" value="view" <%=ckdView%> onclick="window.location = '<%=urlorder.toString()%>&order=<%=DataSetResource.ORDER_VIEW%>';"><label for="orderview"><%=paramRequest.getLocaleString("lbl_byvisited")%></label>
-            <input type="radio" id="orderdownload" name="order" value="download" <%=ckdDownload%> onclick="window.location = '<%=urlorder.toString()%>&order=<%=DataSetResource.ORDER_DOWNLOAD%>';"><label for="orderdownload"><%=paramRequest.getLocaleString("lbl_bydownload")%></label>
-            <input type="radio" id="orderrank" name="order" value="value" <%=ckdRank%> onclick="window.location = '<%=urlorder.toString()%>&order=<%=DataSetResource.ORDER_RANK%>';"><label for="orderrank"><%=paramRequest.getLocaleString("lbl_byvaluated")%></label>
-        </p>
+            <a href="<%=urlorder.toString()%>&order=<%=DataSetResource.ORDER_CREATED%>';" <%=ckdCreated%>><%=paramRequest.getLocaleString("lbl_byrecent")%></a> 
+            <a <%=ckdView%> href="<%=urlorder.toString()%>&order=<%=DataSetResource.ORDER_VIEW%>"><%=paramRequest.getLocaleString("lbl_byvisited")%></a> 
+            <a <%=ckdDownload%> href="<%=urlorder.toString()%>&order=<%=DataSetResource.ORDER_DOWNLOAD%>"><%=paramRequest.getLocaleString("lbl_bydownload")%></a>
+            <a <%=ckdRank%> href="<%=urlorder.toString()%>&order=<%=DataSetResource.ORDER_RANK%>"><%=paramRequest.getLocaleString("lbl_byvaluated")%></a>
     </div>
     <%
 
