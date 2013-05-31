@@ -107,6 +107,7 @@ public class LongFileUploader extends GenericResource {
 //            System.out.println("classUri:"+classUri);
             if (so.getSemanticClass().getURI().equals(classUri)) {
                 String key = request.getSession(true).getId();
+                log.debug("LongFileUploader: key "+key);
                 if (!enProceso.containsKey(key)) {
                     enProceso.put(key, new ArrayList<SemanticObject>());
                 }
@@ -451,16 +452,19 @@ public class LongFileUploader extends GenericResource {
         log.debug("LongFileUploader.eofCheck: pdir="+pdir);
 //        System.out.println("pdir1: "+pdir);
         String key = request.getSession(true).getId();
+        log.debug("LongFileUploader.eofCheck: key "+key);
         ArrayList<SemanticObject> also = enProceso.get(key);
         boolean ret = false;
         if (null != also) {
             SemanticObject so = null;
             for (SemanticObject currSo : also) {
+                log.trace("LongFileUploader.eofCheck: currSo.getId() " +currSo.getId());
                 if (currSo.getId().equals(pdir)) {
                     so = currSo;
                     break;
                 }
             }
+            log.trace("LongFileUploader.eofCheck: so:"+so);
             if (null != so) {
                 pdir = so.getWorkPath();
                 log.debug("LongFileUploader.eofCheck: pdir2="+pdir);
