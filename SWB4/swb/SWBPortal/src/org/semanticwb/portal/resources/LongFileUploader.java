@@ -96,18 +96,13 @@ public class LongFileUploader extends GenericResource {
         String path = "";
         String cmd = "";
         String param = "";
-        log.debug("LongFileUploader: uri en "+redirectURL+":"+request.getParameter(redirectURL));
-        String redirectedURL = URLDecoder.decode(request.getParameter(redirectURL),"UTF-8");
-        log.debug("LongFileUploader: uri decoded: "+redirectedURL);
-        if (!redirectedURL.startsWith("/")){
-            redirectedURL = "";
-        }
-        
-        
-        
-        
+
+
+
+
+
         if ("".equals(cmd) && request.getParameter(parameter) != null) {
-            log.debug("LongFileUploader: parameter "+parameter+":"+request.getParameter(parameter));
+            log.debug("LongFileUploader: parameter " + parameter + ":" + request.getParameter(parameter));
 //            System.out.println("parameter:"+request.getParameter(parameter));
             so = paramRequest.getWebPage().getWebSite().getSemanticModel()
                     .getSemanticObject(request.getParameter(parameter));
@@ -159,14 +154,24 @@ public class LongFileUploader extends GenericResource {
             String id = SWBUtils.TEXT.replaceSpecialCharacters(
                     paramRequest.getResourceBase().getTitle(), true);
             String url = "/bduplaoder";
-            
-            if (null!=so) {
+            String redirectedURL = "/";
+            log.debug("LongFileUploader: uri en " + redirectURL + ":" + request.getParameter(redirectURL));
+            try {
+                redirectedURL = URLDecoder.decode(request.getParameter(redirectURL), "UTF-8");
+            } catch (Exception noe) {
+                log.debug("LongFileUploader: Sin Redirect URL");
+            }
+            log.debug("LongFileUploader: uri decoded: " + redirectedURL);
+            if (!redirectedURL.startsWith("/")) {
+                redirectedURL = "";
+            }
+            if (null != so) {
                 out.println("<script src=\"/swbadmin/js/longfu/json2.js\"></script>"
                         + "<script src=\"/swbadmin/js/longfu/swblongfileuploader.js\">"
                         + "</script><script type=\"text/javascript\">"
-                        + "var " + id + "_lfu = new LongFileUploader(\"" + urlBase + 
-                        "\",\"" + so.getId() //Revisar...
-                        + "\", \"" + id + "\",\""+redirectedURL+"\");</script>");
+                        + "var " + id + "_lfu = new LongFileUploader(\"" + urlBase
+                        + "\",\"" + so.getId() //Revisar...
+                        + "\", \"" + id + "\",\"" + redirectedURL + "\");</script>");
                 out.println("<div id=\"" + id + "\"><form>file: <input type=\"file\" "
                         + "name=\"updfile\" id=\"updfile\" "
                         + "onchange=\"" + id + "_lfu.sendFile(this)\"/>"
@@ -190,10 +195,10 @@ public class LongFileUploader extends GenericResource {
     public void doAdmin(HttpServletRequest request, HttpServletResponse response,
             SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         PrintWriter out = response.getWriter();
-        String frmParameter = getResourceBase().getAttribute("frmParameter","");
-        String frmClass = getResourceBase().getAttribute("frmClass","");
-        String frmProperty = getResourceBase().getAttribute("frmProperty","");
-        String frmRedirectURL = getResourceBase().getAttribute("frmRedirectURL","");
+        String frmParameter = getResourceBase().getAttribute("frmParameter", "");
+        String frmClass = getResourceBase().getAttribute("frmClass", "");
+        String frmProperty = getResourceBase().getAttribute("frmProperty", "");
+        String frmRedirectURL = getResourceBase().getAttribute("frmRedirectURL", "");
 
         String act = request.getParameter("act");
         if (act != null) {
@@ -247,7 +252,7 @@ public class LongFileUploader extends GenericResource {
         out.println("Nombre de la propiedad a actualizar");
         out.println("<br/>");
         out.print("<input name=\"frmProperty\" value=\"" + frmProperty + "\">");
-        
+
         out.println("<br/>");
         out.println("Nombre del parámetro que contiene el URL para redireccionar al terminar");
         out.println("<br/>");
@@ -286,8 +291,7 @@ public class LongFileUploader extends GenericResource {
         redirectURL = base.getAttribute("frmRedirectURL");
     }
 
-    private void startUploadProcess(HttpServletRequest request, HttpServletResponse 
-            response, SWBParamRequest paramRequest) throws IOException {
+    private void startUploadProcess(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws IOException {
         String userStr = paramRequest.getUser().getUserRepository().getId() + ":"
                 + paramRequest.getUser().getId() + ":"
                 + paramRequest.getUser().getLogin();
@@ -315,8 +319,7 @@ public class LongFileUploader extends GenericResource {
         out.print("}");
     }
 
-    private void uploadSolicitude(HttpServletRequest request, HttpServletResponse 
-            response, SWBParamRequest paramRequest) throws IOException {
+    private void uploadSolicitude(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws IOException {
         String filename = request.getParameter("filename");
         String size = request.getParameter("size");
         String crc = request.getParameter("iniCRC");
@@ -349,8 +352,7 @@ public class LongFileUploader extends GenericResource {
                 + pf.getId() + "\",\"bytesRecived\":" + localsize + "}}");
     }
 
-    private void uploadChunk(HttpServletRequest request, HttpServletResponse 
-            response, SWBParamRequest paramRequest, String param) {
+    private void uploadChunk(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest, String param) {
         File workfiledir = new File(tmpplace, param);
         PendingFile pf = fileUtil.getPendingFileFromId(param);
         if (!workfiledir.exists()) {
@@ -434,8 +436,7 @@ public class LongFileUploader extends GenericResource {
         return Long.toHexString(crc.getValue());
     }
 
-    private void abortUpload(HttpServletRequest request, HttpServletResponse 
-            response, SWBParamRequest paramRequest, String param)
+    private void abortUpload(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest, String param)
             throws IOException {
         boolean ret = fileUtil.removePendingFile(param);
         response.setHeader("mimetype", "text/json-comment-filtered");
@@ -443,36 +444,35 @@ public class LongFileUploader extends GenericResource {
         out.print("{\"deleted\":\"" + ret + "\"}");
     }
 
-    private void eofCheck(HttpServletRequest request, HttpServletResponse 
-            response, SWBParamRequest paramRequest, String param)
+    private void eofCheck(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest, String param)
             throws IOException {
         String pdir = request.getParameter("dirToPlace");
 //        System.out.println("pdir1: "+pdir);
         String key = request.getSession(true).getId();
         ArrayList<SemanticObject> also = enProceso.get(key);
         boolean ret = false;
-        if (null!=also){
+        if (null != also) {
             SemanticObject so = null;
-            for (SemanticObject currSo: also){
-                if (currSo.getId().equals(pdir)){
+            for (SemanticObject currSo : also) {
+                if (currSo.getId().equals(pdir)) {
                     so = currSo;
                     break;
                 }
             }
-            if (null!=so){
+            if (null != so) {
                 pdir = so.getWorkPath();
 //                System.out.println("pdir2: "+pdir);
                 File dir = new File(org.semanticwb.SWBPortal.getWorkPath(), pdir);
-                if (!dir.exists()){
+                if (!dir.exists()) {
                     dir.mkdirs();
                 }
                 if (dir.exists()) {
                     PendingFile pf = fileUtil.getPendingFileFromId(param);
-                    File dest = new File(dir, pf.getFilename()); 
+                    File dest = new File(dir, pf.getFilename());
                     if (!dest.exists()) {
                         File workfiledir = new File(tmpplace, param);
                         File orig = new File(workfiledir, pf.getFilename());
-                        ret = orig.renameTo(dest); 
+                        ret = orig.renameTo(dest);
                         if (!ret) {
                             FileInputStream fis = new FileInputStream(orig);
                             FileOutputStream fos = new FileOutputStream(dest);
@@ -489,14 +489,14 @@ public class LongFileUploader extends GenericResource {
                         }
                         SemanticProperty sp = so.getSemanticClass()
                                 .getProperty(propertyName);
-                        if (propertyName.startsWith("has")){
-                            so.addLiteralProperty(sp, 
+                        if (propertyName.startsWith("has")) {
+                            so.addLiteralProperty(sp,
                                     new SemanticLiteral(dest.getName()));
                         } else {
                             String currVal = so.getProperty(sp);
-                            if (null!=currVal){
+                            if (null != currVal) {
                                 File currFile = new File(dir, currVal);
-                                if (currFile.exists()){
+                                if (currFile.exists()) {
                                     currFile.delete();
                                 }
                             }
@@ -513,8 +513,7 @@ public class LongFileUploader extends GenericResource {
         out.print("{\"saved\":\"" + ret + "\"}");
     }
 
-    private void giveStatus(HttpServletRequest request, HttpServletResponse 
-            response, SWBParamRequest paramRequest, String param)
+    private void giveStatus(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest, String param)
             throws IOException {
         PendingFile pf = fileUtil.getPendingFileFromId(param);
         response.setHeader("mimetype", "text/json-comment-filtered");
