@@ -64,7 +64,7 @@
                 String nameLogo= "institutionLogo_"+institution.getId()+"_"+institution.getInstitutionLogo();
                 String urlLogo = urlBase + "/"+nameLogo;
                 String urlData = wsite.getWebPage("Datos").getUrl();
-                String urlDataSet = urlData+"?suri="+dataset.getEncodedURI()+"&act=detail";
+                String urlDataSet = urlData+"?suri="+dataset.getShortURI()+"&act=detail";
         %>
         <div class="slide">
             <a href="<%=urlDataSet%>">
