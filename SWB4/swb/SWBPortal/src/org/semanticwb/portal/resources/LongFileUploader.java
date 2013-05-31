@@ -27,7 +27,6 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.net.URL;
 import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.List;
@@ -97,7 +96,9 @@ public class LongFileUploader extends GenericResource {
         String path = "";
         String cmd = "";
         String param = "";
-        String redirectedURL = URLDecoder.decode(request.getParameter(redirectURL),"ISO8859-1");
+        log.debug("LongFileUploader: uri en "+redirectURL+":"+request.getParameter(redirectURL));
+        String redirectedURL = URLDecoder.decode(request.getParameter(redirectURL),"UTF-8");
+        log.debug("LongFileUploader: uri decoded: "+redirectedURL);
         if (!redirectedURL.startsWith("/")){
             redirectedURL = "";
         }
