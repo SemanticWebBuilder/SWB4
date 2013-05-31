@@ -107,6 +107,7 @@ public class LongFileUploader extends GenericResource {
         
         
         if ("".equals(cmd) && request.getParameter(parameter) != null) {
+            log.debug("LongFileUploader: parameter "+parameter+":"+request.getParameter(parameter));
 //            System.out.println("parameter:"+request.getParameter(parameter));
             so = paramRequest.getWebPage().getWebSite().getSemanticModel()
                     .getSemanticObject(request.getParameter(parameter));
@@ -282,7 +283,7 @@ public class LongFileUploader extends GenericResource {
         if (null == base.getAttribute("frmRedirectURL")) {
             base.setAttribute("frmRedirectURL", "");
         }
-        propertyName = base.getAttribute("frmRedirectURL");
+        redirectURL = base.getAttribute("frmRedirectURL");
     }
 
     private void startUploadProcess(HttpServletRequest request, HttpServletResponse 
