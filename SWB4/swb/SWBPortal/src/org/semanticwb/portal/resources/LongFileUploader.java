@@ -99,12 +99,11 @@ public class LongFileUploader extends GenericResource {
 
         if ("".equals(cmd) && request.getParameter(parameter) != null) {
             log.debug("LongFileUploader: parameter " + parameter + ":" + request.getParameter(parameter));
-//            System.out.println("parameter:"+request.getParameter(parameter));
             so = paramRequest.getWebPage().getWebSite().getSemanticModel()
                     .getSemanticObject(request.getParameter(parameter));
-//            System.out.println("so:"+so);
-//            System.out.println("sosClass:"+so.getSemanticClass().getURI());
-//            System.out.println("classUri:"+classUri);
+            log.debug("LongFileUploader: so:"+so);
+            log.debug("LongFileUploader: sosClass:"+so.getSemanticClass().getURI());
+            log.debug("LongFileUploader: classUri:"+classUri);
             if (so.getSemanticClass().getURI().equals(classUri)) {
                 String key = request.getSession(true).getId();
                 log.debug("LongFileUploader: key "+key);
