@@ -97,10 +97,6 @@ public class LongFileUploader extends GenericResource {
         String cmd = "";
         String param = "";
 
-
-
-
-
         if ("".equals(cmd) && request.getParameter(parameter) != null) {
             log.debug("LongFileUploader: parameter " + parameter + ":" + request.getParameter(parameter));
 //            System.out.println("parameter:"+request.getParameter(parameter));
@@ -295,6 +291,7 @@ public class LongFileUploader extends GenericResource {
         String userStr = paramRequest.getUser().getUserRepository().getId() + ":"
                 + paramRequest.getUser().getId() + ":"
                 + paramRequest.getUser().getLogin();
+        log.debug("LongFileUploader.startUploadProcess: userStr:"+userStr);
         response.setHeader("mimetype", "text/json-comment-filtered");
         PrintWriter out = response.getWriter();
         out.print("{\"chunkSize\":" + CHUNK_SIZE);
@@ -337,6 +334,7 @@ public class LongFileUploader extends GenericResource {
                         crc, userStr);
             }
         }
+        log.debug("LongFileUploader.uploadSolicitude: filename:"+filename);
         response.setHeader("mimetype", "text/json-comment-filtered");
         PrintWriter out = response.getWriter();
         long localsize = 0;
@@ -348,6 +346,7 @@ public class LongFileUploader extends GenericResource {
         if (updFile.exists()) {
             localsize = updFile.length();
         }
+        log.debug("LongFileUploader.uploadSolicitude: bytes uploaded:"+localsize);
         out.print("{\"file2Upload\":{\"localId\":" + localId + ",\"id\":\""
                 + pf.getId() + "\",\"bytesRecived\":" + localsize + "}}");
     }
@@ -360,6 +359,7 @@ public class LongFileUploader extends GenericResource {
         }
         String crc = "";
         String tmpFileName = UUID.randomUUID().toString();
+        log.debug("LongFileUploader.uploadChunk:"+tmpFileName);
         if (ServletFileUpload.isMultipartContent(request)) {
             DiskFileItemFactory factory = new DiskFileItemFactory(1024 * 1024,
                     workfiledir);
@@ -439,6 +439,7 @@ public class LongFileUploader extends GenericResource {
     private void abortUpload(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest, String param)
             throws IOException {
         boolean ret = fileUtil.removePendingFile(param);
+        log.debug("LongFileUploader.abortUpload: "+param+" : "+ret);
         response.setHeader("mimetype", "text/json-comment-filtered");
         PrintWriter out = response.getWriter();
         out.print("{\"deleted\":\"" + ret + "\"}");
@@ -447,6 +448,7 @@ public class LongFileUploader extends GenericResource {
     private void eofCheck(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest, String param)
             throws IOException {
         String pdir = request.getParameter("dirToPlace");
+        log.debug("LongFileUploader.eofCheck: pdir="+pdir);
 //        System.out.println("pdir1: "+pdir);
         String key = request.getSession(true).getId();
         ArrayList<SemanticObject> also = enProceso.get(key);
@@ -461,6 +463,7 @@ public class LongFileUploader extends GenericResource {
             }
             if (null != so) {
                 pdir = so.getWorkPath();
+                log.debug("LongFileUploader.eofCheck: pdir2="+pdir);
 //                System.out.println("pdir2: "+pdir);
                 File dir = new File(org.semanticwb.SWBPortal.getWorkPath(), pdir);
                 if (!dir.exists()) {
@@ -508,6 +511,7 @@ public class LongFileUploader extends GenericResource {
                 }
             }
         }
+        log.debug("LongFileUploader.eofCheck: ret:"+ret);
         response.setHeader("mimetype", "text/json-comment-filtered");
         PrintWriter out = response.getWriter();
         out.print("{\"saved\":\"" + ret + "\"}");
@@ -524,6 +528,7 @@ public class LongFileUploader extends GenericResource {
         if (updFile.exists()) {
             localsize = updFile.length();
         }
+        log.debug("LongFileUploader.giveStatus: id "+pf.getId()+" bytes:"+localsize);
         out.print("{\"id\":\"" + pf.getId() + "\",\"bytesRecived\":"
                 + localsize + "}");
     }
