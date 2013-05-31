@@ -97,7 +97,7 @@ LongFileUploader.prototype.finishFile = function(porEnviar) {
         alert("El archivo " + porEnviar.name + " fue guardado en " + this.ruta);
     else
         alert("El archivo no pudo moverse a " + this.ruta);
-    window.location=endurl;
+    window.location=this.endurl;
 }
 
 LongFileUploader.prototype.processFile = function(porEnviar) {
