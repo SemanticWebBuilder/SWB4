@@ -4,6 +4,7 @@
     Author     : Jorge.Jimenez
     Modified by:Francisco.Jimenez
 --%>
+<%@page import="org.semanticwb.social.util.SWBSocialUtil"%>
 <%@page import="org.semanticwb.portal.api.SWBParamRequest"%>
 <%@page import="org.semanticwb.social.*"%>
 <%@page import="org.semanticwb.SWBUtils"%>
@@ -17,11 +18,18 @@
     String contentType = (String) request.getAttribute("valor");    
     String objUri = request.getParameter("objUri"); 
     SemanticObject semObj=SemanticObject.createSemanticObject(objUri); 
+    SocialTopic socialTopic=null;
     PostIn postIn=null;
+    boolean firstTime=false;
     if(semObj.getSemanticClass().isSubClass(PostIn.social_PostIn)) 
     {
         postIn=(PostIn)semObj.createGenericInstance();
+    }else if(semObj.getGenericInstance() instanceof SocialTopic){
+        socialTopic=(SocialTopic)semObj.createGenericInstance(); 
+        firstTime=true; 
     }
+    
+    User user=paramRequest.getUser(); 
     
     
     //SocialTopic socialTopic = (SocialTopic)SemanticObject.getSemanticObject(objUri).getGenericInstance(); // creates social topic to get Model Name
@@ -54,7 +62,7 @@
             if(postInSN==null)
             {
                 %>
-                <ul><b>Seleccione las redes sociales a las cuales desea enviar el post</b></ul>
+                <ul><b><%=SWBSocialUtil.Util.getStringFromGenericLocale("chooseSocialNets", user.getLanguage())%></b></ul>
                 <%
                     Iterator<SocialNetwork> it = SocialNetwork.ClassMgr.listSocialNetworks(wsite);
                     while (it.hasNext()) {
@@ -79,46 +87,56 @@
         <div class="etiqueta"><label for="title"><%=Message.social_Message.getDisplayName(lang)%>: </label></div>
         <div class="campo"><%=messageFormMgr.renderElement(request, Message.social_msg_Text, messageFormMgr.MODE_CREATE)%></div>
         
-         <%
+        <%
         if(postIn!=null)
         {
-            SocialTopic socialTopic=postIn.getSocialTopic();
+            socialTopic=postIn.getSocialTopic();
+        }
+        if(socialTopic!=null)
+        {
             Iterator<SocialPFlowRef> itSocialPFlowRefs=socialTopic.listInheritPFlowRefs();
              %>    
             <br/><br/><br/><br/>
-            <div class="etiqueta"><label for="socialFlow">Flujo de publicación:</label></div>
+            <div class="etiqueta"><label for="socialFlow"><%=SWBSocialUtil.Util.getStringFromGenericLocale("publishFlow", user.getLanguage())%></label></div>
             <div class="campo">
             <select name="socialFlow">
             <%
-            
-            boolean firstTime=false;
+            boolean noFlows=true;
             while(itSocialPFlowRefs.hasNext())
             {
                 SocialPFlowRef socialFlowRef=itSocialPFlowRefs.next();
                 SocialPFlow socialPFlow=socialFlowRef.getPflow();
                 if(socialPFlow.isActive())
                 {
+                    noFlows=false; 
                     %>
                     <option value="<%=socialPFlow.getURI()%>"><%=socialPFlow.getDisplayTitle(lang)%> </option>
                     <%
                 }
             }
+            if(noFlows)
+            {
+            %>
+                <option value=""><%=SWBSocialUtil.Util.getStringFromGenericLocale("withOutFlow", user.getLanguage())%></option>
+            <%
+            }
             %>
             </select>
             </div>
-            <%if(firstTime){%>
-                <div class="etiqueta"><label for="socialFlowComment">Comentario:</label></div>
+            <%if(!noFlows && firstTime){%>
+                <div class="etiqueta"><label for="socialFlowComment"><%=SWBSocialUtil.Util.getStringFromGenericLocale("comment", user.getLanguage())%></label></div>
                 <div class="campo">
                     <textarea name="socialFlowComment"></textarea>
                 </div>
             <%
            }
         }
+        
         %>
         
         
         <ul class="btns_final">
-            <button dojoType="dijit.form.Button" type="submit">Enviar</button>
+            <button dojoType="dijit.form.Button" type="submit"><%=SWBSocialUtil.Util.getStringFromGenericLocale("send", user.getLanguage())%></button>
         </ul>
     </form>
 </div> 
@@ -140,7 +158,7 @@
 <div class="swbform">
     <form dojoType="dijit.form.Form" id="frmUploadPhoto" action="<%=urlAction.setAction("uploadPhoto")%>" method="post" onsubmit="submitForm('frmUploadPhoto'); return false;">
         <%= photoMgr.getFormHiddens()%>
-        <ul><b>Seleccione las redes sociales a las cuales desea enviar el post</b></ul>
+        <ul><b><%=SWBSocialUtil.Util.getStringFromGenericLocale("chooseSocialNets", user.getLanguage())%></b></ul>
         <%
             Iterator<SocialNetwork> it = SocialNetwork.ClassMgr.listSocialNetworks(wsite);
             while (it.hasNext()) {
@@ -169,40 +187,52 @@
         <%
         if(postIn!=null)
         {
-            SocialTopic socialTopic=postIn.getSocialTopic();
+            socialTopic=postIn.getSocialTopic();
+        }
+        if(socialTopic!=null)
+        {
             Iterator<SocialPFlowRef> itSocialPFlowRefs=socialTopic.listInheritPFlowRefs();
              %>    
             <br/><br/><br/><br/>
-            <div class="etiqueta"><label for="socialFlow">Flujo de publicación:</label></div>
+            <div class="etiqueta"><label for="socialFlow"><%=SWBSocialUtil.Util.getStringFromGenericLocale("publishFlow", user.getLanguage())%></label></div>
             <div class="campo">
+            <select name="socialFlow">
             <%
-            boolean firstTime=false;
+            boolean noFlows=true;
             while(itSocialPFlowRefs.hasNext())
             {
                 SocialPFlowRef socialFlowRef=itSocialPFlowRefs.next();
                 SocialPFlow socialPFlow=socialFlowRef.getPflow();
                 if(socialPFlow.isActive())
                 {
-                    if(!firstTime){%><select name="socialFlow"><%}%>
+                    noFlows=false; 
+                    %>
                     <option value="<%=socialPFlow.getURI()%>"><%=socialPFlow.getDisplayTitle(lang)%> </option>
-                <%
-                    if(!firstTime){%></select><%firstTime=true;}
+                    <%
                 }
             }
+            if(noFlows)
+            {
             %>
-            </div>
-             <%if(firstTime){%>
-            <div class="etiqueta"><label for="socialFlowComment">Comentario:</label></div>
-            <div class="campo">
-                <textarea name="socialFlowComment"></textarea>
-            </div>
+                <option value=""><%=SWBSocialUtil.Util.getStringFromGenericLocale("withOutFlow", user.getLanguage())%></option>
             <%
             }
+            %>
+            </select>
+            </div>
+            <%if(!noFlows && firstTime){%>
+                <div class="etiqueta"><label for="socialFlowComment"><%=SWBSocialUtil.Util.getStringFromGenericLocale("comment", user.getLanguage())%></label></div>
+                <div class="campo">
+                    <textarea name="socialFlowComment"></textarea>
+                </div>
+            <%
+           }
         }
+        
         %>
         
         <ul class="btns_final">
-            <button dojoType="dijit.form.Button" type="submit">Enviar</button>
+            <button dojoType="dijit.form.Button" type="submit"><%=SWBSocialUtil.Util.getStringFromGenericLocale("send", user.getLanguage())%></button>
         </ul>
     </form>
 </div>
@@ -224,7 +254,7 @@
 <div class="swbform">
     <form dojoType="dijit.form.Form" id="frmUploadVideo" action="<%=urlAction.setAction("uploadVideo")%>" method="post" onsubmit="submitForm('frmUploadVideo'); return false;">
         <%= videoMgr.getFormHiddens()%>
-        <ul><b>Seleccione las redes sociales a las cuales desea enviar el post</b></ul>
+        <ul><b><%=SWBSocialUtil.Util.getStringFromGenericLocale("chooseSocialNets", user.getLanguage())%></b></ul>
         <%
             Iterator<SocialNetwork> it = SocialNetwork.ClassMgr.listSocialNetworks(wsite);
             while (it.hasNext()) {
@@ -250,43 +280,63 @@
         <%
         if(postIn!=null)
         {
-            SocialTopic socialTopic=postIn.getSocialTopic();
-            Iterator<SocialPFlowRef> itSocialPFlowRefs=socialTopic.listInheritPFlowRefs();
-        %>    
-            <div class="etiqueta">Flujo de Publicación</div>        
-            <div class="etiqueta"><label for="socialFlow">Flujo de publicación</label></div>
-            <div class="campo">
-            <%
-            boolean firstTime=false;
-            while(itSocialPFlowRefs.hasNext())
-            {
-                SocialPFlowRef socialFlowRef=itSocialPFlowRefs.next();
-                SocialPFlow socialPFlow=socialFlowRef.getPflow();
-                if(socialPFlow.isActive())
-                {
-                    if(!firstTime){%><select name="socialFlow"><option value="test">test</option><%}%>
-                    <option value="<%=socialPFlow.getURI()%>"><%=socialPFlow.getDisplayTitle(lang)%></option>
-                <%
-                    if(!firstTime){%></select><%firstTime=true;}
-                }
-            }
-            %>
-            </div>
-            <%if(firstTime){%>
-            <div class="etiqueta"><label for="socialFlowComment">Comentario</label></div>
-            <div class="campo">
-                <textarea name="socialFlowComment"></textarea>
-            </div>
-            <%
-            }
+            socialTopic=postIn.getSocialTopic();
         }
-        %>
-        
-        <ul class="btns_final">
-            <button dojoType="dijit.form.Button" type="submit">Enviar</button>
-        </ul>
-    </form>
-</div>
-<%    
+        if(socialTopic!=null)
+        {
+            Iterator<SocialPFlowRef> itSocialPFlowRefs=socialTopic.listInheritPFlowRefs();
+            %>    
+            <div class="etiqueta">Flujo de Publicación</div>        
+            <div class="etiqueta"><label for="socialFlow"><%=SWBSocialUtil.Util.getStringFromGenericLocale("publishFlow", user.getLanguage())%></label></div>
+            <div class="campo">
+            <%
+            if(postIn!=null)
+            {
+                socialTopic=postIn.getSocialTopic();
+            }
+            if(socialTopic!=null)
+            {
+            %>
+                <select name="socialFlow">
+                <%
+                boolean noFlows=true;
+                while(itSocialPFlowRefs.hasNext())
+                {
+                    SocialPFlowRef socialFlowRef=itSocialPFlowRefs.next();
+                    SocialPFlow socialPFlow=socialFlowRef.getPflow();
+                    if(socialPFlow.isActive())
+                    {
+                        noFlows=false; 
+                        %>
+                        <option value="<%=socialPFlow.getURI()%>"><%=socialPFlow.getDisplayTitle(lang)%> </option>
+                        <%
+                    }
+                }
+                if(noFlows)
+                {
+                %>
+                    <option value=""><%=SWBSocialUtil.Util.getStringFromGenericLocale("withOutFlow", user.getLanguage())%></option>
+                <%
+                }
+                %>
+                </select>
+                </div>
+                <%if(!noFlows && firstTime){%>
+                    <div class="etiqueta"><label for="socialFlowComment"><%=SWBSocialUtil.Util.getStringFromGenericLocale("comment", user.getLanguage())%></label></div>
+                    <div class="campo">
+                        <textarea name="socialFlowComment"></textarea>
+                    </div>
+                <%
+               }
+            }
+                %>
+
+                <ul class="btns_final">
+                    <button dojoType="dijit.form.Button" type="submit"><%=SWBSocialUtil.Util.getStringFromGenericLocale("send", user.getLanguage())%></button>
+                </ul>
+            </form>
+        </div>
+    <%    
+        }
     }
-%>
+    %>
