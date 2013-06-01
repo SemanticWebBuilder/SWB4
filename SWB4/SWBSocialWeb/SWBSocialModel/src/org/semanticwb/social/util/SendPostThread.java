@@ -77,6 +77,7 @@ public class SendPostThread extends java.lang.Thread {
                           {
                               Messageable messageable=(Messageable) postable;
                               messageable.postMsg((Message)postableObj.getPost());
+                              System.out.println("Se publica-4");
                               postOut.setPublished(true);
                           }else if(postOut instanceof Photo && postable instanceof Photoable)
                           {
@@ -85,7 +86,6 @@ public class SendPostThread extends java.lang.Thread {
                               postOut.setPublished(true);
                           }else if(postOut instanceof Video && postable instanceof Videoable)
                           {
-                              System.out.println("ENTRA A SENTVIDEO...");
                               Videoable videoable=(Videoable) postable;
                               videoable.postVideo((Video)postableObj.getPost());
                               postOut.setPublished(true);
