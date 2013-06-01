@@ -33,7 +33,6 @@ import org.semanticwb.social.SentimentalLearningPhrase;
 import org.semanticwb.social.SocialNetwork;
 import org.semanticwb.social.SocialPFlow;
 import org.semanticwb.social.SocialTopic;
-import org.semanticwb.social.admin.resources.reports.PostSummary;
 import org.semanticwb.social.util.SWBSocialUtil;
 import twitter4j.internal.org.json.JSONArray;
 import twitter4j.internal.org.json.JSONException;
