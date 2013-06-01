@@ -134,7 +134,6 @@ public class AllNewPostInToUser extends GenericResource {
         response.setContentType("text/html; charset=ISO-8859-1");
         response.setHeader("Cache-Control", "no-cache");
         response.setHeader("Pragma", "no-cache");
-        log.debug("doEdit()");
         User user = paramRequest.getUser();
 
         String socialSiteUri = request.getParameter("socialSite");
@@ -157,6 +156,19 @@ public class AllNewPostInToUser extends GenericResource {
                 out.println(" hideDialog(); ");
             }
             out.println("   showStatus('" + request.getParameter("statusMsg") + "');");
+
+            /*
+            out.println(" delay(100000); ");
+            
+            out.println("function delay(milisegundos)");
+            out.println("{");
+            out.println("   for(i=0;i<=milisegundos;i++)");
+            out.println("   {");
+            out.println("       setTimeout('return 0',1);");
+            out.println("   }");
+            out.println("}");
+            */
+            
             out.println("</script>");
         }
 
@@ -543,14 +555,14 @@ public class AllNewPostInToUser extends GenericResource {
                     socialPFlow = (SocialPFlow) SemanticObject.createSemanticObject(socialFlow).createGenericInstance();
                 }
 
-                System.out.println("Entra a InBox_processAction-4");
+                System.out.println("Entra a InBox_processAction-4:"+request.getParameter("wsite"));
                 SWBSocialUtil.PostOutUtil.sendNewPost(postIn, postIn.getSocialTopic(), socialPFlow, aSocialNets, wsite, request.getParameter("toPost"), request, response);
 
                 System.out.println("Entra a InBox_processAction-5");
                 response.setMode(SWBActionResponse.Mode_EDIT);
                 response.setRenderParameter("dialog", "close");
                 response.setRenderParameter("statusMsg", response.getLocaleString("msgResponseCreated"));
-                response.setRenderParameter("socialSite", request.getParameter("wsite"));
+                response.setRenderParameter("socialSite", wsite.getURI());
             }
         } else if (SWBResourceURL.Action_EDIT.equals(action)) {
             WebSite wsite = base.getWebSite();

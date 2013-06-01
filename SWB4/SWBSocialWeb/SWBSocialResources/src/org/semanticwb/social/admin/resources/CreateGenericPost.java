@@ -5,6 +5,7 @@
 package org.semanticwb.social.admin.resources;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -18,6 +19,9 @@ import org.semanticwb.portal.api.SWBResourceException;
 /**
  *
  * @author jorge.jimenez
+ * 
+ * Clase que se utiliza para publicar en las redes sociales de manera Generica desde el menu superior --"Publicar/En Redes Sociales"--
+ * 
  */
 public class CreateGenericPost extends CreatePost { 
     
@@ -25,6 +29,21 @@ public class CreateGenericPost extends CreatePost {
 
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        
+        PrintWriter out=response.getWriter();
+        if(request.getParameter("statusMsg")!=null)
+        {
+            out.println("<script type=\"text/javascript\">");
+            out.println("   showStatus('"+request.getParameter("statusMsg")+"');");
+            /*
+            if(request.getParameter("reloadTab")!=null)
+            {
+                out.println(" reloadTab('" + request.getParameter("reloadTab") + "');");//so
+            } */           
+            out.println("</script>");
+            return;
+        }
+        
         String basePath=SWBPlatform.getContextPath() +"/work/" + paramRequest.getWebPage().getWebSiteId() +"/jsp/post/";
         String jspResponse = basePath+"socialSites.jsp";
         RequestDispatcher dis = request.getRequestDispatcher(jspResponse);

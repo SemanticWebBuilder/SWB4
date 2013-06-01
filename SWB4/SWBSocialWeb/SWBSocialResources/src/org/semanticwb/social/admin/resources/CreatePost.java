@@ -6,7 +6,9 @@ package org.semanticwb.social.admin.resources;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.Iterator;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -16,29 +18,25 @@ import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.platform.SemanticObject;
-import org.semanticwb.portal.SWBFormMgr;
 import org.semanticwb.portal.api.GenericResource;
 import org.semanticwb.portal.api.SWBActionResponse;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.api.SWBResourceURL;
-import org.semanticwb.social.Message;
-import org.semanticwb.social.Messageable;
-import org.semanticwb.social.Photo;
-import org.semanticwb.social.Photoable;
-import org.semanticwb.social.PostOut;
 import org.semanticwb.social.SocialNetwork;
+import org.semanticwb.social.SocialPFlow;
+import org.semanticwb.social.SocialPFlowRef;
 import org.semanticwb.social.SocialTopic;
-import org.semanticwb.social.Video;
-import org.semanticwb.social.Videoable;
-import org.semanticwb.social.util.PostableObj;
 import org.semanticwb.social.util.SWBSocialUtil;
-import org.semanticwb.social.util.SendPostThread;
 
 /**
  *
  * @author Jorge.Jimenez
+ * 
+ * Clase que se utiliza para publicar en las redes sociales desde un Tema.
+ * 
  * @modified by Francisco.Jiménez
+ * 
  */
 public class CreatePost extends GenericResource {
 
@@ -46,6 +44,21 @@ public class CreatePost extends GenericResource {
 
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        
+        PrintWriter out=response.getWriter();
+        
+        if(request.getParameter("statusMsg")!=null)
+        {
+            out.println("<script type=\"text/javascript\">");
+            out.println("   showStatus('"+request.getParameter("statusMsg")+"');");       
+            if(request.getParameter("reloadTab")!=null)
+            {
+                out.println(" reloadTab('" + request.getParameter("reloadTab") + "');");//so
+            }            
+            out.println("</script>");
+            return;
+        }
+        
         String jspResponse = SWBPlatform.getContextPath() +"/work/" + paramRequest.getWebPage().getWebSiteId() +"/jsp/post/createPost.jsp";
         if (request.getParameter("jspResponse") != null) {
             jspResponse = request.getParameter("jspResponse");
@@ -71,12 +84,23 @@ public class CreatePost extends GenericResource {
     @Override
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
         try {
+            ArrayList aSocialNets=new ArrayList();
             WebSite wsite = WebSite.ClassMgr.getWebSite(request.getParameter("wsite"));
             String objUri = request.getParameter("objUri");
             String action = response.getAction();
             SemanticObject semanticObject = SemanticObject.createSemanticObject(objUri);
             SocialTopic socialTopic = (SocialTopic) semanticObject.createGenericInstance();
+            
+            SocialPFlow spflow=null;
+            System.out.println("processA/socialFlow:"+request.getParameter("socialFlow"));
+            if(request.getParameter("socialFlow")!=null && request.getParameter("socialFlow").trim().length()>0)
+            {
+                SemanticObject semObjSFlow=SemanticObject.getSemanticObject(request.getParameter("socialFlow"));
+                spflow=(SocialPFlow)semObjSFlow.createGenericInstance();
+            }
+            
             String toPost = request.getParameter("toPost");
+            
             String socialUri = "";
             int j = 0;
             Enumeration<String> enumParams = request.getParameterNames();
@@ -90,76 +114,33 @@ public class CreatePost extends GenericResource {
                     j++;
                 }
             }
-            if (j != 0 && (action.equals("postMessage")
-                    || action.equals("uploadPhoto")
-                    || action.equals("uploadVideo"))) {
-                if (socialUri != null) {
-                    SWBFormMgr mgr = null;
-                    if (toPost.equals("msg")) {
-                        mgr = new SWBFormMgr(Message.sclass, wsite.getSemanticObject(), null);
-                    } else if (toPost.equals("photo")) {
-                        mgr = new SWBFormMgr(Photo.sclass, wsite.getSemanticObject(), null);
-                    } else if (toPost.equals("video")) {
-                        mgr = new SWBFormMgr(Video.sclass, wsite.getSemanticObject(), null);
+            if (j != 0 && (action.equals("postMessage") || action.equals("uploadPhoto") || action.equals("uploadVideo"))) 
+            {
+                if (socialUri != null) // La publicación por lo menos se debe enviar a una red social
+                {
+                    String[] socialUris = socialUri.split("\\|");  //Dividir valores
+                    for (int i = 0; i < socialUris.length; i++) {
+                        String tmp_socialUri = socialUris[i];
+                        SemanticObject semObject = SemanticObject.createSemanticObject(tmp_socialUri, wsite.getSemanticModel());
+                        SocialNetwork socialNet = (SocialNetwork) semObject.createGenericInstance();
+                        //Se agrega la red social de salida al post
+                        aSocialNets.add(socialNet);
                     }
-                    if (mgr != null) 
-                    {
-                        mgr.setFilterRequired(false);
-                        SemanticObject sobj = mgr.processForm(request);
-                        org.semanticwb.social.Post post = (org.semanticwb.social.Post) sobj.createGenericInstance();
-                        post.setSocialTopic(socialTopic);
-                        //Convierto a un post de salida para poderle agregar cada red social a la que se envía dicho post
-                        PostOut postOut=(PostOut)post;
-                        //Revisa las redes sociales a las cuales se tiene que enviar el Post
-                        String[] socialUris = socialUri.split("\\|");  //Dividir valores
-                        for (int i = 0; i < socialUris.length; i++) {
-                            String tmp_socialUri = socialUris[i];
-                            SemanticObject semObject = SemanticObject.createSemanticObject(tmp_socialUri, wsite.getSemanticModel());
-                            SocialNetwork socialNet = (SocialNetwork) semObject.createGenericInstance();
-                            //Se agrega la red social de salida al post
-                            postOut.addSocialNetwork(socialNet);
-                        }
-                            
-                            SWBSocialUtil.PostOutUtil.publishPost(postOut, request, response);
-                            
-                            /*
-                            //Se revisa si es de tipo mensaje, foto o video.
-                            if (toPost.equals("msg") && socialNet instanceof Messageable) {
-                                System.out.println("MENSAJE!!");
-                                //TODO: YO CREO QUE LO QUE TENGO QUE HACER AQUI, ES UN THREAD POR CADA UNA DE LAS REDES SOCIALES A LAS QUE SE ENVÍE UN POST
-                                Messageable messageable = (Messageable) socialNet;
-                                //messageable.postMsg((Message) post, request, response);
-                                PostableObj postableObj = new PostableObj(messageable, post, toPost, request, response);
-                                SendPostThread sendPostThread = new SendPostThread();
-                                sendPostThread.addPostAble(postableObj);
-                                sendPostThread.start();
-                                response.setMode(SWBResourceURL.Mode_EDIT);
-                            } else if (toPost.equals("photo") && socialNet instanceof Photoable) {
-                                System.out.println("PHOTO!!");
-                                //TODO: YO CREO QUE LO QUE TENGO QUE HACER AQUI, ES UN THREAD POR CADA UNA DE LAS REDES SOCIALES A LAS QUE SE ENVÍE UN POST
-                                Photoable photoable = (Photoable) socialNet;
-                                //photoable.postPhoto((Photo) post, request, response);
-                                PostableObj postableObj = new PostableObj(photoable, post, toPost, request, response);
-                                SendPostThread sendPostThread = new SendPostThread();
-                                sendPostThread.addPostAble(postableObj);
-                                sendPostThread.start();
-                                response.setMode(SWBResourceURL.Mode_EDIT);
-                            } else if (toPost.equals("video") && socialNet instanceof Videoable) {
-                                System.out.println("VIDEO!!");
-                                //TODO: YO CREO QUE LO QUE TENGO QUE HACER AQUI, ES UN THREAD POR CADA UNA DE LAS REDES SOCIALES A LAS QUE SE ENVÍE UN POST
-                                Videoable videoable = (Videoable) socialNet;
-                                //videoable.postVideo((Video) post, request, response);
-                                PostableObj postableObj = new PostableObj(videoable, post, toPost, request, response);
-                                SendPostThread sendPostThread = new SendPostThread();
-                                sendPostThread.addPostAble(postableObj);
-                                sendPostThread.start();
-                                response.setMode(SWBResourceURL.Mode_EDIT);
-                            }
-                            * */
+                    //SWBSocialUtil.PostOutUtil.publishPost(postOut, request, response);
+                    System.out.println("Se publicaJ-1");
+                    SWBSocialUtil.PostOutUtil.sendNewPost(null, socialTopic, spflow, aSocialNets, wsite, toPost, request, response);
+                    response.setRenderParameter("statusMsg", SWBUtils.TEXT.encode(response.getLocaleLogString("postCreated"),"utf8"));
+                    response.setRenderParameter("reloadTab", socialTopic.getURI());
+                    response.setMode(SWBResourceURL.Mode_VIEW);
+                 }else {    //Enviar a statusBar que no se publicó el mensaje en ninguna red social.
+                    response.setMode(SWBResourceURL.Mode_VIEW);
+                    response.setRenderParameter("statusMsg", response.getLocaleLogString("postNotCreatedNoNet"));
+                    response.setRenderParameter("reloadTab", socialTopic.getURI());
                  }
-               }
             } else {
-                response.setMode(SWBResourceURL.Mode_EDIT);
+                response.setMode(SWBResourceURL.Mode_VIEW);
+                response.setRenderParameter("statusMsg", response.getLocaleLogString("postTypeNotDefined"));
+                response.setRenderParameter("reloadTab", socialTopic.getURI());
             }
         } catch (Exception e) {
             log.error(e.getMessage());
@@ -181,12 +162,4 @@ public class CreatePost extends GenericResource {
         }
     }
 
-    @Override
-    public void doEdit(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        PrintWriter out = response.getWriter();
-        out.println("Post Creado Correctamente!");
-        out.println("<script type=\"text/javascript\">");
-        out.println("   showStatus('Post Creado Correctamente!');");            
-        out.println("</script>");
-    }
 }
