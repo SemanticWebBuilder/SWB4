@@ -764,10 +764,34 @@ public class SWBSocialUtil implements SWBAppObject {
 
             return message;
         }
+        
+        /*
+         * Regresa el string relacionado con la llave y el lenguaje pasados como parametros
+         * TODO:Cargarlo solo una vez desde el metodo init de este singleton y mandar llamar con los parametros.
+         */
+        public static String getStringFromGenericLocale(String key, String lang)
+        {
+            String strLocale=SWBUtils.TEXT.getLocaleString("org.semanticwb.social.admin.resources.locales.generic", key,new Locale(lang));
+            if(strLocale!=null)
+            {
+                try
+                {
+                    return SWBUtils.TEXT.encode(strLocale, "utf8");                    
+                }catch(Exception e)
+                {
+                    return strLocale;
+                }                
+            }
+            return null;
+        }
+        
     }
 
     public static class PostOutUtil
     {
+        
+        
+        
 
         public static void sendNewPost(PostIn postIn, SocialTopic socialTopic, SocialPFlow socialPFlow, ArrayList<SocialNetwork> aSocialNets, WebSite wsite, String toPost, HttpServletRequest request, SWBActionResponse response) 
         {
@@ -809,11 +833,15 @@ public class SWBSocialUtil implements SWBAppObject {
                     
                     //SocialPFlow al que se va ha enviar el nuevo post, si no tiene(que llegue Nulo), entonces se envía el PostOut sin pasar por flujo
                     if (socialPFlow != null) {
-                        SocialLoader.getPFlowManager().sendResourceToAuthorize(postOut, socialPFlow, toPost);
+                        System.out.println("Se publicaJ-2");
+                        String strMessage=request.getParameter("socialFlowComment");
+                        if(strMessage==null) strMessage="";
+                        SocialLoader.getPFlowManager().sendResourceToAuthorize(postOut, socialPFlow, strMessage);
                         //sendPostOutToAuthorize(postOut, socialPFlow, socialFlowComment);
                     } else {
                         //Revisa las redes sociales a las cuales se tiene que enviar el Post
                         //String[] socialUris = socialUri.split("\\|");  //Dividir valores
+                        System.out.println("Se publicaJ-3");
                         publishPost(postOut, request, response);
                     }
                 }

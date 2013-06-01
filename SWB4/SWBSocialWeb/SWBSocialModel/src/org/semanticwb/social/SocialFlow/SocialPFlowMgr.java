@@ -14,6 +14,8 @@ import java.util.ResourceBundle;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.GenericIterator;
+import org.semanticwb.model.GenericObject;
+import org.semanticwb.model.PFlowRef;
 import org.semanticwb.model.Role;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.User;
@@ -142,7 +144,7 @@ public class SocialPFlowMgr {
                 {
                     SocialPFlowInstance instance = instances.next();
                     PostOut postOut = instance.getPfinstPostOut();
-                    if (postOut != null && isInFlow(postOut) && postOut.getCreator() != null && postOut.getCreator().equals(user))
+                    if (postOut != null && postOut.getSocialTopic()!=null && isInFlow(postOut) && postOut.getCreator() != null && postOut.getCreator().equals(user) && isSocialPflowRefActive(postOut, flow))
                     {
                         getContentsAtFlowOfUser.add(postOut);
                     }
@@ -152,12 +154,14 @@ public class SocialPFlowMgr {
         return getContentsAtFlowOfUser.toArray(new PostOut[getContentsAtFlowOfUser.size()]);
     }
 
+    
     /**
      * Gets the contents at flow all.
      * 
      * @param site the site
      * @return the contents at flow all
      */
+    /*
     public static PostOut[] getContentsAtFlowAll(WebSite site)
     {
         HashSet<PostOut> getContentsAtFlowAll = new HashSet<PostOut>();
@@ -168,20 +172,115 @@ public class SocialPFlowMgr {
             while (flows.hasNext())
             {
                 SocialPFlow flow = flows.next();
-                Iterator<SocialPFlowInstance> instances = flow.listSocialPFlowinstances(); 
-                while (instances.hasNext())
+                if(flow.isActive()) //Agregado Jorge
                 {
-                    SocialPFlowInstance instance = instances.next();
-                    PostOut postOut = instance.getPfinstPostOut();
-                    if (postOut != null && isInFlow(postOut))
+                    Iterator<SocialPFlowInstance> instances = flow.listSocialPFlowinstances(); 
+                    while (instances.hasNext())
                     {
-                        getContentsAtFlowAll.add(postOut);
+                        SocialPFlowInstance instance = instances.next();
+                        PostOut postOut = instance.getPfinstPostOut();
+                        if(postOut.getSocialTopic()!=null)
+                        {
+                            if (postOut != null && isInFlow(postOut))
+                            {
+                                getContentsAtFlowAll.add(postOut);
+                            }
+                        }
                     }
                 }
             }
         }
         return getContentsAtFlowAll.toArray(new PostOut[getContentsAtFlowAll.size()]);
     }
+    * */
+    
+    public static PostOut[] getContentsAtFlowAll(WebSite site)
+    {
+        HashSet<PostOut> getContentsAtFlowAll = new HashSet<PostOut>();
+        if (site != null)
+        {
+            //Iterator<PFlow> flows = site.listPFlows();
+            Iterator<SocialPFlow> flows = SocialPFlow.ClassMgr.listSocialPFlows(site);
+            while (flows.hasNext())
+            {
+                SocialPFlow flow = flows.next();
+                if(flow.isActive()) //Agregado Jorge
+                {
+                    Iterator<SocialPFlowInstance> instances = flow.listSocialPFlowinstances(); 
+                    while (instances.hasNext())
+                    {
+                        SocialPFlowInstance instance = instances.next();
+                        PostOut postOut = instance.getPfinstPostOut();
+                        if(postOut!=null && postOut.getSocialTopic()!=null)
+                        {
+                            if (isInFlow(postOut) && isSocialPflowRefActive(postOut, flow)) 
+                            {
+                                getContentsAtFlowAll.add(postOut);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return getContentsAtFlowAll.toArray(new PostOut[getContentsAtFlowAll.size()]);
+    }
+    
+    
+    private static boolean isSocialPflowRefActive(PostOut postOut, SocialPFlow socialPflow)
+    {
+        SocialTopic socialTopic=postOut.getSocialTopic();
+        Iterator<SocialPFlowRef> itPFlowRefs=socialTopic.listInheritPFlowRefs();
+        while(itPFlowRefs.hasNext())
+        {
+            SocialPFlowRef socialPFlowRef=itPFlowRefs.next();
+            if(postOut.getPflowInstance().getPflow().getURI().equals(socialPFlowRef.getPflow().getURI()))
+            {
+                if(socialPFlowRef.isActive()) return true;
+                else return false;
+            }
+        }
+        return false;
+    }
+    
+    
+    /*
+    public static PostOut[] getContentsAtFlowAll(WebSite site)
+    {
+        HashSet<PostOut> getContentsAtFlowAll = new HashSet<PostOut>();
+        if (site != null)
+        {
+            //Iterator<PFlow> flows = site.listPFlows();
+            Iterator<SocialPFlow> flows = SocialPFlow.ClassMgr.listSocialPFlows(site);
+            while (flows.hasNext())
+            {
+                SocialPFlow flow = flows.next();
+                if(flow.isActive()) //Agregado Jorge
+                {
+                    Iterator<SocialPFlowRef> pflowRefs = flow.listSocialPFlowRefInvs(); 
+                    while (pflowRefs.hasNext())
+                    {
+                        SocialPFlowRef pflowRef = pflowRefs.next();
+                        if(pflowRef.isActive())
+                        {
+                            Iterator <GenericObject> itGenObjs=pflowRef.listRelatedObjects();
+                            while(itGenObjs.hasNext())
+                            {
+                                GenericObject genObj=itGenObjs.next();
+                                if(genObj instanceof SocialTopic)
+                                {
+                                    
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return getContentsAtFlowAll.toArray(new PostOut[getContentsAtFlowAll.size()]);
+    }
+    */
+    
+    
 
     /**
      * Gets the contents at flow.
@@ -203,10 +302,10 @@ public class SocialPFlowMgr {
                 while (instances.hasNext())
                 {
                     SocialPFlowInstance instance = instances.next();
-                    PostOut resource = instance.getPfinstPostOut();                    
-                    if (resource != null && isInFlow(resource) && isReviewer(resource, user))
+                    PostOut postOut = instance.getPfinstPostOut();                    
+                    if (postOut != null && postOut.getSocialTopic()!=null && isInFlow(postOut) && isReviewer(postOut, user) && isSocialPflowRefActive(postOut, flow))
                     {
-                        getContentsAtFlow.add(resource);
+                        getContentsAtFlow.add(postOut);
                     }
                 }
             }
@@ -780,6 +879,7 @@ public class SocialPFlowMgr {
                     log.error(e);
                 }
                 String messageType = "I";
+                System.out.println("InitContent--1");
                 mailToNotify(resource, activity, messageType, message);
             }
 
@@ -921,6 +1021,7 @@ public class SocialPFlowMgr {
                 instance.setPfinstPostOut(resource);
                 instance.setStatus(1);
                 instance.setVersion(version);
+                System.out.println("sendResourceToAuthorize--1");
                 initContent(resource, pflow, message);
             }
         }
@@ -997,6 +1098,11 @@ public class SocialPFlowMgr {
      */
     public static boolean needAnAuthorization(PostOut resource)
     {
+        SocialPFlow postOutFlow=null;
+        if(resource.getPflowInstance()!=null)
+        {
+            postOutFlow=resource.getPflowInstance().getPflow();
+        }
         SocialTopic socialTopic=resource.getSocialTopic();
         Iterator<SocialPFlowRef> refs = socialTopic.listInheritPFlowRefs();
         while (refs.hasNext())
@@ -1007,6 +1113,7 @@ public class SocialPFlowMgr {
                 SocialPFlow pflow = ref.getPflow();
                 if (pflow != null)
                 {
+                    if(!postOutFlow.getURI().equals(pflow.getURI())) continue;
                     String typeresource = resource.getSemanticObject().getSemanticClass().getClassId();
                     Document docflow = SWBUtils.XML.xmlToDom(pflow.getXml());
                     Element workflow = (Element) docflow.getElementsByTagName("workflow").item(0);
@@ -1019,7 +1126,7 @@ public class SocialPFlowMgr {
                         {
                             if (resource.getPflowInstance() == null)
                             {
-                                return true;
+                                return false;
                             }
                             else
                             {
@@ -1106,8 +1213,9 @@ public class SocialPFlowMgr {
          * @param messageType the message type
          * @param message the message
          */
-        public static void mailToNotify(PostOut postOut, String activityName, String messageType, String message) {
-            
+        public static void mailToNotify(PostOut postOut, String activityName, String messageType, String message) 
+        {
+            System.out.println("mailToNotify--1");
             User wbuser = postOut.getCreator();
             Locale locale = Locale.getDefault();
             try {
