@@ -9,10 +9,10 @@
 <%@page contentType="text/html"%>
 <%
 SWBParamRequest paramRequest = (SWBParamRequest)request.getAttribute("paramRequest");
-SWBResourceURL url = paramRequest.getRenderUrl().setCallMethod(SWBResourceURL.Call_DIRECT);
-url.setMode(SVGModeler.MODE_GATEWAY);
-url.setAction(SVGModeler.ACT_GETPROCESSJSON);
-url.setParameter("suri", request.getParameter("suri"));
+SWBResourceURL commandUrl = paramRequest.getRenderUrl().setCallMethod(SWBResourceURL.Call_DIRECT);
+commandUrl.setMode(SVGModeler.MODE_GATEWAY);
+commandUrl.setAction(SVGModeler.ACT_GETPROCESSJSON);
+commandUrl.setParameter("suri", request.getParameter("suri"));
 
 SWBResourceURL exportUrl = paramRequest.getRenderUrl().setCallMethod(SWBResourceURL.Call_DIRECT);
 exportUrl.setMode(SVGModeler.MODE_EXPORT);
@@ -22,8 +22,8 @@ exportUrl.setMode(SVGModeler.MODE_EXPORT);
     <script type="text/javascript" src="/swbadmin/js/dojo/dojo/dojo.js" djConfig="parseOnLoad: true, isDebug: false, locale: 'es'" ></script>
     <!--
     <script src="/swbadmin/js/swb_admin.js"></script>
-    <script src="/swbadmin/js/swb.js"></script>
     -->
+    <script src="/swbadmin/js/swb.js"></script>
     <script type="text/javascript" src="/swbadmin/jsp/process/modeler/toolkit.js"></script>
     <script type="text/javascript" src="/swbadmin/jsp/process/modeler/modeler.js"></script>
     <link href="/swbadmin/jsp/process/modeler/modelerFrame.css" rel="stylesheet" type="text/css">
@@ -84,7 +84,7 @@ exportUrl.setMode(SVGModeler.MODE_EXPORT);
 
         <div id="fileBar" class="subbarHidden" style="width: 385px;">
             <span class="subbarStart"></span>
-            <span class="storeProcess" title="Enviar modelo" onclick="Modeler.submitCommand('<%=url%>')"></span>
+            <span class="storeProcess" title="Enviar modelo" onclick="storeProcess();"></span>
             <span class="saveAsImage" title="Guardar como imagen" onclick="submit_download_form('svg')"></span>
             <span class="subbarEnd"></span>
         </div>
@@ -714,14 +714,25 @@ exportUrl.setMode(SVGModeler.MODE_EXPORT);
         </defs>
     </svg>
 </div>
-    <form id="svgform" accept-charset="utf-8"method="post" action="<%=exportUrl%>">
+<form id="svgform" accept-charset="utf-8"method="post" action="<%=exportUrl%>">
     <input type="hidden" id="output_format" name="output_format" value="">
     <input type="hidden" name="suri" value="<%=request.getParameter("suri")%>">
     <input type="hidden" id="data" name="data" value="">
 </form>
 <script type="text/javascript">
-    function callback(response) {
+    <%
+        commandUrl = paramRequest.getRenderUrl().setCallMethod(SWBResourceURL.Call_DIRECT);
+        commandUrl.setMode(SVGModeler.MODE_GATEWAY);
+        commandUrl.setAction(SVGModeler.ACT_GETPROCESSJSON);
+        commandUrl.setParameter("suri", request.getParameter("suri"));
+    %>
+    function loadProcess() {
+        Modeler.submitCommand('<%=commandUrl%>', null, callbackLoad);
+    };
+    
+    function callbackLoad(response) {
         Modeler.loadProcess(response);
+        parent.reloadTreeNodeByURI('<%=request.getParameter("suri")%>');
     };
 
     /*
@@ -741,7 +752,18 @@ exportUrl.setMode(SVGModeler.MODE_EXPORT);
             form['data'].value = svg_xml ;
             form.submit();
     }
-
-    Modeler.submitCommand('<%=url%>', callback);
+    <%
+        commandUrl = paramRequest.getRenderUrl().setCallMethod(SWBResourceURL.Call_DIRECT);
+        commandUrl.setMode(SVGModeler.MODE_GATEWAY);
+        commandUrl.setAction(SVGModeler.ACT_STOREPROCESS);
+        commandUrl.setParameter("suri", request.getParameter("suri"));
+    %>
+    function storeProcess() {
+        var json = Modeler.getProcessJSON();
+        var jsonString = "JSONSTART"+JSON.stringify(json)+"JSONEND";
+        Modeler.submitCommand('<%=commandUrl%>',jsonString, loadProcess);
+    }
+    
+    loadProcess();
 </script>
 </body>
