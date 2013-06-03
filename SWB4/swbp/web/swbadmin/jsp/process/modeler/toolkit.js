@@ -1465,11 +1465,11 @@
                 }
                 
                 var offy=0;
-                if(obj.textPY)offy=obj.textPY*(parent.getHeight()/2+lin*dy/2+dy/2);            
+                if(obj.textPY)offy=obj.textPY*(parent.getHeight()/2+lin*dy/2+dy/2);
                 text_element.setY(parent.getY()+dy-lin*dy/2+offy);
                 
                 var offx=0;
-                if(obj.textPX)offx=obj.textPX*((w/2)+dy/2);            
+                if(obj.textPX)offx=obj.textPX*((w/2)+dy/2);
                 text_element.setX(parent.getX()+offx);
                 
                 if(obj.textO==2) {
