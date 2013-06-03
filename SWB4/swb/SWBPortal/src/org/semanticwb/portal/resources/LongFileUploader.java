@@ -29,6 +29,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URLDecoder;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
@@ -495,6 +496,7 @@ public class LongFileUploader extends GenericResource {
                         }
                         SemanticProperty sp = so.getSemanticClass()
                                 .getProperty(propertyName);
+                        log.trace("LongFileUploader.eofCheck: SemanticProperty:"+sp);
                         if (propertyName.startsWith("has")) {
                             so.addLiteralProperty(sp,
                                     new SemanticLiteral(dest.getName()));
@@ -507,6 +509,11 @@ public class LongFileUploader extends GenericResource {
                                 }
                             }
                             so.setProperty(sp, dest.getName());
+                        }
+                        Iterator<SemanticLiteral> iter = so.listLiteralProperties(sp);
+                        while(iter.hasNext()){
+                            SemanticLiteral sl = iter.next();
+                            log.trace("Value found: "+sl.getString());
                         }
                         workfiledir.delete();
                         fileUtil.updateChanges();
