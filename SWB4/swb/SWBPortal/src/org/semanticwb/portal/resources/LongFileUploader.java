@@ -169,7 +169,7 @@ public class LongFileUploader extends GenericResource {
                         + "var " + id + "_lfu = new LongFileUploader(\"" + urlBase
                         + "\",\"" + so.getId() //Revisar...
                         + "\", \"" + id + "\",\"" + redirectedURL + "\");</script>");
-                out.println("<div id=\"" + id + "\"><form>file: <input type=\"file\" "
+                out.println("<div id=\"" + id + "\"><form accept-charset=\"ISO8859-1\">file: <input type=\"file\" "
                         + "name=\"updfile\" id=\"updfile\" "
                         + "onchange=\"" + id + "_lfu.sendFile(this)\"/>"
                         + "<div id=\"progressBar\" style=\"width:100%; height:15px; "
@@ -515,6 +515,7 @@ public class LongFileUploader extends GenericResource {
                             SemanticLiteral sl = iter.next();
                             log.trace("Value found: "+sl.getString());
                         }
+                        
                         workfiledir.delete();
                         fileUtil.updateChanges();
                     }
