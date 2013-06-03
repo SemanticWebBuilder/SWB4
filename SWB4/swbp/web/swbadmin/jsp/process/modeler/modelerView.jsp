@@ -22,8 +22,8 @@ exportUrl.setMode(SVGModeler.MODE_EXPORT);
     <script type="text/javascript" src="/swbadmin/js/dojo/dojo/dojo.js" djConfig="parseOnLoad: true, isDebug: false, locale: 'es'" ></script>
     <!--
     <script src="/swbadmin/js/swb_admin.js"></script>
-    -->
     <script src="/swbadmin/js/swb.js"></script>
+    -->
     <script type="text/javascript" src="/swbadmin/jsp/process/modeler/toolkit.js"></script>
     <script type="text/javascript" src="/swbadmin/jsp/process/modeler/modeler.js"></script>
     <link href="/swbadmin/jsp/process/modeler/modelerFrame.css" rel="stylesheet" type="text/css">
@@ -721,10 +721,10 @@ exportUrl.setMode(SVGModeler.MODE_EXPORT);
 </form>
 <script type="text/javascript">
     <%
-        commandUrl = paramRequest.getRenderUrl().setCallMethod(SWBResourceURL.Call_DIRECT);
-        commandUrl.setMode(SVGModeler.MODE_GATEWAY);
-        commandUrl.setAction(SVGModeler.ACT_GETPROCESSJSON);
-        commandUrl.setParameter("suri", request.getParameter("suri"));
+    commandUrl = paramRequest.getRenderUrl().setCallMethod(SWBResourceURL.Call_DIRECT);
+    commandUrl.setMode(SVGModeler.MODE_GATEWAY);
+    commandUrl.setAction(SVGModeler.ACT_GETPROCESSJSON);
+    commandUrl.setParameter("suri", request.getParameter("suri"));
     %>
     function loadProcess() {
         Modeler.submitCommand('<%=commandUrl%>', null, callbackLoad);
@@ -740,18 +740,18 @@ exportUrl.setMode(SVGModeler.MODE_EXPORT);
        and the requested output format, and submits the form.
     */
     function submit_download_form(output_format) {
-            // Get the SVG element
-            var svg = document.getElementsByTagName("svg")[0];
-            // Extract the data as SVG text string
-            var svg_xml = (new XMLSerializer).serializeToString(svg);
+        // Get the SVG element
+        var svg = document.getElementsByTagName("svg")[0];
+        // Extract the data as SVG text string
+        var svg_xml = (new XMLSerializer).serializeToString(svg);
 
-            // Submit the <FORM> to the server.
-            // The result will be an attachment file to download.
-            var form = document.getElementById("svgform");
-            form['output_format'].value = output_format;
-            form['data'].value = svg_xml ;
-            form.submit();
-    }
+        // Submit the <FORM> to the server.
+        // The result will be an attachment file to download.
+        var form = document.getElementById("svgform");
+        form['output_format'].value = output_format;
+        form['data'].value = svg_xml ;
+        form.submit();
+    };
     <%
         commandUrl = paramRequest.getRenderUrl().setCallMethod(SWBResourceURL.Call_DIRECT);
         commandUrl.setMode(SVGModeler.MODE_GATEWAY);
@@ -762,7 +762,7 @@ exportUrl.setMode(SVGModeler.MODE_EXPORT);
         var json = Modeler.getProcessJSON();
         var jsonString = "JSONSTART"+JSON.stringify(json)+"JSONEND";
         Modeler.submitCommand('<%=commandUrl%>',jsonString, loadProcess);
-    }
+    };
     
     loadProcess();
 </script>
