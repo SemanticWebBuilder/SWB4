@@ -330,6 +330,16 @@
     stroke-width:1.5;
 }
 
+.navPath {
+    fill:e7e7e7;
+    stroke:gray;
+    stroke-width:1;
+}
+
+.navPathHidden {
+    display:none;
+}
+
 /*****************************  NAVBAR **********************************************/
 
 .navbar {
