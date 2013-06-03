@@ -31,6 +31,7 @@
         snap2GridSize:10,
         layer:null,
         tooltip:null,
+        loaded:false,
 
         setLayer:function(layer)
         {
@@ -230,6 +231,7 @@
                         }
                     }
                 }
+                _this.loaded = true;
 
             };
             
@@ -663,9 +665,9 @@
                     //desc(obj.pathSegList.getItem(i),true);
                     var segment=obj.pathSegList.getItem(i);
                     if (segment.pathSegType==SVGPathSeg.PATHSEG_LINETO_ABS) {
-                       console.log("lineto "+segment);
+                       //console.log("lineto "+segment);
                     } else if (segment.pathSegType==SVGPathSeg.PATHSEG_MOVETO_ABS) {
-                       console.log("moveto "+segment);
+                       //console.log("moveto "+segment);
                     }
                 }
             }
@@ -976,7 +978,7 @@
                 for(var i = obj.outConnections.length; i--;)
                 {
                     obj.outConnections[i].setStartPoint(x,y);
-                }                
+                }
             };    
 
             obj.remove = function(all) {
@@ -1257,10 +1259,10 @@
                 var bb=obj.getBBox();
                 obj.setWidth(bb.width);
                 obj.setHeight(bb.height);
-            }            
+            }
             
             return obj;
-        },                    
+        },
 
         createObject:function(constructor, id, parent)
         {
