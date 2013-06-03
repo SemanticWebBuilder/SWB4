@@ -7,11 +7,13 @@
     var _GraphicalElement = function(obj) {
         var _this = obj;
         _this.types = new Array();
-        _this.id = Modeler.itemsCount++;
+        _this.id = ":"+Modeler.itemsCount++;
         
         _this.setElementType = function(typeName) {
             _this.elementType = typeName;
             _this.types.push(typeName);
+            var c = _this.id.substring(_this.id.indexOf(":"), _this.id.length);
+            _this.id = _this.elementType+c;
         };
         
         _this.setURI = function(uri) {
@@ -21,7 +23,7 @@
         _this.typeOf = function(typeName) {
             var ret = false;
             for (var i = 0; i < _this.types.length; i++) {
-                if(_this.types[i] == typeName) {
+                if(_this.types[i] === typeName) {
                     ret = true;
                     break;
                 }
@@ -34,7 +36,7 @@
         };
         
         _this.canEndLink=function(link) {
-            if(link.fromObject!=_this) {
+            if(link.fromObject!==_this) {
                 return true;
             } else {
                 return false;
@@ -55,7 +57,7 @@
         
         _this.getFirstGraphParent = function() {
             var ret = _this.parent;
-            if (ret == null) {
+            if (ret === null) {
                 return _this;
             } else {
                 return ret.getFirstGraphParent();
@@ -64,7 +66,7 @@
         
         _this.getPool = function() {
             var ret = _this.getFirstGraphParent();
-            if (ret != null && ret.elementType=="Pool") {
+            if (ret !== null && ret.elementType==="Pool") {
                 return ret;
             }
             return null;
@@ -82,11 +84,13 @@
     var _ConnectionObject = function(obj) {
         var _this = obj;
         _this.types = new Array();
-        _this.id = Modeler.itemsCount++;
+        _this.id = ":"+Modeler.itemsCount++;
         
         _this.setElementType = function(typeName) {
             _this.elementType = typeName;
             _this.types.push(typeName);
+            var c = _this.id.substring(_this.id.indexOf(":"), _this.id.length);
+            _this.id = _this.elementType+c;
         };
         
         _this.setURI = function(uri) {
@@ -115,7 +119,7 @@
 
         _this.canAttach = function(parent) {
             var ret = false;
-            if (parent.elementType=="Pool" || parent.elementType=="Lane") {
+            if (parent.elementType==="Pool" || parent.elementType==="Lane") {
                 ret = true;
             }
             return ret;
@@ -125,12 +129,12 @@
             var ret = true;
             var msg = null;
             
-            if (link.elementType=="MessageFlow") {
+            if (link.elementType==="MessageFlow") {
                 msg = "Un nodo de flujo no puede tener flujos de mensaje salientes";
                 ret = false;
             }
             
-            if (msg!=null) {
+            if (msg!==null) {
                 ToolKit.showTooltip(0, msg, 200, "Error");
             }
             return ret;
@@ -140,28 +144,28 @@
             var ret = fCanEnd(link);
             var msg = null;
             
-            if (link.elementType=="SequenceFlow") {
-                if (link.fromObject.getContainer() == null && link.fromObject.getPool() !== _this.getPool()) {
+            if (link.elementType==="SequenceFlow") {
+                if (link.fromObject.getContainer() === null && link.fromObject.getPool() !== _this.getPool()) {
                     msg = "Un flujo de secuencia no puede cruzar los límites del Pool";
                     ret = false;
                 }
             }
             
-            if (link.elementType=="AssociationFlow" && link.fromObject.elementType!="AnnotationArtifact") {
-                if (!(link.fromObject.elementType=="Artifact" || link.fromObject.elementType=="DataObject") && !(link.fromObject.elementType=="CompensationIntermediateCatchEvent" && link.fromObject.parent && link.fromObject.parent.typeOf("Activity"))) {
+            if (link.elementType==="AssociationFlow" && link.fromObject.elementType!=="AnnotationArtifact") {
+                if (!(link.fromObject.elementType==="Artifact" || link.fromObject.elementType==="DataObject") && !(link.fromObject.elementType==="CompensationIntermediateCatchEvent" && link.fromObject.parent && link.fromObject.parent.typeOf("Activity"))) {
                     msg = "Un flujo de asociación no puede conectar dos nodos de flujo";
                     ret = false;
                 }
             }
             
-            if (link.elementType=="MessageFlow") {
-                if (link.fromObject.getPool() == _this.getPool()) {
+            if (link.elementType==="MessageFlow") {
+                if (link.fromObject.getPool() === _this.getPool()) {
                     msg = "Un flujo de mensage sólo puede darse entre pools";
                     ret = false;
                 }
             }
             
-            if (msg!=null) {
+            if (msg!==null) {
                 ToolKit.showTooltip(0, msg, 200, "Error");
             }
             return ret;
@@ -216,12 +220,12 @@
         _this.setElementType("Event");
 
         _this.setText = function(text) {
-            fSetText(text,0,1,80,1)
-        }
+            fSetText(text,0,1,80,1);
+        };
 
         _this.canStartLink=function(link) {
             var ret = fCanStart(link);
-            if (ret && (link.elementType=="ConditionalFlow" || link.elementType=="DefaultFlow")) {
+            if (ret && (link.elementType==="ConditionalFlow" || link.elementType==="DefaultFlow")) {
                 ToolKit.showTooltip(0, "Un evento no puede tener flujos condicionales de salida", 200, "Error");
                 ret = false;
             }
@@ -268,22 +272,22 @@
             var c = 0;
             var msg = null;
             
-            if (ToolKit.layer != null) {
+            if (ToolKit.layer !== null) {
                 for (var i = ToolKit.contents.length; i--;)  {
                     if(ToolKit.contents[i].layer===_this.layer && ToolKit.contents[i].typeOf && ToolKit.contents[i].typeOf("StartEventNode")) {
                         c++;
                     }
                 }
                 
-                if (c != 1) {
+                if (c !== 1) {
                     ret = false;
                     msg = "Un subproceso no puede tener más de un evento de inicio";
-                } else if (ToolKit.layer.parent.elementType=="AdhocSubProcess") {
+                } else if (ToolKit.layer.parent.elementType==="AdhocSubProcess") {
                     ret = false;
                     msg = "Un subproceso ad-hoc no puede tener eventos de inicio";
                 }
                 
-                if (msg!=null) {
+                if (msg!==null) {
                     ToolKit.showTooltip(0, msg, 200, "Error");
                 }
             }
@@ -304,14 +308,14 @@
             var ret = fCanAdd();
             var msg = null;
             
-            if (ret && ToolKit.layer != null) {
-                if (ToolKit.layer.parent.elementType=="EventSubProcess") {
+            if (ret && ToolKit.layer !== null) {
+                if (ToolKit.layer.parent.elementType==="EventSubProcess") {
                     ret = false;
                     msg = "Un subproceso de evento no puede contener un evento de inicio normal";
                 }
             }
             
-            if (msg!=null) {
+            if (msg!==null) {
                 ToolKit.showTooltip(0, msg, 200, "Error");
             }
             return ret;
@@ -612,6 +616,23 @@
         var fCanAttach = _this.canAttach;
         var fCanEnd = _this.canEndLink;
         var fCanStart = _this.canStartLink;
+        
+        _this.setInterruptor = function(interrupt) {
+            if (interrupt) {
+                _this.cssClass = "intermediateEvent";
+            } else {
+                _this.cssClass = "intermediateInterruptingEvent";
+            }
+            _this.setBaseClass();
+        };
+        
+         _this.setBaseClass = function() {
+            _this.setAttributeNS(null,"class",_this.cssClass);
+        };
+        
+        _this.setOverClass = function() {
+            _this.setAttributeNS(null,"class",_this.cssClass+"_o");
+        };
         
         _this.setElementType("IntermediateCatchEvent");
         
@@ -1743,6 +1764,25 @@
         return _this;
     };
     
+    var _Lane = function (obj) {
+        var _this = new _GraphicalElement(obj);
+        var fCanAdd = _this.canAddToDiagram;
+        var fSetText = _this.setText;
+        _this.index = -1;
+        
+        _this.setElementType("Lane");
+        
+        _this.setText = function(text) {
+            fSetText(text,-1,0,200,2);
+        };
+        
+        _this.setIndex = function(idx) {
+            _this.index = idx;
+        };
+        
+        return _this;
+    };
+    
     /******************************Actividades*******************************/
     var _Activity = function(obj) {
         var _this = new _FlowNode(obj);
@@ -1871,13 +1911,13 @@
         
         _this.canEndLink = function(link) {
             var ret = fCanEnd(link);
-            if (ret || link.elementType=="MessageFlow") {
+            if (ret || link.elementType==="MessageFlow") {
                 ret = true;
             }
-            if (link.elementType=="SequenceFlow" && link.fromObject.elementType=="ExclusiveIntermediateEventGateway") {
+            if (link.elementType==="SequenceFlow" && link.fromObject.elementType==="ExclusiveIntermediateEventGateway") {
                 ret = true;
                 for (var i = 0; i < link.fromObject.outConnections.length; i++) {
-                    if (link.fromObject.outConnections[i].elementType=="SequenceFlow" && link.fromObject.outConnections[i].toObject && link.fromObject.outConnections[i].toObject.elementType=="MessageIntermediateCatchEvent") {
+                    if (link.fromObject.outConnections[i].elementType==="SequenceFlow" && link.fromObject.outConnections[i].toObject && link.fromObject.outConnections[i].toObject.elementType==="MessageIntermediateCatchEvent") {
                         ret = false;
                         break;
                     }
@@ -1995,6 +2035,7 @@
     {
         creationId:null,                                      //Objeto temporal para creacion de instancias
         itemsCount:0,
+        navPath:null,
                 
         init:function(svgid)
         {
@@ -2008,7 +2049,7 @@
                 
         onmousedown:function(evt)
         {
-            if(Modeler.creationId!=null)
+            if(Modeler.creationId!==null)
             {
                 var obj=Modeler.mapObject(Modeler.creationId);
                 if(obj.move) //es un FlowNode
@@ -2016,12 +2057,15 @@
                     if (obj.canAddToDiagram()) {
                         obj.move(ToolKit.getEventX(evt), ToolKit.getEventY(evt));
                         obj.snap2Grid();
+                        if (obj.typeOf("GraphicalElement")) {
+                            Modeler.fadeInObject(obj);
+                        }
                     } else {
                         obj.remove();
                     }
                 }else   //Es un ConnectionObject
                 {
-                    if(Modeler.creationDropObject!=null)
+                    if(Modeler.creationDropObject!==null)
                     {
                         Modeler.dragConnection=obj;//Modeler.mapObject(Modeler.creationId);
                         if (Modeler.creationDropObject.canStartLink(Modeler.dragConnection)) {
@@ -2268,8 +2312,22 @@
             }
             return obj;
         },
+                
+        createLane: function(id, parent) {
+            var con = function() {
+                var obj = document.createElementNS(ToolKit.svgNS, "rect");
+                obj.setAttributeNS(null, "bclass", "swimlane")
+                obj.setAttributeNS(null, "oclass", "swimlane_o")
+                return obj;
+            };
+                
+            var ob = ToolKit.createBaseObject(con, id, parent);
+            ob.selectable = false;
+            
+            return ob;
+        },
         
-        createSwimLane:function(id, parent)
+        createPool:function(id, parent)
         {
             //Revisar ID
             var obj=ToolKit.createResizeObject(id,parent);
@@ -2285,6 +2343,7 @@
             
             var line=ToolKit.createBaseObject(constructor,null,null);
             obj.headerLine = line;
+            obj.lanes = [];
             
             obj.mousedown=function(evt)
             {
@@ -2322,25 +2381,70 @@
                 }
             }
             
+            obj.addLane = function(ob) {
+                ob.setParent(obj);
+                obj.lanes.push(ob);
+                
+                if (ob.index === -1) {
+                    ob.index = obj.lanes.length;
+                }
+                
+                var totHeight = 0;
+                for (var i = 0; i < obj.lanes.length; i++) {
+                    var l = obj.lanes[i];
+                    totHeight += l.getHeight();
+                }
+                
+                obj.resize(obj.getWidth(), totHeight);
+                
+                if (totHeight === 0) {
+                    ob.resize(obj.getWidth()-13, obj.getHeight());
+                    ob.move(obj.getX()+14, obj.getY());
+                }
+                
+                obj.updateLanes();
+                obj.updateHeaderLine();
+            };
+            
+            obj.updateLanes = function() {
+                var totWidth = obj.getWidth()-15;
+                obj.lanes.sort(function(a,b){return a.index-b.index;});
+                //console.log("updating lanes");
+                if (obj.lanes.length > 0) {
+                    //console.log("lanes exist");
+                    var ypos = obj.getY() - obj.getHeight()/2;
+                    for (var i = 0; i < obj.lanes.length; i++) {
+                        //console.log("updating lane "+i+" moving to "+(obj.getX()+15) +", "+ypos);
+                        obj.lanes[i].resize(totWidth-10, obj.lanes[i].getHeight());
+                        obj.lanes[i].move(obj.getX()+13, ypos + obj.lanes[i].getHeight()/2);
+                        ypos = ypos + obj.lanes[i].getHeight();
+                    }
+                }
+                obj.updateHeaderLine();
+            };
+            
             obj.remove=function() {
                 obj.headerLine.remove();
                 fRemove();
-            }
+            };
             
             obj.moveFirst=function() {
                 //fMoveFirst();
+                obj.updateLanes();
                 obj.updateHeaderLine();
-            }
+            };
             
             obj.resize= function(w, h) {
                 fResize(w, h);
+                obj.updateLanes();
                 obj.updateHeaderLine();
-            }
+            };
             
             obj.move = function(x, y) {
                 fMove(x,y);
+                obj.updateLanes();
                 obj.updateHeaderLine();
-            }
+            };
             return obj;
         },
     
@@ -2357,7 +2461,7 @@
             {
                 //alert("hola1");
                 return true;
-            }
+            };
             obj.mousedown=function(evt){return Modeler.objectMouseDown(evt,obj);}
             obj.onmousemove=function(evt){return Modeler.objectMouseMove(evt,obj);}
             
@@ -2493,6 +2597,7 @@
             
             icon.obj.ondblclick=function(evt)
             {
+                Modeler.navPath.setNavigation(obj.subLayer);
                 ToolKit.setLayer(obj.subLayer);
             };
             
@@ -2573,18 +2678,52 @@
             }
             return obj;
         },
-                
+/***********Utilerías para manipular la información de los procesos*************/
+        fadeInObject: function (obj) {
+            //console.log(obj);
+            if (obj.children) {
+                for (var i = 0; i < obj.children.length; i++) {
+                    //console.log(obj.children[i].tagName);
+                }
+            }
+            var animation = document.createElementNS(ToolKit.svgNS, 'animate');
+            animation.setAttributeNS(null, 'attributeName', 'fill-opacity');
+            animation.setAttributeNS(null, 'begin', "0s");
+            animation.setAttributeNS(null, 'from', "0");
+            animation.setAttributeNS(null, 'to', "1");
+            animation.setAttributeNS(null, 'dur', "0.2s");
+            animation.setAttributeNS(null, 'fill', "freeze");
+            obj.appendChild(animation);
+
+            var animation2 = document.createElementNS(ToolKit.svgNS, 'animate');
+            animation2.setAttributeNS(null, 'attributeName', 'stroke-opacity');
+            animation2.setAttributeNS(null, 'begin', "0s");
+            animation2.setAttributeNS(null, 'from', "0");
+            animation2.setAttributeNS(null, 'to', "1");
+            animation2.setAttributeNS(null, 'dur', "0.2s");
+            animation2.setAttributeNS(null, 'fill', "freeze");
+            obj.appendChild(animation2);
+            
+            animation2.beginElement();
+        },
+
         getJSONObject: function(obj) {
             var ret = {};
             
             if (!obj.typeOf) return null;
             
             ret.class = obj.elementType;
-            ret.uri="";//TODO:Extraer uri
-            ret.title = obj.text.value;
+            ret.uri=obj.id;
+            if (obj.text && obj.text != null) {
+                ret.title = obj.text.value;
+            }
             if (obj.typeOf("GraphicalElement")) {
-                ret.container = obj.getContainer();//TODO: Obtener ID
-                ret.parent = obj.parent;//TODO: Obtener ID
+                if (obj.getContainer() != null) {
+                    ret.container = obj.getContainer().id;
+                }
+                if (ret.parent != null) {
+                    ret.parent = obj.parent.id;
+                }
                 ret.labelSize="12";//TODO:Extraer tamaño de la fuente
                 ret.description=ret.title;//TODO:Extraer descripción
                 ret.x=obj.getX();
@@ -2603,21 +2742,19 @@
                     ret.isCollection=false;//TODO: agregar método para verificar colección
                 }
                 if (obj.elementType=="Lane") {
-                    ret.index=0;//TODO: agregar método para verificar índice
+                    ret.index=obj.index;
                 }
             }
             
-            if (obj.typeOf("ConnectionObject")) {
-                ret.start=obj.fromObject;//TODO: Obtener ID
-                ret.end = obj.toObject;//TODO: Obtener ID
+            if (obj.typeOf("ConnectionObject")) { 
+                ret.start=obj.fromObject.id;
+                ret.end = obj.toObject.id;
                 ret.connectionPoints = "0,0|0,0";//TODO: Agregar método para obtener puntos intermedios
-
             }
             return ret;
         },
 
-/***********Utilerías para manipular la información de los procesos*************/
-        loadProcess: function(jsonString) {
+        loadProcess: function(jsonString) {    
             var json = JSON.parse(jsonString);
             var jsarr = json.nodes;
             var i = 0;
@@ -2644,11 +2781,11 @@
                 i++;
             }
             
-            //Construir swimlanes
+            //Construir pools
             for (i = 0; i < swimlanes.length; i++) {
                 var tmp = swimlanes[i];
-                if (tmp.class==="Pool") { //Por el momento se ignoran lanes
-                    var obj = Modeler.mapObject(tmp.class);
+                if (tmp.class==="Pool") {
+                    var obj = Modeler.mapObject("Pool");
                     obj.setURI(tmp.uri);
                     
                     if (tmp.title != null) {
@@ -2657,6 +2794,25 @@
                     obj.resize(tmp.w, tmp.h);
                     obj.move(tmp.x, tmp.y);
                     obj.snap2Grid();
+                }
+            }
+            
+            //Construir lanes
+            for (i = 0; i < swimlanes.length; i++) {
+                var tmp = swimlanes[i];
+                if (tmp.class==="Lane") {
+                    var obj = Modeler.mapObject("Lane");
+                    obj.setURI(tmp.uri);
+                    if (tmp.title !== null) {
+                        obj.setText(tmp.title);
+                    }
+                    if (tmp.index !== null) {
+                        obj.setIndex(tmp.index);
+                    }
+                    obj.resize(tmp.w, tmp.h);
+                    var par = Modeler.getGraphElementByURI(null, tmp.parent);
+                    par.addLane(obj);
+                    par.move(par.getX(), par.getY());
                 }
             }
             
@@ -2673,8 +2829,18 @@
                     if (obj.resizeable != null && obj.resizeable) {
                         obj.resize(tmp.w, tmp.h);
                     }
+                    
+                    if (obj.typeOf("IntermediateCatchEvent") && tmp.isInterrupting != null) {
+                        var par = Modeler.getGraphElementByURI(null, tmp.parent);
+                        if (par.typeOf("Activity") && !tmp.isInterrupting) {
+                            obj.setInterruptor(false);
+                        }
+                    }
                     obj.move(tmp.x, tmp.y);
-                    obj.snap2Grid();
+                    
+                    if (obj.typeOf("IntermediateCatchEvent") && tmp.parent == "") {
+                        obj.snap2Grid();
+                    }
                 }
             }
             
@@ -2692,27 +2858,126 @@
                 }
             }
             
-            //Asignar contenedores y padres de los flowNodes
+            //Asignar padres de los flowNodes
+//            for (i = 0; i < flowNodes.length; i++) {
+//                var tmp = flowNodes[i];
+//                var obj = Modeler.getGraphElementByURI(null, tmp.uri);
+////                //console.log(tmp.uri+" "+tmp.parent);
+//                if (tmp.parent && tmp.parent !== null) {
+//                    var par = Modeler.getGraphElementByURI(null, tmp.parent);
+//                    if (par != null && obj != null) {
+//                        if (par.elementType=="Pool") {
+//                            console.log("parent: "+par.text.value);
+//                            console.log("obj: "+obj.text.value);
+//                            obj.setParent(null);
+//                        } else {
+//                            obj.setParent(par);
+//                        }
+//                    }
+//                }
+//            }
+
+            //Asignar contenedores de los flowNodes
             for (i = 0; i < flowNodes.length; i++) {
                 var tmp = flowNodes[i];
                 var obj = Modeler.getGraphElementByURI(null, tmp.uri);
-                
-                if (tmp.container && tmp.container != null) {
+                //console.log(tmp.uri+" "+tmp.parent);
+                if (tmp.container && tmp.container !== null) {
                     var par = Modeler.getGraphElementByURI(null, tmp.container);
-                    if (par != null && obj != null) {
+                    if (par !== null && obj !== null) {
                         obj.layer = par.subLayer;
                     }
                 }
-                
-//                if (tmp.parent && tmp.parent != null) {
-//                    var par = Modeler.getGraphElementByURI(null, tmp.parent);
-//                    if (par != null && obj != null) {
-//                        obj.setParent(par);
-//                    }
-//                }
             }
             
+            //Modeler.createNavPath();
             ToolKit.setLayer(null);
+        },
+                
+        createNavPath: function() {
+            if (Modeler.navPath != null) {
+                Modeler.navPath.bar.remove();
+            }
+            
+            var constr = function() {
+                var obj = document.createElementNS(ToolKit.svgNS, "rect");
+                obj.setAttributeNS(null, "rx", "10");
+                obj.setAttributeNS(null, "ry", "10");
+                return obj;
+            };
+            
+            var bar = ToolKit.createBaseObject(constr, null, null);
+            bar.setAttributeNS(null,"class","navPath");
+            bar.resize(500, 50);
+            bar.moveFirst();
+            bar.move((window.pageXOffset+window.innerWidth)-bar.getWidth()/2-ToolKit.svg.offsetLeft-18, 0);
+            
+            var g = document.createElementNS(ToolKit.svgNS, "g");
+            g.bar = bar;
+            g.appendChild(bar);
+            
+            Modeler.navPath = g;
+            
+            Modeler.navPath.setNavigation = function(layer) {
+                Modeler.navPath.bar.layer = layer;
+                
+                if (Modeler.navPath.text && Modeler.navPath.text != null) {
+                    Modeler.navPath.removeChild(Modeler.navPath.text);
+                }
+                
+                var links = [];
+                
+                if (layer != null) {
+                    if (layer.parent && layer.parent != null) {
+                        var p = layer.parent;
+                        var text = document.createElementNS(ToolKit.svgNS, "text");
+                        text.setAttributeNS(null, "x", bar.getX());
+                        text.setAttributeNS(null, "y", bar.getY());
+                        text.setAttributeNS(null, "style", "fill:black");
+                        text.setAttributeNS(null,"text-anchor","middle");
+                        text.setAttributeNS(null,"font-size","11");
+                        text.setAttributeNS(null,"font-family","Verdana, Geneva, sans-serif");
+                        
+                        links.push({label:p.text.value, link:p.id});
+                        
+                        while(p.layer && p.layer != null) {
+                            if (p.layer.parent && p.layer.parent != null) {
+                                links.push({label:p.layer.parent.text.value, link:p.id});
+                                p = p.layer.parent;
+                            }
+                        }
+
+                        links.push({label:"Principal", link:null});
+                        links.reverse();
+                        for (var i = 0; i < links.length; i++) {
+                            var tspan = document.createElementNS(ToolKit.svgNS, "tspan");
+                            var l = links[i].label;
+                            if (i+1 < links.length) {
+                                l += " ";
+                            }
+                            tspan.appendChild(document.createTextNode(l));
+                            if (links[i].link !== layer.parent.id) {
+                                tspan.setAttributeNS(null,"onclick", "Modeler.navPath.setNavigation(Modeler.getGraphElementByURI(null, '"+links[i].link+"').layer);ToolKit.setLayer(Modeler.getGraphElementByURI(null, '"+links[i].link+"').subLayer);");
+                            }
+                            text.appendChild(tspan);
+                        }
+                        Modeler.navPath.appendChild(text);
+                        Modeler.navPath.text=text;
+                    }
+                }
+            };
+            
+            ToolKit.svg.appendChild(g);
+            Modeler.navPath.setNavigation(ToolKit.layer);
+            window.onscroll = function(){if (Modeler.navPath && Modeler.navPath != null) {Modeler.navPath.bar.move((window.pageXOffset+window.innerWidth)-Modeler.navPath.bar.getWidth()/2-ToolKit.svg.offsetLeft-18, window.pageYOffset+Modeler.navPath.bar.getHeight()/2)};};
+        },
+
+        showNavPath: function() {
+            Modeler.navPath.setAttributeNS(null,"class","navPath");
+        },
+                
+        hideNavPath: function() {
+            Modeler.navPath.setAttributeNS(null,"class","navPathHidden");
         },
                 
         getGraphElementByURI:function(parent, uri) {
@@ -2731,17 +2996,24 @@
             return null;
         },
 
-        submitCommand:function(url, callbackHandler){
+        submitCommand:function(url, data, callbackHandler) {
+            if (ToolKit.loaded) {
+                ToolKit.showTooltip("","Enviando datos, por favor espere...", 200, "Warning");
+            }
             //reemplazar dojo por invocaciones directas por ajax
-            dojo.xhrGet({
+            dojo.xhrPost({
                 url: url,
+                contentType: "application/x-www-form-urlencoded; charset=utf-8",
+                content: {jsonString: data},
                 load: function(response, ioArgs) {
                     //console.log(response);
+                    ToolKit.hideToolTip();
                     callbackHandler(response);
                     return response;
                 },
                 error: function(response, ioArgs) {
                     //console.log("error");
+                    ToolKit.showTooltip("","Ocurrió un problema al enviar el modelo", 200, "Error");
                     return response;
                 },
                 handleAs: "text"
@@ -2751,16 +3023,35 @@
         clearCanvas: function() {
             for (var i=0; i<ToolKit.contents.length; i++) {
                 ToolKit.contents[i].remove();
+                ToolKit.contents[i] = null;
             }
+            
+            ToolKit.contents = [];
+            ToolKit.setLayer(null);
+            Modeler.count = 0;
         },
                 
         getProcessJSON:function() {
             var ret = {uri:"test", nodes:[]};
-            
+            var uris = "";
             for (var i = 0; i < ToolKit.contents.length; i++) {
-                ret.nodes.push(Modeler.getJSONObject(ToolKit.contents[i]));
+                if (ToolKit.contents[i].typeOf && (ToolKit.contents[i].typeOf("GraphicalElement") || ToolKit.contents[i].typeOf("ConnectionObject"))) {
+                    var json = Modeler.getJSONObject(ToolKit.contents[i]);
+                    if (json != null) {
+                        ret.nodes.push(json);
+                    }
+                    for (var j = 0; j < ToolKit.contents[i].outConnections.length; j++) {
+                        if (uris.indexOf(ToolKit.contents[i].outConnections[j].id) == -1) {
+                            json = Modeler.getJSONObject(ToolKit.contents[i].outConnections[j]);
+                            if (json != null) {
+                                ret.nodes.push(json);
+                            }
+                            uris += "|";
+                            uris += ToolKit.contents[i].outConnections[j].id;
+                        }
+                    }
+                }
             }
-            console.log(ret);
             return ret;
         },
 
@@ -3080,8 +3371,13 @@
                 ret.resize(100,60);
             }
             else if (type=="Pool") {
-                ret = new _Pool(Modeler.createSwimLane(null, null));
-                ret.setText("Pool con un nombre muy largo ajustable a 200 pixeles");
+                ret = new _Pool(Modeler.createPool(null, null));
+                ret.setText("Pool");
+                ret.resize(600,200);
+            }
+            else if (type=="Lane") {
+                ret = new _Lane(Modeler.createLane(null, null));
+                ret.setText("Lane");
                 ret.resize(600,200);
             }
             return ret;
