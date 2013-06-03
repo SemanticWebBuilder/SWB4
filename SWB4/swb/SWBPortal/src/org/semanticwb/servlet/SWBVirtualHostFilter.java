@@ -598,8 +598,9 @@ public class SWBVirtualHostFilter implements Filter
             log.event("SemanticWebBuilder started...");
             log.event("************************************");
 
-        }catch(Exception e)
+        }catch(Throwable e)
         {
+            e.printStackTrace();
             log.error("Error initializing SemanticWebBuilder...",e);
         }
 
