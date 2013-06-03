@@ -169,7 +169,7 @@ public class LongFileUploader extends GenericResource {
                         + "var " + id + "_lfu = new LongFileUploader(\"" + urlBase
                         + "\",\"" + so.getId() //Revisar...
                         + "\", \"" + id + "\",\"" + redirectedURL + "\");</script>");
-                out.println("<div id=\"" + id + "\"><form accept-charset=\"UTF-8\">file: <input type=\"file\" "
+                out.println("<div id=\"" + id + "\"><form>file: <input type=\"file\" "
                         + "name=\"updfile\" id=\"updfile\" "
                         + "onchange=\"" + id + "_lfu.sendFile(this)\"/>"
                         + "<div id=\"progressBar\" style=\"width:100%; height:15px; "
@@ -475,7 +475,7 @@ public class LongFileUploader extends GenericResource {
                 }
                 if (dir.exists()) {
                     PendingFile pf = fileUtil.getPendingFileFromId(param);
-                    File dest = new File(dir, pf.getFilename());
+                    File dest = new File(dir, SWBUtils.TEXT.replaceSpecialCharacters(pf.getFilename().toString(), true));
                     if (!dest.exists()) {
                         File workfiledir = new File(tmpplace, param);
                         File orig = new File(workfiledir, pf.getFilename());
