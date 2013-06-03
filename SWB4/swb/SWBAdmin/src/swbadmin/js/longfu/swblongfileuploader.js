@@ -94,7 +94,7 @@ LongFileUploader.prototype.finishFile = function(porEnviar) {
     document.getElementById(this.eleid + "_label").innerHTML = 100 + '%';
     var result = this.get(this.baseURL + "/eofcheck/" + porEnviar.id + "?dirToPlace=" + this.ruta);
     if (result.saved=="true")
-        alert("El archivo " + porEnviar.name + " fue guardado en " + this.ruta);
+        alert("El archivo " + porEnviar.name + " fue recibido");
     else
         alert("El archivo no pudo moverse a " + this.ruta);
     window.location=this.endurl;
