@@ -13,13 +13,30 @@
 <%@page import="org.semanticwb.*,org.semanticwb.platform.*,org.semanticwb.portal.*,org.semanticwb.model.*,java.util.*,org.semanticwb.base.util.*"%>
 <jsp:useBean id="paramRequest" scope="request" type="org.semanticwb.portal.api.SWBParamRequest"/>
 <%
-    WebSite wsite = WebSite.ClassMgr.getWebSite(request.getParameter("wsite"));
-    System.out.println("Entra a TypeOfContent..:"+wsite);
-    String contentType = (String) request.getAttribute("valor");    
+     WebSite wsite=null;
+     if(request.getParameter("wsite")!=null)
+     {
+        wsite = WebSite.ClassMgr.getWebSite(request.getParameter("wsite"));
+     }
+    if(wsite==null && request.getAttribute("wsite")!=null) {
+        wsite = WebSite.ClassMgr.getWebSite((String)request.getAttribute("wsite")); 
+    } 
+    if(wsite==null) return; 
+    
     String objUri = request.getParameter("objUri"); 
-    SemanticObject semObj=SemanticObject.createSemanticObject(objUri); 
+    SemanticObject semObj=null;
+    if(objUri==null && request.getAttribute("objUri")!=null)
+    {
+        objUri=(String)request.getAttribute("objUri"); 
+    }
+    if(objUri==null) return;
+    String contentType = (String) request.getAttribute("contentType");    
+    semObj=SemanticObject.createSemanticObject(objUri); 
     SocialTopic socialTopic=null;
     PostIn postIn=null;
+    PostOut postOut=null;
+    String postOutPFlowUri=null;
+    ArrayList apostOutNets=new ArrayList(); 
     boolean firstTime=false;
     if(semObj.getSemanticClass().isSubClass(PostIn.social_PostIn)) 
     {
@@ -27,10 +44,29 @@
     }else if(semObj.getGenericInstance() instanceof SocialTopic){
         socialTopic=(SocialTopic)semObj.createGenericInstance(); 
         firstTime=true; 
+    }else if(semObj.getSemanticClass().isSubClass(PostOut.social_PostOut)) 
+    {
+        postOut=(PostOut)semObj.createGenericInstance();
+        if(postOut instanceof Message) contentType="postMessage";
+               else if(postOut instanceof Photo) contentType="uploadPhoto"; 
+               else if(postOut instanceof Video) contentType="uploadVideo"; 
+        
+        Iterator<SocialNetwork> itPostOutSocialNets=postOut.listSocialNetworks();
+        while(itPostOutSocialNets.hasNext())
+        {
+            SocialNetwork socialNet=itPostOutSocialNets.next();
+            System.out.println("Red de PostOut:"+socialNet);
+            apostOutNets.add(socialNet.getURI()); 
+        }
+        if(postOut.getPflowInstance()!=null && postOut.getPflowInstance().getPflow()!=null)
+        {
+            postOutPFlowUri=postOut.getPflowInstance().getPflow().getURI(); 
+            System.out.println("postOutPFlowUri++G++:"+postOutPFlowUri);
+        }
     }
+    if(contentType==null) return; 
     
     User user=paramRequest.getUser(); 
-    
     
     //SocialTopic socialTopic = (SocialTopic)SemanticObject.getSemanticObject(objUri).getGenericInstance(); // creates social topic to get Model Name
     //String brand = socialTopic.getSemanticObject().getModel().getName(); //gets brand name
@@ -41,9 +77,20 @@
     urlAction.setParameter("objUri", objUri);
     //urlAction.setParameter("wsite", brand);           
     urlAction.setParameter("wsite", wsite.getSemanticObject().getModel().getName());           
+    
+    
+    ///////////////////////////////POSTEO DE MENSAJES/////////////////////////////
+    
     if (contentType.equals("postMessage")) {
         urlAction.setParameter("toPost", "msg");
-        SWBFormMgr messageFormMgr = new SWBFormMgr(Message.sclass.getSemanticObject(), null, SWBFormMgr.MODE_CREATE);
+        SWBFormMgr messageFormMgr=null;
+        if(postOut==null)   //Creation
+        {
+            messageFormMgr = new SWBFormMgr(Message.sclass.getSemanticObject(), null, SWBFormMgr.MODE_CREATE);
+        }else //Update
+        {
+            messageFormMgr = new SWBFormMgr(postOut.getSemanticObject(), null, SWBFormMgr.MODE_EDIT);     
+        }        
         //messageFormMgr.setAction(SWBResourceURL.Action_ADD);
         messageFormMgr.setType(SWBFormMgr.TYPE_DOJO);
         messageFormMgr.setFilterRequired(false);
@@ -68,9 +115,18 @@
                     while (it.hasNext()) {
                         SocialNetwork socialNetwork = (SocialNetwork) it.next();
                         if (socialNetwork instanceof Messageable) {
+                            boolean isSelected=false;
+                            System.out.println("Las Redes:"+socialNetwork); 
+                            if(apostOutNets.contains(socialNetwork.getURI())) 
+                            {
+                                System.out.println("La Chida--:"+socialNetwork); 
+                                isSelected=true; 
+                            }
+                            String selected="";
+                            if(isSelected) selected="checked=\"true\"";
                             %>
                             <li>
-                                <input type="checkbox" name="<%=socialNetwork.getURI()%>"/><%=socialNetwork.getTitle()%>
+                                <input type="checkbox" name="<%=socialNetwork.getURI()%>" <%=selected%> /><%=socialNetwork.getTitle()%> 
                             </li>
                             <%
                         }
@@ -85,12 +141,15 @@
             }
          %>
         <div class="etiqueta"><label for="title"><%=Message.social_Message.getDisplayName(lang)%>: </label></div>
-        <div class="campo"><%=messageFormMgr.renderElement(request, Message.social_msg_Text, messageFormMgr.MODE_CREATE)%></div>
+        <div class="campo"><%=postOut==null?messageFormMgr.renderElement(request, Message.social_msg_Text, messageFormMgr.MODE_CREATE):messageFormMgr.renderElement(request, Message.social_msg_Text, messageFormMgr.MODE_EDIT)%></div>
         
         <%
-        if(postIn!=null)
+        if(postIn!=null && postOut==null)
         {
             socialTopic=postIn.getSocialTopic();
+        }else if(postIn==null && postOut!=null)
+        {
+            socialTopic=postOut.getSocialTopic();
         }
         if(socialTopic!=null)
         {
@@ -105,13 +164,18 @@
             while(itSocialPFlowRefs.hasNext())
             {
                 SocialPFlowRef socialFlowRef=itSocialPFlowRefs.next();
-                SocialPFlow socialPFlow=socialFlowRef.getPflow();
-                if(socialPFlow.isActive())
+                if(socialFlowRef.isActive())
                 {
-                    noFlows=false; 
-                    %>
-                    <option value="<%=socialPFlow.getURI()%>"><%=socialPFlow.getDisplayTitle(lang)%> </option>
-                    <%
+                    SocialPFlow socialPFlow=socialFlowRef.getPflow();
+                    if(socialPFlow.isActive())
+                    {
+                        boolean isChecked=false;
+                        if(postOutPFlowUri!=null && postOutPFlowUri.equals(socialPFlow.getURI())) isChecked=true;
+                        noFlows=false; 
+                        %>
+                        <option value="<%=socialPFlow.getURI()%>" <%=isChecked?"selected":""%>><%=socialPFlow.getDisplayTitle(lang)%> </option>
+                        <%
+                    }
                 }
             }
             if(noFlows)
@@ -140,7 +204,7 @@
         </ul>
     </form>
 </div> 
-<%} else if (contentType.equals("uploadPhoto")) {
+<%} else if (contentType.equals("uploadPhoto")) {       ///////////////////////////////POSTEO DE FOTOS/////////////////////////////
     urlAction.setParameter("toPost", "photo");
     SWBFormMgr photoMgr = new SWBFormMgr(Photo.sclass, paramRequest.getWebPage().getWebSite().getSemanticObject(), null);
     photoMgr.setType(SWBFormMgr.TYPE_DOJO);
@@ -237,7 +301,7 @@
     </form>
 </div>
 
-<%} else if (contentType.equals("uploadVideo")) {
+<%} else if (contentType.equals("uploadVideo")) {       ///////////////////////////////POSTEO DE VIDEOS/////////////////////////////
     urlAction.setParameter("toPost", "video");
     SWBFormMgr videoMgr = new SWBFormMgr(Video.sclass, paramRequest.getWebPage().getWebSite().getSemanticObject(), null);
     videoMgr.setType(SWBFormMgr.TYPE_DOJO);
