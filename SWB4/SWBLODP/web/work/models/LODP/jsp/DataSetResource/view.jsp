@@ -703,6 +703,9 @@
                 <label><%=paramRequest.getLocaleString("lbl_version")%>:</label><p><%=ds.getActualVersion() != null ? ds.getActualVersion().getVersion() : "---"%></p>
             </li>
             <li>
+                <label><%=paramRequest.getLocaleString("lbl_filename")%>:</label><p><%=ds.getActualVersion() != null ? ds.getActualVersion().getFilePath(): "---"%></p>
+            </li>
+            <li>
                 <%
                     String taglist = LODPUtils.getDSTagList(ds,",");
                 %>
@@ -719,10 +722,10 @@
                 urldown.setParameter("act","file");
                 urldown.setMode(DataSetResource.MODE_FILE);
                 %>
-                <label>URL:</label><p><%=ds.getDatasetURL()%><a href="<%=urldown.toString()%>"><%=paramRequest.getLocaleString("lbl_updated")%>Descargar</a></p>
+                <label>URL:</label><p><%=ds.getDatasetURL()%><a href="<%=urldown.toString()%>"><%=paramRequest.getLocaleString("lbl_updated")%></a></p>
             </li>
             <li>
-                <label><%=paramRequest.getLocaleString("lbl_rated")%>Valoración:</label><p><%=ds.getAverage()%></p>
+                <label><%=paramRequest.getLocaleString("lbl_rated")%>:</label><p><%=ds.getAverage()%></p>
                 <div>
                     5 <%=paramRequest.getLocaleString("lbl_val5")%><br/>
                     4 <%=paramRequest.getLocaleString("lbl_val4")%><br/>
@@ -732,7 +735,7 @@
                 </div>
             </li>
             <%
-                DatasetVersion dslv = ds.getLastVersion();
+                DatasetVersion dslv = ds.getActualVersion();
                 DatasetVersion ver = null;
 
                 //para obtener la primera version
@@ -762,7 +765,7 @@
                         %>
                         <tr>
                             <td><%=vernum%></td>
-                            <td><%=sdf2.format(verdate)%></td>
+                            <td><%=null!=verdate?sdf2.format(verdate):"---"%></td>
                         </tr>
                         <%
                                 ver = ver.getNextVersion();
