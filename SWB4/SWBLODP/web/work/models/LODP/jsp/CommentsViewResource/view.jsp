@@ -1,8 +1,9 @@
 <%-- 
-    Document   : view
-    Created on : 14/05/2013, 07:26:08 PM
-    Author     : rene.jara
+Document   : view
+Created on : 14/05/2013, 07:26:08 PM
+Author     : rene.jara
 --%>
+<%@page import="java.util.List"%>
 <%@page import="com.infotec.lodp.swb.Publisher"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="com.infotec.lodp.swb.resources.CommentsViewResource"%>
@@ -27,54 +28,49 @@
                 Resource base = paramRequest.getResourceBase();
                 String repositoryId = wpage.getWebSite().getUserRepository().getId();
 
-                String suri=request.getParameter("suri");
-                String encuri="";
- //               if(suri==null)
- //                   suri = "http://www.LODP.swb#lodpcg_Dataset:3";
-               //    uri"http://www.LODP.swb#lodpcg_Application:2";
+                String suri = request.getParameter("suri");
+                String action = request.getParameter("act");
+
                 SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
                 SemanticObject sobj = null;
+                if (suri != null && !suri.equals("") && action != null && action.equals("detail")) {
+                    GenericObject gobj = null;
+                    Iterator<Comment> itco = null;
+                    if (suri != null && !suri.equals("")) {
+                        gobj = ont.getGenericObject(SemanticObject.shortToFullURI(suri));
+                        if (gobj != null && gobj instanceof Application) {
+                            Application ap = (Application) gobj;
+                            itco = ap.listComments();
 
-                GenericObject gobj = null;
-                Iterator<Comment> itco = null;
-                if (suri != null && !suri.equals("")) {
-                    //sobj = ont.getSemanticObject(suri);
-                    gobj = ont.getGenericObject(suri);
-                    if (gobj != null && gobj instanceof Application) {
-                        Application ap = (Application) gobj;
-                        itco = ap.listComments();
-                        encuri =ap.getEncodedURI();
-
-                    } else if (gobj != null && gobj instanceof Dataset) {
-                        Dataset ds = (Dataset) gobj;
-                        itco = ds.listComments();
-                        encuri =ds.getEncodedURI();
+                        } else if (gobj != null && gobj instanceof Dataset) {
+                            Dataset ds = (Dataset) gobj;
+                            itco = ds.listComments();
+                        }
                     }
-                }
-                if (request.getParameter("msg") != null) {
-                    String strMsg = request.getParameter("msg");
-                    //        strMsg = strMsg.replace("<br>", "\\n\\r");
-%>
+                    if (request.getParameter("msg") != null) {
+                        String strMsg = request.getParameter("msg");
+    //        strMsg = strMsg.replace("<br>", "\\n\\r");
+    %>
     <div>
         <%=strMsg%>
     </div>
     <%
-                }
-                if (suri != null && !suri.equals("")) {
-                    String name = "";
-                    String email = "";
-                    int nInappropriate;
-                    gobj = usr.getSemanticObject().getGenericInstance();
-                    if (gobj instanceof Developer) {
-                        Developer de = (Developer) gobj;
-                        name = de.getFullName();
-                        email = de.getEmail();
-                    }else if (gobj instanceof Publisher) {
-                        Publisher pu = (Publisher) gobj;
-                        name = pu.getFullName();
-                        email = "---";//pu.getEmail();
-                    }
-                    if (itco != null) {
+        }
+
+        String name = "";
+        String email = "";
+        int nInappropriate;
+        gobj = usr.getSemanticObject().getGenericInstance();
+        if (gobj instanceof Developer) {
+            Developer de = (Developer) gobj;
+            name = de.getFullName();
+            email = de.getEmail();
+        } else if (gobj instanceof Publisher) {
+            Publisher pu = (Publisher) gobj;
+            name = pu.getFullName();
+            email = "---";//pu.getEmail();
+        }
+        if (itco != null) {
     %>
     <script type="text/javascript">
         <!--
@@ -94,17 +90,17 @@
         dojo.require("dijit.form.Textarea");
         dojo.require("dijit.form.FilteringSelect");
         dojo.require("dijit.form.TextBox");
-        dojo.require("dijit.form.DateTextBox");
-        dojo.require("dijit.form.TimeTextBox");
+//        dojo.require("dijit.form.DateTextBox");
+//        dojo.require("dijit.form.TimeTextBox");
         dojo.require("dijit.form.Button");
-        dojo.require("dijit.form.NumberSpinner");
-        dojo.require("dijit.form.Slider");
-        dojo.require("dojox.form.BusyButton");
-        dojo.require("dojox.form.TimeSpinner");
+//        dojo.require("dijit.form.NumberSpinner");
+//        dojo.require("dijit.form.Slider");
+//        dojo.require("dojox.form.BusyButton");
+//        dojo.require("dojox.form.TimeSpinner");
         dojo.require("dijit.form.ValidationTextBox");
-        dojo.require("dijit.layout.ContentPane");
-        dojo.require("dijit.form.NumberTextBox");
-        dojo.require("dijit.form.DropDownButton");
+//        dojo.require("dijit.layout.ContentPane");
+//        dojo.require("dijit.form.NumberTextBox");
+//        dojo.require("dijit.form.DropDownButton");
 
         function enviar() {
             var objd=dijit.byId('form1ru');
@@ -112,10 +108,10 @@
             if(objd.validate())
             {
                 if(isEmpty('cmnt_seccode')) {
-                  alert('<%=paramRequest.getLocaleString("promptMsgCaptcha")%>');
-              }else{
+                    alert('<%=paramRequest.getLocaleString("promptMsgCaptcha")%>');
+                }else{
                     if (!validateReadAgree()){
-                    alert('<%=paramRequest.getLocaleString("msgErrAgreement")%>');
+                        alert('<%=paramRequest.getLocaleString("msgErrAgreement")%>');
                     }else{
                         return true;
                     }
@@ -154,77 +150,80 @@
     </script>
     <div>
         <%
-                        try{
-                            nInappropriate=Integer.parseInt(base.getAttribute("inappropriate","1"));
-                        }catch(NumberFormatException ignored){
-                            nInappropriate=1;
-                        }
-                        ArrayList<Comment> alco=CommentsViewResource.listComments(itco, nInappropriate);
-                        Iterator<Comment> itvco =alco.iterator();
-                        int tRec=alco.size();
-                        int nPag=0;
-                        try{
-                            nPag=Integer.parseInt(request.getParameter("npag"));
-                        }catch(NumberFormatException ignored){
-                            nPag=0;
-                        }
-                        int nRecPPag=0;
-                        try{
-                            nRecPPag=Integer.parseInt(base.getAttribute("num_comments_p_page","5"));
-                        }catch(NumberFormatException ignored){
-                            nRecPPag=5;
-                        }
-                        int iRec=((nPag)*nRecPPag);
-                        int fRec=iRec+nRecPPag;
-                        int tPag=(int)(tRec/nRecPPag);
-                        if ((tRec % nRecPPag) > 0) {
-                           tPag++;
-                        }                      
-                        SWBResourceURLImp urlina = new SWBResourceURLImp(request, base, wpage, SWBResourceURLImp.UrlType_ACTION);
-                        urlina.setAction(CommentsViewResource.Action_INAPPROPRIATE);
-                        urlina.setParameter("suri", suri);
-                        //while (itvco.hasNext()) {
-//                            Comment co = itvco.next();
-                        for(int x=iRec;x<fRec&&x<tRec;x++){
-                            Comment co =alco.get(x);
-                            urlina.setParameter("cid", co.getId());
-                            urlina.setParameter("npag", nPag+"");
+            try {
+                nInappropriate = Integer.parseInt(base.getAttribute("inappropriate", "1"));
+            } catch (NumberFormatException ignored) {
+                nInappropriate = 1;
+            }
+            ArrayList<Comment> alco = CommentsViewResource.listComments(itco, nInappropriate);
+            Iterator<Comment> itvco = alco.iterator();
+            int tRec = alco.size();
+            int nPag = 0;
+            try {
+                nPag = Integer.parseInt(request.getParameter("npag"));
+            } catch (NumberFormatException ignored) {
+                nPag = 0;
+            }
+            int nRecPPag = 0;
+            try {
+                nRecPPag = Integer.parseInt(base.getAttribute("num_comments_p_page", "5"));
+            } catch (NumberFormatException ignored) {
+                nRecPPag = 5;
+            }
+            int iRec = ((nPag) * nRecPPag);
+            int fRec = iRec + nRecPPag;
+            int tPag = (int) (tRec / nRecPPag);
+            if ((tRec % nRecPPag) > 0) {
+                tPag++;
+            }
+            SWBResourceURLImp urlina = new SWBResourceURLImp(request, base, wpage, SWBResourceURLImp.UrlType_ACTION);
+            urlina.setAction(CommentsViewResource.Action_INAPPROPRIATE);
+            urlina.setParameter("suri", suri);
+            List lii = (List) request.getSession().getAttribute("io");
+            for (int x = iRec; x < fRec && x < tRec; x++) {
+                Comment co = alco.get(x);
+                urlina.setParameter("cid", co.getId());
+                urlina.setParameter("npag", nPag + "");
+                boolean canRank = false;
+                if (lii == null || !lii.contains(co.getId())) {
+                    canRank = true;
+                }
         %>
         <div>
             <p><%=co.getCommUserName()%>-<%=co.getCommUserEmail()%></p>
             <p><%=co.getComment()%></p>
-            <a href="<%=urlina%>">X</a><b><%=co.getInappropriate()%></b>
+            <a href="<%=canRank?urlina:"#"%>">X</a><b><%=co.getInappropriate()%></b>
         </div>
         <%
-                        }
+            }
         %>
         <div>
             <ul>
-        <%
-                String rurl=wpage.getUrl();
-                for(int x=0;x<tPag;x++){
-                    if(x==nPag){
-        %>
-                <li><%=(x+1)%></li>
-        <%
-                    }else{
-                        rurl+="?act=detail";
-                        rurl+="&suri="+encuri;
-                        rurl+="&npag="+x;
-        %>
-                <li><a href="<%=rurl%>"><%=(x+1)%></a></li>
-        <%
+                <%
+                    String rurl = wpage.getUrl();
+                    for (int x = 0; x < tPag; x++) {
+                        if (x == nPag) {
+                %>
+                <li><%=(x + 1)%></li>
+                <%
+                } else {
+                    rurl += "?act=detail";
+                    rurl += "&suri=" + suri;
+                    rurl += "&npag=" + x;
+                %>
+                <li><a href="<%=rurl%>"><%=(x + 1)%></a></li>
+                <%
+                        }
                     }
-                }
-        %>
+                %>
             </ul>
         </div>
     </div>
     <%
-          }
-          SWBResourceURLImp urladd= new SWBResourceURLImp(request, base, wpage, SWBResourceURLImp.UrlType_ACTION);
-          urladd.setAction(CommentsViewResource.Action_COMMENT);
-          urladd.setParameter("suri", suri);
+        }
+        SWBResourceURLImp urladd = new SWBResourceURLImp(request, base, wpage, SWBResourceURLImp.UrlType_ACTION);
+        urladd.setAction(CommentsViewResource.Action_COMMENT);
+        urladd.setParameter("suri", suri);
     %>
     <div>
         <form id="form1ru" dojoType="dijit.form.Form" class="swbform" action="<%=urladd%>" method="post">
