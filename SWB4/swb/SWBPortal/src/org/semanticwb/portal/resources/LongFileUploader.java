@@ -134,7 +134,7 @@ public class LongFileUploader extends GenericResource {
                 param = path.substring(endcmd + 1);
             }
         }
-//        System.out.println("cmd: " + cmd);
+        log.debug("LongFileUploader: cmd:"+cmd);
         if (cmd.equals("start")) {
             startUploadProcess(request, response, paramRequest);
         } else if (cmd.equals("uploadSolicitude")) {
@@ -450,7 +450,6 @@ public class LongFileUploader extends GenericResource {
             throws IOException {
         String pdir = request.getParameter("dirToPlace");
         log.debug("LongFileUploader.eofCheck: pdir="+pdir);
-//        System.out.println("pdir1: "+pdir);
         String key = request.getSession(true).getId();
         log.debug("LongFileUploader.eofCheck: key "+key);
         ArrayList<SemanticObject> also = enProceso.get(key);
@@ -468,7 +467,6 @@ public class LongFileUploader extends GenericResource {
             if (null != so) {
                 pdir = so.getWorkPath();
                 log.debug("LongFileUploader.eofCheck: pdir2="+pdir);
-//                System.out.println("pdir2: "+pdir);
                 File dir = new File(org.semanticwb.SWBPortal.getWorkPath(), pdir);
                 if (!dir.exists()) {
                     dir.mkdirs();
@@ -515,7 +513,6 @@ public class LongFileUploader extends GenericResource {
                             SemanticLiteral sl = iter.next();
                             log.trace("Value found: "+sl.getString());
                         }
-                        
                         workfiledir.delete();
                         fileUtil.updateChanges();
                     }
