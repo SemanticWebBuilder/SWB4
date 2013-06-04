@@ -497,7 +497,7 @@ public class AllNewPostInToUser extends GenericResource {
 
     public void doCreatePost(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         RequestDispatcher rd = request.getRequestDispatcher(SWBPlatform.getContextPath() + "/work/" + paramRequest.getWebPage().getWebSiteId() + "/jsp/post/typeOfContent.jsp");
-        request.setAttribute("valor", request.getParameter("valor"));
+        request.setAttribute("contentType", request.getParameter("valor"));
         request.setAttribute("wsite", request.getParameter("wsite"));
         request.setAttribute("objUri", request.getParameter("objUri"));
         request.setAttribute("paramRequest", paramRequest);

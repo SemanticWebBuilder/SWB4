@@ -850,14 +850,14 @@ public class SWBSocialRule extends GenericResource {
             dom.appendChild(attributes);
 
             for (int i = 0; i < vecOrderAtt.size(); i++) {
-                String valor = (String) vecOrderAtt.get(i);
-                HashMap hmAttr = (HashMap) comboAtt.get(valor);
+                String value = (String) vecOrderAtt.get(i);
+                HashMap hmAttr = (HashMap) comboAtt.get(value);
                 String label = (String) hmAttr.get("Etiqueta");
 
                 // armando combo de operadores
                 Element attribute = dom.createElement("attribute");
                 attribute.setAttribute("type", (String) hmAttr.get("Tipo"));
-                attribute.setAttribute("name", valor);
+                attribute.setAttribute("name", value);
                 attribute.setAttribute("title", label);
 
                 HashMap hmOper = (HashMap) hmAttr.get("Operador");
@@ -881,11 +881,11 @@ public class SWBSocialRule extends GenericResource {
 
                 // armando combo para armar valores posibles del elemento
                 if (!hmAttr.get("Tipo").equals("TEXT")) {
-                    HashMap valoresCombo = (HashMap) hmAttr.get("Valor");
-                    Iterator itValCombo = valoresCombo.keySet().iterator();
+                    HashMap ComboValues = (HashMap) hmAttr.get("Valor");
+                    Iterator itValCombo = ComboValues.keySet().iterator();
                     while (itValCombo.hasNext()) {
                         String nomValCombo = (String) itValCombo.next();
-                        String labelValCombo = (String) valoresCombo.get(nomValCombo);
+                        String labelValCombo = (String) ComboValues.get(nomValCombo);
                         Element attValue = dom.createElement("option");
                         attValue.setAttribute("title", labelValCombo);
                         attValue.setAttribute("value", nomValCombo);

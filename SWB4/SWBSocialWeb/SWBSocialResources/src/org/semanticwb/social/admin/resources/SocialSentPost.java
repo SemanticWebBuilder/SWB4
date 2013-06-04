@@ -6,6 +6,8 @@ package org.semanticwb.social.admin.resources;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.Set;
 import javax.servlet.RequestDispatcher;
@@ -16,19 +18,19 @@ import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Activeable;
-import org.semanticwb.model.FormValidateException;
+import org.semanticwb.model.Descriptiveable;
 import org.semanticwb.model.PFlowInstance;
 import org.semanticwb.model.Resource;
 import org.semanticwb.model.SWBComparator;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.Trashable;
 import org.semanticwb.model.User;
+import org.semanticwb.model.WebSite;
 import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticOntology;
 import org.semanticwb.platform.SemanticProperty;
 import org.semanticwb.portal.PFlowManager;
-import org.semanticwb.portal.SWBFormMgr;
 import org.semanticwb.portal.api.GenericResource;
 import org.semanticwb.portal.api.SWBActionResponse;
 import org.semanticwb.portal.api.SWBParamRequest;
@@ -40,7 +42,6 @@ import org.semanticwb.social.PostOut;
 import org.semanticwb.social.SocialFlow.SocialPFlowMgr;
 import org.semanticwb.social.SocialNetwork;
 import org.semanticwb.social.SocialPFlow;
-import org.semanticwb.social.SocialPFlowRef;
 import org.semanticwb.social.SocialTopic;
 import org.semanticwb.social.Video;
 import org.semanticwb.social.util.SWBSocialUtil;
@@ -71,18 +72,19 @@ public class SocialSentPost extends GenericResource {
     /** The MOD e_ id request. */
     static String MODE_IdREQUEST = "FORMID";
     public static final String Mode_SOURCE = "source";
+    public static final String Mode_EDITWindow = "editWindow";
+    
     
     @Override
     public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         final String mode = paramRequest.getMode();
         if (Mode_SOURCE.equals(mode)) {
             doShowSource(request, response, paramRequest);
-        }else if(Mode_PFlowMsg.equals(mode))
-        {
+        }else if (Mode_EDITWindow.equals(mode)) {
+            doEditPost(request, response, paramRequest);
+        }else if(Mode_PFlowMsg.equals(mode)){
             doPFlowMessage(request, response, paramRequest);
-        }
-        else if(Mode_Action.equals(mode))
-        {
+        }else if(Mode_Action.equals(mode)){
             doAction(request, response, paramRequest);
         }else {
             super.processRequest(request, response, paramRequest);
@@ -127,7 +129,8 @@ public class SocialSentPost extends GenericResource {
         response.setContentType("text/html; charset=ISO-8859-1");
         response.setHeader("Cache-Control", "no-cache");
         response.setHeader("Pragma", "no-cache");
-        log.debug("doEdit()");
+        
+        System.out.println("Llega a doEdit:"+request.getParameter("suri"));
         
         String id = request.getParameter("suri");
         //System.out.println("SocialSentPost/Edit/id:"+id);
@@ -358,7 +361,10 @@ public class SocialSentPost extends GenericResource {
                 if (send2Flow) 
                 {    //Social:Solo cuando se puede enviar el documento a flujo, se muestra la opción de editar, si el documento esta en flujo no se muestra.
                     //if (canEdit) {
-                        out.println("<a href=\"#\"  title=\"" + paramRequest.getLocaleString("documentAdmin") + "\" onclick=\"\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/icons/editar_1.gif\" border=\"0\" alt=\"" + "documentAdmin" + "\"></a>");
+                    SWBResourceURL urlEdit=paramRequest.getRenderUrl().setMode(Mode_EDITWindow).setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("postOut", sobj.getURI()).setParameter("wsite", sobj.getSemanticObject().getModel().getName());  
+                    out.println("<a href=\"#\" title=\"" + paramRequest.getLocaleString("documentAdmin") + "\" onclick=\"showDialog('" + urlEdit + "','" + paramRequest.getLocaleString("source") + "'); return false;\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/icons/editar_1.gif\" border=\"0\" alt=\"" + "documentAdmin" + "\"></a>");
+                    
+                    //out.println("<a href=\"#\"  title=\"" + paramRequest.getLocaleString("documentAdmin") + "\" onclick=\"\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/icons/editar_1.gif\" border=\"0\" alt=\"" + "documentAdmin" + "\"></a>");
                     //} else {
                     //    out.println("<img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/icons/editar_1.gif\" border=\"0\" alt=\"" + "documentAdmin" + "\">");
                     //}
@@ -406,7 +412,8 @@ public class SocialSentPost extends GenericResource {
             
             //Show 30 firsts characters of Msg PostOut
             out.println("<td>");
-            out.println(SWBUtils.TEXT.cropText(sobj.getMsg_Text(), 30));
+            //out.println(SWBUtils.TEXT.cropText(sobj.getMsg_Text(), 30));
+            out.println("<a href=\"#\"  onclick=\"addNewTab('" + sobj.getURI() + "','" + SWBPlatform.getContextPath() + "/swbadmin/jsp/objectTab.jsp" + "','" + SWBUtils.TEXT.cropText(SWBUtils.TEXT.scape4Script(sobj.getMsg_Text()), 25) + "');return false;\" title=\"" + getDisplaySemObj(sobj.getSemanticObject(), lang) + "\">" + sobj.getMsg_Text() + "</a>"); 
             out.println("</td>");
             
             //Show PostType
@@ -487,10 +494,12 @@ public class SocialSentPost extends GenericResource {
                 } else {    //El PostOut ya se envío
                    if(!isInFlow && needAuthorization && !isAuthorized)
                    {
-                       out.println("Rechazado");
+                       String sFlowRejected="---";
+                       if(sobj.getPflowInstance()!=null&&sobj.getPflowInstance().getPflow()!=null) sFlowRejected=sobj.getPflowInstance().getPflow().getDisplayTitle(lang);
+                       out.println("Rechazado("+sFlowRejected+")");
                    }
                    else if(isInFlow && needAuthorization && !isAuthorized){
-                        out.println("En Flujo");
+                        out.println("En Flujo("+sobj.getPflowInstance().getPflow().getDisplayTitle(lang)+")");
                    }
                 }
             }else{
@@ -619,6 +628,12 @@ public class SocialSentPost extends GenericResource {
         if(semObj==null) return;
         
         PostOut postOut=(PostOut)semObj.createGenericInstance();
+        String postOutFlowUri=null;
+        if(postOut.getPflowInstance()!=null && postOut.getPflowInstance().getPflow()!=null)
+        {
+            postOutFlowUri=postOut.getPflowInstance().getPflow().getURI();
+        }
+        System.out.println("postOutFlowUri ---GGG--:"+postOutFlowUri);
         
         PrintWriter out = response.getWriter();
 
@@ -659,8 +674,13 @@ public class SocialSentPost extends GenericResource {
         out.println("</td>");
         out.println("<td>");
         out.println("<select name=\"pfid\">");
-        for (int i = 0; i < arrPf.length; i++) {
-            out.println("<option value=\"" + arrPf[i].getURI() + "\" " + (i == 0 ? "selected" : "") + ">" + arrPf[i].getDisplayTitle(user.getLanguage()) + "</option>");
+        for (int i = 0; i < arrPf.length; i++) 
+        {
+            System.out.println("arrPf[i].getURI():"+arrPf[i].getURI());
+            String select="";
+            if(postOutFlowUri!=null && postOutFlowUri.equals(arrPf[i].getURI())) select="selected";
+                
+            out.println("<option value=\"" + arrPf[i].getURI() + "\""+select+ ">" + arrPf[i].getDisplayTitle(user.getLanguage()) + "</option>");
         }
         out.println("</select>");
         out.println("</td>");
@@ -691,64 +711,75 @@ public class SocialSentPost extends GenericResource {
      */
     @Override
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
-        String id = request.getParameter("suri");
-        String sprop = request.getParameter("sprop");
-        String sproptype = request.getParameter("sproptype");
+        
         String action = response.getAction();
+        System.out.println("SocialSentPost/processAction-1:"+action);
+        if (action.equals("postMessage") || action.equals("uploadPhoto") || action.equals("uploadVideo")) {
+             try {
+                    System.out.println("SocialSentPost/processAction-2");
+                    ArrayList aSocialNets=new ArrayList();
+                    WebSite wsite = WebSite.ClassMgr.getWebSite(request.getParameter("wsite"));
+                    String objUri = request.getParameter("objUri");
+                    SemanticObject semanticObject = SemanticObject.createSemanticObject(objUri);
+                    PostOut postOut = (PostOut) semanticObject.createGenericInstance();
+                    System.out.println("SocialSentPost/processAction-3:"+postOut);
+                    SocialPFlow spflow=null;
+                    System.out.println("processA/socialFlow:"+request.getParameter("socialFlow"));
+                    if(request.getParameter("socialFlow")!=null && request.getParameter("socialFlow").trim().length()>0)
+                    {
+                        SemanticObject semObjSFlow=SemanticObject.getSemanticObject(request.getParameter("socialFlow"));
+                        spflow=(SocialPFlow)semObjSFlow.createGenericInstance();
+                    }
 
-        //System.out.println("Action: "+action);
+                    String toPost = request.getParameter("toPost");
 
-        SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
-        SemanticObject obj = SemanticObject.createSemanticObject(id); //WebPage
-        SemanticClass cls = obj.getSemanticClass();
-
-        if ("new".equals(action)) {
-            log.debug("ProcessAction(new) ");
-
-            //id = request.getParameter("suri");
-            //sprop = request.getParameter("sprop");
-            //sproptype = request.getParameter("sproptype");
-            String sobj = request.getParameter("sobj");
-
-            SemanticProperty prop = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(sprop);
-            log.debug("ProcessAction(new): sobj: " + sobj);
-
-            SemanticObject wpage = null;
-            wpage = obj;//ont.getSemanticObject(id);
-
-            SWBFormMgr fmgr = new SWBFormMgr(Resource.swb_Resource, wpage, null);
-            try {
-                SemanticObject nso = fmgr.processForm(request);
-
-                SemanticObject ptype = SemanticObject.createSemanticObject(sobj);
-                nso.setObjectProperty(Resource.swb_resourceType, ptype);
-
-                //System.out.println("nso:"+nso);
-                //System.out.println("ptype:"+ptype);
-                //System.out.println("obj:"+obj);
-
-                if (prop.getName().startsWith("has")) {
-                    obj.addObjectProperty(prop, nso);
-                } else {
-                    obj.setObjectProperty(prop, nso);
+                    String socialUri = "";
+                    int j = 0;
+                    Enumeration<String> enumParams = request.getParameterNames();
+                    while (enumParams.hasMoreElements()) {
+                        String paramName = enumParams.nextElement();
+                        if (paramName.startsWith("http://")) {
+                            if (socialUri.trim().length() > 0) {
+                                socialUri += "|";
+                            }
+                            socialUri += paramName;
+                            j++;
+                        }
+                    }
+                    System.out.println("SocialSentPost/processAction-4:"+socialUri);
+                    if (socialUri.trim().length()>0) // La publicación por lo menos se debe enviar a una red social
+                    {
+                        String[] socialUris = socialUri.split("\\|");  //Dividir valores
+                        for (int i = 0; i < socialUris.length; i++) {
+                            String tmp_socialUri = socialUris[i];
+                            SemanticObject semObject = SemanticObject.createSemanticObject(tmp_socialUri, wsite.getSemanticModel());
+                            SocialNetwork socialNet = (SocialNetwork) semObject.createGenericInstance();
+                            //Se agrega la red social de salida al post
+                            aSocialNets.add(socialNet);
+                        }
+                        //SWBSocialUtil.PostOutUtil.publishPost(postOut, request, response);
+                        System.out.println("SocialSentPost/processAction-J5");
+                        //SWBSocialUtil.PostOutUtil.editPostOut(postOut, spflow, aSocialNets, wsite, toPost, request, response);
+                        SWBSocialUtil.PostOutUtil.editPostOut(postOut, spflow, aSocialNets, wsite, toPost, request, response);
+                        response.setMode(SWBResourceURL.Mode_EDIT);
+                        response.setRenderParameter("dialog", "close");
+                        response.setRenderParameter("statusMsg", SWBUtils.TEXT.encode(response.getLocaleLogString("postModified"),"utf8"));
+                        response.setRenderParameter("reloadTab", postOut.getSocialTopic().getURI());
+                        response.setRenderParameter("suri", postOut.getSocialTopic().getURI());
+                        System.out.println("SocialSentPost/processAction-J6-suri:"+postOut.getSocialTopic().getURI());
+                    } else {
+                        response.setMode(SWBResourceURL.Mode_EDIT);
+                        response.setRenderParameter("dialog", "close");
+                        response.setRenderParameter("statusMsg", response.getLocaleLogString("postTypeNotDefined"));
+                        response.setRenderParameter("reloadTab", postOut.getSocialTopic().getURI());
+                    }
+                } catch (Exception e) {
+                    log.error(e.getMessage());
+                    e.printStackTrace();
                 }
-
-                if (id != null) {
-                    response.setRenderParameter("suri", id);
-                }
-                if (sprop != null) {
-                    response.setRenderParameter("sprop", sprop);
-                }
-                if (sproptype != null) {
-                    response.setRenderParameter("sproptype", sproptype);
-                }
-                if (nso != null) {
-                    response.setRenderParameter("nsuri", nso.getURI());
-                }
-            } catch (FormValidateException e) {
-                throw new SWBResourceException("Error to process form...", e);
-            }
-
+            
+            
+            ///////////////////////////////
             response.setRenderParameter("statmsg", response.getLocaleString("statmsg1"));
             response.setMode(response.Mode_EDIT);
             response.setRenderParameter("act", "");
@@ -763,6 +794,10 @@ public class SocialSentPost extends GenericResource {
             response.setRenderParameter("statmsg", response.getLocaleString("statmsg2"));
             response.setMode(SWBActionResponse.Mode_EDIT);
         } else if ("send2flow".equals(action)) {
+            String id = request.getParameter("suri");
+            SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
+            SemanticObject obj = SemanticObject.createSemanticObject(id); //WebPage
+            SemanticClass cls = obj.getSemanticClass();
             SocialPFlowMgr pfmgr = SocialLoader.getPFlowManager();
             String sval = request.getParameter("sval"); // id resource
             String pfid = request.getParameter("pfid"); // id pflow
@@ -772,7 +807,14 @@ public class SocialSentPost extends GenericResource {
             pfmgr.sendResourceToAuthorize(res, pf, usermessage);
             response.setRenderParameter("dialog", "close");
             response.setMode(SWBActionResponse.Mode_EDIT);
+            response.setRenderParameter("suri", id);
         } else if ("deleteall".equals(action)) {
+            String id = request.getParameter("suri");
+            String sprop = request.getParameter("sprop");
+            String sproptype = request.getParameter("sproptype");
+            SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
+            SemanticObject obj = SemanticObject.createSemanticObject(id); //WebPage
+            SemanticClass cls = obj.getSemanticClass();
             log.debug("processAction(deleteall)" + sprop);
             //System.out.println("processAction(deleteall)");
             SemanticProperty sem_p = ont.getSemanticProperty(sprop);
@@ -827,15 +869,8 @@ public class SocialSentPost extends GenericResource {
                 response.setRenderParameter("sproptype", sproptype);
             }
             response.setMode(SWBActionResponse.Mode_EDIT);
-        }
-        if (id != null) {
             response.setRenderParameter("suri", id);
-        }
-        if (sprop != null) {
             response.setRenderParameter("sprop", sprop);
-        }
-        if (request.getParameter("search") != null && request.getParameter("search").trim().length() > 0) {
-            response.setRenderParameter("search", request.getParameter("search"));
         }
     }
 
@@ -1052,13 +1087,13 @@ public class SocialSentPost extends GenericResource {
         response.setContentType("text/html;charset=iso-8859-1");
         response.setHeader("Cache-Control", "no-cache");
         response.setHeader("Pragma", "no-cache");
-        final String myPath = SWBPlatform.getContextPath() + "/work/" + paramRequest.getWebPage().getWebSiteId() + "/jsp/socialTopic/socialSentPost.jsp";
+        final String myPath = SWBPlatform.getContextPath() + "/work/" + paramRequest.getWebPage().getWebSiteId() + "/jsp/review/showPostIn.jsp";
         if (request != null) {
             RequestDispatcher dis = request.getRequestDispatcher(myPath);
             if (dis != null) {
                 try {
                     SemanticObject semObject = SemanticObject.createSemanticObject(request.getParameter("postUri"));
-                    request.setAttribute("sObjPostOut", semObject);
+                    request.setAttribute("postIn", semObject);
                     request.setAttribute("paramRequest", paramRequest);
                     dis.include(request, response);
                 } catch (Exception e) {
@@ -1067,6 +1102,52 @@ public class SocialSentPost extends GenericResource {
                 }
             }
         }
+    }
+    
+            /*
+     * Show the source message of One PostOut that comes as a parameter "postUri"
+     */
+    public void doEditPost(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        if(request.getParameter("postOut")!=null && request.getParameter("wsite")!=null)
+        {
+            response.setContentType("text/html;charset=iso-8859-1");
+            response.setHeader("Cache-Control", "no-cache");
+            response.setHeader("Pragma", "no-cache");
+
+            final String myPath = SWBPlatform.getContextPath() + "/work/" + paramRequest.getWebPage().getWebSiteId() + "/jsp/post/typeOfContent.jsp";
+
+            RequestDispatcher dis = request.getRequestDispatcher(myPath);
+            if (dis != null) {
+                try {
+                    //SemanticObject semObject = SemanticObject.createSemanticObject(request.getParameter("postOut"));
+                    request.setAttribute("objUri", request.getParameter("postOut"));
+                    request.setAttribute("wsite", request.getParameter("wsite"));
+                    request.setAttribute("paramRequest", paramRequest);
+                    dis.include(request, response);
+                } catch (Exception e) {
+                    log.error(e);
+                    e.printStackTrace(System.out);
+                }
+            }
+        }
+    }
+    
+    /**
+     * Gets the string of display name property of a semantic object.
+     *
+     * @param obj the obj
+     * @param lang the lang
+     * @return a string value of the DisplayName property
+     */
+    public String getDisplaySemObj(SemanticObject obj, String lang) {
+        String ret = obj.getRDFName();
+        try {
+            ret = obj.getDisplayName(lang);
+        } catch (Exception e) {
+            ret ="---";
+            //ret = obj.getProperty(Descriptiveable.swb_title);
+        }
+        return ret;
     }
 
 }

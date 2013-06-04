@@ -25,9 +25,11 @@ package org.semanticwb.social.admin.resources;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Iterator;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.Logger;
+import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Resource;
@@ -57,6 +59,19 @@ public class SocialDocumentsToAuhorize extends GenericResource
 
     /** The log. */
     private static Logger log = SWBUtils.getLogger(SocialDocumentsToAuhorize.class);
+    public static final String Mode_SOURCE = "source";
+    
+    
+    @Override
+    public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        final String mode = paramRequest.getMode();
+        if (Mode_SOURCE.equals(mode)) {
+            doShowSource(request, response, paramRequest);
+        }else {
+            super.processRequest(request, response, paramRequest);
+        }
+    }
+    
 
     /* (non-Javadoc)
      * @see org.semanticwb.portal.api.GenericResource#processAction(javax.servlet.http.HttpServletRequest, org.semanticwb.portal.api.SWBActionResponse)
@@ -351,6 +366,9 @@ public class SocialDocumentsToAuhorize extends GenericResource
                 out.println("<table width=\"100%\">");
                 out.println("<tr>");                
                 out.println("<th>");
+                out.println(paramRequest.getLocaleString("action"));
+                out.println("</th>");
+                out.println("<th>");
                 out.println(paramRequest.getLocaleString("title"));
                 out.println("</th>");
                 out.println("<th>");
@@ -366,27 +384,16 @@ public class SocialDocumentsToAuhorize extends GenericResource
                 out.println(paramRequest.getLocaleString("socialNet"));
                 out.println("</th>");
                 out.println("<th>");
-                out.println(paramRequest.getLocaleString("action"));
+                out.println(paramRequest.getLocaleString("source"));
                 out.println("</th>");
                 out.println("</tr>");
                 for (PostOut resource : resources)
                 {
                     out.println("<tr>");
-                    //out.println("<td width='10%'>");
-                    /*
-                    SWBParamRequestImp  paramreq=new SWBParamRequestImp(request, resource, paramRequest.getWebPage(), user);
-                    SWBResourceURL urlpreview=paramreq.getRenderUrl().setCallMethod(SWBParamRequestImp.Call_DIRECT);
-                    if(resource.getResourceData().createGenericInstance() instanceof Versionable)
-                    {
-                        Versionable v=(Versionable)resource.getResourceData().createGenericInstance();
-                        if(v!=null && v.getLastVersion()!=null)
-                        {
-                            urlpreview.setParameter("numversion", String.valueOf(v.getLastVersion().getVersionNumber()));
-                        }
-                    }
-                    * **/
+                    
+                    
                     WebSite wsite = SWBContext.getAdminWebSite();
-
+                    
                     WebPage wpShowPostOut = wsite.getWebPage("ShowPostOut");
                     Resource resrPostOut = wsite.getResource("143");
                     request.setAttribute("postOut", resource.getId());
@@ -395,27 +402,8 @@ public class SocialDocumentsToAuhorize extends GenericResource
                     SWBResourceURL urlpreview=paramreq.getRenderUrl().setCallMethod(SWBParamRequestImp.Call_DIRECT);
                     urlpreview.setParameter("postOut", resource.getURI());
                     urlpreview.setParameter("wsite", resource.getSemanticObject().getModel().getName());
-                   
-
-                    //out.println("</td>");
-                    out.println("<td width='30%'>");
-                    out.println(resource.getMsg_Text()!=null?resource.getMsg_Text():"");
-                    out.println("</td>");
-                    out.println("<td width='30%'>");
-                    out.println(resource.getSocialTopic().getTitle()!=null?resource.getSocialTopic().getTitle():"");
-                    out.println("</td>");
-                    out.println("<td width='20%'>");
-                    out.println(resource.getPflowInstance().getPflow().getDisplayTitle(lang));
-                    out.println("</td>");
-                    out.println("<td width='20%'>");
-                    out.println(resource.getPflowInstance().getStep());
-                    out.println("</td>");
-                    out.println("<td width='20%'>");
                     
-                    out.println(resource.getSocialNetwork()!=null?resource.getSocialNetwork().getDisplayTitle(lang):"---");
-                    out.println("</td>");
-                    out.println("</td>");
-                    out.println("<td width='20%'>");
+                    out.println("<td width='10%'>");
                     try
                     {
                         String id=resource.getEncodedURI().replace('%', '_').replace(':', '_').replace('/', '_');
@@ -436,6 +424,46 @@ public class SocialDocumentsToAuhorize extends GenericResource
                     }
                     
                     out.println("</td>");
+                    
+
+                    out.println("<td width='40%'>");
+                    out.println(resource.getMsg_Text()!=null?resource.getMsg_Text():"");
+                    out.println("</td>");
+                    out.println("<td width='10%'>");
+                    out.println(resource.getSocialTopic().getTitle()!=null?resource.getSocialTopic().getTitle():"");
+                    out.println("</td>");
+                    out.println("<td width='10%'>");
+                    out.println(resource.getPflowInstance().getPflow().getDisplayTitle(lang));
+                    out.println("</td>");
+                    out.println("<td width='10%'>");
+                    out.println(resource.getPflowInstance().getStep());
+                    out.println("</td>");
+                    out.println("<td width='10%'>");
+                    out.println(resource.getSocialNetwork()!=null?resource.getSocialNetwork().getDisplayTitle(lang):"---");
+                    out.println("</td>");
+                    
+                    
+                    //PostIn Source 
+                    out.println("<td width='10%'>");
+                    if(resource.getPostInSource()!=null)
+                    {
+                        WebPage wpShowPostIn = wsite.getWebPage("ShowPostIn");
+                        Resource resrPostIn = wsite.getResource("150");
+
+                        SWBParamRequestImp paramreqPostIn = new SWBParamRequestImp(request, resrPostIn, wpShowPostIn, user);
+                        SWBResourceURL urlpreviewPostIn=paramreqPostIn.getRenderUrl().setCallMethod(SWBParamRequestImp.Call_DIRECT);
+                        urlpreviewPostIn.setParameter("wsite", wsite.getId());
+                        urlpreviewPostIn.setParameter("postIn", resource.getPostInSource().getURI());
+                        
+                        String idPreSource=resource.getEncodedURI().replace('%', '_').replace(':', '_').replace('/', '_');
+                        String imgviewSource=SWBPortal.getContextPath()+"/swbadmin/icons/preview.gif";                        
+                        out.println("<a title=\""+ paramRequest.getLocaleString("properties") +"\" onclick=\"view('"+urlpreviewPostIn+"','"+ idPreSource +"')\" href=\"#\"><img src=\""+imgviewSource+"\" alt=\""+paramRequest.getLocaleString("source")+"\"></a>");
+                    }else{
+                        out.println("---");
+                    }
+                    out.println("</td>");
+                    
+                    
                     out.println("</tr>");
                     
                 }      
@@ -523,6 +551,49 @@ public class SocialDocumentsToAuhorize extends GenericResource
         }
         out.println("<div id='previewcontent'>");
         out.println("</div>");
+        
+        
+        if (request.getParameter("previewSource") != null && request.getParameter("previewSource").equals("true")) {
+            if (request.getParameter("sval") != null) {
+                try {
+                    doShowSource(request, response, paramRequest);
+                } catch (Exception e) {
+                    out.println("Preview not available...");
+                }
+            } else {
+                out.println("Preview not available...");
+            }
+        }
+        
+        
+        
         out.close();
     }
+    
+    
+    /*
+     * Show the source message of One PostOut that comes as a parameter "postUri"
+     */
+    public void doShowSource(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        response.setContentType("text/html;charset=iso-8859-1");
+        response.setHeader("Cache-Control", "no-cache");
+        response.setHeader("Pragma", "no-cache");
+        final String myPath = SWBPlatform.getContextPath() + "/work/" + paramRequest.getWebPage().getWebSiteId() + "/jsp/review/showPostIn.jsp";
+        if (request != null) {
+            RequestDispatcher dis = request.getRequestDispatcher(myPath);
+            if (dis != null) {
+                try {
+                    SemanticObject semObject = SemanticObject.createSemanticObject(request.getParameter("postUri"));
+                    request.setAttribute("postIn", semObject);
+                    request.setAttribute("paramRequest", paramRequest);
+                    dis.include(request, response);
+                } catch (Exception e) {
+                    log.error(e);
+                    e.printStackTrace(System.out);
+                }
+            }
+        }
+    }
+    
+    
 }
