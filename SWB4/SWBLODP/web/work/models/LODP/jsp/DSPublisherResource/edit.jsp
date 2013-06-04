@@ -38,30 +38,20 @@
  
     String repositoryId = wpage.getWebSite().getUserRepository().getId();
     String suri = request.getParameter("suri");
-    
-    //System.out.println("URI:"+suri);
-    
+
     String action = request.getParameter("act");
     if(null==action) action="";
     if (null==suri) {
         suri = "";
     }
-    
-    
-    
-    
-    //12 Jun 2013, 11:35
-    //SimpleDateFormat sdf = new SimpleDateFormat("dd MMM yyyy, h:mm a", new Locale("es"));
-    //12 jun 2013
-    //SimpleDateFormat sdf = new SimpleDateFormat("dd MMM yyyy", new Locale("es"));
-    //12/junio/2013
+
     SimpleDateFormat sdf = new SimpleDateFormat("dd/MMMMM/yyyy h:mm a", new Locale("es"));
     boolean isNew = Boolean.TRUE;
     SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
     SemanticObject so = null;
     GenericObject go = null;
     
-    suri = SemanticObject.shortToFullURI(suri);
+    if(suri.trim().length()>0) suri = SemanticObject.shortToFullURI(suri);
     
     Dataset ds = null;
     go = ont.getGenericObject(suri);
@@ -112,7 +102,7 @@
         
         dstoplevelname=ds.getInstitution()!=null&&ds.getInstitution().getTopLevelName()!=null?ds.getInstitution().getTopLevelName():"---";
         
-        dsurl = ds.getDatasetURL();
+        dsurl = ds.getDatasetURL()!=null?ds.getDatasetURL():"generar url...";
         dswebsite = ds.getInstitution()!=null&&ds.getInstitution().getInstitutionHome()!=null?ds.getInstitution().getInstitutionHome():"";
         
         isApproved = ds.isApproved();
@@ -123,9 +113,9 @@
     if (request.getParameter("msg") != null) {
         String strMsg = request.getParameter("msg");
 %>
-<div>
-    <%=strMsg%>
-</div>
+<script type="text/javascript">
+    alert('<%=strMsg%>');
+</script>
 <%
     }
 
@@ -162,71 +152,53 @@
     dojo.require("dijit.form.DropDownButton");
 
     function enviar() {
-        var objd=dijit.byId('form1ru');
+        var objd=dijit.byId('form1newDS');
 
         if(objd.validate())
         {
-            if(isEmpty('cmnt_seccode')) {
-                alert('<%//=paramRequest.getLocaleString("promptMsgCaptcha")%>');
-            }else{
-                if (!validateReadAgree()){
-                    alert('<%//=paramRequest.getLocaleString("msgErrAgreement")%>');
-                }else{
-                   return true;
-                }
+            if(!isValidTag()) {
+                alert('Selecciona de la lista por lo menos una etiqueta.'); //<%//=paramRequest.getLocaleString("promptMsgCaptcha")%>
+                return false;
             }
+                if (!isValidTopic()){
+                    alert('Selecciona de la lista por lo menos un tema');
+                    return false;
+                }
+                return true;
         }else {
             alert("Datos incompletos");
         }
         return false;
     }
-    function validateReadAgree(){
-        var ret=false;
-        ret=dijit.byId("acept").checked;
-        return ret;
-    }
 
-    function isValidThisEmail(){
-        var valid=false;
-        var email = dijit.byId( "email" );
-        var strEmail = email.getValue();
-        if(strEmail!=""){
-            if(isValidEmail(strEmail)){
-                if(canAddEmail('<%=repositoryId%>',strEmail)){
-                    valid=true;
-                }else{
-                    email.displayMessage( "<%//=paramRequest.getLocaleString("lblEmailDupl")%>" );
-                }
-            }else{
-                email.displayMessage( "<%//=paramRequest.getLocaleString("lblEmailFault")%>" );
-            }
-        }
-        return valid;
-    }
-    function isValidLogin(){
-        var valid=false;
-        var login = dijit.byId( "login" );
-        var filter = /^[a-zA-Z0-9.@]+$/;
-        var strLogin = login.getValue();
-        if(strLogin!=""){
-            if(filter.test(strLogin)&&strLogin.length>2){
-                if(canAddLogin('<%=repositoryId%>',strLogin)){
-                    valid=true;
-                }else{
-                    login.displayMessage( "<%//=paramRequest.getLocaleString("lblLoginDupl")%>" );
-                }
-            }else{
-                login.displayMessage( "<%//=paramRequest.getLocaleString("lblLoginFault")%>" );
-            }
-        }
-        return valid;
-    }
-
-    function isValidPass() {
+    function isValidTag() {
         var valid = false;
-        var passwd = dijit.byId("passwd").getValue();
-        var login = dijit.byId( "login" ).getValue();
-        if(!isEmpty(passwd) && passwd!=login){
+        var sellabels = dijit.byId("dslabels").domNode;
+        if(sellabels.selectedIndex != -1){
+            valid = true;
+        }
+        return valid;
+    }
+        function isValidTopic() {
+        var valid = false;
+        var sellabels = dijit.byId("dstopic").domNode;
+        if(sellabels.selectedIndex != -1){
+            valid = true;
+        }
+        return valid;
+    }
+        function isValidLicense() {
+        var valid = false;
+        var sellabels = dijit.byId("dslicense").domNode;
+        if(sellabels.selectedIndex != -1){
+            valid = true;
+        }
+        return valid;
+    }
+    
+      function addversion(addr) {
+        var sellabels = dijit.byId("dsvercomment");
+        if(sellabels.selectedIndex != -1){
             valid = true;
         }
         return valid;
@@ -246,24 +218,23 @@
             <%
             if(!isNew){
                 %>
-                <input type="hidden" name="suri" value="<%=ds.getEncodedURI()%>"/>
+                <input type="hidden" name="suri" value="<%=ds.getShortURI()%>"/>
                 <%
             }
         %>
             <div>
                 <p>
                     <label for="dstitle"><b>*</b><%=paramRequest.getLocaleString("lbl_title")%></label>
-                    <input type="text" name="dstitle" id="dstitle" dojoType="dijit.form.ValidationTextBox" value="<%=dstitle%>" required="true"  invalidMessage="<%=paramRequest.getLocaleString("lbl_titlemissing")%>" trim="true" _regExp="[a-zA-Z\u00C0-\u00FF' ]+" />
+                    <input type="text" name="dstitle" id="dstitle" dojoType="dijit.form.ValidationTextBox" value="<%=dstitle%>" required="true"  invalidMessage="<%=paramRequest.getLocaleString("lbl_titlemissing")%>" trim="true" regExp="[a-zA-Z\u00C0-\u00FF' ]+" />
                 </p>
                 <p>
                     <label for="dsdescription"><%=paramRequest.getLocaleString("lbl_description")%></label>
-                    <textarea name="dsdescription" id="dsdescription" dojoType="dijit.form.Textarea" value="<%=dsdescription%>" required="false" invalidMessage="<%=paramRequest.getLocaleString("lbl_descriptionmissing")%>" trim="true" rows="20" cols="50"><%=dsdescription%></textarea>
+                    <textarea name="dsdescription" id="dsdescription" dojoType="dijit.form.ValidationTextArea" value="<%=dsdescription%>" required="true"  invalidMessage="<%=paramRequest.getLocaleString("lbl_descriptionmissing")%>" trim="true" regExp="[a-zA-Z\u00C0-\u00FF' ]+" rows="5" cols="50"><%=dsdescription%></textarea>
                 </p>
              <!-- Etiquetas -->
                 <p>
                     <label for="dslabels"><b>*</b><%=paramRequest.getLocaleString("lbl_labels")%></label>
-                    <select multiple size="5" id="dslabels" dojoType="dijit.form.MultiSelect" name="dslabels" required="true" invalidMessage="<%=paramRequest.getLocaleString("lbl_tagmissing")%>"  _isValid="return isValidThisEmail()" >
-                              <option value=""> </option>
+                    <select multiple size="5" id="dslabels" dojoType="dijit.form.MultiSelect" name="dslabels" required="true" invalidMessage="<%=paramRequest.getLocaleString("lbl_tagmissing")%>"  isValid="return isValidTag()" >
                     <%
                         String selected = "";
                       Iterator<Tag> ittag = Tag.ClassMgr.listTags(wsite);
@@ -274,7 +245,7 @@
                               selected = "selected";
                           }   
                     %>
-                    <option value="<%=tag.getEncodedURI()%>" <%=selected%>><%=tag.getTagName()%> </option>
+                    <option value="<%=tag.getShortURI()%>" <%=selected%>><%=tag.getTagName()%> </option>
                     <%
                       }
                     %>
@@ -297,11 +268,10 @@
                 %>
                 <p>
                     <label for="dstopic"><b>*</b><%=paramRequest.getLocaleString("lbl_topic")%></label>
-                    <select multiple size="5" id="dstopic" dojoType="dijit.form.MultiSelect" name="dstopic" required="true" invalidMessage="<%=paramRequest.getLocaleString("lbl_topicmissing")%>"  >
-                              <option value=""> </option>
+                    <select multiple size="5" id="dstopic" dojoType="dijit.form.MultiSelect" name="dstopic" required="true" invalidMessage="<%=paramRequest.getLocaleString("lbl_topicmissing")%>" isValid="return isValidTopic()"  >
                             <%
 
-                        selected="";
+                     selected="";
                     Iterator<Topic> ittopic = Topic.ClassMgr.listTopics(wsite);  
                     while(ittopic.hasNext()){
                         Topic topic = ittopic.next();
@@ -311,7 +281,7 @@
                         
                     %>   
                     
-                    <option value="<%=topic.getURI()%>" title="<%=topic.getTopicDescription()!=null?topic.getTopicDescription():topic.getTopicTitle()%>" <%=selected%>><%=topic.getTopicTitle()%> </option>
+                    <option value="<%=topic.getShortURI()%>" title="<%=topic.getTopicDescription()!=null?topic.getTopicDescription():topic.getTopicTitle()%>" <%=selected%>><%=topic.getTopicTitle()%> </option>
                     <%
                         selected="";
                 }
@@ -320,8 +290,7 @@
                 </p>
                     <p>
                     <label for="dslicense"><b>*</b><%=paramRequest.getLocaleString("lbl_license")%></label>
-                    <select multiple size="5" id="dslicense" dojoType="dijit.form.FilteringSelect" name="dslicense" required="true" invalidMessage="<%=paramRequest.getLocaleString("lbl_licensemissing")%>"  _isValid="return isValidThisEmail()" >
-                              <option value=""> </option>
+                    <select   id="dslicense" dojoType="dijit.form.FilteringSelect" name="dslicense" required="true" invalidMessage="<%=paramRequest.getLocaleString("lbl_licensemissing")%>"  _isValid="return isValidLicense()" >
                     <%
                         String ltypeid = "";
                         if(!isNew && ds!=null&&ds.getLicense()!=null){
@@ -336,7 +305,7 @@
                         }
                         
                     %>
-                    <option value="<%=ltype.getURI()%>" title="<%=ltype.getLicenseDescription()!=null?ltype.getLicenseDescription():ltype.getLicenseTitle()%>" <%=selected%>><%=ltype.getLicenseTitle()%> </option>
+                    <option value="<%=ltype.getShortURI()%>" title="<%=ltype.getLicenseDescription()!=null?ltype.getLicenseDescription():ltype.getLicenseTitle()%>" <%=selected%>><%=ltype.getLicenseTitle()%> </option>
                 <%
                         selected="";
                 }
@@ -349,6 +318,7 @@
                 </p>
                     <%
                 if(!isNew){
+                    
                 %>
                 <p>
                     <label for="dscreator"><b>*</b><%=paramRequest.getLocaleString("lbl_creator")%></label>
@@ -370,18 +340,48 @@
                     <label for="dsurl"><b>*</b><%=paramRequest.getLocaleString("lbl_urlendpoint")%></label>
                     <input type="text" name="dsurl" id="dsurl" dojoType="dijit.form.ValidationTextBox" value="<%=dsurl%>" maxlength="12" readonly="true" />
                 </p>
+                <p>
+                    <label for="dsactive"><b>*</b><%=paramRequest.getLocaleString("lbl_active")%></label>
+                    <input type="checkbox" name="dsactive" id="dsurl" dojoType="dijit.form.ValidationTextBox" value="true" <%=ds.isDatasetActive()?"checked":""%> />
+                </p>
+                <!-- p>
+                    <label for="dsvercomment"><%//=paramRequest.getLocaleString("lbl_vercomment")%></label>
+                    <input type="text" name="dsvercomment" id="dsvercomment" dojoType="dijit.form.ValidationTextBox" value=""  />
+                </p -->
                 <%
                 }
                 %>
                 <p>
                     <label for="dspuburl"><b>*</b><%=paramRequest.getLocaleString("lbl_weburl")%></label>
-                    <input type="text" name="dspuburl" id="login" dojoType="dijit.form.ValidationTextBox" value="<%=dswebsite%>" maxlength="18" required="true" invalidMessage="<%=paramRequest.getLocaleString("lbl_puburlmissing")%>"  isValid="return isValidLogin()" trim="true" />
+                    <input type="text" name="dspuburl" id="login" dojoType="dijit.form.ValidationTextBox" value="<%=dswebsite%>" maxlength="18" required="true" invalidMessage="<%=paramRequest.getLocaleString("lbl_puburlmissing")%>"  _isValid="return isValidLogin()" trim="true" />
                 </p>
                 
             </div>
 
             <div class="centro">
+                <%
+                    SWBResourceURL urlbck = paramRequest.getRenderUrl();
+                    urlbck.setParameter("act", "myds");
+                    urlbck.setMode(SWBResourceURL.Mode_VIEW);
+                
+                %>
+                <input type="button" value="<%=paramRequest.getLocaleString("lblCancel")%>" onclick="if(confirm('Quieres regresar a la lista de datasets?')){window.location='<%=urlbck.toString()%>';} else {return false;}"/> 
+                <%
+                 if(isNew){
+                     %>
                 <input type="reset" value="<%=paramRequest.getLocaleString("lblReset")%>"/>
+                <%
+                 } else {
+                     
+                     SWBResourceURL urlnewversion = paramRequest.getActionUrl();
+                     urlnewversion.setAction("addVersion"); 
+                     urlnewversion.setParameter("suri", ds.getShortURI());
+                     
+                %>
+                <input type="button" value="<%=paramRequest.getLocaleString("lbl_updatefile")%>" onclick="window.location='<%=urlnewversion.toString()%>';" /> 
+                <%
+                 } 
+                %>
                 <input type="submit" onclick="return enviar()" value="<%=paramRequest.getLocaleString("lblSubmit")%>"/>
             </div>
         </form>
