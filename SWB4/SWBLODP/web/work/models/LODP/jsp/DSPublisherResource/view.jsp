@@ -60,11 +60,11 @@
     WebPage wpage = paramRequest.getWebPage();
     WebSite wsite = wpage.getWebSite();
     User usr = paramRequest.getUser();
-    //out.println("Clase a actualizar: "+DatasetVersion.lodpcg_DatasetVersion.getURI());
-    //out.println("Propiedad a actualizar: "+DatasetVersion.lodp_filePath.getName());
+   // out.println("Clase a actualizar: "+DatasetVersion.lodpcg_DatasetVersion.getURI());
+   // out.println("Propiedad a actualizar: "+DatasetVersion.lodp_filePath.getName());
     
-/*
-    
+
+    /*
     if(request.getParameter("createuser")!=null&&request.getParameter("createuser").equals("true")){
         UserRepository usrrep = wsite.getUserRepository();
         Publisher newpub = Publisher.ClassMgr.createPublisher(usrrep);
@@ -82,7 +82,7 @@
     if (pub == null) {
         // no disponible la pagina para usuarios que no sean publicadores
         out.println("<h1>Se necesita ser PUBLICADOR....</h1>");
-        //return;
+        return;
     }
 
     Institution inst = pub.getPubInstitution();
@@ -398,6 +398,9 @@
                     <th>Título</th>
                     <th>Descripción</th>
                     <th>Formato</th>
+                    <th>Visitas</th>
+                    <th>Descargas</th>
+                    <th>Calificado</th>
                     <th>Fecha</th>
                     <th>Etiquetas</th>
                     <th>Acción</th>
@@ -413,7 +416,7 @@
 
                     boolean paintBackColor = Boolean.FALSE;
                     String backcolor = "style=\"background-color: #ccc;\"";
-                    String selectedcolor = "style=\"background-color: background;\"";
+                    String selectedcolor = "style=\"background-color: #cca;\"";
                     String toPaint = "";
                     while (itds.hasNext()) {
 
@@ -454,17 +457,21 @@
                             toPaint = "";
                         }
 
-                        if (null != suri && ds.getURI().equals(suri)) {
+                        if (null != suri && ds.getShortURI().equals(suri)) {
                             toPaint = selectedcolor;
                         }
+                        paintBackColor=!paintBackColor;
                 %>
                 <tr <%=toPaint%>>
-                    <td onclick="window.location = '<%=urlsummary.toString()%>'; "><%=ds.getDatasetTitle()%><td> 
+                    <td onclick="window.location = '<%=urlsummary.toString()%>'; "><%=ds.getDatasetTitle()%></td> 
                     <td onclick="window.location = '<%=urlsummary.toString()%>';"><%=ds.getDatasetDescription()%></td>    
                     <td onclick="window.location = '<%=urlsummary.toString()%>';"><%=ds.getDatasetFormat()%></td>
+                    <td onclick="window.location = '<%=urlsummary.toString()%>';"><%=ds.getViews()%></td>
+                    <td onclick="window.location = '<%=urlsummary.toString()%>';"><%=ds.getDownloads()%></td>
+                    <td onclick="window.location = '<%=urlsummary.toString()%>';"><%=ds.getAverage()%></td>
                     <td onclick="window.location = '<%=urlsummary.toString()%>';"><%=sdf.format(ds.getDatasetUpdated())%></td>
                     <td onclick="window.location = '<%=urlsummary.toString()%>';"><%=LODPUtils.getDSTagList(ds, ",")%></td> 
-                    <td><a href="<%=urldet.toString()%>">Ver</a><a href="<%=urlremove.toString()%>">Eliminar</a></td> 
+                    <td><a href="<%=urldet.toString()%>">Ver</a>&nbsp;<a href="<%=urlremove.toString()%>">Eliminar</a></td> 
                 </tr>
                 <%
                         }
