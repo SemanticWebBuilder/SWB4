@@ -791,6 +791,56 @@ public class SWBSocialUtil implements SWBAppObject {
     {
         
         
+        public static void editPostOut(PostOut postout, SocialPFlow socialPFlow, ArrayList<SocialNetwork> aSocialNets, WebSite wsite, String toPost, HttpServletRequest request, SWBActionResponse response) 
+        {
+            System.out.println("editPostOut-1");
+            try {
+                SWBFormMgr mgr = null;
+                if (toPost.equals("msg")) {
+                    mgr = new SWBFormMgr(postout.getSemanticObject(), null, SWBFormMgr.MODE_EDIT);
+                } else if (toPost.equals("photo")) {
+                    mgr = new SWBFormMgr(postout.getSemanticObject(), null, SWBFormMgr.MODE_EDIT);
+                } else if (toPost.equals("video")) {
+                    mgr = new SWBFormMgr(postout.getSemanticObject(), null, SWBFormMgr.MODE_EDIT);
+                }
+                System.out.println("editPostOut-2/mgr:"+mgr);
+                if (mgr != null) {
+                    mgr.setFilterRequired(false);
+                    SemanticObject sobj = mgr.processForm(request);
+                    org.semanticwb.social.Post post = (org.semanticwb.social.Post) sobj.createGenericInstance();
+                    
+                    //Convierto a un post de salida para poderle agregar cada red social a la que se envía dicho post
+                    PostOut postOut = (PostOut) post;
+                    
+                    //Le agrego las redes sociales a las cuales se enviara el postOut, si se creó de una contestación, 
+                    //sería solo una red social la que vendría en el parametro "aSocialNets", pero como esto es una edición,
+                    //primero elimino las asignaciones de redes sociales que ya tenía.
+                    Iterator <SocialNetwork> itSocialNets=postout.listSocialNetworks();
+                    while(itSocialNets.hasNext())
+                    {
+                        postOut.removeSocialNetwork(itSocialNets.next());
+                    }
+                    //Ahora le asigno las nuevas que llegan por parametro.
+                    for(int i=0;i<aSocialNets.size();i++)
+                    {
+                        SocialNetwork socialNet=aSocialNets.get(i);
+                        if(socialNet!=null)
+                        {
+                            postOut.addSocialNetwork(socialNet);
+                        }
+                    }
+                    System.out.println("editPostOut-3/socialPFlow:"+socialPFlow);
+                    
+                    //SocialPFlow al que se va ha enviar el nuevo post, si no tiene(que llegue Nulo), entonces se envía el PostOut sin pasar por flujo
+                    if (socialPFlow != null) {
+                        postOut.getPflowInstance().setPflow(socialPFlow);
+                        System.out.println("editPostOut-4");
+                    }
+                }
+            } catch (Exception e) {
+                log.error(e);
+            }
+        }
         
 
         public static void sendNewPost(PostIn postIn, SocialTopic socialTopic, SocialPFlow socialPFlow, ArrayList<SocialNetwork> aSocialNets, WebSite wsite, String toPost, HttpServletRequest request, SWBActionResponse response) 
