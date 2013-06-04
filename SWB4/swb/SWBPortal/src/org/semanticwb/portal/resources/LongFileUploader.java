@@ -475,7 +475,7 @@ public class LongFileUploader extends GenericResource {
                 }
                 if (dir.exists()) {
                     PendingFile pf = fileUtil.getPendingFileFromId(param);
-                    File dest = new File(dir, SWBUtils.TEXT.replaceSpecialCharacters(pf.getFilename().toString(), true));
+                    File dest = new File(dir, SWBUtils.TEXT.replaceSpecialCharacters(pf.getFilename().toString(),'.', true));
                     if (!dest.exists()) {
                         File workfiledir = new File(tmpplace, param);
                         File orig = new File(workfiledir, pf.getFilename());
