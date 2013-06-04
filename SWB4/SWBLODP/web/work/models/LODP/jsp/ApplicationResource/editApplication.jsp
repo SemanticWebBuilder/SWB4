@@ -30,7 +30,7 @@
     SWBResourceURL actionURL = paramRequest.getActionUrl(); // para rocesar la accion guardar
     
     String uri = request.getParameter("uri");
-    SemanticObject semObj = SemanticObject.createSemanticObject(URLDecoder.decode(uri) );
+    SemanticObject semObj = SemanticObject.createSemanticObject(URLDecoder.decode(SemanticObject.shortToFullURI(uri)));
     Application apl = (Application)semObj.createGenericInstance();
     User user = paramRequest.getUser();
     WebPage wpage = paramRequest.getWebPage();

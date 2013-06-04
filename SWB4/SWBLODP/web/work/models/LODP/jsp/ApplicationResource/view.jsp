@@ -114,40 +114,42 @@
 
                         itAp1 = hmFilterInst.values().iterator();
 
-                    } else if (go instanceof Developer) {
-                        Developer devAutor = (Developer) go;
-                        Iterator<Application> listApp = Application.ClassMgr.listApplications(wsite);
-                        HashMap<String, Application> hmFilterAutor = new HashMap<String, Application>();
-                        
-                        while(listApp.hasNext()){
-                            Application apAutor = listApp.next();
-                            GenericObject goAutorDes = apAutor.getAppAuthor().createGenericInstance();
-                            User usAutorDes = (User)goAutorDes;
-                            
-                            if(devAutor.getFullName().equals(usAutorDes.getFullName())){
-                                hmFilterAutor.put(apAutor.getURI(), apAutor);                   
-                            }
-                        }
-                        itAp1 = hmFilterAutor.values().iterator();
-                        
-                    } else if(go instanceof Publisher){
-                                          
-                        Iterator<Dataset> dsPub = Dataset.ClassMgr.listDatasetByPublisher((Publisher) go, wsite);
-                        HashMap<String, Application> hmFilterPub = new HashMap<String, Application>();
-                        
-                        while (dsPub.hasNext()) {
-
-                            Dataset appPub = dsPub.next();
-                            Iterator<Application> itAppPub = Application.ClassMgr.listApplicationByRelatedDataset(appPub, wsite);
-
-                            while (itAppPub.hasNext()) {
-                                Application appliPub = itAppPub.next();
-                                hmFilterPub.put(appliPub.getURI(), appliPub);                              
-                            }
-                            
-                        }
-                       itAp1 = hmFilterPub.values().iterator(); 
-                    } else {
+                    }
+//                    else if (go instanceof Developer) {
+//                        Developer devAutor = (Developer) go;
+//                        Iterator<Application> listApp = Application.ClassMgr.listApplications(wsite);
+//                        HashMap<String, Application> hmFilterAutor = new HashMap<String, Application>();
+//                        
+//                        while(listApp.hasNext()){
+//                            Application apAutor = listApp.next();
+//                            GenericObject goAutorDes = apAutor.getAppAuthor().createGenericInstance();
+//                            User usAutorDes = (User)goAutorDes;
+//                            
+//                            if(devAutor.getFullName().equals(usAutorDes.getFullName())){
+//                                hmFilterAutor.put(apAutor.getURI(), apAutor);                   
+//                            }
+//                        }
+//                        itAp1 = hmFilterAutor.values().iterator();
+//                        
+//                    } else if(go instanceof Publisher){
+//                                          
+//                        Iterator<Dataset> dsPub = Dataset.ClassMgr.listDatasetByPublisher((Publisher) go, wsite);
+//                        HashMap<String, Application> hmFilterPub = new HashMap<String, Application>();
+//                        
+//                        while (dsPub.hasNext()) {
+//
+//                            Dataset appPub = dsPub.next();
+//                            Iterator<Application> itAppPub = Application.ClassMgr.listApplicationByRelatedDataset(appPub, wsite);
+//
+//                            while (itAppPub.hasNext()) {
+//                                Application appliPub = itAppPub.next();
+//                                hmFilterPub.put(appliPub.getURI(), appliPub);                              
+//                            }
+//                            
+//                        }
+//                       itAp1 = hmFilterPub.values().iterator(); 
+//                    } 
+                    else {
                         itAp1 = Application.ClassMgr.listApplications(wsite);
                     }
                 } else {
@@ -240,7 +242,7 @@
             
 %>
 
-<div class="buscar_apsss">
+<div class="buscar_aps">
     <form method="post" action="" id="aps_search">
         <%
             if (filterby != null && filterby.trim().length() > 0) {
@@ -280,32 +282,31 @@
     </form>
 </div>
 
-<div class="izquierdo">
-    <div class="izq_categoria">
+<div class="izq">
+        
+        <p class="rubro"><%=paramRequest.getLocaleString("lbl_filterCategory")%></p>
         <ul>
-            <li><h3><%=paramRequest.getLocaleString("lbl_filterCategory")%></h3></li>
-                <%
-                    Iterator<Category> itCat = Category.ClassMgr.listCategories(wsite);
-                    while (itCat.hasNext()) {
+            <%
+                Iterator<Category> itCat = Category.ClassMgr.listCategories(wsite);
+                while (itCat.hasNext()) {
 
-                        Category cat = itCat.next();
-                        SWBResourceURL url = paramRequest.getRenderUrl();
-                        url.setParameter("filteruri", cat.getEncodedURI());
+                    Category cat = itCat.next();
+                    SWBResourceURL url = paramRequest.getRenderUrl();
+                    url.setParameter("filteruri", cat.getShortURI());
 
-                        if (null != orderby) {
-                            url.setParameter("order", orderby);
-                        }
-                %>
+                    if (null != orderby) {
+                        url.setParameter("order", orderby);
+                    }
+            %>
             <li><a href="<%=url.toString()%>"><%=cat.getCatName()%></a></li>               
 
             <%
                 }
             %>
         </ul>   
-    </div>
-    <div class="izq_institucion">
+    
+        <p class="rubro"><%=paramRequest.getLocaleString("lbl_filterIntitution")%></p>
         <ul>
-            <li><h3><%=paramRequest.getLocaleString("lbl_filterIntitution")%></h3></li>
 
             <%
 
@@ -314,7 +315,7 @@
 
                     Institution inst = itins.next();
                     SWBResourceURL url = paramRequest.getRenderUrl();
-                    url.setParameter("filteruri", inst.getEncodedURI());
+                    url.setParameter("filteruri", inst.getShortURI());
 
                     if (null != orderby) {
                         url.setParameter("order", orderby);
@@ -330,10 +331,10 @@
                 %>
         </ul>  
     </div>
-    <div class="izq_autor">
+<!--    <div class="izq_autor">
      <ul>
-        <li><h3><%=paramRequest.getLocaleString("lbl_filterAuthor")%></h3></li>
-     <%
+        <li><h3><%--=paramRequest.getLocaleString("lbl_filterAuthor")--%></h3></li>-->
+     <%--
         Iterator<Application> itAppAuthor = Application.ClassMgr.listApplications(wsite);
         
         while (itAppAuthor.hasNext()) {
@@ -371,13 +372,15 @@
             <li><a href="<%=url.toString()%>" title="<%=descPb != null ? descPb.trim() : ""%>"><%=filterAuthor%></a></li>  
         <%
             }}
-        %>
-    </ul>  
+        --%>
+<!--    </ul>  
    </div>
-</div>
+</div>-->
 
-<div class="derecho">
-    <div class="derecho_ordena">
+<div class="der">
+    <div id="temasdatos">
+         <div class="listado">
+    <div class="orden">
         <%
             SWBResourceURL urlOrder = paramRequest.getRenderUrl();
             urlOrder.setParameter("act", "");
@@ -393,21 +396,21 @@
             String ckdCreated = "", ckdComment = "", ckdRank = "";
             if (null != orderby) {
                 if (orderby.equals(ApplicationResource.ORDER_RANK)) {
-                    ckdRank = "checked";
+                    ckdRank = "class=\"selected\"";
                 } else if (orderby.equals(ApplicationResource.ORDER_COMMENTS)) {
-                    ckdComment = "checked";
+                    ckdComment = "class=\"selected\""; 
                 } else if (orderby.equals(ApplicationResource.ORDER_CREATED)) {
-                    ckdCreated = "checked";
+                    ckdCreated = "class=\"selected\""; 
                 }
             }
 
         %>
-        <label><%=paramRequest.getLocaleString("lbl_ordenar")%></label>
-        <p>
-            <input type="radio" id="orderRank" name="order" value="created" <%=ckdRank%> onclick="window.location = '<%=urlOrder.toString()%>&order=<%=ApplicationResource.ORDER_RANK%>';"><label for="orderRank"><%=paramRequest.getLocaleString("rd_mejorCalificada")%></label>
-            <input type="radio" id="orderComments" name="order" value="view" <%=ckdComment%> onclick="window.location = '<%=urlOrder.toString()%>&order=<%=ApplicationResource.ORDER_COMMENTS%>';"><label for="orderComments"><%=paramRequest.getLocaleString("rd_masComentadas")%></label>
-            <input type="radio" id="orderCreated" name="order" value="download" <%=ckdCreated%> onclick="window.location = '<%=urlOrder.toString()%>&order=<%=ApplicationResource.ORDER_CREATED%>';"><label for="orderCreated"><%=paramRequest.getLocaleString("rd_fecha")%></label>
-        </p>
+        
+        <a <%=ckdRank%> href="<%=urlOrder.toString()%>&order=<%=ApplicationResource.ORDER_RANK%>';" <%=ckdCreated%>><%=paramRequest.getLocaleString("lbl_mejorCalificada")%></a> 
+        <a <%=ckdComment%> href="<%=urlOrder.toString()%>&order=<%=ApplicationResource.ORDER_COMMENTS%>"><%=paramRequest.getLocaleString("lbl_masComentadas")%></a> 
+        <a <%=ckdCreated%> href="<%=urlOrder.toString()%>&order=<%=ApplicationResource.ORDER_CREATED%>"><%=paramRequest.getLocaleString("lbl_fecha")%></a>
+            
+    </div>
         
     <%
 
@@ -422,12 +425,12 @@
         int x = 0;
     %>
         
-    <div class="listaApplication">
-        <ul>
+    <div class="lista10">
+         <ol>
             <%
                 if (intSize == 0) {
             %>
-            <li><h3>No se encontraron Aplicaciones</h3></li>
+            <li><%=paramRequest.getLocaleString("lbl_notAppFound")%></li>
             <% } else {
 
                 while (itAppList.hasNext()) {
@@ -445,20 +448,17 @@
                     String wpurl = wpage.getUrl()+"?act=detail&suri=";
             %>
             <li>
-                <label><a href="<%=wpurl + apls.getEncodedURI()%>"><%=apls.getAppTitle()%></a></label> 
-                <br/>
+                <a href="<%=wpurl + apls.getShortURI()%>"><%=apls.getAppTitle()%></a><br/>
                 <p><%=apls.getAppDescription()%></p>
             </li>
             <%                                           
                 }
                 }
             %>
-        </ul>
+         </ol>
     </div>
-    </div>
+         <div class="pager">
         
-    <div class="paginar">
-    <p>
         <%
             if (p > 0 || x < l) //Requiere paginacion
             {
@@ -467,6 +467,12 @@
                 if ((l % ps) > 0) {
                     pages++;
                 }
+       %>
+       
+  <div class="pager-total">Página <%=p%>/<%=pages%></div>       
+  <div class="pager-index">
+      
+       <%
 
                 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -558,19 +564,25 @@
                     }
                     out.println("<a href=\"#\" onclick=\"window.location='" + urlNext + "';\">"+paramRequest.getLocaleString("pg_golast")+"</a> ");
                 }
-            }
+            
         %>
-    </p></div>
+    </div>
+    </div>
+    
+    <%}%>
+    
+    </div>
+    </div>
+    </div>
 
 <%
 } else if (action.equals("detail")) {  // detalle de la Apliacion seleccionada
     String suri = request.getParameter("suri");
-    go = ont.getGenericObject(suri);
+    go = ont.getGenericObject(SemanticObject.shortToFullURI(suri));
     if (go instanceof Application) {
 %>
 <div>
     <%
-//        System.out.println("Entro al if de instancia de aplicacion");
         Application aps = (Application) go;
         GenericObject ob = aps.getAppAuthor().createGenericInstance();
         String fullName = "";
@@ -593,19 +605,10 @@
         fullName = db.getFullName();
     }
     
-    System.out.println("NOMBRE COMPLETO AUTHOR" + " " + fullName);
+//    System.out.println("NOMBRE COMPLETO AUTHOR" + " " + fullName);
     
-        boolean bupdated = LODPUtils.updateAppViews(aps);  // se actualiza los views
-        aps.sendView(request, user, wpage);
-        
-//        System.out.println("booleano" + " " + bupdated);
-//        System.out.println("titulo" + " " + aps.getAppTitle());
-//        System.out.println("autor" + " " + aps.getAppAuthor());
-//        System.out.println("licencia" + " " +  aps.getAppLicense());
-//        System.out.println("fecha" + " " +   aps.getAppCreated());
-//        System.out.println("rank" + " " +   aps.getRanks());
-//        System.out.println("views" + " " +   aps.getViews());
-//        System.out.println("views" + " " +   aps.getAppCreated());
+// se actualiza los views
+    aps.sendView(request, user, wpage);
         
     %>
     <div>
@@ -621,7 +624,7 @@
                 <label><%=paramRequest.getLocaleString("lbl_licenciaDetalle")%></label>&nbsp;&nbsp;&nbsp;&nbsp;<%=aps.getAppLicense() != null ? aps.getAppLicense().getLicenseTitle() : ""%>
             </li>
             <li>
-                <label><%=paramRequest.getLocaleString("lbl_urlDetalle")%></label>&nbsp;&nbsp;&nbsp;&nbsp;<a href="<%=renderURL.setMode(ApplicationResource.REDIRECT_URL).setParameter("uri", aps.getEncodedURI())%>" ><%=aps.getAppURL()%></a>
+                <label><%=paramRequest.getLocaleString("lbl_urlDetalle")%></label>&nbsp;&nbsp;&nbsp;&nbsp;<a href="<%=renderURL.setMode(ApplicationResource.REDIRECT_URL).setParameter("uri", aps.getShortURI())%>" ><%=aps.getAppURL()%></a>
             </li>
             <li>
                 <label><%=paramRequest.getLocaleString("lbl_visitasDetalle")%></label>&nbsp;&nbsp;&nbsp;&nbsp;<%=aps.getViews()%>
@@ -647,7 +650,7 @@
                 <%
                 if(user.isSigned()&& (user.getSemanticObject().createGenericInstance() instanceof Developer || user.getSemanticObject().createGenericInstance() instanceof Publisher)){
                 %>
-                    <a href="<%=renderURL.setMode(SWBResourceURL.Mode_EDIT).setParameter("uri", aps.getEncodedURI())%>" ><%=paramRequest.getLocaleString("lbl_editar")%></a>
+                    <a href="<%=renderURL.setMode(SWBResourceURL.Mode_EDIT).setParameter("uri", aps.getShortURI())%>" ><%=paramRequest.getLocaleString("lbl_editar")%></a>
                 <%
                 }             
                 %>
