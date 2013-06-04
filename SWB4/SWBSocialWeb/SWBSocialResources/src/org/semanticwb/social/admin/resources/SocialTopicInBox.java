@@ -291,6 +291,15 @@ public class SocialTopicInBox extends GenericResource {
                     + "<img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/images/delete.gif\" border=\"0\" alt=\"" + paramRequest.getLocaleString("remove") + "\"></a>");
             
             
+            //Preview
+            SWBResourceURL urlpre = paramRequest.getRenderUrl();
+            urlpre.setParameter("suri", id);
+            urlpre.setParameter("page", "" + p);
+            urlpre.setParameter("sval", postIn.getURI());
+            urlpre.setParameter("preview", "true");
+            out.println("<a href=\"#\" title=\"" + paramRequest.getLocaleString("previewdocument") + "\" onclick=\"submitUrl('" + urlpre + "',this); return false;\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/icons/preview.gif\" border=\"0\" alt=\"" + paramRequest.getLocaleString("previewdocument") + "\"></a>");
+            
+            
             //ReClasifyByTpic
             SWBResourceURL urlreClasifybyTopic=paramRequest.getRenderUrl().setMode(Mode_RECLASSBYTOPIC).setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("postUri", postIn.getURI());  
             out.println("<a href=\"#\" title=\"" + paramRequest.getLocaleString("reclasifyByTopic") + "\" onclick=\"showDialog('" + urlreClasifybyTopic + "','" + 
@@ -417,6 +426,65 @@ public class SocialTopicInBox extends GenericResource {
         
         
         out.println("</div>");  
+        
+        
+        if (request.getParameter("preview") != null && request.getParameter("preview").equals("true")) {
+            if (request.getParameter("sval") != null) {
+                try {
+                    doPreview(request, response, paramRequest);
+                } catch (Exception e) {
+                    out.println("Preview not available...");
+                }
+            } else {
+                out.println("Preview not available...");
+            }
+        }
+        
+    }
+    
+    
+    /**
+     * Shows the preview of the content.
+     *
+     * @param request , this holds the parameters
+     * @param response , an answer to the user request
+     * @param paramRequest , a list of objects like user, webpage, Resource, ...
+     * @throws SWBResourceException, a Resource Exception
+     * @throws IOException, an In Out Exception
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
+    public void doPreview(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        String postUri=request.getParameter("sval");
+        PrintWriter out = response.getWriter();
+        out.println("<fieldset>");
+        out.println("<legend>" + paramRequest.getLocaleString("previewdocument") + "</legend>");
+        try {
+            final String path = SWBPlatform.getContextPath() + "/work/" + paramRequest.getWebPage().getWebSiteId() + "/jsp/review/showPostIn.jsp";
+            if (request != null) {
+                RequestDispatcher dis = request.getRequestDispatcher(path);
+                if (dis != null) {
+                    try {
+                        SemanticObject semObject = SemanticObject.createSemanticObject(postUri);
+                        request.setAttribute("postIn", semObject);
+                        request.setAttribute("paramRequest", paramRequest);
+                        dis.include(request, response);
+                    } catch (Exception e) {
+                        log.error(e);
+                        e.printStackTrace(System.out);
+                    }
+                }
+            }
+            
+            /*
+            SWBResource res = SWBPortal.getResourceMgr().getResource(id);
+            ((SWBParamRequestImp) paramRequest).setResourceBase(res.getResourceBase());
+            res.render(request, response, paramRequest);
+            **/
+        } catch (Exception e) {
+            log.error("Error while getting content string ,id:" + postUri, e);
+        }
+        out.println("</fieldset>");
     }
     
     
@@ -454,7 +522,7 @@ public class SocialTopicInBox extends GenericResource {
     
     public void doCreatePost(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {        
         RequestDispatcher rd = request.getRequestDispatcher(SWBPlatform.getContextPath() +"/work/" + paramRequest.getWebPage().getWebSiteId() +"/jsp/post/typeOfContent.jsp");
-        request.setAttribute("valor", request.getParameter("valor"));
+        request.setAttribute("contentType", request.getParameter("valor"));
         request.setAttribute("wsite", request.getParameter("wsite"));
         request.setAttribute("objUri", request.getParameter("objUri"));
         request.setAttribute("paramRequest", paramRequest);
