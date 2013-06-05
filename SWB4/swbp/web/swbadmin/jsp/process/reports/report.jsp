@@ -16,15 +16,18 @@
     SWBResourceURL urlAction = paramRequest.getActionUrl();
     Integer pageElements = Integer.parseInt(request.getAttribute("pageElements").toString());
     Iterator<Report> report = Report.ClassMgr.listReports(paramRequest.getWebPage().getWebSite());
-
     SWBResourceURL urlReport = paramRequest.getRenderUrl().setMode("generate").setCallMethod(SWBParamRequest.Call_DIRECT);
-
 %>
-
-
-
-
 <div class="bandeja-combo" dojoType="dijit.layout.ContentPane" region="center" id="workspace">
+
+    <div id="out" style="display: none; width: 100%; alignment-adjust: central;">
+        <%url = paramRequest.getRenderUrl();
+        url.setMode(SWBResourceURL.Mode_VIEW);%>
+        <a id="a" href="<%=url%>" title="Reportes nuevos">Reportes nuevos</a>
+    </div>
+    <div id="out2" style="display: none;background: #008000">
+        <h2 style="color: red;">No creó reporte</h2>
+    </div>
     <div style="text-align: right;">
         <a href="<%=url.setMode("add")%>" title="Agregar reporte"><img src="/swbadmin/jsp/process/reports/add.png"></a>
     </div>
@@ -75,9 +78,6 @@
         %>
     </table>
 </div>
-
-
-
 <div dojoType="dijit.Dialog" style="display:none;" id="configDialog" title="Generar reporte">
     <div dojoType="dojox.layout.ContentPane" id="configDialogImp" executeScripts="true">
         <form method="post">
@@ -92,43 +92,43 @@
         </form>
     </div>
 </div>
-<div id="out" style="display: none;background: #008000">
-    <h2 style="color: #FFFFFF;">Se creó reporte</h2>
-</div><div id="out2" style="display: none;background: #008000">
-    <h2 style="color: red;">No creó reporte</h2>
-</div>
 <script type="text/javascript">
+    var count = 0;
                 dojo.require("dijit.Dialog");
                 function showDialog(idReport) {
                     document.getElementById('idReport').setAttribute("value", "" + idReport);
                     dijit.byId('configDialog').show();
-
                 }
                 function submitUrl(url, reference) {
                     var panel = getContentPanel(reference);
                     var extension = document.getElementById("extension");
                     dijit.byId('configDialog').hide();
                     url = url + '?idReport=' + document.getElementById('idReport').value + '&extension=' + extension.options[extension.selectedIndex].value;
-                    
                     dojo.xhrGet({
                         url: url,
                         load: function(response, ioArgs)
                         {
+                            count ++;
                             document.getElementById('out').style.display = 'block';
-                            setInterval(function(){myTimer()},2000);
+                            //alert(count);
+                            document.getElementById('a').innerHTML = "Reportes nuevos: " + count; 
+                            //setInterval(function(){myTimer()},2000);
                             return response;
                         },
                         error: function(response, ioArgs) {
-                            setInterval(function(){myTimer2()},2000);
+                            setInterval(function() {
+                                myTimer2()
+                            }, 2000);
                             return response;
                         },
                         handleAs: "text"
                     });
                 }
 
-            function myTimer() {
-                document.getElementById('out').style.display = 'none';
-            }function myTimer2() {
-                document.getElementById('out2').style.display = 'none';
-            }
+                function myTimer() {
+                    document.getElementById('out').style.display = 'none';
+                }
+                function myTimer2() {
+                    document.getElementById('out2').style.display = 'none';
+                }
 </script>
