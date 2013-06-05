@@ -2039,7 +2039,10 @@
                 
         init:function(svgid)
         {
-            ToolKit.init(svgid);            
+            //console.log(ToolKit);
+            //console.log("Modeler init");
+            ToolKit.init(svgid);
+            //console.log("After toolkit");
             ToolKit.onmousedown=Modeler.onmousedown;
             ToolKit.onmousemove=Modeler.onmousemove;
             ToolKit.onmouseup=Modeler.onmouseup;
@@ -2057,6 +2060,7 @@
                     if (obj.canAddToDiagram()) {
                         obj.move(ToolKit.getEventX(evt), ToolKit.getEventY(evt));
                         obj.snap2Grid();
+                        obj.layer = ToolKit.layer;
                         if (obj.typeOf("GraphicalElement")) {
                             Modeler.fadeInObject(obj);
                         }
@@ -2597,7 +2601,7 @@
             
             icon.obj.ondblclick=function(evt)
             {
-                Modeler.navPath.setNavigation(obj.subLayer);
+                //Modeler.navPath.setNavigation(obj.subLayer);
                 ToolKit.setLayer(obj.subLayer);
             };
             
@@ -2754,7 +2758,7 @@
             return ret;
         },
 
-        loadProcess: function(jsonString) {    
+        loadProcess: function(jsonString) {
             var json = JSON.parse(jsonString);
             var jsarr = json.nodes;
             var i = 0;
@@ -2763,7 +2767,6 @@
             var flowNodes = [];
             
             Modeler.clearCanvas();
-            ToolKit.setLayer(null);
             
             while(i < jsarr.length) {
                 var tmp = jsarr[i];
@@ -2791,6 +2794,7 @@
                     if (tmp.title != null) {
                         obj.setText(tmp.title);
                     }
+                    obj.layer = null;
                     obj.resize(tmp.w, tmp.h);
                     obj.move(tmp.x, tmp.y);
                     obj.snap2Grid();
@@ -2812,6 +2816,8 @@
                     obj.resize(tmp.w, tmp.h);
                     var par = Modeler.getGraphElementByURI(null, tmp.parent);
                     par.addLane(obj);
+                    obj.setParent(par);
+                    obj.layer = null;
                     par.move(par.getX(), par.getY());
                 }
             }
@@ -2858,34 +2864,62 @@
                 }
             }
             
-            //Asignar padres de los flowNodes
-//            for (i = 0; i < flowNodes.length; i++) {
-//                var tmp = flowNodes[i];
-//                var obj = Modeler.getGraphElementByURI(null, tmp.uri);
-////                //console.log(tmp.uri+" "+tmp.parent);
-//                if (tmp.parent && tmp.parent !== null) {
-//                    var par = Modeler.getGraphElementByURI(null, tmp.parent);
-//                    if (par != null && obj != null) {
-//                        if (par.elementType=="Pool") {
-//                            console.log("parent: "+par.text.value);
-//                            console.log("obj: "+obj.text.value);
-//                            obj.setParent(null);
-//                        } else {
-//                            obj.setParent(par);
-//                        }
-//                    }
-//                }
-//            }
-
             //Asignar contenedores de los flowNodes
             for (i = 0; i < flowNodes.length; i++) {
                 var tmp = flowNodes[i];
                 var obj = Modeler.getGraphElementByURI(null, tmp.uri);
                 //console.log(tmp.uri+" "+tmp.parent);
                 if (tmp.container && tmp.container !== null) {
-                    var par = Modeler.getGraphElementByURI(null, tmp.container);
-                    if (par !== null && obj !== null) {
-                        obj.layer = par.subLayer;
+                    var cont = Modeler.getGraphElementByURI(null, tmp.container);
+                    if (cont !== null && obj !== null) {
+                        if (cont.typeOf("SubProcess")) {
+                            obj.layer = cont.subLayer;
+                        } else {
+                            obj.layer = null;
+                        }
+                    }
+                }
+            }
+            
+            //Asignar padres de los flowNodes
+            for (i = 0; i < flowNodes.length; i++) {
+                var tmp = flowNodes[i];
+                var obj = Modeler.getGraphElementByURI(null, tmp.uri);
+                var cont = Modeler.getGraphElementByURI(null, tmp.container);
+                //console.log("obj: "+tmp.title);
+                //console.log("container: "+tmp.container);
+//                //console.log(tmp.uri+" "+tmp.parent);
+                if (tmp.parent && tmp.parent !== null) {
+                    var par = Modeler.getGraphElementByURI(null, tmp.parent);
+                    //console.log("par: "+tmp.parent);
+                    if (par != null && obj != null) {
+                        obj.setParent(par);
+                        //funciona, pero es estructuralmente incorrecto
+//                        //-----------------------------------------------
+//                        if ((par.elementType=="Lane" || par.elementType == "Pool") && tmp.container && tmp.container != null) {
+//                            obj.setParent(null);
+//                        } else {
+//                            obj.setParent(par);
+//                        }
+                        //-----------------------------------------------
+                    }
+                }
+            }
+
+            //Asignar contenedores de los flowNodes
+            for (i = 0; i < flowNodes.length; i++) {
+                var tmp = flowNodes[i];
+                var obj = Modeler.getGraphElementByURI(null, tmp.uri);
+                var par = Modeler.getGraphElementByURI(null, tmp.parent);
+                //console.log(tmp.uri+" "+tmp.parent);
+                if (tmp.container && tmp.container !== null) {
+                    var cont = Modeler.getGraphElementByURI(null, tmp.container);
+                    if (cont !== null && obj !== null) {
+                        if (cont.typeOf("SubProcess")) {
+                            obj.layer = cont.subLayer;
+                        } else {
+                            obj.layer = null;
+                        }
                     }
                 }
             }
@@ -3027,7 +3061,6 @@
             }
             
             ToolKit.contents = [];
-            ToolKit.setLayer(null);
             Modeler.count = 0;
         },
                 
@@ -3380,6 +3413,49 @@
                 ret.setText("Lane");
                 ret.resize(600,200);
             }
+//            
+//            if (ret != null && ret.typeOf("GraphicalElement")) {
+//                var fShow = ret.show;
+//                ret.show = function() {
+//                    ret.style.display="";
+//                    ret.hidden=false;
+//                    
+//                    console.log(ret);
+//                    for (var i = ret.contents.length; i--;)
+//                    {
+//                        if (ret.contents[i].layer && ret.contents[i].layer == ToolKit.layer) {
+//                            ret.contents[i].show();
+//                        }
+//                    }
+//
+//                    //Elimina Iconos
+//                    if(ret.icons)
+//                    {
+//                        for (var i = ret.icons.length; i--;)
+//                        {
+//                            ret.icons[i].obj.show();
+//                        }
+//                    }
+//                    //Elimina Texto
+//                    if(ret.text!=null)ret.text.show();
+//
+//                    //Eliminar Conexiones
+//                    //Move InConnections
+//                    for(var i = ret.inConnections.length; i--;)
+//                    {
+//                        ret.inConnections[i].show();
+//                    }
+//
+//                    //Move OutConnections
+//                    for(var i = ret.outConnections.length; i--;)
+//                    {
+//                        ret.outConnections[i].show();
+//                    }
+//                    
+//                    //console.log(ret.text.value+", id: "+ret.id+", parent: "+((ret.parent != null)?ret.parent.id:"null")+", container: "+((ret.getContainer && ret.getContainer() != null)?ret.getContainer().id:"null"));
+//                    //fShow();
+//                }
+//            }
             return ret;
         }
     }    
