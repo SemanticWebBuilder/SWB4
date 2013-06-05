@@ -37,7 +37,7 @@
         {
             var _this=ToolKit;
             _this.layer=layer;
-            for (var i = _this.contents.length; i--;) 
+            for (var i = _this.contents.length; i--;)
             {
                 if(_this.contents[i].layer===layer)
                 {
@@ -46,7 +46,7 @@
                 {
                     if(_this.contents[i].hide)_this.contents[i].hide();
                 }
-            } 
+            }
         },
                 
         removeLayer:function(layer)
