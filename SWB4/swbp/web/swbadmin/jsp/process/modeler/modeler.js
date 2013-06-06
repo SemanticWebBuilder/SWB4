@@ -2049,6 +2049,42 @@
             ToolKit.onmouseup=Modeler.onmouseup;
             if(!ToolKit.svg.offsetLeft)ToolKit.svg.offsetLeft=60;
             if(!ToolKit.svg.offsetTop)ToolKit.svg.offsetTop=10;
+            
+            ToolKit.svg.addEventListener("dragover" , function(evt) {
+                evt.preventDefault();
+                console.log("dragging over");
+                if (ToolKit.svg != null) {
+                    ToolKit.svg.setAttributeNS(null, "class", "modelerOver");
+                }
+            } , false);
+            
+            ToolKit.svg.addEventListener("dragleave" , function(evt) {
+                console.log("leaving drag");
+                if (ToolKit.svg != null) {
+                    ToolKit.svg.setAttributeNS(null, "class", "modeler");
+                }
+            } , false);
+            
+            ToolKit.svg.addEventListener("drop" , function(evt) {
+                evt.preventDefault();
+                console.log("dropping");
+                
+                var file = evt.dataTransfer.files[0];
+                console.log("archivo: "+escape(file.name)+", tipo: "+(file.type || 'n/a')+", size: "+file.size);
+                
+                var reader = new FileReader();
+                reader.onload = (function(f) {
+                    return function(e) {
+                        Modeler.loadProcess(e.target.result);
+                        storeProcess(e.target.result);
+                    };
+                })(file);
+                
+                reader.readAsText(file);
+                if (ToolKit.svg != null) {
+                    ToolKit.svg.setAttributeNS(null, "class", "modeler");
+                }
+            } , false);
         },
                 
         onmousedown:function(evt)
@@ -2897,11 +2933,11 @@
                         obj.setParent(par);
                         //funciona, pero es estructuralmente incorrecto
 //                        //-----------------------------------------------
-//                        if ((par.elementType=="Lane" || par.elementType == "Pool") && tmp.container && tmp.container != null) {
-//                            obj.setParent(null);
-//                        } else {
-//                            obj.setParent(par);
-//                        }
+                        if (par == null || (par != null && par.elementType=="Lane" && tmp.container && tmp.container != null)) {
+                            obj.setParent(null);
+                        } else {
+                            obj.setParent(par);
+                        }
                         //-----------------------------------------------
                     }
                 }
