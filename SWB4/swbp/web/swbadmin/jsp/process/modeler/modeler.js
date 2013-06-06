@@ -3068,9 +3068,9 @@
         },
 
         submitCommand:function(url, data, callbackHandler) {
-            if (ToolKit.loaded) {
-                ToolKit.showTooltip("","Enviando datos, por favor espere...", 200, "Warning");
-            }
+//            if (ToolKit.loaded) {
+//                ToolKit.showTooltip("","Enviando datos, por favor espere...", 200, "Warning");
+//            }
             //reemplazar dojo por invocaciones directas por ajax
             dojo.xhrPost({
                 url: url,
