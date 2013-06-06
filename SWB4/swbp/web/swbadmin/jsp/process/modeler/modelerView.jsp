@@ -26,7 +26,7 @@ exportUrl.setMode(SVGModeler.MODE_EXPORT);
     -->
     <script type="text/javascript" src="/swbadmin/jsp/process/modeler/toolkit.js"></script>
     <script type="text/javascript" src="/swbadmin/jsp/process/modeler/modeler.js"></script>
-    <link href="/swbadmin/jsp/process/modeler/modelerFrame.css" rel="stylesheet" type="text/css">
+    <link href="/swbadmin/jsp/process/modeler/images/modelerFrame.css" rel="stylesheet" type="text/css">
 </head>
 <body style="margin: 0px;" onload="Modeler.init('modeler');">
     <div id="toolBar" onmouseout="ToolBar.outToolBar();" onmouseover="ToolBar.overToolBar(); this.style.opacity=1;" style="position: fixed;">
@@ -732,7 +732,10 @@ exportUrl.setMode(SVGModeler.MODE_EXPORT);
     
     function callbackLoad(response) {
         Modeler.loadProcess(response);
-        parent.reloadTreeNodeByURI('<%=request.getParameter("suri")%>');
+        if(parent.reloadTreeNodeByURI)
+        {
+            parent.reloadTreeNodeByURI('<%=request.getParameter("suri")%>');
+        }
     };
 
     /*

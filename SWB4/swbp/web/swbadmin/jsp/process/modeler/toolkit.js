@@ -1396,13 +1396,15 @@
             obj.onmouseup=function(evt)
             {
                 //desc(evt,true);
-                parent.onmouseup(evt);
+                if(parent.onmouseup)
+                    parent.onmouseup(evt);
             };  
             
             obj.onmousemove=function(evt)
             {
                 //desc(evt,true);
-                parent.onmousemove(evt);
+                if(parent.onmousemove)
+                    parent.onmousemove(evt);
             };              
 
             parent.ondblclick=function(evt)
