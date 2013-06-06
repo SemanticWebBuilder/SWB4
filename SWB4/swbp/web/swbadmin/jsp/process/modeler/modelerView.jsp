@@ -85,6 +85,7 @@ exportUrl.setMode(SVGModeler.MODE_EXPORT);
         <div id="fileBar" class="subbarHidden" style="width: 385px;">
             <span class="subbarStart"></span>
             <span class="storeProcess" title="Enviar modelo" onclick="storeProcess();"></span>
+            <span class="saveProcess" title="Guardar modelo" onclick="submit_download_form('swp')"></span>
             <span class="saveAsImage" title="Guardar como imagen" onclick="submit_download_form('svg')"></span>
             <span class="subbarEnd"></span>
         </div>
@@ -347,6 +348,155 @@ exportUrl.setMode(SVGModeler.MODE_EXPORT);
                 stroke:#2cff20;
                 fill:url(#linearGradientGateway);
                 stroke-width:2;
+                cursor:hand;
+            }
+            
+            .sequenceFlowSubLine {
+                fill:none;
+                stroke:#ffffff;
+                stroke-opacity:0.1;
+                stroke-width:8;
+                cursor: hand;
+            }
+
+            .sequenceFlowSubLine_o {
+                fill:none;
+                stroke:#F0F0F0;
+                stroke-width:8;
+                cursor:hand;
+            }
+            
+            .swimlane
+            {
+                fill: #E8E8FF;
+                stroke-width:2;
+                stroke: #ADADAE;
+                fill-opacity:1;
+                cursor:hand;
+            }
+
+            .swimlane_o
+            {
+                stroke:#2cff20;
+                fill: #E8E8FF;
+                stroke-width:2;
+                fill-opacity:1;
+                cursor: hand;
+            }
+            
+            .sequenceFlowLine {
+                fill: none;
+                stroke-width: 2;
+                stroke: #000000;
+                cursor:hand;
+            }
+
+            .intermediateEvent1
+            {
+                stroke:#2c5aa0;
+                fill:none;
+                stroke-width:1;
+            }
+            
+            .itemAware {
+                stroke:#666666;
+                stroke-width:2;
+                cursor:hand;
+            }
+
+            .itemAware_o {
+                stroke:#2cff20;
+                stroke-width:2;
+                cursor:hand;
+            }
+            
+            
+            .transactionSquare {
+                stroke:#2c5aa0;
+                cursor:hand;
+                fill:none;
+                stroke-width:1.5;
+            }
+
+            .group {
+                stroke:#2c5aa0;
+                cursor:hand;
+                fill:none;
+                stroke-width:1.5;
+            }
+
+            .annotationArtifact {
+                fill:none;
+                stroke:#000000;
+                stroke-width:1.5px;
+                cursor:hand;
+            }
+
+            .annotationArtifactRect {
+                fill:none;
+                stroke:none;
+                fill:#E6E6E6;
+                fill-opacity:0.2;
+                cursor:hand;
+            }
+
+            .annotationArtifactRect_o {
+                fill:none;
+                fill:#E6E6E6;
+                stroke:#2cff20;
+                fill-opacity:0.2;
+                cursor:hand;
+            }
+
+            .group_o {
+                stroke:#2cff20;
+                cursor:hand;
+                fill:none;
+                stroke-width:1.5;
+            }
+
+            .taskMarker
+            {
+                stroke:#2c5aa0;
+                cursor:hand;
+            }
+            .pathMarker{
+                fill:none;
+                stroke-width:1;
+            }
+            .startMarker{
+                stroke:#008000;
+                fill:none;
+                stroke-width:2.5;                        
+            }
+            .startMarker{
+                stroke:#008000;
+                fill:none;
+                stroke-width:2.5;                        
+            }
+            .startFilledMarker{
+                fill:#008000;
+                stroke:none;
+                stroke-width:1;
+            }
+            .intermediateMarker{
+                stroke:#2c5aa0;
+                fill:#ffffff;
+                fill-opacity:0.1;
+                stroke-width:2.5;
+                cursor:hand;
+            }      
+            .intermediateFilledMarker{
+                fill:#2c5aa0;
+                stroke:#2c5aa0;
+                stroke-width:1;
+                cursor:hand;
+            }    
+            .endFilledMarked
+            {
+                fill:#550000;   
+                stroke:#550000;
+                stroke-width:1;
                 cursor:hand;
             }
         ]]></style>
@@ -743,16 +893,17 @@ exportUrl.setMode(SVGModeler.MODE_EXPORT);
        and the requested output format, and submits the form.
     */
     function submit_download_form(output_format) {
-        // Get the SVG element
-        var svg = document.getElementsByTagName("svg")[0];
-        // Extract the data as SVG text string
-        var svg_xml = (new XMLSerializer).serializeToString(svg);
-
+        var form = document.getElementById("svgform");
+        if (output_format === "svg") {
+            // Get the SVG element
+            var svg = document.getElementsByTagName("svg")[0];
+            // Extract the data as SVG text string
+            var svg_xml = (new XMLSerializer).serializeToString(svg);
+            form['data'].value = svg_xml ;
+        }
         // Submit the <FORM> to the server.
         // The result will be an attachment file to download.
-        var form = document.getElementById("svgform");
         form['output_format'].value = output_format;
-        form['data'].value = svg_xml ;
         form.submit();
     };
     <%
