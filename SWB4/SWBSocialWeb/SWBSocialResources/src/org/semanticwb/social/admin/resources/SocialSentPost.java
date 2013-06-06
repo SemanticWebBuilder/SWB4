@@ -790,8 +790,9 @@ public class SocialSentPost extends GenericResource {
             log.debug("processAction(remove PostOut):"+so);
             so.remove();
            
-            response.setRenderParameter("closetab", sval);
-            response.setRenderParameter("statmsg", response.getLocaleString("statmsg2"));
+            response.setRenderParameter("dialog", "close");
+            response.setRenderParameter("suri", request.getParameter("suri"));
+            response.setRenderParameter("statmsg", response.getLocaleString("postDeleted"));
             response.setMode(SWBActionResponse.Mode_EDIT);
         } else if ("send2flow".equals(action)) {
             String id = request.getParameter("suri");
@@ -955,7 +956,7 @@ public class SocialSentPost extends GenericResource {
                 PostOut postOut=(PostOut)obj.createGenericInstance();
                 try
                 {
-                    SWBSocialUtil.PostOutUtil.publishPost(postOut, request, null);
+                    SWBSocialUtil.PostOutUtil.publishPost(postOut);
                     //TODOSOCIAL:Probar si con esto funciona
                     postOut.getPflowInstance().setStatus(2);
                     postOut.getPflowInstance().setStep(null);  
