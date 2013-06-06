@@ -34,6 +34,7 @@ import org.semanticwb.social.SentimentalLearningPhrase;
 import org.semanticwb.social.SocialNetwork;
 import org.semanticwb.social.SocialPFlow;
 import org.semanticwb.social.SocialTopic;
+import org.semanticwb.social.Stream;
 import org.semanticwb.social.VideoIn;
 import org.semanticwb.social.util.SWBSocialUtil;
 
@@ -233,14 +234,32 @@ public class SocialTopicInBox extends GenericResource {
         out.println(paramRequest.getLocaleString("place"));
         out.println("</th>");
         
+        out.println("<th>");
+        out.println(paramRequest.getLocaleString("prioritary"));
+        out.println("</th>");
         
         out.println("</thead>");
         out.println("<tbody>");
         
         
-        Iterator<PostIn> itposts = PostIn.ClassMgr.listPostInBySocialTopic(socialTopic);
+        Iterator<PostIn> itposts = PostIn.ClassMgr.listPostInBySocialTopic(socialTopic, socialTopic.getSocialSite());
         
         Set<PostIn> setso = SWBComparator.sortByCreatedSet(itposts, false);
+        //System.out.println("Tamaño de PostIn en SocialTopic-->"+setso.size());
+        
+        /*
+        Stream stream=Stream.ClassMgr.getStream("1", socialTopic.getSocialSite());
+        
+        Iterator <PostIn> itPostInStream=PostIn.ClassMgr.listPostInByPostInStream(stream, socialTopic.getSocialSite());
+        while(itPostInStream.hasNext())
+        {
+            PostIn postInX=itPostInStream.next();
+            System.out.println("postInX:"+postInX+",postInXMsg:"+postInX.getMsg_Text()+",postInXSocialTopic:"+postInX.getSocialTopic()); 
+        }*/
+        
+        
+        
+        
         itposts = null;
         
         int ps = 20;
@@ -390,6 +409,9 @@ public class SocialTopicInBox extends GenericResource {
             out.println(postIn.getPostPlace() == null ? "---" : postIn.getPostPlace());
             out.println("</td>");
             
+            out.println("<td align=\"center\">");
+            out.println(postIn.isIsPrioritary() ? "SI" : "NO");
+            out.println("</td>");
             
             out.println("</tr>");
         }
@@ -570,7 +592,7 @@ public class SocialTopicInBox extends GenericResource {
                 response.setRenderParameter("reloadTap","1");
                 response.setRenderParameter("suri", stOld.getURI());
             }
-        }else if (action.equals("postMessage")) 
+        }else if (action.equals("postMessage") || action.equals("uploadPhoto") || action.equals("uploadVideo")) 
         {
                 System.out.println("Entra a InBox_processAction-2:"+request.getParameter("objUri"));
                 if(request.getParameter("objUri")!=null)
@@ -611,49 +633,50 @@ public class SocialTopicInBox extends GenericResource {
                     response.setRenderParameter("statusMsg", response.getLocaleString("msgResponseCreated"));
                     response.setRenderParameter("suri", stOld.getURI());
                 }
-            }else if (SWBResourceURL.Action_EDIT.equals(action)) 
-            {
-                WebSite wsite = base.getWebSite();
-                try {
-                    String[] phrases = request.getParameter("fw").split(";");
-                    int nv = Integer.parseInt(request.getParameter("nv"));
-                    int dpth = Integer.parseInt(request.getParameter("dpth"));
-                    SentimentalLearningPhrase slp;
-                    for (String phrase : phrases) {
-                        phrase = phrase.toLowerCase().trim();
-                        slp = SentimentalLearningPhrase.getSentimentalLearningPhrasebyPhrase(phrase, wsite);
-                        if (slp == null) {
-                            phrase = SWBSocialUtil.Classifier.normalizer(phrase).getNormalizedPhrase();
-                            phrase = SWBSocialUtil.Classifier.getRootWord(phrase);
-                            phrase = SWBSocialUtil.Classifier.phonematize(phrase);
-                            slp = SentimentalLearningPhrase.ClassMgr.createSentimentalLearningPhrase(wsite);
-                            slp.setPhrase(phrase);
-                            slp.setSentimentType(nv);
-                            slp.setIntensityType(dpth);
-                        } else {
-                            slp.setSentimentType(nv);
-                            slp.setIntensityType(dpth);
-                        }
+        }else if (SWBResourceURL.Action_EDIT.equals(action)) 
+        {
+            WebSite wsite = base.getWebSite();
+            try {
+                String[] phrases = request.getParameter("fw").split(";");
+                int nv = Integer.parseInt(request.getParameter("nv"));
+                int dpth = Integer.parseInt(request.getParameter("dpth"));
+                SentimentalLearningPhrase slp;
+                for (String phrase : phrases) {
+                    phrase = phrase.toLowerCase().trim();
+                    slp = SentimentalLearningPhrase.getSentimentalLearningPhrasebyPhrase(phrase, wsite);
+                    if (slp == null) {
+                        phrase = SWBSocialUtil.Classifier.normalizer(phrase).getNormalizedPhrase();
+                        phrase = SWBSocialUtil.Classifier.getRootWord(phrase);
+                        phrase = SWBSocialUtil.Classifier.phonematize(phrase);
+                        slp = SentimentalLearningPhrase.ClassMgr.createSentimentalLearningPhrase(wsite);
+                        slp.setPhrase(phrase);
+                        slp.setSentimentType(nv);
+                        slp.setIntensityType(dpth);
+                    } else {
+                        slp.setSentimentType(nv);
+                        slp.setIntensityType(dpth);
                     }
-                    response.setRenderParameter("alertmsg", "Revaluación correcta");
-                } catch (Exception e) {
-                    response.setRenderParameter("alertmsg", "Inténtalo de nuevo");
-                    log.error(e);
                 }
-            }else if (action.equals(SWBActionResponse.Action_REMOVE)) {
-                if (request.getParameter("suri") != null && request.getParameter("postUri") != null) {
-                    SemanticObject semObj = SemanticObject.getSemanticObject(request.getParameter("postUri"));
-                    if (semObj != null) {
-                        PostIn postIn = (PostIn) semObj.createGenericInstance();
-                        postIn.remove();
+                response.setRenderParameter("alertmsg", "Revaluación correcta");
+            } catch (Exception e) {
+                response.setRenderParameter("alertmsg", "Inténtalo de nuevo");
+                log.error(e);
+            }
+        }else if (action.equals(SWBActionResponse.Action_REMOVE)) 
+        {
+            if (request.getParameter("suri") != null && request.getParameter("postUri") != null) {
+                SemanticObject semObj = SemanticObject.getSemanticObject(request.getParameter("postUri"));
+                if (semObj != null) {
+                    PostIn postIn = (PostIn) semObj.createGenericInstance();
+                    postIn.remove();
 
-                        response.setMode(SWBActionResponse.Mode_EDIT);
-                        response.setRenderParameter("statusMsg", response.getLocaleString("postDeleted"));
-                        response.setRenderParameter("suri", request.getParameter("suri"));
-                    }
+                    response.setMode(SWBActionResponse.Mode_EDIT);
+                    response.setRenderParameter("statusMsg", response.getLocaleString("postDeleted"));
+                    response.setRenderParameter("suri", request.getParameter("suri"));
                 }
             }
-        
+        }
+
     }
-    
+
 }

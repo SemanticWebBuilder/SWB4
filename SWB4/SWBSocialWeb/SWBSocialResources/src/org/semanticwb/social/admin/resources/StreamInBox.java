@@ -6,9 +6,11 @@ package org.semanticwb.social.admin.resources;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Set;
 import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.Logger;
@@ -28,6 +30,8 @@ import org.semanticwb.social.MessageIn;
 import org.semanticwb.social.PhotoIn;
 import org.semanticwb.social.PostIn;
 import org.semanticwb.social.SentimentalLearningPhrase;
+import org.semanticwb.social.SocialNetwork;
+import org.semanticwb.social.SocialPFlow;
 import org.semanticwb.social.SocialTopic;
 import org.semanticwb.social.Stream;
 import org.semanticwb.social.VideoIn;
@@ -59,13 +63,19 @@ public class StreamInBox extends GenericResource {
     public static final String Mode_REVAL = "rv";
     public static final String Mode_RECLASSBYTOPIC="reclassByTopic";
     public static final String Mode_RECLASSBYSENTIMENT="revalue";
+    public static final String Mode_RESPONSE="response";
     
     @Override
     public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         final String mode = paramRequest.getMode();
         if(Mode_REVAL.equals(mode)) {
             doRevalue(request, response, paramRequest);
-        } else if(Mode_RECLASSBYTOPIC.equals(mode)) {
+        }else if(Mode_RESPONSE.equals(mode))
+        {
+            doResponse(request, response, paramRequest);
+        }else if (paramRequest.getMode().equals("post")) {
+            doCreatePost(request, response, paramRequest);
+        }else if(Mode_RECLASSBYTOPIC.equals(mode)) {
             doReClassifyByTopic(request, response, paramRequest);
         } else if(Mode_RECLASSBYSENTIMENT.equals(mode))
         {
@@ -117,6 +127,8 @@ public class StreamInBox extends GenericResource {
         
         String id = request.getParameter("suri");
         if(id==null) return;
+        
+        System.out.println("Stream-id/doEdit:"+id);
 
         Stream stream = (Stream)SemanticObject.getSemanticObject(id).getGenericInstance();    
         
@@ -211,6 +223,10 @@ public class StreamInBox extends GenericResource {
         out.println(paramRequest.getLocaleString("place"));
         out.println("</th>");
         
+        out.println("<th>");
+        out.println(paramRequest.getLocaleString("prioritary"));
+        out.println("</th>");
+        
         
         out.println("</thead>");
         out.println("<tbody>");
@@ -285,7 +301,14 @@ public class StreamInBox extends GenericResource {
             SWBResourceURL urlrev=paramRequest.getRenderUrl().setMode(Mode_RECLASSBYSENTIMENT).setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("postUri", postIn.getURI());  
             out.println("<a href=\"#\" title=\"" + paramRequest.getLocaleString("reeval") + "\" onclick=\"showDialog('" + urlrev + "','" + paramRequest.getLocaleString("reeval") 
                     + "'); return false;\">RV</a>");
-           
+            
+            //Respond
+            if(postIn.getSocialTopic()!=null)
+            {
+                SWBResourceURL urlresponse=paramRequest.getRenderUrl().setMode(Mode_RESPONSE).setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("postUri", postIn.getURI());  
+                out.println("<a href=\"#\" title=\"" + paramRequest.getLocaleString("respond") + "\" onclick=\"showDialog('" + urlresponse + "','" + paramRequest.getLocaleString("respond") 
+                        + "'); return false;\">R</a>");
+            }
             
             out.println("</td>");
             
@@ -389,6 +412,10 @@ public class StreamInBox extends GenericResource {
             //Place
             out.println("<td>");
             out.println(postIn.getPostPlace() == null ? "---" : postIn.getPostPlace());
+            out.println("</td>");
+            
+            out.println("<td align=\"center\">");
+            out.println(postIn.isIsPrioritary() ? "SI" : "NO");
             out.println("</td>");
             
             
@@ -530,13 +557,47 @@ public class StreamInBox extends GenericResource {
         }
     }
     
+    private void doResponse(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest)
+    {
+        final String path = SWBPlatform.getContextPath() + "/work/" + paramRequest.getWebPage().getWebSiteId() + "/jsp/socialTopic/postInResponse.jsp";
+        RequestDispatcher dis = request.getRequestDispatcher(path);
+        if (dis != null) {
+            try {
+                SemanticObject semObject = SemanticObject.createSemanticObject(request.getParameter("postUri"));
+                request.setAttribute("postUri", semObject);
+                request.setAttribute("paramRequest", paramRequest);
+                dis.include(request, response);
+            } catch (Exception e) {
+                log.error(e);
+            }
+        }
+    }
+    
+    public void doCreatePost(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {        
+        RequestDispatcher rd = request.getRequestDispatcher(SWBPlatform.getContextPath() +"/work/" + paramRequest.getWebPage().getWebSiteId() +"/jsp/post/typeOfContent.jsp");
+        request.setAttribute("contentType", request.getParameter("valor"));
+        request.setAttribute("wsite", request.getParameter("wsite"));
+        request.setAttribute("objUri", request.getParameter("objUri"));
+        request.setAttribute("paramRequest", paramRequest);
+        
+        System.out.println("doCreatePost/1:"+request.getParameter("valor"));
+        System.out.println("doCreatePost/2:"+request.getParameter("wsite"));
+        System.out.println("doCreatePost/3:"+request.getParameter("objUri"));
+        
+        
+        try {
+            rd.include(request, response);
+        } catch (ServletException ex) {
+            log.error("Error al enviar los datos a typeOfContent.jsp " + ex.getMessage());
+        }
+    }
+    
     
     @Override
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
-        //System.out.println("Entra a StreamInBox/processA");
         final Resource base = getResourceBase();
         String action = response.getAction();
-        //System.out.println("Entra a InBox_processAction-1:"+action);
+        System.out.println("Entra a StreamInBox/processA:"+action);
         if(action.equals("changeSocialTopic"))
         {
             if(request.getParameter("postUri")!=null && request.getParameter("newSocialTopic")!=null)
@@ -610,6 +671,58 @@ public class StreamInBox extends GenericResource {
             } catch (Exception e) {
                 log.error(e);
             }
+        } else if ("remove".equals(action)) //suri, prop
+        {
+            String sval = request.getParameter("sval");
+            SemanticObject so = SemanticObject.createSemanticObject(sval);
+            log.debug("processAction(remove PostOut):"+so);
+            so.remove();
+    
+            response.setMode(SWBActionResponse.Mode_EDIT);
+            response.setRenderParameter("dialog", "close");
+            response.setRenderParameter("suri", request.getParameter("suri"));
+            response.setRenderParameter("statusMsg", response.getLocaleString("postDeleted"));
+        }else if (action.equals("postMessage") || action.equals("uploadPhoto") || action.equals("uploadVideo")) 
+        {
+                System.out.println("Entra a Strean_processAction-2:"+request.getParameter("objUri"));
+                if(request.getParameter("objUri")!=null)
+                {
+                    System.out.println("Entra a InBox_processAction-3");
+                    PostIn postIn=(PostIn)SemanticObject.getSemanticObject(request.getParameter("objUri")).createGenericInstance();
+                    Stream stOld=postIn.getPostInStream(); 
+                    SocialNetwork socialNet=(SocialNetwork)SemanticObject.getSemanticObject(request.getParameter("socialNetUri")).createGenericInstance();
+                    ArrayList aSocialNets=new ArrayList();
+                    aSocialNets.add(socialNet);
+
+                    WebSite wsite=WebSite.ClassMgr.getWebSite(request.getParameter("wsite")); 
+
+                    //En este momento en el siguiente código saco uno de los SocialPFlowRef que tiene el SocialTopic del PostIn que se esta contestando,
+                    //Obviamente debo de quitar este código y el SocialPFlowRef debe llegar como parametro, que es de acuerdo al SocialPFlow que el usuario
+                    //desee enviar el PostOut que realizó.
+                    /**
+                    SocialPFlow socialPFlow=null;
+                    Iterator<SocialPFlowRef> itflowRefs=socialTopic.listPFlowRefs();
+                    while(itflowRefs.hasNext())
+                    {
+                        SocialPFlowRef socialPflowRef=itflowRefs.next();
+                        socialPFlow=socialPflowRef.getPflow();
+                    }**/
+                    String socialFlow=request.getParameter("socialFlow");
+                    SocialPFlow socialPFlow=null;
+                    if(socialFlow!=null && socialFlow.trim().length()>0)
+                    {
+                        socialPFlow=(SocialPFlow)SemanticObject.createSemanticObject(socialFlow).createGenericInstance();
+                    }
+
+                    System.out.println("Entra a InBox_processAction-4");
+                    SWBSocialUtil.PostOutUtil.sendNewPost(postIn, postIn.getSocialTopic(), socialPFlow, aSocialNets, wsite, request.getParameter("toPost"), request, response);
+                    
+                    System.out.println("Entra a InBox_processAction-5");
+                    response.setMode(SWBActionResponse.Mode_EDIT);
+                    response.setRenderParameter("dialog","close");
+                    response.setRenderParameter("statusMsg", response.getLocaleString("msgResponseCreated"));
+                    response.setRenderParameter("suri", stOld.getURI());
+                }
         }
          
     }
