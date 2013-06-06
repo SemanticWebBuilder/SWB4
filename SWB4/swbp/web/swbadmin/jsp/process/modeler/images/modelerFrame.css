@@ -1,4 +1,4 @@
-/* 
+s/* 
     Document   : modelerFrame
     Created on : 15/03/2013, 01:39:38 PM
     Author     : hasdai
@@ -582,6 +582,18 @@ ul.breadcrumbs.alt1 li.last a{
 
 .flowItem:hover {
     background: url(flow_2.png) top center no-repeat;
+}
+
+.saveProcess {
+    background: url(file_saveas1.png) top center no-repeat;
+    position: relative;
+    float: left;
+    height:43px;
+    width:37px;
+}
+
+.saveProcess:hover {
+    background: url(file_saveas2.png) top center no-repeat;
 }
 
 .storeProcess {
