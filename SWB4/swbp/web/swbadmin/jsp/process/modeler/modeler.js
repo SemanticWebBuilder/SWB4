@@ -616,12 +616,13 @@
         var fCanAttach = _this.canAttach;
         var fCanEnd = _this.canEndLink;
         var fCanStart = _this.canStartLink;
+        _this.cssClass = "intermediateEvent";
         
         _this.setInterruptor = function(interrupt) {
             if (interrupt) {
-                _this.cssClass = "intermediateEvent";
-            } else {
                 _this.cssClass = "intermediateInterruptingEvent";
+            } else {
+                _this.cssClass = "intermediateEvent";
             }
             _this.setBaseClass();
         };
@@ -2725,7 +2726,7 @@
                 if (obj.getContainer() != null) {
                     ret.container = obj.getContainer().id;
                 }
-                if (ret.parent != null) {
+                if (obj.parent != null) {
                     ret.parent = obj.parent.id;
                 }
                 ret.labelSize="12";//TODO:Extraer tamaño de la fuente
@@ -2838,7 +2839,7 @@
                     
                     if (obj.typeOf("IntermediateCatchEvent") && tmp.isInterrupting != null) {
                         var par = Modeler.getGraphElementByURI(null, tmp.parent);
-                        if (par.typeOf("Activity") && !tmp.isInterrupting) {
+                        if (par!=null && par.typeOf("Activity") && !tmp.isInterrupting) {
                             obj.setInterruptor(false);
                         }
                     }
