@@ -3,6 +3,8 @@
     Created on : 8/05/2013, 03:34:59 PM
     Author     : Lennin
 --%>
+<%@page import="com.infotec.lodp.swb.Category"%>
+<%@page import="com.infotec.lodp.swb.utils.LODPUtils"%>
 <%@page import="com.infotec.lodp.swb.Publisher"%>
 <%@page import="com.infotec.lodp.swb.Developer"%>
 <%@page import="com.infotec.lodp.swb.resources.ApplicationResource"%>
@@ -27,12 +29,43 @@
 <%
     SWBResourceURL renderURL = paramRequest.getRenderUrl();  //para regresar a la vista principal
     SWBResourceURL actionURL = paramRequest.getActionUrl(); // para rocesar la accion guardar
-    String url = actionURL.setAction(SWBResourceURL.Action_ADD).toString();
-    String uri = request.getParameter("uri");
+   
     User user = paramRequest.getUser();
     WebPage wpage = paramRequest.getWebPage();
     WebSite wsite = wpage.getWebSite();
+    Iterator<Category> itCat = Category.ClassMgr.listCategories(wsite);
+
+    String uri = request.getParameter("uri");
     String cancelar = "cancel";
+    String ciudadanas = "Ciudadanas";
+    String servPub = "Servicio Publico";
+    String category = "";
+    String idCat = "";
+    String url = actionURL.setAction(SWBResourceURL.Action_ADD).toString();
+    
+    Publisher pub = LODPUtils.getPublisher(user);
+    Developer dev = LODPUtils.getDeveloper(user);
+    
+    while(itCat.hasNext()){
+        Category cat = itCat.next();
+        
+        if(cat.getCatName()!=null){
+        
+            if (pub != null) {
+                if(cat.getCatName().equals(servPub)){
+                    category = cat.getCatName();
+                    idCat = cat.getId();
+                }
+            }
+
+            if (dev != null) {
+               if(cat.getCatName().equals(ciudadanas)){
+                    category = cat.getCatName();
+                    idCat = cat.getId();
+                }
+            }
+        }
+    }
     
     if(null!=user&&user.isSigned()&& (user.getSemanticObject().createGenericInstance() instanceof Developer || user.getSemanticObject().createGenericInstance() instanceof Publisher)){
  %>
@@ -112,7 +145,6 @@
     -->
 </script>
  
- 
  <p>
     <h1>
        <%=paramRequest.getLocaleString("lbl_tituloSubirApp")%>
@@ -128,7 +160,13 @@
 
                 <p>
                    <label><b>*</b><%=paramRequest.getLocaleString("lbl_appDescripcion")%></label>
-                   <textarea name="descripcion" id="descripcion" dojoType="dijit.form.Textarea" required="true" promptMessage="Ingresa la descripcion de tu aplicacion" invalidMessage="Datos invalidos" trim="true" ></textarea>
+                   <textarea name="descripcion" id="descripcion" data-dojo-type="dijit.form.Textarea" required="true" promptMessage="Ingresa la descripcion de tu aplicacion" invalidMessage="Datos invalidos" trim="true" ></textarea>
+                </p>
+                
+                <p>
+                    <label><b>*</b><%=paramRequest.getLocaleString("lbl_category")%></label>
+                    <input type="text" name="category" disabled="true" value="<%=category%>"/>
+                    <input type="hidden" name="idCat" value="<%=idCat%>"/>
                 </p>
                 
                 <p>

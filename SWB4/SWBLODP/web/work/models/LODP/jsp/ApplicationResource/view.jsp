@@ -35,7 +35,6 @@
 <jsp:useBean id="paramRequest" scope="request" type="org.semanticwb.portal.api.SWBParamRequest" />
 
 <%
-    System.out.println("entro al jsp del metodo doView");
     WebPage wpage = paramRequest.getWebPage();
     SWBResourceURL renderURL = paramRequest.getRenderUrl();
     WebSite wsite = wpage.getWebSite();
@@ -50,7 +49,12 @@
     String filterby = request.getParameter("filter");
     String direction = request.getParameter("direction");
     String filteruri = request.getParameter("filteruri");
+    String filterCat= request.getParameter("filterCat");
     String action = request.getParameter("act");
+    String msgExitoGuardado = request.getParameter("msgExitoAPP");
+    
+    String filterCatShort= filterCat;
+    String filterUriShort = filteruri;
     
     GenericObject go = null;
     SimpleDateFormat sdf2 = new SimpleDateFormat("dd/MMMMM/yyyy", new Locale("es"));
@@ -78,7 +82,14 @@
         action = "";
     }
     
-    System.out.println("action" + action);
+    if(null!=filteruri){
+        filteruri = SemanticObject.shortToFullURI(filteruri);
+    }
+    
+    if(null!=filterCat){
+        filterCat = SemanticObject.shortToFullURI(filterCat);
+    }
+    
     if (paramRequest.getCallMethod() == SWBParamRequest.Call_STRATEGY) {
         // llamada como estrategia
     } else {
@@ -91,13 +102,18 @@
             // ordenamiento orderby y filtrado de DataSets
             Iterator<Application> itAp1 = null;
             if (null != filteruri && filteruri.trim().length() > 0) {
+                
                 go = ont.getGenericObject(filteruri);
+ 
                 if (go != null) {
 
                     if (go instanceof Category) {
+                        
                         itAp1 = Application.ClassMgr.listApplicationByCategory((Category) go, wsite);
+                        
                     } else if (go instanceof Institution) {
 
+                        
                         Iterator<Dataset> itIns = Dataset.ClassMgr.listDatasetByInstitution((Institution) go, wsite);
                         HashMap<String, Application> hmFilterInst = new HashMap<String, Application>();
 
@@ -113,7 +129,7 @@
                         }
 
                         itAp1 = hmFilterInst.values().iterator();
-
+ 
                     }
 //                    else if (go instanceof Developer) {
 //                        Developer devAutor = (Developer) go;
@@ -159,12 +175,10 @@
                 itAp1 = Application.ClassMgr.listApplications(wsite);
             }
 
-            System.out.println("Listado AP .... ");
-
             // obteniendo Aplicaciones que coincidan con el texto a buscar
             String queryinput = request.getParameter("search");
-            System.out.println("query..." + queryinput);
-            String queryOriginal = queryinput != null ? queryinput : "Search";
+            String queryOriginal = queryinput != null ? queryinput : paramRequest.getLocaleString("lbl_buscar");
+            
             if (null == queryinput) {
                 queryinput = "";
             } else {
@@ -177,7 +191,7 @@
 
             // revisar DS si hay texto abuscar
             if (queryinput != null && queryinput.trim().length() > 0) {
-                //System.out.println("Texto recibido...."+queryinput);
+            
                 queryinput = queryinput.replaceAll(",", " ");  // si la búsqueda viene separado por comas, las cambio por espacios en blanco
                 String REGEX = "\\s";  //espacio en blanco
                 Pattern p = Pattern.compile(REGEX);
@@ -192,7 +206,7 @@
                 } else {  // existen mas de una palabra en el queryinput
                     for (int j = 0; j < arrKeys.length; j++) {
                         String s = arrKeys[j];
-                        //System.out.println("word by word:" + s); //muestra cada palabra encontrada en queryinput separada por espacios
+                       
                         if (s != null && s.trim().length() > 0) {
                             if (hmquery.get(s) == null) {
                                 hmquery.put(s, s);
@@ -210,7 +224,7 @@
                         txtAP.append(" ");
                         txtAP.append(ap.getAppDescription() != null ? ap.getAppDescription().trim() : "");
                         String reviewTXT = txtAP.toString().trim().toLowerCase(); // texto completo en donde se buscará la ocurrencia
-                        //System.out.println("Texto DS: "+reviewTXT);
+             
                         if ((reviewQuery(hmquery, reviewTXT)) && hmresults.get(ap.getURI()) == null) {  //||txtAuto.indexOf(queryinput)>-1 
                             hmresults.put(ap.getURI(), ap);
                         }
@@ -224,11 +238,14 @@
 
             while (itAp1.hasNext()) {
                 Application apl = itAp1.next();
-                hmcp.put(apl.getURI(), apl);
+                
+                if(apl.isAppValid()){
+                    hmcp.put(apl.getURI(), apl);
+                }
             }
             
             Iterator<Application> itAp = null;
-            System.out.println("size: "+hmcp.size());
+            
             if(hmcp.size()>0){
                 itAp = ApplicationResource.orderDS(hmcp.values().iterator(), orderby);
                 intSize=hmcp.size();
@@ -240,9 +257,19 @@
             long searchTime = endSearch.getTime() - startSearch.getTime();
             long searchTimeSecs = searchTime / 1000;
             
+        if (msgExitoGuardado != null) {
+               
+            String strMsg = msgExitoGuardado;
+            strMsg = msgExitoGuardado.replace("<br>", "\\n\\r");
+            
 %>
 
-<div class="buscar_aps">
+    <script type="text/javascript">
+        alert('<%=strMsg%>');
+    </script>
+
+        <%}%>
+<div class="buscar_ds">
     <form method="post" action="" id="aps_search">
         <%
             if (filterby != null && filterby.trim().length() > 0) {
@@ -251,8 +278,6 @@
         <%
             }
         %>
-        <ul>
-            <li>
                 <label for="txt_search"><%=txtTitleSearch%></label><input type="text" name="search" value="<%=queryOriginal%>" onfocus="if (this.value == 'Search') {
                             this.value = ''
                         }
@@ -277,8 +302,6 @@
                 <%
                     }
                 %>        
-            </li>
-        </ul>
     </form>
 </div>
 
@@ -286,48 +309,92 @@
         
         <p class="rubro"><%=paramRequest.getLocaleString("lbl_filterCategory")%></p>
         <ul>
-            <%
-                Iterator<Category> itCat = Category.ClassMgr.listCategories(wsite);
-                while (itCat.hasNext()) {
-
-                    Category cat = itCat.next();
+           <%
+                if(null!=filterCat&&filterCat.trim().length()>0){
+                    go = ont.getGenericObject(filterCat);
+                    Category cat = (Category)go;
+                        %>
+                <li><a href="#" class="tema-inst"><%=cat.getCatName()%></a></li>
+                <%
                     SWBResourceURL url = paramRequest.getRenderUrl();
-                    url.setParameter("filteruri", cat.getShortURI());
-
-                    if (null != orderby) {
-                        url.setParameter("order", orderby);
+                    
+                        if(null!=filterCat && filterCat.trim().length()>0) {
+                            url.setParameter("filteruri", filterUriShort); 
+                        }
+                        if (null != orderby) {
+                            url.setParameter("order", orderby);
+                        }
+                        if (queryinput != null && queryinput.trim().length() > 0) {
+                            url.setParameter("search", queryinput);
+                        }                    
+                    %>
+                <li><a href="<%=url.toString()%>" class="tema-todos"><%=paramRequest.getLocaleString("lbl_all")%></a></li>  
+                <%
+                } else {
+                    Iterator<Category> listCat = Category.ClassMgr.listCategories(wsite);
+                    while (listCat.hasNext()) {
+                        
+                        Category category = listCat.next();
+                     
+                        SWBResourceURL url = paramRequest.getRenderUrl();
+                        url.setParameter("filterCat", category.getShortURI());
+                        
+                        if(null!=filteruri){
+                            url.setParameter("filteruri", filterUriShort); 
+                        }
+                        if (null != orderby) {
+                            url.setParameter("order", orderby);
+                        }
+                        if (queryinput != null && queryinput.trim().length() > 0) {
+                            url.setParameter("search", queryinput);
+                        }
+                %>
+            <li><a href="<%=url.toString()%>" class="tema-inst" ><%=category.getCatName()%></a></li> 
+                <%
                     }
-            %>
-            <li><a href="<%=url.toString()%>"><%=cat.getCatName()%></a></li>               
-
-            <%
                 }
-            %>
+                
+                %>
         </ul>   
     
         <p class="rubro"><%=paramRequest.getLocaleString("lbl_filterIntitution")%></p>
         <ul>
-
-            <%
-
-                Iterator<Institution> itins = Institution.ClassMgr.listInstitutions(wsite);
-                while (itins.hasNext()) {
-
-                    Institution inst = itins.next();
+                <%
+                if(null!=filteruri&&filteruri.trim().length()>0){
+                    go = ont.getGenericObject(filteruri);
+                    Institution inst = (Institution)go;
+                        %>
+                <li><a href="#" class="tema-inst"><%=inst.getInstitutionTitle()%></a></li>
+                <%
                     SWBResourceURL url = paramRequest.getRenderUrl();
-                    url.setParameter("filteruri", inst.getShortURI());
+                        if (null != orderby) {
+                            url.setParameter("order", orderby);
+                        }
+                        if (queryinput != null && queryinput.trim().length() > 0) {
+                            url.setParameter("search", queryinput);
+                        }                    
+                    %>
+                <li><a href="<%=url.toString()%>" class="tema-todos"><%=paramRequest.getLocaleString("lbl_all")%></a></li>  
+                <%
+                } else {
+                    Iterator<Institution> itins = Institution.ClassMgr.listInstitutions(wsite);
+                    while (itins.hasNext()) {
+                        Institution inst = itins.next();
 
-                    if (null != orderby) {
-                        url.setParameter("order", orderby);
-                    }
-
-                    if (queryinput != null && queryinput.trim().length() > 0) {
-                        url.setParameter("search", queryinput);
-                    }
-            %>
-            <li><a href="<%=url.toString()%>" title="<%=inst.getInstitutionDescription() != null ? inst.getInstitutionDescription().trim() : inst.getInstitutionTitle()%>"><%=inst.getInstitutionTitle()%></a></li>  
+                        SWBResourceURL url = paramRequest.getRenderUrl();
+                        url.setParameter("filteruri", inst.getShortURI());
+                        if (null != orderby) {
+                            url.setParameter("order", orderby);
+                        }
+                        if (queryinput != null && queryinput.trim().length() > 0) {
+                            url.setParameter("search", queryinput);
+                        }
+                %>
+            <li><a href="<%=url.toString()%>" class="tema-inst" title="<%=inst.getInstitutionDescription() != null ? inst.getInstitutionDescription().trim() : inst.getInstitutionTitle()%>"><%=inst.getInstitutionTitle()%></a></li> 
                 <%
                     }
+                }
+                
                 %>
         </ul>  
     </div>
@@ -432,8 +499,8 @@
             %>
             <li><%=paramRequest.getLocaleString("lbl_notAppFound")%></li>
             <% } else {
-
-                while (itAppList.hasNext()) {
+                String wpurl = wpage.getUrl()+"?act=detail&suri=";
+                while (itAp.hasNext()) {
                     //PAGINACION ////////////////////
                             if (x < p * ps) {
                                 x++;
@@ -445,15 +512,14 @@
                             x++;
                             /////////////////////////////////
                     Application apls = itAp.next();
-                    String wpurl = wpage.getUrl()+"?act=detail&suri=";
+                    
+                    if(apls.isAppValid()){
             %>
-            <li>
-                <a href="<%=wpurl + apls.getShortURI()%>"><%=apls.getAppTitle()%></a><br/>
-                <p><%=apls.getAppDescription()%></p>
-            </li>
-            <%                                           
-                }
-                }
+                    <li>
+                        <a href="<%=wpurl + apls.getShortURI()%>"><%=apls.getAppTitle()%></a><br/>
+                        <p><%=apls.getAppDescription()%></p>
+                    </li>
+            <%}}}
             %>
          </ol>
     </div>
@@ -588,24 +654,19 @@
         String fullName = "";
         
     if(ob instanceof Developer  ){
-//        System.out.println("ENTRO A IF DE DEVELOPER");
         Developer db = (Developer)ob ;
         fullName = db.getFullName();
     }
     
     if(ob instanceof Publisher){
-//        System.out.println("ENTRO A IF DE PUBLISHER");
         Publisher db = (Publisher)ob ;
         fullName = db.getFullName();
     }
     
     if(ob instanceof User){
-//        System.out.println("ENTRO A IF DE USER");
         User db = (User)ob ;
         fullName = db.getFullName();
-    }
-    
-//    System.out.println("NOMBRE COMPLETO AUTHOR" + " " + fullName);
+    }   
     
 // se actualiza los views
     aps.sendView(request, user, wpage);
@@ -725,12 +786,11 @@
 <%!
     public boolean reviewQuery(HashMap<String, String> hm, String texto) {
         boolean res = Boolean.FALSE;
-        System.out.println("Revisando query....");
+ 
         if (null != hm) {
             Iterator<String> itstr = hm.keySet().iterator();
             while (itstr.hasNext()) {
                 String skey = itstr.next();
-                System.out.println("key..." + texto.indexOf(skey));
                 if (texto.indexOf(skey) > -1) {
                     res = Boolean.TRUE;
                     break;

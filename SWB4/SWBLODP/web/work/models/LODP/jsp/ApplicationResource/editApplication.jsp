@@ -4,6 +4,9 @@
     Author     : Lennin
 --%>
 
+<%@page import="org.semanticwb.model.GenericObject"%>
+<%@page import="com.infotec.lodp.swb.utils.LODPUtils"%>
+<%@page import="com.infotec.lodp.swb.Category"%>
 <%@page import="com.infotec.lodp.swb.Publisher"%>
 <%@page import="com.infotec.lodp.swb.Developer"%>
 <%@page import="com.infotec.lodp.swb.Dataset"%>
@@ -35,9 +38,50 @@
     User user = paramRequest.getUser();
     WebPage wpage = paramRequest.getWebPage();
     WebSite wsite = wpage.getWebSite();
-    System.out.println(user.getFirstName());
-    System.out.println(user.getFullName());
-    if(user.isSigned()){
+    Iterator<Category> itCat = Category.ClassMgr.listCategories(wsite);
+    String idCat = "";
+    String descCat = "";
+    String ciudadanas = "Ciudadanas";
+    String servPub = "Servicio Publico";
+    
+    GenericObject ob = apl.getAppAuthor().createGenericInstance();
+    String fullName = "";
+            
+    if(ob instanceof Developer  ){
+        Developer db = (Developer)ob ;
+        fullName = db.getFullName();
+    }
+    
+    if(ob instanceof Publisher){
+        Publisher db = (Publisher)ob ;
+        fullName = db.getFullName();
+    }
+    
+    Publisher pub = LODPUtils.getPublisher(user);
+    Developer dev = LODPUtils.getDeveloper(user);
+    
+    while(itCat.hasNext()){
+        Category cat = itCat.next();
+        
+        if(cat.getCatName()!=null){
+        
+            if (pub != null) {
+                if(cat.getCatName().equals(servPub)){
+                    descCat = cat.getCatName();
+                    idCat = cat.getId();
+                }
+            }
+
+            if (dev != null) {
+               if(cat.getCatName().equals(ciudadanas)){
+                    descCat = cat.getCatName();
+                    idCat = cat.getId();
+                }
+            }
+        }
+    }
+    
+  
  %>
 <p>
     <h1>
@@ -48,15 +92,20 @@
         <form id="nuevoContacto" action="<%=actionURL.setAction(SWBResourceURL.Action_EDIT).setParameter("uri", apl.getEncodedURI())%>" method="post">
             <div>
                 <p>
-                    <label><%=paramRequest.getLocaleString("lbl_appTitulo")%></label>
+                    <label><b>*</b><%=paramRequest.getLocaleString("lbl_appTitulo")%></label>
                     <input type="text" name="titleApp" value="<%=apl.getAppTitle()%>"/>
                 </p>
                 <p>
-                    <label><%=paramRequest.getLocaleString("lbl_appDescripcion")%></label>
+                    <label><b>*</b><%=paramRequest.getLocaleString("lbl_appDescripcion")%></label>
                     <textarea name="descripcion" id="descripcion"><%=apl.getAppDescription()%></textarea>
                 </p>
                 <p>
-                    <label><%=paramRequest.getLocaleString("lbl_appDS")%></label>
+                    <label><b>*</b><%=paramRequest.getLocaleString("lbl_category")%></label>
+                    <input type="text" name="category" disabled="true" value="<%=descCat%>"/>
+                    <input type="hidden" name="idCat" value="<%=idCat%>"/>
+                </p>
+                <p>
+                    <label><b>*</b><%=paramRequest.getLocaleString("lbl_appDS")%></label>
                     <select name="dataSet" dojoType="dijit.form.FilteringSelect">
                         <option value="-1">Selecciona....</option>
                             <%
@@ -84,11 +133,11 @@
             </div>
             <div>
                 <p>
-                    <label><%=paramRequest.getLocaleString("lbl_appAutor")%></label>
-                    <input type="text" name="usuario" disabled="true" value="<%=user.getFullName()%>"/>
+                    <label><b>*</b><%=paramRequest.getLocaleString("lbl_appAutor")%></label>
+                    <input type="text" name="usuario" disabled="true" value="<%=fullName%>"/>
                 </p>
                 <p>
-                    <label><%=paramRequest.getLocaleString("lbl_appLicencia")%></label>
+                    <label><b>*</b><%=paramRequest.getLocaleString("lbl_appLicencia")%></label>
                     <select name="licencia" dojoType="dijit.form.FilteringSelect">
                         <option value="-1">Selecciona....</option>
                             <%
@@ -113,7 +162,7 @@
                     </select>
                 </p>
                 <p>
-                    <label><%=paramRequest.getLocaleString("lbl_appURL")%></label>
+                    <label><b>*</b><%=paramRequest.getLocaleString("lbl_appURL")%></label>
                     <input type="text" name="url" value="<%=apl.getAppURL()%>"/>
                 </p>
             </div>
@@ -127,9 +176,6 @@
              <a href="<%=renderURL.setMode(SWBResourceURL.Mode_VIEW)%>">
                Regresar
             </a>
-        <%}else{ %>
-                <%=paramRequest.getLocaleString("lbl_appUserLoggeo")%>
-        <%}%>
 
 <%!    
     public class PageComparator implements Comparator<LicenseType>{

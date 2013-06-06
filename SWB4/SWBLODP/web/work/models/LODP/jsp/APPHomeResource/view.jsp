@@ -47,14 +47,14 @@
 
         // ordenamiento orderby y filtrado de DataSets
         Iterator<Application> itapp1 = Application.ClassMgr.listApplications(wsite);
-        
-        System.out.println("Lista de aplicaciones" + " " + itapp1);
 
         // dejo en hm las app
         HashMap<String, Application> hmcp = new HashMap<String, Application>();
         while (itapp1.hasNext()) {
             Application app = itapp1.next();
-            hmcp.put(app.getURI(), app);
+            if(app.isAppValid()){
+             hmcp.put(app.getURI(), app);
+            }
         }
 
         Iterator<Application> itapp = null;
@@ -89,16 +89,16 @@
                     /////////////////////////////////
 
                     Application app = itapp.next();
+ 
+                    if(app.isAppValid()){
                 %>
         
         <li>
-            <a title="<%=app.getAppTitle()%>" href="<%=wpurl + app.getEncodedURI()%>"><%=app.getAppTitle()%></a>
+            <a title="<%=app.getAppTitle()%>" href="<%=wpurl + app.getShortURI()%>"><%=app.getAppTitle()%></a>
             <strong><%=app.getAppDescription()%></strong>
         </li>
         
-        <%
-                }
-            }
+        <%}}}
         %>
     </ul>
 </div>
