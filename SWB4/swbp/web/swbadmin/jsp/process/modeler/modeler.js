@@ -3087,8 +3087,9 @@
         },
                 
         clearCanvas: function() {
-            for (var i=0; i<ToolKit.contents.length; i++) {
-                ToolKit.contents[i].remove();
+            
+            for (var i = ToolKit.contents.length; i--;) {
+                ToolKit.contents[i].remove(true);
                 ToolKit.contents[i] = null;
             }
             
