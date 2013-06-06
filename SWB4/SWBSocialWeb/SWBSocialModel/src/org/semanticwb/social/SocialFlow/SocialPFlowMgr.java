@@ -628,7 +628,7 @@ public class SocialPFlowMgr {
                                         System.out.println("ESTA LISTO PARA PUBLICAR EL POSTOut en SocialPFlowMgr/approveResource,notification:"+notification);
                                         try
                                         {
-                                            SWBSocialUtil.PostOutUtil.publishPost(resource, null, null);
+                                            SWBSocialUtil.PostOutUtil.publishPost(resource);
                                             resource.setPublished(true);
                                             if (notification != null)
                                             {
@@ -761,7 +761,7 @@ public class SocialPFlowMgr {
                                 try
                                 {
                                     System.out.println("ESTA LISTO PARA PUBLICAR EL POSTOut en SocialPFlowMgr/rejectContent");
-                                    SWBSocialUtil.PostOutUtil.publishPost(resource, null, null);
+                                    SWBSocialUtil.PostOutUtil.publishPost(resource);
                                     resource.setPublished(true);
                                     /*
                                     if (notification != null)

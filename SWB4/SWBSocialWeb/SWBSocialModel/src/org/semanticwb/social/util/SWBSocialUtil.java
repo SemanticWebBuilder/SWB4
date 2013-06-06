@@ -892,7 +892,7 @@ public class SWBSocialUtil implements SWBAppObject {
                         //Revisa las redes sociales a las cuales se tiene que enviar el Post
                         //String[] socialUris = socialUri.split("\\|");  //Dividir valores
                         System.out.println("Se publicaJ-3");
-                        publishPost(postOut, request, response);
+                        publishPost(postOut);
                     }
                 }
             } catch (Exception e) {
@@ -906,7 +906,7 @@ public class SWBSocialUtil implements SWBAppObject {
          * Los parametros request y response no se utilizan, probar y si funciona así para postear en Flicker y Youtube,
          * despues eliminarlos de los parametros que recibe este metodo.
          */
-        public static void publishPost(PostOut postOut, HttpServletRequest request, SWBActionResponse response) throws SocketException
+        public static void publishPost(PostOut postOut) throws SocketException
         {
             //try
             {    
@@ -923,7 +923,7 @@ public class SWBSocialUtil implements SWBAppObject {
                         //TODO: YO CREO QUE LO QUE TENGO QUE HACER AQUI, ES UN THREAD POR CADA UNA DE LAS REDES SOCIALES A LAS QUE SE ENVÍE UN POST
                         Messageable messageable = (Messageable) socialNet;
                         //messageable.postMsg((Message) post, request, response);
-                        PostableObj postableObj = new PostableObj(messageable, postOut, request, response);
+                        PostableObj postableObj = new PostableObj(messageable, postOut);
                         SendPostThread sendPostThread = new SendPostThread();
                         sendPostThread.addPostAble(postableObj);
                         sendPostThread.start();
@@ -932,7 +932,7 @@ public class SWBSocialUtil implements SWBAppObject {
                         //TODO: YO CREO QUE LO QUE TENGO QUE HACER AQUI, ES UN THREAD POR CADA UNA DE LAS REDES SOCIALES A LAS QUE SE ENVÍE UN POST
                         Photoable photoable = (Photoable) socialNet;
                         //photoable.postPhoto((Photo) post, request, response);
-                        PostableObj postableObj = new PostableObj(photoable, postOut, request, response);
+                        PostableObj postableObj = new PostableObj(photoable, postOut);
                         SendPostThread sendPostThread = new SendPostThread();
                         sendPostThread.addPostAble(postableObj);
                         sendPostThread.start();
@@ -941,7 +941,7 @@ public class SWBSocialUtil implements SWBAppObject {
                         //TODO: YO CREO QUE LO QUE TENGO QUE HACER AQUI, ES UN THREAD POR CADA UNA DE LAS REDES SOCIALES A LAS QUE SE ENVÍE UN POST
                         Videoable videoable = (Videoable) socialNet;
                         //videoable.postVideo((Video) post, request, response);
-                        PostableObj postableObj = new PostableObj(videoable, postOut, request, response);
+                        PostableObj postableObj = new PostableObj(videoable, postOut);
                         SendPostThread sendPostThread = new SendPostThread();
                         sendPostThread.addPostAble(postableObj);
                         sendPostThread.start();

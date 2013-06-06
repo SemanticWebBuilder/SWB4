@@ -22,16 +22,12 @@ import org.semanticwb.social.SocialNetPostable;
 public class PostableObj {
 
     SocialNetPostable postAble=null;
-    HttpServletRequest request=null;
-    SWBActionResponse response=null;
     Post post=null;
     //String action=null;
 
-    public PostableObj(SocialNetPostable postAble,  Post post, HttpServletRequest request, SWBActionResponse response)
+    public PostableObj(SocialNetPostable postAble,  Post post)
     {
         this.postAble=postAble;
-        this.request=request;
-        this.response=response;
         this.post=post;
         //this.action=action;
     }
@@ -51,7 +47,7 @@ public class PostableObj {
     {
         return action;
     }*/
-
+    /*
     public HttpServletRequest getRequest()
     {
         return request;
@@ -61,5 +57,5 @@ public class PostableObj {
     {
         return response;
     }
-
+    * */
 }

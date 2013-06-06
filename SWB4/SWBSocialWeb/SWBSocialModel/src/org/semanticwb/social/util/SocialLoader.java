@@ -35,6 +35,7 @@ public class SocialLoader implements SWBAppObject {
             System.out.println("Entra a Cargar:SocialLoader");
             pflowMgr = new SocialPFlowMgr();
             pflowMgr.init();
+            new SWBSocialCalendarMgr();
             //socialUtil = new SWBSocialUtil();
             //socialUtil.init();
         } catch (Exception e) {
