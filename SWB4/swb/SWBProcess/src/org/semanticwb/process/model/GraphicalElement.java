@@ -22,6 +22,8 @@
  */
 package org.semanticwb.process.model;
 
+import org.semanticwb.model.User;
+
 
 public class GraphicalElement extends org.semanticwb.process.model.base.GraphicalElementBase 
 {
@@ -29,4 +31,25 @@ public class GraphicalElement extends org.semanticwb.process.model.base.Graphica
     {
         super(base);
     }
+    
+    public boolean haveAccess(User user)
+    {
+        boolean ret=false;
+        if(user.haveAccess(this))
+        {
+            GraphicalElement parent = getParent();
+            Containerable cnt=getContainer();
+            if(parent==null && cnt instanceof SubProcess)parent=(SubProcess)cnt;
+
+            if(parent!=null)
+            {
+                ret=parent.haveAccess(user);
+            }else
+            {
+                ret = true;
+            }        
+        }
+        return ret;
+    }
+    
 }
