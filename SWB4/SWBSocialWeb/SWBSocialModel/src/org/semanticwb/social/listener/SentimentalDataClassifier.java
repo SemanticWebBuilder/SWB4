@@ -522,6 +522,7 @@ public class SentimentalDataClassifier {
         try
         {
            //Persistencia del mensaje
+                System.out.println("externalPost.getPostType():"+externalPost.getPostType());
                 if(externalPost.getPostType().equals(SWBSocialUtil.MESSAGE))
                 {
                     postIn=MessageIn.ClassMgr.createMessageIn(String.valueOf(externalPost.getPostId()), model);
