@@ -145,7 +145,6 @@ public class SVGModeler extends GenericResource {
         OutputStream outs = response.getOutputStream();
         String action = paramRequest.getAction();
         GenericObject go = ont.getGenericObject(request.getParameter("suri"));
-        System.out.println(">>Action:"+action);
         
         if (ACT_GETPROCESSJSON.equals(action)) {
             try {
@@ -904,7 +903,15 @@ public class SVGModeler extends GenericResource {
                 svg += data;
                 response.setContentType("image/svg+xml");
                 outs.write(svg.getBytes());
-            } //else if ("png".equalsIgnoreCase(format)) {
+            } else if ("swp".equalsIgnoreCase(format)) {
+                response.setContentType("application/json");
+                String json = getProcessJSON(p).toString();
+                outs.write(json.getBytes());
+            }
+            
+            
+            
+            //else if ("png".equalsIgnoreCase(format)) {
 //                response.setContentType("image/png");
 //                PNGTranscoder t = new PNGTranscoder();
 //                
