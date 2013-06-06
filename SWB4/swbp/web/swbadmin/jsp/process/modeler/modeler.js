@@ -2052,14 +2052,12 @@
             
             ToolKit.svg.addEventListener("dragover" , function(evt) {
                 evt.preventDefault();
-                console.log("dragging over");
                 if (ToolKit.svg != null) {
                     ToolKit.svg.setAttributeNS(null, "class", "modelerOver");
                 }
             } , false);
             
             ToolKit.svg.addEventListener("dragleave" , function(evt) {
-                console.log("leaving drag");
                 if (ToolKit.svg != null) {
                     ToolKit.svg.setAttributeNS(null, "class", "modeler");
                 }
@@ -2067,16 +2065,13 @@
             
             ToolKit.svg.addEventListener("drop" , function(evt) {
                 evt.preventDefault();
-                console.log("dropping");
                 
                 var file = evt.dataTransfer.files[0];
-                console.log("archivo: "+escape(file.name)+", tipo: "+(file.type || 'n/a')+", size: "+file.size);
                 
                 var reader = new FileReader();
                 reader.onload = (function(f) {
                     return function(e) {
                         Modeler.loadProcess(e.target.result);
-                        storeProcess(e.target.result);
                     };
                 })(file);
                 
