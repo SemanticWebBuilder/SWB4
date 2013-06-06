@@ -582,15 +582,10 @@ public class FlowNodeInstance extends org.semanticwb.process.model.base.FlowNode
             if (owner.equals(user)) {
                 canAccess = true;
             }
-        } else if (user.haveAccess(type)) { //No tiene propietario
-            if (type instanceof StartEvent) { //Si es un evento de inicio no hay que verificar los padres
-                canAccess = true;
-            } else {
-                GraphicalElement parent = type.getParent();
-                if (parent == null || parent instanceof Pool || (parent != null && parent instanceof Lane && user.haveAccess(parent))) {
-                    canAccess = true;
-                }
-            }
+        } else 
+        {
+            //Evaluar Padre
+            canAccess=type.haveAccess(user);
         }
         return canAccess;
     }    
