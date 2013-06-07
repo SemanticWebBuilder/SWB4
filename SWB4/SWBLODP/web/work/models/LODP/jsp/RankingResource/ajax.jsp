@@ -4,9 +4,15 @@
     Author     : rene.jara
 --%><jsp:useBean id="paramRequest" scope="request" type="org.semanticwb.portal.api.SWBParamRequest" /><%
     String rank=request.getParameter("rank");
+    int average=0;
+    try{
+        average=Integer.parseInt(rank);
+    }catch(NumberFormatException ignored){
+        average=0;
+    }
     if(rank!=null){
-%><ul><li><%=rank.equals("1")?"1":"-"%></li>
-<li><%=rank.equals("2")?"2":"-"%></li>
-<li><%=rank.equals("3")?"3":"-"%></li>
-<li><%=rank.equals("4")?"4":"-"%></li>
-<li><%=rank.equals("5")?"5":"-"%></li></ul><%}%>
+%><img src="images/star-<%=average >= 1?"on":"off"%>.png" width="15" height="14" alt="*">
+<img src="images/star-<%=average >= 2?"on":"off"%>.png" width="15" height="14" alt="*">
+<img src="images/star-<%=average >= 3?"on":"off"%>.png" width="15" height="14" alt="*">
+<img src="images/star-<%=average >= 4?"on":"off"%>.png" width="15" height="14" alt="*">
+<img src="images/star-<%=average >= 5?"on":"off"%>.png" width="15" height="14" alt="*"><%}%>
