@@ -76,23 +76,22 @@ Author     : rene.jara
         // -->
     </script>
     <div id="ranking">
-        <ul>
-            <li><a href="" onclick="javascript:rank('1'); return false;"><%=average == 1 ? "*" : ""%>1</a></li>
-            <li><a href="" onclick="javascript:rank('2'); return false;"><%=average == 2 ? "*" : ""%>2</a></li>
-            <li><a href="" onclick="javascript:rank('3'); return false;"><%=average == 3 ? "*" : ""%>3</a></li>
-            <li><a href="" onclick="javascript:rank('4'); return false;"><%=average == 4 ? "*" : ""%>4</a></li>
-            <li><a href="" onclick="javascript:rank('5'); return false;"><%=average == 5 ? "*" : ""%>5</a></li>
-        </ul>
+        <a href="" onclick="javascript:rank('1'); return false;"><%=average == 1 ? "" : ""%><img src="/work/models/LODP/css/images/star-off.png" width="15" height="14" alt="*"></a>
+        <a href="" onclick="javascript:rank('2'); return false;"><%=average == 2 ? "" : ""%><img src="/work/models/LODP/css/images/star-off.png" width="15" height="14" alt="*"></a>
+        <a href="" onclick="javascript:rank('3'); return false;"><%=average == 3 ? "" : ""%><img src="/work/models/LODP/css/images/star-off.png" width="15" height="14" alt="*"></a>
+        <a href="" onclick="javascript:rank('4'); return false;"><%=average == 4 ? "" : ""%><img src="/work/models/LODP/css/images/star-off.png" width="15" height="14" alt="*"></a>
+        <a href="" onclick="javascript:rank('5'); return false;"><%=average == 5 ? "" : ""%><img src="/work/models/LODP/css/images/star-off.png" width="15" height="14" alt="*"></a>
+
     </div>
     <%
                     }else{
 %>
    <div id="ranking">
-       <img src="images/star-<%=average >= 1?"on":"off"%>.png" width="15" height="14" alt="*">
-        <img src="images/star-<%=average >= 2?"on":"off"%>.png" width="15" height="14" alt="*">
-        <img src="images/star-<%=average >= 3?"on":"off"%>.png" width="15" height="14" alt="*">
-        <img src="images/star-<%=average >= 4?"on":"off"%>.png" width="15" height="14" alt="*">
-        <img src="images/star-<%=average >= 5?"on":"off"%>.png" width="15" height="14" alt="*">
+       <img src="/work/models/LODP/css/images/star-<%=average >= 1?"on":"off"%>.png" width="15" height="14" alt="*">
+        <img src="/work/models/LODP/css/images/star-<%=average >= 2?"on":"off"%>.png" width="15" height="14" alt="*">
+        <img src="/work/models/LODP/css/images/star-<%=average >= 3?"on":"off"%>.png" width="15" height="14" alt="*">
+        <img src="/work/models/LODP/css/images/star-<%=average >= 4?"on":"off"%>.png" width="15" height="14" alt="*">
+        <img src="/work/models/LODP/css/images/star-<%=average >= 5?"on":"off"%>.png" width="15" height="14" alt="*">
     </div>
     <%
                     }
