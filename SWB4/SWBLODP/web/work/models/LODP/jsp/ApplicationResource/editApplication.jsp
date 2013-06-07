@@ -105,9 +105,10 @@
                     <input type="hidden" name="idCat" value="<%=idCat%>"/>
                 </p>
                 <p>
+                   Este es el id del dataset <%=apl.getRelatedDataset().getId()%>
                     <label><b>*</b><%=paramRequest.getLocaleString("lbl_appDS")%></label>
                     <select name="dataSet" dojoType="dijit.form.FilteringSelect">
-                        <option value="-1">Selecciona....</option>
+                        <option value=""></option>
                             <%
                                 Iterator<Dataset> itDt = Dataset.ClassMgr.listDatasets(wsite);
                                 List<Dataset> dataSet = new ArrayList<Dataset>();
@@ -117,13 +118,13 @@
                                 Collections.sort(dataSet , new PageComparatorDataSet());
                                 itDt=dataSet.iterator();
                                 while (itDt.hasNext()) {
-                                    Dataset lic = itDt.next();
+                                    Dataset ds = itDt.next();
                                     String selectedDS = "";
-                                    if(apl.getRelatedDataset().getId().equals(lic.getId())){
+                                    if(apl.getRelatedDataset().getId().equals(ds.getId())){
                                         selectedDS = "selected";
                                     }
                             %>
-                        <option value="<%=lic.getId()%>" <%=selectedDS%>><%=lic.getDatasetTitle()%></option>
+                        <option value="<%=ds.getId()%>" <%=selectedDS%>><%=ds.getDatasetTitle()%></option>
                             <%
                                 }
                             %>
@@ -139,7 +140,7 @@
                 <p>
                     <label><b>*</b><%=paramRequest.getLocaleString("lbl_appLicencia")%></label>
                     <select name="licencia" dojoType="dijit.form.FilteringSelect">
-                        <option value="-1">Selecciona....</option>
+                        <option value=""></option>
                             <%
                                 Iterator<LicenseType> itLic = LicenseType.ClassMgr.listLicenseTypes(wsite);
                                 List<LicenseType> licArray = new ArrayList<LicenseType>();
