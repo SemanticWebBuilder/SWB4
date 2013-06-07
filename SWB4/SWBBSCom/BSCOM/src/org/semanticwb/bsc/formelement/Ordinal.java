@@ -11,10 +11,20 @@ import org.semanticwb.model.SWBModel;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticProperty;
 
-
-   /**
-   * Campo de texto para valores ordinales que no se repiten para instancias de la misma clase 
-   */
+/**
+ * Ordinal es un FormElement para manejar valores ordinales para las
+ * instancias de una misma clase semántica.
+ * Los valores ordinales para las instancias de una misma clase nos únicos e
+ * irrepetibles. Es decir, dos instancias de una misma clase no pueden tener
+ * como valor ordinal el mismo número.
+ * Las instancias de cada clase semántica maneja su propio orden de valores.
+ * Así, las instancias de clases difenrentes manejan su propia lista de
+ * valores ordinales.
+ * 
+ * @author      Carlos Ramos Incháustegui
+ * @version     %I%, %G%
+ * @since       1.0
+ */
 public class Ordinal extends org.semanticwb.bsc.formelement.base.OrdinalBase 
 {
     static Logger log = SWBUtils.getLogger(Ordinal.class);
@@ -24,20 +34,6 @@ public class Ordinal extends org.semanticwb.bsc.formelement.base.OrdinalBase
         super(base);
     }
     
-    /* (non-Javadoc)
-     * @see org.semanticwb.model.base.FormElementBase#renderElement(javax.servlet.http.HttpServletRequest, org.semanticwb.platform.SemanticObject, org.semanticwb.platform.SemanticProperty, java.lang.String, java.lang.String, java.lang.String)
-     */
-    /**
-     * Render element.
-     * 
-     * @param request the request
-     * @param obj the obj
-     * @param prop the prop
-     * @param type the type
-     * @param mode the mode
-     * @param lang the lang
-     * @return the string
-     */
     @Override
     public String renderElement(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String propName, String type, String mode, String lang) {
         if (obj == null) {
@@ -121,7 +117,7 @@ if(type.equals("dojo")) {
             {
                 ret.append(" promptMessage=\"").append(pmsg).append("\"");
             }
-            
+System.out.println("getRegExp()="+getRegExp());
             if(DOJO)
             {
                 ret.append(((getRegExp() != null)
@@ -135,7 +131,7 @@ if(type.equals("dojo")) {
             }
 
             ret.append(" ").append(getAttributes());
-
+System.out.println("getMaxLength()="+getMaxLength());
             if(getMaxLength()>0)
             {
                 ret.append(" maxlength=\"").append(getMaxLength()).append("\"");
@@ -168,6 +164,7 @@ if(type.equals("dojo")) {
     @Override
     public void validate(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String propName) throws FormValidateException
     {
+System.out.println("\n\nvalidate.....");
         int ordinal;
         try            
         {
@@ -183,6 +180,9 @@ if(type.equals("dojo")) {
         Iterator<SemanticObject> it = model.getSemanticModel().listInstancesOfClass(obj.getSemanticClass());
         while(it.hasNext()) {
             SemanticObject so = it.next();
+            if( obj.equals(so) ) {
+                continue;
+            }
             if(ordinal == so.getIntProperty(prop))
             {
                 throw new FormValidateException("El valor debe ser numérico y no puede repetirse");
@@ -193,9 +193,9 @@ if(type.equals("dojo")) {
     @Override
     public void process(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String propName)
     {
-        try
-        {
-            validate(request, obj, prop);
+//        try
+//        {
+//            validate(request, obj, prop);
             String value = request.getParameter(propName);
             try
             {
@@ -206,10 +206,10 @@ if(type.equals("dojo")) {
             {
                 log.error(e);
             }
-        }
-        catch(Exception e)
-        {
-            log.error(e);
-        }
+//        }
+//        catch(Exception e)
+//        {
+//            log.error(e);
+//        }
     }
 }
