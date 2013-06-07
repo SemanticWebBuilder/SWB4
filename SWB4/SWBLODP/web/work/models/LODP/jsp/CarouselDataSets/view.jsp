@@ -42,7 +42,7 @@
             intSize = true;
         } else {
             intSize = false;
-        }        
+        }      
         Resource base = paramRequest.getResourceBase();
         String strNumItems = base.getAttribute("numds");
         int maxDS = 10;
