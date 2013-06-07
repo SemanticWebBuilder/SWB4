@@ -2050,36 +2050,35 @@
             if(!ToolKit.svg.offsetLeft)ToolKit.svg.offsetLeft=60;
             if(!ToolKit.svg.offsetTop)ToolKit.svg.offsetTop=10;
             
-            ToolKit.svg.addEventListener("dragover" , function(evt) {
-                evt.preventDefault();
-                if (ToolKit.svg != null) {
-                    ToolKit.svg.setAttributeNS(null, "class", "modelerOver");
-                }
-            } , false);
+            var dlg = document.getElementById("dropArea");
             
-            ToolKit.svg.addEventListener("dragleave" , function(evt) {
-                if (ToolKit.svg != null) {
-                    ToolKit.svg.setAttributeNS(null, "class", "modeler");
-                }
-            } , false);
-            
-            ToolKit.svg.addEventListener("drop" , function(evt) {
-                evt.preventDefault();
-                
-                var file = evt.dataTransfer.files[0];
-                
-                var reader = new FileReader();
-                reader.onload = (function(f) {
-                    return function(e) {
-                        Modeler.loadProcess(e.target.result);
-                    };
-                })(file);
-                
-                reader.readAsText(file);
-                if (ToolKit.svg != null) {
-                    ToolKit.svg.setAttributeNS(null, "class", "modeler");
-                }
-            } , false);
+            if (dlg != null) {
+                dlg.addEventListener("dragover" , function(evt) {
+                    evt.preventDefault();
+                    dlg.setAttributeNS(null, "class", "dropAreaOver");
+                } , false);
+
+                dlg.addEventListener("dragleave" , function(evt) {
+                    dlg.setAttributeNS(null, "class", "dropArea");
+                } , false);
+
+                dlg.addEventListener("drop" , function(evt) {
+                    evt.preventDefault();
+
+                    var file = evt.dataTransfer.files[0];
+
+                    var reader = new FileReader();
+                    reader.onload = (function(f) {
+                        return function(e) {
+                            Modeler.loadProcess(e.target.result);
+                        };
+                    })(file);
+
+                    reader.readAsText(file);
+                    dlg.setAttributeNS(null, "class", "dropArea");
+                    hideLoadDialog();
+                } , false);
+            }
         },
                 
         onmousedown:function(evt)
