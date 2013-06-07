@@ -3,6 +3,8 @@ Document   : view
 Created on : 24/05/2013, 01:05:00 PM
 Author     : rene.jara
 --%>
+<%@page import="org.semanticwb.portal.SWBResourceMgr"%>
+<%@page import="java.util.Iterator"%>
 <%@page import="org.semanticwb.platform.SemanticObject"%>
 <%@page import="java.util.List"%>
 <%@page import="com.infotec.lodp.swb.Dataset"%>
@@ -86,13 +88,11 @@ Author     : rene.jara
                     }else{
 %>
    <div id="ranking">
-        <ul>
-            <li><%=average == 1?"1":"-"%></li>
-            <li><%=average == 2?"2":"-"%></li>
-            <li><%=average == 3?"3":"-"%></li>
-            <li><%=average == 4?"4":"-"%></li>
-            <li><%=average == 5?"5":"-"%></li>
-        </ul>
+       <img src="images/star-<%=average >= 1?"on":"off"%>.png" width="15" height="14" alt="*">
+        <img src="images/star-<%=average >= 2?"on":"off"%>.png" width="15" height="14" alt="*">
+        <img src="images/star-<%=average >= 3?"on":"off"%>.png" width="15" height="14" alt="*">
+        <img src="images/star-<%=average >= 4?"on":"off"%>.png" width="15" height="14" alt="*">
+        <img src="images/star-<%=average >= 5?"on":"off"%>.png" width="15" height="14" alt="*">
     </div>
     <%
                     }
