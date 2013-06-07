@@ -1,8 +1,9 @@
 package org.semanticwb.bsc.element.base;
 
 
-public abstract class PerspectiveBase extends org.semanticwb.bsc.element.BSCElement implements org.semanticwb.bsc.Serializable,org.semanticwb.bsc.Recognizable,org.semanticwb.model.Activeable,org.semanticwb.model.Sortable,org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable
+public abstract class PerspectiveBase extends org.semanticwb.bsc.element.BSCElement implements org.semanticwb.model.Activeable,org.semanticwb.bsc.Serializable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable,org.semanticwb.bsc.Recognizable
 {
+    public static final org.semanticwb.platform.SemanticProperty bsc_index=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#index");
     public static final org.semanticwb.platform.SemanticClass bsc_Theme=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#Theme");
     public static final org.semanticwb.platform.SemanticProperty bsc_hasTheme=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#hasTheme");
     public static final org.semanticwb.platform.SemanticClass bsc_Perspective=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#Perspective");
@@ -171,7 +172,7 @@ public abstract class PerspectiveBase extends org.semanticwb.bsc.element.BSCElem
 */
     public int getIndex()
     {
-        return getSemanticObject().getIntProperty(swb_index);
+        return getSemanticObject().getIntProperty(bsc_index);
     }
 
 /**
@@ -180,7 +181,7 @@ public abstract class PerspectiveBase extends org.semanticwb.bsc.element.BSCElem
 */
     public void setIndex(int value)
     {
-        getSemanticObject().setIntProperty(swb_index, value);
+        getSemanticObject().setIntProperty(bsc_index, value);
     }
 
 /**
@@ -294,5 +295,4 @@ public abstract class PerspectiveBase extends org.semanticwb.bsc.element.BSCElem
     {
         return (org.semanticwb.bsc.BSC)getSemanticObject().getModel().getModelObject().createGenericInstance();
     }
-    
 }
