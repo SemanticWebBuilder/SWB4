@@ -107,6 +107,53 @@ s/*
     display:none;
 }
 
+.overlay {
+    z-index: 2;
+    position:absolute;
+    top:20%;
+    width: 100%;
+    display:none;
+}
+
+.loadDialog {
+    background: none repeat scroll 0 0 #FFFFFF;
+    border: 1px solid gray;
+    border-radius: 4px 4px 4px 4px;
+    margin: auto !important;
+    opacity: 1;
+    text-align: justify;
+    width: 450px;
+    moz-box-shadow: 10 0 3px 6px #888;
+    -webkit-box-shadow: 10 0 3px 6px #888;
+    box-shadow: 10 0 3px 6px #888;
+}
+
+.loadDialog .titleBar {
+    background: none repeat scroll 0 0 lightgray;
+    color: #0000;
+    font-weight: bold;
+    padding: 8px 10px;
+    margin:0px;
+}
+
+.loadDialogContent {
+    padding: 5px 10px;
+}
+
+.loadDialogContent .dropArea {
+    border: 2px dashed lightgray;
+    margin:5px;
+    padding: 5px;
+    color:gray;
+}
+
+.loadDialogContent .dropAreaOver {
+    border: 2px dashed lightblue;
+    margin:5px;
+    padding: 5px;
+    color:gray;
+}
+
 /*****************************  NAVBAR **********************************************/
 
 .navbar {
@@ -361,6 +408,18 @@ ul.breadcrumbs.alt1 li.last a{
 
 .saveProcess:hover {
     background: url(file_saveas2.png) top center no-repeat;
+}
+
+.openProcess {
+    background: url(file_abrir1.png) top center no-repeat;
+    position: relative;
+    float: left;
+    height:43px;
+    width:37px;
+}
+
+.openProcess:hover {
+    background: url(file_abrir2.png) top center no-repeat;
 }
 
 .storeProcess {
