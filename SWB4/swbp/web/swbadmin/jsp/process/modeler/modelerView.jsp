@@ -84,6 +84,7 @@ exportUrl.setMode(SVGModeler.MODE_EXPORT);
 
         <div id="fileBar" class="subbarHidden" style="width: 385px;">
             <span class="subbarStart"></span>
+            <span class="openProcess" title="Abrir modelo existente" onclick="showLoadDialog();"></span>
             <span class="storeProcess" title="Enviar modelo" onclick="storeProcess();"></span>
             <span class="saveProcess" title="Guardar modelo" onclick="submit_download_form('swp')"></span>
             <span class="saveAsImage" title="Guardar como imagen" onclick="submit_download_form('svg')"></span>
@@ -869,6 +870,22 @@ exportUrl.setMode(SVGModeler.MODE_EXPORT);
     <input type="hidden" name="suri" value="<%=request.getParameter("suri")%>">
     <input type="hidden" id="data" name="data" value="">
 </form>
+    <div class="overlay" id="overlayBackground">
+        <div class="loadDialog">
+            <p class="titleBar">Cargar modelo</p>
+            <div class="loadDialogContent">
+                <div id="dropArea" class="dropArea">
+                    <p>Arrastra un archivo aqu&iacute;</p>
+                </div>
+                <p>
+                    o selecciona un archivo:
+                    <form action="">
+                        <input type="file"/>
+                    </form>
+                </p>
+            </div>
+        </div>
+    </div>
 <script type="text/javascript">
     <%
     commandUrl = paramRequest.getRenderUrl().setCallMethod(SWBResourceURL.Call_DIRECT);
@@ -917,6 +934,18 @@ exportUrl.setMode(SVGModeler.MODE_EXPORT);
         var jsonString = "JSONSTART"+JSON.stringify(json)+"JSONEND";
         Modeler.submitCommand('<%=commandUrl%>',jsonString, loadProcess);
     };
+    
+    function showLoadDialog() {
+        var ov = document.getElementById("overlayBackground");
+        ov.style.display="block";
+        //ov.style.width = window.outerWidth+"px";
+        //ov.style.height = window.outerHeight+"px";
+    }
+    
+    function hideLoadDialog() {
+        var ov = document.getElementById("overlayBackground");
+        ov.style.display="none";
+    }
     
     loadProcess();
 </script>
