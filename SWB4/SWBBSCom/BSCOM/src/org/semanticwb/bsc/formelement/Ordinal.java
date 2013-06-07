@@ -27,7 +27,7 @@ import org.semanticwb.platform.SemanticProperty;
  */
 public class Ordinal extends org.semanticwb.bsc.formelement.base.OrdinalBase 
 {
-    static Logger log = SWBUtils.getLogger(Ordinal.class);
+    private static Logger log = SWBUtils.getLogger(Ordinal.class);
     
     public Ordinal(org.semanticwb.platform.SemanticObject base)
     {
