@@ -47,77 +47,68 @@ Author     : rene.jara
                             itco = ds.listComments();
                         }
                     }
-                    if (request.getParameter("msg") != null) {
-                        String strMsg = request.getParameter("msg");
-    //        strMsg = strMsg.replace("<br>", "\\n\\r");
-    %>
-    <div>
-        <%=strMsg%>
-    </div>
-    <%
-        }
 
-        String name = "";
-        String email = "";
-        int nInappropriate;
-        gobj = usr.getSemanticObject().getGenericInstance();
-        if (gobj instanceof Developer) {
-            Developer de = (Developer) gobj;
-            name = de.getFullName();
-            email = de.getEmail();
-        } else if (gobj instanceof Publisher) {
-            Publisher pu = (Publisher) gobj;
-            name = pu.getFullName();
-            email = "---";//pu.getEmail();
-        }
-        if (itco != null) {
+                    String name = "";
+                    String email = "";
+                    int nInappropriate;
+                    gobj = usr.getSemanticObject().getGenericInstance();
+                    if (gobj instanceof Developer) {
+                        Developer de = (Developer) gobj;
+                        name = de.getFullName();
+                        email = de.getEmail();
+                    } else if (gobj instanceof Publisher) {
+                        Publisher pu = (Publisher) gobj;
+                        name = pu.getFullName();
+                        email = "---";//pu.getEmail();
+                    }
+                    if (itco != null) {
     %>
     <script type="text/javascript">
-        <!--
+        //        <!--
         // scan page for widgets and instantiate them
         dojo.require("dojo.parser");
-        dojo.require("dijit._Calendar");
-        dojo.require("dijit.ProgressBar");
+        //        dojo.require("dijit._Calendar");
+        //        dojo.require("dijit.ProgressBar");
         dojo.require("dijit.TitlePane");
         dojo.require("dijit.TooltipDialog");
-        dojo.require("dijit.Dialog");
+        //        dojo.require("dijit.Dialog");
         // editor:
-        dojo.require("dijit.Editor");
+        //        dojo.require("dijit.Editor");
 
         // various Form elemetns
         dojo.require("dijit.form.Form");
         dojo.require("dijit.form.CheckBox");
         dojo.require("dijit.form.Textarea");
-        dojo.require("dijit.form.FilteringSelect");
-        dojo.require("dijit.form.TextBox");
-//        dojo.require("dijit.form.DateTextBox");
-//        dojo.require("dijit.form.TimeTextBox");
-        dojo.require("dijit.form.Button");
-//        dojo.require("dijit.form.NumberSpinner");
-//        dojo.require("dijit.form.Slider");
-//        dojo.require("dojox.form.BusyButton");
-//        dojo.require("dojox.form.TimeSpinner");
+        //        dojo.require("dijit.form.FilteringSelect");
+        //        dojo.require("dijit.form.TextBox");
+        //        dojo.require("dijit.form.DateTextBox");
+        //        dojo.require("dijit.form.TimeTextBox");
+        //        dojo.require("dijit.form.Button");
+        //        dojo.require("dijit.form.NumberSpinner");
+        //        dojo.require("dijit.form.Slider");
+        //        dojo.require("dojox.form.BusyButton");
+        //        dojo.require("dojox.form.TimeSpinner");
         dojo.require("dijit.form.ValidationTextBox");
-//        dojo.require("dijit.layout.ContentPane");
-//        dojo.require("dijit.form.NumberTextBox");
-//        dojo.require("dijit.form.DropDownButton");
+        //        dojo.require("dijit.layout.ContentPane");
+        //        dojo.require("dijit.form.NumberTextBox");
+        //        dojo.require("dijit.form.DropDownButton");
 
-        function enviar() {
-            var objd=dijit.byId('form1ru');
-
+        function enviarco() {
+            var objd=dijit.byId('form1co');
             if(objd.validate())
             {
-                if(isEmpty('cmnt_seccode')) {
-                    alert('<%=paramRequest.getLocaleString("promptMsgCaptcha")%>');
+                if(isEmpty('comment')) {
+                    alert('<%=paramRequest.getLocaleString("lblCommentFault")%>');
                 }else{
                     if (!validateReadAgree()){
                         alert('<%=paramRequest.getLocaleString("msgErrAgreement")%>');
+                        return false;
                     }else{
                         return true;
                     }
                 }
             }else {
-                alert("Datos incompletos");
+                alert("<%=paramRequest.getLocaleString("msgErrForm")%>");
             }
             return false;
         }
@@ -146,7 +137,7 @@ Author     : rene.jara
             }
             return valid;
         }
-        -->
+        //        -->
     </script>
     <div>
         <%
@@ -192,7 +183,7 @@ Author     : rene.jara
         <div>
             <p><%=co.getCommUserName()%>-<%=co.getCommUserEmail()%></p>
             <p><%=co.getComment()%></p>
-            <a href="<%=canRank?urlina:"#"%>">X</a><b><%=co.getInappropriate()%></b>
+            <%=canRank ? "<a href=\"" + urlina + "\">X</a>" : "*."%><b><%=co.getInappropriate()%></b>
         </div>
         <%
             }
@@ -201,17 +192,17 @@ Author     : rene.jara
             <ul>
                 <%
                     String rurl = wpage.getUrl();
+                    rurl += "?act=detail";
+                    rurl += "&suri=" + suri;
+                    rurl += "&npag=";
                     for (int x = 0; x < tPag; x++) {
                         if (x == nPag) {
                 %>
                 <li><%=(x + 1)%></li>
                 <%
                 } else {
-                    rurl += "?act=detail";
-                    rurl += "&suri=" + suri;
-                    rurl += "&npag=" + x;
                 %>
-                <li><a href="<%=rurl%>"><%=(x + 1)%></a></li>
+                <li><a href="<%=rurl + x%>"><%=(x + 1)%></a></li>
                 <%
                         }
                     }
@@ -226,7 +217,7 @@ Author     : rene.jara
         urladd.setParameter("suri", suri);
     %>
     <div>
-        <form id="form1ru" dojoType="dijit.form.Form" class="swbform" action="<%=urladd%>" method="post">
+        <form id="form1co" dojoType="dijit.form.Form" class="swbform" action="<%=urladd%>" method="post">
             <div>
                 <p>
                     <label for="name"><b>*</b><%=paramRequest.getLocaleString("lblName")%></label>
@@ -259,12 +250,12 @@ Author     : rene.jara
                 </p>
                 <p>
                     <label for="acept"><b>*</b><%=paramRequest.getLocaleString("lblAgreement")%></label>
-                    <input type="checkbox" name="acept" id="acept" maxlength="8" value="true" dojoType="dijit.form.CheckBox" required="true" _promptMessage="<%=paramRequest.getLocaleString("lblAgreement")%>" invalidMessage="<%=paramRequest.getLocaleString("lblAgreement")%>" isValid="return confirm('this.checkbox.value==true')"/>
+                    <input type="checkbox" name="acept" id="acept" value="true" dojoType="dijit.form.CheckBox" required="true" _promptMessage="<%=paramRequest.getLocaleString("lblAgreement")%>" invalidMessage="<%=paramRequest.getLocaleString("lblAgreement")%>" isValid="return confirm('this.checkbox.value==true')"/>
                 </p>
             </div>
             <div class="centro">
                 <input type="reset" value="<%=paramRequest.getLocaleString("lblReset")%>"/>
-                <input type="submit" onclick="return enviar()" value="<%=paramRequest.getLocaleString("lblSubmit")%>"/>
+                <input type="submit" onclick="return enviarco()" value="<%=paramRequest.getLocaleString("lblSubmit")%>"/>
             </div>
         </form>
     </div>
