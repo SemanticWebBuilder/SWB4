@@ -1,6 +1,6 @@
 <%-- 
     Document   : view
-    Created on : 05/06/2013, 5:44:01 PM
+    Created on : 27/05/2013, 12:01:50 PM
     Author     : rene.jara
 --%>
 <%@page import="org.semanticwb.platform.SemanticObject"%>
@@ -17,22 +17,15 @@
 <%
     WebSite wsite=paramRequest.getWebPage().getWebSite();
     Resource base=paramRequest.getResourceBase();
-
-    String suri = request.getParameter("suri");
-    Dataset dataset=null;
-    SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
-    if (suri != null && !suri.equals("")) {
-        GenericObject gobj = ont.getGenericObject(SemanticObject.shortToFullURI(suri));
-        if (gobj != null && gobj instanceof Dataset) {
-            dataset = (Dataset) gobj;
-        }
-    }
+    Iterator<Dataset> itds=Dataset.ClassMgr.listDatasets(wsite);
+    Iterator<Dataset> sds=DataSetResource.sortByViews(itds,false).iterator();
     String dsid=base.getAttribute("datosid");
+    WebPage dswp=wsite.getWebPage(dsid);
     String serveraddr = request.getScheme() + "://" + request.getServerName() + ((request.getServerPort() != 80)? (":" + request.getServerPort()) : "");
-    if(dataset!=null){//&&
-//            (dataset.getDatasetFormat().toLowerCase().equals("kml")||
-//            dataset.getDatasetFormat().toLowerCase().equals("kmz"))){
-            String path=dataset.getActualVersion().getFilePath();
+    while(sds.hasNext()){
+        Dataset dataset=sds.next();
+//        if(dataset.getDatasetFormat().toLowerCase().equals("kml")){
+            String path=dataset.getActualVersion().getFilePath();                    
 %>
 <script type="text/javascript" src="http://maps.google.com/maps/api/js?v=3&amp;sensor=false&amp;language=es&amp;region=MX"></script>
 <script type="text/javascript">
@@ -43,14 +36,14 @@
 
     function initializeMap() {
         var divMap = document.getElementById("mapCanvas");
-        divMap.style.width="640px";
-        divMap.style.height="480px";
+        divMap.style.width="300px";
+        divMap.style.height="180px";
         var latlng = new google.maps.LatLng(22.99885, -101.77734);
         var myOptions = {
             zoom: 3,
             center: latlng,
             //scrollwheel: false,
-           // disableDefaultUI:true,
+            disableDefaultUI:true,
             backgroundColor: "black",
             mapTypeId: google.maps.MapTypeId.ROADMAP
         };
@@ -66,16 +59,19 @@
 <%
     }
 %>
+
         var marker = null;
         var infowindow = null;
         }
         //-->
 </script>
-<div class="mapa_titulo"><%=dataset.getDatasetTitle()%></div>
+<div class="mapa_titulo"><a href="<%=dswp.getUrl()%>?act=detail&suri=<%=dataset.getEncodedURI()%>" ><%=dataset.getDatasetTitle()%></a></div>
 <div id="mapCanvas" class="mapa" ></div>
 <script type="text/javascript">
     initializeMap();
 </script>
 <%
+        break;
+//    }
 }
 %>
