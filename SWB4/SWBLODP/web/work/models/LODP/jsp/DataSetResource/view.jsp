@@ -4,6 +4,7 @@
     Author     : juan.fernandez
 --%>
 
+<%@page import="org.semanticwb.SWBPortal"%>
 <%@page import="com.infotec.lodp.swb.Developer"%>
 <%@page import="com.infotec.lodp.swb.Publisher"%>
 <%@page import="java.util.TreeSet"%>
@@ -169,31 +170,6 @@
                      //System.out.println("Sin filtro...");
                      itds1 = Dataset.ClassMgr.listDatasets(wsite);
                  }
-                
-                /*
-                if (null != filteruri && filteruri.trim().length() > 0) {
-                    go = ont.getGenericObject(filteruri);
-                    if (go != null) {
-                        if ( go instanceof Institution) { //filterby.equals(DataSetResource.FILTER_INSTITUTION) &&
-                            //System.out.println("Filtrado por institucion....");
-                            itds1 = Dataset.ClassMgr.listDatasetByInstitution((Institution) go,wsite); 
-                        } else if (go instanceof Topic) { //filterby.equals(DataSetResource.FILTER_TOPIC) && 
-                            //System.out.println("Filtrado por tema....");
-                            itds1 = Dataset.ClassMgr.listDatasetByTopic((Topic) go,wsite);
-                        } else if ( go instanceof Sector) { //filterby.equals(DataSetResource.FILTER_SECTOR) &&
-                            //System.out.println("Filtrado por sector....");
-                            itds1 = Dataset.ClassMgr.listDatasetByDatasetSector((Sector) go,wsite);
-                        } else {
-                            //System.out.println("SIN Filtro....");
-                            itds1 = Dataset.ClassMgr.listDatasets(wsite);
-                        }
-                    } else {
-                        itds1 = Dataset.ClassMgr.listDatasets(wsite);
-                    }
-                } else {
-                    itds1 = Dataset.ClassMgr.listDatasets(wsite);
-                }
-                */
 
                 // obteniendo Datasets que coincidan con el texto a buscar
                 String queryinput = request.getParameter("search");
@@ -259,10 +235,12 @@
                 HashMap<String, Dataset> hmcp = new HashMap<String, Dataset>();
                 while(itds1.hasNext()){
                     Dataset ds = itds1.next();
-                    hmcp.put(ds.getURI(), ds);
+                    if(ds.isDatasetActive()&&ds.isApproved()){
+                        hmcp.put(ds.getURI(), ds);
+                    }
                 }
                 Iterator<Dataset> itds = null;
-                System.out.println("size: "+hmcp.size());
+               // System.out.println("size: "+hmcp.size());
                 if(hmcp.size()>0){
                     itds = DataSetResource.orderDS(hmcp.values().iterator(), orderby);
                     intSize=hmcp.size();
@@ -315,7 +293,7 @@
 
     </form>
 </div>
-<div class="izq">
+<div class="izq-data1">
     <!--
     <div class="izq_sector">
         <ul>
@@ -453,7 +431,7 @@
                 %>
         </ul>  
 </div>
-<div class="der">
+<div class="der-data1">
     <div id="temasdatos">
          <div class="listado">
     <div class="orden">
@@ -665,75 +643,94 @@
         go = ont.getGenericObject(SemanticObject.shortToFullURI(suri));
         if (go instanceof Dataset) {
     %>
-<div>
+<div class="cuerpo">
     <%
         Dataset ds = (Dataset) go;
         //ds.getDatasetDescription()
         ds.sendView(request, usr, wpage);
         //boolean bupdated = ds.incViews(); //LODPUtils.updateDSViews(ds);  // se actualiza los views
+        Publisher pub = ds.getPublisher();
+        String pubname = pub!=null?pub.getFullName():"--";
+        if(null==pubname) pubname="---";
+        Institution inst = pub !=null ? pub.getPubInstitution():null; 
+        String instname = "";
+        String instweburl = "";
+        String instlogo = "images/imagen.gif";
+        if(null!=inst){
+            instname = inst.getInstitutionTitle()!=null?inst.getInstitutionTitle():"---";
+            instweburl = inst.getInstitutionHome()!=null?inst.getInstitutionHome():"---"; 
+            if(inst.getInstitutionLogo()!=null) {
+                instlogo = SWBPortal.getWebWorkPath()+inst.getWorkPath()+"/"+Institution.lodp_institutionLogo.getName()+"_"+inst.getId()+"_"+inst.getInstitutionLogo();
+            }
+    }
+        
 %>
-    <div>
-        <h2><%=ds.getDatasetTitle()%></h2> 
-        <ul>
-            <li>
-                <label><%=paramRequest.getLocaleString("lbl_description")%>:</label><p><%=ds.getDatasetDescription()%></p>
-            </li>
-            <li>
-                <label><%=paramRequest.getLocaleString("lbl_institution")%>:</label><p><%=ds.getInstitution() != null ? ds.getInstitution().getInstitutionTitle() : ""%></p> 
-            </li>
-            <li>
-                <label><%=paramRequest.getLocaleString("lbl_technicalContact")%>:</label><p><%=ds.getInstitution() != null ? ds.getInstitution().getTopLevelName() : "No disponible"%></p>
-            </li>
-            <li>
-                <label><%=paramRequest.getLocaleString("lbl_created")%>:</label><p><%=sdf2.format(ds.getDatasetCreated())%></p>
-            </li>
-            <li>
-                <label><%=paramRequest.getLocaleString("lbl_updated")%>:</label><p><%=sdf2.format(ds.getDatasetUpdated())%></p>
-            </li>
-            <li>
-                <label><%=paramRequest.getLocaleString("lbl_publisherwebsite")%></label><p><%=ds.getInstitution() != null ? ds.getInstitution().getInstitutionHome() : ""%></p> 
-            </li>
-            <li>
-                <label><%=paramRequest.getLocaleString("lbl_emailContact")%>:</label><p><%=ds.getPublisher() != null ? ds.getPublisher().getEmail() : ""%></p> 
-            </li>
-            <li>
-                <label><%=paramRequest.getLocaleString("lbl_licenseUse")%>:</label><p title="<%=ds.getLicense() != null ? ds.getLicense().getLicenseDescription() : ""%>"><%=ds.getLicense() != null ? ds.getLicense().getLicenseTitle() : "No asignada"%></p>
-            </li>
-            <li>
-                <label><%=paramRequest.getLocaleString("lbl_version")%>:</label><p><%=ds.getActualVersion() != null ? ds.getActualVersion().getVersion() : "---"%></p>
-            </li>
-            <li>
-                <label><%=paramRequest.getLocaleString("lbl_filename")%>:</label><p><%=ds.getActualVersion() != null ? ds.getActualVersion().getFilePath(): "---"%></p>
-            </li>
-            <li>
-                <%
-                    String taglist = LODPUtils.getDSTagList(ds,",");
+    
+        <h3><%=ds.getDatasetTitle()%></h3> 
+        <div class="izq-data2">
+            <div class="publicador">
+                <img src="<%=instlogo%>" alt="<%=instname%>" />
+            <p class="pub-name"><%=instname%></p>
+            <p class="pub-www"><a href="<%=instweburl%>" class="pub-www" title="<%=instweburl%>">Ir al sitio web</a></p>
+          <p class="pub-mail"><a href="mailto:<%=pub!=null&&pub.getEmail()!=null?pub.getEmail():"---"%>" class="pub-mail" title="<%=pub!=null&&pub.getEmail()!=null?pub.getEmail():"---"%>"><%=paramRequest.getLocaleString("lbl_technicalContact")%> <br />
+          <em><%=pub!=null&&pub.getFullName()!=null?pub.getFullName():"---"%></em></a></p>
+        </div>
+        <div class="detalle">
+            <p><%=ds.getDatasetDescription()%></p>
+            <p><em title="<%=ds.getLicense() != null ? ds.getLicense().getLicenseDescription(): ds.getLicense().getLicenseTitle()%>"><%=paramRequest.getLocaleString("lbl_licenseUse")%>: <%=ds.getLicense() != null ? ds.getLicense().getLicenseTitle() : "No asignada"%></em></p>
+            <fieldset>
+          	<legend>Etiquetas</legend>
+            	<ul>
+                    <%
+                    if(null!=ds && ds.listTags().hasNext()){
+            Iterator<Tag> ittag = ds.listTags();
+            while (ittag.hasNext()) {
+                Tag tag = ittag.next();
                 %>
-                <label><%=paramRequest.getLocaleString("lbl_labels")%>:</label><p><%=taglist%></p>
-            </li>
-            <li>
-                <label><%=paramRequest.getLocaleString("lbl_formats")%>:</label><p><%=ds.getDatasetFormat()%></p> 
-            </li>
-            <li>
+                <li><%=tag.getTagName().trim()%></li>
+                <%
+            }
+        }
+                    %>
+                </ul>
+          </fieldset>
+
+        </div> <!-- detalle -->
+        </div> <!-- izq -->
+        
+        <div class="der-data2">
+            <div class="detalle-file">
                 <%
                 SWBResourceURL urldown = paramRequest.getRenderUrl();
                 urldown.setCallMethod(SWBResourceURL.Call_DIRECT);
                 urldown.setParameter("suri",ds.getShortURI());
                 urldown.setParameter("act","file");
                 urldown.setMode(DataSetResource.MODE_FILE);
+                //ds.getDatasetFormat()
                 %>
-                <label>URL:</label><p><%=ds.getDatasetURL()%><a href="<%=urldown.toString()%>"><%=paramRequest.getLocaleString("lbl_updated")%></a></p>
+                <a href="<%=urldown.toString()%>" title="<%=urldown.toString()%>" class="descargar"><%=paramRequest.getLocaleString("lbl_download")%></a>
+                
+                <a class="ico-<%=ds.getDatasetFormat()%>" href="#"><%=ds.getActualVersion()!=null&&ds.getActualVersion().getFilePath()!=null?ds.getActualVersion().getFilePath():"No tiene archivo asignado"%></a>
+                
+        <ul>
+            <li>
+                <strong><%=paramRequest.getLocaleString("lbl_version")%>:</strong><%=ds.getActualVersion()!=null?ds.getActualVersion().getVersion():"---"%>
             </li>
             <li>
-                <label><%=paramRequest.getLocaleString("lbl_rated")%>:</label><p><%=ds.getAverage()%></p>
-                <div>
-                    5 <%=paramRequest.getLocaleString("lbl_val5")%><br/>
-                    4 <%=paramRequest.getLocaleString("lbl_val4")%><br/>
-                    3 <%=paramRequest.getLocaleString("lbl_val3")%><br/>
-                    2 <%=paramRequest.getLocaleString("lbl_val2")%><br/>
-                    1 <%=paramRequest.getLocaleString("lbl_val1")%><br/>
-                </div>
+                <strong><%=paramRequest.getLocaleString("lbl_created")%>:</strong><%=sdf.format(ds.getDatasetCreated())%>
             </li>
+            <li>
+                <strong><%=paramRequest.getLocaleString("lbl_updated")%>:</strong><%=sdf.format(ds.getDatasetUpdated())%>
+                <a href="#" class="vermas expand-one" title="Ver todas las actualizaciones" ><span>ver mas</span></a>
+            </li>
+            <li><div id="ver-versiones" class="content-one">
+                    <table summary="Historial de Actualizaciones">
+                        <thead>
+                            <tr>
+                                <th class="thversion"><%=paramRequest.getLocaleString("lbl_version")%></th>
+                                <th class="thfecha"><%=paramRequest.getLocaleString("lbl_date")%></th>
+                            </tr>
+                        </thead>
             <%
                 DatasetVersion dslv = ds.getActualVersion();
                 DatasetVersion ver = null;
@@ -748,17 +745,8 @@
 
 
             %>
-            <li>
-                <label><%=paramRequest.getLocaleString("lbl_updated")%>:</label>
-                <p>
-                <table>
-                    <thead>
-                        <tr>
-                            <th><%=paramRequest.getLocaleString("lbl_versionNum")%></th><th><%=paramRequest.getLocaleString("lbl_DateUpdate")%></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <%
+                        <tbody>
+                             <%
                             while (ver != null) {
                                 int vernum = ver.getVersion();
                                 Date verdate = ver.getVersionCreated();
@@ -771,11 +759,34 @@
                                 ver = ver.getNextVersion();
                             }
                         %>
-                    </tbody>
-                </table>
-                </p>
-            </li>
-            <li>
+                        </tbody>                
+                    </table>
+                </div></li>
+            
+            <li><strong><%=paramRequest.getLocaleString("lbl_views")%>:</strong> <%=ds.getViews()%></li>
+                <li><strong><%=paramRequest.getLocaleString("lbl_downloads")%>:</strong> <%=ds.getDownloads()%></li>
+                <li><strong><%=paramRequest.getLocaleString("lbl_rated")%>:</strong> <%=ds.getAverage()%>
+                    
+                    <img src="images/star-on.png" width="15" height="14" />
+                    <img src="images/star-on.png" width="15" height="14" />
+                    <img src="images/star-on.png" width="15" height="14" />
+                    <img src="images/star-off.png" width="15" height="14" />
+                    <img src="images/star-off.png" width="15" height="14" />
+                </li>
+                <!--
+                   <li>
+                <label><%//=paramRequest.getLocaleString("lbl_rated")%>:</label><p><%//=ds.getAverage()%></p>
+                <div>
+                    5 <%//=paramRequest.getLocaleString("lbl_val5")%><br/>
+                    4 <%//=paramRequest.getLocaleString("lbl_val4")%><br/>
+                    3 <%//=paramRequest.getLocaleString("lbl_val3")%><br/>
+                    2 <%//=paramRequest.getLocaleString("lbl_val2")%><br/>
+                    1 <%//=paramRequest.getLocaleString("lbl_val1")%><br/>
+                </div>
+            </li>     
+            -->
+            </ul>
+
                 <%
                 SWBResourceURL url = paramRequest.getRenderUrl();
                 url.setCallMethod(SWBResourceURL.Call_DIRECT);
@@ -783,36 +794,40 @@
                 url.setParameter("act","meta");
                 url.setMode(DataSetResource.MODE_FILE);
                 //url.setParameter("mformat", DataSetResource.RDF_MIME_TYPE);
-                %>
-                <label><%=paramRequest.getLocaleString("lbl_exportDSmeta")%>:</label><p><a href="<%=url.toString()%>&mformat=<%=DataSetResource.META_FORMAT_RDF%>">RDF</a>&nbsp;<a href="<%=url.toString()%>&mformat=<%=DataSetResource.META_FORMAT_JSON%>">JSON</a></p>
-            </li>
-            <li>
-                <label><%=paramRequest.getLocaleString("lbl_views")%>:</label><p><%=ds.getViews()%></p>
-            </li>
-            <li>
-                <label><%=paramRequest.getLocaleString("lbl_downloads")%>:</label><p><%=ds.getDownloads()%></p>
-            </li>
-            <li>
-                <%
+
                     SWBResourceURL urlstats = paramRequest.getRenderUrl();
                     urlstats.setParameter("suri", ds.getShortURI());
                     urlstats.setParameter("act", "stats");
                 %>
-                <p><a href="<%=urlstats.toString()%>"><%=paramRequest.getLocaleString("lbl_statsDS")%></a></p> 
-            </li>
-        </ul>
-    </div>   
-    <div>
-        <label><%=paramRequest.getLocaleString("lbl_relatesApps")%></label>
-        <ul>
+                
+        <a href="<%=urlstats.toString()%>" title="<%=paramRequest.getLocaleString("lbl_statsDS")%>" class="ver-estad"><span><%=paramRequest.getLocaleString("lbl_statsDS")%></span></a> 
+        <a href="<%=url.toString()%>&mformat=<%=DataSetResource.META_FORMAT_JSON%>" title="<%=paramRequest.getLocaleString("lbl_exportDSmeta")%> JSON" class="ver-exp-json"><span><%=paramRequest.getLocaleString("lbl_exportDSmeta")%> JSON</span></a> 
+        <a href="<%=url.toString()%>&mformat=<%=DataSetResource.META_FORMAT_RDF%>" title="<%=paramRequest.getLocaleString("lbl_exportDSmeta")%> RDF" class="ver-exp-rdf"><span><%=paramRequest.getLocaleString("lbl_exportDSmeta")%> RDF</span></a>     
+            
+            </div>  
+            
+                <div class="new-app tit">
+		<h4><%=paramRequest.getLocaleString("lbl_relatesApps")%></h4>
             <%  // lista de aplicaciones relacionadas
+            int numapps = 0;
             Iterator<Application> itapp = Application.ClassMgr.listApplicationByRelatedDataset(ds, wsite);
+            HashMap<String, Application> hmappli = new HashMap<String, Application>();
             if(itapp.hasNext()){
                 while(itapp.hasNext()){
                     Application appli = itapp.next();
-                    
+                    if(appli.isAppValid()){
+                        hmappli.put(appli.getShortURI(), appli);
+                    }
+                }
+            numapps = hmappli.size();
+            itapp = hmappli.values().iterator();
+            if(itapp.hasNext()){
+                while(itapp.hasNext()){
+                    Application appli = itapp.next(); 
             %>
-            <li title="<%=appli.getAppDescription()%>"><%=appli.getAppTitle()%></li>
+            <li><%=appli.getAppTitle()%><br />
+                <strong><%=appli.getAppDescription()!=null?appli.getAppDescription():"---"%></strong>
+            </li>
             <%
                 }
             } else {
@@ -821,17 +836,28 @@
             <li><%=paramRequest.getLocaleString("lbl_NOrelatesApps")%></li>
                 <%
             }
+            }
                 %>
         </ul>
-    </div>
-</div>               
+                        
+            <div>
+                <span><%=numapps%> aplicaciones relacionadas</span> <a href="#">Ver todas</a>
+            </div>
+		</div>
+        </div> <!-- der -->
+
+<div class="clear">&nbsp;</div> 
+    </div>   
+
+        
+       
 <%
             }
         } else if("stats".equals(action)){
         
-            System.out.println("Stats DS.........");
+            //System.out.println("Stats DS.........");
         String suri = request.getParameter("suri");
-        System.out.println("URI........."+suri);
+        //System.out.println("URI........."+suri);
         go = ont.getGenericObject(SemanticObject.shortToFullURI(suri));
         if (go instanceof Dataset) {
             
@@ -905,8 +931,8 @@
     <%
         }
         } else if("stats2".equals(action)){
-            System.out.println("Stats DownLoad / Views.........");
-        String suri = request.getParameter("suri");
+            //System.out.println("Stats DownLoad / Views.........");
+         String suri = request.getParameter("suri");
         String statType = request.getParameter("statType");
         String tmpType1 = ""+LODPUtils.Log_Type_Download; 
         String tmpType2 = ""+LODPUtils.Log_Type_View; 
@@ -917,7 +943,7 @@
         if(null!=statType&&tmpType2.equals(statType)){
             isViews = Boolean.TRUE;
         }
-        System.out.println("URI........."+suri);
+        //System.out.println("URI........."+suri);
         go = ont.getGenericObject(SemanticObject.shortToFullURI(suri));
         if (go instanceof Dataset) {
             
