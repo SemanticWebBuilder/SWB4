@@ -859,12 +859,13 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
                 try {
                     JSONObject userData = new JSONObject(me);
                     //System.out.println("userData="+userData);                    
-                    String username = userData.getString("username");
-                    setFacebookUserId(username);
+                    //String username = userData.getString("username");
+                    String userId = userData.getString("id");
+                    setFacebookUserId(userId);
                     setAccessToken(accessToken);
                     setSn_authenticated(true);
                                         
-                    request.setAttribute("msg", username);
+                    request.setAttribute("msg", userId);
                     PrintWriter out = response.getWriter();
                     out.println("<script type=\"text/javascript\">");
                     out.println("  window.close();");
