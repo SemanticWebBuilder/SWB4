@@ -59,12 +59,13 @@
         <%if(intSize){
             while(listDatasetOrd.hasNext() && count < maxDS){
                 Dataset dataset = listDatasetOrd.next();
-                Institution institution = dataset.getInstitution();
-                String urlBase = "/work"+institution.getWorkPath();
-                String nameLogo= "institutionLogo_"+institution.getId()+"_"+institution.getInstitutionLogo();
-                String urlLogo = urlBase + "/"+nameLogo;
-                String urlData = wsite.getWebPage("Datos").getUrl();
-                String urlDataSet = urlData+"?suri="+dataset.getShortURI()+"&act=detail";
+                if(dataset.isApproved() && dataset.isDatasetActive()){
+                    Institution institution = dataset.getInstitution();
+                    String urlBase = "/work"+institution.getWorkPath();
+                    String nameLogo= "institutionLogo_"+institution.getId()+"_"+institution.getInstitutionLogo();
+                    String urlLogo = urlBase + "/"+nameLogo;
+                    String urlData = wsite.getWebPage("Datos").getUrl();
+                    String urlDataSet = urlData+"?suri="+dataset.getShortURI()+"&act=detail";
         %>
         <div class="slide">
             <a href="<%=urlDataSet%>">
@@ -75,7 +76,8 @@
             </a>
         </div>
         <%
-                count++;
+                    count++;
+                }
             }            
         }else{%>
             Información no disponible
