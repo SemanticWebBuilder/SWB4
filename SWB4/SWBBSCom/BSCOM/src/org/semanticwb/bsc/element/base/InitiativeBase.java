@@ -1,8 +1,9 @@
 package org.semanticwb.bsc.element.base;
 
 
-public abstract class InitiativeBase extends org.semanticwb.bsc.element.BSCElement implements org.semanticwb.bsc.Committable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Activeable,org.semanticwb.bsc.Updateable,org.semanticwb.model.Sortable,org.semanticwb.bsc.Schedule,org.semanticwb.model.Traceable
+public abstract class InitiativeBase extends org.semanticwb.bsc.element.BSCElement implements org.semanticwb.model.Activeable,org.semanticwb.bsc.Updateable,org.semanticwb.model.Descriptiveable,org.semanticwb.bsc.Schedule,org.semanticwb.model.Traceable,org.semanticwb.bsc.Committable
 {
+    public static final org.semanticwb.platform.SemanticProperty bsc_index=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#index");
     public static final org.semanticwb.platform.SemanticClass bsc_Deliverable=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#Deliverable");
     public static final org.semanticwb.platform.SemanticProperty bsc_hasDeliverable=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#hasDeliverable");
     public static final org.semanticwb.platform.SemanticClass bsc_Initiative=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#Initiative");
@@ -207,7 +208,7 @@ public abstract class InitiativeBase extends org.semanticwb.bsc.element.BSCEleme
 */
     public int getIndex()
     {
-        return getSemanticObject().getIntProperty(swb_index);
+        return getSemanticObject().getIntProperty(bsc_index);
     }
 
 /**
@@ -216,7 +217,7 @@ public abstract class InitiativeBase extends org.semanticwb.bsc.element.BSCEleme
 */
     public void setIndex(int value)
     {
-        getSemanticObject().setIntProperty(swb_index, value);
+        getSemanticObject().setIntProperty(bsc_index, value);
     }
 
 /**

@@ -1,8 +1,9 @@
 package org.semanticwb.bsc.accessory.base;
 
 
-public abstract class StateBase extends org.semanticwb.bsc.accessory.BSCAccessory implements org.semanticwb.model.Descriptiveable,org.semanticwb.bsc.StateMachinable,org.semanticwb.model.Activeable,org.semanticwb.model.Iconable,org.semanticwb.model.Sortable,org.semanticwb.model.Traceable
+public abstract class StateBase extends org.semanticwb.bsc.accessory.BSCAccessory implements org.semanticwb.model.Activeable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable,org.semanticwb.model.Iconable,org.semanticwb.bsc.StateMachinable
 {
+    public static final org.semanticwb.platform.SemanticProperty bsc_index=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#index");
     public static final org.semanticwb.platform.SemanticProperty bsc_icon=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#icon");
     public static final org.semanticwb.platform.SemanticClass bsc_State=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#State");
    /**
@@ -193,7 +194,7 @@ public abstract class StateBase extends org.semanticwb.bsc.accessory.BSCAccessor
 */
     public int getIndex()
     {
-        return getSemanticObject().getIntProperty(swb_index);
+        return getSemanticObject().getIntProperty(bsc_index);
     }
 
 /**
@@ -202,7 +203,7 @@ public abstract class StateBase extends org.semanticwb.bsc.accessory.BSCAccessor
 */
     public void setIndex(int value)
     {
-        getSemanticObject().setIntProperty(swb_index, value);
+        getSemanticObject().setIntProperty(bsc_index, value);
     }
    /**
    * Sets the value for the property Previus

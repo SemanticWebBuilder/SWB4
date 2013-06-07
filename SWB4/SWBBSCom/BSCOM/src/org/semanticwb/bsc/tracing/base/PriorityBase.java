@@ -1,8 +1,9 @@
 package org.semanticwb.bsc.tracing.base;
 
 
-public abstract class PriorityBase extends org.semanticwb.bsc.tracing.BSCTracing implements org.semanticwb.model.Descriptiveable,org.semanticwb.bsc.StateMachinable,org.semanticwb.model.Activeable,org.semanticwb.model.Sortable,org.semanticwb.model.Traceable
+public abstract class PriorityBase extends org.semanticwb.bsc.tracing.BSCTracing implements org.semanticwb.model.Activeable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable,org.semanticwb.bsc.StateMachinable
 {
+    public static final org.semanticwb.platform.SemanticProperty bsc_index=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#index");
     public static final org.semanticwb.platform.SemanticClass bsc_Priority=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#Priority");
    /**
    * The semantic class that represents the currentObject
@@ -102,6 +103,29 @@ public abstract class PriorityBase extends org.semanticwb.bsc.tracing.BSCTracing
             return it;
         }
        /**
+       * Gets all org.semanticwb.bsc.tracing.Priority with a determined Previus
+       * @param value Previus of the type org.semanticwb.bsc.StateMachinable
+       * @param model Model of the org.semanticwb.bsc.tracing.Priority
+       * @return Iterator with all the org.semanticwb.bsc.tracing.Priority
+       */
+
+        public static java.util.Iterator<org.semanticwb.bsc.tracing.Priority> listPriorityByPrevius(org.semanticwb.bsc.StateMachinable value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.tracing.Priority> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(bsc_previus, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.bsc.tracing.Priority with a determined Previus
+       * @param value Previus of the type org.semanticwb.bsc.StateMachinable
+       * @return Iterator with all the org.semanticwb.bsc.tracing.Priority
+       */
+
+        public static java.util.Iterator<org.semanticwb.bsc.tracing.Priority> listPriorityByPrevius(org.semanticwb.bsc.StateMachinable value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.tracing.Priority> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(bsc_previus,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
        * Gets all org.semanticwb.bsc.tracing.Priority with a determined Next
        * @param value Next of the type org.semanticwb.bsc.StateMachinable
        * @param model Model of the org.semanticwb.bsc.tracing.Priority
@@ -147,29 +171,6 @@ public abstract class PriorityBase extends org.semanticwb.bsc.tracing.BSCTracing
             org.semanticwb.model.GenericIterator<org.semanticwb.bsc.tracing.Priority> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_creator,value.getSemanticObject(),sclass));
             return it;
         }
-       /**
-       * Gets all org.semanticwb.bsc.tracing.Priority with a determined Previus
-       * @param value Previus of the type org.semanticwb.bsc.StateMachinable
-       * @param model Model of the org.semanticwb.bsc.tracing.Priority
-       * @return Iterator with all the org.semanticwb.bsc.tracing.Priority
-       */
-
-        public static java.util.Iterator<org.semanticwb.bsc.tracing.Priority> listPriorityByPrevius(org.semanticwb.bsc.StateMachinable value,org.semanticwb.model.SWBModel model)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.tracing.Priority> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(bsc_previus, value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.bsc.tracing.Priority with a determined Previus
-       * @param value Previus of the type org.semanticwb.bsc.StateMachinable
-       * @return Iterator with all the org.semanticwb.bsc.tracing.Priority
-       */
-
-        public static java.util.Iterator<org.semanticwb.bsc.tracing.Priority> listPriorityByPrevius(org.semanticwb.bsc.StateMachinable value)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.tracing.Priority> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(bsc_previus,value.getSemanticObject(),sclass));
-            return it;
-        }
     }
 
     public static PriorityBase.ClassMgr getPriorityClassMgr()
@@ -185,44 +186,6 @@ public abstract class PriorityBase extends org.semanticwb.bsc.tracing.BSCTracing
     {
         super(base);
     }
-   /**
-   * Sets the value for the property Next
-   * @param value Next to set
-   */
-
-    public void setNext(org.semanticwb.bsc.StateMachinable value)
-    {
-        if(value!=null)
-        {
-            getSemanticObject().setObjectProperty(bsc_next, value.getSemanticObject());
-        }else
-        {
-            removeNext();
-        }
-    }
-   /**
-   * Remove the value for Next property
-   */
-
-    public void removeNext()
-    {
-        getSemanticObject().removeProperty(bsc_next);
-    }
-
-   /**
-   * Gets the Next
-   * @return a org.semanticwb.bsc.StateMachinable
-   */
-    public org.semanticwb.bsc.StateMachinable getNext()
-    {
-         org.semanticwb.bsc.StateMachinable ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(bsc_next);
-         if(obj!=null)
-         {
-             ret=(org.semanticwb.bsc.StateMachinable)obj.createGenericInstance();
-         }
-         return ret;
-    }
 
 /**
 * Gets the Index property
@@ -230,7 +193,7 @@ public abstract class PriorityBase extends org.semanticwb.bsc.tracing.BSCTracing
 */
     public int getIndex()
     {
-        return getSemanticObject().getIntProperty(swb_index);
+        return getSemanticObject().getIntProperty(bsc_index);
     }
 
 /**
@@ -239,7 +202,7 @@ public abstract class PriorityBase extends org.semanticwb.bsc.tracing.BSCTracing
 */
     public void setIndex(int value)
     {
-        getSemanticObject().setIntProperty(swb_index, value);
+        getSemanticObject().setIntProperty(bsc_index, value);
     }
    /**
    * Sets the value for the property Previus
@@ -273,6 +236,44 @@ public abstract class PriorityBase extends org.semanticwb.bsc.tracing.BSCTracing
     {
          org.semanticwb.bsc.StateMachinable ret=null;
          org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(bsc_previus);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.bsc.StateMachinable)obj.createGenericInstance();
+         }
+         return ret;
+    }
+   /**
+   * Sets the value for the property Next
+   * @param value Next to set
+   */
+
+    public void setNext(org.semanticwb.bsc.StateMachinable value)
+    {
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(bsc_next, value.getSemanticObject());
+        }else
+        {
+            removeNext();
+        }
+    }
+   /**
+   * Remove the value for Next property
+   */
+
+    public void removeNext()
+    {
+        getSemanticObject().removeProperty(bsc_next);
+    }
+
+   /**
+   * Gets the Next
+   * @return a org.semanticwb.bsc.StateMachinable
+   */
+    public org.semanticwb.bsc.StateMachinable getNext()
+    {
+         org.semanticwb.bsc.StateMachinable ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(bsc_next);
          if(obj!=null)
          {
              ret=(org.semanticwb.bsc.StateMachinable)obj.createGenericInstance();
