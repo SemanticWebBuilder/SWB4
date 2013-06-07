@@ -4,7 +4,7 @@ package org.semanticwb.social.base;
    /**
    * Instancia de un recurso asociado a un flujo de publicación. 
    */
-public abstract class SocialPFlowInstanceBase extends org.semanticwb.social.SocialPFlows implements org.semanticwb.social.SocialPFlowable
+public abstract class SocialPFlowInstanceBase extends org.semanticwb.model.SWBClass implements org.semanticwb.social.SocialPFlowable
 {
     public static final org.semanticwb.platform.SemanticProperty social_pfiStatus=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#pfiStatus");
     public static final org.semanticwb.platform.SemanticProperty social_pfiTime=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#pfiTime");

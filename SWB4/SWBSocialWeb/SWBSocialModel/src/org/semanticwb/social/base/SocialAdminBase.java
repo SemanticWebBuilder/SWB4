@@ -10,8 +10,6 @@ public abstract class SocialAdminBase extends org.semanticwb.model.AdminWebSite 
    * Es una pagina web utilizada para mostrar opciones del menu dentro de la administración de SWB
    */
     public static final org.semanticwb.platform.SemanticClass swbxf_MenuItem=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/xforms/ontology#MenuItem");
-    public static final org.semanticwb.platform.SemanticClass social_ZulWebPage=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#ZulWebPage");
-    public static final org.semanticwb.platform.SemanticClass social_TreeNodePage=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#TreeNodePage");
    /**
    * Es una pagina web utilizada para mostrar comportamientos (tabs) dentro de la administración de SWB
    */
@@ -400,54 +398,6 @@ public abstract class SocialAdminBase extends org.semanticwb.model.AdminWebSite 
     public boolean hasMenuItem(String id)
     {
         return org.semanticwb.model.MenuItem.ClassMgr.hasMenuItem(id, this);
-    }
-
-    public org.semanticwb.social.ZulWebPage getZulWebPage(String id)
-    {
-        return org.semanticwb.social.ZulWebPage.ClassMgr.getZulWebPage(id, this);
-    }
-
-    public java.util.Iterator<org.semanticwb.social.ZulWebPage> listZulWebPages()
-    {
-        return org.semanticwb.social.ZulWebPage.ClassMgr.listZulWebPages(this);
-    }
-
-    public org.semanticwb.social.ZulWebPage createZulWebPage(String id)
-    {
-        return org.semanticwb.social.ZulWebPage.ClassMgr.createZulWebPage(id,this);
-    }
-
-    public void removeZulWebPage(String id)
-    {
-        org.semanticwb.social.ZulWebPage.ClassMgr.removeZulWebPage(id, this);
-    }
-    public boolean hasZulWebPage(String id)
-    {
-        return org.semanticwb.social.ZulWebPage.ClassMgr.hasZulWebPage(id, this);
-    }
-
-    public org.semanticwb.social.TreeNodePage getTreeNodePage(String id)
-    {
-        return org.semanticwb.social.TreeNodePage.ClassMgr.getTreeNodePage(id, this);
-    }
-
-    public java.util.Iterator<org.semanticwb.social.TreeNodePage> listTreeNodePages()
-    {
-        return org.semanticwb.social.TreeNodePage.ClassMgr.listTreeNodePages(this);
-    }
-
-    public org.semanticwb.social.TreeNodePage createTreeNodePage(String id)
-    {
-        return org.semanticwb.social.TreeNodePage.ClassMgr.createTreeNodePage(id,this);
-    }
-
-    public void removeTreeNodePage(String id)
-    {
-        org.semanticwb.social.TreeNodePage.ClassMgr.removeTreeNodePage(id, this);
-    }
-    public boolean hasTreeNodePage(String id)
-    {
-        return org.semanticwb.social.TreeNodePage.ClassMgr.hasTreeNodePage(id, this);
     }
 
     public org.semanticwb.model.ObjectBehavior getObjectBehavior(String id)

@@ -4,7 +4,7 @@ package org.semanticwb.social.base;
    /**
    * Clase que contendra los streams que configurados para cada usuario 
    */
-public abstract class StreamBase extends org.semanticwb.model.SWBClass implements org.semanticwb.social.SocialRuleRefable,org.semanticwb.model.Filterable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Activeable,org.semanticwb.model.Referensable,org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable,org.semanticwb.social.Geolocable
+public abstract class StreamBase extends org.semanticwb.model.SWBClass implements org.semanticwb.social.SocialRuleRefable,org.semanticwb.model.Filterable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Activeable,org.semanticwb.model.Referensable,org.semanticwb.model.Traceable,org.semanticwb.social.Geolocable,org.semanticwb.model.Descriptiveable
 {
    /**
    * Clase que engloba a las diferentes clases que representan cada una de las redes sociales.
@@ -710,24 +710,6 @@ public abstract class StreamBase extends org.semanticwb.model.SWBClass implement
     {
         getSemanticObject().setProperty(social_geoDistanceUnit, value);
     }
-
-/**
-* Gets the FilterIntensityHigh property
-* @return boolean with the FilterIntensityHigh
-*/
-    public boolean isFilterIntensityHigh()
-    {
-        return getSemanticObject().getBooleanProperty(social_filterIntensityHigh);
-    }
-
-/**
-* Sets the FilterIntensityHigh property
-* @param value long with the FilterIntensityHigh
-*/
-    public void setFilterIntensityHigh(boolean value)
-    {
-        getSemanticObject().setBooleanProperty(social_filterIntensityHigh, value);
-    }
    /**
    * Sets the value for the property Creator
    * @param value Creator to set
@@ -765,6 +747,24 @@ public abstract class StreamBase extends org.semanticwb.model.SWBClass implement
              ret=(org.semanticwb.model.User)obj.createGenericInstance();
          }
          return ret;
+    }
+
+/**
+* Gets the FilterIntensityHigh property
+* @return boolean with the FilterIntensityHigh
+*/
+    public boolean isFilterIntensityHigh()
+    {
+        return getSemanticObject().getBooleanProperty(social_filterIntensityHigh);
+    }
+
+/**
+* Sets the FilterIntensityHigh property
+* @param value long with the FilterIntensityHigh
+*/
+    public void setFilterIntensityHigh(boolean value)
+    {
+        getSemanticObject().setBooleanProperty(social_filterIntensityHigh, value);
     }
 
 /**

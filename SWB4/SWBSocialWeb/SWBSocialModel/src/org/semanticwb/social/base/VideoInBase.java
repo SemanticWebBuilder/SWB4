@@ -4,7 +4,7 @@ package org.semanticwb.social.base;
    /**
    * Clase en donde se almacenan todos los post de tipo Video y que entran por el Listener 
    */
-public abstract class VideoInBase extends org.semanticwb.social.PostIn implements org.semanticwb.social.PostDataable,org.semanticwb.model.Traceable,org.semanticwb.social.PostVideoable,org.semanticwb.social.PostTextable,org.semanticwb.model.Tagable
+public abstract class VideoInBase extends org.semanticwb.social.PostIn implements org.semanticwb.social.PostVideoable,org.semanticwb.social.PostDataable,org.semanticwb.model.Traceable,org.semanticwb.social.PostTextable,org.semanticwb.model.Tagable
 {
    /**
    * Clase en donde se almacenan todos los post de tipo Video y que entran por el Listener
@@ -37,6 +37,12 @@ public abstract class VideoInBase extends org.semanticwb.social.PostIn implement
         {
             java.util.Iterator it=sclass.listInstances();
             return new org.semanticwb.model.GenericIterator<org.semanticwb.social.VideoIn>(it, true);
+        }
+
+        public static org.semanticwb.social.VideoIn createVideoIn(org.semanticwb.model.SWBModel model)
+        {
+            long id=model.getSemanticObject().getModel().getCounter(sclass);
+            return org.semanticwb.social.VideoIn.ClassMgr.createVideoIn(String.valueOf(id), model);
         }
        /**
        * Gets a org.semanticwb.social.VideoIn

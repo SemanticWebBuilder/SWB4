@@ -38,6 +38,12 @@ public abstract class MessageInBase extends org.semanticwb.social.PostIn impleme
             java.util.Iterator it=sclass.listInstances();
             return new org.semanticwb.model.GenericIterator<org.semanticwb.social.MessageIn>(it, true);
         }
+
+        public static org.semanticwb.social.MessageIn createMessageIn(org.semanticwb.model.SWBModel model)
+        {
+            long id=model.getSemanticObject().getModel().getCounter(sclass);
+            return org.semanticwb.social.MessageIn.ClassMgr.createMessageIn(String.valueOf(id), model);
+        }
        /**
        * Gets a org.semanticwb.social.MessageIn
        * @param id Identifier for org.semanticwb.social.MessageIn

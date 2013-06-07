@@ -15,6 +15,10 @@ public abstract class PostInBase extends org.semanticwb.social.Post implements o
    */
     public static final org.semanticwb.platform.SemanticProperty social_postInSocialNetworkUser=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#postInSocialNetworkUser");
    /**
+   * Identificador del mensaje que llega en la red social.
+   */
+    public static final org.semanticwb.platform.SemanticProperty social_socialNetMsgId=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#socialNetMsgId");
+   /**
    * Propiedad con valor entero que representa el tipo de Sentimientos que expresa el Post, estos se estan definiendo de esta manera: 0) Neutro 1) Positivo 2)Negativo, estos valores pueden ser mas y permanecer en un objeto tipo colección en lo futuro.
    */
     public static final org.semanticwb.platform.SemanticProperty social_postSentimentalType=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#postSentimentalType");
@@ -324,6 +328,24 @@ public abstract class PostInBase extends org.semanticwb.social.Post implements o
              ret=(org.semanticwb.social.SocialNetworkUser)obj.createGenericInstance();
          }
          return ret;
+    }
+
+/**
+* Gets the SocialNetMsgId property
+* @return String with the SocialNetMsgId
+*/
+    public String getSocialNetMsgId()
+    {
+        return getSemanticObject().getProperty(social_socialNetMsgId);
+    }
+
+/**
+* Sets the SocialNetMsgId property
+* @param value long with the SocialNetMsgId
+*/
+    public void setSocialNetMsgId(String value)
+    {
+        getSemanticObject().setProperty(social_socialNetMsgId, value);
     }
 
 /**

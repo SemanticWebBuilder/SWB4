@@ -4,7 +4,7 @@ package org.semanticwb.social.base;
    /**
    * Clase en donde se almacenan todos los post de tipo Photo y que entran por el Listener 
    */
-public abstract class PhotoInBase extends org.semanticwb.social.PostIn implements org.semanticwb.social.PostDataable,org.semanticwb.social.PostImageable,org.semanticwb.model.Traceable,org.semanticwb.social.PostTextable,org.semanticwb.model.Tagable
+public abstract class PhotoInBase extends org.semanticwb.social.PostIn implements org.semanticwb.social.PostImageable,org.semanticwb.social.PostDataable,org.semanticwb.model.Traceable,org.semanticwb.social.PostTextable,org.semanticwb.model.Tagable
 {
    /**
    * Clase en donde se almacenan todos los post de tipo Photo y que entran por el Listener
@@ -37,6 +37,12 @@ public abstract class PhotoInBase extends org.semanticwb.social.PostIn implement
         {
             java.util.Iterator it=sclass.listInstances();
             return new org.semanticwb.model.GenericIterator<org.semanticwb.social.PhotoIn>(it, true);
+        }
+
+        public static org.semanticwb.social.PhotoIn createPhotoIn(org.semanticwb.model.SWBModel model)
+        {
+            long id=model.getSemanticObject().getModel().getCounter(sclass);
+            return org.semanticwb.social.PhotoIn.ClassMgr.createPhotoIn(String.valueOf(id), model);
         }
        /**
        * Gets a org.semanticwb.social.PhotoIn
