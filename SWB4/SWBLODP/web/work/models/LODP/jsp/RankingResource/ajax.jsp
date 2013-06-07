@@ -11,8 +11,8 @@
         average=0;
     }
     if(rank!=null){
-%><img src="images/star-<%=average >= 1?"on":"off"%>.png" width="15" height="14" alt="*">
-<img src="images/star-<%=average >= 2?"on":"off"%>.png" width="15" height="14" alt="*">
-<img src="images/star-<%=average >= 3?"on":"off"%>.png" width="15" height="14" alt="*">
-<img src="images/star-<%=average >= 4?"on":"off"%>.png" width="15" height="14" alt="*">
-<img src="images/star-<%=average >= 5?"on":"off"%>.png" width="15" height="14" alt="*"><%}%>
+%><img src="/work/models/LODP/css/images/star-<%=average >= 1?"on":"off"%>.png" width="15" height="14" alt="*">
+<img src="/work/models/LODP/css/images/star-<%=average >= 2?"on":"off"%>.png" width="15" height="14" alt="*">
+<img src="/work/models/LODP/css/images/star-<%=average >= 3?"on":"off"%>.png" width="15" height="14" alt="*">
+<img src="/work/models/LODP/css/images/star-<%=average >= 4?"on":"off"%>.png" width="15" height="14" alt="*">
+<img src="/work/models/LODP/css/images/star-<%=average >= 5?"on":"off"%>.png" width="15" height="14" alt="*"><%}%>
