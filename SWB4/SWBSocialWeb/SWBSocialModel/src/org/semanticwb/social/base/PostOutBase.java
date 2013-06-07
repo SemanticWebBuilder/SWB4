@@ -39,6 +39,11 @@ public abstract class PostOutBase extends org.semanticwb.social.Post implements 
    */
     public static final org.semanticwb.platform.SemanticProperty social_published=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#published");
    /**
+   * En este objeto se guardara el identificador que es asignado para cada post en cada una de las redes sociales, es decir, si un mismo post se envía hacia mas de una red social, cada una de esas redes sociales daran un identificador unico para ese post en esa red social, este lo tenemos que guardar nosotros en este objeto para fines de monitoreo de estatus del post en esa red social (En Proceso, Revisado, Publicado, etc), como nosotros para un post, independientemente de a cuantas redes sociales se envíe, solo creamos un objeto Post (Message, Photo, Video), tuvimos que crear esta clase para guardar el identificador de ese post para c/red social.
+   */
+    public static final org.semanticwb.platform.SemanticClass social_PostOutNet=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#PostOutNet");
+    public static final org.semanticwb.platform.SemanticProperty social_hasPostOutNetInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#hasPostOutNetInv");
+   /**
    * Instancia de un recurso asociado a un flujo de publicación.
    */
     public static final org.semanticwb.platform.SemanticClass social_SocialPFlowInstance=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#SocialPFlowInstance");
@@ -228,6 +233,29 @@ public abstract class PostOutBase extends org.semanticwb.social.Post implements 
         public static java.util.Iterator<org.semanticwb.social.PostOut> listPostOutByPostContainer_PostInv(org.semanticwb.social.PostOutContainer value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.social.PostOut> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(social_hasPostContainer_PostInv,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.social.PostOut with a determined PostOutNetInv
+       * @param value PostOutNetInv of the type org.semanticwb.social.PostOutNet
+       * @param model Model of the org.semanticwb.social.PostOut
+       * @return Iterator with all the org.semanticwb.social.PostOut
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.PostOut> listPostOutByPostOutNetInv(org.semanticwb.social.PostOutNet value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.PostOut> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(social_hasPostOutNetInv, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.social.PostOut with a determined PostOutNetInv
+       * @param value PostOutNetInv of the type org.semanticwb.social.PostOutNet
+       * @return Iterator with all the org.semanticwb.social.PostOut
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.PostOut> listPostOutByPostOutNetInv(org.semanticwb.social.PostOutNet value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.PostOut> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(social_hasPostOutNetInv,value.getSemanticObject(),sclass));
             return it;
         }
        /**
@@ -491,6 +519,45 @@ public abstract class PostOutBase extends org.semanticwb.social.Post implements 
     public void setPublished(boolean value)
     {
         getSemanticObject().setBooleanProperty(social_published, value);
+    }
+   /**
+   * Gets all the org.semanticwb.social.PostOutNet
+   * @return A GenericIterator with all the org.semanticwb.social.PostOutNet
+   */
+
+    public org.semanticwb.model.GenericIterator<org.semanticwb.social.PostOutNet> listPostOutNetInvs()
+    {
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.social.PostOutNet>(getSemanticObject().listObjectProperties(social_hasPostOutNetInv));
+    }
+
+   /**
+   * Gets true if has a PostOutNetInv
+   * @param value org.semanticwb.social.PostOutNet to verify
+   * @return true if the org.semanticwb.social.PostOutNet exists, false otherwise
+   */
+    public boolean hasPostOutNetInv(org.semanticwb.social.PostOutNet value)
+    {
+        boolean ret=false;
+        if(value!=null)
+        {
+           ret=getSemanticObject().hasObjectProperty(social_hasPostOutNetInv,value.getSemanticObject());
+        }
+        return ret;
+    }
+
+   /**
+   * Gets the PostOutNetInv
+   * @return a org.semanticwb.social.PostOutNet
+   */
+    public org.semanticwb.social.PostOutNet getPostOutNetInv()
+    {
+         org.semanticwb.social.PostOutNet ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(social_hasPostOutNetInv);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.social.PostOutNet)obj.createGenericInstance();
+         }
+         return ret;
     }
    /**
    * Gets all the org.semanticwb.model.CalendarRef

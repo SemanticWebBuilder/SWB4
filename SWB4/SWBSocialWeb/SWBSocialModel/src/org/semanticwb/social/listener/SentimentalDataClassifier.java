@@ -5,6 +5,7 @@
 
 package org.semanticwb.social.listener;
 
+import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -12,8 +13,12 @@ import java.util.Iterator;
 import java.util.StringTokenizer;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.model.GenericObject;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.SWBModel;
+import org.semanticwb.model.User;
+import org.semanticwb.model.UserGroup;
+import org.semanticwb.model.UserGroupRef;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.social.Action;
 import org.semanticwb.social.ExternalPost;
@@ -500,6 +505,37 @@ public class SentimentalDataClassifier {
                        //reclasificar en cualquier momento el mensaje, para que se vaya a otro tema y por consiguiente a otro flujo.
                        System.out.println("Al post se le asocial SocialTopic:"+socialTopic.getURI());
                        post.setSocialTopic(socialTopic);    
+                       
+                       //Envío de correo a los usuarios de los grupos que se encuentre asignados al socialtopic, para avisarles
+                       //del nuevo mensaje que ha llegado a su bandeja
+                       Iterator<User> itSocialTopicUsers=SWBSocialUtil.SocialTopic.getUsersbySocialTopic(socialTopic).iterator();
+                       while(itSocialTopicUsers.hasNext()) 
+                       {
+                           User user=itSocialTopicUsers.next();
+                           if(user.getEmail()!=null && SWBUtils.EMAIL.isValidEmailAddress(user.getEmail()))
+                           {
+                               String sBody="Hola "+user.getFullName()+"<br>";
+                               sBody+="Le comunicamos que existe un nuevo mensaje en la bandeja de entrada del tema:"+socialTopic.getTitle()+", al cual usted se encuentra subscripo<br><br><br>";
+                               sBody+="El mensaje cuenta con el siguiente texto:<br><br><br>";
+                               sBody+=post.getMsg_Text()+"<br><br><br>";
+                               if(post.getPostInSocialNetworkUser()!=null)
+                               {
+                                    sBody+="Usuario:"+post.getPostInSocialNetworkUser().getSnu_name()+"<br><br><br>";
+                                    if(post.getPostInSocialNetworkUser().getSnu_klout()>0)
+                                    {
+                                        sBody+="Klout:"+post.getPostInSocialNetworkUser().getSnu_klout();
+                                    }
+                               }
+                               try
+                               {
+                                    SWBUtils.EMAIL.sendBGEmail(user.getEmail(), "Nuevo Mensaje de Entra en Tema:"+socialTopic.getTitle(), sBody);
+                               }catch(SocketException so)
+                               {
+                                   log.error(so);
+                               }
+                           }
+                       }
+                       
                        existWord=true;
                        break;
                     }
@@ -522,20 +558,20 @@ public class SentimentalDataClassifier {
         try
         {
            //Persistencia del mensaje
-                System.out.println("externalPost.getPostType():"+externalPost.getPostType());
+                //System.out.println("externalPost.getPostType():"+externalPost.getPostType());
                 if(externalPost.getPostType().equals(SWBSocialUtil.MESSAGE))
                 {
-                    postIn=MessageIn.ClassMgr.createMessageIn(String.valueOf(externalPost.getPostId()), model);
+                    postIn=MessageIn.ClassMgr.createMessageIn(model);
                 }else if(externalPost.getPostType().equals(SWBSocialUtil.PHOTO))
                 {
-                    postIn=PhotoIn.ClassMgr.createPhotoIn(String.valueOf(externalPost.getPostId()), model);
+                    postIn=PhotoIn.ClassMgr.createPhotoIn(model);
                 }else if(externalPost.getPostType().equals(SWBSocialUtil.VIDEO))
                 {
-                    postIn=VideoIn.ClassMgr.createVideoIn(String.valueOf(externalPost.getPostId()), model);
+                    postIn=VideoIn.ClassMgr.createVideoIn(model);
                 }
-        
+                postIn.setSocialNetMsgId(externalPost.getPostId());
                 postIn.setMsg_Text(externalPost.getMessage());
-                System.out.println("CREÓ EL MENSAJE CON TEXTO:"+postIn.getMsg_Text());
+                //System.out.println("CREÓ EL MENSAJE CON TEXTO:"+postIn.getMsg_Text());
                 postIn.setPostInSocialNetwork(socialNetwork);
                 postIn.setPostInStream(stream);
                 

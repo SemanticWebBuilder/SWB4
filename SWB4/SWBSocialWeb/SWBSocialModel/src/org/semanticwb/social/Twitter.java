@@ -18,6 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.semanticwb.Logger;
+import org.semanticwb.SWBException;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.SWBContext;
@@ -84,7 +85,15 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
                 StatusUpdate sup = new StatusUpdate(new String(shortUrl(message.getMsg_Text()).getBytes(), "ISO-8859-1"));
                 
                 Status stat = twitter.updateStatus(sup);
-                Long longStat = stat.getId();
+                long longStat = stat.getId();
+                
+                try{
+                    SWBSocialUtil.PostOutUtil.savePostOutNetID(message, this, String.valueOf(longStat));  
+                }catch(SWBException swbe)
+                {
+                    log.error(swbe);
+                }
+                
                 // System.out.println("longStat: " + longStat + " texto: " + stat.getText());
                 //getPostContainer().getPost().setSocialNetPostId("");
             } catch (UnsupportedEncodingException ex) {
@@ -113,7 +122,16 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
                 //StatusUpdate sup = new StatusUpdate(new String(photo.getComment().getBytes(), "utf-8"));
                 StatusUpdate sup = new StatusUpdate(new String(shortUrl(description).getBytes(), "ISO-8859-1"));
                 sup.setMedia(new File(photoSend));
-                twitter.updateStatus(sup);
+                 Status stat = twitter.updateStatus(sup);
+                long longStat = stat.getId();
+                
+                try{
+                    SWBSocialUtil.PostOutUtil.savePostOutNetID(photo, this, String.valueOf(longStat));  
+                }catch(SWBException swbe)
+                {
+                    log.error(swbe);
+                }
+                
             } catch (UnsupportedEncodingException ex) {
                 log.error("Exception" + ex);
             } catch (TwitterException ex) {

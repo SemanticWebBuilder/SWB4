@@ -200,6 +200,29 @@ public abstract class PhotoBase extends org.semanticwb.social.PostOut implements
             return it;
         }
        /**
+       * Gets all org.semanticwb.social.Photo with a determined PostOutNetInv
+       * @param value PostOutNetInv of the type org.semanticwb.social.PostOutNet
+       * @param model Model of the org.semanticwb.social.Photo
+       * @return Iterator with all the org.semanticwb.social.Photo
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.Photo> listPhotoByPostOutNetInv(org.semanticwb.social.PostOutNet value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.Photo> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(social_hasPostOutNetInv, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.social.Photo with a determined PostOutNetInv
+       * @param value PostOutNetInv of the type org.semanticwb.social.PostOutNet
+       * @return Iterator with all the org.semanticwb.social.Photo
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.Photo> listPhotoByPostOutNetInv(org.semanticwb.social.PostOutNet value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.Photo> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(social_hasPostOutNetInv,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
        * Gets all org.semanticwb.social.Photo with a determined SocialTopic
        * @param value SocialTopic of the type org.semanticwb.social.SocialTopic
        * @param model Model of the org.semanticwb.social.Photo

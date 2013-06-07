@@ -11,27 +11,24 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Locale;
 import java.util.Properties;
-import java.util.ResourceBundle;
 import java.util.StringTokenizer;
 import javax.servlet.http.HttpServletRequest;
 import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
 import org.semanticwb.Logger;
+import org.semanticwb.SWBException;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.base.SWBAppObject;
+import org.semanticwb.model.GenericObject;
 import org.semanticwb.model.ModelProperty;
-import org.semanticwb.model.PFlow;
-import org.semanticwb.model.Role;
-import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.SWBModel;
 import org.semanticwb.model.User;
-import org.semanticwb.model.WebPage;
+import org.semanticwb.model.UserGroup;
+import org.semanticwb.model.UserGroupRef;
 import org.semanticwb.model.WebSite;
-import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.portal.SWBFormMgr;
 import org.semanticwb.portal.api.SWBActionResponse;
@@ -42,21 +39,16 @@ import org.semanticwb.social.Photo;
 import org.semanticwb.social.Photoable;
 import org.semanticwb.social.PostIn;
 import org.semanticwb.social.PostOut;
+import org.semanticwb.social.PostOutNet;
 import org.semanticwb.social.PunctuationSign;
-import org.semanticwb.social.SocialFlow.SocialPFlowMgr;
 import org.semanticwb.social.SocialNetwork;
 import org.semanticwb.social.SocialPFlow;
-import org.semanticwb.social.SocialPFlowInstance;
 import org.semanticwb.social.SocialSite;
-import org.semanticwb.social.SocialTopic;
 import org.semanticwb.social.Stream;
 import org.semanticwb.social.Video;
 import org.semanticwb.social.Videoable;
 import org.semanticwb.social.WordsToMonitor;
 import org.semanticwb.social.util.lucene.SpanishAnalizer;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
 
 /**
  *
@@ -702,8 +694,38 @@ public class SWBSocialUtil implements SWBAppObject {
         
     }
     
+    public static class SocialTopic
+    {
+        public static ArrayList<User> getUsersbySocialTopic(org.semanticwb.social.SocialTopic socialTopic)
+        {
+            ArrayList<User> aListUsers=new ArrayList();
+            Iterator <UserGroupRef> itUserGrpRef=socialTopic.listUserGroupRefs();
+            while(itUserGrpRef.hasNext())
+            {
+                UserGroupRef userGrpRef=itUserGrpRef.next();
+                Iterator<GenericObject> itGenObjs=userGrpRef.getUserGroup().listRelatedObjects();
+                while(itGenObjs.hasNext())
+                {
+                    GenericObject genObj=itGenObjs.next();
+                    if(genObj instanceof User)
+                    {
+                        aListUsers.add((User)genObj);
+                    }
+                }
+            }
+            return aListUsers;
+        }
+    }
+    
     
     public static class Util {
+        
+        
+        public static void sendEmail2UserGroup(UserGroup userGroup, String body)
+        {
+            
+        }
+        
 
         /**
          * Metodo que obtiene el valor de la propiedad que le llega como
@@ -750,13 +772,27 @@ public class SWBSocialUtil implements SWBAppObject {
             return ((int) dias);
         }
 
-        public static String replaceTags(String message, PostIn postIn, SocialSite socialSite, Stream stream, SocialNetwork socialNetwork) {
+        /*
+         * Renplaza tags de emails, documentar este tipo de tags que puede poner el usuario en los mensajes de 
+         * correos.
+         */
+        public static String replaceTags(String message, PostIn postIn, SocialSite socialSite, Stream stream, SocialNetwork socialNetwork) 
+        {
+            try 
+            {
+                message = SWBUtils.TEXT.replaceAll(message, "{brand.title}", socialSite.getTitle());
+                message = SWBUtils.TEXT.replaceAll(message, "{stream.title}", stream.getTitle());
+                message = SWBUtils.TEXT.replaceAll(message, "{net.title}", socialNetwork.getTitle());
+                if(postIn.getSocialTopic()!=null)
+                {
+                    message = SWBUtils.TEXT.replaceAll(message, "{postIn.topic}", postIn.getSocialTopic().getTitle());
+                }
+                if(postIn.getPostInSocialNetworkUser()!=null)
+                {
+                    message = SWBUtils.TEXT.replaceAll(message, "{postIn.user}", postIn.getPostInSocialNetworkUser().getSnu_name());
+                    message = SWBUtils.TEXT.replaceAll(message, "{postIn.userklout}", ""+postIn.getPostInSocialNetworkUser().getSnu_klout()); 
+                }
 
-            message = SWBUtils.TEXT.replaceAll(message, "{brand.title}", socialSite.getTitle());
-            message = SWBUtils.TEXT.replaceAll(message, "{stream.title}", stream.getTitle());
-            message = SWBUtils.TEXT.replaceAll(message, "{net.title}", socialNetwork.getTitle());
-            try {
-                System.out.println("Mensaje del post:" + ((MessageIn) postIn).getMsg_Text());
                 message = SWBUtils.TEXT.replaceAll(message, "{post.message}", ((MessageIn) postIn).getMsg_Text());
             } catch (Exception e) {
                 log.error(e);
@@ -789,6 +825,20 @@ public class SWBSocialUtil implements SWBAppObject {
 
     public static class PostOutUtil
     {
+        /*
+         * Metodo con el que se crea un nuevo objeto de la clase PostOutNet, en el cual se agrega los ids creados 
+         * en las diferentes redes sociales a los que se envia un postOut desde swbsocial, esto nos sirve para llevar
+         * la trazabilidad de los mensajes enviados.
+         */
+        public static void savePostOutNetID(PostOut postOut, SocialNetwork socialNet, String socialNetMsgId) throws SWBException
+        {
+            if(postOut==null || socialNet==null || socialNetMsgId==null) return;
+            WebSite wsite=WebSite.ClassMgr.getWebSite(postOut.getSemanticObject().getModel().getName());
+            PostOutNet postOutNet=PostOutNet.ClassMgr.createPostOutNet(wsite);
+            postOutNet.setSocialPost(postOut);
+            postOutNet.setSocialNetwork(socialNet);
+            postOutNet.setSocialNetMsgID(socialNetMsgId);
+        }
         
         
         public static void editPostOut(PostOut postout, SocialPFlow socialPFlow, ArrayList<SocialNetwork> aSocialNets, WebSite wsite, String toPost, HttpServletRequest request, SWBActionResponse response) 
@@ -843,7 +893,7 @@ public class SWBSocialUtil implements SWBAppObject {
         }
         
 
-        public static void sendNewPost(PostIn postIn, SocialTopic socialTopic, SocialPFlow socialPFlow, ArrayList<SocialNetwork> aSocialNets, WebSite wsite, String toPost, HttpServletRequest request, SWBActionResponse response) 
+        public static void sendNewPost(PostIn postIn, org.semanticwb.social.SocialTopic socialTopic, SocialPFlow socialPFlow, ArrayList<SocialNetwork> aSocialNets, WebSite wsite, String toPost, HttpServletRequest request, SWBActionResponse response) 
         {
             try {
                 //if(postIn==null && socialTopic!=null) wsite=WebSite.ClassMgr.getWebSite(socialTopic.getSemanticObject().getModel().getName());
@@ -861,7 +911,7 @@ public class SWBSocialUtil implements SWBAppObject {
                     mgr.setFilterRequired(false);
                     SemanticObject sobj = mgr.processForm(request);
                     org.semanticwb.social.Post post = (org.semanticwb.social.Post) sobj.createGenericInstance();
-                    post.setSocialTopic(socialTopic);
+                    post.setSocialTopic(socialTopic); 
                     //Convierto a un post de salida para poderle agregar cada red social a la que se envía dicho post
                     PostOut postOut = (PostOut) post;
                     //Si el PostOut que se acaba de crear, fue en consecuencia de una respuesta de una PostIn, este se agrega al nuevo PostOut

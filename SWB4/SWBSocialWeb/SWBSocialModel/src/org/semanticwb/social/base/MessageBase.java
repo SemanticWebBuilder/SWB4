@@ -200,6 +200,29 @@ public abstract class MessageBase extends org.semanticwb.social.PostOut implemen
             return it;
         }
        /**
+       * Gets all org.semanticwb.social.Message with a determined PostOutNetInv
+       * @param value PostOutNetInv of the type org.semanticwb.social.PostOutNet
+       * @param model Model of the org.semanticwb.social.Message
+       * @return Iterator with all the org.semanticwb.social.Message
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.Message> listMessageByPostOutNetInv(org.semanticwb.social.PostOutNet value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.Message> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(social_hasPostOutNetInv, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.social.Message with a determined PostOutNetInv
+       * @param value PostOutNetInv of the type org.semanticwb.social.PostOutNet
+       * @return Iterator with all the org.semanticwb.social.Message
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.Message> listMessageByPostOutNetInv(org.semanticwb.social.PostOutNet value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.Message> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(social_hasPostOutNetInv,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
        * Gets all org.semanticwb.social.Message with a determined SocialTopic
        * @param value SocialTopic of the type org.semanticwb.social.SocialTopic
        * @param model Model of the org.semanticwb.social.Message

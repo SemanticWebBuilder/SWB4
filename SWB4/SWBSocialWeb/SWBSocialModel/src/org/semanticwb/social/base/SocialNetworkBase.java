@@ -4,7 +4,7 @@ package org.semanticwb.social.base;
    /**
    * Clase que engloba a las diferentes clases que representan cada una de las redes sociales. 
    */
-public abstract class SocialNetworkBase extends org.semanticwb.model.SWBClass implements org.semanticwb.social.Listenerable,org.semanticwb.model.Activeable,org.semanticwb.social.Secreteable,org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable
+public abstract class SocialNetworkBase extends org.semanticwb.model.SWBClass implements org.semanticwb.social.Listenerable,org.semanticwb.social.Secreteable,org.semanticwb.model.Activeable,org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable
 {
    /**
    * Clase a Cambiar despues por "Relacional".  En esta clase se guardan todos los post que lleguan por el listener, se estima que toda la info. que se guarde en este objeto debe de eliminarse aproximadamente c/mes, siendo este parametro configurable de acuerdo al tiempo que la organización quiera guardar  la información sobre los mensajes que lleguen por el listener. Cuando un post que llegue por el listener sea tomado como base para crear un nuevo post por la organización, se cree que debe copiarse la información de dicho post de esta clase hacia la clase PostListenerContainerBase.Se almacenan por mes y año, de esta manera sera mucho mas rapido hacer las busquedas sobre las instancias de esta clase.
@@ -43,9 +43,9 @@ public abstract class SocialNetworkBase extends org.semanticwb.model.SWBClass im
    */
     public static final org.semanticwb.platform.SemanticProperty social_hasSocialNetStreamSearchInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#hasSocialNetStreamSearchInv");
    /**
-   * En este objeto se guardara el identificador que es asignado para cada post en cada una de las redes sociales, es decir, si un mismo post se envía hacia mas de una red social, cada una de esas redes sociales daran un identificador unico para ese post en esa red social, este lo tenemos que guardar nosotros en este objeto para fines de monitoreo de estatus del post en esa red social (En Proceso, Revisado, Publicado, etc), como nosotros para un post, independientemente de a cuantas redes sociales se envíe, solo creamos un objeto Post (Message, Photo, Video), tuvimos que crear esta clase para guardar el identificador de ese post para c/red social. En el ID de este objeto se colocara el id de ese post en esa red social.
+   * En este objeto se guardara el identificador que es asignado para cada post en cada una de las redes sociales, es decir, si un mismo post se envía hacia mas de una red social, cada una de esas redes sociales daran un identificador unico para ese post en esa red social, este lo tenemos que guardar nosotros en este objeto para fines de monitoreo de estatus del post en esa red social (En Proceso, Revisado, Publicado, etc), como nosotros para un post, independientemente de a cuantas redes sociales se envíe, solo creamos un objeto Post (Message, Photo, Video), tuvimos que crear esta clase para guardar el identificador de ese post para c/red social.
    */
-    public static final org.semanticwb.platform.SemanticClass social_SocialPost=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#SocialPost");
+    public static final org.semanticwb.platform.SemanticClass social_PostOutNet=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#PostOutNet");
    /**
    * Con esta inversa, Cuando se elimine una red social, se eliminaran todos los objetos de tipo SocialPost que este asociados a la misma.
    */
@@ -253,23 +253,23 @@ public abstract class SocialNetworkBase extends org.semanticwb.model.SWBClass im
         }
        /**
        * Gets all org.semanticwb.social.SocialNetwork with a determined SocialPostInv
-       * @param value SocialPostInv of the type org.semanticwb.social.SocialPost
+       * @param value SocialPostInv of the type org.semanticwb.social.PostOutNet
        * @param model Model of the org.semanticwb.social.SocialNetwork
        * @return Iterator with all the org.semanticwb.social.SocialNetwork
        */
 
-        public static java.util.Iterator<org.semanticwb.social.SocialNetwork> listSocialNetworkBySocialPostInv(org.semanticwb.social.SocialPost value,org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.social.SocialNetwork> listSocialNetworkBySocialPostInv(org.semanticwb.social.PostOutNet value,org.semanticwb.model.SWBModel model)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.social.SocialNetwork> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(social_hasSocialPostInv, value.getSemanticObject(),sclass));
             return it;
         }
        /**
        * Gets all org.semanticwb.social.SocialNetwork with a determined SocialPostInv
-       * @param value SocialPostInv of the type org.semanticwb.social.SocialPost
+       * @param value SocialPostInv of the type org.semanticwb.social.PostOutNet
        * @return Iterator with all the org.semanticwb.social.SocialNetwork
        */
 
-        public static java.util.Iterator<org.semanticwb.social.SocialNetwork> listSocialNetworkBySocialPostInv(org.semanticwb.social.SocialPost value)
+        public static java.util.Iterator<org.semanticwb.social.SocialNetwork> listSocialNetworkBySocialPostInv(org.semanticwb.social.PostOutNet value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.social.SocialNetwork> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(social_hasSocialPostInv,value.getSemanticObject(),sclass));
             return it;
@@ -646,21 +646,21 @@ public abstract class SocialNetworkBase extends org.semanticwb.model.SWBClass im
          return ret;
     }
    /**
-   * Gets all the org.semanticwb.social.SocialPost
-   * @return A GenericIterator with all the org.semanticwb.social.SocialPost
+   * Gets all the org.semanticwb.social.PostOutNet
+   * @return A GenericIterator with all the org.semanticwb.social.PostOutNet
    */
 
-    public org.semanticwb.model.GenericIterator<org.semanticwb.social.SocialPost> listSocialPostInvs()
+    public org.semanticwb.model.GenericIterator<org.semanticwb.social.PostOutNet> listSocialPostInvs()
     {
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.social.SocialPost>(getSemanticObject().listObjectProperties(social_hasSocialPostInv));
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.social.PostOutNet>(getSemanticObject().listObjectProperties(social_hasSocialPostInv));
     }
 
    /**
    * Gets true if has a SocialPostInv
-   * @param value org.semanticwb.social.SocialPost to verify
-   * @return true if the org.semanticwb.social.SocialPost exists, false otherwise
+   * @param value org.semanticwb.social.PostOutNet to verify
+   * @return true if the org.semanticwb.social.PostOutNet exists, false otherwise
    */
-    public boolean hasSocialPostInv(org.semanticwb.social.SocialPost value)
+    public boolean hasSocialPostInv(org.semanticwb.social.PostOutNet value)
     {
         boolean ret=false;
         if(value!=null)
@@ -672,15 +672,15 @@ public abstract class SocialNetworkBase extends org.semanticwb.model.SWBClass im
 
    /**
    * Gets the SocialPostInv
-   * @return a org.semanticwb.social.SocialPost
+   * @return a org.semanticwb.social.PostOutNet
    */
-    public org.semanticwb.social.SocialPost getSocialPostInv()
+    public org.semanticwb.social.PostOutNet getSocialPostInv()
     {
-         org.semanticwb.social.SocialPost ret=null;
+         org.semanticwb.social.PostOutNet ret=null;
          org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(social_hasSocialPostInv);
          if(obj!=null)
          {
-             ret=(org.semanticwb.social.SocialPost)obj.createGenericInstance();
+             ret=(org.semanticwb.social.PostOutNet)obj.createGenericInstance();
          }
          return ret;
     }
