@@ -83,10 +83,12 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
                 twitter.setOAuthAccessToken(accessToken);
 //                StatusUpdate sup = new StatusUpdate(new String(message.getMsg_Text().getBytes(), "utf-8"));
                 //StatusUpdate sup = new StatusUpdate(new String(shortUrl(message.getMsg_Text()).getBytes(), "ISO-8859-1"));
-                Status sup=null;
+                Status sup = null;
                 if(message.getPostInSource()!=null && message.getPostInSource().getSocialNetMsgId()!=null)
                 {
-                    sup=twitter.updateStatus(new StatusUpdate(new String(shortUrl(message.getMsg_Text()).getBytes(), "ISO-8859-1")).inReplyToStatusId(Long.parseLong(message.getPostInSource().getSocialNetMsgId())));
+                    sup = twitter.updateStatus(new StatusUpdate(new String(shortUrl(message.getMsg_Text()).getBytes(), "ISO-8859-1")).inReplyToStatusId(Long.parseLong(message.getPostInSource().getSocialNetMsgId())));
+                }else{
+                    sup = twitter.updateStatus(new StatusUpdate(new String(shortUrl(message.getMsg_Text()).getBytes(), "ISO-8859-1")));
                 }
                 
                 //Status stat = twitter.updateStatus(sup);
