@@ -88,6 +88,7 @@ exportUrl.setMode(SVGModeler.MODE_EXPORT);
             <span class="storeProcess" title="Enviar modelo" onclick="storeProcess();"></span>
             <span class="saveProcess" title="Guardar modelo" onclick="submit_download_form('swp')"></span>
             <span class="saveAsImage" title="Guardar como imagen" onclick="submit_download_form('svg')"></span>
+            <span class="saveAsImage" title="Guardar como imagen" onclick="submit_download_form('png')"></span>
             <span class="subbarEnd"></span>
         </div>
         <div id="startEventsBar" class="subbarHidden" style="width: 385px;">
@@ -911,7 +912,7 @@ exportUrl.setMode(SVGModeler.MODE_EXPORT);
     */
     function submit_download_form(output_format) {
         var form = document.getElementById("svgform");
-        if (output_format === "svg") {
+        if (output_format === "svg" || output_format === "png") {
             // Get the SVG element
             var svg = document.getElementsByTagName("svg")[0];
             // Extract the data as SVG text string
