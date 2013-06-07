@@ -28,7 +28,7 @@
     WebPage wpage = paramRequest.getWebPage();
     WebSite wsite = wpage.getWebSite();
     String statistic = request.getParameter("statistic");
-    String urlSite = wsite.getWebPage("Statistics").getUrl();
+    String urlSite = wpage.getUrl();
     String urlstatistic = urlSite+"?statistic=";
 %>
 <%  if(statistic==null){%>
