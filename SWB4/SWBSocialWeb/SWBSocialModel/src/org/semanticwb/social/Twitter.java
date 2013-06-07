@@ -82,16 +82,24 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
                 AccessToken accessToken = new AccessToken(this.getAccessToken(), this.getAccessTokenSecret());
                 twitter.setOAuthAccessToken(accessToken);
 //                StatusUpdate sup = new StatusUpdate(new String(message.getMsg_Text().getBytes(), "utf-8"));
-                StatusUpdate sup = new StatusUpdate(new String(shortUrl(message.getMsg_Text()).getBytes(), "ISO-8859-1"));
-                
-                Status stat = twitter.updateStatus(sup);
-                long longStat = stat.getId();
-                
-                try{
-                    SWBSocialUtil.PostOutUtil.savePostOutNetID(message, this, String.valueOf(longStat));  
-                }catch(SWBException swbe)
+                //StatusUpdate sup = new StatusUpdate(new String(shortUrl(message.getMsg_Text()).getBytes(), "ISO-8859-1"));
+                Status sup=null;
+                if(message.getPostInSource()!=null && message.getPostInSource().getSocialNetMsgId()!=null)
                 {
-                    log.error(swbe);
+                    sup=twitter.updateStatus(new StatusUpdate(new String(shortUrl(message.getMsg_Text()).getBytes(), "ISO-8859-1")).inReplyToStatusId(Long.parseLong(message.getPostInSource().getSocialNetMsgId())));
+                }
+                
+                //Status stat = twitter.updateStatus(sup);
+                long longStat = sup.getId();
+                
+                if(longStat>0)
+                {
+                    try{
+                        SWBSocialUtil.PostOutUtil.savePostOutNetID(message, this, String.valueOf(longStat));  
+                    }catch(SWBException swbe)
+                    {
+                        log.error(swbe);
+                    }
                 }
                 
                 // System.out.println("longStat: " + longStat + " texto: " + stat.getText());
