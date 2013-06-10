@@ -54,7 +54,7 @@ public class SWBTSUtil
             if (ch == '&')
             {
                 ret.append("&#38;");
-            }else if (ch > 127)
+            }else if (ch > 126 || ch < 32)
             {
                 ret.append("&#" + (int) ch + ";");
             } else
