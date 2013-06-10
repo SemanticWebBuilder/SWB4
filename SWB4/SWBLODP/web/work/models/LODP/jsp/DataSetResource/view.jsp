@@ -837,11 +837,18 @@
                 <%
             }
             }
+            String idWPapps = base.getAttribute("appwebpage","Aplicaciones");
+            WebPage wpapps = wsite.getWebPage(idWPapps);
+            String urlapps = "#";
+            
+            if(wpapps!=null&&ds.getInstitution()!=null){
+                urlapps = wpapps.getUrl()+"?filteruri="+ds.getInstitution().getShortURI()+"&order=date";
+            }
                 %>
         </ul>
                         
             <div>
-                <span><%=numapps%> aplicaciones relacionadas</span> <a href="#">Ver todas</a>
+                <span><%=numapps%> aplicaciones relacionadas</span> <a href="<%=urlapps%>">Ver todas</a>
             </div>
 		</div>
         </div> <!-- der -->
