@@ -4,6 +4,7 @@
     Author     : juan.fernandez
 --%>
 
+<%@page import="java.text.DecimalFormat"%>
 <%@page import="org.semanticwb.model.UserRepository"%>
 <%@page import="org.semanticwb.SWBPortal"%>
 <%@page import="com.infotec.lodp.swb.Comment"%>
@@ -317,9 +318,9 @@
 %>
 <div class="buscar_ds">
     <form method="post" action="" id="ds_search">
-        <ul>
-            <li>
-                <label for="txt_search"><%=txtTitleSearch%></label><input type="text" name="search" value="<%=queryOriginal%>" onfocus="if (this.value == 'Search' || this.value == 'Buscar') { this.value = ''; }"><button type="submit"><%=paramRequest.getLocaleString("btn_search")%></button>
+                <label for="txt_search"><%=txtTitleSearch%></label>
+                <input type="text" name="search" value="<%=queryOriginal%>" onfocus="if (this.value == 'Search' || this.value == 'Buscar') { this.value = ''; }">
+                <button type="submit"><%=paramRequest.getLocaleString("btn_search")%></button>
                 <%
                     // si hubo búsqueda
                     if (null != queryinput && queryinput.trim().length() > 0) {
@@ -339,12 +340,10 @@
                 <%
                     }
                 %>        
-            </li>
-        </ul>
     </form>
 </div>
-
-    <div class="derecho_ordena">
+    <div class="panel">
+    <div class="orden">
         <%
             SWBResourceURL urlorder = paramRequest.getRenderUrl();
             urlorder.setParameter("act", "myds");
@@ -358,25 +357,23 @@
             if (null != orderby) {
                 //urlorder.setParameter("order", orderby);
                 if (orderby.equals(DataSetResource.ORDER_CREATED)) {
-                    ckdCreated = "checked";
+                    ckdCreated = "class=\"selected\""; 
                 } else if (orderby.equals(DataSetResource.ORDER_VIEW)) {
-                    ckdView = "checked";
+                    ckdView = "class=\"selected\""; 
                 } else if (orderby.equals(DataSetResource.ORDER_DOWNLOAD)) {
-                    ckdDownload = "checked";
+                    ckdDownload = "class=\"selected\""; 
                 } else if (orderby.equals(DataSetResource.ORDER_RANK)) {
-                    ckdRank = "checked";
+                    ckdRank = "class=\"selected\""; 
                 }
             }
 
         %>
-        <label><%=paramRequest.getLocaleString("lbl_orderby")%></label>
-        <p>
-            <input type="radio" id="ordercreated" name="order" value="created" <%=ckdCreated%> onclick="window.location = '<%=urlorder.toString()%>&order=<%=DataSetResource.ORDER_CREATED%>';"><label for="ordercreated"><%=paramRequest.getLocaleString("lbl_byrecent")%></label>
-            <input type="radio" id="orderview" name="order" value="view" <%=ckdView%> onclick="window.location = '<%=urlorder.toString()%>&order=<%=DataSetResource.ORDER_VIEW%>';"><label for="orderview"><%=paramRequest.getLocaleString("lbl_byvisited")%></label>
-            <input type="radio" id="orderdownload" name="order" value="download" <%=ckdDownload%> onclick="window.location = '<%=urlorder.toString()%>&order=<%=DataSetResource.ORDER_DOWNLOAD%>';"><label for="orderdownload"><%=paramRequest.getLocaleString("lbl_bydownload")%></label>
-            <input type="radio" id="orderrank" name="order" value="value" <%=ckdRank%> onclick="window.location = '<%=urlorder.toString()%>&order=<%=DataSetResource.ORDER_RANK%>';"><label for="orderrank"><%=paramRequest.getLocaleString("lbl_byvaluated")%></label>
-        </p>
+            <a <%=ckdCreated%> href="<%=urlorder.toString()%>&order=<%=DataSetResource.ORDER_CREATED%>" ><%=paramRequest.getLocaleString("lbl_byrecent")%></a> 
+            <a <%=ckdView%> href="<%=urlorder.toString()%>&order=<%=DataSetResource.ORDER_VIEW%>"><%=paramRequest.getLocaleString("lbl_byvisited")%></a> 
+            <a <%=ckdDownload%> href="<%=urlorder.toString()%>&order=<%=DataSetResource.ORDER_DOWNLOAD%>"><%=paramRequest.getLocaleString("lbl_bydownload")%></a>
+            <a <%=ckdRank%> href="<%=urlorder.toString()%>&order=<%=DataSetResource.ORDER_RANK%>"><%=paramRequest.getLocaleString("lbl_byvaluated")%></a>
     </div>
+
     <%
 
         //PAGINACION
@@ -391,19 +388,17 @@
          int x = 0;
          * */
     %>
-    <div class="listadataset">
-        <table style="overflow: auto">
+    <table class="panel-table">
+        <caption>Mis Datasets</caption>
             <thead>
-                <tr style='background-color: cadetblue;'>
+                <tr>
                     <th>Título</th>
                     <th>Descripción</th>
                     <th>Formato</th>
-                    <th>Visitas</th>
-                    <th>Descargas</th>
-                    <th>Calificado</th>
                     <th>Fecha</th>
                     <th>Etiquetas</th>
-                    <th>Acción</th>
+                    <th>Estadísticas</th>
+                    <th>Acciones</th>
                 </tr>
             </thead>
 
@@ -411,12 +406,12 @@
                 <%
                     if (intSize == 0) {
                 %>
-                <tr><td colspan="6">No se encontraron Data-Sets</td></tr>
+                <tr class="r1">
+                    <td colspan="7">No se encontraron Data-Sets</td>
+                </tr>
                 <%                                } else {
 
                     boolean paintBackColor = Boolean.FALSE;
-                    String backcolor = "style=\"background-color: #ccc;\"";
-                    String selectedcolor = "style=\"background-color: #cca;\"";
                     String toPaint = "";
                     while (itds.hasNext()) {
 
@@ -452,26 +447,45 @@
 
 
                         if (paintBackColor) {
-                            toPaint = backcolor;
+                            toPaint = "r1";
                         } else {
-                            toPaint = "";
+                            toPaint = "r2";
                         }
 
-                        if (null != suri && ds.getShortURI().equals(suri)) {
-                            toPaint = selectedcolor;
-                        }
+                       // if (null != suri && ds.getShortURI().equals(suri)) {
+                       //     toPaint = selectedcolor;
+                       // }
                         paintBackColor=!paintBackColor;
                 %>
                 <tr <%=toPaint%>>
-                    <td onclick="window.location = '<%=urlsummary.toString()%>'; "><%=ds.getDatasetTitle()%></td> 
-                    <td onclick="window.location = '<%=urlsummary.toString()%>';"><%=ds.getDatasetDescription()%></td>    
-                    <td onclick="window.location = '<%=urlsummary.toString()%>';"><%=ds.getDatasetFormat()%></td>
-                    <td onclick="window.location = '<%=urlsummary.toString()%>';"><%=ds.getViews()%></td>
-                    <td onclick="window.location = '<%=urlsummary.toString()%>';"><%=ds.getDownloads()%></td>
-                    <td onclick="window.location = '<%=urlsummary.toString()%>';"><%=ds.getAverage()%></td>
-                    <td onclick="window.location = '<%=urlsummary.toString()%>';"><%=sdf.format(ds.getDatasetUpdated())%></td>
-                    <td onclick="window.location = '<%=urlsummary.toString()%>';"><%=LODPUtils.getDSTagList(ds, ",")%></td> 
-                    <td><a href="<%=urldet.toString()%>">Ver</a>&nbsp;<a href="<%=urlremove.toString()%>">Eliminar</a></td> 
+                    <td ><%=ds.getDatasetTitle()%></td> 
+                    <td ><%=ds.getDatasetDescription()%></td>    
+                    <td ><%=ds.getDatasetFormat()%></td>
+                    <td ><%=sdf.format(ds.getDatasetUpdated())%></td>
+                    <td ><%=LODPUtils.getDSTagList_UL(ds)%></td> 
+                    <td >
+                        <ul>
+                            <li class="visita" title="Visitas"><strong>Visitas:</strong><%=ds.getViews()%></li>
+                            <li class="descar" title="Descargas"><strong>Descargas:</strong><%=ds.getDownloads()%></li>
+                            <li class="valora" title="Valoración"><strong>Valoración:</strong><%=ds.getAverage()%></li>
+                            <%
+                                long numcomm = 0;
+                                if (ds.listComments().hasNext()) {
+                                    numcomm = SWBUtils.Collections.sizeOf(ds.listComments());
+                                }
+                                long numapps = 0;
+                                Iterator<Application> iteapp = Application.ClassMgr.listApplicationByRelatedDataset(ds);
+                                if (iteapp.hasNext()) {
+                                    numapps = SWBUtils.Collections.sizeOf(iteapp);
+                                }
+
+                                DecimalFormat dft = new DecimalFormat("#,###,###");
+                            %>
+                            <li class="contri" title="Contribuciones"><strong>Contribuciones:</strong><%=dft.format(numapps)%></li>
+                            <li class="coment" title="Comentarios"><strong>Comentarios:</strong><%=dft.format(numcomm)%></li>
+                        </ul>
+                    </td>
+                    <td><a class="editar" href="<%=urldet.toString()%>"><span>Editar</span></a>&nbsp;<a class="eliminar" href="<%=urlremove.toString()%>"><span>Eliminar</span></a></td> 
                 </tr>
                 <%
                         }
@@ -480,115 +494,9 @@
             </tbody>
         </table>
     </div>
-    <%
-        String showSummary = request.getParameter("summary");
-        if (null == showSummary) {
-            showSummary = "";
-        }
-
-        if ("show".equals(showSummary)) {
-            %>
-            <div>
-                <label>Detalles</label>
-                <div>
-                    <label>Aplicaciones utilizadas con este Dataset</label>
-            <%
-            // Mostrar Informacion Dataset
-            Dataset ds = null;
-            suri = SemanticObject.shortToFullURI(suri);
-            go = ont.getGenericObject(suri);
-            if (null != go && go instanceof Dataset) {
-                ds = (Dataset) go;
-            }
             
-            if (null != ds) {
 
-                Application appn = null;
-                Iterator<Application> itapp = Application.ClassMgr.listApplicationByRelatedDataset(ds, wsite);
-                if (itapp.hasNext()) {
-        %>
-        <ul>
-    
-    <%
-                    String wpappID = base.getAttribute("appwebpage", "Aplicaciones");
-                    String wpappURL = wsite.getWebPage(wpappID).getUrl()+"?act=detail&suri=";
-                    while (itapp.hasNext()) {
-                        appn = itapp.next();
-                        
-    %>
-    <li><a title="<%=appn.getAppDescription()%>" href="<%=wpappURL+appn.getEncodedURI()%>"><%=appn.getAppTitle()%></a></li>
-    <%
-                    }
-                    %>
-      </ul>
-                    <%
-                } else {
-                    // no tiene aplicaciones utilizadas con este dataset 
-                    %>
-                    <ul>
-                        <li>No se encontraron aplicaciones utlizadas por este Dataset.</li>
-                    </ul>
-                    <%
-                }
-            } else {
-                // no se encontró dataset con ese uri
-                 %>
-                    <ul>
-                        <li>No encontró información del Dataset .</li>
-                    </ul>
-                    <%
-            }
-             %>
-</div>
-<div>
-    <ul>
-        <%
-        if(ds!=null){
-        
-        %>
-        <li>
-            <label>Valoración:</label><%=ds.getAverage()%>
-        </li>
-        <li>
-            <label>Visitas:</label><%=ds.getViews()%> 
-        </li>
-        <li>
-            <label>Descargas:</label><%=ds.getDownloads()%>
-        </li>
-        <li>
-            <%
-            long numcomms = 0;
-          if(ds.listComments().hasNext())
-          {
-             numcomms = SWBUtils.Collections.sizeOf(ds.listComments());
-          } 
-            %>
-            <label>Comentarios:</label><%=numcomms%>
-        </li>
-        <li>
-            <%
-           numcomms = 0;
-          if(Application.ClassMgr.listApplicationByRelatedDataset(ds, wsite).hasNext())
-          {
-             numcomms = SWBUtils.Collections.sizeOf(Application.ClassMgr.listApplicationByRelatedDataset(ds, wsite));
-          } 
-            %>
-            <label>Contribuciones:</label><%=numcomms%>
-        </li>
-                <%
-        } else {
-   %>
-   <li>No encontró información del Dataset .</li>
-   <%
-        }
-   %>
-    </ul>
-    
-</div>
-
-            </div>
-<%
-} 
+    <% 
 }
     }
     // Termina llamado como contenido
