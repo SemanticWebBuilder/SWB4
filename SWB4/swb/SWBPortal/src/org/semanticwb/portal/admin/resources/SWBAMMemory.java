@@ -35,6 +35,7 @@ import javax.servlet.http.*;
 import java.util.*;
 import java.io.*;
 import org.semanticwb.portal.monitor.SWBSummary;
+import org.semanticwb.servlet.internal.Distributor;
 import org.semanticwb.servlet.internal.Monitor;
 
 
@@ -129,7 +130,9 @@ public class SWBAMMemory extends GenericResource {
             out.println("</fieldset>");
             out.println("<div class=\"swbform\">");
             out.println(swbSummary.getSample().GetSumaryHTML());
-            out.println("</div>");
+            out.println("<div id=\"Alerts\">");
+            out.println("<ul><li>Is Page cache active: "+ Distributor.isPageCache()+"</li>");
+            out.println("</ul></div></div>");
         } else {
             out.println(paramsRequest.getLocaleString("msgIsNotActive"));
         }
