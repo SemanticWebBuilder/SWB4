@@ -77,7 +77,7 @@ public class SWBCommentToElement extends org.semanticwb.portal.resources.sem.bas
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
         String action = response.getAction();
         String uri = request.getParameter("uri");
-        if(action.equals(response.Action_ADD)) {
+        if(action.equals(SWBActionResponse.Action_ADD)) {
             String securCodeSent = request.getParameter("cmnt_seccode");
             String securCodeCreated = (String)request.getSession(true).getAttribute("cs");
             if( securCodeCreated!=null && securCodeCreated.equalsIgnoreCase(securCodeSent) ) {
@@ -165,7 +165,7 @@ public class SWBCommentToElement extends org.semanticwb.portal.resources.sem.bas
         }
 
         SWBResourceURL rUrl = paramRequest.getActionUrl();
-        rUrl.setAction(paramRequest.Action_ADD);
+        rUrl.setAction(SWBParamRequest.Action_ADD);
         rUrl.setParameter("uri", uri);
 
         out.println("<script type=\"text/javascript\">");
@@ -289,13 +289,15 @@ public class SWBCommentToElement extends org.semanticwb.portal.resources.sem.bas
             int min = MIN_LIST;
             while(min>0 && icomments.hasNext()) {
                 CommentToElement comment = icomments.next();
-                if(!comment.isValid() || !user.haveAccess(comment))
+                if(!comment.isValid() || !user.haveAccess(comment)) {
                     continue;
+                }
                 html.append("  <li class=\"swb-comentario-sem-item\">");
-                if(comment.getName()==null && user.isSigned())
-                    html.append("<p><span>"+comment.getCreator().getFullName()==null?"":comment.getCreator().getFullName()+"</span>");
-                else
+                if(comment.getName()==null && user.isSigned()) {
+                    html.append("<p><span>"+(comment.getCreator()==null?"":comment.getCreator().getFullName())+"</span>");
+                }else {
                     html.append("<p><span>"+comment.getName()==null?"":comment.getName()+"</span>");
+                }
                 try {
                     html.append("&nbsp;"+paramRequest.getLocaleString("ago")+"&nbsp;"+SWBUtils.TEXT.getTimeAgo(comment.getCreated(), lang));
                 }catch(Exception e) {
@@ -308,8 +310,9 @@ public class SWBCommentToElement extends org.semanticwb.portal.resources.sem.bas
             html.append(" </ol>");
             html.append(" <p><a href=\"javascript:postHtml('"+paramRequest.getRenderUrl().setCallMethod(SWBResourceURL.Call_DIRECT).setMode(SWBResourceURL.Mode_INDEX).setParameter("uri",element.getEncodedURI())+"','swb-cmnt-sem-lst')\">"+paramRequest.getLocaleString("viewAllComments") +"&nbsp;&raquo;</a></p>");
             html.append("</div>");
-        }else
+        }else {
             html.append("<h2>"+paramRequest.getLocaleString("noComment")+"</h2>");
+        }
         html.append("</div>");
         return html.toString();
     }
@@ -339,13 +342,15 @@ public class SWBCommentToElement extends org.semanticwb.portal.resources.sem.bas
             html.append(" <ol>");
             while(comments.hasNext()) {
                 CommentToElement comment = comments.next();
-                if(!comment.isValid() || !user.haveAccess(comment))
+                if(!comment.isValid() || !user.haveAccess(comment)) {
                     continue;
+                }
                 html.append("  <li>");
-                if(comment.getName()==null && user.isSigned())
+                if(comment.getName()==null && user.isSigned()) {
                     name = comment.getCreator().getFullName();
-                else
+                }else {
                     name = comment.getName();
+                }
                 try {
                     html.append("&nbsp;"+paramRequest.getLocaleString("ago")+"&nbsp;"+SWBUtils.TEXT.getTimeAgo(comment.getCreated(), lang));
                 }catch(Exception e) {
