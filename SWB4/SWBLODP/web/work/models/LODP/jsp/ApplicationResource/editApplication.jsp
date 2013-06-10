@@ -88,25 +88,33 @@
        <%=paramRequest.getLocaleString("lbl_editAPP")%>
      </h1>
  </p>
+ 
+ <div id="subefile" class="formas">
+     
+     <div class="subefile0"> 
         
         <form id="nuevoContacto" action="<%=actionURL.setAction(SWBResourceURL.Action_EDIT).setParameter("uri", apl.getEncodedURI())%>" method="post">
-            <div>
-                <p>
-                    <label><b>*</b><%=paramRequest.getLocaleString("lbl_appTitulo")%></label>
-                    <input type="text" name="titleApp" value="<%=apl.getAppTitle()%>"/>
-                </p>
-                <p>
-                    <label><b>*</b><%=paramRequest.getLocaleString("lbl_appDescripcion")%></label>
-                    <textarea name="descripcion" id="descripcion"><%=apl.getAppDescription()%></textarea>
-                </p>
-                <p>
-                    <label><b>*</b><%=paramRequest.getLocaleString("lbl_category")%></label>
-                    <input type="text" name="category" disabled="true" value="<%=descCat%>"/>
-                    <input type="hidden" name="idCat" value="<%=idCat%>"/>
-                </p>
-                <p>
-                   Este es el id del dataset <%=apl.getRelatedDataset().getId()%>
-                    <label><b>*</b><%=paramRequest.getLocaleString("lbl_appDS")%></label>
+           
+            <div class="subefile0">
+                
+                <label><b>*</b><%=paramRequest.getLocaleString("lbl_appAutor")%></label>
+                <input type="text" name="usuario" disabled="true" value="<%=fullName%>"/>
+                
+            </div>
+                
+            <div class="subefile1">
+                
+                <label for="tit"><b>*</b><%=paramRequest.getLocaleString("lbl_appTitulo")%></label>
+                <input type="text" id="tit" name="titleApp" value="<%=apl.getAppTitle()%>"/>
+               
+                <label for="desc"><b>*</b><%=paramRequest.getLocaleString("lbl_appDescripcion")%></label>
+                <textarea name="descripcion" id="desc"><%=apl.getAppDescription()%></textarea>
+                
+                <label for="cat"><b>*</b><%=paramRequest.getLocaleString("lbl_category")%></label>
+                <input type="text" id="cat" name="category" disabled="true" value="<%=descCat%>"/>
+                <input type="hidden" name="idCat" value="<%=idCat%>"/>
+                
+                <label for="usr"><b>*</b><%=paramRequest.getLocaleString("lbl_appDS")%></label>
                     <select name="dataSet" dojoType="dijit.form.FilteringSelect">
                         <option value=""></option>
                             <%
@@ -130,15 +138,7 @@
                             %>
                     </select>
 
-                </p>
-            </div>
-            <div>
-                <p>
-                    <label><b>*</b><%=paramRequest.getLocaleString("lbl_appAutor")%></label>
-                    <input type="text" name="usuario" disabled="true" value="<%=fullName%>"/>
-                </p>
-                <p>
-                    <label><b>*</b><%=paramRequest.getLocaleString("lbl_appLicencia")%></label>
+                    <label for="lic"><b>*</b><%=paramRequest.getLocaleString("lbl_appLicencia")%></label>
                     <select name="licencia" dojoType="dijit.form.FilteringSelect">
                         <option value=""></option>
                             <%
@@ -161,22 +161,21 @@
                                 }
                             %>
                     </select>
-                </p>
-                <p>
-                    <label><b>*</b><%=paramRequest.getLocaleString("lbl_appURL")%></label>
-                    <input type="text" name="url" value="<%=apl.getAppURL()%>"/>
-                </p>
+                
+                    <label for="url1"><b>*</b><%=paramRequest.getLocaleString("lbl_appURL")%></label>
+                    <input type="text" id="url1" name="url" value="<%=apl.getAppURL()%>"/>
+             
             </div>
-            <div>
-                <p>
-                   <input type="submit" value="<%=paramRequest.getLocaleString("btn_appActualizar")%>"/>
-                   <input type="button" value="<%=paramRequest.getLocaleString("btn_appCancelar")%>" onclick="javascript:document.back.submit()"/> 
-                </p>
-            </div>
-        </form>           
-             <a href="<%=renderURL.setMode(SWBResourceURL.Mode_VIEW)%>">
-               Regresar
-            </a>
+            
+            <input type="submit" value="<%=paramRequest.getLocaleString("btn_appActualizar")%>" class="boton-subir"/>
+            <input type="button" value="<%=paramRequest.getLocaleString("btn_appCancelar")%>" onclick="javascript:document.back.submit()"  class="boton-cancelar"> 
+               
+        </form>
+     </div>
+            
+    <a href="<%=renderURL.setMode(SWBResourceURL.Mode_VIEW)%>">
+      Regresar
+    </a>
 
 <%!    
     public class PageComparator implements Comparator<LicenseType>{
