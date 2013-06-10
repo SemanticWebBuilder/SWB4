@@ -23,7 +23,7 @@ public class SendPost extends org.semanticwb.social.base.SendPostBase
         try
         {
             SendPost sendPost=(SendPost)action;
-            if(sendPost.getActionMsg()!=null && sendPost.listSocialNetworkses().hasNext())
+            if(sendPost.getMsg_Text()!=null && sendPost.listSocialNetworkses().hasNext())
             {
                 //TODO:Implementar
                 //String message=SWBSocialUtil.Util.replaceTags(sendEmail.getActionMsg(), postIn, stream.getSocialSite(), stream, socialNetwork);

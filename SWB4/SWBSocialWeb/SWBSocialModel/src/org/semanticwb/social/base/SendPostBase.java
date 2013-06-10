@@ -4,7 +4,7 @@ package org.semanticwb.social.base;
    /**
    * Acción específica mediante la cual se envía un mensaje por defecto a una o varias redes sociales seleccionadas 
    */
-public abstract class SendPostBase extends org.semanticwb.social.ActionMsg implements org.semanticwb.social.SocialNetworkable,org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable
+public abstract class SendPostBase extends org.semanticwb.social.ActionMsg implements org.semanticwb.social.PostDataable,org.semanticwb.social.PostTextable,org.semanticwb.model.Descriptiveable,org.semanticwb.social.PostVideoable,org.semanticwb.social.PostImageable,org.semanticwb.social.SocialNetworkable,org.semanticwb.model.Traceable
 {
    /**
    * Acción específica mediante la cual se envía un mensaje por defecto a una o varias redes sociales seleccionadas
@@ -191,6 +191,24 @@ public abstract class SendPostBase extends org.semanticwb.social.ActionMsg imple
     {
         super(base);
     }
+
+/**
+* Gets the Video property
+* @return String with the Video
+*/
+    public String getVideo()
+    {
+        return getSemanticObject().getProperty(social_video);
+    }
+
+/**
+* Sets the Video property
+* @param value long with the Video
+*/
+    public void setVideo(String value)
+    {
+        getSemanticObject().setProperty(social_video, value);
+    }
    /**
    * Gets all the org.semanticwb.social.SocialNetwork
    * @return A GenericIterator with all the org.semanticwb.social.SocialNetwork
@@ -255,6 +273,24 @@ public abstract class SendPostBase extends org.semanticwb.social.ActionMsg imple
              ret=(org.semanticwb.social.SocialNetwork)obj.createGenericInstance();
          }
          return ret;
+    }
+
+/**
+* Gets the Photo property
+* @return String with the Photo
+*/
+    public String getPhoto()
+    {
+        return getSemanticObject().getProperty(social_photo);
+    }
+
+/**
+* Sets the Photo property
+* @param value long with the Photo
+*/
+    public void setPhoto(String value)
+    {
+        getSemanticObject().setProperty(social_photo, value);
     }
 
    /**
