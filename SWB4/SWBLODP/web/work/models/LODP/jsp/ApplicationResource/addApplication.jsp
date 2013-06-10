@@ -79,9 +79,7 @@
     dojo.require("dijit.TitlePane");
     dojo.require("dijit.TooltipDialog");
     dojo.require("dijit.Dialog");
-    // editor:
     dojo.require("dijit.Editor");
-    // various Form elemetns
     dojo.require("dijit.form.Form");
     dojo.require("dijit.form.CheckBox");
     dojo.require("dijit.form.Textarea");
@@ -119,7 +117,6 @@
     
     function validateReadAgree(){
         var ret=false;        
-//        ret = document.getElementById('terminos').checked;
         ret=dijit.byId("terminos").checked;
         return ret;
     }
@@ -150,107 +147,93 @@
        <%=paramRequest.getLocaleString("lbl_tituloSubirApp")%>
      </h1>
  </p>
+ 
+ <div id="subefile" class="formas">
         
- <form id="newApplication" dojoType="dijit.form.Form" action="<%=url%>" method="post" >
-            <div> 
-                <p>
-                   <label><b>*</b><%=paramRequest.getLocaleString("lbl_appTitulo")%></label>
-                   <input type="text" name="titleApp"  dojoType="dijit.form.ValidationTextBox" required="true" promptMessage="<%=paramRequest.getLocaleString("lbl_promtTitleAPP")%>" invalidMessage="<%=paramRequest.getLocaleString("lbl_titleFault")%> " trim="true" regExp="[a-zA-Z\u00C0-\u00FF' ]+" />
-                </p>
-
-                <p>
-                   <label><b>*</b><%=paramRequest.getLocaleString("lbl_appDescripcion")%></label>
-                   <textarea name="descripcion" id="descripcion" data-dojo-type="dijit.form.Textarea" required="true" promptMessage="Ingresa la descripcion de tu aplicacion" invalidMessage="Datos invalidos" trim="true" ></textarea>
-                </p>
-                
-                <p>
-                    <label><b>*</b><%=paramRequest.getLocaleString("lbl_category")%></label>
-                    <input type="text" name="category" disabled="true" value="<%=category%>"/>
-                    <input type="hidden" name="idCat" value="<%=idCat%>"/>
-                </p>
-                
-                <p>
-                    <label><b>*</b><%=paramRequest.getLocaleString("lbl_appDS")%></label>
-                    <select name="dataSet" dojoType="dijit.form.FilteringSelect" required="true">
-                        <option value="">Selecciona...</option>
-                            <%
-                                Iterator<Dataset> itDt = Dataset.ClassMgr.listDatasets(wsite);
-                                List<Dataset> dataSet = new ArrayList<Dataset>();
-                                while(itDt.hasNext()){
-                                    dataSet.add(itDt.next());
-                                }
-                                Collections.sort(dataSet , new PageComparatorDataSet());
-                                itDt=dataSet.iterator();
-                                while (itDt.hasNext()) {
-                                    Dataset lic = itDt.next();
-                            %>
-                        <option value="<%=lic.getId()%>"><%=lic.getDatasetTitle()%></option>
-                            <%
-                                }
-                            %>
-                    </select>
-                </p>               
-            </div>            
-            <div>
-                <p>
-                    <label><b>*</b><%=paramRequest.getLocaleString("lbl_appAutor")%></label>
-                    <input type="text" name="usuario" disabled="true" value="<%=user.getFullName()%>"/>
-                </p>
-
-                <p>
-                    <label><b>*</b><%=paramRequest.getLocaleString("lbl_appLicencia")%></label>
-                    <select name="licencia" dojoType="dijit.form.FilteringSelect" required="true">
-                        <option value="">Selecciona....</option>
-                            <%
-                                Iterator<LicenseType> itLic = LicenseType.ClassMgr.listLicenseTypes(wsite);
-                                List<LicenseType> licArray = new ArrayList<LicenseType>();
-                                while(itLic.hasNext()){
-                                    licArray.add(itLic.next());
-                                }
-                                Collections.sort(licArray , new PageComparator());
-                                itLic=licArray.iterator();
-                                while (itLic.hasNext()) {
-                                    LicenseType lic = itLic.next();
-                            %>
-                        <option value="<%=lic.getId()%>"><%=lic.getLicenseTitle()%></option>
-                            <%
-                                }
-                            %>
-                    </select>
-
-                </p>
-
-                <p>                
-                    <label><b>*</b><%=paramRequest.getLocaleString("lbl_appURL")%></label>
-                    <input type="text" name="url" dojoType="dijit.form.ValidationTextBox" required="true" promptMessage="Ingresa la url de tu aplicacion para descargar" invalidMessage="Url invalida" trim="true" />
-                </p>
-            </div>
-                    
-            <div>
-                <p class="icv-3col">
-                    
-                </p>
-                <p>
-                    <input type="checkbox" name="terminos" id="terminos" maxlength="8" value="true" dojoType="dijit.form.CheckBox" required="true" _promptMessage="<%=paramRequest.getLocaleString("lbl_agreement")%>" invalidMessage="<%=paramRequest.getLocaleString("lbl_agreement")%>" isValid="return confirm('this.checkbox.value==true')"/>
-                    <a href="<%=renderURL.setMode(ApplicationResource.MODE_TERMINOS)%>" ><label for="terminos"><%=paramRequest.getLocaleString("lbl_appTerminosLicencia")%></label></a>         
-                </p>
-            </div>      
-                   
-            <div>
-                <p>
-                    <input type="submit" onclick="return enviarAPP()" value="<%=paramRequest.getLocaleString("btn_appGuardar")%>" />
-                    <input type="button" value="<%=paramRequest.getLocaleString("btn_appCancelar")%>" onclick="javascript:document.back.submit()"/>
-                </p>
-            </div>
-        </form>
+    <form id="newApplication" dojoType="dijit.form.Form" action="<%=url%>" method="post" >
+       
+        <div class="subefile0"> 
+            
+           <label><b>*</b><%=paramRequest.getLocaleString("lbl_appAutor")%></label>
+           <input type="text" name="usuario" disabled="true" value="<%=user.getFullName()%>"/>
+       
+        </div>
+       
+       <div class="subefile1">
+           
+           <label for="tit"><b>*</b><%=paramRequest.getLocaleString("lbl_appTitulo")%></label>
+           <input type="text" id="tit" name="titleApp"  dojoType="dijit.form.ValidationTextBox" required="true" promptMessage="<%=paramRequest.getLocaleString("lbl_promtTitleAPP")%>" invalidMessage="<%=paramRequest.getLocaleString("lbl_titleFault")%> " trim="true" regExp="[a-zA-Z\u00C0-\u00FF' ]+" />
+           
+           <label for="desc"><b>*</b><%=paramRequest.getLocaleString("lbl_appDescripcion")%></label>
+           <textarea name="descripcion" id="desc" data-dojo-type="dijit.form.Textarea" required="true" promptMessage="Ingresa la descripcion de tu aplicacion" invalidMessage="Datos invalidos" trim="true" ></textarea>
+      
+           <label for="cat"><b>*</b><%=paramRequest.getLocaleString("lbl_category")%></label>
+           <input id="cat" type="text" name="category" disabled="true" value="<%=category%>"/>
+           <input type="hidden" name="idCat" value="<%=idCat%>"/>
+           
+           <label for="usr"><b>*</b><%=paramRequest.getLocaleString("lbl_appDS")%></label>
+            <select name="dataSet" dojoType="dijit.form.FilteringSelect" required="true">
+                <optgroup value="">Selecciona...</optgroup>
+                    <%
+                        Iterator<Dataset> itDt = Dataset.ClassMgr.listDatasets(wsite);
+                        List<Dataset> dataSet = new ArrayList<Dataset>();
+                        while(itDt.hasNext()){
+                            dataSet.add(itDt.next());
+                        }
+                        Collections.sort(dataSet , new PageComparatorDataSet());
+                        itDt=dataSet.iterator();
+                        while (itDt.hasNext()) {
+                            Dataset lic = itDt.next();
+                    %>
+                <option value="<%=lic.getId()%>"><%=lic.getDatasetTitle()%></option>
+                    <%
+                        }
+                    %>
+            </select>
+            
+           <label for="lic"><b>*</b><%=paramRequest.getLocaleString("lbl_appLicencia")%></label>
+            <select name="licencia" dojoType="dijit.form.FilteringSelect" required="true">
+                <option value="">Selecciona....</option>
+                    <%
+                        Iterator<LicenseType> itLic = LicenseType.ClassMgr.listLicenseTypes(wsite);
+                        List<LicenseType> licArray = new ArrayList<LicenseType>();
+                        while(itLic.hasNext()){
+                            licArray.add(itLic.next());
+                        }
+                        Collections.sort(licArray , new PageComparator());
+                        itLic=licArray.iterator();
+                        while (itLic.hasNext()) {
+                            LicenseType lic = itLic.next();
+                    %>
+                <option value="<%=lic.getId()%>"><%=lic.getLicenseTitle()%></option>
+                    <%
+                        }
+                    %>
+            </select>
+            
+            <label for="url1"><b>*</b><%=paramRequest.getLocaleString("lbl_appURL")%></label>
+            <input type="text" id="url1" name="url" dojoType="dijit.form.ValidationTextBox" required="true" promptMessage="Ingresa la url de tu aplicacion para descargar" invalidMessage="Url invalida" trim="true" />
+           
+            <input type="checkbox" name="terminos" id="terminos" maxlength="8" value="true" dojoType="dijit.form.CheckBox" required="true" _promptMessage="<%=paramRequest.getLocaleString("lbl_agreement")%>" invalidMessage="<%=paramRequest.getLocaleString("lbl_agreement")%>" isValid="return confirm('this.checkbox.value==true')"/>
+            <a href="<%=renderURL.setMode(ApplicationResource.MODE_TERMINOS)%>" ><label for="terminos"><%=paramRequest.getLocaleString("lbl_appTerminosLicencia")%></label></a>    
+            
+       </div> 
+            
+            <input type="submit" onclick="return enviarAPP()" value="<%=paramRequest.getLocaleString("btn_appGuardar")%>"  class="boton-subir" />
+            <input type="button" value="<%=paramRequest.getLocaleString("btn_appCancelar")%>" onclick="javascript:document.back.submit()" class="boton-cancelar"/>
+                       
+      </form>
+     </div>
+            
         <form action="<%=actionURL.setMode(SWBResourceURL.Mode_VIEW)%>" method="post" name="back"></form>
             
         <a href="<%=renderURL.setMode(SWBResourceURL.Mode_VIEW).setParameter("cancel", cancelar) %>">
-               Regresar
-            </a>
-               <%}else{ %>
+          Regresar
+        </a>
+   
+    <%}else{ %>
         <%=paramRequest.getLocaleString("lbl_appUserLoggeo")%>
-    <%    }%>
+    <%}%>
 
 <%!
     
