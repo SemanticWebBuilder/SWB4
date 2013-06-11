@@ -115,26 +115,39 @@
                 <input type="hidden" name="idCat" value="<%=idCat%>"/>
                 
                 <label for="usr"><b>*</b><%=paramRequest.getLocaleString("lbl_appDS")%></label>
-                    <select name="dataSet" dojoType="dijit.form.FilteringSelect">
+                    <select name="dataSet" multiple siz="5">
                         <option value=""></option>
                             <%
                                 Iterator<Dataset> itDt = Dataset.ClassMgr.listDatasets(wsite);
                                 List<Dataset> dataSet = new ArrayList<Dataset>();
+                                List<Dataset> dataSetSave = new ArrayList<Dataset>();
+                                Iterator<Dataset> itaplList = apl.listRelatedDatasets();
+                                
+                                System.out.println("Esta es la lista que se guardo de los dataset relacionados en el jsp" + itaplList.hasNext());
+                                
                                 while(itDt.hasNext()){
                                     dataSet.add(itDt.next());
                                 }
+                                
+                                while(itaplList.hasNext()){
+                                    dataSetSave.add(itaplList.next());
+                                }
+                                
                                 Collections.sort(dataSet , new PageComparatorDataSet());
                                 itDt=dataSet.iterator();
+                               
                                 while (itDt.hasNext()) {
                                     Dataset ds = itDt.next();
                                     String selectedDS = "";
-                                    if(apl.getRelatedDataset().getId().equals(ds.getId())){
-                                        selectedDS = "selected";
-                                    }
+                                    
+                                    if(dataSetSave.contains(ds)){
+                                        System.out.println("Entro");
+                                       selectedDS = "selected";
+                                    } 
                             %>
                         <option value="<%=ds.getId()%>" <%=selectedDS%>><%=ds.getDatasetTitle()%></option>
                             <%
-                                }
+                                    }
                             %>
                     </select>
 
