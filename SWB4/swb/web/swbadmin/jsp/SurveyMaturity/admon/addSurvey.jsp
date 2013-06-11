@@ -75,5 +75,6 @@
                 <input type="button" value="Cancelar" onclick="closeAddSurvey();">&nbsp;<input type="button" value="Guardar" onclick="saveAddSurvey(this.form)">&nbsp;<input type="button" value="Guardar y Agregar" onclick="saveAndContinueAddSurvey(this.form);">
             </td>
         </tr>
+        
     </table>
 </form>
