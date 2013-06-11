@@ -433,7 +433,10 @@ public class SentimentalDataClassifier {
                                SendEmail.sendEmail(action, post, stream, socialNetwork);
                             }else if(action instanceof SendPost)
                             {
-                               SendPost.sendPost(action, post);
+                                if(post.getSocialTopic()!=null)
+                                {
+                                    SendPost.sendPost(action, post);
+                                }
                             }else if(action instanceof MarkMsgAsPrioritary)
                             {
                                MarkMsgAsPrioritary.markMsgAsPrioritary(action,post);
