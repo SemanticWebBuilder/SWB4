@@ -4,7 +4,7 @@ package org.semanticwb.social.base;
    /**
    * Clase que almacenara las diferentes cuentas de una organización para la red social YouTube. 
    */
-public abstract class YoutubeBase extends org.semanticwb.social.SocialNetwork implements org.semanticwb.social.Secreteable,org.semanticwb.social.Videoable,org.semanticwb.social.Authenticable,org.semanticwb.social.SocialNetPostable,org.semanticwb.model.Descriptiveable,org.semanticwb.social.Listenerable,org.semanticwb.model.Activeable,org.semanticwb.model.Traceable
+public abstract class YoutubeBase extends org.semanticwb.social.SocialNetwork implements org.semanticwb.social.Listenerable,org.semanticwb.model.Activeable,org.semanticwb.social.SocialNetPostable,org.semanticwb.model.Traceable,org.semanticwb.social.Authenticable,org.semanticwb.social.Secreteable,org.semanticwb.social.Videoable,org.semanticwb.model.Descriptiveable,org.semanticwb.social.Oauthable
 {
    /**
    * Clase que almacenara las diferentes cuentas de una organización para la red social YouTube.
@@ -262,6 +262,24 @@ public abstract class YoutubeBase extends org.semanticwb.social.SocialNetwork im
     }
 
 /**
+* Gets the TokenExpirationDate property
+* @return java.util.Date with the TokenExpirationDate
+*/
+    public java.util.Date getTokenExpirationDate()
+    {
+        return getSemanticObject().getDateProperty(social_tokenExpirationDate);
+    }
+
+/**
+* Sets the TokenExpirationDate property
+* @param value long with the TokenExpirationDate
+*/
+    public void setTokenExpirationDate(java.util.Date value)
+    {
+        getSemanticObject().setDateProperty(social_tokenExpirationDate, value);
+    }
+
+/**
 * Gets the Password property
 * @return String with the Password
 */
@@ -295,5 +313,41 @@ public abstract class YoutubeBase extends org.semanticwb.social.SocialNetwork im
     public void setLogin(String value)
     {
         getSemanticObject().setProperty(social_login, value);
+    }
+
+/**
+* Gets the AccessToken property
+* @return String with the AccessToken
+*/
+    public String getAccessToken()
+    {
+        return getSemanticObject().getProperty(social_accessToken);
+    }
+
+/**
+* Sets the AccessToken property
+* @param value long with the AccessToken
+*/
+    public void setAccessToken(String value)
+    {
+        getSemanticObject().setProperty(social_accessToken, value);
+    }
+
+/**
+* Gets the AccessTokenSecret property
+* @return String with the AccessTokenSecret
+*/
+    public String getAccessTokenSecret()
+    {
+        return getSemanticObject().getProperty(social_accessTokenSecret);
+    }
+
+/**
+* Sets the AccessTokenSecret property
+* @param value long with the AccessTokenSecret
+*/
+    public void setAccessTokenSecret(String value)
+    {
+        getSemanticObject().setProperty(social_accessTokenSecret, value);
     }
 }

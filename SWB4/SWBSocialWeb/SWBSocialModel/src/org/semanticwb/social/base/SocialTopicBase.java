@@ -4,7 +4,7 @@ package org.semanticwb.social.base;
    /**
    * Catalogo de temas de un modelo (Marca) 
    */
-public abstract class SocialTopicBase extends org.semanticwb.model.SWBClass implements org.semanticwb.social.SocialPFlowRefable,org.semanticwb.model.Referensable,org.semanticwb.model.Tagable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Activeable,org.semanticwb.model.Traceable
+public abstract class SocialTopicBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.UserGroupRefable,org.semanticwb.model.Activeable,org.semanticwb.model.Referensable,org.semanticwb.model.Traceable,org.semanticwb.social.SocialPFlowRefable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Tagable
 {
    /**
    * Catalogo de temas de un modelo (Marca)
