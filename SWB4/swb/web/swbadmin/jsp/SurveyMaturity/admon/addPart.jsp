@@ -4,7 +4,9 @@
         dijit.byId("dialogAdmonParte").hide();
     }
     function saveDialogAddPart()
-    {       
+    {
+        
+        dojo.ready(enviaforma(''));
         var tituloparteditor=getValueEditor('tituloparteditor');
         if(tituloparteditor.isEmpty())
         {
