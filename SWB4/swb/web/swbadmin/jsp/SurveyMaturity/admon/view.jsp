@@ -34,6 +34,37 @@
                 
                 
             }
+
+            function sendForm(id){
+                var form = dojo.byId(id);
+
+                dojo.connect(form, "onsubmit", function(event){
+                    // Stop the submit event since we want to control form submission.
+                    dojo.stopEvent(event);
+
+                    // The parameters to pass to xhrPost, the form, how to handle it, and the callbacks.
+                    // Note that there isn't a url passed.  xhrPost will extract the url to call from the form's
+                    //'action' attribute.  You could also leave off the action attribute and set the url of the xhrPost object
+                    // either should work.
+                    var xhrArgs = {
+                        form: dojo.byId(id),
+                        handleAs: "text",
+                        load: function(data){
+                            //dojo.byId("response").innerHTML = "Form posted.";
+                        },
+                        error: function(error){
+                            // We'll 404 in the demo, but that's okay.  We don't have a 'postIt' service on the
+                            // docs server.
+                            //dojo.byId("response").innerHTML = "Form posted.";
+                        }
+                    }
+                    // Call the asynchronous xhrPost
+                    //dojo.byId("response").innerHTML = "Form being sent..."
+                    var deferred = dojo.xhrPost(xhrArgs);
+                    return deferred;
+                });
+            }
+
             function getValueEditor(id)
             {
                 var html=dijit.byId(id).getValue(true);
