@@ -769,13 +769,19 @@
             
             <li><strong><%=paramRequest.getLocaleString("lbl_views")%>:</strong> <%=ds.getViews()%></li>
                 <li><strong><%=paramRequest.getLocaleString("lbl_downloads")%>:</strong> <%=ds.getDownloads()%></li>
-                <li><strong><%=paramRequest.getLocaleString("lbl_rated")%>:</strong> <%=ds.getAverage()%>
+                <li><strong><%=paramRequest.getLocaleString("lbl_rated")%>:</strong> <%//=ds.getAverage()%>
+                    <%
+                        float average = Math.round(ds.getAverage());
                     
-                    <img src="images/star-on.png" width="15" height="14" />
-                    <img src="images/star-on.png" width="15" height="14" />
-                    <img src="images/star-on.png" width="15" height="14" />
-                    <img src="images/star-off.png" width="15" height="14" />
-                    <img src="images/star-off.png" width="15" height="14" />
+                    %>
+                    
+                    <!-- div id="ranking" -->
+       <img src="/work/models/LODP/css/images/star-<%=average >= 1?"on":"off"%>.png" width="15" height="14" alt="*">
+        <img src="/work/models/LODP/css/images/star-<%=average >= 2?"on":"off"%>.png" width="15" height="14" alt="*">
+        <img src="/work/models/LODP/css/images/star-<%=average >= 3?"on":"off"%>.png" width="15" height="14" alt="*">
+        <img src="/work/models/LODP/css/images/star-<%=average >= 4?"on":"off"%>.png" width="15" height="14" alt="*">
+        <img src="/work/models/LODP/css/images/star-<%=average >= 5?"on":"off"%>.png" width="15" height="14" alt="*">
+    <!-- /div -->
                 </li>
                 <!--
                    <li>
