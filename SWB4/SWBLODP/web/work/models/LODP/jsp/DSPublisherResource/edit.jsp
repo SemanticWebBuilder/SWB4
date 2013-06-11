@@ -305,7 +305,7 @@
                     </p>
                     <p>
                     <label for="dspuburl"><%=paramRequest.getLocaleString("lbl_weburl")%></label>
-                    <input type="text" name="dspuburl" id="login" dojoType="dijit.form.ValidationTextBox" value="<%=dswebsite%>" maxlength="18"readonly="true" disabled="true" />
+                    <input type="text" name="dspuburl" id="dspuburl" dojoType="dijit.form.ValidationTextBox" value="<%=dswebsite%>" maxlength="18"readonly="true" disabled="true" />
                 </p>
                  <p>
                     <label for="dscreator"><%=paramRequest.getLocaleString("lbl_technicallink")%></label>
@@ -340,7 +340,7 @@
 
                 <p>
                     <label for="dsemail"><%=paramRequest.getLocaleString("lbl_email")%></label>
-                    <input type="text" name="dsemail" id="dscreator" dojoType="dijit.form.ValidationTextBox" value="<%=dsemail%>" readonly="true" disabled="true"  />
+                    <input type="text" name="dsemail" id="dsemail" dojoType="dijit.form.ValidationTextBox" value="<%=dsemail%>" readonly="true" disabled="true"  />
                 </p>
                 <p>
                     <label for="dscreated"><%=paramRequest.getLocaleString("lbl_created")%></label>
@@ -356,7 +356,7 @@
                 </p>
                 <p>
                     <label for="dsactive"><%=paramRequest.getLocaleString("lbl_active")%></label>
-                    <input type="checkbox" name="dsactive" id="dsurl" dojoType="dijit.form.ValidationTextBox" value="true" <%=ds.isDatasetActive()?"checked":""%> />
+                    <input type="checkbox" name="dsactive" id="dsactive" dojoType="dijit.form.ValidationTextBox" value="true" <%=ds.isDatasetActive()?"checked":""%> />
                 </p>
 
                 <%

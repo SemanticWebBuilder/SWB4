@@ -749,6 +749,8 @@
                              <%
                             while (ver != null) {
                                 int vernum = ver.getVersion();
+                              //System.out.println(vernum);
+                              if(vernum>0){
                                 Date verdate = ver.getVersionCreated();
                         %>
                         <tr>
@@ -756,7 +758,9 @@
                             <td><%=null!=verdate?sdf2.format(verdate):"---"%></td>
                         </tr>
                         <%
+                              }
                                 ver = ver.getNextVersion();
+                             
                             }
                         %>
                         </tbody>                
