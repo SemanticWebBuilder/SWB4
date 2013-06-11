@@ -3,10 +3,10 @@
     {
         dijit.byId("dialogAdmonParte").hide();
     }
-    function saveDialogAddPart()
+    function saveDialogAddPart(forma)
     {
         
-        dojo.ready(enviaforma(''));
+        dojo.ready(enviaforma(forma.id));
         var tituloparteditor=getValueEditor('tituloparteditor');
         if(tituloparteditor.isEmpty())
         {
@@ -21,10 +21,11 @@
             dijit.byId('descriptionparteditor').focus();
             return;
         }
-        var parametros={};
+        /*var parametros={};
         parametros['tituloparteditor']=tituloparteditor;
         parametros['descriptionparteditor']=descriptionparteditor;
-        post(parametros);
+        post(parametros);*/
+        forma.submit();
         reloadAdmonParte();
         
         dijit.byId("dialogAdmonParte").hide();
@@ -63,7 +64,7 @@
     </tr>
     <tr>
         <td colspan="2" align="right">
-            <input type="button" value="Cancelar" onclick="closeDialogAddPart();">&nbsp;<input type="button" value="Guardar" onclick="saveDialogAddPart()">&nbsp;<input type="button" value="Guardar y Agregar" onclick="saveAndContinueDialogAddPart();">
+            <input type="button" value="Cancelar" onclick="closeDialogAddPart(this.form);">&nbsp;<input type="button" value="Guardar" onclick="saveDialogAddPart()">&nbsp;<input type="button" value="Guardar y Agregar" onclick="saveAndContinueDialogAddPart();">
         </td>
 
     </tr>
