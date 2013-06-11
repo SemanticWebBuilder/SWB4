@@ -210,7 +210,7 @@
     }
     -->
 </script>
-    <div>
+    <div id="subedataset" class="formas">
         <%
             SWBResourceURL url = paramRequest.getActionUrl();
             if(!isNew){
@@ -227,17 +227,13 @@
                 <%
             }
         %>
-            <div>
-                <p>
+            <div class="subefile1">
+                
                     <label for="dstitle"><b>*</b><%=paramRequest.getLocaleString("lbl_title")%></label>
                     <input type="text" name="dstitle" id="dstitle" dojoType="dijit.form.ValidationTextBox" value="<%=dstitle%>" required="true"  invalidMessage="<%=paramRequest.getLocaleString("lbl_titlemissing")%>" trim="true" regExp="[a-zA-Z\u00C0-\u00FF' ]+" />
-                </p>
-                <p>
                     <label for="dsdescription"><b>*</b><%=paramRequest.getLocaleString("lbl_description")%></label>
                     <textarea name="dsdescription" id="dsdescription" data-dojo-yype="dijit.form.TextArea" value="<%=dsdescription%>" required="true"  invalidMessage="<%=paramRequest.getLocaleString("lbl_descriptionmissing")%>" trim="true" _regExp="[a-zA-Z\u00C0-\u00FF' ]+" rows="5" cols="50"><%=dsdescription%></textarea>
-                </p>
                 <!-- Temas -->
-                                <p>
                     <label for="dstopic"><b>*</b><%=paramRequest.getLocaleString("lbl_topic")%></label>
                     <select multiple size="5" id="dstopic" dojoType="dijit.form.MultiSelect" name="dstopic" required="true" invalidMessage="<%=paramRequest.getLocaleString("lbl_topicmissing")%>" isValid="return isValidTopic()"  >
                             <%
@@ -258,9 +254,7 @@
                 }
                     %>
                     </select>
-                </p>
              <!-- Etiquetas -->
-                <p>
                     <label for="dslabels"><b>*</b><%=paramRequest.getLocaleString("lbl_labels")%></label>
                     <select multiple size="5" id="dslabels" dojoType="dijit.form.MultiSelect" name="dslabels" required="true" invalidMessage="<%=paramRequest.getLocaleString("lbl_tagmissing")%>"  isValid="return isValidTag()" >
                     <%
@@ -278,8 +272,6 @@
                       }
                     %>
                     </select>
-                </p>
-                 <p>
                     <label for="dslicense"><b>*</b><%=paramRequest.getLocaleString("lbl_license")%></label>
                     <select   id="dslicense" dojoType="dijit.form.FilteringSelect" name="dslicense" required="true" invalidMessage="<%=paramRequest.getLocaleString("lbl_licensemissing")%>"  _isValid="return isValidLicense()" >
                     <%
@@ -302,63 +294,35 @@
                 }
                     %>
                     </select>
-                    </p>
-                    <p>
-                    <label for="dspuburl"><%=paramRequest.getLocaleString("lbl_weburl")%></label>
-                    <input type="text" name="dspuburl" id="dspuburl" dojoType="dijit.form.ValidationTextBox" value="<%=dswebsite%>" maxlength="18"readonly="true" disabled="true" />
-                </p>
-                 <p>
-                    <label for="dscreator"><%=paramRequest.getLocaleString("lbl_technicallink")%></label>
-                    <input type="text" name="dscreator" id="dscreator" dojoType="dijit.form.ValidationTextBox" value="<%=dspubname%>" readonly="true" disabled="true" />
-                </p>
+
+                    
+
                 <%
                       if(!isNew)
                       {
                 %>
-                <p>
+                <label for="dspuburl"><%=paramRequest.getLocaleString("lbl_weburl")%></label>
+                    <input type="text" name="dspuburl" id="dspuburl" dojoType="dijit.form.ValidationTextBox" value="<%=dswebsite%>" maxlength="18"readonly="true" disabled="true" />
+                    <label for="dscreator"><%=paramRequest.getLocaleString("lbl_technicallink")%></label>
+                    <input type="text" name="dscreator" id="dscreator" dojoType="dijit.form.ValidationTextBox" value="<%=dspubname%>" readonly="true" disabled="true" />
                     <label for="dsformat"><%=paramRequest.getLocaleString("lbl_format")%></label>
                     <input type="text" name="dsformat" id="dsformat" dojoType="dijit.form.ValidationTextBox" value="<%=dsformat%>" maxlength="60" required="true"   readonly="true" disabled="true"/>
-                </p>
-                <p>
                     <label for="dssize"><%=paramRequest.getLocaleString("lbl_size")%></label>
                     <input type="text" name="dssize" id="dssize" dojoType="dijit.form.ValidationTextBox" value="<%=ds.getDatasetSize()%>" maxlength="60" required="true"   readonly="true"  disabled="true"/>
-                </p>
-                <p>
                     <label for="dsversion"><%=paramRequest.getLocaleString("lbl_version")%></label>
                     <input type="text" name="dsversion" id="dsversion" dojoType="dijit.form.ValidationTextBox" value="<%=dsversion%>" maxlength="18" required="true" _invalidMessage="<%//=paramRequest.getLocaleString("lbl_versionMissing")%>"  readonly="true"  disabled="true" />
-                </p>
-                <%
-                }
-               
-                if(!isNew){
-                    //ds.isApproved();
-                %>
-                <p>
                     <label for="dsapprove"><%=paramRequest.getLocaleString("lbl_approve")%></label>
                     <input type="text" name="dsapprove" id="dsapprove" dojoType="dijit.form.ValidationTextBox" value="<%=ds.isApproved()?"Sí":"No"%>" readonly="true" disabled="true"/>
-                </p>
-
-                <p>
                     <label for="dsemail"><%=paramRequest.getLocaleString("lbl_email")%></label>
                     <input type="text" name="dsemail" id="dsemail" dojoType="dijit.form.ValidationTextBox" value="<%=dsemail%>" readonly="true" disabled="true"  />
-                </p>
-                <p>
                     <label for="dscreated"><%=paramRequest.getLocaleString("lbl_created")%></label>
                     <input type="text" name="dscreated" id="dscreated" dojoType="dijit.form.ValidationTextBox" value="<%=dscreated%>" readonly="true" disabled="true" />
-                </p>
-                <p>
                     <label for="dsupdated"><%=paramRequest.getLocaleString("lbl_updated")%></label>
                     <input type="text" name="dsupdated" id="dsupdated" dojoType="dijit.form.ValidationTextBox" value="<%=dsupdated%>" readonly="true" disabled="true" />
-                </p>
-                <p>
                     <label for="dsurl"><%=paramRequest.getLocaleString("lbl_urlendpoint")%></label>
                     <input type="text" name="dsurl" id="dsurl" dojoType="dijit.form.ValidationTextBox" value="<%=dsurl%>" maxlength="12" readonly="true" disabled="true" />
-                </p>
-                <p>
                     <label for="dsactive"><%=paramRequest.getLocaleString("lbl_active")%></label>
-                    <input type="checkbox" name="dsactive" id="dsactive" dojoType="dijit.form.ValidationTextBox" value="true" <%=ds.isDatasetActive()?"checked":""%> />
-                </p>
-
+                    <input type="checkbox" name="dsactive" id="dsactive" dojoType="dijit.form.CheckBox" value="true" <%=ds.isDatasetActive()?"checked":""%> />
                 <%
                 }
                 %>
@@ -366,7 +330,6 @@
                 
             </div>
 
-            <div class="centro">
                 <%
                     SWBResourceURL urlbck = paramRequest.getRenderUrl();
                     urlbck.setParameter("act", "myds");
@@ -391,7 +354,7 @@
                  } 
                 %>
                 <input type="submit" onclick="return enviar()" value="<%=paramRequest.getLocaleString("lblSubmit")%>"/>
-            </div>
+            
         </form>
     </div>
-
+<div class="clear">&nbsp;</div> 

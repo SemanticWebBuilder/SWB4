@@ -197,18 +197,24 @@
 
         <ul>
             <%
-                SWBResourceURL urlstat = paramRequest.getRenderUrl();
-                urlstat.setMode(DSPublisherResource.MODE_STATS);
-
+                String statswpid = base.getAttribute("statswebpage","EstadisticasEnTabla");
+                WebPage wpurl = wsite.getWebPage(statswpid); 
+                String statsurl = "#";
+                if(null!=wpurl) {
+                    statsurl = wpurl.getUrl();
+                }
             %>
-            <li><a href="<%=urlstat.toString()%>">Estadísticas</a></li>
+            <li><a href="<%=statsurl%>">Estadísticas</a></li> 
 
             <%
-                SWBResourceURL urlgra = paramRequest.getRenderUrl();
-                urlgra.setMode(DSPublisherResource.MODE_GRAPH);
-
+                String graphwpid = base.getAttribute("graphwebpage","EstadisticasEnGrafica");
+                 wpurl = wsite.getWebPage(statswpid); 
+                statsurl = "#";
+                if(null!=wpurl) {
+                    statsurl = wpurl.getUrl();
+                }
             %>
-            <li><a href="<%=urlgra.toString()%>">Gráficas de actividad</a></li>
+            <li><a href="<%=statsurl%>">Gráficas de actividad</a></li>
 
         </ul>
     </fieldset>
@@ -465,9 +471,13 @@
                     <td ><%=LODPUtils.getDSTagList_UL(ds)%></td> 
                     <td >
                         <ul>
-                            <li class="visita" title="Visitas"><strong>Visitas:</strong><%=ds.getViews()%></li>
-                            <li class="descar" title="Descargas"><strong>Descargas:</strong><%=ds.getDownloads()%></li>
-                            <li class="valora" title="Valoración"><strong>Valoración:</strong><%=ds.getAverage()%></li>
+                            <%
+                                DecimalFormat dft = new DecimalFormat("#,###,###");
+                                DecimalFormat dft2 = new DecimalFormat("#,###,###.##");
+                            %>
+                            <li class="visita" title="Visitas"><strong>Visitas:</strong><%=dft.format(ds.getViews())%></li>
+                            <li class="descar" title="Descargas"><strong>Descargas:</strong><%=dft.format(ds.getDownloads())%></li>
+                            <li class="valora" title="Valoración"><strong>Valoración:</strong><%=dft2.format(ds.getAverage())%></li>
                             <%
                                 long numcomm = 0;
                                 if (ds.listComments().hasNext()) {
@@ -479,7 +489,6 @@
                                     numapps = SWBUtils.Collections.sizeOf(iteapp);
                                 }
 
-                                DecimalFormat dft = new DecimalFormat("#,###,###");
                             %>
                             <li class="contri" title="Contribuciones"><strong>Contribuciones:</strong><%=dft.format(numapps)%></li>
                             <li class="coment" title="Comentarios"><strong>Comentarios:</strong><%=dft.format(numcomm)%></li>

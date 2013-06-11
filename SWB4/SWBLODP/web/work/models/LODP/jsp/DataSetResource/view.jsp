@@ -640,6 +640,12 @@
         //System.out.println("Detalle DS.........");
         String suri = request.getParameter("suri");
         //System.out.println("URI........."+suri);
+        String statswpid = base.getAttribute("statswebpage","EstadisticasEnTabla");
+                WebPage wpurl = wsite.getWebPage(statswpid); 
+                String statsurl = "#";
+                if(null!=wpurl) {
+                    statsurl = wpurl.getUrl();
+                }
         go = ont.getGenericObject(SemanticObject.shortToFullURI(suri));
         if (go instanceof Dataset) {
     %>
@@ -783,18 +789,7 @@
         <img src="/work/models/LODP/css/images/star-<%=average >= 5?"on":"off"%>.png" width="15" height="14" alt="*">
     <!-- /div -->
                 </li>
-                <!--
-                   <li>
-                <label><%//=paramRequest.getLocaleString("lbl_rated")%>:</label><p><%//=ds.getAverage()%></p>
-                <div>
-                    5 <%//=paramRequest.getLocaleString("lbl_val5")%><br/>
-                    4 <%//=paramRequest.getLocaleString("lbl_val4")%><br/>
-                    3 <%//=paramRequest.getLocaleString("lbl_val3")%><br/>
-                    2 <%//=paramRequest.getLocaleString("lbl_val2")%><br/>
-                    1 <%//=paramRequest.getLocaleString("lbl_val1")%><br/>
-                </div>
-            </li>     
-            -->
+
             </ul>
 
                 <%
@@ -803,14 +798,10 @@
                 url.setParameter("suri",ds.getShortURI());
                 url.setParameter("act","meta");
                 url.setMode(DataSetResource.MODE_FILE);
-                //url.setParameter("mformat", DataSetResource.RDF_MIME_TYPE);
 
-                    SWBResourceURL urlstats = paramRequest.getRenderUrl();
-                    urlstats.setParameter("suri", ds.getShortURI());
-                    urlstats.setParameter("act", "stats");
                 %>
                 
-        <a href="<%=urlstats.toString()%>" title="<%=paramRequest.getLocaleString("lbl_statsDS")%>" class="ver-estad"><span><%=paramRequest.getLocaleString("lbl_statsDS")%></span></a> 
+        <a href="<%=statsurl%>" title="<%=paramRequest.getLocaleString("lbl_statsDS")%>" class="ver-estad"><span><%=paramRequest.getLocaleString("lbl_statsDS")%></span></a> 
         <a href="<%=url.toString()%>&mformat=<%=DataSetResource.META_FORMAT_JSON%>" title="<%=paramRequest.getLocaleString("lbl_exportDSmeta")%> JSON" class="ver-exp-json"><span><%=paramRequest.getLocaleString("lbl_exportDSmeta")%> JSON</span></a> 
         <a href="<%=url.toString()%>&mformat=<%=DataSetResource.META_FORMAT_RDF%>" title="<%=paramRequest.getLocaleString("lbl_exportDSmeta")%> RDF" class="ver-exp-rdf"><span><%=paramRequest.getLocaleString("lbl_exportDSmeta")%> RDF</span></a>     
             
@@ -866,8 +857,6 @@
 <div class="clear">&nbsp;</div> 
     </div>   
 
-        
-       
 <%
             }
         } else if("stats".equals(action)){
