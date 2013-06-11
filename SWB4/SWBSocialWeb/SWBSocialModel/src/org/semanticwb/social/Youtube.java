@@ -164,4 +164,14 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase
         }
         return service;
     }
+
+    @Override
+    public String doRequestPermissions() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public String doRequestAccess() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 }
