@@ -86,8 +86,10 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
                 Status sup = null;
                 if(message.getPostInSource()!=null && message.getPostInSource().getSocialNetMsgId()!=null)
                 {
-                    sup = twitter.updateStatus(new StatusUpdate(new String(shortUrl(message.getMsg_Text()).getBytes(), "ISO-8859-1")).inReplyToStatusId(Long.parseLong(message.getPostInSource().getSocialNetMsgId())));
+                    System.out.println("Twitter PRIMERA OPCION...:"+message.getPostInSource().getPostInSocialNetworkUser().getSnu_name());
+                    sup = twitter.updateStatus(new StatusUpdate(new String(shortUrl(message.getPostInSource().getPostInSocialNetworkUser().getSnu_name()+" " +message.getMsg_Text()).getBytes(), "ISO-8859-1")).inReplyToStatusId(Long.parseLong(message.getPostInSource().getSocialNetMsgId())));
                 }else{
+                    System.out.println("Twitter SEGUNDA OPCION...");
                     sup = twitter.updateStatus(new StatusUpdate(new String(shortUrl(message.getMsg_Text()).getBytes(), "ISO-8859-1")));
                 }
                 
