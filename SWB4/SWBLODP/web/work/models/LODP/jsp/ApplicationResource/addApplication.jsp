@@ -172,8 +172,7 @@
            <input type="hidden" name="idCat" value="<%=idCat%>"/>
            
            <label for="usr"><b>*</b><%=paramRequest.getLocaleString("lbl_appDS")%></label>
-            <select name="dataSet" dojoType="dijit.form.FilteringSelect" required="true">
-                <optgroup value="">Selecciona...</optgroup>
+           <select multiple name="dataSet" required="true" size="5">
                     <%
                         Iterator<Dataset> itDt = Dataset.ClassMgr.listDatasets(wsite);
                         List<Dataset> dataSet = new ArrayList<Dataset>();

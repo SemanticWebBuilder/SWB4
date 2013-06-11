@@ -704,7 +704,18 @@
                 <%=aps.getAppDescription()%>
             </li>
             <li>
-                <label><%=paramRequest.getLocaleString("lbl_DSUsado")%></label>&nbsp;&nbsp;<%=aps.getRelatedDataset() != null ? aps.getRelatedDataset().getDatasetTitle() : "" %>
+                <label><%=paramRequest.getLocaleString("lbl_DSUsado")%></label>
+                
+                &nbsp;&nbsp;
+                
+                <%
+                Iterator<Dataset> app = aps.listRelatedDatasets();
+                
+                while(app.hasNext()){
+                    Dataset dsRL = app.next();
+                %>
+                    <%=dsRL.getDatasetTitle()%>     
+                <%}%>
                 
                 &nbsp;
                 &nbsp;
