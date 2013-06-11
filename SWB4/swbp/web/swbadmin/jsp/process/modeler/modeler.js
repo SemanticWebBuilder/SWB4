@@ -1724,11 +1724,19 @@
         var _this = new _GraphicalElement(obj);
         var fCanAdd = _this.canAddToDiagram;
         var fSetText = _this.setText;
+        var fUpdateText = null;
         
         _this.setElementType("Pool");
         
         _this.setText = function(text) {
-            fSetText("Pool con un nombre muy largo ajustable a 200 pixeles",-1,0,200,2);
+            fSetText(text,-1,0,200,2);
+            fUpdateText = _this.text.update;
+            _this.text.update = function() {
+                if (fUpdateText != null) {
+                    fUpdateText();
+                    _this.text.setAttributeNS(null, "transform", "translate("+(_this.getX()-_this.getWidth()/2)+", "+(_this.getY()-_this.getHeight()/2)+")");
+                }
+            };
         };
         
         _this.canStartLink = function(link) {
@@ -2222,6 +2230,7 @@
             obj.subLine.setStyleClass=function(cls) {
                 obj.subLine.setAttributeNS(null,"class",cls);
             }
+            obj.pressed = false;
             
             obj.setArrowType= function(type) {
                 obj.setAttributeNS(null, "marker-end", "url(#"+type+")");
@@ -2241,6 +2250,7 @@
                 obj.xs=x;
                 obj.ys=y;
                 obj.updateInterPoints();
+                obj.pressed = false;
             }
                     
             obj.setEndPoint=function(x,y) {
@@ -2248,7 +2258,38 @@
                 obj.ye=y;
                 obj.setPoint(obj.pathSegList.numberOfItems-1,x,y);
                 obj.updateInterPoints();
+                obj.pressed = false;
             }
+            
+            obj.onmousedown = function (evt) {
+                obj.pressed = true;
+                return false;
+            };
+            
+            obj.onmousemove = function (evt) {
+                if (obj.pressed) {
+                    var idx = obj.toObject.inConnections.indexOf(obj);
+                    obj.toObject.inConnections.splice(idx);
+                    obj.toObject = null;
+                    Modeler.dragConnection = obj;
+                    obj.pressed = false;
+                }
+                return Modeler.onmousemove(evt);
+            };
+            
+            obj.onmouseup = function (evt) {
+                if (obj.pressed) {
+                    obj.pressed = false;
+                }
+                if (Modeler.dragConnection !== null && Modeler.dragConnection === obj) {
+                    Modeler.dragConnection = null;
+                }
+                return false;
+            };
+            
+            obj.subLine.onmousedown = obj.onmousedown;
+            obj.subLine.onmousemove = obj.onmousemove;
+            obj.subLine.onmouseup = obj.onmouseup;
             
             obj.updateInterPoints=function()
             {
@@ -2308,13 +2349,17 @@
                     }                                        
                 }
                 obj.updateSubLine();
-            }
+            };
             var fRemove = obj.remove;
             
             obj.remove=function() {
                 obj.subLine.remove();
                 fRemove();
-            }
+            };
+            
+//            obj.onmouseup = function() {
+//                obj.setClass("sequenceFlowSubLine_o");
+//            }
             
 //            obj.onmouseover=function(evt) {
 //                obj.subLine.setStyleClass("sequenceFlowSubLine_o");
@@ -2407,7 +2452,8 @@
             var fMoveFirst = obj.moveFirst;
             
             obj.updateHeaderLine=function() {
-                obj.headerLine.setAttributeNS(null, "d", "M"+(obj.getX()-obj.getWidth()/2 + 20)+" "+(obj.getY()-obj.getHeight()/2) +" L"+(obj.getX()-obj.getWidth()/2 + 20)+" "+(obj.getY()+obj.getHeight()/2));
+                console.log("Text info - width: "+obj.text.getBBox().width+", height: "+obj.text.getBBox().height);
+                obj.headerLine.setAttributeNS(null, "d", "M"+(obj.getX()-obj.getWidth()/2 + obj.text.getBBox().height)+" "+(obj.getY()-obj.getHeight()/2) +" L"+(obj.getX()-obj.getWidth()/2 + obj.text.getBBox().height)+" "+(obj.getY()+obj.getHeight()/2));
                 obj.headerLine.setAttributeNS(null,"bclass","swimlane");
                 obj.headerLine.setAttributeNS(null,"oclass","swimlane_o");
                 obj.headerLine.setBaseClass();
