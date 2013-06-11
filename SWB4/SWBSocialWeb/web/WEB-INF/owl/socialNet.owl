@@ -152,6 +152,13 @@
     >true</swb:autogenId>
     <rdfs:label xml:lang="en">YouTube Account</rdfs:label>
     <rdfs:label xml:lang="es">Cuenta de Youtube</rdfs:label>
+    <rdfs:subClassOf>
+      <swb:Interface rdf:ID="Oauthable">
+        <rdfs:comment>Interface que se le agrega a las clases de tipo SocialNetwork a las que sea necesaria la autenticación mediante OAuth.</rdfs:comment>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBInterface"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Interface>
+    </rdfs:subClassOf>
     <rdfs:comment>Clase que almacenara las diferentes cuentas de una organización para la red social YouTube.</rdfs:comment>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
     <rdfs:subClassOf rdf:resource="#SocialNetwork"/>
@@ -313,13 +320,7 @@
                 <rdfs:subClassOf>
                   <owl:Class rdf:ID="Kloutable"/>
                 </rdfs:subClassOf>
-                <rdfs:subClassOf>
-                  <swb:Interface rdf:ID="Oauthable">
-                    <rdfs:comment>Interface que se le agrega a las clases de tipo SocialNetwork a las que sea necesaria la autenticación mediante OAuth.</rdfs:comment>
-                    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBInterface"/>
-                    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-                  </swb:Interface>
-                </rdfs:subClassOf>
+                <rdfs:subClassOf rdf:resource="#Oauthable"/>
                 <swb:displayObject>
                   <swbxf:DisplayObject rdf:ID="do_Twitter">
                     <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
