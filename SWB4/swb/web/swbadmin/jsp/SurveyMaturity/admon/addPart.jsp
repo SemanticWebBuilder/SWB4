@@ -35,7 +35,7 @@
                 dijit.byId('descriptionparteditor').focus();
                 return;
             }
-            
+            forma.tituloparte.value=tituloparteditor;
             //forma.submit();
             sendform(forma.id);
             alert('ss');
@@ -57,6 +57,7 @@
 </script>
 <h1 align="center">Parte</h1>
 <form id="frmAddPart" action="<%=urlAction%>">
+    <input type="hidden" name="tituloparte">
     <table>
         <tr>
             <td>
