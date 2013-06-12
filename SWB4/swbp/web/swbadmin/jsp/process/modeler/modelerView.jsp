@@ -26,6 +26,11 @@ exportUrl.setMode(SVGModeler.MODE_EXPORT);
     -->
     <script type="text/javascript" src="/swbadmin/jsp/process/modeler/toolkit.js"></script>
     <script type="text/javascript" src="/swbadmin/jsp/process/modeler/modeler.js"></script>
+    <script type='text/javascript' src="/swbadmin/js/upload/upload.js"></script>
+    <script type="text/javascript" src="/dwr/interface/uploadProxy.js"></script>
+    <link rel="stylesheet" type="text/css" media="screen" href="/swbadmin/css/upload/upload.css"/>
+    <script type='text/javascript' src="/dwr/util.js"></script>
+    <script type='text/javascript' src="/dwr/engine.js"></script>
     <link href="/swbadmin/jsp/process/modeler/images/modelerFrame.css" rel="stylesheet" type="text/css">
 </head>
 <body style="margin: 0px;" onload="Modeler.init('modeler');">
@@ -363,7 +368,7 @@ exportUrl.setMode(SVGModeler.MODE_EXPORT);
 
             .sequenceFlowSubLine_o {
                 fill:none;
-                stroke:#F0F0F0;
+                stroke:#2cff20;
                 stroke-width:8;
                 cursor:hand;
             }
@@ -614,19 +619,19 @@ exportUrl.setMode(SVGModeler.MODE_EXPORT);
                 <rect x="-7" y="-7" width="14" height="14" style="fill:#ffffff;fill-opacity:0.1;"/>
             <path d="M-5 0 L5 0 M0 -5 L0 5"/>
             </g>
-            <marker id="sequenceArrow" viewBox="0 0 10 10" refX="0" refY="5" markerUnits="strokeWidth" markerWidth="6" markerHeight="5" orient="auto" fill="black" stroke="none" stroke-dasharray="0">
+            <marker id="sequenceArrow" viewBox="0 0 12 12" refX="0" refY="5" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" orient="auto" fill="black" stroke="none" stroke-dasharray="0">
                 <path d="M 0 0 L 10 5 L 0 10"/>
             </marker>
-            <marker id="messageArrow" viewBox="0 0 10 10" refX="7" refY="5" markerUnits="strokeWidth" markerWidth="6" markerHeight="5" orient="auto" fill="none" stroke="black" stroke-width="1.5" stroke-dasharray="0">
+            <marker id="messageArrow" viewBox="0 0 12 12" refX="7" refY="5" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" orient="auto" fill="none" stroke="black" stroke-width="1.5" stroke-dasharray="0">
                 <path d="M 0 0 L 10 5 L 0 10"/>
             </marker>
-            <marker id="conditionTail" viewBox="-6 -5 10 10" refX="2" refY="0" markerUnits="strokeWidth" markerWidth="6" markerHeight="6" orient="auto" fill="none" stroke="black" stroke-width="1.5" stroke-dasharray="0">
+            <marker id="conditionTail" viewBox="-6 -5 12 12" refX="2" refY="0" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" orient="auto" fill="none" stroke="black" stroke-width="1.5" stroke-dasharray="0">
                 <rect x="-3" y="-3" width="5" height="5" transform="rotate(-45)"/>
             </marker>
-            <marker id="defaultTail" viewBox="0 0 10 10" refX="-3" refY="5" markerUnits="strokeWidth" markerWidth="6" markerHeight="5" orient="auto" fill="none" stroke="black" stroke-width="2" stroke-dasharray="0">
+            <marker id="defaultTail" viewBox="0 0 12 12" refX="-3" refY="5" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" orient="auto" fill="none" stroke="black" stroke-width="2" stroke-dasharray="0">
                 <path d="M 5 0 L 0 10"/>
             </marker>
-            <marker id="messageTail" viewBox="-5 -5 10 10" refX="3" refY="0" markerUnits="strokeWidth" markerWidth="6" markerHeight="6" orient="auto" fill="none" stroke="black" stroke-width="1.5" stroke-dasharray="0">
+            <marker id="messageTail" viewBox="-5 -5 12 12" refX="3" refY="0" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" orient="auto" fill="none" stroke="black" stroke-width="1.5" stroke-dasharray="0">
                 <circle r="3" />
             </marker>
             <!--Definición de eventos iniciales-->
@@ -871,22 +876,91 @@ exportUrl.setMode(SVGModeler.MODE_EXPORT);
     <input type="hidden" name="suri" value="<%=request.getParameter("suri")%>">
     <input type="hidden" id="data" name="data" value="">
 </form>
-    <div class="overlay" id="overlayBackground">
-        <div class="loadDialog">
-            <p class="titleBar">Cargar modelo</p>
-            <div class="loadDialogContent">
-                <div id="dropArea" class="dropArea">
-                    <p>Arrastra un archivo aqu&iacute;</p>
-                </div>
-                <p>
-                    o selecciona un archivo:
-                    <form action="">
-                        <input type="file"/>
-                    </form>
-                </p>
+<%
+    SWBResourceURL uploadUrl = paramRequest.getActionUrl().setAction(SVGModeler.ACT_STOREPROCESS).setParameter("suri", request.getParameter("suri"));
+%>
+<div class="overlay" id="overlayBackground">
+    <div class="loadDialog">
+        <p class="titleBar">Cargar modelo</p>
+        <span class="loadDialogCloseButton">
+            <a href="#" onclick="hideLoadDialog(); return false;">Cerrar</a>
+        </span>
+        <div class="loadDialogContent">
+            <div id="dropArea" class="dropArea">
+                <p>Arrastra un archivo aqu&iacute;</p>
             </div>
+            <p>
+                o selecciona un archivo:
+                <form action="<%=uploadUrl%>" method="post">
+                    <iframe id='target_upload_swpFile' name='target_upload_swpFile' src='' style='display: none'></iframe>
+                    <input id="swpFile" name="swpFile" type="file" onChange="javascript:if(uploadjs_swpFile(this.form,this)) {return startUploadMonitoring('swpFile');}">
+                    <div id="uploadStatus_swpFile" style="width:230px">
+                        <div id="uploadProgressBar_swpFile" style="width:200px; height: 2px; border: 0px solid #BBB; text-align: center; float: left;">
+                            <div id="uploadIndicator_swpFile" style=" height: 1px; position: relative; margin: 0px; padding: 1px; background: #9DC0F4; width: 0; float: left;"></div>
+                        </div>
+                        <div id="uploadPercentage_swpFile" style="width:5px; float: right;"></div>
+                    </div>
+                    <script type="text/javascript">
+                        function uploadjs_swpFile(forma,element) {
+                            if (!isFileType(element.value,'swp' )) {
+                                element.value="";
+                                return false; 
+                            }
+                        
+                            var encoding=forma.encoding;
+                            forma.encoding='multipart/form-data';
+                            var method=forma.method;
+                            forma.method='post';
+                            var action=forma.action;
+
+                            forma.action='/Upload';
+                            var target=forma.target;
+                            forma.target='target_upload_swpFile';
+                            forma.submit();
+                            forma.encoding=encoding;
+                            forma.method=method;
+                            forma.action=action;
+                            forma.target=target;
+                            return true;
+                        }
+
+                        function isFileType(pFile, pExt) {
+                            if(pFile.length > 0 && pExt.length > 0) {
+                                var swFormat=pExt + '|';
+                                sExt=pFile.substring(pFile.indexOf(".")).toLowerCase();
+                                var sType='';
+                                while(swFormat.length > 0 ) {
+                                    sType= swFormat.substring(0, swFormat.indexOf("|"));
+                                    if(sExt.indexOf(sType)!=-1) return true;
+                                    swFormat=swFormat.substring(swFormat.indexOf("|")+1);
+                                }
+                                while(pExt.indexOf("|")!=-1) pExt=pExt.replace('|',',');
+                                alert("El archivo no es válido.");
+                                return false;
+                            } else {
+                                return true;
+                            }
+                        }
+                        </script>
+                        <a href="#" onclick="loadProcessFromFile(); return false;">Enviar</a>
+                </form>
+            </p>
         </div>
     </div>
+</div>
+<!--div class="overlay" id="overlayBackground">
+    <div class="propsDialog">
+        <p class="titleBar">Propiedades</p>
+        <div class="loadDialogContent">
+            <form id="propsForm" action="#">
+                <input type="text" name="title"/>
+                <textarea name="description">
+                
+                </textarea>
+            </form>
+        </div>
+    </div>
+</div-->
 <script type="text/javascript">
     <%
     commandUrl = paramRequest.getRenderUrl().setCallMethod(SWBResourceURL.Call_DIRECT);
@@ -898,12 +972,20 @@ exportUrl.setMode(SVGModeler.MODE_EXPORT);
         Modeler.submitCommand('<%=commandUrl%>', null, callbackLoad);
     };
     
+    <%
+    commandUrl.setAction(SVGModeler.ACT_LOADFILE);
+    %>
+    function loadProcessFromFile() {
+        Modeler.submitCommand('<%=commandUrl%>', null, callbackLoad);
+    };
+    
     function callbackLoad(response) {
         Modeler.loadProcess(response);
         if(parent.reloadTreeNodeByURI)
         {
             parent.reloadTreeNodeByURI('<%=request.getParameter("suri")%>');
         }
+        hideLoadDialog();
     };
 
     /*
