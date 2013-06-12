@@ -28,11 +28,10 @@
         }
     }
     String dsid=base.getAttribute("datosid");
-    String serveraddr = request.getScheme() + "://" + request.getServerName() + ((request.getServerPort() != 80)? (":" + request.getServerPort()) : "");
     if(dataset!=null){//&&
 //            (dataset.getDatasetFormat().toLowerCase().equals("kml")||
 //            dataset.getDatasetFormat().toLowerCase().equals("kmz"))){
-            String path=dataset.getActualVersion().getFilePath();
+            String path=DataSetResource.getDSWebFileURL(request, dataset.getActualVersion())+dataset.getActualVersion().getFilePath();
 %>
 <script type="text/javascript" src="http://maps.google.com/maps/api/js?v=3&amp;sensor=false&amp;language=es&amp;region=MX"></script>
 <script type="text/javascript">
@@ -56,10 +55,10 @@
         };
            var map = new google.maps.Map(document.getElementById("mapCanvas"), myOptions);
 <%
-       if(path!=null&&!path.equals("")){
+       if(dataset.getActualVersion().getFilePath()!=null){
 %>
           var ctaLayer = new google.maps.KmlLayer({
-                url: '<%=serveraddr%><%=path%>',
+                url: '<%=path%>',
                 preserveViewport: true
         });
         ctaLayer.setMap(map);
