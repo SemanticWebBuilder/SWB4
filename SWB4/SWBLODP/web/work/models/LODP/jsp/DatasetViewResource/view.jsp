@@ -22,16 +22,6 @@
     Dataset dataset=null;
     SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
 
-
-
-
-
-    if(suri==null)suri="LODP:lodpcg_Dataset:1";
-
-
-
-
-
     if (suri != null && !suri.equals("")) {
         GenericObject gobj = ont.getGenericObject(SemanticObject.shortToFullURI(suri));
         if (gobj != null && gobj instanceof Dataset) {
@@ -39,11 +29,10 @@
         }
     }
     String dsid=base.getAttribute("datosid");
-    String serveraddr = request.getScheme() + "://" + request.getServerName() + ((request.getServerPort() != 80)? (":" + request.getServerPort()) : "");
-    if(dataset!=null){//&&
-//            (dataset.getDatasetFormat().toLowerCase().equals("kml")||
-//            dataset.getDatasetFormat().toLowerCase().equals("kmz"))){
-            String path=dataset.getActualVersion().getFilePath();
+    if(dataset!=null){
+        if((dataset.getDatasetFormat().toLowerCase().equals("kml")||
+            dataset.getDatasetFormat().toLowerCase().equals("kmz"))){
+            String path=DataSetResource.getDSWebFileURL(request, dataset.getActualVersion())+dataset.getActualVersion().getFilePath();
 %>
 <script type="text/javascript" src="http://maps.google.com/maps/api/js?v=3&amp;sensor=false&amp;language=es&amp;region=MX"></script>
 <script type="text/javascript">
@@ -67,12 +56,10 @@
         };
            var map = new google.maps.Map(document.getElementById("mapCanvas"), myOptions);
 <%
-       if(path!=null&&!path.equals("")){
+       if(dataset.getActualVersion().getFilePath()!=null){
 %>
           var ctaLayer = new google.maps.KmlLayer({
-//                url: '<%=serveraddr%><%=path%>'
-                url: 'http://200.38.186.24:8080/<%=path%>'
-//                ,preserveViewport: true
+                url: '<%=path%>'
         });
         ctaLayer.setMap(map);
 <%
@@ -89,5 +76,20 @@
     initializeMap();
 </script>
 <%
+    }else if(dataset.getDatasetFormat().toLowerCase().equals("csv")){
+%>
+por el momento no soportamos csv
+<%
+    }else if(dataset.getDatasetFormat().toLowerCase().equals("xls")||
+             dataset.getDatasetFormat().toLowerCase().equals("xlsx")){
+%>
+por el momento no soportamos excel
+<%
+    }else{
+%>
+por el momento no soportamos tu formato
+<%
+
+    }
 }
 %>
