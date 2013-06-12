@@ -352,7 +352,6 @@
     <rdfs:subClassOf>
       <owl:Class rdf:about="#Help"/>
     </rdfs:subClassOf>
-    <rdfs:subClassOf rdf:resource="#Sortable"/>
     <rdfs:subClassOf rdf:resource="#BSCAccessory"/>
     <swb:classCodePackage rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >org.semanticwb.bsc.accessory</swb:classCodePackage>
@@ -557,6 +556,10 @@
     <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >objective</swb:propertyCodeName>
   </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="stateGroupInv">
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >stateGroup</swb:propertyCodeName>
+  </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="perspectiveInv">
     <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >perspective</swb:propertyCodeName>
@@ -677,6 +680,8 @@
   <owl:ObjectProperty rdf:ID="next">
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_Next">
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >26</swb:index>
         <rdfs:label xml:lang="es">Siguiente</rdfs:label>
         <rdfs:label xml:lang="en">Next</rdfs:label>
         <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#selectOneModelWithBlank"/>
@@ -728,6 +733,7 @@
     <rdfs:domain rdf:resource="#Initiative"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="hasState">
+    <owl:inverseOf rdf:resource="#stateGroupInv"/>
     <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:removeDependency>
     <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
@@ -740,6 +746,8 @@
   <owl:ObjectProperty rdf:ID="previus">
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_Previus">
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >25</swb:index>
         <rdfs:label xml:lang="es">Anterior</rdfs:label>
         <rdfs:label xml:lang="en">Previus</rdfs:label>
         <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#selectOneModelWithBlank"/>
@@ -822,30 +830,31 @@
     <rdfs:domain rdf:resource="#Periodicity"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="index">
-    <rdfs:domain rdf:resource="#Sortable"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
-    <swb:defaultValue rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >3</swb:defaultValue>
     <swb:displayProperty>
-      <swbxf:DisplayProperty rdf:ID="dp_index">
+      <swbxf:DisplayProperty rdf:ID="dp_ordinalCategorical">
+        <rdfs:label xml:lang="es">orden categórico</rdfs:label>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >25</swb:index>
+        <rdfs:label xml:lang="en">categorical order</rdfs:label>
         <swbxf:formElement>
-          <bsc:Ordinal rdf:ID="ordinal">
+          <bsc:OrdinalCategorical rdf:ID="ordinalCategorical">
             <swbxf:textRegExp rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
             >\d{1,3}</swbxf:textRegExp>
             <swb:maxLength rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
             >3</swb:maxLength>
-          </bsc:Ordinal>
+          </bsc:OrdinalCategorical>
         </swbxf:formElement>
-        <swbxf:propInvalidMessage rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >El valor ordinal es requerido</swbxf:propInvalidMessage>
-        <swbxf:propPromptMessage rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >Valor ordinal</swbxf:propPromptMessage>
-        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >22</swb:index>
-        <rdfs:label xml:lang="en">Index</rdfs:label>
-        <rdfs:label xml:lang="es">Orden</rdfs:label>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+    <swb:defaultValue rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >3</swb:defaultValue>
+    <rdfs:domain rdf:resource="#Sortable"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="orden">
+    <swb:displayProperty rdf:resource="#dp_ordinalCategorical"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+    <rdfs:domain rdf:resource="#StateMachinable"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="modelId">
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
@@ -1102,6 +1111,8 @@
     >unknown.png</swb:defaultValue>
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_icon">
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >24</swb:index>
         <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#fe_DojoFileUpload"/>
         <rdfs:label xml:lang="en">Icon</rdfs:label>
         <rdfs:label xml:lang="es">Ícono</rdfs:label>
@@ -1222,6 +1233,24 @@
     <swbxf:textRegExp rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >\d{1}</swbxf:textRegExp>
   </bsc:Number>
+  <swbxf:DisplayProperty rdf:ID="dp_index">
+    <swbxf:formElement>
+      <bsc:Ordinal rdf:ID="ordinal">
+        <swbxf:textRegExp rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >\d{1,3}</swbxf:textRegExp>
+        <swb:maxLength rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >3</swb:maxLength>
+      </bsc:Ordinal>
+    </swbxf:formElement>
+    <swbxf:propInvalidMessage rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >El valor ordinal es requerido</swbxf:propInvalidMessage>
+    <swbxf:propPromptMessage rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Valor ordinal</swbxf:propPromptMessage>
+    <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+    >22</swb:index>
+    <rdfs:label xml:lang="en">Index</rdfs:label>
+    <rdfs:label xml:lang="es">Orden</rdfs:label>
+  </swbxf:DisplayProperty>
   <bsc:Number rdf:ID="tens">
     <swb:maxLength rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
     >2</swb:maxLength>
@@ -1279,7 +1308,7 @@
   </bsc:Number>
   <swb:FormElement rdf:ID="Ordinal">
     <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >Campo de texto para valores ordinales que no se repiten para instancias de la misma clase</rdfs:comment>
+    >OrdinalCategorical maneja un valores ordinales que no se repiten para instancias de una misma clase. </rdfs:comment>
     <swb:classCodePackage rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >org.semanticwb.bsc.formelement</swb:classCodePackage>
     <rdfs:subClassOf>
@@ -1298,6 +1327,14 @@
     <swb:classCodePackage rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >org.semanticwb.bsc.formelement</swb:classCodePackage>
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBFormElement"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </swb:FormElement>
+  <swb:FormElement rdf:ID="OrdinalCategorical">
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >OrdinalCategorical maneja un valores ordinales que no se repiten para instancias de una clase que comparten la misma instancia de la super clase inmediata.</rdfs:comment>
+    <swb:classCodePackage rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >org.semanticwb.bsc.formelement</swb:classCodePackage>
+    <rdfs:subClassOf rdf:resource="#Ordinal"/>
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
   </swb:FormElement>
 </rdf:RDF>
