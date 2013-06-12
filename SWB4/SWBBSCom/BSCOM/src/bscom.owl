@@ -77,32 +77,35 @@
     >Interfaz que define un valor entero para ordenar</rdfs:comment>
   </owl:Class>
   <owl:Class rdf:ID="Period">
-    <rdfs:subClassOf>
-      <owl:Class rdf:ID="Help"/>
-    </rdfs:subClassOf>
     <rdfs:label xml:lang="en">Period</rdfs:label>
     <rdfs:label xml:lang="es">Período</rdfs:label>
-    <rdfs:subClassOf rdf:resource="#Sortable"/>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
     <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:autogenId>
     <rdfs:subClassOf>
       <swb:Class rdf:ID="BSCAccessory">
-        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-        >true</swb:autogenId>
-        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
-        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
-        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Activeable"/>
         <swb:classCodePackage rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
         >org.semanticwb.bsc.accessory</swb:classCodePackage>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Undeleteable"/>
+        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >true</swb:autogenId>
         <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
         <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
+        <rdfs:subClassOf>
+          <owl:Class rdf:ID="Help"/>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Activeable"/>
       </swb:Class>
     </rdfs:subClassOf>
     <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >Período de medición.</rdfs:comment>
     <rdfs:subClassOf>
       <owl:Class rdf:ID="Blockable"/>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="Machinable"/>
     </rdfs:subClassOf>
     <swb:classCodePackage rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >org.semanticwb.bsc.accessory</swb:classCodePackage>
@@ -335,23 +338,9 @@
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
   <owl:Class rdf:ID="State">
-    <rdfs:subClassOf>
-      <swb:Interface rdf:ID="StateMachinable">
-        <swb:classCodePackage rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >org.semanticwb.bsc</swb:classCodePackage>
-        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBInterface"/>
-        <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >Cualquier elemento que se comporte como una máquina de estados. Estado inicial, estados de transición y estado final.</rdfs:comment>
-        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-      </swb:Interface>
-    </rdfs:subClassOf>
     <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:autogenId>
-    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Iconable"/>
-    <rdfs:subClassOf>
-      <owl:Class rdf:about="#Help"/>
-    </rdfs:subClassOf>
     <rdfs:subClassOf rdf:resource="#BSCAccessory"/>
     <swb:classCodePackage rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >org.semanticwb.bsc.accessory</swb:classCodePackage>
@@ -364,6 +353,9 @@
       </swbxf:DisplayObject>
     </swb:displayObject>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#Machinable"/>
+    </rdfs:subClassOf>
   </owl:Class>
   <owl:Class rdf:about="#Recognizable">
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBInterface"/>
@@ -410,6 +402,14 @@
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBInterface"/>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Interface"/>
   </owl:Class>
+  <owl:Class rdf:about="#Machinable">
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Cualquier elemento que se comporte como una máquina de estados. Estado inicial, estados de transición y estado final.</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBInterface"/>
+    <swb:classCodePackage rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >org.semanticwb.bsc</swb:classCodePackage>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Interface"/>
+  </owl:Class>
   <owl:Class rdf:ID="AdminBSC">
     <swb:hasHerarquicalNode rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_Languages"/>
     <swb:hasClass rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#ObjectBehavior"/>
@@ -418,13 +418,11 @@
       <swbxf:HerarquicalNode rdf:ID="hn_StatesGroups">
         <swbxf:heClass>
           <swb:Class rdf:ID="StateGroup">
-            <rdfs:subClassOf rdf:resource="#Help"/>
             <swb:classCodePackage rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
             >org.semanticwb.bsc.accessory</swb:classCodePackage>
             <rdfs:subClassOf rdf:resource="#BSCAccessory"/>
             <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
             >true</swb:autogenId>
-            <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
             <swb:displayObject>
               <swbxf:DisplayObject rdf:ID="do_StateGroup">
                 <rdfs:label xml:lang="en">Group of states</rdfs:label>
@@ -678,17 +676,17 @@
     <rdfs:label xml:lang="es">Facilitador de champion</rdfs:label>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="next">
+    <rdfs:range rdf:resource="#Machinable"/>
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_Next">
         <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >26</swb:index>
+        >27</swb:index>
         <rdfs:label xml:lang="es">Siguiente</rdfs:label>
         <rdfs:label xml:lang="en">Next</rdfs:label>
         <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#selectOneModelWithBlank"/>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
-    <rdfs:domain rdf:resource="#StateMachinable"/>
-    <rdfs:range rdf:resource="#StateMachinable"/>
+    <rdfs:domain rdf:resource="#Machinable"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="period">
     <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
@@ -744,17 +742,17 @@
     <rdfs:range rdf:resource="#State"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="previus">
+    <rdfs:range rdf:resource="#Machinable"/>
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_Previus">
         <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >25</swb:index>
+        >26</swb:index>
         <rdfs:label xml:lang="es">Anterior</rdfs:label>
         <rdfs:label xml:lang="en">Previus</rdfs:label>
         <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#selectOneModelWithBlank"/>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
-    <rdfs:domain rdf:resource="#StateMachinable"/>
-    <rdfs:range rdf:resource="#StateMachinable"/>
+    <rdfs:domain rdf:resource="#Machinable"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="status">
     <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
@@ -832,9 +830,9 @@
   <owl:DatatypeProperty rdf:ID="index">
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_ordinalCategorical">
-        <rdfs:label xml:lang="es">orden categórico</rdfs:label>
         <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
         >25</swb:index>
+        <rdfs:label xml:lang="es">orden categórico</rdfs:label>
         <rdfs:label xml:lang="en">categorical order</rdfs:label>
         <swbxf:formElement>
           <bsc:OrdinalCategorical rdf:ID="ordinalCategorical">
@@ -852,9 +850,9 @@
     <rdfs:domain rdf:resource="#Sortable"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="orden">
-    <swb:displayProperty rdf:resource="#dp_ordinalCategorical"/>
+    <rdfs:domain rdf:resource="#Machinable"/>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
-    <rdfs:domain rdf:resource="#StateMachinable"/>
+    <swb:displayProperty rdf:resource="#dp_ordinalCategorical"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="modelId">
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
@@ -1283,9 +1281,9 @@
   </swbxf:DisplayProperty>
   <swbxf:DisplayProperty rdf:ID="dP_End"/>
   <swb:Class rdf:ID="Priority">
+    <rdfs:subClassOf rdf:resource="#Machinable"/>
     <swb:classCodePackage rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >org.semanticwb.bsc.tracing</swb:classCodePackage>
-    <rdfs:subClassOf rdf:resource="#StateMachinable"/>
     <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:autogenId>
     <rdfs:subClassOf rdf:resource="#BSCTracing"/>
