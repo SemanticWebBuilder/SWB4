@@ -92,9 +92,9 @@ public class AudioPodCast extends org.semanticwb.portal.resources.sem.base.Audio
         final String lang = user.getLanguage();
         PrintWriter out =  response.getWriter();
         
-        SWBResourceURL directURL = paramRequest.getRenderUrl().setMode(Mode_PLAY).setCallMethod(paramRequest.Call_DIRECT);
+        SWBResourceURL directURL = paramRequest.getRenderUrl().setMode(Mode_PLAY).setCallMethod(SWBParamRequest.Call_DIRECT);
         
-        if(paramRequest.getCallMethod()==paramRequest.Call_STRATEGY) {
+        if(paramRequest.getCallMethod()==SWBParamRequest.Call_STRATEGY) {
             String surl = null;
             Iterator<Resourceable> res = base.listResourceables();
             while(res.hasNext()) {
@@ -116,8 +116,9 @@ public class AudioPodCast extends org.semanticwb.portal.resources.sem.base.Audio
                 out.println("<ul class=\"swb-podcast-list\">");
                 for(int i=0; i<LATEST && resources.hasNext(); i++) {
                     AudioFile audiofile = resources.next();
-                    if(!audiofile.isValid() || !user.haveAccess(audiofile))
+                    if(!audiofile.isValid() || !user.haveAccess(audiofile)) {
                         continue;
+                    }
                     f = audiofile.getFile();
                     if(f!=null && f.isFile()) {
                         out.println("<li class=\"swb-podcast-item\">");
