@@ -154,6 +154,23 @@ s/*
     color:gray;
 }
 
+.loadDialogCloseButton {
+    float:left;
+    left:430px;
+    position:relative;
+    top:-25px;
+}
+
+.loadDialogCloseButton a {
+    background: url(cerrar1.png) no-repeat;
+    display:block;
+    text-decoration:none;
+    font-size:0px;
+    width:15px;
+    padding-top:15px;
+    /*color:#060;*/
+}
+
 /*****************************  NAVBAR **********************************************/
 
 .navbar {
