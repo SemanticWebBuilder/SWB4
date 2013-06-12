@@ -22,15 +22,22 @@
  */
 package org.semanticwb.process.resources;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Map;
+import java.util.List;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.apache.batik.transcoder.TranscoderException;
+import org.apache.batik.transcoder.TranscoderInput;
+import org.apache.batik.transcoder.TranscoderOutput;
+import org.apache.batik.transcoder.image.PNGTranscoder;
+import org.apache.commons.fileupload.FileItem;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.semanticwb.Logger;
@@ -61,9 +68,7 @@ import org.semanticwb.process.model.MultiInstanceLoopCharacteristics;
 import org.semanticwb.process.model.ProcessSite;
 import org.semanticwb.process.model.StandarLoopCharacteristics;
 import org.semanticwb.process.model.UserTask;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
+import org.semanticwb.servlet.internal.UploadFormElement;
 
 /**
  * Modelador de procesos basado en SVG y Javascript.
@@ -76,6 +81,7 @@ public class SVGModeler extends GenericResource {
     public static final String MODE_EXPORT = "export";
     public static final String ACT_GETPROCESSJSON = "getProcessJSON";
     public static final String ACT_STOREPROCESS = "storeProcess";
+    public static final String ACT_LOADFILE = "loadFile";
     private static final String PROP_CLASS = "class";
     private static final String PROP_TITLE = "title";
     private static final String PROP_DESCRIPTION = "description";
@@ -152,9 +158,6 @@ public class SVGModeler extends GenericResource {
                 if (go != null && go instanceof Process) {
                     process = (Process) go;
                     String json = getProcessJSON(process).toString();
-//                    System.out.println("-----------------------------------");
-//                    System.out.println(json);
-//                    System.out.println("-----------------------------------");
                     outs.write(json.getBytes("UTF-8"));
                 } else {
                     log.error("Error to create JSON: Process not found");
@@ -164,11 +167,11 @@ public class SVGModeler extends GenericResource {
                 log.error("Error to create JSON...", e);
                 outs.write(("ERROR:" + e.getMessage()).getBytes());
             }
+        } else if (ACT_LOADFILE.equals(action)) {
+            String json = processFile(request);
+            outs.write(json.getBytes("UTF-8"));
         } else if (ACT_STOREPROCESS.equals(action)) {
             String jsonStr = request.getParameter("jsonString");
-//            System.out.println("-----------------------------------");
-//            System.out.println(jsonStr);
-//            System.out.println("-----------------------------------");
             HashMap<String, JSONObject> hmjson = new HashMap();
 
             if (go != null && go instanceof Process) {
@@ -898,7 +901,6 @@ public class SVGModeler extends GenericResource {
             
             if ("svg".equalsIgnoreCase(format)) {
                 String svg = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n" +
-                             "<?xml-stylesheet href=\"/swbadmin/jsp/process/modeler/modelerFrame.css\" type=\"text/css\"?>\n" +
                              "<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\" \"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\">\n";
                 svg += data;
                 response.setContentType("image/svg+xml");
@@ -907,22 +909,23 @@ public class SVGModeler extends GenericResource {
                 response.setContentType("application/json");
                 String json = getProcessJSON(p).toString();
                 outs.write(json.getBytes());
+            } else if ("png".equalsIgnoreCase(format)) {
+                String svg = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>" +
+                             "<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\" \"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\">";
+                svg += data.trim();
+                System.out.println(svg);
+                PNGTranscoder t = new PNGTranscoder();
+                Charset charset = Charset.forName("UTF-8");
+                response.setContentType("image/png");
+                
+                TranscoderInput ti = new TranscoderInput(new ByteArrayInputStream(charset.encode(svg.trim()).array()));
+                TranscoderOutput to = new TranscoderOutput(outs);
+                try {
+                    t.transcode(ti, to);
+                } catch (TranscoderException ex) {
+                    log.error(ex);
+                }
             }
-            
-            
-            
-            //else if ("png".equalsIgnoreCase(format)) {
-//                response.setContentType("image/png");
-//                PNGTranscoder t = new PNGTranscoder();
-//                
-//                TranscoderInput ti = new TranscoderInput(new ByteArrayInputStream(data.getBytes("UTF-8")));
-//                TranscoderOutput to = new TranscoderOutput(outs);
-//                try {
-//                    t.transcode(ti, to);
-//                } catch (TranscoderException ex) {
-//                    log.error(ex);
-//                }
-//            }
             
             outs.flush();
             outs.close();
@@ -1150,4 +1153,35 @@ public class SVGModeler extends GenericResource {
         }
     }
     
+    private String processFile(HttpServletRequest request) {
+        String data = "";
+        if (request.getSession().getAttribute(UploadFormElement.FILES_UPLOADED) != null) {
+            Iterator itfilesUploaded = ((List) request.getSession().getAttribute(UploadFormElement.FILES_UPLOADED)).iterator();
+            while (itfilesUploaded.hasNext()) {
+                FileItem item = (FileItem) itfilesUploaded.next();
+                if (!item.isFormField()) { //Es un campo de tipo file
+                    //int fileSize = ((Long) item.getSize()).intValue();
+                    String value = item.getName();
+
+                    if (value != null && value.trim().length() > 0) {
+                        value = value.replace("\\", "/");
+                        int pos = value.lastIndexOf("/");
+                        if (pos > -1) {
+                            value = value.substring(pos + 1);
+                        }
+
+                        if (item.getFieldName().startsWith("swpFile")) {
+                            try {
+                                data = new String(item.get());
+                            } catch (Exception e) {
+                                log.error(e);
+                            }
+                        }
+                    }
+                }
+            }
+            request.getSession().setAttribute(UploadFormElement.FILES_UPLOADED, null);
+        }
+        return data;
+    }
 }
