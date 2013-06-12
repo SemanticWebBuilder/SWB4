@@ -48,7 +48,7 @@ Author     : rene.jara
     <script type="text/javascript">
         //<!--
         function rank(value){
-            var tag=dojo.byId("ranking");
+            var tag=dojo.byId("votacion");
             getRanking("<%=urlrank%>?suri=<%=suri%>&rank="+value,tag);
 //            getHtml("<%=urlrank%>?suri=<%=suri+"&rank="%>"+value, "ranking", false, false);
         }
@@ -75,19 +75,20 @@ Author     : rene.jara
       }
         // -->
     </script>
-    <div id="ranking">
-        <a href="" onclick="javascript:rank('1'); return false;"><%=average == 1 ? "" : ""%><img src="/work/models/LODP/css/images/star-off.png" width="15" height="14" alt="*"></a>
-        <a href="" onclick="javascript:rank('2'); return false;"><%=average == 2 ? "" : ""%><img src="/work/models/LODP/css/images/star-off.png" width="15" height="14" alt="*"></a>
-        <a href="" onclick="javascript:rank('3'); return false;"><%=average == 3 ? "" : ""%><img src="/work/models/LODP/css/images/star-off.png" width="15" height="14" alt="*"></a>
-        <a href="" onclick="javascript:rank('4'); return false;"><%=average == 4 ? "" : ""%><img src="/work/models/LODP/css/images/star-off.png" width="15" height="14" alt="*"></a>
-        <a href="" onclick="javascript:rank('5'); return false;"><%=average == 5 ? "" : ""%><img src="/work/models/LODP/css/images/star-off.png" width="15" height="14" alt="*"></a>
-
+    <div id="votacion">
+        <div id="vota1" title="vota 1" onclick="javascript:rank('1'); return false;"><span>vota 1</span></div>
+        <div id="vota2" title="vota 2" onclick="javascript:rank('2'); return false;"><span>vota 2</span></div>
+        <div id="vota3" title="vota 3" onclick="javascript:rank('3'); return false;"><span>vota 3</span></div>
+        <div id="vota4" title="vota 4" onclick="javascript:rank('4'); return false;"><span>vota 4</span></div>
+        <div id="vota5" title="vota 5" onclick="javascript:rank('5'); return false;"><span>vota 5</span></div>
+        <div id="votar"></div>
     </div>
+
     <%
-                    }else{
+      }else{
 %>
-   <div id="ranking">
-       <img src="/work/models/LODP/css/images/star-<%=average >= 1?"on":"off"%>.png" width="15" height="14" alt="*">
+   <div id="votacion">
+        <img src="/work/models/LODP/css/images/star-<%=average >= 1?"on":"off"%>.png" width="15" height="14" alt="*">
         <img src="/work/models/LODP/css/images/star-<%=average >= 2?"on":"off"%>.png" width="15" height="14" alt="*">
         <img src="/work/models/LODP/css/images/star-<%=average >= 3?"on":"off"%>.png" width="15" height="14" alt="*">
         <img src="/work/models/LODP/css/images/star-<%=average >= 4?"on":"off"%>.png" width="15" height="14" alt="*">
