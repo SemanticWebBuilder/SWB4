@@ -210,6 +210,15 @@
       </swbxf:HerarquicalNode>
     </swb:hasHerarquicalNode>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Model"/>
+    <swb:hasHerarquicalNode>
+      <swbxf:HerarquicalNode rdf:ID="hn_Periods">
+        <swbxf:heClass rdf:resource="#Period"/>
+        <swb:title xml:lang="es">Períodos</swb:title>
+        <swb:title xml:lang="en">Periods</swb:title>
+        <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >swbIconDnss</swb:iconClass>
+      </swbxf:HerarquicalNode>
+    </swb:hasHerarquicalNode>
     <swb:hasHerarquicalNode rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_PTContents"/>
     <swb:hasClass>
       <owl:Class rdf:about="#Action"/>
@@ -447,15 +456,6 @@
     <swb:hasHerarquicalNode rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_PTContents"/>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Model"/>
     <swb:hasHerarquicalNode rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_Templates"/>
-    <swb:hasHerarquicalNode>
-      <swbxf:HerarquicalNode rdf:ID="hn_Periods">
-        <swbxf:heClass rdf:resource="#Period"/>
-        <swb:title xml:lang="es">Períodos</swb:title>
-        <swb:title xml:lang="en">Periods</swb:title>
-        <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >swbIconDnss</swb:iconClass>
-      </swbxf:HerarquicalNode>
-    </swb:hasHerarquicalNode>
     <rdfs:comment xml:lang="es">Administración de BSC</rdfs:comment>
     <swb:displayObject>
       <swbxf:DisplayObject rdf:ID="do_AdminBSC">
@@ -807,6 +807,10 @@
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#date"/>
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_Start">
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >22</swb:index>
+        <swbxf:propPromptMessage xml:lang="es">Fecha inicial del período</swbxf:propPromptMessage>
+        <swbxf:propPromptMessage xml:lang="en">Initial date for period</swbxf:propPromptMessage>
         <swbxf:formElement>
           <bsc:Periodicity rdf:ID="dateFrom">
             <bsc:dateOnChange rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
@@ -1091,7 +1095,9 @@
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_InTime">
-        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#BooleanElement_1"/>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >24</swb:index>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#BooleanElement_3"/>
         <rdfs:label xml:lang="en">Measuring time</rdfs:label>
         <rdfs:label xml:lang="es">En tiempo de medición</rdfs:label>
       </swbxf:DisplayProperty>
@@ -1199,6 +1205,8 @@
     <rdfs:domain rdf:resource="#Period"/>
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_End">
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >23</swb:index>
         <swbxf:formElement>
           <bsc:Periodicity rdf:ID="dateTo">
             <bsc:dateOnChange rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
