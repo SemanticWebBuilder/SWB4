@@ -148,16 +148,16 @@
                      go = ont.getGenericObject(filteruri);
                      got = ont.getGenericObject(filtertopic);
                       itds1 = Dataset.ClassMgr.listDatasetByInstitution((Institution) go,wsite); 
-                      TreeSet<Dataset> set = new TreeSet();
+                      HashMap<String,Dataset> set = new HashMap<String,Dataset>(); 
                       while(itds1.hasNext()){  // revisando si el dtaset tiene el tema asociado.
                           Dataset dsfiltered = itds1.next();
                           //System.out.println(dsfiltered.getInstitution().getInstitutionTitle()); 
-                          if(dsfiltered.hasTopic((Topic)got)){
+                          if(null!=got&&dsfiltered.hasTopic((Topic)got)){ 
                               //System.out.println("Se agregó dataset...");
-                              set.add(dsfiltered);
+                              set.put(dsfiltered.getShortURI(),dsfiltered);
                           }
                       }
-                      itds1 = set.iterator(); // pasando el resultado de los dos filtros al iterador
+                      itds1 = set.values().iterator(); // pasando el resultado de los dos filtros al iterador
                  } else  if (null != filteruri && filteruri.trim().length() > 0 && null == filtertopic)  {  // por institucion
                      //System.out.println("Filtro Institucion...");
                      go = ont.getGenericObject(filteruri);
