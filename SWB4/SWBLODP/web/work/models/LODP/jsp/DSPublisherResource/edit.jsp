@@ -212,11 +212,13 @@
 </script>
     <div id="subedataset" class="formas">
         <%
+            String claseStyle = "subefile1";
             SWBResourceURL url = paramRequest.getActionUrl();
-            if(!isNew){
+            if(isNew){
                 url.setAction(SWBResourceURL.Action_ADD);
             } else {
                 url.setAction(SWBResourceURL.Action_EDIT);
+                claseStyle = "subefile2";
             }
         %>
         <form id="form1newDS" dojoType="dijit.form.Form" class="swbform" action="<%=url.toString()%>" method="post">
@@ -227,7 +229,7 @@
                 <%
             }
         %>
-            <div class="subefile1">
+        <div class="<%=claseStyle%>">
                 
                     <label for="dstitle"><b>*</b><%=paramRequest.getLocaleString("lbl_title")%></label>
                     <input type="text" name="dstitle" id="dstitle" dojoType="dijit.form.ValidationTextBox" value="<%=dstitle%>" required="true"  invalidMessage="<%=paramRequest.getLocaleString("lbl_titlemissing")%>" trim="true" regExp="[a-zA-Z\u00C0-\u00FF' ]+" />
@@ -301,60 +303,57 @@
                       if(!isNew)
                       {
                 %>
-                <label for="dspuburl"><%=paramRequest.getLocaleString("lbl_weburl")%></label>
-                    <input type="text" name="dspuburl" id="dspuburl" dojoType="dijit.form.ValidationTextBox" value="<%=dswebsite%>" maxlength="18"readonly="true" disabled="true" />
-                    <label for="dscreator"><%=paramRequest.getLocaleString("lbl_technicallink")%></label>
-                    <input type="text" name="dscreator" id="dscreator" dojoType="dijit.form.ValidationTextBox" value="<%=dspubname%>" readonly="true" disabled="true" />
-                    <label for="dsformat"><%=paramRequest.getLocaleString("lbl_format")%></label>
-                    <input type="text" name="dsformat" id="dsformat" dojoType="dijit.form.ValidationTextBox" value="<%=dsformat%>" maxlength="60" required="true"   readonly="true" disabled="true"/>
-                    <label for="dssize"><%=paramRequest.getLocaleString("lbl_size")%></label>
-                    <input type="text" name="dssize" id="dssize" dojoType="dijit.form.ValidationTextBox" value="<%=ds.getDatasetSize()%>" maxlength="60" required="true"   readonly="true"  disabled="true"/>
-                    <label for="dsversion"><%=paramRequest.getLocaleString("lbl_version")%></label>
-                    <input type="text" name="dsversion" id="dsversion" dojoType="dijit.form.ValidationTextBox" value="<%=dsversion%>" maxlength="18" required="true" _invalidMessage="<%//=paramRequest.getLocaleString("lbl_versionMissing")%>"  readonly="true"  disabled="true" />
-                    <label for="dsapprove"><%=paramRequest.getLocaleString("lbl_approve")%></label>
-                    <input type="text" name="dsapprove" id="dsapprove" dojoType="dijit.form.ValidationTextBox" value="<%=ds.isApproved()?"Sí":"No"%>" readonly="true" disabled="true"/>
-                    <label for="dsemail"><%=paramRequest.getLocaleString("lbl_email")%></label>
-                    <input type="text" name="dsemail" id="dsemail" dojoType="dijit.form.ValidationTextBox" value="<%=dsemail%>" readonly="true" disabled="true"  />
-                    <label for="dscreated"><%=paramRequest.getLocaleString("lbl_created")%></label>
-                    <input type="text" name="dscreated" id="dscreated" dojoType="dijit.form.ValidationTextBox" value="<%=dscreated%>" readonly="true" disabled="true" />
-                    <label for="dsupdated"><%=paramRequest.getLocaleString("lbl_updated")%></label>
-                    <input type="text" name="dsupdated" id="dsupdated" dojoType="dijit.form.ValidationTextBox" value="<%=dsupdated%>" readonly="true" disabled="true" />
-                    <label for="dsurl"><%=paramRequest.getLocaleString("lbl_urlendpoint")%></label>
-                    <input type="text" name="dsurl" id="dsurl" dojoType="dijit.form.ValidationTextBox" value="<%=dsurl%>" maxlength="12" readonly="true" disabled="true" />
-                    <label for="dsactive"><%=paramRequest.getLocaleString("lbl_active")%></label>
-                    <input type="checkbox" name="dsactive" id="dsactive" dojoType="dijit.form.CheckBox" value="true" <%=ds.isDatasetActive()?"checked":""%> />
+                <label for="dsactive"><%=paramRequest.getLocaleString("lbl_active")%></label>
+                <input type="checkbox" name="dsactive" id="dsactive" dojoType="dijit.form.CheckBox" value="true" <%=ds.isDatasetActive()?"checked":""%> />
+                <div class="linea"></div>
+                <div class="datafijo">
+        	<ul>
+                    <li class="datofijo1"><strong><%=paramRequest.getLocaleString("lbl_weburl")%>:</strong><a href="<%=dswebsite%>" target="_blank"><%=dswebsite%></a></li>
+                    <li class="datofijo2"><strong><%=paramRequest.getLocaleString("lbl_technicallink")%>:</strong><%=dspubname%></li>
+                    <li class="datofijo3"><strong><%=paramRequest.getLocaleString("lbl_email")%>:</strong><a href="mailto:<%=dsemail%>" ><%=dsemail%></a></li>
+                    <li class="datofijo4"><strong><%=paramRequest.getLocaleString("lbl_format")%>:</strong><%=dsformat%></li>
+                    <li class="datofijo5"><strong><%=paramRequest.getLocaleString("lbl_size")%>:</strong<%=ds.getDatasetSize()%></li>
+                    <li class="datofijo6"><strong><%=paramRequest.getLocaleString("lbl_version")%>:</strong><%=dsversion%></li>
+                    <li class="datofijo7"><strong><%=paramRequest.getLocaleString("lbl_approve")%>:</strong><%=ds.isApproved()?"Sí":"No"%></li>
+                    <li class="datofijo8"><strong><%=paramRequest.getLocaleString("lbl_created")%>:</strong><%=dscreated%></li>
+                    <li class="datofijo9"><strong><%=paramRequest.getLocaleString("lbl_updated")%>:</strong><%=dsupdated%></li>
+                    <li class="datofijo10"><strong><%=paramRequest.getLocaleString("lbl_urlendpoint")%></strong><%=dsurl%></li>
+                </ul>
+                </div>
                 <%
                 }
                 %>
-                
-                
             </div>
-
+            
                 <%
+                      if(!isNew){
+                          out.println("<div id=\"botones2\">");
+                      }
+                      
                     SWBResourceURL urlbck = paramRequest.getRenderUrl();
                     urlbck.setParameter("act", "myds");
                     urlbck.setMode(SWBResourceURL.Mode_VIEW);
                 
                 %>
-                <input type="button" value="<%=paramRequest.getLocaleString("lblCancel")%>" onclick="if(confirm('Quieres regresar a la lista de datasets?')){window.location='<%=urlbck.toString()%>';} else {return false;}"/> 
+                <input type="button" value="<%=paramRequest.getLocaleString("lblCancel")%>" onclick="if(confirm('¿Quieres regresar a la lista de datasets?')){window.location='<%=urlbck.toString()%>';} else {return false;}" class="boton-cancelar" /> 
                 <%
-                 if(isNew){
-                     %>
-                <input type="reset" value="<%=paramRequest.getLocaleString("lblReset")%>"/>
-                <%
-                 } else {
-                     
+                 if(!isNew){
+
                      SWBResourceURL urlnewversion = paramRequest.getActionUrl();
                      urlnewversion.setAction("addVersion"); 
                      urlnewversion.setParameter("suri", ds.getShortURI());
                      
                 %>
-                <input type="button" value="<%=paramRequest.getLocaleString("lbl_updatefile")%>" onclick="window.location='<%=urlnewversion.toString()%>';" /> 
+                <input type="button" value="<%=paramRequest.getLocaleString("lbl_updatefile")%>" onclick="window.location='<%=urlnewversion.toString()%>';" class="boton-actualizar" /> 
                 <%
                  } 
                 %>
-                <input type="submit" onclick="return enviar()" value="<%=paramRequest.getLocaleString("lblSubmit")%>"/>
-            
+                <input type="submit" onclick="return enviar()" value="<%=paramRequest.getLocaleString("lblSubmit")%>" class="boton-subir" />
+            <%
+                 if(!isNew){
+                          out.println("</div>");
+                      }
+            %>
         </form>
     </div>
 <div class="clear">&nbsp;</div> 
