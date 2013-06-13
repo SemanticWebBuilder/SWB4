@@ -137,6 +137,7 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
      * @param version the version
      * @return true, if is valid version
      */
+    @Override
     public boolean isValidVersion(double version)
     {
         return IOfficeApplication.version == version;
@@ -174,6 +175,7 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
      * @param newPassword the new password
      * @throws Exception the exception
      */
+    @Override
     public void changePassword(String newPassword) throws Exception
     {
         org.semanticwb.model.User userModel = SWBContext.getAdminWebSite().getUserRepository().getUserByLogin(this.user);
@@ -189,6 +191,7 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
      * @return true, if successful
      * @throws Exception the exception
      */
+    @Override
     public boolean existsPage(WebSiteInfo site, String pageid) throws Exception
     {
         WebSite website = SWBContext.getWebSite(site.id);
@@ -273,6 +276,7 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
      * @return the categories
      * @throws Exception the exception
      */
+    @Override
     public CategoryInfo[] getCategories(String repositoryName) throws Exception
     {
         Session session = null;
@@ -523,6 +527,7 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
      * @return the all categories
      * @throws Exception the exception
      */
+    @Override
     public CategoryInfo[] getAllCategories(String repositoryName) throws Exception
     {
         Session session = null;
@@ -624,6 +629,7 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
      * @return the content types
      * @throws Exception the exception
      */
+    @Override
     public ContentType[] getContentTypes(String repositoryName) throws Exception
     {
         ArrayList<ContentType> types = new ArrayList<ContentType>();
@@ -1511,6 +1517,7 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
      * @return the elements to add
      * @throws Exception the exception
      */
+    @Override
     public ElementInfo[] getElementsToAdd(SiteInfo siteInfo) throws Exception
     {
         HashSet<ElementInfo> rules = new HashSet<ElementInfo>();
@@ -1603,6 +1610,7 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
      * 
      * @param resource the resource
      */
+    @Override
     public void publish(Resource resource)
     {
     }
@@ -1612,6 +1620,7 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
      * 
      * @param resource the resource
      */
+    @Override
     public void noAutorize(Resource resource)
     {
     }
@@ -1686,6 +1695,7 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
      * @return true, if successful
      * @throws Exception the exception
      */
+    @Override
     public boolean canCreateCategory(String repositoryName, String categoryId) throws Exception
     {
         Session session = null;
@@ -1728,6 +1738,7 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
      * @return true, if successful
      * @throws Exception the exception
      */
+    @Override
     public boolean canRemoveCategory(String repositoryName) throws Exception
     {
         Session session = null;
@@ -1791,7 +1802,8 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
         }
         catch (Exception e)
         {
-            e.printStackTrace();
+            //e.printStackTrace();
+            log.error(e);
             throw e;
         }
         finally
@@ -1883,6 +1895,7 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
      * @return the semantic folder repositories
      * @throws Exception the exception
      */
+    @Override
     public SemanticFolderRepository[] getSemanticFolderRepositories(SiteInfo siteInfo,SemanticRepository semanticRepository) throws Exception
     {
         HashSet<SemanticFolderRepository> getSemanticFolderRepositories=new HashSet<SemanticFolderRepository>();
@@ -2122,6 +2135,7 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
      * @return the semantic file repositories
      * @throws Exception the exception
      */
+    @Override
     public SemanticFileRepository[] getSemanticFileRepositories(SiteInfo siteInfo,SemanticRepository semanticRepository) throws Exception
     {
         HashSet<SemanticFileRepository> getSemanticFileRepositories=new HashSet<SemanticFileRepository>();
