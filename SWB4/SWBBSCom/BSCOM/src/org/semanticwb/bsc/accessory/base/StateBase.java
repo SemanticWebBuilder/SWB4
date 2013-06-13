@@ -1,9 +1,10 @@
 package org.semanticwb.bsc.accessory.base;
 
 
-public abstract class StateBase extends org.semanticwb.bsc.accessory.BSCAccessory implements org.semanticwb.model.Activeable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable,org.semanticwb.model.Iconable,org.semanticwb.bsc.StateMachinable
+public abstract class StateBase extends org.semanticwb.bsc.accessory.BSCAccessory implements org.semanticwb.model.Descriptiveable,org.semanticwb.bsc.Help,org.semanticwb.model.Traceable,org.semanticwb.model.Undeleteable,org.semanticwb.model.Activeable,org.semanticwb.bsc.Machinable,org.semanticwb.model.Iconable
 {
-    public static final org.semanticwb.platform.SemanticProperty bsc_index=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#index");
+    public static final org.semanticwb.platform.SemanticClass bsc_StateGroup=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#StateGroup");
+    public static final org.semanticwb.platform.SemanticProperty bsc_stateGroupInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#stateGroupInv");
     public static final org.semanticwb.platform.SemanticProperty bsc_icon=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#icon");
     public static final org.semanticwb.platform.SemanticClass bsc_State=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#State");
    /**
@@ -105,46 +106,69 @@ public abstract class StateBase extends org.semanticwb.bsc.accessory.BSCAccessor
         }
        /**
        * Gets all org.semanticwb.bsc.accessory.State with a determined Previus
-       * @param value Previus of the type org.semanticwb.bsc.StateMachinable
+       * @param value Previus of the type org.semanticwb.bsc.Machinable
        * @param model Model of the org.semanticwb.bsc.accessory.State
        * @return Iterator with all the org.semanticwb.bsc.accessory.State
        */
 
-        public static java.util.Iterator<org.semanticwb.bsc.accessory.State> listStateByPrevius(org.semanticwb.bsc.StateMachinable value,org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.bsc.accessory.State> listStateByPrevius(org.semanticwb.bsc.Machinable value,org.semanticwb.model.SWBModel model)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.bsc.accessory.State> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(bsc_previus, value.getSemanticObject(),sclass));
             return it;
         }
        /**
        * Gets all org.semanticwb.bsc.accessory.State with a determined Previus
-       * @param value Previus of the type org.semanticwb.bsc.StateMachinable
+       * @param value Previus of the type org.semanticwb.bsc.Machinable
        * @return Iterator with all the org.semanticwb.bsc.accessory.State
        */
 
-        public static java.util.Iterator<org.semanticwb.bsc.accessory.State> listStateByPrevius(org.semanticwb.bsc.StateMachinable value)
+        public static java.util.Iterator<org.semanticwb.bsc.accessory.State> listStateByPrevius(org.semanticwb.bsc.Machinable value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.bsc.accessory.State> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(bsc_previus,value.getSemanticObject(),sclass));
             return it;
         }
        /**
-       * Gets all org.semanticwb.bsc.accessory.State with a determined Next
-       * @param value Next of the type org.semanticwb.bsc.StateMachinable
+       * Gets all org.semanticwb.bsc.accessory.State with a determined StateGroup
+       * @param value StateGroup of the type org.semanticwb.bsc.accessory.StateGroup
        * @param model Model of the org.semanticwb.bsc.accessory.State
        * @return Iterator with all the org.semanticwb.bsc.accessory.State
        */
 
-        public static java.util.Iterator<org.semanticwb.bsc.accessory.State> listStateByNext(org.semanticwb.bsc.StateMachinable value,org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.bsc.accessory.State> listStateByStateGroup(org.semanticwb.bsc.accessory.StateGroup value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.accessory.State> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(bsc_stateGroupInv, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.bsc.accessory.State with a determined StateGroup
+       * @param value StateGroup of the type org.semanticwb.bsc.accessory.StateGroup
+       * @return Iterator with all the org.semanticwb.bsc.accessory.State
+       */
+
+        public static java.util.Iterator<org.semanticwb.bsc.accessory.State> listStateByStateGroup(org.semanticwb.bsc.accessory.StateGroup value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.accessory.State> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(bsc_stateGroupInv,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.bsc.accessory.State with a determined Next
+       * @param value Next of the type org.semanticwb.bsc.Machinable
+       * @param model Model of the org.semanticwb.bsc.accessory.State
+       * @return Iterator with all the org.semanticwb.bsc.accessory.State
+       */
+
+        public static java.util.Iterator<org.semanticwb.bsc.accessory.State> listStateByNext(org.semanticwb.bsc.Machinable value,org.semanticwb.model.SWBModel model)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.bsc.accessory.State> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(bsc_next, value.getSemanticObject(),sclass));
             return it;
         }
        /**
        * Gets all org.semanticwb.bsc.accessory.State with a determined Next
-       * @param value Next of the type org.semanticwb.bsc.StateMachinable
+       * @param value Next of the type org.semanticwb.bsc.Machinable
        * @return Iterator with all the org.semanticwb.bsc.accessory.State
        */
 
-        public static java.util.Iterator<org.semanticwb.bsc.accessory.State> listStateByNext(org.semanticwb.bsc.StateMachinable value)
+        public static java.util.Iterator<org.semanticwb.bsc.accessory.State> listStateByNext(org.semanticwb.bsc.Machinable value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.bsc.accessory.State> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(bsc_next,value.getSemanticObject(),sclass));
             return it;
@@ -187,30 +211,12 @@ public abstract class StateBase extends org.semanticwb.bsc.accessory.BSCAccessor
     {
         super(base);
     }
-
-/**
-* Gets the Index property
-* @return int with the Index
-*/
-    public int getIndex()
-    {
-        return getSemanticObject().getIntProperty(bsc_index);
-    }
-
-/**
-* Sets the Index property
-* @param value long with the Index
-*/
-    public void setIndex(int value)
-    {
-        getSemanticObject().setIntProperty(bsc_index, value);
-    }
    /**
    * Sets the value for the property Previus
    * @param value Previus to set
    */
 
-    public void setPrevius(org.semanticwb.bsc.StateMachinable value)
+    public void setPrevius(org.semanticwb.bsc.Machinable value)
     {
         if(value!=null)
         {
@@ -231,15 +237,53 @@ public abstract class StateBase extends org.semanticwb.bsc.accessory.BSCAccessor
 
    /**
    * Gets the Previus
-   * @return a org.semanticwb.bsc.StateMachinable
+   * @return a org.semanticwb.bsc.Machinable
    */
-    public org.semanticwb.bsc.StateMachinable getPrevius()
+    public org.semanticwb.bsc.Machinable getPrevius()
     {
-         org.semanticwb.bsc.StateMachinable ret=null;
+         org.semanticwb.bsc.Machinable ret=null;
          org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(bsc_previus);
          if(obj!=null)
          {
-             ret=(org.semanticwb.bsc.StateMachinable)obj.createGenericInstance();
+             ret=(org.semanticwb.bsc.Machinable)obj.createGenericInstance();
+         }
+         return ret;
+    }
+   /**
+   * Sets the value for the property StateGroup
+   * @param value StateGroup to set
+   */
+
+    public void setStateGroup(org.semanticwb.bsc.accessory.StateGroup value)
+    {
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(bsc_stateGroupInv, value.getSemanticObject());
+        }else
+        {
+            removeStateGroup();
+        }
+    }
+   /**
+   * Remove the value for StateGroup property
+   */
+
+    public void removeStateGroup()
+    {
+        getSemanticObject().removeProperty(bsc_stateGroupInv);
+    }
+
+   /**
+   * Gets the StateGroup
+   * @return a org.semanticwb.bsc.accessory.StateGroup
+   */
+    public org.semanticwb.bsc.accessory.StateGroup getStateGroup()
+    {
+         org.semanticwb.bsc.accessory.StateGroup ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(bsc_stateGroupInv);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.bsc.accessory.StateGroup)obj.createGenericInstance();
          }
          return ret;
     }
@@ -248,7 +292,7 @@ public abstract class StateBase extends org.semanticwb.bsc.accessory.BSCAccessor
    * @param value Next to set
    */
 
-    public void setNext(org.semanticwb.bsc.StateMachinable value)
+    public void setNext(org.semanticwb.bsc.Machinable value)
     {
         if(value!=null)
         {
@@ -269,15 +313,15 @@ public abstract class StateBase extends org.semanticwb.bsc.accessory.BSCAccessor
 
    /**
    * Gets the Next
-   * @return a org.semanticwb.bsc.StateMachinable
+   * @return a org.semanticwb.bsc.Machinable
    */
-    public org.semanticwb.bsc.StateMachinable getNext()
+    public org.semanticwb.bsc.Machinable getNext()
     {
-         org.semanticwb.bsc.StateMachinable ret=null;
+         org.semanticwb.bsc.Machinable ret=null;
          org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(bsc_next);
          if(obj!=null)
          {
-             ret=(org.semanticwb.bsc.StateMachinable)obj.createGenericInstance();
+             ret=(org.semanticwb.bsc.Machinable)obj.createGenericInstance();
          }
          return ret;
     }
@@ -298,6 +342,24 @@ public abstract class StateBase extends org.semanticwb.bsc.accessory.BSCAccessor
     public void setIconClass(String value)
     {
         getSemanticObject().setProperty(swb_iconClass, value);
+    }
+
+/**
+* Gets the Orden property
+* @return int with the Orden
+*/
+    public int getOrden()
+    {
+        return getSemanticObject().getIntProperty(bsc_orden);
+    }
+
+/**
+* Sets the Orden property
+* @param value long with the Orden
+*/
+    public void setOrden(int value)
+    {
+        getSemanticObject().setIntProperty(bsc_orden, value);
     }
 
 /**
