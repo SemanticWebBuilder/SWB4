@@ -1850,9 +1850,7 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
                             sr.name=resource.getTitle();
                             sr.resid=resource.getId();                            
                             sr.pageid=wp.getId();
-                            sr.uri=resource.getURI();
-                            String url="";
-                            sr.url=url;
+                            sr.uri=resource.getURI();                            
                             getSemanticRepositories.add(sr);
                         }
                     }
@@ -1875,9 +1873,7 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
                             sr.name=resource.getTitle();
                             sr.resid=resource.getId();
                             sr.pageid=wp.getId();
-                            sr.uri=resource.getURI();
-                            String url="";
-                            sr.url=url;
+                            sr.uri=resource.getURI();                            
                             getSemanticRepositories.add(sr);
                         }
                     }
