@@ -308,7 +308,7 @@ public class SWBCommentToElement extends org.semanticwb.portal.resources.sem.bas
                 min--;
             }
             html.append(" </ol>");
-            html.append(" <p><a href=\"javascript:postHtml('"+paramRequest.getRenderUrl().setCallMethod(SWBResourceURL.Call_DIRECT).setMode(SWBResourceURL.Mode_INDEX).setParameter("uri",element.getEncodedURI())+"','swb-cmnt-sem-lst')\">"+paramRequest.getLocaleString("viewAllComments") +"&nbsp;&raquo;</a></p>");
+            html.append(" <p><a href=\"javascript:postHtml('"+paramRequest.getRenderUrl().setCallMethod(SWBResourceURL.Call_DIRECT).setMode(SWBResourceURL.Mode_INDEX).setParameter("uri",element.getURI())+"','swb-cmnt-sem-lst')\">"+paramRequest.getLocaleString("viewAllComments") +"&nbsp;&raquo;</a></p>");
             html.append("</div>");
         }else {
             html.append("<h2>"+paramRequest.getLocaleString("noComment")+"</h2>");
@@ -360,7 +360,7 @@ public class SWBCommentToElement extends org.semanticwb.portal.resources.sem.bas
                 html.append("  </li>");
             }
             html.append(" </ol>");
-            html.append(" <p><a href=\"javascript:postHtml('"+paramRequest.getRenderUrl().setCallMethod(SWBResourceURL.Call_DIRECT).setMode(SWBResourceURL.Mode_INDEX).setParameter("uri",element.getEncodedURI())+"','swb-cmnt-sem-lst')\">"+paramRequest.getLocaleString("viewAllComments") +"&nbsp;&raquo;</a></p>");
+            html.append(" <p><a href=\"javascript:postHtml('"+paramRequest.getRenderUrl().setCallMethod(SWBResourceURL.Call_DIRECT).setMode(SWBResourceURL.Mode_INDEX).setParameter("uri",element.getURI())+"','swb-cmnt-sem-lst')\">"+paramRequest.getLocaleString("viewAllComments") +"&nbsp;&raquo;</a></p>");
             out.println(html.toString());
         }else
             out.println(paramRequest.getLocaleString("noElement"));
