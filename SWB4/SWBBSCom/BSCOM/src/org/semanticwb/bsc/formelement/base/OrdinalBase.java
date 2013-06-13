@@ -2,12 +2,12 @@ package org.semanticwb.bsc.formelement.base;
 
 
    /**
-   * Campo de texto para valores ordinales que no se repiten para instancias de la misma clase 
+   * OrdinalCategorical maneja un valores ordinales que no se repiten para instancias de una misma clase.  
    */
 public abstract class OrdinalBase extends org.semanticwb.bsc.formelement.Number 
 {
    /**
-   * Campo de texto para valores ordinales que no se repiten para instancias de la misma clase
+   * OrdinalCategorical maneja un valores ordinales que no se repiten para instancias de una misma clase. 
    */
     public static final org.semanticwb.platform.SemanticClass bsc_Ordinal=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#Ordinal");
    /**
