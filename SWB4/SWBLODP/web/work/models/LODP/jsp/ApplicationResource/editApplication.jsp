@@ -4,6 +4,7 @@
     Author     : Lennin
 --%>
 
+<%@page import="com.infotec.lodp.swb.resources.ApplicationResource"%>
 <%@page import="org.semanticwb.model.GenericObject"%>
 <%@page import="com.infotec.lodp.swb.utils.LODPUtils"%>
 <%@page import="com.infotec.lodp.swb.Category"%>
@@ -90,8 +91,6 @@
  </p>
  
  <div id="subefile" class="formas">
-     
-     <div class="subefile0"> 
         
         <form id="nuevoContacto" action="<%=actionURL.setAction(SWBResourceURL.Action_EDIT).setParameter("uri", apl.getEncodedURI())%>" method="post">
            
@@ -105,25 +104,23 @@
             <div class="subefile1">
                 
                 <label for="tit"><b>*</b><%=paramRequest.getLocaleString("lbl_appTitulo")%></label>
-                <input type="text" id="tit" name="titleApp" value="<%=apl.getAppTitle()%>"/>
-               
+                <input type="text" id="tit" promptMessage="<%=paramRequest.getLocaleString("lbl_promtTitleAPP")%>" invalidMessage="<%=paramRequest.getLocaleString("lbl_titleFault")%>" required="true" dojoType="dijit.form.ValidationTextBox" name="titleApp" value="<%=apl.getAppTitle()%>" trim="true" regExp="[a-zA-Z\u00C0-\u00FF' ]+" />
+                  
                 <label for="desc"><b>*</b><%=paramRequest.getLocaleString("lbl_appDescripcion")%></label>
-                <textarea name="descripcion" id="desc"><%=apl.getAppDescription()%></textarea>
+                <textarea name="descripcion" id="desc" data-dojo-type="dijit.form.Textarea" required="true" promptMessage="<%=paramRequest.getLocaleString("lbl_promtTextArea")%>" invalidMessage="<%=paramRequest.getLocaleString("lbl_invalidMsjTA")%>" trim="true"><%=apl.getAppDescription()%></textarea>
                 
                 <label for="cat"><b>*</b><%=paramRequest.getLocaleString("lbl_category")%></label>
                 <input type="text" id="cat" name="category" disabled="true" value="<%=descCat%>"/>
                 <input type="hidden" name="idCat" value="<%=idCat%>"/>
                 
                 <label for="usr"><b>*</b><%=paramRequest.getLocaleString("lbl_appDS")%></label>
-                    <select name="dataSet" multiple siz="5">
+                <select name="dataSet" multiple siz="5" required="true">
                         <option value=""></option>
                             <%
                                 Iterator<Dataset> itDt = Dataset.ClassMgr.listDatasets(wsite);
                                 List<Dataset> dataSet = new ArrayList<Dataset>();
                                 List<Dataset> dataSetSave = new ArrayList<Dataset>();
                                 Iterator<Dataset> itaplList = apl.listRelatedDatasets();
-                                
-                                System.out.println("Esta es la lista que se guardo de los dataset relacionados en el jsp" + itaplList.hasNext());
                                 
                                 while(itDt.hasNext()){
                                     dataSet.add(itDt.next());
@@ -141,7 +138,6 @@
                                     String selectedDS = "";
                                     
                                     if(dataSetSave.contains(ds)){
-                                        System.out.println("Entro");
                                        selectedDS = "selected";
                                     } 
                             %>
@@ -152,7 +148,7 @@
                     </select>
 
                     <label for="lic"><b>*</b><%=paramRequest.getLocaleString("lbl_appLicencia")%></label>
-                    <select name="licencia" dojoType="dijit.form.FilteringSelect">
+                    <select name="licencia" dojoType="dijit.form.FilteringSelect" required="true">
                         <option value=""></option>
                             <%
                                 Iterator<LicenseType> itLic = LicenseType.ClassMgr.listLicenseTypes(wsite);
@@ -176,7 +172,10 @@
                     </select>
                 
                     <label for="url1"><b>*</b><%=paramRequest.getLocaleString("lbl_appURL")%></label>
-                    <input type="text" id="url1" name="url" value="<%=apl.getAppURL()%>"/>
+                    <input type="text" id="url1" name="url" value="<%=apl.getAppURL()%>" dojoType="dijit.form.ValidationTextBox" required="true" promptMessage="<%=paramRequest.getLocaleString("lbl_promtURL")%>" invalidMessage="<%=paramRequest.getLocaleString("lbl_invalidURL")%>" trim="true"/>
+                    
+                    <label><input type="checkbox" name="terminos" id="terminos" maxlength="8" value="true" dojoType="dijit.form.CheckBox" required="true" _promptMessage="<%=paramRequest.getLocaleString("lbl_agreement")%>" invalidMessage="<%=paramRequest.getLocaleString("lbl_agreement")%>" isValid="return confirm('this.checkbox.value==true')"/>
+                    <a href="<%=renderURL.setMode(ApplicationResource.MODE_TERMINOS)%>" ><%=paramRequest.getLocaleString("lbl_appTerminosLicencia")%></label></a>
              
             </div>
             
@@ -186,9 +185,7 @@
         </form>
      </div>
             
-    <a href="<%=renderURL.setMode(SWBResourceURL.Mode_VIEW)%>">
-      Regresar
-    </a>
+     <form action="<%=actionURL.setAction(SWBResourceURL.Mode_VIEW)%>" method="post" name="back"></form>
 
 <%!    
     public class PageComparator implements Comparator<LicenseType>{
