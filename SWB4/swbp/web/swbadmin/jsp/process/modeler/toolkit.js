@@ -1231,18 +1231,38 @@
             
             obj.addInConnection=function(connectionPath)
             {
-                obj.inConnections.push(connectionPath);
-                connectionPath.toObject=obj;
-                connectionPath.setEndPoint(obj.getX(),obj.getY());
+                if (obj.inConnections.indexOf(connectionPath) === -1) {
+                    obj.inConnections.push(connectionPath);
+                    connectionPath.toObject=obj;
+                    connectionPath.setEndPoint(obj.getX(),obj.getY());
+                }
                 
             };
             
+            obj.removeInConnection=function(connectionPath) {
+                var idx = obj.inConnections.indexOf(connectionPath);
+                if (idx !== -1) {
+                    connectionPath.toObject = null;
+                    obj.inConnections.splice(idx);
+                }
+            }
+            
             obj.addOutConnection=function(connectionPath)
             {
-                obj.outConnections.push(connectionPath);
-                connectionPath.fromObject=obj;
-                connectionPath.setStartPoint(obj.getX(),obj.getY());
+                if (obj.outConnections.indexOf(connectionPath) === -1) {
+                    obj.outConnections.push(connectionPath);
+                    connectionPath.fromObject=obj;
+                    connectionPath.setStartPoint(obj.getX(),obj.getY());
+                }
             };
+            
+            obj.removeOutConnection=function(connectionPath) {
+                var idx = obj.outConnections.indexOf(connectionPath);
+                if (idx !== -1) {
+                    connectionPath.fromObject = null;
+                    obj.outConnections.splice(idx);
+                }
+            }
             
             obj.snap2Grid=function()
             {
