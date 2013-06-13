@@ -14,6 +14,7 @@ public class SemanticRepository {
     public String resid;    
     public String pageid;
     public String uri;
+    
 
     @Override
     public boolean equals(Object obj)
