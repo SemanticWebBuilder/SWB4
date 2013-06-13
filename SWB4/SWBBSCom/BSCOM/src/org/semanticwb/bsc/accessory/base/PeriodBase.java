@@ -4,9 +4,8 @@ package org.semanticwb.bsc.accessory.base;
    /**
    * Período de medición. 
    */
-public abstract class PeriodBase extends org.semanticwb.bsc.accessory.BSCAccessory implements org.semanticwb.model.Activeable,org.semanticwb.model.Descriptiveable,org.semanticwb.bsc.Blockable,org.semanticwb.model.Traceable
+public abstract class PeriodBase extends org.semanticwb.bsc.accessory.BSCAccessory implements org.semanticwb.model.Descriptiveable,org.semanticwb.bsc.Help,org.semanticwb.model.Traceable,org.semanticwb.model.Undeleteable,org.semanticwb.model.Activeable,org.semanticwb.bsc.Blockable,org.semanticwb.bsc.Machinable
 {
-    public static final org.semanticwb.platform.SemanticProperty bsc_index=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#index");
     public static final org.semanticwb.platform.SemanticProperty bsc_inTime=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#inTime");
     public static final org.semanticwb.platform.SemanticProperty bsc_start=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#start");
     public static final org.semanticwb.platform.SemanticProperty bsc_end=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#end");
@@ -112,6 +111,52 @@ public abstract class PeriodBase extends org.semanticwb.bsc.accessory.BSCAccesso
             return it;
         }
        /**
+       * Gets all org.semanticwb.bsc.accessory.Period with a determined Previus
+       * @param value Previus of the type org.semanticwb.bsc.Machinable
+       * @param model Model of the org.semanticwb.bsc.accessory.Period
+       * @return Iterator with all the org.semanticwb.bsc.accessory.Period
+       */
+
+        public static java.util.Iterator<org.semanticwb.bsc.accessory.Period> listPeriodByPrevius(org.semanticwb.bsc.Machinable value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.accessory.Period> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(bsc_previus, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.bsc.accessory.Period with a determined Previus
+       * @param value Previus of the type org.semanticwb.bsc.Machinable
+       * @return Iterator with all the org.semanticwb.bsc.accessory.Period
+       */
+
+        public static java.util.Iterator<org.semanticwb.bsc.accessory.Period> listPeriodByPrevius(org.semanticwb.bsc.Machinable value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.accessory.Period> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(bsc_previus,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.bsc.accessory.Period with a determined Next
+       * @param value Next of the type org.semanticwb.bsc.Machinable
+       * @param model Model of the org.semanticwb.bsc.accessory.Period
+       * @return Iterator with all the org.semanticwb.bsc.accessory.Period
+       */
+
+        public static java.util.Iterator<org.semanticwb.bsc.accessory.Period> listPeriodByNext(org.semanticwb.bsc.Machinable value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.accessory.Period> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(bsc_next, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.bsc.accessory.Period with a determined Next
+       * @param value Next of the type org.semanticwb.bsc.Machinable
+       * @return Iterator with all the org.semanticwb.bsc.accessory.Period
+       */
+
+        public static java.util.Iterator<org.semanticwb.bsc.accessory.Period> listPeriodByNext(org.semanticwb.bsc.Machinable value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.accessory.Period> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(bsc_next,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
        * Gets all org.semanticwb.bsc.accessory.Period with a determined Creator
        * @param value Creator of the type org.semanticwb.model.User
        * @param model Model of the org.semanticwb.bsc.accessory.Period
@@ -149,23 +194,43 @@ public abstract class PeriodBase extends org.semanticwb.bsc.accessory.BSCAccesso
     {
         super(base);
     }
+   /**
+   * Sets the value for the property Previus
+   * @param value Previus to set
+   */
 
-/**
-* Gets the Index property
-* @return int with the Index
-*/
-    public int getIndex()
+    public void setPrevius(org.semanticwb.bsc.Machinable value)
     {
-        return getSemanticObject().getIntProperty(bsc_index);
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(bsc_previus, value.getSemanticObject());
+        }else
+        {
+            removePrevius();
+        }
+    }
+   /**
+   * Remove the value for Previus property
+   */
+
+    public void removePrevius()
+    {
+        getSemanticObject().removeProperty(bsc_previus);
     }
 
-/**
-* Sets the Index property
-* @param value long with the Index
-*/
-    public void setIndex(int value)
+   /**
+   * Gets the Previus
+   * @return a org.semanticwb.bsc.Machinable
+   */
+    public org.semanticwb.bsc.Machinable getPrevius()
     {
-        getSemanticObject().setIntProperty(bsc_index, value);
+         org.semanticwb.bsc.Machinable ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(bsc_previus);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.bsc.Machinable)obj.createGenericInstance();
+         }
+         return ret;
     }
 
 /**
@@ -202,6 +267,62 @@ public abstract class PeriodBase extends org.semanticwb.bsc.accessory.BSCAccesso
     public void setStart(java.util.Date value)
     {
         getSemanticObject().setDateProperty(bsc_start, value);
+    }
+   /**
+   * Sets the value for the property Next
+   * @param value Next to set
+   */
+
+    public void setNext(org.semanticwb.bsc.Machinable value)
+    {
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(bsc_next, value.getSemanticObject());
+        }else
+        {
+            removeNext();
+        }
+    }
+   /**
+   * Remove the value for Next property
+   */
+
+    public void removeNext()
+    {
+        getSemanticObject().removeProperty(bsc_next);
+    }
+
+   /**
+   * Gets the Next
+   * @return a org.semanticwb.bsc.Machinable
+   */
+    public org.semanticwb.bsc.Machinable getNext()
+    {
+         org.semanticwb.bsc.Machinable ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(bsc_next);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.bsc.Machinable)obj.createGenericInstance();
+         }
+         return ret;
+    }
+
+/**
+* Gets the Orden property
+* @return int with the Orden
+*/
+    public int getOrden()
+    {
+        return getSemanticObject().getIntProperty(bsc_orden);
+    }
+
+/**
+* Sets the Orden property
+* @param value long with the Orden
+*/
+    public void setOrden(int value)
+    {
+        getSemanticObject().setIntProperty(bsc_orden, value);
     }
 
 /**

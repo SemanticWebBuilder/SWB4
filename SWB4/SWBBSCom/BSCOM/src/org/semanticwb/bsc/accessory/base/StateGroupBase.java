@@ -1,9 +1,12 @@
 package org.semanticwb.bsc.accessory.base;
 
 
-public abstract class StateGroupBase extends org.semanticwb.bsc.accessory.BSCAccessory implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Activeable,org.semanticwb.model.Traceable
+public abstract class StateGroupBase extends org.semanticwb.bsc.accessory.BSCAccessory implements org.semanticwb.model.Descriptiveable,org.semanticwb.bsc.Help,org.semanticwb.model.Traceable,org.semanticwb.model.Undeleteable,org.semanticwb.model.Activeable
 {
     public static final org.semanticwb.platform.SemanticClass bsc_State=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#State");
+   /**
+   * Lista de estados del grupo
+   */
     public static final org.semanticwb.platform.SemanticProperty bsc_hasState=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#hasState");
     public static final org.semanticwb.platform.SemanticClass bsc_StateGroup=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#StateGroup");
    /**
@@ -104,29 +107,6 @@ public abstract class StateGroupBase extends org.semanticwb.bsc.accessory.BSCAcc
             return it;
         }
        /**
-       * Gets all org.semanticwb.bsc.accessory.StateGroup with a determined Creator
-       * @param value Creator of the type org.semanticwb.model.User
-       * @param model Model of the org.semanticwb.bsc.accessory.StateGroup
-       * @return Iterator with all the org.semanticwb.bsc.accessory.StateGroup
-       */
-
-        public static java.util.Iterator<org.semanticwb.bsc.accessory.StateGroup> listStateGroupByCreator(org.semanticwb.model.User value,org.semanticwb.model.SWBModel model)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.accessory.StateGroup> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_creator, value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.bsc.accessory.StateGroup with a determined Creator
-       * @param value Creator of the type org.semanticwb.model.User
-       * @return Iterator with all the org.semanticwb.bsc.accessory.StateGroup
-       */
-
-        public static java.util.Iterator<org.semanticwb.bsc.accessory.StateGroup> listStateGroupByCreator(org.semanticwb.model.User value)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.accessory.StateGroup> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_creator,value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
        * Gets all org.semanticwb.bsc.accessory.StateGroup with a determined State
        * @param value State of the type org.semanticwb.bsc.accessory.State
        * @param model Model of the org.semanticwb.bsc.accessory.StateGroup
@@ -147,6 +127,29 @@ public abstract class StateGroupBase extends org.semanticwb.bsc.accessory.BSCAcc
         public static java.util.Iterator<org.semanticwb.bsc.accessory.StateGroup> listStateGroupByState(org.semanticwb.bsc.accessory.State value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.bsc.accessory.StateGroup> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(bsc_hasState,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.bsc.accessory.StateGroup with a determined Creator
+       * @param value Creator of the type org.semanticwb.model.User
+       * @param model Model of the org.semanticwb.bsc.accessory.StateGroup
+       * @return Iterator with all the org.semanticwb.bsc.accessory.StateGroup
+       */
+
+        public static java.util.Iterator<org.semanticwb.bsc.accessory.StateGroup> listStateGroupByCreator(org.semanticwb.model.User value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.accessory.StateGroup> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_creator, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.bsc.accessory.StateGroup with a determined Creator
+       * @param value Creator of the type org.semanticwb.model.User
+       * @return Iterator with all the org.semanticwb.bsc.accessory.StateGroup
+       */
+
+        public static java.util.Iterator<org.semanticwb.bsc.accessory.StateGroup> listStateGroupByCreator(org.semanticwb.model.User value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.accessory.StateGroup> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_creator,value.getSemanticObject(),sclass));
             return it;
         }
     }
