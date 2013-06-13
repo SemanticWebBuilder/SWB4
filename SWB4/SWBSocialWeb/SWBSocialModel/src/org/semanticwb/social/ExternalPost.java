@@ -36,6 +36,16 @@ public class ExternalPost {
     private String picture;
     
     /**
+     * The link or URL for a video related to the message
+     */
+    private String video;
+    
+    /**
+     * The category of the message, its very used with categorias for youtube
+     */
+    private String category;
+    
+    /**
      * A link related to the message
      */
     private String link;
@@ -44,6 +54,12 @@ public class ExternalPost {
      * The name with which this message was created
      */
     private String postName;
+    
+    
+    /**
+     * The text that titles this message
+     */
+    private String tags;
     
     /**
      * The text that describes the link related to this message
@@ -174,13 +190,60 @@ public class ExternalPost {
     public String getPicture() {
         return picture;
     }
-
+    
+    
+    
     /**
      * @param picture the picture to set
      */
     public void setPicture(String picture) {
         this.picture = picture;
     }
+    
+    
+     /**
+     * @return the tags
+     */
+    public String getTags() {
+        return tags;
+    }
+    
+     /**
+     * @param tags the Tags to set
+     */
+    public void setTags(String tags) {
+        this.tags = tags;
+    }
+    
+    
+    /**
+     * @return the video
+     */
+    public String getVideo() {
+        return video;
+    }
+    
+    /**
+     * @param video the video to set
+     */
+    public void setVideo(String video) {
+        this.video = video;
+    }
+    
+    /**
+     * @return the category, most used when is a Video
+     */
+    public String getCategory() {
+        return category;
+    }
+    
+    /**
+     * @param category the category to set
+     */
+    public void setCategory(String category) {
+        this.category = category;
+    }
+    
 
     /**
      * @return the link

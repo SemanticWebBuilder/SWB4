@@ -12,6 +12,7 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.StringTokenizer;
 import org.semanticwb.Logger;
+import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.GenericObject;
 import org.semanticwb.model.SWBContext;
@@ -40,6 +41,7 @@ import org.semanticwb.social.SocialRuleRef;
 import org.semanticwb.social.SocialTopic;
 import org.semanticwb.social.Stream;
 import org.semanticwb.social.VideoIn;
+import org.semanticwb.social.YouTubeCategory;
 import org.semanticwb.social.util.NormalizerCharDuplicate;
 import org.semanticwb.social.util.SWBSocialRuleMgr;
 import org.semanticwb.social.util.SWBSocialUtil;
@@ -565,15 +567,38 @@ public class SentimentalDataClassifier {
                 if(externalPost.getPostType().equals(SWBSocialUtil.MESSAGE))
                 {
                     postIn=MessageIn.ClassMgr.createMessageIn(model);
-                }else if(externalPost.getPostType().equals(SWBSocialUtil.PHOTO))
+                }else if(externalPost.getPostType().equals(SWBSocialUtil.PHOTO) && externalPost.getPicture()!=null)
                 {
                     postIn=PhotoIn.ClassMgr.createPhotoIn(model);
-                }else if(externalPost.getPostType().equals(SWBSocialUtil.VIDEO))
+                    PhotoIn photoIn=(PhotoIn)postIn;
+                    photoIn.setPhoto(externalPost.getPicture());
+                }else if(externalPost.getPostType().equals(SWBSocialUtil.VIDEO) && externalPost.getVideo()!=null)
                 {
                     postIn=VideoIn.ClassMgr.createVideoIn(model);
+                    VideoIn videoIn=(VideoIn)postIn;
+                    videoIn.setVideo(externalPost.getVideo());
+                    if(externalPost.getCategory()!=null)
+                    {
+                        //Para categorias de youtube, si despues se manejan mas categorias, sería un bloque similar al siguiente
+                        YouTubeCategory youTubeCate=YouTubeCategory.ClassMgr.getYouTubeCategory(externalPost.getCategory(), SWBContext.getAdminWebSite());
+                        System.out.println("youTubeCate-1:"+youTubeCate);
+                        if(youTubeCate!=null)
+                        {
+                            System.out.println("youTubeCate-2:"+youTubeCate);
+                            videoIn.setYoutubeCategory(youTubeCate);
+                        }
+                    }
+                }
+                
+                if(externalPost.getMessage()!=null)
+                {
+                    postIn.setMsg_Text(externalPost.getMessage());
                 }
                 postIn.setSocialNetMsgId(externalPost.getPostId());
-                postIn.setMsg_Text(externalPost.getMessage());
+                if(externalPost.getDescription()!=null)
+                {
+                    postIn.setDescription(externalPost.getDescription());
+                }
                 //System.out.println("CREÓ EL MENSAJE CON TEXTO:"+postIn.getMsg_Text());
                 postIn.setPostInSocialNetwork(socialNetwork);
                 postIn.setPostInStream(stream);
