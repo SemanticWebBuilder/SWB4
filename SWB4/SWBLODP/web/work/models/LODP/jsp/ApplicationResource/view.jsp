@@ -4,6 +4,8 @@
     Author     : Lennin
 --%>
 
+<%@page import="java.util.ArrayList"%>
+<%@page import="org.semanticwb.SWBPortal"%>
 <%@page import="com.infotec.lodp.swb.Publisher"%>
 <%@page import="org.semanticwb.platform.SemanticObject"%>
 <%@page import="com.infotec.lodp.swb.Developer"%>
@@ -104,16 +106,9 @@
             if (null != filteruri && filteruri.trim().length() > 0) {
                 
                 go = ont.getGenericObject(filteruri);
- 
-                if (go != null) {
 
-                    if (go instanceof Category) {
-                        
-                        itAp1 = Application.ClassMgr.listApplicationByCategory((Category) go, wsite);
-                        
-                    } else if (go instanceof Institution) {
-
-                        
+                 if (go instanceof Institution) {
+     
                         Iterator<Dataset> itIns = Dataset.ClassMgr.listDatasetByInstitution((Institution) go, wsite);
                         HashMap<String, Application> hmFilterInst = new HashMap<String, Application>();
 
@@ -128,7 +123,7 @@
                             }
                         }
 
-                        itAp1 = hmFilterInst.values().iterator();
+                     itAp1 = hmFilterInst.values().iterator();
  
                     }
 //                    else if (go instanceof Developer) {
@@ -165,12 +160,10 @@
 //                        }
 //                       itAp1 = hmFilterPub.values().iterator(); 
 //                    } 
-                    else {
-                        itAp1 = Application.ClassMgr.listApplications(wsite);
-                    }
-                } else {
-                    itAp1 = Application.ClassMgr.listApplications(wsite);
-                }
+                
+            } else if(null==filteruri && null!=filterCat) {
+               go = ont.getGenericObject(filterCat);
+               itAp1 = Application.ClassMgr.listApplicationByCategory((Category) go, wsite);
             } else {
                 itAp1 = Application.ClassMgr.listApplications(wsite);
             }
@@ -305,7 +298,7 @@
     </form>
 </div>
 
-<div class="izq">
+<div class="izq-apps1">
         
         <p class="rubro"><%=paramRequest.getLocaleString("lbl_filterCategory")%></p>
         <ul>
@@ -444,7 +437,7 @@
    </div>
 </div>-->
 
-<div class="der">
+<div class="der-apps1">
     <div id="temasdatos">
          <div class="listado">
     <div class="orden">
@@ -652,6 +645,14 @@
         Application aps = (Application) go;
         GenericObject ob = aps.getAppAuthor().createGenericInstance();
         String fullName = "";
+        String instlogo = "images/imagen.gif";
+        Iterator<Dataset> app = aps.listRelatedDatasets();
+        List<Dataset> listDS = new ArrayList();
+        
+        while(app.hasNext()){
+            Dataset ds = app.next();
+            listDS.add(ds);
+        }
         
     if(ob instanceof Developer  ){
         Developer db = (Developer)ob ;
@@ -660,7 +661,14 @@
     
     if(ob instanceof Publisher){
         Publisher db = (Publisher)ob ;
-        fullName = db.getFullName();
+        Institution inst = db !=null ? db.getPubInstitution():null; 
+        
+        if(null!=inst){
+            fullName = inst.getInstitutionTitle()!=null?inst.getInstitutionTitle():"---";
+            if(inst.getInstitutionLogo()!=null) {
+                instlogo = SWBPortal.getWebWorkPath()+inst.getWorkPath()+"/"+Institution.lodp_institutionLogo.getName()+"_"+inst.getId()+"_"+inst.getInstitutionLogo();
+            }
+        }
     }
     
     if(ob instanceof User){
@@ -672,116 +680,145 @@
     aps.sendView(request, user, wpage);
         
     %>
-    <div>
-        <h2><%=aps.getAppTitle()%></h2> 
-        <ul>
-            <li>
-                <label><%=paramRequest.getLocaleString("lbl_autorDetalle")%></label>&nbsp;&nbsp;&nbsp;&nbsp;<%=fullName%>
-            </li>
-            <li>
-                <label><%=paramRequest.getLocaleString("lbl_fechaCracionDetalle")%></label>&nbsp;&nbsp;&nbsp;&nbsp;<%=sdf2.format(aps.getAppCreated())%> 
-            </li>
-            <li>
-                <label><%=paramRequest.getLocaleString("lbl_licenciaDetalle")%></label>&nbsp;&nbsp;&nbsp;&nbsp;<%=aps.getAppLicense() != null ? aps.getAppLicense().getLicenseTitle() : ""%>
-            </li>
-            <li>
-                <label><%=paramRequest.getLocaleString("lbl_urlDetalle")%></label>&nbsp;&nbsp;&nbsp;&nbsp;<a href="<%=renderURL.setMode(ApplicationResource.REDIRECT_URL).setParameter("uri", aps.getShortURI())%>" ><%=aps.getAppURL()%></a>
-            </li>
-            <li>
-                <label><%=paramRequest.getLocaleString("lbl_visitasDetalle")%></label>&nbsp;&nbsp;&nbsp;&nbsp;<%=aps.getViews()%>
-            </li>
+    
+    <h3><%=aps.getAppTitle()%></h3>
+    
+    <div class="izq-apps2">
+        
+        <div class="publicador">
+              <img src="<%=instlogo%>" alt="<%=fullName%>" />
+              <p class="pub-name"><%=fullName%></p>
+        </div>
+        
+        <div class="detalle">
+       	  <p><%=aps.getAppDescription()%></p>
+          <%if(user.isSigned()&& (user.getSemanticObject().createGenericInstance() instanceof Developer || user.getSemanticObject().createGenericInstance() instanceof Publisher)){%>
+          <p><em><a href="<%=renderURL.setMode(SWBResourceURL.Mode_EDIT).setParameter("uri", aps.getShortURI())%>" ><%=paramRequest.getLocaleString("lbl_editar")%></a></em></p>
+          <%}%>
+          <p><em><a href="mapas.opendata.gob.mx" class="api">Documentación del API</a></em></p>
+          <%
+          Dataset ds1 = listDS.get(0);
+          String urlData = wsite.getWebPage("Datos").getUrl();
+          String urlDataSet = urlData+"?suri="+ds1.getShortURI()+"&act=detail";
+          %>
+          <p><em><%=paramRequest.getLocaleString("lbl_DSUsado")%><a href="<%=urlDataSet%>"><%=ds1.getDatasetTitle()%></a></em></p>
+          <p><em><%=paramRequest.getLocaleString("lbl_licenciaDetalle")%><%=aps.getAppLicense() != null ? aps.getAppLicense().getLicenseTitle() : ""%></em></p>
+
+          <div class="redes">Aqui va [MeGusta] [Tweet] [g+] [Share] 
+          </div>
+        </div>
+	</div>
+          
+        <div class="der-apps2">
+            <div class="detalle-file">
+		<a href="<%=renderURL.setMode(ApplicationResource.REDIRECT_URL).setParameter("uri", aps.getShortURI())%>" title="<%=aps.getAppURL()%>" class="descargar"><%=paramRequest.getLocaleString("lbl_descargarAPP")%></a>
+            <ul>
+                <li><strong><%=paramRequest.getLocaleString("lbl_fechaCracionDetalle")%></strong><%=sdf2.format(aps.getAppCreated())%></li>
+                <li><strong><%=paramRequest.getLocaleString("lbl_visitasDetalle")%></strong><%=aps.getViews()%></li>
+                <li><strong><%=paramRequest.getLocaleString("lbl_appDownloads")%></strong><%=aps.getDownloads()%></li>
+                
+                <%Long comment = SWBUtils.Collections.sizeOf(aps.listComments());%>
             
-             <%
-                    Long comment = SWBUtils.Collections.sizeOf(aps.listComments());
-            %>
-            
-            <li>
-                <label><%=paramRequest.getLocaleString("lbl_numComment")%></label>&nbsp;&nbsp;&nbsp;&nbsp;<%=comment%>
-            </li>
-            <p>
-            <p>
-            <li>
-                <%=aps.getAppDescription()%>
-            </li>
-            <li>
-                <label><%=paramRequest.getLocaleString("lbl_DSUsado")%></label>
-                
-                &nbsp;&nbsp;
-                
-                <%
-                Iterator<Dataset> app = aps.listRelatedDatasets();
-                
-                while(app.hasNext()){
-                    Dataset dsRL = app.next();
-                %>
-                    <%=dsRL.getDatasetTitle()%>     
-                <%}%>
-                
-                &nbsp;
-                &nbsp;
-                <%
-                if(user.isSigned()&& (user.getSemanticObject().createGenericInstance() instanceof Developer || user.getSemanticObject().createGenericInstance() instanceof Publisher)){
-                %>
-                    <a href="<%=renderURL.setMode(SWBResourceURL.Mode_EDIT).setParameter("uri", aps.getShortURI())%>" ><%=paramRequest.getLocaleString("lbl_editar")%></a>
-                <%
-                }             
-                %>
-            </li>
-             
-        </ul>
-    </div>  
-            
-    <div>
-        <label><%=paramRequest.getLocaleString("lbl_DSRelacion")%></label>
-        <ul>
+                <li><strong><%=paramRequest.getLocaleString("lbl_numComment")%></strong><%=comment%></li>
+                <li><strong><%=paramRequest.getLocaleString("lbl_rated")%>:</strong>
+           
+                <%float average = Math.round(aps.getAverage());%>
+                    
+                <img src="/work/models/LODP/css/images/star-<%=average >= 1?"on":"off"%>.png" width="15" height="14" alt="*">
+                <img src="/work/models/LODP/css/images/star-<%=average >= 2?"on":"off"%>.png" width="15" height="14" alt="*">
+                <img src="/work/models/LODP/css/images/star-<%=average >= 3?"on":"off"%>.png" width="15" height="14" alt="*">
+                <img src="/work/models/LODP/css/images/star-<%=average >= 4?"on":"off"%>.png" width="15" height="14" alt="*">
+                <img src="/work/models/LODP/css/images/star-<%=average >= 5?"on":"off"%>.png" width="15" height="14" alt="*">
+    
+                </li>
+            </ul>      
+       </div>
+       
+	  <div class="new-dat tit">
+            <h4><%=paramRequest.getLocaleString("lbl_DSRelacion")%></h4>
             <%  // lista de aplicaciones relacionadas
-                Iterator<Dataset> itDataS = Dataset.ClassMgr.listDatasets(wsite);
-
-                if (itDataS.hasNext()) {
-                    while (itDataS.hasNext()) {
-                        Dataset dt = itDataS.next();
-                        Iterator<Application> itApp = Application.ClassMgr.listApplicationByRelatedDataset(dt, wsite);
-                        while (itApp.hasNext()) {
-                            Application ap = itApp.next();
+            int numDS = 0;
+            
+            if(!listDS.isEmpty()){
+                 numDS = listDS.size();
+                for(Dataset dsOBJ : listDS){
             %>
-            <li title="<%=ap.getAppDescription()%>"><%=ap.getAppTitle()%></li>
-                <%
-                        }
-                    }
-                } else {
-
-                %>
-            <li><%=paramRequest.getLocaleString("lbl_DSNoRelacion")%></li>
-                <%                    }
-                %>
+            
+            <li><%=dsOBJ.getDatasetTitle()%><br />
+                <strong><%=dsOBJ.getDatasetDescription()!=null?dsOBJ.getDatasetDescription():"---"%></strong>
+            </li>
+            
+            <%}} else {%>
+            
+            <li><%=paramRequest.getLocaleString("lbl_NOrelatesApps")%></li>
+            
+            <%
+            }
+            String idWds = base.getAttribute("dsWebPage","Datos");
+            WebPage wpds = wsite.getWebPage(idWds);
+            String urlds = "#";
+            
+            if(wpds!=null){
+                urlds = wpds.getUrl();
+            }
+            %>
         </ul>
-    </div>
-    <div>
-        <label><%=paramRequest.getLocaleString("lbl_appRelacion")%></label>
-        <ul>
+                        
+            <div>
+                <span><%=numDS%> <%=paramRequest.getLocaleString("lbl_dsRelated")%></span> <a href="<%=urlds%>"><%=paramRequest.getLocaleString("lbl_viewAll")%></a>
+            </div>
+        </div>
+            
+	  <div class="new-app tit">
+            <h4><%=paramRequest.getLocaleString("lbl_appRelacion")%></h4>
             <%  // lista de aplicaciones relacionadas
-                Iterator<Dataset> itDataSet = Dataset.ClassMgr.listDatasets(wsite);
-
-                if (itDataSet.hasNext()) {
-                    while (itDataSet.hasNext()) {
-                        Dataset dt = itDataSet.next();
-                        Iterator<Application> itApp = Application.ClassMgr.listApplicationByRelatedDataset(dt, wsite);
-                        while (itApp.hasNext()) {
-                            Application ap = itApp.next();
-            %>
-            <li title="<%=ap.getAppDescription()%>"><%=ap.getAppTitle()%></li>
-                <%
+            int numapps = 0;
+            List<Application> listApp = new ArrayList();
+            
+                for(Dataset dsOBJ : listDS){
+                    Iterator<Application> itapp = Application.ClassMgr.listApplicationByRelatedDataset(dsOBJ, wsite);
+                        while(itapp.hasNext()){
+                            Application appli = itapp.next();
+                            if(appli.isAppValid()){
+                                listApp.add(appli);
+                            }
                         }
-                    }
-                } else {
-
-                %>
-            <li><%=paramRequest.getLocaleString("lbl_appNoRealcion")%></li>
-                <%                    }
+                }
+                
+            numapps = listApp.size();
+            
+            if(!listApp.isEmpty()){
+                for(Application appli : listApp){
+               
+            %>
+            
+            <li><%=appli.getAppTitle()%><br />
+                <strong><%=appli.getAppDescription()!=null?appli.getAppDescription():"---"%></strong>
+            </li>
+            
+            <%}}else {%>
+            
+            <li><%=paramRequest.getLocaleString("lbl_NOrelatesApps")%></li>
+            
+            <%}
+            
+            String idWPApps = base.getAttribute("appWebPage","Aplicaciones"); 
+            WebPage wpApps = wsite.getWebPage(idWPApps); 
+            String urlApps = "#"; 
+            
+            if(wpApps!=null){
+                urlApps = wpApps.getUrl();
+            }
                 %>
         </ul>
-    </div>  
-</div> 
+                        
+            <div>
+                <span><%=numapps%> <%=paramRequest.getLocaleString("lbl_appRelated")%></span> <a href="<%=urlApps%>"><%=paramRequest.getLocaleString("lbl_viewAll")%></a>
+            </div>
+        </div>
+      </div>
+    
+    
 
 <%
 }}}   

@@ -36,7 +36,6 @@
     Iterator<Category> itCat = Category.ClassMgr.listCategories(wsite);
 
     String uri = request.getParameter("uri");
-    String cancelar = "cancel";
     String ciudadanas = "Ciudadanas";
     String servPub = "Servicio Publico";
     String category = "";
@@ -165,7 +164,7 @@
            <input type="text" id="tit" name="titleApp"  dojoType="dijit.form.ValidationTextBox" required="true" promptMessage="<%=paramRequest.getLocaleString("lbl_promtTitleAPP")%>" invalidMessage="<%=paramRequest.getLocaleString("lbl_titleFault")%> " trim="true" regExp="[a-zA-Z\u00C0-\u00FF' ]+" />
            
            <label for="desc"><b>*</b><%=paramRequest.getLocaleString("lbl_appDescripcion")%></label>
-           <textarea name="descripcion" id="desc" data-dojo-type="dijit.form.Textarea" required="true" promptMessage="Ingresa la descripcion de tu aplicacion" invalidMessage="Datos invalidos" trim="true" ></textarea>
+           <textarea name="descripcion" id="desc" data-dojo-type="dijit.form.Textarea" required="true" promptMessage="<%=paramRequest.getLocaleString("lbl_promtTextArea")%>" invalidMessage="<%=paramRequest.getLocaleString("lbl_invalidMsjTA")%>" trim="true" ></textarea>
       
            <label for="cat"><b>*</b><%=paramRequest.getLocaleString("lbl_category")%></label>
            <input id="cat" type="text" name="category" disabled="true" value="<%=category%>"/>
@@ -211,10 +210,10 @@
             </select>
             
             <label for="url1"><b>*</b><%=paramRequest.getLocaleString("lbl_appURL")%></label>
-            <input type="text" id="url1" name="url" dojoType="dijit.form.ValidationTextBox" required="true" promptMessage="Ingresa la url de tu aplicacion para descargar" invalidMessage="Url invalida" trim="true" />
+            <input type="text" id="url1" name="url" dojoType="dijit.form.ValidationTextBox" required="true" promptMessage="<%=paramRequest.getLocaleString("lbl_promtURL")%>" invalidMessage="<%=paramRequest.getLocaleString("lbl_invalidURL")%>" trim="true" />
            
-            <input type="checkbox" name="terminos" id="terminos" maxlength="8" value="true" dojoType="dijit.form.CheckBox" required="true" _promptMessage="<%=paramRequest.getLocaleString("lbl_agreement")%>" invalidMessage="<%=paramRequest.getLocaleString("lbl_agreement")%>" isValid="return confirm('this.checkbox.value==true')"/>
-            <a href="<%=renderURL.setMode(ApplicationResource.MODE_TERMINOS)%>" ><label for="terminos"><%=paramRequest.getLocaleString("lbl_appTerminosLicencia")%></label></a>    
+            <label><input type="checkbox" name="terminos" id="terminosCondicioes" maxlength="8" value="true" dojoType="dijit.form.CheckBox" required="true" _promptMessage="<%=paramRequest.getLocaleString("lbl_agreement")%>" invalidMessage="<%=paramRequest.getLocaleString("lbl_agreement")%>" isValid="return confirm('this.checkbox.value==true')"/>
+            <a href="<%=renderURL.setMode(ApplicationResource.MODE_TERMINOS)%>" ><%=paramRequest.getLocaleString("lbl_appTerminosLicencia")%></label></a>    
             
        </div> 
             
@@ -222,13 +221,9 @@
             <input type="button" value="<%=paramRequest.getLocaleString("btn_appCancelar")%>" onclick="javascript:document.back.submit()" class="boton-cancelar"/>
                        
       </form>
-     </div>
+     </div>  
             
-        <form action="<%=actionURL.setMode(SWBResourceURL.Mode_VIEW)%>" method="post" name="back"></form>
-            
-        <a href="<%=renderURL.setMode(SWBResourceURL.Mode_VIEW).setParameter("cancel", cancelar) %>">
-          Regresar
-        </a>
+         <form action="<%=actionURL.setAction(SWBResourceURL.Mode_VIEW)%>" method="post" name="back"></form>
    
     <%}else{ %>
         <%=paramRequest.getLocaleString("lbl_appUserLoggeo")%>
