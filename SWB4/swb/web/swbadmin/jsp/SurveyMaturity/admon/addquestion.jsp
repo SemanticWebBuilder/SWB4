@@ -3,16 +3,51 @@
     {
         dijit.byId("dialogaddCuestion").hide();
     }
-    function saveAndContinueQuestion(forma)
+    function saveAndContinueQuestion()
     {
-        
+        if(!validaAddQuestion())
+        {
+            return;
+        }
+        reloadAdmonQuestion();
     }
-    function saveAddQuestion(forma)
+    function resetAddQuestion()
+    {
+        resetEditor('texteditor');
+        resetEditor('descriptioneditor');
+    }
+    function saveAddQuestion()
     {
         // validaciones
+        if(!validaAddQuestion())
+        {
+            return;
+        }
         reloadAdmonQuestion();
         dijit.byId("dialogaddCuestion").hide();
         
+    }
+    function validaAddQuestion(forma)
+    {        
+        var html=getValueEditor('texteditor');
+        
+        if(html.isEmpty())
+        {
+            alert('¡Debe indicar el texto de la pregunta!');
+            return false;
+        }
+        html=getValueEditor('descriptioneditor');
+        alert('1');
+        try
+        {
+            dojo.ready(enviaforma(forma.id));
+        }
+        catch(err)
+        {
+            alert(err);
+        }
+        resetAddQuestion();
+        return true;
     }
     function addSubPreguntas()
     {
@@ -30,6 +65,7 @@
 </script>
 <title>Agregar Pregunta</title>
 <h1 align="center">Pregunta</h1>
+<form id="frmaddQuestion" action=""  id="">
 <table width="100%">
     <tr>
         <td>
@@ -60,7 +96,7 @@
         </td>
         <td>
             <div dojoType="dijit.Editor" id="texteditor">
-        </div>
+            </div>
             <!--<textarea cols="80" rows="10" name="textquestion"></textarea>-->
         </td>
     </tr>
@@ -149,10 +185,11 @@
     </tr>
     <tr>
         <td colspan="2" align="right">
-            <input type="button" value="Cancelar" onclick="closeAddQuestion();">&nbsp;<input type="button" value="Guardar" onclick="saveAddQuestion(this.form);">&nbsp;<input type="button" value="Guardar y Agregar" onclick="saveAndContinueQuestion(this.form);">
+            <input type="button" value="Cancelar" onclick="closeAddQuestion();">&nbsp;<input type="button" value="Guardar" onclick="saveAddQuestion();">&nbsp;<input type="button" value="Guardar y Agregar" onclick="saveAndContinueQuestion();">
         </td>
     </tr>
 </table>
+</form>
 <div id="dialogaddSubquestions" dojoType="dijit.Dialog" title="Agregar SubPreguntas">
     <jsp:include flush="true" page="addSubquestions.jsp" />
 </div>
