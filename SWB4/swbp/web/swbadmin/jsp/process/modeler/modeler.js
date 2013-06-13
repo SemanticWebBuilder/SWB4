@@ -2048,15 +2048,21 @@
                 
         init:function(svgid)
         {
-            //console.log(ToolKit);
-            //console.log("Modeler init");
             ToolKit.init(svgid);
-            //console.log("After toolkit");
             ToolKit.onmousedown=Modeler.onmousedown;
             ToolKit.onmousemove=Modeler.onmousemove;
             ToolKit.onmouseup=Modeler.onmouseup;
             if(!ToolKit.svg.offsetLeft)ToolKit.svg.offsetLeft=60;
             if(!ToolKit.svg.offsetTop)ToolKit.svg.offsetTop=10;
+            Modeler.createNavPath();
+            
+            var fSetLayer = ToolKit.setLayer;
+            ToolKit.setLayer = function(layer) {
+                fSetLayer(layer);
+                if (Modeler.navPath != null) {
+                    Modeler.navPath.setNavigation(layer);
+                }
+            };
             
             var dlg = document.getElementById("dropArea");
             
@@ -2180,7 +2186,7 @@
                 Modeler.dragConnection=Modeler.mapObject("SequenceFlow");
                 if (obj.canStartLink(Modeler.dragConnection)) {
                     obj.addOutConnection(Modeler.dragConnection);
-                    Modeler.dragConnection.setEndPoint(obj.getX(),obj.getY());
+                    //Modeler.dragConnection.setEndPoint(obj.getX(),obj.getY());
                 } else {
                     Modeler.dragConnection.remove();
                     Modeler.dragConnection = null;
@@ -2200,8 +2206,9 @@
                     if (obj.canEndLink(Modeler.dragConnection)) {
                         ToolKit.unSelectAll();
                         ToolKit.selectObj(obj,true);
-                        Modeler.dragConnection.toObject=obj;
-                        Modeler.dragConnection.setEndPoint(obj.getX(),obj.getY());
+                        obj.addInConnection(Modeler.dragConnection);
+                        //Modeler.dragConnection.toObject=obj;
+                        //Modeler.dragConnection.setEndPoint(obj.getX(),obj.getY());
                     } else {
                         Modeler.dragConnection.setEndPoint(ToolKit.getEventX(evt), ToolKit.getEventY(evt));
                     }
@@ -2271,12 +2278,12 @@
                     var idx = obj.toObject.inConnections.indexOf(obj);
                     obj.toObject.inConnections.splice(idx);
                     obj.toObject = null;
-                    Modeler.dragConnection = obj;
+                Modeler.dragConnection = obj;
                     obj.pressed = false;
                 }
                 return Modeler.onmousemove(evt);
             };
-            
+                
             obj.onmouseup = function (evt) {
                 if (obj.pressed) {
                     obj.pressed = false;
@@ -2356,26 +2363,6 @@
                 obj.subLine.remove();
                 fRemove();
             };
-            
-//            obj.onmouseup = function() {
-//                obj.setClass("sequenceFlowSubLine_o");
-//            }
-            
-//            obj.onmouseover=function(evt) {
-//                obj.subLine.setStyleClass("sequenceFlowSubLine_o");
-//            }
-//            
-//            obj.subLine.onmouseover=function(evt) {
-//                obj.subLine.setStyleClass("sequenceFlowSubLine_o");
-//            }
-//            
-//            obj.subLine.onmouseout=function(evt) {
-//                obj.subLine.setStyleClass("sequenceFlowSubLine");
-//            }
-//            
-//            obj.onmouseout=function(evt) {
-//                obj.subLine.setStyleClass("sequenceFlowSubLine");
-//            }
             
             obj.updateSubLine= function() {
                 obj.subLine.pathSegList.clear();
@@ -2678,7 +2665,6 @@
             
             icon.obj.ondblclick=function(evt)
             {
-                //Modeler.navPath.setNavigation(obj.subLayer);
                 ToolKit.setLayer(obj.subLayer);
             };
             
@@ -2920,7 +2906,6 @@
                         }
                     }
                     obj.move(tmp.x, tmp.y);
-                    
                     if (obj.typeOf("IntermediateCatchEvent") && tmp.parent == "") {
                         obj.snap2Grid();
                     }
@@ -2935,7 +2920,7 @@
                 var start = Modeler.getGraphElementByURI(null, tmp.start);
                 var end = Modeler.getGraphElementByURI(null, tmp.end);
                 
-                if (start != null && end != null) {
+                if (start !== null && end !== null) {
                     start.addOutConnection(obj);
                     end.addInConnection(obj);
                 }
@@ -2988,7 +2973,6 @@
                 var tmp = flowNodes[i];
                 var obj = Modeler.getGraphElementByURI(null, tmp.uri);
                 var par = Modeler.getGraphElementByURI(null, tmp.parent);
-                //console.log(tmp.uri+" "+tmp.parent);
                 if (tmp.container && tmp.container !== null) {
                     var cont = Modeler.getGraphElementByURI(null, tmp.container);
                     if (cont !== null && obj !== null) {
@@ -3000,13 +2984,29 @@
                     }
                 }
             }
-            
-            //Modeler.createNavPath();
             ToolKit.setLayer(null);
         },
                 
+        getNavPath: function(layer) {
+            if (layer === null) {
+                return null;
+            }
+            var ret = [];
+            var currentLayer = layer;
+            do {
+                var pid = "";
+                if (currentLayer.parent !== null) {
+                    pid = currentLayer.parent.id;
+                }
+                ret.push({label:currentLayer.parent.text.value, layer:pid});
+                currentLayer = currentLayer.parent.layer;
+            } while (currentLayer !== null);
+            ret.push({label:"Principal", layer:""});
+            return ret;
+        },
+                
         createNavPath: function() {
-            if (Modeler.navPath != null) {
+            if (Modeler.navPath !== null) {
                 Modeler.navPath.bar.remove();
             }
             
@@ -3030,77 +3030,77 @@
             Modeler.navPath = g;
             
             Modeler.navPath.setNavigation = function(layer) {
-                Modeler.navPath.bar.layer = layer;
+                var links = Modeler.getNavPath(layer);
                 
-                if (Modeler.navPath.text && Modeler.navPath.text != null) {
+                if (Modeler.navPath.text && Modeler.navPath.text !== null) {
                     Modeler.navPath.removeChild(Modeler.navPath.text);
+                    Modeler.navPath.text = null;
                 }
                 
-                var links = [];
-                
-                if (layer != null) {
-                    if (layer.parent && layer.parent != null) {
-                        var p = layer.parent;
-                        var text = document.createElementNS(ToolKit.svgNS, "text");
-                        text.setAttributeNS(null, "x", bar.getX());
-                        text.setAttributeNS(null, "y", bar.getY());
-                        text.setAttributeNS(null, "style", "fill:black");
-                        text.setAttributeNS(null,"text-anchor","middle");
-                        text.setAttributeNS(null,"font-size","11");
-                        text.setAttributeNS(null,"font-family","Verdana, Geneva, sans-serif");
+                if (links !== null) {
+                    links.reverse();
+                    var text = document.createElementNS(ToolKit.svgNS, "text");
+                    text.setAttributeNS(null, "x", bar.getX());
+                    text.setAttributeNS(null, "y", bar.getY());
+                    text.setAttributeNS(null, "style", "fill:black");
+                    text.setAttributeNS(null,"text-anchor","middle");
+                    text.setAttributeNS(null,"font-size","12");
+                    text.setAttributeNS(null,"font-family","Verdana, Geneva, sans-serif");
+                    
+                    for (var i = 0; i < links.length; i++) {
+                        var tspan = document.createElementNS(ToolKit.svgNS, "tspan");
+                        var tspanSeparator = null;
+                        var l = links[i].label;
                         
-                        links.push({label:p.text.value, link:p.id});
+                        tspan.appendChild(document.createTextNode(l));
+                        if (links[i].layer === layer.parent.id) {
+                            tspan.setAttributeNS(null,"font-weight","bold");
+                        } else {
+                            tspan.setAttributeNS(null,"onclick","if (Modeler.getGraphElementByURI(null,'"+links[i].layer+"') != null) {ToolKit.setLayer(Modeler.getGraphElementByURI(null,'"+links[i].layer+"').subLayer);} else {ToolKit.setLayer(null);}");
+                        }
                         
-                        while(p.layer && p.layer != null) {
-                            if (p.layer.parent && p.layer.parent != null) {
-                                links.push({label:p.layer.parent.text.value, link:p.id});
-                                p = p.layer.parent;
-                            }
+                        if (i+1 < links.length) {
+                            var tspanSeparator = document.createElementNS(ToolKit.svgNS, "tspan");
+                            tspanSeparator.appendChild(document.createTextNode(" > "));
                         }
-
-                        links.push({label:"Principal", link:null});
-                        links.reverse();
-                        for (var i = 0; i < links.length; i++) {
-                            var tspan = document.createElementNS(ToolKit.svgNS, "tspan");
-                            var l = links[i].label;
-                            if (i+1 < links.length) {
-                                l += " ";
-                            }
-                            tspan.appendChild(document.createTextNode(l));
-                            if (links[i].link !== layer.parent.id) {
-                                tspan.setAttributeNS(null,"onclick", "Modeler.navPath.setNavigation(Modeler.getGraphElementByURI(null, '"+links[i].link+"').layer);ToolKit.setLayer(Modeler.getGraphElementByURI(null, '"+links[i].link+"').subLayer);");
-                            }
-                            text.appendChild(tspan);
+                        
+                        text.appendChild(tspan);
+                        
+                        if (tspanSeparator !== null) {
+                            text.appendChild(tspanSeparator);
                         }
-                        Modeler.navPath.appendChild(text);
-                        Modeler.navPath.text=text;
                     }
+                    Modeler.navPath.appendChild(text);
+                    Modeler.navPath.text=text;
+                    Modeler.navPath.bar.style.display="";
+                    Modeler.navPath.bar.resize(Modeler.navPath.text.getBBox().width+30, 30);
+                    Modeler.navPath.bar.move((window.pageXOffset+window.innerWidth)-Modeler.navPath.bar.getWidth()/2-ToolKit.svg.offsetLeft-18, window.pageYOffset+Modeler.navPath.bar.getHeight()/2);
+                } else {
+                    Modeler.navPath.bar.style.display="none";
                 }
             };
             
+            var fMove = Modeler.navPath.bar.move;
+            Modeler.navPath.bar.move = function(x, y) {
+                fMove(x, y);
+                if (Modeler.navPath.text !== null) {
+                    Modeler.navPath.text.setAttributeNS(null, "x", x);
+                    Modeler.navPath.text.setAttributeNS(null, "y", y+4);
+                }
+            };
+            Modeler.navPath.bar.style.display="none";
             ToolKit.svg.appendChild(g);
-            Modeler.navPath.setNavigation(ToolKit.layer);
             window.onscroll = function(){if (Modeler.navPath && Modeler.navPath != null) {Modeler.navPath.bar.move((window.pageXOffset+window.innerWidth)-Modeler.navPath.bar.getWidth()/2-ToolKit.svg.offsetLeft-18, window.pageYOffset+Modeler.navPath.bar.getHeight()/2)};};
         },
 
-        showNavPath: function() {
-            Modeler.navPath.setAttributeNS(null,"class","navPath");
-        },
-                
-        hideNavPath: function() {
-            Modeler.navPath.setAttributeNS(null,"class","navPathHidden");
-        },
-                
         getGraphElementByURI:function(parent, uri) {
             var par = parent;
             if (par === null) {
                 par = ToolKit;
             }
             
-            //console.log("uri: "+uri);
             for (var i = 0; i< par.contents.length; i++) {
                 if (par.contents[i].id && par.contents[i].id === uri) {
-                    //console.log("encontrado");
                     return par.contents[i];
                 }
             }
@@ -3486,263 +3486,11 @@
                 ret.setText("Pool");
                 ret.resize(600,200);
             }
-            else if (type=="Lane") {
+            else if (type==="Lane") {
                 ret = new _Lane(Modeler.createLane(null, null));
                 ret.setText("Lane");
                 ret.resize(600,200);
             }
-//            
-//            if (ret != null && ret.typeOf("GraphicalElement")) {
-//                var fShow = ret.show;
-//                ret.show = function() {
-//                    ret.style.display="";
-//                    ret.hidden=false;
-//                    
-//                    console.log(ret);
-//                    for (var i = ret.contents.length; i--;)
-//                    {
-//                        if (ret.contents[i].layer && ret.contents[i].layer == ToolKit.layer) {
-//                            ret.contents[i].show();
-//                        }
-//                    }
-//
-//                    //Elimina Iconos
-//                    if(ret.icons)
-//                    {
-//                        for (var i = ret.icons.length; i--;)
-//                        {
-//                            ret.icons[i].obj.show();
-//                        }
-//                    }
-//                    //Elimina Texto
-//                    if(ret.text!=null)ret.text.show();
-//
-//                    //Eliminar Conexiones
-//                    //Move InConnections
-//                    for(var i = ret.inConnections.length; i--;)
-//                    {
-//                        ret.inConnections[i].show();
-//                    }
-//
-//                    //Move OutConnections
-//                    for(var i = ret.outConnections.length; i--;)
-//                    {
-//                        ret.outConnections[i].show();
-//                    }
-//                    
-//                    //console.log(ret.text.value+", id: "+ret.id+", parent: "+((ret.parent != null)?ret.parent.id:"null")+", container: "+((ret.getContainer && ret.getContainer() != null)?ret.getContainer().id:"null"));
-//                    //fShow();
-//                }
-//            }
             return ret;
         }
-    }    
-    
-    function draw()
-    {
-        //var obj;
-
-        //obj = ToolKit.createUseObject("#task");
-
-        //obj2 = ToolKit.createUseObject("#endEvent",null,obj);
-        //obj2.move(100,200);                
-
-        //for(i=0;i<100;i++)
-        //{
-            //obj3 = ToolKit.createStartEvent(null, obj2);
-            //obj3.move(i,100);
-        //}
-
-        //obj = Modeler.createObject("#barra");                
-
-        //obj = Modeler.createObject("#test");                
-
-//        obj2 = Modeler.mapObject("StartEvent");
-//        obj2.move(80,20);
-//        obj2 = Modeler.mapObject("MessageStartEvent");
-//        obj2.move(160,20);
-//        obj2 = Modeler.mapObject("TimerStartEvent");
-//        obj2.move(240,20);
-//        obj2 = Modeler.mapObject("ruleStartEvent");
-//        obj2.move(320,20);
-//        obj2 = Modeler.mapObject("signalStartEvent");
-//        obj2.move(400,20);
-//        obj2 = Modeler.mapObject("multiStartEvent");
-//        obj2.move(480,20);
-//        obj2 = Modeler.mapObject("parallelStartEvent");
-//        obj2.move(560,20);
-//        obj2 = Modeler.mapObject("scalaStartEvent");
-//        obj2.move(640,20);
-//        obj2 = Modeler.mapObject("errorStartEvent");
-//        obj2.move(720,20);
-//        obj2 = Modeler.mapObject("compensaStartEvent");
-//        obj2.move(800,20);
-//
-//        obj2 = Modeler.mapObject("messageInterCatchEvent");
-//        obj2.move(80,90);
-//        obj2 = Modeler.mapObject("messageInterThrowEvent");
-//        obj2.move(160,90);
-//        obj2 = Modeler.mapObject("errorInterEvent");
-//        obj2.move(240,90);
-//        obj2 = Modeler.mapObject("cancelInterEvent");
-//        obj2.move(320,90);
-//        obj2 = Modeler.mapObject("compensaInterCatchEvent");
-//        obj2.move(400,90);
-//        obj2 = Modeler.mapObject("compensaInterThrowEvent");
-//        obj2.move(480,90);
-//        obj2 = Modeler.mapObject("ruleInterEvent");
-//        obj2.move(560,90);
-//        obj2 = Modeler.mapObject("linkInterCatchEvent");
-//        obj2.move(640,90);
-//        obj2 = Modeler.mapObject("linkInterThrowEvent");
-//        obj2.move(720,90);
-//        obj2 = Modeler.mapObject("signalInterCatchEvent");
-//        obj2.move(800,90);
-//        obj2 = Modeler.mapObject("signalInterThrowEvent");
-//        obj2.move(880,90);
-//        obj2 = Modeler.mapObject("multipleInterCatchEvent");
-//        obj2.move(960,90);
-//        obj2 = Modeler.mapObject("multipleInterThrowEvent");
-//        obj2.move(1040,90);
-//        obj2 = Modeler.mapObject("scalaInterCatchEvent");
-//        obj2.move(1120,90);
-//        obj2 = Modeler.mapObject("scalaInterThrowEvent");
-//        obj2.move(1200,90);
-//        obj2 = Modeler.mapObject("parallelInterEvent");
-//        obj2.move(1280,90);
-//
-//        obj2 = Modeler.mapObject("normalEndEvent");
-//        obj2.move(80,160);
-//        obj2 = Modeler.mapObject("messageEndEvent");
-//        obj2.move(160,160);
-//        obj2 = Modeler.mapObject("errorEndEvent");
-//        obj2.move(240,160);
-//        obj2 = Modeler.mapObject("cancelEndEvent");
-//        obj2.move(320,160);
-//        obj2 = Modeler.mapObject("compensaEndEvent");
-//        obj2.move(400,160);
-//        obj2 = Modeler.mapObject("signalEndEvent");
-//        obj2.move(480,160);
-//        obj2 = Modeler.mapObject("multiEndEvent");
-//        obj2.move(560,160);
-//        obj2 = Modeler.mapObject("escalaEndEvent");
-//        obj2.move(640,160);
-//        obj2 = Modeler.mapObject("terminalEndEvent");
-//        obj2.move(720,160);
-//
-//        obj2 = Modeler.mapObject("exclusiveDataGateway");
-//        obj2.move(80,240);
-//        obj2 = Modeler.mapObject("inclusiveDataGateway");
-//        obj2.move(160,240);
-//        obj2 = Modeler.mapObject("exclusiveStartEventGateway");
-//        obj2.move(240,240);
-//        obj2 = Modeler.mapObject("exclusiveEventGateway");
-//        obj2.move(320,240);
-//        obj2 = Modeler.mapObject("parallelGateway");
-//        obj2.move(400,240);
-//        obj2 = Modeler.mapObject("parallelStartGateway");
-//        obj2.move(480,240);
-//        obj2 = Modeler.mapObject("complexGateway");
-//        obj2.move(560,240);
-//
-//        obj2 = Modeler.mapObject("dataObject");
-//        obj2.move(80,320);
-//        obj2 = Modeler.mapObject("dataInput");
-//        obj2.move(160,320);
-//        obj2 = Modeler.mapObject("dataOutput");
-//        obj2.move(240,320);
-//        obj2 = Modeler.mapObject("dataStore");
-//        obj2.move(320,320);
-//
-//        obj2 = Modeler.mapObject("abstractTask");
-//        obj2.move(100,420);
-//        obj2 = Modeler.mapObject("userTask");
-//        obj2.move(200,420);
-//        obj2 = Modeler.mapObject("serviceTask");
-//        obj2.move(300,420);
-//        obj2 = Modeler.mapObject("scriptTask");
-//        obj2.move(400,420);
-//        obj2 = Modeler.mapObject("ruleTask");
-//        obj2.move(500,420);
-//        obj2 = Modeler.mapObject("sendTask");
-//        obj2.move(600,420);
-//        obj2 = Modeler.mapObject("receiveTask");
-//        obj2.move(700,420);
-//        obj2 = Modeler.mapObject("manualTask");
-//        obj2.move(800,420);
-//        obj2 = Modeler.mapObject("callTask");
-//        obj2.move(900,420);
-//        obj2 = Modeler.mapObject("callmanualTask");
-//        obj2.move(1000,420);
-//        obj2 = Modeler.mapObject("callruleTask");
-//        obj2.move(1100,420);
-//        obj2 = Modeler.mapObject("callscriptTask");
-//        obj2.move(1200,420);
-//        obj2 = Modeler.mapObject("calluserTask");
-//        obj2.move(1300,420);
-//        
-//        obj2 = Modeler.mapObject("pool");
-//        obj2.move(1300,420);
-//        
-//        obj = Modeler.mapObject("pool");
-//        //obj.moveFirst=function(){};
-//        //obj.mouseup=function(evt){alert("up")};
-//        obj.move(350,580);
-//        
-//        obj2 = Modeler.mapObject("manualTask");
-//        obj2.setText("Tarea Contenida");
-//        obj2.resize(100,60);
-//        obj2.move(400,600);        
-//        obj2.setParent(obj);
-/*        
-        obj2 = Modeler.mapObject("conditionalFlow");
-        obj2.setPoint(0,10,10);
-        obj2.setPoint(1,10,20);
-        obj2.setPoint(2,30,20);
-        obj2.setPoint(3,100,100);
-        
-        obj2 = Modeler.mapObject("messageFlow");
-        obj2.setPoint(0,150,150);
-        obj2.setPoint(1,150,350);
-        obj2.setPoint(2.260,350);
-        obj2.setPoint(3,280,350);
-        obj2.addPoint(500,500);
-        
-        obj2 = Modeler.mapObject("associationFlow");
-        obj2.setPoint(0,350,200);
-        obj2.setPoint(1,350,250);
-        obj2.setPoint(2,400,200);
-        obj2.setPoint(3,500,190);
-        
-        obj2 = Modeler.mapObject("directionalassociationFlow");
-        obj2.setPoint(0,350,10);
-        obj2.setPoint(1,350,150);
-        obj2.setPoint(2,400,100);
-        obj2.setPoint(3,430,100);
-        obj2.addPoint(400,190);
-        obj2.listSegments();
-        
-*/        
-        
-//        obj1 = Modeler.mapObject("userTask");
-//        obj1.move(200,700);
-//        
-//        obj2 = Modeler.mapObject("userTask");
-//        obj2.move(400,800);        
-//        
-//        con1 = Modeler.mapObject("sequenceFlow");
-//        obj1.addOutConnection(con1);
-//        obj2.addInConnection(con1);
-//        
-//        obj1 = Modeler.mapObject("userTask");
-//        obj1.move(400,700);        
-//        
-//        obj2 = Modeler.mapObject("userTask");
-//        obj2.move(600,800);        
-//        
-//        con1 = Modeler.mapObject("defaultFlow");
-//        obj1.addOutConnection(con1);
-//        obj2.addInConnection(con1);
-//        Modeler.getProcessJSON();   
-    }
-
+    };
