@@ -33,8 +33,8 @@
         email = request.getParameter("email");
     }
     String login = "";
-    if (request.getParameter("login") != null) {
-        login = request.getParameter("login");
+    if (request.getParameter("user") != null) {
+        login = request.getParameter("user");
     }
 
     if (request.getParameter("msg") != null) {
@@ -128,7 +128,7 @@
     }
     function isValidLogin(){
         var valid=false;
-        var login = dijit.byId( "login" );
+        var login = dijit.byId( "user" );
         var filter = /^[a-zA-Z0-9.@]+$/;
         var strLogin = login.getValue();
         if(strLogin!=""){
@@ -148,7 +148,7 @@
     function isValidPass() {
         var valid = false;
         var passwd = dijit.byId("passwd").getValue();
-        var login = dijit.byId( "login" ).getValue();
+        var login = dijit.byId( "user" ).getValue();
         if(!isEmpty(passwd) && passwd!=login){
             valid = true;
         }
@@ -156,60 +156,53 @@
     }
     -->
 </script>
-    <div>
+    <div id="registro" class="formas">
         <form id="form1ru" dojoType="dijit.form.Form" class="swbform" action="<%=url%>" method="post">
-            <div>
-                <p>
-                    <label for="lastName"><b>*</b><%=paramRequest.getLocaleString("lblLastName")%></label>
-                    <input type="text" name="lastName" id="lastName" dojoType="dijit.form.ValidationTextBox" value="<%=lastName%>" required="true" _promptMessage="<%=paramRequest.getLocaleString("promptMsgLastName")%>" invalidMessage="<%=paramRequest.getLocaleString("lblLastNameFault")%>" trim="true" regExp="[a-zA-Z\u00C0-\u00FF' ]+" />
-                </p>
-                <p>
-                    <label for="secondLastName"><%=paramRequest.getLocaleString("lblSecondLastName")%></label>
-                    <input type="text" name="secondLastName" id="secondLastName" dojoType="dijit.form.ValidationTextBox" value="<%=secondLastName%>" required="false" _promptMessage="<%=paramRequest.getLocaleString("promptMsgSecondLastName")%>" invalidMessage="<%=paramRequest.getLocaleString("lblSecondLastNameFault")%>" trim="true" regExp="[a-zA-Z\u00C0-\u00FF' ]+"/>
-                </p>
-            </div>
-            <div>
-                <p>
-                    <label for="firstName"><b>*</b><%=paramRequest.getLocaleString("lblFirstName")%></label>
-                    <input type="text" name="firstName" id="firstName" dojoType="dijit.form.ValidationTextBox" value="<%=firstName%>"  required="true" _promptMessage="<%=paramRequest.getLocaleString("promptMsgFirstName")%>" invalidMessage="<%=paramRequest.getLocaleString("lblFirstNameFault")%>" trim="true" regExp="[a-zA-Z\u00C0-\u00FF' ]+"/>
-                </p>
-                <p>
-                    <label for="email"><b>*</b><%=paramRequest.getLocaleString("lblEmail")%></label>
-                    <input type="text" name="email" id="email" dojoType="dijit.form.ValidationTextBox" value="<%=email%>" maxlength="60" required="true" _promptMessage="<%=paramRequest.getLocaleString("promptMsgEmail")%>" invalidMessage="<%=paramRequest.getLocaleString("lblEmailFault")%>" isValid="return isValidThisEmail()" trim="true"/>
-                </p>
-            </div>
-            <div>
-                <p>
-                    <label for="login"><b>*</b><%=paramRequest.getLocaleString("lblLogin")%></label>
-                    <input type="text" name="login" id="login" dojoType="dijit.form.ValidationTextBox" value="<%=login%>" maxlength="18" required="true" _promptMessage="<%=paramRequest.getLocaleString("promptMsgLogin")%>" invalidMessage="<%=paramRequest.getLocaleString("lblLoginFault")%>"  isValid="return isValidLogin()" trim="true" />
-                </p>
-                <p>
-                    <label for="passwd"><b>*</b><%=paramRequest.getLocaleString("lblPassword")%></label>
-                    <input type="password" name="passwd" id="passwd" dojoType="dijit.form.ValidationTextBox" value="" maxlength="12" required="true" _promptMessage="<%=paramRequest.getLocaleString("promptMsgPassword")%>" invalidMessage="<%=paramRequest.getLocaleString("lblPasswordFault")%>" isValid="return isValidPass();" trim="true" />
-                </p>
-            </div>
-            <div>
-                <p>
+            <div class="registro">
+                <div class="reg1">
+                    <p>
+                        <label for="lastName"><b>*</b><%=paramRequest.getLocaleString("lblLastName")%></label>
+                        <input type="text" name="lastName" id="lastName" dojoType="dijit.form.ValidationTextBox" value="<%=lastName%>" required="true" _promptMessage="<%=paramRequest.getLocaleString("promptMsgLastName")%>" invalidMessage="<%=paramRequest.getLocaleString("lblLastNameFault")%>" trim="true" regExp="[a-zA-Z\u00C0-\u00FF' ]+" />
+                    </p>
+                    <p>
+                        <label for="secondLastName"><%=paramRequest.getLocaleString("lblSecondLastName")%></label>
+                        <input type="text" name="secondLastName" id="secondLastName" dojoType="dijit.form.ValidationTextBox" value="<%=secondLastName%>" required="false" _promptMessage="<%=paramRequest.getLocaleString("promptMsgSecondLastName")%>" invalidMessage="<%=paramRequest.getLocaleString("lblSecondLastNameFault")%>" trim="true" regExp="[a-zA-Z\u00C0-\u00FF' ]+"/>
+                    </p>
+                    <p>
+                        <label for="firstName"><b>*</b><%=paramRequest.getLocaleString("lblFirstName")%></label>
+                        <input type="text" name="firstName" id="firstName" dojoType="dijit.form.ValidationTextBox" value="<%=firstName%>"  required="true" _promptMessage="<%=paramRequest.getLocaleString("promptMsgFirstName")%>" invalidMessage="<%=paramRequest.getLocaleString("lblFirstNameFault")%>" trim="true" regExp="[a-zA-Z\u00C0-\u00FF' ]+"/>
+                    </p>
+                </div>
+                <div class="reg2">
+                    <p>
+                        <label for="email"><b>*</b><%=paramRequest.getLocaleString("lblEmail")%></label>
+                        <input type="text" name="email" id="email" dojoType="dijit.form.ValidationTextBox" value="<%=email%>" maxlength="60" required="true" _promptMessage="<%=paramRequest.getLocaleString("promptMsgEmail")%>" invalidMessage="<%=paramRequest.getLocaleString("lblEmailFault")%>" isValid="return isValidThisEmail()" trim="true"/>
+                    </p>
+                    <p>
+                        <label for="user"><b>*</b><%=paramRequest.getLocaleString("lblLogin")%></label>
+                        <input type="text" name="user" id="user" dojoType="dijit.form.ValidationTextBox" value="<%=login%>" maxlength="18" required="true" _promptMessage="<%=paramRequest.getLocaleString("promptMsgLogin")%>" invalidMessage="<%=paramRequest.getLocaleString("lblLoginFault")%>"  isValid="return isValidLogin()" trim="true" />
+                    </p>
+                    <p>
+                        <label for="passwd"><b>*</b><%=paramRequest.getLocaleString("lblPassword")%></label>
+                        <input type="password" name="passwd" id="passwd" dojoType="dijit.form.ValidationTextBox" value="" maxlength="12" required="true" _promptMessage="<%=paramRequest.getLocaleString("promptMsgPassword")%>" invalidMessage="<%=paramRequest.getLocaleString("lblPasswordFault")%>" isValid="return isValidPass();" trim="true" />
+                    </p>
+                </div>
+                <div class="captcha">
                     <img src="<%=context%>/swbadmin/jsp/securecode.jsp?sAttr=cdlog" id="imgseccode" width="200" height="100" alt="" />
-                    <br/><%=paramRequest.getLocaleString("lblTryRead")%><a href="#" onclick="changeSecureCodeImage('imgseccode');return false"><%=paramRequest.getLocaleString("lblTryAnotherText")%></a>
-                </p>
-                <p>
                     <label for="cmnt_seccode"><b>*</b><%=paramRequest.getLocaleString("lblCaptcha")%></label>
                     <input type="text" name="cmnt_seccode" id="cmnt_seccode" maxlength="8" value="" dojoType="dijit.form.ValidationTextBox" required="true" _promptMessage="<%=paramRequest.getLocaleString("promptMsgCaptcha")%>" invalidMessage="<%=paramRequest.getLocaleString("msgErrSecureCodeRequired")%>" trim="true"/>
-                </p>
+                    <p><%=paramRequest.getLocaleString("lblTryRead")%><a href="#" onclick="changeSecureCodeImage('imgseccode');return false"><%=paramRequest.getLocaleString("lblTryAnotherText")%></a>
+                    </p>
+                </div>
+                <div class="terminos">
+                    <p><a href="#" _onclick="openSplash();return false;"><%=paramRequest.getLocaleString("lblLinkAgreement")%></a></p>
+                    <input type="checkbox" name="acept" id="acept" maxlength="8" value="true" dojoType="dijit.form.CheckBox" required="true" _promptMessage="<%=paramRequest.getLocaleString("lblAgreement")%>" invalidMessage="<%=paramRequest.getLocaleString("lblAgreement")%>" isValid="return confirm('this.checkbox.value==true')"/>
+                    <label for="acept"><b>*</b><%=paramRequest.getLocaleString("lblAgreement")%></label>
+                </div>
             </div>
             <div>
-                <p class="icv-3col">
-                    <a href="#" _onclick="openSplash();return false;"><%=paramRequest.getLocaleString("lblLinkAgreement")%></a>
-                </p>
-                <p>
-                    <label for="acept"><b>*</b><%=paramRequest.getLocaleString("lblAgreement")%></label>
-                    <input type="checkbox" name="acept" id="acept" maxlength="8" value="true" dojoType="dijit.form.CheckBox" required="true" _promptMessage="<%=paramRequest.getLocaleString("lblAgreement")%>" invalidMessage="<%=paramRequest.getLocaleString("lblAgreement")%>" isValid="return confirm('this.checkbox.value==true')"/>
-                </p>
-            </div>
-            <div class="centro">
-                <input type="reset" value="<%=paramRequest.getLocaleString("lblReset")%>"/>
-                <input type="submit" onclick="return enviar()" value="<%=paramRequest.getLocaleString("lblSubmit")%>"/>
+                <input type="submit" class="boton-subir"  onclick="return enviar()" value="<%=paramRequest.getLocaleString("lblSubmit")%>"/>
+                <input type="reset" class="boton-cancelar" value="<%=paramRequest.getLocaleString("lblReset")%>"/>
             </div>
         </form>
     </div>
