@@ -464,6 +464,7 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
      * @return the string
      * @throws Exception the exception
      */
+    @Override
     public String createCategory(String repositoryName, String categoryId, String title, String description) throws Exception
     {
         String UUID = "";
