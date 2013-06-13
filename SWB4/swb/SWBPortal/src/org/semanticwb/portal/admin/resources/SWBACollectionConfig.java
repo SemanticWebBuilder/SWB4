@@ -244,8 +244,8 @@ public class SWBACollectionConfig extends GenericAdmResource {
                     out.println("<ul style=\"list-style:none;\">");
                     out.println("<li>");
                     out.println("<label for=\"" + id + "_collclass\">" + "Clase asociada" + "</label>");
+                    
                     out.println("<select id=\"" + id + "_collclass\" dojoType=\"dijit.form.FilteringSelect\" autoComplete=\"true\" name=\"collclass\">");
-                    //out.println("<input type=\"text\" name=\"classname\" value=\"" + col.getCollectionClass().getDisplayName(user.getLanguage()) + "\" readonly >");
 
                     Comparator comp = new Comparator<SemanticClass>() {
 
@@ -259,30 +259,13 @@ public class SWBACollectionConfig extends GenericAdmResource {
                         }
                     };
 
-                    Iterator<SemanticClass> itsemcls = null; //col.getSemanticObject().getModel().listModelClasses();
-//                    itsemcls = SWBPlatform.getSemanticMgr().getOntology().listInstancesOfClass(SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(SWBPlatform.getSemanticMgr().getVocabulary().SWB_CLASS));
-                    
-//                    while (itsemcls.hasNext()) {
-//                        SemanticObject semobj = itsemcls.next();
-//                        //System.out.println(semobj+" "+semobj.getURI()+" "+semobj.transformToSemanticClass());
-//                        SemanticClass semClass = semobj.transformToSemanticClass();
-//                        out.println("<option value=\"" + semClass.getURI() + "\" ");
-//                        if (sccol.getURI().equals(semClass.getURI())) {
-//                            out.println(" selected ");
-//                        }
-//                        out.println(">");
-//                        out.println(semClass.getDisplayName(user.getLanguage()));
-//                        out.println("</option>");
-//                    }
+                    Iterator<SemanticClass> itsemcls = null; 
 
                     itsemcls = SWBComparator.sortSemanticObjects(comp,SWBPlatform.getSemanticMgr().getVocabulary().listSemanticClasses());
                     while (itsemcls.hasNext()) {
                         
                         SemanticClass semClass = itsemcls.next();
                         SemanticObject sob = semClass.getSemanticObject();
-                        //SemanticClass semClass = sob.transformToSemanticClass();
-
-                        // System.out.println("display:"+sob.getDisplayName(lang));
 
                         if (sob.getURI() != null) {
                             out.println("<option value=\"" + sob.getURI() + "\" ");
@@ -296,6 +279,7 @@ public class SWBACollectionConfig extends GenericAdmResource {
                     }
                     
                     out.println("</select>");
+   
                     out.println("</li>");
                     out.println("</ul>");
                     out.println("</fieldset>");
@@ -788,21 +772,55 @@ public class SWBACollectionConfig extends GenericAdmResource {
                     out.println("<ul style=\"list-style:none;\">");
                     out.println("<li>");
                     out.println("<label for=\"" + id + "_collclass\">" + "Clase asociada" + "</label>");
-                    out.println("<select id=\"" + id + "_collclass\" name=\"collclass\">");
-                    //out.println("<input type=\"text\" name=\"classname\" value=\"" + col.getCollectionClass().getDisplayName(user.getLanguage()) + "\" readonly >");
+                     out.println("<select id=\"" + id + "_collclass\" dojoType=\"dijit.form.FilteringSelect\" autoComplete=\"true\" name=\"collclass\">");
 
-                    Iterator<SemanticObject> itsemcls = null; //col.getSemanticObject().getModel().listModelClasses();
-                    itsemcls = SWBPlatform.getSemanticMgr().getOntology().listInstancesOfClass(SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(SWBPlatform.getSemanticMgr().getVocabulary().SWB_CLASS));
+                    Comparator comp = new Comparator<SemanticClass>() {
+
+                        public int compare(SemanticClass o1, SemanticClass o2) {
+                            //System.out.println(o1+" "+o2);
+                            SemanticObject so1 = o1.getSemanticObject();
+                            SemanticObject so2 = o2.getSemanticObject();
+                            String s1 = so1.getResId();
+                            String s2 = so2.getResId();
+                            return s1.compareTo(s2);
+                        }
+                    };
+
+                    Iterator<SemanticClass> itsemcls = null; 
+
+                    itsemcls = SWBComparator.sortSemanticObjects(comp,SWBPlatform.getSemanticMgr().getVocabulary().listSemanticClasses());
                     while (itsemcls.hasNext()) {
-                        SemanticObject semobj = itsemcls.next();
-                        SemanticClass semClass = semobj.transformToSemanticClass();
-                        out.println("<option value=\"" + semClass.getURI() + "\" ");
-                        //if(sccol!=null&&sccol.getURI().equals(semClass.getURI())) out.println(" selected ");
-                        out.println(">");
-                        out.println(semClass.getDisplayName(user.getLanguage()));
-                        out.println("</option>");
+                        
+                        SemanticClass semClass = itsemcls.next();
+                        SemanticObject sob = semClass.getSemanticObject();
+
+                        if (sob.getURI() != null) {
+                            out.println("<option value=\"" + sob.getURI() + "\" ");
+//
+//                            if (sccol.getURI().equals(semClass.getURI())) {
+//                                out.println("selected");
+//                            }
+
+                            out.println(">" + sob.getResId() + "</option>");
+                        }
                     }
+                    
                     out.println("</select>");
+//                    out.println("<select id=\"" + id + "_collclass\" name=\"collclass\">");
+//                    //out.println("<input type=\"text\" name=\"classname\" value=\"" + col.getCollectionClass().getDisplayName(user.getLanguage()) + "\" readonly >");
+//
+//                    Iterator<SemanticObject> itsemcls = null; //col.getSemanticObject().getModel().listModelClasses();
+//                    itsemcls = SWBPlatform.getSemanticMgr().getOntology().listInstancesOfClass(SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(SWBPlatform.getSemanticMgr().getVocabulary().SWB_CLASS));
+//                    while (itsemcls.hasNext()) {
+//                        SemanticObject semobj = itsemcls.next();
+//                        SemanticClass semClass = semobj.transformToSemanticClass();
+//                        out.println("<option value=\"" + semClass.getURI() + "\" ");
+//                        //if(sccol!=null&&sccol.getURI().equals(semClass.getURI())) out.println(" selected ");
+//                        out.println(">");
+//                        out.println(semClass.getDisplayName(user.getLanguage()));
+//                        out.println("</option>");
+//                    }
+//                    out.println("</select>");
                     out.println("</li>");
 
                     out.println("</ul>");
@@ -1630,7 +1648,7 @@ public class SWBACollectionConfig extends GenericAdmResource {
 
                 if (actbutton.equals("updtclass")) {
 
-                    String collclass = request.getParameter("collclass");
+                    String collclass = request.getParameter("collclass"); 
                     String usemodel = request.getParameter("usemodel");
 
                     if (usemodel != null) {
