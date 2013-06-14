@@ -578,7 +578,7 @@ public class SocialDocumentsToAuhorize extends GenericResource
         response.setContentType("text/html;charset=iso-8859-1");
         response.setHeader("Cache-Control", "no-cache");
         response.setHeader("Pragma", "no-cache");
-        final String myPath = SWBPlatform.getContextPath() + "/work/" + paramRequest.getWebPage().getWebSiteId() + "/jsp/review/showPostIn.jsp";
+        final String myPath = SWBPlatform.getContextPath() + "/work/models/" + paramRequest.getWebPage().getWebSiteId() + "/jsp/review/showPostIn.jsp";
         if (request != null) {
             RequestDispatcher dis = request.getRequestDispatcher(myPath);
             if (dis != null) {

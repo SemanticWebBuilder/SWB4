@@ -44,7 +44,7 @@ public class CreateGenericPost extends CreatePost {
             return;
         }
         
-        String basePath=SWBPlatform.getContextPath() +"/work/" + paramRequest.getWebPage().getWebSiteId() +"/jsp/post/";
+        String basePath=SWBPlatform.getContextPath() +"/work/models/" + paramRequest.getWebPage().getWebSiteId() +"/jsp/post/";
         String jspResponse = basePath+"socialSites.jsp";
         RequestDispatcher dis = request.getRequestDispatcher(jspResponse);
         try {
