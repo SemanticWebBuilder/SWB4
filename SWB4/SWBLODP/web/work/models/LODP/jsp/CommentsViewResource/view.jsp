@@ -63,6 +63,9 @@ Author     : rene.jara
                     }
                     if (itco != null) {
     %>
+    <div class="tit">
+    <h4>Comentarios</h4>
+    </div>
     <script type="text/javascript">
         //        <!--
         // scan page for widgets and instantiate them
@@ -180,15 +183,21 @@ Author     : rene.jara
                     canRank = true;
                 }
         %>
-        <div>
-            <p><%=co.getCommUserName()%>-<%=co.getCommUserEmail()%></p>
-            <p><%=co.getComment()%></p>
-            <%=canRank ? "<a href=\"" + urlina + "\">X</a>" : "*."%><b><%=co.getInappropriate()%></b>
+        <div class="comentario">
+            <p class="comentador"><strong><%=co.getCommUserName()%></strong><em><%=co.getCommUserEmail()%></em></p>
+            <p class="comentariotxt"><%=co.getComment()%></p>
+            <%
+            if(canRank){
+            %>
+            <p class="inapropiado"><a href="<%=urlina%>" title="Notificar como comentario inapropiado"><span>Comentario inapropiado</span></a></p>
+            <%
+            }
+            %>
         </div>
         <%
             }
         %>
-        <div>
+        <div class="paginacom">
             <ul>
                 <%
                     String rurl = wpage.getUrl();
@@ -198,7 +207,7 @@ Author     : rene.jara
                     for (int x = 0; x < tPag; x++) {
                         if (x == nPag) {
                 %>
-                <li><%=(x + 1)%></li>
+                <li><span><%=(x + 1)%></span></li>
                 <%
                 } else {
                 %>
@@ -209,56 +218,52 @@ Author     : rene.jara
                 %>
             </ul>
         </div>
-    </div>
     <%
         }
         SWBResourceURLImp urladd = new SWBResourceURLImp(request, base, wpage, SWBResourceURLImp.UrlType_ACTION);
         urladd.setAction(CommentsViewResource.Action_COMMENT);
         urladd.setParameter("suri", suri);
     %>
-    <div>
+    <div id="comentar" class="formas">
         <form id="form1co" dojoType="dijit.form.Form" class="swbform" action="<%=urladd%>" method="post">
-            <div>
-                <p>
-                    <label for="name"><b>*</b><%=paramRequest.getLocaleString("lblName")%></label>
-                    <input type="text" name="name" id="name" dojoType="dijit.form.ValidationTextBox" value="<%=name%>"  required="true" _promptMessage="<%=paramRequest.getLocaleString("promptMsgName")%>" invalidMessage="<%=paramRequest.getLocaleString("lblNameFault")%>" trim="true" regExp="[a-zA-Z\u00C0-\u00FF' ]+"/>
-                </p>
-                <p>
-                    <label for="email"><b>*</b><%=paramRequest.getLocaleString("lblEmail")%></label>
-                    <input type="text" name="email" id="email" dojoType="dijit.form.ValidationTextBox" value="<%=email%>" required="true" _promptMessage="<%=paramRequest.getLocaleString("promptMsgEmail")%>" invalidMessage="<%=paramRequest.getLocaleString("lblEmailFault")%>" isValid="return isValidThisEmail()" trim="true"/>
-                </p>
-            </div>
-            <div>
-                <p>
-                    <label for="comment"><b>*</b><%=paramRequest.getLocaleString("lblComment")%></label>
-                    <textarea id="comment" name="comment" data-dojo-type="dijit.form.Textarea"  required="true" promptMessage="<%=paramRequest.getLocaleString("promptMsgComment")%>" invalidMessage="<%=paramRequest.getLocaleString("lblCommentFault")%>" trim="true" regExp="[a-zA-Z]+"></textarea>
-                </p>
-            </div>
-            <div>
-                <p>
+            <div class="comentar">
+                <div class="com1">
+                    <p>
+                        <label for="name"><b>*</b><%=paramRequest.getLocaleString("lblName")%></label>
+                        <input type="text" name="name" id="name" dojoType="dijit.form.ValidationTextBox" value="<%=name%>" <%=name!=null&&!name.equals("")?"readonly=readonly":""%> required="true" _promptMessage="<%=paramRequest.getLocaleString("promptMsgName")%>" invalidMessage="<%=paramRequest.getLocaleString("lblNameFault")%>" trim="true" regExp="[a-zA-Z\u00C0-\u00FF' ]+"/>
+                    </p>
+                    <p>
+                        <label for="email"><b>*</b><%=paramRequest.getLocaleString("lblEmail")%></label>
+                        <input type="text" name="email" id="email" dojoType="dijit.form.ValidationTextBox" value="<%=email%>" <%=email!=null&&!email.equals("")?"readonly=readonly":""%> required="true" _promptMessage="<%=paramRequest.getLocaleString("promptMsgEmail")%>" invalidMessage="<%=paramRequest.getLocaleString("lblEmailFault")%>" isValid="return isValidThisEmail()" trim="true"/>
+                    </p>
+                </div>
+                <div class="com2">
+                    <p>
+                        <label for="comment"><b>*</b><%=paramRequest.getLocaleString("lblComment")%></label>
+                        <textarea id="comment" name="comment" data-dojo-type="dijit.form.Textarea"  required="true" promptMessage="<%=paramRequest.getLocaleString("promptMsgComment")%>" invalidMessage="<%=paramRequest.getLocaleString("lblCommentFault")%>" trim="true" regExp="[a-zA-Z]+"></textarea>
+                    </p>
+                </div>
+                <div class="captcha">
                     <img src="<%=context%>/swbadmin/jsp/securecode.jsp?sAttr=cdlog" id="imgseccode" width="200" height="100" alt="" />
-                    <br/><%=paramRequest.getLocaleString("lblTryRead")%><a href="#" onclick="changeSecureCodeImage('imgseccode');"><%=paramRequest.getLocaleString("lblTryAnotherText")%></a>
-                </p>
-                <p>
                     <label for="cmnt_seccode"><b>*</b><%=paramRequest.getLocaleString("lblCaptcha")%></label>
                     <input type="text" name="cmnt_seccode" id="cmnt_seccode" maxlength="8" value="" dojoType="dijit.form.ValidationTextBox" required="true" _promptMessage="<%=paramRequest.getLocaleString("promptMsgCaptcha")%>" invalidMessage="<%=paramRequest.getLocaleString("msgErrSecureCodeRequired")%>" trim="true"/>
-                </p>
+                    <p><%=paramRequest.getLocaleString("lblTryRead")%><a href="#" onclick="changeSecureCodeImage('imgseccode');"><%=paramRequest.getLocaleString("lblTryAnotherText")%></a></p>
+                </div>
+                <div class="terminos">
+                    <p>
+                        <a href="#" _onclick="openSplash();return false;"><%=paramRequest.getLocaleString("lblLinkAgreement")%></a>
+                        <input type="checkbox" name="acept" id="acept" value="true" dojoType="dijit.form.CheckBox" required="true" _promptMessage="<%=paramRequest.getLocaleString("lblAgreement")%>" invalidMessage="<%=paramRequest.getLocaleString("lblAgreement")%>" isValid="return confirm('this.checkbox.value==true')"/>
+                        <label for="acept"><b>*</b><%=paramRequest.getLocaleString("lblAgreement")%></label>
+                    </p>
+                </div>
             </div>
             <div>
-                <p class="icv-3col">
-                    <a href="#" _onclick="openSplash();return false;"><%=paramRequest.getLocaleString("lblLinkAgreement")%></a>
-                </p>
-                <p>
-                    <label for="acept"><b>*</b><%=paramRequest.getLocaleString("lblAgreement")%></label>
-                    <input type="checkbox" name="acept" id="acept" value="true" dojoType="dijit.form.CheckBox" required="true" _promptMessage="<%=paramRequest.getLocaleString("lblAgreement")%>" invalidMessage="<%=paramRequest.getLocaleString("lblAgreement")%>" isValid="return confirm('this.checkbox.value==true')"/>
-                </p>
-            </div>
-            <div class="centro">
-                <input type="reset" value="<%=paramRequest.getLocaleString("lblReset")%>"/>
-                <input type="submit" onclick="return enviarco()" value="<%=paramRequest.getLocaleString("lblSubmit")%>"/>
+                <input type="submit" onclick="return enviarco()" value="<%=paramRequest.getLocaleString("lblSubmit")%>"  class="boton-subir"/>
+                <input type="reset" value="<%=paramRequest.getLocaleString("lblReset")%>" class="boton-cancelar"/>
             </div>
         </form>
     </div>
+</div>
     <%
                 }
     %>
