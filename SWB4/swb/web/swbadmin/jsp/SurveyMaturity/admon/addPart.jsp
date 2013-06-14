@@ -4,11 +4,15 @@
 <%
     SWBResourceURL urlAction = paramRequest.getActionUrl();
     urlAction.setCallMethod(SWBResourceURL.Call_DIRECT);
+    urlAction.setAction("addPart");
+
+    SWBResourceURL render = paramRequest.getRenderUrl();
     
 %>
 <script type="text/javascript">
     function closeDialogAddPart()
     {
+        
         dijit.byId("dialogAdmonParte").hide();
     }
     function saveDialogAddPart(forma)
@@ -36,11 +40,10 @@
                 return;
             }
             forma.tituloparte.value=tituloparteditor;
-            //forma.submit();
-            sendform(forma.id);
-            alert('ss');
-            reloadAdmonParte();
-            alert('tt');
+            forma.descriptionparte.value=descriptionparteditor;
+            sendform(forma.id,reloadAdmonParte);
+            
+            
             dijit.byId("dialogAdmonParte").hide();
         }
         catch(err)
@@ -58,6 +61,7 @@
 <h1 align="center">Parte</h1>
 <form id="frmAddPart" action="<%=urlAction%>">
     <input type="hidden" name="tituloparte">
+    <input type="hidden" name="descriptionparte">
     <table>
         <tr>
             <td>
