@@ -165,7 +165,8 @@ public class AudioPodCast extends org.semanticwb.portal.resources.sem.base.Audio
                             }
                             out.print("  </p>");
                             out.print("  <p class=\"swb-pdcst-descargar\">");
-                            out.print("   <a href=\""+directURL.setParameter("uri", audiofile.getURI())+"\" title=\""+(audiofile.getDisplayTitle(lang)==null?audiofile.getTitle():audiofile.getDisplayTitle(lang))+"\">"+paramRequest.getLocaleString("download")+"</a>&nbsp;[<span class=\"swb-pdcst-ffmt\">"+paramRequest.getLocaleString("format")+"&nbsp;"+audiofile.getExtension()+"]</span>");
+                            //out.print("   <a href=\""+directURL.setParameter("uri", audiofile.getURI())+"\" title=\""+(audiofile.getDisplayTitle(lang)==null?audiofile.getTitle():audiofile.getDisplayTitle(lang))+"\">"+paramRequest.getLocaleString("download")+"</a>&nbsp;[<span class=\"swb-pdcst-ffmt\">"+paramRequest.getLocaleString("format")+"&nbsp;"+audiofile.getExtension()+"]</span>");
+                            out.print("   <a href=\"javascript:'"+directURL+"?uri='+encodeURIComponent('"+audiofile.getURI()+"')\" title=\""+(audiofile.getDisplayTitle(lang)==null?audiofile.getTitle():audiofile.getDisplayTitle(lang))+"\">"+paramRequest.getLocaleString("download")+"</a>&nbsp;[<span class=\"swb-pdcst-ffmt\">"+paramRequest.getLocaleString("format")+"&nbsp;"+audiofile.getExtension()+"]</span>");
                             f = new File(SWBPortal.getWorkPath()+audiofile.getWorkPath()+"/"+audiofile.getFilename());
                             out.print("  &nbsp;<span class=\"swb-pdcst-fsize\">["+df.format(f.length()/1048576.0)+" Mb]</span>");
                             out.println("  </p>");
@@ -292,13 +293,18 @@ public class AudioPodCast extends org.semanticwb.portal.resources.sem.base.Audio
                 HttpSession session = request.getSession(true);
                 final String rid = base.getWebSiteId()+"_"+base.getId()+"_"+audiofile.getId();
                 DecimalFormat decf = new DecimalFormat("###");
-                if(session.getAttribute(rid)!=null)
+                if(session.getAttribute(rid)!=null) {
                     out.println("  <p>"+decf.format(audiofile.getRank())+"&nbsp;"+paramRequest.getLocaleString("like")+"</p>");
-                else {
+                }else {
                     try {
-                        out.println("  <p>"+decf.format(audiofile.getRank())+"&nbsp;"+paramRequest.getLocaleString("like")+"&nbsp;<a href=\"javascript:postHtml('"+paramRequest.getRenderUrl().setMode(Mode_VOTE).setCallMethod(paramRequest.Call_DIRECT).setParameter("uri", audiofile.getURI())+"','rank')\" title=\""+paramRequest.getLocaleString("like")+"\" class=\"swb-pdcst-rank\">"+paramRequest.getLocaleString("like")+"</a></p>");
+System.out.println("\n\ncaso 1");
+System.out.println("  <p>"+decf.format(audiofile.getRank())+"&nbsp;"+paramRequest.getLocaleString("like")+"&nbsp;<a href=\"javascript:postHtml('"+paramRequest.getRenderUrl().setMode(Mode_VOTE).setCallMethod(SWBParamRequest.Call_DIRECT)+"?uri='+encodeURIComponent('"+audiofile.getURI()+"')"+",'rank')\" title=\""+paramRequest.getLocaleString("like")+"\" class=\"swb-pdcst-rank\">"+paramRequest.getLocaleString("like")+"</a></p>");
+                        //out.println("  <p>"+decf.format(audiofile.getRank())+"&nbsp;"+paramRequest.getLocaleString("like")+"&nbsp;<a href=\"javascript:postHtml(encodeURI('"+paramRequest.getRenderUrl().setMode(Mode_VOTE).setCallMethod(SWBParamRequest.Call_DIRECT).setParameter("uri", audiofile.getURI())+"'),'rank')\" title=\""+paramRequest.getLocaleString("like")+"\" class=\"swb-pdcst-rank\">"+paramRequest.getLocaleString("like")+"</a></p>");
+                        out.println("  <p>"+decf.format(audiofile.getRank())+"&nbsp;"+paramRequest.getLocaleString("like")+"&nbsp;<a href=\"javascript:postHtml('"+paramRequest.getRenderUrl().setMode(Mode_VOTE).setCallMethod(SWBParamRequest.Call_DIRECT)+"?uri='+encodeURIComponent('"+audiofile.getURI()+"')"+",'rank')\" title=\""+paramRequest.getLocaleString("like")+"\" class=\"swb-pdcst-rank\">"+paramRequest.getLocaleString("like")+"</a></p>");
                     }catch(SWBResourceException swbe) {
-                        out.println("  <p>"+decf.format(audiofile.getRank())+"&nbsp;Me gusta&nbsp;<a href=\"javascript:postHtml('"+paramRequest.getRenderUrl().setMode(Mode_VOTE).setCallMethod(paramRequest.Call_DIRECT).setParameter("uri", audiofile.getURI())+"','rank')\" title=\"Me gusta\">Me gusta</a></p>");
+System.out.println("\n\ncaso 2");
+System.out.println("  <p>"+decf.format(audiofile.getRank())+"&nbsp;Me gusta&nbsp;<a href=\"javascript:postHtml('"+paramRequest.getRenderUrl().setMode(Mode_VOTE).setCallMethod(SWBParamRequest.Call_DIRECT)+"?uri='+encodeURIComponent('"+audiofile.getURI()+"')"+",'rank')\" title=\"Me gusta\">Me gusta</a></p>");
+                        out.println("  <p>"+decf.format(audiofile.getRank())+"&nbsp;Me gusta&nbsp;<a href=\"javascript:postHtml('"+paramRequest.getRenderUrl().setMode(Mode_VOTE).setCallMethod(SWBParamRequest.Call_DIRECT)+"?uri='+encodeURIComponent('"+audiofile.getURI()+"')"+",'rank')\" title=\"Me gusta\">Me gusta</a></p>");
                     }
                 }
                 out.println(" </div>");
@@ -306,7 +312,7 @@ public class AudioPodCast extends org.semanticwb.portal.resources.sem.base.Audio
                 out.println("  <p><img src=\"img/descargar.png\" width=\"21\" height=\"17\" align=\"left\" /></p>");
                 out.println(" </div>");
                 out.println(" <div class=\"swb-pdcst-descargar\">");
-                out.println("  <input type=\"button\" value=\""+paramRequest.getLocaleString("download") +"\" onclick=\"location.href='"+directURL.setParameter("uri", audiofile.getURI())+"'\" />");
+                out.println("  <input type=\"button\" value=\""+paramRequest.getLocaleString("download") +"\" onclick=\"location.href='"+directURL+"?uri='+encodeURIComponent('"+audiofile.getURI()+"')"+"\" />");
                 out.println(" </div>");
                 out.println(" </div>");
                 out.println("</div>");
@@ -367,7 +373,9 @@ public class AudioPodCast extends org.semanticwb.portal.resources.sem.base.Audio
     
     public void doPlay(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         String uri = request.getParameter("uri");
+System.out.println("\n\n\n doPlay uri="+uri);
         uri = URLDecoder.decode(uri, "UTF-8");
+System.out.println("\n\n\n doPlay uri decod="+uri);
         AudioFile audiofile = null;
         try {
             audiofile = (AudioFile)SemanticObject.createSemanticObject(uri).createGenericInstance();
@@ -458,7 +466,10 @@ public class AudioPodCast extends org.semanticwb.portal.resources.sem.base.Audio
         Resource base = getResourceBase();
         
         HttpSession session = request.getSession(true);
-        final String uri = request.getParameter("uri");
+        String uri = request.getParameter("uri");
+System.out.println("\n\n\n doVote uri="+uri);
+        uri = URLDecoder.decode(uri, "UTF-8");
+System.out.println("\n\n\n doVote uri deco="+uri);        
         AudioFile audiofile = null;
         try {
             audiofile = (AudioFile)SemanticObject.createSemanticObject(uri).createGenericInstance();
