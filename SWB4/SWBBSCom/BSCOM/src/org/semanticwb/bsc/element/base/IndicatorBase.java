@@ -1,7 +1,7 @@
 package org.semanticwb.bsc.element.base;
 
 
-public abstract class IndicatorBase extends org.semanticwb.bsc.element.BSCElement implements org.semanticwb.bsc.Updateable,org.semanticwb.bsc.Recognizable,org.semanticwb.model.Activeable,org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable
+public abstract class IndicatorBase extends org.semanticwb.bsc.element.BSCElement implements org.semanticwb.bsc.Updateable,org.semanticwb.bsc.Seasonable,org.semanticwb.model.Traceable,org.semanticwb.model.Activeable,org.semanticwb.model.Descriptiveable,org.semanticwb.bsc.Recognizable
 {
    /**
    * Clase que permite definir los atributos de las evidencias de un Indicador
@@ -12,13 +12,17 @@ public abstract class IndicatorBase extends org.semanticwb.bsc.element.BSCElemen
    */
     public static final org.semanticwb.platform.SemanticProperty bsc_hasEvidence=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#hasEvidence");
    /**
-   * Persiste la unidad de medida de un indicador
-   */
-    public static final org.semanticwb.platform.SemanticProperty bsc_unitMesure=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#unitMesure");
-   /**
    * Un usuario es una persona que tiene relación con el portal a través de un método de acceso.
    */
     public static final org.semanticwb.platform.SemanticClass swb_User=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#User");
+   /**
+   * Usuario que se asigna como responsable de conseguir el objetivo
+   */
+    public static final org.semanticwb.platform.SemanticProperty bsc_champion=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#champion");
+   /**
+   * Persiste la unidad de medida de un indicador
+   */
+    public static final org.semanticwb.platform.SemanticProperty bsc_unitMesure=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#unitMesure");
    /**
    * Persiste información de un facilitador de campeón en una indicador
    */
@@ -167,6 +171,29 @@ public abstract class IndicatorBase extends org.semanticwb.bsc.element.BSCElemen
             return it;
         }
        /**
+       * Gets all org.semanticwb.bsc.element.Indicator with a determined Champion
+       * @param value Champion of the type org.semanticwb.model.User
+       * @param model Model of the org.semanticwb.bsc.element.Indicator
+       * @return Iterator with all the org.semanticwb.bsc.element.Indicator
+       */
+
+        public static java.util.Iterator<org.semanticwb.bsc.element.Indicator> listIndicatorByChampion(org.semanticwb.model.User value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Indicator> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(bsc_champion, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.bsc.element.Indicator with a determined Champion
+       * @param value Champion of the type org.semanticwb.model.User
+       * @return Iterator with all the org.semanticwb.bsc.element.Indicator
+       */
+
+        public static java.util.Iterator<org.semanticwb.bsc.element.Indicator> listIndicatorByChampion(org.semanticwb.model.User value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Indicator> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(bsc_champion,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
        * Gets all org.semanticwb.bsc.element.Indicator with a determined ChampionFacilitator
        * @param value ChampionFacilitator of the type org.semanticwb.model.User
        * @param model Model of the org.semanticwb.bsc.element.Indicator
@@ -235,11 +262,6 @@ public abstract class IndicatorBase extends org.semanticwb.bsc.element.BSCElemen
             org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Indicator> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_creator,value.getSemanticObject(),sclass));
             return it;
         }
-    }
-
-    public static IndicatorBase.ClassMgr getIndicatorClassMgr()
-    {
-        return new IndicatorBase.ClassMgr();
     }
 
    /**
@@ -332,6 +354,44 @@ public abstract class IndicatorBase extends org.semanticwb.bsc.element.BSCElemen
     public void setPercentageProgress(float value)
     {
         getSemanticObject().setFloatProperty(bsc_percentageProgress, value);
+    }
+   /**
+   * Sets the value for the property Champion
+   * @param value Champion to set
+   */
+
+    public void setChampion(org.semanticwb.model.User value)
+    {
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(bsc_champion, value.getSemanticObject());
+        }else
+        {
+            removeChampion();
+        }
+    }
+   /**
+   * Remove the value for Champion property
+   */
+
+    public void removeChampion()
+    {
+        getSemanticObject().removeProperty(bsc_champion);
+    }
+
+   /**
+   * Gets the Champion
+   * @return a org.semanticwb.model.User
+   */
+    public org.semanticwb.model.User getChampion()
+    {
+         org.semanticwb.model.User ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(bsc_champion);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.model.User)obj.createGenericInstance();
+         }
+         return ret;
     }
 
 /**
@@ -582,5 +642,4 @@ public abstract class IndicatorBase extends org.semanticwb.bsc.element.BSCElemen
     {
         return (org.semanticwb.bsc.BSC)getSemanticObject().getModel().getModelObject().createGenericInstance();
     }
-    
 }

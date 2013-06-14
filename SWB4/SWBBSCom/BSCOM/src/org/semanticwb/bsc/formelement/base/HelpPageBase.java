@@ -82,11 +82,6 @@ public abstract class HelpPageBase extends org.semanticwb.model.Label
         }
     }
 
-    public static HelpPageBase.ClassMgr getHelpPageClassMgr()
-    {
-        return new HelpPageBase.ClassMgr();
-    }
-
    /**
    * Constructs a HelpPageBase with a SemanticObject
    * @param base The SemanticObject with the properties for the HelpPage

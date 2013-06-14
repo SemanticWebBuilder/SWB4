@@ -77,11 +77,6 @@ public abstract class SelectOneUserByRoleGroupBase extends org.semanticwb.model.
         }
     }
 
-    public static SelectOneUserByRoleGroupBase.ClassMgr getSelectOneUserByRoleGroupClassMgr()
-    {
-        return new SelectOneUserByRoleGroupBase.ClassMgr();
-    }
-
    /**
    * Constructs a SelectOneUserByRoleGroupBase with a SemanticObject
    * @param base The SemanticObject with the properties for the SelectOneUserByRoleGroup

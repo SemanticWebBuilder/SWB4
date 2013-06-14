@@ -4,7 +4,7 @@ package org.semanticwb.bsc.admin.base;
    /**
    * Administración de BSC 
    */
-public abstract class AdminBSCBase extends org.semanticwb.model.AdminWebSite implements org.semanticwb.model.Localeable,org.semanticwb.model.Indexable,org.semanticwb.model.Trashable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Traceable,org.semanticwb.model.Filterable,org.semanticwb.model.OntologyDepable,org.semanticwb.model.Countryable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Activeable,org.semanticwb.model.Undeleteable,org.semanticwb.model.FilterableNode
+public abstract class AdminBSCBase extends org.semanticwb.model.AdminWebSite implements org.semanticwb.model.Localeable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Indexable,org.semanticwb.model.FilterableClass,org.semanticwb.model.OntologyDepable,org.semanticwb.model.Traceable,org.semanticwb.model.Undeleteable,org.semanticwb.model.Trashable,org.semanticwb.model.Filterable,org.semanticwb.model.Activeable,org.semanticwb.model.Countryable
 {
    /**
    * Es una pagina web utilizada para mostrar comportamientos (tabs) dentro de la administración de SWB
@@ -356,11 +356,6 @@ public abstract class AdminBSCBase extends org.semanticwb.model.AdminWebSite imp
             org.semanticwb.model.GenericIterator<org.semanticwb.bsc.admin.AdminBSC> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasModelProperty,value.getSemanticObject(),sclass));
             return it;
         }
-    }
-
-    public static AdminBSCBase.ClassMgr getAdminBSCClassMgr()
-    {
-        return new AdminBSCBase.ClassMgr();
     }
 
    /**

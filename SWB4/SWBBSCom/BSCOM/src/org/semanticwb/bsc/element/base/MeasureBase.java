@@ -1,7 +1,7 @@
 package org.semanticwb.bsc.element.base;
 
 
-public abstract class MeasureBase extends org.semanticwb.bsc.element.BSCElement implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Activeable,org.semanticwb.model.Traceable
+public abstract class MeasureBase extends org.semanticwb.bsc.element.BSCElement implements org.semanticwb.model.Traceable,org.semanticwb.model.Activeable,org.semanticwb.model.Descriptiveable
 {
     public static final org.semanticwb.platform.SemanticClass bsc_State=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#State");
     public static final org.semanticwb.platform.SemanticProperty bsc_status=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#status");
@@ -109,29 +109,6 @@ public abstract class MeasureBase extends org.semanticwb.bsc.element.BSCElement 
             return it;
         }
        /**
-       * Gets all org.semanticwb.bsc.element.Measure with a determined Creator
-       * @param value Creator of the type org.semanticwb.model.User
-       * @param model Model of the org.semanticwb.bsc.element.Measure
-       * @return Iterator with all the org.semanticwb.bsc.element.Measure
-       */
-
-        public static java.util.Iterator<org.semanticwb.bsc.element.Measure> listMeasureByCreator(org.semanticwb.model.User value,org.semanticwb.model.SWBModel model)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Measure> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_creator, value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.bsc.element.Measure with a determined Creator
-       * @param value Creator of the type org.semanticwb.model.User
-       * @return Iterator with all the org.semanticwb.bsc.element.Measure
-       */
-
-        public static java.util.Iterator<org.semanticwb.bsc.element.Measure> listMeasureByCreator(org.semanticwb.model.User value)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Measure> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_creator,value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
        * Gets all org.semanticwb.bsc.element.Measure with a determined Status
        * @param value Status of the type org.semanticwb.bsc.accessory.State
        * @param model Model of the org.semanticwb.bsc.element.Measure
@@ -177,11 +154,29 @@ public abstract class MeasureBase extends org.semanticwb.bsc.element.BSCElement 
             org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Measure> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(bsc_period,value.getSemanticObject(),sclass));
             return it;
         }
-    }
+       /**
+       * Gets all org.semanticwb.bsc.element.Measure with a determined Creator
+       * @param value Creator of the type org.semanticwb.model.User
+       * @param model Model of the org.semanticwb.bsc.element.Measure
+       * @return Iterator with all the org.semanticwb.bsc.element.Measure
+       */
 
-    public static MeasureBase.ClassMgr getMeasureClassMgr()
-    {
-        return new MeasureBase.ClassMgr();
+        public static java.util.Iterator<org.semanticwb.bsc.element.Measure> listMeasureByCreator(org.semanticwb.model.User value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Measure> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_creator, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.bsc.element.Measure with a determined Creator
+       * @param value Creator of the type org.semanticwb.model.User
+       * @return Iterator with all the org.semanticwb.bsc.element.Measure
+       */
+
+        public static java.util.Iterator<org.semanticwb.bsc.element.Measure> listMeasureByCreator(org.semanticwb.model.User value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Measure> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_creator,value.getSemanticObject(),sclass));
+            return it;
+        }
     }
 
    /**

@@ -1,7 +1,7 @@
 package org.semanticwb.bsc.element.base;
 
 
-public abstract class ObjectiveBase extends org.semanticwb.bsc.element.BSCElement implements org.semanticwb.bsc.Serializable,org.semanticwb.bsc.Recognizable,org.semanticwb.model.Activeable,org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable
+public abstract class ObjectiveBase extends org.semanticwb.bsc.element.BSCElement implements org.semanticwb.bsc.Serializable,org.semanticwb.model.Descriptiveable,org.semanticwb.bsc.Preference,org.semanticwb.bsc.Help,org.semanticwb.bsc.Committable,org.semanticwb.bsc.Seasonable,org.semanticwb.model.Traceable,org.semanticwb.model.Activeable,org.semanticwb.bsc.Recognizable
 {
     public static final org.semanticwb.platform.SemanticClass bsc_Indicator=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#Indicator");
     public static final org.semanticwb.platform.SemanticProperty bsc_hasIndicator=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#hasIndicator");
@@ -9,19 +9,20 @@ public abstract class ObjectiveBase extends org.semanticwb.bsc.element.BSCElemen
     public static final org.semanticwb.platform.SemanticProperty bsc_themeInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#themeInv");
     public static final org.semanticwb.platform.SemanticClass bsc_Initiative=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#Initiative");
     public static final org.semanticwb.platform.SemanticProperty bsc_hasInitiative=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#hasInitiative");
+    public static final org.semanticwb.platform.SemanticProperty bsc_index=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#index");
+    public static final org.semanticwb.platform.SemanticClass bsc_Objective=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#Objective");
+   /**
+   * Especifica el objetivo al cual está alineado el objetivo en cuestión, o sea el objetivo padre
+   */
+    public static final org.semanticwb.platform.SemanticProperty bsc_parentObjective=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#parentObjective");
    /**
    * Un usuario es una persona que tiene relación con el portal a través de un método de acceso.
    */
     public static final org.semanticwb.platform.SemanticClass swb_User=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#User");
    /**
-   * Usuario que se asigna como responsable de conseguir el objetivo
-   */
-    public static final org.semanticwb.platform.SemanticProperty bsc_champion=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#champion");
-   /**
    * Un usuario que se asigna como dueño del objetivo
    */
     public static final org.semanticwb.platform.SemanticProperty bsc_sponsor=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#sponsor");
-    public static final org.semanticwb.platform.SemanticClass bsc_Objective=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#Objective");
    /**
    * The semantic class that represents the currentObject
    */
@@ -189,29 +190,6 @@ public abstract class ObjectiveBase extends org.semanticwb.bsc.element.BSCElemen
             return it;
         }
        /**
-       * Gets all org.semanticwb.bsc.element.Objective with a determined Champion
-       * @param value Champion of the type org.semanticwb.model.User
-       * @param model Model of the org.semanticwb.bsc.element.Objective
-       * @return Iterator with all the org.semanticwb.bsc.element.Objective
-       */
-
-        public static java.util.Iterator<org.semanticwb.bsc.element.Objective> listObjectiveByChampion(org.semanticwb.model.User value,org.semanticwb.model.SWBModel model)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Objective> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(bsc_champion, value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.bsc.element.Objective with a determined Champion
-       * @param value Champion of the type org.semanticwb.model.User
-       * @return Iterator with all the org.semanticwb.bsc.element.Objective
-       */
-
-        public static java.util.Iterator<org.semanticwb.bsc.element.Objective> listObjectiveByChampion(org.semanticwb.model.User value)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Objective> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(bsc_champion,value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
        * Gets all org.semanticwb.bsc.element.Objective with a determined Creator
        * @param value Creator of the type org.semanticwb.model.User
        * @param model Model of the org.semanticwb.bsc.element.Objective
@@ -232,6 +210,29 @@ public abstract class ObjectiveBase extends org.semanticwb.bsc.element.BSCElemen
         public static java.util.Iterator<org.semanticwb.bsc.element.Objective> listObjectiveByCreator(org.semanticwb.model.User value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Objective> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_creator,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.bsc.element.Objective with a determined ParentObjective
+       * @param value ParentObjective of the type org.semanticwb.bsc.element.Objective
+       * @param model Model of the org.semanticwb.bsc.element.Objective
+       * @return Iterator with all the org.semanticwb.bsc.element.Objective
+       */
+
+        public static java.util.Iterator<org.semanticwb.bsc.element.Objective> listObjectiveByParentObjective(org.semanticwb.bsc.element.Objective value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Objective> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(bsc_parentObjective, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.bsc.element.Objective with a determined ParentObjective
+       * @param value ParentObjective of the type org.semanticwb.bsc.element.Objective
+       * @return Iterator with all the org.semanticwb.bsc.element.Objective
+       */
+
+        public static java.util.Iterator<org.semanticwb.bsc.element.Objective> listObjectiveByParentObjective(org.semanticwb.bsc.element.Objective value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Objective> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(bsc_parentObjective,value.getSemanticObject(),sclass));
             return it;
         }
        /**
@@ -257,11 +258,6 @@ public abstract class ObjectiveBase extends org.semanticwb.bsc.element.BSCElemen
             org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Objective> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(bsc_sponsor,value.getSemanticObject(),sclass));
             return it;
         }
-    }
-
-    public static ObjectiveBase.ClassMgr getObjectiveClassMgr()
-    {
-        return new ObjectiveBase.ClassMgr();
     }
 
    /**
@@ -336,6 +332,24 @@ public abstract class ObjectiveBase extends org.semanticwb.bsc.element.BSCElemen
              ret=(org.semanticwb.bsc.element.Indicator)obj.createGenericInstance();
          }
          return ret;
+    }
+
+/**
+* Gets the Help property
+* @return String with the Help
+*/
+    public String getHelp()
+    {
+        return getSemanticObject().getProperty(bsc_help);
+    }
+
+/**
+* Sets the Help property
+* @param value long with the Help
+*/
+    public void setHelp(String value)
+    {
+        getSemanticObject().setProperty(bsc_help, value);
     }
    /**
    * Sets the value for the property Theme
@@ -440,43 +454,41 @@ public abstract class ObjectiveBase extends org.semanticwb.bsc.element.BSCElemen
          }
          return ret;
     }
-   /**
-   * Sets the value for the property Champion
-   * @param value Champion to set
-   */
 
-    public void setChampion(org.semanticwb.model.User value)
+/**
+* Gets the Priority property
+* @return String with the Priority
+*/
+    public String getPriority()
     {
-        if(value!=null)
-        {
-            getSemanticObject().setObjectProperty(bsc_champion, value.getSemanticObject());
-        }else
-        {
-            removeChampion();
-        }
-    }
-   /**
-   * Remove the value for Champion property
-   */
-
-    public void removeChampion()
-    {
-        getSemanticObject().removeProperty(bsc_champion);
+        return getSemanticObject().getProperty(bsc_priority);
     }
 
-   /**
-   * Gets the Champion
-   * @return a org.semanticwb.model.User
-   */
-    public org.semanticwb.model.User getChampion()
+/**
+* Sets the Priority property
+* @param value long with the Priority
+*/
+    public void setPriority(String value)
     {
-         org.semanticwb.model.User ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(bsc_champion);
-         if(obj!=null)
-         {
-             ret=(org.semanticwb.model.User)obj.createGenericInstance();
-         }
-         return ret;
+        getSemanticObject().setProperty(bsc_priority, value);
+    }
+
+/**
+* Gets the Index property
+* @return int with the Index
+*/
+    public int getIndex()
+    {
+        return getSemanticObject().getIntProperty(bsc_index);
+    }
+
+/**
+* Sets the Index property
+* @param value long with the Index
+*/
+    public void setIndex(int value)
+    {
+        getSemanticObject().setIntProperty(bsc_index, value);
     }
 
 /**
@@ -497,6 +509,62 @@ public abstract class ObjectiveBase extends org.semanticwb.bsc.element.BSCElemen
     {
         //Override this method in Objective object
         getSemanticObject().setProperty(bsc_prefix, value,false);
+    }
+   /**
+   * Sets the value for the property ParentObjective
+   * @param value ParentObjective to set
+   */
+
+    public void setParentObjective(org.semanticwb.bsc.element.Objective value)
+    {
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(bsc_parentObjective, value.getSemanticObject());
+        }else
+        {
+            removeParentObjective();
+        }
+    }
+   /**
+   * Remove the value for ParentObjective property
+   */
+
+    public void removeParentObjective()
+    {
+        getSemanticObject().removeProperty(bsc_parentObjective);
+    }
+
+   /**
+   * Gets the ParentObjective
+   * @return a org.semanticwb.bsc.element.Objective
+   */
+    public org.semanticwb.bsc.element.Objective getParentObjective()
+    {
+         org.semanticwb.bsc.element.Objective ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(bsc_parentObjective);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.bsc.element.Objective)obj.createGenericInstance();
+         }
+         return ret;
+    }
+
+/**
+* Gets the Commited property
+* @return boolean with the Commited
+*/
+    public boolean isCommited()
+    {
+        return getSemanticObject().getBooleanProperty(bsc_commited);
+    }
+
+/**
+* Sets the Commited property
+* @param value long with the Commited
+*/
+    public void setCommited(boolean value)
+    {
+        getSemanticObject().setBooleanProperty(bsc_commited, value);
     }
    /**
    * Sets the value for the property Sponsor
@@ -563,6 +631,4 @@ public abstract class ObjectiveBase extends org.semanticwb.bsc.element.BSCElemen
     {
         return (org.semanticwb.bsc.BSC)getSemanticObject().getModel().getModelObject().createGenericInstance();
     }
-    
-    
 }

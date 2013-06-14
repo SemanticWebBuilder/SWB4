@@ -83,11 +83,6 @@ public abstract class PeriodicityBase extends org.semanticwb.model.base.FormElem
         }
     }
 
-    public static PeriodicityBase.ClassMgr getPeriodicityClassMgr()
-    {
-        return new PeriodicityBase.ClassMgr();
-    }
-
    /**
    * Constructs a PeriodicityBase with a SemanticObject
    * @param base The SemanticObject with the properties for the Periodicity
