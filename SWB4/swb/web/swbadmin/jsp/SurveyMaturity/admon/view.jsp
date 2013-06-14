@@ -57,6 +57,30 @@
                 
                 return deferred;
             }
+
+            function sendform(id)
+            {
+                var _form = dojo.byId(id);
+
+                var xhrArgs = {
+                    form: _form,
+                    handleAs: "text",
+                    load: function(data){
+                        //dojo.byId("response").innerHTML = "Form posted.";
+                        
+                    },
+                    error: function(error){
+                        alert('error'+error);
+                        // We'll 404 in the demo, but that's okay.  We don't have a 'postIt' service on the
+                        // docs server.
+                        //dojo.byId("response").innerHTML = "Form posted.";
+                    }
+                }
+
+                var deferred = dojo.xhrPost(xhrArgs);
+
+                return deferred;
+            }
             
 
             
