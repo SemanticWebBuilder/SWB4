@@ -588,19 +588,21 @@
         <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
       </rdf:Description>
     </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
   </swb:Class>
   <swb:Class rdf:ID="Application">
     <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >Application</rdfs:label>
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org.mx/ontology/lodp.owl#Application"/>
     <rdfs:subClassOf rdf:resource="#Commentable"/>
     <rdfs:subClassOf rdf:resource="#Rankable"/>
+    <rdfs:subClassOf rdf:resource="#Approveable"/>
     <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:autogenId>
     <rdfs:subClassOf rdf:resource="#Hitable"/>
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
   </swb:Class>
   <rdf:Description rdf:about="http://www.semanticwebbuilder.org.mx/ontology/lodp.owl#pubPhone">
     <swb:displayProperty>
@@ -721,6 +723,7 @@
     <swb:displayProperty rdf:resource="#dp_licTypeDescription"/>
   </rdf:Description>
   <rdf:Description rdf:about="http://www.semanticwebbuilder.org.mx/ontology/lodp.owl#datasetSize">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_DSsize">
         <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
