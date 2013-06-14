@@ -59,12 +59,18 @@
     WebSite wsite = wpage.getWebSite();
     User usr = paramRequest.getUser();
     Resource base = paramRequest.getResourceBase();
+    Publisher publisher = LODPUtils.getPublisher(usr);
+    Developer dev = LODPUtils.getDeveloper(usr);
     String roladmin = base.getAttribute("rolid", "");
     Role role = wsite.getUserRepository().getRole(roladmin);
 
-    String path = SWBPlatform.getContextPath() + "/swbadmin/images/repositoryfile/";
+    boolean isAdmin = Boolean.FALSE;
+    if(null!=role&&usr.hasRole(role)||null!=publisher&&publisher.hasRole(role)||null!=dev&&dev.hasRole(role)){
+        isAdmin = Boolean.TRUE;
+    }
+    //String path = SWBPlatform.getContextPath() + "/swbadmin/images/repositoryfile/";
 
-    int luser = 1;
+    //int luser = 1;
 
     long intSize = 0;
 
@@ -81,10 +87,7 @@
     if(null!=filteruri){
         filteruri = SemanticObject.shortToFullURI(filteruri);
     }
-    
-    
-    
-    
+
     String direction = request.getParameter("direction");
     String action = request.getParameter("act"); // accion
 
@@ -231,12 +234,17 @@
                     }
                 }
 
+                // datasets por revisar
+                HashMap<String, Dataset> hmxrevisar = new HashMap<String, Dataset>();
+                
                 // dejo en hm los ds
                 HashMap<String, Dataset> hmcp = new HashMap<String, Dataset>();
                 while(itds1.hasNext()){
                     Dataset ds = itds1.next();
                     if(ds.isDatasetActive()&&ds.isApproved()){
                         hmcp.put(ds.getURI(), ds);
+                    } else if(isAdmin && !ds.isReviewed()){ 
+                        hmxrevisar.put(ds.getShortURI(), ds);
                     }
                 }
                 Iterator<Dataset> itds = null;
@@ -630,8 +638,42 @@
 </div>
 <%
             }
-        %>
+           %>
     </div>
+    <%
+     if(isAdmin){
+              %>  
+              <div class="lista10"><h3>Datasets por revisar</h3>
+        <ol>
+            <%
+                intSize = hmxrevisar.size();
+                if (intSize == 0) {
+            %>
+            <li><%=paramRequest.getLocaleString("lbl_notDSfound")%></li>
+                    <%                                } else {
+                    itds = hmxrevisar.values().iterator();
+                    String wpurl = wpage.getUrl()+"?review=true&act=detail&suri=";
+                        while (itds.hasNext()) {
+                            Dataset ds = itds.next();
+                            String icontype = "default";
+                            if (ds.getDatasetFormat() != null&&ds.getDatasetFormat().trim().length()>0) {
+                                icontype = ds.getDatasetFormat();
+                            }
+                    %>
+            <li><a class="ico-<%=icontype%>" href="<%=wpurl+ ds.getShortURI()%>"><%=ds.getDatasetTitle()%></a><br/>
+                <p><em><%=sdf.format(ds.getDatasetUpdated())%> - <%=ds.getInstitution().getInstitutionTitle()%></em></p>
+                <p><%=ds.getDatasetDescription()%></p>
+                
+            </li>
+            <%
+                    }
+                }
+            %>
+        </ol>
+    </div>
+                <%
+            } // isAdmin
+        %>
     </div>
 </div>
     <%
@@ -639,6 +681,11 @@
 
         //System.out.println("Detalle DS.........");
         String suri = request.getParameter("suri");
+        String review = request.getParameter("review");
+        boolean isFromReview = Boolean.FALSE;
+        if(null!=review && review.trim().equals("true")){
+            isFromReview = Boolean.TRUE;
+        }
         //System.out.println("URI........."+suri);
         String statswpid = base.getAttribute("statswebpage","EstadisticasEnTabla");
                 WebPage wpurl = wsite.getWebPage(statswpid); 
@@ -653,7 +700,7 @@
     <%
         Dataset ds = (Dataset) go;
         //ds.getDatasetDescription()
-        ds.sendView(request, usr, wpage);
+        if(!isFromReview) ds.sendView(request, usr, wpage);
         //boolean bupdated = ds.incViews(); //LODPUtils.updateDSViews(ds);  // se actualiza los views
         Publisher pub = ds.getPublisher();
         String pubname = pub!=null?pub.getFullName():"--";
@@ -688,7 +735,7 @@
           	<legend>Etiquetas</legend>
             	<ul>
                     <%
-                    if(null!=ds && ds.listTags().hasNext()){
+                    if(null!=ds && ds.listTags().hasNext()){ 
             Iterator<Tag> ittag = ds.listTags();
             while (ittag.hasNext()) {
                 Tag tag = ittag.next();
@@ -700,7 +747,25 @@
                     %>
                 </ul>
           </fieldset>
-
+<%
+                    if(isFromReview){
+                        SWBResourceURL urlreview = paramRequest.getActionUrl();
+                        urlreview.setAction("review"); 
+%>
+                <fieldset>
+          	<legend>Aprobar o rechazar Dataset</legend>
+                <form method="post" action="<%=urlreview.toString()%>">
+                    <input type="hidden" name="dsuri" value="<%=ds.getShortURI()%>" />
+                    <textarea name="comment" rows="5" cols="50"></textarea><br/><br/>
+                    <input type="submit" name="btnok" value="Aprobar" />
+                    <input type="submit" name="btnreject" value="Rechazar" />
+                </form>
+                </ul>
+          </fieldset>
+                <%
+                    }
+                %>
+                
         </div> <!-- detalle -->
         </div> <!-- izq -->
         
