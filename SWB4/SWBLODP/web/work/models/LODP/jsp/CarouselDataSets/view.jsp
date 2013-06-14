@@ -54,7 +54,10 @@
         int count = 0 ;
     %>
 </header> 
-<body>        
+<body>
+    <div class="tit">
+        <h4>Destacados</h4>
+    </div>
     <div  class="slider4">       
         <%if(intSize){
             while(listDatasetOrd.hasNext() && count < maxDS){
