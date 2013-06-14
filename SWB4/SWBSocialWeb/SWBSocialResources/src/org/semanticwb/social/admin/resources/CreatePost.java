@@ -59,7 +59,7 @@ public class CreatePost extends GenericResource {
             return;
         }
         
-        String jspResponse = SWBPlatform.getContextPath() +"/work/" + paramRequest.getWebPage().getWebSiteId() +"/jsp/post/createPost.jsp";
+        String jspResponse = SWBPlatform.getContextPath() +"/work/models/" + paramRequest.getWebPage().getWebSiteId() +"/jsp/post/createPost.jsp";
         if (request.getParameter("jspResponse") != null) {
             jspResponse = request.getParameter("jspResponse");
         }
@@ -149,7 +149,7 @@ public class CreatePost extends GenericResource {
     }
 
     public void doCreatePost(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {        
-        RequestDispatcher rd = request.getRequestDispatcher(SWBPlatform.getContextPath() +"/work/" + paramRequest.getWebPage().getWebSiteId() +"/jsp/post/typeOfContent.jsp");
+        RequestDispatcher rd = request.getRequestDispatcher(SWBPlatform.getContextPath() +"/work/models/" + paramRequest.getWebPage().getWebSiteId() +"/jsp/post/typeOfContent.jsp");
         request.setAttribute("contentType", request.getParameter("valor"));
         request.setAttribute("wsite", request.getParameter("wsite"));
         request.setAttribute("objUri", request.getParameter("objUri"));

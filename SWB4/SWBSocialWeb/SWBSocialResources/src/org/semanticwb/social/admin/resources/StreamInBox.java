@@ -389,24 +389,25 @@ public class StreamInBox extends GenericResource {
             out.println("</td>");
             
             
+            //Nunca debería un PostIn no tener un usuario, porque obvio las redes sociales simpre tienen un usuario que escribe los mensajes
             //User
             out.println("<td>");
-            out.println(postIn.getPostInSocialNetworkUser().getSnu_name());
+            out.println(postIn.getPostInSocialNetworkUser()!=null?postIn.getPostInSocialNetworkUser().getSnu_name():paramRequest.getLocaleString("withoutUser"));   //Nunca debería un PostIn no tener un usuario 
             out.println("</td>");
             
             //Followers
             out.println("<td align=\"center\">");
-            out.println(postIn.getPostInSocialNetworkUser().getFollowers());
+            out.println(postIn.getPostInSocialNetworkUser()!=null?postIn.getPostInSocialNetworkUser().getFollowers():paramRequest.getLocaleString("withoutUser"));
             out.println("</td>");
             
             //Friends
             out.println("<td align=\"center\">");
-            out.println(postIn.getPostInSocialNetworkUser().getFriends());
+            out.println(postIn.getPostInSocialNetworkUser()!=null?postIn.getPostInSocialNetworkUser().getFriends():paramRequest.getLocaleString("withoutUser"));
             out.println("</td>");
             
              //Klout
             out.println("<td align=\"center\">");
-            out.println(postIn.getPostInSocialNetworkUser().getSnu_klout());
+            out.println(postIn.getPostInSocialNetworkUser()!=null?postIn.getPostInSocialNetworkUser().getSnu_klout():paramRequest.getLocaleString("withoutUser"));
             out.println("</td>");
             
             //Place
@@ -487,7 +488,7 @@ public class StreamInBox extends GenericResource {
         out.println("<fieldset>");
         out.println("<legend>" + paramRequest.getLocaleString("previewdocument") + "</legend>");
         try {
-            final String path = SWBPlatform.getContextPath() + "/work/" + paramRequest.getWebPage().getWebSiteId() + "/jsp/review/showPostIn.jsp";
+            final String path = SWBPlatform.getContextPath() + "/work/models/" + paramRequest.getWebPage().getWebSiteId() + "/jsp/review/showPostIn.jsp";
             if (request != null) {
                 RequestDispatcher dis = request.getRequestDispatcher(path);
                 if (dis != null) {
@@ -520,7 +521,7 @@ public class StreamInBox extends GenericResource {
      */
     private void doReClassifyByTopic(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest)
     {
-        final String path = SWBPlatform.getContextPath() + "/work/" + paramRequest.getWebPage().getWebSiteId() + "/jsp/socialTopic/classifybyTopic.jsp";
+        final String path = SWBPlatform.getContextPath() + "/work/models/" + paramRequest.getWebPage().getWebSiteId() + "/jsp/socialTopic/classifybyTopic.jsp";
         RequestDispatcher dis = request.getRequestDispatcher(path);
         if (dis != null) {
             try {
@@ -542,7 +543,7 @@ public class StreamInBox extends GenericResource {
         response.setContentType("text/html;charset=iso-8859-1");
         response.setHeader("Cache-Control", "no-cache");
         response.setHeader("Pragma", "no-cache");
-        final String myPath = SWBPlatform.getContextPath() +"/work/" + paramRequest.getWebPage().getWebSiteId() + "/jsp/stream/revalue.jsp";
+        final String myPath = SWBPlatform.getContextPath() +"/work/models/" + paramRequest.getWebPage().getWebSiteId() + "/jsp/stream/reValue.jsp";
         RequestDispatcher dis = request.getRequestDispatcher(myPath);
         if(dis != null) {
             try {
@@ -559,7 +560,7 @@ public class StreamInBox extends GenericResource {
     
     private void doResponse(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest)
     {
-        final String path = SWBPlatform.getContextPath() + "/work/" + paramRequest.getWebPage().getWebSiteId() + "/jsp/socialTopic/postInResponse.jsp";
+        final String path = SWBPlatform.getContextPath() + "/work/models/" + paramRequest.getWebPage().getWebSiteId() + "/jsp/socialTopic/postInResponse.jsp";
         RequestDispatcher dis = request.getRequestDispatcher(path);
         if (dis != null) {
             try {
@@ -574,7 +575,7 @@ public class StreamInBox extends GenericResource {
     }
     
     public void doCreatePost(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {        
-        RequestDispatcher rd = request.getRequestDispatcher(SWBPlatform.getContextPath() +"/work/" + paramRequest.getWebPage().getWebSiteId() +"/jsp/post/typeOfContent.jsp");
+        RequestDispatcher rd = request.getRequestDispatcher(SWBPlatform.getContextPath() +"/work/models/" + paramRequest.getWebPage().getWebSiteId() +"/jsp/post/typeOfContent.jsp");
         request.setAttribute("contentType", request.getParameter("valor"));
         request.setAttribute("wsite", request.getParameter("wsite"));
         request.setAttribute("objUri", request.getParameter("objUri"));

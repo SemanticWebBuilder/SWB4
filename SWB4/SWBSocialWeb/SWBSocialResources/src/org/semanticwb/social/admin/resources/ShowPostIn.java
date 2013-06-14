@@ -32,7 +32,7 @@ public class ShowPostIn extends GenericResource {
         WebSite wsite=WebSite.ClassMgr.getWebSite(request.getParameter("wsite"));
         SemanticObject semObj=SemanticObject.getSemanticObject(request.getParameter("postIn"));
         
-        final String myPath = SWBPlatform.getContextPath() + "/work/" + paramRequest.getWebPage().getWebSiteId() + "/jsp/review/showPostIn.jsp";
+        final String myPath = SWBPlatform.getContextPath() + "/work/models/" + paramRequest.getWebPage().getWebSiteId() + "/jsp/review/showPostIn.jsp";
         RequestDispatcher dis = request.getRequestDispatcher(myPath);
         if (dis != null) {
             try {

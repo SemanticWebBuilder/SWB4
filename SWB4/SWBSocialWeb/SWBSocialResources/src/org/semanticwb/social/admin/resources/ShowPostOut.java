@@ -34,7 +34,7 @@ public class ShowPostOut extends GenericResource {
         WebSite wsite=WebSite.ClassMgr.getWebSite(request.getParameter("wsite"));
         SemanticObject semObj=SemanticObject.getSemanticObject(request.getParameter("postOut"));
         
-        final String myPath = SWBPlatform.getContextPath() + "/work/" + paramRequest.getWebPage().getWebSiteId() + "/jsp/review/showPostOut.jsp";
+        final String myPath = SWBPlatform.getContextPath() + "/work/models/" + paramRequest.getWebPage().getWebSiteId() + "/jsp/review/showPostOut.jsp";
         RequestDispatcher dis = request.getRequestDispatcher(myPath);
         if (dis != null) {
             try {

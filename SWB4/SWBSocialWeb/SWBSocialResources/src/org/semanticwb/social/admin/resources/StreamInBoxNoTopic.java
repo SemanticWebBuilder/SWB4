@@ -416,7 +416,7 @@ public class StreamInBoxNoTopic extends GenericResource {
      */
     private void doReClassifyByTopic(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest)
     {
-        final String path = SWBPlatform.getContextPath() + "/work/" + paramRequest.getWebPage().getWebSiteId() + "/jsp/socialTopic/classifybyTopic.jsp";
+        final String path = SWBPlatform.getContextPath() + "/work/models/" + paramRequest.getWebPage().getWebSiteId() + "/jsp/socialTopic/classifybyTopic.jsp";
         RequestDispatcher dis = request.getRequestDispatcher(path);
         if (dis != null) {
             try {
@@ -438,7 +438,7 @@ public class StreamInBoxNoTopic extends GenericResource {
         response.setContentType("text/html;charset=iso-8859-1");
         response.setHeader("Cache-Control", "no-cache");
         response.setHeader("Pragma", "no-cache");
-        final String myPath = SWBPlatform.getContextPath() +"/work/" + paramRequest.getWebPage().getWebSiteId() + "/jsp/stream/revalue.jsp";
+        final String myPath = SWBPlatform.getContextPath() +"/work/models/" + paramRequest.getWebPage().getWebSiteId() + "/jsp/stream/revalue.jsp";
         if (request != null) {
             RequestDispatcher dis = request.getRequestDispatcher(myPath);
             if(dis != null) {

@@ -106,7 +106,7 @@ public class AllNewPostInToUser extends GenericResource {
         response.setHeader("Cache-Control", "no-cache");
         response.setHeader("Pragma", "no-cache");
         log.debug("doView(SWBAWebPageContents...)");
-        String jspPath = SWBPlatform.getContextPath() + "/work/" + paramRequest.getWebPage().getWebSiteId() + "/jsp/post/socialSites.jsp";
+        String jspPath = SWBPlatform.getContextPath() + "/work/models/" + paramRequest.getWebPage().getWebSiteId() + "/jsp/post/socialSites.jsp";
         RequestDispatcher dis = request.getRequestDispatcher(jspPath);
         try {
             request.setAttribute("paramRequest", paramRequest);
@@ -466,7 +466,7 @@ public class AllNewPostInToUser extends GenericResource {
     }
 
     private void doReClassifyByTopic(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) {
-        final String path = SWBPlatform.getContextPath() + "/work/" + paramRequest.getWebPage().getWebSiteId() + "/jsp/socialTopic/classifybyTopic.jsp";
+        final String path = SWBPlatform.getContextPath() + "/work/models/" + paramRequest.getWebPage().getWebSiteId() + "/jsp/socialTopic/classifybyTopic.jsp";
         RequestDispatcher dis = request.getRequestDispatcher(path);
         if (dis != null) {
             try {
@@ -481,7 +481,7 @@ public class AllNewPostInToUser extends GenericResource {
     }
 
     private void doResponse(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) {
-        final String path = SWBPlatform.getContextPath() + "/work/" + paramRequest.getWebPage().getWebSiteId() + "/jsp/socialTopic/postInResponse.jsp";
+        final String path = SWBPlatform.getContextPath() + "/work/models/" + paramRequest.getWebPage().getWebSiteId() + "/jsp/socialTopic/postInResponse.jsp";
         RequestDispatcher dis = request.getRequestDispatcher(path);
         if (dis != null) {
             try {
@@ -496,7 +496,7 @@ public class AllNewPostInToUser extends GenericResource {
     }
 
     public void doCreatePost(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        RequestDispatcher rd = request.getRequestDispatcher(SWBPlatform.getContextPath() + "/work/" + paramRequest.getWebPage().getWebSiteId() + "/jsp/post/typeOfContent.jsp");
+        RequestDispatcher rd = request.getRequestDispatcher(SWBPlatform.getContextPath() + "/work/models/" + paramRequest.getWebPage().getWebSiteId() + "/jsp/post/typeOfContent.jsp");
         request.setAttribute("contentType", request.getParameter("valor"));
         request.setAttribute("wsite", request.getParameter("wsite"));
         request.setAttribute("objUri", request.getParameter("objUri"));
