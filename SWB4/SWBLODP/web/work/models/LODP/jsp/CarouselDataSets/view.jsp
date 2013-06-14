@@ -69,10 +69,12 @@
         %>
         <div class="slide">
             <a href="<%=urlDataSet%>">
-                <img src="<%=urlLogo%>" alt="<%=urlLogo%>"  width="200" height="150" />
-                <div>Instituci&oacute;n: <%=institution.getInstitutionTitle()%></div>
-                <div>DataSet: <%=dataset.getDatasetTitle()%></div>
-                <div>N&uacute;mero de vistas: <%=dataset.getViews()%></div>
+                <div class="scrolimg">
+                    <img src="<%=urlLogo%>" alt="<%=urlLogo%>"  width="200" height="150" />
+                </div>
+                <div class="scrolinst">Instituci&oacute;n: <%=institution.getInstitutionTitle()%></div>
+                <div class="scroldata">DataSet: <%=dataset.getDatasetTitle()%></div>
+                <div class="scrolvisi">Vistas: <%=dataset.getViews()%></div>
             </a>
         </div>
         <%
