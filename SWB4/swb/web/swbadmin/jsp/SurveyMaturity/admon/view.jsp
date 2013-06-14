@@ -22,7 +22,7 @@
                 }
                 var url='<%=urlAction%>';
                 var strToEval='dojo.xhrPost({form: url,timeout: 3000,content: {'+ content +' }})';
-                alert(strToEval);
+                
                 try
                 {
                     eval(strToEval);
@@ -33,9 +33,8 @@
                 }
                 
                 
-            }
-            
-            function sendform(id)
+            }            
+            function sendform(id,funcion)
             {
                 var _form = dojo.byId(id);
                 
@@ -44,7 +43,7 @@
                     handleAs: "text",
                     load: function(data){
                         //dojo.byId("response").innerHTML = "Form posted.";
-                        alert('respuesta: '+data);
+                        funcion();
                     },
                     error: function(error){
                         alert('error'+error);
