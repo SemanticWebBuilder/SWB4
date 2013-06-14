@@ -83,6 +83,12 @@ Author     : rene.jara
             urlapv.setAction(CommentsManageResource.Action_APPROVE);
             SWBResourceURLImp urlrvw = new SWBResourceURLImp(request, base, wpage, SWBResourceURLImp.UrlType_ACTION);
             urlrvw.setAction(CommentsManageResource.Action_REVIEWED);
+            if(tRec==0){
+            %>
+            <div class="comentario">No hay comentario por revisar
+            </div>
+            <%
+            }
             for (int x = iRec; x < fRec && x < tRec; x++) {
                 Comment co = alco.get(x);
                 urlapv.setParameter("cid", co.getId());
@@ -90,23 +96,25 @@ Author     : rene.jara
                 urlrvw.setParameter("cid", co.getId());
                 urlrvw.setParameter("npag", nPag + "");
         %>
-        <div>
-            <p><%=co.getCommUserName()%>-<%=co.getCommUserEmail()%></p>
-            <p><%=co.getComment()%></p>
-            <a href="<%=urlapv%>">A</a>
-            <a href="<%=urlrvw%>">R</a>
+        <div class="comentario">
+            <p class="comentador"><%=co.getCommUserName()%>-<%=co.getCommUserEmail()%></p>
+            <p class="comentariotxt"><%=co.getComment()%></p>
+            <p class="inapropiado">
+                <a href="<%=urlapv%>" title="Aprobado"><span>Comentario aprobado</span></a>
+                <a href="<%=urlrvw%>" title="Revisado"><span>Comentario revisado</span>></a>
+            </p>
         </div>
         <%
             }
         %>
-        <div>
+        <div class="paginacom">
             <ul>
                 <%
                     SWBResourceURL rurl = paramRequest.getRenderUrl();
                     for (int x = 0; x < tPag; x++) {
                         if (x == nPag) {
                 %>
-                <li><%=(x + 1)%></li>
+                <li><span><%=(x + 1)%></span></li>
                 <%
                 } else {
                     rurl.setParameter("npag", x + "");
