@@ -4,7 +4,7 @@ package org.semanticwb.bsc.accessory.base;
    /**
    * Período de medición. 
    */
-public abstract class PeriodBase extends org.semanticwb.bsc.accessory.BSCAccessory implements org.semanticwb.model.Descriptiveable,org.semanticwb.bsc.Help,org.semanticwb.model.Traceable,org.semanticwb.model.Undeleteable,org.semanticwb.model.Activeable,org.semanticwb.bsc.Blockable,org.semanticwb.bsc.Machinable
+public abstract class PeriodBase extends org.semanticwb.bsc.accessory.BSCAccessory implements org.semanticwb.bsc.Help,org.semanticwb.model.Traceable,org.semanticwb.model.Undeleteable,org.semanticwb.bsc.Blockable,org.semanticwb.model.Activeable,org.semanticwb.bsc.Machinable,org.semanticwb.model.Descriptiveable
 {
     public static final org.semanticwb.platform.SemanticProperty bsc_inTime=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#inTime");
     public static final org.semanticwb.platform.SemanticProperty bsc_start=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#start");
@@ -179,11 +179,6 @@ public abstract class PeriodBase extends org.semanticwb.bsc.accessory.BSCAccesso
             org.semanticwb.model.GenericIterator<org.semanticwb.bsc.accessory.Period> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_creator,value.getSemanticObject(),sclass));
             return it;
         }
-    }
-
-    public static PeriodBase.ClassMgr getPeriodClassMgr()
-    {
-        return new PeriodBase.ClassMgr();
     }
 
    /**

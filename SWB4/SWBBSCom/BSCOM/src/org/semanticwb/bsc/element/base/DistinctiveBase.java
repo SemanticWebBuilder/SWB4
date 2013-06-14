@@ -1,7 +1,7 @@
 package org.semanticwb.bsc.element.base;
 
 
-public abstract class DistinctiveBase extends org.semanticwb.bsc.element.Theme implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Activeable,org.semanticwb.model.Sortable,org.semanticwb.model.Traceable
+public abstract class DistinctiveBase extends org.semanticwb.bsc.element.Theme implements org.semanticwb.model.Traceable,org.semanticwb.model.Activeable,org.semanticwb.model.Descriptiveable
 {
     public static final org.semanticwb.platform.SemanticClass bsc_Distinctive=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#Distinctive");
    /**
@@ -125,6 +125,29 @@ public abstract class DistinctiveBase extends org.semanticwb.bsc.element.Theme i
             return it;
         }
        /**
+       * Gets all org.semanticwb.bsc.element.Distinctive with a determined Perspective
+       * @param value Perspective of the type org.semanticwb.bsc.element.Perspective
+       * @param model Model of the org.semanticwb.bsc.element.Distinctive
+       * @return Iterator with all the org.semanticwb.bsc.element.Distinctive
+       */
+
+        public static java.util.Iterator<org.semanticwb.bsc.element.Distinctive> listDistinctiveByPerspective(org.semanticwb.bsc.element.Perspective value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Distinctive> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(bsc_perspectiveInv, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.bsc.element.Distinctive with a determined Perspective
+       * @param value Perspective of the type org.semanticwb.bsc.element.Perspective
+       * @return Iterator with all the org.semanticwb.bsc.element.Distinctive
+       */
+
+        public static java.util.Iterator<org.semanticwb.bsc.element.Distinctive> listDistinctiveByPerspective(org.semanticwb.bsc.element.Perspective value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Distinctive> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(bsc_perspectiveInv,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
        * Gets all org.semanticwb.bsc.element.Distinctive with a determined Creator
        * @param value Creator of the type org.semanticwb.model.User
        * @param model Model of the org.semanticwb.bsc.element.Distinctive
@@ -147,11 +170,6 @@ public abstract class DistinctiveBase extends org.semanticwb.bsc.element.Theme i
             org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Distinctive> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_creator,value.getSemanticObject(),sclass));
             return it;
         }
-    }
-
-    public static DistinctiveBase.ClassMgr getDistinctiveClassMgr()
-    {
-        return new DistinctiveBase.ClassMgr();
     }
 
    /**

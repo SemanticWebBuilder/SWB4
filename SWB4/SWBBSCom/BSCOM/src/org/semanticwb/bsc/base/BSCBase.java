@@ -2,12 +2,13 @@ package org.semanticwb.bsc.base;
 
 
    /**
-   * Objeto que define un Scorecard 
+   * Modelo que define un Scorecard de la metodologia BalancedScorecard de Norton y Kaplan 
    */
-public abstract class BSCBase extends org.semanticwb.model.WebSite implements org.semanticwb.model.Localeable,org.semanticwb.model.Indexable,org.semanticwb.model.Trashable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Traceable,org.semanticwb.model.Filterable,org.semanticwb.model.OntologyDepable,org.semanticwb.model.Countryable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Activeable,org.semanticwb.model.Undeleteable,org.semanticwb.model.FilterableNode
+public abstract class BSCBase extends org.semanticwb.model.WebSite implements org.semanticwb.model.Localeable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Indexable,org.semanticwb.model.FilterableClass,org.semanticwb.bsc.Help,org.semanticwb.bsc.Seasonable,org.semanticwb.model.OntologyDepable,org.semanticwb.model.Undeleteable,org.semanticwb.model.Traceable,org.semanticwb.model.Trashable,org.semanticwb.model.Activeable,org.semanticwb.model.Filterable,org.semanticwb.model.Countryable
 {
+    public static final org.semanticwb.platform.SemanticProperty bsc_values=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#values");
    /**
-   * Objeto que define un Scorecard
+   * Modelo que define un Scorecard de la metodologia BalancedScorecard de Norton y Kaplan
    */
     public static final org.semanticwb.platform.SemanticClass bsc_BSC=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#BSC");
     public static final org.semanticwb.platform.SemanticProperty bsc_parent=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#parent");
@@ -388,11 +389,6 @@ public abstract class BSCBase extends org.semanticwb.model.WebSite implements or
         }
     }
 
-    public static BSCBase.ClassMgr getBSCClassMgr()
-    {
-        return new BSCBase.ClassMgr();
-    }
-
    /**
    * Constructs a BSCBase with a SemanticObject
    * @param base The SemanticObject with the properties for the BSC
@@ -400,6 +396,57 @@ public abstract class BSCBase extends org.semanticwb.model.WebSite implements or
     public BSCBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
+    }
+
+/**
+* Gets the Help property
+* @return String with the Help
+*/
+    public String getHelp()
+    {
+        return getSemanticObject().getProperty(bsc_help);
+    }
+
+/**
+* Sets the Help property
+* @param value long with the Help
+*/
+    public void setHelp(String value)
+    {
+        getSemanticObject().setProperty(bsc_help, value);
+    }
+
+/**
+* Gets the Values property
+* @return String with the Values
+*/
+    public String getValues()
+    {
+        return getSemanticObject().getProperty(bsc_values);
+    }
+
+/**
+* Sets the Values property
+* @param value long with the Values
+*/
+    public void setValues(String value)
+    {
+        getSemanticObject().setProperty(bsc_values, value);
+    }
+
+    public String getValues(String lang)
+    {
+        return getSemanticObject().getProperty(bsc_values, null, lang);
+    }
+
+    public String getDisplayValues(String lang)
+    {
+        return getSemanticObject().getLocaleProperty(bsc_values, lang);
+    }
+
+    public void setValues(String values, String lang)
+    {
+        getSemanticObject().setProperty(bsc_values, values, lang);
     }
    /**
    * Sets the value for the property Parent
@@ -476,6 +523,21 @@ public abstract class BSCBase extends org.semanticwb.model.WebSite implements or
         getSemanticObject().setProperty(bsc_vision, value);
     }
 
+    public String getVision(String lang)
+    {
+        return getSemanticObject().getProperty(bsc_vision, null, lang);
+    }
+
+    public String getDisplayVision(String lang)
+    {
+        return getSemanticObject().getLocaleProperty(bsc_vision, lang);
+    }
+
+    public void setVision(String vision, String lang)
+    {
+        getSemanticObject().setProperty(bsc_vision, vision, lang);
+    }
+
 /**
 * Gets the Mission property
 * @return String with the Mission
@@ -492,6 +554,21 @@ public abstract class BSCBase extends org.semanticwb.model.WebSite implements or
     public void setMission(String value)
     {
         getSemanticObject().setProperty(bsc_mission, value);
+    }
+
+    public String getMission(String lang)
+    {
+        return getSemanticObject().getProperty(bsc_mission, null, lang);
+    }
+
+    public String getDisplayMission(String lang)
+    {
+        return getSemanticObject().getLocaleProperty(bsc_mission, lang);
+    }
+
+    public void setMission(String mission, String lang)
+    {
+        getSemanticObject().setProperty(bsc_mission, mission, lang);
     }
 
     public org.semanticwb.bsc.element.Measure getMeasure(String id)

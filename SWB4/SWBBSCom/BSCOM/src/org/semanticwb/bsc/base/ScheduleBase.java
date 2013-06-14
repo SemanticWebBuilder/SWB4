@@ -1,11 +1,17 @@
 package org.semanticwb.bsc.base;
 
+   /**
+   * Cualquier elemento BSC que se pueda programar con fechas de inicio y fin 
+   */
 public interface ScheduleBase extends org.semanticwb.model.GenericObject
 {
     public static final org.semanticwb.platform.SemanticProperty bsc_plannedStart=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#plannedStart");
     public static final org.semanticwb.platform.SemanticProperty bsc_actualEnd=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#actualEnd");
     public static final org.semanticwb.platform.SemanticProperty bsc_plannedEnd=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#plannedEnd");
     public static final org.semanticwb.platform.SemanticProperty bsc_actualStart=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#actualStart");
+   /**
+   * Cualquier elemento BSC que se pueda programar con fechas de inicio y fin 
+   */
     public static final org.semanticwb.platform.SemanticClass bsc_Schedule=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#Schedule");
 
     public java.util.Date getPlannedStart();

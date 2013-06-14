@@ -1,7 +1,7 @@
 package org.semanticwb.bsc.tracing.base;
 
 
-public abstract class PriorityBase extends org.semanticwb.bsc.tracing.BSCTracing implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable,org.semanticwb.model.Activeable,org.semanticwb.bsc.Machinable
+public abstract class PriorityBase extends org.semanticwb.bsc.tracing.BSCTracing implements org.semanticwb.model.Traceable,org.semanticwb.model.Activeable,org.semanticwb.bsc.Machinable,org.semanticwb.model.Descriptiveable
 {
     public static final org.semanticwb.platform.SemanticProperty bsc_index=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#index");
     public static final org.semanticwb.platform.SemanticClass bsc_Priority=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#Priority");
@@ -171,11 +171,6 @@ public abstract class PriorityBase extends org.semanticwb.bsc.tracing.BSCTracing
             org.semanticwb.model.GenericIterator<org.semanticwb.bsc.tracing.Priority> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_creator,value.getSemanticObject(),sclass));
             return it;
         }
-    }
-
-    public static PriorityBase.ClassMgr getPriorityClassMgr()
-    {
-        return new PriorityBase.ClassMgr();
     }
 
    /**

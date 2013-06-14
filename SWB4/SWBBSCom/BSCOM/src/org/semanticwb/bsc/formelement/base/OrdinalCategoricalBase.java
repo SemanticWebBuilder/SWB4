@@ -80,11 +80,6 @@ public abstract class OrdinalCategoricalBase extends org.semanticwb.bsc.formelem
         }
     }
 
-    public static OrdinalCategoricalBase.ClassMgr getOrdinalCategoricalClassMgr()
-    {
-        return new OrdinalCategoricalBase.ClassMgr();
-    }
-
    /**
    * Constructs a OrdinalCategoricalBase with a SemanticObject
    * @param base The SemanticObject with the properties for the OrdinalCategorical

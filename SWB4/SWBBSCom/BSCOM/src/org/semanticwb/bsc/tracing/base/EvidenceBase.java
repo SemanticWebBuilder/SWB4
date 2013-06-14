@@ -4,7 +4,7 @@ package org.semanticwb.bsc.tracing.base;
    /**
    * Clase que permite definir los atributos de las evidencias de un Indicador 
    */
-public abstract class EvidenceBase extends org.semanticwb.bsc.tracing.BSCTracing implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Activeable,org.semanticwb.model.Traceable
+public abstract class EvidenceBase extends org.semanticwb.bsc.tracing.BSCTracing implements org.semanticwb.model.Traceable,org.semanticwb.model.Activeable,org.semanticwb.model.Descriptiveable
 {
    /**
    * Persiste el documento, memorandum o adjunto asociado a un Indicador
@@ -134,11 +134,6 @@ public abstract class EvidenceBase extends org.semanticwb.bsc.tracing.BSCTracing
             org.semanticwb.model.GenericIterator<org.semanticwb.bsc.tracing.Evidence> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_creator,value.getSemanticObject(),sclass));
             return it;
         }
-    }
-
-    public static EvidenceBase.ClassMgr getEvidenceClassMgr()
-    {
-        return new EvidenceBase.ClassMgr();
     }
 
    /**

@@ -1,7 +1,7 @@
 package org.semanticwb.bsc.element.base;
 
 
-public abstract class PerspectiveBase extends org.semanticwb.bsc.element.BSCElement implements org.semanticwb.model.Activeable,org.semanticwb.bsc.Serializable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable,org.semanticwb.bsc.Recognizable
+public abstract class PerspectiveBase extends org.semanticwb.bsc.element.BSCElement implements org.semanticwb.bsc.Help,org.semanticwb.bsc.Serializable,org.semanticwb.model.Traceable,org.semanticwb.model.Activeable,org.semanticwb.model.Descriptiveable,org.semanticwb.bsc.Recognizable
 {
     public static final org.semanticwb.platform.SemanticProperty bsc_index=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#index");
     public static final org.semanticwb.platform.SemanticClass bsc_Theme=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#Theme");
@@ -152,11 +152,6 @@ public abstract class PerspectiveBase extends org.semanticwb.bsc.element.BSCElem
         }
     }
 
-    public static PerspectiveBase.ClassMgr getPerspectiveClassMgr()
-    {
-        return new PerspectiveBase.ClassMgr();
-    }
-
    /**
    * Constructs a PerspectiveBase with a SemanticObject
    * @param base The SemanticObject with the properties for the Perspective
@@ -164,6 +159,24 @@ public abstract class PerspectiveBase extends org.semanticwb.bsc.element.BSCElem
     public PerspectiveBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
+    }
+
+/**
+* Gets the Help property
+* @return String with the Help
+*/
+    public String getHelp()
+    {
+        return getSemanticObject().getProperty(bsc_help);
+    }
+
+/**
+* Sets the Help property
+* @param value long with the Help
+*/
+    public void setHelp(String value)
+    {
+        getSemanticObject().setProperty(bsc_help, value);
     }
 
 /**
