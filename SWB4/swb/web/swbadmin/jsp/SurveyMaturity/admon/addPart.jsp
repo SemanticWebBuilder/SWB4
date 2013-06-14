@@ -2,12 +2,12 @@
 <jsp:useBean id="paramRequest" scope="request" type="org.semanticwb.portal.api.SWBParamRequest"/>
 
 <%
-    SWBResourceURL urlAction = paramRequest.getActionUrl();
-    urlAction.setCallMethod(SWBResourceURL.Call_DIRECT);
-    urlAction.setAction("addPart");
+            SWBResourceURL urlAction = paramRequest.getActionUrl();
+            urlAction.setCallMethod(SWBResourceURL.Call_DIRECT);
+            urlAction.setAction("addPart");
 
-    SWBResourceURL render = paramRequest.getRenderUrl();
-    
+            SWBResourceURL render = paramRequest.getRenderUrl();
+
 %>
 <script type="text/javascript">
     function closeDialogAddPart()
@@ -22,7 +22,13 @@
         try
         {
             
-            
+            var namepart=forma.namepart.value;
+            if(!namepart)
+            {
+                alert('Indique el nombre de la parte del cuestionario');
+                forma.namepart.focus();
+                return;
+            }
             
             
             var tituloparteditor=getValueEditor('tituloparteditor');
@@ -63,6 +69,14 @@
     <input type="hidden" name="tituloparte">
     <input type="hidden" name="descriptionparte">
     <table>
+        <tr>
+            <td>
+                Nombre:
+            </td>
+            <td>
+                <input type="text" maxlength="80" size="80" name="namepart">
+            </td>
+        </tr>
         <tr>
             <td>
                 T&iacute;tulo:
