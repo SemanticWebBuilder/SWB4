@@ -304,7 +304,7 @@
                       {
                 %>
                 <label for="dsactive"><%=paramRequest.getLocaleString("lbl_active")%></label>
-                <input type="checkbox" name="dsactive" id="dsactive" dojoType="dijit.form.CheckBox" value="true" <%=ds.isDatasetActive()?"checked":""%> />
+                <input type="checkbox" name="dsactive" id="dsactive" dojoType="dijit.form.CheckBox" value="true" <%=ds.isDatasetActive()?"checked":""%>  />
                 <div class="linea"></div>
                 <div class="datafijo">
         	<ul>
