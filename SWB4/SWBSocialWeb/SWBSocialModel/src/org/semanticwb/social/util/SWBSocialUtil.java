@@ -513,6 +513,15 @@ public class SWBSocialUtil implements SWBAppObject {
      * Metodo que normaliza una palabra, esto de acuerdo a definición realizada internamente en el área
      */
     public static class Classifier {
+        
+        public static String[] getSpanishStopWords()
+        {
+            String[] stopWords=new SpanishAnalizer().getSpanishStopWords();
+            
+            //stopWords[stopWords.length+1]="quien";
+            
+            return stopWords;
+        }
 
         public static NormalizerCharDuplicate normalizer(String in_word) {
             boolean isCharDuplicate = false;

@@ -693,6 +693,11 @@ public class SpanishAnalizer extends Analyzer {
         "mi",
         "mis"
     };
+    
+    public String[] getSpanishStopWords()
+    {
+        return SPANISH_STOP_WORDS;
+    }
 
     @SuppressWarnings({"unchecked", "rawtypes"})
     public TokenStream tokenStream(String fieldName, Reader reader) {
