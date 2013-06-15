@@ -147,6 +147,11 @@ public class StreamInBox extends GenericResource {
             out.println("</script>");
         }
         
+        String searchWord = request.getParameter("search");
+        if (null == searchWord) {
+            searchWord = "";
+        }
+        
         
         SWBResourceURL urls = paramRequest.getRenderUrl();
         urls.setParameter("act", "");
@@ -155,6 +160,16 @@ public class StreamInBox extends GenericResource {
         
         out.println("<div class=\"swbform\">");
       
+        out.println("<fieldset>");
+        out.println("<form id=\"" + id + "/fsearchwp\" name=\"" + id + "/fsearchwp\" method=\"post\" action=\"" + urls + "\" onsubmit=\"submitForm('" + id + "/fsearchwp');return false;\">");
+        out.println("<div align=\"right\">");
+        out.println("<input type=\"hidden\" name=\"suri\" value=\"" + id + "\">");
+        out.println("<label for=\"" + id + "_searchwp\">" + paramRequest.getLocaleString("searchPost") + ": </label><input type=\"text\" name=\"search\" id=\"" + id + "_searchwp\" value=\"" + searchWord + "\">");
+        out.println("<button dojoType=\"dijit.form.Button\" type=\"submit\">" + paramRequest.getLocaleString("btnSearch") + "</button>"); //
+        out.println("</div>");
+        out.println("</form>");
+        out.println("</fieldset>");
+        
         
         out.println("<fieldset>");
         out.println("<table width=\"98%\" >");
@@ -234,7 +249,31 @@ public class StreamInBox extends GenericResource {
         
         Iterator<PostIn> itposts = PostIn.ClassMgr.listPostInByPostInStream(stream);
         
+        //Filtros
+        ArrayList<PostIn> aListFilter=new ArrayList();
+        if(searchWord!=null)
+        {
+            while(itposts.hasNext())
+            {
+                PostIn postIn=itposts.next();
+                if(postIn.getTags()!=null && postIn.getTags().toLowerCase().indexOf(searchWord.toLowerCase())>-1)
+                {
+                    aListFilter.add(postIn);
+                }else if(postIn.getMsg_Text()!=null && postIn.getMsg_Text().toLowerCase().indexOf(searchWord.toLowerCase())>-1)
+                {
+                    aListFilter.add(postIn);
+                }
+            }
+        }
+        //Termina Filtros
+        
+        if(aListFilter.size()>0) 
+        {
+            itposts=aListFilter.iterator();
+        }
+                
         Set<PostIn> setso = SWBComparator.sortByCreatedSet(itposts, false);
+        
         
         itposts = null;
         int ps = 20;
@@ -255,6 +294,7 @@ public class StreamInBox extends GenericResource {
         while (itposts.hasNext()) 
         {
             PostIn postIn = itposts.next();
+            
             
             if (x < p * ps) {
                 x++;
@@ -443,6 +483,7 @@ public class StreamInBox extends GenericResource {
                 SWBResourceURL urlNew = paramRequest.getRenderUrl();
                 urlNew.setParameter("suri", id);
                 urlNew.setParameter("page", "" + z);
+                urlNew.setParameter("search", (searchWord.trim().length() > 0 ? searchWord : ""));
                 if (z != p) {
                     out.println("<a href=\"#\" onclick=\"submitUrl('" + urlNew + "',this); return false;\">" + (z + 1) + "</a> ");
                 } else {
@@ -527,6 +568,7 @@ public class StreamInBox extends GenericResource {
             try {
                 SemanticObject semObject = SemanticObject.createSemanticObject(request.getParameter("postUri"));
                 request.setAttribute("postUri", semObject);
+                System.out.println("search en doReClassifyByTopic:"+request.getParameter("search"));
                 request.setAttribute("paramRequest", paramRequest);
                 dis.include(request, response);
             } catch (Exception e) {

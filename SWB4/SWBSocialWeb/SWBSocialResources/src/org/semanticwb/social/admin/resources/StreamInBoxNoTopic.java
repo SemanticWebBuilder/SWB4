@@ -6,6 +6,7 @@ package org.semanticwb.social.admin.resources;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Set;
 import javax.servlet.RequestDispatcher;
@@ -131,6 +132,14 @@ public class StreamInBoxNoTopic extends GenericResource {
             out.println("</script>");
         }
         
+        System.out.println("search word que llega sin:"+request.getParameter("search"));
+        String searchWord = request.getParameter("search");
+        if (null == searchWord) {
+            searchWord = "";
+        }
+        
+        System.out.println("search word que llega sin-1:"+searchWord);
+        
         
         SWBResourceURL urls = paramRequest.getRenderUrl();
         urls.setParameter("act", "");
@@ -139,6 +148,16 @@ public class StreamInBoxNoTopic extends GenericResource {
         
         out.println("<div class=\"swbform\">");
       
+        out.println("<fieldset>");
+        out.println("<form id=\"" + id + "/fsearchwp\" name=\"" + id + "/fsearchwp\" method=\"post\" action=\"" + urls + "\" onsubmit=\"submitForm('" + id + "/fsearchwp');return false;\">");
+        out.println("<div align=\"right\">");
+        out.println("<input type=\"hidden\" name=\"suri\" value=\"" + id + "\">");
+        out.println("<label for=\"" + id + "_searchwp\">" + paramRequest.getLocaleString("searchPost") + ": </label><input type=\"text\" name=\"search\" id=\"" + id + "_searchwp\" value=\"" + searchWord + "\">");
+        out.println("<button dojoType=\"dijit.form.Button\" type=\"submit\">" + paramRequest.getLocaleString("btnSearch") + "</button>"); //
+        out.println("</div>");
+        out.println("</form>");
+        out.println("</fieldset>");
+        
         
         out.println("<fieldset>");
         out.println("<table width=\"98%\" >");
@@ -208,6 +227,32 @@ public class StreamInBoxNoTopic extends GenericResource {
         
         
         Iterator<PostIn> itposts = PostIn.ClassMgr.listPostInByPostInStream(stream);
+        
+        
+        System.out.println("search word que llega sin-2:"+searchWord);
+        //Filtros
+        ArrayList<PostIn> aListFilter=new ArrayList();
+        if(searchWord!=null)
+        {
+            while(itposts.hasNext())
+            {
+                PostIn postIn=itposts.next();
+                if(postIn.getTags()!=null && postIn.getTags().toLowerCase().indexOf(searchWord.toLowerCase())>-1)
+                {
+                    aListFilter.add(postIn);
+                }else if(postIn.getMsg_Text()!=null && postIn.getMsg_Text().toLowerCase().indexOf(searchWord.toLowerCase())>-1)
+                {
+                    aListFilter.add(postIn);
+                }
+            }
+        }
+        //Termina Filtros
+        
+        if(aListFilter.size()>0) 
+        {
+            itposts=aListFilter.iterator();
+        }
+        
         
         Set<PostIn> setso = SWBComparator.sortByCreatedSet(itposts, false);
         
@@ -391,14 +436,11 @@ public class StreamInBoxNoTopic extends GenericResource {
                 SWBResourceURL urlNew = paramRequest.getRenderUrl();
                 urlNew.setParameter("suri", id);
                 urlNew.setParameter("page", "" + z);
-                System.out.println("J2-P:"+p);
-                System.out.println("J2-X:"+x);
+                urlNew.setParameter("search", (searchWord.trim().length() > 0 ? searchWord : ""));
                 if(p==0 && z==0) continue;
                 if (z != p) {
                     out.println("<a href=\"#\" onclick=\"submitUrl('" + urlNew + "',this); return false;\">" + (z + 1) + "</a> ");
                 } else {
-                    System.out.println("J3-P:"+p);
-                    System.out.println("J3-X:"+x);
                     out.println((z + 1) + " ");
                 }
             }

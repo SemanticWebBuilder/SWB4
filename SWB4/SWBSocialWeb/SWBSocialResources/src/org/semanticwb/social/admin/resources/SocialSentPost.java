@@ -6,9 +6,12 @@ package org.semanticwb.social.admin.resources;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Locale;
 import java.util.Set;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
@@ -18,7 +21,6 @@ import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Activeable;
-import org.semanticwb.model.Descriptiveable;
 import org.semanticwb.model.PFlowInstance;
 import org.semanticwb.model.Resource;
 import org.semanticwb.model.SWBComparator;
@@ -152,13 +154,7 @@ public class SocialSentPost extends GenericResource {
         //Resource base = getResourceBase();
         //User user = paramRequest.getUser();
         
-        /*
-        String busqueda = request.getParameter("search");
-        if (null == busqueda) {
-            busqueda = "";
-        }*/
-        
-
+  
         if (request.getParameter("dialog") != null && request.getParameter("dialog").equals("close")) {
             out.println("<script type=\"javascript\">");
             out.println(" hideDialog(); ");
@@ -167,7 +163,34 @@ public class SocialSentPost extends GenericResource {
             return;
         }
 
-        String action = request.getParameter("act");
+        
+        //Agregado busqueda
+        /*
+        SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
+        SemanticObject obj = ont.getSemanticObject(id);
+        String idp = request.getParameter("sprop");
+        System.out.println("idp que llega:"+idp);
+        SemanticProperty prop = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(idp);
+        System.out.println("prop--JJ:"+prop+" idp:"+idp);
+        SemanticClass clsprop = prop.getRangeClass();
+        log.debug("class: " + clsprop.getClassName());
+        HashMap<SemanticProperty, SemanticProperty> hmprop = new HashMap();
+        Iterator<SemanticProperty> ite_sp = clsprop.listProperties();
+        while (ite_sp.hasNext()) {
+            SemanticProperty sp = ite_sp.next();
+            log.debug("propiedad:" + sp.getDisplayName() + "---" + sp.getName());
+            hmprop.put(sp, sp);
+        }
+        SemanticProperty sptemp = null;
+
+        String busqueda = request.getParameter("search");
+        if (null == busqueda) {
+            busqueda = "";
+        }
+        */
+        //Termina Agregado busqueda
+        
+        
         
         SWBResourceURL urls = paramRequest.getRenderUrl();
         urls.setParameter("act", "");
@@ -176,6 +199,7 @@ public class SocialSentPost extends GenericResource {
         
         out.println("<div class=\"swbform\">");
         /*
+        //Agregado para la busqueda
         out.println("<fieldset>");
         out.println("<form id=\"" + id + "/fsearchwp\" name=\"" + id + "/fsearchwp\" method=\"post\" action=\"" + urls + "\" onsubmit=\"submitForm('" + id + "/fsearchwp');return false;\">");
         out.println("<div align=\"right\">");
@@ -185,7 +209,8 @@ public class SocialSentPost extends GenericResource {
         out.println("</div>");
         out.println("</form>");
         out.println("</fieldset>");
-        * */
+        //Termina Agregado para la busqueda
+        */
         out.println("<fieldset>");
         out.println("<table width=\"98%\" >");
         out.println("<thead>");
@@ -251,11 +276,75 @@ public class SocialSentPost extends GenericResource {
         boolean needAuthorization = false;
         boolean send2Flow = false;
         
+        //Agregado busqueda
+        /*
+        busqueda = busqueda.trim();
+        HashMap<String, SemanticObject> hmbus = new HashMap();
+        HashMap<String, SemanticObject> hmfiltro = new HashMap();
+        SemanticObject semO = null;
+        Iterator<SemanticProperty> itcol = null;
+        Iterator<SemanticObject> itso = obj.listObjectProperties(prop);
+        
+
+
+        if (!busqueda.equals("")) {
+            while (itso.hasNext()) {
+                semO = itso.next();
+                boolean del = false;
+                if (semO.instanceOf(Trashable.swb_Trashable)) {
+                    del = semO.getBooleanProperty(Trashable.swb_deleted, false);
+                }
+                if (del) {
+                    continue;
+                }
+
+                hmbus.put(semO.getURI(), semO);
+                itcol = hmprop.keySet().iterator();
+                String occ = "";
+                while (itcol.hasNext()) {
+                    SemanticProperty sprop = itcol.next();
+                    occ = occ + reviewSemProp(sprop, semO, paramRequest);
+                }
+                //System.out.println("occ:"+occ);
+                occ = occ.toLowerCase();
+                if (occ.indexOf(busqueda.toLowerCase()) > -1) {
+                    hmfiltro.put(semO.getURI(), semO);
+                }
+            }
+        } else {
+            while (itso.hasNext()) {
+                semO = itso.next();
+                boolean del = false;
+                if (semO.instanceOf(Trashable.swb_Trashable)) {
+                    del = semO.getBooleanProperty(Trashable.swb_deleted, false);
+                }
+                if (del) {
+                    continue;
+                }
+
+                hmbus.put(semO.getURI(), semO);
+            }
+        }
+
+        if (busqueda.trim().length() == 0) {  //hmfiltro.isEmpty()&&
+            itso = hmbus.values().iterator(); //obj.listObjectProperties(prop);
+        } else {
+            itso = hmfiltro.values().iterator();
+        }
+        Set<SemanticObject> setso = SWBComparator.sortByCreatedSet(itso, false);
+        */
+        //Termina Agregado busqueda
+        
+        
+        //Funcionan bien sin busqueda
         Iterator<PostOut> itposts = PostOut.ClassMgr.listPostOutBySocialTopic(socialTopic);
-        
         Set<PostOut> setso = SWBComparator.sortByCreatedSet(itposts, false);
+        //Termina Funcionan bien sin busqueda
         
-        itposts = null;
+        
+        
+        //itposts = null;
+        //itposts=null;
         int ps = 20;
         int l = setso.size();
 
@@ -273,6 +362,12 @@ public class SocialSentPost extends GenericResource {
         itposts = setso.iterator();
         while (itposts.hasNext()) 
         {
+            PostOut sobj = (PostOut)itposts.next();
+            if(sobj==null) {
+                System.out.println("SEMANTIC OBJECT NULOOO:"+sobj+", QUE RARO, VER CON JEI...");
+                continue;
+            }
+            
             
             if (x < p * ps) {
                 x++;
@@ -283,7 +378,6 @@ public class SocialSentPost extends GenericResource {
             }
             x++;
             
-            PostOut sobj = itposts.next();
             
              // revisando contenido en flujo de publicación
              // validacion de botones en relación a los flujos
@@ -294,6 +388,7 @@ public class SocialSentPost extends GenericResource {
             send2Flow = false;
 
             isInFlow = pfmgr.isInFlow(sobj);
+            
 
             //System.out.println("Recurso esta en flujo: "+isInFlow);
 
@@ -1147,6 +1242,56 @@ public class SocialSentPost extends GenericResource {
         } catch (Exception e) {
             ret ="---";
             //ret = obj.getProperty(Descriptiveable.swb_title);
+        }
+        return ret;
+    }
+    
+    /**
+     * Review sem prop.
+     *
+     * @param prop the prop
+     * @param obj the obj
+     * @param paramsRequest the params request
+     * @return the string
+     */
+    public String reviewSemProp(SemanticProperty prop, SemanticObject obj, SWBParamRequest paramsRequest) {
+        String ret = null;
+
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.", new Locale(paramsRequest.getUser().getLanguage()));
+            if (prop.isDataTypeProperty()) {
+                if (prop.isBoolean()) {
+                    boolean bvalue = obj.getBooleanProperty(prop);
+                    if (bvalue) {
+                        ret = paramsRequest.getLocaleString("booleanYes");
+                    } else {
+                        ret = paramsRequest.getLocaleString("booleanNo");
+                    }
+
+                }
+                if (prop.isInt() || prop.isDouble() || prop.isLong()) {
+                    ret = Long.toString(obj.getLongProperty(prop));
+                }
+                if (prop.isString()) {
+                    ret = obj.getProperty(prop);
+                }
+                if (prop.isFloat()) {
+                    ret = Float.toString(obj.getFloatProperty(prop));
+                }
+                if (prop.isDate() || prop.isDateTime()) {
+                    ret = sdf.format(obj.getDateTimeProperty(prop));
+                }
+            } else if (prop.isObjectProperty()) {
+                SemanticObject so = obj.getObjectProperty(prop);
+                if (null != so) {
+                    ret = so.getDisplayName(paramsRequest.getUser().getLanguage());
+                }
+            }
+            if (null == ret || (ret != null && ret.trim().equals("null"))) {
+                ret = "";
+            }
+
+        } catch (Exception e) {
         }
         return ret;
     }
