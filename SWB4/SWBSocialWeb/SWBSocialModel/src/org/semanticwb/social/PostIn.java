@@ -17,7 +17,7 @@ public class PostIn extends org.semanticwb.social.base.PostInBase
      */
     public static PostIn getPostInbySocialMsgId(SWBModel model, String socialMsgId)
     {
-        Iterator<SemanticObject> it=model.getSemanticModel().listSubjects(social_socialNetMsgId, socialMsgId);
+        Iterator<SemanticObject> it=model.getSemanticModel().listSubjects(PostIn.social_socialNetMsgId, socialMsgId);
         if(it.hasNext())
         {
             SemanticObject obj=it.next();
