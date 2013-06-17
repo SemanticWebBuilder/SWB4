@@ -962,10 +962,10 @@
                     obj.text.PX=offx;
                     obj.text.PY=offy;
                     obj.text.update();
-                    for (var i = obj.text.childNodes.length; i--;)
-                    {
-                        obj.text.childNodes[i].setAttributeNS(null,"x",obj.text.getX());
-                    }
+//                    for (var i = obj.text.childNodes.length; i--;)
+//                    {
+                        //obj.text.childNodes[i].setAttributeNS(null,"x",obj.text.getX());
+//                    }
                 }
                 
                 //Move InConnections
@@ -1457,7 +1457,7 @@
                 }
 
                 var tspan_element = document.createElementNS(_this.svgNS, "tspan");	// Create first tspan element
-                tspan_element.setAttributeNS(null, "x", start_x);
+                //tspan_element.setAttributeNS(null, "x", start_x);
                 var text_node = document.createTextNode(words[0]);			// Create text in tspan element
 
                 tspan_element.appendChild(text_node);							// Add tspan element to DOM
