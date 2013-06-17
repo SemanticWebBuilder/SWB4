@@ -1,7 +1,7 @@
 package org.semanticwb.bsc.accessory.base;
 
 
-public abstract class StateGroupBase extends org.semanticwb.bsc.accessory.BSCAccessory implements org.semanticwb.bsc.Help,org.semanticwb.model.Traceable,org.semanticwb.model.Undeleteable,org.semanticwb.model.Activeable,org.semanticwb.model.Descriptiveable
+public abstract class StateGroupBase extends org.semanticwb.bsc.accessory.BSCAccessory implements org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Activeable,org.semanticwb.model.Undeleteable,org.semanticwb.bsc.Help
 {
     public static final org.semanticwb.platform.SemanticClass bsc_State=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#State");
    /**

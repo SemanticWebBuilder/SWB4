@@ -30,16 +30,16 @@ public class UrlGo extends org.semanticwb.bsc.formelement.base.UrlGoBase
 //            DOJO = true;
 //        }
         
-System.out.println("obj="+obj);
-System.out.println("prop="+prop);
-System.out.println("propName="+propName);
-System.out.println("type="+type);
-System.out.println("mode="+mode);
-System.out.println("lang="+lang);
-System.out.println("obj.getSemanticClass()="+obj.getSemanticClass());
-System.out.println("obj.getSemanticClass().getClassName()="+obj.getSemanticClass().getClassName());
-System.out.println("obj.getSemanticClass().getCanonicalName()()="+obj.getSemanticClass().getCanonicalName());
-System.out.println("obj.getSemanticClass().getName()()="+obj.getSemanticClass().getName());
+//System.out.println("obj="+obj);
+//System.out.println("prop="+prop);
+//System.out.println("propName="+propName);
+//System.out.println("type="+type);
+//System.out.println("mode="+mode);
+//System.out.println("lang="+lang);
+//System.out.println("obj.getSemanticClass()="+obj.getSemanticClass());
+//System.out.println("obj.getSemanticClass().getClassName()="+obj.getSemanticClass().getClassName());
+//System.out.println("obj.getSemanticClass().getCanonicalName()()="+obj.getSemanticClass().getCanonicalName());
+//System.out.println("obj.getSemanticClass().getName()()="+obj.getSemanticClass().getName());
         
         
         StringBuilder   ret      = new StringBuilder();

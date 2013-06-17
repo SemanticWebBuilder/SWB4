@@ -152,7 +152,7 @@ if(type.equals("dojo")) {
 System.out.print("validate_...");
 System.out.println(", obj="+obj+", id="+obj.getId());
         String value = request.getParameter(propName);
-System.out.println("value="+value);
+//System.out.println("value="+value);
         Date date = null;
         try {
             date = format.parse(value);
@@ -174,7 +174,7 @@ System.out.println("value="+value);
         Iterator<Period> iperiods = Period.ClassMgr.listPeriods(model);
         while(iperiods.hasNext()) {
             Period p = iperiods.next();
-System.out.println("p="+p);
+//System.out.println("p="+p);
             if( obj.equals(p) ) {
                 continue;
             }
@@ -182,13 +182,13 @@ System.out.println("p="+p);
                 throw new FormValidateException("fecha invalida");
             }
         }
-System.out.println("al parece todo salio bien");
+//System.out.println("al parece todo salio bien");
     }
     
     @Override
     public void process(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String propName)
     {
-System.out.println("\n\nprocess........................");
+//System.out.println("\n\nprocess........................");
 //        try
 //        {
             //validate(request, obj, prop, propName);
