@@ -442,11 +442,11 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase {
             if (socialStreamSerch != null && socialStreamSerch.getNextDatetoSearch() != null) {
                 storedValue = formatter.parse(socialStreamSerch.getNextDatetoSearch());
             }
-
+            System.out.println("Antes de validar las fechas: ");
+            System.out.println("stored Value : " + storedValue + "  dateVideo:  " + formatter.parse(dateVideo));
             if (formatter.parse(dateVideo).before(storedValue)) {
-             //Only stores tweetID if it's greater than the current stored value
             //if (storedValue.before(formatter.parse(dateVideo))) { //Only stores tweetID if it's greater than the current stored value
-                socialStreamSerch.setNextDatetoSearch(dateVideo.toString());
+                socialStreamSerch.setNextDatetoSearch(dateVideo);
                 System.out.println("GUARDANDO FECHA!!:"  + dateVideo);
             } else {
                 System.out.println("NO ESTÁ GUARDANDO NADA PORQUE EL VALOR ALMACENADO YA ES IGUAL O MAYOR AL ACTUAL");
@@ -468,7 +468,7 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase {
         int maxResults = 2;
         int totalResources = 0;
         boolean canGetMoreVideos = true;
-        int iteration = 1;
+        int iteration = 0;
         int count = 0;
         getLastVideoID(stream); //gets the value stored in NextDatetoSearch
         for (int starIndex = 1; starIndex <= limit; starIndex++) {
