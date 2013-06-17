@@ -2458,7 +2458,7 @@
             
             obj.mousedown=function(evt)
             {
-                if(ToolKit.getEventX(evt)<obj.getX()-obj.getWidth()/2+20)
+                if(ToolKit.getEventX(evt)<obj.getX()-obj.getWidth()/2+obj.headerLine.lineOffset+5)
                 {
                     return Modeler.objectMouseDown(evt,obj);
                 }
@@ -2521,13 +2521,13 @@
             
             obj.updateLanes = function() {
                 //console.log("lineOffset:"+obj.headerLine.lineOffset);
-                var totWidth = obj.getWidth();
+                var totWidth = obj.getWidth()-obj.headerLine.lineOffset;
                 obj.lanes.sort(function(a,b){return a.index-b.index;});
                 if (obj.lanes.length > 0) {
                     var ypos = obj.getY() - obj.getHeight()/2;
                     for (var i = 0; i < obj.lanes.length; i++) {
                         obj.lanes[i].resize(totWidth, obj.lanes[i].getHeight());
-                        obj.lanes[i].move(obj.getX()+obj.headerLine.lineOffset, ypos + obj.lanes[i].getHeight()/2);
+                        obj.lanes[i].move(obj.getX()+obj.headerLine.lineOffset/2, ypos + obj.lanes[i].getHeight()/2);
                         ypos = ypos + obj.lanes[i].getHeight();
                     }
                 }
