@@ -1729,12 +1729,30 @@
         _this.setElementType("Pool");
         
         _this.setText = function(text) {
-            fSetText(text,-1,0,200,2);
+            fSetText(text,0,0,_this.getHeight(),1);
             fUpdateText = _this.text.update;
+            
+            _this.text.ondblclick = function(evt) {
+                var txt = prompt("Titulo:",_this.text.value);                  
+                if(txt && txt!==null)
+                {
+                    _this.text.value=txt;
+                    _this.text.update();
+                    _this.updateHeaderLine();
+                }
+            };
+            
             _this.text.update = function() {
-                if (fUpdateText != null) {
+                if (fUpdateText !== null) {
+                    _this.text.textW = _this.getHeight();
                     fUpdateText();
-                    _this.text.setAttributeNS(null, "transform", "translate("+(_this.getX()-_this.getWidth()/2)+", "+(_this.getY()-_this.getHeight()/2)+")");
+                    //console.log("width: "+_this.text.getBoundingClientRect().width+", height: "+_this.text.getBoundingClientRect().height);
+                    //console.log("cwidth: "+_this.text.getBBox().width+", cheight: "+_this.text.getBBox().height);
+                    var x = (_this.getX() - _this.getWidth()/2) + _this.text.getBoundingClientRect().width/2;
+                    var y = _this.getY();
+                    _this.text.setAttributeNS(null, "x", x);
+                    _this.text.setAttributeNS(null, "y", y);
+                    _this.text.setAttributeNS(null, "transform", "rotate(-90 "+x+","+y+")");
                 }
             };
         };
@@ -1777,12 +1795,38 @@
         var _this = new _GraphicalElement(obj);
         var fCanAdd = _this.canAddToDiagram;
         var fSetText = _this.setText;
+        var fUpdateText = null;
         _this.index = -1;
         
         _this.setElementType("Lane");
         
         _this.setText = function(text) {
-            fSetText(text,-1,0,200,2);
+            fSetText(text,0,0,_this.getHeight(),1);
+            fUpdateText = _this.text.update;
+            
+            _this.text.ondblclick = function(evt) {
+                var txt = prompt("Titulo:",_this.text.value);                  
+                if(txt && txt!==null)
+                {
+                    _this.text.value=txt;
+                    _this.text.update();
+                    _this.updateHeaderLine();
+                }
+            };
+            
+            _this.text.update = function() {
+                if (fUpdateText !== null) {
+                    _this.text.textW = _this.getHeight();
+                    fUpdateText();
+                    //console.log("width: "+_this.text.getBoundingClientRect().width+", height: "+_this.text.getBoundingClientRect().height);
+                    //console.log("cwidth: "+_this.text.getBBox().width+", cheight: "+_this.text.getBBox().height);
+                    var x = (_this.getX() - _this.getWidth()/2) + _this.text.getBoundingClientRect().width/2;
+                    var y = _this.getY();
+                    _this.text.setAttributeNS(null, "x", x);
+                    _this.text.setAttributeNS(null, "y", y);
+                    _this.text.setAttributeNS(null, "transform", "rotate(-90 "+x+","+y+")");
+                }
+            };
         };
         
         _this.setIndex = function(idx) {
@@ -2389,7 +2433,7 @@
             };
                 
             var ob = ToolKit.createBaseObject(con, id, parent);
-            ob.selectable = false;
+            ob.canSelect = false;
             
             return ob;
         },
@@ -2439,8 +2483,9 @@
             var fMoveFirst = obj.moveFirst;
             
             obj.updateHeaderLine=function() {
-                console.log("Text info - width: "+obj.text.getBBox().width+", height: "+obj.text.getBBox().height);
-                obj.headerLine.setAttributeNS(null, "d", "M"+(obj.getX()-obj.getWidth()/2 + obj.text.getBBox().height)+" "+(obj.getY()-obj.getHeight()/2) +" L"+(obj.getX()-obj.getWidth()/2 + obj.text.getBBox().height)+" "+(obj.getY()+obj.getHeight()/2));
+                obj.headerLine.lineOffset = obj.text.getBoundingClientRect().width+5;
+                //console.log("Text info - width: "+obj.text.getBBox().width+", height: "+obj.text.getBBox().height);
+                obj.headerLine.setAttributeNS(null, "d", "M"+(obj.getX()-obj.getWidth()/2 + obj.text.getBoundingClientRect().width+5)+" "+(obj.getY()-obj.getHeight()/2) +" L"+(obj.getX()-obj.getWidth()/2 + obj.text.getBoundingClientRect().width +5)+" "+(obj.getY()+obj.getHeight()/2));
                 obj.headerLine.setAttributeNS(null,"bclass","swimlane");
                 obj.headerLine.setAttributeNS(null,"oclass","swimlane_o");
                 obj.headerLine.setBaseClass();
@@ -2466,8 +2511,8 @@
                 obj.resize(obj.getWidth(), totHeight);
                 
                 if (totHeight === 0) {
-                    ob.resize(obj.getWidth()-13, obj.getHeight());
-                    ob.move(obj.getX()+14, obj.getY());
+                    ob.resize(obj.getWidth()-obj.headerLine.lineOffset, obj.getHeight());
+                    ob.move(obj.getX(), obj.getY());
                 }
                 
                 obj.updateLanes();
@@ -2475,16 +2520,14 @@
             };
             
             obj.updateLanes = function() {
-                var totWidth = obj.getWidth()-15;
+                //console.log("lineOffset:"+obj.headerLine.lineOffset);
+                var totWidth = obj.getWidth();
                 obj.lanes.sort(function(a,b){return a.index-b.index;});
-                //console.log("updating lanes");
                 if (obj.lanes.length > 0) {
-                    //console.log("lanes exist");
                     var ypos = obj.getY() - obj.getHeight()/2;
                     for (var i = 0; i < obj.lanes.length; i++) {
-                        //console.log("updating lane "+i+" moving to "+(obj.getX()+15) +", "+ypos);
-                        obj.lanes[i].resize(totWidth-10, obj.lanes[i].getHeight());
-                        obj.lanes[i].move(obj.getX()+13, ypos + obj.lanes[i].getHeight()/2);
+                        obj.lanes[i].resize(totWidth, obj.lanes[i].getHeight());
+                        obj.lanes[i].move(obj.getX()+obj.headerLine.lineOffset, ypos + obj.lanes[i].getHeight()/2);
                         ypos = ypos + obj.lanes[i].getHeight();
                     }
                 }
@@ -2892,21 +2935,21 @@
                 obj.setURI(tmp.uri);
                 
                 if (obj.typeOf("GraphicalElement")) {
-                    if (tmp.title != null) {
+                    if (tmp.title !== null) {
                         obj.setText(tmp.title);
                     }
-                    if (obj.resizeable != null && obj.resizeable) {
+                    if (obj.resizeable !== null && obj.resizeable) {
                         obj.resize(tmp.w, tmp.h);
                     }
                     
-                    if (obj.typeOf("IntermediateCatchEvent") && tmp.isInterrupting != null) {
+                    if (obj.typeOf("IntermediateCatchEvent") && tmp.isInterrupting !== null) {
                         var par = Modeler.getGraphElementByURI(null, tmp.parent);
-                        if (par!=null && par.typeOf("Activity") && !tmp.isInterrupting) {
+                        if (par!==null && par.typeOf("Activity") && !tmp.isInterrupting) {
                             obj.setInterruptor(false);
                         }
                     }
                     obj.move(tmp.x, tmp.y);
-                    if (obj.typeOf("IntermediateCatchEvent") && tmp.parent == "") {
+                    if (obj.typeOf("IntermediateCatchEvent") && tmp.parent === "") {
                         obj.snap2Grid();
                     }
                 }
