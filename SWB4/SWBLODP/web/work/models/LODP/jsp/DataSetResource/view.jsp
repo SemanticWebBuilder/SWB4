@@ -760,7 +760,6 @@
                     <input type="submit" name="btnok" value="Aprobar" />
                     <input type="submit" name="btnreject" value="Rechazar" />
                 </form>
-                </ul>
           </fieldset>
                 <%
                     }
