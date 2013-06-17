@@ -22,9 +22,9 @@
     <script>
         $(document).ready(function() {
             $('.slider4').bxSlider({
-                slideWidth: 220,
+                slideWidth: 148,
                 minSlides: 2,
-                maxSlides: 3,
+                maxSlides: 5,
                 moveSlides: 1,
                 slideMargin: 10
             });
@@ -56,7 +56,7 @@
 </header> 
 <body>
     <div class="tit">
-        <h4>Destacados</h4>
+        <h4><%=paramRequest.getLocaleString("lbl_Highlights")%></h4>
     </div>
     <div  class="slider4">       
         <%if(intSize){
@@ -73,11 +73,11 @@
         <div class="slide">
             <a href="<%=urlDataSet%>">
                 <div class="scrolimg">
-                    <img src="<%=urlLogo%>" alt="<%=urlLogo%>"  width="200" height="150" />
+                    <img src="<%=urlLogo%>" alt="<%=urlLogo%>"  width="148" height="108" />
                 </div>
-                <div class="scrolinst">Instituci&oacute;n: <%=institution.getInstitutionTitle()%></div>
-                <div class="scroldata">DataSet: <%=dataset.getDatasetTitle()%></div>
-                <div class="scrolvisi">Vistas: <%=dataset.getViews()%></div>
+                <div class="scrolinst"><%=institution.getInstitutionTitle()%></div>
+                <div class="scroldata"><%=dataset.getDatasetTitle()%></div>
+                <div class="scrolvisi"><%=dataset.getViews()%> <%=paramRequest.getLocaleString("lbl_Views")%></div>
             </a>
         </div>
         <%
