@@ -1121,6 +1121,7 @@
             if (msg!=null) {
                 ToolKit.showTooltip(0, msg, 200, "Error");
             }
+            return ret;
         };
         return _this;
     };
@@ -2147,13 +2148,21 @@
                 if(obj.move) //es un FlowNode
                 {
                     if (obj.canAddToDiagram()) {
-                        obj.move(ToolKit.getEventX(evt), ToolKit.getEventY(evt));
-                        obj.snap2Grid();
-                        obj.layer = ToolKit.layer;
-                        if (obj.typeOf("GraphicalElement")) {
-                            Modeler.fadeInObject(obj);
+                        if (Modeler.creationDropObject === null && Modeler.creationId === "Lane") { //Lane sobre nada
+                            obj.remove();
+                        } else {
+                            if (Modeler.creationId === "Lane" && Modeler.creationDropObject !== null && Modeler.creationDropObject.elementType === "Pool") {
+                                 Modeler.creationDropObject.addLane(obj);
+                            } else {
+                                obj.move(ToolKit.getEventX(evt), ToolKit.getEventY(evt));
+                                obj.snap2Grid();
+                            }
+                            if (obj.typeOf("GraphicalElement")) {
+                                Modeler.fadeInObject(obj);
+                            }
+                            obj.layer = ToolKit.layer;
                         }
-                    } else {
+                    }  else {
                         obj.remove();
                     }
                 }else   //Es un ConnectionObject
@@ -2458,8 +2467,12 @@
             
             obj.mousedown=function(evt)
             {
-                if(ToolKit.getEventX(evt)<obj.getX()-obj.getWidth()/2+obj.headerLine.lineOffset+5)
-                {
+                if (Modeler.creationId === null) {
+                    if(ToolKit.getEventX(evt)<obj.getX()-obj.getWidth()/2+obj.headerLine.lineOffset+5)
+                    {
+                        return Modeler.objectMouseDown(evt,obj);
+                    }
+                } else if (Modeler.creationId === "Lane") {
                     return Modeler.objectMouseDown(evt,obj);
                 }
                 return false;
