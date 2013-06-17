@@ -84,11 +84,6 @@ public abstract class SelectOne_ParentModelBase extends org.semanticwb.model.Sel
         }
     }
 
-    public static SelectOne_ParentModelBase.ClassMgr getSelectOne_ParentModelClassMgr()
-    {
-        return new SelectOne_ParentModelBase.ClassMgr();
-    }
-
    /**
    * Constructs a SelectOne_ParentModelBase with a SemanticObject
    * @param base The SemanticObject with the properties for the SelectOne_ParentModel

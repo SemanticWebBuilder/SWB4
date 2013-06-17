@@ -117,7 +117,7 @@ if(type.equals("dojo")) {
             {
                 ret.append(" promptMessage=\"").append(pmsg).append("\"");
             }
-System.out.println("getRegExp()="+getRegExp());
+//System.out.println("getRegExp()="+getRegExp());
             if(DOJO)
             {
                 ret.append(((getRegExp() != null)
@@ -131,7 +131,7 @@ System.out.println("getRegExp()="+getRegExp());
             }
 
             ret.append(" ").append(getAttributes());
-System.out.println("getMaxLength()="+getMaxLength());
+//System.out.println("getMaxLength()="+getMaxLength());
             if(getMaxLength()>0)
             {
                 ret.append(" maxlength=\"").append(getMaxLength()).append("\"");
@@ -164,7 +164,7 @@ System.out.println("getMaxLength()="+getMaxLength());
     @Override
     public void validate(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String propName) throws FormValidateException
     {
-System.out.println("\n\nvalidate.....");
+//System.out.println("\n\nvalidate.....");
         int ordinal;
         try            
         {
