@@ -46,6 +46,7 @@ import org.semanticwb.social.SocialNetwork;
 import org.semanticwb.social.SocialPFlow;
 import org.semanticwb.social.SocialTopic;
 import org.semanticwb.social.Video;
+import org.semanticwb.social.util.SWBSocialComparator;
 import org.semanticwb.social.util.SWBSocialUtil;
 import org.semanticwb.social.util.SocialLoader;
 
@@ -132,7 +133,7 @@ public class SocialSentPost extends GenericResource {
         response.setHeader("Cache-Control", "no-cache");
         response.setHeader("Pragma", "no-cache");
         
-        System.out.println("Llega a doEdit:"+request.getParameter("suri"));
+        //System.out.println("Llega a doEdit:"+request.getParameter("suri"));
         
         String id = request.getParameter("suri");
         //System.out.println("SocialSentPost/Edit/id:"+id);
@@ -230,22 +231,34 @@ public class SocialSentPost extends GenericResource {
         out.println(paramRequest.getLocaleString("post"));
         out.println("</th>");
         
+        SWBResourceURL urlOderby = paramRequest.getRenderUrl();
+        urlOderby.setParameter("act", "");
+        urlOderby.setParameter("suri", id);
+        
+        urlOderby.setParameter("orderBy", "PostTypeUp");
         out.println("<th>");
-        out.println(paramRequest.getLocaleString("postType"));
+        out.println("<table><tr><td>");
+        out.print(paramRequest.getLocaleString("postType")); 
+        out.print("</td><td>");
+        out.println("<a href=\"#\"  onclick=\"submitUrl('" + urlOderby + "',this); return false;\"><img src=\"/swbadmin/images/arrow_down.png\" height=\"16\"/></a>");
+        urlOderby.setParameter("orderBy", "PostTypeDown"); 
+        out.print("<a href=\"#\"  onclick=\"submitUrl('" + urlOderby + "',this); return false;\"><img src=\"/swbadmin/images/arrow_up.png\" height=\"16\"/></a>");
+        out.print("</td></tr></table>");
         out.println("</th>");
         
         out.println("<th>");
         out.println(paramRequest.getLocaleString("networks"));
         out.println("</th>");
         
-        /*
+        urlOderby.setParameter("orderBy", "origenUp");
         out.println("<th>");
-        out.println(paramRequest.getLocaleString("shared"));
-        out.println("</th>");
-        * */
-        
-        out.println("<th>");
+        out.println("<table><tr><td>");
         out.println(paramRequest.getLocaleString("source"));
+         out.print("</td><td>");
+        out.println("<a href=\"#\"  onclick=\"submitUrl('" + urlOderby + "',this); return false;\"><img src=\"/swbadmin/images/arrow_down.png\" height=\"16\"/></a>");
+        urlOderby.setParameter("orderBy", "origenDown");
+        out.print("<a href=\"#\"  onclick=\"submitUrl('" + urlOderby + "',this); return false;\"><img src=\"/swbadmin/images/arrow_up.png\" height=\"16\"/></a>");
+        out.print("</td></tr></table>");
         out.println("</th>");
         
         /*
@@ -258,16 +271,37 @@ public class SocialSentPost extends GenericResource {
         out.println("</th>");
         * */
         
+        urlOderby.setParameter("orderBy", "cretedUp");
         out.println("<th>");
+        out.println("<table><tr><td>");
         out.println(paramRequest.getLocaleString("created"));
+        out.print("</td><td>");
+        out.print("<a href=\"#\"  onclick=\"submitUrl('" + urlOderby + "',this); return false;\"><img src=\"/swbadmin/images/arrow_down.png\" height=\"16\"/></a>");
+        urlOderby.setParameter("orderBy", "cretedDown");
+        out.print("<a href=\"#\"  onclick=\"submitUrl('" + urlOderby + "',this); return false;\"><img src=\"/swbadmin/images/arrow_up.png\" height=\"16\"/></a>");
+        out.print("</td></tr></table>");
         out.println("</th>");
-        
+    
+        urlOderby.setParameter("orderBy", "updatedUp");
         out.println("<th>");
+        out.println("<table><tr><td>");
         out.println(paramRequest.getLocaleString("updated"));
+        out.print("</td><td>");
+        out.print("<a href=\"#\"  onclick=\"submitUrl('" + urlOderby + "',this); return false;\"><img src=\"/swbadmin/images/arrow_down.png\" height=\"16\"/></a>");
+        urlOderby.setParameter("orderBy", "updatedDown");
+        out.print("<a href=\"#\"  onclick=\"submitUrl('" + urlOderby + "',this); return false;\"><img src=\"/swbadmin/images/arrow_up.png\" height=\"16\"/></a>");
+        out.print("</td></tr></table>");
         out.println("</th>");
         
+        urlOderby.setParameter("orderBy", "statusUp");
         out.println("<th>");
+        out.println("<table><tr><td>");
         out.println(paramRequest.getLocaleString("status"));
+        out.print("</td><td>");
+        out.print("<a href=\"#\"  onclick=\"submitUrl('" + urlOderby + "',this); return false;\"><img src=\"/swbadmin/images/arrow_down.png\" height=\"16\"/></a>");
+        urlOderby.setParameter("orderBy", "statusDown");
+        out.print("<a href=\"#\"  onclick=\"submitUrl('" + urlOderby + "',this); return false;\"><img src=\"/swbadmin/images/arrow_up.png\" height=\"16\"/></a>");
+        out.print("</td></tr></table>");
         out.println("</th>");
         
         
@@ -365,9 +399,49 @@ public class SocialSentPost extends GenericResource {
         {
             itposts=aListFilter.iterator();
         }
-        
-        Set<PostOut> setso = SWBComparator.sortByCreatedSet(itposts, false);
         //Termina Funcionan bien sin busqueda
+        
+        
+         //Ordenamientos
+        //System.out.println("orderBy k Llega:"+request.getParameter("orderBy"));
+        Set<PostOut> setso=null;
+        if(request.getParameter("orderBy")!=null)
+        {
+            if(request.getParameter("orderBy").equals("PostTypeUp"))
+            {
+                setso = SWBSocialComparator.sortByPostTypePostOut(itposts, false);
+            }if(request.getParameter("orderBy").equals("PostTypeDown"))
+            {
+                setso = SWBSocialComparator.sortByPostTypePostOut(itposts, true);
+            }else if(request.getParameter("orderBy").equals("origenUp"))
+            {
+                setso = SWBSocialComparator.sortByPostOutSource(itposts,false);
+            }else if(request.getParameter("orderBy").equals("origenDown"))
+            {
+                setso = SWBSocialComparator.sortByPostOutSource(itposts,true);
+            }else if(request.getParameter("orderBy").equals("cretedUp"))
+            {
+                setso = SWBComparator.sortByCreatedSet(itposts,true);
+            }else if(request.getParameter("orderBy").equals("cretedDown"))
+            {
+                setso = SWBComparator.sortByCreatedSet(itposts,false);
+            }else if(request.getParameter("orderBy").equals("updatedUp"))
+            {
+                setso = SWBComparator.sortByCreatedSet(itposts,true);
+            }else if(request.getParameter("orderBy").equals("updatedDown"))
+            {
+                setso = SWBComparator.sortByCreatedSet(itposts,false);
+            }else if(request.getParameter("orderBy").equals("statusUp"))
+            {
+                setso = SWBSocialComparator.sortByPostOutStatus(itposts,true);
+            }else if(request.getParameter("orderBy").equals("statusDown"))
+            {
+                setso = SWBSocialComparator.sortByPostOutStatus(itposts,false);
+            }
+        }else
+        {
+            setso = SWBComparator.sortByCreatedSet(itposts, false);
+        }
         
         
         
@@ -392,7 +466,7 @@ public class SocialSentPost extends GenericResource {
         {
             PostOut sobj = (PostOut)itposts.next();
             if(sobj==null) {
-                System.out.println("SEMANTIC OBJECT NULOOO:"+sobj+", QUE RARO, VER CON JEI...");
+                //System.out.println("SEMANTIC OBJECT NULOOO:"+sobj+", QUE RARO, VER CON JEI...");
                 continue;
             }
             
@@ -453,9 +527,9 @@ public class SocialSentPost extends GenericResource {
                 readyToPublish=true; 
             }
             
-            System.out.println("isInFlow:"+isInFlow);
-            System.out.println("needAuthorization:"+needAuthorization);
-            System.out.println("isAuthorized:"+isAuthorized);
+            //System.out.println("isInFlow:"+isInFlow);
+            //System.out.println("needAuthorization:"+needAuthorization);
+            //System.out.println("isAuthorized:"+isAuthorized);
             
             out.println("<tr>");
             
@@ -602,8 +676,8 @@ public class SocialSentPost extends GenericResource {
             
             out.println("<td>");
             //El PostOut No se ha enviado, aqui se daría la posibilidad de que un usuario lo envíe.
-            System.out.println("msg..:"+sobj.getMsg_Text());
-            System.out.println("Ya esta publicado..:"+sobj.isPublished());
+            //System.out.println("msg..:"+sobj.getMsg_Text());
+            //System.out.println("Ya esta publicado..:"+sobj.isPublished());
             
             if(!sobj.isPublished())
             {
@@ -655,6 +729,7 @@ public class SocialSentPost extends GenericResource {
                 urlNew.setParameter("suri", id);
                 urlNew.setParameter("page", "" + z);
                 urlNew.setParameter("search", (searchWord.trim().length() > 0 ? searchWord : ""));
+                urlNew.setParameter("orderBy", (request.getParameter("orderBy")!=null && request.getParameter("orderBy").trim().length() > 0 ? request.getParameter("orderBy") : ""));
                 if (z != p) {
                     out.println("<a href=\"#\" onclick=\"submitUrl('" + urlNew + "',this); return false;\">" + (z + 1) + "</a> ");
                 } else {
@@ -740,13 +815,11 @@ public class SocialSentPost extends GenericResource {
         String id = request.getParameter("suri"); // id recurso
         String resid = request.getParameter("sval"); // id recurso
         
-        System.out.println("Site:"+paramRequest.getWebPage().getWebSite());
+        //System.out.println("Site:"+paramRequest.getWebPage().getWebSite());
         
-        System.out.println("id:"+id);
-        System.out.println("resid:"+resid);
+        //System.out.println("id:"+id);
+        //System.out.println("resid:"+resid);
         
-        SocialTopic socialTopic = (SocialTopic)SemanticObject.getSemanticObject(id).getGenericInstance();    
-        String wsiteId = socialTopic.getSemanticObject().getModel().getName();
         
         SemanticObject semObj=SemanticObject.getSemanticObject(resid);
         if(semObj==null) return;
@@ -757,7 +830,7 @@ public class SocialSentPost extends GenericResource {
         {
             postOutFlowUri=postOut.getPflowInstance().getPflow().getURI();
         }
-        System.out.println("postOutFlowUri ---GGG--:"+postOutFlowUri);
+        //System.out.println("postOutFlowUri ---GGG--:"+postOutFlowUri);
         
         PrintWriter out = response.getWriter();
 
@@ -800,7 +873,7 @@ public class SocialSentPost extends GenericResource {
         out.println("<select name=\"pfid\">");
         for (int i = 0; i < arrPf.length; i++) 
         {
-            System.out.println("arrPf[i].getURI():"+arrPf[i].getURI());
+            //System.out.println("arrPf[i].getURI():"+arrPf[i].getURI());
             String select="";
             if(postOutFlowUri!=null && postOutFlowUri.equals(arrPf[i].getURI())) select="selected";
                 
@@ -837,18 +910,18 @@ public class SocialSentPost extends GenericResource {
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
         
         String action = response.getAction();
-        System.out.println("SocialSentPost/processAction-1:"+action);
+        //System.out.println("SocialSentPost/processAction-1:"+action);
         if (action.equals("postMessage") || action.equals("uploadPhoto") || action.equals("uploadVideo")) {
              try {
-                    System.out.println("SocialSentPost/processAction-2");
+                    //System.out.println("SocialSentPost/processAction-2");
                     ArrayList aSocialNets=new ArrayList();
                     WebSite wsite = WebSite.ClassMgr.getWebSite(request.getParameter("wsite"));
                     String objUri = request.getParameter("objUri");
                     SemanticObject semanticObject = SemanticObject.createSemanticObject(objUri);
                     PostOut postOut = (PostOut) semanticObject.createGenericInstance();
-                    System.out.println("SocialSentPost/processAction-3:"+postOut);
+                    //System.out.println("SocialSentPost/processAction-3:"+postOut);
                     SocialPFlow spflow=null;
-                    System.out.println("processA/socialFlow:"+request.getParameter("socialFlow"));
+                    //System.out.println("processA/socialFlow:"+request.getParameter("socialFlow"));
                     if(request.getParameter("socialFlow")!=null && request.getParameter("socialFlow").trim().length()>0)
                     {
                         SemanticObject semObjSFlow=SemanticObject.getSemanticObject(request.getParameter("socialFlow"));
@@ -870,7 +943,7 @@ public class SocialSentPost extends GenericResource {
                             j++;
                         }
                     }
-                    System.out.println("SocialSentPost/processAction-4:"+socialUri);
+                    //System.out.println("SocialSentPost/processAction-4:"+socialUri);
                     if (socialUri.trim().length()>0) // La publicación por lo menos se debe enviar a una red social
                     {
                         String[] socialUris = socialUri.split("\\|");  //Dividir valores
@@ -882,7 +955,7 @@ public class SocialSentPost extends GenericResource {
                             aSocialNets.add(socialNet);
                         }
                         //SWBSocialUtil.PostOutUtil.publishPost(postOut, request, response);
-                        System.out.println("SocialSentPost/processAction-J5");
+                        //System.out.println("SocialSentPost/processAction-J5");
                         //SWBSocialUtil.PostOutUtil.editPostOut(postOut, spflow, aSocialNets, wsite, toPost, request, response);
                         SWBSocialUtil.PostOutUtil.editPostOut(postOut, spflow, aSocialNets, wsite, toPost, request, response);
                         response.setMode(SWBResourceURL.Mode_EDIT);
@@ -890,7 +963,7 @@ public class SocialSentPost extends GenericResource {
                         response.setRenderParameter("statusMsg", SWBUtils.TEXT.encode(response.getLocaleLogString("postModified"),"utf8"));
                         response.setRenderParameter("reloadTab", postOut.getSocialTopic().getURI());
                         response.setRenderParameter("suri", postOut.getSocialTopic().getURI());
-                        System.out.println("SocialSentPost/processAction-J6-suri:"+postOut.getSocialTopic().getURI());
+                        //System.out.println("SocialSentPost/processAction-J6-suri:"+postOut.getSocialTopic().getURI());
                     } else {
                         response.setMode(SWBResourceURL.Mode_EDIT);
                         response.setRenderParameter("dialog", "close");
@@ -911,7 +984,7 @@ public class SocialSentPost extends GenericResource {
         {
             String sval = request.getParameter("sval");
             SemanticObject so = SemanticObject.createSemanticObject(sval);
-            log.debug("processAction(remove PostOut):"+so);
+           
             so.remove();
            
             response.setRenderParameter("dialog", "close");
@@ -940,7 +1013,7 @@ public class SocialSentPost extends GenericResource {
             SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
             SemanticObject obj = SemanticObject.createSemanticObject(id); //WebPage
             SemanticClass cls = obj.getSemanticClass();
-            log.debug("processAction(deleteall)" + sprop);
+            //log.debug("processAction(deleteall)" + sprop);
             //System.out.println("processAction(deleteall)");
             SemanticProperty sem_p = ont.getSemanticProperty(sprop);
             SemanticObject so = obj.getObjectProperty(sem_p);
@@ -1014,7 +1087,7 @@ public class SocialSentPost extends GenericResource {
         response.setContentType("text/html; charset=ISO-8859-1");
         response.setHeader("Cache-Control", "no-cache");
         response.setHeader("Pragma", "no-cache");
-        log.debug("doAction()");
+        //log.debug("doAction()");
         User user = paramRequest.getUser();
         PrintWriter out = response.getWriter();
         String id = request.getParameter("suri");
@@ -1086,7 +1159,7 @@ public class SocialSentPost extends GenericResource {
                     postOut.getPflowInstance().setStep(null);  
                     //Termina
                     postOut.setPublished(true); 
-                    System.out.println("Post Publicado...");
+                    //System.out.println("Post Publicado...");
                     so = postOut.getSocialTopic().getSemanticObject(); 
                 }catch(Exception se)
                 {
@@ -1208,7 +1281,7 @@ public class SocialSentPost extends GenericResource {
      * Show the source message of One PostOut that comes as a parameter "postUri"
      */
     public void doShowSource(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        System.out.println("Entra a doShowSourceJ");
+        //System.out.println("Entra a doShowSourceJ");
         response.setContentType("text/html;charset=iso-8859-1");
         response.setHeader("Cache-Control", "no-cache");
         response.setHeader("Pragma", "no-cache");

@@ -32,6 +32,7 @@ import org.semanticwb.social.SentimentalLearningPhrase;
 import org.semanticwb.social.SocialTopic;
 import org.semanticwb.social.Stream;
 import org.semanticwb.social.VideoIn;
+import org.semanticwb.social.util.SWBSocialComparator;
 import org.semanticwb.social.util.SWBSocialUtil;
 
 /**
@@ -172,53 +173,154 @@ public class StreamInBoxNoTopic extends GenericResource {
         out.println(paramRequest.getLocaleString("post"));
         out.println("</th>");
         
+        SWBResourceURL urlOderby = paramRequest.getRenderUrl();
+        urlOderby.setParameter("act", "");
+        urlOderby.setParameter("suri", id);
+        
+        urlOderby.setParameter("orderBy", "PostTypeUp");
         out.println("<th>");
-        out.println(paramRequest.getLocaleString("postType"));
+        out.println("<table><tr><td>");
+        out.print(paramRequest.getLocaleString("postType")); 
+        out.print("</td><td>");
+        out.println("<a href=\"#\"  onclick=\"submitUrl('" + urlOderby + "',this); return false;\"><img src=\"/swbadmin/images/arrow_down.png\" height=\"16\"/></a>");
+        urlOderby.setParameter("orderBy", "PostTypeDown"); 
+        out.print("<a href=\"#\"  onclick=\"submitUrl('" + urlOderby + "',this); return false;\"><img src=\"/swbadmin/images/arrow_up.png\" height=\"16\"/></a>");
+        out.print("</td></tr></table>");
+        //out.println("<a href=\"#\"  onclick=\"submitUrl('" + urlOderby + "',this); return false;\"><img src=\""+SWBPortal.getWebWorkPath()+"models/"+SWBContext.getAdminWebSite().getId()+"/css/images/ARW01UP.png"+"\"></a>");
+        //out.println("<a href=\"#\"  onclick=\"submitUrl('" + urlOderby + "',this); return false;\"><img src=\""+SWBPortal.getWebWorkPath()+"models/"+SWBContext.getAdminWebSite().getId()+"/css/images/ARROW9B.png"+"\"></a>");
         out.println("</th>");
         
+        urlOderby.setParameter("orderBy", "networkUp");
         out.println("<th>");
+        out.println("<table><tr><td>");
         out.println(paramRequest.getLocaleString("network"));
+        out.print("</td><td>");
+        out.print("<a href=\"#\"  onclick=\"submitUrl('" + urlOderby + "',this); return false;\"><img src=\"/swbadmin/images/arrow_down.png\" height=\"16\"/></a>");
+        urlOderby.setParameter("orderBy", "networkDown");
+        out.print("<a href=\"#\"  onclick=\"submitUrl('" + urlOderby + "',this); return false;\"><img src=\"/swbadmin/images/arrow_up.png\" height=\"16\"/></a>");
+        out.print("</td></tr></table>");
         out.println("</th>");
         
+        urlOderby.setParameter("orderBy", "cretedUp");
         out.println("<th>");
+        out.println("<table><tr><td>");
         out.println(paramRequest.getLocaleString("created"));
+        out.print("</td><td>");
+        out.print("<a href=\"#\"  onclick=\"submitUrl('" + urlOderby + "',this); return false;\"><img src=\"/swbadmin/images/arrow_down.png\" height=\"16\"/></a>");
+        urlOderby.setParameter("orderBy", "cretedDown");
+        out.print("<a href=\"#\"  onclick=\"submitUrl('" + urlOderby + "',this); return false;\"><img src=\"/swbadmin/images/arrow_up.png\" height=\"16\"/></a>");
+        out.print("</td></tr></table>");
         out.println("</th>");
         
+        urlOderby.setParameter("orderBy", "sentimentUp");
         out.println("<th>");
+        out.println("<table><tr><td>");
         out.println(paramRequest.getLocaleString("sentiment"));
+        out.print("</td><td>");
+        out.print("<a href=\"#\"  onclick=\"submitUrl('" + urlOderby + "',this); return false;\"><img src=\"/swbadmin/images/arrow_down.png\" height=\"16\"/></a>");
+        urlOderby.setParameter("orderBy", "sentimentDown");
+        out.print("<a href=\"#\"  onclick=\"submitUrl('" + urlOderby + "',this); return false;\"><img src=\"/swbadmin/images/arrow_up.png\" height=\"16\"/></a>");
+        out.print("</td></tr></table>");
         out.println("</th>");
         
+        urlOderby.setParameter("orderBy", "intensityUp");
         out.println("<th>");
+        out.println("<table><tr><td>");
         out.println(paramRequest.getLocaleString("intensity"));
+        out.print("</td><td>");
+        out.print("<a href=\"#\"  onclick=\"submitUrl('" + urlOderby + "',this); return false;\"><img src=\"/swbadmin/images/arrow_down.png\" height=\"16\"/></a>");
+        urlOderby.setParameter("orderBy", "intensityDown");
+        out.print("<a href=\"#\"  onclick=\"submitUrl('" + urlOderby + "',this); return false;\"><img src=\"/swbadmin/images/arrow_up.png\" height=\"16\"/></a>");
+        out.print("</td></tr></table>");
         out.println("</th>");
         
+        urlOderby.setParameter("orderBy", "emoticonUp");
         out.println("<th>");
+        out.println("<table><tr><td>");
         out.println(paramRequest.getLocaleString("emoticon"));
+        out.print("</td><td>");
+        out.print("<a href=\"#\"  onclick=\"submitUrl('" + urlOderby + "',this); return false;\"><img src=\"/swbadmin/images/arrow_down.png\" height=\"16\"/></a>");
+        urlOderby.setParameter("orderBy", "emoticonDown");
+        out.print("<a href=\"#\"  onclick=\"submitUrl('" + urlOderby + "',this); return false;\"><img src=\"/swbadmin/images/arrow_up.png\" height=\"16\"/></a>");
+        out.print("</td></tr></table>");
         out.println("</th>");
         
         
+        urlOderby.setParameter("orderBy", "repliesUp");
         out.println("<th>");
+        out.println("<table><tr><td>");
         out.println(paramRequest.getLocaleString("replies"));
+        out.print("</td><td>");
+        out.print("<a href=\"#\"  onclick=\"submitUrl('" + urlOderby + "',this); return false;\"><img src=\"/swbadmin/images/arrow_down.png\" height=\"16\"/></a>");
+        urlOderby.setParameter("orderBy", "repliesDown");
+        out.print("<a href=\"#\"  onclick=\"submitUrl('" + urlOderby + "',this); return false;\"><img src=\"/swbadmin/images/arrow_up.png\" height=\"16\"/></a>");
+        out.print("</td></tr></table>");
         out.println("</th>");
-        
+       
+        urlOderby.setParameter("orderBy", "userUp");
         out.println("<th>");
+        out.println("<table width=\"1\"><tr><td>");
         out.println(paramRequest.getLocaleString("user"));
+        out.print("</td><td>");
+        out.print("<a href=\"#\"  onclick=\"submitUrl('" + urlOderby + "',this); return false;\"><img src=\"/swbadmin/images/arrow_down.png\" height=\"16\"/></a>");
+        urlOderby.setParameter("orderBy", "userDown");
+        out.print("<a href=\"#\"  onclick=\"submitUrl('" + urlOderby + "',this); return false;\"><img src=\"/swbadmin/images/arrow_up.png\" height=\"16\"/></a>");
+        out.print("</td></tr></table>");
         out.println("</th>");
         
+        urlOderby.setParameter("orderBy", "followersUp");
         out.println("<th>");
+        out.println("<table><tr><td>");
         out.println(paramRequest.getLocaleString("followers"));
+        out.print("</td><td>");
+        out.print("<a href=\"#\"  onclick=\"submitUrl('" + urlOderby + "',this); return false;\"><img src=\"/swbadmin/images/arrow_down.png\" height=\"16\"/></a>");
+        urlOderby.setParameter("orderBy", "followersDown");
+        out.print("<a href=\"#\"  onclick=\"submitUrl('" + urlOderby + "',this); return false;\"><img src=\"/swbadmin/images/arrow_up.png\" height=\"16\"/></a>");
+        out.print("</td></tr></table>");
         out.println("</th>");
         
+        urlOderby.setParameter("orderBy", "friendsUp");
         out.println("<th>");
+        out.println("<table><tr><td>");
         out.println(paramRequest.getLocaleString("friends"));
+        out.print("</td><td>");
+        out.print("<a href=\"#\"  onclick=\"submitUrl('" + urlOderby + "',this); return false;\"><img src=\"/swbadmin/images/arrow_down.png\" height=\"16\"/></a>");
+        urlOderby.setParameter("orderBy", "friendsDown");
+        out.print("<a href=\"#\"  onclick=\"submitUrl('" + urlOderby + "',this); return false;\"><img src=\"/swbadmin/images/arrow_up.png\" height=\"16\"/></a>");
+        out.print("</td></tr></table>");
         out.println("</th>");
         
+        urlOderby.setParameter("orderBy", "kloutUp");
         out.println("<th>");
+        out.println("<table><tr><td>");
         out.println(paramRequest.getLocaleString("klout"));
+        out.print("</td><td>");
+        out.print("<a href=\"#\"  onclick=\"submitUrl('" + urlOderby + "',this); return false;\"><img src=\"/swbadmin/images/arrow_down.png\" height=\"16\"/></a>");
+        urlOderby.setParameter("orderBy", "kloutDown");
+        out.print("<a href=\"#\"  onclick=\"submitUrl('" + urlOderby + "',this); return false;\"><img src=\"/swbadmin/images/arrow_up.png\" height=\"16\"/></a>");
+        out.print("</td></tr></table>");
         out.println("</th>");
         
+        urlOderby.setParameter("orderBy", "placeUp");
         out.println("<th>");
+        out.println("<table><tr><td>");
         out.println(paramRequest.getLocaleString("place"));
+        out.print("</td><td>");
+        out.print("<a href=\"#\"  onclick=\"submitUrl('" + urlOderby + "',this); return false;\"><img src=\"/swbadmin/images/arrow_down.png\" height=\"16\"/></a>");
+        urlOderby.setParameter("orderBy", "placeDown");
+        out.print("<a href=\"#\"  onclick=\"submitUrl('" + urlOderby + "',this); return false;\"><img src=\"/swbadmin/images/arrow_up.png\" height=\"16\"/></a>");
+        out.print("</td></tr></table>");
+        out.println("</th>");
+        
+        urlOderby.setParameter("orderBy", "prioritaryUp");
+        out.println("<th>");
+        out.println("<table><tr><td>");
+        out.println(paramRequest.getLocaleString("prioritary"));
+        out.print("</td><td>");
+        out.print("<a href=\"#\"  onclick=\"submitUrl('" + urlOderby + "',this); return false;\"><img src=\"/swbadmin/images/arrow_down.png\" height=\"16\"/></a>");
+        urlOderby.setParameter("orderBy", "prioritaryDown");
+        out.print("<a href=\"#\"  onclick=\"submitUrl('" + urlOderby + "',this); return false;\"><img src=\"/swbadmin/images/arrow_up.png\" height=\"16\"/></a>");
+        out.print("</td></tr></table>");
         out.println("</th>");
         
         
@@ -254,7 +356,101 @@ public class StreamInBoxNoTopic extends GenericResource {
         }
         
         
-        Set<PostIn> setso = SWBComparator.sortByCreatedSet(itposts, false);
+        //Ordenamientos
+        System.out.println("orderBy k Llega:"+request.getParameter("orderBy"));
+        Set<PostIn> setso=null;
+        if(request.getParameter("orderBy")!=null)
+        {
+            if(request.getParameter("orderBy").equals("PostTypeUp"))
+            {
+                setso = SWBSocialComparator.sortByPostType(itposts, true);
+            }if(request.getParameter("orderBy").equals("PostTypeDown"))
+            {
+                setso = SWBSocialComparator.sortByPostType(itposts, false);
+            }else if(request.getParameter("orderBy").equals("networkUp"))
+            {
+                setso = SWBSocialComparator.sortByNetwork(itposts, true);
+            }else if(request.getParameter("orderBy").equals("networkDown"))
+            {
+                setso = SWBSocialComparator.sortByNetwork(itposts, false);
+            }else if(request.getParameter("orderBy").equals("topicUp"))
+            {
+                setso = SWBSocialComparator.sortByTopic(itposts, true);
+            }else if(request.getParameter("orderBy").equals("topicDown"))
+            {
+                setso = SWBSocialComparator.sortByTopic(itposts, false);
+            }else if(request.getParameter("orderBy").equals("cretedUp"))
+            {
+                setso = SWBComparator.sortByCreatedSet(itposts,true);
+            }else if(request.getParameter("orderBy").equals("cretedDown"))
+            {
+                setso = SWBComparator.sortByCreatedSet(itposts,false);
+            }else if(request.getParameter("orderBy").equals("sentimentUp"))
+            {
+                setso = SWBSocialComparator.sortBySentiment(itposts, false);
+            }else if(request.getParameter("orderBy").equals("sentimentDown"))
+            {
+                setso = SWBSocialComparator.sortBySentiment(itposts, true);
+            }else if(request.getParameter("orderBy").equals("intensityUp"))
+            {
+                setso = SWBSocialComparator.sortByIntensity(itposts, true);
+            }else if(request.getParameter("orderBy").equals("intensityDown"))
+            {
+                setso = SWBSocialComparator.sortByIntensity(itposts, false);
+            }else if(request.getParameter("orderBy").equals("emoticonUp"))
+            {
+                setso = SWBSocialComparator.sortByEmoticon(itposts, false);
+            }else if(request.getParameter("orderBy").equals("emoticonDown"))
+            {
+                setso = SWBSocialComparator.sortByEmoticon(itposts, true);
+            }else if(request.getParameter("orderBy").equals("userUp"))
+            {
+                setso = SWBSocialComparator.sortByUser(itposts, true);
+            }else if(request.getParameter("orderBy").equals("userDown"))
+            {
+                setso = SWBSocialComparator.sortByUser(itposts, false);
+            }else if(request.getParameter("orderBy").equals("followersUp"))
+            {
+                setso = SWBSocialComparator.sortByFollowers(itposts, true);
+            }else if(request.getParameter("orderBy").equals("followersDown"))
+            {
+                setso = SWBSocialComparator.sortByFollowers(itposts, false);
+            }else if(request.getParameter("orderBy").equals("repliesUp"))
+            {
+                setso = SWBSocialComparator.sortByReplies(itposts, true);
+            }else if(request.getParameter("orderBy").equals("repliesDown"))
+            {
+                setso = SWBSocialComparator.sortByReplies(itposts, false);
+            }else if(request.getParameter("orderBy").equals("friendsUp"))
+            {
+                setso = SWBSocialComparator.sortByFriends(itposts, true);
+            }else if(request.getParameter("orderBy").equals("friendsDown"))
+            {
+                setso = SWBSocialComparator.sortByFriends(itposts, false);
+            }else if(request.getParameter("orderBy").equals("kloutUp"))
+            {
+                setso = SWBSocialComparator.sortByKlout(itposts, true);
+            }else if(request.getParameter("orderBy").equals("kloutDown"))
+            {
+                setso = SWBSocialComparator.sortByKlout(itposts, false);
+            }else if(request.getParameter("orderBy").equals("placeUp"))
+            {
+                setso = SWBSocialComparator.sortByPlace(itposts, true);
+            }else if(request.getParameter("orderBy").equals("placeDown"))
+            {
+                setso = SWBSocialComparator.sortByPlace(itposts, false);
+            }else if(request.getParameter("orderBy").equals("prioritaryUp"))
+            {
+                setso = SWBSocialComparator.sortByPrioritary(itposts, true);
+            }else if(request.getParameter("orderBy").equals("prioritaryDown"))
+            {
+                setso = SWBSocialComparator.sortByPrioritary(itposts, false);
+            }
+            
+        }else
+        {
+            setso = SWBComparator.sortByCreatedSet(itposts, false);
+        }
         
         itposts = null;
         int ps = 20;
@@ -365,10 +561,10 @@ public class StreamInBoxNoTopic extends GenericResource {
             out.println("<td align=\"center\">");
             if(postIn.getPostSentimentalEmoticonType()==1)
             {
-                out.println("<img src=\""+SWBPortal.getContextPath()+"/swbadmin/images/emopos.png"+"/>");
+                out.println("<img src=\""+SWBPortal.getContextPath()+"/swbadmin/images/emopos.png"+"\"/>");
             }else if(postIn.getPostSentimentalEmoticonType()==2)
             {
-                out.println("<img src=\""+SWBPortal.getContextPath()+"/swbadmin/images/emoneg.png"+"/>");
+                out.println("<img src=\""+SWBPortal.getContextPath()+"/swbadmin/images/emoneg.png"+"\"/>");
             }else if(postIn.getPostSentimentalEmoticonType()==0)
             {
                 out.println("---");
@@ -386,27 +582,32 @@ public class StreamInBoxNoTopic extends GenericResource {
             
             //User
             out.println("<td>");
-            out.println(postIn.getPostInSocialNetworkUser().getSnu_name());
+            out.println(postIn.getPostInSocialNetworkUser()!=null?postIn.getPostInSocialNetworkUser().getSnu_name():"---");
             out.println("</td>");
             
             //Followers
             out.println("<td align=\"center\">");
-            out.println(postIn.getPostInSocialNetworkUser().getFollowers());
+            out.println(postIn.getPostInSocialNetworkUser()!=null?postIn.getPostInSocialNetworkUser().getFollowers():"---");
             out.println("</td>");
             
             //Friends
             out.println("<td align=\"center\">");
-            out.println(postIn.getPostInSocialNetworkUser().getFriends());
+            out.println(postIn.getPostInSocialNetworkUser()!=null?postIn.getPostInSocialNetworkUser().getFriends():"---");
             out.println("</td>");
             
              //Klout
             out.println("<td align=\"center\">");
-            out.println(postIn.getPostInSocialNetworkUser().getSnu_klout());
+            out.println(postIn.getPostInSocialNetworkUser()!=null?postIn.getPostInSocialNetworkUser().getSnu_klout():"---");
             out.println("</td>");
             
             //Place
             out.println("<td>");
             out.println(postIn.getPostPlace() == null ? "---" : postIn.getPostPlace());
+            out.println("</td>");
+            
+            //Priority
+            out.println("<td align=\"center\">");
+            out.println(postIn.isIsPrioritary() ? "SI" : "NO");
             out.println("</td>");
             
             
@@ -437,6 +638,7 @@ public class StreamInBoxNoTopic extends GenericResource {
                 urlNew.setParameter("suri", id);
                 urlNew.setParameter("page", "" + z);
                 urlNew.setParameter("search", (searchWord.trim().length() > 0 ? searchWord : ""));
+                urlNew.setParameter("orderBy", (request.getParameter("orderBy")!=null && request.getParameter("orderBy").trim().length() > 0 ? request.getParameter("orderBy") : ""));
                 if(p==0 && z==0) continue;
                 if (z != p) {
                     out.println("<a href=\"#\" onclick=\"submitUrl('" + urlNew + "',this); return false;\">" + (z + 1) + "</a> ");
