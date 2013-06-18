@@ -2977,6 +2977,9 @@
                 var end = Modeler.getGraphElementByURI(null, tmp.end);
                 
                 if (start !== null && end !== null) {
+//                    if (obj.elementType === "ConditionalFlow" && start.typeOf("Gateway")) {
+//                        obj.removeAttribute("marker-start");
+//                    }
                     start.addOutConnection(obj);
                     end.addInConnection(obj);
                 }
@@ -3188,7 +3191,6 @@
         },
                 
         clearCanvas: function() {
-            
             for (var i = ToolKit.contents.length; i--;) {
                 ToolKit.contents[i].remove(true);
                 ToolKit.contents[i] = null;
