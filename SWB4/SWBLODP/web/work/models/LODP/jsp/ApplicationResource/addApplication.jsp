@@ -3,6 +3,7 @@
     Created on : 8/05/2013, 03:34:59 PM
     Author     : Lennin
 --%>
+<%@page import="org.semanticwb.SWBUtils"%>
 <%@page import="com.infotec.lodp.swb.Category"%>
 <%@page import="com.infotec.lodp.swb.utils.LODPUtils"%>
 <%@page import="com.infotec.lodp.swb.Publisher"%>
@@ -36,8 +37,8 @@
     Iterator<Category> itCat = Category.ClassMgr.listCategories(wsite);
 
     String uri = request.getParameter("uri");
-    String ciudadanas = "Ciudadanas";
-    String servPub = "Servicio Publico";
+    String ciudadanas = "ciudadanas";
+    String servPub = "serviciopublico";
     String category = "";
     String idCat = "";
     String url = actionURL.setAction(SWBResourceURL.Action_ADD).toString();
@@ -49,16 +50,17 @@
         Category cat = itCat.next();
         
         if(cat.getCatName()!=null){
-        
+            String catName = SWBUtils.TEXT.replaceSpecialCharacters(cat.getCatName(), false).toLowerCase(); 
+
             if (pub != null) {
-                if(cat.getCatName().equals(servPub)){
+                if(catName.equals(servPub)){
                     category = cat.getCatName();
                     idCat = cat.getId();
                 }
             }
 
             if (dev != null) {
-               if(cat.getCatName().equals(ciudadanas)){
+               if(catName.equals(ciudadanas)){
                     category = cat.getCatName();
                     idCat = cat.getId();
                 }
@@ -73,28 +75,28 @@
     <!--
     // scan page for widgets and instantiate them
     dojo.require("dojo.parser");
-    dojo.require("dijit._Calendar");
-    dojo.require("dijit.ProgressBar");
-    dojo.require("dijit.TitlePane");
+    //dojo.require("dijit._Calendar");
+   // dojo.require("dijit.ProgressBar");
+    //dojo.require("dijit.TitlePane");
     dojo.require("dijit.TooltipDialog");
     dojo.require("dijit.Dialog");
-    dojo.require("dijit.Editor");
+    //dojo.require("dijit.Editor");
     dojo.require("dijit.form.Form");
     dojo.require("dijit.form.CheckBox");
     dojo.require("dijit.form.Textarea");
     dojo.require("dijit.form.FilteringSelect");
     dojo.require("dijit.form.TextBox");
-    dojo.require("dijit.form.DateTextBox");
-    dojo.require("dijit.form.TimeTextBox");
+   //dojo.require("dijit.form.DateTextBox");
+    //dojo.require("dijit.form.TimeTextBox");
     dojo.require("dijit.form.Button");
-    dojo.require("dijit.form.NumberSpinner");
+    //dojo.require("dijit.form.NumberSpinner");
     dojo.require("dijit.form.Slider");
     dojo.require("dojox.form.BusyButton");
-    dojo.require("dojox.form.TimeSpinner");
+    //dojo.require("dojox.form.TimeSpinner");
     dojo.require("dijit.form.ValidationTextBox");
-    dojo.require("dijit.layout.ContentPane");
-    dojo.require("dijit.form.NumberTextBox");
-    dojo.require("dijit.form.DropDownButton");
+    //dojo.require("dijit.layout.ContentPane");
+   // dojo.require("dijit.form.NumberTextBox");
+   // dojo.require("dijit.form.DropDownButton");
     
     function enviarAPP() {
       
