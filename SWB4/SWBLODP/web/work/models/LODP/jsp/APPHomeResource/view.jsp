@@ -52,7 +52,7 @@
         HashMap<String, Application> hmcp = new HashMap<String, Application>();
         while (itapp1.hasNext()) {
             Application app = itapp1.next();
-            if(app.isAppValid()){
+            if(app.isApproved() && app.isReviewed()){
              hmcp.put(app.getURI(), app);
             }
         }
@@ -88,9 +88,7 @@
                     x++;
                     /////////////////////////////////
 
-                    Application app = itapp.next();
- 
-                    if(app.isAppValid()){
+                    Application app = itapp.next();                
                 %>
         
         <li>
@@ -98,8 +96,7 @@
             <strong><%=app.getAppDescription()%></strong>
         </li>
         
-        <%}}}
-        %>
+        <%}}%>
     </ul>
 </div>
 
