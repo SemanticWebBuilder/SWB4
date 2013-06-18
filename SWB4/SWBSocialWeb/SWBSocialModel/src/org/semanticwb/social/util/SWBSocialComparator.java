@@ -9,10 +9,7 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.TreeSet;
-import org.semanticwb.model.GenericObject;
 import org.semanticwb.model.Traceable;
-import org.semanticwb.platform.SemanticClass;
-import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticProperty;
 import org.semanticwb.social.MessageIn;
 import org.semanticwb.social.PhotoIn;
@@ -60,14 +57,16 @@ public class SWBSocialComparator implements Comparator {
      * @param it the it
      * @return the sets the
      */
-    public static Set sortByPostType(Iterator it) {
+    public static Set sortByPostType(Iterator it, boolean ascendent) {
 
         TreeSet set = null;
         try {
             if (it == null) {
                 return null;
             }
-            set = new TreeSet(new Comparator() {
+            if(ascendent)
+            {
+                set = new TreeSet(new Comparator() {
                 public int compare(Object o1, Object o2) {
                     Date d1 = null;
                     Date d2 = null;
@@ -114,6 +113,55 @@ public class SWBSocialComparator implements Comparator {
                     }
                 }
             });
+            }else{  //TODO:Revisar si funciona este ordenamiento, no lo revise porque aun no tenia mensajes de tipo foto, ni video.
+                set = new TreeSet(new Comparator() {
+                public int compare(Object o1, Object o2) {
+                    Date d1 = null;
+                    Date d2 = null;
+                    if (o1 instanceof MessageIn && o2 instanceof PhotoIn) {
+                        return -1;
+                    } else if (o1 instanceof MessageIn && o2 instanceof VideoIn) {
+                        return -1;
+                    } else if (o1 instanceof MessageIn && o2 instanceof MessageIn) {
+                        MessageIn msgIn1 = (MessageIn) o1;
+                        d1 = msgIn1.getSemanticObject().getDateProperty(Traceable.swb_created);
+                        MessageIn msgIn2 = (MessageIn) o2;
+                        d2 = msgIn2.getSemanticObject().getDateProperty(Traceable.swb_created);
+                    } else if (o1 instanceof PhotoIn && o2 instanceof MessageIn) {
+                        return 1;
+                    } else if (o1 instanceof PhotoIn && o2 instanceof VideoIn) {
+                        return -1;
+                    } else if (o1 instanceof PhotoIn && o2 instanceof PhotoIn) {
+                        PhotoIn photo1 = (PhotoIn) o1;
+                        d1 = photo1.getSemanticObject().getDateProperty(Traceable.swb_created);
+                        PhotoIn photo2 = (PhotoIn) o2;
+                        d2 = photo2.getSemanticObject().getDateProperty(Traceable.swb_created);
+                    } else if (o1 instanceof VideoIn && o2 instanceof MessageIn) {
+                        return 1;
+                    } else if (o1 instanceof VideoIn && o2 instanceof PhotoIn) {
+                        return 1;
+                    } else if (o1 instanceof VideoIn && o2 instanceof VideoIn) {
+                        VideoIn video1 = (VideoIn) o1;
+                        d1 = video1.getSemanticObject().getDateProperty(Traceable.swb_created);
+                        VideoIn video2 = (VideoIn) o2;
+                        d2 = video2.getSemanticObject().getDateProperty(Traceable.swb_created);
+                    }
+
+                    if (d1 == null && d2 != null) {
+                        return 1;
+                    }
+                    if (d1 != null && d2 == null) {
+                        return -1;
+                    }
+                    if (d1 == null && d2 == null) {
+                        return 1;
+                    } else {
+                        int ret = d1.getTime() > d2.getTime() ? -1 : 1;
+                        return ret;
+                    }
+                }
+            });
+            }
 
             while (it.hasNext()) {
                 set.add(it.next());
@@ -130,12 +178,14 @@ public class SWBSocialComparator implements Comparator {
      * @param it the it
      * @return the sets the
      */
-    public static Set sortByNetwork(Iterator it) {
+    public static Set sortByNetwork(Iterator it, boolean ascendent) {
         TreeSet set = null;
         try {
             if (it == null) {
                 return null;
             }
+            if(ascendent)
+            {
             set = new TreeSet(new Comparator() {
                 public int compare(Object o1, Object o2) {
                     if (o1 instanceof PostIn && o2 instanceof PostIn) {
@@ -170,6 +220,42 @@ public class SWBSocialComparator implements Comparator {
                     }
                 }
             });
+            }else{
+                set = new TreeSet(new Comparator() {
+                public int compare(Object o1, Object o2) {
+                    if (o1 instanceof PostIn && o2 instanceof PostIn) {
+                        PostIn postIn1 = (PostIn) o1;
+                        PostIn postIn2 = (PostIn) o2;
+                        if (postIn2.getPostInSocialNetwork() == null && postIn1.getPostInSocialNetwork() != null) {
+                            return -1;
+                        }
+                        if (postIn2.getPostInSocialNetwork() != null && postIn1.getPostInSocialNetwork() == null) {
+                            return 1;
+                        }
+                        if (postIn2.getPostInSocialNetwork() == null && postIn1.getPostInSocialNetwork() == null) {
+                            return -1;
+                        } else {
+                            String name1 = postIn2.getPostInSocialNetwork().getTitle();
+                            String name2 = postIn1.getPostInSocialNetwork().getTitle();
+
+                            int ret;
+                            if ((name1 != null) && (name2 != null)) {
+                                ret = name1.compareToIgnoreCase(name2);
+
+                                if (ret == 0) {
+                                    ret = -1;
+                                }
+                            } else {
+                                ret = -1;
+                            }
+                            return ret;
+                        }
+                    } else {
+                        return -1;
+                    }
+                }
+            });
+            }
 
             while (it.hasNext()) {
                 set.add(it.next());
@@ -186,12 +272,14 @@ public class SWBSocialComparator implements Comparator {
      * @param it the it
      * @return the sets the
      */
-    public static Set sortByTopic(Iterator it) {
+    public static Set sortByTopic(Iterator it, boolean ascendent) {
         TreeSet set = null;
         try {
             if (it == null) {
                 return null;
             }
+            if(ascendent)
+            {
             set = new TreeSet(new Comparator() {
                 public int compare(Object o1, Object o2) {
                     if (o1 instanceof Post && o2 instanceof Post) {
@@ -226,6 +314,43 @@ public class SWBSocialComparator implements Comparator {
                     }
                 }
             });
+            }else
+            {
+                set = new TreeSet(new Comparator() {
+                public int compare(Object o1, Object o2) {
+                    if (o1 instanceof Post && o2 instanceof Post) {
+                        Post post1 = (Post) o1;
+                        Post post2 = (Post) o2;
+                        if (post2.getSocialTopic() == null && post1.getSocialTopic() != null) {
+                            return -1;
+                        }
+                        if (post2.getSocialTopic() != null && post1.getSocialTopic() == null) {
+                            return 1;
+                        }
+                        if (post2.getSocialTopic() == null && post1.getSocialTopic() == null) {
+                            return -1;
+                        } else {
+                            String name1 = post2.getSocialTopic().getTitle();
+                            String name2 = post1.getSocialTopic().getTitle();
+
+                            int ret;
+                            if ((name1 != null) && (name2 != null)) {
+                                ret = name1.compareToIgnoreCase(name2);
+
+                                if (ret == 0) {
+                                    ret = -1;
+                                }
+                            } else {
+                                ret = -1;
+                            }
+                            return ret;
+                        }
+                    } else {
+                        return -1;
+                    }
+                }
+            });
+            }
 
             while (it.hasNext()) {
                 set.add(it.next());
@@ -548,12 +673,14 @@ public class SWBSocialComparator implements Comparator {
      * @param it the it
      * @return the sets the
      */
-    public static Set sortByUser(Iterator it) {
+    public static Set sortByUser(Iterator it, boolean ascendent) {
         TreeSet set = null;
         try {
             if (it == null) {
                 return null;
             }
+            if(ascendent)
+            {
             set = new TreeSet(new Comparator() {
                 public int compare(Object o1, Object o2) {
                     if (o1 instanceof PostIn && o2 instanceof PostIn) {
@@ -588,6 +715,43 @@ public class SWBSocialComparator implements Comparator {
                     }
                 }
             });
+            }else
+            {
+                set = new TreeSet(new Comparator() {
+                public int compare(Object o1, Object o2) {
+                    if (o1 instanceof PostIn && o2 instanceof PostIn) {
+                        PostIn post1 = (PostIn) o1;
+                        PostIn post2 = (PostIn) o2;
+                        if (post2.getPostInSocialNetworkUser() == null && post1.getPostInSocialNetworkUser() != null) {
+                            return -1;
+                        }
+                        if (post2.getPostInSocialNetworkUser() != null && post1.getPostInSocialNetworkUser() == null) {
+                            return 1;
+                        }
+                        if (post2.getPostInSocialNetworkUser() == null && post1.getPostInSocialNetworkUser() == null) {
+                            return -1;
+                        } else {
+                            String name1 = post2.getPostInSocialNetworkUser().getSnu_name();
+                            String name2 = post1.getPostInSocialNetworkUser().getSnu_name();
+
+                            int ret;
+                            if ((name1 != null) && (name2 != null)) {
+                                ret = name1.compareToIgnoreCase(name2);
+
+                                if (ret == 0) {
+                                    ret = -1;
+                                }
+                            } else {
+                                ret = -1;
+                            }
+                            return ret;
+                        }
+                    } else {
+                        return -1;
+                    }
+                }
+            });
+            }
 
             while (it.hasNext()) {
                 set.add(it.next());
@@ -1035,12 +1199,14 @@ public class SWBSocialComparator implements Comparator {
      * @param it the it
      * @return the sets the
      */
-    public static Set sortByPlace(Iterator it) {
+    public static Set sortByPlace(Iterator it, boolean ascendent) {
         TreeSet set = null;
         try {
             if (it == null) {
                 return null;
             }
+            if(ascendent)
+            {
             set = new TreeSet(new Comparator() {
                 public int compare(Object o1, Object o2) {
                     if (o1 instanceof PostIn && o2 instanceof PostIn) {
@@ -1075,6 +1241,43 @@ public class SWBSocialComparator implements Comparator {
                     }
                 }
             });
+            }else
+            {
+                set = new TreeSet(new Comparator() {
+                public int compare(Object o1, Object o2) {
+                    if (o1 instanceof PostIn && o2 instanceof PostIn) {
+                        PostIn post1 = (PostIn) o1;
+                        PostIn post2 = (PostIn) o2;
+                        if (post2.getPostPlace() == null && post1.getPostPlace() != null) {
+                            return -1;
+                        }
+                        if (post2.getPostPlace() != null && post1.getPostPlace() == null) {
+                            return 1;
+                        }
+                        if (post2.getPostPlace() == null && post1.getPostPlace() == null) {
+                            return -1;
+                        } else {
+                            String name1 = post2.getPostPlace();
+                            String name2 = post1.getPostPlace();
+
+                            int ret;
+                            if ((name1 != null) && (name2 != null)) {
+                                ret = name1.compareToIgnoreCase(name2);
+
+                                if (ret == 0) {
+                                    ret = -1;
+                                }
+                            } else {
+                                ret = -1;
+                            }
+                            return ret;
+                        }
+                    } else {
+                        return -1;
+                    }
+                }
+            });
+            }
 
             while (it.hasNext()) {
                 set.add(it.next());
