@@ -11,10 +11,15 @@ import java.util.Set;
 import java.util.TreeSet;
 import org.semanticwb.model.Traceable;
 import org.semanticwb.platform.SemanticProperty;
+import org.semanticwb.social.Message;
 import org.semanticwb.social.MessageIn;
+import org.semanticwb.social.Photo;
 import org.semanticwb.social.PhotoIn;
 import org.semanticwb.social.Post;
 import org.semanticwb.social.PostIn;
+import org.semanticwb.social.PostOut;
+import org.semanticwb.social.SocialFlow.SocialPFlowMgr;
+import org.semanticwb.social.Video;
 import org.semanticwb.social.VideoIn;
 
 /**
@@ -1373,6 +1378,300 @@ public class SWBSocialComparator implements Comparator {
                     }
                 }
             });
+            }
+
+            while (it.hasNext()) {
+                set.add(it.next());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return set;
+    }
+    
+    
+    ////////////////////////////////////////POSTOUT//////////////////////////////
+    
+    
+    /**
+     * Sort by sortByPostType name set.
+     *
+     * @param it the it
+     * @return the sets the
+     */
+    public static Set sortByPostTypePostOut(Iterator it, boolean ascendent) {
+
+        TreeSet set = null;
+        try {
+            if (it == null) {
+                return null;
+            }
+            if(ascendent)
+            {
+                set = new TreeSet(new Comparator() {
+                public int compare(Object o1, Object o2) {
+                    Date d1 = null;
+                    Date d2 = null;
+                    if (o1 instanceof Message && o2 instanceof Photo) {
+                        return 1;
+                    } else if (o1 instanceof Message && o2 instanceof Video) {
+                        return 1;
+                    } else if (o1 instanceof Message && o2 instanceof Message) {
+                        Message msgIn1 = (Message) o1;
+                        d1 = msgIn1.getSemanticObject().getDateProperty(Traceable.swb_created);
+                        Message msgIn2 = (Message) o2;
+                        d2 = msgIn2.getSemanticObject().getDateProperty(Traceable.swb_created);
+                    } else if (o1 instanceof Photo && o2 instanceof Message) {
+                        return -1;
+                    } else if (o1 instanceof Photo && o2 instanceof Video) {
+                        return 1;
+                    } else if (o1 instanceof Photo && o2 instanceof Photo) {
+                        Photo photo1 = (Photo) o1;
+                        d1 = photo1.getSemanticObject().getDateProperty(Traceable.swb_created);
+                        Photo photo2 = (Photo) o2;
+                        d2 = photo2.getSemanticObject().getDateProperty(Traceable.swb_created);
+                    } else if (o1 instanceof Video && o2 instanceof Message) {
+                        return -1;
+                    } else if (o1 instanceof Video && o2 instanceof Photo) {
+                        return -1;
+                    } else if (o1 instanceof Video && o2 instanceof Video) {
+                        Video video1 = (Video) o1;
+                        d1 = video1.getSemanticObject().getDateProperty(Traceable.swb_created);
+                        Video video2 = (Video) o2;
+                        d2 = video2.getSemanticObject().getDateProperty(Traceable.swb_created);
+                    }
+
+                    if (d1 == null && d2 != null) {
+                        return -1;
+                    }
+                    if (d1 != null && d2 == null) {
+                        return 1;
+                    }
+                    if (d1 == null && d2 == null) {
+                        return -1;
+                    } else {
+                        int ret = d1.getTime() > d2.getTime() ? 1 : -1;
+                        return ret;
+                    }
+                }
+            });
+            }else{  //TODO:Revisar si funciona este ordenamiento, no lo revise porque aun no tenia mensajes de tipo foto, ni video.
+                set = new TreeSet(new Comparator() {
+                public int compare(Object o1, Object o2) {
+                    Date d1 = null;
+                    Date d2 = null;
+                    if (o1 instanceof Message && o2 instanceof Photo) {
+                        return -1;
+                    } else if (o1 instanceof Message && o2 instanceof Video) {
+                        return -1;
+                    } else if (o1 instanceof Message && o2 instanceof Message) {
+                        Message msgIn1 = (Message) o1;
+                        d1 = msgIn1.getSemanticObject().getDateProperty(Traceable.swb_created);
+                        Message msgIn2 = (Message) o2;
+                        d2 = msgIn2.getSemanticObject().getDateProperty(Traceable.swb_created);
+                    } else if (o1 instanceof Photo && o2 instanceof Message) {
+                        return 1;
+                    } else if (o1 instanceof Photo && o2 instanceof Video) {
+                        return -1;
+                    } else if (o1 instanceof Photo && o2 instanceof Photo) {
+                        Photo photo1 = (Photo) o1;
+                        d1 = photo1.getSemanticObject().getDateProperty(Traceable.swb_created);
+                        Photo photo2 = (Photo) o2;
+                        d2 = photo2.getSemanticObject().getDateProperty(Traceable.swb_created);
+                    } else if (o1 instanceof Video && o2 instanceof Message) {
+                        return 1;
+                    } else if (o1 instanceof Video && o2 instanceof Photo) {
+                        return 1;
+                    } else if (o1 instanceof Video && o2 instanceof Video) {
+                        Video video1 = (Video) o1;
+                        d1 = video1.getSemanticObject().getDateProperty(Traceable.swb_created);
+                        Video video2 = (Video) o2;
+                        d2 = video2.getSemanticObject().getDateProperty(Traceable.swb_created);
+                    }
+
+                    if (d1 == null && d2 != null) {
+                        return 1;
+                    }
+                    if (d1 != null && d2 == null) {
+                        return -1;
+                    }
+                    if (d1 == null && d2 == null) {
+                        return 1;
+                    } else {
+                        int ret = d1.getTime() > d2.getTime() ? -1 : 1;
+                        return ret;
+                    }
+                }
+            });
+            }
+
+            while (it.hasNext()) {
+                set.add(it.next());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return set;
+    }
+    
+    
+    
+    /**
+     * Sort by sortByPostOutSource name set.
+     *
+     * @param it the it
+     * @return the sets the
+     */
+    public static Set sortByPostOutSource(Iterator it, boolean ascendente) {
+        TreeSet set = null;
+        try {
+            if (it == null) {
+                return null;
+            }
+            if (ascendente) {
+                set = new TreeSet(new Comparator() {
+                    public int compare(Object o1, Object o2) {
+                        if (o1 instanceof PostOut && o2 instanceof PostOut) {
+                            PostOut post1 = (PostOut) o1;
+                            PostOut post2 = (PostOut) o2;
+                            if (post1.getPostInSource() == null && post2.getPostInSource() != null) {
+                                return -1;
+                            }
+                            if (post1.getPostInSource() != null && post2.getPostInSource() == null) {
+                                return 1;
+                            }
+                            if (post1.getPostInSource() == null && post2.getPostInSource() == null) {
+                                return -1;
+                            }else
+                            {
+                                Date d1 = post1.getSemanticObject().getDateProperty(Traceable.swb_created);
+                                Date d2 = post2.getSemanticObject().getDateProperty(Traceable.swb_created);
+                                
+
+                                if (d1 == null && d2 != null) {
+                                    return -1;
+                                }
+                                if (d1 != null && d2 == null) {
+                                    return 1;
+                                }
+                                if (d1 == null && d2 == null) {
+                                    return -1;
+                                } else {
+                                    int ret = d1.getTime() > d2.getTime() ? 1 : -1;
+                                    return ret;
+                                }
+                            }
+                        } else {
+                            return -1;
+                        }
+                    }
+                });
+            } else {
+                set = new TreeSet(new Comparator() {
+                    public int compare(Object o1, Object o2) {
+                        if (o1 instanceof PostOut && o2 instanceof PostOut) {
+                            PostOut post1 = (PostOut) o1;
+                            PostOut post2 = (PostOut) o2;
+                            if (post2.getPostInSource() == null && post1.getPostInSource() != null) {
+                                return -1;
+                            }
+                            if (post2.getPostInSource() != null && post1.getPostInSource() == null) {
+                                return 1;
+                            }
+                            if (post2.getPostInSource() == null && post1.getPostInSource() == null) {
+                                return -1;
+                            }else
+                            {
+                                Date d1 = post2.getSemanticObject().getDateProperty(Traceable.swb_created);
+                                Date d2 = post1.getSemanticObject().getDateProperty(Traceable.swb_created);
+                                
+
+                                if (d1 == null && d2 != null) {
+                                    return -1;
+                                }
+                                if (d1 != null && d2 == null) {
+                                    return 1;
+                                }
+                                if (d1 == null && d2 == null) {
+                                    return -1;
+                                } else {
+                                    int ret = d1.getTime() > d2.getTime() ? 1 : -1;
+                                    return ret;
+                                }
+                            }
+                        } else {
+                            return 1;
+                        }
+                    }
+                });
+            }
+
+            while (it.hasNext()) {
+                set.add(it.next());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return set;
+    }
+    
+    /**
+     * Sort by sortByPostOutStatus name set.
+     *
+     * @param it the it
+     * @return the sets the
+     */
+    public static Set sortByPostOutStatus(Iterator it, boolean ascendente) {
+        TreeSet set = null;
+        try {
+            if (it == null) {
+                return null;
+            }
+            if (!ascendente) {
+                set = new TreeSet(new Comparator() {
+                    public int compare(Object o1, Object o2) {
+                        if (o1 instanceof PostIn && o2 instanceof PostIn) {
+                            PostOut post1 = (PostOut) o1;
+                            if(!post1.isPublished())
+                            {
+                                SocialPFlowMgr pfmgr = SocialLoader.getPFlowManager();
+                                boolean needAuthorization = pfmgr.needAnAuthorization(post1);
+                                if (!needAuthorization) {
+                                    return 1;
+                                } else {    //El PostOut ya se envío
+                                   return -1;
+                                }
+                            }else{
+                               return -1;
+                            }
+                        } else {
+                            return -1;
+                        }
+                    }
+                });
+            }else
+            {
+                 set = new TreeSet(new Comparator() {
+                    public int compare(Object o1, Object o2) {
+                        if (o1 instanceof PostIn && o2 instanceof PostIn) {
+                            PostOut post1 = (PostOut) o1;
+                            if(!post1.isPublished())
+                            {
+                                SocialPFlowMgr pfmgr = SocialLoader.getPFlowManager();
+                                boolean needAuthorization = pfmgr.needAnAuthorization(post1);
+                                if (!needAuthorization) {
+                                    return -1;
+                                } else {    //El PostOut ya se envío
+                                   return 1;
+                                }
+                            }else{
+                               return 1;
+                            }
+                        } else {
+                            return 1;
+                        }
+                    }
+                });
             }
 
             while (it.hasNext()) {

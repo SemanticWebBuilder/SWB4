@@ -1098,11 +1098,14 @@ public class SocialPFlowMgr {
      */
     public static boolean needAnAuthorization(PostOut resource)
     {
+        //System.out.println("resource en needAnAuthorization:"+resource.getMsg_Text());
         SocialPFlow postOutFlow=null;
-        if(resource.getPflowInstance()!=null)
+        if(resource.getPflowInstance()==null) return false;
+        else
         {
             postOutFlow=resource.getPflowInstance().getPflow();
         }
+        //System.out.println("postOutFlow en needAnAuthorization:"+postOutFlow);
         SocialTopic socialTopic=resource.getSocialTopic();
         Iterator<SocialPFlowRef> refs = socialTopic.listInheritPFlowRefs();
         while (refs.hasNext())
