@@ -2989,7 +2989,6 @@
             for (i = 0; i < flowNodes.length; i++) {
                 var tmp = flowNodes[i];
                 var obj = Modeler.getGraphElementByURI(null, tmp.uri);
-                //console.log(tmp.uri+" "+tmp.parent);
                 if (tmp.container && tmp.container !== null) {
                     var cont = Modeler.getGraphElementByURI(null, tmp.container);
                     if (cont !== null && obj !== null) {
@@ -3007,22 +3006,14 @@
                 var tmp = flowNodes[i];
                 var obj = Modeler.getGraphElementByURI(null, tmp.uri);
                 var cont = Modeler.getGraphElementByURI(null, tmp.container);
-                //console.log("obj: "+tmp.title);
-                //console.log("container: "+tmp.container);
-//                //console.log(tmp.uri+" "+tmp.parent);
                 if (tmp.parent && tmp.parent !== null) {
                     var par = Modeler.getGraphElementByURI(null, tmp.parent);
-                    //console.log("par: "+tmp.parent);
-                    if (par != null && obj != null) {
-                        obj.setParent(par);
-                        //funciona, pero es estructuralmente incorrecto
-//                        //-----------------------------------------------
-                        if (par == null || (par != null && par.elementType=="Lane" && tmp.container && tmp.container != null)) {
+                    if (par !== null && obj !== null) {
+                        if (cont !== null && (par.elementType === "Lane" || par.elementType === "Pool")) {
                             obj.setParent(null);
                         } else {
                             obj.setParent(par);
                         }
-                        //-----------------------------------------------
                     }
                 }
             }
