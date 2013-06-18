@@ -89,11 +89,12 @@ exportUrl.setMode(SVGModeler.MODE_EXPORT);
 
         <div id="fileBar" class="subbarHidden" style="width: 385px;">
             <span class="subbarStart"></span>
+            <!--span class="newProcess" title="Nuevo modelo" onclick="Modeler.clearCanvas();"></span-->
             <span class="openProcess" title="Abrir modelo existente" onclick="showLoadDialog();"></span>
             <span class="storeProcess" title="Enviar modelo" onclick="storeProcess();"></span>
             <span class="saveProcess" title="Guardar modelo" onclick="submit_download_form('swp')"></span>
             <span class="saveAsImage" title="Guardar como imagen" onclick="submit_download_form('svg')"></span>
-            <span class="saveAsImage" title="Guardar como imagen" onclick="submit_download_form('png')"></span>
+            <!--span class="saveAsImage" title="Guardar como imagen" onclick="submit_download_form('png')"></span-->
             <span class="subbarEnd"></span>
         </div>
         <div id="startEventsBar" class="subbarHidden" style="width: 385px;">
@@ -417,7 +418,6 @@ exportUrl.setMode(SVGModeler.MODE_EXPORT);
                 cursor:hand;
             }
             
-            
             .transactionSquare {
                 stroke:#2c5aa0;
                 cursor:hand;
@@ -467,44 +467,64 @@ exportUrl.setMode(SVGModeler.MODE_EXPORT);
                 stroke:#2c5aa0;
                 cursor:hand;
             }
+            
             .pathMarker{
                 fill:none;
                 stroke-width:1;
             }
+            
             .startMarker{
                 stroke:#008000;
                 fill:none;
                 stroke-width:2.5;                        
             }
+            
             .startMarker{
                 stroke:#008000;
                 fill:none;
                 stroke-width:2.5;                        
             }
+            
             .startFilledMarker{
                 fill:#008000;
                 stroke:none;
                 stroke-width:1;
             }
+            
             .intermediateMarker{
                 stroke:#2c5aa0;
                 fill:#ffffff;
                 fill-opacity:0.1;
                 stroke-width:2.5;
                 cursor:hand;
-            }      
-            .intermediateFilledMarker{
+            }
+            
+            .intermediateFilledMarker {
                 fill:#2c5aa0;
                 stroke:#2c5aa0;
                 stroke-width:1;
                 cursor:hand;
-            }    
+            }
+            
             .endFilledMarked
             {
                 fill:#550000;   
                 stroke:#550000;
                 stroke-width:1;
                 cursor:hand;
+            }
+            
+            .navPath {
+                fill:#e7e7e7;
+                stroke:gray;
+                stroke-width:1;
+            }
+
+            .navPathHidden {
+                fill:#e7e7e7;
+                stroke:gray;
+                stroke-width:1;
+                display:none;
             }
         ]]></style>
         <defs id="globalDef">
