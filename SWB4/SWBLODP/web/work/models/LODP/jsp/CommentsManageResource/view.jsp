@@ -41,7 +41,6 @@ Author     : rene.jara
                 }
                 String name = "";
                 String email = "";
-                int nInappropriate;
                 gobj = usr.getSemanticObject().getGenericInstance();
                 if (gobj instanceof Developer) {
                     Developer de = (Developer) gobj;
@@ -52,14 +51,8 @@ Author     : rene.jara
     %>
     <div>
         <%
-            try {
-                nInappropriate = Integer.parseInt(base.getAttribute("inappropriate", "1"));
-            } catch (NumberFormatException ignored) {
-                nInappropriate = 1;
-            }
-//            ArrayList<Comment> alco = CommentsManageResource.listComments(itco, nInappropriate);
-            ArrayList<Comment> alco = CommentsManageResource.listCommentsByDataset(Dataset.ClassMgr.listDatasets(wsite), nInappropriate);
-            Iterator<Comment> itvco = alco.iterator();
+            ArrayList<Comment> alco = CommentsManageResource.listComments(Comment.ClassMgr.listComments(wsite));
+//            ArrayList<Comment> alco = CommentsManageResource.listCommentsByDatasetApplication(wsite);
             int tRec = alco.size();
             int nPag = 0;
             try {
@@ -73,19 +66,23 @@ Author     : rene.jara
             } catch (NumberFormatException ignored) {
                 nRecPPag = 5;
             }
-            int iRec = ((nPag) * nRecPPag);
-            int fRec = iRec + nRecPPag;
             int tPag = (int) (tRec / nRecPPag);
             if ((tRec % nRecPPag) > 0) {
                 tPag++;
             }
+            if(nPag>(tPag-1)){
+                nPag=tPag-1;
+            }
+            int iRec = ((nPag) * nRecPPag);
+            int fRec = iRec + nRecPPag;
+
             SWBResourceURLImp urlapv = new SWBResourceURLImp(request, base, wpage, SWBResourceURLImp.UrlType_ACTION);
             urlapv.setAction(CommentsManageResource.Action_APPROVE);
             SWBResourceURLImp urlrvw = new SWBResourceURLImp(request, base, wpage, SWBResourceURLImp.UrlType_ACTION);
             urlrvw.setAction(CommentsManageResource.Action_REVIEWED);
             if(tRec==0){
             %>
-            <div class="comentario">No hay comentario por revisar
+            <div class="comentario"><%=paramRequest.getLocaleString("lblNoComments")%>
             </div>
             <%
             }
@@ -100,8 +97,8 @@ Author     : rene.jara
             <p class="comentador"><%=co.getCommUserName()%>-<%=co.getCommUserEmail()%></p>
             <p class="comentariotxt"><%=co.getComment()%></p>
             <p class="inapropiado">
-                <a href="<%=urlapv%>" title="Aprobado"><span>Comentario aprobado</span></a>
-                <a href="<%=urlrvw%>" title="Revisado"><span>Comentario revisado</span>></a>
+                <a href="<%=urlapv%>" title="<%=paramRequest.getLocaleString("lblApproved")%>"><span><%=paramRequest.getLocaleString("lblCommentApproved")%></span></a>
+                <a href="<%=urlrvw%>" title="<%=paramRequest.getLocaleString("lblReviewed")%>"><span><%=paramRequest.getLocaleString("lblCommentReviewed")%></span></a>
             </p>
         </div>
         <%

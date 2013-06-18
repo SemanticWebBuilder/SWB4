@@ -5,7 +5,7 @@
 <jsp:useBean id="paramRequest" scope="request" type="org.semanticwb.portal.api.SWBParamRequest"/>
 <%
     Resource base=paramRequest.getResourceBase();
-    String msg = base.getAttribute("page_activation");
+    String msg = base.getAttribute("page_login");
 %>
 <div>
   <div>
