@@ -26,13 +26,11 @@ Author     : rene.jara
                 String contextPath = SWBPlatform.getContextPath();
                 String context = SWBPortal.getContextPath();
                 Resource base = paramRequest.getResourceBase();
-                String repositoryId = wpage.getWebSite().getUserRepository().getId();
 
                 String suri = request.getParameter("suri");
                 String action = request.getParameter("act");
 
                 SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
-                SemanticObject sobj = null;
                 if (suri != null && !suri.equals("") && action != null && action.equals("detail")) {
                     GenericObject gobj = null;
                     Iterator<Comment> itco = null;
@@ -50,7 +48,6 @@ Author     : rene.jara
 
                     String name = "";
                     String email = "";
-                    int nInappropriate;
                     gobj = usr.getSemanticObject().getGenericInstance();
                     if (gobj instanceof Developer) {
                         Developer de = (Developer) gobj;
@@ -64,7 +61,7 @@ Author     : rene.jara
                     if (itco != null) {
     %>
     <div class="tit">
-    <h4>Comentarios</h4>
+    <h4><%=paramRequest.getLocaleString("lblTitle")%></h4>
     </div>
     <script type="text/javascript">
         //        <!--
@@ -144,13 +141,7 @@ Author     : rene.jara
     </script>
     <div>
         <%
-            try {
-                nInappropriate = Integer.parseInt(base.getAttribute("inappropriate", "1"));
-            } catch (NumberFormatException ignored) {
-                nInappropriate = 1;
-            }
-            ArrayList<Comment> alco = CommentsViewResource.listComments(itco, nInappropriate);
-            Iterator<Comment> itvco = alco.iterator();
+            ArrayList<Comment> alco = CommentsViewResource.listComments(itco);
             int tRec = alco.size();
             int nPag = 0;
             try {
@@ -164,12 +155,16 @@ Author     : rene.jara
             } catch (NumberFormatException ignored) {
                 nRecPPag = 5;
             }
-            int iRec = ((nPag) * nRecPPag);
-            int fRec = iRec + nRecPPag;
             int tPag = (int) (tRec / nRecPPag);
             if ((tRec % nRecPPag) > 0) {
                 tPag++;
             }
+            if(nPag>(tPag-1)){
+                nPag=tPag-1;
+            }
+            int iRec = ((nPag) * nRecPPag);
+            int fRec = iRec + nRecPPag;
+
             SWBResourceURLImp urlina = new SWBResourceURLImp(request, base, wpage, SWBResourceURLImp.UrlType_ACTION);
             urlina.setAction(CommentsViewResource.Action_INAPPROPRIATE);
             urlina.setParameter("suri", suri);
@@ -189,7 +184,7 @@ Author     : rene.jara
             <%
             if(canRank){
             %>
-            <p class="inapropiado"><a href="<%=urlina%>" title="Notificar como comentario inapropiado"><span>Comentario inapropiado</span></a></p>
+            <p class="inapropiado"><a href="<%=urlina%>" title="<%=paramRequest.getLocaleString("msgCommentInappropriate")%>"><span>C<%=paramRequest.getLocaleString("lblCommentInappropriate")%></span></a></p>
             <%
             }
             %>
