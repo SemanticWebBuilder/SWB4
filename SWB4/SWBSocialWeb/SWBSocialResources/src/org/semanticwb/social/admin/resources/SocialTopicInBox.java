@@ -160,18 +160,25 @@ public class SocialTopicInBox extends GenericResource {
         urls.setParameter("suri", id);
         
         
+        String searchWord = request.getParameter("search");
+        if (null == searchWord) {
+            searchWord = "";
+        }
+        
+        
+        
         out.println("<div class=\"swbform\">");
-        /*
+        
         out.println("<fieldset>");
         out.println("<form id=\"" + id + "/fsearchwp\" name=\"" + id + "/fsearchwp\" method=\"post\" action=\"" + urls + "\" onsubmit=\"submitForm('" + id + "/fsearchwp');return false;\">");
         out.println("<div align=\"right\">");
         out.println("<input type=\"hidden\" name=\"suri\" value=\"" + id + "\">");
-        out.println("<label for=\"" + id + "_searchwp\">" + paramRequest.getLocaleString("searchInProperties") + ": </label><input type=\"text\" name=\"search\" id=\"" + id + "_searchwp\" value=\"" + busqueda + "\">");
+        out.println("<label for=\"" + id + "_searchwp\">" + paramRequest.getLocaleString("searchPost") + ": </label><input type=\"text\" name=\"search\" id=\"" + id + "_searchwp\" value=\"" + searchWord + "\">");
         out.println("<button dojoType=\"dijit.form.Button\" type=\"submit\">" + paramRequest.getLocaleString("btnSearch") + "</button>"); //
         out.println("</div>");
         out.println("</form>");
         out.println("</fieldset>");
-        * */
+        
         out.println("<fieldset>");
         out.println("<table width=\"98%\" >");
         out.println("<thead>");
@@ -244,20 +251,32 @@ public class SocialTopicInBox extends GenericResource {
         
         Iterator<PostIn> itposts = PostIn.ClassMgr.listPostInBySocialTopic(socialTopic, socialTopic.getSocialSite());
         
-        Set<PostIn> setso = SWBComparator.sortByCreatedSet(itposts, false);
-        //System.out.println("Tamaño de PostIn en SocialTopic-->"+setso.size());
         
-        /*
-        Stream stream=Stream.ClassMgr.getStream("1", socialTopic.getSocialSite());
-        
-        Iterator <PostIn> itPostInStream=PostIn.ClassMgr.listPostInByPostInStream(stream, socialTopic.getSocialSite());
-        while(itPostInStream.hasNext())
+        //Filtros
+        ArrayList<PostIn> aListFilter=new ArrayList();
+        if(searchWord!=null)
         {
-            PostIn postInX=itPostInStream.next();
-            System.out.println("postInX:"+postInX+",postInXMsg:"+postInX.getMsg_Text()+",postInXSocialTopic:"+postInX.getSocialTopic()); 
-        }*/
+            while(itposts.hasNext())
+            {
+                PostIn postIn=itposts.next();
+                if(postIn.getTags()!=null && postIn.getTags().toLowerCase().indexOf(searchWord.toLowerCase())>-1)
+                {
+                    aListFilter.add(postIn);
+                }else if(postIn.getMsg_Text()!=null && postIn.getMsg_Text().toLowerCase().indexOf(searchWord.toLowerCase())>-1)
+                {
+                    aListFilter.add(postIn);
+                }
+            }
+        }
+        //Termina Filtros
+        
+        if(aListFilter.size()>0) 
+        {
+            itposts=aListFilter.iterator();
+        }
         
         
+        Set<PostIn> setso = SWBComparator.sortByCreatedSet(itposts, false);
         
         
         itposts = null;
@@ -436,6 +455,7 @@ public class SocialTopicInBox extends GenericResource {
                 SWBResourceURL urlNew = paramRequest.getRenderUrl();
                 urlNew.setParameter("suri", id);
                 urlNew.setParameter("page", "" + z);
+                urlNew.setParameter("search", (searchWord.trim().length() > 0 ? searchWord : ""));
                 if (z != p) {
                     out.println("<a href=\"#\" onclick=\"submitUrl('" + urlNew + "',this); return false;\">" + (z + 1) + "</a> ");
                 } else {
