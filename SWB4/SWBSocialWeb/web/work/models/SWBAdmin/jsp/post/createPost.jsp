@@ -12,7 +12,7 @@
 <%@page import="org.semanticwb.portal.api.SWBParamRequest"%>
 <%@page import="org.semanticwb.portal.api.SWBResourceURL"%>
 <jsp:useBean id="paramRequest" scope="request" type="org.semanticwb.portal.api.SWBParamRequest"/>
-<%    
+<% 
     String objUri = (String) request.getParameter("suri");
     SemanticObject semanticObject = SemanticObject.createSemanticObject(objUri);
     SocialTopic socialTopic = (SocialTopic) semanticObject.createGenericInstance();
