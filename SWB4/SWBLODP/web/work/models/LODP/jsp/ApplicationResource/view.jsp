@@ -4,6 +4,7 @@
     Author     : Lennin
 --%>
 
+<%@page import="org.semanticwb.model.Role"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="org.semanticwb.SWBPortal"%>
 <%@page import="com.infotec.lodp.swb.Publisher"%>
@@ -46,6 +47,11 @@
     User user = paramRequest.getUser();
     
     String strNumItems = base.getAttribute("numpag", "10");
+    String idAdministrador = base.getAttribute("idRoleAdminAPP", "");
+    String msjAprES = base.getAttribute("msjAPPAprobada_es", "msjArobadoES");
+    String msjAprEN = base.getAttribute("msjAPPAprobada_en", "msjArobadoEN");
+    String msjReES = base.getAttribute("msjAPPAprobada_es", "msjRechazadoES");
+    String msjReEN = base.getAttribute("msjAPPAprobada_en", "msjRechazadoEN");
     String npage = request.getParameter("page");
     String orderby = request.getParameter("order");
     String filterby = request.getParameter("filter");
@@ -54,7 +60,23 @@
     String filterCat= request.getParameter("filterCat");
     String action = request.getParameter("act");
     String msgExitoGuardado = request.getParameter("msgExitoAPP");
+    Publisher publisher = LODPUtils.getPublisher(user);
+    Developer dev = LODPUtils.getDeveloper(user);
+    String roladmin = base.getAttribute("idAdminAPP");
+    Role role = wsite.getUserRepository().getRole(roladmin);
     
+    System.out.println("roladmin" + roladmin);
+    System.out.println("role" + role);
+    
+    System.out.println("publicador" + publisher);
+    System.out.println("desarrollador" + dev);
+    System.out.println("usiario" + user);
+    
+    boolean isAdmin = Boolean.FALSE;
+    if(null!=role&&user.hasRole(role)||null!=publisher&&publisher.hasRole(role)||null!=dev&&dev.hasRole(role)){
+        isAdmin = Boolean.TRUE;
+    }
+    System.out.println("isAdmin" + isAdmin);
     String filterCatShort= filterCat;
     String filterUriShort = filteruri;
     
@@ -228,12 +250,16 @@
 
             // dejo en hm los ds
             HashMap<String, Application> hmcp = new HashMap<String, Application>();
+            //Aplicaciones por revizar
+            List<Application> listAppReview= new ArrayList();
 
             while (itAp1.hasNext()) {
                 Application apl = itAp1.next();
                 
-                if(apl.isAppValid()){
+                if(apl.isApproved() && apl.isReviewed()){
                     hmcp.put(apl.getURI(), apl);
+                }else if(isAdmin && !apl.isReviewed()){
+                    listAppReview.add(apl);
                 }
             }
             
@@ -437,7 +463,7 @@
    </div>
 </div>-->
 
-<div class="der-apps1">
+<div class="der-apps2">
     <div id="temasdatos">
          <div class="listado">
     <div class="orden">
@@ -493,7 +519,15 @@
             <li><%=paramRequest.getLocaleString("lbl_notAppFound")%></li>
             <% } else {
                 String wpurl = wpage.getUrl()+"?act=detail&suri=";
-                while (itAp.hasNext()) {
+                List<Application> listAp = new ArrayList();
+                
+                while(itAp.hasNext()){
+                    Application aplication = itAp.next();
+                    listAp.add(aplication);
+                }
+                
+                for(Application apls : listAp){
+      
                     //PAGINACION ////////////////////
                             if (x < p * ps) {
                                 x++;
@@ -504,16 +538,14 @@
                             }
                             x++;
                             /////////////////////////////////
-                    Application apls = itAp.next();
                     
-                    if(apls.isAppValid()){
+                    if(apls.isApproved() && apls.isReviewed()){
             %>
                     <li>
                         <a href="<%=wpurl + apls.getShortURI()%>"><%=apls.getAppTitle()%></a><br/>
                         <p><%=apls.getAppDescription()%></p>
                     </li>
-            <%}}}
-            %>
+            <%}}}%>
          </ol>
     </div>
          <div class="pager">
@@ -630,13 +662,57 @@
     
     <%}%>
     
+    </div
+    <%
+    if(isAdmin){
+        
+    %>
+    <div class="lista10">
+        
+        <h3><%=paramRequest.getLocaleString("lbl_appReview")%></h3>
+        
+        <ol>
+            <%
+                intSize = listAppReview.size();
+                if (intSize == 0) {
+            %>
+            <li><%=paramRequest.getLocaleString("lbl_notAppFound")%></li>
+                    <%} else {
+                    
+                    String wpurl = wpage.getUrl()+"?review=true&act=detail&suri=";
+                    for(Application apliAdmin : listAppReview){                    
+                        
+                    %>
+                <li>
+                    <a href="<%=wpurl + apliAdmin.getShortURI()%>"><%=apliAdmin.getAppTitle()%></a><br/>
+                    <p><%=apliAdmin.getAppDescription()%></p>
+                </li>
+            <%}}%>
+        </ol>
     </div>
+        
+     <%}
+     if(user.isSigned()&& (user.getSemanticObject().createGenericInstance() instanceof Developer || user.getSemanticObject().createGenericInstance() instanceof Publisher)){
+     %>
+
+<p><a href="<%=renderURL.setMode(ApplicationResource.ADD_APPLICATION)%>"><%=paramRequest.getLocaleString("lbl_subirApp")%></a></p>
+
+<%
+ }
+%>          
     </div>
     </div>
 
 <%
 } else if (action.equals("detail")) {  // detalle de la Apliacion seleccionada
     String suri = request.getParameter("suri");
+    String review = request.getParameter("review");
+    boolean isFromReview = Boolean.FALSE;
+    
+        if(null!=review && review.trim().equals("true")){
+            isFromReview = Boolean.TRUE;
+        }
+        
     go = ont.getGenericObject(SemanticObject.shortToFullURI(suri));
     if (go instanceof Application) {
 %>
@@ -677,8 +753,10 @@
     }   
     
 // se actualiza los views
-    aps.sendView(request, user, wpage);
-        
+    
+    if(!isFromReview){
+        aps.sendView(request, user, wpage);
+    }
     %>
     
     <h3><%=aps.getAppTitle()%></h3>
@@ -692,20 +770,48 @@
         
         <div class="detalle">
        	  <p><%=aps.getAppDescription()%></p>
+          
           <%if(user.isSigned()&& (user.getSemanticObject().createGenericInstance() instanceof Developer || user.getSemanticObject().createGenericInstance() instanceof Publisher)){%>
+          
           <p><em><a href="<%=renderURL.setMode(SWBResourceURL.Mode_EDIT).setParameter("uri", aps.getShortURI())%>" ><%=paramRequest.getLocaleString("lbl_editar")%></a></em></p>
+          
           <%}%>
+          
           <p><em><a href="mapas.opendata.gob.mx" class="api">Documentación del API</a></em></p>
+          
           <%
+          
           Dataset ds1 = listDS.get(0);
           String urlData = wsite.getWebPage("Datos").getUrl();
           String urlDataSet = urlData+"?suri="+ds1.getShortURI()+"&act=detail";
+          
           %>
+          
           <p><em><%=paramRequest.getLocaleString("lbl_DSUsado")%><a href="<%=urlDataSet%>"><%=ds1.getDatasetTitle()%></a></em></p>
           <p><em><%=paramRequest.getLocaleString("lbl_licenciaDetalle")%><%=aps.getAppLicense() != null ? aps.getAppLicense().getLicenseTitle() : ""%></em></p>
+          
+          <%if(isFromReview){
+              
+            SWBResourceURL urlreview = paramRequest.getActionUrl();
+            urlreview.setAction(ApplicationResource.ADMIN_COMMENT);
+            
+          %>
+            <fieldset>  
+            
+                <form id="seccCommentAdmin" action="<%=urlreview.toString()%>" method="post" >
 
-          <div class="redes">Aqui va [MeGusta] [Tweet] [g+] [Share] 
-          </div>
+                  <input type="hidden" name="appUri" value="<%=aps.getShortURI()%>" /> 
+                  <label for="desc"><b>*</b><%=paramRequest.getLocaleString("lbl_CommentarioAdminAPP")%></label>
+                  <textarea name="commentAPPAdmin" id="commentAPPAdmin" promptMessage="<%=paramRequest.getLocaleString("lbl_promtTextArea")%>" invalidMessage="<%=paramRequest.getLocaleString("lbl_invalidMsjTA")%>" trim="true" ></textarea>
+                  <br/><br/>
+                  <input type="submit" name="btnApprove" value="<%=paramRequest.getLocaleString("lbl_aprobarAPP")%>"/>
+                  <input type="submit" name="btnReject" value="<%=paramRequest.getLocaleString("lbl_rechazarAPP")%>"/>
+
+                </form>
+                  
+            </fieldset>
+          <%}%>
+          
         </div>
 	</div>
           
@@ -822,13 +928,6 @@
 
 <%
 }}}   
- if(user.isSigned()&& (user.getSemanticObject().createGenericInstance() instanceof Developer || user.getSemanticObject().createGenericInstance() instanceof Publisher)){
-%>
-
-<p><a href="<%=renderURL.setMode(ApplicationResource.ADD_APPLICATION)%>"><%=paramRequest.getLocaleString("lbl_subirApp")%></a></p>
-
-<%
- }
 %>
 
 <%!
