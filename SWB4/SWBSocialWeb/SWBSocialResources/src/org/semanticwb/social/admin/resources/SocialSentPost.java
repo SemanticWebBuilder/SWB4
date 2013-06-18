@@ -377,6 +377,8 @@ public class SocialSentPost extends GenericResource {
         //Funcionan bien sin busqueda
         Iterator<PostOut> itposts = PostOut.ClassMgr.listPostOutBySocialTopic(socialTopic);
         
+        //System.out.println("searchWord en SentPost:"+searchWord);
+        
         //Filtros
         ArrayList<PostOut> aListFilter=new ArrayList();
         if(searchWord!=null)
