@@ -156,46 +156,58 @@
             // llamado como contenido
             if (action.equals("")) {
                 // panel de control
+
+        String pubname = pub!=null?pub.getFullName():"--";
+        if(null==pubname) pubname="---";
+        inst = pub !=null ? pub.getPubInstitution():null; 
+        String instname = "";
+        String instweburl = "";
+        String instlogo = SWBPortal.getWorkPath() +"models/"+wsite.getId()+"/css/images/logox.png";
+        if(null!=inst){
+            instname = inst.getInstitutionTitle()!=null?inst.getInstitutionTitle():"---";
+            instweburl = inst.getInstitutionHome()!=null?inst.getInstitutionHome():"---"; 
+            if(inst.getInstitutionLogo()!=null) {
+                instlogo = SWBPortal.getWebWorkPath()+inst.getWorkPath()+"/"+Institution.lodp_institutionLogo.getName()+"_"+inst.getId()+"_"+inst.getInstitutionLogo();
+            }
+    }
+                
+                
 %>
-<div class="institution_info">
+<div class="panel-publicador">
     <%
     if(null!=inst){  
     %>
-    <div><img src="<%=SWBPortal.getWorkPath() + inst.getWorkPath() + "/" +  inst.getInstitutionLogo()%>"/></div>
-    <div>
-        <label><%=inst.getInstitutionTitle()%></label><p><%=inst.getInstitutionDescription()%></p>
-    </div>
+    <img src="<%=instlogo%>" alt="<%=instname%>" />
+     <p class="panel-pubname"><%=instname%></p>
+     <p class=""><%=inst.getInstitutionDescription()%></p>
+
     <%
     } else {
         %>
-    <div>
-        <label>No se encontró información de la institución</label>
-    </div>
+    
+     <img src="<%=instlogo%>"  />
+     <p class="panel-pubname">No se encontró información de la institución</p>    
+     <p class="">No se encontró información de la institución</p>    
     <%
     }
     %>
 </div>
-<div class="panel">
-    <fieldset><label>Mis datos</label>
-
-        <ul>
+<div class="tit">
+    <h4>Mis datos</h4>
+</div>
+<div class="misdatos">
             <%
                 SWBResourceURL urlnew = paramRequest.getRenderUrl();
                 urlnew.setParameter("act", SWBResourceURL.Action_ADD);
                 urlnew.setMode(SWBResourceURL.Mode_EDIT);
             %>
-            <li><a href="<%=urlnew.toString()%>">Nuevo Dataset</a></li>
+            <a href="<%=urlnew.toString()%>"  class="misdat-nuevo" >Nuevo Dataset</a>
                 <%
                     SWBResourceURL urlmyds = paramRequest.getRenderUrl();
                     urlmyds.setParameter("act", "myds");
 
                 %>
-            <li><a href="<%=urlmyds.toString()%>">Mis Datasets</a></li>
-        </ul>
-    </fieldset>
-    <fieldset><label>Estadísiticas de Mis datos</label>
-
-        <ul>
+            <a href="<%=urlmyds.toString()%>" class="misdat-misdata" >Mis Datasets</a>
             <%
                 String statswpid = base.getAttribute("statswebpage","EstadisticasEnTabla");
                 WebPage wpurl = wsite.getWebPage(statswpid); 
@@ -204,8 +216,7 @@
                     statsurl = wpurl.getUrl();
                 }
             %>
-            <li><a href="<%=statsurl%>">Estadísticas</a></li> 
-
+    <a href="<%=statsurl%>" class="misdat-estadisticas" >Estadísticas</a>
             <%
                 String graphwpid = base.getAttribute("graphwebpage","EstadisticasEnGrafica");
                  wpurl = wsite.getWebPage(statswpid); 
@@ -214,10 +225,7 @@
                     statsurl = wpurl.getUrl();
                 }
             %>
-            <li><a href="<%=statsurl%>">Gráficas de actividad</a></li>
-
-        </ul>
-    </fieldset>
+            <a href="<%=statsurl%>"  class="misdat-actividad" >Actividad</a>
 
 </div>    
 
