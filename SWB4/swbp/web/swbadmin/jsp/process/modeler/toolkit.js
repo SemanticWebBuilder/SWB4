@@ -718,6 +718,10 @@
             obj.setClass=function(styleC) {
                 obj.setAttributeNS(null, "class", styleC);
             }
+            
+            obj.moveFirst = function() {
+                _this.svg.appendChild(obj);
+            };
 
             _this.svg.appendChild(obj);
             return obj;
@@ -1132,6 +1136,16 @@
                     obj.contents[i].moveFirst();
                 }
                 
+                //mueve conexiones
+                for (var i = obj.inConnections.length; i--;)
+                {
+                    obj.inConnections[i].moveFirst();
+                }
+                
+                for (var i = obj.outConnections.length; i--;)
+                {
+                    obj.outConnections[i].moveFirst();
+                }
             };
             
             obj.setParent = function(newParent)
