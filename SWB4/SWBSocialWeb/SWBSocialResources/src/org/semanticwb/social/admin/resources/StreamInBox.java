@@ -426,10 +426,10 @@ public class StreamInBox extends GenericResource {
                 setso = SWBSocialComparator.sortByEmoticon(itposts, false);
             }else if(request.getParameter("orderBy").equals("userUp"))
             {
-                setso = SWBSocialComparator.sortByUser(itposts);
+                setso = SWBSocialComparator.sortByUser(itposts, true);
             }else if(request.getParameter("orderBy").equals("userDown"))
             {
-                setso = SWBSocialComparator.sortByUser(itposts);
+                setso = SWBSocialComparator.sortByUser(itposts, false);
             }else if(request.getParameter("orderBy").equals("followersUp"))
             {
                 setso = SWBSocialComparator.sortByFollowers(itposts, true);
