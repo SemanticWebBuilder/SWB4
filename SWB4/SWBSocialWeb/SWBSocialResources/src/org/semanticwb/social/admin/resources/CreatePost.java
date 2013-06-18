@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Enumeration;
-import java.util.Iterator;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -25,7 +24,6 @@ import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.api.SWBResourceURL;
 import org.semanticwb.social.SocialNetwork;
 import org.semanticwb.social.SocialPFlow;
-import org.semanticwb.social.SocialPFlowRef;
 import org.semanticwb.social.SocialTopic;
 import org.semanticwb.social.util.SWBSocialUtil;
 
@@ -56,19 +54,21 @@ public class CreatePost extends GenericResource {
                 out.println(" reloadTab('" + request.getParameter("reloadTab") + "');");//so
             }            
             out.println("</script>");
-            return;
+            //return;
         }
-        
-        String jspResponse = SWBPlatform.getContextPath() +"/work/models/" + paramRequest.getWebPage().getWebSiteId() +"/jsp/post/createPost.jsp";
-        if (request.getParameter("jspResponse") != null) {
-            jspResponse = request.getParameter("jspResponse");
-        }
-        RequestDispatcher dis = request.getRequestDispatcher(jspResponse);
-        try {
-            request.setAttribute("paramRequest", paramRequest);
-            dis.include(request, response);
-        } catch (Exception e) {
-            log.error(e);
+        if(request.getParameter("suri")!=null)
+        {
+            String jspResponse = SWBPlatform.getContextPath() +"/work/models/" + paramRequest.getWebPage().getWebSiteId() +"/jsp/post/createPost.jsp";
+            if (request.getParameter("jspResponse") != null) {
+                jspResponse = request.getParameter("jspResponse");
+            }
+            RequestDispatcher dis = request.getRequestDispatcher(jspResponse);
+            try {
+                request.setAttribute("paramRequest", paramRequest);
+                dis.include(request, response);
+            } catch (Exception e) {
+                log.error(e);
+            }
         }
     }
 
@@ -130,7 +130,6 @@ public class CreatePost extends GenericResource {
                     System.out.println("Se publicaJ-1");
                     SWBSocialUtil.PostOutUtil.sendNewPost(null, socialTopic, spflow, aSocialNets, wsite, toPost, request, response);
                     response.setRenderParameter("statusMsg", SWBUtils.TEXT.encode(response.getLocaleLogString("postCreated"),"utf8"));
-                    response.setRenderParameter("reloadTab", socialTopic.getURI());
                     response.setMode(SWBResourceURL.Mode_VIEW);
                  }else {    //Enviar a statusBar que no se publicó el mensaje en ninguna red social.
                     response.setMode(SWBResourceURL.Mode_VIEW);

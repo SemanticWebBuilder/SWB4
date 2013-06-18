@@ -189,8 +189,8 @@ public class StreamInBox extends GenericResource {
         SWBResourceURL urlOderby = paramRequest.getRenderUrl();
         urlOderby.setParameter("act", "");
         urlOderby.setParameter("suri", id);
-        urlOderby.setParameter("orderBy", "PostTypeUp");
         
+        urlOderby.setParameter("orderBy", "PostTypeUp");
         out.println("<th>");
         out.println("<table><tr><td>");
         out.print(paramRequest.getLocaleString("postType")); 
@@ -652,6 +652,7 @@ public class StreamInBox extends GenericResource {
             out.println(postIn.getPostPlace() == null ? "---" : postIn.getPostPlace());
             out.println("</td>");
             
+            //Priority
             out.println("<td align=\"center\">");
             out.println(postIn.isIsPrioritary() ? "SI" : "NO");
             out.println("</td>");
