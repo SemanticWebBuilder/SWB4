@@ -1145,13 +1145,17 @@
                 
                 if(newParent && newParent!=null)
                 {
-                    newParent.contents.push(obj);
-                    obj.parent=newParent;
+                    if (newParent.contents.indexOf(obj) === -1) {
+                        newParent.contents.push(obj);
+                        obj.parent=newParent;
+                    }
                 }else
                 {
-                    _this.contents.push(obj);
-                    //obj.parent=_this;
-                    obj.parent=null;
+                    if (_this.contents.indexOf(obj) === -1) {
+                        _this.contents.push(obj);
+                        //obj.parent=_this;
+                        obj.parent=null;
+                    }
                 }
             };
             
