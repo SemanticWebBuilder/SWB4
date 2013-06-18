@@ -35,6 +35,7 @@ import org.semanticwb.social.SocialPFlow;
 import org.semanticwb.social.SocialTopic;
 import org.semanticwb.social.Stream;
 import org.semanticwb.social.VideoIn;
+import org.semanticwb.social.util.SWBSocialComparator;
 import org.semanticwb.social.util.SWBSocialUtil;
 
 /**
@@ -184,62 +185,78 @@ public class StreamInBox extends GenericResource {
         out.println(paramRequest.getLocaleString("post"));
         out.println("</th>");
         
+        SWBResourceURL urlOderby = paramRequest.getRenderUrl();
+        urlOderby.setParameter("act", "");
+        urlOderby.setParameter("suri", id);
+        urlOderby.setParameter("orderBy", "PostType");
+        
         out.println("<th>");
-        out.println(paramRequest.getLocaleString("postType"));
+        out.println("<a href=\"#\"  onclick=\"submitUrl('" + urlOderby + "',this); return false;\">"+paramRequest.getLocaleString("postType")+"</a>"); 
         out.println("</th>");
         
+        urlOderby.setParameter("orderBy", "network");
         out.println("<th>");
-        out.println(paramRequest.getLocaleString("network"));
+        out.println("<a href=\"#\"  onclick=\"submitUrl('" + urlOderby + "',this); return false;\">"+paramRequest.getLocaleString("network")+"</a>");
         out.println("</th>");
         
+        urlOderby.setParameter("orderBy", "topic");
         out.println("<th>");
-        out.println(paramRequest.getLocaleString("topic"));
+        out.println("<a href=\"#\"  onclick=\"submitUrl('" + urlOderby + "',this); return false;\">"+paramRequest.getLocaleString("topic")+"</a>");
         out.println("</th>");
         
-        
+        urlOderby.setParameter("orderBy", "creted");
         out.println("<th>");
-        out.println(paramRequest.getLocaleString("created"));
+        out.println("<a href=\"#\"  onclick=\"submitUrl('" + urlOderby + "',this); return false;\">"+paramRequest.getLocaleString("created")+"</a>");
         out.println("</th>");
         
+        urlOderby.setParameter("orderBy", "sentiment");
         out.println("<th>");
-        out.println(paramRequest.getLocaleString("sentiment"));
+        out.println("<a href=\"#\"  onclick=\"submitUrl('" + urlOderby + "',this); return false;\">"+paramRequest.getLocaleString("sentiment")+"</a>");
         out.println("</th>");
         
+        urlOderby.setParameter("orderBy", "intensity");
         out.println("<th>");
-        out.println(paramRequest.getLocaleString("intensity"));
+        out.println("<a href=\"#\"  onclick=\"submitUrl('" + urlOderby + "',this); return false;\">"+paramRequest.getLocaleString("intensity")+"</a>");
         out.println("</th>");
         
+        urlOderby.setParameter("orderBy", "emoticon");
         out.println("<th>");
-        out.println(paramRequest.getLocaleString("emoticon"));
+        out.println("<a href=\"#\"  onclick=\"submitUrl('" + urlOderby + "',this); return false;\">"+paramRequest.getLocaleString("emoticon")+"</a>");
         out.println("</th>");
         
-        
+        urlOderby.setParameter("orderBy", "replies");
         out.println("<th>");
-        out.println(paramRequest.getLocaleString("replies"));
+        out.println("<a href=\"#\"  onclick=\"submitUrl('" + urlOderby + "',this); return false;\">"+paramRequest.getLocaleString("replies")+"</a>");
+        out.println("</th>");
+       
+        urlOderby.setParameter("orderBy", "user");
+        out.println("<th>");
+        out.println("<a href=\"#\"  onclick=\"submitUrl('" + urlOderby + "',this); return false;\">"+paramRequest.getLocaleString("user")+"</a>");
         out.println("</th>");
         
+        urlOderby.setParameter("orderBy", "followers");
         out.println("<th>");
-        out.println(paramRequest.getLocaleString("user"));
+        out.println("<a href=\"#\"  onclick=\"submitUrl('" + urlOderby + "',this); return false;\">"+paramRequest.getLocaleString("followers")+"</a>");
         out.println("</th>");
         
+        urlOderby.setParameter("orderBy", "friends");
         out.println("<th>");
-        out.println(paramRequest.getLocaleString("followers"));
+        out.println("<a href=\"#\"  onclick=\"submitUrl('" + urlOderby + "',this); return false;\">"+paramRequest.getLocaleString("friends")+"</a>");
         out.println("</th>");
         
+        urlOderby.setParameter("orderBy", "klout");
         out.println("<th>");
-        out.println(paramRequest.getLocaleString("friends"));
+        out.println("<a href=\"#\"  onclick=\"submitUrl('" + urlOderby + "',this); return false;\">"+paramRequest.getLocaleString("klout")+"</a>");
         out.println("</th>");
         
+        urlOderby.setParameter("orderBy", "place");
         out.println("<th>");
-        out.println(paramRequest.getLocaleString("klout"));
+        out.println("<a href=\"#\"  onclick=\"submitUrl('" + urlOderby + "',this); return false;\">"+paramRequest.getLocaleString("place")+"</a>");
         out.println("</th>");
         
+        urlOderby.setParameter("orderBy", "prioritary");
         out.println("<th>");
-        out.println(paramRequest.getLocaleString("place"));
-        out.println("</th>");
-        
-        out.println("<th>");
-        out.println(paramRequest.getLocaleString("prioritary"));
+        out.println("<a href=\"#\"  onclick=\"submitUrl('" + urlOderby + "',this); return false;\">"+paramRequest.getLocaleString("prioritary")+"</a>");
         out.println("</th>");
         
         
@@ -271,8 +288,60 @@ public class StreamInBox extends GenericResource {
         {
             itposts=aListFilter.iterator();
         }
-                
-        Set<PostIn> setso = SWBComparator.sortByCreatedSet(itposts, false);
+         
+        //Ordenamientos
+        System.out.println("orderBy k Llega:"+request.getParameter("orderBy"));
+        Set<PostIn> setso=null;
+        if(request.getParameter("orderBy")!=null)
+        {
+            if(request.getParameter("orderBy").equals("PostType"))
+            {
+                setso = SWBSocialComparator.sortByPostType(itposts);
+            }else if(request.getParameter("orderBy").equals("network"))
+            {
+                setso = SWBSocialComparator.sortByNetwork(itposts);
+            }else if(request.getParameter("orderBy").equals("topic"))
+            {
+                setso = SWBSocialComparator.sortByTopic(itposts);
+            }else if(request.getParameter("orderBy").equals("creted"))
+            {
+                setso = SWBComparator.sortByCreatedSet(itposts,true);
+            }else if(request.getParameter("orderBy").equals("sentiment"))
+            {
+                setso = SWBSocialComparator.sortBySentiment(itposts, true);
+            }else if(request.getParameter("orderBy").equals("intensity"))
+            {
+                setso = SWBSocialComparator.sortByIntensity(itposts, true);
+            }else if(request.getParameter("orderBy").equals("emoticon"))
+            {
+                setso = SWBSocialComparator.sortByEmoticon(itposts, true);
+            }else if(request.getParameter("orderBy").equals("user"))
+            {
+                setso = SWBSocialComparator.sortByUser(itposts);
+            }else if(request.getParameter("orderBy").equals("followers"))
+            {
+                setso = SWBSocialComparator.sortByFollowers(itposts, true);
+            }else if(request.getParameter("orderBy").equals("replies"))
+            {
+                setso = SWBSocialComparator.sortByReplies(itposts, true);
+            }else if(request.getParameter("orderBy").equals("friends"))
+            {
+                setso = SWBSocialComparator.sortByFriends(itposts, true);
+            }else if(request.getParameter("orderBy").equals("klout"))
+            {
+                setso = SWBSocialComparator.sortByKlout(itposts, true);
+            }else if(request.getParameter("orderBy").equals("place"))
+            {
+                setso = SWBSocialComparator.sortByPlace(itposts);
+            }else if(request.getParameter("orderBy").equals("prioritary"))
+            {
+                setso = SWBSocialComparator.sortByPrioritary(itposts, true);
+            }
+            
+        }else
+        {
+            setso = SWBComparator.sortByCreatedSet(itposts, false);
+        }
         
         
         itposts = null;
@@ -403,7 +472,7 @@ public class StreamInBox extends GenericResource {
             
             //Intensity
             out.println("<td>");
-            out.println(postIn.getPostIntesityType()==0?paramRequest.getLocaleString("low"):postIn.getPostSentimentalType()==1?paramRequest.getLocaleString("medium"):postIn.getPostSentimentalType()==2?paramRequest.getLocaleString("high"):"---");
+            out.println(postIn.getPostIntesityType()==0?paramRequest.getLocaleString("low"):postIn.getPostIntesityType()==1?paramRequest.getLocaleString("medium"):postIn.getPostIntesityType()==2?paramRequest.getLocaleString("high"):"---");
             out.println("</td>");
             
             //Emoticon
@@ -417,8 +486,6 @@ public class StreamInBox extends GenericResource {
             }else if(postIn.getPostSentimentalEmoticonType()==0)
             {
                 out.println("---");
-            }else{
-                out.println("XXX");
             }
             out.println("</td>");
             
@@ -484,6 +551,7 @@ public class StreamInBox extends GenericResource {
                 urlNew.setParameter("suri", id);
                 urlNew.setParameter("page", "" + z);
                 urlNew.setParameter("search", (searchWord.trim().length() > 0 ? searchWord : ""));
+                urlNew.setParameter("orderBy", (request.getParameter("orderBy")!=null && request.getParameter("orderBy").trim().length() > 0 ? request.getParameter("orderBy") : ""));
                 if (z != p) {
                     out.println("<a href=\"#\" onclick=\"submitUrl('" + urlNew + "',this); return false;\">" + (z + 1) + "</a> ");
                 } else {

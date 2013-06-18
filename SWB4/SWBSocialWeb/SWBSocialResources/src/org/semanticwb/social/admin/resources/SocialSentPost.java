@@ -9,7 +9,6 @@ import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Enumeration;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Locale;
 import java.util.Set;
@@ -40,6 +39,7 @@ import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.api.SWBResourceURL;
 import org.semanticwb.social.Message;
 import org.semanticwb.social.Photo;
+import org.semanticwb.social.PostIn;
 import org.semanticwb.social.PostOut;
 import org.semanticwb.social.SocialFlow.SocialPFlowMgr;
 import org.semanticwb.social.SocialNetwork;
@@ -196,21 +196,25 @@ public class SocialSentPost extends GenericResource {
         urls.setParameter("act", "");
         urls.setParameter("suri", id);
         
+        String searchWord = request.getParameter("search");
+        if (null == searchWord) {
+            searchWord = "";
+        }
+        
         
         out.println("<div class=\"swbform\">");
-        /*
-        //Agregado para la busqueda
-        out.println("<fieldset>");
+      
+       out.println("<fieldset>");
         out.println("<form id=\"" + id + "/fsearchwp\" name=\"" + id + "/fsearchwp\" method=\"post\" action=\"" + urls + "\" onsubmit=\"submitForm('" + id + "/fsearchwp');return false;\">");
         out.println("<div align=\"right\">");
         out.println("<input type=\"hidden\" name=\"suri\" value=\"" + id + "\">");
-        out.println("<label for=\"" + id + "_searchwp\">" + paramRequest.getLocaleString("searchInProperties") + ": </label><input type=\"text\" name=\"search\" id=\"" + id + "_searchwp\" value=\"" + busqueda + "\">");
+        out.println("<label for=\"" + id + "_searchwp\">" + paramRequest.getLocaleString("searchPost") + ": </label><input type=\"text\" name=\"search\" id=\"" + id + "_searchwp\" value=\"" + searchWord + "\">");
         out.println("<button dojoType=\"dijit.form.Button\" type=\"submit\">" + paramRequest.getLocaleString("btnSearch") + "</button>"); //
         out.println("</div>");
         out.println("</form>");
         out.println("</fieldset>");
-        //Termina Agregado para la busqueda
-        */
+        
+      
         out.println("<fieldset>");
         out.println("<table width=\"98%\" >");
         out.println("<thead>");
@@ -338,6 +342,30 @@ public class SocialSentPost extends GenericResource {
         
         //Funcionan bien sin busqueda
         Iterator<PostOut> itposts = PostOut.ClassMgr.listPostOutBySocialTopic(socialTopic);
+        
+        //Filtros
+        ArrayList<PostOut> aListFilter=new ArrayList();
+        if(searchWord!=null)
+        {
+            while(itposts.hasNext())
+            {
+                PostOut postOut=itposts.next();
+                if(postOut.getTags()!=null && postOut.getTags().toLowerCase().indexOf(searchWord.toLowerCase())>-1)
+                {
+                    aListFilter.add(postOut);
+                }else if(postOut.getMsg_Text()!=null && postOut.getMsg_Text().toLowerCase().indexOf(searchWord.toLowerCase())>-1)
+                {
+                    aListFilter.add(postOut);
+                }
+            }
+        }
+        //Termina Filtros
+        
+        if(aListFilter.size()>0) 
+        {
+            itposts=aListFilter.iterator();
+        }
+        
         Set<PostOut> setso = SWBComparator.sortByCreatedSet(itposts, false);
         //Termina Funcionan bien sin busqueda
         
@@ -626,6 +654,7 @@ public class SocialSentPost extends GenericResource {
                 SWBResourceURL urlNew = paramRequest.getRenderUrl();
                 urlNew.setParameter("suri", id);
                 urlNew.setParameter("page", "" + z);
+                urlNew.setParameter("search", (searchWord.trim().length() > 0 ? searchWord : ""));
                 if (z != p) {
                     out.println("<a href=\"#\" onclick=\"submitUrl('" + urlNew + "',this); return false;\">" + (z + 1) + "</a> ");
                 } else {
