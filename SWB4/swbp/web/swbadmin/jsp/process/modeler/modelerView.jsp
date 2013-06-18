@@ -89,7 +89,7 @@ exportUrl.setMode(SVGModeler.MODE_EXPORT);
 
         <div id="fileBar" class="subbarHidden" style="width: 385px;">
             <span class="subbarStart"></span>
-            <!--span class="newProcess" title="Nuevo modelo" onclick="Modeler.clearCanvas();"></span-->
+            <span class="newProcess" title="Nuevo modelo" onclick="if (confirm('Se perderán todos los cambios no guardados. ¿Desea continuar?')){Modeler.clearCanvas();}"></span>
             <span class="openProcess" title="Abrir modelo existente" onclick="showLoadDialog();"></span>
             <span class="storeProcess" title="Enviar modelo" onclick="storeProcess();"></span>
             <span class="saveProcess" title="Guardar modelo" onclick="submit_download_form('swp')"></span>
@@ -645,8 +645,8 @@ exportUrl.setMode(SVGModeler.MODE_EXPORT);
             <marker id="messageArrow" viewBox="0 0 12 12" refX="7" refY="5" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" orient="auto" fill="none" stroke="black" stroke-width="1.5" stroke-dasharray="0">
                 <path d="M 0 0 L 10 5 L 0 10"/>
             </marker>
-            <marker id="conditionTail" viewBox="-6 -5 12 12" refX="2" refY="0" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" orient="auto" fill="none" stroke="black" stroke-width="1.5" stroke-dasharray="0">
-                <rect x="-3" y="-3" width="5" height="5" transform="rotate(-45)"/>
+            <marker id="conditionTail" viewBox="-6 -6 12 12" refX="3" refY="0" markerUnits="userSpaceOnUse" markerWidth="12" markerHeight="12" orient="auto" fill="none" stroke="black" stroke-width="1.5" stroke-dasharray="0">
+                <rect x="-3" y="-3" width="6" height="6" transform="rotate(-45)"/>
             </marker>
             <marker id="defaultTail" viewBox="0 0 12 12" refX="-3" refY="5" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" orient="auto" fill="none" stroke="black" stroke-width="2" stroke-dasharray="0">
                 <path d="M 5 0 L 0 10"/>
