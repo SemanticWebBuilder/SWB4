@@ -39,27 +39,41 @@
         <span><a href="<%=urlstatistic+"4"%>">Uso de aplicaciones</a></span> <br>
         <span><a href="<%=urlstatistic+"5"%>">Satisfación de usuarios</a></span>
 <%  }else{
-        List columns = StatisticsResource.getNameOfColumns(statistic, paramRequest);        
+        List columns = StatisticsResource.getNameOfColumns(statistic, paramRequest); 
+        String column = request.getParameter("column");        
+        String asc = request.getParameter("asc");
+        if(asc==null){asc="true";}
+        if(column==null){column="1";} 
 %>
         <h1><%=columns.get(0)%></h1>
         <table border>
             <tr>
         <%for(int i=1; i<columns.size(); i++){%>                
-                <th>
+                <th>                    
                     <%=columns.get(i)%>
                     <%String urlstatistic2 = urlstatistic+statistic+"&column="+i+"&asc=";%>
-                    <a href="<%=urlstatistic2+"true"%>">asc</a>
-                    <a href="<%=urlstatistic2+"false"%>">des</a>
+                    <%if(i==i){ 
+                        if(asc.equals("true")){
+                    %>                       
+                        <a href="<%=urlstatistic2+"false"%>" title="Ordenar ascendente" 
+                           class="ico-asendente"><span>ordenar ascendente</span></a>
+                    <%  }
+                        if(asc.equals("false")){
+                    %>   
+                        <a href="<%=urlstatistic2+"true"%>" title="Ordenar desscendente" 
+                           class="ico-descendente"><span>Ordenar descendente</span></a>
+                    <%  } 
+                     }else{%>    
+                        <a href="<%=urlstatistic2+"true"%>"  title="Ordenar ascendente">
+                            <span>ordenar ascendente</span>
+                        </a>
+                    <%}%>
                 </th>
         <%}%> 
             </tr>
         <% 
-        long count = 0;        
-        String column = request.getParameter("column");        
-        String asc = request.getParameter("asc");        
+        long count = 0;                
         if(statistic.trim().equals("1")){
-            if(asc==null){asc="true";}
-            if(column==null){column="1";}            
             Set<DSByIntBean> list = StatisticsResource.getDSByIntBean(wsite,column,asc);            
             for(DSByIntBean dsbyint: list){ 
                 count += dsbyint.getNumDS();
@@ -74,8 +88,6 @@
          <%
          }
         if(statistic.trim().equals("2")){
-            if(asc==null){asc="true";}
-            if(column==null){column="1";}
             Set<AplByDSBean> list = StatisticsResource.getAplByDS(wsite,column,asc);            
             for(AplByDSBean aplbyds : list){ 
                 count+= aplbyds.getNumApp();
@@ -91,8 +103,6 @@
          <%
          }
         if(statistic.trim().equals("3")){
-            if(asc==null){asc="true";}
-            if(column==null){column="2";}
             Set<UseDSBean> list = StatisticsResource.getDSUse(wsite,column,asc);            
             for(UseDSBean dataset : list){
                 count++;
@@ -111,8 +121,6 @@
             <span>Total de datasets: <%=count%></span>
          <%}
          if(statistic.trim().equals("4")){
-            if(asc==null){asc="true";}
-            if(column==null){column="2";}
             Set<UseAppBean> list = StatisticsResource.getAppUse(wsite,column,asc);            
             for(UseAppBean appl : list){
                 count++;
