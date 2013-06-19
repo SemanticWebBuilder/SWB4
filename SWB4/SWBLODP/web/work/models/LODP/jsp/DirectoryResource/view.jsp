@@ -129,36 +129,254 @@
 %>
 
 <div id="directorio">
-    	<div id="abcde">
-   
-        <a href="<%=urlConsulta.setParameter("val", "A").toString() %>"><%=paramRequest.getLocaleString("lbl_A")%></a>               
+    <div id="abcde">
+        
+       <%if(valor != null && valor.equals("A")){%>
+        
+        <span><%=valor%></span>
+        
+       <%}else{%>
+            
+        <a href="<%=urlConsulta.setParameter("val", "A").toString() %>"><%=paramRequest.getLocaleString("lbl_A")%></a>
+            
+       <%}%>
+        
+       <%if(valor != null && valor.equals("B")){%>
+        
+        <span><%=valor%></span>
+        
+       <%}else{%>
+            
         <a href="<%=urlConsulta.setParameter("val", "B").toString() %>"><%=paramRequest.getLocaleString("lbl_B")%></a> 
+            
+       <%}%>
+        
+       <%if(valor != null && valor.equals("C")){%>
+        
+        <span><%=valor%></span>
+        
+       <%}else{%>
+       
         <a href="<%=urlConsulta.setParameter("val", "C").toString() %>"><%=paramRequest.getLocaleString("lbl_C")%></a>
+        
+        <%}%>
+        
+        <%if(valor != null && valor.equals("D")){%>
+        
+        <span><%=valor%></span>
+        
+        <%}else{%>
+        
         <a href="<%=urlConsulta.setParameter("val", "D").toString() %>"><%=paramRequest.getLocaleString("lbl_D")%></a>
+        
+        <%}%>
+        <%if(valor != null && valor.equals("E")){%>
+        
+        <span><%=valor%></span>
+        
+        <%}else{%>
+         
         <a href="<%=urlConsulta.setParameter("val", "E").toString() %>"><%=paramRequest.getLocaleString("lbl_E")%></a>
+        
+        <%}%>
+        <%if(valor != null && valor.equals("F")){%>
+        
+        <span><%=valor%></span>
+        
+        <%}else{%>
+        
         <a href="<%=urlConsulta.setParameter("val", "F").toString() %>"><%=paramRequest.getLocaleString("lbl_F")%></a>
+        
+        <%}%>
+        <%if(valor != null && valor.equals("G")){%>
+        
+        <span><%=valor%></span>
+        
+        <%}else{%>
+        
         <a href="<%=urlConsulta.setParameter("val", "G").toString() %>"><%=paramRequest.getLocaleString("lbl_G")%></a>
+        
+        <%}%>
+        <%if(valor != null && valor.equals("H")){%>
+        
+        <span><%=valor%></span>
+        
+        <%}else{%>
+        
         <a href="<%=urlConsulta.setParameter("val", "H").toString() %>"><%=paramRequest.getLocaleString("lbl_H")%></a>
+        
+        <%}%>
+        <%if(valor != null && valor.equals("I")){%>
+        
+        <span><%=valor%></span>
+        
+        <%}else{%>
+        
         <a href="<%=urlConsulta.setParameter("val", "I").toString() %>"><%=paramRequest.getLocaleString("lbl_I")%></a>
+        
+        <%}%>
+        <%if(valor != null && valor.equals("J")){%>
+        
+        <span><%=valor%></span>
+        
+        <%}else{%>
+        
         <a href="<%=urlConsulta.setParameter("val", "J").toString() %>"><%=paramRequest.getLocaleString("lbl_J")%></a>
+        
+        <%}%>
+        <%if(valor != null && valor.equals("K")){%>
+        
+        <span><%=valor%></span>
+        
+        <%}else{%>
+        
         <a href="<%=urlConsulta.setParameter("val", "K").toString() %>"><%=paramRequest.getLocaleString("lbl_K")%></a>
+        
+        <%}%>
+        <%if(valor != null && valor.equals("L")){%>
+        
+        <span><%=valor%></span>
+        
+        <%}else{%>
+        
         <a href="<%=urlConsulta.setParameter("val", "L").toString() %>"><%=paramRequest.getLocaleString("lbl_L")%></a>
+        
+        <%}%>
+        <%if(valor != null && valor.equals("M")){%>
+        
+        <span><%=valor%></span>
+        
+        <%}else{%>
+        
         <a href="<%=urlConsulta.setParameter("val", "M").toString() %>"><%=paramRequest.getLocaleString("lbl_M")%></a>
+        
+        <%}%>
+        <%if(valor != null && valor.equals("N")){%>
+        
+        <span><%=valor%></span>
+        
+        <%}else{%>
+        
         <a href="<%=urlConsulta.setParameter("val", "N").toString() %>"><%=paramRequest.getLocaleString("lbl_N")%></a>
+        
+        <%}%>
+        <%if(valor != null && valor.equals("O")){%>
+        
+        <span><%=valor%></span>
+        
+        <%}else{%>
+        
         <a href="<%=urlConsulta.setParameter("val", "O").toString() %>"><%=paramRequest.getLocaleString("lbl_O")%></a>
+        
+        <%}%>
+        <%if(valor != null && valor.equals("P")){%>
+        
+        <span><%=valor%></span>
+        
+        <%}else{%>
+        
         <a href="<%=urlConsulta.setParameter("val", "P").toString() %>"><%=paramRequest.getLocaleString("lbl_P")%></a>
+        
+        <%}%>
+        <%if(valor != null && valor.equals("Q")){%>
+        
+        <span><%=valor%></span>
+        
+        <%}else{%>
+        
         <a href="<%=urlConsulta.setParameter("val", "Q").toString() %>"><%=paramRequest.getLocaleString("lbl_Q")%></a>
+        
+        <%}%>
+        <%if(valor != null && valor.equals("R")){%>
+        
+        <span><%=valor%></span>
+        
+        <%}else{%>
+        
         <a href="<%=urlConsulta.setParameter("val", "R").toString() %>"><%=paramRequest.getLocaleString("lbl_R")%></a>
+        
+        <%}%>
+        <%if(valor != null && valor.equals("S")){%>
+        
+        <span><%=valor%></span>
+        
+        <%}else{%>
+        
         <a href="<%=urlConsulta.setParameter("val", "S").toString() %>"><%=paramRequest.getLocaleString("lbl_S")%></a>
+        
+        <%}%>
+        <%if(valor != null && valor.equals("T")){%>
+        
+        <span><%=valor%></span>
+        
+        <%}else{%>
+        
         <a href="<%=urlConsulta.setParameter("val", "T").toString() %>"><%=paramRequest.getLocaleString("lbl_T")%></a>
+        
+        <%}%>
+        <%if(valor != null && valor.equals("U")){%>
+        
+        <span><%=valor%></span>
+        
+        <%}else{%>
+        
         <a href="<%=urlConsulta.setParameter("val", "U").toString() %>"><%=paramRequest.getLocaleString("lbl_U")%></a>
+        
+        <%}%>
+        <%if(valor != null && valor.equals("V")){%>
+        
+        <span><%=valor%></span>
+        
+        <%}else{%>
+        
         <a href="<%=urlConsulta.setParameter("val", "V").toString() %>"><%=paramRequest.getLocaleString("lbl_V")%></a>
+        
+        <%}%>
+        <%if(valor != null && valor.equals("W")){%>
+        
+        <span><%=valor%></span>
+        
+        <%}else{%>
+        
         <a href="<%=urlConsulta.setParameter("val", "W").toString() %>"><%=paramRequest.getLocaleString("lbl_W")%></a>
+        
+        <%}%>
+        <%if(valor != null && valor.equals("X")){%>
+        
+        <span><%=valor%></span>
+        
+        <%}else{%>
+        
         <a href="<%=urlConsulta.setParameter("val", "X").toString() %>"><%=paramRequest.getLocaleString("lbl_X")%></a>
+        
+        <%}%>
+        <%if(valor != null && valor.equals("Y")){%>
+        
+        <span><%=valor%></span>
+        
+        <%}else{%>
+        
         <a href="<%=urlConsulta.setParameter("val", "Y").toString() %>"><%=paramRequest.getLocaleString("lbl_Y")%></a>
+        
+        <%}%>
+        <%if(valor != null && valor.equals("Z")){%>
+        
+        <span><%=valor%></span>
+        
+        <%}else{%>
+        
         <a href="<%=urlConsulta.setParameter("val", "Z").toString() %>"><%=paramRequest.getLocaleString("lbl_Z")%></a>
+        
+        <%}%>
+        <%if(valor != null && valor.equals("")){%>
+        
+        <span><%=paramRequest.getLocaleString("lbl_otro")%></span>
+        
+        <%}else{%>
+        
         <a href="<%=urlConsulta.setParameter("val", "").toString() %>"><%=paramRequest.getLocaleString("lbl_otro")%></a>
         
+        <%}%>
     </div>
         
     <div id="listapub">
@@ -219,21 +437,21 @@
            intSize = hmInst.size();
            genericListInst = hmInst.values().iterator();
            
-           if(!valor.equals("")){
+           //if(!valor.equals("")){
            
         %>
-            <h3>
-               <%=paramRequest.getLocaleString("lbl_pbInicio")%> "<%=valor%> "
-            </h3>   
+<!--            <h3>
+               <%//=paramRequest.getLocaleString("lbl_pbInicio")%> "<%//=valor%> "
+            </h3>   -->
         <%
-           } else {
+          // } else {
         %>
-            <h3>
-               <%=paramRequest.getLocaleString("lbl_otroPB")%>
-            </h3> 
+<!--            <h3>
+               <%//=paramRequest.getLocaleString("lbl_otroPB")%>
+            </h3> -->
         <%
                
-           }
+           //}
 
            //PAGINACION
             int ps = numPages;
