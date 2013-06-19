@@ -16,7 +16,9 @@ Publisher pub = LODPUtils.getPublisher(usr);
 
 if(pub!=null){
 %>
-<a href="/swb/LODP/Panel_de_control">Panel de control</a>
+<div id="panelcontrol">
+    <a href="/swb/LODP/Panel_de_control"><span>Panel de control</span></a>
+</div>
 <%
 }
 %>
