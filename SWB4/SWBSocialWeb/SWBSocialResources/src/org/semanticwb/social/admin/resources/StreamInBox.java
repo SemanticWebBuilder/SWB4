@@ -63,6 +63,7 @@ public class StreamInBox extends GenericResource {
     }
     
     public static final String Mode_REVAL = "rv";
+    public static final String Mode_PREVIEW = "preview";
     public static final String Mode_RECLASSBYTOPIC="reclassByTopic";
     public static final String Mode_RECLASSBYSENTIMENT="revalue";
     public static final String Mode_RESPONSE="response";
@@ -72,6 +73,8 @@ public class StreamInBox extends GenericResource {
         final String mode = paramRequest.getMode();
         if(Mode_REVAL.equals(mode)) {
             doRevalue(request, response, paramRequest);
+        }if(Mode_PREVIEW.equals(mode)) {
+            doPreview(request, response, paramRequest);
         }else if(Mode_RESPONSE.equals(mode))
         {
             doResponse(request, response, paramRequest);
@@ -522,12 +525,19 @@ public class StreamInBox extends GenericResource {
                     + "<img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/images/delete.gif\" border=\"0\" alt=\"" + paramRequest.getLocaleString("remove") + "\"></a>");
             
             //Preview
+            /*
             SWBResourceURL urlpre = paramRequest.getRenderUrl();
             urlpre.setParameter("suri", id);
             urlpre.setParameter("page", "" + p);
             urlpre.setParameter("sval", postIn.getURI());
             urlpre.setParameter("preview", "true");
             out.println("<a href=\"#\" title=\"" + paramRequest.getLocaleString("previewdocument") + "\" onclick=\"submitUrl('" + urlpre + "',this); return false;\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/icons/preview.gif\" border=\"0\" alt=\"" + paramRequest.getLocaleString("previewdocument") + "\"></a>");
+            * */
+            SWBResourceURL urlPrev=paramRequest.getRenderUrl().setMode(Mode_PREVIEW).setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("postUri", postIn.getURI());  
+            out.println("<a href=\"#\" title=\"" + paramRequest.getLocaleString("previewdocument") + "\" onclick=\"showDialog('" + urlPrev + "','" + paramRequest.getLocaleString("previewdocument") 
+                    + "'); return false;\">RV</a>");
+            
+            
             
             
             //ReClasifyByTpic
@@ -694,20 +704,7 @@ public class StreamInBox extends GenericResource {
         }
         
         out.println("</div>");  
-        
-        
-        if (request.getParameter("preview") != null && request.getParameter("preview").equals("true")) {
-            if (request.getParameter("sval") != null) {
-                try {
-                    doPreview(request, response, paramRequest);
-                } catch (Exception e) {
-                    out.println("Preview not available...");
-                }
-            } else {
-                out.println("Preview not available...");
-            }
-        }
-     
+      
     }
     
     
@@ -724,9 +721,6 @@ public class StreamInBox extends GenericResource {
      */
     public void doPreview(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         String postUri=request.getParameter("sval");
-        PrintWriter out = response.getWriter();
-        out.println("<fieldset>");
-        out.println("<legend>" + paramRequest.getLocaleString("previewdocument") + "</legend>");
         try {
             final String path = SWBPlatform.getContextPath() + "/work/models/" + paramRequest.getWebPage().getWebSiteId() + "/jsp/review/showPostIn.jsp";
             if (request != null) {
@@ -744,15 +738,9 @@ public class StreamInBox extends GenericResource {
                 }
             }
             
-            /*
-            SWBResource res = SWBPortal.getResourceMgr().getResource(id);
-            ((SWBParamRequestImp) paramRequest).setResourceBase(res.getResourceBase());
-            res.render(request, response, paramRequest);
-            **/
         } catch (Exception e) {
             log.error("Error while getting content string ,id:" + postUri, e);
         }
-        out.println("</fieldset>");
     }
     
     
