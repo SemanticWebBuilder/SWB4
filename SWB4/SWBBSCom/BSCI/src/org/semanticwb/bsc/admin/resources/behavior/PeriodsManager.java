@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.semanticwb.bsc.admin.resources;
+package org.semanticwb.bsc.admin.resources.behavior;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -23,7 +23,7 @@ import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.api.SWBResourceURL;
 
 /**
- * SelectPeriods es una clase que permite asociar o desasociar periodos a un
+ * PeriodsManager es una clase que permite asociar o desasociar periodos a un
  * objetivo
  *
  *
@@ -31,7 +31,7 @@ import org.semanticwb.portal.api.SWBResourceURL;
  * @version %I%, %G%
  * @since 1.0
  */
-public class SelectPeriods extends GenericResource {
+public class PeriodsManager extends GenericResource {
 
     /**
      * Método que se encarga de presentar la forma al usuario para que elija un
