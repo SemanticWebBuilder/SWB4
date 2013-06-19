@@ -33,13 +33,15 @@
            Tag tag = cloudTags.next();
            String urlData = wsite.getWebPage("Datos").getUrl();
            String urlTag = urlData+"?search="+tag.getTagName();
+           long ponderacion = Long.parseLong(tag.getProperty("weight"));
+           if(ponderacion>0){
        %>
-       <li class="<%=tag.getProperty("classCSS")%>">
-           <a href="<%=urlTag%>" rel="<%=tag.getProperty("weight")%>">
-               <%=tag.getTagName()%>
-           </a>
-       </li>       
-       <%          
+                <li class="<%=tag.getProperty("classCSS")%>">
+                    <a href="<%=urlTag%>" rel="<%=tag.getProperty("weight")%>">
+                        <%=tag.getTagName()%>
+                    </a>
+                </li>       
+       <% }         
        }
     }else{
         %>No hay informacion disponible <%
