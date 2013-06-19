@@ -413,14 +413,18 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase {
     }
 
     private void getLastVideoID(Stream stream) {
-        SocialNetStreamSearch socialStreamSerch = SocialNetStreamSearch.getSocialNetStreamSearchbyStreamAndSocialNetwork(stream, this);
+        System.out.println("entrando al metodo getLastVideoID....");
+        SocialNetStreamSearch socialStreamSerch = SocialNetStreamSearch.getSocialNetStreamSearchbyStreamAndSocialNetwork(stream, this);       
+        //socialStreamSerch.setNextDatetoSearch("2013-06-17T15:42:09.000Z");
+        //if(1==1)return;
+        
         DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSX");
         //formatter.setTimeZone(TimeZone.getTimeZone("GMT-6"));
         try {
             if (socialStreamSerch != null && socialStreamSerch.getNextDatetoSearch() != null) {
                 //socialStreamSerch.setNextDatetoSearch("2000-07-11T23:05:31.000Z");
                 lastVideoID = formatter.parse(socialStreamSerch.getNextDatetoSearch());
-                System.out.println("RECOVERING NEXTDATETOSEARCH: " + socialStreamSerch.getNextDatetoSearch());                
+                System.out.println("RECOVERING NEXTDATETOSEARCH: " + socialStreamSerch.getNextDatetoSearch());
             } else {
                 lastVideoID = new Date(0L);
             }
@@ -434,9 +438,11 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase {
     }
 
     private void setLastVideoID(String dateVideo, Stream stream) {
+        System.out.println("entrando al metodo setLastVideoID....");        
+        //if(1==1)return;
         try {
             DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSX");
-           // formatter.setTimeZone(TimeZone.getTimeZone("GMT-6"));
+            // formatter.setTimeZone(TimeZone.getTimeZone("GMT-6"));
             Date storedValue = new Date(0L);
             SocialNetStreamSearch socialStreamSerch = SocialNetStreamSearch.getSocialNetStreamSearchbyStreamAndSocialNetwork(stream, this);
             if (socialStreamSerch != null && socialStreamSerch.getNextDatetoSearch() != null) {
@@ -444,10 +450,10 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase {
             }
             System.out.println("Antes de validar las fechas: ");
             System.out.println("stored Value : " + storedValue + "  dateVideo:  " + formatter.parse(dateVideo));
-            if (formatter.parse(dateVideo).before(storedValue)) {
-            //if (storedValue.before(formatter.parse(dateVideo))) { //Only stores tweetID if it's greater than the current stored value
+            if (formatter.parse(dateVideo).after(storedValue)) {
+                //if (storedValue.before(formatter.parse(dateVideo))) { //Only stores tweetID if it's greater than the current stored value
                 socialStreamSerch.setNextDatetoSearch(dateVideo);
-                System.out.println("GUARDANDO FECHA!!:"  + dateVideo);
+                System.out.println("GUARDANDO FECHA!!:" + dateVideo);
             } else {
                 System.out.println("NO ESTÁ GUARDANDO NADA PORQUE EL VALOR ALMACENADO YA ES IGUAL O MAYOR AL ACTUAL");
             }
@@ -464,13 +470,14 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase {
         ArrayList<ExternalPost> aListExternalPost = new ArrayList();
         String searchPhrases = getPhrases(stream.getPhrase());
 
-        int limit = 6;
-        int maxResults = 2;
+        int limit = 20;
+        int maxResults = 10;
         int totalResources = 0;
         boolean canGetMoreVideos = true;
-        int iteration = 0;
+        int iteration = 1;
         int count = 0;
         getLastVideoID(stream); //gets the value stored in NextDatetoSearch
+        //if(1==1)return;
         for (int starIndex = 1; starIndex <= limit; starIndex++) {
             String index = String.valueOf(starIndex);
             // idClave = idClave.replace("|", "/");
@@ -481,7 +488,8 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase {
             params.put("max-results", String.valueOf(maxResults));
             params.put("alt", "jsonc");
             params.put("orderby", "published");
-            
+            System.out.println("QUe palabras va a buscar: " +searchPhrases);
+
             try {
                 String r2 = postRequest2(params, "https://gdata.youtube.com/feeds/api/videos", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95", "GET");
                 //Convertir la String res2 a un objeto json
@@ -490,11 +498,11 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase {
                 String updated = data.getString("updated");
                 JSONArray items = data.getJSONArray("items");
                 count = items.length();
-         
+
                 DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSX");
                 //formatter.setTimeZone(TimeZone.getTimeZone("GMT-6"));
                 Date currentVideoID = new Date(0L);
-               
+
                 System.out.println("Antes de entrar al for");
                 for (int i = 0; i < count; i++) {
 
@@ -504,7 +512,7 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase {
                     String uploader = id.getString("uploader");
                     String updatedItem = id.getString("updated");
                     String title = id.getString("title");
-                                        
+
                     String uploadedStr = id.getString("uploaded");
                     String description = id.getString("description");
                     if (description == null || description.equals("")) {
@@ -513,14 +521,15 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase {
                     String categoryItem = id.getString("category");
                     JSONObject content = id.getJSONObject("content");
                     String url = content.getString("5");
+                    System.out.println("uploaded:" + uploadedStr + " -- " + lastVideoID);
                     //Temporal
                     Date uploaded = formatter.parse(id.getString("uploaded"));
-                    if (uploaded.before(lastVideoID)) {
-                        System.out.println("Entra al if....");
+                    if (uploaded.before(lastVideoID) || uploaded.equals(lastVideoID)) {
+                        System.out.println("Entra al if.... Terminar la busqueda");
                         canGetMoreVideos = false;
                         break;
                     } else {
-                        System.out.println("entra al else....");
+                        System.out.println("entra al else... Guardando..");
                         external.setPostId(idItem);
                         external.setCreatorId(uploader);
                         external.setCreatorName(uploader);
@@ -531,18 +540,23 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase {
                         aListExternalPost.add(external);
                         currentVideoID = uploaded;
                     }
+
                     if (iteration == 1) {
-                        iteration=0;
+                        iteration = 0;
                         System.out.println("iteration es igual a 1...");
                         setLastVideoID(uploadedStr, stream);//uploadedStr
-                    }                    
+                    }
+                }
+                if (canGetMoreVideos == false) {
+                    System.out.println("Terminando... " + "<=" + lastVideoID);
+                    break;
                 }
             } catch (Exception e) {
                 System.out.println("entra al error: " + e);
             }
-            starIndex = starIndex + (count-1);
+            starIndex = starIndex + (count - 1);
         }
-  
+
         try {
             Thread.sleep(3000);
         } catch (Exception e) {
