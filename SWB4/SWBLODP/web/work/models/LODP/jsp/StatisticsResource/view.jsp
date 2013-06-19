@@ -32,12 +32,35 @@
     String urlstatistic = urlSite+"?statistic=";
 %>
 <%  if(statistic==null){%>
-        <h1>Estadísticas</h1>
-        <span><a href="<%=urlstatistic+"1"%>">Dataset por institución</a></span> <br>
-        <span><a href="<%=urlstatistic+"2"%>">Dataset por aplicación</a></span> <br>
-        <span><a href="<%=urlstatistic+"3"%>">Uso de datasets</a></span> <br>
-        <span><a href="<%=urlstatistic+"4"%>">Uso de aplicaciones</a></span> <br>
-        <span><a href="<%=urlstatistic+"5"%>">Satisfación de usuarios</a></span>
+    <div class="est-list">        
+        <ul>
+            <li>
+                <a href="<%=urlstatistic+"1"%>">
+                    <%=paramRequest.getLocaleString("lbl_tabla1")%>
+                </a>
+            </li>
+            <li>
+                <a href="<%=urlstatistic+"2"%>">
+                    <%=paramRequest.getLocaleString("lbl_tabla2")%>
+                </a>
+            </li>
+            <li>
+                <a href="<%=urlstatistic+"3"%>">
+                    <%=paramRequest.getLocaleString("lbl_tabla3")%>
+                </a>
+            </li>
+            <li>
+                <a href="<%=urlstatistic+"4"%>">
+                    <%=paramRequest.getLocaleString("lbl_tabla4")%>
+                </a>
+            </li>
+            <li>
+                <a href="<%=urlstatistic+"5"%>">
+                    <%=paramRequest.getLocaleString("lbl_tabla5")%>
+                </a>
+            </li>
+        </ul>
+    </div>        
 <%  }else{
         List columns = StatisticsResource.getNameOfColumns(statistic, paramRequest); 
         String column = request.getParameter("column");        
@@ -69,6 +92,7 @@
                             <span>ordenar ascendente</span>
                         </a>
                     <%}%>
+                    
                 </th>
         <%}%> 
             </tr>
@@ -93,13 +117,12 @@
                 count+= aplbyds.getNumApp();
         %>    
             <tr>
-                <td><%=aplbyds.getDataset()%></td>
-                <td><%=aplbyds.getInstitution()%></td>
-                <td><%=aplbyds.getNumApp()%></td>
+                <td class="est-data"><%=aplbyds.getDataset()%></td>
+                <td class="est-instit"><%=aplbyds.getInstitution()%></td>
+                <td class="est-apptot"><%=aplbyds.getNumApp()%></td>
             </tr>
         <% }%>
-            </table>
-            <span>Total de aplicaciones: <%=count%></span>
+            <tfoot><tr><td colspan="2">Total de aplicaciones: <%=count%>
          <%
          }
         if(statistic.trim().equals("3")){
@@ -108,17 +131,16 @@
                 count++;
         %> 
             <tr>
-                <td><%=dataset.getTotalHits()%></td>
-                <td><%=dataset.getInstitution()%></td>
-                <td><%=dataset.getDataset()%></td>
-                <td><%=dataset.getHits()%></td>
-                <td><%=StatisticsResource.formatFecha(dataset.getLastDownload())%></td>
-                <td><%=dataset.getViews()%></td>
-                <td><%=StatisticsResource.formatFecha(dataset.getLastView())%></td>
+                <td class="est-instdw"><%=dataset.getTotalHits()%></td>
+                <td class="est-instit"><%=dataset.getInstitution()%></td>
+                <td class="est-data"><%=dataset.getDataset()%></td>
+                <td class="est-datavisit"><%=dataset.getHits()%></td>
+                <td class="est-datavisitlst"><%=StatisticsResource.formatFecha(dataset.getLastDownload())%></td>
+                <td class="est-datadw"><%=dataset.getViews()%></td>
+                <td class="est-datadwnlst"><%=StatisticsResource.formatFecha(dataset.getLastView())%></td>
             </tr>
         <%  }%>
-            </table> 
-            <span>Total de datasets: <%=count%></span>
+             <tfoot><tr><td colspan="2">Total de datasets: <%=count%>
          <%}
          if(statistic.trim().equals("4")){
             Set<UseAppBean> list = StatisticsResource.getAppUse(wsite,column,asc);            
@@ -126,17 +148,16 @@
                 count++;
         %>
             <tr>                
-                <td><%=appl.getTotalHits()%></td>
-                <td><%=appl.getInstitution()%></td>
-                <td><%=appl.getApplication()%></td>
-                <td><%=appl.getHits()%></td>
-                <td><%=StatisticsResource.formatFecha(appl.getLastDownload())%></td>
-                <td><%=appl.getViews()%></td>
-                <td><%=StatisticsResource.formatFecha(appl.getLastView())%></td>
+                <td class="est-instdw"><%=appl.getTotalHits()%></td>
+                <td class="est-instit"><%=appl.getInstitution()%></td>
+                <td class="est-data"><%=appl.getApplication()%></td>
+                <td class="est-datavisit"><%=appl.getHits()%></td>
+                <td class="est-datavisitlst"><%=StatisticsResource.formatFecha(appl.getLastDownload())%></td>
+                <td class="est-datadw"><%=appl.getViews()%></td>
+                <td class="est-datadwnlst"><%=StatisticsResource.formatFecha(appl.getLastView())%></td>
             </tr>            
          <%  }%>
-            </table> 
-            <span>Total de datasets: <%=count%></span>
+            <tfoot><tr><td colspan="2">Total de datasets: <%=count%></span>
          <%}
          if(statistic.trim().equals("5")){
             if(asc==null){asc="true";}
@@ -146,10 +167,10 @@
                 count++;
         %>   
             <tr>                
-                <td><%=userssat.getInstitution()%></td>
-                <td><%=userssat.getDataset()%></td>
-                <td><%=userssat.getAverage()%></td>                   
-                <td><%=userssat.getNumComments()%></td>                
+                <td class="est-instit"><%=userssat.getInstitution()%></td>
+                <td class="est-data"><%=userssat.getDataset()%></td>
+                <td class="est-datacalif"><%=userssat.getAverage()%></td>                   
+                <td class="est-datacomen"><%=userssat.getNumComments()%></td>                
             </tr>           
          <%  }%>
             </table> 
