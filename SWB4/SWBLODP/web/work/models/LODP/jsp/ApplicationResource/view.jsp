@@ -492,7 +492,7 @@
 
         %>
         
-        <a <%=ckdRank%> href="<%=urlOrder.toString()%>&order=<%=ApplicationResource.ORDER_RANK%>';" <%=ckdCreated%>><%=paramRequest.getLocaleString("lbl_mejorCalificada")%></a> 
+        <a <%=ckdRank%> href="<%=urlOrder.toString()%>&order=<%=ApplicationResource.ORDER_RANK%>"><%=paramRequest.getLocaleString("lbl_mejorCalificada")%></a> 
         <a <%=ckdComment%> href="<%=urlOrder.toString()%>&order=<%=ApplicationResource.ORDER_COMMENTS%>"><%=paramRequest.getLocaleString("lbl_masComentadas")%></a> 
         <a <%=ckdCreated%> href="<%=urlOrder.toString()%>&order=<%=ApplicationResource.ORDER_CREATED%>"><%=paramRequest.getLocaleString("lbl_fecha")%></a>
             
@@ -662,11 +662,10 @@
     
     <%}%>
     
-    </div
-    <%
-    if(isAdmin){
-        
-    %>
+   </div>
+    
+    <%if(isAdmin){%>
+    
     <div class="lista10">
         
         <h3><%=paramRequest.getLocaleString("lbl_appReview")%></h3>
@@ -689,8 +688,7 @@
                 </li>
             <%}}%>
         </ol>
-    </div>
-        
+    </div>  
      <%}
      if(user.isSigned()&& (user.getSemanticObject().createGenericInstance() instanceof Developer || user.getSemanticObject().createGenericInstance() instanceof Publisher)){
      %>
