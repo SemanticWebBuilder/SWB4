@@ -26,7 +26,7 @@
     Resource base = paramRequest.getResourceBase();
     SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
     SWBResourceURL urlConsulta = paramRequest.getRenderUrl();
-    System.out.println("LO UE VIENE EN EL PARAMREQUEST" + " " + paramRequest.getCallMethod());
+    
     Iterator<Institution> institutionList = Institution.ClassMgr.listInstitutions(wsite);
     Iterator<Institution> itInst = null;
 
@@ -51,12 +51,16 @@
     }  
     
     %>
-<h3><a href="<%=urlConsulta.setParameter("act", "arregloLetras").toString()%>"><%=paramRequest.getLocaleString("lbl_tituloListaPub")%></a></h3>
+    
+    <div class="tit">
+        <h4><a href="<%=urlConsulta.setParameter("act", "arregloLetras").toString()%>"><%=paramRequest.getLocaleString("lbl_tituloListaPub")%></a></h4>
+    </div>
+    
 
     <%
 
     String queryinput = request.getParameter("search");
-//    System.out.println("query..." + queryinput);
+
     String queryOriginal = queryinput != null ? queryinput : paramRequest.getLocaleString("lbl_busquedaPB");
     if (null == queryinput) {
         queryinput = "";
@@ -70,7 +74,7 @@
 
     // revisar DS si hay texto abuscar
     if (queryinput != null && queryinput.trim().length() > 0) {
-        //System.out.println("Texto recibido...."+queryinput);
+        
         queryinput = queryinput.replaceAll(",", " ");  // si la búsqueda viene separado por comas, las cambio por espacios en blanco
         String REGEX = "\\s";  //espacio en blanco
         Pattern p = Pattern.compile(REGEX);
@@ -85,7 +89,7 @@
         } else {  // existen mas de una palabra en el queryinput
             for (int j = 0; j < arrKeys.length; j++) {
                 String s = arrKeys[j];
-                //System.out.println("word by word:" + s); //muestra cada palabra encontrada en queryinput separada por espacios
+                
                 if (s != null && s.trim().length() > 0) {
                     if (hmquery.get(s) == null) {
                         hmquery.put(s, s);
@@ -100,7 +104,7 @@
             txtAP.append(" ");
             txtAP.append(ins.getInstitutionDescription() != null ? ins.getInstitutionDescription().trim() : "");
             String reviewTXT = txtAP.toString().trim().toLowerCase(); // texto completo en donde se buscará la ocurrencia
-            //System.out.println("Texto DS: "+reviewTXT);
+           
             if ((reviewQuery(hmquery, reviewTXT)) && hmresults.get(ins.getURI()) == null) {  //||txtAuto.indexOf(queryinput)>-1 
                 hmresults.put(ins.getURI(), ins);
             }
@@ -114,57 +118,50 @@
         
         itInst = hmresults.values().iterator();  // pone en el iterador las instituciones obtenidas obtenidas
         }
-    System.out.println(" valor : " + " " +valor + " acction : " + action);
+    
    
 
 %>
 
 
-
-
 <%
-if (action.equals("arregloLetras")) {
-System.out.println("ENTRO IF LISTA CONSULTA");
+    if (action.equals("arregloLetras")) {
 %>
-<div>
-               
-    <table>
-    <tr>
-        <td><h3><a href="<%=urlConsulta.setParameter("val", "A").toString() %>"><%=paramRequest.getLocaleString("lbl_A")%></a></h3></td>                 
-        <td><h3><a href="<%=urlConsulta.setParameter("val", "B").toString() %>"><%=paramRequest.getLocaleString("lbl_B")%></a></h3></td> 
-        <td><h3><a href="<%=urlConsulta.setParameter("val", "C").toString() %>"><%=paramRequest.getLocaleString("lbl_C")%></a></h3></td>
-        <td><h3><a href="<%=urlConsulta.setParameter("val", "D").toString() %>"><%=paramRequest.getLocaleString("lbl_D")%></a></h3></td>
-        <td><h3><a href="<%=urlConsulta.setParameter("val", "E").toString() %>"><%=paramRequest.getLocaleString("lbl_E")%></a></h3></td>
-        <td><h3><a href="<%=urlConsulta.setParameter("val", "F").toString() %>"><%=paramRequest.getLocaleString("lbl_F")%></a></h3></td>
-        <td><h3><a href="<%=urlConsulta.setParameter("val", "G").toString() %>"><%=paramRequest.getLocaleString("lbl_G")%></a></h3></td>
-        <td><h3><a href="<%=urlConsulta.setParameter("val", "H").toString() %>"><%=paramRequest.getLocaleString("lbl_H")%></a></h3></td>
-        <td><h3><a href="<%=urlConsulta.setParameter("val", "I").toString() %>"><%=paramRequest.getLocaleString("lbl_I")%></a></h3></td>
-        <td><h3><a href="<%=urlConsulta.setParameter("val", "J").toString() %>"><%=paramRequest.getLocaleString("lbl_J")%></a></h3></td>
-        <td><h3><a href="<%=urlConsulta.setParameter("val", "K").toString() %>"><%=paramRequest.getLocaleString("lbl_K")%></a></h3></td>
-        <td><h3><a href="<%=urlConsulta.setParameter("val", "L").toString() %>"><%=paramRequest.getLocaleString("lbl_L")%></a></h3></td>
-        <td><h3><a href="<%=urlConsulta.setParameter("val", "M").toString() %>"><%=paramRequest.getLocaleString("lbl_M")%></a></h3></td>
-        <td><h3><a href="<%=urlConsulta.setParameter("val", "N").toString() %>"><%=paramRequest.getLocaleString("lbl_N")%></a></h3></td>
-        <td><h3><a href="<%=urlConsulta.setParameter("val", "O").toString() %>"><%=paramRequest.getLocaleString("lbl_O")%></a></h3></td>
-        <td><h3><a href="<%=urlConsulta.setParameter("val", "P").toString() %>"><%=paramRequest.getLocaleString("lbl_P")%></a></h3></td>
-        <td><h3><a href="<%=urlConsulta.setParameter("val", "Q").toString() %>"><%=paramRequest.getLocaleString("lbl_Q")%></a></h3></td>
-        <td><h3><a href="<%=urlConsulta.setParameter("val", "R").toString() %>"><%=paramRequest.getLocaleString("lbl_R")%></a></h3></td>
-        <td><h3><a href="<%=urlConsulta.setParameter("val", "S").toString() %>"><%=paramRequest.getLocaleString("lbl_S")%></a></h3></td>
-        <td><h3><a href="<%=urlConsulta.setParameter("val", "T").toString() %>"><%=paramRequest.getLocaleString("lbl_T")%></a></h3></td>
-        <td><h3><a href="<%=urlConsulta.setParameter("val", "U").toString() %>"><%=paramRequest.getLocaleString("lbl_U")%></a></h3></td>
-        <td><h3><a href="<%=urlConsulta.setParameter("val", "V").toString() %>"><%=paramRequest.getLocaleString("lbl_V")%></a></h3></td>
-        <td><h3><a href="<%=urlConsulta.setParameter("val", "W").toString() %>"><%=paramRequest.getLocaleString("lbl_W")%></a></h3></td>
-        <td><h3><a href="<%=urlConsulta.setParameter("val", "X").toString() %>"><%=paramRequest.getLocaleString("lbl_X")%></a></h3></td>
-        <td><h3><a href="<%=urlConsulta.setParameter("val", "Y").toString() %>"><%=paramRequest.getLocaleString("lbl_Y")%></a></h3</td>
-        <td><h3><a href="<%=urlConsulta.setParameter("val", "Z").toString() %>"><%=paramRequest.getLocaleString("lbl_Z")%></a></h3></td>
-        <td><h3><a href="<%=urlConsulta.setParameter("val", "").toString() %>"><%=paramRequest.getLocaleString("lbl_otro")%></a></h3></td>
+
+<div id="directorio">
+    	<div id="abcde">
+   
+        <a href="<%=urlConsulta.setParameter("val", "A").toString() %>"><%=paramRequest.getLocaleString("lbl_A")%></a>               
+        <a href="<%=urlConsulta.setParameter("val", "B").toString() %>"><%=paramRequest.getLocaleString("lbl_B")%></a> 
+        <a href="<%=urlConsulta.setParameter("val", "C").toString() %>"><%=paramRequest.getLocaleString("lbl_C")%></a>
+        <a href="<%=urlConsulta.setParameter("val", "D").toString() %>"><%=paramRequest.getLocaleString("lbl_D")%></a>
+        <a href="<%=urlConsulta.setParameter("val", "E").toString() %>"><%=paramRequest.getLocaleString("lbl_E")%></a>
+        <a href="<%=urlConsulta.setParameter("val", "F").toString() %>"><%=paramRequest.getLocaleString("lbl_F")%></a>
+        <a href="<%=urlConsulta.setParameter("val", "G").toString() %>"><%=paramRequest.getLocaleString("lbl_G")%></a>
+        <a href="<%=urlConsulta.setParameter("val", "H").toString() %>"><%=paramRequest.getLocaleString("lbl_H")%></a>
+        <a href="<%=urlConsulta.setParameter("val", "I").toString() %>"><%=paramRequest.getLocaleString("lbl_I")%></a>
+        <a href="<%=urlConsulta.setParameter("val", "J").toString() %>"><%=paramRequest.getLocaleString("lbl_J")%></a>
+        <a href="<%=urlConsulta.setParameter("val", "K").toString() %>"><%=paramRequest.getLocaleString("lbl_K")%></a>
+        <a href="<%=urlConsulta.setParameter("val", "L").toString() %>"><%=paramRequest.getLocaleString("lbl_L")%></a>
+        <a href="<%=urlConsulta.setParameter("val", "M").toString() %>"><%=paramRequest.getLocaleString("lbl_M")%></a>
+        <a href="<%=urlConsulta.setParameter("val", "N").toString() %>"><%=paramRequest.getLocaleString("lbl_N")%></a>
+        <a href="<%=urlConsulta.setParameter("val", "O").toString() %>"><%=paramRequest.getLocaleString("lbl_O")%></a>
+        <a href="<%=urlConsulta.setParameter("val", "P").toString() %>"><%=paramRequest.getLocaleString("lbl_P")%></a>
+        <a href="<%=urlConsulta.setParameter("val", "Q").toString() %>"><%=paramRequest.getLocaleString("lbl_Q")%></a>
+        <a href="<%=urlConsulta.setParameter("val", "R").toString() %>"><%=paramRequest.getLocaleString("lbl_R")%></a>
+        <a href="<%=urlConsulta.setParameter("val", "S").toString() %>"><%=paramRequest.getLocaleString("lbl_S")%></a>
+        <a href="<%=urlConsulta.setParameter("val", "T").toString() %>"><%=paramRequest.getLocaleString("lbl_T")%></a>
+        <a href="<%=urlConsulta.setParameter("val", "U").toString() %>"><%=paramRequest.getLocaleString("lbl_U")%></a>
+        <a href="<%=urlConsulta.setParameter("val", "V").toString() %>"><%=paramRequest.getLocaleString("lbl_V")%></a>
+        <a href="<%=urlConsulta.setParameter("val", "W").toString() %>"><%=paramRequest.getLocaleString("lbl_W")%></a>
+        <a href="<%=urlConsulta.setParameter("val", "X").toString() %>"><%=paramRequest.getLocaleString("lbl_X")%></a>
+        <a href="<%=urlConsulta.setParameter("val", "Y").toString() %>"><%=paramRequest.getLocaleString("lbl_Y")%></a>
+        <a href="<%=urlConsulta.setParameter("val", "Z").toString() %>"><%=paramRequest.getLocaleString("lbl_Z")%></a>
+        <a href="<%=urlConsulta.setParameter("val", "").toString() %>"><%=paramRequest.getLocaleString("lbl_otro")%></a>
         
-   </tr>
-</table>
-    
-</div>
-                
-<div class="listaInstitution">
-    <ul>
+    </div>
+        
+    <div id="listapub">
            
         <%
 
@@ -174,13 +171,9 @@ System.out.println("ENTRO IF LISTA CONSULTA");
            HashMap<String, Institution> hmInst = new HashMap<String, Institution>();
            String letra= "";
            Iterator<Institution> genericListInst  = null;
-           
-//           System.out.println("antes de entrar al if otro" + " " + valor);
-//           System.out.println("antes de entrar al if otro" + " " + valor);
             
            if(!(valor.equals(""))){
 
-//               System.out.println("ENTRO AL IF DE VALOR DIFERENTE DE VACIO" + " " + valor);
                 while(listInst.hasNext()){
                     Institution ints = listInst.next();
 
@@ -190,7 +183,7 @@ System.out.println("ENTRO IF LISTA CONSULTA");
                 }           
                 
             }else {
-//                 System.out.println("Entro al if de valor otro" + " " + valor);
+
                 while(listInst.hasNext()){
                     Institution ints = listInst.next();
                     if(!(ints.getInstitutionTitle().startsWith("A") ||
@@ -241,27 +234,20 @@ System.out.println("ENTRO IF LISTA CONSULTA");
         <%
                
            }
-//           System.out.println("ANTES DE LA PAGINASCION");
+
            //PAGINACION
             int ps = numPages;
             long l = intSize;
 
             int p = 0;
-//            System.out.println(ps);
+
             if (npage != null) {
                 p = Integer.parseInt(npage);
             }
             int x = 0;
-            
-//            System.out.println("DESPUES DE LA PAGINACION");
            
            if(genericListInst.hasNext()){
               while(genericListInst.hasNext()){
-                  
-//                  System.out.println("ENTRO AL WHILE" + " " + genericListInst.hasNext());
-//                  System.out.println("VALOR DE X" + " " + x);
-//                  Systeystem.out.println("EL VALOR DE P" + " " + p);
-//                  System.out.println("EL VALOR DE PS" + " " + ps);
                   
 //                    //PAGINACION ////////////////////
                     if (x < p * ps) {
@@ -274,28 +260,26 @@ System.out.println("ENTRO IF LISTA CONSULTA");
                     x++;
 //                    /////////////////////////////////
                   
-//                  System.out.println("DESPUES DEL WHILE Y PAGINACION" );
                 Institution liInst  = genericListInst.next();
                 SWBResourceURL urlDetail = paramRequest.getRenderUrl();
                 urlDetail.setParameter("act", "detail");
                 urlDetail.setParameter("suri", liInst.getURI());
         %>
-        <li>
-            <label>
-                <a href="<%=urlDetail.setMode("DETAIL").toString()%>"><%=liInst.getInstitutionTitle()%></a>
-            </label> 
-        </li>
-        <% 
-              }
-           }else{            
-        %>
         
-        <%=paramRequest.getLocaleString("lbl_noEncontrado")%>
+        <ul>
+            <li><a href="<%=urlDetail.setMode("DETAIL").toString()%>"><%=liInst.getInstitutionTitle()%></a></li>
+        </ul>
         
-        <%}
-        %>
+        <%}}else{%>
         
-        <div class="paginar">
+        <ul>
+            <li><%=paramRequest.getLocaleString("lbl_noEncontrado")%></li>
+        </ul>
+        
+        <%}%>
+   </div>
+        
+   <div class="pager">
     <p>
         <%
             if (p > 0 || x < l) //Requiere paginacion
@@ -305,6 +289,10 @@ System.out.println("ENTRO IF LISTA CONSULTA");
                 if ((l % ps) > 0) {
                     pages++;
                 }
+%>
+    <div class="pager-total">Página <%=p%>/<%=pages%></div>
+    <div class="pager-index">
+<%
 
                 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -398,19 +386,15 @@ System.out.println("ENTRO IF LISTA CONSULTA");
                 }
             }
         %>
-    </p></div>
-   </ul>       
+    </div>
 </div>
-        <%}
-        } 
-%>
-<h3><a href="<%=urlConsulta.setParameter("act", "busquedaPublicador").toString()%>"><%=paramRequest.getLocaleString("lbl_titleBusqueda")%></a></h3>
-<%
-if (action.equals("busquedaPublicador")) {
-        %>
-        
 
-        
+<%}}%>
+
+<h3><a href="<%=urlConsulta.setParameter("act", "busquedaPublicador").toString()%>"><%=paramRequest.getLocaleString("lbl_titleBusqueda")%></a></h3>
+
+<%if (action.equals("busquedaPublicador")) {%>
+      
   <div class="buscar_inst">
     <form method="post" action="" id="ints_search">
         <%--
@@ -462,19 +446,18 @@ if (action.equals("busquedaPublicador")) {
         </ul>
     </form>
 </div>
-  <%
-        }
-  %>
+
+<%}%>
             
-  <%!
+<%!
     public boolean reviewQuery(HashMap<String, String> hm, String texto) {
         boolean res = Boolean.FALSE;
-//        System.out.println("Revisando query....");
+
         if (null != hm) {
             Iterator<String> itstr = hm.keySet().iterator();
             while (itstr.hasNext()) {
                 String skey = itstr.next();
-//                System.out.println("key..." + texto.indexOf(skey));
+
                 if (texto.indexOf(skey) > -1) {
                     res = Boolean.TRUE;
                     break;
