@@ -2101,11 +2101,34 @@
             if(!ToolKit.svg.offsetTop)ToolKit.svg.offsetTop=10;
             Modeler.createNavPath();
             
+            //Sobreescritura del método setLayer para establecer la barra de navegación
             var fSetLayer = ToolKit.setLayer;
             ToolKit.setLayer = function(layer) {
                 fSetLayer(layer);
                 if (Modeler.navPath != null) {
                     Modeler.navPath.setNavigation(layer);
+                }
+            };
+            
+            //Sobreescritura del método showResizeBoxes para considerar Pools con lanes y lanes
+            var fShowBoxes = ToolKit.showResizeBoxes;
+            ToolKit.showResizeBoxes = function() {
+                var _this=ToolKit;
+                if(_this.selected.length===1 && _this.selected[0].resizeable)
+                {
+                    if (_this.selected[0].elementType==="Pool" && _this.selected[0].hasLanes()) {
+                        var obj=_this.selected[0];
+                        _this.createResizeBox(obj,-1,0,"w-resize");
+                        _this.createResizeBox(obj,1,0,"e-resize");
+                    } else if (_this.selected[0].elementType==="Lane") {
+                        _this.createResizeBox(obj,0,-1,"n-resize");
+                        _this.createResizeBox(obj,0,1,"s-resize");
+                    } else {
+                        fShowBoxes();
+                    }
+                }else
+                {
+                    _this.hideResizeBoxes();
                 }
             };
             
@@ -2280,6 +2303,14 @@
             var obj=ToolKit.createUseObject(type,id,parent);
             obj.mousedown=function(evt){return Modeler.objectMouseDown(evt,obj);}
             obj.onmousemove=function(evt){return Modeler.objectMouseMove(evt,obj);}
+            
+//            var fRemove = obj.remove;
+//            obj.remove = function(all) {
+//                obj.text.remove();
+//                Modeler.fadeoutObject(obj);
+//                setTimeout(fRemove, 300);
+//            };
+            
             return obj;
         },
                 
@@ -2291,7 +2322,6 @@
                 obj.subLine.setAttributeNS(null,"class",cls);
             }
             obj.pressed = false;
-            
             obj.setArrowType= function(type) {
                 obj.setAttributeNS(null, "marker-end", "url(#"+type+")");
             }
@@ -2429,7 +2459,7 @@
                 }
                 ToolKit.svg.insertBefore(obj.subLine, obj);
                 obj.subLine.setAttributeNS(null,"class","sequenceFlowSubLine");
-            }
+            };
             return obj;
         },
                 
@@ -2441,10 +2471,22 @@
                 return obj;
             };
                 
-            var ob = ToolKit.createBaseObject(con, id, parent);
-            ob.canSelect = false;
+            var obj = ToolKit.createObject(con, id, parent);
+            obj.canSelect = false;
+            obj.resizeable = true;
             
-            return ob;
+//            obj.onmousedown = function(evt) {
+//                obj.select(true);
+//                console.log("Hay que seleccionar");
+//                return true;
+//            }
+
+//            obj.mousedown= function(evt) {
+//                ToolKit.stopPropagation(evt);
+//                evt.preventDefault();
+//                return true;
+//            };
+            return obj;
         },
         
         createPool:function(id, parent)
@@ -2506,6 +2548,10 @@
                     ToolKit.svg.insertBefore(obj.headerLine, obj.nextSibling);
                 }
             }
+            
+            obj.hasLanes = function() {
+                return (obj.lanes && obj.lanes !== null && obj.lanes.length > 0);
+            };
             
             obj.addLane = function(ob) {
                 ob.setParent(obj);
@@ -2803,12 +2849,6 @@
         },
 /***********Utilerías para manipular la información de los procesos*************/
         fadeInObject: function (obj) {
-            //console.log(obj);
-            if (obj.children) {
-                for (var i = 0; i < obj.children.length; i++) {
-                    //console.log(obj.children[i].tagName);
-                }
-            }
             var animation = document.createElementNS(ToolKit.svgNS, 'animate');
             animation.setAttributeNS(null, 'attributeName', 'fill-opacity');
             animation.setAttributeNS(null, 'begin', "0s");
@@ -2823,6 +2863,28 @@
             animation2.setAttributeNS(null, 'begin', "0s");
             animation2.setAttributeNS(null, 'from', "0");
             animation2.setAttributeNS(null, 'to', "1");
+            animation2.setAttributeNS(null, 'dur', "0.2s");
+            animation2.setAttributeNS(null, 'fill', "freeze");
+            obj.appendChild(animation2);
+            
+            animation2.beginElement();
+        },
+                
+        fadeoutObject: function(obj) {
+            var animation = document.createElementNS(ToolKit.svgNS, 'animate');
+            animation.setAttributeNS(null, 'attributeName', 'fill-opacity');
+            animation.setAttributeNS(null, 'begin', "0s");
+            animation.setAttributeNS(null, 'from', "1");
+            animation.setAttributeNS(null, 'to', "0");
+            animation.setAttributeNS(null, 'dur', "0.2s");
+            animation.setAttributeNS(null, 'fill', "freeze");
+            obj.appendChild(animation);
+
+            var animation2 = document.createElementNS(ToolKit.svgNS, 'animate');
+            animation2.setAttributeNS(null, 'attributeName', 'stroke-opacity');
+            animation2.setAttributeNS(null, 'begin', "0s");
+            animation2.setAttributeNS(null, 'from', "1");
+            animation2.setAttributeNS(null, 'to', "0");
             animation2.setAttributeNS(null, 'dur', "0.2s");
             animation2.setAttributeNS(null, 'fill', "freeze");
             obj.appendChild(animation2);
@@ -3197,13 +3259,13 @@
             for (var i = 0; i < ToolKit.contents.length; i++) {
                 if (ToolKit.contents[i].typeOf && (ToolKit.contents[i].typeOf("GraphicalElement") || ToolKit.contents[i].typeOf("ConnectionObject"))) {
                     var json = Modeler.getJSONObject(ToolKit.contents[i]);
-                    if (json != null) {
+                    if (json !== null) {
                         ret.nodes.push(json);
                     }
                     for (var j = 0; j < ToolKit.contents[i].outConnections.length; j++) {
-                        if (uris.indexOf(ToolKit.contents[i].outConnections[j].id) == -1) {
+                        if (uris.indexOf(ToolKit.contents[i].outConnections[j].id) === -1) {
                             json = Modeler.getJSONObject(ToolKit.contents[i].outConnections[j]);
-                            if (json != null) {
+                            if (json !== null) {
                                 ret.nodes.push(json);
                             }
                             uris += "|";
