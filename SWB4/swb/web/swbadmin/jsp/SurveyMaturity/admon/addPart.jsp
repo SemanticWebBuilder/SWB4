@@ -1,3 +1,5 @@
+<%@page import="org.semanticwb.model.WebSite"%>
+<%@page import="org.semanticwb.questionnaire.Part"%>
 <%@page import="org.semanticwb.portal.api.SWBResourceURL"%>
 <jsp:useBean id="paramRequest" scope="request" type="org.semanticwb.portal.api.SWBParamRequest"/>
 
@@ -5,9 +7,14 @@
             SWBResourceURL urlAction = paramRequest.getActionUrl();
             urlAction.setCallMethod(SWBResourceURL.Call_DIRECT);
             urlAction.setAction("addPart");
+            WebSite site = paramRequest.getWebPage().getWebSite();
 
-            SWBResourceURL render = paramRequest.getRenderUrl();
-
+            String id = request.getParameter("id");
+            Part part = null;
+            if (id != null)
+            {
+                part = Part.ClassMgr.getPart(id, site);
+            }
 %>
 <script type="text/javascript">
     function closeDialogAddPart()
@@ -66,6 +73,17 @@
 </script>
 <h1 align="center">Parte</h1>
 <form id="frmAddPart" action="<%=urlAction%>">
+    <%
+                if (part != null)
+                {
+                    String partid = part.getId();
+    %>
+
+    <input type="hidden" name="part" value="<%=partid%>">
+    <%
+                }
+    %>
+
     <input type="hidden" name="tituloparte">
     <input type="hidden" name="descriptionparte">
     <table>
@@ -74,7 +92,14 @@
                 Nombre:
             </td>
             <td>
-                <input type="text" maxlength="80" size="80" name="namepart">
+                <%
+                            String nombre = "";
+                            if (part != null && part.getNamePart() != null)
+                            {
+                                nombre = part.getNamePart();
+                            }
+                %>
+                <input type="text" maxlength="80" size="80" name="namepart" value="<%=nombre%>">
             </td>
         </tr>
         <tr>
@@ -82,7 +107,16 @@
                 T&iacute;tulo:
             </td>
             <td>
-                <div dojoType="dijit.Editor" id="tituloparteditor"></div>
+                <%
+                            String tituloparteditor = "";
+                            if (part != null && part.getTitle() != null)
+                            {
+                                tituloparteditor = part.getTitle();
+                            }
+                %>
+                <div dojoType="dijit.Editor" id="tituloparteditor">
+                    <%=tituloparteditor%>
+                </div>
             </td>
         </tr>
         <tr>
@@ -96,7 +130,16 @@
                 Descripci&oacute;n:
             </td>
             <td>
-                <div dojoType="dijit.Editor" id="descriptionparteditor"></div>
+                <%
+                            String descriptionparteditor = "";
+                            if (part != null && part.getDescription() != null)
+                            {
+                                descriptionparteditor = part.getDescription();
+                            }
+                %>
+                <div dojoType="dijit.Editor" id="descriptionparteditor">
+                    <%=descriptionparteditor%>
+                </div>
             </td>
         </tr>
         <tr>

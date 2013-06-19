@@ -33,7 +33,29 @@
                 }
                 
                 
-            }            
+            }
+            function doGet(url,funcion)
+            {
+                var content='';
+
+                for (var key in parametros)
+                {
+                    var value=parametros[key];
+                    content+=key+':\''+encodeURIComponent(value)+'\',';
+                }                
+                var strToEval='dojo.xhrGet({form: url,timeout: 3000,load:function(data){funcion();},content: {'+ content +' }})';
+
+                try
+                {
+                    eval(strToEval);
+                }
+                catch(err)
+                {
+                    alert(err);
+                }
+
+
+            }
             function sendform(id,funcion)
             {
                 var _form = dojo.byId(id);
