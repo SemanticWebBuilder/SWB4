@@ -70,7 +70,7 @@ Author     : rene.jara
             if ((tRec % nRecPPag) > 0) {
                 tPag++;
             }
-            if(nPag>(tPag-1)){
+            if(nPag>(tPag-1)&&tPag>0){
                 nPag=tPag-1;
             }
             int iRec = ((nPag) * nRecPPag);
@@ -94,7 +94,7 @@ Author     : rene.jara
                 urlrvw.setParameter("npag", nPag + "");
         %>
         <div class="comentario">
-            <p class="comentador"><%=co.getCommUserName()%>-<%=co.getCommUserEmail()%></p>
+            <p class="comentador"><strong><%=co.getCommUserName()%></strong><em><%=co.getCommUserEmail()%></em></p>
             <p class="comentariotxt"><%=co.getComment()%></p>
             <p class="inapropiado">
                 <a href="<%=urlapv%>" title="<%=paramRequest.getLocaleString("lblApproved")%>"><span><%=paramRequest.getLocaleString("lblCommentApproved")%></span></a>

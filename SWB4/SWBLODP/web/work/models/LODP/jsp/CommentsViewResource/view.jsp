@@ -159,7 +159,7 @@ Author     : rene.jara
             if ((tRec % nRecPPag) > 0) {
                 tPag++;
             }
-            if(nPag>(tPag-1)){
+            if(nPag>(tPag-1)&&tPag>0){
                 nPag=tPag-1;
             }
             int iRec = ((nPag) * nRecPPag);
