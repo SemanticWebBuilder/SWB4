@@ -65,18 +65,12 @@
     String roladmin = base.getAttribute("idAdminAPP");
     Role role = wsite.getUserRepository().getRole(roladmin);
     
-    System.out.println("roladmin" + roladmin);
-    System.out.println("role" + role);
-    
-    System.out.println("publicador" + publisher);
-    System.out.println("desarrollador" + dev);
-    System.out.println("usiario" + user);
-    
     boolean isAdmin = Boolean.FALSE;
+    
     if(null!=role&&user.hasRole(role)||null!=publisher&&publisher.hasRole(role)||null!=dev&&dev.hasRole(role)){
-        isAdmin = Boolean.TRUE;
+        isAdmin = Boolean.TRUE;     
     }
-    System.out.println("isAdmin" + isAdmin);
+    
     String filterCatShort= filterCat;
     String filterUriShort = filteruri;
     
@@ -287,7 +281,7 @@
         alert('<%=strMsg%>');
     </script>
 
-        <%}%>
+ <%}%>
 <div class="buscar_ds">
     <form method="post" action="" id="aps_search">
         <%
