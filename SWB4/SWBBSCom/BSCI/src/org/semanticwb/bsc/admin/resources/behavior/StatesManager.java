@@ -163,21 +163,25 @@ public class StatesManager extends GenericResource {
             //status.removeAllState();
 System.out.println("processAction....");
 System.out.println("status="+status);
+
 //            GenericIterator<State> it = status.listStates();
 //            while
-//            
-//            String[] values = request.getParameterValues("abc");            
-//            if(values!=null)
-//            {
-//                State state;
-//                for(int i=0; i<values.length; i++) {
-//                    if(State.ClassMgr.hasState(values[i], SWBContext.getAdminWebSite())) {
-//                        state = State.ClassMgr.getState(values[i], SWBContext.getAdminWebSite());
-//                        status.addState(state);
-//                    }
-//                }
-//                
-//            }
+            
+            String[] values = request.getParameterValues("abc");            
+            if(values!=null)
+            {
+                State state;
+                for(int i=0; i<values.length; i++) {
+                    if(State.ClassMgr.hasState(values[i], SWBContext.getAdminWebSite())) {
+                        state = State.ClassMgr.getState(values[i], SWBContext.getAdminWebSite());
+                        status.addState(state);
+                        state.setUndeleteable(true);
+                    }
+                }
+                
+            }
+            
+            
         }
         response.setRenderParameter("suri", suri);
         response.setRenderParameter("sg", sgId);
