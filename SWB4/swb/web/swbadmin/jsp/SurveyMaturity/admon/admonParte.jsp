@@ -1,3 +1,5 @@
+
+<%@page import="org.semanticwb.survey.Admin"%>
 <%@page import="org.semanticwb.portal.api.SWBResourceURL"%>
 <%@page import="java.util.Iterator"%>
 <%@page import="org.semanticwb.questionnaire.Part"%>
@@ -21,18 +23,37 @@
     }
 %>
 
+<%
+    SWBResourceURL urlRender = paramRequest.getRenderUrl();
+    urlRender.setMode(Admin.MODE_ADMON_ADD_PART);
+    urlRender.setCallMethod(SWBResourceURL.Call_DIRECT);
+
+%>
+
 <script type="text/javascript">
     function showAdmonParte()
     {
-        resetEditor('tituloparteditor');
-        resetEditor('descriptionparteditor');
+        var url='<%=urlRender%>';
+        reload(url, 'dialogAdmonParte');
         dijit.byId("dialogAdmonParte").show();
     }
     function deletePart(url)
     {
+
+        if(confirm('¿Desea borrar la parte?'))
+        {
+            doGet(url, reloadAdmonParte);
+        }
+        
+    }
+    function showEditPart(id)
+    {
+        var url='<%=urlRender%>'+'?id='+id;
+        reload(url, 'dialogAdmonParte');
         
     }
 </script>
+
 <h1>Administraci&oacute;n de partes de un cuestionario</h1><br>
 <input type="button" value="Agregar Parte" onclick="showAdmonParte();"><br><br>
 <table width="100%" cellpadding="2" cellspacing="2" border="1">
@@ -42,6 +63,11 @@
                 SWBResourceURL urlAction = paramRequest.getActionUrl();
                 WebSite site = paramRequest.getWebPage().getWebSite();
                 Iterator<Part> parts = Part.ClassMgr.listParts(site);
+                //String imageEdit="/swbadmin/jsp/SurveyMaturity/images/edit.png";
+                String imageEdit = "/work/sites/" + site.getId() + "/jsp/SurveyMaturity/images/edit.png";
+                //String imageDelete="/swbadmin/jsp/SurveyMaturity/images/delete.png";
+                String imageDelete = "/work/sites/" + site.getId() + "/jsp/SurveyMaturity/images/delete.png";
+
                 while (parts.hasNext())
                 {
                     Part part = parts.next();
@@ -51,15 +77,18 @@
                         name = "";
                     }
                     name = encode(name);
+                    String id=part.getId();
                     String uri = part.getURI();
+                    urlAction.setParameter("uri", uri);
+                    urlAction.setAction("removePart");
     %>
     <tr>
         <td>
             <p><%=name%></p>
         </td>
         <td style="text-align: center;" class="tban-tarea">
-            <a href="#" title="Editar" onclick="showEditPart('<%=uri%>');"><img alt="editar"  src="/swbadmin/jsp/SurveyMaturity/images/edit.png"></a>
-            <a href="#" title="Eliminar" onclick="deletePart('<%=urlAction.setAction(SWBResourceURL.Action_REMOVE)%>');"><img alt="eliminar"  src="/swbadmin/jsp/SurveyMaturity/images/delete.png"></a>
+            <a href="#" title="Editar" onclick="showEditPart('<%=id%>');"><img alt="editar"  src="<%=imageEdit%>"></a>
+            <a href="#" title="Eliminar" onclick="deletePart('<%=urlAction%>');"><img alt="eliminar"  src="<%=imageDelete%>"></a>
         </td>
     </tr>
     <%
@@ -71,12 +100,7 @@
         <td colspan="2">
             &nbsp;
         </td>
-    </tr>
-    <tr>
-        <td colspan="2">
-            <input type="button" value="Agregar Parte" onclick="showAdmonParte();">
-        </td>
-    </tr>
+    </tr>    
 </table>
 
 
