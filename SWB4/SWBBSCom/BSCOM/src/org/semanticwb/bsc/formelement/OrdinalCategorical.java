@@ -1,13 +1,13 @@
 package org.semanticwb.bsc.formelement;
 
-import java.util.Iterator;
 import javax.servlet.http.HttpServletRequest;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
-import org.semanticwb.bsc.accessory.Period;
+import org.semanticwb.bsc.Status;
 import org.semanticwb.bsc.accessory.State;
 import org.semanticwb.bsc.accessory.StateGroup;
 import org.semanticwb.model.FormValidateException;
+import org.semanticwb.model.GenericIterator;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticProperty;
 
@@ -48,18 +48,21 @@ public class OrdinalCategorical extends org.semanticwb.bsc.formelement.base.Ordi
         if(obj.getGenericInstance() instanceof State)
         {
             State state = (State)obj.getGenericInstance();
-            StateGroup parent = state.getStateGroup();
-            Iterator<State> it = parent.listStates();
-            while(it.hasNext()) {
-                State so = it.next();
-                if( state.equals(so) ) {
-                    continue;
+            //StateGroup parent = state.getStateGroup();
+            Status parent = state.getStatus();
+            if(parent instanceof StateGroup) {
+                GenericIterator<State> it = parent.listStates();
+                while(it.hasNext()) {
+                    State so = it.next();
+                    if( state.equals(so) ) {
+                        continue;
+                    }
+                    if(ordinal == so.getOrden())
+                    {
+                        throw new FormValidateException("El valor debe ser numérico y no puede repetirse");
+                    }
+
                 }
-                if(ordinal == so.getOrden())
-                {
-                    throw new FormValidateException("El valor debe ser numérico y no puede repetirse");
-                }
-    
             }
         }
         else
