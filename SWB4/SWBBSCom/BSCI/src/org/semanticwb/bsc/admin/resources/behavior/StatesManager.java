@@ -2,16 +2,21 @@
 package org.semanticwb.bsc.admin.resources.behavior;
 
 import java.io.IOException;
+import java.net.URLEncoder;
 import java.util.Iterator;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.bsc.Status;
 import org.semanticwb.bsc.accessory.State;
 import org.semanticwb.bsc.accessory.StateGroup;
+import org.semanticwb.model.GenericIterator;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.User;
+import org.semanticwb.platform.SemanticObject;
+import org.semanticwb.platform.SemanticOntology;
 import org.semanticwb.portal.api.GenericResource;
 import org.semanticwb.portal.api.SWBActionResponse;
 import org.semanticwb.portal.api.SWBParamRequest;
@@ -22,12 +27,11 @@ import org.semanticwb.portal.api.SWBResourceURL;
 public class StatesManager extends GenericResource {
     private Logger log = SWBUtils.getLogger(StatesManager.class);
     private static final String formId = State.bsc_State.getClassName()+"/bhvr";
-    private static final String sgId = "sg";
-    private static final String stId = "st";
         
     @Override
     public void doView(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-System.out.println("\n\n\n");
+        response.setHeader("Cache-Control", "no-cache"); 
+        response.setHeader("Pragma", "no-cache");
 
         User user = paramRequest.getUser();
         if(user==null || !user.isSigned())
@@ -35,10 +39,18 @@ System.out.println("\n\n\n");
             response.sendError(403);
             return;
         }
+         
+        final String suri=request.getParameter("suri");
+        if(suri==null) {
+            response.getWriter().println("No se detect&oacute ning&uacute;n objeto sem&aacute;ntico!");
+            return;
+        }
         
-        response.setHeader("Cache-Control", "no-cache"); 
-        response.setHeader("Pragma", "no-cache"); 
-
+        final String stateGroupId = request.getParameter("sg");
+        
+        SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
+        SemanticObject obj = ont.getSemanticObject(suri);
+        Status status = (Status)obj.createGenericInstance();
 
         SWBResourceURL url = paramRequest.getActionUrl();
         StringBuilder ret = new StringBuilder();
@@ -47,21 +59,6 @@ System.out.println("\n\n\n");
         ret.append("  dojo.require('dijit.layout.ContentPane');\n");
         ret.append("  dojo.require('dijit.form.FilteringSelect');\n");
         ret.append("  dojo.require('dijit.form.CheckBox');\n");
-        /*ret.append("  function validpwd(pwd){\n");
-        ret.append("    var ret=true;\n");
-        ret.append(((SWBPlatform.getSecValues().isDifferFromLogin())?"  if (dijit.byId('Ulogin').textbox.value == pwd) { ret=false;}":""));
-        ret.append("\n");
-        ret.append(((SWBPlatform.getSecValues().getMinlength()>0)?"     if (pwd.length < "+SWBPlatform.getSecValues().getMinlength()+") { ret=false;}":""));
-        ret.append("\n");
-        ret.append(((SWBPlatform.getSecValues().getComplexity()==1)?"   if (!pwd.match(/^.*(?=.*[a-zA-Z])(?=.*[0-9])().*$/) ) { ret=false;}":""));
-        ret.append("\n");
-        ret.append((SWBPlatform.getSecValues().getComplexity()==2)?"    if (!pwd.match(/^.*(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[\\W])().*$/) ) { ret=false;}":"");
-        ret.append("\n");
-        ret.append("    return ret;\n");
-        ret.append("  }\n");*/
-        
-        //out.println("dojo.addOnLoad(function(){getHtml('"+url+"'+'?site="+websiteId+"','slave');})");
-        
         ret.append("</script>\n");
         
         ret.append("<form id=\"").append(formId).append("\" dojoType=\"dijit.form.Form\" class=\"swbform\"");
@@ -72,65 +69,117 @@ System.out.println("\n\n\n");
         SWBResourceURL surl = paramRequest.getRenderUrl().setMode(SWBResourceURL.Mode_EDIT).setCallMethod(SWBResourceURL.Call_DIRECT);
         
         String lang = user.getLanguage();
-        ret.append("  <select onchange=\"postHtml('"+surl+"'+'?sg='+this.options[this.selectedIndex],'st')\" dojoType=\"dijit.form.FilteringSelect\" autocomplete=\"false\" name=\"sg\" id=\"sg\">");
-        //ret.append("  <select onchange=\"alert(dijit.byId('sg').get('value'));\" dojoType=\"dijit.form.FilteringSelect\" autocomplete=\"false\" name=\"sg\" id=\"sg\">");
+        ret.append("  <select onchange=\"postHtml('").append(surl).append("'+'?sg='+this.attr('value')+'&suri=").append(URLEncoder.encode(suri,"UTF-8")).append("','st')\" dojoType=\"dijit.form.FilteringSelect\" autocomplete=\"false\" name=\"sg\" id=\"sg\">");
+        StateGroup aux;
+        if(StateGroup.ClassMgr.hasStateGroup(stateGroupId, SWBContext.getAdminWebSite())) {
+            aux = StateGroup.ClassMgr.getStateGroup(stateGroupId, SWBContext.getAdminWebSite());
+        }else {
+            aux = null;
+        }
         Iterator<StateGroup> groups = StateGroup.ClassMgr.listStateGroups(SWBContext.getAdminWebSite());
         while(groups.hasNext()) {
             StateGroup group = groups.next();
             if(!group.isValid() || !user.haveAccess(group)) {
                 continue;
             }
-            ret.append("<option value=\""+group.getId()+"\">"+group.getDisplayTitle(lang)+"</option>"); 
+            if(aux==null) {
+                aux = group;
+            }
+            ret.append("<option ").append(group.equals(aux)?"selected=\"selected\"":"").append(" value=\"").append(group.getId()).append("\">").append(group.getDisplayTitle(lang)).append("</option>"); 
         }        
         ret.append("  </select>");
         ret.append("  <div id=\"st\"> ");
-        ret.append("  </div>");
+        String list = renderStatesList(status, aux, user);
+        ret.append(list==null?"":list);
+        ret.append("  </div>");        
         ret.append("  <button dojoType='dijit.form.Button' type=\"submit\">guardar</button>\n");
+        ret.append("  <input type=\"hidden\" name=\"suri\" value=\""+suri+"\" />");
         ret.append("</fieldset>");
         ret.append("</form>");
         response.getWriter().println(ret.toString());
     }
 
     @Override
-    public void doEdit(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        System.out.println("statesManager.doEdit............");
-        System.out.println("grupo id="+request.getParameter("sg"));
-        
-        /*User user = paramRequest.getUser();
+    public void doEdit(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {      
+        User user = paramRequest.getUser();
         if(user==null || !user.isSigned())
         {
             response.sendError(403);
             return;
         }
+        final String suri=request.getParameter("suri");
+        if(suri==null) {
+            response.getWriter().println("No se detect&oacute ning&uacute;n objeto sem&aacute;ntico!");
+            return;
+        }        
+        SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
+        SemanticObject obj = ont.getSemanticObject(suri);
+        Status status = (Status)obj.createGenericInstance();
         
         if(StateGroup.ClassMgr.hasStateGroup(request.getParameter("sg"), SWBContext.getAdminWebSite())) {
             StateGroup stateGroup = StateGroup.ClassMgr.getStateGroup(request.getParameter("sg"), SWBContext.getAdminWebSite());
-            System.out.println("stateGroup="+stateGroup);
-            
+            String ret = renderStatesList(status, stateGroup, user);
+            response.getWriter().println(ret==null?"<p>Este grupo no posee estados</p>":ret);
+        }
+    }
+    
+    private String renderStatesList(Status status, StateGroup stateGroup, User user) {
+        if(status==null || stateGroup==null) {
+            return null;
+        }
+        
+        GenericIterator<State> states = stateGroup.listStates();
+        if(states.hasNext())
+        {
             String lang = user.getLanguage();
-            
             StringBuilder ret = new StringBuilder();
-            
-System.out.println("AdminWebSite="+SWBContext.getAdminWebSite());
-            Iterator<State> states = State.ClassMgr.listStateByStateGroup(stateGroup, SWBContext.getAdminWebSite());
+            ret.append("<ul>");
             while(states.hasNext()) {
                 State state = states.next();
                 if(!state.isValid() || !user.haveAccess(state)) {
                     continue;
                 }
-                ret.append("<label for=\""+state.getId()+"\"><input type=\"checkbox\" name=\"abc\" id=\""+state.getId()+"\" value=\""+state.getId()+"\"/>"+state.getDisplayTitle(lang)+"</label>"); 
+                ret.append("<li><label for=\""+state.getId()+"\"><input type=\"checkbox\" "+(status.hasState(state)?"checked=\"checked\"":"")+" name=\"abc\" id=\""+state.getId()+"\" value=\""+state.getId()+"\"/>"+state.getDisplayTitle(lang)+"</label></li>"); 
             }
-            response.getWriter().println(ret.toString());
-        }*/
+            ret.append("</ul>");
+            return ret.toString();
+        }
+        else
+        {
+            return null;
+        }
     }
 
     @Override
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
-        System.out.println("statesManager.processAction............");
-        System.out.println("grupo id="+request.getParameter("sg"));
-        if(StateGroup.ClassMgr.hasStateGroup(request.getParameter("sg"), SWBContext.getAdminWebSite())) {
-            StateGroup stateGroup = StateGroup.ClassMgr.getStateGroup(request.getParameter("sg"), SWBContext.getAdminWebSite());
-            System.out.println("stateGroup="+stateGroup);
+        final String sgId = request.getParameter("sg");
+        final String suri=request.getParameter("suri");
+        if(StateGroup.ClassMgr.hasStateGroup(sgId, SWBContext.getAdminWebSite()))
+        {
+            StateGroup stateGroup = StateGroup.ClassMgr.getStateGroup(sgId, SWBContext.getAdminWebSite());
+            SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
+            SemanticObject obj = ont.getSemanticObject(suri);
+            Status status = (Status)obj.createGenericInstance();
+            //status.removeAllState();
+System.out.println("processAction....");
+System.out.println("status="+status);
+//            GenericIterator<State> it = status.listStates();
+//            while
+//            
+//            String[] values = request.getParameterValues("abc");            
+//            if(values!=null)
+//            {
+//                State state;
+//                for(int i=0; i<values.length; i++) {
+//                    if(State.ClassMgr.hasState(values[i], SWBContext.getAdminWebSite())) {
+//                        state = State.ClassMgr.getState(values[i], SWBContext.getAdminWebSite());
+//                        status.addState(state);
+//                    }
+//                }
+//                
+//            }
         }
+        response.setRenderParameter("suri", suri);
+        response.setRenderParameter("sg", sgId);
     }
 }
