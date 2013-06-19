@@ -22,21 +22,15 @@
  */
 package org.semanticwb.process.resources;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
-import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.apache.batik.transcoder.TranscoderException;
-import org.apache.batik.transcoder.TranscoderInput;
-import org.apache.batik.transcoder.TranscoderOutput;
-import org.apache.batik.transcoder.image.PNGTranscoder;
 import org.apache.commons.fileupload.FileItem;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -910,21 +904,21 @@ public class SVGModeler extends GenericResource {
                 String json = getProcessJSON(p).toString();
                 outs.write(json.getBytes());
             } else if ("png".equalsIgnoreCase(format)) {
-                String svg = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>" +
-                             "<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\" \"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\">";
-                svg += data.trim();
-                System.out.println(svg);
-                PNGTranscoder t = new PNGTranscoder();
-                Charset charset = Charset.forName("UTF-8");
-                response.setContentType("image/png");
-                
-                TranscoderInput ti = new TranscoderInput(new ByteArrayInputStream(charset.encode(svg.trim()).array()));
-                TranscoderOutput to = new TranscoderOutput(outs);
-                try {
-                    t.transcode(ti, to);
-                } catch (TranscoderException ex) {
-                    log.error(ex);
-                }
+//                String svg = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>" +
+//                             "<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\" \"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\">";
+//                svg += data.trim();
+//                System.out.println(svg);
+//                PNGTranscoder t = new PNGTranscoder();
+//                Charset charset = Charset.forName("UTF-8");
+//                response.setContentType("image/png");
+//                
+//                TranscoderInput ti = new TranscoderInput(new ByteArrayInputStream(charset.encode(svg.trim()).array()));
+//                TranscoderOutput to = new TranscoderOutput(outs);
+//                try {
+//                    t.transcode(ti, to);
+//                } catch (TranscoderException ex) {
+//                    log.error(ex);
+//                }
             }
             
             outs.flush();
