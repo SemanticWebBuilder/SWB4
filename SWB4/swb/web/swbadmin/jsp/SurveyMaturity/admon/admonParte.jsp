@@ -37,10 +37,10 @@
         reload(url, 'dialogAdmonParte');
         dijit.byId("dialogAdmonParte").show();
     }
-    function deletePart(url)
+    function deletePart(url,name)
     {
 
-        if(confirm('¿Desea borrar la parte?'))
+        if(confirm('¿Desea borrar la parte con nombre: '+name+'?'))
         {
             doGet(url, reloadAdmonParte);
         }
@@ -50,6 +50,7 @@
     {
         var url='<%=urlRender%>'+'?id='+id;
         reload(url, 'dialogAdmonParte');
+        dijit.byId("dialogAdmonParte").show();
         
     }
 </script>
@@ -81,6 +82,10 @@
                     String uri = part.getURI();
                     urlAction.setParameter("uri", uri);
                     urlAction.setAction("removePart");
+                    urlAction.setWindowState(urlAction.WinState_NORMAL);
+                    urlAction.setCallMethod(urlAction.Call_DIRECT);
+                    
+                    
     %>
     <tr>
         <td>
@@ -88,7 +93,7 @@
         </td>
         <td style="text-align: center;" class="tban-tarea">
             <a href="#" title="Editar" onclick="showEditPart('<%=id%>');"><img alt="editar"  src="<%=imageEdit%>"></a>
-            <a href="#" title="Eliminar" onclick="deletePart('<%=urlAction%>');"><img alt="eliminar"  src="<%=imageDelete%>"></a>
+            <a href="#" title="Eliminar" onclick="deletePart('<%=urlAction%>','<%=name%>');"><img alt="eliminar"  src="<%=imageDelete%>"></a>
         </td>
     </tr>
     <%

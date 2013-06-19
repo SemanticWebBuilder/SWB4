@@ -36,14 +36,14 @@
             }
             function doGet(url,funcion)
             {
-                var content='';
 
-                for (var key in parametros)
-                {
-                    var value=parametros[key];
-                    content+=key+':\''+encodeURIComponent(value)+'\',';
-                }                
-                var strToEval='dojo.xhrGet({form: url,timeout: 3000,load:function(data){funcion();},content: {'+ content +' }})';
+                
+                dojo.xhrGet({url:url
+                    ,timeout:3000,load: function(data)
+                    {                        
+                        funcion();
+                    }});
+                /*var strToEval='dojo.xhrGet({url: url,timeout: 3000,load:function(data){funcion();}})';
 
                 try
                 {
@@ -52,7 +52,7 @@
                 catch(err)
                 {
                     alert(err);
-                }
+                }*/
 
 
             }
