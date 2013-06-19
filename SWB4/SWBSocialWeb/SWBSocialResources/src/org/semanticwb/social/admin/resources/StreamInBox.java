@@ -564,7 +564,7 @@ public class StreamInBox extends GenericResource {
             * */
             SWBResourceURL urlPrev=paramRequest.getRenderUrl().setMode(Mode_PREVIEW).setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("postUri", postIn.getURI());  
             out.println("<a href=\"#\" title=\"" + paramRequest.getLocaleString("previewdocument") + "\" onclick=\"showDialog('" + urlPrev + "','" + paramRequest.getLocaleString("previewdocument") 
-                    + "'); return false;\">RV</a>");
+                    + "'); return false;\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/icons/preview.gif\" border=\"0\" alt=\"" + paramRequest.getLocaleString("previewdocument") + "\"></a>");
             
             
             
@@ -633,9 +633,6 @@ public class StreamInBox extends GenericResource {
             }else if(postIn.getPostSentimentalType()==2)
             {
                 out.println("<img src=\""+SWBPortal.getContextPath()+"/swbadmin/images/feelneg.png"+"\">");
-            }else 
-            {
-                out.println("XXX");
             }
             out.println("</td>");
             
@@ -749,7 +746,7 @@ public class StreamInBox extends GenericResource {
      * @throws IOException Signals that an I/O exception has occurred.
      */
     public void doPreview(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        String postUri=request.getParameter("sval");
+        String postUri=request.getParameter("postUri");
         try {
             final String path = SWBPlatform.getContextPath() + "/work/models/" + paramRequest.getWebPage().getWebSiteId() + "/jsp/review/showPostIn.jsp";
             if (request != null) {
