@@ -648,10 +648,10 @@ public class StreamInBox extends GenericResource {
             out.println("<td align=\"center\">");
             if(postIn.getPostSentimentalEmoticonType()==1)
             {
-                out.println("<img src=\""+SWBPortal.getContextPath()+"/swbadmin/images/emopos.png"+"/>");
+                out.println("<img src=\""+SWBPortal.getContextPath()+"/swbadmin/images/emopos.png"+"\"/>");
             }else if(postIn.getPostSentimentalEmoticonType()==2)
             {
-                out.println("<img src=\""+SWBPortal.getContextPath()+"/swbadmin/images/emoneg.png"+"/>");
+                out.println("<img src=\""+SWBPortal.getContextPath()+"/swbadmin/images/emoneg.png"+"\"/>");
             }else if(postIn.getPostSentimentalEmoticonType()==0)
             {
                 out.println("---");
