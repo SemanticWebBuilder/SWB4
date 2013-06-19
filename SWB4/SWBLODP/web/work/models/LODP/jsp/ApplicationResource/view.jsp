@@ -689,14 +689,14 @@
             <%}}%>
         </ol>
     </div>  
-     <%}
-     if(user.isSigned()&& (user.getSemanticObject().createGenericInstance() instanceof Developer || user.getSemanticObject().createGenericInstance() instanceof Publisher)){
+     <%//}
+     //if(user.isSigned()&& (user.getSemanticObject().createGenericInstance() instanceof Developer || user.getSemanticObject().createGenericInstance() instanceof Publisher)){
      %>
 
-<p><a href="<%=renderURL.setMode(ApplicationResource.ADD_APPLICATION)%>"><%=paramRequest.getLocaleString("lbl_subirApp")%></a></p>
+<!--<p><a href="<%//=renderURL.setMode(ApplicationResource.ADD_APPLICATION)%>"><%//=paramRequest.getLocaleString("lbl_subirApp")%></a></p>-->
 
 <%
- }
+ //}
 %>          
     </div>
     </div>
