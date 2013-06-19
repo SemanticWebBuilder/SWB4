@@ -689,7 +689,7 @@
             <%}}%>
         </ol>
     </div>  
-     <%//}
+     <%}
      //if(user.isSigned()&& (user.getSemanticObject().createGenericInstance() instanceof Developer || user.getSemanticObject().createGenericInstance() instanceof Publisher)){
      %>
 
