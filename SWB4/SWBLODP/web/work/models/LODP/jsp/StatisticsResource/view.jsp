@@ -45,12 +45,13 @@
         if(asc==null){asc="true";}
         if(column==null){column="1";} 
 %>
-        <h1><%=columns.get(0)%></h1>
-        <table border>
+        
+        <table class="estadisticas dsxinst">
+            <caption><%=columns.get(0)%></caption>
             <tr>
         <%for(int i=1; i<columns.size(); i++){%>                
-                <th>                    
-                    <%=columns.get(i)%>
+                <th class="est-instit">                    
+                    <span><%=columns.get(i)%></span>
                     <%String urlstatistic2 = urlstatistic+statistic+"&column="+i+"&asc=";%>
                     <%if(i==i){ 
                         if(asc.equals("true")){
@@ -79,12 +80,11 @@
                 count += dsbyint.getNumDS();
         %>
             <tr>
-                <td><%=dsbyint.getInstitution()%></td>
-                <td><%=dsbyint.getNumDS()%></td>
+                <td class="est-instit"><%=dsbyint.getInstitution()%></td>
+                <td class="est-datatot"><%=dsbyint.getNumDS()%></td>
             </tr>
         <%  }%>
-            </table> 
-            <span>Total de datasets: <%=count%></span>
+        <tfoot><tr><td colspan="2">Total de datasets: <%=count%>
          <%
          }
         if(statistic.trim().equals("2")){
@@ -165,5 +165,6 @@
          urlCSV.setMode(StatisticsResource.MODE_FILE);         
         %>
         
-         <a href="<%=urlCSV.toString()%>">Descargar CSV</a>
+         <a class="ico-csv" href="<%=urlCSV.toString()%>">Descargar CSV</a></td></tr></tfoot>
+            </table> 
 <%}%>
