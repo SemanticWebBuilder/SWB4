@@ -4,6 +4,7 @@
     Author     : Sabino
 --%>
 
+<%@page import="java.text.DecimalFormat"%>
 <%@page import="java.util.Set"%>
 <%@page import="com.infotec.lodp.swb.resources.UseAppBean"%>
 <%@page import="com.infotec.lodp.swb.resources.UsersSatBean"%>
@@ -66,26 +67,32 @@
         String column = request.getParameter("column");        
         String asc = request.getParameter("asc");
         if(asc==null){asc="true";}
-        if(column==null){column="1";} 
+        if(column==null){column="1";}
+        String classTable = "dsxinst";
+        if(statistic.trim().equals("1")){classTable="dsxinst";}
+        if(statistic.trim().equals("2")){classTable="dsxapp";}
+        if(statistic.trim().equals("3")){classTable="usods";}
+        if(statistic.trim().equals("4")){classTable="usoapp";}
+        if(statistic.trim().equals("5")){classTable="califusr";}
 %>
         
-        <table class="estadisticas dsxinst">
+        <table class="estadisticas <%=classTable%>">
             <caption><%=columns.get(0)%></caption>
             <tr>
         <%for(int i=1; i<columns.size(); i++){%>                
                 <th class="est-instit">                    
                     <span><%=columns.get(i)%></span>
                     <%String urlstatistic2 = urlstatistic+statistic+"&column="+i+"&asc=";%>
-                    <%if(i==i){ 
+                    <%if(i==Integer.parseInt(column)){ 
                         if(asc.equals("true")){
                     %>                       
-                        <a href="<%=urlstatistic2+"false"%>" title="Ordenar ascendente" 
-                           class="ico-asendente"><span>ordenar ascendente</span></a>
+                        <a href="<%=urlstatistic2+"false"%>" title="Ordenar descendente" 
+                           class="ico-descendente"><span>ordenar descendente</span></a>
                     <%  }
                         if(asc.equals("false")){
                     %>   
-                        <a href="<%=urlstatistic2+"true"%>" title="Ordenar desscendente" 
-                           class="ico-descendente"><span>Ordenar descendente</span></a>
+                        <a href="<%=urlstatistic2+"true"%>" title="Ordenar ascendente" 
+                           class="ico-ascendente"><span>Ordenar ascendente</span></a>
                     <%  } 
                      }else{%>    
                         <a href="<%=urlstatistic2+"true"%>"  title="Ordenar ascendente">
@@ -122,7 +129,7 @@
                 <td class="est-apptot"><%=aplbyds.getNumApp()%></td>
             </tr>
         <% }%>
-            <tfoot><tr><td colspan="2">Total de aplicaciones: <%=count%>
+            <tfoot><tr><td colspan="3">Total de aplicaciones: <%=count%>
          <%
          }
         if(statistic.trim().equals("3")){
@@ -130,34 +137,34 @@
             for(UseDSBean dataset : list){
                 count++;
         %> 
-            <tr>
-                <td class="est-instdw"><%=dataset.getTotalHits()%></td>
-                <td class="est-instit"><%=dataset.getInstitution()%></td>
-                <td class="est-data"><%=dataset.getDataset()%></td>
-                <td class="est-datavisit"><%=dataset.getHits()%></td>
-                <td class="est-datavisitlst"><%=StatisticsResource.formatFecha(dataset.getLastDownload())%></td>
-                <td class="est-datadw"><%=dataset.getViews()%></td>
-                <td class="est-datadwnlst"><%=StatisticsResource.formatFecha(dataset.getLastView())%></td>
+            <tr>                
+                <td class="est-instit"><span><%=dataset.getInstitution()%></span></td>
+                <td class="est-instdw"><span><%=dataset.getTotalHits()%></span></td>
+                <td class="est-data"><span><%=dataset.getDataset()%></span></td>
+                <td class="est-datavisit"><span><%=dataset.getHits()%></span></td>
+                <td class="est-datavisitlst"><span><%=StatisticsResource.formatFecha(dataset.getLastDownload())%></span></td>
+                <td class="est-datadw"><span><%=dataset.getViews()%></span></td>
+                <td class="est-datadwnlst"><span><%=StatisticsResource.formatFecha(dataset.getLastView())%></span></td>
             </tr>
         <%  }%>
-             <tfoot><tr><td colspan="2">Total de datasets: <%=count%>
+             <tfoot><tr><td colspan="7">Total de datasets: <%=count%>
          <%}
          if(statistic.trim().equals("4")){
             Set<UseAppBean> list = StatisticsResource.getAppUse(wsite,column,asc);            
             for(UseAppBean appl : list){
                 count++;
         %>
-            <tr>                
-                <td class="est-instdw"><%=appl.getTotalHits()%></td>
-                <td class="est-instit"><%=appl.getInstitution()%></td>
-                <td class="est-data"><%=appl.getApplication()%></td>
-                <td class="est-datavisit"><%=appl.getHits()%></td>
-                <td class="est-datavisitlst"><%=StatisticsResource.formatFecha(appl.getLastDownload())%></td>
-                <td class="est-datadw"><%=appl.getViews()%></td>
-                <td class="est-datadwnlst"><%=StatisticsResource.formatFecha(appl.getLastView())%></td>
+            <tr>
+                <td class="est-instit"><span><%=appl.getInstitution()%></span></td>
+                <td class="est-instdw"><span><%=appl.getTotalHits()%></span></td>                
+                <td class="est-app"><span><%=appl.getApplication()%></span></td>
+                <td class="est-appvisit"><span><%=appl.getHits()%></span></td>
+                <td class="est-appvisitlst"><span><%=StatisticsResource.formatFecha(appl.getLastDownload())%></span></td>
+                <td class="est-appdw"><span><%=appl.getViews()%></span></td>
+                <td class="est-appdwnlst"><span><%=StatisticsResource.formatFecha(appl.getLastView())%></span></td>
             </tr>            
          <%  }%>
-            <tfoot><tr><td colspan="2">Total de datasets: <%=count%></span>
+            <tfoot><tr><td colspan="7">Total de datasets: <%=count%></span>
          <%}
          if(statistic.trim().equals("5")){
             if(asc==null){asc="true";}
@@ -169,12 +176,12 @@
             <tr>                
                 <td class="est-instit"><%=userssat.getInstitution()%></td>
                 <td class="est-data"><%=userssat.getDataset()%></td>
-                <td class="est-datacalif"><%=userssat.getAverage()%></td>                   
+                <%DecimalFormat df = new DecimalFormat("0.##");%>
+                <td class="est-datacalif"><%=df.format(userssat.getAverage())%></td>                   
                 <td class="est-datacomen"><%=userssat.getNumComments()%></td>                
             </tr>           
          <%  }%>
-            </table> 
-            <span>Total de datasets: <%=count%></span>
+            <tfoot><tr><td colspan="4">Total de datasets: <%=count%></span>
          <%}%>
        
         <%
