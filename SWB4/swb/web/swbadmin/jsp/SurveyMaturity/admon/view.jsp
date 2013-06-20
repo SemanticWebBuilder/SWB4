@@ -35,26 +35,12 @@
                 
             }
             function doGet(url,funcion)
-            {
-
-                
+            {                
                 dojo.xhrGet({url:url
                     ,timeout:3000,load: function(data)
                     {                        
                         funcion();
                     }});
-                /*var strToEval='dojo.xhrGet({url: url,timeout: 3000,load:function(data){funcion();}})';
-
-                try
-                {
-                    eval(strToEval);
-                }
-                catch(err)
-                {
-                    alert(err);
-                }*/
-
-
             }
             function sendform(id,funcion)
             {
@@ -64,7 +50,6 @@
                     form: _form,
                     handleAs: "text",
                     load: function(data){
-                        //dojo.byId("response").innerHTML = "Form posted.";
                         funcion();
                     },
                     error: function(error){
@@ -79,34 +64,6 @@
                 
                 return deferred;
             }
-
-            function sendform(id)
-            {
-                var _form = dojo.byId(id);
-
-                var xhrArgs = {
-                    form: _form,
-                    handleAs: "text",
-                    load: function(data){
-                        //dojo.byId("response").innerHTML = "Form posted.";
-                        
-                    },
-                    error: function(error){
-                        alert('error'+error);
-                        // We'll 404 in the demo, but that's okay.  We don't have a 'postIt' service on the
-                        // docs server.
-                        //dojo.byId("response").innerHTML = "Form posted.";
-                    }
-                }
-
-                var deferred = dojo.xhrPost(xhrArgs);
-
-                return deferred;
-            }
-            
-
-            
-            
 
             function getValueEditor(id)
             {
@@ -179,16 +136,18 @@
                     var url='<%=url%>';//'work/models/admon/admonquestion.jsp';
                     reload(url,'admonParte');
                 }
-                function reload(url,id)
+                function reload(_url,id)
                 {
                     
                     dojo.xhrGet({
                         // The URL to request
-                        url: url,
+                        url: _url,
                         // The method that handles the request's successful result
                         // Handle the response any way you'd like!
                         load: function(result) {
-                            dojo.byId(id).innerHTML = result;                           
+                            
+                            var w=dijit.byId(id);
+                            w.setContent(result);
                         }
                     });
                 }
@@ -214,7 +173,11 @@
                             {
                                 var w=dijit.byId(id);
                                 w.setContent(result);
-                                funcion();                                
+                                try
+                                {
+                                    funcion();
+                                }
+                                catch(err2){}
                             }
                             catch(err){alert('Error cargando '+id+':'+err.message);}
                             
