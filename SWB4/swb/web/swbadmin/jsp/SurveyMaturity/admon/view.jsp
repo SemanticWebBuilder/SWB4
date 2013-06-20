@@ -188,7 +188,36 @@
                         // The method that handles the request's successful result
                         // Handle the response any way you'd like!
                         load: function(result) {
-                            dojo.byId(id).innerHTML = result;
+                            dojo.byId(id).innerHTML = result;                           
+                        }
+                    });
+                }
+                function deleteWidget(id)
+                {
+                    attachedWidget = dijit.byId(id);
+                    if (attachedWidget ) {
+                        attachedWidget.destroy();
+                        attachedWidget = null;
+                    }
+                }
+                function reload(url,id,funcion)
+                {
+
+                    dojo.xhrGet({
+                        // The URL to request
+                        url: url,
+                        // The method that handles the request's successful result
+                        // Handle the response any way you'd like!
+                        load: function(result) {
+                            //var node=dojo.byId(id);
+                            try
+                            {
+                                var w=dijit.byId(id);
+                                w.setContent(result);
+                                funcion();                                
+                            }
+                            catch(err){alert('Error cargando '+id+':'+err.message);}
+                            
                         }
                     });
                 }
