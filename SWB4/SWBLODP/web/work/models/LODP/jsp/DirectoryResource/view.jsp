@@ -37,6 +37,8 @@
     String otro = request.getParameter("otro");
     String txtTitleSearch = paramRequest.getLocaleString("lbl_busquedaPB");
     
+    System.out.println("action" + action);
+    
     int numPages = 10;
     try {
         numPages = Integer.parseInt(strNumItems);
@@ -52,8 +54,27 @@
     
     %>
     
-    <div class="tit">
+    <div class="tab">
+        <%if(action != null && action.equals("arregloLetras")){%>
+        
+         <h4><a class="select"  href="<%=urlConsulta.setParameter("act", "arregloLetras").toString()%>"><%=paramRequest.getLocaleString("lbl_tituloListaPub")%></a></h4>
+        
+       <%}else{%>
+       
         <h4><a href="<%=urlConsulta.setParameter("act", "arregloLetras").toString()%>"><%=paramRequest.getLocaleString("lbl_tituloListaPub")%></a></h4>
+        
+        <%}%>
+        
+         <%if(action != null && action.equals("busquedaPublicador")){%>
+        
+         <h4><a class="select" href="<%=urlConsulta.setParameter("act", "busquedaPublicador").toString()%>"><%=paramRequest.getLocaleString("lbl_titleBusqueda")%></a></h4>
+        
+       <%}else{%>
+        
+       <h4><a href="<%=urlConsulta.setParameter("act", "busquedaPublicador").toString()%>"><%=paramRequest.getLocaleString("lbl_titleBusqueda")%></a></h4>
+    
+       <%}%>
+    
     </div>
     
 
@@ -126,6 +147,7 @@
 
 <%
     if (action.equals("arregloLetras")) {
+        urlConsulta.setParameter("act", "arregloLetras");    
 %>
 
 <div id="directorio">
@@ -537,18 +559,15 @@
                 if (pages > 10) {
                     SWBResourceURL urlNext = paramRequest.getRenderUrl();
                     urlNext.setParameter("page", "" + 0);
-//                    if (null != orderby) {
-//                        urlNext.setParameter("order", orderby);
-//                    }
-//                    if (null != direction) {
-//                        urlNext.setParameter("direction", direction);
-//                    }
-//                    if (null != filterby) {
-//                        urlNext.setParameter("filter", filterby);
-//                    }
-//                    if (null != filteruri) {
-//                        urlNext.setParameter("filteruri", filteruri);
-//                    }
+                    if (null != valor) {
+                        urlNext.setParameter("val", valor);
+                    }
+                    if (null != otro) {
+                        urlNext.setParameter("otro", otro);
+                    }
+                    if (null != action) {
+                        urlNext.setParameter("act", action);
+                    }
                     if (queryinput != null && queryinput.trim().length() > 0) {
                         urlNext.setParameter("search", queryinput);
                     }
@@ -559,19 +578,15 @@
                 for (int z = inicia; z < finaliza; z++) {
                     SWBResourceURL urlNext = paramRequest.getRenderUrl();
                     urlNext.setParameter("page", "" + z);
-//                    if (null != orderby) {
-//                        urlNext.setParameter("order", orderby);
-//                    }
-//                    if (null != direction) {
-//                        urlNext.setParameter("direction", direction);
-//                    }
-//
-//                    if (null != filterby) {
-//                        urlNext.setParameter("filter", filterby);
-//                    }
-//                    if (null != filteruri) {
-//                        urlNext.setParameter("filteruri", filteruri);
-//                    }
+                   if (null != valor) {
+                        urlNext.setParameter("val", valor);
+                    }
+                    if (null != otro) {
+                        urlNext.setParameter("otro", otro);
+                    }
+                    if (null != action) {
+                        urlNext.setParameter("act", action);
+                    }
                     if (queryinput != null && queryinput.trim().length() > 0) {
                         urlNext.setParameter("search", queryinput);
                     }
@@ -585,18 +600,15 @@
                 if (pages > 10) {
                     SWBResourceURL urlNext = paramRequest.getRenderUrl();
                     urlNext.setParameter("page", "" + (pages - 1));
-//                    if (null != orderby) {
-//                        urlNext.setParameter("order", orderby);
-//                    }
-//                    if (null != direction) {
-//                        urlNext.setParameter("direction", direction);
-//                    }
-//                    if (null != filterby) {
-//                        urlNext.setParameter("filter", filterby);
-//                    }
-//                    if (null != filteruri) {
-//                        urlNext.setParameter("filteruri", filteruri);
-//                    }
+                    if (null != valor) {
+                        urlNext.setParameter("val", valor);
+                    }
+                    if (null != otro) {
+                        urlNext.setParameter("otro", otro);
+                    }
+                    if (null != action) {
+                        urlNext.setParameter("act", action);
+                    }
                     if (queryinput != null && queryinput.trim().length() > 0) {
                         urlNext.setParameter("search", queryinput);
                     }
@@ -607,12 +619,8 @@
     </div>
 </div>
 
-<%}}%>
-
-<h3><a href="<%=urlConsulta.setParameter("act", "busquedaPublicador").toString()%>"><%=paramRequest.getLocaleString("lbl_titleBusqueda")%></a></h3>
-
-<%if (action.equals("busquedaPublicador")) {%>
-      
+<%}}else if (action.equals("busquedaPublicador")) {%>
+   
   <div class="buscar_inst">
     <form method="post" action="" id="ints_search">
         <%--
@@ -622,18 +630,17 @@
         <%--
             }
         --%>
-        <ul>
-            <li>
-                <label for="txt_search"><%=txtTitleSearch%></label>
-                <input type="text" name="search" value="<%=queryOriginal%>" onfocus="if (this.value == '<%=paramRequest.getLocaleString("lbl_busquedaPB")%>') {this.value = ''};">
-                <button type="submit"><%=paramRequest.getLocaleString("lbl_busquedaPB")%></button>
+        <label for="txt_search"><%=txtTitleSearch%></label>
+        <input type="text" name="search" value="<%=queryOriginal%>" onfocus="if (this.value == '<%=paramRequest.getLocaleString("lbl_busquedaPB")%>') {this.value = ''};">
+        <button type="submit"><%=paramRequest.getLocaleString("lbl_busquedaPB")%></button>
+      </form>
             <%
                     // si hubo búsqueda
                 if (null != queryinput && queryinput.trim().length() > 0) {
                         if (intSize > 0) {
             %>
                     <br/>
-                        <%=intSize%> <%=paramRequest.getLocaleString("lbl_busPB")%>
+                      <%=paramRequest.getLocaleString("lbl_searchPub")%> <%=intSize%> <%=paramRequest.getLocaleString("lbl_busPB")%>
             <%
                 } else {
             %>
@@ -650,19 +657,18 @@
                 urlDetailBusqueda.setParameter("suri", itIn.getURI());
                     
             %>        
-            </li>
-            
+         
+         <ul> 
             <li>
-                <label>
-                    <a href="<%=urlDetailBusqueda.setMode("DETAIL").toString()%>"><%=itIn.getInstitutionTitle()%></a>
-                </label> 
+                <a href="<%=urlDetailBusqueda.setMode("DETAIL").toString()%>"><%=itIn.getInstitutionTitle()%></a>
             </li>
+        </ul>
             
             <%
                 }}
             %>
-        </ul>
-    </form>
+        
+    
 </div>
 
 <%}%>
