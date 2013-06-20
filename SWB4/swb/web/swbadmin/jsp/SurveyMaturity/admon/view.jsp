@@ -114,21 +114,7 @@
                     var url='<%=url%>';//'work/models/admon/admonquestion.jsp';
                     reload(url,'admonParte');
                 }
-                function reload(_url,id)
-                {
-                    
-                    dojo.xhrGet({
-                        // The URL to request
-                        url: _url,
-                        // The method that handles the request's successful result
-                        // Handle the response any way you'd like!
-                        load: function(result) {
-                            
-                            var w=dijit.byId(id);
-                            w.setContent(result);
-                        }
-                    });
-                }
+                
                 function deleteWidget(id)
                 {
                     attachedWidget = dijit.byId(id);
