@@ -76,6 +76,7 @@ public class SocialSentPost extends GenericResource {
     static String MODE_IdREQUEST = "FORMID";
     public static final String Mode_SOURCE = "source";
     public static final String Mode_EDITWindow = "editWindow";
+    public static final String Mode_PREVIEW = "preview";
     
     
     @Override
@@ -83,6 +84,8 @@ public class SocialSentPost extends GenericResource {
         final String mode = paramRequest.getMode();
         if (Mode_SOURCE.equals(mode)) {
             doShowSource(request, response, paramRequest);
+        }if(Mode_PREVIEW.equals(mode)) {
+            doPreview(request, response, paramRequest);
         }else if (Mode_EDITWindow.equals(mode)) {
             doEditPost(request, response, paramRequest);
         }else if(Mode_PFlowMsg.equals(mode)){
@@ -405,9 +408,9 @@ public class SocialSentPost extends GenericResource {
         
         
          //Ordenamientos
-        //System.out.println("orderBy k Llega:"+request.getParameter("orderBy"));
+        //System.out.println("orderBy k Llega:"+request.getParameter("orderBy")+", itposts:"+itposts.hasNext());
         Set<PostOut> setso=null;
-        if(request.getParameter("orderBy")!=null)
+        if(request.getParameter("orderBy")!=null && request.getParameter("orderBy").trim().length()>0)
         {
             if(request.getParameter("orderBy").equals("PostTypeUp"))
             {
@@ -444,8 +447,6 @@ public class SocialSentPost extends GenericResource {
         {
             setso = SWBComparator.sortByCreatedSet(itposts, false);
         }
-        
-        
         
         //itposts = null;
         //itposts=null;
@@ -546,7 +547,7 @@ public class SocialSentPost extends GenericResource {
             
             out.println("<a href=\"#\" title=\"" + paramRequest.getLocaleString("remove") + "\" onclick=\"if(confirm('" + paramRequest.getLocaleString("confirm_remove") + " " + SWBUtils.TEXT.scape4Script(sobj.getMsg_Text()) + "?')){ submitUrl('" + urlr + "',this); } else { return false;}\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/images/delete.gif\" border=\"0\" alt=\"" + paramRequest.getLocaleString("remove") + "\"></a>");
             
-            
+            /*
             SWBResourceURL urlpre = paramRequest.getRenderUrl();
             urlpre.setParameter("suri", id);
             urlpre.setParameter("page", "" + p);
@@ -555,7 +556,11 @@ public class SocialSentPost extends GenericResource {
             urlpre.setParameter("orderBy", (request.getParameter("orderBy")!=null && request.getParameter("orderBy").trim().length() > 0 ? request.getParameter("orderBy") : ""));
             
             out.println("<a href=\"#\" title=\"" + paramRequest.getLocaleString("previewdocument") + "\" onclick=\"submitUrl('" + urlpre + "',this); return false;\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/icons/preview.gif\" border=\"0\" alt=\"" + paramRequest.getLocaleString("previewdocument") + "\"></a>");
+            */
             
+            SWBResourceURL urlPrev=paramRequest.getRenderUrl().setMode(Mode_PREVIEW).setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("postUri", sobj.getURI());  
+            out.println("<a href=\"#\" title=\"" + paramRequest.getLocaleString("previewdocument") + "\" onclick=\"showDialog('" + urlPrev + "','" + paramRequest.getLocaleString("previewdocument") 
+                    + "'); return false;\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/icons/preview.gif\" border=\"0\" alt=\"" + paramRequest.getLocaleString("previewdocument") + "\"></a>");
             
             if(!sobj.isPublished())     
             {
@@ -746,18 +751,6 @@ public class SocialSentPost extends GenericResource {
         
         out.println("</div>");
         
-        
-        if (request.getParameter("preview") != null && request.getParameter("preview").equals("true")) {
-            if (request.getParameter("sval") != null) {
-                try {
-                    doPreview(request, response, paramRequest);
-                } catch (Exception e) {
-                    out.println("Preview not available...");
-                }
-            } else {
-                out.println("Preview not available...");
-            }
-        }
     }
 
     /**
@@ -772,10 +765,7 @@ public class SocialSentPost extends GenericResource {
      * @throws IOException Signals that an I/O exception has occurred.
      */
     public void doPreview(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        String postUri=request.getParameter("sval");
-        PrintWriter out = response.getWriter();
-        out.println("<fieldset>");
-        out.println("<legend>" + paramRequest.getLocaleString("previewdocument") + "</legend>");
+        String postUri=request.getParameter("postUri");
         try {
             final String path = SWBPlatform.getContextPath() + "/work/models/" + paramRequest.getWebPage().getWebSiteId() + "/jsp/review/showPostOut.jsp";
             if (request != null) {
@@ -792,16 +782,9 @@ public class SocialSentPost extends GenericResource {
                     }
                 }
             }
-            
-            /*
-            SWBResource res = SWBPortal.getResourceMgr().getResource(id);
-            ((SWBParamRequestImp) paramRequest).setResourceBase(res.getResourceBase());
-            res.render(request, response, paramRequest);
-            **/
         } catch (Exception e) {
             log.error("Error while getting content string ,id:" + postUri, e);
         }
-        out.println("</fieldset>");
     }
 
     /**
