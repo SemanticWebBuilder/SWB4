@@ -70,6 +70,7 @@
     String dscreated = "";
     String dsupdated = "";
     String dsformat = "";
+    String dssize = "";
     String dsversion = "";
     String dspubname= "";
     String dstoplevelname = "";
@@ -98,7 +99,8 @@
         dsupdated=ds.getDatasetUpdated()!=null?sdf.format(ds.getDatasetUpdated()):"";
         
         dsformat=ds.getDatasetFormat()!=null?ds.getDatasetFormat():"";
-        
+        dssize = ds.getDatasetSize()!=null?ds.getDatasetSize():"---";
+        //System.out.println("Size: "+dssize);
         DatasetVersion dsver = ds.getActualVersion();
         dsversion = null!=dsver?""+dsver.getVersion():"0"; 
         
@@ -129,13 +131,13 @@
     <!--
     // scan page for widgets and instantiate them
     dojo.require("dojo.parser");
-    dojo.require("dijit._Calendar");
-    dojo.require("dijit.ProgressBar");
+    //dojo.require("dijit._Calendar");
+    //dojo.require("dijit.ProgressBar");
     dojo.require("dijit.TitlePane");
     dojo.require("dijit.TooltipDialog");
     dojo.require("dijit.Dialog");
     // editor:
-    dojo.require("dijit.Editor");
+    //dojo.require("dijit.Editor");
 
     // various Form elemetns
     dojo.require("dijit.form.Form");
@@ -144,16 +146,16 @@
     dojo.require("dijit.form.FilteringSelect");
     dojo.require("dijit.form.MultiSelect");
     dojo.require("dijit.form.TextBox");
-    dojo.require("dijit.form.DateTextBox");
+    //dojo.require("dijit.form.DateTextBox");
     dojo.require("dijit.form.TimeTextBox");
     dojo.require("dijit.form.Button");
-    dojo.require("dijit.form.NumberSpinner");
-    dojo.require("dijit.form.Slider");
+    //dojo.require("dijit.form.NumberSpinner");
+    //dojo.require("dijit.form.Slider");
     dojo.require("dojox.form.BusyButton");
-    dojo.require("dojox.form.TimeSpinner");
+    //dojo.require("dojox.form.TimeSpinner");
     dojo.require("dijit.form.ValidationTextBox");
-    dojo.require("dijit.layout.ContentPane");
-    dojo.require("dijit.form.NumberTextBox");
+    //dojo.require("dijit.layout.ContentPane");
+    //dojo.require("dijit.form.NumberTextBox");
     dojo.require("dijit.form.DropDownButton");
 
     function enviar() {
@@ -312,7 +314,7 @@
                     <li class="datofijo2"><strong><%=paramRequest.getLocaleString("lbl_technicallink")%>:</strong><%=dspubname%></li>
                     <li class="datofijo3"><strong><%=paramRequest.getLocaleString("lbl_email")%>:</strong><a href="mailto:<%=dsemail%>" ><%=dsemail%></a></li>
                     <li class="datofijo4"><strong><%=paramRequest.getLocaleString("lbl_format")%>:</strong><%=dsformat%></li>
-                    <li class="datofijo5"><strong><%=paramRequest.getLocaleString("lbl_size")%>:</strong<%=ds.getDatasetSize()%></li>
+                    <li class="datofijo5"><strong><%=paramRequest.getLocaleString("lbl_size")%>:</strong><%=dssize%></li>
                     <li class="datofijo6"><strong><%=paramRequest.getLocaleString("lbl_version")%>:</strong><%=dsversion%></li>
                     <li class="datofijo7"><strong><%=paramRequest.getLocaleString("lbl_approve")%>:</strong><%=ds.isApproved()?"Sí":"No"%></li>
                     <li class="datofijo8"><strong><%=paramRequest.getLocaleString("lbl_created")%>:</strong><%=dscreated%></li>
