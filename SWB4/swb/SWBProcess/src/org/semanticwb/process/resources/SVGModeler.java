@@ -23,15 +23,19 @@
 package org.semanticwb.process.resources;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
+import java.util.Scanner;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.FileItemIterator;
+import org.apache.commons.fileupload.FileItemStream;
+import org.apache.commons.fileupload.FileUploadException;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.semanticwb.Logger;
@@ -62,7 +66,6 @@ import org.semanticwb.process.model.MultiInstanceLoopCharacteristics;
 import org.semanticwb.process.model.ProcessSite;
 import org.semanticwb.process.model.StandarLoopCharacteristics;
 import org.semanticwb.process.model.UserTask;
-import org.semanticwb.servlet.internal.UploadFormElement;
 
 /**
  * Modelador de procesos basado en SVG y Javascript.
@@ -162,6 +165,7 @@ public class SVGModeler extends GenericResource {
                 outs.write(("ERROR:" + e.getMessage()).getBytes());
             }
         } else if (ACT_LOADFILE.equals(action)) {
+            response.setContentType("text/html");
             String json = processFile(request);
             outs.write(json.getBytes("UTF-8"));
         } else if (ACT_STOREPROCESS.equals(action)) {
@@ -1149,32 +1153,27 @@ public class SVGModeler extends GenericResource {
     
     private String processFile(HttpServletRequest request) {
         String data = "";
-        if (request.getSession().getAttribute(UploadFormElement.FILES_UPLOADED) != null) {
-            Iterator itfilesUploaded = ((List) request.getSession().getAttribute(UploadFormElement.FILES_UPLOADED)).iterator();
-            while (itfilesUploaded.hasNext()) {
-                FileItem item = (FileItem) itfilesUploaded.next();
-                if (!item.isFormField()) { //Es un campo de tipo file
-                    //int fileSize = ((Long) item.getSize()).intValue();
-                    String value = item.getName();
-
-                    if (value != null && value.trim().length() > 0) {
-                        value = value.replace("\\", "/");
-                        int pos = value.lastIndexOf("/");
-                        if (pos > -1) {
-                            value = value.substring(pos + 1);
-                        }
-
-                        if (item.getFieldName().startsWith("swpFile")) {
-                            try {
-                                data = new String(item.get());
-                            } catch (Exception e) {
-                                log.error(e);
-                            }
+        boolean isMultipart = ServletFileUpload.isMultipartContent(request);
+        
+        if (isMultipart) {
+            ServletFileUpload upload = new ServletFileUpload();
+            try {
+                FileItemIterator it = upload.getItemIterator(request);
+                while(it.hasNext()) {
+                    FileItemStream item = it.next();
+                    if (!item.isFormField()) {//Es una archivo
+                        InputStream stream = item.openStream();
+                        java.util.Scanner scanner = new Scanner(stream).useDelimiter("\\A");
+                        if (scanner.hasNext()) {
+                            data = scanner.next();
                         }
                     }
                 }
+            } catch (FileUploadException ex) {
+                log.error("Error al cargar el archivo", ex);
+            } catch (IOException ex) {
+                log.error("Error al cargar el archivo", ex);
             }
-            request.getSession().setAttribute(UploadFormElement.FILES_UPLOADED, null);
         }
         return data;
     }
