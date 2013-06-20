@@ -24,11 +24,15 @@
     }
     function saveDialogAddPart(forma)
     {
+        saveAndContinueDialogAddPart(forma);
+        dijit.byId("dialogAdmonParte").hide();
         
-        
+    }
+    function saveAndContinueDialogAddPart(forma)
+    {
         try
         {
-            
+
             var namepart=forma.namepart.value;
             if(!namepart)
             {
@@ -36,8 +40,8 @@
                 forma.namepart.focus();
                 return;
             }
-            
-            
+
+
             var tituloparteditor=getValueEditor('tituloparteditor');
             if(tituloparteditor.isEmpty())
             {
@@ -53,21 +57,20 @@
                 return;
             }
             forma.tituloparte.value=tituloparteditor;
-            forma.descriptionparte.value=descriptionparteditor;            
+            forma.descriptionparte.value=descriptionparteditor;
             sendform(forma.id,reloadAdmonParte);
-            
-            
-            dijit.byId("dialogAdmonParte").hide();
+            forma.tituloparte.value='';
+            forma.descriptionparte.value='';
+            forma.namepart.value='';
+            resetEditor('tituloparteditor');
+            resetEditor('descriptionparteditor');
+
+
         }
         catch(err)
         {
             alert(err.message);
         }
-    }
-    function saveAndContinueDialogAddPart(forma)
-    {
-        var htmltitulo=dojo.byId('tituloparteditor');
-        forma.submit();
     }
    
 </script>
