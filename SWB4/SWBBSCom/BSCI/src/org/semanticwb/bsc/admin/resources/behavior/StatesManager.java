@@ -13,6 +13,7 @@ import org.semanticwb.bsc.Status;
 import org.semanticwb.bsc.accessory.State;
 import org.semanticwb.bsc.accessory.StateGroup;
 import org.semanticwb.model.GenericIterator;
+import org.semanticwb.model.GenericObject;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.User;
 import org.semanticwb.platform.SemanticObject;
@@ -61,7 +62,7 @@ public class StatesManager extends GenericResource {
         ret.append("  dojo.require('dijit.form.CheckBox');\n");
         ret.append("</script>\n");
         
-        ret.append("<form id=\"").append(formId).append("\" dojoType=\"dijit.form.Form\" class=\"swbform\"");
+        ret.append("<form id=\"").append(formId).append("/"+obj.getId()+"\" dojoType=\"dijit.form.Form\" class=\"swbform\"");
         ret.append(" action=\"").append(url).append("\" ");
         ret.append(" onSubmit=\"submitForm('").append(formId).append("');return false;\" method=\"post\">");
         ret.append("<fieldset>");
@@ -69,7 +70,7 @@ public class StatesManager extends GenericResource {
         SWBResourceURL surl = paramRequest.getRenderUrl().setMode(SWBResourceURL.Mode_EDIT).setCallMethod(SWBResourceURL.Call_DIRECT);
         
         String lang = user.getLanguage();
-        ret.append("  <select onchange=\"postHtml('").append(surl).append("'+'?sg='+this.attr('value')+'&suri=").append(URLEncoder.encode(suri,"UTF-8")).append("','st')\" dojoType=\"dijit.form.FilteringSelect\" autocomplete=\"false\" name=\"sg\" id=\"sg\">");
+        ret.append("  <select onchange=\"postHtml('").append(surl).append("'+'?sg='+this.attr('value')+'&suri=").append(URLEncoder.encode(suri,"UTF-8")).append("','st_"+obj.getId()+"')\" dojoType=\"dijit.form.FilteringSelect\" autocomplete=\"false\" name=\"sg\" id=\"sg_"+obj.getId()+"\">");
         StateGroup aux;
         if(StateGroup.ClassMgr.hasStateGroup(stateGroupId, SWBContext.getAdminWebSite())) {
             aux = StateGroup.ClassMgr.getStateGroup(stateGroupId, SWBContext.getAdminWebSite());
@@ -88,7 +89,7 @@ public class StatesManager extends GenericResource {
             ret.append("<option ").append(group.equals(aux)?"selected=\"selected\"":"").append(" value=\"").append(group.getId()).append("\">").append(group.getDisplayTitle(lang)).append("</option>"); 
         }        
         ret.append("  </select>");
-        ret.append("  <div id=\"st\"> ");
+        ret.append("  <div id=\"st_"+obj.getId()+"\"> ");
         String list = renderStatesList(status, aux, user);
         ret.append(list==null?"":list);
         ret.append("  </div>");        
@@ -139,7 +140,7 @@ public class StatesManager extends GenericResource {
                 if(!state.isValid() || !user.haveAccess(state)) {
                     continue;
                 }
-                ret.append("<li><label for=\""+state.getId()+"\"><input type=\"checkbox\" "+(status.hasState(state)?"checked=\"checked\"":"")+" name=\"abc\" id=\""+state.getId()+"\" value=\""+state.getId()+"\"/>"+state.getDisplayTitle(lang)+"</label></li>"); 
+                ret.append("<li><label for=\"chk_"+state.getId()+"\"><input type=\"checkbox\" "+(status.hasState(state)?"checked=\"checked\"":"")+" name=\"abc\" id=\"chk_"+state.getId()+"\" value=\""+state.getId()+"\"/>"+state.getDisplayTitle(lang)+"</label></li>"); 
             }
             ret.append("</ul>");
             return ret.toString();
@@ -159,16 +160,38 @@ public class StatesManager extends GenericResource {
             SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
             SemanticObject obj = ont.getSemanticObject(suri);
             Status status = (Status)obj.createGenericInstance();
+            
+            
+            
+            System.out.println("\n\nTODO");
+System.out.println("objetivo="+status);
+            Iterator<State> it = status.listStates();
+            while(it.hasNext()) {
+                State state = it.next();
+System.out.println("\n---estado="+state);
+                boolean stateRelated = false;
+                Iterator<Status> it2 = state.listStatuses();
+                while(it2.hasNext() && !stateRelated) {
+                    Status stus = it2.next();
+                    if(stus instanceof StateGroup) {
+System.out.println("----- relacionado con stategroup "+stus);
+                        continue;
+                    }
+                    if(status.equals(stus)) {
+System.out.println("----- relacionado con mismo status "+stus);
+                        continue;
+                    }
+                    stateRelated = true;
+                    System.out.println("----- relacionado con "+stus);
+                }
+                if(!stateRelated) {
+                    state.setUndeleteable(false);
+                }
+            }
+            
+                       
+            
             status.removeAllState();
-            /** TODO 
-             * Antes de quitarle los estados al objeto status es necesario
-             * revisar si su propiedad undeleteable se asigna a false
-             */
-System.out.println("processAction....");
-System.out.println("status="+status);
-
-//            GenericIterator<State> it = status.listStates();
-//            while
             
             String[] values = request.getParameterValues("abc");            
             if(values!=null)
@@ -184,8 +207,6 @@ System.out.println("status="+status);
                 }
                 stateGroup.setUndeleteable(true);
             }
-            
-            
         }
         response.setRenderParameter("suri", suri);
         response.setRenderParameter("sg", sgId);
