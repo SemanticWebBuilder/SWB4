@@ -71,7 +71,7 @@
     }
    
 </script>
-<h1 align="center">Parte</h1>
+<h1 align="center">Parte</h1><br>
 <form id="frmAddPart" action="<%=urlAction%>">
     <%
                 if (part != null)
