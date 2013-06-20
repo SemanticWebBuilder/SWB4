@@ -12,6 +12,7 @@ import java.util.Set;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
@@ -51,7 +52,7 @@ public class StreamInBoxNoTopic extends GenericResource {
     //String Mode_Action = "paction";
     String Mode_PFlowMsg="doPflowMsg";
     String Mode_PreView="preview";
-    
+    String Mode_showTags="showTags";
     /**
      * Creates a new instance of SWBAWebPageContents.
      */
@@ -66,8 +67,10 @@ public class StreamInBoxNoTopic extends GenericResource {
         final String mode = paramRequest.getMode();
         if(Mode_REVAL.equals(mode)) {
             doRevalue(request, response, paramRequest);
-        } else if(Mode_RECLASSBYTOPIC.equals(mode)) {
+        }else if(Mode_RECLASSBYTOPIC.equals(mode)) {
             doReClassifyByTopic(request, response, paramRequest);
+        }else if(Mode_showTags.equals(mode)){
+            doShowTags(request, response, paramRequest);
         }else{
             super.processRequest(request, response, paramRequest);
         }
@@ -128,15 +131,37 @@ public class StreamInBoxNoTopic extends GenericResource {
             }
             if(request.getParameter("reloadTap")!=null)
             {
+                //out.println("var tabId =  '" +id  + "/bh_StreamInBoxNoTopic';");
+                //out.println("alert(dijit.byId(tabId));");
+                //out.println(" reloadTab(tabId);");
                 out.println(" reloadTab('" + id + "'); ");
             }
             out.println("</script>");
         }
         
+        out.println("<style type=\"text/css\">");
+        out.println(".spanFormat");
+        out.println("{");
+        out.println("  text-align: right;");
+        out.println("  display: table-cell;");
+        out.println("  min-width: 10px;");
+        out.println("  padding-right: 10px;");
+        out.println("}");
+        out.println("</style>");
+        
         System.out.println("search word que llega sin:"+request.getParameter("search"));
         String searchWord = request.getParameter("search");
+        HttpSession session = request.getSession(true);
         if (null == searchWord) {
             searchWord = "";
+            String tag = (String)session.getAttribute(id + this.getClass().getName() +"searchNoTopic");
+            if(tag != null){
+                System.out.println("Search for tag:" + tag);
+                searchWord = tag;
+                session.removeAttribute(id + this.getClass().getName() +"searchNoTopic");
+            }
+        }else{//Add word to session var
+            session.setAttribute(id + this.getClass().getName() +"searchNoTopic", searchWord);//Save the word in the session var
         }
         
         System.out.println("search word que llega sin-1:"+searchWord);
@@ -146,10 +171,15 @@ public class StreamInBoxNoTopic extends GenericResource {
         urls.setParameter("act", "");
         urls.setParameter("suri", id);
         
+        SWBResourceURL tagUrl = paramRequest.getRenderUrl();
+        tagUrl.setParameter("suri", id);
+        tagUrl.setParameter("noTopic", "true");
+        tagUrl.setMode(Mode_showTags);
         
         out.println("<div class=\"swbform\">");
       
         out.println("<fieldset>");
+        out.println("<span  class=\"spanFormat\">");
         out.println("<form id=\"" + id + "/fsearchNoTopic\" name=\"" + id + "/fsearchNoTopic\" method=\"post\" action=\"" + urls + "\" onsubmit=\"submitForm('" + id + "/fsearchNoTopic');return false;\">");
         out.println("<div align=\"right\">");
         out.println("<input type=\"hidden\" name=\"suri\" value=\"" + id + "\">");
@@ -157,6 +187,10 @@ public class StreamInBoxNoTopic extends GenericResource {
         out.println("<button dojoType=\"dijit.form.Button\" type=\"submit\">" + paramRequest.getLocaleString("btnSearch") + "</button>"); //
         out.println("</div>");
         out.println("</form>");
+        out.println("</span>");
+        out.println("<span  class=\"spanFormat\">");
+        out.println("<button dojoType='dijit.form.Button'  onclick=\"showDialog('" + tagUrl + "','" + paramRequest.getLocaleString("tagLabel") + "'); return false;\">" + paramRequest.getLocaleString("btnCloud") + "</button>");
+        out.println("</span>");
         out.println("</fieldset>");
         
         
@@ -760,4 +794,14 @@ public class StreamInBoxNoTopic extends GenericResource {
          
     }
     
+    public void doShowTags(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        String jspResponse = SWBPlatform.getContextPath() +"/work/models/" + paramRequest.getWebPage().getWebSiteId() +"/jsp/socialNetworks/tagCloud.jsp";        
+        RequestDispatcher dis = request.getRequestDispatcher(jspResponse);
+        try {
+            request.setAttribute("paramRequest", paramRequest);
+            dis.include(request, response);
+        } catch (Exception e) {
+            log.error("Error in doShowTags() for requestDispatcher" , e);
+        }
+    }
 }
