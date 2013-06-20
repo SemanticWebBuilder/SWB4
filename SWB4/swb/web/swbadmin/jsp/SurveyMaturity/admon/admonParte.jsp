@@ -24,9 +24,9 @@
 %>
 
 <%
-    SWBResourceURL urlRender = paramRequest.getRenderUrl();
-    urlRender.setMode(Admin.MODE_ADMON_ADD_PART);
-    urlRender.setCallMethod(SWBResourceURL.Call_DIRECT);
+            SWBResourceURL urlRender = paramRequest.getRenderUrl();
+            urlRender.setMode(Admin.MODE_ADMON_ADD_PART);
+            urlRender.setCallMethod(SWBResourceURL.Call_DIRECT);
 
 %>
 
@@ -34,9 +34,9 @@
     function showAdmonParte()
     {
         var url='<%=urlRender%>';
-        reload(url, 'dialogAdmonParte');
-        dijit.byId("dialogAdmonParte").show();
+        reload(url, 'dialogAdmonParte',beforeshow);        
     }
+
     function deletePart(url,name)
     {
 
@@ -46,12 +46,20 @@
         }
         
     }
+    function beforeshow()
+    {
+        try
+        {
+            
+            dijit.byId("dialogAdmonParte").show();
+            
+        }
+        catch(err){alert('Error cargando dialogo'+err.message);}
+    }
     function showEditPart(id)
     {
         var url='<%=urlRender%>'+'?id='+id;
-        reload(url, 'dialogAdmonParte');
-        dijit.byId("dialogAdmonParte").show();
-        
+        reload(url, 'dialogAdmonParte',beforeshow);
     }
 </script>
 
@@ -78,14 +86,14 @@
                         name = "";
                     }
                     name = encode(name);
-                    String id=part.getId();
+                    String id = part.getId();
                     String uri = part.getURI();
                     urlAction.setParameter("uri", uri);
                     urlAction.setAction("removePart");
                     urlAction.setWindowState(urlAction.WinState_NORMAL);
                     urlAction.setCallMethod(urlAction.Call_DIRECT);
-                    
-                    
+
+
     %>
     <tr>
         <td>
