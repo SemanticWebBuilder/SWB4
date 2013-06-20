@@ -217,15 +217,6 @@ exportUrl.setMode(SVGModeler.MODE_EXPORT);
             <span class="subbarEnd"></span>
         </div>
     </div>
-    <!--div class="navBar" id="navBar">
-        <ul class="breadcrumbs alt1">
-            <li class="first"><a href="#">Inicio</a></li>
-            <li><a href="#">Proceso</a></li>
-            <li><a href="#">SubProceso1</a></li>
-            <li><a href="#">SubProceso2</a></li>
-            <li class="last"><a href="#">SubProceso3</a></li>
-        </ul>
-    </div-->
     <div style="margin-left:49px;">
         <svg id="modeler" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="100" height="100" class="modeler">
         <style type="text/css"><![CDATA[
@@ -897,7 +888,8 @@ exportUrl.setMode(SVGModeler.MODE_EXPORT);
     <input type="hidden" id="data" name="data" value="">
 </form>
 <%
-    SWBResourceURL uploadUrl = paramRequest.getActionUrl().setAction(SVGModeler.ACT_STOREPROCESS).setParameter("suri", request.getParameter("suri"));
+    SWBResourceURL uploadUrl = paramRequest.getRenderUrl().setCallMethod(SWBResourceURL.Call_DIRECT);
+    uploadUrl.setMode(SVGModeler.MODE_GATEWAY).setAction(SVGModeler.ACT_LOADFILE).setParameter("suri", request.getParameter("suri"));
 %>
 <div class="overlay" id="overlayBackground">
     <div class="loadDialog">
@@ -905,56 +897,72 @@ exportUrl.setMode(SVGModeler.MODE_EXPORT);
         <span class="loadDialogCloseButton">
             <a href="#" onclick="hideLoadDialog(); return false;">Cerrar</a>
         </span>
-        <div class="loadDialogContent">
-            <div id="dropArea" class="dropArea">
-                <p>Arrastra un archivo aqu&iacute;</p>
-            </div>
-            <p>
-                o selecciona un archivo:
-                <form action="<%=uploadUrl%>" method="post">
-                    <iframe id='target_upload_swpFile' name='target_upload_swpFile' src='' style='display: none'></iframe>
-                    <input id="swpFile" name="swpFile" type="file" onChange="javascript:if(uploadjs_swpFile(this.form,this)) {return startUploadMonitoring('swpFile');}">
-                    <div id="uploadStatus_swpFile" style="width:230px">
-                        <div id="uploadProgressBar_swpFile" style="width:200px; height: 2px; border: 0px solid #BBB; text-align: center; float: left;">
-                            <div id="uploadIndicator_swpFile" style=" height: 1px; position: relative; margin: 0px; padding: 1px; background: #9DC0F4; width: 0; float: left;"></div>
-                        </div>
-                        <div id="uploadPercentage_swpFile" style="width:5px; float: right;"></div>
-                    </div>
+        <form action="<%=uploadUrl%>" method="post">
+            <iframe id='target_upload_swpFile' name='target_upload_swpFile' src='' style='display: none'></iframe>
+            <div class="loadDialogContent">
+                <div id="dropArea" class="dropArea">
+                    <p>Arrastra un archivo aqu&iacute;</p>
+                </div>
+                <p>
+                    <input id="swpFile" name="swpFile" type="file" onChange="javascript:validFileType(this);">
                     <script type="text/javascript">
-                        function uploadjs_swpFile(forma,element) {
+                        frame = document.getElementById('target_upload_swpFile');
+                        function validFileType(element) {
                             if (!isFileType(element.value,'swp' )) {
                                 element.value="";
-                                return false; 
                             }
+                            return false;
+                        }
                         
+                        function iframeHandler() {
+                            //Eliminar los handlers del iframe
+                            if (frame.detachEvent) frame.detachEvent("onload", iframeHandler);
+                            else frame.removeEventListener("load", iframeHandler, false);
+                            
+                            var content = "";
+                            if (frame.contentDocument) {
+                                content= frame.contentDocument.body.innerHTML;
+                            } else if (frame.contentWindow) {
+                                content = frame.contentWindow.document.body.innerHTML;
+                            } else if (frame.document) {
+                                content = frame.document.body.innerHTML;
+                            }
+                            Modeler.loadProcess(content);
+                        }
+                        
+                        function uploadjs_swpFile(forma) {
                             var encoding=forma.encoding;
                             forma.encoding='multipart/form-data';
-                            var method=forma.method;
-                            forma.method='post';
                             var action=forma.action;
 
-                            forma.action='/Upload';
                             var target=forma.target;
                             forma.target='target_upload_swpFile';
+                            
+                            //Agregar los handlers al iframe
+                            if (frame.attachEvent) frame.attachEvent("onload", iframeHandler);
+                            else frame.addEventListener("load", iframeHandler, true);
+                            
                             forma.submit();
+                            
                             forma.encoding=encoding;
-                            forma.method=method;
                             forma.action=action;
                             forma.target=target;
-                            return true;
+                            hideLoadDialog();
+                            
+                            return false;
                         }
 
                         function isFileType(pFile, pExt) {
                             if(pFile.length > 0 && pExt.length > 0) {
                                 var swFormat=pExt + '|';
-                                sExt=pFile.substring(pFile.indexOf(".")).toLowerCase();
+                                var sExt=pFile.substring(pFile.indexOf(".")).toLowerCase();
                                 var sType='';
                                 while(swFormat.length > 0 ) {
                                     sType= swFormat.substring(0, swFormat.indexOf("|"));
-                                    if(sExt.indexOf(sType)!=-1) return true;
+                                    if(sExt.indexOf(sType)!==-1) return true;
                                     swFormat=swFormat.substring(swFormat.indexOf("|")+1);
                                 }
-                                while(pExt.indexOf("|")!=-1) pExt=pExt.replace('|',',');
+                                while(pExt.indexOf("|")!==-1) pExt=pExt.replace('|',',');
                                 alert("El archivo no es válido.");
                                 return false;
                             } else {
@@ -962,10 +970,13 @@ exportUrl.setMode(SVGModeler.MODE_EXPORT);
                             }
                         }
                         </script>
-                        <a href="#" onclick="loadProcessFromFile(); return false;">Enviar</a>
-                </form>
-            </p>
-        </div>
+                    </p>
+            </div>
+            <div class='buttonRibbon'>
+                <input type="submit" value="Enviar" onclick="uploadjs_swpFile(this.form);return false;"/>
+                <input type="button" value="Cancelar" onclick="hideLoadDialog();return false;"/>
+            </div>
+        </form>
     </div>
 </div>
 <!--div class="overlay" id="overlayBackground">
@@ -989,13 +1000,6 @@ exportUrl.setMode(SVGModeler.MODE_EXPORT);
     commandUrl.setParameter("suri", request.getParameter("suri"));
     %>
     function loadProcess() {
-        Modeler.submitCommand('<%=commandUrl%>', null, callbackLoad);
-    };
-    
-    <%
-    commandUrl.setAction(SVGModeler.ACT_LOADFILE);
-    %>
-    function loadProcessFromFile() {
         Modeler.submitCommand('<%=commandUrl%>', null, callbackLoad);
     };
     
