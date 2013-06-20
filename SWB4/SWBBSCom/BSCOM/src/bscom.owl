@@ -578,6 +578,10 @@
     <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >objective</swb:propertyCodeName>
   </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasStatusInv">
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >hasStatus</swb:propertyCodeName>
+  </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="perspectiveInv">
     <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >perspective</swb:propertyCodeName>
@@ -629,10 +633,6 @@
     >false</swb:removeDependency>
     <rdfs:range rdf:resource="#Initiative"/>
     <rdfs:domain rdf:resource="#Objective"/>
-  </owl:ObjectProperty>
-  <owl:ObjectProperty rdf:ID="statusInv">
-    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >status</swb:propertyCodeName>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="hasMeasure">
     <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
@@ -781,15 +781,15 @@
     <rdfs:domain rdf:resource="#Initiative"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="hasState">
-    <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >false</swb:removeDependency>
+    <owl:inverseOf rdf:resource="#hasStatusInv"/>
     <rdfs:domain rdf:resource="#Status"/>
     <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >Lista de estados del grupo</rdfs:comment>
     <rdfs:range rdf:resource="#State"/>
     <swb:herarquicalRelation rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:herarquicalRelation>
-    <owl:inverseOf rdf:resource="#statusInv"/>
+    <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >false</swb:removeDependency>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="previus">
     <rdfs:range rdf:resource="#Machinable"/>
