@@ -160,7 +160,11 @@ public class StatesManager extends GenericResource {
             SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
             SemanticObject obj = ont.getSemanticObject(suri);
             Status status = (Status)obj.createGenericInstance();
-            //status.removeAllState();
+            status.removeAllState();
+            /** todo 
+             * antes de quitarle los estados al objeto status es necesario
+             *  revisar si su propiedad undeleteable se asigna a false
+             */
 System.out.println("processAction....");
 System.out.println("status="+status);
 
