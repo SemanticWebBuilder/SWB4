@@ -11,29 +11,7 @@
     <head>
         <script type="text/javascript">dojoConfig = {parseOnLoad: true}</script>
         <script type="text/javascript">
-            function post(parametros)
-            {
-                var content='';
-                
-                for (var key in parametros)
-                {                    
-                    var value=parametros[key];
-                    content+=key+':\''+encodeURIComponent(value)+'\',';
-                }
-                var url='<%=urlAction%>';
-                var strToEval='dojo.xhrPost({form: url,timeout: 3000,content: {'+ content +' }})';
-                
-                try
-                {
-                    eval(strToEval);
-                }
-                catch(err)
-                {
-                    alert(err);
-                }
-                
-                
-            }
+            
             function doGet(url,funcion)
             {                
                 dojo.xhrGet({url:url
