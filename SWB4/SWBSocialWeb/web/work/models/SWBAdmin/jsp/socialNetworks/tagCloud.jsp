@@ -3,6 +3,7 @@
     Created on : 14/06/2013, 09:53:02 AM
     Author     : francisco.jimenez
 --%>
+<%@page import="org.semanticwb.social.SocialTopic"%>
 <%@page import="java.util.Random"%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.ArrayList"%>
@@ -62,17 +63,42 @@
     System.out.println("suri in tagsCloud:" + request.getParameter("suri"));
     String suri = request.getParameter("suri");
     String noTopic = request.getParameter("noTopic");
-    Stream stream=null;
+    Stream stream = null;
+    SocialTopic socialT = null;
+    Iterator <PostIn> itPostIns = null;//The posts
+    long noOfPosts = 0L;
     
+    try{
     if(suri != null) {
-         stream = (Stream)SemanticObject.getSemanticObject(suri).getGenericInstance();   
+        SemanticObject semObj = SemanticObject.getSemanticObject(suri);
+        if(semObj.createGenericInstance() instanceof Stream){
+            System.out.println("is stream");
+            stream = (Stream)semObj.getGenericInstance();
+            itPostIns=stream.listPostInStreamInvs();//The posts
+            itPostIns = SWBComparator.sortByCreatedSet(itPostIns, false).iterator();
+            SWBUtils.Collections.sizeOf(stream.listPostInStreamInvs());//Number of recovered posts
+        }else if(semObj.createGenericInstance() instanceof SocialTopic){
+            System.out.println("is stream");
+            socialT = (SocialTopic)semObj.getGenericInstance();
+            itPostIns = PostIn.ClassMgr.listPostInBySocialTopic(socialT, socialT.getSocialSite());//The posts
+            itPostIns = SWBComparator.sortByCreatedSet(itPostIns, false).iterator();
+            SWBUtils.Collections.sizeOf(PostIn.ClassMgr.listPostInBySocialTopic(socialT, socialT.getSocialSite()));//Number of recovered posts
+        }else{
+            return;
+        }
     }else{
         return;
     }
+    }catch(Exception e){
+        System.out.println("\n\n\n*******************");
+        e.printStackTrace();
+    }
     
     SWBResourceURL renderURL = paramRequest.getRenderUrl().setMode(SWBResourceURL.Mode_EDIT);
-    renderURL.setParameter("sID", stream.getId());
-    renderURL.setParameter("wsite", stream.getSemanticObject().getModel().getName());
+    if(stream!=null){
+        renderURL.setParameter("sID", stream.getId());
+        renderURL.setParameter("wsite", stream.getSemanticObject().getModel().getName());
+    }
     renderURL.setParameter("dialog", "close");
     renderURL.setParameter("suri", suri);
     renderURL.setParameter("reloadTap", "true");
@@ -81,10 +107,10 @@
 
     SocialAdmin socialAdminSite=(SocialAdmin)SWBContext.getAdminWebSite();    
     
-    Iterator <PostIn> itPostIns=stream.listPostInStreamInvs();//The posts
-    itPostIns = SWBComparator.sortByCreatedSet(itPostIns, false).iterator();
+    //itPostIns=stream.listPostInStreamInvs();//The posts
+    //itPostIns = SWBComparator.sortByCreatedSet(itPostIns, false).iterator();
     
-    long noOfPosts = SWBUtils.Collections.sizeOf(stream.listPostInStreamInvs());//Number of recovered posts
+    //SWBUtils.Collections.sizeOf(stream.listPostInStreamInvs());//Number of recovered posts
         
     int posts = 0;
     int randomId = randomId();
@@ -92,7 +118,7 @@
 
     int percent = (int)(noOfPosts*0.6);//Only process 60% of stream
     //System.out.println("Size of sample: " + percent);
-    while(itPostIns.hasNext()){                
+    while(itPostIns.hasNext()){        
         if(cloudTags.size() >= 4000){
             System.out.println("Too large Word List");
             break;        
@@ -102,15 +128,14 @@
         }
         PostIn postIn=itPostIns.next();
         
-        //Condition to show only post without Social Topics
-        if(noTopic != null){
-            if(postIn.getSocialTopic() != null)//Don't process posts with Social topics
+        if(noTopic != null && noTopic.equals("true")){
+            if(postIn.getSocialTopic() != null){//Don't process posts with Social topics
                 continue;
+            }
         }
         
         if(postIn.getTags() != null){//If post has tags
             String[] tags=postIn.getTags().split("\\s+");  //Dividir valores
-            System.out.println("postInJ-tags:"+tags); 
             for(int i=0;i<tags.length;i++)
             {
                String word=tags[i]; 
@@ -155,7 +180,6 @@
                }
             }
         }
-        posts++;
     }
     
     //System.out.println("POSTS READ:"+ posts);
