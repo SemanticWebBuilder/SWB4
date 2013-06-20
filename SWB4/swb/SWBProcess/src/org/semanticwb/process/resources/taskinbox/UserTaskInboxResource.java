@@ -23,6 +23,7 @@
 package org.semanticwb.process.resources.taskinbox;
 
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -30,8 +31,12 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.logging.Level;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.*;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
@@ -91,6 +96,8 @@ public class UserTaskInboxResource extends org.semanticwb.process.resources.task
     public static final String PARAM_COL = "selectedCol";
     public static final String PARAM_PID = "pid";
     public static final String MODE_FWD = "forward";
+    public static final String MODE_STATISTICS = "statistics";
+    public static final String MODE_GETDATA = "getData";
     private HashMap<String, String> colNames;
     
     private Comparator taskNameComparator = new Comparator() {
@@ -175,6 +182,10 @@ public class UserTaskInboxResource extends org.semanticwb.process.resources.task
         String mode = paramRequest.getMode();
         if (MODE_FWD.equals(mode)) {
             doForward(request, response, paramRequest);
+        } else if (MODE_STATISTICS.equals(mode)) {
+            doStatistics(request, response, paramRequest);
+        } else if (MODE_GETDATA.equals(mode)) { 
+            doGetData(request, response, paramRequest);
         } else {
             super.processRequest(request, response, paramRequest);
         }
@@ -347,6 +358,63 @@ public class UserTaskInboxResource extends org.semanticwb.process.resources.task
         } else {
             super.processAction(request, response);
         }
+    }
+    
+    public void doStatistics(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        String jsp = "/swbadmin/jsp/process/processGraphs.jsp";
+
+        try {
+            RequestDispatcher rd = request.getRequestDispatcher(jsp);
+            request.setAttribute("paramRequest", paramRequest);
+            request.setAttribute("base", getResourceBase());
+            rd.include(request, response);
+        } catch (Exception e) {
+            log.error("Error including jsp in statistics mode", e);
+        }
+    }
+    
+    public void doGetData(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        OutputStream ous = response.getOutputStream();
+        String action = paramRequest.getAction();
+        WebSite site = paramRequest.getWebPage().getWebSite();
+        
+        response.setHeader("Cache-Control", "no-cache");
+        response.setHeader("Pragma", "no-cache");
+        response.setContentType("application/json");
+        
+        if ("systemInstances".equals(action)) {
+            JSONArray data = new JSONArray();
+            int act = 0;
+            int clos = 0;
+            int abor = 0;
+            
+            Iterator<SemanticObject> it = site.getSemanticModel().listSubjects(ProcessInstance.swp_processStatus, ProcessInstance.STATUS_PROCESSING);
+            while (it.hasNext()) {
+                SemanticObject o = it.next();
+                act++;
+            }
+            
+            it = site.getSemanticModel().listSubjects(ProcessInstance.swp_processStatus, ProcessInstance.STATUS_CLOSED);
+            while (it.hasNext()) {
+                SemanticObject o = it.next();
+                clos++;
+            }
+            
+            it = site.getSemanticModel().listSubjects(ProcessInstance.swp_processStatus, ProcessInstance.STATUS_ABORTED);
+            while (it.hasNext()) {
+                SemanticObject o = it.next();
+                abor++;
+            }
+            
+            data.put(act);
+            data.put(clos);
+            data.put(abor);
+            System.out.println(data.toString());
+            ous.write(data.toString().getBytes());
+        }
+        
+        ous.flush();
+        ous.close();
     }
     
     @Override
@@ -716,6 +784,11 @@ public class UserTaskInboxResource extends org.semanticwb.process.resources.task
         if (!pType.isValid()) {
             return false;
         }
+        
+        if (fni.getProcessInstance().getCreator() == null) {
+            return false;
+        }
+        
         canAccess = fni.haveAccess(user);
         
         if (canAccess) {
