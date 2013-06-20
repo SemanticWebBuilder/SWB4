@@ -156,14 +156,13 @@ public class StatesManager extends GenericResource {
         final String suri=request.getParameter("suri");
         if(StateGroup.ClassMgr.hasStateGroup(sgId, SWBContext.getAdminWebSite()))
         {
-            StateGroup stateGroup = StateGroup.ClassMgr.getStateGroup(sgId, SWBContext.getAdminWebSite());
             SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
             SemanticObject obj = ont.getSemanticObject(suri);
             Status status = (Status)obj.createGenericInstance();
             status.removeAllState();
-            /** todo 
-             * antes de quitarle los estados al objeto status es necesario
-             *  revisar si su propiedad undeleteable se asigna a false
+            /** TODO 
+             * Antes de quitarle los estados al objeto status es necesario
+             * revisar si su propiedad undeleteable se asigna a false
              */
 System.out.println("processAction....");
 System.out.println("status="+status);
@@ -174,6 +173,7 @@ System.out.println("status="+status);
             String[] values = request.getParameterValues("abc");            
             if(values!=null)
             {
+                StateGroup stateGroup = StateGroup.ClassMgr.getStateGroup(sgId, SWBContext.getAdminWebSite());
                 State state;
                 for(int i=0; i<values.length; i++) {
                     if(State.ClassMgr.hasState(values[i], SWBContext.getAdminWebSite())) {
@@ -182,7 +182,7 @@ System.out.println("status="+status);
                         state.setUndeleteable(true);
                     }
                 }
-                
+                stateGroup.setUndeleteable(true);
             }
             
             
