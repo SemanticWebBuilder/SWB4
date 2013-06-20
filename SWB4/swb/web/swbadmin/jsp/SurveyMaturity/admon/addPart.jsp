@@ -53,7 +53,7 @@
                 return;
             }
             forma.tituloparte.value=tituloparteditor;
-            forma.descriptionparte.value=descriptionparteditor;
+            forma.descriptionparte.value=descriptionparteditor;            
             sendform(forma.id,reloadAdmonParte);
             
             
