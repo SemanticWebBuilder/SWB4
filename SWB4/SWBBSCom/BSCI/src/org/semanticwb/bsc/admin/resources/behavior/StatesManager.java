@@ -64,7 +64,7 @@ public class StatesManager extends GenericResource {
         
         ret.append("<form id=\"").append(formId).append("/"+obj.getId()+"\" dojoType=\"dijit.form.Form\" class=\"swbform\"");
         ret.append(" action=\"").append(url).append("\" ");
-        ret.append(" onSubmit=\"submitForm('").append(formId).append("');return false;\" method=\"post\">");
+        ret.append(" onSubmit=\"submitForm('").append(formId).append("/"+obj.getId()+"');return false;\" method=\"post\">");
         ret.append("<fieldset>");
         
         SWBResourceURL surl = paramRequest.getRenderUrl().setMode(SWBResourceURL.Mode_EDIT).setCallMethod(SWBResourceURL.Call_DIRECT);
@@ -161,28 +161,20 @@ public class StatesManager extends GenericResource {
             SemanticObject obj = ont.getSemanticObject(suri);
             Status status = (Status)obj.createGenericInstance();
             
-            
-            
-            System.out.println("\n\nTODO");
-System.out.println("objetivo="+status);
             Iterator<State> it = status.listStates();
             while(it.hasNext()) {
                 State state = it.next();
-System.out.println("\n---estado="+state);
                 boolean stateRelated = false;
                 Iterator<Status> it2 = state.listStatuses();
                 while(it2.hasNext() && !stateRelated) {
                     Status stus = it2.next();
                     if(stus instanceof StateGroup) {
-System.out.println("----- relacionado con stategroup "+stus);
                         continue;
                     }
                     if(status.equals(stus)) {
-System.out.println("----- relacionado con mismo status "+stus);
                         continue;
                     }
                     stateRelated = true;
-                    System.out.println("----- relacionado con "+stus);
                 }
                 if(!stateRelated) {
                     state.setUndeleteable(false);
