@@ -139,7 +139,7 @@ public class SocialTopicInBox extends GenericResource {
         }*/
         
 
-        if (request.getParameter("statusMsg") != null) {
+        //if (request.getParameter("statusMsg") != null) {
             out.println("<script type=\"javascript\">");
             if(request.getParameter("dialog")!=null && request.getParameter("dialog").equals("close"))
             {
@@ -155,7 +155,7 @@ public class SocialTopicInBox extends GenericResource {
             }
             out.println("</script>");
             //return;
-        }
+        //}
 
         out.println("<style type=\"text/css\">");
         out.println(".spanFormat");
