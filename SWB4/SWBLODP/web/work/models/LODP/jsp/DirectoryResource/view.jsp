@@ -37,8 +37,6 @@
     String otro = request.getParameter("otro");
     String txtTitleSearch = paramRequest.getLocaleString("lbl_busquedaPB");
     
-    System.out.println("action" + action);
-    
     int numPages = 10;
     try {
         numPages = Integer.parseInt(strNumItems);
