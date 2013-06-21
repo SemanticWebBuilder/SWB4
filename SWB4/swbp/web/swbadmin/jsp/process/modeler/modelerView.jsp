@@ -198,7 +198,7 @@ exportUrl.setMode(SVGModeler.MODE_EXPORT);
         </div>
         <div id="artifactsBar" class="subbarHidden" style="width: 89px;">
             <span class="subbarStart"></span>
-            <span class="annotation" cId ="AnnotationArtifact" title="Anotación" onclick="ToolKit.setLayer(null);Modeler.creationStart(this)"></span>
+            <span class="annotation" cId ="AnnotationArtifact" title="Anotación" onclick="Modeler.creationStart(this)"></span>
             <span class="group" cId ="Group" title="Grupo" onclick="Modeler.creationStart(this)"></span>
             <span class="subbarEnd"></span>
         </div>
