@@ -1460,10 +1460,18 @@ public class SWBACollectionConfig extends GenericAdmResource {
         SemanticObject obj = ont.getSemanticObject(id);
         SemanticClass sclass = ont.getSemanticObject(cid).transformToSemanticClass();
 
+        SemanticObject somodel = obj.getModel().getModelObject();
+        Collection col = null;
+        if (obj.createGenericInstance() instanceof Collection) {
+            col = (Collection) obj.createGenericInstance();
+            somodel = col.getCollectionModel()!=null?col.getCollectionModel().getSemanticObject():obj.getModel().getModelObject();
+        }
+
         SWBResourceURL urlPA = paramRequest.getActionUrl();
         urlPA.setAction("new");
 
-        SWBFormMgr fmgr = new SWBFormMgr(sclass, obj.getModel().getModelObject(), SWBFormMgr.MODE_CREATE);
+        //SWBFormMgr fmgr = new SWBFormMgr(sclass, obj.getModel().getModelObject(), SWBFormMgr.MODE_CREATE);
+        SWBFormMgr fmgr = new SWBFormMgr(sclass, somodel, SWBFormMgr.MODE_CREATE);
         fmgr.setLang(user.getLanguage());
         fmgr.setAction(urlPA.toString());
         fmgr.setSubmitByAjax(true);
@@ -1682,7 +1690,15 @@ public class SWBACollectionConfig extends GenericAdmResource {
             SemanticClass sclass = ont.getSemanticObject(clsuri).transformToSemanticClass();
             log.debug("ProcessAction(new): sobj: " + id);
 
-            SWBFormMgr fmgr = new SWBFormMgr(sclass, so.getModel().getModelObject(), SWBFormMgr.MODE_CREATE);
+            SemanticObject somodel = so.getModel().getModelObject();
+        Collection col = null;
+        if (so.createGenericInstance() instanceof Collection) {
+            col = (Collection) so.createGenericInstance();
+            somodel = col.getCollectionModel()!=null?col.getCollectionModel().getSemanticObject():so.getModel().getModelObject();
+        }
+            
+            
+            SWBFormMgr fmgr = new SWBFormMgr(sclass, somodel, SWBFormMgr.MODE_CREATE);
             try {
                 SemanticObject nso = fmgr.processForm(request);
 
