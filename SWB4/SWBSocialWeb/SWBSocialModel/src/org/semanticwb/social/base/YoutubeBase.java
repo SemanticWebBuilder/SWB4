@@ -4,7 +4,7 @@ package org.semanticwb.social.base;
    /**
    * Clase que almacenara las diferentes cuentas de una organización para la red social YouTube. 
    */
-public abstract class YoutubeBase extends org.semanticwb.social.SocialNetwork implements org.semanticwb.model.Traceable,org.semanticwb.social.Listenerable,org.semanticwb.model.Tagable,org.semanticwb.social.SocialNetPostable,org.semanticwb.model.Descriptiveable,org.semanticwb.social.Secreteable,org.semanticwb.social.Videoable,org.semanticwb.model.Activeable,org.semanticwb.social.Authenticable,org.semanticwb.social.Oauthable
+public abstract class YoutubeBase extends org.semanticwb.social.SocialNetwork implements org.semanticwb.social.Oauthable,org.semanticwb.social.SocialNetPostable,org.semanticwb.model.Tagable,org.semanticwb.social.Listenerable,org.semanticwb.model.Activeable,org.semanticwb.social.Videoable,org.semanticwb.social.Secreteable,org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable
 {
    /**
    * Clase que almacenara las diferentes cuentas de una organización para la red social YouTube.
@@ -277,42 +277,6 @@ public abstract class YoutubeBase extends org.semanticwb.social.SocialNetwork im
     public void setTokenExpirationDate(java.util.Date value)
     {
         getSemanticObject().setDateProperty(social_tokenExpirationDate, value);
-    }
-
-/**
-* Gets the Password property
-* @return String with the Password
-*/
-    public String getPassword()
-    {
-        return getSemanticObject().getProperty(social_password);
-    }
-
-/**
-* Sets the Password property
-* @param value long with the Password
-*/
-    public void setPassword(String value)
-    {
-        getSemanticObject().setProperty(social_password, value);
-    }
-
-/**
-* Gets the Login property
-* @return String with the Login
-*/
-    public String getLogin()
-    {
-        return getSemanticObject().getProperty(social_login);
-    }
-
-/**
-* Sets the Login property
-* @param value long with the Login
-*/
-    public void setLogin(String value)
-    {
-        getSemanticObject().setProperty(social_login, value);
     }
 
 /**

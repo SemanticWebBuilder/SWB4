@@ -181,7 +181,7 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase {
         //YouTubeService service = new YouTubeService("SEMANTICWEBBUILDER", "AI39si4crQ_Zn6HmLxroe0TP48ZDkOXI71uodU9xc1QRyl8Y5TaRc2OIIOKMEatsw9Amce81__JcvvwObue_8yXD2yC6bFRhXA");
         YouTubeService service = new YouTubeService(getAppKey(), getSecretKey());
         try {
-            service.setUserCredentials(getLogin(), getPassword());
+            //service.setUserCredentials(getLogin(), getPassword());
         } catch (Exception e) {
             log.error("Invalid login credentials:", e);
         }
