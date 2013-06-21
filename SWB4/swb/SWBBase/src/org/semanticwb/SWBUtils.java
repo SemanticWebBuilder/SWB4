@@ -34,7 +34,6 @@ import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.Properties;
@@ -112,7 +111,6 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
 //import org.apache.poi.extractor.ExtractorFactory;
 //import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 //import org.apache.poi.openxml4j.exceptions.OpenXML4JException;
-import org.apache.xmlbeans.XmlException;
 import org.semanticwb.base.util.*;
 import org.semanticwb.base.util.parser.html.HTMLParser;
 import org.w3c.dom.Element;
@@ -430,6 +428,15 @@ public class SWBUtils {
          * <p>Almacena el nombre del c&oacute;digo de caracteres utilizado por defecto.</p>
          */
         private static String defencoding = null;
+        
+        
+        private static SimpleDateFormatTS formatter = new SimpleDateFormatTS("MMMM");
+        private static SimpleDateFormatTS iso8601dateFormat1 = new SimpleDateFormatTS("yyyy-MM-dd'T'HH:mm:ss'.'SSS");
+        private static SimpleDateFormatTS iso8601dateFormat2 = new SimpleDateFormatTS("yyyy-MM-dd'T'HH:mm:ss");
+        private static SimpleDateFormatTS iso8601dateFormat3 = new SimpleDateFormatTS("yyyy-MM-dd");
+                
+                
+        
 
         /**
          * Given a string specifying a charset, returns the value of {@code SWBUtils.TEXT.CHARSET_ISO8859_1}
@@ -539,7 +546,8 @@ public class SWBUtils {
             {
                 loc = SWBUtils.locale;
             }
-            SimpleDateFormat formatter = new SimpleDateFormat("MMMM");
+            
+            //SimpleDateFormat formatter = new SimpleDateFormat("MMMM");
             GregorianCalendar gc = new GregorianCalendar(loc);
             gc.set(Calendar.MONTH, Calendar.JANUARY);
             gc.set(Calendar.DATE, 1);
@@ -697,8 +705,8 @@ public class SWBUtils {
          */
         public static String iso8601DateFormat(Date date)
         {
-            SimpleDateFormat iso8601dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'.'SSS");
-            return iso8601dateFormat.format(date);
+            //SimpleDateFormat iso8601dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'.'SSS");
+            return iso8601dateFormat1.format(date);
         }
 
         /**
@@ -715,16 +723,16 @@ public class SWBUtils {
          */
         public static Date iso8601DateParse(String date) throws ParseException
         {
-            SimpleDateFormat iso8601dateFormat=null;        
+            SimpleDateFormatTS iso8601dateFormat=null;        
             if(date.length()>19)
             {
-                iso8601dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'.'SSS");
+                iso8601dateFormat = iso8601dateFormat1;//new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'.'SSS");
             }if(date.length()>10)
             {
-                iso8601dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+                iso8601dateFormat = iso8601dateFormat2;//new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
             }else
             {
-                iso8601dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                iso8601dateFormat = iso8601dateFormat3;//new SimpleDateFormat("yyyy-MM-dd");
             }
             return iso8601dateFormat.parse(date);
         }
