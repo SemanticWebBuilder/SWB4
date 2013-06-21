@@ -553,14 +553,9 @@
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBInterface"/>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Interface"/>
   </owl:Class>
-  <owl:ObjectProperty rdf:ID="hasPeriod">
-    <owl:inverseOf>
-      <owl:ObjectProperty rdf:ID="hasSeasonableInv"/>
-    </owl:inverseOf>
-    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >Atributo que almacena un periodo</rdfs:comment>
-    <rdfs:range rdf:resource="#Period"/>
-    <rdfs:domain rdf:resource="#Seasonable"/>
+  <owl:ObjectProperty rdf:ID="objectiveInv">
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >objective</swb:propertyCodeName>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="parent">
     <swb:displayProperty>
@@ -577,15 +572,14 @@
     >false</swb:removeDependency>
     <rdfs:range rdf:resource="#BSC"/>
   </owl:ObjectProperty>
-  <owl:ObjectProperty rdf:ID="objectiveInv">
-    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >objective</swb:propertyCodeName>
-  </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="hasStatusInv">
     <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >hasStatus</swb:propertyCodeName>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="hasGroupedStates">
+    <owl:inverseOf>
+      <owl:ObjectProperty rdf:ID="stateGroupInv"/>
+    </owl:inverseOf>
     <rdfs:domain rdf:resource="#StateGroup"/>
     <rdfs:range>
       <swb:Class rdf:ID="State">
@@ -610,12 +604,10 @@
     <swb:herarquicalRelation rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:herarquicalRelation>
   </owl:ObjectProperty>
-  <owl:ObjectProperty rdf:ID="perspectiveInv">
-    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >perspective</swb:propertyCodeName>
-  </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="hasTheme">
-    <owl:inverseOf rdf:resource="#perspectiveInv"/>
+    <owl:inverseOf>
+      <owl:ObjectProperty rdf:ID="perspectiveInv"/>
+    </owl:inverseOf>
     <rdfs:range rdf:resource="#Theme"/>
     <swb:herarquicalRelation rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:herarquicalRelation>
@@ -641,14 +633,114 @@
     <rdfs:range rdf:resource="#Objective"/>
     <rdfs:domain rdf:resource="#Objective"/>
   </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasMeasure">
+    <rdfs:domain rdf:resource="#Measurable"/>
+    <rdfs:range rdf:resource="#Measure"/>
+    <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >false</swb:removeDependency>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="themeInv">
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >theme</swb:propertyCodeName>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="championFacilitator">
+    <rdfs:label xml:lang="es">Facilitador de champion</rdfs:label>
+    <rdfs:label xml:lang="en">Champion facilitator</rdfs:label>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_championFacilitator">
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >60</swb:index>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#selectOneUserRepWithBlank"/>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Persiste información de un facilitador de campeón en una indicador</rdfs:comment>
+    <rdfs:range rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#User"/>
+    <rdfs:domain rdf:resource="#Indicator"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="period">
+    <rdfs:domain rdf:resource="#Measure"/>
+    <rdfs:range rdf:resource="#Period"/>
+    <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:required>
+    <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >false</swb:removeDependency>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasEvidence">
+    <rdfs:label xml:lang="es">Evidencias</rdfs:label>
+    <rdfs:label xml:lang="en">Evidence</rdfs:label>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_hasEvidence">
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >150</swb:index>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#ObjectElement_1"/>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Periste las evidencias asociadas a un indicador</rdfs:comment>
+    <rdfs:range>
+      <swb:Class rdf:ID="Evidence">
+        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >true</swb:autogenId>
+        <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >Clase que permite definir los atributos de las evidencias de un Indicador</rdfs:comment>
+        <rdfs:subClassOf rdf:resource="#BSCTracing"/>
+        <swb:classCodePackage rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >org.semanticwb.bsc.tracing</swb:classCodePackage>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Class>
+    </rdfs:range>
+    <rdfs:domain rdf:resource="#Indicator"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="previus">
+    <rdfs:domain rdf:resource="#Machinable"/>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_Previus">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#selectOneModelWithBlank"/>
+        <rdfs:label xml:lang="en">Previus</rdfs:label>
+        <rdfs:label xml:lang="es">Anterior</rdfs:label>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >26</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:range rdf:resource="#Machinable"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasDeliverable">
+    <rdfs:domain rdf:resource="#Initiative"/>
+    <rdfs:range>
+      <swb:Class rdf:ID="Deliverable">
+        <rdfs:subClassOf rdf:resource="#BSCElement"/>
+        <swb:classCodePackage rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >org.semanticwb.bsc.element</swb:classCodePackage>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Class>
+    </rdfs:range>
+    <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:removeDependency>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasPeriod">
+    <owl:inverseOf>
+      <owl:ObjectProperty rdf:ID="hasSeasonableInv"/>
+    </owl:inverseOf>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Atributo que almacena un periodo</rdfs:comment>
+    <rdfs:range rdf:resource="#Period"/>
+    <rdfs:domain rdf:resource="#Seasonable"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="#stateGroupInv">
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >stateGroup</swb:propertyCodeName>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="#perspectiveInv">
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >perspective</swb:propertyCodeName>
+  </owl:ObjectProperty>
   <owl:ObjectProperty rdf:about="#hasSeasonableInv">
     <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >hasSeasonable</swb:propertyCodeName>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="hasObjective">
-    <owl:inverseOf>
-      <owl:ObjectProperty rdf:ID="themeInv"/>
-    </owl:inverseOf>
+    <owl:inverseOf rdf:resource="#themeInv"/>
     <rdfs:range rdf:resource="#Objective"/>
     <swb:herarquicalRelation rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:herarquicalRelation>
@@ -657,12 +749,6 @@
   <owl:ObjectProperty rdf:ID="hasInitiative">
     <rdfs:domain rdf:resource="#Objective"/>
     <rdfs:range rdf:resource="#Initiative"/>
-    <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >false</swb:removeDependency>
-  </owl:ObjectProperty>
-  <owl:ObjectProperty rdf:ID="hasMeasure">
-    <rdfs:domain rdf:resource="#Measurable"/>
-    <rdfs:range rdf:resource="#Measure"/>
     <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >false</swb:removeDependency>
   </owl:ObjectProperty>
@@ -725,25 +811,6 @@
     </swb:displayProperty>
     <rdfs:domain rdf:resource="#Indicator"/>
   </owl:ObjectProperty>
-  <owl:ObjectProperty rdf:about="#themeInv">
-    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >theme</swb:propertyCodeName>
-  </owl:ObjectProperty>
-  <owl:ObjectProperty rdf:ID="championFacilitator">
-    <rdfs:label xml:lang="es">Facilitador de champion</rdfs:label>
-    <rdfs:label xml:lang="en">Champion facilitator</rdfs:label>
-    <swb:displayProperty>
-      <swbxf:DisplayProperty rdf:ID="dp_championFacilitator">
-        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >60</swb:index>
-        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#selectOneUserRepWithBlank"/>
-      </swbxf:DisplayProperty>
-    </swb:displayProperty>
-    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >Persiste información de un facilitador de campeón en una indicador</rdfs:comment>
-    <rdfs:range rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#User"/>
-    <rdfs:domain rdf:resource="#Indicator"/>
-  </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="next">
     <rdfs:domain rdf:resource="#Machinable"/>
     <swb:displayProperty>
@@ -757,56 +824,9 @@
     </swb:displayProperty>
     <rdfs:range rdf:resource="#Machinable"/>
   </owl:ObjectProperty>
-  <owl:ObjectProperty rdf:ID="period">
-    <rdfs:domain rdf:resource="#Measure"/>
-    <rdfs:range rdf:resource="#Period"/>
-    <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:required>
-    <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >false</swb:removeDependency>
-  </owl:ObjectProperty>
-  <owl:ObjectProperty rdf:ID="hasEvidence">
-    <rdfs:label xml:lang="es">Evidencias</rdfs:label>
-    <rdfs:label xml:lang="en">Evidence</rdfs:label>
-    <swb:displayProperty>
-      <swbxf:DisplayProperty rdf:ID="dp_hasEvidence">
-        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >150</swb:index>
-        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#ObjectElement_1"/>
-      </swbxf:DisplayProperty>
-    </swb:displayProperty>
-    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >Periste las evidencias asociadas a un indicador</rdfs:comment>
-    <rdfs:range>
-      <swb:Class rdf:ID="Evidence">
-        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-        >true</swb:autogenId>
-        <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >Clase que permite definir los atributos de las evidencias de un Indicador</rdfs:comment>
-        <rdfs:subClassOf rdf:resource="#BSCTracing"/>
-        <swb:classCodePackage rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >org.semanticwb.bsc.tracing</swb:classCodePackage>
-        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-      </swb:Class>
-    </rdfs:range>
-    <rdfs:domain rdf:resource="#Indicator"/>
-  </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="measure">
     <rdfs:domain rdf:resource="#Series"/>
     <rdfs:range rdf:resource="#Measure"/>
-  </owl:ObjectProperty>
-  <owl:ObjectProperty rdf:ID="hasDeliverable">
-    <rdfs:domain rdf:resource="#Initiative"/>
-    <rdfs:range>
-      <swb:Class rdf:ID="Deliverable">
-        <rdfs:subClassOf rdf:resource="#BSCElement"/>
-        <swb:classCodePackage rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >org.semanticwb.bsc.element</swb:classCodePackage>
-        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-      </swb:Class>
-    </rdfs:range>
-    <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:removeDependency>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="hasState">
     <rdfs:domain rdf:resource="#Status"/>
@@ -814,19 +834,6 @@
     <rdfs:range rdf:resource="#State"/>
     <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >Lista de estados del grupo</rdfs:comment>
-  </owl:ObjectProperty>
-  <owl:ObjectProperty rdf:ID="previus">
-    <rdfs:domain rdf:resource="#Machinable"/>
-    <swb:displayProperty>
-      <swbxf:DisplayProperty rdf:ID="dp_Previus">
-        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#selectOneModelWithBlank"/>
-        <rdfs:label xml:lang="en">Previus</rdfs:label>
-        <rdfs:label xml:lang="es">Anterior</rdfs:label>
-        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >26</swb:index>
-      </swbxf:DisplayProperty>
-    </swb:displayProperty>
-    <rdfs:range rdf:resource="#Machinable"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="status">
     <rdfs:domain rdf:resource="#Measure"/>
