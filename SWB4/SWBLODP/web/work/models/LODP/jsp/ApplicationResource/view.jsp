@@ -716,19 +716,22 @@
         String instlogo = "images/imagen.gif";
         Iterator<Dataset> app = aps.listRelatedDatasets();
         List<Dataset> listDS = new ArrayList();
+        String uriUsuario = "";
         
         while(app.hasNext()){
             Dataset ds = app.next();
             listDS.add(ds);
         }
         
-    if(ob instanceof Developer  ){
+    if(ob instanceof Developer){
         Developer db = (Developer)ob ;
         fullName = db.getFullName();
+        uriUsuario=db.getURI();
     }
     
     if(ob instanceof Publisher){
         Publisher db = (Publisher)ob ;
+        uriUsuario=db.getURI();
         Institution inst = db !=null ? db.getPubInstitution():null; 
         
         if(null!=inst){
@@ -763,11 +766,13 @@
         <div class="detalle">
        	  <p><%=aps.getAppDescription()%></p>
           
-          <%if(user.isSigned()&& (user.getSemanticObject().createGenericInstance() instanceof Developer || user.getSemanticObject().createGenericInstance() instanceof Publisher)){%>
+          <%if((user.isSigned()) && user.getSemanticObject().createGenericInstance() instanceof Developer || user.getSemanticObject().createGenericInstance() instanceof Publisher){
+              if(user.getURI().equals(uriUsuario) ){
+          %>
           
           <p><em><a href="<%=renderURL.setMode(SWBResourceURL.Mode_EDIT).setParameter("uri", aps.getShortURI())%>" ><%=paramRequest.getLocaleString("lbl_editar")%></a></em></p>
           
-          <%}%>
+          <%}}%>
           
           <p><em><a href="mapas.opendata.gob.mx" class="api">Documentación del API</a></em></p>
           
@@ -793,7 +798,7 @@
                 <form id="seccCommentAdmin" action="<%=urlreview.toString()%>" method="post" >
 
                   <input type="hidden" name="appUri" value="<%=aps.getShortURI()%>" /> 
-                  <label for="desc"><b>*</b><%=paramRequest.getLocaleString("lbl_CommentarioAdminAPP")%></label>
+                  <label for="desc"><%=paramRequest.getLocaleString("lbl_CommentarioAdminAPP")%></label>
                   <textarea name="commentAPPAdmin" id="commentAPPAdmin" promptMessage="<%=paramRequest.getLocaleString("lbl_promtTextArea")%>" invalidMessage="<%=paramRequest.getLocaleString("lbl_invalidMsjTA")%>" trim="true" ></textarea>
                   <br/><br/>
                   <input type="submit" name="btnApprove" value="<%=paramRequest.getLocaleString("lbl_aprobarAPP")%>"/>
@@ -848,7 +853,7 @@
             
             <%}} else {%>
             
-            <li><%=paramRequest.getLocaleString("lbl_NOrelatesApps")%></li>
+            <li><%=paramRequest.getLocaleString("lbl_notAppFound")%></li>
             
             <%
             }
@@ -896,7 +901,7 @@
             
             <%}}else {%>
             
-            <li><%=paramRequest.getLocaleString("lbl_NOrelatesApps")%></li>
+            <li><%=paramRequest.getLocaleString("lbl_notAppFound")%></li>
             
             <%}
             
