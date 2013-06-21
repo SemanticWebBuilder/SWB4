@@ -211,7 +211,7 @@
             </select>
             
             <label for="url1"><b>*</b><%=paramRequest.getLocaleString("lbl_appURL")%></label>
-            <input type="text" id="url1" name="url" dojoType="dijit.form.ValidationTextBox" required="true" promptMessage="<%=paramRequest.getLocaleString("lbl_promtURL")%>" invalidMessage="<%=paramRequest.getLocaleString("lbl_invalidURL")%>" trim="true" />
+            <input type="text" id="url1" name="url" dojoType="dijit.form.ValidationTextBox" required="true" promptMessage="<%=paramRequest.getLocaleString("lbl_promtURL")%>" invalidMessage="<%=paramRequest.getLocaleString("lbl_invalidURL")%>" trim="true" regExp="^(ht|f)tp(s?)\:\/\/[0-9a-zA-Z]([-.\w]*[0-9a-zA-Z])*(:(0-9)*)*(\/?)( [a-zA-Z0-9\-\.\?\,\'\/\\\+&%\$#_]*)?$"/>
            
             <label><input type="checkbox" name="terminos" id="terminosCondicioes" maxlength="8" value="true" dojoType="dijit.form.CheckBox" required="true" _promptMessage="<%=paramRequest.getLocaleString("lbl_agreement")%>" invalidMessage="<%=paramRequest.getLocaleString("lbl_agreement")%>" isValid="return confirm('this.checkbox.value==true')"/>
             <a href="<%=renderURL.setMode(ApplicationResource.MODE_TERMINOS)%>" ><%=paramRequest.getLocaleString("lbl_appTerminosLicencia")%></label></a>    
