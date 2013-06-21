@@ -738,7 +738,10 @@ public class SocialSentPost extends GenericResource {
                 urlNew.setParameter("suri", id);
                 urlNew.setParameter("page", "" + z);
                 urlNew.setParameter("search", (searchWord.trim().length() > 0 ? searchWord : ""));
-                urlNew.setParameter("orderBy", (request.getParameter("orderBy")!=null && request.getParameter("orderBy").trim().length() > 0 ? request.getParameter("orderBy") : ""));
+                if(request.getParameter("orderBy")!=null)
+                {
+                    urlNew.setParameter("orderBy", request.getParameter("orderBy"));
+                }
                 if (z != p) {
                     out.println("<a href=\"#\" onclick=\"submitUrl('" + urlNew + "',this); return false;\">" + (z + 1) + "</a> ");
                 } else {
