@@ -3,6 +3,12 @@
     Created on : 29/05/2013, 12:32:29 PM
     Author     : Sabino Pariente
 --%>
+<%@page import="java.util.ArrayList"%>
+<%@page import="java.text.ParseException"%>
+<%@page import="java.text.SimpleDateFormat"%>
+<%@page import="java.text.DateFormat"%>
+<%@page import="java.util.Date"%>
+<%@page import="com.infotec.lodp.swb.resources.ChartsResource"%>
 <%@page import="com.infotec.lodp.swb.resources.ChartData"%>
 <%@page import="java.util.List"%>
 <%@page import="org.semanticwb.portal.api.SWBResourceURL"%>
@@ -13,198 +19,278 @@
 <jsp:useBean id="paramRequest" scope="request" type="org.semanticwb.portal.api.SWBParamRequest" />
 <%
     WebPage wpage = paramRequest.getWebPage();
+    SWBResourceURL urlAction = paramRequest.getRenderUrl(); 
     WebSite wsite = wpage.getWebSite();
     String urlSite = wpage.getUrl();
     String urlTypeData = urlSite + "?dataType=";
-    String chartType = (String) (request.getAttribute("chartType")== null? "Barra" : request.getAttribute("chartType"));    
-    SWBResourceURL urlAction = paramRequest.getRenderUrl();            
-    String rango = (String) (request.getAttribute("rango")== null? "" : request.getAttribute("rango"));
-    String fechaInicial = ""; //request.getParameter("startDate")==null? "":request.getParameter("startDate");
-    String fechaFinal = ""; // request.getParameter("finishDate")==null? "":request.getParameter("finishDate");
-    String datasetSelected = request.getParameter("dataset")==null? "":request.getParameter("dataset");    
-    if(fechaInicial.isEmpty()){        
-        fechaInicial = (String)(request.getAttribute("startDate")==null? "":request.getAttribute("startDate"));
-    }
-    if(fechaFinal.isEmpty()){        
-        fechaFinal = (String)(request.getAttribute("finishDate")==null? "":request.getAttribute("finishDate"));        
-    }
-    String DataType = (String)(request.getAttribute("dataType")== null? "views" : request.getAttribute("dataType"));
-    //List<ChartData> datos = getDatos(DataType, dFinal, dStart, dias, rango, datasetObj);
+    String fechaInicial = request.getParameter("startDate")== null? "":request.getParameter("startDate");
+    String fechaFinal = request.getParameter("finishDate")== null? "":request.getParameter("finishDate");
+    String dataset = request.getParameter("dataset");
+    String chartType = request.getParameter("chartType")==null?"Barra":request.getParameter("chartType");
+    String DataType = request.getParameter("dataType")==null?"views":request.getParameter("dataType");
+    Date dStart = null;
+    Date dFinal = null;        
+    if(fechaInicial.equals("") && fechaFinal.equals("")){
+        dFinal = new Date();                   
+        dStart = new Date(dFinal.getTime()-(7*ChartsResource.MILLSECS_PER_DAY));            
+    }else {
+        try {
+            DateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd");
+            dStart = fechaInicial.equals("")?new Date():sdf1.parse(fechaInicial);                
+            dFinal = fechaFinal.equals("")?new Date():sdf1.parse(fechaFinal);                
+        } catch (ParseException ex) {
+            ex.printStackTrace();
+        }
+    }    
+    long dias = 1+(dFinal.getTime()-dStart.getTime())/ChartsResource.MILLSECS_PER_DAY;
+    String rango = ChartsResource.getRango(dias,dStart,dFinal); 
+    Dataset datasetObj = null;
+    String idDSSelected = "";
+    List<ChartData> datos= new ArrayList();
+    String titleGraph = "";    
+    if(dataset!=null){
+        datasetObj = Dataset.ClassMgr.getDataset(dataset, wsite);   
+        idDSSelected = datasetObj.getId();
+        DateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd");
+        fechaInicial = sdf1.format(dStart);
+        fechaFinal =  sdf1.format(dFinal);
+        datos = ChartsResource.getDatos(DataType, dFinal, dStart, dias, rango, datasetObj,wsite);
+        titleGraph = paramRequest.getLocaleString("lbl_period");
+        if(rango==ChartsResource.RANGO_DIAS){ 
+            SimpleDateFormat sdf = new SimpleDateFormat("MMM yyyy");
+            titleGraph += " "+sdf.format(dStart).toUpperCase();
+        }
+        if(rango==ChartsResource.RANGO_MESES){
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy");
+            titleGraph += " "+ sdf.format(dStart).toUpperCase();
+        }
+        if(rango==ChartsResource.RANGO_YEARS){
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy");
+            titleGraph += " "+sdf.format(dStart).toUpperCase()+" "+paramRequest.getLocaleString("lbl_to")+" "+sdf.format(dFinal).toUpperCase();
+        }        
+    }    
 %>
+<meta charset="utf-8">
+<link href="/work/models/LODP/jsp/ChartsResource/barChart/nv.d3.css" rel="stylesheet" type="text/css">
+<style>
+
+body {
+  overflow-y:scroll;
+}
+
+text {
+  font: 10px sans-serif;
+}
+
+svg {
+  display: block;
+}
+
+#grafica svg{ 
+  min-width: 100px;
+  min-height: 100px;
+}
+
+</style>
+<script src="/work/models/LODP/jsp/ChartsResource/barChart/d3.v2.js"></script>
+<script src="/work/models/LODP/jsp/ChartsResource/barChart/nv.d3.js"></script>
+<!-- including all the components so I don't have to minify every time I test in development -->
+<script src="/work/models/LODP/jsp/ChartsResource/barChart/tooltip.js"></script>
+<script src="/work/models/LODP/jsp/ChartsResource/barChart/utils.js"></script>
+<script src="/work/models/LODP/jsp/ChartsResource/barChart/axis.js"></script>
+<script src="/work/models/LODP/jsp/ChartsResource/barChart/discreteBar.js"></script>
+<script src="/work/models/LODP/jsp/ChartsResource/barChart/discreteBarChart.js"></script>
 <script type="text/javascript">    
     dojo.require("dojo.parser");
-    dojo.require("dijit.form.DateTextBox");    
-    chartData = [        
-        { x: "1", y: "19021" },
-        { x: "2", y: "12837" },
-        { x: "3", y: "12378" },
-        { x: "4", y: "21882" },
-        { x: "5", y: "17654" },
-        { x: "6", y: "15833" },
-        { x: "7", y: "16122" }
-    ];  
-    window.onload = function(){ 
-        var chartType = '<%=chartType%>'; 
-        var date = new Date();
-        document.getElementById("startDate").setAttribute("constraints","{max:"+date+"}");
-        document.getElementById("finishDate").setAttribute("constraints","{max:"+date+"}");
-        document.getElementById("startDate").setAttribute("value","<%=fechaInicial%>");
-        document.getElementById("finishDate").setAttribute("value","<%=fechaFinal%>");
-        document.getElementById("txtGraph1").innerHTML = "";
-        document.getElementById("txtGraph2").innerHTML = "";
-        document.getElementById("txtGraph3").innerHTML = "";
-        document.getElementById("txtGraph4").innerHTML = "";        
+    dojo.require("dijit.form.DateTextBox"); 
+    var chartType = '<%=chartType%>'; 
+</script>
+<script>
+    //window.onload = function(){ 
+        
+        //setConstrain();        
         if(chartType == 'Barra') {
-            document.getElementById("txtGraph1").innerHTML = "(selected)"; 
-            document.getElementById("Barra").setAttribute("checked",true);
-            document.getElementById("grafica").setAttribute("style","width:600px;height:400px");            
+            historicalBarChart = [ 
+                {
+                key: "Cumulative Return",
+                values: [
+                <%
+                    int i=0;
+                    for(ChartData cd : datos){
+                %>
+                { "label" : "<%=cd.getTitle()%>", "value" : <%=cd.getCount()%> }
+                <%      i++;
+                        if(i<datos.size()){ %>,<%}%>
+                <%
+                    }
+                %> 
+                 ]
+                 }
+                 ];
+                 
+            nv.addGraph(function() {                 
+                var chart = nv.models.discreteBarChart()
+                    .x(function(d) { return d.label })
+                    .y(function(d) { return d.value })
+                    .staggerLabels(true)
+                    //.staggerLabels(historicalBarChart[0].values.length > 8)
+                    .tooltips(false)
+                    .valueFormat(d3.format('d'))
+                    .showValues(true)
+                d3.select('#grafica svg')
+                    .datum(historicalBarChart)
+                  .transition().duration(500)
+                    .call(chart);
+                nv.utils.windowResize(chart.update);
+                return chart;
+              });                                 
         }
         if(chartType == 'Lineal') { 
-            document.getElementById("txtGraph2").innerHTML = "(selected)";    
-            document.getElementById("Lineal").setAttribute("checked",true);
-            document.getElementById("grafica").setAttribute("style","width:600px;height:400px");
             
         }
         if(chartType == 'Dispersion') { 
-            document.getElementById("txtGraph3").innerHTML = "(selected)";  
-            document.getElementById("Dispersion").setAttribute("checked",true);
-            document.getElementById("grafica").setAttribute("style","width:600px;height:400px");            
+            
+                        
         }
         if(chartType == 'Pastel') { 
-            document.getElementById("txtGraph4").innerHTML = "(selected)"; 
-            document.getElementById("Pastel").setAttribute("checked",true);
-            document.getElementById("grafica").setAttribute("style","width:400px;height:400px");                       
-        }       	
-    }     
-    function validaFecha(){
-        var fechaIni = document.getElementById("startDate").value;
-        var fechaFin = document.getElementById("finishDate").value;
-        var dIni = new Date(fechaIni);
-        var dFin = new Date(fechaFin);
-        //alert(fechaIni+":::"+fechaFin);
-        if(dIni > dFin){
-            alert("La fecha inicial debe ser menor a la fecha final");
-        }        
+            
+                               
+        }
+//}
+</script>
+    
+<script>
+   
+    function setConstrain() {
+        dijit.byId('startDate').constraints.max = new Date();
+        dijit.byId('finishDate').constraints.max = new Date();
     }
 </script>
 <form method="post"  action="<%=urlAction.setMode("GRAPHIC").setParameter("dataType", DataType)%>">
-    <div id="gral">
-        <div id="cuerpo">
-            <h3>Graficas de actividad</h3>
-            <div id="graficador">
-                <div id="categoria">
-                    <span>
-                        <%if(!DataType.equals("views")){%>
-                            <a href="<%=urlTypeData+"views"%>">
-                        <%}%>    
-                        Visitas
-                        <%if(!DataType.equals("views")){%>
-                            </a>
-                        <%}%>
-                    </span>
-                    <span>
-                         <%if(!DataType.equals("ranking")){%>
-                            <a href="<%=urlTypeData+"ranking"%>" />
-                         <%}%>
-                         Calificación
-                         <%if(!DataType.equals("ranking")){%>
-                            </a>
-                        <%}%>
-                    </span>
-                    <span>
-                         <%if(!DataType.equals("hits")){%>   
-                            <a href="<%=urlTypeData+"hits"%>" />
-                         <%}%>
-                         Descargas
-                         <%if(!DataType.equals("hits")){%>
-                            </a>
-                         <%}%>
-                    </span>
-                    <span>
-                         <%if(!DataType.equals("comments")){%> 
-                            <a href="<%=urlTypeData+"comments"%>" />
-                         <%}%>
-                         Comentarios
-                         <%if(!DataType.equals("comments")){%>
-                            </a>
-                        <%}%>
-                    </span>
-                    <span>
-                        <%if(!DataType.equals("appl")){%> 
-                            <a href="<%=urlTypeData+"appl"%>" />
-                        <%}%>
-                        Contribuciones
-                        <%if(!DataType.equals("appl")){%>
-                            </a>
-                        <%}%>
-                    </span>
-                </div>
-                <div id="izq-graf">
-                    <div id="grafica">
-                        Aqui va la gráfica
-                    </div>        
-                    <div  id="graficatipo">
-                        <label for="gbarras">
-                            <input type="radio" name="chartType" value="Barra" id="Barra">
-                            Barras <span id="txtGraph1"></span>
-                        </label>
-                        <label for="glineal">
-                            <input type="radio" name="chartType" value="Lineal" id="Lineal"> 
-                            Lineal <span id="txtGraph2"></span>
-                        </label>
-                        <label for="gdisper">  
-                            <input type="radio" name="chartType" value="Dispersion" id="Dispersion"> 
-                            Dispersi&oacute;n <span id="txtGraph3"></span>
-                        </label>
-                        <label for="gpastel">
-                            <input type="radio" name="chartType" value="Pastel" id="Pastel"> 
-                            Pastel <span id="txtGraph4"></span>
-                        </label>                            
-                    </div>
-                    <div id="grafpie">
-                        <div id="graficafecha">
-                            <p>Periodo del 
-                              <input name="startDate" id="startDate" type="text" 
-                              class="calendario" dojoType="dijit.form.DateTextBox" required="true" 
-                              promptMessage="dd/MM/yyyy" trim="true" valid="false"
-                              invalidMessage="Fecha invalida. Use el formato mm/dd/yyyy."/> 
-                              al 
-                              <input name="finishDate" id="finishDate" type="text" 
-                              class="calendario" dojoType="dijit.form.DateTextBox" required="true"  
-                              promptMessage="dd/MM/yyyy" trim="true" valid="false"  onchange="validaFecha();" 
-                              invalidMessage="Fecha invalida. Use el formato mm/dd/yyyy."/> 
-                            </p>
-                            <div id="graficaunidad">
-                                Unidad: <%=rango%>
-                            </div>
-                             <input type="Submit" value="Gráficar" class="boton-simple" /> 
-                        </div>
-                    </div>
-                    <div id="der-graf">
-                        <div id="grafdatasets">
-                            <p>Datasets</p>
-                            <select size="10" name="dataset" id="dataset">
-                            <%
-                            Iterator<Dataset> listDS = Dataset.ClassMgr.listDatasets(wsite);
-                            while(listDS.hasNext()){
-                            Dataset ds = listDS.next(); 
-                            String selected = "";
-                            if(ds.isDatasetActive() && ds.isApproved()){%>
-                            
-                            <%if(ds.getId().equalsIgnoreCase(datasetSelected)){
-                                    selected = "selected";
-                                }                
-                            %>
-                                <option <%=selected%> value="<%=ds.getId()%>" ><%=ds.getDatasetTitle()%></option>
-                            <%}
-                            }%>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-            </div> 
+    <div id="graficador">
+        <div id="categoria">            
+            <%if(!DataType.equals("views")){%>
+                <a href="<%=urlTypeData+"views"%>">            
+                <%=paramRequest.getLocaleString("lbl_Views")%>            
+                </a>
+            <%}%>
+            <%if(DataType.equals("views")){%>
+                <span><%=paramRequest.getLocaleString("lbl_Views")%></span>
+            <%}%>    
+            <%if(!DataType.equals("ranking")){%>
+               <a href="<%=urlTypeData+"ranking"%>" />
+               <%=paramRequest.getLocaleString("lbl_Ranking")%>
+               </a>
+            <%}%>            
+            <%if(DataType.equals("ranking")){%>
+                <span><%=paramRequest.getLocaleString("lbl_Ranking")%></span>
+            <%}%>            
+            <%if(!DataType.equals("hits")){%>   
+               <a href="<%=urlTypeData+"hits"%>" />
+               <%=paramRequest.getLocaleString("lbl_Downloads")%>
+               </a>
+            <%}%>
+            <%if(DataType.equals("hits")){%>
+                <span><%=paramRequest.getLocaleString("lbl_Downloads")%></span>            
+            <%}%>
+            <%if(!DataType.equals("comments")){%> 
+                <a href="<%=urlTypeData+"comments"%>" />
+                <%=paramRequest.getLocaleString("lbl_Comments")%>
+                </a>
+            <%}%>            
+            <%if(DataType.equals("comments")){%>                
+                <span><%=paramRequest.getLocaleString("lbl_Comments")%></span>
+            <%}%>            
+            <%if(!DataType.equals("appl")){%> 
+                <a href="<%=urlTypeData+"appl"%>" />
+                <%=paramRequest.getLocaleString("lbl_Applications")%>
+                </a>
+            <%}%>            
+            <%if(DataType.equals("appl")){%>
+                <span><%=paramRequest.getLocaleString("lbl_Applications")%></span>
+            <%}%>            
         </div>
-    </div>   
+        <div id="izq-graf">
+            <p> <%=titleGraph%> </p>
+            <div id="grafica">                
+                <svg></svg>
+            </div>        
+            <div  id="graficatipo">
+                <label for="gbarras">
+                    <input type="radio" name="chartType" value="Barra" id="Barra"
+                    <%if(chartType.equals("Barra")){%>checked="true"<%}%>>
+                    <%=paramRequest.getLocaleString("lbl_Bars")%> 
+                    <%if(chartType.equals("Barra")){%><%=paramRequest.getLocaleString("lbl_Select")%><%}%>
+                </label>
+                <label for="glineal">
+                    <input type="radio" name="chartType" value="Lineal" id="Lineal"
+                    <%if(chartType.equals("Lineal")){%>checked="true"<%}%> > 
+                    <%=paramRequest.getLocaleString("lbl_lineal")%> 
+                    <%if(chartType.equals("Lineal")){%><%=paramRequest.getLocaleString("lbl_Select")%><%}%>
+                </label>
+                <label for="gdisper">  
+                    <input type="radio" name="chartType" value="Dispersion" id="Dispersion"
+                    <%if(chartType.equals("Dispersion")){%>checked="true"<%}%> > 
+                    <%=paramRequest.getLocaleString("lbl_Scatter")%> 
+                    <%if(chartType.equals("Dispersion")){%><%=paramRequest.getLocaleString("lbl_Select")%><%}%>
+                </label>
+                <label for="gpastel">
+                    <input type="radio" name="chartType" value="Pastel" id="Pastel"
+                    <%if(chartType.equals("Pastel")){%>checked="true"<%}%> > 
+                    <%=paramRequest.getLocaleString("lbl_Pie")%> 
+                    <%if(chartType.equals("Pastel")){%><%=paramRequest.getLocaleString("lbl_Select")%><%}%>
+                </label>                            
+            </div>
+            <div id="grafpie">
+                <div id="graficafecha">                   
+                    <p><%=paramRequest.getLocaleString("lbl_Period_of")%>
+                      <input name="startDate" id="startDate" type="text"
+                      constraints="{datePattern:'dd/MM/yyyy'}"        
+                      dojoType="dijit.form.DateTextBox" required="true" 
+                      promptMessage="dd/MM/yyyy" valid="true"
+                      invalidMessage="Fecha invalida. Use el formato dd/MM/yyyy."
+                      value="<%=fechaInicial%>" trim="true"
+                      onchange="dijit.byId('finishDate').constraints.min = arguments[0];" 
+                      onclick ="setConstrain();" /> 
+                      <%=paramRequest.getLocaleString("lbl_to")%> 
+                      <input name="finishDate" id="finishDate" type="text" 
+                      constraints="{datePattern:'dd/MM/yyyy'}"       
+                      dojoType="dijit.form.DateTextBox" required="true"  
+                      promptMessage="dd/MM/yyyy" valid="true"  
+                      invalidMessage="Fecha invalida. Use el formato dd/MM/yyyy."
+                      value="<%=fechaFinal%>" trim="true"
+                      onchange="dijit.byId('startDate').constraints.max = arguments[0];" 
+                      onclick="setConstrain();" /> 
+                    </p>
+                </div>
+                <div id="graficaunidad">
+                    <%=paramRequest.getLocaleString("lbl_Unit")%> <%=rango%>
+                </div>                                                
+            </div>
+        </div>
+        <div id="der-graf">
+            <div id="grafdatasets">
+                <p><%=paramRequest.getLocaleString("lbl_Dataset")%></p>
+                <select size="10" name="dataset" id="dataset" 
+                required="true" >
+                <%
+                Iterator<Dataset> listDS = Dataset.ClassMgr.listDatasets(wsite);
+                while(listDS.hasNext()){
+                Dataset ds = listDS.next(); 
+                String selected = "";
+                if(ds.isDatasetActive() && ds.isApproved()){
+                    if(ds.getId().equalsIgnoreCase(idDSSelected)){
+                        selected = "selected";
+                    }                
+                %>
+                    <option <%=selected%> value="<%=ds.getId()%>" ><%=ds.getDatasetTitle()%></option>
+                <%}
+                }%>
+                </select>
+            </div>
+        </div>
+        <input type="Submit" value="Gráficar" class="boton-simple" />         
+    </div>          
 </form> 
   
        
