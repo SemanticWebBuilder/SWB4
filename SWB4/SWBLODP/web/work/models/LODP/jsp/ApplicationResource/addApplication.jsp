@@ -45,13 +45,10 @@
     Publisher pub = LODPUtils.getPublisher(user);
     Developer dev = LODPUtils.getDeveloper(user);
     
-    System.out.println("publicador" + pub);
-    System.out.println("desarrollador" + dev);
-    
     while(itCat.hasNext()){
         
         Category cat = itCat.next();
-        System.out.println("nombre de la categoria" + cat.getCatName());
+        
         if(cat.getCatName()!=null){
         
             if (pub != null) {
