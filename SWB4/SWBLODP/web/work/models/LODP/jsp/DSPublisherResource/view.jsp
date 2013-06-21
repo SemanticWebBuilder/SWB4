@@ -219,7 +219,7 @@
     <a href="<%=statsurl%>" class="misdat-estadisticas" >Estadísticas</a>
             <%
                 String graphwpid = base.getAttribute("graphwebpage","EstadisticasEnGrafica");
-                 wpurl = wsite.getWebPage(statswpid); 
+                 wpurl = wsite.getWebPage(graphwpid); 
                 statsurl = "#";
                 if(null!=wpurl) {
                     statsurl = wpurl.getUrl();
