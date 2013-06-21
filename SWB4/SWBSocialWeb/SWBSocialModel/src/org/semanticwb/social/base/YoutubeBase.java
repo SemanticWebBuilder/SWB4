@@ -4,7 +4,7 @@ package org.semanticwb.social.base;
    /**
    * Clase que almacenara las diferentes cuentas de una organización para la red social YouTube. 
    */
-public abstract class YoutubeBase extends org.semanticwb.social.SocialNetwork implements org.semanticwb.social.Oauthable,org.semanticwb.social.SocialNetPostable,org.semanticwb.model.Tagable,org.semanticwb.social.Listenerable,org.semanticwb.model.Activeable,org.semanticwb.social.Videoable,org.semanticwb.social.Secreteable,org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable
+public abstract class YoutubeBase extends org.semanticwb.social.SocialNetwork implements org.semanticwb.model.Activeable,org.semanticwb.model.Descriptiveable,org.semanticwb.social.Oauthable,org.semanticwb.model.Tagable,org.semanticwb.social.Secreteable,org.semanticwb.social.DeveloperKeyable,org.semanticwb.social.Listenerable,org.semanticwb.social.SocialNetPostable,org.semanticwb.model.Traceable,org.semanticwb.social.Videoable
 {
    /**
    * Clase que almacenara las diferentes cuentas de una organización para la red social YouTube.
@@ -295,6 +295,24 @@ public abstract class YoutubeBase extends org.semanticwb.social.SocialNetwork im
     public void setAccessToken(String value)
     {
         getSemanticObject().setProperty(social_accessToken, value);
+    }
+
+/**
+* Gets the DeveloperKey property
+* @return String with the DeveloperKey
+*/
+    public String getDeveloperKey()
+    {
+        return getSemanticObject().getProperty(social_developerKey);
+    }
+
+/**
+* Sets the DeveloperKey property
+* @param value long with the DeveloperKey
+*/
+    public void setDeveloperKey(String value)
+    {
+        getSemanticObject().setProperty(social_developerKey, value);
     }
 
 /**

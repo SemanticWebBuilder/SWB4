@@ -1390,6 +1390,105 @@ public class SWBSocialComparator implements Comparator {
     }
     
     
+    
+    /**
+     * Sort by sortByTopic name set.
+     *
+     * @param it the it
+     * @return the sets the
+     */
+    public static Set sortByStream(Iterator it, boolean ascendent) {
+        TreeSet set = null;
+        try {
+            if (it == null) {
+                return null;
+            }
+            if(ascendent)
+            {
+            set = new TreeSet(new Comparator() {
+                public int compare(Object o1, Object o2) {
+                    if (o1 instanceof Post && o2 instanceof Post) {
+                        PostIn post1 = (PostIn) o1;
+                        PostIn post2 = (PostIn) o2;
+                        if (post1.getPostInStream() == null && post2.getPostInStream() != null) {
+                            return -1;
+                        }
+                        if (post1.getPostInStream() != null && post2.getPostInStream() == null) {
+                            return 1;
+                        }
+                        if (post1.getPostInStream() == null && post2.getPostInStream() == null) {
+                            return -1;
+                        } else {
+                            String name1 = post1.getPostInStream().getTitle();
+                            String name2 = post2.getPostInStream().getTitle();
+
+                            int ret;
+                            if ((name1 != null) && (name2 != null)) {
+                                ret = name1.compareToIgnoreCase(name2);
+
+                                if (ret == 0) {
+                                    ret = -1;
+                                }
+                            } else {
+                                ret = -1;
+                            }
+                            return ret;
+                        }
+                    } else {
+                        return -1;
+                    }
+                }
+            });
+            }else
+            {
+                set = new TreeSet(new Comparator() {
+                public int compare(Object o1, Object o2) {
+                    if (o1 instanceof Post && o2 instanceof Post) {
+                        PostIn post1 = (PostIn) o1;
+                        PostIn post2 = (PostIn) o2;
+                        if (post2.getPostInStream() == null && post1.getPostInStream() != null) {
+                            return -1;
+                        }
+                        if (post2.getPostInStream() != null && post1.getPostInStream() == null) {
+                            return 1;
+                        }
+                        if (post2.getPostInStream() == null && post1.getPostInStream() == null) {
+                            return -1;
+                        } else {
+                            String name1 = post2.getPostInStream().getTitle();
+                            String name2 = post1.getPostInStream().getTitle();
+
+                            int ret;
+                            if ((name1 != null) && (name2 != null)) {
+                                ret = name1.compareToIgnoreCase(name2);
+
+                                if (ret == 0) {
+                                    ret = -1;
+                                }
+                            } else {
+                                ret = -1;
+                            }
+                            return ret;
+                        }
+                    } else {
+                        return -1;
+                    }
+                }
+            });
+            }
+
+            while (it.hasNext()) {
+                set.add(it.next());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return set;
+    }
+    
+    
+    
+    
     ////////////////////////////////////////POSTOUT//////////////////////////////
     
     
