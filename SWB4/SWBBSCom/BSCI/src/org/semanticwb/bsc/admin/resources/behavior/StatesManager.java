@@ -129,7 +129,7 @@ public class StatesManager extends GenericResource {
             return null;
         }
         
-        GenericIterator<State> states = stateGroup.listStates();
+        GenericIterator<State> states = stateGroup.listGroupedStateses();
         if(states.hasNext())
         {
             String lang = user.getLanguage();
@@ -168,9 +168,9 @@ public class StatesManager extends GenericResource {
                 Iterator<Status> it2 = state.listStatuses();
                 while(it2.hasNext() && !stateRelated) {
                     Status stus = it2.next();
-                    if(stus instanceof StateGroup) {
-                        continue;
-                    }
+//                    if(stus instanceof StateGroup) {
+//                        continue;
+//                    }
                     if(status.equals(stus)) {
                         continue;
                     }
