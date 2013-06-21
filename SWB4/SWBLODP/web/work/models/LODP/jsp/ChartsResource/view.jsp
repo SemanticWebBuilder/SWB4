@@ -90,6 +90,10 @@ svg {
   min-width: 100px;
   min-height: 100px;
 }
+.mypiechart {
+  /*width: 400px;*/
+  border: 2px;
+}
 
 </style>
 <script src="/work/models/LODP/jsp/ChartsResource/barChart/d3.v2.js"></script>
@@ -100,27 +104,27 @@ svg {
 <script src="/work/models/LODP/jsp/ChartsResource/barChart/axis.js"></script>
 <script src="/work/models/LODP/jsp/ChartsResource/barChart/discreteBar.js"></script>
 <script src="/work/models/LODP/jsp/ChartsResource/barChart/discreteBarChart.js"></script>
+
+<script src="/work/models/LODP/jsp/ChartsResource/barChart/pie.js"></script>
+<script src="/work/models/LODP/jsp/ChartsResource/barChart/pieChart.js"></script>
 <script type="text/javascript">    
     dojo.require("dojo.parser");
     dojo.require("dijit.form.DateTextBox"); 
     var chartType = '<%=chartType%>'; 
 </script>
 <script>
-    //window.onload = function(){ 
-        
-        //setConstrain();        
-        if(chartType == 'Barra') {
-            historicalBarChart = [ 
+    if(chartType == 'Barra') {
+        historicalBarChart = [ 
                 {
                 key: "Cumulative Return",
                 values: [
                 <%
-                    int i=0;
+                    int iB=0;
                     for(ChartData cd : datos){
                 %>
                 { "label" : "<%=cd.getTitle()%>", "value" : <%=cd.getCount()%> }
-                <%      i++;
-                        if(i<datos.size()){ %>,<%}%>
+                <%      iB++;
+                        if(iB<datos.size()){ %>,<%}%>
                 <%
                     }
                 %> 
@@ -145,18 +149,47 @@ svg {
                 return chart;
               });                                 
         }
-        if(chartType == 'Lineal') { 
-            
-        }
-        if(chartType == 'Dispersion') { 
-            
-                        
-        }
-        if(chartType == 'Pastel') { 
-            
-                               
-        }
-//}
+    if(chartType == 'Lineal') { 
+
+    }
+    if(chartType == 'Dispersion') { 
+
+
+    }
+    if(chartType == 'Pastel') { 
+        var testdata = [
+            <%
+                int iP=0;
+                for(ChartData cd : datos){
+            %>
+            { "key" : "<%=cd.getTitle()%>", "y" : <%=cd.getCount()%> }
+            <%      iP++;
+                    if(iP<datos.size()){ %>,<%}%>
+            <%
+                }
+            %> 
+        ];
+        nv.addGraph(function() {
+            var width = 600,
+            height = 380;
+            var chart = nv.models.pieChart()
+                .x(function(d) { return d.key })
+                .y(function(d) { return d.y })
+                .showLabels(false)
+                .values(function(d) { return d })
+                .color(d3.scale.category10().range())
+                .width(width)
+                .height(height);
+            d3.select("#grafica svg")
+                .datum([testdata])
+                .transition().duration(1200)
+                .attr('width', width)
+                .attr('height', height)
+                .call(chart);
+            chart.dispatch.on('stateChange', function(e) { nv.log('New State:', JSON.stringify(e)); });
+            return chart;
+        });
+    }
 </script>
     
 <script>
@@ -176,15 +209,7 @@ svg {
             <%}%>
             <%if(DataType.equals("views")){%>
                 <span><%=paramRequest.getLocaleString("lbl_Views")%></span>
-            <%}%>    
-            <%if(!DataType.equals("ranking")){%>
-               <a href="<%=urlTypeData+"ranking"%>" />
-               <%=paramRequest.getLocaleString("lbl_Ranking")%>
-               </a>
-            <%}%>            
-            <%if(DataType.equals("ranking")){%>
-                <span><%=paramRequest.getLocaleString("lbl_Ranking")%></span>
-            <%}%>            
+            <%}%>   
             <%if(!DataType.equals("hits")){%>   
                <a href="<%=urlTypeData+"hits"%>" />
                <%=paramRequest.getLocaleString("lbl_Downloads")%>
