@@ -35,7 +35,7 @@
     Publisher pub = LODPUtils.getPublisher(usr);
     if (pub == null) {
         // no disponible la pagina para usuarios que no sean publicadores
-        out.println("<h1>Se necesita ser PUBLICADOR....</h1>");
+         out.println("<h2>"+paramRequest.getLocaleString("msg_bePublisher")+"....</h2>");
         return;
     }
     String repositoryId = wpage.getWebSite().getUserRepository().getId();
@@ -109,7 +109,7 @@
         
         dstoplevelname=ds.getInstitution()!=null&&ds.getInstitution().getTopLevelName()!=null?ds.getInstitution().getTopLevelName():"---";
         
-        dsurl = ds.getDatasetURL()!=null?ds.getDatasetURL():"generar url...";
+        dsurl = ds.getDatasetURL()!=null?ds.getDatasetURL():"---";
         dswebsite = ds.getInstitution()!=null&&ds.getInstitution().getInstitutionHome()!=null?ds.getInstitution().getInstitutionHome():"";
         
         isApproved = ds.isApproved();
@@ -337,7 +337,7 @@
                     urlbck.setMode(SWBResourceURL.Mode_VIEW);
                 
                 %>
-                <input type="button" value="<%=paramRequest.getLocaleString("lblCancel")%>" onclick="if(confirm('¿Quieres regresar a la lista de datasets?')){window.location='<%=urlbck.toString()%>';} else {return false;}" class="boton-cancelar" /> 
+                <input type="button" value="<%=paramRequest.getLocaleString("lblCancel")%>" _onclick="if(confirm('¿Quieres regresar a la lista de datasets?')){window.location='<%=urlbck.toString()%>';} else {return false;}" class="boton-cancelar" /> 
                 <%
                  if(!isNew){
 

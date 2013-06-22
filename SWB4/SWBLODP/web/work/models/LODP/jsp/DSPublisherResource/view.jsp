@@ -61,28 +61,11 @@
     WebPage wpage = paramRequest.getWebPage();
     WebSite wsite = wpage.getWebSite();
     User usr = paramRequest.getUser();
-   // out.println("Clase a actualizar: "+DatasetVersion.lodpcg_DatasetVersion.getURI());
-   // out.println("Propiedad a actualizar: "+DatasetVersion.lodp_filePath.getName());
-    
-
-    /*
-    if(request.getParameter("createuser")!=null&&request.getParameter("createuser").equals("true")){
-        UserRepository usrrep = wsite.getUserRepository();
-        Publisher newpub = Publisher.ClassMgr.createPublisher(usrrep);
-        newpub.setActive(true);
-        newpub.setEmail("jafdeza@gmail.com");
-        newpub.setFirstName("publicador");
-        newpub.setLastName("sfp");
-        newpub.setLogin("juan");
-                }
-    */
-
-
 
     Publisher pub = LODPUtils.getPublisher(usr);
     if (pub == null) {
         // no disponible la pagina para usuarios que no sean publicadores
-        out.println("<h1>Se necesita ser PUBLICADOR....</h1>");
+        out.println("<h2>"+paramRequest.getLocaleString("msg_bePublisher")+"....</h2>");
         return;
     }
 
@@ -403,16 +386,16 @@
          * */
     %>
     <table class="panel-table">
-        <caption>Mis Datasets</caption>
+        <caption><%=paramRequest.getLocaleString("lbl_myDatasets")%></caption>
             <thead>
                 <tr>
-                    <th>Título</th>
-                    <th>Descripción</th>
-                    <th>Formato</th>
-                    <th>Fecha</th>
-                    <th>Etiquetas</th>
-                    <th>Estadísticas</th>
-                    <th>Acciones</th>
+                    <th><%=paramRequest.getLocaleString("lbl_title")%></th>
+                    <th><%=paramRequest.getLocaleString("lbl_description")%></th>
+                    <th><%=paramRequest.getLocaleString("lbl_format")%></th>
+                    <th><%=paramRequest.getLocaleString("lbl_date")%></th>
+                    <th><%=paramRequest.getLocaleString("lbl_labels")%></th>
+                    <th><%=paramRequest.getLocaleString("lbl_stats")%></th>
+                    <th><%=paramRequest.getLocaleString("lbl_actions")%></th>
                 </tr>
             </thead>
 
@@ -421,7 +404,7 @@
                     if (intSize == 0) {
                 %>
                 <tr class="r1">
-                    <td colspan="7">No se encontraron Data-Sets</td>
+                    <td colspan="7"><%=paramRequest.getLocaleString("lbl_noDatasetsFound")%></td>
                 </tr>
                 <%                                } else {
 
@@ -483,9 +466,9 @@
                                 DecimalFormat dft = new DecimalFormat("#,###,###");
                                 DecimalFormat dft2 = new DecimalFormat("#,###,###.##");
                             %>
-                            <li class="visita" title="Visitas"><strong>Visitas:</strong><%=dft.format(ds.getViews())%></li>
-                            <li class="descar" title="Descargas"><strong>Descargas:</strong><%=dft.format(ds.getDownloads())%></li>
-                            <li class="valora" title="Valoración"><strong>Valoración:</strong><%=dft2.format(ds.getAverage())%></li>
+                            <li class="visita" title="Visitas"><strong><%=paramRequest.getLocaleString("lbl_views")%>:</strong><%=dft.format(ds.getViews())%></li>
+                            <li class="descar" title="Descargas"><strong><%=paramRequest.getLocaleString("lbl_download")%>:</strong><%=dft.format(ds.getDownloads())%></li>
+                            <li class="valora" title="Valoración"><strong><%=paramRequest.getLocaleString("lbl_rank")%>:</strong><%=dft2.format(ds.getAverage())%></li>
                             <%
                                 long numcomm = 0;
                                 if (ds.listComments().hasNext()) {
@@ -498,11 +481,11 @@
                                 }
 
                             %>
-                            <li class="contri" title="Contribuciones"><strong>Contribuciones:</strong><%=dft.format(numapps)%></li>
-                            <li class="coment" title="Comentarios"><strong>Comentarios:</strong><%=dft.format(numcomm)%></li>
+                            <li class="contri" title="Contribuciones"><strong><%=paramRequest.getLocaleString("lbl_contributions")%>:</strong><%=dft.format(numapps)%></li>
+                            <li class="coment" title="Comentarios"><strong><%=paramRequest.getLocaleString("lbl_comments")%>:</strong><%=dft.format(numcomm)%></li>
                         </ul>
                     </td>
-                    <td><a class="editar" href="<%=urldet.toString()%>"><span>Editar</span></a>&nbsp;<a class="eliminar" href="<%=urlremove.toString()%>"><span>Eliminar</span></a></td> 
+                    <td><a class="editar" href="<%=urldet.toString()%>"><span>Editar</span></a>&nbsp;<a class="eliminar" href="<%=urlremove.toString()%>"><span><%=paramRequest.getLocaleString("lbl_noDatasetsFound")%>Eliminar</span></a></td> 
                 </tr>
                 <%
                         }
