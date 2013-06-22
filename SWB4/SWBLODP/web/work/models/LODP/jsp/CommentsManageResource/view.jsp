@@ -96,10 +96,10 @@ Author     : rene.jara
         <div class="comentario">
             <p class="comentador"><strong><%=co.getCommUserName()%></strong><em><%=co.getCommUserEmail()%></em></p>
             <p class="comentariotxt"><%=co.getComment()%></p>
-            <p class="inapropiado">
-                <a href="<%=urlapv%>" title="<%=paramRequest.getLocaleString("lblApproved")%>"><span><%=paramRequest.getLocaleString("lblCommentApproved")%></span></a>
-                <a href="<%=urlrvw%>" title="<%=paramRequest.getLocaleString("lblReviewed")%>"><span><%=paramRequest.getLocaleString("lblCommentReviewed")%></span></a>
-            </p>
+            <div>
+                <p class="aprobar"><a href="<%=urlapv%>" title="<%=paramRequest.getLocaleString("lblApproved")%>"><span><%=paramRequest.getLocaleString("lblCommentApproved")%></span></a></p>
+                <p class="rechazar"><a href="<%=urlrvw%>" title="<%=paramRequest.getLocaleString("lblReviewed")%>"><span><%=paramRequest.getLocaleString("lblCommentReviewed")%></span></a></p>
+            </div>
         </div>
         <%
             }
