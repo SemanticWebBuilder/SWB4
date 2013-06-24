@@ -34,7 +34,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.fileupload.FileItemIterator;
 import org.apache.commons.fileupload.FileItemStream;
-import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -81,6 +80,7 @@ public class SVGModeler extends GenericResource {
     public static final String ACT_LOADFILE = "loadFile";
     private static final String PROP_CLASS = "class";
     private static final String PROP_TITLE = "title";
+    private static final String ERRORSTRING = "{error:\"_JSONERROR_\"}";
     private static final String PROP_DESCRIPTION = "description";
     private static final String PROP_CONNPOINTS = "connectionPoints";
     private static final String PROP_URI = "uri";
@@ -144,43 +144,56 @@ public class SVGModeler extends GenericResource {
         }
     }
     
+    /**
+     * Modo para administrar las peticiones del modelador. Actúa como gateway para ejecutar las acciones.
+     * @param request
+     * @param response
+     * @param paramRequest
+     * @throws SWBResourceException
+     * @throws IOException 
+     */
     public void doGateway(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         OutputStream outs = response.getOutputStream();
         String action = paramRequest.getAction();
         GenericObject go = ont.getGenericObject(request.getParameter("suri"));
         
-        if (ACT_GETPROCESSJSON.equals(action)) {
+        if (ACT_GETPROCESSJSON.equals(action)) { //Obtener el JSON del modelo almacenado
+            String json = "";
             try {
-                Process process = null;
                 if (go != null && go instanceof Process) {
-                    process = (Process) go;
-                    String json = getProcessJSON(process).toString();
+                    Process process = (Process) go;
+                    JSONObject pJson = getProcessJSON(process);
+                    if (pJson != null) {
+                        json = pJson.toString();
+                    } else {
+                        json = ERRORSTRING.replace("_JSONERROR_", "No se ha podido obtener el JSON del modelo");
+                    }
                     outs.write(json.getBytes("UTF-8"));
                 } else {
                     log.error("Error to create JSON: Process not found");
-                    outs.write("ERROR: Process not found".getBytes());
+                    outs.write(ERRORSTRING.replace("_JSONERROR_", "No se ha podido obtener el proceso especificado").getBytes("UTF-8"));
                 }
             } catch (Exception e) {
                 log.error("Error to create JSON...", e);
-                outs.write(("ERROR:" + e.getMessage()).getBytes());
+                outs.write(ERRORSTRING.replace("_JSONERROR_", "No se ha podido obtener el JSON del modelo").getBytes("UTF-8"));
             }
-        } else if (ACT_LOADFILE.equals(action)) {
+        } else if (ACT_LOADFILE.equals(action)) { //Carga de modelo desde archivo swp
             response.setContentType("text/html");
             String json = processFile(request);
+            if (json == null) {
+                json =  ERRORSTRING.replace("_JSONERROR_", "No se ha podido cargar el JSON del modelo");
+            }
             outs.write(json.getBytes("UTF-8"));
-        } else if (ACT_STOREPROCESS.equals(action)) {
+        } else if (ACT_STOREPROCESS.equals(action)) { //Persistir modelo del proceso
             String jsonStr = request.getParameter("jsonString");
             HashMap<String, JSONObject> hmjson = new HashMap();
 
             if (go != null && go instanceof Process) {
                 Process process = (Process) go;
-
-                // Cargando los uris de los elementos existentes en el proceso
-                // eliminando las conexiones entre ellos para generarlas nuevamente
-
                 String str_uri = null;
                 JSONArray jsarr = null;
                 JSONObject jsobj = null;
+                
                 try {
                     //System.out.println("json recibido: "+node.getTextContent());
                     if (jsonStr.startsWith(JSONSTART) && jsonStr.endsWith(JSONEND)) {
@@ -196,9 +209,7 @@ public class SVGModeler extends GenericResource {
                                 try {
                                     jsobj = jsarr.getJSONObject(i);
                                     str_uri = jsobj.getString(PROP_URI);
-                                    
                                     //System.out.println("json uri:"+str_uri);
-
                                     hmjson.put(str_uri, jsobj);
                                 } catch (Exception ej) {
                                     log.error("Error en elemento del JSON. ", ej);
@@ -206,20 +217,20 @@ public class SVGModeler extends GenericResource {
                             }
                             boolean endsGood = createProcessElements(process, request, response, paramRequest, hmjson);
                             if(!endsGood) {
-                                outs.write(getError(3).getBytes());
+                                outs.write(ERRORSTRING.replace("_JSONERROR_", getError(3)).getBytes());
                             }
                         } catch (Exception ejs) {
                             log.error("Error en el JSON recibido. ", ejs);
-                            outs.write(getError(3).getBytes());
+                            outs.write(ERRORSTRING.replace("_JSONERROR_", getError(3)).getBytes());
                         }
                     }
                 } catch (Exception e) {
                     log.error("Error al leer JSON...", e);
-                    outs.write(getError(3).getBytes());
+                    outs.write(ERRORSTRING.replace("_JSONERROR_", getError(3)).getBytes());
                 }
             } else {
                 log.error("Error to create JSON: Process not found");
-                outs.write("ERROR: Process not found".getBytes());
+                outs.write(ERRORSTRING.replace("_JSONERROR_", "No se ha podido obtener el modelo especificado").getBytes());
             }
         }
     }
@@ -268,6 +279,15 @@ public class SVGModeler extends GenericResource {
             return ret;
     }
     
+    /**
+     * Crea los elementos del proceso. Realiza la verificación del JSON del proceso y crea los elementos especificados.
+     * @param process Proceso a reconstruir.
+     * @param request 
+     * @param response
+     * @param paramsRequest
+     * @param hmjson Mapa de objetos recuperados del JSON.
+     * @return true si la creación de los elementos tuvo éxito.
+     */
     public boolean createProcessElements(org.semanticwb.process.model.Process process, HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest, HashMap<String, JSONObject> hmjson) {
         //Revisando si existen problemas
         boolean ret = false;
@@ -336,8 +356,17 @@ public class SVGModeler extends GenericResource {
         }
     }
     
+    /**
+     * Verifica que el JSON del moelo está bien formado.
+     * @param process Proceso.
+     * @param request
+     * @param response
+     * @param paramsRequest
+     * @param hmjson
+     * @param bupdate
+     * @return 
+     */
     public boolean reviewJSON(org.semanticwb.process.model.Process process, HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest, HashMap<String, JSONObject> hmjson, boolean bupdate){
-        
         boolean ret = Boolean.TRUE;
         HashMap<String, String> hmori = loadProcessElements(process);
         HashMap<String, String> hmnew = new HashMap();
@@ -698,8 +727,6 @@ public class SVGModeler extends GenericResource {
 //
 //                        }
 
-
-
                             if (semclass.equals(UserTask.swp_UserTask)) {
 
                                 if (procsite.getResourceType("ProcessForm") == null && bupdate) {
@@ -722,8 +749,6 @@ public class SVGModeler extends GenericResource {
                                 }
                             }
                             ////////////////////////////////////////
-
-
                         } // termina else
                     } // termina if graphicalElement
                 } catch (Exception e) {
@@ -885,6 +910,14 @@ public class SVGModeler extends GenericResource {
         return ret;
     }
     
+    /**
+     * Modo para hacer la exportación del modelo del proceso a distintos formatos.
+     * @param request
+     * @param response
+     * @param paramRequest
+     * @throws SWBResourceException
+     * @throws IOException 
+     */
     public void doExport(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         OutputStream outs = response.getOutputStream();
         String format = request.getParameter("output_format");
@@ -902,41 +935,46 @@ public class SVGModeler extends GenericResource {
                              "<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\" \"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\">\n";
                 svg += data;
                 response.setContentType("image/svg+xml");
-                outs.write(svg.getBytes());
+                outs.write(svg.getBytes("UTF-8"));
             } else if ("swp".equalsIgnoreCase(format)) {
                 response.setContentType("application/json");
-                String json = getProcessJSON(p).toString();
-                outs.write(json.getBytes());
-            } else if ("png".equalsIgnoreCase(format)) {
+                String json = "";
+                JSONObject pJson = getProcessJSON(p);
+                if (pJson != null) {
+                    json = pJson.toString();
+                } else {
+                    json = ERRORSTRING.replace("_JSONERROR_", "No se ha podido obtener el JSON del modelo");
+                }
+                outs.write(json.getBytes("UTF-8"));
+            }
+//            } else if ("png".equalsIgnoreCase(format)) {
 //                String svg = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>" +
 //                             "<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\" \"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\">";
 //                svg += data.trim();
-//                System.out.println(svg);
-//                PNGTranscoder t = new PNGTranscoder();
-//                Charset charset = Charset.forName("UTF-8");
-//                response.setContentType("image/png");
 //                
-//                TranscoderInput ti = new TranscoderInput(new ByteArrayInputStream(charset.encode(svg.trim()).array()));
+//                InputStream strStream = new ByteArrayInputStream(svg.toString().getBytes("UTF-8"));
+//                TranscoderInput ti = new TranscoderInput(strStream/*svgFile.toURI().toString()*/);
 //                TranscoderOutput to = new TranscoderOutput(outs);
-//                try {
+//                
+//                PNGTranscoder t = new PNGTranscoder();
+//                t.addTranscodingHint(PNGTranscoder.KEY_FORCE_TRANSPARENT_WHITE, Boolean.TRUE);
+//                try {                
 //                    t.transcode(ti, to);
 //                } catch (TranscoderException ex) {
-//                    log.error(ex);
+//                    log.error("Ocurrió un problema al generar la imagen", ex);
 //                }
-            }
-            
+//            }
             outs.flush();
             outs.close();
         }
     }
     
-    /** Utilizado para generar un JSON del modelo, para la comunicacion con el applet
+    /** Utilizado para generar un JSON del modelo, para la comunicacion con el modelador
      *
      * @param process, Modelo a convertir en formato JSON
      * @return JSONObject, informacion del proceso en formato JSON
      */
     public JSONObject getProcessJSON(org.semanticwb.process.model.Process process) {
-
         JSONObject json_ret = null;
         JSONArray nodes = null;
         JSONObject ele = null;
@@ -1047,13 +1085,18 @@ public class SVGModeler extends GenericResource {
             }
 
         } catch (Exception e) {
+            json_ret = null;
             log.error("Error al general el JSON del Modelo.....getModelJSON(" + process.getTitle() + ", uri:" + process.getURI() + ")", e);
         }
         return json_ret;
     }
     
+    /**
+     * Obtiene el JSON de un subproceso en el modelo.
+     * @param subprocess Subproceso.
+     * @param nodes Arreglo donde se almacenarán los nodos generados.
+     */
     public void getSubProcessJSON(org.semanticwb.process.model.Containerable subprocess, JSONArray nodes) {
-
         JSONObject ele = null;
         JSONObject coele = null;
         try {
@@ -1151,8 +1194,13 @@ public class SVGModeler extends GenericResource {
         }
     }
     
+    /**
+     * Procesa los archivos enviados para la carga de modelo.
+     * @param request
+     * @return Cadena con el JSON contenido en el archivo.
+     */
     private String processFile(HttpServletRequest request) {
-        String data = "";
+        String data = null;
         boolean isMultipart = ServletFileUpload.isMultipartContent(request);
         
         if (isMultipart) {
@@ -1161,17 +1209,18 @@ public class SVGModeler extends GenericResource {
                 FileItemIterator it = upload.getItemIterator(request);
                 while(it.hasNext()) {
                     FileItemStream item = it.next();
-                    if (!item.isFormField()) {//Es una archivo
-                        InputStream stream = item.openStream();
-                        java.util.Scanner scanner = new Scanner(stream).useDelimiter("\\A");
-                        if (scanner.hasNext()) {
-                            data = scanner.next();
+                    if (!item.isFormField()) {//Es un archivo
+                        if (item.getName().endsWith(".swp")) { //Es un archivo swp
+                            InputStream stream = item.openStream();
+                            java.util.Scanner scanner = new Scanner(stream).useDelimiter("\\A");
+                            if (scanner.hasNext()) {
+                                data = scanner.next();
+                            }
                         }
                     }
                 }
-            } catch (FileUploadException ex) {
-                log.error("Error al cargar el archivo", ex);
-            } catch (IOException ex) {
+            } catch (Exception ex) {
+                data = null;
                 log.error("Error al cargar el archivo", ex);
             }
         }
