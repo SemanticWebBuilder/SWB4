@@ -234,7 +234,7 @@
         <div class="<%=claseStyle%>">
                 
                     <label for="dstitle"><b>*</b><%=paramRequest.getLocaleString("lbl_title")%></label>
-                    <input type="text" name="dstitle" id="dstitle" dojoType="dijit.form.ValidationTextBox" value="<%=dstitle%>" required="true"  invalidMessage="<%=paramRequest.getLocaleString("lbl_titlemissing")%>" trim="true" regExp="[a-zA-Z\u00C0-\u00FF' ]+" />
+                    <input type="text" name="dstitle" id="dstitle" dojoType="dijit.form.ValidationTextBox" value="<%=dstitle%>" required="true"  invalidMessage="<%=paramRequest.getLocaleString("lbl_titlemissing")%>" trim="true" _regExp="[a-zA-Z\u00C0-\u00FF' ]+" />
                     <label for="dsdescription"><b>*</b><%=paramRequest.getLocaleString("lbl_description")%></label>
                     <textarea name="dsdescription" id="dsdescription" data-dojo-yype="dijit.form.TextArea" value="<%=dsdescription%>" required="true"  invalidMessage="<%=paramRequest.getLocaleString("lbl_descriptionmissing")%>" trim="true" _regExp="[a-zA-Z\u00C0-\u00FF' ]+" rows="5" cols="50"><%=dsdescription%></textarea>
                 <!-- Temas -->

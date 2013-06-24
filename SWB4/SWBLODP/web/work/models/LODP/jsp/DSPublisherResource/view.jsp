@@ -166,17 +166,18 @@
 
     <%
     } else {
+        
         %>
     
      <img src="<%=instlogo%>"  />
-     <p class="panel-pubname">No se encontró información de la institución</p>    
-     <p class="">No se encontró información de la institución</p>    
+     <p class="panel-pubname"><%=paramRequest.getLocaleString("lbl_noInstitutionInfo")%></p>    
+     <p class=""><%=paramRequest.getLocaleString("lbl_noInstitutionInfo")%></p>    
     <%
     }
     %>
 </div>
 <div class="tit">
-    <h4>Mis datos</h4>
+    <h4><%=paramRequest.getLocaleString("lbl_mydata")%></h4>
 </div>
 <div class="misdatos">
             <%
@@ -184,13 +185,13 @@
                 urlnew.setParameter("act", SWBResourceURL.Action_ADD);
                 urlnew.setMode(SWBResourceURL.Mode_EDIT);
             %>
-            <a href="<%=urlnew.toString()%>"  class="misdat-nuevo" >Nuevo Dataset</a>
+            <a href="<%=urlnew.toString()%>"  class="misdat-nuevo" ><%=paramRequest.getLocaleString("lbl_newds")%></a>
                 <%
                     SWBResourceURL urlmyds = paramRequest.getRenderUrl();
                     urlmyds.setParameter("act", "myds");
 
                 %>
-            <a href="<%=urlmyds.toString()%>" class="misdat-misdata" >Mis Datasets</a>
+            <a href="<%=urlmyds.toString()%>" class="misdat-misdata" ><%=paramRequest.getLocaleString("lbl_mydatasets")%></a>
             <%
                 String statswpid = base.getAttribute("statswebpage","EstadisticasEnTabla");
                 WebPage wpurl = wsite.getWebPage(statswpid); 
@@ -199,7 +200,7 @@
                     statsurl = wpurl.getUrl();
                 }
             %>
-    <a href="<%=statsurl%>" class="misdat-estadisticas" >Estadísticas</a>
+    <a href="<%=statsurl%>" class="misdat-estadisticas" ><%=paramRequest.getLocaleString("lbl_stats")%></a>
             <%
                 String graphwpid = base.getAttribute("graphwebpage","EstadisticasEnGrafica");
                  wpurl = wsite.getWebPage(graphwpid); 
@@ -208,7 +209,7 @@
                     statsurl = wpurl.getUrl();
                 }
             %>
-            <a href="<%=statsurl%>"  class="misdat-actividad" >Actividad</a>
+            <a href="<%=statsurl%>"  class="misdat-actividad" ><%=paramRequest.getLocaleString("lbl_activities")%></a>
 
 </div>    
 
@@ -466,9 +467,9 @@
                                 DecimalFormat dft = new DecimalFormat("#,###,###");
                                 DecimalFormat dft2 = new DecimalFormat("#,###,###.##");
                             %>
-                            <li class="visita" title="Visitas"><strong><%=paramRequest.getLocaleString("lbl_views")%>:</strong><%=dft.format(ds.getViews())%></li>
-                            <li class="descar" title="Descargas"><strong><%=paramRequest.getLocaleString("lbl_download")%>:</strong><%=dft.format(ds.getDownloads())%></li>
-                            <li class="valora" title="Valoración"><strong><%=paramRequest.getLocaleString("lbl_rank")%>:</strong><%=dft2.format(ds.getAverage())%></li>
+                            <li class="visita" title="<%=paramRequest.getLocaleString("lbl_views")%>"><strong><%=paramRequest.getLocaleString("lbl_views")%>:</strong><%=dft.format(ds.getViews())%></li>
+                            <li class="descar" title="<%=paramRequest.getLocaleString("lbl_download")%>"><strong><%=paramRequest.getLocaleString("lbl_download")%>:</strong><%=dft.format(ds.getDownloads())%></li>
+                            <li class="valora" title="<%=paramRequest.getLocaleString("lbl_rank")%>"><strong><%=paramRequest.getLocaleString("lbl_rank")%>:</strong><%=dft2.format(ds.getAverage())%></li>
                             <%
                                 long numcomm = 0;
                                 if (ds.listComments().hasNext()) {
@@ -481,11 +482,11 @@
                                 }
 
                             %>
-                            <li class="contri" title="Contribuciones"><strong><%=paramRequest.getLocaleString("lbl_contributions")%>:</strong><%=dft.format(numapps)%></li>
-                            <li class="coment" title="Comentarios"><strong><%=paramRequest.getLocaleString("lbl_comments")%>:</strong><%=dft.format(numcomm)%></li>
+                            <li class="contri" title="<%=paramRequest.getLocaleString("lbl_contributions")%>"><strong><%=paramRequest.getLocaleString("lbl_contributions")%>:</strong><%=dft.format(numapps)%></li>
+                            <li class="coment" title="<%=paramRequest.getLocaleString("lbl_comments")%>"><strong><%=paramRequest.getLocaleString("lbl_comments")%>:</strong><%=dft.format(numcomm)%></li>
                         </ul>
                     </td>
-                    <td><a class="editar" href="<%=urldet.toString()%>"><span>Editar</span></a>&nbsp;<a class="eliminar" href="<%=urlremove.toString()%>"><span><%=paramRequest.getLocaleString("lbl_noDatasetsFound")%>Eliminar</span></a></td> 
+                    <td><a class="editar" href="<%=urldet.toString()%>"><span><%=paramRequest.getLocaleString("lbl_edit")%></span></a>&nbsp;<a class="eliminar" href="<%=urlremove.toString()%>"><span><%=paramRequest.getLocaleString("lbl_remove")%></span></a></td> 
                 </tr>
                 <%
                         }
