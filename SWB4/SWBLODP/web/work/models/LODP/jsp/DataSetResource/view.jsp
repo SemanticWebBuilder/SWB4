@@ -302,31 +302,7 @@
     </form>
 </div>
 <div class="izq-data1">
-    <!--
-    <div class="izq_sector">
-        <ul>
-            <li><h3><%//=paramRequest.getLocaleString("lbl_sectorFilter")%></h3></li>
-                    <%/*                        Iterator<Sector> itsec = Sector.ClassMgr.listSectors(wsite);
-                        while (itsec.hasNext()) {
-                            Sector sec = itsec.next();
 
-                            SWBResourceURL url = paramRequest.getRenderUrl();
-                            url.setParameter("filteruri", sec.getURI());
-                            if (null != orderby) {
-                                url.setParameter("order", orderby);
-                            }
-                            if (queryinput != null && queryinput.trim().length() > 0) {
-                                url.setParameter("search", queryinput);
-                            }
-*/
-                    %>
-            <li><a href="<%//=url.toString()%>" title="<%//=sec.getSectorDescription() != null ? sec.getSectorDescription().trim() : sec.getSectorTitle()%>"><%//=sec.getSectorTitle()%></a></li>  
-                <%
-                  //  }
-                %>
-        </ul>   
-    </div>
-        -->
         <p class="rubro"><%=paramRequest.getLocaleString("lbl_institFilter")%></p>
         <ul>
                 <%
@@ -541,7 +517,7 @@
                     pages++;
                 }
 %>
- <div class="pager-total">Página <%=p%>/<%=pages%></div>       
+ <div class="pager-total"><%=paramRequest.getLocaleString("lbl_pages")%> <%=p%>/<%=pages%></div>       
  <div class="pager-index">
     <%
                 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -643,7 +619,7 @@
     <%
      if(isAdmin){
               %>  
-              <div class="lista10"><h3>Datasets por revisar</h3>
+              <div class="lista10"><h3><%=paramRequest.getLocaleString("lbl_reviewDataset")%></h3>
         <ol>
             <%
                 intSize = hmxrevisar.size();
@@ -724,15 +700,15 @@
             <div class="publicador">
                 <img src="<%=instlogo%>" alt="<%=instname%>" />
             <p class="pub-name"><%=instname%></p>
-            <p class="pub-www"><a href="<%=instweburl%>" class="pub-www" title="<%=instweburl%>">Ir al sitio web</a></p>
+            <p class="pub-www"><a href="<%=instweburl%>" class="pub-www" title="<%=instweburl%>"><%=paramRequest.getLocaleString("lbl_gowebsite")%></a></p>
           <p class="pub-mail"><a href="mailto:<%=pub!=null&&pub.getEmail()!=null?pub.getEmail():"---"%>" class="pub-mail" title="<%=pub!=null&&pub.getEmail()!=null?pub.getEmail():"---"%>"><%=paramRequest.getLocaleString("lbl_technicalContact")%> <br />
           <em><%=pub!=null&&pub.getFullName()!=null?pub.getFullName():"---"%></em></a></p>
         </div>
         <div class="detalle">
             <p><%=ds.getDatasetDescription()%></p>
-            <p><em title="<%=ds.getLicense() != null ? ds.getLicense().getLicenseDescription(): ds.getLicense().getLicenseTitle()%>"><%=paramRequest.getLocaleString("lbl_licenseUse")%>: <%=ds.getLicense() != null ? ds.getLicense().getLicenseTitle() : "No asignada"%></em></p>
+            <p><em title="<%=ds.getLicense() != null ? ds.getLicense().getLicenseDescription(): ds.getLicense().getLicenseTitle()%>"><%=paramRequest.getLocaleString("lbl_licenseUse")%>: <%=ds.getLicense() != null ? ds.getLicense().getLicenseTitle() : paramRequest.getLocaleString("lbl_notassigned")%></em></p>
             <fieldset>
-          	<legend>Etiquetas</legend>
+          	<legend><%=paramRequest.getLocaleString("lbl_labels")%></legend>
             	<ul>
                     <%
                     if(null!=ds && ds.listTags().hasNext()){ 
@@ -757,8 +733,8 @@
                 <form method="post" action="<%=urlreview.toString()%>">
                     <input type="hidden" name="dsuri" value="<%=ds.getShortURI()%>" />
                     <textarea name="comment" rows="5" cols="50"></textarea><br/><br/>
-                    <input type="submit" name="btnok" value="Aprobar" />
-                    <input type="submit" name="btnreject" value="Rechazar" />
+                    <input type="submit" name="btnok" value="<%=paramRequest.getLocaleString("lbl_approved")%>" />
+                    <input type="submit" name="btnreject" value="<%=paramRequest.getLocaleString("lbl_reject")%>" />
                 </form>
           </fieldset>
                 <%
@@ -791,10 +767,10 @@
             </li>
             <li>
                 <strong><%=paramRequest.getLocaleString("lbl_updated")%>:</strong><%=sdf.format(ds.getDatasetUpdated())%>
-                <a href="#" class="vermas expand-one" title="Ver todas las actualizaciones" ><span>ver mas</span></a>
+                <a href="#" class="vermas expand-one" title="<%=paramRequest.getLocaleString("lbl_viewallupdates")%>" ><span><%=paramRequest.getLocaleString("lbl_viewmore")%></span></a>
             </li>
             <li><div id="ver-versiones" class="content-one">
-                    <table summary="Historial de Actualizaciones">
+                    <table summary="<%=paramRequest.getLocaleString("lbl_updatehistory")%>">
                         <thead>
                             <tr>
                                 <th class="thversion"><%=paramRequest.getLocaleString("lbl_version")%></th>
@@ -846,11 +822,11 @@
                     %>
                     
                     <!-- div id="ranking" -->
-       <img src="/work/models/LODP/css/images/star-<%=average >= 1?"on":"off"%>.png" width="15" height="14" alt="*">
-        <img src="/work/models/LODP/css/images/star-<%=average >= 2?"on":"off"%>.png" width="15" height="14" alt="*">
-        <img src="/work/models/LODP/css/images/star-<%=average >= 3?"on":"off"%>.png" width="15" height="14" alt="*">
-        <img src="/work/models/LODP/css/images/star-<%=average >= 4?"on":"off"%>.png" width="15" height="14" alt="*">
-        <img src="/work/models/LODP/css/images/star-<%=average >= 5?"on":"off"%>.png" width="15" height="14" alt="*">
+       <img src="/work/models/LODP/css/images/star-<%=average >= 1?"on":"off"%>.png" width="15" height="14" alt="<%=average%>">
+        <img src="/work/models/LODP/css/images/star-<%=average >= 2?"on":"off"%>.png" width="15" height="14" alt="<%=average%>">
+        <img src="/work/models/LODP/css/images/star-<%=average >= 3?"on":"off"%>.png" width="15" height="14" alt="<%=average%>">
+        <img src="/work/models/LODP/css/images/star-<%=average >= 4?"on":"off"%>.png" width="15" height="14" alt="<%=average%>">
+        <img src="/work/models/LODP/css/images/star-<%=average >= 5?"on":"off"%>.png" width="15" height="14" alt="<%=average%>">
     <!-- /div -->
                 </li>
 
@@ -913,7 +889,7 @@
         </ul>
                         
             <div>
-                <span><%=numapps%> aplicaciones relacionadas</span> <a href="<%=urlapps%>">Ver todas</a>
+                <span><%=numapps%> <%=paramRequest.getLocaleString("lbl_relatesApps")%></span> <a href="<%=urlapps%>"><%=paramRequest.getLocaleString("lbl_viewall")%></a>
             </div>
 		</div>
         </div> <!-- der -->
