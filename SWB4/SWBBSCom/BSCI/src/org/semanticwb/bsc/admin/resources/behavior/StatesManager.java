@@ -3,7 +3,6 @@ package org.semanticwb.bsc.admin.resources.behavior;
 
 import java.io.IOException;
 import java.net.URLEncoder;
-import java.util.Arrays;
 import java.util.Iterator;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -16,6 +15,7 @@ import org.semanticwb.bsc.accessory.StateGroup;
 import org.semanticwb.bsc.element.Deliverable;
 import org.semanticwb.bsc.element.Indicator;
 import org.semanticwb.bsc.element.Initiative;
+import org.semanticwb.bsc.element.Objective;
 import org.semanticwb.model.GenericIterator;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.User;
@@ -74,11 +74,13 @@ public class StatesManager extends GenericResource {
         GenericIterator<State> states = null;                
         if(status instanceof Indicator) {
             states = ((Indicator)status).getObjective().listStates();
-        }else if(status instanceof Initiative) {
-            //states = ((Initiative)status).getObjective().listStates();
-        }else if( status instanceof Deliverable) {
+        }
+//        else if(status instanceof Initiative) {
+//            states = ((Initiative)status).getObjective().listStates();
+//        }
+        else if( status instanceof Deliverable) {
             //states = ((Deliverable)status).getObjective().listStates();
-        }else {
+        }else if(status instanceof Objective || status instanceof Initiative) {
             SWBResourceURL surl = paramRequest.getRenderUrl().setMode(SWBResourceURL.Mode_EDIT).setCallMethod(SWBResourceURL.Call_DIRECT);
             final String stateGroupId = request.getParameter("sg");
             StateGroup aux = null;
@@ -99,6 +101,7 @@ public class StatesManager extends GenericResource {
             }        
             ret.append("  </select>");
             states = aux.listGroupedStateses();
+        }else {
         }
         
         ret.append("  <div id=\"st_"+obj.getId()+"\"> ");
@@ -109,6 +112,14 @@ public class StatesManager extends GenericResource {
         ret.append("  <input type=\"hidden\" name=\"suri\" value=\""+suri+"\" />");
         ret.append("</fieldset>");
         ret.append("</form>");
+        
+        if(request.getParameter("statmsg")!=null && !request.getParameter("statmsg").isEmpty()) {        
+            ret.append("<script type=\"text/javascript\">\n");
+            log.debug("showStatus");
+            ret.append("showStatus('" + request.getParameter("statmsg") + "');\n");
+            ret.append("</script>\n");        
+        }
+        
         response.getWriter().println(ret.toString());
     }
 
@@ -137,7 +148,7 @@ public class StatesManager extends GenericResource {
     }
     
     private String renderStatesList(Status status, GenericIterator<State> states, User user) {
-        if(status==null) {
+        if(status==null || states==null) {
             return null;
         }
         
@@ -214,5 +225,6 @@ public class StatesManager extends GenericResource {
 //        }
         response.setRenderParameter("suri", suri);
         response.setRenderParameter("sg", sgId);
+        response.setRenderParameter("statmsg", response.getLocaleString("statmsg"));
     }
 }
