@@ -104,9 +104,9 @@
         if(ob.validate()){
             
                 if (!validateReadAgree()){
-                    alert('Para agregar una aplicacion es necesario aceptar los términos y condiciones');
+                    alert('<%=paramRequest.getLocaleString("lbl_validTermsAddApp")%>');
                 }else if(!valTexArea()){
-                   alert ("Introduzca caracteres válidos no se aceptan caracteres especiales en la descripcion de la aplicación");
+                   alert ("<%=paramRequest.getLocaleString("msj_textAreaError")%>");
                 }else {
                      return true;
                 }
