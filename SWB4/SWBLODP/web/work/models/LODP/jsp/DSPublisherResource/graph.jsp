@@ -233,11 +233,11 @@
 
                 //List<Dataset> listsize = SWBUtils.Collections.copyIterator(itds1);  
                 
-                System.out.println("Listado DS .... ");
+                //System.out.println("Listado DS .... ");
                 
                 // obteniendo Datasets que coincidan con el texto a buscar
                 String queryinput = request.getParameter("search");
-                System.out.println("query..."+queryinput);
+                //System.out.println("query..."+queryinput);
                 String queryOriginal = queryinput != null ? queryinput : paramRequest.getLocaleString("btn_search");//"Search"
                 if (null == queryinput) {
                     queryinput = "";
@@ -285,7 +285,7 @@
                             txtDS.append(" ");
                             txtDS.append(ds.getDatasetDescription() != null ? ds.getDatasetDescription().trim() : "");
                             txtDS.append(" ");
-                            txtDS.append(LODPUtils.getDSTagList(ds));
+                            txtDS.append(LODPUtils.getDSTagList(ds,""));
                             String reviewTXT = txtDS.toString().trim().toLowerCase(); // texto completo en donde se buscará la ocurrencia
                             //System.out.println("Texto DS: "+reviewTXT);
                             if ((DataSetResource.reviewQuery(hmquery, reviewTXT)) && hmresults.get(ds.getURI()) == null) {  //||txtAuto.indexOf(queryinput)>-1 
@@ -304,7 +304,7 @@
                 }
 //                System.out.println("Antes de ordenar DS....");
                 Iterator<Dataset> itds = null;
-                System.out.println("size: "+hmcp.size());
+                //System.out.println("size: "+hmcp.size());
                 if(hmcp.size()>0){
                     itds = DataSetResource.orderDS(hmcp.values().iterator(), orderby);
                     intSize=hmcp.size();
@@ -634,7 +634,7 @@
     <%
         Dataset ds = (Dataset) go;
         //ds.getDatasetDescription()
-        boolean bupdated = LODPUtils.updateDSViews(ds);  // se actualiza los views
+        //boolean bupdated = LODPUtils.updateDSViews(ds);  // se actualiza los views
 %>
     <div>
         <h2><%=ds.getDatasetTitle()%></h2> 
@@ -668,7 +668,7 @@
             </li>
             <li>
                 <%
-                    String taglist = LODPUtils.getDSTagList(ds);
+                    String taglist = LODPUtils.getDSTagList(ds," ");
                 %>
                 <label><%=paramRequest.getLocaleString("lbl_labels")%>:</label><p><%=taglist%></p>
             </li>
@@ -789,9 +789,9 @@
 <%
             }
         } else if("stats".equals(action)){
-            System.out.println("Stats DS.........");
+            //System.out.println("Stats DS.........");
         String suri = request.getParameter("suri");
-        System.out.println("URI........."+suri);
+        //System.out.println("URI........."+suri);
         go = ont.getGenericObject(suri);
         if (go instanceof Dataset) {
             
@@ -878,7 +878,7 @@
     <%
         }
         } else if("stats2".equals(action)){
-            System.out.println("Stats DownLoad / Views.........");
+            //System.out.println("Stats DownLoad / Views.........");
         String suri = request.getParameter("suri");
         String statType = request.getParameter("statType");
         String tmpType1 = ""+LODPUtils.Log_Type_Download; 
@@ -890,7 +890,7 @@
         if(null!=statType&&tmpType2.equals(statType)){
             isViews = Boolean.TRUE;
         }
-        System.out.println("URI........."+suri);
+        //System.out.println("URI........."+suri);
         go = ont.getGenericObject(suri);
         if (go instanceof Dataset) {
             
