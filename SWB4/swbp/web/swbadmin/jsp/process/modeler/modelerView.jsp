@@ -26,11 +26,6 @@ exportUrl.setMode(SVGModeler.MODE_EXPORT);
     -->
     <script type="text/javascript" src="/swbadmin/jsp/process/modeler/toolkit.js"></script>
     <script type="text/javascript" src="/swbadmin/jsp/process/modeler/modeler.js"></script>
-    <script type='text/javascript' src="/swbadmin/js/upload/upload.js"></script>
-    <script type="text/javascript" src="/dwr/interface/uploadProxy.js"></script>
-    <link rel="stylesheet" type="text/css" media="screen" href="/swbadmin/css/upload/upload.css"/>
-    <script type='text/javascript' src="/dwr/util.js"></script>
-    <script type='text/javascript' src="/dwr/engine.js"></script>
     <link href="/swbadmin/jsp/process/modeler/images/modelerFrame.css" rel="stylesheet" type="text/css">
 </head>
 <body style="margin: 0px;" onload="Modeler.init('modeler');">
@@ -229,32 +224,32 @@ exportUrl.setMode(SVGModeler.MODE_EXPORT);
                 stroke:#79adc8;
                 fill:url(#linearGradientTask);
                 stroke-width:2;
-                cursor:hand;
+                cursor:pointer;
             }
             .task_o {
                 stroke:#2cff20;
                 fill:url(#linearGradientTask);
                 stroke-width:2;
-                cursor:hand;
+                cursor:pointer;
             }
             .callactivity {
                 stroke:#79adc8;
                 fill:url(#linearGradientTask);
                 stroke-width:4;
-                cursor:hand;
+                cursor:pointer;
             }
 
             .callactivity_o {
                 stroke:#2cff20;
                 fill:url(#linearGradientTask);
                 stroke-width:4;
-                cursor:hand;
+                cursor:pointer;
             }
             .eventsubTask {
                 stroke:#79adc8;
                 fill:url(#linearGradientTask);
                 stroke-width:2;
-                cursor:hand;
+                cursor:pointer;
                 stroke-dasharray:6,4;
             }
 
@@ -262,7 +257,7 @@ exportUrl.setMode(SVGModeler.MODE_EXPORT);
                 stroke:#2cff20;
                 fill:url(#linearGradientTask);
                 stroke-width:2;
-                cursor:hand;
+                cursor:pointer;
                 stroke-dasharray:6,4;
             }
             .startEvent
@@ -270,7 +265,7 @@ exportUrl.setMode(SVGModeler.MODE_EXPORT);
                 stroke:#008000;
                 fill:url(#linearGradientStartEvent);
                 stroke-width:1.5;
-                cursor:hand;
+                cursor:pointer;
             }
 
             .startEvent_o
@@ -278,7 +273,7 @@ exportUrl.setMode(SVGModeler.MODE_EXPORT);
                 stroke:#2cff20;
                 fill:url(#linearGradientStartEvent);
                 stroke-width:1.5;
-                cursor: hand;
+                cursor: pointer;
             }
  
             .intermediateInterruptingEvent
@@ -307,7 +302,7 @@ exportUrl.setMode(SVGModeler.MODE_EXPORT);
                 fill:url(#linearGradientIntermediateEvent);
                 fill-opacity:1;
                 stroke-width:1.5;
-                cursor:hand;
+                cursor:pointer;
             }
 
             .intermediateEvent_o
@@ -316,14 +311,14 @@ exportUrl.setMode(SVGModeler.MODE_EXPORT);
                 fill:url(#linearGradientIntermediateEvent);
                 fill-opacity:1;
                 stroke-width:1.5;
-            cursor:hand;
+            cursor:pointer;
             }
             .endEvent
             {
                 stroke:#550000;
                 fill:url(#linearGradientEndEvent);
                 stroke-width:2.5;
-                cursor:hand;
+                cursor:pointer;
             }
 
             .endEvent_o
@@ -331,7 +326,7 @@ exportUrl.setMode(SVGModeler.MODE_EXPORT);
                 stroke:#2cff20;
                 fill:url(#linearGradientEndEvent);
                 stroke-width:2.5;
-                cursor:hand;
+                cursor:pointer;
             }    
 
             .gateway
@@ -339,7 +334,7 @@ exportUrl.setMode(SVGModeler.MODE_EXPORT);
                 stroke:#d4aa00;
                 fill:url(#linearGradientGateway);
                 stroke-width:2;
-                cursor:hand;
+                cursor:pointer;
             }
 
             .gateway_o
@@ -347,7 +342,7 @@ exportUrl.setMode(SVGModeler.MODE_EXPORT);
                 stroke:#2cff20;
                 fill:url(#linearGradientGateway);
                 stroke-width:2;
-                cursor:hand;
+                cursor:pointer;
             }
             
             .sequenceFlowSubLine {
@@ -355,14 +350,14 @@ exportUrl.setMode(SVGModeler.MODE_EXPORT);
                 stroke:#ffffff;
                 stroke-opacity:0.1;
                 stroke-width:8;
-                cursor: hand;
+                cursor: pointer;
             }
 
             .sequenceFlowSubLine_o {
                 fill:none;
                 stroke:#2cff20;
                 stroke-width:8;
-                cursor:hand;
+                cursor:pointer;
             }
             
             .swimlane
@@ -371,7 +366,7 @@ exportUrl.setMode(SVGModeler.MODE_EXPORT);
                 stroke-width:2;
                 stroke: #ADADAE;
                 fill-opacity:1;
-                cursor:hand;
+                cursor:pointer;
             }
 
             .swimlane_o
@@ -380,14 +375,14 @@ exportUrl.setMode(SVGModeler.MODE_EXPORT);
                 fill: #E8E8FF;
                 stroke-width:2;
                 fill-opacity:1;
-                cursor: hand;
+                cursor: pointer;
             }
             
             .sequenceFlowLine {
                 fill: none;
                 stroke-width: 2;
                 stroke: #000000;
-                cursor:hand;
+                cursor:pointer;
             }
 
             .intermediateEvent1
@@ -400,25 +395,25 @@ exportUrl.setMode(SVGModeler.MODE_EXPORT);
             .itemAware {
                 stroke:#666666;
                 stroke-width:2;
-                cursor:hand;
+                cursor:pointer;
             }
 
             .itemAware_o {
                 stroke:#2cff20;
                 stroke-width:2;
-                cursor:hand;
+                cursor:pointer;
             }
             
             .transactionSquare {
                 stroke:#2c5aa0;
-                cursor:hand;
+                cursor:pointer;
                 fill:none;
                 stroke-width:1.5;
             }
 
             .group {
                 stroke:#2c5aa0;
-                cursor:hand;
+                cursor:pointer;
                 fill:none;
                 stroke-width:1.5;
             }
@@ -427,7 +422,7 @@ exportUrl.setMode(SVGModeler.MODE_EXPORT);
                 fill:none;
                 stroke:#000000;
                 stroke-width:1.5px;
-                cursor:hand;
+                cursor:pointer;
             }
 
             .annotationArtifactRect {
@@ -435,7 +430,7 @@ exportUrl.setMode(SVGModeler.MODE_EXPORT);
                 stroke:none;
                 fill:#E6E6E6;
                 fill-opacity:0.2;
-                cursor:hand;
+                cursor:pointer;
             }
 
             .annotationArtifactRect_o {
@@ -443,12 +438,12 @@ exportUrl.setMode(SVGModeler.MODE_EXPORT);
                 fill:#E6E6E6;
                 stroke:#2cff20;
                 fill-opacity:0.2;
-                cursor:hand;
+                cursor:pointer;
             }
 
             .group_o {
                 stroke:#2cff20;
-                cursor:hand;
+                cursor:pointer;
                 fill:none;
                 stroke-width:1.5;
             }
@@ -456,7 +451,7 @@ exportUrl.setMode(SVGModeler.MODE_EXPORT);
             .taskMarker
             {
                 stroke:#2c5aa0;
-                cursor:hand;
+                cursor:pointer;
             }
             
             .pathMarker{
@@ -487,14 +482,14 @@ exportUrl.setMode(SVGModeler.MODE_EXPORT);
                 fill:#ffffff;
                 fill-opacity:0.1;
                 stroke-width:2.5;
-                cursor:hand;
+                cursor:pointer;
             }
             
             .intermediateFilledMarker {
                 fill:#2c5aa0;
                 stroke:#2c5aa0;
                 stroke-width:1;
-                cursor:hand;
+                cursor:pointer;
             }
             
             .endFilledMarked
@@ -502,7 +497,7 @@ exportUrl.setMode(SVGModeler.MODE_EXPORT);
                 fill:#550000;   
                 stroke:#550000;
                 stroke-width:1;
-                cursor:hand;
+                cursor:pointer;
             }
             
             .navPath {
