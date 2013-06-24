@@ -52,11 +52,11 @@ public class PeriodsManager extends GenericResource {
         if (semObj != null) {
             Objective obj = (Objective) semObj.createGenericInstance();
             List objetivesCurrent = new ArrayList();
-            Iterator<Period> itObj = obj.listPeriodObjetives();
-            while (itObj.hasNext()) {
-                Period periodSave = itObj.next();
-                objetivesCurrent.add(periodSave);
-            }
+//            Iterator<Period> itObj = obj.listPeriodObjetives();
+//            while (itObj.hasNext()) {
+//                Period periodSave = itObj.next();
+//                objetivesCurrent.add(periodSave);
+//            }
             BSC bsc = obj.getBSC();
             Iterator<Period> itPeriods = bsc.listPeriods();
             SWBResourceURL url = paramRequest.getActionUrl().setAction(SWBResourceURL.Action_ADD);
@@ -113,7 +113,7 @@ public class PeriodsManager extends GenericResource {
                     for (int i = 0; i < periods.length; i++) {
                         Period periodCheck = Period.ClassMgr.getPeriod(periods[i], ws);
                         if (periodCheck != null) {
-                            objective.addPeriodObjetive(periodCheck);
+//                            objective.addPeriodObjetive(periodCheck);
                         }
                     }
                 }
@@ -127,12 +127,12 @@ public class PeriodsManager extends GenericResource {
     }
 
     private void removePeriodsInObj(Objective objective) {
-        Iterator<Period> itPeriods = objective.listPeriodObjetives();
-        if (itPeriods.hasNext()) {
-            while (itPeriods.hasNext()) {
-                Period period = itPeriods.next();
-                objective.removePeriodObjetive(period);
-            }
-        }
+//        Iterator<Period> itPeriods = objective.listPeriodObjetives();
+//        if (itPeriods.hasNext()) {
+//            while (itPeriods.hasNext()) {
+//                Period period = itPeriods.next();
+//                objective.removePeriodObjetive(period);
+//            }
+//        }
     }
 }
