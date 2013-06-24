@@ -20,7 +20,6 @@ import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Resource;
 import org.semanticwb.model.SWBComparator;
-import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.portal.api.GenericResource;
@@ -31,6 +30,7 @@ import org.semanticwb.portal.api.SWBResourceURL;
 import org.semanticwb.social.MessageIn;
 import org.semanticwb.social.PhotoIn;
 import org.semanticwb.social.PostIn;
+import org.semanticwb.social.PostOut;
 import org.semanticwb.social.SentimentalLearningPhrase;
 import org.semanticwb.social.SocialNetwork;
 import org.semanticwb.social.SocialPFlow;
@@ -108,7 +108,6 @@ public class StreamInBox extends GenericResource {
         response.setContentType("text/html; charset=ISO-8859-1");
         response.setHeader("Cache-Control", "no-cache");
         response.setHeader("Pragma", "no-cache");
-        log.debug("doView(SWBAWebPageContents...)");
         doEdit(request, response, paramRequest);
     }
 
@@ -135,11 +134,28 @@ public class StreamInBox extends GenericResource {
         String id = request.getParameter("suri");
         if(id==null) return;
         
-        System.out.println("Stream-id/doEdit:"+id);
+        //System.out.println("Stream-id/doEdit:"+id);
 
         Stream stream = (Stream)SemanticObject.getSemanticObject(id).getGenericInstance();    
         
         PrintWriter out = response.getWriter();
+        
+        if(request.getParameter("leyendReconfirm")!=null)
+        {
+            
+            //Remove
+            SWBResourceURL urlrConfirm = paramRequest.getActionUrl();
+            urlrConfirm.setParameter("suri", id);
+            urlrConfirm.setParameter("sval", request.getParameter("postUri"));
+            urlrConfirm.setAction("removeConfirm");
+            
+            out.println("<form name=\"formStreamInBox_removePostIn\" id=\"formStreamInBox_removePostIn\" class=\"swbform\" method=\"post\" action=\""+urlrConfirm+"\" onsubmit=\"alert('entra a onSubmit k...');submitForm('formStreamInBox_removePostIn');return false;\">");
+            out.println("</form>");
+            
+            out.println("<script type=\"javascript\">");
+            out.println("   if(confirm('" + request.getParameter("leyendReconfirm") + ","+ paramRequest.getLocaleString("deleteAnyWay")+ "?')) { submitForm('formStreamInBox_removePostIn');}");
+            out.println("</script>");
+        }
         
         if (request.getParameter("dialog") != null && request.getParameter("dialog").equals("close")) {
             out.println("<script type=\"javascript\">");
@@ -170,7 +186,7 @@ public class StreamInBox extends GenericResource {
             searchWord = "";
             String tag = (String)session.getAttribute(id + this.getClass().getName() +"search");
             if(tag != null){
-                System.out.println("Search for tag:" + tag);
+                //System.out.println("Search for tag:" + tag);
                 searchWord = tag;
                 session.removeAttribute(id + this.getClass().getName() +"search");
             }
@@ -410,7 +426,7 @@ public class StreamInBox extends GenericResource {
         }
          
         //Ordenamientos
-        System.out.println("orderBy k Llega:"+request.getParameter("orderBy"));
+        //System.out.println("orderBy k Llega:"+request.getParameter("orderBy"));
         Set<PostIn> setso=null;
         if(request.getParameter("orderBy")!=null)
         {
@@ -509,8 +525,6 @@ public class StreamInBox extends GenericResource {
         itposts = null;
         int ps = 20;
         int l = setso.size();
-
-        //System.out.println("num cont: "+l);
 
         int p = 0;
         String page = request.getParameter("page");
@@ -784,7 +798,6 @@ public class StreamInBox extends GenericResource {
             try {
                 SemanticObject semObject = SemanticObject.createSemanticObject(request.getParameter("postUri"));
                 request.setAttribute("postUri", semObject);
-                System.out.println("search en doReClassifyByTopic:"+request.getParameter("search"));
                 request.setAttribute("paramRequest", paramRequest);
                 dis.include(request, response);
             } catch (Exception e) {
@@ -839,11 +852,6 @@ public class StreamInBox extends GenericResource {
         request.setAttribute("objUri", request.getParameter("objUri"));
         request.setAttribute("paramRequest", paramRequest);
         
-        System.out.println("doCreatePost/1:"+request.getParameter("valor"));
-        System.out.println("doCreatePost/2:"+request.getParameter("wsite"));
-        System.out.println("doCreatePost/3:"+request.getParameter("objUri"));
-        
-        
         try {
             rd.include(request, response);
         } catch (ServletException ex) {
@@ -852,16 +860,27 @@ public class StreamInBox extends GenericResource {
     }
     
     
+    public void doShowTags(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        String jspResponse = SWBPlatform.getContextPath() +"/work/models/" + paramRequest.getWebPage().getWebSiteId() +"/jsp/socialNetworks/tagCloud.jsp";        
+        RequestDispatcher dis = request.getRequestDispatcher(jspResponse);
+        try {
+            request.setAttribute("paramRequest", paramRequest);
+            dis.include(request, response);
+        } catch (Exception e) {
+            log.error("Error in doShowTags() for requestDispatcher" , e);
+        }
+    }
+    
+    
     @Override
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
         final Resource base = getResourceBase();
         String action = response.getAction();
-        System.out.println("Entra a StreamInBox/processA:"+action);
+        //System.out.println("Entra a StreamInBox/processAJ-1:"+action);
         if(action.equals("changeSocialTopic"))
         {
             if(request.getParameter("postUri")!=null && request.getParameter("newSocialTopic")!=null)
             {
-                //System.out.println("processAction/1");
                 SemanticObject semObj=SemanticObject.getSemanticObject(request.getParameter("postUri"));
                 PostIn post=(PostIn)semObj.createGenericInstance();
                 Stream stOld=post.getPostInStream();
@@ -934,19 +953,37 @@ public class StreamInBox extends GenericResource {
         {
             String sval = request.getParameter("sval");
             SemanticObject so = SemanticObject.createSemanticObject(sval);
-            log.debug("processAction(remove PostOut):"+so);
-            so.remove();
-    
+            WebSite wsite=WebSite.ClassMgr.getWebSite(so.getModel().getName());
+            PostIn postIn=(PostIn)so.getGenericInstance();
+            
+            if(PostOut.ClassMgr.listPostOutByPostInSource(postIn, wsite).hasNext())
+            {
+                response.setRenderParameter("leyendReconfirm", response.getLocaleString("postOutExist"));
+                response.setRenderParameter("suri", request.getParameter("suri"));
+                response.setRenderParameter("postUri", postIn.getURI());
+            }else{
+                so.remove();
+                //response.setRenderParameter("dialog", "close");
+                response.setRenderParameter("suri", request.getParameter("suri"));
+                response.setRenderParameter("statusMsg", response.getLocaleString("postDeleted"));
+            }
             response.setMode(SWBActionResponse.Mode_EDIT);
-            response.setRenderParameter("dialog", "close");
+        }else if ("removeConfirm".equals(action)) 
+        {
+            String sval = request.getParameter("sval");
+            SemanticObject so = SemanticObject.createSemanticObject(sval);
+            so.remove();
+            response.setMode(SWBActionResponse.Mode_EDIT);
+            response.setRenderParameter("dialog","close");
+            response.setRenderParameter("reloadTap",  request.getParameter("suri"));
             response.setRenderParameter("suri", request.getParameter("suri"));
             response.setRenderParameter("statusMsg", response.getLocaleString("postDeleted"));
         }else if (action.equals("postMessage") || action.equals("uploadPhoto") || action.equals("uploadVideo")) 
         {
-                System.out.println("Entra a Strean_processAction-2:"+request.getParameter("objUri"));
+                //System.out.println("Entra a Strean_processAction-2:"+request.getParameter("objUri"));
                 if(request.getParameter("objUri")!=null)
                 {
-                    System.out.println("Entra a InBox_processAction-3");
+                    //System.out.println("Entra a InBox_processAction-3");
                     PostIn postIn=(PostIn)SemanticObject.getSemanticObject(request.getParameter("objUri")).createGenericInstance();
                     Stream stOld=postIn.getPostInStream(); 
                     SocialNetwork socialNet=(SocialNetwork)SemanticObject.getSemanticObject(request.getParameter("socialNetUri")).createGenericInstance();
@@ -973,10 +1010,10 @@ public class StreamInBox extends GenericResource {
                         socialPFlow=(SocialPFlow)SemanticObject.createSemanticObject(socialFlow).createGenericInstance();
                     }
 
-                    System.out.println("Entra a InBox_processAction-4");
+                    //System.out.println("Entra a InBox_processAction-4");
                     SWBSocialUtil.PostOutUtil.sendNewPost(postIn, postIn.getSocialTopic(), socialPFlow, aSocialNets, wsite, request.getParameter("toPost"), request, response);
                     
-                    System.out.println("Entra a InBox_processAction-5");
+                    //System.out.println("Entra a InBox_processAction-5");
                     response.setMode(SWBActionResponse.Mode_EDIT);
                     response.setRenderParameter("dialog","close");
                     response.setRenderParameter("statusMsg", response.getLocaleString("msgResponseCreated"));
@@ -986,14 +1023,4 @@ public class StreamInBox extends GenericResource {
          
     }
     
-    public void doShowTags(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        String jspResponse = SWBPlatform.getContextPath() +"/work/models/" + paramRequest.getWebPage().getWebSiteId() +"/jsp/socialNetworks/tagCloud.jsp";        
-        RequestDispatcher dis = request.getRequestDispatcher(jspResponse);
-        try {
-            request.setAttribute("paramRequest", paramRequest);
-            dis.include(request, response);
-        } catch (Exception e) {
-            log.error("Error in doShowTags() for requestDispatcher" , e);
-        }
-    }
 }
