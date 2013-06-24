@@ -4,7 +4,7 @@ package org.semanticwb.social.base;
    /**
    * Clase que engloba a las diferentes clases que representan cada una de las redes sociales. 
    */
-public abstract class SocialNetworkBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Activeable,org.semanticwb.social.Listenerable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Tagable,org.semanticwb.model.Traceable,org.semanticwb.social.Secreteable
+public abstract class SocialNetworkBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Descriptiveable,org.semanticwb.social.Secreteable,org.semanticwb.social.Listenerable,org.semanticwb.model.Traceable,org.semanticwb.model.Activeable,org.semanticwb.model.Tagable
 {
    /**
    * Clase a Cambiar despues por "Relacional".  En esta clase se guardan todos los post que lleguan por el listener, se estima que toda la info. que se guarde en este objeto debe de eliminarse aproximadamente c/mes, siendo este parametro configurable de acuerdo al tiempo que la organización quiera guardar  la información sobre los mensajes que lleguen por el listener. Cuando un post que llegue por el listener sea tomado como base para crear un nuevo post por la organización, se cree que debe copiarse la información de dicho post de esta clase hacia la clase PostListenerContainerBase.Se almacenan por mes y año, de esta manera sera mucho mas rapido hacer las busquedas sobre las instancias de esta clase.
@@ -31,7 +31,7 @@ public abstract class SocialNetworkBase extends org.semanticwb.model.SWBClass im
    */
     public static final org.semanticwb.platform.SemanticClass social_PostIn=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#PostIn");
    /**
-   * Esta propiedad inversa me puede decir cuales son los mensajes que han llegado por el Listener por una determinada red social.
+   * Esta propiedad inversa me puede decir cuales son los mensajes que han llegado por el Listener por una determinada red social. Si se elimina una red social, se eliminan todos los mensajes de entrada PostIn.
    */
     public static final org.semanticwb.platform.SemanticProperty social_hasPostInSocialNetworkInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#hasPostInSocialNetworkInv");
    /**
@@ -39,7 +39,7 @@ public abstract class SocialNetworkBase extends org.semanticwb.model.SWBClass im
    */
     public static final org.semanticwb.platform.SemanticClass social_SocialNetStreamSearch=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#SocialNetStreamSearch");
    /**
-   * Una red social puede tener varias fechas proximas de busqueda, una por cada stream en la que este configurada.
+   * Una red social puede tener varias fechas proximas de busqueda, una por cada stream en la que este configurada. Si se elimina una red social, se eliminan los objetos de esta clase (SocialNetStreamSerch) Asociados.
    */
     public static final org.semanticwb.platform.SemanticProperty social_hasSocialNetStreamSearchInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#hasSocialNetStreamSearchInv");
    /**
@@ -58,6 +58,14 @@ public abstract class SocialNetworkBase extends org.semanticwb.model.SWBClass im
    * Código de pais que servira como filtro, es decir, solo se guardaran los mensajes que se hayan generado en el pais que pertenesca al mismo código de pais que se capture en esta propiedad, esto podría ser para cada instancia (cuenta) de cada red social.
    */
     public static final org.semanticwb.platform.SemanticProperty social_countryCodetoSearch=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#countryCodetoSearch");
+   /**
+   * Clase que comprende todos los tipos de Post de Salida que pueden ir siendo creados en la herramienta y que seran publicados a partir de esto en las diferentes redes sociales. Esta clase no se relaciona con una red social (con la clase SocialNetwork) porque un post de salida (desde la herramienta) podría ser enviado a diferentes redes sociales, sin embargo, es el mismo post de salida. Donde esta a que red social se envía esta en las instancias de la clase PostContainer.
+   */
+    public static final org.semanticwb.platform.SemanticClass social_PostOut=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#PostOut");
+   /**
+   * PostOut que tiene una red social. Si se elimina una red social, se eliminan todos los mensajes que tiene de salida.
+   */
+    public static final org.semanticwb.platform.SemanticProperty social_hasSocialNetworkPostOutInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#hasSocialNetworkPostOutInv");
    /**
    * Clase que engloba a las diferentes clases que representan cada una de las redes sociales.
    */
@@ -272,6 +280,29 @@ public abstract class SocialNetworkBase extends org.semanticwb.model.SWBClass im
         public static java.util.Iterator<org.semanticwb.social.SocialNetwork> listSocialNetworkBySocialPostInv(org.semanticwb.social.PostOutNet value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.social.SocialNetwork> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(social_hasSocialPostInv,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.social.SocialNetwork with a determined SocialNetworkPostOutInv
+       * @param value SocialNetworkPostOutInv of the type org.semanticwb.social.PostOut
+       * @param model Model of the org.semanticwb.social.SocialNetwork
+       * @return Iterator with all the org.semanticwb.social.SocialNetwork
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.SocialNetwork> listSocialNetworkBySocialNetworkPostOutInv(org.semanticwb.social.PostOut value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.SocialNetwork> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(social_hasSocialNetworkPostOutInv, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.social.SocialNetwork with a determined SocialNetworkPostOutInv
+       * @param value SocialNetworkPostOutInv of the type org.semanticwb.social.PostOut
+       * @return Iterator with all the org.semanticwb.social.SocialNetwork
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.SocialNetwork> listSocialNetworkBySocialNetworkPostOutInv(org.semanticwb.social.PostOut value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.SocialNetwork> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(social_hasSocialNetworkPostOutInv,value.getSemanticObject(),sclass));
             return it;
         }
        /**
@@ -737,6 +768,45 @@ public abstract class SocialNetworkBase extends org.semanticwb.model.SWBClass im
     public void setCountryCodetoSearch(String value)
     {
         getSemanticObject().setProperty(social_countryCodetoSearch, value);
+    }
+   /**
+   * Gets all the org.semanticwb.social.PostOut
+   * @return A GenericIterator with all the org.semanticwb.social.PostOut
+   */
+
+    public org.semanticwb.model.GenericIterator<org.semanticwb.social.PostOut> listSocialNetworkPostOutInvs()
+    {
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.social.PostOut>(getSemanticObject().listObjectProperties(social_hasSocialNetworkPostOutInv));
+    }
+
+   /**
+   * Gets true if has a SocialNetworkPostOutInv
+   * @param value org.semanticwb.social.PostOut to verify
+   * @return true if the org.semanticwb.social.PostOut exists, false otherwise
+   */
+    public boolean hasSocialNetworkPostOutInv(org.semanticwb.social.PostOut value)
+    {
+        boolean ret=false;
+        if(value!=null)
+        {
+           ret=getSemanticObject().hasObjectProperty(social_hasSocialNetworkPostOutInv,value.getSemanticObject());
+        }
+        return ret;
+    }
+
+   /**
+   * Gets the SocialNetworkPostOutInv
+   * @return a org.semanticwb.social.PostOut
+   */
+    public org.semanticwb.social.PostOut getSocialNetworkPostOutInv()
+    {
+         org.semanticwb.social.PostOut ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(social_hasSocialNetworkPostOutInv);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.social.PostOut)obj.createGenericInstance();
+         }
+         return ret;
     }
 
 /**

@@ -641,7 +641,8 @@ public class SentimentalDataClassifier {
                         socialNetUser.setSnu_id(externalPost.getCreatorId());
                         socialNetUser.setSnu_name(externalPost.getCreatorName());
                         
-                        socialNetUser.setSnu_SocialNetwork(socialNetwork.getSemanticObject().getSemanticClass().getSemanticObject());
+                        
+                        socialNetUser.setSnu_SocialNetworkObj(socialNetwork.getSemanticObject().getSemanticClass().getSemanticObject());
                         socialNetUser.setCreated(externalPost.getUsercreation());
                         socialNetUser.setSnu_klout(userKloutScore);
                         socialNetUser.setFollowers(externalPost.getFollowers());

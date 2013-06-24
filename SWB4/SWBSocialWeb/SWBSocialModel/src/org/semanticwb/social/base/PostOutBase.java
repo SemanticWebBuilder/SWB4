@@ -4,7 +4,7 @@ package org.semanticwb.social.base;
    /**
    * Clase que comprende todos los tipos de Post de Salida que pueden ir siendo creados en la herramienta y que seran publicados a partir de esto en las diferentes redes sociales. Esta clase no se relaciona con una red social (con la clase SocialNetwork) porque un post de salida (desde la herramienta) podría ser enviado a diferentes redes sociales, sin embargo, es el mismo post de salida. Donde esta a que red social se envía esta en las instancias de la clase PostContainer. 
    */
-public abstract class PostOutBase extends org.semanticwb.social.Post implements org.semanticwb.social.PostDataable,org.semanticwb.social.PostTextable,org.semanticwb.model.Tagable,org.semanticwb.social.Descriptable,org.semanticwb.model.CalendarRefable,org.semanticwb.model.Traceable,org.semanticwb.model.Referensable
+public abstract class PostOutBase extends org.semanticwb.social.Post implements org.semanticwb.model.CalendarRefable,org.semanticwb.model.Traceable,org.semanticwb.model.Tagable,org.semanticwb.social.PostDataable,org.semanticwb.model.Referensable,org.semanticwb.social.PostTextable,org.semanticwb.social.Descriptable
 {
    /**
    * Clase que comprende todos los tipos de Post de entrada (Povientes del Listener)que pueden ir siendo creados en la herramienta.
@@ -42,6 +42,9 @@ public abstract class PostOutBase extends org.semanticwb.social.Post implements 
    * En este objeto se guardara el identificador que es asignado para cada post en cada una de las redes sociales, es decir, si un mismo post se envía hacia mas de una red social, cada una de esas redes sociales daran un identificador unico para ese post en esa red social, este lo tenemos que guardar nosotros en este objeto para fines de monitoreo de estatus del post en esa red social (En Proceso, Revisado, Publicado, etc), como nosotros para un post, independientemente de a cuantas redes sociales se envíe, solo creamos un objeto Post (Message, Photo, Video), tuvimos que crear esta clase para guardar el identificador de ese post para c/red social.
    */
     public static final org.semanticwb.platform.SemanticClass social_PostOutNet=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#PostOutNet");
+   /**
+   * Con esta inversa, cuando se elimine un postOut, se eliminaran todos los objetos PostOutNet que tenga asociados.
+   */
     public static final org.semanticwb.platform.SemanticProperty social_hasPostOutNetInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#hasPostOutNetInv");
    /**
    * Instancia de un recurso asociado a un flujo de publicación.

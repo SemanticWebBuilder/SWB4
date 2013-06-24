@@ -4,7 +4,7 @@ package org.semanticwb.social.base;
    /**
    * Clase que almacenara las diferentes cuentas de una organización para la red social Facebook. 
    */
-public abstract class FacebookBase extends org.semanticwb.social.SocialNetwork implements org.semanticwb.model.Activeable,org.semanticwb.model.Descriptiveable,org.semanticwb.social.Oauthable,org.semanticwb.model.Tagable,org.semanticwb.social.Secreteable,org.semanticwb.social.Photoable,org.semanticwb.social.Listenerable,org.semanticwb.social.SocialNetPostable,org.semanticwb.social.Messageable,org.semanticwb.model.Traceable,org.semanticwb.social.Videoable
+public abstract class FacebookBase extends org.semanticwb.social.SocialNetwork implements org.semanticwb.model.Traceable,org.semanticwb.model.Activeable,org.semanticwb.social.Photoable,org.semanticwb.model.Tagable,org.semanticwb.social.Messageable,org.semanticwb.social.Secreteable,org.semanticwb.model.Descriptiveable,org.semanticwb.social.Oauthable,org.semanticwb.social.Videoable,org.semanticwb.social.Listenerable,org.semanticwb.social.SocialNetPostable
 {
    /**
    * Eliminar despues esta propiedad, ver si Jose puede eliminar la propiedad login que se encuentra en la clase padre(SocialNetwork).
@@ -224,6 +224,29 @@ public abstract class FacebookBase extends org.semanticwb.social.SocialNetwork i
         public static java.util.Iterator<org.semanticwb.social.Facebook> listFacebookBySocialPostInv(org.semanticwb.social.PostOutNet value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.social.Facebook> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(social_hasSocialPostInv,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.social.Facebook with a determined SocialNetworkPostOutInv
+       * @param value SocialNetworkPostOutInv of the type org.semanticwb.social.PostOut
+       * @param model Model of the org.semanticwb.social.Facebook
+       * @return Iterator with all the org.semanticwb.social.Facebook
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.Facebook> listFacebookBySocialNetworkPostOutInv(org.semanticwb.social.PostOut value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.Facebook> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(social_hasSocialNetworkPostOutInv, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.social.Facebook with a determined SocialNetworkPostOutInv
+       * @param value SocialNetworkPostOutInv of the type org.semanticwb.social.PostOut
+       * @return Iterator with all the org.semanticwb.social.Facebook
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.Facebook> listFacebookBySocialNetworkPostOutInv(org.semanticwb.social.PostOut value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.Facebook> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(social_hasSocialNetworkPostOutInv,value.getSemanticObject(),sclass));
             return it;
         }
        /**
