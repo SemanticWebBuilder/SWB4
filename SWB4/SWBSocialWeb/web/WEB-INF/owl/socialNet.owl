@@ -1045,14 +1045,6 @@
     <rdfs:domain rdf:resource="#SocialPFlowInstance"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="postIntesityType">
-    <swb:displayProperty>
-      <swbxf:DisplayProperty rdf:ID="dp_company">
-        <swbxf:propGroup rdf:resource="#pg_socialConfig"/>
-        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >10</swb:index>
-        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextBox"/>
-      </swbxf:DisplayProperty>
-    </swb:displayProperty>
     <rdfs:comment>Tipo de Intensidad. 2=Alta;1=Media;0=Baja;</rdfs:comment>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
     <rdfs:domain rdf:resource="#PostIn"/>
@@ -1667,12 +1659,6 @@
     <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextBox"/>
     <swbxf:propGroup rdf:resource="#pg_socialConfig"/>
   </swbxf:DisplayProperty>
-  <swbxf:DisplayProperty rdf:ID="dp_OtherWords">
-    <swbxf:propGroup rdf:resource="#pg_socialConfig"/>
-    <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextBox"/>
-    <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-    >40</swb:index>
-  </swbxf:DisplayProperty>
   <swb:Class rdf:ID="VideoIn">
     <rdfs:subClassOf rdf:resource="#YoutubeCatable"/>
     <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
@@ -1711,12 +1697,6 @@
     <rdfs:label xml:lang="es">Foto</rdfs:label>
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
   </swb:Class>
-  <swbxf:DisplayProperty rdf:ID="dp_competition">
-    <swbxf:propGroup rdf:resource="#pg_socialConfig"/>
-    <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextBox"/>
-    <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-    >20</swb:index>
-  </swbxf:DisplayProperty>
   <swb:Class rdf:ID="Video">
     <rdfs:subClassOf rdf:resource="#YoutubeCatable"/>
     <rdfs:label>Video</rdfs:label>
@@ -1758,12 +1738,6 @@
     <swbxf:propGroup rdf:resource="#pg_socialConfig"/>
     <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
     >1</swb:index>
-  </swbxf:DisplayProperty>
-  <swbxf:DisplayProperty rdf:ID="dp_ProductsAndServices">
-    <swbxf:propGroup rdf:resource="#pg_socialConfig"/>
-    <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextBox"/>
-    <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-    >30</swb:index>
   </swbxf:DisplayProperty>
   <swb:Class rdf:ID="PhotoIn">
     <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
