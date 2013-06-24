@@ -1,10 +1,15 @@
 package org.semanticwb.bsc.accessory.base;
 
 
-public abstract class StateBase extends org.semanticwb.bsc.accessory.BSCAccessory implements org.semanticwb.model.Traceable,org.semanticwb.bsc.Machinable,org.semanticwb.model.Iconable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Activeable,org.semanticwb.model.Undeleteable,org.semanticwb.bsc.Help
+public abstract class StateBase extends org.semanticwb.bsc.accessory.BSCAccessory implements org.semanticwb.bsc.Machinable,org.semanticwb.model.Traceable,org.semanticwb.model.Iconable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Activeable,org.semanticwb.model.Undeleteable,org.semanticwb.bsc.Help
 {
     public static final org.semanticwb.platform.SemanticClass bsc_StateGroup=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#StateGroup");
     public static final org.semanticwb.platform.SemanticProperty bsc_stateGroupInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#stateGroupInv");
+   /**
+   * Cualquier elemento BSC al que se le puedan asignar estados de semaforización
+   */
+    public static final org.semanticwb.platform.SemanticClass bsc_Status=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#Status");
+    public static final org.semanticwb.platform.SemanticProperty bsc_hasStatusInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#hasStatusInv");
     public static final org.semanticwb.platform.SemanticProperty bsc_icon=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#icon");
     public static final org.semanticwb.platform.SemanticClass bsc_State=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#State");
    /**
@@ -196,6 +201,29 @@ public abstract class StateBase extends org.semanticwb.bsc.accessory.BSCAccessor
             org.semanticwb.model.GenericIterator<org.semanticwb.bsc.accessory.State> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_creator,value.getSemanticObject(),sclass));
             return it;
         }
+       /**
+       * Gets all org.semanticwb.bsc.accessory.State with a determined Status
+       * @param value Status of the type org.semanticwb.bsc.Status
+       * @param model Model of the org.semanticwb.bsc.accessory.State
+       * @return Iterator with all the org.semanticwb.bsc.accessory.State
+       */
+
+        public static java.util.Iterator<org.semanticwb.bsc.accessory.State> listStateByStatus(org.semanticwb.bsc.Status value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.accessory.State> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(bsc_hasStatusInv, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.bsc.accessory.State with a determined Status
+       * @param value Status of the type org.semanticwb.bsc.Status
+       * @return Iterator with all the org.semanticwb.bsc.accessory.State
+       */
+
+        public static java.util.Iterator<org.semanticwb.bsc.accessory.State> listStateByStatus(org.semanticwb.bsc.Status value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.accessory.State> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(bsc_hasStatusInv,value.getSemanticObject(),sclass));
+            return it;
+        }
     }
 
    /**
@@ -355,6 +383,45 @@ public abstract class StateBase extends org.semanticwb.bsc.accessory.BSCAccessor
     public void setOrden(int value)
     {
         getSemanticObject().setIntProperty(bsc_orden, value);
+    }
+   /**
+   * Gets all the org.semanticwb.bsc.Status
+   * @return A GenericIterator with all the org.semanticwb.bsc.Status
+   */
+
+    public org.semanticwb.model.GenericIterator<org.semanticwb.bsc.Status> listStatuses()
+    {
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.bsc.Status>(getSemanticObject().listObjectProperties(bsc_hasStatusInv));
+    }
+
+   /**
+   * Gets true if has a Status
+   * @param value org.semanticwb.bsc.Status to verify
+   * @return true if the org.semanticwb.bsc.Status exists, false otherwise
+   */
+    public boolean hasStatus(org.semanticwb.bsc.Status value)
+    {
+        boolean ret=false;
+        if(value!=null)
+        {
+           ret=getSemanticObject().hasObjectProperty(bsc_hasStatusInv,value.getSemanticObject());
+        }
+        return ret;
+    }
+
+   /**
+   * Gets the Status
+   * @return a org.semanticwb.bsc.Status
+   */
+    public org.semanticwb.bsc.Status getStatus()
+    {
+         org.semanticwb.bsc.Status ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(bsc_hasStatusInv);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.bsc.Status)obj.createGenericInstance();
+         }
+         return ret;
     }
 
 /**

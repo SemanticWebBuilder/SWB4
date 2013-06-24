@@ -1,16 +1,11 @@
 package org.semanticwb.bsc.element.base;
 
 
-public abstract class IndicatorBase extends org.semanticwb.bsc.element.BSCElement implements org.semanticwb.bsc.Seasonable,org.semanticwb.model.Traceable,org.semanticwb.bsc.Recognizable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Activeable,org.semanticwb.bsc.Updateable
+   /**
+   * Persiste los atributos de un indicador 
+   */
+public abstract class IndicatorBase extends org.semanticwb.bsc.element.BSCElement implements org.semanticwb.model.Activeable,org.semanticwb.bsc.Seasonable,org.semanticwb.model.Sortable,org.semanticwb.model.Traceable,org.semanticwb.bsc.Committable,org.semanticwb.bsc.Recognizable,org.semanticwb.model.Descriptiveable,org.semanticwb.bsc.Status,org.semanticwb.bsc.Serializable,org.semanticwb.model.Undeleteable
 {
-   /**
-   * Clase que permite definir los atributos de las evidencias de un Indicador
-   */
-    public static final org.semanticwb.platform.SemanticClass bsc_Evidence=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#Evidence");
-   /**
-   * Periste las evidencias asociadas a un indicador
-   */
-    public static final org.semanticwb.platform.SemanticProperty bsc_hasEvidence=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#hasEvidence");
    /**
    * Un usuario es una persona que tiene relación con el portal a través de un método de acceso.
    */
@@ -24,13 +19,9 @@ public abstract class IndicatorBase extends org.semanticwb.bsc.element.BSCElemen
    */
     public static final org.semanticwb.platform.SemanticProperty bsc_unitMesure=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#unitMesure");
    /**
-   * Persiste información de un facilitador de campeón en una indicador
+   * Persiste información de un facilitador de champion en una indicador. Este facilitador se encarga de facilitarte a los champions la actualización de datos en el indicador
    */
     public static final org.semanticwb.platform.SemanticProperty bsc_championFacilitator=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#championFacilitator");
-   /**
-   * Persiste la frecuencia de medida de un indicador
-   */
-    public static final org.semanticwb.platform.SemanticProperty bsc_measurementFrequency=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#measurementFrequency");
     public static final org.semanticwb.platform.SemanticClass bsc_Objective=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#Objective");
     public static final org.semanticwb.platform.SemanticProperty bsc_objectiveInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#objectiveInv");
    /**
@@ -42,13 +33,24 @@ public abstract class IndicatorBase extends org.semanticwb.bsc.element.BSCElemen
    */
     public static final org.semanticwb.platform.SemanticProperty bsc_informationSource=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#informationSource");
    /**
-   * Persiste información de las metas de un indicador
+   * Persiste información de la descripción de metas en un indicador
    */
     public static final org.semanticwb.platform.SemanticProperty bsc_goals=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#goals");
    /**
-   * Persiste información de una formula para el cálculo de un indicador
+   * Persiste información de una periodicidad
+   */
+    public static final org.semanticwb.platform.SemanticClass bsc_MeasurementFrequency=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#MeasurementFrequency");
+   /**
+   * Persiste la periodicidad (frecuencia de medida) de un indicador
+   */
+    public static final org.semanticwb.platform.SemanticProperty bsc_periodicity=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#periodicity");
+   /**
+   * Persiste información de una fórmula para el cálculo de un indicador
    */
     public static final org.semanticwb.platform.SemanticProperty bsc_formula=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#formula");
+   /**
+   * Persiste los atributos de un indicador
+   */
     public static final org.semanticwb.platform.SemanticClass bsc_Indicator=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#Indicator");
    /**
    * The semantic class that represents the currentObject
@@ -125,6 +127,29 @@ public abstract class IndicatorBase extends org.semanticwb.bsc.element.BSCElemen
             return (getIndicator(id, model)!=null);
         }
        /**
+       * Gets all org.semanticwb.bsc.element.Indicator with a determined Period
+       * @param value Period of the type org.semanticwb.bsc.accessory.Period
+       * @param model Model of the org.semanticwb.bsc.element.Indicator
+       * @return Iterator with all the org.semanticwb.bsc.element.Indicator
+       */
+
+        public static java.util.Iterator<org.semanticwb.bsc.element.Indicator> listIndicatorByPeriod(org.semanticwb.bsc.accessory.Period value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Indicator> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(bsc_hasPeriod, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.bsc.element.Indicator with a determined Period
+       * @param value Period of the type org.semanticwb.bsc.accessory.Period
+       * @return Iterator with all the org.semanticwb.bsc.element.Indicator
+       */
+
+        public static java.util.Iterator<org.semanticwb.bsc.element.Indicator> listIndicatorByPeriod(org.semanticwb.bsc.accessory.Period value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Indicator> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(bsc_hasPeriod,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
        * Gets all org.semanticwb.bsc.element.Indicator with a determined ModifiedBy
        * @param value ModifiedBy of the type org.semanticwb.model.User
        * @param model Model of the org.semanticwb.bsc.element.Indicator
@@ -148,26 +173,26 @@ public abstract class IndicatorBase extends org.semanticwb.bsc.element.BSCElemen
             return it;
         }
        /**
-       * Gets all org.semanticwb.bsc.element.Indicator with a determined Evidence
-       * @param value Evidence of the type org.semanticwb.bsc.tracing.Evidence
+       * Gets all org.semanticwb.bsc.element.Indicator with a determined State
+       * @param value State of the type org.semanticwb.bsc.accessory.State
        * @param model Model of the org.semanticwb.bsc.element.Indicator
        * @return Iterator with all the org.semanticwb.bsc.element.Indicator
        */
 
-        public static java.util.Iterator<org.semanticwb.bsc.element.Indicator> listIndicatorByEvidence(org.semanticwb.bsc.tracing.Evidence value,org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.bsc.element.Indicator> listIndicatorByState(org.semanticwb.bsc.accessory.State value,org.semanticwb.model.SWBModel model)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Indicator> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(bsc_hasEvidence, value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Indicator> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(bsc_hasState, value.getSemanticObject(),sclass));
             return it;
         }
        /**
-       * Gets all org.semanticwb.bsc.element.Indicator with a determined Evidence
-       * @param value Evidence of the type org.semanticwb.bsc.tracing.Evidence
+       * Gets all org.semanticwb.bsc.element.Indicator with a determined State
+       * @param value State of the type org.semanticwb.bsc.accessory.State
        * @return Iterator with all the org.semanticwb.bsc.element.Indicator
        */
 
-        public static java.util.Iterator<org.semanticwb.bsc.element.Indicator> listIndicatorByEvidence(org.semanticwb.bsc.tracing.Evidence value)
+        public static java.util.Iterator<org.semanticwb.bsc.element.Indicator> listIndicatorByState(org.semanticwb.bsc.accessory.State value)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Indicator> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(bsc_hasEvidence,value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Indicator> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(bsc_hasState,value.getSemanticObject(),sclass));
             return it;
         }
        /**
@@ -263,26 +288,26 @@ public abstract class IndicatorBase extends org.semanticwb.bsc.element.BSCElemen
             return it;
         }
        /**
-       * Gets all org.semanticwb.bsc.element.Indicator with a determined PeriodObjetive
-       * @param value PeriodObjetive of the type org.semanticwb.bsc.accessory.Period
+       * Gets all org.semanticwb.bsc.element.Indicator with a determined Periodicity
+       * @param value Periodicity of the type org.semanticwb.bsc.accessory.MeasurementFrequency
        * @param model Model of the org.semanticwb.bsc.element.Indicator
        * @return Iterator with all the org.semanticwb.bsc.element.Indicator
        */
 
-        public static java.util.Iterator<org.semanticwb.bsc.element.Indicator> listIndicatorByPeriodObjetive(org.semanticwb.bsc.accessory.Period value,org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.bsc.element.Indicator> listIndicatorByPeriodicity(org.semanticwb.bsc.accessory.MeasurementFrequency value,org.semanticwb.model.SWBModel model)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Indicator> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(bsc_hasPeriodObjetive, value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Indicator> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(bsc_periodicity, value.getSemanticObject(),sclass));
             return it;
         }
        /**
-       * Gets all org.semanticwb.bsc.element.Indicator with a determined PeriodObjetive
-       * @param value PeriodObjetive of the type org.semanticwb.bsc.accessory.Period
+       * Gets all org.semanticwb.bsc.element.Indicator with a determined Periodicity
+       * @param value Periodicity of the type org.semanticwb.bsc.accessory.MeasurementFrequency
        * @return Iterator with all the org.semanticwb.bsc.element.Indicator
        */
 
-        public static java.util.Iterator<org.semanticwb.bsc.element.Indicator> listIndicatorByPeriodObjetive(org.semanticwb.bsc.accessory.Period value)
+        public static java.util.Iterator<org.semanticwb.bsc.element.Indicator> listIndicatorByPeriodicity(org.semanticwb.bsc.accessory.MeasurementFrequency value)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Indicator> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(bsc_hasPeriodObjetive,value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Indicator> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(bsc_periodicity,value.getSemanticObject(),sclass));
             return it;
         }
     }
@@ -296,87 +321,134 @@ public abstract class IndicatorBase extends org.semanticwb.bsc.element.BSCElemen
         super(base);
     }
    /**
-   * Gets all the org.semanticwb.bsc.tracing.Evidence
-   * @return A GenericIterator with all the org.semanticwb.bsc.tracing.Evidence
+   * Gets all the org.semanticwb.bsc.accessory.Period
+   * @return A GenericIterator with all the org.semanticwb.bsc.accessory.Period
    */
 
-    public org.semanticwb.model.GenericIterator<org.semanticwb.bsc.tracing.Evidence> listEvidences()
+    public org.semanticwb.model.GenericIterator<org.semanticwb.bsc.accessory.Period> listPeriods()
     {
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.bsc.tracing.Evidence>(getSemanticObject().listObjectProperties(bsc_hasEvidence));
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.bsc.accessory.Period>(getSemanticObject().listObjectProperties(bsc_hasPeriod));
     }
 
    /**
-   * Gets true if has a Evidence
-   * @param value org.semanticwb.bsc.tracing.Evidence to verify
-   * @return true if the org.semanticwb.bsc.tracing.Evidence exists, false otherwise
+   * Gets true if has a Period
+   * @param value org.semanticwb.bsc.accessory.Period to verify
+   * @return true if the org.semanticwb.bsc.accessory.Period exists, false otherwise
    */
-    public boolean hasEvidence(org.semanticwb.bsc.tracing.Evidence value)
+    public boolean hasPeriod(org.semanticwb.bsc.accessory.Period value)
     {
         boolean ret=false;
         if(value!=null)
         {
-           ret=getSemanticObject().hasObjectProperty(bsc_hasEvidence,value.getSemanticObject());
+           ret=getSemanticObject().hasObjectProperty(bsc_hasPeriod,value.getSemanticObject());
         }
         return ret;
     }
    /**
-   * Adds a Evidence
-   * @param value org.semanticwb.bsc.tracing.Evidence to add
+   * Adds a Period
+   * @param value org.semanticwb.bsc.accessory.Period to add
    */
 
-    public void addEvidence(org.semanticwb.bsc.tracing.Evidence value)
+    public void addPeriod(org.semanticwb.bsc.accessory.Period value)
     {
-        getSemanticObject().addObjectProperty(bsc_hasEvidence, value.getSemanticObject());
+        getSemanticObject().addObjectProperty(bsc_hasPeriod, value.getSemanticObject());
     }
    /**
-   * Removes all the Evidence
+   * Removes all the Period
    */
 
-    public void removeAllEvidence()
+    public void removeAllPeriod()
     {
-        getSemanticObject().removeProperty(bsc_hasEvidence);
+        getSemanticObject().removeProperty(bsc_hasPeriod);
     }
    /**
-   * Removes a Evidence
-   * @param value org.semanticwb.bsc.tracing.Evidence to remove
+   * Removes a Period
+   * @param value org.semanticwb.bsc.accessory.Period to remove
    */
 
-    public void removeEvidence(org.semanticwb.bsc.tracing.Evidence value)
+    public void removePeriod(org.semanticwb.bsc.accessory.Period value)
     {
-        getSemanticObject().removeObjectProperty(bsc_hasEvidence,value.getSemanticObject());
+        getSemanticObject().removeObjectProperty(bsc_hasPeriod,value.getSemanticObject());
     }
 
    /**
-   * Gets the Evidence
-   * @return a org.semanticwb.bsc.tracing.Evidence
+   * Gets the Period
+   * @return a org.semanticwb.bsc.accessory.Period
    */
-    public org.semanticwb.bsc.tracing.Evidence getEvidence()
+    public org.semanticwb.bsc.accessory.Period getPeriod()
     {
-         org.semanticwb.bsc.tracing.Evidence ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(bsc_hasEvidence);
+         org.semanticwb.bsc.accessory.Period ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(bsc_hasPeriod);
          if(obj!=null)
          {
-             ret=(org.semanticwb.bsc.tracing.Evidence)obj.createGenericInstance();
+             ret=(org.semanticwb.bsc.accessory.Period)obj.createGenericInstance();
          }
          return ret;
     }
+   /**
+   * Gets all the org.semanticwb.bsc.accessory.State
+   * @return A GenericIterator with all the org.semanticwb.bsc.accessory.State
+   */
 
-/**
-* Gets the PercentageProgress property
-* @return float with the PercentageProgress
-*/
-    public float getPercentageProgress()
+    public org.semanticwb.model.GenericIterator<org.semanticwb.bsc.accessory.State> listStates()
     {
-        return getSemanticObject().getFloatProperty(bsc_percentageProgress);
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.bsc.accessory.State>(getSemanticObject().listObjectProperties(bsc_hasState));
     }
 
-/**
-* Sets the PercentageProgress property
-* @param value long with the PercentageProgress
-*/
-    public void setPercentageProgress(float value)
+   /**
+   * Gets true if has a State
+   * @param value org.semanticwb.bsc.accessory.State to verify
+   * @return true if the org.semanticwb.bsc.accessory.State exists, false otherwise
+   */
+    public boolean hasState(org.semanticwb.bsc.accessory.State value)
     {
-        getSemanticObject().setFloatProperty(bsc_percentageProgress, value);
+        boolean ret=false;
+        if(value!=null)
+        {
+           ret=getSemanticObject().hasObjectProperty(bsc_hasState,value.getSemanticObject());
+        }
+        return ret;
+    }
+   /**
+   * Adds a State
+   * @param value org.semanticwb.bsc.accessory.State to add
+   */
+
+    public void addState(org.semanticwb.bsc.accessory.State value)
+    {
+        getSemanticObject().addObjectProperty(bsc_hasState, value.getSemanticObject());
+    }
+   /**
+   * Removes all the State
+   */
+
+    public void removeAllState()
+    {
+        getSemanticObject().removeProperty(bsc_hasState);
+    }
+   /**
+   * Removes a State
+   * @param value org.semanticwb.bsc.accessory.State to remove
+   */
+
+    public void removeState(org.semanticwb.bsc.accessory.State value)
+    {
+        getSemanticObject().removeObjectProperty(bsc_hasState,value.getSemanticObject());
+    }
+
+   /**
+   * Gets the State
+   * @return a org.semanticwb.bsc.accessory.State
+   */
+    public org.semanticwb.bsc.accessory.State getState()
+    {
+         org.semanticwb.bsc.accessory.State ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(bsc_hasState);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.bsc.accessory.State)obj.createGenericInstance();
+         }
+         return ret;
     }
    /**
    * Sets the value for the property Champion
@@ -415,6 +487,24 @@ public abstract class IndicatorBase extends org.semanticwb.bsc.element.BSCElemen
              ret=(org.semanticwb.model.User)obj.createGenericInstance();
          }
          return ret;
+    }
+
+/**
+* Gets the Index property
+* @return int with the Index
+*/
+    public int getIndex()
+    {
+        return getSemanticObject().getIntProperty(swb_index);
+    }
+
+/**
+* Sets the Index property
+* @param value long with the Index
+*/
+    public void setIndex(int value)
+    {
+        getSemanticObject().setIntProperty(swb_index, value);
     }
 
 /**
@@ -492,42 +582,6 @@ public abstract class IndicatorBase extends org.semanticwb.bsc.element.BSCElemen
         //Override this method in Indicator object
         getSemanticObject().setProperty(bsc_prefix, value,false);
     }
-
-/**
-* Gets the MeasurementFrequency property
-* @return String with the MeasurementFrequency
-*/
-    public String getMeasurementFrequency()
-    {
-        return getSemanticObject().getProperty(bsc_measurementFrequency);
-    }
-
-/**
-* Sets the MeasurementFrequency property
-* @param value long with the MeasurementFrequency
-*/
-    public void setMeasurementFrequency(String value)
-    {
-        getSemanticObject().setProperty(bsc_measurementFrequency, value);
-    }
-
-/**
-* Gets the Recommendations property
-* @return String with the Recommendations
-*/
-    public String getRecommendations()
-    {
-        return getSemanticObject().getProperty(bsc_recommendations);
-    }
-
-/**
-* Sets the Recommendations property
-* @param value long with the Recommendations
-*/
-    public void setRecommendations(String value)
-    {
-        getSemanticObject().setProperty(bsc_recommendations, value);
-    }
    /**
    * Sets the value for the property Objective
    * @param value Objective to set
@@ -568,89 +622,6 @@ public abstract class IndicatorBase extends org.semanticwb.bsc.element.BSCElemen
     }
 
 /**
-* Gets the Analysis property
-* @return String with the Analysis
-*/
-    public String getAnalysis()
-    {
-        return getSemanticObject().getProperty(bsc_analysis);
-    }
-
-/**
-* Sets the Analysis property
-* @param value long with the Analysis
-*/
-    public void setAnalysis(String value)
-    {
-        getSemanticObject().setProperty(bsc_analysis, value);
-    }
-   /**
-   * Gets all the org.semanticwb.bsc.accessory.Period
-   * @return A GenericIterator with all the org.semanticwb.bsc.accessory.Period
-   */
-
-    public org.semanticwb.model.GenericIterator<org.semanticwb.bsc.accessory.Period> listPeriodObjetives()
-    {
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.bsc.accessory.Period>(getSemanticObject().listObjectProperties(bsc_hasPeriodObjetive));
-    }
-
-   /**
-   * Gets true if has a PeriodObjetive
-   * @param value org.semanticwb.bsc.accessory.Period to verify
-   * @return true if the org.semanticwb.bsc.accessory.Period exists, false otherwise
-   */
-    public boolean hasPeriodObjetive(org.semanticwb.bsc.accessory.Period value)
-    {
-        boolean ret=false;
-        if(value!=null)
-        {
-           ret=getSemanticObject().hasObjectProperty(bsc_hasPeriodObjetive,value.getSemanticObject());
-        }
-        return ret;
-    }
-   /**
-   * Adds a PeriodObjetive
-   * @param value org.semanticwb.bsc.accessory.Period to add
-   */
-
-    public void addPeriodObjetive(org.semanticwb.bsc.accessory.Period value)
-    {
-        getSemanticObject().addObjectProperty(bsc_hasPeriodObjetive, value.getSemanticObject());
-    }
-   /**
-   * Removes all the PeriodObjetive
-   */
-
-    public void removeAllPeriodObjetive()
-    {
-        getSemanticObject().removeProperty(bsc_hasPeriodObjetive);
-    }
-   /**
-   * Removes a PeriodObjetive
-   * @param value org.semanticwb.bsc.accessory.Period to remove
-   */
-
-    public void removePeriodObjetive(org.semanticwb.bsc.accessory.Period value)
-    {
-        getSemanticObject().removeObjectProperty(bsc_hasPeriodObjetive,value.getSemanticObject());
-    }
-
-   /**
-   * Gets the PeriodObjetive
-   * @return a org.semanticwb.bsc.accessory.Period
-   */
-    public org.semanticwb.bsc.accessory.Period getPeriodObjetive()
-    {
-         org.semanticwb.bsc.accessory.Period ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(bsc_hasPeriodObjetive);
-         if(obj!=null)
-         {
-             ret=(org.semanticwb.bsc.accessory.Period)obj.createGenericInstance();
-         }
-         return ret;
-    }
-
-/**
 * Gets the NotesFormula property
 * @return String with the NotesFormula
 */
@@ -666,6 +637,42 @@ public abstract class IndicatorBase extends org.semanticwb.bsc.element.BSCElemen
     public void setNotesFormula(String value)
     {
         getSemanticObject().setProperty(bsc_notesFormula, value);
+    }
+
+/**
+* Gets the Commited property
+* @return boolean with the Commited
+*/
+    public boolean isCommited()
+    {
+        return getSemanticObject().getBooleanProperty(bsc_commited);
+    }
+
+/**
+* Sets the Commited property
+* @param value long with the Commited
+*/
+    public void setCommited(boolean value)
+    {
+        getSemanticObject().setBooleanProperty(bsc_commited, value);
+    }
+
+/**
+* Gets the Undeleteable property
+* @return boolean with the Undeleteable
+*/
+    public boolean isUndeleteable()
+    {
+        return getSemanticObject().getBooleanProperty(swb_undeleteable);
+    }
+
+/**
+* Sets the Undeleteable property
+* @param value long with the Undeleteable
+*/
+    public void setUndeleteable(boolean value)
+    {
+        getSemanticObject().setBooleanProperty(swb_undeleteable, value);
     }
 
 /**
@@ -702,6 +709,62 @@ public abstract class IndicatorBase extends org.semanticwb.bsc.element.BSCElemen
     public void setGoals(String value)
     {
         getSemanticObject().setProperty(bsc_goals, value);
+    }
+   /**
+   * Sets the value for the property Periodicity
+   * @param value Periodicity to set
+   */
+
+    public void setPeriodicity(org.semanticwb.bsc.accessory.MeasurementFrequency value)
+    {
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(bsc_periodicity, value.getSemanticObject());
+        }else
+        {
+            removePeriodicity();
+        }
+    }
+   /**
+   * Remove the value for Periodicity property
+   */
+
+    public void removePeriodicity()
+    {
+        getSemanticObject().removeProperty(bsc_periodicity);
+    }
+
+   /**
+   * Gets the Periodicity
+   * @return a org.semanticwb.bsc.accessory.MeasurementFrequency
+   */
+    public org.semanticwb.bsc.accessory.MeasurementFrequency getPeriodicity()
+    {
+         org.semanticwb.bsc.accessory.MeasurementFrequency ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(bsc_periodicity);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.bsc.accessory.MeasurementFrequency)obj.createGenericInstance();
+         }
+         return ret;
+    }
+
+/**
+* Gets the Serial property
+* @return int with the Serial
+*/
+    public int getSerial()
+    {
+        return getSemanticObject().getIntProperty(bsc_serial);
+    }
+
+/**
+* Sets the Serial property
+* @param value long with the Serial
+*/
+    public void setSerial(int value)
+    {
+        getSemanticObject().setIntProperty(bsc_serial, value);
     }
 
 /**

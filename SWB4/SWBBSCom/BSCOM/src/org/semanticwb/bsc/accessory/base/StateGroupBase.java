@@ -4,10 +4,7 @@ package org.semanticwb.bsc.accessory.base;
 public abstract class StateGroupBase extends org.semanticwb.bsc.accessory.BSCAccessory implements org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Activeable,org.semanticwb.model.Undeleteable,org.semanticwb.bsc.Help
 {
     public static final org.semanticwb.platform.SemanticClass bsc_State=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#State");
-   /**
-   * Lista de estados del grupo
-   */
-    public static final org.semanticwb.platform.SemanticProperty bsc_hasState=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#hasState");
+    public static final org.semanticwb.platform.SemanticProperty bsc_hasGroupedStates=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#hasGroupedStates");
     public static final org.semanticwb.platform.SemanticClass bsc_StateGroup=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#StateGroup");
    /**
    * The semantic class that represents the currentObject
@@ -107,29 +104,6 @@ public abstract class StateGroupBase extends org.semanticwb.bsc.accessory.BSCAcc
             return it;
         }
        /**
-       * Gets all org.semanticwb.bsc.accessory.StateGroup with a determined State
-       * @param value State of the type org.semanticwb.bsc.accessory.State
-       * @param model Model of the org.semanticwb.bsc.accessory.StateGroup
-       * @return Iterator with all the org.semanticwb.bsc.accessory.StateGroup
-       */
-
-        public static java.util.Iterator<org.semanticwb.bsc.accessory.StateGroup> listStateGroupByState(org.semanticwb.bsc.accessory.State value,org.semanticwb.model.SWBModel model)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.accessory.StateGroup> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(bsc_hasState, value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.bsc.accessory.StateGroup with a determined State
-       * @param value State of the type org.semanticwb.bsc.accessory.State
-       * @return Iterator with all the org.semanticwb.bsc.accessory.StateGroup
-       */
-
-        public static java.util.Iterator<org.semanticwb.bsc.accessory.StateGroup> listStateGroupByState(org.semanticwb.bsc.accessory.State value)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.accessory.StateGroup> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(bsc_hasState,value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
        * Gets all org.semanticwb.bsc.accessory.StateGroup with a determined Creator
        * @param value Creator of the type org.semanticwb.model.User
        * @param model Model of the org.semanticwb.bsc.accessory.StateGroup
@@ -152,6 +126,29 @@ public abstract class StateGroupBase extends org.semanticwb.bsc.accessory.BSCAcc
             org.semanticwb.model.GenericIterator<org.semanticwb.bsc.accessory.StateGroup> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_creator,value.getSemanticObject(),sclass));
             return it;
         }
+       /**
+       * Gets all org.semanticwb.bsc.accessory.StateGroup with a determined GroupedStates
+       * @param value GroupedStates of the type org.semanticwb.bsc.accessory.State
+       * @param model Model of the org.semanticwb.bsc.accessory.StateGroup
+       * @return Iterator with all the org.semanticwb.bsc.accessory.StateGroup
+       */
+
+        public static java.util.Iterator<org.semanticwb.bsc.accessory.StateGroup> listStateGroupByGroupedStates(org.semanticwb.bsc.accessory.State value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.accessory.StateGroup> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(bsc_hasGroupedStates, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.bsc.accessory.StateGroup with a determined GroupedStates
+       * @param value GroupedStates of the type org.semanticwb.bsc.accessory.State
+       * @return Iterator with all the org.semanticwb.bsc.accessory.StateGroup
+       */
+
+        public static java.util.Iterator<org.semanticwb.bsc.accessory.StateGroup> listStateGroupByGroupedStates(org.semanticwb.bsc.accessory.State value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.accessory.StateGroup> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(bsc_hasGroupedStates,value.getSemanticObject(),sclass));
+            return it;
+        }
     }
 
    /**
@@ -167,60 +164,60 @@ public abstract class StateGroupBase extends org.semanticwb.bsc.accessory.BSCAcc
    * @return A GenericIterator with all the org.semanticwb.bsc.accessory.State
    */
 
-    public org.semanticwb.model.GenericIterator<org.semanticwb.bsc.accessory.State> listStates()
+    public org.semanticwb.model.GenericIterator<org.semanticwb.bsc.accessory.State> listGroupedStateses()
     {
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.bsc.accessory.State>(getSemanticObject().listObjectProperties(bsc_hasState));
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.bsc.accessory.State>(getSemanticObject().listObjectProperties(bsc_hasGroupedStates));
     }
 
    /**
-   * Gets true if has a State
+   * Gets true if has a GroupedStates
    * @param value org.semanticwb.bsc.accessory.State to verify
    * @return true if the org.semanticwb.bsc.accessory.State exists, false otherwise
    */
-    public boolean hasState(org.semanticwb.bsc.accessory.State value)
+    public boolean hasGroupedStates(org.semanticwb.bsc.accessory.State value)
     {
         boolean ret=false;
         if(value!=null)
         {
-           ret=getSemanticObject().hasObjectProperty(bsc_hasState,value.getSemanticObject());
+           ret=getSemanticObject().hasObjectProperty(bsc_hasGroupedStates,value.getSemanticObject());
         }
         return ret;
     }
    /**
-   * Adds a State
+   * Adds a GroupedStates
    * @param value org.semanticwb.bsc.accessory.State to add
    */
 
-    public void addState(org.semanticwb.bsc.accessory.State value)
+    public void addGroupedStates(org.semanticwb.bsc.accessory.State value)
     {
-        getSemanticObject().addObjectProperty(bsc_hasState, value.getSemanticObject());
+        getSemanticObject().addObjectProperty(bsc_hasGroupedStates, value.getSemanticObject());
     }
    /**
-   * Removes all the State
+   * Removes all the GroupedStates
    */
 
-    public void removeAllState()
+    public void removeAllGroupedStates()
     {
-        getSemanticObject().removeProperty(bsc_hasState);
+        getSemanticObject().removeProperty(bsc_hasGroupedStates);
     }
    /**
-   * Removes a State
+   * Removes a GroupedStates
    * @param value org.semanticwb.bsc.accessory.State to remove
    */
 
-    public void removeState(org.semanticwb.bsc.accessory.State value)
+    public void removeGroupedStates(org.semanticwb.bsc.accessory.State value)
     {
-        getSemanticObject().removeObjectProperty(bsc_hasState,value.getSemanticObject());
+        getSemanticObject().removeObjectProperty(bsc_hasGroupedStates,value.getSemanticObject());
     }
 
    /**
-   * Gets the State
+   * Gets the GroupedStates
    * @return a org.semanticwb.bsc.accessory.State
    */
-    public org.semanticwb.bsc.accessory.State getState()
+    public org.semanticwb.bsc.accessory.State getGroupedStates()
     {
          org.semanticwb.bsc.accessory.State ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(bsc_hasState);
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(bsc_hasGroupedStates);
          if(obj!=null)
          {
              ret=(org.semanticwb.bsc.accessory.State)obj.createGenericInstance();
