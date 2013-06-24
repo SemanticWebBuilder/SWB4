@@ -104,9 +104,13 @@ svg {
 <script src="/work/models/LODP/jsp/ChartsResource/barChart/axis.js"></script>
 <script src="/work/models/LODP/jsp/ChartsResource/barChart/discreteBar.js"></script>
 <script src="/work/models/LODP/jsp/ChartsResource/barChart/discreteBarChart.js"></script>
-
 <script src="/work/models/LODP/jsp/ChartsResource/barChart/pie.js"></script>
 <script src="/work/models/LODP/jsp/ChartsResource/barChart/pieChart.js"></script>
+<script src="/work/models/LODP/jsp/ChartsResource/barChart/line.js"></script>
+<script src="/work/models/LODP/jsp/ChartsResource/barChart/cumulativeLineChart.js"></script>
+<script src="/work/models/LODP/jsp/ChartsResource/barChart/distribution.js"></script>
+<script src="/work/models/LODP/jsp/ChartsResource/barChart/scatter.js"></script>
+<script src="/work/models/LODP/jsp/ChartsResource/barChart/scatterChart.js"></script>
 <script type="text/javascript">    
     dojo.require("dojo.parser");
     dojo.require("dijit.form.DateTextBox"); 
@@ -114,9 +118,9 @@ svg {
 </script>
 <script>
     if(chartType == 'Barra') {
-        historicalBarChart = [ 
+        dataBarChart = [ 
                 {
-                key: "Cumulative Return",
+                key: "Dataset",
                 values: [
                 <%
                     int iB=0;
@@ -142,22 +146,133 @@ svg {
                     .valueFormat(d3.format('d'))
                     .showValues(true)
                 d3.select('#grafica svg')
-                    .datum(historicalBarChart)
+                    .datum(dataBarChart)
                   .transition().duration(500)
                     .call(chart);
                 nv.utils.windowResize(chart.update);
                 return chart;
               });                                 
         }
-    if(chartType == 'Lineal') { 
+    if(chartType == 'Lineal') {
+        <%
+         String datasetTitle = "";
+         if(dataset!=null){
+             datasetTitle = datasetObj.getDatasetTitle();
+         }%>
+        var rango = '<%=rango%>';        
+        dataLineChart= [
+            {
+            "key": "<%=datasetTitle%>",
+            "values": [ 
+                <%
+                    int iL=0;
+                    for(ChartData cd : datos){
+                %>
+                    [ <%=cd.getStartDate().getTime()%> , <%=cd.getCount()%>] 
+                <%      iL++;
+                        if(iL<datos.size()){ %>,<%}
+                    }
+                %> 
+            ]
+            }
+        ]; 
+        var chart;
+        nv.addGraph(function() {  
+           chart = nv.models.cumulativeLineChart()
+                     .x(function(d) { return d[0] })
+                     .y(function(d) { return d[1]})
+                     .color(d3.scale.category10().range())
+                     .average(function(d) { return d.mean; })
+                     .clipVoronoi(true)
+                     .showControls(false);
 
+          if(rango=="Días"){
+            chart.xAxis
+              .tickFormat(function(d) {
+                  return d3.time.format('%d')(new Date(d))
+                });
+          }
+          if(rango=="Meses"){
+            chart.xAxis
+              .tickFormat(function(d) {
+                  return d3.time.format('%B')(new Date(d))
+                });
+          }
+          if(rango=="Años"){
+            chart.xAxis
+              .tickFormat(function(d) {
+                  return d3.time.format('%Y')(new Date(d))
+                });
+          }
+          
+          chart.yAxis;
+              //.tickFormat(d3.format(''));
+
+          d3.select('#grafica svg')              
+              .datum(dataLineChart)
+              .transition().duration(500)
+              .call(chart);
+
+          //TODO: Figure out a good way to do this automatically
+          nv.utils.windowResize(chart.update);
+          //nv.utils.windowResize(function() { d3.select('#chart1 svg').call(chart) });
+
+
+          chart.dispatch.on('stateChange', function(e) { nv.log('New State:', JSON.stringify(e)); });
+
+          return chart;
+        });
     }
+    
     if(chartType == 'Dispersion') { 
-
-
+        <%
+         datasetTitle = "";
+         if(dataset!=null){
+             datasetTitle = datasetObj.getDatasetTitle();
+         }%>
+        var rango = '<%=rango%>';
+        dataScatterChart = [ 
+                {
+                key: "<%=datasetTitle%>",
+                values: [
+                <%
+                    int iD=0;
+                    for(ChartData cd : datos){
+                         if(rango.equals(ChartsResource.RANGO_MESES)){
+                %>                                   
+                { x : <%=cd.getStartDate().getMonth()%>, y : <%=cd.getCount()%>, size: Math.random() }
+                <%       }else{%>
+                         
+                { x : <%=cd.getTitle()%>, y : <%=cd.getCount()%>, size: Math.random() }         <%
+                         }                       
+                         iD++;
+                         if(iD<datos.size()){ %>,<%}%>
+                <%
+                    }
+                %> 
+                 ]
+                 }
+                 ];
+        var chart;
+        nv.addGraph(function() {
+          chart = nv.models.scatterChart()
+                        .showDistX(true)
+                        .showDistY(true)                        
+                        .useVoronoi(true)
+                        .color(d3.scale.category10().range());
+          chart.xAxis;
+          chart.yAxis;
+          d3.select('#grafica svg')
+              .datum(dataScatterChart)
+            .transition().duration(500)
+              .call(chart);
+          nv.utils.windowResize(chart.update);
+          chart.dispatch.on('stateChange', function(e) { ('New State:', JSON.stringify(e)); });
+          return chart;
+        });
     }
     if(chartType == 'Pastel') { 
-        var testdata = [
+        var dataPieChart = [
             <%
                 int iP=0;
                 for(ChartData cd : datos){
@@ -181,7 +296,7 @@ svg {
                 .width(width)
                 .height(height);
             d3.select("#grafica svg")
-                .datum([testdata])
+                .datum([dataPieChart])
                 .transition().duration(1200)
                 .attr('width', width)
                 .attr('height', height)
