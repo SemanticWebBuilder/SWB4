@@ -375,7 +375,7 @@ public class Timeline extends GenericResource{
                     socialNetUser.setSnu_id(status.getUser().getId()+"");
                     socialNetUser.setSnu_klout(userKloutScore);
                     socialNetUser.setSnu_name("@"+status.getUser().getScreenName());
-                    socialNetUser.setSnu_SocialNetwork(socialNetwork.getSemanticObject());
+                    socialNetUser.setSnu_SocialNetworkObj(socialNetwork.getSemanticObject());
                     if(twitterUser != null){
                         socialNetUser.setCreated(twitterUser.getCreatedAt());
                         socialNetUser.setFollowers(twitterUser.getFollowersCount());
