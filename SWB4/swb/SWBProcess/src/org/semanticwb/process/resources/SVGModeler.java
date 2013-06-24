@@ -65,6 +65,8 @@ import org.semanticwb.process.model.MultiInstanceLoopCharacteristics;
 import org.semanticwb.process.model.ProcessSite;
 import org.semanticwb.process.model.StandarLoopCharacteristics;
 import org.semanticwb.process.model.UserTask;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
 /**
  * Modelador de procesos basado en SVG y Javascript.
@@ -934,6 +936,11 @@ public class SVGModeler extends GenericResource {
                 String svg = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n" +
                              "<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\" \"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\">\n";
                 svg += data;
+                
+                //Corregir clases en objetos de datos
+                svg = svg.replace("<g id=\"data\" bclass=\"itemaware\" oclass=\"itemaware_o\">", "<g id=\"data\" bclass=\"itemaware\" oclass=\"itemaware_o\" class=\"itemAware\">");
+                svg = svg.replace("<g id=\"dataStore\" bclass=\"itemaware\" oclass=\"itemaware_o\" transform=\"translate(-12,-10)\">", "<g id=\"dataStore\" bclass=\"itemaware\" oclass=\"itemaware_o\" transform=\"translate(-12,-10)\" class=\"itemAware\">");
+                
                 response.setContentType("image/svg+xml");
                 outs.write(svg.getBytes("UTF-8"));
             } else if ("swp".equalsIgnoreCase(format)) {
