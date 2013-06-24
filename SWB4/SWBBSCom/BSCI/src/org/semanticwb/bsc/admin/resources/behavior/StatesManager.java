@@ -3,6 +3,7 @@ package org.semanticwb.bsc.admin.resources.behavior;
 
 import java.io.IOException;
 import java.net.URLEncoder;
+import java.util.Date;
 import java.util.Iterator;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -65,11 +66,12 @@ public class StatesManager extends GenericResource {
         ret.append("  dojo.require('dijit.form.CheckBox');\n");
         ret.append("</script>\n");
         
-        //ret.append("<form id=\"").append(formId).append("/"+obj.getId()+"\" dojoType=\"dijit.form.Form\" class=\"swbform\"");
-        ret.append("<form dojoType=\"dijit.form.Form\" class=\"swbform\"");
+        //ret.append("<form id=\"").append(formId).append("/_"+obj.getId()+"\" dojoType=\"dijit.form.Form\" class=\"swbform\"");
+        ret.append("<form id=\"").append(formId).append("/_"+(new Date()).getTime()+"\" dojoType=\"dijit.form.Form\" class=\"swbform\"");
+        //ret.append("<form dojoType=\"dijit.form.Form\" class=\"swbform\"");
         ret.append(" action=\"").append(url).append("\" ");
-        ret.append(" onSubmit=\"submitForm('").append(formId).append("/"+obj.getId()+"');return false;\" method=\"post\">");
-        ret.append("<fieldset>");
+        ret.append(" onSubmit=\"submitForm('").append(formId).append("/_"+(new Date()).getTime()+"');return false;\" method=\"post\">\n");
+        ret.append("<fieldset>\n");
         
         GenericIterator<State> states = null;                
         if(status instanceof Indicator) {
@@ -88,7 +90,7 @@ public class StatesManager extends GenericResource {
                 aux = StateGroup.ClassMgr.getStateGroup(stateGroupId, SWBContext.getAdminWebSite());
             }
             Iterator<StateGroup> groups = StateGroup.ClassMgr.listStateGroups(SWBContext.getAdminWebSite());
-            ret.append("  <select onchange=\"postHtml('").append(surl).append("'+'?sg='+this.attr('value')+'&suri=").append(URLEncoder.encode(suri,"UTF-8")).append("','st_"+obj.getId()+"')\" dojoType=\"dijit.form.FilteringSelect\" autocomplete=\"false\" name=\"sg\" id=\"sg_"+obj.getId()+"\">");
+            ret.append("  <select onchange=\"postHtml('").append(surl).append("'+'?sg='+this.attr('value')+'&suri=").append(URLEncoder.encode(suri,"UTF-8")).append("','st_"+obj.getId()+"')\" dojoType=\"dijit.form.FilteringSelect\" autocomplete=\"false\" name=\"sg\" id=\"sg_"+obj.getId()+"\">\n");
             while(groups.hasNext()) {
                 StateGroup group = groups.next();
                 if(!group.isValid() || !user.haveAccess(group)) {
@@ -97,26 +99,27 @@ public class StatesManager extends GenericResource {
                 if(aux==null) {
                     aux = group;
                 }
-                ret.append("<option ").append(group.equals(aux)?"selected=\"selected\"":"").append(" value=\"").append(group.getId()).append("\">").append(group.getDisplayTitle(lang)).append("</option>"); 
+                ret.append("<option ").append(group.equals(aux)?"selected=\"selected\"":"").append(" value=\"").append(group.getId()).append("\">").append(group.getDisplayTitle(lang)).append("</option>\n"); 
             }        
-            ret.append("  </select>");
+            ret.append("  </select>\n");
             states = aux.listGroupedStateses();
         }else {
         }
         
-        ret.append("  <div id=\"st_"+obj.getId()+"\"> ");
+        ret.append("  <div id=\"st_"+obj.getId()+"\">\n");
         String list = renderStatesList(status, states, user);
         ret.append(list==null?"":list);
-        ret.append("  </div>");        
+        ret.append("  </div>\n");        
         ret.append("  <button dojoType='dijit.form.Button' type=\"submit\">guardar</button>\n");
-        ret.append("  <input type=\"hidden\" name=\"suri\" value=\""+suri+"\" />");
-        ret.append("</fieldset>");
-        ret.append("</form>");
+        ret.append("  <input type=\"hidden\" name=\"suri\" value=\""+suri+"\" />\n");
+        ret.append("</fieldset>\n");
+        ret.append("</form>\n");
         
-        if(request.getParameter("statmsg")!=null && !request.getParameter("statmsg").isEmpty()) {        
+System.out.println("request.getParameter('statmsg')="+request.getParameter("statmsg"));
+        if(request.getParameter("statmsg")!=null && !request.getParameter("statmsg").isEmpty()) {
             ret.append("<script type=\"text/javascript\">\n");
             log.debug("showStatus");
-            ret.append("showStatus('" + request.getParameter("statmsg") + "');\n");
+            ret.append("showStatus('"+request.getParameter("statmsg")+"');\n");
             ret.append("</script>\n");        
         }
         
@@ -156,15 +159,15 @@ public class StatesManager extends GenericResource {
         {
             String lang = user.getLanguage();
             StringBuilder ret = new StringBuilder();
-            ret.append("<ul>");
+            ret.append("<ul>\n");
             while(states.hasNext()) {
                 State state = states.next();
                 if(!state.isValid() || !user.haveAccess(state)) {
                     continue;
                 }
-                ret.append("<li><label for=\"chk_"+state.getId()+"\"><input type=\"checkbox\" "+(status.hasState(state)?"checked=\"checked\"":"")+" name=\"abc\" id=\"chk_"+state.getId()+"\" value=\""+state.getId()+"\"/>"+state.getDisplayTitle(lang)+"</label></li>"); 
+                ret.append("<li><label for=\"chk_"+state.getId()+"\"><input type=\"checkbox\" "+(status.hasState(state)?"checked=\"checked\"":"")+" name=\"abc\" id=\"chk_"+state.getId()+"\" value=\""+state.getId()+"\"/>"+state.getDisplayTitle(lang)+"</label></li>\n"); 
             }
-            ret.append("</ul>");
+            ret.append("</ul>\n");
             return ret.toString();
         }
         else
@@ -177,54 +180,47 @@ public class StatesManager extends GenericResource {
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
         final String sgId = request.getParameter("sg");
         final String suri=request.getParameter("suri");
-//        if(StateGroup.ClassMgr.hasStateGroup(sgId, SWBContext.getAdminWebSite()))
-//        {
-            SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
-            SemanticObject obj = ont.getSemanticObject(suri);
-            Status status = (Status)obj.createGenericInstance();
-            
-            Iterator<State> it = status.listStates();
-            while(it.hasNext()) {
-                State state = it.next();
-                boolean stateRelated = false;
-                Iterator<Status> it2 = state.listStatuses();
-                while(it2.hasNext() && !stateRelated) {
-                    Status stus = it2.next();
-//                    if(stus instanceof StateGroup) {
-//                        continue;
-//                    }
-                    if(status.equals(stus)) {
-                        continue;
-                    }
-                    stateRelated = true;
+
+        SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
+        SemanticObject obj = ont.getSemanticObject(suri);
+        Status status = (Status)obj.createGenericInstance();
+
+        Iterator<State> it = status.listStates();
+        while(it.hasNext()) {
+            State state = it.next();
+            boolean stateRelated = false;
+            Iterator<Status> it2 = state.listStatuses();
+            while(it2.hasNext() && !stateRelated) {
+                Status stus = it2.next();
+                if(status.equals(stus)) {
+                    continue;
                 }
-                if(!stateRelated) {
-                    state.setUndeleteable(false);
+                stateRelated = true;
+            }
+            if(!stateRelated) {
+                state.setUndeleteable(false);
+            }
+        }
+
+        status.removeAllState();
+
+        String[] values = request.getParameterValues("abc");
+        if(values!=null)
+        {
+            State state;
+            for(int i=0; i<values.length; i++) {
+                if(State.ClassMgr.hasState(values[i], SWBContext.getAdminWebSite())) {
+                    state = State.ClassMgr.getState(values[i], SWBContext.getAdminWebSite());
+                    status.addState(state);
+                    state.setUndeleteable(true);
+                    state.getStateGroup().setUndeleteable(true);
                 }
             }
-            
-                       
-            
-            status.removeAllState();
-            
-            String[] values = request.getParameterValues("abc");
-            if(values!=null)
-            {
-                //StateGroup stateGroup = StateGroup.ClassMgr.getStateGroup(sgId, SWBContext.getAdminWebSite());
-                State state;
-                for(int i=0; i<values.length; i++) {
-                    if(State.ClassMgr.hasState(values[i], SWBContext.getAdminWebSite())) {
-                        state = State.ClassMgr.getState(values[i], SWBContext.getAdminWebSite());
-                        status.addState(state);
-                        state.setUndeleteable(true);
-                        state.getStateGroup().setUndeleteable(true);
-                    }
-                }
-                //stateGroup.setUndeleteable(true);
-            }
-//        }
+        }
+
         response.setRenderParameter("suri", suri);
         response.setRenderParameter("sg", sgId);
         response.setRenderParameter("statmsg", response.getLocaleString("statmsg"));
+System.out.println("statmsg="+response.getLocaleString("statmsg"));
     }
 }
