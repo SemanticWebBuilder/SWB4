@@ -1,7 +1,7 @@
 package org.semanticwb.bsc.element.base;
 
 
-public abstract class InitiativeBase extends org.semanticwb.bsc.element.BSCElement implements org.semanticwb.bsc.Schedule,org.semanticwb.model.Traceable,org.semanticwb.bsc.Committable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Activeable,org.semanticwb.bsc.Updateable
+public abstract class InitiativeBase extends org.semanticwb.bsc.element.BSCElement implements org.semanticwb.model.Traceable,org.semanticwb.bsc.Committable,org.semanticwb.model.Descriptiveable,org.semanticwb.bsc.Status,org.semanticwb.model.Activeable,org.semanticwb.bsc.Schedule,org.semanticwb.bsc.Updateable
 {
     public static final org.semanticwb.platform.SemanticProperty bsc_index=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#index");
     public static final org.semanticwb.platform.SemanticClass bsc_Deliverable=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#Deliverable");
@@ -105,6 +105,29 @@ public abstract class InitiativeBase extends org.semanticwb.bsc.element.BSCEleme
             return it;
         }
        /**
+       * Gets all org.semanticwb.bsc.element.Initiative with a determined State
+       * @param value State of the type org.semanticwb.bsc.accessory.State
+       * @param model Model of the org.semanticwb.bsc.element.Initiative
+       * @return Iterator with all the org.semanticwb.bsc.element.Initiative
+       */
+
+        public static java.util.Iterator<org.semanticwb.bsc.element.Initiative> listInitiativeByState(org.semanticwb.bsc.accessory.State value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Initiative> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(bsc_hasState, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.bsc.element.Initiative with a determined State
+       * @param value State of the type org.semanticwb.bsc.accessory.State
+       * @return Iterator with all the org.semanticwb.bsc.element.Initiative
+       */
+
+        public static java.util.Iterator<org.semanticwb.bsc.element.Initiative> listInitiativeByState(org.semanticwb.bsc.accessory.State value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Initiative> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(bsc_hasState,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
        * Gets all org.semanticwb.bsc.element.Initiative with a determined Deliverable
        * @param value Deliverable of the type org.semanticwb.bsc.element.Deliverable
        * @param model Model of the org.semanticwb.bsc.element.Initiative
@@ -195,6 +218,71 @@ public abstract class InitiativeBase extends org.semanticwb.bsc.element.BSCEleme
     public void setPlannedEnd(java.util.Date value)
     {
         getSemanticObject().setDateProperty(bsc_plannedEnd, value);
+    }
+   /**
+   * Gets all the org.semanticwb.bsc.accessory.State
+   * @return A GenericIterator with all the org.semanticwb.bsc.accessory.State
+   */
+
+    public org.semanticwb.model.GenericIterator<org.semanticwb.bsc.accessory.State> listStates()
+    {
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.bsc.accessory.State>(getSemanticObject().listObjectProperties(bsc_hasState));
+    }
+
+   /**
+   * Gets true if has a State
+   * @param value org.semanticwb.bsc.accessory.State to verify
+   * @return true if the org.semanticwb.bsc.accessory.State exists, false otherwise
+   */
+    public boolean hasState(org.semanticwb.bsc.accessory.State value)
+    {
+        boolean ret=false;
+        if(value!=null)
+        {
+           ret=getSemanticObject().hasObjectProperty(bsc_hasState,value.getSemanticObject());
+        }
+        return ret;
+    }
+   /**
+   * Adds a State
+   * @param value org.semanticwb.bsc.accessory.State to add
+   */
+
+    public void addState(org.semanticwb.bsc.accessory.State value)
+    {
+        getSemanticObject().addObjectProperty(bsc_hasState, value.getSemanticObject());
+    }
+   /**
+   * Removes all the State
+   */
+
+    public void removeAllState()
+    {
+        getSemanticObject().removeProperty(bsc_hasState);
+    }
+   /**
+   * Removes a State
+   * @param value org.semanticwb.bsc.accessory.State to remove
+   */
+
+    public void removeState(org.semanticwb.bsc.accessory.State value)
+    {
+        getSemanticObject().removeObjectProperty(bsc_hasState,value.getSemanticObject());
+    }
+
+   /**
+   * Gets the State
+   * @return a org.semanticwb.bsc.accessory.State
+   */
+    public org.semanticwb.bsc.accessory.State getState()
+    {
+         org.semanticwb.bsc.accessory.State ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(bsc_hasState);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.bsc.accessory.State)obj.createGenericInstance();
+         }
+         return ret;
     }
 
 /**

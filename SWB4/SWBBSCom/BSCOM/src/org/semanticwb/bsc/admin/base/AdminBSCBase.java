@@ -11,6 +11,10 @@ public abstract class AdminBSCBase extends org.semanticwb.model.AdminWebSite imp
    */
     public static final org.semanticwb.platform.SemanticClass swbxf_ObjectBehavior=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/xforms/ontology#ObjectBehavior");
    /**
+   * Define una Collección de objetos de una clase especificada con la propiedad "collectionClass"
+   */
+    public static final org.semanticwb.platform.SemanticClass swb_Collection=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Collection");
+   /**
    * Es una pagina web utilizada para mostrar opciones del menu dentro de la administración de SWB
    */
     public static final org.semanticwb.platform.SemanticClass swbxf_MenuItem=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/xforms/ontology#MenuItem");
@@ -389,6 +393,36 @@ public abstract class AdminBSCBase extends org.semanticwb.model.AdminWebSite imp
     public boolean hasObjectBehavior(String id)
     {
         return org.semanticwb.model.ObjectBehavior.ClassMgr.hasObjectBehavior(id, this);
+    }
+
+    public org.semanticwb.model.Collection getCollection(String id)
+    {
+        return org.semanticwb.model.Collection.ClassMgr.getCollection(id, this);
+    }
+
+    public java.util.Iterator<org.semanticwb.model.Collection> listCollections()
+    {
+        return org.semanticwb.model.Collection.ClassMgr.listCollections(this);
+    }
+
+    public org.semanticwb.model.Collection createCollection(String id)
+    {
+        return org.semanticwb.model.Collection.ClassMgr.createCollection(id,this);
+    }
+
+    public org.semanticwb.model.Collection createCollection()
+    {
+        long id=getSemanticObject().getModel().getCounter(swb_Collection);
+        return org.semanticwb.model.Collection.ClassMgr.createCollection(String.valueOf(id),this);
+    } 
+
+    public void removeCollection(String id)
+    {
+        org.semanticwb.model.Collection.ClassMgr.removeCollection(id, this);
+    }
+    public boolean hasCollection(String id)
+    {
+        return org.semanticwb.model.Collection.ClassMgr.hasCollection(id, this);
     }
 
     public org.semanticwb.model.MenuItem getMenuItem(String id)

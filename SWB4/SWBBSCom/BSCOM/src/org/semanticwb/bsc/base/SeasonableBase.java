@@ -12,35 +12,35 @@ public interface SeasonableBase extends org.semanticwb.model.GenericObject
    /**
    * Atributo que almacena un periodo 
    */
-    public static final org.semanticwb.platform.SemanticProperty bsc_hasPeriodObjetive=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#hasPeriodObjetive");
+    public static final org.semanticwb.platform.SemanticProperty bsc_hasPeriod=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#hasPeriod");
    /**
    * Cualquier elemento BSC al que se le puedan asignar períodos de medición 
    */
     public static final org.semanticwb.platform.SemanticClass bsc_Seasonable=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#Seasonable");
 
-    public org.semanticwb.model.GenericIterator<org.semanticwb.bsc.accessory.Period> listPeriodObjetives();
-    public boolean hasPeriodObjetive(org.semanticwb.bsc.accessory.Period value);
+    public org.semanticwb.model.GenericIterator<org.semanticwb.bsc.accessory.Period> listPeriods();
+    public boolean hasPeriod(org.semanticwb.bsc.accessory.Period value);
 
    /**
-   * Adds the PeriodObjetive
+   * Adds the Period
    * @param value An instance of org.semanticwb.bsc.accessory.Period
    */
-    public void addPeriodObjetive(org.semanticwb.bsc.accessory.Period value);
+    public void addPeriod(org.semanticwb.bsc.accessory.Period value);
 
    /**
-   * Remove all the values for the property PeriodObjetive
+   * Remove all the values for the property Period
    */
-    public void removeAllPeriodObjetive();
+    public void removeAllPeriod();
 
    /**
-   * Remove a value from the property PeriodObjetive
+   * Remove a value from the property Period
    * @param value An instance of org.semanticwb.bsc.accessory.Period
    */
-    public void removePeriodObjetive(org.semanticwb.bsc.accessory.Period value);
+    public void removePeriod(org.semanticwb.bsc.accessory.Period value);
 
 /**
-* Gets the PeriodObjetive
+* Gets the Period
 * @return a instance of org.semanticwb.bsc.accessory.Period
 */
-    public org.semanticwb.bsc.accessory.Period getPeriodObjetive();
+    public org.semanticwb.bsc.accessory.Period getPeriod();
 }
