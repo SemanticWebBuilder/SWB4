@@ -31,6 +31,7 @@ import org.semanticwb.social.MessageIn;
 import org.semanticwb.social.PhotoIn;
 import org.semanticwb.social.Post;
 import org.semanticwb.social.PostIn;
+import org.semanticwb.social.PostOut;
 import org.semanticwb.social.SentimentalLearningPhrase;
 import org.semanticwb.social.SocialNetwork;
 import org.semanticwb.social.SocialPFlow;
@@ -138,6 +139,23 @@ public class SocialTopicInBox extends GenericResource {
             busqueda = "";
         }*/
         
+        
+        if(request.getParameter("leyendReconfirm")!=null)
+        {
+            
+            //Remove
+            SWBResourceURL urlrConfirm = paramRequest.getActionUrl();
+            urlrConfirm.setParameter("suri", id);
+            urlrConfirm.setParameter("sval", request.getParameter("postUri"));
+            urlrConfirm.setAction("removeConfirm");
+            
+            out.println("<form name=\"formStreamInBox_removePostIn\" id=\"formStreamInBox_removePostIn\" class=\"swbform\" method=\"post\" action=\""+urlrConfirm+"\" onsubmit=\"alert('entra a onSubmit k...');submitForm('formStreamInBox_removePostIn');return false;\">");
+            out.println("</form>");
+            
+            out.println("<script type=\"javascript\">");
+            out.println("   if(confirm('" + request.getParameter("leyendReconfirm") + ","+ paramRequest.getLocaleString("deleteAnyWay")+ "?')) { submitForm('formStreamInBox_removePostIn');}");
+            out.println("</script>");
+        }
 
         //if (request.getParameter("statusMsg") != null) {
             out.println("<script type=\"javascript\">");
@@ -183,7 +201,7 @@ public class SocialTopicInBox extends GenericResource {
             searchWord = "";
             String tag = (String)session.getAttribute(id + this.getClass().getName() +"searchNoTopic");
             if(tag != null){
-                System.out.println("Search for tag:" + tag);
+                //System.out.println("Search for tag:" + tag);
                 searchWord = tag;
                 session.removeAttribute(id + this.getClass().getName() +"searchNoTopic");
             }
@@ -247,6 +265,18 @@ public class SocialTopicInBox extends GenericResource {
         out.print("</td><td>");
         out.print("<a href=\"#\"  onclick=\"submitUrl('" + urlOderby + "',this); return false;\"><img src=\"/swbadmin/images/arrow_down.png\" height=\"16\"/></a>");
         urlOderby.setParameter("orderBy", "networkDown");
+        out.print("<a href=\"#\"  onclick=\"submitUrl('" + urlOderby + "',this); return false;\"><img src=\"/swbadmin/images/arrow_up.png\" height=\"16\"/></a>");
+        out.print("</td></tr></table>");
+        out.println("</th>");
+        
+        
+        urlOderby.setParameter("orderBy", "streamUp");
+        out.println("<th>");
+        out.println("<table><tr><td>");
+        out.println(paramRequest.getLocaleString("stream"));
+        out.print("</td><td>");
+        out.print("<a href=\"#\" onclick=\"submitUrl('" + urlOderby + "',this); return false;\"><img src=\"/swbadmin/images/arrow_down.png\" height=\"16\"/></a>");
+        urlOderby.setParameter("orderBy", "streamDown");
         out.print("<a href=\"#\"  onclick=\"submitUrl('" + urlOderby + "',this); return false;\"><img src=\"/swbadmin/images/arrow_up.png\" height=\"16\"/></a>");
         out.print("</td></tr></table>");
         out.println("</th>");
@@ -405,7 +435,7 @@ public class SocialTopicInBox extends GenericResource {
         
         
        //Ordenamientos
-        System.out.println("orderBy k Llega:"+request.getParameter("orderBy"));
+        //System.out.println("orderBy k Llega:"+request.getParameter("orderBy"));
         Set<PostIn> setso=null;
         if(request.getParameter("orderBy")!=null)
         {
@@ -421,12 +451,12 @@ public class SocialTopicInBox extends GenericResource {
             }else if(request.getParameter("orderBy").equals("networkDown"))
             {
                 setso = SWBSocialComparator.sortByNetwork(itposts, false);
-            }else if(request.getParameter("orderBy").equals("topicUp"))
+            }else if(request.getParameter("orderBy").equals("streamUp"))
             {
-                setso = SWBSocialComparator.sortByTopic(itposts, true);
-            }else if(request.getParameter("orderBy").equals("topicDown"))
+                setso = SWBSocialComparator.sortByStream(itposts, true);
+            }else if(request.getParameter("orderBy").equals("streamDown"))
             {
-                setso = SWBSocialComparator.sortByTopic(itposts, false);
+                setso = SWBSocialComparator.sortByStream(itposts, false);
             }else if(request.getParameter("orderBy").equals("cretedUp"))
             {
                 setso = SWBComparator.sortByCreatedSet(itposts,true);
@@ -505,8 +535,6 @@ public class SocialTopicInBox extends GenericResource {
         
         int ps = 20;
         int l = setso.size();
-
-        //System.out.println("num cont: "+l);
 
         int p = 0;
         String page = request.getParameter("page");
@@ -590,7 +618,12 @@ public class SocialTopicInBox extends GenericResource {
             out.println(postIn.getPostInSocialNetwork().getDisplayTitle(lang));
             out.println("</td>");
             
-            //SocialNetwork
+            //Stream
+            out.println("<td>");
+            out.println(postIn.getPostInStream().getDisplayTitle(lang));
+            out.println("</td>");
+            
+            //created
             out.println("<td>");
             out.println(SWBUtils.TEXT.getTimeAgo(postIn.getCreated(), lang));
             out.println("</td>");
@@ -680,7 +713,10 @@ public class SocialTopicInBox extends GenericResource {
                 urlNew.setParameter("suri", id);
                 urlNew.setParameter("page", "" + z);
                 urlNew.setParameter("search", (searchWord.trim().length() > 0 ? searchWord : ""));
-                urlNew.setParameter("orderBy", (request.getParameter("orderBy")!=null && request.getParameter("orderBy").trim().length() > 0 ? request.getParameter("orderBy") : ""));
+                if(request.getParameter("orderBy")!=null)
+                {
+                    urlNew.setParameter("orderBy", request.getParameter("orderBy"));
+                }
                 if (z != p) {
                     out.println("<a href=\"#\" onclick=\"submitUrl('" + urlNew + "',this); return false;\">" + (z + 1) + "</a> ");
                 } else {
@@ -794,11 +830,6 @@ public class SocialTopicInBox extends GenericResource {
         request.setAttribute("objUri", request.getParameter("objUri"));
         request.setAttribute("paramRequest", paramRequest);
         
-        System.out.println("doCreatePost/1:"+request.getParameter("valor"));
-        System.out.println("doCreatePost/2:"+request.getParameter("wsite"));
-        System.out.println("doCreatePost/3:"+request.getParameter("objUri"));
-        
-        
         try {
             rd.include(request, response);
         } catch (ServletException ex) {
@@ -811,12 +842,11 @@ public class SocialTopicInBox extends GenericResource {
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
         final Resource base = getResourceBase();
         String action = response.getAction();
-        System.out.println("Entra a InBox_processAction-1:"+action);
+        //System.out.println("Entra a InBox_processAction-1:"+action);
         if(action.equals("changeSocialTopic"))
         {
             if(request.getParameter("postUri")!=null && request.getParameter("newSocialTopic")!=null)
             {
-                System.out.println("processAction/1");
                 SemanticObject semObj=SemanticObject.getSemanticObject(request.getParameter("postUri"));
                 Post post=(Post)semObj.createGenericInstance();
                 SocialTopic stOld=post.getSocialTopic();
@@ -839,10 +869,10 @@ public class SocialTopicInBox extends GenericResource {
             }
         }else if (action.equals("postMessage") || action.equals("uploadPhoto") || action.equals("uploadVideo")) 
         {
-                System.out.println("Entra a InBox_processAction-2:"+request.getParameter("objUri"));
+                //System.out.println("Entra a InBox_processAction-2:"+request.getParameter("objUri"));
                 if(request.getParameter("objUri")!=null)
                 {
-                    System.out.println("Entra a InBox_processAction-3");
+                    //System.out.println("Entra a InBox_processAction-3");
                     PostIn postIn=(PostIn)SemanticObject.getSemanticObject(request.getParameter("objUri")).createGenericInstance();
                     SocialTopic stOld=postIn.getSocialTopic();
                     SocialNetwork socialNet=(SocialNetwork)SemanticObject.getSemanticObject(request.getParameter("socialNetUri")).createGenericInstance();
@@ -869,10 +899,10 @@ public class SocialTopicInBox extends GenericResource {
                         socialPFlow=(SocialPFlow)SemanticObject.createSemanticObject(socialFlow).createGenericInstance();
                     }
 
-                    System.out.println("Entra a InBox_processAction-4");
+                    //System.out.println("Entra a InBox_processAction-4");
                     SWBSocialUtil.PostOutUtil.sendNewPost(postIn, postIn.getSocialTopic(), socialPFlow, aSocialNets, wsite, request.getParameter("toPost"), request, response);
                     
-                    System.out.println("Entra a InBox_processAction-5");
+                    //System.out.println("Entra a InBox_processAction-5");
                     response.setMode(SWBActionResponse.Mode_EDIT);
                     response.setRenderParameter("dialog","close");
                     response.setRenderParameter("statusMsg", response.getLocaleString("msgResponseCreated"));
@@ -909,17 +939,35 @@ public class SocialTopicInBox extends GenericResource {
             }
         }else if (action.equals(SWBActionResponse.Action_REMOVE)) 
         {
-            if (request.getParameter("suri") != null && request.getParameter("postUri") != null) {
-                SemanticObject semObj = SemanticObject.getSemanticObject(request.getParameter("postUri"));
-                if (semObj != null) {
-                    PostIn postIn = (PostIn) semObj.createGenericInstance();
-                    postIn.remove();
+            if (request.getParameter("suri") != null && request.getParameter("postUri") != null) 
+            {
+                String sval = request.getParameter("postUri");
+                SemanticObject so = SemanticObject.createSemanticObject(sval);
+                WebSite wsite=WebSite.ClassMgr.getWebSite(so.getModel().getName());
+                PostIn postIn=(PostIn)so.getGenericInstance();
 
-                    response.setMode(SWBActionResponse.Mode_EDIT);
-                    response.setRenderParameter("statusMsg", response.getLocaleString("postDeleted"));
+                if(PostOut.ClassMgr.listPostOutByPostInSource(postIn, wsite).hasNext())
+                {
+                    response.setRenderParameter("leyendReconfirm", response.getLocaleString("postOutExist"));
                     response.setRenderParameter("suri", request.getParameter("suri"));
+                    response.setRenderParameter("postUri", postIn.getURI());
+                }else{
+                    so.remove();
+                    //response.setRenderParameter("dialog", "close");
+                    response.setRenderParameter("suri", request.getParameter("suri"));
+                    response.setRenderParameter("statusMsg", response.getLocaleString("postDeleted"));
                 }
+                response.setMode(SWBActionResponse.Mode_EDIT);
             }
+        }else if ("removeConfirm".equals(action)) 
+        {
+            String sval = request.getParameter("sval");
+            SemanticObject so = SemanticObject.createSemanticObject(sval);
+            so.remove();
+            response.setMode(SWBActionResponse.Mode_EDIT);
+            response.setRenderParameter("reloadTap",  request.getParameter("suri"));
+            response.setRenderParameter("suri", request.getParameter("suri"));
+            response.setRenderParameter("statusMsg", response.getLocaleString("postDeleted"));
         }
 
     }
