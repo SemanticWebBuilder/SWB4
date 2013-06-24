@@ -149,23 +149,19 @@ public class StreamInBoxNoTopic extends GenericResource {
         out.println("}");
         out.println("</style>");
         
-        System.out.println("search word que llega sin:"+request.getParameter("search"));
+        //System.out.println("search word que llega sin:"+request.getParameter("search"));
         String searchWord = request.getParameter("search");
         HttpSession session = request.getSession(true);
         if (null == searchWord) {
             searchWord = "";
             String tag = (String)session.getAttribute(id + this.getClass().getName() +"searchNoTopic");
             if(tag != null){
-                System.out.println("Search for tag:" + tag);
                 searchWord = tag;
                 session.removeAttribute(id + this.getClass().getName() +"searchNoTopic");
             }
         }else{//Add word to session var
             session.setAttribute(id + this.getClass().getName() +"searchNoTopic", searchWord);//Save the word in the session var
         }
-        
-        System.out.println("search word que llega sin-1:"+searchWord);
-        
         
         SWBResourceURL urls = paramRequest.getRenderUrl();
         urls.setParameter("act", "");
@@ -365,7 +361,6 @@ public class StreamInBoxNoTopic extends GenericResource {
         Iterator<PostIn> itposts = PostIn.ClassMgr.listPostInByPostInStream(stream);
         
         
-        System.out.println("search word que llega sin-2:"+searchWord);
         //Filtros
         ArrayList<PostIn> aListFilter=new ArrayList();
         if(searchWord!=null)
@@ -391,7 +386,7 @@ public class StreamInBoxNoTopic extends GenericResource {
         
         
         //Ordenamientos
-        System.out.println("orderBy k Llega:"+request.getParameter("orderBy"));
+        //System.out.println("orderBy Llega:"+request.getParameter("orderBy"));
         Set<PostIn> setso=null;
         if(request.getParameter("orderBy")!=null)
         {
@@ -486,26 +481,49 @@ public class StreamInBoxNoTopic extends GenericResource {
             setso = SWBComparator.sortByCreatedSet(itposts, false);
         }
         
+        //Aquí hago una iteración para sacar los elementos que no tienen SocialTopic, esto para que al momento de la páginación
+        //ya se tenga exactamente cuantos elementos son.
+        
+        //System.out.println("setso Jorge:"+setso+", size:"+setso.size());
+        ArrayList<PostIn> setsoFinal=new ArrayList();;
+        Iterator<PostIn> itTmp=setso.iterator();
+        while (itTmp.hasNext()) 
+        {
+            PostIn postIn = itTmp.next();
+            if(postIn.getSocialTopic()!=null) {
+                setsoFinal.add(postIn);
+            }       
+        }
+        
+        
         itposts = null;
         int ps = 20;
-        int l = setso.size();
-
-        //System.out.println("num cont: "+l);
+        int l = setsoFinal.size();
 
         int p = 0;
         String page = request.getParameter("page");
         if (page != null) {
             p = Integer.parseInt(page);
         }
+        
+        
 
-
-
+        //Una vez que ya se cuantos elementos son, ya que ya se hizo una primera iteración sobre todos los PostIn, hago una segunda
+        //iteración ya para mostrar esos ultimos elementos, esto de hacer 2 iteraciones no es muy bueno, TODO: ver con Javier si vemos
+        //otra mejor opción.
+        itposts=setsoFinal.iterator();
         int x = 0;
-        itposts = setso.iterator();
         while (itposts.hasNext()) 
         {
             PostIn postIn = itposts.next();
-            if(postIn.getSocialTopic()!=null) continue; //Es decir, se listarían solo los que no tengan aun un SocialTopic asociado.
+            /*
+            if(postIn.getSocialTopic()!=null) {
+                //Tengo el problema con la paginación porque los resto al vuelo, entonces conforme se va acercando a la ultima página es como se hace 
+                //exacto, lo que tendría que hacer es saber el tamaño desde el principio de "l", para que lo pusiera exacto en la páginación desde un inicio.
+                l=l-1;                      
+                continue;
+            } //Es decir, se listarían solo los que no tengan aun un SocialTopic asociado.
+            * */
             
             if (x < p * ps) {
                 x++;
@@ -515,7 +533,6 @@ public class StreamInBoxNoTopic extends GenericResource {
                 break;
             }
             x++;
-            
             
             out.println("<tr>");
             
@@ -652,8 +669,9 @@ public class StreamInBoxNoTopic extends GenericResource {
         out.println("</fieldset>");
         
         
-        System.out.println("J-P:"+p);
-        System.out.println("J-X:"+x);
+        //System.out.println("J-P:"+p);
+        //System.out.println("J-X:"+x);
+        //System.out.println("J-L:"+l);
         
         if (p > 0 || x < l) //Requiere paginacion
         {
@@ -676,7 +694,7 @@ public class StreamInBoxNoTopic extends GenericResource {
                 {
                     urlNew.setParameter("orderBy", request.getParameter("orderBy"));
                 }
-                if(p==0 && z==0) continue;
+                //if(p==0 && z==0) continue;
                 if (z != p) {
                     out.println("<a href=\"#\" onclick=\"submitUrl('" + urlNew + "',this); return false;\">" + (z + 1) + "</a> ");
                 } else {
@@ -739,12 +757,12 @@ public class StreamInBoxNoTopic extends GenericResource {
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
         final Resource base = getResourceBase();
         String action = response.getAction();
-        System.out.println("Entra a InBox_processAction-1:"+action);
+        //System.out.println("Entra a InBox_processAction-1:"+action);
         if(action.equals("changeSocialTopic"))
         {
             if(request.getParameter("postUri")!=null && request.getParameter("newSocialTopic")!=null)
             {
-                System.out.println("processAction/1");
+                //System.out.println("processAction/1");
                 SemanticObject semObj=SemanticObject.getSemanticObject(request.getParameter("postUri"));
                 PostIn post=(PostIn)semObj.createGenericInstance();
                 Stream stOld=post.getPostInStream();
