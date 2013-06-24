@@ -393,12 +393,14 @@ exportUrl.setMode(SVGModeler.MODE_EXPORT);
             }
             
             .itemAware {
+                fill:url(#linearGradientDataObject);
                 stroke:#666666;
                 stroke-width:2;
                 cursor:pointer;
             }
 
             .itemAware_o {
+                fill:url(#linearGradientDataObject);
                 stroke:#2cff20;
                 stroke-width:2;
                 cursor:pointer;
@@ -822,12 +824,12 @@ exportUrl.setMode(SVGModeler.MODE_EXPORT);
             </g>
             <!--Definición de objetos de datos-->
             <g id="data" bclass="itemaware" oclass="itemaware_o">
-                <path transform="scale(0.7,0.7) translate(-3,-10)" d="m -25,-25 0,74.61135 58.22841,0 0,-55.2509 -19.88426,-19.36045 -38.34415,0 z" style="fill:url(#linearGradientDataObject);stroke-width:2.5;" />
-                <path transform="scale(0.7,0.7) translate(-2,-10)" d="m 12.5,-24 0,19.5625 20.0601,0" style="fill:none;stroke-width:2.5;" />
+                <path transform="scale(0.7,0.7) translate(-3,-10)" d="m -25,-25 0,74.61135 58.22841,0 0,-55.2509 -19.88426,-19.36045 -38.34415,0 z"/>
+                <path transform="scale(0.7,0.7) translate(-2,-10)" d="m 12.5,-24 0,19.5625 20.0601,0"/>
             </g>
             <g id="dataStore" bclass="itemaware" oclass="itemaware_o" transform="translate(-12,-10)">
-                <path d="m 0,0 c -27.75868,0 -50.28125,5.6228 -50.28125,12.5625 0,0.1516 0.0412,0.2871 0.0625,0.4375 l -0.0625,0 0,61.5624 0,0.3125 0.0312,0 c 0.68314,6.7909 22.92187,12.25 50.25,12.25 27.3249498,0 49.53067,-5.4602 50.21875,-12.25 l 0.0312,0 0,-0.3125 0,-61.5624 -0.0312,0 c 0.0212,-0.1501 0.0312,-0.2862 0.0312,-0.4375 0,-6.9397 -22.4913202,-12.5625 -50.25,-12.5625 z" style="fill:url(#linearGradientDataObject);stroke-width:2.5;" transform="scale(0.6,0.6) translate(22,-24)"/>
-                <path d="m 0,0 c 0,6.9397 -22.5028602,12.5654 -50.26153,12.5654 -27.39179,0 -49.73975,-5.4833 -50.25272,-12.33" style="fill:none;stroke-width:2.5;" transform="scale(0.6,0.6) translate(72,-12)"/>
+                <path d="m 0,0 c -27.75868,0 -50.28125,5.6228 -50.28125,12.5625 0,0.1516 0.0412,0.2871 0.0625,0.4375 l -0.0625,0 0,61.5624 0,0.3125 0.0312,0 c 0.68314,6.7909 22.92187,12.25 50.25,12.25 27.3249498,0 49.53067,-5.4602 50.21875,-12.25 l 0.0312,0 0,-0.3125 0,-61.5624 -0.0312,0 c 0.0212,-0.1501 0.0312,-0.2862 0.0312,-0.4375 0,-6.9397 -22.4913202,-12.5625 -50.25,-12.5625 z" transform="scale(0.6,0.6) translate(22,-24)"/>
+                <path d="m 0,0 c 0,6.9397 -22.5028602,12.5654 -50.26153,12.5654 -27.39179,0 -49.73975,-5.4833 -50.25272,-12.33" transform="scale(0.6,0.6) translate(72,-12)"/>
             </g>	
             <g id="dataInput" bclass="itemaware" oclass="itemaware_o">
                 <use xlink:href="#data" x="0" y="0"/>
