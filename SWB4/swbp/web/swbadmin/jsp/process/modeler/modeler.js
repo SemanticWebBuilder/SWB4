@@ -3195,7 +3195,7 @@
             var fMove = Modeler.navPath.bar.move;
             Modeler.navPath.bar.move = function(x, y) {
                 fMove(x, y);
-                if (Modeler.navPath.text !== null) {
+                if (Modeler.navPath.text && Modeler.navPath.text !== null) {
                     Modeler.navPath.text.setAttributeNS(null, "x", x);
                     Modeler.navPath.text.setAttributeNS(null, "y", y+4);
                 }
