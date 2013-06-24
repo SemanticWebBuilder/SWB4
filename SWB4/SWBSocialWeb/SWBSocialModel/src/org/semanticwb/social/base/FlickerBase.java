@@ -4,7 +4,7 @@ package org.semanticwb.social.base;
    /**
    * Clase que almacenara las diferentes cuentas de una organización para la red social Flicker. 
    */
-public abstract class FlickerBase extends org.semanticwb.social.SocialNetwork implements org.semanticwb.social.Photoable,org.semanticwb.model.Activeable,org.semanticwb.social.Listenerable,org.semanticwb.social.SocialNetPostable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Tagable,org.semanticwb.social.Oauthable,org.semanticwb.model.Traceable,org.semanticwb.social.Secreteable
+public abstract class FlickerBase extends org.semanticwb.social.SocialNetwork implements org.semanticwb.model.Descriptiveable,org.semanticwb.social.Secreteable,org.semanticwb.social.Oauthable,org.semanticwb.social.Listenerable,org.semanticwb.model.Traceable,org.semanticwb.model.Activeable,org.semanticwb.social.Photoable,org.semanticwb.model.Tagable,org.semanticwb.social.SocialNetPostable
 {
    /**
    * Clase que almacenara las diferentes cuentas de una organización para la red social Flicker.
@@ -220,6 +220,29 @@ public abstract class FlickerBase extends org.semanticwb.social.SocialNetwork im
         public static java.util.Iterator<org.semanticwb.social.Flicker> listFlickerBySocialPostInv(org.semanticwb.social.PostOutNet value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.social.Flicker> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(social_hasSocialPostInv,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.social.Flicker with a determined SocialNetworkPostOutInv
+       * @param value SocialNetworkPostOutInv of the type org.semanticwb.social.PostOut
+       * @param model Model of the org.semanticwb.social.Flicker
+       * @return Iterator with all the org.semanticwb.social.Flicker
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.Flicker> listFlickerBySocialNetworkPostOutInv(org.semanticwb.social.PostOut value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.Flicker> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(social_hasSocialNetworkPostOutInv, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.social.Flicker with a determined SocialNetworkPostOutInv
+       * @param value SocialNetworkPostOutInv of the type org.semanticwb.social.PostOut
+       * @return Iterator with all the org.semanticwb.social.Flicker
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.Flicker> listFlickerBySocialNetworkPostOutInv(org.semanticwb.social.PostOut value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.Flicker> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(social_hasSocialNetworkPostOutInv,value.getSemanticObject(),sclass));
             return it;
         }
        /**

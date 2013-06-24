@@ -47,7 +47,6 @@ import org.semanticwb.social.SocialSite;
 import org.semanticwb.social.Stream;
 import org.semanticwb.social.Video;
 import org.semanticwb.social.Videoable;
-import org.semanticwb.social.WordsToMonitor;
 import org.semanticwb.social.util.lucene.SpanishAnalizer;
 
 /**
@@ -347,13 +346,10 @@ public class SWBSocialUtil implements SWBAppObject {
             return aux;
         }
     }
-
+    /*
     public static class words2Monitor {
 
-        /*
-         * Regresa arrglo de string de todas las palabras (separadas x punto y coma(;))
-         * en el campo de palabras de la "Empresa" en todos los objetos de tipo WordsToMonitor
-         */
+        
         public static String[] getCompanyWords(SWBModel model) {
             String words = null;
             String[] awords = null;
@@ -375,10 +371,7 @@ public class SWBSocialUtil implements SWBAppObject {
             return awords;
         }
 
-        /*
-         * Regresa arrglo de string de todas las palabras (separadas x punto y coma(;))
-         * en el campo de palabras de la "Competencia" en todos los objetos de tipo WordsToMonitor
-         */
+        
         public static String[] getCompetitionWords(SWBModel model) {
             String words = null;
             String[] awords = null;
@@ -400,10 +393,7 @@ public class SWBSocialUtil implements SWBAppObject {
             return awords;
         }
 
-        /*
-         * Regresa arrglo de string de todas las palabras (separadas x punto y coma(;))
-         * en el campo de palabras de "Productos y Servicios" en todos los objetos de tipo WordsToMonitor
-         */
+       
         public static String[] getProductAndServicesWords(SWBModel model) {
             String words = null;
             String[] awords = null;
@@ -425,10 +415,7 @@ public class SWBSocialUtil implements SWBAppObject {
             return awords;
         }
 
-        /*
-         * Regresa arrglo de string de todas las palabras (separadas x punto y coma(;))
-         * en el campo de palabras de "Otras Palabras" en todos los objetos de tipo WordsToMonitor
-         */
+       
         public static String[] getOtherWords(SWBModel model) {
             String words = null;
             String[] awords = null;
@@ -450,11 +437,7 @@ public class SWBSocialUtil implements SWBAppObject {
             return awords;
         }
 
-        /*
-         * Metod que regresa cuales con la palabras o frases para monitorear en un determinado modelo
-         * Este metodo es muy posible que NO nos sea util al final ya que pensamos utilizar diversos streams
-         * los cuales pueden tener multiples frases, y todo esto en un mismo sitio o marca
-         */
+        
         public static String getWords2Monitor(String delimiter, SWBModel model) {
             //Palabras acerca de la compañia
             String words2monitor = "";
@@ -508,6 +491,7 @@ public class SWBSocialUtil implements SWBAppObject {
             return words2monitor;
         }
     }
+    * */
 
     /*
      * Metodo que normaliza una palabra, esto de acuerdo a definición realizada internamente en el área

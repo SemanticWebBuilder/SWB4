@@ -130,7 +130,7 @@ public class Flicker extends org.semanticwb.social.base.FlickerBase
 
         SearchParameters searchParams=new SearchParameters();
         searchParams.setSort(SearchParameters.INTERESTINGNESS_DESC);
-
+        /*
         Iterator<WordsToMonitor> words = WordsToMonitor.ClassMgr.listWordsToMonitors(wsite);
         if(words.hasNext()) {
             StringBuilder tagLst = new StringBuilder();
@@ -145,7 +145,7 @@ public class Flicker extends org.semanticwb.social.base.FlickerBase
             searchParams.setTags(tagLst.toString().split(";"));
             searchParams.setText(tagLst.toString());
         }
-
+        * */
 
         PhotosInterface photosInterface=flickr.getPhotosInterface();
         PhotoList photoList=null;

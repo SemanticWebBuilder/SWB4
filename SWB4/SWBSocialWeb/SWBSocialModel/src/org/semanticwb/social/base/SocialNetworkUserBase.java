@@ -14,11 +14,6 @@ public abstract class SocialNetworkUserBase extends org.semanticwb.model.SWBClas
    * Número de usuarios a los que yo sigo (así se maneja en twitter), en facebook aqui pondría a mis amigos y la de followers (que son los que me siguen) según yo no la utilizaría (en facebook)
    */
     public static final org.semanticwb.platform.SemanticProperty social_friends=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#friends");
-    public static final org.semanticwb.platform.SemanticClass swb_Class=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Class");
-   /**
-   * Red social a la cual pertenece este usuario (usuario de red social)
-   */
-    public static final org.semanticwb.platform.SemanticProperty social_snu_SocialNetwork=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#snu_SocialNetwork");
    /**
    * Id del usuario en una determinada red social, es decir, en twitter, facebook, google+, youtube, flicker, etc.
    */
@@ -32,13 +27,18 @@ public abstract class SocialNetworkUserBase extends org.semanticwb.model.SWBClas
    */
     public static final org.semanticwb.platform.SemanticClass social_PostIn=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#PostIn");
    /**
-   * Propiedad inversa que regresa los PostIn pertenecientes a un usuario de una red social.
+   * Propiedad inversa que regresa los PostIn pertenecientes a un usuario de una red social. Si se borrar un SocialNetWorkUser, se borraran todos sus mensajes en la red social a la que pertenece.
    */
     public static final org.semanticwb.platform.SemanticProperty social_hasPostInInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#hasPostInInv");
    /**
    * Klout de un usuario en una determinada red social
    */
     public static final org.semanticwb.platform.SemanticProperty social_snu_klout=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#snu_klout");
+    public static final org.semanticwb.platform.SemanticClass swb_Class=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Class");
+   /**
+   * Red social a la cual pertenece este usuario (usuario de red social). Tiene relación con swb:Class y no con SocialNetwork porque lo que agrego aquí es una clase, ya sea Twitter, Facebook, Flicker, etc. No asoció solo una instancia de la clase Twitter o Facebook, etc, porque un usuario de una red social (Twitter, Facebook, etc) es para todas las cuentas de las mismas, no solo para una, es por ello que como menciono, se graba la clase de la red social, no una instancia (objeto).
+   */
+    public static final org.semanticwb.platform.SemanticProperty social_snu_SocialNetworkObj=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#snu_SocialNetworkObj");
    /**
    * Clase en la cual se almacenan los usuarios que escriben los PostIn que llegan. No se puso como identificador de las instancias de esta clase el id que maneja el usuario en la red social, ya que un identificador de una red social, puede ser el mismo para otra red social, pero obviamnete para otro usuario.Es por ello que se puso como AutoGenID esta clase y por ello se maneja por separado el id de un usuario en una determinada red social, esto en la propiedad snu_id.
    */
@@ -312,27 +312,6 @@ public abstract class SocialNetworkUserBase extends org.semanticwb.model.SWBClas
         getSemanticObject().setDateProperty(swb_created, value);
     }
 
-    public void setSnu_SocialNetwork(org.semanticwb.platform.SemanticObject value)
-    {
-        getSemanticObject().setObjectProperty(social_snu_SocialNetwork, value);
-    }
-
-    public void removeSnu_SocialNetwork()
-    {
-        getSemanticObject().removeProperty(social_snu_SocialNetwork);
-    }
-
-/**
-* Gets the Snu_SocialNetwork property
-* @return the value for the property as org.semanticwb.platform.SemanticObject
-*/
-    public org.semanticwb.platform.SemanticObject getSnu_SocialNetwork()
-    {
-         org.semanticwb.platform.SemanticObject ret=null;
-         ret=getSemanticObject().getObjectProperty(social_snu_SocialNetwork);
-         return ret;
-    }
-
 /**
 * Gets the Snu_id property
 * @return String with the Snu_id
@@ -462,5 +441,26 @@ public abstract class SocialNetworkUserBase extends org.semanticwb.model.SWBClas
     public void setSnu_klout(int value)
     {
         getSemanticObject().setIntProperty(social_snu_klout, value);
+    }
+
+    public void setSnu_SocialNetworkObj(org.semanticwb.platform.SemanticObject value)
+    {
+        getSemanticObject().setObjectProperty(social_snu_SocialNetworkObj, value);
+    }
+
+    public void removeSnu_SocialNetworkObj()
+    {
+        getSemanticObject().removeProperty(social_snu_SocialNetworkObj);
+    }
+
+/**
+* Gets the Snu_SocialNetworkObj property
+* @return the value for the property as org.semanticwb.platform.SemanticObject
+*/
+    public org.semanticwb.platform.SemanticObject getSnu_SocialNetworkObj()
+    {
+         org.semanticwb.platform.SemanticObject ret=null;
+         ret=getSemanticObject().getObjectProperty(social_snu_SocialNetworkObj);
+         return ret;
     }
 }

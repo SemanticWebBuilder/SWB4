@@ -22,26 +22,20 @@ import org.semanticwb.SWBException;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.SWBContext;
-import org.semanticwb.model.SWBModel;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.social.listener.Classifier;
-import org.semanticwb.social.listener.twitter.SWBSocialStatusListener;
 import org.semanticwb.social.util.SWBSocialUtil;
-import twitter4j.FilterQuery;
 import twitter4j.Query;
 import twitter4j.Status;
-import twitter4j.StatusListener;
 import twitter4j.StatusUpdate;
 //import twitter4j.Tweet;
 import twitter4j.TwitterException;
 import twitter4j.TwitterFactory;
 import twitter4j.TwitterStream;
-import twitter4j.TwitterStreamFactory;
 import twitter4j.auth.AccessToken;
 import twitter4j.auth.RequestToken;
-import twitter4j.conf.Configuration;
 import twitter4j.conf.ConfigurationBuilder;
 
 
@@ -399,69 +393,70 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
 
 
     //@Override
-    public void listenAlive(SWBModel model) {
-        try {
-            StatusListener listener = new SWBSocialStatusListener(model, this, null);
-            /*create filterQuery*/
-            FilterQuery query = new FilterQuery();
-            //NOTE: format of values: {minLongitude, minLatitude}, {...}
-            //double[][] loc = {{-118, 37}, {-86, 33}}; //Bounding Box de San Francisco
-            //double[][] loc = {{37.78452999999, -122.39532395324}, {37.78452999998, -122.39532395323}}; //Bounding Box de San Francisco
-            //double[][] loc = {{32.718620, -86.703392}, {14.532850, -118.867172}}; //Bounding Box de México (País) Encontrado en http://isithackday.com/geoplanet-explorer/index.php?woeid=23424900
-            //query.locations(loc);
-
-            //Palabras a monitorear
-            String words2Monitor=SWBSocialUtil.words2Monitor.getWords2Monitor(",", model);
-            //System.out.println("words2MonitorGeorge:"+words2Monitor+", en cta:"+this);
-            if(words2Monitor!=null && words2Monitor.trim().length()>0)
-            {
-                String[] tr = {words2Monitor};
-                query.track(tr);
-            }
-
-
-            //System.out.println(query.toString());
-
-            //Autenticación con Oath, comentado, para despues utilizarlo
-        /*
-            TwitterStream twitterStream = new
-            TwitterStreamFactory(listener).getInstance();
-            twitterStream.setOAuthConsumer(CONSUMER_KEY, CONSUMER_SECRET);
-            twitterStream.setOAuthAccessToken(new AccessToken(TOKEN,
-            TOKEN_SECRET));
-            FilterQuery filterQuery = new FilterQuery();
-            filterQuery.track(new String[] {"is a"});
-            twitterStream.filter(filterQuery);
-             *
-             */
-
-            ConfigurationBuilder cb = new ConfigurationBuilder();
-            cb.setDebugEnabled(true);
-            //simple http form based authentication, you can use oAuth if you have one, check Twitter4j documentation
-            //cb.setUser(this.getLogin());
-            //cb.setPassword(this.getPassword());
-            cb.setUser("George24Mx");
-            cb.setPassword("george24");
-            // creating the twitter listener
-
-
-            Configuration cfg = cb.build();
-            trial = new TwitterStreamFactory(cfg).getInstance();
-
-            trial.addListener(listener);
-
-
-            trial.filter(query);
-
-            //System.out.println(" here is stuff : " + trial.getFilterStream(query));
-
-
-            //trial.sample();
-        } catch (Exception e) {
-            //System.out.println(e.getMessage());
-            log.error(e);
-        }
-    }
+//    
+//    public void listenAlive(SWBModel model) {
+//        try {
+//            StatusListener listener = new SWBSocialStatusListener(model, this, null);
+//            /*create filterQuery*/
+//            FilterQuery query = new FilterQuery();
+//            //NOTE: format of values: {minLongitude, minLatitude}, {...}
+//            //double[][] loc = {{-118, 37}, {-86, 33}}; //Bounding Box de San Francisco
+//            //double[][] loc = {{37.78452999999, -122.39532395324}, {37.78452999998, -122.39532395323}}; //Bounding Box de San Francisco
+//            //double[][] loc = {{32.718620, -86.703392}, {14.532850, -118.867172}}; //Bounding Box de México (País) Encontrado en http://isithackday.com/geoplanet-explorer/index.php?woeid=23424900
+//            //query.locations(loc);
+//
+//            //Palabras a monitorear
+//            String words2Monitor=SWBSocialUtil.words2Monitor.getWords2Monitor(",", model);
+//            //System.out.println("words2MonitorGeorge:"+words2Monitor+", en cta:"+this);
+//            if(words2Monitor!=null && words2Monitor.trim().length()>0)
+//            {
+//                String[] tr = {words2Monitor};
+//                query.track(tr);
+//            }
+//
+//
+//            //System.out.println(query.toString());
+//
+//            //Autenticación con Oath, comentado, para despues utilizarlo
+//        /*
+//            TwitterStream twitterStream = new
+//            TwitterStreamFactory(listener).getInstance();
+//            twitterStream.setOAuthConsumer(CONSUMER_KEY, CONSUMER_SECRET);
+//            twitterStream.setOAuthAccessToken(new AccessToken(TOKEN,
+//            TOKEN_SECRET));
+//            FilterQuery filterQuery = new FilterQuery();
+//            filterQuery.track(new String[] {"is a"});
+//            twitterStream.filter(filterQuery);
+//             *
+//             */
+//
+//            ConfigurationBuilder cb = new ConfigurationBuilder();
+//            cb.setDebugEnabled(true);
+//            //simple http form based authentication, you can use oAuth if you have one, check Twitter4j documentation
+//            //cb.setUser(this.getLogin());
+//            //cb.setPassword(this.getPassword());
+//            cb.setUser("George24Mx");
+//            cb.setPassword("george24");
+//            // creating the twitter listener
+//
+//
+//            Configuration cfg = cb.build();
+//            trial = new TwitterStreamFactory(cfg).getInstance();
+//
+//            trial.addListener(listener);
+//
+//
+//            trial.filter(query);
+//
+//            //System.out.println(" here is stuff : " + trial.getFilterStream(query));
+//
+//
+//            //trial.sample();
+//        } catch (Exception e) {
+//            //System.out.println(e.getMessage());
+//            log.error(e);
+//        }
+//    }
 
     //@Override
     public void stopListenAlive() {
