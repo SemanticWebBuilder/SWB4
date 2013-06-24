@@ -3030,6 +3030,7 @@
                 }
             }
             
+            //Crear objetos de conexión
             for (i = 0; i < connObjects.length; i++) {
                 var tmp = connObjects[i];
                 var obj = Modeler.mapObject(tmp.class);
@@ -3039,27 +3040,12 @@
                 var end = Modeler.getGraphElementByURI(null, tmp.end);
                 
                 if (start !== null && end !== null) {
-//                    if (obj.elementType === "ConditionalFlow" && start.typeOf("Gateway")) {
-//                        obj.removeAttribute("marker-start");
-//                    }
+                    if (obj.elementType === "ConditionalFlow" && start.typeOf("Gateway")) {
+                        obj.removeAttribute("marker-start");
+                        obj.soff = 0;
+                    }
                     start.addOutConnection(obj);
                     end.addInConnection(obj);
-                }
-            }
-            
-            //Asignar contenedores de los flowNodes
-            for (i = 0; i < flowNodes.length; i++) {
-                var tmp = flowNodes[i];
-                var obj = Modeler.getGraphElementByURI(null, tmp.uri);
-                if (tmp.container && tmp.container !== null) {
-                    var cont = Modeler.getGraphElementByURI(null, tmp.container);
-                    if (cont !== null && obj !== null) {
-                        if (cont.typeOf("SubProcess")) {
-                            obj.layer = cont.subLayer;
-                        } else {
-                            obj.layer = null;
-                        }
-                    }
                 }
             }
             
@@ -3079,7 +3065,7 @@
                     }
                 }
             }
-
+            
             //Asignar contenedores de los flowNodes
             for (i = 0; i < flowNodes.length; i++) {
                 var tmp = flowNodes[i];
