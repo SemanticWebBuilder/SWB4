@@ -52,7 +52,7 @@
         };
         
         _this.getDefaultFlow = function() {
-            return null;
+            return "SequenceFlow";
         };
         
         _this.getFirstGraphParent = function() {
@@ -1300,6 +1300,10 @@
         
         _this.setElementType("ExclusiveGateway");
         
+        _this.getDefaultFlow = function() {
+            return "ConditionalFlow";
+        }
+        
         _this.canStartLink = function(link) {
             var ret = fCanStart(link);
             var msg = null;
@@ -1417,6 +1421,10 @@
         var fCanStart = _this.canStartLink;
         
         _this.setElementType("InclusiveGateway");
+        
+        _this.getDefaultFlow = function() {
+            return "ConditionalFlow";
+        }
         
         _this.canStartLink = function(link) {
             var ret = fCanStart(link);
@@ -1585,6 +1593,10 @@
         
         _this.setElementType("DataObject");
         
+        _this.getDefaultFlow = function() {
+            return "DirectionalAssociation";
+        }
+        
         _this.setText = function(text) {
             fSetText(text,0,1,80,1);
         };
@@ -1691,6 +1703,10 @@
         
         _this.setElementType("AnnotationArtifact");
         
+        _this.getDefaultFlow = function() {
+            return "AssociationFlow";
+        }
+        
         _this.setText = function(text) {
             fSetText(text,0,0,0,1);
         };
@@ -1729,6 +1745,10 @@
         
         _this.setElementType("Pool");
         
+        _this.getDefaultFlow = function() {
+            return "MessageFlow";
+        }
+        
         _this.setText = function(text) {
             fSetText(text,0,0,_this.getHeight(),1);
             fUpdateText = _this.text.update;
@@ -1751,6 +1771,9 @@
                     //console.log("cwidth: "+_this.text.getBBox().width+", cheight: "+_this.text.getBBox().height);
                     var x = (_this.getX() - _this.getWidth()/2) + _this.text.getBoundingClientRect().width/2;
                     var y = _this.getY();
+                    if (_this.text.childElementCount === 1) {
+                        x += 5;
+                    }
                     _this.text.setAttributeNS(null, "x", x);
                     _this.text.setAttributeNS(null, "y", y);
                     _this.text.setAttributeNS(null, "transform", "rotate(-90 "+x+","+y+")");
@@ -1823,6 +1846,9 @@
                     //console.log("cwidth: "+_this.text.getBBox().width+", cheight: "+_this.text.getBBox().height);
                     var x = (_this.getX() - _this.getWidth()/2) + _this.text.getBoundingClientRect().width/2;
                     var y = _this.getY();
+                    if (_this.text.childElementCount === 1) {
+                        x += 5;
+                    }
                     _this.text.setAttributeNS(null, "x", x);
                     _this.text.setAttributeNS(null, "y", y);
                     _this.text.setAttributeNS(null, "transform", "rotate(-90 "+x+","+y+")");
@@ -2259,9 +2285,13 @@
             
             if(evt.button==2)
             {
-                Modeler.dragConnection=Modeler.mapObject("SequenceFlow");
+                Modeler.dragConnection=Modeler.mapObject(obj.getDefaultFlow());
                 if (obj.canStartLink(Modeler.dragConnection)) {
                     obj.addOutConnection(Modeler.dragConnection);
+                    if (Modeler.dragConnection.elementType==="ConditionalFlow" && obj.elementType==="ExclusiveGateway" || obj.elementType==="InclusiveGateway") {
+                        Modeler.dragConnection.removeAttribute("marker-start");
+                        Modeler.dragConnection.soff = 0;
+                    }
                     //Modeler.dragConnection.setEndPoint(obj.getX(),obj.getY());
                 } else {
                     Modeler.dragConnection.remove();
