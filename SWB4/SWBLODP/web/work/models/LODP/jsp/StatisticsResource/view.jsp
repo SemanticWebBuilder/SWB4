@@ -115,7 +115,7 @@
                 <td class="est-datatot"><%=dsbyint.getNumDS()%></td>
             </tr>
         <%  }%>
-        <tfoot><tr><td colspan="2">Total de datasets: <%=count%>
+        <tfoot><tr><td colspan="2"><%=paramRequest.getLocaleString("lbl_TotalDS")%> <%=count%>
          <%
          }
         if(statistic.trim().equals("2")){
@@ -129,7 +129,7 @@
                 <td class="est-apptot"><%=aplbyds.getNumApp()%></td>
             </tr>
         <% }%>
-            <tfoot><tr><td colspan="3">Total de aplicaciones: <%=count%>
+            <tfoot><tr><td colspan="3"><%=paramRequest.getLocaleString("lbl_TotalApp")%> <%=count%>
          <%
          }
         if(statistic.trim().equals("3")){
@@ -147,7 +147,7 @@
                 <td class="est-datadwnlst"><span><%=StatisticsResource.formatFecha(dataset.getLastView())%></span></td>
             </tr>
         <%  }%>
-             <tfoot><tr><td colspan="7">Total de datasets: <%=count%>
+             <tfoot><tr><td colspan="7"><%=paramRequest.getLocaleString("lbl_TotalDS")%> <%=count%>
          <%}
          if(statistic.trim().equals("4")){
             Set<UseAppBean> list = StatisticsResource.getAppUse(wsite,column,asc);            
@@ -164,7 +164,7 @@
                 <td class="est-appdwnlst"><span><%=StatisticsResource.formatFecha(appl.getLastView())%></span></td>
             </tr>            
          <%  }%>
-            <tfoot><tr><td colspan="7">Total de datasets: <%=count%></span>
+            <tfoot><tr><td colspan="7"><%=paramRequest.getLocaleString("lbl_TotalApp")%> <%=count%></span>
          <%}
          if(statistic.trim().equals("5")){
             if(asc==null){asc="true";}
@@ -181,7 +181,7 @@
                 <td class="est-datacomen"><%=userssat.getNumComments()%></td>                
             </tr>           
          <%  }%>
-            <tfoot><tr><td colspan="4">Total de datasets: <%=count%></span>
+            <tfoot><tr><td colspan="4"><%=paramRequest.getLocaleString("lbl_TotalDS")%> <%=count%></span>
          <%}%>
        
         <%
@@ -193,6 +193,9 @@
          urlCSV.setMode(StatisticsResource.MODE_FILE);         
         %>
         
-         <a class="ico-csv" href="<%=urlCSV.toString()%>">Descargar CSV</a></td></tr></tfoot>
+         <a class="ico-csv" href="<%=urlCSV.toString()%>">
+             <%=paramRequest.getLocaleString("lbl_DowmloadCSV")%>
+         </a>
+         </td></tr></tfoot>
             </table> 
 <%}%>
