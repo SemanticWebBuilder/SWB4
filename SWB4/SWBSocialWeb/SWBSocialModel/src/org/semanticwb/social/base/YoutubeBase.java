@@ -4,7 +4,7 @@ package org.semanticwb.social.base;
    /**
    * Clase que almacenara las diferentes cuentas de una organización para la red social YouTube. 
    */
-public abstract class YoutubeBase extends org.semanticwb.social.SocialNetwork implements org.semanticwb.model.Trashable,org.semanticwb.model.Activeable,org.semanticwb.social.Secreteable,org.semanticwb.social.SocialNetPostable,org.semanticwb.model.Descriptiveable,org.semanticwb.social.Oauthable,org.semanticwb.social.Listenerable,org.semanticwb.social.DeveloperKeyable,org.semanticwb.social.Videoable,org.semanticwb.model.Traceable,org.semanticwb.model.Tagable
+public abstract class YoutubeBase extends org.semanticwb.social.SocialNetwork implements org.semanticwb.social.Oauthable,org.semanticwb.social.Secreteable,org.semanticwb.social.Videoable,org.semanticwb.social.DeveloperKeyable,org.semanticwb.model.Traceable,org.semanticwb.model.Trashable,org.semanticwb.model.Tagable,org.semanticwb.social.SocialNetPostable,org.semanticwb.social.Listenerable,org.semanticwb.model.Activeable,org.semanticwb.model.Descriptiveable
 {
    /**
    * Clase que almacenara las diferentes cuentas de una organización para la red social YouTube.
@@ -300,6 +300,24 @@ public abstract class YoutubeBase extends org.semanticwb.social.SocialNetwork im
     public void setTokenExpirationDate(java.util.Date value)
     {
         getSemanticObject().setDateProperty(social_tokenExpirationDate, value);
+    }
+
+/**
+* Gets the RefreshToken property
+* @return String with the RefreshToken
+*/
+    public String getRefreshToken()
+    {
+        return getSemanticObject().getProperty(social_refreshToken);
+    }
+
+/**
+* Sets the RefreshToken property
+* @param value long with the RefreshToken
+*/
+    public void setRefreshToken(String value)
+    {
+        getSemanticObject().setProperty(social_refreshToken, value);
     }
 
 /**
