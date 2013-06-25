@@ -10,9 +10,11 @@
 <%
 SWBParamRequest paramRequest = (SWBParamRequest)request.getAttribute("paramRequest");
 SWBResourceURL commandUrl = paramRequest.getRenderUrl().setCallMethod(SWBResourceURL.Call_DIRECT);
+String suri = request.getParameter("suri");
+
 commandUrl.setMode(SVGModeler.MODE_GATEWAY);
 commandUrl.setAction(SVGModeler.ACT_GETPROCESSJSON);
-commandUrl.setParameter("suri", request.getParameter("suri"));
+commandUrl.setParameter("suri", suri);
 
 SWBResourceURL exportUrl = paramRequest.getRenderUrl().setCallMethod(SWBResourceURL.Call_DIRECT);
 exportUrl.setMode(SVGModeler.MODE_EXPORT);
@@ -86,7 +88,12 @@ exportUrl.setMode(SVGModeler.MODE_EXPORT);
             <span class="subbarStart"></span>
             <span class="newProcess" title="Nuevo modelo" onclick="if (confirm('Se perderán todos los cambios no guardados. ¿Desea continuar?')){Modeler.clearCanvas();}"></span>
             <span class="openProcess" title="Abrir modelo existente" onclick="showLoadDialog();"></span>
-            <span class="storeProcess" title="Enviar modelo" onclick="storeProcess();"></span>
+            <%if (suri != null) {
+                %>
+                <span class="storeProcess" title="Enviar modelo" onclick="storeProcess();"></span>
+                <%
+            }
+            %>
             <span class="saveProcess" title="Guardar modelo" onclick="submit_download_form('swp')"></span>
             <span class="saveAsImage" title="Guardar como imagen" onclick="submit_download_form('svg')"></span>
             <!--span class="saveAsImage" title="Guardar como imagen" onclick="submit_download_form('png')"></span-->
@@ -881,12 +888,12 @@ exportUrl.setMode(SVGModeler.MODE_EXPORT);
 </div>
 <form id="svgform" accept-charset="utf-8"method="post" action="<%=exportUrl%>">
     <input type="hidden" id="output_format" name="output_format" value="">
-    <input type="hidden" name="suri" value="<%=request.getParameter("suri")%>">
+    <input type="hidden" name="suri" value="<%=suri%>">
     <input type="hidden" id="data" name="data" value="">
 </form>
 <%
     SWBResourceURL uploadUrl = paramRequest.getRenderUrl().setCallMethod(SWBResourceURL.Call_DIRECT);
-    uploadUrl.setMode(SVGModeler.MODE_GATEWAY).setAction(SVGModeler.ACT_LOADFILE).setParameter("suri", request.getParameter("suri"));
+    uploadUrl.setMode(SVGModeler.MODE_GATEWAY).setAction(SVGModeler.ACT_LOADFILE).setParameter("suri", suri);
 %>
 <div class="overlay" id="overlayBackground">
     <div class="loadDialog">
@@ -976,81 +983,91 @@ exportUrl.setMode(SVGModeler.MODE_EXPORT);
         </form>
     </div>
 </div>
-<!--div class="overlay" id="overlayBackground">
-    <div class="propsDialog">
-        <p class="titleBar">Propiedades</p>
-        <div class="loadDialogContent">
-            <form id="propsForm" action="#">
-                <input type="text" name="title"/>
-                <textarea name="description">
-                
-                </textarea>
-            </form>
-        </div>
-    </div>
-</div-->
-<script type="text/javascript">
-    <%
-    commandUrl = paramRequest.getRenderUrl().setCallMethod(SWBResourceURL.Call_DIRECT);
-    commandUrl.setMode(SVGModeler.MODE_GATEWAY);
-    commandUrl.setAction(SVGModeler.ACT_GETPROCESSJSON);
-    commandUrl.setParameter("suri", request.getParameter("suri"));
-    %>
-    function loadProcess() {
-        Modeler.submitCommand('<%=commandUrl%>', null, callbackLoad);
-    };
-    
-    function callbackLoad(response) {
-        Modeler.loadProcess(response);
-        if(parent.reloadTreeNodeByURI)
-        {
-            parent.reloadTreeNodeByURI('<%=request.getParameter("suri")%>');
-        }
-        hideLoadDialog();
-    };
+    <!--div class="overlay" id="overlayBackground">
+        <div class="propsDialog">
+            <p class="titleBar">Propiedades</p>
+            <div class="loadDialogContent">
+                <form id="propsForm" action="#">
+                    <input type="text" name="title"/>
+                    <textarea name="description">
 
-    /*
-       Utility function: populates the <FORM> with the SVG data
-       and the requested output format, and submits the form.
-    */
-    function submit_download_form(output_format) {
-        var form = document.getElementById("svgform");
-        if (output_format === "svg" || output_format === "png") {
-            // Get the SVG element
-            var svg = document.getElementsByTagName("svg")[0];
-            // Extract the data as SVG text string
-            var svg_xml = (new XMLSerializer).serializeToString(svg);
-            form['data'].value = svg_xml ;
-        }
-        // Submit the <FORM> to the server.
-        // The result will be an attachment file to download.
-        form['output_format'].value = output_format;
-        form.submit();
-    };
-    <%
+                    </textarea>
+                </form>
+            </div>
+        </div>
+    </div-->
+    <script type="text/javascript">
+        <%
         commandUrl = paramRequest.getRenderUrl().setCallMethod(SWBResourceURL.Call_DIRECT);
         commandUrl.setMode(SVGModeler.MODE_GATEWAY);
-        commandUrl.setAction(SVGModeler.ACT_STOREPROCESS);
-        commandUrl.setParameter("suri", request.getParameter("suri"));
-    %>
-    function storeProcess() {
-        var json = Modeler.getProcessJSON();
-        var jsonString = "JSONSTART"+JSON.stringify(json)+"JSONEND";
-        Modeler.submitCommand('<%=commandUrl%>',jsonString, loadProcess);
-    };
-    
-    function showLoadDialog() {
-        var ov = document.getElementById("overlayBackground");
-        ov.style.display="block";
-        //ov.style.width = window.outerWidth+"px";
-        //ov.style.height = window.outerHeight+"px";
-    }
-    
-    function hideLoadDialog() {
-        var ov = document.getElementById("overlayBackground");
-        ov.style.display="none";
-    }
-    
-    loadProcess();
-</script>
+        commandUrl.setAction(SVGModeler.ACT_GETPROCESSJSON);
+        commandUrl.setParameter("suri", suri);
+        %>
+
+        function callbackLoad(response) {
+            Modeler.loadProcess(response);
+            if(parent.reloadTreeNodeByURI)
+            {
+                parent.reloadTreeNodeByURI('<%=suri%>');
+            }
+            hideLoadDialog();
+        };
+
+        /*
+           Utility function: populates the <FORM> with the SVG data
+           and the requested output format, and submits the form.
+        */
+        function submit_download_form(output_format) {
+            var form = document.getElementById("svgform");
+            if (output_format === "svg" || output_format === "png") {
+                // Get the SVG element
+                var svg = document.getElementsByTagName("svg")[0];
+                // Extract the data as SVG text string
+                var svg_xml = (new XMLSerializer).serializeToString(svg);
+                form['data'].value = svg_xml ;
+            } else if (output_format === "swp") {
+                form['data'].value = JSON.stringify(Modeler.getProcessJSON());
+            }
+            // Submit the <FORM> to the server.
+            // The result will be an attachment file to download.
+            form['output_format'].value = output_format;
+            form.submit();
+        };
+        <%
+            commandUrl = paramRequest.getRenderUrl().setCallMethod(SWBResourceURL.Call_DIRECT);
+            commandUrl.setMode(SVGModeler.MODE_GATEWAY);
+            commandUrl.setAction(SVGModeler.ACT_STOREPROCESS);
+            commandUrl.setParameter("suri", suri);
+        %>
+
+        function showLoadDialog() {
+            var ov = document.getElementById("overlayBackground");
+            ov.style.display="block";
+            //ov.style.width = window.outerWidth+"px";
+            //ov.style.height = window.outerHeight+"px";
+        }
+
+        function hideLoadDialog() {
+            var ov = document.getElementById("overlayBackground");
+            ov.style.display="none";
+        }
+
+        <%
+        if (suri != null) {
+            %>      
+            function loadProcess() {
+                Modeler.submitCommand('<%=commandUrl%>', null, callbackLoad);
+            };
+
+            function storeProcess() {
+                var json = Modeler.getProcessJSON();
+                var jsonString = "JSONSTART"+JSON.stringify(json)+"JSONEND";
+                Modeler.submitCommand('<%=commandUrl%>',jsonString, loadProcess);
+            };
+
+            loadProcess();
+            <%
+        }
+        %>
+    </script>
 </body>
