@@ -82,7 +82,7 @@
             }
         }            
     }else{%>
-        Información no disponible
+        <%=paramRequest.getLocaleString("lbl_DataNotAvailable")%>
     <%
     }
     %>

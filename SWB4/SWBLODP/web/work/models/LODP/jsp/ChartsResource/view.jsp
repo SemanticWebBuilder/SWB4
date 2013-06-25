@@ -47,7 +47,8 @@
     Dataset datasetObj = null;
     String idDSSelected = "";
     List<ChartData> datos= new ArrayList();
-    String titleGraph = "";    
+    String titleGraph = ""; 
+    String paramIdDataset="";
     if(dataset!=null){
         datasetObj = Dataset.ClassMgr.getDataset(dataset, wsite);   
         idDSSelected = datasetObj.getId();
@@ -67,7 +68,8 @@
         if(rango==ChartsResource.RANGO_YEARS){
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy");
             titleGraph += " "+sdf.format(dStart).toUpperCase()+" "+paramRequest.getLocaleString("lbl_to")+" "+sdf.format(dFinal).toUpperCase();
-        }        
+        }
+        paramIdDataset="&dataset="+datasetObj.getId();
     }    
 %>
 <meta charset="utf-8">
@@ -243,7 +245,7 @@ svg {
                 { x : <%=cd.getStartDate().getMonth()%>, y : <%=cd.getCount()%>, size: Math.random() }
                 <%       }else{%>
                          
-                { x : <%=cd.getTitle()%>, y : <%=cd.getCount()%>, size: Math.random() }         <%
+                { x : <%=cd.getTitle()%>, y : <%=cd.getCount()%>, size: 2 }         <%
                          }                       
                          iD++;
                          if(iD<datos.size()){ %>,<%}%>
@@ -307,8 +309,7 @@ svg {
     }
 </script>
     
-<script>
-   
+<script>   
     function setConstrain() {
         dijit.byId('startDate').constraints.max = new Date();
         dijit.byId('finishDate').constraints.max = new Date();
@@ -318,7 +319,7 @@ svg {
     <div id="graficador">
         <div id="categoria">            
             <%if(!DataType.equals("views")){%>
-                <a href="<%=urlTypeData+"views"%>">            
+                <a href="<%=urlTypeData+"views"+paramIdDataset%>">            
                 <%=paramRequest.getLocaleString("lbl_Views")%>            
                 </a>
             <%}%>
@@ -326,7 +327,7 @@ svg {
                 <span><%=paramRequest.getLocaleString("lbl_Views")%></span>
             <%}%>   
             <%if(!DataType.equals("hits")){%>   
-               <a href="<%=urlTypeData+"hits"%>" />
+               <a href="<%=urlTypeData+"hits"+paramIdDataset%>" />
                <%=paramRequest.getLocaleString("lbl_Downloads")%>
                </a>
             <%}%>
@@ -334,7 +335,7 @@ svg {
                 <span><%=paramRequest.getLocaleString("lbl_Downloads")%></span>            
             <%}%>
             <%if(!DataType.equals("comments")){%> 
-                <a href="<%=urlTypeData+"comments"%>" />
+                <a href="<%=urlTypeData+"comments"+paramIdDataset%>" />
                 <%=paramRequest.getLocaleString("lbl_Comments")%>
                 </a>
             <%}%>            
@@ -342,7 +343,7 @@ svg {
                 <span><%=paramRequest.getLocaleString("lbl_Comments")%></span>
             <%}%>            
             <%if(!DataType.equals("appl")){%> 
-                <a href="<%=urlTypeData+"appl"%>" />
+                <a href="<%=urlTypeData+"appl"+paramIdDataset%>" />
                 <%=paramRequest.getLocaleString("lbl_Applications")%>
                 </a>
             <%}%>            
