@@ -637,7 +637,7 @@
                             }
                     %>
             <li><a class="ico-<%=icontype%>" href="<%=wpurl+ ds.getShortURI()%>"><%=ds.getDatasetTitle()%></a><br/>
-                <p><em><%=sdf.format(ds.getDatasetUpdated())%> - <%=ds.getInstitution().getInstitutionTitle()%></em></p>
+                <p><em><%=null!=ds.getDatasetUpdated()?sdf.format(ds.getDatasetUpdated()):"--"%> - <%=null!=ds.getInstitution()?ds.getInstitution().getInstitutionTitle():"---"%></em></p>
                 <p><%=ds.getDatasetDescription()%></p>
                 
             </li>
