@@ -49,6 +49,8 @@
     List<ChartData> datos= new ArrayList();
     String titleGraph = ""; 
     String paramIdDataset="";
+    String paramSDate = "";
+    String paramFDate = "";
     if(dataset!=null){
         datasetObj = Dataset.ClassMgr.getDataset(dataset, wsite);   
         idDSSelected = datasetObj.getId();
@@ -70,6 +72,8 @@
             titleGraph += " "+sdf.format(dStart).toUpperCase()+" "+paramRequest.getLocaleString("lbl_to")+" "+sdf.format(dFinal).toUpperCase();
         }
         paramIdDataset="&dataset="+datasetObj.getId();
+        paramSDate = "&startDate="+fechaInicial;
+        paramFDate = "&finishDate="+fechaFinal;
     }    
 %>
 <meta charset="utf-8">
@@ -144,9 +148,11 @@ svg {
                     .y(function(d) { return d.value })
                     .staggerLabels(true)
                     //.staggerLabels(historicalBarChart[0].values.length > 8)
-                    .tooltips(false)
+                    .tooltips(true)
                     .valueFormat(d3.format('d'))
-                    .showValues(true)
+                    .showValues(true);
+                chart.yAxis
+                        .tickFormat(d3.format('d'));
                 d3.select('#grafica svg')
                     .datum(dataBarChart)
                   .transition().duration(500)
@@ -207,8 +213,8 @@ svg {
                 });
           }
           
-          chart.yAxis;
-              //.tickFormat(d3.format(''));
+          chart.yAxis
+              .tickFormat(d3.format('d'));
 
           d3.select('#grafica svg')              
               .datum(dataLineChart)
@@ -262,8 +268,10 @@ svg {
                         .showDistY(true)                        
                         .useVoronoi(true)
                         .color(d3.scale.category10().range());
-          chart.xAxis;
-          chart.yAxis;
+          chart.xAxis
+                  .tickFormat(d3.format('d'));;
+          chart.yAxis
+                  .tickFormat(d3.format('d'));
           d3.select('#grafica svg')
               .datum(dataScatterChart)
             .transition().duration(500)
@@ -319,7 +327,7 @@ svg {
     <div id="graficador">
         <div id="categoria">            
             <%if(!DataType.equals("views")){%>
-                <a href="<%=urlTypeData+"views"+paramIdDataset%>">            
+                <a href="<%=urlTypeData+"views"+paramIdDataset+paramSDate+paramFDate%>">            
                 <%=paramRequest.getLocaleString("lbl_Views")%>            
                 </a>
             <%}%>
@@ -327,7 +335,7 @@ svg {
                 <span><%=paramRequest.getLocaleString("lbl_Views")%></span>
             <%}%>   
             <%if(!DataType.equals("hits")){%>   
-               <a href="<%=urlTypeData+"hits"+paramIdDataset%>" />
+               <a href="<%=urlTypeData+"hits"+paramIdDataset+paramSDate+paramFDate%>" />
                <%=paramRequest.getLocaleString("lbl_Downloads")%>
                </a>
             <%}%>
@@ -335,7 +343,7 @@ svg {
                 <span><%=paramRequest.getLocaleString("lbl_Downloads")%></span>            
             <%}%>
             <%if(!DataType.equals("comments")){%> 
-                <a href="<%=urlTypeData+"comments"+paramIdDataset%>" />
+                <a href="<%=urlTypeData+"comments"+paramIdDataset+paramSDate+paramFDate%>" />
                 <%=paramRequest.getLocaleString("lbl_Comments")%>
                 </a>
             <%}%>            
@@ -343,7 +351,7 @@ svg {
                 <span><%=paramRequest.getLocaleString("lbl_Comments")%></span>
             <%}%>            
             <%if(!DataType.equals("appl")){%> 
-                <a href="<%=urlTypeData+"appl"+paramIdDataset%>" />
+                <a href="<%=urlTypeData+"appl"+paramIdDataset+paramSDate+paramFDate%>" />
                 <%=paramRequest.getLocaleString("lbl_Applications")%>
                 </a>
             <%}%>            
