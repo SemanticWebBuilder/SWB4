@@ -841,7 +841,7 @@
 
                 %>
                 
-        <a href="<%=statsurl%>" title="<%=paramRequest.getLocaleString("lbl_statsDS")%>" class="ver-estad"><span><%=paramRequest.getLocaleString("lbl_statsDS")%></span></a> 
+        <a href="<%=statsurl%>?dataset=<%=ds.getId()%>" title="<%=paramRequest.getLocaleString("lbl_statsDS")%>" class="ver-estad"><span><%=paramRequest.getLocaleString("lbl_statsDS")%></span></a> 
         <a href="<%=url.toString()%>&mformat=<%=DataSetResource.META_FORMAT_JSON%>" title="<%=paramRequest.getLocaleString("lbl_exportDSmeta")%> JSON" class="ver-exp-json"><span><%=paramRequest.getLocaleString("lbl_exportDSmeta")%> JSON</span></a> 
         <a href="<%=url.toString()%>&mformat=<%=DataSetResource.META_FORMAT_RDF%>" title="<%=paramRequest.getLocaleString("lbl_exportDSmeta")%> RDF" class="ver-exp-rdf"><span><%=paramRequest.getLocaleString("lbl_exportDSmeta")%> RDF</span></a>     
             
