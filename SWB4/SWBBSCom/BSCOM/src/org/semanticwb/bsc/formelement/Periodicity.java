@@ -15,72 +15,95 @@ import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticProperty;
 
 
-public class Periodicity extends org.semanticwb.bsc.formelement.base.PeriodicityBase 
-{
+/**
+ * Utiliza una máscara de captura en forma de calendario, a fin de almacenar fechas.
+ * La fecha seleccionada se valida para que dos períodos no se traslapen. 
+ * @author jose.jimenez
+ */
+public class Periodicity extends org.semanticwb.bsc.formelement.base.PeriodicityBase {
+    
+    
+    /**
+     * Realiza operaciones de escritura a la bitacora.
+     */
     private static Logger log = SWBUtils.getLogger(Periodicity.class);
+    
+    /**
+     * Establecel el formato en que se utilizaran las fechas
+     */
     private static final String formatPattern = "yyyy-MM-dd";
+    
+    /**
+     * Aplica el formato establecido por {@code formatPattern} 
+     */
     private static SimpleDateFormat format = new SimpleDateFormat(formatPattern);
     
-    public Periodicity(org.semanticwb.platform.SemanticObject base)
-    {
+    /**
+     * Crea una instancia de esta clase
+     * @param base 
+     */
+    public Periodicity(org.semanticwb.platform.SemanticObject base) {
+        
         super(base);
-        System.out.println("\n\nPeriodicity...........");
     }
     
+    /**
+     * Genera el codigo HTML para representar el elemento de forma para la captura de la fecha correspondiente
+     * @param request la peticion HTTP enviada por el cliente
+     * @param obj el objeto semantico al que pertenece la propiedad asociada a este FormElement
+     * @param prop la propiedad asociada a este FormElement
+     * @param propName el nombre de la propiedad asociada a este FormElement
+     * @param type el tipo de despliegue a generar
+     * @param mode el modo en que debe presentarse el tipo de despliegue
+     * @param lang el lenguaje a utilizar para la interface
+     * @return un {@code String} que representa el codigo HTML para el elemento de forma correspondiente
+     */
     @Override
-    public String renderElement(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String propName, String type, String mode, String lang)
-    {
+    public String renderElement(HttpServletRequest request, SemanticObject obj,
+            SemanticProperty prop, String propName, String type, String mode, String lang) {
+
         if (obj == null) {
             obj = new SemanticObject();
         }
 
-        // boolean IPHONE=false;
-        // boolean XHTML=false;
-        boolean DOJO = false;
+        boolean dojo = false;
 
-        // if(type.equals("iphone"))IPHONE=true;
-        // else if(type.equals("xhtml"))XHTML=true;
         if (type.equals("dojo")) {
-            DOJO = true;
+            dojo = true;
         }
 
-        StringBuilder   ret      = new StringBuilder();
-        String         name     = propName;
-        String         label    = prop.getDisplayName(lang);
-        SemanticObject sobj     = prop.getDisplayProperty();
-        boolean        required = prop.isRequired();
-        String         pmsg     = null;
-        String         imsg     = null;
-        boolean        disabled = false;
+        StringBuilder ret = new StringBuilder(128);
+        String name = propName;
+        String label = prop.getDisplayName(lang);
+        SemanticObject sobj = prop.getDisplayProperty();
+        boolean required = prop.isRequired();
+        String pmsg = null;
+        String imsg = null;
+        boolean disabled = false;
 
         if (sobj != null) {
             DisplayProperty dobj = new DisplayProperty(sobj);
-
-            pmsg     = dobj.getPromptMessage();
-            imsg     = dobj.getInvalidMessage();
+            pmsg = dobj.getPromptMessage();
+            imsg = dobj.getInvalidMessage();
             disabled = dobj.isDisabled();
         }
 
-        if (DOJO) {
+        if (dojo) {
             if (imsg == null) {
                 if (required) {
                     imsg = label + " es requerido.";
-
                     if (lang.equals("en")) {
                         imsg = label + " is required.";
                     }
                 } else {
-                    imsg = "Formato invalido.";
-
+                    imsg = "Formato no válido o la fecha ya forma parte de otro periodo.";
                     if (lang.equals("en")) {
-                        imsg = "Invalid Format.";
+                        imsg = "Invalid Format or this date is already part of another period.";
                     }
                 }
             }
-
             if (pmsg == null) {
                 pmsg = "Captura " + label + ".";
-
                 if (lang.equals("en")) {
                     pmsg = "Enter " + label + ".";
                 }
@@ -88,7 +111,6 @@ public class Periodicity extends org.semanticwb.bsc.formelement.base.Periodicity
         }
 
         String ext = "";
-
         if (disabled) {
             ext += " disabled=\"disabled\"";
         }
@@ -96,44 +118,49 @@ public class Periodicity extends org.semanticwb.bsc.formelement.base.Periodicity
         String value = request.getParameter(propName);
         if (value == null) {
             Date dt = obj.getDateProperty(prop);
-
             if (dt != null) {
                 value = format.format(dt);
             }
         }
-
         if (value == null) {
             value = "";
         }
-        
-if(type.equals("dojo")) {
-    setAttribute("isValid",
-                 "return validateElement('" + propName + "','" + getValidateURL(obj, prop)
-                 + "',this.textbox.value);");
-}else {
-    setAttribute("isValid", null);
-}
 
+        if (type.equals("dojo")) {
+            setAttribute("isValid",
+                    "return validateElement('" + propName + "','" + getValidateURL(obj, prop)
+                    + "',this.textbox.value);");
+        } else {
+            setAttribute("isValid", null);
+        }
+        
         if (mode.equals("edit") || mode.equals("create")) {
             ret.append("<input name=\"" + name + "\" value=\"" + value + "\"");
 
-            if (DOJO) {
+            if (dojo) {
                 ret.append(" dojoType=\"dijit.form.DateTextBox\"");
                 ret.append(" required=\"" + required + "\"");
                 ret.append(" promptMessage=\"" + pmsg + "\"");
                 ret.append(" invalidMessage=\"" + imsg + "\"");
-
                 if (getConstraints() != null) {
                     ret.append(" constraints=\"" + getConstraints() + "\"");
                 }
-                
-                if(getDateId()!=null) ret.append(" id=\"" + getDateId() + "\"");
-                if(getDateOnChange()!=null) ret.append(" onchange=\"" + getDateOnChange() + "\"");
+                if (getDateId() != null) {
+                    ret.append(" id=\"" + getDateId() + obj.getId() + "\"");
+                }
+                if (getDateOnChange() != null) {
+                    String attributeValue = getDateOnChange();
+                    ret.append(" onchange=\"");
+                    ret.append((attributeValue.indexOf("{replaceId}") != -1 
+                                ? attributeValue.replace("{replaceId}", obj.getId())
+                                : attributeValue));
+                    ret.append("\"");
+                }
             }
 
             ret.append(" " + getAttributes());
 
-            if (DOJO) {
+            if (dojo) {
                 ret.append(" trim=\"true\"");
             }
 
@@ -142,88 +169,97 @@ if(type.equals("dojo")) {
         } else if (mode.equals("view")) {
             ret.append("<span name=\"" + name + "\">" + value + "</span>");
         }
-//System.out.println("\n\n"+ret);
         return ret.toString();
     }
     
-    @Override
-    public void validate(javax.servlet.http.HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String propName) throws FormValidateException
-    {
-System.out.print("validate_...");
-System.out.println(", obj="+obj+", id="+obj.getId());
+    /**
+     * Realiza validaciones al dato capturado por el usuario
+     * @param request la petición HTTP enviada por el cliente
+     * @param obj el objeto semantico al que pertenece la propiedad relacionada a este FormElement
+     * @param prop la propiedad relacionada a este FormElement
+     * @param propName el nombre de la propiedad relacionada a este FormElement
+     * @throws FormValidateException generada cuando el valor proporcionado por el usuario no es valido
+     */
+    @Override 
+    public void validate(HttpServletRequest request, SemanticObject obj, 
+            SemanticProperty prop, String propName) throws FormValidateException {
+        
         String value = request.getParameter(propName);
-//System.out.println("value="+value);
         Date date = null;
+        
         try {
             date = format.parse(value);
-        }catch(ParseException pe) {
+        } catch (ParseException pe) {
             try {
-                SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
-                date = format.parse(value);
-            }catch(ParseException p) {
+                SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+                date = dateFormat.parse(value);
+            } catch (ParseException p) {
                 throw new FormValidateException("El valor es incorrecto");
             }
         }
 
-//        System.out.print(" obj="+obj);
-//        System.out.print(" prop="+prop);
-//        System.out.println(", propName="+propName);
-//        System.out.println(", semanticClass()="+obj.getSemanticClass());
-//        System.out.println(", model="+(SWBModel)obj.getModel().getModelObject().createGenericInstance());
-        SWBModel model = (SWBModel)obj.getModel().getModelObject().createGenericInstance();
+        SWBModel model = (SWBModel) obj.getModel().getModelObject().createGenericInstance();
         Iterator<Period> iperiods = Period.ClassMgr.listPeriods(model);
-        while(iperiods.hasNext()) {
+        while (iperiods.hasNext()) {
             Period p = iperiods.next();
-//System.out.println("p="+p);
-            if( obj.equals(p) ) {
+            if (obj.equals(p) || p.getStart() == null || p.getEnd() == null) {
                 continue;
             }
-            if(p.getStart().before(date) && p.getEnd().after(date)) {
-                throw new FormValidateException("fecha invalida");
+            
+            Date fromDate = null;
+            Date toDate = null;
+            try {
+                fromDate = format.parse(p.getStart().toString());
+                toDate = format.parse(p.getEnd().toString());
+            } catch (ParseException pe) {
+                fromDate = p.getStart();
+                toDate = p.getEnd();
+            }
+            if ((fromDate.before(date) || fromDate.equals(date)) &&
+                    (toDate.after(date) || toDate.equals(date))) {
+                throw new FormValidateException("Esta fecha ya forma parte de otro periodo");
             }
         }
-//System.out.println("al parece todo salio bien");
     }
     
+    /**
+     * Realiza el almacenamiento del dato capturado por el usuario, en la propiedad y objeto indicados 
+     * @param request la peticion HTTP enviada por el cliente
+     * @param obj el objeto semantico al que pertenece la propiedad relacionada a este FormElement
+     * @param prop la propiedad relacionada a este FormElement
+     * @param propName el nombre de la propiedad asociada a este FormElement
+     */
     @Override
-    public void process(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String propName)
-    {
-//System.out.println("\n\nprocess........................");
-//        try
-//        {
-            //validate(request, obj, prop, propName);
-            String value = request.getParameter(propName);
-            Date fvalue = null;
-            try
-            {
-                fvalue = format.parse(value);                    
+    public void process(HttpServletRequest request, SemanticObject obj,
+            SemanticProperty prop, String propName) {
+        
+        String value = request.getParameter(propName);
+        Date fvalue = null;
+        try {
+            fvalue = format.parse(value);
+            obj.setDateProperty(prop, fvalue);
+        } catch (Exception e) {
+            try {
+                SimpleDateFormat otherFormat = new SimpleDateFormat("dd/MM/yyyy");
+                fvalue = otherFormat.parse(value);
                 obj.setDateProperty(prop, fvalue);
+            } catch (Exception p) {
             }
-            catch(Exception e)
-            {
-                try {
-                    SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
-                    fvalue = format.parse(value);                    
-                    obj.setDateProperty(prop, fvalue);
-                }catch(Exception p) {
-                }
-            }
-//        }
-//        catch(Exception e)
-//        {
-//            String value = request.getParameter(propName);
-//            value = "";
-//System.out.println("value "+value+" deberia ser blanco");
-//        }
+        }
     }
     
+    /**
+     * Obtiene el valor de la propiedad {@code constraints}
+     * @return el valor almacenado en la propiedad {@code constraints}
+     */
     @Override
     public String getConstraints() {
+        
         String ret = super.getConstraints();
 
         if (ret != null) {
-            ret = SWBUtils.TEXT.replaceAll(ret, "{today}", SWBUtils.TEXT.getStrDate(new Date(), "es", "yyyy-mm-dd"));    // 2006-12-31
-        }
-        return ret;
+            ret = SWBUtils.TEXT.replaceAll(ret, "{today}", 
+                    SWBUtils.TEXT.getStrDate(new Date(), "es", "yyyy-mm-dd"));    // 2006-12-31
+        }        return ret;
     }
 }
