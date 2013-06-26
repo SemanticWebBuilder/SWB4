@@ -50,7 +50,6 @@ public class AudioFile extends org.semanticwb.portal.resources.sem.base.AudioFil
     
     public File getFile() {
         File file = null;
-        //(SWBModel)getSemanticObject().getModel().getModelObject().createGenericInstance()
         file = new File(SWBPortal.getWorkPath()+this.getWorkPath()+"/"+this.getFilename());
         return file;
     }
