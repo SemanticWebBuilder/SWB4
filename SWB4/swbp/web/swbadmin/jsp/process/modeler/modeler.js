@@ -333,8 +333,8 @@
         _this.canEndLink=function(link) {
             var ret = fCanEnd(link);
             
-            if (link.elementType=="MessageFlow") {
-                if (_this.inConnections.length==0) {
+            if (link.elementType==="MessageFlow") {
+                if (_this.inConnections.length===0) {
                     ToolKit.hideToolTip();
                     ret = true;
                 } else {
@@ -626,7 +626,7 @@
             }
             _this.setBaseClass();
         };
-        
+
          _this.setBaseClass = function() {
             _this.setAttributeNS(null,"class",_this.cssClass);
         };
@@ -1869,6 +1869,7 @@
         var fCanStart = _this.canStartLink;
         var fCanEnd = _this.canEndLink;
         var fSetText = _this.setText;
+        var fMoveFirst = _this.moveFirst;
         
         _this.setElementType("Activity");
         
@@ -1878,10 +1879,19 @@
         
         _this.canStartLink = function(link) {
             var ret = fCanStart(link);
-            if (link.elementType=="DefaultFlow") {
+            if (link.elementType==="DefaultFlow") {
                 ret = false;
             }
             return ret;
+        };
+        
+        _this.moveFirst = function() {
+            fMoveFirst();
+            for(var i = 0; i< _this.contents.length; i++) {
+                if (_this.contents[i].moveFirst) {
+                    _this.contents[i].moveFirst();
+                }
+            }
         };
         
         _this.canEndLink = function(link) {
@@ -2089,12 +2099,8 @@
 
             if(obj)
             {
-                //alert(obj.offsetTop);
                 ele.style.top=obj.offsetTop+"px";
                 ele.style.left=(obj.offsetLeft+47)+"px";
-                //ele.offsetLeft=obj.offsetLeft;
-                //alert(ele.offsetTop);
-                //desc(obj,true);
             }
         },
 
@@ -2158,9 +2164,10 @@
                 }
             };
             
+            //Habría que mover esto a otro lado?
             var dlg = document.getElementById("dropArea");
             
-            if (dlg != null) {
+            if (dlg !== null) {
                 dlg.addEventListener("dragover" , function(evt) {
                     evt.preventDefault();
                     dlg.setAttributeNS(null, "class", "dropAreaOver");
@@ -2228,9 +2235,6 @@
                         }
                     }
                 }
-//                obj.setX(ToolKit.getEventX(evt));
-//                obj.setY(ToolKit.getEventY(evt));
-                //desc(evt,true);
                 Modeler.creationId=null;
                 Modeler.creationDropObject=null;
                 return false;
@@ -2240,7 +2244,6 @@
                 
         onmousemove:function(evt)
         {
-            //console.log(evt);
             if(Modeler.dragConnection!=null)
             {
                 if(Modeler.dragConnection.toObject!=null)
@@ -2277,13 +2280,13 @@
                 
         objectMouseDown:function(evt,obj)
         {
-            if(Modeler.creationId!=null)
+            if(Modeler.creationId!==null)
             {
                 Modeler.creationDropObject=obj;
                 return false;
             }
             
-            if(evt.button==2)
+            if(evt.button===2)
             {
                 Modeler.dragConnection=Modeler.mapObject(obj.getDefaultFlow());
                 if (obj.canStartLink(Modeler.dragConnection)) {
@@ -2333,14 +2336,6 @@
             var obj=ToolKit.createUseObject(type,id,parent);
             obj.mousedown=function(evt){return Modeler.objectMouseDown(evt,obj);}
             obj.onmousemove=function(evt){return Modeler.objectMouseMove(evt,obj);}
-            
-//            var fRemove = obj.remove;
-//            obj.remove = function(all) {
-//                obj.text.remove();
-//                Modeler.fadeoutObject(obj);
-//                setTimeout(fRemove, 300);
-//            };
-            
             return obj;
         },
                 
@@ -2352,6 +2347,7 @@
                 obj.subLine.setAttributeNS(null,"class",cls);
             }
             obj.pressed = false;
+            obj.hidden = false;
             obj.setArrowType= function(type) {
                 obj.setAttributeNS(null, "marker-end", "url(#"+type+")");
             }
@@ -2410,6 +2406,15 @@
             obj.subLine.onmousedown = obj.onmousedown;
             obj.subLine.onmousemove = obj.onmousemove;
             obj.subLine.onmouseup = obj.onmouseup;
+            obj.subLine.hide = function() {
+                obj.subLine.style.display="none";
+                obj.subLine.hidden=true;
+            }
+            obj.subLine.show=function()
+            {
+                obj.subLine.style.display="";
+                obj.subLine.hidden=false;
+            }
             
             obj.updateInterPoints=function()
             {
@@ -2436,7 +2441,7 @@
                     p0.y=obj.ys;
                     
                     
-                    if(obj.pathSegList.numberOfItems==4 && obj.fixed==false)
+                    if(obj.pathSegList.numberOfItems===4 && obj.fixed===false)
                     {
                         var p1=obj.pathSegList.getItem(1);
                         var p2=obj.pathSegList.getItem(2);
@@ -2470,7 +2475,20 @@
                 }
                 obj.updateSubLine();
             };
+            
+            var fHide = obj.hide;
+            var fShow = obj.show;
             var fRemove = obj.remove;
+            
+            obj.hide = function() {
+                fHide();
+                obj.subLine.hide();
+            };
+            
+            obj.show = function() {
+                fShow();
+                obj.subLine.show();
+            };
             
             obj.remove=function() {
                 obj.subLine.remove();
@@ -2481,9 +2499,9 @@
                 obj.subLine.pathSegList.clear();
                 for (var i=0; i<obj.pathSegList.numberOfItems; i++) {
                     var segment = obj.pathSegList.getItem(i);
-                    if (segment.pathSegType==SVGPathSeg.PATHSEG_LINETO_ABS) {
+                    if (segment.pathSegType===SVGPathSeg.PATHSEG_LINETO_ABS) {
                         obj.subLine.pathSegList.appendItem(obj.subLine.createSVGPathSegLinetoAbs(segment.x, segment.y));
-                    } else if (segment.pathSegType==SVGPathSeg.PATHSEG_MOVETO_ABS) {
+                    } else if (segment.pathSegType===SVGPathSeg.PATHSEG_MOVETO_ABS) {
                        obj.subLine.pathSegList.appendItem(obj.subLine.createSVGPathSegMovetoAbs(segment.x, segment.y));
                     }
                 }
@@ -2505,17 +2523,13 @@
             obj.canSelect = false;
             obj.resizeable = true;
             
-//            obj.onmousedown = function(evt) {
-//                obj.select(true);
-//                console.log("Hay que seleccionar");
-//                return true;
-//            }
-
-//            obj.mousedown= function(evt) {
-//                ToolKit.stopPropagation(evt);
-//                evt.preventDefault();
-//                return true;
-//            };
+            obj.onmousedown = function(evt) {
+                return false;
+            };
+            
+            obj.mousedown = function(evt) {
+                return false;
+            };
             return obj;
         },
         
@@ -2548,11 +2562,11 @@
                     return Modeler.objectMouseDown(evt,obj);
                 }
                 return false;
-            }
+            };
             
             obj.onmousemove=function(evt)
             {
-                if(Modeler.dragConnection!=null)  //Valida no conectar objetos hijos del pool
+                if(Modeler.dragConnection!==null)  //Valida no conectar objetos hijos del pool
                 {
                     if(Modeler.dragConnection.fromObject.isChild(obj))
                     {
@@ -2560,7 +2574,7 @@
                     }
                 }                                
                 return Modeler.objectMouseMove(evt,obj);
-            }
+            };
             
             var fMove = obj.move;
             var fResize = obj.resize;
@@ -2698,7 +2712,6 @@
             obj.subLine.setBaseClass();
             obj.mouseup=function(x,y)
             {
-                //alert("hola1");
                 return true;
             };
             obj.mousedown=function(evt){return Modeler.objectMouseDown(evt,obj);}
@@ -2929,14 +2942,14 @@
             
             ret.class = obj.elementType;
             ret.uri=obj.id;
-            if (obj.text && obj.text != null) {
+            if (obj.text && obj.text !== null) {
                 ret.title = obj.text.value;
             }
             if (obj.typeOf("GraphicalElement")) {
-                if (obj.getContainer() != null) {
+                if (obj.getContainer() !== null) {
                     ret.container = obj.getContainer().id;
                 }
-                if (obj.parent != null) {
+                if (obj.parent !== null) {
                     ret.parent = obj.parent.id;
                 }
                 ret.labelSize="12";//TODO:Extraer tamaño de la fuente
@@ -2956,7 +2969,7 @@
                 if (obj.typeOf("DataObject")) {
                     ret.isCollection=false;//TODO: agregar método para verificar colección
                 }
-                if (obj.elementType=="Lane") {
+                if (obj.elementType==="Lane") {
                     ret.index=obj.index;
                 }
             }
@@ -2970,149 +2983,160 @@
         },
 
         loadProcess: function(jsonString) {
-            var json = JSON.parse(jsonString);
-            var jsarr = json.nodes;
-            var i = 0;
-            var swimlanes = [];
-            var connObjects = [];
-            var flowNodes = [];
-            
-            Modeler.clearCanvas();
-            
-            while(i < jsarr.length) {
-                var tmp = jsarr[i];
-                var cls = tmp.class;
-                //console.log(cls);
-                if (cls == "Lane" || cls == "Pool") {
-                    swimlanes.push(tmp);
-                } else if (cls === "SequenceFlow" || cls === "ConditionalFlow" 
-                        || cls === "DefaultFlow" || cls === "AssociationFlow" 
-                        || cls === "DirectionalAssociation" || cls === "MessageFlow") {
-                    connObjects.push(tmp);
-                } else {
-                    flowNodes.push(tmp);
-                }
-                i++;
+            if (jsonString === null || jsonString ==="") {
+                ToolKit.showTooltip(0,"Ocurrió un problema al cargar el modelo. Archivo mal formado.", 200, "Error");
+                return;
             }
             
-            //Construir pools
-            for (i = 0; i < swimlanes.length; i++) {
-                var tmp = swimlanes[i];
-                if (tmp.class==="Pool") {
-                    var obj = Modeler.mapObject("Pool");
-                    obj.setURI(tmp.uri);
-                    
-                    if (tmp.title != null) {
-                        obj.setText(tmp.title);
+            ToolKit.showTooltip(0,"Cargando modelo...", 200, "Warning");
+            try {
+                var json = JSON.parse(jsonString);
+                var jsarr = json.nodes;
+                var i = 0;
+                var swimlanes = [];
+                var connObjects = [];
+                var flowNodes = [];
+
+                Modeler.clearCanvas();
+
+                while(i < jsarr.length) {
+                    var tmp = jsarr[i];
+                    var cls = tmp.class;
+                    //console.log(cls);
+                    if (cls === "Lane" || cls === "Pool") {
+                        swimlanes.push(tmp);
+                    } else if (cls === "SequenceFlow" || cls === "ConditionalFlow" 
+                            || cls === "DefaultFlow" || cls === "AssociationFlow" 
+                            || cls === "DirectionalAssociation" || cls === "MessageFlow") {
+                        connObjects.push(tmp);
+                    } else {
+                        flowNodes.push(tmp);
                     }
-                    obj.layer = null;
-                    obj.resize(tmp.w, tmp.h);
-                    obj.move(tmp.x, tmp.y);
-                    obj.snap2Grid();
+                    i++;
                 }
-            }
-            
-            //Construir lanes
-            for (i = 0; i < swimlanes.length; i++) {
-                var tmp = swimlanes[i];
-                if (tmp.class==="Lane") {
-                    var obj = Modeler.mapObject("Lane");
-                    obj.setURI(tmp.uri);
-                    if (tmp.title !== null) {
-                        obj.setText(tmp.title);
-                    }
-                    if (tmp.index !== null) {
-                        obj.setIndex(tmp.index);
-                    }
-                    obj.resize(tmp.w, tmp.h);
-                    var par = Modeler.getGraphElementByURI(null, tmp.parent);
-                    par.addLane(obj);
-                    obj.setParent(par);
-                    obj.layer = null;
-                    par.move(par.getX(), par.getY());
-                }
-            }
-            
-            //Construir flowNodes
-            for (i = 0; i < flowNodes.length; i++) {
-                var tmp = flowNodes[i];
-                var obj = Modeler.mapObject(tmp.class);
-                obj.setURI(tmp.uri);
-                
-                if (obj.typeOf("GraphicalElement")) {
-                    if (tmp.title !== null) {
-                        obj.setText(tmp.title);
-                    }
-                    if (obj.resizeable !== null && obj.resizeable) {
-                        obj.resize(tmp.w, tmp.h);
-                    }
-                    
-                    if (obj.typeOf("IntermediateCatchEvent") && tmp.isInterrupting !== null) {
-                        var par = Modeler.getGraphElementByURI(null, tmp.parent);
-                        if (par!==null && par.typeOf("Activity") && !tmp.isInterrupting) {
-                            obj.setInterruptor(false);
+
+                //Construir pools
+                for (i = 0; i < swimlanes.length; i++) {
+                    var tmp = swimlanes[i];
+                    if (tmp.class==="Pool") {
+                        var obj = Modeler.mapObject("Pool");
+                        obj.setURI(tmp.uri);
+
+                        if (tmp.title != null) {
+                            obj.setText(tmp.title);
                         }
-                    }
-                    obj.move(tmp.x, tmp.y);
-                    if (obj.typeOf("IntermediateCatchEvent") && tmp.parent === "") {
+                        obj.layer = null;
+                        obj.resize(tmp.w, tmp.h);
+                        obj.move(tmp.x, tmp.y);
                         obj.snap2Grid();
                     }
                 }
-            }
-            
-            //Crear objetos de conexión
-            for (i = 0; i < connObjects.length; i++) {
-                var tmp = connObjects[i];
-                var obj = Modeler.mapObject(tmp.class);
-                obj.setURI(tmp.uri);
-                
-                var start = Modeler.getGraphElementByURI(null, tmp.start);
-                var end = Modeler.getGraphElementByURI(null, tmp.end);
-                
-                if (start !== null && end !== null) {
-                    if (obj.elementType === "ConditionalFlow" && start.typeOf("Gateway")) {
-                        obj.removeAttribute("marker-start");
-                        obj.soff = 0;
+
+                //Construir lanes
+                for (i = 0; i < swimlanes.length; i++) {
+                    var tmp = swimlanes[i];
+                    if (tmp.class==="Lane") {
+                        var obj = Modeler.mapObject("Lane");
+                        obj.setURI(tmp.uri);
+                        if (tmp.title !== null) {
+                            obj.setText(tmp.title);
+                        }
+                        if (tmp.index !== null) {
+                            obj.setIndex(tmp.index);
+                        }
+                        obj.resize(tmp.w, tmp.h);
+                        var par = Modeler.getGraphElementByURI(null, tmp.parent);
+                        par.addLane(obj);
+                        obj.setParent(par);
+                        obj.layer = null;
+                        par.move(par.getX(), par.getY());
                     }
-                    start.addOutConnection(obj);
-                    end.addInConnection(obj);
                 }
-            }
-            
-            //Asignar padres de los flowNodes
-            for (i = 0; i < flowNodes.length; i++) {
-                var tmp = flowNodes[i];
-                var obj = Modeler.getGraphElementByURI(null, tmp.uri);
-                var cont = Modeler.getGraphElementByURI(null, tmp.container);
-                if (tmp.parent && tmp.parent !== null) {
-                    var par = Modeler.getGraphElementByURI(null, tmp.parent);
-                    if (par !== null && obj !== null) {
-                        if (cont !== null && (par.elementType === "Lane" || par.elementType === "Pool")) {
-                            obj.setParent(null);
-                        } else {
-                            obj.setParent(par);
+
+                //Construir flowNodes
+                for (i = 0; i < flowNodes.length; i++) {
+                    var tmp = flowNodes[i];
+                    var obj = Modeler.mapObject(tmp.class);
+                    obj.setURI(tmp.uri);
+
+                    if (obj.typeOf("GraphicalElement")) {
+                        if (tmp.title !== null) {
+                            obj.setText(tmp.title);
+                        }
+                        if (obj.resizeable !== null && obj.resizeable) {
+                            obj.resize(tmp.w, tmp.h);
+                        }
+
+                        if (obj.typeOf("IntermediateCatchEvent") && tmp.isInterrupting !== null) {
+                            var par = Modeler.getGraphElementByURI(null, tmp.parent);
+                            if (par!==null && par.typeOf("Activity") && !tmp.isInterrupting) {
+                                obj.setInterruptor(false);
+                            }
+                        }
+                        obj.move(tmp.x, tmp.y);
+                        if (obj.typeOf("IntermediateCatchEvent") && tmp.parent === "") {
+                            obj.snap2Grid();
                         }
                     }
                 }
-            }
-            
-            //Asignar contenedores de los flowNodes
-            for (i = 0; i < flowNodes.length; i++) {
-                var tmp = flowNodes[i];
-                var obj = Modeler.getGraphElementByURI(null, tmp.uri);
-                var par = Modeler.getGraphElementByURI(null, tmp.parent);
-                if (tmp.container && tmp.container !== null) {
+
+                //Crear objetos de conexión
+                for (i = 0; i < connObjects.length; i++) {
+                    var tmp = connObjects[i];
+                    var obj = Modeler.mapObject(tmp.class);
+                    obj.setURI(tmp.uri);
+
+                    var start = Modeler.getGraphElementByURI(null, tmp.start);
+                    var end = Modeler.getGraphElementByURI(null, tmp.end);
+
+                    if (start !== null && end !== null) {
+                        if (obj.elementType === "ConditionalFlow" && start.typeOf("Gateway")) {
+                            obj.removeAttribute("marker-start");
+                            obj.soff = 0;
+                        }
+                        start.addOutConnection(obj);
+                        end.addInConnection(obj);
+                    }
+                }
+
+                //Asignar padres de los flowNodes
+                for (i = 0; i < flowNodes.length; i++) {
+                    var tmp = flowNodes[i];
+                    var obj = Modeler.getGraphElementByURI(null, tmp.uri);
                     var cont = Modeler.getGraphElementByURI(null, tmp.container);
-                    if (cont !== null && obj !== null) {
-                        if (cont.typeOf("SubProcess")) {
-                            obj.layer = cont.subLayer;
-                        } else {
-                            obj.layer = null;
+                    if (tmp.parent && tmp.parent !== null) {
+                        var par = Modeler.getGraphElementByURI(null, tmp.parent);
+                        if (par !== null && obj !== null) {
+                            if (cont !== null && (par.elementType === "Lane" || par.elementType === "Pool")) {
+                                obj.setParent(null);
+                            } else {
+                                obj.setParent(par);
+                            }
+                            obj.moveFirst();
                         }
                     }
                 }
+
+                //Asignar contenedores de los flowNodes
+                for (i = 0; i < flowNodes.length; i++) {
+                    var tmp = flowNodes[i];
+                    var obj = Modeler.getGraphElementByURI(null, tmp.uri);
+                    var par = Modeler.getGraphElementByURI(null, tmp.parent);
+                    if (tmp.container && tmp.container !== null) {
+                        var cont = Modeler.getGraphElementByURI(null, tmp.container);
+                        if (cont !== null && obj !== null) {
+                            if (cont.typeOf("SubProcess")) {
+                                obj.layer = cont.subLayer;
+                            } else {
+                                obj.layer = null;
+                            }
+                        }
+                    }
+                }
+                ToolKit.setLayer(null);
+            } catch (err) {
+                ToolKit.showTooltip(0,"Ocurrió un problema al cargar el modelo. Archivo mal formado.", 200, "Error");
             }
-            ToolKit.setLayer(null);
         },
                 
         getNavPath: function(layer) {
