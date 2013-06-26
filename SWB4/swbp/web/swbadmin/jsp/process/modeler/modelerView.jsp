@@ -997,13 +997,6 @@ exportUrl.setMode(SVGModeler.MODE_EXPORT);
         </div>
     </div-->
     <script type="text/javascript">
-        <%
-        commandUrl = paramRequest.getRenderUrl().setCallMethod(SWBResourceURL.Call_DIRECT);
-        commandUrl.setMode(SVGModeler.MODE_GATEWAY);
-        commandUrl.setAction(SVGModeler.ACT_GETPROCESSJSON);
-        commandUrl.setParameter("suri", suri);
-        %>
-
         function callbackLoad(response) {
             Modeler.loadProcess(response);
             if(parent.reloadTreeNodeByURI)
@@ -1033,12 +1026,6 @@ exportUrl.setMode(SVGModeler.MODE_EXPORT);
             form['output_format'].value = output_format;
             form.submit();
         };
-        <%
-            commandUrl = paramRequest.getRenderUrl().setCallMethod(SWBResourceURL.Call_DIRECT);
-            commandUrl.setMode(SVGModeler.MODE_GATEWAY);
-            commandUrl.setAction(SVGModeler.ACT_STOREPROCESS);
-            commandUrl.setParameter("suri", suri);
-        %>
 
         function showLoadDialog() {
             var ov = document.getElementById("overlayBackground");
@@ -1054,11 +1041,21 @@ exportUrl.setMode(SVGModeler.MODE_EXPORT);
 
         <%
         if (suri != null) {
+            commandUrl = paramRequest.getRenderUrl().setCallMethod(SWBResourceURL.Call_DIRECT);
+            commandUrl.setMode(SVGModeler.MODE_GATEWAY);
+            commandUrl.setAction(SVGModeler.ACT_GETPROCESSJSON);
+            commandUrl.setParameter("suri", suri);
             %>      
             function loadProcess() {
                 Modeler.submitCommand('<%=commandUrl%>', null, callbackLoad);
             };
 
+            <%
+            commandUrl = paramRequest.getRenderUrl().setCallMethod(SWBResourceURL.Call_DIRECT);
+            commandUrl.setMode(SVGModeler.MODE_GATEWAY);
+            commandUrl.setAction(SVGModeler.ACT_STOREPROCESS);
+            commandUrl.setParameter("suri", suri);
+            %>
             function storeProcess() {
                 var json = Modeler.getProcessJSON();
                 var jsonString = "JSONSTART"+JSON.stringify(json)+"JSONEND";
@@ -1066,7 +1063,7 @@ exportUrl.setMode(SVGModeler.MODE_EXPORT);
             };
 
             loadProcess();
-            <%
+        <%
         }
         %>
     </script>
