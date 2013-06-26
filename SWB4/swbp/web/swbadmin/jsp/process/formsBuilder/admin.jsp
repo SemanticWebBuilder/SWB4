@@ -121,7 +121,7 @@ addPropsUrl.setParameter(ProcessForm.ATT_TASK, task.getEncodedURI());
 <div dojoType="dijit.layout.BorderContainer" id="mainContainer" style="width:100%; height:1300px;">
     <div dojoType="dijit.Toolbar" region="top">
         <form action="<%=toggle%>" method="post">
-            <button iconClass="propIcon" <%=disabled%> dojoType="dijit.form.Button" onclick="showDialog('<%=addPropsUrl%>','Editar'); return false;">Propiedad</button>
+            <button iconClass="propIcon" <%=disabled%> dojoType="dijit.form.Button" onclick="showDialog('<%=addPropsUrl%>','Agregad propiedad'); return false;">Propiedad</button>
             <span dojoType="dijit.ToolbarSeparator"></span>
             <button name="btns" <%=disabled%> iconClass="acceptIcon" onclick="window.location='<%=toggle%>?btns=accept'; return false;" <%=btnAccept?"checked":""%> dojoType="dijit.form.ToggleButton">Bot&oacute;n concluir</button>
             <button name="btns" <%=disabled%> iconClass="rejectIcon" onclick="window.location='<%=toggle%>?btns=reject'; return false;" <%=btnReject?"checked":""%> dojoType="dijit.form.ToggleButton">Bot&oacute;n rechazar</button>
