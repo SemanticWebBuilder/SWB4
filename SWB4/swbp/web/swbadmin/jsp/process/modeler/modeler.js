@@ -2121,6 +2121,7 @@
     {
         creationId:null,                                      //Objeto temporal para creacion de instancias
         itemsCount:0,
+        selectedPath:null,
         navPath:null,
                 
         init:function(svgid)
@@ -2141,6 +2142,20 @@
                     Modeler.navPath.setNavigation(layer);
                 }
             };
+            
+            //Add Key Events
+            if (window.addEventListener)
+            {
+                window.addEventListener('keydown', Modeler.keydown, true);
+            }
+            else if (window.attachEvent)
+            {
+                window.attachEvent("onkeydown", Modeler.keydown);
+            }
+            else
+            {
+                window.onkeydown= Modeler.keydown;  
+            }
             
             //Sobreescritura del método showResizeBoxes para considerar Pools con lanes y lanes
             var fShowBoxes = ToolKit.showResizeBoxes;
@@ -2195,9 +2210,25 @@
                 } , false);
             }
         },
+        
+        keydown:function(evt) {
+            if(evt.keyCode===8 && evt.which===8)
+            {
+                if (Modeler.selectedPath !== null) {
+                    Modeler.selectedPath.remove();
+                    Modeler.selectedPath = null;
+                }
+                ToolKit.stopPropagation(evt);
+            }
+        },
                 
         onmousedown:function(evt)
         {
+            if (Modeler.selectedPath !== null) {
+                Modeler.selectedPath.select(false);
+                Modeler.selectedPath = null;
+            }
+            
             if(Modeler.creationId!==null)
             {
                 var obj=Modeler.mapObject(Modeler.creationId);
@@ -2379,15 +2410,33 @@
             
             obj.onmousedown = function (evt) {
                 obj.pressed = true;
+                if (Modeler.selectedPath !== null) {
+                    Modeler.selectedPath.select(false);
+                }
+                obj.select(true);
+                Modeler.selectedPath = obj;
+                ToolKit.stopPropagation(evt);
                 return false;
             };
             
+            obj.select = function(selected) {
+                if (selected) {
+                    obj.setAttributeNS(null, "class", "sequenceFlowLine_o");
+                } else {
+                    obj.setAttributeNS(null, "class", "sequenceFlowLine");
+                }
+            };
+            
             obj.onmousemove = function (evt) {
+                if (Modeler.selectedPath !== null && Modeler.selectedPath === obj) {
+                    obj.select(false);
+                    Modeler.selectedPath = null;
+                }
                 if (obj.pressed) {
                     var idx = obj.toObject.inConnections.indexOf(obj);
                     obj.toObject.inConnections.splice(idx);
                     obj.toObject = null;
-                Modeler.dragConnection = obj;
+                    Modeler.dragConnection = obj;
                     obj.pressed = false;
                 }
                 return Modeler.onmousemove(evt);
@@ -3326,8 +3375,8 @@
             }
             if(type=='MessageFlow') {
                 ret = new _MessageFlow(Modeler.createConnectionPath("messageTail", null, "messageArrow", "5,5", "sequenceFlowLine"));
-                ret.eoff=5;
-                ret.soff=10;
+                ret.eoff=0;
+                ret.soff=0;
             }
             if(type=='ConditionalFlow') {
                 ret = new _ConditionalFlow(Modeler.createConnectionPath("conditionTail", null, "sequenceArrow", null, "sequenceFlowLine"));
