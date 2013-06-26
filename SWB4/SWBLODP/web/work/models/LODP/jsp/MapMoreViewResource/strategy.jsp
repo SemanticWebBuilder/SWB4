@@ -21,11 +21,12 @@
     Iterator<Dataset> sds=DataSetResource.sortByViews(itds,false).iterator();
     String dsid=base.getAttribute("datosid");
     WebPage dswp=wsite.getWebPage(dsid);
-    String serveraddr = request.getScheme() + "://" + request.getServerName() + ((request.getServerPort() != 80)? (":" + request.getServerPort()) : "");
+    String resid=base.getAttribute("recid", "3");
     while(sds.hasNext()){
         Dataset dataset=sds.next();
-//        if(dataset.getDatasetFormat().toLowerCase().equals("kml")){
-            String path=dataset.getActualVersion().getFilePath();                    
+        String path=DataSetResource.getDSWebFileURL(request, dataset.getActualVersion(),resid,wsite);
+        if(dataset.getDatasetFormat().toLowerCase().equals("kml")||
+                dataset.getDatasetFormat().toLowerCase().equals("kmz")){
 %>
 <script type="text/javascript" src="http://maps.google.com/maps/api/js?v=3&amp;sensor=false&amp;language=es&amp;region=MX"></script>
 <script type="text/javascript">
@@ -52,7 +53,7 @@
        if(path!=null&&!path.equals("")){
 %>
           var ctaLayer = new google.maps.KmlLayer({
-                url: '<%=serveraddr%><%=path%>',
+                url: '<%=path%>',
                 preserveViewport: true
         });
         ctaLayer.setMap(map);
@@ -72,6 +73,6 @@
 </script>
 <%
         break;
-//    }
+    }
 }
 %>

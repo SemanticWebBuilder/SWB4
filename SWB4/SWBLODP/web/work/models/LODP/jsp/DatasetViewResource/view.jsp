@@ -18,7 +18,7 @@
     WebSite wsite=paramRequest.getWebPage().getWebSite();
     Resource base=paramRequest.getResourceBase();
     String suri = request.getParameter("suri");
-    String resid=base.getAttribute("resid", "");
+    String resid=base.getAttribute("recid", "3");
 
     Dataset dataset=null;
     SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
@@ -31,7 +31,7 @@
     }
     String dsid=base.getAttribute("datosid");
     if(dataset!=null){
-        String path=DataSetResource.getDSWebFileURL(request, dataset.getActualVersion(),resid,wsite)+dataset.getActualVersion().getFilePath();
+        String path=DataSetResource.getDSWebFileURL(request, dataset.getActualVersion(),resid,wsite);
         if((dataset.getDatasetFormat().toLowerCase().equals("kml")||
             dataset.getDatasetFormat().toLowerCase().equals("kmz"))){
 %>
