@@ -23,8 +23,8 @@ public class SocialNetworkUser extends org.semanticwb.social.base.SocialNetworkU
         {
             SemanticObject obj=it.next();
             SocialNetworkUser socialNetUser=(SocialNetworkUser)obj.createGenericInstance();
-            //System.out.println("socialNetUser.getSnu_SocialNetwork().getId():"+socialNetUser.getSnu_SocialNetwork().getId());
-            //System.out.println("socialNetwork.getSemanticObject().getSemanticClass().getSemanticObject().getId():"+socialNetwork.getSemanticObject().getSemanticClass().getSemanticObject().getId());
+            System.out.println("GEOOOOORGGGEEE:socialNetUser.getSnu_SocialNetwork().getId():"+socialNetUser.getSnu_SocialNetworkObj().getId());
+            System.out.println("GEOOOOORGGGEEE:socialNetwork.getSemanticObject().getSemanticClass().getSemanticObject().getId():"+socialNetwork.getSemanticObject().getSemanticClass().getSemanticObject().getId());
             if(socialNetUser.getSnu_SocialNetworkObj()!=null && socialNetUser.getSnu_SocialNetworkObj().getId().equals(socialNetwork.getSemanticObject().getSemanticClass().getSemanticObject().getId()));
             {
                   return socialNetUser;

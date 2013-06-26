@@ -640,21 +640,25 @@ public class SentimentalDataClassifier {
                         socialNetUser=SocialNetworkUser.ClassMgr.createSocialNetworkUser(model);
                         socialNetUser.setSnu_id(externalPost.getCreatorId());
                         socialNetUser.setSnu_name(externalPost.getCreatorName());
-                        
-                        
+                        if(externalPost.getCreatorPhotoUrl()!=null)
+                        {
+                            socialNetUser.setSnu_photoUrl(externalPost.getCreatorPhotoUrl());
+                        }
                         socialNetUser.setSnu_SocialNetworkObj(socialNetwork.getSemanticObject().getSemanticClass().getSemanticObject());
                         socialNetUser.setCreated(externalPost.getUsercreation());
                         socialNetUser.setSnu_klout(userKloutScore);
                         socialNetUser.setFollowers(externalPost.getFollowers());
                         socialNetUser.setFriends(externalPost.getFriendsNumber());
-                        
-                        //System.out.println("SocialNetworkUser Creado:"+socialNetUser.getSnu_id());
                     }else if(upDateSocialUserNetworkData)
                     {
-                        //System.out.println("SocialNetworkUser Actualizado:"+socialNetUser.getSnu_id());
+                        socialNetUser.setSnu_SocialNetworkObj(socialNetwork.getSemanticObject().getSemanticClass().getSemanticObject());
                         socialNetUser.setFollowers(externalPost.getFollowers());
                         socialNetUser.setFriends(externalPost.getFriendsNumber());
                         socialNetUser.setSnu_klout(userKloutScore);
+                        if(externalPost.getCreatorPhotoUrl()!=null)
+                        {
+                            socialNetUser.setSnu_photoUrl(externalPost.getCreatorPhotoUrl());
+                        }
                         socialNetUser.setUpdated(new Date());
                     }
                     
