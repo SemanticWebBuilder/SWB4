@@ -31,12 +31,18 @@ import java.io.PrintWriter;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.text.DecimalFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Iterator;
-import java.util.Locale;
+import java.util.Map;
 import javax.servlet.http.*;
+import javax.sound.sampled.AudioFileFormat;
+import javax.sound.sampled.AudioFormat.Encoding;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.UnsupportedAudioFileException;
+import javazoom.spi.mpeg.sampled.file.MpegAudioFileReader;
+import javazoom.spi.mpeg.sampled.file.MpegAudioFormat;
 import org.semanticwb.Logger;
+import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Resource;
@@ -94,7 +100,8 @@ public class AudioPodCast extends org.semanticwb.portal.resources.sem.base.Audio
         
         SWBResourceURL directURL = paramRequest.getRenderUrl().setMode(Mode_PLAY).setCallMethod(SWBParamRequest.Call_DIRECT);
         
-        if(paramRequest.getCallMethod()==SWBParamRequest.Call_STRATEGY) {
+        if(paramRequest.getCallMethod()==SWBParamRequest.Call_STRATEGY)
+        {
             String surl = null;
             Iterator<Resourceable> res = base.listResourceables();
             while(res.hasNext()) {
@@ -108,35 +115,67 @@ public class AudioPodCast extends org.semanticwb.portal.resources.sem.base.Audio
             
             Iterator<AudioFile> resources = AudioFile.ClassMgr.listAudioFiles(base.getWebSite());
             resources = SWBComparator.sortByCreated(resources, false);
-            if(resources.hasNext()) {
+            if(resources.hasNext())
+            {
                 File f;
+                long duration;
                 out.println("<div class=\"swb-podcast\">");
                 out.println("<h2>"+(base.getDisplayTitle(lang)==null?base.getTitle():base.getDisplayTitle(lang))+"</h2>");
                 out.println("<h3>"+paramRequest.getLocaleString("latest") +"</h3>");
-                out.println("<ul class=\"swb-podcast-list\">");
-                for(int i=0; i<LATEST && resources.hasNext(); i++) {
+                out.println("<ul class=\"swb-pdcst-list\">");
+                for(int i=0; i<LATEST && resources.hasNext(); i++)
+                {
                     AudioFile audiofile = resources.next();
                     if(!audiofile.isValid() || !user.haveAccess(audiofile)) {
                         continue;
+                    }                    
+                    try {
+                        f = audiofile.getFile();
+                    }catch(Exception e) {
+                        continue;
                     }
-                    f = audiofile.getFile();
-                    if(f!=null && f.isFile()) {
-                        out.println("<li class=\"swb-podcast-item\">");
-                        out.println(" <div class=\"swb-pdcst-caja\">");
-                        out.println("  <h4>"+(audiofile.getDisplayTitle(lang)==null?audiofile.getTitle():audiofile.getDisplayTitle(lang))+"</h4>");
-                        out.println("  <div class=\"swb-pdcst-texto\"><p>"+(audiofile.getDisplayDescription(lang)==null?audiofile.getDescription():audiofile.getDisplayDescription(lang))+"</p></div>");
-                        out.println("  <div class=\"swb-pdcst-texto\">");
-                        out.print("    <p class=\"swb-pdcst-escuchar\">");
-                        out.print("     <a href=\""+contentURL+"?uri="+audiofile.getEncodedURI()+"\" title=\""+(audiofile.getDisplayTitle(lang)==null?audiofile.getTitle():audiofile.getDisplayTitle(lang))+"\">"+paramRequest.getLocaleString("listen")+"</a>");
+                    if(f!=null && f.isFile())
+                    {
                         try {
-                            out.print("  &nbsp;<span class=\"swb-pdcst-ftime\">"+paramRequest.getLocaleString("duration")+":&nbsp;"+hhmm.format(ttb.parse(audiofile.getDuration()))+"</span>");
-                        }catch(ParseException pe) {
+                            AudioInputStream ais = new MpegAudioFileReader().getAudioInputStream(f);
+                            AudioFileFormat baseFileFormat = new MpegAudioFileReader().getAudioFileFormat(f);
+                            Map properties = baseFileFormat.properties();
+                            duration = (Long)properties.get("duration");
+                        }catch(UnsupportedAudioFileException unsafe) {
+                            continue;
+                        }                        
+                        out.println("<li class=\"swb-pdcst-item\">");
+                        out.println(" <div class=\"swb-pdcst-box\">");
+                        try {
+                            out.println("  <div class=\"swb-pdcst-text\"><p class=\"swb-pdcst-title\">"+(audiofile.getDisplayTitle(lang)==null?audiofile.getTitle().substring(0,getScTitle()) : audiofile.getDisplayTitle(lang).substring(0,getScTitle()))+"</p></div>");
+                        }catch(IndexOutOfBoundsException obe) {
+                            out.println("  <div class=\"swb-pdcst-text\"><p class=\"swb-pdcst-title\">"+(audiofile.getDisplayTitle(lang)==null?audiofile.getTitle() :audiofile.getDisplayTitle(lang))+"</p></div>");
                         }
-                        out.print("  </p>");
-                        out.print("  <p class=\"swb-pdcst-descargar\">");
-                        out.print("   <a href=\""+directURL.setParameter("uri", audiofile.getURI())+"\" title=\""+(audiofile.getDisplayTitle(lang)==null?audiofile.getTitle():audiofile.getDisplayTitle(lang))+"\">"+paramRequest.getLocaleString("download")+"</a>&nbsp;[<span class=\"swb-pdcst-ffmt\">"+paramRequest.getLocaleString("format")+"&nbsp;"+audiofile.getExtension()+"]</span>");
-                        out.print("  &nbsp;<span class=\"swb-pdcst-fsize\">["+df.format(f.length()/1048576.0)+" Mb]</span>");
-                        out.println("  </p>");
+                        if(audiofile.getAuthor()!=null) {
+                            out.println("  <div class=\"swb-pdcst-text\"><p class=\"swb-pdcst-author\"><span class=\"swb-pdcst-by\">"+paramRequest.getLocaleString("by")+":</span> "+audiofile.getAuthor()+"</p></div>");
+                        }
+                        try {
+                            out.println("  <div class=\"swb-pdcst-text\"><p class=\"swb-pdcst-desc\">"+(audiofile.getDisplayDescription(lang)==null?audiofile.getDescription().substring(0,getScDescription()) : audiofile.getDisplayDescription(lang).substring(0,getScDescription()))+"</p></div>");
+                        }catch(IndexOutOfBoundsException obe) {
+                            out.println("  <div class=\"swb-pdcst-text\"><p class=\"swb-pdcst-desc\">"+(audiofile.getDisplayDescription(lang)==null?audiofile.getDescription():audiofile.getDisplayDescription(lang))+"</p></div>");
+                        }
+                        out.println("  <div class=\"swb-pdcst-text\">");
+                        out.print("     <p class=\"swb-pdcst-box\">");
+                        out.print("      <a href=\""+contentURL+"?suri="+audiofile.getEncodedURI()+"\" title=\""+(audiofile.getDisplayTitle(lang)==null?audiofile.getTitle():audiofile.getDisplayTitle(lang))+"\">"+paramRequest.getLocaleString("listen")+"</a>");
+                        if(duration>0)
+                        {
+                            out.print("  &nbsp;<span class=\"swb-pdcst-fduration\">"+paramRequest.getLocaleString("duration")+":&nbsp;");
+                            out.print(duration/1000000%60);
+                            out.print(":");
+                            out.print(duration/60000000);
+                            out.print("</span>");
+                        }
+                        out.print("     </p>");                        
+                        out.print("     <p class=\"swb-pdcst-box\">");
+                        out.print("      <a class=\"swb-pdcst-lnk\" href=\"#\" onclick=\"window.open('"+directURL+"?suri='+encodeURIComponent('"+audiofile.getURI()+"'))\" title=\""+(audiofile.getDisplayTitle(lang)==null?audiofile.getTitle():audiofile.getDisplayTitle(lang))+"\">"+paramRequest.getLocaleString("download")+"</a>&nbsp;");
+                        out.print("      <span class=\"swb-pdcst-ffmt\">"+paramRequest.getLocaleString("format")+"&nbsp;"+audiofile.getExtension()+"</span>&nbsp;");
+                        out.print("      <span class=\"swb-pdcst-fsize\">"+df.format(f.length()/1048576.0)+" Mb</span>");
+                        out.println("   </p>");
                         out.println("  </div>");
                         out.println(" </div>");
                         out.println("</li>");
@@ -158,15 +197,14 @@ public class AudioPodCast extends org.semanticwb.portal.resources.sem.base.Audio
                             out.println("  <div class=\"swb-pdcst-texto\"><p>"+(audiofile.getDisplayDescription(lang)==null?audiofile.getDescription():audiofile.getDisplayDescription(lang))+"</p></div>");
                             out.println("  <div class=\"swb-pdcst-texto\">");
                             out.print("    <p class=\"swb-pdcst-escuchar\">");
-                            out.print("      <a href=\""+contentURL+"?uri="+audiofile.getEncodedURI()+"\" title=\""+(audiofile.getDisplayTitle(lang)==null?audiofile.getTitle():audiofile.getDisplayTitle(lang))+"\">"+paramRequest.getLocaleString("listen")+"</a>");
-                            try {
-                                out.print("  &nbsp;<span>"+paramRequest.getLocaleString("duration")+":&nbsp;"+hhmm.format(ttb.parse(audiofile.getDuration()))+"</span>");
-                            }catch(ParseException pe) {
-                            }
+                            out.print("      <a href=\""+contentURL+"?suri="+audiofile.getEncodedURI()+"\" title=\""+(audiofile.getDisplayTitle(lang)==null?audiofile.getTitle():audiofile.getDisplayTitle(lang))+"\">"+paramRequest.getLocaleString("listen")+"</a>");
+//                            try {
+//                                out.print("  &nbsp;<span>"+paramRequest.getLocaleString("duration")+":&nbsp;"+hhmm.format(ttb.parse(audiofile.getDuration()))+"</span>");
+//                            }catch(ParseException pe) {
+//                            }
                             out.print("  </p>");
                             out.print("  <p class=\"swb-pdcst-descargar\">");
-                            //out.print("   <a href=\""+directURL.setParameter("uri", audiofile.getURI())+"\" title=\""+(audiofile.getDisplayTitle(lang)==null?audiofile.getTitle():audiofile.getDisplayTitle(lang))+"\">"+paramRequest.getLocaleString("download")+"</a>&nbsp;[<span class=\"swb-pdcst-ffmt\">"+paramRequest.getLocaleString("format")+"&nbsp;"+audiofile.getExtension()+"]</span>");
-                            out.print("   <a href=\"javascript:'"+directURL+"?uri='+encodeURIComponent('"+audiofile.getURI()+"')\" title=\""+(audiofile.getDisplayTitle(lang)==null?audiofile.getTitle():audiofile.getDisplayTitle(lang))+"\">"+paramRequest.getLocaleString("download")+"</a>&nbsp;[<span class=\"swb-pdcst-ffmt\">"+paramRequest.getLocaleString("format")+"&nbsp;"+audiofile.getExtension()+"]</span>");
+                            out.print("   <a href=\"javascript:window.open('"+directURL+"?suri='+encodeURIComponent('"+audiofile.getURI()+"'))\" title=\""+(audiofile.getDisplayTitle(lang)==null?audiofile.getTitle():audiofile.getDisplayTitle(lang))+"\">"+paramRequest.getLocaleString("download")+"</a>&nbsp;[<span class=\"swb-pdcst-ffmt\">"+paramRequest.getLocaleString("format")+"&nbsp;"+audiofile.getExtension()+"]</span>");
                             f = new File(SWBPortal.getWorkPath()+audiofile.getWorkPath()+"/"+audiofile.getFilename());
                             out.print("  &nbsp;<span class=\"swb-pdcst-fsize\">["+df.format(f.length()/1048576.0)+" Mb]</span>");
                             out.println("  </p>");
@@ -180,112 +218,181 @@ public class AudioPodCast extends org.semanticwb.portal.resources.sem.base.Audio
                 }
                 out.println("</div>");
             }
-        }else {
-            String uri = request.getParameter("uri");
-            if(uri==null)
+            else
+            {
+                out.println("<div class=\"swb-podcast\"><p>Lista vac&iacute;a.</p></div>");
+            }
+        }
+        else
+        {
+            String suri = request.getParameter("suri");
+            if(suri==null)
                 return;
-            uri = URLDecoder.decode(uri, "UTF-8");
+            suri = URLDecoder.decode(suri, "UTF-8");
             AudioFile audiofile = null;
             try {
-                audiofile = (AudioFile)SemanticObject.createSemanticObject(uri).createGenericInstance();
+                audiofile = (AudioFile)SemanticObject.createSemanticObject(suri).createGenericInstance();
             }catch(Exception e) {
+                
             }
             if(audiofile!=null && audiofile.isValid()) {
                 synchronized(this) {
                     audiofile.setReviews(audiofile.getReviews()+1);
                 }
                 out.println("<div class=\"swb-podcast\">");
-                out.println(" <h2 class=\"swb-pdcst-title\">"+(audiofile.getDisplayTitle(lang)==null?audiofile.getTitle():audiofile.getDisplayTitle(lang))+"</h2>");
-                out.println(" <div class=\"swb-pdcst-autor\">");
-                out.println(" <p>"+paramRequest.getLocaleString("by")+": "+(audiofile.getAuthor()==null?paramRequest.getLocaleString("anonymous"):audiofile.getAuthor())+"</p>");
+                out.println(" <h2 class=\"swb-pdcst-title\">");
+                out.println((audiofile.getDisplayTitle(lang)==null ? (audiofile.getTitle()==null ? "" : audiofile.getTitle()) : audiofile.getDisplayTitle(lang)));
+                out.println(" </h2>");
+                out.println(" <div class=\"swb-pdcst-author\">");
+                if(audiofile.getAuthor()!=null && !audiofile.getAuthor().isEmpty()) {
+                    out.println(" <p>"+paramRequest.getLocaleString("by")+": "+audiofile.getAuthor()+"</p>");
+                }
                 out.println(" <div class=\"swb-pdcst-player\">");
                 String clsid, codebase;
                 String resourceURL = SWBPortal.getWebWorkPath()+audiofile.getWorkPath()+"/"+audiofile.getFilename();
-                boolean automatic = audiofile.isAutoplay();
-                boolean controls = audiofile.isShowcontroller();
-                if(audiofile.getFilename().endsWith(".au")) {
-                    clsid = "clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B";
-                    codebase = "http://www.apple.com/qtactivex/qtplugin.cab";
-                    out.println("<object id=\"audio_"+base.getId()+"\" class=\"swb-audio\" classid=\""+clsid+"\" codebase=\""+codebase+"\" width=\"240\" height=\"48\">");
-                    out.println("  <param name=\"src\" value=\""+resourceURL+"\">");
-                    out.println("  <param name=\"autoplay\" value=\""+automatic+"\">");
-                    out.println("  <param name=\"autostart\" value=\""+(automatic?1:0)+"\">");
-                    out.println("  <param name=\"controller\" value=\""+controls+"\">");
-                    out.println("  <param name=\"pluginspage\" value=\"http://www.apple.com/quicktime/download/\">");
-                    out.println("    <object type=\"audio/x-mpeg\" data=\""+resourceURL+"\" width=\"240\" height=\"48\">");
-                    out.println("    <param name=\"autoplay\" value=\""+automatic+"\">");
-                    out.println("    <param name=\"pluginurl\" value=\"http://www.apple.com/quicktime/download/\">");
-                    out.println("    <param name=\"autostart\" value=\""+(automatic?1:0)+"\">");
-                    out.println("    <param name=\"controller\" value=\""+controls+"\">");
-                    out.println("    </object>");
+                if(audiofile.getFilename().endsWith(".mp3"))
+                {
+                    out.println("<object type=\"application/x-shockwave-flash\" data=\""+SWBPlatform.getContextPath()+"/swbadmin/player_mp3_maxi.swf\" width=\""+getWidth()+"\" height=\""+getHeight()+"\">");
+                    out.println("<param name=\"movie\" value=\""+SWBPlatform.getContextPath()+"/swbadmin/player_mp3_maxi.swf\" />");
+                    if(isTransparent()) {
+                        out.println("<param name=\"wmode\" value=\"transparent\" />");
+                    }
+                    //out.println("<param name=\"title\" value=\""+audiofile.getFilename()+"\" />");
+                    out.print("<param name=\"FlashVars\" value=\"mp3="+resourceURL+"");
+                    out.print("&amp;title="+audiofile.getFilename());
+                    out.print("&amp;autoplay="+(isAutoplay()?"1":"0"));
+                    out.print("&amp;loop="+(isLoop()?"1":"0"));
+                    out.print("&amp;autoload="+(isAutoload()?"1":"0"));                    
+                    out.print("&amp;volume="+(getVolume()));
+                    out.print("&amp;showstop="+(isShowStop()?"1":"0"));
+                    out.print("&amp;showvolume="+(isShowVolume()?"1":"0"));
+                    out.print("&amp;showslider="+(isShowSlider()?"1":"0"));
+                    if(getShowLoading()!=null) {
+                        out.print("&amp;showloading="+getShowLoading());
+                    }
+                    if(getLoadingColor()!=null) {
+                        out.print("&amp;loadingcolor="+getShowLoading());
+                    }
+                    if(getTextcolor()!=null) {
+                        out.print("&amp;textcolor="+getTextcolor());
+                    }
+                    if(!isTransparent() && getBgcolor()!=null) {
+                        out.print("&amp;bgcolor="+getBgcolor());
+                    }
+                    if(getBgcolor1()!=null) {
+                        out.print("&amp;bgcolor1="+getBgcolor1());
+                    }
+                    if(getBgcolor2()!=null) {
+                        out.print("&amp;bgcolor2="+getBgcolor2());
+                    }
+                    if(getButtonColor()!=null) {
+                        out.print("&amp;buttoncolor="+getButtonColor());
+                    }
+                    if(getButtonOvercolor()!=null) {
+                        out.print("&amp;buttonovercolor="+getButtonOvercolor());
+                    }
+                    if(getSliderColor1()!=null) {
+                        out.print("&amp;slidercolor1="+getSliderColor1());
+                    }
+                    if(getSliderColor2()!=null) {
+                        out.print("&amp;slidercolor2="+getSliderColor2());
+                    }
+                    if(getSliderOvercolor()!=null) {
+                        out.print("&amp;sliderovercolor="+getSliderOvercolor());
+                    }
+                    out.print("&amp;buttonwidth="+getButtonWidth());
+                    out.print("&amp;sliderwidth="+getSliderWidth());
+                    out.print("&amp;sliderheight="+getSliderHeight());
+                    out.print("&amp;volumewidth="+getVolumeWidth());
+                    out.print("&amp;volumeheight="+getVolumeHeight());
+                    out.println("\" />");
                     out.println("</object>");
-                }else if( audiofile.getFilename().endsWith(".wav") ) {
-                    clsid = "clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B";
-                    codebase = "http://www.apple.com/qtactivex/qtplugin.cab";
-                    out.println("<object id=\"audio_"+base.getId()+"\" class=\"swb-audio\" classid=\""+clsid+"\" codebase=\""+codebase+"\" width=\"240\" height=\"48\">");
-                    out.println("  <param name=\"src\" value=\""+resourceURL+"\"/>");
-                    out.println("  <param name=\"autoplay\" value=\""+automatic+"\"/>");
-                    out.println("  <param name=\"autostart\" value=\""+(automatic?1:0)+"\"/>");
-                    out.println("  <param name=\"controller\" value=\""+controls+"\"/>");
-                    out.println("  <param name=\"pluginspage\" value=\"http://www.apple.com/quicktime/download/\">");
-                    out.println("    <object type=\"audio/x-wav\" data=\""+resourceURL+"\" width=\"240\" height=\"48\">");
-                    out.println("    <param name=\"autoplay\" value=\""+automatic+"\">");
-                    out.println("    <param name=\"pluginurl\" value=\"http://www.apple.com/quicktime/download/\">");
-                    out.println("    <param name=\"autostart\" value=\""+(automatic?1:0)+"\">");
-                    out.println("    <param name=\"controller\" value=\""+controls+"\">");
-                    out.println("    </object>");
-                    out.println("</object>");
-                }else if(audiofile.getFilename().endsWith(".ra")) {
-                    out.print("El formato RA no es soportado.");
-                }else if(audiofile.getFilename().endsWith(".mp3")) {
-                    clsid = "clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B";
-                    codebase = "http://www.apple.com/qtactivex/qtplugin.cab";
-                    out.println("<object id=\"audio_"+base.getId()+"\" class=\"swb-audio\" classid=\""+clsid+"\" codebase=\""+codebase+"\" width=\"240\" height=\"24\" >");
-                    out.println("  <param name=\"src\" value=\""+resourceURL+"\"/>");
-                    out.println("  <param name=\"autoplay\" value=\""+automatic+"\"/>");
-                    out.println("  <param name=\"autostart\" value=\""+(automatic?1:0)+"\"/>");
-                    out.println("  <param name=\"controller\" value=\""+controls+"\"/>");
-                    out.println("  <param name=\"pluginspage\" value=\"http://www.apple.com/quicktime/download/\">");
-                    out.println("    <object type=\"audio/x-mpeg\" data=\""+resourceURL+"\" width=\"240\" height=\"24\">");
-                    out.println("    <param name=\"autoplay\" value=\""+automatic+"\">");
-                    out.println("    <param name=\"pluginurl\" value=\"http://www.apple.com/quicktime/download/\">");
-                    out.println("    <param name=\"autostart\" value=\""+(automatic?1:0)+"\">");
-                    out.println("    <param name=\"controller\" value=\""+controls+"\">");
-                    out.println("    </object>");
-                    out.println("</object>");
-                }else if(audiofile.getFilename().endsWith(".wma")) {
-                    clsid = "clsid:22D6F312-B0F6-11D0-94AB-0080C74C7E95";
-                    codebase = "http://activex.microsoft.com/activex/controls/mplayer/en/nsmp2inf.cab#Version=6,0,02,902";
-                    out.println("<object id=\"audio_"+base.getId()+"\" class=\"swb-audio\" classid=\""+clsid+"\" codebase=\""+codebase+"\" width=\"240\" height=\"48\">");
-                    out.println("  <param name=\"src\" value=\""+resourceURL+"\"/>");
-                    out.println("  <param name=\"autoplay\" value=\""+automatic+"\"/>");
-                    out.println("  <param name=\"autostart\" value=\""+(automatic?1:0)+"\"/>");
-                    out.println("  <param name=\"controller\" value=\""+controls+"\"/>");
-                    out.println("  <param name=\"pluginspage\" value=\"http://www.apple.com/quicktime/download/\"/>");
-                    out.println("    <object type=\"audio/x-ms-wma\" data=\""+resourceURL+"\" width=\"240\" height=\"48\">");
-                    out.println("    <param name=\"autoplay\" value=\""+automatic+"\">");
-                    out.println("    <param name=\"pluginurl\" value=\"http://www.apple.com/quicktime/download/\">");
-                    out.println("    <param name=\"autostart\" value=\""+(automatic?1:0)+"\">");
-                    out.println("    <param name=\"controller\" value=\""+controls+"\">");
-                    out.println("    </object>");
-                    out.println("  </embed>");
-                    out.println("</object>");
-                }else if(audiofile.getFilename().endsWith(".rm")) {
-                    clsid = "clsid:CFCDAA03-8BE4-11CF-B84B-0020AFBBCCFA";
-                    out.println("<object id=\"RVOCX\" class=\"swb-audio\" classid=\""+clsid+"\" width=\"240\" height=\"48\">");
-                    out.println("  <param name=\"src\" value=\""+resourceURL+"\"/>");
-                    out.println("  <param name=\"autoplay\" value=\""+automatic+"\"/>");
-                    out.println("  <param name=\"autostart\" value=\""+(automatic?1:0)+"\"/>");
-                    if(controls)
-                        out.println("  <param name=\"controls\" value=\"ControlPanel\"/>");
-                    out.println("    <object type=\"audio/x-pn-realaudio\" data=\""+resourceURL+"\" width=\"240\" height=\"48\">");
-                    out.println("    <param name=\"autoplay\" value=\""+automatic+"\">");
-                    out.println("    <param name=\"autostart\" value=\""+(automatic?1:0)+"\">");
-                    if(controls)
-                        out.println("    <param name=\"controls\" value=\"ControlPanel\">");
-                    out.println("    </object>");
-                    out.println("</object>");
-                }else {
+//                if(audiofile.getFilename().endsWith(".au")) {
+//                    clsid = "clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B";
+//                    codebase = "http://www.apple.com/qtactivex/qtplugin.cab";
+//                    out.println("<object id=\"audio_"+base.getId()+"\" class=\"swb-audio\" classid=\""+clsid+"\" codebase=\""+codebase+"\" width=\"240\" height=\"48\">");
+//                    out.println("  <param name=\"src\" value=\""+resourceURL+"\">");
+//                    out.println("  <param name=\"autoplay\" value=\""+automatic+"\">");
+//                    out.println("  <param name=\"autostart\" value=\""+(automatic?1:0)+"\">");
+//                    out.println("  <param name=\"controller\" value=\""+controls+"\">");
+//                    out.println("  <param name=\"pluginspage\" value=\"http://www.apple.com/quicktime/download/\">");
+//                    out.println("    <object type=\"audio/x-mpeg\" data=\""+resourceURL+"\" width=\"240\" height=\"48\">");
+//                    out.println("    <param name=\"autoplay\" value=\""+automatic+"\">");
+//                    out.println("    <param name=\"pluginurl\" value=\"http://www.apple.com/quicktime/download/\">");
+//                    out.println("    <param name=\"autostart\" value=\""+(automatic?1:0)+"\">");
+//                    out.println("    <param name=\"controller\" value=\""+controls+"\">");
+//                    out.println("    </object>");
+//                    out.println("</object>");
+//                }else if( audiofile.getFilename().endsWith(".wav") ) {
+//                    clsid = "clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B";
+//                    codebase = "http://www.apple.com/qtactivex/qtplugin.cab";
+//                    out.println("<object id=\"audio_"+base.getId()+"\" class=\"swb-audio\" classid=\""+clsid+"\" codebase=\""+codebase+"\" width=\"240\" height=\"48\">");
+//                    out.println("  <param name=\"src\" value=\""+resourceURL+"\"/>");
+//                    out.println("  <param name=\"autoplay\" value=\""+automatic+"\"/>");
+//                    out.println("  <param name=\"autostart\" value=\""+(automatic?1:0)+"\"/>");
+//                    out.println("  <param name=\"controller\" value=\""+controls+"\"/>");
+//                    out.println("  <param name=\"pluginspage\" value=\"http://www.apple.com/quicktime/download/\">");
+//                    out.println("    <object type=\"audio/x-wav\" data=\""+resourceURL+"\" width=\"240\" height=\"48\">");
+//                    out.println("    <param name=\"autoplay\" value=\""+automatic+"\">");
+//                    out.println("    <param name=\"pluginurl\" value=\"http://www.apple.com/quicktime/download/\">");
+//                    out.println("    <param name=\"autostart\" value=\""+(automatic?1:0)+"\">");
+//                    out.println("    <param name=\"controller\" value=\""+controls+"\">");
+//                    out.println("    </object>");
+//                    out.println("</object>");
+//                }else if(audiofile.getFilename().endsWith(".ra")) {
+//                    out.print("El formato RA no es soportado.");
+//                }else if(audiofile.getFilename().endsWith(".mov")) {
+//                    clsid = "clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B";
+//                    codebase = "http://www.apple.com/qtactivex/qtplugin.cab";
+//                    out.println("<object id=\"audio_"+base.getId()+"\" class=\"swb-audio\" classid=\""+clsid+"\" codebase=\""+codebase+"\" width=\"240\" height=\"24\" >");
+//                    out.println("  <param name=\"src\" value=\""+resourceURL+"\"/>");
+//                    out.println("  <param name=\"autoplay\" value=\""+automatic+"\"/>");
+//                    out.println("  <param name=\"autostart\" value=\""+(automatic?1:0)+"\"/>");
+//                    out.println("  <param name=\"controller\" value=\""+controls+"\"/>");
+//                    out.println("  <param name=\"pluginspage\" value=\"http://www.apple.com/quicktime/download/\">");
+//                    out.println("    <object type=\"audio/x-mpeg\" data=\""+resourceURL+"\" width=\"240\" height=\"24\">");
+//                    out.println("    <param name=\"autoplay\" value=\""+automatic+"\">");
+//                    out.println("    <param name=\"pluginurl\" value=\"http://www.apple.com/quicktime/download/\">");
+//                    out.println("    <param name=\"autostart\" value=\""+(automatic?1:0)+"\">");
+//                    out.println("    <param name=\"controller\" value=\""+controls+"\">");
+//                    out.println("    </object>");
+//                    out.println("</object>");
+//                }else if(audiofile.getFilename().endsWith(".wma")) {
+//                    clsid = "clsid:22D6F312-B0F6-11D0-94AB-0080C74C7E95";
+//                    codebase = "http://activex.microsoft.com/activex/controls/mplayer/en/nsmp2inf.cab#Version=6,0,02,902";
+//                    out.println("<object id=\"audio_"+base.getId()+"\" class=\"swb-audio\" classid=\""+clsid+"\" codebase=\""+codebase+"\" width=\"240\" height=\"48\">");
+//                    out.println("  <param name=\"src\" value=\""+resourceURL+"\"/>");
+//                    out.println("  <param name=\"autoplay\" value=\""+automatic+"\"/>");
+//                    out.println("  <param name=\"autostart\" value=\""+(automatic?1:0)+"\"/>");
+//                    out.println("  <param name=\"controller\" value=\""+controls+"\"/>");
+//                    out.println("  <param name=\"pluginspage\" value=\"http://www.apple.com/quicktime/download/\"/>");
+//                    out.println("    <object type=\"audio/x-ms-wma\" data=\""+resourceURL+"\" width=\"240\" height=\"48\">");
+//                    out.println("    <param name=\"autoplay\" value=\""+automatic+"\">");
+//                    out.println("    <param name=\"pluginurl\" value=\"http://www.apple.com/quicktime/download/\">");
+//                    out.println("    <param name=\"autostart\" value=\""+(automatic?1:0)+"\">");
+//                    out.println("    <param name=\"controller\" value=\""+controls+"\">");
+//                    out.println("    </object>");
+//                    out.println("  </embed>");
+//                    out.println("</object>");
+//                }else if(audiofile.getFilename().endsWith(".rm")) {
+//                    clsid = "clsid:CFCDAA03-8BE4-11CF-B84B-0020AFBBCCFA";
+//                    out.println("<object id=\"RVOCX\" class=\"swb-audio\" classid=\""+clsid+"\" width=\"240\" height=\"48\">");
+//                    out.println("  <param name=\"src\" value=\""+resourceURL+"\"/>");
+//                    out.println("  <param name=\"autoplay\" value=\""+automatic+"\"/>");
+//                    out.println("  <param name=\"autostart\" value=\""+(automatic?1:0)+"\"/>");
+//                    if(controls)
+//                        out.println("  <param name=\"controls\" value=\"ControlPanel\"/>");
+//                    out.println("    <object type=\"audio/x-pn-realaudio\" data=\""+resourceURL+"\" width=\"240\" height=\"48\">");
+//                    out.println("    <param name=\"autoplay\" value=\""+automatic+"\">");
+//                    out.println("    <param name=\"autostart\" value=\""+(automatic?1:0)+"\">");
+//                    if(controls)
+//                        out.println("    <param name=\"controls\" value=\"ControlPanel\">");
+//                    out.println("    </object>");
+//                    out.println("</object>");
+//                }
+                }
+                else
+                {
                     out.print("<p>Formato no soportado.</p>");
                 }
                 out.println(" </div>");
@@ -298,26 +405,21 @@ public class AudioPodCast extends org.semanticwb.portal.resources.sem.base.Audio
                 }else {
                     try {
 System.out.println("\n\ncaso 1");
-System.out.println("  <p>"+decf.format(audiofile.getRank())+"&nbsp;"+paramRequest.getLocaleString("like")+"&nbsp;<a href=\"javascript:postHtml('"+paramRequest.getRenderUrl().setMode(Mode_VOTE).setCallMethod(SWBParamRequest.Call_DIRECT)+"?uri='+encodeURIComponent('"+audiofile.getURI()+"')"+",'rank')\" title=\""+paramRequest.getLocaleString("like")+"\" class=\"swb-pdcst-rank\">"+paramRequest.getLocaleString("like")+"</a></p>");
-                        //out.println("  <p>"+decf.format(audiofile.getRank())+"&nbsp;"+paramRequest.getLocaleString("like")+"&nbsp;<a href=\"javascript:postHtml(encodeURI('"+paramRequest.getRenderUrl().setMode(Mode_VOTE).setCallMethod(SWBParamRequest.Call_DIRECT).setParameter("uri", audiofile.getURI())+"'),'rank')\" title=\""+paramRequest.getLocaleString("like")+"\" class=\"swb-pdcst-rank\">"+paramRequest.getLocaleString("like")+"</a></p>");
-                        out.println("  <p>"+decf.format(audiofile.getRank())+"&nbsp;"+paramRequest.getLocaleString("like")+"&nbsp;<a href=\"javascript:postHtml('"+paramRequest.getRenderUrl().setMode(Mode_VOTE).setCallMethod(SWBParamRequest.Call_DIRECT)+"?uri='+encodeURIComponent('"+audiofile.getURI()+"')"+",'rank')\" title=\""+paramRequest.getLocaleString("like")+"\" class=\"swb-pdcst-rank\">"+paramRequest.getLocaleString("like")+"</a></p>");
+System.out.println("  <p>"+decf.format(audiofile.getRank())+"&nbsp;"+paramRequest.getLocaleString("like")+"&nbsp;<a href=\"javascript:postHtml('"+paramRequest.getRenderUrl().setMode(Mode_VOTE).setCallMethod(SWBParamRequest.Call_DIRECT)+"?suri='+encodeURIComponent('"+audiofile.getURI()+"')"+",'rank')\" title=\""+paramRequest.getLocaleString("like")+"\" class=\"swb-pdcst-rank\">"+paramRequest.getLocaleString("like")+"</a></p>");
+                        out.println("  <p>"+decf.format(audiofile.getRank())+"&nbsp;"+paramRequest.getLocaleString("like")+"&nbsp;<a href=\"javascript:postHtml('"+paramRequest.getRenderUrl().setMode(Mode_VOTE).setCallMethod(SWBParamRequest.Call_DIRECT)+"?suri='+encodeURIComponent('"+audiofile.getURI()+"')"+",'rank')\" title=\""+paramRequest.getLocaleString("like")+"\" class=\"swb-pdcst-rank\">"+paramRequest.getLocaleString("like")+"</a></p>");
                     }catch(SWBResourceException swbe) {
 System.out.println("\n\ncaso 2");
-System.out.println("  <p>"+decf.format(audiofile.getRank())+"&nbsp;Me gusta&nbsp;<a href=\"javascript:postHtml('"+paramRequest.getRenderUrl().setMode(Mode_VOTE).setCallMethod(SWBParamRequest.Call_DIRECT)+"?uri='+encodeURIComponent('"+audiofile.getURI()+"')"+",'rank')\" title=\"Me gusta\">Me gusta</a></p>");
-                        out.println("  <p>"+decf.format(audiofile.getRank())+"&nbsp;Me gusta&nbsp;<a href=\"javascript:postHtml('"+paramRequest.getRenderUrl().setMode(Mode_VOTE).setCallMethod(SWBParamRequest.Call_DIRECT)+"?uri='+encodeURIComponent('"+audiofile.getURI()+"')"+",'rank')\" title=\"Me gusta\">Me gusta</a></p>");
+System.out.println("  <p>"+decf.format(audiofile.getRank())+"&nbsp;Me gusta&nbsp;<a href=\"javascript:postHtml('"+paramRequest.getRenderUrl().setMode(Mode_VOTE).setCallMethod(SWBParamRequest.Call_DIRECT)+"?suri='+encodeURIComponent('"+audiofile.getURI()+"')"+",'rank')\" title=\"Me gusta\">Me gusta</a></p>");
+                        out.println("  <p>"+decf.format(audiofile.getRank())+"&nbsp;Me gusta&nbsp;<a href=\"javascript:postHtml('"+paramRequest.getRenderUrl().setMode(Mode_VOTE).setCallMethod(SWBParamRequest.Call_DIRECT)+"?suri='+encodeURIComponent('"+audiofile.getURI()+"')"+",'rank')\" title=\"Me gusta\">Me gusta</a></p>");
                     }
                 }
                 out.println(" </div>");
                 out.println(" <div id=\"descargar\">");
                 out.println("  <p><img src=\"img/descargar.png\" width=\"21\" height=\"17\" align=\"left\" /></p>");
                 out.println(" </div>");
-                out.println(" <div class=\"swb-pdcst-descargar\">");
-                out.println("  <input type=\"button\" value=\""+paramRequest.getLocaleString("download") +"\" onclick=\"location.href='"+directURL+"?uri='+encodeURIComponent('"+audiofile.getURI()+"')"+"\" />");
-                out.println(" </div>");
                 out.println(" </div>");
                 out.println("</div>");
             }
-            
         }
     }
     
@@ -356,14 +458,14 @@ System.out.println("  <p>"+decf.format(audiofile.getRank())+"&nbsp;Me gusta&nbsp
                 out.println("  <div class=\"swb-pdcst-texto\"><p>"+(audiofile.getDisplayDescription(lang)==null?audiofile.getDescription():audiofile.getDisplayDescription(lang))+"</p></div>");
                 out.println("  <div class=\"swb-pdcst-texto\">");
                 out.print("    <p class=\"swb-pdcst-escuchar\">");
-                out.print("      <a href=\""+contentURL+"?uri="+audiofile.getEncodedURI()+"\" title=\""+(audiofile.getDisplayTitle(lang)==null?audiofile.getTitle():audiofile.getDisplayTitle(lang))+"\">"+paramRequest.getLocaleString("listen")+"</a>");
-                try {
-                    out.print("  &nbsp;<span>"+paramRequest.getLocaleString("duration")+":&nbsp;"+hhmm.format(ttb.parse(audiofile.getDuration()))+"</span>");
-                }catch(ParseException pe) {
-                    log.error(pe);
-                }
+                out.print("      <a href=\""+contentURL+"?suri="+audiofile.getEncodedURI()+"\" title=\""+(audiofile.getDisplayTitle(lang)==null?audiofile.getTitle():audiofile.getDisplayTitle(lang))+"\">"+paramRequest.getLocaleString("listen")+"</a>");
+//                try {
+//                    out.print("  &nbsp;<span>"+paramRequest.getLocaleString("duration")+":&nbsp;"+hhmm.format(ttb.parse(audiofile.getDuration()))+"</span>");
+//                }catch(ParseException pe) {
+//                    log.error(pe);
+//                }
                 out.println("  </p>");
-                out.println("  <p class=\"swb-pdcst-descargar\"><a href=\""+directURL.setParameter("uri", audiofile.getURI())+"\" title=\""+(audiofile.getDisplayTitle(lang)==null?audiofile.getTitle():audiofile.getDisplayTitle(lang))+"\">"+paramRequest.getLocaleString("download")+"</a><span>"+paramRequest.getLocaleString("format")+"&nbsp;"+audiofile.getExtension()+"</span></p>");
+                out.println("  <p class=\"swb-pdcst-descargar\"><a href=\""+directURL.setParameter("suri", audiofile.getURI())+"\" title=\""+(audiofile.getDisplayTitle(lang)==null?audiofile.getTitle():audiofile.getDisplayTitle(lang))+"\">"+paramRequest.getLocaleString("download")+"</a><span>"+paramRequest.getLocaleString("format")+"&nbsp;"+audiofile.getExtension()+"</span></p>");
                 out.println("  </div>");
                 out.println(" </div>");
                 out.println("</li>");
@@ -372,13 +474,13 @@ System.out.println("  <p>"+decf.format(audiofile.getRank())+"&nbsp;Me gusta&nbsp
     }
     
     public void doPlay(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        String uri = request.getParameter("uri");
-System.out.println("\n\n\n doPlay uri="+uri);
-        uri = URLDecoder.decode(uri, "UTF-8");
-System.out.println("\n\n\n doPlay uri decod="+uri);
+        String suri = request.getParameter("suri");
+System.out.println("\n\n\n doPlay suri="+suri);
+        suri = URLDecoder.decode(suri, "UTF-8");
+System.out.println("\n\n\n doPlay suri decod="+suri);
         AudioFile audiofile = null;
         try {
-            audiofile = (AudioFile)SemanticObject.createSemanticObject(uri).createGenericInstance();
+            audiofile = (AudioFile)SemanticObject.createSemanticObject(suri).createGenericInstance();
         }catch(Exception e) {
             log.error(e);
         }
@@ -466,13 +568,13 @@ System.out.println("\n\n\n doPlay uri decod="+uri);
         Resource base = getResourceBase();
         
         HttpSession session = request.getSession(true);
-        String uri = request.getParameter("uri");
-System.out.println("\n\n\n doVote uri="+uri);
-        uri = URLDecoder.decode(uri, "UTF-8");
-System.out.println("\n\n\n doVote uri deco="+uri);        
+        String suri = request.getParameter("suri");
+System.out.println("\n\n\n doVote suri="+suri);
+        suri = URLDecoder.decode(suri, "UTF-8");
+System.out.println("\n\n\n doVote suri deco="+suri);        
         AudioFile audiofile = null;
         try {
-            audiofile = (AudioFile)SemanticObject.createSemanticObject(uri).createGenericInstance();
+            audiofile = (AudioFile)SemanticObject.createSemanticObject(suri).createGenericInstance();
         }catch(Exception e) {
             log.error(e);
         }    
