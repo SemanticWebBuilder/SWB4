@@ -2,7 +2,7 @@ package org.semanticwb.bsc.formelement.base;
 
 
    /**
-   * Período válidos son los que no tienen intervalos de tiempo traslapados 
+   * Utiliza una máscara de captura en forma de calendario, a fin de almacenar fechas. La fecha seleccionada se valida para que dos períodos no se traslapen.  
    */
 public abstract class PeriodicityBase extends org.semanticwb.model.base.FormElementBase 
 {
@@ -10,7 +10,7 @@ public abstract class PeriodicityBase extends org.semanticwb.model.base.FormElem
     public static final org.semanticwb.platform.SemanticProperty bsc_dateOnChange=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#dateOnChange");
     public static final org.semanticwb.platform.SemanticProperty bsc_dateId=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#dateId");
    /**
-   * Período válidos son los que no tienen intervalos de tiempo traslapados
+   * Utiliza una máscara de captura en forma de calendario, a fin de almacenar fechas. La fecha seleccionada se valida para que dos períodos no se traslapen. 
    */
     public static final org.semanticwb.platform.SemanticClass bsc_Periodicity=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#Periodicity");
    /**
@@ -81,6 +81,11 @@ public abstract class PeriodicityBase extends org.semanticwb.model.base.FormElem
         {
             return (getPeriodicity(id, model)!=null);
         }
+    }
+
+    public static PeriodicityBase.ClassMgr getPeriodicityClassMgr()
+    {
+        return new PeriodicityBase.ClassMgr();
     }
 
    /**
