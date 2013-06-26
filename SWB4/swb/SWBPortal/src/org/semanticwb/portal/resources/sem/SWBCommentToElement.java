@@ -41,8 +41,8 @@ import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.portal.api.*;
 
 /**
- * Agrupa un conjunto de comentarios asociados al uri recibido como parametro de un
- * HttpServletRequest y muestra el listado de los mismos correspondientes al uri recibido.
+ * Agrupa un conjunto de comentarios asociados al suri recibido como parametro de un
+ * HttpServletRequest y muestra el listado de los mismos correspondientes al suri recibido.
  * @author jose.jimenez
  */
 public class SWBCommentToElement extends org.semanticwb.portal.resources.sem.base.SWBCommentToElementBase {
@@ -76,12 +76,12 @@ public class SWBCommentToElement extends org.semanticwb.portal.resources.sem.bas
     @Override
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
         String action = response.getAction();
-        String uri = request.getParameter("uri");
+        String suri = request.getParameter("suri");
         if(action.equals(SWBActionResponse.Action_ADD)) {
             String securCodeSent = request.getParameter("cmnt_seccode");
             String securCodeCreated = (String)request.getSession(true).getAttribute("cs");
             if( securCodeCreated!=null && securCodeCreated.equalsIgnoreCase(securCodeSent) ) {
-                String semObjURI = URLDecoder.decode(uri, "UTF-8");
+                String semObjURI = URLDecoder.decode(suri, "UTF-8");
                 SWBClass element = null;
                 try {
                     element = (SWBClass)SemanticObject.createSemanticObject(semObjURI).createGenericInstance();
@@ -128,7 +128,7 @@ public class SWBCommentToElement extends org.semanticwb.portal.resources.sem.bas
         }
         
         String lang = response.getUser().getLanguage();
-        response.sendRedirect(response.getWebPage().getUrl(lang)+"?uri="+URLEncoder.encode(uri,"UTF-8"));
+        response.sendRedirect(response.getWebPage().getUrl(lang)+"?suri="+URLEncoder.encode(suri,"UTF-8"));
     }
 
     /**
@@ -144,16 +144,16 @@ public class SWBCommentToElement extends org.semanticwb.portal.resources.sem.bas
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         PrintWriter out = response.getWriter();
-        String uri = request.getParameter("uri");
-        if(uri==null) {
+        String suri = request.getParameter("suri");
+        if(suri==null) {
             out.println(paramRequest.getLocaleString("noElement"));
             return;
         }
         
-        uri = URLDecoder.decode(uri, "UTF-8");
+        suri = URLDecoder.decode(suri, "UTF-8");
         SWBClass element = null;
         try {
-            element = (SWBClass)SemanticObject.createSemanticObject(uri).createGenericInstance();
+            element = (SWBClass)SemanticObject.createSemanticObject(suri).createGenericInstance();
         }catch(Exception e) {
             out.println(paramRequest.getLocaleString("noElement"));
             return;
@@ -166,7 +166,7 @@ public class SWBCommentToElement extends org.semanticwb.portal.resources.sem.bas
 
         SWBResourceURL rUrl = paramRequest.getActionUrl();
         rUrl.setAction(SWBParamRequest.Action_ADD);
-        rUrl.setParameter("uri", uri);
+        rUrl.setParameter("suri", suri);
 
         out.println("<script type=\"text/javascript\">");
         out.println("<!--");
@@ -248,7 +248,7 @@ public class SWBCommentToElement extends org.semanticwb.portal.resources.sem.bas
         out.println("</form>");
         out.println("</div>");
         
-        out.println(renderListComments(paramRequest, uri));
+        out.println(renderListComments(paramRequest, suri));
         
         out.flush();
         out.close();
@@ -258,10 +258,10 @@ public class SWBCommentToElement extends org.semanticwb.portal.resources.sem.bas
      * Render list comments.
      * 
      * @param paramRequest the param request
-     * @param uri the uri
+     * @param suri the suri
      * @return the string
      */
-    private String renderListComments(SWBParamRequest paramRequest, final String uri) throws SWBResourceException {
+    private String renderListComments(SWBParamRequest paramRequest, final String suri) throws SWBResourceException {
         StringBuilder html = new StringBuilder();
         final User user = paramRequest.getUser();
         final String lang = user.getLanguage()==null?"es":user.getLanguage();
@@ -269,7 +269,7 @@ public class SWBCommentToElement extends org.semanticwb.portal.resources.sem.bas
 
         SWBClass element = null;
         try {
-            element = (SWBClass)SemanticObject.createSemanticObject(uri).createGenericInstance();
+            element = (SWBClass)SemanticObject.createSemanticObject(suri).createGenericInstance();
         }catch(Exception e) {
             log.error(e);
             return html.toString();
@@ -308,7 +308,7 @@ public class SWBCommentToElement extends org.semanticwb.portal.resources.sem.bas
                 min--;
             }
             html.append(" </ol>");
-            html.append(" <p><a href=\"javascript:postHtml('"+paramRequest.getRenderUrl().setCallMethod(SWBResourceURL.Call_DIRECT).setMode(SWBResourceURL.Mode_INDEX).setParameter("uri",element.getURI())+"','swb-cmnt-sem-lst')\">"+paramRequest.getLocaleString("viewAllComments") +"&nbsp;&raquo;</a></p>");
+            html.append(" <p><a href=\"javascript:postHtml('"+paramRequest.getRenderUrl().setCallMethod(SWBResourceURL.Call_DIRECT).setMode(SWBResourceURL.Mode_INDEX).setParameter("suri",element.getURI())+"','swb-cmnt-sem-lst')\">"+paramRequest.getLocaleString("viewAllComments") +"&nbsp;&raquo;</a></p>");
             html.append("</div>");
         }else {
             html.append("<h2>"+paramRequest.getLocaleString("noComment")+"</h2>");
@@ -329,10 +329,10 @@ public class SWBCommentToElement extends org.semanticwb.portal.resources.sem.bas
         final String lang = user.getLanguage()==null?"es":user.getLanguage();
         String name;
         
-        String uri = request.getParameter("uri");
+        String suri = request.getParameter("suri");
         SWBClass element = null;
         try {
-            element = (SWBClass)SemanticObject.createSemanticObject(uri).createGenericInstance();
+            element = (SWBClass)SemanticObject.createSemanticObject(suri).createGenericInstance();
         }catch(Exception e) {
             log.error(e);
         }
@@ -360,7 +360,7 @@ public class SWBCommentToElement extends org.semanticwb.portal.resources.sem.bas
                 html.append("  </li>");
             }
             html.append(" </ol>");
-            html.append(" <p><a href=\"javascript:postHtml('"+paramRequest.getRenderUrl().setCallMethod(SWBResourceURL.Call_DIRECT).setMode(SWBResourceURL.Mode_INDEX).setParameter("uri",element.getURI())+"','swb-cmnt-sem-lst')\">"+paramRequest.getLocaleString("viewAllComments") +"&nbsp;&raquo;</a></p>");
+            html.append(" <p><a href=\"javascript:postHtml('"+paramRequest.getRenderUrl().setCallMethod(SWBResourceURL.Call_DIRECT).setMode(SWBResourceURL.Mode_INDEX).setParameter("suri",element.getURI())+"','swb-cmnt-sem-lst')\">"+paramRequest.getLocaleString("viewAllComments") +"&nbsp;&raquo;</a></p>");
             out.println(html.toString());
         }else
             out.println(paramRequest.getLocaleString("noElement"));
