@@ -465,6 +465,7 @@
 //            anim.setAttributeNS(null, "dur", "2s");
 //            _this.tooltip.appendChild(anim);
             _this.tooltip.show();
+            _this.tooltip.moveFirst();
             _this.tmHandler = setTimeout(function(){_this.tooltip.hide();},3000);
         },
                 
