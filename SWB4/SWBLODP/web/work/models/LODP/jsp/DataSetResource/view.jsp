@@ -756,7 +756,18 @@
                 %>
                 <a href="<%=urldown.toString()%>" title="<%=urldown.toString()%>" class="descargar"><%=paramRequest.getLocaleString("lbl_download")%></a>
                 
-                <a class="ico-<%=ds.getDatasetFormat()%>" href="#"><%=ds.getActualVersion()!=null&&ds.getActualVersion().getFilePath()!=null?ds.getActualVersion().getFilePath():"No tiene archivo asignado"%></a>
+                <%
+                String mapviewWP = base.getAttribute("mapwebpage");
+                if(null!=mapviewWP&&ds.getDatasetFormat()!=null&&(ds.getDatasetFormat().trim().equalsIgnoreCase("kmz")||ds.getDatasetFormat().trim().equalsIgnoreCase("kml"))){
+                    WebPage WPmapview = wsite.getWebPage(mapviewWP);
+                    if(WPmapview!=null){
+                        mapviewWP = WPmapview.getUrl()+"?suri="+ds.getShortURI();
+                    }
+                } else {
+                    mapviewWP="#";
+                }
+                %>
+                <a class="ico-<%=ds.getDatasetFormat()%>" href="<%=mapviewWP%>"><%=ds.getActualVersion()!=null&&ds.getActualVersion().getFilePath()!=null?ds.getActualVersion().getFilePath():"No tiene archivo asignado"%></a>
                 
         <ul>
             <li>
