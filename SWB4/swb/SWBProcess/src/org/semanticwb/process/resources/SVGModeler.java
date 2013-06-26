@@ -65,8 +65,6 @@ import org.semanticwb.process.model.MultiInstanceLoopCharacteristics;
 import org.semanticwb.process.model.ProcessSite;
 import org.semanticwb.process.model.StandarLoopCharacteristics;
 import org.semanticwb.process.model.UserTask;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 
 /**
  * Modelador de procesos basado en SVG y Javascript.
@@ -927,33 +925,38 @@ public class SVGModeler extends GenericResource {
         
         Process p = (Process) SWBPlatform.getSemanticMgr().getOntology().getGenericObject(request.getParameter("suri"));
         
-        if (p != null) {
-            response.setHeader("Cache-Control", "no-cache");
-            response.setHeader("Pragma", "no-cache");
-            response.setHeader("Content-Disposition", "attachment; filename=\"" + p.getTitle() + "."+format+"\";");
-            
-            if ("svg".equalsIgnoreCase(format)) {
-                String svg = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n" +
-                             "<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\" \"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\">\n";
-                svg += data;
-                
-                //Corregir clases en objetos de datos
-                svg = svg.replace("<g id=\"data\" bclass=\"itemaware\" oclass=\"itemaware_o\">", "<g id=\"data\" bclass=\"itemaware\" oclass=\"itemaware_o\" class=\"itemAware\">");
-                svg = svg.replace("<g id=\"dataStore\" bclass=\"itemaware\" oclass=\"itemaware_o\" transform=\"translate(-12,-10)\">", "<g id=\"dataStore\" bclass=\"itemaware\" oclass=\"itemaware_o\" transform=\"translate(-12,-10)\" class=\"itemAware\">");
-                
-                response.setContentType("image/svg+xml");
-                outs.write(svg.getBytes("UTF-8"));
-            } else if ("swp".equalsIgnoreCase(format)) {
-                response.setContentType("application/json");
-                String json = "";
+        response.setHeader("Cache-Control", "no-cache");
+        response.setHeader("Pragma", "no-cache");
+        response.setHeader("Content-Disposition", "attachment; filename=\"" + (p != null ? p.getTitle() : "Proceso") + "."+format+"\";");
+
+        if ("svg".equalsIgnoreCase(format)) {
+            String svg = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n" +
+                         "<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\" \"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\">\n";
+            svg += data;
+
+            //Corregir clases en objetos de datos
+            svg = svg.replace("<g id=\"data\" bclass=\"itemaware\" oclass=\"itemaware_o\">", "<g id=\"data\" bclass=\"itemaware\" oclass=\"itemaware_o\" class=\"itemAware\">");
+            svg = svg.replace("<g id=\"dataStore\" bclass=\"itemaware\" oclass=\"itemaware_o\" transform=\"translate(-12,-10)\">", "<g id=\"dataStore\" bclass=\"itemaware\" oclass=\"itemaware_o\" transform=\"translate(-12,-10)\" class=\"itemAware\">");
+
+            response.setContentType("image/svg+xml");
+            outs.write(svg.getBytes("UTF-8"));
+        } else if ("swp".equalsIgnoreCase(format)) {
+            response.setContentType("application/json");
+            String json = "";
+            if (p != null) {
                 JSONObject pJson = getProcessJSON(p);
                 if (pJson != null) {
                     json = pJson.toString();
                 } else {
                     json = ERRORSTRING.replace("_JSONERROR_", "No se ha podido obtener el JSON del modelo");
                 }
-                outs.write(json.getBytes("UTF-8"));
+            } else {
+                if (data != null && data.length() > 0) {
+                    json = data;
+                }
             }
+            outs.write(json.getBytes("UTF-8"));
+        }
 //            } else if ("png".equalsIgnoreCase(format)) {
 //                String svg = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>" +
 //                             "<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\" \"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\">";
@@ -971,9 +974,8 @@ public class SVGModeler extends GenericResource {
 //                    log.error("Ocurrió un problema al generar la imagen", ex);
 //                }
 //            }
-            outs.flush();
-            outs.close();
-        }
+        outs.flush();
+        outs.close();
     }
     
     /** Utilizado para generar un JSON del modelo, para la comunicacion con el modelador
