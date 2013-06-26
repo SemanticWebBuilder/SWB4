@@ -214,13 +214,13 @@ Author     : rene.jara
             </ul>
         </div>
 <%
-            if(usr.hasRole(wsite.getUserRepository().getRole(base.getAttribute("rolid", "")))){
+            }
+        if(usr.hasRole(wsite.getUserRepository().getRole(base.getAttribute("rolid", "")))){
 %>
         <div id="admcomentarios">
             <a href="<%=wsite.getWebPage(base.getAttribute("manageid", "home")).getUrl()%>"><%=paramRequest.getLocaleString("lblLinkManage")%></a>
         </div>
     <%
-            }
         }
         SWBResourceURLImp urladd = new SWBResourceURLImp(request, base, wpage, SWBResourceURLImp.UrlType_ACTION);
         urladd.setAction(CommentsViewResource.Action_COMMENT);
