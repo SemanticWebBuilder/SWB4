@@ -304,6 +304,26 @@ out.println("</div>");
                     out.println(" <div class=\"swb-pdcst-text\"><p class=\"swb-pdcst-author\"><span class=\"swb-pdcst-by\">"+paramRequest.getLocaleString("by")+":</span> "+audiofile.getAuthor()+"</p></div>");
                 }
                 out.println(" <div class=\"swb-pdcst-text\"><p class=\"swb-pdcst-desc\">"+(audiofile.getDisplayDescription(lang)==null?audiofile.getDescription():audiofile.getDisplayDescription(lang))+"</p></div>");
+                
+                
+                
+                out.println(" <div class=\"swb-pdcst-rank\" id=\"rank\">");
+                HttpSession session = request.getSession(true);
+                final String rid = base.getWebSiteId()+"_"+base.getId()+"_"+audiofile.getId();
+                DecimalFormat decf = new DecimalFormat("###");
+                if(session.getAttribute(rid)!=null) {
+                    out.println("  <p>"+decf.format(audiofile.getRank())+"&nbsp;"+paramRequest.getLocaleString("like")+"</p>");
+                }else {
+                    try {
+                        out.println("  <p>"+decf.format(audiofile.getRank())+"&nbsp;"+paramRequest.getLocaleString("like")+"&nbsp;<a href=\"javascript:postHtml('"+paramRequest.getRenderUrl().setMode(Mode_VOTE).setCallMethod(SWBParamRequest.Call_DIRECT)+"?suri='+encodeURIComponent('"+audiofile.getURI()+"')"+",'rank')\" title=\""+paramRequest.getLocaleString("like")+"\" class=\"swb-pdcst-rank\">"+paramRequest.getLocaleString("like")+"</a></p>");
+                    }catch(SWBResourceException swbe) {
+                        out.println("  <p>"+decf.format(audiofile.getRank())+"&nbsp;Me gusta&nbsp;<a href=\"javascript:postHtml('"+paramRequest.getRenderUrl().setMode(Mode_VOTE).setCallMethod(SWBParamRequest.Call_DIRECT)+"?suri='+encodeURIComponent('"+audiofile.getURI()+"')"+",'rank')\" title=\"Me gusta\">Me gusta</a></p>");
+                    }
+                }
+                out.println(" </div>");
+                
+                
+                
                 out.println(" <div class=\"swb-pdcst-player\">");
                 String resourceURL = SWBPortal.getWebWorkPath()+audiofile.getWorkPath()+"/"+audiofile.getFilename();
                 if(audiofile.getFilename().endsWith(".mp3"))
@@ -369,24 +389,44 @@ out.println("</div>");
                     out.print("<p>Formato no soportado.</p>");
                 }
                 out.println(" </div>");
-                out.println(" <div id=\"rank\">");
-                HttpSession session = request.getSession(true);
-                final String rid = base.getWebSiteId()+"_"+base.getId()+"_"+audiofile.getId();
-                DecimalFormat decf = new DecimalFormat("###");
-                if(session.getAttribute(rid)!=null) {
-                    out.println("  <p>"+decf.format(audiofile.getRank())+"&nbsp;"+paramRequest.getLocaleString("like")+"</p>");
-                }else {
-                    try {
-                        out.println("  <p>"+decf.format(audiofile.getRank())+"&nbsp;"+paramRequest.getLocaleString("like")+"&nbsp;<a href=\"javascript:postHtml('"+paramRequest.getRenderUrl().setMode(Mode_VOTE).setCallMethod(SWBParamRequest.Call_DIRECT)+"?suri='+encodeURIComponent('"+audiofile.getURI()+"')"+",'rank')\" title=\""+paramRequest.getLocaleString("like")+"\" class=\"swb-pdcst-rank\">"+paramRequest.getLocaleString("like")+"</a></p>");
-                    }catch(SWBResourceException swbe) {
-                        out.println("  <p>"+decf.format(audiofile.getRank())+"&nbsp;Me gusta&nbsp;<a href=\"javascript:postHtml('"+paramRequest.getRenderUrl().setMode(Mode_VOTE).setCallMethod(SWBParamRequest.Call_DIRECT)+"?suri='+encodeURIComponent('"+audiofile.getURI()+"')"+",'rank')\" title=\"Me gusta\">Me gusta</a></p>");
-                    }
-                }
-                out.println(" </div>");
-                out.println(" <div id=\"descargar\">");
-                out.println("  <p><img src=\"img/descargar.png\" width=\"21\" height=\"17\" align=\"left\" /></p>");
-                out.println(" </div>");
-                out.println(" </div>");
+                
+                
+long duration = 0;            
+File f;
+try {
+    f = audiofile.getFile();
+}catch(Exception e) {
+    return;
+}
+if(f!=null && f.isFile())
+{
+    try {
+        AudioInputStream ais = new MpegAudioFileReader().getAudioInputStream(f);
+        AudioFileFormat baseFileFormat = new MpegAudioFileReader().getAudioFileFormat(f);
+        Map properties = baseFileFormat.properties();
+        duration = (Long)properties.get("duration");
+    }catch(UnsupportedAudioFileException unsafe) {
+        return;
+    }      
+}
+out.println("  <div class=\"swb-pdcst-text\">");
+out.print("     <p class=\"swb-pdcst-box\">");
+if(duration>0)
+{
+    out.print("  &nbsp;<span class=\"swb-pdcst-fduration\">"+paramRequest.getLocaleString("duration")+":&nbsp;");
+    out.print(duration/1000000%60);
+    out.print(":");
+    out.print(duration/60000000);
+    out.print("</span>");
+}
+out.print("     </p>");                        
+out.print("     <p class=\"swb-pdcst-box\">");
+out.print("      <a class=\"swb-pdcst-lnk\" href=\"#\" onclick=\"window.open('"+directURL+"?suri='+encodeURIComponent('"+audiofile.getURI()+"'))\" title=\""+(audiofile.getDisplayTitle(lang)==null?audiofile.getTitle():audiofile.getDisplayTitle(lang))+"\">"+paramRequest.getLocaleString("download")+"</a>&nbsp;");
+out.print("      <span class=\"swb-pdcst-ffmt\">"+paramRequest.getLocaleString("format")+"&nbsp;"+audiofile.getExtension()+"</span>&nbsp;");
+out.print("      <span class=\"swb-pdcst-fsize\">"+df.format(f.length()/1048576.0)+" Mb</span>");
+out.println("   </p>");
+out.println("  </div>");
+                
                 out.println("</div>");
             }
         }
