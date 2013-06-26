@@ -1092,7 +1092,7 @@
         _this.setElementType("EndEventNode");
         
         _this.canStartLink = function(link) {
-            ToolKit.showTooltip("","Un evento final sólo puede tener flujos de secuencia entrantes", 250, "Error")
+            ToolKit.showTooltip(0,"Un evento final sólo puede tener flujos de secuencia entrantes", 250, "Error")
             return false;
         };
         
@@ -1100,7 +1100,7 @@
             var ret = fCanEnd(link);
             
             if (ret && link.elementType=="MessageFlow") {
-                ToolKit.showTooltip("","Un evento final sólo puede tener flujos de secuencia entrantes", 250, "Error");
+                ToolKit.showTooltip(0,"Un evento final sólo puede tener flujos de secuencia entrantes", 250, "Error");
                 ret = false;
             } else if (ret && link.typeOf("AssociationFlow") && link.fromObject.typeOf("DataObject")) {
                 ret = false;
@@ -1784,7 +1784,7 @@
         _this.canStartLink = function(link) {
             var ret = true;
             if (!(link.elementType=="AssociationFlow" || link.elementType=="MessageFlow")) {
-                ToolKit.showTooltip("","Un pool sólo puede conectarse usando flujos de mensaje", 250, "Error");
+                ToolKit.showTooltip(0,"Un pool sólo puede conectarse usando flujos de mensaje", 250, "Error");
                 ret = false;
             }
             return ret;
@@ -1807,7 +1807,7 @@
         _this.canAddToDiagram = function() {
             var ret = fCanAdd();
             if (ToolKit.layer != null) {
-                ToolKit.showTooltip("","Un subproceso no puede contener pools", 250, "Error");
+                ToolKit.showTooltip(0,"Un subproceso no puede contener pools", 250, "Error");
                 ret = false;
             }
             return ret;
@@ -2052,7 +2052,7 @@
         _this.canStartLink = function(link) {
             var ret = fCanStart(link);
             if (link.typeOf("SequenceFlow")) {
-                ToolKit.showTooltip("","Un subproceso de evento no puede conectarse usando flujos de secuencia", 250, "Error")
+                ToolKit.showTooltip(0,"Un subproceso de evento no puede conectarse usando flujos de secuencia", 250, "Error")
                 ret = false;
             }
             return ret;
@@ -2061,7 +2061,7 @@
         _this.canEndLink = function(link) {
             var ret = fCanEnd(link);
             if (link.typeOf("SequenceFlow")) {
-                ToolKit.showTooltip("","Un subproceso de evento no puede conectarse usando flujos de secuencia", 250, "Error")
+                ToolKit.showTooltip(0,"Un subproceso de evento no puede conectarse usando flujos de secuencia", 250, "Error")
                 ret = false;
             }
             
@@ -2275,9 +2275,10 @@
                 
         onmousemove:function(evt)
         {
-            if(Modeler.dragConnection!=null)
+            if(Modeler.dragConnection && Modeler.dragConnection!==null)
             {
-                if(Modeler.dragConnection.toObject!=null)
+                Modeler.dragConnection.show();
+                if(Modeler.dragConnection.toObject!==null)
                 {
                     Modeler.dragConnection.toObject=null;
                     ToolKit.unSelectAll();
@@ -2290,9 +2291,9 @@
                 
         onmouseup:function(evt)
         {
-            if(Modeler.dragConnection!=null)
+            if(Modeler.dragConnection && Modeler.dragConnection!==null)
             {
-                if(Modeler.dragConnection.toObject==null)
+                if(Modeler.dragConnection.toObject===null)
                 {
                     Modeler.dragConnection.remove();
                 }else
@@ -2320,6 +2321,7 @@
             if(evt.button===2)
             {
                 Modeler.dragConnection=Modeler.mapObject(obj.getDefaultFlow());
+                Modeler.dragConnection.hide();
                 if (obj.canStartLink(Modeler.dragConnection)) {
                     obj.addOutConnection(Modeler.dragConnection);
                     if (Modeler.dragConnection.elementType==="ConditionalFlow" && obj.elementType==="ExclusiveGateway" || obj.elementType==="InclusiveGateway") {
@@ -2339,9 +2341,9 @@
         objectMouseMove:function(evt,obj)
         {
             //console.log("objectMouseOver:"+evt+" "+obj);
-            if(Modeler.dragConnection!=null)
+            if(Modeler.dragConnection && Modeler.dragConnection!==null)
             {
-                if(Modeler.dragConnection.fromObject!=obj && Modeler.dragConnection.toObject!=obj)
+                if(Modeler.dragConnection.fromObject!==obj && Modeler.dragConnection.toObject!==obj)
                 {
                     if (obj.canEndLink(Modeler.dragConnection)) {
                         ToolKit.unSelectAll();
@@ -2446,7 +2448,7 @@
                 if (obj.pressed) {
                     obj.pressed = false;
                 }
-                if (Modeler.dragConnection !== null && Modeler.dragConnection === obj) {
+                if (Modeler.dragConnection && Modeler.dragConnection !== null && Modeler.dragConnection === obj) {
                     Modeler.dragConnection = null;
                 }
                 return false;
@@ -2615,7 +2617,7 @@
             
             obj.onmousemove=function(evt)
             {
-                if(Modeler.dragConnection!==null)  //Valida no conectar objetos hijos del pool
+                if(Modeler.dragConnection && Modeler.dragConnection!==null)  //Valida no conectar objetos hijos del pool
                 {
                     if(Modeler.dragConnection.fromObject.isChild(obj))
                     {
@@ -3325,7 +3327,7 @@
                 },
                 error: function(response, ioArgs) {
                     //console.log("error");
-                    ToolKit.showTooltip("","Ocurrió un problema al enviar el modelo", 200, "Error");
+                    ToolKit.showTooltip(0,"Ocurrió un problema al enviar el modelo", 200, "Error");
                     return response;
                 },
                 handleAs: "text"
