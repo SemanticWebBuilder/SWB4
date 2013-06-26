@@ -9,99 +9,607 @@
     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
   xml:base="http://www.semanticwebbuilder.org/portal/resources/sems/SWBAudioFile">
   <owl:Ontology rdf:about="">
-    <owl:imports rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology"/>
     <owl:versionInfo rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >Created with TopBraid Composer</owl:versionInfo>
+    <owl:imports rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology"/>
   </owl:Ontology>
+  <owl:Class rdf:ID="AudioPodCast">
+    <swb:classCodePackage rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >org.semanticwb.portal.resources.sem</swb:classCodePackage>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBSemanticResource"/>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SemanticResource"/>
+  </owl:Class>
   <owl:ObjectProperty rdf:ID="hasAudioFile">
+    <owl:inverseOf>
+      <owl:ObjectProperty rdf:ID="podcastInv"/>
+    </owl:inverseOf>
+    <rdfs:domain rdf:resource="#AudioPodCast"/>
     <rdfs:range>
       <swb:Class rdf:ID="AudioFile">
-        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-        >true</swb:autogenId>
-        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Rankable"/>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Expirable"/>
+        <swb:classCodePackage rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >org.semanticwb.portal.resources.sem</swb:classCodePackage>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
         <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
         <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Iconable"/>
-        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Expirable"/>
-        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
-        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Activeable"/>
         <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Rankable"/>
+        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >true</swb:autogenId>
       </swb:Class>
     </rdfs:range>
-    <rdfs:domain>
-      <swb:SemanticResource rdf:ID="AudioPodCast">
-        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBSemanticResource"/>
-        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-      </swb:SemanticResource>
-    </rdfs:domain>
   </owl:ObjectProperty>
-  <owl:DatatypeProperty rdf:ID="filename">
+  <owl:ObjectProperty rdf:about="#podcastInv">
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >audioPodcast</swb:propertyCodeName>
+  </owl:ObjectProperty>
+  <owl:DatatypeProperty rdf:ID="buttonWidth">
+    <swb:defaultValue rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >26</swb:defaultValue>
     <swb:displayProperty>
-      <swbxf:DisplayProperty rdf:ID="dp_resource">
-        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#fe_DojoFileUpload"/>
+      <swbxf:DisplayProperty rdf:ID="dp_buttonWidth">
+        <swbxf:formElement>
+          <swbxf:Text rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#Integer">
+            <swbxf:textRegExp rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >\d{1,3}</swbxf:textRegExp>
+          </swbxf:Text>
+        </swbxf:formElement>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >131</swb:index>
+        <rdfs:label xml:lang="es">Ancho de los botones</rdfs:label>
+        <rdfs:label xml:lang="en">Buttons width</rdfs:label>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
-    <rdfs:label xml:lang="en">Audio source</rdfs:label>
-    <rdfs:label xml:lang="es">Recurso de audio</rdfs:label>
-    <rdfs:comment xml:lang="en">Resource name</rdfs:comment>
-    <rdfs:comment xml:lang="es">Nombre del recurso</rdfs:comment>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >The buttons width. By default set to 26</rdfs:comment>
+    <rdfs:domain rdf:resource="#AudioPodCast"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="sliderHeight">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_sliderHeight">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#Integer"/>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >230</swb:index>
+        <rdfs:label xml:lang="es">Alto de la barra</rdfs:label>
+        <rdfs:label xml:lang="en">Slider height</rdfs:label>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <swb:defaultValue rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >10</swb:defaultValue>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >The slider height. By default set to 10</rdfs:comment>
+    <rdfs:domain rdf:resource="#AudioPodCast"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="volumeWidth">
     <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:required>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-    <rdfs:domain rdf:resource="#AudioFile"/>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_volumeWidth">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#Integer"/>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >110</swb:index>
+        <rdfs:label xml:lang="es">El ancho del botón de volumen</rdfs:label>
+        <rdfs:label xml:lang="en">The width of the volume button</rdfs:label>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <swb:defaultValue rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >30</swb:defaultValue>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >The width of the volume button</rdfs:comment>
+    <rdfs:domain rdf:resource="#AudioPodCast"/>
   </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="autoplay">
+  <owl:DatatypeProperty rdf:ID="pageSize">
+    <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:required>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_pageSize">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#Integer"/>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >21</swb:index>
+        <rdfs:label xml:lang="en">Page size</rdfs:label>
+        <rdfs:label xml:lang="es">Tamaño de página</rdfs:label>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <swb:defaultValue rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >5</swb:defaultValue>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Tamaño de página en la paginación</rdfs:comment>
+    <rdfs:domain rdf:resource="#AudioPodCast"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="scDescription">
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Abreviación de descripción (shortcut)</rdfs:comment>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_scDescription">
+        <rdfs:label xml:lang="es">Truncar descripción hasta</rdfs:label>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >10</swb:index>
+        <rdfs:label xml:lang="en">Trunc description to</rdfs:label>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#Integer"/>
+        <swbxf:propPromptMessage xml:lang="en">Resume description to</swbxf:propPromptMessage>
+        <swbxf:propInvalidMessage xml:lang="es">Tamaño máximo de resumen es requerido</swbxf:propInvalidMessage>
+        <swbxf:propInvalidMessage xml:lang="en">Summary maximum size is required</swbxf:propInvalidMessage>
+        <swbxf:propPromptMessage xml:lang="es">Resumir descripción hasta</swbxf:propPromptMessage>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <swb:defaultValue rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >250</swb:defaultValue>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+    <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:required>
+    <rdfs:domain rdf:resource="#AudioPodCast"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="buttonColor">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_buttonColor">
+        <swbxf:formElement>
+          <swbxf:Text rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hexadecimal">
+            <swb:maxLength rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+            >6</swb:maxLength>
+            <swbxf:textRegExp rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >[A-Fa-f0-9]{6}</swbxf:textRegExp>
+          </swbxf:Text>
+        </swbxf:formElement>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >140</swb:index>
+        <rdfs:label xml:lang="en">Color of the buttons</rdfs:label>
+        <rdfs:label xml:lang="es">Color de los botones</rdfs:label>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >The color of the buttons</rdfs:comment>
+    <rdfs:domain rdf:resource="#AudioPodCast"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="showVolume">
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Show the volume button</rdfs:comment>
+    <swb:defaultValue rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >true</swb:defaultValue>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
     <swb:displayProperty>
-      <swbxf:DisplayProperty rdf:ID="dp_autoplay"/>
-    </swb:displayProperty>
-    <rdfs:label xml:lang="en">Automatically play</rdfs:label>
-    <rdfs:comment xml:lang="en">The audio plays automatically</rdfs:comment>
-    <rdfs:label xml:lang="es">Reproducir automáticamente</rdfs:label>
-    <rdfs:comment xml:lang="es">El audio reproduce automáticamente</rdfs:comment>
-    <rdfs:domain rdf:resource="#AudioFile"/>
-  </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="author">
-    <rdfs:domain rdf:resource="#AudioFile"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-    <rdfs:comment xml:lang="es">Participante del contenido</rdfs:comment>
-    <rdfs:label xml:lang="es">Participante</rdfs:label>
-    <rdfs:label xml:lang="en">Participates</rdfs:label>
-    <swb:displayProperty>
-      <swbxf:DisplayProperty rdf:ID="dp_author">
-        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextBox"/>
+      <swbxf:DisplayProperty rdf:ID="dp_showVolume">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#BooleanElement_3"/>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >100</swb:index>
+        <rdfs:label xml:lang="es">Mostrar el botón de volumen</rdfs:label>
+        <rdfs:label xml:lang="en">Show the volume button</rdfs:label>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
+    <rdfs:domain rdf:resource="#AudioPodCast"/>
   </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="duration">
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-    <rdfs:comment xml:lang="es">Duración del podcast</rdfs:comment>
-    <rdfs:label xml:lang="en">Duration</rdfs:label>
-    <rdfs:label xml:lang="es">Duración</rdfs:label>
+  <owl:DatatypeProperty rdf:ID="showStop">
     <swb:displayProperty>
-      <swbxf:DisplayProperty rdf:ID="dp_duration">
-        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TimeElement_1"/>
+      <swbxf:DisplayProperty rdf:ID="dp_showStop">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#BooleanElement_3"/>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >130</swb:index>
+        <rdfs:label xml:lang="es">Mostrar el botón parar</rdfs:label>
+        <rdfs:label xml:lang="en">Show the stop button</rdfs:label>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
-    <rdfs:domain rdf:resource="#AudioFile"/>
-    <rdfs:comment xml:lang="en">Length of podcast</rdfs:comment>
+    <swb:defaultValue rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >true</swb:defaultValue>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >show the STOP button</rdfs:comment>
+    <rdfs:domain rdf:resource="#AudioPodCast"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="loadingColor">
+    <swb:defaultValue rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >ffffff</swb:defaultValue>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Color de leyenda de carga</rdfs:comment>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_loadingColor">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hexadecimal"/>
+        <rdfs:label xml:lang="es">El color de la barra de carga</rdfs:label>
+        <rdfs:label xml:lang="en">The color of loading bar</rdfs:label>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >80</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:domain rdf:resource="#AudioPodCast"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="volume">
+    <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:required>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >The initial volume, between 0 and 200</rdfs:comment>
+    <swb:defaultValue rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >100</swb:defaultValue>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_volume">
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >90</swb:index>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#Integer"/>
+        <rdfs:label xml:lang="es">Volumen inicial (entre 0 y 200)</rdfs:label>
+        <rdfs:label xml:lang="en">The initial volume (between 0 and 200)</rdfs:label>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+    <rdfs:domain rdf:resource="#AudioPodCast"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="sliderColor1">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_sliderColor1">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hexadecimal"/>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >190</swb:index>
+        <rdfs:label xml:lang="es">Primer color del  gradiente de la barra</rdfs:label>
+        <rdfs:label xml:lang="en">The first color of the bar gradient</rdfs:label>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >The first color of the bar gradient</rdfs:comment>
+    <rdfs:domain rdf:resource="#AudioPodCast"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="autoplay">
+    <swb:defaultValue rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >false</swb:defaultValue>
+    <rdfs:domain rdf:resource="#AudioPodCast"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >El audio empieza a reproducirse automáticamente</rdfs:comment>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_autoplay">
+        <rdfs:label xml:lang="en">Start playing automatically</rdfs:label>
+        <rdfs:label xml:lang="es">Iniciar reproducción automáticamente</rdfs:label>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#BooleanElement_3"/>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >40</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="sliderWidth">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_sliderWidth">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#Integer"/>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >220</swb:index>
+        <rdfs:label xml:lang="es">Ancho de la barra</rdfs:label>
+        <rdfs:label xml:lang="en">Slider width</rdfs:label>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <swb:defaultValue rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >20</swb:defaultValue>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >he slider width. By default set to 20</rdfs:comment>
+    <rdfs:domain rdf:resource="#AudioPodCast"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="volumeHeight">
+    <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:required>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_volumeHeight">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#Integer"/>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >120</swb:index>
+        <rdfs:label xml:lang="es">Alto del botón de volumen</rdfs:label>
+        <rdfs:label xml:lang="en">The height of the volume button</rdfs:label>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <swb:defaultValue rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >6</swb:defaultValue>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >The height of the volume button</rdfs:comment>
+    <rdfs:domain rdf:resource="#AudioPodCast"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="bgcolor1">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_bgcolor1">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hexadecimal"/>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >170</swb:index>
+        <rdfs:label xml:lang="es">Primer color del  gradiente de fondo</rdfs:label>
+        <rdfs:label xml:lang="en">The first color of the background gradient</rdfs:label>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >The first color of the background gradient</rdfs:comment>
+    <rdfs:domain rdf:resource="#AudioPodCast"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="showSlider">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_showSlider">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#BooleanElement_3"/>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >160</swb:index>
+        <rdfs:label xml:lang="es">Mostrar barra de avance</rdfs:label>
+        <rdfs:label xml:lang="en">Show the player bar</rdfs:label>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <swb:defaultValue rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >true</swb:defaultValue>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Show the player bar</rdfs:comment>
+    <rdfs:domain rdf:resource="#AudioPodCast"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="showcontroller">
-    <rdfs:label xml:lang="es">Mostrar reproductor</rdfs:label>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+    <rdfs:comment xml:lang="es">Mostrar consola</rdfs:comment>
+    <rdfs:comment xml:lang="en">Show console</rdfs:comment>
+    <rdfs:label xml:lang="en">Show player</rdfs:label>
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_showcontroller"/>
     </swb:displayProperty>
-    <rdfs:label xml:lang="en">Show player</rdfs:label>
-    <rdfs:comment xml:lang="en">Show console</rdfs:comment>
-    <rdfs:comment xml:lang="es">Mostrar consola</rdfs:comment>
+    <rdfs:label xml:lang="es">Mostrar reproductor</rdfs:label>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="transparent">
+    <swb:defaultValue rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >true</swb:defaultValue>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_transparent">
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >30</swb:index>
+        <rdfs:label xml:lang="en">Transparent background</rdfs:label>
+        <rdfs:label xml:lang="es">Fondo transparente</rdfs:label>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#BooleanElement_3"/>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Fondo transparente</rdfs:comment>
+    <rdfs:domain rdf:resource="#AudioPodCast"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="scTitle">
+    <swb:defaultValue rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >50</swb:defaultValue>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+    <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:required>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_scTitle">
+        <rdfs:label xml:lang="es">Truncar título hasta</rdfs:label>
+        <rdfs:label xml:lang="en">Trunc title to</rdfs:label>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >10</swb:index>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#Integer"/>
+        <swbxf:propInvalidMessage xml:lang="es">Tamaño máximo de resumen es requerido</swbxf:propInvalidMessage>
+        <swbxf:propPromptMessage xml:lang="es">Resumir título hasta</swbxf:propPromptMessage>
+        <swbxf:propPromptMessage xml:lang="en">Resume title to</swbxf:propPromptMessage>
+        <swbxf:propInvalidMessage xml:lang="en">Summary maximum size is required</swbxf:propInvalidMessage>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >abreviación de título (shortcut)</rdfs:comment>
+    <rdfs:domain rdf:resource="#AudioPodCast"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="filename">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#AudioFile"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Nombre del archivo de audio</rdfs:comment>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_resource">
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >32</swb:index>
+        <rdfs:label xml:lang="es">Recurso de audio</rdfs:label>
+        <swbxf:propInvalidMessage rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >Archivo de audio es requerido</swbxf:propInvalidMessage>
+        <swbxf:propPromptMessage rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >Seleccione el archivo de audio</swbxf:propPromptMessage>
+        <rdfs:label xml:lang="en">Audio resource</rdfs:label>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#fe_DojoFileUpload"/>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="showLoading">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <swb:defaultValue rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >true</swb:defaultValue>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_showLoading">
+        <swbxf:propSelectValues rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >autohide:autohide|always:always|never:never</swbxf:propSelectValues>
+        <rdfs:label xml:lang="en">Loading bar display mode</rdfs:label>
+        <rdfs:label xml:lang="es">Modo de despliegue de la barra de carga</rdfs:label>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >70</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Mostrar leyenda de carga</rdfs:comment>
+    <rdfs:domain rdf:resource="#AudioPodCast"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="sliderOvercolor">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_sliderOvercolor">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hexadecimal"/>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >210</swb:index>
+        <rdfs:label xml:lang="es">Color de resalte de la barra</rdfs:label>
+        <rdfs:label xml:lang="en">Hover color of the bar</rdfs:label>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Hover color of the bar</rdfs:comment>
+    <rdfs:domain rdf:resource="#AudioPodCast"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="buttonOvercolor">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_buttonOvercolor">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hexadecimal"/>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >150</swb:index>
+        <rdfs:label xml:lang="es">Color de resalte de los botones</rdfs:label>
+        <rdfs:label xml:lang="en">Hover color of buttons</rdfs:label>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Hover color of buttons</rdfs:comment>
+    <rdfs:domain rdf:resource="#AudioPodCast"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="loop">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_loop">
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >50</swb:index>
+        <rdfs:label xml:lang="en">continuous playback</rdfs:label>
+        <rdfs:label xml:lang="es">Reproducción continua</rdfs:label>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#BooleanElement_3"/>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <swb:defaultValue rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >false</swb:defaultValue>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+    <rdfs:domain rdf:resource="#AudioPodCast"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="autoload">
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Cargar automáticamente</rdfs:comment>
+    <swb:defaultValue rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >true</swb:defaultValue>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_autoload">
+        <rdfs:label xml:lang="en">To automatically load</rdfs:label>
+        <rdfs:label xml:lang="es">Cargar automáticamente</rdfs:label>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#BooleanElement_3"/>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >60</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:domain rdf:resource="#AudioPodCast"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="author">
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Autor o participante del contenido</rdfs:comment>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_author">
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >31</swb:index>
+        <rdfs:label xml:lang="es">Autor</rdfs:label>
+        <swbxf:propPromptMessage xml:lang="en">Author or participates</swbxf:propPromptMessage>
+        <swbxf:propPromptMessage xml:lang="es">Autor o participante</swbxf:propPromptMessage>
+        <rdfs:label xml:lang="en">Author</rdfs:label>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextBox"/>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <rdfs:domain rdf:resource="#AudioFile"/>
   </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="bgcolor">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_bgcolor">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hexadecimal"/>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >61</swb:index>
+        <rdfs:label xml:lang="es">Color de fondo</rdfs:label>
+        <rdfs:label xml:lang="en">Background color</rdfs:label>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >The background color</rdfs:comment>
+    <rdfs:domain rdf:resource="#AudioPodCast"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="textcolor">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_textcolor">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hexadecimal"/>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >62</swb:index>
+        <rdfs:label xml:lang="en">Textcolor</rdfs:label>
+        <rdfs:label xml:lang="es">Color de texto</rdfs:label>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >The text color</rdfs:comment>
+    <rdfs:domain rdf:resource="#AudioPodCast"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="sliderColor2">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_sliderColor2">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hexadecimal"/>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >200</swb:index>
+        <rdfs:label xml:lang="es">Segundo color del gradiente de la barra</rdfs:label>
+        <rdfs:label xml:lang="en">The second color of the bar gradient</rdfs:label>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >The second color of the bar gradient</rdfs:comment>
+    <rdfs:domain rdf:resource="#AudioPodCast"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="height">
+    <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:required>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_height">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#Integer"/>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >9</swb:index>
+        <rdfs:label xml:lang="en">Console height</rdfs:label>
+        <rdfs:label xml:lang="es">Altura de la consola</rdfs:label>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <swb:defaultValue rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >80</swb:defaultValue>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Alto de la consola de controles (plugin)</rdfs:comment>
+    <rdfs:domain rdf:resource="#AudioPodCast"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="bgcolor2">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_bgcolor2">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hexadecimal"/>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >180</swb:index>
+        <rdfs:label xml:lang="es">Segundo color del gradiente de fondo</rdfs:label>
+        <rdfs:label xml:lang="en">The second color of the background gradient</rdfs:label>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >The second color of the background gradient</rdfs:comment>
+    <rdfs:domain rdf:resource="#AudioPodCast"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="width">
+    <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:required>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Anchura de la consola de controles (plugin)</rdfs:comment>
+    <swb:defaultValue rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >400</swb:defaultValue>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_width">
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >8</swb:index>
+        <rdfs:label xml:lang="en">Console width</rdfs:label>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#Integer"/>
+        <rdfs:label xml:lang="es">Anchura de la consola</rdfs:label>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:domain rdf:resource="#AudioPodCast"/>
+  </owl:DatatypeProperty>
   <swb:CodePackage rdf:ID="pkg">
-    <swb:prefix rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >audiof</swb:prefix>
     <swb:package rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >org.semanticwb.portal.resources.sem</swb:package>
+    <swb:prefix rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >audiof</swb:prefix>
   </swb:CodePackage>
+  <swbxf:DisplayProperty rdf:ID="dp_duration">
+    <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TimeElement_1"/>
+  </swbxf:DisplayProperty>
 </rdf:RDF>
 
 <!-- Created with TopBraid Composer -->
