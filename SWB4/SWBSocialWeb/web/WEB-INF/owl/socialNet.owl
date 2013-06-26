@@ -143,7 +143,7 @@
     <swb:displayObject>
       <swbxf:DisplayObject rdf:ID="do_YouTube">
         <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >swbIconTwitter</swb:iconClass>
+        >swbIconYouTube</swb:iconClass>
       </swbxf:DisplayObject>
     </swb:displayObject>
     <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
@@ -397,14 +397,18 @@
     </swb:hasHerarquicalNode>
     <swb:hasHerarquicalNode>
       <swbxf:HerarquicalNode rdf:ID="hn_Calendars">
+        <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >swbIconSocialCalendarGrp</swb:iconClass>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >60</swb:index>
         <swbxf:heClass>
           <swb:Class rdf:ID="SocialCalendar">
             <swb:displayObject>
               <swbxf:DisplayObject rdf:ID="do_socialCalendar">
-                <rdfs:label xml:lang="en">Calendar</rdfs:label>
-                <rdfs:label xml:lang="es">Calendario</rdfs:label>
                 <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-                >swbIconSocialTopic</swb:iconClass>
+                >swbIconSocialCalendar</swb:iconClass>
+                <rdfs:label xml:lang="es">Calendario</rdfs:label>
+                <rdfs:label xml:lang="en">Calendar</rdfs:label>
               </swbxf:DisplayObject>
             </swb:displayObject>
             <rdfs:label xml:lang="en">Calendar</rdfs:label>
@@ -414,10 +418,6 @@
             <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
           </swb:Class>
         </swbxf:heClass>
-        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >60</swb:index>
-        <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >swbIconCalendars</swb:iconClass>
         <swb:title xml:lang="es">Calendario</swb:title>
         <swb:title xml:lang="en">Calendar</swb:title>
       </swbxf:HerarquicalNode>
@@ -1095,6 +1095,11 @@
       </swbxf:DisplayProperty>
     </swb:displayProperty>
   </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="snu_photoUrl">
+    <rdfs:comment>Url de la foto del usuario. La foto nunca se va ha guardar en SWBSocial, solo se guarda la url de la misma en el servidor de la red social.</rdfs:comment>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#SocialNetworkUser"/>
+  </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="filterSentimentalPositive">
     <rdfs:comment>Propiedad que indica si en el stream se desea aceptar que entren los mensajes que sean clasificados con sentimiento positivo</rdfs:comment>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
@@ -1619,6 +1624,11 @@
     <rdfs:comment>Cantidad de seguidores que tiene el usuario que es almacenado en c/instancia de esta clase (en su propiedad id)</rdfs:comment>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
     <rdfs:domain rdf:resource="#SocialNetworkUser"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="refreshToken">
+    <rdfs:comment>Token para refrescar un token expirado.</rdfs:comment>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#DeveloperKeyable"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="IntensityType">
     <rdfs:domain rdf:resource="#SentimentalLearningPhrase"/>
