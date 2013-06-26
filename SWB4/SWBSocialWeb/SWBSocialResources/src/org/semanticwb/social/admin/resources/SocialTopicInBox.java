@@ -66,12 +66,18 @@ public class SocialTopicInBox extends GenericResource {
     }
     public static final String Mode_RECLASSBYTOPIC="reclassByTopic";
     public static final String Mode_RESPONSE="response";
+    public static final String Mode_PREVIEW = "preview";
+    public static final String Mode_ShowUsrHistory="showUsrHistory";
     
     @Override
     public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         final String mode = paramRequest.getMode();
         if (Mode_RECLASSBYTOPIC.equals(mode)) {
             doReClassifyByTopic(request, response, paramRequest);
+        }else if(Mode_ShowUsrHistory.equals(mode)){
+             doShowUserHistory(request, response, paramRequest);
+        }else if(Mode_PREVIEW.equals(mode)) {
+            doPreview(request, response, paramRequest);
         }else if(Mode_RESPONSE.equals(mode)){
             doResponse(request, response, paramRequest);
         }else if (paramRequest.getMode().equals("post")) {
@@ -435,14 +441,14 @@ public class SocialTopicInBox extends GenericResource {
         
         
        //Ordenamientos
-        //System.out.println("orderBy k Llega:"+request.getParameter("orderBy"));
+        System.out.println("orderBy k Llega SocialTopicInBoxxx:"+request.getParameter("orderBy"));
         Set<PostIn> setso=null;
         if(request.getParameter("orderBy")!=null)
         {
             if(request.getParameter("orderBy").equals("PostTypeUp"))
             {
                 setso = SWBSocialComparator.sortByPostType(itposts, true);
-            }if(request.getParameter("orderBy").equals("PostTypeDown"))
+            }else if(request.getParameter("orderBy").equals("PostTypeDown"))
             {
                 setso = SWBSocialComparator.sortByPostType(itposts, false);
             }else if(request.getParameter("orderBy").equals("networkUp"))
@@ -523,8 +529,10 @@ public class SocialTopicInBox extends GenericResource {
             }else if(request.getParameter("orderBy").equals("prioritaryDown"))
             {
                 setso = SWBSocialComparator.sortByPrioritary(itposts, false);
+            }else
+            {
+                setso = SWBComparator.sortByCreatedSet(itposts, false);
             }
-            
         }else
         {
             setso = SWBComparator.sortByCreatedSet(itposts, false);
@@ -580,13 +588,18 @@ public class SocialTopicInBox extends GenericResource {
             
             
             //Preview
+            /*
             SWBResourceURL urlpre = paramRequest.getRenderUrl();
             urlpre.setParameter("suri", id);
             urlpre.setParameter("page", "" + p);
             urlpre.setParameter("sval", postIn.getURI());
             urlpre.setParameter("preview", "true");
-            urlpre.setParameter("orderBy", (request.getParameter("orderBy")!=null && request.getParameter("orderBy").trim().length() > 0 ? request.getParameter("orderBy") : ""));
-            out.println("<a href=\"#\" title=\"" + paramRequest.getLocaleString("previewdocument") + "\" onclick=\"submitUrl('" + urlpre + "',this); return false;\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/icons/preview.gif\" border=\"0\" alt=\"" + paramRequest.getLocaleString("previewdocument") + "\"></a>");
+            * */
+            //urlpre.setParameter("orderBy", (request.getParameter("orderBy")!=null && request.getParameter("orderBy").trim().length() > 0 ? request.getParameter("orderBy") : ""));
+            //out.println("<a href=\"#\" title=\"" + paramRequest.getLocaleString("previewdocument") + "\" onclick=\"submitUrl('" + urlpre + "',this); return false;\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/icons/preview.gif\" border=\"0\" alt=\"" + paramRequest.getLocaleString("previewdocument") + "\"></a>");
+            SWBResourceURL urlPrev=paramRequest.getRenderUrl().setMode(Mode_PREVIEW).setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("postUri", postIn.getURI());  
+            out.println("<a href=\"#\" title=\"" + paramRequest.getLocaleString("previewdocument") + "\" onclick=\"showDialog('" + urlPrev + "','" + paramRequest.getLocaleString("previewdocument") 
+                    + "'); return false;\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/icons/preview.gif\" border=\"0\" alt=\"" + paramRequest.getLocaleString("previewdocument") + "\"></a>");
             
             
             //ReClasifyByTpic
@@ -661,7 +674,8 @@ public class SocialTopicInBox extends GenericResource {
             
             //User
             out.println("<td>");
-            out.println(postIn.getPostInSocialNetworkUser().getSnu_name());
+            SWBResourceURL urlshowUsrHistory=paramRequest.getRenderUrl().setMode(Mode_ShowUsrHistory).setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("swbSocialUser", postIn.getPostInSocialNetworkUser().getURI());  
+            out.println(postIn.getPostInSocialNetworkUser()!=null?"<a href=\"#\" onMouseOver=\"showDialog('" + urlshowUsrHistory + "','" + paramRequest.getLocaleString("userHistory") + "'); return false;\" onMouseOut=\"hideDialog();\">"+postIn.getPostInSocialNetworkUser().getSnu_name()+"</a>":paramRequest.getLocaleString("withoutUser"));
             out.println("</td>");
             
             //Followers
@@ -730,19 +744,6 @@ public class SocialTopicInBox extends GenericResource {
         
         out.println("</div>");  
         
-        
-        if (request.getParameter("preview") != null && request.getParameter("preview").equals("true")) {
-            if (request.getParameter("sval") != null) {
-                try {
-                    doPreview(request, response, paramRequest);
-                } catch (Exception e) {
-                    out.println("Preview not available...");
-                }
-            } else {
-                out.println("Preview not available...");
-            }
-        }
-        
     }
     
     
@@ -758,10 +759,7 @@ public class SocialTopicInBox extends GenericResource {
      * @throws IOException Signals that an I/O exception has occurred.
      */
     public void doPreview(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        String postUri=request.getParameter("sval");
-        PrintWriter out = response.getWriter();
-        out.println("<fieldset>");
-        out.println("<legend>" + paramRequest.getLocaleString("previewdocument") + "</legend>");
+        String postUri=request.getParameter("postUri");
         try {
             final String path = SWBPlatform.getContextPath() + "/work/models/" + paramRequest.getWebPage().getWebSiteId() + "/jsp/review/showPostIn.jsp";
             if (request != null) {
@@ -779,15 +777,9 @@ public class SocialTopicInBox extends GenericResource {
                 }
             }
             
-            /*
-            SWBResource res = SWBPortal.getResourceMgr().getResource(id);
-            ((SWBParamRequestImp) paramRequest).setResourceBase(res.getResourceBase());
-            res.render(request, response, paramRequest);
-            **/
         } catch (Exception e) {
             log.error("Error while getting content string ,id:" + postUri, e);
         }
-        out.println("</fieldset>");
     }
     
     
@@ -834,6 +826,22 @@ public class SocialTopicInBox extends GenericResource {
             rd.include(request, response);
         } catch (ServletException ex) {
             log.error("Error al enviar los datos a typeOfContent.jsp " + ex.getMessage());
+        }
+    }
+    
+    private void doShowUserHistory(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest)
+    {
+        final String path = SWBPlatform.getContextPath() + "/work/models/" + paramRequest.getWebPage().getWebSiteId() + "/jsp/review/userHistory.jsp";
+        RequestDispatcher dis = request.getRequestDispatcher(path);
+        if (dis != null) {
+            try {
+                SemanticObject semObject = SemanticObject.createSemanticObject(request.getParameter("swbSocialUser"));
+                request.setAttribute("swbSocialUser", semObject);
+                request.setAttribute("paramRequest", paramRequest);
+                dis.include(request, response);
+            } catch (Exception e) {
+                log.error(e);
+            }
         }
     }
     

@@ -69,6 +69,7 @@ public class StreamInBox extends GenericResource {
     public static final String Mode_RECLASSBYTOPIC="reclassByTopic";
     public static final String Mode_RECLASSBYSENTIMENT="revalue";
     public static final String Mode_RESPONSE="response";
+    public static final String Mode_ShowUsrHistory="showUsrHistory";
     
     @Override
     public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
@@ -77,6 +78,8 @@ public class StreamInBox extends GenericResource {
             doRevalue(request, response, paramRequest);
         }if(Mode_PREVIEW.equals(mode)) {
             doPreview(request, response, paramRequest);
+        }else if(Mode_ShowUsrHistory.equals(mode)){
+             doShowUserHistory(request, response, paramRequest);
         }else if(Mode_RESPONSE.equals(mode)){
             doResponse(request, response, paramRequest);
         }else if (paramRequest.getMode().equals("post")) {
@@ -139,6 +142,7 @@ public class StreamInBox extends GenericResource {
         Stream stream = (Stream)SemanticObject.getSemanticObject(id).getGenericInstance();    
         
         PrintWriter out = response.getWriter();
+        
         
         if(request.getParameter("leyendReconfirm")!=null)
         {
@@ -222,6 +226,7 @@ public class StreamInBox extends GenericResource {
         
         
         out.println("<fieldset>");
+        
         out.println("<table width=\"98%\" >");
         out.println("<thead>");
         
@@ -679,7 +684,8 @@ public class StreamInBox extends GenericResource {
             //Nunca debería un PostIn no tener un usuario, porque obvio las redes sociales simpre tienen un usuario que escribe los mensajes
             //User
             out.println("<td>");
-            out.println(postIn.getPostInSocialNetworkUser()!=null?postIn.getPostInSocialNetworkUser().getSnu_name():paramRequest.getLocaleString("withoutUser"));   //Nunca debería un PostIn no tener un usuario 
+            SWBResourceURL urlshowUsrHistory=paramRequest.getRenderUrl().setMode(Mode_ShowUsrHistory).setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("swbSocialUser", postIn.getPostInSocialNetworkUser().getURI());  
+            out.println(postIn.getPostInSocialNetworkUser()!=null?"<a href=\"#\" onMouseOver=\"showDialog('" + urlshowUsrHistory + "','" + paramRequest.getLocaleString("userHistory") + "'); return false;\" onMouseOut=\"hideDialog();\">"+postIn.getPostInSocialNetworkUser().getSnu_name()+"</a>":paramRequest.getLocaleString("withoutUser"));
             out.println("</td>");
             
             //Followers
@@ -844,6 +850,23 @@ public class StreamInBox extends GenericResource {
             }
         }
     }
+    
+    private void doShowUserHistory(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest)
+    {
+        final String path = SWBPlatform.getContextPath() + "/work/models/" + paramRequest.getWebPage().getWebSiteId() + "/jsp/review/userHistory.jsp";
+        RequestDispatcher dis = request.getRequestDispatcher(path);
+        if (dis != null) {
+            try {
+                SemanticObject semObject = SemanticObject.createSemanticObject(request.getParameter("swbSocialUser"));
+                request.setAttribute("swbSocialUser", semObject);
+                request.setAttribute("paramRequest", paramRequest);
+                dis.include(request, response);
+            } catch (Exception e) {
+                log.error(e);
+            }
+        }
+    }
+    
     
     public void doCreatePost(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {        
         RequestDispatcher rd = request.getRequestDispatcher(SWBPlatform.getContextPath() +"/work/models/" + paramRequest.getWebPage().getWebSiteId() +"/jsp/post/typeOfContent.jsp");
