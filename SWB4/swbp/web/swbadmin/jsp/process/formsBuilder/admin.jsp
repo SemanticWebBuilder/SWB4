@@ -114,11 +114,14 @@ if (ProcessForm.ADM_MODESIMPLE.equals(admMode)) {
     disabled = "disabled=\"true\"";
     updMode.setParameter(ProcessForm.PARAM_ADMMODE, ProcessForm.ADM_MODESIMPLE);
 }
+
+SWBResourceURL addPropsUrl = paramRequest.getRenderUrl().setMode(ProcessForm.MODE_ADDPROPS).setCallMethod(SWBParamRequest.Call_DIRECT);
+addPropsUrl.setParameter(ProcessForm.ATT_TASK, task.getEncodedURI());
 %>
 <div dojoType="dijit.layout.BorderContainer" id="mainContainer" style="width:100%; height:1300px;">
     <div dojoType="dijit.Toolbar" region="top">
         <form action="<%=toggle%>" method="post">
-            <button iconClass="propIcon" <%=disabled%> dojoType="dijit.form.Button" onclick="showFormDialog('elePropsDialog','','Agregar Propiedad')">Propiedad</button>
+            <button iconClass="propIcon" <%=disabled%> dojoType="dijit.form.Button" onclick="showDialog('<%=addPropsUrl%>','Editar'); return false;">Propiedad</button>
             <span dojoType="dijit.ToolbarSeparator"></span>
             <button name="btns" <%=disabled%> iconClass="acceptIcon" onclick="window.location='<%=toggle%>?btns=accept'; return false;" <%=btnAccept?"checked":""%> dojoType="dijit.form.ToggleButton">Bot&oacute;n concluir</button>
             <button name="btns" <%=disabled%> iconClass="rejectIcon" onclick="window.location='<%=toggle%>?btns=reject'; return false;" <%=btnReject?"checked":""%> dojoType="dijit.form.ToggleButton">Bot&oacute;n rechazar</button>
@@ -309,48 +312,6 @@ if (ProcessForm.ADM_MODESIMPLE.equals(admMode)) {
                 }
                 %>
             </div>
-            <div id="elePropsDialog" style="display:none;" dojoType="dijit.Dialog" title="Agregar propiedad">
-                <%
-                SWBResourceURL urladd = paramRequest.getActionUrl().setAction(ProcessForm.ACT_ADDPROPS);
-                ArrayList<String> list = new ArrayList(allprops.keySet());
-                if (!list.isEmpty()) {
-                    %>
-                    <script type="text/javascript">
-                        dojo.require("dijit.form.MultiSelect");
-                    </script>
-                    <form class="swbform" action="<%=urladd%>" method="post">
-                        <fieldset>
-                            <select multiple size="10" name="properties" style="width:250px;">
-                                <%
-                                Collections.sort(list);
-                                Iterator<String> its = list.iterator();
-                                while (its.hasNext()) {
-                                    String str = its.next();
-                                    String varName = "";
-                                    StringTokenizer stoken = new StringTokenizer(str, "|");
-                                    if (stoken.hasMoreTokens()) {
-                                        varName = stoken.nextToken();
-                                    }
-                                    SemanticProperty sp = allprops.get(str);
-                                    %>
-                                    <option value="<%=str%>"><%=varName + "." + sp.getPropertyCodeName()%>
-                                    </option>
-                                    <%
-                                }
-                                %>
-                            </select>
-                        </fieldset>
-                        <fieldset>
-                            <button dojoType="dijit.form.Button" type="submit">Agregar seleccionadas</button>
-                            <button dojoType="dijit.form.Button" onclick="hideDialog('elePropsDialog');">Cancelar</button>
-                        </fieldset>
-                    </form>
-                    <%
-                } else {
-                    %>No hay propiedades disponibles<%
-                }
-                %>
-            </div>
             <%
         } else if (ProcessForm.ADM_MODEADVANCED.equals(admMode)) {
             String basepath = SWBPortal.getWorkPath() + base.getWorkPath() + "/";
@@ -403,14 +364,14 @@ if (ProcessForm.ADM_MODESIMPLE.equals(admMode)) {
 </div>
 <script type="text/javascript">
     dojo.require("dijit.Dialog");
-    function showFormDialog(dialogId, url, title) {
+    /*function showFormDialog(dialogId, url, title) {
         var dialog = dijit.byId(dialogId);
         if (url != null && url != "") {
             dialog.attr('href',url);
         }
         dialog.attr('title',title);
-        dialog.show();
-    }
+        //dialog.show();
+    }*/
 
     function hideDialog(id) {
         dijit.byId(id).hide();
@@ -418,11 +379,13 @@ if (ProcessForm.ADM_MODESIMPLE.equals(admMode)) {
 
     function showDialog(url, title)
     {
+        console.log(url);
+    
         //alert("url:"+url);
         dojo.xhrGet({
             url: url,
             load: function(response, ioArgs){
-                //alert(response);
+                console.log(response);
                 //dijit.byId('swbDialogImp').attr('content',response);
                 dijit.byId('configDialogImp').attr('content',response);
                 dijit.byId('configDialog').show();
@@ -431,6 +394,7 @@ if (ProcessForm.ADM_MODESIMPLE.equals(admMode)) {
             },
             error: function(response, ioArgs){
                 showStatus('Error:'+response);
+                console.log(response);
                 //dijit.byId('swbDialogImp').attr('content','Error: '+response);
                 //dijit.byId('swbDialog').show();
                 return response;
