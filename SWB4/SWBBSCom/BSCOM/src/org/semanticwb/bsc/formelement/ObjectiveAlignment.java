@@ -11,21 +11,21 @@ import org.semanticwb.model.SWBModel;
 import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticProperty;
-import org.semanticwb.bsc.formelement.base.SelectOne_ParentModelBase;
+import org.semanticwb.bsc.formelement.base.ObjectiveAlignmentBase;
 
 
     /**
      * Muestra un select con las instancias pertenecientes al BSC padre, de la clase 
      * definida como rango de la propiedad asociada a este elemento 
      */
-public class SelectOne_ParentModel extends SelectOne_ParentModelBase {
+public class ObjectiveAlignment extends ObjectiveAlignmentBase {
     
     
     /**
      * Crea instancias de esta clase a partir de un objeto semantico
      * @param base el objeto semántico a utilizar para crear la nueva instancia
      */
-    public SelectOne_ParentModel(org.semanticwb.platform.SemanticObject base) {
+    public ObjectiveAlignment(org.semanticwb.platform.SemanticObject base) {
         super(base);
     }
 
