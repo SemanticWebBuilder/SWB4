@@ -1,34 +1,41 @@
-/*
- * SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración,
- * colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de
- * información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes
- * fuentes, donde a la información se le asigna un significado, de forma que pueda ser interpretada y
- * procesada por personas y/o sistemas, es una creación original del Fondo de Información y Documentación
- * para la Industria INFOTEC, cuyo registro se encuentra actualmente en trámite.
- *
- * INFOTEC pone a su disposición la herramienta SemanticWebBuilder a través de su licenciamiento abierto al público (‘open source’),
- * en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición;
- * aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software,
- * todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización
- * del SemanticWebBuilder 4.0.
- *
- * INFOTEC no otorga garantía sobre SemanticWebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita,
- * siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar
- * de la misma.
- *
- * Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente
- * dirección electrónica:
- *  http://www.semanticwebbuilder.org
- */
 package org.semanticwb.portal.resources.sem.base;
 
 
 public abstract class AudioPodCastBase extends org.semanticwb.portal.api.GenericSemResource 
 {
+    public static final org.semanticwb.platform.SemanticProperty audiof_sliderHeight=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/sems/SWBAudioFile#sliderHeight");
+    public static final org.semanticwb.platform.SemanticProperty audiof_textcolor=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/sems/SWBAudioFile#textcolor");
+    public static final org.semanticwb.platform.SemanticProperty audiof_bgcolor=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/sems/SWBAudioFile#bgcolor");
+    public static final org.semanticwb.platform.SemanticProperty audiof_showStop=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/sems/SWBAudioFile#showStop");
+    public static final org.semanticwb.platform.SemanticProperty audiof_height=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/sems/SWBAudioFile#height");
+    public static final org.semanticwb.platform.SemanticProperty audiof_volumeHeight=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/sems/SWBAudioFile#volumeHeight");
+    public static final org.semanticwb.platform.SemanticProperty audiof_showLoading=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/sems/SWBAudioFile#showLoading");
+    public static final org.semanticwb.platform.SemanticProperty audiof_sliderWidth=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/sems/SWBAudioFile#sliderWidth");
+    public static final org.semanticwb.platform.SemanticProperty audiof_showVolume=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/sems/SWBAudioFile#showVolume");
+    public static final org.semanticwb.platform.SemanticProperty audiof_buttonColor=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/sems/SWBAudioFile#buttonColor");
+    public static final org.semanticwb.platform.SemanticProperty audiof_scTitle=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/sems/SWBAudioFile#scTitle");
+    public static final org.semanticwb.platform.SemanticProperty audiof_scDescription=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/sems/SWBAudioFile#scDescription");
+    public static final org.semanticwb.platform.SemanticProperty audiof_width=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/sems/SWBAudioFile#width");
+    public static final org.semanticwb.platform.SemanticProperty audiof_pageSize=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/sems/SWBAudioFile#pageSize");
+    public static final org.semanticwb.platform.SemanticProperty audiof_sliderColor1=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/sems/SWBAudioFile#sliderColor1");
+    public static final org.semanticwb.platform.SemanticProperty audiof_loadingColor=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/sems/SWBAudioFile#loadingColor");
     public static final org.semanticwb.platform.SemanticClass swb_Resource=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Resource");
     public static final org.semanticwb.platform.SemanticProperty swb_semanticResourceInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#semanticResourceInv");
+    public static final org.semanticwb.platform.SemanticProperty audiof_autoplay=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/sems/SWBAudioFile#autoplay");
     public static final org.semanticwb.platform.SemanticClass audiof_AudioFile=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/portal/resources/sems/SWBAudioFile#AudioFile");
     public static final org.semanticwb.platform.SemanticProperty audiof_hasAudioFile=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/sems/SWBAudioFile#hasAudioFile");
+    public static final org.semanticwb.platform.SemanticProperty audiof_sliderColor2=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/sems/SWBAudioFile#sliderColor2");
+    public static final org.semanticwb.platform.SemanticProperty audiof_buttonOvercolor=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/sems/SWBAudioFile#buttonOvercolor");
+    public static final org.semanticwb.platform.SemanticProperty audiof_volumeWidth=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/sems/SWBAudioFile#volumeWidth");
+    public static final org.semanticwb.platform.SemanticProperty audiof_buttonWidth=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/sems/SWBAudioFile#buttonWidth");
+    public static final org.semanticwb.platform.SemanticProperty audiof_sliderOvercolor=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/sems/SWBAudioFile#sliderOvercolor");
+    public static final org.semanticwb.platform.SemanticProperty audiof_loop=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/sems/SWBAudioFile#loop");
+    public static final org.semanticwb.platform.SemanticProperty audiof_transparent=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/sems/SWBAudioFile#transparent");
+    public static final org.semanticwb.platform.SemanticProperty audiof_bgcolor2=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/sems/SWBAudioFile#bgcolor2");
+    public static final org.semanticwb.platform.SemanticProperty audiof_bgcolor1=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/sems/SWBAudioFile#bgcolor1");
+    public static final org.semanticwb.platform.SemanticProperty audiof_showSlider=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/sems/SWBAudioFile#showSlider");
+    public static final org.semanticwb.platform.SemanticProperty audiof_autoload=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/sems/SWBAudioFile#autoload");
+    public static final org.semanticwb.platform.SemanticProperty audiof_volume=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/sems/SWBAudioFile#volume");
     public static final org.semanticwb.platform.SemanticClass audiof_AudioPodCast=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/portal/resources/sems/SWBAudioFile#AudioPodCast");
     public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/portal/resources/sems/SWBAudioFile#AudioPodCast");
 
@@ -62,6 +69,294 @@ public abstract class AudioPodCastBase extends org.semanticwb.portal.api.Generic
     {
         if(obj==null)return false;
         return hashCode()==obj.hashCode();
+    }
+
+/**
+* Gets the SliderHeight property
+* @return int with the SliderHeight
+*/
+    public int getSliderHeight()
+    {
+        return getSemanticObject().getIntProperty(audiof_sliderHeight);
+    }
+
+/**
+* Sets the SliderHeight property
+* @param value long with the SliderHeight
+*/
+    public void setSliderHeight(int value)
+    {
+        getSemanticObject().setIntProperty(audiof_sliderHeight, value);
+    }
+
+/**
+* Gets the Textcolor property
+* @return String with the Textcolor
+*/
+    public String getTextcolor()
+    {
+        return getSemanticObject().getProperty(audiof_textcolor);
+    }
+
+/**
+* Sets the Textcolor property
+* @param value long with the Textcolor
+*/
+    public void setTextcolor(String value)
+    {
+        getSemanticObject().setProperty(audiof_textcolor, value);
+    }
+
+/**
+* Gets the Bgcolor property
+* @return String with the Bgcolor
+*/
+    public String getBgcolor()
+    {
+        return getSemanticObject().getProperty(audiof_bgcolor);
+    }
+
+/**
+* Sets the Bgcolor property
+* @param value long with the Bgcolor
+*/
+    public void setBgcolor(String value)
+    {
+        getSemanticObject().setProperty(audiof_bgcolor, value);
+    }
+
+/**
+* Gets the ShowStop property
+* @return boolean with the ShowStop
+*/
+    public boolean isShowStop()
+    {
+        return getSemanticObject().getBooleanProperty(audiof_showStop);
+    }
+
+/**
+* Sets the ShowStop property
+* @param value long with the ShowStop
+*/
+    public void setShowStop(boolean value)
+    {
+        getSemanticObject().setBooleanProperty(audiof_showStop, value);
+    }
+
+/**
+* Gets the Height property
+* @return int with the Height
+*/
+    public int getHeight()
+    {
+        return getSemanticObject().getIntProperty(audiof_height);
+    }
+
+/**
+* Sets the Height property
+* @param value long with the Height
+*/
+    public void setHeight(int value)
+    {
+        getSemanticObject().setIntProperty(audiof_height, value);
+    }
+
+/**
+* Gets the VolumeHeight property
+* @return int with the VolumeHeight
+*/
+    public int getVolumeHeight()
+    {
+        return getSemanticObject().getIntProperty(audiof_volumeHeight);
+    }
+
+/**
+* Sets the VolumeHeight property
+* @param value long with the VolumeHeight
+*/
+    public void setVolumeHeight(int value)
+    {
+        getSemanticObject().setIntProperty(audiof_volumeHeight, value);
+    }
+
+/**
+* Gets the ShowLoading property
+* @return String with the ShowLoading
+*/
+    public String getShowLoading()
+    {
+        return getSemanticObject().getProperty(audiof_showLoading);
+    }
+
+/**
+* Sets the ShowLoading property
+* @param value long with the ShowLoading
+*/
+    public void setShowLoading(String value)
+    {
+        getSemanticObject().setProperty(audiof_showLoading, value);
+    }
+
+/**
+* Gets the SliderWidth property
+* @return int with the SliderWidth
+*/
+    public int getSliderWidth()
+    {
+        return getSemanticObject().getIntProperty(audiof_sliderWidth);
+    }
+
+/**
+* Sets the SliderWidth property
+* @param value long with the SliderWidth
+*/
+    public void setSliderWidth(int value)
+    {
+        getSemanticObject().setIntProperty(audiof_sliderWidth, value);
+    }
+
+/**
+* Gets the ShowVolume property
+* @return boolean with the ShowVolume
+*/
+    public boolean isShowVolume()
+    {
+        return getSemanticObject().getBooleanProperty(audiof_showVolume);
+    }
+
+/**
+* Sets the ShowVolume property
+* @param value long with the ShowVolume
+*/
+    public void setShowVolume(boolean value)
+    {
+        getSemanticObject().setBooleanProperty(audiof_showVolume, value);
+    }
+
+/**
+* Gets the ButtonColor property
+* @return String with the ButtonColor
+*/
+    public String getButtonColor()
+    {
+        return getSemanticObject().getProperty(audiof_buttonColor);
+    }
+
+/**
+* Sets the ButtonColor property
+* @param value long with the ButtonColor
+*/
+    public void setButtonColor(String value)
+    {
+        getSemanticObject().setProperty(audiof_buttonColor, value);
+    }
+
+/**
+* Gets the ScTitle property
+* @return int with the ScTitle
+*/
+    public int getScTitle()
+    {
+        return getSemanticObject().getIntProperty(audiof_scTitle);
+    }
+
+/**
+* Sets the ScTitle property
+* @param value long with the ScTitle
+*/
+    public void setScTitle(int value)
+    {
+        getSemanticObject().setIntProperty(audiof_scTitle, value);
+    }
+
+/**
+* Gets the ScDescription property
+* @return int with the ScDescription
+*/
+    public int getScDescription()
+    {
+        return getSemanticObject().getIntProperty(audiof_scDescription);
+    }
+
+/**
+* Sets the ScDescription property
+* @param value long with the ScDescription
+*/
+    public void setScDescription(int value)
+    {
+        getSemanticObject().setIntProperty(audiof_scDescription, value);
+    }
+
+/**
+* Gets the Width property
+* @return int with the Width
+*/
+    public int getWidth()
+    {
+        return getSemanticObject().getIntProperty(audiof_width);
+    }
+
+/**
+* Sets the Width property
+* @param value long with the Width
+*/
+    public void setWidth(int value)
+    {
+        getSemanticObject().setIntProperty(audiof_width, value);
+    }
+
+/**
+* Gets the PageSize property
+* @return int with the PageSize
+*/
+    public int getPageSize()
+    {
+        return getSemanticObject().getIntProperty(audiof_pageSize);
+    }
+
+/**
+* Sets the PageSize property
+* @param value long with the PageSize
+*/
+    public void setPageSize(int value)
+    {
+        getSemanticObject().setIntProperty(audiof_pageSize, value);
+    }
+
+/**
+* Gets the SliderColor1 property
+* @return String with the SliderColor1
+*/
+    public String getSliderColor1()
+    {
+        return getSemanticObject().getProperty(audiof_sliderColor1);
+    }
+
+/**
+* Sets the SliderColor1 property
+* @param value long with the SliderColor1
+*/
+    public void setSliderColor1(String value)
+    {
+        getSemanticObject().setProperty(audiof_sliderColor1, value);
+    }
+
+/**
+* Gets the LoadingColor property
+* @return String with the LoadingColor
+*/
+    public String getLoadingColor()
+    {
+        return getSemanticObject().getProperty(audiof_loadingColor);
+    }
+
+/**
+* Sets the LoadingColor property
+* @param value long with the LoadingColor
+*/
+    public void setLoadingColor(String value)
+    {
+        getSemanticObject().setProperty(audiof_loadingColor, value);
     }
    /**
    * Sets the value for the property Resource
@@ -100,6 +395,24 @@ public abstract class AudioPodCastBase extends org.semanticwb.portal.api.Generic
              ret=(org.semanticwb.model.Resource)obj.createGenericInstance();
          }
          return ret;
+    }
+
+/**
+* Gets the Autoplay property
+* @return boolean with the Autoplay
+*/
+    public boolean isAutoplay()
+    {
+        return getSemanticObject().getBooleanProperty(audiof_autoplay);
+    }
+
+/**
+* Sets the Autoplay property
+* @param value long with the Autoplay
+*/
+    public void setAutoplay(boolean value)
+    {
+        getSemanticObject().setBooleanProperty(audiof_autoplay, value);
     }
    /**
    * Gets all the org.semanticwb.portal.resources.sem.AudioFile
@@ -165,5 +478,221 @@ public abstract class AudioPodCastBase extends org.semanticwb.portal.api.Generic
              ret=(org.semanticwb.portal.resources.sem.AudioFile)obj.createGenericInstance();
          }
          return ret;
+    }
+
+/**
+* Gets the SliderColor2 property
+* @return String with the SliderColor2
+*/
+    public String getSliderColor2()
+    {
+        return getSemanticObject().getProperty(audiof_sliderColor2);
+    }
+
+/**
+* Sets the SliderColor2 property
+* @param value long with the SliderColor2
+*/
+    public void setSliderColor2(String value)
+    {
+        getSemanticObject().setProperty(audiof_sliderColor2, value);
+    }
+
+/**
+* Gets the ButtonOvercolor property
+* @return String with the ButtonOvercolor
+*/
+    public String getButtonOvercolor()
+    {
+        return getSemanticObject().getProperty(audiof_buttonOvercolor);
+    }
+
+/**
+* Sets the ButtonOvercolor property
+* @param value long with the ButtonOvercolor
+*/
+    public void setButtonOvercolor(String value)
+    {
+        getSemanticObject().setProperty(audiof_buttonOvercolor, value);
+    }
+
+/**
+* Gets the VolumeWidth property
+* @return int with the VolumeWidth
+*/
+    public int getVolumeWidth()
+    {
+        return getSemanticObject().getIntProperty(audiof_volumeWidth);
+    }
+
+/**
+* Sets the VolumeWidth property
+* @param value long with the VolumeWidth
+*/
+    public void setVolumeWidth(int value)
+    {
+        getSemanticObject().setIntProperty(audiof_volumeWidth, value);
+    }
+
+/**
+* Gets the ButtonWidth property
+* @return int with the ButtonWidth
+*/
+    public int getButtonWidth()
+    {
+        return getSemanticObject().getIntProperty(audiof_buttonWidth);
+    }
+
+/**
+* Sets the ButtonWidth property
+* @param value long with the ButtonWidth
+*/
+    public void setButtonWidth(int value)
+    {
+        getSemanticObject().setIntProperty(audiof_buttonWidth, value);
+    }
+
+/**
+* Gets the SliderOvercolor property
+* @return String with the SliderOvercolor
+*/
+    public String getSliderOvercolor()
+    {
+        return getSemanticObject().getProperty(audiof_sliderOvercolor);
+    }
+
+/**
+* Sets the SliderOvercolor property
+* @param value long with the SliderOvercolor
+*/
+    public void setSliderOvercolor(String value)
+    {
+        getSemanticObject().setProperty(audiof_sliderOvercolor, value);
+    }
+
+/**
+* Gets the Loop property
+* @return boolean with the Loop
+*/
+    public boolean isLoop()
+    {
+        return getSemanticObject().getBooleanProperty(audiof_loop);
+    }
+
+/**
+* Sets the Loop property
+* @param value long with the Loop
+*/
+    public void setLoop(boolean value)
+    {
+        getSemanticObject().setBooleanProperty(audiof_loop, value);
+    }
+
+/**
+* Gets the Transparent property
+* @return boolean with the Transparent
+*/
+    public boolean isTransparent()
+    {
+        return getSemanticObject().getBooleanProperty(audiof_transparent);
+    }
+
+/**
+* Sets the Transparent property
+* @param value long with the Transparent
+*/
+    public void setTransparent(boolean value)
+    {
+        getSemanticObject().setBooleanProperty(audiof_transparent, value);
+    }
+
+/**
+* Gets the Bgcolor2 property
+* @return String with the Bgcolor2
+*/
+    public String getBgcolor2()
+    {
+        return getSemanticObject().getProperty(audiof_bgcolor2);
+    }
+
+/**
+* Sets the Bgcolor2 property
+* @param value long with the Bgcolor2
+*/
+    public void setBgcolor2(String value)
+    {
+        getSemanticObject().setProperty(audiof_bgcolor2, value);
+    }
+
+/**
+* Gets the Bgcolor1 property
+* @return String with the Bgcolor1
+*/
+    public String getBgcolor1()
+    {
+        return getSemanticObject().getProperty(audiof_bgcolor1);
+    }
+
+/**
+* Sets the Bgcolor1 property
+* @param value long with the Bgcolor1
+*/
+    public void setBgcolor1(String value)
+    {
+        getSemanticObject().setProperty(audiof_bgcolor1, value);
+    }
+
+/**
+* Gets the ShowSlider property
+* @return boolean with the ShowSlider
+*/
+    public boolean isShowSlider()
+    {
+        return getSemanticObject().getBooleanProperty(audiof_showSlider);
+    }
+
+/**
+* Sets the ShowSlider property
+* @param value long with the ShowSlider
+*/
+    public void setShowSlider(boolean value)
+    {
+        getSemanticObject().setBooleanProperty(audiof_showSlider, value);
+    }
+
+/**
+* Gets the Autoload property
+* @return boolean with the Autoload
+*/
+    public boolean isAutoload()
+    {
+        return getSemanticObject().getBooleanProperty(audiof_autoload);
+    }
+
+/**
+* Sets the Autoload property
+* @param value long with the Autoload
+*/
+    public void setAutoload(boolean value)
+    {
+        getSemanticObject().setBooleanProperty(audiof_autoload, value);
+    }
+
+/**
+* Gets the Volume property
+* @return int with the Volume
+*/
+    public int getVolume()
+    {
+        return getSemanticObject().getIntProperty(audiof_volume);
+    }
+
+/**
+* Sets the Volume property
+* @param value long with the Volume
+*/
+    public void setVolume(int value)
+    {
+        getSemanticObject().setIntProperty(audiof_volume, value);
     }
 }
