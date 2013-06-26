@@ -17,8 +17,9 @@
 <%
     WebSite wsite=paramRequest.getWebPage().getWebSite();
     Resource base=paramRequest.getResourceBase();
-
     String suri = request.getParameter("suri");
+    String resid=base.getAttribute("resid", "");
+
     Dataset dataset=null;
     SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
 
@@ -30,9 +31,9 @@
     }
     String dsid=base.getAttribute("datosid");
     if(dataset!=null){
+        String path=DataSetResource.getDSWebFileURL(request, dataset.getActualVersion(),resid,wsite)+dataset.getActualVersion().getFilePath();
         if((dataset.getDatasetFormat().toLowerCase().equals("kml")||
             dataset.getDatasetFormat().toLowerCase().equals("kmz"))){
-            String path=DataSetResource.getDSWebFileURL(request, dataset.getActualVersion())+dataset.getActualVersion().getFilePath();
 %>
 <script type="text/javascript" src="http://maps.google.com/maps/api/js?v=3&amp;sensor=false&amp;language=es&amp;region=MX"></script>
 <script type="text/javascript">
@@ -78,16 +79,16 @@
 <%
     }else if(dataset.getDatasetFormat().toLowerCase().equals("csv")){
 %>
-por el momento no soportamos csv
+por el momento no soportamos csv <a href="<%=path%>">download</a>
 <%
     }else if(dataset.getDatasetFormat().toLowerCase().equals("xls")||
              dataset.getDatasetFormat().toLowerCase().equals("xlsx")){
 %>
-por el momento no soportamos excel
+por el momento no soportamos excel <a href="<%=path%>">download</a>
 <%
     }else{
 %>
-por el momento no soportamos tu formato
+por el momento no soportamos tu formato <a href="<%=path%>">download</a>
 <%
 
     }
