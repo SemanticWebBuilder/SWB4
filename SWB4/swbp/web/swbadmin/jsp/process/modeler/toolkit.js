@@ -32,6 +32,7 @@
         layer:null,
         tooltip:null,
         loaded:false,
+        tmHandler:null,
 
         setLayer:function(layer)
         {
@@ -441,11 +442,15 @@
         showTooltip:function(pos, tooltipText, width, tooltipType) {
             var _this=ToolKit;
             
-            if (_this.tooltip == null) _this.createToolTip();
+            if (_this.tmHandler && _this.tmHandler !== null) {
+                clearTimeout(_this.tmHandler);
+            }
             
-            if (tooltipType=="Error") {
+            if (_this.tooltip === null) _this.createToolTip();
+            
+            if (tooltipType==="Error") {
                 _this.tooltip.setAttributeNS(null,"class","errorToolTip");
-            } else if (tooltipType=="Warning") {
+            } else if (tooltipType==="Warning") {
                 _this.tooltip.setAttributeNS(null,"class","warningToolTip");
             }
             _this.tooltip.setText(tooltipText,0,0,width,1);
@@ -459,7 +464,8 @@
 //            anim.setAttributeNS(null, "to", "1");
 //            anim.setAttributeNS(null, "dur", "2s");
 //            _this.tooltip.appendChild(anim);
-                _this.tooltip.show();
+            _this.tooltip.show();
+            _this.tmHandler = setTimeout(function(){_this.tooltip.hide();},3000);
         },
                 
         hideToolTip:function() {
