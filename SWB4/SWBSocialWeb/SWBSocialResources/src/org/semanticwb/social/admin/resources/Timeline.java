@@ -649,7 +649,7 @@ public class Timeline extends GenericResource{
                 if(tweetsListener.getFavoritesSize() > 0){
                     System.out.println("hay nuevos favoritos:" + tweetsListener.getFavoritesSize() );
                     out.println("<script type=\"text/javascript\">");
-                    out.println("   var tabId = '" +objUri + "' + '" + FAVORITES_TAB + "';");
+                    out.println("   var tabId = '" +objUri + FAVORITES_TAB + "';");
                     out.println("   var pane = dijit.byId(tabId);");                   
                     out.println("   try{");
                     out.println("       var aux='Favorites (" + tweetsListener.getFavoritesSize() + ")';");
@@ -672,7 +672,7 @@ public class Timeline extends GenericResource{
                 if(tweetsListener.getMentionsSize() >0 ){
                     System.out.println("hay nuevas menciones:" + tweetsListener.getMentionsSize() );
                     out.println("<script type=\"text/javascript\">");
-                    out.println("   var tabId = '" +objUri + "' + '" + MENTIONS_TAB + "';");
+                    out.println("   var tabId = '" +objUri + MENTIONS_TAB + "';");
                     out.println("   var pane = dijit.byId(tabId);");                   
                     out.println("   try{");
                     out.println("       var aux='Mentions (" + tweetsListener.getMentionsSize() + ")';");
@@ -693,7 +693,7 @@ public class Timeline extends GenericResource{
                 if(tweetsListener.getDirectMSize() >0 ){
                     System.out.println("hay nuevos direct msgs:" + tweetsListener.getDirectMSize() );
                     out.println("<script type=\"text/javascript\">");
-                    out.println("   var tabId = '" +objUri + "' + '/" + DIRECT_MESSAGES_TAB +"';");
+                    out.println("   var tabId = '" +objUri + DIRECT_MESSAGES_TAB +"';");
                     out.println("   var pane = dijit.byId(tabId);");                   
                     out.println("   try{");
                     out.println("       var aux='Direct Messages (" + tweetsListener.getDirectMSize() + ")';");
