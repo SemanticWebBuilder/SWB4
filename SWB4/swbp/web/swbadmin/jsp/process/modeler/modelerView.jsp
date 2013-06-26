@@ -26,8 +26,8 @@ exportUrl.setMode(SVGModeler.MODE_EXPORT);
     <script src="/swbadmin/js/swb_admin.js"></script>
     <script src="/swbadmin/js/swb.js"></script>
     -->
-    <script type="text/javascript" src="/swbadmin/jsp/process/modeler/toolkit.js"></script>
-    <script type="text/javascript" src="/swbadmin/jsp/process/modeler/modeler.js"></script>
+    <script type="text/javascript" src="/swbadmin/jsp/process/modeler/toolkit.js" charset="utf-8"></script>
+    <script type="text/javascript" src="/swbadmin/jsp/process/modeler/modeler.js" charset="utf-8"></script>
     <link href="/swbadmin/jsp/process/modeler/images/modelerFrame.css" rel="stylesheet" type="text/css">
 </head>
 <body style="margin: 0px;" onload="Modeler.init('modeler');">
