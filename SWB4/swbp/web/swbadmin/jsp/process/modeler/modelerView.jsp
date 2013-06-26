@@ -391,6 +391,13 @@ exportUrl.setMode(SVGModeler.MODE_EXPORT);
                 stroke: #000000;
                 cursor:pointer;
             }
+            
+            .sequenceFlowLine_o {
+                fill: none;
+                stroke-width: 2;
+                stroke: #2cff20;
+                cursor:pointer;
+            }
 
             .intermediateEvent1
             {
