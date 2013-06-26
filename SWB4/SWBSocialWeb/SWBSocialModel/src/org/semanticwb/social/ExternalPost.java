@@ -26,6 +26,12 @@ public class ExternalPost {
     private String creatorId;
     
     /**
+     * User photo url in SocialNetwork
+     */
+    
+    private String creatorPhotoUrl;
+    
+    /**
      * The message posted
      */
     private String message;
@@ -121,6 +127,7 @@ public class ExternalPost {
      */
     private String postType;
     
+    
 
     /**
      * Creates a new instance of ExternalPost
@@ -148,13 +155,32 @@ public class ExternalPost {
     public String getCreatorName() {
         return creatorName;
     }
-
+    
+    
     /**
      * @param creatorName the creatorName to set
      */
     public void setCreatorName(String creatorName) {
         this.creatorName = creatorName;
     }
+    
+    /**
+     * 
+     * @return the creator Photo Url
+     */
+    public String getCreatorPhotoUrl()
+    {
+        return creatorPhotoUrl;
+    }
+    
+    /**
+     * @param creatorPhotoUrl the creatorPhotoUrl to set
+     */
+    public void setCreatorPhotoUrl(String creatorPhotoUrl)
+    {
+        this.creatorPhotoUrl = creatorPhotoUrl;
+    }
+    
 
     /**
      * @return the creatorId

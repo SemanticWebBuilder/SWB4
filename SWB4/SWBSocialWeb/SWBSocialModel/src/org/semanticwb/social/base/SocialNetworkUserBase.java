@@ -23,6 +23,10 @@ public abstract class SocialNetworkUserBase extends org.semanticwb.model.SWBClas
    */
     public static final org.semanticwb.platform.SemanticProperty social_snu_name=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#snu_name");
    /**
+   * Url de la foto del usuario. La foto nunca se va ha guardar en SWBSocial, solo se guarda la url de la misma en el servidor de la red social.
+   */
+    public static final org.semanticwb.platform.SemanticProperty social_snu_photoUrl=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#snu_photoUrl");
+   /**
    * Clase que comprende todos los tipos de Post de entrada (Povientes del Listener)que pueden ir siendo creados en la herramienta.
    */
     public static final org.semanticwb.platform.SemanticClass social_PostIn=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#PostIn");
@@ -384,6 +388,24 @@ public abstract class SocialNetworkUserBase extends org.semanticwb.model.SWBClas
     public void setSnu_name(String value)
     {
         getSemanticObject().setProperty(social_snu_name, value);
+    }
+
+/**
+* Gets the Snu_photoUrl property
+* @return String with the Snu_photoUrl
+*/
+    public String getSnu_photoUrl()
+    {
+        return getSemanticObject().getProperty(social_snu_photoUrl);
+    }
+
+/**
+* Sets the Snu_photoUrl property
+* @param value long with the Snu_photoUrl
+*/
+    public void setSnu_photoUrl(String value)
+    {
+        getSemanticObject().setProperty(social_snu_photoUrl, value);
     }
    /**
    * Gets all the org.semanticwb.social.PostIn
