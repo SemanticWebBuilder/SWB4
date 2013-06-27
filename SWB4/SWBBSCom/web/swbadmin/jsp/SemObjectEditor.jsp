@@ -178,7 +178,7 @@ try
 
         boolean canEdit=SWBPortal.getAdminFilterMgr().haveClassAction(user, cls, AdminFilter.ACTION_EDIT) && SWBPortal.getAdminFilterMgr().haveAccessToSemanticObject(user, obj);
         
-        boolean classFullAccess=DisplayObject.getDisplayMode(cls).equals(DisplayObject.DISPLAYMODE_FULL_ACCESS);        //Nivel de acceso definido por clase en la ontologia
+        boolean classFullAccess=DisplayObject.getDisplayMode(cls).equals(DisplayObject.DISPLAYMODE_FULL_ACCESS) || DisplayObject.getDisplayMode(cls).equals(DisplayObject.DISPLAYMODE_FINAL);        //Nivel de acceso definido por clase en la ontologia
         
         
         //out.println("<fieldset>");
