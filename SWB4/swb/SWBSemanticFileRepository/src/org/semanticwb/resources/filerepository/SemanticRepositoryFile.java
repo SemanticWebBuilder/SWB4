@@ -469,6 +469,7 @@ public class SemanticRepositoryFile extends org.semanticwb.resources.filereposit
                                 udel.setParameter(PARAM_UUID, UUID);
                                 udel.setParameter("repNS", IDREP);
                                 udel.setAction("removefile");
+                                if(null!=parentUUID) udel.setParameter("parentUUID", parentUUID);
                                 ret.append("\n<a href=\"#\" onclick=\"if(confirm('" + paramRequest.getLocaleString("msgAlertConfirmRemoveFile") + " " + nodo.getName() + "?')){ window.location='" + udel + "';} else { return false; }\">");
                                 ret.append("\n<img src=\"" + path + "delete.gif\" border=\"0\" alt=\"" + paramRequest.getLocaleString("msgALTDelete") + "\"/>");
                                 ret.append("\n</a>");
@@ -1974,6 +1975,10 @@ public class SemanticRepositoryFile extends org.semanticwb.resources.filereposit
         } else if ("removefile".equals(action)) // marcar archivo como eliminado lógico
         {
 
+            String pUUID = request.getParameter("parentUUID");
+            if (pUUID == null) {
+                pUUID = resUUID;
+            }
             String UUID = request.getParameter(PARAM_UUID);
             try {
                 session = rep.login(credentials, repNS);
@@ -1992,6 +1997,8 @@ public class SemanticRepositoryFile extends org.semanticwb.resources.filereposit
                     session.logout();
                 }
             }
+            if(null!=pUUID) response.setRenderParameter("parentUUID", pUUID);
+            response.setRenderParameter(PARAM_UUID, UUID);
             response.setMode(SWBActionResponse.Mode_VIEW);
         } else if ("removefolder".equals(action)) // marcar folder como eliminado
         {
@@ -2020,6 +2027,9 @@ public class SemanticRepositoryFile extends org.semanticwb.resources.filereposit
                     session.logout();
                 }
             }
+            response.setRenderParameter("parentUUID", pUUID);
+            response.setRenderParameter(PARAM_UUID, fUUID);
+            response.setMode(SWBActionResponse.Mode_VIEW);
         } else if ("updatefile".equals(action)) {
 
             boolean isChecked = false;
@@ -2194,7 +2204,7 @@ public class SemanticRepositoryFile extends org.semanticwb.resources.filereposit
                     Version ver = contenido.checkin();
                     VersionHistory history = ver.getContainingHistory();
                     ver.remove();
-                    history.save();
+                   history.save();
 
                 } catch (Exception e) {
                     log.error("Error al hacer el UndoCheckOut processAction.undo", e);
