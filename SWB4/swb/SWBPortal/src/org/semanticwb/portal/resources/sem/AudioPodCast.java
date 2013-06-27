@@ -216,9 +216,9 @@ public class AudioPodCast extends org.semanticwb.portal.resources.sem.base.Audio
                         if(duration>0)
                         {
                             out.print("  &nbsp;<span class=\"swb-pdcst-fduration\">"+paramRequest.getLocaleString("duration")+":&nbsp;");
-                            out.print(duration/1000000%60);
-                            out.print(":");
                             out.print(duration/60000000);
+                            out.print(":");
+                            out.print(duration/1000000%60);
                             out.print("</span>");
                         }
                         out.print("       </p>");                        
@@ -414,9 +414,9 @@ out.print("     <p class=\"swb-pdcst-box\">");
 if(duration>0)
 {
     out.print("  &nbsp;<span class=\"swb-pdcst-fduration\">"+paramRequest.getLocaleString("duration")+":&nbsp;");
-    out.print(duration/1000000%60);
-    out.print(":");
     out.print(duration/60000000);
+    out.print(":");
+    out.print(duration/1000000%60);
     out.print("</span>");
 }
 out.print("     </p>");                        
