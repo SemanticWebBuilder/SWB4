@@ -24,7 +24,6 @@ package org.semanticwb.portal.resources.sem;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.Enumeration;
@@ -82,7 +81,15 @@ public class SWBCommentToElement extends org.semanticwb.portal.resources.sem.bas
             String securCodeCreated = (String)request.getSession(true).getAttribute("cs");
             if( securCodeCreated!=null && securCodeCreated.equalsIgnoreCase(securCodeSent) )
             {
-                suri = URLDecoder.decode(suri, "UTF-8");
+                if(suri==null) {
+                    return;
+                }
+                try {
+                    suri = URLDecoder.decode(suri, "UTF-8");
+                }catch(Exception unsage) {
+                    suri = null;
+                }
+                
                 SWBClass element = null;
                 try {
                     element = (SWBClass)SemanticObject.createSemanticObject(suri).createGenericInstance();
@@ -93,8 +100,9 @@ public class SWBCommentToElement extends org.semanticwb.portal.resources.sem.bas
                         String key = (String) e.nextElement();
                         response.setRenderParameter(key, request.getParameter(key));
                     }
+                    return;
                 }
-                if(element!=null && element.isValid())
+                if(element.isValid())
                 {
                     String txt = SWBUtils.XML.replaceXMLChars(request.getParameter("cmnt_comment"));
                     if(!txt.isEmpty())
@@ -341,7 +349,6 @@ public class SWBCommentToElement extends org.semanticwb.portal.resources.sem.bas
         comments = SWBComparator.sortByCreated(comments, false);
         if(comments.hasNext())
         {
-            html.append(" <p class=\"swb-semcommts-lblcmmt\">"+paramRequest.getLocaleString("lblComments")+"</p>");
             html.append(" <ol>");
             while(comments.hasNext()) {
                 CommentToElement comment = comments.next();
@@ -376,7 +383,7 @@ public class SWBCommentToElement extends org.semanticwb.portal.resources.sem.bas
         }
         try {
             suri_ = URLDecoder.decode(suri, "UTF-8");
-        }catch(UnsupportedEncodingException unsee) {
+        }catch(Exception unsee) {
             suri_ = suri;
         }
         try {
