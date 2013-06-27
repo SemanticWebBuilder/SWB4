@@ -56,7 +56,7 @@
     SemanticClass cls=obj.getSemanticClass();
 
     boolean fullaccess=SWBPortal.getAdminFilterMgr().haveAccessToSemanticObject(user, obj);
-    boolean classFullAccess=DisplayObject.getDisplayMode(cls).equals(DisplayObject.DISPLAYMODE_FULL_ACCESS);        //Nivel de acceso definido por clase en la ontologia   
+    boolean classFullAccess=DisplayObject.getDisplayMode(cls).equals(DisplayObject.DISPLAYMODE_FULL_ACCESS) || DisplayObject.getDisplayMode(cls).equals(DisplayObject.DISPLAYMODE_FINAL);        //Nivel de acceso definido por clase en la ontologia   
     
     
     if(!classFullAccess || !fullaccess || !SWBPortal.getAdminFilterMgr().haveClassAction(user, cls, AdminFilter.ACTION_DELETE))
