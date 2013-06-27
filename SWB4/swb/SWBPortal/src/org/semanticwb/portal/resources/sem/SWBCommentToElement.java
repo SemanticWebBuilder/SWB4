@@ -270,14 +270,7 @@ public class SWBCommentToElement extends org.semanticwb.portal.resources.sem.bas
         final User user = paramRequest.getUser();
         final String lang = user.getLanguage()==null?"es":user.getLanguage();
         String name;
-
-//        SWBClass element = null;
-//        try {
-//            element = (SWBClass)SemanticObject.createSemanticObject(suri).createGenericInstance();
-//        }catch(Exception e) {
-//            log.error(e);
-//            return html.toString();
-//        }
+        
         SWBClass element = getSWBClassObject(suri);
         if(element==null) {
             return paramRequest.getLocaleString("noElement");
@@ -302,11 +295,7 @@ public class SWBCommentToElement extends org.semanticwb.portal.resources.sem.bas
                     continue;
                 }
                 html.append("  <li class=\"swb-semcommts-item\">");
-                if(comment.getName()==null && user.isSigned()) {
-                    html.append("   <p class=\"swb-semcommts-name\">"+(comment.getCreator()==null?"":comment.getCreator().getFullName()));
-                }else {
-                    html.append("   <p class=\"swb-semcommts-name\">"+comment.getName()==null?"":comment.getName());
-                }
+                html.append("   <p class=\"swb-semcommts-name\">"+(comment.getCreator()==null?comment.getName():comment.getCreator().getFullName()));
                 try {
                     html.append("&nbsp;<span class=\"swb-semcommts-ago\">"+paramRequest.getLocaleString("ago")+"&nbsp;"+SWBUtils.TEXT.getTimeAgo(comment.getCreated(), lang)+"</span>");
                 }catch(Exception e) {
@@ -349,24 +338,20 @@ public class SWBCommentToElement extends org.semanticwb.portal.resources.sem.bas
         comments = SWBComparator.sortByCreated(comments, false);
         if(comments.hasNext())
         {
-            html.append(" <ol>");
+            html.append(" <ol class=\"swb-semcommts-lst\">");
             while(comments.hasNext()) {
                 CommentToElement comment = comments.next();
                 if(!comment.isValid() || !user.haveAccess(comment)) {
                     continue;
                 }
-                html.append("  <li>");
-                if(comment.getName()==null && user.isSigned()) {
-                    name = comment.getCreator().getFullName();
-                }else {
-                    name = comment.getName();
-                }
+                html.append("  <li class=\"swb-semcommts-item\">");
+                html.append("   <p class=\"swb-semcommts-name\">"+(comment.getCreator()==null?comment.getName():comment.getCreator().getFullName()));
                 try {
-                    html.append("&nbsp;"+paramRequest.getLocaleString("ago")+"&nbsp;"+SWBUtils.TEXT.getTimeAgo(comment.getCreated(), lang));
+                    html.append("&nbsp;<span class=\"swb-semcommts-ago\">"+paramRequest.getLocaleString("ago")+"&nbsp;"+SWBUtils.TEXT.getTimeAgo(comment.getCreated(), lang)+"</span>");
                 }catch(Exception e) {
                 }
-                html.append("</p>");
-                html.append("<p>"+comment.getCommentToElement()+"</p>");
+                html.append("   </p>");
+                html.append("   <p class=\"swb-semcommts-cmmt\">"+comment.getCommentToElement()+"</p>");
                 html.append("  </li>");
             }
             html.append(" </ol>");
