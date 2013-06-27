@@ -81,7 +81,7 @@ public class AudioPodCast extends org.semanticwb.portal.resources.sem.base.Audio
         if(Mode_VOTE.equals(mode))
             doVote(request, response, paramRequest);
         else if(Mode_PLAY.equals(mode))
-            doPlay(request, response, paramRequest);
+            doDownload(request, response, paramRequest);
         else
             super.processRequest(request, response, paramRequest);
     }
@@ -286,7 +286,11 @@ out.println("</div>");
             if(suri==null) {
                 return;
             }
-            suri = URLDecoder.decode(suri, "UTF-8");
+            try {
+                suri = URLDecoder.decode(suri, "UTF-8");
+            }catch(Exception unsage) {
+                suri = null;
+            }
             AudioFile audiofile = null;
             try {
                 audiofile = (AudioFile)SemanticObject.createSemanticObject(suri).createGenericInstance();
@@ -492,73 +496,32 @@ out.println("  </div>");
         return getSemanticObject().getIntProperty(audiof_pageSize);
     }
     
-    public void doPlay(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+    public void doDownload(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         String suri = request.getParameter("suri");
-        suri = URLDecoder.decode(suri, "UTF-8");
+        if(suri==null) {
+            return;
+        }
+        try {
+            suri = URLDecoder.decode(suri, "UTF-8");
+        }catch(Exception unsage) {
+            suri = null;
+        }
         AudioFile audiofile = null;
         try {
             audiofile = (AudioFile)SemanticObject.createSemanticObject(suri).createGenericInstance();
         }catch(Exception e) {
             log.error(e);
+            return;
         }
-        if(audiofile!=null && audiofile.isValid()) {
+        if(audiofile.isValid()) {
             String filename = audiofile.getFilename();
-            if(filename.endsWith(".htm"))
+            if(filename.endsWith(".htm")) {
                 response.setContentType("text/html");
-    //        else if(filename.endsWith(".xml"))
-    //            response.setContentType("text/xml");
-    //        else if(filename.endsWith(".rtf"))
-    //            response.setContentType("application/rtf");
-    //        else if(filename.endsWith(".pdf"))
-    //            response.setContentType("application/pdf");
-    //        else if (filename.endsWith(".do"))
-    //            response.setContentType("application/msword");
-    //        else if(filename.endsWith(".xl"))
-    //            response.setContentType("application/vnd.ms-excel");
-    //        else if(filename.endsWith(".pp"))
-    //            response.setContentType("application/vnd.ms-powerpoint");
-    //        else if(filename.endsWith(".msg"))
-    //            response.setContentType("application/vnd.ms-outlook");
-    //        else if(filename.endsWith(".mpp"))
-    //            response.setContentType("application/vnd.ms-project");
-    //        else if(filename.endsWith(".iii"))
-    //            response.setContentType("application/x-iphone");
-    //        else if(filename.endsWith(".mdb"))
-    //            response.setContentType("application/x-msaccess");
-    //        else if(filename.endsWith(".pub"))
-    //            response.setContentType("application/x-mspublisher");
-    //        else if(filename.endsWith(".swf"))
-    //            response.setContentType("application/x-shockwave-flash");
-    //        else if(filename.endsWith(".text"))
-    //            response.setContentType("application/x-tex");
-            else if (filename.endsWith(".zip"))
+            }else if (filename.endsWith(".zip")) {
                 response.setContentType("application/zip");
-    //        else if (filename.endsWith(".jp"))
-    //            response.setContentType("image/jpeg");
-    //        else if (filename.endsWith(".png"))
-    //            response.setContentType("image/png");
-    //        else if (filename.endsWith(".gif"))
-    //            response.setContentType("image/gif");
-    //        else if(filename.endsWith(".bmp"))
-    //            response.setContentType("image/bmp");
-    //        else if(filename.endsWith(".tif"))
-    //            response.setContentType("image/tiff");
-    //        else if(filename.endsWith(".ico"))
-    //            response.setContentType("image/x-icon");
-            else if (filename.endsWith(".mp3"))
+            }else if (filename.endsWith(".mp3")) {
                 response.setContentType("audio/mpeg");
-    //        else if(filename.endsWith(".mp"))
-    //            response.setContentType("video/mpeg");
-    //        else if(filename.endsWith(".mov"))
-    //            response.setContentType("video/quicktime");
-    //        else if(filename.endsWith(".qt"))
-    //            response.setContentType("video/quicktime");
-    //        else if(filename.endsWith(".as"))
-    //            response.setContentType("video/x-ms-asf");
-    //        else if(filename.endsWith(".avi"))
-    //            response.setContentType("video/x-msvideo");
-    //        else
-    //            response.setContentType("application/octet-stream");
+            }
 
             response.setHeader("Content-Disposition", "attachment; filename=" + filename);
             String resourceURL = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+SWBPortal.getContextPath()+SWBPortal.getWebWorkPath()+audiofile.getWorkPath()+"/"+URLDecoder.decode(audiofile.getFilename(), "UTF-8");
@@ -586,14 +549,22 @@ out.println("  </div>");
         
         HttpSession session = request.getSession(true);
         String suri = request.getParameter("suri");
-        suri = URLDecoder.decode(suri, "UTF-8");
+        if(suri==null) {
+            return;
+        }
+        try {
+            suri = URLDecoder.decode(suri, "UTF-8");
+        }catch(Exception unsage) {
+            suri = null;
+        }
         AudioFile audiofile = null;
         try {
             audiofile = (AudioFile)SemanticObject.createSemanticObject(suri).createGenericInstance();
         }catch(Exception e) {
             log.error(e);
+            return;
         }    
-        if(audiofile!=null && audiofile.isValid()) {
+        if(audiofile.isValid()) {
             DecimalFormat decf = new DecimalFormat("###");
             final String rid = base.getWebSiteId()+"_"+base.getId()+"_"+audiofile.getId();
             if(session.getAttribute(rid)!=null)
