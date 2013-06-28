@@ -138,6 +138,7 @@ public class Periodicity extends org.semanticwb.bsc.formelement.base.Periodicity
             ret.append("<input name=\"" + name + "\" value=\"" + value + "\"");
 
             if (dojo) {
+                String elementId = (mode.equals("edit") ? obj.getId() : "1");
                 ret.append(" dojoType=\"dijit.form.DateTextBox\"");
                 ret.append(" required=\"" + required + "\"");
                 ret.append(" promptMessage=\"" + pmsg + "\"");
@@ -146,13 +147,13 @@ public class Periodicity extends org.semanticwb.bsc.formelement.base.Periodicity
                     ret.append(" constraints=\"" + getConstraints() + "\"");
                 }
                 if (getDateId() != null) {
-                    ret.append(" id=\"" + getDateId() + obj.getId() + "\"");
+                    ret.append(" id=\"" + getDateId() + elementId + "\"");
                 }
                 if (getDateOnChange() != null) {
                     String attributeValue = getDateOnChange();
                     ret.append(" onchange=\"");
                     ret.append((attributeValue.indexOf("{replaceId}") != -1 
-                                ? attributeValue.replace("{replaceId}", obj.getId())
+                                ? attributeValue.replace("{replaceId}", elementId)
                                 : attributeValue));
                     ret.append("\"");
                 }
