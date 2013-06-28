@@ -20,6 +20,7 @@ import org.semanticwb.bsc.element.Indicator;
 import org.semanticwb.bsc.element.Objective;
 import org.semanticwb.model.GenericIterator;
 import org.semanticwb.model.GenericObject;
+import org.semanticwb.model.Undeleteable;
 import org.semanticwb.model.User;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.platform.SemanticObject;
@@ -177,8 +178,10 @@ public class PeriodsManager extends GenericResource {
                     if (periodCheck != null) {
                         semObj.addObjectProperty(Seasonable.bsc_hasPeriod,
                                 periodCheck.getSemanticObject());
+                        periodCheck.setUndeleteable(true);
                     }
                 }
+                
                 //}
             }
             if (periods == null) {
@@ -204,6 +207,10 @@ public class PeriodsManager extends GenericResource {
                 SemanticObject period = itPeriods.next();
 
                 semObj.removeObjectProperty(Seasonable.bsc_hasPeriod, period);
+                Iterator<SemanticObject> itObjs = period.listRelatedObjects();
+                if(itObjs != null && itObjs.hasNext()){
+                    period.setBooleanProperty(Undeleteable.swb_undeleteable, false);
+                }
             }
         }
     }
