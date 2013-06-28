@@ -24,7 +24,6 @@ package org.semanticwb.servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.net.DatagramPacket;
 import java.util.Properties;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -45,12 +44,14 @@ public class SWBProxyAdminFilter implements Filter{
     static private Logger log = SWBUtils.getLogger(SWBProxyAdminFilter.class);
     static private SWBProxyAdminFilter instance;
     private FilterConfig filterConfig = null;
-    private static Properties props = SWBUtils.TEXT.getPropertyFile("/web.properties");
+    private static Properties props = null;
     private SWBProxyMessageCenter center;
+    
     
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
         instance=this;
+        props = SWBUtils.TEXT.getPropertyFile("/web.properties");
         log.event("************************************");
         log.event("Initializing SWBProxyAdmin...");
         this.filterConfig = filterConfig;

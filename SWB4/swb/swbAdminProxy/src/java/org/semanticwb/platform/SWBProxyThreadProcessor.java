@@ -25,6 +25,7 @@ package org.semanticwb.platform;
 import java.net.DatagramPacket;
 import java.util.HashMap;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.TimeUnit;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 
@@ -49,8 +50,9 @@ public class SWBProxyThreadProcessor implements Runnable {
     public void run() {
         while(flag){
             try {
-                DelayedMessage message = queue.poll();
-                center.sendMessage(message.getMessage(), network);
+                DelayedMessage message = queue.poll(1000, TimeUnit.MILLISECONDS);
+                if (null!=message)
+                    center.sendMessage(message.getMessage(), network);
             } catch (Exception err){
                 log.error("SWBProxyThreadProcessor: sending udp message", err);
             }
