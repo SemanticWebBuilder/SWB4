@@ -81,7 +81,7 @@ public class Listener implements SWBAppObject {
      */
     public static boolean createUpdateTimers(Stream stream)
     {
-        //System.out.println("rbThread:"+rbThread);
+        System.out.println("createUpdateTimers - 28:"+rbThread+", STREAM:"+stream);
         try
         {
             //synchronized(stream)
@@ -135,14 +135,14 @@ public class Listener implements SWBAppObject {
      */
     private static boolean createUpdateTimersReBind(Stream stream)
     {
-        //System.out.println("Entra a Listener/createUpdateTimersReBind-1");
-        /*
+        System.out.println("Entra a Listener/createUpdateTimersReBind-1");
+        
         Iterator<SocialNetwork> itNets=stream.listSocialNetworks();
         while(itNets.hasNext())
         {
             SocialNetwork socialNet=itNets.next();
             System.out.println("SocialNetwork que tiene el stream:"+socialNet.getURI());
-        }*/
+        }
         if(htTimers.get(stream.getURI())!=null)
         {
             try

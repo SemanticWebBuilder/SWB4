@@ -481,7 +481,7 @@ public class SentimentalDataClassifier {
             boolean existWord=false;
             if(sTags!=null && sTags.length()>0)
             {
-                String[] tags=sTags.split("\\|");  //Dividir valores
+                String[] tags=sTags.split("\\,");  //Dividir valores
                 for(int i=0;i<tags.length;i++)
                 {
                     String tag=tags[i];
