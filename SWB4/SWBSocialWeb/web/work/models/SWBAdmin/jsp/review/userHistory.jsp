@@ -18,14 +18,15 @@
 <%@page import="org.semanticwb.social.util.*"%>
 <%@page import="java.util.*"%>
 <%@page import="twitter4j.*"%>
+<%@page import="org.semanticwb.portal.api.SWBResourceURL"%>
 <jsp:useBean id="paramRequest" scope="request" type="org.semanticwb.portal.api.SWBParamRequest"/>
 
 <%
     org.semanticwb.model.User user=paramRequest.getUser(); 
-    if(request.getAttribute("swbSocialUser")==null) return;
+    if(request.getAttribute("swbSocialUser")==null) return; 
     
     SemanticObject semObj=(SemanticObject)request.getAttribute("swbSocialUser");
-    if(semObj==null) return; 
+    if(semObj==null) return;
     
     WebSite wsite=WebSite.ClassMgr.getWebSite(semObj.getModel().getName());
     if(wsite==null) return;
@@ -75,16 +76,22 @@
         
         <tr>
             <%
+                SWBResourceURL url=paramRequest.getRenderUrl();
+                url.setMode(SWBResourceURL.Action_EDIT);
+                url.setParameter("swbSocialUser", socialNetUser.getId());
+                url.setParameter("dialog", "close");
+                url.setParameter("suri", (String)request.getAttribute("suri")); 
+                url.setParameter("reloadTap", "true");
                 Iterator <PostIn> itPostIns=socialNetUser.listPostInInvs(); 
                 long sizeItPostIns=SWBUtils.Collections.sizeOf(itPostIns); 
             %>
-            <td>Mensajes de entrada:<%=sizeItPostIns%></td> 
+            <td>
+                Mensajes de entrada:<a href="#" onclick="submitUrl('<%=url.setParameter("swbSocialUser", socialNetUser.getId())%>',this); return false;"><%=sizeItPostIns%></a>
+            </td> 
         </tr>
         
         <tr>
             <td colspan="5"><hr><hr></td>
         </tr>
-        
-    <tr>
     
     </table>
