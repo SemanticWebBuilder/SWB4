@@ -64,7 +64,7 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
         params.put("access_token", this.getAccessToken());
         boolean canGetMoreResults = true;
         String phrasesInStream = stream.getPhrase() != null ? stream.getPhrase() : "";
-        int queriesNumber = phrasesInStream.split("\\|").length * 2;
+        int queriesNumber = phrasesInStream.split(",").length * 2;
         HashMap<String, String>[] queriesArray = new HashMap[queriesNumber];
         
         try {
@@ -913,7 +913,8 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
         url.append("'&redirect_uri='+");
         url.append("encodeURI('").append(getRedirectUrl(request, paramRequest)).append("')+");
         url.append("'&scope='+");
-        url.append("encodeURIComponent('publish_stream,read_stream')+");
+        //url.append("encodeURIComponent('publish_stream,read_stream')+");
+        url.append("encodeURIComponent('user_about_me,friends_about_me,user_activities,friends_activities,user_birthday,friends_birthday,user_checkins,friends_checkins,user_education_history,friends_education_history,user_events,friends_events,user_groups,friends_groups,user_hometown,friends_hometown,user_interests,friends_interests,user_likes,friends_likes,user_location,friends_location,user_notes,friends_notes,user_photos,friends_photos,user_relationships,friends_relationships,user_relationship_details,friends_relationship_details,user_religion_politics,friends_religion_politics,user_status,friends_status,user_videos,friends_videos,user_website,friends_website,email,manage_pages,publish_stream,read_stream,read_page_mailboxes,read_insights,ads_management')+");
         url.append("'&state='+");        
         url.append("'").append(state).append("'");
         return url.toString();
