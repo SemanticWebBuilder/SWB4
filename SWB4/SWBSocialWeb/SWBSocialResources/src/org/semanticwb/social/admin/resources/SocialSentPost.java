@@ -448,279 +448,266 @@ public class SocialSentPost extends GenericResource {
             setso = SWBComparator.sortByCreatedSet(itposts, false);
         }
         
-        //itposts = null;
-        //itposts=null;
-        int ps = 20;
-        int l = setso.size();
-
-        //System.out.println("num cont: "+l);
-
-        int p = 0;
-        String page = request.getParameter("page");
-        if (page != null) {
-            p = Integer.parseInt(page);
+       
+        int recPerPage=20;//if(resBase.getItemsbyPage()>0) recPerPage=resBase.getItemsbyPage();            
+        int nRec = 0;
+        int nPage;
+        try {
+            nPage = Integer.parseInt(request.getParameter("page"));
+        } catch (Exception ignored) {
+             nPage = 1;
         }
-
-
-
-        int x = 0;
+        boolean paginate = false;
+        
         itposts = setso.iterator();
         while (itposts.hasNext()) 
         {
             PostOut sobj = (PostOut)itposts.next();
-            if(sobj==null) {
-                //System.out.println("SEMANTIC OBJECT NULOOO:"+sobj+", QUE RARO, VER CON JEI...");
-                continue;
-            }
             
-            
-            if (x < p * ps) {
-                x++;
-                continue;
-            }
-            if (x == (p * ps + ps) || x == l) {
-                break;
-            }
-            x++;
-            
-            
-             // revisando contenido en flujo de publicación
-             // validacion de botones en relación a los flujos
-
-            isInFlow = false;
-            isAuthorized = false;
-            needAuthorization = false;
-            send2Flow = false;
-
-            isInFlow = pfmgr.isInFlow(sobj);
-            
-
-            //System.out.println("Recurso esta en flujo: "+isInFlow);
-
-            needAuthorization = pfmgr.needAnAuthorization(sobj);
-
-            //System.out.println("Necesita autorización: "+needAuthorization);
-
-            /*
-            if (!isInFlow && !needAuthorization) {
-                activeButton = true;
-            }*/
-            if (!isInFlow && needAuthorization) {
-                //activeButton = false;
-                send2Flow = true;
-            }
-            
-            if (isInFlow) {
-                isAuthorized = pfmgr.isAuthorized(sobj);
-                /*
-                SocialPFlowInstance instance = sobj.getPflowInstance();
-                if (!isAuthorized || instance.getStatus()==3) { //rechazado
-                    activeButton = false;
-                }
-                if (isAuthorized) {
-                    activeButton = true;
-                }**/
-            }
-            
-            // fin validación de botones en relacion a flujos
-            
-            boolean readyToPublish=false; 
-            if(!sobj.isPublished() && !needAuthorization)
+            nRec++;
+            if ((nRec > (nPage - 1) * recPerPage) && (nRec <= (nPage) * recPerPage)) 
             {
-                readyToPublish=true; 
-            }
+                paginate = true;  
             
-            //System.out.println("isInFlow:"+isInFlow);
-            //System.out.println("needAuthorization:"+needAuthorization);
-            //System.out.println("isAuthorized:"+isAuthorized);
             
-            out.println("<tr>");
-            
-            //Show Actions
-            out.println("<td>");
-            
-            SWBResourceURL urlr = paramRequest.getActionUrl();
-            urlr.setParameter("suri", id);
-            urlr.setParameter("sval", sobj.getURI());
-            urlr.setParameter("page", "" + p);
-            urlr.setAction("remove");
-            
-            out.println("<a href=\"#\" title=\"" + paramRequest.getLocaleString("remove") + "\" onclick=\"if(confirm('" + paramRequest.getLocaleString("confirm_remove") + " " + SWBUtils.TEXT.scape4Script(sobj.getMsg_Text()) + "?')){ submitUrl('" + urlr + "',this); } else { return false;}\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/images/delete.gif\" border=\"0\" alt=\"" + paramRequest.getLocaleString("remove") + "\"></a>");
-            
-            /*
-            SWBResourceURL urlpre = paramRequest.getRenderUrl();
-            urlpre.setParameter("suri", id);
-            urlpre.setParameter("page", "" + p);
-            urlpre.setParameter("sval", sobj.getURI());
-            urlpre.setParameter("preview", "true");
-            urlpre.setParameter("orderBy", (request.getParameter("orderBy")!=null && request.getParameter("orderBy").trim().length() > 0 ? request.getParameter("orderBy") : ""));
-            
-            out.println("<a href=\"#\" title=\"" + paramRequest.getLocaleString("previewdocument") + "\" onclick=\"submitUrl('" + urlpre + "',this); return false;\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/icons/preview.gif\" border=\"0\" alt=\"" + paramRequest.getLocaleString("previewdocument") + "\"></a>");
-            */
-            
-            SWBResourceURL urlPrev=paramRequest.getRenderUrl().setMode(Mode_PREVIEW).setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("postUri", sobj.getURI());  
-            out.println("<a href=\"#\" title=\"" + paramRequest.getLocaleString("previewdocument") + "\" onclick=\"showDialog('" + urlPrev + "','" + paramRequest.getLocaleString("previewdocument") 
-                    + "'); return false;\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/icons/preview.gif\" border=\"0\" alt=\"" + paramRequest.getLocaleString("previewdocument") + "\"></a>");
-            
-            if(!sobj.isPublished())     
-            {
-                if (send2Flow) 
-                {    //Social:Solo cuando se puede enviar el documento a flujo, se muestra la opción de editar, si el documento esta en flujo no se muestra.
-                    //if (canEdit) {
-                    SWBResourceURL urlEdit=paramRequest.getRenderUrl().setMode(Mode_EDITWindow).setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("postOut", sobj.getURI()).setParameter("wsite", sobj.getSemanticObject().getModel().getName());  
-                    out.println("<a href=\"#\" title=\"" + paramRequest.getLocaleString("documentAdmin") + "\" onclick=\"showDialog('" + urlEdit + "','" + paramRequest.getLocaleString("source") + "'); return false;\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/icons/editar_1.gif\" border=\"0\" alt=\"" + "documentAdmin" + "\"></a>");
-                    
-                    //out.println("<a href=\"#\"  title=\"" + paramRequest.getLocaleString("documentAdmin") + "\" onclick=\"\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/icons/editar_1.gif\" border=\"0\" alt=\"" + "documentAdmin" + "\"></a>");
-                    //} else {
-                    //    out.println("<img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/icons/editar_1.gif\" border=\"0\" alt=\"" + "documentAdmin" + "\">");
-                    //}
-                
-                    boolean canSend2Flow = Boolean.TRUE;
-                    String pfid = null;
-                    SocialPFlow[] arrPf = pfmgr.getFlowsToSendContent(sobj);
-                    if (arrPf.length == 1) {
-                        pfid = arrPf[0].getId();
-                    }
+                    // revisando contenido en flujo de publicación
+                    // validacion de botones en relación a los flujos
 
-                    /*
-                    GenericObject gores = sobj.createGenericInstance();
-                    if (gores != null && gores instanceof Versionable) {
-                        Versionable vgo = (Versionable) gores;
-                        if (vgo.getActualVersion() == null || vgo.getLastVersion() == null) {
-                            canSend2Flow = Boolean.FALSE;
-                        }
-                    }**/
+                   isInFlow = false;
+                   isAuthorized = false;
+                   needAuthorization = false;
+                   send2Flow = false;
 
-                    if (canSend2Flow) {
-                        SWBResourceURL url2flow = paramRequest.getRenderUrl();
-                        url2flow.setParameter("suri", id);
-                        url2flow.setMode(Mode_PFlowMsg);
-                        url2flow.setParameter("sval", sobj.getURI());
-                        url2flow.setParameter("page", "" + p);
-                        url2flow.setParameter("pfid", pfid);
-                        out.println("<a href=\"#\" title=\"" + paramRequest.getLocaleString("senddocument2flow") + "\" onclick=\"showDialog('" + url2flow + "','" + paramRequest.getLocaleString("comentary") + "'); return false;\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/images/enviar-flujo.gif\" border=\"0\" alt=\"" + paramRequest.getLocaleString("senddocument2flow") + "\"></a>");
-                    } else {    //TODOSOCIAL:VER CUANDO PUEDE PASAR ESTA OPCIÓN (ELSE).
-                        out.println("<img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/images/enviar-flujo.gif\" border=\"0\" alt=\"" + paramRequest.getLocaleString("senddocument2flow") + "\" title=\"" + paramRequest.getLocaleString("canNOTsenddocument2flow") + "\">");
-                    }
-                } else if (isInFlow && !isAuthorized) 
-                {
-                    if(!readyToPublish)
-                    {
-                        out.println("<img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/images/espera_autorizacion.gif\" border=\"0\" alt=\"" + paramRequest.getLocaleString("documentwaiting") + "\">");
-                    }
-                } else if (isInFlow && isAuthorized) {
-                    out.println("<img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/images/enlinea.gif\" border=\"0\" alt=\"" + paramRequest.getLocaleString("Caccepted") + "\">");
-                }
-            }
-            
-            
-            out.println("</td>");
-            
-            //Show 30 firsts characters of Msg PostOut
-            out.println("<td>");
-            //out.println(SWBUtils.TEXT.cropText(sobj.getMsg_Text(), 30));
-            out.println("<a href=\"#\"  onclick=\"addNewTab('" + sobj.getURI() + "','" + SWBPlatform.getContextPath() + "/swbadmin/jsp/objectTab.jsp" + "','" + SWBUtils.TEXT.cropText(SWBUtils.TEXT.scape4Script(sobj.getMsg_Text()), 25) + "');return false;\" title=\"" + getDisplaySemObj(sobj.getSemanticObject(), lang) + "\">" + sobj.getMsg_Text() + "</a>"); 
-            out.println("</td>");
-            
-            //Show PostType
-            out.println("<td>");
-            if(sobj instanceof Message)
-            {
-                out.println(paramRequest.getLocaleString("message"));
-            }else if(sobj instanceof Photo)
-            {
-                out.println(paramRequest.getLocaleString("photo"));
-            }else if(sobj instanceof Video)
-            {
-                out.println(paramRequest.getLocaleString("video"));
-            }
-            out.println("</td>");
-            
-            //Show Networks
-            out.println("<td>");
-            String nets="---";
-            //System.out.println("socialNet:"+sobj.getSocialNetwork()+",redes:"+sobj.listSocialNetworks().hasNext());
-            boolean firstTime=true;
-            Iterator<SocialNetwork> itPostSocialNets=sobj.listSocialNetworks();
-            while(itPostSocialNets.hasNext())
-            {
-                SocialNetwork socialNet=itPostSocialNets.next();
-                //System.out.println("socialNet-1:"+socialNet);
-                String sSocialNet=socialNet.getDisplayTitle(lang);
-                //System.out.println("socialNet-2:"+sSocialNet);
-                if(sSocialNet!=null && sSocialNet.trim().length()>0)
-                {
-                    //System.out.println("socialNet-3:"+sSocialNet);
-                    if(firstTime) 
-                    {
-                        nets=""+sSocialNet;
-                        firstTime=false;
-                    }
-                    else nets+="|"+sSocialNet;
-                }
-            }
-            out.println(nets);
-            out.println("</td>");
-            
-            //PostIn Source 
-            out.println("<td>");
-            if(sobj.getPostInSource()!=null)
-            {
-                SWBResourceURL url=paramRequest.getRenderUrl().setMode(Mode_SOURCE).setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("postUri", sobj.getPostInSource().getURI());  
-                out.println("<a href=\"#\" title=\"" + paramRequest.getLocaleString("source") + "\" onclick=\"showDialog('" + url + "','" + paramRequest.getLocaleString("source") + "'); return false;\">Origen(Image)</a>");
-                
-                /*
-                SWBResourceURL url=paramRequest.getRenderUrl().setMode(Mode_SOURCE).setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("postUri", sobj.getPostInSource().getURI());  
-                out.println("<a href=\"#\" title=\"" + paramRequest.getLocaleString("source") + "\" onclick=\"showDialog('" + url + "','" + paramRequest.getLocaleString("source") 
-                    + "'); return false;\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/icons/preview.gif\" border=\"0\" alt=\"" + paramRequest.getLocaleString("source") + "\"></a>");
-                    * */
-                
-            }else{
-                out.println("---");
-            }
-            out.println("</td>");
-            
-            //PostOut creation
-            out.println("<td>");
-            out.println(SWBUtils.TEXT.getTimeAgo(sobj.getCreated(), lang)); 
-            out.println("</td>");
-            
-            //PostOut lastUpdate
-            out.println("<td>");
-            out.println(SWBUtils.TEXT.getTimeAgo(sobj.getUpdated(), lang));
-            out.println("</td>");
-            
-            out.println("<td>");
-            //El PostOut No se ha enviado, aqui se daría la posibilidad de que un usuario lo envíe.
-            //System.out.println("msg..:"+sobj.getMsg_Text());
-            //System.out.println("Ya esta publicado..:"+sobj.isPublished());
-            
-            if(!sobj.isPublished())
-            {
-                if (!needAuthorization) {
-                    SWBResourceURL urlu = paramRequest.getRenderUrl();
-                    urlu.setMode(Mode_Action);
-                    urlu.setParameter("suri", sobj.getURI());
-                    urlu.setParameter("act", "updstatus");
-                    //out.println("J1");
-                    out.println("<a href=\"#\" onclick=\"showStatusURL('" + urlu + "'); \" />"+paramRequest.getLocaleString("publish")+"</a>");
-                } else {    //El PostOut ya se envío
-                   if(!isInFlow && needAuthorization && !isAuthorized)
+                   isInFlow = pfmgr.isInFlow(sobj);
+
+
+                   //System.out.println("Recurso esta en flujo: "+isInFlow);
+
+                   needAuthorization = pfmgr.needAnAuthorization(sobj);
+
+                   //System.out.println("Necesita autorización: "+needAuthorization);
+
+                   /*
+                   if (!isInFlow && !needAuthorization) {
+                       activeButton = true;
+                   }*/
+                   if (!isInFlow && needAuthorization) {
+                       //activeButton = false;
+                       send2Flow = true;
+                   }
+
+                   if (isInFlow) {
+                       isAuthorized = pfmgr.isAuthorized(sobj);
+                       /*
+                       SocialPFlowInstance instance = sobj.getPflowInstance();
+                       if (!isAuthorized || instance.getStatus()==3) { //rechazado
+                           activeButton = false;
+                       }
+                       if (isAuthorized) {
+                           activeButton = true;
+                       }**/
+                   }
+
+                   // fin validación de botones en relacion a flujos
+
+                   boolean readyToPublish=false; 
+                   if(!sobj.isPublished() && !needAuthorization)
                    {
-                       String sFlowRejected="---";
-                       if(sobj.getPflowInstance()!=null&&sobj.getPflowInstance().getPflow()!=null) sFlowRejected=sobj.getPflowInstance().getPflow().getDisplayTitle(lang);
-                       out.println("Rechazado("+sFlowRejected+")");
+                       readyToPublish=true; 
                    }
-                   else if(isInFlow && needAuthorization && !isAuthorized){
-                        out.println("En Flujo("+sobj.getPflowInstance().getPflow().getDisplayTitle(lang)+")");
+
+                   //System.out.println("isInFlow:"+isInFlow);
+                   //System.out.println("needAuthorization:"+needAuthorization);
+                   //System.out.println("isAuthorized:"+isAuthorized);
+
+                   out.println("<tr>");
+
+                   //Show Actions
+                   out.println("<td>");
+
+                   SWBResourceURL urlr = paramRequest.getActionUrl();
+                   urlr.setParameter("suri", id);
+                   urlr.setParameter("sval", sobj.getURI());
+                   urlr.setParameter("page", "" + nPage);
+                   urlr.setAction("remove");
+
+                   out.println("<a href=\"#\" title=\"" + paramRequest.getLocaleString("remove") + "\" onclick=\"if(confirm('" + paramRequest.getLocaleString("confirm_remove") + " " + SWBUtils.TEXT.scape4Script(sobj.getMsg_Text()) + "?')){ submitUrl('" + urlr + "',this); } else { return false;}\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/images/delete.gif\" border=\"0\" alt=\"" + paramRequest.getLocaleString("remove") + "\"></a>");
+
+                   /*
+                   SWBResourceURL urlpre = paramRequest.getRenderUrl();
+                   urlpre.setParameter("suri", id);
+                   urlpre.setParameter("page", "" + p);
+                   urlpre.setParameter("sval", sobj.getURI());
+                   urlpre.setParameter("preview", "true");
+                   urlpre.setParameter("orderBy", (request.getParameter("orderBy")!=null && request.getParameter("orderBy").trim().length() > 0 ? request.getParameter("orderBy") : ""));
+
+                   out.println("<a href=\"#\" title=\"" + paramRequest.getLocaleString("previewdocument") + "\" onclick=\"submitUrl('" + urlpre + "',this); return false;\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/icons/preview.gif\" border=\"0\" alt=\"" + paramRequest.getLocaleString("previewdocument") + "\"></a>");
+                   */
+
+                   SWBResourceURL urlPrev=paramRequest.getRenderUrl().setMode(Mode_PREVIEW).setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("postUri", sobj.getURI());  
+                   out.println("<a href=\"#\" title=\"" + paramRequest.getLocaleString("previewdocument") + "\" onclick=\"showDialog('" + urlPrev + "','" + paramRequest.getLocaleString("previewdocument") 
+                           + "'); return false;\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/icons/preview.gif\" border=\"0\" alt=\"" + paramRequest.getLocaleString("previewdocument") + "\"></a>");
+
+                   if(!sobj.isPublished())     
+                   {
+                       if (send2Flow) 
+                       {    //Social:Solo cuando se puede enviar el documento a flujo, se muestra la opción de editar, si el documento esta en flujo no se muestra.
+                           //if (canEdit) {
+                           SWBResourceURL urlEdit=paramRequest.getRenderUrl().setMode(Mode_EDITWindow).setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("postOut", sobj.getURI()).setParameter("wsite", sobj.getSemanticObject().getModel().getName());  
+                           out.println("<a href=\"#\" title=\"" + paramRequest.getLocaleString("documentAdmin") + "\" onclick=\"showDialog('" + urlEdit + "','" + paramRequest.getLocaleString("source") + "'); return false;\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/icons/editar_1.gif\" border=\"0\" alt=\"" + "documentAdmin" + "\"></a>");
+
+                           //out.println("<a href=\"#\"  title=\"" + paramRequest.getLocaleString("documentAdmin") + "\" onclick=\"\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/icons/editar_1.gif\" border=\"0\" alt=\"" + "documentAdmin" + "\"></a>");
+                           //} else {
+                           //    out.println("<img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/icons/editar_1.gif\" border=\"0\" alt=\"" + "documentAdmin" + "\">");
+                           //}
+
+                           boolean canSend2Flow = Boolean.TRUE;
+                           String pfid = null;
+                           SocialPFlow[] arrPf = pfmgr.getFlowsToSendContent(sobj);
+                           if (arrPf.length == 1) {
+                               pfid = arrPf[0].getId();
+                           }
+
+                           /*
+                           GenericObject gores = sobj.createGenericInstance();
+                           if (gores != null && gores instanceof Versionable) {
+                               Versionable vgo = (Versionable) gores;
+                               if (vgo.getActualVersion() == null || vgo.getLastVersion() == null) {
+                                   canSend2Flow = Boolean.FALSE;
+                               }
+                           }**/
+
+                           if (canSend2Flow) {
+                               SWBResourceURL url2flow = paramRequest.getRenderUrl();
+                               url2flow.setParameter("suri", id);
+                               url2flow.setMode(Mode_PFlowMsg);
+                               url2flow.setParameter("sval", sobj.getURI());
+                               url2flow.setParameter("page", "" + nPage);
+                               url2flow.setParameter("pfid", pfid);
+                               out.println("<a href=\"#\" title=\"" + paramRequest.getLocaleString("senddocument2flow") + "\" onclick=\"showDialog('" + url2flow + "','" + paramRequest.getLocaleString("comentary") + "'); return false;\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/images/enviar-flujo.gif\" border=\"0\" alt=\"" + paramRequest.getLocaleString("senddocument2flow") + "\"></a>");
+                           } else {    //TODOSOCIAL:VER CUANDO PUEDE PASAR ESTA OPCIÓN (ELSE).
+                               out.println("<img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/images/enviar-flujo.gif\" border=\"0\" alt=\"" + paramRequest.getLocaleString("senddocument2flow") + "\" title=\"" + paramRequest.getLocaleString("canNOTsenddocument2flow") + "\">");
+                           }
+                       } else if (isInFlow && !isAuthorized) 
+                       {
+                           if(!readyToPublish)
+                           {
+                               out.println("<img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/images/espera_autorizacion.gif\" border=\"0\" alt=\"" + paramRequest.getLocaleString("documentwaiting") + "\">");
+                           }
+                       } else if (isInFlow && isAuthorized) {
+                           out.println("<img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/images/enlinea.gif\" border=\"0\" alt=\"" + paramRequest.getLocaleString("Caccepted") + "\">");
+                       }
                    }
-                }
-            }else{
-                out.println("Publicado");
+
+
+                   out.println("</td>");
+
+                   //Show 30 firsts characters of Msg PostOut
+                   out.println("<td>");
+                   //out.println(SWBUtils.TEXT.cropText(sobj.getMsg_Text(), 30));
+                   out.println("<a href=\"#\"  onclick=\"addNewTab('" + sobj.getURI() + "','" + SWBPlatform.getContextPath() + "/swbadmin/jsp/objectTab.jsp" + "','" + SWBUtils.TEXT.cropText(SWBUtils.TEXT.scape4Script(sobj.getMsg_Text()), 25) + "');return false;\" title=\"" + getDisplaySemObj(sobj.getSemanticObject(), lang) + "\">" + sobj.getMsg_Text() + "</a>"); 
+                   out.println("</td>");
+
+                   //Show PostType
+                   out.println("<td>");
+                   if(sobj instanceof Message)
+                   {
+                       out.println(paramRequest.getLocaleString("message"));
+                   }else if(sobj instanceof Photo)
+                   {
+                       out.println(paramRequest.getLocaleString("photo"));
+                   }else if(sobj instanceof Video)
+                   {
+                       out.println(paramRequest.getLocaleString("video"));
+                   }
+                   out.println("</td>");
+
+                   //Show Networks
+                   out.println("<td>");
+                   String nets="---";
+                   //System.out.println("socialNet:"+sobj.getSocialNetwork()+",redes:"+sobj.listSocialNetworks().hasNext());
+                   boolean firstTime=true;
+                   Iterator<SocialNetwork> itPostSocialNets=sobj.listSocialNetworks();
+                   while(itPostSocialNets.hasNext())
+                   {
+                       SocialNetwork socialNet=itPostSocialNets.next();
+                       //System.out.println("socialNet-1:"+socialNet);
+                       String sSocialNet=socialNet.getDisplayTitle(lang);
+                       //System.out.println("socialNet-2:"+sSocialNet);
+                       if(sSocialNet!=null && sSocialNet.trim().length()>0)
+                       {
+                           //System.out.println("socialNet-3:"+sSocialNet);
+                           if(firstTime) 
+                           {
+                               nets=""+sSocialNet;
+                               firstTime=false;
+                           }
+                           else nets+="|"+sSocialNet;
+                       }
+                   }
+                   out.println(nets);
+                   out.println("</td>");
+
+                   //PostIn Source 
+                   out.println("<td>");
+                   if(sobj.getPostInSource()!=null)
+                   {
+                       SWBResourceURL url=paramRequest.getRenderUrl().setMode(Mode_SOURCE).setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("postUri", sobj.getPostInSource().getURI());  
+                       out.println("<a href=\"#\" title=\"" + paramRequest.getLocaleString("source") + "\" onclick=\"showDialog('" + url + "','" + paramRequest.getLocaleString("source") + "'); return false;\">Origen(Image)</a>");
+
+                       /*
+                       SWBResourceURL url=paramRequest.getRenderUrl().setMode(Mode_SOURCE).setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("postUri", sobj.getPostInSource().getURI());  
+                       out.println("<a href=\"#\" title=\"" + paramRequest.getLocaleString("source") + "\" onclick=\"showDialog('" + url + "','" + paramRequest.getLocaleString("source") 
+                           + "'); return false;\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/icons/preview.gif\" border=\"0\" alt=\"" + paramRequest.getLocaleString("source") + "\"></a>");
+                           * */
+
+                   }else{
+                       out.println("---");
+                   }
+                   out.println("</td>");
+
+                   //PostOut creation
+                   out.println("<td>");
+                   out.println(SWBUtils.TEXT.getTimeAgo(sobj.getCreated(), lang)); 
+                   out.println("</td>");
+
+                   //PostOut lastUpdate
+                   out.println("<td>");
+                   out.println(SWBUtils.TEXT.getTimeAgo(sobj.getUpdated(), lang));
+                   out.println("</td>");
+
+                   out.println("<td>");
+                   //El PostOut No se ha enviado, aqui se daría la posibilidad de que un usuario lo envíe.
+                   //System.out.println("msg..:"+sobj.getMsg_Text());
+                   //System.out.println("Ya esta publicado..:"+sobj.isPublished());
+
+                   if(!sobj.isPublished())
+                   {
+                       if (!needAuthorization) {
+                           SWBResourceURL urlu = paramRequest.getRenderUrl();
+                           urlu.setMode(Mode_Action);
+                           urlu.setParameter("suri", sobj.getURI());
+                           urlu.setParameter("act", "updstatus");
+                           //out.println("J1");
+                           out.println("<a href=\"#\" onclick=\"showStatusURL('" + urlu + "'); \" />"+paramRequest.getLocaleString("publish")+"</a>");
+                       } else {    //El PostOut ya se envío
+                          if(!isInFlow && needAuthorization && !isAuthorized)
+                          {
+                              String sFlowRejected="---";
+                              if(sobj.getPflowInstance()!=null&&sobj.getPflowInstance().getPflow()!=null) sFlowRejected=sobj.getPflowInstance().getPflow().getDisplayTitle(lang);
+                              out.println("Rechazado("+sFlowRejected+")");
+                          }
+                          else if(isInFlow && needAuthorization && !isAuthorized){
+                               out.println("En Flujo("+sobj.getPflowInstance().getPflow().getDisplayTitle(lang)+")");
+                          }
+                       }
+                   }else{
+                       out.println("Publicado");
+                   }
+                   out.println("</td>");
+
+                 out.println("</tr>");   
             }
-            out.println("</td>");
-            
-          out.println("</tr>");   
         }
         
         
@@ -728,35 +715,23 @@ public class SocialSentPost extends GenericResource {
         out.println("</table>");
         out.println("</fieldset>");
         
-        if (p > 0 || x < l) //Requiere paginacion
+        if (paginate) 
         {
-            out.println("<fieldset>");
-            out.println("<center>");
-
-            //int pages=(int)(l+ps/2)/ps;
-
-            int pages = (int) (l / ps);
-            if ((l % ps) > 0) {
-                pages++;
-            }
-
-            for (int z = 0; z < pages; z++) {
-                SWBResourceURL urlNew = paramRequest.getRenderUrl();
-                urlNew.setParameter("suri", id);
-                urlNew.setParameter("page", "" + z);
-                urlNew.setParameter("search", (searchWord.trim().length() > 0 ? searchWord : ""));
-                if(request.getParameter("orderBy")!=null)
-                {
-                    urlNew.setParameter("orderBy", request.getParameter("orderBy"));
-                }
-                if (z != p) {
-                    out.println("<a href=\"#\" onclick=\"submitUrl('" + urlNew + "',this); return false;\">" + (z + 1) + "</a> ");
+            out.println("<div id=\"pagination\">");
+            out.println("<span>P&aacute;ginas:</span>");
+            for (int countPage = 1; countPage < (Math.ceil((double) nRec / (double) recPerPage) + 1); countPage++) {
+                SWBResourceURL pageURL = paramRequest.getRenderUrl();
+                pageURL.setParameter("page", "" + (countPage));
+                pageURL.setParameter("suri", id);
+                pageURL.setParameter("search", (searchWord.trim().length() > 0 ? searchWord : ""));
+                if(request.getParameter("orderBy")!=null) pageURL.setParameter("orderBy", request.getParameter("orderBy"));
+                if (countPage != nPage) {
+                    out.println("<a href=\"#\" onclick=\"submitUrl('" + pageURL + "',this); return false;\">"+countPage+"</a> ");
                 } else {
-                    out.println((z + 1) + " ");
+                    out.println(countPage+ " ");
                 }
             }
-            out.println("</center>");
-            out.println("</fieldset>");
+            out.println("</div>");
         }
         
         out.println("</div>");
