@@ -71,14 +71,15 @@ public class SWBProxyMessageCenter {
     private void init(){
         log.event("Initializing SWBProxyMessageCenter...");
         String localAddr = SWBProxyAdminFilter.getEnv("swb/localMessageAddress");
-        String serverAddr = SWBProxyAdminFilter.getEnv("swb/serverMessageAddress");
-
+        log.event("found swb/localMessageAddress:"+localAddr);
+        String serverAddr = SWBProxyAdminFilter.getEnv("swb/remoteServerMessageAddress");
+        log.event("found swb/remoteServerMessageAddress:"+serverAddr);
         if (localAddr != null && serverAddr != null) //Nueva version
         {
             int i = localAddr.lastIndexOf(":"); //MAPS74 Ajuste para IPV6
             String ipaddr = localAddr.substring(0, i);
             myPort = Integer.parseInt(localAddr.substring(i + 1)); //System.out.println("ipadd1:"+ipaddr+" "+port);
-
+            
             i = serverAddr.lastIndexOf(":"); //MAPS74 Ajuste para IPV6
             String sipaddr = serverAddr.substring(0, i);
             srvrPort = Integer.parseInt(serverAddr.substring(i + 1));//System.out.println("ipadd2:"+sipaddr+" "+sport);
@@ -96,10 +97,13 @@ public class SWBProxyMessageCenter {
                 } else {
                     srvrAddr = InetAddress.getByName(sipaddr);
                 }
+                log.trace("localAddres: "+myAddr.toString()+":"+myPort);
+                log.trace("remoteAddres: "+srvrAddr.toString()+":"+srvrPort);
                 addLocalAddress(myAddr, myPort);
                 addRemoteAddress(srvrAddr, srvrPort);
                 addRemoteAddress(myAddr, myPort);
                 server = new SWBMessageServer(this, myAddr, myPort);
+                log.trace("Server: "+server);
                 server.start();
                 DatagramSocket aux = new DatagramSocket();   //optener una puerto de salida valido...
                 int x = aux.getLocalPort();
@@ -107,7 +111,11 @@ public class SWBProxyMessageCenter {
                 sock = new DatagramSocket(x, myAddr);
                 String message = "ini|hel|"+myAddr.getHostAddress()+":"+myPort;
                 synchMess = "syn|hel|"+myAddr.getHostAddress()+":"+myPort;
-                sendMessage(message, remoteNetwork);
+                try {
+                    sendMessage(message, remoteNetwork);
+                } catch (IOException ioe){
+                    log.error("Synchronizing to Server:"+message,ioe);
+                }
                 timer.schedule(new TimerTask(){
 
                     @Override
@@ -162,19 +170,22 @@ public class SWBProxyMessageCenter {
     }
 
     void incomingMessage(String message, String addr) {
-        StringBuilder logbuf = new StringBuilder(message.length() + 20);
-        logbuf.append(message.substring(0, 4));
-        logbuf.append(df.format(new Date()));
-        logbuf.append(message.substring(3));
-        if (localNetwork.containsKey(addr)){
-            upStream.add(new DelayedMessage(message, 5, TimeUnit.MINUTES));
-        } else if (remoteNetwork.containsKey(addr)){
-            downStream.add(new DelayedMessage(message, 5, TimeUnit.MINUTES));
+        if (!(message.startsWith("ini")||message.startsWith("syn"))){
+            StringBuilder logbuf = new StringBuilder(message.length() + 20);
+            logbuf.append(message.substring(0, 4));
+            logbuf.append(df.format(new Date()));
+            logbuf.append(message.substring(3));
+            if (localNetwork.containsKey(addr)){
+                upStream.add(new DelayedMessage(message, 5, TimeUnit.MINUTES));
+            } else if (remoteNetwork.containsKey(addr)){
+                downStream.add(new DelayedMessage(message, 5, TimeUnit.MINUTES));
+            }
         }
         log.debug("Message from " + addr + ":(" + message+")");
     }
     
     public void sendMessage(final String message, final HashMap<String, DatagramPacket> network) throws IOException{
+        log.trace("Sending: "+message);
         byte[] data = message.getBytes();
         for (DatagramPacket refPacket:network.values()){
             DatagramPacket packet=new DatagramPacket(data, data.length, refPacket.getAddress(), refPacket.getPort());
