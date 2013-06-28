@@ -43,13 +43,19 @@ import org.semanticwb.platform.SWBProxyMessageCenter;
 public class SWBProxyAdminFilter implements Filter{
 
     static private Logger log = SWBUtils.getLogger(SWBProxyAdminFilter.class);
+    static private SWBProxyAdminFilter instance;
+    private FilterConfig filterConfig = null;
     private static Properties props = SWBUtils.TEXT.getPropertyFile("/web.properties");
     private SWBProxyMessageCenter center;
     
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
+        instance=this;
         log.event("************************************");
         log.event("Initializing SWBProxyAdmin...");
+        this.filterConfig = filterConfig;
+        String prefix = filterConfig.getServletContext().getRealPath("/");
+        SWBUtils.createInstance(prefix);
         center = new SWBProxyMessageCenter();
         log.event("SWBProxyAdmin Started...");
         log.event("************************************");
