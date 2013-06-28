@@ -241,7 +241,7 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
     private String getPhrases(String stream){
         String parsedPhrases = null; // parsed phrases 
         if (stream != null && !stream.isEmpty()) {
-            String[] phrasesStream = stream.split("\\|"); //Delimiter            
+            String[] phrasesStream = stream.split(","); //Delimiter            
             parsedPhrases = "";
             String tmp;
             int noOfPhrases = phrasesStream.length;
