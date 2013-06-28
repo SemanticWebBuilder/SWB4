@@ -12,6 +12,6 @@ public class State extends org.semanticwb.bsc.accessory.base.StateBase
 
     @Override
     public String getIcon() {
-        return SWBPortal.getWorkPath()+this.getWorkPath()+"/"+getIcon();
+        return SWBPortal.getWebWorkPath()+this.getWorkPath()+"/"+getIcon();
     }
 }
