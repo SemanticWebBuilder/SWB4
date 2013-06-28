@@ -259,7 +259,7 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
     @Override
     public void listen(Stream stream) {
         
-        WebSite wsite = WebSite.ClassMgr.getWebSite(stream.getSemanticObject().getModel().getName());
+        //WebSite wsite = WebSite.ClassMgr.getWebSite(stream.getSemanticObject().getModel().getName());
         //System.out.println("Red SocialID:"+this.getId()+", Red Title:"+this.getTitle()+", sitio:"+wsite.getId());
         //System.out.println("Creador:" + this.getCreator());
         twitterResults = new ArrayList<Status>();
