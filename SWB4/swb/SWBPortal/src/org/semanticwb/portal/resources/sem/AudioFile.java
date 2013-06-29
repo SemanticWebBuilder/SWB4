@@ -26,7 +26,6 @@ import java.io.File;
 import java.util.Comparator;
 import org.semanticwb.SWBPortal;
 
-
 public class AudioFile extends org.semanticwb.portal.resources.sem.base.AudioFileBase 
 {
     public AudioFile(org.semanticwb.platform.SemanticObject base)

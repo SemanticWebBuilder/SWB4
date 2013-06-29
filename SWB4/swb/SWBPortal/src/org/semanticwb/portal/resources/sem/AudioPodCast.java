@@ -22,7 +22,6 @@
  */
 package org.semanticwb.portal.resources.sem;
 
-
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -62,8 +61,9 @@ public class AudioPodCast extends org.semanticwb.portal.resources.sem.base.Audio
     
     private final DecimalFormat df = new DecimalFormat("#.00");
 
-    public AudioPodCast()
+    public AudioPodCast()            
     {
+    
     }
 
    /**
@@ -113,9 +113,7 @@ public class AudioPodCast extends org.semanticwb.portal.resources.sem.base.Audio
             Iterator<AudioFile> resources = AudioFile.ClassMgr.listAudioFiles(base.getWebSite());
             resources = SWBComparator.sortByCreated(resources, false);
             if(resources.hasNext())
-            {
-                
-                
+            {                              
                 
 //////////////////////
         List<AudioFile> elements = SWBUtils.Collections.copyIterator(resources);
@@ -171,10 +169,8 @@ public class AudioPodCast extends org.semanticwb.portal.resources.sem.base.Audio
                 out.println(" <p class=\"swb-podcast-title\">"+(base.getDisplayTitle(lang)==null?base.getTitle():base.getDisplayTitle(lang))+"</p>");
                 out.println(" <p class=\"swb-podcast-lat\">"+paramRequest.getLocaleString("latest") +"</p>");
                 out.println(" <ul class=\"swb-pdcst-list\">");
-                //for(int i=0; i<pageSize && resources.hasNext(); i++)
                 for(int i=inicio; i<fin; i++)
                 {
-                    //AudioFile audiofile = resources.next();
                     AudioFile audiofile = elements.get(i);
                     if(!audiofile.isValid() || !user.haveAccess(audiofile)) {
                         continue;
@@ -277,7 +273,7 @@ out.println("</div>");
             }
             else
             {
-                out.println("<div class=\"swb-podcast\"><p>Lista vac&iacute;a.</p></div>");
+                out.println("<p>Lista vac&iacute;a.</p>");
             }
         }
         else
@@ -295,23 +291,138 @@ out.println("</div>");
             try {
                 audiofile = (AudioFile)SemanticObject.createSemanticObject(suri).createGenericInstance();
             }catch(Exception e) {
+                out.println("<p>"+paramRequest.getLocaleString("noElement")+"</p>");
                 return;
             }
             if(audiofile!=null && audiofile.isValid() && user.haveAccess(audiofile)) {
                 synchronized(this) {
                     audiofile.setReviews(audiofile.getReviews()+1);
                 }
-                out.println("<div class=\"swb-podcast\">");
-                out.println(" <div class=\"swb-pdcst-text\"><p class=\"swb-pdcst-title\">"+(audiofile.getDisplayTitle(lang)==null?audiofile.getTitle() :audiofile.getDisplayTitle(lang))+"</p></div>");
-                out.println(" <div class=\"swb-pdcst-text\"><p class=\"swb-pdcst-pubdate\"><span class=\"swb-pdcst-pub\">"+paramRequest.getLocaleString("publicationDate")+":</span> "+ttb.format(audiofile.getCreated()) +"</p></div>");
-                if(audiofile.getAuthor()!=null) {
-                    out.println(" <div class=\"swb-pdcst-text\"><p class=\"swb-pdcst-author\"><span class=\"swb-pdcst-by\">"+paramRequest.getLocaleString("by")+":</span> "+audiofile.getAuthor()+"</p></div>");
+                
+                out.println("<div class=\"swb-podcast\">");                
+                File f;
+                long duration;
+                String size;
+                try {
+                    f = audiofile.getFile();
+                    AudioInputStream ais = new MpegAudioFileReader().getAudioInputStream(f);
+                    AudioFileFormat baseFileFormat = new MpegAudioFileReader().getAudioFileFormat(f);
+                    Map properties = baseFileFormat.properties();
+                    duration = (Long)properties.get("duration");
+                    size = df.format(f.length()/1048576.0);
+                }catch(Exception e) {
+                    f = null;
+                    duration = 0;
+                    size = "0";
                 }
-                out.println(" <div class=\"swb-pdcst-text\"><p class=\"swb-pdcst-desc\">"+(audiofile.getDisplayDescription(lang)==null?audiofile.getDescription():audiofile.getDisplayDescription(lang))+"</p></div>");
+                out.println(" <h2 class=\"swb-pdcst-title\">"+(audiofile.getDisplayTitle(lang)==null ? audiofile.getTitle() : audiofile.getDisplayTitle(lang))+"</h2>");
+                out.println(" <div class=\"swb-pdcst-player\">");
+                if(f!=null) {
+System.out.println("\n\nfile="+f.getName());
+System.out.println("path="+f.getAbsolutePath());
+                    String resourceURL = SWBPortal.getWebWorkPath()+audiofile.getWorkPath()+"/"+f.getName();
+                    if(audiofile.getFilename().endsWith(".mp3"))
+                    {
+                        out.println("<object type=\"application/x-shockwave-flash\" data=\""+SWBPlatform.getContextPath()+"/swbadmin/player_mp3_maxi.swf\" width=\""+getWidth()+"\" height=\""+getHeight()+"\">");
+                        out.println("<param name=\"movie\" value=\""+SWBPlatform.getContextPath()+"/swbadmin/player_mp3_maxi.swf\" />");
+                        if(isTransparent()) {
+                            out.println("<param name=\"wmode\" value=\"transparent\" />");
+                        }
+                        //out.println("<param name=\"title\" value=\""+audiofile.getFilename()+"\" />");
+                        out.print("<param name=\"FlashVars\" value=\"mp3="+resourceURL+"");
+                        out.print("&amp;title="+audiofile.getFilename());
+                        out.print("&amp;autoplay="+(isAutoplay()?"1":"0"));
+                        out.print("&amp;loop="+(isLoop()?"1":"0"));
+                        out.print("&amp;autoload="+(isAutoload()?"1":"0"));                    
+                        out.print("&amp;volume="+(getVolume()));
+                        out.print("&amp;showstop="+(isShowStop()?"1":"0"));
+                        out.print("&amp;showvolume="+(isShowVolume()?"1":"0"));
+                        out.print("&amp;showslider="+(isShowSlider()?"1":"0"));
+                        if(getShowLoading()!=null) {
+                            out.print("&amp;showloading="+getShowLoading());
+                        }
+                        if(getLoadingColor()!=null) {
+                            out.print("&amp;loadingcolor="+getShowLoading());
+                        }
+                        if(getTextcolor()!=null) {
+                            out.print("&amp;textcolor="+getTextcolor());
+                        }
+                        if(!isTransparent() && getBgcolor()!=null) {
+                            out.print("&amp;bgcolor="+getBgcolor());
+                        }
+                        if(getBgcolor1()!=null) {
+                            out.print("&amp;bgcolor1="+getBgcolor1());
+                        }
+                        if(getBgcolor2()!=null) {
+                            out.print("&amp;bgcolor2="+getBgcolor2());
+                        }
+                        if(getButtonColor()!=null) {
+                            out.print("&amp;buttoncolor="+getButtonColor());
+                        }
+                        if(getButtonOvercolor()!=null) {
+                            out.print("&amp;buttonovercolor="+getButtonOvercolor());
+                        }
+                        if(getSliderColor1()!=null) {
+                            out.print("&amp;slidercolor1="+getSliderColor1());
+                        }
+                        if(getSliderColor2()!=null) {
+                            out.print("&amp;slidercolor2="+getSliderColor2());
+                        }
+                        if(getSliderOvercolor()!=null) {
+                            out.print("&amp;sliderovercolor="+getSliderOvercolor());
+                        }
+                        out.print("&amp;buttonwidth="+getButtonWidth());
+                        out.print("&amp;sliderwidth="+getSliderWidth());
+                        out.print("&amp;sliderheight="+getSliderHeight());
+                        out.print("&amp;volumewidth="+getVolumeWidth());
+                        out.print("&amp;volumeheight="+getVolumeHeight());
+                        out.println("\" />");
+                        out.println("</object>");
+                    }
+                    else
+                    {
+                        out.print("<p>Formato no soportado.</p>");
+                    }
+                }
+                else
+                {
+                    out.println("<p>"+paramRequest.getLocaleString("noAudio")+"</p>");
+                    return;
+                }
+                out.println(" </div>");
+                
+                out.println("<div class=\"swb-podcast-info\">");
+                
+                out.println(" <div class=\"swb-pdcst-box swb-pdcst-synps\"><h3>"+paramRequest.getLocaleString("synopsis")+"</h3></div>");
+                
+                out.println(" <div class=\"swb-pdcst-box swb-pdcst-det\">");
+                out.println("  <p class=\"swb-pdcst-text swb-pdcst-pubdate\"><span class=\"swb-pdcst-pub\">"+paramRequest.getLocaleString("publicationDate")+":&nbsp;</span>"+ttb.format(audiofile.getCreated())+"</p>");
+                if(duration>0)
+                {
+                    out.println("  <p class=\"swb-pdcst-text swb-pdcst-pub\">");
+                    out.println("  <span class=\"swb-pdcst-fduration\">"+paramRequest.getLocaleString("duration")+":&nbsp;</span>");
+                    out.print(duration/60000000);
+                    out.print(":");
+                    out.print(duration/1000000%60);
+                    out.println("  </p>");
+                }                
+                if(audiofile.getAuthor()!=null) {
+                    out.println(" <p class=\"swb-pdcst-text swb-pdcst-author\"><span class=\"swb-pdcst-by\">"+paramRequest.getLocaleString("by")+":&nbsp;</span>"+audiofile.getAuthor()+"</p>");
+                }
+                out.println("  <p class=\"swb-pdcst-text swb-pdcst-desc\">"+(audiofile.getDisplayDescription(lang)==null?audiofile.getDescription():audiofile.getDisplayDescription(lang))+"</p>");
+                out.println(" </div>");
                 
                 
+                out.println(" <div class=\"swb-pdcst-box swb-pdcst-downl\">");
+                out.println("  <p class=\"swb-pdcst-text\">");
+                out.println("   <a class=\"swb-pdcst-lnk\" href=\"#\" onclick=\"window.open('"+directURL+"?suri='+encodeURIComponent('"+audiofile.getURI()+"'))\" title=\""+(audiofile.getDisplayTitle(lang)==null?audiofile.getTitle():audiofile.getDisplayTitle(lang))+"\">"+paramRequest.getLocaleString("download")+"</a>");
+                out.println("    <span class=\"swb-pdcst-ffmt\">&nbsp;"+paramRequest.getLocaleString("format")+"&nbsp;"+audiofile.getExtension()+"</span>");
+                out.println("    <span class=\"swb-pdcst-fsize\">&nbsp;"+size+" Mb</span>");
+                out.println("  </p>");
+                out.println(" </div>");
                 
-                out.println(" <div class=\"swb-pdcst-rank\" id=\"rank\">");
+                
+                out.println(" <div class=\"swb-pdcst-box swb-pdcst-rank\" id=\"rank\">");
                 HttpSession session = request.getSession(true);
                 final String rid = base.getWebSiteId()+"_"+base.getId()+"_"+audiofile.getId();
                 DecimalFormat decf = new DecimalFormat("###");
@@ -325,112 +436,7 @@ out.println("</div>");
                     }
                 }
                 out.println(" </div>");
-                
-                
-                
-                out.println(" <div class=\"swb-pdcst-player\">");
-                String resourceURL = SWBPortal.getWebWorkPath()+audiofile.getWorkPath()+"/"+audiofile.getFilename();
-                if(audiofile.getFilename().endsWith(".mp3"))
-                {
-                    out.println("<object type=\"application/x-shockwave-flash\" data=\""+SWBPlatform.getContextPath()+"/swbadmin/player_mp3_maxi.swf\" width=\""+getWidth()+"\" height=\""+getHeight()+"\">");
-                    out.println("<param name=\"movie\" value=\""+SWBPlatform.getContextPath()+"/swbadmin/player_mp3_maxi.swf\" />");
-                    if(isTransparent()) {
-                        out.println("<param name=\"wmode\" value=\"transparent\" />");
-                    }
-                    //out.println("<param name=\"title\" value=\""+audiofile.getFilename()+"\" />");
-                    out.print("<param name=\"FlashVars\" value=\"mp3="+resourceURL+"");
-                    out.print("&amp;title="+audiofile.getFilename());
-                    out.print("&amp;autoplay="+(isAutoplay()?"1":"0"));
-                    out.print("&amp;loop="+(isLoop()?"1":"0"));
-                    out.print("&amp;autoload="+(isAutoload()?"1":"0"));                    
-                    out.print("&amp;volume="+(getVolume()));
-                    out.print("&amp;showstop="+(isShowStop()?"1":"0"));
-                    out.print("&amp;showvolume="+(isShowVolume()?"1":"0"));
-                    out.print("&amp;showslider="+(isShowSlider()?"1":"0"));
-                    if(getShowLoading()!=null) {
-                        out.print("&amp;showloading="+getShowLoading());
-                    }
-                    if(getLoadingColor()!=null) {
-                        out.print("&amp;loadingcolor="+getShowLoading());
-                    }
-                    if(getTextcolor()!=null) {
-                        out.print("&amp;textcolor="+getTextcolor());
-                    }
-                    if(!isTransparent() && getBgcolor()!=null) {
-                        out.print("&amp;bgcolor="+getBgcolor());
-                    }
-                    if(getBgcolor1()!=null) {
-                        out.print("&amp;bgcolor1="+getBgcolor1());
-                    }
-                    if(getBgcolor2()!=null) {
-                        out.print("&amp;bgcolor2="+getBgcolor2());
-                    }
-                    if(getButtonColor()!=null) {
-                        out.print("&amp;buttoncolor="+getButtonColor());
-                    }
-                    if(getButtonOvercolor()!=null) {
-                        out.print("&amp;buttonovercolor="+getButtonOvercolor());
-                    }
-                    if(getSliderColor1()!=null) {
-                        out.print("&amp;slidercolor1="+getSliderColor1());
-                    }
-                    if(getSliderColor2()!=null) {
-                        out.print("&amp;slidercolor2="+getSliderColor2());
-                    }
-                    if(getSliderOvercolor()!=null) {
-                        out.print("&amp;sliderovercolor="+getSliderOvercolor());
-                    }
-                    out.print("&amp;buttonwidth="+getButtonWidth());
-                    out.print("&amp;sliderwidth="+getSliderWidth());
-                    out.print("&amp;sliderheight="+getSliderHeight());
-                    out.print("&amp;volumewidth="+getVolumeWidth());
-                    out.print("&amp;volumeheight="+getVolumeHeight());
-                    out.println("\" />");
-                    out.println("</object>");
-                }
-                else
-                {
-                    out.print("<p>Formato no soportado.</p>");
-                }
-                out.println(" </div>");
-                
-                
-long duration = 0;            
-File f;
-try {
-    f = audiofile.getFile();
-}catch(Exception e) {
-    return;
-}
-if(f!=null && f.isFile())
-{
-    try {
-        AudioInputStream ais = new MpegAudioFileReader().getAudioInputStream(f);
-        AudioFileFormat baseFileFormat = new MpegAudioFileReader().getAudioFileFormat(f);
-        Map properties = baseFileFormat.properties();
-        duration = (Long)properties.get("duration");
-    }catch(UnsupportedAudioFileException unsafe) {
-        return;
-    }      
-}
-out.println("  <div class=\"swb-pdcst-text\">");
-out.print("     <p class=\"swb-pdcst-box\">");
-if(duration>0)
-{
-    out.print("  &nbsp;<span class=\"swb-pdcst-fduration\">"+paramRequest.getLocaleString("duration")+":&nbsp;");
-    out.print(duration/60000000);
-    out.print(":");
-    out.print(duration/1000000%60);
-    out.print("</span>");
-}
-out.print("     </p>");                        
-out.print("     <p class=\"swb-pdcst-box\">");
-out.print("      <a class=\"swb-pdcst-lnk\" href=\"#\" onclick=\"window.open('"+directURL+"?suri='+encodeURIComponent('"+audiofile.getURI()+"'))\" title=\""+(audiofile.getDisplayTitle(lang)==null?audiofile.getTitle():audiofile.getDisplayTitle(lang))+"\">"+paramRequest.getLocaleString("download")+"</a>&nbsp;");
-out.print("      <span class=\"swb-pdcst-ffmt\">"+paramRequest.getLocaleString("format")+"&nbsp;"+audiofile.getExtension()+"</span>&nbsp;");
-out.print("      <span class=\"swb-pdcst-fsize\">"+df.format(f.length()/1048576.0)+" Mb</span>");
-out.println("   </p>");
-out.println("  </div>");
-                
+                out.println("</div>");
                 out.println("</div>");
             }
         }
@@ -554,7 +560,7 @@ out.println("  </div>");
         }
         try {
             suri = URLDecoder.decode(suri, "UTF-8");
-        }catch(Exception unsage) {
+        }catch(Exception e) {
             suri = null;
         }
         AudioFile audiofile = null;
@@ -567,19 +573,21 @@ out.println("  </div>");
         if(audiofile.isValid()) {
             DecimalFormat decf = new DecimalFormat("###");
             final String rid = base.getWebSiteId()+"_"+base.getId()+"_"+audiofile.getId();
-            if(session.getAttribute(rid)!=null)
-               out.println("  <p>"+decf.format(audiofile.getRank())+"&nbsp;"+paramRequest.getLocaleString("like")+"</p>");
-            else {
-                synchronized(this) {
+//            if(session.getAttribute(rid)!=null)
+//               out.println("  <p>"+decf.format(audiofile.getRank())+"&nbsp;"+paramRequest.getLocaleString("like")+"</p>");
+//            else {
+                synchronized(audiofile) {
                     audiofile.setRank(audiofile.getRank()+1);
                 }
                 session.setAttribute(rid,rid);
                 try {
                     out.println("  <p>"+decf.format(audiofile.getRank())+"&nbsp;"+paramRequest.getLocaleString("like")+"</p>");
                 }catch(SWBResourceException swbe) {
-                    out.println("  <p>"+decf.format(audiofile.getRank())+" Me gusta</p>");
+                    out.println("  <p>"+decf.format(audiofile.getRank())+"&nbsp;Me gusta</p>");
                 }
-            }
+//            }
+            out.flush();
+            out.close();
         }
     }
     
