@@ -12,8 +12,8 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.semanticwb.process.model.ProcessInstance;
 import org.semanticwb.process.xmlrpc.RPCProcess;
+import org.semanticwb.process.xmlrpc.RPCProcessProxy;
 
 import org.semanticwb.xmlrpc.XmlRpcProxyFactory;
 
