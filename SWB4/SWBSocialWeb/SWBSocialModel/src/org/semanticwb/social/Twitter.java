@@ -459,14 +459,16 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
 //    }
 
     //@Override
+    /*
     public void stopListenAlive() {
+        System.out.println("Entra a stopListenAliveJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJ");
         if(trial!=null)
         {
             trial.cleanUp();
             trial.shutdown();
             //System.out.println("DETUVO LA CONEXION EN:"+this.getId());
         }
-    }
+    }**/
 
     @Override
     public void authenticate(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
@@ -546,7 +548,7 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
     {
         String url_1="http://api.klout.com/v2/identity.json/tw/"+twitterUserID;
         String kloutJsonResponse_1=getData(url_1);
-        System.out.println("kloutResult step-1:"+kloutJsonResponse_1);
+        //System.out.println("kloutResult step-1:"+kloutJsonResponse_1);
         
         //Obtener id de json
         try
@@ -555,14 +557,14 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
             {
                 JSONObject userData = new JSONObject(kloutJsonResponse_1);
                 String kloutUserId = userData != null && userData.get("id") != null ? (String) userData.get("id") : "";
-                System.out.println("kloutId de Resultado en Json:"+kloutUserId);
+                //System.out.println("kloutId de Resultado en Json:"+kloutUserId);
             
                 //Segunda llamada a la red social Klout, para obtener Json de Score del usuario (kloutUserId) encontrado
                 if(kloutUserId!=null)
                 {
                     String url_2="http://api.klout.com/v2/user.json/"+kloutUserId+"/score";
                     String kloutJsonResponse_2=getData(url_2);
-                    System.out.println("kloutResult step-2-Json:"+kloutJsonResponse_2);
+                    //System.out.println("kloutResult step-2-Json:"+kloutJsonResponse_2);
 
                     if(kloutJsonResponse_2!=null)
                     {
@@ -585,13 +587,13 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
         //String key=SWBContext.getAdminWebSite().getProperty("kloutKey");    //TODO:Ver con Jei x que no funciona esto...
         String key=SWBSocialUtil.Util.getModelPropertyValue(SWBContext.getAdminWebSite(), "kloutKey");
         //if(key==null) key="8fkzgz7ngf7bth3nk94gnxkd";   //Solo para fines de pruebas, quitar despues y dejar línea anterior.
-        System.out.println("key para KLOUT--Gg:"+key);
+        //System.out.println("key para KLOUT--Gg:"+key);
         if(key!=null)
         {
             url=url+"?key="+key;
             URLConnection conex = null;
             try {
-                System.out.println("Url a enviar a Klout:"+url);
+                //System.out.println("Url a enviar a Klout:"+url);
                 URL pagina = new URL(url);
 
                 String host = pagina.getHost();
@@ -606,23 +608,26 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
                 }
                 conex.setDoOutput(true);
 
-                conex.setConnectTimeout(5000);
+                conex.setConnectTimeout(20000); //15 segundos maximo, si no contesta la red Klout, cortamos la conexión
             } catch (Exception nexc) {
                 System.out.println("nexc Error:"+nexc.getMessage());
                 conex = null;
             }
-        
+            //System.out.println("Twitter Klout/conex:"+conex);
             //Analizar la respuesta a la peticion y obtener el access token
             if (conex != null) {
                 try
                 {
+                    //System.out.println("Va a checar esto en Klit:"+conex.getInputStream());
                     answer = getResponse(conex.getInputStream());
                 }catch(Exception e)
                 {
-                    log.error(e);
+                    //log.error(e);
                 }
+                //System.out.println("Twitter Klout/answer-1:"+answer);
             }
         }
+        //System.out.println("Twitter Klout/answer-2:"+answer);
         return answer;
     }
     
@@ -650,6 +655,11 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
             e.printStackTrace();
         }
         return response.toString();
+    }
+
+    @Override
+    public void stopListen(Stream stream) {
+        
     }
 
 }
