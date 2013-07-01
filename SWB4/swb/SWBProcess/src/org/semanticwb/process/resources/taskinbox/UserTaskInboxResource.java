@@ -31,12 +31,9 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.logging.Level;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.*;
 import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
@@ -785,6 +782,7 @@ public class UserTaskInboxResource extends org.semanticwb.process.resources.task
             return false;
         }
         
+        //TODO: Revisar que va a pasar con los procesos creados en automático.
         if (fni.getProcessInstance().getCreator() == null) {
             return false;
         }
