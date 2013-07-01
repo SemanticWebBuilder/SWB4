@@ -31,6 +31,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.StringTokenizer;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.DelayQueue;
@@ -52,13 +53,16 @@ public class SWBProxyMessageCenter {
     private int myPort = 0;
     private InetAddress srvrAddr = null;
     private int srvrPort = 0;
+    private InetAddress rmtAddr = null;
+    private int rmtPort = 0;
     private DatagramSocket sock = null;
     private SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     private DelayQueue<DelayedMessage> upStream = new DelayQueue();
     private SWBProxyThreadProcessor upStreamThread;
     private DelayQueue<DelayedMessage> downStream = new DelayQueue();
     private SWBProxyThreadProcessor downStreamThread;
-    private SWBMessageServer server;
+    private SWBMessageServer lserver;
+    private SWBMessageServer rserver;
     private Timer timer = new Timer("MessageSynchronizer", true);
     private long period = 1000 * 60 * 5;
     private String synchMess = null;
@@ -74,7 +78,9 @@ public class SWBProxyMessageCenter {
         log.event("found swb/localMessageAddress:"+localAddr);
         String serverAddr = SWBProxyAdminFilter.getEnv("swb/remoteServerMessageAddress");
         log.event("found swb/remoteServerMessageAddress:"+serverAddr);
-        if (localAddr != null && serverAddr != null) //Nueva version
+        String remoteAddr = SWBProxyAdminFilter.getEnv("swb/remoteMessageAddress");
+        log.event("found swb/remoteMessageAddress:"+remoteAddr);
+        if (localAddr != null && serverAddr != null && remoteAddr != null) //Nueva version
         {
             int i = localAddr.lastIndexOf(":"); //MAPS74 Ajuste para IPV6
             String ipaddr = localAddr.substring(0, i);
@@ -84,6 +90,10 @@ public class SWBProxyMessageCenter {
             String sipaddr = serverAddr.substring(0, i);
             srvrPort = Integer.parseInt(serverAddr.substring(i + 1));//System.out.println("ipadd2:"+sipaddr+" "+sport);
 
+            i = remoteAddr.lastIndexOf(":"); //MAPS74 Ajuste para IPV6
+            String rmtaddr = remoteAddr.substring(0, i);
+            rmtPort = Integer.parseInt(remoteAddr.substring(i + 1));//System.out.println("ipadd2:"+sipaddr+" "+sport);
+            
             //InetAddress saddr = null;
             try {
                 if (ipaddr.equalsIgnoreCase("localhost")) {
@@ -97,20 +107,31 @@ public class SWBProxyMessageCenter {
                 } else {
                     srvrAddr = InetAddress.getByName(sipaddr);
                 }
+                
+                if (rmtaddr.equalsIgnoreCase("localhost")) {
+                    rmtAddr = InetAddress.getLocalHost();
+                } else {
+                    rmtAddr = InetAddress.getByName(rmtaddr);
+                }
+                
                 log.trace("localAddres: "+myAddr.toString()+":"+myPort);
-                log.trace("remoteAddres: "+srvrAddr.toString()+":"+srvrPort);
+                log.trace("serverAddres: "+srvrAddr.toString()+":"+srvrPort);
+                log.trace("remoteAddres: "+rmtAddr.toString()+":"+rmtPort);
                 addLocalAddress(myAddr, myPort);
                 addRemoteAddress(srvrAddr, srvrPort);
-                addRemoteAddress(myAddr, myPort);
-                server = new SWBMessageServer(this, myAddr, myPort);
-                log.trace("Server: "+server);
-                server.start();
+                addRemoteAddress(rmtAddr, rmtPort);
+                lserver = new SWBMessageServer(this, myAddr, myPort, SWBMessageServer.FromNetwork.LOCAL);
+                log.trace("lServer: "+lserver);
+                lserver.start();
+                rserver = new SWBMessageServer(this, rmtAddr, rmtPort, SWBMessageServer.FromNetwork.REMOTE);
+                log.trace("rServer: "+rserver);
+                rserver.start();
                 DatagramSocket aux = new DatagramSocket();   //optener una puerto de salida valido...
                 int x = aux.getLocalPort();
                 aux.close();
-                sock = new DatagramSocket(x, myAddr);
-                String message = "ini|hel|"+myAddr.getHostAddress()+":"+myPort;
-                synchMess = "syn|hel|"+myAddr.getHostAddress()+":"+myPort;
+                sock = new DatagramSocket(x, rmtAddr);
+                String message = "ini|hel|"+rmtAddr.getHostAddress()+":"+rmtPort;
+                synchMess = "syn|hel|"+rmtAddr.getHostAddress()+":"+rmtPort;
                 try {
                     sendMessage(message, remoteNetwork);
                 } catch (IOException ioe){
@@ -169,19 +190,67 @@ public class SWBProxyMessageCenter {
         return !contains;
     }
 
-    void incomingMessage(String message, String addr) {
+    void incomingMessage(String message, String addr, SWBMessageServer.FromNetwork from) {
         if (!(message.startsWith("ini")||message.startsWith("syn"))){
             StringBuilder logbuf = new StringBuilder(message.length() + 20);
             logbuf.append(message.substring(0, 4));
             logbuf.append(df.format(new Date()));
             logbuf.append(message.substring(3));
-            if (localNetwork.containsKey(addr)){
+            if (SWBMessageServer.FromNetwork.LOCAL.equals(from)){
                 upStream.add(new DelayedMessage(message, 5, TimeUnit.MINUTES));
-            } else if (remoteNetwork.containsKey(addr)){
+            } else if (SWBMessageServer.FromNetwork.REMOTE.equals(from)){
                 downStream.add(new DelayedMessage(message, 5, TimeUnit.MINUTES));
             }
         }
-        log.debug("Message from " + addr + ":(" + message+")");
+        else {
+            int i = message.indexOf('|');
+            String ini = message.substring(0, i);
+            if(ini.equals("ini") || ini.equals("syn"))
+                    {
+                        try {
+                            StringTokenizer st=new StringTokenizer(message, "|");
+                            String init=st.nextToken();
+                            String time=st.nextToken();
+                            String aux=st.nextToken();
+                            if(aux.equals("hel"))
+                            {
+                                String maddr=st.nextToken();
+                                log.info("Registering Message Client:"+maddr);
+
+                                //System.out.println("Registering Message Client:"+addr);
+
+                                int j=maddr.lastIndexOf(":"); //MAPS74 IPV6
+                                if (SWBMessageServer.FromNetwork.LOCAL.equals(from)){
+                                    addLocalAddress(InetAddress.getByName(maddr.substring(0,j)),Integer.parseInt(maddr.substring(j+1)));
+                                } else if (SWBMessageServer.FromNetwork.REMOTE.equals(from)){
+                                    addRemoteAddress(InetAddress.getByName(maddr.substring(0,j)),Integer.parseInt(maddr.substring(j+1)));
+                                }
+    //                            if(!SWBPortal.isClient())
+    //                            {
+    //                                //System.out.println("Server...");
+    //                                center.sendMessage("ini|upd|"+center.getListAddress());
+    //                            }
+                            }
+    //                        else if(aux.equals("upd"))
+    //                        {
+    //                            if(SWBPortal.isClient())
+    //                            {
+    //                                while(st.hasMoreTokens())
+    //                                {
+    //                                    String maddr=st.nextToken();
+    //                                    int j=maddr.lastIndexOf(":"); //MAPS74 IPV6
+    //                                    center.addAddress(InetAddress.getByName(maddr.substring(0,j)),Integer.parseInt(maddr.substring(j+1)));
+    //                                }
+    //                                
+    //                            }
+    //                        }
+                        } catch (Exception mex) {
+                            log.error("SWBProxyMessageCenter: incommingMessage",mex);
+                        }
+                    }
+        }
+        
+        log.debug("Message from " + addr + ":(" + message+") "+from);
     }
     
     public void sendMessage(final String message, final HashMap<String, DatagramPacket> network) throws IOException{
@@ -203,7 +272,8 @@ public class SWBProxyMessageCenter {
     
     public void destroy() {
         timer.cancel();
-        server.setFlag(false);
+        lserver.setFlag(false);
+        rserver.setFlag(false);
         upStreamThread.setFlag(false);
         downStreamThread.setFlag(false);
     }
