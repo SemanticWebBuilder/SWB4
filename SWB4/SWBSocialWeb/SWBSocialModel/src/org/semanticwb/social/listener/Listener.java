@@ -12,6 +12,7 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.base.SWBAppObject;
 import org.semanticwb.model.SWBContext;
+import org.semanticwb.model.UserGroup;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.social.SocialNetwork;
 import org.semanticwb.social.SocialSite;
@@ -92,8 +93,8 @@ public class Listener implements SWBAppObject {
                     //pero si modifican un trhread y despues modifican otro antes de que concluya el tiempo para empezar a revisar los datos del stream
                     //,osea time2Review*MILISEG_IN_SEGUNDO, entonces la variable no va a estar en null, y simplemente no va ha levantar(crear) el nuevo
                     //timer del segundo stream que llegó, y si llegan mas, pues de ninguno de los otros, aunque es dificil que lleguen tantos antes de 
-                    //que empiece el primer timer a corres, osea, antes de que pase el tiempo marcado por time2Review*MILISEG_IN_SEGUNDO, que debe ser
-                    //2 o 3 segundos como maximo, en ese tiempo ya sw debio de haber guardado todas las propiedades del stream cuando se modifgica este, no 
+                    //que empiece el primer timer a correr, osea, antes de que pase el tiempo marcado por time2Review*MILISEG_IN_SEGUNDO, que debe ser
+                    //2 o 3 segundos como maximo, en ese tiempo ya se debio de haber guardado todas las propiedades del stream cuando se modifgica este, no 
                     //recuerdo si también pasa esto cuando apenas se crea como nuevo, pero creo que sí.
                     //System.out.println("Entra a Enviar a ReBind...");
                     rbThread=new ReBindThread(stream);
@@ -137,19 +138,22 @@ public class Listener implements SWBAppObject {
     {
         System.out.println("Entra a Listener/createUpdateTimersReBind-1");
         
+        /*
         Iterator<SocialNetwork> itNets=stream.listSocialNetworks();
         while(itNets.hasNext())
         {
             SocialNetwork socialNet=itNets.next();
             System.out.println("SocialNetwork que tiene el stream:"+socialNet.getURI());
         }
+        * */
         if(htTimers.get(stream.getURI())!=null)
         {
             try
             {
                 //System.out.println("Entra a Listener/createUpdateTimers-2:"+stream.getURI());
                 System.out.println("ListerJ1");
-                if(!createTimer(stream))
+                //Se revisa si el timer del stream puede ser creado, esto es, si el stream esta activo, si hay palabras a buscar, etc., si no es así, se elimina
+                if(!createTimer(stream))    
                 {
                     //System.out.println("Entra a Listener/createUpdateTimers-3:"+stream.getURI());
                     System.out.println("ListerJ1.1");
@@ -198,11 +202,22 @@ public class Listener implements SWBAppObject {
             if(htTimers.get(stream.getURI())!=null)
             {
                 System.out.println("Entra a removeTimer de stream:"+stream.getURI());
+                
+                //Mandar llamar a cada una de las redes sociales con el Stream que deseo detener
+                Iterator<SocialNetwork> itSocialNets=stream.listSocialNetworks();
+                while(itSocialNets.hasNext())
+                {
+                    SocialNetwork socialNet=itSocialNets.next();
+                    System.out.println("Va a mandar al metodo Stop en Listener de red social:"+socialNet);
+                    socialNet.stopListen(stream);   
+                }                
+                //////////////////
                 Timer timer=htTimers.get(stream.getURI());
                 htTimers.remove(stream.getURI());
                 timer.cancel();
                 timer.purge();
                 timer=null;
+                System.out.println("Entra a removeTimer de stream-1:"+stream.getURI());
                 return timer;
             }
          }catch(Exception e)
