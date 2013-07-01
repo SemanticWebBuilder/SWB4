@@ -11,8 +11,6 @@ import java.util.Iterator;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.semanticwb.Logger;
-import org.semanticwb.SWBUtils;
 import org.semanticwb.bsc.BSC;
 import org.semanticwb.bsc.Seasonable;
 import org.semanticwb.bsc.accessory.Period;
@@ -171,7 +169,6 @@ public class PeriodsManager extends GenericResource {
             periods = request.getParameterValues("period" + data);
             if (semObj != null && periods != null && periods.length > 0) {
                 removePeriodsInSemObj(semObj);
-                //if (periods != null && periods.length > 0) {
                 for (int i = 0; i < periods.length; i++) {
                     Period periodCheck = Period.ClassMgr.getPeriod(periods[i], ws);
 
@@ -181,8 +178,6 @@ public class PeriodsManager extends GenericResource {
                         periodCheck.setUndeleteable(true);
                     }
                 }
-                
-                //}
             }
             if (periods == null) {
                 removePeriodsInSemObj(semObj);
