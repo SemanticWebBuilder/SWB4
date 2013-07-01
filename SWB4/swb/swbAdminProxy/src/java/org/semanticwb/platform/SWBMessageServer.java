@@ -34,6 +34,7 @@ import org.semanticwb.SWBUtils;
 public class SWBMessageServer extends java.lang.Thread
 {
     
+    enum FromNetwork {LOCAL,REMOTE};
     /** The log. */
     public static Logger log = SWBUtils.getLogger(SWBMessageServer.class);
 
@@ -48,17 +49,22 @@ public class SWBMessageServer extends java.lang.Thread
     /** The center. */
     private SWBProxyMessageCenter center = null;
     
+    private final FromNetwork from; 
+    
+    
+    
     /**
      * Instantiates a new sWB message server.
      * 
      * @param center the center
      * @throws SocketException the socket exception
      */
-    public SWBMessageServer(SWBProxyMessageCenter center, InetAddress addr, int port) throws java.net.SocketException
+    public SWBMessageServer(SWBProxyMessageCenter center, InetAddress addr, int port, FromNetwork from) throws java.net.SocketException
     {
         this.center = center;
         s = new DatagramSocket(port, addr);
-        log.event("Message Server en:"+"\t"+ s.getLocalAddress().getHostAddress() + ":" + port);
+        this.from = from;
+        log.event("Message Server en:"+"\t"+ s.getLocalAddress().getHostAddress() + ":" + port+" network:"+this.from);
     }    
     
     /* (non-Javadoc)
@@ -78,7 +84,7 @@ public class SWBMessageServer extends java.lang.Thread
                 log.debug("UDP Msg:"+msg+" ");
                 center.incomingMessage(msg, 
                         packet.getAddress().getHostAddress()+":"+
-                        packet.getPort());
+                        packet.getPort(), from);
             } catch (Exception e)
             {
                 log.error(e);
