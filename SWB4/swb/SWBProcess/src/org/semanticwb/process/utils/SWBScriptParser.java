@@ -305,22 +305,26 @@ public class SWBScriptParser
         for (ItemAwareReference item : list)
         {
             String varname = item.getItemAware().getName();
-            SemanticObject object = item.getProcessObject().getSemanticObject();
-            try
-            {
-                //System.out.println("Cargando clase "+className+" ...");
-                Class clazz = SWBPClassMgr.getClassDefinition(object.getSemanticClass());
-                //System.out.println("Obteniendo constructor...");
-                Constructor c = clazz.getConstructor(SemanticObject.class);
-                //System.out.println("Instanciando objeto...");
-                Object instanceObject = c.newInstance(object);
-                //System.out.println("Agregando variable "+varname+"="+instanceObject+" de tipo "+instanceObject.getClass());
-                values.put(varname, instanceObject);
-                //System.out.println("Variable "+ varname +" agregada");
-            }
-            catch (Exception cnfe)
-            {
-                log.error("No se agrego variable " + varname + " a script relacionada con el objeto " + object.getURI() + " en la instancia de proceso " + instance.getURI(), cnfe);
+            if (item.getProcessObject() != null) {
+                SemanticObject object = item.getProcessObject().getSemanticObject();
+                try
+                {
+                    //System.out.println("Cargando clase "+className+" ...");
+                    Class clazz = SWBPClassMgr.getClassDefinition(object.getSemanticClass());
+                    //System.out.println("Obteniendo constructor...");
+                    Constructor c = clazz.getConstructor(SemanticObject.class);
+                    //System.out.println("Instanciando objeto...");
+                    Object instanceObject = c.newInstance(object);
+                    //System.out.println("Agregando variable "+varname+"="+instanceObject+" de tipo "+instanceObject.getClass());
+                    values.put(varname, instanceObject);
+                    //System.out.println("Variable "+ varname +" agregada");
+                }
+                catch (Exception cnfe)
+                {
+                    log.error("No se agrego variable " + varname + " a script relacionada con el objeto " + object.getURI() + " en la instancia de proceso " + instance.getURI(), cnfe);
+                }
+            } else {
+                log.error("No se agrego variable " + varname + " a script relacionada con el item " + item.getURI() + " en la instancia de proceso " + instance.getURI());
             }
         }
     }
