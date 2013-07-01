@@ -87,9 +87,9 @@ public class SentimentalDataClassifier {
         
         //System.out.println("En SentimentalDataClassifier:"+this.externalPost);
         //System.out.println("En stream:"+this.stream);
-        //System.out.println("En socialNetwork:"+this.socialNetwork);
+        ////System.out.println("En socialNetwork:"+this.socialNetwork);
         System.out.println("Creator id:"+externalPost.getCreatorId());
-        System.out.println("Creator name:"+externalPost.getCreatorName());
+        //System.out.println("Creator name:"+externalPost.getCreatorName());
         
         getExternalPostData();
         this.model=WebSite.ClassMgr.getWebSite(stream.getSemanticObject().getModel().getName());
@@ -120,25 +120,25 @@ public class SentimentalDataClassifier {
     private void initAnalysis()
     {
         //Normalizo
-        System.out.println("ANALISIS-0:"+externalString2Clasify);
+        //System.out.println("ANALISIS-0:"+externalString2Clasify);
         externalString2Clasify_TMP=externalString2Clasify;
         externalString2Clasify=SWBSocialUtil.Classifier.normalizer(externalString2Clasify).getNormalizedPhrase();
         
-        System.out.println("ANALISIS-1:"+externalString2Clasify);
+        //System.out.println("ANALISIS-1:"+externalString2Clasify);
         //Se cambia toda la frase a su modo raiz
         externalString2Clasify=SWBSocialUtil.Classifier.getRootWord(externalString2Clasify);
         
-        System.out.println("ANALISIS-2:"+externalString2Clasify);
+        //System.out.println("ANALISIS-2:"+externalString2Clasify);
 
         //Fonetizo
         externalString2Clasify=SWBSocialUtil.Classifier.phonematize(externalString2Clasify);
         
-        System.out.println("ANALISIS-3:"+externalString2Clasify);
+        //System.out.println("ANALISIS-3:"+externalString2Clasify);
 
         //Busco frases en objeto de aprendizaje (SentimentalLearningPhrase)
         
         findInLearnigPhrases();
-        System.out.println("ANALISIS-4:sentimentalTweetValue:"+sentimentalTweetValue+", IntensiveTweetValue:+"+IntensiveTweetValue+", wordsCont:"+wordsCont);
+        //System.out.println("ANALISIS-4:sentimentalTweetValue:"+sentimentalTweetValue+", IntensiveTweetValue:+"+IntensiveTweetValue+", wordsCont:"+wordsCont);
 
         //Elimino Caracteres especiales (acentuados)
         externalString2Clasify=SWBSocialUtil.Strings.replaceSpecialCharacters(externalString2Clasify);
@@ -147,7 +147,7 @@ public class SentimentalDataClassifier {
         
         externalString2Clasify=SWBSocialUtil.Strings.removePuntualSigns(externalString2Clasify, socialAdminSite);
         
-        System.out.println("ANALISIS-5:sentimentalTweetValue:"+externalString2Clasify);
+        //System.out.println("ANALISIS-5:sentimentalTweetValue:"+externalString2Clasify);
         
         ArrayList<String> aListWords=new ArrayList();
         StringTokenizer st = new StringTokenizer(externalString2Clasify);
@@ -199,7 +199,7 @@ public class SentimentalDataClassifier {
             }
         }
         
-        System.out.println("ANALISIS-6 sentimentalTweetValue Final:"+sentimentalTweetValue+", wordsCont:"+wordsCont+",intesitive Final:"+IntensiveTweetValue);
+        //System.out.println("ANALISIS-6 sentimentalTweetValue Final:"+sentimentalTweetValue+", wordsCont:"+wordsCont+",intesitive Final:"+IntensiveTweetValue);
         
         
         //Empieza manejo de filtros
@@ -282,7 +282,7 @@ public class SentimentalDataClassifier {
         
         if(createPostInbySentiment && createPostInbyIntensity)    //Si pasa los filtros, entonces se crea el mensaje, de lo contrario el mensaje de la red social nunca se persiste.
         {
-            System.out.println("PASA FILTRO DE SENTIMIENTOS E INTENSIDAD");
+            //System.out.println("PASA FILTRO DE SENTIMIENTOS E INTENSIDAD");
             //Si pasó filtro por sentimiento e intensidad, entonces revisa filtro por klout
             SocialNetworkUser socialNetUser=null;
             boolean createPostbyKlout=false;
@@ -292,25 +292,23 @@ public class SentimentalDataClassifier {
                 //Filtro de Klout
                 //stream.setStream_KloutValue(10);
                 //Si se requiere filtrar por Klout, esto es porque exista un valo de klout para el stream>0
-                System.out.println("Klout-0, stream k:"+stream.getStream_KloutValue()+",boolean:"+socialNetwork.getSemanticObject().getSemanticClass().isSubClass(Kloutable.social_Kloutable));
+                //System.out.println("Klout-0, stream k:"+stream.getStream_KloutValue()+",boolean:"+socialNetwork.getSemanticObject().getSemanticClass().isSubClass(Kloutable.social_Kloutable));
                 if(stream.getStream_KloutValue()>0 && socialNetwork.getSemanticObject().getSemanticClass().isSubClass(Kloutable.social_Kloutable))
                 {
-                    System.out.println("Klout-1");
+                    //System.out.println("Klout-1");
                     String creatorId=externalPost.getCreatorId();
                     if(creatorId!=null) //Siempre debería externalPost.getCreatorId() traer un valor, por lo tanto debería entrar a este if
                     {
-                        System.out.println("Klout-2:"+creatorId);
+                        //System.out.println("Klout-2:"+creatorId);
                         //Revisar si existe el usuario en nuestra BD y si ya paso mas de 5 días en mi cache.
                         {
                             socialNetUser=SocialNetworkUser.getSocialNetworkUserbyIDAndSocialNet(""+creatorId, socialNetwork, model);
-                            System.out.println("Klout-3:"+socialNetUser);
                             if(socialNetUser!=null)
                             {
                                 userKloutScore=socialNetUser.getSnu_klout();
-                                System.out.println("Klout-4:"+userKloutScore);
+                                System.out.println("Usuario:"+socialNetUser+", SI existe, su Klout es:"+userKloutScore);
                                 //System.out.println("userKloutScore:"+userKloutScore);
                                 int days=SWBSocialUtil.Util.Datediff(socialNetUser.getUpdated(), Calendar.getInstance().getTime());
-                                System.out.println("Klout-5:"+days);
                                 /*
                                 String patron = "yyyy/MM/dd:hh:mm:ss:SSS:a";
                                 SimpleDateFormat formato = new SimpleDateFormat(patron);
@@ -323,7 +321,9 @@ public class SentimentalDataClassifier {
                                     if(userKloutScore>=stream.getStream_KloutValue())
                                     {
                                         createPostbyKlout=true;
-                                    }else{
+                                    }
+                                    /*
+                                    else{
                                         //System.out.println("ENTRA A createPostbyKlout Y ES IGUAL A FALSE...");
                                         Kloutable socialNetKloutAble=(Kloutable) socialNetwork;
                                         userKloutScore=Double.valueOf(socialNetKloutAble.getUserKlout(creatorId)).intValue(); 
@@ -332,12 +332,11 @@ public class SentimentalDataClassifier {
                                             createPostbyKlout=true;
                                             upDateSocialUserNetworkData=true;
                                         }
-                                    }
+                                    }*/
                                 }else{  //Si ya pasaron 5 o mas días de que se actualizó la info del usuario, entonces busca su score en Klout
-                                    System.out.println("YA PASARON MAS DE 5 DÍAS, BUSCAR KLOUT DE USUARIO...");
                                     Kloutable socialNetKloutAble=(Kloutable) socialNetwork;
                                     userKloutScore=Double.valueOf(socialNetKloutAble.getUserKlout(creatorId)).intValue(); 
-                                    System.out.println("userKloutScore K TRAJO:"+userKloutScore);
+                                    //System.out.println("No existe usuario, userKloutScore K TRAJO:"+userKloutScore);
                                     if(userKloutScore>=stream.getStream_KloutValue())
                                     {
                                         createPostbyKlout=true;
@@ -345,14 +344,14 @@ public class SentimentalDataClassifier {
                                     }
                                 }
                             }else { //No existe en la BD, debo revisar su klout
-                                System.out.println("USUARIO NO EXISTE EN EL SISTEMA, REVISAR QUE KLOUT TIENE");
                                 Kloutable socialNetKloutAble=(Kloutable) socialNetwork;
                                 userKloutScore=Double.valueOf(socialNetKloutAble.getUserKlout(creatorId)).intValue(); 
+                                //System.out.println("No existe usuario, userKloutScore K TRAJO:"+userKloutScore);
                                 if(userKloutScore>=stream.getStream_KloutValue())
                                 {
                                     createPostbyKlout=true;
                                 }
-                                System.out.println("createPostbyKlout:"+createPostbyKlout);
+                                //System.out.println("createPostbyKlout:"+createPostbyKlout);
                             }
                         }
                         //Termina de revisar si existe el usuario en nuestra BD y si ya paso mas de 5 días en mi cache.
@@ -361,10 +360,10 @@ public class SentimentalDataClassifier {
                     createPostbyKlout=true;
                 }
             }
-            System.out.println("Klout de usuario del mensaje:"+createPostbyKlout);
+            //System.out.println("Klout de usuario del mensaje, lo crea o no??:"+createPostbyKlout);
             if(createPostbyKlout)   //Si pasa el filtro de Klout del usuario, entonces ya persite el mensaje en BD
             {
-                System.out.println("Paso filtro de sentimientos, intensidad y klout---vamos a persistir el msg...");
+                //System.out.println("Paso filtro de sentimientos, intensidad y klout---vamos a persistir el msg...");
                 PostIn post=createPostInObj(socialNetUser, userKloutScore, upDateSocialUserNetworkData);
 
                 //Guarda valores sentimentales en el PostIn (mensaje de entrada)
@@ -392,29 +391,29 @@ public class SentimentalDataClassifier {
                 ArrayList<SocialRule> streamRules=new ArrayList();
                 //Momento de revisar las reglas del stream
                 Iterator <SocialRuleRef> itsocialRuleRefs =stream.listSocialRuleRefs(); 
-                System.out.println("itsocialRuleRefs jorge:"+itsocialRuleRefs.hasNext());
+                //System.out.println("itsocialRuleRefs jorge:"+itsocialRuleRefs.hasNext());
                 while(itsocialRuleRefs.hasNext())
                 {
                    SocialRuleRef socialRuleRef=itsocialRuleRefs.next();
                    if(socialRuleRef.isActive() && socialRuleRef.getSocialRule()!=null)
                    {
-                        System.out.println("ReglaRef k:"+socialRuleRef);
+                        //System.out.println("ReglaRef k:"+socialRuleRef);
                         SWBSocialRuleMgr socialRuleMgr=new SWBSocialRuleMgr();
                         SocialRule socialRule=socialRuleRef.getSocialRule();
                         rulesClassifierValueTmp=socialRuleMgr.eval(post, socialRule);
-                        System.out.println("rulesClassifierValueTmp-1:"+rulesClassifierValue);
+                        //System.out.println("rulesClassifierValueTmp-1:"+rulesClassifierValue);
                         if(firstTime) {
                             rulesClassifierValue=rulesClassifierValueTmp;
                             firstTime=false;
                         }else
                         {
                             rulesClassifierValue=rulesClassifierValue && rulesClassifierValueTmp;
-                            System.out.println("rulesClassifierValue-2:"+rulesClassifierValue);
+                            //System.out.println("rulesClassifierValue-2:"+rulesClassifierValue);
                         }
                         streamRules.add(socialRule);
                    }
                 }
-                System.out.println("rulesClassifierValue-Final:"+rulesClassifierValue);
+                //System.out.println("rulesClassifierValue-Final:"+rulesClassifierValue);
                 //Si el mensaje cumple con las reglas que tiene el stream por el cual provinó, entonces se ejecutan las acciones asignadas a dichas reglas.
                 if(rulesClassifierValue)
                 {
@@ -452,7 +451,7 @@ public class SentimentalDataClassifier {
      */
     public void clasifyMsgbySocialTopic(PostIn post)
     {
-        System.out.println("Asocialcion de socialTopic-23-1");
+        //System.out.println("Asocialcion de socialTopic-23-1");
          //Elimino Caracteres especiales (acentuados)
         String externalMsgTMP=SWBSocialUtil.Strings.replaceSpecialCharacters(externalString2Clasify_TMP);
 
@@ -471,79 +470,82 @@ public class SentimentalDataClassifier {
             }
         }
                 
-        System.out.println("Asocialcion de socialTopic-23");
+        //System.out.println("Asocialcion de socialTopic-23");
                 
         Iterator <SocialTopic> itSocialTopics=SocialTopic.ClassMgr.listSocialTopics();
         while(itSocialTopics.hasNext())
         {
             SocialTopic socialTopic=itSocialTopics.next();
-            String sTags=socialTopic.getTags();
-            boolean existWord=false;
-            if(sTags!=null && sTags.length()>0)
+            if(socialTopic.isActive() && !socialTopic.isDeleted())  //Si el SocialTopic esta activo y no borrado
             {
-                String[] tags=sTags.split("\\,");  //Dividir valores
-                for(int i=0;i<tags.length;i++)
+                String sTags=socialTopic.getTags();
+                boolean existWord=false;
+                if(sTags!=null && sTags.length()>0)
                 {
-                    String tag=tags[i];
-                    //System.out.println("tag:"+tag);
-                    
-                    //Elimino Caracteres especiales (acentuados)
-                    tag=SWBSocialUtil.Strings.replaceSpecialCharacters(tag);
-
-                    tag=SWBSocialUtil.Strings.removePuntualSigns(tag, socialAdminSite);
-                    
-                    //System.out.println("Tag2_Final:"+tag);
-                    //
-                    
-                    //Si una de las palabras clave de un tema esta en el mensaje de entrada, entonces se agrega al postIn ese tema 
-                    //y ya no se continua iterando en los temas
-                    if(amsgWords.contains(tag.toLowerCase()))
+                    String[] tags=sTags.split("\\,");  //Dividir valores
+                    for(int i=0;i<tags.length;i++)
                     {
-                       //System.out.println("tag SI esta contenido en las palabras:"+tag);
-                       //Hice que un msg de entrada solo se pudiera asignar a un tema debido a que si fuera a mas, entonces sería revisado el mismo msg por 
-                       //varios usuarios en varios flujos, es mejor que se vaya solo a un flujo, asignando bien las palabras clave a cada tema (que no se repitan) 
-                       // y si se clasificó a un tema que no debia de ser (por no colocar correctamente las palabras clave), las personas en un flujo podrían
-                       //reclasificar en cualquier momento el mensaje, para que se vaya a otro tema y por consiguiente a otro flujo.
-                       System.out.println("Al post se le asocial SocialTopic:"+socialTopic.getURI());
-                       post.setSocialTopic(socialTopic);    
-                       
-                       //Envío de correo a los usuarios de los grupos que se encuentre asignados al socialtopic, para avisarles
-                       //del nuevo mensaje que ha llegado a su bandeja
-                       Iterator<User> itSocialTopicUsers=SWBSocialUtil.SocialTopic.getUsersbySocialTopic(socialTopic).iterator();
-                       while(itSocialTopicUsers.hasNext()) 
-                       {
-                           User user=itSocialTopicUsers.next();
-                           if(user.getEmail()!=null && SWBUtils.EMAIL.isValidEmailAddress(user.getEmail()))
+                        String tag=tags[i];
+                        //System.out.println("tag:"+tag);
+
+                        //Elimino Caracteres especiales (acentuados)
+                        tag=SWBSocialUtil.Strings.replaceSpecialCharacters(tag);
+
+                        tag=SWBSocialUtil.Strings.removePuntualSigns(tag, socialAdminSite);
+
+                        //System.out.println("Tag2_Final:"+tag);
+                        //
+
+                        //Si una de las palabras clave de un tema esta en el mensaje de entrada, entonces se agrega al postIn ese tema 
+                        //y ya no se continua iterando en los temas
+                        if(amsgWords.contains(tag.toLowerCase()))
+                        {
+                           //System.out.println("tag SI esta contenido en las palabras:"+tag);
+                           //Hice que un msg de entrada solo se pudiera asignar a un tema debido a que si fuera a mas, entonces sería revisado el mismo msg por 
+                           //varios usuarios en varios flujos, es mejor que se vaya solo a un flujo, asignando bien las palabras clave a cada tema (que no se repitan) 
+                           // y si se clasificó a un tema que no debia de ser (por no colocar correctamente las palabras clave), las personas en un flujo podrían
+                           //reclasificar en cualquier momento el mensaje, para que se vaya a otro tema y por consiguiente a otro flujo.
+                           //System.out.println("Al post se le asocial SocialTopic:"+socialTopic.getURI());
+                           post.setSocialTopic(socialTopic);    
+
+                           //Envío de correo a los usuarios de los grupos que se encuentre asignados al socialtopic, para avisarles
+                           //del nuevo mensaje que ha llegado a su bandeja
+                           Iterator<User> itSocialTopicUsers=SWBSocialUtil.SocialTopic.getUsersbySocialTopic(socialTopic).iterator();
+                           while(itSocialTopicUsers.hasNext()) 
                            {
-                               String sBody="Hola "+user.getFullName()+"<br>";
-                               sBody+="Le comunicamos que existe un nuevo mensaje en la bandeja de entrada del tema:"+socialTopic.getTitle()+", al cual usted se encuentra subscripo<br><br><br>";
-                               sBody+="El mensaje cuenta con el siguiente texto:<br><br><br>";
-                               sBody+=post.getMsg_Text()+"<br><br><br>";
-                               if(post.getPostInSocialNetworkUser()!=null)
+                               User user=itSocialTopicUsers.next();
+                               if(user.getEmail()!=null && SWBUtils.EMAIL.isValidEmailAddress(user.getEmail()))
                                {
-                                    sBody+="Usuario:"+post.getPostInSocialNetworkUser().getSnu_name()+"<br><br><br>";
-                                    if(post.getPostInSocialNetworkUser().getSnu_klout()>0)
-                                    {
-                                        sBody+="Klout:"+post.getPostInSocialNetworkUser().getSnu_klout();
-                                    }
-                               }
-                               try
-                               {
-                                    SWBUtils.EMAIL.sendBGEmail(user.getEmail(), "Nuevo Mensaje de Entra en Tema:"+socialTopic.getTitle(), sBody);
-                               }catch(SocketException so)
-                               {
-                                   log.error(so);
+                                   String sBody="Hola "+user.getFullName()+"<br>";
+                                   sBody+="Le comunicamos que existe un nuevo mensaje en la bandeja de entrada del tema:"+socialTopic.getTitle()+", al cual usted se encuentra subscripo<br><br><br>";
+                                   sBody+="El mensaje cuenta con el siguiente texto:<br><br><br>";
+                                   sBody+=post.getMsg_Text()+"<br><br><br>";
+                                   if(post.getPostInSocialNetworkUser()!=null)
+                                   {
+                                        sBody+="Usuario:"+post.getPostInSocialNetworkUser().getSnu_name()+"<br><br><br>";
+                                        if(post.getPostInSocialNetworkUser().getSnu_klout()>0)
+                                        {
+                                            sBody+="Klout:"+post.getPostInSocialNetworkUser().getSnu_klout();
+                                        }
+                                   }
+                                   try
+                                   {
+                                        SWBUtils.EMAIL.sendBGEmail(user.getEmail(), "Nuevo Mensaje de Entra en Tema:"+socialTopic.getTitle(), sBody);
+                                   }catch(SocketException so)
+                                   {
+                                       log.error(so);
+                                   }
                                }
                            }
-                       }
-                       
-                       existWord=true;
-                       break;
+
+                           existWord=true;
+                           break;
+                        }
                     }
+                    if(existWord) {
+                        break;
+                    }    //Ahora se saldría del while.
                 }
-                if(existWord) {
-                    break;
-                }    //Ahora se saldría del while.
             }
         }
     }
@@ -577,10 +579,10 @@ public class SentimentalDataClassifier {
                     {
                         //Para categorias de youtube, si despues se manejan mas categorias, sería un bloque similar al siguiente
                         YouTubeCategory youTubeCate=YouTubeCategory.ClassMgr.getYouTubeCategory(externalPost.getCategory(), SWBContext.getAdminWebSite());
-                        System.out.println("youTubeCate-1:"+youTubeCate);
+                        //System.out.println("youTubeCate-1:"+youTubeCate);
                         if(youTubeCate!=null)
                         {
-                            System.out.println("youTubeCate-2:"+youTubeCate);
+                            //System.out.println("youTubeCate-2:"+youTubeCate);
                             videoIn.setYoutubeCategory(youTubeCate);
                         }
                     }
@@ -723,9 +725,9 @@ public class SentimentalDataClassifier {
         while(itSntPhases.hasNext())
         {
             SentimentalLearningPhrase sntLPhrase=itSntPhases.next();
-            System.out.println("Frase Learn:"+sntLPhrase.getPhrase());
+            //System.out.println("Frase Learn:"+sntLPhrase.getPhrase());
             int contOcurr=findOccurrencesNumber(sntLPhrase.getPhrase(), 0);
-            System.out.println("sntLPhrase:"+sntLPhrase.getPhrase()+",contOcurrJorge:"+contOcurr);
+            //System.out.println("sntLPhrase:"+sntLPhrase.getPhrase()+",contOcurrJorge:"+contOcurr);
             if(contOcurr>0)
             {
                 if(sntLPhrase.getSentimentType()==1) //la frase es positiva

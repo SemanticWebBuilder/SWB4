@@ -130,6 +130,13 @@ public class SocialNetwork extends org.semanticwb.social.base.SocialNetworkBase
     public void listen(Stream stream) {
         //throw new UnsupportedOperationException("Not supported yet.");
     }
+    
+    @Override
+    public void stopListen(Stream stream) {
+        //throw new UnsupportedOperationException("Not supported yet."
+    }
+
+    
 
     /*
      * Metodo que las clases que extiendan de esta deberan implementar para

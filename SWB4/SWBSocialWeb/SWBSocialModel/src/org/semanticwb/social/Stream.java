@@ -44,7 +44,7 @@ public class Stream extends org.semanticwb.social.base.StreamBase
                         while(itSn.hasNext())
                         {
                             SocialNetwork socialNet=itSn.next();
-                            System.out.println("socialNet lista blanca:"+socialNet.getId());
+                            //System.out.println("socialNet lista blanca:"+socialNet.getId());
                             asocialNetIDs.add(socialNet.getId());   //Se agrega el id de la red social a la lista blanca (asocialNetIDs)
                         }
                         
@@ -58,7 +58,7 @@ public class Stream extends org.semanticwb.social.base.StreamBase
                                 //Si la red social del objeto socialNetStreamSearch, no se encuentra en la lista blanca, se eliminara dicho objeto
                                 if(!asocialNetIDs.contains(socialNetStreamSearch.getSocialNetwork().getId()))  
                                 {
-                                    System.out.println("Se elimina SocialNet:"+socialNetStreamSearch.getSocialNetwork().getId()+" de la clase:SocialNetStreamSearch, puesto que ya no esta en el strea:"+stream.getId());
+                                    //System.out.println("Se elimina SocialNet:"+socialNetStreamSearch.getSocialNetwork().getId()+" de la clase:SocialNetStreamSearch, puesto que ya no esta en el strea:"+stream.getId());
                                     socialNetStreamSearch.remove();
                                 }
                             }
