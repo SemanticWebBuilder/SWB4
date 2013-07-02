@@ -336,7 +336,7 @@ public class SentimentalDataClassifier {
                                 }else{  //Si ya pasaron 5 o mas días de que se actualizó la info del usuario, entonces busca su score en Klout
                                     Kloutable socialNetKloutAble=(Kloutable) socialNetwork;
                                     userKloutScore=Double.valueOf(socialNetKloutAble.getUserKlout(creatorId)).intValue(); 
-                                    //System.out.println("No existe usuario, userKloutScore K TRAJO:"+userKloutScore);
+                                    System.out.println("NO Existe usuario en BD, userKloutScore K TRAJO-1:"+userKloutScore);
                                     if(userKloutScore>=stream.getStream_KloutValue())
                                     {
                                         createPostbyKlout=true;
@@ -346,7 +346,7 @@ public class SentimentalDataClassifier {
                             }else { //No existe en la BD, debo revisar su klout
                                 Kloutable socialNetKloutAble=(Kloutable) socialNetwork;
                                 userKloutScore=Double.valueOf(socialNetKloutAble.getUserKlout(creatorId)).intValue(); 
-                                //System.out.println("No existe usuario, userKloutScore K TRAJO:"+userKloutScore);
+                                System.out.println("No existe usuario, userKloutScore K TRAJO-2:"+userKloutScore);
                                 if(userKloutScore>=stream.getStream_KloutValue())
                                 {
                                     createPostbyKlout=true;
@@ -360,7 +360,7 @@ public class SentimentalDataClassifier {
                     createPostbyKlout=true;
                 }
             }
-            //System.out.println("Klout de usuario del mensaje, lo crea o no??:"+createPostbyKlout);
+            System.out.println("Klout de usuario del mensaje, lo crea o no??:"+createPostbyKlout);
             if(createPostbyKlout)   //Si pasa el filtro de Klout del usuario, entonces ya persite el mensaje en BD
             {
                 //System.out.println("Paso filtro de sentimientos, intensidad y klout---vamos a persistir el msg...");
