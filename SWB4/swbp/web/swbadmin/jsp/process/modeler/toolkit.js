@@ -394,8 +394,11 @@
             };
             b.update=function()
             {
-                b.setAttributeNS(null,"x",b.parent.getX()+(b.parent.getWidth()/2)*b.ix);
-                b.setAttributeNS(null,"y",b.parent.getY()+(b.parent.getHeight()/2)*b.iy);
+                if(b.parent!==undefined)
+                {
+                    b.setAttributeNS(null,"x",b.parent.getX()+(b.parent.getWidth()/2)*b.ix);
+                    b.setAttributeNS(null,"y",b.parent.getY()+(b.parent.getHeight()/2)*b.iy);
+                }
                 //desc(b.sid+" "+Number(b.getAttributeNS(null,"x"))+" "+Number(b.getAttributeNS(null,"y")));
             };
             b.onmousedown=function(evt)
@@ -663,6 +666,7 @@
             
             obj.setPoint = function(p,x,y)
             {
+                //alert(p+" "+x+" "+y);
                 obj.pathSegList.getItem(p).x=x;
                 obj.pathSegList.getItem(p).y=y;
             }
@@ -719,7 +723,7 @@
                 obj.hidden=false;
             }
             
-            obj.setPoint(x1,y1);
+            obj.setPoint(0,x1,y1);
             obj.addPoint(x2,y2);
             
             obj.setClass=function(styleC) {
