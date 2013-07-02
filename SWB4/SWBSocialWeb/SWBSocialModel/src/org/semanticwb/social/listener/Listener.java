@@ -204,13 +204,19 @@ public class Listener implements SWBAppObject {
                 System.out.println("Entra a removeTimer de stream:"+stream.getURI());
                 
                 //Mandar llamar a cada una de las redes sociales con el Stream que deseo detener
-                Iterator<SocialNetwork> itSocialNets=stream.listSocialNetworks();
-                while(itSocialNets.hasNext())
+                try
                 {
-                    SocialNetwork socialNet=itSocialNets.next();
-                    System.out.println("Va a mandar al metodo Stop en Listener de red social:"+socialNet);
-                    socialNet.stopListen(stream);   
-                }                
+                    Iterator<SocialNetwork> itSocialNets=stream.listSocialNetworks();
+                    while(itSocialNets.hasNext())
+                    {
+                        SocialNetwork socialNet=itSocialNets.next();
+                        System.out.println("Va a mandar al metodo Stop en Listener de red social:"+socialNet);
+                        socialNet.stopListen(stream);   
+                    }                
+                }catch(Exception e)
+                {
+                    log.error(e);
+                }
                 //////////////////
                 Timer timer=htTimers.get(stream.getURI());
                 htTimers.remove(stream.getURI());
