@@ -206,7 +206,7 @@ public class SocialTopicInBox extends GenericResource {
         String swbSocialUser=request.getParameter("swbSocialUser");
         
         String page = request.getParameter("page");
-        if(page==null)  //Cuando venga page!=null no se mete nada a session, ni tampoco se manda return.
+        if(page==null && request.getParameter("noSaveSess")==null)  //Cuando venga page!=null no se mete nada a session, ni tampoco se manda return.
         {
             HttpSession session = request.getSession(true);
             if (null == searchWord) {
@@ -240,6 +240,7 @@ public class SocialTopicInBox extends GenericResource {
         out.println("<form id=\"" + id + "/fsearchSocialT\" name=\"" + id + "/fsearchSocialT\" method=\"post\" action=\"" + urls + "\" onsubmit=\"submitForm('" + id + "/fsearchSocialT');return false;\">");
         out.println("<div align=\"right\">");
         out.println("<input type=\"hidden\" name=\"suri\" value=\"" + id + "\">");
+        out.println("<input type=\"hidden\" name=\"noSaveSess\" value=\"1\">");
         out.println("<label for=\"" + id + "_fsearchSocialT\">" + paramRequest.getLocaleString("searchPost") + ": </label><input type=\"text\" name=\"search\" id=\"" + id + "_fsearchSocialT\" value=\"" + searchWord + "\">");
         out.println("<button dojoType=\"dijit.form.Button\" type=\"submit\">" + paramRequest.getLocaleString("btnSearch") + "</button>"); //
         out.println("</div>");        
