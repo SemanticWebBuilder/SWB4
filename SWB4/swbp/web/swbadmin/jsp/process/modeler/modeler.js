@@ -1351,7 +1351,7 @@
             var ret = true;
             var msg = null;
             var co = 0;
-            var ci = 0;
+            var ci = 1;
             
             if (ret && link.elementType=="MessageFlow") {
                 ret = false;
@@ -1375,7 +1375,7 @@
                         ci++;
                     }
                 }
-                if (ci > 0 && co != 0) {
+                if (ci > 1 && co > 1) {
                     msg = "Una compuerta divergente sólo puede tener un flujo entrante";
                     ret = false;
                 }
@@ -2268,6 +2268,7 @@
                 }
                 Modeler.creationId=null;
                 Modeler.creationDropObject=null;
+                ToolKit.stopPropagation(evt);
                 return false;
             }
             return true;
@@ -2333,6 +2334,10 @@
                     Modeler.dragConnection.remove();
                     Modeler.dragConnection = null;
                 }
+                
+                //obj.select(true);
+                //obj.moveFirst();
+                ToolKit.stopPropagation(evt);                
                 return false;
             }
             return true;            
@@ -2348,9 +2353,9 @@
                     if (obj.canEndLink(Modeler.dragConnection)) {
                         ToolKit.unSelectAll();
                         ToolKit.selectObj(obj,true);
-                        obj.addInConnection(Modeler.dragConnection);
-                        //Modeler.dragConnection.toObject=obj;
-                        //Modeler.dragConnection.setEndPoint(obj.getX(),obj.getY());
+                        //obj.addInConnection(Modeler.dragConnection);
+                        Modeler.dragConnection.toObject=obj;
+                        Modeler.dragConnection.setEndPoint(obj.getX(),obj.getY());
                     } else {
                         Modeler.dragConnection.setEndPoint(ToolKit.getEventX(evt), ToolKit.getEventY(evt));
                     }
@@ -2378,7 +2383,9 @@
             obj.subLine = ToolKit.createConnectionPath(0,0,0,0,null, null, null, null, null);
             obj.subLine.setStyleClass=function(cls) {
                 obj.subLine.setAttributeNS(null,"class",cls);
-            }
+            }            
+            obj.subLine.setAttributeNS(null,"class","sequenceFlowSubLine");            
+            
             obj.pressed = false;
             obj.hidden = false;
             obj.setArrowType= function(type) {
@@ -2389,6 +2396,10 @@
             }
             obj.soff=0;
             obj.eoff=0;
+//            obj.xs=0;
+//            obj.ys=0;
+//            obj.xe=0;
+//            obj.ye=0;
             
             //obj.addPoint(0,0);
             obj.addPoint(0,0);
@@ -2398,6 +2409,8 @@
                 obj.setPoint(0,x,y);
                 obj.xs=x;
                 obj.ys=y;
+                if(!obj.xe)obj.xe=x;
+                if(!obj.ye)obj.ye=y;                
                 obj.updateInterPoints();
                 obj.pressed = false;
             }
@@ -2556,8 +2569,8 @@
                        obj.subLine.pathSegList.appendItem(obj.subLine.createSVGPathSegMovetoAbs(segment.x, segment.y));
                     }
                 }
-                ToolKit.svg.insertBefore(obj.subLine, obj);
-                obj.subLine.setAttributeNS(null,"class","sequenceFlowSubLine");
+                //ToolKit.svg.insertBefore(obj.subLine, obj);
+                //obj.subLine.setAttributeNS(null,"class","sequenceFlowSubLine");
             };
             return obj;
         },
