@@ -1,3 +1,4 @@
+
 <script type="text/javascript">
     function closeDialogAddAnswer()
     {
@@ -24,6 +25,7 @@
                 &nbsp;
             </td>
         </tr>
+
         <tr>
             <td colspan="3" align="right">
                 <input type="button" value="Seleccionar de banco de respuestas">
@@ -35,3 +37,5 @@
 
 
 </form>
+
+
