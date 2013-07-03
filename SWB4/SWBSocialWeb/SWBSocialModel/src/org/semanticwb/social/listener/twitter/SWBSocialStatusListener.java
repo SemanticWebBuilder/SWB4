@@ -106,7 +106,7 @@ public class SWBSocialStatusListener implements twitter4j.StatusListener {
                 message.setPostInSocialNetwork(socialNetwork);
                 message.setPostInStream(stream);
                 //System.out.println("Fuente:"+status.getSource());
-                message.setPostRetweets(Integer.parseInt(""+status.getRetweetCount()));
+                message.setPostShared(Integer.parseInt(""+status.getRetweetCount()));
                 //System.out.println("Ya en Msg ReTweets:"+message.getPostRetweets());
                 if(status.getSource()!=null)    //Dispositivo utilizado
                 {

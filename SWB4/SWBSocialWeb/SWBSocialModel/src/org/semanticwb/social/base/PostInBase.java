@@ -31,10 +31,6 @@ public abstract class PostInBase extends org.semanticwb.social.Post implements o
    */
     public static final org.semanticwb.platform.SemanticProperty social_postInSocialNetwork=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#postInSocialNetwork");
    /**
-   * Veces que ha sido re-enviado el post
-   */
-    public static final org.semanticwb.platform.SemanticProperty social_postRetweets=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#postRetweets");
-   /**
    * Lugar Geográfico de donde se envía el Post
    */
     public static final org.semanticwb.platform.SemanticProperty social_postPlace=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#postPlace");
@@ -50,6 +46,10 @@ public abstract class PostInBase extends org.semanticwb.social.Post implements o
    * Valor que resulta del algoritmo de analisis sentimental, aqui se puede ver el porque se pone cierto valor a la propiedad PostSentimentalType
    */
     public static final org.semanticwb.platform.SemanticProperty social_postSentimentalValue=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#postSentimentalValue");
+   /**
+   * Veces que ha sido re-enviado o compartido el post
+   */
+    public static final org.semanticwb.platform.SemanticProperty social_postShared=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#postShared");
    /**
    * Clase que comprende todos los tipos de Post de Salida que pueden ir siendo creados en la herramienta y que seran publicados a partir de esto en las diferentes redes sociales. Esta clase no se relaciona con una red social (con la clase SocialNetwork) porque un post de salida (desde la herramienta) podría ser enviado a diferentes redes sociales, sin embargo, es el mismo post de salida. Donde esta a que red social se envía esta en las instancias de la clase PostContainer.
    */
@@ -436,24 +436,6 @@ public abstract class PostInBase extends org.semanticwb.social.Post implements o
     }
 
 /**
-* Gets the PostRetweets property
-* @return int with the PostRetweets
-*/
-    public int getPostRetweets()
-    {
-        return getSemanticObject().getIntProperty(social_postRetweets);
-    }
-
-/**
-* Sets the PostRetweets property
-* @param value long with the PostRetweets
-*/
-    public void setPostRetweets(int value)
-    {
-        getSemanticObject().setIntProperty(social_postRetweets, value);
-    }
-
-/**
 * Gets the PostPlace property
 * @return String with the PostPlace
 */
@@ -523,6 +505,24 @@ public abstract class PostInBase extends org.semanticwb.social.Post implements o
     public void setPostSentimentalValue(float value)
     {
         getSemanticObject().setFloatProperty(social_postSentimentalValue, value);
+    }
+
+/**
+* Gets the PostShared property
+* @return int with the PostShared
+*/
+    public int getPostShared()
+    {
+        return getSemanticObject().getIntProperty(social_postShared);
+    }
+
+/**
+* Sets the PostShared property
+* @param value long with the PostShared
+*/
+    public void setPostShared(int value)
+    {
+        getSemanticObject().setIntProperty(social_postShared, value);
     }
    /**
    * Gets all the org.semanticwb.social.PostOut
