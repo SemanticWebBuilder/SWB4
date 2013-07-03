@@ -41,21 +41,16 @@
     //argsV.put("action", action);
     //System.out.println(wsite.getId().toString() + "--" + objUri);
 %>
-<div class="swbform">
-    <table width="50%" border="0px">            
-       <tr>
-           <td colspan="3" style="text-align: center;"><b>¿Qu&eacute; deseas postear?</b></td>        
-       </tr>
-       <tr>
-           <td colspan="3" style="text-align: center;">&nbsp;</td>        
-       </tr>
-       <tr>
-            <td style="text-align: center;"><a style="cursor: pointer;" title="Mensaje" onclick="postHtml('<%=url.setMode("post").setParameters(argsM)%>', '<%=objUri%>postType')"><img src="/swbadmin/images/text.png"/></a></td>
-            <td style="text-align: center;"><a style="cursor: pointer;" title="Foto" onclick="postHtml('<%=url.setMode("post").setParameters(argsP)%>', '<%=objUri%>postType')"><img src="/swbadmin/images/photo.png"/></a></td>
-            <td style="text-align: center;"><a style="cursor: pointer;" title="Video" onclick="postHtml('<%=url.setMode("post").setParameters(argsV)%>', '<%=objUri%>postType')"><img src="/swbadmin/images/video.png"/></a></td>
-       </tr>        
-    </table>
+<body>
+<div class="swbform" id="publicar" >
+        <p><strong>¿Qué deseas publicar?</strong></p>
+        <div class="sel-media">
+		<a title="Publicar un mensaje de texto" class="sel-txt" onclick="postHtml('<%=url.setMode("post").setParameters(argsM)%>', '<%=objUri%>postType')"><span>Publicar un mensaje de texto</span></a>
+		<a title="Publicar una imagen" class="sel-img2" onclick="postHtml('<%=url.setMode("post").setParameters(argsP)%>', '<%=objUri%>postType')"><span>Publicar una imagen</span></a>
+		<a title="Publicar un video" class="sel-vid" onclick="postHtml('<%=url.setMode("post").setParameters(argsV)%>', '<%=objUri%>postType')"><span>Publicar un video</span></a>
+	</div>
+        
 </div>
-
-<div id="<%=objUri%>postType" dojoType="dijit.layout.ContentPane">
+        <div id="<%=objUri%>postType" dojoType="dijit.layout.ContentPane">
 </div>
+</body>
