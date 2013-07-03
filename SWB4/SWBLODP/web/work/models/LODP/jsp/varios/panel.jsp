@@ -23,8 +23,8 @@ if(pub!=null){
         <li><a href="/es/LODP/Datos" class="m-datos">Datos</a></li>
         <li><a href="/es/LODP/Aplicaciones" class="m-apps">Aplicaciones</a></li>
         <li><a href="/es/LODP/Publicadores?act=arregloLetras" class="m-pub">Publicadores</a></li>
-        <li><a href="/es/LODP/Foro" class="m-foro">Foro</a></li>
-        <li><a href="/es/LODP/Participa" class="m-participa">Participa </a></li>
+        <!-- li><a href="/es/LODP/Foro" class="m-foro">Foro</a></li>
+        <li><a href="/es/LODP/Participa" class="m-participa">Participa </a></li -->
         <li><a href="/es/LODP/Panel_de_control" class="m-panel">Panel de Control</a></li>
       </ul>
     </div>
