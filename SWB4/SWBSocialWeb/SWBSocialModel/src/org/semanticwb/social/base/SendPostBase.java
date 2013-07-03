@@ -4,7 +4,7 @@ package org.semanticwb.social.base;
    /**
    * Acción específica mediante la cual se envía un mensaje por defecto a una o varias redes sociales seleccionadas 
    */
-public abstract class SendPostBase extends org.semanticwb.social.ActionMsg implements org.semanticwb.social.PostDataable,org.semanticwb.social.PostVideoable,org.semanticwb.model.Descriptiveable,org.semanticwb.social.PostTextable,org.semanticwb.social.SocialNetworkable,org.semanticwb.model.Traceable,org.semanticwb.social.PostImageable
+public abstract class SendPostBase extends org.semanticwb.social.ActionMsg implements org.semanticwb.model.Descriptiveable,org.semanticwb.social.PostVideoable,org.semanticwb.social.PostImageable,org.semanticwb.model.Traceable,org.semanticwb.social.SocialNetworkable,org.semanticwb.social.PostDataable,org.semanticwb.social.PostTextable
 {
    /**
    * Acción específica mediante la cual se envía un mensaje por defecto a una o varias redes sociales seleccionadas
@@ -208,6 +208,24 @@ public abstract class SendPostBase extends org.semanticwb.social.ActionMsg imple
     public void setVideo(String value)
     {
         getSemanticObject().setProperty(social_video, value);
+    }
+
+/**
+* Gets the Category property
+* @return String with the Category
+*/
+    public String getCategory()
+    {
+        return getSemanticObject().getProperty(social_category);
+    }
+
+/**
+* Sets the Category property
+* @param value long with the Category
+*/
+    public void setCategory(String value)
+    {
+        getSemanticObject().setProperty(social_category, value);
     }
    /**
    * Gets all the org.semanticwb.social.SocialNetwork

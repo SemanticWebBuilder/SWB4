@@ -4,7 +4,7 @@ package org.semanticwb.social.base;
    /**
    * Clase en donde se almacenan todos los post de tipo Video y que entran por el Listener 
    */
-public abstract class VideoInBase extends org.semanticwb.social.PostIn implements org.semanticwb.social.PostDataable,org.semanticwb.social.PostVideoable,org.semanticwb.social.PostTextable,org.semanticwb.social.YoutubeCatable,org.semanticwb.model.Tagable,org.semanticwb.social.Descriptable,org.semanticwb.model.Traceable
+public abstract class VideoInBase extends org.semanticwb.social.PostIn implements org.semanticwb.social.PostVideoable,org.semanticwb.model.Traceable,org.semanticwb.model.Tagable,org.semanticwb.social.PostDataable,org.semanticwb.social.PostTextable,org.semanticwb.social.Descriptable
 {
    /**
    * Clase en donde se almacenan todos los post de tipo Video y que entran por el Listener
@@ -177,29 +177,6 @@ public abstract class VideoInBase extends org.semanticwb.social.PostIn implement
             return it;
         }
        /**
-       * Gets all org.semanticwb.social.VideoIn with a determined YoutubeCategory
-       * @param value YoutubeCategory of the type org.semanticwb.social.YouTubeCategory
-       * @param model Model of the org.semanticwb.social.VideoIn
-       * @return Iterator with all the org.semanticwb.social.VideoIn
-       */
-
-        public static java.util.Iterator<org.semanticwb.social.VideoIn> listVideoInByYoutubeCategory(org.semanticwb.social.YouTubeCategory value,org.semanticwb.model.SWBModel model)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.social.VideoIn> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(social_youtubeCategory, value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.social.VideoIn with a determined YoutubeCategory
-       * @param value YoutubeCategory of the type org.semanticwb.social.YouTubeCategory
-       * @return Iterator with all the org.semanticwb.social.VideoIn
-       */
-
-        public static java.util.Iterator<org.semanticwb.social.VideoIn> listVideoInByYoutubeCategory(org.semanticwb.social.YouTubeCategory value)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.social.VideoIn> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(social_youtubeCategory,value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
        * Gets all org.semanticwb.social.VideoIn with a determined PostOutResponseInv
        * @param value PostOutResponseInv of the type org.semanticwb.social.PostOut
        * @param model Model of the org.semanticwb.social.VideoIn
@@ -301,42 +278,22 @@ public abstract class VideoInBase extends org.semanticwb.social.PostIn implement
     {
         getSemanticObject().setProperty(social_video, value);
     }
-   /**
-   * Sets the value for the property YoutubeCategory
-   * @param value YoutubeCategory to set
-   */
 
-    public void setYoutubeCategory(org.semanticwb.social.YouTubeCategory value)
+/**
+* Gets the Category property
+* @return String with the Category
+*/
+    public String getCategory()
     {
-        if(value!=null)
-        {
-            getSemanticObject().setObjectProperty(social_youtubeCategory, value.getSemanticObject());
-        }else
-        {
-            removeYoutubeCategory();
-        }
-    }
-   /**
-   * Remove the value for YoutubeCategory property
-   */
-
-    public void removeYoutubeCategory()
-    {
-        getSemanticObject().removeProperty(social_youtubeCategory);
+        return getSemanticObject().getProperty(social_category);
     }
 
-   /**
-   * Gets the YoutubeCategory
-   * @return a org.semanticwb.social.YouTubeCategory
-   */
-    public org.semanticwb.social.YouTubeCategory getYoutubeCategory()
+/**
+* Sets the Category property
+* @param value long with the Category
+*/
+    public void setCategory(String value)
     {
-         org.semanticwb.social.YouTubeCategory ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(social_youtubeCategory);
-         if(obj!=null)
-         {
-             ret=(org.semanticwb.social.YouTubeCategory)obj.createGenericInstance();
-         }
-         return ret;
+        getSemanticObject().setProperty(social_category, value);
     }
 }
