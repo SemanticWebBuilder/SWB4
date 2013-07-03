@@ -4,7 +4,7 @@ package org.semanticwb.social.base;
    /**
    * Clase que comprende todos los tipos de Post de entrada (Povientes del Listener)que pueden ir siendo creados en la herramienta. 
    */
-public abstract class PostInBase extends org.semanticwb.social.Post implements org.semanticwb.social.PostDataable,org.semanticwb.model.Tagable,org.semanticwb.social.Descriptable,org.semanticwb.social.PostTextable,org.semanticwb.model.Traceable
+public abstract class PostInBase extends org.semanticwb.social.Post implements org.semanticwb.social.PostDataable,org.semanticwb.social.PostTextable,org.semanticwb.model.Tagable,org.semanticwb.social.Descriptable,org.semanticwb.model.Traceable
 {
    /**
    * Clase a Cambiar despues por "Relacional".Clase en la cual se almacenan los usuarios que escriben los PostIn que llegan. No se puso como identificador de las instancias de esta clase el id que maneja el usuario en la red social, ya que un identificador de una red social, puede ser el mismo para otra red social, pero obviamnete para otro usuario.Es por ello que se puso como AutoGenID esta clase y por ello se maneja por separado el id de un usuario en una determinada red social, esto en la propiedad snu_id.
@@ -50,6 +50,14 @@ public abstract class PostInBase extends org.semanticwb.social.Post implements o
    * Valor que resulta del algoritmo de analisis sentimental, aqui se puede ver el porque se pone cierto valor a la propiedad PostSentimentalType
    */
     public static final org.semanticwb.platform.SemanticProperty social_postSentimentalValue=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#postSentimentalValue");
+   /**
+   * Clase que comprende todos los tipos de Post de Salida que pueden ir siendo creados en la herramienta y que seran publicados a partir de esto en las diferentes redes sociales. Esta clase no se relaciona con una red social (con la clase SocialNetwork) porque un post de salida (desde la herramienta) podría ser enviado a diferentes redes sociales, sin embargo, es el mismo post de salida. Donde esta a que red social se envía esta en las instancias de la clase PostContainer.
+   */
+    public static final org.semanticwb.platform.SemanticClass social_PostOut=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#PostOut");
+   /**
+   * Inversa que nos dice que PostOut han sido creados a manera de respuesta de esta instancia de PostIn.
+   */
+    public static final org.semanticwb.platform.SemanticProperty social_haspostOutResponseInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#haspostOutResponseInv");
    /**
    * Dispositivo desde el que se ha enviado el post
    */
@@ -228,6 +236,29 @@ public abstract class PostInBase extends org.semanticwb.social.Post implements o
         public static java.util.Iterator<org.semanticwb.social.PostIn> listPostInByCreator(org.semanticwb.model.User value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.social.PostIn> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_creator,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.social.PostIn with a determined PostOutResponseInv
+       * @param value PostOutResponseInv of the type org.semanticwb.social.PostOut
+       * @param model Model of the org.semanticwb.social.PostIn
+       * @return Iterator with all the org.semanticwb.social.PostIn
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.PostIn> listPostInByPostOutResponseInv(org.semanticwb.social.PostOut value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.PostIn> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(social_haspostOutResponseInv, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.social.PostIn with a determined PostOutResponseInv
+       * @param value PostOutResponseInv of the type org.semanticwb.social.PostOut
+       * @return Iterator with all the org.semanticwb.social.PostIn
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.PostIn> listPostInByPostOutResponseInv(org.semanticwb.social.PostOut value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.PostIn> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(social_haspostOutResponseInv,value.getSemanticObject(),sclass));
             return it;
         }
        /**
@@ -492,6 +523,45 @@ public abstract class PostInBase extends org.semanticwb.social.Post implements o
     public void setPostSentimentalValue(float value)
     {
         getSemanticObject().setFloatProperty(social_postSentimentalValue, value);
+    }
+   /**
+   * Gets all the org.semanticwb.social.PostOut
+   * @return A GenericIterator with all the org.semanticwb.social.PostOut
+   */
+
+    public org.semanticwb.model.GenericIterator<org.semanticwb.social.PostOut> listpostOutResponseInvs()
+    {
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.social.PostOut>(getSemanticObject().listObjectProperties(social_haspostOutResponseInv));
+    }
+
+   /**
+   * Gets true if has a postOutResponseInv
+   * @param value org.semanticwb.social.PostOut to verify
+   * @return true if the org.semanticwb.social.PostOut exists, false otherwise
+   */
+    public boolean haspostOutResponseInv(org.semanticwb.social.PostOut value)
+    {
+        boolean ret=false;
+        if(value!=null)
+        {
+           ret=getSemanticObject().hasObjectProperty(social_haspostOutResponseInv,value.getSemanticObject());
+        }
+        return ret;
+    }
+
+   /**
+   * Gets the postOutResponseInv
+   * @return a org.semanticwb.social.PostOut
+   */
+    public org.semanticwb.social.PostOut getpostOutResponseInv()
+    {
+         org.semanticwb.social.PostOut ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(social_haspostOutResponseInv);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.social.PostOut)obj.createGenericInstance();
+         }
+         return ret;
     }
 
 /**

@@ -4,7 +4,7 @@ package org.semanticwb.social.base;
    /**
    * Clase en donde se almacenan todos los post de tipo Video y que entran por el Listener 
    */
-public abstract class VideoInBase extends org.semanticwb.social.PostIn implements org.semanticwb.social.YoutubeCatable,org.semanticwb.social.PostDataable,org.semanticwb.social.PostVideoable,org.semanticwb.model.Tagable,org.semanticwb.social.Descriptable,org.semanticwb.social.PostTextable,org.semanticwb.model.Traceable
+public abstract class VideoInBase extends org.semanticwb.social.PostIn implements org.semanticwb.social.PostDataable,org.semanticwb.social.PostVideoable,org.semanticwb.social.PostTextable,org.semanticwb.social.YoutubeCatable,org.semanticwb.model.Tagable,org.semanticwb.social.Descriptable,org.semanticwb.model.Traceable
 {
    /**
    * Clase en donde se almacenan todos los post de tipo Video y que entran por el Listener
@@ -197,6 +197,29 @@ public abstract class VideoInBase extends org.semanticwb.social.PostIn implement
         public static java.util.Iterator<org.semanticwb.social.VideoIn> listVideoInByYoutubeCategory(org.semanticwb.social.YouTubeCategory value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.social.VideoIn> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(social_youtubeCategory,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.social.VideoIn with a determined PostOutResponseInv
+       * @param value PostOutResponseInv of the type org.semanticwb.social.PostOut
+       * @param model Model of the org.semanticwb.social.VideoIn
+       * @return Iterator with all the org.semanticwb.social.VideoIn
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.VideoIn> listVideoInByPostOutResponseInv(org.semanticwb.social.PostOut value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.VideoIn> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(social_haspostOutResponseInv, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.social.VideoIn with a determined PostOutResponseInv
+       * @param value PostOutResponseInv of the type org.semanticwb.social.PostOut
+       * @return Iterator with all the org.semanticwb.social.VideoIn
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.VideoIn> listVideoInByPostOutResponseInv(org.semanticwb.social.PostOut value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.VideoIn> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(social_haspostOutResponseInv,value.getSemanticObject(),sclass));
             return it;
         }
        /**
