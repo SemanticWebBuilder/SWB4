@@ -636,9 +636,9 @@ public class SentimentalDataClassifier {
                     {
                         postIn.setPostPlace(externalPost.getLocation());
                     }
-                    if(externalPost.getRetweets()>0)
+                    if(externalPost.getPostShared()>0)
                     {
-                        postIn.setPostShared(externalPost.getRetweets());
+                        postIn.setPostShared(externalPost.getPostShared());
                     }
                     
                     

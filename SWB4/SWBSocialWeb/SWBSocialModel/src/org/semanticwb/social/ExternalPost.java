@@ -504,7 +504,7 @@ public class ExternalPost {
      * @param socialNetwork the socialNetwork where the post was originated
      * 
      */
-    public void setNetwork(SocialNetwork socialNetwork)
+    public void setSocialNetwork(SocialNetwork socialNetwork)
     {
         this.socialNetwork=socialNetwork;
     }
