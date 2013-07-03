@@ -914,9 +914,11 @@ public class SWBSocialUtil implements SWBAppObject {
                         postOut.setPostInSource(postIn);
                     }
                     
+                    System.out.println("sendNewPost-1");
                     if (toPost.equals("video"))
                     {
                         //Guardado de Categorias
+                        System.out.println("sendNewPost-2");
                         if(request.getParameterValues(Video.social_category.getName())!=null)
                         {
                                 String values=null;
@@ -924,6 +926,7 @@ public class SWBSocialUtil implements SWBAppObject {
                                 for(int i=0;i<categories.length;i++)
                                 {
                                     String value=categories[i];
+                                    System.out.println("sendNewPost-3:"+value);
                                     if(value!=null && value.trim().length()>0)
                                     {
                                         if(i>0)
@@ -934,6 +937,8 @@ public class SWBSocialUtil implements SWBAppObject {
                                         }
                                     }
                                 }
+                                System.out.println("sendNewPost-4:"+values);
+                                ((Video)postOut).setCategory(values);
                         }
                         
                     }
