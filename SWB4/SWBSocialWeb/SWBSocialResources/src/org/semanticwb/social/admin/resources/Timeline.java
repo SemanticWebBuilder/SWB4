@@ -332,7 +332,7 @@ public class Timeline extends GenericResource{
                 SWBModel model=WebSite.ClassMgr.getWebSite(socialNetwork.getSemanticObject().getModel().getName());
                 SocialNetworkUser socialNetUser = SocialNetworkUser.getSocialNetworkUserbyIDAndSocialNet(""+status.getUser().getId(), socialNetwork, model);
                 
-                if(socialNetUser != null){//User exists and might or migth not have posts
+                /*if(socialNetUser != null){//User exists and might or migth not have posts
                     Iterator<PostIn> userPosts = PostIn.ClassMgr.listPostInByPostInSocialNetworkUser(socialNetUser, model);
                     while(userPosts.hasNext()){
                         PostIn post = userPosts.next();
@@ -344,6 +344,12 @@ public class Timeline extends GenericResource{
                         }
                     }
                 
+                }*/
+                
+                PostIn post = PostIn.getPostInbySocialMsgId(model, status.getId()+"");
+                if(post != null){
+                    log.error("The post with id :" + post.getSocialNetMsgId() + " already exists");
+                    return;
                 }
                 
                 PostIn postIn = null; //The post
