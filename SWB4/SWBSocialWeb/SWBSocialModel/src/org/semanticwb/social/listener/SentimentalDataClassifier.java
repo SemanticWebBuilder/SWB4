@@ -38,6 +38,7 @@ import org.semanticwb.social.SocialTopic;
 import org.semanticwb.social.Stream;
 import org.semanticwb.social.VideoIn;
 import org.semanticwb.social.YouTubeCategory;
+import org.semanticwb.social.Youtube;
 import org.semanticwb.social.util.NormalizerCharDuplicate;
 import org.semanticwb.social.util.SWBSocialRuleMgr;
 import org.semanticwb.social.util.SWBSocialUtil;
@@ -577,19 +578,25 @@ public class SentimentalDataClassifier {
                     videoIn.setVideo(externalPost.getVideo());
                     if(externalPost.getCategory()!=null)
                     {
-                        //Para categorias de youtube, si despues se manejan mas categorias, sería un bloque similar al siguiente
-                        YouTubeCategory youTubeCate=YouTubeCategory.ClassMgr.getYouTubeCategory(externalPost.getCategory(), SWBContext.getAdminWebSite());
-                        //System.out.println("youTubeCate-1:"+youTubeCate);
-                        if(youTubeCate!=null)
+                        //Para categorias de youtube, si despues se manejan mas categorias para otras redes sociales de video, sería un bloque similar al siguiente
+                        //Si despues se manejan mas categorias en otras redes sociales que no sean de tipo Video, tendría que quitar la propiedad category que se encuentra
+                        //en este momento en la interfaz PostVideoable y ponerselas a las de mas redes sociales, talvez a la clase SocialNetwork directamenre
+                        if(externalPost.getSocialNetwork() instanceof Youtube)
                         {
-                            //System.out.println("youTubeCate-2:"+youTubeCate);
-                            videoIn.setYoutubeCategory(youTubeCate);
+                            YouTubeCategory youTubeCate=YouTubeCategory.ClassMgr.getYouTubeCategory(externalPost.getCategory(), SWBContext.getAdminWebSite());
+                            //System.out.println("youTubeCate-1:"+youTubeCate);
+                            if(youTubeCate!=null)
+                            {
+                                //System.out.println("youTubeCate-2:"+youTubeCate);
+                                videoIn.setCategory(youTubeCate.getURI());
+                            }
                         }
                     }
                 }
                 
                 if(externalPost.getMessage()!=null)
                 {
+                    System.out.println("postIn fACE:"+postIn+", externalPost:"+externalPost);
                     postIn.setMsg_Text(externalPost.getMessage());
                 }
                 postIn.setSocialNetMsgId(externalPost.getPostId());
