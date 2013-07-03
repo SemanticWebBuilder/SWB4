@@ -29,12 +29,12 @@ import org.semanticwb.social.Stream;
  *  Esta clase es llamada cuando se levanta el appserver mediante el archivo startup.properties o mediante la creación y/o edición
  *  de streams.
  */
-public class Listener implements SWBAppObject {
+public class ListenerMgr implements SWBAppObject {
 
-    private static Logger log = SWBUtils.getLogger(Listener.class);
+    private static Logger log = SWBUtils.getLogger(ListenerMgr.class);
     //Timer timer;
     static Hashtable<String, Timer> htTimers = new Hashtable();
-    static private Listener instance;
+    static private ListenerMgr instance;
     static final int MILISEG_IN_SEGUNDO=1000;
     static ReBindThread rbThread=null;
 
@@ -43,22 +43,22 @@ public class Listener implements SWBAppObject {
      * <p>Obtiene una referencia al &uacute;nico objeto existente de esta clase.</p>
      * @return a reference to the only one existing object of this class
      */
-    static public synchronized Listener createInstance() {
-        if (Listener.instance == null) {
-            Listener.instance = new Listener();
+    static public synchronized ListenerMgr createInstance() {
+        if (ListenerMgr.instance == null) {
+            ListenerMgr.instance = new ListenerMgr();
         }
-        return Listener.instance;
+        return ListenerMgr.instance;
     }
 
     /*
      * Metodo constructor que levanta listener de cada uno de los streams de cada sitio de tipo SWBSocial
      */
-    public Listener() {
+    public ListenerMgr() {
         try {
             Iterator<WebSite> itWebSites = SWBContext.listWebSites(false);
             while (itWebSites.hasNext()) {
                 WebSite wsite = itWebSites.next();
-                if (wsite instanceof SocialSite) {
+                if (wsite.isActive() && !wsite.isDeleted() && wsite instanceof SocialSite) {
                     Iterator<Stream> itStreams = Stream.ClassMgr.listStreams(wsite);
                     while (itStreams.hasNext()) {
                         Stream stream = itStreams.next();
@@ -192,48 +192,6 @@ public class Listener implements SWBAppObject {
     }
      
 
-    /*
-     * Metodo que elimina un thread de un stream
-     */
-     public static Timer removeTimer(Stream stream)
-     {
-        try
-        {
-            if(htTimers.get(stream.getURI())!=null)
-            {
-                System.out.println("Entra a removeTimer de stream:"+stream.getURI());
-                
-                //Mandar llamar a cada una de las redes sociales con el Stream que deseo detener
-                try
-                {
-                    Iterator<SocialNetwork> itSocialNets=stream.listSocialNetworks();
-                    while(itSocialNets.hasNext())
-                    {
-                        SocialNetwork socialNet=itSocialNets.next();
-                        System.out.println("Va a mandar al metodo Stop en Listener de red social:"+socialNet);
-                        socialNet.stopListen(stream);   
-                    }                
-                }catch(Exception e)
-                {
-                    log.error(e);
-                }
-                //////////////////
-                Timer timer=htTimers.get(stream.getURI());
-                htTimers.remove(stream.getURI());
-                timer.cancel();
-                timer.purge();
-                timer=null;
-                System.out.println("Entra a removeTimer de stream-1:"+stream.getURI());
-                return timer;
-            }
-         }catch(Exception e)
-         {
-           //System.out.println("Error:"+e.getMessage());
-           log.error(e);
-         }
-        return null;
-     }
-
     /**
      * Clase de tipo Timer, hecha a andar las redes sociales adjudicadas a un stream.
      */ 
@@ -247,13 +205,20 @@ public class Listener implements SWBAppObject {
         }
 
         public void run() {
-            System.out.println("Ejecuta Timer");
-            Iterator<SocialNetwork> itSocialNets=stream.listSocialNetworks();
-            while(itSocialNets.hasNext())
+            if(createTimer(stream))
             {
-                SocialNetwork socialNet=itSocialNets.next();
-                System.out.println("Ejecuta Red Social/Listen:"+socialNet.getId());
-                socialNet.listen(stream);
+                System.out.println("Ejecuta Timer:"+stream);
+                Iterator<SocialNetwork> itSocialNets=stream.listSocialNetworks();
+                while(itSocialNets.hasNext())
+                {
+                    SocialNetwork socialNet=itSocialNets.next();
+                    System.out.println("Ejecuta Red Social/Listen:"+socialNet.getId());
+                    socialNet.listen(stream);
+                }
+            }else
+            {
+                System.out.println("stream es nulo o es inactivo o esta borrado.....:"+stream);
+                removeTimer(stream);
             }
         }
      }
@@ -264,14 +229,59 @@ public class Listener implements SWBAppObject {
     private static boolean createTimer(Stream stream)
     {
         System.out.println("ListerJ5");
-        if(stream.isActive() && stream.getPoolTime() > 0 && stream.getPhrase()!=null && stream.getPhrase().trim().length()>0 && stream.listSocialNetworks().hasNext())
+        if(stream!=null && stream.isActive() && !stream.isDeleted() && stream.getPoolTime() > 0 && stream.getPhrase()!=null && stream.getPhrase().trim().length()>0 && stream.listSocialNetworks().hasNext())
         {
             return true;
         }
         return false;
     }
-
-
+    
+    /*
+     * Metodo que elimina un thread de un stream
+     */
+     public static Timer removeTimer(Stream stream)
+     {
+        if(htTimers.get(stream.getURI())!=null)
+        {
+            System.out.println("Entra a removeTimer de stream:"+stream.getURI());
+            System.out.println("Entra a removeTimer de stream-GeorgEEEEEE:"+stream.getURI());
+            //Mandar llamar a cada una de las redes sociales con el Stream que deseo detener
+            //Esto no se ve que vaya a funcionar, ya que si se elimina una instancia de cuenta de red social de stream
+            //En este iterador de abajo no me la va a regresar, por lo tanto nunca va a mandar llamar a su metodo stop
+            //
+            /*
+            try
+            {
+                Iterator<SocialNetwork> itSocialNets=stream.listSocialNetworks();
+                while(itSocialNets.hasNext())
+                {
+                    SocialNetwork socialNet=itSocialNets.next();
+                    System.out.println("Va a mandar al metodo Stop en Listener de red social:"+socialNet);
+                    socialNet.stopListen(stream);   
+                }                
+            }catch(Exception e)
+            {
+                log.error(e);
+            }*/
+            //////////////////
+            try
+            {
+                Timer timer=htTimers.get(stream.getURI());
+                htTimers.remove(stream.getURI());
+                timer.cancel();
+                timer.purge();
+                timer=null;
+                System.out.println("Entra a removeTimer de stream-1:"+stream.getURI());
+                return timer;
+            }catch(Exception e)
+            {
+                log.error(e);
+            }
+        }
+        return null;
+     }
+    
+   
     @Override
     public void init() {
         //new Listener();
@@ -292,7 +302,7 @@ public class Listener implements SWBAppObject {
      */
     public static void main(String args[]) {
         System.out.println("About to schedule task.");
-        new Listener(); //C/cuantos segundos se ejecutara la tarea
+        new ListenerMgr(); //C/cuantos segundos se ejecutara la tarea
         System.out.println("Task scheduled.");
     }
 }

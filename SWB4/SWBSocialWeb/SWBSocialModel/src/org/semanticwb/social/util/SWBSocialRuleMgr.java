@@ -38,7 +38,7 @@ public class SWBSocialRuleMgr {
  */
     public boolean eval(PostIn postIn, SocialRule socialRule)
     {
-        System.out.println("En SocialRuleMgr/eval_:"+((MessageIn)postIn).getMsg_Text()+",socialRule:"+socialRule.getId());
+        //System.out.println("En SocialRuleMgr/eval_:"+((MessageIn)postIn).getMsg_Text()+",socialRule:"+socialRule.getId());
         boolean ret=false;
         if(postIn != null && socialRule != null && socialRule.getXml()!=null)
         {
@@ -169,11 +169,11 @@ public class SWBSocialRuleMgr {
             {
                 try
                 {
-                    System.out.println("En SocialRuleMgr/exp_:"+SENTIMENT_TYPE+",cond:"+cond);
+                    //System.out.println("En SocialRuleMgr/exp_:"+SENTIMENT_TYPE+",cond:"+cond);
                     if(cond.equals("="))
                     {
                         boolean x=postIn.getPostSentimentalType()==Integer.parseInt(value);
-                        System.out.println("REGRESA-1:"+x); 
+                        //System.out.println("REGRESA-1:"+x); 
                         return x;
                     }else 
                     {
@@ -186,16 +186,16 @@ public class SWBSocialRuleMgr {
                 }
             }else if(name.equals(KLOUT_VALUE)) //validacion de si el usuario del mensaje tiene un klout mayor o igual al valor del nodo de la regla
             {
-                System.out.println("En SocialRuleMgr/exp_:"+KLOUT_VALUE+",cond:"+cond);
+                //System.out.println("En SocialRuleMgr/exp_:"+KLOUT_VALUE+",cond:"+cond);
                 try
                 {
                     if(cond.equals(">"))
                     {
                         
-                        System.out.println("Klout de user:"+postIn.getPostInSocialNetworkUser().getSnu_id()+",klout:"+postIn.getPostInSocialNetworkUser().getSnu_klout());
+                        //System.out.println("Klout de user:"+postIn.getPostInSocialNetworkUser().getSnu_id()+",klout:"+postIn.getPostInSocialNetworkUser().getSnu_klout());
                         boolean x=postIn.getPostInSocialNetworkUser().getSnu_klout()>=Float.parseFloat(value);
                         
-                        System.out.println("REGRESA-2:"+x);
+                        //System.out.println("REGRESA-2:"+x);
                         return postIn.getPostInSocialNetworkUser().getSnu_klout()>=Float.parseFloat(value);
                     }
                 }catch (NumberFormatException e)
@@ -205,13 +205,13 @@ public class SWBSocialRuleMgr {
                 }
             }else if(name.equals(MESSAGE_TEXT)) //validacion de si el mensaje contiene en su texto el texto del valor del nodo de la regla
             {
-                System.out.println("En SocialRuleMgr/exp_:"+MESSAGE_TEXT+",cond:"+cond);
+                //System.out.println("En SocialRuleMgr/exp_:"+MESSAGE_TEXT+",cond:"+cond);
                 try
                 {
                     if(cond.equals("="))
                     {
                         boolean x=((MessageIn) postIn).getMsg_Text().toLowerCase().contains(value.toLowerCase());
-                        System.out.println("REGRESA-3:"+x);
+                        //System.out.println("REGRESA-3:"+x);
                         return ((MessageIn) postIn).getMsg_Text().toLowerCase().contains(value.toLowerCase());
                     }
                 }catch(Exception e)
