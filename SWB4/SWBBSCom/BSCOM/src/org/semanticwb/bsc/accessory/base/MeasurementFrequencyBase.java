@@ -2,12 +2,16 @@ package org.semanticwb.bsc.accessory.base;
 
 
    /**
-   * Persiste información de una periodicidad 
+   * Las frecuencias de medición, definen bloques de períodos para determinar cuándo se requiere la captura de información. 
    */
-public abstract class MeasurementFrequencyBase extends org.semanticwb.bsc.accessory.BSCAccessory implements org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Activeable,org.semanticwb.model.Undeleteable,org.semanticwb.bsc.Help
+public abstract class MeasurementFrequencyBase extends org.semanticwb.bsc.accessory.BSCAccessory implements org.semanticwb.model.Activeable,org.semanticwb.model.Traceable,org.semanticwb.model.Undeleteable,org.semanticwb.model.Descriptiveable,org.semanticwb.bsc.Help
 {
    /**
-   * Persiste información de una periodicidad
+   * Especifica el número de períodos que abarca esta frecuencia de medición
+   */
+    public static final org.semanticwb.platform.SemanticProperty bsc_numberOfPeriods=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#numberOfPeriods");
+   /**
+   * Las frecuencias de medición, definen bloques de períodos para determinar cuándo se requiere la captura de información.
    */
     public static final org.semanticwb.platform.SemanticClass bsc_MeasurementFrequency=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#MeasurementFrequency");
    /**
@@ -130,6 +134,11 @@ public abstract class MeasurementFrequencyBase extends org.semanticwb.bsc.access
             org.semanticwb.model.GenericIterator<org.semanticwb.bsc.accessory.MeasurementFrequency> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_creator,value.getSemanticObject(),sclass));
             return it;
         }
+    }
+
+    public static MeasurementFrequencyBase.ClassMgr getMeasurementFrequencyClassMgr()
+    {
+        return new MeasurementFrequencyBase.ClassMgr();
     }
 
    /**
