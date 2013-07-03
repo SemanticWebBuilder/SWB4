@@ -98,7 +98,7 @@ public class AudioPodCast extends org.semanticwb.portal.resources.sem.base.Audio
         SWBResourceURL directURL = paramRequest.getRenderUrl().setMode(Mode_PLAY).setCallMethod(SWBParamRequest.Call_DIRECT);
         
         if(paramRequest.getCallMethod()==SWBParamRequest.Call_STRATEGY)
-        {
+        {   
             String surl = null;
             Iterator<Resourceable> res = base.listResourceables();
             while(res.hasNext()) {
@@ -110,7 +110,18 @@ public class AudioPodCast extends org.semanticwb.portal.resources.sem.base.Audio
             }
             final String contentURL = surl;
             
-            Iterator<AudioFile> resources = AudioFile.ClassMgr.listAudioFiles(base.getWebSite());
+            Iterator<AudioFile> resources;
+            if(request.getParameter("sid")!=null) {
+                AudioPodcastTheme theme = AudioPodcastTheme.ClassMgr.getAudioPodcastTheme(request.getParameter("sid"), base.getWebSite());
+                try {
+                    resources = theme.listAudioFiles();
+                }catch(Exception e) {
+                    resources = AudioFile.ClassMgr.listAudioFiles(base.getWebSite());
+                }
+            }else {
+                resources = AudioFile.ClassMgr.listAudioFiles(base.getWebSite());
+            }
+            
             resources = SWBComparator.sortByCreated(resources, false);
             if(resources.hasNext())
             {                              
@@ -495,11 +506,14 @@ System.out.println("path="+f.getAbsolutePath());
     @Override
     public int getPageSize()
     {
-        int pageSize = getSemanticObject().getIntProperty(audiof_pageSize);
-        if(pageSize<1) {
-            getSemanticObject().setIntProperty(audiof_pageSize, 5);
+        //int pageSize = getSemanticObject().getIntProperty(audiopdcst_pageSize);
+        int pageSize = super.getPageSize();
+        if(pageSize<1) {            
+            //getSemanticObject().setIntProperty(audiopdcst_pageSize, 5);
+            super.setPageSize(5);
         }
-        return getSemanticObject().getIntProperty(audiof_pageSize);
+        //return getSemanticObject().getIntProperty(audiopdcst_pageSize);
+        return super.getPageSize();
     }
     
     public void doDownload(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {

@@ -3,40 +3,40 @@ package org.semanticwb.portal.resources.sem.base;
 
 public abstract class AudioPodCastBase extends org.semanticwb.portal.api.GenericSemResource 
 {
-    public static final org.semanticwb.platform.SemanticProperty audiof_sliderHeight=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/sems/SWBAudioFile#sliderHeight");
-    public static final org.semanticwb.platform.SemanticProperty audiof_textcolor=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/sems/SWBAudioFile#textcolor");
-    public static final org.semanticwb.platform.SemanticProperty audiof_bgcolor=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/sems/SWBAudioFile#bgcolor");
-    public static final org.semanticwb.platform.SemanticProperty audiof_showStop=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/sems/SWBAudioFile#showStop");
-    public static final org.semanticwb.platform.SemanticProperty audiof_height=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/sems/SWBAudioFile#height");
-    public static final org.semanticwb.platform.SemanticProperty audiof_volumeHeight=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/sems/SWBAudioFile#volumeHeight");
-    public static final org.semanticwb.platform.SemanticProperty audiof_showLoading=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/sems/SWBAudioFile#showLoading");
-    public static final org.semanticwb.platform.SemanticProperty audiof_sliderWidth=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/sems/SWBAudioFile#sliderWidth");
-    public static final org.semanticwb.platform.SemanticProperty audiof_showVolume=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/sems/SWBAudioFile#showVolume");
-    public static final org.semanticwb.platform.SemanticProperty audiof_buttonColor=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/sems/SWBAudioFile#buttonColor");
-    public static final org.semanticwb.platform.SemanticProperty audiof_scTitle=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/sems/SWBAudioFile#scTitle");
-    public static final org.semanticwb.platform.SemanticProperty audiof_scDescription=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/sems/SWBAudioFile#scDescription");
-    public static final org.semanticwb.platform.SemanticProperty audiof_width=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/sems/SWBAudioFile#width");
-    public static final org.semanticwb.platform.SemanticProperty audiof_pageSize=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/sems/SWBAudioFile#pageSize");
-    public static final org.semanticwb.platform.SemanticProperty audiof_sliderColor1=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/sems/SWBAudioFile#sliderColor1");
-    public static final org.semanticwb.platform.SemanticProperty audiof_loadingColor=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/sems/SWBAudioFile#loadingColor");
+    public static final org.semanticwb.platform.SemanticProperty audiopdcst_sliderHeight=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/sems/SWBAudioFile#sliderHeight");
+    public static final org.semanticwb.platform.SemanticProperty audiopdcst_textcolor=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/sems/SWBAudioFile#textcolor");
+    public static final org.semanticwb.platform.SemanticProperty audiopdcst_bgcolor=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/sems/SWBAudioFile#bgcolor");
+    public static final org.semanticwb.platform.SemanticProperty audiopdcst_showStop=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/sems/SWBAudioFile#showStop");
+    public static final org.semanticwb.platform.SemanticProperty audiopdcst_height=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/sems/SWBAudioFile#height");
+    public static final org.semanticwb.platform.SemanticProperty audiopdcst_volumeHeight=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/sems/SWBAudioFile#volumeHeight");
+    public static final org.semanticwb.platform.SemanticProperty audiopdcst_showLoading=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/sems/SWBAudioFile#showLoading");
+    public static final org.semanticwb.platform.SemanticProperty audiopdcst_sliderWidth=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/sems/SWBAudioFile#sliderWidth");
+    public static final org.semanticwb.platform.SemanticProperty audiopdcst_showVolume=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/sems/SWBAudioFile#showVolume");
+    public static final org.semanticwb.platform.SemanticProperty audiopdcst_buttonColor=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/sems/SWBAudioFile#buttonColor");
+    public static final org.semanticwb.platform.SemanticProperty audiopdcst_scTitle=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/sems/SWBAudioFile#scTitle");
+    public static final org.semanticwb.platform.SemanticProperty audiopdcst_scDescription=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/sems/SWBAudioFile#scDescription");
+    public static final org.semanticwb.platform.SemanticProperty audiopdcst_width=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/sems/SWBAudioFile#width");
+    public static final org.semanticwb.platform.SemanticProperty audiopdcst_pageSize=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/sems/SWBAudioFile#pageSize");
+    public static final org.semanticwb.platform.SemanticProperty audiopdcst_sliderColor1=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/sems/SWBAudioFile#sliderColor1");
+    public static final org.semanticwb.platform.SemanticProperty audiopdcst_loadingColor=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/sems/SWBAudioFile#loadingColor");
     public static final org.semanticwb.platform.SemanticClass swb_Resource=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Resource");
     public static final org.semanticwb.platform.SemanticProperty swb_semanticResourceInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#semanticResourceInv");
-    public static final org.semanticwb.platform.SemanticProperty audiof_autoplay=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/sems/SWBAudioFile#autoplay");
-    public static final org.semanticwb.platform.SemanticClass audiof_AudioFile=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/portal/resources/sems/SWBAudioFile#AudioFile");
-    public static final org.semanticwb.platform.SemanticProperty audiof_hasAudioFile=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/sems/SWBAudioFile#hasAudioFile");
-    public static final org.semanticwb.platform.SemanticProperty audiof_sliderColor2=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/sems/SWBAudioFile#sliderColor2");
-    public static final org.semanticwb.platform.SemanticProperty audiof_buttonOvercolor=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/sems/SWBAudioFile#buttonOvercolor");
-    public static final org.semanticwb.platform.SemanticProperty audiof_volumeWidth=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/sems/SWBAudioFile#volumeWidth");
-    public static final org.semanticwb.platform.SemanticProperty audiof_buttonWidth=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/sems/SWBAudioFile#buttonWidth");
-    public static final org.semanticwb.platform.SemanticProperty audiof_sliderOvercolor=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/sems/SWBAudioFile#sliderOvercolor");
-    public static final org.semanticwb.platform.SemanticProperty audiof_loop=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/sems/SWBAudioFile#loop");
-    public static final org.semanticwb.platform.SemanticProperty audiof_transparent=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/sems/SWBAudioFile#transparent");
-    public static final org.semanticwb.platform.SemanticProperty audiof_bgcolor2=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/sems/SWBAudioFile#bgcolor2");
-    public static final org.semanticwb.platform.SemanticProperty audiof_bgcolor1=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/sems/SWBAudioFile#bgcolor1");
-    public static final org.semanticwb.platform.SemanticProperty audiof_showSlider=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/sems/SWBAudioFile#showSlider");
-    public static final org.semanticwb.platform.SemanticProperty audiof_autoload=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/sems/SWBAudioFile#autoload");
-    public static final org.semanticwb.platform.SemanticProperty audiof_volume=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/sems/SWBAudioFile#volume");
-    public static final org.semanticwb.platform.SemanticClass audiof_AudioPodCast=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/portal/resources/sems/SWBAudioFile#AudioPodCast");
+    public static final org.semanticwb.platform.SemanticProperty audiopdcst_autoplay=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/sems/SWBAudioFile#autoplay");
+    public static final org.semanticwb.platform.SemanticClass audiopdcst_AudioFile=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/portal/resources/sems/SWBAudioFile#AudioFile");
+    public static final org.semanticwb.platform.SemanticProperty audiopdcst_hasAudioFile=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/sems/SWBAudioFile#hasAudioFile");
+    public static final org.semanticwb.platform.SemanticProperty audiopdcst_sliderColor2=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/sems/SWBAudioFile#sliderColor2");
+    public static final org.semanticwb.platform.SemanticProperty audiopdcst_buttonOvercolor=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/sems/SWBAudioFile#buttonOvercolor");
+    public static final org.semanticwb.platform.SemanticProperty audiopdcst_volumeWidth=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/sems/SWBAudioFile#volumeWidth");
+    public static final org.semanticwb.platform.SemanticProperty audiopdcst_buttonWidth=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/sems/SWBAudioFile#buttonWidth");
+    public static final org.semanticwb.platform.SemanticProperty audiopdcst_sliderOvercolor=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/sems/SWBAudioFile#sliderOvercolor");
+    public static final org.semanticwb.platform.SemanticProperty audiopdcst_loop=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/sems/SWBAudioFile#loop");
+    public static final org.semanticwb.platform.SemanticProperty audiopdcst_transparent=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/sems/SWBAudioFile#transparent");
+    public static final org.semanticwb.platform.SemanticProperty audiopdcst_bgcolor2=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/sems/SWBAudioFile#bgcolor2");
+    public static final org.semanticwb.platform.SemanticProperty audiopdcst_bgcolor1=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/sems/SWBAudioFile#bgcolor1");
+    public static final org.semanticwb.platform.SemanticProperty audiopdcst_showSlider=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/sems/SWBAudioFile#showSlider");
+    public static final org.semanticwb.platform.SemanticProperty audiopdcst_autoload=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/sems/SWBAudioFile#autoload");
+    public static final org.semanticwb.platform.SemanticProperty audiopdcst_volume=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/sems/SWBAudioFile#volume");
+    public static final org.semanticwb.platform.SemanticClass audiopdcst_AudioPodCast=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/portal/resources/sems/SWBAudioFile#AudioPodCast");
     public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/portal/resources/sems/SWBAudioFile#AudioPodCast");
 
     public AudioPodCastBase()
@@ -77,7 +77,7 @@ public abstract class AudioPodCastBase extends org.semanticwb.portal.api.Generic
 */
     public int getSliderHeight()
     {
-        return getSemanticObject().getIntProperty(audiof_sliderHeight);
+        return getSemanticObject().getIntProperty(audiopdcst_sliderHeight);
     }
 
 /**
@@ -86,7 +86,7 @@ public abstract class AudioPodCastBase extends org.semanticwb.portal.api.Generic
 */
     public void setSliderHeight(int value)
     {
-        getSemanticObject().setIntProperty(audiof_sliderHeight, value);
+        getSemanticObject().setIntProperty(audiopdcst_sliderHeight, value);
     }
 
 /**
@@ -95,7 +95,7 @@ public abstract class AudioPodCastBase extends org.semanticwb.portal.api.Generic
 */
     public String getTextcolor()
     {
-        return getSemanticObject().getProperty(audiof_textcolor);
+        return getSemanticObject().getProperty(audiopdcst_textcolor);
     }
 
 /**
@@ -104,7 +104,7 @@ public abstract class AudioPodCastBase extends org.semanticwb.portal.api.Generic
 */
     public void setTextcolor(String value)
     {
-        getSemanticObject().setProperty(audiof_textcolor, value);
+        getSemanticObject().setProperty(audiopdcst_textcolor, value);
     }
 
 /**
@@ -113,7 +113,7 @@ public abstract class AudioPodCastBase extends org.semanticwb.portal.api.Generic
 */
     public String getBgcolor()
     {
-        return getSemanticObject().getProperty(audiof_bgcolor);
+        return getSemanticObject().getProperty(audiopdcst_bgcolor);
     }
 
 /**
@@ -122,7 +122,7 @@ public abstract class AudioPodCastBase extends org.semanticwb.portal.api.Generic
 */
     public void setBgcolor(String value)
     {
-        getSemanticObject().setProperty(audiof_bgcolor, value);
+        getSemanticObject().setProperty(audiopdcst_bgcolor, value);
     }
 
 /**
@@ -131,7 +131,7 @@ public abstract class AudioPodCastBase extends org.semanticwb.portal.api.Generic
 */
     public boolean isShowStop()
     {
-        return getSemanticObject().getBooleanProperty(audiof_showStop);
+        return getSemanticObject().getBooleanProperty(audiopdcst_showStop);
     }
 
 /**
@@ -140,7 +140,7 @@ public abstract class AudioPodCastBase extends org.semanticwb.portal.api.Generic
 */
     public void setShowStop(boolean value)
     {
-        getSemanticObject().setBooleanProperty(audiof_showStop, value);
+        getSemanticObject().setBooleanProperty(audiopdcst_showStop, value);
     }
 
 /**
@@ -149,7 +149,7 @@ public abstract class AudioPodCastBase extends org.semanticwb.portal.api.Generic
 */
     public int getHeight()
     {
-        return getSemanticObject().getIntProperty(audiof_height);
+        return getSemanticObject().getIntProperty(audiopdcst_height);
     }
 
 /**
@@ -158,7 +158,7 @@ public abstract class AudioPodCastBase extends org.semanticwb.portal.api.Generic
 */
     public void setHeight(int value)
     {
-        getSemanticObject().setIntProperty(audiof_height, value);
+        getSemanticObject().setIntProperty(audiopdcst_height, value);
     }
 
 /**
@@ -167,7 +167,7 @@ public abstract class AudioPodCastBase extends org.semanticwb.portal.api.Generic
 */
     public int getVolumeHeight()
     {
-        return getSemanticObject().getIntProperty(audiof_volumeHeight);
+        return getSemanticObject().getIntProperty(audiopdcst_volumeHeight);
     }
 
 /**
@@ -176,7 +176,7 @@ public abstract class AudioPodCastBase extends org.semanticwb.portal.api.Generic
 */
     public void setVolumeHeight(int value)
     {
-        getSemanticObject().setIntProperty(audiof_volumeHeight, value);
+        getSemanticObject().setIntProperty(audiopdcst_volumeHeight, value);
     }
 
 /**
@@ -185,7 +185,7 @@ public abstract class AudioPodCastBase extends org.semanticwb.portal.api.Generic
 */
     public String getShowLoading()
     {
-        return getSemanticObject().getProperty(audiof_showLoading);
+        return getSemanticObject().getProperty(audiopdcst_showLoading);
     }
 
 /**
@@ -194,7 +194,7 @@ public abstract class AudioPodCastBase extends org.semanticwb.portal.api.Generic
 */
     public void setShowLoading(String value)
     {
-        getSemanticObject().setProperty(audiof_showLoading, value);
+        getSemanticObject().setProperty(audiopdcst_showLoading, value);
     }
 
 /**
@@ -203,7 +203,7 @@ public abstract class AudioPodCastBase extends org.semanticwb.portal.api.Generic
 */
     public int getSliderWidth()
     {
-        return getSemanticObject().getIntProperty(audiof_sliderWidth);
+        return getSemanticObject().getIntProperty(audiopdcst_sliderWidth);
     }
 
 /**
@@ -212,7 +212,7 @@ public abstract class AudioPodCastBase extends org.semanticwb.portal.api.Generic
 */
     public void setSliderWidth(int value)
     {
-        getSemanticObject().setIntProperty(audiof_sliderWidth, value);
+        getSemanticObject().setIntProperty(audiopdcst_sliderWidth, value);
     }
 
 /**
@@ -221,7 +221,7 @@ public abstract class AudioPodCastBase extends org.semanticwb.portal.api.Generic
 */
     public boolean isShowVolume()
     {
-        return getSemanticObject().getBooleanProperty(audiof_showVolume);
+        return getSemanticObject().getBooleanProperty(audiopdcst_showVolume);
     }
 
 /**
@@ -230,7 +230,7 @@ public abstract class AudioPodCastBase extends org.semanticwb.portal.api.Generic
 */
     public void setShowVolume(boolean value)
     {
-        getSemanticObject().setBooleanProperty(audiof_showVolume, value);
+        getSemanticObject().setBooleanProperty(audiopdcst_showVolume, value);
     }
 
 /**
@@ -239,7 +239,7 @@ public abstract class AudioPodCastBase extends org.semanticwb.portal.api.Generic
 */
     public String getButtonColor()
     {
-        return getSemanticObject().getProperty(audiof_buttonColor);
+        return getSemanticObject().getProperty(audiopdcst_buttonColor);
     }
 
 /**
@@ -248,7 +248,7 @@ public abstract class AudioPodCastBase extends org.semanticwb.portal.api.Generic
 */
     public void setButtonColor(String value)
     {
-        getSemanticObject().setProperty(audiof_buttonColor, value);
+        getSemanticObject().setProperty(audiopdcst_buttonColor, value);
     }
 
 /**
@@ -257,7 +257,7 @@ public abstract class AudioPodCastBase extends org.semanticwb.portal.api.Generic
 */
     public int getScTitle()
     {
-        return getSemanticObject().getIntProperty(audiof_scTitle);
+        return getSemanticObject().getIntProperty(audiopdcst_scTitle);
     }
 
 /**
@@ -266,7 +266,7 @@ public abstract class AudioPodCastBase extends org.semanticwb.portal.api.Generic
 */
     public void setScTitle(int value)
     {
-        getSemanticObject().setIntProperty(audiof_scTitle, value);
+        getSemanticObject().setIntProperty(audiopdcst_scTitle, value);
     }
 
 /**
@@ -275,7 +275,7 @@ public abstract class AudioPodCastBase extends org.semanticwb.portal.api.Generic
 */
     public int getScDescription()
     {
-        return getSemanticObject().getIntProperty(audiof_scDescription);
+        return getSemanticObject().getIntProperty(audiopdcst_scDescription);
     }
 
 /**
@@ -284,7 +284,7 @@ public abstract class AudioPodCastBase extends org.semanticwb.portal.api.Generic
 */
     public void setScDescription(int value)
     {
-        getSemanticObject().setIntProperty(audiof_scDescription, value);
+        getSemanticObject().setIntProperty(audiopdcst_scDescription, value);
     }
 
 /**
@@ -293,7 +293,7 @@ public abstract class AudioPodCastBase extends org.semanticwb.portal.api.Generic
 */
     public int getWidth()
     {
-        return getSemanticObject().getIntProperty(audiof_width);
+        return getSemanticObject().getIntProperty(audiopdcst_width);
     }
 
 /**
@@ -302,7 +302,7 @@ public abstract class AudioPodCastBase extends org.semanticwb.portal.api.Generic
 */
     public void setWidth(int value)
     {
-        getSemanticObject().setIntProperty(audiof_width, value);
+        getSemanticObject().setIntProperty(audiopdcst_width, value);
     }
 
 /**
@@ -311,7 +311,7 @@ public abstract class AudioPodCastBase extends org.semanticwb.portal.api.Generic
 */
     public int getPageSize()
     {
-        return getSemanticObject().getIntProperty(audiof_pageSize);
+        return getSemanticObject().getIntProperty(audiopdcst_pageSize);
     }
 
 /**
@@ -320,7 +320,7 @@ public abstract class AudioPodCastBase extends org.semanticwb.portal.api.Generic
 */
     public void setPageSize(int value)
     {
-        getSemanticObject().setIntProperty(audiof_pageSize, value);
+        getSemanticObject().setIntProperty(audiopdcst_pageSize, value);
     }
 
 /**
@@ -329,7 +329,7 @@ public abstract class AudioPodCastBase extends org.semanticwb.portal.api.Generic
 */
     public String getSliderColor1()
     {
-        return getSemanticObject().getProperty(audiof_sliderColor1);
+        return getSemanticObject().getProperty(audiopdcst_sliderColor1);
     }
 
 /**
@@ -338,7 +338,7 @@ public abstract class AudioPodCastBase extends org.semanticwb.portal.api.Generic
 */
     public void setSliderColor1(String value)
     {
-        getSemanticObject().setProperty(audiof_sliderColor1, value);
+        getSemanticObject().setProperty(audiopdcst_sliderColor1, value);
     }
 
 /**
@@ -347,7 +347,7 @@ public abstract class AudioPodCastBase extends org.semanticwb.portal.api.Generic
 */
     public String getLoadingColor()
     {
-        return getSemanticObject().getProperty(audiof_loadingColor);
+        return getSemanticObject().getProperty(audiopdcst_loadingColor);
     }
 
 /**
@@ -356,7 +356,7 @@ public abstract class AudioPodCastBase extends org.semanticwb.portal.api.Generic
 */
     public void setLoadingColor(String value)
     {
-        getSemanticObject().setProperty(audiof_loadingColor, value);
+        getSemanticObject().setProperty(audiopdcst_loadingColor, value);
     }
    /**
    * Sets the value for the property Resource
@@ -403,7 +403,7 @@ public abstract class AudioPodCastBase extends org.semanticwb.portal.api.Generic
 */
     public boolean isAutoplay()
     {
-        return getSemanticObject().getBooleanProperty(audiof_autoplay);
+        return getSemanticObject().getBooleanProperty(audiopdcst_autoplay);
     }
 
 /**
@@ -412,7 +412,7 @@ public abstract class AudioPodCastBase extends org.semanticwb.portal.api.Generic
 */
     public void setAutoplay(boolean value)
     {
-        getSemanticObject().setBooleanProperty(audiof_autoplay, value);
+        getSemanticObject().setBooleanProperty(audiopdcst_autoplay, value);
     }
    /**
    * Gets all the org.semanticwb.portal.resources.sem.AudioFile
@@ -421,7 +421,7 @@ public abstract class AudioPodCastBase extends org.semanticwb.portal.api.Generic
 
     public org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.AudioFile> listAudioFiles()
     {
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.AudioFile>(getSemanticObject().listObjectProperties(audiof_hasAudioFile));
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.AudioFile>(getSemanticObject().listObjectProperties(audiopdcst_hasAudioFile));
     }
 
    /**
@@ -434,7 +434,7 @@ public abstract class AudioPodCastBase extends org.semanticwb.portal.api.Generic
         boolean ret=false;
         if(value!=null)
         {
-           ret=getSemanticObject().hasObjectProperty(audiof_hasAudioFile,value.getSemanticObject());
+           ret=getSemanticObject().hasObjectProperty(audiopdcst_hasAudioFile,value.getSemanticObject());
         }
         return ret;
     }
@@ -445,7 +445,7 @@ public abstract class AudioPodCastBase extends org.semanticwb.portal.api.Generic
 
     public void addAudioFile(org.semanticwb.portal.resources.sem.AudioFile value)
     {
-        getSemanticObject().addObjectProperty(audiof_hasAudioFile, value.getSemanticObject());
+        getSemanticObject().addObjectProperty(audiopdcst_hasAudioFile, value.getSemanticObject());
     }
    /**
    * Removes all the AudioFile
@@ -453,7 +453,7 @@ public abstract class AudioPodCastBase extends org.semanticwb.portal.api.Generic
 
     public void removeAllAudioFile()
     {
-        getSemanticObject().removeProperty(audiof_hasAudioFile);
+        getSemanticObject().removeProperty(audiopdcst_hasAudioFile);
     }
    /**
    * Removes a AudioFile
@@ -462,7 +462,7 @@ public abstract class AudioPodCastBase extends org.semanticwb.portal.api.Generic
 
     public void removeAudioFile(org.semanticwb.portal.resources.sem.AudioFile value)
     {
-        getSemanticObject().removeObjectProperty(audiof_hasAudioFile,value.getSemanticObject());
+        getSemanticObject().removeObjectProperty(audiopdcst_hasAudioFile,value.getSemanticObject());
     }
 
    /**
@@ -472,7 +472,7 @@ public abstract class AudioPodCastBase extends org.semanticwb.portal.api.Generic
     public org.semanticwb.portal.resources.sem.AudioFile getAudioFile()
     {
          org.semanticwb.portal.resources.sem.AudioFile ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(audiof_hasAudioFile);
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(audiopdcst_hasAudioFile);
          if(obj!=null)
          {
              ret=(org.semanticwb.portal.resources.sem.AudioFile)obj.createGenericInstance();
@@ -486,7 +486,7 @@ public abstract class AudioPodCastBase extends org.semanticwb.portal.api.Generic
 */
     public String getSliderColor2()
     {
-        return getSemanticObject().getProperty(audiof_sliderColor2);
+        return getSemanticObject().getProperty(audiopdcst_sliderColor2);
     }
 
 /**
@@ -495,7 +495,7 @@ public abstract class AudioPodCastBase extends org.semanticwb.portal.api.Generic
 */
     public void setSliderColor2(String value)
     {
-        getSemanticObject().setProperty(audiof_sliderColor2, value);
+        getSemanticObject().setProperty(audiopdcst_sliderColor2, value);
     }
 
 /**
@@ -504,7 +504,7 @@ public abstract class AudioPodCastBase extends org.semanticwb.portal.api.Generic
 */
     public String getButtonOvercolor()
     {
-        return getSemanticObject().getProperty(audiof_buttonOvercolor);
+        return getSemanticObject().getProperty(audiopdcst_buttonOvercolor);
     }
 
 /**
@@ -513,7 +513,7 @@ public abstract class AudioPodCastBase extends org.semanticwb.portal.api.Generic
 */
     public void setButtonOvercolor(String value)
     {
-        getSemanticObject().setProperty(audiof_buttonOvercolor, value);
+        getSemanticObject().setProperty(audiopdcst_buttonOvercolor, value);
     }
 
 /**
@@ -522,7 +522,7 @@ public abstract class AudioPodCastBase extends org.semanticwb.portal.api.Generic
 */
     public int getVolumeWidth()
     {
-        return getSemanticObject().getIntProperty(audiof_volumeWidth);
+        return getSemanticObject().getIntProperty(audiopdcst_volumeWidth);
     }
 
 /**
@@ -531,7 +531,7 @@ public abstract class AudioPodCastBase extends org.semanticwb.portal.api.Generic
 */
     public void setVolumeWidth(int value)
     {
-        getSemanticObject().setIntProperty(audiof_volumeWidth, value);
+        getSemanticObject().setIntProperty(audiopdcst_volumeWidth, value);
     }
 
 /**
@@ -540,7 +540,7 @@ public abstract class AudioPodCastBase extends org.semanticwb.portal.api.Generic
 */
     public int getButtonWidth()
     {
-        return getSemanticObject().getIntProperty(audiof_buttonWidth);
+        return getSemanticObject().getIntProperty(audiopdcst_buttonWidth);
     }
 
 /**
@@ -549,7 +549,7 @@ public abstract class AudioPodCastBase extends org.semanticwb.portal.api.Generic
 */
     public void setButtonWidth(int value)
     {
-        getSemanticObject().setIntProperty(audiof_buttonWidth, value);
+        getSemanticObject().setIntProperty(audiopdcst_buttonWidth, value);
     }
 
 /**
@@ -558,7 +558,7 @@ public abstract class AudioPodCastBase extends org.semanticwb.portal.api.Generic
 */
     public String getSliderOvercolor()
     {
-        return getSemanticObject().getProperty(audiof_sliderOvercolor);
+        return getSemanticObject().getProperty(audiopdcst_sliderOvercolor);
     }
 
 /**
@@ -567,7 +567,7 @@ public abstract class AudioPodCastBase extends org.semanticwb.portal.api.Generic
 */
     public void setSliderOvercolor(String value)
     {
-        getSemanticObject().setProperty(audiof_sliderOvercolor, value);
+        getSemanticObject().setProperty(audiopdcst_sliderOvercolor, value);
     }
 
 /**
@@ -576,7 +576,7 @@ public abstract class AudioPodCastBase extends org.semanticwb.portal.api.Generic
 */
     public boolean isLoop()
     {
-        return getSemanticObject().getBooleanProperty(audiof_loop);
+        return getSemanticObject().getBooleanProperty(audiopdcst_loop);
     }
 
 /**
@@ -585,7 +585,7 @@ public abstract class AudioPodCastBase extends org.semanticwb.portal.api.Generic
 */
     public void setLoop(boolean value)
     {
-        getSemanticObject().setBooleanProperty(audiof_loop, value);
+        getSemanticObject().setBooleanProperty(audiopdcst_loop, value);
     }
 
 /**
@@ -594,7 +594,7 @@ public abstract class AudioPodCastBase extends org.semanticwb.portal.api.Generic
 */
     public boolean isTransparent()
     {
-        return getSemanticObject().getBooleanProperty(audiof_transparent);
+        return getSemanticObject().getBooleanProperty(audiopdcst_transparent);
     }
 
 /**
@@ -603,7 +603,7 @@ public abstract class AudioPodCastBase extends org.semanticwb.portal.api.Generic
 */
     public void setTransparent(boolean value)
     {
-        getSemanticObject().setBooleanProperty(audiof_transparent, value);
+        getSemanticObject().setBooleanProperty(audiopdcst_transparent, value);
     }
 
 /**
@@ -612,7 +612,7 @@ public abstract class AudioPodCastBase extends org.semanticwb.portal.api.Generic
 */
     public String getBgcolor2()
     {
-        return getSemanticObject().getProperty(audiof_bgcolor2);
+        return getSemanticObject().getProperty(audiopdcst_bgcolor2);
     }
 
 /**
@@ -621,7 +621,7 @@ public abstract class AudioPodCastBase extends org.semanticwb.portal.api.Generic
 */
     public void setBgcolor2(String value)
     {
-        getSemanticObject().setProperty(audiof_bgcolor2, value);
+        getSemanticObject().setProperty(audiopdcst_bgcolor2, value);
     }
 
 /**
@@ -630,7 +630,7 @@ public abstract class AudioPodCastBase extends org.semanticwb.portal.api.Generic
 */
     public String getBgcolor1()
     {
-        return getSemanticObject().getProperty(audiof_bgcolor1);
+        return getSemanticObject().getProperty(audiopdcst_bgcolor1);
     }
 
 /**
@@ -639,7 +639,7 @@ public abstract class AudioPodCastBase extends org.semanticwb.portal.api.Generic
 */
     public void setBgcolor1(String value)
     {
-        getSemanticObject().setProperty(audiof_bgcolor1, value);
+        getSemanticObject().setProperty(audiopdcst_bgcolor1, value);
     }
 
 /**
@@ -648,7 +648,7 @@ public abstract class AudioPodCastBase extends org.semanticwb.portal.api.Generic
 */
     public boolean isShowSlider()
     {
-        return getSemanticObject().getBooleanProperty(audiof_showSlider);
+        return getSemanticObject().getBooleanProperty(audiopdcst_showSlider);
     }
 
 /**
@@ -657,7 +657,7 @@ public abstract class AudioPodCastBase extends org.semanticwb.portal.api.Generic
 */
     public void setShowSlider(boolean value)
     {
-        getSemanticObject().setBooleanProperty(audiof_showSlider, value);
+        getSemanticObject().setBooleanProperty(audiopdcst_showSlider, value);
     }
 
 /**
@@ -666,7 +666,7 @@ public abstract class AudioPodCastBase extends org.semanticwb.portal.api.Generic
 */
     public boolean isAutoload()
     {
-        return getSemanticObject().getBooleanProperty(audiof_autoload);
+        return getSemanticObject().getBooleanProperty(audiopdcst_autoload);
     }
 
 /**
@@ -675,7 +675,7 @@ public abstract class AudioPodCastBase extends org.semanticwb.portal.api.Generic
 */
     public void setAutoload(boolean value)
     {
-        getSemanticObject().setBooleanProperty(audiof_autoload, value);
+        getSemanticObject().setBooleanProperty(audiopdcst_autoload, value);
     }
 
 /**
@@ -684,7 +684,7 @@ public abstract class AudioPodCastBase extends org.semanticwb.portal.api.Generic
 */
     public int getVolume()
     {
-        return getSemanticObject().getIntProperty(audiof_volume);
+        return getSemanticObject().getIntProperty(audiopdcst_volume);
     }
 
 /**
@@ -693,6 +693,6 @@ public abstract class AudioPodCastBase extends org.semanticwb.portal.api.Generic
 */
     public void setVolume(int value)
     {
-        getSemanticObject().setIntProperty(audiof_volume, value);
+        getSemanticObject().setIntProperty(audiopdcst_volume, value);
     }
 }

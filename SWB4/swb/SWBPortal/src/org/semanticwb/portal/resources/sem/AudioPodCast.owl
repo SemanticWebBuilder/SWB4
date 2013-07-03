@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <rdf:RDF
     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-    xmlns:audiof="http://www.semanticwebbuilder.org/portal/resources/sems/SWBAudioFile#"
+    xmlns:audiopdcst="http://www.semanticwebbuilder.org/portal/resources/sems/SWBAudioFile#"
     xmlns:swb="http://www.semanticwebbuilder.org/swb4/ontology#"
     xmlns:swbxf="http://www.semanticwebbuilder.org/swb4/xforms/ontology#"
     xmlns:owl="http://www.w3.org/2002/07/owl#"
@@ -14,6 +14,9 @@
     >Created with TopBraid Composer</owl:versionInfo>
   </owl:Ontology>
   <owl:ObjectProperty rdf:ID="hasAudioFile">
+    <owl:inverseOf>
+      <owl:ObjectProperty rdf:ID="audioPodcastInv"/>
+    </owl:inverseOf>
     <rdfs:range>
       <swb:Class rdf:ID="AudioFile">
         <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Expirable"/>
@@ -38,13 +41,44 @@
         <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
       </swb:SemanticResource>
     </rdfs:domain>
-    <owl:inverseOf>
-      <owl:ObjectProperty rdf:ID="podcastInv"/>
-    </owl:inverseOf>
   </owl:ObjectProperty>
-  <owl:ObjectProperty rdf:about="#podcastInv">
+  <owl:ObjectProperty rdf:ID="hasAudioFileInv">
+    <rdfs:range rdf:resource="#AudioFile"/>
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >hasAudioFile</swb:propertyCodeName>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="#audioPodcastInv">
     <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >audioPodcast</swb:propertyCodeName>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="theme">
+    <owl:inverseOf rdf:resource="#hasAudioFileInv"/>
+    <rdfs:range>
+      <swb:Class rdf:ID="AudioPodcastTheme">
+        <swb:classCodePackage rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >org.semanticwb.portal.resources.sem</swb:classCodePackage>
+        <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >Los audios del podcast se agrupan por temas</rdfs:comment>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Activeable"/>
+        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >true</swb:autogenId>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Class>
+    </rdfs:range>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Tema o categoría del audio del podcast</rdfs:comment>
+    <rdfs:domain rdf:resource="#AudioFile"/>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_theme_">
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >1</swb:index>
+        <rdfs:label xml:lang="en">Theme</rdfs:label>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#selectOneModel"/>
+        <rdfs:label xml:lang="es">Tema</rdfs:label>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
   </owl:ObjectProperty>
   <owl:DatatypeProperty rdf:ID="buttonWidth">
     <rdfs:domain rdf:resource="#AudioPodCast"/>
@@ -610,6 +644,13 @@
   </swb:CodePackage>
   <swbxf:DisplayProperty rdf:ID="dp_duration">
     <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TimeElement_1"/>
+  </swbxf:DisplayProperty>
+  <swbxf:DisplayProperty rdf:ID="dp_theme">
+    <rdfs:label xml:lang="es">Tema</rdfs:label>
+    <rdfs:label xml:lang="en">Theme</rdfs:label>
+    <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#selectOneModelWithBlank"/>
+    <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+    >21</swb:index>
   </swbxf:DisplayProperty>
 </rdf:RDF>
 
