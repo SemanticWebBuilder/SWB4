@@ -1,19 +1,27 @@
 package org.semanticwb.portal.resources.sem.base;
 
 
-public abstract class AudioFileBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Iconable,org.semanticwb.model.Activeable,org.semanticwb.model.Expirable,org.semanticwb.model.Traceable,org.semanticwb.model.Rankable
+public abstract class AudioFileBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Iconable,org.semanticwb.model.Activeable,org.semanticwb.model.Expirable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Rankable,org.semanticwb.model.Traceable
 {
+    public static final org.semanticwb.platform.SemanticClass audiopdcst_AudioPodCast=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/portal/resources/sems/SWBAudioFile#AudioPodCast");
+    public static final org.semanticwb.platform.SemanticProperty audiopdcst_audioPodcastInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/sems/SWBAudioFile#audioPodcastInv");
    /**
    * Autor o participante del contenido
    */
-    public static final org.semanticwb.platform.SemanticProperty audiof_author=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/sems/SWBAudioFile#author");
-    public static final org.semanticwb.platform.SemanticClass audiof_AudioPodCast=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/portal/resources/sems/SWBAudioFile#AudioPodCast");
-    public static final org.semanticwb.platform.SemanticProperty audiof_podcastInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/sems/SWBAudioFile#podcastInv");
+    public static final org.semanticwb.platform.SemanticProperty audiopdcst_author=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/sems/SWBAudioFile#author");
+   /**
+   * Los audios del podcast se agrupan por temas
+   */
+    public static final org.semanticwb.platform.SemanticClass audiopdcst_AudioPodcastTheme=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/portal/resources/sems/SWBAudioFile#AudioPodcastTheme");
+   /**
+   * Tema o categoría del audio del podcast
+   */
+    public static final org.semanticwb.platform.SemanticProperty audiopdcst_theme=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/sems/SWBAudioFile#theme");
    /**
    * Nombre del archivo de audio
    */
-    public static final org.semanticwb.platform.SemanticProperty audiof_filename=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/sems/SWBAudioFile#filename");
-    public static final org.semanticwb.platform.SemanticClass audiof_AudioFile=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/portal/resources/sems/SWBAudioFile#AudioFile");
+    public static final org.semanticwb.platform.SemanticProperty audiopdcst_filename=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/sems/SWBAudioFile#filename");
+    public static final org.semanticwb.platform.SemanticClass audiopdcst_AudioFile=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/portal/resources/sems/SWBAudioFile#AudioFile");
    /**
    * The semantic class that represents the currentObject
    */
@@ -112,6 +120,29 @@ public abstract class AudioFileBase extends org.semanticwb.model.SWBClass implem
             return it;
         }
        /**
+       * Gets all org.semanticwb.portal.resources.sem.AudioFile with a determined AudioPodcast
+       * @param value AudioPodcast of the type org.semanticwb.portal.resources.sem.AudioPodCast
+       * @param model Model of the org.semanticwb.portal.resources.sem.AudioFile
+       * @return Iterator with all the org.semanticwb.portal.resources.sem.AudioFile
+       */
+
+        public static java.util.Iterator<org.semanticwb.portal.resources.sem.AudioFile> listAudioFileByAudioPodcast(org.semanticwb.portal.resources.sem.AudioPodCast value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.AudioFile> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(audiopdcst_audioPodcastInv, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.portal.resources.sem.AudioFile with a determined AudioPodcast
+       * @param value AudioPodcast of the type org.semanticwb.portal.resources.sem.AudioPodCast
+       * @return Iterator with all the org.semanticwb.portal.resources.sem.AudioFile
+       */
+
+        public static java.util.Iterator<org.semanticwb.portal.resources.sem.AudioFile> listAudioFileByAudioPodcast(org.semanticwb.portal.resources.sem.AudioPodCast value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.AudioFile> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(audiopdcst_audioPodcastInv,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
        * Gets all org.semanticwb.portal.resources.sem.AudioFile with a determined Creator
        * @param value Creator of the type org.semanticwb.model.User
        * @param model Model of the org.semanticwb.portal.resources.sem.AudioFile
@@ -135,26 +166,26 @@ public abstract class AudioFileBase extends org.semanticwb.model.SWBClass implem
             return it;
         }
        /**
-       * Gets all org.semanticwb.portal.resources.sem.AudioFile with a determined AudioPodcast
-       * @param value AudioPodcast of the type org.semanticwb.portal.resources.sem.AudioPodCast
+       * Gets all org.semanticwb.portal.resources.sem.AudioFile with a determined Theme
+       * @param value Theme of the type org.semanticwb.portal.resources.sem.AudioPodcastTheme
        * @param model Model of the org.semanticwb.portal.resources.sem.AudioFile
        * @return Iterator with all the org.semanticwb.portal.resources.sem.AudioFile
        */
 
-        public static java.util.Iterator<org.semanticwb.portal.resources.sem.AudioFile> listAudioFileByAudioPodcast(org.semanticwb.portal.resources.sem.AudioPodCast value,org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.portal.resources.sem.AudioFile> listAudioFileByTheme(org.semanticwb.portal.resources.sem.AudioPodcastTheme value,org.semanticwb.model.SWBModel model)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.AudioFile> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(audiof_podcastInv, value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.AudioFile> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(audiopdcst_theme, value.getSemanticObject(),sclass));
             return it;
         }
        /**
-       * Gets all org.semanticwb.portal.resources.sem.AudioFile with a determined AudioPodcast
-       * @param value AudioPodcast of the type org.semanticwb.portal.resources.sem.AudioPodCast
+       * Gets all org.semanticwb.portal.resources.sem.AudioFile with a determined Theme
+       * @param value Theme of the type org.semanticwb.portal.resources.sem.AudioPodcastTheme
        * @return Iterator with all the org.semanticwb.portal.resources.sem.AudioFile
        */
 
-        public static java.util.Iterator<org.semanticwb.portal.resources.sem.AudioFile> listAudioFileByAudioPodcast(org.semanticwb.portal.resources.sem.AudioPodCast value)
+        public static java.util.Iterator<org.semanticwb.portal.resources.sem.AudioFile> listAudioFileByTheme(org.semanticwb.portal.resources.sem.AudioPodcastTheme value)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.AudioFile> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(audiof_podcastInv,value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.AudioFile> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(audiopdcst_theme,value.getSemanticObject(),sclass));
             return it;
         }
     }
@@ -207,6 +238,44 @@ public abstract class AudioFileBase extends org.semanticwb.model.SWBClass implem
          if(obj!=null)
          {
              ret=(org.semanticwb.model.User)obj.createGenericInstance();
+         }
+         return ret;
+    }
+   /**
+   * Sets the value for the property AudioPodcast
+   * @param value AudioPodcast to set
+   */
+
+    public void setAudioPodcast(org.semanticwb.portal.resources.sem.AudioPodCast value)
+    {
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(audiopdcst_audioPodcastInv, value.getSemanticObject());
+        }else
+        {
+            removeAudioPodcast();
+        }
+    }
+   /**
+   * Remove the value for AudioPodcast property
+   */
+
+    public void removeAudioPodcast()
+    {
+        getSemanticObject().removeProperty(audiopdcst_audioPodcastInv);
+    }
+
+   /**
+   * Gets the AudioPodcast
+   * @return a org.semanticwb.portal.resources.sem.AudioPodCast
+   */
+    public org.semanticwb.portal.resources.sem.AudioPodCast getAudioPodcast()
+    {
+         org.semanticwb.portal.resources.sem.AudioPodCast ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(audiopdcst_audioPodcastInv);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.portal.resources.sem.AudioPodCast)obj.createGenericInstance();
          }
          return ret;
     }
@@ -414,7 +483,7 @@ public abstract class AudioFileBase extends org.semanticwb.model.SWBClass implem
 */
     public String getAuthor()
     {
-        return getSemanticObject().getProperty(audiof_author);
+        return getSemanticObject().getProperty(audiopdcst_author);
     }
 
 /**
@@ -423,7 +492,7 @@ public abstract class AudioFileBase extends org.semanticwb.model.SWBClass implem
 */
     public void setAuthor(String value)
     {
-        getSemanticObject().setProperty(audiof_author, value);
+        getSemanticObject().setProperty(audiopdcst_author, value);
     }
 
 /**
@@ -459,40 +528,40 @@ public abstract class AudioFileBase extends org.semanticwb.model.SWBClass implem
         getSemanticObject().setProperty(swb_title, title, lang);
     }
    /**
-   * Sets the value for the property AudioPodcast
-   * @param value AudioPodcast to set
+   * Sets the value for the property Theme
+   * @param value Theme to set
    */
 
-    public void setAudioPodcast(org.semanticwb.portal.resources.sem.AudioPodCast value)
+    public void setTheme(org.semanticwb.portal.resources.sem.AudioPodcastTheme value)
     {
         if(value!=null)
         {
-            getSemanticObject().setObjectProperty(audiof_podcastInv, value.getSemanticObject());
+            getSemanticObject().setObjectProperty(audiopdcst_theme, value.getSemanticObject());
         }else
         {
-            removeAudioPodcast();
+            removeTheme();
         }
     }
    /**
-   * Remove the value for AudioPodcast property
+   * Remove the value for Theme property
    */
 
-    public void removeAudioPodcast()
+    public void removeTheme()
     {
-        getSemanticObject().removeProperty(audiof_podcastInv);
+        getSemanticObject().removeProperty(audiopdcst_theme);
     }
 
    /**
-   * Gets the AudioPodcast
-   * @return a org.semanticwb.portal.resources.sem.AudioPodCast
+   * Gets the Theme
+   * @return a org.semanticwb.portal.resources.sem.AudioPodcastTheme
    */
-    public org.semanticwb.portal.resources.sem.AudioPodCast getAudioPodcast()
+    public org.semanticwb.portal.resources.sem.AudioPodcastTheme getTheme()
     {
-         org.semanticwb.portal.resources.sem.AudioPodCast ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(audiof_podcastInv);
+         org.semanticwb.portal.resources.sem.AudioPodcastTheme ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(audiopdcst_theme);
          if(obj!=null)
          {
-             ret=(org.semanticwb.portal.resources.sem.AudioPodCast)obj.createGenericInstance();
+             ret=(org.semanticwb.portal.resources.sem.AudioPodcastTheme)obj.createGenericInstance();
          }
          return ret;
     }
@@ -503,7 +572,7 @@ public abstract class AudioFileBase extends org.semanticwb.model.SWBClass implem
 */
     public String getFilename()
     {
-        return getSemanticObject().getProperty(audiof_filename);
+        return getSemanticObject().getProperty(audiopdcst_filename);
     }
 
 /**
@@ -512,6 +581,6 @@ public abstract class AudioFileBase extends org.semanticwb.model.SWBClass implem
 */
     public void setFilename(String value)
     {
-        getSemanticObject().setProperty(audiof_filename, value);
+        getSemanticObject().setProperty(audiopdcst_filename, value);
     }
 }
