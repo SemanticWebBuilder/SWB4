@@ -525,12 +525,6 @@
     <rdfs:comment>Referencia a un objeto de tipo PFlow</rdfs:comment>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
-  <owl:Class rdf:ID="PostOutListenerContainerBase">
-    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
-    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
-    <rdfs:comment>BORRAR----&gt;Clase a Cambiar despues por "Relacional".  Clase que va ha contener los Post que han sido tomados como base (es decir, que llegan por el listener y que se guardan en la clase PostListenerContainer) para crear un nuevo Post desde la herramienta y que se envía hacia las redes sociales.Si se elimina un post que ha sido tomado como base(PostIn), se debe de eliminar la instancia asociada de esta clase (en la propiedad plcb_Post). NO UTILIZAR ESTA CLASE, YA REEMPLACE SU FUNCIONALIDAD COLOCANDO 2 PROPIEDADES A LA CLASE PostOut:postInOrigen y hasSocialNetwork.</rdfs:comment>
-    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
-  </owl:Class>
   <owl:Class rdf:ID="KeepAliveListenerable">
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBInterface"/>
     <rdfs:comment>Interface para las redes sociales que pueden mantener abierta la conección para realizar las busquedas (listener) como es el caso de Twitter con su Streaming Api.</rdfs:comment>
@@ -721,16 +715,16 @@
     <rdfs:subClassOf rdf:resource="#SocialNetwork"/>
     <rdfs:subClassOf rdf:resource="#Videoable"/>
   </owl:Class>
-  <owl:Class rdf:about="#YoutubeCatable">
-    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBInterface"/>
-    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Interface"/>
-  </owl:Class>
   <owl:Class rdf:ID="SocialNetStreamSearch">
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
     <rdfs:comment>Clase en la que se guardan datos que sirven para realizar una siguiente busqueda en una determinada red social y en un determinado stream.</rdfs:comment>
     <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:autogenId>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+  </owl:Class>
+  <owl:Class rdf:about="#YoutubeCatable">
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBInterface"/>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Interface"/>
   </owl:Class>
   <owl:Class rdf:ID="PunctuationSign">
     <rdfs:subClassOf rdf:resource="#TakeOut"/>
@@ -769,9 +763,8 @@
     <rdfs:comment>Esta propiedad inversa me puede decir cuales son los mensajes que han llegado por el Listener por una determinada red social. Si se elimina una red social, se eliminan todos los mensajes de entrada PostIn.</rdfs:comment>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="plcb_SocialNetwork">
-    <rdfs:comment>Cuenta de Red Social a la que pertenece el post que llega por el Listener y que es tomado como base para crear un nuevo post desde la herramienta y que sera enviado a una o mas redes sociales. Ver si quito esta propiedad, no me acuerdo porque la puse, talvez para hacer las busquedas por red social y que estas fueran mas rapidas.</rdfs:comment>
     <rdfs:range rdf:resource="#SocialNetwork"/>
-    <rdfs:domain rdf:resource="#PostOutListenerContainerBase"/>
+    <rdfs:comment>Cuenta de Red Social a la que pertenece el post que llega por el Listener y que es tomado como base para crear un nuevo post desde la herramienta y que sera enviado a una o mas redes sociales. Ver si quito esta propiedad, no me acuerdo porque la puse, talvez para hacer las busquedas por red social y que estas fueran mas rapidas.</rdfs:comment>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="postInSocialNetwork">
     <rdfs:domain rdf:resource="#PostIn"/>
@@ -845,20 +838,20 @@
       <owl:ObjectProperty rdf:ID="hasChildrenObjInv"/>
     </owl:inverseOf>
   </owl:ObjectProperty>
-  <owl:ObjectProperty rdf:ID="postInStream">
-    <rdfs:range rdf:resource="#Stream"/>
-    <rdfs:comment>Stream por el que llega el mensaje de entrada</rdfs:comment>
-    <rdfs:domain rdf:resource="#PostIn"/>
-    <owl:inverseOf>
-      <owl:ObjectProperty rdf:ID="hasPostInStreamInv"/>
-    </owl:inverseOf>
-  </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="hasSocialNetwork">
     <rdfs:domain rdf:resource="#PostOut"/>
     <rdfs:range rdf:resource="#SocialNetwork"/>
     <rdfs:comment>Redes Sociales a las que se envía el post de salida (PostOut)</rdfs:comment>
     <owl:inverseOf>
       <owl:ObjectProperty rdf:ID="hasSocialNetworkPostOutInv"/>
+    </owl:inverseOf>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="postInStream">
+    <rdfs:range rdf:resource="#Stream"/>
+    <rdfs:comment>Stream por el que llega el mensaje de entrada</rdfs:comment>
+    <rdfs:domain rdf:resource="#PostIn"/>
+    <owl:inverseOf>
+      <owl:ObjectProperty rdf:ID="hasPostInStreamInv"/>
     </owl:inverseOf>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="socialTopic">
@@ -908,9 +901,8 @@
     <rdfs:comment>Una red social puede tener varias fechas proximas de busqueda, una por cada stream en la que este configurada. Si se elimina una red social, se eliminan los objetos de esta clase (SocialNetStreamSerch) Asociados.</rdfs:comment>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="plcb_Post">
-    <rdfs:comment>Referencia al Post que es creado por un post que llega por el Listener  y que es tomado como base para crear nuevos post desde la herramienta y que sera o seran enviados a una o mas redes sociales.</rdfs:comment>
     <rdfs:range rdf:resource="#PostIn"/>
-    <rdfs:domain rdf:resource="#PostOutListenerContainerBase"/>
+    <rdfs:comment>Referencia al Post que es creado por un post que llega por el Listener  y que es tomado como base para crear nuevos post desde la herramienta y que sera o seran enviados a una o mas redes sociales.</rdfs:comment>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="hasPostOutNetInv">
     <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
@@ -973,6 +965,9 @@
     <rdfs:range rdf:resource="#SocialPFlowInstance"/>
     <rdfs:domain rdf:resource="#PostOut"/>
     <swb:displayProperty rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#dp_pflowInstance"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="haspostOutResponseInv">
+    <rdfs:comment>Inversa que nos dice que PostOut han sido creados a manera de respuesta de esta instancia de PostIn.</rdfs:comment>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="hasPostOut_published">
     <rdfs:domain rdf:resource="#SocialCalendar"/>
@@ -1064,6 +1059,7 @@
     </rdfs:range>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="postInSource">
+    <owl:inverseOf rdf:resource="#haspostOutResponseInv"/>
     <rdfs:comment>PostIn que sirvió como origen de esta instancia de PostOut</rdfs:comment>
     <rdfs:range rdf:resource="#PostIn"/>
     <rdfs:domain rdf:resource="#PostOut"/>
