@@ -127,6 +127,11 @@ public class ExternalPost {
      */
     private String postType;
     
+    /*
+     * Indicates the type of socialNet by the postIn comes;
+     */
+    private SocialNetwork socialNetwork;
+    
     
 
     /**
@@ -492,6 +497,24 @@ public class ExternalPost {
      */
     public void setPostType(String postType) {
         this.postType = postType;
+    }
+    
+     /**
+     * 
+     * @param socialNetwork the socialNetwork where the post was originated
+     * 
+     */
+    public void setNetwork(SocialNetwork socialNetwork)
+    {
+        this.socialNetwork=socialNetwork;
+    }
+    
+     /**
+     * Returns the type of socialNetwork the post is comming from
+     */
+    public SocialNetwork getSocialNetwork()
+    {
+        return socialNetwork;
     }
     
 }
