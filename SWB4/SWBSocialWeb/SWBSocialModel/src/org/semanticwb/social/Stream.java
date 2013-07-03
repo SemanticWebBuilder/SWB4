@@ -6,7 +6,7 @@ import java.util.Timer;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticObserver;
 import org.semanticwb.platform.SemanticProperty;
-import org.semanticwb.social.listener.Listener;
+import org.semanticwb.social.listener.ListenerMgr;
 
 
    /**
@@ -33,7 +33,7 @@ public class Stream extends org.semanticwb.social.base.StreamBase
                     if(action.equalsIgnoreCase("CREATE"))   //Quiere decir que se esta creando una instancia de la clase nueva
                     {
                         //System.out.println("Entra a Stream/Create...");
-                        Listener.createUpdateTimers(stream);
+                        ListenerMgr.createUpdateTimers(stream);
                     }else if((action.equalsIgnoreCase("SET") && (semProp.getURI().equals(social_stream_PoolTime.getURI()) || semProp.getURI().equals(social_stream_phrase)))
                        || (action.equalsIgnoreCase("ADD") && semProp.getURI().equals(social_hasStream_socialNetwork.getURI()))
                        || (action.equalsIgnoreCase("REMOVE") && semProp!=null && semProp.getURI().equals(social_hasStream_socialNetwork.getURI())))
@@ -64,13 +64,13 @@ public class Stream extends org.semanticwb.social.base.StreamBase
                             }
                         }
                         //Se actualiza el Listener del stream
-                        Listener.createUpdateTimers(stream);
+                        ListenerMgr.createUpdateTimers(stream);
                         
                     }
                     if(action.equalsIgnoreCase("REMOVE") && semProp==null)  //Quiere decir que se esta eliminando una instancia de clase completa, no una propiedad
                     {
                         System.out.println("Entra a Stream/Remove...");
-                        Listener.removeTimer(stream);
+                        ListenerMgr.removeTimer(stream);
                         
                         //Si se elimina el stream, se supone que por la ontología(removeDependency=true), se borrarían los objetos SocialNetStreamSearch
                         //que tuviera asociados, sin embargo, aqui también lo hago de manera manual, ver si no fuera necesario, quitar el sig. código despues

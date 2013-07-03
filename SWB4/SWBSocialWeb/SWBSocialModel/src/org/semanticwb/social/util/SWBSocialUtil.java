@@ -104,13 +104,14 @@ public class SWBSocialUtil implements SWBAppObject {
      * application
      * @return a reference to the only one existing object of this class
      */
+    /*
     static public synchronized SWBSocialUtil createInstance() {
         //System.out.println("Entra a SWBSocialUtil/createInstance");
         if (instance == null) {
             instance = new SWBSocialUtil();
         }
         return instance;
-    }
+    }*/
 
     public ArrayList getDoublesArray() {
         return aDoubles;

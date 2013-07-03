@@ -410,7 +410,10 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
             if (jsonResponse != null && jsonResponse.get("id") != null) {
                 //message.setSocialNetPostId(jsonResponse.getString("id"));
                 //addPost(message);
-                addSentPost(message, jsonResponse.getString("id"), this);
+                //--TODO:Ver si se agrega esta línea despues(addSentPost(message, jsonResponse.getString("id"), this); )
+                //, es para agregar el Post enviado a la clase PostOutContainer
+                //Para que ahi se almacenen por mes y año y despues pueda ser mas facil y optimo hacer busquedas sobre PostOuts
+                //addSentPost(message, jsonResponse.getString("id"), this); 
                 //addPost(message, "IDpuestoxFacebook", this);
                 //this.msg = message;
             }
@@ -457,7 +460,10 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
             if (jsonResponse != null && jsonResponse.get("id") != null) {
                 //photo.setSocialNetPostId(jsonResponse.getString("id"));
                 //this.addPost(photo);
-                addSentPost(photo, jsonResponse.getString("id"), this);
+                //--TODO:Ver si se agrega esta línea despues(addSentPost(message, jsonResponse.getString("id"), this); )
+                //, es para agregar el Post enviado a la clase PostOutContainer
+                //Para que ahi se almacenen por mes y año y despues pueda ser mas facil y optimo hacer busquedas sobre PostOuts
+                //addSentPost(photo, jsonResponse.getString("id"), this);
                 //this.photo = photo;
             }
         } catch (FileNotFoundException fnfe) {
@@ -504,7 +510,10 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
             if (jsonResponse != null && jsonResponse.get("id") != null) {
                 //video.setSocialNetPostId(jsonResponse.getString("id"));
                 //this.addPost(video);
-                addSentPost(video, jsonResponse.getString("id"), this);
+                //--TODO:Ver si se agrega esta línea despues(addSentPost(message, jsonResponse.getString("id"), this); )
+                //, es para agregar el Post enviado a la clase PostOutContainer
+                //Para que ahi se almacenen por mes y año y despues pueda ser mas facil y optimo hacer busquedas sobre PostOuts
+                //addSentPost(video, jsonResponse.getString("id"), this);
             }
         } catch (FileNotFoundException fnfe) {
             try {

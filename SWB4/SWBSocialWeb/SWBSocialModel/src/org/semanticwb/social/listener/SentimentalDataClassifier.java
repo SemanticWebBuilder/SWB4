@@ -285,6 +285,8 @@ public class SentimentalDataClassifier {
             //System.out.println("PASA FILTRO DE SENTIMIENTOS E INTENSIDAD");
             //Si pasó filtro por sentimiento e intensidad, entonces revisa filtro por klout
             SocialNetworkUser socialNetUser=null;
+            String creatorId=externalPost.getCreatorId();
+            socialNetUser=SocialNetworkUser.getSocialNetworkUserbyIDAndSocialNet(""+creatorId, socialNetwork, model);
             boolean createPostbyKlout=false;
             boolean upDateSocialUserNetworkData=false;
             int userKloutScore=0;
@@ -292,21 +294,19 @@ public class SentimentalDataClassifier {
                 //Filtro de Klout
                 //stream.setStream_KloutValue(10);
                 //Si se requiere filtrar por Klout, esto es porque exista un valo de klout para el stream>0
-                //System.out.println("Klout-0, stream k:"+stream.getStream_KloutValue()+",boolean:"+socialNetwork.getSemanticObject().getSemanticClass().isSubClass(Kloutable.social_Kloutable));
-                if(stream.getStream_KloutValue()>0 && socialNetwork.getSemanticObject().getSemanticClass().isSubClass(Kloutable.social_Kloutable))
+                System.out.println("creatorId:"+creatorId+"socialNetUser:"+socialNetUser+",Klout-0, stream k:"+stream.getStream_KloutValue()+",boolean:"+socialNetwork.getSemanticObject().getSemanticClass().isSubClass(Kloutable.social_Kloutable));
+                if(socialNetwork.getSemanticObject().getSemanticClass().isSubClass(Kloutable.social_Kloutable))
                 {
-                    //System.out.println("Klout-1");
-                    String creatorId=externalPost.getCreatorId();
+                    System.out.println("Klout-1");
                     if(creatorId!=null) //Siempre debería externalPost.getCreatorId() traer un valor, por lo tanto debería entrar a este if
                     {
-                        //System.out.println("Klout-2:"+creatorId);
+                        System.out.println("Klout-2:"+creatorId);
                         //Revisar si existe el usuario en nuestra BD y si ya paso mas de 5 días en mi cache.
                         {
-                            socialNetUser=SocialNetworkUser.getSocialNetworkUserbyIDAndSocialNet(""+creatorId, socialNetwork, model);
                             if(socialNetUser!=null)
                             {
                                 userKloutScore=socialNetUser.getSnu_klout();
-                                System.out.println("Usuario:"+socialNetUser+", SI existe, su Klout es:"+userKloutScore);
+                                //System.out.println("Usuario:"+socialNetUser+", SI existe, su Klout es:"+userKloutScore);
                                 //System.out.println("userKloutScore:"+userKloutScore);
                                 int days=SWBSocialUtil.Util.Datediff(socialNetUser.getUpdated(), Calendar.getInstance().getTime());
                                 /*
@@ -316,27 +316,27 @@ public class SentimentalDataClassifier {
                                 System.out.println("Fecha Klout Registrada de usuario:"+formato.format(socialNetUser.getUpdated()));
                                 System.out.println("days Dif:"+days);
                                 * */
-                                if(days<5) //Si aun no pasan 5(TODO:Hacer configurable) días de la ultima actualización de los datos del usuario (incluyendo su klout), entonces toma el valor de klout que tiene guardado en BD
+                                int numDaysToCheckKlout=5;
+                                if(SWBSocialUtil.Util.getModelPropertyValue(SWBContext.getAdminWebSite(), "numDaysToCheckKlout")!=null)
+                                {
+                                    try
+                                    {
+                                        numDaysToCheckKlout=Integer.parseInt(SWBSocialUtil.Util.getModelPropertyValue(SWBContext.getAdminWebSite(), "numDaysToCheckKlout"));
+                                    }catch(NumberFormatException ignored){
+                                        numDaysToCheckKlout=5;
+                                    }
+                                }
+                                //System.out.println("days:"+days+",numDaysToCheckKlout:"+numDaysToCheckKlout);
+                                if(days<numDaysToCheckKlout) //Si aun no pasan 5 días de la ultima actualización de los datos del usuario (incluyendo su klout), entonces toma el valor de klout que tiene guardado en BD
                                 {
                                     if(userKloutScore>=stream.getStream_KloutValue())
                                     {
                                         createPostbyKlout=true;
                                     }
-                                    /*
-                                    else{
-                                        //System.out.println("ENTRA A createPostbyKlout Y ES IGUAL A FALSE...");
-                                        Kloutable socialNetKloutAble=(Kloutable) socialNetwork;
-                                        userKloutScore=Double.valueOf(socialNetKloutAble.getUserKlout(creatorId)).intValue(); 
-                                        if(userKloutScore>=stream.getStream_KloutValue())
-                                        {
-                                            createPostbyKlout=true;
-                                            upDateSocialUserNetworkData=true;
-                                        }
-                                    }*/
                                 }else{  //Si ya pasaron 5 o mas días de que se actualizó la info del usuario, entonces busca su score en Klout
                                     Kloutable socialNetKloutAble=(Kloutable) socialNetwork;
                                     userKloutScore=Double.valueOf(socialNetKloutAble.getUserKlout(creatorId)).intValue(); 
-                                    System.out.println("NO Existe usuario en BD, userKloutScore K TRAJO-1:"+userKloutScore);
+                                    //System.out.println("NO Existe usuario en BD, userKloutScore K TRAJO-1:"+userKloutScore);
                                     if(userKloutScore>=stream.getStream_KloutValue())
                                     {
                                         createPostbyKlout=true;
@@ -346,7 +346,7 @@ public class SentimentalDataClassifier {
                             }else { //No existe en la BD, debo revisar su klout
                                 Kloutable socialNetKloutAble=(Kloutable) socialNetwork;
                                 userKloutScore=Double.valueOf(socialNetKloutAble.getUserKlout(creatorId)).intValue(); 
-                                System.out.println("No existe usuario, userKloutScore K TRAJO-2:"+userKloutScore);
+                                //System.out.println("No existe usuario, userKloutScore K TRAJO-2:"+userKloutScore);
                                 if(userKloutScore>=stream.getStream_KloutValue())
                                 {
                                     createPostbyKlout=true;
@@ -360,7 +360,7 @@ public class SentimentalDataClassifier {
                     createPostbyKlout=true;
                 }
             }
-            System.out.println("Klout de usuario del mensaje, lo crea o no??:"+createPostbyKlout);
+            //System.out.println("Klout de usuario del mensaje, lo crea o no??:"+createPostbyKlout);
             if(createPostbyKlout)   //Si pasa el filtro de Klout del usuario, entonces ya persite el mensaje en BD
             {
                 //System.out.println("Paso filtro de sentimientos, intensidad y klout---vamos a persistir el msg...");
@@ -690,7 +690,6 @@ public class SentimentalDataClassifier {
                 //socialNetwork.addReceivedPost(message, String.valueOf(externalPost.getPostId()), socialNetwork);
         }catch(Exception e)
         {
-            e.printStackTrace();
             log.error(e);
         }
                 
