@@ -898,8 +898,8 @@ public class SWBSocialComparator implements Comparator {
                             PostIn post1 = (PostIn) o1;
                             PostIn post2 = (PostIn) o2;
                             
-                            int replies1 = post1.getPostRetweets();
-                            int replies2 = post2.getPostRetweets();
+                            int replies1 = post1.getPostShared();
+                            int replies2 = post2.getPostShared();
 
                             if(replies1>replies2) return 1;
                             if(replies1==replies2)
@@ -934,8 +934,8 @@ public class SWBSocialComparator implements Comparator {
                             PostIn post1 = (PostIn) o1;
                             PostIn post2 = (PostIn) o2;
                            
-                            int replies1 = post2.getPostRetweets();
-                            int replies2 = post1.getPostRetweets();
+                            int replies1 = post2.getPostShared();
+                            int replies2 = post1.getPostShared();
 
                             if(replies1>replies2) return 1;
                             if(replies1==replies2)
