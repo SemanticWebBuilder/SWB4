@@ -100,7 +100,7 @@ public class ExternalPost {
     /**
      * Number that post has been retweeted
      */
-    private int retweets;
+    private int postShared;
     
     /**
      * Device used by the post creator
@@ -392,9 +392,9 @@ public class ExternalPost {
      * 
      * @return the retweets
      */
-    public int getRetweets()
+    public int getPostShared()
     {
-       return retweets; 
+       return postShared; 
     }
     
     
@@ -402,9 +402,9 @@ public class ExternalPost {
      * 
      * @param the retweets to set
      */
-    public void setRetweets(int retweets)
+    public void setPostShared(int postShared)
     {
-       this.retweets=retweets;
+       this.postShared=postShared;
     }
     
      /**
