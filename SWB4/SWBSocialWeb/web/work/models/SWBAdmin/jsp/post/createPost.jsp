@@ -50,12 +50,12 @@
            <td colspan="3" style="text-align: center;">&nbsp;</td>        
        </tr>
        <tr>
-            <td style="text-align: center;"><a style="cursor: pointer;" title="Mensaje" onclick="postHtml('<%=url.setMode("post").setParameters(argsM)%>', 'postType')"><img src="/swbadmin/images/text.png"/></a></td>
-            <td style="text-align: center;"><a style="cursor: pointer;" title="Foto" onclick="postHtml('<%=url.setMode("post").setParameters(argsP)%>', 'postType')"><img src="/swbadmin/images/photo.png"/></a></td>
-            <td style="text-align: center;"><a style="cursor: pointer;" title="Video" onclick="postHtml('<%=url.setMode("post").setParameters(argsV)%>', 'postType')"><img src="/swbadmin/images/video.png"/></a></td>
+            <td style="text-align: center;"><a style="cursor: pointer;" title="Mensaje" onclick="postHtml('<%=url.setMode("post").setParameters(argsM)%>', '<%=objUri%>postType')"><img src="/swbadmin/images/text.png"/></a></td>
+            <td style="text-align: center;"><a style="cursor: pointer;" title="Foto" onclick="postHtml('<%=url.setMode("post").setParameters(argsP)%>', '<%=objUri%>postType')"><img src="/swbadmin/images/photo.png"/></a></td>
+            <td style="text-align: center;"><a style="cursor: pointer;" title="Video" onclick="postHtml('<%=url.setMode("post").setParameters(argsV)%>', '<%=objUri%>postType')"><img src="/swbadmin/images/video.png"/></a></td>
        </tr>        
     </table>
 </div>
 
-<div id="postType" dojoType="dijit.layout.ContentPane">
+<div id="<%=objUri%>postType" dojoType="dijit.layout.ContentPane">
 </div>
