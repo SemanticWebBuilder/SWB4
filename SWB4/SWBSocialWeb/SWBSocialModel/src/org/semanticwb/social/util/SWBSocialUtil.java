@@ -913,6 +913,31 @@ public class SWBSocialUtil implements SWBAppObject {
                     {
                         postOut.setPostInSource(postIn);
                     }
+                    
+                    if (toPost.equals("video"))
+                    {
+                        //Guardado de Categorias
+                        if(request.getParameterValues(Video.social_category.getName())!=null)
+                        {
+                                String values=null;
+                                String[] categories=request.getParameterValues(Video.social_category.getName());
+                                for(int i=0;i<categories.length;i++)
+                                {
+                                    String value=categories[i];
+                                    if(value!=null && value.trim().length()>0)
+                                    {
+                                        if(i>0)
+                                        {
+                                            values=values+";"+value;
+                                        }else{
+                                            values=value;
+                                        }
+                                    }
+                                }
+                        }
+                        
+                    }
+                    
                     //Le agrego las redes sociales a las cuales se enviara el postOut, si se creó de una contestación, 
                     //sería solo una red social la que vendría en el parametro "aSocialNets"
                     for(int i=0;i<aSocialNets.size();i++)
