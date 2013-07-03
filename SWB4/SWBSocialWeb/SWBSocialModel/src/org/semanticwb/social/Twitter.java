@@ -45,11 +45,11 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
     
     TwitterStream trial=null;
     
-    private Long lastTweetID; // get tweets since the tweet with ID 'lastTweetID' until now
-                              // In the first request the lastTweetID value is 0. This value MUST be updated in further executions
-    private int tweetsReceived;
+    //private Long lastTweetID; // get tweets since the tweet with ID 'lastTweetID' until now
+                                // In the first request the lastTweetID value is 0. This value MUST be updated in further executions
+    //private int tweetsReceived;
     
-    public List<Status> twitterResults;
+    //public List<Status> twitterResults;
     
     private RequestToken requestToken;
     
@@ -73,15 +73,15 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
                 twitter.setOAuthConsumer(this.getAppKey(), this.getSecretKey());
                 AccessToken accessToken = new AccessToken(this.getAccessToken(), this.getAccessTokenSecret());
                 twitter.setOAuthAccessToken(accessToken);
-//                StatusUpdate sup = new StatusUpdate(new String(message.getMsg_Text().getBytes(), "utf-8"));
+                //StatusUpdate sup = new StatusUpdate(new String(message.getMsg_Text().getBytes(), "utf-8"));
                 //StatusUpdate sup = new StatusUpdate(new String(shortUrl(message.getMsg_Text()).getBytes(), "ISO-8859-1"));
                 Status sup = null;
                 if(message.getPostInSource()!=null && message.getPostInSource().getSocialNetMsgId()!=null)
                 {
-                    System.out.println("Twitter PRIMERA OPCION...:"+message.getPostInSource().getPostInSocialNetworkUser().getSnu_name());
+                    System.out.println("Twitter Msg PRIMERA OPCION...:"+message.getPostInSource().getPostInSocialNetworkUser().getSnu_name());
                     sup = twitter.updateStatus(new StatusUpdate(new String(shortUrl(message.getPostInSource().getPostInSocialNetworkUser().getSnu_name()+" " +message.getMsg_Text()).getBytes(), "ISO-8859-1")).inReplyToStatusId(Long.parseLong(message.getPostInSource().getSocialNetMsgId())));
                 }else{
-                    System.out.println("Twitter SEGUNDA OPCION...");
+                    System.out.println("Twitter Msg SEGUNDA OPCION...");
                     sup = twitter.updateStatus(new StatusUpdate(new String(shortUrl(message.getMsg_Text()).getBytes(), "ISO-8859-1")));
                 }
                 
@@ -112,7 +112,6 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
     }
 
     public void postPhoto(Photo photo) {
-        
         if (photo != null && photo.getPhoto() != null && photo.getPhoto().trim().length() > 1) {
             twitter4j.Twitter twitter = new TwitterFactory().getInstance();
             twitter.setOAuthConsumer(this.getAppKey(), this.getSecretKey());
@@ -123,10 +122,20 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
                     + "_" + photo.getId() + "_" + photo.getPhoto();
             try {
                 twitter.setOAuthAccessToken(accessToken);
-                //StatusUpdate sup = new StatusUpdate(new String(photo.getComment().getBytes(), "utf-8"));
-                StatusUpdate sup = new StatusUpdate(new String(shortUrl(description).getBytes(), "ISO-8859-1"));
-                sup.setMedia(new File(photoSend));
-                 Status stat = twitter.updateStatus(sup);
+                StatusUpdate sup = null;// new StatusUpdate(new String(shortUrl(description).getBytes(), "ISO-8859-1"));
+                Status stat = null;
+                if(photo.getPostInSource()!=null && photo.getPostInSource().getSocialNetMsgId()!=null)
+                {
+                    System.out.println("Twitter Photo PRIMERA OPCION...:"+photo.getPostInSource().getPostInSocialNetworkUser().getSnu_name());
+                    sup = new StatusUpdate(new String(shortUrl(photo.getPostInSource().getPostInSocialNetworkUser().getSnu_name() + " " +description).getBytes(), "ISO-8859-1"));
+                    sup.setMedia(new File(photoSend));
+                    stat = twitter.updateStatus(sup.inReplyToStatusId(Long.parseLong(photo.getPostInSource().getSocialNetMsgId())));
+                }else{
+                    System.out.println("Twitter Photo SEGUNDA OPCION...");
+                    sup = new StatusUpdate(new String(shortUrl(description).getBytes(), "ISO-8859-1"));
+                    sup.setMedia(new File(photoSend));
+                    stat = twitter.updateStatus(sup);
+                }
                 long longStat = stat.getId();
                 
                 try{
@@ -195,8 +204,9 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
     /**
      * Gets the value in NextDatetoSearch and verifies is a Long number.
      */
-    private void getLastTweetID(Stream stream){
+    private long getLastTweetID(Stream stream){
         SocialNetStreamSearch socialStreamSerch=SocialNetStreamSearch.getSocialNetStreamSearchbyStreamAndSocialNetwork(stream, this);
+        long lastTweetID = 0L;
         if(socialStreamSerch!=null && socialStreamSerch.getNextDatetoSearch()!= null){
             try{
                 lastTweetID = Long.parseLong(socialStreamSerch.getNextDatetoSearch());
@@ -209,6 +219,7 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
         }else{
             lastTweetID=0L;
         }
+        return lastTweetID;
     }
     
     /**
@@ -262,12 +273,12 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
         //WebSite wsite = WebSite.ClassMgr.getWebSite(stream.getSemanticObject().getModel().getName());
         //System.out.println("Red SocialID:"+this.getId()+", Red Title:"+this.getTitle()+", sitio:"+wsite.getId());
         //System.out.println("Creador:" + this.getCreator());
-        twitterResults = new ArrayList<Status>();
-        tweetsReceived = 0;
-        ArrayList <ExternalPost> aListExternalPost=new ArrayList();
+        //List<Status> twitterResults = new ArrayList<Status>();
+        int  tweetsReceived = 0;
+        ArrayList <ExternalPost> aListExternalPost;
         
         try{            
-            getLastTweetID(stream); //gets the value stored in NextDatetoSearch
+            long lastTweetID = getLastTweetID(stream); //gets the value stored in NextDatetoSearch
             twitter4j.Twitter twitter = new TwitterFactory(configureOAuth().build()).getInstance();            
             String searchPhrases = getPhrases(stream.getPhrase());
             twitter4j.Query query = new Query(searchPhrases);
@@ -278,6 +289,7 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
             long currentTweetID = 0L;
             
             do{
+                aListExternalPost = new ArrayList();
                 try{
                     //System.out.println("QUERY: " + query);
                     twitter4j.QueryResult result = twitter.search(query);
@@ -294,10 +306,11 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
                                 canGetMoreTweets = false;      //If it's greater than ZERO, get tweets posted since the tweet with id lastTweetID
                                 //System.out.println("SINCEID LIMIT REACHED!!!");
                                 break;
-                            }
+                            }                            
                                 
-                                if(!status.isRetweet())
-                                {
+                            if(!status.isRetweet())
+                            {
+                                if(status.getUser() != null){
                                     ExternalPost external = new ExternalPost();
                                     external.setPostId(String.valueOf(status.getId())); 
                                     external.setCreatorId(String.valueOf(status.getUser().getId()));
@@ -314,14 +327,16 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
                                     {
                                         external.setPlace(status.getPlace().getFullName());
                                     }
-                                    
+                                    external.setSocialNetwork(this);
+                                    external.setPostShared((int)status.getRetweetCount());
                                     aListExternalPost.add(external);
 
-                                    twitterResults.add(status);
+                                    //twitterResults.add(status);
                                     //System.out.println("User: @" + status.getUser().getScreenName() + "\tID:" + status.getId() + "\tTime:" + status.getCreatedAt() + "\tText:" + status.getText());
                                     currentTweetID = status.getId();
                                     tweetsReceived++;
                                 }
+                            }
                         }
 
                         if(iteration == 1){
@@ -341,14 +356,13 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
                     }
                     log.error("Error getting tweets:"  + te );
                 }
+                if(aListExternalPost.size()>0){
+                    new Classifier(aListExternalPost, stream, this);
+                }
                 
             }while(canGetMoreTweets && tweetsReceived <17000);  //Maximo permitido para extraer de twitter c/15 minutos
             
             //System.out.println("TOTAL TWEETS RECEIVED:" + tweetsReceived);
-            if(aListExternalPost.size()>0)
-            {
-                new Classifier(aListExternalPost, stream, this);
-            }
         }catch(Exception e){            
             log.error("Error in listen():"  + e );
         }
