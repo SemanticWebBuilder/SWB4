@@ -651,7 +651,7 @@ public class SocialTopicInBox extends GenericResource {
 
                 //Stream
                 out.println("<td>");
-                out.println(postIn.getPostInStream().getDisplayTitle(lang));
+                out.println(postIn.getPostInStream()!=null?postIn.getPostInStream().getDisplayTitle(lang):"---");
                 out.println("</td>");
 
                 //created
