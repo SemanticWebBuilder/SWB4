@@ -15,6 +15,14 @@ html, body, #main {
     font: 10pt Arial,Myriad,Tahoma,Verdana,sans-serif;
 }
 
+.rounded {
+behavior: url(border-radius.htc); border-radius: 2px; /*IE */
+border-radius:2px; /*opera y CSS3*/ 
+-moz-border-radius:2px; /*FireFox*/
+-webkit-border-radius:2px; /*Safari Chrome*/
+-khtml-border-radius:2px; /* Linux browers */
+}
+
 .soria .dijitTreeIcon {
     width:20px;
     height: 18px;
@@ -572,9 +580,11 @@ th {
     padding:5px;
     position:absolute;
     right:0px;
-    font-weight:bold;
     z-index:auto;
+	color:#505b5f !important;
+	font-size:12px;
 }
+#swblogout a { color:#b6c0c9; text-decoration:none; margin:0px 10px;}
 
 .applet{
     visibility:visible;
@@ -685,3 +695,450 @@ div.sitesectiontree ul.treeres {
 	font-size: 12px;
 }
 /*------------------- select tree  ----*/
+
+
+
+/*ANTI SORIA*/
+.swbLogo {background: url(images/swb-logo.png) no-repeat !important; height:41px !important; padding:0; width:189px !important; margin:0px 60px 0px 10px !important}
+.soria .dijitToolbar { background:url(images/bg-cabecera.png) #505b5f !important; height:50px !important;}
+#mainSplit { top:50px !important;}
+
+.soria .dijitTitlePane .dijitClosed .dijitArrowNode,
+.soria .dijitTitlePane .dijitOpen .dijitArrowNode,
+.soria .dijitAccordionTitle-selected .dijitAccordionArrow { float:right;}
+.soria .dijitToolbar .dijitButtonNode button { font-size:0.9em; color:#a9b2bb; padding-top:0px; height:45px;}
+.soria .dijitToolbar .dijitButtonNode button:hover { color:#ff6600; background:none;}
+.soria .dijitToolbar .dijitArrowButtonInner       {background: url(images/spriteArrows.png) no-repeat 0px 0px !important; position:relative; top:15px;}
+.soria .dijitToolbar .dijitArrowButtonInner:hover {background: url(images/spriteArrows.png) no-repeat 0px -10px !important; position:relative; top:15px;}
+.soria .dijitToolbar .dijitButtonText { position:relative; top:15px;}
+
+#mnu_File			   { background:url(images/iconToolBar.png) no-repeat -750px 7px;}
+#Publish         	   { background:url(images/iconToolBar.png) no-repeat   16px 7px;}
+#authorize 	     	   { background:url(images/iconToolBar.png) no-repeat  -90px 7px;}
+#analysis   	 	   { background:url(images/iconToolBar.png) no-repeat -200px 7px;}
+#WBAd_mnui_Tools 	   { background:url(images/iconToolBar.png) no-repeat -300px 7px;}
+#Configurar		 	   { background:url(images/iconToolBar.png) no-repeat -412px 7px;}
+#WBAd_mnui_Users       { background:url(images/iconToolBar.png) no-repeat -530px 7px;}
+#WBAd_mnui_Help   	   { background:url(images/iconToolBar.png) no-repeat -641px 7px;}
+#mnu_File:hover		   { background:url(images/iconToolBar.png) no-repeat -750px -53px;}
+#Publish:hover         { background:url(images/iconToolBar.png) no-repeat   16px -53px;}
+#authorize:hover 	   { background:url(images/iconToolBar.png) no-repeat  -90px -53px;}
+#analysis:hover  	   { background:url(images/iconToolBar.png) no-repeat -200px -53px;}
+#WBAd_mnui_Tools:hover { background:url(images/iconToolBar.png) no-repeat -300px -53px;}
+#Configurar:hover	   { background:url(images/iconToolBar.png) no-repeat -412px -53px;}
+#WBAd_mnui_Users:hover { background:url(images/iconToolBar.png) no-repeat -530px -53px;}
+#WBAd_mnui_Help:hover  { background:url(images/iconToolBar.png) no-repeat -641px -53px;}
+#Publish, #authorize, #analysis, #WBAd_mnui_Tools, #Configurar, #WBAd_mnui_Users, #WBAd_mnui_Help { margin:0px 10px;}
+
+
+.soria .dijitToolbar .dijitButtonCheckedHover,
+.soria .dijitToolbar .dijitToggleButtonCheckedHover { 
+background-color:#9abbea;	border:1px solid #316ac5; padding:0px; 
+}
+
+.soria .dijitToolbar .dijitButton,
+.soria .dijitToolbar .dijitButtonHover,
+.soria .dijitToolbar .dijitToggleButton,
+.soria .dijitToolbar .dijitToggleButtonHover,
+.soria .dijitToolbar .dijitDropDownButton,
+.soria .dijitToolbar .dijitDropDownButtonHover,
+.soria .dijitToolbar .dijitComboButton .dijitButtonContents,
+.soria .dijitToolbar .dijitComboButtonHover .dijitButtonContents,
+.soria .dijitToolbar .dijitComboButton .dijitDownArrowButton,
+.soria .dijitToolbar .dijitComboButtonDownArrowHover .dijitDownArrowButton {
+background:none !important; border:none !important; padding:0 !important;}
+
+
+.soria .dijitAccordionTitle-selected { display:none;} /* pleca MARCAS*/
+.soria .dijitTreeNodeSelected .dijitTreeLabel { background:none;} /*Seleccionado*/
+.soria .dijitAccordionContainer-dijitContentPane { background-color:#EAEAEA; padding:0px !important; width:100% !important;} /*FONDO donde viene el árbol*/
+.soria .dijitTreeIsRoot { background: url(images/bg-dijitTreeIsRoot.gif) !important; margin-bottom:1px;} /*MARCA*/
+.soria .dijitTreeLabel { font-weight:bold !important;}
+
+.soria .dijitTreeRow { /*color:#505b5f*/}
+
+.soria .dijitTreeExpandoClosed { /* float:right; */ background:url(images/spriteTree.png) !important; cursor:pointer;}
+.soria .dijitTreeExpandoOpened { /* float:right; */ background:url(images/spriteTree.png) -18px 0px !important; cursor:pointer;}
+
+.dijitTreeIsRoot .dijitTreeContainer { background:#f2f3f4;}
+.soria .dijitTreeContent { color:#505B5F !important;}
+
+/*-----------------*/
+.soria .dijitTabInnerDiv {
+	padding:0px 3px 0px 0px;
+	margin: 0 0 0 4px;
+	background: url(images/tabContainerSprite.gif) no-repeat;
+	background-position: right -400px;
+}
+.soria .dijitTab {
+	line-height:normal;
+	margin:0 2px 0 0;	
+	padding:0px;
+	background: url(images/tabContainerSprite.gif) no-repeat 0 -300px;
+	color: #BC8534;
+	border-bottom: 1px #ffc56e solid;
+}	
+.soria .dijitTabInnerDiv .dijitTabContent {
+	padding:5px 3px 4px 4px;
+	background: url(images/tabContainerSprite.gif) repeat-x 0 -350px;
+	position: relative;
+}
+.soria .dijitTabHover {
+	color: #243C5F;
+	background: url(images/tabContainerSprite.gif) no-repeat 0px -150px;
+}
+.soria .dijitTabHover .dijitTabInnerDiv {
+	background: url(images/tabContainerSprite.gif) no-repeat right -250px;
+}
+.soria .dijitTabHover .dijitTabInnerDiv .dijitTabContent {
+	background: url(images/tabContainerSprite.gif) repeat-x 0 -200px;
+}
+.soria .dijitTabChecked,
+.soria .dijitTabCloseButtonChecked
+{
+	
+	background: url(images/tabContainerSprite.gif) no-repeat 0px -0px;
+}
+.soria .dijitTabChecked .dijitTabInnerDiv {
+	background: url(images/tabContainerSprite.gif) no-repeat right -100px;
+}
+.soria .dijitTabChecked .dijitTabInnerDiv .dijitTabContent {
+	background: url(images/tabContainerSprite.gif) repeat-x 0 -50px;
+	color: #87490a !important;
+}
+.soria .dijitTabContainerTabListNested {
+	background: #F0F4FC;
+	background: #D9E9F9;
+	border: none;
+}
+.soria .dijitTabContainerTop-tabs {
+	margin-bottom: -1px;
+	border-color: #FFC56E !important;
+	padding-left: 3px;
+	background: url(images/bg-dijitTabContainerTop-tabs.png) repeat-x;
+}
+.soria .dijitTabContainerTop-container {
+	border-top: none;
+}
+.soria .dijitTabContainerTop-tabs .dijitTabChecked {
+	border-bottom-color: #FFA51E;
+}
+.soria .dijitTabContainerTopStrip {
+	border: 1px solid #B1BADF;
+	padding-top: 2px;
+	padding-left: 3px;
+}
+.soria .dijitTabContainerTopStrip {
+	background: #F0F4FC;
+}
+.soria .dijitTabContainerBottom-tabs {
+	margin-top: -1px;
+	border-color: #ccc;
+	padding-left: 3px;
+}
+.soria .dijitTabContainerBottom-container {
+	border-bottom: none;
+}
+.soria .dijitTabContainerBottom-tabs .dijitTab {
+	border-bottom: none;
+	border-top: 1px solid #B1BADF;
+	background: url(images/tabBottomEnabledSpriteLR.gif) no-repeat bottom left;
+}
+.soria .dijitTabContainerBottom-tabs .dijitTabChecked {
+	border-top-color:#94b4e6;
+}
+.soria .dijitTabContainerBottom-tabs .dijitTabInnerDiv .dijitTabContent {
+	padding-top: 4px;
+	padding-bottom: 5px;
+	background: url(images/tabBottomEnabledC.gif) repeat-x bottom left;
+}
+.soria .dijitTabContainerBottom-tabs .dijitTabInnerDiv {
+	background: url(images/tabBottomEnabledSpriteLR.gif) no-repeat bottom right;
+}
+.soria .dijitTabContainerBottom-tabs .dijitTabHover {
+	color: #243C5F;
+	background: url(images/tabBottomHoverSpriteLR.gif) no-repeat bottom left;
+}
+.soria .dijitTabContainerBottom-tabs .dijitTabHover .dijitTabInnerDiv {
+	background: url(images/tabBottomHoverSpriteLR.gif) no-repeat bottom right;
+}
+.soria .dijitTabContainerBottom-tabs .dijitTabHover .dijitTabInnerDiv .dijitTabContent {
+	background: url(images/tabBottomHoverC.gif) repeat-x bottom left;
+}
+.soria .dijitTabContainerBottom-tabs .dijitTabChecked,
+.soria .dijitTabContainerBottom-tabs .dijitTabCloseButtonChecked {
+	background: url(images/tabBottomActiveSpriteLR.gif) no-repeat bottom left;
+}
+.soria .dijitTabContainerBottom-tabs .dijitTabChecked .dijitTabInnerDiv {
+	background: url(images/tabBottomActiveSpriteLR.gif) no-repeat bottom right;
+}
+.soria .dijitTabContainerBottom-tabs .dijitTabChecked .dijitTabInnerDiv .dijitTabContent {
+	background: url(images/tabBottomActiveC.gif) repeat-x bottom left;
+}
+.soria .dijitTabContainerBottomStrip {
+	padding-bottom: 2px;
+	padding-left: 3px;	
+	border: 1px solid #B1BADF;
+}
+.soria .dijitTabContainerBottomStrip {
+	background: #F0F4FC;
+}
+.soria .dijitTabContainerBottom-spacer,
+.soria .dijitTabContainerTop-spacer {
+	height: 2px;
+	border: 1px solid #8ba0bd;
+	background: #94b4e6;
+}
+.soria .dijitTabContainerRight-tabs {
+	margin-left: -1px;
+	border-color: #ccc;
+	padding-top: 3px;
+}
+.soria .dijitTabContainerRight-container {
+	border-right: none;
+}
+.soria .dijitTabContainerRight-tabs .dijitTab {
+	border-bottom: none;
+	border-left: 1px solid #B1BADF;
+	border-bottom: 1px solid #B1BADF !important;
+}
+.dj_ie .soria .dijitTabContainerRight-tabs .dijitTabInnerDiv {
+	border-bottom: solid #fff 1px;
+}
+.soria .dijitTabContainerRight-tabs .dijitTabChecked {
+	border-left-color: #94b4e6;
+}
+.soria .dijitTabContainerRight-tabs .dijitTabChecked {
+	background: url(images/tabRightChecked.gif) no-repeat left top !important;
+}
+.dj_ie .soria .dijitTabContainerRight-tabs .dijitTabChecked .dijitTabInnerDiv,
+.dj_ie .soria .dijitTabContainerRight-tabs .dijitTabCheckedHover .dijitTabInnerDiv {
+	border-bottom: solid #efefef 1px;
+}
+.soria .dijitTabContainerRight-tabs .dijitTab {
+	background: url(images/tabContainerSprite.gif) no-repeat left -350px;
+}
+.soria .dijitTabContainerRight-tabs .dijitTabHover .dijitTab {
+	background: url(images/tabContainerSprite.gif) no-repeat left -200px;
+}
+.soria .dijitTabContainerRightStrip {
+	padding-right: 2px;
+	padding-top: 3px;	
+	border: 1px solid #B1BADF;
+}
+.soria .dijitTabContainerRightStrip {
+	background: #F0F4FC;
+}
+.soria .dijitTabContainerLeft-tabs {
+	margin-right: -1px;
+	border-color: #ccc;
+	padding-top: 3px;
+}
+.soria .dijitTabContainerLeft-container {
+	border-left: none;
+}
+.soria .dijitTabContainerLeft-tabs .dijitTab {
+	border-right: 1px solid #B1BADF;
+	border-bottom: 1px solid #B1BADF;
+}
+.soria .dijitTabContainerLeft-tabs .dijitTabChecked {
+	border-right: 1px solid #94b4e6;}
+.soria .dijitTabContainerLeft-tabs .dijitTabInnerDiv {
+	background: url(images/tabContainerSprite.gif) no-repeat right -350px;}
+.soria .dijitTabContainerLeft-tabs .dijitTabHover .dijitTabInnerDiv {
+	background: url(images/tabContainerSprite.gif) no-repeat right -200px;}
+	
+.soria .dijitTabContainerBottom-spacer, .soria .dijitTabContainerTop-spacer {
+border: 1px solid #A96603 !important;
+background: #FFA51E !important;}
+
+.soria .dijitSplitterV, .soria .dijitGutterV { background:url(images/bg-dijitTabContainerTop-tabs.png) repeat-x #EAEAEA !important;}
+.soria .dijitBorderContainer-dijitTabContainerTop, .soria .dijitBorderContainer-dijitTabContainerBottom, .soria .dijitBorderContainer-dijitTabContainerLeft, .soria .dijitBorderContainer-dijitTabContainerRight { background:#EAEAEA;} 
+
+.swbform fieldset { border-color:#CCC; margin:6px 0px;}
+.swbform { background:none;}
+.swbform a { color:#F60;}
+.soria .dijitTextBox, .soria .dijitComboBox, .soria .dijitSpinner, .soria .dijitInlineEditor input, .soria .dijitTextArea { border-color:#B7B7B7;}
+
+.soria .dijitButtonNode {
+	background: url(images/buttonEnabled.png) repeat-x left top #BCD5F0; border-color:#FFAF37 #FFAF37 #F19101;
+}
+.soria .dijitButtonHover .dijitButtonNode, .soria .dijitButtonNodeHover, .soria .dijitToggleButtonHover .dijitButtonNode, .soria .dijitDropDownButtonHover .dijitButtonNode, .soria .dijitComboButtonHover .dijitButtonContents, .soria .dijitComboButtonDownArrowHover .dijitDownArrowButton, .soria .dijitComboBoxHover .dijitDownArrowButton, .soria .dijitSpinnerUpArrowHover .dijitUpArrowButton, .soria .dijitSpinnerDownArrowHover .dijitDownArrowButton {
+	background: url(images/buttonHover.png) repeat-x scroll left top #ACC5E2;
+	color:#87490A ;
+}
+
+.soria .dijitToolbar .dijitButtonHover .dijitButtonNode, 
+.soria .dijitToolbar .dijitButtonNodeHover, 
+.soria .dijitToolbar .dijitToggleButtonHover .dijitButtonNode, 
+.soria .dijitToolbar .dijitDropDownButtonHover .dijitButtonNode, 
+.soria .dijitToolbar .dijitComboButtonHover .dijitButtonContents, 
+.soria .dijitToolbar .dijitComboButtonDownArrowHover .dijitDownArrowButton, 
+.soria .dijitToolbar .dijitComboBoxHover .dijitDownArrowButton, .soria .dijitSpinnerUpArrowHover .dijitUpArrowButton, 
+.soria .dijitToolbar .dijitSpinnerDownArrowHover .dijitDownArrowButton 
+{
+	background: none;
+	color:#87490A ;
+}
+
+.soria .dijitTabContainerTop-container { border-color:#ffb13D !important;}
+
+/*NUEVOS ICONOS*/
+.swbIconSocialAdminSite,
+.swbIconSocialAdminSiteU,
+.swbIconSocialSite,
+.swbIconSocialSiteU,
+.swbIconWebSite,
+.swbIconWebSiteU,
+.swbIconSocialNetGrp,
+.swbIconFacebookGrp,
+.swbIconFacebook,
+.swbIconFacebookU,
+.swbIconTwitterGrp,
+.swbIconTwitter,
+.swbIconTwitterU,
+.swbIconYoutubeGrp,
+.swbIconYouTube,
+.swbIconYouTubeU,
+.swbIconStreamGrp,
+.swbIconStream,
+.swbIconStreamU,
+.swbIconSocialTopicGrp,
+.swbIconSocialTopic,
+.swbIconSocialTopicU,
+.swbIconSocialTopicF,
+.swbIconUserRepository,
+.swbIconRoles,
+.swbIconRole,
+.swbIconUserGroups,
+.swbIconUserGroup,
+.swbIconRuleGrp,
+.swbIconSocialRule,
+.swbIconActionEmail,
+.swbIconActionPost,
+.swbIconActionPrioritary,
+.swbSocialIconPFlows,
+.swbSocialIconPFlow,
+.swbSocialIconPFlowU
+{
+background-repeat: no-repeat;
+width:20px;
+height: 18px;
+text-align: center;
+padding-right:0px;
+background-image: url(images/iconos-swbSocial.png) !important; }
+
+.swbIconSocialAdminSite  { background-position: 0px -90px;}
+.swbIconSocialAdminSiteU { background-position: 0px -108px;}
+
+.swbIconSocialSite  { background-position: 0px 0px;}
+.swbIconSocialSiteU { background-position: 0px -18px;}
+
+.swbIconWebSite     { background-position: 0px -54px !important;}
+.swbIconWebSiteU	{ background-position: 0px -72px !important;}
+
+.swbIconSocialNetGrp{ background-position: -20px 0px;}
+.swbIconFacebookGrp { background-position: -20px -36px;}
+.swbIconFacebook    { background-position: -20px -108px;}
+.swbIconFacebookU   { background-position: -40px -108px;}
+.swbIconTwitterGrp  { background-position: -20px -18px;}
+.swbIconTwitter     { background-position: -20px -90px;}
+.swbIconTwitterU    { background-position: -40px -90px;}
+.swbIconYoutubeGrp  { background-position: -20px -54px;}
+.swbIconYouTube     { background-position: -20px -126px;}
+.swbIconYouTubeU    { background-position: -40px -126px;}
+.swbIconFliker      { background-position: -20px -144px;}
+.swbIconFlikerU     { background-position: -40px -144px;}
+
+.swbIconStreamGrp   { background-position: -40px  0px;}
+.swbIconStream      { background-position: -40px -18px;}
+.swbIconStreamU     { background-position: -40px -36px;}
+
+.swbIconSocialTopicGrp 	{ background-position: -60px -18px;}/*temas*/
+.swbIconSocialTopic 	{ background-position: -60px -36px;} 
+.swbIconSocialTopicU	{ background-position: -60px -54px;}
+.swbIconSocialTopicF	{ background-position: -60px -36px;}
+
+.swbIconUserRepository { background-position: -80px 0px;}
+.swbIconRoles          { background-position: -80px -18px;}
+.swbIconRole           { background-position: -80px -54px;}
+.swbIconUserGroups     { background-position: -80px -36px;}
+.swbIconUserGroup      { background-position: -80px -72px;}
+
+.swbIconRuleGrp			 { background-position: -100px 0px;}
+.swbIconSocialRule		 { background-position: -100px -18px;}
+.swbIconActionEmail		 { background-position: -100px -36px;}
+.swbIconActionPost		 { background-position: -100px -54px;}
+.swbIconActionPrioritary { background-position: -100px -72px;}
+
+.swbSocialIconPFlows	{ background-position: -120px 0px;}
+.swbSocialIconPFlow		{ background-position: -120px -18px;}
+.swbSocialIconPFlowU	{ background-position: -120px -36px;}
+
+/*PUBLICAR */
+#publicar {width:762px; margin-left:1em;}
+#publicar p strong { color:#666; font-size:1.05em;}
+
+.sel-media 	    { }
+.sel-media a    { display:inline-block; height:60px; width:60px; margin:0px 35px 0px 10px;}
+.sel-media span { display:none;}
+
+.sel-txt       { background:url(images/sel-publica-txt-1.png);}
+.sel-img       { background:url(images/sel-publica-img-1.png);}
+.sel-vid       { background:url(images/sel-publica-vid-1.png);}
+
+.sel-txt:hover { background:url(images/sel-publica-txt-3.png);}
+.sel-img:hover { background:url(images/sel-publica-img-3.png);}
+.sel-vid:hover { background:url(images/sel-publica-vid-3.png);}
+
+.sel-txt2      { background:url(images/sel-publica-txt-2.png);}
+.sel-img2      { background:url(images/sel-publica-img-2.png);}
+.sel-vid2      { background:url(images/sel-publica-vid-2.png);}
+
+#pub-detalle { border:solid 1px #CCC; background:#fafafa; padding:0 0 1em 0; text-align:center; margin-top:10px;
+behavior: url(border-radius.htc);
+border-radius: 4px; /*IE */
+-moz-border-radius:4px; /*FireFox*/
+-webkit-border-radius:4px; /*Safari Chrome*/
+-khtml-border-radius:4px; /* Linux browers */
+}
+
+.sel-txtdiv { background:url(images/sel-pestana.png); width:15px; height:8px; display:block; position:relative; top:-8px; left:30px;}
+.sel-imgdiv { background:url(images/sel-pestana.png); width:15px; height:8px; display:block; position:relative; top:-8px; left:140px;}
+.sel-viddiv { background:url(images/sel-pestana.png); width:15px; height:8px; display:block; position:relative; top:-8px; left:250px;}
+
+#pub-detalle .titulo { color:#f86014; font-size:.9em; margin-top:0; border-bottom:solid 1px #e1e1e1; padding-bottom:3px}
+
+#pub-detalle select { color:#666; font-size:13px; width:290px;}
+
+.pub-info, .pub-redes { display:table-cell; padding:1.5em 1.5em .5em 1.5em; text-align:left;}
+.pub-info { width:28em;}
+.pub-redes { width:21em;}  
+
+.pub-info label  { color:#666; display:inline-block; width:75px; vertical-align:top;}
+.pub-info input, .pub-info textarea { width:290px; font-family: Verdana, Geneva, sans-serif; color:#666; font-size:12px;} 
+.pub-info textarea { height:60px;}
+.pub-info p 	 {}
+
+.pub-redes ul    { margin:0; padding:0;} 
+.pub-redes li    { list-style-type:none; color:#666; margin:7px 0;}
+.pub-redes input { margin:0 5px;}
+.pub-redes label {}
+.pub-redes span  { display:inline-block; height:18px; width:19px; position:relative; top:2px; margin:0 5px 0 0;}
+
+.ico-twt span { background: url(images/iconos-swbSocial.png) no-repeat -20px -90px;}
+.ico-fcb span { background: url(images/iconos-swbSocial.png) no-repeat -20px -108px;}
+.ico-ytb span { background: url(images/iconos-swbSocial.png) no-repeat -20px -126px;}
+
+.boton { margin:auto; border:#FFF solid 1px; padding:0.4em 0.9em; color:#FFF;
+box-shadow: 0 0 1px #666666;
+background:#eb8602;
+background: -webkit-linear-gradient(#f68800, #d76d00);
+background: -moz-linear-gradient(#f68800, #d76d00);
+behavior: url(border-radius.htc);
+border-radius: 2px; /*IE */
+-moz-border-radius:2px; /*FireFox*/
+-webkit-border-radius:2px; /*Safari Chrome*/
+-khtml-border-radius:2px; /* Linux browers */
+}
+
