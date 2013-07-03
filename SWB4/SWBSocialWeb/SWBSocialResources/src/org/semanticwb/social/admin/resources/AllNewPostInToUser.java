@@ -394,7 +394,7 @@ public class AllNewPostInToUser extends GenericResource {
 
                 //Replicas
                 out.println("<td align=\"center\">");
-                out.println(postIn.getPostRetweets());
+                out.println(postIn.getPostShared());
                 out.println("</td>");
 
 
