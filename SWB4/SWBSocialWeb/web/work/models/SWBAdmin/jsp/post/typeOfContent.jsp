@@ -292,11 +292,7 @@
             <%
            }
         }
-        //-When responding from SocialTopic the field 'socialNetUri' was missing
-        SocialNetwork socialNet=(SocialNetwork)SemanticObject.getSemanticObject(postInSN).createGenericInstance(); 
-        if(socialNet==null) return;
         %>
-        <input type="hidden" name="socialNetUri" value="<%=socialNet.getURI()%>"/>                
         
         <ul class="btns_final">
             <button dojoType="dijit.form.Button" type="submit"><%=SWBSocialUtil.Util.getStringFromGenericLocale("send", user.getLanguage())%></button>
@@ -396,11 +392,7 @@
                 <%
                }
             }
-            //-When responding from SocialTopic the field 'socialNetUri' was missing
-            SocialNetwork socialNet=(SocialNetwork)SemanticObject.getSemanticObject(postInSN).createGenericInstance(); 
-            if(socialNet==null) return;
             %>
-            <input type="hidden" name="socialNetUri" value="<%=socialNet.getURI()%>"/>                
 
                 <ul class="btns_final">
                     <button dojoType="dijit.form.Button" type="submit"><%=SWBSocialUtil.Util.getStringFromGenericLocale("send", user.getLanguage())%></button>
