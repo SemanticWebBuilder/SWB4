@@ -12,6 +12,25 @@
 <%@page import="org.semanticwb.portal.api.SWBResourceURL"%>
 <%@page import="org.semanticwb.*,org.semanticwb.platform.*,org.semanticwb.portal.*,org.semanticwb.model.*,java.util.*,org.semanticwb.base.util.*"%>
 <jsp:useBean id="paramRequest" scope="request" type="org.semanticwb.portal.api.SWBParamRequest"/>
+<script type="text/javascript" id="appends">
+    showListCategory = function() {  
+        var frm = document.getElementById('frmUploadVideo');
+        var div = document.getElementById('divCategory');
+       
+     for (i=0;i<frm.checkYT.length;++i){
+             if (frm.checkYT[i].checked)
+             {
+                    div.removeAttribute('style');
+                    break;
+             }
+              if (frm.checkYT[i].checked == false)
+             {
+                    div.setAttribute('style', 'display:none;');
+             }
+     }
+    
+    }
+</script>
 <%
      WebSite wsite=null;
      if(request.getParameter("wsite")!=null)
@@ -314,26 +333,61 @@
     videoMgr.addButton(SWBFormButton.newBackButton());
     SemanticObject videoSemObj = new SemanticObject(paramRequest.getWebPage().getWebSite().getSemanticModel(), Video.sclass);
 %>
+<div dojoType="dojox.layout.ContentPane">
+    <script type="dojo/method">
+         eval(document.getElementById("appends").innerHTML);
+   </script>
+</div> 
 <div class="swbform">
-    <form dojoType="dijit.form.Form" id="frmUploadVideo" action="<%=urlAction.setAction("uploadVideo")%>" method="post" onsubmit="submitForm('frmUploadVideo'); return false;">
+    <form dojoType="dijit.form.Form" id="frmUploadVideo" action="<%=urlAction.setAction("uploadVideo")%>" method="post" onsubmit="submitForm('frmUploadVideo');
+        return false;">
         <%= videoMgr.getFormHiddens()%>
         <ul><b><%=SWBSocialUtil.Util.getStringFromGenericLocale("chooseSocialNets", user.getLanguage())%></b></ul>
         <%
             Iterator<SocialNetwork> it = SocialNetwork.ClassMgr.listSocialNetworks(wsite);
             while (it.hasNext()) {
                 SocialNetwork socialNetwork = (SocialNetwork) it.next();
-                if (socialNetwork instanceof Videoable) {
+               
+                if (socialNetwork instanceof Videoable && socialNetwork.isActive()) {
+                    if (socialNetwork instanceof Youtube){
+                         System.out.println("la instancia es de youtube: " + socialNetwork.getClass());
+                         System.out.println("el estatus de cada red es: " + socialNetwork.isActive());
         %>
         <li>
-            <input type="checkbox" name="<%=socialNetwork.getURI()%>"/><%=socialNetwork.getTitle()%>
+            <input id="checkYT" type="checkbox" name="<%=socialNetwork.getURI()%>" onClick="showListCategory();" /><%=socialNetwork.getTitle()%>
         </li>
         <%
+                    }
+                    else{
+                        %>
+                         <li>
+            <input type="checkbox" name="<%=socialNetwork.getURI()%>" /><%=socialNetwork.getTitle()%>
+        </li>
+                        <%
+                    }
                 }
             }%>
         <!--    
         <div class="etiqueta"><label for="title"><%--=Video.swb_title.getDisplayName()--%>: </label></div>
         <div class="campo"><%--=videoMgr.renderElement(request, Video.swb_title, videoMgr.MODE_CREATE)--%></div>
         -->
+        <div id="divCategory" style="display:none;" class="etiqueta"><label for="description">Categoría:</label>
+            <select name="catId">
+                <option>Selecciona...</option>
+                <%
+                    SWBModel model = WebSite.ClassMgr.getWebSite(paramRequest.getWebPage().getWebSiteId());
+                    Iterator<YouTubeCategory> itYtube = YouTubeCategory.ClassMgr.listYouTubeCategories(model);
+                    while (itYtube.hasNext()) {
+                        YouTubeCategory socialCategory = (YouTubeCategory) itYtube.next();
+                %>
+                <option value="<%=socialCategory.getId()%>"><%=socialCategory.getTitle()%></option>
+                <%
+                    }
+                %>
+            </select>
+        </div>
+
+        <div class="campo"><%=videoMgr.renderElement(request, Video.social_youtubeCategory, videoMgr.MODE_CREATE)%></div>
         <div class="etiqueta"><label for="description"><%=Video.social_msg_Text.getDisplayName()%>:</label></div>
         <div class="campo"><%=videoMgr.renderElement(request, Video.social_msg_Text, videoMgr.MODE_CREATE)%></div>
         <div class="etiqueta"><label for="keywords"><%=Video.swb_Tagable.getDisplayName(lang)%>:</label></div>
