@@ -72,9 +72,9 @@
     //String brand = socialTopic.getSemanticObject().getModel().getName(); //gets brand name
     SWBResourceURL urlAction = paramRequest.getActionUrl();
    
-    String postInSN=request.getParameter("postInSN"); 
-      
-    urlAction.setParameter("objUri", objUri);
+    String postInSN=request.getParameter("postInSN");
+    
+    urlAction.setParameter("objUri", objUri);           
     //urlAction.setParameter("wsite", brand);           
     urlAction.setParameter("wsite", wsite.getSemanticObject().getModel().getName());           
     
@@ -108,7 +108,7 @@
         <%
             if(postInSN==null)
             {
-                %>
+        %>
                 <ul><b><%=SWBSocialUtil.Util.getStringFromGenericLocale("chooseSocialNets", user.getLanguage())%></b></ul>
                 <%
                     Iterator<SocialNetwork> it = SocialNetwork.ClassMgr.listSocialNetworks(wsite);
@@ -292,8 +292,11 @@
             <%
            }
         }
-        
+        //-When responding from SocialTopic the field 'socialNetUri' was missing
+        SocialNetwork socialNet=(SocialNetwork)SemanticObject.getSemanticObject(postInSN).createGenericInstance(); 
+        if(socialNet==null) return;
         %>
+        <input type="hidden" name="socialNetUri" value="<%=socialNet.getURI()%>"/>                
         
         <ul class="btns_final">
             <button dojoType="dijit.form.Button" type="submit"><%=SWBSocialUtil.Util.getStringFromGenericLocale("send", user.getLanguage())%></button>
@@ -393,7 +396,11 @@
                 <%
                }
             }
-                %>
+            //-When responding from SocialTopic the field 'socialNetUri' was missing
+            SocialNetwork socialNet=(SocialNetwork)SemanticObject.getSemanticObject(postInSN).createGenericInstance(); 
+            if(socialNet==null) return;
+            %>
+            <input type="hidden" name="socialNetUri" value="<%=socialNet.getURI()%>"/>                
 
                 <ul class="btns_final">
                     <button dojoType="dijit.form.Button" type="submit"><%=SWBSocialUtil.Util.getStringFromGenericLocale("send", user.getLanguage())%></button>
