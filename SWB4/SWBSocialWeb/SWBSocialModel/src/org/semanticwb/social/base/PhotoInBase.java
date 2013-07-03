@@ -4,7 +4,7 @@ package org.semanticwb.social.base;
    /**
    * Clase en donde se almacenan todos los post de tipo Photo y que entran por el Listener 
    */
-public abstract class PhotoInBase extends org.semanticwb.social.PostIn implements org.semanticwb.social.PostDataable,org.semanticwb.social.PostImageable,org.semanticwb.model.Tagable,org.semanticwb.social.Descriptable,org.semanticwb.social.PostTextable,org.semanticwb.model.Traceable
+public abstract class PhotoInBase extends org.semanticwb.social.PostIn implements org.semanticwb.social.PostDataable,org.semanticwb.social.PostTextable,org.semanticwb.model.Tagable,org.semanticwb.social.Descriptable,org.semanticwb.model.Traceable,org.semanticwb.social.PostImageable
 {
    /**
    * Clase en donde se almacenan todos los post de tipo Photo y que entran por el Listener
@@ -174,6 +174,29 @@ public abstract class PhotoInBase extends org.semanticwb.social.PostIn implement
         public static java.util.Iterator<org.semanticwb.social.PhotoIn> listPhotoInByCreator(org.semanticwb.model.User value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.social.PhotoIn> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_creator,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.social.PhotoIn with a determined PostOutResponseInv
+       * @param value PostOutResponseInv of the type org.semanticwb.social.PostOut
+       * @param model Model of the org.semanticwb.social.PhotoIn
+       * @return Iterator with all the org.semanticwb.social.PhotoIn
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.PhotoIn> listPhotoInByPostOutResponseInv(org.semanticwb.social.PostOut value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.PhotoIn> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(social_haspostOutResponseInv, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.social.PhotoIn with a determined PostOutResponseInv
+       * @param value PostOutResponseInv of the type org.semanticwb.social.PostOut
+       * @return Iterator with all the org.semanticwb.social.PhotoIn
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.PhotoIn> listPhotoInByPostOutResponseInv(org.semanticwb.social.PostOut value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.PhotoIn> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(social_haspostOutResponseInv,value.getSemanticObject(),sclass));
             return it;
         }
        /**

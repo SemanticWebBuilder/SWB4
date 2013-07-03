@@ -31,7 +31,7 @@ public abstract class SocialNetworkUserBase extends org.semanticwb.model.SWBClas
    */
     public static final org.semanticwb.platform.SemanticClass social_PostIn=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#PostIn");
    /**
-   * Propiedad inversa que regresa los PostIn pertenecientes a un usuario de una red social. Si se borrar un SocialNetWorkUser, se borraran todos sus mensajes en la red social a la que pertenece.
+   * Propiedad inversa que regresa los PostIn pertenecientes a un usuario de una red social. Si se borra un SocialNetWorkUser no se borran los PostIn que tiene asociados, esto debido a que existe un onservador desde código que si se borra un PostIn cuyo usuario ya no tiene PostIns, se borra el SocialUserNetWork, así que esto haría que se me ciclara el programa, ya que cuando borre el SocialUserNetwork querría notificar nuevamente a PostIn y esto nuevamente querría borrar al UserSocialNetwork y así se quedaría como un ciclo.
    */
     public static final org.semanticwb.platform.SemanticProperty social_hasPostInInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#hasPostInInv");
    /**
