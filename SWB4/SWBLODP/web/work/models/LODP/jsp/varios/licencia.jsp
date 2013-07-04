@@ -21,6 +21,7 @@
             LicenseType lic = (LicenseType) so.createGenericInstance();
 %>
         <h2><%=lic.getLicenseTitle()!=null?lic.getLicenseTitle():"--"%></h2>
+        <br/><br/>
         <p><%=lic.getLicenseDescription()!=null?lic.getLicenseDescription():"--"%></p>
         <%
         } else {
@@ -35,4 +36,6 @@
     }
     
 %>
+<br/>
+<a  onclick="window.history.back();">Regresar</a>
 </div>

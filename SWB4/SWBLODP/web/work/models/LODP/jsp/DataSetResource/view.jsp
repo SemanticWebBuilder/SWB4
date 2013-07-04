@@ -281,7 +281,7 @@
                 long searchTimeSecs = searchTime / 1000;
     %>
 <div class="buscar_ds">
-    <form method="post" action="" id="ds_search">
+    <form method="post" action="<%=wpage.getUrl()%>" id="ds_search">
         <%
             if (filtertopic != null && filtertopic.trim().length() > 0) {
         %>
@@ -295,29 +295,37 @@
         <input type="hidden" name="filteruri" value="<%=filteruri%>"/>
         <%
             }
+            String tmpsearch1="Search",tmpsearch2="Buscar";
+            if(queryOriginal!=null&&queryOriginal.trim().length()>0){
+                tmpsearch1 = queryOriginal;
+                tmpsearch2 = queryOriginal;
+            }
         %>
 
-                <label for="txt_search"><%=txtTitleSearch%></label><input type="text" name="search" value="<%=queryOriginal%>" onfocus="if (this.value == 'Search'  || this.value == 'Buscar') {this.value = ''};"><button type="submit"><%=paramRequest.getLocaleString("btn_search")%></button>
+                <label for="txt_search"><%=txtTitleSearch%></label>
+                <input type="text" name="search" value="<%=queryOriginal%>" onfocus="if (this.value == '<%=tmpsearch1%>'  || this.value == '<%=tmpsearch2%>') {this.value = ''};" />
+                <button type="submit"><%=paramRequest.getLocaleString("btn_search")%></button>
+             <!--
                 <%
                     // si hubo búsqueda
-                    if (null != queryinput && queryinput.trim().length() > 0) {
-                        if (intSize > 0) {
+                 //  if (null != queryinput && queryinput.trim().length() > 0) {
+                      //  if (intSize > 0) {
                 %>
                 <br/>
-                <%=paramRequest.getLocaleString("btn_almost")%> <%=intSize%> <%=paramRequest.getLocaleString("btn_results")%>
+                <%//=paramRequest.getLocaleString("btn_almost")%> <%//=intSize%> <%//=paramRequest.getLocaleString("btn_results")%>
                 <%
-                } else {
+                //} else {
                 %>
                 <br/>
-                <%=paramRequest.getLocaleString("msg_noresults")%>
-                <%                            }
+                <%//=paramRequest.getLocaleString("msg_noresults")%>
+                <%                        //    }
                     // tiempo en segundos de lo que se tardó la búsqueda
                 %>
-                (<%=searchTimeSecs%> <%=paramRequest.getLocaleString("msg_secs")%>)
+                (<%//=searchTimeSecs%> <%//=paramRequest.getLocaleString("msg_secs")%>)
                 <%
-                    }
+                   // }
                 %>        
-
+ -->
     </form>
 </div>
 <div class="izq-data1">
@@ -737,10 +745,12 @@
                     <%
                     if(null!=ds && ds.listTags().hasNext()){ 
             Iterator<Tag> ittag = ds.listTags();
+            String thiswpurl = wpage.getUrl()+"?search=";
             while (ittag.hasNext()) {
                 Tag tag = ittag.next();
+                
                 %>
-                <li><%=tag.getTagName().trim()%></li>
+                <li><a href="<%=thiswpurl+tag.getTagName().trim()%>"><%=tag.getTagName().trim()%></a></li>
                 <%
             }
         }
