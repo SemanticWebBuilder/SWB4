@@ -63,8 +63,9 @@ public class Flicker extends org.semanticwb.social.base.FlickerBase
         Flickr flickr = null;
         
         //if(UPLOAD_Photo.equals(action) && photo != null && photo.getPhoto() != null) {
+        
         if(photo != null && photo.getPhoto() != null) {
-           String photoSend = SWBPortal.getWorkPath() + photo.getWorkPath() + "/" + org.semanticwb.social.Photo.social_photo.getName() +
+           String photoSend = SWBPortal.getWorkPath() + photo.getWorkPath() + "/" + //org.semanticwb.social.Photo.social_photo.getName() +
                      "_" + photo.getId() + "_" + photo.getPhoto();
 
            String oauth_token = this.getAccessToken();//flicker.getProperty("oauth_token");

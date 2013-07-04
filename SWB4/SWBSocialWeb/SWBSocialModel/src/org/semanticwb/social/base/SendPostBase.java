@@ -4,7 +4,7 @@ package org.semanticwb.social.base;
    /**
    * Acción específica mediante la cual se envía un mensaje por defecto a una o varias redes sociales seleccionadas 
    */
-public abstract class SendPostBase extends org.semanticwb.social.ActionMsg implements org.semanticwb.social.PostVideoable,org.semanticwb.social.PostDataable,org.semanticwb.social.PostImageable,org.semanticwb.social.PostTextable,org.semanticwb.social.SocialNetworkable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable
+public abstract class SendPostBase extends org.semanticwb.social.ActionMsg implements org.semanticwb.model.Descriptiveable,org.semanticwb.social.PostImageable,org.semanticwb.social.PostTextable,org.semanticwb.social.PostVideoable,org.semanticwb.social.SocialNetworkable,org.semanticwb.model.Traceable,org.semanticwb.social.PostDataable
 {
    /**
    * Acción específica mediante la cual se envía un mensaje por defecto a una o varias redes sociales seleccionadas
@@ -154,6 +154,29 @@ public abstract class SendPostBase extends org.semanticwb.social.ActionMsg imple
             return it;
         }
        /**
+       * Gets all org.semanticwb.social.SendPost with a determined Photo
+       * @param value Photo of the type org.semanticwb.social.PhotoImg
+       * @param model Model of the org.semanticwb.social.SendPost
+       * @return Iterator with all the org.semanticwb.social.SendPost
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.SendPost> listSendPostByPhoto(org.semanticwb.social.PhotoImg value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.SendPost> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(social_hasPhoto, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.social.SendPost with a determined Photo
+       * @param value Photo of the type org.semanticwb.social.PhotoImg
+       * @return Iterator with all the org.semanticwb.social.SendPost
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.SendPost> listSendPostByPhoto(org.semanticwb.social.PhotoImg value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.SendPost> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(social_hasPhoto,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
        * Gets all org.semanticwb.social.SendPost with a determined SocialNetworks
        * @param value SocialNetworks of the type org.semanticwb.social.SocialNetwork
        * @param model Model of the org.semanticwb.social.SendPost
@@ -228,6 +251,71 @@ public abstract class SendPostBase extends org.semanticwb.social.ActionMsg imple
         getSemanticObject().setProperty(social_category, value);
     }
    /**
+   * Gets all the org.semanticwb.social.PhotoImg
+   * @return A GenericIterator with all the org.semanticwb.social.PhotoImg
+   */
+
+    public org.semanticwb.model.GenericIterator<org.semanticwb.social.PhotoImg> listPhotos()
+    {
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.social.PhotoImg>(getSemanticObject().listObjectProperties(social_hasPhoto));
+    }
+
+   /**
+   * Gets true if has a Photo
+   * @param value org.semanticwb.social.PhotoImg to verify
+   * @return true if the org.semanticwb.social.PhotoImg exists, false otherwise
+   */
+    public boolean hasPhoto(org.semanticwb.social.PhotoImg value)
+    {
+        boolean ret=false;
+        if(value!=null)
+        {
+           ret=getSemanticObject().hasObjectProperty(social_hasPhoto,value.getSemanticObject());
+        }
+        return ret;
+    }
+   /**
+   * Adds a Photo
+   * @param value org.semanticwb.social.PhotoImg to add
+   */
+
+    public void addPhoto(org.semanticwb.social.PhotoImg value)
+    {
+        getSemanticObject().addObjectProperty(social_hasPhoto, value.getSemanticObject());
+    }
+   /**
+   * Removes all the Photo
+   */
+
+    public void removeAllPhoto()
+    {
+        getSemanticObject().removeProperty(social_hasPhoto);
+    }
+   /**
+   * Removes a Photo
+   * @param value org.semanticwb.social.PhotoImg to remove
+   */
+
+    public void removePhoto(org.semanticwb.social.PhotoImg value)
+    {
+        getSemanticObject().removeObjectProperty(social_hasPhoto,value.getSemanticObject());
+    }
+
+   /**
+   * Gets the Photo
+   * @return a org.semanticwb.social.PhotoImg
+   */
+    public org.semanticwb.social.PhotoImg getPhoto()
+    {
+         org.semanticwb.social.PhotoImg ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(social_hasPhoto);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.social.PhotoImg)obj.createGenericInstance();
+         }
+         return ret;
+    }
+   /**
    * Gets all the org.semanticwb.social.SocialNetwork
    * @return A GenericIterator with all the org.semanticwb.social.SocialNetwork
    */
@@ -291,24 +379,6 @@ public abstract class SendPostBase extends org.semanticwb.social.ActionMsg imple
              ret=(org.semanticwb.social.SocialNetwork)obj.createGenericInstance();
          }
          return ret;
-    }
-
-/**
-* Gets the Photo property
-* @return String with the Photo
-*/
-    public String getPhoto()
-    {
-        return getSemanticObject().getProperty(social_photo);
-    }
-
-/**
-* Sets the Photo property
-* @param value long with the Photo
-*/
-    public void setPhoto(String value)
-    {
-        getSemanticObject().setProperty(social_photo, value);
     }
 
    /**

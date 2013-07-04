@@ -4,7 +4,7 @@ package org.semanticwb.social.base;
    /**
    * Clase que sera creada cuando un post sea de tipo Foto (una imagen), como lo es flicker y facebook (cuando se envía una foto a facebook). 
    */
-public abstract class PhotoBase extends org.semanticwb.social.PostOut implements org.semanticwb.model.CalendarRefable,org.semanticwb.social.PostImageable,org.semanticwb.social.PostDataable,org.semanticwb.model.Referensable,org.semanticwb.model.Tagable,org.semanticwb.social.PostTextable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable
+public abstract class PhotoBase extends org.semanticwb.social.PostOut implements org.semanticwb.social.PostImageable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.CalendarRefable,org.semanticwb.model.Referensable,org.semanticwb.model.Tagable,org.semanticwb.social.PostTextable,org.semanticwb.model.Traceable,org.semanticwb.social.PostDataable
 {
    /**
    * Clase que sera creada cuando un post sea de tipo Foto (una imagen), como lo es flicker y facebook (cuando se envía una foto a facebook).
@@ -151,6 +151,29 @@ public abstract class PhotoBase extends org.semanticwb.social.PostOut implements
         public static java.util.Iterator<org.semanticwb.social.Photo> listPhotoByCreator(org.semanticwb.model.User value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.social.Photo> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_creator,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.social.Photo with a determined Photo
+       * @param value Photo of the type org.semanticwb.social.PhotoImg
+       * @param model Model of the org.semanticwb.social.Photo
+       * @return Iterator with all the org.semanticwb.social.Photo
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.Photo> listPhotoByPhoto(org.semanticwb.social.PhotoImg value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.Photo> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(social_hasPhoto, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.social.Photo with a determined Photo
+       * @param value Photo of the type org.semanticwb.social.PhotoImg
+       * @return Iterator with all the org.semanticwb.social.Photo
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.Photo> listPhotoByPhoto(org.semanticwb.social.PhotoImg value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.Photo> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(social_hasPhoto,value.getSemanticObject(),sclass));
             return it;
         }
        /**
@@ -306,22 +329,69 @@ public abstract class PhotoBase extends org.semanticwb.social.PostOut implements
     {
         super(base);
     }
+   /**
+   * Gets all the org.semanticwb.social.PhotoImg
+   * @return A GenericIterator with all the org.semanticwb.social.PhotoImg
+   */
 
-/**
-* Gets the Photo property
-* @return String with the Photo
-*/
-    public String getPhoto()
+    public org.semanticwb.model.GenericIterator<org.semanticwb.social.PhotoImg> listPhotos()
     {
-        return getSemanticObject().getProperty(social_photo);
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.social.PhotoImg>(getSemanticObject().listObjectProperties(social_hasPhoto));
     }
 
-/**
-* Sets the Photo property
-* @param value long with the Photo
-*/
-    public void setPhoto(String value)
+   /**
+   * Gets true if has a Photo
+   * @param value org.semanticwb.social.PhotoImg to verify
+   * @return true if the org.semanticwb.social.PhotoImg exists, false otherwise
+   */
+    public boolean hasPhoto(org.semanticwb.social.PhotoImg value)
     {
-        getSemanticObject().setProperty(social_photo, value);
+        boolean ret=false;
+        if(value!=null)
+        {
+           ret=getSemanticObject().hasObjectProperty(social_hasPhoto,value.getSemanticObject());
+        }
+        return ret;
+    }
+   /**
+   * Adds a Photo
+   * @param value org.semanticwb.social.PhotoImg to add
+   */
+
+    public void addPhoto(org.semanticwb.social.PhotoImg value)
+    {
+        getSemanticObject().addObjectProperty(social_hasPhoto, value.getSemanticObject());
+    }
+   /**
+   * Removes all the Photo
+   */
+
+    public void removeAllPhoto()
+    {
+        getSemanticObject().removeProperty(social_hasPhoto);
+    }
+   /**
+   * Removes a Photo
+   * @param value org.semanticwb.social.PhotoImg to remove
+   */
+
+    public void removePhoto(org.semanticwb.social.PhotoImg value)
+    {
+        getSemanticObject().removeObjectProperty(social_hasPhoto,value.getSemanticObject());
+    }
+
+   /**
+   * Gets the Photo
+   * @return a org.semanticwb.social.PhotoImg
+   */
+    public org.semanticwb.social.PhotoImg getPhoto()
+    {
+         org.semanticwb.social.PhotoImg ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(social_hasPhoto);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.social.PhotoImg)obj.createGenericInstance();
+         }
+         return ret;
     }
 }
