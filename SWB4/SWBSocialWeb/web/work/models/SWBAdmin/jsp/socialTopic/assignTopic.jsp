@@ -52,8 +52,7 @@
       <table width="98%" >
         <thead>
         <th>
-            <%//=paramRequest.getLocaleString("chooseTopic")%>
-            Seleccione el tema nuevo
+            <%=paramRequest.getLocaleString("chooseTopic")%>
         </th>
         </thead>
         <tbody>
@@ -77,8 +76,8 @@
         </tr>
         <tr>
             <td>
-                <button dojoType="dijit.form.Button" type="submit" ><%//=paramRequest.getLocaleString("btnSend")%>Enviar</button>
-                <button dojoType="dijit.form.Button" onclick="hideDialog(); return false;"><%//=paramRequest.getLocaleString("btnCancel")%>Cancelar</button>
+                <button dojoType="dijit.form.Button" type="submit" ><%=paramRequest.getLocaleString("btnSend")%></button>
+                <button dojoType="dijit.form.Button" onclick="hideDialog(); return false;"><%=paramRequest.getLocaleString("btnCancel")%></button>
             </td>
         </tr>
         </tbody>
