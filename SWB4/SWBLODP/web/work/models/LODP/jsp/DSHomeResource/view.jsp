@@ -156,6 +156,7 @@
             <a title="<%=ds.getDatasetDescription()%>" href="<%=wpurl + ds.getShortURI()%>"><%=ds.getDatasetTitle()%></a><br/> 
             <strong><%=topiclist.toString()%></strong><br/>
             <em><%=ds.getInstitution().getInstitutionTitle()%></em>
+            <em><%=ds.getDatasetCreated()!=null?sdf2.format(ds.getDatasetCreated()):""%></em>
         </li>
         <%
                 }
@@ -189,6 +190,7 @@
             itds1 = Dataset.ClassMgr.listDatasets(wsite);
         }
 
+        
         // dejo en hm los ds
             HashMap<String, Dataset> hmcp = new HashMap<String, Dataset>();
             while (itds1.hasNext()) {

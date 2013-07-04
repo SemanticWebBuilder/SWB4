@@ -87,6 +87,25 @@
     if(null!=filteruri){
         filteruri = SemanticObject.shortToFullURI(filteruri);
     }
+    
+    String licid = base.getAttribute("licid","");
+    String urlLic = "";
+    if(licid.trim().length()>0 ){
+        WebPage wplic = wsite.getWebPage(licid); 
+        if(null!=wplic){
+            urlLic = wplic.getUrl();
+        } else {
+             urlLic = "#";
+        }
+    } else {
+         urlLic = "#";
+    }
+    
+ String autoapprove = paramRequest.getResourceBase().getAttribute("autoapprove","0");
+        boolean isAutoApprove = Boolean.FALSE;
+        if(null!=autoapprove && "1".equals(autoapprove)){
+            isAutoApprove = Boolean.TRUE;
+        }
 
     String direction = request.getParameter("direction");
     String action = request.getParameter("act"); // accion
@@ -243,7 +262,7 @@
                     Dataset ds = itds1.next();
                     if(ds.isDatasetActive()&&ds.isApproved()){
                         hmcp.put(ds.getURI(), ds);
-                    } else if(isAdmin && !ds.isReviewed()){ 
+                    } else if(isAdmin && !ds.isReviewed() && !isAutoApprove){ 
                         hmxrevisar.put(ds.getShortURI(), ds);
                     }
                 }
@@ -617,7 +636,7 @@
            %>
     </div>
     <%
-     if(isAdmin){
+     if(isAdmin && !isAutoApprove){
               %>  
               <div class="lista10"><h3><%=paramRequest.getLocaleString("lbl_reviewDataset")%></h3>
         <ol>
@@ -706,7 +725,12 @@
         </div>
         <div class="detalle">
             <p><%=ds.getDatasetDescription()%></p>
-            <p><em title="<%=ds.getLicense() != null ? ds.getLicense().getLicenseDescription(): ds.getLicense().getLicenseTitle()%>"><%=paramRequest.getLocaleString("lbl_licenseUse")%>: <%=ds.getLicense() != null ? ds.getLicense().getLicenseTitle() : paramRequest.getLocaleString("lbl_notassigned")%></em></p>
+            <%
+                if(!urlLic.equals("#") && ds.getLicense()!=null){
+                    urlLic += "?suri="+ds.getLicense().getShortURI();
+                }
+            %>
+            <p><em title="<%=ds.getLicense() != null ? ds.getLicense().getLicenseDescription(): ds.getLicense().getLicenseTitle()%>"><%=paramRequest.getLocaleString("lbl_licenseUse")%>: <a href="<%=urlLic%>" ><%=ds.getLicense() != null ? ds.getLicense().getLicenseTitle() : paramRequest.getLocaleString("lbl_notassigned")%></a></em></p>
             <fieldset>
           	<legend><%=paramRequest.getLocaleString("lbl_labels")%></legend>
             	<ul>
@@ -724,7 +748,7 @@
                 </ul>
           </fieldset>
 <%
-                    if(isFromReview){
+                    if(isFromReview && !isAutoApprove){
                         SWBResourceURL urlreview = paramRequest.getActionUrl();
                         urlreview.setAction("review"); 
 %>
@@ -857,14 +881,18 @@
         <a href="<%=url.toString()%>&mformat=<%=DataSetResource.META_FORMAT_RDF%>" title="<%=paramRequest.getLocaleString("lbl_exportDSmeta")%> RDF" class="ver-exp-rdf"><span><%=paramRequest.getLocaleString("lbl_exportDSmeta")%> RDF</span></a>     
             
             </div>  
-            
-                <div class="new-app tit">
-		<h4><%=paramRequest.getLocaleString("lbl_relatesApps")%></h4>
-            <%  // lista de aplicaciones relacionadas
-            int numapps = 0;
+            <%
+             int numapps = 0;
             Iterator<Application> itapp = Application.ClassMgr.listApplicationByRelatedDataset(ds, wsite);
             HashMap<String, Application> hmappli = new HashMap<String, Application>();
             if(itapp.hasNext()){
+            
+            %>
+                <div class="new-app tit">
+		<h4><%=paramRequest.getLocaleString("lbl_relatesApps")%></h4>
+                <ul>
+            <%  // lista de aplicaciones relacionadas
+           
                 while(itapp.hasNext()){
                     Application appli = itapp.next();
                     if(appli.isAppValid()){
@@ -888,7 +916,7 @@
             <li><%=paramRequest.getLocaleString("lbl_NOrelatesApps")%></li>
                 <%
             }
-            }
+            
             String idWPapps = base.getAttribute("appwebpage","Aplicaciones");
             WebPage wpapps = wsite.getWebPage(idWPapps);
             String urlapps = "#";
@@ -903,6 +931,10 @@
                 <span><%=numapps%> <%=paramRequest.getLocaleString("lbl_relatesApps")%></span> <a href="<%=urlapps%>"><%=paramRequest.getLocaleString("lbl_viewall")%></a>
             </div>
 		</div>
+            <%
+            }
+            %>
+            
         </div> <!-- der -->
 
 <div class="clear">&nbsp;</div> 
