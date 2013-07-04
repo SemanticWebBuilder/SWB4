@@ -76,27 +76,36 @@ public class SendPost extends org.semanticwb.social.base.SendPostBase
                     {
                         log.error(e);
                     }
-                }else if(sendPost.getPhoto()!=null) //Envía Photo
+                }else if(sendPost.listPhotos().hasNext()) //Envía Photo
                 {
                     try
                     {
                         Photo photo=Photo.ClassMgr.createPhoto(wsite);
-                    
-                        String photoSource = SWBPortal.getWorkPath() + sendPost.getWorkPath() + "/" + PostImageable.social_photo.getName()+"_"+sendPost.getId()+"_"+sendPost.getPhoto();
-                        System.out.println("photoSource:"+photoSource);
-                        String photoTarget = SWBPortal.getWorkPath() + photo.getWorkPath();
-                        System.out.println("photoTarget-1:"+photoTarget);
-                        File targetFile=new File(photoTarget);
-                        if(!targetFile.exists())
+                        
+                        while(sendPost.listPhotos().hasNext())
                         {
-                            targetFile.mkdirs();
+                            String sphoto=(String)sendPost.listPhotos().next().getPhoto(); 
+                            
+                            String photoSource = SWBPortal.getWorkPath() + sendPost.getWorkPath() + "/" + PhotoImg.social_photo.getName()+"_"+sendPost.getId()+"_"+sphoto;
+                            System.out.println("photoSource:"+photoSource);
+                            String photoTarget = SWBPortal.getWorkPath() + photo.getWorkPath();
+                            System.out.println("photoTarget-1:"+photoTarget);
+                            File targetFile=new File(photoTarget);
+                            if(!targetFile.exists())
+                            {
+                                targetFile.mkdirs();
+                            }
+                            photoTarget+="/" + PhotoImg.social_photo.getName()+"_"+photo.getId()+"_"+ sphoto;
+                            System.out.println("photoTarget-2:"+photoTarget);
+                            System.out.println("Va a copiar...");
+                            SWBUtils.IO.copy(photoSource,photoTarget, false, null, null);
+                            System.out.println("Copio....");
+
+
+                            photo.addPhoto(sendPost.getPhoto());
+                       
                         }
-                        photoTarget+="/" + PostImageable.social_photo.getName()+"_"+photo.getId()+"_"+ sendPost.getPhoto();
-                        System.out.println("photoTarget-2:"+photoTarget);
-                        System.out.println("Va a copiar...");
-                        SWBUtils.IO.copy(photoSource,photoTarget, false, null, null);
-                        System.out.println("Copio....");
-                        photo.setPhoto(sendPost.getPhoto());
+                        
                         if(sendPost.getMsg_Text()!=null)
                         {
                             photo.setMsg_Text(sendPost.getMsg_Text());

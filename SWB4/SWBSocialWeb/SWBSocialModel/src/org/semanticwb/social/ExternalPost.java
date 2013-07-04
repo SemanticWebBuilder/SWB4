@@ -1,6 +1,8 @@
 package org.semanticwb.social;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 
 /**
  * Represents any message, image or video posted in any of the social networks
@@ -39,7 +41,7 @@ public class ExternalPost {
     /**
      * The link or URL for a picture related to the message
      */
-    private String picture;
+    private ArrayList pictures=new ArrayList();
     
     /**
      * The link or URL for a video related to the message
@@ -218,8 +220,8 @@ public class ExternalPost {
     /**
      * @return the picture
      */
-    public String getPicture() {
-        return picture;
+    public Iterator lisPictures() {
+        return pictures.iterator();
     }
     
     
@@ -227,8 +229,8 @@ public class ExternalPost {
     /**
      * @param picture the picture to set
      */
-    public void setPicture(String picture) {
-        this.picture = picture;
+    public void setPictures(ArrayList pictures) {
+        this.pictures = pictures;
     }
     
     
