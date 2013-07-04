@@ -128,7 +128,7 @@ if (pGroup != null) {
     }
     
     %>
-    <li <%=statusClass%>><a title="<%=activeInstances%> en proceso, <%=closedInstances%> terminados, <%=abortedInstances%> abortados, TOTAL: <%=totalInstances%>" href="/es/CFE/Monitoreo?gFilter=<%=pGroup.getId()%>&sFilter=1"><%=label%> (<%=activeInstances%>)</a></li>
+    <li <%=statusClass%>><a title="<%=activeInstances%> en proceso, <%=closedInstances%> terminados, <%=abortedInstances%> abortados, TOTAL: <%=totalInstances%>" href="/es/<%=paramRequest.getWebPage().getWebSiteId()%>/Monitoreo?gFilter=<%=pGroup.getId()%>&sFilter=1"><%=label%> (<%=activeInstances%>)</a></li>
     <%
 }
 %>
