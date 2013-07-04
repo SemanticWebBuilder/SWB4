@@ -286,50 +286,53 @@ public class SWBTSUtil
      */
     public static String node2SortString(Node node)//, StringBuilder comp)
     {
-        if(node==null)return null;
-        if(node.isBlank())return node.getBlankNodeId().toString();
-        if(node.isURI())
+        String ret=null;
+        if(node!=null)
         {
-            return node.getURI();
-        }
-        if(node.isLiteral())
-        {
-            String value=null;
-            String type=node.getLiteralDatatypeURI();
-            if(type==null || type.endsWith("#string"))
+            if(node.isBlank())ret=node.getBlankNodeId().toString();
+            else if(node.isURI())
             {
-                value=encodeText(node.getLiteralValue().toString());
+                ret=node.getURI();
             }
-            else if(type.endsWith("#long") || type.endsWith("#integer") || type.endsWith("#int"))
+            else if(node.isLiteral())
             {
-                Object obj=node.getLiteral().getValue();
-                if(obj instanceof Integer)value=LexiSortable.toLexiSortable((Integer)obj);
-                if(obj instanceof Long)value=LexiSortable.toLexiSortable((Long)obj);
-                /*                
-                String ini="00000000000000000000";
-                String v=node.getLiteral().getValue().toString();
-                if(v.charAt(0)=='-')
+                String value=null;
+                String type=node.getLiteralDatatypeURI();
+                if(type==null || type.endsWith("#string"))
                 {
-                    value="-"+ini.substring(v.length())+v.substring(1);
-                }else
-                {
-                    value=ini.substring(v.length())+v;
+                    value=encodeText(node.getLiteralValue().toString());
                 }
-                * 
-                */
-            }else if(type.endsWith("#float") || type.endsWith("#double"))
-            {
-                Object obj=node.getLiteral().getValue();
-                if(obj instanceof Float)value=LexiSortable.toLexiSortable((Float)obj);
-                if(obj instanceof Double)value=LexiSortable.toLexiSortable((Double)obj);
-            }else{
-                value=node.getLiteralLexicalForm();
+                else if(type.endsWith("#long") || type.endsWith("#integer") || type.endsWith("#int"))
+                {
+                    Object obj=node.getLiteral().getValue();
+                    if(obj instanceof Integer)value=LexiSortable.toLexiSortable((Integer)obj);
+                    if(obj instanceof Long)value=LexiSortable.toLexiSortable((Long)obj);
+                    /*                
+                    String ini="00000000000000000000";
+                    String v=node.getLiteral().getValue().toString();
+                    if(v.charAt(0)=='-')
+                    {
+                        value="-"+ini.substring(v.length())+v.substring(1);
+                    }else
+                    {
+                        value=ini.substring(v.length())+v;
+                    }
+                    * 
+                    */
+                }else if(type.endsWith("#float") || type.endsWith("#double"))
+                {
+                    Object obj=node.getLiteral().getValue();
+                    if(obj instanceof Float)value=LexiSortable.toLexiSortable((Float)obj);
+                    if(obj instanceof Double)value=LexiSortable.toLexiSortable((Double)obj);
+                }else{
+                    value=node.getLiteralLexicalForm();
+                }
+                ret=value;
             }
-            if(value!=null && value.length()>MAX_NODE_TEXT)value=value.substring(0,MAX_NODE_TEXT);
-            return value;
         }
-        return null;
-    }    
+        if(ret!=null && ret.length()>MAX_NODE_TEXT)ret=ret.substring(0,MAX_NODE_TEXT);
+        return ret;
+    }   
     
     public static String getSTypeFromSUBJ(String subj)
     {
