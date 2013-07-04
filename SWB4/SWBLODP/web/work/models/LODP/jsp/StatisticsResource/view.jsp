@@ -138,8 +138,7 @@
                 count++;
         %> 
             <tr>                
-                <td class="est-instit"><span><%=dataset.getInstitution()%></span></td>
-                <td class="est-instdw"><span><%=dataset.getTotalHits()%></span></td>
+                <td class="est-instit"><span><%=dataset.getInstitution()%></span></td>                
                 <td class="est-data"><span><%=dataset.getDataset()%></span></td>
                 <td class="est-datavisit"><span><%=dataset.getHits()%></span></td>
                 <td class="est-datavisitlst"><span><%=StatisticsResource.formatFecha(dataset.getLastDownload())%></span></td>
@@ -147,7 +146,7 @@
                 <td class="est-datadwnlst"><span><%=StatisticsResource.formatFecha(dataset.getLastView())%></span></td>
             </tr>
         <%  }%>
-             <tfoot><tr><td colspan="7"><%=paramRequest.getLocaleString("lbl_TotalDS")%> <%=count%>
+             <tfoot><tr><td colspan="6"><%=paramRequest.getLocaleString("lbl_TotalDS")%> <%=count%>
          <%}
          if(statistic.trim().equals("4")){
             Set<UseAppBean> list = StatisticsResource.getAppUse(wsite,column,asc);            
@@ -155,8 +154,7 @@
                 count++;
         %>
             <tr>
-                <td class="est-instit"><span><%=appl.getInstitution()%></span></td>
-                <td class="est-instdw"><span><%=appl.getTotalHits()%></span></td>                
+                <td class="est-instit"><span><%=appl.getInstitution()%></span></td>                       
                 <td class="est-app"><span><%=appl.getApplication()%></span></td>
                 <td class="est-appvisit"><span><%=appl.getHits()%></span></td>
                 <td class="est-appvisitlst"><span><%=StatisticsResource.formatFecha(appl.getLastDownload())%></span></td>
@@ -176,8 +174,24 @@
             <tr>                
                 <td class="est-instit"><%=userssat.getInstitution()%></td>
                 <td class="est-data"><%=userssat.getDataset()%></td>
-                <%DecimalFormat df = new DecimalFormat("0.##");%>
-                <td class="est-datacalif"><%=df.format(userssat.getAverage())%></td>                   
+                <%
+                int average = Math.round(userssat.getAverage());
+                String titleAverage ="";
+                switch(average){
+                    case 1: titleAverage=paramRequest.getLocaleString("lbl_Average1");
+                    case 2: titleAverage=paramRequest.getLocaleString("lbl_Average2");
+                    case 3: titleAverage=paramRequest.getLocaleString("lbl_Average3");
+                    case 4: titleAverage=paramRequest.getLocaleString("lbl_Average4");
+                    case 5: titleAverage=paramRequest.getLocaleString("lbl_Average5");
+                }
+                %>                
+                <td class="est-datacalif" title="<%=titleAverage%>">
+                     <img src="/work/models/LODP/css/images/star-<%=average >= 1?"on":"off"%>.png" width="15" height="14" alt="*">
+                     <img src="/work/models/LODP/css/images/star-<%=average >= 2?"on":"off"%>.png" width="15" height="14" alt="*">
+                     <img src="/work/models/LODP/css/images/star-<%=average >= 3?"on":"off"%>.png" width="15" height="14" alt="*">
+                     <img src="/work/models/LODP/css/images/star-<%=average >= 4?"on":"off"%>.png" width="15" height="14" alt="*">
+                     <img src="/work/models/LODP/css/images/star-<%=average >= 5?"on":"off"%>.png" width="15" height="14" alt="*">
+                </td>                   
                 <td class="est-datacomen"><%=userssat.getNumComments()%></td>                
             </tr>           
          <%  }%>
@@ -198,4 +212,7 @@
          </a>
          </td></tr></tfoot>
             </table> 
+         <a href="<%=urlSite%>" value="Atras">
+             <%=paramRequest.getLocaleString("lbl_GoBack")%>
+         </a>     
 <%}%>
