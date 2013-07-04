@@ -29,6 +29,7 @@ WebSite wsite = wpage.getWebSite();
 SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
 String actionList = request.getParameter("actionList");
 SWBResourceURL urlConsulta = paramRequest.getRenderUrl();
+SWBResourceURL modeURL = paramRequest.getRenderUrl();
            
 String suri = request.getParameter("suri");
             GenericObject go = ont.getGenericObject(suri);
@@ -79,11 +80,20 @@ String suri = request.getParameter("suri");
         <h2><%=inOb.getInstitutionTitle()%></h2> 
         <h3><%=inOb.getInstitutionDescription()!=null?inOb.getInstitutionDescription(): " "%></h3>
         <ul>
+            <%if(numPub>0){%>
+           
             <li>
                 <label><a href="<%=urlConsulta.setParameter("actionList", "listaDatasets").toString()%>"><%=paramRequest.getLocaleString("lbl_dsPub")%></a></label>&nbsp;&nbsp;&nbsp;&nbsp;<%=numPub%>
             </li>
             
-            <%if(actionList.equals("listaDatasets")){
+            <%}else{%>
+            
+            <li>
+                <label><%=paramRequest.getLocaleString("lbl_dsPub")%></label>&nbsp;&nbsp;&nbsp;&nbsp;<%=numPub%>
+            </li>
+            
+            <%}
+              if(actionList.equals("listaDatasets")){
                
                  if(!listaDS.isEmpty()){
                     for(Dataset dsOBJ : listaDS){
@@ -105,4 +115,7 @@ String suri = request.getParameter("suri");
             </li>
              
         </ul>
+            <a href="#" onclick="javascript:document.back.submit()">Regresar</a>
     </div>            
+            
+      <form action="<%=modeURL.setMode(SWBResourceURL.Mode_VIEW).setParameter("act", "arregloLetras")%>" method="post" name="back"></form>
