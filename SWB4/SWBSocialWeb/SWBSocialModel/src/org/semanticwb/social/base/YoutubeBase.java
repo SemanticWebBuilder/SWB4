@@ -4,8 +4,16 @@ package org.semanticwb.social.base;
    /**
    * Clase que almacenara las diferentes cuentas de una organización para la red social YouTube. 
    */
-public abstract class YoutubeBase extends org.semanticwb.social.SocialNetwork implements org.semanticwb.model.Traceable,org.semanticwb.model.Activeable,org.semanticwb.model.Tagable,org.semanticwb.social.Secreteable,org.semanticwb.model.Descriptiveable,org.semanticwb.social.Oauthable,org.semanticwb.social.DeveloperKeyable,org.semanticwb.social.Listenerable,org.semanticwb.social.Videoable,org.semanticwb.social.SocialNetPostable,org.semanticwb.model.Trashable
+public abstract class YoutubeBase extends org.semanticwb.social.SocialNetwork implements org.semanticwb.social.Oauthable,org.semanticwb.social.Secreteable,org.semanticwb.social.Videoable,org.semanticwb.model.Traceable,org.semanticwb.social.DeveloperKeyable,org.semanticwb.model.Trashable,org.semanticwb.model.Tagable,org.semanticwb.social.SocialNetPostable,org.semanticwb.social.Listenerable,org.semanticwb.model.Activeable,org.semanticwb.model.Descriptiveable
 {
+   /**
+   * Categorias a llenar en una colección.
+   */
+    public static final org.semanticwb.platform.SemanticClass social_YouTubeCategory=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#YouTubeCategory");
+   /**
+   * Categorias asociadas sobre las cuales se realizaría listener en una instancia de Youtube
+   */
+    public static final org.semanticwb.platform.SemanticProperty social_hasYoutubeCategory=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#hasYoutubeCategory");
    /**
    * Clase que almacenara las diferentes cuentas de una organización para la red social YouTube.
    */
@@ -268,6 +276,29 @@ public abstract class YoutubeBase extends org.semanticwb.social.SocialNetwork im
             org.semanticwb.model.GenericIterator<org.semanticwb.social.Youtube> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_creator,value.getSemanticObject(),sclass));
             return it;
         }
+       /**
+       * Gets all org.semanticwb.social.Youtube with a determined YoutubeCategory
+       * @param value YoutubeCategory of the type org.semanticwb.social.YouTubeCategory
+       * @param model Model of the org.semanticwb.social.Youtube
+       * @return Iterator with all the org.semanticwb.social.Youtube
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.Youtube> listYoutubeByYoutubeCategory(org.semanticwb.social.YouTubeCategory value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.Youtube> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(social_hasYoutubeCategory, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.social.Youtube with a determined YoutubeCategory
+       * @param value YoutubeCategory of the type org.semanticwb.social.YouTubeCategory
+       * @return Iterator with all the org.semanticwb.social.Youtube
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.Youtube> listYoutubeByYoutubeCategory(org.semanticwb.social.YouTubeCategory value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.Youtube> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(social_hasYoutubeCategory,value.getSemanticObject(),sclass));
+            return it;
+        }
     }
 
     public static YoutubeBase.ClassMgr getYoutubeClassMgr()
@@ -354,6 +385,71 @@ public abstract class YoutubeBase extends org.semanticwb.social.SocialNetwork im
     public void setDeveloperKey(String value)
     {
         getSemanticObject().setProperty(social_developerKey, value);
+    }
+   /**
+   * Gets all the org.semanticwb.social.YouTubeCategory
+   * @return A GenericIterator with all the org.semanticwb.social.YouTubeCategory
+   */
+
+    public org.semanticwb.model.GenericIterator<org.semanticwb.social.YouTubeCategory> listYoutubeCategories()
+    {
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.social.YouTubeCategory>(getSemanticObject().listObjectProperties(social_hasYoutubeCategory));
+    }
+
+   /**
+   * Gets true if has a YoutubeCategory
+   * @param value org.semanticwb.social.YouTubeCategory to verify
+   * @return true if the org.semanticwb.social.YouTubeCategory exists, false otherwise
+   */
+    public boolean hasYoutubeCategory(org.semanticwb.social.YouTubeCategory value)
+    {
+        boolean ret=false;
+        if(value!=null)
+        {
+           ret=getSemanticObject().hasObjectProperty(social_hasYoutubeCategory,value.getSemanticObject());
+        }
+        return ret;
+    }
+   /**
+   * Adds a YoutubeCategory
+   * @param value org.semanticwb.social.YouTubeCategory to add
+   */
+
+    public void addYoutubeCategory(org.semanticwb.social.YouTubeCategory value)
+    {
+        getSemanticObject().addObjectProperty(social_hasYoutubeCategory, value.getSemanticObject());
+    }
+   /**
+   * Removes all the YoutubeCategory
+   */
+
+    public void removeAllYoutubeCategory()
+    {
+        getSemanticObject().removeProperty(social_hasYoutubeCategory);
+    }
+   /**
+   * Removes a YoutubeCategory
+   * @param value org.semanticwb.social.YouTubeCategory to remove
+   */
+
+    public void removeYoutubeCategory(org.semanticwb.social.YouTubeCategory value)
+    {
+        getSemanticObject().removeObjectProperty(social_hasYoutubeCategory,value.getSemanticObject());
+    }
+
+   /**
+   * Gets the YoutubeCategory
+   * @return a org.semanticwb.social.YouTubeCategory
+   */
+    public org.semanticwb.social.YouTubeCategory getYoutubeCategory()
+    {
+         org.semanticwb.social.YouTubeCategory ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(social_hasYoutubeCategory);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.social.YouTubeCategory)obj.createGenericInstance();
+         }
+         return ret;
     }
 
 /**

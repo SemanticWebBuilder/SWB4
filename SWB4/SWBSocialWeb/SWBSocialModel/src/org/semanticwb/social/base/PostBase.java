@@ -4,7 +4,7 @@ package org.semanticwb.social.base;
    /**
    * Clase a Cambiar despues por "Relacional", esta y todas sus hijas. Clase que comprende todos los tipos de Post que pueden ir siendo creados en la herramienta.. 
    */
-public abstract class PostBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Traceable,org.semanticwb.model.Tagable,org.semanticwb.social.PostDataable,org.semanticwb.social.PostTextable,org.semanticwb.social.Descriptable
+public abstract class PostBase extends org.semanticwb.model.SWBClass implements org.semanticwb.social.PostDataable,org.semanticwb.model.Tagable,org.semanticwb.social.PostTextable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable
 {
    /**
    * Indica si un mensaje es prioritario o no. Esta propiedad aplica tanto si es un mensaje de entrada (PostIn) o de salida (PostOut).
@@ -258,7 +258,7 @@ public abstract class PostBase extends org.semanticwb.model.SWBClass implements 
 */
     public String getDescription()
     {
-        return getSemanticObject().getProperty(social_description);
+        return getSemanticObject().getProperty(swb_description);
     }
 
 /**
@@ -267,7 +267,22 @@ public abstract class PostBase extends org.semanticwb.model.SWBClass implements 
 */
     public void setDescription(String value)
     {
-        getSemanticObject().setProperty(social_description, value);
+        getSemanticObject().setProperty(swb_description, value);
+    }
+
+    public String getDescription(String lang)
+    {
+        return getSemanticObject().getProperty(swb_description, null, lang);
+    }
+
+    public String getDisplayDescription(String lang)
+    {
+        return getSemanticObject().getLocaleProperty(swb_description, lang);
+    }
+
+    public void setDescription(String description, String lang)
+    {
+        getSemanticObject().setProperty(swb_description, description, lang);
     }
 
 /**
@@ -324,6 +339,39 @@ public abstract class PostBase extends org.semanticwb.model.SWBClass implements 
              ret=(org.semanticwb.model.User)obj.createGenericInstance();
          }
          return ret;
+    }
+
+/**
+* Gets the Title property
+* @return String with the Title
+*/
+    public String getTitle()
+    {
+        return getSemanticObject().getProperty(swb_title);
+    }
+
+/**
+* Sets the Title property
+* @param value long with the Title
+*/
+    public void setTitle(String value)
+    {
+        getSemanticObject().setProperty(swb_title, value);
+    }
+
+    public String getTitle(String lang)
+    {
+        return getSemanticObject().getProperty(swb_title, null, lang);
+    }
+
+    public String getDisplayTitle(String lang)
+    {
+        return getSemanticObject().getLocaleProperty(swb_title, lang);
+    }
+
+    public void setTitle(String title, String lang)
+    {
+        getSemanticObject().setProperty(swb_title, title, lang);
     }
 
 /**
