@@ -439,7 +439,7 @@ out.println("</div>");
                 out.println("    <span class=\"swb-pdcst-ffmt\">"+paramRequest.getLocaleString("format")+"&nbsp;"+audiofile.getExtension()+"</span>");
                 out.println("    <span class=\"swb-pdcst-fsize\">"+size+" Mb</span>");
                 out.println("  </p>");
-                out.println("   <a class=\"swb-pdcst-imglnk\" href=\"javascript:window.location.href='"+directURL+"?suri='+encodeURIComponent('"+audiofile.getURI()+"')\" title=\""+(audiofile.getDisplayTitle(lang)==null?audiofile.getTitle():audiofile.getDisplayTitle(lang))+"\">"+paramRequest.getLocaleString("download")+"</a>");
+                out.println("  <a class=\"swb-pdcst-imglnk\" href=\"#\" onclick=\"window.open('"+directURL+"?suri='+encodeURIComponent('"+audiofile.getURI()+"'))\" title=\""+(audiofile.getDisplayTitle(lang)==null?audiofile.getTitle():audiofile.getDisplayTitle(lang))+"\">"+paramRequest.getLocaleString("download")+"</a>"  );
                 out.println(" </div>");
                 
                 
