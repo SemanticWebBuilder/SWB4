@@ -64,6 +64,12 @@
         isNew = Boolean.FALSE;
     } 
     
+    String autoapprove = paramRequest.getResourceBase().getAttribute("autoapprove","0");
+        boolean isAutoApprove = Boolean.FALSE;
+        if(null!=autoapprove && "1".equals(autoapprove)){
+            isAutoApprove = Boolean.TRUE;
+        }
+    
     String dstitle = "";
     String dsdescription = "";
     String dsemail = "";
@@ -80,8 +86,9 @@
     dspubname = pub.getFullName();
     dswebsite = pub.getPubInstitution()!=null&&pub.getPubInstitution().getInstitutionHome()!=null?pub.getPubInstitution().getInstitutionHome():"---";
     
-    boolean isActive = Boolean.FALSE;
+    boolean isActive = Boolean.TRUE;
     boolean isApproved = Boolean.FALSE;
+    
     boolean isReviewed = Boolean.FALSE;
     
     if (!isNew) { 
@@ -316,7 +323,13 @@
                     <li class="datofijo4"><strong><%=paramRequest.getLocaleString("lbl_format")%>:</strong><%=dsformat%></li>
                     <li class="datofijo5"><strong><%=paramRequest.getLocaleString("lbl_size")%>:</strong><%=dssize%></li>
                     <li class="datofijo6"><strong><%=paramRequest.getLocaleString("lbl_version")%>:</strong><%=dsversion%></li>
+                    <%
+                          if(!isAutoApprove){
+                    %>
                     <li class="datofijo7"><strong><%=paramRequest.getLocaleString("lbl_approve")%>:</strong><%=ds.isApproved()?"Sí":"No"%></li>
+                    <%
+                          }
+                    %>
                     <li class="datofijo8"><strong><%=paramRequest.getLocaleString("lbl_created")%>:</strong><%=dscreated%></li>
                     <li class="datofijo9"><strong><%=paramRequest.getLocaleString("lbl_updated")%>:</strong><%=dsupdated%></li>
                     <li class="datofijo10"><strong><%=paramRequest.getLocaleString("lbl_urlendpoint")%></strong><%=dsurl%></li>
