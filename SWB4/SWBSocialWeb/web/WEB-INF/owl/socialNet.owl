@@ -941,6 +941,38 @@
     <rdfs:domain rdf:resource="#PostOut"/>
     <swb:displayProperty rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#dp_pflowInstance"/>
   </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasPhoto">
+    <rdfs:label xml:lang="en">Images</rdfs:label>
+    <rdfs:label xml:lang="es">Imagenes</rdfs:label>
+    <rdfs:comment>Imagenes</rdfs:comment>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_hasPhoto">
+        <swbxf:formElement>
+          <swb:DojoImageUpload rdf:ID="socialDojoImageUpload">
+            <swbxf:fileMaxSize rdf:datatype="http://www.w3.org/2001/XMLSchema#long"
+            >500000</swbxf:fileMaxSize>
+            <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >Cargador de imágenes para social. Fotos de maximo 500,000 bytes y con extensión jpg o gif o png o Tiff</rdfs:comment>
+            <swbxf:imgCrop rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+            >false</swbxf:imgCrop>
+            <swbxf:imgThumbnail rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+            >false</swbxf:imgThumbnail>
+            <swbxf:fileFilter rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >*.jpg:JPG|*.gif:GIF|*.png:PNG|*.tiff:TIFF</swbxf:fileFilter>
+          </swb:DojoImageUpload>
+        </swbxf:formElement>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:range>
+      <swb:Class rdf:ID="PhotoImg">
+        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >true</swb:autogenId>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Class>
+    </rdfs:range>
+    <rdfs:domain rdf:resource="#PostImageable"/>
+  </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="haspostOutResponseInv">
     <rdfs:comment>Inversa que nos dice que PostOut han sido creados a manera de respuesta de esta instancia de PostIn.</rdfs:comment>
   </owl:ObjectProperty>
@@ -1595,25 +1627,18 @@
     <rdfs:domain rdf:resource="#PostOutContainer"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="photo">
-    <rdfs:comment xml:lang="en">Photo</rdfs:comment>
+    <rdfs:domain rdf:resource="#PhotoImg"/>
     <rdfs:label xml:lang="es">Foto</rdfs:label>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_photo">
-        <swbxf:formElement>
-          <swb:DojoImageUpload rdf:ID="socialDojoImageUpload">
-            <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-            >Cargador de imágenes para social</rdfs:comment>
-            <swbxf:fileFilter rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-            >*.jpg:JPG|*.gif:GIF|*.png:PNG|*.tiff:TIFF</swbxf:fileFilter>
-          </swb:DojoImageUpload>
-        </swbxf:formElement>
+        <swbxf:formElement rdf:resource="#socialDojoImageUpload"/>
         <swbxf:propGroup rdf:resource="#pg_socialConfig"/>
         <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
         >110</swb:index>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
-    <rdfs:domain rdf:resource="#PostImageable"/>
+    <rdfs:comment xml:lang="en">Photo</rdfs:comment>
     <rdfs:comment>Propiedad que almacena el nombre(referencia) de la foto en un objeto Post que lo requiera.</rdfs:comment>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="puntuationSign">
