@@ -190,6 +190,10 @@ public class Login extends GenericAdmResource
     out.println("       &nbsp;&nbsp;{user.login}<BR>");
     out.println("       &nbsp;&nbsp;{user.email}<BR>");
     out.println("       &nbsp;&nbsp;{user.language}<BR>");
+    out.println("       &nbsp;&nbsp;{user.fullname}<BR>");
+    out.println("       &nbsp;&nbsp;{user.firstname}<BR>");
+    out.println("       &nbsp;&nbsp;{user.lastname}<BR>");
+    out.println("       &nbsp;&nbsp;{user.secondlastname}<BR>");
     out.println("       &nbsp;&nbsp;{getEnv(\"XXXXX\")}<BR>");
     out.println("       &nbsp;&nbsp;{request.getParameter(\"XXXXX\")}<BR>");
     out.println("       &nbsp;&nbsp;{session.getAttribute(\"XXXXX\")}<BR>");
@@ -259,6 +263,10 @@ public class Login extends GenericAdmResource
     str = SWBUtils.TEXT.replaceAll(str, "{user.login}", paramRequest.getUser().getLogin());
     str = SWBUtils.TEXT.replaceAll(str, "{user.email}", paramRequest.getUser().getEmail());
     str = SWBUtils.TEXT.replaceAll(str, "{user.language}", paramRequest.getUser().getLanguage());
+    str = SWBUtils.TEXT.replaceAll(str, "{user.fullname}", paramRequest.getUser().getFullName());
+    str = SWBUtils.TEXT.replaceAll(str, "{user.firstname}", paramRequest.getUser().getFirstName());
+    str = SWBUtils.TEXT.replaceAll(str, "{user.lastname}", paramRequest.getUser().getLastName());
+    str = SWBUtils.TEXT.replaceAll(str, "{user.secondlastname}", paramRequest.getUser().getSecondLastName());
     str = SWBUtils.TEXT.replaceAll(str, "{webpath}", SWBPortal.getContextPath());
     str = SWBUtils.TEXT.replaceAll(str, "{distpath}", SWBPortal.getDistributorPath());
     str = SWBUtils.TEXT.replaceAll(str, "{webworkpath}", SWBPortal.getWebWorkPath());
