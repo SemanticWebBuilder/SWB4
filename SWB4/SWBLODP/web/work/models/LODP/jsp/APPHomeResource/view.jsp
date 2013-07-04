@@ -4,6 +4,8 @@
     Author     : Lennin
 --%>
 
+<%@page import="java.text.SimpleDateFormat"%>
+<%@page import="java.util.Locale"%>
 <%@page import="com.infotec.lodp.swb.resources.ApplicationResource"%>
 <%@page import="java.util.HashMap"%>
 <%@page import="com.infotec.lodp.swb.Application"%>
@@ -21,6 +23,7 @@
     WebSite wsite = wpage.getWebSite();
     Resource base = paramRequest.getResourceBase();
     String appWP = base.getAttribute("appid", "Aplicaciones");
+     SimpleDateFormat sdf2 = new SimpleDateFormat("dd-MMMMM-yyyy", new Locale("es"));
 
     long intSize = 0;
 
@@ -94,6 +97,7 @@
         <li>
             <a title="<%=app.getAppTitle()%>" href="<%=wpurl + app.getShortURI()%>"><%=app.getAppTitle()%></a>
             <strong><%=app.getAppDescription()%></strong>
+            <%=sdf2.format(app.getAppCreated())%>
         </li>
         
         <%}}%>
