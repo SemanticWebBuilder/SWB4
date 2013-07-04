@@ -167,31 +167,14 @@
          if(statistic.trim().equals("5")){
             if(asc==null){asc="true";}
             if(column==null){column="1";}            
-            Set<UsersSatBean> list = StatisticsResource.getUsersSat(wsite,column,asc);             
+            Set<UsersSatBean> list = StatisticsResource.getUsersSat(wsite,column,asc,paramRequest);             
             for(UsersSatBean userssat : list){
                 count++;
         %>   
             <tr>                
                 <td class="est-instit"><%=userssat.getInstitution()%></td>
-                <td class="est-data"><%=userssat.getDataset()%></td>
-                <%
-                int average = Math.round(userssat.getAverage());
-                String titleAverage ="";
-                switch(average){
-                    case 1: titleAverage=paramRequest.getLocaleString("lbl_Average1");
-                    case 2: titleAverage=paramRequest.getLocaleString("lbl_Average2");
-                    case 3: titleAverage=paramRequest.getLocaleString("lbl_Average3");
-                    case 4: titleAverage=paramRequest.getLocaleString("lbl_Average4");
-                    case 5: titleAverage=paramRequest.getLocaleString("lbl_Average5");
-                }
-                %>                
-                <td class="est-datacalif" title="<%=titleAverage%>">
-                     <img src="/work/models/LODP/css/images/star-<%=average >= 1?"on":"off"%>.png" width="15" height="14" alt="*">
-                     <img src="/work/models/LODP/css/images/star-<%=average >= 2?"on":"off"%>.png" width="15" height="14" alt="*">
-                     <img src="/work/models/LODP/css/images/star-<%=average >= 3?"on":"off"%>.png" width="15" height="14" alt="*">
-                     <img src="/work/models/LODP/css/images/star-<%=average >= 4?"on":"off"%>.png" width="15" height="14" alt="*">
-                     <img src="/work/models/LODP/css/images/star-<%=average >= 5?"on":"off"%>.png" width="15" height="14" alt="*">
-                </td>                   
+                <td class="est-data"><%=userssat.getDataset()%></td>                               
+                <td class="est-datacalif"><%=userssat.getAverage()%></td>                   
                 <td class="est-datacomen"><%=userssat.getNumComments()%></td>                
             </tr>           
          <%  }%>
