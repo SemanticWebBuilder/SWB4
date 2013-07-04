@@ -5,6 +5,9 @@
 --%>
 
 
+<%@page import="java.util.List"%>
+<%@page import="java.util.ArrayList"%>
+<%@page import="org.semanticwb.portal.api.SWBResourceURL"%>
 <%@page import="org.semanticwb.SWBPortal"%>
 <%@page import="org.semanticwb.SWBPlatform"%>
 <%@page import="org.semanticwb.platform.SemanticOntology"%>
@@ -24,6 +27,8 @@
 WebPage wpage = paramRequest.getWebPage();
 WebSite wsite = wpage.getWebSite();
 SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
+String actionList = request.getParameter("actionList");
+SWBResourceURL urlConsulta = paramRequest.getRenderUrl();
            
 String suri = request.getParameter("suri");
             GenericObject go = ont.getGenericObject(suri);
@@ -33,10 +38,15 @@ String suri = request.getParameter("suri");
             long numAPPRelatedDS = 0;
             Institution inOb = (Institution)go;
             Iterator<Dataset> itds =  Dataset.ClassMgr.listDatasetByInstitution(inOb, wsite);
+            List<Dataset> listaDS = new ArrayList();
             
                 while(itds.hasNext()){
+                    Dataset dslist = itds.next();
+                    listaDS.add(dslist);
+                }
+                
+                for(Dataset ds:listaDS){
                     
-                    Dataset ds = itds.next();
                     numPub++;
                     numDs = numDs  + ds.getDownloads();
                     numViews = numViews + ds.getViews();
@@ -53,6 +63,14 @@ String suri = request.getParameter("suri");
                 String nameLogo= "institutionLogo_"+inOb.getId()+"_"+inOb.getInstitutionLogo();
                 String urlLogo = urlBase + "/"+nameLogo;
                 
+                if(null!=suri){
+                  urlConsulta.setParameter("suri", suri); 
+                }
+                
+                if(actionList==null){
+                    actionList = "";
+                }
+                
                 
  %> 
             
@@ -61,10 +79,21 @@ String suri = request.getParameter("suri");
         <h2><%=inOb.getInstitutionTitle()%></h2> 
         <h3><%=inOb.getInstitutionDescription()!=null?inOb.getInstitutionDescription(): " "%></h3>
         <ul>
-        
             <li>
-                <label><%=paramRequest.getLocaleString("lbl_dsPub")%></label>&nbsp;&nbsp;&nbsp;&nbsp;<%=numPub%>
+                <label><a href="<%=urlConsulta.setParameter("actionList", "listaDatasets").toString()%>"><%=paramRequest.getLocaleString("lbl_dsPub")%></a></label>&nbsp;&nbsp;&nbsp;&nbsp;<%=numPub%>
             </li>
+            
+            <%if(actionList.equals("listaDatasets")){
+               
+                 if(!listaDS.isEmpty()){
+                    for(Dataset dsOBJ : listaDS){
+                      String urlData = wsite.getWebPage("Datos").getUrl();
+                       String urlDataSet = urlData+"?suri="+dsOBJ.getShortURI()+"&act=detail";
+            %>
+            <a href="<%=urlDataSet%>"><%=dsOBJ.getDatasetTitle()%></a>
+            <%}}else{%>
+                No hay datasets asociados al publicador
+            <%}}%>
             <li>
                 <label><%=paramRequest.getLocaleString("lbl_dsDescarga")%></label>&nbsp;&nbsp;&nbsp;&nbsp;<%=numDs%> 
             </li>

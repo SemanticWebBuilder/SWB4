@@ -782,10 +782,22 @@
           String urlData = wsite.getWebPage("Datos").getUrl();
           String urlDataSet = urlData+"?suri="+ds1.getShortURI()+"&act=detail";
           
+          String idLicP = base.getAttribute("idPageLicence","");
+          String urlLicencia = "";
+          String urlLicenciaPage="";
+          if(idLicP.trim().length()>0){
+            urlLicencia = wsite.getWebPage(idLicP).getUrl();
+                if(urlLicencia!=null){
+                    urlLicenciaPage = urlLicencia+"?suri="+aps.getAppLicense().getShortURI();
+                }else{
+                    urlLicenciaPage = "#";
+                }
+          }else{urlLicenciaPage = "#";}
+          
           %>
           
           <p><em><%=paramRequest.getLocaleString("lbl_DSUsado")%><a href="<%=urlDataSet%>"><%=ds1.getDatasetTitle()%></a></em></p>
-          <p><em><%=paramRequest.getLocaleString("lbl_licenciaDetalle")%><%=aps.getAppLicense() != null ? aps.getAppLicense().getLicenseTitle() : ""%></em></p>
+          <p><em><%=paramRequest.getLocaleString("lbl_licenciaDetalle")%><a href="<%=urlLicenciaPage%>"><%=aps.getAppLicense() != null ? aps.getAppLicense().getLicenseTitle() : ""%></a></em></p>
           
           <%if(isFromReview){
               
@@ -836,7 +848,14 @@
                 </li>
             </ul>      
        </div>
-       
+        <%
+         
+     int numDSVIEW=0;
+     numDSVIEW = listDS.size();  
+     
+     if(numDSVIEW > 0){
+        
+    %>
 	  <div class="new-dat tit">
             <h4><%=paramRequest.getLocaleString("lbl_DSRelacion")%></h4>
             <%  // lista de aplicaciones relacionadas
@@ -872,6 +891,25 @@
             </div>
         </div>
             
+    <%}
+     List<Application> listAppNewCount = new ArrayList();
+     int numAPPS=0;
+     
+     for(Dataset dsNum : listDS){
+         Iterator<Application> itapp = Application.ClassMgr.listApplicationByRelatedDataset(dsNum, wsite);
+            while(itapp.hasNext()){
+                Application appliOBJ = itapp.next();
+                if(appliOBJ.isApproved() && appliOBJ.isReviewed()){
+                    listAppNewCount.add(appliOBJ);
+                    numAPPS ++;
+                }
+            }
+     }
+     
+     if(numAPPS > 0){
+        
+    %>
+            
 	  <div class="new-app tit">
             <h4><%=paramRequest.getLocaleString("lbl_appRelacion")%></h4>
             <%  // lista de aplicaciones relacionadas
@@ -882,7 +920,7 @@
                     Iterator<Application> itapp = Application.ClassMgr.listApplicationByRelatedDataset(dsOBJ, wsite);
                         while(itapp.hasNext()){
                             Application appli = itapp.next();
-                            if(appli.isAppValid()){
+                            if(appli.isApproved() && appli.isReviewed()){
                                 listApp.add(appli);
                             }
                         }
@@ -919,6 +957,7 @@
                 <span><%=numapps%> <%=paramRequest.getLocaleString("lbl_appRelated")%></span> <a href="<%=urlApps%>"><%=paramRequest.getLocaleString("lbl_viewAll")%></a>
             </div>
         </div>
+            <%}%>
       </div>
     
     
