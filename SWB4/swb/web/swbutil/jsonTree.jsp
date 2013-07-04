@@ -33,5 +33,15 @@
     String lang=request.getParameter("lang");
     if(model==null)model="demo";
     WebSite site=SWBContext.getWebSite(model);
-    out.println(getObject(site.getHomePage(), lang));
+    if(request.getParameter("wpage")!=null)
+    {
+            WebPage wpage=site.getWebPage(request.getParameter("wpage"));
+            if(wpage!=null)
+            {
+                out.println(getObject(wpage, lang));
+            }
+    }else
+    {
+            out.println(getObject(site.getHomePage(), lang));
+    }
 %>

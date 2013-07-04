@@ -6,11 +6,13 @@
 <%
     String args="";
     String model=request.getParameter("model");
+    String wpage=request.getParameter("wpage");
     String lang=request.getParameter("lang");
     String w=request.getParameter("w");if(w==null)w="960";
     String h=request.getParameter("h");if(h==null)h="2200";    
     if(model==null)model="demo";
     args="?model="+model;
+    if(wpage!=null)args+="&wpage="+wpage;
     if(lang!=null)args+="&lang="+lang;
     WebSite site=SWBContext.getWebSite(model);    
 %> 
