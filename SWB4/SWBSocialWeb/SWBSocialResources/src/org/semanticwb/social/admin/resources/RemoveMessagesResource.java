@@ -19,7 +19,6 @@ import org.semanticwb.portal.api.SWBActionResponse;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.api.SWBResourceURL;
-import org.semanticwb.social.MessageIn;
 import org.semanticwb.social.PostIn;
 import org.semanticwb.social.Stream;
 
@@ -97,7 +96,6 @@ public class RemoveMessagesResource extends GenericResource {
             
             if(request.getParameter("deleted")!= null && request.getParameter("deleted").equals("ok")){
                 out.println("<script type=\"text/javascript\">");
-                    log.debug("showStatus");
                     out.println("   showStatus('Mensajes eliminados');");            
                 out.println("</script>");
             }
@@ -132,10 +130,10 @@ public class RemoveMessagesResource extends GenericResource {
                     Stream stream = (Stream)SemanticObject.getSemanticObject(objUri).getGenericInstance();
                     String wsiteId = stream.getSemanticObject().getModel().getName();
                     WebSite wsite=WebSite.ClassMgr.getWebSite(wsiteId);
-                    Iterator<MessageIn> itMess = MessageIn.ClassMgr.listMessageInByPostInStream(stream, wsite);
-                    
-                    while(itMess.hasNext()){
-                        itMess.next().remove();
+                    Iterator<PostIn> itPostIn = PostIn.ClassMgr.listPostInByPostInStream(stream, wsite);
+                    while(itPostIn.hasNext()){
+                        PostIn postIn=itPostIn.next();
+                        postIn.remove();
                     }
                 }catch(Exception e){
                     log.error(e.getMessage());
