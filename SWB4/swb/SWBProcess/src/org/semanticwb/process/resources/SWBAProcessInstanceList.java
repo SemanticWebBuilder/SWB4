@@ -277,6 +277,7 @@ public class SWBAProcessInstanceList extends GenericResource {
                 out.print("<th>Class</th>");
                 out.print("<th>Creator</th>");
                 out.print("<th>Created</th>");
+                out.print("<th>Assigned to</th>");
                 out.print("<th>Ended by</th>");
                 out.print("<th>Ended</th>");
                 out.print("<th>Action</th>");
@@ -302,9 +303,6 @@ public class SWBAProcessInstanceList extends GenericResource {
                 out.println("</fieldset>");
                 out.println("</div>");
             }
-
-
-
         }
     }
 
@@ -360,7 +358,7 @@ public class SWBAProcessInstanceList extends GenericResource {
         out.print("<td>");
         if(ai.getCreator()!=null)
         {
-            out.print(ai.getCreator().getLogin());
+            out.print("<a href=\"\" onclick=\"addNewTab('"+ai.getCreator().getURI()+"',null,'"+ai.getCreator().getLogin()+"'); return false;\">"+ai.getCreator().getFullName()+"</a>");
         }
         out.print("</td>");
         out.print("<td>");
@@ -368,11 +366,16 @@ public class SWBAProcessInstanceList extends GenericResource {
         {
             out.print(ai.getCreated());
         }
+        out.print("<td>");
+        if(ai.getAssignedto()!=null)
+        {
+            out.print("<a href=\"\" onclick=\"addNewTab('"+ai.getAssignedto().getURI()+"',null,'"+ai.getAssignedto().getLogin()+"'); return false;\">"+ai.getAssignedto().getFullName()+"</a>");
+        }
         out.print("</td>");
         out.print("<td>");
         if(ai.getEndedby()!=null)
         {
-            out.print(ai.getEndedby().getLogin());
+            out.print("<a href=\"\" onclick=\"addNewTab('"+ai.getEndedby().getURI()+"',null,'"+ai.getEndedby().getLogin()+"'); return false;\">"+ai.getEndedby().getFullName()+"</a>");
         }
         out.print("</td>");
         out.print("<td>");
