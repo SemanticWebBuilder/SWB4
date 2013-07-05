@@ -22,7 +22,6 @@ import org.semanticwb.social.ExternalPost;
 import org.semanticwb.social.Kloutable;
 import org.semanticwb.social.MarkMsgAsPrioritary;
 import org.semanticwb.social.MessageIn;
-import org.semanticwb.social.PhotoImg;
 import org.semanticwb.social.PhotoIn;
 import org.semanticwb.social.PostIn;
 import org.semanticwb.social.Prepositions;
@@ -574,9 +573,10 @@ public class SentimentalDataClassifier {
                     if(externalPost.lisPictures().hasNext())
                     {
                         String sphoto=(String)externalPost.lisPictures().next();
-                        PhotoImg photoImg=PhotoImg.ClassMgr.createPhotoImg(model);
-                        photoImg.setPhoto(sphoto);
-                        photoIn.addPhoto(photoImg);
+                        if(sphoto!=null && sphoto.trim().length()>0)
+                        {
+                            photoIn.addPhoto(sphoto);
+                        }
                     }
                 }else if(externalPost.getPostType().equals(SWBSocialUtil.VIDEO) && externalPost.getVideo()!=null)
                 {

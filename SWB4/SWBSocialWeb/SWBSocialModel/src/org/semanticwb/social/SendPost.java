@@ -33,7 +33,7 @@ public class SendPost extends org.semanticwb.social.base.SendPostBase
         {
             WebSite wsite=WebSite.ClassMgr.getWebSite(action.getSemanticObject().getModel().getName());
             SendPost sendPost=(SendPost)action;
-            if(wsite!=null && (sendPost.getMsg_Text()!=null || sendPost.getPhoto()!=null || sendPost.getVideo()!=null))
+            if(wsite!=null && (sendPost.getMsg_Text()!=null || sendPost.listPhotos().hasNext() || sendPost.getVideo()!=null))
             {
                 
                 if(sendPost.getVideo()!=null)   //Envía Video
@@ -84,9 +84,9 @@ public class SendPost extends org.semanticwb.social.base.SendPostBase
                         
                         while(sendPost.listPhotos().hasNext())
                         {
-                            String sphoto=(String)sendPost.listPhotos().next().getPhoto(); 
+                            String sphoto=(String)sendPost.listPhotos().next(); 
                             
-                            String photoSource = SWBPortal.getWorkPath() + sendPost.getWorkPath() + "/" + PhotoImg.social_photo.getName()+"_"+sendPost.getId()+"_"+sphoto;
+                            String photoSource = SWBPortal.getWorkPath() + sendPost.getWorkPath() + "/" + Photo.social_hasPhoto.getName()+"_"+sendPost.getId()+"_"+sphoto;
                             System.out.println("photoSource:"+photoSource);
                             String photoTarget = SWBPortal.getWorkPath() + photo.getWorkPath();
                             System.out.println("photoTarget-1:"+photoTarget);
@@ -95,14 +95,14 @@ public class SendPost extends org.semanticwb.social.base.SendPostBase
                             {
                                 targetFile.mkdirs();
                             }
-                            photoTarget+="/" + PhotoImg.social_photo.getName()+"_"+photo.getId()+"_"+ sphoto;
+                            photoTarget+="/" + Photo.social_hasPhoto.getName()+"_"+photo.getId()+"_"+ sphoto;
                             System.out.println("photoTarget-2:"+photoTarget);
                             System.out.println("Va a copiar...");
                             SWBUtils.IO.copy(photoSource,photoTarget, false, null, null);
                             System.out.println("Copio....");
 
 
-                            photo.addPhoto(sendPost.getPhoto());
+                            photo.addPhoto(sphoto);
                        
                         }
                         
