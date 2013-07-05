@@ -348,7 +348,7 @@
       <swbxf:DisplayProperty rdf:ID="dp_appType">
         <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
         >Tipo de aplicación</rdfs:label>
-        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#selectOneModel"/>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#selectOneModelWithBlank"/>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
   </rdf:Description>
@@ -514,15 +514,6 @@
         <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#ObjectElement_1"/>
         <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
         >Comentarios</rdfs:label>
-      </swbxf:DisplayProperty>
-    </swb:displayProperty>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://www.semanticwebbuilder.org.mx/ontology/lodp.owl#hasCategory">
-    <swb:displayProperty>
-      <swbxf:DisplayProperty rdf:ID="dp_appcategory">
-        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#selectOneModel"/>
-        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >Categoría</rdfs:label>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
   </rdf:Description>
@@ -761,6 +752,15 @@
   </rdf:Description>
   <rdf:Description rdf:about="http://www.semanticwebbuilder.org.mx/ontology/lodp.owl#datasetCreated">
     <swb:displayProperty rdf:resource="#dp_created"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticwebbuilder.org.mx/ontology/lodp.owl#category">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_appcategory">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#selectOneModel"/>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >Categoría</rdfs:label>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
   </rdf:Description>
   <rdf:Description rdf:about="http://www.semanticwebbuilder.org.mx/ontology/lodp.owl#licenseTitle">
     <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
