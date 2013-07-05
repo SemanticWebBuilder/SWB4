@@ -44,13 +44,13 @@ import org.semanticwb.SWBPlatform;
 public class SWBTSMongoPrefixMapping implements PrefixMapping
 {
     private static Logger log = SWBUtils.getLogger(SWBTSMongoPrefixMapping.class);
-    private SWBTSMongoGraph graph;
+    private int graphId;
 
     private Map<String,String> map=new ConcurrentHashMap();
 
-    public SWBTSMongoPrefixMapping(SWBTSMongoGraph graph)
+    public SWBTSMongoPrefixMapping(int graphId)
     {
-        this.graph = graph;
+        this.graphId = graphId;
         Map map2=getNsPrefixMap();
     }
 
@@ -75,7 +75,7 @@ public class SWBTSMongoPrefixMapping implements PrefixMapping
 
                 doc.put("prefix", prefix);
                 doc.put("namespace", uri);
-                doc.put("graphid", graph.getId());
+                doc.put("graphid", graphId);
 
                 coll.insert(doc);                 
                 
@@ -104,7 +104,7 @@ public class SWBTSMongoPrefixMapping implements PrefixMapping
             BasicDBObject doc = new BasicDBObject();
 
             doc.put("prefix", prefix);
-            doc.put("graphid", graph.getId());
+            doc.put("graphid", graphId);
             
             coll.findAndRemove(doc);
             
@@ -166,7 +166,7 @@ public class SWBTSMongoPrefixMapping implements PrefixMapping
                 BasicDBObject doc = new BasicDBObject();
 
                 doc.put("prefix", prefix);
-                doc.put("graphid", graph.getId());
+                doc.put("graphid", graphId);
 
                 DBCursor cur=coll.find(doc);
                 if(cur.hasNext())
@@ -211,7 +211,7 @@ public class SWBTSMongoPrefixMapping implements PrefixMapping
 
             BasicDBObject doc = new BasicDBObject();
 
-            doc.put("graphid", graph.getId());
+            doc.put("graphid", graphId);
 
             DBCursor cur=coll.find(doc);
             while(cur.hasNext())
