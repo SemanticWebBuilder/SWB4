@@ -12,25 +12,7 @@
 <%@page import="org.semanticwb.portal.api.SWBResourceURL"%>
 <%@page import="org.semanticwb.*,org.semanticwb.platform.*,org.semanticwb.portal.*,org.semanticwb.model.*,java.util.*,org.semanticwb.base.util.*"%>
 <jsp:useBean id="paramRequest" scope="request" type="org.semanticwb.portal.api.SWBParamRequest"/>
-<script type="text/javascript" id="appends">
-    showListCategory = function() {  
-        var frm = document.getElementById('frmUploadVideo');
-        var div = document.getElementById('divCategory');
-       
-     for (i=0;i<frm.checkYT.length;++i){
-             if (frm.checkYT[i].checked)
-             {
-                    div.removeAttribute('style');
-                    break;
-             }
-              if (frm.checkYT[i].checked == false)
-             {
-                    div.setAttribute('style', 'display:none;');
-             }
-     }
-    
-    }
-</script>
+
 <%
      WebSite wsite=null;
      if(request.getParameter("wsite")!=null)
@@ -42,7 +24,7 @@
     } 
     if(wsite==null) return; 
     
-    String objUri = request.getParameter("objUri"); 
+    String objUri = request.getParameter("objUri");
     SemanticObject semObj=null;
     if(objUri==null && request.getAttribute("objUri")!=null)
     {
@@ -122,7 +104,7 @@
         messageFormMgr.addButton(SWBFormButton.newBackButton());
 %>
 <div class="swbform">
-    <form dojoType="dijit.form.Form" id="frmUploadText" action="<%=urlAction.setAction("postMessage")%>" onsubmit="submitForm('frmUploadText'); return false;" method="post">
+    <form dojoType="dijit.form.Form" id="<%=objUri%>frmUploadText" action="<%=urlAction.setAction("postMessage")%>" onsubmit="submitForm('<%=objUri%>frmUploadText'); return false;" method="post">
         <%= messageFormMgr.getFormHiddens()%>
         <%
             if(postInSN==null)
@@ -239,8 +221,12 @@
     SemanticObject obj2 = new SemanticObject(paramRequest.getWebPage().getWebSite().getSemanticModel(), Photo.sclass);
 %>
 <div class="swbform">
-    <form dojoType="dijit.form.Form" id="frmUploadPhoto" action="<%=urlAction.setAction("uploadPhoto")%>" method="post" onsubmit="submitForm('frmUploadPhoto'); return false;">
+    <form dojoType="dijit.form.Form" id="<%=objUri%>frmUploadPhoto" action="<%=urlAction.setAction("uploadPhoto")%>" method="post" onsubmit="submitForm('<%=objUri%>frmUploadPhoto'); return false;">
         <%= photoMgr.getFormHiddens()%>
+        <%
+        if(postInSN==null)
+        {
+        %>
         <ul><b><%=SWBSocialUtil.Util.getStringFromGenericLocale("chooseSocialNets", user.getLanguage())%></b></ul>
         <%
             Iterator<SocialNetwork> it = SocialNetwork.ClassMgr.listSocialNetworks(wsite);
@@ -253,7 +239,15 @@
         </li>
         <%
                 }
-            }%>
+            }
+       }else{
+            SocialNetwork socialNet=(SocialNetwork)SemanticObject.getSemanticObject(postInSN).createGenericInstance(); 
+            if(socialNet==null) return;
+        %>
+            <input type="hidden" name="socialNetUri" value="<%=socialNet.getURI()%>"/>
+        <%
+        }
+        %>
         <!--
         <div class="etiqueta"><label for="title"><%--=Photo.swb_title.getDisplayName()--%>: </label></div>
         <div class="campo"><%--=photoMgr.renderElement(request, Photo.swb_title, photoMgr.MODE_CREATE)--%></div>
@@ -264,8 +258,8 @@
         <div class="etiqueta"><label for="keywords"><%=Photo.swb_Tagable.getDisplayName(lang)%>:</label></div>
         <div class="etiqueta"><%=photoMgr.renderElement(request, Photo.swb_tags, photoMgr.MODE_CREATE)%></div>
 
-        <div class="etiqueta"><label for="photo"><%=photoMgr.renderLabel(request, Photo.social_photo, photoMgr.MODE_CREATE)%>: </label></div>
-        <%=photoMgr.getFormElement(Photo.social_photo).renderElement(request, obj2, Photo.social_photo, SWBFormMgr.TYPE_DOJO, SWBFormMgr.MODE_CREATE, lang)%>       
+        <div class="etiqueta"><label for="photo"><%=photoMgr.renderLabel(request, Photo.social_hasPhoto, photoMgr.MODE_CREATE)%>: </label></div>
+        <%=photoMgr.getFormElement(Photo.social_hasPhoto).renderElement(request, obj2, Photo.social_hasPhoto, SWBFormMgr.TYPE_DOJO, SWBFormMgr.MODE_CREATE, lang)%>       
         
         <%
         if(postIn!=null)
@@ -333,15 +327,36 @@
     videoMgr.addButton(SWBFormButton.newBackButton());
     SemanticObject videoSemObj = new SemanticObject(paramRequest.getWebPage().getWebSite().getSemanticModel(), Video.sclass);
 %>
+<script type="text/javascript" id="appends">
+    showListCategory = function() {  
+        var frm = document.getElementById('<%=objUri%>frmUploadVideo');
+        var div = document.getElementById('<%=objUri%>divCategory');
+        
+     for (i=0;i<frm.checkYT.length;++i){
+             if (frm.checkYT[i].checked)
+             {
+                    div.removeAttribute('style');
+                    break;
+             }
+             if (frm.checkYT[i].checked == false)
+             {
+                    div.setAttribute('style', 'display:none;');
+             }
+     }
+    
+    }
+</script>
 <div dojoType="dojox.layout.ContentPane">
     <script type="dojo/method">
          eval(document.getElementById("appends").innerHTML);
    </script>
 </div> 
 <div class="swbform">
-    <form dojoType="dijit.form.Form" id="frmUploadVideo" action="<%=urlAction.setAction("uploadVideo")%>" method="post" onsubmit="submitForm('frmUploadVideo');
-        return false;">
+    <form dojoType="dijit.form.Form" id="<%=objUri%>frmUploadVideo" action="<%=urlAction.setAction("uploadVideo")%>" method="post" onsubmit="submitForm('<%=objUri%>frmUploadVideo'); return false;">
         <%= videoMgr.getFormHiddens()%>
+        <%
+        if(postInSN==null){
+        %>
         <ul><b><%=SWBSocialUtil.Util.getStringFromGenericLocale("chooseSocialNets", user.getLanguage())%></b></ul>
         <%
             Iterator<SocialNetwork> it = SocialNetwork.ClassMgr.listSocialNetworks(wsite);
@@ -350,8 +365,6 @@
                
                 if (socialNetwork instanceof Videoable && socialNetwork.isActive()) {
                     if (socialNetwork instanceof Youtube){
-                         System.out.println("la instancia es de youtube: " + socialNetwork.getClass());
-                         System.out.println("el estatus de cada red es: " + socialNetwork.isActive());
         %>
         <li>
             <input id="checkYT" type="checkbox" name="<%=socialNetwork.getURI()%>" onClick="showListCategory();" /><%=socialNetwork.getTitle()%>
@@ -359,20 +372,28 @@
         <%
                     }
                     else{
-                        %>
-                         <li>
+        %>
+        <li>
             <input type="checkbox" name="<%=socialNetwork.getURI()%>" /><%=socialNetwork.getTitle()%>
         </li>
-                        <%
-                    }
+            <%
+                        }
                 }
-            }%>
+            }
+        }else{
+            SocialNetwork socialNet=(SocialNetwork)SemanticObject.getSemanticObject(postInSN).createGenericInstance(); 
+            if(socialNet==null) return;
+        %>
+                    <input type="hidden" name="socialNetUri" value="<%=socialNet.getURI()%>"/>
+        <%
+        }
+        %>
         <!--    
         <div class="etiqueta"><label for="title"><%--=Video.swb_title.getDisplayName()--%>: </label></div>
         <div class="campo"><%--=videoMgr.renderElement(request, Video.swb_title, videoMgr.MODE_CREATE)--%></div>
         -->
-        <div id="divCategory" style="display:none;" class="etiqueta"><label for="description">Categoría:</label>
-            <select name="catId">
+        <div id="<%=objUri%>divCategory" style="display:none;" class="etiqueta"><label for="description">Categoría:</label>
+            <select name="<%=Video.social_category.getName()%>">
                 <option>Selecciona...</option>
                 <%
                     SWBModel model = WebSite.ClassMgr.getWebSite(paramRequest.getWebPage().getWebSiteId());
@@ -387,7 +408,7 @@
             </select>
         </div>
 
-        <div class="campo"><%=videoMgr.renderElement(request, Video.social_youtubeCategory, videoMgr.MODE_CREATE)%></div>
+        <!--<div class="campo"><%//=videoMgr.renderElement(request, Video.social_category, videoMgr.MODE_CREATE)%></div>-->
         <div class="etiqueta"><label for="description"><%=Video.social_msg_Text.getDisplayName()%>:</label></div>
         <div class="campo"><%=videoMgr.renderElement(request, Video.social_msg_Text, videoMgr.MODE_CREATE)%></div>
         <div class="etiqueta"><label for="keywords"><%=Video.swb_Tagable.getDisplayName(lang)%>:</label></div>
@@ -403,7 +424,7 @@
         {
             Iterator<SocialPFlowRef> itSocialPFlowRefs=socialTopic.listInheritPFlowRefs();
             %>    
-            <div class="etiqueta">Flujo de Publicación</div>        
+            <!--<div class="etiqueta">Flujo de Publicación</div>-->
             <div class="etiqueta"><label for="socialFlow"><%=SWBSocialUtil.Util.getStringFromGenericLocale("publishFlow", user.getLanguage())%></label></div>
             <div class="campo">
             <%
