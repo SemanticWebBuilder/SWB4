@@ -148,8 +148,10 @@ public class SWBPClassMgr
     public static void addProcessInstanceObjectsReference(Instance instance, Interpreter i)
     {
         List<ItemAwareReference> list=instance.listHeraquicalItemAwareReference();
+        //System.out.println("instance:"+instance);
         for(ItemAwareReference item : list)
         {
+            //System.out.println("item:"+item.getItemAware().getName()+" "+item.getProcessObject());
             String varname=item.getItemAware().getName();
             SWBClass cobj=item.getProcessObject();
             if(cobj!=null)

@@ -67,12 +67,16 @@ public class FlowNode extends org.semanticwb.process.model.base.FlowNodeBase
         inst.setFlowNodeType(this);
         inst.setStatus(Instance.STATUS_INIT);
         inst.setContainerInstance(pinst);
+        
+        //System.out.println("createInstance:"+pinst+" "+inst);
 
         //Crea las instancias de los item aware de entrada  que a su vez no tengan entradas
         Iterator<ItemAware> it=listRelatedItemAware().iterator();
         while (it.hasNext())
         {
             ItemAware item = it.next();
+            
+            //System.out.println("item:"+item+" "+inst);
 
             if(!item.listInputConnectionObjects().hasNext())
             {
@@ -143,6 +147,7 @@ public class FlowNode extends org.semanticwb.process.model.base.FlowNodeBase
                     ref.setItemAware(item);
                     if(ins!=null)
                     {
+                        //System.out.println("item add1:"+ref+" "+inst);
                         ref.setProcessObject((SWBClass)ins.createGenericInstance());
                     }
                     inst.addItemAwareReference(ref);
@@ -186,6 +191,7 @@ public class FlowNode extends org.semanticwb.process.model.base.FlowNodeBase
                         SWBModel model=this.getProcessSite().getProcessDataInstanceModel();
                         String id=id=String.valueOf(model.getSemanticModel().getCounter(scls));
                         SemanticObject ins=model.getSemanticModel().createSemanticObjectById(id, scls);
+                        //System.out.println("item add2:"+ref+" "+inst);
                         ref.setProcessObject((SWBClass)ins.createGenericInstance());
                         inst.addItemAwareReference(ref);
                     }

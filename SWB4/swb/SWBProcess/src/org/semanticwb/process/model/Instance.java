@@ -204,12 +204,14 @@ public class Instance extends org.semanticwb.process.model.base.InstanceBase
      */
     public List<ItemAwareReference> listHeraquicalItemAwareReference()
     {
+        //System.out.println("listHeraquicalItemAwareReference:"+this);
         ArrayList<ItemAwareReference> ret=new ArrayList();
         Iterator<ItemAwareReference> it=listItemAwareReferences();
         while (it.hasNext())
         {
             ItemAwareReference itemAwareReference = it.next();
             ret.add(itemAwareReference);
+            //System.out.println("listHeraquicalItemAwareReference:"+this+" add:"+itemAwareReference.getItemAware().getName());
         }
         if(this instanceof FlowNodeInstance)
         {
@@ -220,6 +222,7 @@ public class Instance extends org.semanticwb.process.model.base.InstanceBase
                 ret.addAll(parent.listHeraquicalItemAwareReference());
             }
         }
+        //System.out.println("listHeraquicalItemAwareReference:"+this+" ret:"+ret);
         return ret;
     }
     
