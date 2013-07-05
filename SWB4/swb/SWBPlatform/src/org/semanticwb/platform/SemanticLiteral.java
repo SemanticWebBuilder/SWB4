@@ -24,6 +24,7 @@ package org.semanticwb.platform;
 
 import com.hp.hpl.jena.rdf.model.Literal;
 import com.hp.hpl.jena.rdf.model.Statement;
+import java.math.BigDecimal;
 import java.sql.Date;
 import java.sql.Timestamp;
 import org.semanticwb.Logger;
@@ -126,6 +127,9 @@ public class SemanticLiteral
             }else if(prop.isLong())
             {
                 ret=new SemanticLiteral(Long.valueOf(value));
+            }else if(prop.isDecimal())
+            {
+                ret=new SemanticLiteral(new BigDecimal(value));
             }else if(prop.isDate())
             {
                 try
@@ -177,12 +181,16 @@ public class SemanticLiteral
         Boolean ret=null;
         if(literal!=null)
         {
-            if(literal.getDatatypeURI().endsWith("#boolean"))
+            //Validar 
+            if(literal.getDatatypeURI()!=null)
             {
-                ret=literal.getBoolean();
-            }else if(literal.getDatatypeURI().endsWith("#integer"))
-            {
-                ret=(literal.getInt()==1);
+                if(literal.getDatatypeURI().endsWith("#boolean"))
+                {
+                    ret=literal.getBoolean();
+                }else if(literal.getDatatypeURI().endsWith("#integer"))
+                {
+                    ret=(literal.getInt()==1);
+                }
             }
         }else if(m_obj instanceof Boolean)
         {
