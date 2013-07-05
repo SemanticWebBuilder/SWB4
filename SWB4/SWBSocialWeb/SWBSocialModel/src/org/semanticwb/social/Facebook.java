@@ -22,6 +22,7 @@ import org.semanticwb.io.SWBFileInputStream;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.social.listener.Classifier;
+import org.semanticwb.social.util.SWBSocialUtil;
 
 
 public class Facebook extends org.semanticwb.social.base.FacebookBase {
@@ -64,7 +65,7 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
         params.put("access_token", this.getAccessToken());
         boolean canGetMoreResults = true;
         String phrasesInStream = stream.getPhrase() != null ? stream.getPhrase() : "";
-        int queriesNumber = phrasesInStream.split(",").length * 2;
+        int queriesNumber = phrasesInStream.split(",").length * 2;//int queriesNumber = phrasesInStream.split("\\|").length * 2;
         HashMap<String, String>[] queriesArray = new HashMap[queriesNumber];
         
         try {
@@ -200,7 +201,7 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
                                     String>[] queriesArray, Stream stream) throws Exception {
         
         //TODO: Acordar que las frases almacenadas no contengan el simbolo =.
-        String[] phrase = streamPhrase.split("\\|");
+        String[] phrase = streamPhrase.split(",");//String[] phrase = streamPhrase.split("\\|");
         HashMap<String, String> searchLimits = new HashMap<String, String>((phrase.length * 2));  //es doble para busquedas globales y del muro
         
         if (queriesArray.length == 0 || (queriesArray.length > 0 && queriesArray[0] == null)) {
@@ -347,13 +348,58 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
                                     external.setLink(postsData.getJSONObject(k).getString("link"));
                                 }
                                 if (postsData.getJSONObject(k).has("picture")) {
-                                    external.setPicture(postsData.getJSONObject(k).getString("picture"));
+                                    
+                                    //external.setPicture(postsData.getJSONObject(k).getString("picture"));
+                                    ArrayList pictures = new ArrayList();
+                                    pictures.add(postsData.getJSONObject(k).getString("picture"));
+                                    external.setPictures(pictures);
                                 }
                                 if (postsData.getJSONObject(k).has("name")) {
                                     external.setPostName(postsData.getJSONObject(k).getString("name"));
                                 }
                                 if (postsData.getJSONObject(k).has("type")) {
-                                    external.setPostType(postsData.getJSONObject(k).getString("type"));
+                                    if(postsData.getJSONObject(k).getString("type").equals("status")){//Status -> message
+                                        if(postsData.getJSONObject(k).has("message")){
+                                            external.setPostType(SWBSocialUtil.MESSAGE);
+                                        }else{
+                                            continue;
+                                        }                                        
+                                    }else if(postsData.getJSONObject(k).getString("type").equals("photo")){//Photo
+                                        if (postsData.getJSONObject(k).has("picture")) {
+                                            //external.setPicture(postsData.getJSONObject(k).getString("picture"));
+                                            ArrayList pictures = new ArrayList();
+                                            pictures.add(postsData.getJSONObject(k).getString("picture"));
+                                            external.setPictures(pictures);
+                                            external.setPostType(SWBSocialUtil.PHOTO);
+                                        }else{//If has message, create it as message
+                                            if(postsData.getJSONObject(k).has("message")){
+                                                external.setPostType(SWBSocialUtil.MESSAGE);
+                                            }else{
+                                                continue;
+                                            }
+                                        }
+                                    }else if(postsData.getJSONObject(k).getString("type").equals("video")){
+                                        if(postsData.getJSONObject(k).has("source")){
+                                            external.setVideo(postsData.getJSONObject(k).getString("source"));
+                                            external.setPostType(SWBSocialUtil.VIDEO);
+                                        }else{//If has message, create it as message
+                                            if(postsData.getJSONObject(k).has("message")){
+                                                external.setPostType(SWBSocialUtil.MESSAGE);
+                                            }else{
+                                                continue;
+                                            }
+                                        }
+                                    }else if(postsData.getJSONObject(k).getString("type").equals("link")){
+                                        if(postsData.getJSONObject(k).has("message")){
+                                            external.setPostType(SWBSocialUtil.MESSAGE);
+                                        }else{
+                                            continue;
+                                        }
+                                    }
+                                    //external.setPostType(postsData.getJSONObject(k).getString("type"));
+                                    
+                                }else {//Do not process data without "type"
+                                    continue;
                                 }
                                 aListExternalPost.add(external);
                             }
@@ -439,22 +485,51 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
         if (this.getAccessToken() != null) {
             params.put("access_token", this.getAccessToken());
         }
-        if (photo.getMsg_Text() != null) {
-            params.put("message", photo.getMsg_Text());
-        }
+//        if (photo.getMsg_Text() != null) {
+//            params.put("message", photo.getMsg_Text());
+//        }
         String url = Facebook.FACEBOOKGRAPH + this.getFacebookUserId() + "/photos";
         JSONObject jsonResponse = null;
         
         try {
-            String photoPath = SWBPortal.getWorkPath() + photo.getWorkPath()
-                    + "/" + Photo.social_Photo.getName() + "_" + photo.getId() 
-                    + "_" + photo.getPhoto();
-            SWBFile photoFile = new SWBFile(photoPath);
+            Iterator<PhotoImg> photosArray = photo.listPhotos();
+            String photoToPublish="";
+            String additionalPhotos="";
+            int photoNumber = 0;
+            while(photosArray.hasNext()){
+                PhotoImg photoData = (PhotoImg)photosArray.next();
+                if(++photoNumber == 1){//post the first Photo
+                    photoToPublish = SWBPortal.getWorkPath() + photo.getWorkPath() + "/" + Photo.social_Photo.getName()
+                        + "_" + photoData.getId() + "_" + photoData.getPhoto();
+                }else{
+                    additionalPhotos += SWBPortal.getWorkPath() + photo.getWorkPath() + "/" + Photo.social_Photo.getName()
+                        + "_" + photoData.getId() + "_" + photoData.getPhoto() + " ";
+                }                
+            }
+            
+            if(photoNumber == 0){
+                System.out.println("No Photos FOUND");
+                return;
+            }
+            
+            System.out.println("The photo to be published FACEBOOK:" + photoToPublish);
+            System.out.println("Additional Photos FACEBOOK: " + additionalPhotos);
+            
+            if (photo.getMsg_Text() != null) {
+                params.put("message", photo.getMsg_Text() + " " + additionalPhotos);
+            }
+            
+//            String photoPath = SWBPortal.getWorkPath() + photo.getWorkPath()
+//                    + "/" + Photo.social_Photo.getName() + "_" + photo.getId() 
+//                    + "_" + photo.getPhoto();
+            SWBFile photoFile = new SWBFile(photoToPublish);
             
             if (photoFile.exists()) {
                 SWBFileInputStream fileStream = new SWBFileInputStream(photoFile);
+//                String facebookResponse = postFileRequest(params, url,
+//                        photo.getPhoto(), fileStream, "POST", "photo");
                 String facebookResponse = postFileRequest(params, url,
-                        photo.getPhoto(), fileStream, "POST", "photo");
+                        photoToPublish, fileStream, "POST", "photo");
                 jsonResponse = new JSONObject(facebookResponse);
             }
             if (jsonResponse != null && jsonResponse.get("id") != null) {
