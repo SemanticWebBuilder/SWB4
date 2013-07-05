@@ -350,7 +350,7 @@
                     urlbck.setMode(SWBResourceURL.Mode_VIEW);
                 
                 %>
-                <input type="button" value="<%=paramRequest.getLocaleString("lblCancel")%>" _onclick="if(confirm('¿Quieres regresar a la lista de datasets?')){window.location='<%=urlbck.toString()%>';} else {return false;}" class="boton-cancelar" /> 
+                <input type="button" value="<%=paramRequest.getLocaleString("lblCancel")%>" onclick="window.location='<%=urlbck.toString()%>';" class="boton-cancelar" /> 
                 <%
                  if(!isNew){
 

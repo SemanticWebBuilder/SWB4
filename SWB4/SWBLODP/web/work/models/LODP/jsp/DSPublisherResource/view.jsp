@@ -498,6 +498,13 @@
                 %>
             </tbody>
         </table>
+            <%
+            SWBResourceURL urlbck = paramRequest.getRenderUrl();
+                    urlbck.setParameter("act", "");
+                    urlbck.setMode(SWBResourceURL.Mode_VIEW);
+            
+            %>
+             <input type="button" value="<%=paramRequest.getLocaleString("lblCancel")%>" onclick="window.location='<%=urlbck.toString()%>';" class="boton-cancelar" /> 
     </div>
             
 
