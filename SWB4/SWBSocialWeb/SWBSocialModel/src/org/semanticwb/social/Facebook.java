@@ -485,30 +485,26 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
         if (this.getAccessToken() != null) {
             params.put("access_token", this.getAccessToken());
         }
-//        if (photo.getMsg_Text() != null) {
-//            params.put("message", photo.getMsg_Text());
-//        }
+        
         String url = Facebook.FACEBOOKGRAPH + this.getFacebookUserId() + "/photos";
         JSONObject jsonResponse = null;
         
         try {
-            Iterator<String> photosArray = photo.listPhotos();
             String photoToPublish="";
             String additionalPhotos="";
             int photoNumber = 0;
-            
-            while(photosArray.hasNext()){
-                String sPhoto = photosArray.next();
+                        
+            Iterator<String> photos = photo.listPhotos();
+            while(photos.hasNext()){
+                String sPhoto =photos.next();
                 if(++photoNumber == 1){//post the first Photo
-                    photoToPublish = SWBPortal.getWorkPath() + photo.getWorkPath() + "/" + Photo.social_Photo.getName()
-                        + "_" + photo.getId() + "_" + sPhoto;
+                    photoToPublish = SWBPortal.getWorkPath() + photo.getWorkPath() + "/" + sPhoto;
                 }else{
-                    additionalPhotos += SWBPortal.getWorkPath() + photo.getWorkPath() + "/" + Photo.social_Photo.getName()
-                        + "_" + photo.getId() + "_" + sPhoto + " ";
-                }                
+                    additionalPhotos += SWBPortal.getWorkPath() + photo.getWorkPath() + "/" + sPhoto + " ";
+                }                        
             }
-            
             if(photoNumber == 0){
+                log.error("No photo(s) found!");
                 System.out.println("No Photos FOUND");
                 return;
             }
@@ -517,12 +513,17 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
             System.out.println("Additional Photos FACEBOOK: " + additionalPhotos);
             
             if (photo.getMsg_Text() != null) {
-                params.put("message", photo.getMsg_Text() + " " + additionalPhotos);
+                if(additionalPhotos.trim().length()>0){//Msg and photos
+                    params.put("message", photo.getMsg_Text() + " " + additionalPhotos);
+                }else{//Only msg
+                    params.put("message", photo.getMsg_Text());
+                }
+            }else if(additionalPhotos.trim().length()>0){//Only photos
+                params.put("message", additionalPhotos);
+            }else {//Empty msg
+                params.put("message", "");
             }
             
-//            String photoPath = SWBPortal.getWorkPath() + photo.getWorkPath()
-//                    + "/" + Photo.social_Photo.getName() + "_" + photo.getId() 
-//                    + "_" + photo.getPhoto();
             SWBFile photoFile = new SWBFile(photoToPublish);
             
             if (photoFile.exists()) {
