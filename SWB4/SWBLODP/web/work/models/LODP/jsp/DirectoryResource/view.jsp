@@ -501,6 +501,7 @@
                 Institution liInst  = genericListInst.next();
                 SWBResourceURL urlDetail = paramRequest.getRenderUrl();
                 urlDetail.setParameter("suri", liInst.getURI());
+                urlDetail.setParameter("val", valor);
         %>
         
         <ul>
