@@ -114,51 +114,28 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
     }
 
     public void postPhoto(Photo photo) {        
-        //if (photo != null && photo.getPhoto() != null && photo.getPhoto().trim().length() > 1) {
         System.out.println("Inside post photo TWITTER");
         if (photo != null) {
-            Iterator<PhotoImg> images = photo.listPhotos();
-            //long noOfPics= SWBUtils.Collections.sizeOf(images);
-            //System.out.println("How many images:" + noOfPics);
-            
             String photoToPublish="";
             String additionalPhotos="";
             int photoNumber = 0;
             System.out.println("postPhoto/1");
             
-            photo.removeAllPhoto();
-            WebSite wsite=WebSite.ClassMgr.getWebSite(photo.getSemanticObject().getModel().getName());
-            PhotoImg photoImg=PhotoImg.ClassMgr.createPhotoImg(wsite);
-            photoImg.setPhoto("xxx.png");
-            photo.addPhoto(photoImg);
             
-            
-            
-            Iterator<PhotoImg> photos = photo.listPhotos();
+            Iterator<String> photos = photo.listPhotos();
             while(photos.hasNext()){
-                System.out.println("postPhoto/2");
-                //PhotoImg photoData = (PhotoImg)photos.next();
-                Object obj =photos.next();
-                System.out.println("obj:"+obj);
-                /*
-                System.out.println("PHOTODATA:" + photoData);
-                System.out.println("postPhoto/3");
+                String sPhoto =photos.next();
                 if(++photoNumber == 1){//post the first Photo
-                    System.out.println("postPhoto/4");
-                    System.out.print("reading 1" + SWBPortal.getWorkPath() + "  " + photoData.getWorkPath() + "/");
-                    System.out.println("postPhoto/5");
-                    System.out.println(Photo.social_PhotoImg.getName());
-                    System.out.println("postPhoto/6");
-                    photoToPublish = SWBPortal.getWorkPath() + photoData.getWorkPath() + "/" + Photo.social_PhotoImg.getName()
-                        + "_" + photoData.getId() + "_" + photoData.getPhoto();
+                    photoToPublish = SWBPortal.getWorkPath() + photo.getWorkPath() + "/" + Photo.social_hasPhoto.getName()
+                        + "_" + photo.getId() + "_" + sPhoto;
                     System.out.println("postPhoto/7");
                     System.out.println("reading 2");
                 }else{
                     System.out.println("postPhoto/8");
-                    additionalPhotos += SWBPortal.getWorkPath() + photoData.getWorkPath() + "/" + Photo.social_PhotoImg.getName()
-                        + "_" + photoData.getId() + "_" + photoData.getPhoto() + " ";
+                    additionalPhotos += SWBPortal.getWorkPath() + photo.getWorkPath() + "/" + Photo.social_hasPhoto.getName()
+                        + "_" + photo.getId() + "_" + sPhoto + " ";
                 }         
-                * */
+               
             }
             if(photoNumber == 0){
                 System.out.println("No Photos FOUND");
