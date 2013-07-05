@@ -258,8 +258,8 @@
         <div class="etiqueta"><label for="keywords"><%=Photo.swb_Tagable.getDisplayName(lang)%>:</label></div>
         <div class="etiqueta"><%=photoMgr.renderElement(request, Photo.swb_tags, photoMgr.MODE_CREATE)%></div>
 
-        <div class="etiqueta"><label for="photo"><%=photoMgr.renderLabel(request, Photo.social_hasPhoto, photoMgr.MODE_CREATE)%>: </label></div>
-        <%=photoMgr.getFormElement(Photo.social_hasPhoto).renderElement(request, obj2, Photo.social_hasPhoto, SWBFormMgr.TYPE_DOJO, SWBFormMgr.MODE_CREATE, lang)%>       
+        <div class="etiqueta"><label for="photo"><%=photoMgr.renderLabel(request, PostImageable.social_hasPhoto, photoMgr.MODE_CREATE)%>: </label></div>
+        <%=photoMgr.getFormElement(PostImageable.social_hasPhoto).renderElement(request, obj2, PostImageable.social_hasPhoto, SWBFormMgr.TYPE_DOJO, SWBFormMgr.MODE_CREATE, lang)%>       
         
         <%
         if(postIn!=null)
@@ -327,7 +327,7 @@
     videoMgr.addButton(SWBFormButton.newBackButton());
     SemanticObject videoSemObj = new SemanticObject(paramRequest.getWebPage().getWebSite().getSemanticModel(), Video.sclass);
 %>
-<script type="text/javascript" id="appends">
+<script type="text/javascript" id="<%=objUri%>appendsContents">
     showListCategory = function() {  
         var frm = document.getElementById('<%=objUri%>frmUploadVideo');
         var div = document.getElementById('<%=objUri%>divCategory');
@@ -348,7 +348,7 @@
 </script>
 <div dojoType="dojox.layout.ContentPane">
     <script type="dojo/method">
-         eval(document.getElementById("appends").innerHTML);
+         eval(document.getElementById("<%=objUri%>appendsContents").innerHTML);
    </script>
 </div> 
 <div class="swbform">
