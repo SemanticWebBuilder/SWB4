@@ -1,35 +1,17 @@
 package org.semanticwb.social;
 
 import com.flickr4java.flickr.Flickr;
-import com.flickr4java.flickr.FlickrException;
 import com.flickr4java.flickr.REST;
-import com.flickr4java.flickr.RequestContext;
-import com.flickr4java.flickr.auth.Auth;
-import com.flickr4java.flickr.auth.Permission;
 import com.flickr4java.flickr.photos.PhotoList;
 import com.flickr4java.flickr.photos.PhotosInterface;
 import com.flickr4java.flickr.photos.SearchParameters;
-import com.flickr4java.flickr.uploader.UploadMetaData;
-import com.flickr4java.flickr.uploader.Uploader;
-import com.flickr4java.flickr.util.IOUtilities;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
-import javax.servlet.http.HttpServletRequest;
 import org.semanticwb.Logger;
-import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
-import org.semanticwb.io.SWBFile;
-import org.semanticwb.model.User;
 import org.semanticwb.model.WebPage;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.platform.SemanticObject;
-import org.semanticwb.portal.api.SWBActionResponse;
-import org.semanticwb.social.listener.Classifier;
 
 
 public class Flicker extends org.semanticwb.social.base.FlickerBase 
@@ -59,6 +41,7 @@ public class Flicker extends org.semanticwb.social.base.FlickerBase
     
     @Override
     public void postPhoto(org.semanticwb.social.Photo photo) {
+        /*
         //String action = response.getAction();
         Flickr flickr = null;
         
@@ -114,8 +97,8 @@ public class Flicker extends org.semanticwb.social.base.FlickerBase
                }
            }
        }
+       * */
     }
-
     public void listen(Stream stream)
     {
          WebSite wsite=WebSite.ClassMgr.getWebSite(stream.getSemanticObject().getModel().getName());
@@ -186,6 +169,7 @@ public class Flicker extends org.semanticwb.social.base.FlickerBase
     {
         return null;
     }
+
 
     /* Funcionando para el protoripo
     @Override

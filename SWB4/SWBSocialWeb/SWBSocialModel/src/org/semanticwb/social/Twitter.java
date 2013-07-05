@@ -118,17 +118,29 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
         System.out.println("Inside post photo TWITTER");
         if (photo != null) {
             Iterator<PhotoImg> images = photo.listPhotos();
-            long noOfPics= SWBUtils.Collections.sizeOf(images);
-            System.out.println("How many images:" + noOfPics);
+            //long noOfPics= SWBUtils.Collections.sizeOf(images);
+            //System.out.println("How many images:" + noOfPics);
             
-            Iterator<PhotoImg> photosArray = photo.listPhotos();
             String photoToPublish="";
             String additionalPhotos="";
             int photoNumber = 0;
             System.out.println("postPhoto/1");
-            while(photosArray.hasNext()){
+            
+            photo.removeAllPhoto();
+            WebSite wsite=WebSite.ClassMgr.getWebSite(photo.getSemanticObject().getModel().getName());
+            PhotoImg photoImg=PhotoImg.ClassMgr.createPhotoImg(wsite);
+            photoImg.setPhoto("xxx.png");
+            photo.addPhoto(photoImg);
+            
+            
+            
+            Iterator<PhotoImg> photos = photo.listPhotos();
+            while(photos.hasNext()){
                 System.out.println("postPhoto/2");
-                PhotoImg photoData = (PhotoImg)photosArray.next();
+                //PhotoImg photoData = (PhotoImg)photos.next();
+                Object obj =photos.next();
+                System.out.println("obj:"+obj);
+                /*
                 System.out.println("PHOTODATA:" + photoData);
                 System.out.println("postPhoto/3");
                 if(++photoNumber == 1){//post the first Photo
@@ -145,7 +157,8 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
                     System.out.println("postPhoto/8");
                     additionalPhotos += SWBPortal.getWorkPath() + photoData.getWorkPath() + "/" + Photo.social_PhotoImg.getName()
                         + "_" + photoData.getId() + "_" + photoData.getPhoto() + " ";
-                }                
+                }         
+                * */
             }
             if(photoNumber == 0){
                 System.out.println("No Photos FOUND");

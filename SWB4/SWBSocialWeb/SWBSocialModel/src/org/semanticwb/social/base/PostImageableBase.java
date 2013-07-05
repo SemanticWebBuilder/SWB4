@@ -5,9 +5,8 @@ package org.semanticwb.social.base;
    */
 public interface PostImageableBase extends org.semanticwb.social.PostDataable
 {
-    public static final org.semanticwb.platform.SemanticClass social_PhotoImg=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#PhotoImg");
    /**
-   * Imagenes 
+   * Photo 
    */
     public static final org.semanticwb.platform.SemanticProperty social_hasPhoto=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#hasPhoto");
    /**
@@ -15,29 +14,9 @@ public interface PostImageableBase extends org.semanticwb.social.PostDataable
    */
     public static final org.semanticwb.platform.SemanticClass social_PostImageable=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#PostImageable");
 
-    public org.semanticwb.model.GenericIterator<org.semanticwb.social.PhotoImg> listPhotos();
-    public boolean hasPhoto(org.semanticwb.social.PhotoImg value);
+    public java.util.Iterator<String> listPhotos();
 
-   /**
-   * Adds the Photo
-   * @param value An instance of org.semanticwb.social.PhotoImg
-   */
-    public void addPhoto(org.semanticwb.social.PhotoImg value);
-
-   /**
-   * Remove all the values for the property Photo
-   */
+    public void addPhoto(String value);
     public void removeAllPhoto();
-
-   /**
-   * Remove a value from the property Photo
-   * @param value An instance of org.semanticwb.social.PhotoImg
-   */
-    public void removePhoto(org.semanticwb.social.PhotoImg value);
-
-/**
-* Gets the Photo
-* @return a instance of org.semanticwb.social.PhotoImg
-*/
-    public org.semanticwb.social.PhotoImg getPhoto();
+    public void removePhoto(String value);
 }
