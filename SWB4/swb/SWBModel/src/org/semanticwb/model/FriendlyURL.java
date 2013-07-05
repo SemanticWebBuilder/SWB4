@@ -52,17 +52,20 @@ public class FriendlyURL extends org.semanticwb.model.base.FriendlyURLBase
             @Override
             public void notify(SemanticObject obj, Statement stmt, String action, boolean remote)
             {
-                Property p=stmt.getPredicate();
-                if(p.equals(swb_friendlyURL.getRDFProperty()))
+                if(stmt!=null)
                 {
-                    if(action.equals(SemanticObject.ACT_REMOVE))
+                    Property p=stmt.getPredicate();
+                    if(p.equals(swb_friendlyURL.getRDFProperty()))
                     {
-                        //System.out.println("remove friendly...");
-                        removeObject(obj);
-                    }else
-                    {
-                        //System.out.println("add friendly...");
-                        addFriendlyUrl((FriendlyURL)obj.createGenericInstance());                    
+                        if(action.equals(SemanticObject.ACT_REMOVE))
+                        {
+                            //System.out.println("remove friendly...");
+                            removeObject(obj);
+                        }else
+                        {
+                            //System.out.println("add friendly...");
+                            addFriendlyUrl((FriendlyURL)obj.createGenericInstance());                    
+                        }
                     }
                 }
             }            
