@@ -1118,6 +1118,22 @@ public class SemanticProperty
         }
         return ret;
     }
+    
+    /**
+     * Checks if is short.
+     * 
+     * @return true, if is short
+     */
+    public boolean isDecimal()
+    {
+        boolean ret = false;
+        Resource res = getRange();
+        if (res != null && res.getURI().equals(SemanticVocabulary.XMLS_DECIMAL))
+        {
+            ret = true;
+        }
+        return ret;
+    }    
 
     /**
      * Checks if is numeric.
