@@ -41,13 +41,41 @@
     //argsV.put("action", action);
     //System.out.println(wsite.getId().toString() + "--" + objUri);
 %>
+<script type="text/javascript" id="<%=objUri%>appends">
+    changeClassT = function() { 
+       if(document.getElementById('Txt').className ='sel-txt'){
+            document.getElementById('Txt').className ='sel-txt2';
+            document.getElementById('Img').className ='sel-img';
+            document.getElementById('Video').className ='sel-vid';
+        }
+    }
+     changeClassI = function() { 
+       if(document.getElementById('Img').className ='sel-img'){
+            document.getElementById('Img').className ='sel-img2';
+            document.getElementById('Txt').className ='sel-txt';
+            document.getElementById('Video').className ='sel-vid';
+        }
+     }
+     changeClassV = function() { 
+       if(document.getElementById('Video').className ='sel-vid'){
+            document.getElementById('Video').className ='sel-vid2';
+            document.getElementById('Txt').className ='sel-txt';
+            document.getElementById('Img').className ='sel-img';
+        }
+    }
+</script>
+<div dojoType="dojox.layout.ContentPane">
+    <script type="dojo/method">
+         eval(document.getElementById("<%=objUri%>appends").innerHTML);
+   </script>
+</div> 
 <body>
 <div class="swbform" id="publicar" >
         <p><strong>¿Qué deseas publicar?</strong></p>
         <div class="sel-media">
-		<a title="Publicar un mensaje de texto" class="sel-txt" onclick="postHtml('<%=url.setMode("post").setParameters(argsM)%>', '<%=objUri%>postType')"><span>Publicar un mensaje de texto</span></a>
-		<a title="Publicar una imagen" class="sel-img2" onclick="postHtml('<%=url.setMode("post").setParameters(argsP)%>', '<%=objUri%>postType')"><span>Publicar una imagen</span></a>
-		<a title="Publicar un video" class="sel-vid" onclick="postHtml('<%=url.setMode("post").setParameters(argsV)%>', '<%=objUri%>postType')"><span>Publicar un video</span></a>
+            <a id="Txt" title="Publicar un mensaje de texto" class="sel-txt" onclick="changeClassT();postHtml('<%=url.setMode("post").setParameters(argsM)%>', '<%=objUri%>postType')"><span>Publicar un mensaje de texto</span></a>
+            <a id="Img" title="Publicar una imagen" class="sel-img" onclick="changeClassI();postHtml('<%=url.setMode("post").setParameters(argsP)%>', '<%=objUri%>postType')"><span>Publicar una imagen</span></a>
+            <a id="Video" title="Publicar un video" class="sel-vid" onclick="changeClassV();postHtml('<%=url.setMode("post").setParameters(argsV)%>', '<%=objUri%>postType')"><span>Publicar un video</span></a>
 	</div>
         
 </div>
