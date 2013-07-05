@@ -492,18 +492,19 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
         JSONObject jsonResponse = null;
         
         try {
-            Iterator<PhotoImg> photosArray = photo.listPhotos();
+            Iterator<String> photosArray = photo.listPhotos();
             String photoToPublish="";
             String additionalPhotos="";
             int photoNumber = 0;
+            
             while(photosArray.hasNext()){
-                PhotoImg photoData = (PhotoImg)photosArray.next();
+                String sPhoto = photosArray.next();
                 if(++photoNumber == 1){//post the first Photo
                     photoToPublish = SWBPortal.getWorkPath() + photo.getWorkPath() + "/" + Photo.social_Photo.getName()
-                        + "_" + photoData.getId() + "_" + photoData.getPhoto();
+                        + "_" + photo.getId() + "_" + sPhoto;
                 }else{
                     additionalPhotos += SWBPortal.getWorkPath() + photo.getWorkPath() + "/" + Photo.social_Photo.getName()
-                        + "_" + photoData.getId() + "_" + photoData.getPhoto() + " ";
+                        + "_" + photo.getId() + "_" + sPhoto + " ";
                 }                
             }
             
