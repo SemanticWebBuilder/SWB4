@@ -65,7 +65,7 @@ public class FlowNodeInstance extends org.semanticwb.process.model.base.FlowNode
     public void start(User user)
     {
         super.start(user);
-        //System.out.println("start("+user+")");
+        //System.out.println("start("+this+","+user+")");
         execute(user);
     }
     
@@ -89,12 +89,14 @@ public class FlowNodeInstance extends org.semanticwb.process.model.base.FlowNode
     @Override
     public void close(User user, int status, String action)
     {
-        //System.out.println("close("+user+","+status+","+action+")");
+        //System.out.println("close("+this+","+user+","+status+","+action+")");
         close(user, status, action, true);
     }
     
     private void _close(User user, int status, boolean nextObjects)
     {
+        //System.out.println("_close("+this+","+user+","+status+","+nextObjects+")");
+        
         abortDependencies(user);
 
         connectItemsAware(user);
@@ -123,11 +125,11 @@ public class FlowNodeInstance extends org.semanticwb.process.model.base.FlowNode
      */
     public void close(User user, int status, String action, boolean nextObjects)
     {
+        //System.out.println("close("+this+","+user+","+status+","+action+","+nextObjects+")");
         //long time=System.currentTimeMillis();
         //System.out.println("Init close");        
         
         super.close(user,status,action);
-        //System.out.println("close("+user+","+status+","+action+","+nextObjects+")");
         
         //Verificar si la instancia tiene eventos intermedios relacionados y cerrarlos
         if (this.getFlowNodeType() instanceof Activity) {
