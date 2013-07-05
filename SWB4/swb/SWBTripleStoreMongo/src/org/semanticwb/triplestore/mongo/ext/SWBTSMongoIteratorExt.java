@@ -20,7 +20,7 @@
  * dirección electrónica:
  *  http://www.semanticwebbuilder.org
  */
-package org.semanticwb.triplestore.mongo;
+package org.semanticwb.triplestore.mongo.ext;
 
 import com.hp.hpl.jena.graph.Triple;
 import com.hp.hpl.jena.graph.TripleMatch;
@@ -40,17 +40,18 @@ import java.util.Set;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.triplestore.mongo.SWBTSMongoUtil;
 
 /**
  *
  * @author jei
  */
-public class SWBTSMongoIterator implements ExtendedIterator<Triple>
+public class SWBTSMongoIteratorExt implements ExtendedIterator<Triple>
 {
 
-    private static Logger log=SWBUtils.getLogger(SWBTSMongoIterator.class);
+    private static Logger log=SWBUtils.getLogger(SWBTSMongoIteratorExt.class);
 
-    private SWBTSMongoGraph graph=null;
+    private SWBTSMongoGraphExt graph=null;
     private TripleMatch tm=null;
 
     private DBCursor cur;
@@ -61,8 +62,13 @@ public class SWBTSMongoIterator implements ExtendedIterator<Triple>
     private boolean closed=false;
 
     private static int counter=0;
+    
+    public SWBTSMongoIteratorExt(SWBTSMongoGraphExt graph, TripleMatch tm)
+    {
+        this(graph, tm, null, 0, 0, null);
+    }
 
-    public SWBTSMongoIterator(SWBTSMongoGraph graph, TripleMatch tm)
+    public SWBTSMongoIteratorExt(SWBTSMongoGraphExt graph, TripleMatch tm, String stype, long limit, long offset, String sortby)
     {
         counter++;
         //System.out.println("SWBTSMongoIterator:"+counter+" tm:"+tm+" "+graph.getName());
@@ -70,7 +76,7 @@ public class SWBTSMongoIterator implements ExtendedIterator<Triple>
         this.graph=graph;
         this.tm=tm;
 
-        String subj=SWBTSMongoUtil.node2HashString(tm.getMatchSubject(),"lgs");
+        String subj= SWBTSMongoUtil.node2HashString(tm.getMatchSubject(),"lgs");
         String prop=SWBTSMongoUtil.node2HashString(tm.getMatchPredicate(),"lgp");
         String obj=SWBTSMongoUtil.node2HashString(tm.getMatchObject(),"lgo");
         
@@ -78,7 +84,7 @@ public class SWBTSMongoIterator implements ExtendedIterator<Triple>
 
         try
         {
-            DB db = SWBTSMongo.getMongo().getDB(SWBPlatform.getEnv("swb/mongodbname","swb"));
+            DB db = SWBTSMongoExt.getMongo().getDB(SWBPlatform.getEnv("swb/mongodbname","swb"));
             if(!db.isAuthenticated() && SWBPlatform.getEnv("swb/mongodbuser")!=null && SWBPlatform.getEnv("swb/mongodbpasswd")!=null)
             {
                 db.authenticate(SWBPlatform.getEnv("swb/mongodbuser"), SWBPlatform.getEnv("swb/mongodbpasswd").toCharArray());
@@ -91,8 +97,27 @@ public class SWBTSMongoIterator implements ExtendedIterator<Triple>
             if(subj!=null)doc.put("subj", subj);
             if(prop!=null)doc.put("prop", prop);
             if(obj!=null)doc.put("obj", obj);
+            if(stype!=null)doc.put("stype",stype);
             
             cur=coll.find(doc);
+            if(limit>0)cur=cur.limit((int)limit);
+            if(offset>0)cur=cur.skip((int)offset);
+            
+            if(sortby!=null)
+            {
+                BasicDBObject sort = new BasicDBObject();
+                int sp=sortby.indexOf(" ");
+                if(sp>-1)
+                {
+                    doc.put(sortby.substring(0,sp), Integer.parseInt(sortby.substring(sp+1)));
+                }else
+                {
+                    doc.put(sortby, -1);
+                }
+                cur=cur.sort(sort);
+                //sortby.replace("obj", "sort");
+                //if(sortby.equals("obj"))sortby="sort";
+            }              
             
             if(cur.hasNext())
             {

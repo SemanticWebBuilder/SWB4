@@ -20,7 +20,7 @@
  * dirección electrónica:
  *  http://www.semanticwebbuilder.org
  */
-package org.semanticwb.triplestore.mongo;
+package org.semanticwb.triplestore.mongo.ext;
 
 import com.hp.hpl.jena.graph.Triple;
 import com.hp.hpl.jena.graph.TripleMatch;
@@ -30,19 +30,28 @@ import com.hp.hpl.jena.util.iterator.ExtendedIterator;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
+import com.mongodb.DBObject;
+import com.mongodb.MongoException;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
+import org.semanticwb.SWBRuntimeException;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.remotetriplestore.RGraph;
+import org.semanticwb.triplestore.ext.GraphExt;
+import org.semanticwb.triplestore.mongo.SWBTSMongoPrefixMapping;
+import org.semanticwb.triplestore.mongo.SWBTSMongoUtil;
 
 /**
  *
  * @author jei
  */
-public class SWBTSMongoGraph extends GraphBase implements RGraph
+public class SWBTSMongoGraphExt extends GraphBase implements RGraph, GraphExt
 {
-    private static Logger log = SWBUtils.getLogger(SWBTSMongoGraph.class);
+    private static Logger log = SWBUtils.getLogger(SWBTSMongoGraphExt.class);
 
     private String name;
     private int id;
@@ -51,17 +60,17 @@ public class SWBTSMongoGraph extends GraphBase implements RGraph
     //private BigdataTransactionHandler trans;
 
 
-    public SWBTSMongoGraph(int id, String name)
+    public SWBTSMongoGraphExt(int id, String name)
     {
         this.id=id;
         this.name=name;
-        pmap=new SWBTSMongoPrefixMapping(this.getId());
+        pmap=new SWBTSMongoPrefixMapping(id);
     }
 
     @Override
     protected ExtendedIterator<Triple> graphBaseFind(TripleMatch tm)
     {
-        return new SWBTSMongoIterator(this, tm);
+        return new SWBTSMongoIteratorExt(this, tm);
         //throw new UnsupportedOperationException("Not supported yet.");
     }
 
@@ -76,7 +85,7 @@ public class SWBTSMongoGraph extends GraphBase implements RGraph
     {
         try
         {
-            String subj=SWBTSMongoUtil.node2String(t.getSubject());
+            String subj= SWBTSMongoUtil.node2String(t.getSubject());
             String hsubj=SWBTSMongoUtil.getHashText(subj);
             String prop=SWBTSMongoUtil.node2String(t.getPredicate());
             String hprop=SWBTSMongoUtil.getHashText(prop);
@@ -105,7 +114,10 @@ public class SWBTSMongoGraph extends GraphBase implements RGraph
             //System.out.println("performAdd:"+subj+" "+prop+" "+obj);
             //new Exception().printStackTrace();
             
-            DB db = SWBTSMongo.getMongo().getDB(SWBPlatform.getEnv("swb/mongodbname","swb"));
+            String ord=SWBTSMongoUtil.node2SortString(t.getObject());
+            String stype=SWBTSMongoUtil.getSTypeFromSUBJ(subj);            
+            
+            DB db = SWBTSMongoExt.getMongo().getDB(SWBPlatform.getEnv("swb/mongodbname","swb"));
             
             if(!db.isAuthenticated() && SWBPlatform.getEnv("swb/mongodbuser")!=null && SWBPlatform.getEnv("swb/mongodbpasswd")!=null)
             {
@@ -118,6 +130,11 @@ public class SWBTSMongoGraph extends GraphBase implements RGraph
             doc.put("subj", subj);
             doc.put("prop", prop);
             doc.put("obj", obj);
+            
+            doc.put("ord", ord);
+            doc.put("stype", stype);      
+            doc.put("timems", System.currentTimeMillis());
+            
             if(sext.length()>0)
             {
                 doc.put("ext", sext);
@@ -147,7 +164,7 @@ public class SWBTSMongoGraph extends GraphBase implements RGraph
 
             //System.out.println("performDelete:"+subj+" "+prop+" "+obj);
             
-            DB db = SWBTSMongo.getMongo().getDB(SWBPlatform.getEnv("swb/mongodbname","swb"));
+            DB db = SWBTSMongoExt.getMongo().getDB(SWBPlatform.getEnv("swb/mongodbname","swb"));
             if(!db.isAuthenticated() && SWBPlatform.getEnv("swb/mongodbuser")!=null && SWBPlatform.getEnv("swb/mongodbpasswd")!=null)
             {
                 db.authenticate(SWBPlatform.getEnv("swb/mongodbuser"), SWBPlatform.getEnv("swb/mongodbpasswd").toCharArray());
@@ -189,6 +206,48 @@ public class SWBTSMongoGraph extends GraphBase implements RGraph
     public PrefixMapping getPrefixMapping()
     {
         return pmap;
+    }
+
+    public long count(TripleMatch tm, String stype)
+    {
+        //System.out.println("SWBTSMongoIterator:"+counter+" tm:"+tm+" "+graph.getName());
+        long count=0;
+        
+        String subj= SWBTSMongoUtil.node2HashString(tm.getMatchSubject(),"lgs");
+        String prop=SWBTSMongoUtil.node2HashString(tm.getMatchPredicate(),"lgp");
+        String obj=SWBTSMongoUtil.node2HashString(tm.getMatchObject(),"lgo");
+        
+        //System.out.println("subj:"+subj+" prop:"+prop+" obj:"+obj);
+        try
+        {
+            DB db = SWBTSMongoExt.getMongo().getDB(SWBPlatform.getEnv("swb/mongodbname","swb"));
+            if(!db.isAuthenticated() && SWBPlatform.getEnv("swb/mongodbuser")!=null && SWBPlatform.getEnv("swb/mongodbpasswd")!=null)
+            {
+                db.authenticate(SWBPlatform.getEnv("swb/mongodbuser"), SWBPlatform.getEnv("swb/mongodbpasswd").toCharArray());
+            }
+            
+            DBCollection coll = db.getCollection("swb_graph_ts"+getId());
+            
+            BasicDBObject doc = new BasicDBObject();
+            
+            if(subj!=null)doc.put("subj", subj);
+            if(prop!=null)doc.put("prop", prop);
+            if(obj!=null)doc.put("obj", obj);
+            if(stype!=null)doc.put("stype", stype);
+            
+            count=coll.count(doc);
+            
+        }catch(MongoException e)
+        {
+            log.error(e);
+        }        
+
+        return count;
+    }
+
+    public ExtendedIterator<Triple> find(TripleMatch tm, String stype, Long limit, Long offset, String sortby)
+    {
+        return new SWBTSMongoIteratorExt(this, tm, stype, limit, offset, sortby);
     }
 
 }
