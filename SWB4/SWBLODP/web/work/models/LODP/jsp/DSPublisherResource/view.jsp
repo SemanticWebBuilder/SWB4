@@ -440,8 +440,8 @@
                         urldet.setParameter("suri", ds.getShortURI());
 
                         SWBResourceURL urlremove = paramRequest.getActionUrl();
-                        urlremove.setParameter("act", "remove");
-                        urlremove.setParameter("suri", ds.getEncodedURI());
+                        urlremove.setAction(SWBResourceURL.Action_REMOVE);
+                        urlremove.setParameter("suri", ds.getShortURI());
 
 
                         if (paintBackColor) {
@@ -486,7 +486,11 @@
                             <li class="coment" title="<%=paramRequest.getLocaleString("lbl_comments")%>"><strong><%=paramRequest.getLocaleString("lbl_comments")%>:</strong><%=dft.format(numcomm)%></li>
                         </ul>
                     </td>
-                    <td><a class="editar" href="<%=urldet.toString()%>"><span><%=paramRequest.getLocaleString("lbl_edit")%></span></a>&nbsp;<a class="eliminar" href="<%=urlremove.toString()%>"><span><%=paramRequest.getLocaleString("lbl_remove")%></span></a></td> 
+                    <td>
+                        <a class="editar" href="<%=urldet.toString()%>"><span><%=paramRequest.getLocaleString("lbl_edit")%></span></a>&nbsp;
+                        <input type="button" class="eliminar" onclick="if(confirm('¿Estás seguro de eliminar este Dataset?')){window.location='<%=urlremove.toString()%>';} else {return false;}" title="<%=paramRequest.getLocaleString("lbl_remove")%>" />
+                        
+                    </td> 
                 </tr>
                 <%
                         }
