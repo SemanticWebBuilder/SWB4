@@ -119,25 +119,19 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
             String photoToPublish="";
             String additionalPhotos="";
             int photoNumber = 0;
-            System.out.println("postPhoto/1");
-            
-            
+                        
             Iterator<String> photos = photo.listPhotos();
             while(photos.hasNext()){
                 String sPhoto =photos.next();
                 if(++photoNumber == 1){//post the first Photo
-                    photoToPublish = SWBPortal.getWorkPath() + photo.getWorkPath() + "/" + Photo.social_hasPhoto.getName()
-                        + "_" + photo.getId() + "_" + sPhoto;
-                    System.out.println("postPhoto/7");
-                    System.out.println("reading 2");
+                    photoToPublish = SWBPortal.getWorkPath() + photo.getWorkPath() + "/" + sPhoto;
                 }else{
-                    System.out.println("postPhoto/8");
-                    additionalPhotos += SWBPortal.getWorkPath() + photo.getWorkPath() + "/" + Photo.social_hasPhoto.getName()
-                        + "_" + photo.getId() + "_" + sPhoto + " ";
+                    additionalPhotos += SWBPortal.getWorkPath() + photo.getWorkPath() + "/" + sPhoto + " ";
                 }         
                
             }
             if(photoNumber == 0){
+                log.error("No photo(s) found!");
                 System.out.println("No Photos FOUND");
                 return;
             }
@@ -148,8 +142,7 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
             AccessToken accessToken = new AccessToken(this.getAccessToken(), this.getAccessTokenSecret());
             String description = photo.getMsg_Text()!= null ? photo.getMsg_Text() : "";
             twitter.setOAuthAccessToken(accessToken);
-//            String photoSend = SWBPortal.getWorkPath() + photo.getWorkPath() + "/" + Photo.social_photo.getName()
-//                    + "_" + photo.getId() + "_" + photo.getPhoto();
+            
             try {
                 twitter.setOAuthAccessToken(accessToken);
                 StatusUpdate sup = null;// new StatusUpdate(new String(shortUrl(description).getBytes(), "ISO-8859-1"));
@@ -158,12 +151,14 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
                 {
                     System.out.println("Twitter Photo PRIMERA OPCION...:"+photo.getPostInSource().getPostInSocialNetworkUser().getSnu_name());
                     //sup = new StatusUpdate(new String(shortUrl(photo.getPostInSource().getPostInSocialNetworkUser().getSnu_name() + " " +description).getBytes(), "ISO-8859-1"));
-                    sup = new StatusUpdate(new String(shortUrl(photo.getPostInSource().getPostInSocialNetworkUser().getSnu_name() + " " + description + " " + additionalPhotos).getBytes(), "ISO-8859-1"));
+                    description = description + (additionalPhotos.trim().length() > 0 ? " " + additionalPhotos : "" ); //
+                    sup = new StatusUpdate(new String(shortUrl(photo.getPostInSource().getPostInSocialNetworkUser().getSnu_name() + " " + description ).getBytes(), "ISO-8859-1"));
                     //sup.setMedia(new File(photoSend));
                     sup.setMedia(new File(photoToPublish));
                     stat = twitter.updateStatus(sup.inReplyToStatusId(Long.parseLong(photo.getPostInSource().getSocialNetMsgId())));
                 }else{
                     System.out.println("Twitter Photo SEGUNDA OPCION...");
+                    description = description + (additionalPhotos.trim().length() > 0 ? " " + additionalPhotos : "" ); //
                     sup = new StatusUpdate(new String(shortUrl(description).getBytes(), "ISO-8859-1"));
                     //sup.setMedia(new File(photoSend));
                     sup.setMedia(new File(photoToPublish));
