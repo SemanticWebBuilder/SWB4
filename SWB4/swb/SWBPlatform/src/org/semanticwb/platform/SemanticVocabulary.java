@@ -117,6 +117,9 @@ public class SemanticVocabulary
     /** The Constant XMLS_BYTE. */
     public static final String XMLS_BYTE = XMLS_URI + "byte";
     
+    /** The Constant XMLS_BYTE. */
+    public static final String XMLS_DECIMAL = XMLS_URI + "decimal";    
+    
     /** The Constant XMLS_BASE64BINARY. */
     public static final String XMLS_BASE64BINARY = XMLS_URI + "base64Binary";
     
