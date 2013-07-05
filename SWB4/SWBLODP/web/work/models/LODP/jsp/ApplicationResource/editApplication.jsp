@@ -39,11 +39,11 @@
     User user = paramRequest.getUser();
     WebPage wpage = paramRequest.getWebPage();
     WebSite wsite = wpage.getWebSite();
-    Iterator<Category> itCat = Category.ClassMgr.listCategories(wsite);
-    String idCat = "";
-    String descCat = "";
-    String ciudadanas = "Ciudadanas";
-    String servPub = "Servicio Publico";
+//    Iterator<Category> itCat = Category.ClassMgr.listCategories(wsite);
+//    String idCat = "";
+//    String descCat = "";
+//    String ciudadanas = "Ciudadanas";
+//    String servPub = "Servicio Público";
     
     GenericObject ob = apl.getAppAuthor().createGenericInstance();
     String fullName = "";
@@ -58,30 +58,30 @@
         fullName = db.getFullName();
     }
     
-    Publisher pub = LODPUtils.getPublisher(user);
-    Developer dev = LODPUtils.getDeveloper(user);
+//    Publisher pub = LODPUtils.getPublisher(user);
+//    Developer dev = LODPUtils.getDeveloper(user);
     
-    while(itCat.hasNext()){
-        Category cat = itCat.next();
-        
-        if(cat.getCatName()!=null){
-        
-            if (pub != null) {
-                if(cat.getCatName().equals(servPub)){
-                    descCat = cat.getCatName();
-                    idCat = cat.getId();
-                }
-            }
-
-            if (dev != null) {
-               if(cat.getCatName().equals(ciudadanas)){
-                    descCat = cat.getCatName();
-                    idCat = cat.getId();
-                }
-            }
-        }
-    }
-    
+//    while(itCat.hasNext()){
+//        Category cat = itCat.next();
+//        
+//        if(cat.getCatName()!=null){
+//        
+//            if (pub != null) {
+//                if(cat.getCatName().equals(servPub)){
+//                    descCat = cat.getCatName();
+//                    idCat = cat.getId();
+//                }
+//            }
+//
+//            if (dev != null) {
+//               if(cat.getCatName().equals(ciudadanas)){
+//                    descCat = cat.getCatName();
+//                    idCat = cat.getId();
+//                }
+//            }
+//        }
+//    }
+    System.out.println("Esta es una descripcion de la categoria" + apl.getCategory().getCatName());
   
  %>
 <p>
@@ -110,8 +110,8 @@
                 <textarea name="descripcion" id="desc" data-dojo-type="dijit.form.Textarea" required="true" promptMessage="<%=paramRequest.getLocaleString("lbl_promtTextArea")%>" invalidMessage="<%=paramRequest.getLocaleString("lbl_invalidMsjTA")%>" trim="true"><%=apl.getAppDescription()%></textarea>
                 
                 <label for="cat"><b>*</b><%=paramRequest.getLocaleString("lbl_category")%></label>
-                <input type="text" id="cat" name="category" disabled="true" value="<%=descCat%>"/>
-                <input type="hidden" name="idCat" value="<%=idCat%>"/>
+                <input type="text" id="cat" name="category" disabled="true" value="<%=apl.getCategory().getCatName()%>"/>
+                <input type="hidden" name="idCat" value="<%=apl.getCategory().getId()%>"/>
                 
                 <label for="usr"><b>*</b><%=paramRequest.getLocaleString("lbl_appDS")%></label>
                 <select name="dataSet" multiple siz="5" required="true">

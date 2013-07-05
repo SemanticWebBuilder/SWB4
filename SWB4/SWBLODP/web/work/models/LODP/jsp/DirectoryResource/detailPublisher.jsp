@@ -28,6 +28,7 @@ WebPage wpage = paramRequest.getWebPage();
 WebSite wsite = wpage.getWebSite();
 SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
 String actionList = request.getParameter("actionList");
+String value = request.getParameter("val");
 SWBResourceURL urlConsulta = paramRequest.getRenderUrl();
 SWBResourceURL modeURL = paramRequest.getRenderUrl();
            
@@ -118,4 +119,4 @@ String suri = request.getParameter("suri");
             <a href="#" onclick="javascript:document.back.submit()">Regresar</a>
     </div>            
             
-      <form action="<%=modeURL.setMode(SWBResourceURL.Mode_VIEW).setParameter("act", "arregloLetras")%>" method="post" name="back"></form>
+          <form action="<%=modeURL.setMode(SWBResourceURL.Mode_VIEW).setParameter("act", "arregloLetras").setParameter("val", value)%>" method="post" name="back"></form>
