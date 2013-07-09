@@ -23,7 +23,6 @@
 package org.semanticwb.process.resources.taskinbox;
 
 import java.io.IOException;
-import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -31,9 +30,11 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
+import java.util.concurrent.TimeUnit;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.*;
-import org.json.JSONArray;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
@@ -55,6 +56,7 @@ import org.semanticwb.process.model.Process;
 import org.semanticwb.process.model.ProcessInstance;
 import org.semanticwb.process.model.ProcessSite;
 import org.semanticwb.process.model.SWBProcessMgr;
+import org.semanticwb.process.model.StartEvent;
 import org.semanticwb.process.model.UserTask;
 
 /***
@@ -81,6 +83,7 @@ public class UserTaskInboxResource extends org.semanticwb.process.resources.task
     public static final String COL_ACTIONS = "actions";
     public static final String COL_STATUSPROCESS = "statusProcess";
     public static final String COL_STATUSTASK = "statusTask";
+    public static final String COL_FLAGTASK = "flagTask";
     public static final String ATT_COLS = "cols";
     public static final String ACT_UPDATE = "update";
     public static final String ACT_CREATE = "create";
@@ -95,6 +98,8 @@ public class UserTaskInboxResource extends org.semanticwb.process.resources.task
     public static final String MODE_FWD = "forward";
     public static final String MODE_STATISTICS = "statistics";
     public static final String MODE_GETDATA = "getData";
+    public static final String MODE_CREATEPI = "createPi";
+    public static final String MODE_PROCESSDETAIL = "processDetail";
     private HashMap<String, String> colNames;
     
     private Comparator taskNameComparator = new Comparator() {
@@ -130,6 +135,7 @@ public class UserTaskInboxResource extends org.semanticwb.process.resources.task
         colNames.put(COL_NAMEPROCESS, "Nombre de instancia de proceso");
         colNames.put(COL_NAMETASK, "Nombre de instancia de tarea");
         colNames.put(COL_STARTTASK, "Fecha de inicio de tarea");
+        colNames.put(COL_FLAGTASK, "Semáforo de la tarea");
         colNames.put(COL_STARTPROCESS, "Fecha de inicio de proceso");
         colNames.put(COL_ENDTASK, "Fecha de fin de tarea");
         colNames.put(COL_ENDPROCESS, "Fecha de fin de proceso");
@@ -179,10 +185,10 @@ public class UserTaskInboxResource extends org.semanticwb.process.resources.task
         String mode = paramRequest.getMode();
         if (MODE_FWD.equals(mode)) {
             doForward(request, response, paramRequest);
-        } else if (MODE_STATISTICS.equals(mode)) {
-            doStatistics(request, response, paramRequest);
-        } else if (MODE_GETDATA.equals(mode)) { 
-            doGetData(request, response, paramRequest);
+        } else if (MODE_CREATEPI.equals(mode)) {
+            doCreateProcessInstance(request, response, paramRequest);
+        } else if (MODE_PROCESSDETAIL.equals(mode)) {
+            doDetail(request, response, paramRequest);
         } else {
             super.processRequest(request, response, paramRequest);
         }
@@ -344,74 +350,22 @@ public class UserTaskInboxResource extends org.semanticwb.process.resources.task
         } else if (MODE_FWD.equals(act)) {
             String suri = request.getParameter("suri");
             String sowner = request.getParameter("owner");
+            
             SemanticObject sobj = SemanticObject.createSemanticObject(suri);
             User owner = response.getWebPage().getWebSite().getUserRepository().getUser(sowner);
-            if (sobj != null && owner != null) {
+            if (sobj != null) {
                 FlowNodeInstance fni = (FlowNodeInstance)sobj.createGenericInstance();
                 if (fni != null) {
-                    fni.setAssignedto(owner);
+                    if (owner != null) {
+                        fni.setAssignedto(owner);
+                    } else {
+                        fni.removeAssignedto();
+                    }
                 }
             }
         } else {
             super.processAction(request, response);
         }
-    }
-    
-    public void doStatistics(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        String jsp = "/swbadmin/jsp/process/processGraphs.jsp";
-
-        try {
-            RequestDispatcher rd = request.getRequestDispatcher(jsp);
-            request.setAttribute("paramRequest", paramRequest);
-            request.setAttribute("base", getResourceBase());
-            rd.include(request, response);
-        } catch (Exception e) {
-            log.error("Error including jsp in statistics mode", e);
-        }
-    }
-    
-    public void doGetData(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        OutputStream ous = response.getOutputStream();
-        String action = paramRequest.getAction();
-        WebSite site = paramRequest.getWebPage().getWebSite();
-        
-        response.setHeader("Cache-Control", "no-cache");
-        response.setHeader("Pragma", "no-cache");
-        response.setContentType("application/json");
-        
-        if ("systemInstances".equals(action)) {
-            JSONArray data = new JSONArray();
-            int act = 0;
-            int clos = 0;
-            int abor = 0;
-            
-            Iterator<SemanticObject> it = site.getSemanticModel().listSubjects(ProcessInstance.swp_processStatus, ProcessInstance.STATUS_PROCESSING);
-            while (it.hasNext()) {
-                SemanticObject o = it.next();
-                act++;
-            }
-            
-            it = site.getSemanticModel().listSubjects(ProcessInstance.swp_processStatus, ProcessInstance.STATUS_CLOSED);
-            while (it.hasNext()) {
-                SemanticObject o = it.next();
-                clos++;
-            }
-            
-            it = site.getSemanticModel().listSubjects(ProcessInstance.swp_processStatus, ProcessInstance.STATUS_ABORTED);
-            while (it.hasNext()) {
-                SemanticObject o = it.next();
-                abor++;
-            }
-            
-            data.put(act);
-            data.put(clos);
-            data.put(abor);
-            System.out.println(data.toString());
-            ous.write(data.toString().getBytes());
-        }
-        
-        ous.flush();
-        ous.close();
     }
     
     @Override
@@ -597,6 +551,89 @@ public class UserTaskInboxResource extends org.semanticwb.process.resources.task
         out.println(sb.toString());
     }
     
+    public void doCreateProcessInstance(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        PrintWriter out = response.getWriter();
+        StringBuilder sb = new StringBuilder();
+        User user = paramRequest.getUser();
+        String lang = "es";
+        
+        if (user != null && user.getLanguage() != null) {
+            lang = user.getLanguage();
+        }
+        
+        Map<String, ArrayList<Process>> groups = new TreeMap<String, ArrayList<Process>>();
+        SWBResourceURL createUrl = paramRequest.getActionUrl().setAction(UserTaskInboxResource.ACT_CREATE);
+        ArrayList<Process> pccs = null;
+        
+        //Obtener los eventos de inicio
+        Iterator<StartEvent> startEvents = StartEvent.ClassMgr.listStartEvents(paramRequest.getWebPage().getWebSite());
+        while(startEvents.hasNext()) {
+            StartEvent sevt = startEvents.next();
+            //Si el usuario tiene permisos en el evento
+            if (sevt.getContainer() != null && sevt.getContainer() instanceof Process && user.haveAccess(sevt)) {
+                Process itp = sevt.getProcess();
+                //Si el proceso al que pertenece el evento y es válido
+                if (itp != null && itp.isValid()) {
+                    if(itp.getProcessGroup() != null) {
+                        String pg = itp.getProcessGroup().getDisplayTitle(lang);
+                        //Si ya existe el grupo de procesos en el treemap
+                        if(groups.get(pg) != null) {
+                            pccs = groups.get(pg);
+                            if (!pccs.contains(itp)) {
+                                pccs.add(itp);
+                            }
+                            groups.put(pg, pccs);
+                        } else { //Si no existe el grupo de procesos en el treemap
+                            pccs = new ArrayList<Process>();
+                            pccs.add(itp);
+                            groups.put(pg, pccs);
+                        }
+                    }
+                }
+            }
+        }
+
+        Iterator<String> keys = groups.keySet().iterator();
+        if (keys.hasNext()) {
+            sb.append("<form method=\"post\" action=\"").append(createUrl.toString()).append("\" onsubmit=\"")
+                    .append("setDialogLoading(true, 'Creando instancia...'); return true;").append("\">");
+            sb.append("  <select name=\"pid\">");
+            while(keys.hasNext()) {
+                String key = keys.next();
+                sb.append("    <optgroup label=\"").append(key).append("\">");
+                Iterator<Process> it_pccs = SWBComparator.sortByDisplayName(groups.get(key).iterator(), lang);
+                while(it_pccs.hasNext()) {
+                    Process pcc = it_pccs.next();
+                    sb.append("      <option value=\"").append(pcc.getId()).append("\">").append(pcc.getDisplayTitle(lang)).append("</option>");
+                }
+                sb.append("    </optgroup>");
+            }
+            sb.append("  </select>");
+            sb.append("  <div>");
+            sb.append("    <br/><input type=\"submit\" value=\"Aceptar\" class=\"btn1\">");
+            sb.append("  </div>");
+            sb.append("</form>");
+        } else {
+            sb.append("<span>No hay procesos disponibles</span>");
+        }
+        out.println(sb.toString());
+    }
+    
+    public void doDetail(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        String jsp = "/swbadmin/jsp/process/userTaskInboxDetail.jsp";
+
+        try {
+            RequestDispatcher rd = request.getRequestDispatcher(jsp);
+            request.setAttribute("paramRequest", paramRequest);
+            request.setAttribute("instances", getProcessInstances(request, paramRequest));
+            request.setAttribute("statusWp", getDisplayMapWp());
+            request.setAttribute("itemsPerPage", getItemsPerPage());
+            rd.include(request, response);
+        } catch (Exception e) {
+            log.error("Error including jsp in detail mode", e);
+        }
+    }
+    
     public void doForward(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         User user = paramRequest.getUser();
         WebSite site = paramRequest.getWebPage().getWebSite();
@@ -646,46 +683,143 @@ public class UserTaskInboxResource extends org.semanticwb.process.resources.task
             
             if (tPartners != null && tPartners.hasNext() && fni != null) {
                 SWBResourceURL forward = paramRequest.getActionUrl().setAction(MODE_FWD);
-                SWBResourceURL url = paramRequest.getRenderUrl().setMode(SWBParamRequest.Mode_VIEW);
-                sb.append("<script type=\"text/javascript\">");
-                sb.append(" dojo.require(\"dijit.form.Form\");");
-                sb.append(" dojo.require(\"dijit.form.FilteringSelect\");");
-                sb.append(" dojo.require(\"dijit.form.Button\");");
-                sb.append("</script>");
-                sb.append("<form class=\"swbform\" dojoType=\"dijit.form.Form\" action=\"").append(forward).append("\">");
+                sb.append("<form id=\"fwd/").append(getResourceBase().getId()).append("\" method=\"post\" action=\"")
+                        .append(forward.toString()).append("\" onsubmit=\"")
+                        .append("submitFormPortal('fwd/").append(getResourceBase().getId()).append("'); hideDialog(); return false;").append("\">");
                 sb.append("  <input type=\"hidden\" name=\"suri\" value=\"").append(suri).append("\"/>");
-                sb.append("  <fieldset>");
-                sb.append("    <table>");
-                sb.append("      <tr>");
-                sb.append("        <td width=\"200px\" align=\"right\">");
-                sb.append("          <label for=\"owner\">Reasignar tarea a: </label>");
-                sb.append("        </td>");
-                sb.append("        <td>");
-                sb.append("          <select name=\"owner\" dojoType=\"dijit.form.FilteringSelect\">");
-                sb.append("            <option value=\"--\">Liberar tarea</option>");
+                sb.append("  <select name=\"owner\">");
+                sb.append("    <option value=\"--\">Liberar tarea</option>");
                 while(tPartners.hasNext()) {
                     User _user = tPartners.next();
                     if (!_user.equals(fni.getAssignedto())) {
-                        sb.append("            <option value=\"").append(_user.getId()).append("\">").append((_user.getFullName()==null||_user.getFullName().trim().equals(""))?_user.getId():_user.getFullName()).append("</option>");
+                        sb.append("    <option value=\"").append(_user.getId()).append("\">").append((_user.getFullName()==null||_user.getFullName().trim().equals(""))?_user.getId():_user.getFullName()).append("</option>");
                     }
                 }
-                sb.append("          </select>");
-                sb.append("        </td>");
-                sb.append("      </tr>");
-                sb.append("    </table>");
-                sb.append("  </fieldset>");
-                sb.append("  <fieldset>");
-                sb.append("    <button type=\"submit\" dojoType=\"dijit.form.Button\">Reasignar</button>");
-                sb.append("    <button dojoType=\"dijit.form.Button\" onclick=\"window.location='").append(url).append("'; return false;\">Regresar</button>");
-                sb.append("  </fieldset>");
+                sb.append("  </select>");
+                sb.append("  <div>");
+                sb.append("    <br/><input type=\"submit\" value=\"Aceptar\" class=\"btn1\">");
+                sb.append("  </div>");
                 sb.append("</form>");
             } else {
-                String url = fni.getUserTaskInboxUrl();             
-                sb.append("Esta tarea no puede ser reasignada a otro usuario");
-                sb.append("<a href=\"").append(url).append("\">Regresar</a>");
+                sb.append("<span>Esta tarea no puede ser reasignada a otro usuario</span>");
             }
         }
         out.println(sb.toString());
+    }
+    
+    public ArrayList<ProcessInstance> getProcessInstances(HttpServletRequest request, SWBParamRequest paramRequest) {
+        ArrayList<ProcessInstance> unpaged = new ArrayList<ProcessInstance>();
+        ArrayList<ProcessInstance> instances = new ArrayList<ProcessInstance>();
+        String suri = request.getParameter("suri");
+        Process p = (Process)SWBPlatform.getSemanticMgr().getOntology().getGenericObject(suri);
+        
+        if (p != null) {
+            int page = 1;
+            int processing = 0;
+            int aborted = 0;
+            int closed = 0;
+            int delayed = 0;
+            int ontime = 0;
+            long maxTime = -3;
+            long minTime = Long.MAX_VALUE;
+            long sumTime = 0;
+            int itemsPerPage = getItemsPerPage();
+            
+            Iterator<ProcessInstance> it = SWBComparator.sortByCreated(p.listProcessInstances(), false);
+            while (it.hasNext()) {
+                ProcessInstance pi = it.next();
+                
+                //Conteo de instancias
+                if (pi.getStatus() == ProcessInstance.STATUS_PROCESSING) {
+                    boolean isDelayed = false;
+                    //Verifica retraso
+                    Iterator<FlowNodeInstance> itfni = pi.listAllFlowNodeInstance();
+                    while (itfni.hasNext() && !isDelayed) {
+                        FlowNodeInstance fni = itfni.next();
+                        if (fni.getStatus() == FlowNodeInstance.STATUS_PROCESSING && fni.getFlowNodeType() instanceof UserTask) {
+                            UserTask ut = (UserTask) fni.getFlowNodeType();
+                            int delay = ut.getNotificationTime();
+
+                            if (delay > 0) {
+                                long today = System.currentTimeMillis();
+                                long cr = fni.getCreated().getTime();
+                                if (today - cr > (1000*60*delay)) {
+                                    isDelayed = true;
+                                }
+                            }
+                        }
+                    }
+                    
+                    if (isDelayed) {
+                        delayed++;
+                    } else {
+                        ontime++;
+                    }
+                    processing++;
+                }
+                if (pi.getStatus() == ProcessInstance.STATUS_ABORTED) aborted++;
+                if (pi.getStatus() == ProcessInstance.STATUS_CLOSED) {
+                    //Cálculo de tiempos de respuesta generales
+                    long resTime = pi.getEnded().getTime() - pi.getCreated().getTime();
+                    if (resTime > maxTime) {
+                        maxTime = resTime;
+                    }
+                    
+                    if(resTime < minTime) {
+                        minTime = resTime;
+                    }
+                    sumTime += resTime;
+                    closed++;
+                }
+                unpaged.add(pi);
+            }
+            
+            request.setAttribute("processing", processing);
+            request.setAttribute("aborted", aborted);
+            request.setAttribute("closed", closed);
+            request.setAttribute("delayed", delayed);
+            request.setAttribute("ontime", ontime);
+            
+            if (closed > 0) {
+                request.setAttribute("minTime", TimeUnit.MILLISECONDS.toMinutes(minTime));
+                request.setAttribute("maxTime", TimeUnit.MILLISECONDS.toMinutes(maxTime));
+                request.setAttribute("avgTime", TimeUnit.MILLISECONDS.toMinutes(sumTime/closed));
+            } else {
+                request.setAttribute("minTime", 0L);
+                request.setAttribute("maxTime", 0L);
+                request.setAttribute("avgTime", 0L);
+            }
+        
+            //Realizar paginado de instancias
+            int maxPages = 1;
+            if (request.getParameter("page") != null && !request.getParameter("page").trim().equals("")) {
+                page = Integer.valueOf(request.getParameter("page"));
+                if (page < 0) page = 1;
+            }
+
+            if (itemsPerPage < 5) itemsPerPage = 5;
+
+            if (unpaged.size() >= itemsPerPage) {
+                maxPages = (int)Math.ceil((double)unpaged.size() / itemsPerPage);
+            }
+            if (page > maxPages) page = maxPages;
+
+            int sIndex = (page - 1) * itemsPerPage;
+            if (unpaged.size() > itemsPerPage && sIndex > unpaged.size() - 1) {
+                sIndex = unpaged.size() - itemsPerPage;
+            }
+
+            int eIndex = sIndex + itemsPerPage;
+            if (eIndex >= unpaged.size()) eIndex = unpaged.size();
+
+            request.setAttribute("maxPages", maxPages);
+            
+            for (int i = sIndex; i < eIndex; i++) {
+                ProcessInstance instance = unpaged.get(i);
+                instances.add(instance);
+            }
+        }
+        return instances;
     }
 
     /***
@@ -701,12 +835,17 @@ public class UserTaskInboxResource extends org.semanticwb.process.resources.task
         User user = paramRequest.getUser();
         String sortType = request.getParameter("sort");
         int itemsPerPage = getItemsPerPage();
-        int statusFilter = ProcessInstance.STATUS_PROCESSING;
+        int statusFilter = FlowNodeInstance.STATUS_PROCESSING;
+        boolean onlyAssigned = false;
         Process p = null;
         int page = 1;
 
         if (request.getParameter("sFilter") != null && !request.getParameter("sFilter").trim().equals("")) {
             statusFilter = Integer.valueOf(request.getParameter("sFilter"));
+        }
+        
+        if (request.getParameter("asFilter") != null && request.getParameter("asFilter").equals("true")) {
+            onlyAssigned = true;
         }
 
         if (request.getParameter("pFilter") != null && !request.getParameter("pFilter").trim().equals("")) {
@@ -722,7 +861,13 @@ public class UserTaskInboxResource extends org.semanticwb.process.resources.task
             while (fnInstances.hasNext()) {
                 FlowNodeInstance flowNodeInstance = fnInstances.next();
                 if (validUserTaskInstance(flowNodeInstance, user, statusFilter)) {
-                    unpaged.add(flowNodeInstance);
+                    if (onlyAssigned) {
+                        if (flowNodeInstance.getAssignedto() == null) {
+                            unpaged.add(flowNodeInstance);
+                        }
+                    } else {
+                        unpaged.add(flowNodeInstance);
+                    }
                 }
             }
         }
@@ -774,7 +919,6 @@ public class UserTaskInboxResource extends org.semanticwb.process.resources.task
     private boolean validUserTaskInstance(FlowNodeInstance fni, User user, int statusFilter) {
         boolean hasGroup = false;
         boolean hasStatus = false;
-        boolean canAccess = false;
         
         Process pType = fni.getProcessInstance().getProcessType();
         
@@ -787,7 +931,7 @@ public class UserTaskInboxResource extends org.semanticwb.process.resources.task
             return false;
         }
         
-        canAccess = fni.haveAccess(user);
+        boolean canAccess = fni.haveAccess(user);
         
         if (canAccess) {
             //Verificar filtrado por grupo
