@@ -71,6 +71,56 @@ public class FlowNode extends org.semanticwb.process.model.base.FlowNodeBase
         //System.out.println("createInstance:"+pinst+" "+inst);
 
         //Crea las instancias de los item aware de entrada  que a su vez no tengan entradas
+        initItemAwares(inst);
+        
+        //crear instancias de itemaware temporales para los itemaware de salida que no tengan referencias herarquicas
+        Iterator<ConnectionObject> it2=listOutputConnectionObjects();
+        while (it2.hasNext())
+        {
+            ConnectionObject connectionObject = it2.next();
+            GraphicalElement gele=connectionObject.getTarget();
+            if(gele instanceof ItemAware)
+            {
+                ItemAware item=(ItemAware)gele;
+                SemanticClass scls=item.getItemSemanticClass();
+                if(scls!=null)
+                {
+                    boolean hasItemAwarereference=false;
+                    //verifica si existe alguna referencia al itemAware
+                    Iterator<ItemAware> it3=listHerarquicalRelatedItemAware().iterator();
+                    while (it3.hasNext())
+                    {
+                        ItemAware itemAware = it3.next();
+                        if(item.getName().equals(itemAware.getName()) && item.getItemSemanticClass().equals(itemAware.getItemSemanticClass()))
+                        {
+                            hasItemAwarereference=true;
+                        }
+                    }
+                    //si no existe crea una referencia temporal al itemAware para su uso en la tarea
+                    if(!hasItemAwarereference)
+                    {
+                        ItemAwareReference ref=ItemAwareReference.ClassMgr.createItemAwareReference(this.getProcessSite());
+                        ref.setItemAware(item);
+                        ref.setItemAwareTemporal(true);
+                        SWBModel model=this.getProcessSite().getProcessDataInstanceModel();
+                        String id=id=String.valueOf(model.getSemanticModel().getCounter(scls));
+                        SemanticObject ins=model.getSemanticModel().createSemanticObjectById(id, scls);
+                        //System.out.println("item add2:"+ref+" "+inst);
+                        ref.setProcessObject((SWBClass)ins.createGenericInstance());
+                        inst.addItemAwareReference(ref);
+                    }
+                }
+            }
+        }
+        return inst;
+    }
+    
+    /**
+     * Crea las instancias de los item aware de entrada  que a su vez no tengan entradas
+     */
+    protected void initItemAwares(FlowNodeInstance inst)
+    {
+        //Crea las instancias de los item aware de entrada  que a su vez no tengan entradas
         Iterator<ItemAware> it=listRelatedItemAware().iterator();
         while (it.hasNext())
         {
@@ -157,48 +207,7 @@ public class FlowNode extends org.semanticwb.process.model.base.FlowNodeBase
             {
                 //No se hace nada ya que los datos ya se agregaron en la salida del ItemAware
             }
-        }
-
-        //crear instancias de itemaware temporales para los itemaware de salida que no tengan referencias herarquicas
-        Iterator<ConnectionObject> it2=listOutputConnectionObjects();
-        while (it2.hasNext())
-        {
-            ConnectionObject connectionObject = it2.next();
-            GraphicalElement gele=connectionObject.getTarget();
-            if(gele instanceof ItemAware)
-            {
-                ItemAware item=(ItemAware)gele;
-                SemanticClass scls=item.getItemSemanticClass();
-                if(scls!=null)
-                {
-                    boolean hasItemAwarereference=false;
-                    //verifica si existe alguna referencia al itemAware
-                    Iterator<ItemAware> it3=listHerarquicalRelatedItemAware().iterator();
-                    while (it3.hasNext())
-                    {
-                        ItemAware itemAware = it3.next();
-                        if(item.getName().equals(itemAware.getName()) && item.getItemSemanticClass().equals(itemAware.getItemSemanticClass()))
-                        {
-                            hasItemAwarereference=true;
-                        }
-                    }
-                    //si no existe crea una referencia temporal al itemAware para su uso en la tarea
-                    if(!hasItemAwarereference)
-                    {
-                        ItemAwareReference ref=ItemAwareReference.ClassMgr.createItemAwareReference(this.getProcessSite());
-                        ref.setItemAware(item);
-                        ref.setItemAwareTemporal(true);
-                        SWBModel model=this.getProcessSite().getProcessDataInstanceModel();
-                        String id=id=String.valueOf(model.getSemanticModel().getCounter(scls));
-                        SemanticObject ins=model.getSemanticModel().createSemanticObjectById(id, scls);
-                        //System.out.println("item add2:"+ref+" "+inst);
-                        ref.setProcessObject((SWBClass)ins.createGenericInstance());
-                        inst.addItemAwareReference(ref);
-                    }
-                }
-            }
-        }
-        return inst;
+        }        
     }
 
     public void execute(FlowNodeInstance instance, User user)
