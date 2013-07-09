@@ -374,7 +374,9 @@ public class AudioPodCast extends org.semanticwb.portal.resources.sem.base.Audio
 
             File f;
             long duration;
-            out.println(" <p class=\"swb-podcast-title\">"+(base.getDisplayTitle(lang)==null?base.getTitle():base.getDisplayTitle(lang))+"</p>");
+            if(isDisplayTitle()) {
+                out.println(" <p class=\"swb-podcast-title\">"+(base.getDisplayTitle(lang)==null?base.getTitle():base.getDisplayTitle(lang))+"</p>");
+            }
             out.println(" <p class=\"swb-podcast-lat\">"+paramRequest.getLocaleString("latest") +"</p>");
             out.println(" <ul class=\"swb-pdcst-list\">");
             for(int i=inicio; i<fin; i++)
@@ -431,6 +433,7 @@ public class AudioPodCast extends org.semanticwb.portal.resources.sem.base.Audio
                     out.print("        <span class=\"swb-pdcst-ffmt\">"+paramRequest.getLocaleString("format")+"&nbsp;"+audiofile.getExtension()+"</span>");
                     out.print("        <span class=\"swb-pdcst-fsize\">"+df.format(f.length()/1048576.0)+" Mb</span>");
                     out.println("     </p>");
+                    out.print("       <a class=\"swb-pdcst-imglnk\" href=\"#\" onclick=\"window.open('"+directURL+"?suri='+encodeURIComponent('"+audiofile.getURI()+"'))\" title=\""+(audiofile.getDisplayTitle(lang)==null?audiofile.getTitle():audiofile.getDisplayTitle(lang))+"\">"+paramRequest.getLocaleString("download")+"</a>&nbsp;");
                     out.println("    </div>");
                     out.println("   </div>");
                     out.println("  </li>");
