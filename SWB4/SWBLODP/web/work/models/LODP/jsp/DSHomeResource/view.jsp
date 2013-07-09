@@ -155,8 +155,9 @@
         <li>
             <a title="<%=ds.getDatasetDescription()%>" href="<%=wpurl + ds.getShortURI()%>"><%=ds.getDatasetTitle()%></a><br/> 
             <strong><%=topiclist.toString()%></strong><br/>
-            <em><%=ds.getInstitution().getInstitutionTitle()%></em>
             <em><%=ds.getDatasetCreated()!=null?sdf2.format(ds.getDatasetCreated()):""%></em>
+            <em><%=ds.getInstitution().getInstitutionTitle()%></em>
+            
         </li>
         <%
                 }
@@ -312,7 +313,8 @@
                     %>
             <li class="<%=pintar%>">
                 <a class="ico-<%=icontype%>" title="<%=ds.getDatasetDescription()%>" href="<%=wpurl + ds.getShortURI()%>"><%=ds.getDatasetTitle()%></a>
-                <em><%=ds.getInstitution() != null && ds.getInstitution().getInstitutionTitle() != null ? ds.getInstitution().getInstitutionTitle() : ""%></em>
+                <em class="date"><%=ds.getDatasetCreated()!=null?sdf2.format(ds.getDatasetCreated()):""%></em>
+                <em class="pub"><%=ds.getInstitution() != null && ds.getInstitution().getInstitutionTitle() != null ? ds.getInstitution().getInstitutionTitle() : ""%></em>
             </li>
             <%
                     }
