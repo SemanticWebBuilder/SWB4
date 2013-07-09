@@ -451,6 +451,13 @@ public class FlowNodeInstance extends org.semanticwb.process.model.base.FlowNode
         }
     }
     
+    /**
+     * Revisa si existen dependencias ciclicas
+     * @param orig
+     * @param act
+     * @param arr
+     * @return 
+     */
     private boolean checkCicle(FlowNode orig, FlowNode act, ArrayList<FlowNode> arr)
     {
         if(arr==null)
