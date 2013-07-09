@@ -553,7 +553,7 @@ public class FlowNodeInstance extends org.semanticwb.process.model.base.FlowNode
         Iterator<ConnectionObject> it=type.listOutputConnectionObjects();
         while (it.hasNext())
         {
-            ConnectionObject connectionObject = it.next();
+            ConnectionObject connectionObject = it .next();
             if(connectionObject instanceof SequenceFlow)
             {
                 if(connectionObject.getClass().equals(SequenceFlow.class))
