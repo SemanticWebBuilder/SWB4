@@ -97,48 +97,85 @@ if (paramRequest.getCallMethod() == SWBParamRequest.Call_STRATEGY) {%>
                 google.load("visualization", "1", {packages:["corechart"]});
                 google.setOnLoadCallback(drawChart);
                 function drawChart() {
-                    var data = google.visualization.arrayToDataTable([
-                        ['Estatus', 'Unidades'],
-                        ['En proceso',     <%=processing%>],
-                        ['Cerrados',     <%=closed%>],
-                        ['Abortados',      <%=aborted%>]
-                    ]);
-
-                    var data2 = google.visualization.arrayToDataTable([
-                        ['Tiempo de respuesta', 'Horas'],
-                        ['Mínimo',     <%=minTime%>],
-                        ['Máximo',     <%=maxTime%>],
-                        ['Promedio',      <%=avgTime%>]
-                    ]);
-
-                    var data3 = google.visualization.arrayToDataTable([
-                        ['Estado', 'Valor'],
-                        ['Retrasadas', <%=delayed%>],
-                        ['A tiempo', <%=ontime%>]
-                    ]);
-
                     var options = {
                       title: 'Instancias de proceso (<%=total%>)',
                       backgroundColor: {fill:'none'}
                     };
-
-                    var chart = new google.visualization.PieChart(document.getElementById('performanceGraph'));
-                    var chart2 = new google.visualization.PieChart(document.getElementById('responseTime'));
-                    var chart3 = new google.visualization.PieChart(document.getElementById('overdueGraph'));
-                    chart.draw(data, options);
-
-                    options.title = "Tiempo de respuesta (min)";
-                    options.pieSliceText = "value";
-                    chart2.draw(data2, options);
-
-                    options.title = "Estatus de ejecución";
-                    options.pieSliceText = "percent";
-                    chart3.draw(data3, options);
+                    
+                    <%
+                    if (processing == 0 && closed == 0 && aborted == 0) {
+                        
+                    } else {
+                        %>
+                        var data = google.visualization.arrayToDataTable([
+                            ['Estatus', 'Unidades'],
+                            ['En proceso',     <%=processing%>],
+                            ['Cerrados',     <%=closed%>],
+                            ['Abortados',      <%=aborted%>]
+                        ]);
+                        var chart = new google.visualization.PieChart(document.getElementById('performanceGraph'));
+                        chart.draw(data, options);
+                    <%
+                    }
+                    
+                    if (minTime == 0 && maxTime == 0 && avgTime == 0) {
+                        
+                    } else {
+                        %>
+                        var data2 = google.visualization.arrayToDataTable([
+                            ['Tiempo de respuesta', 'Horas'],
+                            ['Mínimo',     <%=minTime%>],
+                            ['Máximo',     <%=maxTime%>],
+                            ['Promedio',      <%=avgTime%>]
+                        ]);
+                        
+                        var chart2 = new google.visualization.PieChart(document.getElementById('responseTime'));
+                        options.title = "Tiempo de respuesta (min)";
+                        options.pieSliceText = "value";
+                        chart2.draw(data2, options);
+                        <%
+                    }
+                    
+                    if (delayed == 0 && ontime == 0) {
+                        
+                    } else {
+                        %>
+                        var data3 = google.visualization.arrayToDataTable([
+                            ['Estado', 'Valor'],
+                            ['Retrasadas', <%=delayed%>],
+                            ['A tiempo', <%=ontime%>]
+                        ]);
+                        
+                        var chart3 = new google.visualization.PieChart(document.getElementById('overdueGraph'));
+                        options.title = "Estatus de ejecución";
+                        options.pieSliceText = "percent";
+                        chart3.draw(data3, options);
+                        <%
+                    }
+                    %>
                 }
             </script>
-            <div class="processChartPie" id="performanceGraph"></div>
-            <div class="processChartPie" id="responseTime"></div>
-            <div class="processChartPie" id="overdueGraph"></div>
+            <%if (processing == 0 && closed == 0 && aborted == 0) {
+                        
+            } else {
+                %>
+                <div class="processChartPie" id="performanceGraph"></div>
+                <%
+            }
+            if (minTime == 0 && maxTime == 0 && avgTime == 0) {
+                        
+            } else {
+                %>
+                <div class="processChartPie" id="responseTime"></div>
+                <%
+            }
+            if (delayed == 0 && ontime == 0) {
+                        
+            } else {
+                %>
+                <div class="processChartPie" id="overdueGraph"></div>
+                <%
+            }%>
             <div class="bandeja-combo"><strong><span style="font-size: medium">Instancias del proceso</span></strong></div>
             <div>
                 <table class="tabla-bandeja">
