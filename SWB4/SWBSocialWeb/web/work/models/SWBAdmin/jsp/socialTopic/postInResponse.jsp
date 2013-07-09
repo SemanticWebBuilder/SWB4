@@ -45,7 +45,8 @@
         isVideoable=true; 
     } 
 %>
-<div class="swbform">
+<div class="swbform" id="publicar">
+    <div class="sel-media">
     <table width="50%" border="0px">            
        <tr>
            <td colspan="3" style="text-align: center;"><b><%=SWBUtils.TEXT.encode(paramRequest.getLocaleString("whattoPost"),"utf8")%></b></td>        
@@ -57,20 +58,21 @@
             <%if(isMessageAble){
                 args.put("valor", "postMessage");
             %>
-                 <td style="text-align: center;"><a style="cursor: pointer;" title="<%=paramRequest.getLocaleString("message")%>" onclick="postHtml('<%=url.setMode("post").setParameters(args)%>', 'postType')"><img src="/swbadmin/images/text.png"/></a></td>
+                 <td style="text-align: center;"><a id="Txt" class="sel-txt2" style="cursor: pointer;" title="<%=paramRequest.getLocaleString("message")%>" onclick="postHtml('<%=url.setMode("post").setParameters(args)%>', 'postType')"></a></td>
             <%}%>
             <%if(isPhotoable){  
                 args.put("valor", "uploadPhoto"); 
             %> 
-                <td style="text-align: center;"><a style="cursor: pointer;" title="<%=paramRequest.getLocaleString("photo")%>" onclick="postHtml('<%=url.setMode("post").setParameters(args)%>', 'postType')"><img src="/swbadmin/images/photo.png"/></a></td>
+                <td style="text-align: center;"><a id="Img" class="sel-img2" style="cursor: pointer;" title="<%=paramRequest.getLocaleString("photo")%>" onclick="postHtml('<%=url.setMode("post").setParameters(args)%>', 'postType')"></a></td>
             <%}%>
             <%if(isVideoable){
                 args.put("valor", "uploadVideo"); 
             %> 
-                <td style="text-align: center;"><a style="cursor: pointer;" title="<%=paramRequest.getLocaleString("video")%>" onclick="postHtml('<%=url.setMode("post").setParameters(args)%>', 'postType')"><img src="/swbadmin/images/video.png"/></a></td>
+                <td style="text-align: center;"><a id="Video" class="sel-vid2" style="cursor: pointer;" title="<%=paramRequest.getLocaleString("video")%>" onclick="postHtml('<%=url.setMode("post").setParameters(args)%>', 'postType')"></a></td>
             <%}%>    
        </tr>        
     </table>
+    </div>
 </div>
 
 <div id="postType" dojoType="dijit.layout.ContentPane">
