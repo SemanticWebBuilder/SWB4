@@ -544,8 +544,11 @@ public class FlowNodeInstance extends org.semanticwb.process.model.base.FlowNode
         setAction(null);
         setEnded(null);
         removeEndedby();
-
+        
         FlowNode type=getFlowNodeType();
+        
+        type.initItemAwares(this);
+        
         //resetear subsecuentes
         Iterator<ConnectionObject> it=type.listOutputConnectionObjects();
         while (it.hasNext())
@@ -563,7 +566,6 @@ public class FlowNodeInstance extends org.semanticwb.process.model.base.FlowNode
                         if(inst!=null && inst.getStatus()>Instance.STATUS_PROCESSING)
                         {
                             inst.reset();
-                            node.initItemAwares(inst);
                         }
                     }
                 }
