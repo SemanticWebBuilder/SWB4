@@ -50,7 +50,7 @@ public class SWBProxyThreadProcessor implements Runnable {
     public void run() {
         while(flag){
             try {
-                DelayedMessage message = queue.poll(1000, TimeUnit.MILLISECONDS);
+                DelayedMessage message = queue.poll(250, TimeUnit.MILLISECONDS);
                 if (null!=message)
                     center.sendMessage(message.getMessage(), network);
             } catch (Exception err){

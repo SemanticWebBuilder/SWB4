@@ -35,10 +35,13 @@ public class DelayedMessage implements Delayed {
     private long endTime;
     private TimeUnit unit;
     
-    public DelayedMessage(String message, long delay, TimeUnit unit) {
+    public DelayedMessage(final String message, final long delay, final TimeUnit unit) {
         this.message = message;
         this.unit = unit;
-        this.endTime =  System.currentTimeMillis() + this.unit.convert(delay, TimeUnit.MILLISECONDS);
+//        System.out.println("delay:"+delay);
+//        System.out.println("asked delay: "+TimeUnit.MILLISECONDS.convert(delay, unit));
+        this.endTime =  System.currentTimeMillis() + TimeUnit.MILLISECONDS.convert(delay, unit);
+//        System.out.println("endTime: "+endTime);
     }
     
     public String getMessage(){
@@ -47,13 +50,15 @@ public class DelayedMessage implements Delayed {
 
     @Override
     public long getDelay(TimeUnit unit) {
-        return this.unit.convert(endTime - System.currentTimeMillis(), unit); 
+        long period  =endTime - System.currentTimeMillis();
+        return unit.convert(period, TimeUnit.MILLISECONDS); 
     }
 
     @Override
     public int compareTo(Delayed o) {
-        long del = System.currentTimeMillis() + o.getDelay(TimeUnit.MILLISECONDS);
-        return (int)(endTime - del);
+        long del = o.getDelay(TimeUnit.MILLISECONDS);
+        long com = getDelay(TimeUnit.MILLISECONDS);
+        return (int)(com - del);
     }
     
 }

@@ -81,7 +81,7 @@ public class SWBMessageServer extends java.lang.Thread
                 //DatagramPacket packet = new DatagramPacket(new byte [PKSIZE], PKSIZE);
                 s.receive(packet);
                 String msg = new String(packet.getData(), 0, packet.getLength());
-                log.debug("UDP Msg:"+msg+" ");
+                log.debug("UDP Msg:"+msg+" "+from);
                 center.incomingMessage(msg, 
                         packet.getAddress().getHostAddress()+":"+
                         packet.getPort(), from);
