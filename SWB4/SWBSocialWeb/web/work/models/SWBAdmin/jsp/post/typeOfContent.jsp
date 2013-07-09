@@ -115,7 +115,7 @@
 
             <div class="pub-info">
                 <%= messageFormMgr.getFormHiddens()%>
-                <p class="titulo">Detalles de la publicación</p>
+                <p class="titulo">Detalles de la publicaci&oacute;n</p>
                 <p><div class="etiqueta"><label for="msj"><%=Message.social_Message.getDisplayName(lang)%>: </label></div>
                 <div class="campo"><%=postOut == null ? messageFormMgr.renderElement(request, Message.social_msg_Text, messageFormMgr.MODE_CREATE) : messageFormMgr.renderElement(request, Message.social_msg_Text, messageFormMgr.MODE_EDIT)%></div>
                 </p>
@@ -249,7 +249,7 @@
                 return false;">
                 <%= photoMgr.getFormHiddens()%>
                 <div class="pub-info">
-                    <p class="titulo">Detalles de la publicación</p>
+                    <p class="titulo">Detalles de la publicaci&oacute;n</p>
                     <p>
                     <div class="etiqueta"><label for="description"><%=Photo.social_msg_Text.getDisplayName()%>:</label></div>
                     <div class="campo"><%=photoMgr.renderElement(request, Photo.social_msg_Text, photoMgr.MODE_CREATE)%></div>
@@ -404,7 +404,7 @@
             <%= videoMgr.getFormHiddens()%>
             
              <div class="pub-info">
-                    <p class="titulo">Detalles de la publicación</p>
+                 <p class="titulo">Detalles de la publicaci&oacute;n</p>
                     <p>
                       <div id="<%=objUri%>divCategory" style="display:none;" class="etiqueta"><label for="description">Categoría:</label>
                 <select name="<%=Video.social_category.getName()%>">
