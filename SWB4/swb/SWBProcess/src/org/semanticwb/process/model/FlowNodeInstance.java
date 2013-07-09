@@ -25,12 +25,15 @@ package org.semanticwb.process.model;
 import bsh.Interpreter;
 import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.vocabulary.RDF;
+import java.util.ArrayList;
 import java.util.Iterator;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.*;
 import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticObject;
+import static org.semanticwb.process.model.Instance.ACTION_CANCEL;
+import static org.semanticwb.process.model.Instance.STATUS_ABORTED;
 
 public class FlowNodeInstance extends org.semanticwb.process.model.base.FlowNodeInstanceBase 
 {
@@ -447,6 +450,39 @@ public class FlowNodeInstance extends org.semanticwb.process.model.base.FlowNode
             }
         }
     }
+    
+    private boolean checkCicle(FlowNode orig, FlowNode act, ArrayList<FlowNode> arr)
+    {
+        if(arr==null)
+        {
+            arr=new ArrayList();
+        }        
+        else
+        {
+            if(arr.contains(act))return false;
+            arr.add(act);
+        }
+        Iterator<ConnectionObject> it=act.listInputConnectionObjects();
+        while (it.hasNext())
+        {
+            ConnectionObject connectionObject = it.next();
+            if(connectionObject instanceof SequenceFlow)
+            {
+                if(connectionObject.getClass().equals(SequenceFlow.class))
+                {
+                    //System.out.println(connectionObject);
+                    GraphicalElement obj=connectionObject.getSource();
+                    if(obj instanceof FlowNode)
+                    {
+                        FlowNode node=(FlowNode)obj;
+                        if(node.equals(orig))return true;
+                        return checkCicle(orig,node,arr);
+                    }
+                }
+            }
+        }
+        return false;
+    }
 
     /**
      * Aborta las instancias anteriores ene el flujo a esta instancia
@@ -456,7 +492,7 @@ public class FlowNodeInstance extends org.semanticwb.process.model.base.FlowNode
     {
         //System.out.println("abortDependencies:"+getId()+" "+getFlowNodeType().getClass().getName()+" "+getFlowNodeType().getTitle());
         FlowNode type=getFlowNodeType();
-
+        
         //Cerrar dependencias
         Iterator<ConnectionObject> it=type.listInputConnectionObjects();
         while (it.hasNext())
@@ -471,14 +507,17 @@ public class FlowNodeInstance extends org.semanticwb.process.model.base.FlowNode
                     if(obj instanceof FlowNode)
                     {
                         FlowNode node=(FlowNode)obj;
-                        FlowNodeInstance inst=this.getRelatedFlowNodeInstance(node);
-                        if(inst==null)
+                        if(!checkCicle(type, node, null))
                         {
-                            inst=node.createInstance(getContainerInstance());
-                        }
-                        if(inst.getStatus()<Instance.STATUS_ABORTED)
-                        {
-                            inst.close(user, STATUS_ABORTED, ACTION_CANCEL, false);
+                            FlowNodeInstance inst=this.getRelatedFlowNodeInstance(node);
+                            if(inst==null)
+                            {
+                                inst=node.createInstance(getContainerInstance());
+                            }
+                            if(inst.getStatus()<Instance.STATUS_ABORTED)
+                            {
+                                inst.close(user, STATUS_ABORTED, ACTION_CANCEL, false);
+                            }
                         }
                     }
                 }
