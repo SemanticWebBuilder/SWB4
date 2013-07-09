@@ -23,7 +23,7 @@
     WebSite wsite = wpage.getWebSite();
     Resource base = paramRequest.getResourceBase();
     String appWP = base.getAttribute("appid", "Aplicaciones");
-     SimpleDateFormat sdf2 = new SimpleDateFormat("dd-MMMMM-yyyy", new Locale("es"));
+     SimpleDateFormat sdf2 = new SimpleDateFormat("dd/MMMMM/yyyy", new Locale("es"));
 
     long intSize = 0;
 
