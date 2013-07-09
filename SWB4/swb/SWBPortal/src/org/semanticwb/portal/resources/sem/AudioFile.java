@@ -24,6 +24,7 @@ package org.semanticwb.portal.resources.sem;
 
 import java.io.File;
 import java.util.Comparator;
+import java.util.GregorianCalendar;
 import org.semanticwb.SWBPortal;
 
 public class AudioFile extends org.semanticwb.portal.resources.sem.base.AudioFileBase 
@@ -56,4 +57,33 @@ public class AudioFile extends org.semanticwb.portal.resources.sem.base.AudioFil
     public String getExtension() {
         return this.getFilename().substring(this.getFilename().lastIndexOf(".")+1);
     }
+
+    @Override
+    public void setYear(String value) {
+        super.setYear(value);
+    }
+
+    @Override
+    public String getYear() {
+        String year = super.getYear();
+        if(year==null) {
+            GregorianCalendar gc = new GregorianCalendar();
+            gc.setTime(getCreated());
+            year = Integer.toString(gc.get(GregorianCalendar.YEAR));
+            setYear(year);
+        }
+        return year;
+    }
+    /*
+     * String prefix = super.getPrefix();
+        if(prefix==null) {
+            try {
+                prefix = getTitle().trim().substring(0, 1).toUpperCase();
+            }catch(Exception e) {
+                prefix = "Untitled";
+            }
+            setPrefix(prefix);
+        }
+        return prefix;
+     */
 }

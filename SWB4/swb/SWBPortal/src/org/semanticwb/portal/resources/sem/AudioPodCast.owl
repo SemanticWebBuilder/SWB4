@@ -166,15 +166,15 @@
     >250</swb:defaultValue>
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_scDescription">
-        <swbxf:propPromptMessage xml:lang="es">Resumir descripción hasta</swbxf:propPromptMessage>
+        <rdfs:label xml:lang="en">Truncate Audio description to</rdfs:label>
         <swbxf:propInvalidMessage xml:lang="en">Summary maximum size is required</swbxf:propInvalidMessage>
         <swbxf:propInvalidMessage xml:lang="es">Tamaño máximo de resumen es requerido</swbxf:propInvalidMessage>
         <swbxf:propPromptMessage xml:lang="en">Resume description to</swbxf:propPromptMessage>
         <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#Integer"/>
-        <rdfs:label xml:lang="en">Trunc description to</rdfs:label>
+        <rdfs:label xml:lang="es">Truncar la descripción del Audio hasta</rdfs:label>
         <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
         >10</swb:index>
-        <rdfs:label xml:lang="es">Truncar descripción hasta</rdfs:label>
+        <swbxf:propPromptMessage xml:lang="es">Resumir descripción hasta</swbxf:propPromptMessage>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
     <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
@@ -287,6 +287,21 @@
       </swbxf:DisplayProperty>
     </swb:displayProperty>
   </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="displayTitle">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_displayTitle">
+        <rdfs:label xml:lang="en">Display Podcast title</rdfs:label>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#BooleanElement_3"/>
+        <rdfs:label xml:lang="es">Mostrar título del Podcast</rdfs:label>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >7</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Mostrar el título del recurso en la página de estratégia</rdfs:comment>
+    <rdfs:domain rdf:resource="#AudioPodCast"/>
+  </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="autoplay">
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
     <swb:displayProperty>
@@ -355,6 +370,16 @@
       </swbxf:DisplayProperty>
     </swb:displayProperty>
   </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="showcontroller">
+    <rdfs:label xml:lang="es">Mostrar reproductor</rdfs:label>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_showcontroller"/>
+    </swb:displayProperty>
+    <rdfs:label xml:lang="en">Show player</rdfs:label>
+    <rdfs:comment xml:lang="en">Show console</rdfs:comment>
+    <rdfs:comment xml:lang="es">Mostrar consola</rdfs:comment>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+  </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="showSlider">
     <rdfs:domain rdf:resource="#AudioPodCast"/>
     <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
@@ -372,15 +397,27 @@
       </swbxf:DisplayProperty>
     </swb:displayProperty>
   </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="showcontroller">
-    <rdfs:label xml:lang="es">Mostrar reproductor</rdfs:label>
+  <owl:DatatypeProperty rdf:ID="year">
+    <rdfs:domain rdf:resource="#AudioFile"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <swb:defaultValue rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >2013</swb:defaultValue>
     <swb:displayProperty>
-      <swbxf:DisplayProperty rdf:ID="dp_showcontroller"/>
+      <swbxf:DisplayProperty rdf:ID="dp_year">
+        <rdfs:label xml:lang="es">Año</rdfs:label>
+        <rdfs:label xml:lang="en">Year</rdfs:label>
+        <swbxf:formElement>
+          <swbxf:Text rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#thousand">
+            <swbxf:textRegExp rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >\d{4}</swbxf:textRegExp>
+          </swbxf:Text>
+        </swbxf:formElement>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >32</swb:index>
+      </swbxf:DisplayProperty>
     </swb:displayProperty>
-    <rdfs:label xml:lang="en">Show player</rdfs:label>
-    <rdfs:comment xml:lang="en">Show console</rdfs:comment>
-    <rdfs:comment xml:lang="es">Mostrar consola</rdfs:comment>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+    <swb:externalInvocation rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:externalInvocation>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="transparent">
     <rdfs:domain rdf:resource="#AudioPodCast"/>
@@ -405,15 +442,15 @@
     >abreviación de título (shortcut)</rdfs:comment>
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_scTitle">
-        <swbxf:propInvalidMessage xml:lang="en">Summary maximum size is required</swbxf:propInvalidMessage>
+        <rdfs:label xml:lang="es">Truncar el título del Audio hasta</rdfs:label>
         <swbxf:propPromptMessage xml:lang="en">Resume title to</swbxf:propPromptMessage>
         <swbxf:propPromptMessage xml:lang="es">Resumir título hasta</swbxf:propPromptMessage>
         <swbxf:propInvalidMessage xml:lang="es">Tamaño máximo de resumen es requerido</swbxf:propInvalidMessage>
         <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#Integer"/>
         <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
         >10</swb:index>
-        <rdfs:label xml:lang="en">Trunc title to</rdfs:label>
-        <rdfs:label xml:lang="es">Truncar título hasta</rdfs:label>
+        <rdfs:label xml:lang="en">Truncate Audio title to</rdfs:label>
+        <swbxf:propInvalidMessage xml:lang="en">Summary maximum size is required</swbxf:propInvalidMessage>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
     <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
@@ -592,10 +629,10 @@
     >80</swb:defaultValue>
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_height">
-        <rdfs:label xml:lang="es">Altura de la consola</rdfs:label>
-        <rdfs:label xml:lang="en">Console height</rdfs:label>
         <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >9</swb:index>
+        >6</swb:index>
+        <rdfs:label xml:lang="en">Console height</rdfs:label>
+        <rdfs:label xml:lang="es">Altura de la consola</rdfs:label>
         <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#Integer"/>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
@@ -621,11 +658,11 @@
     <rdfs:domain rdf:resource="#AudioPodCast"/>
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_width">
-        <rdfs:label xml:lang="es">Anchura de la consola</rdfs:label>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >5</swb:index>
         <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#Integer"/>
         <rdfs:label xml:lang="en">Console width</rdfs:label>
-        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >8</swb:index>
+        <rdfs:label xml:lang="es">Anchura de la consola</rdfs:label>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
