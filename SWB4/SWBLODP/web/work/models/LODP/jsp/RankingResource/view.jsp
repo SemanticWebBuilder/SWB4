@@ -75,8 +75,8 @@ Author     : rene.jara
       }
         // -->
     </script>
-    <div class="tit">
-        <h4><%=paramRequest.getLocaleString("lblTitle")%></h4>
+    <div class="valorar">
+        <!-- h4 --><%=paramRequest.getLocaleString("lblTitle")%><!-- /h4 -->
     </div>
     <div id="votacion">
         <div id="vota1" title="vota 1" onclick="javascript:rank('1'); return false;"><span>vota 1</span></div>
@@ -90,8 +90,8 @@ Author     : rene.jara
     <%
       }else{
 %>
-    <div class="tit">
-        <h4><%=paramRequest.getLocaleString("lblTitle")%></h4>
+    <div class="valorar">
+        <!-- h4 --><%=paramRequest.getLocaleString("lblTitle")%><!-- /h4 -->
     </div>
    <div id="votacion">
         <img src="/work/models/LODP/css/images/star-<%=average >= 1?"on":"off"%>.png" width="15" height="14" alt="*">
