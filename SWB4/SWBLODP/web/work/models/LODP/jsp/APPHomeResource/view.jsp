@@ -97,7 +97,7 @@
         <li>
             <a title="<%=app.getAppTitle()%>" href="<%=wpurl + app.getShortURI()%>"><%=app.getAppTitle()%></a>
             <strong><%=app.getAppDescription()%></strong>
-            <%=sdf2.format(app.getAppCreated())%>
+            <em><%=app.getAppCreated()!=null?sdf2.format(app.getAppCreated()):""%></em>
         </li>
         
         <%}}%>
