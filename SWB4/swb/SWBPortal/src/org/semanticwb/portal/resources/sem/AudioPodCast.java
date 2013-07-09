@@ -31,6 +31,7 @@ import java.net.URL;
 import java.net.URLDecoder;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
@@ -49,6 +50,7 @@ import org.semanticwb.model.Resourceable;
 import org.semanticwb.model.SWBComparator;
 import org.semanticwb.model.User;
 import org.semanticwb.model.WebPage;
+import org.semanticwb.platform.SemanticModel;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.portal.api.*;
 
@@ -87,7 +89,8 @@ public class AudioPodCast extends org.semanticwb.portal.resources.sem.base.Audio
     }
 
     @Override
-    public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+    public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
+    {
         response.setContentType("text/html; charset=UTF-8");
         final Resource base = getResourceBase();
         final User user = paramRequest.getUser();
@@ -99,203 +102,37 @@ public class AudioPodCast extends org.semanticwb.portal.resources.sem.base.Audio
         
         if(paramRequest.getCallMethod()==SWBParamRequest.Call_STRATEGY)
         {
-            String surl = null;
-            Iterator<Resourceable> res = base.listResourceables();
-            while(res.hasNext()) {
-                Resourceable re = res.next();
-                if( re instanceof WebPage ) {
-                    surl = ((WebPage)re).getUrl();
-                    break;
-                }
-            }
-            final String contentURL = surl;
             final String sid = request.getParameter("sid");
-            Iterator<AudioFile> resources;
-            if(sid!=null) {
+            final String year = request.getParameter("yr");
+           
+            if(sid!=null)
+            {
+
+                Iterator<AudioFile> resources;
                 AudioPodcastTheme theme = AudioPodcastTheme.ClassMgr.getAudioPodcastTheme(sid, base.getWebSite());
                 try {
                     resources = theme.listAudioFiles();
                 }catch(Exception e) {
                     resources = AudioFile.ClassMgr.listAudioFiles(base.getWebSite());
                 }
-            }else {
-                resources = AudioFile.ClassMgr.listAudioFiles(base.getWebSite());
+                renderPodcastList(request, response, paramRequest, resources);
             }
-            
-            resources = SWBComparator.sortByCreated(resources, false);
-            if(resources.hasNext())
-            {                              
-                
-//////////////////////
-        List<AudioFile> elements = SWBUtils.Collections.copyIterator(resources);
-        int el = elements.size();
-        int paginas = el/getPageSize();
-        if(el%getPageSize() != 0) {
-            paginas++;
-        }
-        int inicio = 0;
-        int fin = getPageSize();
-        int ipage;
-        try {
-            ipage = Integer.parseInt(request.getParameter("p"));
-        }catch(NumberFormatException fne) {
-            ipage = 1;
-        }
-
-        // Mantiene la consistencia al eliminar elementos
-        if(ipage>paginas)
-            ipage--;
-
-        inicio = (ipage * getPageSize()) - getPageSize();
-        fin = (ipage * getPageSize());
-
-        if(ipage < 1 || ipage > paginas) {
-            ipage = 1;
-        }
-        if(inicio < 0) {
-            inicio = 0;
-        }
-        if(fin < 0) {
-            fin = getPageSize();
-        }
-        if(fin > el) {
-            fin = el;
-        }
-        if(inicio > fin) {
-            inicio = 0;
-            fin = getPageSize();
-        }
-        if( fin-inicio > getPageSize() ) {
-            inicio = 0;
-            fin = getPageSize();
-        }
-        //inicio++;
-//////////////////////                
-                
-                
-                
-                File f;
-                long duration;
-                out.println("<div class=\"swb-podcast\">");
-                out.println(" <p class=\"swb-podcast-title\">"+(base.getDisplayTitle(lang)==null?base.getTitle():base.getDisplayTitle(lang))+"</p>");
-                out.println(" <p class=\"swb-podcast-lat\">"+paramRequest.getLocaleString("latest") +"</p>");
-                out.println(" <ul class=\"swb-pdcst-list\">");
-                for(int i=inicio; i<fin; i++)
-                {
-                    AudioFile audiofile = elements.get(i);
-                    if(!audiofile.isValid() || !user.haveAccess(audiofile)) {
-                        continue;
-                    }                    
-                    try {
-                        f = audiofile.getFile();
-                    }catch(Exception e) {
-                        continue;
-                    }
-                    if(f!=null && f.isFile())
-                    {
-                        try {
-                            AudioInputStream ais = new MpegAudioFileReader().getAudioInputStream(f);
-                            AudioFileFormat baseFileFormat = new MpegAudioFileReader().getAudioFileFormat(f);
-                            Map properties = baseFileFormat.properties();
-                            duration = (Long)properties.get("duration");
-                        }catch(UnsupportedAudioFileException unsafe) {
-                            continue;
-                        }                        
-                        out.println("  <li class=\"swb-pdcst-item\">");
-                        out.println("   <div class=\"swb-pdcst-box\">");
-                        try {
-                            out.println("  <div class=\"swb-pdcst-text\"><p class=\"swb-pdcst-title\">"+(audiofile.getDisplayTitle(lang)==null?audiofile.getTitle().substring(0,getScTitle()) : audiofile.getDisplayTitle(lang).substring(0,getScTitle()))+"</p></div>");
-                        }catch(IndexOutOfBoundsException obe) {
-                            out.println("  <div class=\"swb-pdcst-text\"><p class=\"swb-pdcst-title\">"+(audiofile.getDisplayTitle(lang)==null?audiofile.getTitle() :audiofile.getDisplayTitle(lang))+"</p></div>");
-                        }
-                        out.println("      <div class=\"swb-pdcst-text\"><p class=\"swb-pdcst-pubdate\"><span class=\"swb-pdcst-pub\">"+paramRequest.getLocaleString("publicationDate")+":</span> "+ttb.format(audiofile.getCreated()) +"</p></div>");
-                        if(audiofile.getAuthor()!=null) {
-                            out.println("  <div class=\"swb-pdcst-text\"><p class=\"swb-pdcst-author\"><span class=\"swb-pdcst-by\">"+paramRequest.getLocaleString("by")+":</span> "+audiofile.getAuthor()+"</p></div>");
-                        }
-                        try {
-                            out.println("  <div class=\"swb-pdcst-text\"><p class=\"swb-pdcst-desc\">"+(audiofile.getDisplayDescription(lang)==null?audiofile.getDescription().substring(0,getScDescription()) : audiofile.getDisplayDescription(lang).substring(0,getScDescription()))+"</p></div>");
-                        }catch(IndexOutOfBoundsException obe) {
-                            out.println("  <div class=\"swb-pdcst-text\"><p class=\"swb-pdcst-desc\">"+(audiofile.getDisplayDescription(lang)==null?audiofile.getDescription():audiofile.getDisplayDescription(lang))+"</p></div>");
-                        }
-                        out.println("  <div class=\"swb-pdcst-text\">");
-                        out.print("     <p class=\"swb-pdcst-box\">");
-                        out.print("      <a href=\""+contentURL+"?suri="+audiofile.getEncodedURI()+"\" title=\""+(audiofile.getDisplayTitle(lang)==null?audiofile.getTitle():audiofile.getDisplayTitle(lang))+"\">"+paramRequest.getLocaleString("listen")+"</a>");
-                        if(duration>0)
-                        {
-                            out.print("  &nbsp;<span class=\"swb-pdcst-fduration\">"+paramRequest.getLocaleString("duration")+":&nbsp;");
-                            out.print(duration/60000000);
-                            out.print(":");
-                            out.print(duration/1000000%60);
-                            out.print("</span>");
-                        }
-                        out.print("       </p>");                        
-                        out.print("       <p class=\"swb-pdcst-box\">");
-                        out.print("        <a class=\"swb-pdcst-lnk\" href=\"#\" onclick=\"window.open('"+directURL+"?suri='+encodeURIComponent('"+audiofile.getURI()+"'))\" title=\""+(audiofile.getDisplayTitle(lang)==null?audiofile.getTitle():audiofile.getDisplayTitle(lang))+"\">"+paramRequest.getLocaleString("download")+"</a>&nbsp;");
-                        out.print("        <span class=\"swb-pdcst-ffmt\">"+paramRequest.getLocaleString("format")+"&nbsp;"+audiofile.getExtension()+"</span>");
-                        out.print("        <span class=\"swb-pdcst-fsize\">"+df.format(f.length()/1048576.0)+" Mb</span>");
-                        out.println("     </p>");
-                        out.println("    </div>");
-                        out.println("   </div>");
-                        out.println("  </li>");
+            else if(year!=null)
+            {
+                SemanticModel model = base.getWebSite().getSemanticModel();
+                List<AudioFile> audios = new ArrayList<AudioFile>();
+                Iterator<SemanticObject> resources = model.listSubjects(AudioFile.audiopdcst_year, year);
+                while(resources.hasNext()) {
+                    SemanticObject sobj = resources.next();
+                    if (sobj != null && sobj.instanceOf(AudioFile.sclass)) {
+                        audios.add((AudioFile)sobj.createGenericInstance());
                     }
                 }
-                out.println(" </ul>");
-                
-                
-                
-////////////////////// 
-SWBResourceURL pagerUrl = paramRequest.getRenderUrl();
-if(sid!=null) {
-    pagerUrl.setParameter("sid", sid);
-}
-out.println("<div class=\"swb-pdcst-pager\">");
-String nextURL = "#";
-String previusURL = "#";
-if (ipage < paginas) {
-    if(sid!=null) {
-        nextURL = paramRequest.getRenderUrl().setParameter("sid", sid).setParameter("p", Integer.toString(ipage+1)).toString();
-    }else {
-        nextURL = paramRequest.getRenderUrl().setParameter("p", Integer.toString(ipage+1)).toString();
-    }
-}
-if (ipage > 1) {
-    if(sid!=null) {
-        previusURL = paramRequest.getRenderUrl().setParameter("sid", sid).setParameter("p", Integer.toString(ipage-1)).toString();
-    }else {
-        previusURL = paramRequest.getRenderUrl().setParameter("p", Integer.toString(ipage-1)).toString();
-    }
-}
-if (ipage > 1) {
-    out.println("<a class=\"swb-pdcst-sk\" href=\""+previusURL+"\">Anterior</a>");
-}
-for (int i = 1; i <= paginas; i++)
-{
-    if(i==ipage) {
-        out.println("<span class=\"swb-pdcst-cidx\">");
-    }else {
-        out.println("<a class=\"swb-pdcst-idx\" href=\""+pagerUrl.setParameter("p", Integer.toString(i))+"\">");
-    }
-    out.println(i);
-    if(i==ipage) {
-        out.println("</span>");
-    }else {
-        out.println("</a>");
-    }
-}
-if (ipage != paginas)
-{
-    out.println("<a class=\"swb-pdcst-sk\" href=\""+nextURL+"\">Siguiente</a>");
-}
-out.println("</div>");
-//////////////////////  
-                
-                
-                
-                out.println("</div>");
+                renderPodcastList(request, response, paramRequest, audios.iterator());
             }
             else
             {
-                out.println("<p>Lista vac&iacute;a.</p>");
+                renderPodcastList(request, response, paramRequest, AudioFile.ClassMgr.listAudioFiles(base.getWebSite()));
             }
         }
         else
@@ -463,7 +300,209 @@ out.println("</div>");
         }
     }
     
-    private void renderPodcastList(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+    private void renderPodcastList(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest, Iterator<AudioFile>resources) throws SWBResourceException, IOException
+    {
+        final Resource base = getResourceBase();
+        final User user = paramRequest.getUser();
+        final String lang = user.getLanguage();
+        PrintWriter out =  response.getWriter();
+        SimpleDateFormat ttb = new SimpleDateFormat("dd/MMM/yyyy", new Locale(lang, user.getCountry()==null?"mx":user.getCountry()));
+        final String sid = request.getParameter("sid");
+        final String year = request.getParameter("yr");
+        
+        String surl = null;
+        Iterator<Resourceable> res = base.listResourceables();
+        while(res.hasNext()) {
+            Resourceable re = res.next();
+            if( re instanceof WebPage ) {
+                surl = ((WebPage)re).getUrl();
+                break;
+            }
+        }
+        final String contentURL = surl;
+        SWBResourceURL directURL = paramRequest.getRenderUrl().setMode(Mode_PLAY).setCallMethod(SWBParamRequest.Call_DIRECT);
+        
+        out.println("<div class=\"swb-podcast\">");
+        if(resources.hasNext())
+        {
+            resources = SWBComparator.sortByCreated(resources, false);
+            List<AudioFile> elements = SWBUtils.Collections.copyIterator(resources);
+            //////////////////////
+            int el = elements.size();
+            int paginas = el/getPageSize();
+            if(el%getPageSize() != 0) {
+                paginas++;
+            }
+            int inicio = 0;
+            int fin = getPageSize();
+            int ipage;
+            try {
+                ipage = Integer.parseInt(request.getParameter("p"));
+            }catch(NumberFormatException fne) {
+                ipage = 1;
+            }
+
+            // Mantiene la consistencia al eliminar elementos
+            if(ipage>paginas)
+                ipage--;
+
+            inicio = (ipage * getPageSize()) - getPageSize();
+            fin = (ipage * getPageSize());
+
+            if(ipage < 1 || ipage > paginas) {
+                ipage = 1;
+            }
+            if(inicio < 0) {
+                inicio = 0;
+            }
+            if(fin < 0) {
+                fin = getPageSize();
+            }
+            if(fin > el) {
+                fin = el;
+            }
+            if(inicio > fin) {
+                inicio = 0;
+                fin = getPageSize();
+            }
+            if( fin-inicio > getPageSize() ) {
+                inicio = 0;
+                fin = getPageSize();
+            }
+            //inicio++;
+            //////////////////////
+
+            File f;
+            long duration;
+            out.println(" <p class=\"swb-podcast-title\">"+(base.getDisplayTitle(lang)==null?base.getTitle():base.getDisplayTitle(lang))+"</p>");
+            out.println(" <p class=\"swb-podcast-lat\">"+paramRequest.getLocaleString("latest") +"</p>");
+            out.println(" <ul class=\"swb-pdcst-list\">");
+            for(int i=inicio; i<fin; i++)
+            {
+                AudioFile audiofile = elements.get(i);
+                if(audiofile==null || !audiofile.isValid() || !user.haveAccess(audiofile)) {
+                    continue;
+                }                    
+                try {
+                    f = audiofile.getFile();
+                }catch(Exception e) {
+                    continue;
+                }
+                if(f!=null && f.isFile())
+                {
+                    try {
+                        AudioInputStream ais = new MpegAudioFileReader().getAudioInputStream(f);
+                        AudioFileFormat baseFileFormat = new MpegAudioFileReader().getAudioFileFormat(f);
+                        Map properties = baseFileFormat.properties();
+                        duration = (Long)properties.get("duration");
+                    }catch(UnsupportedAudioFileException unsafe) {
+                        continue;
+                    }                        
+                    out.println("  <li class=\"swb-pdcst-item\">");
+                    out.println("   <div class=\"swb-pdcst-box\">");
+                    try {
+                        out.println("  <div class=\"swb-pdcst-text\"><p class=\"swb-pdcst-title\">"+(audiofile.getDisplayTitle(lang)==null?audiofile.getTitle().substring(0,getScTitle()) : audiofile.getDisplayTitle(lang).substring(0,getScTitle()))+"</p></div>");
+                    }catch(IndexOutOfBoundsException obe) {
+                        out.println("  <div class=\"swb-pdcst-text\"><p class=\"swb-pdcst-title\">"+(audiofile.getDisplayTitle(lang)==null?audiofile.getTitle() :audiofile.getDisplayTitle(lang))+"</p></div>");
+                    }
+                    out.println("      <div class=\"swb-pdcst-text\"><p class=\"swb-pdcst-pubdate\"><span class=\"swb-pdcst-pub\">"+paramRequest.getLocaleString("publicationDate")+":</span> "+ttb.format(audiofile.getCreated()) +"</p></div>");
+                    if(audiofile.getAuthor()!=null) {
+                        out.println("  <div class=\"swb-pdcst-text\"><p class=\"swb-pdcst-author\"><span class=\"swb-pdcst-by\">"+paramRequest.getLocaleString("by")+":</span> "+audiofile.getAuthor()+"</p></div>");
+                    }
+                    try {
+                        out.println("  <div class=\"swb-pdcst-text\"><p class=\"swb-pdcst-desc\">"+(audiofile.getDisplayDescription(lang)==null?audiofile.getDescription().substring(0,getScDescription()) : audiofile.getDisplayDescription(lang).substring(0,getScDescription()))+"</p></div>");
+                    }catch(IndexOutOfBoundsException obe) {
+                        out.println("  <div class=\"swb-pdcst-text\"><p class=\"swb-pdcst-desc\">"+(audiofile.getDisplayDescription(lang)==null?audiofile.getDescription():audiofile.getDisplayDescription(lang))+"</p></div>");
+                    }
+                    out.println("  <div class=\"swb-pdcst-text\">");
+                    out.print("     <p class=\"swb-pdcst-box-lstn\">");
+                    out.print("      <a href=\""+contentURL+"?suri="+audiofile.getEncodedURI()+"\" title=\""+(audiofile.getDisplayTitle(lang)==null?audiofile.getTitle():audiofile.getDisplayTitle(lang))+"\">"+paramRequest.getLocaleString("listen")+"</a>");
+                    if(duration>0)
+                    {
+                        out.print("  &nbsp;<span class=\"swb-pdcst-fduration\">"+paramRequest.getLocaleString("duration")+":&nbsp;");
+                        out.print(duration/60000000);
+                        out.print(":");
+                        out.print(duration/1000000%60);
+                        out.print("</span>");
+                    }
+                    out.print("       </p>");                        
+                    out.print("       <p class=\"swb-pdcst-box-dwln\">");
+                    out.print("        <a class=\"swb-pdcst-lnk\" href=\"#\" onclick=\"window.open('"+directURL+"?suri='+encodeURIComponent('"+audiofile.getURI()+"'))\" title=\""+(audiofile.getDisplayTitle(lang)==null?audiofile.getTitle():audiofile.getDisplayTitle(lang))+"\">"+paramRequest.getLocaleString("download")+"</a>&nbsp;");
+                    out.print("        <span class=\"swb-pdcst-ffmt\">"+paramRequest.getLocaleString("format")+"&nbsp;"+audiofile.getExtension()+"</span>");
+                    out.print("        <span class=\"swb-pdcst-fsize\">"+df.format(f.length()/1048576.0)+" Mb</span>");
+                    out.println("     </p>");
+                    out.println("    </div>");
+                    out.println("   </div>");
+                    out.println("  </li>");
+                }
+            }
+            out.println(" </ul>");            
+
+            ////////////////////// 
+            SWBResourceURL pagerUrl = paramRequest.getRenderUrl();
+            if(sid!=null) {
+                pagerUrl.setParameter("sid", sid);
+            }
+            out.println("<div class=\"swb-pdcst-pager\">");
+            SWBResourceURL nextURL = paramRequest.getRenderUrl();
+            SWBResourceURL previusURL = paramRequest.getRenderUrl();
+            if (ipage < paginas) {
+                nextURL.setParameter("p", Integer.toString(ipage+1));
+                if(sid!=null) {
+                    nextURL.setParameter("sid", sid);
+                }
+                if(year!=null) {
+                    nextURL.setParameter("yr", year);
+                }
+            }
+            if (ipage > 1) {
+                previusURL.setParameter("p", Integer.toString(ipage-1));
+                if(sid!=null) {
+                    previusURL.setParameter("sid", sid);
+                }
+                if(year!=null) {
+                    previusURL.setParameter("yr", year);
+                }
+            }
+            if (ipage > 1) {
+                out.println("<a class=\"swb-pdcst-sk\" href=\""+previusURL+"\">Anterior</a>");
+            }
+            for (int i = 1; i <= paginas; i++)
+            {
+                if(i==ipage) {
+                    out.println("<span class=\"swb-pdcst-cidx\">");
+                }else {
+                    if(sid!=null) {
+                        pagerUrl.setParameter("sid", sid);
+                    }
+                    if(year!=null) {
+                        pagerUrl.setParameter("yr", year);
+                    }
+                    out.println("<a class=\"swb-pdcst-idx\" href=\""+pagerUrl.setParameter("p", Integer.toString(i))+"\">");
+                }
+                out.println(i);
+                if(i==ipage) {
+                    out.println("</span>");
+                }else {
+                    out.println("</a>");
+                }
+            }
+            if (ipage != paginas)
+            {
+                out.println("<a class=\"swb-pdcst-sk\" href=\""+nextURL+"\">Siguiente</a>");
+            }
+            out.println("</div>");
+            //////////////////////
+        }
+        else
+        {
+            out.println("<p></p>");
+        }
+        out.println("</div>");
+    }
+    
+    private void renderPodcastList(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
+    {
         response.setContentType("text/xml; charset=UTF-8");
         response.setHeader("Cache-Control","no-cache");
         response.setHeader("Pragma","no-cache");
@@ -499,11 +538,6 @@ out.println("</div>");
                 out.println("  <div class=\"swb-pdcst-texto\">");
                 out.print("    <p class=\"swb-pdcst-escuchar\">");
                 out.print("      <a href=\""+contentURL+"?suri="+audiofile.getEncodedURI()+"\" title=\""+(audiofile.getDisplayTitle(lang)==null?audiofile.getTitle():audiofile.getDisplayTitle(lang))+"\">"+paramRequest.getLocaleString("listen")+"</a>");
-//                try {
-//                    out.print("  &nbsp;<span>"+paramRequest.getLocaleString("duration")+":&nbsp;"+hhmm.format(ttb.parse(audiofile.getDuration()))+"</span>");
-//                }catch(ParseException pe) {
-//                    log.error(pe);
-//                }
                 out.println("  </p>");
                 out.println("  <p class=\"swb-pdcst-descargar\"><a href=\""+directURL.setParameter("suri", audiofile.getURI())+"\" title=\""+(audiofile.getDisplayTitle(lang)==null?audiofile.getTitle():audiofile.getDisplayTitle(lang))+"\">"+paramRequest.getLocaleString("download")+"</a><span>"+paramRequest.getLocaleString("format")+"&nbsp;"+audiofile.getExtension()+"</span></p>");
                 out.println("  </div>");
