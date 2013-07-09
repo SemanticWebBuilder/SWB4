@@ -4,6 +4,7 @@
     Author     : Hasdai Pacheco {ebenezer.sanchez@infotec.com.mx}
 --%>
 
+<%@page import="java.util.Date"%>
 <%@page import="org.semanticwb.process.resources.taskinbox.UserTaskInboxResource"%>
 <%@page import="org.semanticwb.model.Resource"%>
 <%@page import="org.semanticwb.process.model.MessageStartEvent"%>
@@ -32,86 +33,6 @@
 <%@page import="java.util.Map"%>
 <%@page import="java.net.URLEncoder"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-
-<%!
-    public String getStatusInstances(ProcessInstance pi, int status) {
-        String ret = "";
-        if (pi != null) {
-            Iterator<FlowNodeInstance> actit = SWBComparator.sortByCreated(pi.listFlowNodeInstances());
-            while (actit.hasNext()) {
-                FlowNodeInstance obj = actit.next();
-                ret += _getStatusInstances(obj, status);
-            }
-        }
-        return (ret);
-    }
-    
-    /*public String _getStatusInstances(FlowNodeInstance fi, int status) {
-        String ret = "";
-        if (fi instanceof SubProcessInstance) {
-            SubProcessInstance pi = (SubProcessInstance) fi;
-            Iterator<FlowNodeInstance> acit = pi.listFlowNodeInstances();
-            if (acit.hasNext()) {
-                while (acit.hasNext()) {
-                    FlowNodeInstance actinst = acit.next();
-                    ret += _getStatusInstances(actinst, status);
-                }
-            }
-        } else if (fi.getFlowNodeType() instanceof Activity && fi.getStatus() == status) {
-            ret += fi.getFlowNodeType().getURI() + "|";
-        }
-        return ret;
-    }*/
-
-    public String _getStatusInstances(FlowNodeInstance fi, int status) {
-        String ret = "";
-        if (fi instanceof SubProcessInstance) {
-            SubProcessInstance pi = (SubProcessInstance) fi;
-            Iterator<FlowNodeInstance> acit = pi.listFlowNodeInstances();
-            if (acit.hasNext()) {
-                while (acit.hasNext()) {
-                    FlowNodeInstance actinst = acit.next();
-                    ret += _getStatusInstances(actinst, status);
-                }
-            }
-        } else if (fi.getFlowNodeType() instanceof Activity && fi.getStatus() == status) {
-            Iterator<FlowNodeInstance> fnii = fi.getFlowNodeType().listFlowObjectInstances();
-            int c = 0;
-            while (fnii.hasNext()) {
-                c++;
-                fnii.next();
-            }
-            ret += fi.getFlowNodeType().getURI() + "(" + c + ")|";
-        }
-        return ret;
-    }
-%>
-
-<script type="text/javascript">
-    var intCounterToast = 0;
-    function loadPageUrl(url, paramName, paramValue) {
-        var dest = url;
-        if (paramName != null && paramValue != null && paramValue != "") {
-            dest+="&"+paramName+"="+paramValue;
-        }
-        window.location = dest;
-    }
-    
-    function showToast(msg) {
-        var toast = document.getElementById("toast");
-        toast.style.opacity = 0.7;
-        toast.style.visibility = "visible";
-        toast.innerHTML = "<b>"+msg+"</b>";
-        intCounterToast = setInterval("hideToast()", 2000);
-    }
-    
-    function hideToast() {
-        var toast = document.getElementById("toast");
-        toast.style.display = "none";
-        toast.style.opacity = 0;
-        clearInterval(intCounterToast);
-    }
-</script>
 
 <%
 SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
@@ -142,6 +63,9 @@ if (user.getLanguage() != null) {
 }
 if (pNum != null && !pNum.trim().equals("")) {
     pageNum = Integer.valueOf(request.getParameter("page"));
+    if (pageNum > maxPages) {
+        pageNum = maxPages;
+    }
 }
 if (sortType != null && !sortType.trim().equals("")) {
     sortType = sortType.trim();
@@ -165,385 +89,289 @@ while(!base.getAttribute(UserTaskInboxResource.ATT_COLS+i, "").equals("")) {
 }
 
 ArrayList<FlowNodeInstance> tinstances = (ArrayList<FlowNodeInstance>) request.getAttribute("instances");
-//SWBResourceURL configUrl = paramRequest.getRenderUrl().setMode("config");
-if (paramRequest.getMode().equals(paramRequest.Mode_VIEW)) {
-    if (paramRequest.getAction().equals("createCase")) {
-        %><h3>Iniciar un proceso</h3><%
-        Map<String, ArrayList<Process>> groups = new TreeMap<String, ArrayList<Process>>();
-        ArrayList<Process> pccs = null;
-        //Obtener los eventos de inicio
-        Iterator<StartEvent> startEvents = StartEvent.ClassMgr.listStartEvents(paramRequest.getWebPage().getWebSite());
-        SWBResourceURL createUrl = paramRequest.getActionUrl().setAction(UserTaskInboxResource.ACT_CREATE);
-        while(startEvents.hasNext()) {
-            StartEvent sevt = startEvents.next();
-            //Si el usuario tiene permisos en el evento
-            if (sevt.getContainer() != null && sevt.getContainer() instanceof Process && user.haveAccess(sevt)) {
-                Process itp = sevt.getProcess();
-                //Si el proceso al que pertenece el evento y es válido
-                if (itp != null && itp.isValid()) {
-                    if(itp.getProcessGroup() != null) {
-                        String pg = itp.getProcessGroup().getDisplayTitle(lang);
-                        //Si ya existe el grupo de procesos en el treemap
-                        if(groups.get(pg) != null) {
-                            pccs = groups.get(pg);
-                            if (!pccs.contains(itp)) {
-                                pccs.add(itp);
+SWBResourceURL optsUrl = paramRequest.getRenderUrl();
+optsUrl.setParameter("sort", sortType);
+if (applyFilter) {
+    optsUrl.setParameter("pFilter", pFilter);
+}
+optsUrl.setParameter("sFilter", String.valueOf(FlowNodeInstance.STATUS_PROCESSING));
+SWBResourceURL createPiUrl = paramRequest.getRenderUrl().setCallMethod(SWBResourceURL.Call_DIRECT);
+createPiUrl.setMode(UserTaskInboxResource.MODE_CREATEPI);
+
+if (paramRequest.getCallMethod() == SWBParamRequest.Call_STRATEGY) {
+%>
+<div class="lateral">
+    <p class="lat-iniciar"><a onclick="showDialog('<%=createPiUrl%>','Crear instancia'); return false;" href="">Iniciar proceso</a></p>
+    <ul class="lat-lista1">
+        <li class="lat-pend"><a href="<%=optsUrl%>">Tareas pendientes</a></li>
+        <%optsUrl.setParameter("sFilter", String.valueOf(FlowNodeInstance.STATUS_CLOSED));%>
+        <li class="lat-term"><a href="<%=optsUrl%>">Tareas terminadas</a></li>
+        <%optsUrl.setParameter("sFilter", String.valueOf(FlowNodeInstance.STATUS_ABORTED));%>
+        <li class="lat-term"><a href="<%=optsUrl%>">Tareas abortadas</a></li>
+    </ul>
+</div>
+<%
+} else {
+%>
+    <div id="toast" style="border: 1px solid #CCCCCC;background-color: #FFF49C;padding: 10px 0 ;text-align:center;opacity: 0.9;border-radius:5px 5px 5px 5px;-webkit-transition: opacity 0.5s ease-out;  /* Saf3.2+, Chrome */-moz-transition: opacity 0.5s ease-out;  /* FF4+ */-ms-transition: opacity 0.5s ease-out;  /* IE10? */-o-transition: opacity 0.5s ease-out;  /* Opera 10.5+ */transition: opacity 0.5s ease-out;"></div>
+    <div class="bandeja-combo">
+        <ul>
+            <li>
+                <%optsUrl = paramRequest.getRenderUrl();
+                if (applyFilter) {
+                    optsUrl.setParameter("pFilter", pFilter);
+                }
+                optsUrl.setParameter("sFilter", sFilter);%>
+                <b>Ordenamiento&nbsp;</b>
+                <select onchange="loadPageUrl('<%=optsUrl%>', 'sort', this.options[this.selectedIndex].value)">
+                    <option value="date" <%=sortType.equals("date")?"selected":""%>>Por fecha</option>
+                    <option value="name" <%=sortType.equals("name")?"selected":""%>>Por proceso</option>
+                </select>
+            </li>
+            <li>
+                <b>Filtrado&nbsp;</b>
+                <%optsUrl = paramRequest.getRenderUrl(); optsUrl.setParameter("sort", sortType); optsUrl.setParameter("sFilter", sFilter);%>
+                <select onchange="loadPageUrl('<%=optsUrl%>', 'pFilter', this.options[this.selectedIndex].value)">
+                    <option value="" <%=pFilter.equals("")?"selected":""%>>Todos los procesos</option>
+                    <%
+                    Iterator<ProcessGroup> itgroups = SWBComparator.sortByDisplayName(ProcessGroup.ClassMgr.listProcessGroups(paramRequest.getWebPage().getWebSite()), lang);
+                    while (itgroups.hasNext()) {
+                        ProcessGroup pgroup = itgroups.next();
+                        Iterator<Process> processes = SWBComparator.sortByDisplayName(pgroup.listProcesses(), lang);
+                        ArrayList<Process> alProcesses = new ArrayList<Process>();
+
+                        while (processes.hasNext()) {
+                            Process process = processes.next();
+                            if (process.isValid()) {
+                                alProcesses.add(process);
                             }
-                            groups.put(pg, pccs);
-                        } else { //Si no existe el grupo de procesos en el treemap
-                            pccs = new ArrayList<Process>();
-                            pccs.add(itp);
-                            groups.put(pg, pccs);
+                        }
+
+                        if (!alProcesses.isEmpty()) {
+                            processes = alProcesses.iterator();
+                            %>
+                            <optgroup label="<%=pgroup.getDisplayTitle(lang)%>">
+                                <%
+                                while (processes.hasNext()) {
+                                    Process process = processes.next();
+                                    String selected = "";
+                                    if (pFilter.equals(process.getId())) selected = "selected";
+                                    %>
+                                    <option value="<%=process.getId()%>" <%=selected%>><%=process.getDisplayTitle(lang)%></option>
+                                    <%
+                                }
+                                %>
+                            </optgroup>
+                            <%
                         }
                     }
+                    %>
+                </select>&nbsp;
+                <%
+                optsUrl = paramRequest.getRenderUrl();
+                optsUrl.setParameter("sort", sortType);
+                if (applyFilter) {
+                    optsUrl.setParameter("pFilter", pFilter);
                 }
-            }
-        }
-
-        Iterator<String> keys = groups.keySet().iterator();
-        if (keys.hasNext()) {
-        %>
-            <div class="bandeja-combo">
-                <ul>
-                    <li>
-                        Proceso: 
-                        <select id="processId">
-                            <%
-                            while(keys.hasNext()) {
-                                String key = keys.next();
-                                %>
-                                <optgroup label="<%=key%>">
-                                    <%
-                                    Iterator<Process> it_pccs = SWBComparator.sortByDisplayName(groups.get(key).iterator(), lang);
-                                    while(it_pccs.hasNext()) {
-                                        Process pcc = it_pccs.next();
-                                        %>
-                                        <option value="<%=pcc.getId()%>"><%=pcc.getDisplayTitle(lang)%></option>
-                                        <%
-                                    }
-                                    %>
-                                </optgroup>
-                                <%
-                            }
-                            %>
-                        </select>
-                    </li>
-                    <li>
-                        <input type="button" value="Iniciar proceso" onclick="window.location='<%=createUrl%>?pid='+document.getElementById('processId').value;"/>
-                        <input type="button" value="Regresar" onclick="window.location='<%=paramRequest.getRenderUrl().toString()%>'"/>
-                    </li>
-                </ul>
-            </div>
-            <%
-        }
-    } else {
-        SWBResourceURL optsUrl = paramRequest.getRenderUrl();
-        if (applyFilter) {
-            optsUrl.setParameter("pFilter", pFilter);
-        }
-        optsUrl.setParameter("sFilter", sFilter);
-        %>
-        <div id="toast" style="border: 1px solid #CCCCCC;background-color: #FFF49C;padding: 10px 0 ;text-align:center;opacity: 0.9;border-radius:5px 5px 5px 5px;-webkit-transition: opacity 0.5s ease-out;  /* Saf3.2+, Chrome */-moz-transition: opacity 0.5s ease-out;  /* FF4+ */-ms-transition: opacity 0.5s ease-out;  /* IE10? */-o-transition: opacity 0.5s ease-out;  /* Opera 10.5+ */transition: opacity 0.5s ease-out;"></div>
-        <div class="bandeja-combo">
-            <ul>
-                <li>
-                    <%
-                    SWBResourceURL createUrl = paramRequest.getRenderUrl().setAction("createCase");
-                    %>
-                    <a onclick="window.location='<%=createUrl%>'">Iniciar nuevo Caso</a><!--input type="button" value="Iniciar proceso" onclick="window.location='<%=createUrl%>'"/-->
-                </li>
-                <li>
-                    <b>Ordenamiento&nbsp;</b>
-                    <select onchange="loadPageUrl('<%=optsUrl%>', 'sort', this.options[this.selectedIndex].value)">
-                        <option value="date" <%=sortType.equals("date")?"selected":""%>>Por fecha</option>
-                        <option value="name" <%=sortType.equals("name")?"selected":""%>>Por proceso</option>
-                    </select>
-                </li>
-                <li>
-                    <b>Filtrado&nbsp;</b>
-                    <%
-                    optsUrl = paramRequest.getRenderUrl();
-                    optsUrl.setParameter("sort", sortType);
-                    optsUrl.setParameter("sFilter", sFilter);
-                    %>
-                    <select onchange="loadPageUrl('<%=optsUrl%>', 'pFilter', this.options[this.selectedIndex].value)">
-                        <option value="" <%=pFilter.equals("")?"selected":""%>>Todos los procesos</option>
-                        <%
-                        Iterator<ProcessGroup> itgroups = SWBComparator.sortByDisplayName(ProcessGroup.ClassMgr.listProcessGroups(paramRequest.getWebPage().getWebSite()), lang);
-                        while (itgroups.hasNext()) {
-                            ProcessGroup pgroup = itgroups.next();
-                            Iterator<Process> processes = SWBComparator.sortByDisplayName(pgroup.listProcesses(), lang);
-                            ArrayList<Process> alProcesses = new ArrayList<Process>();
-
-                            while (processes.hasNext()) {
-                                Process process = processes.next();
-                                if (process.isValid()) {
-                                    alProcesses.add(process);
-                                }
-                            }
-
-                            if (!alProcesses.isEmpty()) {
-                                processes = alProcesses.iterator();
-                                %>
-                                <optgroup label="<%=pgroup.getDisplayTitle(lang)%>">
-                                    <%
-                                    while (processes.hasNext()) {
-                                        Process process = processes.next();
-                                        String selected = "";
-                                        if (pFilter.equals(process.getId())) selected = "selected";
-                                        %>
-                                        <option value="<%=process.getId()%>" <%=selected%>><%=process.getDisplayTitle(lang)%></option>
-                                        <%
-                                    }
-                                    %>
-                                </optgroup>
-                                <%
+                %>
+                <select onchange="loadPageUrl('<%=optsUrl%>', 'sFilter', this.options[this.selectedIndex].value)">
+                    <option value="<%=ProcessInstance.STATUS_PROCESSING%>" <%=sFilter.equals(String.valueOf(ProcessInstance.STATUS_PROCESSING))?"selected":""%>>Tareas Pendientes</option>
+                    <option value="<%=ProcessInstance.STATUS_CLOSED%>" <%=sFilter.equals(String.valueOf(ProcessInstance.STATUS_CLOSED))?"selected":""%>>Tareas Terminadas</option>
+                    <option value="<%=ProcessInstance.STATUS_ABORTED%>" <%=sFilter.equals(String.valueOf(ProcessInstance.STATUS_ABORTED))?"selected":""%>>Tareas Abortadas</option>
+                </select>
+            </li>
+        </ul>
+    </div>
+    <% if (tinstances != null && tinstances.size() > 0) { %>
+        <div>
+            <table class="tabla-bandeja">
+                <thead>
+                    <tr>
+                        <%Iterator<String> itCols = cols.iterator();
+                        while(itCols.hasNext()) {
+                            String val = itCols.next();
+                            String []conf = val.split("\\|");
+                            if (conf.length == 2) {
+                                %><th class="tban-id"><%=conf[1]%></th><%
                             }
                         }
                         %>
-                    </select>&nbsp;
-                    <%
-                    optsUrl = paramRequest.getRenderUrl();
-                    optsUrl.setParameter("sort", sortType);
-                    if (applyFilter) {
-                        optsUrl.setParameter("pFilter", pFilter);
-                    }
-                    %>
-                    <select onchange="loadPageUrl('<%=optsUrl%>', 'sFilter', this.options[this.selectedIndex].value)">
-                        <option value="<%=ProcessInstance.STATUS_PROCESSING%>" <%=sFilter.equals(String.valueOf(ProcessInstance.STATUS_PROCESSING))?"selected":""%>>Tareas Pendientes</option>
-                        <option value="<%=ProcessInstance.STATUS_CLOSED%>" <%=sFilter.equals(String.valueOf(ProcessInstance.STATUS_CLOSED))?"selected":""%>>Tareas Terminadas</option>
-                        <option value="<%=ProcessInstance.STATUS_ABORTED%>" <%=sFilter.equals(String.valueOf(ProcessInstance.STATUS_ABORTED))?"selected":""%>>Tareas Abortadas</option>
-                    </select>
-                </li>
-            </ul>
-        </div>
-        <%
-        if (tinstances != null && tinstances.size() > 0) {
-            %>
-            <div>
-                <table class="tabla-bandeja">
-                    <thead>
-                        <tr>
-                            <%
-                            Iterator<String> itCols = cols.iterator();
-                            while(itCols.hasNext()) {
-                                String val = itCols.next();
-                                String []conf = val.split("\\|");
-                                if (conf.length == 2) {
-                                    %>
-                                    <th class="tban-id"><%=conf[1]%></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <%Iterator<FlowNodeInstance> instances = tinstances.iterator();
+                    while(instances.hasNext()) {
+                        FlowNodeInstance instance = instances.next();
+                        if (instance.getProcessInstance().getCreator() != null) {
+                            if (instance.getProcessInstance().getStatus() == Instance.STATUS_PROCESSING) {
+                                String status = "--";
+                                %>
+                                <tr>
                                     <%
-                                }
-                            }
-                            %>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <%
-                        Iterator<FlowNodeInstance> instances = tinstances.iterator();
-                        while(instances.hasNext()) {
-                            FlowNodeInstance instance = instances.next();
-                            if (instance.getProcessInstance().getCreator() != null) {
-                                if (instance.getProcessInstance().getStatus() == Instance.STATUS_PROCESSING) {
-                                    WebPage pwp = instance.getProcessWebPage();
-                                    String status = "--";
-                                    %>
-                                    <tr>
-                                        <%
-                                        itCols = cols.iterator();
-                                        while(itCols.hasNext()) {
-                                            String val = itCols.next();
-                                            String []conf = val.split("\\|");
-                                            if (conf.length == 2) {
-                                                if (conf[0].equals(UserTaskInboxResource.COL_IDPROCESS)) {
-                                                    %><td class="tban-id"><%=instance.getProcessInstance().getId()%><%
-                                                } else if (conf[0].equals(UserTaskInboxResource.COL_IDTASK)) {
-                                                    %><td class="tban-id"><%=instance.getId()%><%
-                                                } else if (conf[0].equals(UserTaskInboxResource.COL_NAMEPROCESS)) {
-                                                    String pName = instance.getFlowNodeType().getProcess().getDisplayTitle(lang);
-                                                    if(pwp != null && showPwpLink) {
-                                                        pName = "<a href=\"" + pwp.getUrl() + "\">" + pName + "</a>";
-                                                    }
-                                                    %><td class="tban-tarea"><%=pName%><%
-                                                } else if (conf[0].equals(UserTaskInboxResource.COL_NAMETASK)) {
-                                                    %><td class="tban-tarea"><%=instance.getFlowNodeType().getDisplayTitle(lang)%><%
-                                                } else if (conf[0].equals(UserTaskInboxResource.COL_STARTPROCESS)) {
-                                                    %><td class="tban-inicia"><%=SWBUtils.TEXT.getStrDate(instance.getProcessInstance().getCreated(), lang, "dd/mm/yy - hh:%m")%><%
-                                                } else if (conf[0].equals(UserTaskInboxResource.COL_STARTTASK)) {
-                                                    %><td class="tban-inicia"><%=SWBUtils.TEXT.getStrDate(instance.getCreated(), lang, "dd/mm/yy - hh:%m")%><%
-                                                } else if (conf[0].equals(UserTaskInboxResource.COL_ENDPROCESS)) {
-                                                    String ended = "--";
-                                                    if (instance.getProcessInstance().getStatus() == Instance.STATUS_CLOSED || instance.getProcessInstance().getStatus() == Instance.STATUS_ABORTED) {
-                                                        if (instance.getProcessInstance().getEnded() != null) {
-                                                            ended = SWBUtils.TEXT.getStrDate(instance.getProcessInstance().getEnded(), lang, "dd/mm/yy - hh:%m");
-                                                        }
-                                                    }
-                                                    %><td class="tban-cerrada"><%=ended%><%
-                                                } else if (conf[0].equals(UserTaskInboxResource.COL_ENDTASK)) {
-                                                    String ended = "--";
-                                                    if (instance.getStatus() == Instance.STATUS_CLOSED || instance.getStatus() == Instance.STATUS_ABORTED) {
-                                                        if (instance.getEnded() != null) {
-                                                            ended = SWBUtils.TEXT.getStrDate(instance.getEnded(), lang, "dd/mm/yy - hh:%m");
-                                                        }
-                                                    }
-                                                    %><td class="tban-cerrada"><%=ended%><%
-                                                } else if (conf[0].equals(UserTaskInboxResource.COL_CREATORPROCESS)) {
-                                                    String screator = "Creado automáticamente";
-                                                    User creator = instance.getProcessInstance().getCreator();
-                                                    if (creator != null) {
-                                                        if (creator.getFullName() != null && !creator.getFullName().trim().equals("")) {
-                                                            screator = creator.getFullName();
-                                                        } else {
-                                                            screator = creator.getLogin();
-                                                        }
-                                                    }
-                                                    %><td class="tban-tarea"><%=screator%><%
-                                                } else if (conf[0].equals(UserTaskInboxResource.COL_CREATORTASK)) {
-                                                    String screator = "Creado automáticamente";
-                                                    User creator = instance.getCreator();
-                                                    if (creator != null) {
-                                                        if (creator.getFullName() != null && !creator.getFullName().trim().equals("")) {
-                                                            screator = creator.getFullName();
-                                                        } else {
-                                                            screator = creator.getLogin();
-                                                        }
-                                                    }
-                                                    %><td class="tban-tarea"><%=screator%><%
-                                                } else if (conf[0].equals(UserTaskInboxResource.COL_STATUSPROCESS)) {
-                                                    int st = instance.getProcessInstance().getStatus();
-                                                    if (st == Instance.STATUS_ABORTED) {
-                                                        status = "Abortado";
-                                                    } else if (st == Instance.STATUS_CLOSED) {
-                                                        status = "Cerrado";
-                                                    } if (st == Instance.STATUS_INIT) {
-                                                        status = "Iniciado";
-                                                    } if (st == Instance.STATUS_OPEN || st == Instance.STATUS_PROCESSING) {
-                                                        status = "En proceso";
-                                                    } if (st == Instance.STATUS_STOPED) {
-                                                        status = "Detenido";
-                                                    }
-                                                    %><td class="tban-tarea"><%=status%><%
-                                                } else if (conf[0].equals(UserTaskInboxResource.COL_STATUSTASK)) {
-                                                    int st = instance.getStatus();
-                                                    if (st == Instance.STATUS_ABORTED) {
-                                                        status = "Abortada";
-                                                    } else if (st == Instance.STATUS_CLOSED) {
-                                                        status = "Cerrada";
-                                                    } if (st == Instance.STATUS_INIT) {
-                                                        status = "Iniciada";
-                                                    } if (st == Instance.STATUS_OPEN || st == Instance.STATUS_PROCESSING) {
-                                                        status = "En proceso";
-                                                    } if (st == Instance.STATUS_STOPED) {
-                                                        status = "Detenida";
-                                                    }
-                                                    %><td class="tban-tarea"><%=status%><%
-                                                } else if (conf[0].equals(UserTaskInboxResource.COL_ACTIONS)) {
-                                                    %>
-                                                    <td class="tban-accion">
-                                                    <%
-                                                    UserTask utask = (UserTask) instance.getFlowNodeType();
-                                                    if (instance.getStatus() == ProcessInstance.STATUS_PROCESSING) {
-                                                        %>
-                                                        <a class="acc-atender" href="<%=utask.getTaskWebPage().getUrl()%>?suri=<%=instance.getEncodedURI()%>">Atender</a>
-                                                        <%
-                                                        if (allowForward && instance.getAssignedto() != null) {
-                                                            SWBResourceURL forward = paramRequest.getRenderUrl().setMode(UserTaskInboxResource.MODE_FWD);
-                                                            %><a class="acc-delegar" target="new" href="<%=forward%>?suri=<%=instance.getEncodedURI()%>">Reasignar</a><%
-                                                        }
-                                                    }
-                                                    if (statusWp != null) {
-                                                        %>
-                                                        <a class="acc-mapa" href="<%=statusWp.getUrl()%>?suri=<%=instance.getProcessInstance().getEncodedURI()%>">Ver mapa</a>
-                                                        <%
-                                                    }
-                                                    %>
-                                                    </td>
-                                                    <%
-                                                } else if (conf[0].equals(UserTaskInboxResource.COL_TASKSUBJECT)) {
-                                                    String subject = "--";
-                                                    if (instance.getSubject() != null) {
-                                                        subject = instance.getSubject();
-                                                    }
-                                                    %><td class="tban-tarea"><%=subject%><%
+                                    itCols = cols.iterator();
+                                    while(itCols.hasNext()) {
+                                        String val = itCols.next();
+                                        String []conf = val.split("\\|");
+                                        if (conf.length == 2) {
+                                            if (conf[0].equals(UserTaskInboxResource.COL_IDPROCESS)) {
+                                                %><td class="tban-id"><%=instance.getProcessInstance().getId()%><%
+                                            } else if (conf[0].equals(UserTaskInboxResource.COL_IDTASK)) {
+                                                %><td class="tban-id"><%=instance.getId()%><%
+                                            } else if (conf[0].equals(UserTaskInboxResource.COL_NAMEPROCESS)) {
+                                                String pName = instance.getFlowNodeType().getProcess().getDisplayTitle(lang);
+                                                SWBResourceURL detailUrl = paramRequest.getRenderUrl().setMode(UserTaskInboxResource.MODE_PROCESSDETAIL);
+                                                detailUrl.setParameter("suri", instance.getFlowNodeType().getProcess().getURI());
+                                                if(showPwpLink) {
+                                                    pName = "<a href=\"" + detailUrl + "\">" + pName + "</a>";
                                                 }
-                                                %>
+                                                %><td class="tban-tarea"><%=pName%><%
+                                            } else if (conf[0].equals(UserTaskInboxResource.COL_NAMETASK)) {
+                                                %><td class="tban-tarea"><%=instance.getFlowNodeType().getDisplayTitle(lang)%><%
+                                            } else if (conf[0].equals(UserTaskInboxResource.COL_STARTPROCESS)) {
+                                                %><td class="tban-inicia"><%=SWBUtils.TEXT.getStrDate(instance.getProcessInstance().getCreated(), lang, "dd/mm/yy - hh:%m")%><%
+                                            } else if (conf[0].equals(UserTaskInboxResource.COL_STARTTASK)) {
+                                                %><td class="tban-inicia"><%=SWBUtils.TEXT.getStrDate(instance.getCreated(), lang, "dd/mm/yy - hh:%m")%><%
+                                            } else if (conf[0].equals(UserTaskInboxResource.COL_ENDPROCESS)) {
+                                                String ended = "--";
+                                                if (instance.getProcessInstance().getStatus() == Instance.STATUS_CLOSED || instance.getProcessInstance().getStatus() == Instance.STATUS_ABORTED) {
+                                                    if (instance.getProcessInstance().getEnded() != null) {
+                                                        ended = SWBUtils.TEXT.getStrDate(instance.getProcessInstance().getEnded(), lang, "dd/mm/yy - hh:%m");
+                                                    }
+                                                }
+                                                %><td class="tban-cerrada"><%=ended%><%
+                                            } else if (conf[0].equals(UserTaskInboxResource.COL_ENDTASK)) {
+                                                String ended = "--";
+                                                if (instance.getStatus() == Instance.STATUS_CLOSED || instance.getStatus() == Instance.STATUS_ABORTED) {
+                                                    if (instance.getEnded() != null) {
+                                                        ended = SWBUtils.TEXT.getStrDate(instance.getEnded(), lang, "dd/mm/yy - hh:%m");
+                                                    }
+                                                }
+                                                %><td class="tban-cerrada"><%=ended%><%
+                                            } else if (conf[0].equals(UserTaskInboxResource.COL_CREATORPROCESS)) {
+                                                String screator = "Creado automáticamente";
+                                                User creator = instance.getProcessInstance().getCreator();
+                                                if (creator != null) {
+                                                    if (creator.getFullName() != null && !creator.getFullName().trim().equals("")) {
+                                                        screator = creator.getFullName();
+                                                    } else {
+                                                        screator = creator.getLogin();
+                                                    }
+                                                }
+                                                %><td class="tban-tarea"><%=screator%><%
+                                            } else if (conf[0].equals(UserTaskInboxResource.COL_CREATORTASK)) {
+                                                String screator = "Creado automáticamente";
+                                                User creator = instance.getCreator();
+                                                if (creator != null) {
+                                                    if (creator.getFullName() != null && !creator.getFullName().trim().equals("")) {
+                                                        screator = creator.getFullName();
+                                                    } else {
+                                                        screator = creator.getLogin();
+                                                    }
+                                                }
+                                                %><td class="tban-tarea"><%=screator%><%
+                                            } else if (conf[0].equals(UserTaskInboxResource.COL_STATUSPROCESS)) {
+                                                int st = instance.getProcessInstance().getStatus();
+                                                if (st == Instance.STATUS_ABORTED) {
+                                                    status = "Abortado";
+                                                } else if (st == Instance.STATUS_CLOSED) {
+                                                    status = "Cerrado";
+                                                } if (st == Instance.STATUS_INIT) {
+                                                    status = "Iniciado";
+                                                } if (st == Instance.STATUS_OPEN || st == Instance.STATUS_PROCESSING) {
+                                                    status = "En proceso";
+                                                } if (st == Instance.STATUS_STOPED) {
+                                                    status = "Detenido";
+                                                }
+                                                %><td class="tban-tarea"><%=status%><%
+                                            } else if (conf[0].equals(UserTaskInboxResource.COL_STATUSTASK)) {
+                                                int st = instance.getStatus();
+                                                if (st == Instance.STATUS_ABORTED) {
+                                                    status = "Abortada";
+                                                } else if (st == Instance.STATUS_CLOSED) {
+                                                    status = "Cerrada";
+                                                } if (st == Instance.STATUS_INIT) {
+                                                    status = "Iniciada";
+                                                } if (st == Instance.STATUS_OPEN || st == Instance.STATUS_PROCESSING) {
+                                                    status = "En proceso";
+                                                } if (st == Instance.STATUS_STOPED) {
+                                                    status = "Detenida";
+                                                }
+                                                %><td class="tban-tarea"><%=status%><%
+                                            } else if (conf[0].equals(UserTaskInboxResource.COL_ACTIONS)) {%>
+                                                <td class="tban-accion">
+                                                    <%UserTask utask = (UserTask) instance.getFlowNodeType();
+                                                    if (instance.getStatus() == ProcessInstance.STATUS_PROCESSING) {%>
+                                                        <a class="acc-atender" href="<%=utask.getTaskWebPage().getUrl()%>?suri=<%=instance.getEncodedURI()%>">Atender</a>
+                                                        <%if (allowForward && instance.getAssignedto() != null) {
+                                                            SWBResourceURL forward = paramRequest.getRenderUrl().setCallMethod(SWBResourceURL.Call_DIRECT).setMode(UserTaskInboxResource.MODE_FWD);
+                                                            %><a class="acc-delegar" onclick="showDialog('<%=forward%>?suri=<%=instance.getEncodedURI()%>', 'Reasignar tarea'); return false;" href="">Reasignar</a><%
+                                                        }
+                                                    }
+                                                    if (statusWp != null) {%>
+                                                        <a class="acc-mapa" href="<%=statusWp.getUrl()%>?suri=<%=instance.getProcessInstance().getProcessType().getEncodedURI()%>">Ver mapa</a><%
+                                                    }%>
                                                 </td>
                                                 <%
+                                            } else if (conf[0].equals(UserTaskInboxResource.COL_TASKSUBJECT)) {
+                                                String subject = "--";
+                                                if (instance.getSubject() != null) {
+                                                    subject = instance.getSubject();
+                                                }
+                                                %><td class="tban-tarea"><%=subject%></td><%
+                                            } else if (conf[0].equals(UserTaskInboxResource.COL_FLAGTASK)) {
+                                                UserTask utask = (UserTask)instance.getFlowNodeType();
+                                                int delay = utask.getNotificationTime();
+                                                String delayed = "/work/models/"+paramRequest.getWebPage().getWebSiteId()+"/css/images/icono-retraso1.png";
+                                                
+                                                if (delay > 0) {
+                                                    long today = System.currentTimeMillis();
+                                                    long cr = instance.getCreated().getTime();
+                                                    if (today - cr > (1000*60*delay)) {
+                                                        delayed = "/work/models/"+paramRequest.getWebPage().getWebSiteId()+"/css/images/icono-retraso2.png";
+                                                    }
+                                                }
+                                                %><td class="tban-inicia"><img src="<%=delayed%>"/></td><%
                                             }
                                         }
-                                        %>
-                                    </tr>
-                                <%
-                                }
-                            }
-                        }
-                        %>
-                    </tbody>
-                </table>
-            </div>
-                <div class="paginado">
-                    <table class="tabla-bandeja">
-                        <tbody>
-                            <tr>
-                                <td style="width:80%;">
-                                    P&aacute;gina: <%=pageNum%> de <%=maxPages%>
-                                </td>
-                                <td style="text-align:right;">
-                                    <%
-                                    if (maxPages > 1) {
-                                        SWBResourceURL first = paramRequest.getRenderUrl();
-                                        if (applyFilter) {
-                                            first.setParameter("pFilter", pFilter);
-                                        }
-                                        first.setParameter("sFilter", sFilter);
-                                        first.setParameter("sort", sortType);
-                                        first.setParameter("page", "1");
-                                        %><a href="<%=first%>">Primer p&aacute;gina</a><%
-                                    }
-                                    if (pageNum-1 > 0) {
-                                        SWBResourceURL back = paramRequest.getRenderUrl();
-                                        if (applyFilter) {
-                                            back.setParameter("pFilter", pFilter);
-                                        }
-                                        back.setParameter("sFilter", sFilter);
-                                        back.setParameter("sort", sortType);
-                                        back.setParameter("page", String.valueOf(pageNum-1));
-                                        %><a href="<%=back%>">Anterior</a><%
-                                    }
-                                    if (pageNum+1 <= maxPages) {
-                                        SWBResourceURL forward = paramRequest.getRenderUrl();
-                                        if (applyFilter) {
-                                            forward.setParameter("pFilter", pFilter);
-                                        }
-                                        forward.setParameter("sFilter", sFilter);
-                                        forward.setParameter("sort", sortType);
-                                        forward.setParameter("page", String.valueOf(pageNum+1));
-                                        %><a href="<%=forward%>">Siguiente</a><%
-                                    }
-                                    if (maxPages > 1 && pageNum < maxPages) {
-                                        SWBResourceURL last = paramRequest.getRenderUrl();
-                                        if (applyFilter) {
-                                            last.setParameter("pFilter", pFilter);
-                                        }
-                                        last.setParameter("sFilter", sFilter);
-                                        last.setParameter("sort", sortType);
-                                        last.setParameter("page", String.valueOf(maxPages));
-                                        %><a href="<%=last%>">&Uacute;ltima p&aacute;gina</a><%
                                     }
                                     %>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <%
-        } else {
-            %>No hay tareas<%
-        }
-    }
-}
-
-if (null != request.getSession(true).getAttribute("msg")) {
+                                </tr>
+                            <%
+                            }
+                        }
+                    }%>
+                </tbody>
+            </table>
+        </div>
+        <div class="paginado">
+            <div class="pagtotal">P&aacute;gina <%=pageNum%> de <%=maxPages%></div>
+            <div class="pagLista">
+            <%if (pageNum-1 > 0) {
+                SWBResourceURL back = paramRequest.getRenderUrl();
+                if (applyFilter) {
+                    back.setParameter("pFilter", pFilter);
+                }
+                back.setParameter("sFilter", sFilter);
+                back.setParameter("sort", sortType);
+                back.setParameter("page", String.valueOf(pageNum-1));
+                %><span class="pagant"><a href="<%=back%>">Anterior</a></span><%
+            }
+            if (pageNum+1 <= maxPages) {
+                SWBResourceURL forward = paramRequest.getRenderUrl();
+                if (applyFilter) {
+                    forward.setParameter("pFilter", pFilter);
+                }
+                forward.setParameter("sFilter", sFilter);
+                forward.setParameter("sort", sortType);
+                forward.setParameter("page", String.valueOf(pageNum+1));
+                %><span class="pagsig"><a href="<%=forward%>">Siguiente</a></span><%
+            }%>
+            </div>
+        </div>
+    <%} else {
+        %>No hay tareas<%
+    }%>
+<%if (null != request.getSession(true).getAttribute("msg")) {
     String message = (String) request.getSession(true).getAttribute("msg");
     if (message.startsWith("OK")) {
         String id = message.substring(2);
@@ -563,5 +391,5 @@ if (null != request.getSession(true).getAttribute("msg")) {
     </script>
     <%
 }
+}
 %>
-
