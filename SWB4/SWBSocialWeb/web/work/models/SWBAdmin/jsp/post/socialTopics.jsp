@@ -39,9 +39,10 @@
 
 <div class="swbform">
     <form name="formTopics" id="formSites">
+        <div id="pub-detalle">
     <table width="50%" border="0px">            
        <tr>
-           <td colspan="3" style="text-align: center;"><b>Seleccione un Tema:</b></td>        
+           <td colspan="3" style="text-align: center;" class="titulo">Seleccione un Tema:</td>        
        </tr>
        <tr>
            <td colspan="3" style="text-align: center;">&nbsp;</td>        
@@ -66,6 +67,7 @@
        </tr>
        </form>
     </table>
+        </div>
 </div>
 <div id="createPost" dojoType="dijit.layout.ContentPane">
 </div>
