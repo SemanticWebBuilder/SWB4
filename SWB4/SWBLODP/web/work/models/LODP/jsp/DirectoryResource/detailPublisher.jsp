@@ -79,7 +79,7 @@ String suri = request.getParameter("suri");
    <div>
        <img src="<%=urlLogo%>" width="200" height="150" />
         <h2><%=inOb.getInstitutionTitle()%></h2> 
-        <h3><%=inOb.getInstitutionDescription()!=null?inOb.getInstitutionDescription(): " "%></h3>
+        <p><%=inOb.getInstitutionDescription()!=null?inOb.getInstitutionDescription(): " "%></p>
         <ul>
             <%if(numPub>0){%>
            

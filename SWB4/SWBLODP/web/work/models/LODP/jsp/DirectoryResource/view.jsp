@@ -469,6 +469,7 @@
 <!--            <h3>
                <%//=paramRequest.getLocaleString("lbl_otroPB")%>
             </h3> -->
+     <ul>
         <%
                
            //}
@@ -503,18 +504,11 @@
                 urlDetail.setParameter("suri", liInst.getURI());
                 urlDetail.setParameter("val", valor);
         %>
-        
-        <ul>
             <li><a href="<%=urlDetail.setMode("DETAIL").toString()%>"><%=liInst.getInstitutionTitle()%></a></li>
-        </ul>
-        
         <%}}else{%>
-        
-        <ul>
             <li><%=paramRequest.getLocaleString("lbl_noEncontrado")%></li>
-        </ul>
-        
         <%}%>
+   </ul>
    </div>
         
    <div class="pager">
