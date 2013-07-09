@@ -30,7 +30,6 @@ import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.StringTokenizer;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -66,6 +65,8 @@ public class SWBProxyMessageCenter {
     private Timer timer = new Timer("MessageSynchronizer", true);
     private long period = 1000 * 60 * 5;
     private String synchMess = null;
+    private int delay=5;
+    private TimeUnit delayUnit=TimeUnit.MINUTES;
 
 
     public SWBProxyMessageCenter() {
@@ -74,12 +75,23 @@ public class SWBProxyMessageCenter {
     
     private void init(){
         log.event("Initializing SWBProxyMessageCenter...");
+        String sdelay = SWBProxyAdminFilter.getEnv("swb/delayPeriod");
+        log.event("found swb/delayPeriod:"+sdelay);
+        String sUnit = SWBProxyAdminFilter.getEnv("swb/delayUnit");
+        log.event("found swb/delayUnit:"+sUnit);
         String localAddr = SWBProxyAdminFilter.getEnv("swb/localMessageAddress");
         log.event("found swb/localMessageAddress:"+localAddr);
         String serverAddr = SWBProxyAdminFilter.getEnv("swb/remoteServerMessageAddress");
         log.event("found swb/remoteServerMessageAddress:"+serverAddr);
         String remoteAddr = SWBProxyAdminFilter.getEnv("swb/remoteMessageAddress");
         log.event("found swb/remoteMessageAddress:"+remoteAddr);
+        try {
+            delay = Integer.parseInt(sdelay);
+            delayUnit = TimeUnit.valueOf(sUnit);
+        } catch (Exception e){
+            log.error(e);
+        }
+        log.event("Delay configured to "+delay+ " "+delayUnit);
         if (localAddr != null && serverAddr != null && remoteAddr != null) //Nueva version
         {
             int i = localAddr.lastIndexOf(":"); //MAPS74 Ajuste para IPV6
@@ -117,9 +129,9 @@ public class SWBProxyMessageCenter {
                 log.trace("localAddres: "+myAddr.toString()+":"+myPort);
                 log.trace("serverAddres: "+srvrAddr.toString()+":"+srvrPort);
                 log.trace("remoteAddres: "+rmtAddr.toString()+":"+rmtPort);
-                addLocalAddress(myAddr, myPort);
+//                addLocalAddress(myAddr, myPort);
                 addRemoteAddress(srvrAddr, srvrPort);
-                addRemoteAddress(rmtAddr, rmtPort);
+//                addRemoteAddress(rmtAddr, rmtPort);
                 lserver = new SWBMessageServer(this, myAddr, myPort, SWBMessageServer.FromNetwork.LOCAL);
                 log.trace("lServer: "+lserver);
                 lserver.start();
@@ -162,7 +174,7 @@ public class SWBProxyMessageCenter {
     
     public synchronized boolean addLocalAddress(InetAddress addr, int port)
     {  
-        log.debug("addLocalAddress:"+addr+" "+port);
+        log.debug("addLocalAddress:"+addr+":"+port);
         String key = addr.getHostAddress()+":"+port;
 
         boolean contains = localNetwork.containsKey(key);
@@ -191,15 +203,21 @@ public class SWBProxyMessageCenter {
     }
 
     void incomingMessage(String message, String addr, SWBMessageServer.FromNetwork from) {
+        TimeUnit unit = delayUnit;
         if (!(message.startsWith("ini")||message.startsWith("syn"))){
+            if (message.startsWith("log")||message.startsWith("hit")||message.startsWith("ses")||message.startsWith("lgn")) {
+                unit = TimeUnit.MILLISECONDS;
+            }
             StringBuilder logbuf = new StringBuilder(message.length() + 20);
             logbuf.append(message.substring(0, 4));
             logbuf.append(df.format(new Date()));
             logbuf.append(message.substring(3));
+            DelayedMessage dm = new DelayedMessage(message, delay, unit);
+            log.trace("Adding Message: ("+dm.getMessage()+") delay:"+dm.getDelay(TimeUnit.MILLISECONDS)+" unit:"+unit);
             if (SWBMessageServer.FromNetwork.LOCAL.equals(from)){
-                upStream.add(new DelayedMessage(message, 5, TimeUnit.MINUTES));
+                upStream.add(dm);
             } else if (SWBMessageServer.FromNetwork.REMOTE.equals(from)){
-                downStream.add(new DelayedMessage(message, 5, TimeUnit.MINUTES));
+                downStream.add(dm);
             }
         }
         else {
@@ -210,12 +228,15 @@ public class SWBProxyMessageCenter {
                         try {
                             StringTokenizer st=new StringTokenizer(message, "|");
                             String init=st.nextToken();
-                            String time=st.nextToken();
+                            //String time=st.nextToken();
                             String aux=st.nextToken();
+                            //log.trace("init:"+init);
+                            //log.trace("time:"+time);
+                            //log.trace("aux:"+aux);
                             if(aux.equals("hel"))
                             {
                                 String maddr=st.nextToken();
-                                log.info("Registering Message Client:"+maddr);
+                                log.info("Registering Message Client:"+maddr+" to "+from);
 
                                 //System.out.println("Registering Message Client:"+addr);
 
@@ -250,11 +271,11 @@ public class SWBProxyMessageCenter {
                     }
         }
         
-        log.debug("Message from " + addr + ":(" + message+") "+from);
+        //log.trace("Message received from " + addr + ":(" + message+") "+from);
     }
     
     public void sendMessage(final String message, final HashMap<String, DatagramPacket> network) throws IOException{
-        log.trace("Sending: "+message);
+        log.trace("Sending: ("+message+")");
         byte[] data = message.getBytes();
         for (DatagramPacket refPacket:network.values()){
             DatagramPacket packet=new DatagramPacket(data, data.length, refPacket.getAddress(), refPacket.getPort());
