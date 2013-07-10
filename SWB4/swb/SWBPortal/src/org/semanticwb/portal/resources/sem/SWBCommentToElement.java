@@ -268,7 +268,6 @@ public class SWBCommentToElement extends org.semanticwb.portal.resources.sem.bas
         out.println("<!--");
         
         out.println("function validateFrm(frmId) {");
-        out.println("    return true;");
         out.println("  var frm = dojo.byId(frmId);");
         out.println("  if(!frm) {");
         out.println("    return false;");
