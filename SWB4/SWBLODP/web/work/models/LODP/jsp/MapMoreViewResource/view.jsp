@@ -31,7 +31,7 @@
     if(dataset!=null){//&&
 //            (dataset.getDatasetFormat().toLowerCase().equals("kml")||
 //            dataset.getDatasetFormat().toLowerCase().equals("kmz"))){
-            String path=DataSetResource.getDSWebFileURL(request, dataset.getActualVersion())+dataset.getActualVersion().getFilePath();
+            String path=DataSetResource.getDSWebFileURL(request, dataset,null,wsite);   
 %>
 <script type="text/javascript" src="http://maps.google.com/maps/api/js?v=3&amp;sensor=false&amp;language=es&amp;region=MX"></script>
 <script type="text/javascript">

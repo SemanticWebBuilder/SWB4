@@ -31,7 +31,7 @@
     }
     String dsid=base.getAttribute("datosid");
     if(dataset!=null){
-        String path=DataSetResource.getDSWebFileURL(request, dataset.getActualVersion(),resid,wsite);
+        String path=DataSetResource.getDSWebFileURL(request, dataset,resid,wsite); 
         if((dataset.getDatasetFormat().toLowerCase().equals("kml")||
             dataset.getDatasetFormat().toLowerCase().equals("kmz"))){
 %>

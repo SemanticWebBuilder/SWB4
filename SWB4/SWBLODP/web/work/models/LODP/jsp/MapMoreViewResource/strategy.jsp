@@ -24,7 +24,7 @@
     String resid=base.getAttribute("recid", "3");
     while(sds.hasNext()){
         Dataset dataset=sds.next();
-        String path=DataSetResource.getDSWebFileURL(request, dataset.getActualVersion(),resid,wsite);
+        String path=DataSetResource.getDSWebFileURL(request, dataset,resid,wsite);   
         if(dataset.getDatasetFormat().toLowerCase().equals("kml")||
                 dataset.getDatasetFormat().toLowerCase().equals("kmz")){
 %>
