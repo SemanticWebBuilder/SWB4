@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<admresource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <xslfile>admresource.xslt</xslfile>
+    <form name="frmAdmSVGModeler" action="true" method="POST">
+        <admdbconnmgr defconn="true"/>
+        <fieldset legend="Configuración general">
+            <input type="CHECKBOX" name="viewMode" label="Usar modo vista" value="true"/>
+        </fieldset>
+        <fieldset>
+            <input type="SUBMIT" name="btnSave" value="Guardar"/>
+            <input type="RESET"  name="btnReset" id="btnReset" value="Restablecer" />
+        </fieldset>
+    </form>
+</admresource>
