@@ -88,7 +88,7 @@ public class SWBSocialUtil implements SWBAppObject {
     static public String VIDEO="video";
     
     
-    private static Properties prop = new Properties();
+    //private static Properties prop = new Properties();
 
     /**
      * Creates a new object of this class.
@@ -116,7 +116,8 @@ public class SWBSocialUtil implements SWBAppObject {
         }
         return instance;
     }*/
-
+    
+    
     public ArrayList getDoublesArray() {
         return aDoubles;
     }
@@ -182,7 +183,7 @@ public class SWBSocialUtil implements SWBAppObject {
         hmapChanges.put("gi", "ji");
         hmapChanges.put("bb", "b");
         hmapChanges.put("c", "k");
-
+        
     }
 
     public static class Strings {
