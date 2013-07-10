@@ -32,194 +32,199 @@ exportUrl.setMode(SVGModeler.MODE_EXPORT);
     <link href="/swbadmin/jsp/process/modeler/images/modelerFrame.css" rel="stylesheet" type="text/css">
 </head>
 <body style="margin: 0px;" onload="Modeler.init('modeler');">
-    <div id="toolBar" onmouseout="ToolBar.outToolBar();" onmouseover="ToolBar.overToolBar(); this.style.opacity=1;" style="position: fixed;">
-        <div class="toolbarItem">
-            <span class="toolbarHeader"></span>
-        </div>
-        <div class="toolbarItem">
-            <span title="Archivo" class="fileItem" onclick="ToolBar.showSubBar('fileBar',this)"></span>
-        </div>
-        <div class="toolbarItem">
-            <span title="Eventos de inicio" class="startEventItem" onclick="ToolBar.showSubBar('startEventsBar', this)"></span>
-        </div>
-        <div class="toolbarItem">
-            <span title="Eventos intermedios" class="intereventItem" onclick="ToolBar.showSubBar('interEventsBar', this)"></span>
-        </div>
-        <div class="toolbarItem">
-            <span title="Eventos finales" class="endeventItem" onclick="ToolBar.showSubBar('endEventsBar', this)"></span>
-        </div>
-        <div class="toolbarItem">
-            <span class="toolbarSeparator"></span>
-        </div>
-        <div class="toolbarItem">
-            <span title="Tareas" class="taskItem" onclick="ToolBar.showSubBar('tasksBar', this)"></span>
-        </div>
-        <div class="toolbarItem">
-            <span title="Subprocesos" class="subtaskItem" onclick="ToolBar.showSubBar('subtasksBar', this)"></span>
-        </div>
-        <div class="toolbarItem">
-            <span title="Tareas llamadas" class="taskcallItem" onclick="ToolBar.showSubBar('calltasksBar', this)"></span>
-        </div>
-        <div class="toolbarItem">
-            <span title="Compuertas" class="gatewayItem" onclick="ToolBar.showSubBar('gatewaysBar', this)"></span>
-        </div>
-        <div class="toolbarItem">
-            <span class="toolbarSeparator"></span>
-        </div>
-        <div class="toolbarItem">
-            <span title="Objetos de conexión" class="flowItem" onclick="ToolBar.showSubBar('connectionsBar', this)"></span>
-        </div>
-        <div class="toolbarItem">
-            <span title="Artefactos" class="artifactItem" onclick="ToolBar.showSubBar('artifactsBar', this)"></span>
-        </div>
-        <div class="toolbarItem">
-            <span title="Objetos de datos" class="dataobjectItem" onclick="ToolBar.showSubBar('dataobjectsBar', this)"></span>
-        </div>
-        <div class="toolbarItem">
-            <span class="toolbarSeparator"></span>
-        </div>
-        <div class="toolbarItem">
-            <span title="Swimlanes" class="poolItem" onclick="ToolBar.showSubBar('swimlanesBar', this)"></span>
-        </div>
-        <div class="toolbarItem">
-            <span class="toolbarFooter"></span>
-        </div>
+    <%if (SWBContext.getAdminWebSite().equals(paramRequest.getWebPage().getWebSite())) {
+        %>
+        <div id="toolBar" onmouseout="ToolBar.outToolBar();" onmouseover="ToolBar.overToolBar(); this.style.opacity=1;" style="position: fixed;">
+            <div class="toolbarItem">
+                <span class="toolbarHeader"></span>
+            </div>
+            <div class="toolbarItem">
+                <span title="Archivo" class="fileItem" onclick="ToolBar.showSubBar('fileBar',this)"></span>
+            </div>
+            <div class="toolbarItem">
+                <span title="Eventos de inicio" class="startEventItem" onclick="ToolBar.showSubBar('startEventsBar', this)"></span>
+            </div>
+            <div class="toolbarItem">
+                <span title="Eventos intermedios" class="intereventItem" onclick="ToolBar.showSubBar('interEventsBar', this)"></span>
+            </div>
+            <div class="toolbarItem">
+                <span title="Eventos finales" class="endeventItem" onclick="ToolBar.showSubBar('endEventsBar', this)"></span>
+            </div>
+            <div class="toolbarItem">
+                <span class="toolbarSeparator"></span>
+            </div>
+            <div class="toolbarItem">
+                <span title="Tareas" class="taskItem" onclick="ToolBar.showSubBar('tasksBar', this)"></span>
+            </div>
+            <div class="toolbarItem">
+                <span title="Subprocesos" class="subtaskItem" onclick="ToolBar.showSubBar('subtasksBar', this)"></span>
+            </div>
+            <div class="toolbarItem">
+                <span title="Tareas llamadas" class="taskcallItem" onclick="ToolBar.showSubBar('calltasksBar', this)"></span>
+            </div>
+            <div class="toolbarItem">
+                <span title="Compuertas" class="gatewayItem" onclick="ToolBar.showSubBar('gatewaysBar', this)"></span>
+            </div>
+            <div class="toolbarItem">
+                <span class="toolbarSeparator"></span>
+            </div>
+            <div class="toolbarItem">
+                <span title="Objetos de conexión" class="flowItem" onclick="ToolBar.showSubBar('connectionsBar', this)"></span>
+            </div>
+            <div class="toolbarItem">
+                <span title="Artefactos" class="artifactItem" onclick="ToolBar.showSubBar('artifactsBar', this)"></span>
+            </div>
+            <div class="toolbarItem">
+                <span title="Objetos de datos" class="dataobjectItem" onclick="ToolBar.showSubBar('dataobjectsBar', this)"></span>
+            </div>
+            <div class="toolbarItem">
+                <span class="toolbarSeparator"></span>
+            </div>
+            <div class="toolbarItem">
+                <span title="Swimlanes" class="poolItem" onclick="ToolBar.showSubBar('swimlanesBar', this)"></span>
+            </div>
+            <div class="toolbarItem">
+                <span class="toolbarFooter"></span>
+            </div>
 
-        <div id="fileBar" class="subbarHidden" style="width: 385px;">
-            <span class="subbarStart"></span>
-            <span class="newProcess" title="Nuevo modelo" onclick="if (confirm('Se perderán todos los cambios no guardados. ¿Desea continuar?')){Modeler.clearCanvas();}"></span>
-            <span class="openProcess" title="Abrir modelo existente" onclick="showLoadDialog();"></span>
-            <%if (SWBContext.getAdminWebSite().equals(paramRequest.getWebPage().getWebSite())) {
+            <div id="fileBar" class="subbarHidden" style="width: 385px;">
+                <span class="subbarStart"></span>
+                <span class="newProcess" title="Nuevo modelo" onclick="if (confirm('Se perderán todos los cambios no guardados. ¿Desea continuar?')){Modeler.clearCanvas();}"></span>
+                <span class="openProcess" title="Abrir modelo existente" onclick="showLoadDialog();"></span>
+                <%if (SWBContext.getAdminWebSite().equals(paramRequest.getWebPage().getWebSite())) {
+                    %>
+                    <span class="storeProcess" title="Enviar modelo" onclick="storeProcess();"></span>
+                    <%
+                }
                 %>
-                <span class="storeProcess" title="Enviar modelo" onclick="storeProcess();"></span>
-                <%
-            }
-            %>
-            <span class="saveProcess" title="Guardar modelo" onclick="submit_download_form('swp')"></span>
-            <span class="saveAsImage" title="Guardar como imagen" onclick="submit_download_form('svg')"></span>
-            <!--span class="saveAsImage" title="Guardar como imagen" onclick="submit_download_form('png')"></span-->
-            <span class="subbarEnd"></span>
+                <span class="saveProcess" title="Guardar modelo" onclick="submit_download_form('swp')"></span>
+                <span class="saveAsImage" title="Guardar como imagen" onclick="submit_download_form('svg')"></span>
+                <!--span class="saveAsImage" title="Guardar como imagen" onclick="submit_download_form('png')"></span-->
+                <span class="subbarEnd"></span>
+            </div>
+            <div id="startEventsBar" class="subbarHidden" style="width: 385px;">
+                <span class="subbarStart"></span>
+                <span class="normalStartEvent" cId ="StartEvent" title="Inicio normal" onclick="Modeler.creationStart(this)"></span>
+                <span class="messageStartEvent" cId ="MessageStartEvent" title="Inicio por mensaje" onclick="Modeler.creationStart(this)"></span>
+                <span class="timerStartEvent" cId ="TimerStartEvent" title="Inicio temporizado"  onclick="Modeler.creationStart(this)"></span>
+                <span class="ruleStartEvent" cId ="RuleStartEvent" title="Inicio por regla de negocio" onclick="Modeler.creationStart(this)"></span>
+                <span class="signalStartEvent" cId ="SignalStartEvent" title="Inicio por señal" onclick="Modeler.creationStart(this)"></span>
+                <span class="multiStartEvent" cId ="MultipleStartEvent" title="Inicio por eventos múltiples" onclick="Modeler.creationStart(this)"></span>
+                <span class="parallelStartEvent" cId ="ParallelStartEvent" title="Inicio paralelo" onclick="Modeler.creationStart(this)"></span>
+                <span class="scalaStartEvent" cId ="ScalationStartEvent" title="Inicio por escalamiento" onclick="Modeler.creationStart(this)"></span>
+                <span class="errorStartEvent" cId ="ErrorStartEvent" title="Inicio por error" onclick="Modeler.creationStart(this)"></span>
+                <span class="compensaStartEvent" cId ="CompensationStartEvent" title="Inicio por compensación"  onclick="Modeler.creationStart(this)"></span>
+                <span class="subbarEnd"></span>
+            </div>
+            <div id="interEventsBar" class="subbarHidden" style="width: 645px;">
+                <span class="subbarStart"></span>
+                <span class="messageInterCatchEvent" cId ="MessageIntermediateCatchEvent" title="Recepción de mensaje" onclick="Modeler.creationStart(this)"></span>
+                <span class="messageInterThrowEvent" cId ="MessageIntermediateThrowEvent" title="Disparo de mensaje" onclick="Modeler.creationStart(this)"></span>
+                <span class="timerInterEvent" cId ="TimerIntermediateCatchEvent" title="Temporizador" onclick="Modeler.creationStart(this)"></span>
+                <span class="errorInterEvent" cId ="ErrorIntermediateCatchEvent" title="Error" onclick="Modeler.creationStart(this)"></span>
+                <span class="cancelInterEvent" cId ="CancelationIntermediateCatchEvent" title="Cancelación" onclick="Modeler.creationStart(this)"></span>
+                <span class="compensaInterCatchEvent" cId ="CompensationIntermediateCatchEvent" title="Recepción de compensación" onclick="Modeler.creationStart(this)"></span>
+                <span class="compensaInterThrowEvent" cId ="CompensationIntermediateThrowEvent" title="Disparo de compensación" onclick="Modeler.creationStart(this)"></span>
+                <span class="ruleInterEvent" cId ="RuleIntermediateCatchEvent" title="Regla de negocio" onclick="Modeler.creationStart(this)"></span>
+                <span class="linkInterCatchEvent" cId ="LinkIntermediateCatchEvent" title="Continuación de enlace" onclick="Modeler.creationStart(this)"></span>
+                <span class="linkInterThrowEvent" cId ="LinkIntermediateThrowEvent" title="Inicio de enlace" onclick="Modeler.creationStart(this)"></span>
+                <span class="signalInterCatchEvent" cId ="SignalIntermediateCatchEvent" title="Recepción de señal" onclick="Modeler.creationStart(this)"></span>
+                <span class="signalInterThrowEvent" cId ="SignalIntermediateThrowEvent" title="Disparo de señal" onclick="Modeler.creationStart(this)"></span>
+                <span class="multipleInterCatchEvent" cId ="MultipleIntermediateCatchEvent" title="Recepción múltiple" onclick="Modeler.creationStart(this)"></span>
+                <span class="multipleInterThrowEvent" cId ="MultipleIntermediateThrowEvent" title="Disparo múltiple" onclick="Modeler.creationStart(this)"></span>
+                <span class="scalaInterCatchEvent" cId ="ScalationIntermediateCatchEvent" title="Recepción de escalamiento" onclick="Modeler.creationStart(this)"></span>
+                <span class="scalaInterThrowEvent" cId ="ScalationIntermediateThrowEvent" title="Disparo de escalamiento" onclick="Modeler.creationStart(this)"></span>
+                <span class="parallelInterEvent" cId ="ParallelIntermediateCatchEvent" title="Paralelo" onclick="Modeler.creationStart(this)"></span>
+                <span class="subbarEnd"></span>
+            </div>
+            <div id="endEventsBar" class="subbarHidden" style="width: 348px;">
+                <span class="subbarStart"></span>
+                <span class="normalEndEvent" cId ="EndEvent" title="Fin normal" onclick="Modeler.creationStart(this)"></span>
+                <span class="messageEndEvent" cId ="MessageEndEvent" title="Fin con mensaje"  onclick="Modeler.creationStart(this)"></span>
+                <span class="errorEndEvent" cId ="ErrorEndEvent" title="Fin con error"  onclick="Modeler.creationStart(this)"></span>
+                <span class="cancelEndEvent" cId ="CancelationEndEvent" title="Fin con cancelación" onclick="Modeler.creationStart(this)"></span>
+                <span class="compensaEndEvent" cId ="CompensationEndEvent" title="Fin con compensación"  onclick="Modeler.creationStart(this)"></span>
+                <span class="signalEndEvent" cId ="SignalEndEvent" title="Fin con señal" onclick="Modeler.creationStart(this)"></span>
+                <span class="multiEndEvent" cId ="MultipleEndEvent" title="Fin múltiple"  onclick="Modeler.creationStart(this)"></span>
+                <span class="escalaEndEvent" cId ="ScalationEndEvent" title="Fin con escalamiento" onclick="Modeler.creationStart(this)"></span>
+                <span class="terminalEndEvent" cId ="TerminationEndEvent" title="Terminación" onclick="Modeler.creationStart(this)"></span>
+                <span class="subbarEnd"></span>
+            </div>
+            <div id="tasksBar" class="subbarHidden" style="width: 311px;">
+                <span class="subbarStart"></span>
+                <span class="abstractTask" cId ="Task" title="Tarea abstracta" onclick="Modeler.creationStart(this)"></span>
+                <span class="userTask" cId ="UserTask" title="Tarea de usuario" onclick="Modeler.creationStart(this)"></span>
+                <span class="serviceTask" cId ="ServiceTask" title="Tarea de servicio" onclick="Modeler.creationStart(this)"></span>
+                <span class="scriptTask" cId ="ScriptTask" title="Tarea de script" onclick="Modeler.creationStart(this)"></span>
+                <span class="ruleTask" cId ="BusinessRuleTask" title="Tarea de regla de negocio" onclick="Modeler.creationStart(this)"></span>
+                <span class="manualTask" cId ="ManualTask" title="Tarea manual" onclick="Modeler.creationStart(this)"></span>
+                <span class="sendTask" cId ="SendTask" title="Tarea de envío de mensaje" onclick="Modeler.creationStart(this)"></span>
+                <span class="receiveTask" cId ="ReceiveTask" title="Tarea de recepción de mensaje" onclick="Modeler.creationStart(this)"></span>
+                <span class="subbarEnd"></span>
+            </div>
+            <div id="subtasksBar" class="subbarHidden" style="width: 163px;">
+                <span class="subbarStart"></span>
+                <span class="subProcess" cId ="SubProcess" title="Subproceso" onclick="Modeler.creationStart(this)"></span>
+                <span class="adhocsubProcess" cId ="AdhocSubProcess" title="Subproceso adhoc" onclick="Modeler.creationStart(this)"></span>
+                <span class="eventsubProcess" cId ="EventSubProcess" title="Subproceso de evento" onclick="Modeler.creationStart(this)"></span>
+                <span class="transactionsubProcess" cId ="TransactionSubProcess" title="Transacción" onclick="Modeler.creationStart(this)"></span>
+                <span class="subbarEnd"></span>
+            </div>
+            <div id="calltasksBar" class="subbarHidden" style="width: 237px;">
+                <span class="subbarStart"></span>
+                <span class="callTask" cId ="CallTask" title="Tarea llamada" onclick="Modeler.creationStart(this)"></span>
+                <span class="callmanualTask" cId ="CallManualTask" title="Tarea manual llamada" onclick="Modeler.creationStart(this)"></span>
+                <span class="callruleTask" cId ="CallBusinessRuleTask" title="Tarea de regla de negocio llamada" onclick="Modeler.creationStart(this)"></span>
+                <span class="callscriptTask" cId ="CallScriptTask" title="Tarea de script llamada" onclick="Modeler.creationStart(this)"></span>
+                <span class="calluserTask" cId ="CallUserTask" title="Tarea de usuario llamada" onclick="Modeler.creationStart(this)"></span>
+                <span class="callsubProcess" cId ="CallSubProcess" title="Subproceso llamado" onclick="Modeler.creationStart(this)"></span>
+                <span class="subbarEnd"></span>
+            </div>
+            <div id="gatewaysBar" class="subbarHidden" style="width: 274px;">
+                <span class="subbarStart"></span>
+                <span class="exclusiveDataGateway" cId ="ExclusiveGateway" title="Exclusiva (datos)" onclick="Modeler.creationStart(this)"></span>
+                <span class="inclusiveDataGateway" cId ="InclusiveGateway" title="Inclusiva (datos)" onclick="Modeler.creationStart(this)"></span>
+                <span class="exclusiveStartEventGateway" cId ="ExclusiveStartEventGateway" title="Exclusiva de inicio" onclick="Modeler.creationStart(this)"></span>
+                <span class="exclusiveEventGateway" cId="ExclusiveIntermediateEventGateway" title="Exclusiva (eventos)" onclick="Modeler.creationStart(this)"></span>
+                <span class="parallelGateway" cId ="ParallelGateway" title="Paralela" onclick="Modeler.creationStart(this)"></span>
+                <span class="parallelStartGateway" cId ="ParallelStartEventGateway" title="Paralela de inicio" onclick="Modeler.creationStart(this)"></span>
+                <span class="complexGateway" cId ="ComplexGateway" title="Compleja" onclick="Modeler.creationStart(this)"></span>
+                <span class="subbarEnd"></span>
+            </div>
+            <div id="connectionsBar" class="subbarHidden" style="width: 237px;">
+                <span class="subbarStart"></span>
+                <span class="sequenceFlow" cId ="SequenceFlow" title="Flujo de secuencia" onclick="Modeler.creationStart(this)"></span>
+                <span class="conditionalFlow" cId ="ConditionalFlow" title="Flujo condicional" onclick="Modeler.creationStart(this)"></span>
+                <span class="defaultFlow" cId ="DefaultFlow" title="Flujo por defecto" onclick="Modeler.creationStart(this)"></span>
+                <span class="messageFlow" cId ="MessageFlow" title="Flujo de mensaje" onclick="Modeler.creationStart(this)"></span>
+                <span class="associationFlow" cId ="AssociationFlow" title="Asociación" onclick="Modeler.creationStart(this)"></span>
+                <span class="directionalassociationFlow" cId ="DirectionalAssociation" title="Asociación direccional" onclick="Modeler.creationStart(this)"></span>
+                <span class="subbarEnd"></span>
+            </div>
+            <div id="artifactsBar" class="subbarHidden" style="width: 89px;">
+                <span class="subbarStart"></span>
+                <span class="annotation" cId ="AnnotationArtifact" title="Anotación" onclick="Modeler.creationStart(this)"></span>
+                <span class="group" cId ="Group" title="Grupo" onclick="Modeler.creationStart(this)"></span>
+                <span class="subbarEnd"></span>
+            </div>
+            <div id="dataobjectsBar" class="subbarHidden" style="width: 163px;">
+                <span class="subbarStart"></span>
+                <span class="dataObject" cId ="DataObject" title="Dato" onclick="Modeler.creationStart(this)"></span>
+                <span class="dataInput" cId ="DataInput" title="Dato de entrada" onclick="Modeler.creationStart(this)"></span>
+                <span class="dataOutput" cId ="DataOutput" title="Dato de salida" onclick="Modeler.creationStart(this)"></span>
+                <span class="dataStore" cId ="DataStore" title="Almacén de datos" onclick="Modeler.creationStart(this)"></span>
+                <span class="subbarEnd"></span>
+            </div>
+            <div id="swimlanesBar" class="subbarHidden" style="width: 89px;">
+                <span class="subbarStart"></span>
+                <span class="pool" cId ="Pool" title="Pool" onclick="Modeler.creationStart(this)"></span>
+                <span class="lane" cId ="Lane" title="Lane" onclick="Modeler.creationStart(this)"></span>
+                <span class="subbarEnd"></span>
+            </div>
         </div>
-        <div id="startEventsBar" class="subbarHidden" style="width: 385px;">
-            <span class="subbarStart"></span>
-            <span class="normalStartEvent" cId ="StartEvent" title="Inicio normal" onclick="Modeler.creationStart(this)"></span>
-            <span class="messageStartEvent" cId ="MessageStartEvent" title="Inicio por mensaje" onclick="Modeler.creationStart(this)"></span>
-            <span class="timerStartEvent" cId ="TimerStartEvent" title="Inicio temporizado"  onclick="Modeler.creationStart(this)"></span>
-            <span class="ruleStartEvent" cId ="RuleStartEvent" title="Inicio por regla de negocio" onclick="Modeler.creationStart(this)"></span>
-            <span class="signalStartEvent" cId ="SignalStartEvent" title="Inicio por señal" onclick="Modeler.creationStart(this)"></span>
-            <span class="multiStartEvent" cId ="MultipleStartEvent" title="Inicio por eventos múltiples" onclick="Modeler.creationStart(this)"></span>
-            <span class="parallelStartEvent" cId ="ParallelStartEvent" title="Inicio paralelo" onclick="Modeler.creationStart(this)"></span>
-            <span class="scalaStartEvent" cId ="ScalationStartEvent" title="Inicio por escalamiento" onclick="Modeler.creationStart(this)"></span>
-            <span class="errorStartEvent" cId ="ErrorStartEvent" title="Inicio por error" onclick="Modeler.creationStart(this)"></span>
-            <span class="compensaStartEvent" cId ="CompensationStartEvent" title="Inicio por compensación"  onclick="Modeler.creationStart(this)"></span>
-            <span class="subbarEnd"></span>
-        </div>
-        <div id="interEventsBar" class="subbarHidden" style="width: 645px;">
-            <span class="subbarStart"></span>
-            <span class="messageInterCatchEvent" cId ="MessageIntermediateCatchEvent" title="Recepción de mensaje" onclick="Modeler.creationStart(this)"></span>
-            <span class="messageInterThrowEvent" cId ="MessageIntermediateThrowEvent" title="Disparo de mensaje" onclick="Modeler.creationStart(this)"></span>
-            <span class="timerInterEvent" cId ="TimerIntermediateCatchEvent" title="Temporizador" onclick="Modeler.creationStart(this)"></span>
-            <span class="errorInterEvent" cId ="ErrorIntermediateCatchEvent" title="Error" onclick="Modeler.creationStart(this)"></span>
-            <span class="cancelInterEvent" cId ="CancelationIntermediateCatchEvent" title="Cancelación" onclick="Modeler.creationStart(this)"></span>
-            <span class="compensaInterCatchEvent" cId ="CompensationIntermediateCatchEvent" title="Recepción de compensación" onclick="Modeler.creationStart(this)"></span>
-            <span class="compensaInterThrowEvent" cId ="CompensationIntermediateThrowEvent" title="Disparo de compensación" onclick="Modeler.creationStart(this)"></span>
-            <span class="ruleInterEvent" cId ="RuleIntermediateCatchEvent" title="Regla de negocio" onclick="Modeler.creationStart(this)"></span>
-            <span class="linkInterCatchEvent" cId ="LinkIntermediateCatchEvent" title="Continuación de enlace" onclick="Modeler.creationStart(this)"></span>
-            <span class="linkInterThrowEvent" cId ="LinkIntermediateThrowEvent" title="Inicio de enlace" onclick="Modeler.creationStart(this)"></span>
-            <span class="signalInterCatchEvent" cId ="SignalIntermediateCatchEvent" title="Recepción de señal" onclick="Modeler.creationStart(this)"></span>
-            <span class="signalInterThrowEvent" cId ="SignalIntermediateThrowEvent" title="Disparo de señal" onclick="Modeler.creationStart(this)"></span>
-            <span class="multipleInterCatchEvent" cId ="MultipleIntermediateCatchEvent" title="Recepción múltiple" onclick="Modeler.creationStart(this)"></span>
-            <span class="multipleInterThrowEvent" cId ="MultipleIntermediateThrowEvent" title="Disparo múltiple" onclick="Modeler.creationStart(this)"></span>
-            <span class="scalaInterCatchEvent" cId ="ScalationIntermediateCatchEvent" title="Recepción de escalamiento" onclick="Modeler.creationStart(this)"></span>
-            <span class="scalaInterThrowEvent" cId ="ScalationIntermediateThrowEvent" title="Disparo de escalamiento" onclick="Modeler.creationStart(this)"></span>
-            <span class="parallelInterEvent" cId ="ParallelIntermediateCatchEvent" title="Paralelo" onclick="Modeler.creationStart(this)"></span>
-            <span class="subbarEnd"></span>
-        </div>
-        <div id="endEventsBar" class="subbarHidden" style="width: 348px;">
-            <span class="subbarStart"></span>
-            <span class="normalEndEvent" cId ="EndEvent" title="Fin normal" onclick="Modeler.creationStart(this)"></span>
-            <span class="messageEndEvent" cId ="MessageEndEvent" title="Fin con mensaje"  onclick="Modeler.creationStart(this)"></span>
-            <span class="errorEndEvent" cId ="ErrorEndEvent" title="Fin con error"  onclick="Modeler.creationStart(this)"></span>
-            <span class="cancelEndEvent" cId ="CancelationEndEvent" title="Fin con cancelación" onclick="Modeler.creationStart(this)"></span>
-            <span class="compensaEndEvent" cId ="CompensationEndEvent" title="Fin con compensación"  onclick="Modeler.creationStart(this)"></span>
-            <span class="signalEndEvent" cId ="SignalEndEvent" title="Fin con señal" onclick="Modeler.creationStart(this)"></span>
-            <span class="multiEndEvent" cId ="MultipleEndEvent" title="Fin múltiple"  onclick="Modeler.creationStart(this)"></span>
-            <span class="escalaEndEvent" cId ="ScalationEndEvent" title="Fin con escalamiento" onclick="Modeler.creationStart(this)"></span>
-            <span class="terminalEndEvent" cId ="TerminationEndEvent" title="Terminación" onclick="Modeler.creationStart(this)"></span>
-            <span class="subbarEnd"></span>
-        </div>
-        <div id="tasksBar" class="subbarHidden" style="width: 311px;">
-            <span class="subbarStart"></span>
-            <span class="abstractTask" cId ="Task" title="Tarea abstracta" onclick="Modeler.creationStart(this)"></span>
-            <span class="userTask" cId ="UserTask" title="Tarea de usuario" onclick="Modeler.creationStart(this)"></span>
-            <span class="serviceTask" cId ="ServiceTask" title="Tarea de servicio" onclick="Modeler.creationStart(this)"></span>
-            <span class="scriptTask" cId ="ScriptTask" title="Tarea de script" onclick="Modeler.creationStart(this)"></span>
-            <span class="ruleTask" cId ="BusinessRuleTask" title="Tarea de regla de negocio" onclick="Modeler.creationStart(this)"></span>
-            <span class="manualTask" cId ="ManualTask" title="Tarea manual" onclick="Modeler.creationStart(this)"></span>
-            <span class="sendTask" cId ="SendTask" title="Tarea de envío de mensaje" onclick="Modeler.creationStart(this)"></span>
-            <span class="receiveTask" cId ="ReceiveTask" title="Tarea de recepción de mensaje" onclick="Modeler.creationStart(this)"></span>
-            <span class="subbarEnd"></span>
-        </div>
-        <div id="subtasksBar" class="subbarHidden" style="width: 163px;">
-            <span class="subbarStart"></span>
-            <span class="subProcess" cId ="SubProcess" title="Subproceso" onclick="Modeler.creationStart(this)"></span>
-            <span class="adhocsubProcess" cId ="AdhocSubProcess" title="Subproceso adhoc" onclick="Modeler.creationStart(this)"></span>
-            <span class="eventsubProcess" cId ="EventSubProcess" title="Subproceso de evento" onclick="Modeler.creationStart(this)"></span>
-            <span class="transactionsubProcess" cId ="TransactionSubProcess" title="Transacción" onclick="Modeler.creationStart(this)"></span>
-            <span class="subbarEnd"></span>
-        </div>
-        <div id="calltasksBar" class="subbarHidden" style="width: 237px;">
-            <span class="subbarStart"></span>
-            <span class="callTask" cId ="CallTask" title="Tarea llamada" onclick="Modeler.creationStart(this)"></span>
-            <span class="callmanualTask" cId ="CallManualTask" title="Tarea manual llamada" onclick="Modeler.creationStart(this)"></span>
-            <span class="callruleTask" cId ="CallBusinessRuleTask" title="Tarea de regla de negocio llamada" onclick="Modeler.creationStart(this)"></span>
-            <span class="callscriptTask" cId ="CallScriptTask" title="Tarea de script llamada" onclick="Modeler.creationStart(this)"></span>
-            <span class="calluserTask" cId ="CallUserTask" title="Tarea de usuario llamada" onclick="Modeler.creationStart(this)"></span>
-            <span class="callsubProcess" cId ="CallSubProcess" title="Subproceso llamado" onclick="Modeler.creationStart(this)"></span>
-            <span class="subbarEnd"></span>
-        </div>
-        <div id="gatewaysBar" class="subbarHidden" style="width: 274px;">
-            <span class="subbarStart"></span>
-            <span class="exclusiveDataGateway" cId ="ExclusiveGateway" title="Exclusiva (datos)" onclick="Modeler.creationStart(this)"></span>
-            <span class="inclusiveDataGateway" cId ="InclusiveGateway" title="Inclusiva (datos)" onclick="Modeler.creationStart(this)"></span>
-            <span class="exclusiveStartEventGateway" cId ="ExclusiveStartEventGateway" title="Exclusiva de inicio" onclick="Modeler.creationStart(this)"></span>
-            <span class="exclusiveEventGateway" cId="ExclusiveIntermediateEventGateway" title="Exclusiva (eventos)" onclick="Modeler.creationStart(this)"></span>
-            <span class="parallelGateway" cId ="ParallelGateway" title="Paralela" onclick="Modeler.creationStart(this)"></span>
-            <span class="parallelStartGateway" cId ="ParallelStartEventGateway" title="Paralela de inicio" onclick="Modeler.creationStart(this)"></span>
-            <span class="complexGateway" cId ="ComplexGateway" title="Compleja" onclick="Modeler.creationStart(this)"></span>
-            <span class="subbarEnd"></span>
-        </div>
-        <div id="connectionsBar" class="subbarHidden" style="width: 237px;">
-            <span class="subbarStart"></span>
-            <span class="sequenceFlow" cId ="SequenceFlow" title="Flujo de secuencia" onclick="Modeler.creationStart(this)"></span>
-            <span class="conditionalFlow" cId ="ConditionalFlow" title="Flujo condicional" onclick="Modeler.creationStart(this)"></span>
-            <span class="defaultFlow" cId ="DefaultFlow" title="Flujo por defecto" onclick="Modeler.creationStart(this)"></span>
-            <span class="messageFlow" cId ="MessageFlow" title="Flujo de mensaje" onclick="Modeler.creationStart(this)"></span>
-            <span class="associationFlow" cId ="AssociationFlow" title="Asociación" onclick="Modeler.creationStart(this)"></span>
-            <span class="directionalassociationFlow" cId ="DirectionalAssociation" title="Asociación direccional" onclick="Modeler.creationStart(this)"></span>
-            <span class="subbarEnd"></span>
-        </div>
-        <div id="artifactsBar" class="subbarHidden" style="width: 89px;">
-            <span class="subbarStart"></span>
-            <span class="annotation" cId ="AnnotationArtifact" title="Anotación" onclick="Modeler.creationStart(this)"></span>
-            <span class="group" cId ="Group" title="Grupo" onclick="Modeler.creationStart(this)"></span>
-            <span class="subbarEnd"></span>
-        </div>
-        <div id="dataobjectsBar" class="subbarHidden" style="width: 163px;">
-            <span class="subbarStart"></span>
-            <span class="dataObject" cId ="DataObject" title="Dato" onclick="Modeler.creationStart(this)"></span>
-            <span class="dataInput" cId ="DataInput" title="Dato de entrada" onclick="Modeler.creationStart(this)"></span>
-            <span class="dataOutput" cId ="DataOutput" title="Dato de salida" onclick="Modeler.creationStart(this)"></span>
-            <span class="dataStore" cId ="DataStore" title="Almacén de datos" onclick="Modeler.creationStart(this)"></span>
-            <span class="subbarEnd"></span>
-        </div>
-        <div id="swimlanesBar" class="subbarHidden" style="width: 89px;">
-            <span class="subbarStart"></span>
-            <span class="pool" cId ="Pool" title="Pool" onclick="Modeler.creationStart(this)"></span>
-            <span class="lane" cId ="Lane" title="Lane" onclick="Modeler.creationStart(this)"></span>
-            <span class="subbarEnd"></span>
-        </div>
-    </div>
+    <%
+    }
+    %>
     <div style="margin-left:49px;">
         <svg id="modeler" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="100" height="100" class="modeler">
         <style type="text/css"><![CDATA[
