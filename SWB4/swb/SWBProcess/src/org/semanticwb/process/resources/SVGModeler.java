@@ -48,7 +48,7 @@ import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticModel;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticOntology;
-import org.semanticwb.portal.api.GenericResource;
+import org.semanticwb.portal.api.GenericAdmResource;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.api.SWBResourceURL;
@@ -70,7 +70,7 @@ import org.semanticwb.process.model.UserTask;
  * Modelador de procesos basado en SVG y Javascript.
  * @author Hasdai Pacheco <ebenezer.sanchez@infotec.com.mx>
  */
-public class SVGModeler extends GenericResource {
+public class SVGModeler extends GenericAdmResource {
     private static Logger log = SWBUtils.getLogger(SVGModeler.class);
     public static final String MODE_MODELER = "modeler";
     public static final String MODE_GATEWAY = "gateway";
@@ -135,8 +135,15 @@ public class SVGModeler extends GenericResource {
     public void doModeler(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         String JSP = "/swbadmin/jsp/process/modeler/modelerView.jsp";
         RequestDispatcher rd = request.getRequestDispatcher(JSP);
+        Resource base = getResourceBase();
+        boolean isViewMode = false;
+
+        if (base.getAttribute("viewMode") != null && base.getAttribute("viewMode").equals("true")) {
+            isViewMode = true;
+        }
 
         try {
+            request.setAttribute("isViewMode", isViewMode);
             request.setAttribute("paramRequest", paramRequest);
             rd.include(request, response);
         } catch (Exception ex) {
