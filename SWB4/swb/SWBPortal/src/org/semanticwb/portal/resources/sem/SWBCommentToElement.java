@@ -26,7 +26,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
-import java.util.Enumeration;
 import java.util.Iterator;
 import javax.servlet.http.*;
 import org.semanticwb.Logger;
@@ -75,39 +74,37 @@ public class SWBCommentToElement extends org.semanticwb.portal.resources.sem.bas
     @Override
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException
     {
-        String action = response.getAction();
+        final String action = response.getAction();
         String suri = request.getParameter("suri");
+        if(suri==null) {
+            return;
+        }
+        try {
+            suri = URLDecoder.decode(suri, "UTF-8");
+        }catch(Exception unsage) {
+            suri = request.getParameter("suri");
+        }
+        String alertmsg = null;
+        
         if(SWBActionResponse.Action_ADD.equals(action))
         {
-            String securCodeSent = request.getParameter("cmnt_seccode");
+            String securCodeSent = request.getParameter("seccode");
             String securCodeCreated = (String)request.getSession(true).getAttribute("cs");
+            request.getSession(true).removeAttribute("cs");
+System.out.println("seccode="+securCodeSent);
             if( securCodeCreated!=null && securCodeCreated.equalsIgnoreCase(securCodeSent) )
             {
-                if(suri==null) {
-                    return;
-                }
-                try {
-                    suri = URLDecoder.decode(suri, "UTF-8");
-                }catch(Exception unsage) {
-                    suri = null;
-                }
-                
                 SWBClass element = null;
                 try {
                     element = (SWBClass)SemanticObject.createSemanticObject(suri).createGenericInstance();
                 }catch(Exception exc) {
                     log.error(exc);
-                    Enumeration e = request.getParameterNames();
-                    while(e.hasMoreElements()) {
-                        String key = (String) e.nextElement();
-                        response.setRenderParameter(key, request.getParameter(key));
-                    }
                     return;
                 }
                 if(element.isValid())
                 {
-                    String txt = SWBUtils.XML.replaceXMLChars(request.getParameter("cmnt_comment"));
-                    if(!txt.isEmpty())
+                    String txt = SWBUtils.XML.replaceXMLChars(request.getParameter("comment"));
+                    if(txt.length()>=5)
                     {
                         WebSite model = response.getWebPage().getWebSite();
                         User user = response.getUser();
@@ -119,85 +116,108 @@ public class SWBCommentToElement extends org.semanticwb.portal.resources.sem.bas
                         }
                         else
                         {
-                            String email = SWBUtils.XML.replaceXMLChars(request.getParameter("email"));
-                            String name = SWBUtils.XML.replaceXMLChars(request.getParameter("name"));
-                            if(!name.isEmpty() && SWBUtils.EMAIL.isValidEmailAddress(email))
+                            String name = SWBUtils.XML.replaceXMLChars(request.getParameter("name"));                            
+                            if(!name.isEmpty())
                             {
-                                CommentToElement comment = CommentToElement.ClassMgr.createCommentToElement(model);
-                                comment.setCommentToElement(txt);
-                                comment.setElement(element);
-                                comment.setName(name);
-                                comment.setEmail(email);
+                                String email = SWBUtils.XML.replaceXMLChars(request.getParameter("email"));
+                                if(SWBUtils.EMAIL.isValidEmailAddress(email))
+                                {
+                                    CommentToElement comment = CommentToElement.ClassMgr.createCommentToElement(model);
+                                    comment.setCommentToElement(txt);
+                                    comment.setElement(element);
+                                    comment.setName(name);
+                                    comment.setEmail(email);
+                                }
+                                else
+                                {
+                                    alertmsg = response.getLocaleString("msgWrongEmail");
+                                }
+                            }
+                            else
+                            {
+                                alertmsg = response.getLocaleString("msgWrongName");
                             }
                         }
                     }
+                    else
+                    {
+                        alertmsg = response.getLocaleString("msgWrongComment");
+                    }
                 }
+                else
+                {
+                    log.error("El objeto SWBClass "+element+" con Id "+element.getId()+" es inválido y no es posible comentarlo en "+response.getWebPage().getId());
+                }                
             }
             else
             {
-                Enumeration e = request.getParameterNames();
-                while (e.hasMoreElements()) {
-                    String key = (String) e.nextElement();
-                    response.setRenderParameter(key, request.getParameter(key));
-                }
+                alertmsg = response.getLocaleString("msgWrongCode");
             }
-            request.getSession(true).removeAttribute("cs");
         }
         else if(SWBActionResponse.Action_EDIT.equals(action))
         {
-            if(suri==null) {
-                return;
-            }
-            try {
-                suri = URLDecoder.decode(suri, "UTF-8");
-            }catch(Exception unsage) {
-                suri = null;
-            }
-
             SWBClass element = null;
             try {
                 element = (SWBClass)SemanticObject.createSemanticObject(suri).createGenericInstance();
             }catch(Exception exc) {
                 log.error(exc);
-//                Enumeration e = request.getParameterNames();
-//                while(e.hasMoreElements()) {
-//                    String key = (String) e.nextElement();
-//                    response.setRenderParameter(key, request.getParameter(key));
-//                }
                 return;
             }
             if(element.isValid())
             {
-                WebSite model = response.getWebPage().getWebSite();
-                String commentParentId = request.getParameter("cmmt");
-                if( CommentToElement.ClassMgr.hasCommentToElement(commentParentId, model) )
+                String txt = SWBUtils.XML.replaceXMLChars(request.getParameter("comment"));
+                if(txt.length()>=5)
                 {
-                    String txt = SWBUtils.XML.replaceXMLChars(request.getParameter("ab_comment"));
-                    if(!txt.isEmpty())
+                    WebSite model = response.getWebPage().getWebSite();
+                    String commentParentId = request.getParameter("cmmt");
+                    if( CommentToElement.ClassMgr.hasCommentToElement(commentParentId, model) )
                     {
-                        CommentToElement commentParent = CommentToElement.ClassMgr.getCommentToElement(commentParentId, model);
-                        CommentToElement comment = CommentToElement.ClassMgr.createCommentToElement(model);
-                        comment.setElement(element);
-                        commentParent.addAnswerBack(comment);
                         User user = response.getUser();
                         if(user.isSigned())
                         {
+                            CommentToElement commentParent = CommentToElement.ClassMgr.getCommentToElement(commentParentId, model);
+                            CommentToElement comment = CommentToElement.ClassMgr.createCommentToElement(model);
+                            comment.setElement(element);
+                            commentParent.addAnswerBack(comment);
                             comment.setCommentToElement(txt);
                         }
                         else
                         {
-                            String name = SWBUtils.XML.replaceXMLChars(request.getParameter("ab_name"));
-                            String email = SWBUtils.XML.replaceXMLChars(request.getParameter("ab_email"));
-                            if(!name.isEmpty() && SWBUtils.EMAIL.isValidEmailAddress(email))
+                            String name = SWBUtils.XML.replaceXMLChars(request.getParameter("name"));                            
+                            if(!name.isEmpty())
                             {
-                                comment.setCommentToElement(txt);
-                                comment.setName(name);
-                                comment.setEmail(email);
+                                String email = SWBUtils.XML.replaceXMLChars(request.getParameter("email"));
+                                if(SWBUtils.EMAIL.isValidEmailAddress(email))
+                                {
+                                    CommentToElement commentParent = CommentToElement.ClassMgr.getCommentToElement(commentParentId, model);
+                                    CommentToElement comment = CommentToElement.ClassMgr.createCommentToElement(model);
+                                    comment.setElement(element);
+                                    commentParent.addAnswerBack(comment);
+                                    comment.setCommentToElement(txt);
+                                    comment.setName(name);
+                                    comment.setEmail(email);
+                                }
+                                else
+                                {
+                                    alertmsg = response.getLocaleString("msgWrongEmail");
+                                }
+                            }
+                            else
+                            {
+                                alertmsg = response.getLocaleString("msgWrongName");
                             }
                         }
                     }
                 }
+                else
+                {
+                    alertmsg = response.getLocaleString("msgWrongComment");
+                }
             }
+            else
+            {
+                log.error("El objeto SWBClass "+element+" con Id "+element.getId()+" es inválido y no es posible comentarlo en "+response.getWebPage().getId());
+            }  
         }
         else
         {
@@ -205,7 +225,7 @@ public class SWBCommentToElement extends org.semanticwb.portal.resources.sem.bas
         }
         
         String lang = response.getUser().getLanguage();
-        response.sendRedirect(response.getWebPage().getUrl(lang)+"?suri="+URLEncoder.encode(suri,"UTF-8"));
+        response.sendRedirect(response.getWebPage().getUrl(lang)+"?suri="+URLEncoder.encode(suri,"UTF-8")+(alertmsg==null?"":"&alertmsg="+alertmsg) + (alertmsg!=null?"&name="+request.getParameter("name"):"")+(alertmsg!=null?"&email="+request.getParameter("email"):"")+(alertmsg!=null?"&comment="+request.getParameter("comment"):""));
     }
     
     @Override
@@ -232,7 +252,6 @@ public class SWBCommentToElement extends org.semanticwb.portal.resources.sem.bas
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
         PrintWriter out = response.getWriter();
-        
         SWBClass element = getSWBClassObject(request.getParameter("suri"));
         if(element==null) {
             out.println(paramRequest.getLocaleString("noElement"));
@@ -263,44 +282,57 @@ public class SWBCommentToElement extends org.semanticwb.portal.resources.sem.bas
 //        out.println("    return true; ");
 //        out.println("} ");
         
-        out.println("function doApply() { ");
-        out.println("    var msgs = new Array();");
-        out.println("    if(isEmpty('cmnt_comment')) { ");
-        out.println("        msgs.push('Tienes que ingresar un comentario u opinión.'); ");
-        out.println("    } ");
-        out.println("    if(isEmpty('cmnt_seccode')) { ");
-        out.println("        msgs.push('Para poder agregar tu comentario es necesario que ingreses el código de la imagen.\\nEn caso de no ser claro puedes cambiarlo haciendo clic en <<Cambiar imagen>>.'); ");
-        out.println("    }");
+//        out.println("function doApply() { ");
+//        out.println("    var msgs = new Array();");
+//        out.println("    if(isEmpty('cmnt_comment')) { ");
+//        out.println("        msgs.push('Tienes que ingresar un comentario u opinión.'); ");
+//        out.println("    } ");
+//        out.println("    if(isEmpty('cmnt_seccode')) { ");
+//        out.println("        msgs.push('Para poder agregar tu comentario es necesario que ingreses el código de la imagen.\\nEn caso de no ser claro puedes cambiarlo haciendo clic en <<Cambiar imagen>>.'); ");
+//        out.println("    }");
+//        
+//        out.println("    if(msgs.length > 0) { ");
+//        out.println("          alert(msgs.join('\\n'));");
+//        out.println("    }else { ");
+//        out.println("        dojo.byId('cmnt_send').form.submit(); ");
+//        out.println("    } ");
+//        out.println("} ");
         
-        out.println("    if(msgs.length > 0) { ");
-        out.println("          alert(msgs.join('\\n'));");
-        out.println("    }else { ");
-        out.println("        dojo.byId('cmnt_send').form.submit(); ");
-        out.println("    } ");
-        out.println("} ");
+        out.println("function validateFrm(frmId) {");
+        out.println("    return true;");
+        out.println("  var frm = dojo.byId(frmId);");
+        out.println("  if(!frm) {");
+        out.println("    return false;");
+        out.println("  } ");
+        out.println("    alert('frm.seccode='+frm.seccode+', nombre='+frm.name.value+', mail='+frm.email.value+', comentario='+frm.comment.value);");
+        out.println("  if(isEmpty(frm.name.value)) {");
+//        out.println("        msgs.push('Al parecer falta tu nombre.'); ");
+        out.println("    alert('Al parecer falta tu nombre completo.');");
+        out.println("    return false;");
+        out.println("  }");        
+        out.println("  if(!isValidEmail(frm.email.value)) {");
+//        out.println("        msgs.push('Tu dirección de correo es incorrecta.'); ");
+        out.println("    alert('Tu dirección de correo es incorrecta, revísala e intentalo de nuevo.');");
+        out.println("    return false;");
+        out.println("  }");        
+        out.println("  if(isEmpty(frm.comment.value)) {");
+//        out.println("        msgs.push('Falta tu comentario.'); ");
+        out.println("    alert('Falta tu comentario.');");
+        out.println("    return false;");
+        out.println("  }");        
+        out.println("  if(frm.comment.value.length<5) {");
+//        out.println("        msgs.push('Falta tu comentario.'); ");
+        out.println("    alert('¡Vaya&#33;&nbsp;El comentario es demasiado corto.');");
+        out.println("    return false;");
+        out.println("  } ");
         
-        out.println("function validateAnswerBack(frmId) { ");
-        out.println("    var msgs = new Array();");
-        out.println("    var frm = dojo.byId(frmId);");
-        out.println("    alert('nombre='+frm.ab_name.value+', mail='+frm.ab_email.value+', comentario='+frm.ab_comment.value);");
-        out.println("    if(isEmpty(frm.ab_name.value)) { ");
-        out.println("        msgs.push('Al parecer falta tu nombre.'); ");
-        out.println("    } ");
-        
-        out.println("    if(!isValidEmail(frm.ab_email.value)) { ");
-        out.println("        msgs.push('Tu dirección de correo es incorrecta.'); ");
-        out.println("    } ");
-        
-        out.println("    if(isEmpty(frm.ab_comment.value)) { ");
-        out.println("        msgs.push('Falta tu comentario.'); ");
-        out.println("    } ");
-        
-        out.println("    if(msgs.length > 0) { ");
-        out.println("          alert(msgs.join('\\n'));");
-        out.println("    }else { ");
-        //out.println("        frm.submit(); ");
-        out.println("    alert('la forma '+frm+' se va');");
-        out.println("    } ");
+        out.println("  if(frm.seccode && isEmpty('seccode')) { ");
+        out.println("    msgs.push('Para poder agregar tu comentario es necesario que ingreses el código de la imagen.\\nEn caso de no ser claro puedes cambiarlo haciendo clic en <<Cambiar imagen>>.'); ");
+        out.println("    return false;");
+        out.println("  }");    
+        out.println("  alert('true');");
+        out.println("  return true;");       
+        //out.println("  frm.submit(); ");
         out.println("} ");
         
         out.println("function changeSecureCodeImage(imgid) { ");
@@ -311,9 +343,6 @@ public class SWBCommentToElement extends org.semanticwb.portal.resources.sem.bas
         out.println("    } ");
         out.println("} ");
         
-        
-        
-        //out.println("dojo.require(\"dojo.parser\");");
         out.println("var pc = 1;");
         out.println("function answerBack(parentObjId, childObjId, position, cmmtId) {");
         out.println("  if(!dojo.byId(childObjId)) {");
@@ -322,18 +351,19 @@ public class SWBCommentToElement extends org.semanticwb.portal.resources.sem.bas
         if(!user.isSigned()) {
             out.println("    s =  s.concat('<div class=\"swb-comments-name\">');");
             out.println("    s =  s.concat('  <label for=\"ab_name_'+pc+'\">"+paramRequest.getLocaleString("nameLabel")+"</label>');");
-            out.println("    s =  s.concat('  <input type=\"text\" id=\"ab_name_'+pc+'\" name=\"ab_name\" />');");
+            out.println("    s =  s.concat('  <input type=\"text\" id=\"ab_name_'+pc+'\" name=\"name\" />');");
             out.println("    s =  s.concat('</div>');");
 
             out.println("    s =  s.concat('<div class=\"swb-comments-email\">');");
             out.println("    s =  s.concat('  <label for=\"ab_email_'+pc+'\">"+paramRequest.getLocaleString("emailLabel")+"</label>');");
-            out.println("    s =  s.concat('  <input type=\"text\" id=\"ab_email_'+pc+'\" name=\"ab_email\" />');");
+            out.println("    s =  s.concat('  <input type=\"text\" id=\"ab_email_'+pc+'\" name=\"email\" />');");
             out.println("    s =  s.concat('</div>');");
         }
         out.println("    s = s.concat('<input type=\"hidden\" name=\"cmmt\" value=\"'+cmmtId+'\" />');");
+        
         out.println("    s = s.concat('<div class=\"swb-comments-comment\">');");
         out.println("    s = s.concat('  <label for=\"ab_comment_'+pc+'\">"+paramRequest.getLocaleString("comment")+":</label>');");
-        out.println("    s = s.concat('  <textarea id=\"ab_comment_'+pc+'\" name=\"ab_comment\" cols=\"32\" rows=\"3\"></textarea>');");
+        out.println("    s = s.concat('  <textarea id=\"ab_comment_'+pc+'\" name=\"comment\" cols=\"32\" rows=\"3\"></textarea>');");
         out.println("    s = s.concat('</div>');");
 //        out.println("    s = s.concat('<div class=\"swb-comments-image\">');");
 //        out.println("    s = s.concat('  <img src=\""+SWBPlatform.getContextPath()+"/swbadmin/jsp/securecode.jsp\" id=\"imgseccode_'+pc+'\" width=\"155\" height=\"65\" /><br/>');");
@@ -344,7 +374,7 @@ public class SWBCommentToElement extends org.semanticwb.portal.resources.sem.bas
 //        out.println("    s = s.concat('  <input type=\"text\" id=\"ab_seccode_'+pc+'\" name=\"ab_seccode_'+pc+'\" />');");
 //        out.println("    s = s.concat('</div>');");
         out.println("    s = s.concat('<div class=\"swb-comments-send\">');");
-        out.println("    s = s.concat('  <input type=\"button\" value=\""+paramRequest.getLocaleString("publish")+"\" onclick=\"validateAnswerBack('+childObjId+')\" />');");
+        out.println("    s = s.concat('  <input type=\"button\" value=\""+paramRequest.getLocaleString("publish")+"\" onclick=\"if(validateFrm('+childObjId+')){this.form.submit()}\" />');");
         out.println("    s = s.concat('</div>');");
         out.println("    s = s.concat('</form>');");
         out.println("    dojo.place(s, parentObjId, position);");
@@ -358,41 +388,43 @@ public class SWBCommentToElement extends org.semanticwb.portal.resources.sem.bas
         out.println("-->");
         out.println("</script> ");
         
-        String comment = request.getParameter("cmnt_comment")==null?"":request.getParameter("cmnt_comment");
+        ;
         out.println("<div class=\"swb-comments\">");
-        out.println("<h2>"+paramRequest.getLocaleString("add")+"</h2>");
+        out.println("<p class=\"swb-comments-addcmnt\">"+paramRequest.getLocaleString("add")+"</p>");
+        if(request.getParameter("alertmsg")!=null)
+        {
+            out.println("<div class=\"swb-alertmsg\">"+request.getParameter("alertmsg")+"</div>");
+        }
         out.println("<form id=\"cmnt\" action=\""+rUrl.setAction(SWBParamRequest.Action_ADD)+"\" method=\"post\">\n");
-//        User user = paramRequest.getUser();
         if(!user.isSigned()) {
             out.println("<div class=\"swb-comments-name\">");
-            out.println("  <label for=\"cmnt_seccode\">"+paramRequest.getLocaleString("nameLabel")+"</label>");
-            out.println("  <input type=\"text\" id=\"name\" name=\"name\" />");
+            out.println("  <label for=\"name\">"+paramRequest.getLocaleString("nameLabel")+"</label>");
+            out.println("  <input type=\"text\" id=\"name\" name=\"name\" value=\""+(request.getParameter("name")==null?"":request.getParameter("name"))+"\" />");
             out.println("</div>");
             
             out.println("<div class=\"swb-comments-email\">");
-            out.println("  <label for=\"cmnt_seccode\">"+paramRequest.getLocaleString("emailLabel")+"</label>");
-            out.println("  <input type=\"text\" id=\"email\" name=\"email\" />");
+            out.println("  <label for=\"email\">"+paramRequest.getLocaleString("emailLabel")+"</label>");
+            out.println("  <input type=\"text\" id=\"email\" name=\"email\" value=\""+(request.getParameter("email")==null?"":request.getParameter("email"))+"\" />");
             out.println("</div>");
         }
         out.println("<div class=\"swb-comments-comment\">");
         out.println("  <label for=\"comment\">"+paramRequest.getLocaleString("comment")+":</label>");
-        out.println("  <textarea id=\"cmnt_comment\" name=\"cmnt_comment\" cols=\"32\" rows=\"3\" >"+comment+"</textarea>");
+        out.println("  <textarea id=\"comment\" name=\"comment\" cols=\"32\" rows=\"3\" >"+(request.getParameter("comment")==null?"":request.getParameter("comment"))+"</textarea>");
         out.println("</div>");
         out.println("<div class=\"swb-comments-image\">");
         out.println("  <img src=\""+SWBPlatform.getContextPath()+"/swbadmin/jsp/securecode.jsp\" id=\"imgseccode\" width=\"155\" height=\"65\" /><br/>");
-        out.println("  <a href=\"#\" onclick=\"changeSecureCodeImage('imgseccode');\">"+paramRequest.getLocaleString("anotherCode")+"</a>");
+        out.println("  <a href=\"javascript:changeSecureCodeImage('imgseccode');return false;\">"+paramRequest.getLocaleString("anotherCode")+"</a>");
         out.println("</div>");
         out.println("<div class=\"swb-comments-captcha\">");
-        out.println("  <label for=\"cmnt_seccode\">El texto de la imagen es:</label>");
-        out.println("  <input type=\"text\" id=\"cmnt_seccode\" name=\"cmnt_seccode\" />");
+        out.println("  <label for=\"seccode\">El texto de la imagen es:</label>");
+        out.println("  <input type=\"text\" id=\"seccode\" name=\"seccode\" />");
         out.println("</div>");
         out.println("<div class=\"swb-comments-send\">");
-        out.println("  <input type=\"button\" id=\"cmnt_send\" value=\""+paramRequest.getLocaleString("publish")+"\" onclick=\"doApply();\" />");
+        out.println("  <input type=\"button\" value=\""+paramRequest.getLocaleString("publish")+"\" onclick=\"if(validateFrm('cmnt')){this.form.submit()}\" />");
         out.println("</div>");
         out.println("</form>");
         out.println("</div>");
         Iterator<CommentToElement> comments = CommentToElement.ClassMgr.listCommentToElementByElement(element, paramRequest.getWebPage().getWebSite());
-//        out.println(renderListComments(paramRequest, element.getEncodedURI()));
         out.println("<div class=\"swb-comments-lst\">");
         if(comments.hasNext()) {
             out.println("<p class=\"swb-semcommts-lblcmmt\">"+paramRequest.getLocaleString("lblComments")+"</p>");
