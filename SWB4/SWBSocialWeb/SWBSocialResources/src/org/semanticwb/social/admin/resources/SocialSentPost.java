@@ -78,6 +78,7 @@ public class SocialSentPost extends GenericResource {
     public static final String Mode_SOURCE = "source";
     public static final String Mode_EDITWindow = "editWindow";
     public static final String Mode_PREVIEW = "preview";
+    public static final String Mode_ShowPostOutNets="postOutLog";
     
     
     @Override
@@ -93,6 +94,8 @@ public class SocialSentPost extends GenericResource {
             doPFlowMessage(request, response, paramRequest);
         }else if(Mode_Action.equals(mode)){
             doAction(request, response, paramRequest);
+        }else if(Mode_ShowPostOutNets.equals(mode)){
+            doShowPostOutLog(request, response, paramRequest);
         }else {
             super.processRequest(request, response, paramRequest);
         }
@@ -688,6 +691,7 @@ public class SocialSentPost extends GenericResource {
                    //System.out.println("msg..:"+postOut.getMsg_Text());
                    //System.out.println("Ya esta publicado..:"+postOut.isPublished());
 
+                   SWBResourceURL urlPostOutNets=paramRequest.getRenderUrl().setMode(Mode_ShowPostOutNets).setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("postOut", postOut.getURI());  
                    if(!postOut.isPublished())
                    {
                        
@@ -722,7 +726,7 @@ public class SocialSentPost extends GenericResource {
                        {
                            System.out.println("SE SUPONE QUE ESTA PUBLICADO CARNAL...");
                            postOut.setPublished(true);
-                           out.println("<a href=\"#\">Publicado</a>");
+                           out.println("<a href=\"#\" title=\"" + paramRequest.getLocaleString("postOutLog") + "\" onclick=\"showDialog('" + urlPostOutNets + "','" + paramRequest.getLocaleString("postOutLog") + "'); return false;\">Publicado</a>");
                        }else{ 
                             if (!needAuthorization) {
                                 SWBResourceURL urlu = paramRequest.getRenderUrl();
@@ -732,7 +736,7 @@ public class SocialSentPost extends GenericResource {
                                 //out.println("J1");
                                 if(someOneIsNotPublished)
                                 {
-                                    out.println("<a href=\"#\"  />Warning</a>"); //No ha sido publicado en todas las redes sociales que debiera, abrir dialogo para mostrar todos los PostOutNtes del PostOut
+                                    out.println("<a href=\"#\" title=\"" + paramRequest.getLocaleString("postOutLog") + "\" onclick=\"showDialog('" + urlPostOutNets + "','" + paramRequest.getLocaleString("postOutLog") + "'); return false;\">A Revisar</a>"); //No ha sido publicado en todas las redes sociales que debiera, abrir dialogo para mostrar todos los PostOutNtes del PostOut
                                 }else{
                                     out.println("<a href=\"#\" onclick=\"showStatusURL('" + urlu + "'); \" />"+paramRequest.getLocaleString("publish")+"</a>");
                                 }
@@ -750,7 +754,7 @@ public class SocialSentPost extends GenericResource {
                        }
                    }else{
                        System.out.println("ESA MADRE ESTA PUBLICADO WEY..");
-                       out.println("<a href=\"\">Publicado</a>");
+                       out.println("<a href=\"#\" title=\"" + paramRequest.getLocaleString("postOutLog") + "\" onclick=\"showDialog('" + urlPostOutNets + "','" + paramRequest.getLocaleString("postOutLog") + "'); return false;\">Publicado</a>");
                    }
                    out.println("</td>");
 
@@ -786,6 +790,36 @@ public class SocialSentPost extends GenericResource {
         
     }
     
+            
+     
+      /*
+     * Show the PostOutNets related to a PostOut PostOut that comes as a parameter "postUri"
+     */
+    public void doShowPostOutLog(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        /////////////
+        String postUri=request.getParameter("postOut");
+        try {
+            final String path = SWBPlatform.getContextPath() + "/work/models/" + paramRequest.getWebPage().getWebSiteId() + "/jsp/review/showPostOutLog.jsp";
+            if (request != null) {
+                RequestDispatcher dis = request.getRequestDispatcher(path);
+                if (dis != null) {
+                    try {
+                        SemanticObject semObject = SemanticObject.createSemanticObject(postUri);
+                        request.setAttribute("postOut", semObject);
+                        request.setAttribute("paramRequest", paramRequest);
+                        dis.include(request, response);
+                    } catch (Exception e) {
+                        log.error(e);
+                        e.printStackTrace(System.out);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            log.error("Error while getting content string ,id:" + postUri, e);
+        }
+    }
+            
+            
      /*
      * Show the source message of One PostOut that comes as a parameter "postUri"
      */
@@ -811,8 +845,6 @@ public class SocialSentPost extends GenericResource {
         } catch (Exception e) {
             log.error("Error while getting content string ,id:" + postUri, e);
         }
-        
-        
     }
 
     /**
