@@ -20,7 +20,7 @@
         if(null!=so&&so.createGenericInstance() instanceof LicenseType){
             LicenseType lic = (LicenseType) so.createGenericInstance();
 %>
-        <h2><%=lic.getLicenseTitle()!=null?lic.getLicenseTitle():"--"%></h2>
+        <h4><%=lic.getLicenseTitle()!=null?lic.getLicenseTitle():"--"%></h4>
         <br/><br/>
         <p><%=lic.getLicenseDescription()!=null?lic.getLicenseDescription():"--"%></p>
         <%
