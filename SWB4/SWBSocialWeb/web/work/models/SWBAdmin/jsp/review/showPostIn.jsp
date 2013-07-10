@@ -132,10 +132,19 @@
         //System.out.println("Name:"+Photo.social_Photo.getName()); 
         //System.out.println("ClassID:"+Photo.social_Photo.getClassId()); 
         //System.out.println("Canonical:"+Photo.social_Photo.getCanonicalName());
-         //Puse ese tolowercase porque el nombre de la propiedad lo pone en mayuscula, quien sabe porque, si esta en minuscula
+         //Puse ese tolowercase porque el nombre de la propiedad lo pone en mayuscula, quien sabe porque, si esta en minuscula 
         %>
         <td colspan="5">
-        <img src="<%=SWBPortal.getWebWorkPath()%><%=photo.getWorkPath()%>/<%=Photo.social_Photo.getName().toLowerCase()%>_<%=photo.getId()%>_<%=photo.getPhoto()%>">
+        <%
+            Iterator <String> itPhotos=photo.listPhotos();
+            while(itPhotos.hasNext())
+            {
+                String sphoto=itPhotos.next();  
+        %>    
+                <img src="<%=SWBPortal.getWebWorkPath()%><%=photo.getWorkPath()%>/<%=Photo.social_hasPhoto.getName().toLowerCase()%>_<%=photo.getId()%>_<%=sphoto%>">
+        <%
+            }
+        %>        
         <br><br><br><%=SWBUtils.TEXT.encode(photo.getMsg_Text(), "utf8")%>
         </td>
     <%    
