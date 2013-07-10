@@ -708,7 +708,7 @@
     go = ont.getGenericObject(SemanticObject.shortToFullURI(suri));
     if (go instanceof Application) {
 %>
-<div>
+<div class="cuerpo">
     <%
         Application aps = (Application) go;
         GenericObject ob = aps.getAppAuthor().createGenericInstance();
@@ -755,16 +755,12 @@
     %>
     
     <h3><%=aps.getAppTitle()%></h3>
+    <div class="dataset-detalle">
+     
+    <img class="logo" src="<%=instlogo%>" alt="<%=fullName%>" />
+    <p class="pub-name"><%=fullName%></p>
     
-    <div class="izq-apps2">
-        
-        <div class="publicador">
-              <img src="<%=instlogo%>" alt="<%=fullName%>" />
-              <p class="pub-name"><%=fullName%></p>
-        </div>
-        
-        <div class="detalle">
-       	  <p><%=aps.getAppDescription()%></p>
+    <p class="desc"><%=aps.getAppDescription()%></p>
           
           <%if((user.isSigned()) && user.getSemanticObject().createGenericInstance() instanceof Developer || user.getSemanticObject().createGenericInstance() instanceof Publisher){
               if(user.getURI().equals(uriUsuario) ){
@@ -774,7 +770,7 @@
           
           <%}}%>
           
-          <p><em><a href="mapas.opendata.gob.mx" class="api">Documentación del API</a></em></p>
+          <!--<p><em><a href="mapas.opendata.gob.mx" class="api">Documentación del API</a></em></p>-->
           
           <%
           
@@ -796,8 +792,8 @@
           
           %>
           
-          <p><em><%=paramRequest.getLocaleString("lbl_DSUsado")%><a href="<%=urlDataSet%>"><%=ds1.getDatasetTitle()%></a></em></p>
-          <p><em><%=paramRequest.getLocaleString("lbl_licenciaDetalle")%><a href="<%=urlLicenciaPage%>"><%=aps.getAppLicense() != null ? aps.getAppLicense().getLicenseTitle() : ""%></a></em></p>
+          <p class="etiq"><strong><%=paramRequest.getLocaleString("lbl_DSUsado")%></strong><a href="<%=urlDataSet%>"><%=ds1.getDatasetTitle()%></a></p>
+          <p class="lic"><strong><%=paramRequest.getLocaleString("lbl_licenciaDetalle")%></strong><a href="<%=urlLicenciaPage%>"><%=aps.getAppLicense() != null ? aps.getAppLicense().getLicenseTitle() : ""%></a></p>
           
           <%if(isFromReview){
               
@@ -821,12 +817,9 @@
             </fieldset>
           <%}%>
           
-        </div>
-	</div>
-          
-        <div class="der-apps2">
-            <div class="detalle-file">
-		<a href="<%=renderURL.setMode(ApplicationResource.REDIRECT_URL).setParameter("uri", aps.getShortURI())%>" title="<%=aps.getAppURL()%>" class="descargar"><%=paramRequest.getLocaleString("lbl_descargarAPP")%></a>
+        <div class="acerca-data">
+            <fieldset>
+                <legend>Más de esta aplicación</legend>  
             <ul>
                 <li><strong><%=paramRequest.getLocaleString("lbl_fechaCracionDetalle")%></strong><%=sdf2.format(aps.getAppCreated())%></li>
                 <li><strong><%=paramRequest.getLocaleString("lbl_visitasDetalle")%></strong><%=aps.getViews()%></li>
@@ -846,8 +839,14 @@
                 <img src="/work/models/LODP/css/images/star-<%=average >= 5?"on":"off"%>.png" width="15" height="14" alt="*">
     
                 </li>
-            </ul>      
-       </div>
+            </ul>
+      </fieldset>
+     </div>
+                
+    <div class="botonera">
+        <a href="<%=renderURL.setMode(ApplicationResource.REDIRECT_URL).setParameter("uri", aps.getShortURI())%>" title="<%=aps.getAppURL()%>" class="descargar"><%=paramRequest.getLocaleString("lbl_descargarAPP")%></a>
+    </div>
+       
         <%
          
      int numDSVIEW=0;
@@ -856,17 +855,21 @@
      if(numDSVIEW > 0){
         
     %>
-	  <div class="new-dat tit">
-            <h4><%=paramRequest.getLocaleString("lbl_DSRelacion")%></h4>
+	  <div class="new-app datarelapp">
+            <div></div>
+            <fieldset>
+                <legend><%=paramRequest.getLocaleString("lbl_DSRelacion")%></legend>
             <%  // lista de aplicaciones relacionadas
             int numDS = 0;
             
             if(!listDS.isEmpty()){
                  numDS = listDS.size();
                 for(Dataset dsOBJ : listDS){
+                    String urlDataSetRelacion = wsite.getWebPage("Datos").getUrl();
+                    String urlDataSetRelacionDetail = urlData+"?suri="+dsOBJ.getShortURI()+"&act=detail";
             %>
             
-            <li><%=dsOBJ.getDatasetTitle()%><br />
+            <li><a href="<%=urlDataSetRelacionDetail%>"><%=dsOBJ.getDatasetTitle()%></a><br/>
                 <strong><%=dsOBJ.getDatasetDescription()!=null?dsOBJ.getDatasetDescription():"---"%></strong>
             </li>
             
@@ -889,6 +892,7 @@
             <div>
                 <span><%=numDS%> <%=paramRequest.getLocaleString("lbl_dsRelated")%></span> <a href="<%=urlds%>"><%=paramRequest.getLocaleString("lbl_viewAll")%></a>
             </div>
+            </fieldset>
         </div>
             
     <%}
@@ -910,8 +914,10 @@
         
     %>
             
-	  <div class="new-app tit">
-            <h4><%=paramRequest.getLocaleString("lbl_appRelacion")%></h4>
+	  <div class="new-app datarelapp">
+            <div></div>
+            <fieldset>
+                <legend><%=paramRequest.getLocaleString("lbl_appRelacion")%></legend>
             <%  // lista de aplicaciones relacionadas
             int numapps = 0;
             List<Application> listApp = new ArrayList();
@@ -930,10 +936,12 @@
             
             if(!listApp.isEmpty()){
                 for(Application appli : listApp){
+                    String idWPapps = base.getAttribute("appwebpage", "Aplicaciones");
+                    WebPage wpapps = wsite.getWebPage(idWPapps);
                
             %>
             
-            <li><%=appli.getAppTitle()%><br />
+            <li><a href="<%=wpapps.getUrl()+"?suri=" + appli.getShortURI() + "&act=detail"%>"><%=appli.getAppTitle()%></a><br/>
                 <strong><%=appli.getAppDescription()!=null?appli.getAppDescription():"---"%></strong>
             </li>
             
@@ -956,9 +964,12 @@
             <div>
                 <span><%=numapps%> <%=paramRequest.getLocaleString("lbl_appRelated")%></span> <a href="<%=urlApps%>"><%=paramRequest.getLocaleString("lbl_viewAll")%></a>
             </div>
-        </div>
+        </fieldset>
+    </div>
             <%}%>
-      </div>
+            </div>
+            <div class="clear">&nbsp;</div>
+</div>
     
     
 
