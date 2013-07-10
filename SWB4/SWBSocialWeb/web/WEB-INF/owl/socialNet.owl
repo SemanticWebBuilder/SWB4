@@ -456,6 +456,13 @@
     <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:autogenId>
     <rdfs:label xml:lang="en">YouTube Account</rdfs:label>
+    <rdfs:subClassOf>
+      <swb:Interface rdf:ID="SocialMonitorable">
+        <rdfs:comment>Interface que sera agregada a todas las redes sociales que se requieran monitorear. Esto es normalmente porque no se publica hacia las mismas al momento, como lo es el caso de YouTube, en el que envía que la publicación se encuentra en estatus de "En Proceso" y este estatus puede durar varios minutos antes de que envíe "Publicado" o talvez algún error.</rdfs:comment>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBInterface"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Interface>
+    </rdfs:subClassOf>
     <rdfs:label xml:lang="es">Cuenta de Youtube</rdfs:label>
     <rdfs:subClassOf rdf:resource="#Oauthable"/>
     <rdfs:comment>Clase que almacenara las diferentes cuentas de una organización para la red social YouTube.</rdfs:comment>
@@ -790,6 +797,26 @@
     >true</swb:removeDependency>
     <rdfs:domain rdf:resource="#PostInContainer"/>
   </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasPostOutNet">
+    <rdfs:domain>
+      <swb:Class rdf:ID="PostMonitor">
+        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >true</swb:autogenId>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Class>
+    </rdfs:domain>
+    <rdfs:comment>Propiedad en la que se agregan instancias de PostOutNet de redes sociales que son de tipo SocialMonitorable. Sa agregan instancias para poderlas estas monitoreando, cuando dicha instancia regresa el valor de "True" al proceso que las esta monitoreando, quiere decir que ya se publicó en dicha red social, en ese momento se eliminara dicha instancia de esta propiedad, es decir del monitoreo. Si sigue enviando false, es porque aun esta el PostOut en proceso de publicación ("En Proceso"), lo cual hara que el proceso siga monitoreando a dicha instancia cada x cantidad de minutos..</rdfs:comment>
+    <rdfs:range>
+      <swb:Class rdf:ID="PostOutNet">
+        <rdfs:comment>En este objeto se guardara el identificador que es asignado para cada post en cada una de las redes sociales, es decir, si un mismo post se envía hacia mas de una red social, cada una de esas redes sociales daran un identificador unico para ese post en esa red social, este lo tenemos que guardar nosotros en este objeto para fines de monitoreo de estatus del post en esa red social (En Proceso, Revisado, Publicado, etc), como nosotros para un post, independientemente de a cuantas redes sociales se envíe, solo creamos un objeto PostOut (Message, Photo, Video), tuvimos que crear esta clase para guardar el identificador de ese postOut para c/red social.</rdfs:comment>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
+        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >true</swb:autogenId>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Class>
+    </rdfs:range>
+  </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="hasSocialPFlowRefInv">
     <rdfs:domain rdf:resource="#SocialPFlow"/>
     <rdfs:range rdf:resource="#SocialPFlowRef"/>
@@ -919,15 +946,7 @@
     <owl:inverseOf rdf:resource="#hasSocialPostInv"/>
     <rdfs:comment>Objeto Red Social a la cual se hace referencia.</rdfs:comment>
     <rdfs:range rdf:resource="#SocialNetwork"/>
-    <rdfs:domain>
-      <swb:Class rdf:ID="PostOutNet">
-        <rdfs:comment>En este objeto se guardara el identificador que es asignado para cada post en cada una de las redes sociales, es decir, si un mismo post se envía hacia mas de una red social, cada una de esas redes sociales daran un identificador unico para ese post en esa red social, este lo tenemos que guardar nosotros en este objeto para fines de monitoreo de estatus del post en esa red social (En Proceso, Revisado, Publicado, etc), como nosotros para un post, independientemente de a cuantas redes sociales se envíe, solo creamos un objeto PostOut (Message, Photo, Video), tuvimos que crear esta clase para guardar el identificador de ese postOut para c/red social.</rdfs:comment>
-        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
-        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-        >true</swb:autogenId>
-        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-      </swb:Class>
-    </rdfs:domain>
+    <rdfs:domain rdf:resource="#PostOutNet"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="pc_SocialNetworkInv">
     <rdfs:comment>Con esta propiedad inversa, se puede saber a que red social pertenece este grupo de post agrupados por mes y año</rdfs:comment>
@@ -940,38 +959,6 @@
     <rdfs:range rdf:resource="#SocialPFlowInstance"/>
     <rdfs:domain rdf:resource="#PostOut"/>
     <swb:displayProperty rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#dp_pflowInstance"/>
-  </owl:ObjectProperty>
-  <owl:ObjectProperty rdf:ID="hasPhoto">
-    <rdfs:label xml:lang="en">Images</rdfs:label>
-    <rdfs:label xml:lang="es">Imagenes</rdfs:label>
-    <rdfs:comment>Imagenes</rdfs:comment>
-    <swb:displayProperty>
-      <swbxf:DisplayProperty rdf:ID="dp_hasPhoto">
-        <swbxf:formElement>
-          <swb:DojoImageUpload rdf:ID="socialDojoImageUpload">
-            <swbxf:fileMaxSize rdf:datatype="http://www.w3.org/2001/XMLSchema#long"
-            >500000</swbxf:fileMaxSize>
-            <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-            >Cargador de imágenes para social. Fotos de maximo 500,000 bytes y con extensión jpg o gif o png o Tiff</rdfs:comment>
-            <swbxf:imgCrop rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-            >false</swbxf:imgCrop>
-            <swbxf:imgThumbnail rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-            >false</swbxf:imgThumbnail>
-            <swbxf:fileFilter rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-            >*.jpg:JPG|*.gif:GIF|*.png:PNG|*.tiff:TIFF</swbxf:fileFilter>
-          </swb:DojoImageUpload>
-        </swbxf:formElement>
-      </swbxf:DisplayProperty>
-    </swb:displayProperty>
-    <rdfs:range>
-      <swb:Class rdf:ID="PhotoImg">
-        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-        >true</swb:autogenId>
-        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
-        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-      </swb:Class>
-    </rdfs:range>
-    <rdfs:domain rdf:resource="#PostImageable"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="haspostOutResponseInv">
     <rdfs:comment>Inversa que nos dice que PostOut han sido creados a manera de respuesta de esta instancia de PostIn.</rdfs:comment>
@@ -1149,6 +1136,11 @@
     <rdfs:domain rdf:resource="#Stream"/>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
     <rdfs:comment>Propiedad que indica si en el stream se desea aceptar que entren los mensajes que sean clasificados con sentimiento negativo</rdfs:comment>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="error">
+    <rdfs:comment>Error en la publicación del PostOut en una determimada red social., Este error podría desplegarse para que vieran los usuarios del sistema cual fué la causa de porque no se publicó el mensaje (PostOut).</rdfs:comment>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#PostOutNet"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="pfiTime">
     <rdfs:domain rdf:resource="#SocialPFlowInstance"/>
@@ -1408,6 +1400,34 @@
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <rdfs:domain rdf:resource="#SocialNetworkUser"/>
   </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="hasPhoto">
+    <rdfs:domain rdf:resource="#PostImageable"/>
+    <rdfs:comment>Propiedad que almacena el nombre(referencia) de la foto en un objeto Post que lo requiera.</rdfs:comment>
+    <rdfs:comment xml:lang="en">Photo</rdfs:comment>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_photo">
+        <swbxf:formElement>
+          <swb:DojoImageUpload rdf:ID="socialDojoImageUpload">
+            <swbxf:fileFilter rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >*.jpg:JPG|*.gif:GIF|*.png:PNG</swbxf:fileFilter>
+            <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >Cargador de imágenes para social. Fotos de maximo 500,000 bytes y con extensión jpg o gif o png o Tiff</rdfs:comment>
+            <swbxf:imgCrop rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+            >false</swbxf:imgCrop>
+            <swbxf:imgThumbnail rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+            >false</swbxf:imgThumbnail>
+            <swbxf:fileMaxSize rdf:datatype="http://www.w3.org/2001/XMLSchema#long"
+            >500000</swbxf:fileMaxSize>
+          </swb:DojoImageUpload>
+        </swbxf:formElement>
+        <swbxf:propGroup rdf:resource="#pg_socialConfig"/>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >110</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:label xml:lang="es">Foto</rdfs:label>
+  </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="pfiStatus">
     <rdfs:domain rdf:resource="#SocialPFlowInstance"/>
     <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
@@ -1461,16 +1481,16 @@
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <rdfs:domain rdf:resource="#SocialNetwork"/>
   </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="published">
-    <rdfs:domain rdf:resource="#PostOut"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
-    <rdfs:comment>Define si un PostOut se encuentra en estado de publicado o no.</rdfs:comment>
-  </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="pfiVersion">
     <rdfs:domain rdf:resource="#SocialPFlowInstance"/>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
     <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >version</swb:propertyCodeName>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="published">
+    <rdfs:domain rdf:resource="#PostOut"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+    <rdfs:comment>Define si un PostOut se encuentra en estado de publicado o no.</rdfs:comment>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="socialNetMsgId">
     <rdfs:domain rdf:resource="#PostIn"/>
@@ -1556,15 +1576,15 @@
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
     <rdfs:domain rdf:resource="#PostIn"/>
   </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="friends">
-    <rdfs:comment>Número de usuarios a los que yo sigo (así se maneja en twitter), en facebook aqui pondría a mis amigos y la de followers (que son los que me siguen) según yo no la utilizaría (en facebook)</rdfs:comment>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
-    <rdfs:domain rdf:resource="#SocialNetworkUser"/>
-  </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="plc_year">
     <rdfs:comment>Año en el cual es creada una instancia de PostListenerContainer, esta propiedad servira mucho  para buscar los postIn de manera optima, ya que pudieran ser muchos en un corto tiempo.</rdfs:comment>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <rdfs:domain rdf:resource="#PostInContainer"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="friends">
+    <rdfs:comment>Número de usuarios a los que yo sigo (así se maneja en twitter), en facebook aqui pondría a mis amigos y la de followers (que son los que me siguen) según yo no la utilizaría (en facebook)</rdfs:comment>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+    <rdfs:domain rdf:resource="#SocialNetworkUser"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="facebookUserId">
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
@@ -1626,21 +1646,6 @@
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <rdfs:domain rdf:resource="#PostOutContainer"/>
   </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="photo">
-    <rdfs:domain rdf:resource="#PhotoImg"/>
-    <rdfs:label xml:lang="es">Foto</rdfs:label>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-    <swb:displayProperty>
-      <swbxf:DisplayProperty rdf:ID="dp_photo">
-        <swbxf:formElement rdf:resource="#socialDojoImageUpload"/>
-        <swbxf:propGroup rdf:resource="#pg_socialConfig"/>
-        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >110</swb:index>
-      </swbxf:DisplayProperty>
-    </swb:displayProperty>
-    <rdfs:comment xml:lang="en">Photo</rdfs:comment>
-    <rdfs:comment>Propiedad que almacena el nombre(referencia) de la foto en un objeto Post que lo requiera.</rdfs:comment>
-  </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="puntuationSign">
     <rdfs:domain rdf:resource="#PunctuationSign"/>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
@@ -1695,6 +1700,11 @@
       </swbxf:DisplayProperty>
     </swb:displayProperty>
   </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="status">
+    <rdfs:comment>Estatus del PostOut en una instancia de red social específica. 0=No publicado; 1=Publicado;</rdfs:comment>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+    <rdfs:domain rdf:resource="#PostOutNet"/>
+  </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="category">
     <rdfs:domain rdf:resource="#PostVideoable"/>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
@@ -1745,6 +1755,12 @@
     <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
     >1</swb:index>
     <swbxf:propGroup rdf:resource="#pg_socialConfig"/>
+  </swbxf:DisplayProperty>
+  <swbxf:DisplayProperty rdf:ID="dp_hasPhoto">
+    <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+    >100</swb:index>
+    <swbxf:propGroup rdf:resource="#pg_socialConfig"/>
+    <swbxf:formElement rdf:resource="#socialDojoImageUpload"/>
   </swbxf:DisplayProperty>
 </rdf:RDF>
 
