@@ -3,6 +3,7 @@
     Created on : 7/05/2013, 12:09:42 PM
     Author     : Hasdai Pacheco <ebenezer.sanchez@infotec.com.mx>
 --%>
+<%@page import="org.semanticwb.model.SWBContext"%>
 <%@page import="org.semanticwb.process.resources.SVGModeler"%>
 <%@page import="org.semanticwb.portal.api.SWBResourceURL"%>
 <%@page import="org.semanticwb.portal.api.SWBParamRequest"%>
@@ -88,7 +89,7 @@ exportUrl.setMode(SVGModeler.MODE_EXPORT);
             <span class="subbarStart"></span>
             <span class="newProcess" title="Nuevo modelo" onclick="if (confirm('Se perderán todos los cambios no guardados. ¿Desea continuar?')){Modeler.clearCanvas();}"></span>
             <span class="openProcess" title="Abrir modelo existente" onclick="showLoadDialog();"></span>
-            <%if (suri != null) {
+            <%if (SWBContext.getAdminWebSite().equals(paramRequest.getWebPage().getWebSite())) {
                 %>
                 <span class="storeProcess" title="Enviar modelo" onclick="storeProcess();"></span>
                 <%
@@ -1058,6 +1059,8 @@ exportUrl.setMode(SVGModeler.MODE_EXPORT);
             };
 
             <%
+        }
+        if (SWBContext.getAdminWebSite().equals(paramRequest.getWebPage().getWebSite())) {
             commandUrl = paramRequest.getRenderUrl().setCallMethod(SWBResourceURL.Call_DIRECT);
             commandUrl.setMode(SVGModeler.MODE_GATEWAY);
             commandUrl.setAction(SVGModeler.ACT_STOREPROCESS);
@@ -1068,10 +1071,7 @@ exportUrl.setMode(SVGModeler.MODE_EXPORT);
                 var jsonString = "JSONSTART"+JSON.stringify(json)+"JSONEND";
                 Modeler.submitCommand('<%=commandUrl%>',jsonString, loadProcess);
             };
-
-            loadProcess();
-        <%
-        }
-        %>
+        <%}%>
+        loadProcess();
     </script>
 </body>
