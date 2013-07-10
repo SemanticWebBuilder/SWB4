@@ -27,7 +27,6 @@ import java.lang.reflect.Constructor;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import org.openjena.atlas.iterator.Iterator2;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
@@ -173,9 +172,9 @@ public class SWBPClassMgr
                 {
                     log.error("No se agrego variable "+varname+" a script relacionada con el objeto "+object.getURI()+" en la instancia de proceso "+instance.getURI(),cnfe);
                 }
+            } else {
+                System.out.println("No se pudo agregar objeto para "+varname);
             }
         }
     }
-
-
 }
