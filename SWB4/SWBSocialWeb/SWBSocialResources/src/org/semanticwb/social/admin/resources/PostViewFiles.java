@@ -43,23 +43,19 @@ public class PostViewFiles extends GenericResource{
                 {
                     ArrayList aPostImages=new ArrayList();
                     ArrayList aPostVideos=new ArrayList();
-                    String path=SWBPortal.getWebWorkPath()+semObj.getWorkPath();
-                    System.out.println("Entra a PostViewFiles/doView-3:"+path);
+                    String path=SWBPortal.getWorkPath()+semObj.getWorkPath();
                     File postDirectory=new File(path);
                     if(postDirectory.exists() && postDirectory.isDirectory())
                     {
-                        System.out.println("Entra a PostViewFiles/doView-4");
                         File[] directoryFiles=postDirectory.listFiles();
                         for(int i=0;i<directoryFiles.length;i++)
                         {
                             File file=directoryFiles[i];
-                            System.out.println("Entra a PostViewFiles/doView-5:"+file);
                             if(file.isFile())
                             {
                                 //Para Imagenes. Extensiones soportados en la ontología para subir en los Post
                                 if(file.getName().endsWith(".png") || file.getName().endsWith(".jpg") || file.getName().endsWith(".gif")) 
                                 {
-                                    System.out.println("Entra a PostViewFiles/doView-6:"+file);
                                     aPostImages.add(file);
                                 }else if(file.getName().endsWith(".mov")) 
                                 {
@@ -74,7 +70,7 @@ public class PostViewFiles extends GenericResource{
                             request.setAttribute("imageList", aPostImages.iterator());
                             request.setAttribute("videoList", aPostVideos.iterator());
                             request.setAttribute("paramRequest", paramRequest);
-                            System.out.println("Entra a PostViewFiles/doView-7:"+aPostImages);
+                            request.setAttribute("semObj", semObj);
                             dis.include(request, response);
                         } catch (Exception e) {
                             log.error(e);
