@@ -46,6 +46,7 @@ import org.semanticwb.portal.api.*;
 public class SWBCommentToElement extends org.semanticwb.portal.resources.sem.base.SWBCommentToElementBase {
     private static Logger log = SWBUtils.getLogger(SWBCommentToElement.class);
     public static final String Mode_DETAIL = "dtl";
+    private static final String FCTR = "fctr";
     
     /**
      * Instantiates a new sWB comment to element.
@@ -257,7 +258,7 @@ public class SWBCommentToElement extends org.semanticwb.portal.resources.sem.bas
             return;            
         }
         
-        request.getSession(true).removeAttribute("fctr");
+        request.getSession(true).removeAttribute(FCTR);
         
         User user = paramRequest.getUser();
         
@@ -392,7 +393,7 @@ public class SWBCommentToElement extends org.semanticwb.portal.resources.sem.bas
         if(comments.hasNext()) {
             out.println("<p class=\"swb-semcommts-lblcmmt\">"+paramRequest.getLocaleString("lblComments")+"</p>");
             out.println(renderListComments(paramRequest, comments));
-            out.println("<p><a href=\"javascript:postHtml('"+paramRequest.getRenderUrl().setCallMethod(SWBResourceURL.Call_DIRECT).setMode(SWBResourceURL.Mode_INDEX).setParameter("suri",element.getEncodedURI()).setParameter("fctr","_")+"','commts')\" title=\""+paramRequest.getLocaleString("viewMore")+"\">"+paramRequest.getLocaleString("viewMore")+"</a></p>");
+            out.println("<p><a href=\"javascript:postHtml('"+paramRequest.getRenderUrl().setCallMethod(SWBResourceURL.Call_DIRECT).setMode(SWBResourceURL.Mode_INDEX).setParameter("suri",element.getEncodedURI()).setParameter(FCTR,"_")+"','commts')\" title=\""+paramRequest.getLocaleString("viewMore")+"\">"+paramRequest.getLocaleString("viewMore")+"</a></p>");
             out.println("<p><a href=\"javascript:postHtml('"+paramRequest.getRenderUrl().setCallMethod(SWBResourceURL.Call_DIRECT).setMode(SWBResourceURL.Mode_INDEX).setParameter("suri",element.getEncodedURI())+"','commts')\" title=\""+paramRequest.getLocaleString("viewAllComments")+"\">"+paramRequest.getLocaleString("viewAllComments")+"&nbsp;&raquo;</a></p>");
         }else {
             out.println("<p class=\"swb-semcommts-noe\">"+paramRequest.getLocaleString("noComment")+"</p>");
@@ -544,12 +545,12 @@ public class SWBCommentToElement extends org.semanticwb.portal.resources.sem.bas
             html.append("  <ul class=\"swb-semcommts-lst\">");
             int fctr;
             try {
-                fctr = (Integer)request.getSession(true).getAttribute("fctr");
+                fctr = (Integer)request.getSession(true).getAttribute(FCTR);
             }catch(Exception e) {
                 fctr = 1;
             }
             fctr++;
-            request.getSession(true).setAttribute("fctr", fctr);
+            request.getSession(true).setAttribute(FCTR, fctr);
             fctr *= getBlockSize(); 
             for(int i=fctr; i>0&&icomments.hasNext(); i--) {
                 CommentToElement comment = icomments.next();
@@ -577,7 +578,7 @@ public class SWBCommentToElement extends org.semanticwb.portal.resources.sem.bas
                 html.append("  </li>");
             }
             html.append(" </ul>");
-//            html.append("<p><a href=\"javascript:postHtml('"+paramRequest.getRenderUrl().setCallMethod(SWBResourceURL.Call_DIRECT).setMode(SWBResourceURL.Mode_INDEX).setParameter("suri",element.getEncodedURI()).setParameter("fctr","+")+"','commts')\" title=\""+paramRequest.getLocaleString("viewMore")+"\">"+paramRequest.getLocaleString("viewMore")+"</a></p>");
+//            html.append("<p><a href=\"javascript:postHtml('"+paramRequest.getRenderUrl().setCallMethod(SWBResourceURL.Call_DIRECT).setMode(SWBResourceURL.Mode_INDEX).setParameter("suri",element.getEncodedURI()).setParameter(FCTR,"_")+"','commts')\" title=\""+paramRequest.getLocaleString("viewMore")+"\">"+paramRequest.getLocaleString("viewMore")+"</a></p>");
             html.append("</div>");
             
         }else {
