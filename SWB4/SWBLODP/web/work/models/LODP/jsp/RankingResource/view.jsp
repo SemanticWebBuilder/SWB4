@@ -75,6 +75,7 @@ Author     : rene.jara
       }
         // -->
     </script>
+    <div class="ranking">
     <div class="valorar">
         <!-- h4 --><%=paramRequest.getLocaleString("lblTitle")%><!-- /h4 -->
     </div>
@@ -86,10 +87,11 @@ Author     : rene.jara
         <div id="vota5" title="vota 5" onclick="javascript:rank('5'); return false;"><span>vota 5</span></div>
         <div id="votar"></div>
     </div>
-
+</div>
     <%
       }else{
 %>
+<div class="ranking">
     <div class="valorar">
         <!-- h4 --><%=paramRequest.getLocaleString("lblTitle")%><!-- /h4 -->
     </div>
@@ -100,6 +102,7 @@ Author     : rene.jara
         <img src="/work/models/LODP/css/images/star-<%=average >= 4?"on":"off"%>.png" width="15" height="14" alt="*">
         <img src="/work/models/LODP/css/images/star-<%=average >= 5?"on":"off"%>.png" width="15" height="14" alt="*">
     </div>
+</div>
     <%
                     }
                 }
