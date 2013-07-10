@@ -533,7 +533,10 @@
             _this.selected.splice(i, 1);
             obj.selected=false;
             obj.setBaseClass();
-            _this.hideResizeBoxes();
+            if(i>-1)
+            {
+                _this.hideResizeBoxes();
+            }
         },
 
         unSelectAll:function()
@@ -551,7 +554,7 @@
         {
             //desc(evt,true);
             var _this=ToolKit;
-            if(evt.keyCode==8 && evt.which==8)
+            if((evt.keyCode==8 && evt.which==8) || evt.keyCode==46 && evt.which==46)
             //if(evt.keyCode==32 && evt.which==32)
             {
                 try
@@ -1044,8 +1047,10 @@
                 }catch(noe){}
                 
                 //_this.unSelectObj(obj);
-                _this.hideResizeBoxes();
-                
+                if(_this.selected.indexOf(obj)>-1)
+                {
+                    _this.hideResizeBoxes();
+                }                
                 return this;
             };
             
@@ -1084,7 +1089,10 @@
                 }                  
                 
                 //_this.unSelectObj(obj);
-                _this.hideResizeBoxes();               
+                if(_this.selected.indexOf(obj)>-1)
+                {
+                    _this.hideResizeBoxes();               
+                }
                 return this;
             };     
             
