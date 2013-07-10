@@ -302,10 +302,7 @@
         %>
 
         <label for="txt_search"><%=txtTitleSearch%></label>
-        <input type="text" name="search" value="<%=queryOriginal%>" onfocus="if (this.value == '<%=tmpsearch1%>' || this.value == '<%=tmpsearch2%>') {
-            this.value = ''
-        }
-        ;" />
+        <input type="text" name="search" value="<%=queryOriginal%>" onfocus="if (this.value == '<%=tmpsearch1%>' || this.value == '<%=tmpsearch2%>') { this.value = ''} ;" />
         <button type="submit"><%=paramRequest.getLocaleString("btn_search")%></button>
         <!--
         <%
@@ -335,9 +332,11 @@
     <p class="rubro"><%=paramRequest.getLocaleString("lbl_institFilter")%></p>
     <ul>
         <%
+             int numinst = 0;    
             if (null != filteruri && filteruri.trim().length() > 0) {
                 go = ont.getGenericObject(filteruri);
                 Institution inst = (Institution) go;
+                
         %>
         <li><a href="#" class="tema-inst"><%=inst.getInstitutionTitle()%></a></li>
             <%
@@ -355,10 +354,11 @@
         <li><a href="<%=url.toString()%>" class="tema-todos"><%=paramRequest.getLocaleString("lbl_all")%></a></li>  
             <%
             } else {
+               
                 Iterator<Institution> itins = Institution.ClassMgr.listInstitutions(wsite);
                 while (itins.hasNext()) {
                     Institution inst = itins.next();
-
+                    numinst++;
                     SWBResourceURL url = paramRequest.getRenderUrl();
                     url.setParameter("filteruri", inst.getShortURI());
                     if (null != orderby) {
@@ -370,21 +370,42 @@
                     if (queryinput != null && queryinput.trim().length() > 0) {
                         url.setParameter("search", queryinput);
                     }
+                    if(numinst>5){
+                        
+                        %>
+        <div class="content-one">
+        <%
+                    }
             %>
         <li><a href="<%=url.toString()%>" class="tema-inst" title="<%=inst.getInstitutionDescription() != null ? inst.getInstitutionDescription().trim() : inst.getInstitutionTitle()%>"><%=inst.getInstitutionTitle()%></a></li> 
             <%
+                    
+                    
+                    
+                    }
+                if(numinst>5){
+                        %>
+        </div>
+        <%
                     }
                 }
 
             %>
     </ul>  
-
-    <p class="rubro"><%=paramRequest.getLocaleString("lbl_topicFilter")%></p>
+    <%
+    if(numinst>5){
+                        %>
+        <a class="vermas expand-one" title="Mostrar/Ocultar" ><span>Mostrar/Ocultar</span></a>
+        <%
+                    }
+%>
+    <p class="rubro"><%=paramRequest.getLocaleString("lbl_topicFilter")%></p> 
     <ul>
         <%
+            int numtemas = 0; 
             if (null != filtertopic && filtertopic.trim().length() > 0) {
-                go = ont.getGenericObject(filtertopic);
-                Topic topic = (Topic) go;
+                go = ont.getGenericObject(filtertopic); 
+                Topic topic = (Topic) go; 
                 String nomclass = topic.getTopicTitle();
                 if (null == nomclass) {
                     nomclass = "default";
@@ -415,6 +436,7 @@
                 Iterator<Topic> ittop = Topic.ClassMgr.listTopics(wsite);
                 while (ittop.hasNext()) {
                     Topic inst = ittop.next();
+                    numtemas++; 
                     SWBResourceURL url = paramRequest.getRenderUrl();
                     url.setParameter("filtertopic", inst.getShortURI());
                     if (null != orderby) {
@@ -436,13 +458,31 @@
                         }
                     }
                     nomclass = SWBUtils.TEXT.replaceSpecialCharacters(nomclass, true);
+                    if(numtemas>5){
             %>
+        <div class="content-two">
+        <%
+                    }
+                    %>
         <li><a class="tema-<%=nomclass%>" href="<%=url.toString()%>" title="<%=inst.getTopicDescription() != null ? inst.getTopicDescription().trim() : inst.getTopicTitle()%>"><%=inst.getTopicTitle()%></a></li> 
             <%
                     }
+                 if(numtemas>5){
+            %>
+        </div>
+        <%
+                    }
+                    
                 }
             %>
     </ul>  
+    <%
+     if(numtemas>5){
+            %>
+        <a class="vermas expand-two" title="Mostrar/Ocultar" ><span>Mostrar/Ocultar</span></a>
+        <%
+                    }
+                    %>
 </div>
 <div class="der-data1">
     <div id="temasdatos">
@@ -457,7 +497,7 @@
                     if (null != filtertopic) {
                         urlorder.setParameter("filtertopic", filtertopicshort);
                     }
-                    if (queryinput != null && queryinput.trim().length() > 0) {
+                    if (queryinput != null && queryinput.trim().length() > 0) { 
                         urlorder.setParameter("search", queryinput);
                     }
 
