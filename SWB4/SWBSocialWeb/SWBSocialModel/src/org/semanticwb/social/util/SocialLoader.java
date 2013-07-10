@@ -9,6 +9,7 @@ import org.semanticwb.SWBUtils;
 import org.semanticwb.base.SWBAppObject;
 import org.semanticwb.social.SocialFlow.SocialPFlowMgr;
 import org.semanticwb.social.listener.ListenerMgr;
+import org.semanticwb.social.listener.MonitorMgr;
 
 /**
  *
@@ -36,6 +37,7 @@ public class SocialLoader implements SWBAppObject {
             pflowMgr.init();
             new SWBSocialCalendarMgr();
             new ListenerMgr();
+            new MonitorMgr();
             new SWBSocialUtil();
         } catch (Exception e) {
             log.error(e);

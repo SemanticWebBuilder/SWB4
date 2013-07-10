@@ -179,7 +179,7 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase {
     @Override
     public void postVideo(Video video) {
 
-        System.out.println("Entra al metodo postVideo....");
+        System.out.println("Entra al metodo postVideo de YouTube....");
         
         YouTubeCategory youTubeCat;
         String allCategories=video.getCategory();
@@ -194,7 +194,7 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase {
        
         //Valida que este activo el token, de lo contrario manda el token refresh
         //para que nos regrese un nuevo 
-
+        /*
         try {
             HttpClient client = new DefaultHttpClient();
             //client.getParams().setParameter(CoreProtocolPNames.PROTOCOL_VERSION, HttpVersion.HTTP_1_1);
@@ -325,7 +325,16 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase {
         } catch (Exception e) {
             System.out.println("Error: " + e);
         }
-
+        * */
+        try
+        {
+           System.out.println("Va a Grabar en savePostOutNetID - George/video:"+video+", this:"+this);
+           SWBSocialUtil.PostOutUtil.savePostOutNetID(video, this, "12345678");
+        }catch(Exception e)
+        {
+            
+        }
+        
     }
 
     private YouTubeService getYouTubeService() {
@@ -823,4 +832,13 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase {
         }
         return parsedPhrases;
     }
+
+    @Override
+    public boolean isPublished(PostOutNet postOutNet) {
+        System.out.println("Entra a YouTube, Instancia:"+this+", PostOut:"+postOutNet.getSocialPost());
+        //postOutNet.setStatus(1);      //Con esta línea le indicamos al PostOutNet que ya se ha publicado su PostOut en su red social asociada
+        return false;
+    }
+
+    
 }

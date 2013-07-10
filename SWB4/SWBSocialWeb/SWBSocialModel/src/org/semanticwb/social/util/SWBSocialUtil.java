@@ -24,6 +24,7 @@ import org.semanticwb.SWBUtils;
 import org.semanticwb.base.SWBAppObject;
 import org.semanticwb.model.GenericObject;
 import org.semanticwb.model.ModelProperty;
+import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.SWBModel;
 import org.semanticwb.model.User;
 import org.semanticwb.model.UserGroup;
@@ -38,9 +39,12 @@ import org.semanticwb.social.Messageable;
 import org.semanticwb.social.Photo;
 import org.semanticwb.social.Photoable;
 import org.semanticwb.social.PostIn;
+import org.semanticwb.social.PostMonitor;
 import org.semanticwb.social.PostOut;
 import org.semanticwb.social.PostOutNet;
 import org.semanticwb.social.PunctuationSign;
+import org.semanticwb.social.SocialFlow.SocialPFlowMgr;
+import org.semanticwb.social.SocialMonitorable;
 import org.semanticwb.social.SocialNetwork;
 import org.semanticwb.social.SocialPFlow;
 import org.semanticwb.social.SocialSite;
@@ -819,20 +823,72 @@ public class SWBSocialUtil implements SWBAppObject {
 
     public static class PostOutUtil
     {
+        
+        
         /*
          * Metodo con el que se crea un nuevo objeto de la clase PostOutNet, en el cual se agrega los ids creados 
          * en las diferentes redes sociales a los que se envia un postOut desde swbsocial, esto nos sirve para llevar
          * la trazabilidad de los mensajes enviados.
          */
-        public static void savePostOutNetID(PostOut postOut, SocialNetwork socialNet, String socialNetMsgId) throws SWBException
+        public static PostOutNet savePostOutNetID(PostOut postOut, SocialNetwork socialNet, String socialNetMsgId)
         {
-            if(postOut==null || socialNet==null || socialNetMsgId==null) return;
-            WebSite wsite=WebSite.ClassMgr.getWebSite(postOut.getSemanticObject().getModel().getName());
-            PostOutNet postOutNet=PostOutNet.ClassMgr.createPostOutNet(wsite);
-            postOutNet.setSocialPost(postOut);
-            postOutNet.setSocialNetwork(socialNet);
-            postOutNet.setSocialNetMsgID(socialNetMsgId);
+            System.out.println("Entra a savePostOutNetID-1");
+            PostOutNet postOutNet=null;
+            try
+            {
+                if(postOut==null || socialNet==null || socialNetMsgId==null) return null;
+                WebSite wsite=WebSite.ClassMgr.getWebSite(postOut.getSemanticObject().getModel().getName());
+                System.out.println("Entra a savePostOutNetID-2:"+wsite);
+                postOutNet=PostOutNet.ClassMgr.createPostOutNet(wsite);
+                System.out.println("Entra a savePostOutNetID-3:"+postOutNet);
+                postOutNet.setSocialPost(postOut);
+                postOutNet.setSocialNetwork(socialNet);
+                postOutNet.setSocialNetMsgID(socialNetMsgId);
+                System.out.println("Entra a savePostOutNetID-4:"+postOutNet);
+                //Si la red social es de tipo SocialMonitorable, se pone a monitorear el PostOutNet creado.
+                if(socialNet instanceof SocialMonitorable)
+                {
+                    System.out.println("Entra a savePostOutNetID-5:"+socialNet);
+                    SWBSocialUtil.PostOutUtil.savePostOutNetToMonitor(postOutNet);
+                    System.out.println("Entra a savePostOutNetID-6:"+socialNet);
+                }
+            }catch(Exception e)
+            {
+                System.out.println(e.getMessage());
+                log.error(e);
+            }
+            System.out.println("Entra a savePostOutNetID-7:"+postOutNet);
+            return postOutNet;
         }
+        
+        
+          /*
+         * Metodo con el que se graba un PostOutNet para ser monitoreado a la instancia unica de la clase PostMonitor, la cual existe solo para el 
+         * sitio de Admin.
+         */
+        public static void savePostOutNetToMonitor(PostOutNet postOutNet)
+        {
+            if(postOutNet!=null)
+            {
+                PostMonitor postMonitor=null;
+                //Si existe la única instancia PostMonitor que debe de existir, que es en el sitio de Admin, la toma.
+                if(PostMonitor.ClassMgr.listPostMonitors(SWBContext.getAdminWebSite()).hasNext())
+                {
+                    postMonitor=PostMonitor.ClassMgr.listPostMonitors().next();
+                }else{  //De lo contrario la crea
+                    postMonitor=PostMonitor.ClassMgr.createPostMonitor(SWBContext.getAdminWebSite());
+                }
+                //Y le agrega el PostOutNet que llego como parametro desde una Red Social que sea de tipo SocialMonitorable, esto para que sea monitoreado el estatus
+                //del PostOut que se encuentra en dicha clase y que ha sido tratado de publicar en dicha red social. El monitoreo se lleva a cabo mediante un Timer en 
+                //la clase MonitorMgr
+                if(postMonitor!=null)
+                {
+                    postMonitor.addPostOutNet(postOutNet);
+                }
+            }
+        }
+        
+        
         
         
         public static void editPostOut(PostOut postout, SocialPFlow socialPFlow, ArrayList<SocialNetwork> aSocialNets, WebSite wsite, String toPost, HttpServletRequest request, SWBActionResponse response) 

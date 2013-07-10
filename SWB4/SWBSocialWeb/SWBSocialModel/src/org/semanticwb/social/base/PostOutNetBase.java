@@ -7,6 +7,10 @@ package org.semanticwb.social.base;
 public abstract class PostOutNetBase extends org.semanticwb.model.SWBClass 
 {
    /**
+   * Estatus del PostOut en una instancia de red social específica. 0=No publicado; 1=Publicado;
+   */
+    public static final org.semanticwb.platform.SemanticProperty social_status=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#status");
+   /**
    * Identificador del mensaje en la red social
    */
     public static final org.semanticwb.platform.SemanticProperty social_socialNetMsgID=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#socialNetMsgID");
@@ -26,6 +30,10 @@ public abstract class PostOutNetBase extends org.semanticwb.model.SWBClass
    * Objeto Red Social a la cual se hace referencia.
    */
     public static final org.semanticwb.platform.SemanticProperty social_socialNetwork=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#socialNetwork");
+   /**
+   * Error en la publicación del PostOut en una determimada red social., Este error podría desplegarse para que vieran los usuarios del sistema cual fué la causa de porque no se publicó el mensaje (PostOut).
+   */
+    public static final org.semanticwb.platform.SemanticProperty social_error=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#error");
    /**
    * En este objeto se guardara el identificador que es asignado para cada post en cada una de las redes sociales, es decir, si un mismo post se envía hacia mas de una red social, cada una de esas redes sociales daran un identificador unico para ese post en esa red social, este lo tenemos que guardar nosotros en este objeto para fines de monitoreo de estatus del post en esa red social (En Proceso, Revisado, Publicado, etc), como nosotros para un post, independientemente de a cuantas redes sociales se envíe, solo creamos un objeto PostOut (Message, Photo, Video), tuvimos que crear esta clase para guardar el identificador de ese postOut para c/red social.
    */
@@ -167,6 +175,24 @@ public abstract class PostOutNetBase extends org.semanticwb.model.SWBClass
     }
 
 /**
+* Gets the Status property
+* @return int with the Status
+*/
+    public int getStatus()
+    {
+        return getSemanticObject().getIntProperty(social_status);
+    }
+
+/**
+* Sets the Status property
+* @param value long with the Status
+*/
+    public void setStatus(int value)
+    {
+        getSemanticObject().setIntProperty(social_status, value);
+    }
+
+/**
 * Gets the SocialNetMsgID property
 * @return String with the SocialNetMsgID
 */
@@ -258,5 +284,23 @@ public abstract class PostOutNetBase extends org.semanticwb.model.SWBClass
              ret=(org.semanticwb.social.SocialNetwork)obj.createGenericInstance();
          }
          return ret;
+    }
+
+/**
+* Gets the Error property
+* @return String with the Error
+*/
+    public String getError()
+    {
+        return getSemanticObject().getProperty(social_error);
+    }
+
+/**
+* Sets the Error property
+* @param value long with the Error
+*/
+    public void setError(String value)
+    {
+        getSemanticObject().setProperty(social_error, value);
     }
 }
