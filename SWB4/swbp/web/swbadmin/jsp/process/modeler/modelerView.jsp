@@ -10,6 +10,8 @@
 <%@page contentType="text/html"%>
 <%
 SWBParamRequest paramRequest = (SWBParamRequest)request.getAttribute("paramRequest");
+boolean isViewMode = (Boolean) request.getAttribute("isViewMode");
+
 SWBResourceURL commandUrl = paramRequest.getRenderUrl().setCallMethod(SWBResourceURL.Call_DIRECT);
 String suri = request.getParameter("suri");
 
@@ -31,8 +33,16 @@ exportUrl.setMode(SVGModeler.MODE_EXPORT);
     <script type="text/javascript" src="/swbadmin/jsp/process/modeler/modeler.js" charset="utf-8"></script>
     <link href="/swbadmin/jsp/process/modeler/images/modelerFrame.css" rel="stylesheet" type="text/css">
 </head>
-<body style="margin: 0px;" onload="Modeler.init('modeler');">
-    <%if (SWBContext.getAdminWebSite().equals(paramRequest.getWebPage().getWebSite())) {
+<%if (!isViewMode) {
+    %>
+    <body style="margin: 0px;" onload="Modeler.init('modeler','edit');">
+    <%
+} else {
+%>
+    <body style="margin: 0px;" onload="Modeler.init('modeler','view');">
+    <%
+}
+if (!isViewMode) {
         %>
         <div id="toolBar" onmouseout="ToolBar.outToolBar();" onmouseover="ToolBar.overToolBar(); this.style.opacity=1;" style="position: fixed;">
             <div class="toolbarItem">
