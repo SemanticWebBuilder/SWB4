@@ -2125,7 +2125,7 @@
         navPath:null,
         window:null,
                 
-        init:function(svgid)
+        init:function(svgid, mode)
         {
             ToolKit.init(svgid);
             ToolKit.onmousedown=Modeler.onmousedown;
@@ -2134,6 +2134,7 @@
             if(!ToolKit.svg.offsetLeft)ToolKit.svg.offsetLeft=60;
             if(!ToolKit.svg.offsetTop)ToolKit.svg.offsetTop=10;
             Modeler.createNavPath();
+            Modeler.mode = mode;
             
             //Sobreescritura del método setLayer para establecer la barra de navegación
             var fSetLayer = ToolKit.setLayer;
@@ -2144,21 +2145,23 @@
                 }
             };
             
-            //Add Key Events
-            if (window.addEventListener)
-            {
-                window.addEventListener('keydown', Modeler.keydown, true);
+            if (Modeler.mode !== "view") {
+                //Add Key Events
+                if (window.addEventListener)
+                {
+                    window.addEventListener('keydown', Modeler.keydown, true);
+                }
+                else if (window.attachEvent)
+                {
+                    window.attachEvent("onkeydown", Modeler.keydown);
+                }
+                else
+                {
+                    window.onkeydown= Modeler.keydown;  
+                }
+                modeler.window=window;
+                modeler.window.focus();
             }
-            else if (window.attachEvent)
-            {
-                window.attachEvent("onkeydown", Modeler.keydown);
-            }
-            else
-            {
-                window.onkeydown= Modeler.keydown;  
-            }
-            modeler.window=window;
-            modeler.window.focus();
             
             //Sobreescritura del método showResizeBoxes para considerar Pools con lanes y lanes
             var fShowBoxes = ToolKit.showResizeBoxes;
@@ -2227,6 +2230,7 @@
                 
         onmousedown:function(evt)
         {
+            if (Modeler.mode === "view") return false;
             modeler.window.focus();
             if (Modeler.selectedPath !== null) {
                 Modeler.selectedPath.select(false);
@@ -2280,6 +2284,7 @@
                 
         onmousemove:function(evt)
         {
+            if (Modeler.mode === "view") return false;
             if(Modeler.dragConnection && Modeler.dragConnection!==null)
             {
                 Modeler.dragConnection.show();
@@ -2296,6 +2301,7 @@
                 
         onmouseup:function(evt)
         {
+            if (Modeler.mode === "view") return false;
             if(Modeler.dragConnection && Modeler.dragConnection!==null)
             {
                 if(Modeler.dragConnection.toObject===null)
@@ -2317,6 +2323,7 @@
                 
         objectMouseDown:function(evt,obj)
         {
+            if (Modeler.mode === "view") return false;
             if(Modeler.creationId!==null)
             {
                 Modeler.creationDropObject=obj;
@@ -2349,6 +2356,7 @@
                 
         objectMouseMove:function(evt,obj)
         {
+            if (Modeler.mode === "view") return false;
             //console.log("objectMouseOver:"+evt+" "+obj);
             if(Modeler.dragConnection && Modeler.dragConnection!==null)
             {
@@ -2428,6 +2436,7 @@
             }
             
             obj.onmousedown = function (evt) {
+                if (Modeler.mode === "view") return false;
                 obj.pressed = true;
                 if (Modeler.selectedPath !== null) {
                     Modeler.selectedPath.select(false);
@@ -2447,6 +2456,7 @@
             };
             
             obj.onmousemove = function (evt) {
+                if (Modeler.mode === "view") return false;
                 if (Modeler.selectedPath !== null && Modeler.selectedPath === obj) {
                     obj.select(false);
                     Modeler.selectedPath = null;
@@ -2462,6 +2472,7 @@
             };
                 
             obj.onmouseup = function (evt) {
+                if (Modeler.mode === "view") return false;
                 if (obj.pressed) {
                     obj.pressed = false;
                 }
@@ -2621,6 +2632,7 @@
             
             obj.mousedown=function(evt)
             {
+                if (Modeler.mode === "view") return false;
                 if (Modeler.creationId === null) {
                     if(ToolKit.getEventX(evt)<obj.getX()-obj.getWidth()/2+obj.headerLine.lineOffset+5)
                     {
@@ -2634,6 +2646,7 @@
             
             obj.onmousemove=function(evt)
             {
+                if (Modeler.mode === "view") return false;
                 if(Modeler.dragConnection && Modeler.dragConnection!==null)  //Valida no conectar objetos hijos del pool
                 {
                     if(Modeler.dragConnection.fromObject.isChild(obj))
@@ -2780,6 +2793,7 @@
             obj.subLine.setBaseClass();
             obj.mouseup=function(x,y)
             {
+                if (Modeler.mode === "view") return false;
                 return true;
             };
             obj.mousedown=function(evt){return Modeler.objectMouseDown(evt,obj);}
@@ -3097,6 +3111,15 @@
                         obj.resize(tmp.w, tmp.h);
                         obj.move(tmp.x, tmp.y);
                         obj.snap2Grid();
+                        
+                        //Evitar edición de texto
+                        if (Modeler.mode === "view") {
+                            if (obj.text && obj.text != null) {
+                                obj.text.ondblclick = function(evt) {
+                                    return false;
+                                };
+                            }
+                        }
                     }
                 }
 
@@ -3118,6 +3141,15 @@
                         obj.setParent(par);
                         obj.layer = null;
                         par.move(par.getX(), par.getY());
+                        
+                        //Evitar edición de texto
+                        if (Modeler.mode === "view") {
+                            if (obj.text && obj.text != null) {
+                                obj.text.ondblclick = function(evt) {
+                                    return false;
+                                };
+                            }
+                        }
                     }
                 }
 
@@ -3144,6 +3176,15 @@
                         obj.move(tmp.x, tmp.y);
                         if (obj.typeOf("IntermediateCatchEvent") && tmp.parent === "") {
                             obj.snap2Grid();
+                        }
+                        
+                        //Evitar edición de texto
+                        if (Modeler.mode === "view") {
+                            if (obj.text && obj.text != null) {
+                                obj.text.ondblclick = function(evt) {
+                                    return false;
+                                };
+                            }
                         }
                     }
                 }
@@ -3203,7 +3244,7 @@
                 }
                 ToolKit.setLayer(null);
             } catch (err) {
-                ToolKit.showTooltip(0,"Ocurrió un problema al cargar el modelo. Archivo mal formado.", 200, "Error");
+                ToolKit.showTooltip(0,"Ocurrió un problema al cargar el modelo."+err, 200, "Error");
             }
         },
                 
