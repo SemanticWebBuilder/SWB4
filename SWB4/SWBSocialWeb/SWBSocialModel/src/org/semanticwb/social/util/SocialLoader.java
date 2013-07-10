@@ -7,6 +7,8 @@ package org.semanticwb.social.util;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.base.SWBAppObject;
+import org.semanticwb.model.SWBContext;
+import org.semanticwb.social.PostMonitor;
 import org.semanticwb.social.SocialFlow.SocialPFlowMgr;
 import org.semanticwb.social.listener.ListenerMgr;
 import org.semanticwb.social.listener.MonitorMgr;
@@ -24,6 +26,7 @@ public class SocialLoader implements SWBAppObject {
      * <p>Es el administrador de los flujos de publicaci&oacute;n en este portal.</p>
      */
     private static SocialPFlowMgr pflowMgr;
+    static private PostMonitor postMonitor=null;
    
     
     
@@ -39,6 +42,13 @@ public class SocialLoader implements SWBAppObject {
             new ListenerMgr();
             new MonitorMgr();
             new SWBSocialUtil();
+            
+             //Charges the unique PostMonitor instance
+            if(PostMonitor.ClassMgr.listPostMonitors(SWBContext.getAdminWebSite()).hasNext())
+            {
+                postMonitor=PostMonitor.ClassMgr.listPostMonitors(SWBContext.getAdminWebSite()).next();
+            }
+            
         } catch (Exception e) {
             log.error(e);
         }
@@ -53,6 +63,11 @@ public class SocialLoader implements SWBAppObject {
     public static SocialPFlowMgr getPFlowManager()
     {
         return pflowMgr;
+    }
+    
+    public static PostMonitor getPostMonitor()
+    {
+        return postMonitor;
     }
 
     @Override
