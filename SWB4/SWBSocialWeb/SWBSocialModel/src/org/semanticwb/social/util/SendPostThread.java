@@ -52,17 +52,20 @@ public class SendPostThread extends java.lang.Thread {
     public void run()
     {
 
-        while (true)
+        //while (true)
         {
+            /*
             try
             {
                 this.currentThread().sleep(20000);
             }catch(Exception e){log.error(e);}
+            * */
             try
             {
                 while (!postableList.isEmpty())
                 {
                     Object obj=postableList.removeLast();
+                    System.out.println("SendPostThread/obj:"+obj);
                     try
                     {
                      if(obj instanceof PostableObj)
@@ -78,17 +81,17 @@ public class SendPostThread extends java.lang.Thread {
                               Messageable messageable=(Messageable) postable;
                               messageable.postMsg((Message)postableObj.getPost());
                               System.out.println("Se publica-4");
-                              postOut.setPublished(true);
+                              //postOut.setPublished(true);
                           }else if(postOut instanceof Photo && postable instanceof Photoable)
                           {
                               Photoable photoable=(Photoable) postable;
                               photoable.postPhoto((Photo)postableObj.getPost());
-                              postOut.setPublished(true);
+                              //postOut.setPublished(true);
                           }else if(postOut instanceof Video && postable instanceof Videoable)
                           {
                               Videoable videoable=(Videoable) postable;
                               videoable.postVideo((Video)postableObj.getPost());
-                              postOut.setPublished(true);
+                              //postOut.setPublished(true);
                           }
                        }
                        

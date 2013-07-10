@@ -33,10 +33,10 @@ public class ListenerMgr implements SWBAppObject {
 
     private static Logger log = SWBUtils.getLogger(ListenerMgr.class);
     //Timer timer;
-    static Hashtable<String, Timer> htTimers = new Hashtable();
+    static private Hashtable<String, Timer> htTimers = new Hashtable();
     static private ListenerMgr instance;
     static final int MILISEG_IN_SEGUNDO=1000;
-    static ReBindThread rbThread=null;
+    static private ReBindThread rbThread=null;
 
     /**
      * Retrieves a reference to the only one existing object of this class.
