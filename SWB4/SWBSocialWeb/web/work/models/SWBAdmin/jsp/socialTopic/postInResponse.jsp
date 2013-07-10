@@ -19,6 +19,7 @@
 <%
     SWBResourceURL url = paramRequest.getRenderUrl();
     SemanticObject sObjPostIn=(SemanticObject)request.getAttribute("postUri");
+    String postUri = (String)request.getAttribute("postUri");
     PostIn postIn=(PostIn)sObjPostIn.createGenericInstance();
     SocialNetwork postInSN=postIn.getPostInSocialNetwork();
     
@@ -58,22 +59,22 @@
             <%if(isMessageAble){
                 args.put("valor", "postMessage");
             %>
-                 <td style="text-align: center;"><a id="Txt" class="sel-txt2" style="cursor: pointer;" title="<%=paramRequest.getLocaleString("message")%>" onclick="postHtml('<%=url.setMode("post").setParameters(args)%>', 'postType')"></a></td>
+                 <td style="text-align: center;"><a id="Txt" class="sel-txt2" style="cursor: pointer;" title="<%=paramRequest.getLocaleString("message")%>" onclick="postHtml('<%=url.setMode("post").setParameters(args)%>', '<%=postUri%>postType')"></a></td>
             <%}%>
             <%if(isPhotoable){  
                 args.put("valor", "uploadPhoto"); 
             %> 
-                <td style="text-align: center;"><a id="Img" class="sel-img2" style="cursor: pointer;" title="<%=paramRequest.getLocaleString("photo")%>" onclick="postHtml('<%=url.setMode("post").setParameters(args)%>', 'postType')"></a></td>
+                <td style="text-align: center;"><a id="Img" class="sel-img2" style="cursor: pointer;" title="<%=paramRequest.getLocaleString("photo")%>" onclick="postHtml('<%=url.setMode("post").setParameters(args)%>', '<%=postUri%>postType')"></a></td>
             <%}%>
             <%if(isVideoable){
                 args.put("valor", "uploadVideo"); 
             %> 
-                <td style="text-align: center;"><a id="Video" class="sel-vid2" style="cursor: pointer;" title="<%=paramRequest.getLocaleString("video")%>" onclick="postHtml('<%=url.setMode("post").setParameters(args)%>', 'postType')"></a></td>
+                <td style="text-align: center;"><a id="Video" class="sel-vid2" style="cursor: pointer;" title="<%=paramRequest.getLocaleString("video")%>" onclick="postHtml('<%=url.setMode("post").setParameters(args)%>', '<%=postUri%>postType')"></a></td>
             <%}%>    
        </tr>        
     </table>
     </div>
 </div>
 
-<div id="postType" dojoType="dijit.layout.ContentPane">
+<div id="<%=postUri%>postType" dojoType="dijit.layout.ContentPane">
 </div>
