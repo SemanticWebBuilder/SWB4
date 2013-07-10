@@ -76,47 +76,63 @@ String suri = request.getParameter("suri");
                 
  %> 
             
-   <div>
+   <div class="publicador">
        <img src="<%=urlLogo%>" width="200" height="150" />
-        <h2><%=inOb.getInstitutionTitle()%></h2> 
+        <h4><%=inOb.getInstitutionTitle()%></h4> 
         <p><%=inOb.getInstitutionDescription()!=null?inOb.getInstitutionDescription(): " "%></p>
         <ul>
             <%if(numPub>0){%>
            
-            <li>
-                <label><a href="<%=urlConsulta.setParameter("actionList", "listaDatasets").toString()%>"><%=paramRequest.getLocaleString("lbl_dsPub")%></a></label>&nbsp;&nbsp;&nbsp;&nbsp;<%=numPub%>
+            <li class="pub-publicado">
+                <strong><a href="<%=urlConsulta.setParameter("actionList", "listaDatasets").toString()%>"><%=paramRequest.getLocaleString("lbl_dsPub")%></a></strong>
+                <em><%=numPub%></em>
             </li>
             
             <%}else{%>
             
-            <li>
-                <label><%=paramRequest.getLocaleString("lbl_dsPub")%></label>&nbsp;&nbsp;&nbsp;&nbsp;<%=numPub%>
+            <li class="pub-publicado">
+                <strong><%=paramRequest.getLocaleString("lbl_dsPub")%></strong>
+                <em><%=numPub%></em>
             </li>
             
-            <%}
-              if(actionList.equals("listaDatasets")){
+            <%}%>
+            
+            <ul>
+                
+            <%
+            
+                if(actionList.equals("listaDatasets")){
                
                  if(!listaDS.isEmpty()){
                     for(Dataset dsOBJ : listaDS){
                       String urlData = wsite.getWebPage("Datos").getUrl();
                        String urlDataSet = urlData+"?suri="+dsOBJ.getShortURI()+"&act=detail";
             %>
-            <a href="<%=urlDataSet%>"><%=dsOBJ.getDatasetTitle()%></a>
-            <%}}else{%>
-                No hay datasets asociados al publicador
-            <%}}%>
-            <li>
-                <label><%=paramRequest.getLocaleString("lbl_dsDescarga")%></label>&nbsp;&nbsp;&nbsp;&nbsp;<%=numDs%> 
+            
+                <li><a href="<%=urlDataSet%>"><%=dsOBJ.getDatasetTitle()%></a></li>
+                
+                <%}}else{%>
+                    No hay datasets asociados al publicador
+                <%}}%>
+                
+            </ul>
+            <li class="pub-descargado">
+                <strong><%=paramRequest.getLocaleString("lbl_dsDescarga")%></strong>
+                <em><%=numDs%></em></li>
             </li>
-            <li>
-                <label><%=paramRequest.getLocaleString("lbl_numViews")%></label>&nbsp;&nbsp;&nbsp;&nbsp;<%=numViews%>
+            <li class="pub-visitas">
+                <strong><%=paramRequest.getLocaleString("lbl_numViews")%></strong>
+                <em><%=numViews%></em>
             </li>
-            <li>
-                <label><%=paramRequest.getLocaleString("lbl_appRelated")%></label>&nbsp;&nbsp;&nbsp;&nbsp;<%=numAPPRelatedDS%>
+            <li class="pub-appsrel">
+                <strong><%=paramRequest.getLocaleString("lbl_appRelated")%></strong>
+                <em><%=numAPPRelatedDS%></em>
             </li>
              
         </ul>
-            <a href="#" onclick="javascript:document.back.submit()">Regresar</a>
+            <div class="regresar">
+                <a href="#" onclick="javascript:document.back.submit()">Regresar</a>
+            </div>
     </div>            
             
           <form action="<%=modeURL.setMode(SWBResourceURL.Mode_VIEW).setParameter("act", "arregloLetras").setParameter("val", value)%>" method="post" name="back"></form>
