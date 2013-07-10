@@ -526,7 +526,7 @@
                                 }
 
                         %>
-                    <li><a class="ico-<%=icontype%>" href="<%=wpurl + ds.getShortURI()%>"><%=ds.getDatasetTitle()%></a><br/>
+                    <li><a class="ico-<%=icontype.toLowerCase()%>" href="<%=wpurl + ds.getShortURI()%>"><%=ds.getDatasetTitle()%></a><br/>
                         <p><em><%=sdf.format(ds.getDatasetUpdated())%> - <%=ds.getInstitution().getInstitutionTitle()%></em></p>
                         <p><%=ds.getDatasetDescription()%></p>
                     </li>
@@ -767,7 +767,7 @@
                         mapviewWP = "#";
                     }
                 %>
-                <a class="ico-<%=ds.getDatasetFormat()%>" href="<%=mapviewWP%>"><%=ds.getActualVersion() != null && ds.getActualVersion().getFilePath() != null ? ds.getActualVersion().getFilePath() : "No tiene archivo asignado"%></a>
+                <a class="ico-<%=ds.getDatasetFormat().toLowerCase()%>" href="<%=mapviewWP%>"><%=ds.getActualVersion() != null && ds.getActualVersion().getFilePath() != null ? ds.getActualVersion().getFilePath() : "No tiene archivo asignado"%></a>
 
 
                 <ul>
@@ -885,6 +885,67 @@
         </div>  
 
 
+            
+        <%
+            int numapps = 0;
+            Iterator<Application> itapp = Application.ClassMgr.listApplicationByRelatedDataset(ds, wsite);
+            HashMap<String, Application> hmappli = new HashMap<String, Application>();
+            if (itapp.hasNext()) {
+
+        %>
+            <div class="new-app datarelapp">
+                <div></div>
+                <fieldset>
+                    <legend><%=paramRequest.getLocaleString("lbl_relatesApps")%></legend>
+            <ul>
+                <%  // lista de aplicaciones relacionadas
+
+                String idWPapps = base.getAttribute("appwebpage", "Aplicaciones");
+                        WebPage wpapps = wsite.getWebPage(idWPapps);
+                        
+                    while (itapp.hasNext()) {
+                        Application appli = itapp.next();
+                        if (appli.isAppValid()) {
+                            hmappli.put(appli.getShortURI(), appli);
+                        }
+                    }
+                    numapps = hmappli.size();
+                    itapp = hmappli.values().iterator();
+                    if (itapp.hasNext()) {
+                        while (itapp.hasNext()) {
+                            Application appli = itapp.next();
+                            
+                            // ?act=detail&suri=LODP:lodpcg_Application:1
+                %>
+                <li><a href="<%=wpapps.getUrl()+"?suri=" + appli.getShortURI() + "&act=detail"%>"><%=appli.getAppTitle()%></a><br /> 
+                    <strong><%=appli.getAppDescription() != null ? appli.getAppDescription() : "---"%></strong><br/>
+                </li>
+                <%
+                    }
+                } else {
+
+                %>
+                <li><%=paramRequest.getLocaleString("lbl_NOrelatesApps")%></li>
+                    <%
+                        }
+
+                        String urlapps = "#";
+
+                        if (wpapps != null && ds.getInstitution() != null) {
+                            urlapps = wpapps.getUrl() + "?filteruri=" + ds.getInstitution().getShortURI() + "&order=date";
+                        }
+                    %>
+            </ul>
+
+            <div>
+                <span><%=numapps%> <%=paramRequest.getLocaleString("lbl_relatesApps")%></span> <a href="<%=urlapps%>"><%=paramRequest.getLocaleString("lbl_viewall")%></a>
+            </div>
+            </fieldset>
+        </div>
+        <%
+            }
+        %>
+
 
        
 
@@ -914,61 +975,6 @@
     </div> <!-- izq -->
 
         
-            
-        <%
-            int numapps = 0;
-            Iterator<Application> itapp = Application.ClassMgr.listApplicationByRelatedDataset(ds, wsite);
-            HashMap<String, Application> hmappli = new HashMap<String, Application>();
-            if (itapp.hasNext()) {
-
-        %>
-        <div class="new-app tit">
-            <h4><%=paramRequest.getLocaleString("lbl_relatesApps")%></h4>
-            <ul>
-                <%  // lista de aplicaciones relacionadas
-
-                    while (itapp.hasNext()) {
-                        Application appli = itapp.next();
-                        if (appli.isAppValid()) {
-                            hmappli.put(appli.getShortURI(), appli);
-                        }
-                    }
-                    numapps = hmappli.size();
-                    itapp = hmappli.values().iterator();
-                    if (itapp.hasNext()) {
-                        while (itapp.hasNext()) {
-                            Application appli = itapp.next();
-                %>
-                <li><%=appli.getAppTitle()%><br />
-                    <strong><%=appli.getAppDescription() != null ? appli.getAppDescription() : "---"%></strong>
-                </li>
-                <%
-                    }
-                } else {
-
-                %>
-                <li><%=paramRequest.getLocaleString("lbl_NOrelatesApps")%></li>
-                    <%
-                        }
-
-                        String idWPapps = base.getAttribute("appwebpage", "Aplicaciones");
-                        WebPage wpapps = wsite.getWebPage(idWPapps);
-                        String urlapps = "#";
-
-                        if (wpapps != null && ds.getInstitution() != null) {
-                            urlapps = wpapps.getUrl() + "?filteruri=" + ds.getInstitution().getShortURI() + "&order=date";
-                        }
-                    %>
-            </ul>
-
-            <div>
-                <span><%=numapps%> <%=paramRequest.getLocaleString("lbl_relatesApps")%></span> <a href="<%=urlapps%>"><%=paramRequest.getLocaleString("lbl_viewall")%></a>
-            </div>
-        </div>
-        <%
-            }
-        %>
-
     </div> <!-- der -->
 
     <div class="clear">&nbsp;</div> 
