@@ -1129,24 +1129,15 @@ public class ProcessForm extends GenericResource {
         while (!base.getAttribute("prop" + max, "").equals("")) {
 
             String val = base.getAttribute("prop" + max);
-            String varName = "";
-            String propid = "";
-            String modo = "";
-            String fe = "";
-            String label = "";
-            StringTokenizer stoken = new StringTokenizer(val, "|");
-            if (stoken.hasMoreTokens()) {
-                varName = stoken.nextToken();
-                propid = stoken.nextToken();
-                modo = stoken.nextToken();
-                fe = stoken.nextToken();
-                label = stoken.nextToken();
-            }
+            HashMap<String, String> props = getPropertiesMap(val);
+            String varName = props.get("varName");
+            String propid = props.get("propId");
+            String modo = props.get("mode");
+            String fe = props.get("fe");
+            String label = props.get("label");
 
             SemanticProperty semprop = hmprops.get(propid);
-
             String strMode = "";
-
             SemanticClass semclass = hmclass.get(varName);
 
             if (semclass != null && semprop != null) {
