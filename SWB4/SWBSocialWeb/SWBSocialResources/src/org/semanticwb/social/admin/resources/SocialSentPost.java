@@ -157,6 +157,7 @@ public class SocialSentPost extends GenericResource {
         
         
         WebSite wsite=WebSite.ClassMgr.getWebSite(socialTopic.getSemanticObject().getModel().getName());
+        String classifyBySentiment=SWBSocialUtil.Util.getModelPropertyValue(wsite, SWBSocialUtil.CLASSIFYSENTMGS_PROPNAME);
         
         PrintWriter out = response.getWriter();
         //Resource base = getResourceBase();
@@ -300,6 +301,31 @@ public class SocialSentPost extends GenericResource {
         out.print("</td></tr></table>");
         out.println("</th>");
         
+        if(classifyBySentiment!=null && classifyBySentiment.equalsIgnoreCase("true"))
+        {
+            urlOderby.setParameter("orderBy", "sentimentUp");
+            out.println("<th>");
+            out.println("<table><tr><td>");
+            out.println(paramRequest.getLocaleString("sentiment"));
+            out.print("</td><td>");
+            out.print("<a href=\"#\"  onclick=\"submitUrl('" + urlOderby + "',this); return false;\"><img src=\"/swbadmin/images/arrow_down.png\" height=\"16\"/></a>");
+            urlOderby.setParameter("orderBy", "sentimentDown");
+            out.print("<a href=\"#\"  onclick=\"submitUrl('" + urlOderby + "',this); return false;\"><img src=\"/swbadmin/images/arrow_up.png\" height=\"16\"/></a>");
+            out.print("</td></tr></table>");
+            out.println("</th>");
+
+            urlOderby.setParameter("orderBy", "intensityUp");
+            out.println("<th>");
+            out.println("<table><tr><td>");
+            out.println(paramRequest.getLocaleString("intensity"));
+            out.print("</td><td>");
+            out.print("<a href=\"#\"  onclick=\"submitUrl('" + urlOderby + "',this); return false;\"><img src=\"/swbadmin/images/arrow_down.png\" height=\"16\"/></a>");
+            urlOderby.setParameter("orderBy", "intensityDown");
+            out.print("<a href=\"#\"  onclick=\"submitUrl('" + urlOderby + "',this); return false;\"><img src=\"/swbadmin/images/arrow_up.png\" height=\"16\"/></a>");
+            out.print("</td></tr></table>");
+            out.println("</th>");
+        }
+        
         urlOderby.setParameter("orderBy", "statusUp");
         out.println("<th>");
         out.println("<table><tr><td>");
@@ -440,6 +466,18 @@ public class SocialSentPost extends GenericResource {
             }else if(request.getParameter("orderBy").equals("updatedDown"))
             {
                 setso = SWBComparator.sortByCreatedSet(itposts,false);
+            }else if(request.getParameter("orderBy").equals("sentimentUp"))
+            {
+                setso = SWBSocialComparator.sortBySentiment(itposts, false);
+            }else if(request.getParameter("orderBy").equals("sentimentDown"))
+            {
+                setso = SWBSocialComparator.sortBySentiment(itposts, true);
+            }else if(request.getParameter("orderBy").equals("intensityUp"))
+            {
+                setso = SWBSocialComparator.sortByIntensity(itposts, true);
+            }else if(request.getParameter("orderBy").equals("intensityDown"))
+            {
+                setso = SWBSocialComparator.sortByIntensity(itposts, false);
             }else if(request.getParameter("orderBy").equals("statusUp"))
             {
                 setso = SWBSocialComparator.sortByPostOutStatus(itposts,true);
@@ -685,6 +723,30 @@ public class SocialSentPost extends GenericResource {
                    out.println("<td>");
                    out.println(SWBUtils.TEXT.getTimeAgo(postOut.getUpdated(), lang));
                    out.println("</td>");
+                   
+                   if(classifyBySentiment!=null && classifyBySentiment.equalsIgnoreCase("true"))
+                   {
+                        //Sentiment
+                        out.println("<td align=\"center\">");
+                        if(postOut.getPostSentimentalType()==0)
+                        {
+                            out.println("---");
+                        }else if(postOut.getPostSentimentalType()==1)
+                        {
+                            out.println("<img src=\""+SWBPortal.getContextPath()+"/swbadmin/images/feelpos.png"+"\">");
+                        }else if(postOut.getPostSentimentalType()==2)
+                        {
+                            out.println("<img src=\""+SWBPortal.getContextPath()+"/swbadmin/images/feelneg.png"+"\">");
+                        }
+                        out.println("</td>");
+
+                        //Intensity
+                        out.println("<td>");
+                        out.println(postOut.getPostIntesityType()==0?paramRequest.getLocaleString("low"):postOut.getPostIntesityType()==1?paramRequest.getLocaleString("medium"):postOut.getPostIntesityType()==2?paramRequest.getLocaleString("high"):"---");
+                        out.println("</td>");
+                   }
+                   
+                   
 
                    out.println("<td>");
                    //El PostOut No se ha enviado, aqui se daría la posibilidad de que un usuario lo envíe.
