@@ -69,6 +69,8 @@ public class SocialTopicInBox extends GenericResource {
     public static final String Mode_RESPONSE="response";
     public static final String Mode_PREVIEW = "preview";
     public static final String Mode_ShowUsrHistory="showUsrHistory";
+    public static final String Mode_RESPONSES="responses";
+    public static final String Mode_SHOWPOSTOUT="showPostOut";
     
     @Override
     public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
@@ -85,6 +87,10 @@ public class SocialTopicInBox extends GenericResource {
             doCreatePost(request, response, paramRequest);
         }else if(Mode_showTags.equals(mode)){
             doShowTags(request, response, paramRequest);
+        }else if(Mode_RESPONSES.equals(mode)){
+            doShowResponses(request, response, paramRequest);
+        }else if(Mode_SHOWPOSTOUT.equals(mode)){ 
+            doShowPostOut(request, response, paramRequest);
         }else {
             super.processRequest(request, response, paramRequest);
         }
@@ -252,7 +258,7 @@ public class SocialTopicInBox extends GenericResource {
         out.println("</fieldset>");
         
         out.println("<fieldset>");
-        out.println("<table width=\"98%\" >");
+        out.println("<table width=\"100%\" >");
         out.println("<thead>");
         
         out.println("<th>");
@@ -630,6 +636,14 @@ public class SocialTopicInBox extends GenericResource {
                 SWBResourceURL urlresponse=paramRequest.getRenderUrl().setMode(Mode_RESPONSE).setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("postUri", postIn.getURI());  
                 out.println("<a href=\"#\" title=\"" + paramRequest.getLocaleString("respond") + "\" onclick=\"showDialog('" + urlresponse + "','" + paramRequest.getLocaleString("respond") 
                         + "'); return false;\">R</a>");
+                
+                //Respuestas que posee un PostIn
+                if(postIn.listpostOutResponseInvs().hasNext())
+                {
+                    SWBResourceURL urlresponses=paramRequest.getRenderUrl().setMode(Mode_RESPONSES).setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("postUri", postIn.getURI());  
+                    out.println("<a href=\"#\" title=\"" + paramRequest.getLocaleString("answers") + "\" onclick=\"showDialog('" + urlresponses + "','" + paramRequest.getLocaleString("answers") 
+                            + "'); return false;\">A</a>");
+                }
 
                 out.println("</td>");
 
@@ -817,6 +831,42 @@ public class SocialTopicInBox extends GenericResource {
             try {
                 SemanticObject semObject = SemanticObject.createSemanticObject(request.getParameter("postUri"));
                 request.setAttribute("postUri", semObject);
+                request.setAttribute("paramRequest", paramRequest);
+                dis.include(request, response);
+            } catch (Exception e) {
+                log.error(e);
+            }
+        }
+    }
+    
+    
+    private void doShowResponses(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest)
+    {
+        final String path = SWBPlatform.getContextPath() + "/work/models/" + paramRequest.getWebPage().getWebSiteId() + "/jsp/review/showpostInResponses.jsp";
+        RequestDispatcher dis = request.getRequestDispatcher(path);
+        if (dis != null) {
+            try {
+                System.out.println("doShowResponses/postUri:"+request.getParameter("postUri"));
+                SemanticObject semObject = SemanticObject.createSemanticObject(request.getParameter("postUri"));
+                System.out.println("doShowResponses/semObject:"+semObject);
+                request.setAttribute("postUri", semObject);
+                request.setAttribute("paramRequest", paramRequest);
+                dis.include(request, response);
+            } catch (Exception e) {
+                log.error(e);
+            }
+        }
+    }
+            
+    
+    private void doShowPostOut(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest)
+    {
+        final String path = SWBPlatform.getContextPath() + "/work/models/" + paramRequest.getWebPage().getWebSiteId() + "/jsp/review/showPostOut.jsp";
+        RequestDispatcher dis = request.getRequestDispatcher(path);
+        if (dis != null) {
+            try {
+                SemanticObject semObject = SemanticObject.createSemanticObject(request.getParameter("postOut"));
+                request.setAttribute("postOut", semObject);
                 request.setAttribute("paramRequest", paramRequest);
                 dis.include(request, response);
             } catch (Exception e) {

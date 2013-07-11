@@ -20,6 +20,7 @@ import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Resource;
 import org.semanticwb.model.SWBComparator;
+import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.portal.api.GenericResource;
@@ -71,6 +72,8 @@ public class StreamInBox extends GenericResource {
     public static final String Mode_RECLASSBYSENTIMENT="revalue";
     public static final String Mode_RESPONSE="response";
     public static final String Mode_ShowUsrHistory="showUsrHistory";
+    public static final String Mode_RESPONSES="responses";
+    public static final String Mode_SHOWPOSTOUT="showPostOut";
     
     @Override
     public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
@@ -91,6 +94,10 @@ public class StreamInBox extends GenericResource {
             doRevalue(request, response, paramRequest);
         }else if(Mode_showTags.equals(mode)){
             doShowTags(request, response, paramRequest);
+        }else if(Mode_RESPONSES.equals(mode)){
+            doShowResponses(request, response, paramRequest);
+        }else if(Mode_SHOWPOSTOUT.equals(mode)){ 
+            doShowPostOut(request, response, paramRequest);
         }else{
             super.processRequest(request, response, paramRequest);
         }
@@ -631,6 +638,14 @@ public class StreamInBox extends GenericResource {
                     out.println("<a href=\"#\" title=\"" + paramRequest.getLocaleString("respond") + "\" onclick=\"showDialog('" + urlresponse + "','" + paramRequest.getLocaleString("respond") 
                             + "'); return false;\">R</a>");
                 }
+                
+                //Respuestas que posee un PostIn
+                if(postIn.listpostOutResponseInvs().hasNext())
+                {
+                    SWBResourceURL urlresponses=paramRequest.getRenderUrl().setMode(Mode_RESPONSES).setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("postUri", postIn.getURI());  
+                    out.println("<a href=\"#\" title=\"" + paramRequest.getLocaleString("answers") + "\" onclick=\"showDialog('" + urlresponses + "','" + paramRequest.getLocaleString("answers") 
+                            + "'); return false;\">A</a>");
+                }
 
                 out.println("</td>");
 
@@ -868,6 +883,41 @@ public class StreamInBox extends GenericResource {
         }
     }
     
+    private void doShowResponses(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest)
+    {
+        final String path = SWBPlatform.getContextPath() + "/work/models/" + paramRequest.getWebPage().getWebSiteId() + "/jsp/review/showpostInResponses.jsp";
+        RequestDispatcher dis = request.getRequestDispatcher(path);
+        if (dis != null) {
+            try {
+                System.out.println("doShowResponses/postUri:"+request.getParameter("postUri"));
+                SemanticObject semObject = SemanticObject.createSemanticObject(request.getParameter("postUri"));
+                System.out.println("doShowResponses/semObject:"+semObject);
+                request.setAttribute("postUri", semObject);
+                request.setAttribute("paramRequest", paramRequest);
+                dis.include(request, response);
+            } catch (Exception e) {
+                log.error(e);
+            }
+        }
+    }
+            
+    
+    private void doShowPostOut(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest)
+    {
+        final String path = SWBPlatform.getContextPath() + "/work/models/" + paramRequest.getWebPage().getWebSiteId() + "/jsp/review/showPostOut.jsp";
+        RequestDispatcher dis = request.getRequestDispatcher(path);
+        if (dis != null) {
+            try {
+                SemanticObject semObject = SemanticObject.createSemanticObject(request.getParameter("postOut"));
+                request.setAttribute("postOut", semObject);
+                request.setAttribute("paramRequest", paramRequest);
+                dis.include(request, response);
+            } catch (Exception e) {
+                log.error(e);
+            }
+        }
+    }
+    
     private void doShowUserHistory(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest)
     {
         final String path = SWBPlatform.getContextPath() + "/work/models/" + paramRequest.getWebPage().getWebSiteId() + "/jsp/review/userHistory.jsp";
@@ -944,7 +994,6 @@ public class StreamInBox extends GenericResource {
             }
         }else if (action.equals("reValue"))  
         {
-            WebSite wsite = base.getWebSite();
             SemanticObject semObj=SemanticObject.getSemanticObject(request.getParameter("postUri"));
             PostIn post=(PostIn)semObj.createGenericInstance();
             Stream stOld=post.getPostInStream();
@@ -965,13 +1014,16 @@ public class StreamInBox extends GenericResource {
                     //System.out.println("Entra a processA/reValue-4.3--J:"+phrase);
                     phrase = SWBSocialUtil.Classifier.phonematize(phrase);
                     //System.out.println("Entra a processA/reValue-4.4:"+phrase);
-                    slp = SentimentalLearningPhrase.getSentimentalLearningPhrasebyPhrase(phrase, wsite);
+                    //Se Buscan y se crean las frases de aprendizaje del sistema en el sitio de Admin, para que el sistema aprenda independientemente del
+                    //sitio, así también si se elimina un sitio, las palabras aprendidas por el sistema para el clasificador, aun siguen sirviendo para los demas
+                    //sitios.
+                    slp = SentimentalLearningPhrase.getSentimentalLearningPhrasebyPhrase(phrase, SWBContext.getAdminWebSite());    
                     if (slp == null) {
                         //System.out.println("Entra a processA/reValue-5:"+phrase);
                         phrase = SWBSocialUtil.Classifier.normalizer(phrase).getNormalizedPhrase();
                         phrase = SWBSocialUtil.Classifier.getRootPhrase(phrase);
                         phrase = SWBSocialUtil.Classifier.phonematize(phrase);
-                        slp = SentimentalLearningPhrase.ClassMgr.createSentimentalLearningPhrase(wsite);
+                        slp = SentimentalLearningPhrase.ClassMgr.createSentimentalLearningPhrase(SWBContext.getAdminWebSite());
                         //System.out.println("Entra a processA/reValue-5-1:"+phrase);
                         slp.setPhrase(phrase);
                         slp.setSentimentType(nv);
