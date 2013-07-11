@@ -946,7 +946,7 @@ public class SVGModeler extends GenericAdmResource {
             svg = svg.replace("<g id=\"dataStore\" bclass=\"itemaware\" oclass=\"itemaware_o\" transform=\"translate(-12,-10)\">", "<g id=\"dataStore\" bclass=\"itemaware\" oclass=\"itemaware_o\" transform=\"translate(-12,-10)\" class=\"itemAware\">");
 
             response.setContentType("image/svg+xml");
-            outs.write(svg.getBytes("UTF-8"));
+            outs.write(svg.getBytes());
         } else if ("swp".equalsIgnoreCase(format)) {
             response.setContentType("application/json");
             String json = "";
