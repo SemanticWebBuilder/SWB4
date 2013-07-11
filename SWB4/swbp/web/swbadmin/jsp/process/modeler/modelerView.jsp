@@ -3,8 +3,10 @@
     Created on : 7/05/2013, 12:09:42 PM
     Author     : Hasdai Pacheco <ebenezer.sanchez@infotec.com.mx>
 --%>
+<%@page import="org.semanticwb.SWBPlatform"%>
 <%@page import="org.semanticwb.model.SWBContext"%>
 <%@page import="org.semanticwb.process.resources.SVGModeler"%>
+<%@page import="org.semanticwb.process.model.Process"%>
 <%@page import="org.semanticwb.portal.api.SWBResourceURL"%>
 <%@page import="org.semanticwb.portal.api.SWBParamRequest"%>
 <%@page contentType="text/html"%>
@@ -233,6 +235,13 @@ if (!isViewMode) {
             </div>
         </div>
     <%
+    }
+
+    Process p = (Process)SWBPlatform.getSemanticMgr().getOntology().getGenericObject(suri);
+    if (isViewMode && p != null) {
+        %>
+        <h1><%=p.getTitle()%>&nbsp;<a href="" onclick="window.history.go(-1); return false;"><img alt="volver" src="/work/models/<%=paramRequest.getWebPage().getWebSiteId()%>/css/images/icono-atras.png"/></a></h1>
+        <%
     }
     %>
     <div style="margin-left:49px;">
