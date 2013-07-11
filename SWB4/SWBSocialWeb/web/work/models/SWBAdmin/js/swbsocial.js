@@ -206,3 +206,53 @@
         img.style.left =result.targetleft + 'px';
         img.style.top = result.targettop + 'px';
     }
+    
+      function changeClassT(objUri, sourceCall) {
+          var divId = objUri +  sourceCall +'Txt';
+          console.log('DIV:' + divId);
+       if(document.getElementById(divId).className == 'sel-txt'){
+            document.getElementById(objUri +  sourceCall +'Txt').className ='sel-txt2';
+            document.getElementById(objUri +  sourceCall +'Img').className ='sel-img';
+            document.getElementById(objUri +  sourceCall +'Video').className ='sel-vid';
+        }
+    }
+     function changeClassI(objUri,sourceCall) { 
+       if(document.getElementById(objUri +  sourceCall +'Img').className =='sel-img'){
+            document.getElementById(objUri +  sourceCall +'Img').className ='sel-img2';
+            document.getElementById(objUri +  sourceCall +'Txt').className ='sel-txt';
+            document.getElementById(objUri +  sourceCall +'Video').className ='sel-vid';
+        }
+     }
+     function changeClassV(objUri,sourceCall) { 
+       if(document.getElementById(objUri +  sourceCall +'Video').className =='sel-vid'){
+            document.getElementById(objUri +  sourceCall +'Video').className ='sel-vid2';
+            document.getElementById(objUri +  sourceCall +'Txt').className ='sel-txt';
+            document.getElementById(objUri +  sourceCall +'Img').className ='sel-img';
+        }
+    }
+    function showListCategory(objUri,sourceCall) {
+                var frm = document.getElementById(objUri+sourceCall+'frmUploadVideo');
+                var div = document.getElementById(objUri+sourceCall+'divCategory');
+
+                for (i = 0; i < frm.checkYT.length; ++i) {
+                    if (frm.checkYT[i].checked)
+                    {
+                        div.removeAttribute('style');
+                        break;
+                    }
+                    if (frm.checkYT[i].checked == false)
+                    {
+                        div.setAttribute('style', 'display:none;');
+                    }
+                }
+            }
+     function validateChecks(){
+                if(document.getElementById('checkYT').checked == false && 
+                        document.getElementById('checkRedes').checked == false){
+                    alert("Debes seleccionar al menos una red");
+                    return false;
+                }
+                else{
+                    return true;
+                }
+            }
