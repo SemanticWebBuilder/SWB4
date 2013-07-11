@@ -81,9 +81,10 @@ public class CreateGenericPost extends CreatePost {
         }
      }
      
-     public void doCreateGenericPost(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {        
+     public void doCreateGenericPost(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {    
         RequestDispatcher rd = request.getRequestDispatcher(SWBPlatform.getContextPath() +"/work/models/" + paramRequest.getWebPage().getWebSiteId() +"/jsp/post/createPost.jsp");
         request.setAttribute("suri", request.getParameter("suri"));
+        request.setAttribute("source", "RedSocial");
         request.setAttribute("paramRequest", paramRequest);
         try {
             rd.include(request, response);
