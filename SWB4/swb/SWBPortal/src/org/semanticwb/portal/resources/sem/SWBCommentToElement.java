@@ -275,15 +275,17 @@ public class SWBCommentToElement extends org.semanticwb.portal.resources.sem.bas
         //out.println("alert('frm='+frm+', name='+frm.name+', email='+frm.email+', cmmt='+frm.comment);");
         out.println("  if(!frm) {");
         out.println("    return false;");
-        out.println("  } ");        
-        out.println("  if(isEmpty(frm.name.value)) {");
-        out.println("    alert('Al parecer falta tu nombre completo.');");
-        out.println("    return false;");
-        out.println("  }");        
-        out.println("  if(!isValidEmail(frm.email.value)) {");
-        out.println("    alert('Tu dirección de correo es incorrecta, revísala e intentalo de nuevo.');");
-        out.println("    return false;");
-        out.println("  }");        
+        out.println("  } ");
+        if(!user.isSigned()) {
+            out.println("  if(isEmpty(frm.name.value)) {");
+            out.println("    alert('Al parecer falta tu nombre completo.');");
+            out.println("    return false;");
+            out.println("  }");        
+            out.println("  if(!isValidEmail(frm.email.value)) {");
+            out.println("    alert('Tu dirección de correo es incorrecta, revísala e intentalo de nuevo.');");
+            out.println("    return false;");
+            out.println("  }");
+        }
         out.println("  if(isEmpty(frm.comment.value)) {");
         out.println("    alert('Falta tu comentario.');");
         out.println("    return false;");
