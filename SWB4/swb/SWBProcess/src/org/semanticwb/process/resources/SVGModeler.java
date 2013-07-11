@@ -137,6 +137,8 @@ public class SVGModeler extends GenericAdmResource {
         RequestDispatcher rd = request.getRequestDispatcher(JSP);
         Resource base = getResourceBase();
         boolean isViewMode = false;
+        
+        response.setContentType("text/html; charset=UTF-8");
 
         if (base.getAttribute("viewMode") != null && base.getAttribute("viewMode").equals("true")) {
             isViewMode = true;
