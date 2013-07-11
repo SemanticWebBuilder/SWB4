@@ -32,8 +32,8 @@
 </style>
 
 <div class="swbform">
-    <form name="formSites" id="formSites">
-        <div id="pub-detalle">
+    <div id="pub-detalle">
+    <form name="formSites" id="formSites">        
     <table width="50%" border="0px">            
        <tr>
            <td colspan="3" style="text-align: center;" class="titulo">Seleccione una marca:</td>        
@@ -59,9 +59,10 @@
             </td>
             
        </tr>
-       </form>
+       
     </table>
-        </div>
+    </form>
+    </div>
 </div>
 <div id="socialTopics" dojoType="dijit.layout.ContentPane" style="width:100%; height:100%;">
 </div>
