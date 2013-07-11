@@ -301,14 +301,14 @@ if (paramRequest.getCallMethod() == SWBParamRequest.Call_STRATEGY) {
                                                 <td class="tban-accion">
                                                     <%UserTask utask = (UserTask) instance.getFlowNodeType();
                                                     if (instance.getStatus() == ProcessInstance.STATUS_PROCESSING) {%>
-                                                        <a class="acc-atender" href="<%=utask.getTaskWebPage().getUrl()%>?suri=<%=instance.getEncodedURI()%>">Atender</a>
+                                                        <a title="Atender" class="acc-atender" href="<%=utask.getTaskWebPage().getUrl()%>?suri=<%=instance.getEncodedURI()%>">Atender</a>
                                                         <%if (allowForward && instance.getAssignedto() != null) {
                                                             SWBResourceURL forward = paramRequest.getRenderUrl().setCallMethod(SWBResourceURL.Call_DIRECT).setMode(UserTaskInboxResource.MODE_FWD);
-                                                            %><a class="acc-delegar" onclick="showDialog('<%=forward%>?suri=<%=instance.getEncodedURI()%>', 'Reasignar tarea'); return false;" href="">Reasignar</a><%
+                                                            %><a title="Reasignar" class="acc-delegar" onclick="showDialog('<%=forward%>?suri=<%=instance.getEncodedURI()%>', 'Reasignar tarea'); return false;" href="">Reasignar</a><%
                                                         }
                                                     }
                                                     if (statusWp != null) {%>
-                                                        <a class="acc-mapa" href="<%=statusWp.getUrl()%>?suri=<%=instance.getProcessInstance().getProcessType().getEncodedURI()%>">Ver mapa</a><%
+                                                        <a title="Ver mapa" class="acc-mapa" href="<%=statusWp.getUrl()%>?suri=<%=instance.getProcessInstance().getProcessType().getEncodedURI()%>">Ver mapa</a><%
                                                     }%>
                                                 </td>
                                                 <%
@@ -322,15 +322,17 @@ if (paramRequest.getCallMethod() == SWBParamRequest.Call_STRATEGY) {
                                                 UserTask utask = (UserTask)instance.getFlowNodeType();
                                                 int delay = utask.getNotificationTime();
                                                 String delayed = "/work/models/"+paramRequest.getWebPage().getWebSiteId()+"/css/images/icono-retraso1.png";
-                                                
+                                                String delayTitle = "A tiempo";
+                                                        
                                                 if (delay > 0) {
                                                     long today = System.currentTimeMillis();
                                                     long cr = instance.getCreated().getTime();
                                                     if (today - cr > (1000*60*delay)) {
                                                         delayed = "/work/models/"+paramRequest.getWebPage().getWebSiteId()+"/css/images/icono-retraso2.png";
+                                                        delayTitle = "Retrasada";
                                                     }
                                                 }
-                                                %><td class="tban-inicia"><img src="<%=delayed%>"/></td><%
+                                                %><td class="tban-inicia"><img title="<%=delayTitle%>" alt="<%=delayTitle%>" src="<%=delayed%>"/></td><%
                                             }
                                         }
                                     }
