@@ -475,6 +475,14 @@
       </swb:Interface>
     </rdfs:subClassOf>
     <rdfs:subClassOf>
+      <swb:Interface rdf:ID="FixedMeasurable">
+        <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >Interface que permite agregar sólo una medida a un objeto</rdfs:comment>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBInterface"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Interface>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
       <owl:Restriction>
         <owl:onProperty rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#hasWebPageChild"/>
         <owl:allValuesFrom>
@@ -606,6 +614,7 @@
   <owl:Class rdf:about="#Indicator">
     <swb:classCodePackage rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >org.semanticwb.bsc.element</swb:classCodePackage>
+    <rdfs:subClassOf rdf:resource="#FixedMeasurable"/>
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Sortable"/>
     <rdfs:subClassOf rdf:resource="#Status"/>
     <rdfs:subClassOf>
@@ -840,6 +849,12 @@
     <rdfs:domain rdf:resource="#Machinable"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="periodicity">
+    <rdfs:domain rdf:resource="#FixedMeasurable"/>
+    <rdfs:range rdf:resource="#MeasurementFrequency"/>
+    <rdfs:label xml:lang="es">Periodicidad</rdfs:label>
+    <rdfs:label xml:lang="en">Periodicity</rdfs:label>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Persiste la periodicidad (frecuencia de medida) de un indicador</rdfs:comment>
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_periodicity">
         <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#selectOneModelWithBlank"/>
@@ -847,12 +862,6 @@
         >35</swb:index>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
-    <rdfs:range rdf:resource="#MeasurementFrequency"/>
-    <rdfs:label xml:lang="es">Periodicidad</rdfs:label>
-    <rdfs:label xml:lang="en">Periodicity</rdfs:label>
-    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >Persiste la periodicidad (frecuencia de medida) de un indicador</rdfs:comment>
-    <rdfs:domain rdf:resource="#Indicator"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="hasPeriod">
     <rdfs:domain rdf:resource="#Seasonable"/>
