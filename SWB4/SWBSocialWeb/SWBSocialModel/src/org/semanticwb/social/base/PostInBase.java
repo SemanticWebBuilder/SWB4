@@ -4,7 +4,7 @@ package org.semanticwb.social.base;
    /**
    * Clase que comprende todos los tipos de Post de entrada (Povientes del Listener)que pueden ir siendo creados en la herramienta. 
    */
-public abstract class PostInBase extends org.semanticwb.social.Post implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Tagable,org.semanticwb.social.PostDataable,org.semanticwb.social.PostTextable,org.semanticwb.model.Traceable
+public abstract class PostInBase extends org.semanticwb.social.Post implements org.semanticwb.model.Traceable,org.semanticwb.social.PostTextable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Tagable,org.semanticwb.social.PostDataable
 {
    /**
    * Clase a Cambiar despues por "Relacional".Clase en la cual se almacenan los usuarios que escriben los PostIn que llegan. No se puso como identificador de las instancias de esta clase el id que maneja el usuario en la red social, ya que un identificador de una red social, puede ser el mismo para otra red social, pero obviamnete para otro usuario.Es por ello que se puso como AutoGenID esta clase y por ello se maneja por separado el id de un usuario en una determinada red social, esto en la propiedad snu_id.
@@ -18,10 +18,6 @@ public abstract class PostInBase extends org.semanticwb.social.Post implements o
    * Identificador del mensaje que llega en la red social.
    */
     public static final org.semanticwb.platform.SemanticProperty social_socialNetMsgId=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#socialNetMsgId");
-   /**
-   * Propiedad con valor entero que representa el tipo de Sentimientos que expresa el Post, estos se estan definiendo de esta manera: 0) Neutro 1) Positivo 2)Negativo, estos valores pueden ser mas y permanecer en un objeto tipo colección en lo futuro.
-   */
-    public static final org.semanticwb.platform.SemanticProperty social_postSentimentalType=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#postSentimentalType");
    /**
    * Clase que engloba a las diferentes clases que representan cada una de las redes sociales.
    */
@@ -39,14 +35,6 @@ public abstract class PostInBase extends org.semanticwb.social.Post implements o
    */
     public static final org.semanticwb.platform.SemanticProperty social_postSentimentalEmoticonType=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#postSentimentalEmoticonType");
    /**
-   * Valor que es resultado del algoritmo de intensidad, mediante este valor se puede determinar si la intencidad es alta, media o baja
-   */
-    public static final org.semanticwb.platform.SemanticProperty social_postIntensityValue=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#postIntensityValue");
-   /**
-   * Valor que resulta del algoritmo de analisis sentimental, aqui se puede ver el porque se pone cierto valor a la propiedad PostSentimentalType
-   */
-    public static final org.semanticwb.platform.SemanticProperty social_postSentimentalValue=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#postSentimentalValue");
-   /**
    * Veces que ha sido re-enviado o compartido el post
    */
     public static final org.semanticwb.platform.SemanticProperty social_postShared=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#postShared");
@@ -62,10 +50,6 @@ public abstract class PostInBase extends org.semanticwb.social.Post implements o
    * Dispositivo desde el que se ha enviado el post
    */
     public static final org.semanticwb.platform.SemanticProperty social_postSource=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#postSource");
-   /**
-   * Tipo de Intensidad. 2=Alta;1=Media;0=Baja;
-   */
-    public static final org.semanticwb.platform.SemanticProperty social_postIntesityType=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#postIntesityType");
    /**
    * Clase que contendra los streams que configurados para cada usuario
    */
@@ -378,24 +362,6 @@ public abstract class PostInBase extends org.semanticwb.social.Post implements o
     {
         getSemanticObject().setProperty(social_socialNetMsgId, value);
     }
-
-/**
-* Gets the PostSentimentalType property
-* @return int with the PostSentimentalType
-*/
-    public int getPostSentimentalType()
-    {
-        return getSemanticObject().getIntProperty(social_postSentimentalType);
-    }
-
-/**
-* Sets the PostSentimentalType property
-* @param value long with the PostSentimentalType
-*/
-    public void setPostSentimentalType(int value)
-    {
-        getSemanticObject().setIntProperty(social_postSentimentalType, value);
-    }
    /**
    * Sets the value for the property PostInSocialNetwork
    * @param value PostInSocialNetwork to set
@@ -472,42 +438,6 @@ public abstract class PostInBase extends org.semanticwb.social.Post implements o
     }
 
 /**
-* Gets the PostIntensityValue property
-* @return float with the PostIntensityValue
-*/
-    public float getPostIntensityValue()
-    {
-        return getSemanticObject().getFloatProperty(social_postIntensityValue);
-    }
-
-/**
-* Sets the PostIntensityValue property
-* @param value long with the PostIntensityValue
-*/
-    public void setPostIntensityValue(float value)
-    {
-        getSemanticObject().setFloatProperty(social_postIntensityValue, value);
-    }
-
-/**
-* Gets the PostSentimentalValue property
-* @return float with the PostSentimentalValue
-*/
-    public float getPostSentimentalValue()
-    {
-        return getSemanticObject().getFloatProperty(social_postSentimentalValue);
-    }
-
-/**
-* Sets the PostSentimentalValue property
-* @param value long with the PostSentimentalValue
-*/
-    public void setPostSentimentalValue(float value)
-    {
-        getSemanticObject().setFloatProperty(social_postSentimentalValue, value);
-    }
-
-/**
 * Gets the PostShared property
 * @return int with the PostShared
 */
@@ -580,24 +510,6 @@ public abstract class PostInBase extends org.semanticwb.social.Post implements o
     public void setPostSource(String value)
     {
         getSemanticObject().setProperty(social_postSource, value);
-    }
-
-/**
-* Gets the PostIntesityType property
-* @return int with the PostIntesityType
-*/
-    public int getPostIntesityType()
-    {
-        return getSemanticObject().getIntProperty(social_postIntesityType);
-    }
-
-/**
-* Sets the PostIntesityType property
-* @param value long with the PostIntesityType
-*/
-    public void setPostIntesityType(int value)
-    {
-        getSemanticObject().setIntProperty(social_postIntesityType, value);
     }
    /**
    * Sets the value for the property PostInStream

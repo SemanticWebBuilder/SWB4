@@ -4,12 +4,28 @@ package org.semanticwb.social.base;
    /**
    * Clase a Cambiar despues por "Relacional", esta y todas sus hijas. Clase que comprende todos los tipos de Post que pueden ir siendo creados en la herramienta.. 
    */
-public abstract class PostBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Tagable,org.semanticwb.social.PostDataable,org.semanticwb.social.PostTextable,org.semanticwb.model.Traceable
+public abstract class PostBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Traceable,org.semanticwb.social.PostTextable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Tagable,org.semanticwb.social.PostDataable
 {
+   /**
+   * Propiedad con valor entero que representa el tipo de Sentimientos que expresa el Post, estos se estan definiendo de esta manera: 0) Neutro 1) Positivo 2)Negativo, estos valores pueden ser mas y permanecer en un objeto tipo colección en lo futuro.
+   */
+    public static final org.semanticwb.platform.SemanticProperty social_postSentimentalType=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#postSentimentalType");
+   /**
+   * Valor que es resultado del algoritmo de intensidad, mediante este valor se puede determinar si la intencidad es alta, media o baja
+   */
+    public static final org.semanticwb.platform.SemanticProperty social_postIntensityValue=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#postIntensityValue");
+   /**
+   * Valor que resulta del algoritmo de analisis sentimental, aqui se puede ver el porque se pone cierto valor a la propiedad PostSentimentalType
+   */
+    public static final org.semanticwb.platform.SemanticProperty social_postSentimentalValue=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#postSentimentalValue");
    /**
    * Indica si un mensaje es prioritario o no. Esta propiedad aplica tanto si es un mensaje de entrada (PostIn) o de salida (PostOut).
    */
     public static final org.semanticwb.platform.SemanticProperty social_isPrioritary=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#isPrioritary");
+   /**
+   * Tipo de Intensidad. 2=Alta;1=Media;0=Baja;
+   */
+    public static final org.semanticwb.platform.SemanticProperty social_postIntesityType=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#postIntesityType");
    /**
    * Catalogo de temas de un modelo (Marca)
    */
@@ -217,6 +233,24 @@ public abstract class PostBase extends org.semanticwb.model.SWBClass implements 
     }
 
 /**
+* Gets the PostSentimentalType property
+* @return int with the PostSentimentalType
+*/
+    public int getPostSentimentalType()
+    {
+        return getSemanticObject().getIntProperty(social_postSentimentalType);
+    }
+
+/**
+* Sets the PostSentimentalType property
+* @param value long with the PostSentimentalType
+*/
+    public void setPostSentimentalType(int value)
+    {
+        getSemanticObject().setIntProperty(social_postSentimentalType, value);
+    }
+
+/**
 * Gets the Updated property
 * @return java.util.Date with the Updated
 */
@@ -283,6 +317,42 @@ public abstract class PostBase extends org.semanticwb.model.SWBClass implements 
     public void setDescription(String description, String lang)
     {
         getSemanticObject().setProperty(swb_description, description, lang);
+    }
+
+/**
+* Gets the PostIntensityValue property
+* @return float with the PostIntensityValue
+*/
+    public float getPostIntensityValue()
+    {
+        return getSemanticObject().getFloatProperty(social_postIntensityValue);
+    }
+
+/**
+* Sets the PostIntensityValue property
+* @param value long with the PostIntensityValue
+*/
+    public void setPostIntensityValue(float value)
+    {
+        getSemanticObject().setFloatProperty(social_postIntensityValue, value);
+    }
+
+/**
+* Gets the PostSentimentalValue property
+* @return float with the PostSentimentalValue
+*/
+    public float getPostSentimentalValue()
+    {
+        return getSemanticObject().getFloatProperty(social_postSentimentalValue);
+    }
+
+/**
+* Sets the PostSentimentalValue property
+* @param value long with the PostSentimentalValue
+*/
+    public void setPostSentimentalValue(float value)
+    {
+        getSemanticObject().setFloatProperty(social_postSentimentalValue, value);
     }
 
 /**
@@ -405,6 +475,24 @@ public abstract class PostBase extends org.semanticwb.model.SWBClass implements 
     public void setTags(String tags, String lang)
     {
         getSemanticObject().setProperty(swb_tags, tags, lang);
+    }
+
+/**
+* Gets the PostIntesityType property
+* @return int with the PostIntesityType
+*/
+    public int getPostIntesityType()
+    {
+        return getSemanticObject().getIntProperty(social_postIntesityType);
+    }
+
+/**
+* Sets the PostIntesityType property
+* @param value long with the PostIntesityType
+*/
+    public void setPostIntesityType(int value)
+    {
+        getSemanticObject().setIntProperty(social_postIntesityType, value);
     }
 
 /**

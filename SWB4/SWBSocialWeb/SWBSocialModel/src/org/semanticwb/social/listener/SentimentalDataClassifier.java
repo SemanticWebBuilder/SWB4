@@ -9,6 +9,7 @@ import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.StringTokenizer;
 import org.semanticwb.Logger;
@@ -24,10 +25,8 @@ import org.semanticwb.social.MarkMsgAsPrioritary;
 import org.semanticwb.social.MessageIn;
 import org.semanticwb.social.PhotoIn;
 import org.semanticwb.social.PostIn;
-import org.semanticwb.social.Prepositions;
 import org.semanticwb.social.SendEmail;
 import org.semanticwb.social.SendPost;
-import org.semanticwb.social.SentimentWords;
 import org.semanticwb.social.SentimentalLearningPhrase;
 import org.semanticwb.social.SocialAdmin;
 import org.semanticwb.social.SocialNetwork;
@@ -39,7 +38,6 @@ import org.semanticwb.social.Stream;
 import org.semanticwb.social.VideoIn;
 import org.semanticwb.social.YouTubeCategory;
 import org.semanticwb.social.Youtube;
-import org.semanticwb.social.util.NormalizerCharDuplicate;
 import org.semanticwb.social.util.SWBSocialRuleMgr;
 import org.semanticwb.social.util.SWBSocialUtil;
 
@@ -60,7 +58,7 @@ public class SentimentalDataClassifier {
 
     //PostIn post=null;
     String externalString2Clasify=null;
-    String externalString2Clasify_TMP;
+    //String externalString2Clasify_TMP;
     SWBModel model=null;
     float sentimentalTweetValue=0;
     float IntensiveTweetValue=0;
@@ -120,27 +118,21 @@ public class SentimentalDataClassifier {
     
     private void initAnalysis()
     {
+        
         //Normalizo
-        //System.out.println("ANALISIS-0:"+externalString2Clasify);
-        externalString2Clasify_TMP=externalString2Clasify;
+        String externalString2Clasify_TMP=externalString2Clasify;
+        /*
         externalString2Clasify=SWBSocialUtil.Classifier.normalizer(externalString2Clasify).getNormalizedPhrase();
         
-        //System.out.println("ANALISIS-1:"+externalString2Clasify);
         //Se cambia toda la frase a su modo raiz
         externalString2Clasify=SWBSocialUtil.Classifier.getRootWord(externalString2Clasify);
         
-        //System.out.println("ANALISIS-2:"+externalString2Clasify);
-
         //Fonetizo
         externalString2Clasify=SWBSocialUtil.Classifier.phonematize(externalString2Clasify);
         
-        //System.out.println("ANALISIS-3:"+externalString2Clasify);
-
         //Busco frases en objeto de aprendizaje (SentimentalLearningPhrase)
-        
         findInLearnigPhrases();
-        //System.out.println("ANALISIS-4:sentimentalTweetValue:"+sentimentalTweetValue+", IntensiveTweetValue:+"+IntensiveTweetValue+", wordsCont:"+wordsCont);
-
+        
         //Elimino Caracteres especiales (acentuados)
         externalString2Clasify=SWBSocialUtil.Strings.replaceSpecialCharacters(externalString2Clasify);
 
@@ -148,60 +140,41 @@ public class SentimentalDataClassifier {
         
         externalString2Clasify=SWBSocialUtil.Strings.removePuntualSigns(externalString2Clasify, socialAdminSite);
         
-        //System.out.println("ANALISIS-5:sentimentalTweetValue:"+externalString2Clasify);
-        
         ArrayList<String> aListWords=new ArrayList();
         StringTokenizer st = new StringTokenizer(externalString2Clasify);
         while (st.hasMoreTokens())
         {
             String word2Find=st.nextToken();
-            //System.out.println("Palabra monitorear:"+word2Find);
-            
             if(Prepositions.ClassMgr.getPrepositions(word2Find, socialAdminSite)!=null) //Elimino preposiciones
             {
                 continue;
             }
 
             String word2FindTmp=word2Find;
-            //System.out.println("word2Find:"+word2Find);
             NormalizerCharDuplicate normalizerCharDuplicate=SWBSocialUtil.Classifier.normalizer(word2Find);
             word2Find=normalizerCharDuplicate.getNormalizedPhrase();
             aListWords.add(word2Find);
-            //System.out.println("word Normalizada:"+word2Find);
-            //Aplicar snowball a la palabra
-            //word2Find=SWBSocialUtil.Classifier.getRootWord(word2Find);
-            //Se fonematiza la palabra
-            //word2Find=SWBSocialUtil.Classifier.phonematize(word2Find);
-            //System.out.println("word Fonematizada:"+word2Find);
-            //SentimentWords sentimentalWordObj=SentimentWords.getSentimentalWordByWord(model, word2Find);
+            
             SentimentWords sentimentalWordObj=SentimentWords.ClassMgr.getSentimentWords(word2Find, socialAdminSite);
             if(sentimentalWordObj!=null) //La palabra en cuestion ha sido encontrada en la BD
             {
-                //System.out.println("Palabra Encontrada:"+word2Find);
                 wordsCont++;
                 IntensiveTweetValue+=sentimentalWordObj.getIntensityValue();
                 //Veo si la palabra cuenta con mas de dos caracteres(Normalmente el inicial de la palabra y talvez otro que
                 //hayan escrito por equivocación) en mayusculas
                 //De ser así, se incrementaría el valor para la intensidad
-                
                 if(SWBSocialUtil.Strings.isIntensiveWordByUpperCase(word2FindTmp, 3))
                 {
-                    //System.out.println("VENIA PALABRA CON MAYUSCULAS:"+word2Find);
                     IntensiveTweetValue+=1;
                 }
                 //Veo si en la palabra se repiten mas de 2 caracteres para los que se pueden repetir hasta 2 veces (Arrar Doubles)
                 // y mas de 1 cuando no estan dichos caracteres en docho array, si es así entonces se incrementa la intensidad
-                
                 if(normalizerCharDuplicate.isCharDuplicate()){
-                    //System.out.println("VENIA PALABRA CON CARACTERES REPETIDOS:"+word2Find);
                     IntensiveTweetValue+=1;
                 }
                 sentimentalTweetValue+=sentimentalWordObj.getSentimentalValue();
             }
         }
-        
-        //System.out.println("ANALISIS-6 sentimentalTweetValue Final:"+sentimentalTweetValue+", wordsCont:"+wordsCont+",intesitive Final:"+IntensiveTweetValue);
-        
         
         //Empieza manejo de filtros
         
@@ -212,19 +185,44 @@ public class SentimentalDataClassifier {
         if(sentimentalTweetValue>0) //Se revisa de acuerdo al promedio de sentimentalTweetValue/wordsCont, que valor sentimental posee el tweet
         {
             promSentimentalValue=sentimentalTweetValue/wordsCont;
-            //post.setPostSentimentalValue(prom);
-            //System.out.println("prom final:"+prom);
             if(promSentimentalValue>=4.5) //Si el promedio es mayor de 4.5 (Segun Octavio) es un tweet positivo
             {
                 sentimentalTweetValueType=1;
             }else if(promSentimentalValue<4.5)
             {
-                //System.out.println("Se guarda Post Negativo:"+post.getId()+", valor promedio:"+prom);
-                //post.setPostSentimentalType(2); //Tweet Negativo, valor de 1 (Esto yo lo determiné)
                 sentimentalTweetValueType=2;
             }
         }
+       
+        int intensityTweetValueType=0;    //Por defecto sería un tweet con intensidad baja.
+        float promIntensityValue=0; 
+        if(IntensiveTweetValue>0)
+        {
+            promIntensityValue=IntensiveTweetValue/wordsCont;
+            if(promIntensityValue>=5.44) //Si el promedio es mayor de 5.44 sería un tweet con intesidad alta, ya que la maxima en intensidad es de 8.16
+            {
+                intensityTweetValueType=2;
+            }else if(promIntensityValue<5.44 && promIntensityValue>=2.72) //tweet con intensidad media
+            {
+                intensityTweetValueType=1;
+            }
+        }
+        */
         
+        
+        HashMap hmapValues=SWBSocialUtil.Classifier.classyfyText(externalString2Clasify);
+        float promSentimentalValue=((Float)hmapValues.get("promSentimentalValue")).floatValue();
+        int sentimentalTweetValueType=((Integer)hmapValues.get("sentimentalTweetValueType")).intValue();
+        float promIntensityValue=((Float)hmapValues.get("promIntensityValue")).floatValue();
+        int intensityTweetValueType=((Integer)hmapValues.get("intensityTweetValueType")).intValue();
+        
+        System.out.println("SentimentalData../promSentimentalValue:"+promSentimentalValue);
+        System.out.println("SentimentalData../sentimentalTweetValueType:"+sentimentalTweetValueType);
+        System.out.println("SentimentalData../promIntensityValue:"+promIntensityValue);
+        System.out.println("SentimentalData../intensityTweetValueType:"+intensityTweetValueType);
+        
+        
+        //////////////////////////////////ESTO SI FUNCIONA BIEN ------10 - Julio - 2013//////////////////////////////////
         boolean filterPositives=stream.isFilterSentimentalPositive();
         boolean filterNegatives=stream.isFilterSentimentalNegative();
         boolean filterNeutrals=stream.isFilterSentimentalNeutral();
@@ -250,19 +248,7 @@ public class SentimentalDataClassifier {
         boolean filterIntensityHigh=stream.isFilterIntensityHigh();
         boolean filterIntensityMedium=stream.isFilterIntensityMedium();
         boolean filtrarIntensityLow=stream.isFilterIntensityLow();
-        int intensityTweetValueType=0;    //Por defecto sería un tweet con intensidad baja.
-        float promIntensityValue=0; 
-        if(IntensiveTweetValue>0)
-        {
-            promIntensityValue=IntensiveTweetValue/wordsCont;
-            if(promIntensityValue>=5.44) //Si el promedio es mayor de 5.44 sería un tweet con intesidad alta, ya que la maxima en intensidad es de 8.16
-            {
-                intensityTweetValueType=2;
-            }else if(promIntensityValue<5.44 && promIntensityValue>=2.72) //tweet con intensidad media
-            {
-                intensityTweetValueType=1;
-            }
-        }
+        
         
         boolean createPostInbyIntensity=false;
         //Si el stream no tiene filtros de intensidad, es decir, que todos sean positivos o negativos, entonces los mensajes siempre pasarían este filtro
@@ -379,12 +365,13 @@ public class SentimentalDataClassifier {
                 //System.out.println("Valor de intensidad puesto al final:"+post.getPostIntensityValue());
 
                 //Revisa si encuentra emoticones en el mensaje
-                findEmoticones(post);
+                System.out.println("SentimentalData..text/externalString2Clasify:"+externalString2Clasify);
+                findEmoticones(post, externalString2Clasify_TMP);
                 //MessageIn messageIn=(MessageIn)post;
                 //System.out.println("messageIn final:"+messageIn.getMsg_Text());
                 
                 //Clasificación por palabras relacionadas a un tema
-                clasifyMsgbySocialTopic(post);
+                clasifyMsgbySocialTopic(post, externalString2Clasify_TMP);
                 
                 boolean firstTime=true;
                 boolean rulesClassifierValue=false;
@@ -450,11 +437,11 @@ public class SentimentalDataClassifier {
      * Metodo que revisa el mensaje del post de entrada, si concuerda con algunas de las palabras clave
      * encontradas en algún SocialTopic (Tema), entonces al PostIn le asocia dicho Tema.
      */
-    public void clasifyMsgbySocialTopic(PostIn post)
+    public void clasifyMsgbySocialTopic(PostIn post, String text)
     {
         //System.out.println("Asocialcion de socialTopic-23-1");
          //Elimino Caracteres especiales (acentuados)
-        String externalMsgTMP=SWBSocialUtil.Strings.replaceSpecialCharacters(externalString2Clasify_TMP);
+        String externalMsgTMP=SWBSocialUtil.Strings.replaceSpecialCharacters(text);
 
         SocialAdmin socialAdminSite=(SocialAdmin)SWBContext.getAdminWebSite();
 
@@ -813,12 +800,12 @@ public class SentimentalDataClassifier {
      * TODO:Hacer que los emoticons esten almacenados en un objeto.
      */
     
-    private void findEmoticones(PostIn post)
+    private void findEmoticones(PostIn post, String text)
     {
          //System.out.println("Emoti-1:"+externalString2Clasify_TMP);
          int contPositiveEmoticon=0;
          int contNegativeEmoticon=0;
-         StringTokenizer st = new StringTokenizer(externalString2Clasify_TMP);
+         StringTokenizer st = new StringTokenizer(text);
          while (st.hasMoreTokens())
          {
             String word2Find=st.nextToken();
