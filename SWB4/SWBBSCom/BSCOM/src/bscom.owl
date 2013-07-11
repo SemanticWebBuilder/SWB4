@@ -173,6 +173,9 @@
   </owl:Class>
   <owl:Class rdf:ID="BSC">
     <swb:hasClass rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Collection"/>
+    <swb:hasClass>
+      <owl:Class rdf:ID="Distinctive"/>
+    </swb:hasClass>
     <swb:hasHerarquicalNode rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_Countries"/>
     <swb:hasClass>
       <owl:Class rdf:ID="Objective"/>
@@ -367,42 +370,54 @@
     <rdfs:subClassOf rdf:resource="#Sortable"/>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
-  <owl:Class rdf:ID="Distinctive">
+  <owl:Class rdf:about="#Distinctive">
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom>
+          <swb:Class rdf:ID="Theme">
+            <swb:classCodePackage rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >org.semanticwb.bsc.element</swb:classCodePackage>
+            <rdfs:subClassOf rdf:resource="#BSCElement"/>
+            <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+            >true</swb:autogenId>
+            <swb:displayObject>
+              <swbxf:DisplayObject rdf:ID="do_Theme">
+                <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+                >swbIconWebPage</swb:iconClass>
+                <rdfs:label xml:lang="es">Tema estratégico</rdfs:label>
+                <rdfs:label xml:lang="en">Strategic theme</rdfs:label>
+              </swbxf:DisplayObject>
+            </swb:displayObject>
+            <rdfs:subClassOf rdf:resource="#Sortable"/>
+            <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >Los temas estratégicos agrupan objetivos con fines en común. A su vez, los temas están agrupados dentro de las perspectivas.</rdfs:comment>
+            <rdfs:subClassOf>
+              <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#webPageParent"/>
+                <owl:allValuesFrom rdf:resource="#Perspective"/>
+              </owl:Restriction>
+            </rdfs:subClassOf>
+            <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+          </swb:Class>
+        </owl:allValuesFrom>
+        <owl:onProperty rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#webPageParent"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
     <swb:classCodePackage rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >org.semanticwb.bsc.element</swb:classCodePackage>
-    <rdfs:subClassOf>
-      <swb:Class rdf:ID="Theme">
-        <swb:classCodePackage rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >org.semanticwb.bsc.element</swb:classCodePackage>
-        <rdfs:subClassOf rdf:resource="#BSCElement"/>
-        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-        >true</swb:autogenId>
-        <swb:displayObject>
-          <swbxf:DisplayObject rdf:ID="do_Theme">
-            <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-            >swbIconWebPage</swb:iconClass>
-            <rdfs:label xml:lang="es">Tema estratégico</rdfs:label>
-            <rdfs:label xml:lang="en">Strategic theme</rdfs:label>
-          </swbxf:DisplayObject>
-        </swb:displayObject>
-        <rdfs:subClassOf rdf:resource="#Sortable"/>
-        <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >Los temas estratégicos agrupan objetivos con fines en común. A su vez, los temas están agrupados dentro de las perspectivas.</rdfs:comment>
-        <rdfs:subClassOf>
-          <owl:Restriction>
-            <owl:onProperty rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#webPageParent"/>
-            <owl:allValuesFrom rdf:resource="#Perspective"/>
-          </owl:Restriction>
-        </rdfs:subClassOf>
-        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-      </swb:Class>
-    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="#BSCElement"/>
     <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:autogenId>
     <swb:displayObject>
       <swbxf:DisplayObject rdf:ID="do_Distinctive">
+        <swbxf:dropMatchLevel rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >2</swbxf:dropMatchLevel>
         <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
         >swbIconWebPage</swb:iconClass>
+        <rdfs:comment xml:lang="en">Distinctive</rdfs:comment>
+        <rdfs:comment xml:lang="es">Diferenciador</rdfs:comment>
+        <swbxf:dragSupport rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >true</swbxf:dragSupport>
       </swbxf:DisplayObject>
     </swb:displayObject>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
@@ -454,6 +469,14 @@
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
   <owl:Class rdf:about="#Objective">
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#hasWebPageChild"/>
+        <owl:allValuesFrom>
+          <owl:Class rdf:about="#Indicator"/>
+        </owl:allValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
     <rdfs:subClassOf rdf:resource="#Committable"/>
     <rdfs:subClassOf>
       <owl:Class rdf:about="#Serializable"/>
@@ -481,14 +504,6 @@
         <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBInterface"/>
         <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
       </swb:Interface>
-    </rdfs:subClassOf>
-    <rdfs:subClassOf>
-      <owl:Restriction>
-        <owl:onProperty rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#hasWebPageChild"/>
-        <owl:allValuesFrom>
-          <owl:Class rdf:about="#Indicator"/>
-        </owl:allValuesFrom>
-      </owl:Restriction>
     </rdfs:subClassOf>
     <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:autogenId>
@@ -633,6 +648,10 @@
         >2</swbxf:dropMatchLevel>
       </swbxf:DisplayObject>
     </swb:displayObject>
+    <rdfs:subClassOf rdf:resource="#Seasonable"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Persiste los atributos de un indicador</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="#Committable"/>
     <rdfs:subClassOf>
       <owl:Restriction>
         <owl:allValuesFrom>
@@ -669,20 +688,16 @@
         <owl:onProperty rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#hasWebPageChild"/>
       </owl:Restriction>
     </rdfs:subClassOf>
-    <rdfs:subClassOf rdf:resource="#Seasonable"/>
-    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >Persiste los atributos de un indicador</rdfs:comment>
-    <rdfs:subClassOf rdf:resource="#Committable"/>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+    <rdfs:subClassOf rdf:resource="#Recognizable"/>
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
     <rdfs:subClassOf>
       <owl:Restriction>
         <owl:onProperty rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#webPageParent"/>
         <owl:allValuesFrom rdf:resource="#Objective"/>
       </owl:Restriction>
     </rdfs:subClassOf>
-    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
-    <rdfs:subClassOf rdf:resource="#Recognizable"/>
-    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:autogenId>
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Undeleteable"/>
   </owl:Class>
   <owl:Class rdf:about="#Action">
@@ -1523,6 +1538,13 @@
     <swbxf:textRegExp rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >\d{1,2}</swbxf:textRegExp>
   </bsc:Number>
+  <swbxf:HerarquicalNode rdf:ID="hn_Distinctive">
+    <rdfs:label xml:lang="en">Distinctive</rdfs:label>
+    <rdfs:label xml:lang="es">Diferenciadores</rdfs:label>
+    <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >swbIconWebPage</swb:iconClass>
+    <swbxf:heClass rdf:resource="#Distinctive"/>
+  </swbxf:HerarquicalNode>
   <bsc:SelectOneUserByRoleGroup rdf:ID="facilitators">
     <bsc:so_userGroupId rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >Facilitator</bsc:so_userGroupId>
