@@ -26,7 +26,9 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import javax.servlet.http.*;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
@@ -270,10 +272,10 @@ public class SWBCommentToElement extends org.semanticwb.portal.resources.sem.bas
         
         out.println("function validateFrm(frmId) {");
         out.println("  var frm = dojo.byId(frmId);");
+        //out.println("alert('frm='+frm+', name='+frm.name+', email='+frm.email+', cmmt='+frm.comment);");
         out.println("  if(!frm) {");
         out.println("    return false;");
-        out.println("  } ");
-        out.println("    alert('frm.seccode='+frm.seccode+', nombre='+frm.name.value+', mail='+frm.email.value+', comentario='+frm.comment.value);");
+        out.println("  } ");        
         out.println("  if(isEmpty(frm.name.value)) {");
         out.println("    alert('Al parecer falta tu nombre completo.');");
         out.println("    return false;");
@@ -294,8 +296,7 @@ public class SWBCommentToElement extends org.semanticwb.portal.resources.sem.bas
         out.println("  if(frm.seccode && isEmpty('seccode')) { ");
         out.println("    msgs.push('Para poder agregar tu comentario es necesario que ingreses el código de la imagen.\\nEn caso de no ser claro puedes cambiarlo haciendo clic en <<Cambiar imagen>>.'); ");
         out.println("    return false;");
-        out.println("  }");    
-        out.println("  alert('true');");
+        out.println("  }");
         out.println("  return true;");       
         out.println("} ");
         
@@ -343,6 +344,7 @@ public class SWBCommentToElement extends org.semanticwb.portal.resources.sem.bas
         out.println("    s = s.concat('</form>');");
         out.println("    dojo.place(s, parentObjId, position);");
         out.println("    dojo.parser.parse(childObjId);");
+        out.println("    dojo.byId(childObjId).name.focus();");
         out.println("    pc++;");
         out.println("  }else {");
         out.println("    dojo.destroy(childObjId);");
@@ -388,15 +390,28 @@ public class SWBCommentToElement extends org.semanticwb.portal.resources.sem.bas
         out.println("</div>");
         out.println("</form>");
         out.println("</div>");
-        Iterator<CommentToElement> comments = CommentToElement.ClassMgr.listCommentToElementByElement(element, paramRequest.getWebPage().getWebSite());
+        //Iterator<CommentToElement> comments = CommentToElement.ClassMgr.listCommentToElementByElement(element, paramRequest.getWebPage().getWebSite());
+        Iterator<CommentToElement> comments = listCommentToElementByElement(element, paramRequest.getWebPage().getWebSite());
+        List<CommentToElement> commentsList = SWBUtils.Collections.copyIterator(comments);
         out.println("<div class=\"swb-comments-lst\">");
-        if(comments.hasNext()) {
-            out.println("<p class=\"swb-semcommts-lblcmmt\">"+paramRequest.getLocaleString("lblComments")+"</p>");
-            out.println(renderListComments(paramRequest, comments));
-            out.println("<p><a href=\"javascript:postHtml('"+paramRequest.getRenderUrl().setCallMethod(SWBResourceURL.Call_DIRECT).setMode(SWBResourceURL.Mode_INDEX).setParameter("suri",element.getEncodedURI()).setParameter(FCTR,"_")+"','commts')\" title=\""+paramRequest.getLocaleString("viewMore")+"\">"+paramRequest.getLocaleString("viewMore")+"</a></p>");
-            out.println("<p><a href=\"javascript:postHtml('"+paramRequest.getRenderUrl().setCallMethod(SWBResourceURL.Call_DIRECT).setMode(SWBResourceURL.Mode_INDEX).setParameter("suri",element.getEncodedURI())+"','commts')\" title=\""+paramRequest.getLocaleString("viewAllComments")+"\">"+paramRequest.getLocaleString("viewAllComments")+"&nbsp;&raquo;</a></p>");
-        }else {
-            out.println("<p class=\"swb-semcommts-noe\">"+paramRequest.getLocaleString("noComment")+"</p>");
+        //if(comments.hasNext()) {
+        if(!commentsList.isEmpty())
+        {
+            out.println("<p class=\"swb-comments-lblcmmt\">"+paramRequest.getLocaleString("lblComments")+"</p>");
+            //out.println(renderListComments(paramRequest, comments));
+            out.println(" <div class=\"swb-comments-box\" id=\"commts\">");
+            out.println(renderListComments(paramRequest, commentsList.iterator()));
+            if(commentsList.size()>getBlockSize()) {
+                out.println("<p><a href=\"javascript:postHtml('"+paramRequest.getRenderUrl().setCallMethod(SWBResourceURL.Call_DIRECT).setMode(SWBResourceURL.Mode_INDEX).setParameter("suri",element.getEncodedURI()).setParameter(FCTR,"_")+"','commts')\" title=\""+paramRequest.getLocaleString("viewMore")+"\">"+paramRequest.getLocaleString("viewMore")+"</a></p>");
+//                if(commentsList.size()>getBlockSize()*5) {
+//                    out.println("<p><a href=\"javascript:postHtml('"+paramRequest.getRenderUrl().setCallMethod(SWBResourceURL.Call_DIRECT).setMode(SWBResourceURL.Mode_INDEX).setParameter("suri",element.getEncodedURI())+"','commts')\" title=\""+paramRequest.getLocaleString("viewAllComments")+"\">"+paramRequest.getLocaleString("viewAllComments")+"&nbsp;&raquo;</a></p>");
+//                }
+            }
+            out.println("</div>");
+        }
+        else
+        {
+            out.println("<p class=\"swb-comments-noe\">"+paramRequest.getLocaleString("noComment")+"</p>");
         }
         out.println("</div>");
         
@@ -418,41 +433,62 @@ public class SWBCommentToElement extends org.semanticwb.portal.resources.sem.bas
         final String lang = user.getLanguage()==null?"es":user.getLanguage();
         String name;
         
-        icomments = SWBComparator.sortByCreated(icomments, false);
         if(icomments.hasNext())
         {
-            html.append(" <div class=\"swb-semcommts-box\" id=\"commts\">");
-            html.append("  <ul class=\"swb-semcommts-lst\">");
+            icomments = SWBComparator.sortByCreated(icomments, false);
+//            html.append(" <div class=\"swb-comments-box\" id=\"commts\">");
+            html.append("  <ul class=\"swb-comments-lst\">");
             for(int i=getBlockSize(); i>0&&icomments.hasNext(); i--) {
                 CommentToElement comment = icomments.next();
-                if(!comment.isValid() || !user.haveAccess(comment)) {
-                    continue;
-                }
-                html.append("  <li class=\"swb-semcommts-item\" id=\"item_"+comment.getId()+"\">");
-                html.append("   <p class=\"swb-semcommts-name\">"+(comment.getCreator()==null?comment.getName():comment.getCreator().getFullName()));
+//                if(!comment.isValid() || !user.haveAccess(comment)) {
+//                    continue;
+//                }
+                html.append("  <li class=\"swb-cmmts-item\" id=\"item_"+comment.getId()+"\">");
+                html.append("   <p class=\"swb-cmmts-name\">"+(comment.getCreator()==null?comment.getName():comment.getCreator().getFullName()));
                 try {
-                    html.append("&nbsp;<span class=\"swb-semcommts-ago\">"+paramRequest.getLocaleString("ago")+"&nbsp;"+SWBUtils.TEXT.getTimeAgo(comment.getCreated(), lang)+"</span>");
+                    html.append("&nbsp;<span class=\"swb-cmmts-ago\">"+paramRequest.getLocaleString("ago")+"&nbsp;"+SWBUtils.TEXT.getTimeAgo(comment.getCreated(), lang)+"</span>");
                 }catch(Exception e) {
                 }
                 html.append("   </p>");
-                html.append("   <p class=\"swb-semcommts-cmmt\">"+comment.getCommentToElement()+"</p>");
-                html.append("   <p><a href=\"#\" onclick=\"answerBack('cmmt_"+comment.getId()+"','child_"+comment.getId()+"', 'last','"+comment.getId()+"');return false;\">"+paramRequest.getLocaleString("answerBack") +"</a></p>");
-                if(comment.getAnswerBackTo()!=null) {
-                    html.append("<div class=\"swb-commts-ans\" id=\"cmmt_"+comment.getId()+"\">");
-                    html.append(paramRequest.getLocaleString("inAnswerTo")+"&nbsp;");
-                    html.append(comment.getAnswerBackTo().getCreator()==null?comment.getAnswerBackTo().getName():comment.getAnswerBackTo().getCreator().getFullName());
-                    html.append("&nbsp;<a href=\"javascript:postHtml('"+paramRequest.getRenderUrl().setCallMethod(SWBParamRequest.Call_DIRECT).setMode(Mode_DETAIL).setParameter("cmmt", comment.getEncodedURI())+"','item_"+comment.getId()+"')\" title=\""+paramRequest.getLocaleString("showComment")+"\">("+paramRequest.getLocaleString("showComment")+")</a>");
-                    html.append("</div>");
-                }else {
+                html.append("   <p class=\"swb-cmmts-cmmt\">"+comment.getCommentToElement()+"</p>");
+                html.append("   <p><a href=\"javascript:answerBack('cmmt_"+comment.getId()+"','child_"+comment.getId()+"', 'last','"+comment.getId()+"')\">"+paramRequest.getLocaleString("answerBack") +"</a></p>");
+//                if(comment.getAnswerBackTo()!=null) {
+//                    html.append("<div class=\"swb-commts-ans\" id=\"cmmt_"+comment.getId()+"\">");
+//                    html.append(paramRequest.getLocaleString("inAnswerTo")+"&nbsp;");
+//                    html.append(comment.getAnswerBackTo().getCreator()==null?comment.getAnswerBackTo().getName():comment.getAnswerBackTo().getCreator().getFullName());
+//                    html.append("&nbsp;<a href=\"javascript:postHtml('"+paramRequest.getRenderUrl().setCallMethod(SWBParamRequest.Call_DIRECT).setMode(Mode_DETAIL).setParameter("cmmt", comment.getEncodedURI())+"','item_"+comment.getId()+"')\" title=\""+paramRequest.getLocaleString("showComment")+"\">("+paramRequest.getLocaleString("showComment")+")</a>");
+//                    html.append("</div>");
+//                }else {
                     html.append("   <div class=\"swb-commts-ans\" id=\"cmmt_"+comment.getId()+"\"></div>");
+//                }
+                //réplica a comentario-inicio
+                Iterator<CommentToElement> answers = comment.listAnswerBacks();
+                if(answers.hasNext())
+                {
+                    answers = SWBComparator.sortByCreated(answers, false);
+                    html.append("  <ul class=\"swb-comments-anslst\">");
+                    while(answers.hasNext()) {
+                        comment = answers.next();
+                        html.append("  <li class=\"swb-cmmts-ansitem\">");
+                        html.append("   <p class=\"swb-cmmts-ansname\">"+(comment.getCreator()==null?comment.getName():comment.getCreator().getFullName()));
+                        try {
+                            html.append("&nbsp;<span class=\"swb-cmmts-ansago\">"+paramRequest.getLocaleString("ago")+"&nbsp;"+SWBUtils.TEXT.getTimeAgo(comment.getCreated(), lang)+"</span>");
+                        }catch(Exception e) {
+                        }
+                        html.append("   </p>");
+                        html.append("   <p class=\"swb-cmmts-anscmmt\">"+comment.getCommentToElement()+"</p>");
+                        html.append("  </li>");
+                    }
+                    html.append("  </ul>");                        
                 }
+                //réplica a comentario-fin
                 html.append("  </li>");
             }
             html.append(" </ul>");
-            html.append("</div>");
+//            html.append("</div>");
             
         }else {
-            html.append("<p class=\"swb-commts-noe\">"+paramRequest.getLocaleString("noComment")+"</p>");
+            html.append("<p class=\"swb-comments-noe\">"+paramRequest.getLocaleString("noComment")+"</p>");
         }
         return html.toString();
     }
@@ -525,24 +561,28 @@ public class SWBCommentToElement extends org.semanticwb.portal.resources.sem.bas
         if(element==null) {
             out.println(paramRequest.getLocaleString("noElement"));       
         }else {
-            out.println(renderListComments(request, paramRequest, CommentToElement.ClassMgr.listCommentToElementByElement(element, paramRequest.getWebPage().getWebSite())));
+            out.println(renderListComments(request, paramRequest, element));
         }
         out.flush();
         out.close();
     }
     
-    private String renderListComments(HttpServletRequest request, SWBParamRequest paramRequest, Iterator<CommentToElement> icomments) throws SWBResourceException
+    private String renderListComments(HttpServletRequest request, SWBParamRequest paramRequest, SWBClass element) throws SWBResourceException
     {
         StringBuilder html = new StringBuilder();
         final User user = paramRequest.getUser();
         final String lang = user.getLanguage()==null?"es":user.getLanguage();
         String name;
         
-        icomments = SWBComparator.sortByCreated(icomments, false);
-        if(icomments.hasNext())
+        Iterator<CommentToElement> comments = listCommentToElementByElement(element, paramRequest.getWebPage().getWebSite());
+        if(comments.hasNext())
         {
-            html.append(" <div class=\"swb-semcommts-box\" id=\"commts\">");
-            html.append("  <ul class=\"swb-semcommts-lst\">");
+            comments = SWBComparator.sortByCreated(comments, false);
+            List<CommentToElement> commentsList = SWBUtils.Collections.copyIterator(comments);
+            
+            //html.append(" <div class=\"swb-comments-box\" id=\"commts\">");
+            html.append("  <ul class=\"swb-comments-lst\">");
+            
             int fctr;
             try {
                 fctr = (Integer)request.getSession(true).getAttribute(FCTR);
@@ -552,35 +592,63 @@ public class SWBCommentToElement extends org.semanticwb.portal.resources.sem.bas
             fctr++;
             request.getSession(true).setAttribute(FCTR, fctr);
             fctr *= getBlockSize(); 
-            for(int i=fctr; i>0&&icomments.hasNext(); i--) {
-                CommentToElement comment = icomments.next();
-                if(!comment.isValid() || !user.haveAccess(comment)) {
-                    continue;
-                }
-                html.append("  <li class=\"swb-semcommts-item\" id=\"item_"+comment.getId()+"\">");
-                html.append("   <p class=\"swb-semcommts-name\">"+(comment.getCreator()==null?comment.getName():comment.getCreator().getFullName()));
+            
+            comments = commentsList.iterator();
+            CommentToElement comment;
+            for(int i=fctr; i>0&&comments.hasNext(); i--) {
+                comment = comments.next();
+//                if(!comment.isValid() || !user.haveAccess(comment)) {
+//                    continue;
+//                }
+                html.append("  <li class=\"swb-cmmts-item\" id=\"item_"+comment.getId()+"\">");
+                html.append("   <p class=\"swb-cmmts-name\">"+(comment.getCreator()==null?comment.getName():comment.getCreator().getFullName()));
                 try {
-                    html.append("&nbsp;<span class=\"swb-semcommts-ago\">"+paramRequest.getLocaleString("ago")+"&nbsp;"+SWBUtils.TEXT.getTimeAgo(comment.getCreated(), lang)+"</span>");
+                    html.append("&nbsp;<span class=\"swb-cmmts-ago\">"+paramRequest.getLocaleString("ago")+"&nbsp;"+SWBUtils.TEXT.getTimeAgo(comment.getCreated(), lang)+"</span>");
                 }catch(Exception e) {
                 }
                 html.append("   </p>");
-                html.append("   <p class=\"swb-semcommts-cmmt\">"+comment.getCommentToElement()+"</p>");
+                html.append("   <p class=\"swb-cmmts-cmmt\">"+comment.getCommentToElement()+"</p>");
                 html.append("   <p><a href=\"#\" onclick=\"answerBack('cmmt_"+comment.getId()+"','child_"+comment.getId()+"', 'last','"+comment.getId()+"');return false;\">"+paramRequest.getLocaleString("answerBack") +"</a></p>");
-                if(comment.getAnswerBackTo()!=null) {
-                    html.append("<div class=\"swb-commts-ans\" id=\"cmmt_"+comment.getId()+"\">");
-                    html.append(paramRequest.getLocaleString("inAnswerTo")+"&nbsp;");
-                    html.append(comment.getAnswerBackTo().getCreator()==null?comment.getAnswerBackTo().getName():comment.getAnswerBackTo().getCreator().getFullName());
-                    html.append("&nbsp;<a href=\"javascript:postHtml('"+paramRequest.getRenderUrl().setCallMethod(SWBParamRequest.Call_DIRECT).setMode(Mode_DETAIL).setParameter("cmmt", comment.getEncodedURI())+"','item_"+comment.getId()+"')\" title=\""+paramRequest.getLocaleString("showComment")+"\">("+paramRequest.getLocaleString("showComment")+")</a>");
-                    html.append("</div>");
-                }else {
+//                if(comment.getAnswerBackTo()!=null) {
+//                    html.append("<div class=\"swb-commts-ans\" id=\"cmmt_"+comment.getId()+"\">");
+//                    html.append(paramRequest.getLocaleString("inAnswerTo")+"&nbsp;");
+//                    html.append(comment.getAnswerBackTo().getCreator()==null?comment.getAnswerBackTo().getName():comment.getAnswerBackTo().getCreator().getFullName());
+//                    html.append("&nbsp;<a href=\"javascript:postHtml('"+paramRequest.getRenderUrl().setCallMethod(SWBParamRequest.Call_DIRECT).setMode(Mode_DETAIL).setParameter("cmmt", comment.getEncodedURI())+"','item_"+comment.getId()+"')\" title=\""+paramRequest.getLocaleString("showComment")+"\">("+paramRequest.getLocaleString("showComment")+")</a>");
+//                    html.append("</div>");
+//                }else {
                     html.append("   <div class=\"swb-commts-ans\" id=\"cmmt_"+comment.getId()+"\"></div>");
+//                }
+                //réplica a comentario-inicio
+                Iterator<CommentToElement> answers = comment.listAnswerBacks();
+                if(answers.hasNext())
+                {
+                    answers = SWBComparator.sortByCreated(answers, false);
+                    html.append("  <ul class=\"swb-comments-anslst\">");
+                    while(answers.hasNext()) {
+                        comment = answers.next();
+                        html.append("  <li class=\"swb-cmmts-ansitem\">");
+                        html.append("   <p class=\"swb-cmmts-ansname\">"+(comment.getCreator()==null?comment.getName():comment.getCreator().getFullName()));
+                        try {
+                            html.append("&nbsp;<span class=\"swb-cmmts-ansago\">"+paramRequest.getLocaleString("ago")+"&nbsp;"+SWBUtils.TEXT.getTimeAgo(comment.getCreated(), lang)+"</span>");
+                        }catch(Exception e) {
+                        }
+                        html.append("   </p>");
+                        html.append("   <p class=\"swb-cmmts-anscmmt\">"+comment.getCommentToElement()+"</p>");
+                        html.append("  </li>");
+                    }
+                    html.append("  </ul>");                        
                 }
+                //réplica a comentario-fin
                 html.append("  </li>");
             }
             html.append(" </ul>");
-//            html.append("<p><a href=\"javascript:postHtml('"+paramRequest.getRenderUrl().setCallMethod(SWBResourceURL.Call_DIRECT).setMode(SWBResourceURL.Mode_INDEX).setParameter("suri",element.getEncodedURI()).setParameter(FCTR,"_")+"','commts')\" title=\""+paramRequest.getLocaleString("viewMore")+"\">"+paramRequest.getLocaleString("viewMore")+"</a></p>");
-            html.append("</div>");
-            
+            if(commentsList.size()>fctr) {
+                html.append("<p><a href=\"javascript:postHtml('"+paramRequest.getRenderUrl().setCallMethod(SWBResourceURL.Call_DIRECT).setMode(SWBResourceURL.Mode_INDEX).setParameter("suri",element.getEncodedURI()).setParameter(FCTR,"_")+"','commts')\" title=\""+paramRequest.getLocaleString("viewMore")+"\">"+paramRequest.getLocaleString("viewMore")+"</a></p>");
+                if(commentsList.size()>fctr*5) {
+                    html.append("<p><a href=\"javascript:postHtml('"+paramRequest.getRenderUrl().setCallMethod(SWBResourceURL.Call_DIRECT).setMode(SWBResourceURL.Mode_INDEX).setParameter("suri",element.getEncodedURI())+"','commts')\" title=\""+paramRequest.getLocaleString("viewAllComments")+"\">"+paramRequest.getLocaleString("viewAllComments")+"&nbsp;&raquo;</a></p>");
+                }
+            }
+            //html.append("</div>");            
         }else {
             html.append("<p class=\"swb-commts-noe\">"+paramRequest.getLocaleString("noComment")+"</p>");
         }
@@ -609,4 +677,69 @@ public class SWBCommentToElement extends org.semanticwb.portal.resources.sem.bas
         }
         return element;
     }
+    
+    public Iterator<CommentToElement> listCommentToElementByElement(SWBClass value, org.semanticwb.model.SWBModel model)
+    {
+        Iterator<CommentToElement> it = CommentToElement.ClassMgr.listCommentToElementByElement(value, model);
+        List<CommentToElement> lst = SWBUtils.Collections.copyIterator(it);
+        List<CommentToElement> rev = new ArrayList<CommentToElement>();
+        CommentToElement comment;
+        for(int i=0; i<lst.size(); i++) {
+            comment = lst.get(i);
+            if(comment.getAnswerBackTo()!=null) {
+                //lst.remove(i);
+                rev.add(comment);
+            }
+        }
+        lst.removeAll(rev);
+        return lst.iterator();
+    }
+    
+    /*
+    private String renderListComments(SWBParamRequest paramRequest, Iterator<CommentToElement> icomments) throws SWBResourceException
+    {
+        StringBuilder html = new StringBuilder();
+        final User user = paramRequest.getUser();
+        final String lang = user.getLanguage()==null?"es":user.getLanguage();
+        String name;
+        
+        icomments = SWBComparator.sortByCreated(icomments, false);
+        if(icomments.hasNext())
+        {
+            html.append(" <div class=\"swb-comments-box\" id=\"commts\">");
+            html.append("  <ul class=\"swb-comments-lst\">");
+            for(int i=getBlockSize(); i>0&&icomments.hasNext(); i--) {
+                CommentToElement comment = icomments.next();
+                if(!comment.isValid() || !user.haveAccess(comment)) {
+                    continue;
+                }
+                html.append("  <li class=\"swb-cmmts-item\" id=\"item_"+comment.getId()+"\">");
+                html.append("   <p class=\"swb-cmmts-name\">"+(comment.getCreator()==null?comment.getName():comment.getCreator().getFullName()));
+                try {
+                    html.append("&nbsp;<span class=\"swb-cmmts-ago\">"+paramRequest.getLocaleString("ago")+"&nbsp;"+SWBUtils.TEXT.getTimeAgo(comment.getCreated(), lang)+"</span>");
+                }catch(Exception e) {
+                }
+                html.append("   </p>");
+                html.append("   <p class=\"swb-cmmts-cmmt\">"+comment.getCommentToElement()+"</p>");
+                html.append("   <p><a href=\"#\" onclick=\"answerBack('cmmt_"+comment.getId()+"','child_"+comment.getId()+"', 'last','"+comment.getId()+"');return false;\">"+paramRequest.getLocaleString("answerBack") +"</a></p>");
+                if(comment.getAnswerBackTo()!=null) {
+                    html.append("<div class=\"swb-commts-ans\" id=\"cmmt_"+comment.getId()+"\">");
+                    html.append(paramRequest.getLocaleString("inAnswerTo")+"&nbsp;");
+                    html.append(comment.getAnswerBackTo().getCreator()==null?comment.getAnswerBackTo().getName():comment.getAnswerBackTo().getCreator().getFullName());
+                    html.append("&nbsp;<a href=\"javascript:postHtml('"+paramRequest.getRenderUrl().setCallMethod(SWBParamRequest.Call_DIRECT).setMode(Mode_DETAIL).setParameter("cmmt", comment.getEncodedURI())+"','item_"+comment.getId()+"')\" title=\""+paramRequest.getLocaleString("showComment")+"\">("+paramRequest.getLocaleString("showComment")+")</a>");
+                    html.append("</div>");
+                }else {
+                    html.append("   <div class=\"swb-commts-ans\" id=\"cmmt_"+comment.getId()+"\"></div>");
+                }
+                html.append("  </li>");
+            }
+            html.append(" </ul>");
+            html.append("</div>");
+            
+        }else {
+            html.append("<p class=\"swb-comments-noe\">"+paramRequest.getLocaleString("noComment")+"</p>");
+        }
+        return html.toString();
+    }
+     */
 }

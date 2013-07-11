@@ -107,7 +107,6 @@ public class AudioPodCast extends org.semanticwb.portal.resources.sem.base.Audio
            
             if(sid!=null)
             {
-
                 Iterator<AudioFile> resources;
                 AudioPodcastTheme theme = AudioPodcastTheme.ClassMgr.getAudioPodcastTheme(sid, base.getWebSite());
                 try {
@@ -382,62 +381,115 @@ public class AudioPodCast extends org.semanticwb.portal.resources.sem.base.Audio
             for(int i=inicio; i<fin; i++)
             {
                 AudioFile audiofile = elements.get(i);
-                if(audiofile==null || !audiofile.isValid() || !user.haveAccess(audiofile)) {
-                    continue;
-                }                    
+//                if(audiofile==null || !audiofile.isValid() || !user.haveAccess(audiofile)) {
+//                    continue;
+//                }
+                out.println("  <li class=\"swb-pdcst-item\">");
+                out.println("   <div class=\"swb-pdcst-box\">");
+                try {
+                    out.println("  <div class=\"swb-pdcst-text\"><p class=\"swb-pdcst-title\">"+(audiofile.getDisplayTitle(lang)==null?audiofile.getTitle().substring(0,getScTitle()) : audiofile.getDisplayTitle(lang).substring(0,getScTitle()))+"</p></div>");
+                }catch(IndexOutOfBoundsException obe) {
+                    out.println("  <div class=\"swb-pdcst-text\"><p class=\"swb-pdcst-title\">"+(audiofile.getDisplayTitle(lang)==null?audiofile.getTitle() :audiofile.getDisplayTitle(lang))+"</p></div>");
+                }
+                out.println("      <div class=\"swb-pdcst-text\"><p class=\"swb-pdcst-pubdate\"><span class=\"swb-pdcst-pub\">"+paramRequest.getLocaleString("publicationDate")+":</span> "+ttb.format(audiofile.getCreated()) +"</p></div>");
+                if(audiofile.getAuthor()!=null) {
+                    out.println("  <div class=\"swb-pdcst-text\"><p class=\"swb-pdcst-author\"><span class=\"swb-pdcst-by\">"+paramRequest.getLocaleString("by")+":</span> "+audiofile.getAuthor()+"</p></div>");
+                }
+                try {
+                    out.println("  <div class=\"swb-pdcst-text\"><p class=\"swb-pdcst-desc\">"+(audiofile.getDisplayDescription(lang)==null?audiofile.getDescription().substring(0,getScDescription()) : audiofile.getDisplayDescription(lang).substring(0,getScDescription()))+"</p></div>");
+                }catch(IndexOutOfBoundsException obe) {
+                    out.println("  <div class=\"swb-pdcst-text\"><p class=\"swb-pdcst-desc\">"+(audiofile.getDisplayDescription(lang)==null?audiofile.getDescription():audiofile.getDisplayDescription(lang))+"</p></div>");
+                }
+                out.println("    <div class=\"swb-pdcst-text\">");
                 try {
                     f = audiofile.getFile();
-                }catch(Exception e) {
-                    continue;
-                }
-                if(f!=null && f.isFile())
-                {
                     try {
+                        StringBuilder html = new StringBuilder();
                         AudioInputStream ais = new MpegAudioFileReader().getAudioInputStream(f);
                         AudioFileFormat baseFileFormat = new MpegAudioFileReader().getAudioFileFormat(f);
                         Map properties = baseFileFormat.properties();
                         duration = (Long)properties.get("duration");
+                        html.append("<p class=\"swb-pdcst-box-lstn\">");
+                        html.append(" <a href=\""+contentURL+"?suri="+audiofile.getEncodedURI()+"\" title=\""+(audiofile.getDisplayTitle(lang)==null?audiofile.getTitle():audiofile.getDisplayTitle(lang))+"\">"+paramRequest.getLocaleString("listen")+"</a>");
+                        if(duration>0)
+                        {
+                            html.append(" &nbsp;<span class=\"swb-pdcst-fduration\">"+paramRequest.getLocaleString("duration")+":&nbsp;");
+                            html.append(duration/60000000);
+                            html.append(":");
+                            html.append(duration/1000000%60);
+                            html.append(" </span>");
+                        }
+                        html.append("</p>");                        
+                        html.append("<p class=\"swb-pdcst-box-dwln\">");
+                        html.append(" <a class=\"swb-pdcst-lnk\" href=\"#\" onclick=\"window.open('"+directURL+"?suri='+encodeURIComponent('"+audiofile.getURI()+"'))\" title=\""+(audiofile.getDisplayTitle(lang)==null?audiofile.getTitle():audiofile.getDisplayTitle(lang))+"\">"+paramRequest.getLocaleString("download")+"</a>&nbsp;");
+                        html.append(" <span class=\"swb-pdcst-ffmt\">"+paramRequest.getLocaleString("format")+"&nbsp;"+audiofile.getExtension()+"</span>");
+                        html.append(" <span class=\"swb-pdcst-fsize\">"+df.format(f.length()/1048576.0)+" Mb</span>");
+                        html.append(" <a class=\"swb-pdcst-imglnk\" href=\"#\" onclick=\"window.open('"+directURL+"?suri='+encodeURIComponent('"+audiofile.getURI()+"'))\" title=\""+(audiofile.getDisplayTitle(lang)==null?audiofile.getTitle():audiofile.getDisplayTitle(lang))+"\">"+paramRequest.getLocaleString("download")+"</a>&nbsp;");
+                        html.append("</p>");
+                        out.println(html.toString());
                     }catch(UnsupportedAudioFileException unsafe) {
-                        continue;
-                    }                        
-                    out.println("  <li class=\"swb-pdcst-item\">");
-                    out.println("   <div class=\"swb-pdcst-box\">");
-                    try {
-                        out.println("  <div class=\"swb-pdcst-text\"><p class=\"swb-pdcst-title\">"+(audiofile.getDisplayTitle(lang)==null?audiofile.getTitle().substring(0,getScTitle()) : audiofile.getDisplayTitle(lang).substring(0,getScTitle()))+"</p></div>");
-                    }catch(IndexOutOfBoundsException obe) {
-                        out.println("  <div class=\"swb-pdcst-text\"><p class=\"swb-pdcst-title\">"+(audiofile.getDisplayTitle(lang)==null?audiofile.getTitle() :audiofile.getDisplayTitle(lang))+"</p></div>");
+                    }catch(Exception exc) {
                     }
-                    out.println("      <div class=\"swb-pdcst-text\"><p class=\"swb-pdcst-pubdate\"><span class=\"swb-pdcst-pub\">"+paramRequest.getLocaleString("publicationDate")+":</span> "+ttb.format(audiofile.getCreated()) +"</p></div>");
-                    if(audiofile.getAuthor()!=null) {
-                        out.println("  <div class=\"swb-pdcst-text\"><p class=\"swb-pdcst-author\"><span class=\"swb-pdcst-by\">"+paramRequest.getLocaleString("by")+":</span> "+audiofile.getAuthor()+"</p></div>");
-                    }
-                    try {
-                        out.println("  <div class=\"swb-pdcst-text\"><p class=\"swb-pdcst-desc\">"+(audiofile.getDisplayDescription(lang)==null?audiofile.getDescription().substring(0,getScDescription()) : audiofile.getDisplayDescription(lang).substring(0,getScDescription()))+"</p></div>");
-                    }catch(IndexOutOfBoundsException obe) {
-                        out.println("  <div class=\"swb-pdcst-text\"><p class=\"swb-pdcst-desc\">"+(audiofile.getDisplayDescription(lang)==null?audiofile.getDescription():audiofile.getDisplayDescription(lang))+"</p></div>");
-                    }
-                    out.println("  <div class=\"swb-pdcst-text\">");
-                    out.print("     <p class=\"swb-pdcst-box-lstn\">");
-                    out.print("      <a href=\""+contentURL+"?suri="+audiofile.getEncodedURI()+"\" title=\""+(audiofile.getDisplayTitle(lang)==null?audiofile.getTitle():audiofile.getDisplayTitle(lang))+"\">"+paramRequest.getLocaleString("listen")+"</a>");
-                    if(duration>0)
-                    {
-                        out.print("  &nbsp;<span class=\"swb-pdcst-fduration\">"+paramRequest.getLocaleString("duration")+":&nbsp;");
-                        out.print(duration/60000000);
-                        out.print(":");
-                        out.print(duration/1000000%60);
-                        out.print("</span>");
-                    }
-                    out.print("       </p>");                        
-                    out.print("       <p class=\"swb-pdcst-box-dwln\">");
-                    out.print("        <a class=\"swb-pdcst-lnk\" href=\"#\" onclick=\"window.open('"+directURL+"?suri='+encodeURIComponent('"+audiofile.getURI()+"'))\" title=\""+(audiofile.getDisplayTitle(lang)==null?audiofile.getTitle():audiofile.getDisplayTitle(lang))+"\">"+paramRequest.getLocaleString("download")+"</a>&nbsp;");
-                    out.print("        <span class=\"swb-pdcst-ffmt\">"+paramRequest.getLocaleString("format")+"&nbsp;"+audiofile.getExtension()+"</span>");
-                    out.print("        <span class=\"swb-pdcst-fsize\">"+df.format(f.length()/1048576.0)+" Mb</span>");
-                    out.print("        <a class=\"swb-pdcst-imglnk\" href=\"#\" onclick=\"window.open('"+directURL+"?suri='+encodeURIComponent('"+audiofile.getURI()+"'))\" title=\""+(audiofile.getDisplayTitle(lang)==null?audiofile.getTitle():audiofile.getDisplayTitle(lang))+"\">"+paramRequest.getLocaleString("download")+"</a>&nbsp;");
-                    out.println("     </p>");
-                    out.println("    </div>");
-                    out.println("   </div>");
-                    out.println("  </li>");
+                }catch(Exception e) {                    
                 }
+                out.println("    </div>");
+                out.println("   </div>");
+                out.println("  </li>");
+                
+                
+//                try {
+//                    f = audiofile.getFile();
+//                }catch(Exception e) {
+//                    continue;
+//                }
+//                if(f!=null && f.isFile())
+//                {
+//                    try {
+//                        AudioInputStream ais = new MpegAudioFileReader().getAudioInputStream(f);
+//                        AudioFileFormat baseFileFormat = new MpegAudioFileReader().getAudioFileFormat(f);
+//                        Map properties = baseFileFormat.properties();
+//                        duration = (Long)properties.get("duration");
+//                    }catch(UnsupportedAudioFileException unsafe) {
+//                        continue;
+//                    }                        
+//                    out.println("  <li class=\"swb-pdcst-item\">");
+//                    out.println("   <div class=\"swb-pdcst-box\">");
+//                    try {
+//                        out.println("  <div class=\"swb-pdcst-text\"><p class=\"swb-pdcst-title\">"+(audiofile.getDisplayTitle(lang)==null?audiofile.getTitle().substring(0,getScTitle()) : audiofile.getDisplayTitle(lang).substring(0,getScTitle()))+"</p></div>");
+//                    }catch(IndexOutOfBoundsException obe) {
+//                        out.println("  <div class=\"swb-pdcst-text\"><p class=\"swb-pdcst-title\">"+(audiofile.getDisplayTitle(lang)==null?audiofile.getTitle() :audiofile.getDisplayTitle(lang))+"</p></div>");
+//                    }
+//                    out.println("      <div class=\"swb-pdcst-text\"><p class=\"swb-pdcst-pubdate\"><span class=\"swb-pdcst-pub\">"+paramRequest.getLocaleString("publicationDate")+":</span> "+ttb.format(audiofile.getCreated()) +"</p></div>");
+//                    if(audiofile.getAuthor()!=null) {
+//                        out.println("  <div class=\"swb-pdcst-text\"><p class=\"swb-pdcst-author\"><span class=\"swb-pdcst-by\">"+paramRequest.getLocaleString("by")+":</span> "+audiofile.getAuthor()+"</p></div>");
+//                    }
+//                    try {
+//                        out.println("  <div class=\"swb-pdcst-text\"><p class=\"swb-pdcst-desc\">"+(audiofile.getDisplayDescription(lang)==null?audiofile.getDescription().substring(0,getScDescription()) : audiofile.getDisplayDescription(lang).substring(0,getScDescription()))+"</p></div>");
+//                    }catch(IndexOutOfBoundsException obe) {
+//                        out.println("  <div class=\"swb-pdcst-text\"><p class=\"swb-pdcst-desc\">"+(audiofile.getDisplayDescription(lang)==null?audiofile.getDescription():audiofile.getDisplayDescription(lang))+"</p></div>");
+//                    }
+//                    out.println("  <div class=\"swb-pdcst-text\">");
+//                    out.print("     <p class=\"swb-pdcst-box-lstn\">");
+//                    out.print("      <a href=\""+contentURL+"?suri="+audiofile.getEncodedURI()+"\" title=\""+(audiofile.getDisplayTitle(lang)==null?audiofile.getTitle():audiofile.getDisplayTitle(lang))+"\">"+paramRequest.getLocaleString("listen")+"</a>");
+//                    if(duration>0)
+//                    {
+//                        out.print("  &nbsp;<span class=\"swb-pdcst-fduration\">"+paramRequest.getLocaleString("duration")+":&nbsp;");
+//                        out.print(duration/60000000);
+//                        out.print(":");
+//                        out.print(duration/1000000%60);
+//                        out.print("</span>");
+//                    }
+//                    out.print("       </p>");                        
+//                    out.print("       <p class=\"swb-pdcst-box-dwln\">");
+//                    out.print("        <a class=\"swb-pdcst-lnk\" href=\"#\" onclick=\"window.open('"+directURL+"?suri='+encodeURIComponent('"+audiofile.getURI()+"'))\" title=\""+(audiofile.getDisplayTitle(lang)==null?audiofile.getTitle():audiofile.getDisplayTitle(lang))+"\">"+paramRequest.getLocaleString("download")+"</a>&nbsp;");
+//                    out.print("        <span class=\"swb-pdcst-ffmt\">"+paramRequest.getLocaleString("format")+"&nbsp;"+audiofile.getExtension()+"</span>");
+//                    out.print("        <span class=\"swb-pdcst-fsize\">"+df.format(f.length()/1048576.0)+" Mb</span>");
+//                    out.print("        <a class=\"swb-pdcst-imglnk\" href=\"#\" onclick=\"window.open('"+directURL+"?suri='+encodeURIComponent('"+audiofile.getURI()+"'))\" title=\""+(audiofile.getDisplayTitle(lang)==null?audiofile.getTitle():audiofile.getDisplayTitle(lang))+"\">"+paramRequest.getLocaleString("download")+"</a>&nbsp;");
+//                    out.println("     </p>");
+//                    out.println("    </div>");
+//                    out.println("   </div>");
+//                    out.println("  </li>");
+//                }
             }
             out.println(" </ul>");            
 
