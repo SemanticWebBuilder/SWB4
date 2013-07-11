@@ -38,8 +38,8 @@
 </style>
 
 <div class="swbform">
-    <form name="formTopics" id="formSites">
-        <div id="pub-detalle">
+    <div id="pub-detalle">
+    <form name="formTopics" id="formSites">        
     <table width="50%" border="0px">            
        <tr>
            <td colspan="3" style="text-align: center;" class="titulo">Seleccione un Tema:</td>        
@@ -59,15 +59,15 @@
                             %>
                                 <option value="<%=socialTopic.getURI()%>"><%=socialTopic.getDisplayTitle(user.getLanguage())%></option>
                             <%
-                        }
+                        }                   
                     %>
                 </select>
             </td>
             
        </tr>
-       </form>
-    </table>
-        </div>
+       </table>
+       </form>  
+                   </div>
 </div>
 <div id="createPost" dojoType="dijit.layout.ContentPane">
 </div>
