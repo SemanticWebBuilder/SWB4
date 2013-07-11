@@ -26,6 +26,9 @@
     }
 
     String objUri = request.getParameter("objUri");
+    String sourceCall = request.getParameter("source");
+    System.out.println("****EL source es: " +sourceCall);
+    
     SemanticObject semObj = null;
     if (objUri == null && request.getAttribute("objUri") != null) {
         objUri = (String) request.getAttribute("objUri");
@@ -110,7 +113,7 @@
 <div id="pub-detalle">
     <span class="sel-txtdiv"></span>
     <div class="swbform">
-        <form dojoType="dijit.form.Form" id="<%=objUri%>frmUploadText" action="<%=urlAction.setAction("postMessage")%>" onsubmit="submitForm('<%=objUri%>frmUploadText');
+        <form dojoType="dijit.form.Form" id="<%=objUri%><%=sourceCall%>frmUploadText" action="<%=urlAction.setAction("postMessage")%>" onsubmit="submitForm('<%=objUri%>frmUploadText');
                 return false;" method="post">
 
             <div class="pub-info">
@@ -184,7 +187,7 @@
                     Iterator<SocialNetwork> it = SocialNetwork.ClassMgr.listSocialNetworks(wsite);
                     while (it.hasNext()) {
                         SocialNetwork socialNetwork = (SocialNetwork) it.next();
-                        if (socialNetwork instanceof Messageable) {
+                        if (socialNetwork instanceof Messageable && socialNetwork.isActive()) {
                             boolean isSelected = false;
                             System.out.println("Las Redes:" + socialNetwork);
                             if (apostOutNets.contains(socialNetwork.getURI())) {
@@ -245,7 +248,7 @@
     <div id="pub-detalle">
         <span class="sel-imgdiv"></span>
         <div class="swbform">
-            <form dojoType="dijit.form.Form" id="<%=objUri%>frmUploadPhoto" action="<%=urlAction.setAction("uploadPhoto")%>" method="post" onsubmit="submitForm('<%=objUri%>frmUploadPhoto');
+            <form dojoType="dijit.form.Form" id="<%=objUri%><%=sourceCall%>frmUploadPhoto" action="<%=urlAction.setAction("uploadPhoto")%>" method="post" onsubmit="submitForm('<%=objUri%>frmUploadPhoto');
                 return false;">
                 <%= photoMgr.getFormHiddens()%>
                 <div class="pub-info">
@@ -253,11 +256,6 @@
                     <p>
                     <div class="etiqueta"><label for="description"><%=Photo.social_msg_Text.getDisplayName()%>:</label></div>
                     <div class="campo"><%=photoMgr.renderElement(request, Photo.social_msg_Text, photoMgr.MODE_CREATE)%></div>
-                    </p>
-                    <p>
-                    <div class="etiqueta"><label for="keywords"><%=Photo.swb_Tagable.getDisplayName(lang)%>:</label></div>
-                    <div class="etiqueta"><%=photoMgr.renderElement(request, Photo.swb_tags, photoMgr.MODE_CREATE)%></div>
-
                     </p>
                     <p>
                     <div class="etiqueta"><label for="photo"><%=photoMgr.renderLabel(request, PostImageable.social_hasPhoto, photoMgr.MODE_CREATE)%>: </label></div>
@@ -372,41 +370,17 @@
         videoMgr.addButton(SWBFormButton.newBackButton());
         SemanticObject videoSemObj = new SemanticObject(paramRequest.getWebPage().getWebSite().getSemanticModel(), Video.sclass);
     %>
-    <script type="text/javascript" id="<%=objUri%>appendsContents">
-            showListCategory = function() {
-                var frm = document.getElementById('<%=objUri%>frmUploadVideo');
-                var div = document.getElementById('<%=objUri%>divCategory');
-
-                for (i = 0; i < frm.checkYT.length; ++i) {
-                    if (frm.checkYT[i].checked)
-                    {
-                        div.removeAttribute('style');
-                        break;
-                    }
-                    if (frm.checkYT[i].checked == false)
-                    {
-                        div.setAttribute('style', 'display:none;');
-                    }
-                }
-
-            }
-    </script>
-    <div dojoType="dojox.layout.ContentPane">
-        <script type="dojo/method">
-            eval(document.getElementById("<%=objUri%>appendsContents").innerHTML);
-        </script>
-    </div> 
     <div id="pub-detalle">
        <span class="sel-viddiv"></span>
     <div class="swbform">
-        <form dojoType="dijit.form.Form" id="<%=objUri%>frmUploadVideo" action="<%=urlAction.setAction("uploadVideo")%>" method="post" onsubmit="submitForm('<%=objUri%>frmUploadVideo');
+        <form dojoType="dijit.form.Form" id="<%=objUri%><%=sourceCall%>frmUploadVideo" action="<%=urlAction.setAction("uploadVideo")%>" method="post" onsubmit="submitForm('<%=objUri%><%=sourceCall%>frmUploadVideo');
                 return false;">
             <%= videoMgr.getFormHiddens()%>
             
              <div class="pub-info">
                  <p class="titulo">Detalles de la publicaci&oacute;n</p>
                     <p>
-                      <div id="<%=objUri%>divCategory" style="display:none;" class="etiqueta"><label for="description">Categoría:</label>
+                      <div id="<%=objUri%><%=sourceCall%>divCategory" style="display:none;" class="etiqueta"><label for="description">Categoría:</label>
                 <select name="<%=Video.social_category.getName()%>">
                     <option>Selecciona...</option>
                     <%
@@ -423,6 +397,10 @@
             </div>
     
                     </p>
+                    <p>   
+        <div class="etiqueta"><label for="title"><%=Video.swb_title.getDisplayName()%>: </label></div>
+        <div class="campo"><%=videoMgr.renderElement(request, Video.swb_title, videoMgr.MODE_CREATE)%></div>
+             </p>
                     <p>
                        <div class="etiqueta"><label for="description"><%=Video.social_msg_Text.getDisplayName()%>:</label></div>
                        <div class="campo"><%=videoMgr.renderElement(request, Video.social_msg_Text, videoMgr.MODE_CREATE)%></div>
@@ -433,17 +411,18 @@
                     </p>
                     <p>
                         <div class="etiqueta"><label for="title"><%=videoMgr.renderLabel(request, Video.social_video, videoMgr.MODE_CREATE)%>: </label></div>
-                        <div class="campo"><%=videoMgr.getFormElement(Video.social_video).renderElement(request, videoSemObj, Video.social_video, SWBFormMgr.TYPE_DOJO, SWBFormMgr.MODE_CREATE, lang)%></div>       
-            <%
-                if (postIn != null) {
+                        <div class="campo"><%=videoMgr.getFormElement(Video.social_video).renderElement(request, videoSemObj, Video.social_video, SWBFormMgr.TYPE_DOJO, SWBFormMgr.MODE_CREATE, lang).replaceAll("video_new_defaultAuto", "video_new_defaultAuto" + objUri+sourceCall)%></div>       
+                    </p>
+
+            <%if (postIn != null) {
                     socialTopic = postIn.getSocialTopic();
                 }
                 if (socialTopic != null) {
                     Iterator<SocialPFlowRef> itSocialPFlowRefs = socialTopic.listInheritPFlowRefs();
             %>     
-                    </p>
                     <p>
-                       <div class="etiqueta"><label for="socialFlow"><%=SWBSocialUtil.Util.getStringFromGenericLocale("publishFlow", user.getLanguage())%></label></div>
+                   
+            <div class="etiqueta"><label for="socialFlow"><%=SWBSocialUtil.Util.getStringFromGenericLocale("publishFlow", user.getLanguage())%></label></div>
             <div class="campo">
                 <%
                     if (postIn != null) {
@@ -485,9 +464,8 @@
             %>  
                     </p>
             <ul class="btns_final">
-                <button dojoType="dijit.form.Button" type="submit"><%=SWBSocialUtil.Util.getStringFromGenericLocale("send", user.getLanguage())%></button>
-            </ul>      
-                    
+                <button dojoType="dijit.form.Button" type="submit" onclick="return validateChecks()"><%=SWBSocialUtil.Util.getStringFromGenericLocale("send", user.getLanguage())%></button>
+            </ul>           
              </div>
             <%
                 if (postInSN == null) {
@@ -513,14 +491,14 @@
                         if (socialNetwork instanceof Youtube) {
             %>
             <li class="<%=typeClass%>">
-                <input id="checkYT" type="checkbox" name="<%=socialNetwork.getURI()%>" onClick="showListCategory();" />
+                <input id="checkYT" type="checkbox" name="<%=socialNetwork.getURI()%>" onClick="showListCategory('<%=objUri%>','<%=sourceCall%>');" />
                 <label><span></span><%=socialNetwork.getTitle()%></label>
             </li>
             <%
             } else {
             %>
             <li>
-                <input type="checkbox" name="<%=socialNetwork.getURI()%>" /><%=socialNetwork.getTitle()%>
+                <input type="checkbox" id="checkRedes" name="<%=socialNetwork.getURI()%>" /><%=socialNetwork.getTitle()%>
             </li>
             <%
                         }
