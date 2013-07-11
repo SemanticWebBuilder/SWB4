@@ -45,10 +45,7 @@
         out.println("</div>");
         
         out.println("<div id=\""+ objUri + DISCOVER_TAB +"\" dojoType=\"dijit.layout.ContentPane\" title=\""+"Discover"+"\" refreshOnShow=\""+"true"+"\" href=\""+"/es/SWBAdmin/Timeline"+"?" + param + "&contentTabId=discover" +"\" _loadingMessage=\""+loading+"\" style_=\"border:0px; width:100%; height:100%\">");
-        out.println("</div>");
-        
-        out.println("<div id=\""+ objUri + "/wordN" +"\" dojoType=\"dijit.layout.ContentPane\" title=\""+"Word Net"+"\" refreshOnShow=\""+"false"+"\" href=\""+"/es/SWBAdmin/Timeline"+"?" + param + "&contentTabId=wordNet" +"\" _loadingMessage=\""+loading+"\" style_=\"border:0px; width:100%; height:100%\">");
-        out.println("</div>");
+        out.println("</div>");        
                 
         //out.println("<div id=\""+ objUri +"/profile"+"\" dojoType=\"dijit.layout.ContentPane\" title=\""+"Profile"+"\" refreshOnShow=\""+"true"+"\" href=\""+"/es/SWBAdmin/T_Timeline"+"?" + param + "&contentTabId=showUserProfile&targetUser=dendral"+"\" _loadingMessage=\""+loading+"\" style_=\"border:0px; width:100%; height:100%\">");
         //out.println("</div>");
