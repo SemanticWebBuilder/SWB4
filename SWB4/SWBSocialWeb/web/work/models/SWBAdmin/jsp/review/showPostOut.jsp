@@ -124,7 +124,7 @@
               <%=SWBSocialUtil.Util.getStringFromGenericLocale("intensity", user.getLanguage())%>:<%=postInSource.getPostIntesityType()==0?paramRequest.getLocaleString("low"):postInSource.getPostIntesityType()==1?paramRequest.getLocaleString("medium"):postInSource.getPostIntesityType()==2?paramRequest.getLocaleString("high"):"---"%>
           </td>
           <td align="center">
-              <%=SWBSocialUtil.Util.getStringFromGenericLocale("replies", user.getLanguage())%>:<%=postInSource.getPostRetweets()%>
+              <%=SWBSocialUtil.Util.getStringFromGenericLocale("replies", user.getLanguage())%>:<%=postInSource.getPostShared()%>
           </td>
           <td align="center">
               <%=SWBSocialUtil.Util.getStringFromGenericLocale("place", user.getLanguage())%>:<%=postInSource.getPostPlace() == null ? "---" : postInSource.getPostPlace()%>
@@ -160,7 +160,16 @@
          //Puse ese tolowercase porque el nombre de la propiedad lo pone en mayuscula, quien sabe porque, si esta en minuscula
         %>
         <td colspan="5">
-        <img src="<%=SWBPortal.getWebWorkPath()%><%=photo.getWorkPath()%>/<%=Photo.social_Photo.getName().toLowerCase()%>_<%=photo.getId()%>_<%=photo.getPhoto()%>">
+        <%
+        Iterator<String> itPhotos=photo.listPhotos();
+        while(itPhotos.hasNext())
+        {
+            String sphoto=itPhotos.next();
+        %>
+        <img src="<%=SWBPortal.getWebWorkPath()%><%=photo.getWorkPath()%>/<%=PostImageable.social_hasPhoto.getName()%>_<%=photo.getId()%>_<%=sphoto%>">
+        <%
+        }
+        %>
         <br><br><br><%=SWBUtils.TEXT.encode(photo.getMsg_Text(), "utf8")%>
         </td>
     <%    
