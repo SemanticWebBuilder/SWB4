@@ -1,7 +1,7 @@
 package org.semanticwb.bsc.element.base;
 
 
-public abstract class DistinctiveBase extends org.semanticwb.bsc.element.Theme implements org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Activeable
+public abstract class DistinctiveBase extends org.semanticwb.bsc.element.Theme implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Activeable,org.semanticwb.model.Roleable,org.semanticwb.model.Referensable,org.semanticwb.model.UserGroupable
 {
     public static final org.semanticwb.platform.SemanticClass bsc_Distinctive=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#Distinctive");
    /**
@@ -125,6 +125,29 @@ public abstract class DistinctiveBase extends org.semanticwb.bsc.element.Theme i
             return it;
         }
        /**
+       * Gets all org.semanticwb.bsc.element.Distinctive with a determined UserGroup
+       * @param value UserGroup of the type org.semanticwb.model.UserGroup
+       * @param model Model of the org.semanticwb.bsc.element.Distinctive
+       * @return Iterator with all the org.semanticwb.bsc.element.Distinctive
+       */
+
+        public static java.util.Iterator<org.semanticwb.bsc.element.Distinctive> listDistinctiveByUserGroup(org.semanticwb.model.UserGroup value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Distinctive> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasUserGroup, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.bsc.element.Distinctive with a determined UserGroup
+       * @param value UserGroup of the type org.semanticwb.model.UserGroup
+       * @return Iterator with all the org.semanticwb.bsc.element.Distinctive
+       */
+
+        public static java.util.Iterator<org.semanticwb.bsc.element.Distinctive> listDistinctiveByUserGroup(org.semanticwb.model.UserGroup value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Distinctive> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasUserGroup,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
        * Gets all org.semanticwb.bsc.element.Distinctive with a determined Perspective
        * @param value Perspective of the type org.semanticwb.bsc.element.Perspective
        * @param model Model of the org.semanticwb.bsc.element.Distinctive
@@ -170,6 +193,80 @@ public abstract class DistinctiveBase extends org.semanticwb.bsc.element.Theme i
             org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Distinctive> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_creator,value.getSemanticObject(),sclass));
             return it;
         }
+       /**
+       * Gets all org.semanticwb.bsc.element.Distinctive with a determined Role
+       * @param value Role of the type org.semanticwb.model.Role
+       * @param model Model of the org.semanticwb.bsc.element.Distinctive
+       * @return Iterator with all the org.semanticwb.bsc.element.Distinctive
+       */
+
+        public static java.util.Iterator<org.semanticwb.bsc.element.Distinctive> listDistinctiveByRole(org.semanticwb.model.Role value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Distinctive> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasRole, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.bsc.element.Distinctive with a determined Role
+       * @param value Role of the type org.semanticwb.model.Role
+       * @return Iterator with all the org.semanticwb.bsc.element.Distinctive
+       */
+
+        public static java.util.Iterator<org.semanticwb.bsc.element.Distinctive> listDistinctiveByRole(org.semanticwb.model.Role value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Distinctive> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasRole,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.bsc.element.Distinctive with a determined RuleRef
+       * @param value RuleRef of the type org.semanticwb.model.RuleRef
+       * @param model Model of the org.semanticwb.bsc.element.Distinctive
+       * @return Iterator with all the org.semanticwb.bsc.element.Distinctive
+       */
+
+        public static java.util.Iterator<org.semanticwb.bsc.element.Distinctive> listDistinctiveByRuleRef(org.semanticwb.model.RuleRef value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Distinctive> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasRuleRef, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.bsc.element.Distinctive with a determined RuleRef
+       * @param value RuleRef of the type org.semanticwb.model.RuleRef
+       * @return Iterator with all the org.semanticwb.bsc.element.Distinctive
+       */
+
+        public static java.util.Iterator<org.semanticwb.bsc.element.Distinctive> listDistinctiveByRuleRef(org.semanticwb.model.RuleRef value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Distinctive> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasRuleRef,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.bsc.element.Distinctive with a determined Distinctive
+       * @param value Distinctive of the type org.semanticwb.bsc.element.Distinctive
+       * @param model Model of the org.semanticwb.bsc.element.Distinctive
+       * @return Iterator with all the org.semanticwb.bsc.element.Distinctive
+       */
+
+        public static java.util.Iterator<org.semanticwb.bsc.element.Distinctive> listDistinctiveByDistinctive(org.semanticwb.bsc.element.Distinctive value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Distinctive> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(bsc_hasDistinctive, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.bsc.element.Distinctive with a determined Distinctive
+       * @param value Distinctive of the type org.semanticwb.bsc.element.Distinctive
+       * @return Iterator with all the org.semanticwb.bsc.element.Distinctive
+       */
+
+        public static java.util.Iterator<org.semanticwb.bsc.element.Distinctive> listDistinctiveByDistinctive(org.semanticwb.bsc.element.Distinctive value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Distinctive> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(bsc_hasDistinctive,value.getSemanticObject(),sclass));
+            return it;
+        }
+    }
+
+    public static DistinctiveBase.ClassMgr getDistinctiveClassMgr()
+    {
+        return new DistinctiveBase.ClassMgr();
     }
 
    /**
@@ -179,5 +276,14 @@ public abstract class DistinctiveBase extends org.semanticwb.bsc.element.Theme i
     public DistinctiveBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
+    }
+
+   /**
+   * Gets the BSC
+   * @return a instance of org.semanticwb.bsc.BSC
+   */
+    public org.semanticwb.bsc.BSC getBSC()
+    {
+        return (org.semanticwb.bsc.BSC)getSemanticObject().getModel().getModelObject().createGenericInstance();
     }
 }

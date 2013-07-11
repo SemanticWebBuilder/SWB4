@@ -4,7 +4,7 @@ package org.semanticwb.bsc.base;
    /**
    * Modelo que define un Scorecard de la metodologia BalancedScorecard de Norton y Kaplan 
    */
-public abstract class BSCBase extends org.semanticwb.model.WebSite implements org.semanticwb.model.Localeable,org.semanticwb.model.Activeable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Trashable,org.semanticwb.model.FilterableNode,org.semanticwb.bsc.Help,org.semanticwb.model.Traceable,org.semanticwb.model.Filterable,org.semanticwb.model.Indexable,org.semanticwb.model.OntologyDepable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Countryable,org.semanticwb.model.Undeleteable
+public abstract class BSCBase extends org.semanticwb.model.WebSite implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Trashable,org.semanticwb.model.Traceable,org.semanticwb.bsc.Help,org.semanticwb.model.Undeleteable,org.semanticwb.model.FilterableNode,org.semanticwb.model.OntologyDepable,org.semanticwb.model.Filterable,org.semanticwb.model.Activeable,org.semanticwb.model.Indexable,org.semanticwb.model.Countryable,org.semanticwb.model.Localeable,org.semanticwb.model.FilterableClass
 {
     public static final org.semanticwb.platform.SemanticProperty bsc_values=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#values");
    /**
@@ -15,18 +15,27 @@ public abstract class BSCBase extends org.semanticwb.model.WebSite implements or
     public static final org.semanticwb.platform.SemanticProperty bsc_logo=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#logo");
     public static final org.semanticwb.platform.SemanticProperty bsc_vision=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#vision");
     public static final org.semanticwb.platform.SemanticProperty bsc_mission=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#mission");
-    public static final org.semanticwb.platform.SemanticClass bsc_Measure=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#Measure");
+   /**
+   * Define una Collección de objetos de una clase especificada con la propiedad "collectionClass"
+   */
+    public static final org.semanticwb.platform.SemanticClass swb_Collection=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Collection");
+    public static final org.semanticwb.platform.SemanticClass bsc_Distinctive=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#Distinctive");
     public static final org.semanticwb.platform.SemanticClass bsc_Objective=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#Objective");
    /**
    * Persiste los atributos de un indicador
    */
     public static final org.semanticwb.platform.SemanticClass bsc_Indicator=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#Indicator");
     public static final org.semanticwb.platform.SemanticClass bsc_Risk=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#Risk");
+    public static final org.semanticwb.platform.SemanticClass bsc_PeriodStatus=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#PeriodStatus");
     public static final org.semanticwb.platform.SemanticClass bsc_Action=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#Action");
+   /**
+   * Catalogo de paises
+   */
+    public static final org.semanticwb.platform.SemanticClass swb_Country=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Country");
     public static final org.semanticwb.platform.SemanticClass bsc_Perspective=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#Perspective");
     public static final org.semanticwb.platform.SemanticClass bsc_Initiative=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#Initiative");
    /**
-   * Persiste información de una periodicidad
+   * Las frecuencias de medición, definen bloques de períodos para determinar cuándo se requiere la captura de información.
    */
     public static final org.semanticwb.platform.SemanticClass bsc_MeasurementFrequency=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#MeasurementFrequency");
    /**
@@ -396,6 +405,11 @@ public abstract class BSCBase extends org.semanticwb.model.WebSite implements or
         }
     }
 
+    public static BSCBase.ClassMgr getBSCClassMgr()
+    {
+        return new BSCBase.ClassMgr();
+    }
+
    /**
    * Constructs a BSCBase with a SemanticObject
    * @param base The SemanticObject with the properties for the BSC
@@ -578,34 +592,64 @@ public abstract class BSCBase extends org.semanticwb.model.WebSite implements or
         getSemanticObject().setProperty(bsc_mission, mission, lang);
     }
 
-    public org.semanticwb.bsc.element.Measure getMeasure(String id)
+    public org.semanticwb.model.Collection getCollection(String id)
     {
-        return org.semanticwb.bsc.element.Measure.ClassMgr.getMeasure(id, this);
+        return org.semanticwb.model.Collection.ClassMgr.getCollection(id, this);
     }
 
-    public java.util.Iterator<org.semanticwb.bsc.element.Measure> listMeasures()
+    public java.util.Iterator<org.semanticwb.model.Collection> listCollections()
     {
-        return org.semanticwb.bsc.element.Measure.ClassMgr.listMeasures(this);
+        return org.semanticwb.model.Collection.ClassMgr.listCollections(this);
     }
 
-    public org.semanticwb.bsc.element.Measure createMeasure(String id)
+    public org.semanticwb.model.Collection createCollection(String id)
     {
-        return org.semanticwb.bsc.element.Measure.ClassMgr.createMeasure(id,this);
+        return org.semanticwb.model.Collection.ClassMgr.createCollection(id,this);
     }
 
-    public org.semanticwb.bsc.element.Measure createMeasure()
+    public org.semanticwb.model.Collection createCollection()
     {
-        long id=getSemanticObject().getModel().getCounter(bsc_Measure);
-        return org.semanticwb.bsc.element.Measure.ClassMgr.createMeasure(String.valueOf(id),this);
+        long id=getSemanticObject().getModel().getCounter(swb_Collection);
+        return org.semanticwb.model.Collection.ClassMgr.createCollection(String.valueOf(id),this);
     } 
 
-    public void removeMeasure(String id)
+    public void removeCollection(String id)
     {
-        org.semanticwb.bsc.element.Measure.ClassMgr.removeMeasure(id, this);
+        org.semanticwb.model.Collection.ClassMgr.removeCollection(id, this);
     }
-    public boolean hasMeasure(String id)
+    public boolean hasCollection(String id)
     {
-        return org.semanticwb.bsc.element.Measure.ClassMgr.hasMeasure(id, this);
+        return org.semanticwb.model.Collection.ClassMgr.hasCollection(id, this);
+    }
+
+    public org.semanticwb.bsc.element.Distinctive getDistinctive(String id)
+    {
+        return org.semanticwb.bsc.element.Distinctive.ClassMgr.getDistinctive(id, this);
+    }
+
+    public java.util.Iterator<org.semanticwb.bsc.element.Distinctive> listDistinctives()
+    {
+        return org.semanticwb.bsc.element.Distinctive.ClassMgr.listDistinctives(this);
+    }
+
+    public org.semanticwb.bsc.element.Distinctive createDistinctive(String id)
+    {
+        return org.semanticwb.bsc.element.Distinctive.ClassMgr.createDistinctive(id,this);
+    }
+
+    public org.semanticwb.bsc.element.Distinctive createDistinctive()
+    {
+        long id=getSemanticObject().getModel().getCounter(bsc_Distinctive);
+        return org.semanticwb.bsc.element.Distinctive.ClassMgr.createDistinctive(String.valueOf(id),this);
+    } 
+
+    public void removeDistinctive(String id)
+    {
+        org.semanticwb.bsc.element.Distinctive.ClassMgr.removeDistinctive(id, this);
+    }
+    public boolean hasDistinctive(String id)
+    {
+        return org.semanticwb.bsc.element.Distinctive.ClassMgr.hasDistinctive(id, this);
     }
 
     public org.semanticwb.bsc.element.Objective getObjective(String id)
@@ -698,6 +742,36 @@ public abstract class BSCBase extends org.semanticwb.model.WebSite implements or
         return org.semanticwb.bsc.tracing.Risk.ClassMgr.hasRisk(id, this);
     }
 
+    public org.semanticwb.bsc.element.PeriodStatus getPeriodStatus(String id)
+    {
+        return org.semanticwb.bsc.element.PeriodStatus.ClassMgr.getPeriodStatus(id, this);
+    }
+
+    public java.util.Iterator<org.semanticwb.bsc.element.PeriodStatus> listPeriodStatuses()
+    {
+        return org.semanticwb.bsc.element.PeriodStatus.ClassMgr.listPeriodStatuses(this);
+    }
+
+    public org.semanticwb.bsc.element.PeriodStatus createPeriodStatus(String id)
+    {
+        return org.semanticwb.bsc.element.PeriodStatus.ClassMgr.createPeriodStatus(id,this);
+    }
+
+    public org.semanticwb.bsc.element.PeriodStatus createPeriodStatus()
+    {
+        long id=getSemanticObject().getModel().getCounter(bsc_PeriodStatus);
+        return org.semanticwb.bsc.element.PeriodStatus.ClassMgr.createPeriodStatus(String.valueOf(id),this);
+    } 
+
+    public void removePeriodStatus(String id)
+    {
+        org.semanticwb.bsc.element.PeriodStatus.ClassMgr.removePeriodStatus(id, this);
+    }
+    public boolean hasPeriodStatus(String id)
+    {
+        return org.semanticwb.bsc.element.PeriodStatus.ClassMgr.hasPeriodStatus(id, this);
+    }
+
     public org.semanticwb.bsc.tracing.Action getAction(String id)
     {
         return org.semanticwb.bsc.tracing.Action.ClassMgr.getAction(id, this);
@@ -726,6 +800,30 @@ public abstract class BSCBase extends org.semanticwb.model.WebSite implements or
     public boolean hasAction(String id)
     {
         return org.semanticwb.bsc.tracing.Action.ClassMgr.hasAction(id, this);
+    }
+
+    public org.semanticwb.model.Country getCountry(String id)
+    {
+        return org.semanticwb.model.Country.ClassMgr.getCountry(id, this);
+    }
+
+    public java.util.Iterator<org.semanticwb.model.Country> listCountries()
+    {
+        return org.semanticwb.model.Country.ClassMgr.listCountries(this);
+    }
+
+    public org.semanticwb.model.Country createCountry(String id)
+    {
+        return org.semanticwb.model.Country.ClassMgr.createCountry(id,this);
+    }
+
+    public void removeCountry(String id)
+    {
+        org.semanticwb.model.Country.ClassMgr.removeCountry(id, this);
+    }
+    public boolean hasCountry(String id)
+    {
+        return org.semanticwb.model.Country.ClassMgr.hasCountry(id, this);
     }
 
     public org.semanticwb.bsc.element.Perspective getPerspective(String id)
