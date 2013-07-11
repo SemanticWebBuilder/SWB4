@@ -13,7 +13,9 @@
 <%@page import="org.semanticwb.portal.api.SWBResourceURL"%>
 <jsp:useBean id="paramRequest" scope="request" type="org.semanticwb.portal.api.SWBParamRequest"/>
 <% 
-    String objUri = (String) request.getParameter("suri");
+    String objUri = (String)request.getParameter("suri");
+
+    String sourceCall =  request.getAttribute("source") == null ? "" : (String) request.getAttribute("source");    
     SemanticObject semanticObject = SemanticObject.createSemanticObject(objUri);
     SocialTopic socialTopic = (SocialTopic) semanticObject.createGenericInstance();
     String brand = socialTopic.getSemanticObject().getModel().getName();    
@@ -24,6 +26,8 @@
     Map argsM = new HashMap();
     argsM.put("wsite", wsite.getId().toString());
     argsM.put("objUri", objUri);
+    //Para probar el source
+    argsM.put("source", sourceCall);
     argsM.put("valor", "postMessage");
     //argsM.put("action", action);
     //System.out.println(wsite.getId().toString() + "--" + objUri + "--" + action );
@@ -31,54 +35,30 @@
     Map argsP = new HashMap();
     argsP.put("wsite", wsite.getId().toString());
     argsP.put("objUri", objUri);
+    //Para probar el source
+    argsM.put("source", sourceCall);
     argsP.put("valor", "uploadPhoto");
     //argsP.put("action", action);
     //System.out.println(wsite.getId().toString() + "--" + objUri);
     Map argsV = new HashMap();
     argsV.put("wsite", wsite.getId().toString());
     argsV.put("objUri", objUri);
+    //Para probar el source
+    argsM.put("source", sourceCall);
     argsV.put("valor", "uploadVideo");
     //argsV.put("action", action);
     //System.out.println(wsite.getId().toString() + "--" + objUri);
 %>
-<script type="text/javascript" id="<%=objUri%>appends">
-    changeClassT = function() { 
-       if(document.getElementById('Txt').className ='sel-txt'){
-            document.getElementById('Txt').className ='sel-txt2';
-            document.getElementById('Img').className ='sel-img';
-            document.getElementById('Video').className ='sel-vid';
-        }
-    }
-     changeClassI = function() { 
-       if(document.getElementById('Img').className ='sel-img'){
-            document.getElementById('Img').className ='sel-img2';
-            document.getElementById('Txt').className ='sel-txt';
-            document.getElementById('Video').className ='sel-vid';
-        }
-     }
-     changeClassV = function() { 
-       if(document.getElementById('Video').className ='sel-vid'){
-            document.getElementById('Video').className ='sel-vid2';
-            document.getElementById('Txt').className ='sel-txt';
-            document.getElementById('Img').className ='sel-img';
-        }
-    }
-</script>
-<div dojoType="dojox.layout.ContentPane">
-    <script type="dojo/method">
-         eval(document.getElementById("<%=objUri%>appends").innerHTML);
-   </script>
-</div> 
 <body>
-<div class="swbform" id="publicar" >
+<div class="swbform" id="<%=objUri%><%=sourceCall%>publicar" >
         <p><strong>¿Qué deseas publicar?</strong></p>
         <div class="sel-media">
-            <a id="Txt" title="Publicar un mensaje de texto" class="sel-txt" onclick="changeClassT();postHtml('<%=url.setMode("post").setParameters(argsM)%>', '<%=objUri%>postType')"><span>Publicar un mensaje de texto</span></a>
-            <a id="Img" title="Publicar una imagen" class="sel-img" onclick="changeClassI();postHtml('<%=url.setMode("post").setParameters(argsP)%>', '<%=objUri%>postType')"><span>Publicar una imagen</span></a>
-            <a id="Video" title="Publicar un video" class="sel-vid" onclick="changeClassV();postHtml('<%=url.setMode("post").setParameters(argsV)%>', '<%=objUri%>postType')"><span>Publicar un video</span></a>
+            <a id="<%=objUri%><%=sourceCall%>Txt" title="Publicar un mensaje de texto" class="sel-txt" onclick="changeClassT('<%=objUri%>','<%=sourceCall%>');postHtml('<%=url.setMode("post").setParameters(argsM)%>', '<%=objUri%><%=sourceCall%>postType')"><span>Publicar un mensaje de texto</span></a>
+            <a id="<%=objUri%><%=sourceCall%>Img" title="Publicar una imagen" class="sel-img" onclick="changeClassI('<%=objUri%>','<%=sourceCall%>');postHtml('<%=url.setMode("post").setParameters(argsP)%>', '<%=objUri%><%=sourceCall%>postType')"><span>Publicar una imagen</span></a>
+            <a id="<%=objUri%><%=sourceCall%>Video" title="Publicar un video" class="sel-vid" onclick="changeClassV('<%=objUri%>','<%=sourceCall%>');postHtml('<%=url.setMode("post").setParameters(argsV)%>', '<%=objUri%><%=sourceCall%>postType')"><span>Publicar un video</span></a>
 	</div>
         
 </div>
-        <div id="<%=objUri%>postType" dojoType="dijit.layout.ContentPane">
+        <div id="<%=objUri%><%=sourceCall%>postType" dojoType="dijit.layout.ContentPane">
 </div>
 </body>
