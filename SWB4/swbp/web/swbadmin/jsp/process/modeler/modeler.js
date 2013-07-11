@@ -3601,9 +3601,11 @@
             }
             else if(type=='ExclusiveGateway') {
                 ret= new _ExclusiveGateway(Modeler.createObject("#exclusiveDataGateway",null,null));
+                ret.setText("Exclusiva (datos)");
             }
             else if(type=='InclusiveGateway') {
                 ret= new _InclusiveGateway(Modeler.createObject("#inclusiveDataGateway",null,null));
+                ret.setText("Inclusiva (datos)");
             }
             else if(type=='ExclusiveStartEventGateway') {
                 ret= new _ExclusiveStartEventGateway(Modeler.createObject("#exclusiveStartGateway",null,null));
@@ -3619,6 +3621,7 @@
             }
             else if(type=='ComplexGateway') {
                 ret= new _ComplexGateway(Modeler.createObject("#complexGateway",null,null));
+                ret.setText("Compleja");
             }
             else if(type=='Group') {
                 ret= new _Group(Modeler.createGroupArtifact(null,null));
