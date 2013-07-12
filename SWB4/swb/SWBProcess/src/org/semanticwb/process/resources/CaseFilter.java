@@ -31,7 +31,6 @@ import java.net.URLDecoder;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.process.model.Instance;
-import org.semanticwb.process.model.ProcessSite;
 import org.semanticwb.process.model.ProcessInstance;
 import org.semanticwb.process.model.SubProcessInstance;
 
@@ -42,7 +41,6 @@ import org.semanticwb.portal.api.SWBResourceException;
 
 import org.semanticwb.process.kpi.CaseCountSys;
 import org.semanticwb.process.kpi.KProcessInstance;
-import org.semanticwb.process.kpi.CaseProcessInstance;
 
 import org.semanticwb.process.utils.Restriction;
 import org.semanticwb.process.utils.TimeInterval;
@@ -67,6 +65,7 @@ import org.w3c.dom.Document;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.semanticwb.SWBPlatform;
 import org.semanticwb.model.*;
 
 import org.semanticwb.process.utils.JRCaseDetail;
@@ -169,20 +168,21 @@ public class CaseFilter extends GenericResource {
          out.println("          rowsPerPage: \"15\"");
 
          out.println(",query:{ status: '*' } ");
-         out.println(",onRowDblClick: fillTracking ");
+//         out.println(",onRowDblClick: fillTracking ");
 
          out.println("      }, \"gridMaster\");");
          out.println("      gridMaster.startup();");
          out.println("  });");
 
-         out.println("function fillTracking(evt) {\n");
-         out.println("      doTracking('width=600, height=550, scrollbars, resizable, alwaysRaised, menubar',evt.grid.store.getValue(evt.grid.getItem(evt.rowIndex),'instance')); \n");
-         out.println("}\n");
-
-         out.println("function doTracking(size, key) { \n");
-         out.println("   var params = '?&instance='+key;\n");
-         out.println("   window.open(\""+url.setMode("tracking")+"\"+params,\"detailWindow\", size);\n");
-         out.println("}\n");
+//         out.println("function fillTracking(evt) {\n");
+//         out.println("alert(evt.grid.store.getValue(evt.grid.getItem(evt.rowIndex),'instanceURI'));\n");
+//         out.println("      doTracking('width=600, height=550, scrollbars, resizable, alwaysRaised, menubar',evt.grid.store.getValue(evt.grid.getItem(evt.rowIndex),'instanceURI')); \n");
+//         out.println("}\n");
+//
+//         out.println("function doTracking(size, key) { \n");
+//         out.println("   var params = '?instanceURI='+key;\n");
+//         out.println("   window.open(\""+url.setMode("tracking")+"\"+params,\"detailWindow\", size);\n");
+//         out.println("}\n");
 
          out.println("  function addProps(){");
          out.println("      var process = dijit.byId('process').value;");
@@ -221,7 +221,8 @@ public class CaseFilter extends GenericResource {
          out.println("      if(dojo.byId('status')) {");
          out.println("          params += '&status=' + status;");
          out.println("      }");
-         Iterator itIds = getProcessObjectsIds().iterator();
+         url.setCallMethod(SWBResourceURL.Call_DIRECT);
+         Iterator itIds = getProcessURIs().iterator();
          while (itIds.hasNext()) {
              String id = (String)itIds.next();
              out.println("          if(dojo.byId('" + id + "_active')) {");
@@ -427,6 +428,7 @@ public class CaseFilter extends GenericResource {
                 JSONObject obj = new JSONObject();
                 ProcessInstance pinst = itpi.next();
                 obj.put("instance", pinst.getId());
+                obj.put("instanceURI", pinst.getEncodedURI());
                 obj.put("process", pinst.getProcessType().getTitle());
                 obj.put("user", Ajax.getModifiedBy(pinst));
                 obj.put("started", pinst.getCreated());
@@ -593,23 +595,16 @@ public class CaseFilter extends GenericResource {
         out.print(" </table>\n");
     }
 
-    private ArrayList getProcessObjectsIds() {
+    private ArrayList getProcessURIs() {
         ArrayList pobjs = new ArrayList();
-        Iterator isites = ProcessSite.ClassMgr.listProcessSites();
-        while (isites.hasNext()) {
-            ProcessSite site = (ProcessSite)isites.next();
-            /*java.util.Vector processdefs = BPMSProcessInstance.ClassMgr.getAllProcessDefinitions(site);
-            java.util.Enumeration eprocess = processdefs.elements();
-            while (eprocess.hasMoreElements()) {
-                Process process = (Process)eprocess.nextElement();*/
-            Iterator<Process> itprocess = site.listProcesses();
-            while (itprocess.hasNext()) {
-                Process process = itprocess.next();
-                ProcessInstance pinst = CaseProcessInstance.pop(process);
-                if (null != pinst)
+        
+        Iterator<ProcessInstance> instances = ProcessInstance.ClassMgr.listProcessInstances();
+        while (instances.hasNext()) {
+            ProcessInstance pinst = instances.next();
+            if (null != pinst)
                     getObjectsFromInstanceIds(pinst, pobjs);
-            }
         }
+        
         return getObjetcsIds(pobjs);
     }
 
@@ -673,16 +668,21 @@ public class CaseFilter extends GenericResource {
     public void doCaseTracking(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
         ArrayList pobjs = new ArrayList();
         PrintWriter out = response.getWriter();
-        String idpinst = getURLInstance(request.getParameter("instance"));
-        SemanticObject semObject = SemanticObject.createSemanticObject(idpinst);
-        ProcessInstance pinst = (ProcessInstance)semObject.createGenericInstance();
+        String idpinst = request.getParameter("instanceURI");
+        //SemanticObject semObject = SemanticObject.createSemanticObject(idpinst);
+        ProcessInstance pinst = (ProcessInstance) SWBPlatform.getSemanticMgr().getOntology().getGenericObject(URLDecoder.decode(idpinst));
+        
+        if (pinst == null) {
+            return;
+        }
+        
         Process process = pinst.getProcessType();
         out.println("<h3>Propiedades</h3>");
         out.println("<ul>");
         getProcessObjects(process, pobjs);
-        Iterator<SWBClass> objit = pobjs.iterator();
+        Iterator<SemanticClass> objit = pobjs.iterator();
         while(objit.hasNext()) {
-            SWBClass pobj =  objit.next();
+            SemanticClass pobj =  objit.next();
             out.println("   <li><b>" + getLabelObject(pobj, paramsRequest) + "</b></li>\n");
             Iterator<SemanticProperty> spit = pobj.getSemanticObject().listProperties();
             while(spit.hasNext()) {
@@ -950,7 +950,7 @@ public class CaseFilter extends GenericResource {
             return "";
     }
 
-    private String getLabelObject(SWBClass obj, SWBParamRequest paramRequest) {
+    private String getLabelObject(SemanticClass obj, SWBParamRequest paramRequest) {
         SemanticObject sob = SemanticObject.getSemanticObject(obj.getURI());
         SemanticClass cls = sob.getSemanticClass();
         if (null!=cls.getRootClass().getLabel(paramRequest.getUser().getLanguage()))
