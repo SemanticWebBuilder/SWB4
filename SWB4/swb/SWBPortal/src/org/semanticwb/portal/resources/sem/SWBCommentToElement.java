@@ -381,7 +381,7 @@ public class SWBCommentToElement extends org.semanticwb.portal.resources.sem.bas
         out.println("</div>");
         out.println("<div class=\"swb-comments-image\">");
         out.println("  <img src=\""+SWBPlatform.getContextPath()+"/swbadmin/jsp/securecode.jsp\" id=\"imgseccode\" width=\"155\" height=\"65\" /><br/>");
-        out.println("  <a href=\"javascript:changeSecureCodeImage('imgseccode');return false;\">"+paramRequest.getLocaleString("anotherCode")+"</a>");
+        out.println("  <a href=\"javascript:changeSecureCodeImage('imgseccode');\">"+paramRequest.getLocaleString("anotherCode")+"</a>");
         out.println("</div>");
         out.println("<div class=\"swb-comments-captcha\">");
         out.println("  <label for=\"seccode\">El texto de la imagen es:</label>");
