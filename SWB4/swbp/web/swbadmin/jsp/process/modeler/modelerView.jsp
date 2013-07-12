@@ -9,7 +9,7 @@
 <%@page import="org.semanticwb.process.model.Process"%>
 <%@page import="org.semanticwb.portal.api.SWBResourceURL"%>
 <%@page import="org.semanticwb.portal.api.SWBParamRequest"%>
-<%@page contentType="text/html"%>
+
 <%
 SWBParamRequest paramRequest = (SWBParamRequest)request.getAttribute("paramRequest");
 boolean isViewMode = (Boolean) request.getAttribute("isViewMode");
