@@ -26,13 +26,13 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import javax.servlet.http.*;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.model.Resource;
 import org.semanticwb.model.SWBClass;
 import org.semanticwb.model.SWBComparator;
 import org.semanticwb.model.User;
@@ -64,6 +64,18 @@ public class SWBCommentToElement extends org.semanticwb.portal.resources.sem.bas
     public SWBCommentToElement(org.semanticwb.platform.SemanticObject base) {
         super(base);
     }
+    
+    @Override
+    public void setResourceBase(Resource base)
+    {
+        try {
+            super.setResourceBase(base);
+            if(getMaxLength()<5) {
+                setMaxLength(500);
+            }
+        }catch(SWBResourceException e) {
+        }
+    }       
 
     /**
      * Al recibir la acción definida por <code>action_ADD</code> crea un nuevo comentario con los
@@ -108,6 +120,10 @@ public class SWBCommentToElement extends org.semanticwb.portal.resources.sem.bas
                     String txt = SWBUtils.XML.replaceXMLChars(request.getParameter("comment"));
                     if(txt.length()>=5)
                     {
+                        try {
+                            txt = txt.substring(0, getMaxLength());
+                        }catch(IndexOutOfBoundsException oobe) {
+                        }
                         WebSite model = response.getWebPage().getWebSite();
                         User user = response.getUser();
                         if(user.isSigned())
@@ -170,6 +186,10 @@ public class SWBCommentToElement extends org.semanticwb.portal.resources.sem.bas
                 String txt = SWBUtils.XML.replaceXMLChars(request.getParameter("comment"));
                 if(txt.length()>=5)
                 {
+                    try {
+                        txt = txt.substring(0, getMaxLength());
+                    }catch(IndexOutOfBoundsException oobe) {
+                    }
                     WebSite model = response.getWebPage().getWebSite();
                     String commentParentId = request.getParameter("cmmt");
                     if( CommentToElement.ClassMgr.hasCommentToElement(commentParentId, model) )
@@ -332,21 +352,23 @@ public class SWBCommentToElement extends org.semanticwb.portal.resources.sem.bas
         out.println("    s = s.concat('  <label for=\"ab_comment_'+pc+'\">"+paramRequest.getLocaleString("comment")+":</label>');");
         out.println("    s = s.concat('  <textarea id=\"ab_comment_'+pc+'\" name=\"comment\" cols=\"32\" rows=\"3\"></textarea>');");
         out.println("    s = s.concat('</div>');");
-//        out.println("    s = s.concat('<div class=\"swb-comments-image\">');");
-//        out.println("    s = s.concat('  <img src=\""+SWBPlatform.getContextPath()+"/swbadmin/jsp/securecode.jsp\" id=\"imgseccode_'+pc+'\" width=\"155\" height=\"65\" /><br/>');");
-//        out.println("    s = s.concat('  <a href=\"#\" onclick=\"changeSecureCodeImage(\'imgseccode_\''+pc+')\">"+paramRequest.getLocaleString("anotherCode")+"</a>');");
-//        out.println("    s = s.concat('</div>');");
-//        out.println("    s = s.concat('<div class=\"swb-comments-captcha\">');");
-//        out.println("    s = s.concat('  <label for=\"ab_seccode\">El texto de la imagen es:</label>');");
-//        out.println("    s = s.concat('  <input type=\"text\" id=\"ab_seccode_'+pc+'\" name=\"ab_seccode_'+pc+'\" />');");
-//        out.println("    s = s.concat('</div>');");
+out.println("    s = s.concat('<div class=\"swb-comments-image\">');");
+out.println("    s = s.concat('  <img src=\""+SWBPlatform.getContextPath()+"/swbadmin/jsp/securecode.jsp\" id=\"imgseccode_'+pc+'\" width=\"155\" height=\"65\" />');");
+out.println("    s = s.concat('  <a href=\"#\" onclick=\"changeSecureCodeImage(\\'imgseccode_'+pc+'\\')\">"+paramRequest.getLocaleString("anotherCode")+"</a>');");
+out.println("    s = s.concat('</div>');");
+out.println("    s = s.concat('<div class=\"swb-comments-captcha\">');");
+out.println("    s = s.concat('  <label for=\"ab_seccode_'+pc+'\">El texto de la imagen es:</label>');");
+out.println("    s = s.concat('  <input type=\"text\" id=\"ab_seccode_'+pc+'\" name=\"seccode\" />');");
+out.println("    s = s.concat('</div>');");
         out.println("    s = s.concat('<div class=\"swb-comments-send\">');");
         out.println("    s = s.concat('  <input type=\"button\" value=\""+paramRequest.getLocaleString("publish")+"\" onclick=\"if(validateFrm('+childObjId+')){this.form.submit()}\" />');");
         out.println("    s = s.concat('</div>');");
         out.println("    s = s.concat('</form>');");
         out.println("    dojo.place(s, parentObjId, position);");
         out.println("    dojo.parser.parse(childObjId);");
-        out.println("    dojo.byId(childObjId).name.focus();");
+        out.println("    if(dojo.byId(childObjId).name) {");
+        out.println("      dojo.byId(childObjId).name.focus();");
+        out.println("    }");
         out.println("    pc++;");
         out.println("  }else {");
         out.println("    dojo.destroy(childObjId);");
@@ -392,22 +414,15 @@ public class SWBCommentToElement extends org.semanticwb.portal.resources.sem.bas
         out.println("</div>");
         out.println("</form>");
         out.println("</div>");
-        //Iterator<CommentToElement> comments = CommentToElement.ClassMgr.listCommentToElementByElement(element, paramRequest.getWebPage().getWebSite());
-        Iterator<CommentToElement> comments = listCommentToElementByElement(element, paramRequest.getWebPage().getWebSite());
-        List<CommentToElement> commentsList = SWBUtils.Collections.copyIterator(comments);
+        List<CommentToElement> commentsList = listCommentToElementByElement(element, paramRequest.getWebPage().getWebSite());
         out.println("<div class=\"swb-comments-lst\">");
-        //if(comments.hasNext()) {
         if(!commentsList.isEmpty())
         {
             out.println("<p class=\"swb-comments-lblcmmt\">"+paramRequest.getLocaleString("lblComments")+"</p>");
-            //out.println(renderListComments(paramRequest, comments));
             out.println(" <div class=\"swb-comments-box\" id=\"commts\">");
             out.println(renderListComments(paramRequest, commentsList.iterator()));
             if(commentsList.size()>getBlockSize()) {
                 out.println("<p><a href=\"javascript:postHtml('"+paramRequest.getRenderUrl().setCallMethod(SWBResourceURL.Call_DIRECT).setMode(SWBResourceURL.Mode_INDEX).setParameter("suri",element.getEncodedURI()).setParameter(FCTR,"_")+"','commts')\" title=\""+paramRequest.getLocaleString("viewMore")+"\">"+paramRequest.getLocaleString("viewMore")+"</a></p>");
-//                if(commentsList.size()>getBlockSize()*5) {
-//                    out.println("<p><a href=\"javascript:postHtml('"+paramRequest.getRenderUrl().setCallMethod(SWBResourceURL.Call_DIRECT).setMode(SWBResourceURL.Mode_INDEX).setParameter("suri",element.getEncodedURI())+"','commts')\" title=\""+paramRequest.getLocaleString("viewAllComments")+"\">"+paramRequest.getLocaleString("viewAllComments")+"&nbsp;&raquo;</a></p>");
-//                }
             }
             out.println("</div>");
         }
@@ -437,14 +452,9 @@ public class SWBCommentToElement extends org.semanticwb.portal.resources.sem.bas
         
         if(icomments.hasNext())
         {
-            icomments = SWBComparator.sortByCreated(icomments, false);
-//            html.append(" <div class=\"swb-comments-box\" id=\"commts\">");
             html.append("  <ul class=\"swb-comments-lst\">");
             for(int i=getBlockSize(); i>0&&icomments.hasNext(); i--) {
                 CommentToElement comment = icomments.next();
-//                if(!comment.isValid() || !user.haveAccess(comment)) {
-//                    continue;
-//                }
                 html.append("  <li class=\"swb-cmmts-item\" id=\"item_"+comment.getId()+"\">");
                 html.append("   <p class=\"swb-cmmts-name\">"+(comment.getCreator()==null?comment.getName():comment.getCreator().getFullName()));
                 try {
@@ -487,7 +497,6 @@ public class SWBCommentToElement extends org.semanticwb.portal.resources.sem.bas
                 html.append("  </li>");
             }
             html.append(" </ul>");
-//            html.append("</div>");
             
         }else {
             html.append("<p class=\"swb-comments-noe\">"+paramRequest.getLocaleString("noComment")+"</p>");
@@ -576,12 +585,9 @@ public class SWBCommentToElement extends org.semanticwb.portal.resources.sem.bas
         final String lang = user.getLanguage()==null?"es":user.getLanguage();
         String name;
         
-        Iterator<CommentToElement> comments = listCommentToElementByElement(element, paramRequest.getWebPage().getWebSite());
-        if(comments.hasNext())
+        List<CommentToElement> commentsList = listCommentToElementByElement(element, paramRequest.getWebPage().getWebSite());
+        if(!commentsList.isEmpty())
         {
-            comments = SWBComparator.sortByCreated(comments, false);
-            List<CommentToElement> commentsList = SWBUtils.Collections.copyIterator(comments);
-            
             //html.append(" <div class=\"swb-comments-box\" id=\"commts\">");
             html.append("  <ul class=\"swb-comments-lst\">");
             
@@ -595,8 +601,8 @@ public class SWBCommentToElement extends org.semanticwb.portal.resources.sem.bas
             request.getSession(true).setAttribute(FCTR, fctr);
             fctr *= getBlockSize(); 
             
-            comments = commentsList.iterator();
             CommentToElement comment;
+            Iterator<CommentToElement> comments = commentsList.iterator();
             for(int i=fctr; i>0&&comments.hasNext(); i--) {
                 comment = comments.next();
 //                if(!comment.isValid() || !user.haveAccess(comment)) {
@@ -646,9 +652,6 @@ public class SWBCommentToElement extends org.semanticwb.portal.resources.sem.bas
             html.append(" </ul>");
             if(commentsList.size()>fctr) {
                 html.append("<p><a href=\"javascript:postHtml('"+paramRequest.getRenderUrl().setCallMethod(SWBResourceURL.Call_DIRECT).setMode(SWBResourceURL.Mode_INDEX).setParameter("suri",element.getEncodedURI()).setParameter(FCTR,"_")+"','commts')\" title=\""+paramRequest.getLocaleString("viewMore")+"\">"+paramRequest.getLocaleString("viewMore")+"</a></p>");
-                if(commentsList.size()>fctr*5) {
-                    html.append("<p><a href=\"javascript:postHtml('"+paramRequest.getRenderUrl().setCallMethod(SWBResourceURL.Call_DIRECT).setMode(SWBResourceURL.Mode_INDEX).setParameter("suri",element.getEncodedURI())+"','commts')\" title=\""+paramRequest.getLocaleString("viewAllComments")+"\">"+paramRequest.getLocaleString("viewAllComments")+"&nbsp;&raquo;</a></p>");
-                }
             }
             //html.append("</div>");            
         }else {
@@ -680,21 +683,20 @@ public class SWBCommentToElement extends org.semanticwb.portal.resources.sem.bas
         return element;
     }
     
-    public Iterator<CommentToElement> listCommentToElementByElement(SWBClass value, org.semanticwb.model.SWBModel model)
+    public List<CommentToElement> listCommentToElementByElement(SWBClass value, org.semanticwb.model.SWBModel model)
     {
-        Iterator<CommentToElement> it = CommentToElement.ClassMgr.listCommentToElementByElement(value, model);
-        List<CommentToElement> lst = SWBUtils.Collections.copyIterator(it);
-        List<CommentToElement> rev = new ArrayList<CommentToElement>();
         CommentToElement comment;
-        for(int i=0; i<lst.size(); i++) {
-            comment = lst.get(i);
-            if(comment.getAnswerBackTo()!=null) {
-                //lst.remove(i);
-                rev.add(comment);
+        Iterator<CommentToElement> it = CommentToElement.ClassMgr.listCommentToElementByElement(value, model);
+        it = SWBComparator.sortByCreated(it, false);
+        List<CommentToElement> lst = SWBUtils.Collections.copyIterator(it);
+        it = lst.iterator();
+        while(it.hasNext()) {
+            comment = it.next();
+            if(!comment.isValid() || comment.getAnswerBackTo()!=null) {
+                it.remove();
             }
         }
-        lst.removeAll(rev);
-        return lst.iterator();
+        return lst;
     }
     
     /*
