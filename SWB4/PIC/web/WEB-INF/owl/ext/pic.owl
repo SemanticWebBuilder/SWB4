@@ -3,168 +3,681 @@
     xmlns:pic="http://www.semanticwebbuilder.org/pic.owl#"
     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
     xmlns:swb="http://www.semanticwebbuilder.org/swb4/ontology#"
+    xmlns:swbxf="http://www.semanticwebbuilder.org/swb4/xforms/ontology#"
     xmlns:owl="http://www.w3.org/2002/07/owl#"
     xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
   xml:base="http://www.semanticwebbuilder.org/pic.owl">
   <owl:Ontology rdf:about="">
+    <owl:imports rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology"/>
     <owl:versionInfo rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >Created with TopBraid Composer</owl:versionInfo>
-    <owl:imports rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology"/>
   </owl:Ontology>
-  <owl:Class rdf:ID="Certificate">
+  <owl:Class rdf:ID="BusinessLine">
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="Catalog"/>
+    </rdfs:subClassOf>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Business line</rdfs:label>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Giro comercial</rdfs:comment>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+  </owl:Class>
+  <owl:Class rdf:ID="SocialNetwork">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#Catalog"/>
+    </rdfs:subClassOf>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Social network</rdfs:label>
     <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:autogenId>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Phone">
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
     <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >Certificados</rdfs:label>
+    >Phone</rdfs:label>
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+  </owl:Class>
+  <owl:Class rdf:ID="National">
     <rdfs:subClassOf>
-      <swb:Class rdf:ID="Catalog">
-        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-        >true</swb:autogenId>
-        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
-        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
-        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >Catalog</rdfs:label>
-        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
-        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-      </swb:Class>
+      <owl:Class rdf:ID="Company"/>
+    </rdfs:subClassOf>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >National</rdfs:label>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+  </owl:Class>
+  <owl:Class rdf:ID="EmployeeNumber">
+    <rdfs:label xml:lang="es">Número de empleados</rdfs:label>
+    <rdfs:label xml:lang="en">Employee number</rdfs:label>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#Catalog"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="#Company">
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Company</rdfs:label>
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="AdditionalContactData"/>
     </rdfs:subClassOf>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
-  <owl:ObjectProperty rdf:ID="hasSocial">
+  <owl:Class rdf:ID="Foreign">
+    <rdfs:subClassOf rdf:resource="#Company"/>
     <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >Redes sociales</rdfs:label>
-    <rdfs:domain>
-      <swb:Class rdf:ID="Company">
-        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
-        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-        >true</swb:autogenId>
-        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >Company</rdfs:label>
-        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
-        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-      </swb:Class>
-    </rdfs:domain>
+    >Foreign</rdfs:label>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Post">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Post</rdfs:label>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Expirable"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Searchable"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Tagable"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Activeable"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Contact">
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Contact</rdfs:label>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#AdditionalContactData"/>
+    </rdfs:subClassOf>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Product">
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Product</rdfs:label>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Sector">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#Catalog"/>
+    </rdfs:subClassOf>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Sector</rdfs:label>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Sector al que pertenece</rdfs:comment>
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+  </owl:Class>
+  <owl:Class rdf:about="#Catalog">
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Catalog</rdfs:label>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+  </owl:Class>
+  <owl:Class rdf:about="#AdditionalContactData">
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBInterface"/>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Additional contact data</rdfs:label>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Interface"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Tariff">
+    <rdfs:subClassOf rdf:resource="#Catalog"/>
+    <rdfs:label xml:lang="en">Tariff</rdfs:label>
+    <rdfs:label xml:lang="es">Fracción Arancelaria</rdfs:label>
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+  </owl:Class>
+  <owl:ObjectProperty rdf:ID="dimensionUnit">
     <rdfs:range>
-      <swb:Class rdf:ID="SocialNetwork">
+      <swb:Class rdf:ID="DimensionUnits">
         <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
         >true</swb:autogenId>
         <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >Social network</rdfs:label>
+        >Dimension units</rdfs:label>
         <rdfs:subClassOf rdf:resource="#Catalog"/>
         <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
       </swb:Class>
     </rdfs:range>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Dimension units</rdfs:label>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:resource="#Product"/>
   </owl:ObjectProperty>
-  <owl:ObjectProperty rdf:ID="recordType">
+  <owl:ObjectProperty rdf:ID="sector">
+    <rdfs:domain rdf:resource="#Company"/>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Sector</rdfs:label>
+    <rdfs:range rdf:resource="#Sector"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="municipioCPInv">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Municipio</rdfs:label>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="invCompany">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Empresa</rdfs:label>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasCountry">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >País</rdfs:label>
+    <rdfs:domain rdf:resource="#Post"/>
+    <rdfs:range rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Country"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasSocial">
+    <rdfs:range rdf:resource="#SocialNetwork"/>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Redes sociales</rdfs:label>
+    <rdfs:domain rdf:resource="#AdditionalContactData"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasComment">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Comentario</rdfs:label>
+    <rdfs:domain rdf:resource="#Post"/>
     <rdfs:range>
-      <swb:Class rdf:ID="RecordType">
+      <swb:Class rdf:ID="Comment">
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >Comment</rdfs:label>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Class>
+    </rdfs:range>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasContact">
+    <rdfs:range rdf:resource="#Contact"/>
+    <rdfs:domain rdf:resource="#Company"/>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >contact</rdfs:label>
+    <owl:inverseOf rdf:resource="#invCompany"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasColoniaCP">
+    <owl:inverseOf>
+      <owl:ObjectProperty rdf:ID="cpInv"/>
+    </owl:inverseOf>
+    <rdfs:range>
+      <swb:Class rdf:ID="Colonia">
+        <rdfs:subClassOf>
+          <swb:Interface rdf:ID="Sepomex">
+            <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >Sepomex</rdfs:label>
+            <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBInterface"/>
+            <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+          </swb:Interface>
+        </rdfs:subClassOf>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >Colonia</rdfs:label>
+        <rdfs:subClassOf rdf:resource="#Catalog"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Class>
+    </rdfs:range>
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >hasColonia</swb:propertyCodeName>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Colonia</rdfs:label>
+    <rdfs:domain>
+      <swb:Class rdf:ID="CP">
+        <rdfs:subClassOf rdf:resource="#Sepomex"/>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >CP</rdfs:label>
+        <rdfs:subClassOf rdf:resource="#Catalog"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Class>
+    </rdfs:domain>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasViewProfile">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Quienes ha visto mi perfil</rdfs:label>
+    <rdfs:range rdf:resource="#Contact"/>
+    <rdfs:domain rdf:resource="#Company"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="#cpInv">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >CP</rdfs:label>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="tariff">
+    <rdfs:label xml:lang="es">Fracción arancelaria</rdfs:label>
+    <rdfs:label xml:lang="en">Tariff</rdfs:label>
+    <rdfs:domain rdf:resource="#Product"/>
+    <rdfs:range rdf:resource="#Tariff"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasSector">
+    <rdfs:range rdf:resource="#Sector"/>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Sector</rdfs:label>
+    <rdfs:domain rdf:resource="#Post"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasCP">
+    <owl:inverseOf rdf:resource="#municipioCPInv"/>
+    <rdfs:range rdf:resource="#CP"/>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >CP</rdfs:label>
+    <rdfs:domain>
+      <swb:Class rdf:ID="Municipio">
+        <rdfs:subClassOf rdf:resource="#Sepomex"/>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >Municipio</rdfs:label>
+        <rdfs:subClassOf rdf:resource="#Catalog"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Class>
+    </rdfs:domain>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="employeeNumber">
+    <rdfs:range rdf:resource="#EmployeeNumber"/>
+    <rdfs:label xml:lang="es">Número de Empleados</rdfs:label>
+    <rdfs:label xml:lang="en">Employee number</rdfs:label>
+    <rdfs:domain rdf:resource="#Company"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="municipio">
+    <rdfs:range rdf:resource="#Municipio"/>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Municipio</rdfs:label>
+    <rdfs:domain rdf:resource="#Company"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasCertificate">
+    <rdfs:range>
+      <swb:Class rdf:ID="Certificate">
+        <rdfs:subClassOf rdf:resource="#Catalog"/>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >Certificados</rdfs:label>
+        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >true</swb:autogenId>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Class>
+    </rdfs:range>
+    <rdfs:label xml:lang="es">Certificaciones</rdfs:label>
+    <rdfs:label xml:lang="en">Certificate</rdfs:label>
+    <rdfs:domain rdf:resource="#Company"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="entidadFederativa">
+    <rdfs:range>
+      <swb:Class rdf:ID="EntidadFederativa">
+        <rdfs:subClassOf rdf:resource="#Sepomex"/>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >Entidad federativa</rdfs:label>
+        <rdfs:subClassOf rdf:resource="#Catalog"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Class>
+    </rdfs:range>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Entidad Federativa</rdfs:label>
+    <rdfs:domain rdf:resource="#Company"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="weightUnits">
+    <rdfs:range>
+      <swb:Class rdf:ID="WeightUnits">
+        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >true</swb:autogenId>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >Weight units</rdfs:label>
+        <rdfs:subClassOf rdf:resource="#Catalog"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Class>
+    </rdfs:range>
+    <rdfs:label xml:lang="es">Unidades de peso</rdfs:label>
+    <rdfs:label xml:lang="en">Weight units</rdfs:label>
+    <rdfs:domain rdf:resource="#Product"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="colonia">
+    <rdfs:range rdf:resource="#Colonia"/>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Colonia</rdfs:label>
+    <rdfs:domain rdf:resource="#Company"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="bussinesLine">
+    <rdfs:domain rdf:resource="#Company"/>
+    <rdfs:label xml:lang="en">bussines line</rdfs:label>
+    <rdfs:label xml:lang="es">Giro</rdfs:label>
+    <rdfs:range rdf:resource="#BusinessLine"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="minoritySupport">
+    <rdfs:range>
+      <swb:Class rdf:ID="MinoritySupport">
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >Minority support</rdfs:label>
+        <rdfs:subClassOf rdf:resource="#Catalog"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Class>
+    </rdfs:range>
+    <rdfs:label xml:lang="es">Soporte a minorías</rdfs:label>
+    <rdfs:label xml:lang="en">Minority support</rdfs:label>
+    <rdfs:domain rdf:resource="#Company"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="postMaturity">
+    <rdfs:range>
+      <swb:Class rdf:ID="Maturity">
+        <rdfs:label xml:lang="en">Maturity</rdfs:label>
+        <rdfs:label xml:lang="es">Nivel de madurez</rdfs:label>
+        <rdfs:subClassOf rdf:resource="#Catalog"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Class>
+    </rdfs:range>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Madurez</rdfs:label>
+    <rdfs:domain rdf:resource="#Post"/>
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >maturity</swb:propertyCodeName>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasColonia">
+    <owl:inverseOf>
+      <owl:ObjectProperty rdf:ID="municipioColoniasInv"/>
+    </owl:inverseOf>
+    <rdfs:range rdf:resource="#Colonia"/>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Colonia</rdfs:label>
+    <rdfs:domain rdf:resource="#Municipio"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasProductCertificate">
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >hasCertificate</swb:propertyCodeName>
+    <rdfs:range rdf:resource="#Certificate"/>
+    <rdfs:label xml:lang="es">Certificados</rdfs:label>
+    <rdfs:label xml:lang="en">Certificates</rdfs:label>
+    <rdfs:domain rdf:resource="#Product"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="maturityLevel">
+    <rdfs:range rdf:resource="#Maturity"/>
+    <rdfs:label xml:lang="es">Nivel de madurez</rdfs:label>
+    <rdfs:label xml:lang="en">Maturity level</rdfs:label>
+    <rdfs:domain rdf:resource="#Company"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasProduct">
+    <rdfs:label xml:lang="es">Productos</rdfs:label>
+    <rdfs:label xml:lang="en">Products</rdfs:label>
+    <rdfs:domain rdf:resource="#Company"/>
+    <rdfs:range rdf:resource="#Product"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasMunicipio">
+    <owl:inverseOf>
+      <owl:ObjectProperty rdf:ID="entidadInv"/>
+    </owl:inverseOf>
+    <rdfs:range rdf:resource="#Municipio"/>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Municipio</rdfs:label>
+    <rdfs:domain rdf:resource="#EntidadFederativa"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="cp">
+    <rdfs:range rdf:resource="#CP"/>
+    <rdfs:domain rdf:resource="#Company"/>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >cp</rdfs:label>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasFollowingContactsInv">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Empresas que me siguen</rdfs:label>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasFollow">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Empresas que sigo</rdfs:label>
+    <rdfs:range rdf:resource="#Contact"/>
+    <owl:inverseOf rdf:resource="#hasFollowingContactsInv"/>
+    <rdfs:domain rdf:resource="#Company"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasPhone">
+    <rdfs:range rdf:resource="#Phone"/>
+    <rdfs:label xml:lang="es">Teléfono</rdfs:label>
+    <rdfs:domain rdf:resource="#AdditionalContactData"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="#entidadInv">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Entidad</rdfs:label>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="#municipioColoniasInv">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Municipio</rdfs:label>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="companyType">
+    <rdfs:domain rdf:resource="#Contact"/>
+    <rdfs:range>
+      <swb:Class rdf:ID="CompanyType">
         <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
         >true</swb:autogenId>
         <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
         >Record type</rdfs:label>
         <rdfs:subClassOf rdf:resource="#Catalog"/>
+        <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >Tipo de empresa</rdfs:comment>
         <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
       </swb:Class>
     </rdfs:range>
     <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >Tipo de registro</rdfs:label>
-    <rdfs:domain rdf:resource="#Company"/>
+    >Tipo de empresa</rdfs:label>
   </owl:ObjectProperty>
-  <owl:ObjectProperty rdf:ID="hasPhone">
-    <rdfs:range>
-      <swb:Class rdf:ID="Phone">
-        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-        >true</swb:autogenId>
-        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >Phone</rdfs:label>
-        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
-        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-      </swb:Class>
-    </rdfs:range>
-    <rdfs:label xml:lang="es">Teléfono</rdfs:label>
-    <rdfs:domain rdf:resource="#Company"/>
-  </owl:ObjectProperty>
-  <owl:ObjectProperty rdf:ID="contact">
+  <owl:ObjectProperty rdf:ID="user">
+    <rdfs:domain rdf:resource="#Contact"/>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >user</rdfs:label>
     <rdfs:range rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#User"/>
-    <rdfs:domain rdf:resource="#Company"/>
-    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >contact</rdfs:label>
   </owl:ObjectProperty>
-  <owl:DatatypeProperty rdf:ID="lada">
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-    <rdfs:domain rdf:resource="#Phone"/>
-    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >lada</rdfs:label>
+  <owl:ObjectProperty rdf:ID="salesRange">
+    <rdfs:range>
+      <swb:Class rdf:ID="SalesRange">
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >Sales range</rdfs:label>
+        <rdfs:subClassOf rdf:resource="#Catalog"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Class>
+    </rdfs:range>
+    <rdfs:label xml:lang="es">Rango de ventas</rdfs:label>
+    <rdfs:label xml:lang="en">Sales range</rdfs:label>
+    <rdfs:domain rdf:resource="#Company"/>
+  </owl:ObjectProperty>
+  <owl:DatatypeProperty rdf:ID="innovation">
+    <rdfs:label xml:lang="es">Innovación</rdfs:label>
+    <rdfs:label xml:lang="en">Innovation</rdfs:label>
+    <rdfs:domain rdf:resource="#Company"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
   </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="phoneNumber">
+  <owl:DatatypeProperty rdf:ID="rfc">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >rfc</rdfs:label>
+    <rdfs:domain rdf:resource="#Company"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="clave">
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >Número</rdfs:label>
-    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >Número de teléfono</rdfs:comment>
-    <rdfs:domain rdf:resource="#Phone"/>
+    >Clave SEPOMEX</rdfs:label>
+    <rdfs:domain rdf:resource="#Sepomex"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="hasImage">
+    <rdfs:label xml:lang="es">Imágenes</rdfs:label>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:label xml:lang="en">Images</rdfs:label>
+    <rdfs:domain rdf:resource="#Product"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="webSite">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >web site</rdfs:label>
+    <rdfs:domain rdf:resource="#Company"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="topics">
+    <rdfs:label xml:lang="en">Topics</rdfs:label>
+    <rdfs:label xml:lang="es">Temas de interés</rdfs:label>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#Contact"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="source">
     <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >emas de interés</rdfs:label>
+    >Fuente</rdfs:label>
+    <rdfs:domain rdf:resource="#Post"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="hasFile">
+    <rdfs:domain rdf:resource="#Post"/>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Archivos</rdfs:label>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="jobTitle">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:label xml:lang="en">Job title</rdfs:label>
+    <rdfs:label xml:lang="es">Puesto</rdfs:label>
+    <rdfs:domain rdf:resource="#Contact"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="dimensions">
+    <rdfs:label xml:lang="es">Dimensiones</rdfs:label>
+    <rdfs:label xml:lang="en">Dimensions</rdfs:label>
+    <rdfs:domain rdf:resource="#Product"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="productionCapacity">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:label xml:lang="es">Capacidad de producción</rdfs:label>
+    <rdfs:label xml:lang="en">Production capacity</rdfs:label>
+    <rdfs:domain rdf:resource="#Product"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="comment">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#Comment"/>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >comment</rdfs:label>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="packing">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:label xml:lang="es">Empaque</rdfs:label>
+    <rdfs:label xml:lang="en">Packing</rdfs:label>
+    <rdfs:domain rdf:resource="#Product"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="phoneType">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >phone type</rdfs:label>
+    <rdfs:domain rdf:resource="#Phone"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_phoneType">
+        <rdfs:label xml:lang="es">Tipo de teléfono</rdfs:label>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="url">
+    <rdfs:domain rdf:resource="#Post"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >url</rdfs:label>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="otherCertificate">
+    <rdfs:label xml:lang="es">Otras certificaciones</rdfs:label>
+    <rdfs:label xml:lang="en">Other certificates</rdfs:label>
+    <rdfs:domain rdf:resource="#Company"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="commercialName">
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <rdfs:domain rdf:resource="#Company"/>
+    <rdfs:label xml:lang="en">Commercial name</rdfs:label>
+    <rdfs:label xml:lang="es">Nombre comercial</rdfs:label>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="hasCommentFile">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Archivo</rdfs:label>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#Comment"/>
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >hasFile</swb:propertyCodeName>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="product">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+    <rdfs:domain rdf:resource="#Product"/>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >product</rdfs:label>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="hasPostImages">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >hasImage</swb:propertyCodeName>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Imágenes</rdfs:label>
+    <rdfs:domain rdf:resource="#Post"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="weight">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:label xml:lang="es">Peso</rdfs:label>
+    <rdfs:label xml:lang="en">Weight</rdfs:label>
+    <rdfs:domain rdf:resource="#Product"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="commentUrl">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >url</swb:propertyCodeName>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Url</rdfs:label>
+    <rdfs:domain rdf:resource="#Comment"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="address">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:label xml:lang="es">Calle y número</rdfs:label>
+    <rdfs:label xml:lang="en">Address</rdfs:label>
+    <rdfs:domain rdf:resource="#Company"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="phoneNumber">
+    <rdfs:domain rdf:resource="#Phone"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Número de teléfono</rdfs:comment>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Número</rdfs:label>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="sku">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >SKU</rdfs:label>
+    <rdfs:domain rdf:resource="#Product"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="areaCode">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#Phone"/>
+    <rdfs:label xml:lang="es">Lada</rdfs:label>
+    <rdfs:label xml:lang="en">Area Code</rdfs:label>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="hasCommentImage">
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >hasImage</swb:propertyCodeName>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Imagen</rdfs:label>
+    <rdfs:domain rdf:resource="#Comment"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="countryCode">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <rdfs:domain rdf:resource="#Phone"/>
-    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >country code</rdfs:label>
+    <rdfs:label xml:lang="en">Country code</rdfs:label>
+    <rdfs:label xml:lang="es">Código de país</rdfs:label>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="hasEmail">
     <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >Correos electónicos adicionales</rdfs:comment>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-    <rdfs:label xml:lang="en">Email</rdfs:label>
     <rdfs:label xml:lang="es">Correo electrónico</rdfs:label>
+    <rdfs:label xml:lang="en">Email</rdfs:label>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#AdditionalContactData"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="companyLogo">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:label xml:lang="es">Logotipo</rdfs:label>
+    <rdfs:label xml:lang="en">Company logo</rdfs:label>
     <rdfs:domain rdf:resource="#Company"/>
   </owl:DatatypeProperty>
-  <swb:Class rdf:ID="BusinessLine">
-    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >Giro comercial</rdfs:comment>
+  <swb:Class rdf:ID="PostType">
     <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >Business line</rdfs:label>
-    <rdfs:subClassOf rdf:resource="#Catalog"/>
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-  </swb:Class>
-  <swb:Class rdf:ID="National">
-    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >National</rdfs:label>
-    <rdfs:subClassOf rdf:resource="#Company"/>
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-  </swb:Class>
-  <swb:Class rdf:ID="Foreign">
-    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >Foreign</rdfs:label>
-    <rdfs:subClassOf rdf:resource="#Company"/>
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-  </swb:Class>
-  <swb:Class rdf:ID="Product">
-    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >Product</rdfs:label>
-    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-  </swb:Class>
-  <swb:Class rdf:ID="Sector">
-    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:autogenId>
-    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >Sector al que pertenece</rdfs:comment>
-    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >Sector</rdfs:label>
-    <rdfs:subClassOf rdf:resource="#Catalog"/>
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-  </swb:Class>
-  <swb:Class rdf:ID="Tariff">
-    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:autogenId>
-    <rdfs:label xml:lang="es">Fracción Arancelaria</rdfs:label>
-    <rdfs:label xml:lang="en">Tariff</rdfs:label>
+    >Post type</rdfs:label>
     <rdfs:subClassOf rdf:resource="#Catalog"/>
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
   </swb:Class>
