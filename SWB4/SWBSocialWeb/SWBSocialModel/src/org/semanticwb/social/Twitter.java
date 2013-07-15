@@ -39,6 +39,7 @@ import twitter4j.TwitterStream;
 import twitter4j.auth.AccessToken;
 import twitter4j.auth.RequestToken;
 import twitter4j.conf.ConfigurationBuilder;
+import twitter4j.GeoLocation;
 
 
 public class Twitter extends org.semanticwb.social.base.TwitterBase {
@@ -350,6 +351,12 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
                                     if(status.getPlace()!=null)
                                     {
                                         external.setPlace(status.getPlace().getFullName());
+                                    }
+                                    
+                                    if(status.getGeoLocation() != null){
+                                        GeoLocation location = status.getGeoLocation();
+                                        //location.getLatitude();
+                                        //location.getLongitude();
                                     }
                                     external.setSocialNetwork(this);
                                     external.setPostShared((int)status.getRetweetCount());
