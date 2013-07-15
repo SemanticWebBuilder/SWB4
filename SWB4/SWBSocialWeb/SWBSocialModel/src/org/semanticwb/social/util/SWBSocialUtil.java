@@ -20,6 +20,7 @@ import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.base.SWBAppObject;
+import org.semanticwb.social.Country;
 import org.semanticwb.model.GenericObject;
 import org.semanticwb.model.ModelProperty;
 import org.semanticwb.model.SWBContext;
@@ -31,11 +32,13 @@ import org.semanticwb.model.WebSite;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.portal.SWBFormMgr;
 import org.semanticwb.portal.api.SWBActionResponse;
+import org.semanticwb.social.CountryState;
 import org.semanticwb.social.Message;
 import org.semanticwb.social.MessageIn;
 import org.semanticwb.social.Messageable;
 import org.semanticwb.social.Photo;
 import org.semanticwb.social.Photoable;
+import org.semanticwb.social.Post;
 import org.semanticwb.social.PostIn;
 import org.semanticwb.social.PostMonitor;
 import org.semanticwb.social.PostOut;
@@ -959,7 +962,61 @@ public class SWBSocialUtil implements SWBAppObject {
         
         public static void sendEmail2UserGroup(UserGroup userGroup, String body)
         {
-            
+            //TODO:Ver si se utiliza este metodo e implementarlo de ser el caso.
+        }
+        
+        /*
+         * Metodo que obtiene un estado de un país mediante los parametros recibidos
+         * @param country país a buscar
+         * @param latitude latitude a buscar en un país
+         * @param longitude longitude a buscar en un país
+         * @return CountryState Estado del país donde encontro las coordenadas
+         * @return null si no encontró las coodenadas en ningún estato del país recibido
+         */
+        public static CountryState getMessageMapState(Country country, float latitude, float longitude)
+        {
+            if(country!=null && latitude!=0 && longitude!=0)
+            {
+                Iterator <CountryState> itCountryStates=country.listStatesInvs();
+                while(itCountryStates.hasNext())
+                {
+                    CountryState countryState=itCountryStates.next();
+                    //Si se cumple el siguiente if, el mensaje proviene del estado en cuestio.
+                    if(countryState.getNorth()>=latitude && countryState.getSouth()<=latitude && 
+                            countryState.getEast()>=longitude && countryState.getWest()<=longitude)
+                    {
+                        return countryState;
+                    }
+                }
+            }
+            return null; 
+        }
+        
+        
+        /*
+         * Metodo que obtiene un país mediante los parametros recibidos
+         * @param latitude latitude a buscar en la lista de paises
+         * @param longitude longitude a buscar en la lista de paises
+         * @return Country que cumple con las coordenadas recibidas
+         * @return null si no encontró las coodenadas en ningún país del catálogo
+         */
+        public static Country getMessageMapCountry(float latitude, float longitude)
+        {
+            if(latitude!=0 && longitude!=0)
+            {
+                Iterator <Country> itCountries=Country.ClassMgr.listCountries(SWBContext.getAdminWebSite());
+                while(itCountries.hasNext())
+                {
+                    Country country=itCountries.next();
+                    //Si se cumple el siguiente if, el mensaje proviene del estado en cuestio.
+                    if(country.getNorth()>=latitude && country.getSouth()<=latitude && 
+                            country.getEast()>=longitude && country.getWest()<=longitude)
+                    {
+                        return country;
+                    }
+                }
+            }
+            return null; 
         }
         
 

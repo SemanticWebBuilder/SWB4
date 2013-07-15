@@ -19,6 +19,8 @@ import org.semanticwb.model.SWBModel;
 import org.semanticwb.model.User;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.social.Action;
+import org.semanticwb.social.Country;
+import org.semanticwb.social.CountryState;
 import org.semanticwb.social.ExternalPost;
 import org.semanticwb.social.Kloutable;
 import org.semanticwb.social.MarkMsgAsPrioritary;
@@ -626,10 +628,40 @@ public class SentimentalDataClassifier {
                     if(externalPost.getPlace()!=null)
                     {
                         postIn.setPostPlace(externalPost.getPlace());
-                    }else if(externalPost.getLocation()!=null)
+                    }/*else if(externalPost.getLocation()!=null)
                     {
                         postIn.setPostPlace(externalPost.getLocation());
+                    }*/
+                    
+                    //Sets the latitude, longitud and possibly the state the message is comming from
+                    System.out.println("Checa latitude y longitud del mensaje recibido-Latitude:"+externalPost.getLatitude()+",longitude:"+externalPost.getLongitude());
+                    if(externalPost.getLatitude()!=0 && externalPost.getLongitude()!=0)
+                    {
+                        postIn.setLatitude(Float.parseFloat(""+externalPost.getLatitude()));
+                        postIn.setLongitude(Float.parseFloat(""+externalPost.getLongitude())); 
+                        
+                        //The next code calculates if latitude and longitud belongs to a country and next to state
+                        Country country=null;
+                        if(externalPost.getCountryCode()!=null)
+                        {
+                            country=Country.ClassMgr.getCountry(externalPost.getCountryCode(), SWBContext.getAdminWebSite());
+                        }else 
+                        {
+                            country=SWBSocialUtil.Util.getMessageMapCountry(postIn.getLatitude(), postIn.getLongitude());
+                        }
+                        System.out.println("country en el que encuentra el mensaje:"+country);
+                        if(country!=null)
+                        {
+                            //Busca en que estado del país encontrado se encuentra el mensaje.
+                            CountryState countryState=SWBSocialUtil.Util.getMessageMapState(country, postIn.getLatitude(), postIn.getLongitude());   
+                            System.out.println("estado en el que encuentra el mensaje:"+countryState);
+                            if(countryState!=null)
+                            {
+                                postIn.setGeoStateMap(countryState);
+                            }
+                        }
                     }
+                    
                     if(externalPost.getPostShared()>0)
                     {
                         postIn.setPostShared(externalPost.getPostShared());

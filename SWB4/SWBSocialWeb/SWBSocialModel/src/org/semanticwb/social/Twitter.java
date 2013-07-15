@@ -351,13 +351,21 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
                                     if(status.getPlace()!=null)
                                     {
                                         external.setPlace(status.getPlace().getFullName());
+                                        if(status.getPlace().getBoundingBoxCoordinates()!=null && status.getPlace().getBoundingBoxCoordinates().length > 0)
+                                        {
+                                            GeoLocation[] boundingBox = status.getPlace().getBoundingBoxCoordinates()[0];
+                                            external.setLatitude(boundingBox[0].getLatitude());
+                                            external.setLongitude(boundingBox[0].getLongitude());
+                                            System.out.println("TWITTER Pone como latitude:"+external.getLatitude());
+                                            System.out.println("TWITTER Pone como longitud:"+external.getLongitude());
+                                            System.out.println("Twitter Country Code:"+status.getPlace().getCountryCode());
+                                            if(status.getPlace().getCountryCode()!=null)
+                                            {
+                                                external.setCountryCode(status.getPlace().getCountryCode().toUpperCase());
+                                            }
+                                        }
                                     }
                                     
-                                    if(status.getGeoLocation() != null){
-                                        GeoLocation location = status.getGeoLocation();
-                                        //location.getLatitude();
-                                        //location.getLongitude();
-                                    }
                                     external.setSocialNetwork(this);
                                     external.setPostShared((int)status.getRetweetCount());
                                     external.setCreatorPhotoUrl(status.getUser().getBiggerProfileImageURL());

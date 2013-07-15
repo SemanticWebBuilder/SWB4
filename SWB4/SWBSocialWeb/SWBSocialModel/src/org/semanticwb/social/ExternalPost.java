@@ -122,7 +122,7 @@ public class ExternalPost {
     /**
      * location where the post was originated
      */
-    private String location;
+    //private String location;
     
     /**
      * Indicates the type of post retrieved from the Social Net
@@ -134,6 +134,21 @@ public class ExternalPost {
      */
     private SocialNetwork socialNetwork;
     
+    /*
+     * Indicates the latitude where the message is comming from
+     */
+    private double latitude;
+    
+    /*
+     * Indicates the longitude where the message is comming from
+     */
+    private double longitude;
+    
+    
+    /*
+     * Indicates the country code where the message is comming from. Ej from México would be MX, from USA would be US and so on.
+     */
+    private String countryCode;
     
 
     /**
@@ -465,25 +480,80 @@ public class ExternalPost {
         this.place=place;
     }
     
+    
     /**
      * 
      * @return location the location where the post was originated
      */
+    /*
     public String getLocation()
     {
        return location; 
     }
-    
+    */
     /**
      * 
      * @param location the location where the post was originated
      * 
      */
+    /*
     public void setLocation(String location)
     {
         this.location=location;
     }
+    * */
+    
+    /*
+     * Sets the latitude the message is comming from
+     */
+    public void setLatitude(double latitude)
+    {
+        this.latitude=latitude;
+    }
+    
+    /*
+     * Gets the latitude the message is comming from
+     */
+    public double getLatitude()
+    {
+        return latitude;
+    }
+    
+    
+    /*
+     * Sets the longitude the message is comming from
+     */
+    public void setLongitude(double longitude)
+    {
+        this.longitude=longitude;
+    }
+    
+    /*
+     * Gets the longitude the message is comming from
+     */
+    public double getLongitude()
+    {
+        return longitude;
+    }
 
+    
+    /*
+     * Sets the country code the message is comming from
+     */
+    public void setCountryCode(String countryCode)
+    {
+        this.countryCode=countryCode;
+    }
+    
+    /*
+     * Gets the country code the message is comming from
+     */
+    public String getCountryCode()
+    {
+        return countryCode;
+    }
+    
+    
     /**
      * Returns the type of post retrieved from the social net. Facebook uses one
      * of the following types: {@literal link}, {@literal page}, {@literal video},

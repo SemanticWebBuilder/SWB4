@@ -154,6 +154,29 @@ public abstract class PhotoInBase extends org.semanticwb.social.PostIn implement
             return it;
         }
        /**
+       * Gets all org.semanticwb.social.PhotoIn with a determined GeoStateMap
+       * @param value GeoStateMap of the type org.semanticwb.social.CountryState
+       * @param model Model of the org.semanticwb.social.PhotoIn
+       * @return Iterator with all the org.semanticwb.social.PhotoIn
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.PhotoIn> listPhotoInByGeoStateMap(org.semanticwb.social.CountryState value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.PhotoIn> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(social_geoStateMap, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.social.PhotoIn with a determined GeoStateMap
+       * @param value GeoStateMap of the type org.semanticwb.social.CountryState
+       * @return Iterator with all the org.semanticwb.social.PhotoIn
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.PhotoIn> listPhotoInByGeoStateMap(org.semanticwb.social.CountryState value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.PhotoIn> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(social_geoStateMap,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
        * Gets all org.semanticwb.social.PhotoIn with a determined Creator
        * @param value Creator of the type org.semanticwb.model.User
        * @param model Model of the org.semanticwb.social.PhotoIn
