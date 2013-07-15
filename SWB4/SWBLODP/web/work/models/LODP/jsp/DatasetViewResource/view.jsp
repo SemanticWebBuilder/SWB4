@@ -43,7 +43,7 @@
     var arrInfoWindows = [];
 
     function initializeMap() {
-        var divMap = document.getElementById("mapCanvas");
+        var divMap = document.getElementById("mapCanvass");
         divMap.style.width="640px";
         divMap.style.height="480px";
         var latlng = new google.maps.LatLng(22.99885, -101.77734);
@@ -55,7 +55,7 @@
             backgroundColor: "black",
             mapTypeId: google.maps.MapTypeId.ROADMAP
         };
-           var map = new google.maps.Map(document.getElementById("mapCanvas"), myOptions);
+           var map = new google.maps.Map(document.getElementById("mapCanvass"), myOptions);
 <%
        if(dataset.getActualVersion().getFilePath()!=null){
 %>
@@ -71,8 +71,8 @@
         }
         //-->
 </script>
-<div class="mapa_titulo"><%=dataset.getDatasetTitle()%></div>
-<div id="mapCanvas" class="mapa" ></div>
+<div class="mapa_titulos"><%=dataset.getDatasetTitle()%></div>
+<div id="mapCanvass" class="mapasss" ></div>
 <script type="text/javascript">
     initializeMap();
 </script>
