@@ -1,3 +1,6 @@
+  4.2.5.6
+    - Se agregaron nuevas funcionalidades al AudioPodcast: configuración del  plugin de reproducción, calculo programado  de duración del audio, temas de agrupación, activo/inactivo, exclusivo para formato mp3, paginación, etc.
+    - Se agregaron nuevas funcionalidades al CommentToElement. Configuración del listado de comentarios, configuración del tamaño de bloques de comentarios, etc.
   4.2.5.5
     - BUG: Error en la propagación de los cambios en URLFriendly en esquema de balanceo (Jei)
   4.2.5.2
