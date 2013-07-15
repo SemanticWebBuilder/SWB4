@@ -452,6 +452,7 @@ public class SWBLuceneIndexer extends SWBIndexer
             try
             {
                 //bq.add(new QueryParser(t.getField(), analyzer).parse(txt), operation);
+                QueryParser.escape(txt);
                 bq.add(new QueryParser(LUCENE_VERSION, t.getField(), analyzer).parse(txt), operation);
             }catch(Exception e){log.error(e);}
         }
