@@ -28,6 +28,7 @@ import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.Iterator;
 import java.util.List;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.http.*;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
@@ -38,7 +39,10 @@ import org.semanticwb.model.SWBComparator;
 import org.semanticwb.model.User;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.platform.SemanticObject;
-import org.semanticwb.portal.api.*;
+import org.semanticwb.portal.api.SWBActionResponse;
+import org.semanticwb.portal.api.SWBParamRequest;
+import org.semanticwb.portal.api.SWBResourceException;
+import org.semanticwb.portal.api.SWBResourceURL;
 
 /**
  * Agrupa un conjunto de comentarios asociados al suri recibido como parametro de un
@@ -48,7 +52,7 @@ import org.semanticwb.portal.api.*;
 public class SWBCommentToElement extends org.semanticwb.portal.resources.sem.base.SWBCommentToElementBase {
     private static Logger log = SWBUtils.getLogger(SWBCommentToElement.class);
     public static final String Mode_DETAIL = "dtl";
-    private static final String FCTR = "fctr";
+    public static final String FCTR = "fctr";
     
     /**
      * Instantiates a new sWB comment to element.
@@ -378,7 +382,6 @@ out.println("    s = s.concat('</div>');");
         out.println("-->");
         out.println("</script> ");
         
-        ;
         out.println("<div class=\"swb-comments\">");
         out.println("<p class=\"swb-comments-addcmnt\">"+paramRequest.getLocaleString("add")+"</p>");
         if(request.getParameter("alertmsg")!=null)
@@ -414,24 +417,47 @@ out.println("    s = s.concat('</div>');");
         out.println("</div>");
         out.println("</form>");
         out.println("</div>");
-        List<CommentToElement> commentsList = listCommentToElementByElement(element, paramRequest.getWebPage().getWebSite());
-        out.println("<div class=\"swb-comments-lst\">");
-        if(!commentsList.isEmpty())
-        {
-            out.println("<p class=\"swb-comments-lblcmmt\">"+paramRequest.getLocaleString("lblComments")+"</p>");
-            out.println(" <div class=\"swb-comments-box\" id=\"commts\">");
-            out.println(renderListComments(paramRequest, commentsList.iterator()));
-            if(commentsList.size()>getBlockSize()) {
-                out.println("<p><a href=\"javascript:postHtml('"+paramRequest.getRenderUrl().setCallMethod(SWBResourceURL.Call_DIRECT).setMode(SWBResourceURL.Mode_INDEX).setParameter("suri",element.getEncodedURI()).setParameter(FCTR,"_")+"','commts')\" title=\""+paramRequest.getLocaleString("viewMore")+"\">"+paramRequest.getLocaleString("viewMore")+"</a></p>");
-            }
-            out.println("</div>");
-        }
-        else
-        {
-            out.println("<p class=\"swb-comments-noe\">"+paramRequest.getLocaleString("noComment")+"</p>");
-        }
-        out.println("</div>");
         
+        request.setAttribute("paramRequest", paramRequest);
+        request.setAttribute("res", this);
+        request.setAttribute("element", element);
+        String path;
+        RequestDispatcher dis;
+        try
+        {
+            path = getRenderCommentsList();
+            dis = request.getRequestDispatcher(path);
+            dis.include(request, response);
+        }
+        catch (Exception e)
+        {
+            try
+            {
+                path = "/swbadmin/jsp/"+this.getClass().getSimpleName()+"/";
+                dis = request.getRequestDispatcher(path+"renderCommentsList1.jsp");
+                dis.include(request, response);
+            }
+            catch(Exception exc)
+            {
+                List<CommentToElement> commentsList = listCommentToElementByElement(element, paramRequest.getWebPage().getWebSite());
+                out.println("<div class=\"swb-comments-lst\">");
+                if(!commentsList.isEmpty())
+                {
+                    out.println("<p class=\"swb-comments-lblcmmt\">"+paramRequest.getLocaleString("lblComments")+"</p>");
+                    out.println(" <div class=\"swb-comments-box\" id=\"commts\">");
+                    out.println(renderListComments(paramRequest, commentsList.iterator()));
+                    if(commentsList.size()>getBlockSize()) {
+                        out.println("<p><a href=\"javascript:postHtml('"+paramRequest.getRenderUrl().setCallMethod(SWBResourceURL.Call_DIRECT).setMode(SWBResourceURL.Mode_INDEX).setParameter("suri",element.getEncodedURI()).setParameter(FCTR,"_")+"','commts')\" title=\""+paramRequest.getLocaleString("viewMore")+"\">"+paramRequest.getLocaleString("viewMore")+"</a></p>");
+                    }
+                    out.println("</div>");
+                }
+                else
+                {
+                    out.println("<p class=\"swb-comments-noe\">"+paramRequest.getLocaleString("noComment")+"</p>");
+                }
+                out.println("</div>");
+            }
+        }        
         out.flush();
         out.close();
     }
@@ -443,7 +469,7 @@ out.println("    s = s.concat('</div>');");
      * @param suri the suri
      * @return the string
      */
-    private String renderListComments(SWBParamRequest paramRequest, Iterator<CommentToElement> icomments) throws SWBResourceException
+    public String renderListComments(SWBParamRequest paramRequest, Iterator<CommentToElement> icomments) throws SWBResourceException
     {
         StringBuilder html = new StringBuilder();
         final User user = paramRequest.getUser();
@@ -578,7 +604,7 @@ out.println("    s = s.concat('</div>');");
         out.close();
     }
     
-    private String renderListComments(HttpServletRequest request, SWBParamRequest paramRequest, SWBClass element) throws SWBResourceException
+    public String renderListComments(HttpServletRequest request, SWBParamRequest paramRequest, SWBClass element) throws SWBResourceException
     {
         StringBuilder html = new StringBuilder();
         final User user = paramRequest.getUser();
@@ -699,8 +725,8 @@ out.println("    s = s.concat('</div>');");
         return lst;
     }
     
-    /*
-    private String renderListComments(SWBParamRequest paramRequest, Iterator<CommentToElement> icomments) throws SWBResourceException
+    
+    /*private String renderListComments_(SWBParamRequest paramRequest, Iterator<CommentToElement> icomments) throws SWBResourceException
     {
         StringBuilder html = new StringBuilder();
         final User user = paramRequest.getUser();
@@ -744,6 +770,6 @@ out.println("    s = s.concat('</div>');");
             html.append("<p class=\"swb-comments-noe\">"+paramRequest.getLocaleString("noComment")+"</p>");
         }
         return html.toString();
-    }
-     */
+    }*/
+     
 }
