@@ -227,11 +227,11 @@ public class SWBAFTP extends GenericResource
                 }
                 if (f.isDirectory())
                 {
-                    log("CREATED|DIR:\"" + f.getCanonicalPath() + "\"|USER:\"" + paramRequest.getUser().getLogin() + "_" + paramRequest.getUser().getUserRepository().getId() + "\"", request.getRemoteAddr());
+                    log("CREATED|DIR:\"" + f.getAbsolutePath() + "\"|USER:\"" + paramRequest.getUser().getLogin() + "_" + paramRequest.getUser().getUserRepository().getId() + "\"", request.getRemoteAddr());
                 }
                 else
                 {
-                    log("CREATED|FILE:\"" + f.getCanonicalPath() + "\"|USER:\"" + paramRequest.getUser().getLogin() + "_" + paramRequest.getUser().getUserRepository().getId() + "\"", request.getRemoteAddr());
+                    log("CREATED|FILE:\"" + f.getAbsolutePath() + "\"|USER:\"" + paramRequest.getUser().getLogin() + "_" + paramRequest.getUser().getUserRepository().getId() + "\"", request.getRemoteAddr());
                 }
 
                 FileOutputStream fout = new FileOutputStream(f);
@@ -658,11 +658,11 @@ public class SWBAFTP extends GenericResource
                 {
                     if (f.isDirectory())
                     {
-                        log("CREATED|DIR:\"" + f.getCanonicalPath() + "\"|USER:\"" + user.getLogin() + "_" + user.getUserRepository().getId() + "\"", ip);
+                        log("CREATED|DIR:\"" + f.getAbsolutePath() + "\"|USER:\"" + user.getLogin() + "_" + user.getUserRepository().getId() + "\"", ip);
                     }
                     else
                     {
-                        log("CREATED|FILE:\"" + f.getCanonicalPath() + "\"|USER:\"" + user.getLogin() + "_" + user.getUserRepository().getId() + "\"", ip);
+                        log("CREATED|FILE:\"" + f.getAbsolutePath() + "\"|USER:\"" + user.getLogin() + "_" + user.getUserRepository().getId() + "\"", ip);
                     }
                 }
                 catch (Exception e)
@@ -709,11 +709,11 @@ public class SWBAFTP extends GenericResource
                     {
                         if (f.isDirectory())
                         {
-                            log("RENAME|DIR:\"" + f.getCanonicalPath() + "\"|USER:\"" + user.getLogin() + "_" + user.getUserRepository().getId() + "\"|NEWFILE:\"" + newfile + "\"", ip);
+                            log("RENAME|DIR:\"" + f.getAbsolutePath() + "\"|USER:\"" + user.getLogin() + "_" + user.getUserRepository().getId() + "\"|NEWFILE:\"" + newfile + "\"", ip);
                         }
                         else
                         {
-                            log("RENAME|FILE:\"" + f.getCanonicalPath() + "\"|USER:\"" + user.getLogin() + "_" + user.getUserRepository().getId() + "\"|NEWFILE:\"" + newfile + "\"", ip);
+                            log("RENAME|FILE:\"" + f.getAbsolutePath() + "\"|USER:\"" + user.getLogin() + "_" + user.getUserRepository().getId() + "\"|NEWFILE:\"" + newfile + "\"", ip);
                         }
                     }
                     catch (Exception e)
@@ -771,8 +771,8 @@ public class SWBAFTP extends GenericResource
     {
         try
         {
-            String path = f.getCanonicalPath();
-            String appPath = new File(SWBUtils.getApplicationPath()).getCanonicalPath();
+            String path = f.getAbsolutePath();
+            String appPath = new File(SWBUtils.getApplicationPath()).getAbsolutePath();
             path = path.substring(appPath.length()).replace('\\', '/');
             for (String pathProhibited : prohibitedPaths)
             {
@@ -828,11 +828,11 @@ public class SWBAFTP extends GenericResource
                     {
                         if (f.isDirectory())
                         {
-                            log("DELETED|DIR:\"" + f.getCanonicalPath() + "\"|USER:\"" + user.getLogin() + "_" + user.getUserRepository().getId() + "\"", ip);
+                            log("DELETED|DIR:\"" + f.getAbsolutePath() + "\"|USER:\"" + user.getLogin() + "_" + user.getUserRepository().getId() + "\"", ip);
                         }
                         else
                         {
-                            log("DELETED|FILE:\"" + f.getCanonicalPath() + "\"|USER:\"" + user.getLogin() + "_" + user.getUserRepository().getId() + "\"", ip);
+                            log("DELETED|FILE:\"" + f.getAbsolutePath() + "\"|USER:\"" + user.getLogin() + "_" + user.getUserRepository().getId() + "\"", ip);
                         }
                     }
                     catch (Exception e)
@@ -891,8 +891,8 @@ public class SWBAFTP extends GenericResource
                                     }
                                     pathPermission = SWBUtils.getApplicationPath() + pathPermission;
                                     File filePermission = new File(pathPermission);
-                                    pathPermission = filePermission.getCanonicalPath();
-                                    String testPath = directory.getCanonicalPath();
+                                    pathPermission = filePermission.getAbsolutePath();
+                                    String testPath = directory.getAbsolutePath();
                                     if ((pathPermission.equals(testPath) || testPath.startsWith(pathPermission)))
                                     {
                                         permision = true;
@@ -950,12 +950,12 @@ public class SWBAFTP extends GenericResource
                                     {
                                         pathPermission = pathPermission.substring(pos);
                                     }
-                                    String appPath = new File(SWBUtils.getApplicationPath()).getCanonicalPath();
+                                    String appPath = new File(SWBUtils.getApplicationPath()).getAbsolutePath();
                                     pathPermission = appPath + pathPermission;
                                     File filePermission = new File(pathPermission);
-                                    pathPermission = filePermission.getCanonicalPath().replace('\\', '/') + "/";
+                                    pathPermission = filePermission.getAbsolutePath().replace('\\', '/') + "/";
                                     pathPermission = pathPermission.replace("//", "/");
-                                    String testPath = directory.getCanonicalPath().replace('\\', '/') + "/";
+                                    String testPath = directory.getAbsolutePath().replace('\\', '/') + "/";
                                     testPath = testPath.replace("//", "/");
                                     if (filePermission.isDirectory() && (pathPermission.startsWith(testPath) || testPath.startsWith(pathPermission)))
                                     {
