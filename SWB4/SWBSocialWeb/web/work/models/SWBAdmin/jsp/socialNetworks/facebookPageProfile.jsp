@@ -41,19 +41,16 @@
 %>
 <div class="swbform">
 <%
-    String userType = (String) request.getParameter("type");
     String target = (String) request.getParameter("id");
-    String pageProfile="";
-    
     String objUri = (String) request.getParameter("suri");
+    if(target == null || objUri == null){
+        return;
+    }
+    
     SemanticObject semanticObject = SemanticObject.createSemanticObject(objUri);
     Facebook facebook = (Facebook)semanticObject.createGenericInstance();
-
-    
-    if(!userType.equals("page")){
-        return;        
-    }
-    pageProfile =getFullPageProfileFromId(target, facebook);
+      
+    String pageProfile = getFullPageProfileFromId(target, facebook);
     JSONObject pageResp = new JSONObject(pageProfile);
     JSONArray pageData = pageResp.getJSONArray("data");
     
