@@ -6,6 +6,7 @@
 
 <%@page import="org.semanticwb.SWBPlatform"%>
 <%@page import="static org.semanticwb.social.admin.resources.Timeline.lookForEntities"%>
+<%@page import="static org.semanticwb.social.admin.resources.Timeline.twitterHumanFriendlyDate"%>
 <%@page import="org.semanticwb.portal.api.SWBResourceException"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="org.semanticwb.social.admin.resources.SocialUserStreamListener"%>
@@ -117,8 +118,7 @@
                         out.println("</tr>");
                         out.println("<tr>");
                         out.println("   <td colspan=\"2\">");
-                        long minutes = (long)(new Date().getTime()/60000) - (status.getCreatedAt().getTime()/60000);
-                        out.println("Created:<b>" + (int)minutes + "</b> minutes ago - - Retweeted: <b>" + status.getRetweetCount() + "</b> times ");
+                        out.write("Created:<b>" + twitterHumanFriendlyDate(status.getCreatedAt()) + "</b> - - ");                    
                         out.println("   </td>");
                         out.println("</tr>");
                         out.println("</table>");
