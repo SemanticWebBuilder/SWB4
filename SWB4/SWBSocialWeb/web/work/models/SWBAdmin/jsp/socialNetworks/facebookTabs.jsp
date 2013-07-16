@@ -6,6 +6,7 @@
 
 <%@page import="org.semanticwb.SWBPlatform"%>
 <%@page import="java.net.URLEncoder"%>
+<%@page import="static org.semanticwb.social.admin.resources.FacebookWall.*"%>
 <jsp:useBean id="paramRequest" scope="request" type="org.semanticwb.portal.api.SWBParamRequest"/>
 <%@page contentType="text/html" pageEncoding="x-iso-8859-11"%>
 
@@ -28,18 +29,23 @@
 
         out.println("<div dojoType=\"dijit.layout.TabContainer\" region=\"center\" style_=\"border:0px; width:100%; height:100%\" id=\""+objUri+"/tabs\" _tabPosition=\"bottom\" nested_=\"true\" _selectedChild=\"btab1\" onButtonClick_=\"alert('click');\" onLoad_=\"alert('Hola');\">");        
         
-        out.println("<div id=\""+ objUri + "/wall" +"\" dojoType=\"dijit.layout.ContentPane\" title=\""+"Wall"+"\" refreshOnShow=\""+"false"+"\" href=\""+"/es/SWBAdmin/Facebook_Wall"+"?" + param + "&contentTabId=wall" +"\" _loadingMessage=\""+loading+"\" style_=\"border:0px; width:100%; height:100%\">");
+        out.println("<div id=\""+ objUri + NEWS_FEED_TAB +"\" dojoType=\"dijit.layout.ContentPane\" title=\""+"News Feed"+"\" refreshOnShow=\""+"false"+"\" href=\""+"/es/SWBAdmin/Facebook_Wall"+"?" + param + "&contentTabId=newsFeed" +"\" _loadingMessage=\""+loading+"\" style_=\"border:0px; width:100%; height:100%\">");
         out.println("</div>");
         
-        out.println("<div id=\""+ objUri + "/images" +"\" dojoType=\"dijit.layout.ContentPane\" title=\""+"Pictures"+"\" refreshOnShow=\""+"false"+"\" href=\""+"/es/SWBAdmin/Facebook_Wall"+"?" + param + "&contentTabId=pictures" +"\" _loadingMessage=\""+loading+"\" style_=\"border:0px; width:100%; height:100%\">");
+        out.println("<div id=\""+ objUri + WALL_TAB + "\" dojoType=\"dijit.layout.ContentPane\" title=\""+"My wall"+"\" refreshOnShow=\""+"false"+"\" href=\""+"/es/SWBAdmin/Facebook_Wall"+"?" + param + "&contentTabId=wall" +"\" _loadingMessage=\""+loading+"\" style_=\"border:0px; width:100%; height:100%\">");
+        out.println("</div>");                
+        
+        out.println("<div id=\""+ objUri + MEDIA_TAB +"\" dojoType=\"dijit.layout.ContentPane\" title=\""+"Media"+"\" refreshOnShow=\""+"false"+"\" href=\""+"/es/SWBAdmin/Facebook_Wall"+"?" + param + "&contentTabId=pictures" +"\" _loadingMessage=\""+loading+"\" style_=\"border:0px; width:100%; height:100%\">");
         out.println("</div>");
+        /*
+        
         
         out.println("<div id=\""+ objUri + "/wallPosts" +"\" dojoType=\"dijit.layout.ContentPane\" title=\""+"Wall posts"+"\" refreshOnShow=\""+"false"+"\" href=\""+"/es/SWBAdmin/Facebook_Wall"+"?" + param + "&contentTabId=pictures" +"\" _loadingMessage=\""+loading+"\" style_=\"border:0px; width:100%; height:100%\">");
         out.println("</div>");
         
         out.println("<div id=\""+ objUri + "/videos" +"\" dojoType=\"dijit.layout.ContentPane\" title=\""+"Videos"+"\" refreshOnShow=\""+"false"+"\" href=\""+"/es/SWBAdmin/Facebook_Wall"+"?" + param + "&contentTabId=videos" +"\" _loadingMessage=\""+loading+"\" style_=\"border:0px; width:100%; height:100%\">");
         out.println("</div>");
-                
+                */
         
         out.println("</div><!-- end Bottom TabContainer -->");
         %>
