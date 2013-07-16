@@ -190,7 +190,7 @@ public class SemanticObject
         while (stit.hasNext()) 
         {            
             Statement st = stit.next();
-            m_props.add(st);
+            m_props.add(0,st);
             
             if(st.getPredicate().equals(RDF.type))
             {
@@ -295,7 +295,7 @@ public class SemanticObject
                     sobj.m_model=model;
                     map.put(uri, sobj);
                 }
-                sobj.m_props.add(st);
+                sobj.m_props.add(0,st);
                 
                 
                 if(prop.equals(RDF.type))
