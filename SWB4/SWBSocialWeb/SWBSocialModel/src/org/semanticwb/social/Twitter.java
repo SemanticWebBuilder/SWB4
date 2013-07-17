@@ -354,11 +354,15 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
                                         if(status.getPlace().getBoundingBoxCoordinates()!=null && status.getPlace().getBoundingBoxCoordinates().length > 0)
                                         {
                                             GeoLocation[] boundingBox = status.getPlace().getBoundingBoxCoordinates()[0];
-                                            external.setLatitude(boundingBox[0].getLatitude());
-                                            external.setLongitude(boundingBox[0].getLongitude());
-                                            System.out.println("TWITTER Pone como latitude:"+external.getLatitude());
-                                            System.out.println("TWITTER Pone como longitud:"+external.getLongitude());
-                                            System.out.println("Twitter Country Code:"+status.getPlace().getCountryCode());
+                                            
+                                            double latCenterPoint=((boundingBox[3].getLatitude()-boundingBox[0].getLatitude())/2)+boundingBox[0].getLatitude();
+                                            double lngCenterPoint=((boundingBox[1].getLongitude()-boundingBox[0].getLongitude())/2)+boundingBox[0].getLongitude();
+                                            
+                                            //System.out.println("Punto 5:["+latCenterPoint+"," +lngCenterPoint+"]");
+                                            
+                                            external.setLatitude(latCenterPoint);
+                                            external.setLongitude(lngCenterPoint);
+                                            
                                             if(status.getPlace().getCountryCode()!=null)
                                             {
                                                 external.setCountryCode(status.getPlace().getCountryCode().toUpperCase());
