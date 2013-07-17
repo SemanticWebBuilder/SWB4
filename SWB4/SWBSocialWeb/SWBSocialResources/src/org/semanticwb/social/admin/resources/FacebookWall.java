@@ -323,7 +323,7 @@ public class FacebookWall extends GenericResource {
             System.out.println("UNLIKE-Start"); //If you liked a post from a user you gave like, you cannot give unlike
             String objUri = (String) request.getParameter("suri");
             String commentID = (String)request.getParameter("commentID");
-            String userType = request.getParameter("type") == null ? "" :(String)request.getParameter("type");
+            
             SemanticObject semanticObject = SemanticObject.createSemanticObject(objUri);
             Facebook facebook = (Facebook)semanticObject.createGenericInstance();
             HashMap<String, String> params = new HashMap<String, String>(2);
@@ -360,7 +360,6 @@ public class FacebookWall extends GenericResource {
             response.setRenderParameter("commentID", commentID);
             response.setRenderParameter("suri", objUri);
             response.setRenderParameter("currentTab", request.getParameter("currentTab"));
-            response.setRenderParameter("type", userType);
             response.setRenderParameter("unliked", "ok");
             System.out.println("UNLIKE-End");
             response.setMode("unlikeSent"); //show Like Message and update div
@@ -418,7 +417,6 @@ public class FacebookWall extends GenericResource {
         }else if(mode!= null && mode.equals("likeSent") || mode.equals("unlikeSent")){//Displays updated data of liked/unliked status
             String commentID = request.getParameter("commentID");
             String objUri = request.getParameter("suri");
-            String userType = request.getParameter("type") == null ? "" : request.getParameter("type");
             SemanticObject semanticObject = SemanticObject.createSemanticObject(objUri);
             Facebook facebook = (Facebook)semanticObject.createGenericInstance();
             
@@ -457,14 +455,14 @@ public class FacebookWall extends GenericResource {
                 out.println("   var spanId = dijit.byId('" + facebook.getId() + commentID + LIKE + currentTab +  "');");
                 String likeStatus = null;
                 if(iLikedPost){
-                    likeStatus =" <a href=\"\"  onclick=\"postSocialHtml('" + actionURL.setAction("doUnlike").setParameter("commentID", likeResp.getString("id")).setParameter("type", userType).setParameter("currentTab", currentTab)+ "','" + facebook.getId() + commentID + INFORMATION + currentTab + "');return false;" +"\">Unlike</a>";
+                    likeStatus =" <a href=\"\"  onclick=\"postSocialHtml('" + actionURL.setAction("doUnlike").setParameter("commentID", likeResp.getString("id")).setParameter("currentTab", currentTab)+ "','" + facebook.getId() + commentID + INFORMATION + currentTab + "');return false;" +"\">Unlike</a>";
                     if(request.getParameter("error") != null){
                         out.println("   showStatus('ERROR: " +request.getParameter("error") +"');");
                     }else{
                         out.println("   showStatus('Post liked successfully');");
                     }
                 }else{
-                    likeStatus =" <a href=\"\"  onclick=\"postSocialHtml('" + actionURL.setAction("doLike").setParameter("commentID", likeResp.getString("id")).setParameter("type", userType).setParameter("currentTab", currentTab) + "','" + facebook.getId() + commentID + INFORMATION + currentTab + "');return false;" +"\">Like</a>";
+                    likeStatus =" <a href=\"\"  onclick=\"postSocialHtml('" + actionURL.setAction("doLike").setParameter("commentID", likeResp.getString("id")).setParameter("currentTab", currentTab) + "','" + facebook.getId() + commentID + INFORMATION + currentTab + "');return false;" +"\">Like</a>";
                     if(request.getParameter("error") != null){
                         out.println("   showStatus('ERROR: " +request.getParameter("error") +"');");
                     }else{
@@ -522,12 +520,26 @@ public class FacebookWall extends GenericResource {
             }
         }else if(mode.equals("fullProfile")){//Show user or page profile in dialog
             String profileType =request.getParameter("type") == null ? "" : (String)request.getParameter("type");
+            String objUri = (String) request.getParameter("suri");
+            SemanticObject semanticObject = SemanticObject.createSemanticObject(objUri);
+            Facebook facebook = (Facebook)semanticObject.createGenericInstance();
             String jspResponse;
+            
+            if(profileType.equals("noType")) {
+                try{
+                    JSONObject profile = new JSONObject(getProfileFromId(request.getParameter("id"), facebook));
+                    profile = profile.getJSONArray("data").getJSONObject(0);
+                    profileType=profile.getString("type");
+                }catch(JSONException jsone){
+                    log.error("Error getting profile information" + jsone);
+                    return;
+                }
+            }
             if(profileType.equals("user")){
                 jspResponse = SWBPlatform.getContextPath() +"/work/models/" + paramRequest.getWebPage().getWebSiteId() +"/jsp/socialNetworks/facebookUserProfile.jsp";
             }else if (profileType.equals("page")){
                 jspResponse = SWBPlatform.getContextPath() +"/work/models/" + paramRequest.getWebPage().getWebSiteId() +"/jsp/socialNetworks/facebookPageProfile.jsp";
-            }else{
+            }else{ 
                 return;
             }
 
@@ -818,19 +830,19 @@ public class FacebookWall extends GenericResource {
                 }
             }
             
-            JSONObject profile = new JSONObject(getProfileFromId(postsData.getJSONObject("from").getString("id")+"", facebook));
-            profile = profile.getJSONArray("data").getJSONObject(0);
+            //JSONObject profile = new JSONObject(getProfileFromId(postsData.getJSONObject("from").getString("id")+"", facebook));
+            //profile = profile.getJSONArray("data").getJSONObject(0);
             writer.write("<fieldset>");
             writer.write("<table style=\"width: 100%; border: 0px\">");
             writer.write("<tr>");
             writer.write("   <td colspan=\"2\">");
-            writer.write("<a href=\"#\" title=\"" + "Ver perfil" + "\" onclick=\"showDialog('" +renderURL.setMode("fullProfile").setParameter("type", profile.getString("type")).setParameter("id", profile.getLong("id")+"")  + "','" + profile.getString("name") + "'); return false;\">" + profile.getString("name") + "</a> " + story);                            
+            writer.write("<a href=\"#\" title=\"" + "Ver perfil" + "\" onclick=\"showDialog('" +renderURL.setMode("fullProfile").setParameter("type", "noType").setParameter("id", postsData.getJSONObject("from").getLong("id")+"")  + "','" + postsData.getJSONObject("from").getString("name") + "'); return false;\">" + postsData.getJSONObject("from").getString("name") + "</a> " + story);                            
             
             writer.write("   </td>");
             writer.write("</tr>");
             writer.write("<tr>");
             writer.write("   <td  width=\"10%\">");
-            writer.write("<a href=\"#\" title=\"" + "Ver perfil" + "\" onclick=\"showDialog('" + renderURL.setMode("fullProfile").setParameter("type", profile.getString("type")).setParameter("id", profile.getLong("id")+"") + "','" + profile.getString("name") + "'); return false;\"><img src=\"http://graph.facebook.com/" + profile.getLong("id") +"/picture\"/></a>");
+            writer.write("<a href=\"#\" title=\"" + "Ver perfil" + "\" onclick=\"showDialog('" + renderURL.setMode("fullProfile").setParameter("type", "noType").setParameter("id", postsData.getJSONObject("from").getLong("id")+"") + "','" + postsData.getJSONObject("from").getString("name") + "'); return false;\"><img src=\"http://graph.facebook.com/" + postsData.getJSONObject("from").getLong("id") +"/picture\"/></a>");
 
             writer.write("   </td>");
             writer.write("   <td width=\"90%\">");
@@ -917,16 +929,17 @@ public class FacebookWall extends GenericResource {
                     for (int k = 0; k < comments.length(); k++){
                         writer.write("<tr>");
                         writer.write("  <td rowspan=\"3\">");
-                        JSONObject commentProfile = new JSONObject(getProfileFromId(comments.getJSONObject(k).getJSONObject("from").getString("id")+"", facebook));
-                        commentProfile = commentProfile.getJSONArray("data").getJSONObject(0);
-                        writer.write("<a href=\"#\" title=\"" + "Ver perfil" + "\" onclick=\"showDialog('" + renderURL.setMode("fullProfile").setParameter("type", commentProfile.getString("type")).setParameter("id", commentProfile.getLong("id")+"") + "','" + commentProfile.getString("name") + "'); return false;\"><img src=\"http://graph.facebook.com/" + commentProfile.getLong("id") +"/picture?width=30&height=30\"/></a>");
+                        //JSONObject commentProfile = new JSONObject(getProfileFromId(comments.getJSONObject(k).getJSONObject("from").getString("id")+"", facebook));
+                        //commentProfile = commentProfile.getJSONArray("data").getJSONObject(0);
+                        //writer.write("<a href=\"#\" title=\"" + "Ver perfil" + "\" onclick=\"showDialog('" + renderURL.setMode("fullProfile").setParameter("type", commentProfile.getString("type")).setParameter("id", commentProfile.getLong("id")+"") + "','" + commentProfile.getString("name") + "'); return false;\"><img src=\"http://graph.facebook.com/" + commentProfile.getLong("id") +"/picture?width=30&height=30\"/></a>");
+                        writer.write("<a href=\"#\" title=\"" + "Ver perfil" + "\" onclick=\"showDialog('" + renderURL.setMode("fullProfile").setParameter("type","noType").setParameter("id",comments.getJSONObject(k).getJSONObject("from").getLong("id")+"") + "','" + comments.getJSONObject(k).getJSONObject("from").getString("name") + "'); return false;\"><img src=\"http://graph.facebook.com/" + comments.getJSONObject(k).getJSONObject("from").getLong("id") +"/picture?width=30&height=30\"/></a>");
                         
                         writer.write("  </td>");
                         writer.write("</tr>");
                         
                         writer.write("<tr>");
                         writer.write("  <td>");
-                        writer.write("<b><a href=\"#\" title=\"" + "Ver perfil" + "\" onclick=\"showDialog('" + renderURL.setMode("fullProfile").setParameter("type", commentProfile.getString("type")).setParameter("id", commentProfile.getLong("id")+"") + "','" + commentProfile.getString("name") + "'); return false;\">" + commentProfile.getString("name") + "</a></b>:");
+                        writer.write("<b><a href=\"#\" title=\"" + "Ver perfil" + "\" onclick=\"showDialog('" + renderURL.setMode("fullProfile").setParameter("type","noType").setParameter("id", comments.getJSONObject(k).getJSONObject("from").getLong("id")+"") + "','" + comments.getJSONObject(k).getJSONObject("from").getString("name") + "'); return false;\">" + comments.getJSONObject(k).getJSONObject("from").getString("name") + "</a></b>:");
                         writer.write(       comments.getJSONObject(k).getString("message").replace("\n", "</br>") + "</br>");
                         writer.write("  </td>");
                         writer.write("</tr>");
@@ -988,9 +1001,9 @@ public class FacebookWall extends GenericResource {
                     }else if(actions.getJSONObject(i).getString("name").equals("Like")){//I can like
                         writer.write("   <span class=\"inline\" id=\"" + facebook.getId() + postsData.getString("id") + LIKE + tabSuffix + "\" dojoType=\"dojox.layout.ContentPane\">");                        
                         if(iLikedPost){
-                            writer.write(" <a href=\"\"  onclick=\"postSocialHtml('" + actionURL.setAction("doUnlike").setParameter("commentID", postsData.getString("id")).setParameter("type", profile.getString("type")).setParameter("currentTab", tabSuffix) + "','" + facebook.getId() +  postsData.getString("id") + INFORMATION + tabSuffix + "');return false;" +"\">Unlike</a>");
+                            writer.write(" <a href=\"\"  onclick=\"postSocialHtml('" + actionURL.setAction("doUnlike").setParameter("commentID", postsData.getString("id")).setParameter("currentTab", tabSuffix) + "','" + facebook.getId() +  postsData.getString("id") + INFORMATION + tabSuffix + "');return false;" +"\">Unlike</a>");
                         }else{
-                            writer.write(" <a href=\"\"  onclick=\"postSocialHtml('" + actionURL.setAction("doLike").setParameter("commentID", postsData.getString("id")).setParameter("type", profile.getString("type")).setParameter("currentTab", tabSuffix) + "','" + facebook.getId() + postsData.getString("id") + INFORMATION + tabSuffix + "');return false;" +"\">Like</a>");
+                            writer.write(" <a href=\"\"  onclick=\"postSocialHtml('" + actionURL.setAction("doLike").setParameter("commentID", postsData.getString("id")).setParameter("currentTab", tabSuffix) + "','" + facebook.getId() + postsData.getString("id") + INFORMATION + tabSuffix + "');return false;" +"\">Like</a>");
                         }
                         writer.write("   </span>");
                     }else{//Other unknown action
