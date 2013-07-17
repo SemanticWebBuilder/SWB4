@@ -211,6 +211,9 @@ public class SentimentalDataClassifier {
         }
         */
         
+        System.out.println("externalString2Clasify:"+externalString2Clasify);
+        
+        if(externalString2Clasify==null) return;
         
         HashMap hmapValues=SWBSocialUtil.Classifier.classyfyText(externalString2Clasify);
         float promSentimentalValue=((Float)hmapValues.get("promSentimentalValue")).floatValue();

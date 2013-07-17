@@ -1,7 +1,7 @@
 package org.semanticwb.social.base;
 
 
-public abstract class CountryBase extends org.semanticwb.social.GeoCatalog implements org.semanticwb.social.GeoMapable,org.semanticwb.model.Descriptiveable
+public abstract class CountryBase extends org.semanticwb.social.GeoCatalog implements org.semanticwb.model.Descriptiveable,org.semanticwb.social.GeoMapable
 {
     public static final org.semanticwb.platform.SemanticClass social_CountryState=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#CountryState");
     public static final org.semanticwb.platform.SemanticProperty social_hasStatesInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#hasStatesInv");
@@ -111,6 +111,24 @@ public abstract class CountryBase extends org.semanticwb.social.GeoCatalog imple
     public CountryBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
+    }
+
+/**
+* Gets the CapitalLatitude property
+* @return float with the CapitalLatitude
+*/
+    public float getCapitalLatitude()
+    {
+        return getSemanticObject().getFloatProperty(social_capitalLatitude);
+    }
+
+/**
+* Sets the CapitalLatitude property
+* @param value long with the CapitalLatitude
+*/
+    public void setCapitalLatitude(float value)
+    {
+        getSemanticObject().setFloatProperty(social_capitalLatitude, value);
     }
 
 /**
@@ -270,6 +288,24 @@ public abstract class CountryBase extends org.semanticwb.social.GeoCatalog imple
              ret=(org.semanticwb.social.CountryState)obj.createGenericInstance();
          }
          return ret;
+    }
+
+/**
+* Gets the CapitalLongitude property
+* @return float with the CapitalLongitude
+*/
+    public float getCapitalLongitude()
+    {
+        return getSemanticObject().getFloatProperty(social_capitalLongitude);
+    }
+
+/**
+* Sets the CapitalLongitude property
+* @param value long with the CapitalLongitude
+*/
+    public void setCapitalLongitude(float value)
+    {
+        getSemanticObject().setFloatProperty(social_capitalLongitude, value);
     }
 
 /**
