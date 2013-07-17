@@ -312,9 +312,9 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
             boolean canGetMoreTweets = true;
             int iteration = 1;
             long currentTweetID = 0L;
-            
+            aListExternalPost = new ArrayList();
             do{
-                aListExternalPost = new ArrayList();
+                //aListExternalPost = new ArrayList();
                 try{
                     //System.out.println("QUERY: " + query);
                     twitter4j.QueryResult result = twitter.search(query);
@@ -396,12 +396,14 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
                     }
                     log.error("Error getting tweets:"  + te );
                 }
-                if(aListExternalPost.size()>0){
-                    new Classifier(aListExternalPost, stream, this);
-                }
+//                if(aListExternalPost.size()>0){
+//                    new Classifier(aListExternalPost, stream, this);
+//                }
                 
             }while(canGetMoreTweets && tweetsReceived <17000);  //Maximo permitido para extraer de twitter c/15 minutos
-            
+            if(aListExternalPost.size()>0){
+                    new Classifier(aListExternalPost, stream, this);
+                }
             //System.out.println("TOTAL TWEETS RECEIVED:" + tweetsReceived);
         }catch(Exception e){            
             log.error("Error in listen():"  + e );
