@@ -97,9 +97,7 @@ public class ImportExportBrand extends GenericResource {
             File file = new File(SWBPortal.getWorkPath() + "/sitetemplates/");
             File[] files = file.listFiles();
             urlAction.setAction("upload");
-            //out.println("<iframe id=\"templates\">");
-            //out.println("<div id=\"vtemplates\" dojoType=\"dijit.TitlePane\" title=\"Templates existentes de Sitios \" class=\"admViewTemplates\" open=\"true\" duration=\"150\" minSize_=\"20\" splitter_=\"true\" region=\"bottom\">");
-
+            
 
             out.println("<script type=\"text/javascript\">"
                     + "dojo.require(\"dojo.parser\");"
