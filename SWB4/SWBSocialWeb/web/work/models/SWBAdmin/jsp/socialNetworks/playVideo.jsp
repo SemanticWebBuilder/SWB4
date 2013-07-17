@@ -19,17 +19,28 @@
         videoFormat = "video/mp4";
     }else if(videoUrl.toLowerCase().contains(".3gp")){
         
-    }else if(videoUrl.toLowerCase().contains(".other")){
-        
+    }else if(videoUrl.toLowerCase().contains(".swf")){
+        videoFormat = "flash";
     }
 %>
 <%
     if(videoFormat.equals("youtube")){
+        System.out.println("Displaing Youtube Video");
 %>
     <div class="swbform">
         <fieldset>
         <iframe id="ytplayer" type="text/html" width="640" height="390"
         src="<%=videoUrl%>" frameborder="0"/>
+        </fieldset>
+    </div>
+<%
+    }else if(videoFormat.equals("flash")){
+%>
+    <div class="swbform">
+        <fieldset>
+        <object type="application/x-shockwave-flash" data="<%=videoUrl%>">
+            <param name="movie" value="<%=videoUrl%>" />
+        </object>
         </fieldset>
     </div>
 <%

@@ -71,21 +71,69 @@
             JSONObject phraseResp = new JSONObject(response);
             System.out.println("Tamanio del arreglo:" + phraseResp.length());                       
             int cont = 0;
-            JSONArray postsData = phraseResp.getJSONArray("data");
+                        
+            JSONArray postsData = null;
+            JSONArray userData = null;
+            JSONArray pageData = null;
+            
+            for(int i = 0; i < phraseResp.getJSONArray("data").length(); i++){
+                System.out.println("ENTRANDO");
+                if(phraseResp.getJSONArray("data").getJSONObject(i).getString("name").equals("pictures")){//All the posts
+                    System.out.println("PICTURES:" + i);
+                    postsData = phraseResp.getJSONArray("data").getJSONObject(i).getJSONArray("fql_result_set");
+                    //System.out.println("PICTURES:" + postsData);
+                }else if(phraseResp.getJSONArray("data").getJSONObject(i).getString("name").equals("pages")){//All the pages
+                    System.out.println("PAGES:" + i);
+                    pageData = phraseResp.getJSONArray("data").getJSONObject(i).getJSONArray("fql_result_set");
+                    System.out.println("PAGES:"  + pageData.length() + "\n\n" + pageData);
+                }else if(phraseResp.getJSONArray("data").getJSONObject(i).getString("name").equals("usernames")){//All the users
+                    System.out.println("USERS:" + i);
+                    userData = phraseResp.getJSONArray("data").getJSONObject(i).getJSONArray("fql_result_set");
+                    System.out.println("USERS:" + userData.length() + "\n\n" + userData);
+                }
+            }
+            
+            System.out.println("YA SE TRAJERON LOS DATOS!!");
             System.out.println("ARREGLO DE DATOS:" + postsData.length());
             for (int k = 0; k < postsData.length(); k++) {
+                System.out.println("Reading object number:" + k);
                 cont++;
-                createdTime = printPicture(out,  postsData.getJSONObject(k), request, paramRequest, MEDIA_TAB, facebook );
+                JSONObject userOrPage = null;
+                for(int userCount = 0 ; userCount < userData.length(); userCount++){
+                    System.out.println("USER(" + userCount + "):");
+                    System.out.println(userData.getJSONObject(userCount).getLong("uid") +"vs" + postsData.getJSONObject(k).getLong("actor_id"));
+                    if(userData.getJSONObject(userCount).getLong("uid") == postsData.getJSONObject(k).getLong("actor_id")){
+                        userOrPage = userData.getJSONObject(userCount);                        
+                        break;
+                    }
+                }
+                if(userOrPage == null){
+                    for(int pageCount = 0 ; pageCount < pageData.length(); pageCount++){
+                        System.out.println("PAGE(" + pageCount + "):");
+                        System.out.println(pageData.getJSONObject(pageCount).getLong("page_id") +"vs" + postsData.getJSONObject(k).getLong("actor_id"));
+                        if(pageData.getJSONObject(pageCount).getLong("page_id") == postsData.getJSONObject(k).getLong("actor_id")){
+                            userOrPage = pageData.getJSONObject(pageCount);
+                            break;
+                        }
+                    }
+                }
+                if(userOrPage == null){
+                    System.out.println("\n\n\n\nTHIS IS NOT SUPOSSED TO HAPPEN!!!!!!!!!!!!!!!!!" + postsData.getJSONObject(k).getLong("actor_id")  );
+                    //return null;
+                }
+                
+                System.out.println("SE ENCONTRO EL ID:" + userOrPage );
+                createdTime = printPicture(out,  postsData.getJSONObject(k), userOrPage, request, paramRequest, MEDIA_TAB, facebook );
             }
             
             System.out.println("TOTAL PICTURE POSTS RECEIVED:" + postsData.length());
-        } catch (JSONException jsone) {
+        } catch (Exception jsone) {
             System.out.println("Problemas al parsear respuesta de Facebook" + jsone);
         }
         return createdTime;
     }
 
-    public static String printPicture(Writer writer, JSONObject postsData, HttpServletRequest request, SWBParamRequest paramRequest, String tabSuffix, Facebook facebook){
+    public static String printPicture(Writer writer, JSONObject postsData, JSONObject userData, HttpServletRequest request, SWBParamRequest paramRequest, String tabSuffix, Facebook facebook){
         String createdTime="";
         
         try{
@@ -97,25 +145,30 @@
             
             DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:SSz");    
             formatter.setTimeZone(TimeZone.getTimeZone("GMT-6"));
-            
+            long id=0L;
+            if(userData.has("uid")){
+                id = userData.getLong("uid");
+            }else if(userData.has("page_id")){
+                id = userData.getLong("page_id");
+            }else{
+                return null;
+            }
             //System.out.println("POST:")
             //Get profile information of a user or page 
             //TODO: id = A 64-bit int representing the user, group, page, event, or application ID
-            JSONObject profile = new JSONObject(getProfileFromId(postsData.getLong("actor_id")+"", facebook));            
-            profile = profile.getJSONArray("data").getJSONObject(0);
             JSONArray media = postsData.getJSONObject("attachment").getJSONArray("media");
             
             writer.write("<fieldset>");
             writer.write("<table style=\"width: 100%; border: 0px\">");
             writer.write("<tr>");
             writer.write("   <td colspan=\"2\">");
-            writer.write("      <a href=\"#\" title=\"" + "Ver perfil" + "\" onclick=\"showDialog('" + renderURL.setMode("fullProfile").setParameter("type", profile.getString("type")).setParameter("id", profile.getLong("id")+"") + "','" + profile.getString("name") + "'); return false;\">" + profile.getString("name") + "</a>");
+            writer.write("      <a href=\"#\" title=\"" + "Ver perfil" + "\" onclick=\"showDialog('" + renderURL.setMode("fullProfile").setParameter("type", "noType").setParameter("id", id+"") + "','" + userData.getString("name") + "'); return false;\">" + userData.getString("name") + "</a>");
             writer.write("   </td>");
             writer.write("</tr>");
 
             writer.write("<tr>");
             writer.write("   <td  width=\"10%\">"); 
-            writer.write("      <a href=\"#\" title=\"" + "Ver perfil" + "\" onclick=\"showDialog('" + renderURL.setMode("fullProfile").setParameter("type", profile.getString("type")).setParameter("id", profile.getLong("id")+"") + "','" + profile.getString("name") + "'); return false;\"><img src=\"http://graph.facebook.com/" + profile.getLong("id") +"/picture\"/></a>");
+            writer.write("      <a href=\"#\" title=\"" + "Ver perfil" + "\" onclick=\"showDialog('" + renderURL.setMode("fullProfile").setParameter("type", "noType").setParameter("id", id+"") + "','" + userData.getString("name") + "'); return false;\"><img src=\"http://graph.facebook.com/" + id +"/picture\"/></a>");
             writer.write("   </td>");
             writer.write("   <td width=\"90%\">");
             if(postsData.getInt("type") == 247){//Photo posted
@@ -132,7 +185,7 @@
                 }
                 //writer.write(":Tagged photo");
             }else if(postsData.getInt("type") == 373){//Cover update                
-                writer.write(profile.getString("name") + " has updated cover photo");
+                writer.write(userData.getString("name") + " has updated cover photo");
                 //writer.write(":updated cover photo");
             }else{
                 writer.write("&nbsp;");
@@ -141,7 +194,7 @@
             if(!postsData.getJSONObject("attachment").isNull("fb_object_type") && postsData.getJSONObject("attachment").getString("fb_object_type").equals("album")){
                 //writer.write(postsData.getString("description"));
                 if(!postsData.getJSONObject("attachment").getString("name").isEmpty())
-                    writer.write(profile.getString("name") + " has added " + media.length() + " photos to the album " + postsData.getJSONObject("attachment").getString("name") );
+                    writer.write(userData.getString("name") + " has added " + media.length() + " photos to the album " + postsData.getJSONObject("attachment").getString("name") );
             }
             
             writer.write("  </td>");
@@ -366,7 +419,8 @@
     
     HashMap<String, String> params = new HashMap<String, String>(3);//SELECT uid, name, first_name, middle_name, last_name FROM user WHERE uid = 1921576442
     //TODO: it seems than 'likes' is deprecated and it must be replaced with like_info
-    params.put("q", "SELECT actor_id, created_time, like_info, post_id, attachment, message, description, description_tags, type, comments FROM stream WHERE filter_key IN ( SELECT filter_key FROM stream_filter WHERE uid = me() AND name = 'Photos') LIMIT 25");
+    params.put("q", "{\"pictures\": \"SELECT actor_id, created_time, like_info, post_id, attachment, message, description, description_tags, type, comments FROM stream WHERE filter_key IN " + 
+                "( SELECT filter_key FROM stream_filter WHERE uid = me() AND name = 'Photos') LIMIT 25\", \"usernames\": \"SELECT uid, name FROM user WHERE uid IN (SELECT actor_id FROM #pictures)\", \"pages\":\"SELECT page_id, name FROM page WHERE page_id IN (SELECT actor_id FROM #pictures)\"}");
     params.put("access_token", facebookBean.getAccessToken());
     
     //params1.put("access_token", "CAACEdEose0cBAKyWLxR6XedK1KrfMDVmqUQshOoZA2vGCnuqIyrekZCGQ9HZBc0FWKIXfNMexJGxxinNvtcvEnHGkBLpCCmEuPVgmUAddZCxcDWc1KigZCrYaDCSSoEUHIhda1G3y4tCZBq4ripHKZAw1steVi0NGYZD");    
