@@ -38,7 +38,6 @@ import java.util.Locale;
 import java.util.Map;
 import javax.servlet.http.*;
 import javax.sound.sampled.AudioFileFormat;
-import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import javazoom.spi.mpeg.sampled.file.MpegAudioFileReader;
 import org.semanticwb.Logger;
@@ -163,7 +162,7 @@ public class AudioPodCast extends org.semanticwb.portal.resources.sem.base.Audio
                 String size;
                 try {
                     f = audiofile.getFile();
-                    AudioInputStream ais = new MpegAudioFileReader().getAudioInputStream(f);
+                    //AudioInputStream ais = new MpegAudioFileReader().getAudioInputStream(f);
                     AudioFileFormat baseFileFormat = new MpegAudioFileReader().getAudioFileFormat(f);
                     Map properties = baseFileFormat.properties();
                     duration = (Long)properties.get("duration");
@@ -405,7 +404,7 @@ public class AudioPodCast extends org.semanticwb.portal.resources.sem.base.Audio
                     f = audiofile.getFile();
                     try {
                         StringBuilder html = new StringBuilder();
-                        AudioInputStream ais = new MpegAudioFileReader().getAudioInputStream(f);
+                        //AudioInputStream ais = new MpegAudioFileReader().getAudioInputStream(f);
                         AudioFileFormat baseFileFormat = new MpegAudioFileReader().getAudioFileFormat(f);
                         Map properties = baseFileFormat.properties();
                         duration = (Long)properties.get("duration");
