@@ -3,6 +3,7 @@
     Created on : 11-jul-2013, 16:25:27
     Author     : jorge.jimenez
 --%>
+<%@page import="org.semanticwb.social.util.SWBSocialUtil"%>
 <%@page import="org.semanticwb.platform.SemanticObject"%>
 <%@page import="org.semanticwb.social.*"%>
 <%@page import="java.util.Iterator"%>
@@ -16,24 +17,36 @@
 
 <%
     System.out.println("SURI en StreamMap:"+request.getParameter("suri"));
+    String apiKey=SWBSocialUtil.Util.getModelPropertyValue(SWBContext.getAdminWebSite(), "GoogleMapsApiKey");
+    if(apiKey==null){
+        out.println("Error:No se puede mostrar el mapa debido a que la llave de Google Maps no esta configurada(GoogleMapsApiKey), contactese con su administrador");
+        return; 
+    }
     String suri=request.getParameter("suri");
-    if(suri==null) return;
+    if(suri==null) {
+        System.out.println("Error en StreamMap.jsp/suri:"+suri);
+        return;
+    }
     SemanticObject semObj=SemanticObject.getSemanticObject(suri);
     if(semObj==null) return;
     Stream stream=(Stream)semObj.getGenericInstance();
     WebSite wsite=WebSite.ClassMgr.getWebSite(stream.getSemanticObject().getModel().getName()); 
     System.out.println("wsite en StreamMap:"+wsite);
     User user=paramRequest.getUser(); 
+    
+    String stateMsg=SWBSocialUtil.Util.getStringFromGenericLocale("state", user.getLanguage());
+    String positivesMsg=SWBSocialUtil.Util.getStringFromGenericLocale("positives", user.getLanguage());
+    String negativesMsg=SWBSocialUtil.Util.getStringFromGenericLocale("negatives", user.getLanguage());
 %>
 
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
-    <title>Google Maps API Example - Random Weather Map</title>
-    
+    <title>SWBSocial Sentiment Analysis Map</title>
+    <!--AIzaSyA_8bWaWXaKlJV2XgZt-RYwRAsp6S0J7iw-->
     <script type="text/javascript"
-      src="http://maps.googleapis.com/maps/api/js?key=AIzaSyA_8bWaWXaKlJV2XgZt-RYwRAsp6S0J7iw&sensor=false">
+      src="http://maps.googleapis.com/maps/api/js?sensor=false&key="+apiKey> 
     </script>
     <script type="text/javascript">
       document.write('<script type="text/javascript" src="/images/markermanager.js"><' + '/script>');
@@ -91,7 +104,6 @@
                     }
                 }else{  //Si ya contiene el estado en el HashMap
                     HashMap sentimentHash=hmapPoints.get(postIn.getGeoStateMap().getId());
-                    System.out.println("Entra a hmapPoints-5:"+postIn.getMsg_Text()+",sentimentHash:"+sentimentHash+", sentiment:"+postIn.getPostSentimentalType()); 
                     if(postIn.getPostSentimentalType()==1)
                     {
                         if(sentimentHash.containsKey("P"))
@@ -114,10 +126,7 @@
                     {
                         if(sentimentHash.containsKey("N"))
                         {
-                            System.out.println("Entra a NEGATIVE hmapPoints-5.1:"+postIn.getMsg_Text()); 
-                            System.out.println("Valor:"+sentimentHash.get("N"));
                             int negativeSentimentNumber=((Integer)sentimentHash.get("N")).intValue()+1;
-                            System.out.println("Entra a NEGATIVE-hmapPoints-5.2:"+negativeSentimentNumber); 
                             sentimentHash.remove("N");
                             sentimentHash.put("N", new Integer(negativeSentimentNumber));
                             hmapPoints.remove(postIn.getGeoStateMap().getId());
@@ -157,26 +166,24 @@
                 }
                 if(positiveNumber>negativeNumber)
                 {
-                    //System.out.println("countryState J/positiveNumber:"+positiveNumber);
                     %>
                     //var tmpIcon = new google.maps.MarkerImage('/images/glad.png');
                     //alert("tmpIcon:"+tmpIcon);
                     batch.push(new google.maps.Marker({
                         position: new google.maps.LatLng(<%=countryState.getCapitalLatitude()%>,<%=countryState.getCapitalLongitude()%>),
-                        icon: new google.maps.MarkerImage('/images/greenPoint.png', new google.maps.Size(15, 15), new google.maps.Point(15,15)),
-                        title: 'Estado:<%=countryState.getDisplayTitle(user.getLanguage())%>, Positivos:'+<%=positiveNumber%>+', Negativos:<%=negativeNumber%>'
+                        icon: new google.maps.MarkerImage('<%=SWBPortal.getContextPath()%>/swbadmin/css/images/greenPoint.png', new google.maps.Size(15, 15), new google.maps.Point(15,15)),
+                        title: '<%=stateMsg%>:<%=countryState.getDisplayTitle(user.getLanguage())%>, <%=positivesMsg%>:'+<%=positiveNumber%>+', <%=negativesMsg%>:<%=negativeNumber%>'
                     })
                     );
                     <%    
                 }else if(negativeNumber>positiveNumber)
                 {
-                   System.out.println("countryState J/negativeNumber"+negativeNumber);
                     %>
                     //var tmpIcon = getSentimentIcon("sad");
                     batch.push(new google.maps.Marker({
                         position: new google.maps.LatLng(<%=countryState.getCapitalLatitude()%>,<%=countryState.getCapitalLongitude()%>),
-                        icon: new google.maps.MarkerImage('/images/redPoint.png', new google.maps.Size(15, 15), new google.maps.Point(15,15)),
-                        title: 'Estado:<%=countryState.getDisplayTitle(user.getLanguage())%>, Positivos:'+<%=positiveNumber%>+', Negativos:<%=negativeNumber%>'
+                        icon: new google.maps.MarkerImage('<%=SWBPortal.getContextPath()%>/swbadmin/css/images/redPoint.png', new google.maps.Size(15, 15), new google.maps.Point(15,15)),
+                        title: '<%=stateMsg%>:<%=countryState.getDisplayTitle(user.getLanguage())%>, <%=positivesMsg%>:'+<%=positiveNumber%>+', <%=negativesMsg%>:<%=negativeNumber%>'
                     })
                     );
                     <%  
@@ -186,8 +193,8 @@
                     //var tmpIcon = getSentimentIcon("sad");
                     batch.push(new google.maps.Marker({
                         position: new google.maps.LatLng(<%=countryState.getCapitalLatitude()%>,<%=countryState.getCapitalLongitude()%>),
-                        icon: new google.maps.MarkerImage('/images/yellowPoint.png', new google.maps.Size(15, 15), new google.maps.Point(15,15)),
-                        title: 'Estado:<%=countryState.getDisplayTitle(user.getLanguage())%>, Positivos:'+<%=positiveNumber%>+', Negativos:<%=negativeNumber%>'
+                        icon: new google.maps.MarkerImage('<%=SWBPortal.getContextPath()%>/swbadmin/css/images/yellowPoint.png', new google.maps.Size(15, 15), new google.maps.Point(15,15)),
+                        title: '<%=stateMsg%>:<%=countryState.getDisplayTitle(user.getLanguage())%>, <%=positivesMsg%>:'+<%=positiveNumber%>+', <%=negativesMsg%>:<%=negativeNumber%>'
                     })
                     );
                     <%  
@@ -212,11 +219,11 @@
                         if(postIn.getPostSentimentalType()==1)
                         {
                             %>
-                               tmpIcon = new google.maps.MarkerImage('/images/greenPoint.png', new google.maps.Size(15, 15), new google.maps.Point(15,15)),
+                               tmpIcon = new google.maps.MarkerImage('<%=SWBPortal.getContextPath()%>/swbadmin/css/images/greenPoint.png', new google.maps.Size(15, 15), new google.maps.Point(15,15)),
                             <%
                         }else{
                             %>
-                                tmpIcon = new google.maps.MarkerImage('/images/redPoint.png', new google.maps.Size(15, 15), new google.maps.Point(15,15)),
+                                tmpIcon = new google.maps.MarkerImage('<%=SWBPortal.getContextPath()%>/swbadmin/css/images/redPoint.png', new google.maps.Size(15, 15), new google.maps.Point(15,15)),
                             <%
                         }
                         %>
@@ -226,7 +233,7 @@
                         //shadow: tmpIcon.shadow,
                         icon: tmpIcon,
                         //shape: tmpIcon.shape,
-                        title: '<%=postIn.getMsg_Text()%>'
+                        title: '<%=SWBUtils.TEXT.replaceAllIgnoreCase(postIn.getMsg_Text(),"'","")%>'
                     })
                     );  
                 <%         
@@ -253,7 +260,7 @@
     <body onload="setupMap()">
     <div id="map" style="margin: 5px auto; width: 100%; height: 100%"></div>
     <div style="text-align: center; font-size: large;">
-      Random Weather Map
+      SWBSocial Sentiment Analysis Map
     </div>
   </body>
 </html>
