@@ -287,9 +287,8 @@ public class AdmTopics {
 //                    dir.addBaseName(sn);
 //                }
                 //dir.getWebSite();
-                System.out.println("Antes del log...");
+
                 saveLog("rename",user,0,dir,"Rename a directory",0);
-                System.out.println("Despues del log...");
                 msg=paramsRequest.getLocaleString("msgDirectoryUpdatedSuccessfully")+"...";
             }catch(Exception e) {
                 msg=paramsRequest.getLocaleString("msgErrorChangingNameDirectory")+"...";
@@ -508,8 +507,7 @@ public class AdmTopics {
      * @param p_isfile A flag to indicate if is a file or not
      */
     public void saveLog(String p_action, User user, long p_fileid, WebPage p_topic, String p_description, int p_isfile){
-        
-        System.out.println("Generando log...");
+
         Connection con = null;
         PreparedStatement ps= null;
         ResultSet rs = null;
