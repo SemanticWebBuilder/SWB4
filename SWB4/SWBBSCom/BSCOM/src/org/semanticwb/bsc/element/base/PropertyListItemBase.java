@@ -47,6 +47,12 @@ public abstract class PropertyListItemBase extends org.semanticwb.model.SWBClass
             java.util.Iterator it=sclass.listInstances();
             return new org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.PropertyListItem>(it, true);
         }
+
+        public static org.semanticwb.bsc.element.PropertyListItem createPropertyListItem(org.semanticwb.model.SWBModel model)
+        {
+            long id=model.getSemanticObject().getModel().getCounter(sclass);
+            return org.semanticwb.bsc.element.PropertyListItem.ClassMgr.createPropertyListItem(String.valueOf(id), model);
+        }
        /**
        * Gets a org.semanticwb.bsc.element.PropertyListItem
        * @param id Identifier for org.semanticwb.bsc.element.PropertyListItem
