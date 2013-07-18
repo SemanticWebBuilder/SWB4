@@ -250,6 +250,7 @@
       
       google.maps.event.addListener(mgr, 'loaded', function(){
           mgr.addMarkers(getMarkers(), 3);
+          mgr.addMarkers(getMarkers(), 0);
           mgr.refresh();          
       });      
     }
