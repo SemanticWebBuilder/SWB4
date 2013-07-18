@@ -7,6 +7,7 @@ public abstract class AudioPodCastBase extends org.semanticwb.portal.api.Generic
     public static final org.semanticwb.platform.SemanticProperty audiopdcst_textcolor=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/sems/SWBAudioFile#textcolor");
     public static final org.semanticwb.platform.SemanticProperty audiopdcst_bgcolor=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/sems/SWBAudioFile#bgcolor");
     public static final org.semanticwb.platform.SemanticProperty audiopdcst_showStop=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/sems/SWBAudioFile#showStop");
+    public static final org.semanticwb.platform.SemanticProperty audiopdcst_displayTitle=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/sems/SWBAudioFile#displayTitle");
     public static final org.semanticwb.platform.SemanticProperty audiopdcst_height=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/sems/SWBAudioFile#height");
     public static final org.semanticwb.platform.SemanticProperty audiopdcst_volumeHeight=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/sems/SWBAudioFile#volumeHeight");
     public static final org.semanticwb.platform.SemanticProperty audiopdcst_showLoading=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/sems/SWBAudioFile#showLoading");
@@ -141,6 +142,24 @@ public abstract class AudioPodCastBase extends org.semanticwb.portal.api.Generic
     public void setShowStop(boolean value)
     {
         getSemanticObject().setBooleanProperty(audiopdcst_showStop, value);
+    }
+
+/**
+* Gets the DisplayTitle property
+* @return boolean with the DisplayTitle
+*/
+    public boolean isDisplayTitle()
+    {
+        return getSemanticObject().getBooleanProperty(audiopdcst_displayTitle);
+    }
+
+/**
+* Sets the DisplayTitle property
+* @param value long with the DisplayTitle
+*/
+    public void setDisplayTitle(boolean value)
+    {
+        getSemanticObject().setBooleanProperty(audiopdcst_displayTitle, value);
     }
 
 /**

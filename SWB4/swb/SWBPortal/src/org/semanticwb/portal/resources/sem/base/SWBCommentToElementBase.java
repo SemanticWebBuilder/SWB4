@@ -1,32 +1,14 @@
-/*
- * SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración,
- * colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de
- * información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes
- * fuentes, donde a la información se le asigna un significado, de forma que pueda ser interpretada y
- * procesada por personas y/o sistemas, es una creación original del Fondo de Información y Documentación
- * para la Industria INFOTEC, cuyo registro se encuentra actualmente en trámite.
- *
- * INFOTEC pone a su disposición la herramienta SemanticWebBuilder a través de su licenciamiento abierto al público (‘open source’),
- * en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición;
- * aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software,
- * todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización
- * del SemanticWebBuilder 4.0.
- *
- * INFOTEC no otorga garantía sobre SemanticWebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita,
- * siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar
- * de la misma.
- *
- * Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente
- * dirección electrónica:
- *  http://www.semanticwebbuilder.org
- */
 package org.semanticwb.portal.resources.sem.base;
 
 
 public abstract class SWBCommentToElementBase extends org.semanticwb.portal.api.GenericSemResource 
 {
+    public static final org.semanticwb.platform.SemanticProperty swb_res_cmts_maxLength=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/sems/SWBCommentToElement#maxLength");
+    public static final org.semanticwb.platform.SemanticProperty swb_res_cmts_renderCommentsList=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/sems/SWBCommentToElement#renderCommentsList");
+    public static final org.semanticwb.platform.SemanticProperty swb_res_cmts_blockSize=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/sems/SWBCommentToElement#blockSize");
     public static final org.semanticwb.platform.SemanticClass swb_Resource=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Resource");
     public static final org.semanticwb.platform.SemanticProperty swb_semanticResourceInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#semanticResourceInv");
+    public static final org.semanticwb.platform.SemanticProperty swb_res_cmts_maxConsecutive=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/sems/SWBCommentToElement#maxConsecutive");
     public static final org.semanticwb.platform.SemanticClass swb_res_cmts_CommentToElement=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/portal/resources/sems/SWBCommentToElement#CommentToElement");
     public static final org.semanticwb.platform.SemanticProperty swb_res_cmts_hasComment=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/sems/SWBCommentToElement#hasComment");
     public static final org.semanticwb.platform.SemanticClass swb_res_cmts_SWBCommentToElement=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/portal/resources/sems/SWBCommentToElement#SWBCommentToElement");
@@ -62,6 +44,60 @@ public abstract class SWBCommentToElementBase extends org.semanticwb.portal.api.
     {
         if(obj==null)return false;
         return hashCode()==obj.hashCode();
+    }
+
+/**
+* Gets the MaxLength property
+* @return int with the MaxLength
+*/
+    public int getMaxLength()
+    {
+        return getSemanticObject().getIntProperty(swb_res_cmts_maxLength);
+    }
+
+/**
+* Sets the MaxLength property
+* @param value long with the MaxLength
+*/
+    public void setMaxLength(int value)
+    {
+        getSemanticObject().setIntProperty(swb_res_cmts_maxLength, value);
+    }
+
+/**
+* Gets the RenderCommentsList property
+* @return String with the RenderCommentsList
+*/
+    public String getRenderCommentsList()
+    {
+        return getSemanticObject().getProperty(swb_res_cmts_renderCommentsList);
+    }
+
+/**
+* Sets the RenderCommentsList property
+* @param value long with the RenderCommentsList
+*/
+    public void setRenderCommentsList(String value)
+    {
+        getSemanticObject().setProperty(swb_res_cmts_renderCommentsList, value);
+    }
+
+/**
+* Gets the BlockSize property
+* @return int with the BlockSize
+*/
+    public int getBlockSize()
+    {
+        return getSemanticObject().getIntProperty(swb_res_cmts_blockSize);
+    }
+
+/**
+* Sets the BlockSize property
+* @param value long with the BlockSize
+*/
+    public void setBlockSize(int value)
+    {
+        getSemanticObject().setIntProperty(swb_res_cmts_blockSize, value);
     }
    /**
    * Sets the value for the property Resource
@@ -100,6 +136,24 @@ public abstract class SWBCommentToElementBase extends org.semanticwb.portal.api.
              ret=(org.semanticwb.model.Resource)obj.createGenericInstance();
          }
          return ret;
+    }
+
+/**
+* Gets the MaxConsecutive property
+* @return int with the MaxConsecutive
+*/
+    public int getMaxConsecutive()
+    {
+        return getSemanticObject().getIntProperty(swb_res_cmts_maxConsecutive);
+    }
+
+/**
+* Sets the MaxConsecutive property
+* @param value long with the MaxConsecutive
+*/
+    public void setMaxConsecutive(int value)
+    {
+        getSemanticObject().setIntProperty(swb_res_cmts_maxConsecutive, value);
     }
    /**
    * Gets all the org.semanticwb.portal.resources.sem.CommentToElement

@@ -1,10 +1,11 @@
 package org.semanticwb.portal.resources.sem.base;
 
 
-public abstract class AudioFileBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Iconable,org.semanticwb.model.Activeable,org.semanticwb.model.Expirable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Rankable,org.semanticwb.model.Traceable
+public abstract class AudioFileBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Activeable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Expirable,org.semanticwb.model.Rankable,org.semanticwb.model.Iconable,org.semanticwb.model.Traceable
 {
     public static final org.semanticwb.platform.SemanticClass audiopdcst_AudioPodCast=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/portal/resources/sems/SWBAudioFile#AudioPodCast");
     public static final org.semanticwb.platform.SemanticProperty audiopdcst_audioPodcastInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/sems/SWBAudioFile#audioPodcastInv");
+    public static final org.semanticwb.platform.SemanticProperty audiopdcst_year=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/sems/SWBAudioFile#year");
    /**
    * Autor o participante del contenido
    */
@@ -365,6 +366,26 @@ public abstract class AudioFileBase extends org.semanticwb.model.SWBClass implem
     public void setDescription(String description, String lang)
     {
         getSemanticObject().setProperty(swb_description, description, lang);
+    }
+
+/**
+* Gets the Year property
+* @return String with the Year
+*/
+    public String getYear()
+    {
+        //Override this method in AudioFile object
+        return getSemanticObject().getProperty(audiopdcst_year,false);
+    }
+
+/**
+* Sets the Year property
+* @param value long with the Year
+*/
+    public void setYear(String value)
+    {
+        //Override this method in AudioFile object
+        getSemanticObject().setProperty(audiopdcst_year, value,false);
     }
 
 /**
