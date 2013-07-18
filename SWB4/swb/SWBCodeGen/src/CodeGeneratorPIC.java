@@ -21,7 +21,7 @@ public class CodeGeneratorPIC {
         SWBPlatform.createInstance();
          
         SWBPlatform.getSemanticMgr().addBaseOntology(base+"../../../../web/WEB-INF/owl/swb.owl");
-        SWBPlatform.getSemanticMgr().addBaseOntology(base+"/../../../../../swbproys/PIC/web/WEB-INF/owl/ext/pic.owl");
+        SWBPlatform.getSemanticMgr().addBaseOntology(base+"/../../../../../swbproys/swbproys/PIC/web/WEB-INF/owl/ext/pic.owl");
 
        
         SWBPlatform.getSemanticMgr().loadBaseVocabulary();
@@ -30,7 +30,7 @@ public class CodeGeneratorPIC {
         try
         {
             String path = getClass().getResource("/").getPath().replaceAll("%20", " ");
-            File dir = new File(path+"/../../../../../swbproys/PIC/PIC/src");
+            File dir = new File(path+"/../../../../../swbproys//swbproys/PIC/PIC/src");
             CodeGenerator codeGeneration = new CodeGenerator();
             //codeGeneration.generateCode("lodp", false, dir);
             codeGeneration.generateCode("pic", false, dir);
