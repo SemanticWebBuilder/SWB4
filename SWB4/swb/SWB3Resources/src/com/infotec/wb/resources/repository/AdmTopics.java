@@ -153,7 +153,8 @@ public class AdmTopics {
         ret.append("<tr><td width=200>");
         ret.append("<FONT face=\"Verdana, Arial, Helvetica, sans-serif\">"+paramsRequest.getLocaleString("msgOrderName")+":</FONT>");
         ret.append("</td><td  align=left>");
-        ret.append("<input type=\"text\" name=\"orderid\" value=\"" + dir.getSortName() +"\">\n");
+        String sortName = dir.getSortName() !=null?dir.getSortName():"";
+        ret.append("<input type=\"text\" name=\"orderid\" value=\"" + sortName +"\">\n");
         ret.append("</td></tr>");
         ret.append("<tr><td colspan=2>");
         ret.append("<IMG src=\""+path+"line.gif\" width=\"100%\" height=\"5\">");
@@ -274,7 +275,7 @@ public class AdmTopics {
                 dir.setTitle(name);
                 dir.setSortName(s_id);
                 WebPage parent = dir.getParent();
-                if(!dir.hasVirtualParent(parent)) dir.addVirtualParent(parent);
+                if(parent!=null&&!dir.hasVirtualParent(parent)) dir.addVirtualParent(parent);
                 
 //                dir.getBaseNames().clear();
 //                BaseName bn=new BaseName(name);
@@ -286,8 +287,10 @@ public class AdmTopics {
 //                    dir.addBaseName(sn);
 //                }
                 //dir.getWebSite();
-                saveLog("rename",user,0,dir,"Rename a directory a directory",0);
-                msg=paramsRequest.getLocaleString("msgDirectoryCreatedSuccessfully")+"...";
+                System.out.println("Antes del log...");
+                saveLog("rename",user,0,dir,"Rename a directory",0);
+                System.out.println("Despues del log...");
+                msg=paramsRequest.getLocaleString("msgDirectoryUpdatedSuccessfully")+"...";
             }catch(Exception e) {
                 msg=paramsRequest.getLocaleString("msgErrorChangingNameDirectory")+"...";
             }
@@ -505,6 +508,8 @@ public class AdmTopics {
      * @param p_isfile A flag to indicate if is a file or not
      */
     public void saveLog(String p_action, User user, long p_fileid, WebPage p_topic, String p_description, int p_isfile){
+        
+        System.out.println("Generando log...");
         Connection con = null;
         PreparedStatement ps= null;
         ResultSet rs = null;
