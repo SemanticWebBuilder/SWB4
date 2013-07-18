@@ -6,7 +6,10 @@ package org.semanticwb.bsc.element.base;
    */
 public abstract class SummaryViewBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable
 {
-    public static final org.semanticwb.platform.SemanticClass rdf_Property=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.w3.org/1999/02/22-rdf-syntax-ns#Property");
+   /**
+   * Define el orden en que debe aparecer una propiedad en la vista resumen correspondiente.
+   */
+    public static final org.semanticwb.platform.SemanticClass bsc_PropertyListItem=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#PropertyListItem");
     public static final org.semanticwb.platform.SemanticProperty bsc_hasPropertyListItem=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#hasPropertyListItem");
    /**
    * Define la estructura de propiedades a mostrar en las vistas resumen.
@@ -39,6 +42,12 @@ public abstract class SummaryViewBase extends org.semanticwb.model.SWBClass impl
         {
             java.util.Iterator it=sclass.listInstances();
             return new org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.SummaryView>(it, true);
+        }
+
+        public static org.semanticwb.bsc.element.SummaryView createSummaryView(org.semanticwb.model.SWBModel model)
+        {
+            long id=model.getSemanticObject().getModel().getCounter(sclass);
+            return org.semanticwb.bsc.element.SummaryView.ClassMgr.createSummaryView(String.valueOf(id), model);
         }
        /**
        * Gets a org.semanticwb.bsc.element.SummaryView
@@ -124,6 +133,29 @@ public abstract class SummaryViewBase extends org.semanticwb.model.SWBClass impl
         public static java.util.Iterator<org.semanticwb.bsc.element.SummaryView> listSummaryViewByCreator(org.semanticwb.model.User value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.SummaryView> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_creator,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.bsc.element.SummaryView with a determined PropertyListItem
+       * @param value PropertyListItem of the type org.semanticwb.bsc.element.PropertyListItem
+       * @param model Model of the org.semanticwb.bsc.element.SummaryView
+       * @return Iterator with all the org.semanticwb.bsc.element.SummaryView
+       */
+
+        public static java.util.Iterator<org.semanticwb.bsc.element.SummaryView> listSummaryViewByPropertyListItem(org.semanticwb.bsc.element.PropertyListItem value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.SummaryView> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(bsc_hasPropertyListItem, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.bsc.element.SummaryView with a determined PropertyListItem
+       * @param value PropertyListItem of the type org.semanticwb.bsc.element.PropertyListItem
+       * @return Iterator with all the org.semanticwb.bsc.element.SummaryView
+       */
+
+        public static java.util.Iterator<org.semanticwb.bsc.element.SummaryView> listSummaryViewByPropertyListItem(org.semanticwb.bsc.element.PropertyListItem value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.SummaryView> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(bsc_hasPropertyListItem,value.getSemanticObject(),sclass));
             return it;
         }
     }
@@ -286,36 +318,69 @@ public abstract class SummaryViewBase extends org.semanticwb.model.SWBClass impl
          }
          return ret;
     }
+   /**
+   * Gets all the org.semanticwb.bsc.element.PropertyListItem
+   * @return A GenericIterator with all the org.semanticwb.bsc.element.PropertyListItem
+   */
 
-    public org.semanticwb.platform.SemanticIterator<org.semanticwb.platform.SemanticObject> listPropertyListItems()
+    public org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.PropertyListItem> listPropertyListItems()
     {
-        com.hp.hpl.jena.rdf.model.StmtIterator stit=getSemanticObject().getRDFResource().listProperties(bsc_hasPropertyListItem.getRDFProperty());
-        return new org.semanticwb.platform.SemanticIterator<org.semanticwb.platform.SemanticObject>(stit);
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.PropertyListItem>(getSemanticObject().listObjectProperties(bsc_hasPropertyListItem));
     }
 
-    public void addPropertyListItem(org.semanticwb.platform.SemanticObject value)
+   /**
+   * Gets true if has a PropertyListItem
+   * @param value org.semanticwb.bsc.element.PropertyListItem to verify
+   * @return true if the org.semanticwb.bsc.element.PropertyListItem exists, false otherwise
+   */
+    public boolean hasPropertyListItem(org.semanticwb.bsc.element.PropertyListItem value)
     {
-        getSemanticObject().addObjectProperty(bsc_hasPropertyListItem, value);
+        boolean ret=false;
+        if(value!=null)
+        {
+           ret=getSemanticObject().hasObjectProperty(bsc_hasPropertyListItem,value.getSemanticObject());
+        }
+        return ret;
     }
+   /**
+   * Adds a PropertyListItem
+   * @param value org.semanticwb.bsc.element.PropertyListItem to add
+   */
+
+    public void addPropertyListItem(org.semanticwb.bsc.element.PropertyListItem value)
+    {
+        getSemanticObject().addObjectProperty(bsc_hasPropertyListItem, value.getSemanticObject());
+    }
+   /**
+   * Removes all the PropertyListItem
+   */
 
     public void removeAllPropertyListItem()
     {
         getSemanticObject().removeProperty(bsc_hasPropertyListItem);
     }
+   /**
+   * Removes a PropertyListItem
+   * @param value org.semanticwb.bsc.element.PropertyListItem to remove
+   */
 
-    public void removePropertyListItem(org.semanticwb.platform.SemanticObject value)
+    public void removePropertyListItem(org.semanticwb.bsc.element.PropertyListItem value)
     {
-        getSemanticObject().removeObjectProperty(bsc_hasPropertyListItem,value);
+        getSemanticObject().removeObjectProperty(bsc_hasPropertyListItem,value.getSemanticObject());
     }
 
-/**
-* Gets the PropertyListItem property
-* @return the value for the property as org.semanticwb.platform.SemanticObject
-*/
-    public org.semanticwb.platform.SemanticObject getPropertyListItem()
+   /**
+   * Gets the PropertyListItem
+   * @return a org.semanticwb.bsc.element.PropertyListItem
+   */
+    public org.semanticwb.bsc.element.PropertyListItem getPropertyListItem()
     {
-         org.semanticwb.platform.SemanticObject ret=null;
-         ret=getSemanticObject().getObjectProperty(bsc_hasPropertyListItem);
+         org.semanticwb.bsc.element.PropertyListItem ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(bsc_hasPropertyListItem);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.bsc.element.PropertyListItem)obj.createGenericInstance();
+         }
          return ret;
     }
 
