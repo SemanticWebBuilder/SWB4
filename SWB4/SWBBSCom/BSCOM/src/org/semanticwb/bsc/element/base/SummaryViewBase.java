@@ -4,7 +4,7 @@ package org.semanticwb.bsc.element.base;
    /**
    * Define la estructura de propiedades a mostrar en las vistas resumen. 
    */
-public abstract class SummaryViewBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable
+public abstract class SummaryViewBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable
 {
    /**
    * Define el orden en que debe aparecer una propiedad en la vista resumen correspondiente.
