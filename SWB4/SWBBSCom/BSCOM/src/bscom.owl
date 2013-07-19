@@ -941,6 +941,8 @@
     >perspective</swb:propertyCodeName>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="hasPropertyListItem">
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Representa el conjunto de propiedades que conforman la vista resumen.</rdfs:comment>
     <rdfs:range rdf:resource="#PropertyListItem"/>
     <rdfs:domain rdf:resource="#SummaryView"/>
   </owl:ObjectProperty>

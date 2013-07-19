@@ -4,12 +4,15 @@ package org.semanticwb.bsc.element.base;
    /**
    * Define la estructura de propiedades a mostrar en las vistas resumen. 
    */
-public abstract class SummaryViewBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable
+public abstract class SummaryViewBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable
 {
    /**
    * Define el orden en que debe aparecer una propiedad en la vista resumen correspondiente.
    */
     public static final org.semanticwb.platform.SemanticClass bsc_PropertyListItem=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#PropertyListItem");
+   /**
+   * Representa el conjunto de propiedades que conforman la vista resumen.
+   */
     public static final org.semanticwb.platform.SemanticProperty bsc_hasPropertyListItem=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#hasPropertyListItem");
    /**
    * Define la estructura de propiedades a mostrar en las vistas resumen.
