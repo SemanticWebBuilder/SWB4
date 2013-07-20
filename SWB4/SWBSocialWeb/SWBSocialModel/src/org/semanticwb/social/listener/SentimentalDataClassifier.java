@@ -221,10 +221,10 @@ public class SentimentalDataClassifier {
         float promIntensityValue=((Float)hmapValues.get("promIntensityValue")).floatValue();
         int intensityTweetValueType=((Integer)hmapValues.get("intensityTweetValueType")).intValue();
         
-        System.out.println("SentimentalData../promSentimentalValue:"+promSentimentalValue);
-        System.out.println("SentimentalData../sentimentalTweetValueType:"+sentimentalTweetValueType);
-        System.out.println("SentimentalData../promIntensityValue:"+promIntensityValue);
-        System.out.println("SentimentalData../intensityTweetValueType:"+intensityTweetValueType);
+        //System.out.println("SentimentalData../promSentimentalValue:"+promSentimentalValue);
+        //System.out.println("SentimentalData../sentimentalTweetValueType:"+sentimentalTweetValueType);
+        //System.out.println("SentimentalData../promIntensityValue:"+promIntensityValue);
+        //System.out.println("SentimentalData../intensityTweetValueType:"+intensityTweetValueType);
         
         
         //////////////////////////////////ESTO SI FUNCIONA BIEN ------10 - Julio - 2013//////////////////////////////////
@@ -286,13 +286,13 @@ public class SentimentalDataClassifier {
                 //Filtro de Klout
                 //stream.setStream_KloutValue(10);
                 //Si se requiere filtrar por Klout, esto es porque exista un valo de klout para el stream>0
-                System.out.println("creatorId:"+creatorId+"socialNetUser:"+socialNetUser+",Klout-0, stream k:"+stream.getStream_KloutValue()+",boolean:"+socialNetwork.getSemanticObject().getSemanticClass().isSubClass(Kloutable.social_Kloutable));
+                //System.out.println("creatorId:"+creatorId+"socialNetUser:"+socialNetUser+",Klout-0, stream k:"+stream.getStream_KloutValue()+",boolean:"+socialNetwork.getSemanticObject().getSemanticClass().isSubClass(Kloutable.social_Kloutable));
                 if(socialNetwork.getSemanticObject().getSemanticClass().isSubClass(Kloutable.social_Kloutable))
                 {
-                    System.out.println("Klout-1");
+                    //System.out.println("Klout-1");
                     if(creatorId!=null) //Siempre debería externalPost.getCreatorId() traer un valor, por lo tanto debería entrar a este if
                     {
-                        System.out.println("Klout-2:"+creatorId);
+                        //System.out.println("Klout-2:"+creatorId);
                         //Revisar si existe el usuario en nuestra BD y si ya paso mas de 5 días en mi cache.
                         {
                             if(socialNetUser!=null)
@@ -370,7 +370,7 @@ public class SentimentalDataClassifier {
                 //System.out.println("Valor de intensidad puesto al final:"+post.getPostIntensityValue());
 
                 //Revisa si encuentra emoticones en el mensaje
-                System.out.println("SentimentalData..text/externalString2Clasify:"+externalString2Clasify);
+                //System.out.println("SentimentalData..text/externalString2Clasify:"+externalString2Clasify);
                 findEmoticones(post, externalString2Clasify_TMP);
                 //MessageIn messageIn=(MessageIn)post;
                 //System.out.println("messageIn final:"+messageIn.getMsg_Text());
@@ -595,7 +595,7 @@ public class SentimentalDataClassifier {
                 
                 if(externalPost.getMessage()!=null)
                 {
-                    System.out.println("postIn fACE:"+postIn+", externalPost:"+externalPost);
+                    //System.out.println("postIn fACE:"+postIn+", externalPost:"+externalPost);
                     postIn.setMsg_Text(externalPost.getMessage());
                 }
                 postIn.setSocialNetMsgId(externalPost.getPostId());
@@ -637,7 +637,7 @@ public class SentimentalDataClassifier {
                     }*/
                     
                     //Sets the latitude, longitud and possibly the state the message is comming from
-                    System.out.println("Checa latitude y longitud del mensaje recibido-Latitude:"+externalPost.getLatitude()+",longitude:"+externalPost.getLongitude());
+                    //System.out.println("Checa latitude y longitud del mensaje recibido-Latitude:"+externalPost.getLatitude()+",longitude:"+externalPost.getLongitude());
                     if(externalPost.getLatitude()!=0 && externalPost.getLongitude()!=0)
                     {
                         postIn.setLatitude(Float.parseFloat(""+externalPost.getLatitude()));
@@ -652,12 +652,12 @@ public class SentimentalDataClassifier {
                         {
                             country=SWBSocialUtil.Util.getMessageMapCountry(postIn.getLatitude(), postIn.getLongitude());
                         }
-                        System.out.println("country en el que encuentra el mensaje:"+country);
+                        //System.out.println("country en el que encuentra el mensaje:"+country);
                         if(country!=null)
                         {
                             //Busca en que estado del país encontrado se encuentra el mensaje.
                             CountryState countryState=SWBSocialUtil.Util.getMessageMapState(country, postIn.getLatitude(), postIn.getLongitude());   
-                            System.out.println("estado en el que encuentra el mensaje:"+countryState);
+                            //System.out.println("estado en el que encuentra el mensaje:"+countryState);
                             if(countryState!=null)
                             {
                                 postIn.setGeoStateMap(countryState);

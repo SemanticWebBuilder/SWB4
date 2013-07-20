@@ -3,6 +3,7 @@ package org.semanticwb.social;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Timer;
+import org.semanticwb.model.Activeable;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticObserver;
 import org.semanticwb.platform.SemanticProperty;
@@ -34,7 +35,7 @@ public class Stream extends org.semanticwb.social.base.StreamBase
                     {
                         //System.out.println("Entra a Stream/Create...");
                         ListenerMgr.createUpdateTimers(stream);
-                    }else if((action.equalsIgnoreCase("SET") && (semProp.getURI().equals(social_stream_PoolTime.getURI()) || semProp.getURI().equals(social_stream_phrase)))
+                    }else if((action.equalsIgnoreCase("SET") && (semProp.getURI().equals("http://www.semanticwebbuilder.org/swb4/ontology#active") || semProp.getURI().equals(social_stream_PoolTime.getURI()) || semProp.getURI().equals(social_stream_phrase)))
                        || (action.equalsIgnoreCase("ADD") && semProp.getURI().equals(social_hasStream_socialNetwork.getURI()))
                        || (action.equalsIgnoreCase("REMOVE") && semProp!=null && semProp.getURI().equals(social_hasStream_socialNetwork.getURI())))
                     {
@@ -87,6 +88,8 @@ public class Stream extends org.semanticwb.social.base.StreamBase
                 }
             }
         });
+        
+                
     }
    
 }

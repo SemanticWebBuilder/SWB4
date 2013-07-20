@@ -835,7 +835,7 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase {
 
     @Override
     public boolean isPublished(PostOutNet postOutNet) {
-        System.out.println("Entra a YouTube, Instancia:"+this+", PostOut:"+postOutNet.getSocialPost());
+        //System.out.println("Entra a YouTube, Instancia:"+this+", PostOut:"+postOutNet.getSocialPost());
         //postOutNet.setStatus(1);      //Con esta línea le indicamos al PostOutNet que ya se ha publicado su PostOut en su red social asociada
         return false;
     }
