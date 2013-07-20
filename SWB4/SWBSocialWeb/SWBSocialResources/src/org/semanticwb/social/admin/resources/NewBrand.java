@@ -110,13 +110,15 @@ public class NewBrand extends GenericResource {
                     //workspace.setUn
                     site.addSubModel(workspace);
                     workspace.getSemanticObject().getModel().setTraceable(true);
-
+                    
+                    //PARA SWBSOCIAL SITES NO EXISTIRA UNA SECCIÓN HOME.
+                    /*
                     WebPage home = site.createWebPage("home");
                     site.setHomePage(home);
                     home.setUndeleteable(true);
                     home.setTitle("Home");
                     home.setSortName("z");
-
+                    * */
                     //Crea grupo de templates de defecto
                     TemplateGroup grp = site.createTemplateGroup();
                     grp.setTitle("Default");
