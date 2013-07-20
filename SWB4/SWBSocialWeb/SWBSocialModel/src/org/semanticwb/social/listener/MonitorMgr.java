@@ -51,7 +51,7 @@ public class MonitorMgr {
         }
 
         public void run() {
-             System.out.println("Entra a MonitorMgr/Run-1");
+             //System.out.println("Entra a MonitorMgr/Run-1");
             if(PostMonitor.ClassMgr.listPostMonitors(SWBContext.getAdminWebSite()).hasNext())
             {
                 PostMonitor postMonitor=PostMonitor.ClassMgr.listPostMonitors(SWBContext.getAdminWebSite()).next();
@@ -60,14 +60,15 @@ public class MonitorMgr {
                 while(itPostOutNets.hasNext())
                 {
                     PostOutNet postOutNet=itPostOutNets.next();
-                    System.out.println("Entra a MonitorMgr/Run-2/postMonitor:"+postOutNet);
+                    //System.out.println("Entra a MonitorMgr/Run-2/postMonitor:"+postOutNet);
                     if(postOutNet!=null)
                     {
-                        System.out.println("Entra a MonitorMgr/Run-3/postOutNet:"+postOutNet.getSocialNetwork());
+                        //System.out.println("Entra a MonitorMgr/Run-3/postOutNet:"+postOutNet.getSocialNetwork());
                         if(postOutNet.getSocialNetwork() instanceof SocialMonitorable)
                         {
                             SocialMonitorable socialMonitorAbleClass=(SocialMonitorable)postOutNet.getSocialNetwork();
-                            System.out.println("Entra a MonitorMgr/Run-4/socialMonitorAbleClass:"+socialMonitorAbleClass);
+                            System.out.println("Entra a MonitorMgr.. Para enviar a monitorear cuenta de red:"+postOutNet.getSocialNetwork());
+                            //System.out.println("Entra a MonitorMgr/Run-4/socialMonitorAbleClass:"+socialMonitorAbleClass);
 
                             //Va ha entrar al siguinte if si la red social me regresa en el metodo isPublished un true,
                             //eso significa que voy a quitar a esa instancia de PostOutNet de mi unico PostMonitor (el de admin) y 
@@ -76,16 +77,17 @@ public class MonitorMgr {
                             if(socialMonitorAbleClass.isPublished(postOutNet)) 
                             {
                                 postMonitor.removePostOutNet(postOutNet);  //Elimino el PostOutNet de mi PostMonitor, para que ya no se tome en cuenta en el timer la sig. vez
-                                System.out.println("Entra a MonitorMgr/Run-5/ISpublished Y SE QUITA DE TIMER");
+                                //System.out.println("Entra a MonitorMgr/Run-5/ISpublished Y SE QUITA DE TIMER");
+                                /*
                                 if(postOutNet.getStatus()==0) //Quiere decir que aunque se va ha quitar de ejecutar en el timer el postOutNet, pero que en realidad el PostOut no se publicó por causa de un error en la Red Social
                                 {
-                                    System.out.println("Entra a MonitorMgr/Run-6/ESTATUS 0");
+                                    //System.out.println("Entra a MonitorMgr/Run-6/ESTATUS 0");
                                 }else{  //Si se publicó en la red social de manera satisfactoria (Sin error)
                                     //TODO:Talvez ver si todos los PostOutNet en donde esta un PostOut estan con estus 1(publicado), entonces, poner el PostOut como publicado
                                     //Talvez esto lo debo hacer cuando listo los PostOuts, revisar ahi y si es asi, cambio el estatus desde ahi, para no volver a revisar ese 
                                     //PostOut la siguiente vez en sus PostOutNet, lo cual puede tardar mucho.
-                                    System.out.println("Entra a MonitorMgr/Run-5/ESTATUS 1");
-                                }
+                                    //System.out.println("Entra a MonitorMgr/Run-5/ESTATUS 1");
+                                }**/
                             }
                         }
                     }
