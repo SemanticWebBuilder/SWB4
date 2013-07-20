@@ -196,7 +196,7 @@
             System.out.println("Showing @" + twitterBean.getScreenName() +  "'s home timeline.");
             out.println("<div align=\"center\"><h2>Showing @" + twitterBean.getScreenName() +  "'s home timeline. </h2><br/></div>");
             out.println("<div class=\"bar\" id=\"" + objUri + "/newTweetsAvailable\" dojoType=\"dojox.layout.ContentPane\"></div>");
-            out.println("<div id=\"" + objUri + "/stream\" dojoType=\"dojox.layout.ContentPane\"></div>");
+            out.println("<div id=\"" + objUri + "/stream\" dojoType=\"dojox.layout.ContentPane\"></div>");           
             
             Paging paging = new Paging(); //used to set maxId and count
             paging.count(20);//Gets a number of tweets of timeline. Max value is 200           
