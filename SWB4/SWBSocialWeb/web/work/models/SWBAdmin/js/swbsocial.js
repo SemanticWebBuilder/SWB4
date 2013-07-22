@@ -3,6 +3,18 @@
  * and open the template in the editor.
  */
 
+    function resetTabTitle (objUri, tabId, title){
+        var tabId = objUri + tabId;
+        var pane = dijit.byId(tabId);                   
+        try{
+            var aux=title;
+            pane.title = aux;
+            pane.controlButton.containerNode.innerHTML = aux;
+        }catch(noe){
+            console.log('Error setting title to default value: ' + noe);
+        }
+    }
+      
     function appendHtmlAt(url, tagid, location){
      dojo.xhrPost({
         url: url,
