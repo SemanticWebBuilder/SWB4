@@ -2125,7 +2125,7 @@
         navPath:null,
         window:null,
                 
-        init:function(svgid, mode)
+        init:function(svgid, mode, callbackHandler)
         {
             ToolKit.init(svgid);
             ToolKit.onmousedown=Modeler.onmousedown;
@@ -2215,6 +2215,7 @@
                     hideLoadDialog();
                 } , false);
             }
+            callbackHandler();
         },
         
         keydown:function(evt) {
@@ -2317,7 +2318,7 @@
                 }
                 Modeler.dragConnection=null;
             }
-            ToolKit.hideToolTip();
+            //ToolKit.hideToolTip();
             return true;
         },                  
                 
@@ -3070,7 +3071,6 @@
                 return;
             }
             
-            ToolKit.showTooltip(0,"Cargando modelo...", 200, "Warning");
             try {
                 var json = JSON.parse(jsonString);
                 var jsarr = json.nodes;
@@ -3369,9 +3369,6 @@
         },
 
         submitCommand:function(url, data, callbackHandler) {
-//            if (ToolKit.loaded) {
-//                ToolKit.showTooltip("","Enviando datos, por favor espere...", 200, "Warning");
-//            }
             //reemplazar dojo por invocaciones directas por ajax
             dojo.xhrPost({
                 url: url,
@@ -3385,7 +3382,7 @@
                 },
                 error: function(response, ioArgs) {
                     //console.log("error");
-                    ToolKit.showTooltip(0,"Ocurrió un problema al enviar el modelo", 200, "Error");
+                    ToolKit.showTooltip(0,"Ocurrió un problema al ejecutar la operación", 200, "Error");
                     return response;
                 },
                 handleAs: "text"
