@@ -37,11 +37,11 @@ exportUrl.setMode(SVGModeler.MODE_EXPORT);
 </head>
 <%if (!isViewMode) {
     %>
-    <body style="margin: 0px;" onload="Modeler.init('modeler','edit');">
+    <body style="margin: 0px;" onload="Modeler.init('modeler','edit', loadProcess);">
     <%
 } else {
 %>
-    <body style="margin: 0px;" onload="Modeler.init('modeler','view');">
+    <body style="margin: 0px;" onload="Modeler.init('modeler','view', loadProcess);">
     <%
 }
 if (!isViewMode) {
@@ -1079,9 +1079,11 @@ if (!isViewMode) {
             commandUrl.setParameter("suri", suri);
             %>      
             function loadProcess() {
+                if (ToolKit && ToolKit !== null) {
+                    ToolKit.showTooltip(0, "Cargando modelo, por favor espere...", 200, "Warning");
+                }
                 Modeler.submitCommand('<%=commandUrl%>', null, callbackLoad);
             };
-
             <%
         }
         if (SWBContext.getAdminWebSite().equals(paramRequest.getWebPage().getWebSite())) {
@@ -1093,9 +1095,14 @@ if (!isViewMode) {
             function storeProcess() {
                 var json = Modeler.getProcessJSON();
                 var jsonString = "JSONSTART"+JSON.stringify(json)+"JSONEND";
+                if (ToolKit && ToolKit !== null) {
+                    ToolKit.showTooltip(0, "Enviando modelo, por favor espere...", 200, "Warning");
+                }
                 Modeler.submitCommand('<%=commandUrl%>',jsonString, loadProcess);
             };
-        <%}%>
+        <%
+        }
+        %>
         loadProcess();
     </script>
 </body>
