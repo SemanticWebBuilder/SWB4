@@ -1,9 +1,14 @@
 package org.semanticwb.bsc.element.base;
 
 
-public abstract class PerspectiveBase extends org.semanticwb.bsc.element.BSCElement implements org.semanticwb.model.Traceable,org.semanticwb.bsc.Recognizable,org.semanticwb.model.Descriptiveable,org.semanticwb.bsc.Serializable,org.semanticwb.model.Activeable,org.semanticwb.bsc.Help
+public abstract class PerspectiveBase extends org.semanticwb.bsc.element.BSCElement implements org.semanticwb.bsc.Serializable,org.semanticwb.bsc.Recognizable,org.semanticwb.model.Referensable,org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.UserGroupable,org.semanticwb.bsc.Help,org.semanticwb.model.Activeable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Roleable
 {
     public static final org.semanticwb.platform.SemanticProperty bsc_index=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#index");
+   /**
+   * Los temas para distintivos agrupan distintivos con fines en común. A su vez, los temas para distintivos están agrupados dentro de las perspectivas.
+   */
+    public static final org.semanticwb.platform.SemanticClass bsc_DistinctiveTheme=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#DistinctiveTheme");
+    public static final org.semanticwb.platform.SemanticProperty bsc_hasDistinctiveTheme=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#hasDistinctiveTheme");
    /**
    * Los temas estratégicos agrupan objetivos con fines en común. A su vez, los temas están agrupados dentro de las perspectivas.
    */
@@ -108,6 +113,52 @@ public abstract class PerspectiveBase extends org.semanticwb.bsc.element.BSCElem
             return it;
         }
        /**
+       * Gets all org.semanticwb.bsc.element.Perspective with a determined UserGroup
+       * @param value UserGroup of the type org.semanticwb.model.UserGroup
+       * @param model Model of the org.semanticwb.bsc.element.Perspective
+       * @return Iterator with all the org.semanticwb.bsc.element.Perspective
+       */
+
+        public static java.util.Iterator<org.semanticwb.bsc.element.Perspective> listPerspectiveByUserGroup(org.semanticwb.model.UserGroup value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Perspective> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasUserGroup, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.bsc.element.Perspective with a determined UserGroup
+       * @param value UserGroup of the type org.semanticwb.model.UserGroup
+       * @return Iterator with all the org.semanticwb.bsc.element.Perspective
+       */
+
+        public static java.util.Iterator<org.semanticwb.bsc.element.Perspective> listPerspectiveByUserGroup(org.semanticwb.model.UserGroup value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Perspective> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasUserGroup,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.bsc.element.Perspective with a determined DistinctiveTheme
+       * @param value DistinctiveTheme of the type org.semanticwb.bsc.element.DistinctiveTheme
+       * @param model Model of the org.semanticwb.bsc.element.Perspective
+       * @return Iterator with all the org.semanticwb.bsc.element.Perspective
+       */
+
+        public static java.util.Iterator<org.semanticwb.bsc.element.Perspective> listPerspectiveByDistinctiveTheme(org.semanticwb.bsc.element.DistinctiveTheme value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Perspective> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(bsc_hasDistinctiveTheme, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.bsc.element.Perspective with a determined DistinctiveTheme
+       * @param value DistinctiveTheme of the type org.semanticwb.bsc.element.DistinctiveTheme
+       * @return Iterator with all the org.semanticwb.bsc.element.Perspective
+       */
+
+        public static java.util.Iterator<org.semanticwb.bsc.element.Perspective> listPerspectiveByDistinctiveTheme(org.semanticwb.bsc.element.DistinctiveTheme value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Perspective> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(bsc_hasDistinctiveTheme,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
        * Gets all org.semanticwb.bsc.element.Perspective with a determined Creator
        * @param value Creator of the type org.semanticwb.model.User
        * @param model Model of the org.semanticwb.bsc.element.Perspective
@@ -128,6 +179,52 @@ public abstract class PerspectiveBase extends org.semanticwb.bsc.element.BSCElem
         public static java.util.Iterator<org.semanticwb.bsc.element.Perspective> listPerspectiveByCreator(org.semanticwb.model.User value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Perspective> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_creator,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.bsc.element.Perspective with a determined Role
+       * @param value Role of the type org.semanticwb.model.Role
+       * @param model Model of the org.semanticwb.bsc.element.Perspective
+       * @return Iterator with all the org.semanticwb.bsc.element.Perspective
+       */
+
+        public static java.util.Iterator<org.semanticwb.bsc.element.Perspective> listPerspectiveByRole(org.semanticwb.model.Role value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Perspective> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasRole, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.bsc.element.Perspective with a determined Role
+       * @param value Role of the type org.semanticwb.model.Role
+       * @return Iterator with all the org.semanticwb.bsc.element.Perspective
+       */
+
+        public static java.util.Iterator<org.semanticwb.bsc.element.Perspective> listPerspectiveByRole(org.semanticwb.model.Role value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Perspective> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasRole,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.bsc.element.Perspective with a determined RuleRef
+       * @param value RuleRef of the type org.semanticwb.model.RuleRef
+       * @param model Model of the org.semanticwb.bsc.element.Perspective
+       * @return Iterator with all the org.semanticwb.bsc.element.Perspective
+       */
+
+        public static java.util.Iterator<org.semanticwb.bsc.element.Perspective> listPerspectiveByRuleRef(org.semanticwb.model.RuleRef value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Perspective> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasRuleRef, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.bsc.element.Perspective with a determined RuleRef
+       * @param value RuleRef of the type org.semanticwb.model.RuleRef
+       * @return Iterator with all the org.semanticwb.bsc.element.Perspective
+       */
+
+        public static java.util.Iterator<org.semanticwb.bsc.element.Perspective> listPerspectiveByRuleRef(org.semanticwb.model.RuleRef value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Perspective> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasRuleRef,value.getSemanticObject(),sclass));
             return it;
         }
        /**
@@ -153,6 +250,11 @@ public abstract class PerspectiveBase extends org.semanticwb.bsc.element.BSCElem
             org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Perspective> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(bsc_hasTheme,value.getSemanticObject(),sclass));
             return it;
         }
+    }
+
+    public static PerspectiveBase.ClassMgr getPerspectiveClassMgr()
+    {
+        return new PerspectiveBase.ClassMgr();
     }
 
    /**
@@ -218,6 +320,71 @@ public abstract class PerspectiveBase extends org.semanticwb.bsc.element.BSCElem
     {
         //Override this method in Perspective object
         getSemanticObject().setProperty(bsc_prefix, value,false);
+    }
+   /**
+   * Gets all the org.semanticwb.bsc.element.DistinctiveTheme
+   * @return A GenericIterator with all the org.semanticwb.bsc.element.DistinctiveTheme
+   */
+
+    public org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.DistinctiveTheme> listDistinctiveThemes()
+    {
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.DistinctiveTheme>(getSemanticObject().listObjectProperties(bsc_hasDistinctiveTheme));
+    }
+
+   /**
+   * Gets true if has a DistinctiveTheme
+   * @param value org.semanticwb.bsc.element.DistinctiveTheme to verify
+   * @return true if the org.semanticwb.bsc.element.DistinctiveTheme exists, false otherwise
+   */
+    public boolean hasDistinctiveTheme(org.semanticwb.bsc.element.DistinctiveTheme value)
+    {
+        boolean ret=false;
+        if(value!=null)
+        {
+           ret=getSemanticObject().hasObjectProperty(bsc_hasDistinctiveTheme,value.getSemanticObject());
+        }
+        return ret;
+    }
+   /**
+   * Adds a DistinctiveTheme
+   * @param value org.semanticwb.bsc.element.DistinctiveTheme to add
+   */
+
+    public void addDistinctiveTheme(org.semanticwb.bsc.element.DistinctiveTheme value)
+    {
+        getSemanticObject().addObjectProperty(bsc_hasDistinctiveTheme, value.getSemanticObject());
+    }
+   /**
+   * Removes all the DistinctiveTheme
+   */
+
+    public void removeAllDistinctiveTheme()
+    {
+        getSemanticObject().removeProperty(bsc_hasDistinctiveTheme);
+    }
+   /**
+   * Removes a DistinctiveTheme
+   * @param value org.semanticwb.bsc.element.DistinctiveTheme to remove
+   */
+
+    public void removeDistinctiveTheme(org.semanticwb.bsc.element.DistinctiveTheme value)
+    {
+        getSemanticObject().removeObjectProperty(bsc_hasDistinctiveTheme,value.getSemanticObject());
+    }
+
+   /**
+   * Gets the DistinctiveTheme
+   * @return a org.semanticwb.bsc.element.DistinctiveTheme
+   */
+    public org.semanticwb.bsc.element.DistinctiveTheme getDistinctiveTheme()
+    {
+         org.semanticwb.bsc.element.DistinctiveTheme ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(bsc_hasDistinctiveTheme);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.bsc.element.DistinctiveTheme)obj.createGenericInstance();
+         }
+         return ret;
     }
    /**
    * Gets all the org.semanticwb.bsc.element.Theme
