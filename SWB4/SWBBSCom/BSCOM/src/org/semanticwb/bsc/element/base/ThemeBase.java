@@ -4,15 +4,13 @@ package org.semanticwb.bsc.element.base;
    /**
    * Los temas estratégicos agrupan objetivos con fines en común. A su vez, los temas están agrupados dentro de las perspectivas. 
    */
-public abstract class ThemeBase extends org.semanticwb.bsc.element.BSCElement implements org.semanticwb.model.RuleRefable,org.semanticwb.model.Activeable,org.semanticwb.model.Roleable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Referensable,org.semanticwb.model.Traceable,org.semanticwb.model.UserGroupable
+public abstract class ThemeBase extends org.semanticwb.bsc.element.BSCElement implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.UserGroupable,org.semanticwb.model.Activeable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Roleable,org.semanticwb.model.Referensable,org.semanticwb.model.Traceable
 {
     public static final org.semanticwb.platform.SemanticClass bsc_Objective=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#Objective");
     public static final org.semanticwb.platform.SemanticProperty bsc_hasObjective=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#hasObjective");
     public static final org.semanticwb.platform.SemanticProperty bsc_index=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#index");
     public static final org.semanticwb.platform.SemanticClass bsc_Perspective=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#Perspective");
     public static final org.semanticwb.platform.SemanticProperty bsc_perspectiveInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#perspectiveInv");
-    public static final org.semanticwb.platform.SemanticClass bsc_Distinctive=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#Distinctive");
-    public static final org.semanticwb.platform.SemanticProperty bsc_hasDistinctive=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#hasDistinctive");
    /**
    * Abreviación del título del tema, para distinguirlos en despliegues con poco espacio. Un ejemplo de estos despliegues es el mapa estratégico.
    */
@@ -256,29 +254,6 @@ public abstract class ThemeBase extends org.semanticwb.bsc.element.BSCElement im
             org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Theme> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasRuleRef,value.getSemanticObject(),sclass));
             return it;
         }
-       /**
-       * Gets all org.semanticwb.bsc.element.Theme with a determined Distinctive
-       * @param value Distinctive of the type org.semanticwb.bsc.element.Distinctive
-       * @param model Model of the org.semanticwb.bsc.element.Theme
-       * @return Iterator with all the org.semanticwb.bsc.element.Theme
-       */
-
-        public static java.util.Iterator<org.semanticwb.bsc.element.Theme> listThemeByDistinctive(org.semanticwb.bsc.element.Distinctive value,org.semanticwb.model.SWBModel model)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Theme> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(bsc_hasDistinctive, value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.bsc.element.Theme with a determined Distinctive
-       * @param value Distinctive of the type org.semanticwb.bsc.element.Distinctive
-       * @return Iterator with all the org.semanticwb.bsc.element.Theme
-       */
-
-        public static java.util.Iterator<org.semanticwb.bsc.element.Theme> listThemeByDistinctive(org.semanticwb.bsc.element.Distinctive value)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Theme> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(bsc_hasDistinctive,value.getSemanticObject(),sclass));
-            return it;
-        }
     }
 
     public static ThemeBase.ClassMgr getThemeClassMgr()
@@ -412,71 +387,6 @@ public abstract class ThemeBase extends org.semanticwb.bsc.element.BSCElement im
          if(obj!=null)
          {
              ret=(org.semanticwb.bsc.element.Perspective)obj.createGenericInstance();
-         }
-         return ret;
-    }
-   /**
-   * Gets all the org.semanticwb.bsc.element.Distinctive
-   * @return A GenericIterator with all the org.semanticwb.bsc.element.Distinctive
-   */
-
-    public org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Distinctive> listDistinctives()
-    {
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Distinctive>(getSemanticObject().listObjectProperties(bsc_hasDistinctive));
-    }
-
-   /**
-   * Gets true if has a Distinctive
-   * @param value org.semanticwb.bsc.element.Distinctive to verify
-   * @return true if the org.semanticwb.bsc.element.Distinctive exists, false otherwise
-   */
-    public boolean hasDistinctive(org.semanticwb.bsc.element.Distinctive value)
-    {
-        boolean ret=false;
-        if(value!=null)
-        {
-           ret=getSemanticObject().hasObjectProperty(bsc_hasDistinctive,value.getSemanticObject());
-        }
-        return ret;
-    }
-   /**
-   * Adds a Distinctive
-   * @param value org.semanticwb.bsc.element.Distinctive to add
-   */
-
-    public void addDistinctive(org.semanticwb.bsc.element.Distinctive value)
-    {
-        getSemanticObject().addObjectProperty(bsc_hasDistinctive, value.getSemanticObject());
-    }
-   /**
-   * Removes all the Distinctive
-   */
-
-    public void removeAllDistinctive()
-    {
-        getSemanticObject().removeProperty(bsc_hasDistinctive);
-    }
-   /**
-   * Removes a Distinctive
-   * @param value org.semanticwb.bsc.element.Distinctive to remove
-   */
-
-    public void removeDistinctive(org.semanticwb.bsc.element.Distinctive value)
-    {
-        getSemanticObject().removeObjectProperty(bsc_hasDistinctive,value.getSemanticObject());
-    }
-
-   /**
-   * Gets the Distinctive
-   * @return a org.semanticwb.bsc.element.Distinctive
-   */
-    public org.semanticwb.bsc.element.Distinctive getDistinctive()
-    {
-         org.semanticwb.bsc.element.Distinctive ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(bsc_hasDistinctive);
-         if(obj!=null)
-         {
-             ret=(org.semanticwb.bsc.element.Distinctive)obj.createGenericInstance();
          }
          return ret;
     }
