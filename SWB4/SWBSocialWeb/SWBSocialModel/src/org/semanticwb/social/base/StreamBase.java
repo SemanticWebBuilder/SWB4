@@ -4,7 +4,7 @@ package org.semanticwb.social.base;
    /**
    * Clase que contendra los streams que configurados para cada usuario 
    */
-public abstract class StreamBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Trashable,org.semanticwb.social.Geolocable,org.semanticwb.model.Referensable,org.semanticwb.model.Activeable,org.semanticwb.model.FilterableClass,org.semanticwb.social.SocialRuleRefable,org.semanticwb.model.Traceable,org.semanticwb.model.Filterable
+public abstract class StreamBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Referensable,org.semanticwb.model.Trashable,org.semanticwb.social.Geolocable,org.semanticwb.model.Activeable,org.semanticwb.model.Filterable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable,org.semanticwb.model.FilterableClass,org.semanticwb.social.SocialRuleRefable
 {
    /**
    * Clase que engloba a las diferentes clases que representan cada una de las redes sociales.
@@ -34,6 +34,10 @@ public abstract class StreamBase extends org.semanticwb.model.SWBClass implement
    * Lapso de tiempo en que se busca la información. Ej. Cada x tiempo
    */
     public static final org.semanticwb.platform.SemanticProperty social_stream_PoolTime=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#stream_PoolTime");
+   /**
+   * Propiedad que indica si el stream va manejar conexiones abiertas en las cuentas de redes sociales que así lo permitan, en este momento solo twitter con su "Stream Api" lo maneja.
+   */
+    public static final org.semanticwb.platform.SemanticProperty social_keepAliveManager=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#keepAliveManager");
    /**
    * Frase a monitorear en un determinado stream, cada stream tiene sus propias frasea a monitorear.
    */
@@ -463,24 +467,6 @@ public abstract class StreamBase extends org.semanticwb.model.SWBClass implement
     }
 
 /**
-* Gets the Updated property
-* @return java.util.Date with the Updated
-*/
-    public java.util.Date getUpdated()
-    {
-        return getSemanticObject().getDateProperty(swb_updated);
-    }
-
-/**
-* Sets the Updated property
-* @param value long with the Updated
-*/
-    public void setUpdated(java.util.Date value)
-    {
-        getSemanticObject().setDateProperty(swb_updated, value);
-    }
-
-/**
 * Gets the Created property
 * @return java.util.Date with the Created
 */
@@ -496,6 +482,24 @@ public abstract class StreamBase extends org.semanticwb.model.SWBClass implement
     public void setCreated(java.util.Date value)
     {
         getSemanticObject().setDateProperty(swb_created, value);
+    }
+
+/**
+* Gets the Updated property
+* @return java.util.Date with the Updated
+*/
+    public java.util.Date getUpdated()
+    {
+        return getSemanticObject().getDateProperty(swb_updated);
+    }
+
+/**
+* Sets the Updated property
+* @param value long with the Updated
+*/
+    public void setUpdated(java.util.Date value)
+    {
+        getSemanticObject().setDateProperty(swb_updated, value);
     }
 
 /**
@@ -601,6 +605,24 @@ public abstract class StreamBase extends org.semanticwb.model.SWBClass implement
     public void setPoolTime(int value)
     {
         getSemanticObject().setIntProperty(social_stream_PoolTime, value);
+    }
+
+/**
+* Gets the KeepAliveManager property
+* @return boolean with the KeepAliveManager
+*/
+    public boolean isKeepAliveManager()
+    {
+        return getSemanticObject().getBooleanProperty(social_keepAliveManager);
+    }
+
+/**
+* Sets the KeepAliveManager property
+* @param value long with the KeepAliveManager
+*/
+    public void setKeepAliveManager(boolean value)
+    {
+        getSemanticObject().setBooleanProperty(social_keepAliveManager, value);
     }
 
 /**

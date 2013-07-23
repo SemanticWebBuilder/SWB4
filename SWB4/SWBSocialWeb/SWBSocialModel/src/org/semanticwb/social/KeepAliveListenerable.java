@@ -7,7 +7,7 @@ import org.semanticwb.model.SWBModel;
    */
 public interface KeepAliveListenerable extends org.semanticwb.social.base.KeepAliveListenerableBase
 {
-    public void listenAlive(SWBModel model);
+    public void listenAlive(Stream stream);
 
-    public void stopListenAlive();
+    public void stopListenAlive(Stream stream);
 }

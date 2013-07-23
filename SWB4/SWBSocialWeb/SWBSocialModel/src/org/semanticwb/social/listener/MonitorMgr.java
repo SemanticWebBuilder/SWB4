@@ -67,7 +67,7 @@ public class MonitorMgr {
                         if(postOutNet.getSocialNetwork() instanceof SocialMonitorable)
                         {
                             SocialMonitorable socialMonitorAbleClass=(SocialMonitorable)postOutNet.getSocialNetwork();
-                            System.out.println("Entra a MonitorMgr.. Para enviar a monitorear cuenta de red:"+postOutNet.getSocialNetwork());
+                            //System.out.println("Entra a MonitorMgr.. Para enviar a monitorear cuenta de red:"+postOutNet.getSocialNetwork());
                             //System.out.println("Entra a MonitorMgr/Run-4/socialMonitorAbleClass:"+socialMonitorAbleClass);
 
                             //Va ha entrar al siguinte if si la red social me regresa en el metodo isPublished un true,

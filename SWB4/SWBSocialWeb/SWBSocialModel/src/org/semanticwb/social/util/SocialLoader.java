@@ -38,9 +38,9 @@ public class SocialLoader implements SWBAppObject {
             System.out.println("Entra a Cargar:SocialLoader");
             pflowMgr = new SocialPFlowMgr();
             pflowMgr.init();
-            new SWBSocialCalendarMgr(); //Trae un Thread por c/stream activo + los threads que se disparen en c/listener
+            //new SWBSocialCalendarMgr(); //Trae un Thread por c/stream activo + los threads que se disparen en c/listener
             new ListenerMgr();  //Trae un Thread
-            new MonitorMgr();   //Trae un Thread
+            //new MonitorMgr();   //Trae un Thread
             new SWBSocialUtil();
             
              //Charges the unique PostMonitor instance

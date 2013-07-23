@@ -5,19 +5,19 @@
 
 package org.semanticwb.social.listener.twitter;
 
-import java.util.Date;
+import java.util.HashMap;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.SWBModel;
-import org.semanticwb.social.MessageIn;
+import org.semanticwb.model.WebSite;
 import org.semanticwb.social.SocialNetwork;
-import org.semanticwb.social.SocialNetworkUser;
 import org.semanticwb.social.Stream;
 import twitter4j.MediaEntity;
 import twitter4j.Place;
 import twitter4j.StallWarning;
 import twitter4j.Status;
 import twitter4j.StatusDeletionNotice;
+import twitter4j.TwitterStream;
 
 /**
  *
@@ -35,6 +35,7 @@ public class SWBSocialStatusListener implements twitter4j.StatusListener {
     SWBModel model=null;
     SocialNetwork socialNetwork=null;
     Stream stream=null;
+    HashMap<String, TwitterStream> ListenAlives;
 
     /*
      * Metodo constructor el cual recibe como parametros
@@ -42,11 +43,15 @@ public class SWBSocialStatusListener implements twitter4j.StatusListener {
      * @param socialNetwork is the SocialNetwork object related with the instance of the listener
      * @param stream is the stream configured to hear the listener.
      */
-    public SWBSocialStatusListener(SWBModel model, SocialNetwork socialNetwork, Stream stream)
+    public SWBSocialStatusListener(Stream stream, SocialNetwork socialNetwork, HashMap ListenAlives)
     {
-        this.model=model;
+        if(stream==null || socialNetwork==null) return;
         this.socialNetwork=socialNetwork;
         this.stream=stream;
+        WebSite wsite=WebSite.ClassMgr.getWebSite(stream.getSemanticObject().getModel().getName());
+        this.model=wsite;
+        this.ListenAlives=ListenAlives;
+        System.out.println("Entra a crear SWBSocialStatusListener...");
     }
 
     /*
@@ -59,6 +64,27 @@ public class SWBSocialStatusListener implements twitter4j.StatusListener {
     public void onStatus(Status status) {
         try
         {
+            System.out.println("Entra a SWBSocialStatusListener/onStatus-0:"+socialNetwork);
+            //El siguiente bloque de código (if) es NECESARIO, sirve para detener este thread de la librería twitter4J (onStatus), por si en algún momento
+            //se cambia el stream en la propiedad "keepAliveManager" de true a false o si se elimina la instancia de red social la cual se esta
+            //monitoreando, este thread nunca lo sabría y no se tiene manera de detenerlo desde el LitenerMgr, es por eso que se agrega aquí
+            //DEBEMOS agregarlo en todos las clases de red social que soporten Listener de tipo KeepAlive (En este momento solo es Twitter).
+            if((!stream.isActive() || stream.getPhrase()==null || !stream.isKeepAliveManager() || !stream.hasSocialNetwork(socialNetwork)) && (ListenAlives!=null &&
+                    ListenAlives.containsKey(stream.getURI()+"|"+socialNetwork.getURI())))
+            {
+                TwitterStream twitterStream=ListenAlives.get(stream.getURI()+"|"+socialNetwork.getURI());
+                if(twitterStream!=null)
+                {
+                    twitterStream.cleanUp();
+                    twitterStream.shutdown();
+                    ListenAlives.remove(stream.getURI()+"|"+socialNetwork.getURI());
+                    System.out.println("DETUVO LA CONEXION EN SWBSocialStatusListener/onStatus-de:"+stream.getURI()+"|"+socialNetwork.getURI());
+                }
+            }
+            //Termina Bloque de código que debemos agregar, De manera personalizada para c/red social, cuando soporten Listener de tipo KeepAlive.
+            
+            System.out.println("Entra a SWBSocialStatusListener/onStatus-1:"+socialNetwork);
+            
             //if (status.getGeoLocation() != null)
 
             Place place=status.getPlace();
@@ -77,30 +103,29 @@ public class SWBSocialStatusListener implements twitter4j.StatusListener {
             }
             */
             //System.out.println("Cuenta en la que estoy:"+socialNetwork.getTitle());
-            if(place!=null) System.out.println("Country:"+place.getCountry()+",CountryCode:"+place.getCountryCode()+", PlaceName:"+place.getName()+", PlaceFullName:"+place.getFullName()+", PlaceStreetAdress:"+place.getStreetAddress());
+            //if(place!=null) System.out.println("Country:"+place.getCountry()+",CountryCode:"+place.getCountryCode()+", PlaceName:"+place.getName()+", PlaceFullName:"+place.getFullName()+", PlaceStreetAdress:"+place.getStreetAddress());
             //else System.out.println("place es NULO...");
             //if(place!=null && place.getCountryCode().equals("MX")) //&& place.getName().equals("Cuernavaca"))
             {
 
-                System.out.println("CUENTA EN SWBSocialStatusListener:"+socialNetwork);
-                System.out.println(status.getUser().getName() + " : " + status.getText() + " : " + status.getGeoLocation());
-                System.out.println(status.getCreatedAt());
-               
+                System.out.println(status.getUser().getName() + " : " + status.getText());
+                /*
                 MediaEntity[] medianEntities=status.getMediaEntities();
                 if(medianEntities!=null)
                 {
                     for(int i=0;i<medianEntities.length;i++)
                     {
                         MediaEntity mediaEntity=medianEntities[i];
-                        /*
+                        
                         System.out.println("Media DisplayUrl:"+mediaEntity.getDisplayURL());
                         System.out.println("Media ExpandedUrl:"+mediaEntity.getExpandedURL());
                         System.out.println("Media MediaURLFile:"+mediaEntity.getMediaURL().getFile());
                         System.out.println("Media URLString:"+mediaEntity.getURL().toString());
-                         * */
                     }
                 }
+                */
                 //Persistencia del mensaje
+                /*
                 MessageIn message=MessageIn.ClassMgr.createMessageIn(String.valueOf(status.getId()), model);
                 message.setMsg_Text(status.getText());
                 message.setPostInSocialNetwork(socialNetwork);
@@ -163,8 +188,8 @@ public class SWBSocialStatusListener implements twitter4j.StatusListener {
                     {
                         message.setPostInSocialNetworkUser(socialNetUser);
                     }
-                }
-                socialNetwork.addReceivedPost(message, String.valueOf(status.getId()), socialNetwork);
+                }*/
+                //socialNetwork.addReceivedPost(message, String.valueOf(status.getId()), socialNetwork);
                 //new Classifier(message);
             }
       }catch(Exception e){
