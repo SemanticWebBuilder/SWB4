@@ -52,11 +52,13 @@
     }
     span.inline { display:inline; }
 </style>    
-<%!
-    public static JSONObject getLikedPostFromId(String postId, String fields, Facebook facebook){
+<%!/*
+    public static JSONObject getPostFromId(String postId, String fields, Facebook facebook){
         HashMap<String, String> params = new HashMap<String, String>(2);
         params.put("access_token", facebook.getAccessToken());
-        params.put("fields", fields);
+        if(fields != null){
+            params.put("fields", fields);
+        }
         
         JSONObject jsonObject = null;
         try{
@@ -104,8 +106,7 @@
                         if(!untilParam.isEmpty()){
                             until = untilParam.substring(untilParam.indexOf("=") + 1);//gets only the value of until param in paging object
                         }
-                        
-                        if(includeSinceParam){//Include value of since param when the tab loaded and when GetNewPost link is clicked
+                        if(includeSinceParam){//Include value of since param when the tab is loaded and when GetNewPost link is clicked
                             String previousPage = pagingData.getString("previous"); // get since param to get NEWER posts
                             pattern = Pattern.compile("since=[0-9]+");
                             matcher = pattern.matcher(previousPage);
@@ -117,7 +118,7 @@
                             if(!sinceParam.isEmpty()){
                                 since = sinceParam.substring(sinceParam.indexOf("=") + 1);//gets only the value of since param in paging object
                                 HttpSession session = request.getSession(true);
-                                session.setAttribute("since", since);
+                                session.setAttribute(objUri + tabSuffix + "since", since);
                             }
                         }
                     }
@@ -163,8 +164,17 @@
             String caption = "";
             boolean isAPhotoLike = false;
             boolean isALinkLike = false;
+            boolean isAPostLike = false;
+            boolean isAppCreated = false;
+            boolean isAStatusLike = false;
+            boolean isFoursquare = false;
+            
+            JSONObject postLike = null;
             JSONObject photoLike = null;
             JSONObject linkLike = null;
+            JSONObject applicationCreated = null;
+            JSONObject foursquareLink = null;
+            JSONObject statusLike = null;
             
             
             
@@ -178,11 +188,7 @@
                         story = getTagsFromPost(postsData.getJSONObject("story_tags"), story, renderURL);
                     }
                 }
-
-                /*if(!postsData.isNull("status_type") &&
-                        (postsData.getString("status_type").equals("shared_story") || postsData.getString("status_type").equals("tagged_in_photo"))){
-                    story = (!postsData.isNull("story")) ? postsData.getString("story").replace(postsData.getJSONObject("from").getString("name"), "") : "" ;
-                }*/
+                
                 if(!postsData.isNull("message")){
                     message = postsData.getString("message");
                     if(!postsData.isNull("message_tags")){//Users tagged in story
@@ -191,6 +197,14 @@
                 }
                 if(!postsData.isNull("caption")){
                     caption = postsData.getString("caption").replace("\n", "</br>");
+                }
+                if(postsData.has("application")){
+                    if(postsData.getJSONObject("application").getString("name").equals("Foursquare")){
+                        foursquareLink = getPostFromId(postsData.getString("id"), null, facebook);
+                        isFoursquare = true;
+                        System.out.println("\n\n\nFOURSQUARE CREATED:" +  foursquareLink);
+                        message = "Checked in";
+                    }
                 }
                 //Story or message or both!!
                 //or "status_type": "shared_story", tagged_in_photo
@@ -208,7 +222,16 @@
                     if(!postsData.isNull("message_tags")){//Users tagged in story
                         message = getTagsFromPost(postsData.getJSONObject("message_tags"), message, renderURL);
                     }
-                }                
+                }
+
+                if(postsData.has("application")){
+                    if(postsData.getJSONObject("application").getString("name").equals("Instagram")){
+                        applicationCreated = getPostFromId(postsData.getString("id"), null, facebook);
+                        isAppCreated = true;
+                        System.out.println("\n\n\nAPPLICATION CREATED:" +  applicationCreated);
+                        message = "Liked a picture in Instagram";
+                    }
+                }
             }else if(postType.equals("status")){
                 if(!postsData.isNull("message")){
                     message = postsData.getString("message");
@@ -223,13 +246,22 @@
                         story = getTagsFromPost(storyTags, story, renderURL);
                     }
                     if(story.contains("likes a photo")){
-                        photoLike = getLikedPostFromId(postsData.getString("id"), "id,from,name,name_tags,picture,source,link,tags", facebook);
+                        photoLike = getPostFromId(postsData.getString("id"), "id,from,name,name_tags,picture,source,link,tags", facebook);
                         isAPhotoLike = true;
                         //System.out.println("THE RECOVERED OBJECT:" + jSONObject);
                     }else if(story.contains("likes a link")){
-                        linkLike = getLikedPostFromId(postsData.getString("id"), "id,from,name,picture,link,tags,message", facebook);
+                        linkLike = getPostFromId(postsData.getString("id"), "id,from,name,picture,link,tags,message", facebook);
+                        System.out.println("\n\n\nLINKED LIKED:" +  linkLike);
                         isALinkLike = true;
                     }
+                    if(story.contains("likes a status")){
+                        statusLike = getPostFromId(postsData.getString("id"), null, facebook);
+                        isAStatusLike = true;
+                        System.out.println("\n\n\nSTATUS LIKED:" +  statusLike);
+                        if(statusLike.has("message")){
+                            message = statusLike.getString("message");
+                        }
+                    }                   
                 }else{
                      return;
                 }
@@ -237,13 +269,36 @@
                 if(!postsData.isNull("message")){
                     message = postsData.getString("message") + " THIS IS A VIDEO!!";
                 }
+            }else if(postType.equals("checkin")){
+                if(!postsData.isNull("message")){
+                    message = postsData.getString("message");
+                    if(!postsData.isNull("message_tags")){//Users tagged in story
+                        JSONObject storyTags = postsData.getJSONObject("message_tags");
+                        message = getTagsFromPost(storyTags, message, renderURL);
+                    }
+                }            
+            }else if(postType.equals("swf")){
+                if(!postsData.isNull("message")){
+                    message = postsData.getString("message");
+                    if(!postsData.isNull("message_tags")){//Users tagged in story
+                        JSONObject storyTags = postsData.getJSONObject("message_tags");
+                        message = getTagsFromPost(storyTags, message, renderURL);
+                    }
+                }            
             }
             
-            if(postsData.has("place")){
+            if(postsData.has("place") && !postsData.isNull("place")){
                 if(postsData.getJSONObject("place").has("name")){
                 message = message + " AT " + "<a href=\"http://facebook.com/" + postsData.getJSONObject("place").getString("id") + "\" target=\"_blank\">" + postsData.getJSONObject("place").getString("name") + "</a>";
+                }                
+            }
+            
+            if(isFoursquare){
+                if(foursquareLink.has("place")){
+                    if(foursquareLink.getJSONObject("place").has("name")){
+                    message = message + "by Foursquare AT " + "<a href=\"http://facebook.com/" + foursquareLink.getJSONObject("place").getString("id") + "\" target=\"_blank\">" + foursquareLink.getJSONObject("place").getString("name") + "</a>";
+                    }                
                 }
-                
             }
             
             //JSONObject profile = new JSONObject(getProfileFromId(postsData.getJSONObject("from").getString("id")+"", facebook));
@@ -272,18 +327,33 @@
             writer.write("   </td>");
             writer.write("</tr>");
             
+            if(postType.equals("link") && story.contains("like")){
+                writer.write("<tr>");
+                
+                writer.write("</tr>");
+            }
             
             //Picture if exists, start
             //if(postType.equals("link") && postsData.has("picture")){
-            if(postsData.has("picture") || isAPhotoLike || isALinkLike){
+            if(postsData.has("picture") || isAPhotoLike || isALinkLike || isAppCreated){
                 String picture = "";
                 if(isAPhotoLike){
                     if(photoLike.has("source")){
                         picture = photoLike.getString("source");
                     }
                 }else if(isALinkLike){
-                    if(photoLike.has("picture")){
-                        picture = linkLike.getString("picture");                    
+                    if(linkLike.has("picture")){
+                        picture = linkLike.getString("picture");
+                    }
+                }else if(isAPostLike){
+                    if(postLike.has("picture")){
+                        picture = postLike.getString("picture");
+                    }
+                }else if(isAppCreated){
+                    if(applicationCreated.has("data")){
+                        if(applicationCreated.getJSONObject("data").has("object")){
+                            picture = applicationCreated.getJSONObject("data").getJSONObject("object").optString("url") + "media";
+                        }
                     }
                 }else{
                     picture = postsData.getString("picture").replace("_s.", "_n.");
@@ -318,6 +388,10 @@
                 }else if(isALinkLike){
                     if(linkLike.has("link")){
                         writer.write(    "<a href=\"" + linkLike.getString("link") + "\">" +  linkLike.getString("name") + "</a>");
+                    }                    
+                }else if(isAPostLike){
+                    if(postLike.has("link")){
+                        writer.write(    "<a href=\"" + postLike.getString("link") + "\">" +  postLike.getString("name") + "</a>");
                     }                    
                 }else{ 
                     writer.write("&nbsp;");
@@ -468,7 +542,7 @@
             }            
         }
     }
-
+*/
 %>
 <%
     String objUri = (String) request.getParameter("suri");
@@ -482,10 +556,8 @@
     HashMap<String, String> params = new HashMap<String, String>(2);
     params.put("access_token", facebookBean.getAccessToken());
     
-    params.put("limit", "25");
-    params.put("fields", "id,from,to,message,message_tags,story,story_tags,picture,caption,link,object_id,application,source,name,description,properties,icon,actions,privacy,type,status_type,created_time,likes,comments.limit(5),place");
-    String since = (String)session.getAttribute("since");
-    System.out.println("session.getAttribute(since):" + session.getAttribute("since"));
+    params.put("limit", "5");
+    params.put("fields", "id,from,to,message,message_tags,story,story_tags,picture,caption,link,object_id,application,source,name,description,properties,icon,actions,privacy,type,status_type,created_time,likes,comments.limit(5),place");    
     
     //params.put("callback", "?");
     //String fbResponse = postRequest(params, "https://graph.facebook.com/" + facebookBean.getFacebookUserId() + "/feed",
@@ -497,6 +569,8 @@
         
     String untilPost = parseResponse(fbResponse, out, true, request, paramRequest, NEWS_FEED_TAB);//Gets the newest post and saves the ID of the last one    
     SWBResourceURL renderURL = paramRequest.getRenderUrl().setParameter("suri", objUri).setParameter("currentTab", NEWS_FEED_TAB);
+    String since = (String)session.getAttribute(objUri + NEWS_FEED_TAB + "since");
+    System.out.println("\n\n\nsession.getAttribute(since):" + session.getAttribute(objUri + NEWS_FEED_TAB +  "since"));
 %>
 
 <div dojoType="dojox.layout.ContentPane">
@@ -504,7 +578,7 @@
         <%
             System.out.println("SINCE: " +  since);
             
-            if(since == null || since.equals("0")){
+            if(since != null){
                 System.out.println("Calling the funtion!");
         %>
             setInterval(function(){ postSocialHtml('<%=renderURL.setMode("newPostsAvailable")%>','<%=objUri%>newPostsAvailable'); },20000);

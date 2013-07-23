@@ -60,7 +60,7 @@
     params.put("access_token", facebookBean.getAccessToken());
     //System.out.println("AccessToken:\n" + facebookBean.getAccessToken());
     
-    params.put("limit", "15");    
+    params.put("limit", "25");    
     String since = (String)session.getAttribute("since");
     System.out.println("session.getAttribute(since):" + session.getAttribute("since"));
     
@@ -78,8 +78,6 @@
 <div dojoType="dojox.layout.ContentPane">
     <script type="dojo/method">
         <%
-            System.out.println("SINCE: " +  since);
-            
             if(since == null || since.equals("0")){
                 System.out.println("Calling the funtion!");
         %>
