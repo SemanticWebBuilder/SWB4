@@ -227,7 +227,7 @@ public class SentimentalDataClassifier {
         //System.out.println("SentimentalData../intensityTweetValueType:"+intensityTweetValueType);
         
         
-        //////////////////////////////////ESTO SI FUNCIONA BIEN ------10 - Julio - 2013//////////////////////////////////
+        //////////////////////////////////ESTO (PARA ABAJO) SI FUNCIONA BIEN ------10 - Julio - 2013//////////////////////////////////
         boolean filterPositives=stream.isFilterSentimentalPositive();
         boolean filterNegatives=stream.isFilterSentimentalNegative();
         boolean filterNeutrals=stream.isFilterSentimentalNeutral();

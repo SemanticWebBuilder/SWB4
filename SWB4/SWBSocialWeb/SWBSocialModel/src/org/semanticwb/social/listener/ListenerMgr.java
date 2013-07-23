@@ -14,9 +14,11 @@ import org.semanticwb.base.SWBAppObject;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.UserGroup;
 import org.semanticwb.model.WebSite;
+import org.semanticwb.social.KeepAliveListenerable;
 import org.semanticwb.social.SocialNetwork;
 import org.semanticwb.social.SocialSite;
 import org.semanticwb.social.Stream;
+
 
 /**
  *
@@ -36,7 +38,10 @@ public class ListenerMgr implements SWBAppObject {
     static private Hashtable<String, Timer> htTimers = new Hashtable();
     static private ListenerMgr instance;
     static final int MILISEG_IN_SEGUNDO=1000;
-    static private ReBindThread rbThread=null;
+    //static private ReBindThread rbThread=null;
+    
+    
+    static private boolean canEnter=true;
 
     /**
      * Retrieves a reference to the only one existing object of this class.
@@ -82,31 +87,18 @@ public class ListenerMgr implements SWBAppObject {
      */
     public static boolean createUpdateTimers(Stream stream)
     {
-        System.out.println("createUpdateTimers - 28:"+rbThread+", STREAM:"+stream);
+        System.out.println("createUpdateTimers/STREAM:"+stream);
         try
         {
-            //synchronized(stream)
+            synchronized(stream)
             {
-                int time2Review=3;  //tiempo para darle chance a swb de terminar de grabar todas las propiedades a un stream, ya que lo hace una por una
-                if(rbThread==null)  //TODO:Ver que hago cuando puedan llegar algunos otros stream que se modifiquen cuando aun no haya terminado el thread.
-                {//El problema aqui sería la concurrencia, si modificam un stream la variable rbThread va a ser nula, por lo tanto va ha entrar
-                    //pero si modifican un trhread y despues modifican otro antes de que concluya el tiempo para empezar a revisar los datos del stream
-                    //,osea time2Review*MILISEG_IN_SEGUNDO, entonces la variable no va a estar en null, y simplemente no va ha levantar(crear) el nuevo
-                    //timer del segundo stream que llegó, y si llegan mas, pues de ninguno de los otros, aunque es dificil que lleguen tantos antes de 
-                    //que empiece el primer timer a correr, osea, antes de que pase el tiempo marcado por time2Review*MILISEG_IN_SEGUNDO, que debe ser
-                    //2 o 3 segundos como maximo, en ese tiempo ya se debio de haber guardado todas las propiedades del stream cuando se modifgica este, no 
-                    //recuerdo si también pasa esto cuando apenas se crea como nuevo, pero creo que sí.
-                    //System.out.println("Entra a Enviar a ReBind...");
-                    rbThread=new ReBindThread(stream);
-                    //Pongo a dormir el thread 3 segundos antes de levantarlo, ya que al actualizar un stream, se actualiza en el modelo
-                    //propiedad por propiedad y yo necesito saber si el tiempo es mayor a 0, si las redes sociales NO viene vacias
-                    //y si las frases a monitorear TAMPOCO vienen vacias, es por eso que pongo a dormir el thread para dar chance a swb
-                    //de que ponga todos los valores correspondientes al stream antes de revisar sus datos y ver si se levanta(crea) el timer o no.
-                    rbThread.sleep(time2Review*MILISEG_IN_SEGUNDO);   
-                    rbThread.start();
-                    rbThread=null;  //Elimino la variable y por lo tanto el thread se envía al gc
-                    return true;
-                }
+              System.out.println("createUpdateTimers-1");  
+              if(canEnter)
+              {
+                  System.out.println("createUpdateTimers-2");  
+                  canEnter=false;
+                  createUpdateTimersReBind(stream);
+              }
             }
         }catch(Exception e)
         {
@@ -116,25 +108,9 @@ public class ListenerMgr implements SWBAppObject {
     }
 
     /*
-     * Metodo que regenera un determinado thread de un determinado stream
-     */
-    static class ReBindThread extends Thread {
-        Stream stream=null;
-        public ReBindThread(Stream stream) {
-            this.stream=stream;
-        }
-        public void run() {
-            //sleep(2 * 1000);
-            //System.out.println("Entra a run...");
-            createUpdateTimersReBind(stream);
-            //System.out.println("DONE! " + getName());
-        }
-    }
-
-    /*
      * Metodo que crea o actualiza un thread de un determinado stream
      */
-    private static boolean createUpdateTimersReBind(Stream stream)
+    private static void createUpdateTimersReBind(Stream stream)
     {
         System.out.println("Entra a Listener/createUpdateTimersReBind-1");
         
@@ -157,19 +133,18 @@ public class ListenerMgr implements SWBAppObject {
                 {
                     //System.out.println("Entra a Listener/createUpdateTimers-3:"+stream.getURI());
                     System.out.println("ListerJ1.1");
-                    removeTimer(stream);
+                    removeTimer(stream, true);
                     System.out.println("Elimino timer k");
                 }else
                 {
                     //System.out.println("Entra a Listener/createUpdateTimers-4:"+stream.getURI());
                     System.out.println("ListerJ2");
-                    Timer timer=removeTimer(stream);
+                    Timer timer=removeTimer(stream, true);
                     timer=new Timer();
-                    timer.schedule(new ListenerTask(stream), 0,stream.getPoolTime()*MILISEG_IN_SEGUNDO);
+                    timer.schedule(new ListenerTask(stream), 3*MILISEG_IN_SEGUNDO,stream.getPoolTime()*MILISEG_IN_SEGUNDO);
                     htTimers.put(stream.getURI(), timer);
+                    return;
                 }
-                //System.out.println("Entra a Listener/createUpdateTimers-5:"+stream.getURI());
-                return true;
             }catch(Exception e)
             {
                 //System.out.println("Error:"+e.getMessage());
@@ -183,12 +158,12 @@ public class ListenerMgr implements SWBAppObject {
                 //Se arranca un timer que se ejecutara cada tantos segundos configurados en el stream
                 System.out.println("Levanta Timer");
                 Timer timer = new Timer();
-                timer.schedule(new ListenerTask(stream), 0,stream.getPoolTime()*MILISEG_IN_SEGUNDO); 
+                timer.schedule(new ListenerTask(stream), 3*MILISEG_IN_SEGUNDO,stream.getPoolTime()*MILISEG_IN_SEGUNDO); 
                 htTimers.put(stream.getURI(), timer);
-                return true;
+                return;
             }
         }
-        return false;
+        canEnter=true;
     }
      
 
@@ -207,19 +182,46 @@ public class ListenerMgr implements SWBAppObject {
         public void run() {
             if(createTimer(stream))
             {
+                boolean isThereNoListenAliveNets=false;
                 System.out.println("Ejecuta Timer:"+stream);
                 Iterator<SocialNetwork> itSocialNets=stream.listSocialNetworks();
                 while(itSocialNets.hasNext())
                 {
                     SocialNetwork socialNet=itSocialNets.next();
-                    System.out.println("Ejecuta Red Social/Listen:"+socialNet.getId());
-                    socialNet.listen(stream);
+                    if(stream.isKeepAliveManager())
+                    {
+                        //Si el Stream esta configurado para que maneje las redes sociales que así lo permitan en su forma "ListenAlive", y si la red social
+                        //que se esta revisando en este momento es de tipo KeepAliveListenerable, entonces no hace nada e itera de nuevo para buscar la 
+                        //siguiente red social del Stream, dado que la actual no se va a enviar a que escuche.
+                        if(socialNet instanceof KeepAliveListenerable)
+                        {
+                            KeepAliveListenerable listenAliveableNet=(KeepAliveListenerable)socialNet;
+                            listenAliveableNet.listenAlive(stream);
+                        }else   //De lo contrario, si se envía a que escuche
+                        {
+                            System.out.println("Ejecuta Red Social/Listen:"+socialNet.getId());
+                            socialNet.listen(stream);
+                            isThereNoListenAliveNets=true;
+                        }
+                    }else   //De lo contrario, si se envía a que escuche
+                    {
+                        System.out.println("Ejecuta Red Social/Listen:"+socialNet.getId());
+                        socialNet.listen(stream);
+                        isThereNoListenAliveNets=true;
+                    }
+                }
+                //Si no existen redes sociales que NO sean ListenAlive, entonces elimina ese timer
+                
+                if(!isThereNoListenAliveNets)
+                {
+                    removeTimer(stream, false);
                 }
             }else
             {
                 System.out.println("stream es nulo o es inactivo o esta borrado.....:"+stream);
-                removeTimer(stream);
+                removeTimer(stream, true);
             }
+            canEnter=true;
         }
      }
 
@@ -232,6 +234,32 @@ public class ListenerMgr implements SWBAppObject {
         if(stream!=null && stream.isActive() && !stream.isDeleted() && stream.getPoolTime() > 0 && stream.getPhrase()!=null && stream.getPhrase().trim().length()>0 && stream.listSocialNetworks().hasNext())
         {
             return true;
+            //Revisa si en el Stream esta indicado (Active) si se va a manejar KeepAlive en las redes sociales que así lo permitan y que esten
+            //asociadas a dicho Stream
+            /*
+            if(stream.isKeepAliveManager())
+            {
+                //Busca si alguna de las redes sociales que estan registradas en el Stream es de tipo KeepAliveListenerable, si es así no creara el Timer para ese Stream
+                boolean isNotKeepAliveable=false;
+                Iterator<SocialNetwork> itSocialNets=stream.listSocialNetworks(); 
+                while(itSocialNets.hasNext())
+                {
+                   SocialNetwork socialNet=itSocialNets.next();
+                   if(!(socialNet instanceof KeepAliveListenerable))
+                   {
+                       isNotKeepAliveable=true;
+                       break;
+                   }
+                }
+                //Si alguna red social del Stream, no es de tipo KeepAliveListenerable, entonces se regresa true, esto para que SI se genere un timer para ese stream
+                if(isNotKeepAliveable) 
+                {
+                    return true;
+                }
+            }else{
+                return true;
+            }
+            * */
         }
         return false;
     }
@@ -239,31 +267,43 @@ public class ListenerMgr implements SWBAppObject {
     /*
      * Metodo que elimina un thread de un stream
      */
-     public static Timer removeTimer(Stream stream)
+     public static Timer removeTimer(Stream stream, boolean stopNetListeners)
      {
         if(htTimers.get(stream.getURI())!=null)
         {
             System.out.println("Entra a removeTimer de stream:"+stream.getURI());
             System.out.println("Entra a removeTimer de stream-GeorgEEEEEE:"+stream.getURI());
-            //Mandar llamar a cada una de las redes sociales con el Stream que deseo detener
-            //Esto no se ve que vaya a funcionar, ya que si se elimina una instancia de cuenta de red social de stream
-            //En este iterador de abajo no me la va a regresar, por lo tanto nunca va a mandar llamar a su metodo stop
-            //
-            /*
-            try
+            if(stopNetListeners)
             {
-                Iterator<SocialNetwork> itSocialNets=stream.listSocialNetworks();
-                while(itSocialNets.hasNext())
+                //Mandar llamar a cada una de las redes sociales con el Stream que deseo detener
+                try
                 {
-                    SocialNetwork socialNet=itSocialNets.next();
-                    System.out.println("Va a mandar al metodo Stop en Listener de red social:"+socialNet);
-                    socialNet.stopListen(stream);   
-                }                
-            }catch(Exception e)
-            {
-                log.error(e);
-            }*/
-            //////////////////
+                    Iterator<SocialNetwork> itSocialNets=stream.listSocialNetworks();
+                    while(itSocialNets.hasNext())
+                    {
+                        SocialNetwork socialNet=itSocialNets.next();
+                        if(socialNet instanceof KeepAliveListenerable)
+                        {
+                            KeepAliveListenerable keepAliveNet=(KeepAliveListenerable) socialNet;
+                            //Envío llamar a ambos metodos, esto por si era el stream "isKeepAliveManager()=true" y se lo quitaron, 
+                            //pero ya estaba ejecutandose mediante esa instancia una red social y viceversa, de lo contrario nunca
+                            //detendría lo que ya tiene iniciado.
+                            //Si una red social que estaba configurada en el stream, ya se la quitaron, tampoco entraría en todo este while
+                            //pero para eso, ya lo estoy controlando con un if que detiene el proceso que esta en un hilo completamente por 
+                            //separadoen el metodo "onStatus",  de la Clase SWBSocialStatusListener, hacer lo mismo para cuando se desee
+                            //incorporar mas redes sociales de tipo KeepAlive
+                            keepAliveNet.stopListenAlive(stream);
+                            socialNet.stopListen(stream);  
+                        }else{
+                            socialNet.stopListen(stream);   
+                        }
+                    }                
+                }catch(Exception e)
+                {
+                    log.error(e);
+                }
+                //////////////////
+            }
             try
             {
                 Timer timer=htTimers.get(stream.getURI());

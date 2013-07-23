@@ -35,11 +35,14 @@ public class Stream extends org.semanticwb.social.base.StreamBase
                     {
                         //System.out.println("Entra a Stream/Create...");
                         ListenerMgr.createUpdateTimers(stream);
-                    }else if((action.equalsIgnoreCase("SET") && (semProp.getURI().equals("http://www.semanticwebbuilder.org/swb4/ontology#active") || semProp.getURI().equals(social_stream_PoolTime.getURI()) || semProp.getURI().equals(social_stream_phrase)))
+                    }else if((action.equalsIgnoreCase("SET") && (semProp.getURI().equals("http://www.semanticwebbuilder.org/swb4/ontology#active") || semProp.getURI().equals(Stream.social_keepAliveManager)
+                       || semProp.getURI().equals(social_stream_PoolTime.getURI()) || semProp.getURI().equals(social_stream_phrase)))
                        || (action.equalsIgnoreCase("ADD") && semProp.getURI().equals(social_hasStream_socialNetwork.getURI()))
                        || (action.equalsIgnoreCase("REMOVE") && semProp!=null && semProp.getURI().equals(social_hasStream_socialNetwork.getURI())))
                     {
                         System.out.println("Entra a Stream/Update...Activo??:"+stream.isActive());
+                        
+                        //Revisar redes sociales que se encuentran en este momento en el stream
                         ArrayList asocialNetIDs=new ArrayList();    //White List -Lista buena-Lista que si esta en el stream
                         Iterator <SocialNetwork> itSn=stream.listSocialNetworks();
                         while(itSn.hasNext())
@@ -49,7 +52,7 @@ public class Stream extends org.semanticwb.social.base.StreamBase
                             asocialNetIDs.add(socialNet.getId());   //Se agrega el id de la red social a la lista blanca (asocialNetIDs)
                         }
                         
-                        //Si en la clase SocialNetStreamSearch existe alguna instancia de SocialNetwork para el stream que no este en la mismo Stream, entonces se elimina
+                        //Si en la clase SocialNetStreamSearch existe alguna instancia de SocialNetwork para el stream que no este en la mismo Stream(Lista blanca de arriba), entonces se elimina
                         Iterator <SocialNetStreamSearch> itSocialNetStreamSearch=SocialNetStreamSearch.ClassMgr.listSocialNetStreamSearchByStream(stream, stream.getSocialSite());
                         while(itSocialNetStreamSearch.hasNext())
                         {
@@ -71,7 +74,7 @@ public class Stream extends org.semanticwb.social.base.StreamBase
                     if(action.equalsIgnoreCase("REMOVE") && semProp==null)  //Quiere decir que se esta eliminando una instancia de clase completa, no una propiedad
                     {
                         System.out.println("Entra a Stream/Remove...");
-                        ListenerMgr.removeTimer(stream);
+                        ListenerMgr.removeTimer(stream, true);
                         
                         //Si se elimina el stream, se supone que por la ontología(removeDependency=true), se borrarían los objetos SocialNetStreamSearch
                         //que tuviera asociados, sin embargo, aqui también lo hago de manera manual, ver si no fuera necesario, quitar el sig. código despues

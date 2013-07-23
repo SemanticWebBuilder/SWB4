@@ -11,24 +11,24 @@ import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import javaQuery.j2ee.tinyURL;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.semanticwb.Logger;
-import org.semanticwb.SWBException;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
-import org.semanticwb.model.GenericIterator;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.social.listener.Classifier;
+import org.semanticwb.social.listener.twitter.SWBSocialStatusListener;
 import org.semanticwb.social.util.SWBSocialUtil;
+import twitter4j.FilterQuery;
 import twitter4j.Query;
 import twitter4j.Status;
 import twitter4j.StatusUpdate;
@@ -40,13 +40,16 @@ import twitter4j.auth.AccessToken;
 import twitter4j.auth.RequestToken;
 import twitter4j.conf.ConfigurationBuilder;
 import twitter4j.GeoLocation;
+import twitter4j.StatusListener;
+import twitter4j.TwitterStreamFactory;
+import twitter4j.conf.Configuration;
 
 
 public class Twitter extends org.semanticwb.social.base.TwitterBase {
 
     private static Logger log = SWBUtils.getLogger(Twitter.class);
     
-    TwitterStream trial=null;
+    private static HashMap<String, TwitterStream> ListenAlives=new HashMap();
     
     //private Long lastTweetID; // get tweets since the tweet with ID 'lastTweetID' until now
                                 // In the first request the lastTweetID value is 0. This value MUST be updated in further executions
@@ -294,7 +297,7 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
 
     @Override
     public void listen(Stream stream) {
-        
+        System.out.println("Entra a Twitter/Listen");
         //WebSite wsite = WebSite.ClassMgr.getWebSite(stream.getSemanticObject().getModel().getName());
         //System.out.println("Red SocialID:"+this.getId()+", Red Title:"+this.getTitle()+", sitio:"+wsite.getId());
         //System.out.println("Creador:" + this.getCreator());
@@ -452,83 +455,75 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
     }
 
 
-    //@Override
-//    
-//    public void listenAlive(SWBModel model) {
-//        try {
-//            StatusListener listener = new SWBSocialStatusListener(model, this, null);
-//            /*create filterQuery*/
-//            FilterQuery query = new FilterQuery();
-//            //NOTE: format of values: {minLongitude, minLatitude}, {...}
-//            //double[][] loc = {{-118, 37}, {-86, 33}}; //Bounding Box de San Francisco
-//            //double[][] loc = {{37.78452999999, -122.39532395324}, {37.78452999998, -122.39532395323}}; //Bounding Box de San Francisco
-//            //double[][] loc = {{32.718620, -86.703392}, {14.532850, -118.867172}}; //Bounding Box de México (País) Encontrado en http://isithackday.com/geoplanet-explorer/index.php?woeid=23424900
-//            //query.locations(loc);
-//
-//            //Palabras a monitorear
-//            String words2Monitor=SWBSocialUtil.words2Monitor.getWords2Monitor(",", model);
-//            //System.out.println("words2MonitorGeorge:"+words2Monitor+", en cta:"+this);
-//            if(words2Monitor!=null && words2Monitor.trim().length()>0)
-//            {
-//                String[] tr = {words2Monitor};
-//                query.track(tr);
-//            }
-//
-//
-//            //System.out.println(query.toString());
-//
-//            //Autenticación con Oath, comentado, para despues utilizarlo
-//        /*
-//            TwitterStream twitterStream = new
-//            TwitterStreamFactory(listener).getInstance();
-//            twitterStream.setOAuthConsumer(CONSUMER_KEY, CONSUMER_SECRET);
-//            twitterStream.setOAuthAccessToken(new AccessToken(TOKEN,
-//            TOKEN_SECRET));
-//            FilterQuery filterQuery = new FilterQuery();
-//            filterQuery.track(new String[] {"is a"});
-//            twitterStream.filter(filterQuery);
-//             *
-//             */
-//
-//            ConfigurationBuilder cb = new ConfigurationBuilder();
-//            cb.setDebugEnabled(true);
-//            //simple http form based authentication, you can use oAuth if you have one, check Twitter4j documentation
-//            //cb.setUser(this.getLogin());
-//            //cb.setPassword(this.getPassword());
-//            cb.setUser("George24Mx");
-//            cb.setPassword("george24");
-//            // creating the twitter listener
-//
-//
-//            Configuration cfg = cb.build();
-//            trial = new TwitterStreamFactory(cfg).getInstance();
-//
-//            trial.addListener(listener);
-//
-//
-//            trial.filter(query);
-//
-//            //System.out.println(" here is stuff : " + trial.getFilterStream(query));
-//
-//
-//            //trial.sample();
-//        } catch (Exception e) {
-//            //System.out.println(e.getMessage());
-//            log.error(e);
-//        }
-//    }
+    @Override
+    
+    public void listenAlive(Stream stream) {
+        try {
+            System.out.println("Entra a Twitter listenAlive-1:"+stream.getURI()+"|"+this.getURI());
+            if(ListenAlives.containsKey(stream.getURI()+"|"+this.getURI())) return;
+            System.out.println("Entra a Twitter listenAlive-2:"+stream.getURI()+"|"+this.getURI());
+            
+            //WebSite wsite=WebSite.ClassMgr.getWebSite(stream.getSemanticObject().getModel().getName());
+            StatusListener listener = new SWBSocialStatusListener(stream, this, ListenAlives);
+            /*create filterQuery*/
+            FilterQuery query = new FilterQuery();
+            //NOTE: format of values: {minLongitude, minLatitude}, {...}
+            //double[][] loc = {{-118, 37}, {-86, 33}}; //Bounding Box de San Francisco
+            //double[][] loc = {{37.78452999999, -122.39532395324}, {37.78452999998, -122.39532395323}}; //Bounding Box de San Francisco
+            //double[][] loc = {{32.718620, -86.703392}, {14.532850, -118.867172}}; //Bounding Box de México (País) Encontrado en http://isithackday.com/geoplanet-explorer/index.php?woeid=23424900
+            //query.locations(loc);
+
+            //Palabras a monitorear
+            String words2Monitor=getPhrases(stream.getPhrase());
+            System.out.println("words2Monitor:"+words2Monitor);
+            if(words2Monitor!=null && words2Monitor.trim().length()>0)
+            {
+                String[] tr = {words2Monitor};
+                query.track(tr);
+                System.out.println("words2Monitor--1:"+words2Monitor);
+            }
+            /*
+            System.out.println("AppKey:"+getAppKey());
+            System.out.println("SecretKey:"+getSecretKey());
+            System.out.println("AccessToken:"+getAccessToken());
+            System.out.println("AccessTokenSecret:"+getAccessTokenSecret());
+            */
+            
+            TwitterStream twitterStream = new TwitterStreamFactory(configureOAuth().build()).getInstance();
+            
+            twitterStream.addListener(listener);
+
+            twitterStream.filter(query);
+            
+            System.out.println("Entra a Twitter listenAlive-3G1:"+stream.getURI()+"|"+this.getURI());
+            //twitterStream.sample();
+            ListenAlives.put(stream.getURI()+"|"+this.getURI(), twitterStream);
+            
+            
+             System.out.println("Entra a Twitter listenAlive-4-JorgeJJ:"+stream.getURI()+"|"+this.getURI());
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            log.error(e);
+        }
+    }
 
     //@Override
-    /*
-    public void stopListenAlive() {
+    
+    public void stopListenAlive(Stream stream) {
         System.out.println("Entra a stopListenAliveJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJ");
-        if(trial!=null)
+        if(ListenAlives.containsKey(stream.getURI()+"|"+this.getURI()))
         {
-            trial.cleanUp();
-            trial.shutdown();
-            //System.out.println("DETUVO LA CONEXION EN:"+this.getId());
+            TwitterStream twitterStream=ListenAlives.get(stream.getURI()+"|"+this.getURI());
+            if(twitterStream!=null)
+            {
+                twitterStream.cleanUp();
+                twitterStream.shutdown();
+                ListenAlives.remove(stream.getURI()+"|"+this.getURI());
+                System.out.println("DETUVO LA CONEXION EN stopListenAlive:"+this.getId());
+            }
         }
-    }**/
+        
+    }
 
     @Override
     public void authenticate(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
@@ -719,7 +714,7 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
 
     @Override
     public void stopListen(Stream stream) {
-        
+        System.out.println("Entra a Twitter/stopListen");
     }
 
 }
