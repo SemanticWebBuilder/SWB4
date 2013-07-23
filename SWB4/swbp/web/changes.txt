@@ -1,0 +1,128 @@
+4.2.5.5
+    - (22/07/2013) - BUG: Modeler - Corregido error que ocultaba el texto de los tooltips.
+    - (12/07/2013) - BUG: Cambiadas fuentes en las plantillas de jasper para los reportes resultantes del buscador de instancias de procesos.
+    - (12/07/2013) - BUG: Corregidos errores en grid de reporte en la búsqueda de instancias de procesos.
+    - (12/07/2013) - BUG: Corregida etiqueta de esquema de color en la configuración del recurso ProcessKPI.
+    - (11/07/2013) - BUG: Modeler - Agregado texto a compuertas.
+    - (11/07/2013) - BUG: Corregido error al generar XML para el modo avanzado del ProcessForm.
+    - (11/07/2013) - BUG: Corregido error de codificación al visualizar los modelos.
+    - (10/07/2013) - Modeler - Agregada configuración para permitir mostrar el recurso en modo vista.
+    - (10/07/2013) - BUG: Corregido error de codificación al exportar modelo a formato SVG.
+    - (09/07/2013) - Modificada funcionalidad y diseño de la bandeja de tareas para hacerla más fácil de usar.
+    - (25/06/2013) - BUG: Corregido error en ProcessForm que ciclaba IE al abrir un diálogo de dojo.
+    - (25/06/2013) - Modeler - Modificado para funcionar como recurso fuera del sitio de administración.
+    - (24/06/2013) - BUG: Modeler - Corregidos errores de estilos de formas al exportar modelo a formato SVG.
+    - (20/06/2013) - BUG: Agregada validación para filtrar instancias de procesos sin usuario creador.
+    - (11/06/2013) - Modeler - Agregada función para cargar modelos a partir de archivos SWP.
+    - (06/06/2013) - Modeler - Agregada función para exportar modelos a formato SWP.
+    - (08/05/2013) - Modeler - Agregada función para exportar modelos a formato SVG.
+    - (07/05/2013) - Modeler - Creado nuevo Modeler basado en Javascript y SVG.
+    - (06/05/2013) - BUG: Agregada fecha de creación al ejecutar las tareas de usuario.
+    - (06/05/2013) - Agregados métodos a los servicios del API de servicios Web para invocación de las funciones de SWBProcess.
+    - (03/05/2013) - BUG: Corregida validación de instancias cerradas en método haveAccess de las instancias.
+    - (29/04/2013) - Implementado módulo de generación de reportes de procesos.
+    - (22/04/2013) - Implementada API de servicios Web para invocación de las funciones de SWBProcess.
+    - (20/03/2013) - Creado Toolkit javascript para generación de modeladores.
+    - (20/03/2013) - Creado prototipo de modelador gráfico BPMN con javascript y SVG.
+    - (28/02/2013) - BUG: Corregido cierre de eventos intermedios añadidos a tareas.
+    - (28/02/2013) - BUG: Corregida asignación de comportamiento interruptor en eventos intermedios al generar el JSON del modelo.
+    - (28/02/2013) - Implementados timers para eventos intermedios temporizadores añadidos a tareas.
+    - (13/02/2013) - BUG: Corregido error en validación de tipos al obtener las instancias en el ProcessManager.
+    - (13/02/2013) - BUG: Corregido error en validación de correo del remitente en servicio SendMail.
+    - (13/02/2013) - Modificado método canAccess de las instancias para hacerlo genérico.
+    - (12/02/2013) - Agregado FormElement de captura de URLs estilo wiki.
+    - (06/02/2013) - BUG: Modeler - Corregido error en guardado de propiedad de interrupción en eventos intermedios receptores.
+    - (31/01/2013) - Modificada creación de instancias para redireccionar automáticamente a la primer tarea.
+    - (31/01/2013) - Modificado servicio de envío de correo para tomar el destinatario de la configuración.
+    - (31/01/2013) - Modificada funcionalidad de configuración de columnas en la bandeja de tareas para editar las etiquetas.
+    - (31/01/2013) - Agregada funcionalidad para configuración de columnas de información en la bandeja de tareas.
+    - (31/01/2013) - BUG: Corregido error en evaluador de calendarios de procesos al generar el XML del calendario.
+    - (31/01/2013) - BUG: Modeler - Corregido error en guardado de propiedad de interrupción en eventos intermedios.
+    - (25/01/2013) - Agregada funcionalidad para reasignación de tareas.
+4.2.2.0
+    - (11/01/2013) - Cambiada vista de configuración de formularios en el componente ProcessForm para mejorar usabilidad.
+    - (04/12/2012) - Agregada propiedad de configuración en tareas de usuario para hacer redirección automática de tareas.
+    - (04/12/2012) - BUG: Corregido error en filtrado de tareas en la bandeja de tareas de usuario.
+    - (04/12/2012) - Cambiada disposición de los filtros en la bandeja de tareas de usuario para evitar confusiones al crear nuevas instancias de procesos.
+    - (04/12/2012) - Mejorado el rendimiento de la bandeja de tareas de usuario.
+    - (29/11/2012) - BUG: Corregido error en Selector de objetos (SelectOne) en formularios de procesos cuando se incluyen datos temporales. 
+    - (21/11/2012) - Cambios a componente Modeler para agregar caché al applet de modelado y acelerar la carga del mismo.
+    - (14/11/2012) - BUG: Cambiado administrador de clases de SWBProcess para evitar llamar al compilador de código interno cuando hay scripts vacíos.
+    - (29/10/2012) - Modificado componente de exportación de configuración de procesos para permitir la exportación de roles de usuarios.
+    - (18/10/2012) - BUG: Corregida carga de archivos en repositorio de documentos de procesos.
+4.2.1.0
+    - (25/09/2012) - BUG: Corregida carga de clases compiladas al vuelo para ontologías configuradas para no generar código.
+    - (24/09/2012) - Modificado componente de exportación de configuración de procesos para permitir la carga del archivo de importación.
+4.2.0.5
+    - (31/08/2012) - Modificado componente de formulario de procesos para agregar soporte a firmado electrónico en las tareas de usuario.
+    - (31/08/2012) - Creados objetos para certificados de firma electrónica en procesos de negocio.
+    - (14/08/2012) - Agregada notificación de resultado de validación de campos en el manejador de formularios de procesos.
+    - (02/08/2012) - BUG: Corregido error al actualizar elementos de forma en el manejador de formularios de procesos.
+    - (27/07/2012) - BUG: Corregida validación que permitía acceder a tareas cerradas mediante su URL directa.
+    - (26/07/2012) - BUG: Corregida redirección a bandeja de tareas en el manejador de formularios de procesos al cancelar tarea.
+    - (26/07/2012) - Agregado campo de descripción en el servicio de almacenamiento de documento en repositorio.
+    - (25/07/2012) - BUG: Corregida redirección a bandeja de tareas en el manejador de formularios de procesos al concluir tarea.
+    - (24/07/2012) - BUG: Corregido nombre de estilo HTML en el modo avanzado del manejador de formularios de procesos.
+    - (04/07/2012) - Modificado componente de creación de procesos para su uso como estrategia.
+    - (04/07/2012) - BUG: Corregido error de filtrado en permisis para creación de procesos en el componente CreateProcessInstance.
+    - (15/06/2012) - BUG: Corregidos errores de validación en observador de nodos de procesos.
+    - (15/06/2012) - BUG: Corregidos errores de validación en manejador de formularios de procesos.
+    - (22/05/2012) - BUG: Corregidos errores de validación en recurso de reportes de procesos en la administración de SWB Process.
+    - (18/04/2012) - BUG: Corregido error en bandeja de tareas que mostraba confirmación de creación de procesos al refrescar la página.
+    - (11/04/2012) - BUG: Corregido error en configuración de eventos de mensaje.
+    - (03/04/2012) - Implementado componente de exportación de configuración de procesos.
+    - (03/04/2012) - Implementados eventos de envío y recepción de mensaje.
+    - (28/03/2012) - BUG: Corregido error en paginación en el monitor de procesos que mostraba mal la última página.
+    - (27/03/2012) - Cambiado estilo de paginación de tareas en la bandeja.
+    - (27/03/2012) - BUG: Corregido error en paginación de tareas de la bandeja que mostraba mal la última página.
+    - (23/03/2012) - BUG: Agregada validación para evitar que los procesos se detengan cuando no se carga un archivo en tareas de usuario.
+    - (09/03/2012) - BUG: Eliminada etiqueta "Datos generales" del fieldset en el formulario de procesos.
+    - (08/03/2012) - BUG: Corregidas etiquetas de despliegue de propiedades de los procesos.
+    - (07/03/2012) - Agregada configuración de nombre de variable en la generación de documentos mediante tareas de servicio.
+    - (07/03/2012) - Agregado parseo de nombres de variables en las tareas de servicio.
+    - (07/03/2012) - BUG: Corregido error en extensión al generar un documento mediante tareas de servicio.
+    - (23/02/2012) - BUG: Corregido formato de despliegue de fechas de inicio y fin de instancias en bandeja de tareas y panel de monitoreo de procesos.
+    - (08/02/2012) - BUG: Corregida leyenda "null" en documentos sin estatus dentro de repositorio de procesos.
+    - (08/02/2012) - BUG: Corregido error de ordenamiento por fecha en la bandeja de tareas.
+    - (08/02/2012) - BUG: Corregida redirección al concluir una tarea de usuario.
+    - (18/01/2012) - BUG: Corregido error al transformar un objeto de procesos por no especificar el estado de los documentos.
+    - (27/12/2011) - BUG: Corregido error en formulario de procesos que generaba llaves duplicadas en las propiedades.
+    - (21/12/2011) - BUG: Eliminada propiedad swb:valid de configuración de formulario de procesos.
+    - (14/12/2011) - Agregada configuración de página de seguimiento en administración del panel de monitoreo.
+    - (14/12/2011) - BUG: Corregido error en repositorio que impedía descargar un archivo desde el detalle de versiones.
+    - (01/12/2011) - Cambiada ruta por defecto de los JSP para los componentes de SWB Process.
+    - (30/11/2011) - Agregada funcionalidad para ver los documentos generados por una instancia de proceso.
+    - (30/11/2011) - BUG: Corregida validación de accesos a los elementos de la bandeja de tareas para considerar al propietario de la tarea.
+    - (29/11/2011) - Agregados parsers para indexado y búsqueda de documentos del repositorio.
+    - (28/11/2011) - Agregada opción para eliminar instancias de procesos desde el panel de monitoreo.
+    - (24/11/2011) - Agregado componente para reportes de segregación de roles.
+    - (24/11/2011) - Agregada agrupación de procesos en combo para filtrado por proceso en la bandeja de tareas.
+    - (22/11/2011) - BUG: Corregido error de validación de accesos a los elementos de la bandeja de tareas.
+    - (22/11/2011) - Eliminado objeto ProcessWebPage y sus referencias.
+    - (04/11/2011) - BUG: Corregido filtro de procesos activos en inicio de nuevos procesos.
+    - (03/11/2011) - BUG: Corregido error en filtrado por estatus en bandeja de tareas.
+    - (21/10/2011) - Agregada propiedad de estado a los documentos en el repositorio de procesos.
+    - (21/10/2011) - Agregada opción de configuración de elementos por página en panel de monitoreo y bandeja de tareas.
+    - (20/10/2011) - BUG: Corregida malformación de URL de vista de diagrama de procesos en bandeja de tareas.
+    - (20/10/2011) - Agregado filtrado por grupo de usuarios en bandeja de tareas y panel de monitoreo.
+    - (20/10/2011) - BUG: Corregida revisión de permisos sobre las instancias de tareas en bandeja de tareas.
+    - (20/10/2011) - Cambiado filtrado de tareas en panel de monitoreo para mostrar las pendientes por defecto.
+    - (10/10/2011) - Cambiado filtrado de tareas en bandeja para mostrar las pendientes por defecto.
+    - (18/10/2011) - Agregado filtrado por grupo de usuarios y restricción de tipos de archivos en repositorio de procesos.
+    - (29/09/2011) - BUG: Corregida comunicación entre el applet de Modeler y la administración de SWB Portal.
+    - (15/09/2011) - Creado componente para seguimiento de traza de los procesos.
+    - (14/09/2011) - Creado monitor de procesos.
+    - (24/08/2011) - BUG: Corregido guardado de archivos con ruta completa en el repositorio de procesos.
+    - (11/08/2011) - BUG: Eliminados mensajes de debuggeo en el formulario de procesos y el modelador.
+    - (09/08/2011) - BUG: Corregido funcionamiento del formulario de procesos en Firefox y Safari.
+    - (01/08/2011) - Agregada paginación en panel de control de procesos.
+    - (01/08/2011) - Agregado ordenamiento por prioridad en panel de control de procesos.
+    - (28/07/2011) - Agregado panel de control de procesos.
+    - (01/06/2011) - Agregada configuración de servicios Web en configuración de tareas de servicio.
+    - (31/05/2011) - Agregado listado de operaciones de servicios Web en configuración de tareas de servicio.
+    - (30/05/2011) - Agregada vista de diagrama de procesos en bandeja de tareas.
+    - (27/05/2011) - Agregados íconos para acciones en el repositorio de documentos.
+    - (17/05/2011) - Agregado soporte para líneas con múltiples segmentos en objetos de conexión dentro de SWBP Modeler.
+    - (19/04/2011) - Incorporada definición de propiedades de elementos llamados.
+    - (14/04/2011) - Agregada propiedad para colecciones de objetos de datos.
+    - (29/03/2011) - BUG: Corrección para que los modelos existentes guarden correctamente las descripciones.
