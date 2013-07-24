@@ -216,36 +216,6 @@ public class SentimentalDataClassifier {
         
         if(externalString2Clasify==null) return;
         
-        //Filtrado por localización
-        boolean passLocalization=false;
-        try
-        {
-            if(stream.getGeoCenterLatitude()>0 && stream.getGeoCenterLongitude()>0 && stream.getGeoRadio()>0)
-            {
-                if(externalPost.getLatitude()>0 && externalPost.getLongitude() > 0)
-                {
-                    float streamNorth=stream.getGeoCenterLatitude()+stream.getGeoRadio();
-                    float streamEast=stream.getGeoCenterLongitude()+stream.getGeoRadio();
-                    float streamSouth=stream.getGeoCenterLatitude()-stream.getGeoRadio();
-                    float streamWest=stream.getGeoCenterLongitude()-stream.getGeoRadio();
-                    
-                    if(streamNorth>=externalPost.getLatitude() && streamSouth<=externalPost.getLatitude() && 
-                            streamEast>=externalPost.getLongitude() && streamWest<=externalPost.getLongitude())
-                    {
-                       passLocalization=true;
-                    }
-
-                }else{
-                    return; //No hace nada, ya que el stream tiene Latitud y longitud para filtrar y el mensaje NO
-                }
-            }
-        }catch(Exception e)
-        {
-            log.error(e);
-        }
-        
-        if(!passLocalization) return;
-        
         
         HashMap hmapValues=SWBSocialUtil.Classifier.classyfyText(externalString2Clasify);
         float promSentimentalValue=((Float)hmapValues.get("promSentimentalValue")).floatValue();

@@ -91,6 +91,8 @@ public class SWBSocialUtil implements SWBAppObject {
     static public String PHOTO="photo";
     static public String VIDEO="video";
     static public final String CLASSIFYSENTMGS_PROPNAME="classifySentMgs";
+    static public double EART_RADIUS_KM = 6371.01;   //Kilometros
+    static public double EART_RADIUS_MI = 3958.762079; //Millas
     
     
     //private static Properties prop = new Properties();

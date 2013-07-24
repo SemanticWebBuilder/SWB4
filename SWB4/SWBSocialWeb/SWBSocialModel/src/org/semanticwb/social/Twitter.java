@@ -463,44 +463,56 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
                 stopListenAlive(stream);
             }
             System.out.println("Entra a Twitter listenAlive-2:"+stream.getURI()+"|"+this.getURI());
-            
-            //WebSite wsite=WebSite.ClassMgr.getWebSite(stream.getSemanticObject().getModel().getName());
             StatusListener listener = new SWBSocialStatusListener(stream, this, ListenAlives);
+            
             /*create filterQuery*/
             FilterQuery query = new FilterQuery();
-            /*
-            float streamNorth=stream.getGeoCenterLatitude()+stream.getGeoRadio();
-            float streamEast=stream.getGeoCenterLongitude()+stream.getGeoRadio();
-            float streamSouth=stream.getGeoCenterLatitude()-stream.getGeoRadio();
-            float streamWest=stream.getGeoCenterLongitude()-stream.getGeoRadio();
-            * */
-            //NOTE: format of values: {minLongitude, minLatitude}, {...}
-             //double[][] loc = {{-118, 37}, {-86, 33}}; //Bounding Box de San Francisco
-            //double[][] loc = {{37.78452999999, -122.39532395324}, {37.78452999998, -122.39532395323}}; //Bounding Box de San Francisco
-            //double[][] loc = {{32.718620, -86.703392}, {14.532850, -118.867172}}; //Bounding Box de México (País) Encontrado en http://isithackday.com/geoplanet-explorer/index.php?woeid=23424900
-            
-            //System.out.println("Envio esto como bounding box a filtrar/Nort:"+streamNorth+",East:"+streamEast+",South:"+streamSouth+",West:"+streamWest);
-            //double[][] loc = {{streamNorth, streamEast}, {streamSouth, streamWest}};
-            
-            //query.locations(loc);
+            try
+            {
+                if(stream.getGeoCenterLatitude()!=0 && stream.getGeoCenterLongitude()!=0)
+                {
+                        double eart_Radio=SWBSocialUtil.EART_RADIUS_KM;
+                        if(stream.getGeoDistanceUnit().equals("MI"))
+                        {
+                            eart_Radio=SWBSocialUtil.EART_RADIUS_MI;
+                        }
+                        double distance = 50;
+                        if(stream.getGeoRadio()>0)
+                        {
+                            distance=stream.getGeoRadio();
+                        }
+                        
+                        org.semanticwb.social.util.GeoLocation myLocation = org.semanticwb.social.util.GeoLocation.fromDegrees(stream.getGeoCenterLatitude(), stream.getGeoCenterLongitude());
+                        org.semanticwb.social.util.GeoLocation[] boundingCoordinates =myLocation.boundingCoordinates(distance, eart_Radio);
+                        
+                        //SW
+                        System.out.println("S:"+boundingCoordinates[0].getLatitudeInDegrees());
+                        System.out.println("W:"+boundingCoordinates[0].getLongitudeInDegrees());
+                        
+                        //NE
+                        System.out.println("N:"+boundingCoordinates[1].getLatitudeInDegrees());
+                        System.out.println("E:"+boundingCoordinates[1].getLongitudeInDegrees());
+                        
+                        double[][] boundingBox2FindTweets = {{boundingCoordinates[0].getLatitudeInDegrees(), boundingCoordinates[0].getLongitudeInDegrees()}, 
+                            {boundingCoordinates[1].getLatitudeInDegrees(), boundingCoordinates[1].getLongitudeInDegrees()}};
+                        
+                        query.locations(boundingBox2FindTweets);
 
+                }
+            }catch(Exception e)
+            {
+                log.error(e);
+            }
+            
+            
             //Palabras a monitorear
-            String words2Monitor=getPhrases(stream.getPhrase());
-            System.out.println("words2Monitor:"+words2Monitor);
+            String words2Monitor=stream.getPhrase();
             if(words2Monitor!=null && words2Monitor.trim().length()>0)
             {
                 String[] tr = {words2Monitor};
                 query.track(tr);
                 System.out.println("words2Monitor--1:"+words2Monitor);
             }
-            /*
-            System.out.println("AppKey:"+getAppKey());
-            System.out.println("SecretKey:"+getSecretKey());
-            System.out.println("AccessToken:"+getAccessToken());
-            System.out.println("AccessTokenSecret:"+getAccessTokenSecret());
-            */
-            
-            
             
             TwitterStream twitterStream = new TwitterStreamFactory(configureOAuth().build()).getInstance();
             
@@ -512,8 +524,7 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
             //twitterStream.sample();
             ListenAlives.put(stream.getURI()+"|"+this.getURI(), twitterStream);
             
-            
-             System.out.println("Entra a Twitter listenAlive-4-JorgeJJ:"+stream.getURI()+"|"+this.getURI());
+            System.out.println("Entra a Twitter listenAlive-4-JorgeJJ:"+stream.getURI()+"|"+this.getURI());
         } catch (Exception e) {
             System.out.println(e.getMessage());
             log.error(e);
@@ -523,7 +534,7 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
     //@Override
     
     public void stopListenAlive(Stream stream) {
-        System.out.println("Entra a stopListenAliveJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJ");
+        System.out.println("Entra a stopListenAlive");
         if(ListenAlives.containsKey(stream.getURI()+"|"+this.getURI()))
         {
             TwitterStream twitterStream=ListenAlives.get(stream.getURI()+"|"+this.getURI());
