@@ -27,7 +27,7 @@
 
 <%!
 
-    public static String getTagsFromPost(JSONObject objectTags, String postContent, SWBResourceURL renderURL){
+    /*public static String getTagsFromPost(JSONObject objectTags, String postContent, SWBResourceURL renderURL){
         String postContentWithUrl = postContent;
         Iterator<?> keyTags = objectTags.keys();
         try{
@@ -388,7 +388,7 @@
             System.out.println("Error getting user information"  + e.getMessage());
         }
         return fbResponse;
-    }
+    }*/
 %>
 
 <%

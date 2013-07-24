@@ -556,11 +556,9 @@
     HashMap<String, String> params = new HashMap<String, String>(2);
     params.put("access_token", facebookBean.getAccessToken());
     
-    params.put("limit", "5");
+    params.put("limit", "25");
     params.put("fields", "id,from,to,message,message_tags,story,story_tags,picture,caption,link,object_id,application,source,name,description,properties,icon,actions,privacy,type,status_type,created_time,likes,comments.limit(5),place");    
-    
-    //params.put("callback", "?");
-    //String fbResponse = postRequest(params, "https://graph.facebook.com/" + facebookBean.getFacebookUserId() + "/feed",
+
     //SELECT status_id, time, source, message FROM status WHERE uid = me() Filtering status only
     //POSTS WITH LOCATION https://graph.facebook.com/me/home?with=location
     //GET  ALL THE POSTS FROM USER FEED
