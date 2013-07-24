@@ -63,11 +63,7 @@
     params.put("limit", "25");    
     String since = (String)session.getAttribute("since");
     System.out.println("session.getAttribute(since):" + session.getAttribute("since"));
-    
-    //params.put("callback", "?");
-    //String fbResponse = postRequest(params, "https://graph.facebook.com/" + facebookBean.getFacebookUserId() + "/feed",
-    //SELECT status_id, time, source, message FROM status WHERE uid = me() Filtering status only
-    //POSTS WITH LOCATION https://graph.facebook.com/me/home?with=location
+
     //GETS ONLY MY POSTS
     String fbResponse = postRequest(params, "https://graph.facebook.com/me/feed",
                         "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95", "GET");
@@ -75,18 +71,6 @@
     SWBResourceURL renderURL = paramRequest.getRenderUrl().setParameter("suri", objUri).setParameter("currentTab", WALL_TAB);
 %>
 
-<div dojoType="dojox.layout.ContentPane">
-    <script type="dojo/method">
-        <%
-            if(since == null || since.equals("0")){
-                System.out.println("Calling the funtion!");
-        %>
-                //setInterval(function(){ postHtml('<%=renderURL.setMode("newPostsAvailable")%>','<%=objUri%>newPostsWallAvailable'); },60000);
-        <%
-            }
-        %>
-   </script>
-</div>
 <div align="center" id="<%=objUri%>getMorePostsWall" dojoType="dijit.layout.ContentPane">
     <label id="<%=objUri%>morePostsWallLabel"><a href="#" onclick="appendHtmlAt('<%=renderURL.setMode("getMorePosts").setParameter("until", untilPost).setParameter("scope", "wall")%>','<%=objUri%>getMorePostsWall', 'bottom');try{this.parentNode.parentNode.removeChild( this.parentNode );}catch(noe){}; return false;">More posts</a></label>
 </div>
