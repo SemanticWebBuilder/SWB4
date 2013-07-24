@@ -396,11 +396,16 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
                     }
                 }catch(TwitterException te){
                     if(te.getErrorCode() == 88){
-                        //System.out.println("getSecondsUntilReset: " + te.getRateLimitStatus().getSecondsUntilReset());
-                        canGetMoreTweets = false;
-                        //System.out.println("\n\n\n RATE LIMIT EXCCEDED!!!");
+                        log.error("Error getting tweets SEARCH - RATE LIMIT EXCCEDED:"  + te );
                     }
-                    log.error("Error getting tweets:"  + te );
+                    if(te.getErrorCode() == 89){
+                        log.error("Error getting tweets SEARCH - AUTHENTICACION CREDENTIALS MISSING OR INCORRECT"  + te );
+                    }
+                    log.error("Error getting tweets SEARCH:"  + te );
+                    canGetMoreTweets = false;
+                }catch(Exception ex){
+                    log.error("Error getting tweets SEARCH"  + ex );
+                    canGetMoreTweets = false;
                 }
 //                if(aListExternalPost.size()>0){
 //                    new Classifier(aListExternalPost, stream, this);
