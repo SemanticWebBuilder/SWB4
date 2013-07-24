@@ -149,6 +149,13 @@ public class ProcessForm extends GenericResource {
                 base.setAttribute("btnSaveLabel", "Guardar");
             }
             
+            if ("showHeader".equals(toggle)) {
+                if(base.getAttribute("showHeader", "").equals("use")) {
+                    base.removeAttribute("showHeader");
+                } else {
+                    base.setAttribute("showHeader", "use");
+                }
+            }
             if ("accept".equals(toggle)) {
                 if(base.getAttribute("btnAccept", "").equals("use")) {
                     base.removeAttribute("btnAccept");
@@ -821,9 +828,13 @@ public class ProcessForm extends GenericResource {
             urlact.setAction(ACT_PROCESS);
             out.println(SWBForms.DOJO_REQUIRED);
             
+            boolean showHeader = base.getAttribute("showHeader", "").equals("use")?true:false;
             out.println("<script type=\"text/javascript\">function validateForm" + foi.getId() + "(form) {var frm = dijit.byId(form); if (frm.isValid()) {return true;} else {alert('Algunos de los datos no son válidos. Verifique la información proporcionada.'); return false;}}</script>");
+            if (showHeader) {
+                out.println("<h1>"+foi.getFlowNodeType().getTitle()+"</h1>");
+            }
             out.println("<div id=\"processForm\">");
-            out.println("<form name=\""+foi.getId()+"\" id=\"" + foi.getId() + "/form\" dojoType=\"dijit.form.Form\" class=\"swbform\" action=\"" + urlact + "\" method=\"post\" onSubmit=\"return validateForm"+foi.getId()+"('"+foi.getId()+"/form');\">");
+            out.println("<form name=\""+foi.getId()+"\" id=\"" + foi.getId() + "/form\" dojoType=\"dijit.form.Form\" action=\"" + urlact + "\" method=\"post\" onSubmit=\"return validateForm"+foi.getId()+"('"+foi.getId()+"/form');\">");
             out.println("<input type=\"hidden\" name=\"suri\" value=\"" + suri + "\"/>");
             out.println("<input type=\"hidden\" name=\"smode\" value=\"edit\"/>");
 
@@ -871,7 +882,7 @@ public class ProcessForm extends GenericResource {
                             SWBProcessFormMgr fmgr = new SWBProcessFormMgr(foi);
                             FormElement ele = fmgr.getFormElement(semprop, propsMap.get("varName"));
                             if (!printHeaders) {
-                                out.println("<fieldset>");
+                                //out.println("<fieldset>");
         //                        out.println("<legend>Datos Generales</legend>");
                                 out.println("<table>");
                                 printHeaders = true;
@@ -905,7 +916,7 @@ public class ProcessForm extends GenericResource {
 
                 if (printHeaders) {
                     out.println("    </table>");
-                    out.println("</fieldset>");
+                    //out.println("</fieldset>");
                 }
             }
 
@@ -915,7 +926,7 @@ public class ProcessForm extends GenericResource {
             boolean btnCancel = base.getAttribute("btnCancel", "").equals("use")?true:false;
             
             if (btnSave || btnAccept || btnReject || btnCancel) {
-                out.println("<fieldset><span align=\"center\">");
+                out.println("<p class=\"submit\"><span align=\"center\">");
             }
             if (btnSave) {
                 out.println("<button dojoType=\"dijit.form.Button\" type=\"submit\">"+base.getAttribute("btnSaveLabel","Guardar")+"</button>");
@@ -930,7 +941,7 @@ public class ProcessForm extends GenericResource {
                 out.println("<button dojoType=\"dijit.form.Button\" onclick=\"window.location='" + foi.getUserTaskInboxUrl() + "?suri=" + suri + "'\">"+base.getAttribute("btnCancelLabel","Regresar")+"</button>");
             }
             if (btnSave || btnAccept || btnReject || btnCancel) {
-                out.println("</span></fieldset>");
+                out.println("</span></p>");
             }
             out.println("</form>");
             out.println("</div>");
