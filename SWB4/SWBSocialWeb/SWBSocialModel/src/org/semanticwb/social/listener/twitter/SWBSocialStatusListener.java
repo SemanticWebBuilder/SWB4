@@ -12,6 +12,7 @@ import org.semanticwb.model.SWBModel;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.social.SocialNetwork;
 import org.semanticwb.social.Stream;
+import twitter4j.GeoLocation;
 import twitter4j.MediaEntity;
 import twitter4j.Place;
 import twitter4j.StallWarning;
@@ -79,15 +80,13 @@ public class SWBSocialStatusListener implements twitter4j.StatusListener {
                     twitterStream.shutdown();
                     ListenAlives.remove(stream.getURI()+"|"+socialNetwork.getURI());
                     System.out.println("DETUVO LA CONEXION EN SWBSocialStatusListener/onStatus-de:"+stream.getURI()+"|"+socialNetwork.getURI());
+                    return;
                 }
             }
             //Termina Bloque de código que debemos agregar, De manera personalizada para c/red social, cuando soporten Listener de tipo KeepAlive.
             
             System.out.println("Entra a SWBSocialStatusListener/onStatus-1:"+socialNetwork);
             
-            //if (status.getGeoLocation() != null)
-
-            Place place=status.getPlace();
             //Investigar cuales son los 4 puntos cardinales del bounding Box de México y los tweets que lleguen no deben ser mayores
             //a esos 4 float que lleguen, esto con los números que nos llegan en la parte de código que se encuentra comentada aquí abajo.
             /*

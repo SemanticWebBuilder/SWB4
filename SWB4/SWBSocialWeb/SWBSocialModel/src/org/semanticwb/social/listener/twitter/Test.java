@@ -5,15 +5,8 @@
 package org.semanticwb.social.listener.twitter;
 
 import java.io.IOException;
-import twitter4j.FilterQuery;
-import twitter4j.StallWarning;
-import twitter4j.Status;
-import twitter4j.StatusDeletionNotice;
-import twitter4j.StatusListener;
+import org.semanticwb.social.util.GeoLocation;
 import twitter4j.TwitterException;
-import twitter4j.TwitterStream;
-import twitter4j.TwitterStreamFactory;
-import twitter4j.conf.Configuration;
 import twitter4j.conf.ConfigurationBuilder;
 
 /**
@@ -23,6 +16,25 @@ import twitter4j.conf.ConfigurationBuilder;
 public class Test {
 
     public static void main(String[] args) throws TwitterException, IOException {
+        //El resultado sera en la misma unidad de medida que sea parado el Radio
+        double EARTRADIUS_KM = 6371.01;   //KM
+        double EARTRADIUS_MI = 3958.762079;
+        GeoLocation myLocation = GeoLocation.fromDegrees(19.319901, -99.152130);
+        double distance = 50;   //El radio que le estamos enviando, este es variable
+        GeoLocation[] boundingCoordinates =myLocation.boundingCoordinates(distance, EARTRADIUS_KM);
+        System.out.println("boundingCoordinates:"+boundingCoordinates);
+      
+        //NE
+        System.out.println("N:"+boundingCoordinates[1].getLatitudeInDegrees());
+        System.out.println("E:"+boundingCoordinates[1].getLongitudeInDegrees());
+        
+        //SW
+        System.out.println("S:"+boundingCoordinates[0].getLatitudeInDegrees());
+        System.out.println("W:"+boundingCoordinates[0].getLongitudeInDegrees());
+        
+        
+        
+        /*
         StatusListener listener = new StatusListener() {
             public void onStatus(Status status) {
                 System.out.println(status.getUser().getName() + " : " + status.getText());
@@ -62,6 +74,7 @@ public class Test {
         
         // sample() method internally creates a thread which manipulates TwitterStream and calls these adequate listener methods continuously.
         //twitterStream.sample();
+        * */
     }
     
     

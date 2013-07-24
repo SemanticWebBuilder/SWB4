@@ -32,7 +32,6 @@ import twitter4j.FilterQuery;
 import twitter4j.Query;
 import twitter4j.Status;
 import twitter4j.StatusUpdate;
-//import twitter4j.Tweet;
 import twitter4j.TwitterException;
 import twitter4j.TwitterFactory;
 import twitter4j.TwitterStream;
@@ -460,17 +459,29 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
     public void listenAlive(Stream stream) {
         try {
             System.out.println("Entra a Twitter listenAlive-1:"+stream.getURI()+"|"+this.getURI());
-            if(ListenAlives.containsKey(stream.getURI()+"|"+this.getURI())) return;
+            if(ListenAlives.containsKey(stream.getURI()+"|"+this.getURI())) {
+                stopListenAlive(stream);
+            }
             System.out.println("Entra a Twitter listenAlive-2:"+stream.getURI()+"|"+this.getURI());
             
             //WebSite wsite=WebSite.ClassMgr.getWebSite(stream.getSemanticObject().getModel().getName());
             StatusListener listener = new SWBSocialStatusListener(stream, this, ListenAlives);
             /*create filterQuery*/
             FilterQuery query = new FilterQuery();
+            /*
+            float streamNorth=stream.getGeoCenterLatitude()+stream.getGeoRadio();
+            float streamEast=stream.getGeoCenterLongitude()+stream.getGeoRadio();
+            float streamSouth=stream.getGeoCenterLatitude()-stream.getGeoRadio();
+            float streamWest=stream.getGeoCenterLongitude()-stream.getGeoRadio();
+            * */
             //NOTE: format of values: {minLongitude, minLatitude}, {...}
-            //double[][] loc = {{-118, 37}, {-86, 33}}; //Bounding Box de San Francisco
+             //double[][] loc = {{-118, 37}, {-86, 33}}; //Bounding Box de San Francisco
             //double[][] loc = {{37.78452999999, -122.39532395324}, {37.78452999998, -122.39532395323}}; //Bounding Box de San Francisco
             //double[][] loc = {{32.718620, -86.703392}, {14.532850, -118.867172}}; //Bounding Box de México (País) Encontrado en http://isithackday.com/geoplanet-explorer/index.php?woeid=23424900
+            
+            //System.out.println("Envio esto como bounding box a filtrar/Nort:"+streamNorth+",East:"+streamEast+",South:"+streamSouth+",West:"+streamWest);
+            //double[][] loc = {{streamNorth, streamEast}, {streamSouth, streamWest}};
+            
             //query.locations(loc);
 
             //Palabras a monitorear
@@ -488,6 +499,8 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
             System.out.println("AccessToken:"+getAccessToken());
             System.out.println("AccessTokenSecret:"+getAccessTokenSecret());
             */
+            
+            
             
             TwitterStream twitterStream = new TwitterStreamFactory(configureOAuth().build()).getInstance();
             
