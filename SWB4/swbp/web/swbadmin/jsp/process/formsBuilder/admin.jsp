@@ -46,7 +46,11 @@ boolean btnReject = false;
 boolean btnCancel = false;
 boolean btnSave = false;
 boolean useSign = false;
+boolean showHeader = false;
 
+if (base.getAttribute("showHeader") != null) {
+    showHeader = true;
+}
 if (base.getAttribute("btnAccept") != null) {
     btnAccept = true;
 }
@@ -122,6 +126,7 @@ addPropsUrl.setParameter(ProcessForm.ATT_TASK, task.getEncodedURI());
     <div dojoType="dijit.Toolbar" region="top">
         <form action="<%=toggle%>" method="post">
             <button iconClass="propIcon" <%=disabled%> dojoType="dijit.form.Button" onclick="showDialog('<%=addPropsUrl%>','Agregad propiedad'); return false;">Propiedad</button>
+            <button name="btns" <%=disabled%> iconClass="headerIcon" onclick="window.location='<%=toggle%>?btns=showHeader'; return false;" <%=showHeader?"checked":""%> dojoType="dijit.form.ToggleButton">Mostrar encabezado</button>
             <span dojoType="dijit.ToolbarSeparator"></span>
             <button name="btns" <%=disabled%> iconClass="acceptIcon" onclick="window.location='<%=toggle%>?btns=accept'; return false;" <%=btnAccept?"checked":""%> dojoType="dijit.form.ToggleButton">Bot&oacute;n concluir</button>
             <button name="btns" <%=disabled%> iconClass="rejectIcon" onclick="window.location='<%=toggle%>?btns=reject'; return false;" <%=btnReject?"checked":""%> dojoType="dijit.form.ToggleButton">Bot&oacute;n rechazar</button>
@@ -137,10 +142,12 @@ addPropsUrl.setParameter(ProcessForm.ATT_TASK, task.getEncodedURI());
         if (ProcessForm.ADM_MODESIMPLE.equals(admMode)) {
             %>
             <div class="formBody container" autoSync="true" dojoType="dojo.dnd.Source" skipForm="true">
-                <div id="header1">
-                    <h1><%=task.getTitle()%></h1>
-                    <hr>
-                </div>
+                <%if (showHeader) {%>
+                    <div id="header1">
+                        <h1><%=task.getTitle()%></h1>
+                        <hr>
+                    </div>
+                <%}%>
                 <div id="separator1" class="separator dojoDndItem">
                     <div class="lineSeparator"></div>
                 </div>
