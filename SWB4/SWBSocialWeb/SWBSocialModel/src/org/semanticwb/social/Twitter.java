@@ -22,7 +22,6 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.SWBContext;
-import org.semanticwb.model.WebSite;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.social.listener.Classifier;
@@ -41,7 +40,6 @@ import twitter4j.conf.ConfigurationBuilder;
 import twitter4j.GeoLocation;
 import twitter4j.StatusListener;
 import twitter4j.TwitterStreamFactory;
-import twitter4j.conf.Configuration;
 
 
 public class Twitter extends org.semanticwb.social.base.TwitterBase {
