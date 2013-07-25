@@ -59,12 +59,12 @@ public class SWBMailSender extends java.lang.Thread
     public void run()
     {
         
-        while (true)
+        //while (true)
         {
-            try
-            {
-                this.currentThread().sleep(20000);
-            }catch(Exception e){log.error(e);}
+//            try
+//            {
+//                this.currentThread().sleep(20000);
+//            }catch(Exception e){log.error(e);}
             try
             {
                 while (!emails.isEmpty())
