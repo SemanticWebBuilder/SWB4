@@ -84,6 +84,7 @@ if (paramRequest.getCallMethod() == SWBParamRequest.Call_STRATEGY) {%>
     int ontime = (Integer)request.getAttribute("ontime");
     int delayed = (Integer)request.getAttribute("delayed");
     
+    String processInfo = (String)request.getAttribute("participation");
     Process p = (Process)ont.getGenericObject(suri);
     if (p == null) {%>
         <script>
@@ -96,6 +97,7 @@ if (paramRequest.getCallMethod() == SWBParamRequest.Call_STRATEGY) {%>
         <div class="bandeja-combo"><strong><span style="font-size: medium">Desempe&ntilde;o</span></strong></div>
         <%if (tinstances != null && !tinstances.isEmpty()) {%>
             <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+            <script src="/swbadmin/jsp/process/d3.v3.min.js" charset="utf-8"></script> 
             <script type="text/javascript">
                 google.load("visualization", "1", {packages:["corechart"]});
                 google.setOnLoadCallback(drawChart);
@@ -157,6 +159,167 @@ if (paramRequest.getCallMethod() == SWBParamRequest.Call_STRATEGY) {%>
                     }
                     %>
                 }
+                
+                function updateD3Chart () {
+                    var nodes = flatten(root);
+                    var links = d3.layout.tree().links(nodes);
+                    
+                    force.nodes(nodes)
+                        .links(links)
+                        .start();
+                    
+                    var link = vis.selectAll("line.link")
+                        .data(links, function(d) {
+                            return d.target.id;
+                        });
+                        
+                    link.enter().insert("svg:line", ".node")
+                        .attr("class", "link")
+                        .attr("x1", function(d) {
+                            return d.source.x;
+                        })
+                        .attr("y1", function(d) {
+                            return d.source.y;
+                        })
+                        .attr("x2", function(d) {
+                            return d.target.x;
+                        })
+                        .attr("y2", function(d) {
+                            return d.target.y;
+                        });
+                        
+                    link.exit().remove();
+                    
+                    var node = vis.selectAll("g.node")
+                        .data(nodes, function(d) {
+                            return d.id;
+                        });
+                        
+                    node.select("circle")
+                        .style("fill", color);
+                    
+                    var nodeEnter = node.enter().append("svg:g")
+                        .attr("class", "node")
+                        .attr("transform", function(d) {
+                            return "translate(" + d.x + "," + d.y + ")";
+                        })
+                        .call(force.drag);
+                
+                    /*nodeEnter.append("svg:circle")
+                        .attr("r", function(d) {
+                            return  d.size;
+                        })
+                        .on("click", click)
+                        .on("mouseover", function(d) {
+                            d3.select(this)
+                            //.transition()
+                            .attr("r", function(d) {
+                                console.log("on selected "+d.size);
+                                return d.size * 2;
+                            });
+                            console.log("over "+d.name);
+                        })
+                        .on("mouseout", function(d) {
+                            d3.select(this)
+                            .attr("r", function(d) {
+                                console.log("on unselected "+d.size);
+                                return d.size;
+                            });
+                            console.log("out "+d.name);
+                        })
+                        .style("fill", color);*/
+    
+                    nodeEnter.append("svg:image")
+                        .attr("xlink:href", function(d) {
+                            if (d.type && d.type==="process") {
+                                return "<%="/work/models/"+site.getId()+"/css/images/icono-iniciado.gif"%>";
+                            } else {
+                                return "<%="/work/models/"+site.getId()+"/css/images/colaborador.png"%>";
+                            }
+                        })
+                        .attr("x", -10)
+                        .attr("y", -10)
+                        .attr("width", 20)
+                        .attr("height", 20)
+                        .style("fill", color);
+                
+                    nodeEnter.append("svg:text")
+                        .attr("font-family", "Arial")
+                        .attr("font-size", "11")
+                        .attr("stroke", "none")
+                        .attr("fill", "#000000")
+                        .attr("text-anchor", "middle")
+                        .attr("dy", "2em")
+                        .text(function(d) {
+                            return d.name;
+                        });
+                        
+                    nodeEnter.append("svg:title")
+                        .attr("class", "nodetext")
+                        .attr("text-anchor", "middle")
+                        .attr("dy", ".15em")
+                        .text(function(d,i) {
+                            if (d.participa && d.participa !== null) {
+                                return d.participa +" participaciones";
+                            } else {
+                                return d.name;
+                            }
+                        });
+                        
+                    node.exit().remove();
+                    
+                    link = vis.selectAll("line.link");
+                    node = vis.selectAll("g.node");
+                    
+                    force.on("tick", function() {
+                        link.attr("x1", function(d) {
+                            return d.source.x;
+                        })
+                        .attr("y1", function(d) {
+                            return d.source.y;
+                        })
+                        .attr("x2", function(d) {
+                            return d.target.x;
+                        })
+                        .attr("y2", function(d) {
+                            return d.target.y;
+                        });
+                        
+                        node.attr("transform", function(d) {
+                            return "translate(" + d.x + "," + d.y + ")";
+                        });
+                    });
+                }
+                
+                var d3Color = d3.scale.category20();
+                
+                function color(d, i) {
+                    return d3Color(i);
+                }
+                
+                function click(d) {
+                    if (d.children) {
+                        d._children = d.children;
+                        d.children = null;
+                    } else {
+                        d.children = d._children;
+                        d._children = null;
+                    }
+                    updateD3Chart();
+                }
+                
+                function flatten(root) {
+                    var nodes = [], i = 0;
+                    function recurse(node) {
+                        if (node.children)
+                            node.children.forEach(recurse);
+                        if (!node.id)
+                            node.id = ++i;
+                        nodes.push(node);
+                    }
+                    recurse(root);
+                    return nodes;
+                }
             </script>
             <%if (processing == 0 && closed == 0 && aborted == 0) {
                         
@@ -179,6 +342,37 @@ if (paramRequest.getCallMethod() == SWBParamRequest.Call_STRATEGY) {%>
                 <div class="processChartPie" id="overdueGraph"></div>
                 <%
             }%>
+            <div class="processChartPie" id="participationGraph"></div>
+            <script type="text/javascript">
+                var w = 400, 
+                    h = 200;
+            
+                var theJson = JSON.parse('<%=processInfo%>');
+
+                var force = d3.layout.force()
+                    .charge(-800)
+                    .distance(80)
+                    .gravity(.05)
+                    //.linkDistance(50)
+                    .size([w, h]);
+
+                var vis = d3.select("#participationGraph").append("svg:svg")
+                    .attr("width", w)
+                    .attr("height", h);
+
+                vis.append("svg:text")
+                        .text("Grafo de participación")
+                        .attr("x","67")
+                        .attr("y","22.85")
+                        .attr("font-family", "Arial")
+                        .attr("font-size", "11")
+                        .attr("font-weight", "bold")
+                        .attr("stroke", "none")
+                        .attr("fill", "#000000");
+                
+                var root = theJson;
+                updateD3Chart();
+            </script>
             <div class="bandeja-combo"><strong><span style="font-size: medium">Instancias del proceso</span></strong></div>
             <div>
                 <table class="tabla-bandeja">
