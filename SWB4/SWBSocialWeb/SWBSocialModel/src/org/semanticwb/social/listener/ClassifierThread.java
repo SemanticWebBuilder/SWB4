@@ -32,6 +32,7 @@ public class ClassifierThread extends java.lang.Thread {
     ArrayList <ExternalPost> aListExternalPost=null;
     Stream stream=null;
     SocialNetwork socialNetwork=null;
+    boolean classifyGeoLocation=false;
 
     /**
      * Creates a new instance of WBMessageServer.
@@ -43,10 +44,11 @@ public class ClassifierThread extends java.lang.Thread {
         this.post = post;
     }**/
     
-    public ClassifierThread(ArrayList <ExternalPost> aListExternalPost, Stream stream, SocialNetwork socialNetwork) throws java.net.SocketException {
+    public ClassifierThread(ArrayList <ExternalPost> aListExternalPost, Stream stream, SocialNetwork socialNetwork, boolean classifyGeoLocation) throws java.net.SocketException {
         this.aListExternalPost = aListExternalPost;
         this.stream = stream;
         this.socialNetwork = socialNetwork;
+        this.classifyGeoLocation=classifyGeoLocation;
     }
 
     /* (non-Javadoc)
@@ -61,7 +63,7 @@ public class ClassifierThread extends java.lang.Thread {
           while(itExternalThreads.hasNext())
           {
               ExternalPost externalPost=itExternalThreads.next();
-              new SentimentalDataClassifier(externalPost, stream, socialNetwork);
+              new SentimentalDataClassifier(externalPost, stream, socialNetwork, classifyGeoLocation);
           }
            /*
             String words2classify = null;

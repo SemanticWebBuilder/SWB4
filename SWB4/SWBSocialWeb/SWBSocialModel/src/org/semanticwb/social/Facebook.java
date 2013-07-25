@@ -406,7 +406,7 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
                             //Si el ArrayList tiene tamaño mayor a 0, entonces es que existen mensajes para enviar al clasificador
                             if(aListExternalPost.size()>0)
                             {
-                                new Classifier(aListExternalPost, stream, this);
+                                new Classifier(aListExternalPost, stream, this, false);
                             }
                             if (cont == Facebook.QUERYLIMIT) {
                                 isThereMoreMsgs = true;  //Esto indica la posibilidad de que en una consulta siguiente, se obtengan más mensajes
