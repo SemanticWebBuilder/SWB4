@@ -110,6 +110,29 @@ public abstract class ProcessRuleGroupBase extends org.semanticwb.process.model.
             return it;
         }
        /**
+       * Gets all org.semanticwb.process.model.ProcessRuleGroup with a determined Documentation
+       * @param value Documentation of the type org.semanticwb.process.model.Documentation
+       * @param model Model of the org.semanticwb.process.model.ProcessRuleGroup
+       * @return Iterator with all the org.semanticwb.process.model.ProcessRuleGroup
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.ProcessRuleGroup> listProcessRuleGroupByDocumentation(org.semanticwb.process.model.Documentation value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ProcessRuleGroup> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_hasDocumentation, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.ProcessRuleGroup with a determined Documentation
+       * @param value Documentation of the type org.semanticwb.process.model.Documentation
+       * @return Iterator with all the org.semanticwb.process.model.ProcessRuleGroup
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.ProcessRuleGroup> listProcessRuleGroupByDocumentation(org.semanticwb.process.model.Documentation value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ProcessRuleGroup> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_hasDocumentation,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
        * Gets all org.semanticwb.process.model.ProcessRuleGroup with a determined ProcessRule
        * @param value ProcessRule of the type org.semanticwb.process.model.ProcessRule
        * @param model Model of the org.semanticwb.process.model.ProcessRuleGroup

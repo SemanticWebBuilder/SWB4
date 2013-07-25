@@ -3,6 +3,11 @@ package org.semanticwb.process.model.base;
 
 public abstract class ProcessElementBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable
 {
+   /**
+   * Objeto que almacena una descripción textual de un elemento de procesos
+   */
+    public static final org.semanticwb.platform.SemanticClass swp_Documentation=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#Documentation");
+    public static final org.semanticwb.platform.SemanticProperty swp_hasDocumentation=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#hasDocumentation");
     public static final org.semanticwb.platform.SemanticClass swp_ProcessElement=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#ProcessElement");
    /**
    * The semantic class that represents the currentObject
@@ -93,6 +98,29 @@ public abstract class ProcessElementBase extends org.semanticwb.model.SWBClass i
         public static java.util.Iterator<org.semanticwb.process.model.ProcessElement> listProcessElementByModifiedBy(org.semanticwb.model.User value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ProcessElement> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_modifiedBy,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.ProcessElement with a determined Documentation
+       * @param value Documentation of the type org.semanticwb.process.model.Documentation
+       * @param model Model of the org.semanticwb.process.model.ProcessElement
+       * @return Iterator with all the org.semanticwb.process.model.ProcessElement
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.ProcessElement> listProcessElementByDocumentation(org.semanticwb.process.model.Documentation value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ProcessElement> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_hasDocumentation, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.ProcessElement with a determined Documentation
+       * @param value Documentation of the type org.semanticwb.process.model.Documentation
+       * @return Iterator with all the org.semanticwb.process.model.ProcessElement
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.ProcessElement> listProcessElementByDocumentation(org.semanticwb.process.model.Documentation value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ProcessElement> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_hasDocumentation,value.getSemanticObject(),sclass));
             return it;
         }
        /**
@@ -239,6 +267,71 @@ public abstract class ProcessElementBase extends org.semanticwb.model.SWBClass i
     public void setDescription(String description, String lang)
     {
         getSemanticObject().setProperty(swb_description, description, lang);
+    }
+   /**
+   * Gets all the org.semanticwb.process.model.Documentation
+   * @return A GenericIterator with all the org.semanticwb.process.model.Documentation
+   */
+
+    public org.semanticwb.model.GenericIterator<org.semanticwb.process.model.Documentation> listDocumentations()
+    {
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.process.model.Documentation>(getSemanticObject().listObjectProperties(swp_hasDocumentation));
+    }
+
+   /**
+   * Gets true if has a Documentation
+   * @param value org.semanticwb.process.model.Documentation to verify
+   * @return true if the org.semanticwb.process.model.Documentation exists, false otherwise
+   */
+    public boolean hasDocumentation(org.semanticwb.process.model.Documentation value)
+    {
+        boolean ret=false;
+        if(value!=null)
+        {
+           ret=getSemanticObject().hasObjectProperty(swp_hasDocumentation,value.getSemanticObject());
+        }
+        return ret;
+    }
+   /**
+   * Adds a Documentation
+   * @param value org.semanticwb.process.model.Documentation to add
+   */
+
+    public void addDocumentation(org.semanticwb.process.model.Documentation value)
+    {
+        getSemanticObject().addObjectProperty(swp_hasDocumentation, value.getSemanticObject());
+    }
+   /**
+   * Removes all the Documentation
+   */
+
+    public void removeAllDocumentation()
+    {
+        getSemanticObject().removeProperty(swp_hasDocumentation);
+    }
+   /**
+   * Removes a Documentation
+   * @param value org.semanticwb.process.model.Documentation to remove
+   */
+
+    public void removeDocumentation(org.semanticwb.process.model.Documentation value)
+    {
+        getSemanticObject().removeObjectProperty(swp_hasDocumentation,value.getSemanticObject());
+    }
+
+   /**
+   * Gets the Documentation
+   * @return a org.semanticwb.process.model.Documentation
+   */
+    public org.semanticwb.process.model.Documentation getDocumentation()
+    {
+         org.semanticwb.process.model.Documentation ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swp_hasDocumentation);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.process.model.Documentation)obj.createGenericInstance();
+         }
+         return ret;
     }
    /**
    * Sets the value for the property Creator

@@ -148,6 +148,29 @@ public abstract class ParallelIntermediateCatchEventBase extends org.semanticwb.
             return it;
         }
        /**
+       * Gets all org.semanticwb.process.model.ParallelIntermediateCatchEvent with a determined Documentation
+       * @param value Documentation of the type org.semanticwb.process.model.Documentation
+       * @param model Model of the org.semanticwb.process.model.ParallelIntermediateCatchEvent
+       * @return Iterator with all the org.semanticwb.process.model.ParallelIntermediateCatchEvent
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.ParallelIntermediateCatchEvent> listParallelIntermediateCatchEventByDocumentation(org.semanticwb.process.model.Documentation value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ParallelIntermediateCatchEvent> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_hasDocumentation, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.ParallelIntermediateCatchEvent with a determined Documentation
+       * @param value Documentation of the type org.semanticwb.process.model.Documentation
+       * @return Iterator with all the org.semanticwb.process.model.ParallelIntermediateCatchEvent
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.ParallelIntermediateCatchEvent> listParallelIntermediateCatchEventByDocumentation(org.semanticwb.process.model.Documentation value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ParallelIntermediateCatchEvent> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_hasDocumentation,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
        * Gets all org.semanticwb.process.model.ParallelIntermediateCatchEvent with a determined Parent
        * @param value Parent of the type org.semanticwb.process.model.GraphicalElement
        * @param model Model of the org.semanticwb.process.model.ParallelIntermediateCatchEvent
